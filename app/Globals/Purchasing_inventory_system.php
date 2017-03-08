@@ -1,0 +1,498 @@
+<?php
+namespace App\Globals;
+use App\Models\Tbl_chart_of_account;
+use App\Models\Tbl_default_chart_account;
+use App\Models\Tbl_shop;
+use App\Models\Tbl_warehouse;
+use App\Models\Tbl_warehouse_inventory;
+use App\Models\Tbl_sub_warehouse;
+use App\Models\Tbl_sir_item;
+use App\Models\Tbl_sir;
+use App\Models\Tbl_truck;
+use App\Models\Tbl_employee;
+use App\Models\Tbl_item;
+use App\Models\Tbl_inventory_slip;
+use App\Models\Tbl_temp_customer_invoice_line;
+use App\Models\Tbl_temp_customer_invoice;
+use App\Models\Tbl_manual_invoice;
+use App\Models\Tbl_unit_measurement;
+use App\Models\Tbl_unit_measurement_multi;
+use App\Models\Tbl_settings;
+use App\Globals\UnitMeasurement;
+use DB;
+use Carbon\Carbon;
+use Session;
+    /*
+     * sir_status
+     * 0 - new
+     * 1 - open
+     * 2 - close 
+
+
+     * ilr_status
+     * 0 - new
+     * 1 - open
+     * 2 - close 
+     */
+class Purchasing_inventory_system
+{
+    public static function return_stock($sir_id)
+    {
+        // inventroy_source_reason
+        // inventory_source_id
+        $warehouse_id = Purchasing_inventory_system::get_warehouse_based_sir($sir_id);
+        $reason_refill = "sir_return";
+        $refill_source = $sir_id;
+        $remarks = "Return Stock from SIR NO: ".$sir_id;
+
+        $sir_item = Tbl_sir_item::where("sir_id",$sir_id)->get();
+
+        foreach ($sir_item as $key => $value) 
+        {
+            $warehouse_refill_product[$key]["product_id"] = $value->item_id;
+            $warehouse_refill_product[$key]["quantity"] = $value->physical_count;
+        }
+
+        $data = Warehouse::inventory_refill($warehouse_id, $reason_refill, $refill_source, $remarks, $warehouse_refill_product,'array',$is_return = 1);
+
+        $up["ilr_status"] = 2;
+        Tbl_sir::where("sir_id",$sir_id)->update($up);
+
+        return $data;
+    }
+    public static function get_warehouse_based_sir($sir_id)
+    {
+        $sir = Tbl_sir::truck()->where("sir_id",$sir_id)->first();
+
+        return $sir->warehouse_id;
+    }
+    public static function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
+    public static function get_sir_data($sir_id)
+    {
+        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.sir_id",$sir_id)->first();
+
+      $data->total_amount = "";
+            $item = Tbl_sir_item::where("sir_id",$data->sir_id)->get();
+            $price = "";
+            foreach ($item as $key2 => $value2)
+            {   
+                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();
+                $qty = 1;
+                if($unit_m != null)
+                {
+                    $qty = $unit_m->unit_qty;
+                }
+                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
+            }
+
+            $data->total_amount = $price; 
+
+        return $data->toArray();
+
+    }
+    public static function select_sir($shop_id = 0, $return = 'array',$srch_sir = '')
+    {
+    	$data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+                                ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
+                                ->orderBy("tbl_sir.sir_id","DESC")->get();
+
+        foreach ($data as $key => $value) 
+        {              
+            $data[$key]->total_amount = "";
+            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $price = "";
+            foreach ($item as $key2 => $value2)
+            {   
+                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();
+                $qty = 1;
+                if($unit_m != null)
+                {
+                    $qty = $unit_m->unit_qty;
+                }
+                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
+            }
+
+            $data[$key]->total_amount += $price; 
+        }
+
+        if($return == "json")
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+    }
+    public static function get_item_price($item_id)
+    {
+        $return_price = Tbl_item::where("item_id",$item_id)->pluck("item_price");
+
+        return $return_price;
+    }
+    public static function create_manual_invoice()
+    {     
+    } 
+    public static function get_inventory_in_sir($sir_id)
+    {
+        $data["sir"] = Tbl_sir::truck()->saleagent()->where("sir_id",$sir_id)->where("sir_status",1)->where("tbl_sir.archived",0)->first();
+        $data["_sir_item"] = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->get();
+        // dd($data["_sir_item"]);
+        if($data["_sir_item"] != null)
+        {
+            foreach($data["_sir_item"] as $key => $value) 
+            {                      
+                $um = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
+
+                $data["_sir_item"][$key]->um_name = isset($um->multi_name) ? $um->multi_name : "";
+                $data["_sir_item"][$key]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
+
+                $issued_qty = $value->item_qty * isset($um->unit_qty) ? $um->unit_qty : 1;
+                $remaining_qty = $issued_qty - $value->sold_qty;
+                $total_sold_qty = $value->sold_qty;
+                
+                $rem = "";
+                $sold = "";
+                $physical_count = "";
+                $rem = UnitMeasurement::um_view($remaining_qty, $value->item_measurement_id, $value->related_um_type);
+                $sold = UnitMeasurement::um_view($value->sold_qty, $value->item_measurement_id, $value->related_um_type);
+                $physical_count = UnitMeasurement::um_view($value->physical_count, $value->item_measurement_id,$value->related_um_type);
+            
+                $data["_sir_item"][$key]->remaining_qty = $rem;
+                $data["_sir_item"][$key]->sold_qty = $sold;
+                $data["_sir_item"][$key]->physical_count = $physical_count;
+
+            }
+        }
+        
+        return $data;
+    }
+    public static function select_sir_status($shop_id = 0, $return = 'array',$status = 0,$archived = 0, $srch_sir = '',$is_sync = 0)
+    {
+        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+                        ->where("sir_status",$status)
+                        ->where("tbl_sir.archived",$archived)
+                        ->where("tbl_sir.is_sync",$is_sync)
+                        // ->where("tbl_sir.sales_agent_id",$agent_id)
+                        ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
+                        ->orderBy("tbl_sir.sir_id","DESC")->get();
+
+        // dd($data);
+        foreach ($data as $key => $value) 
+        {              
+            $data[$key]->total_amount = "";
+            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $price = "";
+            foreach ($item as $key2 => $value2)
+            {   
+                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();   
+                $qty = 1;
+                if($unit_m != null)
+                {
+                    $qty = $unit_m->unit_qty;
+                }
+                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
+            }
+
+            $data[$key]->total_amount += $price; 
+        }
+
+         if($return == "json")
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+    }
+    public static function tablet_sir_per_sales_agent($shop_id = 0, $return = 'array',$status = 0,$archived = 0, $srch_sir = '',$is_sync = 0, $agent_id)
+    {
+        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+                        ->where("sir_status",$status)
+                        ->where("tbl_sir.archived",$archived)
+                        ->where("tbl_sir.is_sync",$is_sync)
+                        ->where("tbl_sir.sales_agent_id",$agent_id)
+                        ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
+                        ->orderBy("tbl_sir.sir_id","DESC")->get();
+
+        // dd($data);
+        foreach ($data as $key => $value) 
+        {              
+            $data[$key]->total_amount = "";
+            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $price = "";
+            foreach ($item as $key2 => $value2)
+            {   
+                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();   
+                $qty = 1;
+                if($unit_m != null)
+                {
+                    $qty = $unit_m->unit_qty;
+                }
+                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
+            }
+
+            $data[$key]->total_amount += $price; 
+        }
+
+         if($return == "json")
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+    }
+
+    public static function select_ilr_status($shop_id = 0, $return = 'array',$status = 0, $srch_ilr = '')
+    {
+        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+                        ->where("ilr_status",$status)
+                        ->where("tbl_sir.sir_id",'like','%'.$srch_ilr.'%')
+                        ->orderBy("tbl_sir.sir_id","DESC")->get();
+
+        // dd($data);
+        foreach ($data as $key => $value) 
+        {              
+            $data[$key]->total_amount = "";
+            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $price = "";
+            foreach ($item as $key2 => $value2)
+            {   
+                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();
+                 $qty = 1;
+                if($unit_m != null)
+                {
+                    $qty = $unit_m->unit_qty;
+                }                 
+                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
+            }
+
+            $data[$key]->total_amount += $price;
+        }
+
+         if($return == "json")
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+    }
+
+    public static function select_ilr($shop_id = 0, $return = 'array',$srch_sir = '')
+    {
+        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+                                ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
+                                ->where("sir_status",2)
+                                ->orderBy("tbl_sir.sir_id","DESC")->get();
+
+        foreach ($data as $key => $value) 
+        {              
+            $data[$key]->total_amount = "";
+            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $price = "";
+            foreach ($item as $key2 => $value2)
+            {   
+                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first(); 
+                $qty = 1;
+                if($unit_m != null)
+                {
+                    $qty = $unit_m->unit_qty;
+                }                   
+                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
+            }
+
+            $data[$key]->total_amount += $price; 
+        }
+
+        if($return == "json")
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+    }
+    public static function check_qty_sir($sir_id, $item_id, $um, $qty)
+    {
+        $sir_item = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->first();
+        $sir_um_info = UnitMeasurement::um_info($sir_item->related_um_type);
+
+        $total_qty = $sir_item->item_qty * $sir_um_info->unit_qty;
+
+        $um_info = UnitMeasurement::um_info($um);
+        $qty_1 = 1;
+        if($um_info != null)
+        {
+            $qty_1 = $um_info->unit_qty;
+        }
+        $invoice_qty = ($qty_1 * $qty) + $sir_item->sold_qty;
+
+        $return = 0;
+        if($invoice_qty > $total_qty)
+        {
+            $return =  1;
+        }
+        return $return;
+    }
+
+    public static function return_qty($sir_id, $item_id, $um, $qty)
+    {
+        $sir_item = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->first();
+
+        $um_info = UnitMeasurement::um_info($um);
+        $invoice_qty = $um_info->unit_qty * $qty;
+
+        $update_sold["sold_qty"] = $sir_item->sold_qty - $invoice_qty;
+
+        Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->update($update_sold);
+    }
+    public static function mark_as_sold($sir_id, $item_id, $um, $qty)
+    {
+        $sir_item = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->first();
+
+        $um_info = UnitMeasurement::um_info($um);
+        $invoice_qty = $um_info->unit_qty * $qty;
+
+        $update_sold["sold_qty"] = $invoice_qty + $sir_item->sold_qty;
+
+        Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->update($update_sold);
+
+    }
+    public static function count_sir($shop_id = 0, $return = 'array',$status = 0,$archived = 0)
+    {
+        $data = Tbl_sir::where("tbl_sir.shop_id",$shop_id)->where("sir_status",$status)->where("tbl_sir.archived",$archived)->count();
+
+         if($return == "json")
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+    } 
+    public static function count_ilr($shop_id = 0, $return = 'array',$status = 0,$archived = 0)
+    {
+        $data = Tbl_sir::where("tbl_sir.shop_id",$shop_id)->where("ilr_status",$status)->where("tbl_sir.archived",$archived)->count();
+
+         if($return == "json")
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+    } 
+    public static function select_single_sir($shop_id = 0,$sir_id, $return = 'array')
+    {
+        $data = Tbl_sir::truck()->saleagent()->where("tbl_sir.shop_id",$shop_id)
+                                ->selectRaw("*, tbl_sir.created_at as sir_created")
+                                ->where("tbl_sir.sir_id",$sir_id)->first();
+
+        if($return == "json")
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+    }
+    public static function select_sir_item($shop_id = 0, $sir_id, $return = 'array')
+    {
+        $data = Tbl_sir::select_sir_item()->where("tbl_sir.shop_id",$shop_id)->where("tbl_sir.sir_id",$sir_id)->get();
+
+        foreach ($data as $key => $value) 
+        {
+            if($value->related_um_type != null)
+            {
+                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
+                $data[$key]->um_name = $unit_m->multi_name;
+                $data[$key]->um_abbrev = $unit_m->multi_abbrev;              
+            }
+            else
+            {
+                $data[$key]->um_name = "PC";
+                $data[$key]->um_abbrev = "";
+            }
+        }
+
+        if($return == "json")
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+    }
+    public static function open_sir_general()
+    {        
+        $update["is_sync"] = 1;
+        $all_load_out_form = Tbl_sir::where("sir_status",1)->get();
+
+        foreach ($all_load_out_form as $key => $value) 
+        {
+            Tbl_sir::where("sir_id",$value->sir_id)->update($update);
+        }
+
+        $data["status"] = "success";
+
+        return $data;
+    }    
+    public static function close_sir_general()
+    {        
+        $update["sir_status"] = 2;
+        $update["ilr_status"] = 1;
+        $all_load_out_form = Tbl_sir::where("sir_status",1)->where("is_sync",1)->get();
+
+        foreach ($all_load_out_form as $key => $value) 
+        {
+            Tbl_sir::where("sir_id",$value->sir_id)->update($update);
+        }
+
+        $data["status"] = "success";
+
+
+        $all = Tbl_manual_invoice::sir()->customer_invoice() 
+                                        ->where("tbl_manual_invoice.is_sync",0)
+                                        ->get();
+
+        foreach ($all as $key => $value) 
+        {
+                $customer_info                      = [];
+                $customer_info['customer_id']       = $value->inv_customer_id;
+                $customer_info['customer_email']    = $value->inv_customer_email;
+
+                $invoice_info                       = [];
+                $invoice_info['invoice_terms_id']   = $value->inv_terms_id;
+                $invoice_info['invoice_date']       = $value->inv_date;
+                $invoice_info['invoice_due']        = $value->inv_due_date;
+                $invoice_info['billing_address']    = $value->inv_customer_billing_address;
+
+                $invoice_other_info                 = [];
+                $invoice_other_info['invoice_msg']  = $value->inv_message;
+                $invoice_other_info['invoice_memo'] = $value->inv_memo;
+
+                $total_info                         = [];
+                $total_info['total_subtotal_price'] = $value->inv_subtotal_price;
+                $total_info['ewt']                  = $value->ewt;
+                $total_info['total_discount_type']  = $value->inv_discount_type;
+                $total_info['total_discount_value'] = $value->inv_discount_value;
+                $total_info['taxable']              = $value->taxable;
+                $total_info['total_overall_price']  = $value->inv_overall_price;
+
+                $item_info                          = [];
+                $_itemline                          = Tbl_temp_customer_invoice_line::where("invline_inv_id",$value->inv_id)->get();
+
+            $return = 0;
+            foreach($_itemline as $keys => $item_line)
+            {
+                if($item_line)
+                {
+                    $item_info[$keys]['item_service_date']  = $item_line->invline_service_date;
+                    $item_info[$keys]['item_id']            = $item_line->invline_item_id;
+                    $item_info[$keys]['item_description']   = $item_line->invline_description;
+                    $item_info[$keys]['um']                 = $item_line->invline_um;
+                    $item_info[$keys]['quantity']           = $item_line->invline_qty;
+                    $item_info[$keys]['rate']               = $item_line->invline_rate;
+                    $item_info[$keys]['discount']           = $item_line->invline_discount;
+                    $item_info[$keys]['discount_remark']    = $item_line->invline_discount_remark;
+                    $item_info[$keys]['taxable']            = $item_line->taxable;
+                    $item_info[$keys]['amount']             = $item_line->invline_amount;
+                }
+            }
+           $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+           
+           $update["inv_id"] = $invoice_id;
+           $update["is_sync"] = 1;
+           Tbl_manual_invoice::where("manual_invoice_id",$value->manual_invoice_id)->update($update);
+           Tbl_temp_customer_invoice::where("inv_id",$value->inv_id)->update($update);
+        }
+
+        return $data;
+    }
+}

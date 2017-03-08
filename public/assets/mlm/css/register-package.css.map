@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,MACA,CACC,aAAa,CAAE,IAAI",
+"sources": ["../sass/register-package.scss"],
+"names": [],
+"file": "register-package.css"
+}

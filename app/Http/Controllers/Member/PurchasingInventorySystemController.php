@@ -1,0 +1,964 @@
+<?php
+
+namespace App\Http\Controllers\Member;
+
+use Request;
+use App\Models\Tbl_position;
+use App\Models\Tbl_employee;
+use App\Models\Tbl_truck;
+use App\Models\Tbl_unit_measurement;
+use App\Models\Tbl_unit_measurement_multi;
+use App\Models\Tbl_sir_item;
+use App\Models\Tbl_warehouse_inventory;
+use App\Models\Tbl_sir;
+use App\Models\Tbl_item;
+use App\Models\Tbl_warehouse;
+use App\Globals\UnitMeasurement;
+use App\Globals\Warehouse;
+use App\Globals\Pdf_global;
+use App\Globals\Item;
+use App\Globals\Utilities;
+use App\Globals\AuditTrail;
+use App\Globals\Purchasing_inventory_system;
+use App\Http\Controllers\Controller;
+use Validator;
+use Carbon\Carbon;
+use Session;
+use PDF;
+use Redirect;
+class PurchasingInventorySystemController extends Member
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     * sir_status
+     * 0 - new
+     * 1 - open
+     * 2 - close 
+     */
+    public function index()
+    {
+        //
+    }
+    public function update_count($sir_id, $item_id)
+    {
+        $data["sir_item"] = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->where("tbl_sir_item.item_id",$item_id)->first();
+
+        $um = Tbl_unit_measurement_multi::where("multi_id",$data["sir_item"]->related_um_type)->first();
+
+       
+        $data["sir_item"]->um_name = isset($um->multi_name) ? $um->multi_name : "";
+        $data["sir_item"]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
+
+        $issued_qty = $data["sir_item"]->item_qty * isset($um->unit_qty) ? $um->unit_qty : 1;
+        // dd($issued_qty);
+        $remaining_qty = $issued_qty - $data["sir_item"]->sold_qty;
+        $rem = "";
+        $sold = "";
+
+        $data["base_name"] = null;
+        $data["base_qty"] = null;
+        $data["base_um_id"] = null;
+
+        $data["issued_um_qty"] = null;
+        $data["issued_um_name"] = null;
+        $data["issued_um_id"] = null;
+
+        $um_info = UnitMeasurement::um_info($data["sir_item"]->related_um_type);
+        if($data["sir_item"]->item_measurement_id == $data["sir_item"]->related_um_type)
+        {
+            if($um != null)
+            {                
+               $rem = $remaining_qty." ".$um->multi_abbrev;
+               $sold = $data["sir_item"]->sold_qty." ".$um->multi_abbrev;
+
+               $data["base_qty"] = $remaining_qty;
+               $data["base_name"] = $um->multi_name." (".$um->multi_abbrev.")";
+               $data["base_um_id"] = $data["sir_item"]->related_um_type;
+            }
+            else
+            {                
+               $data["base_qty"] = $remaining_qty;
+               $data["base_name"] = "Piece(s)";
+               $data["base_um_id"] = "";   
+            }
+        }
+        else
+        {                    
+            //item base um
+            $base_um = Tbl_unit_measurement_multi::where("multi_um_id",$data["sir_item"]->item_measurement_id)->where("is_base",1)->first();
+
+            //for remaining
+            $total_qty_issued =  $data["sir_item"]->item_qty * $um->unit_qty;
+            $rem_qty = $total_qty_issued - $data["sir_item"]->sold_qty;
+            $issued_um_qty = $um->unit_qty;
+            $issued_um = floor($rem_qty / $issued_um_qty);
+            $each = (($rem_qty / $issued_um_qty) - floor($rem_qty / $issued_um_qty)) * $issued_um_qty;                
+
+            //for sold
+            $um_q = floor($data["sir_item"]->sold_qty / $issued_um_qty);
+            $sold_each = (($data["sir_item"]->sold_qty / $issued_um_qty) - floor($data["sir_item"]->sold_qty / $issued_um_qty)) * $issued_um_qty;                
+
+
+            if($data["sir_item"]->sold_qty != 0)
+            {
+                $data["base_name"] = $base_um->multi_name." (".$base_um->multi_abbrev.")";
+                $data["base_qty"] = $each;
+                $data["base_um_id"] = $data["sir_item"]->item_measurement_id;
+                $data["issued_um_qty"] = $issued_um;
+                $data["issued_um_name"] = $um->multi_name." (".$um->multi_abbrev.")";
+                $data["issued_um_id"] = $data["sir_item"]->related_um_type;
+                $rem = $issued_um." ".$um->multi_abbrev." & ".$each." ".$base_um->multi_abbrev;
+            }
+            else
+            {                
+                $data["issued_um_qty"] = $issued_um;
+                $data["issued_um_name"] = $um->multi_name." (".$um->multi_abbrev.")";
+                $data["issued_um_id"] = $data["sir_item"]->related_um_type;
+                $rem = $issued_um." ".$um->multi_abbrev;
+            }
+
+        }
+        if($um != null)
+        {
+            if($um_info->is_base == 1)
+            {
+               $rem = $remaining_qty." ".$um_info->multi_abbrev;
+               $sold = $data["sir_item"]->sold_qty." ".$um_info->multi_abbrev;
+
+               $data["base_qty"] = $remaining_qty;
+               $data["base_name"] = $um_info->multi_name." (".$um_info->multi_abbrev.")";
+               $data["base_um_id"] = $data["sir_item"]->related_um_type;         
+
+               $data["issued_um_qty"] = null;
+               $data["issued_um_name"] = null;
+               $data["issued_um_id"] = null;   
+            }
+        }
+        $data["sir_item"]->remaining_qty = $rem;
+
+        return view("member.purchasing_inventory_system.ilr.update_count",$data);
+    }
+    public function update_count_submit()
+    {
+        $sir_id = Request::input("sir_id");
+        $item_id = Request::input("item_id");
+        $base_um_id = Request::input("base_um_id");
+        $base_qty = Request::input("base_qty");
+        $issued_um_id = Request::input("issued_um_id");
+        $issued_qty = Request::input("issued_qty");
+
+        $sir_info = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->first();
+        $unit_qty = Tbl_unit_measurement_multi::where("multi_id",$sir_info->related_um_type)->pluck("unit_qty");
+
+        $qt = 1;
+        if($unit_qty != null)
+        {
+            $qt = $unit_qty;
+        }
+        $remaining_qty = ($sir_info->item_qty * $qt ) - $sir_info->sold_qty;
+
+        $item_info = Tbl_item::where("item_id",$item_id)->first();
+        $base_um_id = $item_info->item_measurement_id;
+        $um_base_info = Tbl_unit_measurement_multi::where("multi_um_id",$base_um_id)->where("is_base",1)->first();
+        $um_issued_info = UnitMeasurement::um_info($issued_um_id);
+
+        $total_qty = 0;
+        $base_pc_qty = 0;
+        $issued_pc_qty = 0;
+
+        if($um_base_info != null)
+        {
+            $base_pc_qty = $base_qty * $um_base_info->unit_qty;
+        }
+        if($um_issued_info != null)
+        {
+            $issued_pc_qty = $issued_qty * $um_issued_info->unit_qty;
+        }
+        else
+        {
+            $base_pc_qty = $base_qty;
+        }
+
+        $total_qty = $issued_pc_qty + $base_pc_qty;
+
+        $update["infos"] = "";
+        if($remaining_qty == $total_qty)
+        {
+            $update["infos"] = 0;
+        }
+        elseif($total_qty > $remaining_qty)
+        {
+            //over
+            $update["infos"] = ($total_qty - $remaining_qty) * $sir_info->sir_item_price;   
+        }
+        elseif($total_qty < $remaining_qty) 
+        {
+            //short
+            $update["infos"] = ($remaining_qty - $total_qty) * -$sir_info->sir_item_price;
+        }
+
+        $update["is_updated"] = 1;
+        $update["physical_count"] = $total_qty;
+
+        Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->update($update);
+
+        $data["status"] = "success-ilr";
+        $data["id"] = $sir_id;
+        return json_encode($data);
+
+    }
+    public function confirm_syncing($action)
+    {
+        $access = Utilities::checkAccess("pis-sir","sync");
+        if($access != 0)
+        {
+            $data["action"] = "/member/pis/sir/sync_export";
+            if($action == "import")
+            {
+                $data["action"] = "/member/pis/sir/sync_import";
+            }
+            return view("member.purchasing_inventory_system.sync_confirm",$data);
+        }
+        else
+        {
+            return $this->show_no_access_modal();
+        }
+    }
+    public function sync_import()
+    {
+        $data = Purchasing_inventory_system::open_sir_general();
+
+        return json_encode($data);
+    }
+
+    public function sync_export()
+    {
+        $data = Purchasing_inventory_system::close_sir_general();
+
+        return json_encode($data);
+    }
+
+    public function ilr_submit()
+    {
+        $sir_id = Request::input("sir_id");
+
+        $check_item_if_updated = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->get();
+
+        $data["status"] = null;
+        $data["status_message"] = null;
+
+        foreach ($check_item_if_updated as $key => $value) 
+        {
+            if($value->is_updated == 0)
+            {
+                $data["status"] = "error";
+                $data["status_message"] .= "The item ".$value->item_name." is not updated <br>";
+            }
+        }
+        if($data["status"] == null)
+        {
+            $data = Purchasing_inventory_system::return_stock($sir_id);
+        }
+
+        return json_encode($data);
+    }
+    public function ilr_pdf($id)
+    {
+        $data["sir"] = Purchasing_inventory_system::select_single_sir($this->user_info->shop_id,$id,'array');
+        $data["_sir_item"] = Purchasing_inventory_system::select_sir_item($this->user_info->shop_id,$id,'array');
+
+        $data["type"] = "I.L.R";
+
+        if($data["_sir_item"] != null)
+        {
+            foreach($data["_sir_item"] as $key => $value) 
+            {              
+
+                $um = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
+
+                $data["_sir_item"][$key]->um_name = isset($um->multi_name) ? $um->multi_name : "";
+                $data["_sir_item"][$key]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
+
+                $qt = 1;
+                if($um != null)
+                {
+                    $qt = $um->unit_qty;
+                }
+                $issued_qty = $value->item_qty * $qt;
+                $remaining_qty = $issued_qty - $value->sold_qty;
+                $total_sold_qty = $value->sold_qty;
+                
+                $physical_ctr = $value->physical_count;
+                $rem = "";
+                $sold = "";
+                $physical_count = "";
+                $rem = UnitMeasurement::um_view($remaining_qty, $value->item_measurement_id, $value->related_um_type);
+                $sold = UnitMeasurement::um_view($value->sold_qty, $value->item_measurement_id, $value->related_um_type);
+                $physical_count = UnitMeasurement::um_view($value->physical_count, $value->item_measurement_id,$value->related_um_type);
+            
+                $data["_sir_item"][$key]->quantity_sold = $value->sold_qty;
+                $data["_sir_item"][$key]->remaining_qty = $rem;
+                $data["_sir_item"][$key]->sold_qty = $sold;
+                $data["_sir_item"][$key]->physical_count = $physical_count;
+
+                $status = "";
+                if($value->is_updated != 0)
+                {
+                    if($remaining_qty == $physical_ctr)
+                    {
+                        $status = "OK";
+                    }
+                    elseif($physical_ctr > $remaining_qty)
+                    {
+                        $status = "OVER ".(UnitMeasurement::um_view($physical_ctr - $remaining_qty,$value->item_measurement_id,$value->related_um_type));   
+                    }
+                    elseif($physical_ctr < $remaining_qty) 
+                    {
+                        $status = "SHORT ".(UnitMeasurement::um_view($remaining_qty - $physical_ctr,$value->item_measurement_id,$value->related_um_type));
+                    }                    
+                }
+                $data["rem_total"][$key] = $remaining_qty." ".$physical_ctr;
+                $data["_sir_item"][$key]->status = $status;
+
+            }
+            // dd($data["rem_total"]);
+        }
+
+        $html = view('member.purchasing_inventory_system.ilr.ilr_pdf', $data);
+        return Pdf_global::show_pdf($html);
+    }
+    public function ilr_confirm($sir_id, $action)
+    {
+        $data["action"] = $action;
+        $data["sir_id"] = $sir_id;
+
+        return view("member.purchasing_inventory_system.ilr.ilr_confirm",$data);
+    }
+    public function ilr($sir_id)
+    {
+        // processed-ilr
+        $access = Utilities::checkAccess("pis-ilr","processed-ilr");
+        if($access != 0)
+        {
+            $data["_truck"] = Tbl_truck::where("archived",0)->where("truck_shop_id",$this->user_info->shop_id)->get();
+            $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("tbl_employee.archived",0)->get();
+            $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->get();
+
+            $data["sir"] = Tbl_sir::where("sir_id",$sir_id)->where("shop_id",$this->user_info->shop_id)->where("sir_status",2)->where("archived",0)->first();
+            $data["_sir_item"] = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->get();
+            // dd($data["_sir_item"]);
+            if($data["_sir_item"] != null)
+            {
+                foreach($data["_sir_item"] as $key => $value) 
+                {              
+
+                    $um = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
+
+                    $data["_sir_item"][$key]->um_name = isset($um->multi_name) ? $um->multi_name : "";
+                    $data["_sir_item"][$key]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
+
+                    $qt = 1;
+                    if($um != null)
+                    {
+                        $qt = $um->unit_qty;
+                    }
+                    $issued_qty = $value->item_qty * $qt;
+
+                    $remaining_qty = $issued_qty - $value->sold_qty;
+                    $total_sold_qty = $value->sold_qty;
+                    
+                    $physical_ctr = $value->physical_count;
+                    $rem = "";
+                    $sold = "";
+                    $physical_count = "";
+                    $rem = UnitMeasurement::um_view($remaining_qty, $value->item_measurement_id, $value->related_um_type);
+                    $sold = UnitMeasurement::um_view($value->sold_qty, $value->item_measurement_id, $value->related_um_type);
+                    $physical_count = UnitMeasurement::um_view($value->physical_count, $value->item_measurement_id,$value->related_um_type);
+                    
+                    $test[$key] = $remaining_qty." ".$rem." | ".$physical_ctr." ".$physical_count;
+                    $data["_sir_item"][$key]->remaining_qty = $rem;
+                    $data["_sir_item"][$key]->sold_qty = $sold;
+                    $data["_sir_item"][$key]->physical_count = $physical_count;
+
+                    $status = "";
+                    if($value->is_updated != 0)
+                    {
+                        if($remaining_qty == $physical_ctr)
+                        {
+                            $status = "OK";
+                        }
+                        elseif($physical_ctr > $remaining_qty)
+                        {
+                            $status = "OVER ".(UnitMeasurement::um_view($physical_ctr - $remaining_qty,$value->item_measurement_id,$value->related_um_type));   
+                        }
+                        elseif($physical_ctr < $remaining_qty) 
+                        {
+                            $status = "SHORT ".(UnitMeasurement::um_view($remaining_qty - $physical_ctr,$value->item_measurement_id,$value->related_um_type));
+                        }                 
+                    }
+                    $data["rem_total"][$key] = $remaining_qty." ".$physical_ctr;
+                    $data["_sir_item"][$key]->status = $status;
+
+                }
+                // dd($test);
+                return view("member.purchasing_inventory_system.ilr.ilr",$data);
+            }
+            else
+            {
+                return Redirect::to("/member/pis/sir");
+            }
+        }
+        else
+        {
+            return $this->show_no_access();
+        }
+    }
+    public function sir()
+    {     
+        if(Request::input("status") != null)
+        {
+            if(Request::input("status") != 'all')
+            {
+                $data["_sir"] = Purchasing_inventory_system::select_sir_status($this->user_info->shop_id,'array',Request::input("status"),0,Request::input("sir_id"),Request::input("is_sync"));
+            }
+            else
+            {
+                $data["_sir"] = Purchasing_inventory_system::select_sir($this->user_info->shop_id,'array',Request::input("sir_id"));
+            }
+        }
+        else if(Request::input("archived") != null)
+        {
+                $data["_sir"] = Purchasing_inventory_system::select_sir_status($this->user_info->shop_id,'array',0,Request::input("archived"),Request::input("sir_id"),Request::input("is_sync"));
+        }
+        else
+        {            
+            $data["_sir"] = Purchasing_inventory_system::select_sir($this->user_info->shop_id,'array',Request::input("sir_id"));
+        }
+        return view("member.purchasing_inventory_system.sir",$data);
+    }
+    public function create_sir()
+    {
+        $access = Utilities::checkAccess("pis-sir","add");
+        if($access != 0)
+        {
+            $data["_truck"] = Tbl_truck::where("archived",0)->where("truck_shop_id",$this->user_info->shop_id)->get();
+            $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("tbl_employee.archived",0)->get();
+
+            $type[0] = 1; 
+            $data["_item"] = Item::get_all_category_item($type);
+            return view("member.purchasing_inventory_system.create_sir",$data);
+        } 
+        else
+        {
+            return $this->show_no_access(); 
+        }
+    }
+    public function load_ilr()
+    {        
+       $data["count_sir"] = Purchasing_inventory_system::count_ilr($this->user_info->shop_id,'array',1,0);
+       if(Request::input("status") != null)
+        {
+            if(Request::input("status") != 'all')
+            {
+                $data["_sir"] = Purchasing_inventory_system::select_ilr_status($this->user_info->shop_id,'array',Request::input("status"),Request::input("sir_id"));
+            }
+            else
+            {
+                $data["_sir"] = Purchasing_inventory_system::select_ilr($this->user_info->shop_id,'array',Request::input("sir_id"));
+            }
+        }
+        else
+        {            
+            $data["_sir"] = Purchasing_inventory_system::select_ilr($this->user_info->shop_id,'array',Request::input("sir_id"));
+        }
+
+        return view("member.purchasing_inventory_system.ilr.list_ilr",$data);
+    }
+    public function ilr_view($sir_id)
+    {
+        $data["sir_id"] = $sir_id;
+        $data["type"] = "Incoming Load Report";       
+
+        return view("member.purchasing_inventory_system.ilr.ilr_view",$data);
+    }
+    public function view($id, $type)
+    {
+        $data["sir_id"] = $id;
+        $data["type_code"] = $type; 
+        $data["type"] = "Stock Issuance Report";
+        if($type == "lof")
+        {
+            $data["type"] = "Load Out Form";
+        }
+
+        return view("member.purchasing_inventory_system.sir_view",$data);
+    }
+    public function view_pdf($id, $type_code)
+    {
+        $data["sir"] = Purchasing_inventory_system::select_single_sir($this->user_info->shop_id,$id,'array');
+        $data["_sir_item"] = Purchasing_inventory_system::select_sir_item($this->user_info->shop_id,$id,'array');
+
+        $data["type_code"] = $type_code; 
+        $data["type"] = "S.I.R";
+        if($type_code == "lof")
+        {
+            $data["type"] = "L.O.F";
+        }
+        // return view("member.purchasing_inventory_system.sir_pdf",$data);
+
+        $html = view('member.purchasing_inventory_system.sir_pdf', $data);
+        return Pdf_global::show_pdf($html);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create_sir_submit()
+    {
+        $data["status"] = "";
+        $data["status_message"] = "";
+
+        $shop_id = $this->user_info->shop_id;
+        $sales_agent_id = Request::input("sales_agent_id");
+        $truck_id = Request::input("truck_id");
+        $sir_date = date('Y-m-d',strtotime(Request::input("sir_date")));
+
+        //array
+        $item_id = Request::input("item");
+        $item_qty = Request::input("item_qty");
+        $related_um_type = Request::input("related_um_type");
+        // $um_qty = Request::input("um_qty");
+        // dd($related_um_type);
+        //if related um_type == 0 then um_qty == 1
+        // if related um_type != 0 then um_qty
+        $insert_sir["shop_id"] = $shop_id;
+        $insert_sir["sales_agent_id"] = $sales_agent_id;
+        $insert_sir["truck_id"] = $truck_id;
+        $insert_sir["created_at"] = $sir_date;
+
+        $rule_sir["sales_agent_id"] = 'required';
+        $rule_sir["truck_id"] = 'required';
+
+        $validator = Validator::make($insert_sir,$rule_sir);
+
+        $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
+        $sir_id = 0;
+        if($validator->fails())
+        {
+            $data["status"] = "error";
+            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+            {
+                $data["status_message"] .= $message;
+            }
+        }
+        else
+        {
+            if($item_id != null && $item_qty != null)
+            {
+                foreach ($item_id as $key => $value) 
+                {
+                    if($value != "")
+                    {
+                        $insert_sir_item[$key]["item_id"] = $value;
+                        $insert_sir_item[$key]["item_qty"] = str_replace(",", "", $item_qty[$key]);
+                        $insert_sir_item[$key]["related_um_type"] = $related_um_type[$key];
+                        // $insert_sir_item[$key]["um_qty"] = $um_qty[$key];
+
+                        $rule[$key]["item_id"]    = "required";
+                        $rule[$key]["item_qty"]  = "required|numeric|min:1";
+                        // $rule[$key]["related_um_type"]      = "required";
+                        // $rule[$key]["um_qty"] = "required|numeric|min:1";
+
+                        $validator2[$key] = Validator::make($insert_sir_item[$key], $rule[$key]);
+                        if($validator2[$key]->fails())
+                        {
+                            $data["status"] = "error";
+                            foreach ($validator2[$key]->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+                            {
+                                $data["status_message"] .= $message;
+                            }
+                        }
+
+                        $related_um_qty = Tbl_unit_measurement_multi::where("multi_id",$related_um_type[$key])->pluck("unit_qty");
+                        if($related_um_qty == null)
+                        {
+                            $related_um_qty = 1;
+                        }
+                        $inventory_consume_product[$key]["product_id"] = $value;
+                        $inventory_consume_product[$key]["quantity"] = $insert_sir_item[$key]["item_qty"] * $related_um_qty;
+                        
+                        $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value)->pluck('inventory_count');
+                        if($count_on_hand == null)
+                        {
+                            $count_on_hand = 0;   
+                        }
+                        if($inventory_consume_product[$key]["quantity"] > 0 && $count_on_hand > 0 && $count_on_hand >= $inventory_consume_product[$key]["quantity"])
+                        {
+
+                        }
+                        else
+                        {
+                            $item_name = Tbl_item::where("item_id",$value)->pluck("item_name");
+
+                            $data["status"] = "error";
+                            $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
+                        }
+                    }
+                }
+            }
+            else
+            {
+                $data["status"] = "error";
+                $data["status_message"] = "Please insert items";
+            }
+            if($data["status"] == "")
+            {
+                $sir_id = Tbl_sir::insertGetId($insert_sir);
+                $remarks = "SIR consume";
+                // $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
+                $warehouse_id = Purchasing_inventory_system::get_warehouse_based_sir($sir_id);
+                $transaction_type = "sir";
+                $transaction_id = $sir_id;
+
+                $data = Warehouse::inventory_consume($warehouse_id, $remarks, $inventory_consume_product,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type, $transaction_id);                
+
+            }
+            $insert_sir_item = null;
+            if($data["status"] == "success")
+            {                
+               if($item_id != null && $item_qty != null)
+                {
+                    foreach ($item_id as $key => $value) 
+                    {
+                        if($value != "")
+                        {
+                            $unit_qty = Tbl_unit_measurement_multi::where("multi_id",$related_um_type[$key])->pluck("unit_qty");
+                            $insert_sir_item["sir_id"] = $sir_id;
+                            $insert_sir_item["item_id"] = $value;
+                            $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
+                            $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
+                            $insert_sir_item["related_um_type"] = $related_um_type[$key];
+                            $qty = 1;
+                            if($unit_qty != null)
+                            {
+                                $qty = $unit_qty;
+                            }
+                            $related_um_qty = $qty;
+                            $insert_sir_item["um_qty"] = $related_um_qty;
+
+                            Tbl_sir_item::insert($insert_sir_item);
+
+                        }
+                    }                    
+
+                }
+                $data["status"] = "success";
+
+                $sir_data = Purchasing_inventory_system::get_sir_data($sir_id);
+                AuditTrail::record_logs("Added","load_out_form",$sir_id,"",serialize($sir_data));
+
+            }
+
+        }
+
+        return json_encode($data);
+
+    }
+
+    public function edit_sir_submit()
+    {
+        $data["status"] = "";
+        $data["status_message"] = "";
+
+        $sir_id = Request::input("sir_id");
+        $shop_id = $this->user_info->shop_id;
+
+        $old_sir_data = Purchasing_inventory_system::get_sir_data($sir_id);
+
+        $sales_agent_id = Request::input("sales_agent_id");
+        $truck_id = Request::input("truck_id");
+        $sir_date = date('Y-m-d',strtotime(Request::input("sir_date")));
+
+        $item_id = Request::input("item");
+        $item_qty = Request::input("item_qty");
+        $related_um_type = Request::input("related_um_type");
+        // $um_qty = Request::input("um_qty");
+
+        //if related um_type == 0 then um_qty == 1
+        // if related um_type != 0 then um_qty
+        $insert_sir["shop_id"] = $shop_id;
+        $insert_sir["sales_agent_id"] = $sales_agent_id;
+        $insert_sir["truck_id"] = $truck_id;
+        $insert_sir["created_at"] = $sir_date;
+
+        $rule_sir["sales_agent_id"] = 'required';
+        $rule_sir["truck_id"] = 'required';
+
+        $validator = Validator::make($insert_sir,$rule_sir);
+
+        $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
+        if($validator->fails())
+        {
+            $data["status"] = "error";
+            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+            {
+                $data["status_message"] .= $message;
+            }
+        }
+        else
+        {
+            if($item_id != null && $item_qty != null && $related_um_type != null)
+            {
+                $inventory_consume_product = null;
+                foreach ($item_id as $key => $value) 
+                {
+                    if($value != "")
+                    {
+                        $insert_sir_item[$key]["item_id"] = $value;
+                        $insert_sir_item[$key]["item_qty"] = str_replace(",","", $item_qty[$key]);
+                        $insert_sir_item[$key]["related_um_type"] = $related_um_type[$key];
+                        // $insert_sir_item[$key]["um_qty"] = $um_qty[$key];
+
+                        $rule[$key]["item_id"]    = "required";
+                        $rule[$key]["item_qty"]  = "required|numeric|min:1";
+                        $rule[$key]["related_um_type"] = "required";
+                        // $rule[$key]["um_qty"] = "required|numeric|min:1";
+
+                        $validator2[$key] = Validator::make($insert_sir_item[$key], $rule[$key]);
+                        if($validator2[$key]->fails())
+                        {
+                            $data["status"] = "error";
+                            foreach ($validator2[$key]->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+                            {
+                                $data["status_message"] .= $message;
+                            }
+                        }
+                        $related_um_qty = Tbl_unit_measurement_multi::where("multi_id",$related_um_type[$key])->pluck("unit_qty");
+
+                        $inventory_update_item[$key]["product_id"] = $value;
+                        $inventory_update_item[$key]["quantity"] = $insert_sir_item[$key]["item_qty"] * $related_um_qty;
+
+                        $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value)->pluck('inventory_count');
+                        if($inventory_update_item[$key]["quantity"] > 0 && $count_on_hand > 0 && $count_on_hand >= $inventory_update_item[$key]["quantity"])
+                        {
+
+                        }
+                        else
+                        {
+                            $item_name = Tbl_item::where("item_id",$value)->pluck("item_name");
+
+                            $data["status"] = "error";
+                            $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
+                        }
+                    }
+                }
+            }
+            else
+            {
+                $data["status"] = "error";
+                $data["status_message"] = "Please insert items";
+            }
+            $insert_sir_item = null;
+
+            if($data["status"] == "")
+            {
+                $transaction_id = $sir_id;
+                $transaction_type = "sir";
+                $data = Warehouse::inventory_update($transaction_id, $transaction_type, $inventory_update_item, $return = 'array');
+            }
+            if($data["status"] == "success")
+            {
+                Tbl_sir::where("sir_id",$sir_id)->update($insert_sir);
+                
+               if($item_id != null && $item_qty != null && $related_um_type != null )
+                {
+                    Tbl_sir_item::where("sir_id",$sir_id)->delete();
+
+                    foreach ($item_id as $key => $value) 
+                    {
+                        if($value != "")
+                        {
+                            $insert_sir_item["sir_id"] = $sir_id;
+                            $insert_sir_item["item_id"] = $value;
+                            $insert_sir_item["item_qty"] = $item_qty[$key];                            
+                            $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
+                            $insert_sir_item["related_um_type"] = $related_um_type[$key];
+                            $related_um_qty = Tbl_unit_measurement_multi::where("multi_id",$related_um_type[$key])->pluck("unit_qty");
+                            $qty = 1;
+                            if($related_um_qty != null)
+                            {
+                                $qty = $related_um_qty;
+                            }
+                            $insert_sir_item["um_qty"] = $qty;                            
+                            Tbl_sir_item::insert($insert_sir_item);    
+                        }
+                    }
+                }
+                $data["status"] = "success";
+
+                $new_sir_data = Purchasing_inventory_system::get_sir_data($sir_id);
+                AuditTrail::record_logs("Edited","load_out_form",$sir_id,serialize($old_sir_data),serialize($new_sir_data));
+            }
+
+        }
+
+        return json_encode($data);
+
+    }
+    public function edit_sir($sir_id)
+    {
+        $access = Utilities::checkAccess("pis-sir","edit");
+        if($access != 0)
+        {
+            $data["_truck"] = Tbl_truck::where("archived",0)->where("truck_shop_id",$this->user_info->shop_id)->get();
+            $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("tbl_employee.archived",0)->get();
+            $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->get();
+
+            $data["sir"] = Tbl_sir::where("sir_id",$sir_id)->where("shop_id",$this->user_info->shop_id)->where("archived",0)->first();
+            $data["_sir_item"] = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->get();
+
+            if($data["_sir_item"] != null)
+            {
+                foreach ($data["_sir_item"] as $key => $value) 
+                {
+                    $um = UnitMeasurement::select_um_array($value->related_um_type, 'array');
+                     
+                    $data["_sir_item"][$key]->um_list = $um;
+                }
+
+                return view("member.purchasing_inventory_system.sir_edit",$data);
+            }
+            else
+            {
+                return Redirect::to("/member/pis/sir");
+            }
+        }        
+        else
+        {           
+            return $this->show_no_access(); 
+        }
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function archived_sir($id, $action)
+    {
+        $access = Utilities::checkAccess("pis-sir","archived");
+        if($access != 0)
+        {
+            $data["sir_id"] = $id;
+            $data["action"] = $action;
+
+            return view("member.purchasing_inventory_system.sir_confirm",$data);
+        }
+        else
+        {
+            return $this->show_no_access_modal(); 
+        }
+    }
+    public function open_sir($id, $action)
+    {
+        $access = Utilities::checkAccess("pis-sir","open-sir");
+        if($access != 0)
+        {
+            $data["sir_id"] = $id;
+            $data["action"] = $action;
+
+            return view("member.purchasing_inventory_system.sir_confirm",$data);
+        }
+        else
+        {
+            return $this->show_no_access_modal(); 
+        }
+    }
+    public function archived_sir_submit()
+    {
+        $id = Request::input("sir_id");
+        $action = Request::input("action");
+
+        if($action == "archived")
+        {
+            $update["archived"] = 1;
+            $sir_data = Purchasing_inventory_system::get_sir_data($id);
+            AuditTrail::record_logs("Archived","load_out_form",$id,"",serialize($sir_data));
+        }
+        else if($action == "open")
+        {
+            $update["sir_status"] = 1;
+
+            $sir_data = Purchasing_inventory_system::get_sir_data($id);
+            AuditTrail::record_logs("Open","pis_stock_issuance_report",$id,"",serialize($sir_data));
+        }
+        else if($action == "close")
+        {
+            $update["sir_status"] = 2;
+
+            $sir_data = Purchasing_inventory_system::get_sir_data($id);
+            AuditTrail::record_logs("Close","pis_stock_issuance_report",$id,"",serialize($sir_data));
+        }
+        else
+        {        
+            $update["archived"] = 0;
+            $sir_data = Purchasing_inventory_system::get_sir_data($id);
+            AuditTrail::record_logs("Restore","load_out_form",$id,"",serialize($sir_data));
+        }
+
+        Tbl_sir::where("sir_id",$id)->update($update);
+
+        $data["status"] = "success";
+
+        return json_encode($data);
+    }
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+}

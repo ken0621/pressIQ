@@ -1,0 +1,123 @@
+{
+	"home":
+	{
+		"home_slider" :
+		{
+			"label":"Slideshow",
+			"type":"gallery",
+			"default":"",
+			"size":"6"
+		},
+		"home_brand" :
+		{
+			"label":"Brand Carousel",
+			"type":"gallery",
+			"default":"",
+			"size":"6"
+		},
+		"home_intro_title_1" :
+		{
+			"label":"Intro Title - 1",
+			"type":"textbox",
+			"default":"MONEY BACK",
+			"size":"4"
+		},
+		"home_intro_title_2" :
+		{
+			"label":"Intro Title - 2",
+			"type":"textbox",
+			"default":"FREE SHIPPING",
+			"size":"4"
+		},
+		"home_intro_title_3" :
+		{
+			"label":"Intro Title - 3",
+			"type":"textbox",
+			"default":"SPECIAL DISCOUNT",
+			"size":"4"
+		},
+		"home_intro_sub_1" :
+		{
+			"label":"Intro Sub - 1",
+			"type":"textbox",
+			"default":"15 Days Money Back Guarantee",
+			"size":"4"
+		},
+		"home_intro_sub_2" :
+		{
+			"label":"Intro Sub - 2",
+			"type":"textbox",
+			"default":"Shipping on orders over PHP 1000.00",
+			"size":"4"
+		},
+		"home_intro_sub_3" :
+		{
+			"label":"Intro Sub - 3",
+			"type":"textbox",
+			"default":"Extra 5% off on all items",
+			"size":"4"
+		},
+		"home_ads_1" :
+		{
+			"label":"Home Ads - 1",
+			"type":"image",
+			"default":"",
+			"size":"6"
+		},
+		"home_ads_2" :
+		{
+			"label":"Home Ads - 2",
+			"type":"image",
+			"default":"",
+			"size":"6"
+		}
+	},
+	"about_us":
+	{
+		"about_title" :
+		{
+			"label":"About Title",
+			"type":"textbox",
+			"default":"Welcome to Shopshoshop.com",
+			"size":"12"
+		},
+		"mission-content" :
+		{
+			"label":"About Description",
+			"type":"textarea",
+			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue.",
+			"size":"12"
+		},
+		"mission_title" :
+		{
+			"label":"Mission Title",
+			"type":"textbox",
+			"default":"Our Mission",
+			"size":"12"
+		},
+		"mission_description" :
+		{
+			"label":"Mission Description",
+			"type":"textarea",
+			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.",
+			"size":"12"
+		},
+		"vision_title" :
+		{
+			"label":"Vision Title",
+			"type":"textbox",
+			"default":"Our Mission",
+			"size":"12"
+		}
+	},
+	"others":
+	{
+		"address" :
+		{
+			"label":"Address",
+			"type":"textbox",
+			"default":"168 Lorem ipsum dolor sit amet, consectetuer adipiscing elit",
+			"size":"6"
+		}
+	}
+}

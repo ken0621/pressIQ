@@ -1,0 +1,202 @@
+var receive_payment = receive_payment();
+var maximum_payment = 0;
+var is_amount_receive_modified = false;
+
+function receive_payment()
+{
+	init();
+
+	function init()
+	{
+		document_ready();
+	}
+
+	function document_ready()
+	{
+		initialize_select_plugin();
+
+		event_line_check_change();
+		event_payment_amount_change();
+		event_received_amount_change();
+	}
+
+	function new_row()
+	{
+		var html = '<tr class="tr-draggable">';
+            html += '<td class="text-center cursor-move move td-draggable"><input type="checkbox" ></td>';
+            html += '<td></td>';
+            html += '<td class="text-right"></td>';
+            html += '<td><input type="text" class="text-right" value=""/></td>';
+            html += '<td><input type="text" class="text-right" value=""/></td>';
+            html += '<td><input class="text-right" value="" type="text" name=""/></td>';
+            html += '</tr>';
+	}
+
+	function initialize_select_plugin()
+	{
+		$(".drop-down-customer").globalDropList(
+		{
+		    link 		: '/member/customer/modalcreatecustomer',
+		    link_size 	: 'lg',
+		    width 		: "100%",
+		    placeholder : 'Customer',
+		    onChangeValue: function()
+		    {
+		    	$(".tbody-item").load("/member/customer/load_rp/"+$(this).val(), function()
+		    	{
+		    		action_compute_maximum_amount();
+		    	})
+		    }
+		});
+
+		$(".drop-down-payment").globalDropList(
+		{
+		    link 		: '/member/maintenance/payment_method/add',
+		    link_size 	: 'lg',
+		    width 		: "100%",
+		    placeholder : 'Payment Method'
+		});
+
+		$(".drop-down-coa").globalDropList(
+		{
+		    link 		: '/member/accounting/chart_of_account/popup/add',
+		    link_size 	: 'md',
+		    width 		: "100%",
+		    placeholder : 'Chart of Account'
+		});
+	}
+
+	/* CHECK BOX FOR LINE ITEM */
+	function event_line_check_change()
+	{
+		$(document).on("change", ".line-checked", function()
+		{
+			action_change_input_value($(this));
+		});
+	}
+	function action_change_input_value($this)
+	{
+		if($this.is(":checked"))
+		{
+			$this.prev().val(1);
+			var balance = $this.parents("tr").find(".balance-due").val();
+			if(!formatFloat($this.parents("tr").find(".amount-payment").val()) > 0)
+			{
+				$this.parents("tr").find(".amount-payment").val(balance).change();
+			}
+		}
+		else
+		{
+			$this.prev().val(0);
+			if(formatFloat($this.parents("tr").find(".amount-payment").val()) > 0)
+			$this.parents("tr").find(".amount-payment").val('').change();
+		}
+	}
+
+	function action_compute_maximum_amount()
+	{
+		$(".balance-due").each(function()
+		{
+			maximum_payment += formatFloat($(this).val());
+		})
+	}
+
+	function event_received_amount_change()
+	{
+		$(document).on("change", ".amount-received", function()
+		{
+			$(this).val(formatMoney($(this).val()));
+
+			var amount_receive = formatFloat($(this).val());
+			var amount_applied = formatFloat(action_total_amount_apply());
+
+			if( amount_receive > amount_applied)
+			{
+				console.log("true");
+				action_update_credit_amount(amount_receive - amount_applied);
+			}
+			else
+			{
+				action_update_credit_amount(0)
+			}
+		})
+
+		$(document).on("keydown", ".amount-received", function()
+		{
+			is_amount_receive_modified = true;
+		})
+	}
+
+	function action_update_apply_amount($amount)
+	{
+		$(".amount-to-apply").val($amount);
+		$(".amount-apply").html("PHP "+formatMoney($amount))
+	}
+
+	function action_update_credit_amount($amount)
+	{
+		$(".amount-to-credit").val($amount);
+		$(".amount-credit").html("PHP "+formatMoney($amount))
+	}
+
+	function event_payment_amount_change()
+	{
+		$(document).on("change",".amount-payment", function(e)
+		{
+			$(this).val(formatFloat($(this).val()) == 0 ? '' : formatMoney($(this).val()));
+
+			!is_amount_receive_modified ? $(".amount-received").val(action_total_amount_apply()).change() : $(".amount-received").change();
+			action_update_apply_amount(action_total_amount_apply());
+
+			// check - uncheck checkbox
+			if(formatFloat($(this).val()) > 0)
+			{
+				$(this).parents("tr").find(".line-checked").prop("checked", true).change();
+			}
+			else
+			{
+				$(this).parents("tr").find(".line-checked").prop("checked", false).change();
+			}
+
+			// validation for exceeding balace
+			if(formatFloat($(this).val()) > formatFloat($(this).parents("tr").find(".balance-due").val()) )
+			{
+				this.setCustomValidity("You may not pay more than the balance due");
+    			return false;
+			}
+			else
+			{
+				this.setCustomValidity("");
+    			return true;
+			}
+		})
+	}
+
+	function action_total_amount_apply()
+	{
+		var line_payment_amount = 0;
+		$(".amount-payment").each(function()
+		{
+			line_payment_amount += formatFloat($(this).val());
+		})
+
+		return formatMoney(line_payment_amount);
+	}
+
+	function formatFloat($this)
+	{
+		return Number($this.toString().replace(/[^0-9\.]+/g,""));
+	}
+
+	function formatMoney($this)
+	{
+		var n = formatFloat($this), 
+	    c = isNaN(c = Math.abs(c)) ? 2 : c, 
+	    d = d == undefined ? "." : d, 
+	    t = t == undefined ? "," : t, 
+	    s = n < 0 ? "-" : "", 
+	    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+	    j = (j = i.length) > 3 ? j % 3 : 0;
+	   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+	}
+}

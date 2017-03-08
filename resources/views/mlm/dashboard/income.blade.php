@@ -1,0 +1,38 @@
+
+
+<div>
+  <!-- Widget: user widget style 1 -->
+  <div class="box box-widget widget-user-2">
+    <!-- Add the bg color to the header using any of the bg-* classes -->
+    <div class="widget-user-header bg-aqua">
+      <div class="widget-user-image">
+        <img class="img-circle" src="/assets/mlm/default-pic.png" alt="User Avatar">
+      </div>
+      <!-- /.widget-user-image -->
+      <h3 class="widget-user-username">{{$customer_info->mlm_username}}</h3>
+      <h5 class="widget-user-desc">@if(isset($slot_now->membership_name)) {{$slot_now->membership_name}} @else @endif</h5>
+    </div>
+    <div class="box-footer no-padding">
+      <ul class="nav nav-stacked">
+        <li><a href="javascript:">Slot No <span class="pull-right badge ">@if(isset($slot_now->slot_no)) {{$slot_now->slot_no}} @else No Slot @endif</span></a></li>
+        <li><a href="javascript:"><hr></li>
+        <li><a href="javascript:">Income Summary</li>
+        @if(isset($slot_now))
+            @if($slot_now != null)
+                @if (Session::has('message'))
+                    <li><a href="javascript:" class="pull-right badge bg-red">{{ Session::get('message') }}</a></li>
+                @endif
+                @foreach($plan_settings as $key => $value)
+                <li><a href="javascript:">{{$value->marketing_plan_name}} <span class="pull-right badge bg-aqua">{{currency('PHP', $earning[$key])}}</span></a></li>
+                @endforeach 
+            @else
+                <li><a href="javascript:" class="pull-right badge bg-blue">No Active Income yet.</a></li>
+            @endif
+        @else
+        <li><a href="javascript:" class="pull-right badge bg-blue">No Active Income yet.</a></li>
+        @endif
+      </ul>
+    </div>
+  </div>
+  <!-- /.widget-user -->
+</div>

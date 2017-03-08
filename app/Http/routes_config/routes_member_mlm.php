@@ -1,0 +1,189 @@
+<?php
+/* MEMBER - MULTILEVEL MARKETING */
+Route::any('/member/mlm/membership', 'Member\MLM_MembershipController@index'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/membership/add', 'Member\MLM_MembershipController@add'); //GUILLERMO TABLIGAN
+Route::post('/member/mlm/membership/add/save', 'Member\MLM_MembershipController@save'); // LUKE GLENN JORDAN
+Route::any('/member/mlm/membership/edit/{membership_id}', 'Member\MLM_MembershipController@edit'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/membership/edit/{membership_id}/add_package', 'Member\MLM_MembershipController@add_package'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/membership/popup', 'Member\MLM_MembershipController@popup'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/membership/popups', 'Member\MLM_MembershipController@popup'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/membership/edit/{membership_id}/package/edit/{membership_package_id}', 'Member\MLM_MembershipController@edit_package');
+Route::any('/member/mlm/membership/edit/{membership_id}/package/view/product', 'Member\MLM_MembershipController@view_product'); //LUKE GLENN JORDAN
+Route::any('/member/mlm/membership/edit/{membership_id}/package/{package_id}', 'Member\MLM_MembershipController@edit_package'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/membership/delete/{membership_id}', 'Member\MLM_MembershipController@delete'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/membership/restore/{membership_id}', 'Member\MLM_MembershipController@restore'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/membership/add/package/save', 'Member\MLM_MembershipController@save_package'); // Luke
+Route::any('/member/mlm/membership/view/package/{membership_id}', 'Member\MLM_MembershipController@get_packages_with_view'); //Luke
+Route::any('/member/mlm/membership/edit/package/{membership_package_id}', 'Member\MLM_MembershipController@edit_package_popup'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/membership/edit/package/archive/{membership_package_id}', 'Member\MLM_MembershipController@edit_package_popup_archive'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/membership/edit/package/save/submit', 'Member\MLM_MembershipController@save_package_popup'); 
+
+Route::any('/member/mlm/code', 'Member\MLM_CodeController@index'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/code/block/{id}', 'Member\MLM_CodeController@block'); //ERWIN
+Route::any('/member/mlm/code/block_submit', 'Member\MLM_CodeController@block_submit'); //ERWIN
+Route::any('/member/mlm/code/sell', 'Member\MLM_CodeController@sell'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/code/sell/add_line', 'Member\MLM_CodeController@add_line'); //Luke
+Route::any('/member/mlm/code/sell/add_line/view', 'Member\MLM_CodeController@view_all_lines'); //Luke
+Route::any('/member/mlm/code/sell/add_line/submit', 'Member\MLM_CodeController@addl_line_submit'); //Luke
+Route::any('/member/mlm/code/sell/clear_line_all', 'Member\MLM_CodeController@clear_line_all'); //Luke
+Route::any('/member/mlm/code/sell/clear_line/{id}', 'Member\MLM_CodeController@remove_one_line'); //Luke
+Route::any('/member/mlm/code/sell/compute', 'Member\MLM_CodeController@compute');//Luke
+Route::any('/member/mlm/code/sell/process', 'Member\MLM_CodeController@process');// ERWIN
+Route::any('/member/mlm/code/receipt/', 'Member\MLM_CodeController@receipt'); //ERWIN
+Route::any('/member/mlm/code/receipt/view/{id}', 'Member\MLM_CodeController@view_receipt'); //ERWIN
+
+Route::any('/member/mlm/claim_voucher', 'Member\MLM_ClaimVoucher@index'); //ERWIN
+Route::any('/member/mlm/claim_voucher/claim', 'Member\MLM_ClaimVoucher@claim'); //ERWIN
+Route::post('/member/mlm/claim_voucher/check_claim', 'Member\MLM_ClaimVoucher@check_claim'); //ERWIN
+Route::post('/member/mlm/claim_voucher/check_claim/process', 'Member\MLM_ClaimVoucher@process'); //ERWIN
+Route::post('/member/mlm/claim_voucher/check_claim/void', 'Member\MLM_ClaimVoucher@void'); //ERWIN
+
+/* Start MLM Slot */
+Route::any('/member/mlm/slot', 'Member\MLM_SlotController@index'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/slot/simulate/{code}', 'Member\MLM_SlotController@simulate');
+Route::any('/member/mlm/slot/add', 'Member\MLM_SlotController@add_slot');
+Route::any('/member/mlm/slot/view/{slot_id}', 'Member\MLM_SlotController@view_slot_info');
+Route::any('/member/mlm/slot/add/submit', 'Member\MLM_SlotController@add_slot_submit');
+Route::any('/member/mlm/slot/head', 'Member\MLM_SlotController@add_slot_head');
+Route::any('/member/mlm/slot/get/code/{customer_id}', 'Member\MLM_SlotController@get_member_code');
+Route::any('/member/mlm/slot/get/code/form/submit', 'Member\MLM_SlotController@get_member_code_form_submit');
+Route::any('/member/mlm/slot/genealogy', 'Member\MLM_SlotController@tree');
+Route::any('/member/mlm/slot/genealogy/downline', 'Member\MLM_SlotController@downline');
+Route::any('/member/mlm/slot/set/inactive/{slot_id}', 'Member\MLM_SlotController@set_inactive_slot');
+/* end MLM Slot */
+
+/* start MLM PLAN */
+Route::any('/member/mlm/plan', 'Member\MLM_PlanController@index'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/plan/save/setting', 'Member\MLM_PlanController@save_settings'); // Luke
+Route::any('/member/mlm/plan/{plan}', 'Member\MLM_PlanController@configure_plan');//Luke
+Route::any('/member/mlm/plan/{plan}/basicsettings', 'Member\MLM_PlanController@get_basicsettings');//Luke
+Route::any('/member/mlm/plan/edit/submit', 'Member\MLM_PlanController@configure_plan_submit');//Luke
+Route::any('/member/mlm/plan/binary/settings/submit', 'Member\MLM_PlanController@submit_binary_advance');//Luke
+Route::any('/member/mlm/plan/wallet/type/view', 'Member\MLM_PlanController@wallet_type');//Luke
+Route::any('/member/mlm/plan/wallet/type/add', 'Member\MLM_PlanController@add_wallet_type');//Luke
+
+
+/* start binary PLAN */
+Route::any('/member/mlm/plan/binary/edit/membership/points', 'Member\MLM_PlanController@edit_binary_membership_points');//Luke
+Route::any('/member/mlm/plan/binary/get/membership/pairing/{membership_id}', 'Member\MLM_PlanController@get_binary_pairing_combination'); //Luke
+Route::any('/member/mlm/plan/binary/edit/membership/pairing/save', 'Member\MLM_PlanController@save_binary_pairing_combinartion'); //Luke
+/* start binary PLAN */
+
+/* start indirect PLAN */
+Route::any('/member/mlm/plan/indirect/edit/settings/{membership_id}', 'Member\MLM_PlanController@edit_indirect_setting');//Luke
+Route::any('/member/mlm/plan/indirect/edit/settings/addlevel/save', 'Member\MLM_PlanController@edit_indirect_setting_add_level');//Luke
+/* end stairstep Plan */
+
+/* start stairstep PLAN */
+Route::any('/member/mlm/plan/stairstep/get', 'Member\MLM_PlanController@get_stairstep');//Luke
+Route::any('/member/mlm/plan/stairstep/save', 'Member\MLM_PlanController@save_stairstep');//Luke
+Route::any('/member/mlm/plan/stairstep/edit/save', 'Member\MLM_PlanController@edit_save_stairstep');//Luke
+/* end stairstep Plan */
+
+/* start unilevel Plan */
+Route::any('/member/mlm/plan/unilevel/get/all', 'Member\MLM_PlanController@get_all_unilevel');//luke
+Route::any('/member/mlm/plan/unilevel/get/single/{membership_id}', 'Member\MLM_PlanController@get_single_unilevel');//luke
+Route::any('/member/mlm/plan/unilevel/settings/save', 'Member\MLM_PlanController@save_settings_unilevel');
+/* end unilevel Plan */
+
+/* start Matching Plan */
+Route::any('/member/mlm/plan/matching/add', 'Member\MLM_PlanController@matching_add_new');//luke
+/* end unilevel Plan */
+
+/* start Executive Plan */
+Route::any('/member/mlm/plan/executive/edit/points', 'Member\MLM_PlanController@edit_executive_points');//luke
+Route::any('/member/mlm/product/set/settings', 'Member\MLM_PlanController@set_settings_executive_points');
+/* end Executive Plan */
+
+/* start leadership Plan */
+Route::any('/member/mlm/plan/leadership/edit/points', 'Member\MLM_PlanController@leadership_bonus_edit');//luke
+Route::any('/member/mlm/plan/leadership/edit/matching', 'Member\MLM_PlanController@leadership_bonus_matching');
+/* end leadership Plan */
+
+/* start direct points NOTE: Direct POINTS ONLY Plan */
+Route::any('/member/mlm/plan/direct/edit/points', 'Member\MLM_PlanController@direct_points_edit_v2');//luke
+/* end direct points Plan */
+
+/* start indirect points NOTE: INDirect POINTS ONLY Plan */
+Route::any('/member/mlm/plan/indirect/edit/points', 'Member\MLM_PlanController@indirect_points_edit_v2');//luke
+/* end indirect points Plan */
+
+/* start indirect points NOTE: INDirect POINTS ONLY Plan */
+Route::any('/member/mlm/plan/repurchase/edit/points', 'Member\MLM_PlanController@repurchase_add');//luke
+/* end indirect points Plan */
+
+/* start initial points */
+Route::any('/member/mlm/plan/initial_points/edit/membership/points', 'Member\MLM_PlanController@initial_points_add');//luke
+/* end initial points Plan */
+
+/* start REPURCHASE CASHBACK points */
+Route::any('/member/mlm/plan/repurchase_cashback/edit/membership/points', 'Member\MLM_PlanController@repurchase_cashback_add');//luke
+/* end REPURCHASE CASHBACK Plan */
+
+/* start Unilevel repurchase points */
+Route::any('/member/mlm/plan/unilevel_repurchase_points/edit/membership/points', 'Member\MLM_PlanController@unilevel_repurchase_points_add');//luke
+/* end Unilevel repurchase Plan */
+
+/* start discount card  */
+Route::any('/member/mlm/plan/discountcard/add', 'Member\MLM_PlanController@discount_card_add');//luke
+/* end discount card Plan */
+
+/* end MLM Plan */
+
+/* start MLM Product */
+Route::any('/member/mlm/wallet', 'Member\Mlm_WalletController@index');//luke
+Route::any('/member/mlm/wallet/adjust', 'Member\Mlm_WalletController@adjust');//luke
+Route::any('/member/mlm/wallet/adjust/submit', 'Member\Mlm_WalletController@adjust_submit');//luke
+Route::any('/member/mlm/wallet/breakdown/{slot_id}', 'Member\Mlm_WalletController@breakdown_wallet');//luke
+Route::any('/member/mlm/wallet/refill', 'Member\Mlm_WalletController@refill');//luke
+Route::any('/member/mlm/wallet/refill/{id}', 'Member\Mlm_WalletController@refill_id');//luke
+Route::any('/member/mlm/wallet/refill/process/submit', 'Member\Mlm_WalletController@refill_process');//luke
+Route::any('/member/mlm/wallet/refill/change/settings', 'Member\Mlm_WalletController@refill_settings');//luke
+Route::any('/member/mlm/wallet/transfer', 'Member\Mlm_WalletController@transfer');
+Route::any('/member/mlm/wallet/transfer/change_settings', 'Member\Mlm_WalletController@transfer_change_settings');
+/* end MLM Product */
+
+/* start MLM Encashment */
+Route::any('/member/mlm/encashment', 'Member\Mlm_EncashmentController@index');//luke
+Route::any('/member/mlm/encashment/update/settings', 'Member\Mlm_EncashmentController@update_settings');//luke
+Route::any('/member/mlm/encashment/process/all', 'Member\Mlm_EncashmentController@process_all_encashment');//luke
+Route::any('/member/mlm/encashment/view/{encashment_process}', 'Member\Mlm_EncashmentController@view_process');//luke
+Route::any('/member/mlm/encashment/view/breakdown/{encashment_process}/{slot_id}', 'Member\Mlm_EncashmentController@breakdown_slot');//luke
+Route::any('/member/mlm/encashment/view/breakdown/process', 'Member\Mlm_EncashmentController@process_breakdown');//luke
+Route::any('/member/mlm/encashment/view/pdf/{encashment_process}/{slot_id}', 'Member\Mlm_EncashmentController@show_pdf');//luke
+/* end MLM Product */
+
+/* start MLM Product */
+Route::any('/member/mlm/product', 'Member\MLM_ProductController@index');//luke
+Route::any('/member/mlm/product/point/add', 'Member\MLM_ProductController@add_product_points');
+Route::any('/member/mlm/product/discount', 'Member\MLM_ProductController@discount');//luke
+Route::any('/member/mlm/product/discount/submit', 'Member\MLM_ProductController@discount_add');
+Route::any('/member/mlm/product/discount/get/{item_id}/{slot_id}', 'Member\MLM_ProductCodeController@discount_get');
+Route::any('/member/mlm/product/discount/get/{item_id}', 'Member\MLM_ProductCodeController@price_original_get');
+Route::any('/member/mlm/product/discount/fix/session/{slot_id}', 'Member\MLM_ProductCodeController@fix_discount_session');
+Route::any('/member/mlm/product/repurchase/points', 'Member\MLM_ProductController@discount');//luke
+Route::any('/member/mlm/product/set/all/points', 'Member\MLM_ProductController@set_all_points');//luke
+/* end MLM Product */
+
+/* start MLM PRODUCT CODE */
+Route::any('/member/mlm/product_code', 'Member\MLM_ProductCodeController@index');//ewen
+Route::any('/member/mlm/product_code/sell', 'Member\MLM_ProductCodeController@sell');//ewen
+Route::any('/member/mlm/product_code/sell/add_line', 'Member\MLM_ProductCodeController@add_line'); //ewen
+Route::any('/member/mlm/product_code/sell/add_line/submit', 'Member\MLM_ProductCodeController@add_line_submit'); //ewen
+Route::any('/member/mlm/product_code/sell/add_line/view', 'Member\MLM_ProductCodeController@view_all_lines'); //ewen
+Route::any('/member/mlm/product_code/sell/compute', 'Member\MLM_ProductCodeController@compute'); //ewen
+Route::any('/member/mlm/product_code/sell/clear_line/{id}', 'Member\MLM_ProductCodeController@remove_one_line'); //ewen
+Route::any('/member/mlm/product_code/sell/clear_line_all', 'Member\MLM_ProductCodeController@clear_line_all'); //ewen
+Route::any('/member/mlm/product_code/sell/process', 'Member\MLM_ProductCodeController@process'); //ewen
+Route::any('/member/mlm/product_code/block/{id}', 'Member\MLM_ProductCodeController@block'); //ewen
+Route::any('/member/mlm/product_code/block_submit', 'Member\MLM_ProductCodeController@block_submit'); //ewen
+Route::any('/member/mlm/product_code/receipt', 'Member\MLM_ProductCodeController@receipt'); //ewen
+Route::any('/member/mlm/product_code/receipt/view/{id}', 'Member\MLM_ProductCodeController@view_receipt'); //ewen
+/* end MLM PRODUCT CODE */
+
+Route::get('member/mlm/card', 'Member\MLM_CardController@all_slot');
+Route::post('member/mlm/card/filter', 'Member\MLM_CardController@filter');
+Route::get('member/mlm/card/image/{slot}', 'Member\MLM_CardController@generate');
+Route::get('member/mlm/card/all', 'Member\MLM_CardController@all_slot');
+Route::post('member/mlm/card/done', 'Member\MLM_CardController@done');
+Route::post('member/mlm/card/pending', 'Member\MLM_CardController@pending');

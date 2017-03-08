@@ -1,0 +1,430 @@
+<?php
+namespace App\Globals;
+
+use App\Models\Tbl_membership_package;
+use App\Models\Tbl_membership;
+use App\Models\Tbl_mlm_plan;
+use App\Models\Tbl_item_code;
+use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_mlm_plan_setting;
+use App\Models\Tbl_tree_placement;
+use App\Models\Tbl_tree_sponsor;
+use App\Models\Tbl_mlm_binary_pairing;
+use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Models\Tbl_mlm_indirect_setting;
+use App\Models\Tbl_mlm_binary_setttings;
+use App\Models\Tbl_mlm_unilevel_settings;
+use App\Models\Tbl_mlm_item_points;
+use App\Models\Tbl_mlm_unilevel_points_settings;
+
+use App\Http\Controllers\Member\MLM_MembershipController;
+use App\Http\Controllers\Member\MLM_ProductController;
+
+use Schema;
+use Session;
+use DB;
+
+use Carbon\Carbon;
+
+use App\Globals\Mlm_compute;
+use App\Globals\Mlm_slot_log;
+use App\Globals\Mlm_complan_manager_repurchase;
+
+class Mlm_complan_manager_repurchase
+{   
+    public static function unilevel($slot_info, $item_code_id)
+    {
+        $slot_info     = Tbl_mlm_slot::where("slot_id", $slot_info->slot_id)->customer()->membership()->first();
+        $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 
+
+        if($item_code)
+        {
+            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)->first();
+
+            if($mlm_item_points)
+            {
+                $unilevel_pts = $mlm_item_points->UNILEVEL;
+            }
+            else
+            {
+                $unilevel_pts = 0;
+            }
+        }
+        else
+        {
+            $unilevel_pts = 0;
+        }
+        $_unilevel_setting = Tbl_mlm_unilevel_settings::get();
+        $_tree             = Tbl_tree_sponsor::child($slot_info->slot_id)->level()->distinct_level()->get();
+
+        $unilevel_level = [];
+        $unilevel_level_settings = [];
+        foreach($_unilevel_setting as $key => $level)
+        {
+            $unilevel_level[$level->membership_id][$level->unilevel_settings_level] =  $level->unilevel_settings_amount;
+            $unilevel_level_settings[$level->membership_id][$level->unilevel_settings_level] =  $level->unilevel_settings_type;
+            $unilevel_level_settings_percentage[$level->membership_id][$level->unilevel_settings_level] =  $level->unilevel_settings_percent;
+        }
+        foreach($_tree as $key => $tree)
+        {
+            $slot_recipient = Mlm_compute::get_slot_info($tree->sponsor_tree_parent_id);
+            if(isset($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]))
+            {
+                      
+                $settings = $unilevel_level_settings[$slot_recipient->membership_id][$tree->sponsor_tree_level];
+                $percentage = $unilevel_level_settings_percentage[$slot_recipient->membership_id][$tree->sponsor_tree_level];
+                // 0 = fixed
+                // 1 = percentage
+                if($percentage === 0)
+                {
+                    $unilevel_bonus = $unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level];
+                }
+                else
+                {
+                    $unilevel_bonus = ($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]/100) * $unilevel_pts;
+                }
+            }
+
+            else
+            {
+                $unilevel_bonus = 0;  
+            }
+            if($unilevel_bonus != 0)
+            {
+                // 0 = points
+                // 1 = cash
+                if($settings === 0)
+                {
+                    $array['points_log_complan'] = "UNILEVEL";
+                    $array['points_log_level'] = $tree->sponsor_tree_level;
+                    $array['points_log_slot'] = $slot_recipient->slot_id;
+                    $array['points_log_Sponsor'] = $slot_info->slot_id;
+                    $array['points_log_date_claimed'] = Carbon::now();
+                    $array['points_log_converted'] = 0;
+                    $array['points_log_converted_date'] = Carbon::now();
+                    $array['points_log_type'] = 'GPV';
+                    $array['points_log_from'] = 'Product Repurchase';
+                    $array['points_log_points'] = $unilevel_bonus;
+
+                    Mlm_slot_log::slot_log_points_array($array);
+                }
+                else
+                {
+                    $log_array['earning'] = $unilevel_bonus;
+                    $log_array['level'] = $tree->sponsor_tree_level;
+                    $log_array['level_tree'] = 'Sponsor Tree';
+                    $log_array['complan'] = 'UNILEVEL';
+
+                    $log = Mlm_slot_log::log_constructor($slot_recipient, $slot_info,  $log_array);
+
+                    $arry_log['wallet_log_slot'] = $slot_recipient->slot_id;
+                    $arry_log['shop_id'] = $slot_info->shop_id;
+                    $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                    $arry_log['wallet_log_details'] = $log;
+                    $arry_log['wallet_log_amount'] = $unilevel_bonus;
+                    $arry_log['wallet_log_plan'] = "UNILEVEL";
+                    $arry_log['wallet_log_status'] = "n_ready";   
+                    $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('DIRECT', $slot_info->shop_id); 
+                    Mlm_slot_log::slot_array($arry_log);
+                }
+            }
+        }
+        Mlm_complan_manager_repurchase::unilevel_cutoff('UNILEVEL', $slot_info->shop_id);  
+    }
+    public static function unilevel_cutoff($code, $shop_id)
+    {
+        $now = Carbon::now();
+        $wallet_log = Tbl_mlm_slot_wallet_log::where('shop_id', $shop_id)
+        ->where('wallet_log_plan', $code)
+        ->where('wallet_log_status', 'n_ready')
+        ->where('wallet_log_claimbale_on', '<', Carbon::now()->addMinutes(1))
+        ->get();  
+        $cutoff_log = [];
+        foreach($wallet_log as $key => $value)
+        {
+            $cutoff_log[$value->wallet_log_slot][$value->wallet_log_id] = $value->wallet_log_amount; 
+        }
+        if($cutoff_log != null)
+        {
+            foreach($cutoff_log as $key => $value)
+            {
+                foreach($value as $key2 => $value2)
+                {
+                    $update['wallet_log_status'] = 'released';
+                    Tbl_mlm_slot_wallet_log::where('wallet_log_id', $key2)->update($update);
+                }
+            }
+        }
+    }
+    public static function unilevel_v2($slot_info,$item_code_id)
+    {
+        
+        /* ----- COMPUTATION OF PERSONAL PV */
+        $update_recipient["slot_personal_points"] = $slot_info->slot_personal_points + $unilevel_pts;
+
+        dd($update_recipient["slot_personal_points"]);
+        /* UPDATE SLOT CHANGES TO DATABASE */
+        Tbl_mlm_slot::where("slot_id",$slot_info->slot_id)->update($update_recipient);
+        $update_recipient  = null;
+
+        /* ----- COMPUTATION OF GROUP PV ----- */
+        $_unilevel_setting = Tbl_mlm_unilevel_settings::get();
+        $_tree             = Tbl_tree_sponsor::child($slot_info->slot_id)->level()->distinct_level()->get();
+
+        /* RECORD ALL INTO A SINGLE VARIABLE */
+        $unilevel_level = null;
+        foreach($_unilevel_setting as $key => $level)
+        {
+            $unilevel_level[$level->membership_id][$level->unilevel_settings_level] =  $level->unilevel_settings_amount;
+        }
+
+            /* CHECK IF LEVEL EXISTS */
+            if($unilevel_level)
+            {
+                foreach($_tree as $key => $tree)
+                {
+                    /* GET SLOT INFO FROM DATABASE */
+                    $slot_recipient                          = Tbl_mlm_slot::where("slot_id",$tree->sponsor_tree_parent_id)->customer()->membership()->first();
+                    $update_recipient["slot_group_points"]   = $slot_recipient->slot_group_points;
+                    $update_recipient["slot_upgrade_points"] = $slot_recipient->slot_upgrade_points;
+
+                    /* COMPUTE FOR BONUS */
+                    if(isset($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]))
+                    {
+                        $unilevel_bonus = ($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]/100) * $unilevel_pts;      
+                    }
+                    else
+                    {
+                        $unilevel_bonus = 0;  
+                    }
+
+                    /* CHECK IF BONUS IS ZERO */
+                    if($unilevel_bonus != 0)
+                    {
+                        /* UPDATE GROUP PTS */
+                        $update_recipient["slot_group_points"]  = $update_recipient["slot_group_points"] + $unilevel_bonus;
+                    }
+                    Tbl_mlm_slot::where("slot_id",$slot_recipient->slot_id)->update($update_recipient);
+                }
+            }            
+    }
+    public static function binary_repurchase($slot_info,$item_code_id)
+    {
+
+        $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first();
+
+        if($item_code)
+        {
+            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)->first();
+
+            if($mlm_item_points)
+            {
+                $binary_pts = $mlm_item_points->BINARY_REPURCHASE;
+            }
+            else
+            {
+                $binary_pts = 0;
+            }
+        }
+        else
+        {
+            $binary_pts = 0;
+        }
+
+
+        /* FOR PS ONLY or CD Turned PS */
+        // GET PAIRING SETTINGS / BINARY TREE
+        $settings_pairing       = Tbl_mlm_binary_pairing::orderBy("pairing_point_left", "desc")->get();
+        $binary_advance_pairing = Tbl_mlm_binary_setttings::where('shop_id', $slot_info->shop_id)->first();
+
+        // select max tree level
+        if(isset($binary_advance_pairing->binary_settings_max_tree_level))
+        {
+            $binary_settings_max_tree_level = $binary_advance_pairing->binary_settings_max_tree_level;
+        }
+        else
+        {
+            // set 999 max tree level if setting does not exist
+            $binary_settings_max_tree_level = 999;
+        }
+        $settings_tree = Tbl_tree_placement::child($slot_info->slot_id)
+        ->where('placement_tree_level', '<=', $binary_settings_max_tree_level)
+        ->level()->distinct_level()->parentslot()->get();
+
+        // end
+
+        // DISTRIBUTE BINARY POINTS
+        foreach($settings_tree as $tree)
+        {
+            // RETRIEVE LEFT & RIGHT POINTS
+            $binary["left"] = $tree->slot_binary_left;
+            $binary["right"] = $tree->slot_binary_right; 
+            // END
+
+            // GET BINARY POINTS OF MEMBERSHIP
+            $binary['points'] = $unilevel_pts  = $binary_pts;
+            // End
+            if($binary['points'] != 0)
+            {
+                // ADD OLD BINARY POINTS + NEW BINARY POINTS
+
+                $binary[$tree->placement_tree_position] = $binary[$tree->placement_tree_position] + $binary['points']; 
+
+                // End
+                $update['slot_binary_left'] =   $binary["left"];
+                $update['slot_binary_right'] =  $binary["right"];
+                Tbl_mlm_slot::where('slot_id', $tree->placement_tree_parent_id)->update($update);
+            }
+        }
+        // END
+        $a = Mlm_complan_manager::binary_pairing($slot_info);
+        Mlm_complan_manager::cutoff_binary('BINARY', $slot_info->shop_id); 
+    }
+    public static function stairstep($slot_info,$item_code_id)
+    {
+        
+    }
+    public static function repurchase_points($slot_info,$item_code_id)
+    {
+        $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 
+        if($item_code)
+        {
+            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)->first();
+            $percentage = ($slot_info->membership_points_repurchase / 100);
+            if($mlm_item_points)
+            {
+                $membership_points_repurchase = $mlm_item_points->REPURCHASE_POINTS * $percentage;
+            }
+            else
+            {
+                $membership_points_repurchase = 0;
+            }
+        }
+        else
+        {
+            $membership_points_repurchase = 0;
+        }
+        if($membership_points_repurchase != 0)
+        {
+            $array['points_log_complan'] = "REPURCHASE_POINTS";
+            $array['points_log_level'] = 0;
+            $array['points_log_slot'] = $slot_info->slot_id;
+            $array['points_log_Sponsor'] = $slot_info->slot_id;
+            $array['points_log_date_claimed'] = Carbon::now();
+            $array['points_log_converted'] = 0;
+            $array['points_log_converted_date'] = Carbon::now();
+            $array['points_log_type'] = 'PV';
+            $array['points_log_from'] = 'Product Repurchase';
+            $array['points_log_points'] = $membership_points_repurchase;
+
+            Mlm_slot_log::slot_log_points_array($array);
+        }
+    }
+    public static function repurchase_cashback($slot_info,$item_code_id)
+    {
+       $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first();  
+       if($item_code)
+        {
+            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)->first();
+            $percentage = ($slot_info->membership_points_repurchase_cashback / 100);
+            if($mlm_item_points)
+            {
+                $membership_points_repurchase_cashback = $mlm_item_points->REPURCHASE_CASHBACK * $percentage;
+            }
+            else
+            {
+                $membership_points_repurchase_cashback = 0;
+
+            }
+        }
+        if($membership_points_repurchase_cashback != 0)
+        {
+                    $log_array['earning'] = $membership_points_repurchase_cashback;
+                    $log_array['level'] = 0;
+                    $log_array['level_tree'] = 'Sponsor Tree';
+                    $log_array['complan'] = 'REPURCHASE_CASHBACK';
+
+                    $log = Mlm_slot_log::log_constructor($slot_info, $slot_info,  $log_array);
+
+                    $arry_log['wallet_log_slot'] = $slot_info->slot_id;
+                    $arry_log['shop_id'] = $slot_info->shop_id;
+                    $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                    $arry_log['wallet_log_details'] = $log;
+                    $arry_log['wallet_log_amount'] = $membership_points_repurchase_cashback;
+                    $arry_log['wallet_log_plan'] = "REPURCHASE_CASHBACK";
+                    $arry_log['wallet_log_status'] = "n_ready";   
+                    $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK', $slot_info->shop_id); 
+                    Mlm_slot_log::slot_array($arry_log);
+        }
+    }
+    public static function unilevel_repurchase_points($slot_info, $item_code_id)
+    {
+        $slot_info     = Tbl_mlm_slot::where("slot_id", $slot_info->slot_id)->customer()->membership()->first();
+        $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 
+
+        if($item_code)
+        {
+            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)->first();
+
+            if($mlm_item_points)
+            {
+                $unilevel_pts = $mlm_item_points->UNILEVEL_REPURCHASE_POINTS;
+            }
+            else
+            {
+                $unilevel_pts = 0;
+            }
+        }
+        else
+        {
+            $unilevel_pts = 0;
+        }
+        $_unilevel_setting = Tbl_mlm_unilevel_points_settings::where('unilevel_points_archive', 0)->get();
+        $_tree             = Tbl_tree_sponsor::child($slot_info->slot_id)->level()->distinct_level()->get();
+
+        $unilevel_level = [];
+        $unilevel_level_settings = [];
+        foreach($_unilevel_setting as $key => $level)
+        {
+            $unilevel_level[$level->membership_id][$level->unilevel_points_level] =  $level->unilevel_points_amount;
+            $unilevel_level_settings_percentage[$level->membership_id][$level->unilevel_points_level] =  $level->unilevel_points_percentage;
+        }
+        foreach($_tree as $key => $tree)
+        {
+            $slot_recipient = Mlm_compute::get_slot_info($tree->sponsor_tree_parent_id);
+            if(isset($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]))
+            {
+                $percentage = $unilevel_level_settings_percentage[$slot_recipient->membership_id][$tree->sponsor_tree_level];
+                // 0 = fixed
+                // 1 = percentage
+                if($percentage === 0)
+                {
+                    $unilevel_bonus = $unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level];
+                }
+                else
+                {
+                    $unilevel_bonus = ($unilevel_level[$slot_recipient->membership_id][$tree->sponsor_tree_level]/100) * $unilevel_pts;
+                }
+            }
+            else
+            {
+                $unilevel_bonus = 0;  
+            }
+            if($unilevel_bonus != 0)
+            {
+                $array['points_log_complan'] = "UNILEVEL_REPURCHASE_POINTS";
+                $array['points_log_level'] = $tree->sponsor_tree_level;
+                $array['points_log_slot'] = $slot_recipient->slot_id;
+                $array['points_log_Sponsor'] = $slot_info->slot_id;
+                $array['points_log_date_claimed'] = Carbon::now();
+                $array['points_log_converted'] = 0;
+                $array['points_log_converted_date'] = Carbon::now();
+                $array['points_log_type'] = 'GPV';
+                $array['points_log_from'] = 'Product Repurchase';
+                $array['points_log_points'] = $unilevel_bonus;
+                Mlm_slot_log::slot_log_points_array($array);
+            }
+        }
+        Mlm_complan_manager_repurchase::unilevel_cutoff('UNILEVEL_REPURCHASE_POINTS', $slot_info->shop_id);
+    }
+}

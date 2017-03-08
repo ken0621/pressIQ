@@ -1,0 +1,96 @@
+{
+	"home":
+	{
+		"home_slider" :
+		{
+			"label":"Slideshow",
+			"type":"gallery",
+			"default":"",
+			"size":"12"
+		},
+		"home_category_sale" :
+		{
+			"label":"Category Sale",
+			"type":"image",
+			"default":"",
+			"size":"6"
+		},
+		"home_category_featured" :
+		{
+			"label":"Category Featured",
+			"type":"image",
+			"default":"",
+			"size":"6"
+		},
+		"home_category_tablet" :
+		{
+			"label":"Category Tablet",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"home_category_accessories" :
+		{
+			"label":"Category Accessories",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"home_category_smartphone" :
+		{
+			"label":"Category Smartphone",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"home_first_service" :
+		{
+			"label":"First Service",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"home_second_service" :
+		{
+			"label":"Second Service",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"home_third_service" :
+		{
+			"label":"Third Service",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"home_brand_title" :
+		{
+			"label":"Brand Title",
+			"type":"textbox",
+			"default":"BRANDS",
+			"size":"4"
+		},
+		"home_brand_image" :
+		{
+			"label":"Brand Images",
+			"type":"gallery",
+			"default":"",
+			"size":"4"
+		},
+ 		"home_new_arrival_title" :
+		{
+			"label":"New Arrival Title",
+			"type":"textbox",
+			"default":"NEW ARRIVAL",
+			"size":"4"
+		},
+		"home_best_seller_title" :
+		{
+			"label":"Best Seller Title",
+			"type":"textbox",
+			"default":"BEST SELLER",
+			"size":"4"
+		}
+	}
+}

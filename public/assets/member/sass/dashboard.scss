@@ -1,0 +1,37 @@
+.trial-warning
+{
+	font-weight: bold;
+	background-color: #31373D;
+	color: #fff;
+	padding: 10px 20px;
+	font-weight: normal;
+	vertical-align: middle;
+	border-radius: 3px;
+	.word-warning
+	{
+		padding-top: 5px;
+	}
+}
+
+.title-advice
+{
+	margin-top: 30px;
+	font-size: 20px;
+	i
+	{
+		color: #76B6EC;
+	}
+}
+
+.simple-advice
+{
+	background-color: #fff;
+	border: 1px solid #eee;
+	padding: 15px 0;
+	margin-top: 20px;
+	.advice-word
+	{
+		font-size: 16px;
+		padding-bottom: 5px;
+	}
+}

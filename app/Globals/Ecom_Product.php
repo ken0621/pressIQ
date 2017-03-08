@@ -1,0 +1,262 @@
+<?php
+namespace App\Globals;
+use DB;
+use App\Models\Tbl_chart_of_account;
+use App\Models\Tbl_user;
+use App\Models\Tbl_item;
+use App\Models\Tbl_category;
+use App\Models\Tbl_ec_product;
+use App\Models\Tbl_ec_variant;
+use App\Models\Tbl_variant_name;
+use App\Models\Tbl_option_name;
+use App\Models\Tbl_option_value;
+use App\Models\Tbl_ec_variant_image;
+use App\Models\Tbl_collection_item;
+
+use Request;
+use Session;
+use Validator;
+use Redirect;
+
+/**
+ * Acommerce Products and Variants - all product of ecommerce related module
+ *
+ * @author Bryan Kier Aradanas
+ */
+
+class Ecom_Product
+{
+	public static function getShopId()
+	{
+		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+	}
+
+	/**
+	 * Getting all Product w/ variants and options. If shop_id is null, the current shop id that logged on will be used.
+	 *
+	 * @param int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
+	 */
+	public static function getAllProduct($shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+		
+		$_product = Tbl_ec_product::where("eprod_shop_id", $shop_id)->get()->toArray();
+		
+		foreach($_product as $key=>$product)
+		{
+			$_product[$key]			 	= $product;
+			$_product[$key]["variant"] = Tbl_ec_variant::where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+
+			foreach($_product[$key]["variant"] as $key2=>$variant)
+			{
+				$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
+				
+				foreach($variant_option_name as $key3=>$option_name)
+				{
+					$variant_option_value = Tbl_option_value::where("option_value_id", $option_name["option_value_id"])->first()->toArray();
+					$_product[$key]["variant"][$key2]["options"][$option_name['option_name']] = $variant_option_value["option_value"];
+				}
+			}
+		}
+		
+		return $_product;
+	}
+
+	/**
+	 * Getting all Product w/ cateogry, variants and options. If shop_id is null, the current shop id that logged on will be used.
+	 *
+	 * @param int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
+	 */
+	public static function getAllCategoryProduct($shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+		
+		return Ecom_Product::getItemPerSub($shop_id, 0);
+	}
+	
+	public static function getItemPerSub($shop_id, $category_id)
+	{
+		$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived",0)->get()->toArray();
+
+		foreach($_category as $key0=>$category)
+		{
+			$_product = Tbl_ec_product::where("eprod_category_id", $category["type_id"])->where("archived",0)->get()->toArray();
+		
+			foreach($_product as $key1=>$product)
+			{
+				$_product[$key1]			   = $product;
+				$_product[$key1]["variant"] = Tbl_ec_variant::where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+
+				foreach($_product[$key1]["variant"] as $key2=>$variant)
+				{
+					$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
+					$_product[$key1]["variant"]["$key2"]["image"] = Tbl_ec_variant_image::where("eimg_variant_id", $variant["evariant_id"])->get()->toArray();
+
+					foreach($variant_option_name as $key3=>$option_name)
+					{
+						$variant_option_value = Tbl_option_value::where("option_value_id", $option_name["option_value_id"])->first()->toArray();
+						$_product[$key1]["variant"][$key2]["options"][$option_name['option_name']] = $variant_option_value["option_value"];
+					}
+				}
+			}
+
+			$_category[$key0]["Product"]		= $_product;
+			
+			$_category[$key0]["subcategory"]	= Ecom_Product::getItemPerSub($shop_id, $category["type_id"]);
+		}
+
+		return $_category;
+	}
+
+	public static function getAllProductByCategory($category_id, $shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		return Ecom_Product::getAllProductPerCategory($category_id, $shop_id, []);
+	}
+	public static function getAllProductPerCategory($category_id, $shop_id, $_product_value)
+	{
+		$_product = Tbl_ec_product::category()->where("eprod_category_id", $category_id)->where("tbl_ec_product.archived",0)->get()->toArray();
+
+		foreach($_product as $key=>$product)
+		{
+			$_product_value[$category_id."-".$key] = Ecom_Product::getProduct($product["eprod_id"], $shop_id);
+		}
+
+		$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived",0)->get()->toArray();
+		foreach($_category as $key=>$category)
+		{	
+			$_product_value	= Ecom_Product::getAllProductPerCategory($category["type_id"], $shop_id, $_product_value);
+		}
+
+		return $_product_value;
+	}
+
+	public static function getAllCategory($shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+		
+		return Ecom_Product::getCategoryPerSub($shop_id, 0, 0);
+	}
+	public static function getCategoryPerSub($shop_id, $category_id, $ctr)
+	{
+		$_category = Tbl_category::where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived",0)->get()->toArray();
+
+		foreach($_category as $key=>$category)
+		{	
+			$_category[$key]["product_count"]	= Tbl_ec_product::where("eprod_category_id", $category["type_id"])->where("archived",0)->count();
+			$ctr += $_category[$key]["product_count"] == 0 ? -$ctr : $_category[$key]["product_count"];
+			$_category[$key]["products"] = $ctr;
+			
+			$_category[$key]["subcategory"] = Ecom_Product::getCategoryPerSub($shop_id, $category["type_id"], $ctr);
+
+			if(!$_category[$key]["subcategory"] && $ctr == 0)
+			{
+				unset($_category[$key]);
+			}
+		}
+
+		return $_category;
+	}
+
+	/**
+	 * Getting specific product. If shop_id is null, the current shop id that logged on will be used.
+	 *
+	 * @param int    $product_id 	Product ID of the specific product.
+	 * @param int    $shop_id 		Shop id of the products that you wnat to get. null if auto get
+	 */
+	public static function getProduct($product_id, $shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		$product = Tbl_ec_product::price()->where("eprod_id", $product_id)->where("tbl_ec_product.archived",0)->first()->toArray();
+
+		$product			   	= $product;
+		$product["variant"] 	= Tbl_ec_variant::where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+
+		foreach($product["variant"] as $key2=>$variant)
+		{
+			$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
+			$product["variant"]["$key2"]["image"] = Tbl_ec_variant_image::path()->where("eimg_variant_id", $variant["evariant_id"])->get()->toArray();
+
+			foreach($variant_option_name as $key3=>$option_name)
+			{
+				$variant_option_value = Tbl_option_value::where("option_value_id", $option_name["option_value_id"])->first()->toArray();
+				$product["variant"][$key2]["options"][$option_name['option_name']] = $variant_option_value["option_value"];
+			}
+		}
+		
+		return $product;
+	}
+
+	public static function getProductOption($product_id = null, $separator = ' • ')
+	{
+		if($product_id)
+		{
+			return Tbl_ec_product::variantOption($separator)->where("eprod_id", $product_id)->get()->toArray();
+		}
+		else
+		{
+			return Tbl_ec_product::variantOption($separator)->get()->toArray();
+		}
+	}
+
+	public static function getVariant($name, $product_id, $separator = ' • ')
+	{
+		return Tbl_ec_variant::variantName($separator)->having("evariant_prod_id", "=", $product_id)->having("variant_name", "=", $name)->first();
+	}
+
+	public static function getAllVariants()
+	{
+		return Tbl_ec_variant::variantName()->product()->where("eprod_shop_id", Ecom_Product::getShopId())->get()->toArray();
+	}
+
+	/**
+	 * Getting all image of specific variant
+	 *
+	 * @param int   $variant_id 	Unique Id of the specific variant of a product
+	 */
+	public static function getVariantImage($variant_id)
+	{
+		return Tbl_ec_variant::where("evariant_id", $variant_id)->imageOnly()->get();
+	}
+
+	public static function getProductCollection($collection_id, $shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		$collection = Tbl_collection_item::where("tbl_collection_item.collection_id", $collection_id)
+										 ->where("tbl_collection_item.hide", 0)
+										 ->where("tbl_collection_item.archived", 0)
+										 ->where("tbl_collection.shop_id", $shop_id)
+										 ->leftJoin("tbl_collection", "tbl_collection_item.collection_id", "=", "tbl_collection.collection_id")
+										 ->get();
+	
+		foreach ($collection as $key => $value) 
+		{
+			$product = Ecom_Product::getProduct($value->ec_product_id, $shop_id);
+
+			$collection[$key]->product = $product;
+		}
+		
+		return $collection;
+	}
+}

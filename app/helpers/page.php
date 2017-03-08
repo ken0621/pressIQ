@@ -517,6 +517,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
     
+    /* -- EMPLOYEE POSITION=> LIST  */
+    $code = "employee-timesheet";
+    $nav[$page]['submenu'][$code]['label'] = "Employee Timesheet";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/employee_timesheet";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Guillermo Tabligan";
+
 
     /* VENDORS */
     $page = "vendor";  

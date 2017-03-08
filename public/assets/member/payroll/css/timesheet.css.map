@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAMG,sBACA;EACC,OAAO,EAAE,YAAY;EACrB,+BACA;IACC,MAAM,EAAE,IAAI;IACZ,MAAM,EAAE,IAAI;EAEb,uCACA;IACC,MAAM,EAAE,IAAI",
+"sources": ["../sass/timesheet.scss"],
+"names": [],
+"file": "timesheet.css"
+}

@@ -1,0 +1,9 @@
+.timesheet tbody tr td {
+  padding: 0 !important; }
+  .timesheet tbody tr td textarea {
+    border: none;
+    height: 40px; }
+  .timesheet tbody tr td input[type=text] {
+    border: none; }
+
+/*# sourceMappingURL=timesheet.css.map */

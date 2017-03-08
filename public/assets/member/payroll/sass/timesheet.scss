@@ -1,0 +1,24 @@
+.timesheet
+{
+	tbody
+	{
+		tr
+		{
+			td
+			{
+				padding: 0 !important;
+				textarea
+				{
+					border: none;
+					height: 40px;
+				}
+				input[type=text]
+				{
+					border: none;
+				}
+			}
+			
+		}
+	}
+
+}

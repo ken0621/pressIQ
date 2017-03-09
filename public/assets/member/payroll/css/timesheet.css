@@ -43,5 +43,13 @@
       cursor: text; }
 .timesheet tbody tr.breakdown {
   color: #aaa; }
+.timesheet tbody tr.normal td.total-mod {
+  display: none !important; }
+.timesheet tbody tr.normal td.normal-mod {
+  display: table-cell !important; }
+.timesheet tbody tr.total td.total-mod {
+  display: table-cell !important; }
+.timesheet tbody tr.total td.normal-mod {
+  display: none !important; }
 
 /*# sourceMappingURL=timesheet.css.map */

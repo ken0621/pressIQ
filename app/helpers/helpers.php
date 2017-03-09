@@ -415,6 +415,13 @@ function phone_number($customer_info)
                     $ret = $p2;
                 }
             }
+            else
+            {
+                if($p2 != null)
+                {
+                    $ret = $p2;
+                }
+            }
         }
     }
     return $ret;

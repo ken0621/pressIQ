@@ -26,6 +26,7 @@
 					background-color: transparent;
 					resize: none;
 					cursor: pointer;
+					border-radius: 3px;
 				}
 				input[type=text]
 				{
@@ -35,8 +36,18 @@
 					padding: 5px;
 					background-color: transparent;
 					cursor: pointer;
+					border-radius: 3px;
 				}
-
+				button
+				{
+					border: none;
+					color: #ddd;
+					background-color: transparent;
+					&:hover
+					{
+						color: #333;
+					}
+				}
 				&.editable
 				{
 					&:focus

@@ -10,7 +10,7 @@
                     Repurchasing of products.
                 </small>
             </h1>
-            <a href="/member/mlm/product_code/sell" class="panel-buttons btn btn-primary pull-right">Sell Codes</a>
+            <a href="/member/mlm/product_code/sell" class="panel-buttons btn btn-primary pull-right">Sell Product</a>
             <a href="/member/mlm/product_code/receipt" class="panel-buttons btn btn-default pull-right">View Receipt(s)</a>
         </div>
     </div>

@@ -28,7 +28,7 @@
 		<?php $last_date = $key; ?>
 		<tr>
 			<td colspan="40">
-				<span class="pull-right">{{$last_date}}  End Balance: {{$last_amount}}</span>
+				<span class="pull-right"><h3>{{$last_date}}  End Balance: {{$last_amount}}</h3></span>
 			</td>
 		</tr>
 	@endforeach	

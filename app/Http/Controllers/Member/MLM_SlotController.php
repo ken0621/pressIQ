@@ -25,7 +25,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_customer_search;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_customer_address;
-
+use App\Models\Tbl_mlm_matching_log;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
 use App\Globals\Mlm_plan;
@@ -765,7 +765,7 @@ class MLM_SlotController extends Member
             }
 
         }
-        else if($code = 'reset_income')
+        else if($code == 'reset_income')
         {
             DB::table('tbl_mlm_slot_wallet_log')->delete();
             DB::table('tbl_mlm_matching_log')->delete();
@@ -776,6 +776,35 @@ class MLM_SlotController extends Member
             Tbl_mlm_slot::where('shop_id', 1)->update($update);
             
             return redirect::back();
+        }
+        else if($code == 'fix_income_matching')
+        {
+            $match = Tbl_mlm_matching_log::get()->toArray();
+            $per_earner = [];
+            foreach($match as $key => $value)
+            {
+                $per_earner[$value['matching_log_earner']][$key] = $value;
+            }
+            $per_earn = [];
+            $per_earner_2 = [];
+            
+            foreach($per_earner as $key => $value)
+            {
+                
+                foreach($value as $key2 => $value2)
+                {
+                    if(isset($per_earn[$key][$value2['matching_log_slot_1']]))
+                    {
+                        $per_earn[$key][$value2['matching_log_slot_1']] += 1;
+                    }
+                    else
+                    {
+                        $per_earn[$key][$value2['matching_log_slot_1']] = 1;
+                    }
+                }
+            }
+            dd($per_earn);
+            
         }
     }
 }

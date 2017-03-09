@@ -727,6 +727,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevarra";
 
+    $code = "developer-simulate";
+    $nav[$page]['submenu'][$code]['label'] = "Simulate";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/simulate";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevarra";
+
      /* -- DEVELOPERS => DOCUMENTATION */
     $code = "developer-documentation";
     $nav[$page]['submenu'][$code]['label'] = "Code Documentation";

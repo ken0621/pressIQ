@@ -56,7 +56,7 @@
 					<tbody>
 						<tr>
 							<td style="width: 130px;">Complete Address:</td>
-							<td>{{$address}}</td>
+							<td>{{ mb_strimwidth($address, 0, 45, "...")}}</td>
 						</tr>
 					</tbody>
 				</table>

@@ -681,7 +681,9 @@ class MLM_SlotController extends Member
                 // DB::table('tbl_customer')->delete();
                 foreach($results[0] as $key => $value)
                 {
-                    $shop_id = 9;
+                    dd($value);
+                    $shop_id = 1;
+                    // $email = $value['email'];
                     $insert['shop_id'] = $shop_id;
                     $insert['country_id'] = 420;
                     $insert['title_name'] = '';
@@ -716,7 +718,25 @@ class MLM_SlotController extends Member
                 }
             });
         }
+        else if($code == 'excel2')
+        {
+            Excel::load(public_path().'/assets/mlm/phil2.xlsx', function($reader) {
+                $results = $reader->get()->toArray();
+                foreach($results[0] as $key => $value)
+                {
+                    $email = $value['email'];
+                    $address =  $value['address'];
 
+                    $customer = Tbl_customer::where('email', $email)->first();
+                    if($customer)
+                    {
+                        $update['customer_street'] = $address;
+
+                        Tbl_customer_address::where('customer_id', $customer->customer_id)->where('purpose', 'billing')->update($update);
+                    }
+                }
+            });
+        }
         else if($code =='fix_search')
         {
             $customer = Tbl_customer::leftjoin('tbl_customer_search', 'tbl_customer_search.customer_id', '=', 'tbl_customer.customer_id')->get();

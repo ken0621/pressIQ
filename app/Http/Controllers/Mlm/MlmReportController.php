@@ -82,6 +82,24 @@ class MlmReportController extends Mlm
             ->where('sponsor_tree_child_id', $value->points_log_Sponsor)->pluck('sponsor_tree_level');
       
         }
+        // $data = [];
+        $tree = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_tree_sponsor.sponsor_tree_child_id')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        ->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership')
+        ->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id')
+        ->orderBy('tbl_tree_sponsor.sponsor_tree_level', 'ASC')
+        ->get();
+        $data['tree'] = [];
+        $data['sum_all'] = 0;
+        foreach($tree as $key => $value)
+        {
+            $sum = Tbl_mlm_slot_points_log::where('points_log_slot', $value->slot_id)->where('points_log_complan', 'LEADERSHIP_BONUS')->sum('points_log_points');
+            $value->points = $sum;
+            $data['tree'][$value->sponsor_tree_level][$value->slot_id] = $value;
+
+        }
+        // dd($data['tree'][1]);
         return view("mlm.report.report_leadership_bonus", $data);
     }
     public static function direct_points()

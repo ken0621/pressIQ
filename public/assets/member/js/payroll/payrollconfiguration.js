@@ -1,12 +1,13 @@
-var departmentjs = new departmentjs();
+var payrollconfiguration = new payrollconfiguration();
 
-function departmentjs()
+function payrollconfiguration()
 {
 	init();
 
 	function init()
 	{
 		a_navigation_configuration_event();
+		load_configuration('/member/payroll/departmentlist');
 	}
 
 	function a_navigation_configuration_event()
@@ -16,28 +17,39 @@ function departmentjs()
 		{
 			e.preventDefault();
 			var link 	= $(this).attr("href");
-			var target 	= ".configuration-div";
-			$(target).html(misc('loader'));
-			$.ajax({
-				url 	: 	link,
-				type 	:  	"POST",
-				data 	: 	{
-					_token:misc('_token')
-				},
-				success : 	function(result)
-				{
-					$(target).html(result);
-				},
-				error  	: 	function()
-				{
-					error_function();
-				}
-			});
+			load_configuration(link);
 		});
 	}
 
+	function load_configuration(action = "", method = "POST", target = ".configuration-div")
+	{
+		$(target).html(misc('loader'));
+		$.ajax({
+			url 	: 	action,
+			type 	:  	method,
+			data 	: 	{
+				_token:misc('_token')
+			},
+			success : 	function(result)
+			{
+				$(target).html(result);
+				load_configuration_event();
+			},
+			error  	: 	function()
+			{
+				error_function();
+			}
+		});
+	}
 
-
+	function load_configuration_event()
+	{	
+		$(".btn-archived").unbind("click");
+		$(".btn-archived").bind("click", function()
+		{
+			var content = $(this).data("content");
+		});
+	}
 
 	function error_function()
 	{
@@ -77,6 +89,17 @@ function departmentjs()
 		}
 	}
 
+
+	this.relaod_tbl_department = function()
+	{
+
+	}
+
+	this.executeFunctionByName = function(functionName)
+	{
+		executeFunctionByName(functionName, window);
+	}
+
 	/* CALL A FUNCTION BY NAME */
 	function executeFunctionByName(functionName, context /*, args */) {
 	  var args = [].slice.call(arguments).splice(2);
@@ -90,5 +113,7 @@ function departmentjs()
 }
 function submit_done(data)
 {
+	$("#global_modal").modal("hide");
+	payrollconfiguration.executeFunctionByName(data.function_name);
 	$("#global_modal").modal("hide");
 }

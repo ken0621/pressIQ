@@ -65,5 +65,5 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/member/js/payroll/departmentlist.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/payrollconfiguration.js"></script>
 @endsection

@@ -662,6 +662,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/departmentlist','Member\PayrollController@department_list');
 	Route::any('/departmentlist/department_modal_create','Member\PayrollController@department_modal_create');
 	Route::any('/departmentlist/department_save','Member\PayrollController@department_save');
+	Route::any('/departmentlist/archived_department','Member\PayrollController@archived_department');
 	/* DEPARTMENT END */
 });
 

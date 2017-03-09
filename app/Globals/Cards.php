@@ -41,7 +41,7 @@ class Cards
         }
         return view("mlm.card.card", $data);
     }
-    public function discount_card($info)
+    public static function discount_card($info)
     {
         $data['color'] = 'discount';
         $data['name'] = name_format_from_customer_info($info);

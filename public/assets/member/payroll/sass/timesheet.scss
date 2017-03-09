@@ -1,5 +1,10 @@
+
 .timesheet
 {
+	.timeEntry-control
+	{
+		display: none !important;
+	}
 	thead
 	{
 		background-color: #FBFBFB;
@@ -20,6 +25,7 @@
 					width: 100%;
 					background-color: transparent;
 					resize: none;
+					cursor: pointer;
 				}
 				input[type=text]
 				{
@@ -28,6 +34,7 @@
 					text-align: center;
 					padding: 5px;
 					background-color: transparent;
+					cursor: pointer;
 				}
 
 				&.editable
@@ -52,10 +59,12 @@
 					textarea
 					{
 						border: 1px solid #aaa;
+						cursor: text;
 					}
 					input[type=text]
 					{
 						border: 1px solid #aaa;
+						cursor: text;
 					}
 
 					&.editable

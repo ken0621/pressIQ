@@ -1,23 +1,118 @@
+
 .timesheet
 {
+	.timeEntry-control
+	{
+		display: none !important;
+	}
+	thead
+	{
+		background-color: #FBFBFB;
+
+	}
 	tbody
 	{
 		tr
 		{
+			cursor: pointer;
 			td
 			{
-				padding: 0 !important;
+				padding: 5px !important;
 				textarea
 				{
 					border: none;
 					height: 40px;
+					width: 100%;
+					background-color: transparent;
+					resize: none;
+					cursor: pointer;
+					border-radius: 3px;
 				}
 				input[type=text]
 				{
 					border: none;
+					width: 100%;
+					text-align: center;
+					padding: 5px;
+					background-color: transparent;
+					cursor: pointer;
+					border-radius: 3px;
+				}
+				button
+				{
+					border: none;
+					color: #ddd;
+					background-color: transparent;
+					&:hover
+					{
+						color: #333;
+					}
+				}
+				&.editable
+				{
+					&:focus
+					{
+					}
 				}
 			}
-			
+			&:hover
+			{
+				background-color: #F4F5F8;
+			}
+			&.focus
+			{
+				background-color: #FFF;
+				box-shadow: 0 0 10px #ccc;
+				z-index: 1;
+				position: relative;
+				td
+				{
+					textarea
+					{
+						border: 1px solid #bbb;
+						cursor: text;
+					}
+					input[type=text]
+					{
+						border: 1px solid #bbb;
+						cursor: text;
+					}
+
+					&.editable
+					{
+						&:focus
+						{
+						}
+					}
+				}
+			}
+		}
+		tr.breakdown
+		{
+			color: #aaa;
+		}
+		tr.normal
+		{
+			td.total-mod
+			{
+				display: none !important;
+			}
+			td.normal-mod
+			{
+				display: table-cell !important;
+			}
+		}
+		tr.total
+		{
+			td.total-mod
+			{
+				display: table-cell !important;
+			}
+
+			td.normal-mod
+			{
+				display: none !important;
+			}
 		}
 	}
 

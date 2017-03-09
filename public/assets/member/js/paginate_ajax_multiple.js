@@ -42,7 +42,6 @@ function paginate_ajax()
                     if(this.specified && this.name != "class" && this.name != "style") 
                     {
                         url = url+"&&"+this.name+"="+this.value;
-                        console.log(this.name, this.value);
                     }
                 });
             });
@@ -52,23 +51,34 @@ function paginate_ajax()
         });
 	}
 
-    function getArticles(url, load_data) {
-        $.ajax(
+    function getArticles(url, load_data) 
+    {
+        target = load_data.attr("target");
+        console.log(target);
+        load_data.load(url+" .load-data #"+target, function()
         {
-            url : url
-        })
-        .done( function(data)
-        {
-            load_data.hide().html(data).fadeIn();
-            
             if (typeof loading_done == 'function')
             {
                 loading_done_paginate();
             }
         })
-        .fail( function() 
-        {
-            alert('Data could not be loaded.');
-        });
+
+        // $.ajax(
+        // {
+        //     url : url
+        // })
+        // .done( function(data)
+        // {
+        //     load_data.hide().html(data).fadeIn();
+            
+        //     if (typeof loading_done == 'function')
+        //     {
+        //         loading_done_paginate();
+        //     }
+        // })
+        // .fail( function() 
+        // {
+        //     alert('Data could not be loaded.');
+        // });
     }
 }

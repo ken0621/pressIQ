@@ -85,14 +85,9 @@
                                         </tr>
                                     </thead>
                                     <tbody class="tbody-item">
-                                        <tr>
-                                            <td class="text-center"><input type="checkbox" ></td>
-                                            <td></td>
-                                            <td class="text-right"></td>
-                                            <td><input type="text" class="text-right" disabled /></td>
-                                            <td><input type="text" class="text-right" disabled /></td>
-                                            <td><input class="text-right" type="text" name=""/></td>
-                                        </tr>  
+                                    @if(isset($rcvpayment))
+                                        @include('member.receive_payment.load_receive_payment_items');
+                                    @endif
                                     </tbody>
                                 </table>
                             </div>

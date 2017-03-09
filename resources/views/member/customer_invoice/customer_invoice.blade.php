@@ -274,7 +274,7 @@
                                         </div>
                                         <div class="col-md-5 text-right digima-table-value">
                                             <input type="hidden" name="payment-receive" class="payment-receive-input" />
-                                            PHP&nbsp;<span class="payment-applied">0.00</span>
+                                            PHP&nbsp;<span class="  ">{{$inv->amount_applied}}</span>
                                         </div>
                                     </div>
                                     <div class="row">

@@ -23,7 +23,7 @@
 							<a href="#" class="popup" link="" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 						</li>
 						<li>
-							<a href="#" data-content="{{$active->payroll_department_id}}" data-archived="{{$active->payroll_department_archived == 0 ? '1':'0'}}" data-action="archived_department" data-trigger="department" class="btn-archived"><i class="fa fa-{{$active->payroll_department_archived == 0 ? 'trash-o':'recycle'}}"></i>&nbsp;{{$active->payroll_department_archived == 0 ? 'Archived':'Restore'}}</a>
+							<a href="#" data-content="{{$active->payroll_department_id}}" data-archived="{{$active->payroll_department_archived == 0 ? '1':'0'}}" data-action="/departmentlist/archived_department" data-trigger="department" class="btn-archived"><i class="fa fa-{{$active->payroll_department_archived == 0 ? 'trash-o':'recycle'}}"></i>&nbsp;{{$active->payroll_department_archived == 0 ? 'Archived':'Restore'}}</a>
 						</li>
 					</ul>
 				</div>

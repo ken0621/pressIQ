@@ -47,7 +47,18 @@ function payrollconfiguration()
 		$(".btn-archived").unbind("click");
 		$(".btn-archived").bind("click", function()
 		{
-			var content = $(this).data("content");
+			var content 	= $(this).data("content");
+			var archived 	= $(this).data("archived");
+			var trigger 	= $(this).data("trigger");
+			var action 		= "/member/payroll" + $(this).data("action");
+			var parent 		= $(this).parents(".dropdown");
+			var tr 			= $(this).parents("tr");
+			var statement 	= "remove";
+			if(archived == 0)
+			{
+				statement = "restore";
+			}
+			var con 	 	= confirm("Do you really want to " + statement + " this " + trigger + "?");
 		});
 	}
 

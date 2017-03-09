@@ -1,29 +1,31 @@
 .timesheet thead {
   background-color: #FBFBFB; }
-.timesheet tbody tr td {
-  padding: 5px !important; }
-  .timesheet tbody tr td textarea {
-    border: none;
-    height: 40px;
-    width: 100%;
-    background-color: transparent;
-    resize: none; }
-  .timesheet tbody tr td input[type=text] {
-    border: none;
-    width: 100%;
-    text-align: center;
-    padding: 5px;
-    background-color: transparent; }
-.timesheet tbody tr:hover {
-  background-color: #F4F5F8; }
-.timesheet tbody tr.focus {
-  background-color: #FFF;
-  box-shadow: 0 0 10px #ccc;
-  z-index: 1;
-  position: relative; }
-  .timesheet tbody tr.focus td textarea {
-    border: 1px solid #aaa; }
-  .timesheet tbody tr.focus td input[type=text] {
-    border: 1px solid #aaa; }
+.timesheet tbody tr {
+  cursor: pointer; }
+  .timesheet tbody tr td {
+    padding: 5px !important; }
+    .timesheet tbody tr td textarea {
+      border: none;
+      height: 40px;
+      width: 100%;
+      background-color: transparent;
+      resize: none; }
+    .timesheet tbody tr td input[type=text] {
+      border: none;
+      width: 100%;
+      text-align: center;
+      padding: 5px;
+      background-color: transparent; }
+  .timesheet tbody tr:hover {
+    background-color: #F4F5F8; }
+  .timesheet tbody tr.focus {
+    background-color: #FFF;
+    box-shadow: 0 0 10px #ccc;
+    z-index: 1;
+    position: relative; }
+    .timesheet tbody tr.focus td textarea {
+      border: 1px solid #aaa; }
+    .timesheet tbody tr.focus td input[type=text] {
+      border: 1px solid #aaa; }
 
 /*# sourceMappingURL=timesheet.css.map */

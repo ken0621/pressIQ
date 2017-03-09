@@ -657,6 +657,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list','Member\PayrollController@employee_list');
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
 
+	Route::any('/employee_timesheet','Member\PayrollTimesheetController@index');
+
 
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');

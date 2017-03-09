@@ -69,12 +69,12 @@
 				{
 					textarea
 					{
-						border: 1px solid #aaa;
+						border: 1px solid #bbb;
 						cursor: text;
 					}
 					input[type=text]
 					{
-						border: 1px solid #aaa;
+						border: 1px solid #bbb;
 						cursor: text;
 					}
 
@@ -86,6 +86,10 @@
 					}
 				}
 			}
+		}
+		tr.breakdown
+		{
+			color: #aaa;
 		}
 	}
 

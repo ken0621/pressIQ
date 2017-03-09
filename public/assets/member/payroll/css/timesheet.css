@@ -36,10 +36,12 @@
     z-index: 1;
     position: relative; }
     .timesheet tbody tr.focus td textarea {
-      border: 1px solid #aaa;
+      border: 1px solid #bbb;
       cursor: text; }
     .timesheet tbody tr.focus td input[type=text] {
-      border: 1px solid #aaa;
+      border: 1px solid #bbb;
       cursor: text; }
+.timesheet tbody tr.breakdown {
+  color: #aaa; }
 
 /*# sourceMappingURL=timesheet.css.map */

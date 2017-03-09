@@ -807,7 +807,6 @@ class MLM_SlotController extends Member
                     {
 
                         $per_earn[$key][$value2['matching_log_slot_2']] += 1;
-                        // dd($key);
                     }
                     else
                     {
@@ -857,6 +856,11 @@ class MLM_SlotController extends Member
             dd($match_delete);
             
             
+        }
+        else if($code == 'rep')
+        {
+            $slot = Mlm_compute::get_slot_info(10);
+            return Mlm_complan_manager_repurchase::repurchase_points($slot, 1);
         }
     }
 }

@@ -765,5 +765,17 @@ class MLM_SlotController extends Member
             }
 
         }
+        else if($code = 'reset_income')
+        {
+            DB::table('tbl_mlm_slot_wallet_log')->delete();
+            DB::table('tbl_mlm_matching_log')->delete();
+
+            $update['slot_wallet_all'] = 0;
+            $update['slot_wallet_withdraw'] = 0;
+            $update['slot_wallet_current'] = 0;
+            Tbl_mlm_slot::where('shop_id', 1)->update($update);
+            
+            return redirect::back();
+        }
     }
 }

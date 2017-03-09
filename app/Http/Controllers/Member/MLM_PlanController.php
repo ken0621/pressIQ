@@ -1872,7 +1872,8 @@ class MLM_PlanController extends Member
         $i['level'] = Request::input('level');
         $i['amount'] = Request::input('amount');
         $i['type'] = Request::input('type');
-        $count = Tbl_mlm_unilevel_points_settings::where('membership_id', $i['membership_id'])->count();
+        $count = Tbl_mlm_unilevel_points_settings::where('membership_id', $i['membership_id'])->where('unilevel_points_archive', 0)->count();
+        // return $count;
         $count_new = count($i['level']);
         if($count == 0)
         {

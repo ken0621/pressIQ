@@ -13,6 +13,17 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<div class="col-md-12">
+				<small>Parent Company</small>
+				<select class="form-control view-form" name="payroll_parent_company_id" {{$action == 'view' ? 'disabled':''}}>
+					<option value="0">Select Parent</option>
+					@foreach($_company as $company_select)
+					<option value="{{$company_select->payroll_company_id}}" {{$company_select->payroll_company_id == $company->payroll_parent_company_id ? 'selected="selected"':''}}>{{$company_select->payroll_company_name}}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
 			<div class="col-md-6">
 				<small>Company Code</small>
 				<input type="text" name="payroll_company_code" placeholder="Company Code" class="form-control view-form" required value="{{$company->payroll_company_code}}" {{$action == 'view' ? 'disabled':''}}>

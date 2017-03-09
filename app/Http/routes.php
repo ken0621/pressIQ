@@ -664,7 +664,19 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/departmentlist','Member\PayrollController@department_list');
 	Route::any('/departmentlist/department_modal_create','Member\PayrollController@department_modal_create');
 	Route::any('/departmentlist/department_save','Member\PayrollController@department_save');
+	Route::any('/departmentlist/archived_department','Member\PayrollController@archived_department');
+	Route::any('/departmentlist/department_reload','Member\PayrollController@department_reload');
+	Route::any('/departmentlist/modal_view_department/{id}','Member\PayrollController@modal_view_department');
+	Route::any('/departmentlist/modal_edit_department/{id}','Member\PayrollController@modal_edit_department');
+	Route::any('/departmentlist/modal_update_department','Member\PayrollController@modal_update_department');
 	/* DEPARTMENT END */
+
+	/* JOB TITLE START */
+	Route::any("/jobtitlelist","Member\PayrollController@jobtitle_list");
+	Route::any("/jobtitlelist/modal_create_jobtitle","Member\PayrollController@modal_create_jobtitle");
+	Route::any("/jobtitlelist/modal_save_department","Member\PayrollController@modal_save_department");
+	Route::any("/jobtitlelist/reload_tbl_jobtitle","Member\PayrollController@reload_tbl_jobtitle");
+	/* JOB TITLE END */
 });
 
 

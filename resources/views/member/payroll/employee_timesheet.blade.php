@@ -37,19 +37,19 @@
 
         
         <div class=" panel-customer load-data">
-            <table style="table-layout: fixed;" class="timesheet table table-hover table-condensed table-bordered table-sale-month">
+            <table style="table-layout: fixed;" class="timesheet table table-condensed table-bordered table-sale-month">
                 <thead>
                     <tr>
                         <th class="text-center">Day</th>
                         <th class="text-center" colspan="2">Time</th>
-                        <th class="text-center">Total</th>
                         <th class="text-center">Activities</th>
+                        <th class="text-center">Total</th>
                         <th class="text-center">OT Hours</th>
                     </tr>
                     <tr>
                         <th class="text-center"></th>
-                        <th class="text-center">Time In</th>
-                        <th class="text-center">Time Out</th>
+                        <th class="text-center" width="30px">Time In</th>
+                        <th class="text-center" width="30px">Time Out</th>
                         <th class="text-center"></th>
                         <th class="text-center"></th>
                         <th class="text-center"></th>
@@ -58,18 +58,19 @@
                 <tbody>
                 	<tr>
                 		<td class="text-center">26 (SUN)</td>
-                		<td class="text-center"><input type="text" name="" value="10:30 AM"></td>
-                		<td class="text-center"><input type="text" name="" value="06:00 PM"></td>
+                		<td class="text-center editable"><input class="text-table" type="text" name="" value="10:30 AM"></td>
+                		<td class="text-center editable"><input class="text-table"  type="text" name="" value="06:00 PM"></td>
+                		<td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
                 		<td class="text-center">5 Hours and 10 Minutes</td>
-                		<td class="text-center"><textarea></textarea></td>
+                		
                 		<td class="text-center">No Overtime</td>
                 	</tr>
                 	<tr>
                 		<td class="text-center">27 (MON)</td>
-                		<td class="text-center"><input type="text" name="" value="10:30 AM"></td>
-                		<td class="text-center"><input type="text" name="" value="06:00 PM"></td>
-                		<td class="text-center">5 Hours and 10 Minutes</td>
-                		<td class="text-center"><textarea></textarea></td>
+                		<td class="text-center editable"><input class="text-table" type="text" name="" value="10:30 AM"></td>
+                		<td class="text-center editable"><input class="text-table" type="text" name="" value="06:00 PM"></td>
+                		<td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
+                		<td class="text-center ">5 Hours and 10 Minutes</td>
                 		<td class="text-center">No Overtime</td>
                 	</tr>
                 </tbody>
@@ -86,4 +87,5 @@
 @endsection
 
 @section('script')
+	<script type="text/javascript" src="/assets/member/payroll/js/timesheet.js"></script>
 @endsection

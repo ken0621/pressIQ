@@ -428,13 +428,22 @@ function submit_done(data)
 		window.location = "/member/mlm/product_code/receipt?invoice_id=" + data.invoice_id;
 	}
 }
-window.addEventListener('keydown', function(e) {
-        if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
-            if (e.target.nodeName == 'INPUT' && e.target.type == 'text') {
-                e.preventDefault();
-                return false;
-            }
-        }
-    }, true);
+
+$(document).on("keydown", ".membership_code", function(e)
+{
+	if(e.which == 13)
+	{
+		console.log($(this).val());
+		bar_code_membership_code(this)
+	}
+})
+// window.addEventListener('keydown', function(e) {
+//         if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
+//             if (e.target.nodeName == 'INPUT' && e.target.type == 'text') {
+//                 e.preventDefault();
+//                 return false;
+//             }
+//         }
+//     }, true);
 </script>
 @endsection

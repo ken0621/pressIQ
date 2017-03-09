@@ -2142,7 +2142,7 @@
          <div class="panel panel-default panel-block">
             <div class="list-group">
                <div class="list-group-item" id="getting-started">
-                  <h3 class="section-title"><b>20. Standard Transaction Types</b></h3>
+                  <h3 class="section-title"><b>21. Standard Transaction Types</b></h3>
                   <!-- 1 -->
                   <p>
                      <h4 class="subtitle">Transaction Type Name</h4>
@@ -2150,7 +2150,7 @@
                   </p>
                   <p>
                      <ul>
-                        <li>Receive Payment <i>Receive Payment</i></li>
+                        <li>Under Development</li>
                      </ul>
                   </p>
                </div>
@@ -2160,7 +2160,7 @@
          <div class="panel panel-default panel-block">
             <div class="list-group">
                <div class="list-group-item" id="getting-started">
-                  <h3 class="section-title"><b>21. Email Content</b></h3>
+                  <h3 class="section-title"><b>22. Email Content</b></h3>
                   <!-- 1 -->
                   <p>
                      <h4 class="subtitle">A. Change Email Content</h4>
@@ -2207,6 +2207,56 @@
                </div>
             </div>
          </div>  
+
+         <!-- TUTORIAL GROUP -->
+         <div class="panel panel-default panel-block">
+            <div class="list-group">
+               <div class="list-group-item" id="getting-started">
+                  <h3 class="section-title"><b>23. Global Paginate</b></h3>
+                  <!-- 1 -->
+                  <p>
+                     <h4 class="subtitle">INCLUDE JAVASCRIPT</h4>
+                     <div class="gray-author">by Bryan Kier Aradanas (Javascipt)</div>
+                  </p>
+                  <p>
+                     <div>
+                        <div><pre>{{ '<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>' }}</pre></div>
+                     </div>
+                  </p>
+                  <div>Include this to your file</div>
+<!--                   <div>
+                     ATTRIBUTES:
+                     <ul>
+                        <li>"LINK" is the link of the page the developer would like to load in the modal form.</li>
+                        <li>"SIZE" can <i>sm</i>,<i>md</i> or <i>lg</i>. This refers to the size of the form that the developer would like to load.</li>
+                     </ul>
+                  </div> -->
+
+                  <hr>
+
+                  <p>
+                     <h4 class="subtitle">USING HTML CLASS AND ATTRIBUTES</h4>
+                     <div class="gray-author">by Bryan Kier Aradanas (Javascipt)</div>
+                  </p>
+                  <p>
+                     <div>
+                        <div><pre>{{ $documentation_paginate_html }}</pre></div>
+                     </div>
+                  </p>
+                  <div>Put all the contents in a div with a unique <span class="text-success text-bold">id</span> attribute. And the div inside div with a class of <span class="text-success text-bold">.load-data</span><div>
+                     <div>
+                        ATTRIBUTES:
+                        <ul>
+                           <li>"CLASS : load-data" div container for the pagination</li>
+                           <li>"TARGET" specify the target div id for reloading the content.</li>
+                        </ul>
+                     </div>
+                  <div> You can also add a url query on the ajax request, Just add it as an attribute in the container. Ex : <span class="text-success text-bold">{{ '<div class="load-data" target="data-value" filter="status" orderby="asc">' }}</span> , the result of ajax request is ___?filter=status&&orderby=asc  </div>
+
+               </div>
+            </div>
+         </div>  
+
       </div>
    </div>
 </div>

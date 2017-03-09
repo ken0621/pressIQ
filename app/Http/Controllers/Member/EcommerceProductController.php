@@ -53,24 +53,24 @@ class EcommerceProductController extends Member
 	{
 		if($this->hasAccess("product-list","access_page"))
         {	
-			$active_product 	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("archived", 0)->paginate(10);
-			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("archived", 1)->paginate(10); 
+			$active_product 	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("archived", 0)->paginate(2);
+			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("archived", 1)->paginate(2); 
 			
 			/* IF REQUEST TYPE IS AJAX = RETURN ONLY TABLE DATA */ 
-	        if(Request::ajax())
-	        {
-	        	if(Request::input('filter') == "active")
-	        	{
-	        		$data["_product"] 	= $active_product;
-	        		$data["filter"] 	= "active"; // For Changing blade layout
-	        	}
-	        	else
-	        	{
-	        		$data["_product"] 	= $inactive_product;
-	        		$data["filter"] 	= "inactive"; // For Changing blade layout
-	        	}
-	        	return view('member.ecommerce_product.ecom_load_product_tbl', $data);
-	        }
+	        // if(Request::ajax())
+	        // {
+	        // 	if(Request::input('filter') == "active")
+	        // 	{
+	        // 		$data["_product"] 	= $active_product;
+	        // 		$data["filter"] 	= "active"; // For Changing blade layout
+	        // 	}
+	        // 	else
+	        // 	{
+	        // 		$data["_product"] 	= $inactive_product;
+	        // 		$data["filter"] 	= "inactive"; // For Changing blade layout
+	        // 	}
+	        // 	return view('member.ecommerce_product.ecom_load_product_tbl', $data);
+	        // }
 
 	        $data["_product"]			= $active_product;
 	        $data["_product_archived"]	= $inactive_product;

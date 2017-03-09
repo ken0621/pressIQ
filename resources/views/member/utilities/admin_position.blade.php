@@ -47,7 +47,7 @@
                     @if($is_developer)
                         <th class="text-left">Shop Id</th>
                         <th class="text-left">Shop Name</th>
-                        <th class="text-left">Shop Status</th>
+                        <!-- <th class="text-left">Shop Status</th> -->
                     @endif
                     <th class="text-left">Name</th>
                     <th class="text-left">Rank</th>
@@ -61,7 +61,7 @@
                     @if($is_developer)
                         <td class="text-left">{{$position->shop_id}}</td>
                         <td class="text-left">{{$position->shop_key}}</td>
-                        <td class="text-left">{{$position->shop_status}}</td>
+                        <!-- <td class="text-left">{{$position->shop_status}}</td> -->
                     @endif
                     <td class="text-left">{{$position->position_name}}</td>
                     <td class="text-left">{{$position->position_rank}}</td>

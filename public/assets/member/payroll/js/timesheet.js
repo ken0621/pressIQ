@@ -1,0 +1,30 @@
+var timesheet = new timesheet();
+
+function timesheet()
+{
+	init();
+
+	function init()
+	{
+		$(document).ready(function()
+		{
+			document_ready();
+		})
+	}
+	function document_ready()
+	{
+		event_focus_edit();
+	}
+
+	function event_focus_edit()
+	{
+		$(".text-table").focusin(function(e)
+		{
+			$(e.currentTarget).closest("tr").addClass("focus");
+		});
+		$(".text-table").focusout(function(e)
+		{
+			$(e.currentTarget).closest("tr").removeClass("focus");
+		});
+	}
+}

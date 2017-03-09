@@ -402,8 +402,28 @@ function phone_number($customer_info)
             {
                 $p2 = $customer_info->customer_mobile;
             }
-            
-            if($p1 != null)
+            if(strlen($p1) == 10)
+            {
+                $p1 = '+63' . $p1;
+            }
+            else if(strlen($p1) == 11)
+            {
+                $p1 = substr($p1, 1);
+                $p1 = '+63' . $p1;
+            }
+
+            if(strlen($p2) == 10)
+            {
+                $p2 = '+63' . $p2;
+            }
+            else if(strlen($p2) == 11)
+            {
+                $p2 = substr($p2, 1);
+                $p2 = '+63' . $p2;
+            }
+
+
+            if($p1 != null && $p1 != '--' )
             {
                 $ret = $p1;
                 if($p2 != null)
@@ -411,6 +431,13 @@ function phone_number($customer_info)
                     $ret = $p1.'/'.$p2;
                 }
                 else
+                {
+                    $ret = $p2;
+                }
+            }
+            else
+            {
+                if($p2 != null)
                 {
                     $ret = $p2;
                 }
@@ -423,9 +450,25 @@ function address_customer_info($customer_info)
 {
     // street, city, province, zipcode.
     $adderss = '';
-    if(isset($customer_info->customer_state))
+    if(isset($customer_info->customer_street))
     {
-        $adderss = $customer_info->customer_street . ', ' . $customer_info->customer_city . ', ' . $customer_info->customer_state . ', ' .  $customer_info->customer_zipcode;
+        // $adderss = $customer_info->customer_street  . ', ' . $customer_info->customer_state . ', ' .  $customer_info->customer_zipcode;
+        if($customer_info->customer_street != null)
+        {
+            $adderss = $customer_info->customer_street;
+        } 
+        if($customer_info->customer_city != null)
+        {
+            $adderss = $adderss . ', ' . $customer_info->customer_city;
+        }    
+        if($customer_info->customer_state != null)
+        {
+            $adderss = $adderss . ', ' . $customer_info->customer_state;
+        }
+        if($customer_info->customer_zipcode != null)
+        {
+            $adderss = $adderss . ', ' . $customer_info->customer_zipcode;
+        }
     }
     return $adderss;
 }

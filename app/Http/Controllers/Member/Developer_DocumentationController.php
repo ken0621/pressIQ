@@ -31,6 +31,7 @@ class Developer_DocumentationController extends Member
 		$data["documentation_member_settings"] = view('member.developer.documentation_member_settings');
 		$data["documentation_create_invoice"] = view('member.developer.documentation_create_invoice');
 		$data["documentation_globalDropList_reload"] = view('member.developer.documentation_globalDropList_reload');
+        $data["documentation_paginate_html"] = view('member.developer.documentation_paginate_html');
 
 		$data['_account']       = Accounting::getAllAccount();
 		$data['_category']      = Category::getAllCategory();

@@ -1,23 +1,71 @@
 .timesheet
 {
+	thead
+	{
+		background-color: #FBFBFB;
+
+	}
 	tbody
 	{
 		tr
 		{
+			cursor: pointer;
 			td
 			{
-				padding: 0 !important;
+				padding: 5px !important;
 				textarea
 				{
 					border: none;
 					height: 40px;
+					width: 100%;
+					background-color: transparent;
+					resize: none;
 				}
 				input[type=text]
 				{
 					border: none;
+					width: 100%;
+					text-align: center;
+					padding: 5px;
+					background-color: transparent;
+				}
+
+				&.editable
+				{
+					&:focus
+					{
+					}
 				}
 			}
-			
+			&:hover
+			{
+				background-color: #F4F5F8;
+			}
+			&.focus
+			{
+				background-color: #FFF;
+				box-shadow: 0 0 10px #ccc;
+				z-index: 1;
+				position: relative;
+				td
+				{
+					textarea
+					{
+						border: 1px solid #aaa;
+					}
+					input[type=text]
+					{
+						border: 1px solid #aaa;
+					}
+
+					&.editable
+					{
+						&:focus
+						{
+						}
+					}
+				}
+			}
 		}
 	}
 

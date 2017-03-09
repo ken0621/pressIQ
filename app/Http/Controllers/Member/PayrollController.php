@@ -255,6 +255,7 @@ class PayrollController extends Member
 
 		$update['payroll_department_name'] = $payroll_department_name;
 		Tbl_payroll_department::where('payroll_department_id', $payroll_department_id)->update($update);
+		
 		$return['message'] 			= 'success';
 		$return['data']	   			= '';
 		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
@@ -279,7 +280,7 @@ class PayrollController extends Member
 		return view('member.payroll.modal.modal_create_jobtitle', $data);
 	}
 
-	public function modal_save_department()
+	public function modal_save_jobtitle()
 	{
 		$insert['payroll_jobtitle_department_id'] 	= Request::input('payroll_jobtitle_department_id');
 		$insert['payroll_jobtitle_name'] 			= Request::input('payroll_jobtitle_name');
@@ -288,13 +289,61 @@ class PayrollController extends Member
 
 		$return['message'] 			= 'success';
 		$return['data']	   			= '';
-		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
+		$return['function_name'] 	= 'payrollconfiguration.reload_tbl_jobtitle';
+		return json_encode($return);
+	}
+
+
+	public function archived_jobtitle()
+	{
+		$archived = Request::input('archived');
+		$content  = Request::input("content");
+		$update['payroll_jobtitle_archived'] = $archived;
+		Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $content)->update($update);
+
+		$return['message'] 			= 'success';
+		$return['data']	   			= '';
+		$return['function_name'] 	= 'payrollconfiguration.reload_tbl_jobtitle';
 		return json_encode($return);
 	}
 
 	public function reload_tbl_jobtitle()
 	{
-		
+		$archived = Request::input('archived');
+		$data['_active'] = Tbl_payroll_jobtitle::sel(Self::shop_id(), $archived)->orderBy('payroll_jobtitle_name')->get();
+		return view('member.payroll.reload.jobtitlelist_reload',$data);
+	}
+
+	public function modal_view_jobtitle($id)
+	{
+
+		return Self::moda_view_jobtitle_operation($id);
+	}
+
+	public function modal_edit_jobtitle($id)
+	{
+		return Self::moda_view_jobtitle_operation($id, 'edit');
+	}
+
+	public function moda_view_jobtitle_operation($payroll_jobtitle_id = 0, $action = "view")
+	{
+		$data['position'] = Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $payroll_jobtitle_id)->first();
+		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+		$data['action'] = $action;
+		return view('member.payroll.modal.modal_view_jobtitlelist',$data);
+	}
+
+	public function modal_update_jobtitle()
+	{
+		$payroll_jobtitle_id 						= Request::input('payroll_jobtitle_id');
+		$update['payroll_jobtitle_department_id'] 	= Request::input('payroll_jobtitle_department_id');
+		$update['payroll_jobtitle_name'] 			= Request::input('payroll_jobtitle_name');
+		Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $payroll_jobtitle_id)->update($update);
+
+		$return['message'] 			= 'success';
+		$return['data']	   			= '';
+		$return['function_name'] 	= 'payrollconfiguration.reload_tbl_jobtitle';
+		return json_encode($return);
 	}
 
 	/* JOB TITLE END*/

@@ -674,8 +674,12 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* JOB TITLE START */
 	Route::any("/jobtitlelist","Member\PayrollController@jobtitle_list");
 	Route::any("/jobtitlelist/modal_create_jobtitle","Member\PayrollController@modal_create_jobtitle");
-	Route::any("/jobtitlelist/modal_save_department","Member\PayrollController@modal_save_department");
+	Route::any("/jobtitlelist/modal_save_jobtitle","Member\PayrollController@modal_save_jobtitle");
 	Route::any("/jobtitlelist/reload_tbl_jobtitle","Member\PayrollController@reload_tbl_jobtitle");
+	Route::any("/jobtitlelist/modal_view_jobtitle/{id}","Member\PayrollController@modal_view_jobtitle");
+	Route::any("/jobtitlelist/modal_edit_jobtitle/{id}","Member\PayrollController@modal_edit_jobtitle");
+	Route::any("/jobtitlelist/archived_jobtitle","Member\PayrollController@archived_jobtitle");
+	Route::any("/jobtitlelist/modal_update_jobtitle","Member\PayrollController@modal_update_jobtitle");
 	/* JOB TITLE END */
 });
 

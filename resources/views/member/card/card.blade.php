@@ -14,7 +14,6 @@
 		<div class="bottom-container clearfix" style="margin-top: -7.5px;">
 			<div class="member">
 				<div class="member-name">{{ $name }}</div>
-				<div class="member-label">MEMBER</div>
 				<div class="member-label">ISSUED: <small>{{$now}}</small></div>
 			</div>
 			<div class="barcode">
@@ -69,7 +68,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div style="font-weight: 600;" style="margin-top: 5px;">By signing this card, the cardholder agrees to be bound be the terms and conditions of the VIP Loyalty Program. Present this card along with the valid ID when purchasing or availing privilleges and benefits in the head office, all BCO and partner merchants nationwide.</div>
+			<div style="font-weight: 600;" style="margin-top: 5px;">By signing this card, the Cardholder agrees to be bound be the terms and conditions of the VIP Loyalty Program. Present this card along with the valid ID when purchasing or availing privilleges and benefits in the head office, all BCO and partner merchants nationwide.</div>
 			<div style="color: red; font-weight: 600; font-size: 12px; text-align: center; margin-bottom: 5px;">Non-Transferable&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Annual Fee&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Expiry</div>
 			<div class="text-right" style="font-weight: 600;">Tampering invalidates the card.</div>
 		</div>

@@ -53,35 +53,10 @@ class MlmReportController extends Mlm
         $data['report']     = Mlm_member_report::get_wallet('MEMBERSHIP_MATCHING', Self::$slot_id); 
         $data['plan']       = Mlm_member_report::get_plan('MEMBERSHIP_MATCHING', Self::$shop_id); 
         $data['header'] = Mlm_member_report::header($data['plan']);
-        $data['report_matching'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->get()->toArray();
-        // dd($data['report_matching']);
-        // // $data['tester'] = [];
-        // $data['pair'] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
-        // ->get();
-        // $perlevel = [];
-        // $l = 0;
-        // foreach($data['pair'] as $key => $value)
-        // {
-        //     if($value->sponsor_tree_level <= 20 && $value->sponsor_tree_level >= 4)
-        //     {
-        //         if(isset($perlevel[$value->sponsor_tree_level]))
-        //         {
-        //             $perlevel[$value->sponsor_tree_level]++;
-        //             $l++;
-        //         }
-        //         else
-        //         {
-        //             $perlevel[$value->sponsor_tree_level] = 1;
-        //             $l++;
-        //         }
-        //     }
-            
-        // }
-        // dd ($l);
+        $data['report_matching'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->get();
+        $data['tester'] = [];
         $data['matching_count'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->count();
-        
         $data['count'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->get();
-        // dd($data);
         return view("mlm.report.report_membership_matching", $data);
     }
     public static function executive_bonus()

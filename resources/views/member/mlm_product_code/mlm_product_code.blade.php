@@ -5,9 +5,9 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Product Codes</span>
+                <span class="page-title">Sell Product/s</span>
                 <small>
-                    Produce a code that will use for repurchase.
+                    Repurchasing of products.
                 </small>
             </h1>
             <a href="/member/mlm/product_code/sell" class="panel-buttons btn btn-primary pull-right">Sell Codes</a>

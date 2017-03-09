@@ -6,7 +6,7 @@
         <div>
             <i class="fa fa-tablet"></i>
             <h1>
-                <span class="page-title">Tablet Dashboard</span>
+                <span class="page-title">Tablet</span>
                 <small>
                     Login as Sales Agent
                 </small>
@@ -23,7 +23,7 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal">
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <div class="col-md-4">
                     <form class="global-submit form-to-submit-add" action="/tablet/sync_import" method="post">
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -36,6 +36,14 @@
                         <button type="submit" class="btn btn-primary">Sync Export Data</button>
                     </form>
                 </div>
+            </div> -->
+            <div class="form-group">
+                <div class="col-md-6"><h4>List of Load Out Form issued to you</h4></div>
+                @if($ctr_open_sir != 0)
+                    <div class="col-md-6 text-right">
+                        <a href="/tablet/sir_dashboard" class="btn btn-primary">Go to Dashboard ({{$ctr_open_sir}})</a>
+                    </div>
+                @endif
             </div>
         <div class="form-group tab-content panel-body sir_container">
             <div id="all" class="tab-pane fade in active">
@@ -68,12 +76,11 @@
                                               <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 Action <span class="caret"></span>
                                               </button>
-                                              @if($sir->sir_status == 1)
+                                              @if($sir->sir_status == 0)
                                               <ul class="dropdown-menu dropdown-menu-custom">
-                                                <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}" class="popup">View SIR</a></li>
-                                                <li><a size="lg" link="/tablet/sir_inventory/{{$sir->sir_id}}" class="popup">View Inventory</a></li>
-                                                <li><a href="/tablet/create_invoices/add/{{$sir->sir_id}}">Create Invoice</a></li>
-                                                <li><a href="/tablet/view_invoices/{{$sir->sir_id}}">View Invoices</a></li>
+                                                <li><a size="lg" link="/tablet/pis/sir/review/{{$sir->sir_id}}" class="popup">Review Load Out Form</a></li>
+                                                <li><a size="md" link="/tablet/pis/sir/{{$sir->sir_id}}/confirm" class="popup">Confirm Load Out Form</a></li>
+                                                <li><a size="md" class="popup" link="/tablet/pis/sir/{{$sir->sir_id}}/reject">Reject Load Out Form</a></li>
                                               </ul>
                                               @endif
                                             </div>

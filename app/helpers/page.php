@@ -262,6 +262,15 @@ function page_list()
     $nav[$page]['icon'] = "truck";
 
      /* -- PIS => SIR */
+    $code = "pis-lof";
+    $nav[$page]['submenu'][$code]['label'] = "Load Out Form";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/lof";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+     /* -- PIS => SIR */
     $code = "pis-sir";
     $nav[$page]['submenu'][$code]['label'] = "Stock Issuance Report";
     $nav[$page]['submenu'][$code]['code'] = $code;

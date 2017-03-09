@@ -1,4 +1,4 @@
-<form class="global-submit form-horizontal" role="form" action="/member/pis/sir/archived_submit" id="confirm_answer" method="post">
+<form class="global-submit form-horizontal" role="form" action="/tablet/pis/sir/lof_action_submit" id="confirm_answer" method="post">
 {!! csrf_field() !!}
 <div class="modal-header">
 	<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -27,9 +27,10 @@ function submit_done(data)
     {
         toastr.success("Success");
         $('#global_modal').modal('toggle');
-        $(".sir_container").load("/member/pis/lof .sir_container");
+        $(".sir_container").load("/tablet/dashboard .sir_container");
         $(".all-sir").addClass("active");
         $(".sir-class").removeClass("active");
+        data.element.modal("hide");
     }
     else if(data.status == "error")
     {

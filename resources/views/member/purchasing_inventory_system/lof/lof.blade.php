@@ -7,11 +7,12 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Stock Issuance Report</span>
+                <span class="page-title">Load Out Form</span>
                 <small>
-                    List of SIR
+                    List of LOF
                 </small>
             </h1>
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/pis/lof/create" >Create Load Out Form</a>
         </div>
     </div>
 </div>
@@ -34,9 +35,10 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
         <li class="active cursor-pointer all-sir"><a class="cursor-pointer" onclick="select('all')" data-toggle="tab" href="#all"><i class="fa fa-star"></i> All</a></li>
-        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(1,0,'',1)" data-toggle="tab" href="#sync"><i class="fa fa-refresh"></i> Currently Synced</a></li>
-        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(2,0,'',1)" data-toggle="tab" href="#closed"><i class="fa fa-window-close"></i> Closed SIR</a></li>
-        <li class="cursor-pointer sir-class"><a class="cursor-pointer" onclick="select('',1,'',0)" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived SIR</a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(1,0,'')" data-toggle="tab" href="#new"><i class="fa fa-reorder"></i> Waiting for Confirmation LOF</a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(2,0,'')" data-toggle="tab" href="#confirmed"><i class="fa fa-check"></i> Confirmed LOF</a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(3,0,'')" data-toggle="tab" href="#rejected"><i class="fa fa-close"></i> Rejected LOF</a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer" onclick="select('',1,'')" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived LOF</a></li>
     </ul>
     <div class="search-filter-box">
         <div class="col-md-4" style="padding: 10px">
@@ -78,26 +80,16 @@
                                             Action <span class="caret"></span>
                                           </button>
                                             <ul class="dropdown-menu dropdown-menu-custom"> 
-                                               <li><a size="lg" link="/member/pis/sir/view_status/{{$sir->sir_id}}/" class="popup">View Status</a></li>
                                           @if($sir->sir_archived == 1)
                                                 <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/restore" class="popup">Restore SIR</a></li>
                                           @else
-                                              @if($sir->sir_status == 0)
+                                                <li><a size="lg" link="/member/pis/lof/view_status/{{$sir->sir_id}}/" class="popup">View Status</a></li>
+                                              @if($sir->lof_status == 3)
                                                 <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/lof" class="popup">View Load Out Form</a></li>
-                                                <li><a href="/member/pis/sir/edit/{{$sir->sir_id}}">Edit Load Out Form</a></li>
-                                                <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/archived" class="popup">Archive L.O.F</a></li>
-                                                <li><a size="md" link="/member/pis/sir/open/{{$sir->sir_id}}/open" class="popup">OPEN THIS AS SIR</a></li>
-                                              @elseif($sir->ilr_status == 2)                  
-                                                <li><a size="lg" link="/member/pis/ilr/view/{{$sir->sir_id}}" class="popup">View ILR</a></li>
-                                              @elseif($sir->is_sync == 1 )
-                                                <li><a size="lg" link="/tablet/sir_inventory/{{$sir->sir_id}}" class="popup">View Inventory</a></li>
-                                                <li><a href="/member/pis/manual_invoice/add/{{$sir->sir_id}}">Create Manual Invoices</a></li>
-                                              @elseif($sir->sir_status == 1)                   
-                                                <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/sir" class="popup">View SIR</a></li>
-                                              @elseif($sir->ilr_status == 1)                   
-                                                <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/sir" class="popup">View SIR</a></li>
-                                                <li><a href="/member/pis/ilr/{{$sir->sir_id}}">Processed ILR</a></li>
+                                                <li><a href="/member/pis/sir/lof/edit/{{$sir->sir_id}}">Edit Load Out Form</a></li>
+                                                <li><a size="md" link="/member/pis/lof/{{$sir->sir_id}}/archived" class="popup">Archive L.O.F</a></li>
                                               @endif
+
                                             </ul>
                                           @endif
                                         </div>
@@ -110,26 +102,22 @@
             </div>
         </div>
     </div>
-    
-    
 </div>
 @endsection
 @section("script")
 <script type="text/javascript">
     var status_s = 'all';
     var archived_s = 0;
-    var is_sync_s = 0;
     $("#srch_sir_id").keyup(function()
     {
-        select(status_s, archived_s, $(this).val(),is_sync_s);
+        select(status_s, archived_s, $(this).val());
     });
-    function select(status,archived,sir_id = '',is_sync)
+    function select(status,archived,sir_id = '')
     {        
         $(".modal-loader").removeClass("hidden");
         status_s = status;
         archived_s = archived;
-        is_sync_s = is_sync;
-        $(".sir_container").load("/member/pis/sir?status="+status +"&archived="+archived + "&sir_id="+sir_id + "&is_sync="+is_sync +" .sir_container", function()
+        $(".sir_container").load("/member/pis/lof?status="+status +"&archived="+archived + "&sir_id="+sir_id + " .sir_container", function()
             {
                 $(".modal-loader").addClass("hidden");
             });

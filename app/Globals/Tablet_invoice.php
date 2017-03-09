@@ -41,6 +41,7 @@ class Tablet_invoice
         $insert['inv_shop_id']                  = Tablet_invoice::getShopId();  
 		$insert['inv_customer_id']              = $customer_info['customer_id'];        
         $insert['inv_customer_email']           = $customer_info['customer_email'];
+        $insert['new_inv_id']                   = $invoice_info['new_inv_id'];
         $insert['inv_customer_billing_address'] = $invoice_info['billing_address'];
         $insert['inv_terms_id']                 = $invoice_info['invoice_terms_id'];
         $insert['inv_date']                     = $invoice_info['invoice_date'];

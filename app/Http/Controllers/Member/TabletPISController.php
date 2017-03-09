@@ -8,12 +8,16 @@ use App\Globals\UnitMeasurement;
 use App\Globals\Item;
 use App\Globals\Tablet_invoice;
 use App\Globals\Invoice;
+use App\Globals\Transaction;
 use App\Globals\Purchasing_inventory_system;
+use App\Globals\Customer;
+use App\Globals\Pdf_global;
 use App\Models\Tbl_employee;
 use App\Models\Tbl_sir;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_temp_customer_invoice;
 use App\Models\Tbl_temp_customer_invoice_line;
+use App\Models\Tbl_unit_measurement_multi;
 use Session;
 use Crypt;
 use Redirect;
@@ -29,11 +33,82 @@ class TabletPISController extends Member
 	 */
 	public function index()
 	{
-		$data["_sir"] = Purchasing_inventory_system::tablet_sir_per_sales_agent($this->user_info->shop_id,'array',1,0,null,1,$this->get_user()->employee_id);
+		$data["_sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);
 
 		$data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
 		$data["employee_position"] = $this->get_user()->position_name;
-		return view("tablet.dashboard",$data);
+
+		$data["ctr_open_sir"] = Tbl_sir::where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->count();
+		$data["open_sir"] = Tbl_sir::truck()->saleagent()->where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->get();
+
+		Session::forget("key");
+		if($data["ctr_open_sir"] != 0)
+		{
+			$str = str_random(5);
+			Session::put("key",$str);
+		}
+
+		if(Session::get("key") != null)
+		{
+			$data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_temp_customer_invoice.inv_id","DESC")->get();
+
+			$data["_customer"] = Customer::getAllCustomer();
+
+			return view("tablet.agent.agent_dashboard",$data);
+		}
+		else
+		{
+			return view("tablet.index",$data);
+		}
+	}
+	public function selected_sir()
+	{
+		Session::forget("selected_sir");
+		$sir_id = Request::input("sir_id");
+
+		Session::put("selected_sir",$sir_id);
+
+		$data["status"] = "success";
+		return json_encode($data);
+	}
+	public function review_sir($sir_id)
+	{
+        $data["sir_id"] = $sir_id;
+        $data["type_code"] = "lof";
+	    $data["type"] = "Load Out Form";
+	    $data["tablet"] = "confirm_reject";
+
+        return view("member.purchasing_inventory_system.sir_view",$data);
+	}
+	public function lof_action($id, $action)
+	{
+     	$data["sir_id"] = $id;
+        $data["action"] = $action;
+
+        return view("tablet.confirm_tablet",$data);
+	}
+	public function lof_action_submit()
+	{
+        $id = Request::input("sir_id");
+        $action = Request::input("action");
+
+        if($action == "confirm")
+        {
+        	$update["lof_status"] = 2;
+        	$update["sir_status"] = 1;
+        	$update["is_sync"] = 1;
+        }
+        else if($action == "reject")
+        {
+        	$update["lof_status"] = 3;
+        }
+
+        Tbl_sir::where("sir_id",$id)->update($update);
+
+        $data["status"] = "success";
+
+        return json_encode($data);
+
 	}
 	public function logout()
 	{
@@ -78,6 +153,7 @@ class TabletPISController extends Member
 		$data["_customer"]  = Tbl_customer::where("archived", 0)->get();
 		// $data["_item"]      = Tbl_item::where("archived", 0)->get();
 		$data['_item']      = Item::get_all_item_sir($sir_id);
+        $data["new_inv_id"] = Transaction::get_last_number("tbl_temp_customer_invoice","new_inv_id","inv_shop_id"); 
 		$data["sir_id"] = $sir_id;
 		// dd($data["sir_id"]);
 		$data["action"] = "/tablet/create_invoice/add_submit";
@@ -96,6 +172,7 @@ class TabletPISController extends Member
 
 		$invoice_info                       = [];
 		$invoice_info['invoice_terms_id']   = Request::input('inv_terms_id');
+        $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
 		$invoice_info['invoice_date']       = Request::input('inv_date');
 		$invoice_info['invoice_due']        = Request::input('inv_due_date');
 		$invoice_info['billing_address']    = Request::input('inv_customer_billing_address');
@@ -145,34 +222,44 @@ class TabletPISController extends Member
 
 		if($return == 0)
 		{
-		   $invoice_id = Tablet_invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+		    $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
+
+	        if($inv == 0 || Request::input("keep_val") == "keep")
+	        {
+		   		$invoice_id = Tablet_invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
 		   // $remarks = "Manual Invoice consume";
 		   // $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
 		   // $transaction_type = "invoice";
 		   // $transaction_id = $invoice_id;
 		   // $data = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type, $transaction_id);
 			  
-		   if($sir_id != null && $invoice_id != null)
-		   {
-				$insert_manual_invoice["sir_id"] = $sir_id;
-				$insert_manual_invoice["inv_id"] = $invoice_id;
+			   if($sir_id != null && $invoice_id != null)
+			   {
+					$insert_manual_invoice["sir_id"] = $sir_id;
+					$insert_manual_invoice["inv_id"] = $invoice_id;
 
-				Tbl_manual_invoice::insert($insert_manual_invoice);
+					Tbl_manual_invoice::insert($insert_manual_invoice);
 
-				foreach($_itemline as $keys => $item_line)
-				{
-					if($item_line)
+					foreach($_itemline as $keys => $item_line)
 					{
-						Purchasing_inventory_system::mark_as_sold($sir_id, Request::input('invline_item_id')[$keys],Request::input('invline_um')[$keys],Request::input('invline_qty')[$keys]);
+						if($item_line)
+						{
+							Purchasing_inventory_system::mark_as_sold($sir_id, Request::input('invline_item_id')[$keys],Request::input('invline_um')[$keys],Request::input('invline_qty')[$keys]);
+						}
 					}
-				}
-				$data["status"] = "success-tablet";
-		   }
-		   else
-		   {
-				$data["status"] = "error";
-				$data["status_message"] = "error";
-		   }
+					$data["status"] = "success-tablet";
+			   }
+			   else
+			   {
+					$data["status"] = "error";
+					$data["status_message"] = "error";
+			   }
+			}
+			else
+			{
+				$data["inv_id"] = Request::input("new_invoice_id");            
+            	$data["status"] = "error-inv-no";
+			}
 		}
 		else
 		{
@@ -184,7 +271,32 @@ class TabletPISController extends Member
 		}
 	   return json_encode($data);
 	}
+	public function view_invoice_pdf($inv_id)
+	{
+		$data["invoice"] = Tbl_temp_customer_invoice::customer()->where("inv_id",$inv_id)->first();
 
+        $data["invoice_item"] = Tbl_temp_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
+        foreach($data["invoice_item"] as $key => $value) 
+        {        	
+            $um = Tbl_unit_measurement_multi::where("multi_id",$value->invline_um)->first();
+          	$qty = 1;
+            if($um != null)
+            {
+                $qty = $um->unit_qty;
+            }
+
+            $total_qty = $value->invline_qty * $qty;
+            $data["invoice_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
+        }
+          $pdf = view('member.customer_invoice.invoice_pdf', $data);
+          return Pdf_global::show_pdf($pdf);
+	}
+	public function view_invoices_view($id)
+	{
+		$data["invoice_id"] = $id;
+		$data["action_load"] = "/tablet/view_invoice_pdf";
+        return view("member.customer_invoice.invoice_view",$data);
+	}
 	public function login()
 	{
 		if(Session::get("sales_agent"))

@@ -603,10 +603,10 @@ function submit_done(data)
         $('#global_modal').modal('toggle');
         $('.multiple_global_modal').modal('hide');  
     }
-    else if(data.status == "success")
+    else if(data.status == "success-lof")
     {
         toastr.success("Success");
-    	location.href = "/member/pis/sir/";
+    	location.href = "/member/pis/lof";
     }
     else if(data.status == "success-serial")
     {    

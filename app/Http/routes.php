@@ -277,6 +277,8 @@ Route::any('/member/item/confirm_serial_submit','Member\WarehouseController@conf
 /* END WAREHOUSE ARCY*/
 
 /* START PIS ARCY*/
+Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
+
 Route::any('/member/pis/sir','Member\PurchasingInventorySystemController@sir');
 Route::any('/member/pis/sir/archived_submit','Member\PurchasingInventorySystemController@archived_sir_submit');
 Route::any('/member/pis/sir/create','Member\PurchasingInventorySystemController@create_sir');
@@ -288,7 +290,13 @@ Route::any('/member/pis/sir/edit_submit','Member\PurchasingInventorySystemContro
 
 Route::any('/member/pis/ilr/update_count_submit','Member\PurchasingInventorySystemController@update_count_submit');
 Route::any('/member/pis/ilr/update_count/{sir_id}/{item_id}','Member\PurchasingInventorySystemController@update_count');
-
+//lof
+Route::any('/member/pis/lof','Member\PurchasingInventorySystemController@lof');
+Route::any('/member/pis/lof/archived_submit','Member\PurchasingInventorySystemController@archived_sir_submit');
+Route::any('/member/pis/lof/create','Member\PurchasingInventorySystemController@create_sir');
+Route::any('/member/pis/lof/create_submit','Member\PurchasingInventorySystemController@create_sir_submit');
+Route::any('/member/pis/lof/edit/{id}','Member\PurchasingInventorySystemController@edit_sir');
+Route::any('/member/pis/lof/edit_submit','Member\PurchasingInventorySystemController@edit_sir_submit');
 //syncs
 Route::any('/member/pis/sir/sync_import','Member\PurchasingInventorySystemController@sync_import');
 Route::any('/member/pis/sir/sync_export','Member\PurchasingInventorySystemController@sync_export');
@@ -312,6 +320,11 @@ Route::any('/member/customer/invoice/manual_invoice_update',"Member\ManualInvoic
 Route::any('/member/pis/view_invoices/{id}','Member\ManualInvoiceController@view_invoices');
 /* END PIS ARCY*/
 
+Route::any('/tablet/pis/sir/review/{id}',"Member\TabletPISController@review_sir");
+Route::any('/tablet/pis/sir/{id}/{action}',"Member\TabletPISController@lof_action");
+Route::any('/tablet/pis/sir/lof_action_submit',"Member\TabletPISController@lof_action_submit");
+Route::any('/tablet/selected_sir',"Member\TabletPISController@selected_sir");
+
 /* END PIS TABLEt*/
 Route::any('/tablet','Member\TabletPISController@login');
 Route::any('/tablet/login_submit','Member\TabletPISController@login_submit');
@@ -324,6 +337,9 @@ Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_si
 Route::any('/tablet/view_invoices/{id}','Member\TabletPISController@view_invoices');
 Route::any('/tablet/create_invoices/add/{id}','Member\TabletPISController@tablet_create_invoice');
 Route::any('/tablet/create_invoice/add_submit','Member\TabletPISController@create_invoice_submit');
+
+Route::any('/tablet/view_invoice_view/{id}','Member\TabletPISController@view_invoices_view');
+Route::any('/tablet/view_invoice_pdf/{id}','Member\TabletPISController@view_invoice_pdf');
 /* END PIS TABLEt*/
 
  //form

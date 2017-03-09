@@ -14,6 +14,7 @@ use App\Models\Tbl_warehousea;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_customer_invoice_line;
+use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_item;
 use App\Models\Tbl_warehouse;
 use App\Globals\Customer;
@@ -248,7 +249,7 @@ class Customer_InvoiceController extends Member
     public function invoice_view($invoice_id)
     {
         $data["invoice_id"] = $invoice_id;
-
+        $data["action_load"] = "/member/customer/customer_invoice_pdf";
         return view("member.customer_invoice.invoice_view",$data);
     }
     public function invoice_view_pdf($inv_id)
@@ -258,7 +259,14 @@ class Customer_InvoiceController extends Member
         $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
         foreach($data["invoice_item"] as $key => $value) 
         {
-            $total_qty = $value->invline_qty * $value->unit_qty;
+          $um = Tbl_unit_measurement_multi::where("multi_id",$value->invline_um)->first();
+            $qty = 1;
+            if($um != null)
+            {
+                $qty = $um->unit_qty;
+            }
+
+            $total_qty = $value->invline_qty * $qty;
             $data["invoice_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
         }
           $pdf = view('member.customer_invoice.invoice_pdf', $data);

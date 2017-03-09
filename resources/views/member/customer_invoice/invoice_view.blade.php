@@ -3,7 +3,7 @@
     <h4 class="modal-title layout-modallarge-title item_title">Invoice No : {{$invoice_id}}</h4>
 </div>
 <div class="modal-body modallarge-body-layout background-white form-horizontal menu_container" >
-    <iframe width="100%" height="1200px" style="overflow-y: hidden;" src="/member/customer/customer_invoice_pdf/{{$invoice_id}}"></iframe>
+    <iframe width="100%" height="1200px" style="overflow-y: hidden;" src="{{$action_load}}/{{$invoice_id}}"></iframe>
 </div>
 <script>
   function resizeIframe(obj) {

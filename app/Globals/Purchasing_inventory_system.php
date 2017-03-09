@@ -97,6 +97,38 @@ class Purchasing_inventory_system
     {
     	$data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
                                 ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
+                                ->where("lof_status",2)
+                                ->orderBy("tbl_sir.sir_id","DESC")->get();
+
+        foreach ($data as $key => $value) 
+        {              
+            $data[$key]->total_amount = "";
+            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $price = "";
+            foreach ($item as $key2 => $value2)
+            {   
+                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();
+                $qty = 1;
+                if($unit_m != null)
+                {
+                    $qty = $unit_m->unit_qty;
+                }
+                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
+            }
+
+            $data[$key]->total_amount += $price; 
+        }
+
+        if($return == "json")
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+    }
+    public static function select_lof($shop_id = 0, $return = 'array',$srch_sir = '')
+    {
+        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+                                ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
                                 ->orderBy("tbl_sir.sir_id","DESC")->get();
 
         foreach ($data as $key => $value) 
@@ -146,8 +178,13 @@ class Purchasing_inventory_system
 
                 $data["_sir_item"][$key]->um_name = isset($um->multi_name) ? $um->multi_name : "";
                 $data["_sir_item"][$key]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
+                $qty = 1;
+                if($um != null)
+                {
+                    $qty = $um->unit_qty;
+                }
 
-                $issued_qty = $value->item_qty * isset($um->unit_qty) ? $um->unit_qty : 1;
+                $issued_qty = $value->item_qty * $qty;
                 $remaining_qty = $issued_qty - $value->sold_qty;
                 $total_sold_qty = $value->sold_qty;
                 
@@ -164,12 +201,44 @@ class Purchasing_inventory_system
 
             }
         }
-        
+        return $data;
+    }
+    public static function select_lof_status($shop_id = 0, $return = 'array',$status = 0,$archived = 0, $srch_sir = '')
+    {
+        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+                        ->where("tbl_sir.archived",$archived)
+                        ->where("lof_status",$status)
+                        ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
+                        ->orderBy("tbl_sir.sir_id","DESC")->get();
+        foreach ($data as $key => $value) 
+        {              
+            $data[$key]->total_amount = "";
+            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $price = "";
+            foreach ($item as $key2 => $value2)
+            {   
+                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();   
+                $qty = 1;
+                if($unit_m != null)
+                {
+                    $qty = $unit_m->unit_qty;
+                }
+                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
+            }
+
+            $data[$key]->total_amount += $price; 
+        }
+
+         if($return == "json")
+        {
+            $data = json_encode($data);
+        }
         return $data;
     }
     public static function select_sir_status($shop_id = 0, $return = 'array',$status = 0,$archived = 0, $srch_sir = '',$is_sync = 0)
     {
         $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+                        ->where("lof_status",2)
                         ->where("sir_status",$status)
                         ->where("tbl_sir.archived",$archived)
                         ->where("tbl_sir.is_sync",$is_sync)
@@ -202,6 +271,41 @@ class Purchasing_inventory_system
             $data = json_encode($data);
         }
         return $data;
+    }
+    public static function tablet_lof_per_sales_agent($shop_id = 0, $return = 'array',$status = 0, $srch_sir = '', $agent_id)
+    {
+        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+                        ->where("lof_status",$status)
+                        ->where("tbl_sir.sales_agent_id",$agent_id)
+                        ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
+                        ->orderBy("tbl_sir.sir_id","DESC")->get();
+
+        // dd($data);
+        foreach ($data as $key => $value) 
+        {              
+            $data[$key]->total_amount = "";
+            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $price = "";
+            foreach ($item as $key2 => $value2)
+            {   
+                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();   
+                $qty = 1;
+                if($unit_m != null)
+                {
+                    $qty = $unit_m->unit_qty;
+                }
+                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
+            }
+
+            $data[$key]->total_amount += $price; 
+        }
+
+         if($return == "json")
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+
     }
     public static function tablet_sir_per_sales_agent($shop_id = 0, $return = 'array',$status = 0,$archived = 0, $srch_sir = '',$is_sync = 0, $agent_id)
     {
@@ -273,7 +377,6 @@ class Purchasing_inventory_system
         }
         return $data;
     }
-
     public static function select_ilr($shop_id = 0, $return = 'array',$srch_sir = '')
     {
         $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)

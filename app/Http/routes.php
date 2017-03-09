@@ -53,6 +53,7 @@ Route::any("/member/page/store_information/update_submit","Member\ManageStoreInf
 Route::any('/member/developer/status', 'Member\Developer_StatusController@index'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/rematrix', 'Member\Developer_RematrixController@index'); //ERWIN GUEVARRA
 Route::any('/member/developer/documentation', 'Member\Developer_DocumentationController@index'); //EVERYONE
+Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */

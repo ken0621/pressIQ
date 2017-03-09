@@ -80,36 +80,28 @@
 {
 	font-size: 10px;
 	letter-spacing: 1px;
-	color: #000;
 }
 .info
 {
-	margin: 0;
+	margin: 7.5px 0;
 }
 .info table
 {
-	background-color: #fff;
+	background-color: transparent;
 	width: 100%;
 }
 .info table td
 {
 	font-size: 12px;
 	letter-spacing: 0;
-	border: 2px solid #000;
-	border-bottom: 0;
-}
-.info table:last-child td
-{
-	border-bottom: 2px solid #000;
 }
 .info table td:first-child
 {
 	font-weight: bold;
-	border-right: 0;
 }
 .info table td:last-child
 {
-	border-left: 0;
+	border-bottom: 1px solid #fff;
 }
 .signature
 {
@@ -117,12 +109,8 @@
 	text-align: center;
 	color: #676767;
 	margin-top: 5px;
-	padding-top: 40px;
-	width: 250px;
-	margin: auto;
 }
-.sign-label
+.signature .sign-label
 {
-	text-align: center;
-	font-weight: 700;
+	padding-top: 33px;
 }

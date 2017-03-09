@@ -47,13 +47,13 @@
             </div>
         </div>  
 
-        <div class="panel panel-default panel-block hide">
+        <div class="panel panel-default panel-block ">
             <div class="list-group">
                 @if(isset($points_log))
                 <div class="list-group-item" id="responsive-bordered-table">
                     <div class="form-group">
                         <h4 class="section-title">
-                        POINTS LOG
+                        POINTS LOG PERSONAL
                         </h4>
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped table-condensed">
@@ -94,6 +94,39 @@
         </div> 
 
         </form> 
+        <div class="panel panel-default panel-block">
+            <div class="list-group">
+                <div class="list-group-item" id="responsive-bordered-table">
+                    <div class="form-group">
+                    <div class="table-responsive">
+                    <h4 class="section-title">
+                    POINTS LOG GROUP
+                    </h4>
+                            <table class="table table-bordered table-striped table-condensed">
+                                <thead>
+                                    <th>Level</th>
+                                    <th>Slot</th>
+                                    <th>Points</th>
+                                </thead>
+                                <tbody>
+                                    @foreach($tree as $key => $value)
+                                    <tr >
+                                        <td colspan="40" style="background-color: gray;">{{$key}}</td>
+                                    </tr>
+                                        @foreach($value as $key2 => $value2)
+                                        <tr>
+                                            <td></td>
+                                            <td>{{$value2->slot_no}}</td>
+                                            <td>{{$value2->points}}</td>
+                                        </tr>
+                                        @endforeach
+                                    @endforeach
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            </div>
+        </div>            
         <div>
 
     </div>

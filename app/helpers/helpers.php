@@ -415,6 +415,13 @@ function phone_number($customer_info)
                     $ret = $p2;
                 }
             }
+            else
+            {
+                if($p2 != null)
+                {
+                    $ret = $p2;
+                }
+            }
         }
     }
     return $ret;
@@ -423,9 +430,25 @@ function address_customer_info($customer_info)
 {
     // street, city, province, zipcode.
     $adderss = '';
-    if(isset($customer_info->customer_state))
+    if(isset($customer_info->customer_street))
     {
-        $adderss = $customer_info->customer_street . ', ' . $customer_info->customer_city . ', ' . $customer_info->customer_state . ', ' .  $customer_info->customer_zipcode;
+        // $adderss = $customer_info->customer_street  . ', ' . $customer_info->customer_state . ', ' .  $customer_info->customer_zipcode;
+        if($customer_info->customer_street != null)
+        {
+            $adderss = $customer_info->customer_street;
+        } 
+        if($customer_info->customer_city != null)
+        {
+            $adderss = $adderss . ', ' . $customer_info->customer_city;
+        }    
+        if($customer_info->customer_state != null)
+        {
+            $adderss = $adderss . ', ' . $customer_info->customer_state;
+        }
+        if($customer_info->customer_zipcode != null)
+        {
+            $adderss = $adderss . ', ' . $customer_info->customer_zipcode;
+        }
     }
     return $adderss;
 }

@@ -29,7 +29,7 @@
 						</tr>
 						<tr>
 							<td>
-								<a href="#" class="a-navigation-configuration">Job Title</a>
+								<a href="/member/payroll/jobtitlelist" class="a-navigation-configuration">Job Title</a>
 							</td>
 						</tr>
 						<tr>

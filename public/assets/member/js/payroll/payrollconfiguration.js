@@ -7,7 +7,8 @@ function payrollconfiguration()
 	function init()
 	{
 		a_navigation_configuration_event();
-		load_configuration('/member/payroll/departmentlist');
+		var formdata = {_token:misc('_token')};
+		load_configuration('/member/payroll/departmentlist', "POST",".configuration-div", formdata);
 	}
 
 	function a_navigation_configuration_event()
@@ -16,20 +17,20 @@ function payrollconfiguration()
 		$(".a-navigation-configuration").bind("click", function(e)
 		{
 			e.preventDefault();
-			var link 	= $(this).attr("href");
-			load_configuration(link);
+			var link 		= $(this).attr("href");
+			var formdata 	= {_token:misc('_token')};
+			var target 		= ".configuration-div";
+			load_configuration(link, "POST", target, formdata);
 		});
 	}
 
-	function load_configuration(action = "", method = "POST", target = ".configuration-div")
+	function load_configuration(action = "", method = "POST", target = ".configuration-div", formdata = [])
 	{
 		$(target).html(misc('loader'));
 		$.ajax({
 			url 	: 	action,
 			type 	:  	method,
-			data 	: 	{
-				_token:misc('_token')
-			},
+			data 	: 	formdata,
 			success : 	function(result)
 			{
 				$(target).html(result);
@@ -52,6 +53,7 @@ function payrollconfiguration()
 			var trigger 	= $(this).data("trigger");
 			var action 		= "/member/payroll" + $(this).data("action");
 			var parent 		= $(this).parents(".dropdown");
+			var html 		= parent.html();
 			var tr 			= $(this).parents("tr");
 			var statement 	= "remove";
 			if(archived == 0)
@@ -59,6 +61,32 @@ function payrollconfiguration()
 				statement = "restore";
 			}
 			var con 	 	= confirm("Do you really want to " + statement + " this " + trigger + "?");
+			if(con)
+			{
+				parent.html(misc('spinner'));
+				$.ajax(
+				{
+					url 	: 	action,
+					type 	: 	"POST",
+					data 	: 	{
+						_token:misc('_token'),
+						content:content,
+						archived:archived
+					},
+					success : 	function(data)
+					{
+						tr.remove();
+						data = JSON.parse(data);
+						executeFunctionByName(data.function_name, window);
+					},
+					error 	: 	function(err)
+					{
+						error_function();
+						parent.html(html);
+						load_configuration_event();
+					}
+				});
+			}
 		});
 	}
 
@@ -101,7 +129,24 @@ function payrollconfiguration()
 	}
 
 
-	this.relaod_tbl_department = function()
+	
+
+	function department_archived(archived = 0)
+	{
+		var action = "/member/payroll/departmentlist/department_reload";
+		var formdata = {
+			_token:misc('_token'),
+			archived:archived
+		};
+		var target = "#active-department";
+		if(archived == 1)
+		{
+			target = "#archived-department";
+		}
+		load_configuration(action, "POST",target, formdata);
+	}
+
+	function jobtitle_archived(archived = 0)
 	{
 
 	}
@@ -110,6 +155,24 @@ function payrollconfiguration()
 	{
 		executeFunctionByName(functionName, window);
 	}
+
+	this.relaod_tbl_department = function()
+	{
+		department_archived();
+		department_archived(1);
+	}
+
+	this.btn_modal_button_event = function()
+	{
+		$(".btn-edit").unbind("click");
+		$(".btn-edit").bind("click", function()
+		{
+			$(this).addClass("display-none");
+			$(".btn-submit").removeClass("display-none");
+			$(".view-form").removeAttr("disabled");
+		});
+	}
+
 
 	/* CALL A FUNCTION BY NAME */
 	function executeFunctionByName(functionName, context /*, args */) {
@@ -124,7 +187,12 @@ function payrollconfiguration()
 }
 function submit_done(data)
 {
-	$("#global_modal").modal("hide");
 	payrollconfiguration.executeFunctionByName(data.function_name);
+	
 	$("#global_modal").modal("hide");
+}
+
+function loading_done(url)
+{
+	payrollconfiguration.btn_modal_button_event();
 }

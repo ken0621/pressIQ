@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Member;
 
 
@@ -10,6 +9,7 @@ use Session;
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_rdo;
 use App\Models\Tbl_payroll_department;
+use App\Models\Tbl_payroll_jobtitle;
 
 class PayrollController extends Member
 {
@@ -205,6 +205,7 @@ class PayrollController extends Member
 		$return['message'] 			= 'success';
 		$return['data']	   			= '';
 		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
+		return json_encode($return);
 	}
 
 	public function department_reload()
@@ -220,8 +221,82 @@ class PayrollController extends Member
 		$content  = Request::input('content');
 		$update['payroll_department_archived'] = $archived;
 		Tbl_payroll_department::where('payroll_department_id',$content)->update($update);
+
+		$return['message'] 			= 'success';
+		$return['data']	   			= '';
+		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
+		return json_encode($return);
+	}
+
+	public function modal_view_department($id)
+	{
+		return Self::modal_department_operation($id);
+	}
+
+	public function modal_edit_department($id)
+	{
+		$action = 'edit';
+		return Self::modal_department_operation($id, $action);
+	}
+
+	public function modal_department_operation($payroll_department_id = 0, $action = 'view')
+	{
+		$data['deparmtent'] = Tbl_payroll_department::where('payroll_department_id', $payroll_department_id)->first();
+		$data['action'] = $action;
+		return view('member.payroll.modal.modal_view_department',$data);
+	}
+
+
+	public function modal_update_department()
+	{
+		
+		$payroll_department_id = Request::input('payroll_department_id');
+		$payroll_department_name = Request::input('payroll_department_name');
+
+		$update['payroll_department_name'] = $payroll_department_name;
+		Tbl_payroll_department::where('payroll_department_id', $payroll_department_id)->update($update);
+		$return['message'] 			= 'success';
+		$return['data']	   			= '';
+		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
+		return json_encode($return);
 	}
 
 	/* DEPARTMENT END */
+
+
+	/* JOB TITLE START*/
+
+	public function jobtitle_list()
+	{
+		$data['_active'] = Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->get();
+		$data['_archived'] = Tbl_payroll_jobtitle::sel(Self::shop_id(), 1)->orderBy('payroll_jobtitle_name')->get();
+		return view('member.payroll.side_container.jobtitlelist', $data);
+	}
+
+	public function modal_create_jobtitle()
+	{
+		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+		return view('member.payroll.modal.modal_create_jobtitle', $data);
+	}
+
+	public function modal_save_department()
+	{
+		$insert['payroll_jobtitle_department_id'] 	= Request::input('payroll_jobtitle_department_id');
+		$insert['payroll_jobtitle_name'] 			= Request::input('payroll_jobtitle_name');
+		$insert['shop_id']							= Self::shop_id();
+		Tbl_payroll_jobtitle::insert($insert);
+
+		$return['message'] 			= 'success';
+		$return['data']	   			= '';
+		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
+		return json_encode($return);
+	}
+
+	public function reload_tbl_jobtitle()
+	{
+		
+	}
+
+	/* JOB TITLE END*/
 
 }

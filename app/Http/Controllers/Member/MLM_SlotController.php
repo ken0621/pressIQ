@@ -769,7 +769,7 @@ class MLM_SlotController extends Member
         {
             DB::table('tbl_mlm_slot_wallet_log')->delete();
             DB::table('tbl_mlm_matching_log')->delete();
-
+            DB::table('tbl_mlm_slot_points_log')->delete();
             $update['slot_wallet_all'] = 0;
             $update['slot_wallet_withdraw'] = 0;
             $update['slot_wallet_current'] = 0;

@@ -9,6 +9,8 @@ use App\Globals\Warehouse;
 use App\Globals\Pdf_global;
 use App\Globals\CreditMemo;
 use App\Globals\Transaction;
+use App\Globals\Customer;
+
 use App\Models\Tbl_customer;
 use App\Models\Tbl_warehousea;
 use App\Models\Tbl_customer_invoice;
@@ -16,7 +18,8 @@ use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_customer_invoice_line;
 use App\Models\Tbl_item;
 use App\Models\Tbl_warehouse;
-use App\Globals\Customer;
+use App\Models\Tbl_user;
+
 use Request;
 use Carbon\Carbon;
 use Session;
@@ -25,6 +28,11 @@ use PDF;
 
 class Customer_InvoiceController extends Member
 {
+    public function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
+
     public function index()
     {
         $data["page"]       = "Customer Invoice";
@@ -37,9 +45,11 @@ class Customer_InvoiceController extends Member
         $id = Request::input('id');
         if($id)
         {
-            $data["inv"]            = Tbl_customer_invoice::where("inv_id", $id)->first();
+            $data["inv"]            = Tbl_customer_invoice::appliedPayment($this->getShopId())->where("inv_id", $id)->first();
             $data["_invline"]       = Tbl_customer_invoice_line::um()->where("invline_inv_id", $id)->get();
             $data["action"]         = "/member/customer/invoice/update";
+
+            // dd($data["inv"]);
 
             $sir = Tbl_manual_invoice::where("inv_id",$id)->first();
             if($sir)

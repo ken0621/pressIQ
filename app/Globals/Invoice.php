@@ -114,7 +114,7 @@ class Invoice
                 }
 
                 $insert_line['invline_inv_id']          = $invoice_id;
-                $insert_line['invline_service_date']    = $item_line['item_service_date'];
+                $insert_line['invline_service_date']    = date("Y-m-d", strtotime($item_line['item_service_date']));
                 $insert_line['invline_item_id']         = $item_line['item_id'];
                 $insert_line['invline_description']     = $item_line['item_description'];
                 $insert_line['invline_um']              = $item_line['um'];

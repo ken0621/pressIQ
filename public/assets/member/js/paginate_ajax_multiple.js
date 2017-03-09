@@ -42,7 +42,6 @@ function paginate_ajax()
                     if(this.specified && this.name != "class" && this.name != "style") 
                     {
                         url = url+"&&"+this.name+"="+this.value;
-                        console.log(this.name, this.value);
                     }
                 });
             });
@@ -55,6 +54,7 @@ function paginate_ajax()
     function getArticles(url, load_data) 
     {
         target = load_data.attr("target");
+        console.log(target);
         load_data.load(url+" .load-data #"+target, function()
         {
             if (typeof loading_done == 'function')

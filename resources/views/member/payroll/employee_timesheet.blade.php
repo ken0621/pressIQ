@@ -40,16 +40,18 @@
             <table style="table-layout: fixed;" class="timesheet table table-condensed table-bordered table-sale-month">
                 <thead>
                     <tr>
-                        <th class="text-center">Day</th>
-                        <th class="text-center" colspan="2">Time</th>
+                        <th width="100px" class="text-center">Day</th>
+                        <th width="200px" class="text-center" colspan="2">Time</th>
                         <th class="text-center">Activities</th>
-                        <th class="text-center">Total</th>
-                        <th class="text-center">OT Hours</th>
+                        <th width="100px" class="text-center">Regular</th>
+                        <th width="100px" class="text-center">Overtime</th>
+                        <th width="100px" class="text-center">Rest Day</th>
                     </tr>
                     <tr>
                         <th class="text-center"></th>
-                        <th class="text-center" width="30px">Time In</th>
-                        <th class="text-center" width="30px">Time Out</th>
+                        <th class="text-center">Time In</th>
+                        <th class="text-center">Time Out</th>
+                        <th class="text-center"></th>
                         <th class="text-center"></th>
                         <th class="text-center"></th>
                         <th class="text-center"></th>
@@ -57,21 +59,13 @@
                 </thead>
                 <tbody>
                 	<tr>
-                		<td class="text-center">26 (SUN)</td>
-                		<td class="text-center editable"><input class="text-table" type="text" name="" value="10:30 AM"></td>
-                		<td class="text-center editable"><input class="text-table"  type="text" name="" value="06:00 PM"></td>
+                		<td class="text-center edit-data">26 (SUN)</td>
+                		<td class="text-center editable"><input class="text-table time-entry time-in" type="text" name="" value="10:30AM"></td>
+                		<td class="text-center editable"><input class="text-table time-entry time-out"  type="text" name="" value="06:00PM"></td>
                 		<td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
-                		<td class="text-center">5 Hours and 10 Minutes</td>
-                		
-                		<td class="text-center">No Overtime</td>
-                	</tr>
-                	<tr>
-                		<td class="text-center">27 (MON)</td>
-                		<td class="text-center editable"><input class="text-table" type="text" name="" value="10:30 AM"></td>
-                		<td class="text-center editable"><input class="text-table" type="text" name="" value="06:00 PM"></td>
-                		<td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
-                		<td class="text-center ">5 Hours and 10 Minutes</td>
-                		<td class="text-center">No Overtime</td>
+                		<td class="text-center edit-data">05:10:30</td>
+                		<td class="text-center edit-data">00:00:00</td>
+                		<td class="text-center edit-data">00:00:00</td>
                 	</tr>
                 </tbody>
             </table>
@@ -84,8 +78,12 @@
 
 @section('css')
 	<link rel="stylesheet" type="text/css" href="/assets/member/payroll/css/timesheet.css">
+	<link rel="stylesheet" type="text/css" href="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.css">
 @endsection
 
 @section('script')
+
 	<script type="text/javascript" src="/assets/member/payroll/js/timesheet.js"></script>
+	<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
+	<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 @endsection

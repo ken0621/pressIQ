@@ -64,7 +64,7 @@
 					<tbody>
 						<tr>
 							<td style="width: 320px;">In case of loss please notify PHILTECH Head Office:</td>
-							<td></td>
+							<td><small>(+63)9175422614</small></td>
 						</tr>
 					</tbody>
 				</table>

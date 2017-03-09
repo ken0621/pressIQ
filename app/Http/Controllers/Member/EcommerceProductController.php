@@ -53,8 +53,8 @@ class EcommerceProductController extends Member
 	{
 		if($this->hasAccess("product-list","access_page"))
         {	
-			$active_product 	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("archived", 0)->paginate(2);
-			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("archived", 1)->paginate(2); 
+			$active_product 	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("archived", 0)->paginate(10);
+			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("archived", 1)->paginate(10); 
 			
 			/* IF REQUEST TYPE IS AJAX = RETURN ONLY TABLE DATA */ 
 	        // if(Request::ajax())
@@ -105,7 +105,7 @@ class EcommerceProductController extends Member
 	{
 		$button_action 	= Request::input('button_action');
 
-		/* VALIDATION */
+		/* START OF VALIDATION */
 		$message = [];
 
 		$value["product_label"] 	= Request::input('eprod_name');
@@ -130,6 +130,20 @@ class EcommerceProductController extends Member
 				$message["option_" . $key . ".required"] = "You need to add option for your variation.";
 			}
 		}
+
+		$item_id		= Request::input("evariant_item_id"); 
+		$item_code		= Request::input("item_code");
+
+		foreach($item_id as $key => $item)
+		{
+			$item_data		= Tbl_item::where("item_id", $item)->first();
+			$product_info 	= $this->session_product_info($item_code[$key]);
+			$value["evariant_price"] = $product_info ? $product_info["product_price"] : '';
+			$rules["evariant_price"] = 'required';
+			$message["evariant_price.required"] 	= 'You have to set a price for product '.$item_data->item_name;
+		}
+
+		/* END OF VALIDATION */
 
 		$validator = Validator::make($value, $rules, $message);
 		
@@ -246,6 +260,8 @@ class EcommerceProductController extends Member
 				}
 			}
 		}
+
+		return null;
 	}
 
 	public function postSaveProductInfo()
@@ -671,6 +687,36 @@ class EcommerceProductController extends Member
 
 		Request::session()->flash('success', 'Product Successfully Deleted');
 		return Redirect::to('/member/ecommerce/product/list');
+	}
+
+	public function getProductArchiveRestore($action, $id)
+	{
+		$data["title"] 		= $action;
+		$data["product"]	= Tbl_ec_product::where("eprod_id", $id)->first();
+
+		return view('member.ecommerce_product.ecom_product_archive_restore_modal', $data);
+	}
+
+	public function postProductArchiveRestore($id)
+	{
+		if(Request::input('action') == "restore")
+		{
+			Tbl_ec_product::where("eprod_id", $id)->update(['archived' => 0]);
+			// Request::session()->flash('success', 'Product Successfully Restored');
+			$json["message"] = "Product Successfully Restored";
+		}
+		elseif(Request::input('action') == "archive")
+		{
+			Tbl_ec_product::where("eprod_id", $id)->update(['archived' => 1]);
+			// Request::session()->flash('success', 'Product Successfully Archived');
+			$json["message"] = "Product Successfully Archived
+			";
+		}
+
+		$json["status"]		= "success";
+		$josn["product_id"] = $id;
+
+		return json_encode($json);
 	}
 
 	public function getTest()

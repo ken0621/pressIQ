@@ -17,7 +17,7 @@
 </div>
 
 <!-- NO PRODUCT YET -->
-@if(count($_product) == 0)
+@if(count($_product) == 0 && count($_product_archived) == 0)
 <div class="row">
     <div class="col-md-12 text-center">
         <div class="trial-warning clearfix">
@@ -78,5 +78,20 @@
     @if(Session::has('success'))
         toastr.success('{{Session::get('success')}}');
     @endif
+    function submit_done(data)
+    {
+        if(data.status == "success")
+        {
+            toastr.success(data.message);
+            refresh_data()
+            data.element.modal("toggle");
+        }
+    }
+
+    function refresh_data()
+    {
+        $(".load-data[target='active_product']").load("/member/ecommerce/product/list #active_product");
+        $(".load-data[target='inactive_product']").load("/member/ecommerce/product/list #inactive_product");
+    }
 </script>
 @endsection

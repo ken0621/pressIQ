@@ -22,8 +22,24 @@ class PayrollTimesheetController extends Member
 			$data["_timesheet"][$from] = new stdClass();
 			$data["_timesheet"][$from]->day_number = Carbon::parse($from)->format("d");
 			$data["_timesheet"][$from]->day_word = Carbon::parse($from)->format("D");
-			$data["_timesheet"][$from]->time_record[0]["time_in"] = "9:00AM";
-			$data["_timesheet"][$from]->time_record[0]["time_out"] = "6:00PM";
+			
+
+			/* CHECK IF MULTIPLE TIME IN */
+			if($from == Carbon::parse("February 28, 2017")->format("Y-m-d")) //MULTIPLE TIME IN
+			{
+				$data["_timesheet"][$from]->time_record_count = 2;
+				$data["_timesheet"][$from]->time_record[0]["time_in"] = "9:00AM";
+				$data["_timesheet"][$from]->time_record[0]["time_out"] = "3:00PM";
+				$data["_timesheet"][$from]->time_record[1]["time_in"] = "4:00PM";
+				$data["_timesheet"][$from]->time_record[1]["time_out"] = "6:30PM";
+			}
+			else //SINGLE TIME IN
+			{
+				$data["_timesheet"][$from]->time_record_count = 1;
+				$data["_timesheet"][$from]->time_record[0]["time_in"] = "9:00AM";
+				$data["_timesheet"][$from]->time_record[0]["time_out"] = "6:00PM";
+			}
+
 			$data["_timesheet"][$from]->time_record[0]["activities"] = "";
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}

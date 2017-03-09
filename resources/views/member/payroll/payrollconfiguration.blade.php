@@ -29,7 +29,7 @@
 						</tr>
 						<tr>
 							<td>
-								<a href="#" class="a-navigation-configuration">Job Title</a>
+								<a href="/member/payroll/jobtitlelist" class="a-navigation-configuration">Job Title</a>
 							</td>
 						</tr>
 						<tr>
@@ -65,5 +65,5 @@
 </div>
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/member/js/payroll/departmentlist.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/payrollconfiguration.js"></script>
 @endsection

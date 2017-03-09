@@ -1,3 +1,5 @@
+.timesheet .timeEntry-control {
+  display: none !important; }
 .timesheet thead {
   background-color: #FBFBFB; }
 .timesheet tbody tr {
@@ -9,13 +11,23 @@
       height: 40px;
       width: 100%;
       background-color: transparent;
-      resize: none; }
+      resize: none;
+      cursor: pointer;
+      border-radius: 3px; }
     .timesheet tbody tr td input[type=text] {
       border: none;
       width: 100%;
       text-align: center;
       padding: 5px;
+      background-color: transparent;
+      cursor: pointer;
+      border-radius: 3px; }
+    .timesheet tbody tr td button {
+      border: none;
+      color: #ddd;
       background-color: transparent; }
+      .timesheet tbody tr td button:hover {
+        color: #333; }
   .timesheet tbody tr:hover {
     background-color: #F4F5F8; }
   .timesheet tbody tr.focus {
@@ -24,8 +36,10 @@
     z-index: 1;
     position: relative; }
     .timesheet tbody tr.focus td textarea {
-      border: 1px solid #aaa; }
+      border: 1px solid #aaa;
+      cursor: text; }
     .timesheet tbody tr.focus td input[type=text] {
-      border: 1px solid #aaa; }
+      border: 1px solid #aaa;
+      cursor: text; }
 
 /*# sourceMappingURL=timesheet.css.map */

@@ -24,6 +24,10 @@ function currency($symbol,$amount)
 {
     return $symbol ." " .number_format($amount, 2);
 }
+function convertToNumber($str)
+{
+    return preg_replace("/([^0-9\\.])/i", "", $str);
+}
 function deleteDir($dirPath) {
     if (! is_dir($dirPath)) {
         throw new InvalidArgumentException("$dirPath must be a directory");

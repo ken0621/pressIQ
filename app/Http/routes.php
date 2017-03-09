@@ -552,6 +552,7 @@ Route::post('/member/customer/updatecustomermain','Member\CustomerController@upd
 Route::get('/member/customer/downloadfile/{id}','Member\CustomerController@downloadfile');
 Route::any('/member/customer/loadcustomer','Member\CustomerController@loadcustomer');
 Route::post('/member/customer/inactivecustomer','Member\CustomerController@inactivecustomer');
+Route::get('/member/customer/details/{id}','Member\CustomerController@view_customer_details');
 
 
 /* API v1*/

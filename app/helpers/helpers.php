@@ -402,8 +402,28 @@ function phone_number($customer_info)
             {
                 $p2 = $customer_info->customer_mobile;
             }
-            
-            if($p1 != null)
+            if(strlen($p1) == 10)
+            {
+                $p1 = '(+63)' . $p1;
+            }
+            else if(strlen($p1) == 11)
+            {
+                $p1 = substr($p1, 1);
+                $p1 = '(+63)' . $p1;
+            }
+
+            if(strlen($p2) == 10)
+            {
+                $p2 = '(+63)' . $p2;
+            }
+            else if(strlen($p2) == 11)
+            {
+                $p2 = substr($p2, 1);
+                $p2 = '(+63)' . $p2;
+            }
+
+
+            if($p1 != null && $p1 != '--' )
             {
                 $ret = $p1;
                 if($p2 != null)

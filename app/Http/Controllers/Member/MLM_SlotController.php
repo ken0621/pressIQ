@@ -795,15 +795,67 @@ class MLM_SlotController extends Member
                 {
                     if(isset($per_earn[$key][$value2['matching_log_slot_1']]))
                     {
+
                         $per_earn[$key][$value2['matching_log_slot_1']] += 1;
+                        // dd($key);
                     }
                     else
                     {
                         $per_earn[$key][$value2['matching_log_slot_1']] = 1;
                     }
+                    if(isset($per_earn[$key][$value2['matching_log_slot_2']]))
+                    {
+
+                        $per_earn[$key][$value2['matching_log_slot_2']] += 1;
+                        // dd($key);
+                    }
+                    else
+                    {
+                        $per_earn[$key][$value2['matching_log_slot_2']] = 1;
+                    }
                 }
             }
-            dd($per_earn);
+            foreach ($per_earn as $key => $value) {
+                foreach($value as $key2 => $value2)
+                {
+                    if($value2 == 2)
+                    {
+                        $per_earner_2[$key][$key2] = $value2;
+                    }
+                }
+                # code...
+            }
+            $will_del = [];
+            $match_delete = [];
+            foreach($per_earner_2 as $key => $value)
+            {
+                // dd($key2);
+                foreach ($value as $key2 => $value2) {
+                    // dd($key);
+                    $will_del[$key][$key2] = Tbl_mlm_matching_log::where(function ($query) use ($key2){
+                                $query->where('matching_log_slot_1', $key2)
+                                      ->orWhere('matching_log_slot_2', $key2);
+                            })
+                    ->where('matching_log_earner', $key)
+                    ->first();
+                }
+
+                
+            }
+            
+            foreach($will_del as $key => $value)
+            {
+                foreach ($value as $key2 => $value2) 
+                {
+                    $match_delete[$value2->matching_log] = $value2;
+                }
+            }
+            foreach($match_delete as $key => $value)
+            {
+                Tbl_mlm_matching_log::where('matching_log', $key)->delete();
+            }
+            dd($match_delete);
+            
             
         }
     }

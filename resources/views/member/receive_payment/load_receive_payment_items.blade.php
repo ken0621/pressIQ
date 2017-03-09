@@ -9,7 +9,7 @@
 	    <td>Invoice # {{$invoice["inv_id"]}} ( {{$invoice["inv_date"]}} )</td>
 	    <td class="text-right">{{$invoice["inv_due_date"]}}</td>
 	    <td><input type="text" class="text-right original-amount" value="{{currency('',$invoice['inv_overall_price'])}}" disabled /></td>
-	    <td><input type="text" class="text-right balance-due" value="{{currency('',$invoice['inv_overall_price'] - $invoice['inv_payment_applied'])}}" disabled /></td>
+	    <td><input type="text" class="text-right balance-due" value="{{currency('',$invoice['amount_applied'] - $invoice['inv_payment_applied'])}}" disabled /></td>
 	    <td><input type="text" class="text-right amount-payment" name="rpline_amount[]"/></td>
 	</tr>
 @endforeach

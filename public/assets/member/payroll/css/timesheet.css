@@ -12,14 +12,22 @@
       width: 100%;
       background-color: transparent;
       resize: none;
-      cursor: pointer; }
+      cursor: pointer;
+      border-radius: 3px; }
     .timesheet tbody tr td input[type=text] {
       border: none;
       width: 100%;
       text-align: center;
       padding: 5px;
       background-color: transparent;
-      cursor: pointer; }
+      cursor: pointer;
+      border-radius: 3px; }
+    .timesheet tbody tr td button {
+      border: none;
+      color: #ddd;
+      background-color: transparent; }
+      .timesheet tbody tr td button:hover {
+        color: #333; }
   .timesheet tbody tr:hover {
     background-color: #F4F5F8; }
   .timesheet tbody tr.focus {

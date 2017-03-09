@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         // $this->call(UserTableSeeder::class);
         $this->call(tbl_delivery_method::class);
         $this->call(tbl_payrll_rdo::class);
+        $this->call(tbl_payroll_employement_status::class);
 
         Model::reguard();
     }

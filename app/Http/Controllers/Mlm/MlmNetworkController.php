@@ -25,6 +25,7 @@ class MlmNetworkController extends Mlm
             ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
             ->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership')
             ->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id')
+            ->orderBy('tbl_tree_sponsor.sponsor_tree_level', 'ASC')
             ->get();
             $data['tree'] = [];
             foreach($tree as $key => $value)
@@ -49,6 +50,7 @@ class MlmNetworkController extends Mlm
             ->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership')
             ->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id')
             ->where('placement_tree_position', 'left')
+            ->orderBy('tbl_tree_placement.placement_tree_level', 'ASC')
             ->get();
             $data['tree_left'] = [];
             $data['tree_right'] = [];

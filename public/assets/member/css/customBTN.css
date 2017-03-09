@@ -203,7 +203,10 @@
 .margin-top-20{
     margin-top: 20px;
 }
-
+.margin-auto
+{
+    margin:auto;
+}
 /* margin section end */
 
 
@@ -220,6 +223,10 @@
 }
 .width-100{
     width:100% !important;
+}
+.width-200px
+{
+    width: 200px !important;
 }
 
 /* width section end */
@@ -370,6 +377,13 @@
     width:35px;
     height:35px;
     object-fit:contain;
+}
+.img-200-200
+{
+    width: 200px;
+    height: 200px;
+    object-fit:contain;
+    border: 1px solid #d2d5d6;
 }
 /*image end*/
 
@@ -557,6 +571,7 @@
     max-width: 150px;
     height:5px;
     border:1px solid #1682ba;
+    border-radius: 5px;
 }
 .custom-progress{
     height:100%;

@@ -34,7 +34,7 @@
             <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#actives"><i class="fa fa-star"></i> Active Product</a></li>
             <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#inactives"><i class="fa fa-trash"></i> Archived</a></li>
         </ul>
-
+        
         <div class="search-filter-box">
             <div class="col-md-4 col-md-offset-8" style="padding: 10px">
                 <div class="input-group">
@@ -46,14 +46,18 @@
         <div class="tab-content">
             <div id="actives" class="tab-pane fade in active">
                 <div class="form-group order-tags"></div>
-                <div class="load-data" filter="active">
-                    @include('member.ecommerce_product.ecom_load_product_tbl', ['filter' => 'active'])
+                <div class="load-data" filter="active" target="active_product">
+                    <div id="active_product">
+                        @include('member.ecommerce_product.ecom_load_product_tbl', ['filter' => 'active'])
+                    </div>
                 </div>
             </div>
             <div id="inactives" class="tab-pane fade in">
                 <div class="form-group order-tags"></div>
-                <div class="load-data" filter="inactive">
-                    @include('member.ecommerce_product.ecom_load_product_tbl',['_product' => $_product_archived, 'filter' => 'inactive'])
+                <div class="load-data" filter="inactive" target="inactive_product">
+                    <div id="inactive_product">
+                        @include('member.ecommerce_product.ecom_load_product_tbl',['_product' => $_product_archived, 'filter' => 'inactive'])
+                    </div>
                 </div>
             </div>
         </div>
@@ -68,7 +72,7 @@
 <link rel="stylesheet" type="text/css" href="/assets/member/css/order.css">
 @endsection
 @section('script')
-<script type="text/javascript" src="/assets/member/js/paginate_ajax.js"></script>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 <script type="text/javascript" src="/assets/member/js/global_view.js"></script>
 <script type="text/javascript">
     @if(Session::has('success'))

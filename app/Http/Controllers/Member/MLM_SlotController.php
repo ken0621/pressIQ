@@ -673,7 +673,8 @@ class MLM_SlotController extends Member
            // dd(1);
             // dd(public_path().'\assets\mlm\philteccustomer.xlsx');
             
-            Excel::load(public_path().'/assets/mlm/philteccustomer.xlsx', function($reader) {
+            Excel::load(public_path().'/assets/mlm/philteccustomer.xlsx', function($reader) 
+            {
                 $results = $reader->get()->toArray();
                 // DB::table('tbl_customer_address')->delete();
                 // DB::table('tbl_customer_search')->delete();

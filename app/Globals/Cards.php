@@ -51,7 +51,7 @@ class Cards
         $data['address'] = address_customer_info($info);
         $data['now'] = Carbon::now()->format('m/d/Y');
         // $data['now'] = Carbon::parse($info->slot_card_issued)->format('m/d/Y');
-        return view("mlm.card.card", $data);
+        return view("mlm.card.discount_card", $data);
     }
     public static function card_all($info)
     {

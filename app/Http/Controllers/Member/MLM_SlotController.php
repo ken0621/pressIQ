@@ -769,7 +769,7 @@ class MLM_SlotController extends Member
         {
             DB::table('tbl_mlm_slot_wallet_log')->delete();
             DB::table('tbl_mlm_matching_log')->delete();
-
+            DB::table('tbl_mlm_slot_points_log')->delete();
             $update['slot_wallet_all'] = 0;
             $update['slot_wallet_withdraw'] = 0;
             $update['slot_wallet_current'] = 0;
@@ -807,7 +807,6 @@ class MLM_SlotController extends Member
                     {
 
                         $per_earn[$key][$value2['matching_log_slot_2']] += 1;
-                        // dd($key);
                     }
                     else
                     {
@@ -857,6 +856,11 @@ class MLM_SlotController extends Member
             dd($match_delete);
             
             
+        }
+        else if($code == 'rep')
+        {
+            $slot = Mlm_compute::get_slot_info(10);
+            return Mlm_complan_manager_repurchase::repurchase_points($slot, 1);
         }
     }
 }

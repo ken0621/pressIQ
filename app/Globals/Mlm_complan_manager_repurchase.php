@@ -291,6 +291,7 @@ class Mlm_complan_manager_repurchase
         {
             $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)->first();
             $percentage = ($slot_info->membership_points_repurchase / 100);
+            // return $slot_info->membership_points_repurchase;
             if($mlm_item_points)
             {
                 $membership_points_repurchase = $mlm_item_points->REPURCHASE_POINTS * $percentage;

@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class tbl_payrll_rdo extends Seeder
+class tbl_payroll_rdo extends Seeder
 {
     /**
      * Run the database seeds.

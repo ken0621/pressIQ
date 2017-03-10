@@ -39,6 +39,13 @@ class Customer_ReceivePaymentController extends Member
         $data['action']         = "/member/customer/receive_payment/add";
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->user_info->shop_id )->get();
 
+        $id = Request::input('id');
+        if($id)
+        {
+            $data["rcvpayment"]         = Tbl_receive_payment::where("rp_id", $id)->first();
+            $data["_rcvpayment_line"]   = Tbl_receive_payment_line::where("rpline_rp_id", $id)->get();
+        }
+
         return view("member.receive_payment.receive_payment", $data);
     }
 
@@ -87,6 +94,6 @@ class Customer_ReceivePaymentController extends Member
 
     public function update_receive_payment()
     {
-
+        
     }
 }

@@ -1,4 +1,4 @@
-<form class="global-submit" role="form" action="/member/payroll/jobtitlelist/modal_save_department" method="POST">
+<form class="global-submit" role="form" action="/member/payroll/jobtitlelist/modal_save_jobtitle" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Create Job Title</h4>

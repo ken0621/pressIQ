@@ -17,6 +17,7 @@ function customer_invoice(){
 		
 		action_lastclick_row();
 		action_compute();
+		action_convert_number();
 		action_date_picker();
 		action_reassign_number();
 		event_button_action_click();
@@ -260,6 +261,11 @@ function customer_invoice(){
 
 		$(".balance-due").html(balance_due.toFixed(2));
 
+	}
+
+	function action_convert_number()
+	{
+		$(".payment-applied").html(action_add_comma(parseFloat($(".payment-applied").html()).toFixed(2)));
 	}
 
 	function action_add_comma(number)

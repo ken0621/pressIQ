@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class tbl_payroll_employement_status extends Seeder
+class tbl_payroll_employment_status extends Seeder
 {
     /**
      * Run the database seeds.

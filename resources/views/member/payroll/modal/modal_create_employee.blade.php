@@ -186,6 +186,13 @@
                   <div class="col-md-6">
                       <div class="form-group">
                         <div class="col-md-12">
+                          <div class="checkbox">
+                            <label><input type="checkbox" name="" value="1">Minimum wage earner</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <div class="col-md-12">
                           <small>Tax Status</small>
                           <select class="form-control">
                             @foreach($tax_status as $tax)
@@ -200,7 +207,6 @@
                           <input type="text" name="" class="form-control">
                         </div>
                       </div>
-
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">

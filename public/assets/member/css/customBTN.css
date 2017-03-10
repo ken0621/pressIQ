@@ -575,6 +575,13 @@
     border:1px solid #1682ba;
     border-radius: 5px;
 }
+.custom-progress-container-100
+{
+    width:100%;
+    height:5px;
+    border:1px solid #1682ba;
+    border-radius: 5px;
+}
 .custom-progress{
     height:100%;
     width:0%;
@@ -681,4 +688,16 @@
     padding-top:50px;
     border-top:none;
     margin-bottom:50px;
+}
+
+
+.lbl-a-href
+{
+    color: #226e99;
+    
+}
+.lbl-a-href:hover
+{
+    cursor:pointer;
+    color: #147fbd;
 }

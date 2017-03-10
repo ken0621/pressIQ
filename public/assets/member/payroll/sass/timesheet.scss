@@ -27,7 +27,9 @@
 					resize: none;
 					cursor: pointer;
 					border-radius: 3px;
+					padding: 8px;
 				}
+
 				input[type=text]
 				{
 					border: none;
@@ -57,7 +59,7 @@
 			}
 			&:hover
 			{
-				background-color: #F4F5F8;
+
 			}
 			&.focus
 			{
@@ -65,12 +67,14 @@
 				box-shadow: 0 0 10px #ccc;
 				z-index: 1;
 				position: relative;
+				background-color: #fff;
 				td
 				{
 					textarea
 					{
 						border: 1px solid #bbb;
 						cursor: text;
+
 					}
 					input[type=text]
 					{

@@ -302,6 +302,7 @@ class Mlm_compute
     }
     public static function simulate_perfect()
     {
+        ini_set('max_execution_time', 60000);
         $slot_no = 5000;
         $downline_count = 5000;
         $shop_id = 5;

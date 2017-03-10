@@ -44,6 +44,8 @@ class Customer_ReceivePaymentController extends Member
         {
             $data["rcvpayment"]         = Tbl_receive_payment::where("rp_id", $id)->first();
             $data["_rcvpayment_line"]   = Tbl_receive_payment_line::where("rpline_rp_id", $id)->get();
+            $data["_invoice"]           = Invoice::getAllInvoiceByCustomer($data["rcvpayment"]->rp_customer_id);
+            // dd($data["_invoice"]);
         }
 
         return view("member.receive_payment.receive_payment", $data);

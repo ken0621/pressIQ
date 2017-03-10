@@ -166,7 +166,6 @@ class MlmRegisterController extends MlmLoginController
     								$data['type']   = "error";
 		    						$data['message'] = "Tin Number Is Required";
     							}
-    							
     						}
 	                	}
 	                	else

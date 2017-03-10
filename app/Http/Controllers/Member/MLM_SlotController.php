@@ -25,7 +25,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_customer_search;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_customer_address;
-
+use App\Models\Tbl_mlm_matching_log;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
 use App\Globals\Mlm_plan;
@@ -765,17 +765,102 @@ class MLM_SlotController extends Member
             }
 
         }
-        else if($code = 'reset_income')
+        else if($code == 'reset_income')
         {
             DB::table('tbl_mlm_slot_wallet_log')->delete();
             DB::table('tbl_mlm_matching_log')->delete();
-
+            DB::table('tbl_mlm_slot_points_log')->delete();
             $update['slot_wallet_all'] = 0;
             $update['slot_wallet_withdraw'] = 0;
             $update['slot_wallet_current'] = 0;
             Tbl_mlm_slot::where('shop_id', 1)->update($update);
             
             return redirect::back();
+        }
+        else if($code == 'fix_income_matching')
+        {
+            $match = Tbl_mlm_matching_log::get()->toArray();
+            $per_earner = [];
+            foreach($match as $key => $value)
+            {
+                $per_earner[$value['matching_log_earner']][$key] = $value;
+            }
+            $per_earn = [];
+            $per_earner_2 = [];
+            
+            foreach($per_earner as $key => $value)
+            {
+                
+                foreach($value as $key2 => $value2)
+                {
+                    if(isset($per_earn[$key][$value2['matching_log_slot_1']]))
+                    {
+
+                        $per_earn[$key][$value2['matching_log_slot_1']] += 1;
+                        // dd($key);
+                    }
+                    else
+                    {
+                        $per_earn[$key][$value2['matching_log_slot_1']] = 1;
+                    }
+                    if(isset($per_earn[$key][$value2['matching_log_slot_2']]))
+                    {
+
+                        $per_earn[$key][$value2['matching_log_slot_2']] += 1;
+                    }
+                    else
+                    {
+                        $per_earn[$key][$value2['matching_log_slot_2']] = 1;
+                    }
+                }
+            }
+            foreach ($per_earn as $key => $value) {
+                foreach($value as $key2 => $value2)
+                {
+                    if($value2 == 2)
+                    {
+                        $per_earner_2[$key][$key2] = $value2;
+                    }
+                }
+                # code...
+            }
+            $will_del = [];
+            $match_delete = [];
+            foreach($per_earner_2 as $key => $value)
+            {
+                // dd($key2);
+                foreach ($value as $key2 => $value2) {
+                    // dd($key);
+                    $will_del[$key][$key2] = Tbl_mlm_matching_log::where(function ($query) use ($key2){
+                                $query->where('matching_log_slot_1', $key2)
+                                      ->orWhere('matching_log_slot_2', $key2);
+                            })
+                    ->where('matching_log_earner', $key)
+                    ->first();
+                }
+
+                
+            }
+            
+            foreach($will_del as $key => $value)
+            {
+                foreach ($value as $key2 => $value2) 
+                {
+                    $match_delete[$value2->matching_log] = $value2;
+                }
+            }
+            foreach($match_delete as $key => $value)
+            {
+                Tbl_mlm_matching_log::where('matching_log', $key)->delete();
+            }
+            dd($match_delete);
+            
+            
+        }
+        else if($code == 'rep')
+        {
+            $slot = Mlm_compute::get_slot_info(10);
+            return Mlm_complan_manager_repurchase::repurchase_points($slot, 1);
         }
     }
 }

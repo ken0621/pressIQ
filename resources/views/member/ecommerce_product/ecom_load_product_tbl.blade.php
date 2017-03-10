@@ -29,10 +29,11 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-custom">
                                 <li><a href="/member/ecommerce/product/edit/{{ $product["eprod_id"] }}">Edit product info</a></li>
+                                <li><a class="popup" link="/member/ecommerce/product/product-archive-restore/archive/{{ $product['eprod_id'] }}" size="md">Archived</a></li>
                             </ul>
                         </div>
                     @else
-                        <a href="javascript:">Restore</a>
+                        <a class="popup" link="/member/ecommerce/product/product-archive-restore/restore/{{ $product['eprod_id'] }}" size="md" >Restore</a>
                     @endif
                 </td>
             </tr>

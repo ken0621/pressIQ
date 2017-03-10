@@ -21,10 +21,10 @@
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body">
         <div class="search-filter-box">
-            <div class="col-md-3" style="padding: 10px">
+            <div class="col-md-5" style="padding: 10px">
             	<span style="font-size: 18px;">February 26, 2017 to March 10, 2017</span>
             </div>
-            <div class="col-md-4 col-md-offset-5" style="padding: 10px">
+            <div class="col-md-4 col-md-offset-3" style="padding: 10px">
                 <div class="input-group">
                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
                                   <select class="form-control">
@@ -40,39 +40,75 @@
             <table style="table-layout: fixed;" class="timesheet table table-condensed table-bordered table-sale-month">
                 <thead>
                     <tr>
-                        <th class="text-center">Day</th>
-                        <th class="text-center" colspan="2">Time</th>
+                        <th width="80px" class="text-center" colspan="2">Day</th>
+                        <th width="200px" class="text-center" colspan="2">Time</th>
                         <th class="text-center">Activities</th>
-                        <th class="text-center">Total</th>
-                        <th class="text-center">OT Hours</th>
+                        <th width="100px" class="text-center">Regular</th>
+                        <th width="100px" class="text-center">Overtime</th>
+                        <th width="100px" class="text-center">Rest Day</th>
+                        <th width="50px" class="text-center"></th>
                     </tr>
                     <tr>
                         <th class="text-center"></th>
-                        <th class="text-center" width="30px">Time In</th>
-                        <th class="text-center" width="30px">Time Out</th>
+                        <th class="text-center"></th>
+                        <th class="text-center">Time In</th>
+                        <th class="text-center">Time Out</th>
+                        <th class="text-center"></th>
+                        <th class="text-center"></th>
                         <th class="text-center"></th>
                         <th class="text-center"></th>
                         <th class="text-center"></th>
                     </tr>
                 </thead>
                 <tbody>
-                	<tr>
-                		<td class="text-center">26 (SUN)</td>
-                		<td class="text-center editable"><input class="text-table" type="text" name="" value="10:30 AM"></td>
-                		<td class="text-center editable"><input class="text-table"  type="text" name="" value="06:00 PM"></td>
-                		<td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
-                		<td class="text-center">5 Hours and 10 Minutes</td>
-                		
-                		<td class="text-center">No Overtime</td>
-                	</tr>
-                	<tr>
-                		<td class="text-center">27 (MON)</td>
-                		<td class="text-center editable"><input class="text-table" type="text" name="" value="10:30 AM"></td>
-                		<td class="text-center editable"><input class="text-table" type="text" name="" value="06:00 PM"></td>
-                		<td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
-                		<td class="text-center ">5 Hours and 10 Minutes</td>
-                		<td class="text-center">No Overtime</td>
-                	</tr>
+                	@foreach($_timesheet as $timesheet)
+                		@if($timesheet->time_record_count > 1) <!-- MULTIPLE TIME RECORD -->
+	                		<tr class="total">
+		                		<td class="text-center edit-data">{{ $timesheet->day_number }}</td>
+		                		<td class="text-center edit-data">{{ $timesheet->day_word }}</td>
+		                		<td class="text-center editable total-mod" colspan="2"><input disabled="disabled" class="text-table time-entry time-in" type="text" name="" value="MULTIPLE TIME IN"></td>
+		                		<td class="text-center editable normal-mod"><input class="text-table time-entry time-in" type="text" name="" value="10:30AM"></td>
+		                		<td class="text-center editable normal-mod"><input class="text-table time-entry time-out"  type="text" name="" value="06:00PM"></td>
+		                		<td class="text-center editable normal-mod"><textarea placeholder="" class="text-table" ></textarea></td>
+		                		<td class="text-center editable total-mod"><textarea disabled="disabled" placeholder="" class="text-table" ></textarea></td>
+		                		<td class="text-center edit-data">05:10:30</td>
+		                		<td class="text-center edit-data">00:00:00</td>
+		                		<td class="text-center edit-data">00:00:00</td>
+		                		<td class="text-center"><button><i class="fa fa-plus"></i></button></td>
+	                		</tr>
+	                		@foreach($timesheet->time_record as $time_record)
+	                		<tr class="breakdown">
+		                		<td class="text-center edit-data"></td>
+		                		<td class="text-center edit-data"></td>
+		                		<td class="text-center editable"><input class="text-table time-entry time-in" type="text" name="" value="10:30AM"></td>
+		                		<td class="text-center editable"><input class="text-table time-entry time-out"  type="text" name="" value="06:00PM"></td>
+		                		<td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
+		                		<td class="text-center edit-data">05:10:30</td>
+		                		<td class="text-center edit-data"></td>
+		                		<td class="text-center edit-data"></td>
+		                		<td class="text-center"><button><i class="fa fa-plus"></i></button></td>
+	                		</tr>
+	                		@endforeach
+
+                		@else <!-- SINGLE TIME RECORD -->
+	                		@foreach($timesheet->time_record as $time_record)
+	                		<tr class="normal">
+		                		<td class="text-center edit-data">{{ $timesheet->day_number }}</td>
+		                		<td class="text-center edit-data">{{ $timesheet->day_word }}</td>
+		                		<td class="text-center editable total-mod" colspan="2"><input disabled="disabled" class="text-table time-entry time-in" type="text" name="" value="MULTIPLE TIME IN"></td>
+		                		<td class="text-center editable normal-mod"><input class="text-table time-entry time-in" type="text" name="" value="10:30AM"></td>
+		                		<td class="text-center editable normal-mod"><input class="text-table time-entry time-out"  type="text" name="" value="06:00PM"></td>
+		                		<td class="text-center editable normal-mod"><textarea placeholder="" class="text-table" ></textarea></td>
+		                		<td class="text-center editable total-mod"><textarea disabled="disabled" placeholder="" class="text-table" ></textarea></td>
+		                		<td class="text-center edit-data">05:10:30</td>
+		                		<td class="text-center edit-data">00:00:00</td>
+		                		<td class="text-center edit-data">00:00:00</td>
+		                		<td class="text-center"><button><i class="fa fa-plus"></i></button></td>
+	                		</tr>
+	                		@endforeach
+                		@endif
+
+                	@endforeach
                 </tbody>
             </table>
             <div class="padding-10 text-center">
@@ -84,8 +120,12 @@
 
 @section('css')
 	<link rel="stylesheet" type="text/css" href="/assets/member/payroll/css/timesheet.css">
+	<link rel="stylesheet" type="text/css" href="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.css">
 @endsection
 
 @section('script')
+
 	<script type="text/javascript" src="/assets/member/payroll/js/timesheet.js"></script>
+	<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
+	<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 @endsection

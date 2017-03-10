@@ -61,7 +61,6 @@
                                     <th>ID</th>
                                     <th>DATE</th>
                                     <th>SPONSOR</th>
-                                    <th>LEVEL</th>
                                     <th>POINTS</th>
                                     <th>TYPE</th>
                                 </thead>
@@ -72,7 +71,6 @@
                                         <td>{{$value->points_log_id}}</td>
                                         <td>{{$value->points_log_date_claimed}}</td>
                                         <td>{{$value->points_log_Sponsor}}</td>
-                                        <td>{{$level[$key]}}</td>
                                         <td>{{$value->points_log_points}}</td>
                                         <td>{{$value->points_log_type}}</td>
                                     </tr>
@@ -109,18 +107,27 @@
                                     <th>Points</th>
                                 </thead>
                                 <tbody>
+                                    <?php $sum_all = 0; $sum_level =0; ?>
                                     @foreach($tree as $key => $value)
                                     <tr >
                                         <td colspan="40" style="background-color: gray;">{{$key}}</td>
                                     </tr>
+                                        <?php $sum_level =0; ?>
                                         @foreach($value as $key2 => $value2)
                                         <tr>
                                             <td></td>
                                             <td>{{$value2->slot_no}}</td>
                                             <td>{{$value2->points}}</td>
                                         </tr>
+                                        <?php $sum_level+= $value2->points; $sum_all+= $value2->points; ?>
                                         @endforeach
+                                    <tr >
+                                        <td colspan="40"><span class="pull-right"><h4>Total Level({{$key}}): {{$sum_level}}</h4></span></td>
+                                    </tr>    
                                     @endforeach
+                                    <tr>
+                                        <td colspan="40"><span class="pull-right"><h3>Total (All): {{$sum_all}}</h3></span></td>
+                                    </tr>
                                 </tbody>
                             </table>
                     </div>

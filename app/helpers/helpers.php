@@ -24,6 +24,10 @@ function currency($symbol,$amount)
 {
     return $symbol ." " .number_format($amount, 2);
 }
+function convertToNumber($str)
+{
+    return preg_replace("/([^0-9\\.])/i", "", $str);
+}
 function deleteDir($dirPath) {
     if (! is_dir($dirPath)) {
         throw new InvalidArgumentException("$dirPath must be a directory");
@@ -380,7 +384,7 @@ function name_format_from_customer_info($customer_info)
     {
         if(isset($customer_info->title_name))
         {
-            $name = $customer_info->title_name . ' ' . $customer_info->first_name . ' ' . $customer_info->middle_name . ' ' . $customer_info->last_name . ' ' . $customer_info->suffix_name;
+            $name = strtoupper($customer_info->title_name) . ' ' . strtoupper($customer_info->first_name) . ' ' . ($customer_info->middle_name ? strtoupper(substr($customer_info->middle_name, 0, 1)) . '.' : '') . ' ' . strtoupper($customer_info->last_name) . ' ' . strtoupper($customer_info->suffix_name);
             return $name; 
         }
     }

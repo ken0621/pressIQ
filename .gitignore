@@ -5,3 +5,4 @@ Homestead.json
 .env
 /public/upload/*
 /public/uploads/*
+/config/snappy.php

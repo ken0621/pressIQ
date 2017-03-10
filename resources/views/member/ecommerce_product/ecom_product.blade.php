@@ -1,4 +1,4 @@
-\@extends('member.layout')
+@extends('member.layout')
 @section('content')
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">

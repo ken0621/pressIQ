@@ -32,14 +32,21 @@ class PurchasingInventorySystemController extends Member
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     * lof_status
+     * 1 - created and pass to the agent's tablet
+     * 2 - confirmed by the agent (currently_sync)
+     * 3 - rejected by the agent, return to warehouse supervisor's list of LOF
+     *
+     *
      * sir_status
      * 0 - new
      * 1 - open
      * 2 - close 
      */
-    public function index()
+    public function view_status($sir_id)
     {
-        //
+        $data["sir"] = Tbl_sir::where("sir_id",$sir_id)->first();
+        return view("member.purchasing_inventory_system.view_status",$data);        
     }
     public function update_count($sir_id, $item_id)
     {
@@ -51,7 +58,7 @@ class PurchasingInventorySystemController extends Member
         $data["sir_item"]->um_name = isset($um->multi_name) ? $um->multi_name : "";
         $data["sir_item"]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
 
-        $issued_qty = $data["sir_item"]->item_qty * isset($um->unit_qty) ? $um->unit_qty : 1;
+        $issued_qty = $data["sir_item"]->item_qty * UnitMeasurement::um_qty($data["sir_item"]->related_um_type);
         // dd($issued_qty);
         $remaining_qty = $issued_qty - $data["sir_item"]->sold_qty;
         $rem = "";
@@ -152,11 +159,8 @@ class PurchasingInventorySystemController extends Member
         $sir_info = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->first();
         $unit_qty = Tbl_unit_measurement_multi::where("multi_id",$sir_info->related_um_type)->pluck("unit_qty");
 
-        $qt = 1;
-        if($unit_qty != null)
-        {
-            $qt = $unit_qty;
-        }
+        $qt = UnitMeasurement::um_qty($sir_info->related_um_type);
+                    
         $remaining_qty = ($sir_info->item_qty * $qt ) - $sir_info->sold_qty;
 
         $item_info = Tbl_item::where("item_id",$item_id)->first();
@@ -281,11 +285,8 @@ class PurchasingInventorySystemController extends Member
                 $data["_sir_item"][$key]->um_name = isset($um->multi_name) ? $um->multi_name : "";
                 $data["_sir_item"][$key]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
 
-                $qt = 1;
-                if($um != null)
-                {
-                    $qt = $um->unit_qty;
-                }
+                $qt = UnitMeasurement::um_qty($value->related_um_type);
+                    
                 $issued_qty = $value->item_qty * $qt;
                 $remaining_qty = $issued_qty - $value->sold_qty;
                 $total_sold_qty = $value->sold_qty;
@@ -343,7 +344,7 @@ class PurchasingInventorySystemController extends Member
         if($access != 0)
         {
             $data["_truck"] = Tbl_truck::where("archived",0)->where("truck_shop_id",$this->user_info->shop_id)->get();
-            $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("tbl_employee.archived",0)->get();
+            $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("shop_id",$this->user_info->shop_id)->where("tbl_employee.archived",0)->get();
             $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->get();
 
             $data["sir"] = Tbl_sir::where("sir_id",$sir_id)->where("shop_id",$this->user_info->shop_id)->where("sir_status",2)->where("archived",0)->first();
@@ -359,11 +360,8 @@ class PurchasingInventorySystemController extends Member
                     $data["_sir_item"][$key]->um_name = isset($um->multi_name) ? $um->multi_name : "";
                     $data["_sir_item"][$key]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
 
-                    $qt = 1;
-                    if($um != null)
-                    {
-                        $qt = $um->unit_qty;
-                    }
+                    $qt = UnitMeasurement::um_qty($value->related_um_type);
+
                     $issued_qty = $value->item_qty * $qt;
 
                     $remaining_qty = $issued_qty - $value->sold_qty;
@@ -438,13 +436,38 @@ class PurchasingInventorySystemController extends Member
         }
         return view("member.purchasing_inventory_system.sir",$data);
     }
+
+    public function lof()
+    {
+        if(Request::input("status") != null)
+        {
+            if(Request::input("status") != 'all')
+            {
+                $data["_sir"] = Purchasing_inventory_system::select_lof_status($this->user_info->shop_id,'array',Request::input("status"),0,Request::input("sir_id"));
+            }
+            else
+            {
+                $data["_sir"] = Purchasing_inventory_system::select_lof($this->user_info->shop_id,'array',Request::input("sir_id"));
+            }
+        }
+        else if(Request::input("archived") != null)
+        {
+            $data["_sir"] = Purchasing_inventory_system::select_lof_status($this->user_info->shop_id,'array',1,Request::input("archived"),Request::input("sir_id"));
+        }
+        else
+        {            
+            $data["_sir"] = Purchasing_inventory_system::select_lof($this->user_info->shop_id,'array',Request::input("sir_id"));
+        }
+
+        return view("member.purchasing_inventory_system.lof.lof",$data);
+    }
     public function create_sir()
     {
         $access = Utilities::checkAccess("pis-sir","add");
         if($access != 0)
         {
             $data["_truck"] = Tbl_truck::where("archived",0)->where("truck_shop_id",$this->user_info->shop_id)->get();
-            $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("tbl_employee.archived",0)->get();
+            $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("tbl_employee.archived",0)->where("shop_id",$this->user_info->shop_id)->get();
 
             $type[0] = 1; 
             $data["_item"] = Item::get_all_category_item($type);
@@ -525,8 +548,8 @@ class PurchasingInventorySystemController extends Member
         $shop_id = $this->user_info->shop_id;
         $sales_agent_id = Request::input("sales_agent_id");
         $truck_id = Request::input("truck_id");
-        $sir_date = date('Y-m-d',strtotime(Request::input("sir_date")));
-
+        $sir_date = date('Y-d-m',strtotime(Request::input("sir_date")));
+        // dd($sir_date." ".Request::input("sir_date"));
         //array
         $item_id = Request::input("item");
         $item_qty = Request::input("item_qty");
@@ -539,6 +562,7 @@ class PurchasingInventorySystemController extends Member
         $insert_sir["sales_agent_id"] = $sales_agent_id;
         $insert_sir["truck_id"] = $truck_id;
         $insert_sir["created_at"] = $sir_date;
+        $insert_sir["lof_status"] = 1;
 
         $rule_sir["sales_agent_id"] = 'required';
         $rule_sir["truck_id"] = 'required';
@@ -642,11 +666,8 @@ class PurchasingInventorySystemController extends Member
                             $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
                             $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
                             $insert_sir_item["related_um_type"] = $related_um_type[$key];
-                            $qty = 1;
-                            if($unit_qty != null)
-                            {
-                                $qty = $unit_qty;
-                            }
+                            $qty = UnitMeasurement::um_qty($related_um_type[$key]);
+
                             $related_um_qty = $qty;
                             $insert_sir_item["um_qty"] = $related_um_qty;
 
@@ -656,7 +677,7 @@ class PurchasingInventorySystemController extends Member
                     }                    
 
                 }
-                $data["status"] = "success";
+                $data["status"] = "success-lof";
 
                 $sir_data = Purchasing_inventory_system::get_sir_data($sir_id);
                 AuditTrail::record_logs("Added","load_out_form",$sir_id,"",serialize($sir_data));
@@ -681,7 +702,7 @@ class PurchasingInventorySystemController extends Member
 
         $sales_agent_id = Request::input("sales_agent_id");
         $truck_id = Request::input("truck_id");
-        $sir_date = date('Y-m-d',strtotime(Request::input("sir_date")));
+        $sir_date = date('Y-d-m',strtotime(Request::input("sir_date")));
 
         $item_id = Request::input("item");
         $item_qty = Request::input("item_qty");
@@ -694,6 +715,7 @@ class PurchasingInventorySystemController extends Member
         $insert_sir["sales_agent_id"] = $sales_agent_id;
         $insert_sir["truck_id"] = $truck_id;
         $insert_sir["created_at"] = $sir_date;
+        $insert_sir["lof_status"] = 1;
 
         $rule_sir["sales_agent_id"] = 'required';
         $rule_sir["truck_id"] = 'required';
@@ -737,7 +759,7 @@ class PurchasingInventorySystemController extends Member
                                 $data["status_message"] .= $message;
                             }
                         }
-                        $related_um_qty = Tbl_unit_measurement_multi::where("multi_id",$related_um_type[$key])->pluck("unit_qty");
+                        $related_um_qty = UnitMeasurement::um_qty($related_um_type[$key]);
 
                         $inventory_update_item[$key]["product_id"] = $value;
                         $inventory_update_item[$key]["quantity"] = $insert_sir_item[$key]["item_qty"] * $related_um_qty;
@@ -787,18 +809,13 @@ class PurchasingInventorySystemController extends Member
                             $insert_sir_item["item_qty"] = $item_qty[$key];                            
                             $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
                             $insert_sir_item["related_um_type"] = $related_um_type[$key];
-                            $related_um_qty = Tbl_unit_measurement_multi::where("multi_id",$related_um_type[$key])->pluck("unit_qty");
-                            $qty = 1;
-                            if($related_um_qty != null)
-                            {
-                                $qty = $related_um_qty;
-                            }
+                            $qty = UnitMeasurement::um_qty($related_um_type[$key]);
                             $insert_sir_item["um_qty"] = $qty;                            
                             Tbl_sir_item::insert($insert_sir_item);    
                         }
                     }
                 }
-                $data["status"] = "success";
+                $data["status"] = "success-lof";
 
                 $new_sir_data = Purchasing_inventory_system::get_sir_data($sir_id);
                 AuditTrail::record_logs("Edited","load_out_form",$sir_id,serialize($old_sir_data),serialize($new_sir_data));
@@ -815,7 +832,7 @@ class PurchasingInventorySystemController extends Member
         if($access != 0)
         {
             $data["_truck"] = Tbl_truck::where("archived",0)->where("truck_shop_id",$this->user_info->shop_id)->get();
-            $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("tbl_employee.archived",0)->get();
+            $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("shop_id",$this->user_info->shop_id)->where("tbl_employee.archived",0)->get();
             $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->get();
 
             $data["sir"] = Tbl_sir::where("sir_id",$sir_id)->where("shop_id",$this->user_info->shop_id)->where("archived",0)->first();
@@ -893,7 +910,8 @@ class PurchasingInventorySystemController extends Member
         else if($action == "open")
         {
             $update["sir_status"] = 1;
-
+            $update["is_sync"] = 1; 
+            
             $sir_data = Purchasing_inventory_system::get_sir_data($id);
             AuditTrail::record_logs("Open","pis_stock_issuance_report",$id,"",serialize($sir_data));
         }

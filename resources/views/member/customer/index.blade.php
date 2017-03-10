@@ -61,7 +61,7 @@
                 </thead>
                 <tbody>
                     @foreach($_customer as $customer)
-                        <tr class="cursor-pointer" id="tr-customer-{{$customer->customer_id}}">
+                        <tr class="cursor-pointer" id="tr-customer-{{$customer->customer_id}}" style="color: {{$customer->approved == 1? '#000' : '#ff3333' }};">
                             <td class="text-left">{{$customer->title_name.' '.$customer->first_name.' '.$customer->middle_name.' '.$customer->last_name.' '.$customer->suffix_name}}</td>
                             <td class="text-left">{{$customer->customer_phone != null ? $customer->customer_phone : 'No Phone Number' }} / {{$customer->customer_mobile != null ? $customer->customer_mobile : 'No Mobile Number'}} </td>
                             <td class="text-left">{{$customer->email}}</td>
@@ -74,7 +74,7 @@
                                   </button>
                                   <ul class="dropdown-menu dropdown-menu-custom">
                                     <li><a href="/member/customer/receive_payment">Receive Payment</a></li>
-                                    <li><a href="/member/customer/invoice">Create Invoice</a></li>
+                                    <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id}}">Create Invoice</a></li>
                                     <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
                                     <li><a href="/member/customer/transaction_list">Transaction List</a></li>
                                     <li><a href="/member/customer/details/{{$customer->customer_id}}">View Customer Details</a></li>

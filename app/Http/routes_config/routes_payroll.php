@@ -14,7 +14,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_list/update_company','Member\PayrollController@update_company');
 	/* COMPANY END */
 
+	/* EMPLOYEE START */
 	Route::any('/employee_list','Member\PayrollController@employee_list');
+	Route::any('/employee_list/modal_create_employee','Member\PayrollController@modal_create_employee');
+
+	/* EMPLOYEE END */
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
 
 	Route::any('/employee_timesheet','Member\PayrollTimesheetController@index');

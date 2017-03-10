@@ -21,6 +21,52 @@ function receive_payment()
 		action_initialize_load();
 	}
 
+	this.action_initialize_load = function()
+	{
+		action_initialize_load();
+	}
+
+	function action_initialize_load()
+	{
+		initialize_select_plugin();
+		$(".amount-payment").change();
+	}
+
+	function initialize_select_plugin()
+	{
+		$(".drop-down-customer").globalDropList(
+		{
+		    link 		: '/member/customer/modalcreatecustomer',
+		    link_size 	: 'lg',
+		    width 		: "100%",
+		    placeholder : 'Customer',
+		    onChangeValue: function()
+		    {
+		    	var customer_id = $(this).val();
+		    	$(".tbody-item").load("/member/customer/load_rp/"+ (customer_id != '' ? customer_id : 0), function()
+		    	{
+		    		action_compute_maximum_amount();
+		    	})
+		    }
+		});
+
+		$(".drop-down-payment").globalDropList(
+		{
+		    link 		: '/member/maintenance/payment_method/add',
+		    link_size 	: 'lg',
+		    width 		: "100%",
+		    placeholder : 'Payment Method'
+		});
+
+		$(".drop-down-coa").globalDropList(
+		{
+		    link 		: '/member/accounting/chart_of_account/popup/add',
+		    link_size 	: 'md',
+		    width 		: "100%",
+		    placeholder : 'Account'
+		});
+	}
+
 	/* CHECK BOX FOR LINE ITEM */
 	function event_line_check_change()
 	{
@@ -164,47 +210,6 @@ function receive_payment()
 	}
 }
 
-function action_initialize_load()
-{
-	initialize_select_plugin();
-	$(".amount-payment").change();
-}
-
-function initialize_select_plugin()
-{
-	$(".drop-down-customer").globalDropList(
-	{
-	    link 		: '/member/customer/modalcreatecustomer',
-	    link_size 	: 'lg',
-	    width 		: "100%",
-	    placeholder : 'Customer',
-	    onChangeValue: function()
-	    {
-	    	var customer_id = $(this).val();
-	    	$(".tbody-item").load("/member/customer/load_rp/"+ (customer_id != '' ? customer_id : 0), function()
-	    	{
-	    		action_compute_maximum_amount();
-	    	})
-	    }
-	});
-
-	$(".drop-down-payment").globalDropList(
-	{
-	    link 		: '/member/maintenance/payment_method/add',
-	    link_size 	: 'lg',
-	    width 		: "100%",
-	    placeholder : 'Payment Method'
-	});
-
-	$(".drop-down-coa").globalDropList(
-	{
-	    link 		: '/member/accounting/chart_of_account/popup/add',
-	    link_size 	: 'md',
-	    width 		: "100%",
-	    placeholder : 'Account'
-	});
-}
-
 function submit_done(data)
 {
 	if(data.status == "success")
@@ -217,7 +222,7 @@ function submit_done(data)
     	else
     	{
     		$(".tab-content").load(data.url+" .tab-content .row:first");
-    		action_initialize_load();
+    		receive_payment.action_initialize_load();
     	}
 	}
 }

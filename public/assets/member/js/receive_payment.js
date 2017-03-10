@@ -13,57 +13,12 @@ function receive_payment()
 
 	function document_ready()
 	{
-		initialize_select_plugin();
-
 		event_line_check_change();
 		event_payment_amount_change();
 		event_received_amount_change();
-	}
+		event_button_action_click();
 
-	function new_row()
-	{
-		var html = '<tr class="tr-draggable">';
-            html += '<td class="text-center cursor-move move td-draggable"><input type="checkbox" ></td>';
-            html += '<td></td>';
-            html += '<td class="text-right"></td>';
-            html += '<td><input type="text" class="text-right" value=""/></td>';
-            html += '<td><input type="text" class="text-right" value=""/></td>';
-            html += '<td><input class="text-right" value="" type="text" name=""/></td>';
-            html += '</tr>';
-	}
-
-	function initialize_select_plugin()
-	{
-		$(".drop-down-customer").globalDropList(
-		{
-		    link 		: '/member/customer/modalcreatecustomer',
-		    link_size 	: 'lg',
-		    width 		: "100%",
-		    placeholder : 'Customer',
-		    onChangeValue: function()
-		    {
-		    	$(".tbody-item").load("/member/customer/load_rp/"+$(this).val(), function()
-		    	{
-		    		action_compute_maximum_amount();
-		    	})
-		    }
-		});
-
-		$(".drop-down-payment").globalDropList(
-		{
-		    link 		: '/member/maintenance/payment_method/add',
-		    link_size 	: 'lg',
-		    width 		: "100%",
-		    placeholder : 'Payment Method'
-		});
-
-		$(".drop-down-coa").globalDropList(
-		{
-		    link 		: '/member/accounting/chart_of_account/popup/add',
-		    link_size 	: 'md',
-		    width 		: "100%",
-		    placeholder : 'Chart of Account'
-		});
+		action_initialize_load();
 	}
 
 	/* CHECK BOX FOR LINE ITEM */
@@ -198,5 +153,71 @@ function receive_payment()
 	    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
 	    j = (j = i.length) > 3 ? j % 3 : 0;
 	   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+	}
+
+	function event_button_action_click()
+	{
+		$(document).on("click","button[type='submit']", function()
+		{
+			$(".button-action").val($(this).attr("data-action"));
+		})
+	}
+}
+
+function action_initialize_load()
+{
+	initialize_select_plugin();
+	$(".amount-payment").change();
+}
+
+function initialize_select_plugin()
+{
+	$(".drop-down-customer").globalDropList(
+	{
+	    link 		: '/member/customer/modalcreatecustomer',
+	    link_size 	: 'lg',
+	    width 		: "100%",
+	    placeholder : 'Customer',
+	    onChangeValue: function()
+	    {
+	    	var customer_id = $(this).val();
+	    	$(".tbody-item").load("/member/customer/load_rp/"+ (customer_id != '' ? customer_id : 0), function()
+	    	{
+	    		action_compute_maximum_amount();
+	    	})
+	    }
+	});
+
+	$(".drop-down-payment").globalDropList(
+	{
+	    link 		: '/member/maintenance/payment_method/add',
+	    link_size 	: 'lg',
+	    width 		: "100%",
+	    placeholder : 'Payment Method'
+	});
+
+	$(".drop-down-coa").globalDropList(
+	{
+	    link 		: '/member/accounting/chart_of_account/popup/add',
+	    link_size 	: 'md',
+	    width 		: "100%",
+	    placeholder : 'Account'
+	});
+}
+
+function submit_done(data)
+{
+	if(data.status == "success")
+	{
+		toastr.success(data.message);
+		if(data.redirect)
+        {
+        	location.href = data.redirect;
+    	}
+    	else
+    	{
+    		$(".tab-content").load(data.url+" .tab-content .row:first");
+    		action_initialize_load();
+    	}
 	}
 }

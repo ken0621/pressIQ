@@ -399,7 +399,7 @@ Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
 Route::get('/member/customer/receive_payment','Member\Customer_ReceivePaymentController@index');
 Route::get('/member/customer/load_rp/{id}','Member\Customer_ReceivePaymentController@load_customer_rp');
 Route::post('/member/customer/receive_payment/add','Member\Customer_ReceivePaymentController@add_receive_payment');
-Route::post('/member/customer/receive_payment/update','Member\Customer_ReceivePaymentController@update_receive_payment');
+Route::post('/member/customer/receive_payment/update/{id}','Member\Customer_ReceivePaymentController@update_receive_payment');
 
 
 /* CUSTOMER CREDIT MEMO*/

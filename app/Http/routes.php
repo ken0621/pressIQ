@@ -336,7 +336,7 @@ Route::any('/tablet/logout','Member\TabletPISController@logout');
 Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_sir');
 
 Route::any('/tablet/view_invoices/{id}','Member\TabletPISController@view_invoices');
-Route::any('/tablet/create_invoices/add/{id}','Member\TabletPISController@tablet_create_invoice');
+Route::any('/tablet/create_invoices/add','Member\TabletPISController@tablet_create_invoice');
 Route::any('/tablet/create_invoice/add_submit','Member\TabletPISController@create_invoice_submit');
 
 Route::any('/tablet/view_invoice_view/{id}','Member\TabletPISController@view_invoices_view');

@@ -53,7 +53,7 @@
             <div id="invoice" class="tab-pane fade in active">
                 <div class="form-group">
                     <div class="col-md-12 text-right">
-                        <a class="btn btn-primary" href="/tablet/create_invoices/add/{{Session::get('selected_sir')}}">Create Invoice</a>
+                        <a class="btn btn-primary" href="/tablet/create_invoices/add?sir_id={{Session::get('selected_sir')}}">Create Invoice</a>
                     </div>
                 </div>
                 <div class="form-group">
@@ -131,8 +131,8 @@
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Action <span class="caret"></span>
                                       </button>
                                         <ul class="dropdown-menu dropdown-menu-custom">
-                                            <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id}}">Create Invoice</a></li>
-                                            <li><a >Create Receive Payment</a></li>
+                                            <li><a href="/tablet/create_invoices/add?sir_id={{Session::get('selected_sir')}}&customer_id={{$customer->customer_id}}">Create Invoice</a></li>
+                                            <li><a >Receive Payment</a></li>
                                         </ul> 
                                     </div>                                   
                                 </td>

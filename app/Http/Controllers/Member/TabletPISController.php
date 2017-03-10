@@ -148,8 +148,11 @@ class TabletPISController extends Member
 
 		return json_encode($data);
 	}
-	public function tablet_create_invoice($sir_id)
+	public function tablet_create_invoice()
 	{         
+		$sir_id = Request::input("sir_id");
+        $data["c_id"] = Request::input("customer_id");
+        
 		$data["_customer"]  = Tbl_customer::where("archived", 0)->get();
 		// $data["_item"]      = Tbl_item::where("archived", 0)->get();
 		$data['_item']      = Item::get_all_item_sir($sir_id);

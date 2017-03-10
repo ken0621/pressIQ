@@ -53,6 +53,7 @@ Route::any("/member/page/store_information/update_submit","Member\ManageStoreInf
 Route::any('/member/developer/status', 'Member\Developer_StatusController@index'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/rematrix', 'Member\Developer_RematrixController@index'); //ERWIN GUEVARRA
 Route::any('/member/developer/documentation', 'Member\Developer_DocumentationController@index'); //EVERYONE
+Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */
@@ -552,6 +553,7 @@ Route::post('/member/customer/updatecustomermain','Member\CustomerController@upd
 Route::get('/member/customer/downloadfile/{id}','Member\CustomerController@downloadfile');
 Route::any('/member/customer/loadcustomer','Member\CustomerController@loadcustomer');
 Route::post('/member/customer/inactivecustomer','Member\CustomerController@inactivecustomer');
+Route::get('/member/customer/details/{id}','Member\CustomerController@view_customer_details');
 
 
 /* API v1*/
@@ -636,8 +638,8 @@ Route::controller('/tester','TesterController');
 Route::any("/member/load_position","Member\EmployeePositionController@load_position");
 
 
-
 /* PAYROLL START */
+<<<<<<< HEAD
 
 Route::group(array('prefix' => '/member/payroll'), function()
 {
@@ -690,4 +692,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 });
 
 
+=======
+include_once('routes_config/routes_payroll.php');
+>>>>>>> faffb727416254fe1eb187e788f6d5ad484073d2
 /* PAYROLL END */

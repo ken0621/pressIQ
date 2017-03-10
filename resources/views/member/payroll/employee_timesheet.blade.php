@@ -62,17 +62,52 @@
                 </thead>
                 <tbody>
                 	@foreach($_timesheet as $timesheet)
-                	<tr>
-                		<td class="text-center edit-data">{{ $timesheet->day_number }}</td>
-                		<td class="text-center edit-data">{{ $timesheet->day_word }}</td>
-                		<td class="text-center editable"><input class="text-table time-entry time-in" type="text" name="" value="10:30AM"></td>
-                		<td class="text-center editable"><input class="text-table time-entry time-out"  type="text" name="" value="06:00PM"></td>
-                		<td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
-                		<td class="text-center edit-data">05:10:30</td>
-                		<td class="text-center edit-data">00:00:00</td>
-                		<td class="text-center edit-data">00:00:00</td>
-                		<td class="text-center edit-data"><button><i class="fa fa-plus"></i></button></td>
-                	</tr>
+                		@if($timesheet->time_record_count > 1) <!-- MULTIPLE TIME RECORD -->
+	                		<tr class="total">
+		                		<td class="text-center edit-data">{{ $timesheet->day_number }}</td>
+		                		<td class="text-center edit-data">{{ $timesheet->day_word }}</td>
+		                		<td class="text-center editable total-mod" colspan="2"><input disabled="disabled" class="text-table time-entry time-in" type="text" name="" value="MULTIPLE TIME IN"></td>
+		                		<td class="text-center editable normal-mod"><input class="text-table time-entry time-in" type="text" name="" value="10:30AM"></td>
+		                		<td class="text-center editable normal-mod"><input class="text-table time-entry time-out"  type="text" name="" value="06:00PM"></td>
+		                		<td class="text-center editable normal-mod"><textarea placeholder="" class="text-table" ></textarea></td>
+		                		<td class="text-center editable total-mod"><textarea disabled="disabled" placeholder="" class="text-table" ></textarea></td>
+		                		<td class="text-center edit-data">05:10:30</td>
+		                		<td class="text-center edit-data">00:00:00</td>
+		                		<td class="text-center edit-data">00:00:00</td>
+		                		<td class="text-center"><button><i class="fa fa-plus"></i></button></td>
+	                		</tr>
+	                		@foreach($timesheet->time_record as $time_record)
+	                		<tr class="breakdown">
+		                		<td class="text-center edit-data"></td>
+		                		<td class="text-center edit-data"></td>
+		                		<td class="text-center editable"><input class="text-table time-entry time-in" type="text" name="" value="10:30AM"></td>
+		                		<td class="text-center editable"><input class="text-table time-entry time-out"  type="text" name="" value="06:00PM"></td>
+		                		<td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
+		                		<td class="text-center edit-data">05:10:30</td>
+		                		<td class="text-center edit-data"></td>
+		                		<td class="text-center edit-data"></td>
+		                		<td class="text-center"><button><i class="fa fa-plus"></i></button></td>
+	                		</tr>
+	                		@endforeach
+
+                		@else <!-- SINGLE TIME RECORD -->
+	                		@foreach($timesheet->time_record as $time_record)
+	                		<tr class="normal">
+		                		<td class="text-center edit-data">{{ $timesheet->day_number }}</td>
+		                		<td class="text-center edit-data">{{ $timesheet->day_word }}</td>
+		                		<td class="text-center editable total-mod" colspan="2"><input disabled="disabled" class="text-table time-entry time-in" type="text" name="" value="MULTIPLE TIME IN"></td>
+		                		<td class="text-center editable normal-mod"><input class="text-table time-entry time-in" type="text" name="" value="10:30AM"></td>
+		                		<td class="text-center editable normal-mod"><input class="text-table time-entry time-out"  type="text" name="" value="06:00PM"></td>
+		                		<td class="text-center editable normal-mod"><textarea placeholder="" class="text-table" ></textarea></td>
+		                		<td class="text-center editable total-mod"><textarea disabled="disabled" placeholder="" class="text-table" ></textarea></td>
+		                		<td class="text-center edit-data">05:10:30</td>
+		                		<td class="text-center edit-data">00:00:00</td>
+		                		<td class="text-center edit-data">00:00:00</td>
+		                		<td class="text-center"><button><i class="fa fa-plus"></i></button></td>
+	                		</tr>
+	                		@endforeach
+                		@endif
+
                 	@endforeach
                 </tbody>
             </table>

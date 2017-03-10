@@ -26,8 +26,9 @@
                     </div>
                     <div class="cover-text">
                         <div class="name">@if(isset($content['company_name']))  {{$content['company_name']}} @endif</div>
-                        <div class="date">This account is a member since June 03, 2015 - 11:09 PM</div>
-                        <div class="email">@if(isset($content['company_email']))  {{$content['company_email']}} @endif</div>
+                        <div class="date hide">This account is a member since June 03, 2015 - 11:09 PM</div>
+                        <div class="email"><span class="hide">>@if(isset($content['company_email']))  {{$content['company_email']}} @endif</span><hr></div>
+
                     </div>
                 </div>
             </div>

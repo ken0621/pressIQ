@@ -25,7 +25,7 @@
                 <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                     <div class="row clearfix">
                         <div class="col-sm-3">
-                            <select class="drop-down-customer">
+                            <select class="drop-down-customer" name="rp_customer_id">
                                 @include("member.load_ajax_data.load_customer")
                             </select>
                         </div>

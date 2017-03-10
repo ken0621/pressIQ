@@ -847,4 +847,13 @@ class CustomerController extends Member
         return json_encode($data);
     }
 	
+    public function view_customer_details($id)
+    {
+        $data["customer"]       = Tbl_customer::info()->where("tbl_customer.customer_id", $id)->first();
+        // dd($data["customer"]);
+        $data["_transaction"]   = Tbl_customer::transaction($this->checkuser('user_shop'), $id)->get();
+        // dd($data["_transaction"]);
+
+        return view('member.customer.customer_details', $data);
+    }
 }

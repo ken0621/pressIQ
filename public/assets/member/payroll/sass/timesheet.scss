@@ -69,12 +69,12 @@
 				{
 					textarea
 					{
-						border: 1px solid #aaa;
+						border: 1px solid #bbb;
 						cursor: text;
 					}
 					input[type=text]
 					{
-						border: 1px solid #aaa;
+						border: 1px solid #bbb;
 						cursor: text;
 					}
 
@@ -85,6 +85,33 @@
 						}
 					}
 				}
+			}
+		}
+		tr.breakdown
+		{
+			color: #aaa;
+		}
+		tr.normal
+		{
+			td.total-mod
+			{
+				display: none !important;
+			}
+			td.normal-mod
+			{
+				display: table-cell !important;
+			}
+		}
+		tr.total
+		{
+			td.total-mod
+			{
+				display: table-cell !important;
+			}
+
+			td.normal-mod
+			{
+				display: none !important;
 			}
 		}
 	}

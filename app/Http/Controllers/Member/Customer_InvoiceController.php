@@ -42,7 +42,7 @@ class Customer_InvoiceController extends Member
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["action"]     = "/member/customer/invoice/create";
         $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id"); 
-
+        $data["c_id"] = Request::input("customer_id");
         $id = Request::input('id');
         if($id)
         {

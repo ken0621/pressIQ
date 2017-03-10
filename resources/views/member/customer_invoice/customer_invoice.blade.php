@@ -41,7 +41,7 @@
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <select class="form-control droplist-customer input-sm pull-left" name="inv_customer_id" data-placeholder="Select a Customer" required>
-                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv->inv_customer_id) ? $inv->inv_customer_id : '']);
+                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv->inv_customer_id) ? $inv->inv_customer_id : isset($c_id) ? $c_id : '' ]);
                                     </select>
                                 </div>
                                 <div class="col-sm-4">

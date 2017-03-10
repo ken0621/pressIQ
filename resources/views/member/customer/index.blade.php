@@ -74,7 +74,7 @@
                                   </button>
                                   <ul class="dropdown-menu dropdown-menu-custom">
                                     <li><a href="/member/customer/receive_payment">Receive Payment</a></li>
-                                    <li><a href="/member/customer/invoice">Create Invoice</a></li>
+                                    <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id}}">Create Invoice</a></li>
                                     <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
                                     <li><a href="/member/customer/transaction_list">Transaction List</a></li>
                                     <li><a href="/member/customer/details/{{$customer->customer_id}}">View Customer Details</a></li>

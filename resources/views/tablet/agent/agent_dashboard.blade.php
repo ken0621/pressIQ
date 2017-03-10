@@ -87,7 +87,7 @@
                                         <ul class="dropdown-menu dropdown-menu-custom">
                                             <li><a size="lg" link="/tablet/view_invoice_view/{{$inv->inv_id}}" class="popup">View Invoice</a></li>
                                         </ul>
-                                    
+                                    </div>
                                 </td>
                               </tr>
                               @endforeach
@@ -96,8 +96,52 @@
                     </div>
                 </div>
             </div>
-            <div id="customer" class="tab-pane fade in">
-            
+            <div id="customer" class="tab-pane fade in"> 
+                <div class="form-group">
+                    <div class="col-md-12 text-right">
+                        <a link="/member/customer/modalcreatecustomer" class="btn btn-primary popup" size="lg">Add Customer</a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-12">
+                      <table class="table table-bordered table-condensed">
+                          <thead>
+                              <tr>
+                                  <th>#</th>
+                                  <th>Customer</th>
+                                  <th>Balance</th>
+                                  <th></th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              @foreach($_customer as $customer)
+                              <tr>
+                                <td>{{$customer->customer_id}}</td>
+                                <td>
+                                  @if($customer->company != null)
+                                  {{$customer->company}}
+                                  @else
+                                  {{$customer->title_name}} {{$customer->first_name}} {{$customer->middle_name}} {{$customer->last_name}} 
+                                  {{$customer->suffix_name}}
+                                  @endif
+                                </td>
+                                <td>{{currency("PHP",$customer->customer_opening_balance)}}</td>
+                                  <td class="text-center">
+                                    <div class="btn-group">
+                                      <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Action <span class="caret"></span>
+                                      </button>
+                                        <ul class="dropdown-menu dropdown-menu-custom">
+                                            <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id}}">Create Invoice</a></li>
+                                            <li><a >Create Receive Payment</a></li>
+                                        </ul> 
+                                    </div>                                   
+                                </td>
+                              </tr>
+                              @endforeach
+                          </tbody>
+                      </table>
+                    </div>
+                </div>
             </div>
             <div id="account" class="tab-pane fade in">
             

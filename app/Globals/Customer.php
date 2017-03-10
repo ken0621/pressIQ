@@ -115,7 +115,7 @@ class Customer
 
 	public static function getAllCustomer()
 	{
-		$customer = Tbl_customer::where("archived", 0)->where("shop_id", Customer::getShopId())->get();
+		$customer = Tbl_customer::info()->where("tbl_customer.archived", 0)->where("shop_id", Customer::getShopId())->groupBy("tbl_customer.customer_id")->get();
 		return $customer;
 	}
 

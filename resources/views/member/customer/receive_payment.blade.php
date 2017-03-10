@@ -83,14 +83,18 @@
                                     </tr>
                                 </thead>
                                 <tbody class="tbody-item">
-                                    <tr>
-                                        <td class="text-center"><input type="checkbox" ></td>
-                                        <td></td>
-                                        <td class="text-right">11/26/2016</td>
-                                        <td><input type="text" class="text-right" disabled /></td>
-                                        <td><input type="text" class="text-right" disabled /></td>
-                                        <td><input class="text-right" type="text" name=""/></td>
-                                    </tr>       
+                                    @if(isset($rcvpaymnet))
+                                        @include('member.receive_payment.load_receive_payment_items');
+                                    @else
+                                        <tr>
+                                            <td class="text-center"><input type="checkbox" ></td>
+                                            <td></td>
+                                            <td class="text-right">11/26/2016</td>
+                                            <td><input type="text" class="text-right" disabled /></td>
+                                            <td><input type="text" class="text-right" disabled /></td>
+                                            <td><input class="text-right" type="text" name=""/></td>
+                                        </tr>   
+                                    @endif    
                                 </tbody>
                             </table>
                         </div>

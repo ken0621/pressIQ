@@ -14,7 +14,7 @@
 			Employee 201 files
 			</small>
 			</h1>
-			<button class="btn btn-custom-primary panel-buttons pull-right popup" link="" size="lg">Create Employee</button>
+			<button class="btn btn-custom-primary panel-buttons pull-right popup" link="/member/payroll/employee_list/modal_create_employee" size="lg">Create Employee</button>
 			<input type="hidden" name="_token" value="{{csrf_token()}}" id="_token">
 		</div>
 	</div>

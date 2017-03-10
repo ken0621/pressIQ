@@ -10,6 +10,10 @@ use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_rdo;
 use App\Models\Tbl_payroll_department;
 use App\Models\Tbl_payroll_jobtitle;
+use App\Models\Tbl_payroll_employment_status;
+use App\Models\Tbl_payroll_tax_status;
+use App\Models\Tbl_payroll_civil_status;
+use App\Models\Tbl_country;
 
 class PayrollController extends Member
 {
@@ -19,11 +23,29 @@ class PayrollController extends Member
 		return $shop_id = $this->user_info->user_shop;
 	}
 
+	/* EMPLOYEE START */
+
     public function employee_list()
 	{
 		return view('member.payroll.employeelist');
 	}   
 
+	public function modal_create_employee()
+	{
+		$data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+		// Tbl_payroll_department
+		// Tbl_payroll_jobtitle
+		$data['employement_status'] = Tbl_payroll_employment_status::get();
+		$data['tax_status'] = Tbl_payroll_tax_status::get();
+		$data['civil_status'] = Tbl_payroll_civil_status::get();
+		$data['_country'] = Tbl_country::orderBy('country_name')->get();
+		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+
+		return view("member.payroll.modal.modal_create_employee", $data);
+	}
+
+	/* EMPLOYEE END */
 
 	public function payroll_configuration()
 	{

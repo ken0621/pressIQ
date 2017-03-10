@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use Request;
 use Session;
+use Carbon\Carbon;
 
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_rdo;
@@ -14,6 +15,7 @@ use App\Models\Tbl_payroll_employment_status;
 use App\Models\Tbl_payroll_tax_status;
 use App\Models\Tbl_payroll_civil_status;
 use App\Models\Tbl_country;
+use App\Models\Tbl_payroll_requirements;
 
 class PayrollController extends Member
 {
@@ -43,6 +45,67 @@ class PayrollController extends Member
 		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
 
 		return view("member.payroll.modal.modal_create_employee", $data);
+	}
+
+
+	public function employee_updload_requirements()
+	{
+		$file = Request::file('file');
+		// dd($file);
+
+		$requirement_original_name 	= $file->getClientOriginalName();
+		$requirement_extension_name = $file->getClientOriginalExtension();
+		$requirement_mime_type		= $file->getMimeType();
+
+		$requirement_new_name 		= value(function() use ($file){
+            $filename = str_random(10). date('ymdhis') . '.' . $file->getClientOriginalExtension();
+            return strtolower($filename);
+        });
+
+        $path = '/assets/payroll/employee_requirements';
+        if (!file_exists($path)) {
+		    mkdir($path, 0777, true);
+		}
+        $upload_success = $file->move(public_path($path), $requirement_new_name);
+
+        $data = array();
+        $status = 'error';
+        if($upload_success)
+        {
+
+        	$insert['shop_id'] 								= Self::shop_id();
+        	$insert['payroll_requirements_path']	 		= $path.'/'.$requirement_new_name;
+        	$insert['payroll_requirements_original_name'] 	= $requirement_original_name;
+        	$insert['payroll_requirements_extension_name'] 	= $requirement_extension_name;
+        	$insert['payroll_requirements_mime_type'] 		= $requirement_mime_type;
+        	$insert['payroll_requirements_date_upload'] 	= Carbon::now();
+
+        	$payroll_requirements_id = Tbl_payroll_requirements::insertGetId($insert);
+
+        	$data['path'] 					= $path.'/'.$requirement_new_name;
+	        $data['original_name'] 			= $requirement_original_name;
+	        $data['extension'] 				= $requirement_extension_name;
+	        $data['mime_type'] 				= $requirement_mime_type;
+	        $data['payroll_requirements_id'] = $payroll_requirements_id;
+	        $status = 'success';
+        }
+        
+
+        $return['status'] = $status;
+        $return['data']	   = $data;
+
+        return json_encode($return);
+	}
+
+
+	public function remove_employee_requirement()
+	{
+		$payroll_requirements_id = Request::input("content");
+		$path = Tbl_payroll_requirements::where('payroll_requirements_id',$payroll_requirements_id)->pluck('payroll_requirements_path');
+		Tbl_payroll_requirements::where('payroll_requirements_id',$payroll_requirements_id)->delete();
+		// dd($path);
+		// unlink($path);
+		// unlink(public_path($path));
 	}
 
 	/* EMPLOYEE END */

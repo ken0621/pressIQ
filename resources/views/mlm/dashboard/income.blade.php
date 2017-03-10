@@ -31,6 +31,22 @@
         @else
         <li><a href="javascript:" class="pull-right badge bg-blue">No Active Income yet.</a></li>
         @endif
+        <li><hr></li>
+        <li><a href="javascript:">Points Summary</li>
+        @if(isset($slot_now))
+            @if($slot_now != null)
+                @if (Session::has('message'))
+                    <li><a href="javascript:" class="pull-right badge bg-red">{{ Session::get('message') }}</a></li>
+                @endif
+                @foreach($plan_settings_2 as $key => $value)
+                <li><a href="javascript:">{{$value->marketing_plan_name}} <span class="pull-right badge bg-aqua">{{$earning_2[$key]}}</span></a></li>
+                @endforeach 
+            @else
+                <li><a href="javascript:" class="pull-right badge bg-blue">No Active Income yet.</a></li>
+            @endif
+        @else
+        <li><a href="javascript:" class="pull-right badge bg-blue">No Active Income yet.</a></li>
+        @endif
       </ul>
     </div>
   </div>

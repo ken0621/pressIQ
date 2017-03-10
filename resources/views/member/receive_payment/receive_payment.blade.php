@@ -27,8 +27,8 @@
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
                             <div class="col-sm-3">
-                                <select class="drop-down-customer" required>
-                                    @include("member.load_ajax_data.load_customer")
+                                <select class="drop-down-customer" name="rp_customer_id" required>
+                                    @include("member.load_ajax_data.load_customer", ['customer_id' => $rcvpayment->rp_customer_id or ''])
                                 </select>
                             </div>
                             <div class="col-sm-4">
@@ -45,7 +45,7 @@
                             </div>
                         <div class="col-sm-3">
                             <label>Payment Method</label>
-                            <select class="drop-down-payment">
+                            <select class="drop-down-payment" name="rp_payment_method">
                                 @include("member.load_ajax_data.load_payment_method")
                             </select>
                         </div>
@@ -55,7 +55,7 @@
                         </div>
                         <div class="col-sm-3">
                             <label>Deposit to</label>
-                            <select class="drop-down-coa">
+                            <select class="drop-down-coa" name="rp_ar_account">
                                 @include("member.load_ajax_data.load_chart_account", ['add_search' => ""])
                             </select>
                         </div>
@@ -85,14 +85,18 @@
                                         </tr>
                                     </thead>
                                     <tbody class="tbody-item">
+                                    @if(isset($rcvpaymnet))
+                                        @include('member.receive_payment.load_receive_payment_items');
+                                    @else
                                         <tr>
                                             <td class="text-center"><input type="checkbox" ></td>
                                             <td></td>
-                                            <td class="text-right"></td>
+                                            <td class="text-right">11/26/2016</td>
                                             <td><input type="text" class="text-right" disabled /></td>
                                             <td><input type="text" class="text-right" disabled /></td>
                                             <td><input class="text-right" type="text" name=""/></td>
-                                        </tr>  
+                                        </tr>   
+                                    @endif 
                                     </tbody>
                                 </table>
                             </div>
@@ -102,7 +106,7 @@
                     <div class="row clearfix">
                         <div class="col-sm-6">
                             <label>Memo</label>
-                            <textarea class="form-control input-sm textarea-expand" name="" placeholder=""></textarea>
+                            <textarea class="form-control input-sm textarea-expand" name="rp_memo" placeholder=""></textarea>
                         </div>
                         <div class="col-sm-6">
                             <div class="row">
@@ -110,7 +114,7 @@
                                     Amount to Apply
                                 </div>
                                 <div class="col-md-5 text-right digima-table-value total">
-                                    <input type="hidden" name="amount_to_apply" class="amount-to-apply" />
+                                    <input type="hidden" name="rp_total_amount" class="amount-to-apply" />
                                     <span class="amount-apply">PHP 0.00</span>
                                 </div>
                             </div> 

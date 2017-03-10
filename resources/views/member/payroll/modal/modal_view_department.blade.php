@@ -3,7 +3,7 @@
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Create Department</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
-		<input type="hidden" name="payroll_department_id" {{$deparmtent->payroll_department_id}}>
+		<input type="hidden" name="payroll_department_id" value="{{$deparmtent->payroll_department_id}}">
 	</div>
 	<div class="modal-body form-horizontal">
 		<div class="form-group">

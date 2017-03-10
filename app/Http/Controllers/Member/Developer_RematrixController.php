@@ -3,6 +3,10 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_membership;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_customer_search;
+
+Tbl_customer_search
 use Crypt;
 class Developer_RematrixController extends Member
 {
@@ -21,7 +25,11 @@ class Developer_RematrixController extends Member
 		$data['customers'] = $this->dummy_account();
 		return view('member.developer.simulate.index', $data);
 	}
-	public function generate_customer($shop_id)
+	public function reset()
+	{
+		
+	}
+	public function generate_customer($shop_id, $count)
 	{
 		$customers = $this->dummy_account();
 		foreach ($customers as $key => $value) 
@@ -47,32 +55,23 @@ class Developer_RematrixController extends Member
 		foreach ($all_customer as $key => $value) 
 		{
 			$customer_id = $value->customer_id;
-			// title_name
-			// first_name
-			// middle_name
-			// last_name
-			// suffix_name
-			// email
+
 			$insertSearch['customer_id'] = $customer_id;
-	        $insertSearch['body'] = $value->title_name.' '.$value->first_name.' '.$value->middle_name.' '.$value->last_name.' '.$value->suffix_namvare.' '.$email.' '.$company;
+	        $insertSearch['body'] = $value->title_name.' '.$value->first_name.' '.$value->middle_name.' '.$value->last_name.' '.$value->suffix_name.' '.$value->$email.' '.$value->company;
 	        Tbl_customer_search::insert($insertSearch);
-		}
-		$insertSearch['customer_id'] = $customer_id;
-        $insertSearch['body'] = $title.' '.$first_name.' '.$middle_name.' '.$last_name.' '.$suffix.' '.$email.' '.$company;
-        Tbl_customer_search::insert($insertSearch);
 
-		$insert_other['customer_mobile'] = Request::input('customer_mobile');
-        $insert_other['customer_id'] = $cus_id;
-        DB::table('tbl_customer_other_info')->insert($insert_other);
+	        $insert_other['customer_id'] = $customer_id;
+        	DB::table('tbl_customer_other_info')->insert($insert_other);
 
-        $insert_address['customer_id'] = $cus_id;
-        $insert_address['customer_state'] = Request::input('customer_state');
-        $insert_address['customer_city'] = Request::input('customer_city');
-        $insert_address['customer_zipcode'] = Request::input('customer_zipcode');
-        $insert_address['customer_street'] = Request::input('customer_street');
-        $insert_address['purpose'] = 'billing';
-        $insert_address['country_id'] = Request::input('country');
-        DB::table('tbl_customer_address')->insert($insert_address);                            
+        	$insert_address[0]['customer_id'] = $customer_id;
+	        $insert_address[0]['purpose'] = 'billing';
+	        $insert_address[0]['country_id'] = 420;
+	        $insert_address[1]['customer_id'] = $customer_id;
+	        $insert_address[1]['purpose'] = 'shipping';
+	        $insert_address[1]['country_id'] = 420;
+	        DB::table('tbl_customer_address')->insert($insert_address);  
+		
+		}                          
 	}
 	public function dummy_account()
 	{

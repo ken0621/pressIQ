@@ -54,6 +54,9 @@ class MlmReportController extends Mlm
         $data['plan']       = Mlm_member_report::get_plan('MEMBERSHIP_MATCHING', Self::$shop_id); 
         $data['header'] = Mlm_member_report::header($data['plan']);
         $data['report_matching'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->get();
+        $data['tester'] = [];
+        $data['matching_count'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->count();
+        $data['count'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->get();
         return view("mlm.report.report_membership_matching", $data);
     }
     public static function executive_bonus()

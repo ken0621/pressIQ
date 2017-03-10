@@ -16,7 +16,7 @@ use App\Models\Tbl_post;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_lead;
 use App\Models\Tbl_mlm_slot;
-
+use App\Models\Tbl_mlm_slot_points_log;
 class MlmDashboardController extends Mlm
 {
     public function index()
@@ -57,8 +57,34 @@ class MlmDashboardController extends Mlm
     	$data['plan_settings'] = Tbl_mlm_plan::where('shop_id', $shop_id)
         ->where('marketing_plan_enable', 1)
         ->where('marketing_plan_trigger', 'Slot Creation')
+        ->where('marketing_plan_code', '!=', 'INDIRECT_POINTS')
+        ->where('marketing_plan_code', '!=', 'DIRECT_POINTS')
+        ->where('marketing_plan_code', '!=', 'INITIAL_POINTS')
+        ->where('marketing_plan_code', '!=', 'DISCOUNT_CARD')
         ->get();
-        
+
+        $data['plan_settings_2'] = Tbl_mlm_plan::where('shop_id', $shop_id)
+        ->where('marketing_plan_enable', 1)
+        ->where('marketing_plan_trigger', 'Slot Creation')
+        ->where('marketing_plan_code', '!=', 'DIRECT')
+        ->where('marketing_plan_code', '!=', 'INDIRECT')
+        ->where('marketing_plan_code', '!=', 'MEMBERSHIP_MATCHING')
+        ->where('marketing_plan_code', '!=', 'LEADERSHIP_BONUS')
+        ->where('marketing_plan_code', '!=', 'DISCOUNT_CARD')
+        ->get();
+        // dd($data['plan_settings']);
+        foreach($data['plan_settings_2'] as $key => $value)
+        {
+            $data['earning_2'][$key] = Tbl_mlm_slot_points_log::where('points_log_complan', $value->marketing_plan_code)
+            ->where('points_log_slot', $slot_id)
+            ->sum('points_log_points');
+            if($data['earning_2'][$key] == null)
+            {
+                $data['earning_2'][$key] = 0;
+            }
+            // if()
+        }
+
         foreach($data['plan_settings'] as $key => $value)
         {
         	$data['earning'][$key] = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', $value->marketing_plan_code)
@@ -69,6 +95,7 @@ class MlmDashboardController extends Mlm
         		$data['earning'][$key] = 0;
         	}
         }
+
     	return view('mlm.dashboard.income', $data);
     }
     public static function no_slot($shop_id)

@@ -148,7 +148,17 @@ function payrollconfiguration()
 
 	function jobtitle_archived(archived = 0)
 	{
-
+		var action = "/member/payroll/jobtitlelist/reload_tbl_jobtitle";
+		var formdata = {
+			_token:misc('_token'),
+			archived:archived
+		};
+		var target = "#active-jobtitle";
+		if(archived == 1)
+		{
+			target = "#archived-jobtitle";
+		}
+		load_configuration(action, "POST",target, formdata);
 	}
 
 	this.executeFunctionByName = function(functionName)
@@ -160,6 +170,12 @@ function payrollconfiguration()
 	{
 		department_archived();
 		department_archived(1);
+	}
+
+	this.reload_tbl_jobtitle = function()
+	{
+		jobtitle_archived();
+		jobtitle_archived(1);
 	}
 
 	this.btn_modal_button_event = function()
@@ -188,7 +204,7 @@ function payrollconfiguration()
 function submit_done(data)
 {
 	payrollconfiguration.executeFunctionByName(data.function_name);
-	
+	console.log(data.function_name);
 	$("#global_modal").modal("hide");
 }
 

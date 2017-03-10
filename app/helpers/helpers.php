@@ -28,6 +28,10 @@ function convertToNumber($str)
 {
     return preg_replace("/([^0-9\\.])/i", "", $str);
 }
+function dateFormat($string)
+{
+    return date_format(date_create($string),"m/d/Y");
+}
 function deleteDir($dirPath) {
     if (! is_dir($dirPath)) {
         throw new InvalidArgumentException("$dirPath must be a directory");

@@ -1,4 +1,4 @@
-<form id="modal_form_large" class="z-index-1000">
+<form class="global-submit" role="form" action="" method="POST">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
     <h4 class="modal-title layout-modallarge-title">Create new employee</h4>
@@ -286,28 +286,88 @@
                     <table class="table table-condensed">
                       <tr>
                         <td>Resume/CV/Bio-Data</td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center">
+                          <input type="checkbox" name="requirement_resume_checkbox" value="1">
+                        </td>
+                        <td width="35%" class="text-center">
+                          <a href="#" class="a-file-name display-none">file name here</a><br>
+                          <div class="custom-progress-container-100 display-none">
+                            <div class="custom-progress"></div>
+                          </div>
+                          <label class="lbl-a-href"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
+                          <input type="hidden" class="requirement-input" name="requirement_resume_input">
+                        </td>
+                        <td class="text-center" width="10">
+                          <a href="#" class="display-none remove-requirements" data-requirement=""><i class="fa fa-times"></i></a>
+                        </td>
                       </tr>
                       <tr>
                         <td>Police Clearance</td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center">
+                          <input type="checkbox" name="requirement_police_checkbox" value="1">
+                        </td>
+                        <td width="35%" class="text-center">
+                          <a href="#" class="a-file-name display-none">file name here</a><br>
+                          <div class="custom-progress-container-100 display-none">
+                            <div class="custom-progress"></div>
+                          </div>
+                          <label class="lbl-a-href"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
+                          <input type="hidden" class="requirement-input" name="requirement_police_input">
+                        </td>
+                        <td class="text-center" width="10">
+                          <a href="#" class="display-none remove-requirements" data-requirement=""><i class="fa fa-times"></i></a>
+                        </td>
                       </tr>
                       <tr>
                         <td>NBI</td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center">
+                          <input type="checkbox" name="requirement_nbi_checkbox" value="1">
+                        </td>
+                        <td width="35%" class="text-center">
+                          <a href="#" class="a-file-name display-none">file name here</a><br>
+                          <div class="custom-progress-container-100 display-none">
+                            <div class="custom-progress"></div>
+                          </div>
+                          <label class="lbl-a-href"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
+                          <input type="hidden" class="requirement-input" name="requirement_nbi_input">
+                        </td>
+                        <td class="text-center" width="10">
+                          <a href="#" class="display-none remove-requirements" data-requirement=""><i class="fa fa-times"></i></a>
+                        </td>
                       </tr>
                       <tr>
                         <td>Health Certificate</td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center">
+                          <input type="checkbox" name="requirement_health_checkbox" value="1">
+                        </td>
+                        <td width="35%" class="text-center">
+                          <a href="#" class="a-file-name display-none">file name here</a><br>
+                          <div class="custom-progress-container-100 display-none">
+                            <div class="custom-progress"></div>
+                          </div>
+                          <label class="lbl-a-href"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
+                          <input type="hidden" class="requirement-input" name="requirement_health_input">
+                        </td>
+                        <td class="text-center" width="10">
+                          <a href="#" class="display-none remove-requirements" data-requirement=""><i class="fa fa-times"></i></a>
+                        </td>
                       </tr>
                       <tr>
                         <td>School Credentials</td>
-                        <td></td>
-                        <td></td>
+                        <td class="text-center">
+                          <input type="checkbox" name="requirement_school_checkbox" value="1">
+                        </td>
+                        <td width="35%" class="text-center">
+                          <a href="#" class="a-file-name display-none">file name here</a><br>
+                          <div class="custom-progress-container-100 display-none">
+                            <div class="custom-progress"></div>
+                          </div>
+                          <label class="lbl-a-href"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
+                          <input type="hidden" class="requirement-input" name="requirement_school_input">
+                        </td>
+                        <td class="text-center" width="10">
+                          <a href="#" class="display-none remove-requirements" data-content=""><i class="fa fa-times"></i></a>
+                        </td>
                       </tr>
                     </table>
                   </div>
@@ -342,3 +402,4 @@
 </form>
 <script type="text/javascript" src="/assets/member/js/customer.js"></script>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/modal_create_employee.js"></script>

@@ -61,7 +61,7 @@
                 </thead>
                 <tbody>
                     @foreach($_customer as $customer)
-                        <tr class="cursor-pointer" id="tr-customer-{{$customer->customer_id}}">
+                        <tr class="cursor-pointer" id="tr-customer-{{$customer->customer_id}}" style="color: {{$customer->approved == 1? '#000' : '#ff3333' }};">
                             <td class="text-left">{{$customer->title_name.' '.$customer->first_name.' '.$customer->middle_name.' '.$customer->last_name.' '.$customer->suffix_name}}</td>
                             <td class="text-left">{{$customer->customer_phone != null ? $customer->customer_phone : 'No Phone Number' }} / {{$customer->customer_mobile != null ? $customer->customer_mobile : 'No Mobile Number'}} </td>
                             <td class="text-left">{{$customer->email}}</td>

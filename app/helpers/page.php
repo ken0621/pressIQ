@@ -279,6 +279,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
+     /* -- PIS => ILR */
+    $code = "pis-ilr";
+    $nav[$page]['submenu'][$code]['label'] = "Incoming Load Report";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/ilr";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','processed-ilr'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    
     /* -- PIS => Auto Invoicing */
     $code = "pis-auto-invoicing";
     $nav[$page]['submenu'][$code]['label'] = "Auto Invoicing";
@@ -288,23 +297,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
-    /* -- PIS => Manual Invoicing */
-    $code = "pis-manual-invoicing";
-    $nav[$page]['submenu'][$code]['label'] = "Manual Invoicing";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page ."/manual_invoice";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    // /* -- PIS => Manual Invoicing */
+    // $code = "pis-manual-invoicing";
+    // $nav[$page]['submenu'][$code]['label'] = "Manual Invoicing";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page ."/manual_invoice";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
-     /* -- PIS => ILR */
-    $code = "pis-ilr";
-    $nav[$page]['submenu'][$code]['label'] = "Incoming Load Report";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/ilr";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','processed-ilr'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
    
     $code = "pis-agent";
     $nav[$page]['submenu'][$code]['label'] = "Agent List";

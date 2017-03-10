@@ -82,21 +82,14 @@
                                           @if($sir->sir_archived == 1)
                                                 <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/restore" class="popup">Restore SIR</a></li>
                                           @else
-                                              @if($sir->sir_status == 0)
+                                              @if($sir->lof_status == 3)
                                                 <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/lof" class="popup">View Load Out Form</a></li>
                                                 <li><a href="/member/pis/sir/edit/{{$sir->sir_id}}">Edit Load Out Form</a></li>
                                                 <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/archived" class="popup">Archive L.O.F</a></li>
-                                                <li><a size="md" link="/member/pis/sir/open/{{$sir->sir_id}}/open" class="popup">OPEN THIS AS SIR</a></li>
                                               @elseif($sir->ilr_status == 2)                  
                                                 <li><a size="lg" link="/member/pis/ilr/view/{{$sir->sir_id}}" class="popup">View ILR</a></li>
-                                              @elseif($sir->is_sync == 1 )
-                                                <li><a size="lg" link="/tablet/sir_inventory/{{$sir->sir_id}}" class="popup">View Inventory</a></li>
-                                                <li><a href="/member/pis/manual_invoice/add/{{$sir->sir_id}}">Create Manual Invoices</a></li>
                                               @elseif($sir->sir_status == 1)                   
                                                 <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/sir" class="popup">View SIR</a></li>
-                                              @elseif($sir->ilr_status == 1)                   
-                                                <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/sir" class="popup">View SIR</a></li>
-                                                <li><a href="/member/pis/ilr/{{$sir->sir_id}}">Processed ILR</a></li>
                                               @endif
                                             </ul>
                                           @endif

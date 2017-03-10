@@ -45,11 +45,11 @@
     <ul class="nav nav-tabs">
         <li class="cursor-pointer sir-class active"><a class="cursor-pointer" data-toggle="tab" href="#invoice"><i class="fa fa-reorder"></i> Invoice List</a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer" data-toggle="tab" href="#customer"><i class="fa fa-users"></i> Customer List</a></li>
-        <li class="cursor-pointer sir-class"><a class="cursor-pointer" data-toggle="tab" href="#account"><i class="fa fa-user"></i> Account Settings</a></li>
-        <li class="cursor-pointer sir-class"><a class="cursor-pointer" data-toggle="tab" href="#submit"><i class="fa fa-upload"></i> Submit</a></li>
+        <li class="cursor-pointer sir-class"><a class="popup" link="/member/pis/agent/edit/{{$employee_id}}" size="md"><i class="fa fa-user"></i> Account Settings</a></li>
+        <li class="cursor-pointer sir-class"><a class="popup" link="/tablet/submit_all_transaction" ><i class="fa fa-upload"></i> Submit</a></li>
     </ul>
 
-    <div class="tab-content panel-body form-horizontal">
+    <div class="tab-content panel-body form-horizontal tablet-container">
             <div id="invoice" class="tab-pane fade in active">
                 <div class="form-group">
                     <div class="col-md-12 text-right">
@@ -86,6 +86,8 @@
                                       </button>
                                         <ul class="dropdown-menu dropdown-menu-custom">
                                             <li><a size="lg" link="/tablet/view_invoice_view/{{$inv->inv_id}}" class="popup">View Invoice</a></li>
+                                            <li><a href="/tablet/create_invoices/add?id={{$inv->inv_id}}&sir_id={{Session::get('selected_sir')}}">Edit Invoice</a></li>
+                                            <li><a >View Receipt</a></li>                                            
                                         </ul>
                                     </div>
                                 </td>
@@ -99,7 +101,7 @@
             <div id="customer" class="tab-pane fade in"> 
                 <div class="form-group">
                     <div class="col-md-12 text-right">
-                        <a link="/member/customer/modalcreatecustomer" class="btn btn-primary popup" size="lg">Add Customer</a>
+                        <a link="/member/customer/modalcreatecustomer?stat=not-approved" class="btn btn-primary popup" size="lg">Add Customer</a>
                     </div>
                 </div>
                 <div class="form-group">
@@ -115,7 +117,7 @@
                           </thead>
                           <tbody>
                               @foreach($_customer as $customer)
-                              <tr>
+                              <tr style="color: {{$customer->approved == 1? '#000' : '#ff3333' }};">
                                 <td>{{$customer->customer_id}}</td>
                                 <td>
                                   @if($customer->company != null)
@@ -168,6 +170,18 @@
 @endsection
 @section("script")
 <script type="text/javascript">
+    function submit_done_customer(data)
+    {
+        if(data.message == "success")
+        {
+            toastr.success("Success");
+            $(".tablet-container").load("/tablet/dashboard .tablet-container")
+        }
+        else if(data.message == "error")
+        {
+            toastr.warning(data.error);
+        }
+    }
     function submit_done(data)
     {
         if(data.status == "success")

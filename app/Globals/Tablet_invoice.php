@@ -67,6 +67,7 @@ class Tablet_invoice
     {
         $update['inv_customer_id']              = $customer_info['customer_id'];        
         $update['inv_customer_email']           = $customer_info['customer_email'];
+        $update['new_inv_id']                   = $invoice_info['new_inv_id'];
         $update['inv_customer_billing_address'] = $invoice_info['billing_address'];
         $update['inv_terms_id']                 = $invoice_info['invoice_terms_id'];
         $update['inv_date']                     = $invoice_info['invoice_date'];

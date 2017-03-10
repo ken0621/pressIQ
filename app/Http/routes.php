@@ -338,9 +338,17 @@ Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_si
 Route::any('/tablet/view_invoices/{id}','Member\TabletPISController@view_invoices');
 Route::any('/tablet/create_invoices/add','Member\TabletPISController@tablet_create_invoice');
 Route::any('/tablet/create_invoice/add_submit','Member\TabletPISController@create_invoice_submit');
+Route::any('/tablet/update_invoice/edit_submit',"Member\TabletPISController@update_invoice_submit");
+
+Route::any('/tablet/view_receive_payment/{id}','Member\TabletPISController@view_receive_payment');
+Route::any('/tablet/receive_payment/add','Member\TabletPISController@tablet_receive_payment');
+Route::any('/tablet/receive_payment/add_submit','Member\TabletPISController@receive_payment_submit');
 
 Route::any('/tablet/view_invoice_view/{id}','Member\TabletPISController@view_invoices_view');
 Route::any('/tablet/view_invoice_pdf/{id}','Member\TabletPISController@view_invoice_pdf');
+
+Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_submission');
+Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
 /* END PIS TABLEt*/
 
  //form

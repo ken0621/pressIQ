@@ -133,7 +133,12 @@ class Invoice
 
     public static function getAllInvoiceByCustomer($customer_id)
     {
-        return  Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->where("inv_shop_id", Invoice::getShopId())->where("inv_customer_id", $customer_id)->where("inv_is_paid", 0)->get()->toArray();
+        return  Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)->get()->toArray();
+    }
+
+    public static function getAllInvoiceByCustomerWithRcvPymnt($customer_id, $rcv_payment_id)
+    {
+        return  Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)->rcvPayment($rcv_payment_id)->orderBy("inv_id")->get()->toArray();
     }
   
 }

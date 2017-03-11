@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use DB;
+
+class Tbl_payroll_employee_basic extends Model
+{
+    protected $table = 'tbl_payroll_employee_basic';
+	protected $primaryKey = "payroll_employee_id";
+    public $timestamps = false;
+
+    /* COLUMN REFERENCE NAME */
+	// [PRIMARY KEY] 	payroll_employee_id
+	// [INTEGER] 		shop_id
+	// [INTEGER] 		payroll_employee_company_id
+	// [VARCHAR] 		payroll_employee_title_name
+	// [VARCHAR] 		payroll_employee_first_name
+	// [VARCHAR] 		payroll_employee_middle_name
+	// [VARCHAR] 		payroll_employee_last_name
+	// [VARCHAR] 		payroll_employee_suffix_name
+	// [VARCHAR] 		payroll_employee_display_name
+	// [VARCHAR] 		payroll_employee_contact
+	// [VARCHAR] 		payroll_employee_email
+	// [DATE] 			payroll_employee_birthdate
+	// [VARCHAR] 		payroll_employee_gender
+	// [VARCHAR] 		payroll_employee_number
+	// [VARCHAR] 		payroll_employee_atm_number
+	// [VARCHAR] 		payroll_employee_street
+	// [VARCHAR] 		payroll_employee_city
+	// [VARCHAR] 		payroll_employee_state
+	// [VARCHAR] 		payroll_employee_zipcode
+	// [INTEGER] 		payroll_employee_country
+	// [VARCHAR] 		payroll_employee_tax_status
+	// [VARCHAR] 		payroll_employee_tin
+	// [VARCHAR] 		payroll_employee_sss
+	// [VARCHAR] 		payroll_employee_pagibig
+	// [VARCHAR] 		payroll_employee_philhealth
+	// [TEXT] 			payroll_employee_remarks
+
+
+	public function scopeselemployee($query, $shop_id = 0, $company_id = 0, $employment_status = 0, $date = '0000-00-00')
+	{
+		if($date == '0000-00-00')
+		{
+			$date = date('Y-m-d');
+		}
+		$query->leftjoin('tbl_payroll_company as company','company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
+			  ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
+			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')
+			  ->where('contract.payroll_employee_contract_date_end','>=',$date)
+			  ->where('company.shop_id',$shop_id);
+
+
+			  if($company_id != 0)
+			  {
+			  	$query->where('company.payroll_company_id',$company_id);
+			  }
+
+			  $query->select('company.payroll_company_name','tbl_payroll_employee_basic.*', DB::raw(''));
+
+
+	}
+}

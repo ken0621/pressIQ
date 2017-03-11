@@ -10,11 +10,11 @@
 			<span class="website">{{ URL::to('/') }}</span>
 			<div class="logo"><img style="width: 200px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/philtech-logo.png"></div>
 		</div>
-		<div class="mid-container clearfix" style="margin: 0; height: 149px;"><img style="display: block; width: 380px; margin-left: 15px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/{{ $color }}-logo.png"></div>
+		<div class="mid-container clearfix" style="margin: 0; height: 149px;"><img style="display: block; width: 380px; margin-left: 10px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/{{ $color }}-logo.png"></div>
 		<div class="bottom-container clearfix" style="margin-top: -7.5px;">
 			<div class="member">
 				<div class="member-name">{{ $name }}</div>
-				<div class="member-label">ISSUED: <small>{{$now}}</small></div>
+				<div class="member-label" style="padding-left: 0;">ISSUED: <small>{{$now}}</small></div>
 			</div>
 			<div class="barcode">
 				<div class="barcodeimg" style="background-color: #fff; padding: 7.5px 0;"><img src="{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/barcode?text={{ $membership_code }}&size=35"></div>

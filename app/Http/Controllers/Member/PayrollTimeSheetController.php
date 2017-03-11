@@ -20,10 +20,11 @@ class PayrollTimesheetController extends Member
 		while($from <= $to)
 		{
 			$data["_timesheet"][$from] = new stdClass();
+			$data["_timesheet"][$from]->date = Carbon::parse($from)->format("Y-m-d");
 			$data["_timesheet"][$from]->day_number = Carbon::parse($from)->format("d");
 			$data["_timesheet"][$from]->day_word = Carbon::parse($from)->format("D");
+			$data["_timesheet"][$from]->break = "01:00:00";
 			
-
 			/* CHECK IF MULTIPLE TIME IN */
 			if($from == Carbon::parse("February 28, 2017")->format("Y-m-d")) //MULTIPLE TIME IN
 			{

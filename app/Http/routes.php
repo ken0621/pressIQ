@@ -10,6 +10,10 @@ Route::get('/barcode', 'MemberController@barcodes');
 // Route::get('/card', 'MemberController@card');
 // Route::get('/card/all', 'MemberController@all_slot');
 
+Route::get('member/register', 'MemberController@register');
+Route::get('member/register/payment', 'MemberController@payment');
+Route::get('member/register/package', 'MemberController@package');
+
 Route::get('member/card', 'Member\MLM_CardController@card');
 Route::get('member/card/all', 'Member\MLM_CardController@all_slot');
 

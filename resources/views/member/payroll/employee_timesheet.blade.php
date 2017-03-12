@@ -66,27 +66,48 @@
                 	@foreach($_timesheet as $timesheet)
                 		@foreach($timesheet->time_record as $key => $time_record)
 	            		<tr class="time-record {{ $key == 0 ? 'main' : '' }}" date="{{ $timesheet->date }}" total_hours="00:00">
-	                		<td class="text-center edit-data">{{ $timesheet->day_number }}</td>
-	                		<td class="text-center edit-data">{{ $timesheet->day_word }}</td>
-	                		<td class="text-center editable"><input class="text-table time-entry time-in" type="text" name="" value="{{ $time_record->time_in }}"></td>
-	                		<td class="text-center editable"><input class="text-table time-entry time-out"  type="text" name="" value="{{ $time_record->time_out }}"></td>
-	                		<td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
-	                		@if($key == 0)
+	                		@if($key == 0) <!--MAIN -->
+	                			<td class="text-center edit-data day-number">{{ $timesheet->day_number }}</td>
+	                			<td class="text-center edit-data day-word">{{ $timesheet->day_word }}</td>
+	                			<td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in" type="text" name="" value="{{ $time_record->time_in }}"></td>
+	                			<td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out"  type="text" name="" value="{{ $time_record->time_out }}"></td>
+	                			<td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
 								<td class="text-center edit-data"><input class="text-table break-time time-entry-24"  type="text" name="" value="{{ $timesheet->break }}"></td>
 		                		<td class="text-center edit-data normal-hours">00:00</td>
 		                		<td class="text-center edit-data overtime-hours">00:00</td>
 		                		<td class="text-center edit-data">Regular</td>
-		                		<td class="text-center"><span class="button"><i class="fa fa-plus"></i></span></td>
-	                		@else
+		                		<td class="text-center"><span class="button create-sub-time"><i class="fa fa-plus"></i></span></td>
+	                		@else 
+	                			<td class="text-center edit-data day-number"></td>
+	                			<td class="text-center edit-data day-word"></td>
+	                			<td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in" type="text" name="" value="{{ $time_record->time_in }}"></td>
+	                			<td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out"  type="text" name="" value="{{ $time_record->time_out }}"></td>
+	                			<td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
 	                			<td class="text-center edit-data"></td>
 		                		<td class="text-center edit-data"></td>
 		                		<td class="text-center edit-data"></td>
 		                		<td class="text-center edit-data"></td>
-		                		<td class="text-center"><span class="button"><i class="fa fa-close"></i></span></td>
+		                		<td class="text-center"><span class="button delete-sub-time"><i class="fa fa-close"></i></span></td>
 	                		@endif
 	            		</tr>
                 		@endforeach
                 	@endforeach
+
+
+	                <tfoot class="hidden sub-time-container">
+	                	<tr class="time-record new-sub" date="0000-00-00" total_hours="00:00">
+		                	<td class="text-center edit-data"></td>
+		                	<td class="text-center edit-data"></td>
+		                	<td class="text-center editable"><input class="text-table time-entry time-in is-timeEntry" name="" value="9:00AM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span></td>
+		                	<td class="text-center editable"><input class="text-table time-entry time-out is-timeEntry" name="" value="6:00PM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span></td>
+		                	<td class="text-center editable"><textarea placeholder="" class="text-table"></textarea></td>	
+		                	<td class="text-center edit-data"></td>
+			                <td class="text-center edit-data"></td>
+			                <td class="text-center edit-data"></td>
+			                <td class="text-center edit-data"></td>
+			                <td class="text-center"><span class="button delete-sub-time"><i class="fa fa-close"></i></span></td>
+		                </tr>
+	                </tfoot>
                 </tbody>
             </table>
             <div class="padding-10 text-center">

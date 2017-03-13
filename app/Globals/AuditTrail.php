@@ -81,7 +81,7 @@ class AuditTrail
                 }
                 $transaction_amount = currency("PHP",$amount);
             }
-            else if($value->source == "purchase")
+            else if($value->source == "purchase_order")
             {
                 $transaction = Tbl_purchase_order::vendor()->where("po_id",$value->source_id)->first();
                 $transaction_date = date("m/d/y", strtotime($transaction->po_date));

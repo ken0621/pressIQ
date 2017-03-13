@@ -19,6 +19,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_vendor;
 use App\Globals\Vendor;
+use App\Globals\AuditTrail;
 use App\Globals\Purchase_Order;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;

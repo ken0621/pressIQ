@@ -445,11 +445,7 @@
                 "docblock",
                 "parser"
             ],
-<<<<<<< HEAD
-            "time": "2017-02-24T16:22:25+00:00"
-=======
-            "time": "2015-08-31 12:32:49"
->>>>>>> 67975843d73ebd00a40e80aca51c3b2b226712cb
+            "time": "2015-08-31T12:32:49+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -585,11 +581,7 @@
                 "collections",
                 "iterator"
             ],
-<<<<<<< HEAD
-            "time": "2017-01-03T10:49:41+00:00"
-=======
-            "time": "2015-04-14 22:21:58"
->>>>>>> 67975843d73ebd00a40e80aca51c3b2b226712cb
+            "time": "2015-04-14T22:21:58+00:00"
         },
         {
             "name": "doctrine/common",
@@ -662,11 +654,7 @@
                 "persistence",
                 "spl"
             ],
-<<<<<<< HEAD
-            "time": "2017-01-13T14:02:13+00:00"
-=======
-            "time": "2016-11-30 16:50:46"
->>>>>>> 67975843d73ebd00a40e80aca51c3b2b226712cb
+            "time": "2016-11-30T16:50:46+00:00"
         },
         {
             "name": "doctrine/dbal",
@@ -4708,16 +4696,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.2.4",
+            "version": "v3.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "9724c684646fcb5387d579b4bfaa63ee0b0c64c8"
+                "reference": "093e416ad096355149e265ea2e4cc1f9ee40ab1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/9724c684646fcb5387d579b4bfaa63ee0b0c64c8",
-                "reference": "9724c684646fcb5387d579b4bfaa63ee0b0c64c8",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/093e416ad096355149e265ea2e4cc1f9ee40ab1a",
+                "reference": "093e416ad096355149e265ea2e4cc1f9ee40ab1a",
                 "shasum": ""
             },
             "require": {
@@ -4759,7 +4747,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-02-16T22:46:52+00:00"
+            "time": "2017-03-07T16:47:02+00:00"
         }
     ],
     "aliases": [],

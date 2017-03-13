@@ -68,22 +68,19 @@
                                                 <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/restore" class="popup">Restore SIR</a></li>
                                             </ul>
                                           @else
-                                              @if($sir->sir_status == 0)
                                               <ul class="dropdown-menu dropdown-menu-custom">
+                                               <li><a size="lg" link="/member/pis/sir/view_status/{{$sir->sir_id}}" class="popup">View Status</a></li>
+                                              @if($sir->sir_status == 0)
                                                 <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/sir" class="popup">View SIR</a></li>
                                                 <li><a href="/member/pis/sir/edit/{{$sir->sir_id}}">Edit SIR</a></li>
                                                 <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/archived" class="popup">Archive SIR</a></li>
-                                              </ul>
                                               @elseif($sir->ilr_status == 1)                                          
-                                              <ul class="dropdown-menu dropdown-menu-custom">
                                                 <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/sir" class="popup">View SIR</a></li>
                                                 <li><a href="/member/pis/ilr/{{$sir->sir_id}}">Processed ILR</a></li>
-                                              </ul>
-                                              @elseif($sir->ilr_status == 2)                                          
-                                              <ul class="dropdown-menu dropdown-menu-custom">
+                                              @elseif($sir->ilr_status == 2)                                         
                                                 <li><a size="lg" link="/member/pis/ilr/view/{{$sir->sir_id}}" class="popup">View ILR</a></li>
-                                              </ul>
                                               @endif
+                                              </ul>
                                           @endif
                                         </div>
                                     </td>

@@ -85,7 +85,7 @@
                                           @if($sir->sir_archived == 1)
                                                 <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/restore" class="popup">Restore SIR</a></li>
                                           @else
-                                                <li><a size="lg" link="/member/pis/lof/view_status/{{$sir->sir_id}}/" class="popup">View Status</a></li>
+                                               <li><a size="lg" link="/member/pis/sir/view_status/{{$sir->sir_id}}" class="popup">View Status</a></li>
                                               @if($sir->sir_status == 1)
                                               @elseif($sir->lof_status == 2)
                                                 <li><a size="md" link="/member/pis/sir/open/{{$sir->sir_id}}/open" class="popup">Open SIR</a></li>

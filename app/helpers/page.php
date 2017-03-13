@@ -754,6 +754,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";
 
+     /* -- DEVELOPERS => DOCUMENTATION */
+    $code = "developer-documentation";
+    $nav[$page]['submenu'][$code]['label'] = "Code Documentation";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/auto_entry";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
 
     /* REPORTS  */
     $page = "report"; 

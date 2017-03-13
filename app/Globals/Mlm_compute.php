@@ -89,7 +89,8 @@ class Mlm_compute
                         }
                         else if($tbl_mlm_binary_setttings->binary_settings_auto_placement == "auto_balance")
                         {
-                            $a = Mlm_tree::auto_place_slot_binary_auto_balance($slot_info);
+                            // $a = Mlm_tree::auto_place_slot_binary_auto_balance($slot_info);
+                            $a = Mlm_tree::auto_place_slot_binary_auto_balance_revised($slot_info);
                         }
                     }
                 }

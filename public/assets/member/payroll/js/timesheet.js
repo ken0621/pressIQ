@@ -16,39 +16,122 @@ function timesheet()
 		event_focus_edit();
 		event_time_entry();
 		event_change_time_in_out();
+		event_create_sub_time();
+		event_delete_sub_time();
 		action_compute_work_hours();
+	}
+	function event_create_sub_time()
+	{
+		$("body").on("click", ".create-sub-time", function(e)
+		{
+			$date = $(e.currentTarget).closest("tr").attr("date");
+			action_create_sub_time($date);
+			action_compute_work_hours();
+		});
+	}
+	function event_delete_sub_time()
+	{
+		$("body").on("click", ".delete-sub-time", function(e)
+		{
+			if(confirm("Are you sure you want to delete this time-entry?"))
+			{
+				$date = $(e.currentTarget).closest("tr").remove();
+			}
+		});
 	}
 	function event_change_time_in_out()
 	{
-		$("body").on("keyup", ".time-in", function()
+		$("body").on("keyup", ".time-in", function(e)
 		{
+			/* EMPTY BOTH IF ONE IS EMPTY */
+			if($(e.currentTarget).val() == "")
+			{
+				$(e.currentTarget).closest("tr").find(".time-out").val("");
+				$(e.currentTarget).closest("tr").find(".break-time").val("00:00");
+			}
+
 			action_compute_work_hours();
 		});
 
-		$("body").on("keyup", ".time-out", function()
+		$("body").on("keyup", ".time-out", function(e)
 		{
+			/* EMPTY BOTH IF ONE IS EMPTY */
+			if($(e.currentTarget).val() == "")
+			{
+				$(e.currentTarget).closest("tr").find(".time-in").val("");
+				$(e.currentTarget).closest("tr").find(".break-time").val("00:00");
+			}
+
 			action_compute_work_hours();
 		});
 
-		$("body").on("keyup", ".break-time", function()
+		$("body").on("keyup", ".break-time", function(e)
 		{
 			action_compute_work_hours();
 		});
 	}
+	function event_focus_edit()
+	{
+		$("body").on("focusin", ".text-table", function(e)
+		{
+			$(e.currentTarget).closest("tr").addClass("focus");
+		});
+		$("body").on("focusout", ".text-table", function(e)
+		{
+			$(e.currentTarget).closest("tr").removeClass("focus");
+		});
+		$("body").on("focusout", ".edit-data", function(e)
+		{
+			$(e.currentTarget).closest("tr").find(".time-in").focus();
+		});
+
+	}
 	function event_time_entry()
 	{
+		$(".time-entry").timeEntry('destroy');
+		$(".time-entry-24").timeEntry('destroy');
 		$(".time-entry").timeEntry();
 		$(".time-entry-24").timeEntry({show24Hours: true});
+	}
+	function action_create_sub_time(date)
+	{
+		$append = $(".sub-time-container").html();
+		$(".time-record[date='" + date + "']:last").after($append);
+		
+		$last_time_out = $(".time-record[date='" + date + "']:last").find(".time-out").val();
+		$time_in = $last_time_out;
+		$time_out = add_two_time(convert_to_24h($last_time_out), "01:00");
+
+		/* UPDATE DATA FOR NEW SUB */
+		$("tbody").find(".time-record.new-sub").attr("date", date);
+		$("tbody").find(".time-record.new-sub").find(".time-in").val($time_in);
+		$("tbody").find(".time-record.new-sub").find(".time-out").val($time_out);
+
+		/* ADD EVENT TO NEW SUB */
+		event_time_entry();
+
+		/* REMOVE NEW SUB REFERENCE */
+		$("tbody").find(".time-record.new-sub").removeClass("new-sub");
 	}
 	function action_compute_work_hours()
 	{
 		/* COMPUTE TOTAL HOURS PER LINE */
 		$(".time-record").each(function(key, val)
-		{
-			
+		{		
 			var time_in = convert_to_24h($(this).find(".time-in").val());
 			var time_out = convert_to_24h($(this).find(".time-out").val());
-			var total_hours = deduct_two_time(time_in, time_out);
+
+			/* IF BLANK TIME-IN */
+			if(time_in == "" || time_out == "")
+			{
+				var total_hours = "00:00";
+			}
+			else
+			{
+				var total_hours = deduct_two_time(time_in, time_out);
+			}
+
+			
 			$(this).attr("total_hours", total_hours);
 			$(this).find(".normal-hours").text(total_hours);
 		});
@@ -103,22 +186,7 @@ function timesheet()
  			
 		});
 	}
-	function event_focus_edit()
-	{
-		$(".text-table").focusin(function(e)
-		{
-			$(e.currentTarget).closest("tr").addClass("focus");
-		});
-		$(".text-table").focusout(function(e)
-		{
-			$(e.currentTarget).closest("tr").removeClass("focus");
-		});
 
-		$(".edit-data").click(function(e)
-		{
-			$(e.currentTarget).closest("tr").find(".time-in").focus();
-		});
-	}
 
 	function action_convert_time_str_to_seconds(time_str)
 	{
@@ -159,6 +227,11 @@ function timesheet()
 		start_actual_time = new Date(start_actual_time);
 		end_actual_time = new Date(end_actual_time);
 
+		if(end_actual_time < start_actual_time)
+		{
+			end_actual_time = start_actual_time;
+		}
+
 		var diff = end_actual_time - start_actual_time;
 
 		var diffSeconds = diff/1000;
@@ -194,6 +267,10 @@ function timesheet()
 	}
 	function convert_to_24h(time_str)
 	{
+		if(time_str == "")
+		{
+			time_str = "12:00AM";
+		}
 	    // Convert a string like 10:05:23 PM to 24h format, returns like [22,5,23]
 	    var time = time_str.match(/(\d+):(\d+)(\w)/);
 	    var hours = Number(time[1]);

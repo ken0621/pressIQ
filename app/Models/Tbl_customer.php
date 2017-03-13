@@ -30,4 +30,21 @@ class Tbl_customer extends Model
         return $query->join("tbl_customer_address","tbl_customer_address.customer_id","=","tbl_customer.customer_id")
                      ->join("tbl_customer_other_info","tbl_customer_other_info.customer_id","=","tbl_customer.customer_id");
     }
+
+    public function scopeBalance($query, $shop_id, $customer_id = null)
+    {
+        $invoice = DB::table("tbl_customer")->selectRaw("sum(inv_overall_price - inv_payment_applied) as balance")
+                    ->join("tbl_customer_invoice","inv_customer_id","=","customer_id")
+                    ->where("inv_shop_id", $shop_id);
+        if($customer_id) $invoice->where("inv_customer_id", $customer_id);
+
+        $receive_payment = DB::table("tbl_customer")->selectRaw("sum(0) as balance")
+                    ->join("tbl_receive_payment","rp_customer_id","=","customer_id")
+                    ->where("rp_shop_id", $shop_id);
+        if($customer_id) $receive_payment->where("rp_customer_id", $customer_id);
+        
+        $balance = $invoice->pluck("balance") + $receive_payment->pluck("balance");
+
+        return $query->selectRaw("*, $balance as balance");
+    }
 }

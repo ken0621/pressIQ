@@ -60,6 +60,11 @@ class Purchasing_inventory_system
 
         return $data;
     }
+    public static function view_status($sir_id)
+    {
+        
+
+    }
     public static function get_warehouse_based_sir($sir_id)
     {
         $sir = Tbl_sir::truck()->where("sir_id",$sir_id)->first();

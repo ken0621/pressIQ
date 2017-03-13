@@ -16,8 +16,8 @@ class Tbl_manual_invoice extends Model
     }
     public static function scopeCustomer_invoice($query)
     {
-    	return $query->join("tbl_temp_customer_invoice","tbl_temp_customer_invoice.inv_id","=","tbl_manual_invoice.inv_id")
-                    ->join("tbl_customer","tbl_customer.customer_id","=","tbl_temp_customer_invoice.inv_customer_id");
+    	return $query->join("tbl_customer_invoice","tbl_customer_invoice.inv_id","=","tbl_manual_invoice.inv_id")
+                    ->join("tbl_customer","tbl_customer.customer_id","=","tbl_customer_invoice.inv_customer_id");
     }
 
 }

@@ -32,7 +32,9 @@ class UtilitiesController extends Member
         if($this->hasAccess("utilities-admin-accounts","access_page"))
         {
             $user_info     = $this->user_info();
-            $data["_list"] = Tbl_user::where("user_shop",$user_info->user_shop)->position()->where("position_rank",">",$user_info->position_rank)->get();
+            $data["_list"] = Tbl_user::where("user_shop",$user_info->user_shop)->position()->where("position_rank",">",$user_info->position_rank)->where("tbl_user.archived",0)->get();
+
+            $data["_list_archived"] = Tbl_user::where("user_shop",$user_info->user_shop)->position()->where("position_rank",">",$user_info->position_rank)->where("tbl_user.archived",1)->get();
             return view('member/utilities/admin_list', $data);
         }
         else
@@ -90,8 +92,68 @@ class UtilitiesController extends Member
         $user_info     = $this->user_info();
         $data["_rank"] = Tbl_user_position::where("position_shop_id", $user_info->user_shop)->where("position_rank", ">", $user_info->position_rank)->orderBy('position_id')->get(['position_id','position_name'])->toArray();
         $data["user"]  = Tbl_user::where("user_id",$user_id)->first();
+        $data["action"]= "/member/utilities/archive-user";
+        $data["title"] = "archived"; 
 
         return view("member.utilities.modal_archive_user", $data);
+    }
+
+    public function postArchiveUser()
+    { 
+        $edit_user                       = Tbl_user::where("user_id",Request::input("user_id"))->position()->first();
+        $insert["archived"]              = 1;
+        if($edit_user->position_rank <= $this->user_info()->position_rank)
+        {
+            $json['message']          = "You are not authorized to archive this user";
+            $json['response_status']  = "error-message";
+            $json['redirect_to']      = Redirect::back()->getTargetUrl();
+            return json_encode($json); 
+        }
+
+
+        if(!isset($json))
+        {
+            Tbl_user::where("user_id",Request::input("user_id"))->update($insert);
+            $json['message']          = "Succesfully update";
+            $json['response_status']  = "success-archived";
+            $json['redirect_to']      = Redirect::back()->getTargetUrl();
+            return json_encode($json); 
+        }
+    }
+
+    public function getModalRestoreUser()
+    {
+        $user_id       = Request::input("user_id");
+        $user_info     = $this->user_info();
+        $data["_rank"] = Tbl_user_position::where("position_shop_id", $user_info->user_shop)->where("position_rank", ">", $user_info->position_rank)->orderBy('position_id')->get(['position_id','position_name'])->toArray();
+        $data["user"]  = Tbl_user::where("user_id",$user_id)->first();
+        $data["action"]= "/member/utilities/restore-user";
+        $data["title"] = "restored"; 
+
+        return view("member.utilities.modal_archive_user", $data);
+    }
+
+    public function postRestoreUser()
+    { 
+        $edit_user                       = Tbl_user::where("user_id",Request::input("user_id"))->position()->first();
+        $insert["archived"]              = 0;
+        if($edit_user->position_rank <= $this->user_info()->position_rank)
+        {
+            $json['message']          = "You are not authorized to restore this user";
+            $json['response_status']  = "error-message";
+            $json['redirect_to']      = Redirect::back()->getTargetUrl();
+            return json_encode($json); 
+        }
+
+
+        if(!isset($json))
+        {
+            Tbl_user::where("user_id",Request::input("user_id"))->update($insert);
+            $json['message']          = "Succesfully update";
+            $json['response_status']  = "success-restored";
+            $json['redirect_to']      = Redirect::back()->getTargetUrl();
+            return json_encode($json); 
+        }
     }
 
     public function postCreateUser()
@@ -258,29 +320,6 @@ class UtilitiesController extends Member
 
             $json['message']          = "Succesfully update";
             $json['response_status']  = "success";
-            $json['redirect_to']      = Redirect::back()->getTargetUrl();
-            return json_encode($json); 
-        }
-    }
-
-    public function postArchiveUser()
-    { 
-        $edit_user                       = Tbl_user::where("user_id",Request::input("user_id"))->position()->first();
-        $insert["archived"]              = 1;
-        if($edit_user->position_rank <= $this->user_info()->position_rank)
-        {
-            $json['message']          = "You are not authorized to archive this user";
-            $json['response_status']  = "error-message";
-            $json['redirect_to']      = Redirect::back()->getTargetUrl();
-            return json_encode($json); 
-        }
-
-
-        if(!isset($json))
-        {
-            Tbl_user::where("user_id",Request::input("user_id"))->update($insert);
-            $json['message']          = "Succesfully update";
-            $json['response_status']  = "success-archived";
             $json['redirect_to']      = Redirect::back()->getTargetUrl();
             return json_encode($json); 
         }

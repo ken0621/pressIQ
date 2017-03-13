@@ -265,7 +265,7 @@ function customer_invoice(){
 
 	function action_convert_number()
 	{
-		$(".payment-applied").html(action_add_comma(parseFloat($(".payment-applied").html()).toFixed(2)));
+		// $(".payment-applied").html(action_add_comma(parseFloat($(".payment-applied").html()).toFixed(2)));
 	}
 
 	function action_add_comma(number)

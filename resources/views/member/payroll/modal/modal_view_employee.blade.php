@@ -194,8 +194,11 @@
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <button class="btn pull-right btn-primary">New Contract</button>
-                        <button class="btn btn-primary pull-right margin-lr-5">Contract List</button>
+                        
+                        <button class="btn btn-primary pull-right margin-lr-5 popup" link="/member/payroll/employee_list/modal_view_contract_list/{{$employee->payroll_employee_id}}" type="button">Company detail List</button>
+
+                        <button class="btn pull-right btn-primary popup" type="button" link="/member/payroll/employee_list/modal_create_contract/{{$employee->payroll_employee_id}}">New Company details</button>
+                        
                       </div>
                     </div>
                   </div>

@@ -243,6 +243,30 @@ class PayrollController extends Member
 		return view("member.payroll.modal.modal_view_employee", $data);
 	}
 
+	public function modal_view_contract_list($id)
+	{
+
+	}
+	public function modal_create_contract($id)
+	{
+		$data['employee_id'] = $id;
+		$data['employement_status'] = Tbl_payroll_employment_status::get();
+		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+		return view('member.payroll.modal.modal_create_contract',$data);
+	}
+
+	public function modal_save_contract()
+	{
+		$insert['payroll_employee_id'] 					= Request::input('payroll_employee_id');
+		$insert['payroll_department_id'] 				= Request::input('payroll_department_id');
+		$insert['payroll_jobtitle_id'] 					= Request::input('payroll_jobtitle_id');
+		$insert['payroll_employee_contract_date_hired'] = Request::input('payroll_employee_contract_date_hired');
+		$insert['payroll_employee_contract_date_end'] 	= Request::input('payroll_employee_contract_date_end');
+		$insert['payroll_group_id'] 					= Request::input('payroll_group_id');
+		$insert['payroll_employee_contract_status'] 	= Request::input('payroll_employee_contract_status');
+		Tbl_payroll_employee_contract::insert($insert);
+	}
+
 	/* EMPLOYEE END */
 
 	public function payroll_configuration()

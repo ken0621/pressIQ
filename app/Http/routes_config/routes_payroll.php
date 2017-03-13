@@ -21,6 +21,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/remove_employee_requirement','Member\PayrollController@remove_employee_requirement');
 	Route::any('/employee_list/modal_employee_save','Member\PayrollController@modal_employee_save');
 	Route::any('/employee_list/modal_employee_view/{id}','Member\PayrollController@modal_employee_view');
+	Route::any('/employee_list/modal_view_contract_list/{id}','Member\PayrollController@modal_view_contract_list');
+	Route::any('/employee_list/modal_create_contract/{id}','Member\PayrollController@modal_create_contract');
+	Route::any('/employee_list/modal_save_contract','Member\PayrollController@modal_save_contract');
 
 	/* EMPLOYEE END */
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');

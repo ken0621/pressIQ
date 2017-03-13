@@ -19,4 +19,5 @@ class Tbl_payroll_employee_contract extends Model
 	// [DATE] 			payroll_employee_contract_date_end
 	// [INTEGER] 		payroll_employee_contract_status
 	// [INTEGER] 		payroll_group_id
+	// [TINY INTEGER] 	payroll_employee_contract_archived
 }

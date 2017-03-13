@@ -21,12 +21,15 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer_invoice_line;
+use App\Models\Tbl_receive_payment;
+use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_unit_measurement_multi;
 use Session;
 use Crypt;
 use Redirect;
 use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_item;
+use Carbon\Carbon;
 
 class TabletPISController extends Member
 {
@@ -205,7 +208,7 @@ class TabletPISController extends Member
 	    $data["_customer"]      = Customer::getAllCustomer();
         $data['_account']       = Accounting::getAllAccount();
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
-        $data['action']         = "/member/customer/receive_payment/add";
+        $data['action']         = "/tablet/receive_payment/add_submit";
         $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"]);
 
         $id = Request::input('id');
@@ -215,11 +218,99 @@ class TabletPISController extends Member
             $data["_rcvpayment_line"]   = Tbl_receive_payment_line::where("rpline_rp_id", $id)->get();
             $data["_invoice"]           = Invoice::getAllInvoiceByCustomerWithRcvPymnt($data["rcvpayment"]->rp_customer_id, $data["rcvpayment"]->rp_id);
             // dd($data["_invoice"]);
-            $data['action']             = "/member/customer/receive_payment/update/".$data["rcvpayment"]->rp_id;
+            $data['action']             = "/tablet/receive_payment/update/".$data["rcvpayment"]->rp_id;
         }
 
         return view("member.receive_payment.receive_payment", $data);
 	}
+	public function add_receive_payment()
+	{
+
+		$insert["rp_shop_id"]           = $this->getShopId();
+        $insert["rp_customer_id"]       = Request::input('rp_customer_id');
+        $insert["rp_ar_account"]        = Request::input('rp_ar_account') or 0;
+        $insert["rp_date"]              = date("Y-m-d", strtotime(Request::input('rp_date')));
+        $insert["rp_total_amount"]      = convertToNumber(Request::input('rp_total_amount'));
+        $insert["rp_payment_method"]    = Request::input('rp_payment_method');
+        $insert["rp_memo"]              = Request::input('rp_memo');
+        $insert["date_created"]         = Carbon::now();
+
+        $rcvpayment_id  = Tbl_receive_payment::insertGetId($insert);
+
+        $txn_line = Request::input('line_is_checked');
+        foreach($txn_line as $key=>$txn)
+        {
+            if($txn == 1)
+            {
+                $insert_line["rpline_rp_id"]            = $rcvpayment_id;
+                $insert_line["rpline_reference_name"]   = Request::input('rpline_txn_type')[$key];
+                $insert_line["rpline_reference_id"]     = Request::input('rpline_txn_id')[$key];
+                $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
+
+                Tbl_receive_payment_line::insert($insert_line);
+            }
+        }
+
+        $button_action = Request::input('button_action');
+
+        $json["status"]         = "success";
+        $json["rcvpayment_id"]  = $rcvpayment_id;
+        $json["message"]        = "Successfully received payment";
+        $json["url"]            = "/tablet/receive_payment";
+
+        if($button_action == "save-and-edit")
+        {
+            $json["redirect"]    = "/tablet/receive_payment/add?id=".$rcvpayment_id;
+        }
+
+        return json_encode($json);
+	}
+	public function update_receive_payment($rcvpayment_id)
+    {
+        // dd(Request::input());
+
+        $update["rp_customer_id"]       = Request::input('rp_customer_id');
+        $update["rp_ar_account"]        = Request::input('rp_ar_account') or 0;
+        $update["rp_date"]              = date("Y-m-d", strtotime(Request::input('rp_date')));
+        $update["rp_total_amount"]      = convertToNumber(Request::input('rp_total_amount'));
+        $update["rp_payment_method"]    = Request::input('rp_payment_method');
+        $update["rp_memo"]              = Request::input('rp_memo');
+
+        Tbl_receive_payment::where("rp_id", $rcvpayment_id)->update($update);
+        Tbl_receive_payment_line::where("rpline_rp_id", $rcvpayment_id)->delete();
+
+        $txn_line = Request::input('line_is_checked');
+        foreach($txn_line as $key=>$txn)
+        {
+            if($txn == 1)
+            {
+                $insert_line["rpline_rp_id"]            = $rcvpayment_id;
+                $insert_line["rpline_reference_name"]   = Request::input('rpline_txn_type')[$key];
+                $insert_line["rpline_reference_id"]     = Request::input('rpline_txn_id')[$key];
+                $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
+
+                Tbl_receive_payment_line::insert($insert_line);
+                if($insert_line["rpline_reference_name"] == 'invoice')
+                {
+                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                }
+            }
+        }
+
+        $button_action = Request::input('button_action');
+
+        $json["status"]         = "success";
+        $json["rcvpayment_id"]  = $rcvpayment_id;
+        $json["message"]        = "Successfully updated payment";
+        $json["redirect"]            = "/tablet/receive_payment/add?id=".$rcvpayment_id;
+        
+        if($button_action == "save-and-new")
+        {
+            $json["redirect"]   = '/tablet/receive_payment/add';
+        }
+
+        return json_encode($json);
+    }
 	public function update_invoice_submit()
 	{
 		$invoice_id = Request::input("invoice_id");

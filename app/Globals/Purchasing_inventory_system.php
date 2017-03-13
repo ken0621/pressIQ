@@ -144,27 +144,35 @@ class Purchasing_inventory_system
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
     public static function get_sir_data($sir_id)
-    {
-        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.sir_id",$sir_id)->first();
+    {        
+        $price = "";
+        $data["sir"] = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.sir_id",$sir_id)->first();
 
-        $data->total_amount = "";
-            $item = Tbl_sir_item::where("sir_id",$data->sir_id)->get();
-            $price = "";
-            foreach ($item as $key2 => $value2)
-            {   
-                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();
-                $qty = 1;
-                if($unit_m != null)
-                {
-                    $qty = $unit_m->unit_qty;
-                }
-                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
-            }
+        $item = Tbl_sir_item::where("sir_id",$sir_id)->get();
+        foreach ($item as $key2 => $value2)
+        {   
+            $qty = UnitMeasurement::um_qty($value2->related_um_type);
+            $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
+        }
+        $data["sir"]->total_amount = $price; 
 
-            $data->total_amount = $price; 
+        $return = $data["sir"];
+        return $return->toArray();
+    }
+    public static function get_ilr_data($sir_id)
+    {        
+        $price = "";
+        $data["ilr"] = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.sir_id",$sir_id)->first();
 
-        return $data->toArray();
+        $item = Tbl_sir_item::where("sir_id",$sir_id)->get();
+        foreach ($item as $key2 => $value2)
+        {   
+            $price += $value2->sir_item_price *  $value2->physical_count;
+        }
+        $data["ilr"]->total_amount = $price; 
 
+        $return = $data["ilr"];
+        return $return->toArray();
     }
     public static function select_sir($shop_id = 0, $return = 'array',$srch_sir = '')
     {

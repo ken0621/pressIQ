@@ -379,23 +379,51 @@ class AuditTrail
                 }
                 $transaction_amount = currency("PHP",$amount);
             }
-            // else if($value->source == "load_out_form")
-            // {                
-            //     $transaction = Tbl_sir::truck()->saleagent()->where("sir_id",$value->source_id)->first();
+            else if($value->source == "pis_load_out_form")
+            {                
+                $transaction = Tbl_sir::saleagent()->where("sir_id",$value->source_id)->first();
+                $transaction_date = date("m/d/y", strtotime($transaction->created_at));
+                $transaction_client = $transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name;
 
-            //     $sub_transaction = Purchasing_inventory_system::get_sir_data($value->source_id);
-            //     $transaction_date = date("m/d/y", strtotime($transaction->created_at));
-            //     $transaction_client = "";
+                $old[$key] = unserialize($value->new_data);
+                $amount = 0;
+                if(isset($old))
+                {
+                    $amount = $old[$key]["total_amount"];
+                    $transaction_new_id = $old[$key]["sir_id"];
+                }
+                $transaction_amount = currency("PHP",$amount);
+            }
+            else if($value->source == "pis_stock_issuance_report")
+            {                
+                $transaction = Tbl_sir::saleagent()->truck()->where("sir_id",$value->source_id)->first();
+                $transaction_date = date("m/d/y", strtotime($transaction->created_at));
+                $transaction_client = $transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name;
 
-            //     $old[$key] = unserialize($value->new_data);
-            //     $amount = $sub_transaction["total_amount"];
-            //     if(isset($old))
-            //     {
-            //         $amount = $sub_transaction["total_amount"];
-            //         $transaction_new_id = $old[$key]["sir_id"];
-            //     }
-            //     $transaction_amount = currency("PHP",$amount);
-            // }
+                $old[$key] = unserialize($value->new_data);
+                $amount = 0;
+                if(isset($old))
+                {
+                    $amount = $old[$key]["total_amount"];
+                    $transaction_new_id = $old[$key]["sir_id"];
+                }
+                $transaction_amount = currency("PHP",$amount);
+            }
+            else if($value->source == "pis_incoming_load_report")
+            {                
+                $transaction = Tbl_sir::saleagent()->truck()->where("sir_id",$value->source_id)->first();
+                $transaction_date = date("m/d/y", strtotime($transaction->created_at));
+                $transaction_client = $transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name;
+
+                $old[$key] = unserialize($value->new_data);
+                $amount = 0;
+                if(isset($old))
+                {
+                    $amount = $old[$key]["total_amount"];
+                    $transaction_new_id = $old[$key]["sir_id"];
+                }
+                $transaction_amount = currency("PHP",$amount);
+            }
 
 
             $audit_trail[$key]->user = $value->user_first_name." ".$value->user_last_name;

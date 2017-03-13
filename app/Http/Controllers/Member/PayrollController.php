@@ -33,7 +33,9 @@ class PayrollController extends Member
 
     public function employee_list()
 	{
-		return view('member.payroll.employeelist');
+
+		$data['_active'] = Tbl_payroll_employee_basic::selemployee(Self::shop_id())->get();
+		return view('member.payroll.employeelist', $data);
 	}   
 
 	public function modal_create_employee()
@@ -227,6 +229,18 @@ class PayrollController extends Member
 
 		return json_encode($return);
 
+	}
+
+	public function modal_employee_view($id)
+	{
+		$data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+		$data['employement_status'] = Tbl_payroll_employment_status::get();
+		$data['tax_status'] = Tbl_payroll_tax_status::get();
+		$data['civil_status'] = Tbl_payroll_civil_status::get();
+		$data['_country'] = Tbl_country::orderBy('country_name')->get();
+		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+		$data['employee'] = Tbl_payroll_employee_basic::where('payroll_employee_id',$id)->first();
+		return view("member.payroll.modal.modal_view_employee", $data);
 	}
 
 	/* EMPLOYEE END */

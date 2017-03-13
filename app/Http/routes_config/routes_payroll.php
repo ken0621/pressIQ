@@ -20,6 +20,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/employee_updload_requirements','Member\PayrollController@employee_updload_requirements');
 	Route::any('/employee_list/remove_employee_requirement','Member\PayrollController@remove_employee_requirement');
 	Route::any('/employee_list/modal_employee_save','Member\PayrollController@modal_employee_save');
+	Route::any('/employee_list/modal_employee_view/{id}','Member\PayrollController@modal_employee_view');
 
 	/* EMPLOYEE END */
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');

@@ -8,7 +8,7 @@ use App\Globals\Customer;
 use App\Models\Tbl_User;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_unit_measurement;
-
+use Request;
 class DashboardController extends Member
 {
 
@@ -30,5 +30,18 @@ class DashboardController extends Member
 
 		// dd($data['_category']);
 		return view('member.dashboard.dashboard', $data);
+	}
+
+	public function change_warehouse()
+	{
+		if(Request::input("change_warehouse"))
+		{
+			$data = $this->save_warehouse_id(Request::input("change_warehouse"));
+			return json_encode($data);
+		}
+		else
+		{
+			dd("Error 404");
+		}
 	}
 }

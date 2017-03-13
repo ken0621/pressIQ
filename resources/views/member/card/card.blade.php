@@ -10,7 +10,7 @@
 			<span class="website">{{ URL::to('/') }}</span>
 			<div class="logo"><img style="width: 200px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/philtech-logo.png"></div>
 		</div>
-		<div class="mid-container clearfix" style="margin: 0; height: 149px;"><img style="display: block; width: 380px; margin: auto;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/{{ $color }}-logo.png"></div>
+		<div class="mid-container clearfix" style="margin: 0; height: 149px;"><img style="display: block; width: 380px; margin-left: 15px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/{{ $color }}-logo.png"></div>
 		<div class="bottom-container clearfix" style="margin-top: -7.5px;">
 			<div class="member">
 				<div class="member-name">{{ $name }}</div>

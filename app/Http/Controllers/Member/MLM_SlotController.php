@@ -633,6 +633,7 @@ class MLM_SlotController extends Member
     }
     public static function simulate($code)
     {
+        die('no_Accesso_for_pavor');
         // dd($code);
         // return Mlm_compute::reset_all_slot();
         if($code =='binary')

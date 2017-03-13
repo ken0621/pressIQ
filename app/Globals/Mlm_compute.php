@@ -305,7 +305,7 @@ class Mlm_compute
     public static function simulate_perfect()
     {
         $slot_no = 5000;
-        $downline_count = 5;
+        $downline_count = 500;
         $shop_id = 5;
         Mlm_compute::reset_all_slot();
         Mlm_compute::create_slot_simulate($slot_no, $downline_count);

@@ -985,6 +985,15 @@ class Mlm_complan_manager
 
         $slot_sponsor = Tbl_mlm_slot::where('slot_id', $slot_info->slot_sponsor)->membership()->first();
         /* CHECK IF SLOT RECIPIENT EXIST */
+
+        $settings_combination = Tbl_mlm_leadership_settings::where('shop_id', $slot_info->shop_id)
+                                    ->where('leadership_settings_start', '!=', 0)
+                                    ->where('leadership_settings_end', '!=', 0)
+                                    ->where('leadership_settings_earnings', '!=', 0)
+                                    ->where('leadership_settings_required_points', '!=', 0)
+                                    ->get()
+                                    ->toArray();
+        // if(count($settings_combination) >= )                     
         if($slot_sponsor)
         {
             if($slot_info->membership_points_leadership != null || $slot_info->membership_points_leadership != 0)

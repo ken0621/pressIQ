@@ -28,7 +28,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <select class="drop-down-customer" name="rp_customer_id" required>
-                                    @include("member.load_ajax_data.load_customer")
+                                    @include("member.load_ajax_data.load_customer", ['customer_id' => $rcvpayment->rp_customer_id or ''])
                                 </select>
                             </div>
                             <div class="col-sm-4">
@@ -85,9 +85,18 @@
                                         </tr>
                                     </thead>
                                     <tbody class="tbody-item">
-                                    @if(isset($rcvpayment))
+                                    @if(isset($rcvpaymnet))
                                         @include('member.receive_payment.load_receive_payment_items');
-                                    @endif
+                                    @else
+                                        <tr>
+                                            <td class="text-center"><input type="checkbox" ></td>
+                                            <td></td>
+                                            <td class="text-right">11/26/2016</td>
+                                            <td><input type="text" class="text-right" disabled /></td>
+                                            <td><input type="text" class="text-right" disabled /></td>
+                                            <td><input class="text-right" type="text" name=""/></td>
+                                        </tr>   
+                                    @endif 
                                     </tbody>
                                 </table>
                             </div>

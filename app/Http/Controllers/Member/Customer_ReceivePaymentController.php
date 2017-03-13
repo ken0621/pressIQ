@@ -35,7 +35,8 @@ class Customer_ReceivePaymentController extends Member
     }
 
     public function index()
-    {
+    {        
+        $data["c_id"] = Request::input("customer_id");
         $data["_customer"]      = Customer::getAllCustomer();
         $data['_account']       = Accounting::getAllAccount();
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();

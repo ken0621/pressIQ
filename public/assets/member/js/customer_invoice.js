@@ -259,13 +259,13 @@ function customer_invoice(){
 		$(".total-amount").html(action_add_comma(total.toFixed(2)));
 		$(".total-amount-input").val(total.toFixed(2));
 
-		$(".balance-due").html(balance_due.toFixed(2));
+		$(".balance-due").html(action_add_comma(balance_due.toFixed(2)));
 
 	}
 
 	function action_convert_number()
 	{
-		// $(".payment-applied").html(action_add_comma(parseFloat($(".payment-applied").html()).toFixed(2)));
+		$(".payment-applied").html(action_add_comma(parseFloat($(".payment-applied").html()).toFixed(2)));
 	}
 
 	function action_add_comma(number)

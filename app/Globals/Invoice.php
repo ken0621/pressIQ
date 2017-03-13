@@ -140,5 +140,17 @@ class Invoice
     {
         return  Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)->rcvPayment($rcv_payment_id)->orderBy("inv_id")->get()->toArray();
     }
+
+    public static function updateAmountApplied($inv_id)
+    {
+        $payment_applied = Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->where("inv_id",$inv_id)->pluck("amount_applied");
+        $overall_price   = Tbl_customer_invoice::where("inv_id", $inv_id)->pluck("inv_overall_price"); 
+        
+        if($payment_applied == $overall_price)  $data["inv_is_paid"] = 1;
+        else                                    $data["inv_is_paid"] = 0;
+        $data["inv_payment_applied"] = $payment_applied;
+
+        Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
+    }
   
 }

@@ -12,7 +12,7 @@ class Tbl_customer extends Model
     
     public function scopeTransaction($query, $shop_id, $customer_id = null)
     {
-        $invoice = DB::table("tbl_customer")->selectRaw("inv_date as date, 'Invoice' as type, inv_id as no, inv_due_date as due_date, 'balance' as balance, inv_overall_price as total, 'status' as status, date_created, 'invoice' as reference_name ")
+        $invoice = DB::table("tbl_customer")->selectRaw("inv_date as date, 'Invoice' as type, inv_id as no, inv_due_date as due_date, inv_overall_price - inv_payment_applied as balance, inv_overall_price as total, 'status' as status, date_created, 'invoice' as reference_name ")
                     ->join("tbl_customer_invoice","inv_customer_id","=","customer_id")
                     ->where("inv_shop_id", $shop_id);
         if($customer_id) $invoice->where("inv_customer_id", $customer_id);

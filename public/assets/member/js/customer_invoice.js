@@ -259,7 +259,7 @@ function customer_invoice(){
 		$(".total-amount").html(action_add_comma(total.toFixed(2)));
 		$(".total-amount-input").val(total.toFixed(2));
 
-		$(".balance-due").html(balance_due.toFixed(2));
+		$(".balance-due").html(action_add_comma(balance_due.toFixed(2)));
 
 	}
 

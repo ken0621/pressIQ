@@ -8,6 +8,8 @@ function modal_create_employee()
 	{
 		file_requirement_change_event();
 		remove_requirements();
+		select_change_action();
+		select_change_event();
 	}
 
 	function file_requirement_change_event()
@@ -46,14 +48,13 @@ function modal_create_employee()
 			ajax.addEventListener("load", function(event)
 			{
 				var json = JSON.parse(event.target.responseText);
-				console.log(json);
 				progress_container.addClass("display-none");
 				progress_div.css("width","0%");
 				removefile.removeClass("display-none");
 				removefile.attr("data-content",json.data.payroll_requirements_id);
 				a_href.attr("href",json.data.path);
-				requirement_input.val(json.data.path);
-				checkbox.prop(":checked", true);
+				requirement_input.val(json.data.payroll_requirements_id);
+				checkbox.prop("checked", true);
 			}, false);
 
 			/* on error */
@@ -83,6 +84,48 @@ function modal_create_employee()
 		});
 	}
 
+
+	function select_change_event()
+	{
+		// jobtitle-select
+		$(".department-select").unbind("change");
+		$(".department-select").bind("change", function()
+		{
+			select_change_action();
+		});
+	}
+
+	function select_change_action()
+	{
+		var payroll_department_id = $(".department-select").val();
+		var pre_data = '<option value="">...loading job title</option>';
+		$(".jobtitle-select").html(pre_data);
+		$.ajax(
+			{
+				url 	: 	"/member/payroll/jobtitlelist/get_job_title_by_department",
+				type 	: 	"POST",
+				data 	: 	{
+					payroll_department_id:payroll_department_id,
+					_token:misc('_token')
+				},
+				success : 	function(result)
+				{
+					var json = JSON.parse(result);
+
+					var html = '<option value="">Select Job Title</option>';
+
+					$(json).each(function(index, data)
+					{
+						html += '<option value="'+data.payroll_jobtitle_id+'">'+data.payroll_jobtitle_name+'</option>';
+					});
+					$(".jobtitle-select").html(html);
+				},
+				error 	: 	function(err)
+				{
+					error_function();
+				}
+			});
+	}
 
 	function remove_requirements()
 	{
@@ -118,7 +161,9 @@ function modal_create_employee()
 						label.removeClass("display-none");
 						removefile.addClass("display-none");
 						removefile.html(original_html);
+						checkbox.prop("checked", false);
 						remove_requirements();
+
 						file_requirement_change_event();
 					},
 					error 	: 	function(err)

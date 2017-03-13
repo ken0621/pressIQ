@@ -297,6 +297,14 @@
     padding-left:1px !important;
     padding-right:1px !important;
 }
+.padding-l-1
+{
+    padding-left: 1px !important;
+}
+.padding-r-1
+{
+    padding-right: 1px !important;
+}
 .padding-lr-2{
     padding-left:2px !important;
     padding-right:2px !important;

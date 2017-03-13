@@ -5,6 +5,7 @@
   </div>
   <div class="modal-body modallarge-body-layout background-white">   
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
+    <input type="hidden" name="customer_status" value="{{$customer_status or 'approved'}}">
     <div class="form-horizontal">
     <div class="form-group">
       <div class="col-md-6">

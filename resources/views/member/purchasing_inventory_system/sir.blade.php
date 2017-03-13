@@ -7,17 +7,16 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Stock Issuance Report and Load Out Form</span>
+                <span class="page-title">Stock Issuance Report</span>
                 <small>
-                    List of SIR and LOF
+                    List of SIR
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/pis/sir/create" >Create Load Out Form</a>
         </div>
     </div>
 </div>
 <!-- TEMPORARY -->
-<div class="panel panel-default panel-block panel-title-block" id="top">
+<!-- <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div class="form-group">
             <div class="col-md-4">
@@ -28,15 +27,13 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 <!-- END TEMPORARY -->
 
 <!-- NO PRODUCT YET -->
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
         <li class="active cursor-pointer all-sir"><a class="cursor-pointer" onclick="select('all')" data-toggle="tab" href="#all"><i class="fa fa-star"></i> All</a></li>
-        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(0,0,'',0)" data-toggle="tab" href="#new"><i class="fa fa-reorder"></i> Load Out Form</a></li>
-        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(1,0,'',0)" data-toggle="tab" href="#open"><i class="fa fa-folder-open"></i> Open SIR</a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(1,0,'',1)" data-toggle="tab" href="#sync"><i class="fa fa-refresh"></i> Currently Synced</a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(2,0,'',1)" data-toggle="tab" href="#closed"><i class="fa fa-window-close"></i> Closed SIR</a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer" onclick="select('',1,'',0)" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived SIR</a></li>
@@ -80,37 +77,21 @@
                                           <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             Action <span class="caret"></span>
                                           </button>
+                                            <ul class="dropdown-menu dropdown-menu-custom"> 
+                                               <li><a size="lg" link="/member/pis/sir/view_status/{{$sir->sir_id}}/" class="popup">View Status</a></li>
                                           @if($sir->sir_archived == 1)
-                                            <ul class="dropdown-menu dropdown-menu-custom">
                                                 <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/restore" class="popup">Restore SIR</a></li>
-                                            </ul>
                                           @else
-                                              @if($sir->sir_status == 0)
-                                              <ul class="dropdown-menu dropdown-menu-custom">
+                                              @if($sir->lof_status == 3)
                                                 <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/lof" class="popup">View Load Out Form</a></li>
                                                 <li><a href="/member/pis/sir/edit/{{$sir->sir_id}}">Edit Load Out Form</a></li>
                                                 <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/archived" class="popup">Archive L.O.F</a></li>
-                                                <li><a size="md" link="/member/pis/sir/open/{{$sir->sir_id}}/open" class="popup">OPEN THIS AS SIR</a></li>
-                                              </ul>
-                                              @elseif($sir->ilr_status == 2)                                        
-                                              <ul class="dropdown-menu dropdown-menu-custom">
+                                              @elseif($sir->ilr_status == 2)                  
                                                 <li><a size="lg" link="/member/pis/ilr/view/{{$sir->sir_id}}" class="popup">View ILR</a></li>
-                                              </ul>
-                                              @elseif($sir->is_sync == 1 )
-                                              <ul class="dropdown-menu dropdown-menu-custom">                                                  
-                                                <li><a size="lg" link="/tablet/sir_inventory/{{$sir->sir_id}}" class="popup">View Inventory</a></li>
-                                                <li><a href="/member/pis/manual_invoice/add/{{$sir->sir_id}}">Create Manual Invoices</a></li>
-                                              </ul>
-                                              @elseif($sir->sir_status == 1)                                          
-                                              <ul class="dropdown-menu dropdown-menu-custom">
+                                              @elseif($sir->sir_status == 1)                   
                                                 <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/sir" class="popup">View SIR</a></li>
-                                              </ul>
-                                              @elseif($sir->ilr_status == 1)                                          
-                                              <ul class="dropdown-menu dropdown-menu-custom">
-                                                <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/sir" class="popup">View SIR</a></li>
-                                                <li><a href="/member/pis/ilr/{{$sir->sir_id}}">Processed ILR</a></li>
-                                              </ul>
                                               @endif
+                                            </ul>
                                           @endif
                                         </div>
                                     </td>

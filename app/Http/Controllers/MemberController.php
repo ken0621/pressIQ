@@ -13,6 +13,21 @@ class MemberController extends Controller
 		echo "hello world";
 	}
 
+    public function register()
+    {
+        return view("mlm.register.register");
+    }
+
+    public function payment()
+    {
+        return view("mlm.register.payment");
+    }
+
+    public function package()
+    {
+        return view("mlm.register.package");
+    }
+
     public function barcode( $filepath="", $text="0", $size="20", $orientation="horizontal", $code_type="code128", $print=false, $SizeFactor=1 ) 
     {
         $code_string = "";

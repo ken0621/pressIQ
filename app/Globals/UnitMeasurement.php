@@ -37,6 +37,16 @@ class UnitMeasurement
                                     ->where("um_archived",0)
                                     ->get();
     } 
+    public static function um_qty($um_id)
+    {
+        $um_info = UnitMeasurement::um_info($um_id);
+        $return_qty = 1;
+        if($um_info != null)
+        {
+            $return_qty = $um_info->unit_qty;
+        }
+        return $return_qty;
+    }
     public static function um_view($qty, $um_base_id = "", $um_issued_id = "")
     {
         // if($um_issued_id == "")

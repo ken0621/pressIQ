@@ -42,9 +42,6 @@
 
     <link rel="stylesheet" href="/assets/external/jquery_css/jquery-ui.css">
 
-
-    
-
     <style type="text/css">
     a
     {

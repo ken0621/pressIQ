@@ -4,6 +4,8 @@ namespace App\Globals;
 use App\Globals\Accounting;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_customer_invoice_line;
+use App\Models\Tbl_temp_customer_invoice;
+use App\Models\Tbl_temp_customer_invoice_line;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 

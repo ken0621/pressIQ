@@ -27,7 +27,7 @@ function submit_done(data)
     {
         toastr.success("Success");
         $('#global_modal').modal('toggle');
-        $(".sir_container").load("/member/pis/sir .sir_container");
+        $(".sir_container").load("/member/pis/lof .sir_container");
         $(".all-sir").addClass("active");
         $(".sir-class").removeClass("active");
     }

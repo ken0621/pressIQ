@@ -53,7 +53,6 @@ class Tbl_payroll_employee_basic extends Model
 			  ->where('contract.payroll_employee_contract_date_end','>=',$date)
 			  ->where('company.shop_id',$shop_id);
 
-
 			  if($company_id != 0)
 			  {
 			  	$query->where('company.payroll_company_id',$company_id);

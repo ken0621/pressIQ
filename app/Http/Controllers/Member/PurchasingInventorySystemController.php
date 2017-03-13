@@ -415,6 +415,8 @@ class PurchasingInventorySystemController extends Member
     }
     public function sir()
     {     
+        // $sir_data = Purchasing_inventory_system::view_status(1);
+        
         if(Request::input("status") != null)
         {
             if(Request::input("status") != 'all')

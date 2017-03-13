@@ -62,7 +62,14 @@ class Purchasing_inventory_system
     }
     public static function view_status($sir_id)
     {
-        
+        $sir_data["sir"] = Tbl_sir::where("sir_id",$sir_id)->first();
+
+        if($sir_data["sir"]->ilr_status == 2 && $sir_data["sir"]->sir_status == 1 )
+        {
+
+        }
+
+        dd($sir_data);
 
     }
     public static function get_warehouse_based_sir($sir_id)

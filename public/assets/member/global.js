@@ -19,7 +19,7 @@ function global()
         add_event_global_submit();
         add_event_global_onclose_popup();
         add_event_overlay_fix();
-
+        select_current_warehouse();
         //arcy
         add_event_global_submit_for_page();
     }
@@ -276,6 +276,31 @@ function add_event_overlay_fix()
         setTimeout(function() {
             $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
         }, 0);
+    });
+}
+
+function select_current_warehouse()
+{
+    $(".warehouse_loader_container").on("change",".select_current_warehouse",function()
+    {
+        $.ajax({
+            url:"/member/change_warehouse",
+            dataType:"json",
+            data: {_token: $(".token").val(), change_warehouse: $(this).val()},
+            type:"post",
+            success: function(data)
+            {
+                if(data.response == "success")
+                {
+                    // $('.select_current_warehouse').load(document.URL +  ' .select_current_warehouse');
+                    $('.warehouse-access-name').load(document.URL +  ' .warehouse-access-name');
+                }
+            },
+            error: function()
+            {
+
+            }
+        })
     });
 }
 

@@ -171,6 +171,9 @@
                 <i class="icon-reorder"></i>
             </a>
             <section class="user-menu-wrapper">
+                <a href="javascript:;" data-expand=".warehouse-view" class="warehouse-access" style="min-height: 50px; margin-top:25px;">
+                    <span class="warehouse-access-name">{{$current_warehouse ? "Warehouse: ".$current_warehouse->warehouse_name : "No Warehouse"}}</span>
+                </a>
                 <a href="javascript:;" data-expand=".messages-view" class="messages-access">
                     <i class="icon-envelope-alt"></i>
                 </a>
@@ -179,6 +182,26 @@
                     <div class="menu-counter">6</div>
                 </a>
             </section>
+            <div class="warehouse_loader_container">
+                <div class="panel panel-default nav-view warehouse-view">
+                    <div class="arrow user-menu-arrow"></div>
+                    <div class="panel-heading">
+                        <!-- <i class="icon-envelope-alt"></i> -->
+                        <span>Choose a warehouse</span>
+                        <a href="javascript:;" class="close-user-menu"><i class="icon-remove"></i></a>
+                        <select class="form-control select_current_warehouse">
+                            @foreach($warehouse_list as $solo_warehouse)
+                                @if($current_warehouse)
+                                    <option value="{{$solo_warehouse->warehouse_id}}" {{$current_warehouse->warehouse_id == $solo_warehouse->warehouse_id ? "selected" : ""}}>{{$solo_warehouse->warehouse_name}}</option>
+                                @else
+                                    <option value="{{$solo_warehouse->warehouse_id}}"> {{$solo_warehouse->warehouse_name}}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                        <div class="col-md-12" style="min-height:25px;"></div>
+                    </div>
+                </div>
+            </div>
             <div class="panel panel-default nav-view messages-view">
                 <div class="arrow user-menu-arrow"></div>
                 <div class="panel-heading">

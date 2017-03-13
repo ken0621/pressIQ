@@ -6,12 +6,143 @@ use App\Globals\Pdf_global;
 use PDF;
 use App;
 use App\Models\Tbl_mlm_discount_card_log;
+use App\Models\Tbl_country;
+use App\Models\Tbl_shop;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_membership;
+use App\Models\Tbl_membership_package;
 class MemberController extends Controller
 {
+    public static $shop_id;
+    public static $lead;
+    public function __construct()
+    {   
+        $domain = Request::url();
+        $check_expole = explode('//', $domain);
+        if(count($check_expole) == 2 )
+        {
+            $check_expole_2 = explode('.', $check_expole[1]);
+            $key = $check_expole_2[0];
+            $check_domain = Tbl_shop::where('shop_key', $key)->first();
+            $lead_e = null;
+            if($check_domain == null)
+            {
+                $check_domain = Tbl_customer::where('mlm_username', $key)->first();
+                $lead_e = $check_domain;
+            }
+            
+        }
+        if($check_domain != null)
+        {
+             Self::$shop_id = $check_domain->shop_id;
+             if($lead_e != null)
+             {
+                Self::$lead = $lead_e;
+             }
+             else
+             {
+                Self::$lead = null;
+             }
+        }
+        else
+        {
+            $domain = Request::url();
+            $check_expole = explode('.', $domain);
+            if(isset($check_expole[2]))
+            {
+                $check_expole_2 = explode('/', $check_expole[2]);
+                if(isset($check_expole_2[0]))
+                {
+                    $shop_domain = $check_expole[1] . '.' . $check_expole_2[0];
+                    $shop = Tbl_shop::where('shop_domain', $shop_domain)->first();
+                    if($shop != null)
+                    {
+                        Self::$shop_id = $shop->shop_id;
+                    }
+
+                }
+            }
+            else
+            {
+
+                if(isset($check_expole[1]))
+                {
+
+                    $check_expole_2 = explode('/', $check_expole[1]);
+                    if(isset($check_expole_2[0]))
+                    {
+                        $check_expole_slash = explode('//', $check_expole[0]);
+                        if(count($check_expole_slash) >= 2)
+                        {
+                          $check_expole[0] = $check_expole_slash[1];  
+                        }
+                        $shop_domain = $check_expole[0] . '.' . $check_expole_2[0];
+                        $shop = Tbl_shop::where('shop_domain', $shop_domain)->first();
+                        if($shop != null)
+                        {
+                            Self::$shop_id = $shop->shop_id;
+                        }
+                    }   
+                }
+            }
+        }
+    }
+
 	public function index()
 	{
 		echo "hello world";
 	}
+    public function register()
+    {
+        $data['country'] = Tbl_country::get();
+        return view("mlm.register.register", $data);
+    }
+    public function register_post()
+    {
+        return $_POST;
+    }
+    public function payment()
+    {
+        return view("mlm.register.payment");
+    }
+
+    public function package()
+    {
+        // dd(Self::$shop_id);
+        $data['membership'] = Tbl_membership::where('shop_id', Self::$shop_id)->get();
+        $data['package'] = [];
+        foreach($data['membership'] as $key => $value)
+        {
+            // return $value->membership_id;
+            $data['package'][$key] = Tbl_membership_package::where('membership_id', $value->membership_id)->get();
+        }
+        return view("mlm.register.package", $data);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function barcode( $filepath="", $text="0", $size="20", $orientation="horizontal", $code_type="code128", $print=false, $SizeFactor=1 ) 
     {

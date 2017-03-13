@@ -22,7 +22,6 @@ class MlmDashboardController extends Mlm
     public function index()
     {
     	// return Self::show_maintenance();
-
         $data["page"] = "Dashboard";
         if(Self::$slot_id != null)
         {

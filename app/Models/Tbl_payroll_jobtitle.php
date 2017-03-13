@@ -10,6 +10,14 @@ class Tbl_payroll_jobtitle extends Model
 	protected $primaryKey = "payroll_jobtitle_id";
     public $timestamps = false;
 
+
+    /* REFERENCE COLUMN NAME */
+    // [PRIMARY KEY]    payroll_jobtitle_id
+    // [INTEGER]        shop_id
+    // [INTEGER]        payroll_jobtitle_department_id
+    // [VARCHAR]        payroll_jobtitle_name
+    // [TINYINTEGER]    payroll_jobtitle_archived
+
     public function scopesel($query, $shop_id = 0, $archived = 0)
     {
     	$query->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_jobtitle.payroll_jobtitle_department_id')

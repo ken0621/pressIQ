@@ -36,4 +36,5 @@
 @endsection
 
 @section('script')
+<script type="text/javascript" src="/assets/member/js/payroll/employeelist.js"></script>
 @endsection

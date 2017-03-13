@@ -154,17 +154,6 @@
         </div>
     </div>
 </div>
-<div class="panel panel-default panel-block panel-title-block">
-    <div class="panel-body form-horizontal">
-        <div class="form-group tab-content panel-body sir_container">
-            <div id="all" class="tab-pane fade in active">
-                <div class="form-group order-tags">
-                    
-                </div>                
-            </div>
-        </div>    
-    </div>
-</div>
 
 
 @endsection

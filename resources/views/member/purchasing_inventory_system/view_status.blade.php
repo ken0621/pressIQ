@@ -20,7 +20,8 @@
                 <h3>Plate Number: {{$sir->plate_number}}</h3>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group" style="font-size: 20px">
+            {!! $sir->gen_status !!}
        <!--  <div class="col-md-12"><h3>Select Item</h3></div>        
             <div class="col-md-3" >
                 <select class="form-control">
@@ -33,19 +34,7 @@
                     <input type="search" name="" class="form-control" placeholder="Start typing item">
                 </div>
             </div>
-        </div> -->
-        <div class="row clearfix draggable-container">
-            <div class="table-responsive">
-             <div class="col-md-12">
-                    <div class="row clearfix draggable-container ilr-container">
-                        <div class="table-responsive">
-                            <div class="col-sm-12">
-                            </div>
-                        </div>
-                    </div>
-                </div>   
-            </div>
-        </div>    
+        </div> -->    
     </div>
 </div>
 

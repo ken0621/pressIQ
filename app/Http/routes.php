@@ -1,5 +1,7 @@
 <?php
 
+// Route::any('/member/instant_add_slot', 'Member\MLM_SlotController@instant_add_slot');
+
 Route::any('/member/raymond', 'Member\RaymondController@index'); //RAYMOND
 
 /* FRONTEND - SHIGUMA RIKA */
@@ -57,7 +59,12 @@ Route::any("/member/page/store_information/update_submit","Member\ManageStoreInf
 Route::any('/member/developer/status', 'Member\Developer_StatusController@index'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/rematrix', 'Member\Developer_RematrixController@index'); //ERWIN GUEVARRA
 Route::any('/member/developer/documentation', 'Member\Developer_DocumentationController@index'); //EVERYONE
+
+Route::any('/member/developer/re_entry', 'Member\Developer_ReentryController@index'); //EVERYONE
+Route::post('/member/developer/re_entry/instant_add_slot', 'Member\Developer_ReentryController@instant_add_slot'); //EVERYONE
+
 Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
+
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */
@@ -135,6 +142,7 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 
 
 Route::get('/member', 'Member\DashboardController@index');
+Route::post('/member/change_warehouse', 'Member\DashboardController@change_warehouse');
 Route::any('/member/setup', 'Member\SetupController@index');
 Route::any('/member/product/service_list', 'Member\Product_ServiceListController@index'); //GUILLERMO TABLGIAN
 Route::any('/member/product/list', 'Member\ProductController@index');

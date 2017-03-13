@@ -89,7 +89,8 @@ class Mlm_compute
                         }
                         else if($tbl_mlm_binary_setttings->binary_settings_auto_placement == "auto_balance")
                         {
-                            $a = Mlm_tree::auto_place_slot_binary_auto_balance($slot_info);
+                            // $a = Mlm_tree::auto_place_slot_binary_auto_balance($slot_info);
+                            $a = Mlm_tree::auto_place_slot_binary_auto_balance_revised($slot_info);
                         }
                     }
                 }
@@ -302,12 +303,13 @@ class Mlm_compute
     }
     public static function simulate_perfect()
     {
+        ini_set('max_execution_time', 60000);
         $slot_no = 5000;
-        $downline_count = 5000;
+        $downline_count = 500;
         $shop_id = 5;
         Mlm_compute::reset_all_slot();
         Mlm_compute::create_slot_simulate($slot_no, $downline_count);
-        // Mlm_compute::computer($shop_id);
+        Mlm_compute::computer($shop_id);
 
         $d['all_slot'] = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
         ->orderBy('tbl_mlm_slot.slot_id')->membership()->membership_points()->customer()

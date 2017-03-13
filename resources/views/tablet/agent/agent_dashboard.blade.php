@@ -134,7 +134,7 @@
                                       </button>
                                         <ul class="dropdown-menu dropdown-menu-custom">
                                             <li><a href="/tablet/create_invoices/add?sir_id={{Session::get('selected_sir')}}&customer_id={{$customer->customer_id}}">Create Invoice</a></li>
-                                            <li><a >Receive Payment</a></li>
+                                            <li><a href="/tablet/receive_payment/add?customer_id={{$customer->customer_id}}" >Receive Payment</a></li>
                                         </ul> 
                                     </div>                                   
                                 </td>

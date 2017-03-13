@@ -6,6 +6,7 @@ use App\Models\Tbl_shop;
 use App\Models\Tbl_audit_trail;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_purchase_order;
+use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_item;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer;
@@ -380,7 +381,7 @@ class AuditTrail
             }
             // else if($value->source == "load_out_form")
             // {                
-            //     $transaction = Tbl_sir::where("sir_id",$value->source_id)->first();
+            //     $transaction = Tbl_sir::truck()->saleagent()->where("sir_id",$value->source_id)->first();
 
             //     $sub_transaction = Purchasing_inventory_system::get_sir_data($value->source_id);
             //     $transaction_date = date("m/d/y", strtotime($transaction->created_at));
@@ -390,7 +391,7 @@ class AuditTrail
             //     $amount = $sub_transaction["total_amount"];
             //     if(isset($old))
             //     {
-            //         $amount = $old[$key]["total_amount"];
+            //         $amount = $sub_transaction["total_amount"];
             //         $transaction_new_id = $old[$key]["sir_id"];
             //     }
             //     $transaction_amount = currency("PHP",$amount);

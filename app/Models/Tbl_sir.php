@@ -15,7 +15,7 @@ class Tbl_sir extends Model
     }
     public function scopeSaleagent($query)
     {
-    	return $query->join("tbl_employee","tbl_employee.employee_id","=","tbl_sir.sales_agent_id");
+    	return $query->leftjoin("tbl_employee","tbl_employee.employee_id","=","tbl_sir.sales_agent_id");
     }
     public function scopeSir_item($query)
     {

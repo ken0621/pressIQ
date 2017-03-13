@@ -266,6 +266,9 @@ class PurchasingInventorySystemController extends Member
             $data = Purchasing_inventory_system::return_stock($sir_id);
         }
 
+        $ilr = Purchasing_inventory_system::get_ilr_data($sir_id);
+        AuditTrail::record_logs("Saved","pis_incoming_load_report",$sir_id,"",serialize($ilr));
+
         return json_encode($data);
     }
     public function ilr_pdf($id)
@@ -681,7 +684,7 @@ class PurchasingInventorySystemController extends Member
                 $data["status"] = "success-lof";
 
                 $sir_data = Purchasing_inventory_system::get_sir_data($sir_id);
-                AuditTrail::record_logs("Added","load_out_form",$sir_id,"",serialize($sir_data));
+                AuditTrail::record_logs("Added","pis_load_out_form",$sir_id,"",serialize($sir_data));
 
             }
 
@@ -819,7 +822,7 @@ class PurchasingInventorySystemController extends Member
                 $data["status"] = "success-lof";
 
                 $new_sir_data = Purchasing_inventory_system::get_sir_data($sir_id);
-                AuditTrail::record_logs("Edited","load_out_form",$sir_id,serialize($old_sir_data),serialize($new_sir_data));
+                AuditTrail::record_logs("Edited","pis_load_out_form",$sir_id,serialize($old_sir_data),serialize($new_sir_data));
             }
 
         }
@@ -906,7 +909,7 @@ class PurchasingInventorySystemController extends Member
         {
             $update["archived"] = 1;
             $sir_data = Purchasing_inventory_system::get_sir_data($id);
-            AuditTrail::record_logs("Archived","load_out_form",$id,"",serialize($sir_data));
+            AuditTrail::record_logs("Archived","pis_load_out_form",$id,"",serialize($sir_data));
         }
         else if($action == "open")
         {
@@ -927,7 +930,7 @@ class PurchasingInventorySystemController extends Member
         {        
             $update["archived"] = 0;
             $sir_data = Purchasing_inventory_system::get_sir_data($id);
-            AuditTrail::record_logs("Restore","load_out_form",$id,"",serialize($sir_data));
+            AuditTrail::record_logs("Restore","pis_load_out_form",$id,"",serialize($sir_data));
         }
 
         Tbl_sir::where("sir_id",$id)->update($update);

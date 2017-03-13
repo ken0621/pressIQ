@@ -138,6 +138,7 @@
               </div>
             </div>
             <div id="company-details" class="tab-pane fade ">
+              <input type="hidden" name="payroll_employee_contract_id" value="{{$contract->payroll_employee_contract_id}}">
               <div class="form-horizontal">
                 <div class="form-group">
                   <div class="col-md-6">
@@ -147,7 +148,7 @@
                         <select class="form-control department-select" required name="payroll_department_id">
                           <option value="">Select Department</option>
                           @foreach($_department as $department)
-                          <option value="{{$department->payroll_department_id}}">{{$department->payroll_department_name}}</option>
+                          <option value="{{$department->payroll_department_id}}" {{$contract->payroll_department_id == $department->payroll_department_id ? 'selected="selected"':''}}>{{$department->payroll_department_name}}</option>
                           @endforeach
                         </select>
                       </div>
@@ -157,6 +158,9 @@
                         <small>Job Title</small>
                         <select class="form-control jobtitle-select" required name="payroll_jobtitle_id">
                           <option value="">Select Job Title</option>
+                          @foreach($_jobtitle as $jobtitle)
+                          <option value="{{$jobtitle->payroll_jobtitle_id}}" {{$jobtitle->payroll_jobtitle_id == $contract->payroll_jobtitle_id ? 'selected="selected"':''}}>{{$jobtitle->payroll_jobtitle_name}}</option>
+                          @endforeach
                         </select>
                       </div>
                     </div>
@@ -165,12 +169,12 @@
                     <div class="form-group">
                       <div class="col-md-6 padding-r-1">
                         <small>Date Hired</small>
-                        <input type="text" name="payroll_employee_contract_date_hired" class="form-control indent-13 datepicker">
+                        <input type="text" name="payroll_employee_contract_date_hired" class="form-control indent-13 datepicker" value="{{$contract->payroll_employee_contract_date_hired != '0000-00-00' ?date('m/d/Y', strtotime($contract->payroll_employee_contract_date_hired)) : ''}}">
                         <i class="fa fa-calendar pos-absolute top-30 margin-left-6 color-dark-gray" aria-hidden="true"></i>
                       </div>
                       <div class="col-md-6 padding-l-1">
                         <small>Date End</small>
-                        <input type="text" name="payroll_employee_contract_date_end" class="form-control indent-13 datepicker">
+                        <input type="text" name="payroll_employee_contract_date_end" class="form-control indent-13 datepicker" value="{{$contract->payroll_employee_contract_date_end != '0000-00-00' ? date('m/d/Y', strtotime($contract->payroll_employee_contract_date_end)) : ''}}">
                         <i class="fa fa-calendar pos-absolute top-30 margin-left-6 color-dark-gray" aria-hidden="true"></i>
                       </div>
                       
@@ -187,7 +191,7 @@
                         <select class="form-control" name="payroll_employee_contract_status">
                           <option value="">Select Status</option>
                           @foreach($employement_status as $employment)
-                          <option value="{{$employment->payroll_employment_status_id}}">{{$employment->employment_status}}</option>
+                          <option value="{{$employment->payroll_employment_status_id}}" {{$employment->payroll_employment_status_id == $contract->payroll_employee_contract_status ? 'selected="selected"':''}}>{{$employment->employment_status}}</option>
                           @endforeach
                         </select>
                       </div>
@@ -195,10 +199,10 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         
-                        <button class="btn btn-primary pull-right margin-lr-5 popup" link="/member/payroll/employee_list/modal_view_contract_list/{{$employee->payroll_employee_id}}" type="button">Company detail List</button>
+                        <button class="btn btn-primary pull-right margin-lr-5 popup" link="/member/payroll/employee_list/modal_view_contract_list/{{$employee->payroll_employee_id}}" type="button" size="lg">Company detail List</button>
 
                         <button class="btn pull-right btn-primary popup" type="button" link="/member/payroll/employee_list/modal_create_contract/{{$employee->payroll_employee_id}}">New Company details</button>
-                        
+
                       </div>
                     </div>
                   </div>
@@ -260,20 +264,26 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Monthly Rate</small>
-                        <input type="number" name="payroll_employee_salary_monthly" class="form-control text-right" required>
+                        <input type="number" name="payroll_employee_salary_monthly" class="form-control text-right" required value="{{$salary->payroll_employee_salary_monthly}}">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Daily Rate</small>
-                        <input type="number" name="payroll_employee_salary_daily" class="form-control text-right">
+                        <input type="number" name="payroll_employee_salary_daily" class="form-control text-right" value="{{$salary->payroll_employee_salary_daily}}">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <div class="checkbox">
-                          <label><input type="checkbox" name="payroll_employee_salary_minimum_wage" value="1">Minimum wage earner</label>
+                          <label><input type="checkbox" name="payroll_employee_salary_minimum_wage" value="1" {{$salary->payroll_employee_salary_minimum_wage == 1 ? 'checked="checked"' : ''}}>Minimum wage earner</label>
                         </div>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <button class="btn pull-left btn-primary popup" type="button" link="/member/payroll/employee_list/modal_create_salary_adjustment/{{$employee->payroll_employee_id}}">Create salary adjustment</button>
+                        <button class="btn pull-left margin-lr-5 btn-primary popup" link="/member/payroll/employee_list/modal_salary_list/{{$employee->payroll_employee_id}}" size="lg">Salary List</button>
                       </div>
                     </div>
                   </div>
@@ -281,25 +291,25 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Taxable Salary</small>
-                        <input type="number" name="payroll_employee_salary_taxable" class="form-control text-right">
+                        <input type="number" name="payroll_employee_salary_taxable" class="form-control text-right" value="{{$salary->payroll_employee_salary_taxable}}">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>SSS Salary</small>
-                        <input type="number" name="payroll_employee_salary_sss" class="form-control text-right">
+                        <input type="number" name="payroll_employee_salary_sss" class="form-control text-right" value="{{$salary->payroll_employee_salary_sss}}">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>PAGIBIG/HDMF Salary</small>
-                        <input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right">
+                        <input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right" value="{{$salary->payroll_employee_salary_pagibig}}">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>PHILHEALTH Salary</small>
-                        <input type="number" name="payroll_employee_salary_philhealth" class="form-control text-right">
+                        <input type="number" name="payroll_employee_salary_philhealth" class="form-control text-right" value="{{$salary->payroll_employee_salary_philhealth}}">
                       </div>
                     </div>
                   </div>
@@ -314,27 +324,27 @@
                       <tr>
                         <td>Resume/CV/Bio-Data</td>
                         <td class="text-center">
-                          <input type="checkbox" name="has_resume" value="1">
+                          <input type="checkbox" name="has_resume" value="1" {{$requirement->has_resume == 1 ? 'checked':''}}>
                         </td>
                         <td width="35%" class="text-center">
-                          <a href="#" class="a-file-name display-none">file name here</a><br>
+                          <a href="{{$requirement->resume != null ? $requirement->resume :'#'}}" class="a-file-name {{$requirement->resume != null ? '' :'display-none'}}">{{$requirement->resume != null ? $requirement->resume_name :'file name here'}}</a><br>
                           <div class="custom-progress-container-100 display-none">
                             <div class="custom-progress"></div>
                           </div>
-                          <label class="lbl-a-href"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
-                          <input type="hidden" class="requirement-input" name="resume_requirements_id">
+                          <label class="lbl-a-href {{$requirement->resume != null ? 'display-none' :''}}"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
+                          <input type="hidden" class="requirement-input" name="resume_requirements_id" value="{{$requirement->resume != null ? '$requirement->resume_requirements_id' :'0'}}">
                         </td>
                         <td class="text-center" width="10">
-                          <a href="#" class="display-none remove-requirements" data-requirement=""><i class="fa fa-times"></i></a>
+                          <a href="#" class="{{$requirement->resume != null ? '' :'display-none'}} remove-requirements" data-requirement="{{$requirement->resume != null ? '$requirement->resume_requirements_id' :'0'}}"><i class="fa fa-times"></i></a>
                         </td>
                       </tr>
                       <tr>
                         <td>Police Clearance</td>
                         <td class="text-center">
-                          <input type="checkbox" name="has_police_clearance" value="1">
+                          <input type="checkbox" name="has_police_clearance" value="1" {{$requirement->has_police_clearance == 1 ? 'checked':''}}>
                         </td>
                         <td width="35%" class="text-center">
-                          <a href="#" class="a-file-name display-none">file name here</a><br>
+                          <a href="{{$requirement->police_clearance != null ? $requirement->police_clearance :'#'}}" class="a-file-name {{$requirement->police_clearance != null ? '' :'display-none'}}">{{$requirement->police_clearance != null ? $requirement->police_clearance_name :'file name here'}}</a><br>
                           <div class="custom-progress-container-100 display-none">
                             <div class="custom-progress"></div>
                           </div>
@@ -348,7 +358,7 @@
                       <tr>
                         <td>NBI</td>
                         <td class="text-center">
-                          <input type="checkbox" name="has_nbi" value="1">
+                          <input type="checkbox" name="has_nbi" value="1" {{$requirement->has_nbi == 1 ? 'checked':''}}>
                         </td>
                         <td width="35%" class="text-center">
                           <a href="#" class="a-file-name display-none">file name here</a><br>
@@ -365,7 +375,7 @@
                       <tr>
                         <td>Health Certificate</td>
                         <td class="text-center">
-                          <input type="checkbox" name="has_health_certificate" value="1">
+                          <input type="checkbox" name="has_health_certificate" value="1" {{$requirement->has_health_certificate == 1 ? 'checked':''}}>
                         </td>
                         <td width="35%" class="text-center">
                           <a href="#" class="a-file-name display-none">file name here</a><br>
@@ -382,7 +392,7 @@
                       <tr>
                         <td>School Credentials</td>
                         <td class="text-center">
-                          <input type="checkbox" name="has_school_credentials" value="1">
+                          <input type="checkbox" name="has_school_credentials" value="1" {{$requirement->has_school_credentials == 1 ? 'checked':''}}>
                         </td>
                         <td width="35%" class="text-center">
                           <a href="#" class="a-file-name display-none">file name here</a><br>
@@ -399,7 +409,7 @@
                       <tr>
                         <td>Valid ID</td>
                         <td class="text-center">
-                          <input type="checkbox" name="has_valid_id" value="1">
+                          <input type="checkbox" name="has_valid_id" value="1" {{$requirement->has_valid_id == 1 ? 'checked':''}}>
                         </td>
                         <td width="35%" class="text-center">
                           <a href="#" class="a-file-name display-none">file name here</a><br>

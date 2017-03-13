@@ -50,6 +50,6 @@ function modal_create_company_details()
 
 function submit_done(data)
 {
-	data.element.modal("hide");
-
+	data.element.modal("toggle");
+	console.log(data.element);
 }

@@ -233,19 +233,27 @@ class PayrollController extends Member
 
 	public function modal_employee_view($id)
 	{
-		$data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+		$data['_company'] 			= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
 		$data['employement_status'] = Tbl_payroll_employment_status::get();
-		$data['tax_status'] = Tbl_payroll_tax_status::get();
-		$data['civil_status'] = Tbl_payroll_civil_status::get();
-		$data['_country'] = Tbl_country::orderBy('country_name')->get();
-		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-		$data['employee'] = Tbl_payroll_employee_basic::where('payroll_employee_id',$id)->first();
+		$data['tax_status'] 		= Tbl_payroll_tax_status::get();
+		$data['civil_status'] 		= Tbl_payroll_civil_status::get();
+		$data['_country'] 			= Tbl_country::orderBy('country_name')->get();
+		$data['_department'] 		= Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+		$data['_jobtitle']			= Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->get();
+
+		$data['employee'] 			= Tbl_payroll_employee_basic::where('payroll_employee_id',$id)->first();
+		$data['contract'] 			= Tbl_payroll_employee_contract::selemployee($id)->first();
+
+		$data['salary']				= Tbl_payroll_employee_salary::selemployee($id)->first();
+		$data['requirement']		= Tbl_payroll_employee_requirements::selrequirements($id)->first();
+		dd($data['requirement']);
 		return view("member.payroll.modal.modal_view_employee", $data);
 	}
 
 	public function modal_view_contract_list($id)
 	{
-
+		$data['_active'] = Tbl_payroll_employee_contract::contractlist($id)->get();
+		return view('member.payroll.modal.modal_view_contract_list', $data);
 	}
 	public function modal_create_contract($id)
 	{
@@ -260,11 +268,44 @@ class PayrollController extends Member
 		$insert['payroll_employee_id'] 					= Request::input('payroll_employee_id');
 		$insert['payroll_department_id'] 				= Request::input('payroll_department_id');
 		$insert['payroll_jobtitle_id'] 					= Request::input('payroll_jobtitle_id');
-		$insert['payroll_employee_contract_date_hired'] = Request::input('payroll_employee_contract_date_hired');
-		$insert['payroll_employee_contract_date_end'] 	= Request::input('payroll_employee_contract_date_end');
+		$insert['payroll_employee_contract_date_hired'] = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_hired')));
+		$insert['payroll_employee_contract_date_end'] 	= date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_end')));
 		$insert['payroll_group_id'] 					= Request::input('payroll_group_id');
 		$insert['payroll_employee_contract_status'] 	= Request::input('payroll_employee_contract_status');
 		Tbl_payroll_employee_contract::insert($insert);
+
+		$return['message'] = 'success';
+		return json_encode($return);
+	}
+
+
+	public function modal_salary_list($id)
+	{	
+		$data['_active'] = Tbl_payroll_employee_salary::salaylist($id)->get();
+		return view('member.payroll.modal.modal_salary_list', $data);
+	}
+
+	public function modal_create_salary_adjustment($id)
+	{
+		$data['employee_id'] = $id;
+		return view('member.payroll.modal.modal_create_salary', $data);
+	}
+
+	public function modal_save_salary()
+	{
+		$insert['payroll_employee_id'] 					= Request::input('payroll_employee_id');
+		$insert['payroll_employee_salary_monthly'] 		= Request::input('payroll_employee_salary_monthly');
+		$insert['payroll_employee_salary_daily'] 		= Request::input('payroll_employee_salary_daily');
+		$insert['payroll_employee_salary_taxable'] 		= Request::input('payroll_employee_salary_taxable');
+		$insert['payroll_employee_salary_sss'] 			= Request::input('payroll_employee_salary_sss');
+		$insert['payroll_employee_salary_philhealth'] 	= Request::input('payroll_employee_salary_philhealth');
+		$insert['payroll_employee_salary_pagibig'] 		= Request::input('payroll_employee_salary_pagibig');
+		$insert['payroll_employee_salary_minimum_wage'] = Request::input('payroll_employee_salary_minimum_wage');
+		$insert['payroll_employee_salary_effective_date'] = date('Y-m-d',strtotime(Request::input('payroll_employee_salary_effective_date')));
+		Tbl_payroll_employee_salary::insert($insert);
+		$return['message'] = 'success';
+		return json_encode($return);
+
 	}
 
 	/* EMPLOYEE END */

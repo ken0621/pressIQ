@@ -12,6 +12,10 @@ Route::get('/barcode', 'MemberController@barcodes');
 // Route::get('/card', 'MemberController@card');
 // Route::get('/card/all', 'MemberController@all_slot');
 
+Route::get('member/register', 'MemberController@register');
+Route::get('member/register/payment', 'MemberController@payment');
+Route::get('member/register/package', 'MemberController@package');
+
 Route::get('member/card', 'Member\MLM_CardController@card');
 Route::get('member/card/all', 'Member\MLM_CardController@all_slot');
 
@@ -55,8 +59,12 @@ Route::any("/member/page/store_information/update_submit","Member\ManageStoreInf
 Route::any('/member/developer/status', 'Member\Developer_StatusController@index'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/rematrix', 'Member\Developer_RematrixController@index'); //ERWIN GUEVARRA
 Route::any('/member/developer/documentation', 'Member\Developer_DocumentationController@index'); //EVERYONE
+
 Route::any('/member/developer/re_entry', 'Member\Developer_ReentryController@index'); //EVERYONE
 Route::post('/member/developer/re_entry/instant_add_slot', 'Member\Developer_ReentryController@instant_add_slot'); //EVERYONE
+
+Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
+
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */
@@ -282,6 +290,8 @@ Route::any('/member/item/confirm_serial_submit','Member\WarehouseController@conf
 /* END WAREHOUSE ARCY*/
 
 /* START PIS ARCY*/
+Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
+
 Route::any('/member/pis/sir','Member\PurchasingInventorySystemController@sir');
 Route::any('/member/pis/sir/archived_submit','Member\PurchasingInventorySystemController@archived_sir_submit');
 Route::any('/member/pis/sir/create','Member\PurchasingInventorySystemController@create_sir');
@@ -293,7 +303,13 @@ Route::any('/member/pis/sir/edit_submit','Member\PurchasingInventorySystemContro
 
 Route::any('/member/pis/ilr/update_count_submit','Member\PurchasingInventorySystemController@update_count_submit');
 Route::any('/member/pis/ilr/update_count/{sir_id}/{item_id}','Member\PurchasingInventorySystemController@update_count');
-
+//lof
+Route::any('/member/pis/lof','Member\PurchasingInventorySystemController@lof');
+Route::any('/member/pis/lof/archived_submit','Member\PurchasingInventorySystemController@archived_sir_submit');
+Route::any('/member/pis/lof/create','Member\PurchasingInventorySystemController@create_sir');
+Route::any('/member/pis/lof/create_submit','Member\PurchasingInventorySystemController@create_sir_submit');
+Route::any('/member/pis/lof/edit/{id}','Member\PurchasingInventorySystemController@edit_sir');
+Route::any('/member/pis/lof/edit_submit','Member\PurchasingInventorySystemController@edit_sir_submit');
 //syncs
 Route::any('/member/pis/sir/sync_import','Member\PurchasingInventorySystemController@sync_import');
 Route::any('/member/pis/sir/sync_export','Member\PurchasingInventorySystemController@sync_export');
@@ -317,6 +333,11 @@ Route::any('/member/customer/invoice/manual_invoice_update',"Member\ManualInvoic
 Route::any('/member/pis/view_invoices/{id}','Member\ManualInvoiceController@view_invoices');
 /* END PIS ARCY*/
 
+Route::any('/tablet/pis/sir/review/{id}',"Member\TabletPISController@review_sir");
+Route::any('/tablet/pis/sir/{id}/{action}',"Member\TabletPISController@lof_action");
+Route::any('/tablet/pis/sir/lof_action_submit',"Member\TabletPISController@lof_action_submit");
+Route::any('/tablet/selected_sir',"Member\TabletPISController@selected_sir");
+
 /* END PIS TABLEt*/
 Route::any('/tablet','Member\TabletPISController@login');
 Route::any('/tablet/login_submit','Member\TabletPISController@login_submit');
@@ -327,8 +348,19 @@ Route::any('/tablet/logout','Member\TabletPISController@logout');
 Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_sir');
 
 Route::any('/tablet/view_invoices/{id}','Member\TabletPISController@view_invoices');
-Route::any('/tablet/create_invoices/add/{id}','Member\TabletPISController@tablet_create_invoice');
+Route::any('/tablet/create_invoices/add','Member\TabletPISController@tablet_create_invoice');
 Route::any('/tablet/create_invoice/add_submit','Member\TabletPISController@create_invoice_submit');
+Route::any('/tablet/update_invoice/edit_submit',"Member\TabletPISController@update_invoice_submit");
+
+Route::any('/tablet/view_receive_payment/{id}','Member\TabletPISController@view_receive_payment');
+Route::any('/tablet/receive_payment/add','Member\TabletPISController@tablet_receive_payment');
+Route::any('/tablet/receive_payment/add_submit','Member\TabletPISController@receive_payment_submit');
+
+Route::any('/tablet/view_invoice_view/{id}','Member\TabletPISController@view_invoices_view');
+Route::any('/tablet/view_invoice_pdf/{id}','Member\TabletPISController@view_invoice_pdf');
+
+Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_submission');
+Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
 /* END PIS TABLEt*/
 
  //form
@@ -403,7 +435,7 @@ Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
 Route::get('/member/customer/receive_payment','Member\Customer_ReceivePaymentController@index');
 Route::get('/member/customer/load_rp/{id}','Member\Customer_ReceivePaymentController@load_customer_rp');
 Route::post('/member/customer/receive_payment/add','Member\Customer_ReceivePaymentController@add_receive_payment');
-Route::post('/member/customer/receive_payment/update','Member\Customer_ReceivePaymentController@update_receive_payment');
+Route::post('/member/customer/receive_payment/update/{id}','Member\Customer_ReceivePaymentController@update_receive_payment');
 
 
 /* CUSTOMER CREDIT MEMO*/
@@ -557,6 +589,7 @@ Route::post('/member/customer/updatecustomermain','Member\CustomerController@upd
 Route::get('/member/customer/downloadfile/{id}','Member\CustomerController@downloadfile');
 Route::any('/member/customer/loadcustomer','Member\CustomerController@loadcustomer');
 Route::post('/member/customer/inactivecustomer','Member\CustomerController@inactivecustomer');
+Route::get('/member/customer/details/{id}','Member\CustomerController@view_customer_details');
 
 
 /* API v1*/
@@ -641,36 +674,59 @@ Route::controller('/tester','TesterController');
 Route::any("/member/load_position","Member\EmployeePositionController@load_position");
 
 
-
 /* PAYROLL START */
 
-Route::group(array('prefix' => '/member/payroll'), function()
-{
 
-	/* COMPANY START */
-	Route::any('/company_list','Member\PayrollController@company_list');
-	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');
-	Route::any('/company_list/upload_company_logo','Member\PayrollController@upload_company_logo');
-	Route::any('/company_list/modal_save_company','Member\PayrollController@modal_save_company');
-	Route::any('/company_list/view_company_modal/{id}','Member\PayrollController@view_company_modal');
-	Route::any('/company_list/edit_company_modal/{id}','Member\PayrollController@edit_company_modal');
-	Route::any('/company_list/reload_company','Member\PayrollController@reload_company');
-	Route::any('/company_list/archived_company','Member\PayrollController@archived_company');
-	Route::any('/company_list/update_company','Member\PayrollController@update_company');
-	/* COMPANY END */
+// Route::group(array('prefix' => '/member/payroll'), function()
+// {
 
-	Route::any('/employee_list','Member\PayrollController@employee_list');
-	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
-
-	Route::any('/employee_timesheet','Member\PayrollTimesheetController@index');
+// 	/* COMPANY START */
+// 	Route::any('/company_list','Member\PayrollController@company_list');
+// 	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');
+// 	Route::any('/company_list/upload_company_logo','Member\PayrollController@upload_company_logo');
+// 	Route::any('/company_list/modal_save_company','Member\PayrollController@modal_save_company');
+// 	Route::any('/company_list/view_company_modal/{id}','Member\PayrollController@view_company_modal');
+// 	Route::any('/company_list/edit_company_modal/{id}','Member\PayrollController@edit_company_modal');
+// 	Route::any('/company_list/reload_company','Member\PayrollController@reload_company');
+// 	Route::any('/company_list/archived_company','Member\PayrollController@archived_company');
+// 	Route::any('/company_list/update_company','Member\PayrollController@update_company');
+// 	/* COMPANY END */
 
 
-	/* DEPARTMENT START */
-	Route::any('/departmentlist','Member\PayrollController@department_list');
-	Route::any('/departmentlist/department_modal_create','Member\PayrollController@department_modal_create');
-	Route::any('/departmentlist/department_save','Member\PayrollController@department_save');
-	/* DEPARTMENT END */
-});
+// 	/* EMPLOYEE START */
+// 	Route::any('/employee_list','Member\PayrollController@employee_list');
+// 	Route::any('/employee_list/modal_create_employee','Member\PayrollController@modal_create_employee');
 
+// 	/* EMPLOYEE END */
+
+// 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
+
+// 	Route::any('/employee_timesheet','Member\PayrollTimesheetController@index');
+
+
+// 	/* DEPARTMENT START */
+// 	Route::any('/departmentlist','Member\PayrollController@department_list');
+// 	Route::any('/departmentlist/department_modal_create','Member\PayrollController@department_modal_create');
+// 	Route::any('/departmentlist/department_save','Member\PayrollController@department_save');
+// 	Route::any('/departmentlist/archived_department','Member\PayrollController@archived_department');
+// 	Route::any('/departmentlist/department_reload','Member\PayrollController@department_reload');
+// 	Route::any('/departmentlist/modal_view_department/{id}','Member\PayrollController@modal_view_department');
+// 	Route::any('/departmentlist/modal_edit_department/{id}','Member\PayrollController@modal_edit_department');
+// 	Route::any('/departmentlist/modal_update_department','Member\PayrollController@modal_update_department');
+// 	/* DEPARTMENT END */
+
+// 	/* JOB TITLE START */
+// 	Route::any("/jobtitlelist","Member\PayrollController@jobtitle_list");
+// 	Route::any("/jobtitlelist/modal_create_jobtitle","Member\PayrollController@modal_create_jobtitle");
+// 	Route::any("/jobtitlelist/modal_save_jobtitle","Member\PayrollController@modal_save_jobtitle");
+// 	Route::any("/jobtitlelist/reload_tbl_jobtitle","Member\PayrollController@reload_tbl_jobtitle");
+// 	Route::any("/jobtitlelist/modal_view_jobtitle/{id}","Member\PayrollController@modal_view_jobtitle");
+// 	Route::any("/jobtitlelist/modal_edit_jobtitle/{id}","Member\PayrollController@modal_edit_jobtitle");
+// 	Route::any("/jobtitlelist/archived_jobtitle","Member\PayrollController@archived_jobtitle");
+// 	Route::any("/jobtitlelist/modal_update_jobtitle","Member\PayrollController@modal_update_jobtitle");
+// 	/* JOB TITLE END */
+// });
+
+include_once('routes_config/routes_payroll.php');
 
 /* PAYROLL END */

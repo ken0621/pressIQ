@@ -12,26 +12,40 @@
       width: 100%;
       background-color: transparent;
       resize: none;
-      cursor: pointer; }
+      cursor: pointer;
+      border-radius: 3px;
+      padding: 8px; }
     .timesheet tbody tr td input[type=text] {
       border: none;
       width: 100%;
       text-align: center;
       padding: 5px;
       background-color: transparent;
-      cursor: pointer; }
+      cursor: pointer;
+      border-radius: 3px; }
+    .timesheet tbody tr td .button {
+      display: block;
+      padding: 5px;
+      border: none;
+      color: #ddd;
+      background-color: transparent; }
+      .timesheet tbody tr td .button:hover {
+        color: #333; }
+    .timesheet tbody tr td.red {
+      color: red; }
   .timesheet tbody tr:hover {
-    background-color: #F4F5F8; }
+    background-color: #fcfcfc; }
   .timesheet tbody tr.focus {
     background-color: #FFF;
     box-shadow: 0 0 10px #ccc;
     z-index: 1;
-    position: relative; }
+    position: relative;
+    background-color: #fff; }
     .timesheet tbody tr.focus td textarea {
-      border: 1px solid #aaa;
+      border: 1px solid #bbb;
       cursor: text; }
     .timesheet tbody tr.focus td input[type=text] {
-      border: 1px solid #aaa;
+      border: 1px solid #bbb;
       cursor: text; }
 
 /*# sourceMappingURL=timesheet.css.map */

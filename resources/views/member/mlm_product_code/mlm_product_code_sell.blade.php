@@ -8,9 +8,9 @@
 	        <div>
 	            <i class="fa fa-tags"></i>
 	            <h1>
-	                <span class="page-title">Sell Product Codes</span>
+	                <span class="page-title">Sell Product/s</span>
 	                <small>
-	                    Codes are use to give repurchase points.
+	                    
 	                </small>
 	            </h1>
 	            <button type="submit" class="panel-buttons btn btn-primary pull-right save_item">Process Purchase</button>
@@ -428,5 +428,23 @@ function submit_done(data)
 		window.location = "/member/mlm/product_code/receipt?invoice_id=" + data.invoice_id;
 	}
 }
+
+$(document).on("keydown", ".membership_code", function(e)
+{
+	e.preventDefault();
+	if(e.which == 13)
+	{
+		console.log($(this).val());
+		bar_code_membership_code(this)
+	}
+})
+// window.addEventListener('keydown', function(e) {
+//         if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
+//             if (e.target.nodeName == 'INPUT' && e.target.type == 'text') {
+//                 e.preventDefault();
+//                 return false;
+//             }
+//         }
+//     }, true);
 </script>
 @endsection

@@ -26,7 +26,10 @@
 					background-color: transparent;
 					resize: none;
 					cursor: pointer;
+					border-radius: 3px;
+					padding: 8px;
 				}
+
 				input[type=text]
 				{
 					border: none;
@@ -35,18 +38,34 @@
 					padding: 5px;
 					background-color: transparent;
 					cursor: pointer;
+					border-radius: 3px;
 				}
-
+				.button
+				{
+					display: block;
+					padding: 5px;
+					border: none;
+					color: #ddd;
+					background-color: transparent;
+					&:hover
+					{
+						color: #333;
+					}
+				}
 				&.editable
 				{
 					&:focus
 					{
 					}
 				}
+				&.red
+				{
+					color: red;
+				}
 			}
 			&:hover
 			{
-				background-color: #F4F5F8;
+				background-color: #fcfcfc;
 			}
 			&.focus
 			{
@@ -54,16 +73,18 @@
 				box-shadow: 0 0 10px #ccc;
 				z-index: 1;
 				position: relative;
+				background-color: #fff;
 				td
 				{
 					textarea
 					{
-						border: 1px solid #aaa;
+						border: 1px solid #bbb;
 						cursor: text;
+
 					}
 					input[type=text]
 					{
-						border: 1px solid #aaa;
+						border: 1px solid #bbb;
 						cursor: text;
 					}
 
@@ -73,6 +94,7 @@
 						{
 						}
 					}
+
 				}
 			}
 		}

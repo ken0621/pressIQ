@@ -119,8 +119,7 @@ class Item
     {
         $shop_id = Item::getShopId();
 
-        $item = Tbl_sir_item::select_sir_item()->join("tbl_category","tbl_category.type_id","=","tbl_item.item_category_id")->where("tbl_sir_item.sir_id",$sir_id)->groupBy("tbl_item.item_category_id")->get();
-
+        $item = Tbl_sir_item::select_sir_item()->leftjoin("tbl_category","tbl_category.type_id","=","tbl_item.item_category_id")->where("tbl_sir_item.sir_id",$sir_id)->groupBy("tbl_item.item_category_id")->get();
         foreach ($item as $key1 => $value) 
         {         
             $_category[$key1] = Tbl_category::where("type_shop",$shop_id)->where("archived",0)->where("type_id",$value->item_category_id)->first();  

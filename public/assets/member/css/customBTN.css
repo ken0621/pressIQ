@@ -297,6 +297,14 @@
     padding-left:1px !important;
     padding-right:1px !important;
 }
+.padding-l-1
+{
+    padding-left: 1px !important;
+}
+.padding-r-1
+{
+    padding-right: 1px !important;
+}
 .padding-lr-2{
     padding-left:2px !important;
     padding-right:2px !important;
@@ -412,7 +420,9 @@
 .top-34{
     top:34px !important;
 }
-
+.top-30{
+    top:30px !important;
+}
 
 
 
@@ -573,6 +583,13 @@
     border:1px solid #1682ba;
     border-radius: 5px;
 }
+.custom-progress-container-100
+{
+    width:100%;
+    height:5px;
+    border:1px solid #1682ba;
+    border-radius: 5px;
+}
 .custom-progress{
     height:100%;
     width:0%;
@@ -679,4 +696,16 @@
     padding-top:50px;
     border-top:none;
     margin-bottom:50px;
+}
+
+
+.lbl-a-href
+{
+    color: #226e99;
+    
+}
+.lbl-a-href:hover
+{
+    cursor:pointer;
+    color: #147fbd;
 }

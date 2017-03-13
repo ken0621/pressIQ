@@ -31,17 +31,21 @@
                         <!-- START CONTENT -->
                         <div style="padding-bottom: 10px; margin-bottom: 10px;">
                             <div class="row clearfix">
-                                <div class="col-sm-4">
-                                    <label>Invoice No:</label>
-                                    <input type="text" class="form-control input-sm" name="new_invoice_id" value="{{$inv->new_inv_id or $new_inv_id}}">
-                                </div>
                             </div>
                         </div>
                         <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                             <div class="row clearfix">
                                 <div class="col-sm-4">
+                                    <div class="col-sm-3">                                    
+                                        <label>Invoice No:</label>
+                                    </div>
+                                    <div class="col-sm-9">                                    
+                                        <input type="text" class="form-control input-sm" name="new_invoice_id" value="{{$inv->new_inv_id or $new_inv_id}}">
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
                                     <select class="form-control droplist-customer input-sm pull-left" name="inv_customer_id" data-placeholder="Select a Customer" required>
-                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv->inv_customer_id) ? $inv->inv_customer_id : '']);
+                                        @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv) ? $inv->inv_customer_id : (isset($c_id) ? $c_id : '') ]);
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
@@ -274,7 +278,7 @@
                                         </div>
                                         <div class="col-md-5 text-right digima-table-value">
                                             <input type="hidden" name="payment-receive" class="payment-receive-input" />
-                                            PHP&nbsp;<span class="payment-applied">0.00</span>
+                                            PHP&nbsp;<span class="  ">{{$inv->amount_applied}}</span>
                                         </div>
                                     </div>
                                     <div class="row">

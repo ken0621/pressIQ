@@ -9,14 +9,18 @@ use App\Globals\Warehouse;
 use App\Globals\Pdf_global;
 use App\Globals\CreditMemo;
 use App\Globals\Transaction;
+use App\Globals\Customer;
+
 use App\Models\Tbl_customer;
 use App\Models\Tbl_warehousea;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_customer_invoice_line;
+use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_item;
 use App\Models\Tbl_warehouse;
-use App\Globals\Customer;
+use App\Models\Tbl_user;
+
 use Request;
 use Carbon\Carbon;
 use Session;
@@ -25,6 +29,11 @@ use PDF;
 
 class Customer_InvoiceController extends Member
 {
+    public function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
+
     public function index()
     {
         $data["page"]       = "Customer Invoice";
@@ -33,13 +42,16 @@ class Customer_InvoiceController extends Member
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["action"]     = "/member/customer/invoice/create";
         $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id"); 
-
+        $data["c_id"] = Request::input("customer_id");
         $id = Request::input('id');
         if($id)
         {
-            $data["inv"]            = Tbl_customer_invoice::where("inv_id", $id)->first();
+            $data["inv"]            = Tbl_customer_invoice::appliedPayment($this->getShopId())->where("inv_id", $id)->first();
+            
             $data["_invline"]       = Tbl_customer_invoice_line::um()->where("invline_inv_id", $id)->get();
             $data["action"]         = "/member/customer/invoice/update";
+
+            // dd($data["inv"]);
 
             $sir = Tbl_manual_invoice::where("inv_id",$id)->first();
             if($sir)
@@ -248,7 +260,7 @@ class Customer_InvoiceController extends Member
     public function invoice_view($invoice_id)
     {
         $data["invoice_id"] = $invoice_id;
-
+        $data["action_load"] = "/member/customer/customer_invoice_pdf";
         return view("member.customer_invoice.invoice_view",$data);
     }
     public function invoice_view_pdf($inv_id)
@@ -258,7 +270,14 @@ class Customer_InvoiceController extends Member
         $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
         foreach($data["invoice_item"] as $key => $value) 
         {
-            $total_qty = $value->invline_qty * $value->unit_qty;
+          $um = Tbl_unit_measurement_multi::where("multi_id",$value->invline_um)->first();
+            $qty = 1;
+            if($um != null)
+            {
+                $qty = $um->unit_qty;
+            }
+
+            $total_qty = $value->invline_qty * $qty;
             $data["invoice_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
         }
           $pdf = view('member.customer_invoice.invoice_pdf', $data);

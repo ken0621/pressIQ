@@ -123,6 +123,7 @@ class CustomerController extends Member
     {
         if($this->hasAccess("customer-list","add"))
         {
+            $data["customer_status"] = Request::input("stat");
     	    $shop_id = $this->checkuser('user_shop');
     	    $data['_country'] = Tbl_country::orderBy('country_name','asc')->get();
     	    $data['_def_payment_method'] = Tbl_payment_method::where("isDefault",1)->orderBy('payment_name','asc')->get();
@@ -287,7 +288,12 @@ class CustomerController extends Member
         $email = Request::input('email');
         $company = Request::input('company');
         $billing_country = Request::input('billing_country');
-        
+        $customer_status = Request::input("customer_status");
+        $is_approved = 0;
+        if($customer_status == "approved")
+        {
+            $is_approved = 1;
+        }
         
         $phone = Request::input('phone');
         $mobile = Request::input('mobile');
@@ -409,6 +415,7 @@ class CustomerController extends Member
             $insertcustomer['created_date'] = Carbon::now();
             $insertcustomer['IsWalkin'] = 0;
             $insertcustomer['tin_number']= $tin_number;
+            $insertcustomer['approved']= $is_approved;
 
             if($mlm_continue == 1)
             {
@@ -847,4 +854,13 @@ class CustomerController extends Member
         return json_encode($data);
     }
 	
+    public function view_customer_details($id)
+    {
+        $data["customer"]       = Tbl_customer::info()->where("tbl_customer.customer_id", $id)->first();
+        // dd($data["customer"]);
+        $data["_transaction"]   = Tbl_customer::transaction($this->checkuser('user_shop'), $id)->get();
+        // dd($data["_transaction"]);
+
+        return view('member.customer.customer_details', $data);
+    }
 }

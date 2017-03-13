@@ -1,6 +1,6 @@
 textExpand();
 function textExpand(){
-    $('.textarea-expand').attr("rows","1");
+    // $('.textarea-expand').attr("rows","1");
     $('.textarea-expand').css("resize","none");
 
 	$.each($('.textarea-expand'), function() {

@@ -33,7 +33,7 @@
 	    		</div>
 	    		<div clas="col-md-12">
 		    		<div class="pull-right">
-		    			<h3> BALANCE {{currency("PHP", $customer->balance)}}</h3>
+		    			<h3> BALANCE <span class="green">{{currency("PHP", $customer->balance)}}</span></h3>
 		    		</div>
 	    		</div>
 	    	</div>

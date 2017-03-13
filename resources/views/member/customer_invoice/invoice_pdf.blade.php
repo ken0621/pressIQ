@@ -11,22 +11,32 @@
 	</style>
 </head>
 <body>
-<table width="100%">
-	<tr>
-		<td width="60%" style="text-align: left"><span style="font-size: 50px;font-weight: bold">Invoice</span></td>
-		<td width="40%" ><span style="font-size: 25px;font-weight: bold">NO : {{sprintf("%'.05d\n", $invoice->inv_id)}}</span></td>
-	</tr>
-	<tr>
-		<td width="60%"></td>
-		<td width="40%" ><span style="font-size: 15px;">DATE : {{date('m/d/Y',strtotime($invoice->date_created))}}</span></td>
-	</tr>
-	<tr>
-		<td><span style="font-size: 15px;">CUSTOMER : {{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</span></td>
-	</tr>
-</table>
+	<div class="form-group">
+		<h2>INVOICE</h2>		
+	</div>
+<div class="form-group">
+	<div class="col-md-6 text-left" style="float: left; width: 50%">
+		<strong>BILL TO</strong><br>
+		<span>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</span>
+	</div>
+	<div class="col-md-6 text-right" style="float: right; width: 50%">
+		<div class="col-md-6 text-right" style="float: left; width: 50%">
+			<strong>INVOICE NO.</strong><br>
+			<strong>DATE.</strong><br>
+			<strong>DUE DATE</strong><br>
+			<strong>TERMS</strong><br>
+		</div>
+		<div class="col-md-6 text-left" style="float: left; width: 50%">
+			<span>{{sprintf("%'.04d\n", $invoice->inv_id)}}</span><br>
+			<span>{{date('m/d/Y',strtotime($invoice->inv_date))}}</span><br>
+			<span>{{date('m/d/Y',strtotime($invoice->inv_due_date))}}</span><br>
+			<span>TERMS</span><br>
+		</div>
+	</div>
+</div>
+
 <table width="100%" style="padding: 0; margin-top: 20px ">
 	<tr>
-		<th width="10%">CODE</th>
 		<th>PRODUCT NAME</th>
 		<th width="20%">QTY</th>
 		<th width="15%">PRICE</th>
@@ -34,21 +44,21 @@
 	</tr>
 		<input type="hidden" name="{{$total = 0}}">
 	<tbody>
-	@if($invoice_item)
+	@if($invoice_item)		
 		@foreach($invoice_item as $item)
-			<tr class="{{$total += $item->invline_amount}}">
-				<td>{{$item->item_barcode}}</td>
+			<tr >
 				<td>{{$item->item_name}}</td>
 				<td style="text-align: center;">{{$item->qty}}</td>
-				<td style="text-align: right;">{{number_format($item->invline_rate,2)}}</td>
-				<td style="text-align: right;">{{number_format($item->invline_amount,2)}}</td>
+				<td style="text-align: right;">{{currency("PHP",$item->invline_rate)}}</td>
+				<td style="text-align: right;">{{currency("PHP",$item->invline_amount)}}</td>
 			</tr>
 		@endforeach
+		<div class="{{$invoice->inv_is_paid == 1 ? 'watermark' : 'hidden'}}"> PAID </div>
 	@endif
 		<tr>
-			<td colspan="3"></td>
+			<td colspan="2"></td>
 			<td style="text-align: left;font-weight: bold">TOTAL</td>
-			<td style="text-align: right; font-weight: bold">{{number_format($total,2)}}</td>
+			<td style="text-align: right; font-weight: bold">{{currency("PHP",$invoice->inv_overall_price)}}</td>
 		</tr>
 	</tbody>
 </table>
@@ -57,11 +67,27 @@
 	table
 	{
 		border-collapse: collapse;
+		padding: 5px;
 	}
 	tr th
 	{
 		padding: 0;
 		border: 1px solid #000;
+	}
+	.watermark
+	{
+		font-size: 100px;
+		text-align: center;
+		 position:fixed;
+		 left: 300px;
+		 top: 250px;
+		 opacity:0.5;
+		 z-index:99;
+		 color:#000;
+
+		 -ms-transform: rotate(-40deg); /* IE 9 */
+	    -webkit-transform: rotate(-40deg); /* Chrome, Safari, Opera */
+	    transform: rotate(-40deg);
 	}
 </style>
 </html>

@@ -20,28 +20,8 @@
                 <h3>Plate Number: {{$sir->plate_number}}</h3>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-12">
-                1. New Load Out Form 
-            </div>
-            <div class="col-md-12">
-                2. Confirmation of Load Out form by Sales Agent 
-            </div>
-            <div class="col-md-12">
-                3. Convert LoadOutForm to SIR (Click here to convert to SIR)
-            </div>
-            <div class="col-md-12">
-                4. Currently Synced (Waiting for Truck and Agent to Return)
-            </div>
-            <div class="col-md-12">
-                5. Sales Agent Submit all transaction (Open I.L.R will be generated)
-            </div>
-            <div class="col-md-12">
-                6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)
-            </div>
-            <div class="col-md-12">
-                7. Accounting Department Confirmed Payment Remit by Agent
-            </div>
+        <div class="form-group" style="font-size: 20px">
+            {!! $sir->gen_status !!}
        <!--  <div class="col-md-12"><h3>Select Item</h3></div>        
             <div class="col-md-3" >
                 <select class="form-control">

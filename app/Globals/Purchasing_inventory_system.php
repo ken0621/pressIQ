@@ -62,15 +62,75 @@ class Purchasing_inventory_system
     }
     public static function view_status($sir_id)
     {
-        $sir_data["sir"] = Tbl_sir::where("sir_id",$sir_id)->first();
+        $sir_data["sir"] = Tbl_sir::truck()->where("sir_id",$sir_id)->first();
 
-        if($sir_data["sir"]->ilr_status == 2 && $sir_data["sir"]->sir_status == 1 )
+        if($sir_data["sir"]->ilr_status == 2 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
         {
 
+        $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+            <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
+            <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">5. Sales Agent Submit all transaction (Open I.L.R will be generated)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
+            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+        }
+        else if($sir_data["sir"]->ilr_status == 1 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
+        {
+           $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+            <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
+            <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">5. Sales Agent Submit all transaction (Open I.L.R will be generated)</div>
+            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click <a href="/member/pis/ilr/'.$sir_id.'"> here </a> to close the I.L.R)</div>
+            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+        }
+        else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
+        {
+             $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+            <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
+            <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
+            <div class="col-md-12" >5. Sales Agent Submit all transaction (Open I.L.R will be generated)</div>
+            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
+            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+        }
+        else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 0)
+        {
+            $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+            <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
+            <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
+            <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
+            <div class="col-md-12" >5. Sales Agent Submit all transaction (Open I.L.R will be generated)</div>
+            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
+            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+        }
+        else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 0 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 0)
+        {
+             $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+            <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
+            <div class="col-md-12" >3. Convert LoadOutForm to SIR (Click <a size="md" link="/member/pis/sir/open/'.$sir_id.'/open" class="popup">here</a> to convert to SIR)</div>
+            <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
+            <div class="col-md-12" >5. Sales Agent Submit all transaction (Open I.L.R will be generated)</div>
+            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
+            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+        }
+        else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 0 && $sir_data["sir"]->lof_status == 1 && $sir_data["sir"]->is_sync == 0)
+        {
+                 $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+            <div class="col-md-12" >2. Confirmation of Load Out form by Sales Agent </div>
+            <div class="col-md-12" >3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
+            <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
+            <div class="col-md-12" >5. Sales Agent Submit all transaction (Open I.L.R will be generated)</div>
+            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
+            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
         }
 
-        dd($sir_data);
+        $sir_data["sir"]->gen_status = $return;
 
+        $data = $sir_data["sir"];
+
+        return $data;
     }
     public static function get_warehouse_based_sir($sir_id)
     {

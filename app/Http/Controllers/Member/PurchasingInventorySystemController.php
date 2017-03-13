@@ -45,7 +45,7 @@ class PurchasingInventorySystemController extends Member
      */
     public function view_status($sir_id)
     {
-        $data["sir"] = Tbl_sir::where("sir_id",$sir_id)->first();
+        $data["sir"] = Purchasing_inventory_system::view_status($sir_id);
         return view("member.purchasing_inventory_system.view_status",$data);        
     }
     public function update_count($sir_id, $item_id)
@@ -415,8 +415,7 @@ class PurchasingInventorySystemController extends Member
     }
     public function sir()
     {     
-        // $sir_data = Purchasing_inventory_system::view_status(1);
-        
+
         if(Request::input("status") != null)
         {
             if(Request::input("status") != 'all')

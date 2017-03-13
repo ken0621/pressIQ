@@ -78,7 +78,7 @@
                                             Action <span class="caret"></span>
                                           </button>
                                             <ul class="dropdown-menu dropdown-menu-custom"> 
-                                               <li><a size="lg" link="/member/pis/sir/view_status/{{$sir->sir_id}}/" class="popup">View Status</a></li>
+                                               <li><a size="lg" link="/member/pis/sir/view_status/{{$sir->sir_id}}" class="popup">View Status</a></li>
                                           @if($sir->sir_archived == 1)
                                                 <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/restore" class="popup">Restore SIR</a></li>
                                           @else

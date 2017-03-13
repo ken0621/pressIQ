@@ -18,17 +18,26 @@
 
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body">
-    	<div class="form-group">
-    		<a class="panel-buttons btn btn-custom-primary pull-right popup" link="/member/customer/customeredit/{{$customer->customer_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer</a>
-    	</div>
-    	<div class="form-group load-customer-detail">
-    		<div class="customer-detail-container">
-				<h4>Full Name : {{$customer->first_name." ".$customer->middle_name." ".$customer->last_name." ".$customer->suffix_name}}</h4>
-				<h4>Email : {{$customer->email}}</h4>
-				<h4>Phone : {{$customer->customer_phone}}</h4>
-				<h4>Mobile : {{$customer->customer_mobile}}</h4>
-			</div>
-    	</div>
+    	<div class="row">
+	    	<div class="form-group load-customer-detail col-md-6">
+	    		<div class="customer-detail-container">
+					<h4>Full Name : {{$customer->first_name." ".$customer->middle_name." ".$customer->last_name." ".$customer->suffix_name}}</h4>
+					<h4>Email : {{$customer->email}}</h4>
+					<h4>Phone : {{$customer->customer_phone}}</h4>
+					<h4>Mobile : {{$customer->customer_mobile}}</h4>
+				</div>
+	    	</div>
+	    	<div class="form-group col-md-6">
+	    		<div class="col-md-12">
+	    			<a class="panel-buttons btn btn-custom-primary pull-right popup" link="/member/customer/customeredit/{{$customer->customer_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer</a>
+	    		</div>
+	    		<div clas="col-md-12">
+		    		<div class="pull-right">
+		    			<h3> BALANCE {{currency("PHP", $customer->balance)}}</h3>
+		    		</div>
+	    		</div>
+	    	</div>
+	    </div>
     </div>
 </div>
 

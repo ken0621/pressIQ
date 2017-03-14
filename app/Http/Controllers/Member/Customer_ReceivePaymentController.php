@@ -35,11 +35,13 @@ class Customer_ReceivePaymentController extends Member
     }
 
     public function index()
-    {
+    {        
+        $data["c_id"] = Request::input("customer_id");
         $data["_customer"]      = Customer::getAllCustomer();
         $data['_account']       = Accounting::getAllAccount();
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
         $data['action']         = "/member/customer/receive_payment/add";
+        $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"]);
 
         $id = Request::input('id');
         if($id)
@@ -88,14 +90,15 @@ class Customer_ReceivePaymentController extends Member
             }
         }
 
-        AuditTrail::record_logs("Added","receive_payment",$rcvpayment_id,"",serialize($insert));
+        $rcv_data = AuditTrail::get_table_data("tbl_receive_payment","rp_id",$rcvpayment_id);
+        AuditTrail::record_logs("Added","receive_payment",$rcvpayment_id,"",serialize($rcv_data));
 
         $button_action = Request::input('button_action');
 
         $json["status"]         = "success";
         $json["rcvpayment_id"]  = $rcvpayment_id;
         $json["message"]        = "Successfully received payment";
-        $json["url"]            = "/member/customer/receive_payment";
+        $json["redirect"]            = "/member/customer/receive_payment";
 
         if($button_action == "save-and-edit")
         {
@@ -108,6 +111,9 @@ class Customer_ReceivePaymentController extends Member
     public function update_receive_payment($rcvpayment_id)
     {
         // dd(Request::input());
+
+        $old_data = AuditTrail::get_table_data("tbl_receive_payment","rp_id",$rcvpayment_id);
+
         $update["rp_customer_id"]       = Request::input('rp_customer_id');
         $update["rp_ar_account"]        = Request::input('rp_ar_account') or 0;
         $update["rp_date"]              = date("Y-m-d", strtotime(Request::input('rp_date')));
@@ -136,7 +142,9 @@ class Customer_ReceivePaymentController extends Member
             }
         }
 
-        AuditTrail::record_logs("Updated","receive_payment",$rcvpayment_id,"",serialize($update));
+        $new_data = AuditTrail::get_table_data("tbl_receive_payment","rp_id",$rcvpayment_id);
+        AuditTrail::record_logs("Updated","receive_payment",$rcvpayment_id,serialize($old_data),serialize($new_data));
+
 
         $button_action = Request::input('button_action');
 

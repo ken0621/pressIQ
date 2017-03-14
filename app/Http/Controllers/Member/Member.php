@@ -27,6 +27,7 @@ class Member extends Controller
 		}
 		else
 		{
+
 			/* CHECK IF USERNAME DOESN'T EXIST IN DB - REDIRECT TO FRONTPAGE */
 			$user_info = Tbl_user::where("user_email", session('user_email'))->shop()->first();
 			if(!$user_info)

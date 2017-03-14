@@ -869,6 +869,9 @@ class MLM_SlotController extends Member
         }
         else if($code == 'mmatching_m')
         {
+            $shop_id = 0;
+            $update['matching_log_earning'] = 0;
+            Tbl_mlm_matching_log::where('shop_id', $shop_id)->update($update);
             Mlm_compute::entry(289);
         }
         else if($code == 'leadership_m')
@@ -879,7 +882,7 @@ class MLM_SlotController extends Member
             $s = Mlm_compute::get_slot_info(289);
             // dd($s);
             return Mlm_complan_manager::leadership_bonus($s);
-            return Mlm_complan_manager::leadership_bonus_earn_2(15);
+            // return Mlm_complan_manager::leadership_bonus_earn_2(15);
             // dd($s);
 
         }

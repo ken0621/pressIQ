@@ -415,7 +415,7 @@
                                 </div>
                             </div>
                             <div calss="middle-content">
-                               @include('member.modal.load_media_library')
+                               
                             </div>
                         </div>
                         <div class="modal-footer">

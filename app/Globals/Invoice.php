@@ -64,7 +64,8 @@ class Invoice
 
         $invoice_id = Tbl_customer_invoice::insertGetId($insert);
 
-        AuditTrail::record_logs("Added","invoice",$invoice_id,"",serialize($insert));
+        $inv_data = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
+        AuditTrail::record_logs("Added","invoice",$invoice_id,"",serialize($inv_data));
 
         Invoice::insert_invoice_line($invoice_id, $item_info);
 
@@ -73,7 +74,7 @@ class Invoice
 
     public static function updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info)
     {        
-        $old = Tbl_customer_invoice::where("inv_id", $invoice_id)->first()->toArray();
+        $old = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
 
         $update['inv_customer_id']              = $customer_info['customer_id'];        
         $update['inv_customer_email']           = $customer_info['customer_email'];
@@ -93,7 +94,9 @@ class Invoice
 
         Tbl_customer_invoice::where("inv_id", $invoice_id)->update($update);
 
-        AuditTrail::record_logs("Edited","invoice",$invoice_id,serialize($old),serialize($update));
+
+        $new = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
+        AuditTrail::record_logs("Edited","invoice",$invoice_id,serialize($old),serialize($new));
 
         Tbl_customer_invoice_line::where("invline_inv_id", $invoice_id)->delete();
         Invoice::insert_invoice_line($invoice_id, $item_info);

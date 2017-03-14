@@ -33,7 +33,7 @@
 	    		</div>
 	    		<div clas="col-md-12">
 		    		<div class="pull-right">
-		    			<h3> BALANCE {{currency("PHP", $customer->balance)}}</h3>
+		    			<h3> BALANCE <span class="green">{{currency("PHP", $customer->balance)}}</span></h3>
 		    		</div>
 	    		</div>
 	    	</div>
@@ -61,7 +61,7 @@
 			        </thead>
 			        <tbody>
 			            @foreach($_transaction as $transaction)
-			            <tr  onClick="window.location='/member/customer/{{$transaction->reference_name}}?id={{$transaction->no}}'">
+			            <tr class="cursor-pointer" onClick="window.location='/member/customer/{{$transaction->reference_name}}?id={{$transaction->no}}'">
 			                <td>{{ $transaction->date }}</td>
 			                <td>{{ $transaction->type }}</td>
 			                <td>{{ $transaction->no }}</td>

@@ -142,3 +142,15 @@ td
 	cursor: move;
 }
 
+.btn-group .btn-grp-primary
+{
+	color: #5f5f5f;
+    background-color: transparent;
+
+    &:hover
+    {
+    	color: #fff!important;
+    	background-color: #1682ba!important;
+    }
+}
+

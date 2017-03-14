@@ -1,7 +1,7 @@
 <form class="global-submit" action="/member/ecommerce/product/save-product-info" method="post">
     <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
-    <input type="hidden" class="token" name="product_code" value="{{ $product_code }}">
-    <input type="hidden" class="token" name="item_id" value="{{ $item_info->item_id }}">
+    <input type="hidden" class="" name="product_code" value="{{ $product_code }}">
+    <input type="hidden" class="" name="item_id" value="{{ $item_info->item_id }}">
     <div class="modal-header" style="padding-bottom: 0px;">
     	<button type="button" class="close" data-dismiss="modal">×</button>
     	<h4 class="modal-title">{{strtoupper($item_info->item_name)}}</h4>
@@ -40,7 +40,7 @@
                 <!-- FORM.TITLE -->
                 <div class="form-box-divider">
                     <div class="fieldset">
-                        <label>Product </label>
+                        <label>Product Price</label>
                         <div>
                             <input class="form-control input-sm" name="evariant_price" placeholder="Product Price" value="{{$product_data['product_price'] or ''}}">
                         </div>
@@ -48,7 +48,7 @@
 
                     <div class="fieldset">
                         <!-- description -->
-                        <label>Promo Price</label>
+                        <!-- <label>Promo Price</label> -->
                         <div >
                         </div>
                     </div>

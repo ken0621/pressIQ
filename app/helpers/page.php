@@ -69,13 +69,13 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Erwin Guevara</span>";    
 
     /* -- E-COMMERCE => WEBSITE ORDERS */
-    $code = "ecommerce-order-list";
-    $nav[$page]['submenu'][$code]['label'] = "Website Orders";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/order";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "90% Working";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Jimar Zape</span>";
+    // $code = "ecommerce-order-list";
+    // $nav[$page]['submenu'][$code]['label'] = "Website Orders";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/order";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "90% Working";
+    // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Jimar Zape</span>";
 
     /* -- PRODUCTS => PRODUCT LIST */
     $code = "product-list";

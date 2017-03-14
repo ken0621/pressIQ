@@ -61,7 +61,7 @@
 			        </thead>
 			        <tbody>
 			            @foreach($_transaction as $transaction)
-			            <tr  onClick="window.location='/member/customer/{{$transaction->reference_name}}?id={{$transaction->no}}'">
+			            <tr class="cursor-pointer" onClick="window.location='/member/customer/{{$transaction->reference_name}}?id={{$transaction->no}}'">
 			                <td>{{ $transaction->date }}</td>
 			                <td>{{ $transaction->type }}</td>
 			                <td>{{ $transaction->no }}</td>

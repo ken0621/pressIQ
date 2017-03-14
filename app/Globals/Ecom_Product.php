@@ -259,4 +259,40 @@ class Ecom_Product
 		
 		return $collection;
 	}
+
+	/**
+	 * Getting all Product w/ cateogory only. If shop_id is null, the current shop id that logged on will be used.
+	 *
+	 * @param  int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
+	 * @return array  [Product name : variation (if any)] -> "Product 1 : blue • small" or "Product 1"
+	 */
+	public static function getProductList($shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		return Ecom_Product::getProductPerSub($shop_id, 0);
+	}
+	public static function getProductPerSub($shop_id, $category_id)
+	{
+		$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived",0)->get()->toArray();
+
+		foreach($_category as $key0=>$category)
+		{
+			$_product = Tbl_ec_product::variant()->where("eprod_category_id", $category["type_id"])->where("tbl_ec_product.archived",0)->get()->toArray();
+		
+			foreach($_product as $key1=>$product)
+			{
+				$_product[$key1]["product_new_name"] = $product["eprod_name"] . ($product["variant_name"] ? ' : '.$product["variant_name"] : '');
+			}
+
+			$_category[$key0]["Product"]		= $_product;
+			
+			$_category[$key0]["subcategory"]	= Ecom_Product::getProductPerSub($shop_id, $category["type_id"]);
+		}
+
+		return $_category;
+	}
 }

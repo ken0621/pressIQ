@@ -50,7 +50,7 @@ class Tbl_payroll_employee_basic extends Model
 			  ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
 			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
 			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')
-			  ->where('contract.payroll_employee_contract_date_end','>=',$date)
+			  ->where('contract.payroll_employee_contract_date_end','<=',$date)
 			  ->where('company.shop_id',$shop_id);
 
 			  if($company_id != 0)
@@ -58,8 +58,10 @@ class Tbl_payroll_employee_basic extends Model
 			  	$query->where('company.payroll_company_id',$company_id);
 			  }
 
-			  $query->select('company.payroll_company_name','tbl_payroll_employee_basic.*', DB::raw(''));
+			  $query->select('company.payroll_company_name','tbl_payroll_employee_basic.*','department.payroll_department_name','jobtitle.payroll_jobtitle_name')
+			  		->groupBy('tbl_payroll_employee_basic.payroll_employee_id');
 
+		return $query;
 
 	}
 }

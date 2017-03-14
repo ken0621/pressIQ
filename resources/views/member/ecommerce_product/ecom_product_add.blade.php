@@ -165,9 +165,9 @@
                 <td>
                     <input class="hidden item-code" name="item_code[]" />
                     <select class="select-item" name="evariant_item_id[]">
-                        @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                        @include("member.load_ajax_data.load_item", ['add_search' => ""])
                     </select>
-                </td>
+            </td>
                 <td>
                     <a href="#" class="product-info popup" link="/member/ecommerce/product/variant-modal/" size="lg"  product-id="" product-code="">
                     <i class="fa fa-cog fa-lg"></i> Info</a>

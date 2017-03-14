@@ -17,7 +17,6 @@
 </div>
 
 <div class="panel panel-default panel-block panel-title-block">
-    
     <ul class="nav nav-tabs">
         <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#active"><i class="fa fa-star"></i> Active User</a></li>
         <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"><i class="fa fa-trash" href="#inactive"></i> Inactive User</a></li>
@@ -39,6 +38,10 @@
         <div id="active" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
+    
+    <div class="tab-content">
+        <div id="actives" class="tab-pane fade in active">
+            <div class="panel-body position-container">
                 <table style="table-layout: fixed;" class="table table-hover table-condensed table-bordered table-sale-month">
                     <thead>
                         <tr>
@@ -47,6 +50,7 @@
                             <th class="text-left">Position Name</th>
                             <th class="text-left">Position Rank</th>
                             <th class="text-left"></th>
+                            <th class="text-left">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,6 +61,12 @@
                             <td class="text-left">{{$list->position_name}}</td>
                             <td class="text-left">{{$list->position_rank}}</td>
                             <td class="text-left"><a href="javascript:" class="popup" link="/member/utilities/modal-edit-user?user_id={{$list->user_id}}" size="sm">Edit</a>|<a href="javascript:" class="popup" link="/member/utilities/modal-archive-user?user_id={{$list->user_id}}" size="sm">Archive</a></td>    
+                            <td class="text-left text-center">
+                                <div class="btn-group">
+                                    <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/utilities/modal-edit-user?user_id={{$list->user_id}}" size="sm">Edit</a>
+                                    <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/utilities/modal-archive-user?user_id={{$list->user_id}}" size="sm"><span class="fa fa-trash"></span></a>
+                                </div>
+                            </td>    
                         </tr>
                         @endforeach
                     </tbody>
@@ -67,6 +77,7 @@
         <div id="inactive" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
+            <div class="panel-body position-archived-container">
                 <table style="table-layout: fixed;" class="table table-hover table-condensed table-bordered table-sale-month">
                     <thead>
                         <tr>
@@ -75,6 +86,7 @@
                             <th class="text-left">Position Name</th>
                             <th class="text-left">Position Rank</th>
                             <th class="text-left"></th>
+                            <th class="text-left">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,6 +97,11 @@
                             <td class="text-left">{{$list->position_name}}</td>
                             <td class="text-left">{{$list->position_rank}}</td>
                             <td class="text-left"><a href="javascript:" class="popup" link="/member/utilities/modal-edit-user?user_id={{$list->user_id}}" size="sm">Edit</a>|<a href="javascript:" class="popup" link="/member/utilities/modal-archive-user?user_id={{$list->user_id}}" size="sm">Archive</a></td>    
+                            <td class="text-left text-center">
+                                <div class="btn-group">
+                                    <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/utilities/modal-restore-user?user_id={{$list->user_id}}" size="sm">Restore</a>
+                                </div>
+                            </td>    
                         </tr>
                         @endforeach
                     </tbody>
@@ -92,6 +109,7 @@
             </div>
         </div>
     </div>
+    <div>
 </div>
 @endsection
 @section('script')
@@ -106,9 +124,23 @@
         }
         if(data.response_status == "success-archived")
         {
-            $(".position-container").load("/member/utilities/admin-list .position-container");
-            toastr.success('Successfully archived');
             $("#global_modal").modal("toggle");
+            $(".position-archived-container").load("/member/utilities/admin-list .position-archived-container table");
+            $(".position-container").load("/member/utilities/admin-list .position-container table", function()
+            {
+                toastr.success('Successfully archived');
+            });
+            
+            
+        }
+        if(data.response_status == "success-restored")
+        {
+            $("#global_modal").modal("toggle");
+            $(".position-container").load("/member/utilities/admin-list .position-container table");
+            $(".position-archived-container").load("/member/utilities/admin-list .position-archived-container table", function()
+            {
+                toastr.success('Successfully Restored');
+            });  
         }
         if(data.response_status == "error-message")
         {
@@ -117,7 +149,6 @@
             // $("#global_modal").modal("toggle");
             $(".modal-loader").addClass("hidden");
         }
-
     }
     
 </script>

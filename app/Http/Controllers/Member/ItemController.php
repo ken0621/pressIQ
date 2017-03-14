@@ -40,7 +40,7 @@ class ItemController extends Member
         if($access == 1)
         {
 			$shop_id        		   = $this->user_info->shop_id;
-	        $item 		    		   = Tbl_item::where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
+	        $item 		    		   = Tbl_item::inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
 	        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)->where("shop_id",$shop_id)->type()->category();
 	        $item_type				   = Request::input("item_type");
 	        $search_name			   = Request::input("search_name");

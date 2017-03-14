@@ -15,6 +15,9 @@ class PayrollTimesheetController extends Member
 		/* INITALIZE DATA */
 		$from = $data["start_date"] = Carbon::parse("February 26, 2017")->format("Y-m-d");
 		$to = $data["end_date"] = Carbon::parse("March 10, 2017")->format("Y-m-d");
+		$time_rule = $data["time_rule"] = "timestrict"; //flexitime, timestrict
+		$data["default_time_in"] = $default_time_in = "9:00AM";
+		$data["default_time_out"] = $default_time_out = "6:00PM";
 
 		/* CREATE ARRAY TIMESHEET */
 		while($from <= $to)

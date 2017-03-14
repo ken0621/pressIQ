@@ -8,7 +8,6 @@ use View;
 use Validator;
 
 use App\Globals\Mlm_member;
-
 use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_mlm;
 use App\Models\Tbl_mlm_slot_wallet_log;
@@ -17,10 +16,12 @@ use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_lead;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_mlm_slot_points_log;
+
 class MlmDashboardController extends Mlm
 {
     public function index()
     {
+        // return Mlm_member::add_to_session_edit(5, 301, 1);
     	// return Self::show_maintenance();
         $data["page"] = "Dashboard";
         if(Self::$slot_id != null)

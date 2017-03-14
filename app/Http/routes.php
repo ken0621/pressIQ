@@ -60,8 +60,8 @@ Route::any('/member/developer/status', 'Member\Developer_StatusController@index'
 Route::any('/member/developer/rematrix', 'Member\Developer_RematrixController@index'); //ERWIN GUEVARRA
 Route::any('/member/developer/documentation', 'Member\Developer_DocumentationController@index'); //EVERYONE
 
-Route::any('/member/developer/re_entry', 'Member\Developer_ReentryController@index'); //EVERYONE
-Route::post('/member/developer/re_entry/instant_add_slot', 'Member\Developer_ReentryController@instant_add_slot'); //EVERYONE
+Route::any('/member/developer/auto_entry', 'Member\Developer_AutoentryController@index'); //EVERYONE
+Route::post('/member/developer/auto_entry/instant_add_slot', 'Member\Developer_AutoentryController@instant_add_slot'); //EVERYONE
 
 Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
 

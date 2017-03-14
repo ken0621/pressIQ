@@ -65,7 +65,8 @@ class Mlm_tree
         }
         else
         {
-            if($new_slot->slot_sponsor == 1)
+            $top_slot                  = Tbl_mlm_slot::where("shop_id",$new_slot->shop_id)->orderBy("slot_id","ASC")->first();
+            if($new_slot->slot_sponsor == $top_slot->slot_id)
             {
                 if($new_slot->slot_position == "left")
                 {
@@ -580,7 +581,7 @@ class Mlm_tree
     
     public static function auto_place_slot_binary_auto_balance_revised($slot_info)
     {
-        if($slot_info->slot_sponsor != 0)
+        if($slot_info->slot_sponsor != 0 && $slot_info->slot_sponsor != null)
         {
             $sponsor = Tbl_mlm_slot::where("slot_id",$slot_info->slot_sponsor)->first();
             if($sponsor)

@@ -19,8 +19,8 @@
 <div class="panel panel-default panel-block panel-title-block">
     
     <ul class="nav nav-tabs">
-        <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab"><i class="fa fa-star"></i> Active User</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"><i class="fa fa-trash"></i> Inactive User</a></li>
+        <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#active"><i class="fa fa-star"></i> Active User</a></li>
+        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"><i class="fa fa-trash" href="#inactive"></i> Inactive User</a></li>
     </ul>
     
     <div class="search-filter-box">
@@ -34,30 +34,63 @@
             </div>
         </div>  
     </div>
-    
-    <div class="panel-body position-container">
-        <table style="table-layout: fixed;" class="table table-hover table-condensed table-bordered table-sale-month">
-            <thead>
-                <tr>
-                    <th class="text-left">User Id</th>
-                    <th class="text-left">User First Name</th>
-                    <th class="text-left">Position Name</th>
-                    <th class="text-left">Position Rank</th>
-                    <th class="text-left"></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($_list as $list)
-                <tr class="cursor-pointer">
-                    <td class="text-left">{{$list->user_id}}</td>
-                    <td class="text-left">{{$list->user_first_name}}</td>
-                    <td class="text-left">{{$list->position_name}}</td>
-                    <td class="text-left">{{$list->position_rank}}</td>
-                    <td class="text-left"><a href="javascript:" class="popup" link="/member/utilities/modal-edit-user?user_id={{$list->user_id}}" size="sm">Edit</a>|<a href="javascript:" class="popup" link="/member/utilities/modal-archive-user?user_id={{$list->user_id}}" size="sm">Archive</a></td>    
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+
+    <div class="tab-content codes_container">
+        <div id="active" class="tab-pane fade in active">
+            <div class="form-group order-tags"></div>
+            <div class="table-responsive">
+                <table style="table-layout: fixed;" class="table table-hover table-condensed table-bordered table-sale-month">
+                    <thead>
+                        <tr>
+                            <th class="text-left">User Id</th>
+                            <th class="text-left">User First Name</th>
+                            <th class="text-left">Position Name</th>
+                            <th class="text-left">Position Rank</th>
+                            <th class="text-left"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($_list as $list)
+                        <tr class="cursor-pointer">
+                            <td class="text-left">{{$list->user_id}}</td>
+                            <td class="text-left">{{$list->user_first_name}}</td>
+                            <td class="text-left">{{$list->position_name}}</td>
+                            <td class="text-left">{{$list->position_rank}}</td>
+                            <td class="text-left"><a href="javascript:" class="popup" link="/member/utilities/modal-edit-user?user_id={{$list->user_id}}" size="sm">Edit</a>|<a href="javascript:" class="popup" link="/member/utilities/modal-archive-user?user_id={{$list->user_id}}" size="sm">Archive</a></td>    
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="inactive" class="tab-pane fade in">
+            <div class="form-group order-tags"></div>
+            <div class="table-responsive">
+                <table style="table-layout: fixed;" class="table table-hover table-condensed table-bordered table-sale-month">
+                    <thead>
+                        <tr>
+                            <th class="text-left">User Id</th>
+                            <th class="text-left">User First Name</th>
+                            <th class="text-left">Position Name</th>
+                            <th class="text-left">Position Rank</th>
+                            <th class="text-left"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($_list_archived as $list)
+                        <tr class="cursor-pointer">
+                            <td class="text-left">{{$list->user_id}}</td>
+                            <td class="text-left">{{$list->user_first_name}}</td>
+                            <td class="text-left">{{$list->position_name}}</td>
+                            <td class="text-left">{{$list->position_rank}}</td>
+                            <td class="text-left"><a href="javascript:" class="popup" link="/member/utilities/modal-edit-user?user_id={{$list->user_id}}" size="sm">Edit</a>|<a href="javascript:" class="popup" link="/member/utilities/modal-archive-user?user_id={{$list->user_id}}" size="sm">Archive</a></td>    
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

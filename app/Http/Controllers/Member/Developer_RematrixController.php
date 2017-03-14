@@ -5,8 +5,6 @@ use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_search;
-
-Tbl_customer_search
 use Crypt;
 class Developer_RematrixController extends Member
 {

@@ -38,13 +38,67 @@ use App\Globals\Mlm_voucher;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Item_code;
 use App\Globals\Mlm_gc;
+use App\Globals\Mlm_compute;
 use App\Globals\Mlm_complan_manager_repurchase;
 use App\Globals\Utilities;
 use Crypt;
 class MLM_SlotController extends Member
 {
+    public function instant_add_slot()
+    {
+        for($x = 0;$x < Request::input("loop");$x++)
+        {
+            $shop_id = $this->user_info->shop_id;
+            if(Tbl_mlm_slot::where("shop_id",$shop_id)->count() == 0)
+            {
+                $insert['slot_sponsor'] = null;
+            }
+            else
+            {
+                $insert['slot_sponsor'] = 1;    
+            }
+
+            $insert['slot_no'] = Tbl_mlm_slot::where("shop_id",$shop_id)->count() + 1;
+            $insert['shop_id'] = $this->user_info->shop_id;
+            $insert['slot_owner'] = 1;
+            $insert['slot_created_date'] = Carbon::now();
+            $insert['slot_membership'] = 1;
+            $insert['slot_status']  = "PS";
+
+
+            $id = Tbl_mlm_slot::insertGetId($insert);
+
+            $slot_info = Tbl_mlm_slot::where('slot_id', $id)->membership()->membership_points()->customer()->first();
+            // compute mlm
+            $a = Mlm_compute::entry($id);
+        }
+
+        dd("Success");
+    }
+    
     public function index()
     {
+        // $placement_tree_left_list        = Tbl_tree_placement::where("placement_tree_parent_id",1)
+        //                                                      ->where("placement_tree_level",11)
+        //                                                      ->where("placement_tree_position","left")
+        //                                                      ->leftjoin("tbl_mlm_slot","tbl_mlm_slot.slot_placement","=","tbl_tree_placement.placement_tree_child_id")
+        //                                                      ->orderBy("tbl_mlm_slot.auto_balance_position","ASC")
+        //                                                      ->whereNull("slot_id")
+        //                                                      ->select("placement_tree_child_id")
+        //                                                      ->lists("placement_tree_child_id");
+
+        // $placement_tree_left             = Tbl_tree_placement::whereIn("placement_tree_child_id",$placement_tree_left_list)->where("placement_tree_parent_id",1)->where("placement_tree_level",11)->childslot()->orderBy("tbl_mlm_slot.auto_balance_position","ASC")->get();
+        // dd($placement_tree_left);
+        // $placement_tree_right_list       = Tbl_tree_placement::where("placement_tree_parent_id",$sponsor->slot_id)
+        //                                                      ->where("placement_tree_level",$current_level)
+        //                                                      ->where("placement_tree_position","right")
+        //                                                      ->leftjoin("tbl_mlm_slot","tbl_mlm_slot.slot_placement","=","tbl_tree_placement.placement_tree_child_id")
+        //                                                      ->orderBy("tbl_mlm_slot.auto_balance_position","ASC")
+        //                                                      ->whereNull("slot_id")
+        //                                                      ->select("placement_tree_child_id")
+        //                                                      ->lists("placement_tree_child_id");
+
+        // $placement_tree_right  = Tbl_tree_placement::whereIn("placement_tree_child_id",$placement_tree_right_list)->where("placement_tree_parent_id",$sponsor->slot_id)->where("placement_tree_level",$current_level)->childslot()->orderBy("tbl_mlm_slot.auto_balance_position","ASC")->get();
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {

@@ -12,7 +12,7 @@ class Tbl_warehouse extends Model
 
     public function scopeInventory($query)
     {
-    	 return $query->join('tbl_warehouse_inventory', 'tbl_warehouse_inventory.warehouse_id', '=', 'tbl_warehouse.warehouse_id');
+    	 return $query->leftjoin('tbl_warehouse_inventory', 'tbl_warehouse_inventory.warehouse_id', '=', 'tbl_warehouse.warehouse_id');
     }
     public function scopeWarehouseitem($query)
     {

@@ -62,14 +62,14 @@
                         </div>
                         <div class="col-sm-1">  
                             <label>Terms</label>
-                            <select {{isset($inv) ? 'disabled' : ''}} class="form-control" name="inv_terms_id">
+                            <select {{isset($inv) ? 'disabled' : ''}} class="form-control input-sm" name="inv_terms_id">
                                 <option value="1" {{isset($inv) ? $inv->term_id == 1 ? 'selected' : '' : ''}}>Net 10</option>
                                 <option value="2" {{isset($inv) ? $inv->term_id == 2 ? 'selected' : '' : ''}}>Net 30</option>
                             </select>
                         </div>
                         <div class="col-sm-2">  
                             <label>Payment Method</label>
-                            <select {{isset($inv) ? 'disabled' : ''}} class="form-control" name="payment_method_id">
+                            <select {{isset($inv) ? 'disabled' : ''}} class="form-control nput-sm" name="payment_method_id">
                             @foreach($_payment as $payment)
                                 <option value="{{$payment->payment_method_id}}" {{isset($inv) ? $inv->payment_method_id == $payment->payment_method_id ? 'selected' : '' : ''}}>{{$payment->payment_name}}</option>
                             @endforeach
@@ -94,7 +94,7 @@
                                             <th style="width: 10px;" ></th>
                                             <th style="width: 120px;">Service Date</th>
                                             <th style="width: 15px;" class="text-right">#</th>
-                                            <th style="width: 180px;">Product/Service</th>
+                                            <th>Product/Service</th>
                                             <th>Description</th>
                                             <th style="width: 70px;">Qty</th>
                                             <th style="width: 100px;">Rate</th>
@@ -116,7 +116,7 @@
                                                     <td class="invoice-number-td text-right">1</td>
                                                     <td>
                                                         <select disabled class="form-control select-item input-sm pull-left {{$invline->item_id}}" name="invline_item_id[]" required>
-                                                            @include("member.product_order.load_evariant_category", ['add_search' => "", 'item_id' => $invline->item_id])
+                                                            @include("member.load_ajax_data.load_product_category", ['add_search' => "", 'item_id' => $invline->item_id])
                                                         </select>
                                                     </td>
                                                     <td><textarea disabled class="textarea-expand txt-desc" name="invline_description[]">{{$invline->description}}</textarea></td>
@@ -141,7 +141,7 @@
                                                 <td class="invoice-number-td text-right">1</td>
                                                 <td>
                                                     <select class="1111 form-control select-item droplist-item input-sm pull-left" name="invline_item_id[]" >
-                                                        @include("member.product_order.load_evariant_category", ['add_search' => ""])
+                                                        @include("member.load_ajax_data.load_product_category", ['add_search' => ""])
                                                         <option class="hidden" value="" />
                                                     </select>
                                                 </td>
@@ -165,7 +165,7 @@
                                                 <td class="invoice-number-td text-right">2</td>
                                                 <td>
                                                     <select class="22222 form-control select-item droplist-item input-sm pull-left" name="invline_item_id[]" >
-                                                        @include("member.product_order.load_evariant_category", ['add_search' => ""])
+                                                        @include("member.load_ajax_data.load_product_category", ['add_search' => ""])
                                                         <option class="hidden" value="" />
                                                     </select>
                                                 </td>
@@ -321,7 +321,7 @@
             <td class="invoice-number-td text-right">2</td>
             <td>
                 <select class="form-control select-item input-sm pull-left" name="invline_item_id[]" >
-                    @include("member.product_order.load_evariant_category", ['add_search' => ""])
+                    @include("member.load_ajax_data.load_product_category", ['add_search' => ""])
                     <option class="hidden" value="" />
                 </select>
             </td>

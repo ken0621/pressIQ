@@ -93,9 +93,9 @@ class UtilitiesController extends Member
         $data["_rank"] = Tbl_user_position::where("position_shop_id", $user_info->user_shop)->where("position_rank", ">", $user_info->position_rank)->orderBy('position_id')->get(['position_id','position_name'])->toArray();
         $data["user"]  = Tbl_user::where("user_id",$user_id)->first();
         $data["action"]= "/member/utilities/archive-user";
-        $data["title"] = "archived"; 
+        $data["title"] = "archived-user"; 
 
-        return view("member.utilities.modal_archive_user", $data);
+        return view("member.utilities.modal_archive_restore", $data);
     }
 
     public function postArchiveUser()
@@ -113,7 +113,7 @@ class UtilitiesController extends Member
 
         if(!isset($json))
         {
-            Tbl_user::where("user_id",Request::input("user_id"))->update($insert);
+            Tbl_user::where("user_id",Request::input("id"))->update($insert);
             $json['message']          = "Succesfully update";
             $json['response_status']  = "success-archived";
             $json['redirect_to']      = Redirect::back()->getTargetUrl();
@@ -128,14 +128,14 @@ class UtilitiesController extends Member
         $data["_rank"] = Tbl_user_position::where("position_shop_id", $user_info->user_shop)->where("position_rank", ">", $user_info->position_rank)->orderBy('position_id')->get(['position_id','position_name'])->toArray();
         $data["user"]  = Tbl_user::where("user_id",$user_id)->first();
         $data["action"]= "/member/utilities/restore-user";
-        $data["title"] = "restored"; 
+        $data["title"] = "restored-user"; 
 
-        return view("member.utilities.modal_archive_user", $data);
+        return view("member.utilities.modal_archive_restore", $data);
     }
 
     public function postRestoreUser()
     { 
-        $edit_user                       = Tbl_user::where("user_id",Request::input("user_id"))->position()->first();
+        $edit_user                       = Tbl_user::where("user_id",Request::input("id"))->position()->first();
         $insert["archived"]              = 0;
         if($edit_user->position_rank <= $this->user_info()->position_rank)
         {
@@ -148,7 +148,7 @@ class UtilitiesController extends Member
 
         if(!isset($json))
         {
-            Tbl_user::where("user_id",Request::input("user_id"))->update($insert);
+            Tbl_user::where("user_id",Request::input("id"))->update($insert);
             $json['message']          = "Succesfully update";
             $json['response_status']  = "success-restored";
             $json['redirect_to']      = Redirect::back()->getTargetUrl();
@@ -371,22 +371,25 @@ class UtilitiesController extends Member
         {
             $user_info = $this->user_info();
 
-            $data["is_developer"] = false; 
+            $data["is_developer"]   = false; 
+            $data["_position"]      = [];
 
             if($user_info->position_rank == 0)
             {
-                $data["_position"] = Tbl_user_position::shop()->where("position_rank",">", $user_info->position_rank)->orderBy("shop_key")->get();
+                $active = Tbl_user_position::shop()->where("position_rank",">", $user_info->position_rank)->orderBy("shop_key")->where("archived", 0)->get();
+                $inactive = Tbl_user_position::shop()->where("position_rank",">", $user_info->position_rank)->orderBy("shop_key")->where("archived", 1)->get();
                 $data["is_developer"] = true;
             }
             elseif($user_info->position_rank)
             {
-                $data["_position"] = Tbl_user_position::where("position_shop_id", $this->user_info->shop_id)
-                                    ->where("position_rank",">", $user_info->position_rank)->get();
+                $active = Tbl_user_position::where("position_shop_id", $this->user_info->shop_id)
+                                    ->where("position_rank",">", $user_info->position_rank)->where("archived", 0)->get();
+                $inactive = Tbl_user_position::where("position_shop_id", $this->user_info->shop_id)
+                                    ->where("position_rank",">", $user_info->position_rank)->where("archived", 1)->get();
             }
-            else
-            {
-                $data["_position"] = [];
-            }
+
+            $data["_position"]          = $active;
+            $data["_position_archived"] = $inactive;
 
             return view('member/utilities/admin_position', $data);
         }
@@ -394,6 +397,58 @@ class UtilitiesController extends Member
         {
             return $this->show_no_access();
         }
+    }
+
+    public function getModalArchivePosition()
+    {
+        $position_id        = Request::input("position_id");
+
+        $data["position"]   = Tbl_user_position::where("position_id",$position_id)->first();
+        $data["action"]     = "/member/utilities/archive-position";
+        $data["title"]      = "archived-position"; 
+
+        return view("member.utilities.modal_archive_restore", $data);
+    }
+
+    public function postArchivePosition()
+    { 
+        $position_id = Request::input("id");
+        $position_is_used = Tbl_user_position::join('tbl_user','user_level','=','position_id')->where("position_id", $position_id)->first();
+
+        if($position_is_used)
+        {
+            $json['message']          = "Position is in use";
+            $json['response_status']  = "error";
+            $json['redirect_to']      = Redirect::back()->getTargetUrl();
+            return json_encode($json); 
+        }
+
+        Tbl_user_position::where("position_id",$position_id)->update(['archived'=>1]);
+
+        $json['message']          = "Succesfully archived";
+        $json['response_status']  = "success-archived";
+        $json['redirect_to']      = Redirect::back()->getTargetUrl();
+        return json_encode($json); 
+    }
+
+    public function getModalRestorePosition()
+    {
+        $position_id        = Request::input("position_id");
+
+        $data["position"]   = Tbl_user_position::where("position_id",$position_id)->first();
+        $data["action"]     = "/member/utilities/restore-position";
+        $data["title"]      = "restored-position"; 
+
+        return view("member.utilities.modal_archive_restore", $data);
+    }
+
+    public function postRestorePosition()
+    { 
+        Tbl_user_position::where("position_id",Request::input("id"))->update(['archived'=>0]);
+        $json['message']          = "Succesfully restored";
+        $json['response_status']  = "success-archived";
+        $json['redirect_to']      = Redirect::back()->getTargetUrl();
+        return json_encode($json); 
     }
 
     public function getAccess()

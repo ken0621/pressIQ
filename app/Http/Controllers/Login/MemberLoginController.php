@@ -17,10 +17,12 @@ class MemberLoginController extends Controller
 	{
 		Session::forget('user_email');
 		Session::forget('user_password');
+		Session::forget('product_info');
 		return Redirect::back();
 	}
 	public function login()
 	{
+		Session::forget('product_info');
 		if(Request::isMethod("post"))
 		{
 			$user_info = Tbl_user::where("user_email", Request::input("email"))->first();

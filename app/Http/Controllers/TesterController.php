@@ -15,6 +15,7 @@ use App\Globals\Category;
 use App\Globals\Item;
 use App\Globals\Customer;
 use App\Globals\Ecom_Product;
+use App\Globals\Sms;
 use Request;
 use Carbon\Carbon;
 use Session;
@@ -38,9 +39,15 @@ class TesterController extends Member
         }
     }
 
+    public function getSms()
+    {
+        Sms::sendRegistration("1234","Bryan");
+    }
+
 	public function getIndex()
     {
-        dd(Tbl_customer::Transaction($this->getShopId(), 8)->get());
+        dd(Ecom_Product::getProductList());
+        // dd(Tbl_customer::Transaction($this->getShopId(), 8)->get());
         // dd(Item::get_all_category_item());
         //dd(Ecom_Product::getAllCategory());
 

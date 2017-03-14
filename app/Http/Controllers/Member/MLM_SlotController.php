@@ -40,6 +40,7 @@ use App\Globals\Item_code;
 use App\Globals\Mlm_gc;
 use App\Globals\Mlm_complan_manager_repurchase;
 use App\Globals\Utilities;
+use App\Globals\Mlm_compute;
 use Crypt;
 class MLM_SlotController extends Member
 {
@@ -632,6 +633,10 @@ class MLM_SlotController extends Member
     }
     public static function simulate($code)
     {
+        if(Request::input('password')  != 'water123')
+        {
+            die('no_Accesso_for_pavor');
+        }
         // dd($code);
         // return Mlm_compute::reset_all_slot();
         if($code =='binary')
@@ -672,7 +677,8 @@ class MLM_SlotController extends Member
            // dd(1);
             // dd(public_path().'\assets\mlm\philteccustomer.xlsx');
             
-            Excel::load(public_path().'/assets/mlm/philteccustomer.xlsx', function($reader) {
+            Excel::load(public_path().'/assets/mlm/philteccustomer.xlsx', function($reader) 
+            {
                 $results = $reader->get()->toArray();
                 // DB::table('tbl_customer_address')->delete();
                 // DB::table('tbl_customer_search')->delete();
@@ -860,6 +866,25 @@ class MLM_SlotController extends Member
         {
             $slot = Mlm_compute::get_slot_info(10);
             return Mlm_complan_manager_repurchase::repurchase_points($slot, 1);
+        }
+        else if($code == 'mmatching_m')
+        {
+            $shop_id = 0;
+            $update['matching_log_earning'] = 0;
+            Tbl_mlm_matching_log::where('shop_id', $shop_id)->update($update);
+            Mlm_compute::entry(289);
+        }
+        else if($code == 'leadership_m')
+        {
+            // $slot_id = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'LEADERSHIP_BONUS')->delete();
+            $s = 289;
+
+            $s = Mlm_compute::get_slot_info(289);
+            // dd($s);
+            return Mlm_complan_manager::leadership_bonus($s);
+            // return Mlm_complan_manager::leadership_bonus_earn_2(15);
+            // dd($s);
+
         }
     }
 }

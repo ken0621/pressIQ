@@ -53,10 +53,19 @@ class MlmReportController extends Mlm
         $data['report']     = Mlm_member_report::get_wallet('MEMBERSHIP_MATCHING', Self::$slot_id); 
         $data['plan']       = Mlm_member_report::get_plan('MEMBERSHIP_MATCHING', Self::$shop_id); 
         $data['header'] = Mlm_member_report::header($data['plan']);
-        $data['report_matching'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->get();
-        $data['tester'] = [];
+        $data['report_matching'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->orderBy('matching_log', 'DESC')->paginate(10);
+        $data['slot_1']  = [];
+        $data['slot_2'] = [];
+        foreach($data['report_matching'] as $key => $value)
+        {
+            $data['slot_1'][$key] = Tbl_mlm_slot::where('slot_id', $value->matching_log_slot_1)->customer()->first();
+            $data['slot_2'][$key] = Tbl_mlm_slot::where('slot_id', $value->matching_log_slot_2)->customer()->first();
+        }
+        // $unmatch_1 = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)->join('tbl_mlm_matching_log', 'tbl_mlm_matching_log.matching_log_earner', '=', 'tbl_tree_sponsor.sponsor_tree_parent_id' )->get();
+        // dd($unmatch_1);
         $data['matching_count'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->count();
         $data['count'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->get();
+        // dd($data['report_matching']);
         return view("mlm.report.report_membership_matching", $data);
     }
     public static function executive_bonus()
@@ -86,45 +95,7 @@ class MlmReportController extends Mlm
             ->orderby('points_log_id', 'DESC')
             ->where('points_log_slot', Self::$slot_id)
             ->paginate(10);
-            foreach($data['points_log'] as $key => $value)
-            {
-                $data['level'][$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
-                ->where('sponsor_tree_child_id', $value->points_log_Sponsor)->pluck('sponsor_tree_level');
-          
-            }
-            // $data = [];
-            $data['leadership_bonus'] = Tbl_mlm_leadership_settings::where('membership_id', $slot->membership_id)->first();
-            if(isset($data['leadership_bonus']->leadership_settings_start))
-            {
-                $tree = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
-                ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_tree_sponsor.sponsor_tree_child_id')
-                ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-                ->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership')
-                ->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id')
-                ->where('tbl_tree_sponsor.sponsor_tree_level', '>=', $data['leadership_bonus']->leadership_settings_start)
-                ->where('tbl_tree_sponsor.sponsor_tree_level', '<=', $data['leadership_bonus']->leadership_settings_end)
-                ->orderBy('tbl_tree_sponsor.sponsor_tree_level', 'ASC')
-                ->get();
-            }
-            else
-            {
-                $tree = [];
-            }
-            // dd($tree);
-            $data['tree'] = [];
-            $data['sum_all'] = 0;
-            foreach($tree as $key => $value)
-            {
-                $sum = Tbl_mlm_slot_points_log::where('points_log_slot', $value->slot_id)->where('points_log_complan', 'LEADERSHIP_BONUS')->sum('points_log_points');
-                $value->points = $sum;
-                if($sum != null || $sum != 0)
-                {
-                    $data['tree'][$value->sponsor_tree_level][$value->slot_id] = $value;
-                }
-                
-
-            }
-            // dd($data['tree']);
+            // dd($data);
             return view("mlm.report.report_leadership_bonus", $data);
         }
         else

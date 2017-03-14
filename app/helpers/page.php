@@ -737,6 +737,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevarra";
 
+     /* -- DEVELOPERS => DOCUMENTATION */
+    $code = "developer-auto-entry";
+    $nav[$page]['submenu'][$code]['label'] = "Auto Entry";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/auto_entry";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+    
     $code = "developer-simulate";
     $nav[$page]['submenu'][$code]['label'] = "Simulate";
     $nav[$page]['submenu'][$code]['code'] = $code;
@@ -750,15 +759,6 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Code Documentation";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/documentation";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
-
-     /* -- DEVELOPERS => DOCUMENTATION */
-    $code = "developer-documentation";
-    $nav[$page]['submenu'][$code]['label'] = "Code Documentation";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/auto_entry";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";

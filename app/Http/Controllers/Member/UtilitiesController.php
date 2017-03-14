@@ -31,10 +31,10 @@ class UtilitiesController extends Member
     {
         if($this->hasAccess("utilities-admin-accounts","access_page"))
         {
-            $user_info     = $this->user_info();
-            $data["_list"] = Tbl_user::where("user_shop",$user_info->user_shop)->position()->where("position_rank",">",$user_info->position_rank)->where("tbl_user.archived",0)->get();
+            $user_info              = $this->user_info();
+            $data["_list"]          = Tbl_user::where("user_shop",$user_info->user_shop)->position()->where("position_rank",">",$user_info->position_rank)->get();
+            $data["_list_archived"] = Tbl_user::where("user_shop",$user_info->user_shop)->where("tbl_user.archived",0)->position()->where("position_rank",">",$user_info->position_rank)->get();
 
-            $data["_list_archived"] = Tbl_user::where("user_shop",$user_info->user_shop)->position()->where("position_rank",">",$user_info->position_rank)->where("tbl_user.archived",1)->get();
             return view('member/utilities/admin_list', $data);
         }
         else

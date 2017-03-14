@@ -1,38 +1,332 @@
-var bill = bill();
-var maximum_payment = 0;
-var is_amount_receive_modified = false;
+var bill = new bill();
+var global_tr_html = $(".div-script tbody").html();
+var item_selected = ''; 
 
-function bill()
-{
+function bill(){
 	init();
 
 	function init()
 	{
-		document_ready();
-	}
+		initialize_select();
+		draggable_row.dragtable();
 
-	function document_ready()
-	{
-		event_line_check_change();
-		event_payment_amount_change();
-		event_received_amount_change();
+		event_remove_tr();
+		event_accept_number_only();
+		event_compute_class_change();
+		event_taxable_check_change();
+		
+		action_lastclick_row();
+		action_compute();
+		action_date_picker();
+		action_reassign_number();
 		event_button_action_click();
-
-		action_initialize_load();
 	}
 
-	this.action_initialize_load = function()
+	function event_remove_tr()
 	{
-		action_initialize_load();
+		$(document).on("click", ".remove-tr", function(e){
+			if($(".tbody-item .remove-tr").length > 1){
+				$(this).parent().remove();
+				action_reassign_number();
+				action_compute();
+			}			
+		});
 	}
 
-	function action_initialize_load()
+	this.action_lastclick_row = function()
 	{
-		initialize_select_plugin();
-		$(".amount-payment").change();
+		action_lastclick_row();
 	}
 
-	function initialize_select_plugin()
+	function action_lastclick_row()
+	{
+		$(document).on("click", "tbody.draggable tr:last td:not(.remove-tr)", function(){
+			action_lastclick_row_op();
+		});
+	}
+
+	function action_return_to_number(number = '')
+	{
+
+		number += '';
+		number = number.replace(/,/g, "");
+		if(number == "" || number == null || isNaN(number)){
+			number = 0;
+		}
+		
+		return parseFloat(number);
+	
+	}
+
+	function action_lastclick_row_op()
+	{
+		$("tbody.draggable").append(global_tr_html);
+		action_reassign_number();
+		action_trigger_select_plugin();
+		action_date_picker();
+	}
+
+	function action_date_picker()
+	{
+		$(".draggable .for-datepicker").datepicker();
+	}
+
+	this.action_reassign_number = function()
+	{
+		action_reassign_number();
+	}
+
+	function action_reassign_number()
+	{
+		var num = 1;
+		$(".invoice-number-td").each(function(){
+			$(this).html(num);
+			num++;
+		});
+	}
+
+	function event_accept_number_only()
+	{
+		$(document).on("keypress",".number-input", function(event){
+			if(event.which < 46 || event.which > 59) {
+		        event.preventDefault();
+		    } // prevent if not number/dot
+
+		    if(event.which == 46 && $(this).val().indexOf('.') != -1) {
+		        event.preventDefault();
+		    } // prevent if already dot
+
+		});
+
+		$(document).on("change",".number-input", function(){
+			$(this).val(function(index, value) {		 
+			    var ret = '';
+			    value = action_return_to_number(value);
+			    if(!$(this).hasClass("txt-qty")){
+			    	value = parseFloat(value);
+			    	value = value.toFixed(2);
+			    }
+			    if(value != '' && !isNaN(value)){
+			    	value = parseFloat(value);
+			    	ret = action_add_comma(value).toLocaleString();
+			    }
+			   	
+			    if(ret == 0){
+			    	ret = '';
+			    }
+
+				return ret;
+			  });
+		});
+	}
+
+	function event_compute_class_change()
+	{
+		$(document).on("change",".compute", function()
+		{
+			action_compute();
+		});
+	}
+
+	function action_compute()
+	{
+		var subtotal = 0;
+		var total_taxable = 0;
+
+		$(".tr-draggable").each(function()
+		{
+			/* GET ALL DATA */
+			var qty 	= $(this).find(".txt-qty").val();
+			var rate 	= $(this).find(".txt-rate").val();
+			var discount= 0;
+			var amount 	= $(this).find(".txt-amount");
+			var taxable = $(this).find(".taxable-check");
+			
+			/* CHECK IF QUANTITY IS EMPTY */
+			if(qty == "" || qty == null)
+			{
+				qty = 1;
+			}
+
+			/* CHECK THE DISCOUNT */
+			// if(discount.indexOf('%') >= 0)
+			// {
+			// 	$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
+			// 	discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * action_return_to_number(rate);
+			// }
+			// else if(discount == "" || discount == null)
+			// {
+			// 	discount = 0;
+			// }
+			// else
+			// {
+			// 	discount = parseFloat(discount);
+			// }
+
+			/* RETURN TO NUMBER IF THERE IS COMMA */
+			qty = action_return_to_number(qty);
+			rate = action_return_to_number(rate);
+			discount = action_return_to_number(discount);
+
+			var total_per_tr = ((qty * rate) - discount).toFixed(2);
+
+			/* action_compute SUB TOTAL PER LINE */
+			subtotal += parseFloat(total_per_tr);
+
+			/* AVOID ZEROES */
+			if(total_per_tr <= 0)
+			{
+				total_per_tr = '';
+			}
+
+			/* CONVERT TO INTEGER */
+			var amount_val = amount.val();
+			
+			if(amount_val != '' && amount_val != null && total_per_tr == '') //IF QUANTITY, RATE IS [NOT EMPTY]
+			{
+				var sub = parseFloat(action_return_to_number(amount_val));
+				if(isNaN(sub))
+				{
+					sub = 0;
+				}
+				subtotal += sub;
+				total_per_tr = sub;
+				amount.val(action_add_comma(sub));
+			}
+			else //IF QUANTITY, RATE IS [EMPTY]
+			{
+				amount.val(action_add_comma(total_per_tr));
+			}
+
+			/*CHECK IF TAXABLE*/	
+			if(taxable.is(':checked'))
+			{
+				total_taxable += parseFloat(total_per_tr);
+			}
+
+		});
+		
+		/* action_compute EWT */
+		var ewt_value 			= $(".ewt-value").val();
+
+		ewt_value = parseFloat(ewt_value) * subtotal;
+
+		/* action_compute DISCOUNT */
+		var discount_selection 	= $(".discount_selection").val();
+		var discount_txt 		= $(".discount_txt").val();
+		var tax_selection 		= $(".tax_selection").val();
+		var taxable_discount 	= 0;
+
+		if(discount_txt == "" || discount_txt == null)
+		{
+			discount_txt = 0;
+		}
+
+		discount_total = 0;
+
+		if(discount_selection == 'percent')
+		{
+			discount_total = subtotal * (discount_txt / 100);
+			taxable_discount = total_taxable * (discount_txt / 100);
+		}
+
+		discount_total = 0;
+
+		/* action_compute TOTAL */
+		var total = 0;
+		total     = subtotal - discount_total - ewt_value;
+
+		/* action_compute TAX */
+		var tax   = 0;
+		if(tax_selection == 1){
+			tax = total_taxable * (12 / 100);
+		}
+		total += tax;
+
+		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));
+		$(".subtotal-amount-input").val(action_add_comma(subtotal.toFixed(2)));
+		$(".ewt-total").html(action_add_comma(ewt_value.toFixed(2)));
+		$(".discount-total").html(action_add_comma(discount_total.toFixed(2)));
+		$(".tax-total").html(action_add_comma(tax.toFixed(2)));
+		$(".total-amount").html(action_add_comma(subtotal.toFixed(2)));
+		$(".total-amount-input").val(subtotal.toFixed(2));
+
+	}
+
+	function action_add_comma(number)
+	{
+		number += '';
+		if(number == '0' || number == ''){
+			return '';
+		}
+
+		else{
+			return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+	}
+
+	/* CHECK BOX FOR TAXABLE */
+	function event_taxable_check_change()
+	{
+		$(".taxable-check").unbind("change");
+		$(".taxable-check").bind("change", function()
+		{
+			action_change_input_value($(this));
+		});
+	}
+
+	function check_change_input_value()
+	{
+		$(".taxable-check").each( function()
+		{
+			action_change_input_value($(this));
+		})
+	}
+	
+	function action_change_input_value($this)
+	{
+		if($this.is(":checked"))
+		{
+			$this.prev().val(1);
+		}
+		else
+		{
+			$this.prev().val(0);
+		}
+	}
+
+	function action_trigger_select_plugin()
+	{
+		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
+        {
+            link : "/member/item/add",
+            width : "100%",
+            onCreateNew : function()
+            {
+            	item_selected = $(this);
+            },
+            onChangeValue : function()
+            {
+            	action_load_item_info($(this));
+            }
+        });
+        $(".draggable .tr-draggable:last td select.select-um").globalDropList(
+        {
+        	hasPopup: "false",
+    		width : "110px",
+    		placeholder : "um.."
+        }).globalDropList('disabled');
+	}
+	function event_button_action_click()
+	{
+		$(document).on("click","button[type='submit']", function()
+		{
+			$(".button-action").val($(this).attr("data-action"));
+		})
+	}
+	/* Make select input into a drop down list plugin */
+
+	function initialize_select()
 	{
 		$(".drop-down-customer").globalDropList(
 		{
@@ -49,7 +343,41 @@ function bill()
 		    	})
 		    }
 		});
+		$('.droplist-vendor').globalDropList(
+		{ 
+			width : "100%",
+			link : "/member/vendor/add",
+			onChangeValue: function()
+			{
+				$(".customer-email").val($(this).find("option:selected").attr("email"));
+			}
+		});
 
+	    $('.droplist-item').globalDropList(
+        {
+            link : "/member/item/add",
+            width : "100%",
+            onCreateNew : function()
+            {
+            	item_selected = $(this);
+            },
+            onChangeValue : function()
+            {
+            	action_load_item_info($(this));
+            }
+        });
+        $('.droplist-um').globalDropList(
+    	{
+    		hasPopup: "false",
+    		width : "110px",
+    		placeholder : "um..",
+    		onChangeValue: function()
+    		{
+    			action_load_unit_measurement($(this));
+    		}
+
+    	});
+        $('.droplist-um:not(.has-value)').globalDropList("disabled");
 		$(".drop-down-payment").globalDropList(
 		{
 		    link 		: '/member/maintenance/payment_method/add',
@@ -67,162 +395,143 @@ function bill()
 		});
 	}
 
-	/* CHECK BOX FOR LINE ITEM */
-	function event_line_check_change()
+
+	function action_load_item_info($this)
 	{
-		$(document).on("change", ".line-checked", function()
+		$parent = $this.closest(".tr-draggable");
+		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
+		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
+		$parent.find(".txt-qty").val(1).change();
+
+		if($this.find("option:selected").attr("has-um") != '')
 		{
-			action_change_input_value($(this));
-		});
-	}
-	function action_change_input_value($this)
-	{
-		if($this.is(":checked"))
-		{
-			$this.prev().val(1);
-			var balance = $this.parents("tr").find(".balance-due").val();
-			if(!formatFloat($this.parents("tr").find(".amount-payment").val()) > 0)
+			$.ajax(
 			{
-				$this.parents("tr").find(".amount-payment").val(balance).change();
-			}
+				url: '/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"),
+				method: 'get',
+				success: function(data)
+				{
+					$parent.find(".select-um").html(data).globalDropList("reload").globalDropList("enabled");
+				},
+				error: function(e)
+				{
+					console.log(e.error());
+				}
+			})
 		}
 		else
 		{
-			$this.prev().val(0);
-			if(formatFloat($this.parents("tr").find(".amount-payment").val()) > 0)
-			$this.parents("tr").find(".amount-payment").val('').change();
+			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
 	}
 
-	function action_compute_maximum_amount()
+	function action_load_unit_measurement($this)
 	{
-		$(".balance-due").each(function()
+		$parent = $this.closest(".tr-draggable");
+		$item   = $this.closest(".tr-draggable").find(".select-item");
+
+		$um_qty = parseFloat($this.find("option:selected").attr("qty"));
+		$sales  = parseFloat($item.find("option:selected").attr("price"));
+		$qty    = parseFloat($parent.find(".txt-qty").val());
+		console.log($um_qty +"|" + $sales +"|" +$qty);
+		$parent.find(".txt-rate").val( $um_qty * $sales * $qty ).change();
+	}
+
+	this.action_reload_customer = function($id)
+	{
+		action_reload_customer($id);
+	}
+
+	function action_reload_customer($id)
+	{
+		$.ajax(
 		{
-			maximum_payment += formatFloat($(this).val());
+			url: '/member/customer/load_customer',
+			method: 'GET',
+			success: function(data)
+			{
+				$element = $(".droplist-customer");
+
+				$element.html(data);
+				$element.globalDropList("reload");
+				$element.val($id).change();
+				
+			},
+			error: function()
+			{
+				console.log("error");
+			}
+
 		})
 	}
 
-	function event_received_amount_change()
+	this.action_reload_item = function($id)
 	{
-		$(document).on("change", ".amount-received", function()
-		{
-			$(this).val(formatMoney($(this).val()));
-
-			var amount_receive = formatFloat($(this).val());
-			var amount_applied = formatFloat(action_total_amount_apply());
-
-			if( amount_receive > amount_applied)
-			{
-				console.log("true");
-				action_update_credit_amount(amount_receive - amount_applied);
-			}
-			else
-			{
-				action_update_credit_amount(0)
-			}
-		})
-
-		$(document).on("keydown", ".amount-received", function()
-		{
-			is_amount_receive_modified = true;
-		})
+		action_reload_item($id);
 	}
 
-	function action_update_apply_amount($amount)
+	function action_reload_item($id)
 	{
-		$(".amount-to-apply").val($amount);
-		$(".amount-apply").html("PHP "+formatMoney($amount))
-	}
-
-	function action_update_credit_amount($amount)
-	{
-		$(".amount-to-credit").val($amount);
-		$(".amount-credit").html("PHP "+formatMoney($amount))
-	}
-
-	function event_payment_amount_change()
-	{
-		$(document).on("change",".amount-payment", function(e)
+		$.ajax(
 		{
-			$(this).val(formatFloat($(this).val()) == 0 ? '' : formatMoney($(this).val()));
+			url: '/member/item/load_item_category',
+			method: 'GET',
+			success: function(data)
+			{
+				$element = $(".tbody-item .select-item");
 
-			!is_amount_receive_modified ? $(".amount-received").val(action_total_amount_apply()).change() : $(".amount-received").change();
-			action_update_apply_amount(action_total_amount_apply());
+				$element.html(data);
+				
+				$element.globalDropList("reload");
 
-			// check - uncheck checkbox
-			if(formatFloat($(this).val()) > 0)
+				// Filter selected combobox only
+				item_selected.val($id).change();
+			},
+			error: function()
 			{
-				$(this).parents("tr").find(".line-checked").prop("checked", true).change();
-			}
-			else
-			{
-				$(this).parents("tr").find(".line-checked").prop("checked", false).change();
+				console.log("error");
 			}
 
-			// validation for exceeding balace
-			if(formatFloat($(this).val()) > formatFloat($(this).parents("tr").find(".balance-due").val()) )
-			{
-				this.setCustomValidity("You may not pay more than the balance due");
-    			return false;
-			}
-			else
-			{
-				this.setCustomValidity("");
-    			return true;
-			}
 		})
 	}
 
-	function action_total_amount_apply()
-	{
-		var line_payment_amount = 0;
-		$(".amount-payment").each(function()
-		{
-			line_payment_amount += formatFloat($(this).val());
-		})
+}	
 
-		return formatMoney(line_payment_amount);
-	}
 
-	function formatFloat($this)
-	{
-		return Number($this.toString().replace(/[^0-9\.]+/g,""));
-	}
-
-	function formatMoney($this)
-	{
-		var n = formatFloat($this), 
-	    c = isNaN(c = Math.abs(c)) ? 2 : c, 
-	    d = d == undefined ? "." : d, 
-	    t = t == undefined ? "," : t, 
-	    s = n < 0 ? "-" : "", 
-	    i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
-	    j = (j = i.length) > 3 ? j % 3 : 0;
-	   return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-	}
-
-	function event_button_action_click()
-	{
-		$(document).on("click","button[type='submit']", function()
-		{
-			$(".button-action").val($(this).attr("data-action"));
-		})
-	}
+/* AFTER DRAGGING A TABLE ROW */
+function dragging_done()
+{
+	bill.action_reassign_number();
 }
+
+/* AFTER ADDING A CUSTOMER */
+function submit_done_customer(result)
+{
+	bill.action_reload_customer(result['customer_info']['customer_id']);
+}
+
+/* AFTER ADDING AN  ITEM */
+// function submit_done(data)
+// {
+// 	bill.action_reload_item(data.item_id);
+// 	$("#global_modal").modal("toggle");
+// }
 
 function submit_done(data)
 {
-	if(data.status == "success")
-	{
-		toastr.success(data.message);
-		if(data.redirect)
-        {
-        	location.href = data.redirect;
-    	}
-    	else
-    	{
-    		$(".tab-content").load(data.url+" .tab-content .row:first");
-    		receive_payment.action_initialize_load();
-    	}
+	if(data.status == 'success-po')
+	{		
+        toastr.success("Success");
+       	location.href = data.redirect_to;
 	}
+	else if(data.status == 'success-tablet')
+	{		
+        toastr.success("Success");
+       	location.href = "/tablet";
+	}
+    else if(data.status == "error")
+    {
+        toastr.warning(data.status_message);
+        $(data.target).html(data.view);
+    }
 }

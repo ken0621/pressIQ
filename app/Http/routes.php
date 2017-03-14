@@ -454,6 +454,10 @@ Route::any('/member/vendor/purchase_order/create_po','Member\Vendor_PurchaseOrde
 Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrderController@upate_po');
 
 Route::get('/member/vendor/create_bill','Member\Vendor_CreateBillController@index');
+Route::get('/member/vendor/create_bill/add','Member\Vendor_CreateBillController@add_bill');
+Route::get('/member/vendor/create_bill/update','Member\Vendor_CreateBillController@update_bill');
+
+
 Route::get('/member/vendor/write_check','Member\Vendor_WriteCheckController@index');
 
 /*Manufacturer*/

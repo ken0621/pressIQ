@@ -46,7 +46,7 @@ class Customer_InvoiceController extends Member
         $id = Request::input('id');
         if($id)
         {
-            $data["inv"]            = Tbl_customer_invoice::appliedPayment($this->getShopId())->where("inv_id", $id)->first();
+            $data["inv"]            = Tbl_customer_invoice::where("inv_id", $id)->first();
             
             $data["_invline"]       = Tbl_customer_invoice_line::um()->where("invline_inv_id", $id)->get();
             $data["action"]         = "/member/customer/invoice/update";

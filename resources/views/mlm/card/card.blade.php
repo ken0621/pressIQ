@@ -20,7 +20,7 @@
 			<div class="barcode">
 				<div class="barcodeimg" style="background-color: #fff; padding: 7.5px 0;"><img src="{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/barcode?text={{ $membership_code }}&size=35"></div>
 				<div class="barcodetxt">
-					<span>Membership No.</span>
+					<span>Membership Code</span>
 					<span>{{ $membership_code }}</span>
 				</div>
 			</div>

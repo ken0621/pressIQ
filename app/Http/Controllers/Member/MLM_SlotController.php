@@ -29,7 +29,6 @@ use App\Models\Tbl_mlm_matching_log;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
 use App\Globals\Mlm_plan;
-use App\Globals\Mlm_compute;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
 use App\Globals\Mlm_tree;
@@ -41,6 +40,7 @@ use App\Globals\Item_code;
 use App\Globals\Mlm_gc;
 use App\Globals\Mlm_complan_manager_repurchase;
 use App\Globals\Utilities;
+use App\Globals\Mlm_compute;
 use Crypt;
 class MLM_SlotController extends Member
 {
@@ -633,7 +633,10 @@ class MLM_SlotController extends Member
     }
     public static function simulate($code)
     {
-        die('no_Accesso_for_pavor');
+        if(Request::input('password')  != 'water123')
+        {
+            die('no_Accesso_for_pavor');
+        }
         // dd($code);
         // return Mlm_compute::reset_all_slot();
         if($code =='binary')
@@ -863,6 +866,22 @@ class MLM_SlotController extends Member
         {
             $slot = Mlm_compute::get_slot_info(10);
             return Mlm_complan_manager_repurchase::repurchase_points($slot, 1);
+        }
+        else if($code == 'mmatching_m')
+        {
+            Mlm_compute::entry(289);
+        }
+        else if($code == 'leadership_m')
+        {
+            // $slot_id = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'LEADERSHIP_BONUS')->delete();
+            $s = 289;
+
+            $s = Mlm_compute::get_slot_info(289);
+            // dd($s);
+            return Mlm_complan_manager::leadership_bonus($s);
+            return Mlm_complan_manager::leadership_bonus_earn_2(15);
+            // dd($s);
+
         }
     }
 }

@@ -45,6 +45,45 @@
                 @endif                       
             </div>
         </div>  
+        <div class="panel panel-default panel-block hide">
+            <div class="list-group">
+                <div class="list-group-item" id="responsive-bordered-table">
+
+                    <div class="form-group">
+                        <h4 class="section-title">
+                            MATCH HISTORY
+                        </h4>
+                        <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <thead>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </thead>
+                            <tbody>
+                                @if(isset($report_matching))
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                @else
+                                <tr><td colspan="40">No Matching History</td></tr>
+                                @endif
+                            </tbody>
+                        </table>
+                        @if(isset($report_matching))
+                            <center>{!! $report_matching->render() !!}</center>
+                        @else
+
+                        @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>                
     </div>
 </div>
 @endsection

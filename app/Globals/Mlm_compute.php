@@ -89,7 +89,8 @@ class Mlm_compute
                         }
                         else if($tbl_mlm_binary_setttings->binary_settings_auto_placement == "auto_balance")
                         {
-                            $a = Mlm_tree::auto_place_slot_binary_auto_balance($slot_info);
+                            // $a = Mlm_tree::auto_place_slot_binary_auto_balance($slot_info);
+                            $a = Mlm_tree::auto_place_slot_binary_auto_balance_revised($slot_info);
                         }
                     }
                 }
@@ -311,10 +312,6 @@ class Mlm_compute
         Mlm_compute::reset_all_slot();
         Mlm_compute::create_slot_simulate($slot_no, $downline_count);
         Mlm_compute::computer($shop_id);
-<<<<<<< HEAD
-=======
-
->>>>>>> d6e1f3097154137b57cbc0651cbf1a1789b9a7d2
         $d['all_slot'] = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
         ->orderBy('tbl_mlm_slot.slot_id')->membership()->membership_points()->customer()
         ->get();

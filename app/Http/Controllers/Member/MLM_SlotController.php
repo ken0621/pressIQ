@@ -53,16 +53,6 @@ class MLM_SlotController extends Member
         }
 
         $data['page'] = 'Slot';
-        // return Mlm_gc::slot_gc(6);
-        // For Testing of Income
-            // dd($slot_s);
-        // Mlm_compute::reset_all_slot();
-            // return  Mlm_compute::simulate_perfect();
-            // $sample = Tbl_mlm_slot::where('slot_id', 1)->membership()->membership_points()->first();
-            // return Mlm_complan_manager::membership_matching($sample);
-        // End Testing
-
-        // set company head if slot count = 0;
         $shop_id = $this->user_info->shop_id;
         $slot_count = Tbl_mlm_slot::where('shop_id', $shop_id)->count();
         
@@ -73,7 +63,17 @@ class MLM_SlotController extends Member
         //end
 
         $data['membership'] = Tbl_membership::archive(0)->where('shop_id', $shop_id)->get();
+        $data['count_all_slot_active'] = Tbl_mlm_slot::where('shop_id', $shop_id)->where('slot_active', 0)->count();
+        $data['count_all_slot_inactive'] =  Tbl_mlm_slot::where('shop_id', $shop_id)->where('slot_active', 1)->count();
+        $data['customer_account'] = Tbl_customer::where('shop_id', $shop_id)->where('ismlm', 1)->count();
+        // dd($data['customer_account_w_slot']);
+        $data['membership_count'] = [];
+        foreach($data['membership'] as $key => $value)
+        {
+            $data['membership_count'][$key] = Tbl_mlm_slot::where('slot_membership', $value->membership_id)->count();
+        }
 
+        // dd($data);
         if(Request::ajax()) 
         {
             return $this->code_filter($shop_id, Request::input());

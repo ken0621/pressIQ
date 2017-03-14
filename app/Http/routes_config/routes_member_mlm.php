@@ -187,3 +187,6 @@ Route::get('member/mlm/card/image/{slot}', 'Member\MLM_CardController@generate')
 Route::get('member/mlm/card/all', 'Member\MLM_CardController@all_slot');
 Route::post('member/mlm/card/done', 'Member\MLM_CardController@done');
 Route::post('member/mlm/card/pending', 'Member\MLM_CardController@pending');
+
+
+Route::get('/member/mlm/report', 'Member\MLM_ReportController@index');

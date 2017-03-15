@@ -18,45 +18,25 @@
 </div>
 <div class="form-horizontal">
 	<div class="form-gorup">
-		<div class="col-md-4">
+		<div class="col-md-3">
 			<div class="panel panel-default">
 				<div class="panel-body background-white">
-					<table class="table table-condensed table-bordered">
-						<tr>
-							<td>
-								<a href="/member/payroll/departmentlist" class="a-navigation-configuration">Department</a>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<a href="/member/payroll/jobtitlelist" class="a-navigation-configuration">Job Title</a>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<a href="#" class="a-navigation-configuration">Holiday</a>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<a href="#" class="a-navigation-configuration">Allowances</a>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<a href="#" class="a-navigation-configuration">Deductions</a>
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<a href="#" class="a-navigation-configuration">Leave</a>
-							</td>
-						</tr>
-					</table>
+					<div class="list-group">
+					  <a href="/member/payroll/departmentlist" class="list-group-item  a-navigation-configuration">Department</a>
+					  <a href="/member/payroll/jobtitlelist" class="list-group-item a-navigation-configuration">Job Title</a>
+					  <a href="#" class="list-group-item a-navigation-configuration">Holiday</a>
+					  <a href="#" class="list-group-item a-navigation-configuration">Allowances</a>
+					  <a href="#" class="list-group-item a-navigation-configuration">Deductions</a>
+					  <a href="#" class="list-group-item a-navigation-configuration">Leave</a>
+					  <a href="/member/payroll/tax_table_list" class="list-group-item a-navigation-configuration">Tax Table</a>
+					  <a href="/member/payroll/sss_table_list" class="list-group-item a-navigation-configuration">SSS Table</a>
+					  <a href="/member/payroll/philhealth_table_list" class="list-group-item a-navigation-configuration">Philhealth Table</a>
+					</div>
+					
 				</div>
 			</div>
 		</div>
-		<div class="col-md-8">
+		<div class="col-md-9">
 			<div class="panel panel-default">
 				<div class="panel-body background-white configuration-div"></div>
 			</div>

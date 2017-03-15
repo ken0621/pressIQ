@@ -3,37 +3,33 @@
         <thead>
             <tr>
                 <!-- <td class="col-md-2"></td> -->
-                <th class="col-md-1">ID</th>
-                <th class="col-md-3">Product</th>
-                <th class="col-md-2">Inventory</th>
-                <th class="col-md-1">Type</th>
-                <th class="col-md-3">Date Created</th>
-                <th class="col-md-2">Action</th>
+                <th class="text-center">ID</th>
+                <th class="text-center">Product</th>
+                <th class="text-center">Inventory</th>
+                <th class="text-center">Type</th>
+                <th class="text-center">Date Created</th>
+                <th class="text-center">Action</th>
             </tr>
         </thead>
         <tbody>
             @foreach($_product as $product)
             <tr>
-                <!-- <td><img src="" style="width:50px"></td> -->
-                <td>{{ $product->eprod_id }}</td>
-                <td>{{$product->eprod_name}}</td>
-                <td></td>
-                <td>{{ $product->eprod_is_single==1 ? 'single' : 'multi'  }}</td>
-                <td>{{ $product->date_created }}</td>
-                <td>
+                <td class="text-center" >{{ $product->eprod_id }}</td>
+                <td>{{ $product->eprod_name}}</td>
+                <td class="text-center">{{ $product->inventory_count}}</td>
+                <td class="text-center">{{ $product->eprod_is_single==1 ? 'single' : 'multi'  }}</td>
+                <td class="text-center">{{ $product->date_created }}</td>
+                <td class="text-center">
                     <!-- ACTION BUTTON -->
                     @if($filter == "active")
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-custom-white  dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Action <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a href="/member/ecommerce/product/edit/{{ $product["eprod_id"] }}">Edit product info</a></li>
-                                <li><a class="popup" link="/member/ecommerce/product/product-archive-restore/archive/{{ $product['eprod_id'] }}" size="md">Archived</a></li>
-                            </ul>
+                            <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product/edit/{{ $product['eprod_id'] }}" >Edit</a>
+                            <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/ecommerce/product/product-archive-restore/archive/{{ $product['eprod_id'] }}" size="md"><span class="fa fa-trash"></span></a>
                         </div>
                     @else
-                        <a class="popup" link="/member/ecommerce/product/product-archive-restore/restore/{{ $product['eprod_id'] }}" size="md" >Restore</a>
+                        <div class="btn-group">
+                            <a class="btn btn-primary btn-grp-primary popup" link="/member/ecommerce/product/product-archive-restore/restore/{{ $product['eprod_id'] }}" size="md">Restore</a>
+                        </div>
                     @endif
                 </td>
             </tr>

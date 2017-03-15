@@ -61,8 +61,9 @@ class EcommerceProductController extends Member
 	{
 		if($this->hasAccess("product-list","access_page"))
         {	
-			$active_product 	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("archived", 0)->paginate(10);
-			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("archived", 1)->paginate(10); 
+        	$warehouse_id = Ecom_Product::getWarehouseId();
+			$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->paginate(10);
+			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1)->paginate(10); 
 			
 			/* IF REQUEST TYPE IS AJAX = RETURN ONLY TABLE DATA */ 
 	        // if(Request::ajax())
@@ -306,11 +307,12 @@ class EcommerceProductController extends Member
 	public function ProductInfo($id,  $separator = ',', $type = 'product')
 	{
 		$data["_column"] = [];
+		$warehouse_id	 = Ecom_Product::getWarehouseId();
 
 		if($type == 'product')
 		{
 			$data["product"]	= Tbl_ec_product::where("eprod_id", $id)->first();
-			$data["_variant"]	= Tbl_ec_variant::variantNameValue($separator)->firstImage()->where("evariant_prod_id", $id)->get();
+			$data["_variant"]	= Tbl_ec_variant::variantNameValue($separator)->item()->inventory($warehouse_id)->firstImage()->where("evariant_prod_id", $id)->get();
 		
 			foreach($data["_variant"] as $key=>$variant)
 			{                                                                                                                                                                                                       
@@ -328,7 +330,7 @@ class EcommerceProductController extends Member
 		}
 		elseif($type == 'variant')
 		{
-			$data["_variant"]	= Tbl_ec_variant::variantNameValue($separator)->where("evariant_id", $id)->first();
+			$data["_variant"]	= Tbl_ec_variant::variantNameValue($separator)->item()->inventory($warehouse_id)->where("evariant_id", $id)->first();
 
 			if($data["_variant"])
 			{

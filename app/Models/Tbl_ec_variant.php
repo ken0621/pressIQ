@@ -39,15 +39,15 @@ class Tbl_ec_variant extends Model
     }
 
     /* DEPENDENT on scopeItem */
-    public function scopeInventory($query, $warehouse_id)
+    public function scopeInventory($query, $warehouse_id = null)
     {
-        return $query->selectRaw("*, sum(inventory_count) as inventory_count")
+        return $query->selectRaw("IFNULL(sum(inventory_count),0) as inventory_count, IF(sum(inventory_count) > 0, 'in stock', 'out of stock') as inventory_status")
                      ->leftjoin("tbl_warehouse_inventory", function($join) use ($warehouse_id)
                      {
                         $join->on("inventory_item_id","=","item_id");
                         if($warehouse_id)
                         {
-                            $join->on("warehouse_id","=", $warehouse_id);
+                            $join->on("warehouse_id","=", DB::raw($warehouse_id));
                         }
                      })
                      ->groupBy("item_id");

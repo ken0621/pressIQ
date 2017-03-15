@@ -12,6 +12,7 @@ use App\Models\Tbl_option_name;
 use App\Models\Tbl_option_value;
 use App\Models\Tbl_ec_variant_image;
 use App\Models\Tbl_collection_item;
+use App\Models\Tbl_warehouse;
 
 use Request;
 use Session;
@@ -26,9 +27,24 @@ use Redirect;
 
 class Ecom_Product
 {
+	/**
+	 * Get the id of current shop_id that logged in.
+	 *
+	 * @return int 		Shop id
+	 */
 	public static function getShopId()
 	{
 		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+	}
+
+	/**
+	 * Get the id of default Ecommerce Warehouse 
+	 *
+	 * @return int 		Warehouse ID
+	 */
+	public static function getWarehouseId()
+	{
+		return Tbl_warehouse::where("warehouse_name", "Ecommerce Warehouse")->where("warehouse_shop_id", Ecom_Product::getShopId())->pluck('warehouse_id');
 	}
 
 	/**
@@ -187,7 +203,8 @@ class Ecom_Product
 		$product = Tbl_ec_product::price()->where("eprod_id", $product_id)->where("tbl_ec_product.archived",0)->first()->toArray();
 
 		$product			   	= $product;
-		$product["variant"] 	= Tbl_ec_variant::where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+		$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+		dd($product["variant"]);
 
 		foreach($product["variant"] as $key2=>$variant)
 		{
@@ -219,6 +236,11 @@ class Ecom_Product
 	public static function getVariant($name, $product_id, $separator = ' • ')
 	{
 		return Tbl_ec_variant::variantName($separator)->having("evariant_prod_id", "=", $product_id)->having("variant_name", "=", $name)->first();
+	}
+
+	public static function getVariantInfo($variant_id)
+	{
+		return TTbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_id", $variant_id)->Product()->FirstImage()->first()
 	}
 
 	public static function getAllVariants()

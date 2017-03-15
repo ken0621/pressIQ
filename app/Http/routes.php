@@ -13,6 +13,7 @@ Route::get('/barcode', 'MemberController@barcodes');
 // Route::get('/card/all', 'MemberController@all_slot');
 
 Route::get('member/register', 'MemberController@register');
+Route::post('member/register/submit', 'MemberController@register_post');
 Route::get('member/register/payment', 'MemberController@payment');
 Route::get('member/register/package', 'MemberController@package');
 
@@ -60,11 +61,11 @@ Route::any('/member/developer/status', 'Member\Developer_StatusController@index'
 Route::any('/member/developer/rematrix', 'Member\Developer_RematrixController@index'); //ERWIN GUEVARRA
 Route::any('/member/developer/documentation', 'Member\Developer_DocumentationController@index'); //EVERYONE
 
-Route::any('/member/developer/re_entry', 'Member\Developer_ReentryController@index'); //EVERYONE
-Route::post('/member/developer/re_entry/instant_add_slot', 'Member\Developer_ReentryController@instant_add_slot'); //EVERYONE
+Route::any('/member/developer/auto_entry', 'Member\Developer_AutoentryController@index'); //EVERYONE
+Route::post('/member/developer/auto_entry/instant_add_slot', 'Member\Developer_AutoentryController@instant_add_slot'); //EVERYONE
 
 Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
-
+Route::any('/member/developer/simulate/submit', 'Member\Developer_RematrixController@simulate_submit'); //EVERYONE
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */
@@ -454,6 +455,10 @@ Route::any('/member/vendor/purchase_order/create_po','Member\Vendor_PurchaseOrde
 Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrderController@upate_po');
 
 Route::get('/member/vendor/create_bill','Member\Vendor_CreateBillController@index');
+Route::get('/member/vendor/create_bill/add','Member\Vendor_CreateBillController@add_bill');
+Route::get('/member/vendor/create_bill/update','Member\Vendor_CreateBillController@update_bill');
+
+
 Route::get('/member/vendor/write_check','Member\Vendor_WriteCheckController@index');
 
 /*Manufacturer*/
@@ -643,6 +648,7 @@ Route::get('/member/accounting/load_coa','Member\ChartOfAccountController@load_c
 Route::get('/member/customer/load_customer','Member\CustomerController@load_customer');
 Route::get('/member/item/load_item','Member\ItemController@load_item');
 Route::get('/member/item/load_item_category','Member\ItemController@load_item_category');
+Route::get('/member/ecommerce/load_product_category','Member\EcommerceProductController@load_product_category');
 Route::get('/member/item/load_um','Member\UnitOfMeasurementController@load_um');
 Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
 Route::get('/member/item/load_category','Member\Manage_Category_Controller@load_category');

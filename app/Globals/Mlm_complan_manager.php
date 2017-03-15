@@ -982,30 +982,98 @@ class Mlm_complan_manager
     // LEADERSHIP_BONUS
     public static function leadership_bonus($slot_info)
     {
-
-        $slot_sponsor = Tbl_mlm_slot::where('slot_id', $slot_info->slot_sponsor)->membership()->first();
-        /* CHECK IF SLOT RECIPIENT EXIST */
-        if($slot_sponsor)
+        // $tree = Tbl_tree_sponsor::where('sponsor_tree_child_id', $slot_info->slot_id)->
+        $membership_points_leadership = $slot_info->membership_points_leadership;
+        $settings_combination = Tbl_mlm_leadership_settings::where('shop_id', $slot_info->shop_id)
+                                    ->where('leadership_settings_start', '!=', 0)
+                                    ->where('leadership_settings_end', '!=', 0)
+                                    ->where('leadership_settings_earnings', '!=', 0)
+                                    ->where('leadership_settings_required_points', '!=', 0)
+                                    ->where('membership_id', $slot_info->membership_id)
+                                    ->get()
+                                    ->toArray();
+                                    // dd($settings_combination);
+        foreach($settings_combination as $key => $value)
         {
-            if($slot_info->membership_points_leadership != null || $slot_info->membership_points_leadership != 0)
+            $tree = Tbl_tree_sponsor::where('sponsor_tree_child_id', $slot_info->slot_id)
+            ->where('sponsor_tree_level', '>=', $value['leadership_settings_start'])
+            ->where('sponsor_tree_level', '<=', $value['leadership_settings_end'])
+            ->distinct_level()
+            ->get();
+            // dd($tree);
+            foreach($tree as  $key2 => $value2)
             {
                 $array['points_log_complan'] = "LEADERSHIP_BONUS";
-                $array['points_log_level'] = 1;
-                $array['points_log_slot'] = $slot_sponsor->slot_id;
+                $array['points_log_level'] = $value2->sponsor_tree_level;
+                $array['points_log_slot'] = $value2->sponsor_tree_parent_id;
                 $array['points_log_Sponsor'] = $slot_info->slot_id;
                 $array['points_log_date_claimed'] = Carbon::now();
                 $array['points_log_converted'] = 0;
                 $array['points_log_converted_date'] = Carbon::now();
                 $array['points_log_type'] = 'GPV';
                 $array['points_log_from'] = 'Slot Creation';
-                $array['points_log_points'] = $slot_info->membership_points_leadership;
+                $array['points_log_points'] = $membership_points_leadership;
 
                 Mlm_slot_log::slot_log_points_array($array);
 
-                Mlm_complan_manager::leadership_bonus_earn($slot_sponsor);
+                Mlm_complan_manager::leadership_bonus_2($value2->sponsor_tree_parent_id);
             }
-        }   
-        Mlm_complan_manager::leadership_bonus_cutoff('LEADERSHIP_BONUS', $slot_info->shop_id);
+        }      
+        Mlm_complan_manager::leadership_bonus_cutoff('LEADERSHIP_BONUS', $slot_info->shop_id);                      
+
+    }
+    public static function leadership_bonus_2($slot_id)
+    {
+        $slot_info = Mlm_compute::get_slot_info($slot_id);
+
+        $settings_combination = Tbl_mlm_leadership_settings::where('shop_id', $slot_info->shop_id)
+                                    ->where('leadership_settings_start', '!=', 0)
+                                    ->where('leadership_settings_end', '!=', 0)
+                                    ->where('leadership_settings_earnings', '!=', 0)
+                                    ->where('leadership_settings_required_points', '!=', 0)
+                                    ->where('membership_id', $slot_info->membership_id)
+                                    ->get()
+                                    ->toArray();
+        // $all_points = Tbl_mlm_slot_points_log::where('points_log_complan', 'LEADERSHIP_BONUS')->
+        foreach($settings_combination as $key => $value)
+        {
+            $all_points = Tbl_mlm_slot_points_log::where('points_log_complan', 'LEADERSHIP_BONUS')
+            ->where('points_log_level', '>=', $value['leadership_settings_start'])
+            ->where('points_log_level', '<=', $value['leadership_settings_end'])
+            ->where('points_log_slot', $slot_info->slot_id)->sum('points_log_points');
+
+            // dd($all_points);
+             if($all_points >= $value['leadership_settings_required_points'])
+                {
+                    $array['points_log_complan'] = "LEADERSHIP_BONUS";
+                    $array['points_log_level'] = $value['leadership_settings_start'];
+                    $array['points_log_slot'] = $slot_info->slot_id;
+                    $array['points_log_Sponsor'] = $slot_info->slot_id;
+                    $array['points_log_date_claimed'] = Carbon::now();
+                    $array['points_log_converted'] = 0;
+                    $array['points_log_converted_date'] = Carbon::now();
+                    $array['points_log_type'] = 'GPV';
+                    $array['points_log_from'] = 'Slot Creation';
+                    $array['points_log_leve_start'] = $value['leadership_settings_start'];
+                    $array['points_log_leve_end'] = $value['leadership_settings_end'];
+                    $array['points_log_points'] = $value['leadership_settings_required_points'] * (-1);
+
+                    Mlm_slot_log::slot_log_points_array($array);
+
+                    $earn = $value['leadership_settings_earnings'];
+                    $log = "Congratulations!, Your Slot ". $slot_info->slot_no . " has earned " . $value['leadership_settings_earnings'] . ' from Leadership Bonus. '. $value['leadership_settings_required_points'] . ' Leadership Points is deducted to your level ' . $value['leadership_settings_start'] .' to level '.$value['leadership_settings_end'] . ' leadership points' ;
+                    $arry_log['wallet_log_slot'] =  $slot_info->slot_id;
+                    $arry_log['shop_id'] =  $slot_info->shop_id;
+                    $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                    $arry_log['wallet_log_details'] = $log;
+                    $arry_log['wallet_log_amount'] = $value['leadership_settings_earnings'];
+                    $arry_log['wallet_log_plan'] = "LEADERSHIP_BONUS";
+                    $arry_log['wallet_log_status'] = "released";   
+                    $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('EXECUTIVE_BONUS', $slot_info->shop_id); 
+                    Mlm_slot_log::slot_array($arry_log);
+                }
+
+        }                            
     }
     public static function leadership_bonus_earn($slot_info)
     {

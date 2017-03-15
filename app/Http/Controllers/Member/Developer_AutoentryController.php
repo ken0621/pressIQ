@@ -4,10 +4,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_membership;
-use App\Models\Tbl_mlm_slot;
+// use App\Models\Tbl_mlm_slot;
 use App\Globals\Mlm_compute;
-
-class Developer_ReentryController extends Member
+use Request;
+use Carbon\Carbon;
+class Developer_AutoentryController extends Member
 {
 	public function index()
 	{
@@ -16,7 +17,7 @@ class Developer_ReentryController extends Member
 		$data["_slot"] 		 = Tbl_mlm_slot::where("shop_id",$shop_id)->get();
 		$data["_membership"] = Tbl_membership::where("shop_id",$shop_id)->where("membership_archive",0)->get();
 		$data["_customer"]   = Tbl_customer::where("shop_id",$shop_id)->where("archived",0)->get();
-		return view('member.developer.re_entry',$data);
+		return view('member.developer.auto_entry',$data);
 	}
 
     public function instant_add_slot()
@@ -24,11 +25,17 @@ class Developer_ReentryController extends Member
     	$shop_id = $this->user_info->shop_id;
         if(Tbl_mlm_slot::where("shop_id",$shop_id)->count() == 0)
         {
-            $insert['slot_sponsor'] = 0;
+            $insert['slot_sponsor'] = null;
         }
         else
         {
-            $insert['slot_sponsor'] = Request::input("slot_sponsor");    
+            $insert['slot_sponsor'] = Request::input("slot_sponsor");  
+            $check_sponsor          = Tbl_mlm_slot::where("slot_id",Request::input("slot_sponsor"))->first(); 
+            if(!$check_sponsor)
+            {
+            	$top_slot 				= Tbl_mlm_slot::where("shop_id",$shop_id)->orderBy("slot_id","ASC")->first();
+            	$insert['slot_sponsor'] = $top_slot->slot_id; 
+            } 
         }
 
         $insert['slot_no'] = Tbl_mlm_slot::where("shop_id",$shop_id)->count() + 1;
@@ -44,5 +51,8 @@ class Developer_ReentryController extends Member
         $slot_info = Tbl_mlm_slot::where('slot_id', $id)->membership()->membership_points()->customer()->first();
         // compute mlm
         $a = Mlm_compute::entry($id);
+
+        $count = Request::input("count");
+        return json_encode($count);
     }
 }

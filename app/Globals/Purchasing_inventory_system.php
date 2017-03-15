@@ -68,7 +68,7 @@ class Purchasing_inventory_system
         if($sir_data["sir"]->ilr_status == 2 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
         {
 
-        $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+        $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
             <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
@@ -78,7 +78,7 @@ class Purchasing_inventory_system
         }
         else if($sir_data["sir"]->ilr_status == 1 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
         {
-           $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+           $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
             <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
@@ -88,7 +88,7 @@ class Purchasing_inventory_system
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
         {
-             $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+             $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
             <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
@@ -98,7 +98,7 @@ class Purchasing_inventory_system
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 0)
         {
-            $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+            $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
             <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
@@ -108,7 +108,7 @@ class Purchasing_inventory_system
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 0 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 0)
         {
-             $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+             $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
             <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
             <div class="col-md-12" >3. Convert LoadOutForm to SIR (Click <a size="md" link="/member/pis/sir/open/'.$sir_id.'/open" class="popup">here</a> to convert to SIR)</div>
             <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
@@ -118,7 +118,7 @@ class Purchasing_inventory_system
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 0 && $sir_data["sir"]->lof_status == 1 && $sir_data["sir"]->is_sync == 0)
         {
-                 $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+                 $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
             <div class="col-md-12" >2. Confirmation of Load Out form by Sales Agent </div>
             <div class="col-md-12" >3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>

@@ -236,6 +236,7 @@ class Mlm_compute
         $sponsor_count = 1;
         for($i = 2; $i < $slot_no; $i++)
         {
+            
             $limit = $downline_count -1;
             if($sponsor == 1 )
             {
@@ -257,6 +258,7 @@ class Mlm_compute
         $slot_sponsor = 1;
         for($i = 2; $i < $slot_no; $i++)
         {
+
             $random_membership = rand ( 0 , $membership_count_id );
             $random_customer = rand ( 300 , 308 );
             $insert['slot_no'] = Mlm_plan::set_slot_no();
@@ -310,7 +312,6 @@ class Mlm_compute
         Mlm_compute::reset_all_slot();
         Mlm_compute::create_slot_simulate($slot_no, $downline_count);
         Mlm_compute::computer($shop_id);
-
         $d['all_slot'] = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
         ->orderBy('tbl_mlm_slot.slot_id')->membership()->membership_points()->customer()
         ->get();

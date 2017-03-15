@@ -6,6 +6,7 @@ use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_warehouse;
 
 use App\Globals\Account;
+use App\Globals\Warehouse;
 use App\Globals\Seed;
 use App\Globals\Utilities;
 use App\Globals\Payroll;
@@ -100,11 +101,18 @@ class Member extends Controller
 		Account::put_default_account($this->user_info->shop_id);
 
 
+
 		/* INSERT TAX TABLE PER SHOP */
 		Payroll::tax_reference($this->user_info->shop_id);
 
 		/* INSERT SSS TABLE PER SHOP */
 		Payroll::generate_sss($this->user_info->shop_id);
+		
+		/* INSERT DEFAULT WAREHOUSE */
+		Warehouse::put_default_warehouse($this->user_info->shop_id);
+		/* INSERT MAIN WAREHOUSE */
+		Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);
+
 	}
 	public function show_no_access()
 	{

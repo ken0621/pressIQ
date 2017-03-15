@@ -21,8 +21,8 @@
 
     <div class="panel panel-default panel-block panel-title-block panel-gray">
         
-        <div class="tab-content">
-            <div class="row">
+        <div class="tab-content rcvpymnt-container">
+            <div class="row rcvpymnt-load-data">
                 <div class="col-md-12" style="padding: 30px;">
                     <!-- START CONTENT -->
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">

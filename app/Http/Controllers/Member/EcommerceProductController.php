@@ -49,6 +49,14 @@ class EcommerceProductController extends Member
 		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
 	}
 
+	public function load_product_category()
+	{
+		$data["_product"] 	= Ecom_Product::getProductList();
+		$data["add_search"]	= "";
+
+		return view('member.load_ajax_data.load_product_category', $data);
+	}
+
 	public function getList()
 	{
 		if($this->hasAccess("product-list","access_page"))
@@ -87,7 +95,6 @@ class EcommerceProductController extends Member
 	{
         if($this->hasAccess("product-list","add"))
         {
-			Session::forget("product_info");
 			$data["page"]		= "Product Add";
 			$data["_image"] 	= Tbl_image::where("image_shop", $this->user_info->shop_id)->where("image_reason", "product")->where("image_reason_id", 0)->get();
 			$data["_item"]  	= Item::get_all_item();
@@ -164,8 +171,6 @@ class EcommerceProductController extends Member
 			$product_id = Tbl_ec_product::insertGetId($insert_product);
 
 			$this->InsertVariantInfo($product_id, $insert_product["eprod_is_single"]);
-			
-			Session::forget("product_info");
 
 			$json["status"] 	= "success";
 			$json["type"]	 	= "add";

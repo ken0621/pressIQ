@@ -6,7 +6,8 @@ function deduction_type()
 	init();
 	function init()
 	{
-		form_submit()
+		form_submit();
+		update_type();
 	}
 
 	function update_type()
@@ -23,6 +24,33 @@ function deduction_type()
 			var method   		= "POST";
 			var target 			= "";
 			load_configuration(action, method, target, formdata);
+		});
+
+		$(".btn-archived").unbind("click");
+		$(".btn-archived").bind("click", function()
+		{
+			var content = $(this).data("content");
+			var archived = $(this).data("archived");
+			var statement = "remove";
+			if(archived == 0)
+			{
+				statement = "restore";
+			}
+			var formdata = {
+				_token:_token,
+				content:content,
+				archived:archived
+			};
+			var action = "/member/payroll/deduction/archive_deduction_type";
+			var method = "POST";
+			var function_name = "deduction_type.reload_deduction";
+			var element = $(this);
+			var html = $(this).html(spinner);
+			var con = confirm("Do you really want to " + statement +  " this type?");
+			if(con)
+			{
+				load_configuration(action, method, "", formdata, function_name, element, html);
+			}
 		});
 	}
 
@@ -48,6 +76,7 @@ function deduction_type()
 	this.reload_deduction = function()
 	{
 		reload_deduction();
+		reload_deduction(1);
 	}
 
 	this.update_type = function()

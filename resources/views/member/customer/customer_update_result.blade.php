@@ -9,12 +9,15 @@
         Action <span class="caret"></span>
       </button>
       <ul class="dropdown-menu dropdown-menu-custom">
-        <li><a href="/member/customer/receive_payment">Receive Payment</a></li>
-        <li><a href="/member/customer/invoice">Create Invoice</a></li>
+        <li><a href="/member/customer/receive_payment?customer_id={{$customer->customer_id1}}">Receive Payment</a></li>
+        <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id1}}">Create Invoice</a></li>
         <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
+        <li><a href="/member/customer/transaction_list">Transaction List</a></li>
+        <li><a href="/member/customer/details/{{$customer->customer_id1}}">View Customer Details</a></li>
         <!-- <li><a href="/member/customer/estimate">Create Estimate</li> -->
-        <li><a href="#">Make Inactive</a></li>
-        <li><a href="javascript:" class="popup" link="/member/customer/customeredit/{{$customer->customer_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
+        <li><a class="popup" link="/member/customer/customeredit/{{$customer->customer_id1}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
+        <li><a class="active-toggle" data-content="{{$customer->customer_id1}}" data-target="#tr-customer-{{$customer->customer_id1}}" data-value="0" data-html="inactive">Make Inactive</a></li>
       </ul>
+     
     </div>
 </td>

@@ -354,6 +354,7 @@ Route::any('/tablet/create_invoices/add','Member\TabletPISController@tablet_crea
 Route::any('/tablet/create_invoice/add_submit','Member\TabletPISController@create_invoice_submit');
 Route::any('/tablet/update_invoice/edit_submit',"Member\TabletPISController@update_invoice_submit");
 
+Route::any('/tablet/receive_payment','Member\TabletPISController@receive_payment');
 Route::any('/tablet/view_receive_payment/{id}','Member\TabletPISController@view_receive_payment');
 Route::any('/tablet/receive_payment/add','Member\TabletPISController@tablet_receive_payment');
 Route::any('/tablet/receive_payment/add_submit','Member\TabletPISController@add_receive_payment');

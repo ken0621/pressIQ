@@ -36,15 +36,15 @@
     </div>
     <div class="form-group">
         <div class="col-md-6 col-xs-6">
-          <a class="btn btn-primary form-control" href="/tablet/invoice"><i class="fa fa-list-alt"></i> Invoice </a>
+          <a class="btn btn-primary form-control" href="/tablet/invoice"><i class="fa fa-list-alt"></i> Invoice ({{$total_invoice_amount}})</a>
         </div>
         <div class="col-md-6 col-xs-6">
-            <a class="btn btn-primary form-control"><i class="fa fa-users"></i> Customer </a>          
+            <a class="btn btn-primary form-control"><i class="fa fa-users"></i> Customer ({{$total_customer}})</a>          
         </div>        
     </div>
     <div class="form-group">
         <div class="col-md-6 col-xs-6">
-            <a class="btn btn-primary form-control"><i class="fa fa-money"></i> Receive Payment </a>
+            <a class="btn btn-primary form-control" href="/tablet/receive_payment"><i class="fa fa-money"></i> Receive Payment ({{$total_receive_payment}})</a>
         </div>
         <div class="col-md-6 col-xs-6">
             <a class="popup btn btn-primary form-control" link="/member/pis/agent/edit/{{$employee_id}}" ><i class="fa fa-gears"></i> Account Setting </button></a>

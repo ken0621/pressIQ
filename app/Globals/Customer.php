@@ -118,7 +118,11 @@ class Customer
 		$customer = Tbl_customer::info()->where("tbl_customer.archived", 0)->where("shop_id", Customer::getShopId())->groupBy("tbl_customer.customer_id")->get();
 		return $customer;
 	}
-
+	public static function countAllCustomer()
+	{
+		$count = Tbl_customer::where("tbl_customer.archived", 0)->where("shop_id", Customer::getShopId())->count();
+		return $count;
+	}
 	public static function getAllTransaction()
 	{
 		

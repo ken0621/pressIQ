@@ -35,7 +35,7 @@ class Tbl_ec_variant extends Model
 
     public function scopeItem($query)
     {
-    	$query->join("tbl_item as item","item_id","=","evariant_item_id");
+    	$query->join("tbl_item as item","item_id","=","evariant_item_id")->leftJoin("tbl_item_discount","tbl_item_discount.item_id","=","tbl_item.item_id");
     }
 
     /* DEPENDENT on scopeItem */

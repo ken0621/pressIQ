@@ -40,32 +40,33 @@
                             <div class="col-sm-4">
                                 <input {{isset($inv) ? 'disabled' : ''}} type="text" class="form-control input-sm customer-email" name="inv_customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$inv->customer_email or ''}}"/>
                             </div>
+                            @if(isset($inv))
+                            <div class="col-sm-4">
+                                <div class="btn-group btn-group-justified" data-toggle="buttons">
+                                    <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Unpaid' ? 'active' : '' : 'active'}}">
+                                    <input type="radio" name="order_status" id="option1" value="Unpaid"> Unpaid
+                                    </label>
+                                    <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Paid' ? 'active' : '' : ''}}">
+                                    <input type="radio" name="order_status" id="option2" value="Paid"> Paid
+                                    </label>
+                                    <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Void' ? 'active' : '' : ''}}">
+                                    <input type="radio" name="order_status" id="option3" value="Void"> Void
+                                    </label>
+                                </div> 
+                            </div>
+                            @endif
                         </div>
                     </div>
-                    <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
-                        <div class="row clearfix">
-                            <div class="col-sm-4">  
-                                <label>Order Status</label>
-                                <select class="form-control" name="order_status">
-                                <option value="Unpaid" {{isset($inv) ? $inv->order_status == "Unpaid" ? 'selected' : '' : ''}}> Unpaid </option>
-                                <option value="Paid" {{isset($inv) ? $inv->order_status == "Paid" ? 'selected' : '' : ''}}> Paid </option>
-                                <option value="Void" {{isset($inv) ? $inv->order_status == "Void" ? 'selected' : '' : ''}}> Void </option>
-                                </select>
-                            </div>
-                        </div>`
-
-                        <div class="btn-group" data-toggle="buttons">
-                              <label class="btn btn-custom-white">
-                                <input type="radio" name="options" id="option1" value=""> Unpaid
-                              </label>
-                              <label class="btn btn-custom-white">
-                                <input type="radio" name="options" id="option2" value=""> Paid
-                              </label>
-                              <label class="btn btn-custom-white">
-                                <input type="radio" name="options" id="option3" value=""> Void
-                              </label>
-                        </div>      
-                    </div>
+                    <!-- <div class="row clearfix">
+                        <div class="col-sm-4">  
+                            <label>Order Status</label>
+                            <select class="form-control" name="order_status">
+                            <option value="Unpaid" {{isset($inv) ? $inv->order_status == "Unpaid" ? 'selected' : '' : ''}}> Unpaid </option>
+                            <option value="Paid" {{isset($inv) ? $inv->order_status == "Paid" ? 'selected' : '' : ''}}> Paid </option>
+                            <option value="Void" {{isset($inv) ? $inv->order_status == "Void" ? 'selected' : '' : ''}}> Void </option>
+                            </select>
+                        </div>
+                    </div>` -->
                     
                     <div class="row clearfix">
                         <div class="col-sm-2">
@@ -81,10 +82,8 @@
                         </div>
                         <div class="col-sm-2">  
                             <label>Payment Method</label>
-                            <select {{isset($inv) ? 'disabled' : ''}} class="form-control nput-sm" name="payment_method_id">
-                            @foreach($_payment as $payment)
-                                <option value="{{$payment->payment_method_id}}" {{isset($inv) ? $inv->payment_method_id == $payment->payment_method_id ? 'selected' : '' : ''}}>{{$payment->payment_name}}</option>
-                            @endforeach
+                            <select class="form-control input-sm drop-down-payment" name="payment_method_id">
+                                @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($inv) ? $inv->payment_method_id : ''])
                             </select>
                         </div>
                         <div class="col-sm-2">

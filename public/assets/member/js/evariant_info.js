@@ -20,6 +20,7 @@ function variant_info()
 		event_remove_image_click();
 		event_required_focus();
 		event_onload_container();
+		event_edit_item_click();
 
 		item_select_plugin($(".droplist-item"));
         
@@ -45,13 +46,23 @@ function variant_info()
 		})
 	}
 
+	function event_edit_item_click()
+	{
+		$(document).on("click", ".edit-item", function(e)
+		{
+			var item_id = $(this).closest(".row").find("select").val();
+			console.log(item_id);
+			$(this).attr("link", "/member/item/edit/"+item_id);
+		})
+	}
+
 	function item_select_plugin($this)
 	{
 		$this.globalDropList(
 		{
 			link: '/member/item/add',
 		    link_size: 'lg',
-		    width: '50%',
+		    width: '100%',
 		    maxHeight: "309px",
 		    placeholder: 'Item',
             onCreateNew : function()
@@ -60,7 +71,14 @@ function variant_info()
             },
             onChangeValue: function()
             {	
-
+            	if($(this).val() == "")
+            	{
+            		$(this).closest(".row").find(".edit-item").prop("disabled");
+            	}
+            	else
+            	{
+            		$(this).closest(".row").find(".edit-item").prop("disabled", false);
+            	}
             }
 		});
 	}

@@ -7,6 +7,9 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_cart;
 use App\Models\Tbl_coupon_code;
+use App\Models\Tbl_user;
+use App\Models\Tbl_ec_variant;
+use App\Globals\Ecom_Product;
 use DB;
 use Session;
 use Carbon\Carbon;
@@ -19,13 +22,16 @@ class Cart
 
         return $shop_info;
     }
-    public static function add_to_cart($product_id,$quantity)
+    public static function add_to_cart($product_id,$quantity,$shop_id = null)
     {
         //get_shop_info
-        $shop_id = Cart::get_shop_info();
-
+        if (!$shop_id) 
+        {
+            $shop_id = Cart::get_shop_info();
+        }
+        
         $unique_id = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
-        $check     = Tbl_item::where("item_id",$product_id)->where("shop_id",$shop_id)->first();
+        $check     = Tbl_ec_variant::where("evariant_id",$product_id)->first();
         if(number_format($quantity) <= 0)
         {
             $message["status"]         = "error";
@@ -89,11 +95,14 @@ class Cart
         return $message;
     }
 
-    public static function get_cart()
+    public static function get_cart($shop_id = null)
     {
         //get_shop_info
-        $shop_info = Cart::get_shop_info();
-        $shop_id = $shop_info->shop_id;
+        if (!$shop_id) 
+        {
+            $shop_info = Cart::get_shop_info();
+            $shop_id = $shop_info->shop_id;
+        }
 
         /* INITIALIZE */
         $date_now              = Carbon::now();
@@ -134,13 +143,15 @@ class Cart
                 $item_discounted_value  = 0;
                 $item_discounted_remark = "";
 
-                $item           = Tbl_item::where("item_id",$info["product_id"])->first();
+                $item = Ecom_Product::getVariantInfo($info["product_id"]);
+                
                 $data["cart"][$key]["cart_product_information"]                                   = null;
-                $data["cart"][$key]["cart_product_information"]["product_id"]                     = $item->item_id;
-                $data["cart"][$key]["cart_product_information"]["product_name"]                   = $item->item_name;
+                $data["cart"][$key]["cart_product_information"]["variant_id"]                     = $item->evariant_id;
+                $data["cart"][$key]["cart_product_information"]["product_name"]                   = $item->evariant_item_label;
+                $data["cart"][$key]["cart_product_information"]["product_stocks"]                 = $item->inventory_count;
                 $data["cart"][$key]["cart_product_information"]["product_sku"]                    = $item->item_sku;
-                $data["cart"][$key]["cart_product_information"]["product_stocks"]                 = 0;
-                $data["cart"][$key]["cart_product_information"]["product_ecommerce_price"]        = $item->item_price;
+                $data["cart"][$key]["cart_product_information"]["product_price"]                  = $item->item_price;
+                $data["cart"][$key]["cart_product_information"]["image_path"]                     = $item->image_path;
 
                 /* CHECK IF DISCOUNT EXISTS */
                 $check_discount = Tbl_item_discount::where("item_id",$item->item_id)->first();
@@ -163,10 +174,10 @@ class Cart
                     }
                 }
 
-                $current_price                                                                    = $item->item_price - $item_discounted_value;
-                $data["cart"][$key]["cart_product_information"]["product_discounted"]             = $item_discounted;
-                $data["cart"][$key]["cart_product_information"]["product_discounted_value"]       = $item_discounted_value;
-                $data["cart"][$key]["cart_product_information"]["product_discounted_remark"]      = $item_discounted_remark;
+                $current_price                                                                    = $item->item_price - isset($item_discounted_value) ? $item_discounted_value : 0;
+                $data["cart"][$key]["cart_product_information"]["product_discounted"]             = isset($item_discounted) ? $item_discounted : null;
+                $data["cart"][$key]["cart_product_information"]["product_discounted_value"]       = isset($item_discounted_value) ? $item_discounted_value : null;
+                $data["cart"][$key]["cart_product_information"]["product_discounted_remark"]      = isset($item_discounted_remark) ? $item_discounted_remark : null;
                 $data["cart"][$key]["cart_product_information"]["product_current_price"]          = $current_price;
 
                 $total_product_price = $total_product_price + $current_price;
@@ -298,11 +309,14 @@ class Cart
         return $message;
     }
 
-    public static function customer_settings($customer_id = null,$customer_information = null,$customer_shipping_address = null,$customer_billing_address = null,$customer_payment_method = null,$customer_payment_proof = null)
+    public static function customer_settings($shop_id = null,$customer_id = null,$customer_information = null,$customer_shipping_address = null,$customer_billing_address = null,$customer_payment_method = null,$customer_payment_proof = null)
     {
         //get_shop_info
-        $shop_info = Cart::get_shop_info();
-        $shop_id = $shop_info->shop_id;
+        if (!$shop_id) 
+        {
+            $shop_info = Cart::get_shop_info();
+            $shop_id = $shop_info->shop_id;
+        }
 
         $unique_id = "customer_settings:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
         if($customer_id && $customer_id != 0)
@@ -393,11 +407,14 @@ class Cart
         return $message;
     }
 
-    public static function customer_get_settings()
+    public static function customer_get_settings($shop_id = null)
     {
         //get_shop_info
-        $shop_info = Cart::get_shop_info();
-        $shop_id = $shop_info->shop_id;
+        if (!$shop_id) 
+        {
+            $shop_info = Cart::get_shop_info();
+            $shop_id = $shop_info->shop_id;
+        }
 
         $unique_id = "customer_settings:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
         $data      = Session::get($unique_id);

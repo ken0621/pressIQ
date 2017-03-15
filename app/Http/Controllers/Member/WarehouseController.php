@@ -26,6 +26,8 @@ class WarehouseController extends Member
      */
     public function index()
     {
+        $this->item();
+
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
         { 
@@ -109,6 +111,17 @@ class WarehouseController extends Member
         // $count_on_hand = Tbl_warehouse_inventory::check_inventory_single(1, 28)->pluck('inventory_count');
         // dd($count_on_hand);
 
+    }
+    public function item()
+    {
+        $not_mainwarehouse = Tbl_warehouse::where("main_warehouse",0)->where("warehouse_shop_id",$this->user_info->shop_id)->get();
+        if($not_mainwarehouse)
+        {
+            foreach($not_mainwarehouse as $key => $value) 
+            {
+                Warehouse::insert_item(Warehouse::getMainwarehouse(),$value->warehouse_id);
+            }            
+        }
     }
     public function load_warehouse()
     {
@@ -340,25 +353,17 @@ class WarehouseController extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public static function check_if_critical($c_stock, $reorder_point)
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
-        if($access == 1)
-        { 
-            $color = "";
-            if($c_stock <= $reorder_point)
-            {
-                $color = "red";
-            }
-            return $color;
-        }
-        else
+        $color = "";
+        if($c_stock <= $reorder_point)
         {
-            return $this->show_no_access();
+            $color = "red";
         }
+        return $color;
     }
     public function create_main()
     {
@@ -820,12 +825,12 @@ class WarehouseController extends Member
         if($access == 1)
         { 
            // $data = Tbl_user_warehouse_access::join("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_user_warehouse_access.warehouse_id")->where("user_id",$this->user_info->user_id)->where("archived",0)->get();
-           $data["warehouse"] = Tbl_warehouse::where("archived",0)->get();
+           $data["warehouse"] = Tbl_warehouse::where("archived",0)->where("warehouse_shop_id",$this->user_info->shop_id)->get();
            return view("member.warehouse.warehouse_transfer",$data);
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public function transferinventory_submit()
@@ -839,6 +844,8 @@ class WarehouseController extends Member
             {
                 $data["from"] = Tbl_warehouse::where("archived",0)->where("warehouse_id",$from)->first();
                 $data["to"] = Tbl_warehouse::where("archived",0)->where("warehouse_id",$to)->first();
+
+                Warehouse::insert_item($from,$to);
 
                 $count = Tbl_sub_warehouse::where("warehouse_id",$to)->get();
                 $ctr = 0;

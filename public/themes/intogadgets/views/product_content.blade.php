@@ -75,7 +75,7 @@
                         Quantity
                      </div>
                      <div class="select">
-                        <select class="variation-qty" name="qty">
+                        <select class="variation-qty" variant-id="{{ $product_variant['evariant_id'] }}" name="qty">
                            <option>1</option>
                            <option>2</option>
                            <option>3</option>
@@ -86,8 +86,9 @@
                   </div>
                </div>
             </div>
-            <button class="single-order-button " pid="" vid="" mode="cart" onclick="window.open('','_blank')">BUY NOW</button> 
-            <button href="product/#order" class="single-order-button order-button add-cart" mode="reservation">STORE PICK-UP</button>
+            <!-- <button class="single-order-button " pid="" vid="" mode="cart" onclick="window.open('','_blank')">BUY NOW</button> 
+            <button href="product/#order" class="single-order-button order-button add-cart" mode="reservation">STORE PICK-UP</button> -->
+            <button type="button" class="single-order-button add-to-cart" variant-id="{{ $product_variant['evariant_id'] }}">ADD TO CART</button>
             <div class="divider" style="margin: 35px 0;"></div>
             <div class="single-order-rate" id="single-product-rate">
                @for ($i = 1; $i <= 5; $i++)

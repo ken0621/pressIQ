@@ -126,7 +126,6 @@ class MlmNetworkController extends Mlm
             ->where('placement_tree_level', $page)
             ->orderBy('tbl_tree_placement.placement_tree_level', 'ASC')
             ->count();
-
             return view('mlm.network.binary', $data);
         }
         else

@@ -22,8 +22,8 @@ class Tbl_sub_warehouse extends Model
 
     public function scopewarehousetowarehouse($query, $from_id = 0, $to_id = 0)
     {
-        $query->join('tbl_sub_warehouse as to_warehouse','to_warehouse.item_id','=','tbl_sub_warehouse.item_id')
-              ->join('tbl_item','tbl_item.item_id','=','tbl_sub_warehouse.item_id')
+        $query->leftjoin('tbl_sub_warehouse as to_warehouse','to_warehouse.item_id','=','tbl_sub_warehouse.item_id')
+              ->leftjoin('tbl_item','tbl_item.item_id','=','tbl_sub_warehouse.item_id')
               ->where('tbl_sub_warehouse.warehouse_id',$from_id)
               ->where('to_warehouse.warehouse_id',$to_id)
               ->groupBy('to_warehouse.item_id')

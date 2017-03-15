@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_user;
 use App\Globals\Account;
+use App\Globals\Warehouse;
 use App\Globals\Seed;
 use App\Globals\Utilities;
 use App\Models\Tbl_user_warehouse_access;
@@ -27,6 +28,7 @@ class Member extends Controller
 		}
 		else
 		{
+
 			/* CHECK IF USERNAME DOESN'T EXIST IN DB - REDIRECT TO FRONTPAGE */
 			$user_info = Tbl_user::where("user_email", session('user_email'))->shop()->first();
 			if(!$user_info)
@@ -94,6 +96,11 @@ class Member extends Controller
 
 		/* INSERT DEFAULT CHART OF ACCOUNT */
 		Account::put_default_account($this->user_info->shop_id);
+		/* INSERT DEFAULT WAREHOUSE */
+		Warehouse::put_default_warehouse($this->user_info->shop_id);
+		/* INSERT MAIN WAREHOUSE */
+		Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);
+
 	}
 	public function show_no_access()
 	{

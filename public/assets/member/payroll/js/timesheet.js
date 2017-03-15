@@ -56,7 +56,6 @@ function timesheet()
 			if($(e.currentTarget).val() == "")
 			{
 				$(e.currentTarget).closest("tr").find(".time-out").val("");
-				$(e.currentTarget).closest("tr").find(".break-time").val("00:00");
 			}
 
 			action_compute_work_hours();
@@ -70,7 +69,6 @@ function timesheet()
 			if($(e.currentTarget).val() == "")
 			{
 				$(e.currentTarget).closest("tr").find(".time-in").val("");
-				$(e.currentTarget).closest("tr").find(".break-time").val("00:00");
 			}
 
 			action_compute_work_hours();
@@ -153,10 +151,18 @@ function timesheet()
 			var total_late_overtime = "00:00";
 
 
-			if(check_greater(default_time_in, time_in)) //CHECK FOR EARLY OVERTIME
+			if(time_in == "0:0:00")
 			{
-				var total_early_overtime = deduct_two_time(time_in, default_time_in);
+				total_early_overtime = "00:00";
 			}
+			else
+			{
+				if(check_greater(default_time_in, time_in)) //CHECK FOR EARLY OVERTIME
+				{
+					var total_early_overtime = deduct_two_time(time_in, default_time_in);
+				}
+			}
+
 
 			if(check_greater(time_out, default_time_out))
 			{
@@ -205,7 +211,7 @@ function timesheet()
 
 		switch(time_rule)
 		{
-			case "flexitime": action_compute_work_hours_flexitime(); break;
+			case "flexistrict": action_compute_work_hours_flexistrict(); break;
 			case "timestrict": action_compute_work_hours_timestrict(); break;
 			default: alert("Time Rule Error: Contact Administrator for Support");
 		}
@@ -271,7 +277,7 @@ function timesheet()
 
 		});
 	}
-	function action_compute_work_hours_flexitime()
+	function action_compute_work_hours_flexistrict()
 	{
 		/* COMPUTE PER DATE*/
 		$(".time-record.main").each(function(key, val)

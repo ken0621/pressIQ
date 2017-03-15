@@ -85,13 +85,13 @@
                                           @if($sir->sir_archived == 1)
                                                 <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/restore" class="popup">Restore SIR</a></li>
                                           @else
-                                                <li><a size="lg" link="/member/pis/lof/view_status/{{$sir->sir_id}}/" class="popup">View Status</a></li>
+                                               <li><a size="lg" link="/member/pis/sir/view_status/{{$sir->sir_id}}" class="popup">View Status</a></li>
                                               @if($sir->sir_status == 1)
                                               @elseif($sir->lof_status == 2)
                                                 <li><a size="md" link="/member/pis/sir/open/{{$sir->sir_id}}/open" class="popup">Open SIR</a></li>
                                               @elseif($sir->lof_status == 3)
                                                 <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/lof" class="popup">View Load Out Form</a></li>
-                                                <li><a href="/member/pis/sir/lof/edit/{{$sir->sir_id}}">Edit Load Out Form</a></li>
+                                                <li><a href="/member/pis/lof/edit/{{$sir->sir_id}}">Edit Load Out Form</a></li>
                                                 <li><a size="md" link="/member/pis/lof/{{$sir->sir_id}}/archived" class="popup">Archive L.O.F</a></li>
                                               @endif
 

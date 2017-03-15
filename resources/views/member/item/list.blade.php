@@ -51,6 +51,7 @@
                             <th>Item SKU</th>
                             <th>Item Category</th>
                             <th>Item Type</th>
+                            <th>Inventory</th>
                             <th>Item Price</th>
                             <th>Item Date Created</th>
                             <th></th>
@@ -65,6 +66,7 @@
                             <td>{{$item->item_sku}}</td>
                             <td>{{$item->type_name}}</td>
                             <td>{{$item->item_type_name}}</td>
+                            <td>{{$item->inventory_count}}</td>
                             <td>{{currency("PHP", $item->item_price)}}</td>
                             <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td>
                             <td><a link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:" class="popup">Edit</a></td>

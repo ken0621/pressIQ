@@ -9,6 +9,8 @@ use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_item;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_settings;
+use App\Models\Tbl_user;
+use App\Models\Tbl_user_warehouse_access    ;
 use DB;
 use Carbon\Carbon;
 use Session;
@@ -370,6 +372,49 @@ class Warehouse
         return $data;
     }
 
+    public static function put_default_warehouse($shop_id)
+    {
+        if(!Tbl_warehouse::where("warehouse_shop_id", $shop_id)->where("main_warehouse", 1)->first())
+        {
+            $insert1["warehouse_name"]    = "Main Warehouse";
+            $insert1["warehouse_shop_id"] = $shop_id;
+            $insert1["warehouse_created"] = Carbon::now();
+            $insert1["main_warehouse"]    = "1";
 
+            Tbl_warehouse::insertGetId($insert1);
+        }
+
+        if(!Tbl_warehouse::where("warehouse_shop_id", $shop_id)->where("warehouse_name", "Ecommerce Warehouse")->first())
+        {
+            $insert2["warehouse_name"]    = "Ecommerce Warehouse";
+            $insert2["warehouse_shop_id"] = $shop_id;
+            $insert2["warehouse_created"] = Carbon::now();
+            $insert2["main_warehouse"]    = "0";
+
+            Tbl_warehouse::insertGetId($insert2);
+        }
+    }
+
+    public static function mainwarehouse_for_developer($user_id, $shop_id)
+    {
+        $_warehouse     = Tbl_warehouse::where("warehouse_shop_id", $shop_id)->get();
+        $warehouse_id   = collect($_warehouse)->where("main_warehouse", 1)->first()->pluck("warehouse_id");
+        $user           = Tbl_user::where("user_id", $user_id)->first();
+        
+        if($user->user_level == 1)
+        {
+            foreach($_warehouse as $warehouse)
+            {
+                 if(!Tbl_user_warehouse_access::where("user_id", $user_id)->where("warehouse_id", $warehouse->warehouse_id)->first())
+                 {
+                    Tbl_user_warehouse_access::insert(['user_id' => $user_id, 'warehouse_id' => $warehouse->warehouse_id]);
+                 }
+            }
+        }
+        elseif(!Tbl_user_warehouse_access::where("user_id", $user_id)->where("warehouse_id", $warehouse_id)->first())
+        {
+            Tbl_user_warehouse_access::insert(['user_id' => $user_id, 'warehouse_id' => $warehouse_id]);
+        }
+    }
    
 }

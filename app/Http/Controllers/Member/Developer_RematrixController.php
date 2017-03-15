@@ -5,9 +5,9 @@ use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_search;
-
-Tbl_customer_search
+use App\Models\Tbl_membership_package;
 use Crypt;
+use Request;
 class Developer_RematrixController extends Member
 {
 	public function index()
@@ -20,10 +20,40 @@ class Developer_RematrixController extends Member
 	{
 		$shop_id 			= $this->user_info->shop_id;
 		$data = [];
-		$data['membership'] = Tbl_membership::where('shop_id', $shop_id)->where('membership_archive', 0)->get();
-		// dd($data);
-		$data['customers'] = $this->dummy_account();
+		$data['membership'] = Tbl_membership::where('shop_id', $shop_id)->where('membership_archive', 0)
+		->join('tbl_membership_package', 'tbl_membership_package.membership_id', '=', 'tbl_membership.membership_id')->get();
+		$data['customers'] = $this->dummy_account(); //200
 		return view('member.developer.simulate.index', $data);
+	}
+	public function simulate_submit()
+	{
+		// return $_POST;
+		$shop_id 			= $this->user_info->shop_id;
+		$membership_id = Request::input('membership_id');
+		$no_of_customer = Request::input('no_of_customer');
+		$no_of_slots_customer = Request::input('no_of_slots_customer');
+		$no_of_slots = Request::input('no_of_slots');
+		$no_of_downlines = Request::input('no_of_downlines');
+
+		if(isset($membership_id))
+		{
+			$membership = [];
+			$count = 1;
+			foreach($membership_id as $key => $value)
+			{
+				$membership[$count] = $key;
+				$count++;
+			}
+			// $this->	
+		}
+		else
+		{
+			$data['status'] = 'warning';
+			$data['error'][0] = 'Membership is Required';
+			
+		}
+		return json_encode($data);
+		// if(isset())
 	}
 	public function reset()
 	{

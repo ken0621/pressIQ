@@ -4,7 +4,8 @@
 	<div class="register">
 		<div class="title">Create a Brown ID</div>
 		<div class="sub">Nulla dolor lacus, viverra sed laoreet a, tristique ut elit.</div>
-		<form method="get">
+		<form method="post" action="/member/register/submit" onsubmit="validateMyForm();">
+		{!! csrf_field() !!}
 			<div class="form-container">
 				<div class="row clearfix">
 					<div class="col-md-6">
@@ -33,7 +34,7 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Tin No.</label>
+							<label>Tin No. (Optional)</label>
 							<input type="text" class="form-control input-lg">
 						</div>
 					</div>
@@ -41,8 +42,10 @@
 						<div class="form-group">
 							<label>Country</label>
 							<select class="form-control input-lg">
-								<option></option>
-							</select>
+								@foreach($country as $value)
+	                                <option value="{{$value->country_id}}" @if($value->country_id == 420) selected @endif >{{$value->country_name}}</option>
+	                            @endforeach							
+	                        </select>
 						</div>
 					</div>
 				</div>
@@ -57,7 +60,7 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Membership Code of Sponsor</label>
+							<label>Membership Code of Sponsor (Optional)</label>
 							<input type="text" class="form-control input-lg">
 						</div>
 					</div>
@@ -93,4 +96,12 @@
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/assets/mlm/css/register.css">
+@endsection
+@section('script')
+<script type="text/javascript">
+	function validateMyForm()
+	{
+		event.preventDefault();
+	}
+</script>
 @endsection

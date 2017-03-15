@@ -86,4 +86,11 @@ td {
 .cursor-move {
   cursor: move; }
 
+.btn-group .btn-grp-primary {
+  color: #5f5f5f;
+  background-color: transparent; }
+  .btn-group .btn-grp-primary:hover {
+    color: #fff !important;
+    background-color: #1682ba !important; }
+
 /*# sourceMappingURL=member.css.map */

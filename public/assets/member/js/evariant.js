@@ -43,7 +43,7 @@ function variant()
 		{
 			link: '/member/item/add',
 		    link_size: 'lg',
-		    width: '50%',
+		    width: '100%',
 		    maxHeight: "309px",
 		    placeholder: 'Item',
             onCreateNew : function()
@@ -181,18 +181,21 @@ function submit_done(data)
 			{
 				variant.initialize_select_plugin();
 
-                tinyMCE.init(
-			    { 
-			        selector:'.tinymce',
-			        menubar:false,
-			        height:200, 
-			        content_css : "/assets/member/css/tinymce.css",
-			        setup: function(val) {
-			            val.on('change', function(e) {
+				if($(".tinymce").length)
+				{
+	                tinyMCE.init(
+				    { 
+				        selector:'.tinymce',
+				        menubar:false,
+				        height:200, 
+				        content_css : "/assets/member/css/tinymce.css",
+				        setup: function(val) {
+				            val.on('change', function(e) {
 
-			            });
-			        }
-			    });
+				            });
+				        }
+				    });
+				}
 
 				toastr.success("Successfully updated the product");
 			});

@@ -60,6 +60,79 @@ class Purchasing_inventory_system
 
         return $data;
     }
+    public static function view_status($sir_id)
+    {
+        $sir_data["sir"] = Tbl_sir::saleagent()->truck()->where("sir_id",$sir_id)->first();
+
+        $return = 'Rejected by Sales Agent <strong>'. $sir_data["sir"]->first_name." ".$sir_data["sir"]->middle_name." ".$sir_data["sir"]->last_name."</strong>";
+        if($sir_data["sir"]->ilr_status == 2 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
+        {
+
+        $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
+            <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
+            <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
+            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+        }
+        else if($sir_data["sir"]->ilr_status == 1 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
+        {
+           $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
+            <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
+            <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
+            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click <a href="/member/pis/ilr/'.$sir_id.'"> here </a> to close the I.L.R)</div>
+            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+        }
+        else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
+        {
+             $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
+            <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
+            <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
+            <div class="col-md-12" >5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
+            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
+            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+        }
+        else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 0)
+        {
+            $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
+            <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
+            <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
+            <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
+            <div class="col-md-12" >5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
+            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
+            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+        }
+        else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 0 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 0)
+        {
+             $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
+            <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
+            <div class="col-md-12" >3. Convert LoadOutForm to SIR (Click <a size="md" link="/member/pis/sir/open/'.$sir_id.'/open" class="popup">here</a> to convert to SIR)</div>
+            <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
+            <div class="col-md-12" >5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
+            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
+            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+        }
+        else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 0 && $sir_data["sir"]->lof_status == 1 && $sir_data["sir"]->is_sync == 0)
+        {
+                 $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
+            <div class="col-md-12" >2. Confirmation of Load Out form by Sales Agent </div>
+            <div class="col-md-12" >3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
+            <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
+            <div class="col-md-12" >5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
+            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
+            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+        }
+
+        $sir_data["sir"]->gen_status = $return;
+
+        $data = $sir_data["sir"];
+
+        return $data;
+    }
     public static function get_warehouse_based_sir($sir_id)
     {
         $sir = Tbl_sir::truck()->where("sir_id",$sir_id)->first();
@@ -71,27 +144,35 @@ class Purchasing_inventory_system
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
     public static function get_sir_data($sir_id)
-    {
-        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.sir_id",$sir_id)->first();
+    {        
+        $price = "";
+        $data["sir"] = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.sir_id",$sir_id)->first();
 
-        $data->total_amount = "";
-            $item = Tbl_sir_item::where("sir_id",$data->sir_id)->get();
-            $price = "";
-            foreach ($item as $key2 => $value2)
-            {   
-                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();
-                $qty = 1;
-                if($unit_m != null)
-                {
-                    $qty = $unit_m->unit_qty;
-                }
-                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
-            }
+        $item = Tbl_sir_item::where("sir_id",$sir_id)->get();
+        foreach ($item as $key2 => $value2)
+        {   
+            $qty = UnitMeasurement::um_qty($value2->related_um_type);
+            $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
+        }
+        $data["sir"]->total_amount = $price; 
 
-            $data->total_amount = $price; 
+        $return = $data["sir"];
+        return $return->toArray();
+    }
+    public static function get_ilr_data($sir_id)
+    {        
+        $price = "";
+        $data["ilr"] = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.sir_id",$sir_id)->first();
 
-        return $data->toArray();
+        $item = Tbl_sir_item::where("sir_id",$sir_id)->get();
+        foreach ($item as $key2 => $value2)
+        {   
+            $price += $value2->sir_item_price *  $value2->physical_count;
+        }
+        $data["ilr"]->total_amount = $price; 
 
+        $return = $data["ilr"];
+        return $return->toArray();
     }
     public static function select_sir($shop_id = 0, $return = 'array',$srch_sir = '')
     {
@@ -544,56 +625,56 @@ class Purchasing_inventory_system
                  // dd($all);                       
         foreach ($all as $key => $value) 
         {
-                $customer_info                      = [];
-                $customer_info['customer_id']       = $value->inv_customer_id;
-                $customer_info['customer_email']    = $value->inv_customer_email;
+        //         $customer_info                      = [];
+        //         $customer_info['customer_id']       = $value->inv_customer_id;
+        //         $customer_info['customer_email']    = $value->inv_customer_email;
 
-                $invoice_info                       = [];
-                $invoice_info['new_inv_id']         = $value->new_inv_id;
-                $invoice_info['invoice_terms_id']   = $value->inv_terms_id;
-                $invoice_info['invoice_date']       = $value->inv_date;
-                $invoice_info['invoice_due']        = $value->inv_due_date;
-                $invoice_info['billing_address']    = $value->inv_customer_billing_address;
+        //         $invoice_info                       = [];
+        //         $invoice_info['new_inv_id']         = $value->new_inv_id;
+        //         $invoice_info['invoice_terms_id']   = $value->inv_terms_id;
+        //         $invoice_info['invoice_date']       = $value->inv_date;
+        //         $invoice_info['invoice_due']        = $value->inv_due_date;
+        //         $invoice_info['billing_address']    = $value->inv_customer_billing_address;
 
-                $invoice_other_info                 = [];
-                $invoice_other_info['invoice_msg']  = $value->inv_message;
-                $invoice_other_info['invoice_memo'] = $value->inv_memo;
+        //         $invoice_other_info                 = [];
+        //         $invoice_other_info['invoice_msg']  = $value->inv_message;
+        //         $invoice_other_info['invoice_memo'] = $value->inv_memo;
 
-                $total_info                         = [];
-                $total_info['total_subtotal_price'] = $value->inv_subtotal_price;
-                $total_info['ewt']                  = $value->ewt;
-                $total_info['total_discount_type']  = $value->inv_discount_type;
-                $total_info['total_discount_value'] = $value->inv_discount_value;
-                $total_info['taxable']              = $value->taxable;
-                $total_info['total_overall_price']  = $value->inv_overall_price;
+        //         $total_info                         = [];
+        //         $total_info['total_subtotal_price'] = $value->inv_subtotal_price;
+        //         $total_info['ewt']                  = $value->ewt;
+        //         $total_info['total_discount_type']  = $value->inv_discount_type;
+        //         $total_info['total_discount_value'] = $value->inv_discount_value;
+        //         $total_info['taxable']              = $value->taxable;
+        //         $total_info['total_overall_price']  = $value->inv_overall_price;
 
-                $item_info                          = [];
-                $_itemline                          = Tbl_temp_customer_invoice_line::where("invline_inv_id",$value->inv_id)->get();
+        //         $item_info                          = [];
+        //         $_itemline                          = Tbl_temp_customer_invoice_line::where("invline_inv_id",$value->inv_id)->get();
 
-            $return = 0;
-            foreach($_itemline as $keys => $item_line)
-            {
-                if($item_line)
-                {
-                    $item_info[$keys]['item_service_date']  = $item_line->invline_service_date;
-                    $item_info[$keys]['item_id']            = $item_line->invline_item_id;
-                    $item_info[$keys]['item_description']   = $item_line->invline_description;
-                    $item_info[$keys]['um']                 = $item_line->invline_um;
-                    $item_info[$keys]['quantity']           = $item_line->invline_qty;
-                    $item_info[$keys]['rate']               = $item_line->invline_rate;
-                    $item_info[$keys]['discount']           = $item_line->invline_discount;
-                    $item_info[$keys]['discount_remark']    = $item_line->invline_discount_remark;
-                    $item_info[$keys]['taxable']            = $item_line->taxable;
-                    $item_info[$keys]['amount']             = $item_line->invline_amount;
-                }
-            }
-           $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+        //     $return = 0;
+        //     foreach($_itemline as $keys => $item_line)
+        //     {
+        //         if($item_line)
+        //         {
+        //             $item_info[$keys]['item_service_date']  = $item_line->invline_service_date;
+        //             $item_info[$keys]['item_id']            = $item_line->invline_item_id;
+        //             $item_info[$keys]['item_description']   = $item_line->invline_description;
+        //             $item_info[$keys]['um']                 = $item_line->invline_um;
+        //             $item_info[$keys]['quantity']           = $item_line->invline_qty;
+        //             $item_info[$keys]['rate']               = $item_line->invline_rate;
+        //             $item_info[$keys]['discount']           = $item_line->invline_discount;
+        //             $item_info[$keys]['discount_remark']    = $item_line->invline_discount_remark;
+        //             $item_info[$keys]['taxable']            = $item_line->taxable;
+        //             $item_info[$keys]['amount']             = $item_line->invline_amount;
+        //         }
+        //     }
+        //    $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
            
-           $update_ms["inv_id"] = $invoice_id;
+        //    $update_ms["inv_id"] = $invoice_id;
            $update_ms["is_sync"] = 1;
-           $update_m["is_sync"] = 1;
+        //    $update_m["is_sync"] = 1;
            Tbl_manual_invoice::where("manual_invoice_id",$value->manual_invoice_id)->update($update_ms);
-           Tbl_temp_customer_invoice::where("inv_id",$value->inv_id)->update($update_m);
+        //    Tbl_temp_customer_invoice::where("inv_id",$value->inv_id)->update($update_m);
         }
 
         return $data;

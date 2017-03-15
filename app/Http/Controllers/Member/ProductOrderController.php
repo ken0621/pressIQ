@@ -7,6 +7,7 @@ use App\Globals\Accounting;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
+use App\Globals\Ecom_product;
 use App\Globals\Pdf_global;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_warehousea;
@@ -32,7 +33,7 @@ class ProductOrderController extends Member
         $data["page"]       = "Customer Invoice";
         $data["_customer"]  = Tbl_customer::where("archived", 0)->get();
         $data["_payment"]   = Tbl_payment_method::where("archived", 0)->where("shop_id",$this->user_info->shop_id)->get();
-        $data['_item']      = Tbl_ec_variant::where("eprod_shop_id",$this->user_info->shop_id)->product()->item()->get();
+        $data['_product']      = Ecom_Product::getProductList();
         // dd($data);
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["action"]     = "/member/ecommerce/product_order/create_order/create_invoice";
@@ -59,7 +60,7 @@ class ProductOrderController extends Member
                     $data["coupon_amount"] = null;
                     $data["coupon_type"]   = "fixed";
                 }
-
+ 
                 $data["ec_order_id"] = $sir->ec_order_id;
             }
         }

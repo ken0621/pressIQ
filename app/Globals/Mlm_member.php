@@ -15,6 +15,9 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_membership_code;
+use App\Models\Tbl_customer_search;
+use App\Models\Tbl_customer_other_info;
+use App\Models\Tbl_customer_address;
 
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
@@ -25,7 +28,7 @@ use DB;
 use Carbon\Carbon;
 use Request;
 use Validator;
-
+use Crypt;
 
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_slot_log;
@@ -227,4 +230,68 @@ class Mlm_member
     	}
     	return json_encode($data);
 	}
+
+    public static function register_slot_membership_code($shop_id, $register_session, $register_session_2, $ship, $code, $code_info)
+    {
+        // dd($code_info);
+        $customer_id = Mlm_member::register_slot_insert_customer($shop_id, $register_session);
+        $slot_id = Mlm_member::register_slot_insert($shop_id, $customer_id, $register_session, $code, $code_info);
+        $update['used'] = 1;
+        $update['date_used'] = Carbon::now();
+        $update['slot_id'] = $slot_id;
+        Tbl_membership_code::where('membership_code_id', $code['membership_pin'])->update($update);
+        $c = Mlm_gc::slot_gc($slot_id);
+
+        Mlm_member::add_to_session_edit($shop_id, $customer_id, $slot_id);
+    }
+    public static function register_slot_insert_customer($shop_id, $info)
+    {
+        $insert['shop_id'] = $shop_id;
+        $insert['country_id'] = $info['country'];
+        $insert['title_name'] = '';
+        $insert['first_name'] =  $info['first_name'];
+        $insert['middle_name'] = '';
+        $insert['last_name'] = $info['last_name'];
+        $insert['suffix_name'] = '';
+        $insert['email'] =  $info['email'];
+        $insert['ismlm'] = 1;
+        $insert['mlm_username'] = $info['username'];
+        $insert['password'] = Crypt::encrypt($info['password']);
+        $insert['tin_number'] = '';
+        $insert['company'] = $info['company'];
+        $customer_id = Tbl_customer::insertGetId($insert);
+
+        $insertSearch['customer_id'] = $customer_id;
+        $insertSearch['body'] = $insert['title_name'].' '.$insert['first_name'].' '.$insert['middle_name'].' '.$insert['last_name'].' '.$insert['suffix_name'].' '.$insert['email'].' '.$insert['company'];
+        Tbl_customer_search::insert($insertSearch);
+
+        $insertInfo['customer_id'] = $customer_id;
+        Tbl_customer_other_info::insert($insertInfo);
+
+        $insertAddress[0]['customer_id'] = $customer_id;
+        $insertAddress[0]['country_id'] = $info['country'];
+        $insertAddress[0]['purpose'] = 'billing';
+        $insertAddress[1]['customer_id'] = $customer_id;
+        $insertAddress[1]['country_id'] = $info['country'];
+        $insertAddress[1]['purpose'] = 'shipping';
+        Tbl_customer_address::insert($insertAddress);
+
+        return $customer_id;
+    }
+    public static function register_slot_insert($shop_id, $customer_id, $register_session, $code, $code_info)
+    {
+        $slot_sponsor = Tbl_mlm_slot::where('slot_nick_name', $register_session['sponsor'])->first();
+        $insert['slot_no'] = Mlm_plan::set_slot_no($shop_id, $code['membership_pin']);
+        $insert['shop_id'] = $shop_id;
+        $insert['slot_owner'] = $customer_id;
+        $insert['slot_created_date'] = Carbon::now();
+        $insert['slot_membership'] = $code_info->membership_id;
+        $insert['slot_status'] = $code_info->membership_type;
+        $insert['slot_sponsor'] = $slot_sponsor->slot_id;
+        
+        $id = Tbl_mlm_slot::insertGetId($insert);
+        $a = Mlm_compute::entry($id);
+
+        return $id;
+    }
 }

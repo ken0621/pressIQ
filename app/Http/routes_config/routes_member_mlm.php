@@ -40,6 +40,7 @@ Route::post('/member/mlm/claim_voucher/check_claim/void', 'Member\MLM_ClaimVouch
 
 /* Start MLM Slot */
 Route::any('/member/mlm/slot', 'Member\MLM_SlotController@index'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/slot/login', 'Member\MLM_SlotController@force_login'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/slot/simulate/{code}', 'Member\MLM_SlotController@simulate');
 Route::any('/member/mlm/slot/add', 'Member\MLM_SlotController@add_slot');
 Route::any('/member/mlm/slot/view/{slot_id}', 'Member\MLM_SlotController@view_slot_info');
@@ -187,3 +188,6 @@ Route::get('member/mlm/card/image/{slot}', 'Member\MLM_CardController@generate')
 Route::get('member/mlm/card/all', 'Member\MLM_CardController@all_slot');
 Route::post('member/mlm/card/done', 'Member\MLM_CardController@done');
 Route::post('member/mlm/card/pending', 'Member\MLM_CardController@pending');
+
+
+Route::get('/member/mlm/report', 'Member\MLM_ReportController@index');

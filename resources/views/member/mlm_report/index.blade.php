@@ -54,7 +54,6 @@
                            <?php $total_membership_price += $membership_price[$key];?>
                         </div>
                         @endforeach
-
                     </div>
                 </div>
                 <div class="space"></div>
@@ -173,7 +172,7 @@
                        EXPECTED PAYOUT: {{$total_income_per_complan}}
                     </div>
                     <div class="more">
-                        COMPANY EARNINGS : {{$total_membership_price - $total_income_per_complan }} ({{  ((($total_income_per_complan/$total_membership_price) - 1) * (-1)) *100}})
+                        COMPANY EARNINGS : {{$total_membership_price - $total_income_per_complan }} ({{  ((($total_income_per_complan/$total_membership_price) - 1) * (-1)) *100}}%)
                     </div>
                 </div>
             </div>

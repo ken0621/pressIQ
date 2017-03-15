@@ -363,8 +363,17 @@ class Mlm_compute
         $data['total_cashin'] = $total; 
         return view('member.mlm_slot.simulate', $data);
     }
+    public static function set_slot_nick_name_2($slot_info)
+    {
+        $count_customer = Tbl_mlm_slot::where('slot_owner', $slot_info->slot_owner)-count();
+        if($count_customer == 0)
+        {
+            $update['slot_defaul'] = 1;
+            // $update['slot_nick_name'] = 
+        }
+    }
     public static function set_slot_nick_name($slot_info)
     {
-        $count_customer = Tbl_mlm_slot::where('slot_owner', $slot_info->slot_owner)-
+
     }
 }

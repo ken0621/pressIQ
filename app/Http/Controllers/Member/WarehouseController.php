@@ -8,6 +8,7 @@ use App\Globals\Utilities;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_sub_warehouse;
+use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_settings;
 use Request;
 use App\Http\Controllers\Controller;
@@ -39,44 +40,60 @@ class WarehouseController extends Member
             $all_item = null;
             foreach($data["_warehouse"] as $key => $value)
             {
-                $selling_price = 0;
-                $cost_price = 0;
-                
-                $all_item = Tbl_sub_warehouse::select_item($value->warehouse_id)
-                                             ->get();
-
-                foreach ($all_item as $key2 => $value2) 
+                $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$value->warehouse_id)->first();
+                if(!$check_if_owned)
                 {
-                    $qty = Tbl_warehouse_inventory::where("inventory_item_id",$value2->item_id)
-                                                        ->where("warehouse_id",$value->warehouse_id)
-                                                        ->sum("inventory_count");
-
-                    $selling_price += $value2->item_price * $qty;
-                    $cost_price += $value2->item_cost * $qty;
+                    unset($data["_warehouse"][$key]);
                 }
-                $data["_warehouse"][$key]->total_selling_price = $selling_price;
-                $data["_warehouse"][$key]->total_cost_price = $cost_price;
+                else
+                {          
+                    $selling_price = 0;
+                    $cost_price = 0;
+                    
+                    $all_item = Tbl_sub_warehouse::select_item($value->warehouse_id)
+                                                 ->get();
+
+                    foreach ($all_item as $key2 => $value2) 
+                    {
+                        $qty = Tbl_warehouse_inventory::where("inventory_item_id",$value2->item_id)
+                                                            ->where("warehouse_id",$value->warehouse_id)
+                                                            ->sum("inventory_count");
+
+                        $selling_price += $value2->item_price * $qty;
+                        $cost_price += $value2->item_cost * $qty;
+                    }
+                    $data["_warehouse"][$key]->total_selling_price = $selling_price;
+                    $data["_warehouse"][$key]->total_cost_price = $cost_price;
+                }
             }
 
             $archive_item = null;
             foreach($data["_warehouse_archived"] as $key3 => $value3)
             {
-                $selling_price_a = 0;
-                $cost_price_a = 0;
-                $archive_item = Tbl_sub_warehouse::select_item($value3->warehouse_id)
-                                             ->get();
-
-                foreach ($archive_item as $key4 => $value4) 
+                $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$value3->warehouse_id)->first();
+                if(!$check_if_owned)
                 {
-                    $qty = Tbl_warehouse_inventory::where("inventory_item_id",$value4->item_id)
-                                                        ->where("warehouse_id",$value3->warehouse_id)
-                                                        ->sum("inventory_count");
-
-                    $selling_price_a += $value4->item_price * $qty;
-                    $cost_price_a += $value4->item_cost * $qty;
+                    unset($data["_warehouse_archived"][$key3]);
                 }
-                $data["_warehouse_archived"][$key3]->total_selling_price = $selling_price_a;
-                $data["_warehouse_archived"][$key3]->total_cost_price = $cost_price_a;
+                else
+                {
+                    $selling_price_a = 0;
+                    $cost_price_a = 0;
+                    $archive_item = Tbl_sub_warehouse::select_item($value3->warehouse_id)
+                                                 ->get();
+
+                    foreach ($archive_item as $key4 => $value4) 
+                    {
+                        $qty = Tbl_warehouse_inventory::where("inventory_item_id",$value4->item_id)
+                                                            ->where("warehouse_id",$value3->warehouse_id)
+                                                            ->sum("inventory_count");
+
+                        $selling_price_a += $value4->item_price * $qty;
+                        $cost_price_a += $value4->item_cost * $qty;
+                    }
+                    $data["_warehouse_archived"][$key3]->total_selling_price = $selling_price_a;
+                    $data["_warehouse_archived"][$key3]->total_cost_price = $cost_price_a;
+                }
             }
 
             $this->create_main();
@@ -100,11 +117,11 @@ class WarehouseController extends Member
         { 
             if(Request::input("id"))
             {
-                $data = Tbl_warehouse::where("archived",0)->where("warehouse_id","!=",Request::input("id"))->get();
+                $data = Tbl_user_warehouse_access::join("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_user_warehouse_access.warehouse_id")->where("user_id",$this->user_info->user_id)->where("archived",0)->where("tbl_warehouse.warehouse_id","!=",Request::input("id"))->get();
             }
             else
             {
-                $data = Tbl_warehouse::where("archived",0)->get();   
+                $data = Tbl_user_warehouse_access::join("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_user_warehouse_access.warehouse_id")->where("user_id",$this->user_info->user_id)->where("archived",0)->get();
             }
 
             return json_encode($data);
@@ -285,6 +302,11 @@ class WarehouseController extends Member
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
         { 
+            $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$id)->first();
+            if(!$check_if_owned)
+            {
+                return $this->show_no_access_modal();
+            }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
             $data["warehouse_item"] = Warehouse::select_item_warehouse_single($id,'array');
             // dd($data["warehouse_item"]);
@@ -302,7 +324,11 @@ class WarehouseController extends Member
         if($access == 1)
         { 
             $id = Request::input("warehouse_id");
-
+            $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$id)->first();
+            if(!$check_if_owned)
+            {
+                return $this->show_no_access_modal();
+            }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
             
             $data["warehouse_item"] = Warehouse::select_item_warehouse_single($id,'array');
@@ -412,6 +438,11 @@ class WarehouseController extends Member
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
         { 
+            $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$warehouse_id)->first();
+            if(!$check_if_owned)
+            {
+                return $this->show_no_access_modal();
+            }
             $shop_id               = $this->user_info->shop_id;
             $data["page"]          = "Warehouse";
             $data["warehouse"]          = Tbl_warehouse::inventory()
@@ -456,6 +487,11 @@ class WarehouseController extends Member
         if($access == 1)
         { 
             $shop_id               = $this->user_info->shop_id;
+            $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$warehouse_id)->first();
+            if(!$check_if_owned)
+            {
+                return $this->show_no_access_modal();
+            }
             $data["page"]          = "Warehouse";
             $data["warehouse"]     = Tbl_warehouse::inventory()
                                                         ->selectRaw('*, sum(tbl_warehouse_inventory.inventory_count) as total_qty')
@@ -689,6 +725,11 @@ class WarehouseController extends Member
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
         { 
+            $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$id)->first();
+            if(!$check_if_owned)
+            {
+                return $this->show_no_access_modal();
+            }
             $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->where("shop_id",$this->user_info->shop_id)->get();
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
 
@@ -778,6 +819,7 @@ class WarehouseController extends Member
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
         { 
+           // $data = Tbl_user_warehouse_access::join("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_user_warehouse_access.warehouse_id")->where("user_id",$this->user_info->user_id)->where("archived",0)->get();
            $data["warehouse"] = Tbl_warehouse::where("archived",0)->get();
            return view("member.warehouse.warehouse_transfer",$data);
         }

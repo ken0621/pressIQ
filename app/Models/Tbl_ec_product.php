@@ -12,7 +12,7 @@ class Tbl_ec_product extends Model
 
     public function scopeVariant($query, $separator = ' • ' )
     {
-    	$query->selectRaw("eprod_id, evariant_id, group_concat(option_value ORDER BY variant_name_order ASC SEPARATOR '$separator') as variant_name, evariant_item_id, evariant_item_label, evariant_description")
+    	$query->selectRaw("eprod_id, eprod_name, evariant_id, group_concat(option_value ORDER BY variant_name_order ASC SEPARATOR '$separator') as variant_name, evariant_item_id, evariant_item_label, evariant_description, evariant_price")
     		  ->join("tbl_ec_variant","eprod_id","=","evariant_prod_id")
     		  ->leftjoin(DB::raw("tbl_variant_name as var_name"),"evariant_id","=", "variant_id")
     		  ->leftjoin(DB::raw("tbl_option_name as op_name"),"op_name.option_name_id","=","var_name.option_name_id")

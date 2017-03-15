@@ -194,3 +194,21 @@ Pending:
 -------------------------------------------------------------------------------------------------------------------------
 
 
+1.  Perfect
+2.  1M Earnings nung perfect
+3.  levels tigil (11)
+4.  total members 																	|| Start 11:24 (OK)
+5.  total payout off all members /released /wallet  								||
+6.  membership 3999
+7.  Perfect Tree ()
+8.  Adming total direct saka binary()
+9.  walang pangalan walang info()
+10. 11 levels ang ipapakita sa members area
+13. Basta (11 levels) lang papakita, iccount sa left and right
+14. Required switch for floating slots (next pa to)
+
+
+
+
+
+APP_KEY=vNYGoBAFOTzqWyeXFkYeO97Z5FIBq5SD

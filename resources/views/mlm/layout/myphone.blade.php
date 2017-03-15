@@ -120,11 +120,30 @@
                            <li><a href="/mlm"> Home <span class="fa fa-chevron-down"></span></a></li>
                            <li><a href="/mlm/profile"> Profile <span class="fa fa-chevron-down"></span></a></li>
                            <li><a href="/mlm/notification"> Notification <span class="fa fa-chevron-down"></span></a></li>
-                           <li><a href="/mlm/repurchase"> Repurchase <span class="fa fa-chevron-down"></span></a></li>
+                           <!-- <li><a href="/mlm/repurchase"> Repurchase <span class="fa fa-chevron-down"></span></a></li> -->
                            <li>
                             <a> Genealogy <span class="fa fa-chevron-down"></span></a>
                             <ul style="display: none;">
-                              <li><a href="javascript:">Sub Desu</a></li>
+                              <li>
+                                  <a  href="/mlm/genealogy/unilevel">
+                                      Unilevel Genealogy
+                                  </a> 
+                              </li>
+                              <li>
+                                <a href="/mlm/network/unilevel">
+                                  Unilevel Network List
+                                </a>
+                              </li>
+                              <li>
+                                  <a  href="/mlm/genealogy/binary">
+                                      Binary Genealogy
+                                  </a> 
+                              </li>
+                              <li>
+                                <a href="/mlm/network/binary">
+                                  Binary Network List
+                                </a>
+                              </li>
                             </ul>
                            </li>
                            <li><a> Report <span class="fa fa-chevron-down"></span></a></li>

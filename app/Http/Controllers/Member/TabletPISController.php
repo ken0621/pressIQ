@@ -70,7 +70,7 @@ class TabletPISController extends Member
             Session::forget("selected_sir");
             Session::put("selected_sir",$data["open_sir"]->sir_id);
       
-			$data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_customer_invoice.inv_id","DESC")->get();
+			$data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_is_paid",0)->get();
 
             $data["total_invoice_amount"] = 0;
             foreach ($data["_invoices"] as $key => $value) 
@@ -291,6 +291,10 @@ class TabletPISController extends Member
                 $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
 
                 Tbl_receive_payment_line::insert($insert_line);
+                if($insert_line["rpline_reference_name"] == 'invoice')
+                {
+                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                }
             }
         }
 

@@ -56,9 +56,7 @@
                                   <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Action <span class="caret"></span>
                                   </button>
                                     <ul class="dropdown-menu dropdown-menu-custom">
-                                        <li><a size="lg" link="/tablet/view_invoice_view/{{$rp->inv_id}}" class="popup">View Invoice</a></li>
-                                        <li><a href="/tablet/create_invoices/add?id={{$rp->inv_id}}&sir_id={{Session::get('selected_sir')}}">Edit Invoice</a></li>
-                                        <li><a >View Receipt</a></li>                                            
+                                        <li><a href="/tablet/receive_payment/add?id={{$rp->rp_id}}">Edit Payment</a></li>                                        
                                     </ul>
                                 </div>
                             </td>

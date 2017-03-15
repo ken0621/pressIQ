@@ -353,6 +353,9 @@ Route::any('/tablet/sync_export','Member\TabletPISController@sync_export');
 Route::any('/tablet/logout','Member\TabletPISController@logout');
 Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_sir');
 
+Route::any('/tablet/customer',"Member\TabletPISController@customer");
+Route::any('/tablet/customer_details/{id}',"Member\TabletPISController@customer_details");
+
 Route::any('/tablet/invoice','Member\TabletPISController@invoice');
 Route::any('/tablet/view_invoices/{id}','Member\TabletPISController@view_invoices');
 Route::any('/tablet/create_invoices/add','Member\TabletPISController@tablet_create_invoice');
@@ -660,6 +663,7 @@ Route::get('/member/item/load_um','Member\UnitOfMeasurementController@load_um');
 Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
 Route::get('/member/item/load_category','Member\Manage_Category_Controller@load_category');
 Route::get('/member/item/manufacturer/load_manufacturer','Member\ManufacturerController@load_manufacturer');
+Route::get('/member/maintenance/load_payment_method','Member\MaintenancePaymentMethodController@load_payment_method');
 Route::get('/member/maintenance/load_payment_gateway/{id}','Member\OnlinePaymentMethodController@load_payment_gateway');
 
 /* SettingsController */

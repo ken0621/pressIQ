@@ -1,4 +1,4 @@
-<form class="form-horizontal global-submit" role="form" action="/member/payroll/philhealth_table_list/philhealth_table_save_default" method="POST">
+<form class="form-horizontal global-submit" role="form" action="/member/payroll/philhealth_table_list/philhealth_table_save" method="POST">
 	<input type="hidden" name="_token" value="{{csrf_token()}}">
 	<h4>Philhealth Table</h4>
 	<table class="table table-bordered table-condensed ">
@@ -23,27 +23,31 @@
 		</tr>
 
 		<tbody class="tbl-philhealth">
+			@foreach($_philhealth as $philhealth)
 			<tr>
 				<td>
-					<input type="number" step="any" name="payroll_philhealth_min[]" class="border-none width-100 text-right">
+					<input type="number" step="any" name="payroll_philhealth_min[]" class="border-none width-100 text-right" value="{{$philhealth->payroll_philhealth_min}}">
 				</td>
 				<td>
-					<input type="number" step="any" name="payroll_philhealth_max[]" class="border-none width-100 text-right">
+					<input type="number" step="any" name="payroll_philhealth_max[]" class="border-none width-100 text-right" value="{{$philhealth->payroll_philhealth_max}}">
 				</td>
 				<td>
-					<input type="number" step="any" name="payroll_philhealth_base[]" class="border-none width-100 text-right" >
+					<input type="number" step="any" name="payroll_philhealth_base[]" class="border-none width-100 text-right" value="{{$philhealth->payroll_philhealth_base}}">
 				</td>
 				<td>
-					<input type="number" step="any" name="payroll_philhealth_premium[]" class="border-none width-100 text-right">
+					<input type="number" step="any" name="payroll_philhealth_premium[]" class="border-none width-100 text-right" value="{{$philhealth->payroll_philhealth_premium}}">
 				</td>
 				<td>
-					<input type="number" step="any" name="payroll_philhealth_ee_share[]" class="border-none width-100 text-right">
+					<input type="number" step="any" name="payroll_philhealth_ee_share[]" class="border-none width-100 text-right" value="{{$philhealth->payroll_philhealth_ee_share}}">
 				</td>
 				<td>
-					<input type="number" step="any" name="payroll_philhealth_er_share[]" class="border-none width-100 text-right">
+					<input type="number" step="any" name="payroll_philhealth_er_share[]" class="border-none width-100 text-right" value="{{$philhealth->payroll_philhealth_er_share}}">
 				</td>
-			
+				<td class="text-center" valign="cener">
+					<a href="#" class="remove-tr"><i class="fa fa-trash-o"></i></a>
+				</td>
 			</tr>
+			@endforeach
 		</tbody>
 		
 		<tbody class="display-none tbl-ref">
@@ -66,7 +70,9 @@
 				<td>
 					<input type="number" step="any" name="payroll_philhealth_er_share[]" class="border-none width-100 text-right">
 				</td>
-			
+				<td class="text-center" valign="cener">
+					<a href="#" class="remove-tr"><i class="fa fa-trash-o"></i></a>
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -93,9 +99,9 @@
 			$(".tbl-philhealth tr:last").bind("click", function()
 			{
 
-				$(".tbl-sss tr:last").unbind("click");
+				$(".tbl-philhealth tr:last").unbind("click");
 				var ref = $(".tbl-ref").html();
-				$(".tbl-sss").append(ref);
+				$(".tbl-philhealth").append(ref);
 				append_tr();
 				remove_tr();
 			});

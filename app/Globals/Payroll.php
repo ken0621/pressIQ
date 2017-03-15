@@ -6,6 +6,10 @@ use App\Models\Tbl_payroll_copy_log_requirements;
 use App\Models\Tbl_payroll_tax_period;
 use App\Models\Tbl_payroll_sss;
 use App\Models\Tbl_payroll_sss_default;
+use App\Models\Tbl_payroll_philhealth_default;
+use App\Models\Tbl_payroll_philhealth;
+use App\Models\Tbl_payroll_pagibig_default;
+use App\Models\Tbl_payroll_pagibig;
 
 use Carbon\Carbon;
 
@@ -86,6 +90,51 @@ class Payroll
 			Tbl_payroll_sss::insert($insert);
 			$insertlog['shop_id'] 					= $shop_id;
 			$insertlog['requirements_category']	 	= 'sss';
+			$insertlog['requirements_copy_date']	= Carbon::now();
+			Tbl_payroll_copy_log_requirements::insert($insertlog);
+		}
+	}
+
+	public static function generate_philhealth($shop_id = 0)
+	{
+		$count = Tbl_payroll_copy_log_requirements::where('shop_id',$shop_id)->where('requirements_category','philhealth')->count();
+
+		if($count == 0)
+		{
+			$_philhealth = Tbl_payroll_philhealth_default::get();
+			$insert = array();
+			foreach($_philhealth as $key => $philhealth)
+			{
+				$insert[$key]['shop_id']					= $shop_id;
+				$insert[$key]['payroll_philhealth_min'] 	= $philhealth->payroll_philhealth_min;
+				$insert[$key]['payroll_philhealth_max'] 	= $philhealth->payroll_philhealth_max;
+				$insert[$key]['payroll_philhealth_base'] 	= $philhealth->payroll_philhealth_base;
+				$insert[$key]['payroll_philhealth_premium'] = $philhealth->payroll_philhealth_premium;
+				$insert[$key]['payroll_philhealth_ee_share'] = $philhealth->payroll_philhealth_ee_share;
+				$insert[$key]['payroll_philhealth_er_share'] = $philhealth->payroll_philhealth_er_share;
+			}
+			Tbl_payroll_philhealth::insert($insert);
+
+			$insertlog['shop_id'] 					= $shop_id;
+			$insertlog['requirements_category']	 	= 'philhealth';
+			$insertlog['requirements_copy_date']	= Carbon::now();
+			Tbl_payroll_copy_log_requirements::insert($insertlog);
+		}
+	}
+
+	public static function generate_pagibig($shop_id = 0)
+	{
+
+		$count = Tbl_payroll_copy_log_requirements::where('shop_id',$shop_id)->where('requirements_category','pagibig')->count();
+		if($count == 0)
+		{
+			$pagibig = Tbl_payroll_pagibig_default::pluck('payroll_pagibig_percent');
+			$insert['payroll_pagibig_percent']  = $pagibig;
+			$insert['shop_id']					= $shop_id;
+			Tbl_payroll_pagibig::insert($insert);
+
+			$insertlog['shop_id'] 					= $shop_id;
+			$insertlog['requirements_category']	 	= 'pagibig';
 			$insertlog['requirements_copy_date']	= Carbon::now();
 			Tbl_payroll_copy_log_requirements::insert($insertlog);
 		}

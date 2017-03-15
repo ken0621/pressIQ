@@ -26,6 +26,9 @@ use App\Models\Tbl_payroll_tax_default;
 use App\Models\Tbl_payroll_sss_default;
 use App\Models\Tbl_payroll_sss;
 use App\Models\Tbl_payroll_philhealth_default;
+use App\Models\Tbl_payroll_philhealth;
+use App\Models\Tbl_payroll_pagibig_default;
+use App\Models\Tbl_payroll_pagibig;
 
 use App\Globals\Payroll;
 
@@ -901,7 +904,38 @@ class PayrollController extends Member
 	/* PHILHEALTH TABLE START */
 	public function philhealth_table_list()
 	{
-		return view('member.payroll.side_container.philhealthlist');
+		$data['_philhealth'] = Tbl_payroll_philhealth::where('shop_id', Self::shop_id())->orderBy('payroll_philhealth_min')->get();
+		return view('member.payroll.side_container.philhealthlist', $data);
+	}
+
+	public function philhealth_table_save()
+	{
+		$payroll_philhealth_min 		= Request::input('payroll_philhealth_min');
+		$payroll_philhealth_max 		= Request::input('payroll_philhealth_max');
+		$payroll_philhealth_base 		= Request::input('payroll_philhealth_base');
+		$payroll_philhealth_premium 	= Request::input('payroll_philhealth_premium');
+		$payroll_philhealth_ee_share 	= Request::input('payroll_philhealth_ee_share');
+		$payroll_philhealth_er_share 	= Request::input('payroll_philhealth_er_share');
+		Tbl_payroll_philhealth::where('shop_id', Self::shop_id())->delete();
+		$insert = array();
+		foreach($payroll_philhealth_min as $key => $min)
+		{
+			if($min != "" && $min != null)
+			{
+				$insert[$key]['shop_id']						= Self::shop_id();
+				$insert[$key]['payroll_philhealth_min'] 		= $min;
+				$insert[$key]['payroll_philhealth_max'] 		= $payroll_philhealth_max[$key];
+				$insert[$key]['payroll_philhealth_base'] 		= $payroll_philhealth_base[$key];
+				$insert[$key]['payroll_philhealth_premium'] 	= $payroll_philhealth_premium[$key];
+				$insert[$key]['payroll_philhealth_ee_share'] 	= $payroll_philhealth_ee_share[$key];
+				$insert[$key]['payroll_philhealth_er_share'] 	= $payroll_philhealth_er_share[$key];
+			}
+			
+		}
+		Tbl_payroll_philhealth::insert($insert);
+
+		$return['status'] = 'success';
+		return json_encode($return);
 	}
 
 
@@ -919,18 +953,55 @@ class PayrollController extends Member
 		$insert = array();
 		foreach($payroll_philhealth_min as $key => $min)
 		{
-			$insert[$key]['payroll_philhealth_min'] = $min;
-			$insert[$key]['payroll_philhealth_max'] = $payroll_philhealth_max[$key];
-			$insert[$key]['payroll_philhealth_base'] = $payroll_philhealth_base[$key];
-			$insert[$key]['payroll_philhealth_premium'] = $payroll_philhealth_premium[$key];
-			$insert[$key]['payroll_philhealth_ee_share'] = $payroll_philhealth_ee_share[$key];
-			$insert[$key]['payroll_philhealth_er_share'] = $payroll_philhealth_er_share[$key];
+			if($min != "" && $min != null)
+			{
+				$insert[$key]['payroll_philhealth_min'] 		= $min;
+				$insert[$key]['payroll_philhealth_max'] 		= $payroll_philhealth_max[$key];
+				$insert[$key]['payroll_philhealth_base'] 		= $payroll_philhealth_base[$key];
+				$insert[$key]['payroll_philhealth_premium'] 	= $payroll_philhealth_premium[$key];
+				$insert[$key]['payroll_philhealth_ee_share'] 	= $payroll_philhealth_ee_share[$key];
+				$insert[$key]['payroll_philhealth_er_share'] 	= $payroll_philhealth_er_share[$key];
+			}
+			
 		}
 		Tbl_payroll_philhealth_default::insert($insert);
 
 		$return['status'] = 'success';
 		return json_encode($return);
 	}
+
+
 	/* PHILHEALTH TABLE END */
+	public function pagibig_formula()
+	{
+		$data['pagibig'] = Tbl_payroll_pagibig::where('shop_id', Self::shop_id())->first();
+		return view('member.payroll.side_container.pagibig', $data);
+	}
+
+	public function pagibig_formula_save()
+	{
+		Tbl_payroll_pagibig::where('shop_id', Self::shop_id())->delete();
+
+		$insert['payroll_pagibig_percent']  = Request::input('payroll_pagibig_percent');
+		$insert['shop_id']					= Self::shop_id();
+		Tbl_payroll_pagibig::insert($insert);
+		
+		$return['status'] = 'success';
+		return json_encode($return);
+	}
+
+
+
+	/* PAGIBIG DEFAULT VALUE [DEVELOPER] */
+	public function pagibig_formula_save_default()
+	{
+		Tbl_payroll_pagibig_default::truncate();
+		$insert['payroll_pagibig_percent'] = Request::input('payroll_pagibig_percent');
+		Tbl_payroll_pagibig_default::insert($insert);
+
+		$return['status'] = 'success';
+		return json_encode($return);
+	}
+	/* PAGIBIG TABLE START */
 
 }

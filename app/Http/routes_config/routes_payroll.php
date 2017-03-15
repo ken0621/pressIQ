@@ -77,8 +77,17 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/* PHILHEALTH TABLE START */
 	Route::any('/philhealth_table_list',"Member\PayrollController@philhealth_table_list");
-	
+	Route::any('/philhealth_table_list/philhealth_table_save',"Member\PayrollController@philhealth_table_save");
 	/* saving default data for developer */
 	Route::any('/philhealth_table_list/philhealth_table_save_default',"Member\PayrollController@philhealth_table_save_default");
 	/* PHILHEALTH TABLE END */
+
+
+	/* PAGIBIG START */
+	Route::any('/pagibig_formula',"Member\PayrollController@pagibig_formula");
+	Route::any('/pagibig_formula/pagibig_formula_save',"Member\PayrollController@pagibig_formula_save");
+
+	/* saving default data for developer */
+	Route::any('/pagibig_formula/pagibig_formula_save_default',"Member\PayrollController@pagibig_formula_save_default");
+	/* PAGIBIG END */
 });

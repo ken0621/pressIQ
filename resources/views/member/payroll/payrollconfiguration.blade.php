@@ -31,6 +31,7 @@
 					  <a href="/member/payroll/tax_table_list" class="list-group-item a-navigation-configuration">Tax Table</a>
 					  <a href="/member/payroll/sss_table_list" class="list-group-item a-navigation-configuration">SSS Table</a>
 					  <a href="/member/payroll/philhealth_table_list" class="list-group-item a-navigation-configuration">Philhealth Table</a>
+					  <a href="/member/payroll/pagibig_formula" class="list-group-item a-navigation-configuration">Pagibig/HDMF</a>
 					</div>
 					
 				</div>

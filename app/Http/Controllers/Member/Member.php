@@ -107,7 +107,13 @@ class Member extends Controller
 
 		/* INSERT SSS TABLE PER SHOP */
 		Payroll::generate_sss($this->user_info->shop_id);
-		
+
+		/* INSERT PHILHEALTH TABLE PER SHOP */
+		Payroll::generate_philhealth($this->user_info->shop_id);
+
+		/* INSERT PAGIBIG TABLE PER SHOP */
+		Payroll::generate_pagibig($this->user_info->shop_id);
+
 		/* INSERT DEFAULT WAREHOUSE */
 		Warehouse::put_default_warehouse($this->user_info->shop_id);
 		/* INSERT MAIN WAREHOUSE */

@@ -367,6 +367,20 @@ class Warehouse
 
                 Tbl_sub_warehouse::insert($ins_item);
             }
+
+            $ctr_to_item_inventory = Tbl_warehouse_inventory::where("warehouse_id",$to_warehouse_id)->where("inventory_item_id",$value->item_id)->count();
+
+            if($ctr_to_item_inventory == 0)
+            {
+                $ins_inventory["inventory_item_id"] = $value->item_id;
+                $ins_inventory["warehouse_id"] = $to_warehouse_id;
+                $ins_inventory["inventory_created"] = Carbon::now();
+                $ins_inventory["inventory_count"] = 0;
+
+                Tbl_warehouse_inventory::insert($ins_inventory);
+            }
+
+
         }
     }
     public static function get_transfer_warehouse_information($warehouse_from_id = 0, $warehouse_to_id = 0, $return = 'array')
@@ -412,6 +426,14 @@ class Warehouse
         }
     }
 
+    public static function getMainwarehouse()
+    {
+        return Tbl_warehouse::where("warehouse_shop_id",Warehouse::getShopId())->where("main_warehouse",1)->pluck("warehouse_id");
+    }
+    public static function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
     public static function mainwarehouse_for_developer($user_id, $shop_id)
     {
         $_warehouse     = Tbl_warehouse::where("warehouse_shop_id", $shop_id)->get();

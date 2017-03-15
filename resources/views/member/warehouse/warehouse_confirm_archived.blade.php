@@ -20,9 +20,9 @@
     </div>
 </div>
 <div class="modal-footer">
-        <div class="col-md-6"><button class="btn btn-def-white btn-custom-white col-md-12" data-dismiss="modal">Cancel</button></div>
-        <div class="col-md-6"><button class="btn btn-custom-blue col-md-12 ">Confirm</button></div>
-</div>	
+    <div class="col-md-6 col-xs-6"><button type="submit" class="btn btn-custom-blue form-control">Yes</button></div>
+    <div class="col-md-6 col-xs-6"><button data-dismiss="modal" class="btn btn-def-white btn-custom-white form-control">Cancel</button></div>
+</div>  
 </form>
 
 <script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script>

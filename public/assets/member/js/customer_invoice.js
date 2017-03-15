@@ -474,7 +474,7 @@ function submit_done(data)
 	else if(data.status == 'success-tablet')
 	{		
         toastr.success("Success");
-       	location.href = "/tablet";
+       	location.href = "/tablet/invoice";
 	}
     else if(data.status == "error")
     {

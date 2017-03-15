@@ -13,12 +13,18 @@ function timesheet()
 	}
 	function document_ready()
 	{
+		action_convert_default_time_to_24_hour();
 		event_focus_edit();
 		event_time_entry();
 		event_change_time_in_out();
 		event_create_sub_time();
 		event_delete_sub_time();
 		action_compute_work_hours();
+	}
+	function action_convert_default_time_to_24_hour()
+	{
+		default_time_in = convert_to_24h(default_time_in);
+		default_time_out = convert_to_24h(default_time_out);
 	}
 	function event_create_sub_time()
 	{
@@ -36,39 +42,48 @@ function timesheet()
 			if(confirm("Are you sure you want to delete this time-entry?"))
 			{
 				$date = $(e.currentTarget).closest("tr").remove();
+				action_compute_work_hours();
 			}
 		});
 	}
 	function event_change_time_in_out()
 	{
-		$("body").on("keyup", ".time-in", function(e)
+		$("body").on("change", ".time-in", function(e)
 		{
+			$(e.currentTarget).closest("tr").find(".ot-approved").val("00:00");
+
 			/* EMPTY BOTH IF ONE IS EMPTY */
 			if($(e.currentTarget).val() == "")
 			{
 				$(e.currentTarget).closest("tr").find(".time-out").val("");
-				$(e.currentTarget).closest("tr").find(".break-time").val("00:00");
 			}
 
 			action_compute_work_hours();
 		});
 
-		$("body").on("keyup", ".time-out", function(e)
+		$("body").on("change", ".time-out", function(e)
 		{
+			$(e.currentTarget).closest("tr").find(".ot-approved").val("00:00");
+
 			/* EMPTY BOTH IF ONE IS EMPTY */
 			if($(e.currentTarget).val() == "")
 			{
 				$(e.currentTarget).closest("tr").find(".time-in").val("");
-				$(e.currentTarget).closest("tr").find(".break-time").val("00:00");
 			}
 
 			action_compute_work_hours();
 		});
 
-		$("body").on("keyup", ".break-time", function(e)
+		$("body").on("change", ".break-time", function(e)
 		{
 			action_compute_work_hours();
 		});
+
+		$("body").on("change", ".ot-approved", function(e)
+		{
+			action_compute_work_hours();
+		});
+
 	}
 	function event_focus_edit()
 	{
@@ -131,9 +146,36 @@ function timesheet()
 				var total_hours = deduct_two_time(time_in, time_out);
 			}
 
-			
+			var total_normal_hours = total_hours;
+			var total_early_overtime = "00:00";
+			var total_late_overtime = "00:00";
+
+
+			if(time_in == "0:0:00")
+			{
+				total_early_overtime = "00:00";
+			}
+			else
+			{
+				if(check_greater(default_time_in, time_in)) //CHECK FOR EARLY OVERTIME
+				{
+					var total_early_overtime = deduct_two_time(time_in, default_time_in);
+				}
+			}
+
+
+			if(check_greater(time_out, default_time_out))
+			{
+				var total_late_overtime = deduct_two_time(default_time_out, time_out);
+			}
+
+			total_normal_hours = deduct_two_time(total_early_overtime, total_normal_hours);
+			total_normal_hours = deduct_two_time(total_late_overtime, total_normal_hours);
+
 			$(this).attr("total_hours", total_hours);
-			$(this).find(".normal-hours").text(total_hours);
+			$(this).attr("total_normal_hours", total_normal_hours);
+			$(this).attr("total_early_overtime", total_early_overtime);
+			$(this).attr("total_late_overtime", total_late_overtime);
 		});
 
 		/* COMPUTE TOTAL HOURS PER DATE */
@@ -143,38 +185,87 @@ function timesheet()
 			
 			if(count_entry_per_date > 1)
 			{
-				var total_time_multiple_line = "00:00";
+				var total_hours = "00:00";
+				var total_normal_hours = "00:00";
+				var total_early_overtime = "00:00";
+				var total_late_overtime = "00:00";
 
 				$(".time-record[date='" + $(this).attr("date") + "']").each(function(key, val)
 				{
-					total_time_multiple_line = add_two_time(total_time_multiple_line, $(this).attr("total_hours"));
+					total_hours = add_two_time(total_hours, $(this).attr("total_hours"));
+					total_normal_hours = add_two_time(total_normal_hours, $(this).attr("total_normal_hours"));
+					total_early_overtime = add_two_time(total_early_overtime, $(this).attr("total_early_overtime"));
+					total_late_overtime = add_two_time(total_late_overtime, $(this).attr("total_late_overtime"));
 					$(this).attr("total_hours", "00:00");
+					$(this).attr("total_normal_hours", "00:00");
+					$(this).attr("total_early_overtime", "00:00");
+					$(this).attr("total_late_overtime", "00:00");
 				});
 
-				$(".time-record.main[date='" + $(this).attr("date") + "']").attr("total_hours", total_time_multiple_line);
+				$(".time-record.main[date='" + $(this).attr("date") + "']").attr("total_hours", total_hours);
+				$(".time-record.main[date='" + $(this).attr("date") + "']").attr("total_normal_hours", total_normal_hours);
+				$(".time-record.main[date='" + $(this).attr("date") + "']").attr("total_early_overtime", total_early_overtime);
+				$(".time-record.main[date='" + $(this).attr("date") + "']").attr("total_late_overtime", total_late_overtime);
 			}
 		});
 
+		switch(time_rule)
+		{
+			case "flexistrict": action_compute_work_hours_flexistrict(); break;
+			case "timestrict": action_compute_work_hours_timestrict(); break;
+			default: alert("Time Rule Error: Contact Administrator for Support");
+		}
+
+		action_check_validation();
+
+	}
+	function action_check_validation()
+	{
+		$(".time-record.main").each(function(key, val)
+		{
+			action_check_overtime($(this));
+		});
+	}
+	function action_check_overtime($this)
+	{
+		/* OVERTIME VALIDATION */
+		var approved_overtime = $this.find(".ot-approved").val();
+		var total_early_overtime = $this.attr("total_early_overtime");
+		var total_late_overtime = $this.attr("total_late_overtime");
+		var total_overtime = add_two_time(total_early_overtime, total_late_overtime);
+
+		if(check_greater(approved_overtime, total_overtime))
+		{
+			$this.find(".ot-approved").val(total_overtime);
+			action_compute_work_hours();
+		}
+
+		if($this.find(".ot-approved").val() == total_overtime)
+		{
+			$this.find(".overtime-hours").removeClass("red");
+			$this.find(".overtime-hours").addClass("green");
+		}
+	}
+	function action_compute_work_hours_timestrict()
+	{
 		/* COMPUTE PER DATE*/
 		$(".time-record.main").each(function(key, val)
 		{
-			total_hours = $(this).attr("total_hours");
-			total_break = $(this).find(".break-time").val();
-			total_hours_less_break = deduct_two_time(total_break, total_hours);
+			var current_date = $(this).attr("date");
+			var total_break = $(this).find(".break-time").val();
+			var total_normal_hours = $(this).attr("total_normal_hours");
+			var total_early_overtime = $(this).attr("total_early_overtime");
+			var total_late_overtime = $(this).attr("total_late_overtime");
+			
+			total_normal_hours = deduct_two_time(total_break, total_normal_hours);
 
-			if(check_greater(total_hours_less_break, '08:00'))
-			{
-				total_normal_hours = "08:00";
-				total_overtime_hours = deduct_two_time('08:00', total_hours_less_break);
-			}
-			else
-			{
-				total_normal_hours = total_hours_less_break;
-				total_overtime_hours = "00:00";
-			}
-
+			var total_overtime_hours = "00:00";
  			$(this).find(".normal-hours").text(total_normal_hours);
- 			$(this).find(".overtime-hours").text(total_overtime_hours);
+ 			$(this).find(".overtime-hours.early").text(total_early_overtime);
+ 			$(this).find(".overtime-hours.late").text(total_late_overtime);
+
+ 			total_overtime_hours = total_early_overtime + total_late_overtime;
+
  			if(check_greater(total_overtime_hours, '00:00'))
  			{
  				$(this).find(".overtime-hours").addClass("red");
@@ -183,7 +274,49 @@ function timesheet()
  			{
  				$(this).find(".overtime-hours").removeClass("red");
  			}
- 			
+
+		});
+	}
+	function action_compute_work_hours_flexistrict()
+	{
+		/* COMPUTE PER DATE*/
+		$(".time-record.main").each(function(key, val)
+		{
+			var current_date = $(this).attr("date");
+			var total_hours = $(this).attr("total_hours");
+			var total_break = $(this).find(".break-time").val();
+			var total_hours_less_break = deduct_two_time(total_break, total_hours);
+			var total_early_overtime = "00:00";
+			var total_late_overtime = "00:00";
+
+			if(check_greater(total_hours_less_break, '08:00'))
+			{
+				total_normal_hours = "08:00";
+				total_overtime_hours = deduct_two_time('08:00', total_hours_less_break);
+				total_late_overtime = total_overtime_hours;
+				if(check_greater(default_time_in, convert_to_24h($(this).find(".time-in").val())))
+				{
+					total_early_overtime = deduct_two_time(convert_to_24h($(this).find(".time-in").val()), default_time_in);
+					total_late_overtime = deduct_two_time(total_early_overtime, total_late_overtime);
+				}
+			}
+			else
+			{
+				total_normal_hours = total_hours_less_break;
+				total_overtime_hours = "00:00";
+			}
+
+ 			$(this).find(".normal-hours").text(total_normal_hours);
+ 			$(this).find(".overtime-hours.early").text(total_early_overtime);
+ 			$(this).find(".overtime-hours.late").text(total_late_overtime);
+ 			if(check_greater(total_overtime_hours, '00:00'))
+ 			{
+ 				$(this).find(".overtime-hours").addClass("red");
+ 			}
+ 			else
+ 			{
+ 				$(this).find(".overtime-hours").removeClass("red");
+ 			}
 		});
 	}
 

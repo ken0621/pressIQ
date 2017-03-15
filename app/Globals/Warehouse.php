@@ -351,7 +351,24 @@ class Warehouse
         $data = Tbl_warehouse::where('warehouse_id',$warehouse_id)->pluck('warehouse_shop_id');
         return $data;
     }
+    public static function insert_item($from_warehouse_id, $to_warehouse_id)
+    {
+        $from_item = Tbl_sub_warehouse::where("warehouse_id",$from_warehouse_id)->get();
 
+        foreach($from_item as $key => $value) 
+        {
+            $ctr_to_item_existence = Tbl_sub_warehouse::where("warehouse_id",$to_warehouse_id)->where("item_id",$value->item_id)->count();
+
+            if($ctr_to_item_existence == 0)
+            {
+                $ins_item["warehouse_id"] = $to_warehouse_id;
+                $ins_item["item_id"] = $value->item_id;
+                $ins_item["item_reorder_point"] = 0;
+
+                Tbl_sub_warehouse::insert($ins_item);
+            }
+        }
+    }
     public static function get_transfer_warehouse_information($warehouse_from_id = 0, $warehouse_to_id = 0, $return = 'array')
     {   
         $data = Tbl_sub_warehouse::warehousetowarehouse($warehouse_from_id, $warehouse_to_id)->get();

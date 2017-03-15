@@ -53,7 +53,7 @@
                             </div>               
                         </div>
                         <div class="form-group">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <select class="form-control">
                                     <option>Select Category</option>
                                 </select>

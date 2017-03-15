@@ -47,7 +47,7 @@
 
                 @if($product->eprod_is_single == 1)
                 <div class="form-box-divider single-container">
-                    @include('member.ecommerce_product.ecom_edit_variant',['default' => '1']);
+                    @include('member.ecommerce_product.ecom_edit_variant',['default' => '1'])
                 </div>
 
                 @else

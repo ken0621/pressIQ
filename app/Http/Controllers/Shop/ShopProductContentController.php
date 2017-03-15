@@ -13,9 +13,8 @@ class ShopProductContentController extends Shop
 {
     public function index($id)
     {
-        $data["page"] = "Product Content";
-
-        $data["product"] = Ecom_Product::getProduct($id, $this->shop_info->shop_id);
+        $data["page"]     = "Product Content";
+        $data["product"]  = Ecom_Product::getProduct($id, $this->shop_info->shop_id);
         $data["category"] = Tbl_ec_product::category()->where("eprod_category_id", $data["product"]["eprod_category_id"])->first();
         $data["_variant"] = Ecom_Product::getProductOption($id, ",");
         $data["_related"] = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
@@ -30,7 +29,7 @@ class ShopProductContentController extends Shop
 
     public function variant()
     {
-        $name = implode(",", Request::input("variation"));
+        $name    = implode(",", Request::input("variation"));
         $variant = Ecom_Product::getVariant($name, Request::input("product_id"), ",");
 
         if ($variant)

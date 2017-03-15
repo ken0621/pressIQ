@@ -74,7 +74,7 @@
                                 <div class="holder">
                                     <div class="s-label">{{ $variant['option_name'] }}</div>
                                     <div class="select">
-                                        <select style="text-transform: capitalize;" class="form-control" variant-label="{{ $variant['option_name'] }}" product-id="{{ $product['eprod_id'] }}" variant-id="{{ $product_variant['evariant_id'] }}">
+                                        <select name="attr[{{ $variant['option_name_id'] }}]" style="text-transform: capitalize;" class="form-control select-variation" variant-label="{{ $variant['option_name'] }}" product-id="{{ $product['eprod_id'] }}" variant-id="{{ $product_variant['evariant_id'] }}">
                                             <option value="0" style="text-transform: capitalize;">Select {{ $variant['option_name'] }}</option>
                                             @foreach(explode(",", $variant['variant_value']) as $option)
                                             <option value="{{ $option }}" style="text-transform: capitalize;">{{ $option }}</option>
@@ -397,6 +397,9 @@
     </div>
   </div>
 </div>
+@endsection
+@section("js")
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/product_content.js"></script>
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product_content.css">

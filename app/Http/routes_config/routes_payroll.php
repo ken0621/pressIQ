@@ -89,4 +89,29 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* saving default data for developer */
 	Route::any('/pagibig_formula/pagibig_formula_save_default',"Member\PayrollController@pagibig_formula_save_default");
 	/* PAGIBIG END */
+
+
+	/* DEDUCTION START */
+	Route::any('/deduction',"Member\PayrollController@deduction");
+	Route::any('/deduction/modal_create_deduction',"Member\PayrollController@modal_create_deduction");
+	Route::any('/deduction/modal_create_deduction_type/{type}',"Member\PayrollController@modal_create_deduction_type");
+	Route::any('/deduction/modal_save_deduction_type',"Member\PayrollController@modal_save_deduction_type");
+	Route::any('/deduction/update_deduction_type',"Member\PayrollController@update_deduction_type");
+	Route::any('/deduction/reload_deduction_type',"Member\PayrollController@reload_deduction_type");
+	Route::any('/deduction/archive_deduction_type',"Member\PayrollController@archive_deduction_type");
+	Route::any('/deduction/ajax_deduction_type',"Member\PayrollController@ajax_deduction_type");
+	/* DEDUCTION END */
+
+
+	/* HOLIDAY START */
+	Route::any('/holiday',"Member\PayrollController@holiday");
+	/* HOLIDAY END */
+
+	/* ALLOWANCE START */
+	Route::any('/allowance',"Member\PayrollController@allowance");
+	/* ALLOWANCE END */
+
+	/* LEAVE START */
+	Route::any('/leave',"Member\PayrollController@leave");
+	/* LEAVE END */
 });

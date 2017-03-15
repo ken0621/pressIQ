@@ -8,18 +8,20 @@
     <div class="col-md-12">
         <h3>Are you sure you want to {{strtoupper($action)}} this Load Out Form No : {{sprintf("%'.05d\n", $sir_id)}} ?</h3>
     </div>
+    @if($action == "reject")
     <div class="col-md-12 text-center">
-        <h4></h4>
-        <h4></h4>
+        <textarea class="form-control textarea-expand" placeholder="State your reason here." required name="reason_txt"></textarea>
     </div>
+    @endif
     <input type="hidden" name="sir_id" value="{{$sir_id}}">
     <input type="hidden" name="action" value="{{$action}}">
 </div>
 <div class="modal-footer">
-    <div class="col-md-6"><button type="submit" class="btn btn-custom-blue col-md-12">Yes</button></div>
-    <div class="col-md-6"><button data-dismiss="modal" class="btn btn-def-white btn-custom-white col-md-12">No</button></div>
+    <div class="col-md-6 col-xs-6"><button type="submit" class="btn btn-custom-blue form-control">Yes</button></div>
+    <div class="col-md-6 col-xs-6"><button data-dismiss="modal" class="btn btn-def-white btn-custom-white form-control">No</button></div>
 </div>	
 </form>
+<script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <script type="text/javascript">   
 function submit_done(data)
 {

@@ -30,7 +30,7 @@ class Tbl_warehouse extends Model
 
     public function scopeselect_inventory($query, $warehouse_id = 0, $item_id = 0, $archived = 0)
     {
-        $query->join('tbl_warehouse_inventory','tbl_warehouse_inventory.inventory_item_id','=','tbl_item.item_id')
+        $query->leftjoin('tbl_warehouse_inventory','tbl_warehouse_inventory.inventory_item_id','=','tbl_item.item_id')
             ->where('tbl_sub_warehouse.warehouse_id', $warehouse_id)
             ->where('tbl_warehouse_inventory.warehouse_id','=',$warehouse_id);
         if($item_id != 0)

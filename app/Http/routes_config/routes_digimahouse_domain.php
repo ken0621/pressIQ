@@ -2,6 +2,8 @@
 if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "my168shop-primia.c9users.io") || (hasSubdomain() && $domain != "my168shop-primia.c9users.io"))
 {
 	Route::get('/', 'Shop\ShopHomeController@index');
+	Route::get('/cart', 'Shop\ShopCartController@index'); //EDWARD GUEVARRA
+	Route::get('/cart/add', 'Shop\ShopCartController@add_cart'); //EDWARD GUEVARRA
 	Route::get('/product', 'Shop\ShopProductController@index'); //EDWARD GUEVARRA
 	Route::get('/product/view/{id}', 'Shop\ShopProductContentController@index'); //EDWARD GUEVARRA
 	Route::get('/product/variant', 'Shop\ShopProductContentController@variant'); //EDWARD GUEVARRA

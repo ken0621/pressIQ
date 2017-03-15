@@ -34,8 +34,11 @@
                                 @include("member.load_ajax_data.load_item", ['add_search' => "", 'item_id' => isset($variant) ? $variant->evariant_item_id : ''])
                             </select>
                             </div>
-                            <div class="col-md-6">
-                            <a class="btn btn-custom-white btn-sm popup edit-item" link=""> Edit Item</a>
+                            <div class="col-md-2">
+                                <a class="btn btn-custom-white btn-sm popup edit-item" link="" size="lg"> Edit Item</a>
+                            </div>
+                            <div class="col-md-4">
+                                <input class="form-control input-sm" type="text" value="Remaining : {{ $variant->inventory_count or '' }} ({{$variant->inventory_status or ''}})" readonly />
                             </div>
                         </div>
                     </div>

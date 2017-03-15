@@ -33,6 +33,10 @@ class Tbl_item extends Model
                      ->leftjoin("tbl_chart_account_type", "chart_type_id", "=", "account_type_id");
     }
 
+    public function scopeItemDiscount($query)
+    {
+        return $query->leftjoin("tbl_item_discount","tbl_item_discount.discount_item_id","=","tbl_item.item_id");
+    }
     public function scopeAccountIncome($query)
     {
         return $query->leftjoin("tbl_chart_of_account", "account_id", "=", "item_income_account_id")
@@ -51,12 +55,16 @@ class Tbl_item extends Model
                      ->join("tbl_item as bundle_item","item_id","=","bundle_item_id");
     }
 
-    public function scopeInventory($query)
+    public function scopeInventory($query, $warehouse_id = null)
     {
-        return $query->selectRaw("*, sum(inventory_count) as inventory_count")
-                     ->leftjoin("tbl_warehouse_inventory", function($join)
+        return $query->selectRaw("*, IFNULL(sum(inventory_count),0) as inventory_count")
+                     ->leftjoin("tbl_warehouse_inventory", function($join) use ($warehouse_id)
                      {
                         $join->on("inventory_item_id","=","item_id");
+                        if($warehouse_id)
+                        {
+                            $join->on("warehouse_id","=", DB::raw($warehouse_id));
+                        }
                      })
                      ->groupBy("item_id");
     }

@@ -130,8 +130,6 @@
             {
                 toastr.success('Successfully archived');
             });
-            
-            
         }
         if(data.response_status == "success-restored")
         {

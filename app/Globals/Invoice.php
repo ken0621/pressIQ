@@ -4,6 +4,7 @@ namespace App\Globals;
 use App\Globals\Accounting;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_customer_invoice_line;
+use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Globals\AuditTrail;
@@ -136,12 +137,16 @@ class Invoice
 
     public static function getAllInvoiceByCustomer($customer_id)
     {
-        return  Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)->get()->toArray();
+        return  Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)->where("inv_is_paid", 0)->get()->toArray();
     }
 
-    public static function getAllInvoiceByCustomerWithRcvPymnt($customer_id, $rcv_payment_id)
+    public static function getAllInvoiceByCustomerWithRcvPymnt($customer_id, $rcvpayment_id)
     {
-        return  Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)->rcvPayment($rcv_payment_id)->orderBy("inv_id")->get()->toArray();
+        $inv_in_rcvpayment = Tbl_receive_payment_line::select("rpline_reference_id")->where("rpline_reference_name", 'invoice')
+                            ->where("rpline_rp_id", $rcvpayment_id)->get()->toArray();
+
+        return  Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)
+                ->rcvPayment($rcvpayment_id, $inv_in_rcvpayment)->orderBy("inv_id")->get()->toArray();
     }
 
     public static function updateAmountApplied($inv_id)

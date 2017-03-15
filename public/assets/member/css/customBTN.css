@@ -321,6 +321,11 @@
 {
     padding-top: 10px !important;
 }
+.padding-tb-1, .padding-tb-1 td
+{
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+}
 
 /*padding start*/
 
@@ -367,10 +372,11 @@
     border-right: none !important;
 }
 
-.border-none, .border-none:focus
+.border-none, .border-none:focus, .border-none:active
 {
     border:none !important;
     outline: none !important;
+    box-shadow: none !important;
 }
 /* border end */
 

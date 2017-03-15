@@ -29,6 +29,7 @@ use App\Models\Tbl_payroll_philhealth_default;
 use App\Models\Tbl_payroll_philhealth;
 use App\Models\Tbl_payroll_pagibig_default;
 use App\Models\Tbl_payroll_pagibig;
+use App\Models\Tbl_payroll_deduction_type;
 
 use App\Globals\Payroll;
 
@@ -985,7 +986,7 @@ class PayrollController extends Member
 		$insert['payroll_pagibig_percent']  = Request::input('payroll_pagibig_percent');
 		$insert['shop_id']					= Self::shop_id();
 		Tbl_payroll_pagibig::insert($insert);
-		
+
 		$return['status'] = 'success';
 		return json_encode($return);
 	}
@@ -1004,4 +1005,107 @@ class PayrollController extends Member
 	}
 	/* PAGIBIG TABLE START */
 
+
+	/* DEDUCTION START */
+	public function deduction()
+	{
+		return view('member.payroll.side_container.deduction');
+	}
+
+	public function modal_create_deduction()
+	{
+		return view('member.payroll.modal.modal_create_deduction');
+	}
+
+	public function modal_create_deduction_type($type)
+	{
+		$type 				= str_replace('_', ' ', $type);
+		$data['_active'] 	= Tbl_payroll_deduction_type::seltype(Self::shop_id(),$type)->get();
+		$data['_archived'] 	= Tbl_payroll_deduction_type::seltype(Self::shop_id(),$type, 1)->get();
+		$data['type'] 		= $type;
+		return view('member.payroll.modal.modal_deduction_type',$data);
+	}
+
+	public function modal_save_deduction_type()
+	{
+		$insert['payroll_deduction_category'] 	= Request::input('payroll_deduction_category');
+		$insert['payroll_deduction_type_name'] 	= Request::input('payroll_deduction_type_name');
+		$insert['shop_id'] 						= Self::shop_id();
+		$id = Tbl_payroll_deduction_type::insertGetId($insert);
+
+		$type = Request::input('payroll_deduction_category');
+
+		$_data = Tbl_payroll_deduction_type::seltype(Self::shop_id(),$type)->get();
+		$html = '<option value="">Select Type</option>';
+		foreach($_data as $data)
+		{
+			$html .= '<option value="'.$data->payroll_deduction_type_id.'" ';
+			if($data->payroll_deduction_type_id == $id)
+			{
+				$html .= 'selected="selected"';
+			}
+			$html.= '>'.$data->payroll_deduction_type_name.'</option>';
+		}
+		return $html;
+	}
+
+	public function reload_deduction_type()
+	{
+		$payroll_deduction_category = Request::input('payroll_deduction_category');
+		$archived 					= Request::input('archived');
+		$data['_active'] 			= Tbl_payroll_deduction_type::seltype(Self::shop_id(),$payroll_deduction_category, $archived)->get();
+		return view('member.payroll.reload.deduction_list_reload',$data);
+	}
+
+	public function update_deduction_type()
+	{
+		$value 		= Request::input('value');
+		$content 	= Request::input('content');
+		
+		$update['payroll_deduction_type_name'] = $value;
+		Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->update($update);
+
+	}
+
+	public function archive_deduction_type()
+	{
+		$content = Request::input('content');
+		$update['payroll_deduction_archived'] = Request::input('archived');
+		Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->update($update);
+	}
+
+	public function ajax_deduction_type()
+	{
+		$category = Request::input('category');
+		$data = Tbl_payroll_deduction_type::seltype(Self::shop_id(),$category)->get();
+		return json_encode($data);
+	}
+
+	public function modal_save_dedution()
+	{
+		
+	}
+	/* DEDUCTION END */
+
+
+	/* HOLIDAY START */
+	public function holiday()
+	{
+		return view('member.payroll.side_container.holiday');
+	}
+	/* HOLIDAY END */
+
+	/* ALLOWANCE START */
+	public function allowance()
+	{
+		return view('member.payroll.side_container.allowance');
+	}
+	/* ALLOWANCE END */
+
+	/* LEAVE START */
+	public function leave()
+	{
+		return view('member.payroll.side_container.leave');
+	}
+	/* LEAVE END */
 }

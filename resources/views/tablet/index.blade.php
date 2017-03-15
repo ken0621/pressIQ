@@ -53,26 +53,49 @@
                             </div>               
                         </div>
                         <div class="form-group">
-                            <div class="col-md-4">
+                            <div class="col-md-4 col-xs-6">
                                 <select class="form-control">
                                     <option>Select Category</option>
                                 </select>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4 col-xs-6">
                                 <div class="input-group">
                                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control search_name" id="srch_sir_id" placeholder="Search by SIR number" aria-describedby="basic-addon1">
+                                    <input type="text" class="form-control search_name" id="srch_sir_id" placeholder="Search by product name" aria-describedby="basic-addon1">
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                
+                        </div>
+                        <div class="form-group">                            
+                            <div class="col-md-12">                
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Product Code</th>
+                                                <th>Product Name</th>
+                                                <th>Qty</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($_sir_item as $item)
+                                                <tr class="text-left">
+                                                    <td><input type="checkbox" name=""></td>
+                                                    <td>{{$item->item_barcode}}</td>
+                                                    <td>{{$item->item_name}}</td>
+                                                    <td>{{$item->qty}}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-xs-6">
                                 <a link="/tablet/pis/sir/{{$sir->sir_id}}/confirm" size="md" class="popup btn btn-primary form-control">Confirm</a>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-xs-6">
                                 <a link="/tablet/pis/sir/{{$sir->sir_id}}/reject" size="md" class="popup btn btn-primary form-control">Reject</a>
                             </div>
                         </div>

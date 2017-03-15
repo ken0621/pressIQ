@@ -62,16 +62,15 @@ class TabletPISController extends Member
 		$data["employee_id"] = $this->get_user()->employee_id;
 
 		$data["ctr_open_sir"] = Tbl_sir::where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->count();
-		$data["open_sir"] = Tbl_sir::truck()->saleagent()->where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->get();
 
-		Session::forget("key");
-		if($data["ctr_open_sir"] != 0)
-		{
-			$str = str_random(5);
-			Session::put("key",$str);
-		}
+		$data["open_sir"] = Tbl_sir::truck()->saleagent()->where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->first();
+        if($data["open_sir"])
+        {   
+            Session::forget("selected_sir");
+            Session::put("selected_sir",$data["open_sir"]->sir_id);
+        }
 
-		if(Session::get("key") != null)
+		if(Session::get("selected_sir") != null)
 		{
 			$data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_customer_invoice.inv_id","DESC")->get();
 
@@ -94,6 +93,19 @@ class TabletPISController extends Member
 		$data["status"] = "success";
 		return json_encode($data);
 	}
+    public function invoice()
+    {
+        $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
+        $data["employee_position"] = $this->get_user()->position_name;
+        $data["employee_id"] = $this->get_user()->employee_id;
+
+        if(Session::get("selected_sir") != null)
+        {
+            $data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_customer_invoice.inv_id","DESC")->get();
+        }
+        return view("tablet.agent.invoice",$data);
+
+    }
 	public function review_sir($sir_id)
 	{
         $data["sir_id"] = $sir_id;
@@ -119,12 +131,11 @@ class TabletPISController extends Member
         {
         	$update["lof_status"] = 2;
         	
-            // $update["sir_status"] = 1;
-            // $update["is_sync"] = 1; 
         }
         else if($action == "reject")
         {
         	$update["lof_status"] = 3;
+            $update["rejection_reason"] = Request::input("reason_txt");
         }
 
         Tbl_sir::where("sir_id",$id)->update($update);

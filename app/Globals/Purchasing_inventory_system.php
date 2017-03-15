@@ -64,7 +64,7 @@ class Purchasing_inventory_system
     {
         $sir_data["sir"] = Tbl_sir::saleagent()->truck()->where("sir_id",$sir_id)->first();
 
-        $return = 'Rejected by Sales Agent <strong>'. $sir_data["sir"]->first_name." ".$sir_data["sir"]->middle_name." ".$sir_data["sir"]->last_name."</strong>";
+        $return = 'Rejected by Sales Agent <strong>'. $sir_data["sir"]->first_name." ".$sir_data["sir"]->middle_name." ".$sir_data["sir"]->last_name."</strong> <br><br><div class='text-center'> <strong >Reason : </strong><br>".$sir_data["sir"]->rejection_reason."</div>";
         if($sir_data["sir"]->ilr_status == 2 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
         {
 
@@ -145,9 +145,14 @@ class Purchasing_inventory_system
     }
     public static function get_sir_item($sir_id)
     {
-        $data = Tbl_sir_item::where("sir_id",$sir_id)->get();
-
-        return $data;
+        $data["item"] = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->get();
+        foreach ($data["item"] as $key => $value) 
+        {   
+            $um_qty = UnitMeasurement::um_qty($value->related_um_type);
+            $data["item"][$key]->qty = UnitMeasurement::um_view($value->item_qty * $um_qty, $value->item_measurement_id, $value->related_um_type);   
+        }
+        $return_data = $data["item"];
+        return $return_data;
     }
     public static function get_sir_data($sir_id)
     {        

@@ -143,6 +143,12 @@ class Purchasing_inventory_system
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
+    public static function get_sir_item($sir_id)
+    {
+        $data = Tbl_sir_item::where("sir_id",$sir_id)->get();
+
+        return $data;
+    }
     public static function get_sir_data($sir_id)
     {        
         $price = "";
@@ -355,37 +361,28 @@ class Purchasing_inventory_system
     }
     public static function tablet_lof_per_sales_agent($shop_id = 0, $return = 'array',$status = 0, $srch_sir = '', $agent_id)
     {
-        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+        $data["sir"] = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
                         ->where("lof_status",$status)
-                        ->where("tbl_sir.sales_agent_id",$agent_id)
-                        ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
-                        ->orderBy("tbl_sir.sir_id","DESC")->get();
-
-        // dd($data);
-        foreach ($data as $key => $value) 
-        {              
-            $data[$key]->total_amount = "";
-            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+                        ->where("tbl_sir.sales_agent_id",$agent_id)->first();
+        if($data["sir"])
+        {
+            $item = Tbl_sir_item::where("sir_id",$data["sir"]->sir_id)->get();
             $price = "";
             foreach ($item as $key2 => $value2)
             {   
-                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();   
-                $qty = 1;
-                if($unit_m != null)
-                {
-                    $qty = $unit_m->unit_qty;
-                }
+                $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
             }
 
-            $data[$key]->total_amount += $price; 
+            $data["sir"]->total_amount = $price; 
         }
 
-         if($return == "json")
+        $return_data = $data["sir"];
+        if($return == "json")
         {
-            $data = json_encode($data);
+            $return_data = json_encode($return_data);
         }
-        return $data;
+        return $return_data;
 
     }
     public static function tablet_sir_per_sales_agent($shop_id = 0, $return = 'array',$status = 0,$archived = 0, $srch_sir = '',$is_sync = 0, $agent_id)

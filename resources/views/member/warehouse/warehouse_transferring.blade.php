@@ -82,13 +82,13 @@
                                                 {{$item->product_sku}}
                                             </td>                                            
                                             <td class="text-center">                                                
-                                                {{$item->product_source_qty}}
+                                                {{$item->product_source_qty == null ? 0 : $item->product_source_qty}}
                                             </td>                  
                                             <td class="text-center">                                                
                                                 @if($item->product_current_qty <= $item->product_reorder_point)
-                                                <label style="color: red">{{$item->product_current_qty}}</label>
+                                                <label style="color: red">{{$item->product_current_qty == null ? 0 : $item->product_current_qty}}</label>
                                                 @else
-                                                <label >{{$item->product_current_qty}}</label>
+                                                <label style="color: {{$item->product_current_qty == null ? red :''}}" >{{$item->product_current_qty == null ? 0 : $item->product_current_qty}}</label>
                                                 @endif
                                             </td>
                                             <td><input type="text" value="0" class="form-control number-input input-sm" name="quantity[{{$item->product_id}}]"></td>

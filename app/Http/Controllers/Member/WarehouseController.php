@@ -820,12 +820,12 @@ class WarehouseController extends Member
         if($access == 1)
         { 
            // $data = Tbl_user_warehouse_access::join("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_user_warehouse_access.warehouse_id")->where("user_id",$this->user_info->user_id)->where("archived",0)->get();
-           $data["warehouse"] = Tbl_warehouse::where("archived",0)->get();
+           $data["warehouse"] = Tbl_warehouse::where("archived",0)->where("warehouse_shop_id",$this->user_info->shop_id)->get();
            return view("member.warehouse.warehouse_transfer",$data);
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public function transferinventory_submit()
@@ -839,6 +839,8 @@ class WarehouseController extends Member
             {
                 $data["from"] = Tbl_warehouse::where("archived",0)->where("warehouse_id",$from)->first();
                 $data["to"] = Tbl_warehouse::where("archived",0)->where("warehouse_id",$to)->first();
+
+                Warehouse::insert_item($from,$to);
 
                 $count = Tbl_sub_warehouse::where("warehouse_id",$to)->get();
                 $ctr = 0;

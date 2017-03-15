@@ -2,12 +2,15 @@
 namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_user;
+use App\Models\Tbl_user_warehouse_access;
+use App\Models\Tbl_warehouse;
+
 use App\Globals\Account;
 use App\Globals\Warehouse;
 use App\Globals\Seed;
 use App\Globals\Utilities;
-use App\Models\Tbl_user_warehouse_access;
-use App\Models\Tbl_warehouse;
+use App\Globals\Payroll;
+
 use Crypt;
 use Redirect;
 use Request;
@@ -96,6 +99,21 @@ class Member extends Controller
 
 		/* INSERT DEFAULT CHART OF ACCOUNT */
 		Account::put_default_account($this->user_info->shop_id);
+
+
+
+		/* INSERT TAX TABLE PER SHOP */
+		Payroll::tax_reference($this->user_info->shop_id);
+
+		/* INSERT SSS TABLE PER SHOP */
+		Payroll::generate_sss($this->user_info->shop_id);
+
+		/* INSERT PHILHEALTH TABLE PER SHOP */
+		Payroll::generate_philhealth($this->user_info->shop_id);
+
+		/* INSERT PAGIBIG TABLE PER SHOP */
+		Payroll::generate_pagibig($this->user_info->shop_id);
+
 		/* INSERT DEFAULT WAREHOUSE */
 		Warehouse::put_default_warehouse($this->user_info->shop_id);
 		/* INSERT MAIN WAREHOUSE */

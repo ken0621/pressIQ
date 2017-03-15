@@ -28,11 +28,19 @@ class Tbl_customer_invoice extends Model
 
     public static function scopeByCustomer($query, $shop_id, $customer_id)
     {
-        return $query->where("inv_shop_id", $shop_id)->where("inv_customer_id", $customer_id)->where("inv_is_paid", 0);
+        return $query->where("inv_shop_id", $shop_id)->where("inv_customer_id", $customer_id);
     }
 
-    public static function scopeRcvPayment($query, $rcvpayment_id)
+    public static function scopeRcvPayment($query, $rcvpayment_id, $invoice_id)
     {
-        return $query->leftJoin(DB::raw("(select * from tbl_receive_payment_line where rpline_rp_id =" .$rcvpayment_id ." and rpline_reference_name = 'invoice') rp"),"rp.rpline_reference_id","=","inv_id");
+        return $query->leftJoin(DB::raw("(select * from tbl_receive_payment_line where rpline_rp_id =" .$rcvpayment_id ." and rpline_reference_name = 'invoice') rp"),"rp.rpline_reference_id","=","inv_id")
+                     ->where(function($query) use ($invoice_id)
+                     {
+                        $query->where("inv_is_paid", 0);
+                        $query->orWhere(function($query) use ($invoice_id)
+                        {
+                            $query->whereIn("inv_id", $invoice_id);
+                        });
+                     });
     }
 }

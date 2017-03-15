@@ -33,6 +33,10 @@ class Tbl_item extends Model
                      ->leftjoin("tbl_chart_account_type", "chart_type_id", "=", "account_type_id");
     }
 
+    public function scopeItemDiscount($query)
+    {
+        return $query->leftjoin("tbl_item_discount","tbl_item_discount.discount_item_id","=","tbl_item.item_id");
+    }
     public function scopeAccountIncome($query)
     {
         return $query->leftjoin("tbl_chart_of_account", "account_id", "=", "item_income_account_id")

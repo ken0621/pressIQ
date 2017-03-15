@@ -560,7 +560,7 @@ class CustomerController extends Member
 	
     public function customeredit($id)
     {
-        // $id = Crypt::decrypt($id);
+
         if($this->hasAccess("customer-list","edit"))
         {
             $shop_id = $this->checkuser('user_shop');

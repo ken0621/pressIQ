@@ -14,7 +14,7 @@
         <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
         <!-- <li><a href="/member/customer/estimate">Create Estimate</li> -->
         <li><a href="#">Make Inactive</a></li>
-        <li><a href="javascript:" class="popup" link="/member/customer/customeredit/{{Crypt::encrypt($customer->customer_id)}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
+        <li><a href="javascript:" class="popup" link="/member/customer/customeredit/{{$customer->customer_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
       </ul>
     </div>
 </td>

@@ -5,7 +5,7 @@
         <div class="col-md-8">
             <i class="fa fa-tablet"></i>
             <h1>
-                <span class="page-title">Tablet &raquo; Invoice</span>
+                <span class="page-title">Tablet &raquo; Receive Payment</span>
                 <small>
                 </small>
             </h1>
@@ -23,12 +23,9 @@
    <div class="tab-content panel-body form-horizontal tablet-container">
         <div id="invoice" class="tab-pane fade in active">
             <div class="form-group">
-                <div class="col-md-4 col-xs-6">
-                    <a class="btn btn-primary form-control" href="/tablet/create_invoices/add?sir_id={{Session::get('selected_sir')}}">Create Invoice</a>
+                <div class="col-md-4">
+                    <a class="btn btn-primary form-control" href="/tablet/receive_payment/add">Create Receive Payment</a>
                 </div>
-                <div class="col-md-4 col-xs-6">
-                    <a href="/tablet/dashboard"><< Back to Dashboard</a>
-                </div> 
             </div>
             <div class="form-group">
                 <div class="col-md-12">
@@ -37,31 +34,29 @@
                           <tr>
                               <th>#</th>
                               <th>Customer</th>
-                              <th>Total Price</th>
+                              <th>Receive Payment</th>
                               <th></th>
                           </tr>
                       </thead>
                       <tbody>
-                          @foreach($_invoices as $inv)
+                          @foreach($_receive_payment as $rp)
                           <tr>
-                            <td>{{$inv->inv_id}}</td>
+                            <td>{{$rp->rp_id}}</td>
                             <td>
-                              @if($inv->company != null)
-                              {{$inv->company}}
+                              @if($rp->company != null)
+                              {{$rp->company}}
                               @else
-                              {{$inv->title_name}} {{$inv->first_name}} {{$inv->middle_name}} {{$inv->last_name}} 
-                              {{$inv->suffix_name}}
+                              {{$rp->title_name}} {{$rp->first_name}} {{$rp->middle_name}} {{$rp->last_name}} 
+                              {{$rp->suffix_name}}
                               @endif
                             </td>
-                            <td>{{currency("PHP",$inv->inv_overall_price)}}</td>
+                            <td>{{currency("PHP",$rp->rp_total_amount)}}</td>
                               <td class="text-center">
                                 <div class="btn-group">
                                   <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Action <span class="caret"></span>
                                   </button>
                                     <ul class="dropdown-menu dropdown-menu-custom">
-                                        <li><a size="lg" link="/tablet/view_invoice_view/{{$inv->inv_id}}" class="popup">View Invoice</a></li>
-                                        <li><a href="/tablet/create_invoices/add?id={{$inv->inv_id}}&sir_id={{Session::get('selected_sir')}}">Edit Invoice</a></li>
-                                        <li><a >View Receipt</a></li>                                            
+                                        <li><a href="/tablet/receive_payment/add?id={{$rp->rp_id}}">Edit Payment</a></li>                                        
                                     </ul>
                                 </div>
                             </td>

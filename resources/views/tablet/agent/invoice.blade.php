@@ -23,9 +23,12 @@
    <div class="tab-content panel-body form-horizontal tablet-container">
         <div id="invoice" class="tab-pane fade in active">
             <div class="form-group">
-                <div class="col-md-4">
+                <div class="col-md-4 col-xs-6">
                     <a class="btn btn-primary form-control" href="/tablet/create_invoices/add?sir_id={{Session::get('selected_sir')}}">Create Invoice</a>
                 </div>
+                <div class="col-md-4 col-xs-6">
+                    <a href="/tablet/dashboard"><< Back to Dashboard</a>
+                </div> 
             </div>
             <div class="form-group">
                 <div class="col-md-12">

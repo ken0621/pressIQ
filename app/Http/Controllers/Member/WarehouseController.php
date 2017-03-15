@@ -840,6 +840,8 @@ class WarehouseController extends Member
                 $data["from"] = Tbl_warehouse::where("archived",0)->where("warehouse_id",$from)->first();
                 $data["to"] = Tbl_warehouse::where("archived",0)->where("warehouse_id",$to)->first();
 
+                Warehouse::insert_item($from,$to);
+
                 $count = Tbl_sub_warehouse::where("warehouse_id",$to)->get();
                 $ctr = 0;
                 foreach ($count as $key => $value) 

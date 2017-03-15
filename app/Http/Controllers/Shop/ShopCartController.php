@@ -29,4 +29,10 @@ class ShopCartController extends Shop
 
         echo json_encode($result);
     }
+
+    public function remove_cart()
+    {
+        $variant_id = Request::input("variant_id");
+        Cart::delete_product($variant_id);
+    }
 }

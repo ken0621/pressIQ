@@ -53,8 +53,16 @@
                             </div>               
                         </div>
                         <div class="form-group">
-                            <div class="col-md-12">
-                                
+                            <div class="col-md-6">
+                                <select class="form-control">
+                                    <option>Select Category</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="input-group">
+                                    <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                                    <input type="text" class="form-control search_name" id="srch_sir_id" placeholder="Search by SIR number" aria-describedby="basic-addon1">
+                                </div>
                             </div>
                             <div class="col-md-12">
                                 
@@ -62,10 +70,10 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-6">
-                                <a link="" size="md" class="popup btn btn-primary form-control">Confirm</a>
+                                <a link="/tablet/pis/sir/{{$sir->sir_id}}/confirm" size="md" class="popup btn btn-primary form-control">Confirm</a>
                             </div>
                             <div class="col-md-6">
-                                <a link="" size="md" class="popup btn btn-primary form-control">Reject</a>
+                                <a link="/tablet/pis/sir/{{$sir->sir_id}}/reject" size="md" class="popup btn btn-primary form-control">Reject</a>
                             </div>
                         </div>
                       @else

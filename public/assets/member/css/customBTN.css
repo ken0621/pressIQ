@@ -317,6 +317,10 @@
 .padding-r-10{
     padding-right: 10px !important;
 }
+.padding-top-10
+{
+    padding-top: 10px !important;
+}
 
 /*padding start*/
 
@@ -361,6 +365,12 @@
 }
 .border-right-none{
     border-right: none !important;
+}
+
+.border-none, .border-none:focus
+{
+    border:none !important;
+    outline: none !important;
 }
 /* border end */
 
@@ -714,3 +724,4 @@
     cursor:pointer;
     color: #147fbd;
 }
+

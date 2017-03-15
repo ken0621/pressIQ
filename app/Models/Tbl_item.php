@@ -51,4 +51,14 @@ class Tbl_item extends Model
                      ->join("tbl_item as bundle_item","item_id","=","bundle_item_id");
     }
 
+    public function scopeInventory($query)
+    {
+        return $query->selectRaw("*, sum(inventory_count) as inventory_count")
+                     ->leftjoin("tbl_warehouse_inventory", function($join)
+                     {
+                        $join->on("inventory_item_id","=","item_id");
+                     })
+                     ->groupBy("item_id");
+    }
+
 }

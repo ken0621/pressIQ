@@ -48,7 +48,7 @@ class MlmNetworkController extends Mlm
             ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_tree_placement.placement_tree_child_id')
             ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
             ->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership')
-            ->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id')
+            // ->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id')
             ->where('placement_tree_position', 'left')
             ->orderBy('tbl_tree_placement.placement_tree_level', 'ASC')
             ->get();
@@ -63,13 +63,14 @@ class MlmNetworkController extends Mlm
             ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_tree_placement.placement_tree_child_id')
             ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
             ->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership')
-            ->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id')
+            // ->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id')
             ->where('placement_tree_position', 'right')
             ->get();
             foreach($tree as $key => $value)
             {
                 $data['tree_right'][$value->placement_tree_level][$value->slot_id] = $value;
             }
+            // dd($data);
             return view('mlm.network.binary', $data);
         }
         else

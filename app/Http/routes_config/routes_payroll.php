@@ -27,6 +27,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/modal_salary_list/{id}','Member\PayrollController@modal_salary_list');
 	Route::any('/employee_list/modal_create_salary_adjustment/{id}','Member\PayrollController@modal_create_salary_adjustment');
 	Route::any('/employee_list/modal_save_salary','Member\PayrollController@modal_save_salary');
+	Route::any('/employee_list/modal_employee_update','Member\PayrollController@modal_employee_update');
+	Route::any('/employee_list/reload_employee_list','Member\PayrollController@reload_employee_list');
 
 	/* EMPLOYEE END */
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
@@ -54,4 +56,38 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any("/jobtitlelist/modal_edit_jobtitle/{id}","Member\PayrollController@modal_edit_jobtitle");
 	Route::any("/jobtitlelist/modal_save_jobtitle","Member\PayrollController@modal_save_jobtitle");
 	/* JOB TITLE END */
+
+
+	/* TAX TABLE START */
+	Route::any('/tax_table_list',"Member\PayrollController@tax_table_list");
+	Route::any('/tax_table_list/tax_table_save',"Member\PayrollController@tax_table_save");
+
+	/* saving default data for developer */
+	Route::any('/tax_table_list/tax_table_save_default',"Member\PayrollController@tax_table_save_default");
+	
+	/* TAX TABLE END */
+
+	/* SSS TABLE START */
+	Route::any('/sss_table_list',"Member\PayrollController@sss_table_list");
+	Route::any('/sss_table_list/sss_table_save',"Member\PayrollController@sss_table_save");
+
+	/* saving default data for developer */
+	Route::any('/sss_table_list/sss_table_save_default',"Member\PayrollController@sss_table_save_default");
+	/* SSS TABLE END */
+
+	/* PHILHEALTH TABLE START */
+	Route::any('/philhealth_table_list',"Member\PayrollController@philhealth_table_list");
+	Route::any('/philhealth_table_list/philhealth_table_save',"Member\PayrollController@philhealth_table_save");
+	/* saving default data for developer */
+	Route::any('/philhealth_table_list/philhealth_table_save_default',"Member\PayrollController@philhealth_table_save_default");
+	/* PHILHEALTH TABLE END */
+
+
+	/* PAGIBIG START */
+	Route::any('/pagibig_formula',"Member\PayrollController@pagibig_formula");
+	Route::any('/pagibig_formula/pagibig_formula_save',"Member\PayrollController@pagibig_formula_save");
+
+	/* saving default data for developer */
+	Route::any('/pagibig_formula/pagibig_formula_save_default',"Member\PayrollController@pagibig_formula_save_default");
+	/* PAGIBIG END */
 });

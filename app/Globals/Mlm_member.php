@@ -49,7 +49,7 @@ class Mlm_member
 		$data['customer_info'] = Tbl_customer::where('customer_id', $customer_id)->first();
 		$data['slot_now'] = Tbl_mlm_slot::where('slot_owner', $customer_id)
 		->where('tbl_mlm_slot.slot_id', $slot_id)
-		->membershipcode()
+		// ->membershipcode()
 		->membership()
 		->first();
 		$data['discount_card'] = Tbl_mlm_discount_card_log::where('discount_card_customer_holder', $customer_id)->first();

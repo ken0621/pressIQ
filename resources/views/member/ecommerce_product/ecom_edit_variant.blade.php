@@ -28,9 +28,16 @@
                 <div class="">
                     <div class="fieldset">
                         <label>Product Item</label>
-                        <select class="select-item droplist-item" name="evariant_item_id">
-                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => isset($variant) ? $variant->evariant_item_id : ''])
-                        </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <select class="select-item droplist-item" name="evariant_item_id">
+                                @include("member.load_ajax_data.load_item", ['add_search' => "", 'item_id' => isset($variant) ? $variant->evariant_item_id : ''])
+                            </select>
+                            </div>
+                            <div class="col-md-6">
+                            <a class="btn btn-custom-white btn-sm popup edit-item" link=""> Edit Item</a>
+                            </div>
+                        </div>
                     </div>
                     <div class="fieldset">
                         <label>Product Label</label>
@@ -80,7 +87,7 @@
 
                     <div class="fieldset">
                         <!-- description -->
-                        <<!-- label>Promo Price</label>
+                        <!-- label>Promo Price</label>
                         <div >
                         </div> -->
                     </div>

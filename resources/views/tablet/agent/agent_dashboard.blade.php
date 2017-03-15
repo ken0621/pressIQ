@@ -23,22 +23,33 @@
 </div>
 
 <div class="panel panel-default panel-block panel-title-block panel-gray">
-
-    <div class="tab-content panel-body form-horizontal">
-      <div class="form-group">
-          <div class="col-md-4">
-            <select class="form-control select-sir-no input-sm">
-                @if(isset($open_sir))
-                    @foreach($open_sir as $sir)
-                        <option value="{{$sir->sir_id}}" {{Session::get("selected_sir") == $sir->sir_id ? 'selected': ''}}>SIR No: {{sprintf("%'.05d\n", $sir->sir_id)}} ({{$sir->plate_number}})</option>
-                    @endforeach
-                @endif
-            </select>        
-          </div>
-          <div class="col-md-4">
-            <a link="/tablet/sir_inventory/{{Session::get('selected_sir')}}" size="lg" class="btn btn-primary popup">VIew Inventory</a>
-          </div>
-      </div>
+  <div class="tab-content panel-body form-horizontal tablet-container">
+    <div class="form-group text-center">
+        <div class="col-md-6 col-xs-6">
+          <h3>SIR No: <strong>{{sprintf("%'.05d\n", $open_sir->sir_id)}}</strong></h3>
+        </div>
+        <div class="col-md-6 col-xs-6">
+            <h3>
+           <a link="/tablet/sir_inventory/{{Session::get('selected_sir')}}" size="lg" class="form-control btn btn-primary popup">VIew Inventory</a>
+           </h3>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-6 col-xs-6">
+          <a class="btn btn-primary form-control" href="/tablet/invoice"><i class="fa fa-list-alt"></i> Invoice </a>
+        </div>
+        <div class="col-md-6 col-xs-6">
+            <a class="btn btn-primary form-control"><i class="fa fa-users"></i> Customer </a>          
+        </div>        
+    </div>
+    <div class="form-group">
+        <div class="col-md-6 col-xs-6">
+            <a class="btn btn-primary form-control"><i class="fa fa-money"></i> Receive Payment </a>
+        </div>
+        <div class="col-md-6 col-xs-6">
+            <a class="popup btn btn-primary form-control" link="/member/pis/agent/edit/{{$employee_id}}" ><i class="fa fa-gears"></i> Account Setting </button></a>
+        </div>
+    </div>
   </div>
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray">

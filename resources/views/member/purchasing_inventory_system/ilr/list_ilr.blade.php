@@ -7,9 +7,9 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Incoming Load Report &raquo; Unprocessed SIR <strong class="blink-me" style="color: green">Total: {{number_format($count_sir)}} </strong></span>
+                <span class="page-title">Incoming Load Report &raquo; Unprocessed I.L.R <strong class="blink-me" style="color: green">Total: {{number_format($count_sir)}} </strong></span>
                 <small>
-                    List of Unprocessed SIR
+                    List of I.L.R
                 </small>
             </h1>
             <!-- <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/pis/sir/create">Create S.I.R.</a> -->

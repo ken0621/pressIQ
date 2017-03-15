@@ -1,7 +1,8 @@
-<form class="global-submit" role="form" action="/member/payroll/employee_list/modal_employee_save" method="POST">
+<form class="global-submit" role="form" action="/member/payroll/employee_list/modal_employee_update" method="POST">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
     <h4 class="modal-title layout-modallarge-title">Create new employee</h4>
+    <input type="hidden" name="payroll_employee_id" value="{{$employee->payroll_employee_id}}">
   </div>
   <div class="modal-body modallarge-body-layout background-white">
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
@@ -64,9 +65,12 @@
       </div>
       <div class="form-group">
         <div class="col-md-6">
+
           <small><b>Print on as check as</b></small>&nbsp;
           <div class="checkbox display-inline-block"><small for=""><input type="checkbox" name="chck_print_on_as" class="checkbox-toggle-rev check-print-name-as" data-target=".display-name-check" checked="true"/>Use display name</small></div>
+
           <input type="text" name="payroll_employee_display_name" class="form-control display-name-check" value="{{$employee->payroll_employee_display_name}}">
+
         </div>
         <div class="col-md-6">
           <div class="col-md-6 padding-lr-1">
@@ -264,13 +268,19 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Monthly Rate</small>
-                        <input type="number" name="payroll_employee_salary_monthly" class="form-control text-right" required value="{{$salary->payroll_employee_salary_monthly}}">
+                        <input type="number" step="any" name="payroll_employee_salary_monthly" class="form-control text-right" required value="{{$salary->payroll_employee_salary_monthly}}">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Daily Rate</small>
-                        <input type="number" name="payroll_employee_salary_daily" class="form-control text-right" value="{{$salary->payroll_employee_salary_daily}}">
+                        <input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right" value="{{$salary->payroll_employee_salary_daily}}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <small>COLA (monthly)</small>
+                        <input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" value="{{$salary->payroll_employee_salary_cola}}">
                       </div>
                     </div>
                     <div class="form-group">
@@ -335,7 +345,7 @@
                           <input type="hidden" class="requirement-input" name="resume_requirements_id" value="{{$requirement->resume != null ? '$requirement->resume_requirements_id' :'0'}}">
                         </td>
                         <td class="text-center" width="10">
-                          <a href="#" class="{{$requirement->resume != null ? '' :'display-none'}} remove-requirements" data-requirement="{{$requirement->resume != null ? '$requirement->resume_requirements_id' :'0'}}"><i class="fa fa-times"></i></a>
+                          <a href="#" class="{{$requirement->resume != null ? '' :'display-none'}} remove-requirements" data-content="{{$requirement->resume != null ? '$requirement->resume_requirements_id' :'0'}}" data-name="resume"><i class="fa fa-times"></i></a>
                         </td>
                       </tr>
                       <tr>
@@ -348,11 +358,11 @@
                           <div class="custom-progress-container-100 display-none">
                             <div class="custom-progress"></div>
                           </div>
-                          <label class="lbl-a-href"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
-                          <input type="hidden" class="requirement-input" name="police_clearance_requirements_id">
+                          <label class="lbl-a-href {{$requirement->police_clearance != null ? 'display-none' :''}}"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
+                          <input type="hidden" class="requirement-input" name="police_clearance_requirements_id" value="{{$requirement->police_clearance_requirements_id}}">
                         </td>
                         <td class="text-center" width="10">
-                          <a href="#" class="display-none remove-requirements" data-requirement=""><i class="fa fa-times"></i></a>
+                          <a href="#" class="{{$requirement->police_clearance != null ? '' :'display-none'}} remove-requirements" data-content="{{$requirement->police_clearance_requirements_id}}"><i class="fa fa-times"></i></a>
                         </td>
                       </tr>
                       <tr>
@@ -361,15 +371,15 @@
                           <input type="checkbox" name="has_nbi" value="1" {{$requirement->has_nbi == 1 ? 'checked':''}}>
                         </td>
                         <td width="35%" class="text-center">
-                          <a href="#" class="a-file-name display-none">file name here</a><br>
+                          <a href="{{$requirement->nbi_clearance != null ? $requirement->nbi_clearance :'#'}}" class="a-file-name {{$requirement->nbi_clearance != null ? $requirement->nbi_clearance :'display-none'}}">{{$requirement->nbi_clearance_name != null ? $requirement->nbi_clearance_name :'file name here'}}</a><br>
                           <div class="custom-progress-container-100 display-none">
                             <div class="custom-progress"></div>
                           </div>
-                          <label class="lbl-a-href"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
-                          <input type="hidden" class="requirement-input" name="nbi_payroll_requirements_id">
+                          <label class="lbl-a-href {{$requirement->nbi_clearance != null ? 'display-none' :''}}"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
+                          <input type="hidden" class="requirement-input" name="nbi_payroll_requirements_id" value="{{$requirement->nbi_payroll_requirements_id}}">
                         </td>
                         <td class="text-center" width="10">
-                          <a href="#" class="display-none remove-requirements" data-requirement=""><i class="fa fa-times"></i></a>
+                          <a href="#" class="{{$requirement->nbi_clearance != null ? '' :'display-none'}} remove-requirements" data-content="{{$requirement->nbi_payroll_requirements_id}}"><i class="fa fa-times"></i></a>
                         </td>
                       </tr>
                       <tr>
@@ -378,15 +388,15 @@
                           <input type="checkbox" name="has_health_certificate" value="1" {{$requirement->has_health_certificate == 1 ? 'checked':''}}>
                         </td>
                         <td width="35%" class="text-center">
-                          <a href="#" class="a-file-name display-none">file name here</a><br>
+                          <a href="{{$requirement->heatlh_certificate != null ? $requirement->heatlh_certificate :'#'}}" class="a-file-name {{$requirement->heatlh_certificate != null ? '' :'display-none'}}">{{$requirement->heatlh_certificate_name != null ? $requirement->heatlh_certificate_name :'file name here'}}</a><br>
                           <div class="custom-progress-container-100 display-none">
                             <div class="custom-progress"></div>
                           </div>
-                          <label class="lbl-a-href"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
-                          <input type="hidden" class="requirement-input" name="health_certificate_requirements_id">
+                          <label class="lbl-a-href {{$requirement->heatlh_certificate != null ? 'display-none' :''}}"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
+                          <input type="hidden" class="requirement-input" name="health_certificate_requirements_id" value="{{$requirement->health_certificate_requirements_id}}">
                         </td>
                         <td class="text-center" width="10">
-                          <a href="#" class="display-none remove-requirements" data-requirement=""><i class="fa fa-times"></i></a>
+                          <a href="#" class="{{$requirement->heatlh_certificate != null ? '' :'display-none'}} remove-requirements" data-content="{{$requirement->health_certificate_requirements_id}}"><i class="fa fa-times"></i></a>
                         </td>
                       </tr>
                       <tr>
@@ -395,15 +405,15 @@
                           <input type="checkbox" name="has_school_credentials" value="1" {{$requirement->has_school_credentials == 1 ? 'checked':''}}>
                         </td>
                         <td width="35%" class="text-center">
-                          <a href="#" class="a-file-name display-none">file name here</a><br>
+                          <a href="{{$requirement->school_credentials != null ? $requirement->school_credentials :'#'}}" class="a-file-name {{$requirement->school_credentials != null ? '' :'display-none'}}">{{$requirement->school_credentials_name != null ? $requirement->school_credentials_name :'file name here'}}</a><br>
                           <div class="custom-progress-container-100 display-none">
                             <div class="custom-progress"></div>
                           </div>
-                          <label class="lbl-a-href"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
-                          <input type="hidden" class="requirement-input" name="school_credentials_requirements_id">
+                          <label class="lbl-a-href {{$requirement->school_credentials != null ? 'display-none' :''}}"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
+                          <input type="hidden" class="requirement-input" name="school_credentials_requirements_id" value="{{$requirement->school_credentials_requirements_id}}">
                         </td>
                         <td class="text-center" width="10">
-                          <a href="#" class="display-none remove-requirements" data-content=""><i class="fa fa-times"></i></a>
+                          <a href="#" class="{{$requirement->school_credentials != null ? '' :'display-none'}} remove-requirements" data-content="{{$requirement->school_credentials_requirements_id}}"><i class="fa fa-times"></i></a>
                         </td>
                       </tr>
                       <tr>
@@ -412,15 +422,15 @@
                           <input type="checkbox" name="has_valid_id" value="1" {{$requirement->has_valid_id == 1 ? 'checked':''}}>
                         </td>
                         <td width="35%" class="text-center">
-                          <a href="#" class="a-file-name display-none">file name here</a><br>
+                          <a href="{{$requirement->valid_id != null ? $requirement->valid_id :'#'}}" class="a-file-name {{$requirement->valid_id != null ? '' :'display-none'}}">{{$requirement->valid_id_name != null ? $requirement->valid_id_name :'file name here'}}</a><br>
                           <div class="custom-progress-container-100 display-none">
                             <div class="custom-progress"></div>
                           </div>
-                          <label class="lbl-a-href"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
-                          <input type="hidden" class="requirement-input" name="valid_id_requirements_id">
+                          <label class="lbl-a-href {{$requirement->valid_id != null ? 'display-none' :''}}"><input type="file" name="" class="hide file-requirements"><i class="fa fa-cloud-upload lbl-a-href" aria-hidden="true"></i>&nbsp;Upload requirement</label>
+                          <input type="hidden" class="requirement-input" name="valid_id_requirements_id" value="{{$requirement->valid_id_requirements_id}}">
                         </td>
                         <td class="text-center" width="10">
-                          <a href="#" class="display-none remove-requirements" data-content=""><i class="fa fa-times"></i></a>
+                          <a href="#" class="{{$requirement->valid_id != null ? '' :'display-none'}} remove-requirements" data-content="{{$requirement->valid_id_requirements_id}}"><i class="fa fa-times"></i></a>
                         </td>
                       </tr>
                     </table>
@@ -451,7 +461,7 @@
     
     <button type="button" class="btn btn-custom-white " data-dismiss="modal">Cancel</button>
     <!--<button type="button" class="btn btn-custom-red-white btn-del-modallarge" data-url="" data-value="">Delete</button>-->
-    <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Save customer</button>
+    <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Update customer</button>
   </div>
 </form>
 <script type="text/javascript" src="/assets/member/js/customer.js"></script>

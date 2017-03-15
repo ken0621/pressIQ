@@ -22,6 +22,7 @@ use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_payment_method;
+
 use Request;
 use Carbon\Carbon;
 use Session;
@@ -118,8 +119,6 @@ class ProductOrderController extends Member
         //         $item_info[$key]['um']                 = null;
         //     }
         // }
-
-
         // $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
 
         $returned_data = Ec_order::create_ec_order(Request::input());
@@ -223,15 +222,7 @@ class ProductOrderController extends Member
         $return["redirect_to"]                = "/member/ecommerce/product_order/create_order?id=".$data["ec_order_id"];
         return json_encode($return);
     }
-    public function  return_to_number($number = '0.00')
-    {
-        $num = explode($number);
-        $return = '';
-        foreach($num as $n){
-            $return .= ''.$n;
-        }
-        return $return;
-    }
+
     public function invoice_view($invoice_id)
     {
         $data["invoice_id"] = $invoice_id;

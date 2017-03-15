@@ -93,11 +93,28 @@
 				
 			</div>
 		</div>
+		<hr>
+		<div class="form-group">
+			<div class="col-md-12">
+				<small>Search Employee</small>
+				<div class="input-group">
+					<span class="input-group-btn">
+						<button class="btn btn-custom-primary" type="button"><i class="fa fa-search"></i></button>
+					</span>
+					<input type="search" name="" class="form-control">
+				</div>
+				
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-12">
+				
+			</div>
+		</div>
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
 		<button class="btn btn-custom-primary btn-submit" type="submit">Save</button>
-	
 	</div>
 </form>
 <script type="text/javascript">
@@ -120,6 +137,30 @@
 			$(".btn-add-type").removeClass("popup");
 			$(".btn-add-type").removeAttr("link");
 		}
+		var pre_load = "<option value=''>...loading</option>";
+		$(".select-deduction-type").html(pre_load);
+		$.ajax({
+			url 	: 	"/member/payroll/deduction/ajax_deduction_type",
+			type 	: 	"POST",
+			data 	: 	{
+				_token:$("#_token").val(),
+				category:$(this).val()
+			},
+			success : 	function(result)
+			{
+				result = JSON.parse(result);
+				var html = "<option value=''>Select Type</option>";
+				$(result).each(function(index, data)
+				{	
+					html += "<option value='"+data.payroll_deduction_type_id+"'>"+data.payroll_deduction_type_name+"</option>";
+				});
+				$(".select-deduction-type").html(html);
+			},
+			error 	: 	function(err)
+			{
+				toastr.error("Error, something went wrong.");
+			}
+		});
 		
 	});
 </script>

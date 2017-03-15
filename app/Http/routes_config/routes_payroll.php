@@ -99,6 +99,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/deduction/modal_save_deduction_type',"Member\PayrollController@modal_save_deduction_type");
 	Route::any('/deduction/update_deduction_type',"Member\PayrollController@update_deduction_type");
 	Route::any('/deduction/reload_deduction_type',"Member\PayrollController@reload_deduction_type");
+	Route::any('/deduction/archive_deduction_type',"Member\PayrollController@archive_deduction_type");
+	Route::any('/deduction/ajax_deduction_type',"Member\PayrollController@ajax_deduction_type");
 	/* DEDUCTION END */
 
 

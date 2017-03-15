@@ -70,7 +70,7 @@ class TabletPISController extends Member
             Session::forget("selected_sir");
             Session::put("selected_sir",$data["open_sir"]->sir_id);
       
-			$data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_customer_invoice.inv_id","DESC")->get();
+			$data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_is_paid",0)->get();
 
             $data["total_invoice_amount"] = 0;
             foreach ($data["_invoices"] as $key => $value) 
@@ -122,7 +122,40 @@ class TabletPISController extends Member
         return view("tablet.agent.invoice",$data);
 
     }
+    public function customer()
+    {   
+        $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
+        $data["employee_position"] = $this->get_user()->position_name;
+        $data["employee_id"] = $this->get_user()->employee_id;
 
+        if(Session::get("selected_sir") != null)
+        {    
+            $data["_customer"] = Customer::getAllCustomer();
+        }
+        return view("tablet.agent.customer",$data);
+    }
+    public function checkuser($str = '')
+    {
+        $user_info = $this->user_info;
+        switch ($str) {
+            case 'user_id':
+                return $user_info->user_id;
+                break;
+            case 'user_shop':
+                return $user_info->user_shop;
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
+    public function customer_details($id)
+    {
+        $data["customer"]       = Tbl_customer::info()->balance($this->checkuser('user_shop'), $id)->where("tbl_customer.customer_id", $id)->first();
+        $data["_transaction"]   = Tbl_customer::transaction($this->checkuser('user_shop'), $id)->get();
+
+        return view("tablet.agent.customer_details",$data);
+    }
     public function receive_payment()
     {
         $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
@@ -291,6 +324,10 @@ class TabletPISController extends Member
                 $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
 
                 Tbl_receive_payment_line::insert($insert_line);
+                if($insert_line["rpline_reference_name"] == 'invoice')
+                {
+                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                }
             }
         }
 

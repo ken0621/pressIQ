@@ -52,7 +52,19 @@
                                 <option value="Void" {{isset($inv) ? $inv->order_status == "Void" ? 'selected' : '' : ''}}> Void </option>
                                 </select>
                             </div>
-                        </div>
+                        </div>`
+
+                        <div class="btn-group" data-toggle="buttons">
+                              <label class="btn btn-custom-white">
+                                <input type="radio" name="options" id="option1" value=""> Unpaid
+                              </label>
+                              <label class="btn btn-custom-white">
+                                <input type="radio" name="options" id="option2" value=""> Paid
+                              </label>
+                              <label class="btn btn-custom-white">
+                                <input type="radio" name="options" id="option3" value=""> Void
+                              </label>
+                        </div>      
                     </div>
                     
                     <div class="row clearfix">
@@ -342,7 +354,15 @@
 </div>
 @endsection
 
-
+@section('css')
+<style>
+    .btn-custom-white.active, .btn-custom-white.active:hover
+    {
+        background-color: #106189!important;
+        color: white!important;
+    }
+</style>
+@endsection
 @section('script')
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 @if(!isset($inv))

@@ -9,6 +9,7 @@ use App\Models\Tbl_cart;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_user;
 use App\Models\Tbl_ec_variant;
+use App\Globals\Ecom_Product;
 use DB;
 use Session;
 use Carbon\Carbon;
@@ -142,13 +143,15 @@ class Cart
                 $item_discounted_value  = 0;
                 $item_discounted_remark = "";
 
-                $item           = Tbl_ec_variant::where("evariant_id",$info["product_id"])->Product()->FirstImage()->first();
-                dd($item);
+                $item = Ecom_Product::getVariantInfo($info["product_id"]);
+                
                 $data["cart"][$key]["cart_product_information"]                                   = null;
                 $data["cart"][$key]["cart_product_information"]["variant_id"]                     = $item->evariant_id;
                 $data["cart"][$key]["cart_product_information"]["product_name"]                   = $item->evariant_item_label;
-                $data["cart"][$key]["cart_product_information"]["product_stocks"]                 = 0;
-                $data["cart"][$key]["cart_product_information"]["product_ecommerce_price"]        = $item->item_price;
+                $data["cart"][$key]["cart_product_information"]["product_stocks"]                 = $item->inventory_count;
+                $data["cart"][$key]["cart_product_information"]["product_sku"]                    = $item->item_sku;
+                $data["cart"][$key]["cart_product_information"]["product_price"]                  = $item->item_price;
+                $data["cart"][$key]["cart_product_information"]["image_path"]                     = $item->image_path;
 
                 /* CHECK IF DISCOUNT EXISTS */
                 $check_discount = Tbl_item_discount::where("item_id",$item->item_id)->first();

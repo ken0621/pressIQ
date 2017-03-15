@@ -87,6 +87,10 @@ class Customer_ReceivePaymentController extends Member
                 $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
 
                 Tbl_receive_payment_line::insert($insert_line);
+                if($insert_line["rpline_reference_name"] == 'invoice')
+                {
+                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                }
             }
         }
 

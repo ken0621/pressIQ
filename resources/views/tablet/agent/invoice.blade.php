@@ -2,7 +2,7 @@
 @section('content')
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
-        <div class="col-md-8">
+        <div class="col-md-8 col-xs-6">
             <i class="fa fa-tablet"></i>
             <h1>
                 <span class="page-title">Tablet &raquo; Invoice</span>
@@ -10,7 +10,7 @@
                 </small>
             </h1>
         </div>
-        <div class="col-md-4 text-right">
+        <div class="col-md-4 col-xs-6 text-right">
             <div class="col-md-12 text-left">
                 <label>{{$employee_name}}</label><br>
                 <label>{{$employee_position}}</label><br>
@@ -23,9 +23,12 @@
    <div class="tab-content panel-body form-horizontal tablet-container">
         <div id="invoice" class="tab-pane fade in active">
             <div class="form-group">
-                <div class="col-md-4">
+                <div class="col-md-4 col-xs-6">
                     <a class="btn btn-primary form-control" href="/tablet/create_invoices/add?sir_id={{Session::get('selected_sir')}}">Create Invoice</a>
                 </div>
+                <div class="col-md-8 col-xs-6 text-right">
+                    <a href="/tablet/dashboard"><< Back to Dashboard</a>
+                </div> 
             </div>
             <div class="form-group">
                 <div class="col-md-12">
@@ -33,6 +36,7 @@
                       <thead>
                           <tr>
                               <th>#</th>
+                              <th>Paid</th>
                               <th>Customer</th>
                               <th>Total Price</th>
                               <th></th>
@@ -40,8 +44,9 @@
                       </thead>
                       <tbody>
                           @foreach($_invoices as $inv)
-                          <tr>
+                          <tr style="color: {{$inv->inv_is_paid == 1? '#00b33c' : '#000' }};">
                             <td>{{$inv->inv_id}}</td>
+                            <td><input type="checkbox" name="paid" disabled {{$inv->inv_is_paid == 1? 'checked' : '' }} ></td>
                             <td>
                               @if($inv->company != null)
                               {{$inv->company}}
@@ -56,9 +61,12 @@
                                   <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Action <span class="caret"></span>
                                   </button>
                                     <ul class="dropdown-menu dropdown-menu-custom">
-                                        <li><a size="lg" link="/tablet/view_invoice_view/{{$inv->inv_id}}" class="popup">View Invoice</a></li>
-                                        <li><a href="/tablet/create_invoices/add?id={{$inv->inv_id}}&sir_id={{Session::get('selected_sir')}}">Edit Invoice</a></li>
-                                        <li><a >View Receipt</a></li>                                            
+                                        @if($inv->inv_is_paid == 0)
+                                         <li><a size="lg" link="/tablet/view_invoice_view/{{$inv->inv_id}}" class="popup">View Invoice</a></li>
+                                        @else
+                                         <li><a size="lg" link="/tablet/view_invoice_view/{{$inv->inv_id}}" class="popup">View Receipt</a></li>
+                                        @endif
+                                        <li><a href="/tablet/create_invoices/add?id={{$inv->inv_id}}&sir_id={{Session::get('selected_sir')}}">Edit Invoice</a></li>                                        
                                     </ul>
                                 </div>
                             </td>

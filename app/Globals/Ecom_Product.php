@@ -204,7 +204,6 @@ class Ecom_Product
 
 		$product			   	= $product;
 		$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
-		dd($product["variant"]);
 
 		foreach($product["variant"] as $key2=>$variant)
 		{
@@ -240,7 +239,7 @@ class Ecom_Product
 
 	public static function getVariantInfo($variant_id)
 	{
-		return TTbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_id", $variant_id)->Product()->FirstImage()->first();
+		return Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_id", $variant_id)->Product()->FirstImage()->first();
 	}
 
 	public static function getAllVariants()

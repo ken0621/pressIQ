@@ -461,6 +461,7 @@ function customer_invoice(){
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
 			}
 		});
+		
 	    $('.droplist-item').globalDropList(
         {
         	hasPopup: "false",
@@ -470,6 +471,14 @@ function customer_invoice(){
             	action_load_item_info($(this));
             }
         });
+
+        $(".drop-down-payment").globalDropList(
+		{
+		    link 		: '/member/maintenance/payment_method/add',
+		    link_size 	: 'sm',
+		    width 		: "100%",
+		    placeholder : 'Payment Method'
+		});
 	}
 
 

@@ -13,6 +13,7 @@ use App\Models\Tbl_unit_measurement;
 use App\Models\Tbl_product_vendor;
 use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_unit_measurement_multi;
+use App\Models\Tbl_item_discount;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -152,22 +153,19 @@ class ItemController extends Member
 
 
 		$promo_price 			= Request::input("promo_price");
-		$start_promo_date 		= date("Y-m-d",strtotime(Request::input("start_promo_date")));
-		$end_promo_date 		= date("Y-m-d",strtotime(Request::input("end_promo_date")));
+		$start_promo_date 		= Request::input("start_promo_date");
+		$end_promo_date 		= Request::input("end_promo_date");
 
 		$shop_id = $this->user_info->shop_id;
 
 			
 			$insert["item_date_created"]	    	  = Carbon::now();
 			$insert["shop_id"]	    				  = $shop_id;
-			$insert["promo_price"]					  = $promo_price;
-			$insert["start_promo_date"]				  = $start_promo_date;
-			$insert["end_promo_date"]			      = $end_promo_date;			
+
 
 		if(Request::input("item_type") == "inventory")
 		{
 			$insert["item_type_id"]				      = 1; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
-
 
 			$insert["item_name"]				      = $item_name ;
 			$insert["item_sku"]					      = $item_sku ;
@@ -216,6 +214,13 @@ class ItemController extends Member
 			else
 			{
 				$item_id = Tbl_item::insertGetId($insert);
+
+				$insert_item_discount["item_id"] = $item_id;
+				$insert_item_discount["item_discount_value"] = $promo_price;
+				$insert_item_discount["item_discount_date_start"] = $start_promo_date;
+				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;			
+
+				Item::insert_item_discount($insert_item_discount);
 
 				$warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->first();
 
@@ -323,6 +328,14 @@ class ItemController extends Member
 			else
 			{
 				$item_id = Tbl_item::insertGetId($insert);
+
+				$insert_item_discount["item_id"] = $item_id;
+				$insert_item_discount["item_discount_value"] = $promo_price;
+				$insert_item_discount["item_discount_date_start"] = $start_promo_date;
+				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;	
+				Item::insert_item_discount($insert_item_discount);
+	
+
 				$return["item_id"] = $item_id;
 				$return["message"] = "Success";
 				$return["type"]		= "item";
@@ -368,6 +381,13 @@ class ItemController extends Member
 			else
 			{
 				$item_id = Tbl_item::insertGetId($insert);
+
+				$insert_item_discount["item_id"] = $item_id;
+				$insert_item_discount["item_discount_value"] = $promo_price;
+				$insert_item_discount["item_discount_date_start"] = $start_promo_date;
+				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;	
+				Item::insert_item_discount($insert_item_discount);
+
 				$return["item_id"] = $item_id;
 				$return["message"] = "Success";
 				$return["type"]		= "item";
@@ -402,6 +422,12 @@ class ItemController extends Member
 			else
 			{
 				$item_id 			= Tbl_item::insertGetId($insert);
+
+				$insert_item_discount["item_id"] = $item_id;
+				$insert_item_discount["item_discount_value"] = $promo_price;
+				$insert_item_discount["item_discount_date_start"] = $start_promo_date;
+				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;	
+				Item::insert_item_discount($insert_item_discount);
 
 				foreach($_item as $key=>$item)
 				{
@@ -462,7 +488,7 @@ class ItemController extends Member
         if($access == 1)
         {
 			$shop_id          = $this->user_info->shop_id;
-			$data["data"]	  = Tbl_item::where("item_id",$id)->first()->toArray();
+			$data["data"]	  = Tbl_item::where("item_id",$id)->itemDiscount()->first()->toArray();
 			$data["item_id"]  = $id;
 			if($data["data"]["item_type_id"] == 1)
 			{
@@ -528,12 +554,9 @@ class ItemController extends Member
 		$insert["item_purchase_from_supplier"]	      = 0;
 		
 		$promo_price 			= Request::input("promo_price");
-		$start_promo_date 		= date("Y-m-d",strtotime(Request::input("start_promo_date")));
-		$end_promo_date 		= date("Y-m-d",strtotime(Request::input("end_promo_date")));
-
-		$insert["promo_price"]					  = $promo_price;
-		$insert["start_promo_date"]				  = $start_promo_date;
-		$insert["end_promo_date"]			      = $end_promo_date;			
+		$start_promo_date 		= Request::input("start_promo_date");
+		$end_promo_date 		= Request::input("end_promo_date");
+		
 
 		if(Request::input("item_type") == "inventory")
 		{
@@ -590,6 +613,13 @@ class ItemController extends Member
 				Tbl_sub_warehouse::where("warehouse_id",$warehouse)->where("item_id",$id)->update($up_item);
 
 				Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->update($insert);
+
+				$insert_item_discount["item_id"] = $id;
+				$insert_item_discount["item_discount_value"] = $promo_price;
+				$insert_item_discount["item_discount_date_start"] = $start_promo_date;
+				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;	
+				Item::insert_item_discount($insert_item_discount);
+
 				$return["message"] = "Success";
 			}
 		}
@@ -633,6 +663,13 @@ class ItemController extends Member
 			else
 			{
 				Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->update($insert);
+
+				$insert_item_discount["item_id"] = $id;
+				$insert_item_discount["item_discount_value"] = $promo_price;
+				$insert_item_discount["item_discount_date_start"] = $start_promo_date;
+				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;	
+				Item::insert_item_discount($insert_item_discount);
+
 				$return["message"] = "Success";
 			}
 		}
@@ -675,6 +712,12 @@ class ItemController extends Member
 			else
 			{
 				Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->update($insert);
+					$insert_item_discount["item_id"] = $id;
+				$insert_item_discount["item_discount_value"] = $promo_price;
+				$insert_item_discount["item_discount_date_start"] = $start_promo_date;
+				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;	
+				Item::insert_item_discount($insert_item_discount);
+
 				$return["message"] = "Success";
 			}
 		}
@@ -703,6 +746,13 @@ class ItemController extends Member
 			else
 			{
 				Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->update($insert);
+
+				$insert_item_discount["item_id"] = $item_idid;
+				$insert_item_discount["item_discount_value"] = $promo_price;
+				$insert_item_discount["item_discount_date_start"] = $start_promo_date;
+				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;	
+				Item::insert_item_discount($insert_item_discount);
+
 				Tbl_item_bundle::where("bundle_bundle_id",$id)->delete();
 
 				foreach($_item as $key=>$item)

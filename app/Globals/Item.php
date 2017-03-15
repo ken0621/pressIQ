@@ -10,6 +10,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_sir_item;
 use App\Models\Tbl_mlm_discount_card_log;
+use App\Models\Tbl_item_discount;
 
 use App\Globals\Item;
 use Session;
@@ -87,7 +88,28 @@ class Item
     {
         return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();
     }
+    public static function insert_item_discount($item_info)
+    {
+        $chck = Tbl_item_discount::where("discount_item_id",$item_info["item_id"])->first();
 
+        if($chck == null)
+        {
+            $insert["discount_item_id"] = $item_info["item_id"];
+            $insert["item_discount_value"] = $item_info["item_discount_value"];
+            $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
+            $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
+
+            Tbl_item_discount::insert($insert);            
+        }
+        else
+        {
+            $insert["item_discount_value"] = $item_info["item_discount_value"];
+            $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
+            $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
+
+            Tbl_item_discount::where("discount_item_id",$item_info["item_id"])->update($insert);  
+        }
+    }
     public static function get_all_category_item($type = array(1,2,3,4))
     {
         $shop_id = Item::getShopId();

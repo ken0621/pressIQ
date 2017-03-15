@@ -52,8 +52,11 @@ class TabletPISController extends Member
 	}
 	public function index()
 	{
-		$data["_sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);
-
+		$data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);
+        if($data["sir"])
+        {
+            $data["_sir_item"] = Purchasing_inventory_system::get_sir_item($data["sir"]->sir_id);
+        }
 		$data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
 		$data["employee_position"] = $this->get_user()->position_name;
 		$data["employee_id"] = $this->get_user()->employee_id;

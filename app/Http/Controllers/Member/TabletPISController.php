@@ -122,7 +122,40 @@ class TabletPISController extends Member
         return view("tablet.agent.invoice",$data);
 
     }
+    public function customer()
+    {   
+        $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
+        $data["employee_position"] = $this->get_user()->position_name;
+        $data["employee_id"] = $this->get_user()->employee_id;
 
+        if(Session::get("selected_sir") != null)
+        {    
+            $data["_customer"] = Customer::getAllCustomer();
+        }
+        return view("tablet.agent.customer",$data);
+    }
+    public function checkuser($str = '')
+    {
+        $user_info = $this->user_info;
+        switch ($str) {
+            case 'user_id':
+                return $user_info->user_id;
+                break;
+            case 'user_shop':
+                return $user_info->user_shop;
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
+    public function customer_details($id)
+    {
+        $data["customer"]       = Tbl_customer::info()->balance($this->checkuser('user_shop'), $id)->where("tbl_customer.customer_id", $id)->first();
+        $data["_transaction"]   = Tbl_customer::transaction($this->checkuser('user_shop'), $id)->get();
+
+        return view("tablet.agent.customer_details",$data);
+    }
     public function receive_payment()
     {
         $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;

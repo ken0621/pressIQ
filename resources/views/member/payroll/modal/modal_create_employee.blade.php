@@ -251,13 +251,19 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Monthly Rate</small>
-                        <input type="number" name="payroll_employee_salary_monthly" class="form-control text-right" required>
+                        <input type="number" step="any" name="payroll_employee_salary_monthly" class="form-control text-right" required>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Daily Rate</small>
-                        <input type="number" name="payroll_employee_salary_daily" class="form-control text-right">
+                        <input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-12">
+                        <small>COLA (monthly)</small>
+                        <input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right">
                       </div>
                     </div>
                     <div class="form-group">
@@ -272,25 +278,25 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Taxable Salary</small>
-                        <input type="number" name="payroll_employee_salary_taxable" class="form-control text-right">
+                        <input type="number" step="any" name="payroll_employee_salary_taxable" class="form-control text-right">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>SSS Salary</small>
-                        <input type="number" name="payroll_employee_salary_sss" class="form-control text-right">
+                        <input type="number" step="any" name="payroll_employee_salary_sss" class="form-control text-right">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>PAGIBIG/HDMF Salary</small>
-                        <input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right">
+                        <input type="number" step="any" name="payroll_employee_salary_pagibig" class="form-control text-right">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>PHILHEALTH Salary</small>
-                        <input type="number" name="payroll_employee_salary_philhealth" class="form-control text-right">
+                        <input type="number" step="any" name="payroll_employee_salary_philhealth" class="form-control text-right">
                       </div>
                     </div>
                   </div>

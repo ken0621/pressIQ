@@ -71,7 +71,14 @@ function variant_info()
             },
             onChangeValue: function()
             {	
-
+            	if($(this).val() == "")
+            	{
+            		$(this).closest(".row").find(".edit-item").prop("disabled");
+            	}
+            	else
+            	{
+            		$(this).closest(".row").find(".edit-item").prop("disabled", false);
+            	}
             }
 		});
 	}

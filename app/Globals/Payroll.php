@@ -10,8 +10,8 @@ use App\Models\Tbl_payroll_philhealth_default;
 use App\Models\Tbl_payroll_philhealth;
 use App\Models\Tbl_payroll_pagibig_default;
 use App\Models\Tbl_payroll_pagibig;
-
 use Carbon\Carbon;
+use stdClass;
 
 class Payroll
 {
@@ -138,5 +138,50 @@ class Payroll
 			$insertlog['requirements_copy_date']	= Carbon::now();
 			Tbl_payroll_copy_log_requirements::insert($insertlog);
 		}
+	}
+	
+	/* 	 Returns normal hours rendered and overtime (Guillermo Tabligan) */
+	public static function process_time($time_rule, $default_time_in, $default_time_out, $_time_record, $break = "01:00", $default_working_hours = "08:00")
+	{
+		switch($time_rule)
+		{
+			case "flexitime": 
+				return Payroll::process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
+			break;
+		}
+	}
+	public static function process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours)
+	{
+		$break = strtotime($break);
+		$default_working_hours = strtotime($default_working_hours);
+
+		$return = new stdClass();
+
+		$total_time_spent = 0;
+		$total_early_overtime = 0;
+		$total_late_overtime = 0;
+		$total_regular_hours = 0;
+
+		foreach($_time_record as $time_record)
+		{
+			$time_in = strtotime($time_record->time_in);
+			$time_out = strtotime($time_record->time_out);
+			$time_spent = ($time_out - $time_in) - $break;
+			$total_time_spent += $time_spent;
+		}
+
+		/* COMPUTE OVERTIME */
+		if($default_working_hours < $total_time_spent)
+		{
+			$total_late_overtime = $total_time_spent - $default_working_hours;
+			$total_regular_hours = $default_working_hours;
+		}
+
+		$return->time_spent = date("H:i", $total_time_spent);
+		$return->regular_hours = date("H:i", $total_regular_hours);
+		$return->late_overtime = date("H:i", $total_late_overtime);
+		$return->early_overtime = date("H:i", $total_early_overtime);
+		
+		return $return;
 	}
 }

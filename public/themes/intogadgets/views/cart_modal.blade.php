@@ -13,14 +13,14 @@
       </div>
       <!-- FOREACH -->
       @foreach($get_cart['cart'] as $cart)
-      <div class="cart-content-item" vid="{{ $cart['product_id'] }}" rawprice="">
-        <div class="cart-item-text"><img style="width: 100%;" src="{{ $cart->image_path ? $cart->image_path : '/assets/mlm/img/placeholder.jpg' }}"></div>
+      <div class="cart-content-item" vid="{{ $cart["cart_product_information"]["variant_id"] }}" rawprice="{{ $cart["cart_product_information"]["product_price"] }}">
+        <div class="cart-item-text"><img style="width: 100%;" src="{{ $cart['cart_product_information']['image_path'] ? $cart['cart_product_information']['image_path'] : '/assets/mlm/img/placeholder.jpg' }}"></div>
         <div class="cart-item-text">
-          <div>{{ $cart['evariant_item_label'] }}</div>
-          <div><a class="remove-item-from-cart" vid="{{ $cart['evariant_id'] }}" href="javascript:">REMOVE</a></div>
+          <div>{{ $cart["cart_product_information"]["product_name"] }}</div>
+          <div><a class="remove-item-from-cart" vid="{{ $cart["cart_product_information"]["variant_id"] }}" href="javascript:">REMOVE</a></div>
         </div>
-        <div class="cart-item-text">&#8369; {{ $cart['evariant_price'] }}</div>
-        <div class="cart-item-text"><button class="compute-cart" compute="-1">-</button><input name="qty[{{ $cart['evariant_id'] }}]" class="text-center product-qty" type="text" value=""><button class="compute-cart" compute="1">+</button></div>
+        <div class="cart-item-text">&#8369; {{ number_format($cart["cart_product_information"]["product_price"], 2) }}</div>
+        <div class="cart-item-text"><button class="compute-cart" compute="-1">-</button><input name="qty[{{ $cart["cart_product_information"]["variant_id"] }}]" class="text-center product-qty" type="text" value="{{ $cart['quantity'] }}"><button class="compute-cart" compute="1">+</button></div>
         <div class="cart-item-text text-right total-price"></div>
       </div>
       @endforeach
@@ -31,7 +31,7 @@
       <button onclick="location.href='branch'; return false;" class="cart-content-go text-center">Reserve</button>
       
       <div class="super-holder"><span>Total</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-         <div class="cart-content-price text-right super-total"></div></div>
+         <div class="cart-content-price text-right super-total">{{ $get_cart["sale_information"]["total_product_price"] }}</div></div>
     </div>
 
     <div class="feature-items">

@@ -16,7 +16,7 @@ class ShopCartController extends Shop
     {
         $data["page"]  = "Product Cart";
         $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
-
+       
         return view("cart_modal", $data);
     }
 
@@ -28,5 +28,11 @@ class ShopCartController extends Shop
         $result = Cart::add_to_cart($variant_id,$quantity,$this->shop_info->shop_id);
 
         echo json_encode($result);
+    }
+
+    public function remove_cart()
+    {
+        $variant_id = Request::input("variant_id");
+        Cart::delete_product($variant_id);
     }
 }

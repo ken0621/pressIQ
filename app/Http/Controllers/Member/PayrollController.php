@@ -1054,6 +1054,7 @@ class PayrollController extends Member
 		$payroll_deduction_category = Request::input('payroll_deduction_category');
 		$archived 					= Request::input('archived');
 		$data['_active'] 			= Tbl_payroll_deduction_type::seltype(Self::shop_id(),$payroll_deduction_category, $archived)->get();
+		return view('member.payroll.reload.deduction_list_reload',$data);
 	}
 
 	public function update_deduction_type()
@@ -1064,6 +1065,25 @@ class PayrollController extends Member
 		$update['payroll_deduction_type_name'] = $value;
 		Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->update($update);
 
+	}
+
+	public function archive_deduction_type()
+	{
+		$content = Request::input('content');
+		$update['payroll_deduction_archived'] = Request::input('archived');
+		Tbl_payroll_deduction_type::where('payroll_deduction_type_id',$content)->update($update);
+	}
+
+	public function ajax_deduction_type()
+	{
+		$category = Request::input('category');
+		$data = Tbl_payroll_deduction_type::seltype(Self::shop_id(),$category)->get();
+		return json_encode($data);
+	}
+
+	public function modal_save_dedution()
+	{
+		
 	}
 	/* DEDUCTION END */
 

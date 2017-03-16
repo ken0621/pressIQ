@@ -41,6 +41,7 @@ class MlmDashboardController extends Mlm
         }
         
         $data['news'] = Self::news();
+        
         return view("mlm.dashboard", $data);
     }
     public static function income_discount()
@@ -141,7 +142,7 @@ class MlmDashboardController extends Mlm
     }
     public static function news()
     {
-    	$data["_post"] = Tbl_post::where("archived", 0)->get();
+    	$data["_post"] = Tbl_post::where("archived", 0)->where('shop_id', Self::$shop_id)->get();
 
     	return view('mlm.dashboard.news', $data);
     }

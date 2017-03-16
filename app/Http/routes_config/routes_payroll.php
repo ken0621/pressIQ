@@ -1,7 +1,6 @@
 <?php
 Route::group(array('prefix' => '/member/payroll'), function()
 {
-
 	/* COMPANY START */
 	Route::any('/company_list','Member\PayrollController@company_list');
 	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');
@@ -34,7 +33,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
 
 	Route::any('/employee_timesheet','Member\PayrollTimesheetController@index');
-
+	Route::any('/employee_timesheet/timesheet/{id}','Member\PayrollTimesheetController@timesheet');
+	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimesheetController@json_process_time');
 
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');

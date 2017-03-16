@@ -1,3 +1,9 @@
+.timesheet-table-loading {
+  min-height: 1500px;
+  text-align: center; }
+  .timesheet-table-loading .spin {
+    font-size: 20px; }
+
 .timesheet .timeEntry-control {
   display: none !important; }
 .timesheet thead {

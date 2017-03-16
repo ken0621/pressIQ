@@ -87,12 +87,12 @@
                             <div class="container-quantity-price">
                                 <div class="row clearfix">
                                     <div class="col-md-5 price-old-new">
-                                       @if($product_variant['discounted'] == "true")
-                                       <div class="present-item-price">PHP {{ number_format($product_variant['item_discount_value'], 2) }}</div>
-                                       <div class="item-old-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
-                                       @else
+                                       <!-- if($product_variant['discounted'] == "true") -->
+                                       <!-- <div class="present-item-price">PHP {{ number_format($product_variant['item_discount_value'], 2) }}</div>
+                                       <div class="item-old-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div> -->
+                                       <!-- else -->
                                        <div class="present-item-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
-                                       @endif
+                                       <!-- endif -->
                                     </div>
                                     <div class="col-md-7 item-quantity">
                                         <div class="quantity-input">

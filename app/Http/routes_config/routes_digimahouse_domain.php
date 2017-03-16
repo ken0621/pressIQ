@@ -5,6 +5,8 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/cart', 'Shop\ShopCartController@index'); //EDWARD GUEVARRA
 	Route::get('/cart/add', 'Shop\ShopCartController@add_cart'); //EDWARD GUEVARRA
 	Route::get('/cart/remove', 'Shop\ShopCartController@remove_cart'); //EDWARD GUEVARRA
+	Route::get('/cart/update', 'Shop\ShopCartController@update_cart'); //EDWARD GUEVARRA
+	Route::get('/cart/clear', 'Shop\ShopCartController@clear_cart'); //EDWARD GUEVARRA
 	Route::get('/product', 'Shop\ShopProductController@index'); //EDWARD GUEVARRA
 	Route::get('/product/view/{id}', 'Shop\ShopProductContentController@index'); //EDWARD GUEVARRA
 	Route::get('/product/variant', 'Shop\ShopProductContentController@variant'); //EDWARD GUEVARRA

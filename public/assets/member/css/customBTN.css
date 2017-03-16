@@ -731,7 +731,6 @@
     color: #147fbd;
 }
 
-<<<<<<< HEAD
 
 
     .box > .icon { text-align: center; position: relative; }
@@ -747,5 +746,3 @@
 .box > .icon > .info > .more a { font-family: "Roboto",sans-serif !important; font-size: 12px; color: #222; line-height: 12px; text-transform: uppercase; text-decoration: none; }
 .box > .icon:hover > .info > .more > a { color: #fff; padding: 6px 8px; background-color: #63B76C; }
 .box .space { height: 30px; }
-=======
->>>>>>> c7ebff7292676523ba7a2b10466901e5bebaf36e

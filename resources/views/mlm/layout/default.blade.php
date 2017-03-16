@@ -349,12 +349,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <i class="icon-angle-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li>
+                        <li class="hide">
                             <a  href="/mlm/genealogy/unilevel" class="subnav-text">
                                 Unilevel Genealogy
                             </a> 
-                        </li>
-                        <li>
+                        </li >
+                        <li class="hide">
                           <a href="/mlm/network/unilevel" class="subnav-text">
                             Unilevel Network List
                           </a>

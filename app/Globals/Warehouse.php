@@ -10,7 +10,8 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_user;
-use App\Models\Tbl_user_warehouse_access    ;
+use App\Models\Tbl_user_warehouse_access ;
+use App\Globals\Item;
 use DB;
 use Carbon\Carbon;
 use Session;
@@ -80,6 +81,7 @@ class Warehouse
         $inventory_err = '';
         $success = 0;
         $err = 0;
+        $err_msg["msg"] ="";
 
         foreach($_info as $key => $info)
         {
@@ -107,16 +109,19 @@ class Warehouse
                 $inventory_success[$success] = Warehouse::array_tansfer('transfer_success', $info['product_id']);
                 $success++;
             }
-            else if($count_on_hand < 0)
+            else
             {
+                $item_name = Item::get_item_details($info['product_id']);
+                $err_msg["msg"] .= "The quantity of ".$item_name->item_name." is not enough for your transfer.<br>";
                 $inventory_err[$err] = Warehouse::array_tansfer('error', $info['product_id']);
                 $err++;
-            }
+            }     
             
         }
+
         $data['status'] = '';
 
-        if($insertsource != '' && $insertdestination != '')
+        if($inventory_err == "")
         {   
             $data['status']             = 'transfer_success';
             $data['response_status']    = 'transfer_success';
@@ -131,8 +136,8 @@ class Warehouse
         {
             $data['status']             = 'error';
             $data['response_status']    = 'error';
-            $data['error']              = $inventory_err;
-            $data['message'] = 'The quantity is not enough for your transfer.';
+            $data['error']              = $err_msg;
+            $data['message'] = $err_msg["msg"];
         }
         $space = '';
 
@@ -298,6 +303,8 @@ class Warehouse
         $inventory_err = '';
         $success = 0;
         $err = 0;
+        $data['status_message'] = "";
+        $err_msg = "";
         foreach($consume_product as $key => $product)
         {
             $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $product['product_id'])->pluck('inventory_count');
@@ -319,6 +326,8 @@ class Warehouse
             }
             else
             {
+                $item_name = Item::get_item_details($product['product_id']);
+                $err_msg[$key] = "The quantity of ".$item_name->item_name." is not enough for you to transfer.<br>";
                 $inventory_err[$err] = Warehouse::array_tansfer('error', $product['product_id']);
                 $err++;
             }
@@ -334,7 +343,7 @@ class Warehouse
         else
         {
             $data['status'] = 'error';
-            $data['status_message'] = 'The quantity is not enough for your transfer.';
+            $data['status_message'] = $err_msg;
         }
         $space = '';
         if($return == 'json')

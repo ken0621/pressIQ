@@ -22,6 +22,10 @@ class Item
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
+    public static function get_item_details($item_id = 0)
+    {
+        return Tbl_item::category()->where("item_id",$item_id)->first();
+    }
 	public static function breakdown($_item='')
 	{
 		$data = '';

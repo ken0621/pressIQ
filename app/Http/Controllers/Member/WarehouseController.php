@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use App\Models\Tbl_category;
 use App\Models\Tbl_inventory_serial_number;
 use Session;
+use App\Globals\Item;
 use Validator;
 class WarehouseController extends Member
 {
@@ -886,14 +887,41 @@ class WarehouseController extends Member
 
             $remarks = Request::input("remarks");
             $quantity_product = Request::input("quantity");
+            $selected_item_id = Request::input("selected_item_id");
 
-            foreach ($quantity_product as $key => $value) 
+            $data['message'] = "";
+            $err_msg = "";
+
+            $data['status']             = '';
+            $data['response_status']    = '';
+
+            foreach ($selected_item_id as $key => $value) 
             {
-                $info[$key]['product_id'] = $key;
-                $info[$key]['quantity'] = str_replace(",","",$value);
+                $value2 = $quantity_product[$key];
+                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($from, $value)->pluck('inventory_count');
+                if($value2 != 0)
+                {
+                    if($count_on_hand > 0 && $count_on_hand >= $value2) 
+                    {
+                        $info[$value2]['product_id'] = $value;
+                        $info[$value2]['quantity'] = str_replace(",","",$value2);
+                    }
+                    else
+                    {
+                        $item_name = Item::get_item_details($value);
+
+                        $data['status']             = 'error';
+                        $data['response_status']    = 'error';
+                        $data['error']              = $err_msg;
+                        $data['message'] .= "The quantity of ".$item_name->item_name." is not enough for your transfer.<br>";
+                    }                    
+                }
             }
 
-            $data = Warehouse::inventory_transfer_bulk($from, $to, $info, $remarks, 'json');
+            if($data["status"] == null)
+            {
+                $data = Warehouse::inventory_transfer_bulk($from, $to, $info, $remarks, 'json');
+            }
             
             return json_encode($data);
         }

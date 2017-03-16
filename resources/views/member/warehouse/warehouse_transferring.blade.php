@@ -1,6 +1,6 @@
 @extends('member.layout')
 @section('content')
-<form class="global-submit form-to-submit-transfer" role="form" action="/member/item/warehouse/transfer_submit" method="post">
+<form class="global-submit-page form-to-submit-transfer" role="form" action="/member/item/warehouse/transfer_submit" method="post">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <input type="hidden" name="_token" value="{{csrf_token()}}">
     <div class="panel-heading">

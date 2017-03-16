@@ -895,30 +895,42 @@ class WarehouseController extends Member
             $data['status']             = '';
             $data['response_status']    = '';
 
+            $ctr = 0;
             foreach ($selected_item_id as $key => $value) 
             {
-                $value2 = $quantity_product[$key];
-                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($from, $value)->pluck('inventory_count');
-                if($value2 != 0)
+                if($value != "")
                 {
-                    if($count_on_hand > 0 && $count_on_hand >= $value2) 
+                    $value2 = $quantity_product[$key];
+                    $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($from, $value)->pluck('inventory_count');
+                    if($value2 != 0)
                     {
-                        $info[$value2]['product_id'] = $value;
-                        $info[$value2]['quantity'] = str_replace(",","",$value2);
-                    }
-                    else
-                    {
-                        $item_name = Item::get_item_details($value);
+                        if($count_on_hand > 0 && $count_on_hand >= $value2) 
+                        {
+                            $info[$value2]['product_id'] = $value;
+                            $info[$value2]['quantity'] = str_replace(",","",$value2);
+                        }
+                        else
+                        {
+                            $item_name = Item::get_item_details($value);
 
-                        $data['status']             = 'error';
-                        $data['response_status']    = 'error';
-                        $data['error']              = $err_msg;
-                        $data['message'] .= "The quantity of ".$item_name->item_name." is not enough for your transfer.<br>";
-                    }                    
+                            $data['status']             = 'error';
+                            $data['response_status']    = 'error';
+                            $data['error']              = $err_msg;
+                            $data['message'] .= "The quantity of ".$item_name->item_name." is not enough for your transfer.<br>";
+                        }      
+                        $ctr++;              
+                    }
                 }
             }
+            if($ctr == 0)
+            {
+                $data['status']             = 'error';
+                $data['response_status']    = 'error';
+                $data['error']              = $err_msg;
+                $data['message'] = "Please insert atleast 1 item and quantity to transfer.";                
+            }
 
-            if($data["status"] == null)
+            if($data["status"] == null || $ctr != 0)
             {
                 $data = Warehouse::inventory_transfer_bulk($from, $to, $info, $remarks, 'json');
             }

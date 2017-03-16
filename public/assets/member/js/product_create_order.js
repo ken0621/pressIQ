@@ -268,7 +268,7 @@ function customer_invoice(){
 			if(discount.indexOf('%') >= 0)
 			{
 				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
-				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * action_return_to_number(rate);
+				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
 			}
 			else if(discount == "" || discount == null)
 			{
@@ -544,7 +544,7 @@ function submit_done_customer(result)
 	customer_invoice.action_reload_customer(result['customer_info']['customer_id']);
 }
 
-function submit_done_for_page(data)
+function submit_done(data)
 {
 	if(data.status == "success-invoice")
 	{
@@ -556,15 +556,14 @@ function submit_done_for_page(data)
         toastr.success("Successfully updated");
        	location.href = data.redirect_to;
 	}
-	else if(data.status == 'success-sir')
-	{		
-        toastr.success("Success");
-       	location.href = "/member/pis/manual_invoice";
-	}
-	else if(data.status == 'success-tablet')
-	{		
-        toastr.success("Success");
-       	location.href = "/tablet";
+	else if(data.type == "payment_method")
+	{
+		$(".drop-down-payment").load("/member/maintenance/load_payment_method", function()
+		{
+			$(this).globalDropList("reload");
+			$(this).val(data.payment_method_id).change();
+		});
+		data.element.modal("toggle");
 	}
     else if(data.status == "error")
     {

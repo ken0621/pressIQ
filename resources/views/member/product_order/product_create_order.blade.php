@@ -1,6 +1,6 @@
 @extends('member.layout')
 @section('content')
-<form class="global-submit-page form-to-submit-transfer" role="form" action="{{$action}}" method="POST" >
+<form class="global-submit form-to-submit-transfer" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" name="ec_order_id" value="{{$ec_order_id or ''}}" >
     <input type="hidden" name="invoice_id" class="invoice_id_container" value="{{Request::input('id')}}" >
@@ -10,7 +10,7 @@
             <div>
                 <i class="fa fa-tags"></i>
                 <h1>
-                    <span class="page-title">{{isset($inv) ? 'View Invoice #'.$inv->ec_order_id : 'Create Invoice'}}</span>
+                    <span class="page-title">{{isset($inv) ? 'View Order #'.$inv->ec_order_id : 'Create Order'}}</span>
                     <small>
                     
                     </small>
@@ -28,7 +28,37 @@
         </ul> -->
         <div class="tab-content">
             <div class="row">
-                <div class="col-md-12" style="padding: 30px;">
+                <div class="col-md-12" style="padding: 10px 30px;">
+                    <div class="row" style="margin-bottom: 10px">
+                        @if(isset($inv))
+                        <div class="col-sm-12">
+                            <div class="btn-group btn-group-justified" data-toggle="buttons">
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Pending Payment' ? 'active' : '' : 'active'}}">
+                                <input type="radio" name="order_status" id="option1" value="Unpaid"> Pending Payment
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Failed' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option2" value="Paid"> Failed
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Processing' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option3" value="Void"> Processing
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Completed' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option4" value="Void"> Completed
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option5" value="Void"> On-Hold
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option6" value="Void"> Cancelled
+                                </label>
+                                <!-- <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Refunded' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option3" value="Void"> Refunded
+                                </label> -->
+                            </div> 
+                        </div>
+                        @endif
+                    </div>  
+
                     <!-- START CONTENT -->
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
@@ -40,21 +70,6 @@
                             <div class="col-sm-4">
                                 <input {{isset($inv) ? 'disabled' : ''}} type="text" class="form-control input-sm customer-email" name="inv_customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$inv->customer_email or ''}}"/>
                             </div>
-                            @if(isset($inv))
-                            <div class="col-sm-4">
-                                <div class="btn-group btn-group-justified" data-toggle="buttons">
-                                    <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Unpaid' ? 'active' : '' : 'active'}}">
-                                    <input type="radio" name="order_status" id="option1" value="Unpaid"> Unpaid
-                                    </label>
-                                    <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Paid' ? 'active' : '' : ''}}">
-                                    <input type="radio" name="order_status" id="option2" value="Paid"> Paid
-                                    </label>
-                                    <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Void' ? 'active' : '' : ''}}">
-                                    <input type="radio" name="order_status" id="option3" value="Void"> Void
-                                    </label>
-                                </div> 
-                            </div>
-                            @endif
                         </div>
                     </div>
                     <!-- <div class="row clearfix">
@@ -138,7 +153,7 @@
                                                     <td><input disabled class="text-right number-input txt-amount" type="text" name="invline_amount[]" value="{{$invline->total}}" /></td>
                                                     <td class="text-center">
                                                         <input disabled type="hidden" class="invline_taxable" name="invline_taxable[]" value="{{$invline->tax}}" >
-                                                        <input disabled type="checkbox" name="" class="taxable-check" {{$invline->tax == 1 ? 'checked' : ''}}>
+                                                        <input disabled type="checkbox" name="" class="taxable-check compute" {{$invline->tax == 1 ? 'checked' : ''}}>
                                                     </td>
                                                     <td class="text-center cursor-pointer"></td>
                                                 </tr>
@@ -165,7 +180,7 @@
                                                 <td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]"/></td>
                                                 <td class="text-center">
                                                     <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check" value="checked">
+                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -189,7 +204,7 @@
                                                 <td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]"/></td>
                                                 <td class="text-center">
                                                     <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check" value="checked">
+                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -345,7 +360,7 @@
             <td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]"/></td>
             <td class="text-center">
                 <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
-                <input type="checkbox" name="" class="taxable-check" value="checked">
+                <input type="checkbox" name="" class="taxable-check compute" value="checked">
             </td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>

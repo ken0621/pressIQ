@@ -93,6 +93,7 @@ class Mlm_member
         $data['wallet_log'] = Tbl_mlm_slot_wallet_log::where('tbl_mlm_slot_wallet_log.shop_id', $data['slot']->shop_id)
         ->orderBy('wallet_log_date_created', 'ASC')
         ->where('wallet_log_slot', $slot_id)
+        ->where('wallet_log_amount', '!=', 0)
         ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=','tbl_mlm_slot_wallet_log.wallet_log_slot')
         ->join('tbl_customer', 'tbl_customer.customer_id', '=','tbl_mlm_slot.slot_owner')
         ->get();
@@ -101,7 +102,15 @@ class Mlm_member
         foreach($data['wallet_log'] as $key => $value)
         {
             $date = Carbon::parse($value->wallet_log_date_created)->format('Y-m-d');
-            $data['sort_by_date'][$date][$key] = $value;
+            if(isset($data['sort_by_date'][$date][$value->wallet_log_plan]->wallet_log_amount))
+            {
+                $data['sort_by_date'][$date][$value->wallet_log_plan]->wallet_log_amount += $value->wallet_log_amount;
+            }
+            else
+            {
+                $data['sort_by_date'][$date][$value->wallet_log_plan] = $value;
+            }
+            
         }
         $data['customer_view'] = Mlm_member::get_customer_info_w_slot($data['slot']->customer_id, $slot_id);
         // dd($data['sort_by_date']);

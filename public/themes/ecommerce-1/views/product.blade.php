@@ -125,7 +125,7 @@
 								<div class="col-md-3">
 									<div class="per-item-container">
 										<div class="image-content-1">
-											<div class="item-image-large" style="background-image: url({{ $product['variant'][0]['image'] ? $product['variant'][0]['image'][0]['image_path'] : '' }})"></div>
+											<div class="item-image-large" style="background-image: url({{ get_product_first_image($product) }})"></div>
 											<button class="new-add-to-cart-button btn" >
 											<table>
 												<tbody>

@@ -70,12 +70,12 @@ class MaintenancePaymentMethodController extends Member
 
         if($data["status"] == "")
         {
-            $payment_method_id = Tbl_payment_method::insert($insert);
+            $payment_method_id = Tbl_payment_method::insertGetId($insert);
 
             $data["status"]         = "success";
             $data["type"]           = "payment_method";   
             $data["message"]        = "success";
-            $data["payment_method_id"] = "payment_method_id";
+            $data["payment_method_id"] = $payment_method_id;
         }
 
         return json_encode($data);

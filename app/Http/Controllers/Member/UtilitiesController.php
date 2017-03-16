@@ -32,8 +32,8 @@ class UtilitiesController extends Member
         if($this->hasAccess("utilities-admin-accounts","access_page"))
         {
             $user_info              = $this->user_info();
-            $data["_list"]          = Tbl_user::where("user_shop",$user_info->user_shop)->position()->where("position_rank",">",$user_info->position_rank)->get();
-            $data["_list_archived"] = Tbl_user::where("user_shop",$user_info->user_shop)->where("tbl_user.archived",0)->position()->where("position_rank",">",$user_info->position_rank)->get();
+            $data["_list"]          = Tbl_user::where("user_shop",$user_info->user_shop)->position()->where("position_rank",">",$user_info->position_rank)->where("tbl_user.archived",0)->get();
+            $data["_list_archived"] = Tbl_user::where("user_shop",$user_info->user_shop)->where("tbl_user.archived",1)->position()->where("position_rank",">",$user_info->position_rank)->get();
 
             return view('member/utilities/admin_list', $data);
         }
@@ -100,7 +100,7 @@ class UtilitiesController extends Member
 
     public function postArchiveUser()
     { 
-        $edit_user                       = Tbl_user::where("user_id",Request::input("user_id"))->position()->first();
+        $edit_user                       = Tbl_user::where("user_id",Request::input("id"))->position()->first();
         $insert["archived"]              = 1;
         if($edit_user->position_rank <= $this->user_info()->position_rank)
         {

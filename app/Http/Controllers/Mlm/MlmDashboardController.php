@@ -72,6 +72,7 @@ class MlmDashboardController extends Mlm
         ->where('marketing_plan_code', '!=', 'MEMBERSHIP_MATCHING')
         ->where('marketing_plan_code', '!=', 'LEADERSHIP_BONUS')
         ->where('marketing_plan_code', '!=', 'DISCOUNT_CARD')
+        ->where('marketing_plan_code', '!=', 'BINARY')
         ->get();
         // dd($data['plan_settings']);
         foreach($data['plan_settings_2'] as $key => $value)
@@ -86,8 +87,13 @@ class MlmDashboardController extends Mlm
             // if()
         }
 
+        $binary = 0;
         foreach($data['plan_settings'] as $key => $value)
         {
+            if($value->marketing_plan_code == 'BINARY')
+            {
+                $binary = 1;
+            }
         	$data['earning'][$key] = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', $value->marketing_plan_code)
         	->where('wallet_log_slot', $slot_id)
         	->sum('wallet_log_amount');
@@ -96,7 +102,10 @@ class MlmDashboardController extends Mlm
         		$data['earning'][$key] = 0;
         	}
         }
-
+        $data['binary'] = $binary;
+        $data['left'] = Self::$slot_now->slot_binary_left;
+        $data['right'] = Self::$slot_now->slot_binary_right;
+        // dd($binary);
     	return view('mlm.dashboard.income', $data);
     }
     public static function no_slot($shop_id)

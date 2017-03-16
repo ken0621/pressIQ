@@ -125,6 +125,8 @@ class Mlm_EncashmentController extends Member
     }
     public function process_all_encashment()
     {
+        ini_set('max_execution_time', 60000);
+        set_time_limit(10000);
         $shop_id = $this->user_info->shop_id;
         $enchasment_process_from = Request::input('enchasment_process_from');
         $enchasment_process_to = Request::input('enchasment_process_to');
@@ -143,7 +145,7 @@ class Mlm_EncashmentController extends Member
             $insert['enchasment_process_minimum'] =  $encashment_settings->enchasment_settings_minimum;
             $insert['encashment_process_sum'] = 0;
             $id = Tbl_mlm_encashment_process::insertGetId($insert);
-            Mlm_slot_log::encash_all($id);
+            return Mlm_slot_log::encash_all($id);
             $data['status'] = 'success';
             $data['message'] = 'Encashment Process';
         }

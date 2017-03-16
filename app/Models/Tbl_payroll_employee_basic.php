@@ -97,4 +97,5 @@ class Tbl_payroll_employee_basic extends Model
 		return $query;
 
 	}
+
 }

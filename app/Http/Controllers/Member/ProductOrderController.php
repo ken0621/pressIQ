@@ -32,10 +32,10 @@ class ProductOrderController extends Member
 {
     public function index()
     {
-        $data["page"]       = "Customer Invoice";
-        $data["_customer"]  = Tbl_customer::where("archived", 0)->get();
-        $data["_payment"]   = Tbl_payment_method::where("archived", 0)->where("shop_id",$this->user_info->shop_id)->get();
-        $data['_product']      = Ecom_Product::getProductList();
+        $data["page"]               = "Customer Invoice";
+        $data["_customer"]          = Tbl_customer::where("archived", 0)->get();
+        $data["_payment_method"]    = Tbl_payment_method::where("archived", 0)->where("shop_id",$this->user_info->shop_id)->get();
+        $data['_product']           = Ecom_Product::getProductList();
         // dd($data);
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["action"]     = "/member/ecommerce/product_order/create_order/create_invoice";
@@ -71,6 +71,9 @@ class ProductOrderController extends Member
     }
     public function invoice_list()
     {
+        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Pending")->get();
+        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Unpaid")->get();
+        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Unpaid")->get();
         $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Unpaid")->get();
         $data["ec_order_paid"]   = Tbl_ec_order::customer()->where("order_status","Paid")->get();
         $data["ec_order_void"]   = Tbl_ec_order::customer()->where("order_status","Void")->get();

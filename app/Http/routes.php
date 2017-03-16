@@ -14,8 +14,13 @@ Route::get('/barcode', 'MemberController@barcodes');
 
 Route::get('member/register', 'MemberController@register');
 Route::post('member/register/submit', 'MemberController@register_post');
-Route::get('member/register/payment', 'MemberController@payment');
+
 Route::get('member/register/package', 'MemberController@package');
+Route::post('member/register/package/submit', 'MemberController@package_post');
+
+Route::get('member/register/payment', 'MemberController@payment');
+Route::post('member/register/payment/submit', 'MemberController@payment_post');
+
 
 Route::get('member/card', 'Member\MLM_CardController@card');
 Route::get('member/card/all', 'Member\MLM_CardController@all_slot');
@@ -658,6 +663,7 @@ Route::get('/member/item/load_um','Member\UnitOfMeasurementController@load_um');
 Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
 Route::get('/member/item/load_category','Member\Manage_Category_Controller@load_category');
 Route::get('/member/item/manufacturer/load_manufacturer','Member\ManufacturerController@load_manufacturer');
+Route::get('/member/maintenance/load_payment_method','Member\MaintenancePaymentMethodController@load_payment_method');
 Route::get('/member/maintenance/load_payment_gateway/{id}','Member\OnlinePaymentMethodController@load_payment_gateway');
 
 /* SettingsController */

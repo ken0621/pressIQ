@@ -1,6 +1,10 @@
 <?php
-use App\Globals\Ecom_Product;
 
+function c_time_to_int($time)
+{
+    $time = date("H:i", strtotime($time));
+    return strtotime("01/01/70 " . $time);
+}
 function createPath($path)
 {
     if (is_dir($path)) return true;
@@ -491,59 +495,4 @@ function limit_foreach($iterable, $limit)
         if (!$limit--) break;
         yield $key => $value;
     }
-}
-function get_post($shop_id, $key)
-{
-    $post_id = explode(",", DB::table("tbl_content")->where("key", $key)->where("shop_id", $shop_id)->first()->value);
-
-    $post = DB::table("tbl_post")->where("archived", 0)->where("shop_id", $shop_id)->get();
-    foreach ($post as $key => $value) 
-    {
-        foreach ($post_id as $keys => $values) 
-        {
-            if ($values != $value->post_id) 
-            {
-                unset($post[$key]);
-            }
-        }
-    }
-
-    return $post;
-}
-
-function get_content($data, $tab, $content, $default = "")
-{
-    $response = $data->$tab->$content->default;
-
-    return $response ? $response : $default;
-}
-
-function get_collection($collection_id, $shop_id = null)
-{
-    return Ecom_Product::getProductCollection($collection_id, $shop_id);
-}
-
-function get_collection_first_image($data)
-{
-    return $data['product']['variant'][0]['image'] ? $data['product']['variant'][0]['image'][0]['image_path'] : '';
-}
-
-function get_collection_first_price($data)
-{
-    return $data['product']['min_price'] == $data['product']['max_price'] ? "&#8369; " . number_format($data['product']['max_price'], 2) : "&#8369; " . number_format($data['product']['min_price'], 2) . " - " . number_format($data['product']['max_price'], 2);
-}
-
-function get_product_first_name($data)
-{
-    return $data['eprod_name'];
-}
-
-function get_product_first_price($data)
-{
-    return $data['min_price'] == $data['max_price'] ? "&#8369; " . number_format($data['max_price'], 2) : "&#8369; " . number_format($data['min_price'], 2) . " - " . number_format($data['max_price'], 2);
-}
-
-function get_product_first_image($data)
-{
-    return $data['variant'][0]['image'] ? $data['variant'][0]['image'][0]['image_path'] : '';
 }

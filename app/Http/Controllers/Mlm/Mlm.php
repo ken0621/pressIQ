@@ -69,6 +69,7 @@ class Mlm extends Controller
             $all_slot = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)
             ->membershipcode()
             ->membership()
+            ->take(10)
             ->get();
             $plan_settings = Tbl_mlm_plan::where('shop_id', Self::$shop_id)
             ->where('marketing_plan_enable', 1)

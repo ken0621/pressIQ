@@ -10,8 +10,11 @@ use App\Models\Tbl_payroll_philhealth_default;
 use App\Models\Tbl_payroll_philhealth;
 use App\Models\Tbl_payroll_pagibig_default;
 use App\Models\Tbl_payroll_pagibig;
+use App\Models\Tbl_payroll_employee_search;
+use App\Models\Tbl_payroll_employee_basic;
 
 use Carbon\Carbon;
+use stdClass;
 
 class Payroll
 {
@@ -138,5 +141,112 @@ class Payroll
 			$insertlog['requirements_copy_date']	= Carbon::now();
 			Tbl_payroll_copy_log_requirements::insert($insertlog);
 		}
+	}
+
+
+	/* TABLE FOR EMPLOYEE SEARCH INSERT OR UPDATE */
+	public static function generate_emplyoee_search($employee_id = 0)
+	{
+
+		if($employee_id == 0)
+		{
+			// $_emp 	= Tbl_payroll_employee_basic::get();
+			// $insert = array();
+			// foreach($_emp as $key => $emp)
+			// {
+			// 	$insert[$key]['payroll_search_employee_id'] = $emp->payroll_employee_id;
+			// 	$insert[$key]['body'] = $emp->payroll_employee_title_name.' '.$emp->payroll_employee_first_name.' '.$emp->payroll_employee_middle_name.' '.$emp->payroll_employee_last_name.' '.$emp->payroll_employee_suffix_name.' '.$emp->payroll_employee_display_name.' '.$emp->payroll_employee_email;
+
+			// }
+			// Tbl_payroll_employee_search::insert($insert);
+		}
+		else
+		{
+			$count = Tbl_payroll_employee_search::where('payroll_search_employee_id', $employee_id)->count();
+			$employee = Tbl_payroll_employee_basic::where('payroll_search_employee_id', $employee_id)->first();
+
+			$search['body'] = $employee->payroll_employee_title_name.' '.$employee->payroll_employee_first_name.' '.$employee->payroll_employee_middle_name.' '.$employee->payroll_employee_last_name.' '.$employee->payroll_employee_suffix_name.' '.$employee->payroll_employee_display_name.' '.$employee->payroll_employee_email;
+			if($count == 0)
+			{
+				$search['payroll_search_employee_id'] = $employee_id;
+				Tbl_payroll_employee_search::insert($search);
+			}
+			else
+			{
+				Tbl_payroll_employee_search::where('payroll_search_employee_id',$employee_id)->update($search);
+			}
+		}
+		
+
+	}
+	
+	/* 	 Returns normal hours rendered and overtime (Guillermo Tabligan) */
+	public static function process_time($time_rule, $default_time_in, $default_time_out, $_time_record, $break = "01:00", $default_working_hours = "08:00")
+	{
+		switch($time_rule)
+		{
+			case "flexitime": 
+				return Payroll::process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
+			break;
+		}
+	}
+	public static function process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours)
+	{
+		$data["break"] = $break = c_time_to_int($break);
+		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
+
+		$return = new stdClass();
+
+		$total_time_spent = 0;
+		$total_early_overtime = 0;
+		$total_late_overtime = 0;
+		$total_regular_hours = 0;
+
+		foreach($_time_record as $time_record)
+		{
+			$time_in = c_time_to_int($time_record->time_in);
+			$time_out = c_time_to_int($time_record->time_out);
+
+			if($time_out > $time_in)
+			{
+				$time_spent = ($time_out - $time_in);
+			}
+			else
+			{
+				$time_spent = 0;
+			}
+			
+			$total_time_spent += $time_spent;
+		}
+
+		if($total_time_spent <= 0)
+		{
+			$total_time_spent = 0;
+		}
+		else
+		{
+			$total_time_spent = $total_time_spent - $break;
+		}
+
+
+		/* COMPUTE OVERTIME */
+		$total_time_spent = c_time_to_int(date("H:i", $total_time_spent));
+		$default_working_hours = c_time_to_int(date("H:i", $default_working_hours));
+		if($total_time_spent > $default_working_hours)
+		{
+			$total_late_overtime = $total_time_spent - $default_working_hours;
+			$total_regular_hours = $default_working_hours;
+		}
+		else
+		{
+			$total_regular_hours = $total_time_spent;
+		}
+
+		$return->time_spent = date("H:i", $total_time_spent);
+		$return->regular_hours = date("H:i", $total_regular_hours);
+		$return->late_overtime = date("H:i", $total_late_overtime);
+		$return->early_overtime = date("H:i", $total_early_overtime);
+		
+		return $return;
 	}
 }

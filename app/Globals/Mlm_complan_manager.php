@@ -193,9 +193,9 @@ class Mlm_complan_manager
         // GET PAIRING SETTINGS / BINARY TREE
         $settings_pairing = Tbl_mlm_binary_pairing::orderBy("pairing_point_left", "desc")->get();
         $binary_advance_pairing = Tbl_mlm_binary_setttings::where('shop_id', $slot_info->shop_id)->first();
-
+        // binary_settings_max_tree_level
         // select max tree level
-        if(isseT($binary_advance_pairing->binary_settings_max_tree_level))
+        if(isset($binary_advance_pairing->binary_settings_max_tree_level))
         {
             $binary_settings_max_tree_level = $binary_advance_pairing->binary_settings_max_tree_level;
         }
@@ -208,8 +208,22 @@ class Mlm_complan_manager
         ->where('placement_tree_level', '<=', $binary_settings_max_tree_level)
         ->level()->distinct_level()->parentslot()->get();
 
-        // dd($settings_tree);
-        // end
+        $notify_max_level = Tbl_tree_placement::child($slot_info->slot_id)
+        ->where('placement_tree_level', '>', $binary_settings_max_tree_level)
+        ->level()->distinct_level()->parentslot()->get();
+        foreach($notify_max_level as $key => $value)
+        {
+            $log = "Sorry, Your Slot has already reached the max level for binary. Slot " . $slot_info->slot_no . "'s binary points will not be added.";
+            $arry_log['wallet_log_slot']            = $value->slot_id;
+            $arry_log['shop_id']                    = $value->shop_id;
+            $arry_log['wallet_log_slot_sponsor']    = $slot_info->slot_id;
+            $arry_log['wallet_log_details']         = $log;
+            $arry_log['wallet_log_amount']          = 0;
+            $arry_log['wallet_log_plan']            = "BINARY_MAX_LEVEL";
+            $arry_log['wallet_log_status']          = "n_ready";   
+            $arry_log['wallet_log_claimbale_on']    = Carbon::now(); 
+            Mlm_slot_log::slot_array($arry_log); 
+        }
 
         // DISTRIBUTE BINARY POINTS
         foreach($settings_tree as $tree)

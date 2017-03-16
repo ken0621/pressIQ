@@ -53,7 +53,7 @@ function receive_payment()
 		$(".drop-down-payment").globalDropList(
 		{
 		    link 		: '/member/maintenance/payment_method/add',
-		    link_size 	: 'lg',
+		    link_size 	: 'sm',
 		    width 		: "100%",
 		    placeholder : 'Payment Method'
 		});
@@ -215,7 +215,16 @@ function submit_done(data)
 {
 	if(data.status == "success")
 	{
-		if(data.redirect)
+		if(data.type == "payment_method")
+		{
+			$(".drop-down-payment").load("/member/maintenance/load_payment_method", function()
+			{
+				$(this).globalDropList("reload");
+				$(this).val(data.payment_method_id).change();
+			});
+			data.element.modal("toggle");
+		}
+		else if(data.redirect)
         {
         	toastr.success(data.message);
         	location.href = data.redirect;

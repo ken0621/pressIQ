@@ -194,7 +194,10 @@ function payrollconfiguration()
 		});
 	}
 
-	// this.relaod_
+	this.relaod_deduction = function()
+	{
+		reload_configuration("/member/payroll/deduction");
+	}
 	
 	
 }

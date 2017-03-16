@@ -172,17 +172,20 @@ class AuditTrail
             else if($value->source == "mlm_membership_code_invoice")
             {
                 $transaction = Tbl_membership_code_invoice::customer()->where("membership_code_invoice_id",$value->source_id)->first();
-                $transaction_date = date("m/d/y", strtotime($transaction->membership_code_date_created));
-                $transaction_client = $transaction->company != null ? $transaction->company : $transaction->title_name." ".$transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name." ".$transaction->suffix_name;
-
-                $old[$key] = unserialize($value->new_data);
-                $amount = $transaction->membership_total;
-                if(isset($old))
+                if($transaction != null)
                 {
-                    $amount = $old[$key]["membership_total"];
-                    $transaction_new_id = $old[$key]["membership_code_invoice_id"];
+                    $transaction_date = date("m/d/y", strtotime($transaction->membership_code_date_created));
+                    $transaction_client = $transaction->company != null ? $transaction->company : $transaction->title_name." ".$transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name." ".$transaction->suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->membership_total;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["membership_total"];
+                        $transaction_new_id = $old[$key]["membership_code_invoice_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
                 }
-                $transaction_amount = currency("PHP",$amount);
             }
             else if($value->source == "mlm_membership_package")
             {                

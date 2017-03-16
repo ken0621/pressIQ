@@ -14,19 +14,30 @@ function timesheet()
 	}
 	function document_ready()
 	{
-		
-		action_convert_default_time_to_24_hour();
+		action_load_timesheet();
+		event_change_employee();
 		event_focus_edit();
-		event_time_entry();
 		event_change_time_in_out();
 		event_create_sub_time();
 		event_delete_sub_time();
-		action_compute_work_hours();
 	}
-	function action_convert_default_time_to_24_hour()
+	function action_load_timesheet()
 	{
-		default_time_in = convert_to_24h(default_time_in);
-		default_time_out = convert_to_24h(default_time_out);
+		$(".load-timesheet").html("<div class='timesheet-table-loading'><div class='spin'><i class='table-loader fa fa-spinner fa-spin fa-fw'></i></div> <div>LOADING</div> </div>");
+
+		var selected_employee = $(".choose-employee").val();
+		$(".load-timesheet").load('/member/payroll/employee_timesheet/timesheet/' + selected_employee, function()
+		{
+			action_compute_work_hours();
+			event_time_entry();
+		});
+	}
+	function event_change_employee()
+	{
+		$("body").on("change", ".choose-employee", function(e)
+		{
+			action_load_timesheet();
+		});
 	}
 	function event_create_sub_time()
 	{
@@ -50,7 +61,7 @@ function timesheet()
 	}
 	function event_change_time_in_out()
 	{
-		$("body").on("focusout", ".time-in", function(e)
+		$("body").on("change", ".time-in", function(e)
 		{
 			$(e.currentTarget).closest("tr").find(".ot-approved").val("00:00");
 
@@ -60,10 +71,12 @@ function timesheet()
 				$(e.currentTarget).closest("tr").find(".time-out").val("");
 			}
 
+			$date = $(e.currentTarget).closest("tr").attr("date");
+			action_recompute_loading($date);
 			action_compute_work_hours();
 		});
 
-		$("body").on("focusout", ".time-out", function(e)
+		$("body").on("change", ".time-out", function(e)
 		{
 			$(e.currentTarget).closest("tr").find(".ot-approved").val("00:00");
 
@@ -73,15 +86,19 @@ function timesheet()
 				$(e.currentTarget).closest("tr").find(".time-in").val("");
 			}
 
+			$date = $(e.currentTarget).closest("tr").attr("date");
+			action_recompute_loading($date);
 			action_compute_work_hours();
 		});
 
-		$("body").on("focusout", ".break-time", function(e)
+		$("body").on("change", ".break-time", function(e)
 		{
+			$date = $(e.currentTarget).closest("tr").attr("date");
+			action_recompute_loading($date);
 			action_compute_work_hours();
 		});
 
-		$("body").on("focusout", ".ot-approved", function(e)
+		$("body").on("change", ".ot-approved", function(e)
 		{
 			action_compute_work_hours();
 		});
@@ -110,6 +127,14 @@ function timesheet()
 		$(".time-entry").timeEntry({ampmPrefix: ' '});
 		$(".time-entry-24").timeEntry({show24Hours: true});
 	}
+	function action_recompute_loading(date)
+	{	
+		$(".time-record.main[date='" + date + "']").find(".table-loader").removeClass("hidden");
+		$(".time-record.main[date='" + date + "']").find(".table-check").addClass("hidden");
+		$(".time-record.main[date='" + date + "']").find(".normal-hours").text("__:__");
+		$(".time-record.main[date='" + date + "']").find(".overtime-hours").text("__:__");
+		$(".time-record.main[date='" + date + "']").find(".overtime-hours").removeClass("red");
+	}
 	function action_create_sub_time(date)
 	{
 		$append = $(".sub-time-container").html();
@@ -130,6 +155,7 @@ function timesheet()
 		/* REMOVE NEW SUB REFERENCE */
 		$("tbody").find(".time-record.new-sub").removeClass("new-sub");
 	}
+
 	function action_compute_work_hours()
 	{
 		if(timesheet_request !== null)
@@ -145,7 +171,13 @@ function timesheet()
 			type:"post",
 			success: function(data)
 			{
+				$.each(data, function(key, val)
+				{
+					update_time_record_on_table(val.date, val.regular_hours, val.early_overtime, val.late_overtime);
+				});
 
+				$(".table-loader").addClass("hidden");
+				$(".table-check").removeClass("hidden");
 			},
 			error: function()
 			{
@@ -154,7 +186,32 @@ function timesheet()
 		});
 	}
 
+	function update_time_record_on_table(date, regular_hours, early_overtime, late_overtime)
+	{
+		$(".time-record[date='" + date + "']").find(".normal-hours").text(regular_hours);
+		$(".time-record[date='" + date + "']").find(".overtime-hours.late").text(late_overtime);
+		$(".time-record[date='" + date + "']").find(".overtime-hours.early").text(early_overtime);
 
+		if(late_overtime != "00:00")
+		{
+			$(".time-record[date='" + date + "']").find(".overtime-hours.late").addClass("red");
+		}
+		else
+		{
+			$(".time-record[date='" + date + "']").find(".overtime-hours.late").removeClass("red");
+		}
+
+		if(early_overtime != "00:00")
+		{
+			$(".time-record[date='" + date + "']").find(".overtime-hours.early").addClass("red");
+		}
+		else
+		{
+			$(".time-record[date='" + date + "']").find(".overtime-hours.early").removeClass("red");
+		}
+
+
+	}
 	function action_convert_time_str_to_seconds(time_str)
 	{
 	    // Extract hours, minutes and seconds
@@ -224,12 +281,13 @@ function timesheet()
 	  var HH = times[0];
 
 
-	  if (MM % 60 === 0) {
-	    res = MM / 60;
-	    HH += res;
-	    MM = MM - (60 * res);
+	  if (MM % 60 === 0)
+	  {
+			res = MM / 60;
+			HH += res;
+			MM = MM - (60 * res);
 	  }
-		var formatted = ((HH < 10)?("0" + HH):HH) + ":" + ((MM < 10)?("0" + MM):MM)
+		var formatted = ((HH < 10)?("0" + HH):HH) + ":" + ((MM < 10)?("0" + MM):MM);
 	  return formatted;
 	}
 	function convert_to_24h(time_str)

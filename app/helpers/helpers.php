@@ -1,6 +1,11 @@
 <?php
 use App\Globals\Ecom_Product;
 
+function c_time_to_int($time)
+{
+    $time = date("H:i", strtotime($time));
+    return strtotime("01/01/70 " . $time);
+}
 function createPath($path)
 {
     if (is_dir($path)) return true;

@@ -33,6 +33,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
 
 	Route::any('/employee_timesheet','Member\PayrollTimesheetController@index');
+	Route::any('/employee_timesheet/timesheet/{id}','Member\PayrollTimesheetController@timesheet');
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimesheetController@json_process_time');
 
 	/* DEPARTMENT START */

@@ -152,8 +152,8 @@ class Payroll
 	}
 	public static function process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours)
 	{
-		$break = strtotime($break);
-		$default_working_hours = strtotime($default_working_hours);
+		$data["break"] = $break = c_time_to_int($break);
+		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
 
 		$return = new stdClass();
 
@@ -164,17 +164,42 @@ class Payroll
 
 		foreach($_time_record as $time_record)
 		{
-			$time_in = strtotime($time_record->time_in);
-			$time_out = strtotime($time_record->time_out);
-			$time_spent = ($time_out - $time_in) - $break;
+			$time_in = c_time_to_int($time_record->time_in);
+			$time_out = c_time_to_int($time_record->time_out);
+
+			if($time_out > $time_in)
+			{
+				$time_spent = ($time_out - $time_in);
+			}
+			else
+			{
+				$time_spent = 0;
+			}
+			
 			$total_time_spent += $time_spent;
 		}
 
+		if($total_time_spent <= 0)
+		{
+			$total_time_spent = 0;
+		}
+		else
+		{
+			$total_time_spent = $total_time_spent - $break;
+		}
+
+
 		/* COMPUTE OVERTIME */
-		if($default_working_hours < $total_time_spent)
+		$total_time_spent = c_time_to_int(date("H:i", $total_time_spent));
+		$default_working_hours = c_time_to_int(date("H:i", $default_working_hours));
+		if($total_time_spent > $default_working_hours)
 		{
 			$total_late_overtime = $total_time_spent - $default_working_hours;
 			$total_regular_hours = $default_working_hours;
+		}
+		else
+		{
+			$total_regular_hours = $total_time_spent;
 		}
 
 		$return->time_spent = date("H:i", $total_time_spent);

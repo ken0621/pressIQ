@@ -5,10 +5,40 @@ function employeelist()
 	init()
 	function init()
 	{
+		tbl_btn_event();
+		// reload_employee_list();
+		// reload_employee_list('separated');
+		filter_change_event();
+	}
+
+	function tbl_btn_event()
+	{
 
 	}
 
-	function load_configuration(action = "", method = "POST", target = ".configuration-div", formdata = [])
+	function filter_change_event()
+	{
+		$(".filter-change").unbind("change");
+		$(".filter-change").bind("change", function()
+		{
+			var parent = $(this).parents(".filter-div");
+			var company_id = parent.find(".filter-change-company").val();
+			var employement_status =  parent.find(".filter-change-status").val();
+			var formdata = {
+				_token:misc('_token'),
+				company_id:company_id,
+				employement_status:employement_status
+			};
+			var action = "/member/payroll/employee_list/reload_employee_list";
+			var method = "POST";
+			var target = $(this).data("target");
+			var function_name = "employeelist.tbl_btn_event";
+			$(target).html(misc('loader'));
+			load_configuration(action, method, formdata, target, function_name);
+		});
+	}
+
+	function load_configuration(action = "", method = "POST", formdata = [] , target = "",  function_name = "")
 	{
 		$(target).html(misc('loader'));
 		$.ajax({
@@ -18,7 +48,8 @@ function employeelist()
 			success : 	function(result)
 			{
 				$(target).html(result);
-				load_configuration_event();
+				// load_configuration_event();
+				executeFunctionByName(function_name, window);
 			},
 			error  	: 	function()
 			{
@@ -30,6 +61,54 @@ function employeelist()
 	function error_function()
 	{
 		toastr.error("Error, something went wrong.");
+	}
+
+	/* USE THIS FOR FILTERING THE EMPLOYEE LIST */
+	function reload_employee_list(employement_status = 0, company_id = 0)
+	{
+		var formdata = {
+			_token:misc('_token'),
+			company_id:company_id,
+			employement_status:employement_status
+		};
+		var action = "/member/payroll/employee_list/reload_employee_list";
+		var method = "POST";
+		var target = "#active-employee";
+		if(employement_status == 'separated')
+		{
+			target = "#separated-employee";
+		}
+		var function_name = "employeelist.tbl_btn_event";
+		$(target).html(misc('loader'));
+		load_configuration(action, method, formdata, target, function_name);
+	}
+
+	this.executeFunctionByName = function(function_name)
+	{
+		console.log(function_name);
+		executeFunctionByName(function_name, window);
+	}
+
+	this.reload_employee_list = function()
+	{	
+		reload_employee_list();
+		reload_employee_list('separated');
+	}
+
+	this.tbl_btn_event = function()
+	{
+		tbl_btn_event();
+	}
+
+	/* CALL A FUNCTION BY NAME */
+	function executeFunctionByName(functionName, context /*, args */) {
+	  var args = [].slice.call(arguments).splice(2);
+	  var namespaces = functionName.split(".");
+	  var func = namespaces.pop();
+	  for(var i = 0; i < namespaces.length; i++) {
+	    context = context[namespaces[i]];
+	  }
+	  return context[func].apply(context, args);
 	}
 
 	function misc(str){
@@ -64,21 +143,14 @@ function employeelist()
 				break;
 		}
 	}
-
-	/* CALL A FUNCTION BY NAME */
-	function executeFunctionByName(functionName, context /*, args */) {
-	  var args = [].slice.call(arguments).splice(2);
-	  var namespaces = functionName.split(".");
-	  var func = namespaces.pop();
-	  for(var i = 0; i < namespaces.length; i++) {
-	    context = context[namespaces[i]];
-	  }
-	  return context[func].apply(context, args);
-	}
 }
 
 
 function submit_done($data)
 {
-	$("#global-submit").modal("hide");
+	data = JSON.parse(data);
+	console.log(data);
+	alert("submit done");
+	employeelist.executeFunctionByName(data.function_name);
+	data.element.modal("toggle");
 }

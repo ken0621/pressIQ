@@ -18,6 +18,7 @@
 		    		<tr>
 		    			<th>Monthly</th>
 		    			<th>Daily</th>
+		    			<th>COLA</th>
 		    			<th>Mimimum Wage</th>
 		    			<th>Taxable</th>
 		    			<th>SSS</th>
@@ -34,6 +35,9 @@
 		    		</td>
 		    		<td class="text-right">
 		    			{{number_format($active->payroll_employee_salary_daily, 2)}}
+		    		</td>
+		    		<td class="text-right">
+		    			{{number_format($active->payroll_employee_salary_cola, 2)}}
 		    		</td>
 		    		<td class="text-center">
 		    			{{$active->payroll_employee_salary_minimum_wage == 1 ? 'Yes':'No'}}

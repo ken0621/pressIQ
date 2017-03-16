@@ -9,6 +9,7 @@ use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
 use App\Globals\Ecom_product;
 use App\Globals\Pdf_global;
+
 use App\Models\Tbl_customer;
 use App\Models\Tbl_warehousea;
 use App\Models\Tbl_customer_invoice;
@@ -21,6 +22,7 @@ use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_payment_method;
+
 use Request;
 use Carbon\Carbon;
 use Session;
@@ -30,10 +32,10 @@ class ProductOrderController extends Member
 {
     public function index()
     {
-        $data["page"]       = "Customer Invoice";
-        $data["_customer"]  = Tbl_customer::where("archived", 0)->get();
-        $data["_payment"]   = Tbl_payment_method::where("archived", 0)->where("shop_id",$this->user_info->shop_id)->get();
-        $data['_product']      = Ecom_Product::getProductList();
+        $data["page"]               = "Customer Invoice";
+        $data["_customer"]          = Tbl_customer::where("archived", 0)->get();
+        $data["_payment_method"]    = Tbl_payment_method::where("archived", 0)->where("shop_id",$this->user_info->shop_id)->get();
+        $data['_product']           = Ecom_Product::getProductList();
         // dd($data);
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["action"]     = "/member/ecommerce/product_order/create_order/create_invoice";
@@ -117,8 +119,6 @@ class ProductOrderController extends Member
         //         $item_info[$key]['um']                 = null;
         //     }
         // }
-
-
         // $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
 
         $returned_data = Ec_order::create_ec_order(Request::input());
@@ -222,15 +222,7 @@ class ProductOrderController extends Member
         $return["redirect_to"]                = "/member/ecommerce/product_order/create_order?id=".$data["ec_order_id"];
         return json_encode($return);
     }
-    public function  return_to_number($number = '0.00')
-    {
-        $num = explode($number);
-        $return = '';
-        foreach($num as $n){
-            $return .= ''.$n;
-        }
-        return $return;
-    }
+
     public function invoice_view($invoice_id)
     {
         $data["invoice_id"] = $invoice_id;

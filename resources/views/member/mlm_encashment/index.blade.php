@@ -13,7 +13,7 @@
             <!-- <a href="/member/mlm/membership/add" class="panel-buttons btn btn-primary pull-right btn-custom-primary">Add Membership</a> -->
         </div>
     </div>
-</div>
+</div>  
 <form class="global-submit" action="/member/mlm/encashment/update/settings" method="post">
 {!! csrf_field() !!}
 <input type="hidden" value="{{$encashment_settings->enchasment_settings_id}}" name="enchasment_settings_id">

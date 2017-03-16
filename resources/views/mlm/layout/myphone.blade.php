@@ -82,6 +82,13 @@
           border-bottom-left-radius: 3px;
           padding: 10px;
         }
+
+        .nav.side-menu>li>ul>li>a
+        {
+          color: #fff;
+          display: block;
+          padding: 7.5px 0;
+        }
       </style>
    </head>
    <body class="nav-md">
@@ -110,15 +117,38 @@
                      <div class="menu_section">
                         <h3>Members Dashboard</h3>
                         <ul class="nav side-menu">
-                           <li><a href="/mlm"> Home <span class="fa fa-chevron-down"></span></a>
-                           <li><a href="/mlm/profile"> Profile <span class="fa fa-chevron-down"></span></a>
-                           <li><a href="/mlm/notification"> Notification <span class="fa fa-chevron-down"></span></a>
-                           <li><a href="/mlm/repurchase"> Repurchase <span class="fa fa-chevron-down"></span></a>
-                           <li><a> Genealogy <span class="fa fa-chevron-down"></span></a>
-                           <li><a> Report <span class="fa fa-chevron-down"></span></a>
-                           <li><a> Vouchers <span class="fa fa-chevron-down"></span></a>
-                           <li><a> Wallet <span class="fa fa-chevron-down"></span></a>
+                           <li><a href="/mlm"> Home <span class="fa fa-chevron-down"></span></a></li>
+                           <li><a href="/mlm/profile"> Profile <span class="fa fa-chevron-down"></span></a></li>
+                           <li><a href="/mlm/notification"> Notification <span class="fa fa-chevron-down"></span></a></li>
+                           <!-- <li><a href="/mlm/repurchase"> Repurchase <span class="fa fa-chevron-down"></span></a></li> -->
+                           <li>
+                            <a> Genealogy <span class="fa fa-chevron-down"></span></a>
+                            <ul style="display: none;">
+                              <li>
+                                  <a  href="/mlm/genealogy/unilevel">
+                                      Unilevel Genealogy
+                                  </a> 
+                              </li>
+                              <li>
+                                <a href="/mlm/network/unilevel">
+                                  Unilevel Network List
+                                </a>
+                              </li>
+                              <li>
+                                  <a  href="/mlm/genealogy/binary">
+                                      Binary Genealogy
+                                  </a> 
+                              </li>
+                              <li>
+                                <a href="/mlm/network/binary">
+                                  Binary Network List
+                                </a>
+                              </li>
+                            </ul>
                            </li>
+                           <li><a> Report <span class="fa fa-chevron-down"></span></a></li>
+                           <li><a> Vouchers <span class="fa fa-chevron-down"></span></a></li>
+                           <li><a> Wallet <span class="fa fa-chevron-down"></span></a></li>
                         </ul>
                      </div>
                   </div>

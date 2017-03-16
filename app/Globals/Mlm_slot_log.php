@@ -62,8 +62,8 @@ class Mlm_slot_log
 		}
 
 		$wallet_log_id = Tbl_mlm_slot_wallet_log::insertGetId($insert);
-		$wallet_log_data = AuditTrail::get_table_data("tbl_mlm_slot_wallet_log","wallet_log_id",$wallet_log_id);
-		AuditTrail::record_logs("Added","mlm_wallet_log_slot",$wallet_log_id,"",serialize($wallet_log_data));
+		// $wallet_log_data = AuditTrail::get_table_data("tbl_mlm_slot_wallet_log","wallet_log_id",$wallet_log_id);
+		// AuditTrail::record_logs("Added","mlm_wallet_log_slot",$wallet_log_id,"",serialize($wallet_log_data));
 
 		$slot_wallet_all = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $arry_log['wallet_log_slot'])->sum('wallet_log_amount');
 		$slot_wallet_current = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $arry_log['wallet_log_slot'])

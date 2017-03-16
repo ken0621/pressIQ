@@ -6,10 +6,14 @@ $data['sub'] = '';
 $data['icon'] = 'fa fa-retweet';
 ?>  
 @include('mlm.header.index', $data) 
+<center>
+  {!! $tree_level->render() !!}
+</center>
 <div class="col-md-6">
-  <center>LEFT</center>
+  <center>LEFT ({{$left_count}})</center>
   <ul class="timeline">
   @foreach($tree_left as $key => $value)
+
     <li class="time-label">
               <span class="bg-aqua">
                 LEVEL {{$key}}
@@ -25,7 +29,6 @@ $data['icon'] = 'fa fa-retweet';
                     <br>
                     <span style="color: gray;">Membership: </span> {{$value->membership_name}}
                     <br>
-                    <span style="color: gray;">Membership Code: </span> {{$value->membership_activation_code}}
                     <br>
             </div>
             <div class="timeline-footer">
@@ -40,7 +43,7 @@ $data['icon'] = 'fa fa-retweet';
 </div>   
 
 <div class="col-md-6">
-  <center>RIGHT</center>
+  <center>RIGHT ({{$right_count}})</center>
   <ul class="timeline">
   @foreach($tree_right as $key => $value)
     <li class="time-label">
@@ -58,7 +61,6 @@ $data['icon'] = 'fa fa-retweet';
                     <br>
                     <span style="color: gray;">Membership: </span> {{$value->membership_name}}
                     <br>
-                    <span style="color: gray;">Membership Code: </span> {{$value->membership_activation_code}}
                     <br>
             </div>
             <div class="timeline-footer">

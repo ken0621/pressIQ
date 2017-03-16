@@ -21,6 +21,7 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer_invoice_line;
+use App\Models\Tbl_manual_receive_payment;
 use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_unit_measurement_multi;
@@ -52,27 +53,44 @@ class TabletPISController extends Member
 	}
 	public function index()
 	{
-		$data["_sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);
-
+		$data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);
+        if($data["sir"])
+        {
+            $data["_sir_item"] = Purchasing_inventory_system::get_sir_item($data["sir"]->sir_id);
+        }
 		$data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
 		$data["employee_position"] = $this->get_user()->position_name;
 		$data["employee_id"] = $this->get_user()->employee_id;
 
 		$data["ctr_open_sir"] = Tbl_sir::where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->count();
-		$data["open_sir"] = Tbl_sir::truck()->saleagent()->where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->get();
 
-		Session::forget("key");
-		if($data["ctr_open_sir"] != 0)
-		{
-			$str = str_random(5);
-			Session::put("key",$str);
-		}
+		$data["open_sir"] = Tbl_sir::truck()->saleagent()->where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->first();
+        if($data["open_sir"])
+        {   
+            Session::forget("selected_sir");
+            Session::put("selected_sir",$data["open_sir"]->sir_id);
+      
+			$data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_is_paid",0)->get();
 
-		if(Session::get("key") != null)
-		{
-			$data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_customer_invoice.inv_id","DESC")->get();
+            $data["total_invoice_amount"] = 0;
+            foreach ($data["_invoices"] as $key => $value) 
+            {
+                $data["total_invoice_amount"] += $value->inv_overall_price;
+            }
+
+            $data["_receive_payment"] = Tbl_manual_receive_payment::sir()->customer_receive_payment()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_receive_payment.rp_id","DESC")->get();
+            $data["total_receive_payment"] = 0;
+            foreach ($data["_receive_payment"] as $key => $value) 
+            {
+                $data["total_receive_payment"] += $value->rp_total_amount;
+            }
+
+            $data["total_receive_payment"] = currency("Php", $data["total_receive_payment"]);
+            $data["total_invoice_amount"] = currency("Php", $data["total_invoice_amount"]);
+            $data["total_customer"] = Customer::countAllCustomer();
 
 			$data["_customer"] = Customer::getAllCustomer();
+
 
 			return view("tablet.agent.agent_dashboard",$data);
 		}
@@ -91,6 +109,65 @@ class TabletPISController extends Member
 		$data["status"] = "success";
 		return json_encode($data);
 	}
+    public function invoice()
+    {
+        $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
+        $data["employee_position"] = $this->get_user()->position_name;
+        $data["employee_id"] = $this->get_user()->employee_id;
+
+        if(Session::get("selected_sir") != null)
+        {
+            $data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_customer_invoice.inv_id","DESC")->get();
+        }
+        return view("tablet.agent.invoice",$data);
+
+    }
+    public function customer()
+    {   
+        $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
+        $data["employee_position"] = $this->get_user()->position_name;
+        $data["employee_id"] = $this->get_user()->employee_id;
+
+        if(Session::get("selected_sir") != null)
+        {    
+            $data["_customer"] = Customer::getAllCustomer();
+        }
+        return view("tablet.agent.customer",$data);
+    }
+    public function checkuser($str = '')
+    {
+        $user_info = $this->user_info;
+        switch ($str) {
+            case 'user_id':
+                return $user_info->user_id;
+                break;
+            case 'user_shop':
+                return $user_info->user_shop;
+                break;
+            default:
+                return '';
+                break;
+        }
+    }
+    public function customer_details($id)
+    {
+        $data["customer"]       = Tbl_customer::info()->balance($this->checkuser('user_shop'), $id)->where("tbl_customer.customer_id", $id)->first();
+        $data["_transaction"]   = Tbl_customer::transaction($this->checkuser('user_shop'), $id)->get();
+
+        return view("tablet.agent.customer_details",$data);
+    }
+    public function receive_payment()
+    {
+        $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
+        $data["employee_position"] = $this->get_user()->position_name;
+        $data["employee_id"] = $this->get_user()->employee_id;
+
+        if(Session::get("selected_sir") != null)
+        {
+            $data["_receive_payment"] = Tbl_manual_receive_payment::sir()->customer_receive_payment()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_receive_payment.rp_id","DESC")->get();
+        }
+        return view("tablet.agent.receive_payment",$data);
+    }
 	public function review_sir($sir_id)
 	{
         $data["sir_id"] = $sir_id;
@@ -116,12 +193,11 @@ class TabletPISController extends Member
         {
         	$update["lof_status"] = 2;
         	
-            // $update["sir_status"] = 1;
-            // $update["is_sync"] = 1; 
         }
         else if($action == "reject")
         {
         	$update["lof_status"] = 3;
+            $update["rejection_reason"] = Request::input("reason_txt");
         }
 
         Tbl_sir::where("sir_id",$id)->update($update);
@@ -248,6 +324,10 @@ class TabletPISController extends Member
                 $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
 
                 Tbl_receive_payment_line::insert($insert_line);
+                if($insert_line["rpline_reference_name"] == 'invoice')
+                {
+                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                }
             }
         }
 
@@ -257,6 +337,13 @@ class TabletPISController extends Member
         $json["rcvpayment_id"]  = $rcvpayment_id;
         $json["message"]        = "Successfully received payment";
         $json["url"]            = "/tablet/receive_payment";
+
+        $ins_manual_rcv_pymnt["rp_id"] = $rcvpayment_id;
+        $ins_manual_rcv_pymnt["sir_id"] = Session::get("selected_sir");
+        $ins_manual_rcv_pymnt["rp_date"] = Carbon::now();
+        $ins_manual_rcv_pymnt["agent_id"] = $this->get_user()->employee_id;
+
+        Tbl_manual_receive_payment::insert($ins_manual_rcv_pymnt);
 
         if($button_action == "save-and-edit")
         {
@@ -399,7 +486,7 @@ class TabletPISController extends Member
                     }
                 }
 
-                $data["status"] = "success-sir";
+                $data["status"] = "success-tablet";
             }
             else
             {
@@ -490,16 +577,12 @@ class TabletPISController extends Member
 	        if($inv == 0 || Request::input("keep_val") == "keep")
 	        {
 		   		$invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
-		   // $remarks = "Manual Invoice consume";
-		   // $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
-		   // $transaction_type = "invoice";
-		   // $transaction_id = $invoice_id;
-		   // $data = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type, $transaction_id);
-			  
+
 			   if($sir_id != null && $invoice_id != null)
 			   {
 					$insert_manual_invoice["sir_id"] = $sir_id;
-					$insert_manual_invoice["inv_id"] = $invoice_id;
+                    $insert_manual_invoice["inv_id"] = $invoice_id;
+                    $insert_manual_invoice["manual_invoice_date"] = Carbon::now();
 
 					Tbl_manual_invoice::insert($insert_manual_invoice);
 

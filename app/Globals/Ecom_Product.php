@@ -183,7 +183,6 @@ class Ecom_Product
 				unset($_category[$key]);
 			}
 		}
-
 		return $_category;
 	}
 

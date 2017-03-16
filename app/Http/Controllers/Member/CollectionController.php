@@ -22,7 +22,6 @@ class CollectionController extends Member
     {        
         $data["action"] = "/member/ecommerce/product/collection/add_submit";
         $data["_ec_product"] = Tbl_ec_product::where("archived",0)->where("eprod_shop_id",Ecom_Product::getShopId())->get();
-
         $id = Request::input("id");
         if($id)
         {

@@ -32,7 +32,25 @@ class ShopCartController extends Shop
 
     public function remove_cart()
     {
-        $variant_id = Request::input("variant_id");
-        Cart::delete_product($variant_id);
+        $variant_id = Request::input("variation_id");
+        $result = Cart::delete_product($variant_id, $this->shop_info->shop_id);
+
+        echo json_encode($result);
+    }
+
+    public function update_cart()
+    {
+        $variant_id = Request::input("variation_id");
+        $quantity = Request::input("quantity");
+        $result = Cart::update_cart($quantity, $this->shop_info->shop_id);
+
+        echo json_encode($result);
+    }
+
+    public function clear_cart()
+    {
+        $result = Cart::clear_all($this->shop_info->shop_id);
+
+        echo json_encode($result);
     }
 }

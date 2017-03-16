@@ -62,7 +62,9 @@ class EcommerceProductController extends Member
 		if($this->hasAccess("product-list","access_page"))
         {	
         	$warehouse_id = Ecom_Product::getWarehouseId();
-			$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->paginate(10);
+        	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->paginate(10);
+			$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->get()->toArray();
+			dd($active_product);
 			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1)->paginate(10); 
 			
 			/* IF REQUEST TYPE IS AJAX = RETURN ONLY TABLE DATA */ 
@@ -121,7 +123,7 @@ class EcommerceProductController extends Member
 
 		$rules["product_label"] 	= "required";
 		$rules["product_category"] 	= "required";
-
+		dd(Request::input("evariant_item_id"));
 		foreach(Request::input("evariant_item_id") as $key=>$variant_item_id)
 		{
 			$value["variant_item_id"] = $variant_item_id;

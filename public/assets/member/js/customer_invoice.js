@@ -67,10 +67,6 @@ function customer_invoice(){
 		action_date_picker();
 	}
 
-	function action_date_picker()
-	{
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
-	}
 
 	this.action_reassign_number = function()
 	{
@@ -84,6 +80,10 @@ function customer_invoice(){
 			$(this).html(num);
 			num++;
 		});
+	}
+	function action_date_picker()
+	{
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
 	}
 
 	function event_accept_number_only()

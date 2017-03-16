@@ -28,6 +28,10 @@ function currency($symbol,$amount)
 {
     return $symbol ." " .number_format($amount, 2);
 }
+function datepicker_input($date_str)
+{
+    return date("Y-m-d", strtotime($date_str));
+}
 function convertToNumber($str)
 {
     return preg_replace("/([^0-9\\.])/i", "", $str);

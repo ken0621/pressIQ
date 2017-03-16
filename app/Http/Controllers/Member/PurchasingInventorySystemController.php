@@ -552,8 +552,7 @@ class PurchasingInventorySystemController extends Member
         $shop_id = $this->user_info->shop_id;
         $sales_agent_id = Request::input("sales_agent_id");
         $truck_id = Request::input("truck_id");
-        $sir_date = date('Y-d-m',strtotime(Request::input("sir_date")));
-        // dd($sir_date." ".Request::input("sir_date"));
+        $sir_date = datepicker_input(Request::input("sir_date"));
         //array
         $item_id = Request::input("item");
         $item_qty = Request::input("item_qty");

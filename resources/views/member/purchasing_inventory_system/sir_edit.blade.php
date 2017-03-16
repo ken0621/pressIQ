@@ -30,7 +30,7 @@
                     <label>DATE :</label>
                 </div>
                 <div class="col-md-4">
-                    <input type="text" class="datepicker form-control" value="{{date('m/d/Y',strtotime($sir->created_at))}}" name="sir_date">
+                    <input type="text" class="datepicker form-control" value="{{dateFormat($sir->created_at)}}" name="sir_date">
                 </div>
             </div>
             <div class="form-group">

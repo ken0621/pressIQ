@@ -28,7 +28,8 @@
                                 <li><a href="/member/mlm/slot/genealogy?id={{$slot->slot_id}}&mode=sponsor" target="_blank">View Unilevel Genealogy</a></li>
                                 @if(isset($binary_settings->marketing_plan_enable))
                                 <li><a href="/member/mlm/slot/genealogy?id={{$slot->slot_id}}&mode=binary" target="_blank">View Binary Genealogy</a></li>
-                                @endif                              
+                                @endif 
+                                <li><a href="/member/mlm/slot/login?slot={{$slot->slot_id}}" target="_blank">LOGIN</a></li>                             
                               </ul>
                             </div>
                         </td>

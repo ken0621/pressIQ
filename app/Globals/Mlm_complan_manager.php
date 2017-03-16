@@ -193,9 +193,9 @@ class Mlm_complan_manager
         // GET PAIRING SETTINGS / BINARY TREE
         $settings_pairing = Tbl_mlm_binary_pairing::orderBy("pairing_point_left", "desc")->get();
         $binary_advance_pairing = Tbl_mlm_binary_setttings::where('shop_id', $slot_info->shop_id)->first();
-
+        // binary_settings_max_tree_level
         // select max tree level
-        if(isseT($binary_advance_pairing->binary_settings_max_tree_level))
+        if(isset($binary_advance_pairing->binary_settings_max_tree_level))
         {
             $binary_settings_max_tree_level = $binary_advance_pairing->binary_settings_max_tree_level;
         }

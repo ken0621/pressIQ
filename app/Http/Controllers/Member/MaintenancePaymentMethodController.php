@@ -22,6 +22,11 @@ class MaintenancePaymentMethodController extends Member
 
         return view("member.maintenance.payment_method.payment_method_list",$data);
     }
+    public function load_payment_method()
+    {
+        $data["_payment_method"] = Tbl_payment_method::where("archived",0)->where("shop_id",$this->user_info->shop_id)->get();
+        return view('member.load_ajax_data.load_payment_method', $data);
+    }
     public function add()
     {
         $data["action"] = "/member/maintenance/payment_method/add_submit";
@@ -65,8 +70,12 @@ class MaintenancePaymentMethodController extends Member
 
         if($data["status"] == "")
         {
-            $data["status"] = "success";
-            Tbl_payment_method::insert($insert);
+            $payment_method_id = Tbl_payment_method::insert($insert);
+
+            $data["status"]         = "success";
+            $data["type"]           = "payment_method";   
+            $data["message"]        = "success";
+            $data["payment_method_id"] = "payment_method_id";
         }
 
         return json_encode($data);

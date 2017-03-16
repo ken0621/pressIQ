@@ -541,6 +541,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     @endforeach
               @endif   
             @endif
+            <a class="btn btn-primary col-md-12" href="/mlm/slots">View More Slots.</a>
         <!-- /.control-sidebar-menu -->
 
       </div>

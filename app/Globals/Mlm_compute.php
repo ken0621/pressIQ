@@ -315,12 +315,7 @@ class Mlm_compute
         $shop_id = 5;
         Mlm_compute::reset_all_slot();
         Mlm_compute::create_slot_simulate($slot_no, $downline_count);
-<<<<<<< HEAD
         // Mlm_compute::computer($shop_id);
-
-=======
-        Mlm_compute::computer($shop_id);
->>>>>>> f28a9c3e1ad03c7c157b125c3697353778d54cbe
         $d['all_slot'] = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
         ->orderBy('tbl_mlm_slot.slot_id')->membership()->membership_points()->customer()
         ->get();
@@ -371,5 +366,18 @@ class Mlm_compute
         $data['all_slot'] = $d['all_slot'];
         $data['total_cashin'] = $total; 
         return view('member.mlm_slot.simulate', $data);
+    }
+    public static function set_slot_nick_name_2($slot_info)
+    {
+        $count_customer = Tbl_mlm_slot::where('slot_owner', $slot_info->slot_owner)-count();
+        if($count_customer == 0)
+        {
+            $update['slot_defaul'] = 1;
+            // $update['slot_nick_name'] = 
+        }
+    }
+    public static function set_slot_nick_name($slot_info)
+    {
+
     }
 }

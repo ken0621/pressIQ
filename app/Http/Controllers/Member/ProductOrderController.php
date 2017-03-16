@@ -71,6 +71,9 @@ class ProductOrderController extends Member
     }
     public function invoice_list()
     {
+        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Pending")->get();
+        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Unpaid")->get();
+        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Unpaid")->get();
         $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Unpaid")->get();
         $data["ec_order_paid"]   = Tbl_ec_order::customer()->where("order_status","Paid")->get();
         $data["ec_order_void"]   = Tbl_ec_order::customer()->where("order_status","Void")->get();

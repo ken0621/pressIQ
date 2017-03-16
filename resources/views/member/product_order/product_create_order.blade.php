@@ -28,7 +28,37 @@
         </ul> -->
         <div class="tab-content">
             <div class="row">
-                <div class="col-md-12" style="padding: 30px;">
+                <div class="col-md-12" style="padding: 10px 30px;">
+                    <div class="row" style="margin-bottom: 10px">
+                        @if(isset($inv))
+                        <div class="col-sm-12">
+                            <div class="btn-group btn-group-justified" data-toggle="buttons">
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Pending Payment' ? 'active' : '' : 'active'}}">
+                                <input type="radio" name="order_status" id="option1" value="Unpaid"> Pending Payment
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Failed' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option2" value="Paid"> Failed
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Processing' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option3" value="Void"> Processing
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Completed' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option4" value="Void"> Completed
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option5" value="Void"> On-Hold
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option6" value="Void"> Cancelled
+                                </label>
+                                <!-- <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Refunded' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option3" value="Void"> Refunded
+                                </label> -->
+                            </div> 
+                        </div>
+                        @endif
+                    </div>  
+
                     <!-- START CONTENT -->
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
@@ -40,21 +70,6 @@
                             <div class="col-sm-4">
                                 <input {{isset($inv) ? 'disabled' : ''}} type="text" class="form-control input-sm customer-email" name="inv_customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$inv->customer_email or ''}}"/>
                             </div>
-                            @if(isset($inv))
-                            <div class="col-sm-4">
-                                <div class="btn-group btn-group-justified" data-toggle="buttons">
-                                    <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Unpaid' ? 'active' : '' : 'active'}}">
-                                    <input type="radio" name="order_status" id="option1" value="Unpaid"> Unpaid
-                                    </label>
-                                    <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Paid' ? 'active' : '' : ''}}">
-                                    <input type="radio" name="order_status" id="option2" value="Paid"> Paid
-                                    </label>
-                                    <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Void' ? 'active' : '' : ''}}">
-                                    <input type="radio" name="order_status" id="option3" value="Void"> Void
-                                    </label>
-                                </div> 
-                            </div>
-                            @endif
                         </div>
                     </div>
                     <!-- <div class="row clearfix">

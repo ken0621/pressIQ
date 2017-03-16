@@ -1,6 +1,6 @@
 @extends('member.layout')
 @section('content')
-<form class="global-submit-page form-to-submit-transfer" role="form" action="{{$action}}" method="POST" >
+<form class="global-submit form-to-submit-transfer" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" name="ec_order_id" value="{{$ec_order_id or ''}}" >
     <input type="hidden" name="invoice_id" class="invoice_id_container" value="{{Request::input('id')}}" >
@@ -10,7 +10,7 @@
             <div>
                 <i class="fa fa-tags"></i>
                 <h1>
-                    <span class="page-title">{{isset($inv) ? 'View Invoice #'.$inv->ec_order_id : 'Create Invoice'}}</span>
+                    <span class="page-title">{{isset($inv) ? 'View Order #'.$inv->ec_order_id : 'Create Order'}}</span>
                     <small>
                     
                     </small>
@@ -138,7 +138,7 @@
                                                     <td><input disabled class="text-right number-input txt-amount" type="text" name="invline_amount[]" value="{{$invline->total}}" /></td>
                                                     <td class="text-center">
                                                         <input disabled type="hidden" class="invline_taxable" name="invline_taxable[]" value="{{$invline->tax}}" >
-                                                        <input disabled type="checkbox" name="" class="taxable-check" {{$invline->tax == 1 ? 'checked' : ''}}>
+                                                        <input disabled type="checkbox" name="" class="taxable-check compute" {{$invline->tax == 1 ? 'checked' : ''}}>
                                                     </td>
                                                     <td class="text-center cursor-pointer"></td>
                                                 </tr>
@@ -165,7 +165,7 @@
                                                 <td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]"/></td>
                                                 <td class="text-center">
                                                     <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check" value="checked">
+                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -189,7 +189,7 @@
                                                 <td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]"/></td>
                                                 <td class="text-center">
                                                     <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check" value="checked">
+                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -345,7 +345,7 @@
             <td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]"/></td>
             <td class="text-center">
                 <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
-                <input type="checkbox" name="" class="taxable-check" value="checked">
+                <input type="checkbox" name="" class="taxable-check compute" value="checked">
             </td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>

@@ -18,8 +18,8 @@
 
 <div class="panel panel-default panel-block panel-title-block">
     <ul class="nav nav-tabs">
-        <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#active"><i class="fa fa-star"></i> Active User</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"><i class="fa fa-trash" href="#inactive"></i> Inactive User</a></li>
+        <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#actives"><i class="fa fa-star"></i> Active User</a></li>
+        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#inactives"><i class="fa fa-trash"></i> Inactive User</a></li>
     </ul>
     
     <div class="search-filter-box">
@@ -74,7 +74,7 @@
             </div>
         </div>
 
-        <div id="inactive" class="tab-pane fade in">
+        <div id="inactives" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
             <div class="panel-body position-archived-container">
@@ -108,7 +108,6 @@
                 </table>
             </div>
         </div>
-    </div>
     <div>
 </div>
 @endsection

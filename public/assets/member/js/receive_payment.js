@@ -220,7 +220,6 @@ function submit_done(data)
 			$(".drop-down-payment").load("/member/maintenance/load_payment_method", function()
 			{
 				$(this).globalDropList("reload");
-				console.log("id"+data.payment_method_id);
 				$(this).val(data.payment_method_id).change();
 			});
 			data.element.modal("toggle");

@@ -526,39 +526,54 @@ function get_collection($collection_id, $shop_id = null)
 
 function get_collection_first_image($data)
 {
-    // return $data['product']['variant'][0]['image'] ? $data['product']['variant'][0]['image'][0]['image_path'] : '';
+    if(isset($data['product']['variant'][0]))
+    {
+        return $data['product']['variant'][0]['image'] ? $data['product']['variant'][0]['image'][0]['image_path'] : '';
+    }
+    else
+    {
+        return '';
+    }
 }
 
 function get_collection_first_price($data)
 {
-    // return $data['product']['min_price'] == $data['product']['max_price'] ? "&#8369; " . number_format($data['product']['max_price'], 2) : "&#8369; " . number_format($data['product']['min_price'], 2) . " - " . number_format($data['product']['max_price'], 2);
+    if (isset($data['product']['min_price']) && isset($data['product']['max_price'])) 
+    {
+        return $data['product']['min_price'] == $data['product']['max_price'] ? "&#8369; " . number_format($data['product']['max_price'], 2) : "&#8369; " . number_format($data['product']['min_price'], 2) . " - " . number_format($data['product']['max_price'], 2);
+    }
+    else
+    {
+        return "&#8369; 0.00";
+    }
 }
 
 function get_product_first_name($data)
 {
-    return $data['eprod_name'];
+    return isset($data['eprod_name']) ? $data['eprod_name'] : '';
 }
 
 function get_product_first_price($data)
 {
-    // Convert to timestamp
-    // $start_ts = strtotime($data[0]['item_discount_date_start']);
-    // $end_ts = strtotime($data[0]['item_discount_date_end']);
-    // $user_ts = strtotime(strtotime(date("Y-m-d H:i:s")));
-
-    // $result = (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
-
-    // if ($result) 
-    // {
-    //     return $data['min_price'] == $data['max_price'] ? "&#8369; " . number_format($data['max_price'], 2) : "&#8369; " . number_format($data['min_price'], 2) . " - " . number_format($data['max_price'], 2);
-    // }
-    // else
-    // {
+    if (isset($data['min_price']) && isset($data['max_price'])) 
+    {
         return $data['min_price'] == $data['max_price'] ? "&#8369; " . number_format($data['max_price'], 2) : "&#8369; " . number_format($data['min_price'], 2) . " - " . number_format($data['max_price'], 2);
-    // }
+    }
+    else
+    {
+        return "&#8369; 0.00";
+    }
 }
 
 function get_product_first_image($data)
 {
-    return $data['variant'][0]['image'] ? $data['variant'][0]['image'][0]['image_path'] : '';
+    if (isset($data['variant'][0])) 
+    {
+        return $data['variant'][0]['image'] ? $data['variant'][0]['image'][0]['image_path'] : '';
+    }
+    else
+    {
+        return '';
+    }
+    
 }

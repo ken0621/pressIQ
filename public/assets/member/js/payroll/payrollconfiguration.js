@@ -161,10 +161,10 @@ function payrollconfiguration()
 		load_configuration(action, "POST",target, formdata);
 	}
 
-	this.executeFunctionByName = function(functionName)
-	{
-		executeFunctionByName(functionName, window);
-	}
+	// this.executeFunctionByName = function(functionName)
+	// {
+	// 	executeFunctionByName(functionName, window);
+	// }
 
 	this.relaod_tbl_department = function()
 	{
@@ -189,22 +189,26 @@ function payrollconfiguration()
 		});
 	}
 
-	/* CALL A FUNCTION BY NAME */
-	function executeFunctionByName(functionName, context /*, args */) {
-	  var args = [].slice.call(arguments).splice(2);
-	  var namespaces = functionName.split(".");
-	  var func = namespaces.pop();
-	  for(var i = 0; i < namespaces.length; i++) {
-	    context = context[namespaces[i]];
-	  }
-	  return context[func].apply(context, args);
-	}
+	
+	
 }
+
+/* CALL A FUNCTION BY NAME */
+function executeFunctionByName(functionName, context /*, args */) {
+  var args = [].slice.call(arguments).splice(2);
+  var namespaces = functionName.split(".");
+  var func = namespaces.pop();
+  for(var i = 0; i < namespaces.length; i++) {
+    context = context[namespaces[i]];
+  }
+  return context[func].apply(context, args);
+}
+
 function submit_done(data)
 {
-	payrollconfiguration.executeFunctionByName(data.function_name);
-	console.log(data.function_name);
-	$("#global_modal").modal("hide");
+	executeFunctionByName(data.function_name, window);
+	// $("#global_modal").modal("hide");
+	data.element.modal("toggle");
 }
 
 function loading_done(url)

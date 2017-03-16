@@ -30,6 +30,9 @@ use App\Models\Tbl_payroll_philhealth;
 use App\Models\Tbl_payroll_pagibig_default;
 use App\Models\Tbl_payroll_pagibig;
 use App\Models\Tbl_payroll_deduction_type;
+use App\Models\Tbl_payroll_deduction;
+use App\Models\Tbl_payroll_deduction_employee;
+use App\Models\Tbl_payroll_deduction_payment;
 
 use App\Globals\Payroll;
 
@@ -1014,6 +1017,8 @@ class PayrollController extends Member
 
 	public function modal_create_deduction()
 	{
+		$array = array();
+		Session::put('employee_deduction_tag',$array);
 		return view('member.payroll.modal.modal_create_deduction');
 	}
 
@@ -1081,10 +1086,76 @@ class PayrollController extends Member
 		return json_encode($data);
 	}
 
+	public function modal_deduction_tag_employee()
+	{
+		$data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+		return view('member.payroll.modal.modal_deduction_tag_employee', $data);
+	}
+
 	public function modal_save_dedution()
 	{
 		
 	}
+
+	public function ajax_deduction_tag_employee()
+	{
+		$company 	= Request::input('company');
+		$department = Request::input('department');
+		$jobtitle 	= Request::input('jobtitle');
+
+
+		$emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->groupBy('tbl_payroll_employee_basic.payroll_employee_id')->get();
+		// dd($emp);
+		return json_encode($emp);
+	}
+
+	public function set_employee_deduction_tag()
+	{
+		$employee_tag = Request::input('employee_tag');
+		$array = array();
+		if(Session::has('employee_deduction_tag'))
+		{
+			$array = Session::get('employee_deduction_tag');
+		}
+
+		foreach($employee_tag as $tag)
+		{
+			if(!in_array($tag, $array))
+			{
+				array_push($array, $tag);
+			}
+		}
+		Session::put('employee_deduction_tag', $array);
+
+		$return['status'] = 'success';
+		$return['function_name'] = 'modal_create_deduction.load_tagged_employee';
+		return json_encode($return);
+	}
+
+	public function get_employee_deduction_tag()
+	{	
+		$employee = [0 => 0];
+		if(Session::has('employee_deduction_tag'))
+		{
+			$employee = Session::get('employee_deduction_tag');
+		}
+		$emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+
+		$data['new_record'] = $emp;
+		return json_encode($data);
+	}
+
+	public function remove_from_tag_session()
+	{
+		$content = Request::input('content');
+		$array 	 = Session::get('employee_deduction_tag');
+		if(($key = array_search($content, $array)) !== false) {
+		    unset($array[$key]);
+		}
+		Session::put('employee_deduction_tag', $array);
+	}
+
 	/* DEDUCTION END */
 
 

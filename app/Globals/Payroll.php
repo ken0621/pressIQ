@@ -10,6 +10,8 @@ use App\Models\Tbl_payroll_philhealth_default;
 use App\Models\Tbl_payroll_philhealth;
 use App\Models\Tbl_payroll_pagibig_default;
 use App\Models\Tbl_payroll_pagibig;
+use App\Models\Tbl_payroll_employee_search;
+use App\Models\Tbl_payroll_employee_basic;
 
 use Carbon\Carbon;
 
@@ -138,5 +140,42 @@ class Payroll
 			$insertlog['requirements_copy_date']	= Carbon::now();
 			Tbl_payroll_copy_log_requirements::insert($insertlog);
 		}
+	}
+
+	/* TABLE FOR EMPLOYEE SEARCH INSERT OR UPDATE */
+	public static function generate_emplyoee_search($employee_id = 0)
+	{
+
+		if($employee_id == 0)
+		{
+			// $_emp 	= Tbl_payroll_employee_basic::get();
+			// $insert = array();
+			// foreach($_emp as $key => $emp)
+			// {
+			// 	$insert[$key]['payroll_search_employee_id'] = $emp->payroll_employee_id;
+			// 	$insert[$key]['body'] = $emp->payroll_employee_title_name.' '.$emp->payroll_employee_first_name.' '.$emp->payroll_employee_middle_name.' '.$emp->payroll_employee_last_name.' '.$emp->payroll_employee_suffix_name.' '.$emp->payroll_employee_display_name.' '.$emp->payroll_employee_email;
+
+			// }
+			// Tbl_payroll_employee_search::insert($insert);
+		}
+		else
+		{
+			$count = Tbl_payroll_employee_search::where('payroll_search_employee_id', $employee_id)->count();
+			$employee = Tbl_payroll_employee_basic::where('payroll_search_employee_id', $employee_id)->first();
+
+			$search['body'] = $employee->payroll_employee_title_name.' '.$employee->payroll_employee_first_name.' '.$employee->payroll_employee_middle_name.' '.$employee->payroll_employee_last_name.' '.$employee->payroll_employee_suffix_name.' '.$employee->payroll_employee_display_name.' '.$employee->payroll_employee_email;
+			if($count == 0)
+			{
+				$search['payroll_search_employee_id'] = $employee_id;
+				Tbl_payroll_employee_search::insert($search);
+			}
+			else
+			{
+				Tbl_payroll_employee_search::where('payroll_search_employee_id',$employee_id)->update($search);
+			}
+		}
+		
+
+
 	}
 }

@@ -13,9 +13,13 @@ class CreateTblPayrollEmployeeSearch extends Migration
     public function up()
     {
         Schema::create('tbl_payroll_employee_search', function (Blueprint $table) {
+            $table->engine = 'MyISAM'; // means you can't use foreign key constraints
             $table->increments('payroll_employee_search_id');
-            $table->timestamps();
+            $table->integer('payroll_search_employee_id');
+            $table->text('body');
         });
+
+        DB::statement('ALTER TABLE tbl_payroll_employee_search ADD FULLTEXT search(body)');
     }
 
     /**

@@ -93,6 +93,12 @@
 				
 			</div>
 		</div>
+		<div class="form-group">
+			<div class="col-md-12">
+				<small>Remarks</small>
+				<textarea class="form-control textarea-expand" name="payroll_deduction_remarks"></textarea>
+			</div>
+		</div>
 		<hr>
 		<div class="form-group">
 			<div class="col-md-12">
@@ -122,3 +128,4 @@
 	</div>
 </form>
 <script type="text/javascript" src="/assets/member/js/payroll/modal_create_deduction.js"></script>
+<script type="text/javascript" src="/assets/member/js/textExpand.js"></script>

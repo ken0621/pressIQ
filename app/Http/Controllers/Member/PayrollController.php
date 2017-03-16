@@ -1095,7 +1095,17 @@ class PayrollController extends Member
 
 	public function modal_save_dedution()
 	{
-		
+		$insert['shop_id'] 						= Self::shop_id();
+		$insert['payroll_deduction_name'] 		= Request::input('payroll_deduction_name');
+		$insert['payroll_deduction_amount'] 	= Request::input('payroll_deduction_amount');
+		$insert['payroll_monthly_amortization'] = Request::input('payroll_monthly_amortization');
+		$insert['payroll_periodal_deduction'] 	= Request::input('payroll_periodal_deduction');
+		$insert['payroll_deduction_date_filed'] = Request::input('payroll_deduction_date_filed');
+		$insert['payroll_deduction_date_start'] = Request::input('payroll_deduction_date_start');
+		$insert['payroll_deduction_period'] 	= Request::input('payroll_deduction_period');
+		$insert['payroll_deduction_category'] 	= Request::input('payroll_deduction_category');
+		$insert['payroll_deduction_type'] 		= Request::input('payroll_deduction_type');
+		$insert['payroll_deduction_remarks'] 	= Request::input('payroll_deduction_remarks');
 	}
 
 	public function ajax_deduction_tag_employee()

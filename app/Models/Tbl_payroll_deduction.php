@@ -13,6 +13,7 @@ class Tbl_payroll_deduction extends Model
 
     /* COLUMN REFERENCE NAME */
 	// [PRIMARY KEY] 	payroll_deduction_id
+	// [INTEGER]		shop_id
 	// [VARCHAR] 		payroll_deduction_name
 	// [DOUBLE] 		payroll_deduction_amount
 	// [DOUBLE] 		payroll_monthly_amortization

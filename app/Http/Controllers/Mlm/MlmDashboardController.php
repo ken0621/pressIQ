@@ -8,7 +8,6 @@ use View;
 use Validator;
 
 use App\Globals\Mlm_member;
-
 use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_mlm;
 use App\Models\Tbl_mlm_slot_wallet_log;
@@ -17,10 +16,12 @@ use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_lead;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_mlm_slot_points_log;
+
 class MlmDashboardController extends Mlm
 {
     public function index()
     {
+        // return Mlm_member::add_to_session_edit(5, 301, 1);
     	// return Self::show_maintenance();
         $data["page"] = "Dashboard";
         if(Self::$slot_id != null)
@@ -40,6 +41,7 @@ class MlmDashboardController extends Mlm
         }
         
         $data['news'] = Self::news();
+        
         return view("mlm.dashboard", $data);
     }
     public static function income_discount()
@@ -70,6 +72,7 @@ class MlmDashboardController extends Mlm
         ->where('marketing_plan_code', '!=', 'MEMBERSHIP_MATCHING')
         ->where('marketing_plan_code', '!=', 'LEADERSHIP_BONUS')
         ->where('marketing_plan_code', '!=', 'DISCOUNT_CARD')
+        ->where('marketing_plan_code', '!=', 'BINARY')
         ->get();
         // dd($data['plan_settings']);
         foreach($data['plan_settings_2'] as $key => $value)
@@ -84,8 +87,13 @@ class MlmDashboardController extends Mlm
             // if()
         }
 
+        $binary = 0;
         foreach($data['plan_settings'] as $key => $value)
         {
+            if($value->marketing_plan_code == 'BINARY')
+            {
+                $binary = 1;
+            }
         	$data['earning'][$key] = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', $value->marketing_plan_code)
         	->where('wallet_log_slot', $slot_id)
         	->sum('wallet_log_amount');
@@ -94,7 +102,10 @@ class MlmDashboardController extends Mlm
         		$data['earning'][$key] = 0;
         	}
         }
-
+        $data['binary'] = $binary;
+        $data['left'] = Self::$slot_now->slot_binary_left;
+        $data['right'] = Self::$slot_now->slot_binary_right;
+        // dd($binary);
     	return view('mlm.dashboard.income', $data);
     }
     public static function no_slot($shop_id)
@@ -140,7 +151,7 @@ class MlmDashboardController extends Mlm
     }
     public static function news()
     {
-    	$data["_post"] = Tbl_post::where("archived", 0)->get();
+    	$data["_post"] = Tbl_post::where("archived", 0)->where('shop_id', Self::$shop_id)->get();
 
     	return view('mlm.dashboard.news', $data);
     }

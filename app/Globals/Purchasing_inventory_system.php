@@ -64,11 +64,11 @@ class Purchasing_inventory_system
     {
         $sir_data["sir"] = Tbl_sir::saleagent()->truck()->where("sir_id",$sir_id)->first();
 
-        $return = 'Rejected by Sales Agent <strong>'. $sir_data["sir"]->first_name." ".$sir_data["sir"]->middle_name." ".$sir_data["sir"]->last_name."</strong>";
+        $return = 'Rejected by Sales Agent <strong>'. $sir_data["sir"]->first_name." ".$sir_data["sir"]->middle_name." ".$sir_data["sir"]->last_name."</strong> <br><br><div class='text-center'> <strong >Reason : </strong><br>".$sir_data["sir"]->rejection_reason."</div>";
         if($sir_data["sir"]->ilr_status == 2 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
         {
 
-        $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+        $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
             <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
@@ -78,7 +78,7 @@ class Purchasing_inventory_system
         }
         else if($sir_data["sir"]->ilr_status == 1 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
         {
-           $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+           $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
             <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
@@ -88,7 +88,7 @@ class Purchasing_inventory_system
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
         {
-             $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+             $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
             <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
@@ -98,7 +98,7 @@ class Purchasing_inventory_system
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 0)
         {
-            $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+            $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
             <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
@@ -108,7 +108,7 @@ class Purchasing_inventory_system
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 0 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 0)
         {
-             $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+             $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
             <div class="col-md-12" style="text-decoration: line-through;">2. Confirmation of Load Out form by Sales Agent </div>
             <div class="col-md-12" >3. Convert LoadOutForm to SIR (Click <a size="md" link="/member/pis/sir/open/'.$sir_id.'/open" class="popup">here</a> to convert to SIR)</div>
             <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
@@ -118,7 +118,7 @@ class Purchasing_inventory_system
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 0 && $sir_data["sir"]->lof_status == 1 && $sir_data["sir"]->is_sync == 0)
         {
-                 $return = '<div class="col-md-12" style="text-decoration: line-through;">1. New Load Out Form</div>
+                 $return = '<div class="col-md-12" style="text-decoration: line-through;">1. Create Load Out Form</div>
             <div class="col-md-12" >2. Confirmation of Load Out form by Sales Agent </div>
             <div class="col-md-12" >3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
@@ -142,6 +142,17 @@ class Purchasing_inventory_system
     public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
+    public static function get_sir_item($sir_id)
+    {
+        $data["item"] = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->get();
+        foreach ($data["item"] as $key => $value) 
+        {   
+            $um_qty = UnitMeasurement::um_qty($value->related_um_type);
+            $data["item"][$key]->qty = UnitMeasurement::um_view($value->item_qty * $um_qty, $value->item_measurement_id, $value->related_um_type);   
+        }
+        $return_data = $data["item"];
+        return $return_data;
     }
     public static function get_sir_data($sir_id)
     {        
@@ -355,37 +366,28 @@ class Purchasing_inventory_system
     }
     public static function tablet_lof_per_sales_agent($shop_id = 0, $return = 'array',$status = 0, $srch_sir = '', $agent_id)
     {
-        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+        $data["sir"] = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
                         ->where("lof_status",$status)
-                        ->where("tbl_sir.sales_agent_id",$agent_id)
-                        ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
-                        ->orderBy("tbl_sir.sir_id","DESC")->get();
-
-        // dd($data);
-        foreach ($data as $key => $value) 
-        {              
-            $data[$key]->total_amount = "";
-            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+                        ->where("tbl_sir.sales_agent_id",$agent_id)->first();
+        if($data["sir"])
+        {
+            $item = Tbl_sir_item::where("sir_id",$data["sir"]->sir_id)->get();
             $price = "";
             foreach ($item as $key2 => $value2)
             {   
-                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();   
-                $qty = 1;
-                if($unit_m != null)
-                {
-                    $qty = $unit_m->unit_qty;
-                }
+                $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
             }
 
-            $data[$key]->total_amount += $price; 
+            $data["sir"]->total_amount = $price; 
         }
 
-         if($return == "json")
+        $return_data = $data["sir"];
+        if($return == "json")
         {
-            $data = json_encode($data);
+            $return_data = json_encode($return_data);
         }
-        return $data;
+        return $return_data;
 
     }
     public static function tablet_sir_per_sales_agent($shop_id = 0, $return = 'array',$status = 0,$archived = 0, $srch_sir = '',$is_sync = 0, $agent_id)

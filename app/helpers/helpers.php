@@ -1,6 +1,11 @@
 <?php
 use App\Globals\Ecom_Product;
 
+function c_time_to_int($time)
+{
+    $time = date("H:i", strtotime($time));
+    return strtotime("01/01/70 " . $time);
+}
 function createPath($path)
 {
     if (is_dir($path)) return true;
@@ -521,12 +526,12 @@ function get_collection($collection_id, $shop_id = null)
 
 function get_collection_first_image($data)
 {
-    return $data['product']['variant'][0]['image'] ? $data['product']['variant'][0]['image'][0]['image_path'] : '';
+    // return $data['product']['variant'][0]['image'] ? $data['product']['variant'][0]['image'][0]['image_path'] : '';
 }
 
 function get_collection_first_price($data)
 {
-    return $data['product']['min_price'] == $data['product']['max_price'] ? "&#8369; " . number_format($data['product']['max_price'], 2) : "&#8369; " . number_format($data['product']['min_price'], 2) . " - " . number_format($data['product']['max_price'], 2);
+    // return $data['product']['min_price'] == $data['product']['max_price'] ? "&#8369; " . number_format($data['product']['max_price'], 2) : "&#8369; " . number_format($data['product']['min_price'], 2) . " - " . number_format($data['product']['max_price'], 2);
 }
 
 function get_product_first_name($data)
@@ -536,7 +541,21 @@ function get_product_first_name($data)
 
 function get_product_first_price($data)
 {
-    return $data['min_price'] == $data['max_price'] ? "&#8369; " . number_format($data['max_price'], 2) : "&#8369; " . number_format($data['min_price'], 2) . " - " . number_format($data['max_price'], 2);
+    // Convert to timestamp
+    // $start_ts = strtotime($data[0]['item_discount_date_start']);
+    // $end_ts = strtotime($data[0]['item_discount_date_end']);
+    // $user_ts = strtotime(strtotime(date("Y-m-d H:i:s")));
+
+    // $result = (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
+
+    // if ($result) 
+    // {
+    //     return $data['min_price'] == $data['max_price'] ? "&#8369; " . number_format($data['max_price'], 2) : "&#8369; " . number_format($data['min_price'], 2) . " - " . number_format($data['max_price'], 2);
+    // }
+    // else
+    // {
+        return $data['min_price'] == $data['max_price'] ? "&#8369; " . number_format($data['max_price'], 2) : "&#8369; " . number_format($data['min_price'], 2) . " - " . number_format($data['max_price'], 2);
+    // }
 }
 
 function get_product_first_image($data)

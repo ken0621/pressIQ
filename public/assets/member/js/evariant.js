@@ -43,7 +43,7 @@ function variant()
 		{
 			link: '/member/item/add',
 		    link_size: 'lg',
-		    width: '50%',
+		    width: '100%',
 		    maxHeight: "309px",
 		    placeholder: 'Item',
             onCreateNew : function()

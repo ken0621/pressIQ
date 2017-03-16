@@ -1,7 +1,7 @@
 @extends("layout")
 @section("content")
 <div class="banner-image">
-	<img src="/themes/{{ $shop_theme }}/img/front-banner.png">
+	<img src="{{ get_content($shop_theme_info, "home", "home_banner", "/themes/". $shop_theme ."/img/front-banner.png") }}">
 	<button id="shop-now-button">SHOP NOW</button>
 </div>
 
@@ -11,7 +11,7 @@
 		<div class="row clearfix">
 			<div class="col-md-12">
 				<div class="featured-content-container">
-					<div class="container-title"><i class="fa fa-star-o" aria-hidden="true"></i><span class="title">FEATURED</span><span class="scroll-button"><a href="#"><img src="/themes/{{ $shop_theme }}/img/left-button-scroll.png"></a><a href="#"><img src="/themes/{{ $shop_theme }}/img/right-button-scroll.png"></a></span></div>
+					<div class="container-title"><i class="fa fa-star-o" aria-hidden="true"></i><span class="title">{{ get_content($shop_theme_info, "home", "home_category_title", "FEATURED") }}</span><span class="scroll-button"><a href="#"><img src="/themes/{{ $shop_theme }}/img/left-button-scroll.png"></a><a href="#"><img src="/themes/{{ $shop_theme }}/img/right-button-scroll.png"></a></span></div>
 				</div>
 				<div class="content-container">
 					<div class="row clearfix">

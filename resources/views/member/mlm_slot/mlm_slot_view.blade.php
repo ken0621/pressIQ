@@ -33,20 +33,14 @@
 				    		<thead>
 				    			<th>Amount</th>
 				    			<th>Complan</th>
-				    			<th>Date Earned</th>
-				    			<th>Date Claimable</th>
-				    			<th>Log</th>
 				    		</thead>
 				    		<tbody>
-				    			@if(count($wallet_logs) != 0)
-				    				@foreach($wallet_logs as $key => $value)
-						    			<tr>
-						    				<td>{{$value->wallet_log_amount}}</td>
-						    				<td>{{$value->wallet_log_plan}}</td>
-						    				<td>{{$value->wallet_log_date_created}}</td>
-						    				<td>{{$value->wallet_log_claimbale_on}}</td>
-						    				<td><p>{{$value->wallet_log_details}}</p></td>
-						    			</tr>	
+				    			@if(count($plan_settings) != 0)
+				    				@foreach($plan_settings as $key => $value)
+				    				<tr>
+				    					<td>{{$value->marketing_plan_label}}</td>
+				    					<td>{{$plan_ernings[$key]}}</td>
+				    				</tr>
 				    				@endforeach
 				    			@else
 				    				<tr>

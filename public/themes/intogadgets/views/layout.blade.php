@@ -28,7 +28,7 @@
 
     <link rel="stylesheet" href="resources/assets/remodal/src/jquery.remodal.css">
 
-    <link rel="stylesheet" href="/resources/assets/slider/dist/slippry.css">
+    <link rel="stylesheet" href="resources/assets/slider/dist/slippry.css">
 
     <link rel="stylesheet" href="resources/assets/bootstrap/css/bootstrap.css">
 
@@ -36,7 +36,7 @@
 
     <link rel="stylesheet" type="text/css" href="/resources/assets/slick/slick-theme.css">
 
-    <link href="/resources/assets/footable/css/footable.core.css" rel="stylesheet" type="text/css" />
+    <link href="resources/assets/footable/css/footable.core.css" rel="stylesheet" type="text/css" />
 
     @yield('css')
 
@@ -895,23 +895,23 @@
 
   </script>
 
-  <script src="/resources/assets/external/jquery.min.js"></script> 
+  <script src="resources/assets/external/jquery.min.js"></script> 
 
-  <script src="/resources/assets/external/bootstrap.min.js"></script>
+  <script src="resources/assets/external/bootstrap.min.js"></script>
 
-  <script src="/resources/assets/remodal/src/jquery.remodal.js"></script>
+  <script src="resources/assets/remodal/src/jquery.remodal.js"></script>
 
-  <script src="/resources/assets/rutsen/js/lazy.js"></script>
+  <script src="resources/assets/rutsen/js/lazy.js"></script>
 
-  <script src="/resources/assets/rutsen/js/global.js"></script>
+  <script src="resources/assets/rutsen/js/global.js"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 
   <script type="text/javascript" src="http://arrow.scrolltotop.com/arrow33.js"></script>
 
-  <script src="/resources/assets/slider/dist/slippry.min.js"></script>
+  <script src="resources/assets/slider/dist/slippry.min.js"></script>
 
-  <script src="/resources/assets/footable/js/footable.js" type="text/javascript"></script>
+  <script src="resources/assets/footable/js/footable.js" type="text/javascript"></script>
 
   <script type="text/javascript" src="/resources/assets/slick/slick.min.js"></script>
 

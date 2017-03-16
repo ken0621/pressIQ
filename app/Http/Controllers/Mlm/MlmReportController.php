@@ -43,8 +43,15 @@ class MlmReportController extends Mlm
     }
     public static function binary()
     {
-        return Self::show_maintenance();
-
+        // return Self::show_maintenance();
+        $data['report']     = Mlm_member_report::get_wallet('BINARY', Self::$slot_id); 
+        $data['plan']       = Mlm_member_report::get_plan('BINARY', Self::$shop_id); 
+        $data['header'] = Mlm_member_report::header($data['plan']);
+        foreach($data['report'] as $key => $value)
+        {
+            $data['level'][$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
+            ->where('sponsor_tree_child_id', $value->wallet_log_slot_sponsor)->pluck('sponsor_tree_level');
+        }
         $data["page"] = "Report - Binary";
         return view("mlm.report.report_binary", $data);
     }

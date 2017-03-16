@@ -1,4 +1,4 @@
-<form class="global-submit" role="form" action="/member/payroll/departmentlist/modal_update_department" method="POST">
+<form class="global-submit" role="form" action="/member/payroll/deduction/modal_save_deduction" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Create Deduction</h4>
@@ -8,34 +8,34 @@
 		<div class="form-group">
 			<div class="col-md-12">
 				<small>Deduction Name</small>
-				<input type="text" name="" class="form-control" required>
+				<input type="text" name="payroll_deduction_name" class="form-control" required>
 			</div>
 		</div>
 		<div class="form-group">
 			<div class="col-md-12">
 				<small>Deduction Amount</small>
-				<input type="number" name="" class="form-control text-right" step="any" required>
+				<input type="number" name="payroll_deduction_amount" class="form-control text-right" step="any" required>
 			</div>
 			
 		</div>
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Monthly Amortization</small>
-				<input type="number" name="" class="form-control text-right" step="any" required>
+				<input type="number" name="payroll_monthly_amortization" class="form-control text-right" step="any" required>
 			</div>
 			<div class="col-md-6">
 				<small>Periodical Deduction</small>
-				<input type="number" name="" class="form-control text-right" step="any" required>
+				<input type="number" name="payroll_periodal_deduction" class="form-control text-right" step="any" required>
 			</div>
 		</div>
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Date filed</small>
-				<input type="text" name="" class="form-control datepicker">
+				<input type="text" name="payroll_deduction_date_filed" class="form-control datepicker" required>
 			</div>
 			<div class="col-md-6">
 				<small>Date start</small>
-				<input type="text" name="" class="form-control datepicker">
+				<input type="text" name="payroll_deduction_date_start" class="form-control datepicker" required>
 			</div>
 		</div>
 		<div class="form-group">
@@ -46,22 +46,22 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="radio">
-									<label><input type="radio" name="deduction_period">First Period</label>
+									<label><input type="radio" name="payroll_deduction_period" value="First Period">First Period</label>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="radio">
-									<label><input type="radio" name="deduction_period">Second Period</label>
+									<label><input type="radio" name="payroll_deduction_period" value="Second Period">Second Period</label>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="radio">
-									<label><input type="radio" name="deduction_period">Every other Period</label>
+									<label><input type="radio" name="payroll_deduction_period" value="Every other Period">Every other Period</label>
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="radio">
-									<label><input type="radio" name="deduction_period" checked>Every Period</label>
+									<label><input type="radio" name="payroll_deduction_period" checked value="Every Period">Every Period</label>
 								</div>
 							</div>
 						</div>
@@ -72,7 +72,7 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Category</small>
-				<select class="form-control deduction-category-change" required>
+				<select class="form-control deduction-category-change" name="payroll_deduction_category" required>
 					<option value="">Select Category</option>
 					<option value="Cash Advance">Cash Advance</option>
 					<option value="Cash Bond">Cash Bond</option>
@@ -83,7 +83,7 @@
 			<div class="col-md-6">
 				<small>Type</small>
 				<div class="input-group">
-					<select class="form-control select-deduction-type" required>
+					<select class="form-control select-deduction-type" name="payroll_deduction_type" required>
 						<option value="">Select Type</option>
 					</select>
 					<span class="input-group-btn">
@@ -93,74 +93,39 @@
 				
 			</div>
 		</div>
+		<div class="form-group">
+			<div class="col-md-12">
+				<small>Remarks</small>
+				<textarea class="form-control textarea-expand" name="payroll_deduction_remarks"></textarea>
+			</div>
+		</div>
 		<hr>
 		<div class="form-group">
 			<div class="col-md-12">
-				<small>Search Employee</small>
-				<div class="input-group">
-					<span class="input-group-btn">
-						<button class="btn btn-custom-primary" type="button"><i class="fa fa-search"></i></button>
-					</span>
-					<input type="search" name="" class="form-control">
-				</div>
-				
+				<span><b>Affected Employee</b><button class="btn btn-custom-primary pull-right popup" type="button" link="/member/payroll/deduction/modal_deduction_tag_employee">Tag Employee</button></span>
 			</div>
 		</div>
 		<div class="form-group">
 			<div class="col-md-12">
-				
+				<table class="table table-condensed table-bordered">
+					<thead>
+						<tr>
+							<th>Employee Name</th>
+							<th width="5%"></th>
+						</tr>
+					</thead>
+					<tbody class="table-employee-tag">
+						
+					</tbody>
+				</table>
 			</div>
 		</div>
+		
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
 		<button class="btn btn-custom-primary btn-submit" type="submit">Save</button>
 	</div>
 </form>
-<script type="text/javascript">
-	$(".datepicker").datepicker();
-	$(".deduction-category-change").on("change", function()
-	{
-		if($(this).val() != "")
-		{
-			if(!$(".btn-add-type").hasClass("popup"))
-			{
-				$(".btn-add-type").addClass("popup");
-			}
-			var link = "/member/payroll/deduction/modal_create_deduction_type/";
-			link += $(this).val().replace(/ /g,"_");
-
-			$(".btn-add-type").attr("link", link);
-		}
-		else
-		{
-			$(".btn-add-type").removeClass("popup");
-			$(".btn-add-type").removeAttr("link");
-		}
-		var pre_load = "<option value=''>...loading</option>";
-		$(".select-deduction-type").html(pre_load);
-		$.ajax({
-			url 	: 	"/member/payroll/deduction/ajax_deduction_type",
-			type 	: 	"POST",
-			data 	: 	{
-				_token:$("#_token").val(),
-				category:$(this).val()
-			},
-			success : 	function(result)
-			{
-				result = JSON.parse(result);
-				var html = "<option value=''>Select Type</option>";
-				$(result).each(function(index, data)
-				{	
-					html += "<option value='"+data.payroll_deduction_type_id+"'>"+data.payroll_deduction_type_name+"</option>";
-				});
-				$(".select-deduction-type").html(html);
-			},
-			error 	: 	function(err)
-			{
-				toastr.error("Error, something went wrong.");
-			}
-		});
-		
-	});
-</script>
+<script type="text/javascript" src="/assets/member/js/payroll/modal_create_deduction.js"></script>
+<script type="text/javascript" src="/assets/member/js/textExpand.js"></script>

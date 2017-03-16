@@ -337,17 +337,21 @@ class AuditTrail
             else if($value->source == "mlm_wallet_log_slot")
             {                
                 $transaction = Tbl_mlm_slot_wallet_log::slot()->customer()->where("wallet_log_id",$value->source_id)->first();
-                $transaction_date = date("m/d/y", strtotime($transaction->wallet_log_date_created));
-                $transaction_client = $transaction->title_name." ".$transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name." ".$transaction->suffix_name;
-
-                $old[$key] = unserialize($value->new_data);
-                $amount = $transaction->wallet_log_amount;
-                if(isset($old))
+                if($transaction != null)
                 {
-                    $amount = $old[$key]["wallet_log_amount"];
-                    $transaction_new_id = $old[$key]["wallet_log_id"];
+                    $transaction_date = date("m/d/y", strtotime($transaction->wallet_log_date_created));
+                    $transaction_client = $transaction->title_name." ".$transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name." ".$transaction->suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->wallet_log_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["wallet_log_amount"];
+                        $transaction_new_id = $old[$key]["wallet_log_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);
+
                 }
-                $transaction_amount = currency("PHP",$amount);
             }
             else if($value->source == "mlm_encashment_settings")
             {                

@@ -1012,7 +1012,9 @@ class PayrollController extends Member
 	/* DEDUCTION START */
 	public function deduction()
 	{
-		return view('member.payroll.side_container.deduction');
+		$data['_active'] = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')->get();
+		$data['_archived'] = Tbl_payroll_deduction::seldeduction(Self::shop_id(), 1)->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')->get();
+		return view('member.payroll.side_container.deduction', $data);
 	}
 
 	public function modal_create_deduction()
@@ -1093,19 +1095,41 @@ class PayrollController extends Member
 		return view('member.payroll.modal.modal_deduction_tag_employee', $data);
 	}
 
-	public function modal_save_dedution()
+	public function modal_save_deduction()
 	{
 		$insert['shop_id'] 						= Self::shop_id();
 		$insert['payroll_deduction_name'] 		= Request::input('payroll_deduction_name');
 		$insert['payroll_deduction_amount'] 	= Request::input('payroll_deduction_amount');
 		$insert['payroll_monthly_amortization'] = Request::input('payroll_monthly_amortization');
 		$insert['payroll_periodal_deduction'] 	= Request::input('payroll_periodal_deduction');
-		$insert['payroll_deduction_date_filed'] = Request::input('payroll_deduction_date_filed');
-		$insert['payroll_deduction_date_start'] = Request::input('payroll_deduction_date_start');
+		$insert['payroll_deduction_date_filed'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_filed')));
+		$insert['payroll_deduction_date_start'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_start')));
 		$insert['payroll_deduction_period'] 	= Request::input('payroll_deduction_period');
 		$insert['payroll_deduction_category'] 	= Request::input('payroll_deduction_category');
 		$insert['payroll_deduction_type'] 		= Request::input('payroll_deduction_type');
 		$insert['payroll_deduction_remarks'] 	= Request::input('payroll_deduction_remarks');
+
+		$deduction_id = Tbl_payroll_deduction::insertGetId($insert);
+
+		if(Session::has('employee_deduction_tag'))
+		{
+			$employee_tag = Session::get('employee_deduction_tag');
+			$insert_employee = '';
+			foreach($employee_tag as $key => $tag)
+			{
+				$insert_employee['payroll_deduction_id']  	= $deduction_id;
+				$insert_employee['payroll_employee_id']		= $tag;
+			}
+			if($insert_employee != '')
+			{
+				Tbl_payroll_deduction_employee::insert($insert_employee);
+			}
+		}
+
+		$return['stataus'] = 'success';
+		$return['function_name'] = '';
+		return json_encode($return);
+
 	}
 
 	public function ajax_deduction_tag_employee()

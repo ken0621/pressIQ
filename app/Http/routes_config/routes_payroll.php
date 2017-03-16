@@ -106,6 +106,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/deduction/set_employee_deduction_tag',"Member\PayrollController@set_employee_deduction_tag");
 	Route::any('/deduction/get_employee_deduction_tag',"Member\PayrollController@get_employee_deduction_tag");
 	Route::any('/deduction/remove_from_tag_session',"Member\PayrollController@remove_from_tag_session");
+	Route::any('/deduction/modal_save_deduction',"Member\PayrollController@modal_save_deduction");
 	/* DEDUCTION END */
 
 

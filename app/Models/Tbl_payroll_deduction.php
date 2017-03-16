@@ -25,4 +25,12 @@ class Tbl_payroll_deduction extends Model
 	// [INTEGER] 		payroll_deduction_type
 	// [TEXT] 			payroll_deduction_remarks
 	// [TINY INTEGER] 	payroll_deduction_archived
+
+	public function scopeseldeduction($query, $shop_id  = 0, $payroll_deduction_archived = 0)
+	{
+		$query->leftjoin('tbl_payroll_deduction_type','tbl_payroll_deduction_type.payroll_deduction_type_id','=','tbl_payroll_deduction.payroll_deduction_type')
+			->where('tbl_payroll_deduction.shop_id', $shop_id)
+			->where('tbl_payroll_deduction.payroll_deduction_archived', $payroll_deduction_archived);
+		return $query;
+	}
 }

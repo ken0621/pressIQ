@@ -1,4 +1,4 @@
-<form class="global-submit" role="form" action="/member/payroll/departmentlist/modal_update_department" method="POST">
+<form class="global-submit" role="form" action="/member/payroll/deduction/modal_save_deduction" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Create Deduction</h4>
@@ -31,11 +31,11 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Date filed</small>
-				<input type="text" name="payroll_deduction_date_filed" class="form-control datepicker">
+				<input type="text" name="payroll_deduction_date_filed" class="form-control datepicker" required>
 			</div>
 			<div class="col-md-6">
 				<small>Date start</small>
-				<input type="text" name="payroll_deduction_date_start" class="form-control datepicker">
+				<input type="text" name="payroll_deduction_date_start" class="form-control datepicker" required>
 			</div>
 		</div>
 		<div class="form-group">

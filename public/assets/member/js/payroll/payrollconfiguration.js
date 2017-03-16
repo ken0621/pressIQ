@@ -18,10 +18,15 @@ function payrollconfiguration()
 		{
 			e.preventDefault();
 			var link 		= $(this).attr("href");
-			var formdata 	= {_token:misc('_token')};
-			var target 		= ".configuration-div";
-			load_configuration(link, "POST", target, formdata);
+			reload_configuration(link);
 		});
+	}
+
+	function reload_configuration(link = "")
+	{
+		var formdata 	= {_token:misc('_token')};
+		var target 		= ".configuration-div";
+		load_configuration(link, "POST", target, formdata);
 	}
 
 	function load_configuration(action = "", method = "POST", target = ".configuration-div", formdata = [])
@@ -189,6 +194,7 @@ function payrollconfiguration()
 		});
 	}
 
+	// this.relaod_
 	
 	
 }
@@ -206,9 +212,9 @@ function executeFunctionByName(functionName, context /*, args */) {
 
 function submit_done(data)
 {
-	executeFunctionByName(data.function_name, window);
-	// $("#global_modal").modal("hide");
 	data.element.modal("toggle");
+	data = JSON.parse(data);
+	executeFunctionByName(data.function_name, window);
 }
 
 function loading_done(url)

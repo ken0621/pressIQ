@@ -63,7 +63,7 @@ class EcommerceProductController extends Member
         {	
         	$warehouse_id = Ecom_Product::getWarehouseId();
         	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->paginate(10);
-			$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->get()->toArray();
+			// $active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->get()->toArray();
 			// dd($active_product);
 			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1)->paginate(10); 
 			

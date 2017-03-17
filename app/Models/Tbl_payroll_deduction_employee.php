@@ -27,4 +27,11 @@ class Tbl_payroll_deduction_employee extends Model
 
 		return $query;
 	}
+
+	public function scopegetemployee($query, $payroll_deduction_employee_id = 0)
+	{
+		$query->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_deduction_employee.payroll_employee_id')
+			 ->where('payroll_deduction_employee_id', $payroll_deduction_employee_id);
+		return $query;
+	}
 }

@@ -198,6 +198,11 @@ function payrollconfiguration()
 	{
 		reload_configuration("/member/payroll/deduction");
 	}
+
+	this.reload_allowance = function()
+	{
+		reload_configuration("/member/payroll/allowance");
+	}
 	
 	
 }

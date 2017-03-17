@@ -21,7 +21,7 @@
         </div>
         <div class="cart-item-text">&#8369; {{ number_format($cart["cart_product_information"]["product_price"], 2) }}</div>
         <div class="cart-item-text"><button class="compute-cart" compute="-1">-</button><input name="qty[{{ $cart["cart_product_information"]["variant_id"] }}]" class="text-center product-qty" type="text" value="{{ $cart['quantity'] }}"><button class="compute-cart" compute="1">+</button></div>
-        <div class="cart-item-text text-right total-price"></div>
+        <div class="cart-item-text text-right">&#8369; <span class="total-price"></span></div>
       </div>
       @endforeach
       <!-- ENDFOREACH -->
@@ -31,7 +31,7 @@
       <button onclick="location.href='/checkout'; return false;" class="cart-content-go text-center">Checkout</button>
       
       <div class="super-holder"><span>Total</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-         <div class="cart-content-price text-right super-total">{{ $get_cart["sale_information"]["total_product_price"] }}</div></div>
+         <div class="cart-content-price text-right">&#8369; <span class="super-total">{{ $get_cart["sale_information"]["total_product_price"] }}</span></div></div>
     </div>
 
     <div class="feature-items">

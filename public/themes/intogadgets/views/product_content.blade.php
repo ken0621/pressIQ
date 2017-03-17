@@ -117,7 +117,7 @@
             </div>
          </div>
       </div>
-      <div class="single-detail clear">
+      <div class="single-detail clear hide">
          <div class="single-detail-header">
             <div class="single-detail-tab single-tab" data-id="single-detail-description">DETAILS</div>
             <div class="single-detail-tab single-tab active" data-id="single-detail-review">REVIEWS</div>

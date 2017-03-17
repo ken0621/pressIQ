@@ -84,7 +84,7 @@ class Customer
 		$insert["company"]      = isset($customer_info['customer_company'])
 									  ? $customer_info['customer_company'] : '';
 		$insert["b_day"]        = isset($customer_info['customer_birthdate'])
-									  ? $customer_info['customer_birthdate'] : '';
+									  ? datepicker_input($customer_info['customer_birthdate']) : '';
 		$insert["IsWalkin"]     = isset($customer_info['customer_iswalkin'])
 									  ? $customer_info['customer_iswalkin'] : 0;
 		$insert["created_date"] = Carbon::now();

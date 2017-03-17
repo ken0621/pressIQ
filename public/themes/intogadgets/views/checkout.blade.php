@@ -230,29 +230,29 @@
 						</tr>
 					</thead>
 					<tbody>
-						
+						@foreach($get_cart["cart"] as $cart)
 						<tr>
-							<td></td>
-							<td class="text-center"></td>
-							<td class="text-right"></td>
+							<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
+							<td class="text-center">{{ $cart["quantity"] }}</td>
+							<td class="text-right">{{ $cart["cart_product_information"]["product_price"] }}</td>
 						</tr>
-						
+						@endforeach
 					</tbody>
 				</table>
 				<div class="text-right total">
-					<div class="total-price"></div>
+					<div class="total-price">{{ $get_cart["sale_information"]["total_product_price"] }}</div>
 					<div class="total-label">Subtotal</div>
 				</div>	
-				<div class="text-right total">
+				<!-- <div class="text-right total">
 					<div class="total-price"></div>
 					<div class="total-label">tax()</div>
-				</div>
+				</div> -->
 				<div class="text-right total">
-					<div class="total-price"></div>
+					<div class="total-price">{{ $get_cart["sale_information"]["total_shipping"] }}</div>
 					<div class="total-label">Shipping Fee</div>
 				</div>
 				<div class="text-right total ">
-					<div class="total-price supertotal"></div>
+					<div class="total-price supertotal">{{ $get_cart["sale_information"]["total_overall_price"] }}</div>
 					<div class="total-label">Total</div>
 				</div>
 			</div>

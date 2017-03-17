@@ -43,6 +43,7 @@ use App\Globals\Mlm_complan_manager_repurchase;
 use App\Globals\Utilities;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_member;
+use App\Globals\Mlm_discount;
 // use App\Globals\Mlm_compute;
 use Crypt;
 class MLM_SlotController extends Member
@@ -985,6 +986,12 @@ class MLM_SlotController extends Member
             // return Mlm_complan_manager::leadership_bonus_earn_2(15);
             // dd($s);
 
+        }
+        else if($code == 'discount')
+        {
+            // return 1;
+            $shop_id = 5;
+            return Mlm_discount::get_discount_all_membership($shop_id, 9);
         }
     }
 }

@@ -8,6 +8,7 @@ use View;
 use App\Globals\Cart;
 use App\Models\Tbl_country;
 use App\Models\Tbl_online_pymnt_method;
+use App\Globals\Customer;
 use Validator;
 
 class ShopCheckoutController extends Shop
@@ -78,7 +79,10 @@ class ShopCheckoutController extends Shop
             $cart["payment_method_id"] = Request::input("payment_method_id");
             $cart["taxable"] = Request::input("taxable");
             $cart["shop_id"] = $this->shop_info->shop_id;
-            dd($cart);
+
+            $result = Customer::createCustomer($this->shop_info->shop_id ,$cart);
+            
+            return Redirect::to("/");
         }
     }
     public function order_placed()

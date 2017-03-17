@@ -38,11 +38,12 @@
          <div class="single-order-content">
             <div class="single-order-description">
                <div class="title">DESCRIPTION</div>
+               <div>{!! $product_variant['evariant_description'] !!}</div>
             </div>
-            <div class="divider"></div>
+            <!-- <div class="divider"></div>
             <div class="single-order-description">
                <div class="title">PACKAGE INCLUSION</div>
-            </div>
+            </div> -->
             <div class="price-container">
                <div id="single-order-price" class="single-order-price"></div>
                <div class="single-order-availability"></div>
@@ -88,7 +89,7 @@
             </div>
             <!-- <button class="single-order-button " pid="" vid="" mode="cart" onclick="window.open('','_blank')">BUY NOW</button> 
             <button href="product/#order" class="single-order-button order-button add-cart" mode="reservation">STORE PICK-UP</button> -->
-            <button type="button" class="single-order-button add-to-cart" variant-id="{{ $product_variant['evariant_id'] }}">ADD TO CART</button>
+            <button type="button" class="single-order-button add-to-cart disabled" variant-id="{{ $product_variant['evariant_id'] }}" disabled>ADD TO CART</button>
             <div class="divider" style="margin: 35px 0;"></div>
             <div class="single-order-rate" id="single-product-rate">
                @for ($i = 1; $i <= 5; $i++)

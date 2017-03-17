@@ -219,7 +219,6 @@ class Cart
         $data["sale_information"]["total_coupon_discount"]             = $total_coupon_discount; 
         $data["sale_information"]["total_overall_price"]               = $total_overall_price; 
 
-        dd($data);
         return $data;
     }
 

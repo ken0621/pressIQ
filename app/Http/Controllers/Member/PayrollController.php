@@ -35,6 +35,8 @@ use App\Models\Tbl_payroll_deduction_employee;
 use App\Models\Tbl_payroll_deduction_payment;
 use App\Models\Tbl_payroll_allowance;
 use App\Models\Tbl_payroll_employee_allowance;
+use App\Models\Tbl_payroll_holiday;
+use App\Models\Tbl_payroll_holiday_company;
 
 use App\Globals\Payroll;
 
@@ -1323,8 +1325,134 @@ class PayrollController extends Member
 	/* HOLIDAY START */
 	public function holiday()
 	{
-		return view('member.payroll.side_container.holiday');
+
+		$data['_active'] = Tbl_payroll_holiday::getholiday(Self::shop_id())->orderBy('payroll_holiday_date','desc')->get();
+		$data['_archived'] = Tbl_payroll_holiday::getholiday(Self::shop_id(), 1)->orderBy('payroll_holiday_date','desc')->get();
+
+		return view('member.payroll.side_container.holiday',$data);
 	}
+
+	public function modal_create_holiday()
+	{
+		$data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();
+		return view('member.payroll.modal.modal_create_holiday', $data);
+	}
+
+	public function modal_save_holiday()
+	{
+		
+		$insert['shop_id']					= Self::shop_id();
+		$insert['payroll_holiday_name'] 	= Request::input('payroll_holiday_name');
+		$insert['payroll_holiday_date'] 	= date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
+		$insert['payroll_holiday_category'] = Request::input('payroll_holiday_category');
+
+		$holiday_id = Tbl_payroll_holiday::insertGetId($insert);
+
+		$_company 							= Request::input('company');
+
+		$insert_company = array();
+
+		foreach($_company as $company)
+		{
+
+			$temp['payroll_company_id'] = $company;
+			$temp['payroll_holiday_id'] = $holiday_id;
+			array_push($insert_company, $temp);
+		}
+
+		if(!empty($insert_company))
+		{
+			Tbl_payroll_holiday_company::insert($insert_company);
+		}
+
+		$return['status'] = 'success';
+		$return['function_name'] = 'payrollconfiguration.reload_holiday';
+		return json_encode($return);
+	}
+
+	public function archive_holiday($archive, $id)
+	{
+		$statement = 'archive';
+		if($archive == 0)
+		{
+			$statement = 'restore';
+		}
+		$file_name 			= Tbl_payroll_holiday::where('payroll_holiday_id', $id)->pluck('payroll_holiday_name');
+		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
+		$data['html'] 		= '';
+		$data['action'] 	= '/member/payroll/holiday/archive_holiday_action';
+		$data['id'] 		= $id;
+		$data['archived'] 	= $archive;
+
+		return view('member.modal.modal_confirm_archived', $data);
+	}
+
+	public function archive_holiday_action()
+	{
+		$id = Request::input('id');
+		$update['payroll_holiday_archived'] = Request::input('archived');
+		Tbl_payroll_holiday::where('payroll_holiday_id', $id)->update($update);
+
+
+		$return['status'] = 'success';
+		$return['function_name'] = 'payrollconfiguration.reload_holiday';
+		return json_encode($return);
+	}
+
+	public function modal_edit_holiday($id)
+	{
+		// $data['']
+		$_company = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();
+		$company_check = array();
+		foreach($_company as $company)
+		{
+			$count = Tbl_payroll_holiday_company::company($company->payroll_company_id, $id)->count();
+			$status = '';
+			if($count != 0)
+			{
+				$status = 'checked';
+			}
+			$temp['payroll_company_id'] 	= $company->payroll_company_id;
+			$temp['payroll_company_name'] 	= $company->payroll_company_name;
+			$temp['status']					= $status;
+			array_push($company_check, $temp);
+		}
+
+		$data['_company'] = $company_check;
+		$data['holiday'] = Tbl_payroll_holiday::where('payroll_holiday_id',$id)->first();
+		return view('member.payroll.modal.modal_edit_holiday', $data);
+	}
+
+	public function modal_update_holiday()
+	{
+		$payroll_holiday_id 				= Request::input('payroll_holiday_id');
+		$update['payroll_holiday_name'] 	= Request::input('payroll_holiday_name');
+		$update['payroll_holiday_date'] 	= date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
+		$update['payroll_holiday_category'] = Request::input('payroll_holiday_category');
+		$_company 							= Request::input('company');
+
+		Tbl_payroll_holiday::where('payroll_holiday_id',$payroll_holiday_id)->update($update);
+
+		Tbl_payroll_holiday_company::where('payroll_holiday_id',$payroll_holiday_id)->delete();
+
+		$insert_company = array();
+		foreach($_company as $company)
+		{
+			$temp['payroll_company_id'] = $company;
+			$temp['payroll_holiday_id'] = $payroll_holiday_id;
+			array_push($insert_company, $temp);
+		}
+		if(!empty($insert_company))
+		{
+			Tbl_payroll_holiday_company::insert($insert_company);
+		}
+
+		$return['status'] 			= 'success';
+		$return['function_name'] 	= 'payrollconfiguration.reload_holiday';
+		return json_encode($return);
+
+	}
+
 	/* HOLIDAY END */
 
 	/* ALLOWANCE START */
@@ -1528,4 +1656,17 @@ class PayrollController extends Member
 		return view('member.payroll.side_container.leave');
 	}
 	/* LEAVE END */
+
+
+	/* PAYROLL GROUP START */
+	public function payroll_group()
+	{
+		return view('member.payroll.side_container.payroll_group');
+	}
+
+	public function modal_create_payroll_group()
+	{
+		return view('member.payroll.modal.modal_create_payroll_group');
+	}
+	/* PAYROLL GROUP END */
 }

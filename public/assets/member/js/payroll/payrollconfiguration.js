@@ -204,6 +204,10 @@ function payrollconfiguration()
 		reload_configuration("/member/payroll/allowance");
 	}
 	
+	this.reload_holiday = function()
+	{
+		reload_configuration("/member/payroll/holiday");
+	}
 	
 }
 

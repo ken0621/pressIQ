@@ -156,7 +156,7 @@ function submit_done(data)
 {
 	if(data.type == 'product-info')
 	{
-		$("#global_modal").modal("toggle");
+		data.element.modal("hide");
 	}
 	else
 	{

@@ -309,7 +309,7 @@ class TabletPISController extends Member
 		$insert["rp_shop_id"]           = $this->getShopId();
         $insert["rp_customer_id"]       = Request::input('rp_customer_id');
         $insert["rp_ar_account"]        = Request::input('rp_ar_account') or 0;
-        $insert["rp_date"]              = date("Y-m-d", strtotime(Request::input('rp_date')));
+        $insert["rp_date"]              = datepicker_input(Request::input('rp_date'));
         $insert["rp_total_amount"]      = convertToNumber(Request::input('rp_total_amount'));
         $insert["rp_payment_method"]    = Request::input('rp_payment_method');
         $insert["rp_memo"]              = Request::input('rp_memo');
@@ -362,7 +362,7 @@ class TabletPISController extends Member
 
         $update["rp_customer_id"]       = Request::input('rp_customer_id');
         $update["rp_ar_account"]        = Request::input('rp_ar_account') or 0;
-        $update["rp_date"]              = date("Y-m-d", strtotime(Request::input('rp_date')));
+        $update["rp_date"]              = datepicker_input(Request::input('rp_date'));
         $update["rp_total_amount"]      = convertToNumber(Request::input('rp_total_amount'));
         $update["rp_payment_method"]    = Request::input('rp_payment_method');
         $update["rp_memo"]              = Request::input('rp_memo');
@@ -415,8 +415,8 @@ class TabletPISController extends Member
         $invoice_info                       = [];
         $invoice_info['invoice_terms_id']   = Request::input('inv_terms_id');
         $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
-        $invoice_info['invoice_date']       = Request::input('inv_date');
-        $invoice_info['invoice_due']        = Request::input('inv_due_date');
+        $invoice_info['invoice_date']       = datepicker_input(Request::input('inv_date'));
+        $invoice_info['invoice_due']        = datepicker_input(Request::input('inv_due_date'));
         $invoice_info['billing_address']    = Request::input('inv_customer_billing_address');
 
         $invoice_other_info                 = [];
@@ -521,8 +521,8 @@ class TabletPISController extends Member
 		$invoice_info                       = [];
 		$invoice_info['invoice_terms_id']   = Request::input('inv_terms_id');
         $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
-		$invoice_info['invoice_date']       = Request::input('inv_date');
-		$invoice_info['invoice_due']        = Request::input('inv_due_date');
+		$invoice_info['invoice_date']       = datepicker_input(Request::input('inv_date'));
+		$invoice_info['invoice_due']        = datepicker_input(Request::input('inv_due_date'));
 		$invoice_info['billing_address']    = Request::input('inv_customer_billing_address');
 
 		$invoice_other_info                 = [];

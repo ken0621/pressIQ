@@ -9,6 +9,7 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_user;
 use App\Models\Tbl_customer_other_info;
 use DB;
+use Carbon\Carbon;
 class Customer
 {
 
@@ -30,68 +31,6 @@ class Customer
         $data['order_id'] = $order_id;
         dd();
         return $data;
-	}
-	public static function sales($customer = null){
-	    $data = array();
-	    if($customer != null){
-	        
-	        foreach($customer as $key => $cust){
-	            $data[$key]['customer_id'] = $cust->customer_id;
-	            $company = '';
-	            if($cust->email != ''){
-	            	$company = ' / '.$cust->email;
-	            }
-	            $data[$key]['name'] = $cust->first_name.' '.$cust->last_name.$company;
-	            $data[$key]['location'] = $cust->province.', '.$cust->country_code;
-	            $data[$key]['email'] = $cust->email;
-	            $data[$key]['phone'] = $cust->phone;
-	            $_order = Tbl_order::where('customer_id',$cust->customer_id)->orderBy('tbl_order_id','asc')->get();
-	            $lastorder = '';
-	            $totalorder = 0;
-	            $totalSpent = 0;
-	            
-	            foreach($_order as $k => $order){
-	                $_item = Tbl_order_item::where('tbl_order_id',$order->tbl_order_id)->get();
-	                $tempTotal = 0;
-	                foreach($_item as $item){
-	                    $temp = 0;
-	                    $amount = $item->item_amount;
-	                    $quantity = $item->quantity;
-	                    $discount = $item->discount;
-	                    $discount_var = $item->discount_var;
-	                    
-	                    $temp = $amount *  $quantity;
-	                    if($discount_var != 'amount'){
-	                        $discount = $temp * ($discount / 100);
-	                    }
-	                    $tempTotal += $temp - $discount;
-	                }
-	                $tempDiscount = $order->discount;
-	                $tempdiscountvar = $order->discount_var;
-	                $shipping = $order->shipping_amount;
-	                $isTaxExempt = $order->isTaxExempt;
-	                $hasTax = $order->hasTax;
-	                $tax_percentage = $order->tax_percentage;
-	                $tempTAx = 0;
-	                if($tempdiscountvar != 'amount'){
-	                    $tempDiscount = $tempTotal * ($tempDiscount / 100);
-	                }
-	                if($isTaxExempt == 0 && $hasTax == 1){
-	                    $tempTAx = ($tempTotal - $tempDiscount) * ($tax_percentage / 100);
-	                }
-	                $lastorder = $order->tbl_order_id;
-	                $totalSpent += $tempTAx + $shipping + ($tempTotal - $tempDiscount);
-	                $totalorder++;
-	            }   
-	            $data[$key]['lastorder'] = $lastorder;
-	            $data[$key]['totalorder'] = $totalorder;
-	            $data[$key]['totalSpent'] = $totalSpent;
-	        }
-	        return $data;
-	    }
-	    else{
-	        return '';
-	    }
 	}
 	
 	public static function search($str = '', $shop_id = 0, $archived = 0){
@@ -123,9 +62,50 @@ class Customer
 		$count = Tbl_customer::where("tbl_customer.archived", 0)->where("shop_id", Customer::getShopId())->count();
 		return $count;
 	}
-	public static function getAllTransaction()
+
+	public static function createCustomer($shop_id, $customer_info)
 	{
-		
+		$insert["shop_id"] 		= $shop_id;
+		$insert["title_name"] 	= $customer_info['customer_title_name'] or '';
+		$insert["first_name"] 	= $customer_info['customer_first_name'] or '';
+		$insert["middle_name"]  = $customer_info['customer_middle_name'] or '';
+		$insert["last_name"]    = $customer_info['customer_last_name'] or '';
+		$insert["suffix_name"]  = $customer_info['customer_suffix_name'] or '';
+		$insert["email"]        = $customer_info['customer_email'] or '';
+		$insert["password"]     = $customer_info['customer_password'] or '';
+		$insert["company"]      = $customer_info['customer_company'] or '';
+		$insert["b_day"]        = $customer_info['customer_birthdate'] or '';
+		$insert["IsWalkin"]     = $customer_info['customer_iswalkin'] or '';
+		$insert["created_date"] = Carbon::now();
+
+		$customer_id = Tbl_customer::insertGetId($insert);
+
+		$insertAddress[0]['customer_id'] 		= $customer_id;
+		$insertAddress[0]['country_id'] 		= $customer_info['customer_country_id'] or '';
+		$insertAddress[0]['customer_state'] 	= $customer_info['customer_state_province'] or '';
+		$insertAddress[0]['customer_city'] 		= $customer_info['customer_city'] or '';
+		$insertAddress[0]['customer_zipcode'] 	= $customer_info['customer_zipcode'] or '';
+		$insertAddress[0]['customer_street'] 	= $customer_info['customer_address'] or '';
+		$insertAddress[0]['purpose'] 			= 'billing';
+
+		$insertAddress[1]['customer_id'] 		= $customer_id;
+		$insertAddress[1]['country_id'] 		= $customer_info['customer_country_id_ship'] or '';
+		$insertAddress[1]['customer_state'] 	= $customer_info['customer_state_province_ship'] or '';
+		$insertAddress[1]['customer_city'] 		= $customer_info['customer_city_ship'] or '';
+		$insertAddress[1]['customer_zipcode'] 	= $customer_info['customer_zipcode_ship'] or '';
+		$insertAddress[1]['customer_street'] 	= $customer_info['customer_address_ship'] or '';
+		$insertAddress[1]['purpose'] 			= 'shipping';
+
+		Tbl_customer_address::insert($insertAddress);
+
+		$insertOtherInfo['customer_id'] 	= $customer_id;
+		$insertOtherInfo['customer_phone'] 	= $customer_info['customer_phone'] or '';
+		$insertOtherInfo['customer_mobile'] = $customer_info['customer_mobile'] or '';
+		$insertOtherInfo['customer_notes'] 	= $customer_info['customer_notes'] or '';
+
+		Tbl_customer_other_info::insert($insertOtherInfo);
+
+		return $customer_id;
 	}
 
 }

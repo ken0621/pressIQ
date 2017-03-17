@@ -146,6 +146,7 @@ class Ecom_Product
 		foreach($_product as $key=>$product)
 		{
 			$_product_value[$category_id."-".$key] = Ecom_Product::getProduct($product["eprod_id"], $shop_id);
+			if($_product_value[$category_id."-".$key] == null) unset($_product_value[$category_id."-".$key]);
 		}
 
 		$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived",0)->get()->toArray();
@@ -183,7 +184,6 @@ class Ecom_Product
 				unset($_category[$key]);
 			}
 		}
-
 		return $_category;
 	}
 
@@ -200,23 +200,28 @@ class Ecom_Product
 			$shop_id = Ecom_Product::getShopId();
 		}
 
-		$product = Tbl_ec_product::price()->where("eprod_id", $product_id)->where("tbl_ec_product.archived",0)->first()->toArray();
+		$product = Tbl_ec_product::price()->where("eprod_id", $product_id)->where("tbl_ec_product.archived",0)->first();
 
-		$product			   	= $product;
-		$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
-
-		foreach($product["variant"] as $key2=>$variant)
+		if($product)
 		{
-			$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
-			$product["variant"]["$key2"]["image"] = Tbl_ec_variant_image::path()->where("eimg_variant_id", $variant["evariant_id"])->get()->toArray();
+			$product = collect($product)->toArray();
 
-			foreach($variant_option_name as $key3=>$option_name)
+			$product			   	= $product;
+			$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+
+			foreach($product["variant"] as $key2=>$variant)
 			{
-				$variant_option_value = Tbl_option_value::where("option_value_id", $option_name["option_value_id"])->first()->toArray();
-				$product["variant"][$key2]["options"][$option_name['option_name']] = $variant_option_value["option_value"];
+				$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
+				$product["variant"]["$key2"]["image"] = Tbl_ec_variant_image::path()->where("eimg_variant_id", $variant["evariant_id"])->get()->toArray();
+
+				foreach($variant_option_name as $key3=>$option_name)
+				{
+					$variant_option_value = Tbl_option_value::where("option_value_id", $option_name["option_value_id"])->first()->toArray();
+					$product["variant"][$key2]["options"][$option_name['option_name']] = $variant_option_value["option_value"];
+				}
 			}
 		}
-		
+
 		return $product;
 	}
 

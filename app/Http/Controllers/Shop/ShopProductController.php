@@ -20,7 +20,7 @@ class ShopProductController extends Shop
         $product = Ecom_Product::getAllProductByCategory(Request::input("type"), $this->shop_info->shop_id);
         $perPage = 12;
         $data["_product"] = self::paginate($product, $perPage);
-        
+
         return view("product", $data);
     }
     public function paginate($items,$perPage)

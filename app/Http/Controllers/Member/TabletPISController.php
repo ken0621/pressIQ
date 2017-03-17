@@ -42,7 +42,7 @@ class TabletPISController extends Member
 	 */
 	public function confirm_submission()
 	{
-		$data["action"] = "sync";
+		$data["action"] = "close";
 
 		return view("tablet.agent.confirm_sync",$data);
 	}

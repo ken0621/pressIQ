@@ -43,7 +43,7 @@ class CreditMemoController extends Member
         $customer_info[] = null;
         $customer_info["cm_customer_id"] = Request::input("cm_customer_id");
         $customer_info["cm_customer_email"] = Request::input("cm_customer_email");
-        $customer_info["cm_date"] = Request::input("cm_date");
+        $customer_info["cm_date"] = datepicker_input(Request::input("cm_date"));
         $customer_info["cm_message"] = Request::input("cm_message");
         $customer_info["cm_memo"] = Request::input("cm_memo");
         $customer_info["cm_amount"] = Request::input("overall_price");
@@ -52,7 +52,7 @@ class CreditMemoController extends Member
         $_items = Request::input("cmline_item_id");
         foreach ($_items as $key => $value) 
         {           
-            $item_info[$key]['item_service_date']  = Request::input('cmline_service_date')[$key];
+            $item_info[$key]['item_service_date']  = datepicker_input(Request::input('cmline_service_date')[$key]);
             $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
             $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
             $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
@@ -75,7 +75,7 @@ class CreditMemoController extends Member
         $customer_info[] = null;
         $customer_info["cm_customer_id"] = Request::input("cm_customer_id");
         $customer_info["cm_customer_email"] = Request::input("cm_customer_email");
-        $customer_info["cm_date"] = Request::input("cm_date");
+        $customer_info["cm_date"] = datepicker_input(Request::input("cm_date"));
         $customer_info["cm_message"] = Request::input("cm_message");
         $customer_info["cm_memo"] = Request::input("cm_memo");
         $customer_info["cm_amount"] = Request::input("overall_price");
@@ -84,7 +84,7 @@ class CreditMemoController extends Member
         $_items = Request::input("cmline_item_id");
         foreach ($_items as $key => $value) 
         {           
-            $item_info[$key]['item_service_date']  = Request::input('cmline_service_date')[$key];
+            $item_info[$key]['item_service_date']  = datepicker_input(Request::input('cmline_service_date')[$key]);
             $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
             $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
             $item_info[$key]['um']                 = Request::input('cmline_um')[$key];

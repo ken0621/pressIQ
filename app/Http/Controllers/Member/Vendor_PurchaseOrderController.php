@@ -68,8 +68,8 @@ class Vendor_PurchaseOrderController extends Member
 
         $po_info                            = [];
         $po_info['po_terms_id']             = Request::input('po_terms_id');
-        $po_info['po_date']                 = Request::input('po_date');
-        $po_info['po_due_date']             = Request::input('po_due_date');
+        $po_info['po_date']                 = datepicker_input(Request::input('po_date'));
+        $po_info['po_due_date']             = datepicker_input(Request::input('po_due_date'));
         $po_info['billing_address']         = Request::input('po_billing_address');
 
         $po_other_info                      = [];
@@ -123,8 +123,8 @@ class Vendor_PurchaseOrderController extends Member
 
         $po_info                            = [];
         $po_info['po_terms_id']             = Request::input('po_terms_id');
-        $po_info['po_date']                 = Request::input('po_date');
-        $po_info['po_due_date']             = Request::input('po_due_date');
+        $po_info['po_date']                 = datepicker_input(Request::input('po_date'));
+        $po_info['po_due_date']             = datepicker_input(Request::input('po_due_date'));
         $po_info['billing_address']         = Request::input('po_billing_address');
 
         $po_other_info                      = [];

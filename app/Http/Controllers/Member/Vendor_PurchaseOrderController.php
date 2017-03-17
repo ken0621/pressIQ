@@ -36,8 +36,9 @@ class Vendor_PurchaseOrderController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["action"]     = "/member/vendor/purchase_order/create_po";
-
+        $data["v_id"]       = Request::input("vendor_id");
         $id = Request::input('id');
+
         if($id)
         {
             $data["po"]            = Tbl_purchase_order::where("po_id", $id)->first();

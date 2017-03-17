@@ -174,7 +174,7 @@ class Cart
                     }
                 }
 
-                $current_price                                                                    = $item->item_price - isset($item_discounted_value) ? $item_discounted_value : 0;
+                $current_price                                                                    = $item->evariant_price - $item_discounted_value;
                 $data["cart"][$key]["cart_product_information"]["product_discounted"]             = isset($item_discounted) ? $item_discounted : null;
                 $data["cart"][$key]["cart_product_information"]["product_discounted_value"]       = isset($item_discounted_value) ? $item_discounted_value : null;
                 $data["cart"][$key]["cart_product_information"]["product_discounted_remark"]      = isset($item_discounted_remark) ? $item_discounted_remark : null;

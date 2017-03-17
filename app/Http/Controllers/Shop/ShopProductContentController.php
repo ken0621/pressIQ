@@ -24,7 +24,7 @@ class ShopProductContentController extends Shop
             // Convert to timestamp
             $start_ts = strtotime($values['item_discount_date_start']);
             $end_ts = strtotime($values['item_discount_date_end']);
-            $user_ts = strtotime(strtotime(date("Y-m-d H:i:s")));
+            $user_ts = strtotime(date("Y-m-d H:i:s"));
 
             $result = (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
 

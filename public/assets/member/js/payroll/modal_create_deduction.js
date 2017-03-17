@@ -108,6 +108,7 @@ function modal_create_deduction()
 			data 	: 	formdata,
 			success : 	function(result)
 			{
+				console.log(result);
 				var html = '';
 				result = JSON.parse(result);
 				$(result.new_record).each(function(index, data){
@@ -122,7 +123,39 @@ function modal_create_deduction()
 				error_function();
 			}
 		});
+		reload_tag_employee();
 	}
+
+	this.reload_tag_employee = function()
+	{
+		reload_tag_employee();
+	}
+
+	function reload_tag_employee()
+	{
+		var target = ".affected-employee";
+		var formdata = {
+			_token:misc('_token'),
+			payroll_deduction_id:$("#payroll_deduction_id").val()
+		};
+		var action = "/member/payroll/deduction/reload_deduction_employee_tag";
+		var method = "POST";
+		$(target).html(misc('loader'));
+		$.ajax({
+			url 	: 	action,
+			type 	: 	method,
+			data 	: 	formdata,
+			success : 	function(result)
+			{
+				$(target).html(result);
+			},
+			error 	: 	function(err)
+			{
+				error_function();
+			}
+		});
+	}
+
 
 	function tbl_tag(data)
 	{

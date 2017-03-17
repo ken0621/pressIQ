@@ -31,68 +31,6 @@ class Customer
         dd();
         return $data;
 	}
-	public static function sales($customer = null){
-	    $data = array();
-	    if($customer != null){
-	        
-	        foreach($customer as $key => $cust){
-	            $data[$key]['customer_id'] = $cust->customer_id;
-	            $company = '';
-	            if($cust->email != ''){
-	            	$company = ' / '.$cust->email;
-	            }
-	            $data[$key]['name'] = $cust->first_name.' '.$cust->last_name.$company;
-	            $data[$key]['location'] = $cust->province.', '.$cust->country_code;
-	            $data[$key]['email'] = $cust->email;
-	            $data[$key]['phone'] = $cust->phone;
-	            $_order = Tbl_order::where('customer_id',$cust->customer_id)->orderBy('tbl_order_id','asc')->get();
-	            $lastorder = '';
-	            $totalorder = 0;
-	            $totalSpent = 0;
-	            
-	            foreach($_order as $k => $order){
-	                $_item = Tbl_order_item::where('tbl_order_id',$order->tbl_order_id)->get();
-	                $tempTotal = 0;
-	                foreach($_item as $item){
-	                    $temp = 0;
-	                    $amount = $item->item_amount;
-	                    $quantity = $item->quantity;
-	                    $discount = $item->discount;
-	                    $discount_var = $item->discount_var;
-	                    
-	                    $temp = $amount *  $quantity;
-	                    if($discount_var != 'amount'){
-	                        $discount = $temp * ($discount / 100);
-	                    }
-	                    $tempTotal += $temp - $discount;
-	                }
-	                $tempDiscount = $order->discount;
-	                $tempdiscountvar = $order->discount_var;
-	                $shipping = $order->shipping_amount;
-	                $isTaxExempt = $order->isTaxExempt;
-	                $hasTax = $order->hasTax;
-	                $tax_percentage = $order->tax_percentage;
-	                $tempTAx = 0;
-	                if($tempdiscountvar != 'amount'){
-	                    $tempDiscount = $tempTotal * ($tempDiscount / 100);
-	                }
-	                if($isTaxExempt == 0 && $hasTax == 1){
-	                    $tempTAx = ($tempTotal - $tempDiscount) * ($tax_percentage / 100);
-	                }
-	                $lastorder = $order->tbl_order_id;
-	                $totalSpent += $tempTAx + $shipping + ($tempTotal - $tempDiscount);
-	                $totalorder++;
-	            }   
-	            $data[$key]['lastorder'] = $lastorder;
-	            $data[$key]['totalorder'] = $totalorder;
-	            $data[$key]['totalSpent'] = $totalSpent;
-	        }
-	        return $data;
-	    }
-	    else{
-	        return '';
-	    }
-	}
 	
 	public static function search($str = '', $shop_id = 0, $archived = 0){
 		if($str != '' && $str != null){
@@ -123,9 +61,7 @@ class Customer
 		$count = Tbl_customer::where("tbl_customer.archived", 0)->where("shop_id", Customer::getShopId())->count();
 		return $count;
 	}
-	public static function getAllTransaction()
-	{
-		
-	}
+
+	// public static function createCustomer
 
 }

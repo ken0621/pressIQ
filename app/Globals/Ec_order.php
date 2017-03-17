@@ -13,6 +13,7 @@ use App\Models\Tbl_ec_order;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_position;
 use App\Models\Tbl_coupon_code;
+
 use Log;
 use Request;
 use Session;
@@ -32,8 +33,8 @@ class Ec_order
         $customer_id = Customer::createCustomer($order_info['shop_id'] ,$order_info['customer']);
 
         $data['shop_id']           = $order_info['shop_id'];
-        $data['inv_customer_id']       = $customer_id;;
-        $data['inv_customer_email']    = $order_info['customer']['customer_email'];
+        $data['inv_customer_id']   = $customer_id;;
+        $data['inv_customer_email']= $order_info['customer']['customer_email'];
 
         $data['inv_terms_id']  = '';
         $data['inv_date']      = '';

@@ -18,7 +18,7 @@ class ShopProductContentController extends Shop
         $data["category"] = Tbl_ec_product::category()->where("eprod_category_id", $data["product"]["eprod_category_id"])->first();
         $data["_variant"] = Ecom_Product::getProductOption($id, ",");
         $data["_related"] = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
-        // dd($data["product"]);
+
         foreach ($data["product"]["variant"] as $keys => $values) 
         {
             // Convert to timestamp

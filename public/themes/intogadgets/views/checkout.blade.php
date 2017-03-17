@@ -59,18 +59,18 @@
 					<div class="field col-md-8 birthday">
 						<div class="bdivider month">
 							<select name="customer_birthdate[]" class="form-control">
-								<option value="1">January</option>
-								<option value="2">February</option>
-								<option value="3">March</option>
-								<option value="4">April</option>
-								<option value="5">May</option>
-								<option value="6">June</option>
-								<option value="7">July</option>
-								<option value="8">August</option>
-								<option value="9">September</option>
-								<option value="10">October</option>
-								<option value="11">November</option>
-								<option value="12">December</option>
+								<option >January</option>
+								<option >February</option>
+								<option >March</option>
+								<option >April</option>
+								<option >May</option>
+								<option >June</option>
+								<option >July</option>
+								<option >August</option>
+								<option >September</option>
+								<option >October</option>
+								<option >November</option>
+								<option >December</option>
 							</select>
 						</div>
 						<div class="bdivider day">

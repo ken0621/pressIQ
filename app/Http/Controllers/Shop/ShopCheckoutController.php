@@ -50,6 +50,8 @@ class ShopCheckoutController extends Shop
             $get_cart = Cart::get_cart($this->shop_info->shop_id);
             // Get Country ID (Philippines)
             $get_country = Tbl_country::where("country_name", "Philippines")->first();
+            // Explode Birthday
+            $get_birthday = Request::input("customer_birthdate")[0] . " " . Request::input("customer_birthdate")[1] . ", " . Request::input("customer_birthdate")[2];
             // Variant ID (Array)
             $invline_item_id = [];
             // Discounted Price (Array)
@@ -66,21 +68,24 @@ class ShopCheckoutController extends Shop
             $cart["invline_item_id"] = $invline_item_id;
             $cart["invline_discount"] = $invline_discount;
             $cart["invline_rate"] = $invline_rate;
-            $cart["customer_first_name"] = Request::input("customer_first_name");
-            $cart["customer_middle_name"] = Request::input("customer_middle_name");
-            $cart["customer_last_name"] = Request::input("customer_last_name");
-            $cart["customer_email"] = Request::input("customer_email");
-            $cart["customer_birthdate"] = Request::input("customer_birthdate");
-            $cart["customer_mobile"] = Request::input("customer_mobile");
-            $cart["customer_country_id"] = $get_country ? $get_country->country_id : '420';
-            $cart["customer_state_province"] = Request::input("customer_state_province");
-            $cart["customer_city"] = Request::input("customer_city");
-            $cart["customer_address"] = Request::input("customer_address");
+            $cart["customer"] = null;
+            $cart["customer"]["customer_first_name"] = Request::input("customer_first_name");
+            $cart["customer"]["customer_middle_name"] = Request::input("customer_middle_name");
+            $cart["customer"]["customer_last_name"] = Request::input("customer_last_name");
+            $cart["customer"]["customer_email"] = Request::input("customer_email");
+            $cart["customer"]["customer_birthdate"] = $get_birthday;
+            $cart["customer"]["customer_mobile"] = Request::input("customer_mobile");
+            $cart["customer"]["customer_country_id"] = $get_country ? $get_country->country_id : '420';
+            $cart["customer"]["customer_state_province"] = Request::input("customer_state_province");
+            $cart["customer"]["customer_city"] = Request::input("customer_city");
+            $cart["customer"]["customer_address"] = Request::input("customer_address");
             $cart["payment_method_id"] = Request::input("payment_method_id");
             $cart["taxable"] = Request::input("taxable");
             $cart["shop_id"] = $this->shop_info->shop_id;
 
             $result = Customer::createCustomer($this->shop_info->shop_id ,$cart);
+
+            Cart::clear_all($this->shop_info->shop_id);
             
             return Redirect::to("/");
         }

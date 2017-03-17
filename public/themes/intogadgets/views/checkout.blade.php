@@ -16,20 +16,49 @@
 					@endif
 				</div>
 
+				@if (count($errors) > 0)
+				    <div class="alert alert-danger">
+				        <ul>
+				            @foreach ($errors->all() as $error)
+				                <li>{{ $error }}</li>
+				            @endforeach
+				        </ul>
+				    </div>
+				@endif
+
 				<div class="fieldset">
-					<label class="col-md-4">First Name & Last Name</label>
+					<label class="col-md-4">First Name</label>
 					<div class="field col-md-8">
-						<input required="required" class="form-control" type="text" name="fn" value="">
+						<input  class="form-control" type="text" name="customer_first_name" value="{{ Request::old('customer_first_name') }}">
 					</div>
-					<div class="error-message text-right col-md-12">{{ isset($err) ? $err->first('customer_name') : '' }}</div>
 				</div>
 
-				@if(!isset($customer))
+				<div class="fieldset">
+					<label class="col-md-4">Middle Name</label>
+					<div class="field col-md-8">
+						<input  class="form-control" type="text" name="customer_middle_name" value="{{ Request::old('customer_middle_name') }}">
+					</div>
+				</div>
+
+				<div class="fieldset">
+					<label class="col-md-4">Last Name</label>
+					<div class="field col-md-8">
+						<input  class="form-control" type="text" name="customer_last_name" value="{{ Request::old('customer_last_name') }}">
+					</div>
+				</div>
+
+				<div class="fieldset">
+					<label class="col-md-4">Email</label>
+					<div class="field col-md-8">
+						<input autocomplete="off"  class="form-control" type="email" name="customer_email" value="{{ Request::old('customer_email') }}">
+					</div>
+				</div>
+
 				<div class="fieldset">
 					<label class="col-md-4">Birthday</label>
 					<div class="field col-md-8 birthday">
 						<div class="bdivider month">
-							<select name="b-month" class="form-control">
+							<select name="customer_birthdate[]" class="form-control">
 								<option value="1">January</option>
 								<option value="2">February</option>
 								<option value="3">March</option>
@@ -45,7 +74,7 @@
 							</select>
 						</div>
 						<div class="bdivider day">
-							<select name="b-day" class="form-control">
+							<select name="customer_birthdate[]" class="form-control">
 								@for($ctr=1;$ctr<=31;$ctr++)
 									<option>
 										{{ $ctr }}
@@ -54,7 +83,7 @@
 							</select>
 						</div>
 						<div class="bdivider year">
-							<select name="b-year" class="form-control">
+							<select name="customer_birthdate[]" class="form-control">
 								@for($ctr=(date("Y")-120);$ctr<=date("Y");$ctr++)
 									<option {{ (date("Y")-18) == $ctr ? 'selected' : '' }}>
 										{{ $ctr }}
@@ -63,10 +92,17 @@
 							</select>
 						</div>
 					</div>
-					<div class="error-message text-right col-md-12">{{ isset($err) ? $err->first('customer_birthday') : '' }}</div>
 				</div>
 
 				<div class="fieldset">
+					<label class="col-md-4">Contact Number</label>
+					<div class="field col-md-8">
+						<input  maxlength="11" class="form-control" type="text" name="customer_mobile" value="{{ Request::input('customer_mobile') }}">
+					</div>
+				</div>
+
+				@if(!isset($customer))
+				<!-- <div class="fieldset">
 					<label class="col-md-4">Gender</label>
 					<div class="field col-md-8">
 						<select name="g" class="form-control">
@@ -76,30 +112,23 @@
 					</div>
 					<div class="error-message text-right col-md-12">{{ isset($err) ? $err->first('customer_gender') : '' }}</div>
 				</div>
-				<div class="fieldset">
-					<label class="col-md-4">Email</label>
-					<div class="field col-md-8">
-						<input autocomplete="off" required="required" class="form-control" type="email" name="em" value="">
-						<input type="checkbox" name="subscribe" value="Yes" /> Subscribe to newsletter<div>(Subscribing needs email confirmation).</div>
-					</div>
-					<div class="error-message text-right col-md-12">{{ isset($err) ? $err->first('customer_email') : '' }}</div>
-				</div>
+			
 				<div class="fieldset">
 					<label class="col-md-4">Password</label>
 					<div class="field col-md-8">
-						<input autocomplete="off" required="required" class="form-control" type="password" name="pw" value="">
+						<input autocomplete="off"  class="form-control" type="password" name="pw" value="">
 					</div>
 					<div class="error-message text-right col-md-12"></div>
 				</div>
 				<div class="fieldset">
 					<label class="col-md-4">Confirm Password</label>
 					<div class="field col-md-8">
-						<input autocomplete="off" required="required" class="form-control" type="password" name="cpw" value="">
+						<input autocomplete="off"  class="form-control" type="password" name="cpw" value="">
 					</div>
 					<div class="error-message text-right col-md-12"></div>
-				</div>
+				</div> -->
 				@endif
-				<div class="fieldset">
+				<!-- <div class="fieldset">
 					<label class="col-md-4">Province</label>
 					<div class="field col-md-8">
 						<select name="p_id" class="form-control province load-child-location" target=".municipality">
@@ -132,23 +161,48 @@
 						<textarea spellcheck="false" class="form-control" name="ca"></textarea>
 					</div>
 					<div class="error-message text-right col-md-12">{{ isset($err) ? $err->first('customer_address') : '' }}</div>
+				</div> -->
+
+				<div class="fieldset">
+					<label class="col-md-4">Province</label>
+					<div class="field col-md-8">
+						<input class="form-control" type="text" name="customer_state_province" value="{{ Request::old('customer_state_province') }}">
+					</div>
 				</div>
 				<div class="fieldset">
-					<label class="col-md-4">Contact Number</label>
+					<label class="col-md-4">City / Municipality</label>
 					<div class="field col-md-8">
-						<input required="required" maxlength="11" class="form-control" type="text" name="cn" value="">
+						<input class="form-control" type="text" name="customer_city" value="{{ Request::old('customer_city') }}">
 					</div>
-					<div class="error-message text-right col-md-12">{{ isset($err) ? $err->first('customer_contact') : '' }}</div>
+				</div>
+				<div class="fieldset">
+					<label class="col-md-4">Complete Address</label>
+					<div class="field col-md-8">
+						<textarea spellcheck="false" class="form-control" name="customer_address">{{ Request::old('customer_address') }}</textarea>
+					</div>
+				</div>
+				<div class="fieldset">
+					<label class="col-md-4">Payment Method</label>
+					<div class="field col-md-8">
+						<select class="form-control" name="payment_method_id">
+							@if(count($_payment_method) != 0)
+								@foreach($_payment_method as $payment_method)
+								<option value="{{ $payment_method->method_id }}" {{ Request::old('payment_method_id') == $payment_method->method_id ? 'selected' : '' }}>{{ $payment_method->method_name }}</option>
+								@endforeach	
+							@else
+								<option disabled selected>No Payment Method Available</option>
+							@endif
+						</select>
+					</div>
 				</div>
 				<div class="fieldset">
 					<label class="col-md-4">Tax</label>
 					<div class="field col-md-8">
 						<select name="taxable" class="form-control">
-							<option value="1">With tax</option>
-							<option value="0">Without tax</option>
+							<option value="1" {{ Request::old('taxable') == 1 ? "selected" : "" }}>With tax</option>
+							<option value="0" {{ Request::old('taxable') == 0 ? "selected" : "" }}>Without tax</option>
 						</select>
 					</div>
-					<div class="error-message text-right col-md-12">{{ isset($err) ? $err->first('taxable') : '' }}</div>
 				</div>
 				<div class="fieldset text-right btn-container">
 					<div class="col-md-12">

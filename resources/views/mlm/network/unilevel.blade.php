@@ -7,7 +7,7 @@ $data['icon'] = 'fa fa-retweet';
 ?>  
 @include('mlm.header.index', $data) 
 <center>
-  {!! $tree_level->render() !!}
+  {!! $tree_level->appends(Request::capture()->except('page'))->render() !!}
 </center>
 <div class="col-md-12">
 	<ul class="timeline ">
@@ -39,7 +39,7 @@ $data['icon'] = 'fa fa-retweet';
 
 	@endforeach
 	</ul>
-  <center>{!! $tree_p->render() !!}</center>
+  <center>{!! $tree_p->appends(Request::capture()->except('tree'))->render() !!}</center>
 </div>  
 @endsection
 @section('script')

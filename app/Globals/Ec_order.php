@@ -38,19 +38,21 @@ class Ec_order
         $data['inv_terms_id']  = '';
         $data['inv_date']      = '';
         $data['inv_due_date']       = '';
-        $data['inv_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province'];
-        $data['invoice_msg']          = '';
-        $data['invoice_memo']         = '';
+        $data['inv_customer_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province'];
+        $data['inv_message']          = '';
+        $data['inv_memo']         = '';
         $data['ewt']                  = 0;
         $data['inv_discount_type']    = '';
         $data['inv_discount_value']   = 0;
-        $data['invline_service_date'] = '';
+        $data['invline_service_date'] = $order_info['invline_service_date'];
         $data['invline_item_id']      = $order_info['invline_item_id'];
-        $data['invline_description']  = '';
+        $data['invline_description']  = $order_info['invline_description'];
         $data['invline_qty']          = $order_info['invline_qty'];
         $data['invline_rate']         = $order_info['invline_rate'];
-        $data['invline_discount']     = 0;
-        $data['invline_discount_remark'] = '';
+        $data['invline_discount']     = $order_info['invline_discount'];
+        $data['invline_discount_remark'] = $order_info['invline_discount_remark'];
+        $data['payment_method_id'] = $order_info['payment_method_id'];
+        $data['coupon_code'] = 0;
         
         $data['taxable']              = $order_info['taxable'];
 
@@ -108,15 +110,17 @@ class Ec_order
                 $ec_order_item[$key]["total"]                = $total_amt;  
                 $ec_order_item[$key]["description"]          = $data["invline_description"][$key];              
                 $ec_order_item[$key]["service_date"]         = $data["invline_service_date"][$key];              
-                $ec_order_item[$key]["tax"]                  = $data['invline_taxable'][$key];  
+                $ec_order_item[$key]["tax"]                  = isset($data['invline_taxable']) ? $data['invline_taxable'][$key] : 0;  
 
                 $prod_total                                  = $prod_total + $total_amt;
 
 
-
-                if($data['invline_taxable'][$key] == 1)
+                if (isset($data['invline_taxable'])) 
                 {
-                    $vat_total = $vat_total + ($total_amt * .12);
+                    if($data['invline_taxable'][$key] == 1)
+                    {
+                        $vat_total = $vat_total + ($total_amt * .12);
+                    }
                 }
             }
         }

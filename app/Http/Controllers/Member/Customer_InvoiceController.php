@@ -172,9 +172,9 @@ class Customer_InvoiceController extends Member
 
         $invoice_info                       = [];
         $invoice_info['invoice_terms_id']   = Request::input('inv_terms_id');
-        $invoice_info['invoice_date']       = Request::input('inv_date');
+        $invoice_info['invoice_date']       = datepicker_input(Request::input('inv_date'));
         $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
-        $invoice_info['invoice_due']        = Request::input('inv_due_date');
+        $invoice_info['invoice_due']        = datepicker_input(Request::input('inv_due_date'));
         $invoice_info['billing_address']    = Request::input('inv_customer_billing_address');
 
         $invoice_other_info                 = [];

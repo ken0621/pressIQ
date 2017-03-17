@@ -906,8 +906,8 @@ class WarehouseController extends Member
                     {
                         if($count_on_hand > 0 && $count_on_hand >= $value2) 
                         {
-                            $info[$value2]['product_id'] = $value;
-                            $info[$value2]['quantity'] = str_replace(",","",$value2);
+                            $info[$value]['product_id'] = $value;
+                            $info[$value]['quantity'] = str_replace(",","",$value2);
                         }
                         else
                         {
@@ -930,7 +930,7 @@ class WarehouseController extends Member
                 $data['message'] = "Please insert atleast 1 item and quantity to transfer.";                
             }
 
-            if($data["status"] == null || $ctr != 0)
+            if($data["status"] == null && $ctr != 0)
             {
                 $data = Warehouse::inventory_transfer_bulk($from, $to, $info, $remarks, 'json');
             }

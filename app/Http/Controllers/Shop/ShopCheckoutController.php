@@ -9,6 +9,7 @@ use App\Globals\Cart;
 use App\Models\Tbl_country;
 use App\Models\Tbl_online_pymnt_method;
 use App\Globals\Customer;
+use App\Globals\Ec_order;
 use Validator;
 
 class ShopCheckoutController extends Shop
@@ -58,16 +59,20 @@ class ShopCheckoutController extends Shop
             $invline_discount = [];
             // Original Price (Array)
             $invline_rate = [];
+            // Qty (Array)
+            $invline_qty = [];
             // Restructure Cart
             foreach ($get_cart['cart'] as $key => $value) 
             {
                 array_push($invline_item_id, $value["product_id"]);
                 array_push($invline_discount, $value["cart_product_information"]["product_discounted_value"]);
                 array_push($invline_rate, $value["cart_product_information"]["product_price"]);
+                array_push($invline_qty, $value["quantity"]);
             }
             $cart["invline_item_id"] = $invline_item_id;
             $cart["invline_discount"] = $invline_discount;
             $cart["invline_rate"] = $invline_rate;
+            $cart["invline_qty"] = $invline_qty;
             $cart["customer"] = null;
             $cart["customer"]["customer_first_name"] = Request::input("customer_first_name");
             $cart["customer"]["customer_middle_name"] = Request::input("customer_middle_name");
@@ -83,7 +88,7 @@ class ShopCheckoutController extends Shop
             $cart["taxable"] = Request::input("taxable");
             $cart["shop_id"] = $this->shop_info->shop_id;
 
-            $result = Customer::createCustomer($this->shop_info->shop_id ,$cart);
+            $result = Ec_order::create_ec_order_automatic($cart);
 
             Cart::clear_all($this->shop_info->shop_id);
             

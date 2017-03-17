@@ -29,7 +29,7 @@ class Ec_order
 
     public static function create_ec_order_automatic($order_info)
     {
-        $customer_id = Customer::createCustomer($order_info['customer']);
+        $customer_id = Customer::createCustomer($order_info['shop_id'] ,$order_info['customer']);
 
         $data['shop_id']           = $order_info['shop_id'];
         $data['inv_customer_id']       = $customer_id;;
@@ -38,18 +38,17 @@ class Ec_order
         $data['inv_terms_id']  = '';
         $data['inv_date']      = '';
         $data['inv_due_date']       = '';
-        $data['inv_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province 
-    '];
+        $data['inv_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province'];
         $data['invoice_msg']          = '';
         $data['invoice_memo']         = '';
         $data['ewt']                  = 0;
         $data['inv_discount_type']    = '';
         $data['inv_discount_value']   = 0;
         $data['invline_service_date'] = '';
-        $data['invline_item_id']      = $order_info['invline_item_id  '];
+        $data['invline_item_id']      = $order_info['invline_item_id'];
         $data['invline_description']  = '';
-        $data['invline_qty']          = $order_info['customer'];
-        $data['invline_rate']         = $order_info['customer'];
+        $data['invline_qty']          = $order_info['invline_qty'];
+        $data['invline_rate']         = $order_info['invline_rate'];
         $data['invline_discount']     = 0;
         $data['invline_discount_remark'] = '';
         

@@ -31,30 +31,29 @@ class Ec_order
     {
         $customer_id = Customer::createCustomer($order_info['customer']);
 
- 
-        $data['customer_id']       = $customer_id;;
-        $data['customer_email']    = $order_info['customer']['customer_email'];
+        $data['shop_id']           = $order_info['shop_id'];
+        $data['inv_customer_id']       = $customer_id;;
+        $data['inv_customer_email']    = $order_info['customer']['customer_email'];
 
-        $data['invoice_terms_id']  = '';
-        $data['invoice_date']      = '';
-        $data['invoice_due']       = '';
-        $data['billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province 
+        $data['inv_terms_id']  = '';
+        $data['inv_date']      = '';
+        $data['inv_due_date']       = '';
+        $data['inv_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province 
     '];
-
         $data['invoice_msg']          = '';
         $data['invoice_memo']         = '';
         $data['ewt']                  = 0;
-        $data['total_discount_type']  = 0;
-        $data['total_discount_value'] = 0;
-        $data['item_service_date']  = '';
-        $data['item_id']            = $order_info['customer'];
-        $data['item_description']   = '';
-        $data['quantity']           = $order_info['customer'];
-        $data['rate']               = $order_info['customer'];
-        $data['discount']           = 0;
-        $data['discount_remark']    = '';
-        $data['taxable']            = $order_info['taxable'];
-        $data['um']                 = null;
+        $data['inv_discount_type']    = '';
+        $data['inv_discount_value']   = 0;
+        $data['invline_service_date'] = '';
+        $data['invline_item_id']      = $order_info['invline_item_id  '];
+        $data['invline_description']  = '';
+        $data['invline_qty']          = $order_info['customer'];
+        $data['invline_rate']         = $order_info['customer'];
+        $data['invline_discount']     = 0;
+        $data['invline_discount_remark'] = '';
+        
+        $data['taxable']              = $order_info['taxable'];
 
         $order_id = Ec_order::create_ec_order($data);
         
@@ -207,7 +206,7 @@ class Ec_order
         $ec_order['tax']                            = $data["taxable"];
         $ec_order['coupon_id']                      = $coupon_id;
         $ec_order['term_id']                        = $data["inv_terms_id"];
-        $ec_order['shop_id']                        = Ec_order::getShopId();
+        $ec_order['shop_id']                        = isset($data["shop_id"]) ? $data["shop_id"] : Ec_order::getShopId();
         $ec_order['created_date']                   = Carbon::now();
         $ec_order['archived']                       = 0;
         $ec_order_id 								= Tbl_ec_order::insertGetId($ec_order);

@@ -190,7 +190,7 @@
                 @foreach($_categories as $categories)
                 <li class="notsub">
 
-                    <a href="javascript:">
+                    <a href="/product?type={{ $categories['type_id'] }}">
 
                         <div class="nav-text">
 

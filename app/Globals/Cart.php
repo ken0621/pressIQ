@@ -150,7 +150,7 @@ class Cart
                 $data["cart"][$key]["cart_product_information"]["variant_name"]                   = $item->evariant_item_label;
                 $data["cart"][$key]["cart_product_information"]["product_stocks"]                 = $item->inventory_count;
                 $data["cart"][$key]["cart_product_information"]["product_sku"]                    = $item->item_sku;
-                $data["cart"][$key]["cart_product_information"]["product_price"]                  = $item->item_price;
+                $data["cart"][$key]["cart_product_information"]["product_price"]                  = $item->evariant_price;
                 $data["cart"][$key]["cart_product_information"]["image_path"]                     = $item->image_path;
 
                 /* CHECK IF DISCOUNT EXISTS */

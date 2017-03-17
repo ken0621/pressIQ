@@ -35,7 +35,6 @@ class MLM_ProductController extends Member
         
         
         $data['active_plan_product_repurchase'] = Mlm_plan::get_all_active_plan_repurchase($shop_id);
-	    $type  = Tbl_category::sel($shop_id)->orderBy('type_name','asc')->get();
 	    
 	    // setup product on first try : no error on leftjoin
 	    $_inventory = Tbl_item::where("shop_id",$shop_id)
@@ -50,8 +49,6 @@ class MLM_ProductController extends Member
         ->type()->category()
         ->paginate(10);
 
-	    $vendor      = Tbl_product_vendor::sel($shop_id)->orderBy('vendor_name','asc')->get();
-
 	    $data['active'] = [];
 	    foreach($data['active_plan_product_repurchase'] as $key => $value)
 	    {
@@ -60,8 +57,6 @@ class MLM_ProductController extends Member
 	    }
 
 	    $data['item'] 		 = $this->iteminventory($_inventory, $data['active']);
-	    $data['item_type']   = $type;
-	    $data['item_vendor'] = $vendor;
 	    $data['_inventory']  = $_inventory;	    
         $data['membership_active'] = Tbl_membership::getactive(0, $shop_id)->get();
         // dd($data);
@@ -78,7 +73,6 @@ class MLM_ProductController extends Member
                 $insert['item_points_stairstep'] = 0;
                 $insert['item_points_unilevel']  = 0;
                 $insert['item_points_binary']    = 0;
-                // $insert['item_points_upgrade']   = 0;
                 $insert['item_id']			     = $value->item_id;
                 Tbl_mlm_item_points::insert($insert);
             }
@@ -105,27 +99,6 @@ class MLM_ProductController extends Member
 	        $item[$key]['item_sku'] 			  = $inventory->item_sku;
             $item[$key]['item_img']               = $inventory->item_img;
             $item[$key]['item_show_in_mlm']       = $inventory->item_show_in_mlm;
-	        // $var 	= $inventory->variant_name;
-	        // $exvar  = explode("•",$var);
-	        // $strvar = '';
-
-	        // foreach($exvar as $v)
-	        // {
-	        //     if($strvar != '')
-	        //     {
-	        //         $strvar.='/';
-	        //     }
-	        //     $strvar.=$v;
-	        // }
-	        
-	        // $item[$key]['variant_name']    			  = $strvar;
-	        // $item[$key]['variant_price']   			  = $inventory->variant_price;
-	        // $item[$key]['variant_sku']     			  = $inventory->variant_sku;
-	        // $item[$key]['variant_barcode'] 			  = $inventory->variant_barcode;
-	        // $item[$key]['variant_inventory_count']    = $inventory->variant_inventory_count;
-	        // $item[$key]['variant_track_inventory']    = $inventory->variant_track_inventory;
-	        // $item[$key]['variant_allow_oos_purchase'] = $inventory->variant_allow_oos_purchase;
-	        // $item[$key]['image_path']                 = $inventory->image_path;
 	        
 	    }
 	    return $item;
@@ -277,10 +250,6 @@ class MLM_ProductController extends Member
                 $update[$plan->marketing_plan_code] = ($value->item_price/100) * $percentage;
                 Tbl_mlm_item_points::where('item_id', $value->item_id)->update($update);
             }
-            
-            // $old_mlm_item_points = Tbl_mlm_item_points::where('item_id', $value->item_id)->first()->toArray(); 
-            // $new_mlm_item_points = Tbl_mlm_item_points::where('item_id', $value->item_id)->first()->toArray();
-            // AuditTrail::record_logs("Edited","mlm_item_points",$old_mlm_item_points["item_points_id"],serialize($old_mlm_item_points),serialize($new_mlm_item_points));
         }
         $data['response_status'] = 'success_edit_all_points';
         return $data;

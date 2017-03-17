@@ -11,6 +11,7 @@ use App\Models\Tbl_online_pymnt_method;
 use App\Globals\Customer;
 use App\Globals\Ec_order;
 use Validator;
+use Carbon\Carbon;
 
 class ShopCheckoutController extends Shop
 {
@@ -61,6 +62,12 @@ class ShopCheckoutController extends Shop
             $invline_rate = [];
             // Qty (Array)
             $invline_qty = [];
+            // Discount Remark (Array)
+            $invline_discount_remark = [];
+            // Description (Array)
+            $invline_description = [];
+            // Date (Array)
+            $invline_service_date = [];
             // Restructure Cart
             foreach ($get_cart['cart'] as $key => $value) 
             {
@@ -68,11 +75,17 @@ class ShopCheckoutController extends Shop
                 array_push($invline_discount, $value["cart_product_information"]["product_discounted_value"]);
                 array_push($invline_rate, $value["cart_product_information"]["product_price"]);
                 array_push($invline_qty, $value["quantity"]);
+                array_push($invline_discount_remark, "");
+                array_push($invline_description, "");
+                array_push($invline_service_date, date('Y-m-d H:i:s'));
             }
             $cart["invline_item_id"] = $invline_item_id;
             $cart["invline_discount"] = $invline_discount;
             $cart["invline_rate"] = $invline_rate;
             $cart["invline_qty"] = $invline_qty;
+            $cart["invline_discount_remark"] = $invline_discount_remark;
+            $cart["invline_service_date"] = $invline_service_date;
+            $cart["invline_description"] = $invline_description;
             $cart["customer"] = null;
             $cart["customer"]["customer_first_name"] = Request::input("customer_first_name");
             $cart["customer"]["customer_middle_name"] = Request::input("customer_middle_name");

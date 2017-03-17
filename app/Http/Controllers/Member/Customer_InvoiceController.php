@@ -163,8 +163,8 @@ class Customer_InvoiceController extends Member
     }
     public function update_invoice()
     {
-        $invoice_id = Request::input("invoice_id");
-        $button_action = Request::input('button_action');
+        $invoice_id     = Request::input("invoice_id");
+        $button_action  = Request::input('button_action');
 
         $customer_info                      = [];
         $customer_info['customer_id']       = Request::input('inv_customer_id');;
@@ -212,6 +212,8 @@ class Customer_InvoiceController extends Member
                 $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
             }
         }
+
+        Invoice::updateIsPaid($invoice_id);
 
         $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
 

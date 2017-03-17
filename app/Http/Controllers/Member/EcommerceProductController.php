@@ -145,6 +145,8 @@ class EcommerceProductController extends Member
 					$value["evariant_price"] = $variant_price[$key];
 					$rules["evariant_price"] = 'required';
 					$message["evariant_price.required"] = 'You have to set a price for product '.$item_data->item_name;
+
+					
 				}
 				else
 				{

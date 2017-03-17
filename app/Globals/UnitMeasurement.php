@@ -68,7 +68,7 @@ class UnitMeasurement
                 $return = $qty == 0 ? 1 : $qty." PC";
             }
         }
-        else
+        else if($um_issued != null && $um_base != null )
         {
             $issued_um_qty = 1;
             $base_um_qty = 1;
@@ -85,6 +85,10 @@ class UnitMeasurement
             $each = (($qty / $issued_um_qty) - floor($qty / $issued_um_qty)) * $issued_um_qty;
             // dd($um_base);
             $return = $issued_um." ".$um_issued->multi_abbrev." & ".$each." ".$um_base->multi_abbrev;
+        }
+        else
+        {
+            $return = $qty." PC";
         }
 
         if($um_issued != null)

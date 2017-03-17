@@ -89,6 +89,10 @@ You mad bro? what are you doing here.
 	9:30 pumasok
 2/1/2017
 	9:13 pumasok
+
+3/16/2017 O.B. 1-8
+3/13/2017 O.B. 1-9
+
 			
 
 -------------------------------------------------------------------------------------------------------------------------
@@ -212,3 +216,10 @@ Pending:
 
 
 APP_KEY=vNYGoBAFOTzqWyeXFkYeO97Z5FIBq5SD
+
+1. Cashback http://digimahouse2.dev/member/mlm/Product 						| Ok
+2. Product points / Membership 												| Ok
+3. Matching Bonus (Di na mag mamatch)										| ---	
+4. Membership Matching (5th pair GC)										| ---
+5. Use Wallet as Payment (Wallet lang, wallet lang)							| ---
+6. Discount																	| Ok

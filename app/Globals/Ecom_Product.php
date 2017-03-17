@@ -183,7 +183,6 @@ class Ecom_Product
 				unset($_category[$key]);
 			}
 		}
-
 		return $_category;
 	}
 
@@ -239,7 +238,7 @@ class Ecom_Product
 
 	public static function getVariantInfo($variant_id)
 	{
-		return Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_id", $variant_id)->Product()->FirstImage()->first();
+		return Tbl_ec_variant::variantName()->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_id", $variant_id)->Product()->FirstImage()->first();
 	}
 
 	public static function getAllVariants()

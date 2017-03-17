@@ -52,9 +52,10 @@
                 </div>
                 <div class="dividers half"></div>
                 <div class="row product-container">
-                    <div class="col-md-9">
+                    <div class="col-md-7">
                         <div class="fieldset">
                             <div>
+                                <input name="variant_checked[]" type="hidden" value="true">
                                 <input class="hidden item-code" name="item_code[]" />
                                 <select class="select-item droplist-item" name="evariant_item_id[]" required>
                                     @include("member.load_ajax_data.load_item", ['add_search' => ""])
@@ -64,8 +65,13 @@
                     </div>
                     <div class="col-md-3">
                         <div class="fieldset">
+                            <input type="text" name="evariant_price[]" class="form-control input-sm" placeholder="Price" required> 
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="fieldset">
                             <a href="#" class="product-info popup" link="/member/ecommerce/product/variant-modal/" size="lg" product-id="" product-code="">
-                            <i class="fa fa-cog fa-lg"></i> Product Information</a>
+                            <i class="fa fa-cog fa-lg"></i> Information</a>
                         </div>
                     </div>
                 </div>
@@ -120,9 +126,10 @@
                                         </tr>
                                         <tr>
                                             <td width="5%"></td>
-                                            <th width="30%">Variant</th>
-                                            <th width="50%">Product</th>
-                                            <th width="15%">Product Info</th>
+                                            <th width="20%">Variant</th>
+                                            <th width="40%">Product</th>
+                                            <th width="25%">Product</th>
+                                            <th width="10%"></th>
                                         </tr>
                                     </thead>
                                     <tbody class="variant-main-container">
@@ -167,7 +174,10 @@
                     <select class="select-item" name="evariant_item_id[]">
                         @include("member.load_ajax_data.load_item", ['add_search' => ""])
                     </select>
-            </td>
+                </td>
+                <td>
+                    <input type="text" name="evariant_price[]" class="form-control input-sm" placeholder="Price">
+                </td>
                 <td>
                     <a href="#" class="product-info popup" link="/member/ecommerce/product/variant-modal/" size="lg"  product-id="" product-code="">
                     <i class="fa fa-cog fa-lg"></i> Info</a>

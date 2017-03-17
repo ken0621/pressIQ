@@ -28,7 +28,6 @@
             <input name="brand" type="hidden" value="{{ Input::get('brand') }}">
         @endif
 
-
         <input type="hidden" class="min-price" value="" name="min">
         <input type="hidden" class="max-price" value="" name="max">
  
@@ -48,7 +47,7 @@
         <div class="holder">
             <div class="select">
                 <select class="sidebar-order" name="sort">
-                    <option {{ Request::input('sort') == 'alhabet' ? 'selected="selected"' : '' }} value="alphabet">Sort By Name: A-Z</option>
+                    <option {{ Request::input('sort') == 'alphabet' ? 'selected="selected"' : '' }} value="alphabet">Sort By Name: A-Z</option>
                     <option {{ Request::input('sort') == 'popularity' ? 'selected="selected"' : '' }} value="popularity">Sort By Popularity</option>
                     <option {{ Request::input('sort') == 'newest' ? 'selected="selected"' : '' }} value="newest">Sort By Newest</option>
                     <option {{ Request::input('sort') == 'l2h' ? 'selected="selected"' : '' }} value="l2h">Sort By Price: Low to High</option>

@@ -2,6 +2,8 @@
 namespace App\Globals;
 use DB;
 use App\Globals\Ec_order;
+use App\Globals\Customer;
+
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
@@ -25,38 +27,41 @@ class Ec_order
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
-    // public static function create_ec_order_automatic()
-    // {
- 
-    //     $data['customer_id']       = Request::input('inv_customer_id');;
-    //     $data['customer_email']    = Request::input('inv_customer_email');
+    public static function create_ec_order_automatic($order_info)
+    {
+        $customer_id = Customer::createCustomer($order_info['customer']);
 
-    //     $data['invoice_terms_id']  = Request::input('inv_terms_id');
-    //     $data['invoice_date']      = Request::input('inv_date');
-    //     $data['invoice_due']       = Request::input('inv_due_date');
-    //     $data['billing_address']   = Request::input('inv_customer_billing_address');
+        $data['shop_id']           = $order_info['shop_id'];
+        $data['inv_customer_id']       = $customer_id;;
+        $data['inv_customer_email']    = $order_info['customer']['customer_email'];
 
-    //     $data['invoice_msg']          = Request::input('inv_message');
-    //     $data['invoice_memo']         = Request::input('inv_memo');
-    //     $data['total_subtotal_price'] = Request::input('subtotal_price');
-    //     $data['ewt']                  = Request::input('ewt');
-    //     $data['total_discount_type']  = Request::input('inv_discount_type');
-    //     $data['total_discount_value'] = Request::input('inv_discount_value');
-    //     $data['taxable']              = Request::input('taxable');
-    //     $data['total_overall_price']  = Request::input('overall_price');
-    //     $data['item_service_date']  = Request::input('invline_service_date')[$key];
-    //     $data['item_id']            = Request::input('invline_item_id')[$key];
-    //     $data['item_description']   = Request::input('invline_description')[$key];
-    //     $data['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
-    //     $data['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
-    //     $data['discount']           = Request::input('invline_discount')[$key];
-    //     $data['discount_remark']    = Request::input('invline_discount_remark')[$key];
-    //     $data['taxable']            = Request::input('invline_taxable')[$key];
-    //     $data['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
-    //     $data['um']                 = null;
-    //     }
-    //     // $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
-    // }
+        $data['inv_terms_id']  = '';
+        $data['inv_date']      = '';
+        $data['inv_due_date']       = '';
+        $data['inv_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province 
+    '];
+        $data['invoice_msg']          = '';
+        $data['invoice_memo']         = '';
+        $data['ewt']                  = 0;
+        $data['inv_discount_type']    = '';
+        $data['inv_discount_value']   = 0;
+        $data['invline_service_date'] = '';
+        $data['invline_item_id']      = $order_info['invline_item_id  '];
+        $data['invline_description']  = '';
+        $data['invline_qty']          = $order_info['customer'];
+        $data['invline_rate']         = $order_info['customer'];
+        $data['invline_discount']     = 0;
+        $data['invline_discount_remark'] = '';
+        
+        $data['taxable']              = $order_info['taxable'];
+
+        $order_id = Ec_order::create_ec_order($data);
+        
+        $return["status"]           = "success";
+        $return["order_id"]         = $order_id;
+
+        return $return;
+    }
 
 	public static function create_ec_order($data)
 	{
@@ -201,7 +206,7 @@ class Ec_order
         $ec_order['tax']                            = $data["taxable"];
         $ec_order['coupon_id']                      = $coupon_id;
         $ec_order['term_id']                        = $data["inv_terms_id"];
-        $ec_order['shop_id']                        = Ec_order::getShopId();
+        $ec_order['shop_id']                        = isset($data["shop_id"]) ? $data["shop_id"] : Ec_order::getShopId();
         $ec_order['created_date']                   = Carbon::now();
         $ec_order['archived']                       = 0;
         $ec_order_id 								= Tbl_ec_order::insertGetId($ec_order);

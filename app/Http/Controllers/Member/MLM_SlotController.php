@@ -991,7 +991,7 @@ class MLM_SlotController extends Member
         {
             // return 1;
             $shop_id = 5;
-            return Mlm_discount::get_discount_all_membership($shop_id, 9);
+            return Mlm_discount::get_discount_all_membership($shop_id, 9, null);
         }
     }
 }

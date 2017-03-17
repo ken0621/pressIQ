@@ -105,6 +105,7 @@ class Customer
 
 		Tbl_customer_other_info::insert($insertOtherInfo);
 
+		return $customer_id;
 	}
 
 }

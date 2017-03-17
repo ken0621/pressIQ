@@ -25,6 +25,39 @@ class Ec_order
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
+    // public static function create_ec_order_automatic()
+    // {
+ 
+    //     $data['customer_id']       = Request::input('inv_customer_id');;
+    //     $data['customer_email']    = Request::input('inv_customer_email');
+
+    //     $data['invoice_terms_id']  = Request::input('inv_terms_id');
+    //     $data['invoice_date']      = Request::input('inv_date');
+    //     $data['invoice_due']       = Request::input('inv_due_date');
+    //     $data['billing_address']   = Request::input('inv_customer_billing_address');
+
+    //     $data['invoice_msg']          = Request::input('inv_message');
+    //     $data['invoice_memo']         = Request::input('inv_memo');
+    //     $data['total_subtotal_price'] = Request::input('subtotal_price');
+    //     $data['ewt']                  = Request::input('ewt');
+    //     $data['total_discount_type']  = Request::input('inv_discount_type');
+    //     $data['total_discount_value'] = Request::input('inv_discount_value');
+    //     $data['taxable']              = Request::input('taxable');
+    //     $data['total_overall_price']  = Request::input('overall_price');
+    //     $data['item_service_date']  = Request::input('invline_service_date')[$key];
+    //     $data['item_id']            = Request::input('invline_item_id')[$key];
+    //     $data['item_description']   = Request::input('invline_description')[$key];
+    //     $data['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
+    //     $data['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
+    //     $data['discount']           = Request::input('invline_discount')[$key];
+    //     $data['discount_remark']    = Request::input('invline_discount_remark')[$key];
+    //     $data['taxable']            = Request::input('invline_taxable')[$key];
+    //     $data['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
+    //     $data['um']                 = null;
+    //     }
+    //     // $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+    // }
+
 	public static function create_ec_order($data)
 	{
         $_itemline                          = $data['invline_item_id'];

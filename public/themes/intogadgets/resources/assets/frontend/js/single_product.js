@@ -89,10 +89,11 @@ function action_select_variation(e)
 
 	if (toload == true) 
 	{
-		$('.loader').fadeIn();
-
-		$('.add-to-cart').prop("disabled", false);
-		$('.add-to-cart').removeClass("disabled");
+		$('.loader').fadeIn(400, function()
+		{
+			$('.add-to-cart').prop("disabled", false);
+			$('.add-to-cart').removeClass("disabled");
+		});
 	}
 	else
 	{
@@ -161,14 +162,14 @@ function event_add_to_cart()
 			if (data.status == "error") 
 			{
 				alert("An error occurred. Please try again later.");
+
+				$(event.currentTarget).prop("disabled", false);
+				$(event.currentTarget).removeClass("disabled");
 			}
 			else
 			{
-				load_cart();
+				load_cart();				
 			}
-
-			$(event.currentTarget).prop("disabled", false);
-			$(event.currentTarget).removeClass("disabled");
 		})
 		.fail(function() 
 		{

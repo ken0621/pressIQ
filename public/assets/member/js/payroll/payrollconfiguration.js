@@ -194,7 +194,7 @@ function payrollconfiguration()
 		});
 	}
 
-	this.relaod_deduction = function()
+	this.reload_deduction = function()
 	{
 		reload_configuration("/member/payroll/deduction");
 	}
@@ -215,8 +215,9 @@ function executeFunctionByName(functionName, context /*, args */) {
 
 function submit_done(data)
 {
+	console.log(data);
 	data.element.modal("toggle");
-	data = JSON.parse(data);
+	// data = JSON.parse(data);
 	executeFunctionByName(data.function_name, window);
 }
 

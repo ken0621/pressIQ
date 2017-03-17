@@ -1117,8 +1117,8 @@ class PayrollController extends Member
 			$insert_employee = '';
 			foreach($employee_tag as $key => $tag)
 			{
-				$insert_employee['payroll_deduction_id']  	= $deduction_id;
-				$insert_employee['payroll_employee_id']		= $tag;
+				$insert_employee[$key]['payroll_deduction_id']  	= $deduction_id;
+				$insert_employee[$key]['payroll_employee_id']		= $tag;
 			}
 			if($insert_employee != '')
 			{
@@ -1127,7 +1127,7 @@ class PayrollController extends Member
 		}
 
 		$return['stataus'] = 'success';
-		$return['function_name'] = '';
+		$return['function_name'] = 'payrollconfiguration.reload_deduction';
 		return json_encode($return);
 
 	}
@@ -1189,6 +1189,18 @@ class PayrollController extends Member
 		}
 		Session::put('employee_deduction_tag', $array);
 	}
+
+
+	public function modal_edit_deduction($id)
+	{
+		$data['deduction'] = Tbl_payroll_deduction::where('payroll_deduction_id',$id)->first();
+		$data['_type'] = Tbl_payroll_deduction_type::where('shop_id', Self::shop_id())->where('payroll_deduction_archived', 0)->orderBy('payroll_deduction_type_name')->get();
+		$data['emp'] = Payroll::getbalance(Self::shop_id(), $id);
+		// dd($data['_emp']);
+		return view('member.payroll.modal.modal_edit_deduction', $data);
+	}
+
+
 
 	/* DEDUCTION END */
 

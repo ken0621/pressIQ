@@ -37,10 +37,23 @@
 	   			<td>
 	   				{{date('M d, Y', strtotime($active->payroll_deduction_date_start))}}
 	   			</td>
-	   			<td>
+	   			<td class="text-right">
 	   				{{number_format($active->payroll_deduction_amount, 2)}}
 	   			</td>
-	   			<td></td>
+	   			<td class="text-center">
+	   				<div class="dropdown">
+						<button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu dropdown-menu-custom">
+							<li>
+								<a href="#" class="popup" link="/member/payroll/deduction/modal_edit_deduction/{{$active->payroll_deduction_id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+							</li>
+							<li>
+								<a href="#" data-content="" data-archived="1" class="btn-archived" data-action="" data-trigger="job title"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
+							</li>
+						</ul>
+					</div>
+	   			</td>
 	   		</tr>
 	   		@endforeach
 	   	</tbody>

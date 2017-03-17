@@ -108,6 +108,7 @@ function modal_create_deduction()
 			data 	: 	formdata,
 			success : 	function(result)
 			{
+				console.log(result);
 				var html = '';
 				result = JSON.parse(result);
 				$(result.new_record).each(function(index, data){

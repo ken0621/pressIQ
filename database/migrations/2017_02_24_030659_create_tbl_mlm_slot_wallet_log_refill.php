@@ -14,7 +14,7 @@ class CreateTblMlmSlotWalletLogRefill extends Migration
     {
         Schema::create('tbl_mlm_slot_wallet_log_refill', function (Blueprint $table) {
             $table->increments('wallet_log_refill_id');
-            $table->datetime('wallet_log_refill_date')->default(0);
+            $table->datetime('wallet_log_refill_date');
             $table->datetime('wallet_log_refill_date_approved')->nullable();
             $table->double('wallet_log_refill_amount')->default(0);
             $table->double('wallet_log_refill_amount_paid')->default(0);

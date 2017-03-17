@@ -10,6 +10,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_customer_other_info;
 use DB;
 use Carbon\Carbon;
+use Request;
 class Customer
 {
 
@@ -66,42 +67,65 @@ class Customer
 	public static function createCustomer($shop_id, $customer_info)
 	{
 		$insert["shop_id"] 		= $shop_id;
-		$insert["title_name"] 	= $customer_info['customer_title_name'] or '';
-		$insert["first_name"] 	= $customer_info['customer_first_name'] or '';
-		$insert["middle_name"]  = $customer_info['customer_middle_name'] or '';
-		$insert["last_name"]    = $customer_info['customer_last_name'] or '';
-		$insert["suffix_name"]  = $customer_info['customer_suffix_name'] or '';
-		$insert["email"]        = $customer_info['customer_email'] or '';
-		$insert["password"]     = $customer_info['customer_password'] or '';
-		$insert["company"]      = $customer_info['customer_company'] or '';
-		$insert["b_day"]        = $customer_info['customer_birthdate'] or '';
-		$insert["IsWalkin"]     = $customer_info['customer_iswalkin'] or '';
+		$insert["title_name"] 	= isset($customer_info['customer_title_name']) 
+								       ? $customer_info['customer_title_name'] : '';
+		$insert["first_name"] 	= isset($customer_info['customer_first_name'])
+								      ? $customer_info['customer_first_name'] : '';
+		$insert["middle_name"]  = isset($customer_info['customer_middle_name'])
+								      ? $customer_info['customer_middle_name'] : '';
+		$insert["last_name"]    = isset($customer_info['customer_last_name'])
+									  ? $customer_info['customer_last_name'] : '';
+		$insert["suffix_name"]  = isset($customer_info['customer_suffix_name'])
+									  ? $customer_info['customer_suffix_name'] : '';
+		$insert["email"]        = isset($customer_info['customer_email'])
+									  ? $customer_info['customer_email'] : '';
+		$insert["password"]     = isset($customer_info['customer_password'])
+									  ? $customer_info['customer_password'] : '';
+		$insert["company"]      = isset($customer_info['customer_company'])
+									  ? $customer_info['customer_company'] : '';
+		$insert["b_day"]        = isset($customer_info['customer_birthdate'])
+									  ? $customer_info['customer_birthdate'] : '';
+		$insert["IsWalkin"]     = isset($customer_info['customer_iswalkin'])
+									  ? $customer_info['customer_iswalkin'] : 0;
 		$insert["created_date"] = Carbon::now();
 
 		$customer_id = Tbl_customer::insertGetId($insert);
 
 		$insertAddress[0]['customer_id'] 		= $customer_id;
-		$insertAddress[0]['country_id'] 		= $customer_info['customer_country_id'] or '';
-		$insertAddress[0]['customer_state'] 	= $customer_info['customer_state_province'] or '';
-		$insertAddress[0]['customer_city'] 		= $customer_info['customer_city'] or '';
-		$insertAddress[0]['customer_zipcode'] 	= $customer_info['customer_zipcode'] or '';
-		$insertAddress[0]['customer_street'] 	= $customer_info['customer_address'] or '';
+		$insertAddress[0]['country_id'] 		= isset($customer_info['customer_country_id'])
+									  				  ? $customer_info['customer_country_id'] : 420;
+		$insertAddress[0]['customer_state'] 	= isset($customer_info['customer_state'])
+									  				  ? $customer_info['customer_state'] : '';
+		$insertAddress[0]['customer_city'] 		= isset($customer_info['customer_city'])
+									  				  ? $customer_info['customer_city'] : '';
+		$insertAddress[0]['customer_zipcode'] 	= isset($customer_info['customer_zipcode'])
+									  				  ? $customer_info['customer_zipcode'] : '';
+		$insertAddress[0]['customer_street'] 	= isset($customer_info['customer_street'])
+									  				  ? $customer_info['customer_street'] : '';
 		$insertAddress[0]['purpose'] 			= 'billing';
 
 		$insertAddress[1]['customer_id'] 		= $customer_id;
-		$insertAddress[1]['country_id'] 		= $customer_info['customer_country_id_ship'] or '';
-		$insertAddress[1]['customer_state'] 	= $customer_info['customer_state_province_ship'] or '';
-		$insertAddress[1]['customer_city'] 		= $customer_info['customer_city_ship'] or '';
-		$insertAddress[1]['customer_zipcode'] 	= $customer_info['customer_zipcode_ship'] or '';
-		$insertAddress[1]['customer_street'] 	= $customer_info['customer_address_ship'] or '';
+		$insertAddress[1]['country_id'] 		=isset($customer_info['customer_country_id_ship'])
+									  				  ? $customer_info['customer_country_id_ship'] : 420;
+		$insertAddress[1]['customer_state'] 	= isset($customer_info['customer_state_ship'])
+									  				  ? $customer_info['customer_state_ship'] : '';
+		$insertAddress[1]['customer_city'] 		= isset($customer_info['customer_city_ship'])
+									  				  ? $customer_info['customer_city_ship'] : '';
+		$insertAddress[1]['customer_zipcode'] 	= isset($customer_info['customer_zipcode_ship'])
+									  				  ? $customer_info['customer_zipcode_ship'] : '';
+		$insertAddress[1]['customer_street'] 	= isset($customer_info['customer_street_ship'])
+									  				  ? $customer_info['customer_street_ship'] : '';
 		$insertAddress[1]['purpose'] 			= 'shipping';
 
 		Tbl_customer_address::insert($insertAddress);
 
 		$insertOtherInfo['customer_id'] 	= $customer_id;
-		$insertOtherInfo['customer_phone'] 	= $customer_info['customer_phone'] or '';
-		$insertOtherInfo['customer_mobile'] = $customer_info['customer_mobile'] or '';
-		$insertOtherInfo['customer_notes'] 	= $customer_info['customer_notes'] or '';
+		$insertOtherInfo['customer_phone'] 	= isset($customer_info['customer_phone'])
+									  			  ? $customer_info['customer_phone'] : '';
+		$insertOtherInfo['customer_mobile'] = isset($customer_info['customer_mobile'])
+									  			  ? $customer_info['customer_mobile'] : '';
+		$insertOtherInfo['customer_notes'] 	= isset($customer_info['customer_notes'])
+									  			  ? $customer_info['customer_notes'] : '';
 
 		Tbl_customer_other_info::insert($insertOtherInfo);
 

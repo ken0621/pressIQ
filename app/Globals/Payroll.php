@@ -12,6 +12,9 @@ use App\Models\Tbl_payroll_pagibig_default;
 use App\Models\Tbl_payroll_pagibig;
 use App\Models\Tbl_payroll_employee_search;
 use App\Models\Tbl_payroll_employee_basic;
+use App\Models\Tbl_payroll_deduction;
+use App\Models\Tbl_payroll_deduction_employee;
+use App\Models\Tbl_payroll_deduction_payment;
 
 use Carbon\Carbon;
 use stdClass;
@@ -180,6 +183,43 @@ class Payroll
 
 	}
 	
+	/* GET EMPLOYEE DEDUCTION BALANCE */
+	public static function getbalance($shop_id = 0, $deduction_id = 0)
+	{
+		$data = array();
+
+		$total_amount = Tbl_payroll_deduction::where('payroll_deduction_id',$deduction_id)->pluck('payroll_deduction_amount');
+
+
+		$_deduction = Tbl_payroll_deduction_employee::selbyemployee($deduction_id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
+		// dd($_deduction);
+		$data['active'] = array();
+		$data['zero']	= array();
+		$data['cancel']	= array();
+		foreach($_deduction as $key => $deduction)
+		{
+			$balance = $total_amount - Tbl_payroll_deduction_payment::selbyemployee($deduction->payroll_employee_id, $deduction_id)->sum('payroll_payment_amount');
+			$index = 'active';
+			if($balance <= 0)
+			{
+				$index = 'zero';
+			}
+			$data[$index][$key]['deduction'] 	= $deduction;
+			$data[$index][$key]['balance'] 		= $balance;
+		}
+		
+		$_canceled = Tbl_payroll_deduction_employee::selbyemployee($deduction_id,1)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
+		foreach($_canceled as $key => $cancel)
+		{
+			$balance = $total_amount - Tbl_payroll_deduction_payment::selbyemployee($cancel->payroll_employee_id, $deduction_id)->sum('payroll_payment_amount');
+
+			$data['cancel'][$key]['deduction'] 	= $cancel;
+			$data['cancel'][$key]['balance'] 		= $balance;
+		}
+		
+		return $data;
+	}
+
 	/* 	 Returns normal hours rendered and overtime (Guillermo Tabligan) */
 	public static function process_time($time_rule, $default_time_in, $default_time_out, $_time_record, $break = "01:00", $default_working_hours = "08:00")
 	{

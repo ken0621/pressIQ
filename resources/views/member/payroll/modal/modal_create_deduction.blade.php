@@ -102,7 +102,7 @@
 		<hr>
 		<div class="form-group">
 			<div class="col-md-12">
-				<span><b>Affected Employee</b><button class="btn btn-custom-primary pull-right popup" type="button" link="/member/payroll/deduction/modal_deduction_tag_employee">Tag Employee</button></span>
+				<span><b>Affected Employee</b><button class="btn btn-custom-primary pull-right popup" type="button" link="/member/payroll/deduction/modal_deduction_tag_employee/0">Tag Employee</button></span>
 			</div>
 		</div>
 		<div class="form-group">

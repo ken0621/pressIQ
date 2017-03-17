@@ -17,4 +17,11 @@ class Tbl_payroll_deduction_payment extends Model
 	// [INTEGER] 		payroll_employee_id
 	// [INTEGER] 		payroll_record_id
 	// [DOUBLE] 		payroll_payment_amount
+
+	public function scopeselbyemployee($query, $payroll_deduction_id = 0, $payroll_employee_id = 0)
+	{
+		$query->where('payroll_deduction_id',$payroll_deduction_id)->where('payroll_employee_id', $payroll_employee_id);
+
+		return $query;
+	}
 }

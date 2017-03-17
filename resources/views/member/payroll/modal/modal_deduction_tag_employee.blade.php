@@ -1,8 +1,9 @@
-<form class="global-submit" role="form" action="/member/payroll/deduction/set_employee_deduction_tag" method="POST">
+<form class="global-submit" role="form" action="{{$action}}" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Tag Employee</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
+		<input type="hidden" name="deduction_id" value="{{$deduction_id}}">
 	</div>
 	<div class="modal-body form-horizontal">
 		<div class="form-group">

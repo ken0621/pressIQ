@@ -26,7 +26,7 @@
   <div class="tab-content panel-body form-horizontal tablet-container">
     <div class="form-group">
       <div class="col-md-12">
-        <a link="/tablet/submit_all_transaction" size="md" class="popup"> Temporary Submit</a>
+        <a link="/tablet/submit_all_transaction" size="md" class="popup"> Close this S.I.R</a>
       </div>
     </div>
     <div class="form-group text-center">

@@ -67,7 +67,7 @@ class Customer_InvoiceController extends Member
 
     public function invoice_list()
     {
-        $data["_invoices"] = Tbl_customer_invoice::customer()->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_shop_id",$this->user_info->shop_id)->get();
+        $data["_invoices"] = Tbl_customer_invoice::manual_invoice()->customer()->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_shop_id",$this->user_info->shop_id)->get();
         return view("member.customer_invoice.customer_invoice_list",$data);
     }
     public function create_invoice()

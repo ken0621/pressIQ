@@ -47,6 +47,7 @@ class MlmDashboardController extends Mlm
     public static function income_discount()
     {
         $data = [];
+        $data['all_discount'] = Tbl_mlm_discount_card_log::where('discount_card_customer_sponsor', Self::$customer_id)->get();
         return view('mlm.dashboard.income_discount', $data);
     }
     public static function income()

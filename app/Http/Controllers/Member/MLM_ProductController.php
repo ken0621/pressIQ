@@ -147,17 +147,18 @@ class MLM_ProductController extends Member
         $membership = Tbl_membership::getactive(0, $shop_id)->get();
 
         $points = Request::input('membership_points');
+        foreach($membership as $key2 => $value2)
+                {
         foreach($data['active_plan_product_repurchase'] as $key => $value)
         {
 	            $tablename 			 = $value->marketing_plan_code;
-
-                foreach($membership as $key2 => $value2)
-                {
+                
                     $update[$tablename] = $points[$tablename][$value2->membership_id];
                     Tbl_mlm_item_points::where('item_id', Request::input('item_id'))
                     ->where('membership_id', $value2->membership_id)->update($update);
-                }
         }
+        
+                }
 
         if($update != null)
         {

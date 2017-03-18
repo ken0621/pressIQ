@@ -231,7 +231,7 @@
                            <span class="badge bg-green">6</span>
                            </a>
                            <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                              <li>
+                              <li class="hide">
                                  <a>
                                  <span class="image"><img src="/member-theme/myphone/images/img.jpg" alt="Profile Image" /></span>
                                  <span>
@@ -245,22 +245,23 @@
                               </li>
                               @if(isset($notification))
                                   @foreach($notification as $key => $value)
-                                  <li><!-- start notification -->
+                                  <li>
                                     <a href="/mlm/notification">
-                                      <i class="fa fa-users text-aqua"></i> {{$value->wallet_log_details}}
+                                      <span class="image"><i class="fa fa-users text-aqua"></i></span>
+                                      <span>
+                                        <span>{{$value->slot_no}}</span>
+                                        <span class="time">{{$value->wallet_log_date_created}}</span>
+                                       </span>
+                                       <span class="message">
+                                       {{$value->wallet_log_details}}
+                                       </span>
                                     </a>
                                   </li>
                                   @endforeach
-                              @else
-                              <li><!-- start notification -->
-                                <a href="/mlm/notification">
-                                  <i class="fa fa-users text-aqua"></i> No Active Notification
-                                </a>
-                              </li>
                               @endif
                               <li>
                                  <div class="text-center">
-                                    <a>
+                                    <a href="/mlm/notification">
                                     <strong>See All Alerts</strong>
                                     <i class="fa fa-angle-right"></i>
                                     </a>

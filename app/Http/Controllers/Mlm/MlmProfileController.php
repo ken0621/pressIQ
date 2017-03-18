@@ -9,6 +9,7 @@ use DB;
 use Validator;
 use App\Globals\Mlm_member;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_mlm_discount_card_log;
 use App\Globals\Cards;
 use App\Models\Tbl_mlm_slot;
 use App\Globals\Pdf_global;
@@ -33,6 +34,14 @@ class MlmProfileController extends Mlm
     	else
     	{
     		$data['cus_info'] = Mlm_member::get_customer_info(Self::$customer_id);
+    		if(Self::$discount_card_log_id != null)
+    		{
+    			$data['card'] = $this->card_discount(Self::$discount_card_log_id);
+    			if(Request::input('pdf') == 'true')
+	    		{
+	    			return Pdf_global::show_image($data['card']);
+	    		}
+    		}
     	}
     	 
 
@@ -200,5 +209,17 @@ class MlmProfileController extends Mlm
     		return $a;
     		return Pdf_global::show_image($a);
     	}
+    }
+    public function card_discount($discount_card_log_id)
+    {
+    	$card_info = Tbl_mlm_discount_card_log::membership()
+    	->where('discount_card_log_id', $discount_card_log_id)
+        ->whereNotNull('tbl_mlm_discount_card_log.discount_card_customer_holder')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+        ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+        ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+        ->first();
+        // dd($card_info);
+       	return Cards::discount_card($card_info);
     }
 }

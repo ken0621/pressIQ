@@ -16,22 +16,22 @@
       <div class="cart-content-item" vid="{{ $cart["cart_product_information"]["variant_id"] }}" rawprice="{{ $cart["cart_product_information"]["product_price"] }}">
         <div class="cart-item-text"><img style="width: 100%;" src="{{ $cart['cart_product_information']['image_path'] ? $cart['cart_product_information']['image_path'] : '/assets/mlm/img/placeholder.jpg' }}"></div>
         <div class="cart-item-text">
-          <div>{{ $cart["cart_product_information"]["product_name"] }}</div>
+          <div>{{ $cart["cart_product_information"]["product_name"] }} ({{ $cart["cart_product_information"]["variant_name"] }})</div>
           <div><a class="remove-item-from-cart" vid="{{ $cart["cart_product_information"]["variant_id"] }}" href="javascript:">REMOVE</a></div>
         </div>
         <div class="cart-item-text">&#8369; {{ number_format($cart["cart_product_information"]["product_price"], 2) }}</div>
         <div class="cart-item-text"><button class="compute-cart" compute="-1">-</button><input name="qty[{{ $cart["cart_product_information"]["variant_id"] }}]" class="text-center product-qty" type="text" value="{{ $cart['quantity'] }}"><button class="compute-cart" compute="1">+</button></div>
-        <div class="cart-item-text text-right total-price"></div>
+        <div class="cart-item-text text-right">&#8369; <span class="total-price"></span></div>
       </div>
       @endforeach
       <!-- ENDFOREACH -->
     </div>
     <div class="cart-content-items">
       <a class="cart-content-back"><img src="/resources/assets/rutsen/img/arrow-left.png">Continue Shopping</a>
-      <button onclick="location.href='branch'; return false;" class="cart-content-go text-center">Reserve</button>
+      <button onclick="location.href='/checkout'; return false;" class="cart-content-go text-center">Checkout</button>
       
       <div class="super-holder"><span>Total</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-         <div class="cart-content-price text-right super-total">{{ $get_cart["sale_information"]["total_product_price"] }}</div></div>
+         <div class="cart-content-price text-right">&#8369; <span class="super-total">{{ $get_cart["sale_information"]["total_product_price"] }}</span></div></div>
     </div>
 
     <div class="feature-items">

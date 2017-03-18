@@ -349,7 +349,7 @@ class CustomerController extends Member
             $mlm_password = Request::input('mlm_password');
             if($mlm_username != null || $mlm_username != "")
             {
-                if(strlen($mlm_username) >= 6)
+                if(strlen($mlm_username) >= 4)
                 {
                     $count_username = Tbl_customer::where('mlm_username', $mlm_username)->count();
                     if($count_username == 0)
@@ -680,7 +680,7 @@ class CustomerController extends Member
             $mlm_password = Request::input('mlm_password');
             if($mlm_username != null || $mlm_username != "")
             {
-                if(strlen($mlm_username) >= 6)
+                if(strlen($mlm_username) >= 4)
                 {
                     $count_username = Tbl_customer::where('mlm_username', $mlm_username)->where('customer_id', '!=', $client_id)->count();
                     if($count_username == 0)

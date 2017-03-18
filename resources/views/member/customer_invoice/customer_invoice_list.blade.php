@@ -25,14 +25,14 @@
         <li class="cursor-pointer"><a class="cursor-pointer"  onclick="select(1,0)" data-toggle="tab" href="#closed"><i class="fa fa-window-close"></i> Closed SIR</a></li>
         <li class="cursor-pointer"><a class="cursor-pointer" onclick="select('',1)" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived SIR</a></li>
     </ul> -->
-    <div class="search-filter-box">
+    <!-- <div class="search-filter-box">
         <div class="col-md-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
                 <input type="text" class="form-control search_name" placeholder="Search by SIR Number" aria-describedby="basic-addon1">
             </div>
         </div>  
-    </div>
+    </div> -->
     <div class="form-group tab-content panel-body sir_container">
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
@@ -60,7 +60,9 @@
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
                                           <li ><a class="popup" link="/member/customer/customer_invoice_view/{{$invoice->inv_id}}" size="lg">View Invoice</a></li>
+                                          @if($invoice->manual_invoice_id == null)
                                           <li ><a href="/member/customer/invoice?id={{$invoice->inv_id}}">Edit Invoice</a></li>
+                                          @endif
                                       </ul>
                                     </div>
                                 </td>

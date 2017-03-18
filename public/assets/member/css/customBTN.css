@@ -229,6 +229,10 @@
 .width-100{
     width:100% !important;
 }
+.width-120px
+{
+    width: 120px !important;
+}
 .width-200px
 {
     width: 200px !important;
@@ -326,7 +330,19 @@
     padding-top: 1px !important;
     padding-bottom: 1px !important;
 }
-
+.padding-tb-2, .padding-tb-2 td
+{
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+}
+.padding-3-10
+{
+    padding: 3px 10px !important;
+}
+.padding-b-37
+{
+    padding-bottom: 37px !important;
+}
 /*padding start*/
 
 /* position start*/

@@ -13,6 +13,7 @@ use App\Globals\Purchasing_inventory_system;
 use App\Globals\Customer;
 use App\Globals\Accounting;
 use App\Globals\Pdf_global;
+use App\Globals\Category;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_employee;
@@ -41,7 +42,7 @@ class TabletPISController extends Member
 	 */
 	public function confirm_submission()
 	{
-		$data["action"] = "sync";
+		$data["action"] = "close";
 
 		return view("tablet.agent.confirm_sync",$data);
 	}
@@ -54,6 +55,9 @@ class TabletPISController extends Member
 	public function index()
 	{
 		$data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);
+
+        $data['_category']  = Category::getAllCategory(["inventory","all"]);
+
         if($data["sir"])
         {
             $data["_sir_item"] = Purchasing_inventory_system::get_sir_item($data["sir"]->sir_id);
@@ -305,7 +309,7 @@ class TabletPISController extends Member
 		$insert["rp_shop_id"]           = $this->getShopId();
         $insert["rp_customer_id"]       = Request::input('rp_customer_id');
         $insert["rp_ar_account"]        = Request::input('rp_ar_account') or 0;
-        $insert["rp_date"]              = date("Y-m-d", strtotime(Request::input('rp_date')));
+        $insert["rp_date"]              = datepicker_input(Request::input('rp_date'));
         $insert["rp_total_amount"]      = convertToNumber(Request::input('rp_total_amount'));
         $insert["rp_payment_method"]    = Request::input('rp_payment_method');
         $insert["rp_memo"]              = Request::input('rp_memo');
@@ -358,7 +362,7 @@ class TabletPISController extends Member
 
         $update["rp_customer_id"]       = Request::input('rp_customer_id');
         $update["rp_ar_account"]        = Request::input('rp_ar_account') or 0;
-        $update["rp_date"]              = date("Y-m-d", strtotime(Request::input('rp_date')));
+        $update["rp_date"]              = datepicker_input(Request::input('rp_date'));
         $update["rp_total_amount"]      = convertToNumber(Request::input('rp_total_amount'));
         $update["rp_payment_method"]    = Request::input('rp_payment_method');
         $update["rp_memo"]              = Request::input('rp_memo');
@@ -411,8 +415,8 @@ class TabletPISController extends Member
         $invoice_info                       = [];
         $invoice_info['invoice_terms_id']   = Request::input('inv_terms_id');
         $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
-        $invoice_info['invoice_date']       = Request::input('inv_date');
-        $invoice_info['invoice_due']        = Request::input('inv_due_date');
+        $invoice_info['invoice_date']       = datepicker_input(Request::input('inv_date'));
+        $invoice_info['invoice_due']        = datepicker_input(Request::input('inv_due_date'));
         $invoice_info['billing_address']    = Request::input('inv_customer_billing_address');
 
         $invoice_other_info                 = [];
@@ -517,8 +521,8 @@ class TabletPISController extends Member
 		$invoice_info                       = [];
 		$invoice_info['invoice_terms_id']   = Request::input('inv_terms_id');
         $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
-		$invoice_info['invoice_date']       = Request::input('inv_date');
-		$invoice_info['invoice_due']        = Request::input('inv_due_date');
+		$invoice_info['invoice_date']       = datepicker_input(Request::input('inv_date'));
+		$invoice_info['invoice_due']        = datepicker_input(Request::input('inv_due_date'));
 		$invoice_info['billing_address']    = Request::input('inv_customer_billing_address');
 
 		$invoice_other_info                 = [];

@@ -315,7 +315,8 @@ class MlmTransferController extends Mlm
             ->where('wallet_log_status', 'released')
             ->whereNull('encashment_process')   
             ->get()->toArray();
-
+            
+            // dd($data['unprocessed']);
             return view('mlm.wallet.encashment', $data);
         }
         else

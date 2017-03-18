@@ -87,12 +87,12 @@
                             <div class="container-quantity-price">
                                 <div class="row clearfix">
                                     <div class="col-md-5 price-old-new">
-                                       @if($product_variant['discounted'] == "true")
-                                       <div class="present-item-price">PHP {{ number_format($product_variant['item_discount_value'], 2) }}</div>
-                                       <div class="item-old-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
-                                       @else
+                                       <!-- if($product_variant['discounted'] == "true") -->
+                                       <!-- <div class="present-item-price">PHP {{ number_format($product_variant['item_discount_value'], 2) }}</div>
+                                       <div class="item-old-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div> -->
+                                       <!-- else -->
                                        <div class="present-item-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
-                                       @endif
+                                       <!-- endif -->
                                     </div>
                                     <div class="col-md-7 item-quantity">
                                         <div class="quantity-input">
@@ -105,10 +105,32 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="facebook-share">
+                            @if(count($product_variant['mlm_discount']) > 0)
+                            <div style="margin-top: 15px;">
+                                <table class="table table-bordered table-striped table-hover table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Discount Value</th>
+                                            <th>Product Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($product_variant['mlm_discount'] as $key => $mlm_discount)
+                                        <tr>
+                                            <td>{{ $mlm_discount['discount_name'] }}</td>
+                                            <td>PHP. {{ number_format($mlm_discount['discount_value'], 2) }}</td>
+                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            @endif
+                            <!-- <div class="facebook-share">
                                 <img class="item-image-small" src="/themes/{{ $shop_theme }}/img/facebook-logo.jpg">
                                 <a class="tooltips" href="#">Share<span>20</span></a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

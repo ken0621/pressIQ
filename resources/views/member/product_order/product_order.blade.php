@@ -20,13 +20,16 @@
 
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
-        <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#unpaid"><i class="fa fa-star"></i> Unpaid</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#paid"><i class="fa fa-trash"></i> Paid</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#void"><i class="fa fa-trash"></i> Void</a></li>
+        <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#pending"><i class="fa fa-star"></i> Pending</a></li>
+        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#failed"><i class="fa fa-trash"></i> Failed</a></li>
+        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#processing"><i class="fa fa-trash"></i> Processing</a></li>
+        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#completed"><i class="fa fa-trash"></i> Completed</a></li>
+        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#onhold"><i class="fa fa-trash"></i> On-Hold</a></li>
+        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#cancelled"><i class="fa fa-trash"></i> Cancelled</a></li>
     </ul>
     
     <div class="tab-content">
-        <div id="unpaid" class="tab-pane fade in active">
+        <div id="pending" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
                 <table class="table table-condensed">
@@ -66,7 +69,7 @@
             </div>
         </div>
         
-        <div id="paid" class="tab-pane fade in ">
+        <div id="failed" class="tab-pane fade in ">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
                 <table class="table table-condensed">

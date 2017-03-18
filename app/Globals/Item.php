@@ -22,6 +22,10 @@ class Item
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
+    public static function get_item_details($item_id = 0)
+    {
+        return Tbl_item::category()->where("item_id",$item_id)->first();
+    }
 	public static function breakdown($_item='')
 	{
 		$data = '';
@@ -141,7 +145,7 @@ class Item
     {
         $shop_id = Item::getShopId();
 
-        $item = Tbl_sir_item::select_sir_item()->leftjoin("tbl_category","tbl_category.type_id","=","tbl_item.item_category_id")->where("tbl_sir_item.sir_id",$sir_id)->groupBy("tbl_item.item_category_id")->get();
+        $item = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->groupBy("tbl_item.item_category_id")->get();
         foreach ($item as $key1 => $value) 
         {         
             $_category[$key1] = Tbl_category::where("type_shop",$shop_id)->where("archived",0)->where("type_id",$value->item_category_id)->first();  

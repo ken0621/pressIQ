@@ -46,7 +46,7 @@
         <div class="tab-content">
             <div id="actives" class="tab-pane fade in active">
                 <div class="form-group order-tags"></div>
-                <div class="load-data" filter="active" target="active_product">
+                <div class="load-data" target="active_product" filter="active" filteru="anime" >
                     <div id="active_product">
                         @include('member.ecommerce_product.ecom_load_product_tbl', ['filter' => 'active'])
                     </div>

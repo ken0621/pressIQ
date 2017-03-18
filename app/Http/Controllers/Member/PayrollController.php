@@ -1677,23 +1677,84 @@ class PayrollController extends Member
 
 	public function modal_save_payroll_group()
 	{
+		$insert['shop_id']								= Self::shop_id();
 		$insert['payroll_group_code'] 					= Request::input('payroll_group_code');
 		$insert['payroll_group_salary_computation'] 	= Request::input('payroll_group_salary_computation');
 		$insert['payroll_group_period'] 				= Request::input('payroll_group_period');
 		$insert['payroll_group_13month_basis'] 			= Request::input('payroll_group_13month_basis');
-		$insert['payroll_group_deduct_before_absences'] = Request::input('payroll_group_deduct_before_absences');
+		
+		if( Request::has('payroll_group_deduct_before_absences'))
+		{
+			$insert['payroll_group_deduct_before_absences'] = Request::input('payroll_group_deduct_before_absences');
+		}
+		
 		$insert['payroll_group_tax'] 					= Request::input('payroll_group_tax');
 		$insert['payroll_group_sss'] 					= Request::input('payroll_group_sss');
 		$insert['payroll_group_philhealth'] 			= Request::input('payroll_group_philhealth');
 		$insert['payroll_group_pagibig'] 				= Request::input('payroll_group_pagibig');
 		$insert['payroll_group_agency'] 				= Request::input('payroll_group_agency');
 		$insert['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
-		$insert['payroll_group_is_flexi_time'] 			= Request::input('payroll_group_is_flexi_time');
+		
+		if(Request::has('payroll_group_is_flexi_time'))
+		{
+			$insert['payroll_group_is_flexi_time'] 		= Request::input('payroll_group_is_flexi_time');
+		}
+		
 		$insert['payroll_group_working_day_month'] 		= Request::input('payroll_group_working_day_month');
-		$insert['payroll_group_target_hour_parameter'] 	= Request::input('payroll_group_target_hour_parameter');
+		if(Request::has('payroll_group_target_hour_parameter'))
+		{
+			$insert['payroll_group_target_hour_parameter'] 	= Request::input('payroll_group_target_hour_parameter');
+		}
 		$insert['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
 		$insert['payroll_group_start'] 					= Request::input('payroll_group_start');
 		$insert['payroll_group_end'] 					= Request::input('payroll_group_end');
+
+		/* INSERT PAYROLL GROUP AND GET ID */ 
+		$group_id = Tbl_payroll_group::insertGetId($insert);
+
+		$insert_rate['payroll_group_id']				= $group_id;
+		$insert_rate['payroll_overtime_name'] 			= Request::input("payroll_overtime_name");
+		$insert_rate['payroll_overtime_regular'] 		= Request::input("payroll_overtime_regular");
+		$insert_rate['payroll_overtime_overtime'] 		= Request::input("payroll_overtime_overtime");
+		$insert_rate['payroll_overtime_nigth_diff'] 	= Request::input("payroll_overtime_nigth_diff");
+		$insert_rate['payroll_overtime_rest_day'] 		= Request::input("payroll_overtime_rest_day");
+		$insert_rate['payroll_overtime_rest_overtime'] 	= Request::input("payroll_overtime_rest_overtime");
+		$insert_rate['payroll_overtime_rest_night'] 	= Request::input("payroll_overtime_rest_night");
+
+		/* INSERT PAYROLL OVERTIME NIGHT DIFFERENTIALS REST DAY HOLIDAY */
+		Tbl_payroll_overtime_rate::insert($insert_rate);
+
+		$_restday 										= Request::input('restday');
+		$_extraday										= Request::input('extraday');
+
+		$insert_rest_day = array();
+
+		foreach($_restday as $restday)
+		{
+			$temp['payroll_group_id']					= $group_id;
+			$temp['payroll_group_rest_day']				= $restday;
+			$temp['payroll_group_rest_day_category']	= 'rest day';
+
+			array_push($insert_rest_day, $temp);
+		}
+
+		foreach($_extraday as $extra)
+		{
+			$temp['payroll_group_id']					= $group_id;
+			$temp['payroll_group_rest_day']				= $extra;
+			$temp['payroll_group_rest_day_category']	= 'extra day';
+
+			array_push($insert_rest_day, $temp);
+		}
+
+		if(!empty($insert_rest_day))
+		{
+			Tbl_payroll_group_rest_day::insert($insert_rest_day);
+		}
+
+		$return['status'] = 'success';
+		$return['function_name'] = '';
+		return json_encode($return);
 	}
 
 // 	Tbl_payroll_overtime_rate

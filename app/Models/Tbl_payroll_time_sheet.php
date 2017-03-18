@@ -14,10 +14,12 @@ class Tbl_payroll_time_sheet extends Model
 
     // ['PRIMARY KEY']					payroll_time_sheet_id
 	// [INTEGER] 						payroll_employee_id
-	// [INTEGER] 						payroll_company_id  
 	// [VARCHAR (DEFAULT : Regular) ] 	payroll_time_sheet_type
 	// [DATE]							payroll_time_date
-	// []
+	// [TIME]							payroll_time_approve_regular_overtime
+	// [TIME]							payroll_time_approve_early_overtime
+	// [TIME]							payroll_time_approve_extra_day
+	// [TIME]							payroll_time_approve_rest_day
 
 	/* REASONING */
 	/* [payroll_company_id]  

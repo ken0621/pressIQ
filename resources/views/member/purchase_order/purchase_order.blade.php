@@ -1,8 +1,8 @@
 @extends('member.layout')
 @section('content')
-<form class="global-submit form-to-submit-transfer" role="form" action="{{$action}}" method="POST" >
+<form class="global-submit form-to-submit-transfer load-po-container" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" name="_token" value="{{csrf_token()}}" >
-    <input type="hidden" name="po_id" value="{{Request::input('id')}}" >
+    <input type="hidden" name="po_id" value="{{$po->po_id or ''}}" >
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
             <div>
@@ -13,8 +13,8 @@
                     
                     </small>
                 </h1>
-                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save and Send</button>
-                <a href="javascript:" class="panel-buttons btn btn-custom-white pull-right popup" link="/member/item/add" size="lg">Save</a>
+                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save</button>
+                <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <select class="form-control droplist-vendor input-sm pull-left" name="po_vendor_id" data-placeholder="Select a Customer" required>
-                                    @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($po->po_vendor_id) ? $po->po_vendor_id : '']);
+                                    @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($po->po_vendor_id) ? $po->po_vendor_id : (isset($v_id) ? $v_id : '')]);
                                 </select>
                             </div>
                             <div class="col-sm-4">

@@ -3,9 +3,15 @@
 @section('content')
 
 <div class="product-title container">
-
     <div class="text" onclick="location.href='/'">Home</div> 
-
+    @foreach($breadcrumbs as $breadcrumb)
+      <i class="fa fa-circle aktibo"></i>
+      @if(end($breadcrumbs) == $breadcrumb)
+        <div class="text aktibo">{{ $breadcrumb['type_name'] }}</div>
+      @else
+        <div class="text" onclick="location.href='/{{ $breadcrumb['type_id'] }}'">{{ $breadcrumb['type_name'] }}</div> 
+      @endif
+    @endforeach
 </div>
 
 <div class="remodal" data-remodal-id="full">
@@ -38,14 +44,15 @@
          <div class="single-order-content">
             <div class="single-order-description">
                <div class="title">DESCRIPTION</div>
+               <div>{!! $product_variant['evariant_description'] !!}</div>
             </div>
-            <div class="divider"></div>
+            <!-- <div class="divider"></div>
             <div class="single-order-description">
                <div class="title">PACKAGE INCLUSION</div>
-            </div>
+            </div> -->
             <div class="price-container">
-               <div id="single-order-price" class="single-order-price"></div>
-               <div class="single-order-availability"></div>
+               <div id="single-order-price" class="single-order-price">&#8369;&nbsp;{{ number_format($product_variant['evariant_price'], 2) }}</div>
+               <div class="single-order-availability" style="text-transform: capitalize;">{{ $product_variant['inventory_status'] }}</div>
             </div>
             <div class="product-selection">
                <form id="prod-attr-form" method="GET">
@@ -75,7 +82,7 @@
                         Quantity
                      </div>
                      <div class="select">
-                        <select class="variation-qty" name="qty">
+                        <select class="variation-qty" variant-id="{{ $product_variant['evariant_id'] }}" name="qty">
                            <option>1</option>
                            <option>2</option>
                            <option>3</option>
@@ -86,10 +93,11 @@
                   </div>
                </div>
             </div>
-            <button class="single-order-button " pid="" vid="" mode="cart" onclick="window.open('','_blank')">BUY NOW</button> 
-            <button href="product/#order" class="single-order-button order-button add-cart" mode="reservation">STORE PICK-UP</button>
-            <div class="divider" style="margin: 35px 0;"></div>
-            <div class="single-order-rate" id="single-product-rate">
+            <!-- <button class="single-order-button " pid="" vid="" mode="cart" onclick="window.open('','_blank')">BUY NOW</button> 
+            <button href="product/#order" class="single-order-button order-button add-cart" mode="reservation">STORE PICK-UP</button> -->
+            <button type="button" class="single-order-button add-to-cart disabled" variant-id="{{ $product_variant['evariant_id'] }}" disabled>ADD TO CART</button>
+            <div class="divider" style="margin: 35px 0; opacity: 0;"></div>
+            <!-- <div class="single-order-rate" id="single-product-rate">
                @for ($i = 1; $i <= 5; $i++)
                <div class="single-order-star active">
                </div>
@@ -112,10 +120,10 @@
                   <i class="fa fa-twitter"></i>
                   </a>
                </div>
-            </div>
+            </div> -->
          </div>
       </div>
-      <div class="single-detail clear">
+      <div class="single-detail clear hide">
          <div class="single-detail-header">
             <div class="single-detail-tab single-tab" data-id="single-detail-description">DETAILS</div>
             <div class="single-detail-tab single-tab active" data-id="single-detail-review">REVIEWS</div>
@@ -193,20 +201,22 @@
             <div class="related-content-header"><span>RELATED</span> PRODUCTS</div>
             <div class="related-content-sub">You might want to check out other products.</div>
             <div class="container">
+               @foreach(limit_foreach($_related, 4) as $related)
                <div class="feature-holder col-md-3 col-sm-6 col-xs-12">
                   <a href="product/">
                      <div class="feature-img">
-                        <img class="lazy" data-original="" height="222px" width="222px">
+                        <img class="lazy 4-3-ratio" data-original="{{ get_product_first_image($related) }}" height="222px" width="222px">
                         <div class="feature-hover"></div>
                         <div class="feature-hoverimg">
                   <a href="javascript:"><i class="fa fa-link"></i></a></div>
                   </div>
                   </a>
-                  <a href="product/" class="feature-name"></a>
+                  <a href="product/" class="feature-name">{{ get_product_first_name($related) }}</a>
                   <div class="feature-rate"></div>
-                  <div class="feature-price"></div>
-                  <a href='{{ "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]" }}#quick' variations='' attributes='' preview="" pid="" title="" price="" description="" class="feature-button quick-view" style="display: none;">QUICK VIEW</a>
+                  <div class="feature-price">{{ get_product_first_price($related) }}</div>
+                  <a class="feature-button quick-view" style="display: none;">QUICK VIEW</a>
                </div>
+               @endforeach
             </div>
          </div>
       </div>

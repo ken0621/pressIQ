@@ -1,6 +1,6 @@
 @extends('member.layout')
 @section('content')
-<form class="global-submit-page form-to-submit-transfer" role="form" action="{{$action}}" method="POST" >
+<form class="global-submit form-to-submit-transfer" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" name="ec_order_id" value="{{$ec_order_id or ''}}" >
     <input type="hidden" name="invoice_id" class="invoice_id_container" value="{{Request::input('id')}}" >
@@ -10,7 +10,7 @@
             <div>
                 <i class="fa fa-tags"></i>
                 <h1>
-                    <span class="page-title">{{isset($inv) ? 'View Invoice #'.$inv->ec_order_id : 'Create Invoice'}}</span>
+                    <span class="page-title">{{isset($inv) ? 'View Order #'.$inv->ec_order_id : 'Create Order'}}</span>
                     <small>
                     
                     </small>
@@ -28,7 +28,37 @@
         </ul> -->
         <div class="tab-content">
             <div class="row">
-                <div class="col-md-12" style="padding: 30px;">
+                <div class="col-md-12" style="padding: 10px 30px;">
+                    <div class="row" style="margin-bottom: 10px">
+                        @if(isset($inv))
+                        <div class="col-sm-12">
+                            <div class="btn-group btn-group-justified" data-toggle="buttons">
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Pending Payment' ? 'active' : '' : 'active'}}">
+                                <input type="radio" name="order_status" id="option1" value="Unpaid"> Pending Payment
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Failed' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option2" value="Paid"> Failed
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Processing' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option3" value="Void"> Processing
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Completed' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option4" value="Void"> Completed
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option5" value="Void"> On-Hold
+                                </label>
+                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option6" value="Void"> Cancelled
+                                </label>
+                                <!-- <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Refunded' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option3" value="Void"> Refunded
+                                </label> -->
+                            </div> 
+                        </div>
+                        @endif
+                    </div>  
+
                     <!-- START CONTENT -->
                     <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                         <div class="row clearfix">
@@ -42,18 +72,16 @@
                             </div>
                         </div>
                     </div>
-                    <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
-                        <div class="row clearfix">
-                            <div class="col-sm-4">  
-                                <label>Order Status</label>
-                                <select class="form-control" name="order_status">
-                                <option value="Unpaid" {{isset($inv) ? $inv->order_status == "Unpaid" ? 'selected' : '' : ''}}> Unpaid </option>
-                                <option value="Paid" {{isset($inv) ? $inv->order_status == "Paid" ? 'selected' : '' : ''}}> Paid </option>
-                                <option value="Void" {{isset($inv) ? $inv->order_status == "Void" ? 'selected' : '' : ''}}> Void </option>
-                                </select>
-                            </div>
+                    <!-- <div class="row clearfix">
+                        <div class="col-sm-4">  
+                            <label>Order Status</label>
+                            <select class="form-control" name="order_status">
+                            <option value="Unpaid" {{isset($inv) ? $inv->order_status == "Unpaid" ? 'selected' : '' : ''}}> Unpaid </option>
+                            <option value="Paid" {{isset($inv) ? $inv->order_status == "Paid" ? 'selected' : '' : ''}}> Paid </option>
+                            <option value="Void" {{isset($inv) ? $inv->order_status == "Void" ? 'selected' : '' : ''}}> Void </option>
+                            </select>
                         </div>
-                    </div>
+                    </div>` -->
                     
                     <div class="row clearfix">
                         <div class="col-sm-2">
@@ -69,10 +97,8 @@
                         </div>
                         <div class="col-sm-2">  
                             <label>Payment Method</label>
-                            <select {{isset($inv) ? 'disabled' : ''}} class="form-control nput-sm" name="payment_method_id">
-                            @foreach($_payment as $payment)
-                                <option value="{{$payment->payment_method_id}}" {{isset($inv) ? $inv->payment_method_id == $payment->payment_method_id ? 'selected' : '' : ''}}>{{$payment->payment_name}}</option>
-                            @endforeach
+                            <select class="form-control input-sm drop-down-payment" name="payment_method_id">
+                                @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($inv) ? $inv->payment_method_id : ''])
                             </select>
                         </div>
                         <div class="col-sm-2">
@@ -116,7 +142,7 @@
                                                     <td class="invoice-number-td text-right">1</td>
                                                     <td>
                                                         <select disabled class="form-control select-item input-sm pull-left {{$invline->item_id}}" name="invline_item_id[]" required>
-                                                            @include("member.load_ajax_data.load_product_category", ['add_search' => "", 'item_id' => $invline->item_id])
+                                                            @include("member.load_ajax_data.load_product_category", ['add_search' => "", 'product_id' => $invline->item_id])
                                                         </select>
                                                     </td>
                                                     <td><textarea disabled class="textarea-expand txt-desc" name="invline_description[]">{{$invline->description}}</textarea></td>
@@ -127,7 +153,7 @@
                                                     <td><input disabled class="text-right number-input txt-amount" type="text" name="invline_amount[]" value="{{$invline->total}}" /></td>
                                                     <td class="text-center">
                                                         <input disabled type="hidden" class="invline_taxable" name="invline_taxable[]" value="{{$invline->tax}}" >
-                                                        <input disabled type="checkbox" name="" class="taxable-check" {{$invline->tax == 1 ? 'checked' : ''}}>
+                                                        <input disabled type="checkbox" name="" class="taxable-check compute" {{$invline->tax == 1 ? 'checked' : ''}}>
                                                     </td>
                                                     <td class="text-center cursor-pointer"></td>
                                                 </tr>
@@ -154,7 +180,7 @@
                                                 <td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]"/></td>
                                                 <td class="text-center">
                                                     <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check" value="checked">
+                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -178,7 +204,7 @@
                                                 <td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]"/></td>
                                                 <td class="text-center">
                                                     <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
-                                                    <input type="checkbox" name="" class="taxable-check" value="checked">
+                                                    <input type="checkbox" name="" class="taxable-check compute" value="checked">
                                                 </td>
                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                             </tr>
@@ -334,7 +360,7 @@
             <td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]"/></td>
             <td class="text-center">
                 <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
-                <input type="checkbox" name="" class="taxable-check" value="checked">
+                <input type="checkbox" name="" class="taxable-check compute" value="checked">
             </td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
@@ -342,7 +368,15 @@
 </div>
 @endsection
 
-
+@section('css')
+<style>
+    .btn-custom-white.active, .btn-custom-white.active:hover
+    {
+        background-color: #106189!important;
+        color: white!important;
+    }
+</style>
+@endsection
 @section('script')
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 @if(!isset($inv))

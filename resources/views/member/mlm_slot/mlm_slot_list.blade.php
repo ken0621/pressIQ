@@ -16,6 +16,9 @@
         </div>
     </div>
 </div>
+<style type="text/css">
+
+</style>
 
 <!-- NO PRODUCT YET -->
 <div class="panel panel-default panel-block panel-title-block panel-gray ">

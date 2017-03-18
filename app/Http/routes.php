@@ -14,8 +14,13 @@ Route::get('/barcode', 'MemberController@barcodes');
 
 Route::get('member/register', 'MemberController@register');
 Route::post('member/register/submit', 'MemberController@register_post');
-Route::get('member/register/payment', 'MemberController@payment');
+
 Route::get('member/register/package', 'MemberController@package');
+Route::post('member/register/package/submit', 'MemberController@package_post');
+
+Route::get('member/register/payment', 'MemberController@payment');
+Route::post('member/register/payment/submit', 'MemberController@payment_post');
+
 
 Route::get('member/card', 'Member\MLM_CardController@card');
 Route::get('member/card/all', 'Member\MLM_CardController@all_slot');
@@ -184,6 +189,7 @@ Route::any('/member/item/restore/{id}', 'Member\ItemController@restore'); /* B *
 Route::any('/member/item/restore_submit', 'Member\ItemController@restore_submit'); /* B */
 Route::any('/member/item/insert_saved_data', 'Member\ItemController@insert_session'); /* ERWIN */
 Route::any('/member/item/data', 'Member\ItemController@data'); /* ERWIN */
+Route::any('/member/item/mulitple_price_modal', 'Member\ItemController@get_multiple_price_modal'); /* B */
 
 Route::any('/member/functiontester', 'Member\FunctionTesterController@index'); /* ERWIN */
 Route::any('/member/functiontester/clear_all', 'Member\FunctionTesterController@clear_all'); /* ERWIN */
@@ -348,11 +354,16 @@ Route::any('/tablet/sync_export','Member\TabletPISController@sync_export');
 Route::any('/tablet/logout','Member\TabletPISController@logout');
 Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_sir');
 
+Route::any('/tablet/customer',"Member\TabletPISController@customer");
+Route::any('/tablet/customer_details/{id}',"Member\TabletPISController@customer_details");
+
+Route::any('/tablet/invoice','Member\TabletPISController@invoice');
 Route::any('/tablet/view_invoices/{id}','Member\TabletPISController@view_invoices');
 Route::any('/tablet/create_invoices/add','Member\TabletPISController@tablet_create_invoice');
 Route::any('/tablet/create_invoice/add_submit','Member\TabletPISController@create_invoice_submit');
 Route::any('/tablet/update_invoice/edit_submit',"Member\TabletPISController@update_invoice_submit");
 
+Route::any('/tablet/receive_payment','Member\TabletPISController@receive_payment');
 Route::any('/tablet/view_receive_payment/{id}','Member\TabletPISController@view_receive_payment');
 Route::any('/tablet/receive_payment/add','Member\TabletPISController@tablet_receive_payment');
 Route::any('/tablet/receive_payment/add_submit','Member\TabletPISController@add_receive_payment');
@@ -653,6 +664,7 @@ Route::get('/member/item/load_um','Member\UnitOfMeasurementController@load_um');
 Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
 Route::get('/member/item/load_category','Member\Manage_Category_Controller@load_category');
 Route::get('/member/item/manufacturer/load_manufacturer','Member\ManufacturerController@load_manufacturer');
+Route::get('/member/maintenance/load_payment_method','Member\MaintenancePaymentMethodController@load_payment_method');
 Route::get('/member/maintenance/load_payment_gateway/{id}','Member\OnlinePaymentMethodController@load_payment_gateway');
 
 /* SettingsController */

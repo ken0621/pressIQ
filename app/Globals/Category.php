@@ -20,27 +20,27 @@ class Category
 		return $data;
 	}
 
-	public static function getAllCategory()
+	public static function getAllCategory($cat_type = array("all","service","inventory","non-inventory"))
 	{
-		$data = Category::re_select_raw(Category::getShopId(), 0);
+		$data = Category::re_select_raw(Category::getShopId(), 0, $cat_type);
 
 		return $data;
 	}
 
 	/* RECURSIVE SELECTION OF RAW DATA */ 
-	public static function re_select_raw($shop_id = 0, $parent = 0)
+	public static function re_select_raw($shop_id = 0, $parent = 0, $cat_type = array("all","service","inventory","non-inventory"))
 	{
 		$data = array();
-        $_category = Tbl_category::selecthierarchy($shop_id, $parent)->get();
+        $_category = Tbl_category::selecthierarchy($shop_id, $parent, $cat_type)->get();
         foreach($_category as $key => $category)
         {
             $data[$key] = $category;
-            $count =  Tbl_category::selecthierarchy($shop_id, $parent)->count();
+            $count =  Tbl_category::selecthierarchy($shop_id, $parent, $cat_type)->count();
             
             if($count != 0)
             {
                 // dd($category->type_parent_id);
-                $data[$key]['sub'] = Category::re_select_raw($shop_id, $category->type_id);
+                $data[$key]['sub'] = Category::re_select_raw($shop_id, $category->type_id, $cat_type);
             }
         }
         return collect($data)->toArray();

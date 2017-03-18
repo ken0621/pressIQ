@@ -46,33 +46,67 @@
                             <div class="col-md-12">
                                 <h3>Load Out Form No: <strong>{{sprintf("%'.05d\n", $sir->sir_id)}}</strong></h3>
                                 <ul class="nav nav-tabs">
-                                  <li id="all-list" class="active"><a data-toggle="tab" href="#all"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;All List</a></li>
-                                  <li id="checked"><a data-toggle="tab" href="#archived"><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;Checked</a></li>
-                                  <li id="unchecked"><a data-toggle="tab" href="#archived"><i class="fa fa-square-o" aria-hidden="true"></i>&nbsp;Unchecked</a></li>
+                                  <li id="all-list" class="active">
+                                    <a data-toggle="tab" onclick="select_list('all')"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;All List</a>
+                                  </li>
+                                  <li id="checked">
+                                    <a data-toggle="tab" onclick="select_list('checked')"><i class="fa fa-check-square-o" aria-hidden="true"></i>&nbsp;Checked</a>
+                                    </li>
+                                  <li id="unchecked">
+                                    <a data-toggle="tab" onclick="select_list('unchecked')"><i class="fa fa-square-o" aria-hidden="true"></i>&nbsp;Unchecked</a>
+                                  </li>
                                 </ul>
                             </div>               
                         </div>
                         <div class="form-group">
-                            <div class="col-md-4">
-                                <select class="form-control">
-                                    <option>Select Category</option>
+                            <div class="col-md-4 col-xs-6">
+                                <select class="form-control drop-down-category">
+                                    @include("member.load_ajax_data.load_category", ['add_search' => ""])
                                 </select>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4 col-xs-6">
                                 <div class="input-group">
                                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                                    <input type="text" class="form-control search_name" id="srch_sir_id" placeholder="Search by SIR number" aria-describedby="basic-addon1">
+                                    <input type="text" class="form-control search_name" onkeyup="doSearch();" id="search_txt" placeholder="Search by product name" aria-describedby="basic-addon1">
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                
+                        </div>
+                        <div class="form-group">                            
+                            <div class="col-md-12"> 
+                                <div class="load-data" target="sir_item" filter="active" filteru="anime" >
+                                    <div id="sir_item">     
+                                        <div class="table-responsive">
+                                            <table id="item_table" class="table table-bordered table-condensed">
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>Product Code</th>
+                                                        <th>Product Name</th>
+                                                        <th>Qty</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($_sir_item as $item)
+                                                        <tr class="text-left unchecked all_tr tr_{{$item->sir_item_id}}">
+                                                            <td><input type="checkbox" name="" value="{{$item->sir_item_id}}" onclick="checked_item({{$item->sir_item_id}})"></td>
+                                                            <td>{{$item->item_barcode}}</td>
+                                                            <td>{{$item->item_name}} ({{$item->type_name}})</td>
+                                                            <td>{{$item->qty}}</td>
+                                                        </tr>
+                                                    @endforeach
+                                                    <tr id="noresults"><span id="qt"></span></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-xs-6">
                                 <a link="/tablet/pis/sir/{{$sir->sir_id}}/confirm" size="md" class="popup btn btn-primary form-control">Confirm</a>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 col-xs-6">
                                 <a link="/tablet/pis/sir/{{$sir->sir_id}}/reject" size="md" class="popup btn btn-primary form-control">Reject</a>
                             </div>
                         </div>
@@ -85,7 +119,9 @@
         </div>    
     </div>
 </div>
-
+@endsection
+@section("script")
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 <script type="text/javascript">
     function submit_done(data)
     {
@@ -99,6 +135,69 @@
             toastr.warning(data.status_message);
             $(data.target).html(data.view);
         }
+    }
+    function select_list(str = '')
+    {
+        if(str == "checked")
+        {
+            $(".checked").removeClass("hidden");
+            $(".unchecked").addClass("hidden");
+        }
+        else if(str == "unchecked")
+        {
+            $(".checked").addClass("hidden");
+            $(".unchecked").removeClass("hidden");
+        }
+        else
+        {
+            $(".all_tr").removeClass("hidden");
+        }
+    }
+    function checked_item(tr_id)
+    {
+        $(".tr_"+tr_id).toggleClass("checked");
+        $(".tr_"+tr_id).toggleClass("unchecked");
+    }
+    var category = "";
+    $(".drop-down-category").globalDropList(
+    {
+        hasPopup    : 'false',
+        width       : '100%',
+        onChangeValue: function()
+        {
+           category = $(this).find("option:selected").attr("type-name");
+           searchTable(category);
+        }
+    });
+    $('#search_txt').keyup(function()
+    {
+        searchTable($(this).val());
+        if($(this).val() == "")
+        {            
+           searchTable(category);
+        }
+    });
+    function searchTable(inputVal)
+    {
+        var table = $('#item_table');
+        table.find('tr').each(function(index, row)
+        {
+            var allCells = $(row).find('td');
+            if(allCells.length > 0)
+            {
+                var found = false;
+                allCells.each(function(index, td)
+                {
+                    var regExp = new RegExp(inputVal, 'i');
+                    if(regExp.test($(td).text()))
+                    {
+                        found = true;
+                        return false;
+                    }
+                });
+                if(found == true)$(row).show();else $(row).hide();
+            }
+        });
     }
 </script>
 @endsection

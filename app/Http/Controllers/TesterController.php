@@ -8,6 +8,8 @@ use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_user;
+use App\Models\Tbl_ec_product;
+
 use App\Models\Tbl_journal_entry_line;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
@@ -46,7 +48,9 @@ class TesterController extends Member
 
 	public function getIndex()
     {
-        dd(Ecom_Product::getProductList());
+        // dd(Tbl_ec_product::variant()->item()->inventory()->get()->toArray());
+        // dd(Ecom_Product::getProductList());
+        dd(Ecom_Product::getProduct(5));
         // dd(Tbl_customer::Transaction($this->getShopId(), 8)->get());
         // dd(Item::get_all_category_item());
         //dd(Ecom_Product::getAllCategory());
@@ -127,5 +131,13 @@ class TesterController extends Member
         // dd($data['tbl_journal_entry']);
 
         return view('member.tester_journal', $data);
+    }
+
+    public function getCustomer()
+    {
+        $shop_id = 1;
+        $data["customer_first_name"] = "Bryan";
+
+        dd(Customer::createCustomer($shop_id, $data))   ;
     }
 }

@@ -90,7 +90,7 @@ class MlmGenealogyController extends Mlm
         }   
     }
     public function binary_downline($slot_id)
-    {
+    {  
         $left_info  = Tbl_mlm_slot::where("slot_placement", $slot_id)->where("slot_position", "left")->membership()->customer()->first();
         $right_info = Tbl_mlm_slot::where("slot_placement", $slot_id)->where("slot_position", "right")->membership()->customer()->first(); 
 

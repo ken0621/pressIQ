@@ -38,6 +38,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/basic.css">
     <link rel="stylesheet" type="text/css" href="/assets/custom_plugin/myDropList/css/myDropList.css">
+    <!-- <link rel="stylesheet" type="text/css" href="/assets/chartist/chartist.css"> -->
     <!-- <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/dropzone.min.css"> -->
 
     <link rel="stylesheet" href="/assets/external/jquery_css/jquery-ui.css">
@@ -66,7 +67,7 @@
     <script>
     $(function()
     {
-        $(".datepicker").datepicker({ dateFormat: "mm-dd-yy" });
+        $(".datepicker").datepicker();
     });
     </script>
 </head>
@@ -458,6 +459,7 @@
     <script type="text/javascript" src='/assets/custom_plugin/myDropList/js/myDropList.js'></script>
     <script type="text/javascript" src="/assets/member/js/prompt_serial_number.js"></script>
     <script type="text/javascript" src='/assets/member/js/match-height.js'></script>
+    <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
     
     @yield('script')
 </body>

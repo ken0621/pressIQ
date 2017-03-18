@@ -68,7 +68,7 @@ class Customer_ReceivePaymentController extends Member
         $insert["rp_shop_id"]           = $this->getShopId();
         $insert["rp_customer_id"]       = Request::input('rp_customer_id');
         $insert["rp_ar_account"]        = Request::input('rp_ar_account') or 0;
-        $insert["rp_date"]              = date("Y-m-d", strtotime(Request::input('rp_date')));
+        $insert["rp_date"]              = datepicker_input(Request::input('rp_date'));
         $insert["rp_total_amount"]      = convertToNumber(Request::input('rp_total_amount'));
         $insert["rp_payment_method"]    = Request::input('rp_payment_method');
         $insert["rp_memo"]              = Request::input('rp_memo');
@@ -87,6 +87,10 @@ class Customer_ReceivePaymentController extends Member
                 $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
 
                 Tbl_receive_payment_line::insert($insert_line);
+                if($insert_line["rpline_reference_name"] == 'invoice')
+                {
+                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                }
             }
         }
 
@@ -116,7 +120,7 @@ class Customer_ReceivePaymentController extends Member
 
         $update["rp_customer_id"]       = Request::input('rp_customer_id');
         $update["rp_ar_account"]        = Request::input('rp_ar_account') or 0;
-        $update["rp_date"]              = date("Y-m-d", strtotime(Request::input('rp_date')));
+        $update["rp_date"]              = datepicker_input(Request::input('rp_date'));
         $update["rp_total_amount"]      = convertToNumber(Request::input('rp_total_amount'));
         $update["rp_payment_method"]    = Request::input('rp_payment_method');
         $update["rp_memo"]              = Request::input('rp_memo');

@@ -41,8 +41,9 @@
 		<th width="20%">QTY</th>
 		<th width="15%">PRICE</th>
 		<th width="15%">AMOUNT</th>
+		<th width="15%">Taxable</th>
 	</tr>
-		<input type="hidden" name="{{$total = 0}}">
+		<input type="hidden" name="{{$total = 0}}" class="{{$taxable_item = 0}}" >
 	<tbody>
 	@if($invoice_item)		
 		@foreach($invoice_item as $item)
@@ -51,12 +52,39 @@
 				<td style="text-align: center;">{{$item->qty}}</td>
 				<td style="text-align: right;">{{currency("PHP",$item->invline_rate)}}</td>
 				<td style="text-align: right;">{{currency("PHP",$item->invline_amount)}}</td>
+				<td style="text-align: center;" {{$taxable_item += $item->taxable == 1 ? $item->invline_amount : 0}}>{{$item->taxable == 1 ? "&#10004;" : '' }}</td>
 			</tr>
 		@endforeach
 		<div class="{{$invoice->inv_is_paid == 1 ? 'watermark' : 'hidden'}}"> PAID </div>
-	@endif
+	@endif	
 		<tr>
-			<td colspan="2"></td>
+			<td colspan="3"></td>
+			<td style="text-align: left;font-weight: bold">SUBTOTAL</td>
+			<td style="text-align: right; font-weight: bold">{{currency('PHP', $invoice->inv_subtotal_price)}}</td>
+		</tr>
+		@if($invoice->ewt != 0)
+		<tr>
+			<td colspan="3"></td>
+			<td style="text-align: left;font-weight: bold">EWT ({{$invoice->ewt * 100}} %)</td>
+			<td style="text-align: right; font-weight: bold">{{currency('PHP',$invoice->ewt *  $invoice->inv_subtotal_price)}}</td>
+		</tr>
+		@endif
+		@if($invoice->inv_discount_value != 0)
+		<tr>
+			<td colspan="3"></td>
+			<td style="text-align: left;font-weight: bold">Discount {{$invoice->inv_discount_type == 'percent' ? $invoice->inv_discount_type."%" : '' }}</td>
+			<td style="text-align: right; font-weight: bold">{{$invoice->inv_discount_type == 'value' ? currency("PHP",$invoice->inv_discount_value) : currency("PHP",($invoice->inv_discount_value/100) * $invoice->inv_subtotal_price) }}</td>
+		</tr>
+		@endif
+		@if($invoice->taxable != 0)
+		<tr>
+			<td colspan="3"></td>
+			<td style="text-align: left;font-weight: bold">Vat (12%)</td>
+			<td style="text-align: right; font-weight: bold">{{currency("PHP",$taxable_item * (12/100))  }}</td>
+		</tr>
+		@endif
+		<tr>
+			<td colspan="3"></td>
 			<td style="text-align: left;font-weight: bold">TOTAL</td>
 			<td style="text-align: right; font-weight: bold">{{currency("PHP",$invoice->inv_overall_price)}}</td>
 		</tr>

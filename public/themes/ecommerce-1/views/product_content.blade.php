@@ -74,7 +74,7 @@
                                 <div class="holder">
                                     <div class="s-label">{{ $variant['option_name'] }}</div>
                                     <div class="select">
-                                        <select style="text-transform: capitalize;" class="form-control" variant-label="{{ $variant['option_name'] }}" product-id="{{ $product['eprod_id'] }}" variant-id="{{ $product_variant['evariant_id'] }}">
+                                        <select name="attr[{{ $variant['option_name_id'] }}]" style="text-transform: capitalize;" class="form-control select-variation" variant-label="{{ $variant['option_name'] }}" product-id="{{ $product['eprod_id'] }}" variant-id="{{ $product_variant['evariant_id'] }}">
                                             <option value="0" style="text-transform: capitalize;">Select {{ $variant['option_name'] }}</option>
                                             @foreach(explode(",", $variant['variant_value']) as $option)
                                             <option value="{{ $option }}" style="text-transform: capitalize;">{{ $option }}</option>
@@ -87,8 +87,12 @@
                             <div class="container-quantity-price">
                                 <div class="row clearfix">
                                     <div class="col-md-5 price-old-new">
+                                       <!-- if($product_variant['discounted'] == "true") -->
+                                       <!-- <div class="present-item-price">PHP {{ number_format($product_variant['item_discount_value'], 2) }}</div>
+                                       <div class="item-old-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div> -->
+                                       <!-- else -->
                                        <div class="present-item-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
-                                       <!-- <div class="item-old-price">PHP 8,200.00</div> -->
+                                       <!-- endif -->
                                     </div>
                                     <div class="col-md-7 item-quantity">
                                         <div class="quantity-input">
@@ -101,10 +105,30 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="facebook-share">
+                            @if(count($product_variant['mlm_discount']) > 0)
+                            <div style="margin-top: 15px;">
+                                <table class="table table-bordered table-striped table-hover table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Product Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($product_variant['mlm_discount'] as $key => $mlm_discount)
+                                        <tr>
+                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
+                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            @endif
+                            <!-- <div class="facebook-share">
                                 <img class="item-image-small" src="/themes/{{ $shop_theme }}/img/facebook-logo.jpg">
                                 <a class="tooltips" href="#">Share<span>20</span></a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -397,6 +421,9 @@
     </div>
   </div>
 </div>
+@endsection
+@section("js")
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/product_content.js"></script>
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/product_content.css">

@@ -150,7 +150,7 @@ function submit_done($data)
 {
 	data = JSON.parse(data);
 	console.log(data);
-	alert("submit done");
+	// alert("submit done");
 	employeelist.executeFunctionByName(data.function_name);
 	data.element.modal("toggle");
 }

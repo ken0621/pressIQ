@@ -71,7 +71,14 @@ function variant_info()
             },
             onChangeValue: function()
             {	
-
+            	if($(this).val() == "")
+            	{
+            		$(this).closest(".row").find(".edit-item").prop("disabled");
+            	}
+            	else
+            	{
+            		$(this).closest(".row").find(".edit-item").prop("disabled", false);
+            	}
             }
 		});
 	}
@@ -149,7 +156,7 @@ function submit_done(data)
 {
 	if(data.type == 'product-info')
 	{
-		$("#global_modal").modal("toggle");
+		data.element.modal("hide");
 	}
 	else
 	{

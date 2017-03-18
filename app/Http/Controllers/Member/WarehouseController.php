@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use App\Models\Tbl_category;
 use App\Models\Tbl_inventory_serial_number;
 use Session;
+use App\Globals\Item;
 use Validator;
 class WarehouseController extends Member
 {
@@ -26,6 +27,8 @@ class WarehouseController extends Member
      */
     public function index()
     {
+        $this->item();
+
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
         { 
@@ -109,6 +112,17 @@ class WarehouseController extends Member
         // $count_on_hand = Tbl_warehouse_inventory::check_inventory_single(1, 28)->pluck('inventory_count');
         // dd($count_on_hand);
 
+    }
+    public function item()
+    {
+        $not_mainwarehouse = Tbl_warehouse::where("main_warehouse",0)->where("warehouse_shop_id",$this->user_info->shop_id)->get();
+        if($not_mainwarehouse)
+        {
+            foreach($not_mainwarehouse as $key => $value) 
+            {
+                Warehouse::insert_item(Warehouse::getMainwarehouse(),$value->warehouse_id);
+            }            
+        }
     }
     public function load_warehouse()
     {
@@ -340,25 +354,17 @@ class WarehouseController extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public static function check_if_critical($c_stock, $reorder_point)
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
-        if($access == 1)
-        { 
-            $color = "";
-            if($c_stock <= $reorder_point)
-            {
-                $color = "red";
-            }
-            return $color;
-        }
-        else
+        $color = "";
+        if($c_stock <= $reorder_point)
         {
-            return $this->show_no_access();
+            $color = "red";
         }
+        return $color;
     }
     public function create_main()
     {
@@ -881,14 +887,53 @@ class WarehouseController extends Member
 
             $remarks = Request::input("remarks");
             $quantity_product = Request::input("quantity");
+            $selected_item_id = Request::input("selected_item_id");
 
-            foreach ($quantity_product as $key => $value) 
+            $data['message'] = "";
+            $err_msg = "";
+
+            $data['status']             = '';
+            $data['response_status']    = '';
+
+            $ctr = 0;
+            foreach ($selected_item_id as $key => $value) 
             {
-                $info[$key]['product_id'] = $key;
-                $info[$key]['quantity'] = str_replace(",","",$value);
+                if($value != "")
+                {
+                    $value2 = $quantity_product[$key];
+                    $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($from, $value)->pluck('inventory_count');
+                    if($value2 != 0)
+                    {
+                        if($count_on_hand > 0 && $count_on_hand >= $value2) 
+                        {
+                            $info[$value]['product_id'] = $value;
+                            $info[$value]['quantity'] = str_replace(",","",$value2);
+                        }
+                        else
+                        {
+                            $item_name = Item::get_item_details($value);
+
+                            $data['status']             = 'error';
+                            $data['response_status']    = 'error';
+                            $data['error']              = $err_msg;
+                            $data['message'] .= "The quantity of ".$item_name->item_name." is not enough for your transfer.<br>";
+                        }      
+                        $ctr++;              
+                    }
+                }
+            }
+            if($ctr == 0)
+            {
+                $data['status']             = 'error';
+                $data['response_status']    = 'error';
+                $data['error']              = $err_msg;
+                $data['message'] = "Please insert atleast 1 item and quantity to transfer.";                
             }
 
-            $data = Warehouse::inventory_transfer_bulk($from, $to, $info, $remarks, 'json');
+            if($data["status"] == null && $ctr != 0)
+            {
+                $data = Warehouse::inventory_transfer_bulk($from, $to, $info, $remarks, 'json');
+            }
             
             return json_encode($data);
         }

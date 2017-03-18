@@ -34,7 +34,7 @@
 
 <div class="load_price hide"></div>
 <script type="text/javascript">
-// get_price();
+
 function get_price()
 {
   $('#price_id_a').html('<center><div style="margin: 20px auto;" class="loader-16-gray"></div></center>');

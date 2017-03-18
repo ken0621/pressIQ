@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterForeignKeyVariantId extends Migration
+class CreateTblItemMultiplePrice extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class AlterForeignKeyVariantId extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_variant_name', function (Blueprint $table) {
-            $table->foreign("variant_id")->references("evariant_id")->on("tbl_ec_variant")->onDelete("cascade");
+        Schema::table('tbl_item_multiple_price', function (Blueprint $table) {
+            //
         });
     }
 
@@ -24,7 +24,7 @@ class AlterForeignKeyVariantId extends Migration
      */
     public function down()
     {
-        Schema::table('tbl_variant_name', function (Blueprint $table) {
+        Schema::table('tbl_item_multiple_price', function (Blueprint $table) {
             //
         });
     }

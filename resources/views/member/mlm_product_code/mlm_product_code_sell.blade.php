@@ -139,7 +139,7 @@
 </form>
 <div class="clear"></div>
 <div class="col-md-12 load_fix_session hide">
-	@include('sessionPrinter')
+	<!-- @include('sessionPrinter') -->
 </div>
 @endsection
 
@@ -363,10 +363,11 @@ function get_slot(ito)
 function bar_code_membership_code(ito)
 {
 	var membership_code = ito.value;
+	$('.customer_data').html('<center><div class="loader-16-gray"></div></center>');
 	$('.customer_data').load('/member/customer/product_repurchase/get_slot_v_membership_code/' + membership_code, function(){
 		change_slot_class();
 	});
-	
+	$(ito).val('');
 	
 }
 $(".membership_code").on("paste",function(e){
@@ -402,6 +403,7 @@ function load_no_discount()
 $(".chosen-select").chosen({no_results_text: "The customer doesn't exist."});
 function submit_done(data)
 {
+	$('.close').click();
 	if(data.response_status == 'warning')
 	{
 		var validtor = data.warning_validator;
@@ -424,10 +426,11 @@ function submit_done(data)
 
 $(document).on("keydown", ".membership_code", function(e)
 {
-	e.preventDefault();
+	
 	if(e.which == 13)
 	{
-		bar_code_membership_code(this)
+		e.preventDefault();
+		bar_code_membership_code(this);
 	}
 })
 </script>

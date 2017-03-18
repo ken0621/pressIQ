@@ -339,7 +339,7 @@
 				    					</td>
 				    					<td>
 				    						<div class="checkbox">
-				    							<label><input type="checkbox" class="extraday-check" name="" value="Sunday">Sunday</label>
+				    							<label><input type="checkbox" class="extraday-check" name="extraday[]"" value="Sunday">Sunday</label>
 				    						</div>
 				    					</td>
 				    				</tr>

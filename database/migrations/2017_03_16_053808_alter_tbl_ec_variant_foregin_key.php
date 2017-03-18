@@ -16,7 +16,6 @@ class AlterTblEcVariantForeginKey extends Migration
             $table->integer('evariant_prod_id')->unsigned()->change();
             $table->integer('evariant_item_id')->unsigned()->change();
 
-            $table->foreign('evariant_prod_id')->references('eprod_id')->on('tbl_ec_product')->onDelete('cascade');
             $table->foreign('evariant_item_id')->references('item_id')->on('tbl_item')->onDelete('cascade');
         });
     }

@@ -96,7 +96,7 @@
 								<div class="hot-deals-item-container">
 									<img class="4-3-ratio" src="{{ get_collection_first_image($collection) }}">
 									<div class="item-details">
-										<div class="item-title">{{ $collection['product']['eprod_name'] }}</div>
+										<div class="item-title">{{ get_collection_first_name($collection) }}</div>
 										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 									</div>
 									<button class="new-add-to-cart-button btn" style="margin-top: 25px;">

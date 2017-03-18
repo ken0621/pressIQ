@@ -14,7 +14,7 @@
             @if($product->eprod_is_single == 0)
                 <li class="{{$default == 2 ? 'active' : ''}} cursor-pointer tab" data-id="2"><a class="cursor-pointer" data-toggle="tab" href="#options"><i class="fa fa-certificate"></i> Options</a></li>
             @endif
-            <li class="{{$default == 3 ? 'active' : ''}} cursor-pointer tab" data-id="3"><a class="cursor-pointer" data-toggle="tab" href="#info"><i class="fa fa-info"></i> Other Info</a></li>
+            <li class="{{$default == 3 ? 'active' : ''}} cursor-pointer tab" data-id="3"><a class="cursor-pointer" data-toggle="tab" href="#price"><i class="fa fa-info"></i> Price</a></li>
             <li class="{{$default == 4 ? 'active' : ''}} cursor-pointer tab" data-id="4"><a class="cursor-pointer" data-toggle="tab" href="#image"><i class="fa fa-picture-o"></i> Images</a></li>
         </ul> 
     </div>
@@ -77,22 +77,18 @@
             </div>
         @endif
 
-        <div class="tab-pane fade in {{$default == 3 ? 'active' : ''}}" id="info">
+        <div class="tab-pane fade in {{$default == 3 ? 'active' : ''}}" id="price">
             <div class="clearfix">
                 <!-- FORM.TITLE -->
-                <div class="">
-                    <div class="fieldset">
+                <div class="row">
+                    <div class="col-md-6 fieldset">
                         <label>Product Price</label>
                         <div>
                             <input class="form-control input-sm" name="evariant_price" placeholder="Product Price" value="{{$variant->evariant_price or ''}}">
                         </div>
                     </div>
-
-                    <div class="fieldset">
-                        <!-- description -->
-                        <!-- label>Promo Price</label>
-                        <div >
-                        </div> -->
+                    <div class="col-md-6 fieldset">
+                        
                     </div>
                 </div>
             </div>

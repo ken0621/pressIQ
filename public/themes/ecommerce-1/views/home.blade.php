@@ -168,7 +168,7 @@
 								</div>
 								@if(count($collection['product']['variant'][0]['mlm_discount']) > 0)
 	                            <div style="margin-top: 15px;">
-	                                <table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 12px;">
+	                                <table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 10px;">
 	                                    <thead>
 	                                        <tr>
 	                                            <th>Membership</th>

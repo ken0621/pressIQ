@@ -144,7 +144,6 @@ function action_select_variation(e)
 		{
 			if (toload == true) 
 			{
-				alert("Failed");
 				$('.attribute-variation[variant-label="'+variant_label+'"]').val($(e.currentTarget).val());
 				$(".loader").fadeOut();
 			}

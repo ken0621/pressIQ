@@ -166,6 +166,26 @@
 									</div>
 									<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 								</div>
+								@if(count($product['product']['variant'][0]['mlm_discount']) > 0)
+	                            <div style="margin-top: 15px;">
+	                                <table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 12px;">
+	                                    <thead>
+	                                        <tr>
+	                                            <th>Membership</th>
+	                                            <th>Price</th>
+	                                        </tr>
+	                                    </thead>
+	                                    <tbody>
+	                                        @foreach($product['product']['variant'][0]['mlm_discount'] as $key => $mlm_discount)
+	                                        <tr>
+	                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
+	                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+	                                        </tr>
+	                                        @endforeach
+	                                    </tbody>
+	                                </table>
+	                            </div>
+	                            @endif
 							</div>
 						</div>
 						@endforeach
@@ -193,6 +213,28 @@
 											</div>
 											<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 										</div>
+									</div>
+									<div class="col-md-12">
+										@if(count($product['product']['variant'][0]['mlm_discount']) > 0)
+			                            <div style="margin-top: 15px;">
+			                                <table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 12px;">
+			                                    <thead>
+			                                        <tr>
+			                                            <th>Membership</th>
+			                                            <th>Price</th>
+			                                        </tr>
+			                                    </thead>
+			                                    <tbody>
+			                                        @foreach($product['product']['variant'][0]['mlm_discount'] as $key => $mlm_discount)
+			                                        <tr>
+			                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
+			                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+			                                        </tr>
+			                                        @endforeach
+			                                    </tbody>
+			                                </table>
+			                            </div>
+			                            @endif
 									</div>
 								</div>
 							</div>

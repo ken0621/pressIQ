@@ -69,7 +69,7 @@ class Invoice
         $insert['inv_discount_type']            = $total_info['total_discount_type'];
         $insert['inv_discount_value']           = $total_info['total_discount_value'];
         $insert['taxable']                      = $total_info['taxable'];
-        $insert['inv_overall_price']            = $total_info['total_overall_price'];
+        $insert['inv_overall_price']            = $overall_price;
         $insert['inv_message']                  = $invoice_other_info['invoice_msg'];
         $insert['inv_memo']                     = $invoice_other_info['invoice_memo'];
         $insert['date_created']                 = Carbon::now();       
@@ -123,23 +123,26 @@ class Invoice
             if($item_line)
             {
                 /* DISCOUNT PER LINE */
-                $discount = $item_line['discount'];
+                $discount       = $item_line['discount'];
+                $discount_type  = 'fixed';
                 if(strpos($discount, '%'))
-                {
-                    $discount = substr($discount, 0, strpos($discount, '%')) / 100;
+                {   
+                    $discount       = substr($discount, 0, strpos($discount, '%')) / 100;
+                    $discount_type  = 'percent';
                 }
 
                 /* AMOUNT PER LINE */
-                $amount = ($item_line['rate'] * $item_line['quantity']) - $discount;
+                $amount = (convertToNumber($item_line['rate']) * convertToNumber($item_line['quantity'])) - $discount;
 
                 $insert_line['invline_inv_id']          = $invoice_id;
                 $insert_line['invline_service_date']    = date("Y-m-d", strtotime($item_line['item_service_date']));
                 $insert_line['invline_item_id']         = $item_line['item_id'];
                 $insert_line['invline_description']     = $item_line['item_description'];
                 $insert_line['invline_um']              = $item_line['um'];
-                $insert_line['invline_qty']             = $item_line['quantity'];
-                $insert_line['invline_rate']            = $item_line['rate'];
-                $insert_line['invline_discount']        = $discount;
+                $insert_line['invline_qty']             = convertToNumber($item_line['quantity']);
+                $insert_line['invline_rate']            = convertToNumber($item_line['rate']);
+                $insert_line['invline_discount']        = $item_line['discount'];
+                $insert_line['invline_discount_type']   = $discount_type;
                 $insert_line['invline_discount_remark'] = $item_line['discount_remark'];
                 $insert_line['taxable']                 = $item_line['taxable'];
                 $insert_line['invline_amount']          = $amount;

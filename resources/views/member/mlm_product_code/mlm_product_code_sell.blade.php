@@ -139,7 +139,7 @@
 </form>
 <div class="clear"></div>
 <div class="col-md-12 load_fix_session hide">
-	@include('sessionPrinter')
+	<!-- @include('sessionPrinter') -->
 </div>
 @endsection
 
@@ -403,6 +403,7 @@ function load_no_discount()
 $(".chosen-select").chosen({no_results_text: "The customer doesn't exist."});
 function submit_done(data)
 {
+	$('.close').click();
 	if(data.response_status == 'warning')
 	{
 		var validtor = data.warning_validator;

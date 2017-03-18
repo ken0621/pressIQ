@@ -44,7 +44,7 @@
 					  <a href="/member/payroll/philhealth_table_list" class="list-group-item a-navigation-configuration">Philhealth Table</a>
 
 					  <a href="/member/payroll/pagibig_formula" class="list-group-item a-navigation-configuration">Pagibig/HDMF</a>
-					  
+
 					</div>
 					
 				</div>
@@ -59,5 +59,6 @@
 </div>
 @endsection
 @section('script')
+
 <script type="text/javascript" src="/assets/member/js/payroll/payrollconfiguration.js"></script>
 @endsection

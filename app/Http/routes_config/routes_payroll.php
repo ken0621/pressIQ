@@ -151,5 +151,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* PAYROLL GROUP START */
 	Route::any('/payroll_group',"Member\PayrollController@payroll_group");
 	Route::any('/payroll_group/modal_create_payroll_group',"Member\PayrollController@modal_create_payroll_group");
+	Route::any('/payroll_group/modal_save_payroll_group',"Member\PayrollController@modal_save_payroll_group");
 	/* PAYROLL GROUP END */
 });

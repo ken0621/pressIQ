@@ -37,6 +37,10 @@ use App\Models\Tbl_payroll_allowance;
 use App\Models\Tbl_payroll_employee_allowance;
 use App\Models\Tbl_payroll_holiday;
 use App\Models\Tbl_payroll_holiday_company;
+use App\Models\Tbl_payroll_overtime_rate;
+use App\Models\Tbl_payroll_over_time_rate_default;
+use App\Models\Tbl_payroll_group;
+use App\Models\Tbl_payroll_group_rest_day;
 
 use App\Globals\Payroll;
 
@@ -1661,12 +1665,39 @@ class PayrollController extends Member
 	/* PAYROLL GROUP START */
 	public function payroll_group()
 	{
+		// Tbl_payroll_overtime_rate
 		return view('member.payroll.side_container.payroll_group');
 	}
 
 	public function modal_create_payroll_group()
 	{
-		return view('member.payroll.modal.modal_create_payroll_group');
+		$data['_overtime_rate'] = Tbl_payroll_over_time_rate_default::get();
+		return view('member.payroll.modal.modal_create_payroll_group', $data);
 	}
+
+	public function modal_save_payroll_group()
+	{
+		$insert['payroll_group_code'] 					= Request::input('payroll_group_code');
+		$insert['payroll_group_salary_computation'] 	= Request::input('payroll_group_salary_computation');
+		$insert['payroll_group_period'] 				= Request::input('payroll_group_period');
+		$insert['payroll_group_13month_basis'] 			= Request::input('payroll_group_13month_basis');
+		$insert['payroll_group_deduct_before_absences'] = Request::input('payroll_group_deduct_before_absences');
+		$insert['payroll_group_tax'] 					= Request::input('payroll_group_tax');
+		$insert['payroll_group_sss'] 					= Request::input('payroll_group_sss');
+		$insert['payroll_group_philhealth'] 			= Request::input('payroll_group_philhealth');
+		$insert['payroll_group_pagibig'] 				= Request::input('payroll_group_pagibig');
+		$insert['payroll_group_agency'] 				= Request::input('payroll_group_agency');
+		$insert['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
+		$insert['payroll_group_is_flexi_time'] 			= Request::input('payroll_group_is_flexi_time');
+		$insert['payroll_group_working_day_month'] 		= Request::input('payroll_group_working_day_month');
+		$insert['payroll_group_target_hour_parameter'] 	= Request::input('payroll_group_target_hour_parameter');
+		$insert['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
+		$insert['payroll_group_start'] 					= Request::input('payroll_group_start');
+		$insert['payroll_group_end'] 					= Request::input('payroll_group_end');
+	}
+
+// 	Tbl_payroll_overtime_rate
+// Tbl_payroll_group
+// Tbl_payroll_group_rest_day
 	/* PAYROLL GROUP END */
 }

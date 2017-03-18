@@ -110,7 +110,7 @@
                                 <table class="table table-bordered table-striped table-hover table-condensed">
                                     <thead>
                                         <tr>
-                                            <th>Label</th>
+                                            <th>Name</th>
                                             <th>Discount Value</th>
                                             <th>Product Price</th>
                                         </tr>
@@ -118,9 +118,9 @@
                                     <tbody>
                                         @foreach($product_variant['mlm_discount'] as $key => $mlm_discount)
                                         <tr>
-                                            <td>{{ $key }}</td>
-                                            <td>PHP. {{ number_format($mlm_discount, 2) }}</td>
-                                            <td>PHP. 0.00</td>
+                                            <td>{{ $mlm_discount['discount_name'] }}</td>
+                                            <td>PHP. {{ number_format($mlm_discount['discount_value'], 2) }}</td>
+                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>

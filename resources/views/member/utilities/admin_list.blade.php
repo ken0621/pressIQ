@@ -18,8 +18,8 @@
 
 <div class="panel panel-default panel-block panel-title-block">
     <ul class="nav nav-tabs">
-        <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#actives"><i class="fa fa-star"></i> Active Accounts</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#inactives"><i class="fa fa-trash"></i> Archived</a></li>
+        <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#actives"><i class="fa fa-star"></i> Active User</a></li>
+        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#inactives"><i class="fa fa-trash"></i> Inactive User</a></li>
     </ul>
     
     <div class="search-filter-box">
@@ -33,6 +33,11 @@
             </div>
         </div>  
     </div>
+
+    <div class="tab-content codes_container">
+        <div id="active" class="tab-pane fade in active">
+            <div class="form-group order-tags"></div>
+            <div class="table-responsive">
     
     <div class="tab-content">
         <div id="actives" class="tab-pane fade in active">
@@ -44,6 +49,7 @@
                             <th class="text-left">User First Name</th>
                             <th class="text-left">Position Name</th>
                             <th class="text-left">Position Rank</th>
+                            <th class="text-left"></th>
                             <th class="text-left">Action</th>
                         </tr>
                     </thead>
@@ -54,6 +60,7 @@
                             <td class="text-left">{{$list->user_first_name}}</td>
                             <td class="text-left">{{$list->position_name}}</td>
                             <td class="text-left">{{$list->position_rank}}</td>
+                            <td class="text-left"><a href="javascript:" class="popup" link="/member/utilities/modal-edit-user?user_id={{$list->user_id}}" size="sm">Edit</a>|<a href="javascript:" class="popup" link="/member/utilities/modal-archive-user?user_id={{$list->user_id}}" size="sm">Archive</a></td>    
                             <td class="text-left text-center">
                                 <div class="btn-group">
                                     <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/utilities/modal-edit-user?user_id={{$list->user_id}}" size="sm">Edit</a>
@@ -66,7 +73,10 @@
                 </table>
             </div>
         </div>
+
         <div id="inactives" class="tab-pane fade in">
+            <div class="form-group order-tags"></div>
+            <div class="table-responsive">
             <div class="panel-body position-archived-container">
                 <table style="table-layout: fixed;" class="table table-hover table-condensed table-bordered table-sale-month">
                     <thead>
@@ -75,6 +85,7 @@
                             <th class="text-left">User First Name</th>
                             <th class="text-left">Position Name</th>
                             <th class="text-left">Position Rank</th>
+                            <th class="text-left"></th>
                             <th class="text-left">Action</th>
                         </tr>
                     </thead>
@@ -85,6 +96,7 @@
                             <td class="text-left">{{$list->user_first_name}}</td>
                             <td class="text-left">{{$list->position_name}}</td>
                             <td class="text-left">{{$list->position_rank}}</td>
+                            <td class="text-left"><a href="javascript:" class="popup" link="/member/utilities/modal-edit-user?user_id={{$list->user_id}}" size="sm">Edit</a>|<a href="javascript:" class="popup" link="/member/utilities/modal-archive-user?user_id={{$list->user_id}}" size="sm">Archive</a></td>    
                             <td class="text-left text-center">
                                 <div class="btn-group">
                                     <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/utilities/modal-restore-user?user_id={{$list->user_id}}" size="sm">Restore</a>
@@ -117,8 +129,6 @@
             {
                 toastr.success('Successfully archived');
             });
-            
-            
         }
         if(data.response_status == "success-restored")
         {

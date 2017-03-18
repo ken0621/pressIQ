@@ -14,7 +14,7 @@
             @if($product->eprod_is_single == 0)
                 <li class="{{$default == 2 ? 'active' : ''}} cursor-pointer tab" data-id="2"><a class="cursor-pointer" data-toggle="tab" href="#options"><i class="fa fa-certificate"></i> Options</a></li>
             @endif
-            <li class="{{$default == 3 ? 'active' : ''}} cursor-pointer tab" data-id="3"><a class="cursor-pointer" data-toggle="tab" href="#info"><i class="fa fa-info"></i> Other Info</a></li>
+            <li class="{{$default == 3 ? 'active' : ''}} cursor-pointer tab" data-id="3"><a class="cursor-pointer" data-toggle="tab" href="#price"><i class="fa fa-info"></i> Price</a></li>
             <li class="{{$default == 4 ? 'active' : ''}} cursor-pointer tab" data-id="4"><a class="cursor-pointer" data-toggle="tab" href="#image"><i class="fa fa-picture-o"></i> Images</a></li>
         </ul> 
     </div>
@@ -28,9 +28,19 @@
                 <div class="">
                     <div class="fieldset">
                         <label>Product Item</label>
-                        <select class="select-item droplist-item" name="evariant_item_id">
-                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => isset($variant) ? $variant->evariant_item_id : ''])
-                        </select>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <select class="select-item droplist-item" name="evariant_item_id">
+                                @include("member.load_ajax_data.load_item", ['add_search' => "", 'item_id' => isset($variant) ? $variant->evariant_item_id : ''])
+                            </select>
+                            </div>
+                            <div class="col-md-2">
+                                <a class="btn btn-custom-white btn-sm popup edit-item" link="" size="lg"> Edit Item</a>
+                            </div>
+                            <div class="col-md-4">
+                                <input class="form-control input-sm" type="text" value="Remaining : {{ $variant->inventory_count or '' }} ({{$variant->inventory_status or ''}})" readonly />
+                            </div>
+                        </div>
                     </div>
                     <div class="fieldset">
                         <label>Product Label</label>
@@ -67,22 +77,18 @@
             </div>
         @endif
 
-        <div class="tab-pane fade in {{$default == 3 ? 'active' : ''}}" id="info">
+        <div class="tab-pane fade in {{$default == 3 ? 'active' : ''}}" id="price">
             <div class="clearfix">
                 <!-- FORM.TITLE -->
-                <div class="">
-                    <div class="fieldset">
+                <div class="row">
+                    <div class="col-md-6 fieldset">
                         <label>Product Price</label>
                         <div>
                             <input class="form-control input-sm" name="evariant_price" placeholder="Product Price" value="{{$variant->evariant_price or ''}}">
                         </div>
                     </div>
-
-                    <div class="fieldset">
-                        <!-- description -->
-                        <<!-- label>Promo Price</label>
-                        <div >
-                        </div> -->
+                    <div class="col-md-6 fieldset">
+                        
                     </div>
                 </div>
             </div>

@@ -27,6 +27,7 @@ class Mlm extends Controller
     public static $discount_card_log;
     public function __construct()
     {	
+        // dd(Self::$slot_id);  
         if(Session::get('mlm_member') != null)
         {
             $session = Session::get('mlm_member');
@@ -68,6 +69,7 @@ class Mlm extends Controller
             $all_slot = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)
             ->membershipcode()
             ->membership()
+            ->take(10)
             ->get();
             $plan_settings = Tbl_mlm_plan::where('shop_id', Self::$shop_id)
             ->where('marketing_plan_enable', 1)
@@ -84,6 +86,7 @@ class Mlm extends Controller
             ->orderBy('wallet_log_id', 'DESC')
             ->sponsorslot()
             ->where('wallet_log_notified', 0)
+            ->take(10)
             ->get();
 
             $noti_count = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)

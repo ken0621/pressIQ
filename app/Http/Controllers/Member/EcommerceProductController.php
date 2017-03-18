@@ -61,24 +61,9 @@ class EcommerceProductController extends Member
 	{
 		if($this->hasAccess("product-list","access_page"))
         {	
-			$active_product 	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("archived", 0)->paginate(10);
-			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("archived", 1)->paginate(10); 
-			
-			/* IF REQUEST TYPE IS AJAX = RETURN ONLY TABLE DATA */ 
-	        // if(Request::ajax())
-	        // {
-	        // 	if(Request::input('filter') == "active")
-	        // 	{
-	        // 		$data["_product"] 	= $active_product;
-	        // 		$data["filter"] 	= "active"; // For Changing blade layout
-	        // 	}
-	        // 	else
-	        // 	{
-	        // 		$data["_product"] 	= $inactive_product;
-	        // 		$data["filter"] 	= "inactive"; // For Changing blade layout
-	        // 	}
-	        // 	return view('member.ecommerce_product.ecom_load_product_tbl', $data);
-	        // }
+        	$warehouse_id = Ecom_Product::getWarehouseId();
+        	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->paginate(10);
+			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1)->paginate(10); 
 
 	        $data["_product"]			= $active_product;
 	        $data["_product_archived"]	= $inactive_product;
@@ -110,21 +95,63 @@ class EcommerceProductController extends Member
 
 	public function postAdd()
 	{
+		// dd(Session::get('product_info'));
 		$button_action 	= Request::input('button_action');
 
 		/* START OF VALIDATION */
 		$message = [];
 
+		$variant_checked			= Request::input('variant_checked');
 		$value["product_label"] 	= Request::input('eprod_name');
 		$value["product_category"] 	= Request::input('eprod_category_id');
 
 		$rules["product_label"] 	= "required";
 		$rules["product_category"] 	= "required";
 
-		foreach(Request::input("evariant_item_id") as $key=>$variant_item_id)
+		/* validation of the item */
+		$item_id		= Request::input("evariant_item_id"); 
+		$variant_price	= Request::input("evariant_price"); 
+		$item_code		= Request::input("item_code");
+
+		$custom_validation_fails = false;
+		
+		// dd($this->hasDuplicate($item_id));
+
+		foreach($item_id as $key => $item)
 		{
-			$value["variant_item_id"] = $variant_item_id;
-			$rules["variant_item_id"] = "required";
+			$item_data		= Tbl_item::where("item_id", $item)->first();
+			$product_info 	= $this->session_product_info($item_code[$key]);
+			if($variant_checked[$key] == 'true')
+			{
+				/* Custom Validation For Unique Items in 1 Product */
+				if($this->hasDuplicate($item_id) != false)
+				{
+					$custom_validation_fails = true;
+					$custom_message = "The item ".$item_data->item_name ." cannot be duplicate";
+				}
+
+				if($item_data)
+				{
+
+					$value["evariant_price"] = $variant_price[$key];
+					$rules["evariant_price"] = 'required';
+					$message["evariant_price.required"] = 'You have to set a price for product '.$item_data->item_name;
+
+					/* Custom Validation For 2 Unique Columns */
+					$item_exist = Tbl_ec_variant::product()->where("evariant_item_id", $item_id[$key])->where("eprod_shop_id", $this->getShopId())->first();
+					if($item_exist) 
+					{
+						$custom_validation_fails = true;
+						$custom_message = "Item ".$item_data->item_name." is already used";
+					}
+				}
+				else
+				{
+					$value["variant_item"] = $item;
+					$rules["variant_item"] = "required";
+					$message["variant_item.required"] = "The variant item field is required on checked";
+				}
+			}
 		}
 
 		if(Request::input('product_variant_type') == "multiple") //RULES FOR PRODUCT WITH VARIATION
@@ -138,18 +165,6 @@ class EcommerceProductController extends Member
 			}
 		}
 
-		$item_id		= Request::input("evariant_item_id"); 
-		$item_code		= Request::input("item_code");
-
-		foreach($item_id as $key => $item)
-		{
-			$item_data		= Tbl_item::where("item_id", $item)->first();
-			$product_info 	= $this->session_product_info($item_code[$key]);
-			$value["evariant_price"] = $product_info ? $product_info["product_price"] : '';
-			$rules["evariant_price"] = 'required';
-			$message["evariant_price.required"] 	= 'You have to set a price for product '.$item_data->item_name;
-		}
-
 		/* END OF VALIDATION */
 
 		$validator = Validator::make($value, $rules, $message);
@@ -158,6 +173,11 @@ class EcommerceProductController extends Member
 		{
 			$json["status"] 	= "error";
 			$json["message"] 	= $validator->errors()->first(); 
+		}
+		else if($custom_validation_fails)
+		{
+			$json["status"] 	= "error";
+			$json["message"] 	= $custom_message; 
 		}
 		else
 		{
@@ -205,63 +225,69 @@ class EcommerceProductController extends Member
 		$option_name	= Request::input("option_name");
 		$option_value	= Request::input('option_value');
 		$combination	= Request::input("variant_combination");
+		$variant_checked= Request::input("variant_checked");
 		$item_id		= Request::input("evariant_item_id"); 
+		$variant_price	= Request::input("evariant_price"); 
 		$item_code		= Request::input("item_code"); 
 		
 		
 		foreach($item_id as $key => $item){
 			
 			/* Product Information */
+
 			$product_info = $this->session_product_info($item_code[$key]);
 			$item_data		= Tbl_item::where("item_id", $item)->first();
 
-			$insertVariant['evariant_prod_id']		= $product_id;
-			$insertVariant['evariant_item_id']		= $item;
-			$insertVariant["evariant_item_label"] 	= $product_info ? $product_info["product_label"] : $item_data->item_name;
-			$insertVariant["evariant_description"] 	= $product_info ? $product_info["product_description"] : '';
-			$insertVariant["evariant_price"] 		= $product_info ? $product_info["product_price"] : '';
-			$insertVariant["date_created"] 			= Carbon::now();
-			$insertVariant["date_visible"] 			= Carbon::now();
-
-			$variant_id = Tbl_ec_variant::insertGetId($insertVariant);
-
-			/* PRODUCT IMAGE */
-			if($product_info["product_image"])
+			if($variant_checked[$key] == 'true')
 			{
-				foreach($product_info["product_image"] as $image)
+				$insertVariant['evariant_prod_id']		= $product_id;
+				$insertVariant['evariant_item_id']		= $item;
+				$insertVariant["evariant_item_label"] 	= $product_info ? $product_info["product_label"] : $item_data->item_name;
+				$insertVariant["evariant_description"] 	= $product_info ? $product_info["product_description"] : '';
+				$insertVariant["evariant_price"] 		= convertToNumber($variant_price[$key]);
+				$insertVariant["date_created"] 			= Carbon::now();
+				$insertVariant["date_visible"] 			= Carbon::now();
+
+				$variant_id = Tbl_ec_variant::insertGetId($insertVariant);
+
+				/* PRODUCT IMAGE */
+				if($product_info["product_image"])
 				{
-					$insert_image["eimg_variant_id"]	= $variant_id;
-					$insert_image["eimg_image_id"]		= $image;
-					Tbl_ec_variant_image::insert($insert_image);
+					foreach($product_info["product_image"] as $image)
+					{
+						$insert_image["eimg_variant_id"]	= $variant_id;
+						$insert_image["eimg_image_id"]		= $image;
+						Tbl_ec_variant_image::insert($insert_image);
+					}
 				}
-			}
 			
-			if($is_single == 0)
-			{
-				$excombination = explode(",", $combination[$key]);
+				if($is_single == 0)
+				{
+					$excombination = explode(",", $combination[$key]);
 
-				foreach($excombination as $key2 => $excom){
-					
-					$insert_option_value['option_value']	= $excom;
-					$insert_option_name['option_name']		= strtolower($option_name[$key2]);
-														
-					$option_value_id	= Tbl_option_value::insertGetId($insert_option_value);
-					$option_name_data 	= Tbl_option_name::where("option_name",$insert_option_name['option_name'])->first();
-					if($option_name_data)
-					{
-						$option_name_id 	= $option_name_data->option_name_id;
-					}
-					else
-					{
-						$option_name_id 	= Tbl_option_name::insertGetId($insert_option_name);
-					}
+					foreach($excombination as $key2 => $excom){
+						
+						$insert_option_value['option_value']	= $excom;
+						$insert_option_name['option_name']		= strtolower($option_name[$key2]);
+															
+						$option_value_id	= Tbl_option_value::insertGetId($insert_option_value);
+						$option_name_data 	= Tbl_option_name::where("option_name",$insert_option_name['option_name'])->first();
+						if($option_name_data)
+						{
+							$option_name_id 	= $option_name_data->option_name_id;
+						}
+						else
+						{
+							$option_name_id 	= Tbl_option_name::insertGetId($insert_option_name);
+						}
 
-					$insert_variant_name['variant_name_order']	= $key2;
-					$insert_variant_name['variant_id']			= $variant_id;
-					$insert_variant_name['option_name_id']		= $option_name_id;
-					$insert_variant_name['option_value_id']		= $option_value_id;
-					
-					Tbl_variant_name::insert($insert_variant_name);
+						$insert_variant_name['variant_name_order']	= $key2;
+						$insert_variant_name['variant_id']			= $variant_id;
+						$insert_variant_name['option_name_id']		= $option_name_id;
+						$insert_variant_name['option_value_id']		= $option_value_id;
+						
+						Tbl_variant_name::insert($insert_variant_name);
+					}
 				}
 			}
 		}
@@ -279,7 +305,6 @@ class EcommerceProductController extends Member
 		$session_data[$code]["item_id"] 			= Request::input("item_id");
 		$session_data[$code]["product_label"] 		= Request::input("evariant_item_label");
 		$session_data[$code]["product_description"]	= Request::input("evariant_description");
-		$session_data[$code]["product_price"]		= Request::input("evariant_price");
 		$session_data[$code]["product_image"]		= Request::input("image_id");
 		$session_data[$code]["product_image_path"]	= Request::input("product_image");
 
@@ -306,11 +331,12 @@ class EcommerceProductController extends Member
 	public function ProductInfo($id,  $separator = ',', $type = 'product')
 	{
 		$data["_column"] = [];
+		$warehouse_id	 = Ecom_Product::getWarehouseId();
 
 		if($type == 'product')
 		{
 			$data["product"]	= Tbl_ec_product::where("eprod_id", $id)->first();
-			$data["_variant"]	= Tbl_ec_variant::variantNameValue($separator)->firstImage()->where("evariant_prod_id", $id)->get();
+			$data["_variant"]	= Tbl_ec_variant::variantNameValue($separator)->item()->inventory($warehouse_id)->firstImage()->where("evariant_prod_id", $id)->get();
 		
 			foreach($data["_variant"] as $key=>$variant)
 			{                                                                                                                                                                                                       
@@ -328,7 +354,7 @@ class EcommerceProductController extends Member
 		}
 		elseif($type == 'variant')
 		{
-			$data["_variant"]	= Tbl_ec_variant::variantNameValue($separator)->where("evariant_id", $id)->first();
+			$data["_variant"]	= Tbl_ec_variant::variantNameValue($separator)->item()->inventory($warehouse_id)->where("evariant_id", $id)->first();
 
 			if($data["_variant"])
 			{
@@ -540,8 +566,6 @@ class EcommerceProductController extends Member
 				}
 			}
 
-			//$json["redirect"] = '/member/ecommerce/product/edit/'.$product_id;
-
 			/* UPDATE OPTION VALUES */ 
 			if($is_single == 0)
 			{
@@ -734,4 +758,15 @@ class EcommerceProductController extends Member
 		$data = Session::get("product_info.".$item_code);
 		return $data;
 	}	
+
+	public function hasDuplicate($array)
+	{
+		$dupe_array = array();
+		foreach($array as $val)
+		{
+			if(collect($dupe_array)->contains($val)) return $val;
+			array_push($dupe_array, $val);
+		}
+		return false;
+	}
 }

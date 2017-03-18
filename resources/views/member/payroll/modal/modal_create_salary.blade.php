@@ -15,6 +15,7 @@
 				<small>Daily Rate</small>
 				<input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right" placeholder="0.00">
 			</div>
+			
 		</div>
 		
 		<div class="form-group">
@@ -39,13 +40,20 @@
 		</div>
 		<div class="form-group">
 			<div class="col-md-6">
-				<div class="checkbox">
-					<label><input type="checkbox" name="payroll_employee_salary_minimum_wage" value="1">Minimum wage earner</label>
-				</div>
+				<small>COLA (monthly)</small>
+				<input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" placeholder="0.00">
 			</div>
 			<div class="col-md-6">
 				<small>Effective date</small>
 				<input type="text" name="payroll_employee_salary_effective_date" class="form-control datepicker">
+			</div>
+		</div>
+		<div class="form-group">
+			
+			<div class="col-md-6">
+				<div class="checkbox">
+					<label><input type="checkbox" name="payroll_employee_salary_minimum_wage" value="1">Minimum wage earner</label>
+				</div>
 			</div>
 		</div>
 	</div>

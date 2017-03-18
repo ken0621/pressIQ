@@ -35,7 +35,21 @@ class Tbl_ec_variant extends Model
 
     public function scopeItem($query)
     {
-    	$query->join("tbl_item","item_id","=","evariant_item_id");
+    	$query->join("tbl_item as item","item_id","=","evariant_item_id")->leftJoin("tbl_item_discount","discount_item_id","=","item_id");
+    }
+
+    /* DEPENDENT on scopeItem */
+    public function scopeInventory($query, $warehouse_id = null)
+    {
+        return $query->selectRaw("IFNULL(sum(inventory_count),0) as inventory_count, IF(sum(inventory_count) > 0, 'in stock', 'out of stock') as inventory_status")
+                     ->leftjoin(DB::raw("(SELECT * FROM tbl_warehouse_inventory GROUP BY inventory_item_id) as warehouse"), function($join) use ($warehouse_id)
+                     {
+                        $join->on("inventory_item_id","=","item_id");
+                        if($warehouse_id)
+                        {
+                            $join->on("warehouse_id","=", DB::raw($warehouse_id));
+                        }
+                     });
     }
 
     public function scopeOptionName($query)
@@ -77,6 +91,5 @@ class Tbl_ec_variant extends Model
         $query->select("image_id","image_path")
               ->rightjoin("tbl_ec_variant_image","evariant_id","=","eimg_variant_id")
               ->join("tbl_image","image_id","=","eimg_image_id");
-
     }
 }

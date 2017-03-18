@@ -1,22 +1,26 @@
 $(document).ready(function()
 {
-
-	init_quatity_button();
-	//prod_variation();
-	init_comment();
-	init_rating();
-	add_to_cart_init();
-	var social = new social_share();
-	// variation();
-	check_disable_button_for_variation();
-	show_imagebox();
-	// social.initialize_social();
-	// var number = new numbers_only();
-	//disable_alphabet();
 	add_event_availability();
 	event_select_variation();
 	event_slick();
 	event_change_image();
+	event_add_to_cart();
+
+	//prod_variation();
+	// variation();
+	// social.initialize_social();
+	// var number = new numbers_only();
+	//disable_alphabet();
+
+	var social = new social_share();
+
+	/* TEMPORARY DISABLE */
+	// init_quatity_button();
+	// init_comment();
+	// init_rating();
+	// add_to_cart_init();
+	// check_disable_button_for_variation();
+	// show_imagebox();
 });
 
 function event_change_image()
@@ -41,12 +45,19 @@ function event_change_image()
 
 function event_slick()
 {
+	if ($('.thumb').hasClass("slick-initialized")) 
+	{
+		$('.thumb').slick('unslick');
+	}
+
 	$('.thumb').slick({
 		infinite: true,
 		slidesToShow: 4,
 		slidesToScroll: 1,
 		arrows: false
 	});
+
+	$('.4-3-ratio').keepRatio({ ratio: 4/3, calculate: 'height' });
 }
 
 function event_select_variation()
@@ -78,7 +89,16 @@ function action_select_variation(e)
 
 	if (toload == true) 
 	{
-		$('.loader').fadeIn();
+		$('.loader').fadeIn(400, function()
+		{
+			$('.add-to-cart').prop("disabled", false);
+			$('.add-to-cart').removeClass("disabled");
+		});
+	}
+	else
+	{
+		$('.add-to-cart').prop("disabled", true);
+		$('.add-to-cart').addClass("disabled");
 	}
 
 	$.ajax({
@@ -96,24 +116,74 @@ function action_select_variation(e)
 		if(data.result == "success")
 		{
 			var variant_id = data.variation.evariant_id;
-		
+			
 			$('.single-product-content').addClass("hide");
 			$('.single-product-content[variant-id="'+variant_id+'"]').removeClass("hide");
 			$('.4-3-ratio').keepRatio({ ratio: 4/3, calculate: 'height' });
+			event_slick();
+
 			$('.attribute-variation[variant-label="'+variant_label+'"]').val($(e.currentTarget).val());
-			alert($('.attribute-variation[variant-label="'+variant_label+'"]').val());
+			$(".loader").fadeOut();
+		}
+		else
+		{
+			$('.attribute-variation[variant-label="'+variant_label+'"]').val($(e.currentTarget).val());
 		}
 	})
 	.fail(function() 
 	{
 		console.log("error");
-	})
-	.always(function() 
-	{
-		$(".loader").fadeOut();
 	});
-	
 }
+
+function event_add_to_cart()
+{
+	$(document).on('click', '.add-to-cart', function(event) 
+	{
+		event.preventDefault();
+		
+		$(event.currentTarget).prop("disabled", true);
+		$(event.currentTarget).addClass("disabled");
+
+		var variant_id = $(event.currentTarget).attr("variant-id");
+		var quantity = $(".variation-qty[variant-id='"+variant_id+"']").val();
+
+		$.ajax({
+			url: '/cart/add',
+			type: 'GET',
+			dataType: 'json',
+			data: {
+				variant_id: variant_id,
+				quantity: quantity,
+			},
+		})
+		.done(function(data) 
+		{
+			if (data.status == "error") 
+			{
+				alert("An error occurred. Please try again later.");
+
+				$(event.currentTarget).prop("disabled", false);
+				$(event.currentTarget).removeClass("disabled");
+			}
+			else
+			{
+				load_cart();				
+			}
+		})
+		.fail(function() 
+		{
+			console.log("error");
+		})
+		.always(function() 
+		{
+			console.log("complete");
+		});
+		
+	});
+}
+
+/* BELOW TEMPORARY DISABLED */
 
 function add_event_availability()
 {
@@ -211,8 +281,6 @@ function check_variation()
 			check_disable_button_for_variation();
 		});
 	}
-
-
 }
 
 function check_disable_button_for_variation()
@@ -272,7 +340,6 @@ function init_flexslider()
 	});
 }
 
-
 function init_quatity_button()
 {
 	var qty = parseInt($('.quantity input.qty').val());
@@ -299,6 +366,7 @@ function init_quatity_button()
 		$(this).siblings('input.qty').val(qty);
 	});
 }
+
 function disable_alphabet()
 {
 	
@@ -352,9 +420,6 @@ function prod_variation()
 		    }
 		});
 	});
-
-
-
 }
 
 
@@ -363,8 +428,6 @@ function change_prod_price($price)
 	$('.single-order-content .single-order-price').html('');
 	$('.single-order-content .single-order-price').html(convert_to_html($price));
 	// document.getElementById('single-order-price').innerHTML = '<span>' + $price + '</span>';
-
-
 }
 
 
@@ -374,10 +437,6 @@ function convert_to_html($html)
         var varTitle = $('<textarea />').html(theString).text();
         return varTitle;        
 }
-
-
-
-
 
 function init_comment()
 {

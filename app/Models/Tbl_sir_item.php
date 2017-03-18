@@ -11,6 +11,7 @@ class Tbl_sir_item extends Model
 
     public function scopeSelect_sir_item($query)
     {
-        return $query->join("tbl_item","tbl_item.item_id","=","tbl_sir_item.item_id");
+        return $query->leftjoin("tbl_item","tbl_item.item_id","=","tbl_sir_item.item_id")
+        			->leftjoin('tbl_category','tbl_category.type_id','=','tbl_item.item_category_id');
     }
 }

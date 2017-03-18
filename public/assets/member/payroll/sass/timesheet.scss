@@ -1,4 +1,12 @@
-
+.timesheet-table-loading
+{
+	min-height: 1500px;
+	text-align: center;
+	.spin
+	{
+		font-size: 20px;
+	}
+}
 .timesheet
 {
 	.timeEntry-control

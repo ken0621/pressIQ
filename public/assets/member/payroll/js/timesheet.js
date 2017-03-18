@@ -1,4 +1,5 @@
 var timesheet = new timesheet();
+var timesheet_request = null;
 
 function timesheet()
 {
@@ -13,12 +14,30 @@ function timesheet()
 	}
 	function document_ready()
 	{
+		action_load_timesheet();
+		event_change_employee();
 		event_focus_edit();
-		event_time_entry();
 		event_change_time_in_out();
 		event_create_sub_time();
 		event_delete_sub_time();
-		action_compute_work_hours();
+	}
+	function action_load_timesheet()
+	{
+		$(".load-timesheet").html("<div class='timesheet-table-loading'><div class='spin'><i class='table-loader fa fa-spinner fa-spin fa-fw'></i></div> <div>LOADING</div> </div>");
+
+		var selected_employee = $(".choose-employee").val();
+		$(".load-timesheet").load('/member/payroll/employee_timesheet/timesheet/' + selected_employee, function()
+		{
+			action_compute_work_hours();
+			event_time_entry();
+		});
+	}
+	function event_change_employee()
+	{
+		$("body").on("change", ".choose-employee", function(e)
+		{
+			action_load_timesheet();
+		});
 	}
 	function event_create_sub_time()
 	{
@@ -36,39 +55,54 @@ function timesheet()
 			if(confirm("Are you sure you want to delete this time-entry?"))
 			{
 				$date = $(e.currentTarget).closest("tr").remove();
+				action_compute_work_hours();
 			}
 		});
 	}
 	function event_change_time_in_out()
 	{
-		$("body").on("keyup", ".time-in", function(e)
+		$("body").on("change", ".time-in", function(e)
 		{
+			$(e.currentTarget).closest("tr").find(".ot-approved").val("00:00");
+
 			/* EMPTY BOTH IF ONE IS EMPTY */
 			if($(e.currentTarget).val() == "")
 			{
 				$(e.currentTarget).closest("tr").find(".time-out").val("");
-				$(e.currentTarget).closest("tr").find(".break-time").val("00:00");
 			}
 
+			$date = $(e.currentTarget).closest("tr").attr("date");
+			action_recompute_loading($date);
 			action_compute_work_hours();
 		});
 
-		$("body").on("keyup", ".time-out", function(e)
+		$("body").on("change", ".time-out", function(e)
 		{
+			$(e.currentTarget).closest("tr").find(".ot-approved").val("00:00");
+
 			/* EMPTY BOTH IF ONE IS EMPTY */
 			if($(e.currentTarget).val() == "")
 			{
 				$(e.currentTarget).closest("tr").find(".time-in").val("");
-				$(e.currentTarget).closest("tr").find(".break-time").val("00:00");
 			}
 
+			$date = $(e.currentTarget).closest("tr").attr("date");
+			action_recompute_loading($date);
 			action_compute_work_hours();
 		});
 
-		$("body").on("keyup", ".break-time", function(e)
+		$("body").on("change", ".break-time", function(e)
+		{
+			$date = $(e.currentTarget).closest("tr").attr("date");
+			action_recompute_loading($date);
+			action_compute_work_hours();
+		});
+
+		$("body").on("change", ".ot-approved", function(e)
 		{
 			action_compute_work_hours();
 		});
+
 	}
 	function event_focus_edit()
 	{
@@ -90,8 +124,16 @@ function timesheet()
 	{
 		$(".time-entry").timeEntry('destroy');
 		$(".time-entry-24").timeEntry('destroy');
-		$(".time-entry").timeEntry();
+		$(".time-entry").timeEntry({ampmPrefix: ' '});
 		$(".time-entry-24").timeEntry({show24Hours: true});
+	}
+	function action_recompute_loading(date)
+	{	
+		$(".time-record.main[date='" + date + "']").find(".table-loader").removeClass("hidden");
+		$(".time-record.main[date='" + date + "']").find(".table-check").addClass("hidden");
+		$(".time-record.main[date='" + date + "']").find(".normal-hours").text("__:__");
+		$(".time-record.main[date='" + date + "']").find(".overtime-hours").text("__:__");
+		$(".time-record.main[date='" + date + "']").find(".overtime-hours").removeClass("red");
 	}
 	function action_create_sub_time(date)
 	{
@@ -113,81 +155,63 @@ function timesheet()
 		/* REMOVE NEW SUB REFERENCE */
 		$("tbody").find(".time-record.new-sub").removeClass("new-sub");
 	}
+
 	function action_compute_work_hours()
 	{
-		/* COMPUTE TOTAL HOURS PER LINE */
-		$(".time-record").each(function(key, val)
-		{		
-			var time_in = convert_to_24h($(this).find(".time-in").val());
-			var time_out = convert_to_24h($(this).find(".time-out").val());
-
-			/* IF BLANK TIME-IN */
-			if(time_in == "" || time_out == "")
-			{
-				var total_hours = "00:00";
-			}
-			else
-			{
-				var total_hours = deduct_two_time(time_in, time_out);
-			}
-
-			
-			$(this).attr("total_hours", total_hours);
-			$(this).find(".normal-hours").text(total_hours);
-		});
-
-		/* COMPUTE TOTAL HOURS PER DATE */
-		$(".time-record.main").each(function(key, val)
+		if(timesheet_request !== null)
 		{
-			count_entry_per_date = $(".time-record[date='" + $(this).attr("date") + "']").length;
-			
-			if(count_entry_per_date > 1)
+			timesheet_request.abort();
+		}
+		
+		timesheet_request = $.ajax(
+		{
+			url:"/member/payroll/employee_timesheet/json_process_time",
+			dataType:"json",
+			data: $(".payroll-form").serialize(),
+			type:"post",
+			success: function(data)
 			{
-				var total_time_multiple_line = "00:00";
-
-				$(".time-record[date='" + $(this).attr("date") + "']").each(function(key, val)
+				$.each(data, function(key, val)
 				{
-					total_time_multiple_line = add_two_time(total_time_multiple_line, $(this).attr("total_hours"));
-					$(this).attr("total_hours", "00:00");
+					update_time_record_on_table(val.date, val.regular_hours, val.early_overtime, val.late_overtime);
 				});
 
-				$(".time-record.main[date='" + $(this).attr("date") + "']").attr("total_hours", total_time_multiple_line);
-			}
-		});
-
-		/* COMPUTE PER DATE*/
-		$(".time-record.main").each(function(key, val)
-		{
-			total_hours = $(this).attr("total_hours");
-			total_break = $(this).find(".break-time").val();
-			total_hours_less_break = deduct_two_time(total_break, total_hours);
-
-			if(check_greater(total_hours_less_break, '08:00'))
+				$(".table-loader").addClass("hidden");
+				$(".table-check").removeClass("hidden");
+			},
+			error: function()
 			{
-				total_normal_hours = "08:00";
-				total_overtime_hours = deduct_two_time('08:00', total_hours_less_break);
+				console.log("Error");
 			}
-			else
-			{
-				total_normal_hours = total_hours_less_break;
-				total_overtime_hours = "00:00";
-			}
-
- 			$(this).find(".normal-hours").text(total_normal_hours);
- 			$(this).find(".overtime-hours").text(total_overtime_hours);
- 			if(check_greater(total_overtime_hours, '00:00'))
- 			{
- 				$(this).find(".overtime-hours").addClass("red");
- 			}
- 			else
- 			{
- 				$(this).find(".overtime-hours").removeClass("red");
- 			}
- 			
 		});
 	}
 
+	function update_time_record_on_table(date, regular_hours, early_overtime, late_overtime)
+	{
+		$(".time-record[date='" + date + "']").find(".normal-hours").text(regular_hours);
+		$(".time-record[date='" + date + "']").find(".overtime-hours.late").text(late_overtime);
+		$(".time-record[date='" + date + "']").find(".overtime-hours.early").text(early_overtime);
 
+		if(late_overtime != "00:00")
+		{
+			$(".time-record[date='" + date + "']").find(".overtime-hours.late").addClass("red");
+		}
+		else
+		{
+			$(".time-record[date='" + date + "']").find(".overtime-hours.late").removeClass("red");
+		}
+
+		if(early_overtime != "00:00")
+		{
+			$(".time-record[date='" + date + "']").find(".overtime-hours.early").addClass("red");
+		}
+		else
+		{
+			$(".time-record[date='" + date + "']").find(".overtime-hours.early").removeClass("red");
+		}
+
+
+	}
 	function action_convert_time_str_to_seconds(time_str)
 	{
 	    // Extract hours, minutes and seconds
@@ -257,12 +281,13 @@ function timesheet()
 	  var HH = times[0];
 
 
-	  if (MM % 60 === 0) {
-	    res = MM / 60;
-	    HH += res;
-	    MM = MM - (60 * res);
+	  if (MM % 60 === 0)
+	  {
+			res = MM / 60;
+			HH += res;
+			MM = MM - (60 * res);
 	  }
-		var formatted = ((HH < 10)?("0" + HH):HH) + ":" + ((MM < 10)?("0" + MM):MM)
+		var formatted = ((HH < 10)?("0" + HH):HH) + ":" + ((MM < 10)?("0" + MM):MM);
 	  return formatted;
 	}
 	function convert_to_24h(time_str)

@@ -43,4 +43,35 @@ class Tbl_payroll_employee_contract extends Model
 
 		return $query;
 	}
+
+	public function scopeemployeefilter($query, $company_id = 0, $department_id = 0, $job_title_id = 0, $date = '0000-00-00')
+	{
+		if($date == '0000-00-00')
+		{
+			$date = date('Y-m-d');
+		}
+		$query->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
+			  ->where(function($query1) use ($date)
+			  {
+			  	$query1->where('tbl_payroll_employee_contract.payroll_employee_contract_date_end','>=', $date)
+			  			->orWhere('tbl_payroll_employee_contract.payroll_employee_contract_date_end','0000-00-00');
+			  })
+			  ->where('tbl_payroll_employee_contract.payroll_employee_contract_date_hired','<=',$date);
+
+			  if($company_id != 0)
+			  {
+			  	$query->where('tbl_payroll_employee_basic.payroll_employee_company_id', $company_id);
+			  }
+
+			  if($department_id != 0)
+			  {
+			  	$query->where('tbl_payroll_employee_contract.payroll_department_id', $department_id);
+			  }
+			  if($job_title_id != 0)
+			  {
+			  	$query->where('tbl_payroll_employee_contract.payroll_jobtitle_id', $job_title_id);
+			  }
+
+		return $query;
+	}
 }

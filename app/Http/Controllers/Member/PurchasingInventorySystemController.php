@@ -462,7 +462,6 @@ class PurchasingInventorySystemController extends Member
         {            
             $data["_sir"] = Purchasing_inventory_system::select_lof($this->user_info->shop_id,'array',Request::input("sir_id"));
         }
-
         return view("member.purchasing_inventory_system.lof.lof",$data);
     }
     public function create_sir()
@@ -552,8 +551,7 @@ class PurchasingInventorySystemController extends Member
         $shop_id = $this->user_info->shop_id;
         $sales_agent_id = Request::input("sales_agent_id");
         $truck_id = Request::input("truck_id");
-        $sir_date = date('Y-d-m',strtotime(Request::input("sir_date")));
-        // dd($sir_date." ".Request::input("sir_date"));
+        $sir_date = datepicker_input(Request::input("sir_date"));
         //array
         $item_id = Request::input("item");
         $item_qty = Request::input("item_qty");
@@ -744,9 +742,17 @@ class PurchasingInventorySystemController extends Member
                 {
                     if($value != "")
                     {
+                        if(isset($related_um_type[$key]))
+                        {
+                             $related_um_type[$key] = $related_um_type[$key];  
+                        }
+                        else
+                        {
+                            $related_um_type[$key] = 0;
+                        }
                         $insert_sir_item[$key]["item_id"] = $value;
                         $insert_sir_item[$key]["item_qty"] = str_replace(",","", $item_qty[$key]);
-                        $insert_sir_item[$key]["related_um_type"] = $related_um_type[$key];
+                        $insert_sir_item[$key]["related_um_type"] = $related_um_type[$key] ;
                         // $insert_sir_item[$key]["um_qty"] = $um_qty[$key];
 
                         $rule[$key]["item_id"]    = "required";
@@ -837,7 +843,7 @@ class PurchasingInventorySystemController extends Member
         {
             $data["_truck"] = Tbl_truck::where("archived",0)->where("truck_shop_id",$this->user_info->shop_id)->get();
             $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("shop_id",$this->user_info->shop_id)->where("tbl_employee.archived",0)->get();
-            $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->get();
+            $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->where("shop_id",$this->user_info->shop_id)->get();
 
             $data["sir"] = Tbl_sir::where("sir_id",$sir_id)->where("shop_id",$this->user_info->shop_id)->where("archived",0)->first();
             $data["_sir_item"] = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->get();

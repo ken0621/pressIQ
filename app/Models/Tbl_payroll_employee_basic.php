@@ -40,28 +40,62 @@ class Tbl_payroll_employee_basic extends Model
 	// [TEXT] 			payroll_employee_remarks
 
 
-	public function scopeselemployee($query, $shop_id = 0, $company_id = 0, $employment_status = 0, $date = '0000-00-00')
+	public function scopeselemployee($query, $parameter)
 	{
+		$date 				= $parameter['date'];
+		$company_id 		= $parameter['company_id'];
+		$employment_status 	= $parameter['employement_status'];
+		$shop_id 			= $parameter['shop_id'];
+		
 		if($date == '0000-00-00')
 		{
 			$date = date('Y-m-d');
 		}
+
 		$query->leftjoin('tbl_payroll_company as company','company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
 			  ->leftjoin('tbl_payroll_employee_contract as contract','contract.payroll_employee_id','=','tbl_payroll_employee_basic.payroll_employee_id')
 			  ->leftjoin('tbl_payroll_department as department','department.payroll_department_id','=','contract.payroll_department_id')
 			  ->leftjoin('tbl_payroll_jobtitle as jobtitle','jobtitle.payroll_jobtitle_id','=','contract.payroll_jobtitle_id')
 			  ->where('contract.payroll_employee_contract_date_end','<=',$date)
 			  ->where('company.shop_id',$shop_id);
-
+			 
 			  if($company_id != 0)
 			  {
 			  	$query->where('company.payroll_company_id',$company_id);
 			  }
 
-			  $query->select('company.payroll_company_name','tbl_payroll_employee_basic.*','department.payroll_department_name','jobtitle.payroll_jobtitle_name')
+			  if($employment_status == 0)
+			  {
+			  	$status = array();
+			  	$status[0] = 1;
+			  	$status[1] = 2;
+			  	$status[2] = 3;
+			  	$status[3] = 4;
+			  	$status[4] = 5;
+			  	$status[5] = 6;
+			  	$status[6] = 7;
+			  }
+
+			  if($employment_status === 'separated')
+			  {
+			  	$status = array();
+			  	$status[0] = 8;
+			  	$status[1] = 9;
+			  	
+			  }
+
+			  if($employment_status != 0 && $employment_status != 'separated')
+			  {
+			  	$status = array();
+			  	$status[0] = $employment_status;
+			  }
+
+			  $query->whereIn('contract.payroll_employee_contract_status',$status)
+			  		->select('company.payroll_company_name','tbl_payroll_employee_basic.*','department.payroll_department_name','jobtitle.payroll_jobtitle_name')
 			  		->groupBy('tbl_payroll_employee_basic.payroll_employee_id');
 
 		return $query;
 
 	}
+
 }

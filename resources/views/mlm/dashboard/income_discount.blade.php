@@ -24,7 +24,7 @@
         </div>  
     </li>
 </ul>
-
+<div class="col-md-12"><hr /></div>
 @foreach($all_discount as $key => $value)
 <div class="col-md-6">
   <!-- Widget: user widget style 1 -->

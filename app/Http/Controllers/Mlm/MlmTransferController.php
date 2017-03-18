@@ -313,7 +313,7 @@ class MlmTransferController extends Mlm
 
             $data['unprocessed'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)
             ->where('wallet_log_status', 'released')
-            ->whereNull('encashment_process')
+            ->whereNull('encashment_process')   
             ->get()->toArray();
 
             return view('mlm.wallet.encashment', $data);

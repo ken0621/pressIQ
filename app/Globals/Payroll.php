@@ -143,20 +143,24 @@ class Payroll
 	/* 	 Returns normal hours rendered and overtime (Guillermo Tabligan) */
 	public static function process_time($time_rule, $default_time_in, $default_time_out, $_time_record, $break = "01:00", $default_working_hours = "08:00")
 	{
+		$return = new stdClass();
+
 		switch($time_rule)
 		{
 			case "flexitime": 
-				return Payroll::process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
+				return Payroll::process_time_flexitime($return, $time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
+			break;
+			case "regulartime": 
+				return Payroll::process_time_regulartime($return, $time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
 			break;
 		}
 	}
-	public static function process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours)
+	public static function process_time_flexitime($return, $time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours)
 	{
 		$data["break"] = $break = c_time_to_int($break);
 		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
 
-		$return = new stdClass();
-
+		
 		$total_time_spent = 0;
 		$total_early_overtime = 0;
 		$total_late_overtime = 0;
@@ -185,7 +189,15 @@ class Payroll
 		}
 		else
 		{
-			$total_time_spent = $total_time_spent - $break;
+			if($break > $total_time_spent)
+			{
+				$total_time_spent = 0;
+			}
+			else
+			{
+				$total_time_spent = $total_time_spent - $break;
+			}
+			
 		}
 
 
@@ -201,6 +213,85 @@ class Payroll
 		{
 			$total_regular_hours = $total_time_spent;
 		}
+
+		$return->time_spent = date("H:i", $total_time_spent);
+		$return->regular_hours = date("H:i", $total_regular_hours);
+		$return->late_overtime = date("H:i", $total_late_overtime);
+		$return->early_overtime = date("H:i", $total_early_overtime);
+		
+		return $return;
+	}
+
+	public static function process_time_regulartime($return, $time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours)
+	{
+		$data["break"] = $break = c_time_to_int($break);
+		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
+
+		$total_time_spent = 0;
+		$total_early_overtime = 0;
+		$total_late_overtime = 0;
+		$total_regular_hours = 0;
+
+		$default_time_in = c_time_to_int($default_time_in);
+		$default_time_out = c_time_to_int($default_time_out);
+
+		/* CHECK EACH TIME */
+		foreach($_time_record as $time_record)
+		{
+			$time_in = c_time_to_int($time_record->time_in);
+			$time_out = c_time_to_int($time_record->time_out);
+			$early_overtime = 0;
+			$late_overtime = 0;
+
+			if($time_out > $time_in)
+			{
+				$time_spent = ($time_out - $time_in);
+			}
+			else
+			{
+				$time_spent = 0;
+			}
+
+			$regular_hours = $time_spent;
+
+			/* CHECK IF EARLY OVERTIME */
+			if($time_in < $default_time_in)
+			{
+				$early_overtime = $default_time_in - $time_in;
+				$regular_hours = $regular_hours - $early_overtime;
+			}
+
+			/* CHECK IF EARLY OVERTIME */
+			if($time_out > $default_time_out)
+			{
+				$late_overtime = $time_out - $default_time_out;
+				$regular_hours = $regular_hours - $late_overtime;
+			}
+
+			$total_early_overtime += $early_overtime;
+			$total_late_overtime += $late_overtime;
+			$total_regular_hours += $regular_hours;
+			$total_time_spent += $time_spent;
+
+		}
+
+
+		if($total_time_spent <= 0)
+		{
+			$total_time_spent = 0;
+		}
+		else
+		{
+			if($break > $total_regular_hours)
+			{
+				$total_regular_hours = 0;
+			}
+			else
+			{
+				$total_regular_hours = $total_regular_hours - $break;
+			}
+		}
+
 
 		$return->time_spent = date("H:i", $total_time_spent);
 		$return->regular_hours = date("H:i", $total_regular_hours);

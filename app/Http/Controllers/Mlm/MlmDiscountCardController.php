@@ -27,13 +27,15 @@ class MlmDiscountCardController extends Mlm
     	->where('ismlm', 1)
     	->get();
 
-        $with_discount = Tbl_mlm_discount_card_log::whereNotNull('discount_card_customer_holder')->lists('discount_card_customer_holder')->toArray();
+        // $with_discount = Tbl_mlm_discount_card_log::whereNotNull('discount_card_customer_holder')->lists('discount_card_customer_holder')->toArray();
         $with_slot = Tbl_mlm_slot::where('shop_id', $shop_id)->lists('slot_owner')->toArray();
         
-        $customers = Tbl_customer::whereNotIn('customer_id', $with_slot)->whereNotIn('customer_id', $with_discount)->where('shop_id', $shop_id)
+        $customers = Tbl_customer::whereNotIn('customer_id', $with_slot)
+        // ->whereNotIn('customer_id', $with_discount)
+        ->where('shop_id', $shop_id)
         ->where('ismlm', 1)
         ->get();
-
+        $data['expiry'] = Carbon::now()->addYear(1);
         $data['discount_card_log_id'] = Request::input('discount_card_log_id');
     	$data['customers'] = $customers;
     	return view('mlm.discount_card.discount_card',$data);
@@ -43,6 +45,17 @@ class MlmDiscountCardController extends Mlm
     	return Mlm_member::get_customer_info($customer_id);
     }
     public static function submit_use_discount_card()
+    {
+        $discount_card_log_id = Request::input('discount_card_log_id_a');
+        $update['discount_card_log_date_used'] = Carbon::now();
+        $update['discount_card_customer_holder'] =Self::$customer_id;
+        $update['discount_card_log_date_expired'] = Carbon::now()->addYear(1);
+        Tbl_mlm_discount_card_log::where('discount_card_log_id', $discount_card_log_id)->update($update);
+        $data['response_status'] = 'success';
+        $data['message'] = 'Success';
+        return json_encode($data);
+    }
+    public static function submit_use_discount_card_2()
     {
         // return $_POST;
          // return Request::input('discount_card_log_id');

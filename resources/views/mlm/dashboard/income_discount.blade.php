@@ -24,9 +24,9 @@
         </div>  
     </li>
 </ul>
-
+<div class="col-md-12"><hr /></div>
 @foreach($all_discount as $key => $value)
-<div class="col-md-6">
+<div class="col-md-12">
   <!-- Widget: user widget style 1 -->
   <div class="box box-widget widget-user">
     <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -41,7 +41,7 @@
       <div class="row">
         <div class="col-sm-4 border-right">
           <div class="description-block">
-            <h5 class="description-header"></h5>
+            <h5 class="description-header">{{name_format_from_customer_info($value)}}</h5>
             <span class="description-text">Holder</span>
           </div>
           <!-- /.description-block -->
@@ -49,7 +49,7 @@
         <!-- /.col -->
         <div class="col-sm-4 border-right">
           <div class="description-block">
-            <h5 class="description-header">{{$value->mlm_gc_code}}</h5>
+            <h5 class="description-header">{{$value->discount_card_log_code}}</h5>
             <span class="description-text">CODE</span>
           </div>
           <!-- /.description-block -->
@@ -57,8 +57,8 @@
         <!-- /.col -->
         <div class="col-sm-4">
           <div class="description-block">
-            <h5 class="description-header"></h5>
-            <span class="description-text">STATUS</span>
+            <h5 class="description-header">{{date_format(date_create($value->discount_card_log_date_expired), "Y/m/d") }}</h5>
+            <span class="description-text">Expiration</span>
           </div>
           <!-- /.description-block -->
         </div>

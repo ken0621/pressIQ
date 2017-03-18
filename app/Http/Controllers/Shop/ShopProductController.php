@@ -20,6 +20,8 @@ class ShopProductController extends Shop
         $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         // Get Product by Category
         $product = Ecom_Product::getAllProductByCategory(Request::input("type"), $this->shop_info->shop_id);
+        // Get Breadcrumbs
+        $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs(Request::input("type"), $this->shop_info);
         // Count total product
         $data["total_product"] = count($product);
         // Filter Price

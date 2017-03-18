@@ -49,9 +49,11 @@ class MlmDashboardController extends Mlm
         $data = [];
         $data['sample'] = Tbl_mlm_discount_card_log::whereNotNull('discount_card_customer_holder')->count();
         // dd($data);
-        dd(Self::$discount_card_log);
-        $data['all_discount'] = Tbl_mlm_discount_card_log::where('discount_card_customer_holder', Self::$customer_id)->get();
-        dd($data);
+        // dd(Self::$discount_card_log);
+        $data['all_discount'] = Tbl_mlm_discount_card_log::where('discount_card_customer_holder', Self::$customer_id)
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+        ->get();
+        // dd($data);
         return view('mlm.dashboard.income_discount', $data);
     }
     public static function income()

@@ -3,6 +3,22 @@ body
 	font-family: 'Open Sans', sans-serif;
 	background-color: #f7f7f7;
 }
+
+.logo-default{
+  font-family: 'Open Sans', sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 25px;
+
+  .font1{
+  	color: #034769;
+  }
+  .font2{
+  	color: #ff4900;
+  }
+}
+
 .btn-primary
 {
 	background: none;
@@ -97,7 +113,7 @@ body
 
 			a:hover
 			{
-				text-decoration: none;
+				text-decoration: underline;
 			}
 
 			.linya
@@ -124,16 +140,47 @@ body
 				border-right: 1px solid #c8c8c8;
 				color: #686868;
 				font-size: 12.5px;
+				cursor: pointer;
+
+				.dropdown-content{
+					display: none;
+				    position: absolute;
+				    background-color: #f9f9f9;
+				    color:#686868;
+				    min-width: 160px;
+				    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+				    padding: 12px 16px;
+				    z-index: 1;
+				    border-radius: 5px;
+				    margin-left: -18px;
+				    top: 45px;
+				    text-align: left;
+
+				    	p{
+				    		line-height: 20px;
+				    	}
+
+				    	p:hover{
+				    		color: #ff4900;
+				    	}
+
+				}
 			}
+			.search-category:hover .dropdown-content{
+				display:block;
+			}
+
 			.search-input
 			{
 				border: 0;
+				font-size: 13px;
 			}
 			.search-button
 			{
 				color: #473e06;
 				background-color: #ffd800;
 				border: 0;
+				cursor: pointer;
 			}
 		}
 		.woaw
@@ -436,7 +483,7 @@ body
 }
 .nav-border
 {
-	border-right: solid 1px #515390;
+	border-right: solid 1px #256281;
 	&:last-child
 	{
 		border-right: 0;
@@ -446,6 +493,10 @@ body
 		border: 0;
 	}
 }
+.nav-border:hover{
+	background-color: #095880;
+}
+
 
 .button-a
 {

@@ -17,6 +17,9 @@
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
         <!-- FONT AWESOME -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/font-awesome/css/font-awesome.min.css">
+        <!-- FONT ELLO -->
+        <link rel="stylesheet" type="text/css" href="/fontello/css/animation.css">
+        <link rel="stylesheet" type="text/css" href="/fontello/css/fontello.css">
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <!-- THEME COLOR -->
@@ -50,13 +53,21 @@
     	<div class="header-nav-middle">
     		<div class="container">
     			<div class="row clearfix">
-	    			<div class="col-md-3"></div>
+	    			<div class="col-md-3 logo-default"><span class="font1">digima</span><span class="font2">house</span></div>
 	    			<div class="col-md-6">
 	    				<div class="search-bar">
 	    					<div class="input-group input-group-lg">
-							  <span class="input-group-addon search-category" id="sizing-addon1">Categories <span class="caret"></span></span>
-							  <input type="text" class="form-control search-input" aria-describedby="sizing-addon1">
-							  <span class="input-group-addon search-button" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
+                                <div class="input-group-addon search-category" id="sizing-addon1">Categories
+                                    <div class="dropdown-content">
+                                        <p>Electronics</p>
+                                        <p>Clothing</p>
+                                        <p>Home and Living</p>
+                                        <p>Beauty and Wellness</p>
+                                    </div>
+                                    <span class="caret"></span>
+                                </div>
+                            <input type="text" class="form-control search-input" aria-describedby="sizing-addon1">
+							<span class="input-group-addon search-button" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
 							</div>
 	    				</div>
 	    			</div>

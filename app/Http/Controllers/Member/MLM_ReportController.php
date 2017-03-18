@@ -146,8 +146,8 @@ class MLM_ReportController extends Member
             $data['not_encashed_encashed'] = 0;
         } 
             $data['labels'][0] = 'Pending Wallet';
-            $data['labels'][1] = 'Pending Wallet';
-            $data['labels'][2] = 'Pending Wallet';
+            $data['labels'][1] = 'Requested Wallet';
+            $data['labels'][2] = 'Released Wallet';
 
             $data['data'][0] = $data['not_encashed'];
             $data['data'][1] = $data['not_encashed_requested'] * (-1);

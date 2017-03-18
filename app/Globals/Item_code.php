@@ -293,7 +293,7 @@ class Item_code
                         $insert["item_discount"]            = $item_discount_sum;
                         if($gc == 1)
                         {
-                            if($gc_amount >= $insert["item_subtotal"])
+                            if($gc_amount >= $insert["item_total"])
                             {
                                 $insert['item_code_paid'] = 2;
                                 $gc = 2;
@@ -301,13 +301,13 @@ class Item_code
                             else
                             {
                                 $send['response_status']      = "warning";
-                                $send['warning_validator'][0] = 'Gc Amount is only ' . $gc_amount . ' while the needed amount is' . $insert["item_subtotal"];
+                                $send['warning_validator'][0] = 'Gc Amount is only ' . $gc_amount . ' while the needed amount is ' . $insert["item_total"];
                                 return $send;
                             }
                         }
                         if($wallet == 1)
                         {
-                            if($wallet_amount >= $insert["item_subtotal"])
+                            if($wallet_amount >= $insert["item_total"])
                             {
                                 $insert['item_code_paid'] = 3;
                                 $wallet = 2;
@@ -315,7 +315,7 @@ class Item_code
                             else
                             {
                                 $send['response_status']      = "warning";
-                                $send['warning_validator'][0] = 'Wallet Amount is only ' . $wallet_amount . ' while the needed amount is' . $insert["item_subtotal"];
+                                $send['warning_validator'][0] = 'Wallet Amount is only ' . $wallet_amount . ' while the needed amount is ' . $insert["item_total"];
                                 return $send;
                             }
                         }
@@ -391,7 +391,7 @@ class Item_code
                             $update_gc['mlm_gc_used_date'] = Carbon::now();
                             Tbl_mlm_gc::where('mlm_gc_code', $data['gc_code'])->update($update_gc);
 
-                            $return = $gc_amount - $insert["item_subtotal"];
+                            $return = $gc_amount - $insert["item_total"];
                             if($return >= 1)
                             {
                                 Mlm_gc::return_gc($insert['slot_id'], $data['gc_code'], $return);
@@ -404,7 +404,7 @@ class Item_code
                             $arry_log['shop_id'] = $shop_id;
                             $arry_log['wallet_log_slot_sponsor'] = $insert['slot_id'];
                             $arry_log['wallet_log_details'] = $log;
-                            $arry_log['wallet_log_amount'] = $insert["item_subtotal"] * (-1);
+                            $arry_log['wallet_log_amount'] = $insert["item_total"] * (-1);
                             $arry_log['wallet_log_plan'] = "REPURCHASE";
                             $arry_log['wallet_log_status'] = "released";   
                             $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 

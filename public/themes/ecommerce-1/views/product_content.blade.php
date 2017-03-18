@@ -111,15 +111,13 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Discount Value</th>
                                             <th>Product Price</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach($product_variant['mlm_discount'] as $key => $mlm_discount)
                                         <tr>
-                                            <td>{{ $mlm_discount['discount_name'] }}</td>
-                                            <td>PHP. {{ number_format($mlm_discount['discount_value'], 2) }}</td>
+                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
                                             <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
                                         </tr>
                                         @endforeach

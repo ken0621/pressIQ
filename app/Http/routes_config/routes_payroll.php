@@ -119,6 +119,12 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/* HOLIDAY START */
 	Route::any('/holiday',"Member\PayrollController@holiday");
+	Route::any('/holiday/modal_create_holiday',"Member\PayrollController@modal_create_holiday");
+	Route::any('/holiday/modal_save_holiday',"Member\PayrollController@modal_save_holiday");
+	Route::any('/holiday/archive_holiday/{archived}/{id}',"Member\PayrollController@archive_holiday");
+	Route::any('/holiday/archive_holiday_action',"Member\PayrollController@archive_holiday_action");
+	Route::any('/holiday/modal_edit_holiday/{id}',"Member\PayrollController@modal_edit_holiday");
+	Route::any('/holiday/modal_update_holiday',"Member\PayrollController@modal_update_holiday");
 	/* HOLIDAY END */
 
 	/* ALLOWANCE START */
@@ -140,4 +146,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* LEAVE START */
 	Route::any('/leave',"Member\PayrollController@leave");
 	/* LEAVE END */
+
+
+	/* PAYROLL GROUP START */
+	Route::any('/payroll_group',"Member\PayrollController@payroll_group");
+	Route::any('/payroll_group/modal_create_payroll_group',"Member\PayrollController@modal_create_payroll_group");
+	/* PAYROLL GROUP END */
 });

@@ -91,12 +91,10 @@ class Customer_InvoiceController extends Member
         $invoice_other_info['invoice_memo'] = Request::input('inv_memo');
 
         $total_info                         = [];
-        $total_info['total_subtotal_price'] = Request::input('subtotal_price');
         $total_info['ewt']                  = Request::input('ewt');
         $total_info['total_discount_type']  = Request::input('inv_discount_type');
         $total_info['total_discount_value'] = Request::input('inv_discount_value');
         $total_info['taxable']              = Request::input('taxable');
-        $total_info['total_overall_price']  = Request::input('overall_price');
 
         $item_info                          = [];
         $_itemline                          = Request::input('invline_item_id');
@@ -109,12 +107,11 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
                 $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
                 $item_info[$key]['um']                 = Request::input('invline_um')[$key];
-                $item_info[$key]['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
-                $item_info[$key]['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
+                $item_info[$key]['quantity']           = Request::input('invline_qty')[$key];
+                $item_info[$key]['rate']               = Request::input('invline_rate')[$key];
                 $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
-                $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
 
 
                 $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
@@ -231,11 +228,7 @@ class Customer_InvoiceController extends Member
                 $json["invoice_id"]     = $inv_id;
                 $json["link"]           = "/member/customer/invoice?id=".$inv_id;
 
-                if($button_action == "save-and-edit")
-                {
-                    $json["redirect"]    = "/member/customer/invoice?id=".$inv_id;
-                }
-                elseif($button_action == "save-and-new")
+                if($button_action == "save-and-new")
                 {
                     $json["redirect"]   = '/member/customer/invoice';
                 }

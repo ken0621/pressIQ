@@ -86,6 +86,7 @@ class Mlm extends Controller
             ->orderBy('wallet_log_id', 'DESC')
             ->sponsorslot()
             ->where('wallet_log_notified', 0)
+            ->take(10)
             ->get();
 
             $noti_count = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)

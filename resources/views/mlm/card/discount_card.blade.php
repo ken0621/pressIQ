@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/style.css">
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,600" rel="stylesheet"> 
 <div class="{{ Request::input('pdf') == 'true' ? '' : 'row' }} clearfix">
 
 <div class="{{ Request::input('pdf') == 'true' ? '' : 'col-md-6' }} clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 450px;' : '' }}">

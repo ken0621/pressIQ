@@ -41,6 +41,7 @@ use App\Models\Tbl_payroll_overtime_rate;
 use App\Models\Tbl_payroll_over_time_rate_default;
 use App\Models\Tbl_payroll_group;
 use App\Models\Tbl_payroll_group_rest_day;
+use App\Models\Tbl_payroll_time_sheet_record;
 
 use App\Globals\Payroll;
 

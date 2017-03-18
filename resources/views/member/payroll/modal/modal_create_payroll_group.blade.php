@@ -13,7 +13,7 @@
 				  <li><a data-toggle="tab" href="#deduction-basis">Deduction Basis</a></li>
 				  <li><a data-toggle="tab" href="#over-time-rates">Over Time Rates</a></li>
 				  <li><a data-toggle="tab" href="#shifting">Shifting</a></li>
-
+				  <li><a data-toggle="tab" href="#13month">13 Month</a></li>
 				</ul>
 
 				<div class="tab-content tab-content-custom tab-pane-div margin-bottom-0">
@@ -73,7 +73,9 @@
 				  <div id="shifting" class="tab-pane fade">
 				    
 				  </div>
-				 
+				  <div id="13month" class="tab-pane fade">
+				    
+				  </div>
 				</div>
 			</div>
 		</div>

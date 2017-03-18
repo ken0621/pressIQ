@@ -9,19 +9,19 @@
             <table class="digima-table">
                 <thead >
                     <tr>
-                        <th width="5%"></th>
-                        <th width="50%">Qty</th>
-                        <th width="50%">Price / Pc</th>
-                        <th width="50%">Total  Price</th>
+                        <th class="text-center" width="5%"></th>
+                        <th class="text-center" width="30%">Qty</th>
+                        <th class="text-center" width="30%">Price / Pc</th>
+                        <th class="text-center" width="30%">Total  Price</th>
                         <th width="5%"></th>
                     </tr>
                 </thead>
                 <tbody class="tbody-item-price">
-                    <tr>
+                    <tr class="tr-item-price">
                         <td class="text-center add-tr-price cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td> 
-                        <td><input class="text-center form-control input-sm" type="text" name="item_qty[]"/></td>
-                        <td><input class="text-center form-control input-sm" type="text" name="item_price[]"/></td>
-                        <td><input class="text-center form-control input-sm" type="text" name="item_total_price[]"/></td>
+                        <td><input class="text-center form-control input-sm item-price-qty" type="text" name="item_qty[]"/></td>
+                        <td><input class="text-center form-control input-sm item-price-value" type="text" name="item_price[]"/></td>
+                        <td><input class="text-center form-control input-sm item-price-total" type="text" name="item_total_price[]"/></td>
                         <td class="text-center remove-tr-price cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                     </tr>
                 </tbody>
@@ -38,9 +38,9 @@
     <table class="div-script-row-price hide">
         <tr>
             <td class="text-center add-tr-price cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td> 
-            <td><input class="text-center form-control input-sm" type="text" name="item_qty[]"/></td>
-            <td><input class="text-center form-control input-sm" type="text" name="item_price[]"/></td>
-            <td><input class="text-center form-control input-sm" type="text" name="item_total_price[]"/></td>
+            <td><input class="text-center form-control input-sm item-price-qty" type="text" name="item_qty[]"/></td>
+            <td><input class="text-center form-control input-sm item-price-value" type="text" name="item_price[]"/></td>
+            <td><input class="text-center form-control input-sm item-price-total" type="text" name="item_total_price[]"/></td>
             <td class="text-center remove-tr-price cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>

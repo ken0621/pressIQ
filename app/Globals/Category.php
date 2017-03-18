@@ -28,7 +28,7 @@ class Category
 	}
 
 	/* RECURSIVE SELECTION OF RAW DATA */ 
-	public static function re_select_raw($shop_id = 0, $parent = 0, $cat_type)
+	public static function re_select_raw($shop_id = 0, $parent = 0, $cat_type = array("all","service","inventory","non-inventory"))
 	{
 		$data = array();
         $_category = Tbl_category::selecthierarchy($shop_id, $parent, $cat_type)->get();

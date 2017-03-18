@@ -33,6 +33,9 @@
 	    font-size: 18.75px;
 	    font-weight: 600;
 	}
+	button:hover{
+		opacity: 0.9;
+	}
 
 	.bottom-content
 	{
@@ -121,7 +124,7 @@
 	.scroll-button
 	{
 		position: absolute;
-		right: 0;
+		right: -5px;
 
 		a{
 			padding: 2px;
@@ -210,6 +213,9 @@
     border-radius: 0px 2px 2px 0px;
     width: 70%;
 }
+.button-icon:hover{
+	opacity:0.9;
+}
 
 .button-icon2
 {
@@ -249,7 +255,7 @@
 	.scroll-button
 	{
 		position: absolute;
-		right: 0;
+		right: -10px;
 
 		a
 		{
@@ -270,7 +276,44 @@
 	.per-item
 	{
 		padding-bottom: 10px;
+
+		.image-holder{
+			position: relative;
+			padding-bottom: 100%;
+			height: 0;
+			overflow: hidden;
+
+			.first-image{
+				position: absolute;
+				top: 0;
+				transition: 0.3s all ease;
+			}
+			.second-image{
+				position: absolute;
+				top: 100%;
+				transition: 0.3s all ease;
+			}
+		}
 	}
+	.per-item:hover{
+		cursor: pointer;
+
+		.item-details-container{
+			.item-title{
+				text-decoration: underline;
+			}
+		}
+
+		.image-holder{
+			.first-image{
+				top: -100%;
+			}
+			.second-image{
+				top: 0;
+			}
+		}
+	}
+
 }
 
 .item-details-container
@@ -281,7 +324,7 @@
 .item-img
 {
 	width: 100%;
-	border: #e5e5e5 solid 1px;
+	border: #fff solid 1px;
 }
 
 .item-old-price
@@ -331,6 +374,9 @@
 	    border: 0;
 	    border-radius: 2px;
     }
+    .button-a:hover{
+    	opacity: 0.9;
+    }
 }
 /* FEATURED TODAY */
 .featured-container
@@ -348,7 +394,7 @@
     	color: #1e1e1e;
 	    font-size: 16.75px;
 	    font-weight: 700;
-	    border-bottom: #f7f7f7 solid 8px;
+	    border-bottom: #cccccc solid 1px;
 	    position: relative;
 
 		.title
@@ -360,7 +406,7 @@
 		{
 			position: absolute;
 		    padding: 20px;
-		    right: 20px;
+		    right: -10px;
 		    bottom: 0px;
 		    top: -5px;
 			a
@@ -386,11 +432,6 @@
     {
     	padding: 10px;
     }
-    .item-price
-    {
-
-    }
-
     .new-arrivals
     {
     	position: relative;
@@ -446,7 +487,7 @@
 }
 
 
-
+/* BEST SELLER */
 .best-seller-container
 {
 	background-color: #fff;
@@ -459,9 +500,81 @@
 
     .best-item-container
     {
-    	padding: 30px;
-    	padding-bottom: 50px;
+    	padding: 30px 30px 50px 15px;
     	width: 100%;
+
+    	.best-item-upper, .best-item-lower{
+	    	
+	    	.per-item-container
+		    {
+		    	width: 100%;
+
+		    	.image-holder{
+
+		    		position: relative;
+					padding-bottom: 100%;
+					height: 0;
+					overflow: hidden;
+
+		    		.item-image-small{
+		    			width: 100%;
+		    		}
+		    		.first-image{
+		    			position: absolute;
+					    top: 0;
+					    transition: 0.3s all ease;
+		    		}
+
+		    		.second-image{
+		    			position: absolute;
+					    top: 100%;
+						transition: 0.3s all ease;
+		    		}
+		    		
+		    	}
+			    .item-details
+			    {	
+			    	padding: 20px 13px 0px 10px;
+			    	.item-title
+			    	{
+			    		color: #484848;
+					    font-size: 12px;
+					    font-weight: 600;
+					    white-space: nowrap;
+					    overflow: hidden;
+					    text-overflow: ellipsis;
+			    	}
+			    	.item-title:hover{
+			    		cursor: pointer;
+			    		text-decoration: underline;
+			    	}
+			    	.item-price
+				    {
+				    	padding-top: 5px;
+				    }
+			    }
+		    }
+		    .per-item-container:hover{
+		    	cursor: pointer;
+		    	.image-holder{
+		    		.first-image{
+			    		top: -100%;
+			    	}
+			    	.second-image{
+			    		top: 0;
+			    	}
+		    	}
+		    	.item-details{
+		    		.item-title{
+		    			text-decoration: underline;
+		    		}
+		    	}
+		    }
+
+		}
+		.best-item-lower{
+			padding: 20px 0px 0px 0px;
+		}
     }
 
     .left-container-title
@@ -469,7 +582,7 @@
     	color: #1e1e1e;
 	    font-size: 16.75px;
 	    font-weight: 700;
-	    border-bottom: #f7f7f7 solid 8px;
+	    border-bottom: #cccccc solid 1px;
 	    position: relative;
 
 	    .title
@@ -481,7 +594,7 @@
 		{
 			position: absolute;
 		    padding: 20px;
-		    right: 20px;
+		    right: -10px;
 		    bottom: 0px;
 		    top: -5px;
 			a
@@ -498,33 +611,6 @@
 		    color: #fff;
 		    font-size: 25px;
 		}
-    }
-    .best-seller-item-container
-    {
-    	padding: 10px;
-    }
-    .per-item-container
-    {
-    	padding: 10px;
-    }
-    .item-price
-    {
-    	padding-top: 5px;
-    }
-
-    .item-details
-    {
-    	padding: 0 !important;
-    	
-    	.item-title
-    	{
-    		color: #797979;
-		    font-size: 12px;
-		    font-weight: 600;
-		    white-space: nowrap;
-		    overflow: hidden;
-		    text-overflow: ellipsis;
-    	}
     }
 
 }
@@ -558,4 +644,25 @@
 			padding-left: 60px;
 		}
 	}
+}
+.per-content-hover:hover{
+	cursor: pointer;
+	.image-content-1{
+		opacity: 0.5;
+	}
+	.item-title{
+		text-decoration: underline;
+	}
+}
+.icon-wallet{
+	color:#a2a2a2;
+	font-size: 32px;
+}
+.icon-truck{
+	color:#a2a2a2;
+	font-size: 32px;
+}
+.icon-tag{
+	color:#a2a2a2;
+	font-size: 32px;
 }

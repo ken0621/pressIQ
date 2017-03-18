@@ -15,9 +15,11 @@
 {	
     margin-top: 30px;
 
-    .button-shop
+    .button-shop:hover
     {
-
+    	.text{
+    		color: #ff4900;
+    	}
     }
 }
 .add-slider

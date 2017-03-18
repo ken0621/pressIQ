@@ -993,5 +993,10 @@ class MLM_SlotController extends Member
             $shop_id = 5;
             return Mlm_discount::get_discount_all_membership($shop_id, 9, null);
         }
+        else if($code == 'fix_mlm_slot')
+        {
+            $update['slot_matched_membership'] = 1;
+            Tbl_mlm_slot::where('slot_id', '!=', 289)->update($update);
+        }
     }
 }

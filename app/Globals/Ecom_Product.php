@@ -230,15 +230,21 @@ class Ecom_Product
 	public static function getMlmDiscount($shop_id, $item_id, $product_price)
 	{
 		$_discount = Mlm_discount::get_discount_all_membership($shop_id, $item_id);
+		
 		if($_discount['status'] == "success")
 		{
 			$data = null;
+			$ctr  = 0;
 			foreach($_discount['discount'] as $key=>$discount)
 			{
 				$discount_value = $discount['value'];
 				if($discount['type'] == 1) $discount_value = ($discount['value'] / 100) * $product_price;
 
-				$data[$key] = $product_price - $discount_value;
+				$data[$ctr]["discount_name"]  = $key;
+				$data[$ctr]["discount_value"] = $discount['value'];
+				$data[$ctr]["discount_type"]  = intval($discount['type']);
+				$data[$ctr]["discounted_amount"] = $product_price - $discount_value;
+				$ctr++;
 			}
 		}
 		else

@@ -81,18 +81,18 @@
                                     <table class="digima-table">
                                         <thead >
                                             <tr>
-                                                <th style="width: 10px;" ></th>
-                                                <th style="width: 120px;">Service Date</th>
-                                                <th style="width: 15px;" class="text-right">#</th>
-                                                <th style="width: 180px;">Product/Service</th>
-                                                <th>Description</th>
-                                                <th style="width: 120px;">U/M</th>
-                                                <th style="width: 70px;">Qty</th>
-                                                <th style="width: 100px;">Rate</th>
-                                                <th style="width: 100px;">Discount</th>
-                                                <th style="width: 100px;">Remark</th>
-                                                <th style="width: 100px;">Amount</th>
-                                                <th style="width: 10px;">Tax</th>
+                                                <th style="" ></th>
+                                                <th style="">Service Date</th>
+                                                <th style="" class="text-right">#</th>
+                                                <th style="width: 200px">Product/Service</th>
+                                                <th style="">Description</th>
+                                                <th style="">U/M</th>
+                                                <th style="">Qty</th>
+                                                <th style="">Rate</th>
+                                                <th style="">Discount</th>
+                                                <th style="">Remark</th>
+                                                <th style="">Amount</th>
+                                                <th style="">Tax</th>
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>

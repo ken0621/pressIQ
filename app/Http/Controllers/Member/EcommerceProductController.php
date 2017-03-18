@@ -64,22 +64,6 @@ class EcommerceProductController extends Member
         	$warehouse_id = Ecom_Product::getWarehouseId();
         	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->paginate(10);
 			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1)->paginate(10); 
-			
-			/* IF REQUEST TYPE IS AJAX = RETURN ONLY TABLE DATA */ 
-	        // if(Request::ajax())
-	        // {
-	        // 	if(Request::input('filter') == "active")
-	        // 	{
-	        // 		$data["_product"] 	= $active_product;
-	        // 		$data["filter"] 	= "active"; // For Changing blade layout
-	        // 	}
-	        // 	else
-	        // 	{
-	        // 		$data["_product"] 	= $inactive_product;
-	        // 		$data["filter"] 	= "inactive"; // For Changing blade layout
-	        // 	}
-	        // 	return view('member.ecommerce_product.ecom_load_product_tbl', $data);
-	        // }
 
 	        $data["_product"]			= $active_product;
 	        $data["_product_archived"]	= $inactive_product;
@@ -581,8 +565,6 @@ class EcommerceProductController extends Member
 					Tbl_ec_variant_image::insert($insert_img); 
 				}
 			}
-
-			//$json["redirect"] = '/member/ecommerce/product/edit/'.$product_id;
 
 			/* UPDATE OPTION VALUES */ 
 			if($is_single == 0)

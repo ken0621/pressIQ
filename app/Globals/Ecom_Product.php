@@ -269,7 +269,7 @@ class Ecom_Product
 
 	public static function getVariant($name, $product_id, $separator = ' • ')
 	{
-		return Tbl_ec_variant::variantName($separator)->having("evariant_prod_id", "=", $product_id)->having("variant_name", "=", $name)->first();
+		return Tbl_ec_variant::variantName($separator)->item()->inventory(Ecom_Product::getWarehouseId())->having("evariant_prod_id", "=", $product_id)->having("variant_name", "=", $name)->first();
 	}
 
 	public static function getVariantInfo($variant_id)
@@ -350,5 +350,53 @@ class Ecom_Product
 		}
 
 		return $_category;
+	}
+
+	/**
+	 * Getting all category for breadcrumbs.
+	 *
+	 * @param  int    $category_id 	Shop id of the products that you wnat to get. null if auto get
+	 * @param  int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
+	 */
+	public static function getProductBreadcrumbs($category_id, $shop_id)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		// $get_product = Ecom_Product::getProduct($product_id, $shop_id);
+		$current = $category_id;
+		$stop = 0;
+		$ctr = 0;
+		$category = [];
+
+		while ($stop == 0) 
+		{ 
+			$get_parent = Tbl_category::where("type_shop", $shop_id)->where("type_id", $current)->first();
+
+			if ($get_parent) 
+			{
+				$current = $get_parent->type_parent_id;
+
+				$category[$ctr]['type_name'] = $get_parent->type_name;
+				$category[$ctr]['type_id'] = $get_parent->type_id;
+
+				if ($get_parent->type_parent_id == 0) 
+				{
+					$stop++;
+					break;
+				}
+			}
+			else
+			{
+				$stop++;
+				break;
+			}
+
+			$ctr++;
+		}
+		
+		return $category;
 	}
 }

@@ -121,11 +121,12 @@ class MLM_ProductRepurchaseController extends Member
     public function get_membership_code($membership_code)
     {
         /// Membership code changed to slot
+        $shop_id = $this->user_info->shop_id;
         $count_discount_card = Tbl_mlm_discount_card_log::where('discount_card_log_code', $membership_code)->count();
-        $tbl_membership_code_count = Tbl_membership_code::where('membership_activation_code', $membership_code)->count();
+        $tbl_membership_code_count = Tbl_mlm_slot::where('slot_no', $membership_code)->where('shop_id', $shop_id)->count();
         if($tbl_membership_code_count != 0)
         {
-            $tbl_membership_code_count = Tbl_membership_code::where('membership_activation_code', $membership_code)->first();
+            $tbl_membership_code_count = Tbl_mlm_slot::where('slot_no', $membership_code)->where('tbl_mlm_slot.shop_id', $shop_id)->customer()->first();
             return Mlm_member::get_customer_info_w_slot($tbl_membership_code_count->customer_id, $tbl_membership_code_count->slot_id);
         }
         else
@@ -137,7 +138,7 @@ class MLM_ProductRepurchaseController extends Member
             }   
             else
             {
-                return '<center>Invalid Membership Code</center>';
+                return '<center>Invalid Slot</center>';
             }
         }
     }

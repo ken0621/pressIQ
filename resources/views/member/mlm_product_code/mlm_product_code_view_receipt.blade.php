@@ -74,6 +74,32 @@
                 <table class="table table-condensed tadble">     
                     <thead>                   
                             <tr>
+                                <th>Item Name</th>
+                                <th>Quantity</th>
+                            </tr>   
+                    </thead>    
+                    <tbody>
+                    @if(isset($item_list))
+                        @foreach($item_list as $key => $value)
+                        <tr>
+                            <td>{{$value->item_name}}</td>
+                            <td>{{$value->item_quantity}}</td>
+                        </tr>
+                        @endforeach
+                    @else
+                    <tr>
+                        <td colspan="40"><center></center></td>
+                    </tr>    
+                    @endif    
+                    </tbody>               
+                </table>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-12" style="margin-top:25px;">
+                <table class="table table-condensed tadble">     
+                    <thead>                   
+                            <tr>
                                 <th>Code ID</th>
                                 <th>Activation Code</th>
                                 <th>Used on slot</th>

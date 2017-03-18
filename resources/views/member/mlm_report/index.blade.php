@@ -172,7 +172,9 @@
                        EXPECTED PAYOUT: {{$total_income_per_complan}}
                     </div>
                     <div class="more">
-                        COMPANY EARNINGS : {{$total_membership_price - $total_income_per_complan }} ({{  ((($total_income_per_complan/$total_membership_price) - 1) * (-1)) *100}}%)
+                    <?php $div = 0;  if($total_income_per_complan == 0){$div = 0;} else{ $div = $total_income_per_complan/$total_membership_price; }?>
+                        COMPANY EARNINGS : {{$total_membership_price - $total_income_per_complan }} ({{  ((($div) - 1) * (-1)) *100}}%)
+                    
                     </div>
                 </div>
             </div>

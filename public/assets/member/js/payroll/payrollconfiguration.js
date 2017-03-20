@@ -229,9 +229,7 @@ function executeFunctionByName(functionName, context /*, args */) {
 
 function submit_done(data)
 {
-	console.log(data);
 	data.element.modal("toggle");
-	// data = JSON.parse(data);
 	executeFunctionByName(data.function_name, window);
 }
 

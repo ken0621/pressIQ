@@ -94,6 +94,12 @@
                                 <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
                                 <td>{{$order->order_status}}</td>
                                 <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
+
                             </tr>
                             @endforeach
                         @else
@@ -128,6 +134,12 @@
                                 <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
                                 <td>{{$order->order_status}}</td>
                                 <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
+
                             </tr>
                             @endforeach
                         @else
@@ -162,6 +174,12 @@
                                 <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
                                 <td>{{$order->order_status}}</td>
                                 <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
+
                             </tr>
                             @endforeach
                         @else
@@ -196,6 +214,12 @@
                                 <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
                                 <td>{{$order->order_status}}</td>
                                 <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
+
                             </tr>
                             @endforeach
                         @else
@@ -230,6 +254,11 @@
                                 <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
                                 <td>{{$order->order_status}}</td>
                                 <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
                             </tr>
                             @endforeach
                         @else

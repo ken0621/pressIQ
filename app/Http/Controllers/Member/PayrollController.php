@@ -1667,7 +1667,9 @@ class PayrollController extends Member
 	public function payroll_group()
 	{
 		// Tbl_payroll_overtime_rate
-		return view('member.payroll.side_container.payroll_group');
+		$data['_active'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+		$data['_archived'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+		return view('member.payroll.side_container.payroll_group', $data);
 	}
 
 	public function modal_create_payroll_group()
@@ -1678,6 +1680,7 @@ class PayrollController extends Member
 
 	public function modal_save_payroll_group()
 	{
+		
 		$insert['shop_id']								= Self::shop_id();
 		$insert['payroll_group_code'] 					= Request::input('payroll_group_code');
 		$insert['payroll_group_salary_computation'] 	= Request::input('payroll_group_salary_computation');
@@ -1710,26 +1713,46 @@ class PayrollController extends Member
 		$insert['payroll_group_start'] 					= Request::input('payroll_group_start');
 		$insert['payroll_group_end'] 					= Request::input('payroll_group_end');
 
+		// dd($insert);
 		/* INSERT PAYROLL GROUP AND GET ID */ 
 		$group_id = Tbl_payroll_group::insertGetId($insert);
 
-		$insert_rate['payroll_group_id']				= $group_id;
-		$insert_rate['payroll_overtime_name'] 			= Request::input("payroll_overtime_name");
-		$insert_rate['payroll_overtime_regular'] 		= Request::input("payroll_overtime_regular");
-		$insert_rate['payroll_overtime_overtime'] 		= Request::input("payroll_overtime_overtime");
-		$insert_rate['payroll_overtime_nigth_diff'] 	= Request::input("payroll_overtime_nigth_diff");
-		$insert_rate['payroll_overtime_rest_day'] 		= Request::input("payroll_overtime_rest_day");
-		$insert_rate['payroll_overtime_rest_overtime'] 	= Request::input("payroll_overtime_rest_overtime");
-		$insert_rate['payroll_overtime_rest_night'] 	= Request::input("payroll_overtime_rest_night");
+		$insert_rate = array();
+		foreach(Request::input("payroll_overtime_name") as $key => $overtime)
+		{
+			$temp['payroll_group_id']				= $group_id;
+			$temp['payroll_overtime_name'] 			= Request::input("payroll_overtime_name")[$key];
+			$temp['payroll_overtime_regular'] 		= Request::input("payroll_overtime_regular")[$key];
+			$temp['payroll_overtime_overtime'] 		= Request::input("payroll_overtime_overtime")[$key];
+			$temp['payroll_overtime_nigth_diff'] 	= Request::input("payroll_overtime_nigth_diff")[$key];
+			$temp['payroll_overtime_rest_day'] 		= Request::input("payroll_overtime_rest_day")[$key];
+			$temp['payroll_overtime_rest_overtime'] 	= Request::input("payroll_overtime_rest_overtime")[$key];
+			$temp['payroll_overtime_rest_night'] 	= Request::input("payroll_overtime_rest_night")[$key];
 
+			array_push($insert_rate, $temp);
+		}
+		
+		// dd($insert_rate);
 		/* INSERT PAYROLL OVERTIME NIGHT DIFFERENTIALS REST DAY HOLIDAY */
 		Tbl_payroll_overtime_rate::insert($insert_rate);
 
-		$_restday 										= Request::input('restday');
-		$_extraday										= Request::input('extraday');
 
+
+		$restday 										= array();
+		$extraday 										= array();
+		if(Request::has('restday'))
+		{
+			$_restday 									= Request::input('restday');
+		}
+
+		if(Request::has('extraday'))
+		{
+			$_extraday									= Request::input('extraday');
+		}	
+		
+		
 		$insert_rest_day = array();
-
+		$temp = "";
 		foreach($_restday as $restday)
 		{
 			$temp['payroll_group_id']					= $group_id;
@@ -1739,13 +1762,14 @@ class PayrollController extends Member
 			array_push($insert_rest_day, $temp);
 		}
 
+		$insert_extra_day = array();
 		foreach($_extraday as $extra)
 		{
 			$temp['payroll_group_id']					= $group_id;
 			$temp['payroll_group_rest_day']				= $extra;
 			$temp['payroll_group_rest_day_category']	= 'extra day';
 
-			array_push($insert_rest_day, $temp);
+			array_push($insert_extra_day, $temp);
 		}
 
 		if(!empty($insert_rest_day))
@@ -1753,9 +1777,22 @@ class PayrollController extends Member
 			Tbl_payroll_group_rest_day::insert($insert_rest_day);
 		}
 
+		if(!empty($insert_extra_day))
+		{
+			Tbl_payroll_group_rest_day::insert($insert_extra_day);
+		}
+
+
 		$return['status'] = 'success';
-		$return['function_name'] = '';
+		$return['function_name'] = 'payrollconfiguration.reload_payroll_group';
 		return json_encode($return);
+	}
+
+	public function modal_edit_payroll_group($id)
+	{
+		$data['group'] 			= Tbl_payroll_group::where('payroll_group_id',$id)->first();
+		$data['_overtime_rate'] = Tbl_payroll_overtime_rate::where('payroll_group_id',$id)->get();
+		return view('member.payroll.modal.modal_edit_payroll_group',$data);
 	}
 
 // 	Tbl_payroll_overtime_rate

@@ -32,4 +32,10 @@ class Tbl_payroll_group extends Model
 	// [TIME] 			payroll_group_start
 	// [TIME] 			payroll_group_end
 	// [TINY INTEGER] 	payroll_group_archived
+
+	public function scopesel($query, $shop_id = 0, $payroll_group_archived = 0)
+	{
+		$query->where('shop_id',$shop_id)->where('payroll_group_archived',$payroll_group_archived);
+		return $query;
+	}		
 }

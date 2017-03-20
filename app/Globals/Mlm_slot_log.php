@@ -332,4 +332,13 @@ class Mlm_slot_log
 			AuditTrail::record_logs("Added","mlm_encash",$encashment_process,"",serialize($encash_data));
 		}
 	}
+	public static function get_sum_wallet($slot_id)
+	{
+		$active_wallet = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot_id)->whereNull('encashment_process')->where('wallet_log_status', 'released')->sum('wallet_log_amount');
+		if($active_wallet == null)
+		{
+			$active_wallet = 0;
+		}
+		return $active_wallet;
+	}
 }

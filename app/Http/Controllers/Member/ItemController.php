@@ -820,6 +820,13 @@ class ItemController extends Member
     	
     	return json_encode($return);
 	}	
+
+	public function get_multiple_price_modal()
+	{
+		$data["name"] = '';
+		return view('member/item/item_multiple_price_modal', $data);
+	}
+
 	public function insert_session()
 	{
 		$data								 = null;

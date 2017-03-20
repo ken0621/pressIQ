@@ -1,5 +1,6 @@
 var timesheet = new timesheet();
 var timesheet_request = null;
+var new_sub_ctr = 1000;
 
 function timesheet()
 {
@@ -124,8 +125,9 @@ function timesheet()
 	{
 		$(".time-entry").timeEntry('destroy');
 		$(".time-entry-24").timeEntry('destroy');
-		$(".time-entry").timeEntry({ampmPrefix: ' '});
-		$(".time-entry-24").timeEntry({show24Hours: true});
+		$(".time-entry.time-in").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+		$(".time-entry.time-out").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 12, 0, 0)});
+		$(".time-entry-24").timeEntry({show24Hours: true, defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 	}
 	function action_recompute_loading(date)
 	{	
@@ -133,6 +135,9 @@ function timesheet()
 		$(".time-record.main[date='" + date + "']").find(".table-check").addClass("hidden");
 		$(".time-record.main[date='" + date + "']").find(".normal-hours").text("__:__");
 		$(".time-record.main[date='" + date + "']").find(".overtime-hours").text("__:__");
+		$(".time-record.main[date='" + date + "']").find(".extra-day-hours").text("__:__");
+		$(".time-record.main[date='" + date + "']").find(".rest-day-hours").text("__:__");
+		$(".time-record.main[date='" + date + "']").find(".total-hours").text("__:__");
 		$(".time-record.main[date='" + date + "']").find(".overtime-hours").removeClass("red");
 	}
 	function action_create_sub_time(date)
@@ -146,9 +151,13 @@ function timesheet()
 
 		/* UPDATE DATA FOR NEW SUB */
 		$("tbody").find(".time-record.new-sub").attr("date", date);
+		$("tbody").find(".time-record.new-sub").find(".date").val(date);
 		$("tbody").find(".time-record.new-sub").find(".time-in").val($time_in);
 		$("tbody").find(".time-record.new-sub").find(".time-out").val($time_out);
-
+		$arr_count = new_sub_ctr++;
+		$("tbody").find(".time-record.new-sub").find(".date").attr("name", "date[" + date + "][" + $arr_count + "]");
+		$("tbody").find(".time-record.new-sub").find(".time-in").attr("name", "time_in[" + date + "][" + $arr_count + "]");
+		$("tbody").find(".time-record.new-sub").find(".time-out").attr("name", "time_out[" + date + "][" + $arr_count + "]");
 		/* ADD EVENT TO NEW SUB */
 		event_time_entry();
 
@@ -173,7 +182,7 @@ function timesheet()
 			{
 				$.each(data, function(key, val)
 				{
-					update_time_record_on_table(val.date, val.regular_hours, val.early_overtime, val.late_overtime);
+					update_time_record_on_table(val.date, val.regular_hours, val.early_overtime, val.late_overtime, val.extra_day_hours, val.rest_day_hours, val.total_hours);
 				});
 
 				$(".table-loader").addClass("hidden");
@@ -186,11 +195,14 @@ function timesheet()
 		});
 	}
 
-	function update_time_record_on_table(date, regular_hours, early_overtime, late_overtime)
+	function update_time_record_on_table(date, regular_hours, early_overtime, late_overtime,  extra_day_hours = "00:00", rest_day_hours = "00:00", total_hours = "00:00")
 	{
 		$(".time-record[date='" + date + "']").find(".normal-hours").text(regular_hours);
 		$(".time-record[date='" + date + "']").find(".overtime-hours.late").text(late_overtime);
 		$(".time-record[date='" + date + "']").find(".overtime-hours.early").text(early_overtime);
+		$(".time-record[date='" + date + "']").find(".extra-day-hours").text(extra_day_hours);
+		$(".time-record[date='" + date + "']").find(".rest-day-hours").text(rest_day_hours);
+		$(".time-record[date='" + date + "']").find(".total-hours").text(total_hours);
 
 		if(late_overtime != "00:00")
 		{

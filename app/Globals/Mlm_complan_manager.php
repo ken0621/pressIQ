@@ -817,11 +817,12 @@ class Mlm_complan_manager
                 ->where('sponsor_tree_level', '>=', $value2['matching_settings_start'])
                 ->where('sponsor_tree_level', '<=', $value2['matching_settings_end'])
                 ->where('slot_membership', $value2['membership_id'])
+                ->where('slot_matched_membership', 0)
                 ->get()
                 ->toArray();
             }
         }
-        
+        // dd($tree_selected);
         $tree_match = [];
         foreach($tree_selected as $key => $value)
         {

@@ -32,6 +32,11 @@ function get_collection($collection_id, $shop_id = null)
     return Ecom_Product::getProductCollection($collection_id, $shop_id);
 }
 
+function get_collection_first_name($data)
+{
+    return $data['product']['eprod_name'] ? $data['product']['eprod_name'] : '';
+}
+
 function get_collection_first_image($data)
 {
     if(isset($data['product']['variant'][0]))
@@ -61,6 +66,18 @@ function get_product_first_name($data)
     return isset($data['eprod_name']) ? $data['eprod_name'] : '';
 }
 
+function get_product_first_description($data)
+{
+    if (isset($data['variant'][0])) 
+    {
+        return $data['variant'][0]['evariant_description'] ? $data['variant'][0]['evariant_description'] : '';
+    }
+    else
+    {
+        return '';
+    }
+}
+
 function get_product_first_price($data)
 {
     if (isset($data['min_price']) && isset($data['max_price'])) 
@@ -82,6 +99,5 @@ function get_product_first_image($data)
     else
     {
         return '';
-    }
-    
+    }   
 }

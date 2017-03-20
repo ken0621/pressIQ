@@ -43,22 +43,22 @@
 
 		<div class="row clearfix team-details">
 			<div class="col-md-3 person-details">
-				<div class="person-image"><img src="/themes/{{ $shop_theme }}/img/our-team-image1.png"></div>
+				<div class="person-image"><img src="/themes/{{ $shop_theme }}/img/person.png"></div>
 				<div class="person-name">Lorem Ipsum Dolor</div>
 				<div class="person-position">Lorem Ipsum</div>
 			</div>
 			<div class="col-md-3 person-details">
-				<div class="person-image"><img src="/themes/{{ $shop_theme }}/img/our-team-image2.png"></div>
+				<div class="person-image"><img src="/themes/{{ $shop_theme }}/img/person.png"></div>
 				<div class="person-name">Lorem Ipsum Dolor</div>
 				<div class="person-position">Lorem Ipsum</div>
 			</div>
 			<div class="col-md-3 person-details">
-				<div class="person-image"><img src="/themes/{{ $shop_theme }}/img/our-team-image3.png"></div>
+				<div class="person-image"><img src="/themes/{{ $shop_theme }}/img/person.png"></div>
 				<div class="person-name">Lorem Ipsum Dolor</div>
 				<div class="person-position">Lorem Ipsum</div>
 			</div>
 			<div class="col-md-3 person-details">
-				<div class="person-image"><img src="/themes/{{ $shop_theme }}/img/our-team-image4.png"></div>
+				<div class="person-image"><img src="/themes/{{ $shop_theme }}/img/person.png"></div>
 				<div class="person-name">Lorem Ipsum Dolor</div>
 				<div class="person-position">Lorem Ipsum</div>
 			</div>

@@ -43,6 +43,7 @@ class Cards
     }
     public static function discount_card($info)
     {
+        // dd($info);
         $data['color'] = 'discount';
         $data['name'] = name_format_from_customer_info($info);
         $data['membership_code'] = $info->discount_card_log_code;    

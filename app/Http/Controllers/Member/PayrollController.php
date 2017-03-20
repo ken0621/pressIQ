@@ -35,6 +35,13 @@ use App\Models\Tbl_payroll_deduction_employee;
 use App\Models\Tbl_payroll_deduction_payment;
 use App\Models\Tbl_payroll_allowance;
 use App\Models\Tbl_payroll_employee_allowance;
+use App\Models\Tbl_payroll_holiday;
+use App\Models\Tbl_payroll_holiday_company;
+use App\Models\Tbl_payroll_overtime_rate;
+use App\Models\Tbl_payroll_over_time_rate_default;
+use App\Models\Tbl_payroll_group;
+use App\Models\Tbl_payroll_group_rest_day;
+use App\Models\Tbl_payroll_time_sheet_record;
 
 use App\Globals\Payroll;
 
@@ -1323,8 +1330,134 @@ class PayrollController extends Member
 	/* HOLIDAY START */
 	public function holiday()
 	{
-		return view('member.payroll.side_container.holiday');
+
+		$data['_active'] = Tbl_payroll_holiday::getholiday(Self::shop_id())->orderBy('payroll_holiday_date','desc')->get();
+		$data['_archived'] = Tbl_payroll_holiday::getholiday(Self::shop_id(), 1)->orderBy('payroll_holiday_date','desc')->get();
+
+		return view('member.payroll.side_container.holiday',$data);
 	}
+
+	public function modal_create_holiday()
+	{
+		$data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();
+		return view('member.payroll.modal.modal_create_holiday', $data);
+	}
+
+	public function modal_save_holiday()
+	{
+		
+		$insert['shop_id']					= Self::shop_id();
+		$insert['payroll_holiday_name'] 	= Request::input('payroll_holiday_name');
+		$insert['payroll_holiday_date'] 	= date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
+		$insert['payroll_holiday_category'] = Request::input('payroll_holiday_category');
+
+		$holiday_id = Tbl_payroll_holiday::insertGetId($insert);
+
+		$_company 							= Request::input('company');
+
+		$insert_company = array();
+
+		foreach($_company as $company)
+		{
+
+			$temp['payroll_company_id'] = $company;
+			$temp['payroll_holiday_id'] = $holiday_id;
+			array_push($insert_company, $temp);
+		}
+
+		if(!empty($insert_company))
+		{
+			Tbl_payroll_holiday_company::insert($insert_company);
+		}
+
+		$return['status'] = 'success';
+		$return['function_name'] = 'payrollconfiguration.reload_holiday';
+		return json_encode($return);
+	}
+
+	public function archive_holiday($archive, $id)
+	{
+		$statement = 'archive';
+		if($archive == 0)
+		{
+			$statement = 'restore';
+		}
+		$file_name 			= Tbl_payroll_holiday::where('payroll_holiday_id', $id)->pluck('payroll_holiday_name');
+		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
+		$data['html'] 		= '';
+		$data['action'] 	= '/member/payroll/holiday/archive_holiday_action';
+		$data['id'] 		= $id;
+		$data['archived'] 	= $archive;
+
+		return view('member.modal.modal_confirm_archived', $data);
+	}
+
+	public function archive_holiday_action()
+	{
+		$id = Request::input('id');
+		$update['payroll_holiday_archived'] = Request::input('archived');
+		Tbl_payroll_holiday::where('payroll_holiday_id', $id)->update($update);
+
+
+		$return['status'] = 'success';
+		$return['function_name'] = 'payrollconfiguration.reload_holiday';
+		return json_encode($return);
+	}
+
+	public function modal_edit_holiday($id)
+	{
+		// $data['']
+		$_company = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();
+		$company_check = array();
+		foreach($_company as $company)
+		{
+			$count = Tbl_payroll_holiday_company::company($company->payroll_company_id, $id)->count();
+			$status = '';
+			if($count != 0)
+			{
+				$status = 'checked';
+			}
+			$temp['payroll_company_id'] 	= $company->payroll_company_id;
+			$temp['payroll_company_name'] 	= $company->payroll_company_name;
+			$temp['status']					= $status;
+			array_push($company_check, $temp);
+		}
+
+		$data['_company'] = $company_check;
+		$data['holiday'] = Tbl_payroll_holiday::where('payroll_holiday_id',$id)->first();
+		return view('member.payroll.modal.modal_edit_holiday', $data);
+	}
+
+	public function modal_update_holiday()
+	{
+		$payroll_holiday_id 				= Request::input('payroll_holiday_id');
+		$update['payroll_holiday_name'] 	= Request::input('payroll_holiday_name');
+		$update['payroll_holiday_date'] 	= date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
+		$update['payroll_holiday_category'] = Request::input('payroll_holiday_category');
+		$_company 							= Request::input('company');
+
+		Tbl_payroll_holiday::where('payroll_holiday_id',$payroll_holiday_id)->update($update);
+
+		Tbl_payroll_holiday_company::where('payroll_holiday_id',$payroll_holiday_id)->delete();
+
+		$insert_company = array();
+		foreach($_company as $company)
+		{
+			$temp['payroll_company_id'] = $company;
+			$temp['payroll_holiday_id'] = $payroll_holiday_id;
+			array_push($insert_company, $temp);
+		}
+		if(!empty($insert_company))
+		{
+			Tbl_payroll_holiday_company::insert($insert_company);
+		}
+
+		$return['status'] 			= 'success';
+		$return['function_name'] 	= 'payrollconfiguration.reload_holiday';
+		return json_encode($return);
+
+	}
+
 	/* HOLIDAY END */
 
 	/* ALLOWANCE START */
@@ -1528,4 +1661,142 @@ class PayrollController extends Member
 		return view('member.payroll.side_container.leave');
 	}
 	/* LEAVE END */
+
+
+	/* PAYROLL GROUP START */
+	public function payroll_group()
+	{
+		// Tbl_payroll_overtime_rate
+		$data['_active'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+		$data['_archived'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+		return view('member.payroll.side_container.payroll_group', $data);
+	}
+
+	public function modal_create_payroll_group()
+	{
+		$data['_overtime_rate'] = Tbl_payroll_over_time_rate_default::get();
+		return view('member.payroll.modal.modal_create_payroll_group', $data);
+	}
+
+	public function modal_save_payroll_group()
+	{
+		
+		$insert['shop_id']								= Self::shop_id();
+		$insert['payroll_group_code'] 					= Request::input('payroll_group_code');
+		$insert['payroll_group_salary_computation'] 	= Request::input('payroll_group_salary_computation');
+		$insert['payroll_group_period'] 				= Request::input('payroll_group_period');
+		$insert['payroll_group_13month_basis'] 			= Request::input('payroll_group_13month_basis');
+		
+		if( Request::has('payroll_group_deduct_before_absences'))
+		{
+			$insert['payroll_group_deduct_before_absences'] = Request::input('payroll_group_deduct_before_absences');
+		}
+		
+		$insert['payroll_group_tax'] 					= Request::input('payroll_group_tax');
+		$insert['payroll_group_sss'] 					= Request::input('payroll_group_sss');
+		$insert['payroll_group_philhealth'] 			= Request::input('payroll_group_philhealth');
+		$insert['payroll_group_pagibig'] 				= Request::input('payroll_group_pagibig');
+		$insert['payroll_group_agency'] 				= Request::input('payroll_group_agency');
+		$insert['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
+		
+		if(Request::has('payroll_group_is_flexi_time'))
+		{
+			$insert['payroll_group_is_flexi_time'] 		= Request::input('payroll_group_is_flexi_time');
+		}
+		
+		$insert['payroll_group_working_day_month'] 		= Request::input('payroll_group_working_day_month');
+		if(Request::has('payroll_group_target_hour_parameter'))
+		{
+			$insert['payroll_group_target_hour_parameter'] 	= Request::input('payroll_group_target_hour_parameter');
+		}
+		$insert['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
+		$insert['payroll_group_start'] 					= Request::input('payroll_group_start');
+		$insert['payroll_group_end'] 					= Request::input('payroll_group_end');
+
+		// dd($insert);
+		/* INSERT PAYROLL GROUP AND GET ID */ 
+		$group_id = Tbl_payroll_group::insertGetId($insert);
+
+		$insert_rate = array();
+		foreach(Request::input("payroll_overtime_name") as $key => $overtime)
+		{
+			$temp['payroll_group_id']				= $group_id;
+			$temp['payroll_overtime_name'] 			= Request::input("payroll_overtime_name")[$key];
+			$temp['payroll_overtime_regular'] 		= Request::input("payroll_overtime_regular")[$key];
+			$temp['payroll_overtime_overtime'] 		= Request::input("payroll_overtime_overtime")[$key];
+			$temp['payroll_overtime_nigth_diff'] 	= Request::input("payroll_overtime_nigth_diff")[$key];
+			$temp['payroll_overtime_rest_day'] 		= Request::input("payroll_overtime_rest_day")[$key];
+			$temp['payroll_overtime_rest_overtime'] 	= Request::input("payroll_overtime_rest_overtime")[$key];
+			$temp['payroll_overtime_rest_night'] 	= Request::input("payroll_overtime_rest_night")[$key];
+
+			array_push($insert_rate, $temp);
+		}
+		
+		// dd($insert_rate);
+		/* INSERT PAYROLL OVERTIME NIGHT DIFFERENTIALS REST DAY HOLIDAY */
+		Tbl_payroll_overtime_rate::insert($insert_rate);
+
+
+
+		$restday 										= array();
+		$extraday 										= array();
+		if(Request::has('restday'))
+		{
+			$_restday 									= Request::input('restday');
+		}
+
+		if(Request::has('extraday'))
+		{
+			$_extraday									= Request::input('extraday');
+		}	
+		
+		
+		$insert_rest_day = array();
+		$temp = "";
+		foreach($_restday as $restday)
+		{
+			$temp['payroll_group_id']					= $group_id;
+			$temp['payroll_group_rest_day']				= $restday;
+			$temp['payroll_group_rest_day_category']	= 'rest day';
+
+			array_push($insert_rest_day, $temp);
+		}
+
+		$insert_extra_day = array();
+		foreach($_extraday as $extra)
+		{
+			$temp['payroll_group_id']					= $group_id;
+			$temp['payroll_group_rest_day']				= $extra;
+			$temp['payroll_group_rest_day_category']	= 'extra day';
+
+			array_push($insert_extra_day, $temp);
+		}
+
+		if(!empty($insert_rest_day))
+		{
+			Tbl_payroll_group_rest_day::insert($insert_rest_day);
+		}
+
+		if(!empty($insert_extra_day))
+		{
+			Tbl_payroll_group_rest_day::insert($insert_extra_day);
+		}
+
+
+		$return['status'] = 'success';
+		$return['function_name'] = 'payrollconfiguration.reload_payroll_group';
+		return json_encode($return);
+	}
+
+	public function modal_edit_payroll_group($id)
+	{
+		$data['group'] 			= Tbl_payroll_group::where('payroll_group_id',$id)->first();
+		$data['_overtime_rate'] = Tbl_payroll_overtime_rate::where('payroll_group_id',$id)->get();
+		return view('member.payroll.modal.modal_edit_payroll_group',$data);
+	}
+
+// 	Tbl_payroll_overtime_rate
+// Tbl_payroll_group
+// Tbl_payroll_group_rest_day
+	/* PAYROLL GROUP END */
 }

@@ -105,19 +105,23 @@
                                     </div>
                                 </div>
                             </div>
-                            @if(count($product_variant['mlm_discount']) != 0)
+                            @if(count($product_variant['mlm_discount']) > 0)
                             <div style="margin-top: 15px;">
                                 <table class="table table-bordered table-striped table-hover table-condensed">
                                     <thead>
-                                        <tbody>
-                                            @foreach($product_variant['mlm_discount'] as $key => $mlm_discount)
-                                            <tr>
-                                                <td style="font-weight: 700;">{{ $key }}</td>
-                                                <td>PHP. {{ number_format($mlm_discount, 2) }}</td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Product Price</th>
+                                        </tr>
                                     </thead>
+                                    <tbody>
+                                        @foreach($product_variant['mlm_discount'] as $key => $mlm_discount)
+                                        <tr>
+                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
+                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
                                 </table>
                             </div>
                             @endif

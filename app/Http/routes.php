@@ -189,24 +189,24 @@ Route::any('/member/item/restore/{id}', 'Member\ItemController@restore'); /* B *
 Route::any('/member/item/restore_submit', 'Member\ItemController@restore_submit'); /* B */
 Route::any('/member/item/insert_saved_data', 'Member\ItemController@insert_session'); /* ERWIN */
 Route::any('/member/item/data', 'Member\ItemController@data'); /* ERWIN */
-Route::any('/member/item/mulitple_price_modal', 'Member\ItemController@get_multiple_price_modal'); /* B */
+Route::get('/member/item/mulitple_price_modal/{id}', 'Member\ItemController@get_multiple_price_modal'); /* B */
+Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_multiple_price_modal'); /* B */
 
 Route::any('/member/functiontester', 'Member\FunctionTesterController@index'); /* ERWIN */
 Route::any('/member/functiontester/clear_all', 'Member\FunctionTesterController@clear_all'); /* ERWIN */
 Route::any('/member/functiontester/clear_one', 'Member\FunctionTesterController@clear_one'); /* ERWIN */
 Route::any('/member/functiontester/get_cart', 'Member\FunctionTesterController@get_cart'); /* ERWIN */
 
-
 /* MANAGE CATEGORIES */
-
 Route::any('/member/item/category', 'Member\Manage_Category_Controller@index');
 Route::any('/member/item/category/modal_create_category', 'Member\Manage_Category_Controller@modal_create_category');
 Route::any('/member/item/category/edit_category/{id}', 'Member\Manage_Category_Controller@edit_category');
 Route::any('/member/item/category/update_category', 'Member\Manage_Category_Controller@update_category');
+Route::any('/member/item/category/archived/{id}/{action}','Member\Manage_Category_Controller@archived');
+Route::any('/member/item/category/archived_submit','Member\Manage_Category_Controller@archived_submit');
 
 Route::any('/member/item/category/create_category', 'Member\Manage_Category_Controller@create_category');
 Route::any('/member/item/category/search_category', 'Member\Manage_Category_Controller@search_category');
-
 
 /* START U/M ARCY*/
 Route::any('/member/item/unit_of_measurement','Member\UnitOfMeasurementController@index');
@@ -266,6 +266,7 @@ Route::any('/member/item/select_um','Member\UnitOfMeasurementController@select_u
 
 /* WAREHOUSE ARCY*/
 Route::any('/member/item/warehouse', 'Member\WarehouseController@index');
+Route::any('member/item/inventory_log','Member\WarehouseController@inventory_log');
 Route::any('/member/item/warehouse/add', 'Member\WarehouseController@add');
 Route::any('/member/item/warehouse/edit/{id}', 'Member\WarehouseController@edit');
 Route::any('/member/item/warehouse/edit_submit', 'Member\WarehouseController@edit_submit');
@@ -466,9 +467,10 @@ Route::any('/member/vendor/purchase_order/create_po','Member\Vendor_PurchaseOrde
 Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrderController@upate_po');
 
 Route::get('/member/vendor/create_bill','Member\Vendor_CreateBillController@index');
-Route::get('/member/vendor/create_bill/add','Member\Vendor_CreateBillController@add_bill');
-Route::get('/member/vendor/create_bill/update','Member\Vendor_CreateBillController@update_bill');
-
+Route::any('/member/vendor/load_purchase_order/{id}','Member\Vendor_CreateBillController@load_purchase_order');
+Route::any('/member/vendor/create_bill/add','Member\Vendor_CreateBillController@add_bill');
+Route::any('/member/vendor/create_bill/update','Member\Vendor_CreateBillController@update_bill');
+Route::any('/member/vendor/load_po_item','Member\Vendor_CreateBillController@load_po_item');
 
 Route::get('/member/vendor/write_check','Member\Vendor_WriteCheckController@index');
 
@@ -686,6 +688,7 @@ Route::controller('/member/vendor', 'Member\VendorController');
 /* ONLINE PAYMENT METHOD */
 Route::controller('/member/maintenance/online_payment', 'Member\OnlinePaymentMethodController');
 /* End */
+
 
 Route::controller('/tester','TesterController');
 

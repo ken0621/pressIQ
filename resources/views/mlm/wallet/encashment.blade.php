@@ -7,7 +7,7 @@ $data['icon'] = 'fa fa-money';
 ?>
 @include('mlm.header.index', $data)
 
-<div class="col-md-6">
+<div class="col-md-12">
   <div class="box">
     <div class="box-header with-border">
       <h3 class="box-title">Encashment History</h3>
@@ -33,13 +33,12 @@ $data['icon'] = 'fa fa-money';
               <td>{{$value->enchasment_process_from}}</td>
               <td>{{$value->enchasment_process_to}}</td>
 
-              @if($value->enchasment_process_tax == 0)
+              @if($value->enchasment_process_tax_type == 1)
               <td>{{$value->enchasment_process_tax}}%</td>
               @else
               <td>{{$value->enchasment_process_tax}}</td>
               @endif
-
-              @if($value->enchasment_process_p_fee_type == 0)
+              @if($value->enchasment_process_p_fee_type == 1)
               <td>{{$value->enchasment_process_p_fee}}%</td>
               @else
               <td>{{$value->enchasment_process_p_fee}}</td>
@@ -84,7 +83,18 @@ $data['icon'] = 'fa fa-money';
     </div>
   </div>
 </div>  
-@if($encashment_settings->enchasment_settings_auto == 0)
+<div class="col-md-6">
+  <div class="box">
+    <div class="box-header with-border">
+      <h3 class="box-title">Encashment Details</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+    {!! $encashment !!}
+    </div>
+  </div>
+</div>  
+@if($encashment_settings->enchasment_settings_auto == 1)
 <form class="global-submit" id="form_ecnash" method="post" action="/mlm/encashment/request">
 {!! csrf_field() !!}
 <div class="col-md-8">
@@ -244,10 +254,18 @@ var fee_p = 0;
   }
 
 $('.select_all_logs').click(function(){
-
+    // $('.b_amount').val(0);
     if($(this).is(':checked'))
     {
         // $('.check_box_single').checked = true;
+        $('.check_box_single').each(function(){
+          if($(this).is(':checked'))
+          {
+            var amount = $(this).val();
+            add_amount(-amount);
+          }
+        });
+
         $(".check_box_single").prop("checked", true);
         $('.check_box_single').each(function(){
           console.log();
@@ -290,6 +308,10 @@ function submit_done(data)
   else if(data.status =='Success')
   {
     location.reload();
+    toastr.success(data.message);
+  }
+  else if (data.status == 'success')
+  {
     toastr.success(data.message);
   }
 }

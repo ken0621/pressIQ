@@ -23,7 +23,15 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/modal_view_contract_list/{id}','Member\PayrollController@modal_view_contract_list');
 	Route::any('/employee_list/modal_create_contract/{id}','Member\PayrollController@modal_create_contract');
 	Route::any('/employee_list/modal_save_contract','Member\PayrollController@modal_save_contract');
+	Route::any('/employee_list/modal_edit_contract/{employee_id}/{id}','Member\PayrollController@modal_edit_contract');
+	Route::any('/employee_list/modal_update_contract','Member\PayrollController@modal_update_contract');
+	Route::any('/employee_list/modal_archive_contract/{archived}/{id}','Member\PayrollController@modal_archive_contract');
 	Route::any('/employee_list/modal_salary_list/{id}','Member\PayrollController@modal_salary_list');
+	Route::any('/employee_list/modal_edit_salary_adjustment/{id}','Member\PayrollController@modal_edit_salary_adjustment');
+	Route::any('/employee_list/modal_update_salary','Member\PayrollController@modal_update_salary');
+	Route::any('/employee_list/modal_archived_salary/{archived}/{id}','Member\PayrollController@modal_archived_salary');
+	Route::any('/employee_list/archived_salary','Member\PayrollController@archived_salary');
+	Route::any('/employee_list/archive_contract','Member\PayrollController@archive_contract');
 	Route::any('/employee_list/modal_create_salary_adjustment/{id}','Member\PayrollController@modal_create_salary_adjustment');
 	Route::any('/employee_list/modal_save_salary','Member\PayrollController@modal_save_salary');
 	Route::any('/employee_list/modal_employee_update','Member\PayrollController@modal_employee_update');
@@ -184,5 +192,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_period_list','Member\PayrollController@payroll_period_list');
 	Route::any('/payroll_period_list/modal_create_payroll_period','Member\PayrollController@modal_create_payroll_period');
 	Route::any('/payroll_period_list/modal_save_payroll_period','Member\PayrollController@modal_save_payroll_period');
+	Route::any('/payroll_period_list/modal_archive_period/{archived}/{id}','Member\PayrollController@modal_archive_period');
+	Route::any('/payroll_period_list/archive_period','Member\PayrollController@archive_period');
+	Route::any('/payroll_period_list/modal_edit_period/{id}','Member\PayrollController@modal_edit_period');
+	Route::any('/payroll_period_list/modal_update_period','Member\PayrollController@modal_update_period');
 	/* PAYROLL PERIOD END */
 });

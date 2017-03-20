@@ -416,7 +416,7 @@ function page_list()
 
     /* -- ITEM => ITEM CATEGORIES  */
     $code = "item-categories";
-    $nav[$page]['submenu'][$code]['label'] = "Manage Categories";
+    $nav[$page]['submenu'][$code]['label'] = "Category";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/category";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -515,37 +515,27 @@ function page_list()
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/company_list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "90%";
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
-    /* -- EMPLOYEE POSITION => LIST  */
+    /* -- EMPLOYEE POSITION=> LIST  */
     $code = "employee-list";
     $nav[$page]['submenu'][$code]['label'] = "Employee List";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/employee_list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "90%";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
-    /* -- PAYROLL PERIOD => LIST  */
-    $code = "payroll-period-list";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Period List";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_period_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
-    /* -- EMPLOYEE CONFIGURATION => LIST  */
     $code = "payroll-configuration";
     $nav[$page]['submenu'][$code]['label'] = "Payroll Configuration";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_configuration";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "80%";
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
     
-    /* -- TIME SHEET=> LIST  */
+    /* -- EMPLOYEE POSITION=> LIST  */
     $code = "employee-timesheet";
     $nav[$page]['submenu'][$code]['label'] = "Employee Timesheet";
     $nav[$page]['submenu'][$code]['code'] = $code;
@@ -589,10 +579,19 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
     
     /* -- VENDORS => PAY BILLS  */
+    $code = "vendor-bill";
+    $nav[$page]['submenu'][$code]['label'] = "Bill";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/create_bill";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    /* -- VENDORS => PAY BILLS  */
     $code = "vendor-pay-bills";
     $nav[$page]['submenu'][$code]['label'] = "Pay Bills";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/create_bill";
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";

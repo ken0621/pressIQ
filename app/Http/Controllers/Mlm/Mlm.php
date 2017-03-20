@@ -13,6 +13,7 @@ use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_membership_code;
+use App\Models\Tbl_mlm_encashment_settings;
 
 use App\Globals\Mlm_member;
 class Mlm extends Controller
@@ -58,8 +59,10 @@ class Mlm extends Controller
             }
             if($session['discount_card'])
             {
-                Self::$discount_card_log_id = $session['discount_card']->discount_card_log_id;
-                Self::$discount_card_log =  $session['discount_card'];
+                // Self::$discount_card_log_id = $session['discount_card']->discount_card_log_id;
+                // Self::$discount_card_log =  $session['discount_card'];
+                Self::$discount_card_log_id = null;
+                Self::$discount_card_log = null;
             }
             else
             {
@@ -98,6 +101,12 @@ class Mlm extends Controller
             {
                 $content_a[$value->key] = $value->value;
             }
+            $customer = Tbl_customer::where('customer_id', Self::$customer_id)->first();
+            $customer->profile != null ? $profile = $customer->profile :  $profile = '/assets/mlm/default-pic.png';
+            // dd($profile);
+            $this->seed();
+
+            View::share("profile", $profile);
             View::share("content", $content_a);
             View::share("complan", $plan_settings);
             View::share("complan_repurchase", $plan_settings_repurchase);
@@ -150,6 +159,71 @@ class Mlm extends Controller
     public static function show_no_access()
     {
         return view('mlm.no_access');
+    }
+    public static function seed()
+    {
+        // Session::flash('success', "Membership Saved");
+        $customer_id = Self::$customer_id;
+        $shop_id = Self::$shop_id;
+        $encashment_settings = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+        $count = DB::table('tbl_customer_payout')->where('customer_id', $customer_id)->count();
+        if($count == 0)
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['customer_id'] = $customer_id;
+            $insert['customer_payout_type'] = $encashment_settings->enchasment_settings_type;
+            $insert['customer_payout_name_on_cheque'] = name_format_from_customer_info(Self::$customer_info);
+            $insert['encashment_bank_deposit_id'] = '';
+            $insert['customer_payout_bank_branch'] = '';
+            $insert['customer_payout_bank_account_number'] = '';
+            $insert['customer_payout_bank_account_name'] = name_format_from_customer_info(Self::$customer_info);
+
+            DB::table('tbl_customer_payout')->insert($insert);
+        }
+        else
+        {
+            $customer_payout  = DB::table('tbl_customer_payout')->where('customer_id', $customer_id)->first();
+            if($encashment_settings->enchasment_settings_type == 0)
+            {
+                if($encashment_settings->enchasment_settings_cheque_edit == 0)
+                {
+                    //encashment_bank_deposit_id
+                    
+                    if(Self::$slot_id != null)
+                    {
+                        if($customer_payout->encashment_bank_deposit_id == 0)
+                        {
+                            Session::flash('warning', "Please set your encashment settings at the profile tab.");
+                        }
+                        else
+                        {
+                            $bank_details = DB::table('tbl_encashment_bank_deposit')->where('encashment_bank_deposit_id', $customer_payout->encashment_bank_deposit_id)->where('encashment_bank_deposit_archive', 0)->count();
+                            if($bank_details >= 1)
+                            {
+
+                            }
+                            else
+                            {
+                                Session::flash('warning', "Please set your encashment settings at the profile tab.");
+                            }
+                        }
+                    }
+                    
+                    $update['customer_payout_bank_account_name'] = name_format_from_customer_info(Self::$customer_info);
+                    DB::table('tbl_customer_payout')->where('customer_id', Self::$customer_id)->update($update);
+                }
+            }
+            else if($encashment_settings->enchasment_settings_type == 1)
+            {
+                //cheque
+                // dd(1);
+                if($encashment_settings->enchasment_settings_cheque_edit == 0)
+                {
+                    $update['customer_payout_name_on_cheque'] = name_format_from_customer_info(Self::$customer_info);
+                    DB::table('tbl_customer_payout')->where('customer_id', Self::$customer_id)->update($update);
+                }
+            }
+        }
     }
 
 }

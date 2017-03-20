@@ -80,6 +80,14 @@
                             <small>If the amount did not make it to the minimum requirements, the amount will be added to the next cutoff</small>
                         </span>
                     </div>
+                    <div class="col-md-12">
+                        <label>Gateway</label>
+                        <select class="form-control enchasment_settings_type" name="enchasment_settings_type">
+                            @foreach($payout_gateway as $key => $value)
+                            <option value="{{$key}}" {{$encashment_settings->enchasment_settings_type == $key ? 'selected' : '' }}>{{$value}}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <hr>
@@ -115,6 +123,14 @@
     </div>
 </div>
 </form>
+<div class="panel panel-default panel-block panel-title-block panel-gray col-md-6" >
+    <div class="tab-content">
+        <div id="all-orders" class="tab-pane fade in active">
+            <div class="panel-heading append_encashment_settings_type">
+            </div>
+        </div>
+    </div>
+</div>       
 @if($encashment_settings->enchasment_settings_auto == 0)
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-12" >
     <div class="tab-content">
@@ -237,6 +253,7 @@
     </div>
 </div>            
 @endif
+
 @endsection
 @section('script')
 <script type="text/javascript">
@@ -247,10 +264,21 @@ function submit_done(data)
         toastr.success(data.message);
         location.reload();
     }
-    else if(data.status ='warning')
+    else if(data.status =='warning')
     {
         toastr.warning(data.message);
     }
+    else if(data.status == 'success_new')
+    {
+        toastr.success(data.message);
+        encashmet_type();   
+    }
+}
+encashmet_type();
+function encashmet_type() {
+    var enchasment_settings_type = $('.enchasment_settings_type').val();
+    $('.append_encashment_settings_type').html('<div style="margin: 100px auto;" class="loader-16-gray"></div>');
+    $('.append_encashment_settings_type').load('/member/mlm/encashment/view/type/' + enchasment_settings_type);
 }
 </script>
 @endsection

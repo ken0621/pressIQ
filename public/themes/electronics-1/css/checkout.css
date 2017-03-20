@@ -175,4 +175,7 @@
   padding: 10px 30px;
   margin-bottom: 30px; }
 
+#placeorder-button:hover {
+  opacity: 0.9; }
+
 /*# sourceMappingURL=checkout.css.map */

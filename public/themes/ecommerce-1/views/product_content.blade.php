@@ -67,7 +67,7 @@
                                    <img src="/themes/{{ $shop_theme }}/img/star-disable.png">
                                 </div> -->
                                 <div class="availability">Availability : <span id="stock">In-stock</span></div>
-                                <div class="item-description">{!! $product_variant['evariant_description'] !!}</div>
+                                <!-- <div class="item-description">{!! $product_variant['evariant_description'] !!}</div> -->
                             </div>
                             <div class="variant-holder">
                                 @foreach($_variant as $variant)
@@ -134,127 +134,9 @@
                 </div>
                 <?php $ctr++; ?>
                 @endforeach
-                <!-- <div class="featured-container description-reviews">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#description">DESCRIPTION</a></li>
-                        <li><a data-toggle="tab" href="#reviews">REVIEWS</a></li>
-                    </ul>
-                    <div class="tab-content">
-                    <div id="description" class="tab-pane fade in active">
-                        <div class="description-content">
-                            <div class="description-par">{!! $product_variant['evariant_description'] !!}</div>
-                        </div>
-                    </div>
-                    <div id="reviews" class="tab-pane fade">
-                        <div class="container-review">
-                            <div class="review-title">Customer Reviews</div>
-                            <div class="row clearfix">
-                                <div class="review-content">        
-                                    <div class="col-md-2 col-xs-12">
-                                        <div class="summary-details">
-                                            <div class="item-name">Alpha 12345</div>
-                                            <div class="rating">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-disable.png">
-                                            </div>
-                                            <div class="item-date">Dec 5, 2016</div>
-                                        </div>
-                                        <div class="summary-details">
-                                            <div class="item-name">Alpha 12345</div>
-                                            <div class="rating">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-disable.png">
-                                            </div>
-                                            <div class="item-date">Dec 5, 2016</div>
-                                        </div>
-                                        <div class="summary-details">
-                                            <div class="item-name">Alpha 12345</div>
-                                            <div class="rating">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                                <img src="/themes/{{ $shop_theme }}/img/star-disable.png">
-                                            </div>
-                                            <div class="item-date">Dec 5, 2016</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-10 col-xs-12">
-                                        <div class="summary-tab">
-                                            <div class="summary-title">Summary Lorem ipsum</div>
-                                            <div class="summary-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
-                                        </div>
-                                        <div class="summary-tab">
-                                            <div class="summary-title">Summary Lorem ipsum</div>
-                                            <div class="summary-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
-                                        </div>
-                                        <div class="summary-tab">
-                                            <div class="summary-title">Summary Lorem ipsum</div>
-                                            <div class="summary-content">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    </div>
-                    <div class="bottom-container">
-                        <div class="input-name-summary-review">
-                            <div class="row clearfix">
-                                
-                                    <div class="write-your-own-title">Write your own review</div>
-                                <div class="col-md-2"></div>
-
-                                <div class="col-md-10 input-summary-review">
-                                    <div class="col-md-6 form-name-summary">
-                                        <div class="input-name">Your Name <span class="star">*</span></div>
-                                        <input type="text" class="form-control">
-                                        <div class="input-name">Summary <span class="star">*</span></div>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                    <div class="col-md-6 form-review">
-                                        <div class="input-name">Review <span class="star">*</span></div>
-                                        <textarea class="form-control" style="height: 110px; border-radius: 0;"></textarea>
-                                    </div>
-
-                                    <div class="row clearfix">
-                                        <div class="col-md-12 col-xs-6 stars-count">
-                                            <div class="stars-number">
-                                                <li>1 Star</li>
-                                                <li>2 Stars</li>
-                                                <li>3 Stars</li>
-                                                <li>4 Stars</li>
-                                                <li>5 Stars</li>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row clearfix">
-                                        <div class="col-md-12 col-xs-6 product-rate">
-                                            <div class="rate-title">Rate this product</div>
-                                            <div class="rays">
-                                                <li><input type="radio"></li>
-                                                <li><input type="radio"></li>
-                                                <li><input type="radio"></li>
-                                                <li><input type="radio"></li>
-                                                <li><input type="radio"></li>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <button>SUBMIT REVIEW</button>
-
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
+                <div class="featured-container" style="padding: 25px;">
+                    <div class="item-description" style="overflow: auto;">{!! $product_variant['evariant_description'] !!}</div>
+                </div>
                 <div class="featured-container clearfix">
                     <div class="other-related"><strong>Other Related Products</strong></div>
                     <div class="other-related-items row clearfix">

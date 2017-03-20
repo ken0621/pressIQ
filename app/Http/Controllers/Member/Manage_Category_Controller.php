@@ -22,7 +22,8 @@ class Manage_Category_Controller extends Member
         if($access == 1)
         {
             $shop_id = $this->user_info->user_shop;
-            $data['category'] = Category::select_tr_html($shop_id);
+            $data['category'] = Category::select_tr_html($shop_id, 0);
+            $data['archived_category'] = Category::select_tr_html($shop_id, 1);
             return view('member.manage_category.manage_category_list', $data);
         }
         else
@@ -46,7 +47,31 @@ class Manage_Category_Controller extends Member
             return $this->show_no_access();
         }
     }
+    public function archived($id, $action)
+    {
+        $data["cat_id"] = $id;
+        $data["action"] = $action;
 
+        $data["cat"] = Tbl_category::where("type_id",$id)->first();
+
+        return view("member.manage_category.category_confirm",$data);
+    }
+    public function archived_submit()
+    {
+        $id = Request::input("cat_id");
+        $action = Request::input("action");
+
+        $update["archived"] = 0;
+        if($action == "archived")
+        {
+            $update["archived"] = 1;
+        }
+
+        Tbl_category::where("type_id",$id)->update($update);
+
+        $data["status"] = "success-category";
+        return json_encode($data);
+    }
     public function modal_create_category()
     {
         $access = Utilities::checkAccess('item-categories', 'access_page');

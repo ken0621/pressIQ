@@ -12,6 +12,7 @@ use View;
 use Crypt;
 use PDF;
 use App;
+use DB;
 
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer;
@@ -44,6 +45,7 @@ use App\Globals\Mlm_member;
 use App\Globals\Pdf_global;
 use App\Globals\Utilities;
 use App\Globals\AuditTrail;
+
 class Mlm_EncashmentController extends Member
 {
     public function index()
@@ -53,12 +55,12 @@ class Mlm_EncashmentController extends Member
         {
             return $this->show_no_access(); 
         }
-        // return Mlm_slot_log::encash_all(17);
         $data = [];
         $shop_id = $this->user_info->shop_id;
         $count = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->count();
         $this->initialize_settings($shop_id);
         $data['encashment_settings'] = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+        $data['payout_gateway'] = payout_getway();
         if($data['encashment_settings']->enchasment_settings_auto == 0)
         {
             $data['encashment_process'] = Tbl_mlm_encashment_process::where('shop_id', $shop_id)
@@ -112,6 +114,8 @@ class Mlm_EncashmentController extends Member
         $update['enchasment_settings_p_fee'] = Request::input('enchasment_settings_p_fee');
         $update['enchasment_settings_p_fee_type'] = Request::input('enchasment_settings_p_fee_type');
         $update['enchasment_settings_minimum'] = Request::input('enchasment_settings_minimum');
+        $update['enchasment_settings_type'] = Request::input('enchasment_settings_type');
+
         Tbl_mlm_encashment_settings::where('enchasment_settings_id', $enchasment_settings_id)->update($update);
         $data['status'] = 'success';
         $data['message'] = 'Encashment Settings Changed';
@@ -219,5 +223,70 @@ class Mlm_EncashmentController extends Member
     {
         $html_a = $this->breakdown_slot($encashment_process, $slot_id, 'true');
         return Pdf_global::show_pdf($html_a);
+    }
+    public function show_type($type)
+    {
+        $shop_id = $this->user_info->shop_id;
+        $data['encashment_settings'] = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+        if($type == 0)
+        {
+            $data['bank_option'] = DB::table('tbl_encashment_bank_deposit')->where('shop_id', $shop_id)->where('encashment_bank_deposit_archive', 0)->get();
+            return view('member.mlm_encashment.type.bank', $data);
+        }
+        else if($type == 1)
+        {
+            return view('member.mlm_encashment.type.cheque', $data);
+        }
+    }
+    public function cheque_edit()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $update['enchasment_settings_cheque_edit'] = Request::input('enchasment_settings_cheque_edit');
+        Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->update($update);
+
+        $data['status'] = 'success_new';
+        $data['message'] = 'Name on cheque option editted';
+        return json_encode($data);
+    }
+    public function bank_add()
+    {
+            // return $_POST;
+            $shop_id = $this->user_info->shop_id;
+            if($_POST['encashment_bank_deposit_name'] != null)
+            {
+                $insert['encashment_bank_deposit_name'] = Request::input('encashment_bank_deposit_name');
+                $insert['shop_id'] = $shop_id;
+                $insert['encashment_bank_deposit_archive'] = 0;
+                DB::table('tbl_encashment_bank_deposit')->insert($insert);
+                $data['status'] = 'success_new';
+                $data['message'] = 'Bank option added.';
+            }
+            else
+            {
+                $data['status'] = 'warning';
+                $data['message'] = 'Bank deposit name is required';
+            }
+            return json_encode($data);
+    }
+    public function bank_archive()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $encashment_bank_deposit_id = Request::input('encashment_bank_deposit_id');
+        $update['encashment_bank_deposit_archive']  = 1;
+        DB::table('tbl_encashment_bank_deposit')->where('encashment_bank_deposit_id', $encashment_bank_deposit_id)->update($update);
+        $data['status'] = 'success_new';
+        $data['message'] = 'Bank option archived.';
+        return json_encode($data);
+
+    }
+    public function bank_edit_name()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $update['enchasment_settings_bank_edit'] = Request::input('enchasment_settings_bank_edit');
+        Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->update($update);
+
+        $data['status'] = 'success_new';
+        $data['message'] = 'Bank account name option editted';
+        return json_encode($data);
     }
 }

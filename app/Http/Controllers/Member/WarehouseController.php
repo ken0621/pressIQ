@@ -101,6 +101,13 @@ class WarehouseController extends Member
 
             $this->create_main();
 
+            $chk = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$this->user_info->shop_id)->first();
+            $data["count_no_serial"] = 0;
+            if($chk)
+            {
+                $data["count_no_serial"] = count(Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->get()->toArray());
+            }
+
             return view("member.warehouse.warehouse_list",$data);
         }
         else
@@ -112,6 +119,12 @@ class WarehouseController extends Member
         // $count_on_hand = Tbl_warehouse_inventory::check_inventory_single(1, 28)->pluck('inventory_count');
         // dd($count_on_hand);
 
+    }
+    public function inventory_log()
+    {
+        $data["_inventory_log"] = Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->orderBy("inventory_id","DESC")->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->get();
+
+        return view("member.warehouse.inventory_log",$data);
     }
     public function item()
     {
@@ -196,8 +209,19 @@ class WarehouseController extends Member
     {
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
-        { 
+        {             
             $items = Session::get("item");
+
+            if(Request::input("inventory_id"))
+            {
+                $details = Tbl_warehouse_inventory::where("inventory_id",Request::input("inventory_id"))->first();  
+                $for_serial_item[$details->inventory_item_id]["quantity"] = $details->inventory_count;
+                $for_serial_item[$details->inventory_item_id]["product_id"] = $details->inventory_item_id;
+                $for_serial_item[$details->inventory_item_id]["inventory_id"] = $details->inventory_id;
+
+                $items["item_list"] = $for_serial_item;
+            }
+
             $data["items"] = null;
             foreach ($items["item_list"] as $key => $value) 
             {
@@ -241,7 +265,7 @@ class WarehouseController extends Member
                     $count = 1;
                 }
 
-                $insert[$key]["inventory_id"] = $inventory[$value];
+                $insert[$key]["serial_inventory_id"] = $inventory[$value];
                 $insert[$key]["item_id"] = $value;
                 $insert[$key]["serial_number"] = strtoupper($serials[$key]);
                 $insert[$key]["serial_created"] = Carbon::now();

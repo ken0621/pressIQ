@@ -19,13 +19,13 @@ class PayrollTimesheetController extends Member
 	{
 		$data["_employee"] = Tbl_payroll_employee_basic::where("shop_id", $this->user_info->shop_id)->get();
 		$data["current_employee"] = $current_employee = Tbl_payroll_employee_basic::where("shop_id", $this->user_info->shop_id)->where("payroll_employee_id", Request::input("employee_id"))->first();
-		
+		// dd($data);
 		/* REDIRECT IF NO DEFAULT */
 		if(empty($data["current_employee"]))
 		{
 			return Redirect::to("/member/payroll/employee_timesheet?employee_id=" . $data["_employee"][0]->payroll_employee_id)->send();
 		}
-
+		
 		return view('member.payroll.employee_timesheet', $data);
 	}
 	public function timesheet($employee_id)

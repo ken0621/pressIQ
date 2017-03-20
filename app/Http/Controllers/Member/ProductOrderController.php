@@ -66,7 +66,7 @@ class ProductOrderController extends Member
                 $data["ec_order_id"] = $sir->ec_order_id;
             }
         }
-
+            // dd($data["_product"]);
         return view('member.product_order.product_create_order', $data);
     }
     public function invoice_list()

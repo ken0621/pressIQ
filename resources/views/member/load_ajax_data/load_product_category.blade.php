@@ -4,7 +4,7 @@
 		@foreach($type['Product'] as $product)
 			<option value="{{$product['eprod_id']}}" indent="{{$type['type_sub_level']+1}}" add-search="{{$add_search."|".$type['type_name']}}" 
 					price="{{$product['evariant_price']}}"
-					{{ isset($product_id) ?  $product_id == $product['product_id'] ? 'selected' : '' : '' }} >{{$product['product_new_name']}}</option>
+					{{ isset($product_id) ?  $product_id == $product['eprod_id'] ? 'selected' : '' : '' }} >{{$product['product_new_name']}}</option>
 		@endforeach
 	@endif
 	@if($type['subcategory'])

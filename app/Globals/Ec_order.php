@@ -13,6 +13,7 @@ use App\Models\Tbl_ec_order;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_position;
 use App\Models\Tbl_coupon_code;
+use App\Models\Tbl_ec_variant;
 
 use Log;
 use Request;
@@ -221,7 +222,8 @@ class Ec_order
             $ctr = 0;
             foreach($ec_order_item as $ordered)
             {  
-                $warehouse_consume_product[$ctr]["product_id"] = $ordered["item_id"];             
+                $get_prod_id                                   = Tbl_ec_variant::where("evariant_prod_id",$ordered["item_id"])->first();
+                $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
                 $warehouse_consume_product[$ctr]["quantity"]   = $ordered["quantity"];
                 $ctr++;             
             }
@@ -326,7 +328,8 @@ class Ec_order
             $ctr = 0;
             foreach($ec_order_item as $ordered)
             {  
-                $warehouse_consume_product[$ctr]["product_id"] = $ordered->item_id;             
+                $get_prod_id                                   = Tbl_ec_variant::where("evariant_prod_id",$ordered->item_id)->first();
+                $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
                 $warehouse_consume_product[$ctr]["quantity"]   = $ordered->quantity;
                 $ctr++;             
             }
@@ -344,8 +347,9 @@ class Ec_order
             $ctr = 0;
             foreach($ec_order_item as $ordered)
             {  
-                $warehouse_refill_product[$ctr]["product_id"] = $ordered->item_id;             
-                $warehouse_refill_product[$ctr]["quantity"]   = $ordered->quantity;
+                $get_prod_id                                   = Tbl_ec_variant::where("evariant_prod_id",$ordered->item_id)->first();
+                $warehouse_refill_product[$ctr]["product_id"]  = $get_prod_id->evariant_item_id;            
+                $warehouse_refill_product[$ctr]["quantity"]    = $ordered->quantity;
                 $ctr++;             
             }
 

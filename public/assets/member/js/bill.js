@@ -25,8 +25,11 @@ function bill()
 
 	function event_remove_tr()
 	{
+		//cycy
 		$(document).on("click", ".remove-tr", function(e){
 			if($(".tbody-item .remove-tr").length > 1){
+				// var remove = $(this).attr("tr-id");
+				// $(remove).remove();
 				$(this).parent().remove();
 				action_reassign_number();
 				action_compute();
@@ -421,8 +424,13 @@ function bill()
 				url: '/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"),
 				method: 'get',
 				success: function(data)
-				{
-					$parent.find(".select-um").html(data).globalDropList("reload").globalDropList("enabled");
+				{						
+					$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
+					{
+						$(this).globalDropList("reload").globalDropList("enabled");
+						console.log($(this).find("option:first").val());
+						$(this).val($(this).find("option:first").val()).change();
+					})
 				},
 				error: function(e)
 				{
@@ -549,26 +557,24 @@ function add_po_to_bill(po_id)
 			var html = "";
              $(item).each(function (a, b)
              {
-             	html += '<tr class="tr-draggable">';
+             	html += '<tr class="tr-'+b.poline_id+' tr-draggable">';
              	html += '<td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>';
-             	html += '<td class="invoice-number-td text-right">1</td>';
-             	
-             	html += '<td><select class="1111 form-control select-item droplist-item input-sm pull-left select-poline-item-'+b.poline_id+'" name="itemline_item_id[]">';
-             	html += '@include("member.load_ajax_data.load_item_category", ["add_search" => ""])</select></td>';
+             	html += '<td class="invoice-number-td text-right">1</td>';             	
+             	html += '<td><input type="text" disabled value='+b.poline_item_id+' name="poline_item_id[]" class="form-control"/></td>';
+             	html += '<td><textarea class="textarea-expand txt-desc" name="poline_description[]">'+b.poline_description+'</textarea></td>';
+             	html += '<td><input type="text" value='+b.poline_um+' name="poline_um[]" class="form-control"/></td>';
+             	html += '<td><input class="text-center number-input txt-qty compute" type="text" value='+b.poline_qty+' name="poline_qty[]"/></td>';
+             	html += '<td><input class="text-right number-input txt-rate compute" value='+b.poline_rate+' type="text" name="poline_rate[]" /></td>';
+             	html += '<td><input class="text-right number-input txt-amount" value='+b.poline_amount+'  type="text" name="poline_amount[]" /></td>';
+             	html += '<td class="text-center remove-tr cursor-pointer" tr-id=tr-'+b.poline_id+'><i class="fa fa-trash-o" aria-hidden="true"></i></td>';
+             	html += '</tr>';
+
              	iniatilize(b.poline_id);
              	$(".select-poline-item-"+b.poline_id).load("/member/item/load_item_category", function()
 		        {                
 		             $(".select-poline-item-"+b.poline_id).globalDropList("reload"); 
 		             $(".select-poline-item-"+b.poline_id).val(b.poline_item_id).change();              
 		        });
-
-             	html += '<td><textarea class="textarea-expand txt-desc" name="poline_description[]">'+b.poline_description+'</textarea></td>';
-             	html += '<td><select class="2222 droplist-um select-um" name="poline_um[]"><option class="hidden" value="" /></select></td>';
-             	html += '<td><input class="text-center number-input txt-qty compute" type="text" value='+b.poline_qty+' name="poline_qty[]"/></td>';
-             	html += '<td><input class="text-right number-input txt-rate compute" value='+b.poline_rate+' type="text" name="poline_rate[]" /></td>';
-             	html += '<td><input class="text-right number-input txt-amount" value='+b.poline_amount+'  type="text" name="poline_amount[]" /></td>';
-             	html += '<td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>';
-             	html += '</tr>';
              });
              $(html).insertBefore(".tbody-item tr:first");
              bill.iniatilize_select();
@@ -591,15 +597,10 @@ function iniatilize(id)
 }
 function submit_done(data)
 {
-	if(data.status == 'success-po')
+	if(data.status == 'success-bill')
 	{		
         toastr.success("Success");
-       	location.href = data.redirect_to;
-	}
-	else if(data.status == 'success-tablet')
-	{		
-        toastr.success("Success");
-       	location.href = "/tablet";
+       	location.href = data.redirect;
 	}
     else if(data.status == "error")
     {

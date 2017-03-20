@@ -57,9 +57,7 @@ class MLM_CardController extends Member
             ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_slot.slot_owner')
             ->where('tbl_customer_address.purpose', 'billing')
             ->membership()->customer()->get();
-
             $ret = null;
-
             foreach ($all_slot as $key => $value) 
             {
                 $ret .= Cards::card_all($value);

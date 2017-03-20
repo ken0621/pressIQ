@@ -496,3 +496,9 @@ function limit_foreach($iterable, $limit)
         yield $key => $value;
     }
 }
+function payout_getway()
+{
+    $data[0] = 'Bank Deposit';
+    $data[1] = 'Cheque';
+    return $data;
+}

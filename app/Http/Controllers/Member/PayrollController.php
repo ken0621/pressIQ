@@ -99,7 +99,7 @@ class PayrollController extends Member
 		$data['civil_status'] = Tbl_payroll_civil_status::get();
 		$data['_country'] = Tbl_country::orderBy('country_name')->get();
 		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-
+		$data['_group'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
 		return view("member.payroll.modal.modal_create_employee", $data);
 	}
 
@@ -301,6 +301,7 @@ class PayrollController extends Member
 
 		$data['salary']				= Tbl_payroll_employee_salary::selemployee($id)->first();
 		$data['requirement']		= Tbl_payroll_employee_requirements::selrequirements($id)->first();
+		$data['_group'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
 		// dd($data['requirement']);
 
 		return view("member.payroll.modal.modal_view_employee", $data);
@@ -1655,7 +1656,7 @@ class PayrollController extends Member
 		$update['payroll_allowance_category'] 	= Request::input('payroll_allowance_category');
 		$update['payroll_allowance_category'] 	= Request::input('payroll_allowance_category');
 		Tbl_payroll_allowance::where('payroll_allowance_id', $payroll_allowance_id)->update($update);
-		
+
 		$return['status'] 			= 'success';
 		$return['function_name'] 	= 'payrollconfiguration.reload_allowance';
 		return json_encode($return);
@@ -1716,6 +1717,7 @@ class PayrollController extends Member
 		$insert['payroll_group_agency'] 				= Request::input('payroll_group_agency');
 		$insert['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
 		$insert['payroll_group_grace_time'] 			= Request::input('payroll_group_grace_time');
+		$insert['payroll_group_break']					= Request::input('payroll_group_break');
 		$insert['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
 		
 		if(Request::has('payroll_group_is_flexi_time'))
@@ -1825,6 +1827,7 @@ class PayrollController extends Member
 		$update['payroll_group_13month_basis'] 			= Request::input('payroll_group_13month_basis');
 
 		$update['payroll_group_grace_time'] 			= Request::input('payroll_group_grace_time');
+		$update['payroll_group_break']					= Request::input('payroll_group_break');
 		$update['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
 		
 		$payroll_group_deduct_before_absences 			= 0;
@@ -1967,7 +1970,9 @@ class PayrollController extends Member
 	/* PAYROLL PERIOD START*/
 	public function payroll_period_list()
 	{	
-		return view('member.payroll.payroll_period_list');
+		$data['_active'] = Tbl_payroll_period::sel(Self::shop_id())->orderBy('payroll_period_start','desc')->get();
+		$data['_archived'] = Tbl_payroll_period::sel(Self::shop_id(), 1)->orderBy('payroll_period_start','desc')->get();
+		return view('member.payroll.payroll_period_list', $data);
 	}
 
 	public function modal_create_payroll_period()
@@ -1978,8 +1983,8 @@ class PayrollController extends Member
 	public function modal_save_payroll_period()
 	{
 		$insert['shop_id'] 					= Self::shop_id();
-		$insert['payroll_period_start'] 	= Request::input('payroll_period_start');
-		$insert['payroll_period_end'] 		= Request::input('payroll_period_end');
+		$insert['payroll_period_start'] 	= date('Y-m-d',strtotime(Request::input('payroll_period_start')));
+		$insert['payroll_period_end'] 		= date('Y-m-d',strtotime(Request::input('payroll_period_end')));
 		$insert['payroll_period_category'] 	= Request::input('payroll_period_category');
 
 		$payroll_period_id = Tbl_payroll_period::insertGetId($insert);
@@ -1990,16 +1995,91 @@ class PayrollController extends Member
 
 		foreach($_company as $key => $company)
 		{
-			$insert_company[$key]['payroll_period_id'] 		= $insert_company;
-			$insert_company[$key]['payroll_company_id'] 		= $company->payroll_company_id;
+			$insert_company[$key]['payroll_period_id'] 		= $payroll_period_id;
+			$insert_company[$key]['payroll_company_id'] 	= $company->payroll_company_id;
 			$insert_company[$key]['payroll_period_status'] 	= 'pending';
 		}
-
+		// dd($insert_company);
 		if(!empty($insert_company))
 		{
 			Tbl_payroll_period_company::insert($insert_company);
 		}
 
+		$return['status'] = 'success';
+		$return['function_name'] = 'payroll_period_list.reload_list';
+		return json_encode($return);
+	}
+
+	public function modal_archive_period($archived, $payroll_period_id)
+	{
+		$statement = 'archive';
+		if($archived == 0)
+		{
+			$statement = 'restore';
+		}
+		$_query 			= Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
+		// dd($_query);
+		$file_name 			= date('M d, Y', strtotime($_query->payroll_period_start)).' to '.date('M d, Y', strtotime($_query->payroll_period_end));
+		$data['title'] 		= 'Do you really want to '.$statement.' payroll period of '.$file_name.'?';
+		$data['html'] 		= '';
+		$data['action'] 	= '/member/payroll/payroll_period_list/archive_period';
+		$data['id'] 		= $payroll_period_id;
+		$data['archived'] 	= $archived;
+
+		return view('member.modal.modal_confirm_archived', $data);
+	}
+
+	public function archive_period()
+	{
+		$payroll_period_id = Request::input('id');
+		$update['payroll_period_archived'] = Request::input('archived');
+		Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
+
+		$return['status'] = 'success';
+		$return['function_name'] = 'payroll_period_list.reload_list';
+		return json_encode($return);
+	}
+
+	public function modal_edit_period($payroll_period_id)
+	{
+		$data['period'] = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();
+		$data['_tax'] = Tbl_payroll_tax_period::get();
+		return view('member.payroll.modal.modal_edit_period', $data);
+	}
+
+	public function modal_update_period()
+	{
+		$payroll_period_id 			 		= Request::input("payroll_period_id");
+		$update['payroll_period_category'] 	= Request::input("payroll_period_category");
+		$update['payroll_period_start'] 	= date('Y-m-d',strtotime(Request::input("payroll_period_start")));
+		$update['payroll_period_end'] 		= date('Y-m-d',strtotime(Request::input("payroll_period_end")));
+		Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->update($update);
+
+		$insert_company = array();
+
+		$_company = Tbl_payroll_company::selcompany(Self::shop_id())->get();
+
+		foreach($_company as $key => $company)
+		{
+			$count = Tbl_payroll_period_company::where('payroll_company_id',$company->payroll_company_id)->where('payroll_period_id', $payroll_period_id)->count();
+			if($count == 0)
+			{
+				$temp_insert['payroll_period_id'] 		= $payroll_period_id;
+				$temp_insert['payroll_company_id'] 		= $company->payroll_company_id;
+				$temp_insert['payroll_period_status'] 	= 'pending';
+				array_push($insert_company, $temp_insert);
+			}	
+			
+		}
+		// dd($insert_company);
+		if(!empty($insert_company))
+		{
+			Tbl_payroll_period_company::insert($insert_company);
+		}
+
+		$return['status'] = 'success';
+		$return['function_name'] = 'payroll_period_list.reload_list';
+		return json_encode($return);
 	}
 	/* PAYROLL PERIOD END */
 }

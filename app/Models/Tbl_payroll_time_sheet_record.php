@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Tbl_payroll_time_sheet_record extends Model
 {
-    protected $table = 'tbl_payroll_time_sheet';
-	protected $primaryKey = "payroll_time_sheet_id";
+    protected $table = 'tbl_payroll_time_sheet_record';
+	protected $primaryKey = "payroll_time_sheet_record_id";
     public $timestamps = false;
 
     /* COLUMN REFERENCE NAME */

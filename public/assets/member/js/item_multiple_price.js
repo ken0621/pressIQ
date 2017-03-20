@@ -37,7 +37,8 @@ function item_multiple_price()
         {
             $parent = $(this).parents(".tbody-item-price");
             
-            if(last_price_change) last_price_change.
+            if(last_price_change == ".item-price-value")      action_item_price($(last_price_change));
+            else if(last_price_change = ".item-price-total")  action_item_price_total($(last_price_change));
         })
     }
 
@@ -45,14 +46,7 @@ function item_multiple_price()
     {
         $(document).on("change", ".tr-item-price .item-price-value", function()
         {
-            val = $(this).val();
-
-            $(this).val(formatMoney(val));
-
-            qty_val     = $(".tr-item-price .item-price-qty").val();
-            price_total = $(".tr-item-price .item-price-total");
-            if(qty_val > 0)  price_total.val(formatMoney( val * qty_val));
-            else             price_total.val("0.00");
+            action_item_price($(this));
         })
 
         $(document).on("keyup", ".tr-item-price .item-price-value", function()
@@ -61,12 +55,22 @@ function item_multiple_price()
         })
     }
 
+    function action_item_price($this)
+    {
+        val = $this.val();
+        $this.val(formatMoney(val));
+
+        qty_val     = $(".tr-item-price .item-price-qty").val();
+        price_total = $(".tr-item-price .item-price-total");
+        if(qty_val > 0)  price_total.val(formatMoney( val * qty_val));
+        else             price_total.val("0.00");
+    }
+
     function event_item_price_total_change()
     {
         $(document).on("change", ".tr-item-price .item-price-total", function()
         {
             val = $(this).val();
-            
             $(this).val(formatMoney(val));
 
             qty_val     = $(".tr-item-price .item-price-qty").val();
@@ -79,6 +83,18 @@ function item_multiple_price()
         {
             last_price_change = ".item-price-total";
         })
+    }
+
+    function action_item_price_total($this)
+    {
+        val = $this.val();
+            
+        $this.val(formatMoney(val));
+
+        qty_val     = $(".tr-item-price .item-price-qty").val();
+        price_value = $(".tr-item-price .item-price-value");
+        if(qty_val > 0)  price_value.val(formatMoney( val / qty_val));
+        else             price_total.val("0.00");
     }
 
     function formatFloat($this)

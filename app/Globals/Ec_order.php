@@ -2,8 +2,8 @@
 namespace App\Globals;
 use DB;
 use App\Globals\Ec_order;
+use App\Globals\Warehouse;
 use App\Globals\Customer;
-
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
@@ -126,7 +126,6 @@ class Ec_order
             }
         }
 
-
         /* SET INFORMATION FOR EC ORDER */
         $coupon_id          = null;
         $coupon_disc_amount = 0;
@@ -198,6 +197,7 @@ class Ec_order
         $ec_order['invoice_date']                   = $data["inv_date"];
         $ec_order['due_date']                       = $data["inv_due_date"];
         $ec_order['invoice_message']                = $data["inv_message"];
+        $ec_order['order_status']                   = $data["order_status"];
         $ec_order['statement_memo']                 = $data["inv_memo"];
         $ec_order['subtotal']                       = $prod_total;
         $ec_order['ewt']                            = $data["ewt"];
@@ -213,6 +213,31 @@ class Ec_order
         $ec_order['shop_id']                        = isset($data["shop_id"]) ? $data["shop_id"] : Ec_order::getShopId();
         $ec_order['created_date']                   = Carbon::now();
         $ec_order['archived']                       = 0;
+
+
+        if($ec_order["order_status"] == "Processing" || $ec_order["order_status"] == "Completed" || $ec_order["order_status"] == "On-hold")
+        {
+            $warehouse_id = Warehouse::getMainwarehouse();
+            $ctr = 0;
+            foreach($ec_order_item as $ordered)
+            {  
+                $warehouse_consume_product[$ctr]["product_id"] = $ordered["item_id"];             
+                $warehouse_consume_product[$ctr]["quantity"]   = $ordered["quantity"];
+                $ctr++;             
+            }
+
+            $warehouse_consume_remarks  = "";                                                            
+            $warehouse_consumer_id      = $ec_order["customer_id"];                          
+            $warehouse_consume_reason   = "";                              
+            $return_type                = "array";              
+            $warehouse_response         = Warehouse::inventory_consume($warehouse_id, $warehouse_consume_remarks, $warehouse_consume_product, $warehouse_consumer_id, $warehouse_consume_reason, $return_type);
+
+            if($warehouse_response["status"] == "error")
+            {
+                return $warehouse_response;
+            }
+        }
+
         $ec_order_id 								= Tbl_ec_order::insertGetId($ec_order);
 
        	Ec_order::create_ec_order_item($ec_order_id,$ec_order_item);
@@ -245,7 +270,91 @@ class Ec_order
 	{
         $ec_order_id             = $data["ec_order_id"];
         $update['order_status']  = $data["order_status"];
-        Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
-        return "success";
+        $order_status            = $data["order_status"];
+        $order                   = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
+        $response                = "nothing";
+
+        if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
+        {
+            if($order_status == "Processing")
+            {
+                $response = Ec_order::update_inventory("deduct",$ec_order_id);
+            }
+            else if($order_status == "Completed")
+            {
+                $response = Ec_order::update_inventory("deduct",$ec_order_id);   
+            }
+            else if($order_status == "On-hold")
+            {
+                $response = Ec_order::update_inventory("deduct",$ec_order_id);
+            }
+        }
+        else if($order->order_status == "Processing" || $order->order_status == "Completed" || $order->order_status == "On-hold")
+        {
+            if($order_status == "Pending")
+            {
+                $response = Ec_order::update_inventory("add",$ec_order_id);
+            }
+            else if($order_status == "Failed")
+            {
+                $response = Ec_order::update_inventory("add",$ec_order_id);   
+            }
+            else if($order_status == "Cancelled")
+            {
+                $response = Ec_order::update_inventory("add",$ec_order_id);
+            }
+        }
+
+        if($response["status"] == "error")
+        {
+            return $response;
+        }
+        else
+        {
+            Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
+            return $response; 
+        }
 	}
+
+    public static function update_inventory($type,$ec_order_id)
+    {
+        $warehouse_id = Warehouse::getMainwarehouse();
+        $ec_order     = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
+        if($type == "deduct")
+        {
+            $ec_order_item = Tbl_ec_order_item::where("ec_order_id",$ec_order_id)->get();
+            $ctr = 0;
+            foreach($ec_order_item as $ordered)
+            {  
+                $warehouse_consume_product[$ctr]["product_id"] = $ordered->item_id;             
+                $warehouse_consume_product[$ctr]["quantity"]   = $ordered->quantity;
+                $ctr++;             
+            }
+
+            $warehouse_consume_remarks  = "";                                                            
+            $warehouse_consumer_id      = $ec_order->customer_id;                          
+            $warehouse_consume_reason   = "";                              
+            $return_type                = "array";              
+            $data                       = Warehouse::inventory_consume($warehouse_id, $warehouse_consume_remarks, $warehouse_consume_product, $warehouse_consumer_id, $warehouse_consume_reason, $return_type);
+            return $data;
+        }
+        else if($type == "add")
+        {
+            $ec_order_item = Tbl_ec_order_item::where("ec_order_id",$ec_order_id)->get();
+            $ctr = 0;
+            foreach($ec_order_item as $ordered)
+            {  
+                $warehouse_refill_product[$ctr]["product_id"] = $ordered->item_id;             
+                $warehouse_refill_product[$ctr]["quantity"]   = $ordered->quantity;
+                $ctr++;             
+            }
+
+            $warehouse_reason_refill  = "";  
+            $warehouse_refill_source  = $ec_order_id;  
+            $warehouse_remarks        = "";    
+            $return_type              = "array";             
+            $data                     = Warehouse::inventory_refill($warehouse_id, $warehouse_reason_refill, $warehouse_refill_source, $warehouse_remarks, $warehouse_refill_product, $return_type);
+            return $data;
+        }
+    }
 }

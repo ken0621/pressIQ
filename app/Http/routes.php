@@ -1,6 +1,6 @@
 <?php
 
-// Route::any('/member/instant_add_slot', 'Member\MLM_SlotController@instant_add_slot');
+Route::any('/member/instant_add_slot', 'Member\MLM_SlotController@instant_add_slot');
 
 Route::any('/member/raymond', 'Member\RaymondController@index'); //RAYMOND
 

@@ -219,7 +219,7 @@ class Ec_order
 
         if($ec_order["order_status"] == "Processing" || $ec_order["order_status"] == "Completed" || $ec_order["order_status"] == "On-hold")
         {
-            $warehouse_id = Warehouse::getMainwarehouse();
+            $warehouse_id = Ecom_Product::getWarehouseId();
             $ctr = 0;
             foreach($ec_order_item as $ordered)
             {  
@@ -321,7 +321,7 @@ class Ec_order
 
     public static function update_inventory($type,$ec_order_id)
     {
-        $warehouse_id = Warehouse::getMainwarehouse();
+        $warehouse_id = Ecom_Product::getWarehouseId();
         $ec_order     = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
         if($type == "deduct")
         {

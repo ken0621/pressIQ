@@ -13,8 +13,8 @@
                 </small>
             </h1>
             <div class="text-right">
-            <a class="btn btn-custom-white panel-buttons popup" link="/member/item/transferinventory" size="md" data-toggle="modal" data-target="#global_modal">Transfer Inventory</a>
-            <a class="btn btn-primary panel-buttons popup" link="/member/item/warehouse/add" size="lg" data-toggle="modal" data-target="#global_modal">Add Warehouse</a>
+                <a class="btn btn-custom-white panel-buttons popup" link="/member/item/transferinventory" size="md" data-toggle="modal" data-target="#global_modal">Transfer Inventory</a>
+                <a class="btn btn-primary panel-buttons popup" link="/member/item/warehouse/add" size="lg" data-toggle="modal" data-target="#global_modal">Add Warehouse</a>
             </div>
         </div>
     </div>
@@ -37,6 +37,15 @@
         </div>
 
         <div class="form-group tab-content panel-body warehouse-container">
+            <div class="form-group">
+                <div class="col-md-12">
+                    @if($count_no_serial != 0)
+                    <div class="text-right" style="margin-top: 10px">
+                        <a href="/member/item/inventory_log">{{$count_no_serial}} Item has No Serial Number</a>
+                    </div>
+                    @endif
+                </div>
+            </div>
             <div id="all" class="tab-pane fade in active">
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">

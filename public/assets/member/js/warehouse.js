@@ -407,7 +407,7 @@ function submit_done(data)
     {
         toastr.success("Success");
         $(".warehouse-container").load("/member/item/warehouse .warehouse-container"); 
-        $(data.target).html(data.view);
+        data.element.modal("hide");
         $('#global_modal').modal('toggle');
     }
     else if(data.status == "error")
@@ -424,6 +424,7 @@ function submit_done(data)
     {
         toastr.success("Success");
         $(".warehouse-container").load("/member/item/warehouse .warehouse-container"); 
+        $(".inventory-log-container").load("/member/item/inventory_log .inventory-log-container"); 
         $('#global_modal').modal('toggle');
         $('.multiple_global_modal').modal('hide');
         data.element.modal("hide");
@@ -462,7 +463,7 @@ function submit_done_item(data)
     {
         toastr.success("Success");
         $(".warehouse-container").load("/member/item/warehouse .warehouse-container"); 
-        $(data.target).html(data.view);
+        $('#global_modal').modal('toggle');
         data.element.modal("hide");
     }
     else if(data.status == "error")
@@ -479,6 +480,7 @@ function submit_done_item(data)
     {
         toastr.success("Success");
         $(".warehouse-container").load("/member/item/warehouse .warehouse-container"); 
+        $(".inventory-log-container").load("/member/item/inventory_log .inventory-log-container"); 
         $('#global_modal').modal('toggle');
         $('.multiple_global_modal').modal('hide');
         data.element.modal("hide");

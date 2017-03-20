@@ -40,7 +40,9 @@ class Vendor_CreateBillController extends Member
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['action']     = "/member/vendor/create_bill/add";
- 
+
+        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_paid",0)->get();
+        
         $id = Request::input("id");
         if($id)
         {
@@ -49,9 +51,22 @@ class Vendor_CreateBillController extends Member
            $data['_item']      = Item::get_all_category_item();
            $data['_account']   = Accounting::getAllAccount();
            $data['action']     = "/member/vendor/create_bill/update";
-
         }
+        
        return view("member.vendor_list.create_bill",$data);
+    }
+    public function load_purchase_order($vendor_id)
+    {
+        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$vendor_id)->where("po_is_paid",0)->get();
+
+        return view("member.load_ajax_data.load_purchase_order",$data);
+    }
+    public function load_po_item()
+    {
+        $po_id = Request::input("po_id");
+        $data = Tbl_purchase_order_line::where("poline_po_id",$po_id)->get();
+
+        return json_encode($data);
     }
     public function add_bill()
     {

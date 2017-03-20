@@ -44,9 +44,14 @@ class Ecom_Product
 	 *
 	 * @return int 		Warehouse ID
 	 */
-	public static function getWarehouseId()
+	public static function getWarehouseId($shop_id = null)
 	{
-		return Tbl_warehouse::where("warehouse_name", "Ecommerce Warehouse")->where("warehouse_shop_id", Ecom_Product::getShopId())->pluck('warehouse_id');
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		return Tbl_warehouse::where("warehouse_name", "Ecommerce Warehouse")->where("warehouse_shop_id", $shop_id)->pluck('warehouse_id');
 	}
 
 	/**
@@ -207,9 +212,8 @@ class Ecom_Product
 		if($product)
 		{
 			$product = collect($product)->toArray();
-
 			$product			   	= $product;
-			$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+			$product["variant"] 	= Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
 
 			foreach($product["variant"] as $key2=>$variant)
 			{
@@ -269,12 +273,14 @@ class Ecom_Product
 
 	public static function getVariant($name, $product_id, $separator = ' • ')
 	{
-		return Tbl_ec_variant::variantName($separator)->item()->inventory(Ecom_Product::getWarehouseId())->having("evariant_prod_id", "=", $product_id)->having("variant_name", "=", $name)->first();
+		$shop_id = Tbl_ec_product::where("eprod_id", $product_id)->pluck("eprod_shop_id");
+		return Tbl_ec_variant::variantName($separator)->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->having("evariant_prod_id", "=", $product_id)->having("variant_name", "=", $name)->first();
 	}
 
 	public static function getVariantInfo($variant_id)
 	{
-		return Tbl_ec_variant::variantName()->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_id", $variant_id)->Product()->FirstImage()->first();
+		$shop_id = Tbl_ec_variant::product()->where("evariant_id", $variant_id)->first()->pluck("eprod_shop_id");
+		return Tbl_ec_variant::variantName()->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_id", $variant_id)->Product()->FirstImage()->first();
 	}
 
 	public static function getAllVariants()
@@ -422,9 +428,8 @@ class Ecom_Product
 			foreach ($product as $key => $value) 
 			{
 				$product = collect($value)->toArray();
-
 				$product[$key] = $product;
-				$product[$key]['variant'] = Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_prod_id", $value["eprod_id"])->get()->toArray();
+				$product[$key]['variant'] = Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $value["eprod_id"])->get()->toArray();
 				foreach($product[$key]["variant"] as $key2=>$variant)
 				{
 					$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();

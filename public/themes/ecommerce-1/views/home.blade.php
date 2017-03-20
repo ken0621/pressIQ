@@ -96,7 +96,7 @@
 								<div class="hot-deals-item-container">
 									<img class="4-3-ratio" src="{{ get_collection_first_image($collection) }}">
 									<div class="item-details">
-										<div class="item-title">{{ get_collection_first_name($collection) }}</div>
+										<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ get_collection_first_name($collection) }}</div></a>
 										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 									</div>
 									<button class="new-add-to-cart-button btn" style="margin-top: 25px;">
@@ -124,7 +124,7 @@
 							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
 							<div class="col-xs-8">
 								<div class=" item-details-container">
-									<div class="item-title">{{ $collection['product']['eprod_name'] }}</div>
+									<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
 									<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 								</div>
 							</div>
@@ -156,7 +156,7 @@
 									</button>
 								</div>
 								<div class="item-details">
-									<div class="item-title">{{ $collection['product']['eprod_name'] }}</div>
+									<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
 									<div class="rating">
 										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
 										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
@@ -166,6 +166,26 @@
 									</div>
 									<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 								</div>
+								@if(count($collection['product']['variant'][0]['mlm_discount']) > 0)
+	                            <div style="margin-top: 15px;">
+	                                <table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 10px;">
+	                                    <thead>
+	                                        <tr>
+	                                            <th>Membership</th>
+	                                            <th>Price</th>
+	                                        </tr>
+	                                    </thead>
+	                                    <tbody>
+	                                        @foreach($collection['product']['variant'][0]['mlm_discount'] as $key => $mlm_discount)
+	                                        <tr>
+	                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
+	                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+	                                        </tr>
+	                                        @endforeach
+	                                    </tbody>
+	                                </table>
+	                            </div>
+	                            @endif
 							</div>
 						</div>
 						@endforeach
@@ -183,7 +203,7 @@
 									</div>
 									<div class="col-md-6 col-sm-12">
 										<div class="item-details" style="padding-top: 0;">
-											<div class="item-title">{{ $collection['product']['eprod_name'] }}</div>
+											<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
 											<div class="rating">
 												<img src="/themes/{{ $shop_theme }}/img/star-active.png">
 												<img src="/themes/{{ $shop_theme }}/img/star-active.png">
@@ -193,6 +213,28 @@
 											</div>
 											<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 										</div>
+									</div>
+									<div class="col-md-12">
+										@if(count($collection['product']['variant'][0]['mlm_discount']) > 0)
+			                            <div style="margin-top: 15px;">
+			                                <table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 12px;">
+			                                    <thead>
+			                                        <tr>
+			                                            <th>Membership</th>
+			                                            <th>Price</th>
+			                                        </tr>
+			                                    </thead>
+			                                    <tbody>
+			                                        @foreach($collection['product']['variant'][0]['mlm_discount'] as $key => $mlm_discount)
+			                                        <tr>
+			                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
+			                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+			                                        </tr>
+			                                        @endforeach
+			                                    </tbody>
+			                                </table>
+			                            </div>
+			                            @endif
 									</div>
 								</div>
 							</div>
@@ -228,7 +270,7 @@
 							<div class="per-item-container">
 								<img class="item-image-large 4-3-ratio" src="{{ get_collection_first_image($collection) }}">
 								<div class="item-details">
-									<div class="item-title">{{ $collection['product']['eprod_name'] }}</div>
+									<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
 									<div class="rating">
 										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
 										<img src="/themes/{{ $shop_theme }}/img/star-active.png">

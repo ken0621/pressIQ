@@ -29,6 +29,8 @@
       font-weight: 700;
       color: #fff;
       background-color: #ff2e34; }
+    .content .left-content button:hover {
+      opacity: 0.9; }
   .content .right-content {
     background-color: #fff;
     padding: 50px;

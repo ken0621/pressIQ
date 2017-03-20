@@ -28,9 +28,9 @@
 									<li><a href="javascript:">Jackets</a></li>
 									<li><a href="javascript:">Acessories</a></li>
 								</ul>
-								<div class="banner-holder">
+								<!-- <div class="banner-holder">
 									<img src="/themes/{{ $shop_theme }}/img/big-discount.jpg">
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -51,9 +51,9 @@
 									<li><a href="javascript:">Jackets</a></li>
 									<li><a href="javascript:">Acessories</a></li>
 								</ul>
-								<div class="banner-holder">
+								<!-- <div class="banner-holder">
 									<img src="/themes/{{ $shop_theme }}/img/big-discount.jpg">
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -74,9 +74,9 @@
 									<li><a href="javascript:">Jackets</a></li>
 									<li><a href="javascript:">Acessories</a></li>
 								</ul>
-								<div class="banner-holder">
+								<!-- <div class="banner-holder">
 									<img src="/themes/{{ $shop_theme }}/img/big-discount.jpg">
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -97,9 +97,9 @@
 									<li><a href="javascript:">Jackets</a></li>
 									<li><a href="javascript:">Acessories</a></li>
 								</ul>
-								<div class="banner-holder">
+								<!-- <div class="banner-holder">
 									<img src="/themes/{{ $shop_theme }}/img/big-discount.jpg">
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -120,9 +120,9 @@
 									<li><a href="javascript:">Jackets</a></li>
 									<li><a href="javascript:">Acessories</a></li>
 								</ul>
-								<div class="banner-holder">
+								<!-- <div class="banner-holder">
 									<img src="/themes/{{ $shop_theme }}/img/big-discount.jpg">
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -143,9 +143,9 @@
 									<li><a href="javascript:">Jackets</a></li>
 									<li><a href="javascript:">Acessories</a></li>
 								</ul>
-								<div class="banner-holder">
+								<!-- <div class="banner-holder">
 									<img src="/themes/{{ $shop_theme }}/img/big-discount.jpg">
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>
@@ -166,9 +166,9 @@
 									<li><a href="javascript:">Jackets</a></li>
 									<li><a href="javascript:">Acessories</a></li>
 								</ul>
-								<div class="banner-holder">
+								<!-- <div class="banner-holder">
 									<img src="/themes/{{ $shop_theme }}/img/big-discount.jpg">
-								</div>
+								</div> -->
 							</div>
 						</div>
 					</div>

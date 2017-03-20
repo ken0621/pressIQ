@@ -5,8 +5,10 @@ use App\Models\Tbl_order;
 use App\Models\Tbl_order_item;
 use DB;
 
-class SalesReport{
-    public static function reportcount($shop_id = 0){
+class SalesReport
+{
+    public static function reportcount($shop_id = 0)
+    {
         $data = array();
         $date = date_create(date('Y-m-d'));
 		
@@ -57,7 +59,8 @@ class SalesReport{
 		$data['product_count']['str'] = $product_count.$strproduct_count;
 		return $data;
     }
-    public static function monthlysale($shop_id, $startdate = '0000-00-00', $endate = '0000-00-00'){
+    public static function monthlysale($shop_id, $startdate = '0000-00-00', $endate = '0000-00-00')
+    {
         $data = array();
         // dd($endate);
         // dd($shop_id);
@@ -181,7 +184,8 @@ class SalesReport{
     }
     
     /*FOR PRODUCT OR VARIANT OR CUSTOMER*/
-    public static function SalesReportBy($type, $shop_id, $startdate = '0000-00-00', $endate = '0000-00-00'){
+    public static function SalesReportBy($type, $shop_id, $startdate = '0000-00-00', $endate = '0000-00-00')
+    {
         $data = array();
         $data['range'] = date('M d Y', strtotime($startdate)).' - '.date('M d Y', strtotime($endate));
         $start = date('Y-m-d', strtotime($startdate));
@@ -280,5 +284,10 @@ class SalesReport{
             return $data;
         }
         //  dd($data);
+    }
+
+    public static function productreport()
+    {
+        
     }
 }

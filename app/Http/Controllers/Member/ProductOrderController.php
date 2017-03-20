@@ -82,7 +82,7 @@ class ProductOrderController extends Member
     public function create_invoice()
     {
         $customer_info                      = [];
-        $customer_info['customer_id']       = Request::input('inv_customer_id');;
+        $customer_info['customer_id']       = Request::input('inv_customer_id');
         $customer_info['customer_email']    = Request::input('inv_customer_email');
 
         $invoice_info                       = [];

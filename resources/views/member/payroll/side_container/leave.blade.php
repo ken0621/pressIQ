@@ -16,6 +16,8 @@
 		  			<tr>
 		  				<th>Leave Name</th>
 		  				<th>No of Days.</th>
+		  				<th>With Pay?</th>
+		  				<th>Is Accumulated?</th>
 		  				<th class="text-center">Action</th>
 		  			</tr>
 		  		</thead>
@@ -27,6 +29,12 @@
 		  				</td>
 		  				<td>
 		  					{{$active->payroll_leave_temp_days_cap}}
+		  				</td>
+		  				<td>
+		  					{{$active->payroll_leave_temp_with_pay == 1 ? 'Yes' : 'No' }}
+		  				</td>
+		  				<td>
+		  					{{$active->payroll_leave_temp_is_cummulative == 1 ? 'Yes' : 'No' }}
 		  				</td>
 		  				<td class="text-center"> 
 		  					<div class="dropdown">
@@ -74,7 +82,7 @@
 										<a href="#" class="popup" link="/member/payroll/leave/modal_edit_leave_temp/{{$archive->payroll_leave_temp_id}}"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 									</li>
 									<li>
-										<a href="#" class="popup" link="/member/payroll/leave/modal_archived_leave_temp/1/{{$archive->payroll_leave_temp_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
+										<a href="#" class="popup" link="/member/payroll/leave/modal_archived_leave_temp/0/{{$archive->payroll_leave_temp_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Restore</a>
 									</li>
 								</ul>
 							</div>

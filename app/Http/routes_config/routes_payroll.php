@@ -157,6 +157,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/leave/modal_archived_leave_temp/{archived}/{leave_temp_id}',"Member\PayrollController@modal_archived_leave_temp");
 	Route::any('/leave/archived_leave_temp',"Member\PayrollController@archived_leave_temp");
 	
+	Route::any('/leave/reload_leave_employee',"Member\PayrollController@reload_leave_employee");
 
 	Route::any('/leave/modal_edit_leave_temp/{id}',"Member\PayrollController@modal_edit_leave_temp");
 	Route::any('/leave/set_leave_tag_employee',"Member\PayrollController@set_leave_tag_employee");
@@ -164,7 +165,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/leave/archived_leave_employee',"Member\PayrollController@archived_leave_employee");
 
 	Route::any('/leave/modal_archived_leave_employee/{archived}/{id}',"Member\PayrollController@modal_archived_leave_employee");
-
+	/*Update leave temp*/
+	Route::any('/leave/update_leave_temp',"Member\PayrollController@update_leave_temp");
 	/* LEAVE END */
 
 

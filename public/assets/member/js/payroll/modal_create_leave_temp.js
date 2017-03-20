@@ -47,7 +47,7 @@ function modal_create_leave_temp()
 
 	this.load_employee_tag = function()
 	{
-		//reload_allowance_employee();
+		reload_leave_employee();
 		$(".tbl-tag").html('<tr><td colspan="2" class="text-center">'+misc('loader') + '</td></tr>');
 		$.ajax({
 			url 	: 	"/member/payroll/leave/get_leave_tag_employee",
@@ -73,6 +73,11 @@ function modal_create_leave_temp()
 			}
 		});
 	}
+
+/*	this.reload_leave_employee = function()
+	{
+		reload_leave_employee();
+	}*/
 
 	function reload_leave_employee()
 	{

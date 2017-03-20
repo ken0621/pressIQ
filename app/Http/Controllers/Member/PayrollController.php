@@ -1527,7 +1527,7 @@ class PayrollController extends Member
 		Session::put('allowance_employee_tag',$array);
 
 		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'modal_create_allowance.load_emoloyee_tag';
+		$return['function_name'] 	= 'modal_create_allowance.load_employee_tag';
 		return json_encode($return);
 	}
 
@@ -1822,6 +1822,7 @@ class PayrollController extends Member
 		$return['status'] 			= 'success';
 		$return['function_name'] 	= 'payrollconfiguration.reload_leave_temp';
 		return json_encode($return);
+
 	}
 
 
@@ -1834,6 +1835,20 @@ class PayrollController extends Member
 		$data['_archived'] = Tbl_payroll_leave_employee::getperleave($id , 1)->get();
 		// dd($data);
 		return view('member.payroll.modal.modal_edit_leave_temp', $data);
+	}
+
+	public function update_leave_temp()
+	{
+		$payroll_leave_temp_id 					= Request::input('payroll_leave_temp_id');
+		$update['payroll_leave_temp_name'] 		= Request::input('payroll_leave_temp_name');
+		$update['payroll_leave_temp_days_cap'] 	= Request::input('payroll_leave_temp_days_cap');
+		$update['payroll_leave_temp_with_pay'] 	= Request::input('payroll_leave_temp_with_pay');
+		$update['payroll_leave_temp_is_cummulative'] 	= Request::input('payroll_leave_temp_is_cummulative');
+		Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $payroll_leave_temp_id)->update($update);
+		
+		$return['status'] 			= 'success';
+		$return['function_name'] 	= 'payrollconfiguration.reload_leave_temp';
+		return json_encode($return);
 	}
 
 	public function modal_archived_leave_employee($archived, $id)
@@ -1853,6 +1868,8 @@ class PayrollController extends Member
 		$data['archived'] 	= $archived;
 
 		return view('member.modal.modal_confirm_archived', $data);
+
+
 	}
 
 	public function archived_leave_employee()
@@ -1871,9 +1888,16 @@ class PayrollController extends Member
 		$payroll_leave_temp_id = Request::input('payroll_leave_temp_id');
 		$data['_active'] = Tbl_payroll_leave_employee::getperleave($payroll_leave_temp_id)->get();
 		$data['_archived'] = Tbl_payroll_leave_employee::getperleave($payroll_leave_temp_id , 1)->get();
-		return view('member.payroll.reload.allowance_employee_reload', $data);
+		return view('member.payroll.reload.leave_employee_reload', $data);
 	}
 
+	/*public function reload_allowance_employee()
+	{
+		$payroll_allowance_id = Request::input('payroll_allowance_id');
+		$data['_active'] = Tbl_payroll_employee_allowance::getperallowance($payroll_allowance_id)->get();
+		$data['_archived'] = Tbl_payroll_employee_allowance::getperallowance($payroll_allowance_id , 1)->get();
+		return view('member.payroll.reload.allowance_employee_reload', $data);
+	}*/
 	
 
 	/* LEAVE END */

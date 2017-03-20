@@ -18,7 +18,7 @@
 						{{$active->payroll_employee_title_name.' '.$active->payroll_employee_first_name.' '.$active->payroll_employee_middle_name.' '.$active->payroll_employee_last_name.' '.$active->payroll_employee_suffix_name}}
 					</td>
 					<td class="text-center">
-						<a href="#" class="popup" size="sm" link="/member/payroll/leave/modal_archived_leave_employee/1/{{$active->payroll_employee_allowance_id}}"><i class="fa fa-times"></i></a>
+						<a href="#" class="popup" size="sm" link="/member/payroll/leave/modal_archived_leave_employee/1/{{$active->payroll_leave_employee_id}}"><i class="fa fa-times"></i></a>
 					</td>
 				</tr>
 				@endforeach
@@ -40,12 +40,12 @@
 						{{$archived->payroll_employee_title_name.' '.$archived->payroll_employee_first_name.' '.$archived->payroll_employee_middle_name.' '.$archived->payroll_employee_last_name.' '.$archived->payroll_employee_suffix_name}}
 					</td>
 					<td class="text-center">
-						<a href="#" class="popup" size="sm" link="/member/payroll/allowance/modal_archived_llowance_employee/0/{{$archived->payroll_employee_allowance_id}}"><i class="fa fa-refresh"></i></a>
+						<a href="#" class="popup" size="sm" link="/member/payroll/leave/modal_archived_leave_employee/0/{{$archived->payroll_leave_employee_id}}"><i class="fa fa-refresh"></i></a>
 					</td>
 				</tr>
 				@endforeach
 			</tbody>
 		</table>
 	</div>
-	
+	</div>/
 </div>

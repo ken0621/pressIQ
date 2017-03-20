@@ -32,4 +32,5 @@ class Tbl_payroll_leave_employee extends Model
 
 		return $query;
 	}
+
 }

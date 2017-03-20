@@ -1,9 +1,9 @@
-<form class="global-submit" role="form" action="/member/payroll/leave/modal_save_leave_temp" method="POST">
+<form class="global-submit" role="form" action="/member/payroll/leave/update_leave_temp" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Leave Template Details</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
-		<input type="hidden" name="payroll_leave_id" id="payroll_leave_id" value="{{$leave_temp->payroll_leave_temp_id}}">
+		<input type="hidden" name="payroll_leave_temp_id" id="payroll_leave_temp_id" value="{{$leave_temp->payroll_leave_temp_id}}">
 	</div>
 	<div class="modal-body form-horizontal">
 
@@ -89,7 +89,30 @@
 							@endforeach
 						</tbody>
 					</table>
-				</div>				
+				</div>
+				<div id="archived-emp" class="tab-pane fade">
+					<table class="table table-bordered table-condensed">
+						<thead>
+							<tr>
+								<th>Employee Name</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($_archived as $archived)
+							<tr>
+								<td>
+									{{$archived->payroll_employee_title_name.' '.$archived->payroll_employee_first_name.' '.$archived->payroll_employee_middle_name.' '.$archived->payroll_employee_last_name.' '.$archived->payroll_employee_suffix_name}}
+								</td>
+								<td class="text-center">
+									<a href="#" class="popup" size="sm" link="/member/payroll/leave/modal_archived_leave_employee/0/{{$archived->payroll_leave_employee_id}}"><i class="fa fa-refresh"></i></a>
+								</td>
+							</tr>
+							@endforeach
+						</tbody>
+					</table>
+				</div>
+				
 			</div>
 		</div>
 

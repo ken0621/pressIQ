@@ -237,6 +237,7 @@ class ProductOrderController extends Member
             {
                 $return["status"]                   = "error";
                 $return["status_message"]           = $response["status_message"];
+                return json_encode($return);
             }
             else
             {

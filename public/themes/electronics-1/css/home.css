@@ -111,10 +111,11 @@
       transition: .3s all ease; }
   .featured .content-container .left-container .item-content {
     padding: 0px 0px 30px 20px; }
-    .featured .content-container .left-container .item-content .item-title {
+    .featured .content-container .left-container .item-content .item-title a {
       color: #616161;
       font-size: 17px;
-      font-weight: 600; }
+      font-weight: 600;
+      text-decoration: none; }
     .featured .content-container .left-container .item-content .item-rating {
       padding-bottom: 10px; }
     .featured .content-container .left-container .item-content .item-price {
@@ -154,11 +155,15 @@
           opacity: 0;
           transition: 0.3s all ease; }
       .featured .content-container .right-container .product-holder .per-item-container .product-content {
-        padding: 0; }
+        padding: 0;
+        padding-top: 30px; }
         .featured .content-container .right-container .product-holder .per-item-container .product-content .product-details .item-name {
           color: #616161;
           font-size: 15px;
           font-weight: 600; }
+          .featured .content-container .right-container .product-holder .per-item-container .product-content .product-details .item-name a {
+            color: #505050;
+            text-decoration: none; }
         .featured .content-container .right-container .product-holder .per-item-container .product-content .product-details .item-rating {
           padding-top: 5px; }
         .featured .content-container .right-container .product-holder .per-item-container .product-content .product-details .item-price {
@@ -218,9 +223,10 @@
         transition: 0.3s all ease; }
     .most-viewed .most-viewed-content .product-holder .product-content {
       padding-top: 15px; }
-      .most-viewed .most-viewed-content .product-holder .product-content .item-name {
+      .most-viewed .most-viewed-content .product-holder .product-content .item-name a {
         color: #505050;
-        font-weight: 600; }
+        font-weight: 600;
+        text-decoration: none; }
       .most-viewed .most-viewed-content .product-holder .product-content .item-price {
         color: #1e1e1e;
         font-weight: 700;

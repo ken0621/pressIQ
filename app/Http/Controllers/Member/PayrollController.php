@@ -35,6 +35,10 @@ use App\Models\Tbl_payroll_deduction_employee;
 use App\Models\Tbl_payroll_deduction_payment;
 use App\Models\Tbl_payroll_allowance;
 use App\Models\Tbl_payroll_employee_allowance;
+/*Leave Template Model
+Created by Brain*/
+use App\Models\Tbl_payroll_leave_temp;
+use App\Models\Tbl_payroll_leave_employee;
 
 use App\Globals\Payroll;
 
@@ -1525,7 +1529,203 @@ class PayrollController extends Member
 	/* LEAVE START */
 	public function leave()
 	{
-		return view('member.payroll.side_container.leave');
+		$data['_active'] = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->get();
+		$data['_archived'] = Tbl_payroll_leave_temp::sel(Self::shop_id(), 1)->orderBy('payroll_leave_temp_name')->get();
+		return view('member.payroll.side_container.leave', $data);		
 	}
+
+	/*Function to view modal to create leave_temp*/
+	public function modal_create_leave_temp()
+	{
+		Session::put('leave_tag_employee', array());
+		return view('member.payroll.modal.modal_create_leave_temp');
+	}
+
+	public function modal_leave_tag_employee($leave_temp_id)
+	{
+		$data['_company'] 		= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+		$data['_department'] 	= Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+
+		$data['deduction_id']	=	$leave_temp_id;
+		$data['action']			= 	'/member/payroll/leave/set_leave_tag_employee';
+		return view('member.payroll.modal.modal_deduction_tag_employee', $data);
+	}
+
+	public function set_leave_tag_employee()
+	{
+		$leave_temp_id = Request::input('deduction_id');
+		$employee_tag = Request::input('employee_tag');
+
+		$array = array();
+		if(Session::has('leave_tag_employee'))
+		{
+			$array = Session::get('leave_tag_employee');
+		}
+
+		$insert_tag = array();
+
+		if(isset($employee_tag)){
+			foreach($employee_tag as $tag)
+			{
+				array_push($array, $tag);
+				if($leave_temp_id != 0)
+				{
+					$count = Tbl_payroll_leave_employee::where('payroll_leave_temp_id', $leave_temp_id)->where('payroll_employee_id',$tag)->count();
+					if($count == 0)
+					{
+						$insert['payroll_leave_temp_id'] = $leave_temp_id;
+						$insert['payroll_employee_id']	= $tag;
+						array_push($insert_tag, $insert);
+					}
+				}
+			}	
+		}
+			
+
+		if($leave_temp_id != 0 && !empty($insert_tag))
+		{
+			Tbl_payroll_leave_employee::insert($insert_tag);
+		}
+		Session::put('leave_tag_employee',$array);
+
+		$return['status'] 			= 'success';
+		$return['function_name'] 	= 'modal_create_leave_temp.load_employee_tag';
+		return json_encode($return);
+	}
+
+	public function get_leave_tag_employee()
+	{
+		$employee = [0 => 0];
+		if(Session::has('leave_tag_employee'))
+		{
+			$employee = Session::get('leave_tag_employee');
+		}
+		$emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+
+		$data['new_record'] = $emp;
+		return json_encode($data);
+	}
+
+
+	public function remove_leave_tag_employee()
+	{
+		$content = Request::input('content');
+		$array 	 = Session::get('leave_tag_employee');
+		if(($key = array_search($content, $array)) !== false) {
+		    unset($array[$key]);
+		}
+		Session::put('leave_tag_employee',$array);
+	}
+
+	public function modal_save_leave_temp()
+	{
+		$insert['payroll_leave_temp_name'] 				= Request::input('payroll_leave_temp_name');
+		$insert['payroll_leave_temp_days_cap'] 			= Request::input('payroll_leave_temp_days_cap');
+		$insert['payroll_leave_temp_with_pay'] 			= Request::input('payroll_leave_temp_with_pay');
+		$insert['payroll_leave_temp_is_cummulative']	= Request::input('payroll_leave_temp_is_cummulative');
+		$insert['shop_id']								= Self::shop_id();
+		$leave_temp_id = Tbl_payroll_leave_temp::insertGetId($insert);
+
+		$insert_employee = array();
+		if(Session::has('leave_tag_employee'))
+		{
+			foreach(Session::get('leave_tag_employee') as $tag)
+			{	
+				$temp['payroll_leave_temp_id'] 	= $leave_temp_id;
+				$temp['payroll_employee_id']	= $tag;
+				array_push($insert_employee, $temp);
+			}
+			if(!empty($insert_employee))
+			{
+				Tbl_payroll_leave_employee::insert($insert_employee);
+			}
+		}
+
+		$return['status'] 			= 'success';
+		$return['function_name'] 	= 'payrollconfiguration.reload_leave_temp';
+		return json_encode($return);
+	}
+
+	public function modal_archived_leave_temp($archived, $leave_temp_id)
+	{
+		$statement = 'archive';
+		if($archived == 0)
+		{
+			$statement = 'restore';
+		}
+		$file_name 			= Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $leave_temp_id)->pluck('payroll_leave_temp_name');
+		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
+		$data['html'] 		= '';
+		$data['action'] 	= '/member/payroll/leave/archived_leave_temp';
+		$data['id'] 		= $leave_temp_id;
+		$data['archived'] 	= $archived;
+
+		return view('member.modal.modal_confirm_archived', $data);
+	}
+
+	public function archived_leave_temp()
+	{
+		$id = Request::input('id');
+		$update['payroll_leave_temp_archived'] = Request::input('archived');
+		Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $id)->update($update);
+
+		$return['status'] 			= 'success';
+		$return['function_name'] 	= 'payrollconfiguration.reload_leave_temp';
+		return json_encode($return);
+	}
+
+
+
+
+	public function modal_edit_leave_temp($id)
+	{
+		$data['leave_temp'] = Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $id)->first();
+		$data['_active'] = Tbl_payroll_leave_employee::getperleave($id)->get();
+		$data['_archived'] = Tbl_payroll_leave_employee::getperleave($id , 1)->get();
+		// dd($data);
+		return view('member.payroll.modal.modal_edit_leave_temp', $data);
+	}
+
+	public function modal_archived_leave_employee($archived, $id)
+	{
+		$statement = 'archive';
+		if($archived == 0)
+		{
+			$statement = 'restore';
+		}
+		$_query 			= Tbl_payroll_leave_employee::employee($id)->first();
+		// dd($_query);
+		$file_name 			= $_query->payroll_employee_title_name.' '.$_query->payroll_employee_first_name.' '.$_query->payroll_employee_middle_name.' '.$_query->payroll_employee_last_name.' '.$_query->payroll_employee_suffix_name;
+		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
+		$data['html'] 		= '';
+		$data['action'] 	= '/member/payroll/leave/archived_leave_employee';
+		$data['id'] 		= $id;
+		$data['archived'] 	= $archived;
+
+		return view('member.modal.modal_confirm_archived', $data);
+	}
+
+	public function archived_leave_employee()
+	{
+		$id = Request::input('id');
+		$update['payroll_leave_employee_is_archived'] = Request::input('archived');
+		Tbl_payroll_leave_employee::where('payroll_leave_employee_id', $id)->update($update);
+
+		$return['status'] 			= 'success';
+		$return['function_name'] 	= 'modal_create_leave_temp.load_employee_tag';
+		return json_encode($return);
+	}
+
+	public function reload_leave_employee()
+	{
+		$payroll_leave_temp_id = Request::input('payroll_leave_temp_id');
+		$data['_active'] = Tbl_payroll_leave_employee::getperleave($payroll_leave_temp_id)->get();
+		$data['_archived'] = Tbl_payroll_leave_employee::getperleave($payroll_leave_temp_id , 1)->get();
+		return view('member.payroll.reload.allowance_employee_reload', $data);
+	}
+
+	
+
 	/* LEAVE END */
 }

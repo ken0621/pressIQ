@@ -3,9 +3,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Tbl_cart extends Model
+class Tbl_item_multiple_price extends Model
 {
-	protected $table = 'tbl_cart';
-	protected $primaryKey = "cart_id";
+	protected $table = 'tbl_item_multiple_price';
+	protected $primaryKey = "multiprice_id";
     public $timestamps = false;
 }

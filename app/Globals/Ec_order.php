@@ -38,10 +38,10 @@ class Ec_order
 
         $data['inv_terms_id']  = '';
         $data['inv_date']      = '';
-        $data['inv_due_date']       = '';
+        $data['inv_due_date']  = '';
         $data['inv_customer_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province'];
         $data['inv_message']          = '';
-        $data['inv_memo']         = '';
+        $data['inv_memo']             = '';
         $data['ewt']                  = 0;
         $data['inv_discount_type']    = '';
         $data['inv_discount_value']   = 0;
@@ -52,9 +52,9 @@ class Ec_order
         $data['invline_rate']         = $order_info['invline_rate'];
         $data['invline_discount']     = $order_info['invline_discount'];
         $data['invline_discount_remark'] = $order_info['invline_discount_remark'];
-        $data['payment_method_id'] = $order_info['payment_method_id'];
-        $data['coupon_code'] = 0;
-        
+        $data['payment_method_id']    = $order_info['payment_method_id'];
+        $data['coupon_code']          = 0;
+
         $data['taxable']              = $order_info['taxable'];
 
         $order_id = Ec_order::create_ec_order($data);

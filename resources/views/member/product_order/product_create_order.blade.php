@@ -30,33 +30,33 @@
             <div class="row">
                 <div class="col-md-12" style="padding: 10px 30px;">
                     <div class="row" style="margin-bottom: 10px">
-                        @if(isset($inv))
+                        
                         <div class="col-sm-12">
                             <div class="btn-group btn-group-justified" data-toggle="buttons">
-                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Pending Payment' ? 'active' : '' : 'active'}}">
-                                <input type="radio" name="order_status" id="option1" value="Unpaid"> Pending Payment
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Pending' ? 'active' : '' : 'active'}}">
+                                <input type="radio" name="order_status" id="option1" value="Pending" {{isset($inv) ? $inv->order_status == 'Pending' ? 'checked' : '' : 'checked'}}> Pending Payment
                                 </label>
-                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Failed' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option2" value="Paid"> Failed
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Failed' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option2" value="Failed" {{isset($inv) ? $inv->order_status == 'Failed' ? 'checked' : '' : ''}}> Failed
                                 </label>
-                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Processing' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option3" value="Void"> Processing
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Processing' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option3" value="Processing" {{isset($inv) ? $inv->order_status == 'Processing' ? 'checked' : '' : ''}}"> Processing
                                 </label>
-                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Completed' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option4" value="Void"> Completed
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Completed' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option4" value="Completed" {{isset($inv) ? $inv->order_status == 'Completed' ? 'checked' : '' : ''}}"> Completed
                                 </label>
-                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option5" value="Void"> On-Hold
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option5" value="On-hold" {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'checked' : '' : ''}}"> On-Hold
                                 </label>
-                                <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option6" value="Void"> Cancelled
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'active' : '' : ''}}">
+                                <input type="radio" name="order_status" id="option6" value="Cancelled" {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'checked' : '' : ''}}"> Cancelled
                                 </label>
                                 <!-- <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Refunded' ? 'active' : '' : ''}}">
                                 <input type="radio" name="order_status" id="option3" value="Void"> Refunded
                                 </label> -->
                             </div> 
                         </div>
-                        @endif
+                        
                     </div>  
 
                     <!-- START CONTENT -->

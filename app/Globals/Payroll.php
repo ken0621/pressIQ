@@ -15,6 +15,7 @@ use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_payroll_deduction;
 use App\Models\Tbl_payroll_deduction_employee;
 use App\Models\Tbl_payroll_deduction_payment;
+use App\Models\Tbl_payroll_group_rest_day;
 
 use Carbon\Carbon;
 use stdClass;
@@ -219,6 +220,35 @@ class Payroll
 		
 		return $data;
 	}
+
+	/* RETURN IF INPUT IS CHECKED [FROm REST DAY AND EXTRA DAY ONLY (PAYROLL GROUPD)] */
+	public static function restday_checked($payroll_group_id = 0)
+	{
+		$data = array();
+		$_day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday'];
+		foreach($_day as $day)
+		{
+			$temp['rest_day'] = $day;
+			$rest_checked = '';
+			$rest_count = Tbl_payroll_group_rest_day::selcheck($payroll_group_id, $day)->count();
+			if($rest_count >= 1)
+			{
+				$rest_checked = 'checked';
+			}
+			$temp['rest_day_checked'] = $rest_checked;
+			$temp['extra_day'] = $day;
+			$extra_checked = '';
+			$extra_count = Tbl_payroll_group_rest_day::selcheck($payroll_group_id, $day,'extra day')->count();
+			if($extra_count >= 1)
+			{
+				$extra_checked = 'checked';
+			}
+			$temp['extra_day_checked'] = $extra_checked;
+			array_push($data, $temp);
+		}
+		return $data;
+	}
+
 
 	/* 	 Returns normal hours rendered and overtime (Guillermo Tabligan) */
 	public static function process_time($time_rule, $default_time_in, $default_time_out, $_time_record, $break = "01:00", $default_working_hours = "08:00", $late_grace_time = 15)

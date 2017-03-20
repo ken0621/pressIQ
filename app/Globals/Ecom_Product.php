@@ -365,7 +365,6 @@ class Ecom_Product
 			$shop_id = Ecom_Product::getShopId();
 		}
 
-		// $get_product = Ecom_Product::getProduct($product_id, $shop_id);
 		$current = $category_id;
 		$stop = 0;
 		$ctr = 0;
@@ -398,5 +397,49 @@ class Ecom_Product
 		}
 		
 		return $category;
+	}
+
+	/**
+	 * Search product by keywords.
+	 *
+	 * @param  int    $keywords Keywords to search in products.
+	 * @param  int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
+	 */
+	public static function searchProduct($keywords, $shop_id)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		$product = Tbl_ec_product::price()->where('eprod_name', 'like', "%{$keywords}%")
+										  ->where('eprod_shop_id', $shop_id)
+										  ->where("tbl_ec_product.archived", 0)
+										  ->get();
+
+		if($product)
+		{
+			foreach ($product as $key => $value) 
+			{
+				$product = collect($value)->toArray();
+
+				$product[$key] = $product;
+				$product[$key]['variant'] = Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId())->where("evariant_prod_id", $value["eprod_id"])->get()->toArray();
+				foreach($product[$key]["variant"] as $key2=>$variant)
+				{
+					$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
+					$product[$key]["variant"]["$key2"]["mlm_discount"] = Ecom_Product::getMlmDiscount($shop_id, $variant["evariant_item_id"], $variant["evariant_price"]);
+					$product[$key]["variant"]["$key2"]["image"] = Tbl_ec_variant_image::path()->where("eimg_variant_id", $variant["evariant_id"])->get()->toArray();
+
+					foreach($variant_option_name as $key3=>$option_name)
+					{
+						$variant_option_value = Tbl_option_value::where("option_value_id", $option_name["option_value_id"])->first()->toArray();
+						$product[$key]["variant"][$key2]["options"][$option_name['option_name']] = $variant_option_value["option_value"];
+					}
+				}
+			}
+		}
+
+		return $product;
 	}
 }

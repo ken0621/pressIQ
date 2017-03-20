@@ -158,16 +158,8 @@
 	    }	
 	}
 
-	.left-container
-	{
-		.asus-cellphone
-		{
-			img
-			{
-				max-width: 100%
-			}
-		}
-	}
+
+	
 
 	.content-container
 	{
@@ -176,6 +168,35 @@
 
 		.left-container
 		{
+			.asus-cellphone
+			{
+				position: relative;
+				padding-bottom: 100%;
+				height: 0;
+				overflow: hidden;
+				img
+				{
+					max-width: 100%
+				}
+
+				.first-image
+				{
+					position: absolute;
+					right: 0;
+					opacity: 1;
+					transition: 0.3s all ease;
+				}
+
+				.second-image
+				{
+					position: absolute;
+				    left: 100%;
+				    top: 0;
+				    opacity: 0;
+				    transition: .3s all ease;
+				}
+			}
+
 			.item-content
 			{
 				padding: 0px 0px 30px 20px;
@@ -201,6 +222,30 @@
 			}
 		}
 
+		.left-container:hover
+		{
+			.asus-cellphone
+			{
+				img
+				{
+					max-width: 100%
+				}
+
+				.first-image
+				{
+					right: 100%;
+					opacity: 0;
+				}
+
+				.second-image
+				{
+				    left: 0;
+				    top: 0;
+				    opacity: 1;
+				}
+			}
+		}
+
 		.right-container
 		{
 			.product-holder
@@ -213,96 +258,86 @@
 				    padding-top: 20px;
     				padding-bottom: 20px;
 
-    				.image-holder
+    				.product-image
     				{
-    					position: relative;
-					    padding-bottom: 100%;
-					    height: 0;
-					    overflow: hidden;
+    					.image-holder
+	    				{
+	    					position: relative;
+						    padding-bottom: 100%;
+						    height: 0;
+						    overflow: hidden;
 
-					    img
-					    {
-					    	max-width: 100%
-					    }
+						    img
+						    {
+						    	max-width: 100%
+						    }
 
-					    .first-image
-					    {
-					    	position: absolute;
-						    top: 0;
-						    transition: 0.3s all ease;
-					    }
+						    .first-image
+						    {
+						    	position: absolute;
+							    right: 0;
+							    opacity: 1;
+							    transition: 0.3s all ease;
+						    }
 
-					    .second-image
-					    {
-					    	position: absolute;
-						    left: 100%;
-						    transition: 0.3s all ease;
-					    }
+						    .second-image
+						    {
+						    	position: absolute;
+							    left: 100%;
+							    opacity: 0;
+							    transition: 0.3s all ease;
+						    }
+	    				}
     				}
 
-    				.product-details
+    				.product-content
     				{
-    					.item-name
-						{
-							color: #616161;
-							font-size: 15px;
-							font-weight: 600;
-						}
+    					padding: 0;
 
-						.item-rating
-						{
-							padding-top: 5px;
-						}
+    					.product-details
+	    				{
+	    					.item-name
+							{
+								color: #616161;
+								font-size: 15px;
+								font-weight: 600;
+							}
 
-						.item-price
-						{
-							font-size: 15px !important;
-							font-weight: 700;
-							padding-top: 10px;
-						}
+							.item-rating
+							{
+								padding-top: 5px;
+							}
+
+							.item-price
+							{
+								font-size: 15px !important;
+								font-weight: 700;
+								padding-top: 10px;
+							}
+	    				}
     				}
 				}
 
-				table
+				.per-item-container:hover
 				{
-					tr
+					.image-holder
 					{
-						td
+						.first-image
 						{
-							img
-							{
-								max-width: 100%;
-							}
-
-							.first-image
-							{
-							    top: 0;
-							    transition: 0.3s all ease;
-							}
-
-							.second-image
-							{
-								position: absolute;
-							    top: 100%;
-							    transition: 0.3s all ease;
-							}
-
-							.item-image
-							{
-								padding: 10px;
-							}
+							opacity: 0;
+							right: 100%;
+							transition: 0.3s all ease;
 						}
 
-						.image-holder
-							{
-								position: relative;
-							    height: 0;
-							    overflow: hidden;
-							}
+						.second-image
+						{
+							opacity: 1;
+							left: 0;
+							transition: 0.3s all ease;
+						}
 					}
 				}
 			}
-			
 		}
 	}
 }
@@ -348,18 +383,71 @@
 		background-color: #fff;
 		padding: 15px;
 
-		.item-name
+		.product-holder
 		{
-			color: #505050;
-    		font-weight: 600;
+			.product-image
+			{
+				padding: 0;
+			    text-align: center;
+			    position: relative;
+			    padding-bottom: 25%;
+			    overflow: hidden;
+
+			    .first-image
+			    {
+			    	position: absolute;
+					right: 0;
+					opacity: 1;
+					transition: 0.3s all ease;
+			    }
+
+			    .second-image
+			    {
+			    	position: absolute;
+					left: 100%;
+					opacity: 0;
+					transition: 0.3s all ease;
+			    }
+			}
+
+			.product-content
+			{
+				padding-top: 15px;
+				
+				.item-name
+				{
+					color: #505050;
+		    		font-weight: 600;
+				}
+
+				.item-price
+				{
+					color: #1e1e1e;
+		    		font-weight: 700;
+		    		font-size: 15px !important;
+		    		padding-top: 5px;
+				}
+			}
 		}
 
-		.item-price
+		.product-holder:hover
 		{
-			color: #1e1e1e;
-    		font-weight: 700;
-    		font-size: 15px !important;
-    		padding-top: 5px;
+			.product-image
+			{
+			    .first-image
+			    {
+			    	position: absolute;
+					right: 100%;
+					opacity: 0;
+			    }
+
+			    .second-image
+			    {
+			    	position: absolute;
+					left: 0;
+					opacity: 1;
+			    }
+			}
 		}
 	}
 }

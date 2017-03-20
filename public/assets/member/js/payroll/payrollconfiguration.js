@@ -208,6 +208,11 @@ function payrollconfiguration()
 	{
 		reload_configuration("/member/payroll/holiday");
 	}
+
+	this.reload_payroll_group = function()
+	{
+		reload_configuration("/member/payroll/payroll_group");
+	}
 	
 }
 
@@ -224,9 +229,7 @@ function executeFunctionByName(functionName, context /*, args */) {
 
 function submit_done(data)
 {
-	console.log(data);
 	data.element.modal("toggle");
-	// data = JSON.parse(data);
 	executeFunctionByName(data.function_name, window);
 }
 

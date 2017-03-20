@@ -15,6 +15,7 @@ use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_payroll_deduction;
 use App\Models\Tbl_payroll_deduction_employee;
 use App\Models\Tbl_payroll_deduction_payment;
+use App\Models\Tbl_payroll_group_rest_day;
 
 use Carbon\Carbon;
 use stdClass;
@@ -220,6 +221,35 @@ class Payroll
 		return $data;
 	}
 
+	/* RETURN IF INPUT IS CHECKED [FROm REST DAY AND EXTRA DAY ONLY (PAYROLL GROUPD)] */
+	public static function restday_checked($payroll_group_id = 0)
+	{
+		$data = array();
+		$_day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday'];
+		foreach($_day as $day)
+		{
+			$temp['rest_day'] = $day;
+			$rest_checked = '';
+			$rest_count = Tbl_payroll_group_rest_day::selcheck($payroll_group_id, $day)->count();
+			if($rest_count >= 1)
+			{
+				$rest_checked = 'checked';
+			}
+			$temp['rest_day_checked'] = $rest_checked;
+			$temp['extra_day'] = $day;
+			$extra_checked = '';
+			$extra_count = Tbl_payroll_group_rest_day::selcheck($payroll_group_id, $day,'extra day')->count();
+			if($extra_count >= 1)
+			{
+				$extra_checked = 'checked';
+			}
+			$temp['extra_day_checked'] = $extra_checked;
+			array_push($data, $temp);
+		}
+		return $data;
+	}
+
+
 	/* 	 Returns normal hours rendered and overtime (Guillermo Tabligan) */
 	public static function process_time($time_rule, $default_time_in, $default_time_out, $_time_record, $break = "01:00", $default_working_hours = "08:00")
 	{
@@ -320,9 +350,11 @@ class Payroll
 		{
 			$time_in = c_time_to_int($time_record->time_in);
 			$time_out = c_time_to_int($time_record->time_out);
+
 			$early_overtime = 0;
 			$late_overtime = 0;
 
+			/* IF TIMEOUT HAPPENS BEFORE TIME IN - SET TIME SPENT TO ZERO */
 			if($time_out > $time_in)
 			{
 				$time_spent = ($time_out - $time_in);
@@ -335,14 +367,14 @@ class Payroll
 			$regular_hours = $time_spent;
 
 			/* CHECK IF EARLY OVERTIME */
-			if($time_in < $default_time_in)
+			if($time_in < $default_time_in && $time_out != 0)
 			{
 				$early_overtime = $default_time_in - $time_in;
 				$regular_hours = $regular_hours - $early_overtime;
 			}
 
 			/* CHECK IF EARLY OVERTIME */
-			if($time_out > $default_time_out)
+			if($time_out > $default_time_out && $time_out != 0)
 			{
 				$late_overtime = $time_out - $default_time_out;
 				$regular_hours = $regular_hours - $late_overtime;
@@ -352,7 +384,6 @@ class Payroll
 			$total_late_overtime += $late_overtime;
 			$total_regular_hours += $regular_hours;
 			$total_time_spent += $time_spent;
-
 		}
 
 
@@ -362,6 +393,7 @@ class Payroll
 		}
 		else
 		{
+			//IF BREAK IS GREATER THAN REGULAR HOURS - SET REGULAR HOURS TO ZERO
 			if($break > $total_regular_hours)
 			{
 				$total_regular_hours = 0;
@@ -372,11 +404,13 @@ class Payroll
 			}
 		}
 
-
 		$return->time_spent = date("H:i", $total_time_spent);
 		$return->regular_hours = date("H:i", $total_regular_hours);
 		$return->late_overtime = date("H:i", $total_late_overtime);
 		$return->early_overtime = date("H:i", $total_early_overtime);
+		$return->rest_day_hours = date("H:i", 0);
+		$return->extra_day_hours = date("H:i", 0);
+		$return->total_hours = date("H:i", 0);
 		
 		return $return;
 	}

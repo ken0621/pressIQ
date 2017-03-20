@@ -64,22 +64,6 @@ class EcommerceProductController extends Member
         	$warehouse_id = Ecom_Product::getWarehouseId();
         	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->paginate(10);
 			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1)->paginate(10); 
-			
-			/* IF REQUEST TYPE IS AJAX = RETURN ONLY TABLE DATA */ 
-	        // if(Request::ajax())
-	        // {
-	        // 	if(Request::input('filter') == "active")
-	        // 	{
-	        // 		$data["_product"] 	= $active_product;
-	        // 		$data["filter"] 	= "active"; // For Changing blade layout
-	        // 	}
-	        // 	else
-	        // 	{
-	        // 		$data["_product"] 	= $inactive_product;
-	        // 		$data["filter"] 	= "inactive"; // For Changing blade layout
-	        // 	}
-	        // 	return view('member.ecommerce_product.ecom_load_product_tbl', $data);
-	        // }
 
 	        $data["_product"]			= $active_product;
 	        $data["_product_archived"]	= $inactive_product;
@@ -129,22 +113,37 @@ class EcommerceProductController extends Member
 		$variant_price	= Request::input("evariant_price"); 
 		$item_code		= Request::input("item_code");
 
+		$custom_validation_fails = false;
+		
+		// dd($this->hasDuplicate($item_id));
+
 		foreach($item_id as $key => $item)
 		{
 			$item_data		= Tbl_item::where("item_id", $item)->first();
 			$product_info 	= $this->session_product_info($item_code[$key]);
 			if($variant_checked[$key] == 'true')
 			{
+				/* Custom Validation For Unique Items in 1 Product */
+				if($this->hasDuplicate($item_id) != false)
+				{
+					$custom_validation_fails = true;
+					$custom_message = "The item ".$item_data->item_name ." cannot be duplicate";
+				}
+
 				if($item_data)
 				{
-					/* Session proce data */
-					// $value["evariant_price"] = $product_info ? $product_info["product_price"] : '';
-					// $rules["evariant_price"] = 'required';
-					// $message["evariant_price.required"] 	= 'You have to set a price for product '.$item_data->item_name;
 
 					$value["evariant_price"] = $variant_price[$key];
 					$rules["evariant_price"] = 'required';
 					$message["evariant_price.required"] = 'You have to set a price for product '.$item_data->item_name;
+
+					/* Custom Validation For 2 Unique Columns */
+					$item_exist = Tbl_ec_variant::product()->where("evariant_item_id", $item_id[$key])->where("eprod_shop_id", $this->getShopId())->first();
+					if($item_exist) 
+					{
+						$custom_validation_fails = true;
+						$custom_message = "Item ".$item_data->item_name." is already used";
+					}
 				}
 				else
 				{
@@ -174,6 +173,11 @@ class EcommerceProductController extends Member
 		{
 			$json["status"] 	= "error";
 			$json["message"] 	= $validator->errors()->first(); 
+		}
+		else if($custom_validation_fails)
+		{
+			$json["status"] 	= "error";
+			$json["message"] 	= $custom_message; 
 		}
 		else
 		{
@@ -562,8 +566,6 @@ class EcommerceProductController extends Member
 				}
 			}
 
-			//$json["redirect"] = '/member/ecommerce/product/edit/'.$product_id;
-
 			/* UPDATE OPTION VALUES */ 
 			if($is_single == 0)
 			{
@@ -756,4 +758,15 @@ class EcommerceProductController extends Member
 		$data = Session::get("product_info.".$item_code);
 		return $data;
 	}	
+
+	public function hasDuplicate($array)
+	{
+		$dupe_array = array();
+		foreach($array as $val)
+		{
+			if(collect($dupe_array)->contains($val)) return $val;
+			array_push($dupe_array, $val);
+		}
+		return false;
+	}
 }

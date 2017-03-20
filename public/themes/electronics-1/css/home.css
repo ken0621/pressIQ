@@ -13,6 +13,8 @@
     color: #fff;
     width: 130px;
     border-radius: 5px; }
+  .banner-image #shop-now-button:hover {
+    opacity: 0.9; }
 
 .browse-by-category .browse-by-category-container {
   background-color: #c60f0f;
@@ -86,11 +88,27 @@
       padding-right: 20px;
       color: #fff;
       font-size: 25px; }
-.featured .left-container .asus-cellphone img {
-  max-width: 100%; }
 .featured .content-container {
   background-color: #fff;
   margin-bottom: 50px; }
+  .featured .content-container .left-container .asus-cellphone {
+    position: relative;
+    padding-bottom: 100%;
+    height: 0;
+    overflow: hidden; }
+    .featured .content-container .left-container .asus-cellphone img {
+      max-width: 100%; }
+    .featured .content-container .left-container .asus-cellphone .first-image {
+      position: absolute;
+      right: 0;
+      opacity: 1;
+      transition: 0.3s all ease; }
+    .featured .content-container .left-container .asus-cellphone .second-image {
+      position: absolute;
+      left: 100%;
+      top: 0;
+      opacity: 0;
+      transition: .3s all ease; }
   .featured .content-container .left-container .item-content {
     padding: 0px 0px 30px 20px; }
     .featured .content-container .left-container .item-content .item-title {
@@ -103,26 +121,58 @@
       font-size: 18px !important;
       font-weight: 700;
       padding-top: 10px; }
+  .featured .content-container .left-container:hover .asus-cellphone img {
+    max-width: 100%; }
+  .featured .content-container .left-container:hover .asus-cellphone .first-image {
+    right: 100%;
+    opacity: 0; }
+  .featured .content-container .left-container:hover .asus-cellphone .second-image {
+    left: 0;
+    top: 0;
+    opacity: 1; }
   .featured .content-container .right-container .product-holder {
     border: solid 1px #eaeaea;
     padding: 0; }
     .featured .content-container .right-container .product-holder .per-item-container {
       padding-top: 20px;
       padding-bottom: 20px; }
-    .featured .content-container .right-container .product-holder table tr td img {
-      max-width: 100%; }
-    .featured .content-container .right-container .product-holder table tr td .item-image {
-      padding: 10px; }
-    .featured .content-container .right-container .product-holder table tr td .item-name {
-      color: #616161;
-      font-size: 15px;
-      font-weight: 600; }
-    .featured .content-container .right-container .product-holder table tr td .item-rating {
-      padding-top: 5px; }
-    .featured .content-container .right-container .product-holder table tr td .item-price {
-      font-size: 15px !important;
-      font-weight: 700;
-      padding-top: 10px; }
+      .featured .content-container .right-container .product-holder .per-item-container .product-image .image-holder {
+        position: relative;
+        padding-bottom: 100%;
+        height: 0;
+        overflow: hidden; }
+        .featured .content-container .right-container .product-holder .per-item-container .product-image .image-holder img {
+          max-width: 100%; }
+        .featured .content-container .right-container .product-holder .per-item-container .product-image .image-holder .first-image {
+          position: absolute;
+          right: 0;
+          opacity: 1;
+          transition: 0.3s all ease; }
+        .featured .content-container .right-container .product-holder .per-item-container .product-image .image-holder .second-image {
+          position: absolute;
+          left: 100%;
+          opacity: 0;
+          transition: 0.3s all ease; }
+      .featured .content-container .right-container .product-holder .per-item-container .product-content {
+        padding: 0; }
+        .featured .content-container .right-container .product-holder .per-item-container .product-content .product-details .item-name {
+          color: #616161;
+          font-size: 15px;
+          font-weight: 600; }
+        .featured .content-container .right-container .product-holder .per-item-container .product-content .product-details .item-rating {
+          padding-top: 5px; }
+        .featured .content-container .right-container .product-holder .per-item-container .product-content .product-details .item-price {
+          font-size: 15px !important;
+          font-weight: 700;
+          padding-top: 10px; }
+    .featured .content-container .right-container .product-holder .per-item-container:hover .image-holder .first-image {
+      opacity: 0;
+      right: 100%;
+      transition: 0.3s all ease; }
+    .featured .content-container .right-container .product-holder .per-item-container:hover .image-holder .second-image {
+      opacity: 1;
+      left: 0;
+      transition: 0.3s all ease; }
 
 .most-viewed {
   margin-bottom: 30px; }
@@ -150,14 +200,40 @@
   .most-viewed .most-viewed-content {
     background-color: #fff;
     padding: 15px; }
-    .most-viewed .most-viewed-content .item-name {
-      color: #505050;
-      font-weight: 600; }
-    .most-viewed .most-viewed-content .item-price {
-      color: #1e1e1e;
-      font-weight: 700;
-      font-size: 15px !important;
-      padding-top: 5px; }
+    .most-viewed .most-viewed-content .product-holder .product-image {
+      padding: 0;
+      text-align: center;
+      position: relative;
+      padding-bottom: 25%;
+      overflow: hidden; }
+      .most-viewed .most-viewed-content .product-holder .product-image .first-image {
+        position: absolute;
+        right: 0;
+        opacity: 1;
+        transition: 0.3s all ease; }
+      .most-viewed .most-viewed-content .product-holder .product-image .second-image {
+        position: absolute;
+        left: 100%;
+        opacity: 0;
+        transition: 0.3s all ease; }
+    .most-viewed .most-viewed-content .product-holder .product-content {
+      padding-top: 15px; }
+      .most-viewed .most-viewed-content .product-holder .product-content .item-name {
+        color: #505050;
+        font-weight: 600; }
+      .most-viewed .most-viewed-content .product-holder .product-content .item-price {
+        color: #1e1e1e;
+        font-weight: 700;
+        font-size: 15px !important;
+        padding-top: 5px; }
+    .most-viewed .most-viewed-content .product-holder:hover .product-image .first-image {
+      position: absolute;
+      right: 100%;
+      opacity: 0; }
+    .most-viewed .most-viewed-content .product-holder:hover .product-image .second-image {
+      position: absolute;
+      left: 0;
+      opacity: 1; }
 
 .news-letter {
   padding-bottom: 50px; }
@@ -204,6 +280,8 @@
       color: #fff;
       font-weight: 700;
       background-color: #ff2e34; }
+    .news-letter .news-letter-content button:hover {
+      opacity: 0.9; }
 
 .new-releases .featured-content-container {
   background-color: #c60f0f;

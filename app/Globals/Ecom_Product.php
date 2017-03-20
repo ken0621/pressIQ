@@ -14,6 +14,8 @@ use App\Models\Tbl_ec_variant_image;
 use App\Models\Tbl_collection_item;
 use App\Models\Tbl_warehouse;
 
+use App\Globals\Mlm_discount;
+
 use Request;
 use Session;
 use Validator;
@@ -212,6 +214,7 @@ class Ecom_Product
 			foreach($product["variant"] as $key2=>$variant)
 			{
 				$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
+				$product["variant"]["$key2"]["mlm_discount"] = Ecom_Product::getMlmDiscount($shop_id, $variant["evariant_item_id"], $variant["evariant_price"]);
 				$product["variant"]["$key2"]["image"] = Tbl_ec_variant_image::path()->where("eimg_variant_id", $variant["evariant_id"])->get()->toArray();
 
 				foreach($variant_option_name as $key3=>$option_name)
@@ -223,6 +226,33 @@ class Ecom_Product
 		}
 
 		return $product;
+	}
+	public static function getMlmDiscount($shop_id, $item_id, $product_price)
+	{
+		$_discount = Mlm_discount::get_discount_all_membership($shop_id, $item_id);
+		
+		if($_discount['status'] == "success")
+		{
+			$data = null;
+			$ctr  = 0;
+			foreach($_discount['discount'] as $key=>$discount)
+			{
+				$discount_value = $discount['value'];
+				if($discount['type'] == 1) $discount_value = ($discount['value'] / 100) * $product_price;
+
+				$data[$ctr]["discount_name"]  = $key;
+				$data[$ctr]["discount_value"] = $discount['value'];
+				$data[$ctr]["discount_type"]  = intval($discount['type']);
+				$data[$ctr]["discounted_amount"] = $product_price - $discount_value;
+				$ctr++;
+			}
+		}
+		else
+		{
+			return null;
+		}
+
+		return $data;
 	}
 
 	public static function getProductOption($product_id = null, $separator = ' • ')
@@ -239,7 +269,7 @@ class Ecom_Product
 
 	public static function getVariant($name, $product_id, $separator = ' • ')
 	{
-		return Tbl_ec_variant::variantName($separator)->having("evariant_prod_id", "=", $product_id)->having("variant_name", "=", $name)->first();
+		return Tbl_ec_variant::variantName($separator)->item()->inventory(Ecom_Product::getWarehouseId())->having("evariant_prod_id", "=", $product_id)->having("variant_name", "=", $name)->first();
 	}
 
 	public static function getVariantInfo($variant_id)
@@ -320,5 +350,53 @@ class Ecom_Product
 		}
 
 		return $_category;
+	}
+
+	/**
+	 * Getting all category for breadcrumbs.
+	 *
+	 * @param  int    $category_id 	Shop id of the products that you wnat to get. null if auto get
+	 * @param  int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
+	 */
+	public static function getProductBreadcrumbs($category_id, $shop_id)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		// $get_product = Ecom_Product::getProduct($product_id, $shop_id);
+		$current = $category_id;
+		$stop = 0;
+		$ctr = 0;
+		$category = [];
+
+		while ($stop == 0) 
+		{ 
+			$get_parent = Tbl_category::where("type_shop", $shop_id)->where("type_id", $current)->first();
+
+			if ($get_parent) 
+			{
+				$current = $get_parent->type_parent_id;
+
+				$category[$ctr]['type_name'] = $get_parent->type_name;
+				$category[$ctr]['type_id'] = $get_parent->type_id;
+
+				if ($get_parent->type_parent_id == 0) 
+				{
+					$stop++;
+					break;
+				}
+			}
+			else
+			{
+				$stop++;
+				break;
+			}
+
+			$ctr++;
+		}
+		
+		return $category;
 	}
 }

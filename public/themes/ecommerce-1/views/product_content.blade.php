@@ -105,10 +105,30 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="facebook-share">
+                            @if(count($product_variant['mlm_discount']) > 0)
+                            <div style="margin-top: 15px;">
+                                <table class="table table-bordered table-striped table-hover table-condensed">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Product Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($product_variant['mlm_discount'] as $key => $mlm_discount)
+                                        <tr>
+                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
+                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            @endif
+                            <!-- <div class="facebook-share">
                                 <img class="item-image-small" src="/themes/{{ $shop_theme }}/img/facebook-logo.jpg">
                                 <a class="tooltips" href="#">Share<span>20</span></a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

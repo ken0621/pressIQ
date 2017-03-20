@@ -32,9 +32,10 @@ class Mlm_discount
 		$item = Tbl_item::where('item_id', $item_id)->first();
 		if($item)
 		{
+
 			foreach ($all_membership as $key => $value) 
 			{
-				$dis = Tbl_mlm_item_discount::where('item_id', $item_id)->where('membership_id', $value->membership_id)->first(); 				if($dis)
+				$dis = Tbl_mlm_item_discount::where('item_id', $item_id)->where('membership_id', $value->membership_id)->first(); 
 				if($dis)
 				{
 					$discount[$value->membership_name]['value'] = 	$dis->item_discount_price;
@@ -46,7 +47,7 @@ class Mlm_discount
 					$discount[$value->membership_name]['type'] =	0;
 				}
 			}
-			if($discount)
+			if(isset($discount))
 			{
 				$data['status'] = 'success';
 				$data['discount'] = $discount;

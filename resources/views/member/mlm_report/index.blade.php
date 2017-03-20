@@ -104,16 +104,16 @@
                     </p>
                    <?php $total_wallet = 0; ?>
                    <div class="more">
-                       Pending : {{$not_encashed}}
+                       Pending : {{number_format($not_encashed)}}
                    </div>
                    <div class="more">
-                       Requested : {{$not_encashed_requested * (-1)}}
+                       Requested : {{number_format($not_encashed_requested * (-1))}}
                    </div>
                    <div class="more">
-                       Released : {{$not_encashed_encashed * (-1)}}
+                       Released : {{number_format($not_encashed_encashed * (-1))}}
                    </div>
                    <div class="more">
-                       Total : {{$total_wallet += ($not_encashed_encashed * (-1))+ ($not_encashed_requested * (-1)) + $not_encashed }}
+                       Total : {{number_format($total_wallet += ($not_encashed_encashed * (-1))+ ($not_encashed_requested * (-1)) + $not_encashed )}}
                    </div>
                 </div>
             </div>
@@ -138,12 +138,12 @@
                     <?php $total_income_per_complan = 0; ?>
                     @foreach($chart_per_complan_raw['plan'] as $key => $value)
                     <div class="more">
-                       {{$value}} : {{$chart_per_complan_raw['series'][$key]}}
+                       {{$value}} : {{number_format($chart_per_complan_raw['series'][$key])}}
                     </div>
                     <?php $total_income_per_complan += $chart_per_complan_raw['series'][$key]; ?>
                     @endforeach
                     <div class="more">
-                        Total : {{$total_income_per_complan}}
+                        Total : {{number_format($total_income_per_complan)}}
                     </div>
                 </div>
             </div>
@@ -166,13 +166,14 @@
                     </p>
                     
                     <div class="more">
-                       PAYIN : {{$total_membership_price}}
+                       PAYIN : {{number_format($total_membership_price)}}
                     </div>
                     <div class="more">
-                       EXPECTED PAYOUT: {{$total_income_per_complan}}
+                       EXPECTED PAYOUT: {{number_format($total_income_per_complan)}}
                     </div>
                     <div class="more">
-                        COMPANY EARNINGS : {{$total_membership_price - $total_income_per_complan }} ({{  ((($total_income_per_complan/$total_membership_price) - 1) * (-1)) *100}}%)
+                    <?php $div = 0;  if($total_income_per_complan == 0){$div = 0;} else{ $div = $total_income_per_complan/$total_membership_price; }?>
+                        COMPANY EARNINGS : {{$total_membership_price - $total_income_per_complan }} ({{  ((($div) - 1) * (-1)) *100}}%)
                     </div>
                 </div>
             </div>

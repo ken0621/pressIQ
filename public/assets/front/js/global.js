@@ -398,8 +398,11 @@ function load_cart(hide)
         cart_event();   
         update_cart_price();
 
-        $('.add-to-cart').prop("disabled", false);
-        $('.add-to-cart').removeClass("disabled");
+        if(!hide)
+        {
+            $('.add-to-cart').prop("disabled", false);
+            $('.add-to-cart').removeClass("disabled");
+        }
     }); 
 }
 function cart_event()

@@ -123,11 +123,30 @@ function action_select_variation(e)
 			event_slick();
 
 			$('.attribute-variation[variant-label="'+variant_label+'"]').val($(e.currentTarget).val());
+
+			if (toload == true) 
+			{
+				if (data.variation.inventory_status == "out of stock") 
+				{
+					$('.add-to-cart').prop("disabled", true);
+					$('.add-to-cart').addClass("disabled");	
+				}
+				else
+				{
+					$('.add-to-cart').prop("disabled", false);
+					$('.add-to-cart').removeClass("disabled");
+				}
+			}
+
 			$(".loader").fadeOut();
 		}
 		else
 		{
-			$('.attribute-variation[variant-label="'+variant_label+'"]').val($(e.currentTarget).val());
+			if (toload == true) 
+			{
+				$('.attribute-variation[variant-label="'+variant_label+'"]').val($(e.currentTarget).val());
+				$(".loader").fadeOut();
+			}
 		}
 	})
 	.fail(function() 

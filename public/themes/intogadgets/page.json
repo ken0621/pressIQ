@@ -92,5 +92,22 @@
 			"default":"BEST SELLER",
 			"size":"4"
 		}
+	},
+	"product":
+	{
+		"top_rated_products" :
+		{
+			"label":"Top Rated Products",
+			"type":"collection",
+			"default":"",
+			"size":"12"
+		},
+		"most_viewed" :
+		{
+			"label":"Most Viewed",
+			"type":"collection",
+			"default":"",
+			"size":"12"
+		}
 	}
 }

@@ -8,6 +8,7 @@ use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_mlm_gc;
+use App\Models\Tbl_item_code_item;
 
 use App\Globals\Mlm_voucher;
 use App\Globals\Item;
@@ -15,6 +16,7 @@ use App\Globals\Item_code;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_gc;
 use App\Globals\AuditTrail;
+use App\Globals\Mlm_slot_log;
 
 use Session;
 use Carbon\Carbon;
@@ -88,6 +90,25 @@ class Item_code
         }
         $gc = 0;
         $gc_amount = 0;
+        $wallet = 0;
+        $wallet_amount = 0;
+        if(isset($data['use_wallet']))
+        {
+            if($data['use_wallet'] == 'on')
+            {
+                if(isset($data["slot_id"]))
+                {
+                    $wallet = 1;
+                    $wallet_amount = Mlm_slot_log::get_sum_wallet($data["slot_id"]);
+                }
+                else
+                {
+                    $send['response_status']      = "warning";
+                    $send['warning_validator'][0] = "No Slot/Discount Card Selected";
+                    return $send;
+                }
+            }
+        }
         if(isset($data['use_gc']))
         {
             if($data['use_gc'] == 'on')
@@ -137,7 +158,12 @@ class Item_code
                 }
             }
         }
-
+        if($gc  ==1 && $wallet == 1)
+        {
+            $send['response_status']      = "warning";
+            $send['warning_validator'][0] = "Can't Use Wallet and GC at the Same Time";
+            return $send;
+        }
         $insert['customer_id']                             = $data["customer_id"];
         $insert['item_code_customer_email']                = $data["item_code_customer_email"];
         $insert['item_code_paid']                          = $data["item_code_paid"];
@@ -267,7 +293,7 @@ class Item_code
                         $insert["item_discount"]            = $item_discount_sum;
                         if($gc == 1)
                         {
-                            if($gc_amount >= $insert["item_subtotal"])
+                            if($gc_amount >= $insert["item_total"])
                             {
                                 $insert['item_code_paid'] = 2;
                                 $gc = 2;
@@ -275,11 +301,24 @@ class Item_code
                             else
                             {
                                 $send['response_status']      = "warning";
-                                $send['warning_validator'][0] = 'Gc Amount is only' . $gc_amount . ' while the needed amount is' . $insert["item_subtotal"];
+                                $send['warning_validator'][0] = 'Gc Amount is only ' . $gc_amount . ' while the needed amount is ' . $insert["item_total"];
                                 return $send;
                             }
                         }
-
+                        if($wallet == 1)
+                        {
+                            if($wallet_amount >= $insert["item_total"])
+                            {
+                                $insert['item_code_paid'] = 3;
+                                $wallet = 2;
+                            }
+                            else
+                            {
+                                $send['response_status']      = "warning";
+                                $send['warning_validator'][0] = 'Wallet Amount is only ' . $wallet_amount . ' while the needed amount is ' . $insert["item_total"];
+                                return $send;
+                            }
+                        }
                         foreach ($count_on_hand as $key => $value) 
                         {
                             $warehouse_consume_reason = 'Customer ' . $data["customer_id"] . ' bought a product';
@@ -316,9 +355,34 @@ class Item_code
         	            {
         	                $rel_insert[$key]["item_code_invoice_id"] = $invoice_id;
                             $rel_insert[$key]["slot_id"] = $insert['slot_id'];
+
+                            // item_id
         	            }
         	            Tbl_item_code::insert($rel_insert);
         	            
+                        $items = Tbl_item_code::where('item_code_invoice_id', $invoice_id)->get();
+                        foreach($items as $key => $value)
+                        {
+                            $insert_item_per[$value->item_id]['item_id'] =  $value->item_id;
+                            $item = Tbl_item::where('item_id', $value->item_id)->first();
+                            if($item)
+                            {
+                                $insert_item_per[$value->item_id]['item_name'] = $item->item_name;
+                                $insert_item_per[$value->item_id]['item_price'] = $item->item_price;  
+                                $insert_item_per[$value->item_id]['item_code_invoice_id'] = $invoice_id;
+                                $insert_item_per[$value->item_id]['item_code_id'] = $value->item_code_id;
+                                if(isset($insert_item_per[$value->item_id]['item_quantity']))
+                                {
+                                    $insert_item_per[$value->item_id]['item_quantity'] += 1;
+                                }
+                                else
+                                {
+                                    $insert_item_per[$value->item_id]['item_quantity'] = 1;
+                                }
+                            }
+                        }
+                        Tbl_item_code_item::insert($insert_item_per);
+                        
                         Mlm_voucher::give_voucher_prod_code($invoice_id);
                         if($gc == 2)
                         {
@@ -327,13 +391,26 @@ class Item_code
                             $update_gc['mlm_gc_used_date'] = Carbon::now();
                             Tbl_mlm_gc::where('mlm_gc_code', $data['gc_code'])->update($update_gc);
 
-                            $return = $gc_amount - $insert["item_subtotal"];
+                            $return = $gc_amount - $insert["item_total"];
                             if($return >= 1)
                             {
                                 Mlm_gc::return_gc($insert['slot_id'], $data['gc_code'], $return);
                             }
                         }
-                        // use_item_code_auto
+                        if($wallet == 2)
+                        {
+                            $log = 'Thank you for purchasing. ' .$insert["item_subtotal"]. ' is deducted to your wallet';
+                            $arry_log['wallet_log_slot'] = $insert['slot_id'];
+                            $arry_log['shop_id'] = $shop_id;
+                            $arry_log['wallet_log_slot_sponsor'] = $insert['slot_id'];
+                            $arry_log['wallet_log_details'] = $log;
+                            $arry_log['wallet_log_amount'] = $insert["item_total"] * (-1);
+                            $arry_log['wallet_log_plan'] = "REPURCHASE";
+                            $arry_log['wallet_log_status'] = "released";   
+                            $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                            Mlm_slot_log::slot_array($arry_log);
+                        }
+
                         if(isset($data['use_item_code_auto']))
                         {
                             if($data['use_item_code_auto'] == 1)

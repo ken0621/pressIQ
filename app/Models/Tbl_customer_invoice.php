@@ -14,7 +14,11 @@ class Tbl_customer_invoice extends Model
     {
     	return $query->join("tbl_customer","tbl_customer.customer_id","=","tbl_customer_invoice.inv_customer_id");
     }
-
+    public static function scopeManual_invoice($query)
+    {
+        return $query->leftJoin("tbl_manual_invoice","tbl_manual_invoice.inv_id","=","tbl_customer_invoice.inv_id")
+                    ->selectRaw("*, tbl_customer_invoice.inv_id as inv_id");
+    }
     public static function scopeInvoice_item($query)
     {
     	return $query->join("tbl_customer_invoice_line","tbl_customer_invoice_line.invline_inv_id","=","tbl_customer_invoice.inv_id")

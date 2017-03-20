@@ -95,12 +95,8 @@
 
 			<div class="col-md-9 prod-content">
 				<!-- FEATURED TODAY -->
-
 				<span class="prod-big-image"><img id="prod-big-image" src="/themes/{{ $shop_theme }}/img/2017-banner.jpg"></span>
-
-				
 					<div class="featured-container">
-						
 						<div class="left-container-title">
 							<form class="sort-by" method="get">
 							<input type="hidden" name="type" value="{{ Request::input('type') }}">
@@ -125,7 +121,7 @@
 								<div class="col-md-3">
 									<div class="per-item-container">
 										<div class="image-content-1">
-											<div class="item-image-large" style="background-image: url({{ $product['variant'][0]['image'] ? $product['variant'][0]['image'][0]['image_path'] : '' }})"></div>
+											<div class="item-image-large" style="background-image: url({{ get_product_first_image($product) }})"></div>
 											<button class="new-add-to-cart-button btn" >
 											<table>
 												<tbody>
@@ -148,6 +144,26 @@
 											</div> -->
 											<div class="item-price">&#8369; {{ $product['min_price'] == $product['max_price'] ? number_format($product['max_price'], 2) : number_format($product['min_price'], 2) . ' - ' . number_format($product['max_price'], 2) }}</div>
 										</div>
+										@if(count($product['variant'][0]['mlm_discount']) > 0)
+			                            <div style="margin-top: 15px;">
+			                                <table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 12px;">
+			                                    <thead>
+			                                        <tr>
+			                                            <th>Membership</th>
+			                                            <th>Price</th>
+			                                        </tr>
+			                                    </thead>
+			                                    <tbody>
+			                                        @foreach($product['variant'][0]['mlm_discount'] as $key => $mlm_discount)
+			                                        <tr>
+			                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
+			                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+			                                        </tr>
+			                                        @endforeach
+			                                    </tbody>
+			                                </table>
+			                            </div>
+			                            @endif
 									</div>
 								</div>
 								@endforeach

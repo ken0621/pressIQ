@@ -101,18 +101,57 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/deduction/reload_deduction_type',"Member\PayrollController@reload_deduction_type");
 	Route::any('/deduction/archive_deduction_type',"Member\PayrollController@archive_deduction_type");
 	Route::any('/deduction/ajax_deduction_type',"Member\PayrollController@ajax_deduction_type");
+	Route::any('/deduction/modal_deduction_tag_employee/{id}',"Member\PayrollController@modal_deduction_tag_employee");
+	Route::any('/deduction/ajax_deduction_tag_employee',"Member\PayrollController@ajax_deduction_tag_employee");
+	Route::any('/deduction/set_employee_deduction_tag',"Member\PayrollController@set_employee_deduction_tag");
+	Route::any('/deduction/get_employee_deduction_tag',"Member\PayrollController@get_employee_deduction_tag");
+	Route::any('/deduction/remove_from_tag_session',"Member\PayrollController@remove_from_tag_session");
+	Route::any('/deduction/modal_save_deduction',"Member\PayrollController@modal_save_deduction");
+	Route::any('/deduction/modal_edit_deduction/{id}',"Member\PayrollController@modal_edit_deduction");
+	Route::any('/deduction/archive_deduction/{archived}/{id}',"Member\PayrollController@archive_deduction");
+	Route::any('/deduction/archived_deduction_action',"Member\PayrollController@archived_deduction_action");
+	Route::any('/deduction/modal_update_deduction',"Member\PayrollController@modal_update_deduction");
+	Route::any('/deduction/reload_deduction_employee_tag',"Member\PayrollController@reload_deduction_employee_tag");
+	Route::any('/deduction/deduction_employee_tag/{archived}/{payroll_deduction_employee_id}',"Member\PayrollController@deduction_employee_tag");
+	Route::any('/deduction/deduction_employee_tag_archive',"Member\PayrollController@deduction_employee_tag_archive");
 	/* DEDUCTION END */
 
 
 	/* HOLIDAY START */
 	Route::any('/holiday',"Member\PayrollController@holiday");
+	Route::any('/holiday/modal_create_holiday',"Member\PayrollController@modal_create_holiday");
+	Route::any('/holiday/modal_save_holiday',"Member\PayrollController@modal_save_holiday");
+	Route::any('/holiday/archive_holiday/{archived}/{id}',"Member\PayrollController@archive_holiday");
+	Route::any('/holiday/archive_holiday_action',"Member\PayrollController@archive_holiday_action");
+	Route::any('/holiday/modal_edit_holiday/{id}',"Member\PayrollController@modal_edit_holiday");
+	Route::any('/holiday/modal_update_holiday',"Member\PayrollController@modal_update_holiday");
 	/* HOLIDAY END */
 
 	/* ALLOWANCE START */
 	Route::any('/allowance',"Member\PayrollController@allowance");
+	Route::any('/allowance/modal_create_allowance',"Member\PayrollController@modal_create_allowance");
+	Route::any('/allowance/modal_allowance_tag_employee/{allowance_id}',"Member\PayrollController@modal_allowance_tag_employee");
+	Route::any('/allowance/set_employee_allowance_tag',"Member\PayrollController@set_employee_allowance_tag");
+	Route::any('/allowance/get_employee_allowance_tag',"Member\PayrollController@get_employee_allowance_tag");
+	Route::any('/allowance/remove_allowance_tabe_employee',"Member\PayrollController@remove_allowance_tabe_employee");
+	Route::any('/allowance/modal_save_allowances',"Member\PayrollController@modal_save_allowances");
+	Route::any('/allowance/modal_archived_allwance/{archived}/{allowance_id}',"Member\PayrollController@modal_archived_allwance");
+	Route::any('/allowance/archived_allowance',"Member\PayrollController@archived_allowance");
+	Route::any('/allowance/modal_edit_allowance/{id}',"Member\PayrollController@modal_edit_allowance");
+	Route::any('/allowance/modal_archived_llowance_employee/{archived}/{id}',"Member\PayrollController@modal_archived_llowance_employee");
+	Route::any('/allowance/reload_allowance_employee',"Member\PayrollController@reload_allowance_employee");
+	Route::any('/allowance/archived_allowance_employee',"Member\PayrollController@archived_allowance_employee");
 	/* ALLOWANCE END */
 
 	/* LEAVE START */
 	Route::any('/leave',"Member\PayrollController@leave");
 	/* LEAVE END */
+
+
+	/* PAYROLL GROUP START */
+	Route::any('/payroll_group',"Member\PayrollController@payroll_group");
+	Route::any('/payroll_group/modal_create_payroll_group',"Member\PayrollController@modal_create_payroll_group");
+	Route::any('/payroll_group/modal_save_payroll_group',"Member\PayrollController@modal_save_payroll_group");
+	Route::any('/payroll_group/modal_edit_payroll_group/{id}',"Member\PayrollController@modal_edit_payroll_group");
+	/* PAYROLL GROUP END */
 });

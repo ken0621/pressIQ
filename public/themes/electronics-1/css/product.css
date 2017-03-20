@@ -265,6 +265,8 @@
       color: #fff;
       font-weight: 700;
       border-radius: 5px; }
+    .filter-by-price .filter-content .bottom button:hover {
+      opacity: 0.9; }
     .filter-by-price .filter-content .bottom #price-word {
       color: #ababab;
       font-size: 14px;

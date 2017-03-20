@@ -3,23 +3,12 @@
 	<input type="hidden" name="discount_card_log_id_a" value="{{Request::input('discount_card_log_id')}}">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
-		<h4 class="modal-title">Give Discount Card</h4>
+		<h4 class="modal-title"></h4>
 	</div>
 	<div class="modal-body clearfix">
-		<div class="col-md-12">
-		@if($discount_card_log_id != null)
-		
-			<label>Search username</label>
-			<select name="customer_id" class="form-control search_customers" name="customer_id" onChange="customer_change(this)">
-				@foreach($customers as $key => $value)
-					<option value="{{$value->customer_id}}" @if($key == 0) selected @endif>{{$value->mlm_username}}</option>
-				@endforeach
-			</select>
- 		</div>
- 		<div class="col-md-12 custom_profile"></div>
- 		@else
- 		<center>Invalid Discount Card</center>
- 		@endif
+		Confirm Use of Discount Card?
+		<hr>
+		<span class="" style="color: green;"><small>Expiry (if used): {{$expiry}} </small></span>
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>

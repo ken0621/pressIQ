@@ -59,7 +59,7 @@
                                 <th>Used On</th>
                                 <th>Date Used</th>
                                 <th>Expiration</th>
-                                <th></th>
+                                <th>Discount Card Code <br> <span style="color: green;"><small>Show this code in the cashier</small></span></th>
                             </thead>
                             @if(isset($used_discount_card))
                                 @if(count($used_discount_card) >= 1)
@@ -70,7 +70,7 @@
                                             <td>{{$value->title_name}} {{$value->first_name}} {{$value->middle_name}} {{$value->last_name}} {{$value->suffix_name}}</td>
                                             <td>{{$value->discount_card_log_date_used}}</td>
                                             <td>{{$value->discount_card_log_date_expired}}</td>
-                                            <td><button class="btn btn-primary">View Report</button>(Not functioning)</td>
+                                            <td>{{$value->discount_card_log_code}}</td>
                                         </tr>
                                     @endforeach
                                 @else

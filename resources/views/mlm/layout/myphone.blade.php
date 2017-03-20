@@ -125,16 +125,6 @@
                             <a> Genealogy <span class="fa fa-chevron-down"></span></a>
                             <ul style="display: none;">
                               <li>
-                                  <a  href="/mlm/genealogy/unilevel">
-                                      Unilevel Genealogy
-                                  </a> 
-                              </li>
-                              <li>
-                                <a href="/mlm/network/unilevel">
-                                  Unilevel Network List
-                                </a>
-                              </li>
-                              <li>
                                   <a  href="/mlm/genealogy/binary">
                                       Binary Genealogy
                                   </a> 
@@ -146,9 +136,48 @@
                               </li>
                             </ul>
                            </li>
-                           <li><a> Report <span class="fa fa-chevron-down"></span></a></li>
-                           <li><a> Vouchers <span class="fa fa-chevron-down"></span></a></li>
-                           <li><a> Wallet <span class="fa fa-chevron-down"></span></a></li>
+                           <li><a> Report <span class="fa fa-chevron-down"></span></a>
+                            <ul style="display: none;">
+                              @if(count($complan) >=1)
+                                  @foreach($complan as $value)
+                                  <li>
+                                      <a href="/mlm/report/{{strtolower($value->marketing_plan_code) }}" class="subnav-text">
+                                          {{$value->marketing_plan_label}}
+                                      </a> 
+                                  </li>
+                                  @endforeach
+                              @endif
+                              @if(count($complan_repurchase) >=1)
+                                  @foreach($complan_repurchase as $value)
+                                  <li>
+                                      <a href="/mlm/report/{{strtolower($value->marketing_plan_code) }}" class="subnav-text">
+                                          {{$value->marketing_plan_label}}
+                                      </a> 
+                                  </li>
+                                  @endforeach
+                              @endif
+                            </ul>
+                           </li>
+                           <li class="hide"><a> Vouchers <span class="fa fa-chevron-down"></span></a></li>
+                           <li>
+                            <a> Wallet <span class="fa fa-chevron-down"></span></a>
+                            <ul style="display: none;">
+                              <li>
+                                <a href="/mlm/wallet" class="subnav-text">
+                                    Wallet Logs
+                                </a> 
+                                <a href="/mlm/refill" class="subnav-text">
+                                    Wallet Refill
+                                </a> 
+                                <a href="/mlm/transfer" class="subnav-text">
+                                    Wallet Transfer
+                                </a> 
+                                <a href="/mlm/encashment" class="subnav-text">
+                                    Wallet Encashment
+                                </a> 
+                            </li>
+                            </ul>
+                            </li>
                         </ul>
                      </div>
                   </div>
@@ -202,7 +231,7 @@
                            <span class="badge bg-green">6</span>
                            </a>
                            <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
-                              <li>
+                              <li class="hide">
                                  <a>
                                  <span class="image"><img src="/member-theme/myphone/images/img.jpg" alt="Profile Image" /></span>
                                  <span>
@@ -214,45 +243,25 @@
                                  </span>
                                  </a>
                               </li>
-                              <li>
-                                 <a>
-                                 <span class="image"><img src="/member-theme/myphone/images/img.jpg" alt="Profile Image" /></span>
-                                 <span>
-                                 <span>John Smith</span>
-                                 <span class="time">3 mins ago</span>
-                                 </span>
-                                 <span class="message">
-                                 Film festivals used to be do-or-die moments for movie makers. They were where...
-                                 </span>
-                                 </a>
-                              </li>
-                              <li>
-                                 <a>
-                                 <span class="image"><img src="/member-theme/myphone/images/img.jpg" alt="Profile Image" /></span>
-                                 <span>
-                                 <span>John Smith</span>
-                                 <span class="time">3 mins ago</span>
-                                 </span>
-                                 <span class="message">
-                                 Film festivals used to be do-or-die moments for movie makers. They were where...
-                                 </span>
-                                 </a>
-                              </li>
-                              <li>
-                                 <a>
-                                 <span class="image"><img src="/member-theme/myphone/images/img.jpg" alt="Profile Image" /></span>
-                                 <span>
-                                 <span>John Smith</span>
-                                 <span class="time">3 mins ago</span>
-                                 </span>
-                                 <span class="message">
-                                 Film festivals used to be do-or-die moments for movie makers. They were where...
-                                 </span>
-                                 </a>
-                              </li>
+                              @if(isset($notification))
+                                  @foreach($notification as $key => $value)
+                                  <li>
+                                    <a href="/mlm/notification">
+                                      <span class="image"><i class="fa fa-users text-aqua"></i></span>
+                                      <span>
+                                        <span>{{$value->slot_no}}</span>
+                                        <span class="time">{{$value->wallet_log_date_created}}</span>
+                                       </span>
+                                       <span class="message">
+                                       {{$value->wallet_log_details}}
+                                       </span>
+                                    </a>
+                                  </li>
+                                  @endforeach
+                              @endif
                               <li>
                                  <div class="text-center">
-                                    <a>
+                                    <a href="/mlm/notification">
                                     <strong>See All Alerts</strong>
                                     <i class="fa fa-angle-right"></i>
                                     </a>

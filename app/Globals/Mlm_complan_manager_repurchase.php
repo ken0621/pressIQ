@@ -39,7 +39,10 @@ class Mlm_complan_manager_repurchase
 
         if($item_code)
         {
-            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)->first();
+
+            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)
+            ->where('membership_id', $slot_info->membership_id)
+            ->first();
 
             if($mlm_item_points)
             {
@@ -289,9 +292,11 @@ class Mlm_complan_manager_repurchase
         $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 
         if($item_code)
         {
-            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)->first();
-            $percentage = ($slot_info->membership_points_repurchase / 100);
-            // return $slot_info->membership_points_repurchase;
+            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)
+            ->where('membership_id', $slot_info->membership_id)
+            ->first();
+            // $percentage = ($slot_info->membership_points_repurchase / 100);
+            $percentage = 1;
             if($mlm_item_points)
             {
                 $membership_points_repurchase = $mlm_item_points->REPURCHASE_POINTS * $percentage;
@@ -326,8 +331,11 @@ class Mlm_complan_manager_repurchase
        $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first();  
        if($item_code)
         {
-            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)->first();
-            $percentage = ($slot_info->membership_points_repurchase_cashback / 100);
+            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)
+            ->where('membership_id', $slot_info->membership_id)
+            ->first();
+            // $percentage = ($slot_info->membership_points_repurchase_cashback / 100);
+            $percentage = 1;
             if($mlm_item_points)
             {
                 $membership_points_repurchase_cashback = $mlm_item_points->REPURCHASE_CASHBACK * $percentage;
@@ -365,7 +373,9 @@ class Mlm_complan_manager_repurchase
 
         if($item_code)
         {
-            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)->first();
+            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)
+            ->where('membership_id', $slot_info->membership_id)
+            ->first();
 
             if($mlm_item_points)
             {

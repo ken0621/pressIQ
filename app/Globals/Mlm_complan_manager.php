@@ -208,8 +208,22 @@ class Mlm_complan_manager
         ->where('placement_tree_level', '<=', $binary_settings_max_tree_level)
         ->level()->distinct_level()->parentslot()->get();
 
-        // dd($settings_tree);
-        // end
+        $notify_max_level = Tbl_tree_placement::child($slot_info->slot_id)
+        ->where('placement_tree_level', '>', $binary_settings_max_tree_level)
+        ->level()->distinct_level()->parentslot()->get();
+        foreach($notify_max_level as $key => $value)
+        {
+            $log = "Sorry, Your Slot has already reached the max level for binary. Slot " . $slot_info->slot_no . "'s binary points will not be added.";
+            $arry_log['wallet_log_slot']            = $value->slot_id;
+            $arry_log['shop_id']                    = $value->shop_id;
+            $arry_log['wallet_log_slot_sponsor']    = $slot_info->slot_id;
+            $arry_log['wallet_log_details']         = $log;
+            $arry_log['wallet_log_amount']          = 0;
+            $arry_log['wallet_log_plan']            = "BINARY_MAX_LEVEL";
+            $arry_log['wallet_log_status']          = "n_ready";   
+            $arry_log['wallet_log_claimbale_on']    = Carbon::now(); 
+            Mlm_slot_log::slot_array($arry_log); 
+        }
 
         // DISTRIBUTE BINARY POINTS
         foreach($settings_tree as $tree)
@@ -803,11 +817,12 @@ class Mlm_complan_manager
                 ->where('sponsor_tree_level', '>=', $value2['matching_settings_start'])
                 ->where('sponsor_tree_level', '<=', $value2['matching_settings_end'])
                 ->where('slot_membership', $value2['membership_id'])
+                ->where('slot_matched_membership', 0)
                 ->get()
                 ->toArray();
             }
         }
-        
+        // dd($tree_selected);
         $tree_match = [];
         foreach($tree_selected as $key => $value)
         {

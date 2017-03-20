@@ -17,6 +17,7 @@ use App\Models\Tbl_membership_code_invoice;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_item_code_item;
 use App\Globals\Item;
 use App\Globals\Item_code;
 use App\Models\Tbl_membership_code;
@@ -327,7 +328,8 @@ class MLM_ProductCodeController extends Member
         $data['company_name'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
         $data['company_email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
         $data['company_logo'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_logo')->pluck('value');
-        
+        $data['item_list'] = Tbl_item_code_item::where('item_code_invoice_id', $id)->get();    
+        // dd($data['item_list']);
         // dd($this->user_info);
         $subtotal                = Tbl_item_code::where("item_code_invoice_id",$invoice->item_code_invoice_id)->item()->sum("item_code_price");
         $discount_amount         = $invoice->item_discount;

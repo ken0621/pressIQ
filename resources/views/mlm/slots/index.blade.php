@@ -14,6 +14,7 @@ $data['icon'] = 'fa fa-linode';
     </div>
     <!-- /.box-header -->
     <form class="global-submit" method="post" action="/mlm/slots/set_nickname">
+    {!! csrf_field() !!}
     <div class="box-body">
     	<label>Slot</label>
     	<input type="text" class="form-control" name="active_slot" value="{{ isset($active->slot_no) ? $active->slot_no : ''}}">
@@ -24,6 +25,7 @@ $data['icon'] = 'fa fa-linode';
       <hr>
       <button class="btn btn-primary pull-right">Set Default</button>
     </div>
+    </form>
   </div>
 </div>  
 <div class="col-md-6">
@@ -38,6 +40,7 @@ $data['icon'] = 'fa fa-linode';
             <th>Slot</th>
             <th>Date Created</th>
             <th>Current Wallet</th>
+            <th></th>
         </thead>
         <tbody>
             @if(count($all_slots_p) >= 1)
@@ -46,6 +49,12 @@ $data['icon'] = 'fa fa-linode';
                   <td>{{$value->slot_no}}</td>
                   <td>{{$value->slot_created_date}}</td>
                   <td>{{$value->slot_wallet_current}}</td>
+                  <td><form class="global_submit" action="/mlm/changeslot" method="post">
+                        {!! csrf_field() !!}
+                        <input type="hidden" name="slot_id" value="{{$value->slot_id}}">
+                        <button class="btn btn-primary">Use Slot</button>
+                      </form>
+                  </td>
                 </tr>
               @endforeach
             @else

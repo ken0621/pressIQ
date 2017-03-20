@@ -34,6 +34,20 @@ function customer_invoice(){
 		});
 	}
 
+	this.action_initialized = function()
+	{
+		action_initialize();
+	}
+
+	function action_initialize()
+	{
+		iniatilize_select();
+		action_compute();
+		action_convert_number();
+		action_date_picker();
+		draggable_row.dragtable();
+	}
+
 	this.action_lastclick_row = function()
 	{
 		action_lastclick_row();
@@ -48,7 +62,6 @@ function customer_invoice(){
 
 	function action_return_to_number(number = '')
 	{
-
 		number += '';
 		number = number.replace(/,/g, "");
 		if(number == "" || number == null || isNaN(number)){
@@ -56,7 +69,6 @@ function customer_invoice(){
 		}
 		
 		return parseFloat(number);
-	
 	}
 
 	function action_lastclick_row_op()
@@ -67,10 +79,6 @@ function customer_invoice(){
 		action_date_picker();
 	}
 
-	function action_date_picker()
-	{
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
-	}
 
 	this.action_reassign_number = function()
 	{
@@ -84,6 +92,10 @@ function customer_invoice(){
 			$(this).html(num);
 			num++;
 		});
+	}
+	function action_date_picker()
+	{
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
 	}
 
 	function event_accept_number_only()
@@ -246,7 +258,6 @@ function customer_invoice(){
 
 		/* action payment applied */
 		var payment_applied   	= parseFloat($(".payment-applied").html());
-		console.log(total + "|" + payment_applied);
 		var balance_due 		= total - payment_applied;
 
 		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));
@@ -315,7 +326,7 @@ function customer_invoice(){
 		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
             link : "/member/item/add",
-            width : "150px",
+            width : "100%",
             onCreateNew : function()
             {
             	item_selected = $(this);
@@ -347,7 +358,7 @@ function customer_invoice(){
 	    $('.droplist-item').globalDropList(
         {
             link : "/member/item/add",
-            width : "150px",
+            width : "100%",
             onCreateNew : function()
             {
             	item_selected = $(this);
@@ -452,14 +463,18 @@ function submit_done(data)
 {
 	if(data.status == "success-invoice")
 	{
-        toastr.success("Success");
         if(data.redirect)
         {
+        	toastr.success("Success");
         	location.href = data.redirect;
     	}
     	else
     	{
-    		$("")
+    		$(".load-data:last").load(data.link+" .load-data .data-container", function()
+    		{
+    			customer_invoice.action_initialized();
+    			toastr.success("Success");
+    		})
     	}
 	}
 	else if(data.status == 'error-inv-no')

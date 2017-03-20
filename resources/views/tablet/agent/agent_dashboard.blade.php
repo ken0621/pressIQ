@@ -24,6 +24,11 @@
 
 <div class="panel panel-default panel-block panel-title-block panel-gray">
   <div class="tab-content panel-body form-horizontal tablet-container">
+    <div class="form-group">
+      <div class="col-md-12">
+        <a link="/tablet/submit_all_transaction" size="md" class="popup"> Close this S.I.R</a>
+      </div>
+    </div>
     <div class="form-group text-center">
         <div class="col-md-6 col-xs-6">
           <h3>SIR No: <strong>{{sprintf("%'.05d\n", $open_sir->sir_id)}}</strong></h3>

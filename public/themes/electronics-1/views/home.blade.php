@@ -21,7 +21,7 @@
 							<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/asus-cellphone.png">
 							</div>
 							<div class="item-content">
-								<div class="item-title">Lorem ipsum dolor sit amet consectetuer</div>
+								<div class="item-title"><a href="">Lorem ipsum dolor sit amet consectetuer</a></div>
 								<div class="item-rating">
 									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -44,7 +44,7 @@
 										</div>
 										<div class="col-md-6 product-content">
 											<div class="product-details">
-												<div class="item-name">Lorem ipsum dolor sit</div>
+												<div class="item-name"><a href="">Lorem ipsum dolor sit</a></div>
 												<div class="item-rating">
 													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -67,7 +67,7 @@
 										</div>
 										<div class="col-md-6 product-content">
 											<div class="product-details">
-												<div class="item-name">Lorem ipsum dolor sit</div>
+												<div class="item-name"><a href="">Lorem ipsum dolor sit</a></div>
 												<div class="item-rating">
 													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -90,7 +90,7 @@
 										</div>
 										<div class="col-md-6 product-content">
 											<div class="product-details">
-												<div class="item-name">Lorem ipsum dolor sit</div>
+												<div class="item-name"><a href="">Lorem ipsum dolor sit</a></div>
 												<div class="item-rating">
 													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -113,7 +113,7 @@
 										</div>
 										<div class="col-md-6 product-content">
 											<div class="product-details">
-												<div class="item-name">Lorem ipsum dolor sit</div>
+												<div class="item-name"><a href="">Lorem ipsum dolor sit</a></div>
 												<div class="item-rating">
 													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -136,7 +136,7 @@
 										</div>
 										<div class="col-md-6 product-content">
 											<div class="product-details">
-												<div class="item-name">Lorem ipsum dolor sit</div>
+												<div class="item-name"><a href="">Lorem ipsum dolor sit</a></div>
 												<div class="item-rating">
 													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -159,7 +159,7 @@
 										</div>
 										<div class="col-md-6 product-content">
 											<div class="product-details">
-												<div class="item-name">Lorem ipsum dolor sit</div>
+												<div class="item-name"><a href="">Lorem ipsum dolor sit</a></div>
 												<div class="item-rating">
 													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -197,7 +197,7 @@
 						</div>
 						<div class="col-md-7 product-content">
 							<div class="product-details">
-								<div class="item-name">Lorem ipsum dolor sit</div>
+								<div class="item-name"><a href="">Lorem ipsum dolor sit</a></div>
 								<div class="item-rating">
 									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -218,7 +218,7 @@
 						</div>
 						<div class="col-md-7 product-content">
 							<div class="product-details">
-								<div class="item-name">Lorem ipsum dolor sit</div>
+								<div class="item-name"><a href="">Lorem ipsum dolor sit</a></div>
 								<div class="item-rating">
 									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -239,7 +239,7 @@
 						</div>
 						<div class="col-md-7 product-content">
 							<div class="product-details">
-								<div class="item-name">Lorem ipsum dolor sit</div>
+								<div class="item-name"><a href="">Lorem ipsum dolor sit</a></div>
 								<div class="item-rating">
 									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -260,7 +260,7 @@
 						</div>
 						<div class="col-md-7 product-content">
 							<div class="product-details">
-								<div class="item-name">Lorem ipsum dolor sit</div>
+								<div class="item-name"><a href="">Lorem ipsum dolor sit</a></div>
 								<div class="item-rating">
 									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">

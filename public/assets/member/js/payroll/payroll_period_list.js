@@ -1,13 +1,22 @@
-var payorll_period_list = new payorll_period_list();
+var payroll_period_list = new payroll_period_list();
 
-function payorll_period_list()
+function payroll_period_list()
 {
 	init();
 
-	function payorll_period_list()
+	function init()
 	{
 
 	}
+
+	this.reload_list = function()
+	{
+		toastr.success("Period list has been updated");
+		$(".period-list").load("/member/payroll/payroll_period_list .tab-pane-div", function()
+		{
+			
+		});
+	}	
 }
 
 /* CALL A FUNCTION BY NAME */
@@ -24,5 +33,6 @@ function executeFunctionByName(functionName, context /*, args */) {
 function submit_done(data)
 {
 	data.element.modal("toggle");
+	console.log(data.function_name);
 	executeFunctionByName(data.function_name, window);
 }

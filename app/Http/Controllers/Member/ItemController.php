@@ -14,7 +14,11 @@ use App\Models\Tbl_product_vendor;
 use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_item_discount;
+<<<<<<< HEAD
 use App\Models\Tbl_item_multiple_price;
+=======
+use App\Models\Tbl_inventory_slip;
+>>>>>>> 16c1b229e4aa9211284f331c4113d78c9703ac0a
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -241,8 +245,17 @@ class ItemController extends Member
 
 					Tbl_sub_warehouse::insert($ins);
 
+					$insert_slip['inventory_slip_id_sibling']    = 0;
+			        $insert_slip['inventory_reason']             = 'refill';
+			        $insert_slip['warehouse_id']                 = $warehouse->warehouse_id;
+			        $insert_slip['inventory_slip_date']          = Carbon::now();
+			        $insert_slip['inventory_slip_shop_id']       = $shop_id;
+
+			        $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
+
+
 					$ins_inven["inventory_item_id"] = $item_id;
-					$ins_inven["warehouse_id"] = $warehouse_id;
+					$ins_inven["warehouse_id"] =  $warehouse->warehouse_id;
 					$ins_inven["inventory_created"] = Carbon::now();
 					$ins_inven["inventory_count"] = $item_quantity;
 
@@ -257,10 +270,19 @@ class ItemController extends Member
 
 					Tbl_sub_warehouse::insert($insert_sub);
 
+			        $insert_slip['inventory_reason']             = 'refill';
+			        $insert_slip['warehouse_id']                 = $warehouse->warehouse_id;
+			        $insert_slip['inventory_slip_date']          = Carbon::now();
+			        $insert_slip['inventory_slip_shop_id']       = $shop_id;
+
+			        $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
+
+
 					$ins_inven["inventory_item_id"] = $item_id;
 					$ins_inven["warehouse_id"] =  $warehouse->warehouse_id;
 					$ins_inven["inventory_created"] = Carbon::now();
 					$ins_inven["inventory_count"] = $item_quantity;
+					$ins_inven["inventory_slip_id"] = $inventory_slip_id;
 
 					$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
 				}

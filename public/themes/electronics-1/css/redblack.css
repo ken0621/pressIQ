@@ -121,7 +121,7 @@ footer .footer-logo {
 
 .navbar-default .navbar-nav > li > a {
   color: #999898 !important;
-  text-shadow: none !important;
+  box-shadow: none !important;
   font-size: 12px;
   font-weight: 600; }
 

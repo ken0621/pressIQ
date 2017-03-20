@@ -178,8 +178,11 @@
                     <div class="form-group">
                       <div class="col-md-6 padding-r-1">
                         <small>Payroll Group</small>
-                        <select class="form-control" name="payroll_group_id">
+                        <select class="form-control" name="payroll_group_id" required>
                           <option value="">Select Group</option>
+                          @foreach($_group as $group)
+                          <option value="{{$group->payroll_group_id}}">{{$group->payroll_group_code}}</option>
+                          @endforeach
                         </select>
                       </div>
                       <div class="col-md-6 padding-l-1">

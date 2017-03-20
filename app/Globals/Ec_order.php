@@ -223,7 +223,7 @@ class Ec_order
             $ctr = 0;
             foreach($ec_order_item as $ordered)
             {  
-                $get_prod_id                                   = Tbl_ec_variant::where("evariant_prod_id",$ordered["item_id"])->first();
+                $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered["item_id"])->first();
                 $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
                 $warehouse_consume_product[$ctr]["quantity"]   = $ordered["quantity"];
                 $ctr++;             
@@ -329,7 +329,7 @@ class Ec_order
             $ctr = 0;
             foreach($ec_order_item as $ordered)
             {  
-                $get_prod_id                                   = Tbl_ec_variant::where("evariant_prod_id",$ordered->item_id)->first();
+                $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered->item_id)->first();
                 $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
                 $warehouse_consume_product[$ctr]["quantity"]   = $ordered->quantity;
                 $ctr++;             
@@ -348,7 +348,7 @@ class Ec_order
             $ctr = 0;
             foreach($ec_order_item as $ordered)
             {  
-                $get_prod_id                                   = Tbl_ec_variant::where("evariant_prod_id",$ordered->item_id)->first();
+                $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered->item_id)->first();
                 $warehouse_refill_product[$ctr]["product_id"]  = $get_prod_id->evariant_item_id;            
                 $warehouse_refill_product[$ctr]["quantity"]    = $ordered->quantity;
                 $ctr++;             

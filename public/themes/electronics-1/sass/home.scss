@@ -229,6 +229,8 @@
 
 		.left-container:hover
 		{
+			cursor: pointer;
+
 			.asus-cellphone
 			{
 				img
@@ -247,6 +249,17 @@
 				    left: 0;
 				    top: 0;
 				    opacity: 1;
+				}
+			}
+
+			.item-content
+			{
+				.item-title
+				{
+					a
+					{
+						text-decoration: underline;
+					}
 				}
 			}
 		}
@@ -331,6 +344,8 @@
 
 				.per-item-container:hover
 				{
+					cursor: pointer;
+
 					.image-holder
 					{
 						.first-image
@@ -347,6 +362,17 @@
 							transition: 0.3s all ease;
 						}
 					}
+
+					.product-details
+	    				{
+	    					.item-name
+							{
+								a
+								{
+									text-decoration: underline;
+								}
+							}
+	    				}
 				}
 			}
 		}
@@ -447,6 +473,8 @@
 
 		.product-holder:hover
 		{
+			cursor: pointer;
+
 			.product-image
 			{
 			    .first-image
@@ -462,6 +490,17 @@
 					left: 0;
 					opacity: 1;
 			    }
+			}
+
+			.product-content
+			{
+				.item-name
+				{
+					a
+					{
+						text-decoration: underline;
+					}
+				}
 			}
 		}
 	}
@@ -794,6 +833,7 @@
 			-moz-box-shadow: 0px 0px 0px rgba(0,0,0,0.5);
     		-webkit-box-shadow: 0px 0px 0px rgba(0,0,0,0.5);
     		box-shadow: 0px 0px 14px rgba(0,0,0,0.5);
+    		cursor: pointer;
     		
     		.item-details
     		{

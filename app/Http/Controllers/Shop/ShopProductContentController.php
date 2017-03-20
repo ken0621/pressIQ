@@ -61,4 +61,11 @@ class ShopProductContentController extends Shop
 
         echo json_encode($response);
     }
+
+    public function search()
+    {
+        $search = Ecom_Product::searchProduct(Request::input("search-pokus"), $this->shop_info->shop_id);
+
+        return json_encode($search);
+    }
 }

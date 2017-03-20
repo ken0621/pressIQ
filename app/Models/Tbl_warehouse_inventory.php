@@ -14,4 +14,20 @@ class Tbl_warehouse_inventory extends Model
     	$query->where('warehouse_id', $warehouse_id)->where('inventory_item_id',$item_id)->select(DB::raw('sum(inventory_count) as inventory_count'));
     	return $query;
     }
+    public function scopeItem($query)
+    {
+    	return $query->join("tbl_item","tbl_item.item_id","=","inventory_item_id");
+    }
+    public function scopeWarehouse($query)
+    {
+    	return $query->leftjoin("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_warehouse_inventory.warehouse_id");
+    }
+    public function scopeInventoryslip($query)
+    {
+    	return $query->leftjoin("tbl_inventory_slip","tbl_inventory_slip.inventory_slip_id","=","tbl_warehouse_inventory.inventory_slip_id");
+    }
+    public function scopeSerialnumber($query)
+    {
+    	return $query->leftjoin("tbl_inventory_serial_number","tbl_inventory_serial_number.serial_inventory_id","=","tbl_warehouse_inventory.inventory_id");
+    }
 }

@@ -305,7 +305,7 @@ body {
 
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .active > a {
   background-color: #fff !important;
-  color: #000 !important;
+  color: #000;
   background-image: none !important; }
 
 .nav-border:last-child {
@@ -327,6 +327,10 @@ footer {
     padding-bottom: 15px; }
     footer .ftr .contact-footer .contact-details {
       padding: 0; }
+    footer .ftr .shop-footer {
+      padding-left: 30px; }
+      footer .ftr .shop-footer .btm-link {
+        padding: 0; }
     footer .ftr table tr td {
       padding-bottom: 10px; }
       footer .ftr table tr td .fa-map-marker {
@@ -366,7 +370,7 @@ footer {
       color: #9c9c9c;
       text-decoration: none; }
   footer .btm-link {
-    margin-left: -15px; }
+    padding: 0; }
   footer .site-icon {
     background-color: #383a9a;
     padding: 8px;

@@ -7,7 +7,7 @@ use App\Globals\Accounting;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
-use App\Globals\Ecom_product;
+use App\Globals\Ecom_Product;
 use App\Globals\Pdf_global;
 
 use App\Models\Tbl_customer;
@@ -66,23 +66,23 @@ class ProductOrderController extends Member
                 $data["ec_order_id"] = $sir->ec_order_id;
             }
         }
-
+            // dd($data["_product"]);
         return view('member.product_order.product_create_order', $data);
     }
     public function invoice_list()
     {
-        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Pending")->get();
-        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Unpaid")->get();
-        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Unpaid")->get();
-        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Unpaid")->get();
-        $data["ec_order_paid"]   = Tbl_ec_order::customer()->where("order_status","Paid")->get();
-        $data["ec_order_void"]   = Tbl_ec_order::customer()->where("order_status","Void")->get();
+        $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("order_status","Pending")->get();
+        $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("order_status","Failed")->get();
+        $data["ec_order_processing"] = Tbl_ec_order::customer()->where("order_status","Processing")->get();
+        $data["ec_order_completed"]  = Tbl_ec_order::customer()->where("order_status","Completed")->get();
+        $data["ec_order_on_hold"]    = Tbl_ec_order::customer()->where("order_status","On-hold")->get();
+        $data["ec_order_cancelled"]  = Tbl_ec_order::customer()->where("order_status","Cancelled")->get();
         return view("member.product_order.product_order",$data);
     }
     public function create_invoice()
     {
         $customer_info                      = [];
-        $customer_info['customer_id']       = Request::input('inv_customer_id');;
+        $customer_info['customer_id']       = Request::input('inv_customer_id');
         $customer_info['customer_email']    = Request::input('inv_customer_email');
 
         $invoice_info                       = [];
@@ -106,30 +106,40 @@ class ProductOrderController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('invline_item_id');
 
-        // foreach($_itemline as $key => $item_line)
-        // {
-        //     if($item_line)
-        //     {
-        //         $item_info[$key]['item_service_date']  = Request::input('invline_service_date')[$key];
-        //         $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
-        //         $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
-        //         $item_info[$key]['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
-        //         $item_info[$key]['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
-        //         $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
-        //         $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
-        //         $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
-        //         $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
-        //         $item_info[$key]['um']                 = null;
-        //     }
-        // }
-        // $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+        $item_count                         = 0;
 
-        $returned_data = Ec_order::create_ec_order(Request::input());
-        
-        $json["status"]         = "success-invoice";
-        $json["redirect_to"]    = "/member/ecommerce/product_order/create_order?id=".$returned_data;
+        foreach(Request::input("invline_item_id") as $request_item)
+        {
+            if($request_item != "")
+            {
+                $item_count++;
+            }
+        }
 
-        return json_encode($json);
+        if($item_count != 0)
+        {
+                $returned_data = Ec_order::create_ec_order(Request::input());
+                if($returned_data["status"] == "error")
+                {
+                    $json["status"]            = "error";
+                    $json["status_message"]    = $returned_data["status_message"];
+
+                    return json_encode($json);
+                }
+                else
+                {
+                    $json["status"]         = "success-invoice";
+                    $json["redirect_to"]    = "/member/ecommerce/product_order/create_order?id=".$returned_data;
+
+                    return json_encode($json);
+                }
+        }
+        else
+        {   
+            $json["status"]         = "error";
+            $json["status_message"] = "No ordered item.";
+            return json_encode($json);
+        }
     }
     public function submit_coupon()
     {
@@ -144,7 +154,7 @@ class ProductOrderController extends Member
             {
                 if($invoice_id)
                 {
-                    $check_invoice = Tbl_ec_Order::where('ec_order_id',$invoice_id)->first();
+                    $check_invoice = Tbl_ec_order::where('ec_order_id',$invoice_id)->first();
                     if($check_invoice)
                     {
                         $check_coupon = Tbl_coupon_code::where("coupon_code_id",$check_invoice->coupon_id)->first();
@@ -220,10 +230,28 @@ class ProductOrderController extends Member
         $data["ec_order_id"]                = Request::input("ec_order_id");
         $data["order_status"]               = Request::input("order_status");
 
-        Ec_order::update_ec_order($data);
-        $return["status"]                   = "success-update-invoice";
-        $return["redirect_to"]                = "/member/ecommerce/product_order/create_order?id=".$data["ec_order_id"];
-        return json_encode($return);
+        $response                           = Ec_order::update_ec_order($data);
+        if(isset($response["status"]))
+        {
+            if($response["status"] == "error")
+            {
+                $return["status"]                   = "error";
+                $return["status_message"]           = $response["status_message"];
+                return json_encode($return);
+            }
+            else
+            {
+                $return["status"]                   = "success-update-invoice";
+                $return["redirect_to"]              = "/member/ecommerce/product_order/create_order?id=".$data["ec_order_id"];
+                return json_encode($return);
+            }
+        }
+        else
+        {
+            $return["status"]                   = "success-update-invoice";
+            $return["redirect_to"]              = "/member/ecommerce/product_order/create_order?id=".$data["ec_order_id"];
+            return json_encode($return);
+        }
     }
 
     public function invoice_view($invoice_id)

@@ -138,7 +138,7 @@ function add_search_events()
         request = $.ajax(
         {
      
-            url: "product/live_search",
+            url: "/product/search",
             data:  $search_input,           
             type: "GET",
             dataType : "json",
@@ -152,25 +152,30 @@ function add_search_events()
                     var ctr = 0;
                     $.each(data,function(index, element)
                     {
-    
-                        
+                        if (data[index]['min_price'] == data[index]['max_price']) 
+                        {
+                            var price = data[index]['max_price'];
+                        }
+                        else
+                        {
+                            var price = data[index]['min_price'] + ' - ' + data[index]['max_price'];
+                        }
 
-                        
                         $append += '<div class="search-popup-holder">' +
-                                        '<a href="product/'+data[index]['slug']+'">'+
+                                        '<a href="/product/view/'+data[index]['eprod_id']+'">'+
                                         '<div class="search-popup-img">'+
-                                          '<img src="'+data[index]['img_link']+'">' +
+                                          '<img src="">' +
                                         '</div>'+
                                         '<div class="search-popup-text">' +
                                           '<div class="search-popup-name">' +
-                                           data[index]['product_name'] +
+                                           data[index]['eprod_name'] +
                                          '</div>'+
                                          '<div class="search-popup-description">'+
                                           '<div class="price">'+
-                                              data[index]['price'] +
+                                              price
                                           '</div>' +
                                           '<div class="search-popup-rate">' +
-                                            data[index]['rate'] +
+                                            '' +
                                           '</div>' +
                                          '</div>'+
                                         '</div>'+

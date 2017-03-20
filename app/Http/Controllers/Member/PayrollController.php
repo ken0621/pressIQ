@@ -329,18 +329,20 @@ class PayrollController extends Member
 		$update['payroll_department_id'] 				= Request::input('payroll_department_id');
 		$update['payroll_jobtitle_id'] 					= Request::input('payroll_jobtitle_id');
 		$update['payroll_employee_contract_date_hired'] = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_hired')));
+		$payroll_employee_contract_date_end				= '';
 		if(Request::input('payroll_employee_contract_date_end') != '')
 		{
-			$update['payroll_employee_contract_date_end'] 	= date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_end')));
+			$payroll_employee_contract_date_end 	= date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_end')));
 		}
-		
+
+		$update['payroll_employee_contract_date_end'] 	= $payroll_employee_contract_date_end;
 		$update['payroll_group_id'] 					= Request::input('payroll_group_id');
 		$update['payroll_employee_contract_status'] 	= Request::input('payroll_employee_contract_status');
 
 		Tbl_payroll_employee_contract::where('payroll_employee_contract_id', $payroll_employee_contract_id)->update($update);
 
 		$return['status'] 			= 'success';
-		$return['function_name'] 	= '';
+		$return['function_name'] 	= 'employeelist.reload_contract_list';
 		return json_encode($return);
 	}
 
@@ -367,7 +369,7 @@ class PayrollController extends Member
 		Tbl_payroll_employee_contract::where('payroll_employee_contract_id',$id)->update($update);
 
 		$return['status'] 			= 'success';
-		$return['function_name'] 	= '';
+		$return['function_name'] 	= 'employeelist.reload_contract_list';
 		return json_encode($return);
 	}
 
@@ -399,6 +401,7 @@ class PayrollController extends Member
 	public function modal_salary_list($id)
 	{	
 		$data['_active'] = Tbl_payroll_employee_salary::salaylist($id)->get();
+		$data['_archived'] = Tbl_payroll_employee_salary::salaylist($id, 1)->get();
 		return view('member.payroll.modal.modal_salary_list', $data);
 	}
 
@@ -406,6 +409,71 @@ class PayrollController extends Member
 	{
 		$data['employee_id'] = $id;
 		return view('member.payroll.modal.modal_create_salary', $data);
+	}
+
+	public function modal_edit_salary_adjustment($id)
+	{
+		$data['salary'] = Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$id)->first();
+		return view('member.payroll.modal.modal_edit_salary', $data);
+	}
+
+	public function modal_update_salary()
+	{
+		$payroll_employee_salary_id						= Request::input('payroll_employee_salary_id');
+		$update['payroll_employee_salary_monthly'] 		= Request::input('payroll_employee_salary_monthly');
+		$update['payroll_employee_salary_daily'] 		= Request::input('payroll_employee_salary_daily');
+		$update['payroll_employee_salary_taxable'] 		= Request::input('payroll_employee_salary_taxable');
+		$update['payroll_employee_salary_sss'] 			= Request::input('payroll_employee_salary_sss');
+		$update['payroll_employee_salary_philhealth'] 	= Request::input('payroll_employee_salary_philhealth');
+		$update['payroll_employee_salary_pagibig'] 		= Request::input('payroll_employee_salary_pagibig');
+		$update['payroll_employee_salary_cola'] 		= Request::input('payroll_employee_salary_cola');
+		
+		$payroll_employee_salary_effective_date			= '';
+		if(Request::input('payroll_employee_salary_effective_date') != '')
+		{
+			 $payroll_employee_salary_effective_date = date('Y-m-d',strtotime(Request::input('payroll_employee_salary_effective_date')));
+		}
+		
+		$payroll_employee_salary_minimum_wage 			= 0;
+		if(Request::has('payroll_employee_salary_minimum_wage'))
+		{
+			$payroll_employee_salary_minimum_wage 		= Request::has('payroll_employee_salary_minimum_wage');
+		}
+		$update['payroll_employee_salary_minimum_wage'] = $payroll_employee_salary_minimum_wage;
+		$update['payroll_employee_salary_effective_date'] = $payroll_employee_salary_effective_date;
+
+		Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$payroll_employee_salary_id)->update($update);
+
+		$return['function_name'] = 'employeelist.reload_salary_list';
+		$return['status'] = 'success';
+		return json_encode($return);
+	}
+
+	public function modal_archived_salary($archived, $id)
+	{
+		$statement = 'archive';
+		if($archived == 0)
+		{
+			$statement = 'restore';
+		}
+		$data['title'] 		= 'Do you really want to '.$statement.' this salary?';
+		$data['html'] 		= '';
+		$data['action'] 	= '/member/payroll/employee_list/archived_salary';
+		$data['id'] 		= $id;
+		$data['archived'] 	= $archived;
+
+		return view('member.modal.modal_confirm_archived', $data);
+	}
+
+	public function archived_salary()
+	{
+		$update['payroll_employee_salary_archived'] = Request::input('archived');
+		$id 										= Request::input('id');
+		Tbl_payroll_employee_salary::where('payroll_employee_salary_id',$id)->update($update);
+
+		$return['status'] 			= 'success';
+		$return['function_name'] 	= 'employeelist.reload_salary_list';
+		return json_encode($return);
 	}
 
 	public function modal_save_salary()

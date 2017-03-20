@@ -65,6 +65,9 @@
 <script type="text/javascript">
 	function submit_done(data)
 	{
-		data.element.modal('toggle');
+		
+		data.element.modal("toggle");
+		executeFunctionByName(data.function_name, window);
+		
 	}
 </script>

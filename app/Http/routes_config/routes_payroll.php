@@ -27,6 +27,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/modal_update_contract','Member\PayrollController@modal_update_contract');
 	Route::any('/employee_list/modal_archive_contract/{archived}/{id}','Member\PayrollController@modal_archive_contract');
 	Route::any('/employee_list/modal_salary_list/{id}','Member\PayrollController@modal_salary_list');
+	Route::any('/employee_list/modal_edit_salary_adjustment/{id}','Member\PayrollController@modal_edit_salary_adjustment');
+	Route::any('/employee_list/modal_update_salary','Member\PayrollController@modal_update_salary');
+	Route::any('/employee_list/modal_archived_salary/{archived}/{id}','Member\PayrollController@modal_archived_salary');
+	Route::any('/employee_list/archived_salary','Member\PayrollController@archived_salary');
 	Route::any('/employee_list/archive_contract','Member\PayrollController@archive_contract');
 	Route::any('/employee_list/modal_create_salary_adjustment/{id}','Member\PayrollController@modal_create_salary_adjustment');
 	Route::any('/employee_list/modal_save_salary','Member\PayrollController@modal_save_salary');

@@ -5,7 +5,7 @@
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
 
 	</div>
-	<div class="modal-body">
+	<div class="modal-body contract-modal-body">
 		<ul class="nav nav-tabs">
 		  <li class="active"><a data-toggle="tab" href="#active-list"><i class="fa fa-star"></i>&nbsp;Active</a></li>
 		  <li><a data-toggle="tab" href="#archived-list"><i class="fa fa-trash-o"></i>&nbsp;Archived</a></li>

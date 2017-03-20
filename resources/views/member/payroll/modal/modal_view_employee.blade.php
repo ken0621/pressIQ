@@ -2,9 +2,9 @@
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
     <h4 class="modal-title layout-modallarge-title">Create new employee</h4>
-    <input type="hidden" name="payroll_employee_id" value="{{$employee->payroll_employee_id}}">
+    <input type="hidden" name="payroll_employee_id" class="payroll_employee_id" value="{{$employee->payroll_employee_id}}">
   </div>
-  <div class="modal-body modallarge-body-layout background-white">
+  <div class="modal-body modallarge-body-layout background-white modal-body-employee-details">
     <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
     <div class="form-horizontal">
       <div class="form-group">
@@ -149,7 +149,7 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Department</small>
-                        <select class="form-control department-select" required name="payroll_department_id">
+                        <select class="form-control" required name="payroll_department_id" disabled>
                           <option value="">Select Department</option>
                           @foreach($_department as $department)
                           <option value="{{$department->payroll_department_id}}" {{$contract->payroll_department_id == $department->payroll_department_id ? 'selected="selected"':''}}>{{$department->payroll_department_name}}</option>
@@ -160,7 +160,7 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Job Title</small>
-                        <select class="form-control jobtitle-select" required name="payroll_jobtitle_id">
+                        <select class="form-control jobtitle-select" required name="payroll_jobtitle_id" disabled>
                           <option value="">Select Job Title</option>
                           @foreach($_jobtitle as $jobtitle)
                           <option value="{{$jobtitle->payroll_jobtitle_id}}" {{$jobtitle->payroll_jobtitle_id == $contract->payroll_jobtitle_id ? 'selected="selected"':''}}>{{$jobtitle->payroll_jobtitle_name}}</option>
@@ -173,12 +173,12 @@
                     <div class="form-group">
                       <div class="col-md-6 padding-r-1">
                         <small>Date Hired</small>
-                        <input type="text" name="payroll_employee_contract_date_hired" class="form-control indent-13 datepicker" value="{{$contract->payroll_employee_contract_date_hired != '0000-00-00' ?date('m/d/Y', strtotime($contract->payroll_employee_contract_date_hired)) : ''}}">
+                        <input type="text" name="payroll_employee_contract_date_hired" class="form-control indent-13 datepicker" value="{{$contract->payroll_employee_contract_date_hired != '0000-00-00' ?date('m/d/Y', strtotime($contract->payroll_employee_contract_date_hired)) : ''}}" disabled>
                         <i class="fa fa-calendar pos-absolute top-30 margin-left-6 color-dark-gray" aria-hidden="true"></i>
                       </div>
                       <div class="col-md-6 padding-l-1">
                         <small>Date End</small>
-                        <input type="text" name="payroll_employee_contract_date_end" class="form-control indent-13 datepicker" value="{{$contract->payroll_employee_contract_date_end != '0000-00-00' ? date('m/d/Y', strtotime($contract->payroll_employee_contract_date_end)) : ''}}">
+                        <input type="text" name="payroll_employee_contract_date_end" class="form-control indent-13 datepicker" value="{{$contract->payroll_employee_contract_date_end != '0000-00-00' ? date('m/d/Y', strtotime($contract->payroll_employee_contract_date_end)) : ''}}" disabled>
                         <i class="fa fa-calendar pos-absolute top-30 margin-left-6 color-dark-gray" aria-hidden="true"></i>
                       </div>
                       
@@ -186,16 +186,16 @@
                     <div class="form-group">
                       <div class="col-md-6 padding-r-1">
                         <small>Payroll Group</small>
-                        <select class="form-control" name="payroll_group_id" required>
+                        <select class="form-control" name="payroll_group_id" required disabled>
                           <option value="">Select Group</option>
                           @foreach($_group as $group)
-                          <option value="{{$group->payroll_group_id}}">{{$group->payroll_group_code}}</option>
+                          <option value="{{$group->payroll_group_id}}" {{$contract->payroll_group_id == $group->payroll_group_id ? 'selected="selected"':''}}>{{$group->payroll_group_code}}</option>
                           @endforeach
                         </select>
                       </div>
                       <div class="col-md-6 padding-l-1">
                         <small>Employment Status</small>
-                        <select class="form-control" name="payroll_employee_contract_status">
+                        <select class="form-control" name="payroll_employee_contract_status" disabled>
                           <option value="">Select Status</option>
                           @foreach($employement_status as $employment)
                           <option value="{{$employment->payroll_employment_status_id}}" {{$employment->payroll_employment_status_id == $contract->payroll_employee_contract_status ? 'selected="selected"':''}}>{{$employment->employment_status}}</option>
@@ -271,32 +271,32 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Monthly Rate</small>
-                        <input type="number" step="any" name="payroll_employee_salary_monthly" class="form-control text-right" required value="{{$salary->payroll_employee_salary_monthly}}">
+                        <input type="number" step="any" name="payroll_employee_salary_monthly" class="form-control text-right" value="{{$salary->payroll_employee_salary_monthly}}" readonly>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Daily Rate</small>
-                        <input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right" value="{{$salary->payroll_employee_salary_daily}}">
+                        <input type="number" step="any" name="payroll_employee_salary_daily" class="form-control text-right" value="{{$salary->payroll_employee_salary_daily}}" readonly>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>COLA (monthly)</small>
-                        <input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" value="{{$salary->payroll_employee_salary_cola}}">
+                        <input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" value="{{$salary->payroll_employee_salary_cola}}" readonly>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <div class="checkbox">
-                          <label><input type="checkbox" name="payroll_employee_salary_minimum_wage" value="1" {{$salary->payroll_employee_salary_minimum_wage == 1 ? 'checked="checked"' : ''}}>Minimum wage earner</label>
+                          <label><input type="checkbox" name="payroll_employee_salary_minimum_wage" value="1" disabled {{$salary->payroll_employee_salary_minimum_wage == 1 ? 'checked="checked"' : ''}}>Minimum wage earner</label>
                         </div>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <button class="btn pull-left btn-primary popup" type="button" link="/member/payroll/employee_list/modal_create_salary_adjustment/{{$employee->payroll_employee_id}}">Create salary adjustment</button>
-                        <button class="btn pull-left margin-lr-5 btn-primary popup" link="/member/payroll/employee_list/modal_salary_list/{{$employee->payroll_employee_id}}" size="lg">Salary List</button>
+                        <button class="btn pull-left margin-lr-5 btn-primary popup" link="/member/payroll/employee_list/modal_salary_list/{{$employee->payroll_employee_id}}" size="lg" type="button">Salary List</button>
                       </div>
                     </div>
                   </div>
@@ -304,25 +304,25 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Taxable Salary</small>
-                        <input type="number" name="payroll_employee_salary_taxable" class="form-control text-right" value="{{$salary->payroll_employee_salary_taxable}}">
+                        <input type="number" name="payroll_employee_salary_taxable" class="form-control text-right" value="{{$salary->payroll_employee_salary_taxable}}" readonly>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>SSS Salary</small>
-                        <input type="number" name="payroll_employee_salary_sss" class="form-control text-right" value="{{$salary->payroll_employee_salary_sss}}">
+                        <input type="number" name="payroll_employee_salary_sss" class="form-control text-right" value="{{$salary->payroll_employee_salary_sss}}" readonly>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>PAGIBIG/HDMF Salary</small>
-                        <input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right" value="{{$salary->payroll_employee_salary_pagibig}}">
+                        <input type="number" name="payroll_employee_salary_pagibig" class="form-control text-right" value="{{$salary->payroll_employee_salary_pagibig}}" readonly>
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>PHILHEALTH Salary</small>
-                        <input type="number" name="payroll_employee_salary_philhealth" class="form-control text-right" value="{{$salary->payroll_employee_salary_philhealth}}">
+                        <input type="number" name="payroll_employee_salary_philhealth" class="form-control text-right" value="{{$salary->payroll_employee_salary_philhealth}}" readonly>
                       </div>
                     </div>
                   </div>

@@ -13,10 +13,11 @@ use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use Redirect;
 
-class PayrollTimesheetController extends Member
+class PayrollTimeSheetController extends Member
 {
 	public function index()
 	{
+
 		$data["_employee"] = Tbl_payroll_employee_basic::where("shop_id", $this->user_info->shop_id)->get();
 		$data["current_employee"] = $current_employee = Tbl_payroll_employee_basic::where("shop_id", $this->user_info->shop_id)->where("payroll_employee_id", Request::input("employee_id"))->first();
 		
@@ -185,6 +186,7 @@ class PayrollTimesheetController extends Member
 			$_timesheet[$key]->total_hours = $processed_timesheet->total_hours;
 			$_timesheet[$key]->extra_day_hours = $processed_timesheet->extra_day_hours;
 			$_timesheet[$key]->rest_day_hours = $processed_timesheet->rest_day_hours;
+			$_timesheet[$key]->late_hours = $processed_timesheet->late_hours;
 		}
 
 		return json_encode($_timesheet);

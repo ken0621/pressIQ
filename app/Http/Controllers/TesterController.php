@@ -50,7 +50,8 @@ class TesterController extends Member
     {
         // dd(Tbl_ec_product::variant()->item()->inventory()->get()->toArray());
         // dd(Ecom_Product::getProductList());
-        dd(Ecom_Product::getProduct(5));
+        // dd(Ecom_Product::getProduct(5));\
+        dd(Ecom_Product::getVariantInfo(36));
         // dd(Tbl_customer::Transaction($this->getShopId(), 8)->get());
         // dd(Item::get_all_category_item());
         //dd(Ecom_Product::getAllCategory());

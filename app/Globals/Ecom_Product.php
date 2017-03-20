@@ -279,7 +279,7 @@ class Ecom_Product
 
 	public static function getVariantInfo($variant_id)
 	{
-		$shop_id = Tbl_ec_variant::product()->where("evariant_id", $variant_id)->first()->pluck("eprod_shop_id");
+		$shop_id = Tbl_ec_variant::product()->where("evariant_id", $variant_id)->pluck("eprod_shop_id");
 		return Tbl_ec_variant::variantName()->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_id", $variant_id)->Product()->FirstImage()->first();
 	}
 

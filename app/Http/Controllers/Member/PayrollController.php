@@ -44,6 +44,7 @@ use App\Models\Tbl_payroll_group_rest_day;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_period;
+use App\Models\Tbl_payroll_bank_convertion;
 
 use App\Globals\Payroll;
 
@@ -59,35 +60,28 @@ class PayrollController extends Member
 
     public function employee_list()
 	{	
-	
-		$active['shop_id'] 					= Self::shop_id();
-		$active['company_id'] 				= 0;
-		$active['employement_status'] 		= 0;
-		$active['date'] 					= date('Y-m-d');
-		$data['_active'] 					= Tbl_payroll_employee_basic::selemployee($active)->get();
+		$active_status[0] 	 = 1;
+		$active_status[1] 	 = 2;
+		$active_status[2] 	 = 3;
+		$active_status[3] 	 = 4;
+		$active_status[4] 	 = 5;
+		$active_status[5] 	 = 6;
+		$active_status[7] 	 = 7;
 
-		$separated['shop_id'] 				= Self::shop_id();
-		$separated['company_id'] 			= 0;
-		$separated['employement_status'] 	= 'separated';
-		$separated['date'] 					= date('Y-m-d');
+		$separated_status[0] = 8;
+		$separated_status[1] = 9;
 
-		$data['_separated'] 				= Tbl_payroll_employee_basic::selemployee($separated)->get();
+		$data['_active']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id())->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
+
+		$data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
 
 		$data['_company']					= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
 
-		$active_status[0] 					= 1;
-		$active_status[1] 					= 2;
-		$active_status[2] 					= 3;
-		$active_status[3] 					= 4;
-		$active_status[4] 					= 5;
-		$active_status[5] 					= 6;
-		$active_status[7] 					= 7;
+		
 		$data['_status_active']				= Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $active_status)->orderBy('employment_status')->get();
 
-		$separated_status[0]				= 8;
-		$separated_status[1]				= 9;
+		
 		$data['_status_separated']			= Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $separated_status)->orderBy('employment_status')->get();
-		// dd($data);
 		return view('member.payroll.employeelist', $data);
 	}   
 
@@ -288,6 +282,7 @@ class PayrollController extends Member
 
 	public function modal_employee_view($id)
 	{
+
 		$data['_company'] 			= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
 		$data['employement_status'] = Tbl_payroll_employment_status::get();
 		$data['tax_status'] 		= Tbl_payroll_tax_status::get();
@@ -298,25 +293,90 @@ class PayrollController extends Member
 
 		$data['employee'] 			= Tbl_payroll_employee_basic::where('payroll_employee_id',$id)->first();
 		$data['contract'] 			= Tbl_payroll_employee_contract::selemployee($id)->first();
-
+		// dd($data['contract']);
 		$data['salary']				= Tbl_payroll_employee_salary::selemployee($id)->first();
 		$data['requirement']		= Tbl_payroll_employee_requirements::selrequirements($id)->first();
 		$data['_group'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
-		// dd($data['requirement']);
+		// dd($data);
 
 		return view("member.payroll.modal.modal_view_employee", $data);
 	}
 
 	public function modal_view_contract_list($id)
 	{
-		$data['_active'] = Tbl_payroll_employee_contract::contractlist($id)->get();
+		$data['_active'] 		= Tbl_payroll_employee_contract::contractlist($id)->get();
+		$data['_archived'] 		= Tbl_payroll_employee_contract::contractlist($id, 1)->get();
+		$data['employee_id'] 	= $id;
 		return view('member.payroll.modal.modal_view_contract_list', $data);
 	}
+
+	public function modal_edit_contract($employee_id ,$id)
+	{
+		$data['employee_id'] 		= $employee_id;
+		$data['contract'] 			= Tbl_payroll_employee_contract::where('payroll_employee_contract_id',$id)->first();
+		$data['employement_status'] = Tbl_payroll_employment_status::get();
+		$data['_department'] 		= Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+		$data['_jobtitle']			= Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->get();
+
+		$data['_group'] 			= Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+
+		return view('member.payroll.modal.modal_edit_contract', $data);
+	}
+
+	public function modal_update_contract()
+	{
+		$payroll_employee_contract_id 					= Request::input('payroll_employee_contract_id');
+		$update['payroll_department_id'] 				= Request::input('payroll_department_id');
+		$update['payroll_jobtitle_id'] 					= Request::input('payroll_jobtitle_id');
+		$update['payroll_employee_contract_date_hired'] = date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_hired')));
+		if(Request::input('payroll_employee_contract_date_end') != '')
+		{
+			$update['payroll_employee_contract_date_end'] 	= date('Y-m-d',strtotime(Request::input('payroll_employee_contract_date_end')));
+		}
+		
+		$update['payroll_group_id'] 					= Request::input('payroll_group_id');
+		$update['payroll_employee_contract_status'] 	= Request::input('payroll_employee_contract_status');
+
+		Tbl_payroll_employee_contract::where('payroll_employee_contract_id', $payroll_employee_contract_id)->update($update);
+
+		$return['status'] 			= 'success';
+		$return['function_name'] 	= '';
+		return json_encode($return);
+	}
+
+	public function modal_archive_contract($archived, $payroll_employee_contract_id)
+	{
+		$statement = 'archive';
+		if($archived == 0)
+		{
+			$statement = 'restore';
+		}
+		$data['title'] 		= 'Do you really want to '.$statement.' this contract?';
+		$data['html'] 		= '';
+		$data['action'] 	= '/member/payroll/employee_list/archive_contract';
+		$data['id'] 		= $payroll_employee_contract_id;
+		$data['archived'] 	= $archived;
+
+		return view('member.modal.modal_confirm_archived', $data);
+	}
+
+	public function archive_contract()
+	{
+		$update['payroll_employee_contract_archived'] 	= Request::input('archived');
+		$id 									= Request::input('id');
+		Tbl_payroll_employee_contract::where('payroll_employee_contract_id',$id)->update($update);
+
+		$return['status'] 			= 'success';
+		$return['function_name'] 	= '';
+		return json_encode($return);
+	}
+
 	public function modal_create_contract($id)
 	{
-		$data['employee_id'] = $id;
+		$data['employee_id'] 		= $id;
 		$data['employement_status'] = Tbl_payroll_employment_status::get();
-		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+		$data['_department'] 		= Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+		$data['_group'] 			= Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
 		return view('member.payroll.modal.modal_create_contract',$data);
 	}
 
@@ -456,6 +516,7 @@ class PayrollController extends Member
 		$data['company_logo'] = $company_logo;
 		$data['_rdo'] = Tbl_payroll_rdo::orderBy('rdo_code')->get();
 		$data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->get();
+		$data['_bank'] = Tbl_payroll_bank_convertion::get();
 		return view('member.payroll.modal.modal_create_company', $data);
 	}
 
@@ -499,6 +560,7 @@ class PayrollController extends Member
 		$insert['payroll_company_pagibig'] 				= Request::input('payroll_company_pagibig');
 		$insert['shop_id']								= Self::shop_id();
 		$insert['payroll_parent_company_id']			= Request::input('payroll_parent_company_id');
+		$insert['payroll_company_bank']					= Request::input('payroll_company_bank');
 
 		$logo = '/assets/images/no-logo.png';
 		if(Session::has('company_logo'))
@@ -533,6 +595,7 @@ class PayrollController extends Member
 		$data['action'] = $action;
 		Session::put('company_logo_update', $data['company']->payroll_company_logo);
 		$data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->where('payroll_parent_company_id',0)->orderBy('tbl_payroll_company.payroll_company_name')->get();
+		$data['_bank'] = Tbl_payroll_bank_convertion::get();
 		return view('member.payroll.modal.modal_view_company', $data);
 	}
 
@@ -552,6 +615,7 @@ class PayrollController extends Member
 		$update['payroll_company_philhealth'] 			= Request::input('payroll_company_philhealth');
 		$update['payroll_company_pagibig'] 				= Request::input('payroll_company_pagibig');
 		$update['payroll_parent_company_id']			= Request::input('payroll_parent_company_id');
+		$update['payroll_company_bank']					= Request::input('payroll_company_bank');
 		$logo = '/assets/images/no-logo.png';
 		if(Session::has('company_logo_update'))
 		{

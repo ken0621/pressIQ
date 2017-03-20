@@ -13,10 +13,11 @@ use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use Redirect;
 
-class PayrollTimesheetController extends Member
+class PayrollTimeSheetController extends Member
 {
 	public function index()
 	{
+
 		$data["_employee"] = Tbl_payroll_employee_basic::where("shop_id", $this->user_info->shop_id)->get();
 		$data["current_employee"] = $current_employee = Tbl_payroll_employee_basic::where("shop_id", $this->user_info->shop_id)->where("payroll_employee_id", Request::input("employee_id"))->first();
 		

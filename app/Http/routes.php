@@ -203,6 +203,8 @@ Route::any('/member/item/category', 'Member\Manage_Category_Controller@index');
 Route::any('/member/item/category/modal_create_category', 'Member\Manage_Category_Controller@modal_create_category');
 Route::any('/member/item/category/edit_category/{id}', 'Member\Manage_Category_Controller@edit_category');
 Route::any('/member/item/category/update_category', 'Member\Manage_Category_Controller@update_category');
+Route::any('/member/item/category/archived/{id}/{action}','Member\Manage_Category_Controller@archived');
+Route::any('/member/item/category/archived_submit','Member\Manage_Category_Controller@archived_submit');
 
 Route::any('/member/item/category/create_category', 'Member\Manage_Category_Controller@create_category');
 Route::any('/member/item/category/search_category', 'Member\Manage_Category_Controller@search_category');

@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<div class="panel panel-default panel-block panel-title-block panel-gray">
+<div class="panel panel-default panel-block panel-title-block panel-gray">  
     <div class="tab-content">
         <div class="row">
              <div class="form-group">

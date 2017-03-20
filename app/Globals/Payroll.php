@@ -320,9 +320,11 @@ class Payroll
 		{
 			$time_in = c_time_to_int($time_record->time_in);
 			$time_out = c_time_to_int($time_record->time_out);
+
 			$early_overtime = 0;
 			$late_overtime = 0;
 
+			/* IF TIMEOUT HAPPENS BEFORE TIME IN - SET TIME SPENT TO ZERO */
 			if($time_out > $time_in)
 			{
 				$time_spent = ($time_out - $time_in);
@@ -335,14 +337,14 @@ class Payroll
 			$regular_hours = $time_spent;
 
 			/* CHECK IF EARLY OVERTIME */
-			if($time_in < $default_time_in)
+			if($time_in < $default_time_in && $time_out != 0)
 			{
 				$early_overtime = $default_time_in - $time_in;
 				$regular_hours = $regular_hours - $early_overtime;
 			}
 
 			/* CHECK IF EARLY OVERTIME */
-			if($time_out > $default_time_out)
+			if($time_out > $default_time_out && $time_out != 0)
 			{
 				$late_overtime = $time_out - $default_time_out;
 				$regular_hours = $regular_hours - $late_overtime;
@@ -352,7 +354,6 @@ class Payroll
 			$total_late_overtime += $late_overtime;
 			$total_regular_hours += $regular_hours;
 			$total_time_spent += $time_spent;
-
 		}
 
 
@@ -362,6 +363,7 @@ class Payroll
 		}
 		else
 		{
+			//IF BREAK IS GREATER THAN REGULAR HOURS - SET REGULAR HOURS TO ZERO
 			if($break > $total_regular_hours)
 			{
 				$total_regular_hours = 0;
@@ -372,11 +374,13 @@ class Payroll
 			}
 		}
 
-
 		$return->time_spent = date("H:i", $total_time_spent);
 		$return->regular_hours = date("H:i", $total_regular_hours);
 		$return->late_overtime = date("H:i", $total_late_overtime);
 		$return->early_overtime = date("H:i", $total_early_overtime);
+		$return->rest_day_hours = date("H:i", 0);
+		$return->extra_day_hours = date("H:i", 0);
+		$return->total_hours = date("H:i", 0);
 		
 		return $return;
 	}

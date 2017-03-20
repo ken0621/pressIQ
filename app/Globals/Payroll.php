@@ -221,7 +221,7 @@ class Payroll
 	}
 
 	/* 	 Returns normal hours rendered and overtime (Guillermo Tabligan) */
-	public static function process_time($time_rule, $default_time_in, $default_time_out, $_time_record, $break = "01:00", $default_working_hours = "08:00")
+	public static function process_time($time_rule, $default_time_in, $default_time_out, $_time_record, $break = "01:00", $default_working_hours = "08:00", $late_grace_time = 15)
 	{
 		$return = new stdClass();
 
@@ -231,7 +231,7 @@ class Payroll
 				return Payroll::process_time_flexitime($return, $time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
 			break;
 			case "regulartime": 
-				return Payroll::process_time_regulartime($return, $time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
+				return Payroll::process_time_regulartime($return, $time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours, $late_grace_time);
 			break;
 		}
 	}
@@ -240,7 +240,6 @@ class Payroll
 		$data["break"] = $break = c_time_to_int($break);
 		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
 
-		
 		$total_time_spent = 0;
 		$total_early_overtime = 0;
 		$total_late_overtime = 0;
@@ -302,7 +301,7 @@ class Payroll
 		return $return;
 	}
 
-	public static function process_time_regulartime($return, $time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours)
+	public static function process_time_regulartime($return, $time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours, $late_grace_time)
 	{
 		$data["break"] = $break = c_time_to_int($break);
 		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
@@ -311,6 +310,9 @@ class Payroll
 		$total_early_overtime = 0;
 		$total_late_overtime = 0;
 		$total_regular_hours = 0;
+		$total_late_hours = 0;
+		$total_hours = 0;
+		$earliest_time_in = 86340;
 
 		$default_time_in = c_time_to_int($default_time_in);
 		$default_time_out = c_time_to_int($default_time_out);
@@ -320,9 +322,14 @@ class Payroll
 		{
 			$time_in = c_time_to_int($time_record->time_in);
 			$time_out = c_time_to_int($time_record->time_out);
-
 			$early_overtime = 0;
 			$late_overtime = 0;
+
+			/* GET EARLIEST TIME IN - USE FOR LATE */
+			if($earliest_time_in > $time_in)
+			{
+				$earliest_time_in = $time_in;
+			}
 
 			/* IF TIMEOUT HAPPENS BEFORE TIME IN - SET TIME SPENT TO ZERO */
 			if($time_out > $time_in)
@@ -374,13 +381,26 @@ class Payroll
 			}
 		}
 
+		/* COMPUTE LATE BASED ON EARLIEST TIME IN */
+		if($default_time_in < $earliest_time_in)
+		{
+			$total_late_hours = $earliest_time_in - $default_time_in;
+		}
+		else
+		{
+			$total_late_hours = 0;
+		}
+
+		$total_hours = $total_regular_hours;
+
 		$return->time_spent = date("H:i", $total_time_spent);
 		$return->regular_hours = date("H:i", $total_regular_hours);
 		$return->late_overtime = date("H:i", $total_late_overtime);
 		$return->early_overtime = date("H:i", $total_early_overtime);
+		$return->late_hours = date("H:i", $total_late_hours);
 		$return->rest_day_hours = date("H:i", 0);
 		$return->extra_day_hours = date("H:i", 0);
-		$return->total_hours = date("H:i", 0);
+		$return->total_hours = date("H:i", $total_hours);
 		
 		return $return;
 	}

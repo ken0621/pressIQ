@@ -437,7 +437,7 @@ body
 .navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.active>a
 {
 	background-color: #fff !important;
-	color: #000 !important;
+	color: #000;
 	background-image: none !important;
 }
 .nav-border
@@ -472,6 +472,16 @@ footer
 		.contact-footer
 		{
 			.contact-details
+			{
+				padding: 0;
+			}
+		}
+
+		.shop-footer
+		{
+			padding-left: 30px;
+			
+			.btm-link
 			{
 				padding: 0;
 			}
@@ -547,7 +557,7 @@ footer
 
 	.btm-link 
 	{
-		margin-left: -15px;
+		padding: 0;
 	}
 
 	.site-icon 

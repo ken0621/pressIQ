@@ -11,6 +11,9 @@
                 </small>
             </h1>
             <a class="panel-buttons btn btn-custom-primary pull-right" href="product_order/create_order" >Create Invoice</a>
+<!--             <a class="panel-buttons btn btn-default pull-right" href="product_order/create_order" >Sales by product (Report)</a>
+            <a class="panel-buttons btn btn-default pull-right" href="product_order/create_order" >Sales by month (Report)</a>
+            <a class="panel-buttons btn btn-default pull-right" href="product_order/create_order" >Sales by variant (Report)</a> -->
         </div>
     </div>
 </div>
@@ -44,8 +47,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if($ec_order_unpaid)
-                            @foreach($ec_order_unpaid as $order)
+                        @if($ec_order_pending)
+                            @foreach($ec_order_pending as $order)
                             <tr>
                                 <td>{{$order->ec_order_id}}</td>
                                 <td>{{$order->created_date}}</td>
@@ -83,14 +86,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if($ec_order_paid)
-                            @foreach($ec_order_paid as $order)
+                        @if($ec_order_failed)
+                            @foreach($ec_order_failed as $order)
                             <tr>
                                 <td>{{$order->ec_order_id}}</td>
                                 <td>{{$order->created_date}}</td>
                                 <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
                                 <td>{{$order->order_status}}</td>
                                 <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
+
                             </tr>
                             @endforeach
                         @else
@@ -103,7 +112,7 @@
             </div>
         </div>
 
-        <div id="void" class="tab-pane fade in ">
+        <div id="processing" class="tab-pane fade in ">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
                 <table class="table table-condensed">
@@ -117,14 +126,139 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if($ec_order_void)
-                            @foreach($ec_order_void as $order)
+                        @if($ec_order_processing)
+                            @foreach($ec_order_processing as $order)
                             <tr>
                                 <td>{{$order->ec_order_id}}</td>
                                 <td>{{$order->created_date}}</td>
                                 <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
                                 <td>{{$order->order_status}}</td>
                                 <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
+
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="5"><center>No Order</center></td>    
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="completed" class="tab-pane fade in ">
+            <div class="form-group order-tags"></div>
+            <div class="table-responsive">
+                <table class="table table-condensed">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th>Order</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Payment Status</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if($ec_order_completed)
+                            @foreach($ec_order_completed as $order)
+                            <tr>
+                                <td>{{$order->ec_order_id}}</td>
+                                <td>{{$order->created_date}}</td>
+                                <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
+                                <td>{{$order->order_status}}</td>
+                                <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
+
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="5"><center>No Order</center></td>    
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </div> 
+
+        <div id="onhold" class="tab-pane fade in ">
+            <div class="form-group order-tags"></div>
+            <div class="table-responsive">
+                <table class="table table-condensed">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th>Order</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Payment Status</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if($ec_order_on_hold)
+                            @foreach($ec_order_on_hold as $order)
+                            <tr>
+                                <td>{{$order->ec_order_id}}</td>
+                                <td>{{$order->created_date}}</td>
+                                <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
+                                <td>{{$order->order_status}}</td>
+                                <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
+
+                            </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="5"><center>No Order</center></td>    
+                            </tr>
+                        @endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="cancelled" class="tab-pane fade in ">
+            <div class="form-group order-tags"></div>
+            <div class="table-responsive">
+                <table class="table table-condensed">
+                    <thead style="text-transform: uppercase">
+                        <tr>
+                            <th>Order</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Payment Status</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if($ec_order_cancelled)
+                            @foreach($ec_order_cancelled as $order)
+                            <tr>
+                                <td>{{$order->ec_order_id}}</td>
+                                <td>{{$order->created_date}}</td>
+                                <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
+                                <td>{{$order->order_status}}</td>
+                                <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
                             </tr>
                             @endforeach
                         @else

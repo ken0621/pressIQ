@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblItemMultiplePrice extends Migration
+class UpdateTblInventorySerialNumber5678 extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class CreateTblItemMultiplePrice extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_item_multiple_price', function (Blueprint $table) {
-            //
+        Schema::table('tbl_inventory_serial_number', function (Blueprint $table) {
+            $table->renameColumn("inventory_id", "serial_inventory_id");
         });
     }
 
@@ -24,7 +24,7 @@ class CreateTblItemMultiplePrice extends Migration
      */
     public function down()
     {
-        Schema::table('tbl_item_multiple_price', function (Blueprint $table) {
+        Schema::table('tbl_inventory_serial_number', function (Blueprint $table) {
             //
         });
     }

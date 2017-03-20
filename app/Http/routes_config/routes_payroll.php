@@ -141,6 +141,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/allowance/modal_archived_llowance_employee/{archived}/{id}',"Member\PayrollController@modal_archived_llowance_employee");
 	Route::any('/allowance/reload_allowance_employee',"Member\PayrollController@reload_allowance_employee");
 	Route::any('/allowance/archived_allowance_employee',"Member\PayrollController@archived_allowance_employee");
+	Route::any('/allowance/update_allowance',"Member\PayrollController@update_allowance");
 	/* ALLOWANCE END */
 
 	/* LEAVE START */
@@ -153,5 +154,14 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_group/modal_create_payroll_group',"Member\PayrollController@modal_create_payroll_group");
 	Route::any('/payroll_group/modal_save_payroll_group',"Member\PayrollController@modal_save_payroll_group");
 	Route::any('/payroll_group/modal_edit_payroll_group/{id}',"Member\PayrollController@modal_edit_payroll_group");
+	Route::any('/payroll_group/modal_update_payroll_group',"Member\PayrollController@modal_update_payroll_group");
+	Route::any('/payroll_group/confirm_archived_payroll_group/{archived}/{group_id}',"Member\PayrollController@confirm_archived_payroll_group");
+	Route::any('/payroll_group/archived_payroll_group',"Member\PayrollController@archived_payroll_group");
 	/* PAYROLL GROUP END */
+
+	/* PAYROLL PERIOD START */
+	Route::any('/payroll_period_list','Member\PayrollController@payroll_period_list');
+	Route::any('/payroll_period_list/modal_create_payroll_period','Member\PayrollController@modal_create_payroll_period');
+	Route::any('/payroll_period_list/modal_save_payroll_period','Member\PayrollController@modal_save_payroll_period');
+	/* PAYROLL PERIOD END */
 });

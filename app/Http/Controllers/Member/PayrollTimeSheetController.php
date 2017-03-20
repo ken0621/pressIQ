@@ -186,6 +186,7 @@ class PayrollTimeSheetController extends Member
 			$_timesheet[$key]->total_hours = $processed_timesheet->total_hours;
 			$_timesheet[$key]->extra_day_hours = $processed_timesheet->extra_day_hours;
 			$_timesheet[$key]->rest_day_hours = $processed_timesheet->rest_day_hours;
+			$_timesheet[$key]->late_hours = $processed_timesheet->late_hours;
 		}
 
 		return json_encode($_timesheet);

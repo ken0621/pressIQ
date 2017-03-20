@@ -1,4 +1,4 @@
-<form class="global-submit" role="form" action="/member/payroll/allowance/modal_save_allowances" method="POST">
+<form class="global-submit" role="form" action="/member/payroll/allowance/update_allowance" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Allowance Details</h4>

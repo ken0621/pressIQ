@@ -13,12 +13,13 @@
             <th class="text-center"></th>
             
             <th width="60px" class="text-center"></th>
-            <th width="60px" class="text-center"></th>
-            <th width="120px" colspan="2" class="text-center">Non-Reg Day</th>
-            <th width="120px" colspan="2" class="text-center">Overtime</th>
-            <th width="60px" class="text-center"></th>
+            <th width="55px" class="text-center"></th>
+            <th width="55px" class="text-center"></th>
+            <th width="110px" colspan="2" class="text-center">Non-Reg Day</th>
+            <th width="110px" colspan="2" class="text-center">Overtime</th>
+            <th width="55px" class="text-center"></th>
 
-            <th width="80px" class="text-center"></th>
+            <th width="45px" class="text-center"></th>
             <th width="50px" class="text-center"></th>
         </tr>
         <tr>
@@ -28,9 +29,10 @@
             <th class="text-center">Time Out</th>
             <th class="text-center">Activities</th>
             <th class="text-center">Break</th>
-            <th class="text-center">Norm</th>
+            <th class="text-center">NRM</th>
+            <th class="text-center">Late</th>
             <th class="text-center">Rest</th>
-            <th class="text-center">Extra</th>
+            <th class="text-center">XTRA</th>
 
             @if($time_rule == "flexitime")
             <th colspan="2" width="80px" class="text-center">O.T Hours</th>
@@ -39,7 +41,7 @@
             <th class="text-center">Reg</th>
             @endif
             <th class="text-center">Total</th>
-            <th class="text-center">Type</th>
+            <th class="text-center">TYP</i></th>
             <th class="text-center"></th>
         </tr>
     </thead>
@@ -57,6 +59,7 @@
                     <td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
                     <td class="text-center edit-data"><input class="text-table break-time time-entry-24"  type="text" name="break[{{ $timesheet->date}}]" value="{{ $timesheet->break }}"></td>
                     <td class="text-center edit-data normal-hours">__:__</td>
+                    <td class="text-center edit-data late-hours">__:__</td>
                     <td class="text-center edit-data rest-day-hours">__:__</td>
                     <td class="text-center edit-data extra-day-hours">__:__</td>
 
@@ -67,7 +70,7 @@
                     <td class="text-center edit-data overtime-hours late">__:__</td>
                     @endif
                     <td class="text-center edit-data total-hours">__:__</td>
-                    <td class="text-center edit-data">REGULAR</td>
+                    <td class="text-center edit-data">REG</td>
                     <td class="text-center"><span class="button create-sub-time"><i class="fa fa-plus"></i></span></td>
                 @else 
                     <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $timesheet->date }}">
@@ -77,6 +80,7 @@
                     <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}"></td>
                     <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}"></td>
                     <td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
+                    <td class="text-center edit-data"></td>
                     <td class="text-center edit-data"></td>
                     <td class="text-center edit-data"></td>
                     <td class="text-center edit-data"></td>
@@ -100,9 +104,11 @@
                 <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>
-                <td class="text-center editable"><input class="text-table time-entry time-in is-timeEntry" name="" value="9:00AM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span></td>
-                <td class="text-center editable"><input class="text-table time-entry time-out is-timeEntry" name="" value="6:00PM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span></td>
+                <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in is-timeEntry" name="" value="9:00AM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span></td>
+                <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out is-timeEntry" name="" value="6:00PM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span></td>
                 <td class="text-center editable"><textarea placeholder="" class="text-table"></textarea></td>   
+                <td class="text-center edit-data"></td>
+                <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>

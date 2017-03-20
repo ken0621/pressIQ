@@ -50,8 +50,8 @@
                     <option value="" {{ Request::input('sort') == '' ? 'selected' : '' }}>Relevance</option>
                     <option value="name_asc" {{ Request::input('sort') == 'name_asc' ? 'selected' : '' }}>Sort by Name: A - Z</option>
                     <option value="name_desc" {{ Request::input('sort') == 'name_desc' ? 'selected' : '' }}>Sort by Name: Z - A</option>
-                    <option value="price_desc" {{ Request::input('sort') == 'price_desc' ? 'selected' : '' }}>Sort by Price: Low - High</option>
-                    <option value="price_asc" {{ Request::input('sort') == 'price_asc' ? 'selected' : '' }}>Sort by Price: High - Low</option>
+                    <option value="price_desc" {{ Request::input('sort') == 'price_desc' ? 'selected' : '' }}>Sort by Price: High - Low</option>
+                    <option value="price_asc" {{ Request::input('sort') == 'price_asc' ? 'selected' : '' }}>Sort by Price: Low - High</option>
                     <option value="newest" {{ Request::input('sort') == 'newest' ? 'selected' : '' }}>Sort by: Newest</option>
                 </select>
             </div>

@@ -320,9 +320,7 @@
 
 <script type="text/javascript">
 
-    $(".single-product-img").elevateZoom({
-
-    });
+    
 
 </script>
 

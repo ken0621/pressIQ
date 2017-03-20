@@ -19,7 +19,7 @@ class ShopProductContentController extends Shop
         $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
         $data["_variant"]    = Ecom_Product::getProductOption($id, ",");
         $data["_related"]    = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
-        
+    
         foreach ($data["product"]["variant"] as $keys => $values) 
         {
             // Convert to timestamp
@@ -60,5 +60,12 @@ class ShopProductContentController extends Shop
         }
 
         echo json_encode($response);
+    }
+
+    public function search()
+    {
+        $search = Ecom_Product::searchProduct(Request::input("search-pokus"), $this->shop_info->shop_id);
+
+        return json_encode($search);
     }
 }

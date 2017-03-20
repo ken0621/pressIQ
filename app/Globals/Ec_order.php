@@ -2,6 +2,7 @@
 namespace App\Globals;
 use DB;
 use App\Globals\Ec_order;
+use App\Globals\Ecom_Product;
 use App\Globals\Warehouse;
 use App\Globals\Customer;
 use App\Models\Tbl_chart_of_account;
@@ -308,23 +309,34 @@ class Ec_order
             }
         }
 
-        if($response["status"] == "error")
-        {
-            return $response;
+
+        if(isset($response["status"]))
+        { 
+            if($response["status"] == "error")
+            {
+                return $response;
+            }
+            else
+            {
+                Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
+                return $response; 
+            }
         }
         else
         {
             Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
-            return $response; 
+            $response           = null;
+            $response["status"] = "success";
+            return $response;
         }
 	}
 
     public static function update_inventory($type,$ec_order_id)
     {
-        $warehouse_id = Ecom_Product::getWarehouseId();
         $ec_order     = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
         if($type == "deduct")
         {
+            $warehouse_id = Ecom_Product::getWarehouseId();
             $ec_order_item = Tbl_ec_order_item::where("ec_order_id",$ec_order_id)->get();
             $ctr = 0;
             foreach($ec_order_item as $ordered)
@@ -344,6 +356,7 @@ class Ec_order
         }
         else if($type == "add")
         {
+            $warehouse_id  = Ecom_Product::getWarehouseId();
             $ec_order_item = Tbl_ec_order_item::where("ec_order_id",$ec_order_id)->get();
             $ctr = 0;
             foreach($ec_order_item as $ordered)
@@ -359,6 +372,8 @@ class Ec_order
             $warehouse_remarks        = "";    
             $return_type              = "array";             
             $data                     = Warehouse::inventory_refill($warehouse_id, $warehouse_reason_refill, $warehouse_refill_source, $warehouse_remarks, $warehouse_refill_product, $return_type);
+            
+
             return $data;
         }
     }

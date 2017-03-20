@@ -46,7 +46,7 @@ function timesheet()
 		{
 			$date = $(e.currentTarget).closest("tr").attr("date");
 			action_create_sub_time($date);
-			action_compute_work_hours();
+
 		});
 	}
 	function event_delete_sub_time()
@@ -55,7 +55,9 @@ function timesheet()
 		{
 			if(confirm("Are you sure you want to delete this time-entry?"))
 			{
-				$date = $(e.currentTarget).closest("tr").remove();
+				$date = $(e.currentTarget).closest("tr").attr("date");
+				$(e.currentTarget).closest("tr").remove();
+				action_recompute_loading($date);
 				action_compute_work_hours();
 			}
 		});
@@ -138,6 +140,7 @@ function timesheet()
 		$(".time-record.main[date='" + date + "']").find(".extra-day-hours").text("__:__");
 		$(".time-record.main[date='" + date + "']").find(".rest-day-hours").text("__:__");
 		$(".time-record.main[date='" + date + "']").find(".total-hours").text("__:__");
+		$(".time-record.main[date='" + date + "']").find(".late-hours").text("__:__");
 		$(".time-record.main[date='" + date + "']").find(".overtime-hours").removeClass("red");
 	}
 	function action_create_sub_time(date)
@@ -146,14 +149,12 @@ function timesheet()
 		$(".time-record[date='" + date + "']:last").after($append);
 		
 		$last_time_out = $(".time-record[date='" + date + "']:last").find(".time-out").val();
-		$time_in = $last_time_out;
-		$time_out = add_two_time(convert_to_24h($last_time_out), "01:00");
 
 		/* UPDATE DATA FOR NEW SUB */
 		$("tbody").find(".time-record.new-sub").attr("date", date);
 		$("tbody").find(".time-record.new-sub").find(".date").val(date);
-		$("tbody").find(".time-record.new-sub").find(".time-in").val($time_in);
-		$("tbody").find(".time-record.new-sub").find(".time-out").val($time_out);
+		$("tbody").find(".time-record.new-sub").find(".time-in").val("");
+		$("tbody").find(".time-record.new-sub").find(".time-out").val("");
 		$arr_count = new_sub_ctr++;
 		$("tbody").find(".time-record.new-sub").find(".date").attr("name", "date[" + date + "][" + $arr_count + "]");
 		$("tbody").find(".time-record.new-sub").find(".time-in").attr("name", "time_in[" + date + "][" + $arr_count + "]");
@@ -182,7 +183,7 @@ function timesheet()
 			{
 				$.each(data, function(key, val)
 				{
-					update_time_record_on_table(val.date, val.regular_hours, val.early_overtime, val.late_overtime, val.extra_day_hours, val.rest_day_hours, val.total_hours);
+					update_time_record_on_table(val.date, val.regular_hours, val.early_overtime, val.late_overtime, val.extra_day_hours, val.rest_day_hours, val.late_hours, val.total_hours);
 				});
 
 				$(".table-loader").addClass("hidden");
@@ -195,7 +196,7 @@ function timesheet()
 		});
 	}
 
-	function update_time_record_on_table(date, regular_hours, early_overtime, late_overtime,  extra_day_hours = "00:00", rest_day_hours = "00:00", total_hours = "00:00")
+	function update_time_record_on_table(date, regular_hours, early_overtime, late_overtime,  extra_day_hours = "00:00", rest_day_hours = "00:00", late_hours="00:00",total_hours = "00:00")
 	{
 		$(".time-record[date='" + date + "']").find(".normal-hours").text(regular_hours);
 		$(".time-record[date='" + date + "']").find(".overtime-hours.late").text(late_overtime);
@@ -203,23 +204,74 @@ function timesheet()
 		$(".time-record[date='" + date + "']").find(".extra-day-hours").text(extra_day_hours);
 		$(".time-record[date='" + date + "']").find(".rest-day-hours").text(rest_day_hours);
 		$(".time-record[date='" + date + "']").find(".total-hours").text(total_hours);
+		$(".time-record[date='" + date + "']").find(".late-hours").text(late_hours);
 
-		if(late_overtime != "00:00")
+		/* LATE HOURS GRAY IF ZERO */
+		if(late_hours != "00:00")
 		{
-			$(".time-record[date='" + date + "']").find(".overtime-hours.late").addClass("red");
+			$(".time-record[date='" + date + "']").find(".late-hours").css("color", "black");
 		}
 		else
 		{
-			$(".time-record[date='" + date + "']").find(".overtime-hours.late").removeClass("red");
+			$(".time-record[date='" + date + "']").find(".late-hours").css("color", "#bbb");
+		}
+
+		/* NORM HOURS GRAY IF ZERO */
+		if(regular_hours != "00:00")
+		{
+			$(".time-record[date='" + date + "']").find(".normal-hours").css("color", "black");
+		}
+		else
+		{
+			$(".time-record[date='" + date + "']").find(".normal-hours").css("color", "#bbb");
+		}
+
+		/* EXTRA DAY GRAY IF ZERO */
+		if(extra_day_hours != "00:00")
+		{
+			$(".time-record[date='" + date + "']").find(".extra-day-hours").css("color", "black");
+		}
+		else
+		{
+			$(".time-record[date='" + date + "']").find(".extra-day-hours").css("color", "#bbb");
+		}
+
+		/* REST DAY GRAY IF ZERO */
+		if(rest_day_hours != "00:00")
+		{
+			$(".time-record[date='" + date + "']").find(".rest-day-hours").css("color", "black");
+		}
+		else
+		{
+			$(".time-record[date='" + date + "']").find(".rest-day-hours").css("color", "#bbb");
+		}
+
+		/* TOTAL GRAY IF ZERO */
+		if(total_hours != "00:00")
+		{
+			$(".time-record[date='" + date + "']").find(".total-hours").css("color", "black");
+		}
+		else
+		{
+			$(".time-record[date='" + date + "']").find(".total-hours").css("color", "#bbb");
+		}
+
+		if(late_overtime != "00:00")
+		{
+			$(".time-record[date='" + date + "']").find(".overtime-hours.late").css("color", "red");
+		}
+		else
+		{
+			$(".time-record[date='" + date + "']").find(".overtime-hours.late").css("color", "#bbb");
 		}
 
 		if(early_overtime != "00:00")
 		{
-			$(".time-record[date='" + date + "']").find(".overtime-hours.early").addClass("red");
+			$(".time-record[date='" + date + "']").find(".overtime-hours.early").css("color", "red");
 		}
 		else
 		{
-			$(".time-record[date='" + date + "']").find(".overtime-hours.early").removeClass("red");
+			$(".time-record[date='" + date + "']").find(".overtime-hours.early").css("color", "#bbb");
 		}
 
 

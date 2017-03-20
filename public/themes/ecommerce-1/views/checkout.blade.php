@@ -63,6 +63,12 @@
 											<div class="name">REMITTANCE</div>
 										</td>
 									</tr>
+									<tr>
+										<td class="ray"><input type="radio"></td>
+										<td>
+											<div class="name">E-WALLET PAYMENT</div>
+										</td>
+									</tr>
 								</tbody>
 							</table>
 						</div>

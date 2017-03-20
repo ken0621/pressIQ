@@ -154,6 +154,27 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/* LEAVE START */
 	Route::any('/leave',"Member\PayrollController@leave");
+	/*Link to Modal Create leave_temp*/
+	Route::any('/leave/modal_create_leave_temp',"Member\PayrollController@modal_create_leave_temp");
+	/*Another Modal for tagging employee*/
+	Route::any('/leave/modal_leave_tag_employee/{leave_temp_id}',"Member\PayrollController@modal_leave_tag_employee");
+	Route::any('/leave/set_leave_employee_tag',"Member\PayrollController@set_leave_employee_tag");
+	Route::any('/leave/get_leave_tag_employee',"Member\PayrollController@get_leave_tag_employee");
+	Route::any('/leave/remove_leave_tag_employee',"Member\PayrollController@remove_leave_tag_employee");
+	Route::any('/leave/modal_save_leave_temp',"Member\PayrollController@modal_save_leave_temp");
+	Route::any('/leave/modal_archived_leave_temp/{archived}/{leave_temp_id}',"Member\PayrollController@modal_archived_leave_temp");
+	Route::any('/leave/archived_leave_temp',"Member\PayrollController@archived_leave_temp");
+	
+	Route::any('/leave/reload_leave_employee',"Member\PayrollController@reload_leave_employee");
+
+	Route::any('/leave/modal_edit_leave_temp/{id}',"Member\PayrollController@modal_edit_leave_temp");
+	Route::any('/leave/set_leave_tag_employee',"Member\PayrollController@set_leave_tag_employee");
+
+	Route::any('/leave/archived_leave_employee',"Member\PayrollController@archived_leave_employee");
+
+	Route::any('/leave/modal_archived_leave_employee/{archived}/{id}',"Member\PayrollController@modal_archived_leave_employee");
+	/*Update leave temp*/
+	Route::any('/leave/update_leave_temp',"Member\PayrollController@update_leave_temp");
 	/* LEAVE END */
 
 

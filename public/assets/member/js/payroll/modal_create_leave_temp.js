@@ -1,6 +1,6 @@
-var modal_create_allowance = new modal_create_allowance();
+var modal_create_leave_temp = new modal_create_leave_temp();
 
-function modal_create_allowance()
+function modal_create_leave_temp()
 {
 	init();
 
@@ -24,7 +24,7 @@ function modal_create_allowance()
 			{	
 				element.html(misc('spinner'));
 				$.ajax({
-					url 	: 	"/member/payroll/allowance/remove_allowance_tabe_employee",
+					url 	: 	"/member/payroll/leave/remove_leave_tag_employee",
 					type 	: 	"POST",
 					data 	: 	{
 						_token:misc('_token'),
@@ -47,10 +47,10 @@ function modal_create_allowance()
 
 	this.load_employee_tag = function()
 	{
-		reload_allowance_employee();
+		reload_leave_employee();
 		$(".tbl-tag").html('<tr><td colspan="2" class="text-center">'+misc('loader') + '</td></tr>');
 		$.ajax({
-			url 	: 	"/member/payroll/allowance/get_employee_allowance_tag",
+			url 	: 	"/member/payroll/leave/get_leave_tag_employee",
 			type 	: 	"POST",
 			data 	: 	{
 				_token:misc('_token')
@@ -74,15 +74,20 @@ function modal_create_allowance()
 		});
 	}
 
-	function reload_allowance_employee()
+/*	this.reload_leave_employee = function()
 	{
-		var action = "/member/payroll/allowance/reload_allowance_employee";
+		reload_leave_employee();
+	}*/
+
+	function reload_leave_employee()
+	{
+		var action = "/member/payroll/leave/reload_leave_employee";
 		var method = "POST";
 		var formdata = {
 			_token:misc('_token'),
-			payroll_allowance_id:$("#payroll_allowance_id").val()
+			payroll_leave_temp_id:$("#payroll_leave_temp_id").val()
 		};
-		var target = ".allowance-employee";
+		var target = ".leave-employee";
 		$(target).html(misc('loader'));
 		$.ajax({
 			url	 	: 	action,

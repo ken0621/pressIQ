@@ -26,8 +26,6 @@ class PayrollTimesheetController extends Member
 			return Redirect::to("/member/payroll/employee_timesheet?employee_id=" . $data["_employee"][0]->payroll_employee_id)->send();
 		}
 
-		
-
 		return view('member.payroll.employee_timesheet', $data);
 	}
 	public function timesheet($employee_id)

@@ -3,6 +3,7 @@ namespace App\Globals;
 use DB;
 use App\Globals\Ec_order;
 use App\Globals\Warehouse;
+use App\Globals\Customer;
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
@@ -12,6 +13,7 @@ use App\Models\Tbl_ec_order;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_position;
 use App\Models\Tbl_coupon_code;
+
 use Log;
 use Request;
 use Session;
@@ -24,6 +26,43 @@ class Ec_order
     public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
+
+    public static function create_ec_order_automatic($order_info)
+    {
+        $customer_id = Customer::createCustomer($order_info['shop_id'] ,$order_info['customer']);
+
+        $data['shop_id']           = $order_info['shop_id'];
+        $data['inv_customer_id']   = $customer_id;;
+        $data['inv_customer_email']= $order_info['customer']['customer_email'];
+
+        $data['inv_terms_id']  = '';
+        $data['inv_date']      = '';
+        $data['inv_due_date']       = '';
+        $data['inv_customer_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province'];
+        $data['inv_message']          = '';
+        $data['inv_memo']         = '';
+        $data['ewt']                  = 0;
+        $data['inv_discount_type']    = '';
+        $data['inv_discount_value']   = 0;
+        $data['invline_service_date'] = $order_info['invline_service_date'];
+        $data['invline_item_id']      = $order_info['invline_item_id'];
+        $data['invline_description']  = $order_info['invline_description'];
+        $data['invline_qty']          = $order_info['invline_qty'];
+        $data['invline_rate']         = $order_info['invline_rate'];
+        $data['invline_discount']     = $order_info['invline_discount'];
+        $data['invline_discount_remark'] = $order_info['invline_discount_remark'];
+        $data['payment_method_id'] = $order_info['payment_method_id'];
+        $data['coupon_code'] = 0;
+        
+        $data['taxable']              = $order_info['taxable'];
+
+        $order_id = Ec_order::create_ec_order($data);
+        
+        $return["status"]           = "success";
+        $return["order_id"]         = $order_id;
+
+        return $return;
     }
 
 	public static function create_ec_order($data)
@@ -72,15 +111,17 @@ class Ec_order
                 $ec_order_item[$key]["total"]                = $total_amt;  
                 $ec_order_item[$key]["description"]          = $data["invline_description"][$key];              
                 $ec_order_item[$key]["service_date"]         = $data["invline_service_date"][$key];              
-                $ec_order_item[$key]["tax"]                  = $data['invline_taxable'][$key];  
+                $ec_order_item[$key]["tax"]                  = isset($data['invline_taxable']) ? $data['invline_taxable'][$key] : 0;  
 
                 $prod_total                                  = $prod_total + $total_amt;
 
 
-
-                if($data['invline_taxable'][$key] == 1)
+                if (isset($data['invline_taxable'])) 
                 {
-                    $vat_total = $vat_total + ($total_amt * .12);
+                    if($data['invline_taxable'][$key] == 1)
+                    {
+                        $vat_total = $vat_total + ($total_amt * .12);
+                    }
                 }
             }
         }
@@ -169,7 +210,7 @@ class Ec_order
         $ec_order['tax']                            = $data["taxable"];
         $ec_order['coupon_id']                      = $coupon_id;
         $ec_order['term_id']                        = $data["inv_terms_id"];
-        $ec_order['shop_id']                        = Ec_order::getShopId();
+        $ec_order['shop_id']                        = isset($data["shop_id"]) ? $data["shop_id"] : Ec_order::getShopId();
         $ec_order['created_date']                   = Carbon::now();
         $ec_order['archived']                       = 0;
 

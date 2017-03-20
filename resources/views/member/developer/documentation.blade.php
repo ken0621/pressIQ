@@ -2195,15 +2195,6 @@
                         </ul>
                      </ul>
                   </p>
-                  <p>
-                     <form action="/send">
-                        <input type="hidden" name="_token" value="{{csrf_token()}}">
-                        <div class="form-group">
-                           <input type="text"  name="email">
-                           <button type="submit" class="btn btn-primary">Send Sample</button>
-                        </div>
-                     </form>
-                  </p>
                </div>
             </div>
          </div>  

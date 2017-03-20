@@ -34,7 +34,7 @@ class MlmSlotsController extends Mlm
                 $customer_id = Self::$customer_id;
                 $slot_id = $_POST['active_slot'];
                 $nickname = $_POST['slot_nickname'];
-                $slot = Tbl_mlm_slot::where('slot_owner', $customer_id)->where('slot_id', $slot_id)->first();
+                $slot = Tbl_mlm_slot::where('slot_owner', $customer_id)->where('slot_no', $slot_id)->first();
                 if(isset($slot->slot_id))
                 {
                     if(strlen($nickname) >= 6)

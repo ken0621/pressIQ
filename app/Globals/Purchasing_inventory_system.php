@@ -190,7 +190,7 @@ class Purchasing_inventory_system
     	$data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
                                 ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
                                 ->where("lof_status",2)
-                                ->orderBy("tbl_sir.sir_id","DESC")->get();
+                                ->orderBy("tbl_sir.sir_id","DESC")->paginate(10);
 
         foreach ($data as $key => $value) 
         {              
@@ -220,8 +220,9 @@ class Purchasing_inventory_system
     public static function select_lof($shop_id = 0, $return = 'array',$srch_sir = '')
     {
         $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+                                ->where("tbl_sir.sir_status","!=",2)
                                 ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
-                                ->orderBy("tbl_sir.sir_id","DESC")->get();
+                                ->orderBy("tbl_sir.sir_id","DESC")->paginate(10);
 
         foreach ($data as $key => $value) 
         {              
@@ -241,8 +242,40 @@ class Purchasing_inventory_system
 
             $data[$key]->total_amount += $price; 
         }
-
         if($return == "json")
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+    }
+    public static function select_lof_status($shop_id = 0, $return = 'array',$status = 0,$archived = 0, $srch_sir = '')
+    {
+        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
+                        ->where("tbl_sir.archived",$archived)
+                        ->where("lof_status",$status)
+                        ->where("tbl_sir.sir_status","!=",2)
+                        ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
+                        ->orderBy("tbl_sir.sir_id","DESC")->paginate(10);
+        foreach ($data as $key => $value) 
+        {              
+            $data[$key]->total_amount = "";
+            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $price = "";
+            foreach ($item as $key2 => $value2)
+            {   
+                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();   
+                $qty = 1;
+                if($unit_m != null)
+                {
+                    $qty = $unit_m->unit_qty;
+                }
+                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
+            }
+
+            $data[$key]->total_amount += $price; 
+        }
+
+         if($return == "json")
         {
             $data = json_encode($data);
         }
@@ -295,38 +328,7 @@ class Purchasing_inventory_system
         }
         return $data;
     }
-    public static function select_lof_status($shop_id = 0, $return = 'array',$status = 0,$archived = 0, $srch_sir = '')
-    {
-        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
-                        ->where("tbl_sir.archived",$archived)
-                        ->where("lof_status",$status)
-                        ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
-                        ->orderBy("tbl_sir.sir_id","DESC")->get();
-        foreach ($data as $key => $value) 
-        {              
-            $data[$key]->total_amount = "";
-            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
-            $price = "";
-            foreach ($item as $key2 => $value2)
-            {   
-                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();   
-                $qty = 1;
-                if($unit_m != null)
-                {
-                    $qty = $unit_m->unit_qty;
-                }
-                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
-            }
 
-            $data[$key]->total_amount += $price; 
-        }
-
-         if($return == "json")
-        {
-            $data = json_encode($data);
-        }
-        return $data;
-    }
     public static function select_sir_status($shop_id = 0, $return = 'array',$status = 0,$archived = 0, $srch_sir = '',$is_sync = 0)
     {
         $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
@@ -336,7 +338,7 @@ class Purchasing_inventory_system
                         ->where("tbl_sir.is_sync",$is_sync)
                         // ->where("tbl_sir.sales_agent_id",$agent_id)
                         ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
-                        ->orderBy("tbl_sir.sir_id","DESC")->get();
+                        ->orderBy("tbl_sir.sir_id","DESC")->paginate(10);
 
         // dd($data);
         foreach ($data as $key => $value) 
@@ -432,7 +434,7 @@ class Purchasing_inventory_system
         $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
                         ->where("ilr_status",$status)
                         ->where("tbl_sir.sir_id",'like','%'.$srch_ilr.'%')
-                        ->orderBy("tbl_sir.sir_id","DESC")->get();
+                        ->orderBy("tbl_sir.sir_id","DESC")->paginate(10);
 
         // dd($data);
         foreach ($data as $key => $value) 
@@ -461,7 +463,7 @@ class Purchasing_inventory_system
         $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
                                 ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
                                 ->where("sir_status",2)
-                                ->orderBy("tbl_sir.sir_id","DESC")->get();
+                                ->orderBy("tbl_sir.sir_id","DESC")->paginate(10);
 
         foreach ($data as $key => $value) 
         {              

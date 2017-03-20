@@ -189,6 +189,7 @@ Route::any('/member/item/restore/{id}', 'Member\ItemController@restore'); /* B *
 Route::any('/member/item/restore_submit', 'Member\ItemController@restore_submit'); /* B */
 Route::any('/member/item/insert_saved_data', 'Member\ItemController@insert_session'); /* ERWIN */
 Route::any('/member/item/data', 'Member\ItemController@data'); /* ERWIN */
+Route::any('/member/item/mulitple_price_modal', 'Member\ItemController@get_multiple_price_modal'); /* B */
 
 Route::any('/member/functiontester', 'Member\FunctionTesterController@index'); /* ERWIN */
 Route::any('/member/functiontester/clear_all', 'Member\FunctionTesterController@clear_all'); /* ERWIN */

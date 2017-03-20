@@ -13,6 +13,8 @@
     color: #fff;
     width: 130px;
     border-radius: 5px; }
+  .banner-image #shop-now-button:hover {
+    opacity: 0.9; }
 
 .browse-by-category .browse-by-category-container {
   background-color: #c60f0f;
@@ -109,6 +111,8 @@
     .featured .content-container .right-container .product-holder .per-item-container {
       padding-top: 20px;
       padding-bottom: 20px; }
+    .featured .content-container .right-container .product-holder .per-item-container:hover {
+      opacity: 0.9; }
     .featured .content-container .right-container .product-holder table tr td img {
       max-width: 100%; }
     .featured .content-container .right-container .product-holder table tr td .item-image {
@@ -204,6 +208,8 @@
       color: #fff;
       font-weight: 700;
       background-color: #ff2e34; }
+    .news-letter .news-letter-content button:hover {
+      opacity: 0.9; }
 
 .new-releases .featured-content-container {
   background-color: #c60f0f;

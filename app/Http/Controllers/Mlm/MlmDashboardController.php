@@ -16,7 +16,7 @@ use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_lead;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_mlm_slot_points_log;
-
+use App\Models\Tbl_mlm_discount_card_log;
 class MlmDashboardController extends Mlm
 {
     public function index()
@@ -47,6 +47,13 @@ class MlmDashboardController extends Mlm
     public static function income_discount()
     {
         $data = [];
+        $data['sample'] = Tbl_mlm_discount_card_log::whereNotNull('discount_card_customer_holder')->count();
+        // dd($data);
+        // dd(Self::$discount_card_log);
+        $data['all_discount'] = Tbl_mlm_discount_card_log::where('discount_card_customer_holder', Self::$customer_id)
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+        ->get();
+        // dd($data);
         return view('mlm.dashboard.income_discount', $data);
     }
     public static function income()

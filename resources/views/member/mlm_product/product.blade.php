@@ -22,7 +22,7 @@
                 {!! csrf_field() !!}
                 <div class="col-md-12 table-responsive">
                     <div class="col-md-12"><center>Set Points/Bonus For All Item</center></div>
-                    <div class="col-md-3 hide">
+                    <div class="col-md-3">
                        <label>Membership</label>
                         <select class="form-control" name="membership_id">
                         @foreach($membership_active as $key => $value)
@@ -30,7 +30,7 @@
                         @endforeach
                         </select> 
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label>Plan</label>
                         <select class="form-control" name="marketing_plan_code_id">
                             @foreach($active_plan_product_repurchase as $key => $value)
@@ -38,11 +38,11 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label>Percentage of price</label>
                         <input type="number" class="form-control" value="0" name="percentage">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <label>Set Points</label><br>
                         <button class="btn btn-primary col-md-12">Submit</button>
                     </div>
@@ -101,7 +101,17 @@
                                     {!! csrf_field() !!}
                                     <input type="hidden" name="item_id" value="{{$variant['item_id']}}">
                                     @foreach($active as $key => $value)
-                                        <td><input type="number" class="form-control" name="{{$value}}" value="{{$variant[$value]}}"></td>
+                                        <td>
+                                        <div class="col-md-12 hide">
+                                            <input type="number" class="form-control" name="{{$value}}" value="{{$variant[$value]}}">
+                                        </div>    
+                                        @foreach($membership_active as $key2 => $value2)
+                                        <div class="col-md-12">
+                                           <label>{{$value2->membership_name}}</label> 
+                                           <input type="number" class="form-control" name="membership_points[{{$value}}][{{$value2->membership_id}}]" value="{{$variant['points'][$value2->membership_id]->$value}}">
+                                        </div>
+                                        @endforeach
+                                        </td>
                                     @endforeach
                                 </form>    
                             @endif

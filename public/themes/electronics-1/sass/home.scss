@@ -19,6 +19,11 @@
 	    width: 130px;
 	    border-radius: 5px;
 	}
+
+	#shop-now-button:hover
+	{
+		opacity: 0.9;
+	}
 }
 
 .browse-by-category
@@ -208,6 +213,11 @@
 				    padding-top: 20px;
     				padding-bottom: 20px;
 				}
+
+				.per-item-container:hover
+				{
+					opacity:0.9;
+				}
 				table
 				{
 					tr
@@ -378,6 +388,11 @@
 		    color: #fff;
 		    font-weight: 700;
 		    background-color: #ff2e34;
+		}
+
+		button:hover
+		{
+			opacity: 0.9;
 		}
 	}
 }

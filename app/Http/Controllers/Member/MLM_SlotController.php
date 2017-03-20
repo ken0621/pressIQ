@@ -43,6 +43,8 @@ use App\Globals\Mlm_complan_manager_repurchase;
 use App\Globals\Utilities;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_member;
+use App\Globals\Mlm_discount;
+// use App\Globals\Mlm_compute;
 use Crypt;
 class MLM_SlotController extends Member
 {
@@ -845,7 +847,7 @@ class MLM_SlotController extends Member
         {
             $customer = Tbl_customer::leftjoin('tbl_customer_search', 'tbl_customer_search.customer_id', '=', 'tbl_customer.customer_id')->get();
             $customer_2 = Tbl_customer::get();
-            // dd($customer[0]);
+            // dd(count($customer));
             foreach ($customer as $key => $value) 
             {
                 if($value->body == null)
@@ -984,6 +986,17 @@ class MLM_SlotController extends Member
             // return Mlm_complan_manager::leadership_bonus_earn_2(15);
             // dd($s);
 
+        }
+        else if($code == 'discount')
+        {
+            // return 1;
+            $shop_id = 5;
+            return Mlm_discount::get_discount_all_membership($shop_id, 9, null);
+        }
+        else if($code == 'fix_mlm_slot')
+        {
+            $update['slot_matched_membership'] = 1;
+            Tbl_mlm_slot::where('slot_id', '!=', 289)->update($update);
         }
     }
 }

@@ -71,12 +71,12 @@ class ProductOrderController extends Member
     }
     public function invoice_list()
     {
-        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Pending")->get();
-        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Unpaid")->get();
-        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Unpaid")->get();
-        $data["ec_order_unpaid"] = Tbl_ec_order::customer()->where("order_status","Unpaid")->get();
-        $data["ec_order_paid"]   = Tbl_ec_order::customer()->where("order_status","Paid")->get();
-        $data["ec_order_void"]   = Tbl_ec_order::customer()->where("order_status","Void")->get();
+        $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("order_status","Pending")->get();
+        $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("order_status","Failed")->get();
+        $data["ec_order_processing"] = Tbl_ec_order::customer()->where("order_status","Processing")->get();
+        $data["ec_order_completed"]  = Tbl_ec_order::customer()->where("order_status","Completed")->get();
+        $data["ec_order_on_hold"]    = Tbl_ec_order::customer()->where("order_status","On-hold")->get();
+        $data["ec_order_cancelled"]  = Tbl_ec_order::customer()->where("order_status","Cancelled")->get();
         return view("member.product_order.product_order",$data);
     }
     public function create_invoice()

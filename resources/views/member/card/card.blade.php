@@ -8,7 +8,7 @@
 	<div class="containers" style="overflow: hidden; {{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : '' }} ;height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}.jpg') !important;">
 		<div class="top-container clearfix">
 			<span class="website" style="font-weight: 700; letter-spacing: -1px;">{{ URL::to('/') }}</span>
-			<div class="logo"><img style="width: 200px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/philtech-logo-blue.png"></div>
+			<div class="logo"><img style="width: 200px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/philtech-logo-blue-2.png"></div>
 		</div>
 		<div class="mid-container clearfix" style="margin: 0; height: 149px;"><img style="display: block; width: 380px; margin-left: 10px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/{{ $color }}-logo.png"></div>
 		<div class="bottom-container clearfix" style="margin-top: -7.5px;">
@@ -68,9 +68,9 @@
 					</tbody>
 				</table>
 			</div>
-			<div style="font-weight: 600;" style="margin-top: 5px;">By signing this card, the Cardholder agrees to be bound be the terms and conditions of the VIP Loyalty Program. Present this card along with the valid ID when purchasing or availing privilleges and benefits in the head office, all BCO and partner merchants nationwide.</div>
-			<div style="color: red; font-weight: 600; font-size: 12px; text-align: center; margin-bottom: 5px;">Non-Transferable&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Annual Fee&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Expiry</div>
-			<div class="text-right" style="font-weight: 600;">Tampering invalidates the card.</div>
+			<div style="font-weight: 600; color: @if($color == 'gold') black @else white @endif ;" style="margin-top: 5px; ">By signing this card, the Cardholder agrees to be bound be the terms and conditions of the VIP Loyalty Program. Present this card along with the valid ID when purchasing or availing privilleges and benefits in the head office, all BCO and partner merchants nationwide.</div>
+			<div style="color: white; font-weight: 600; font-size: 12px; text-align: center; margin-bottom: 5px;">Non-Transferable&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Annual Fee&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Expiry</div>
+			<div class="text-right" style="font-weight: 600; color: @if($color == 'gold') black @else white @endif">Tampering invalidates the card.</div>
 		</div>
 	</div>
 	<br>

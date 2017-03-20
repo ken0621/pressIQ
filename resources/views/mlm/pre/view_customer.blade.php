@@ -1,7 +1,8 @@
 <div class="col-md-12" style="margin-top: 10px; outline: 1px solid #3c8dbc; background-color: #3c8dbc;">
 	<div class="col-md-12" style="height: 100px; background-color: #3c8dbc;">
 		<center>
-		<img class="card-img-top" src="{{ Request::segment(5) == 'pdf' || Request::input('pdf')=='true' || Request::segment(5) == 'process' ? (public_path().'/assets/mlm/default-pic.png') : '/assets/mlm/default-pic.png' }}" width="100" height="100" alt="Card image cap"></center>
+		<?php $customer_data->profile != null ? $profile = $customer_data->profile :  $profile = '/assets/mlm/default-pic.png' ?>
+		<img style="border-radius: 50%; border: 1px solid white; "class="card-img-top" src="{{ Request::segment(5) == 'pdf' || Request::input('pdf')=='true' || Request::segment(5) == 'process' ? (public_path().$profile) : $profile }}" width="100" height="100" alt="Card image cap"></center>
 		<!--  -->
 	</div>
 	<div class="col-md-12" style="background-color: white;">

@@ -13,6 +13,8 @@ function item_multiple_price()
         event_item_qty_change();
         event_item_price_change();
         event_item_price_total_change();
+
+        $(".tr-item-price .item-price-value").change();
     }
 
     function event_remove_tr()

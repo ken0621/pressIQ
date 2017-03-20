@@ -24,5 +24,13 @@ use Session;
 
 class ItemMultiplePrice extends Member
 {
-	
+ 	public function getIndex()
+ 	{
+
+ 	}
+
+ 	public function postIndex()
+ 	{
+ 		
+ 	}
 }

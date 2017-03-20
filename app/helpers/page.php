@@ -416,7 +416,7 @@ function page_list()
 
     /* -- ITEM => ITEM CATEGORIES  */
     $code = "item-categories";
-    $nav[$page]['submenu'][$code]['label'] = "Manage Categories";
+    $nav[$page]['submenu'][$code]['label'] = "Category";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/category";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];

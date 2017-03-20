@@ -273,7 +273,8 @@ class SalesReport{
             
         }
         if($count == 0){
-            return 'no data';
+            // return 'no data';
+            return null;
         }
         else{
             return $data;

@@ -196,9 +196,7 @@ Route::any('/member/functiontester/clear_all', 'Member\FunctionTesterController@
 Route::any('/member/functiontester/clear_one', 'Member\FunctionTesterController@clear_one'); /* ERWIN */
 Route::any('/member/functiontester/get_cart', 'Member\FunctionTesterController@get_cart'); /* ERWIN */
 
-
 /* MANAGE CATEGORIES */
-
 Route::any('/member/item/category', 'Member\Manage_Category_Controller@index');
 Route::any('/member/item/category/modal_create_category', 'Member\Manage_Category_Controller@modal_create_category');
 Route::any('/member/item/category/edit_category/{id}', 'Member\Manage_Category_Controller@edit_category');
@@ -208,7 +206,6 @@ Route::any('/member/item/category/archived_submit','Member\Manage_Category_Contr
 
 Route::any('/member/item/category/create_category', 'Member\Manage_Category_Controller@create_category');
 Route::any('/member/item/category/search_category', 'Member\Manage_Category_Controller@search_category');
-
 
 /* START U/M ARCY*/
 Route::any('/member/item/unit_of_measurement','Member\UnitOfMeasurementController@index');

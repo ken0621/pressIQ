@@ -49,27 +49,6 @@
 					</thead>
 					<tbody class="table-category">
 						{!!$category!!}
-						<!-- <tr>
-							<td>
-							<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="1"></i>Category 1
-							</td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr class="tr-sub-1">
-							<td>
-								<span style="margin-left:30px"><i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="2"></i>Sub category</span>
-							</td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr class="tr-sub-2">
-							<td>
-								<span style="margin-left:60px">Sub category 2</span>
-							</td>
-							<td></td>
-							<td></td>
-						</tr> -->
 					</tbody>
 				</table>
 			</div>
@@ -86,27 +65,6 @@
 					</thead>
 					<tbody class="table-category">
 						{!!$archived_category!!}
-						<!-- <tr>
-							<td>
-							<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="1"></i>Category 1
-							</td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr class="tr-sub-1">
-							<td>
-								<span style="margin-left:30px"><i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="2"></i>Sub category</span>
-							</td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr class="tr-sub-2">
-							<td>
-								<span style="margin-left:60px">Sub category 2</span>
-							</td>
-							<td></td>
-							<td></td>
-						</tr> -->
 					</tbody>
 				</table>
 			</div>

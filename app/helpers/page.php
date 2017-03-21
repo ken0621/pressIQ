@@ -688,6 +688,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
     
+    /* -- UTILITIES => AUDIT TRAIL */
+    $code = "utilities-client-list";
+    $nav[$page]['submenu'][$code]['label'] = "Client List";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/client_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
     /* Maintenance */
     $page = "maintenance";  

@@ -2,6 +2,12 @@
 <link rel="stylesheet" type="text/css" href="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/style.css">
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">  
 @endif
+<style type="text/css">
+	body
+	{
+		font-weight: 500 !important;
+	}
+</style>
 <div class="{{ Request::input('pdf') == 'true' ? '' : 'row' }} clearfix">
 <div class="{{ Request::input('pdf') == 'true' ? '' : 'col-md-6' }} clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 450px;' : '' }}">
 	<div class="containers" style="overflow: hidden; {{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : '' }} ;height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}.jpg') !important;">

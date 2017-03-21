@@ -6,7 +6,7 @@
         <div>
             <i class="fa fa-users"></i>
             <h1>
-                <span class="page-title">Client List</span>
+                <span class="page-title">Owner's Information Settings</span>
             </h1>
         </div>
     </div>
@@ -20,12 +20,12 @@
                   <li id="archived-list"><a data-toggle="tab" href="#archived"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;Archived Truck</a></li>
                 </ul>
             </div> -->
-            <div class="col-md-4 pull-right">
+           <!--  <div class="col-md-4 pull-right">
                 <div class="input-group">
                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
                     <input type="search" name="" class="form-control srch-txt" placeholder="Start typing client name">
                 </div>
-            </div>
+            </div> -->
         </div>
 
         <div class="form-group tab-content panel-body client-container">

@@ -15,12 +15,12 @@
             <th width="60px" class="text-center"></th>
             <th width="55px" class="text-center"></th>
             <th width="55px" class="text-center"></th>
-            <th width="110px" colspan="2" class="text-center">Non-Reg Day</th>
+            <th width="165px" colspan="3" class="text-center">Non-Reg Time</th>
             <th width="110px" colspan="2" class="text-center">Overtime</th>
             <th width="55px" class="text-center"></th>
 
-            <th width="45px" class="text-center"></th>
-            <th width="50px" class="text-center"></th>
+            <th width="95px" class="text-center"></th>
+            <th width="40px" class="text-center"></th>
         </tr>
         <tr>
             <th width="40px" class="text-center"></th>
@@ -31,8 +31,9 @@
             <th class="text-center">Break</th>
             <th class="text-center">NRM</th>
             <th class="text-center">Late</th>
-            <th class="text-center">Rest</th>
-            <th class="text-center">XTRA</th>
+            <th class="text-center">R.D</th>
+            <th class="text-center">E.D</th>
+            <th class="text-center">N.D</th>
 
             @if($time_rule == "flexitime")
             <th colspan="2" width="80px" class="text-center">O.T Hours</th>
@@ -41,7 +42,7 @@
             <th class="text-center">Reg</th>
             @endif
             <th class="text-center">Total</th>
-            <th class="text-center">TYP</i></th>
+            <th class="text-center">TYPE</i></th>
             <th class="text-center"></th>
         </tr>
     </thead>
@@ -62,6 +63,7 @@
                     <td class="text-center edit-data late-hours">__:__</td>
                     <td class="text-center edit-data rest-day-hours">__:__</td>
                     <td class="text-center edit-data extra-day-hours">__:__</td>
+                    <td class="text-center edit-data night-differential">__:__</td>
 
                     @if($time_rule == "flexitime")
                     <td class="text-center edit-data overtime-hours late" colspan="2">__:__</td>
@@ -70,7 +72,7 @@
                     <td class="text-center edit-data overtime-hours late">__:__</td>
                     @endif
                     <td class="text-center edit-data total-hours">__:__</td>
-                    <td class="text-center edit-data">REG</td>
+                    <td class="text-center edit-data">REGULAR</td>
                     <td class="text-center"><span class="button create-sub-time"><i class="fa fa-plus"></i></span></td>
                 @else 
                     <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $timesheet->date }}">
@@ -89,6 +91,7 @@
                     <td class="text-center edit-data"></td>
                     <td class="text-center edit-data"></td>
                     <td class="text-center edit-data"></td>
+                    <td class="text-center edit-data">REGULAR</td>
                     <td class="text-center"><span class="button delete-sub-time"><i class="fa fa-close"></i></span></td>
                 @endif
 
@@ -116,6 +119,7 @@
                 <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>
+                <td class="text-center edit-data">REGULAR</td>
                 <td class="text-center"><span class="button delete-sub-time"><i class="fa fa-close"></i></span></td>
             </tr>
         </tfoot>

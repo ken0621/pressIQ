@@ -25,6 +25,7 @@ class MlmProfileController extends Mlm
     	$data['country'] = DB::table('tbl_country')->get();
     	$data['customer_address'] = DB::table('tbl_customer_address')->where('customer_id', Self::$customer_id)->first();
     	$data['other_info'] = DB::table('tbl_customer_other_info')->where('customer_id', Self::$customer_id)->first();
+    	$data['cus_info'] = Mlm_member::get_customer_info(Self::$customer_id);
     	if(Self::$slot_id != null)
     	{
     		if(Self::$shop_id == 1)

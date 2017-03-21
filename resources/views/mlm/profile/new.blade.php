@@ -221,7 +221,7 @@
     </form>
   </div>
 </div>
-
+@if(isset($encashment))
 <div class="col-md-6">
   <div class="box box-primary">
     <div class="box-header with-border">
@@ -241,7 +241,7 @@
     </div>
   </div>
 </div> 
-
+@endif
 
 
 </div>

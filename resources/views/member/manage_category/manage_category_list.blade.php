@@ -35,40 +35,41 @@
 				</div>
 			</div>
 		</div>
-
-        <div class="form-group tab-content panel-body category-container">
-	      <div id="all" class="tab-pane fade in active">
-			<div class="form-group panel-body">
-				<table class="table table-bordered table-condensed">
-					<thead>
-						<tr>
-							<th>Category Name</th>
-							<th class="text-center">Category Type</th>
-							<th class="text-center">Action</th>
-						</tr>
-					</thead>
-					<tbody class="table-category">
-						{!!$category!!}
-					</tbody>
-				</table>
+		<div class="category-container">
+	        <div class="form-group tab-content panel-body load-category-container">
+		      <div id="all" class="tab-pane fade in active">
+				<div class="form-group panel-body">
+					<table class="table table-bordered table-condensed">
+						<thead>
+							<tr>
+								<th>Category Name</th>
+								<th class="text-center">Category Type</th>
+								<th class="text-center">Action</th>
+							</tr>
+						</thead>
+						<tbody class="table-category">
+							{!!$category!!}
+						</tbody>
+					</table>
+				</div>
+			  </div>
+		      <div id="archived" class="tab-pane fade in">
+				<div class="form-group panel-body">
+					<table class="table table-bordered table-condensed">
+						<thead>
+							<tr>
+								<th>Category Name</th>
+								<th class="text-center">Category Type</th>
+								<th class="text-center">Action</th>
+							</tr>
+						</thead>
+						<tbody class="table-category">
+							{!!$archived_category!!}
+						</tbody>
+					</table>
+				</div>
+			  </div>
 			</div>
-		  </div>
-	      <div id="archived" class="tab-pane fade in">
-			<div class="form-group panel-body">
-				<table class="table table-bordered table-condensed">
-					<thead>
-						<tr>
-							<th>Category Name</th>
-							<th class="text-center">Category Type</th>
-							<th class="text-center">Action</th>
-						</tr>
-					</thead>
-					<tbody class="table-category">
-						{!!$archived_category!!}
-					</tbody>
-				</table>
-			</div>
-		  </div>
 		</div>
 	</div>
 </div>
@@ -82,7 +83,7 @@
     if(data.status == "success-category")
     {         
         toastr.success("Success");
-        $(".category-container").load("/member/item/category .category-container");     
+        $(".category-container").load("/member/item/category .load-category-container");     
         data.element.modal("hide");
         $("#all-list").addClass("active");
         $("#archived-list").removeClass("active");

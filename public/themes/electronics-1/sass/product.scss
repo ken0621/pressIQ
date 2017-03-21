@@ -51,13 +51,10 @@
 				{
 					.item-title
 					{
-						a
-						{
-							color: #505050;
-    						font-size: 15px;
-    						text-decoration: none;
-    						font-weight: 600;
-						}
+						color: #505050;
+    					font-size: 15px;
+    					text-decoration: none;
+    					font-weight: 600;
 					}
 
 					.item-price
@@ -65,6 +62,7 @@
 						font-size: 15px;
 					    font-weight: 700;
 					    padding-top: 5px;
+					    color: #1e1e1e;
 					}
 				}
 
@@ -210,6 +208,11 @@
     		box-shadow: 0px 0px 14px rgba(0,0,0,0.5);
     		cursor: pointer;
     		
+    		a
+    		{
+    			text-decoration: none;
+    		}
+
     		.item-details
     		{
     			opacity: 0.5;
@@ -552,12 +555,9 @@
 				
 				.item-name
 				{
-					a
-		    		{
-		    			color: #505050;
-					    font-weight: 600;
-					    text-decoration: none;
-		    		}
+		    		color: #505050;
+					font-weight: 600;
+					text-decoration: none;
 				}
 
 				.item-price
@@ -595,10 +595,7 @@
 			{
 				.item-name
 				{
-					a
-					{
-						text-decoration: underline;
-					}
+					text-decoration: underline;
 				}
 			}
 		}

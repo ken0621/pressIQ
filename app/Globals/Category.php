@@ -147,8 +147,7 @@ class Category
 	public static function select_tr_html($shop_id = 0, $archived = 0, $parent = 0, $margin_left = 0, $hierarchy = [])
 	{
 		$html = '';
-		$_category = Tbl_category::selecthierarchy($shop_id, $parent, array("all","service","inventory","non-inventory"), $archived)->orderBy('type_name','asc')->get();
-
+		$_category = Tbl_category::selecthierarchy($shop_id, $parent, array("all","service","inventory","non-inventory"),$archived)->orderBy('type_name','asc')->get();
 		foreach($_category as $key => $cat)
 		{
 			$class = '';
@@ -162,8 +161,7 @@ class Category
 			$class .= $child;
 
 			$caret = '';
-			$count = Tbl_category::selecthierarchy($shop_id, $parent, array("all","service","inventory","non-inventory"), $archived)->count();
-
+			$count = Tbl_category::selecthierarchy($shop_id, $parent, $cat->type_id, $archived)->count();
 			if($count != 0)
 			{
 				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$cat->type_id.'"></i>';
@@ -182,4 +180,43 @@ class Category
 		}
 		return $html;
 	}
+	public static function select_category_archived($margin_left = 0)
+	{
+		$html = "";
+		$_category = Tbl_category::where("archived",1)->get();
+
+		foreach ($_category as $key => $value) 
+		{
+			$class = '';
+			// $child = 'header"';
+			$child = '';
+			if($value->type_parent_id != 0)
+			{
+				$class = 'tr-sub-'.$value->type_parent_id.' tr-parent-'.$value->type_parent_id.' ';
+				// $child = 'child"';
+			}
+			$class .= $child;
+
+			$caret = '';
+			$count = Tbl_category::selecthierarchy(Category::getShopId(), $value->type_parent_id, $value->type_id, 1)->count();
+			if($count != 0)
+			{
+				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$value->type_id.'"></i>';
+			}
+
+			$data['class'] = $class;
+			$data['cat'] = $value;
+			$data['margin_left'] = 'style="margin-left:'.$margin_left.'px"';
+			$data['category'] = $caret.$value->type_name;
+
+			$html .= view('member.manage_category.tr_row',$data)->render();
+			if($count != 0)
+			{	
+				$html .= Category::select_tr_html(Category::getShopId(), 1, $value->type_id, $margin_left + 30);
+			}			
+		}
+
+		return $html;
+	}
+
 }

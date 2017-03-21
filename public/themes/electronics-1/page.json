@@ -13,11 +13,60 @@
 			"label":"Category Title",
 			"type":"textbox",
 			"default":"",
+			"size":"12"
+		},
+		"home_main_product_image" :
+		{
+			"label":"Main Product Image",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"home_main_product_title" :
+		{
+			"label":"Main Product Title",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"home_main_product_price" :
+		{
+			"label":"Main Product Price",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"home_product_1_image" :
+		{
+			"label":"Product 1 Image",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"home_product_1_title" :
+		{
+			"label":"Product 1 Title",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"home_product_1_price" :
+		{
+			"label":"Product 1 Price",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"home_mostviewed_title" :
+		{
+			"label":"Most Viewed Title",
+			"type":"textbox",
+			"default":"",
 			"size":"6"
 		},
-		"home_filter_title" :
+		"home_newreleases_title" :
 		{
-			"label":"Filter Title",
+			"label":"New Releases Title",
 			"type":"textbox",
 			"default":"",
 			"size":"6"

@@ -79,7 +79,6 @@ class PayrollTimeSheetController extends Member
 						$data["_timesheet"][$from]->time_record[$key]->time_out = Carbon::parse($timesheet_record->payroll_time_sheet_out)->format("h:i A");
 					}
 
-
 					$data["_timesheet"][$from]->time_record[$key]->activities =  $timesheet_record->payroll_time_shee_activity;
 				}
 			}
@@ -187,8 +186,14 @@ class PayrollTimeSheetController extends Member
 			$_timesheet[$key]->extra_day_hours = $processed_timesheet->extra_day_hours;
 			$_timesheet[$key]->rest_day_hours = $processed_timesheet->rest_day_hours;
 			$_timesheet[$key]->late_hours = $processed_timesheet->late_hours;
+			$_timesheet[$key]->night_differential = $processed_timesheet->night_differential;
 		}
 
 		return json_encode($_timesheet);
+	}
+	public function overtime_form()
+	{
+		$data["page"] = "Overtime Form";
+		return view('member.payroll.employee_timesheet_overtime', $data);
 	}
 }

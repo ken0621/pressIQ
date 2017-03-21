@@ -1,6 +1,6 @@
 @if(Request::input('pdf') == 'true')
 <link rel="stylesheet" type="text/css" href="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/style.css">
-<link href="https://fonts.googleapis.com/css?family=Poppins:300,600" rel="stylesheet">  
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">  
 @endif
 <div class="{{ Request::input('pdf') == 'true' ? '' : 'row' }} clearfix">
 
@@ -18,7 +18,7 @@
 			</div>
 			<div class="barcode">
 				<div class="barcodeimg" style="background-color: #fff; padding: 7.5px 0;"><img src="{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/barcode?text={{ $membership_code }}&size=35"></div>
-				<div class="barcodetxt">
+				<div class="barcodetxt" style="font-size: 9px;">
 					<span>Membership Code</span>
 					<span>{{ $membership_code }}</span>
 				</div>
@@ -68,9 +68,9 @@
 					</tbody>
 				</table>
 			</div>
-			<div style="font-weight: 600; color: @if($color == 'gold') black @else white @endif ;" style="margin-top: 5px; ">By signing this card, the Cardholder agrees to be bound be the terms and conditions of the VIP Loyalty Program. Present this card along with the valid ID when purchasing or availing privilleges and benefits in the head office, all BCO and partner merchants nationwide.</div>
-			<div style="color: white; font-weight: 600; font-size: 12px; text-align: center; margin-bottom: 5px;">Non-Transferable&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Annual Fee&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Expiry</div>
-			<div class="text-right" style="font-weight: 600; color: @if($color == 'gold') black @else white @endif">Tampering invalidates the card.</div>
+			<div style="font-weight: 500; color: @if($color == 'gold') black @else white @endif ; font-size: 11px;" style="margin-top: 5px; ">By signing this card, the Cardholder agrees to be bound be the terms and conditions of the VIP Loyalty Program. Present this card along with the valid ID when purchasing or availing privilleges and benefits in the head office, all BCO and partner merchants nationwide.</div>
+			<div style="color: white; font-weight: 600; font-size: 16px; text-align: center; margin-bottom: 5px; letter-spacing: 1px">Non-Transferable&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Annual Fee&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Expiry</div>
+			<div class="text-right" style="font-weight: 600; color: @if($color == 'gold') black @else white @endif ; font-size: 12px;">Tampering invalidates the card.</div>
 		</div>
 	</div>
 	<br>

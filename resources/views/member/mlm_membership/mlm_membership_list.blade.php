@@ -21,7 +21,7 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
         <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#active"><i class="fa fa-star"></i> Active Membership</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#archive"><i class="fa fa-trash"></i> Trashed Membership</a></li>
+        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"  href="#archive"><i class="fa fa-trash"></i> Archived Membership</a></li>
     </ul>
     
     <div class="tab-content">

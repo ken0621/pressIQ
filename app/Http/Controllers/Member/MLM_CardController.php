@@ -81,7 +81,6 @@ class MLM_CardController extends Member
         ->membership()->customer()->first();
         $card = Cards::card_all($slot);
 
-
         return Pdf_global::show_image($card);
 	}
 	

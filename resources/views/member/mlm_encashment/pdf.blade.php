@@ -104,6 +104,49 @@
 							<hr>
 						</td>
 					</tr>
+					@if(isset($encashment_details->encashment_process))
+					<tr>
+						<td colspan="40"><center>Encashment Details</center></td>
+					</tr>
+						@if($encashment_details->encashment_type == 0)
+						<tr>
+							<td>Payment Type: </td>
+							<td>Bank Deposit</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Bank:</td>
+							<td>{{$encashment_details->bank_name}}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Branch:</td>
+							<td>{{$encashment_details->bank_account_branch}}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Name: </td>
+							<td>{{$encashment_details->bank_account_name}}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Account Number: </td>
+							<td>{{$encashment_details->bank_account_number}}</td>
+							<td></td>
+						</tr>
+						@elseif($encashment_details->encashment_type == 1)
+						<tr>
+							<td>Payment Type: </td>
+							<td>Cheque</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Name on cheque:</td>
+							<td>{{$encashment_details->cheque_name}}</td>
+							<td></td>
+						</tr>
+						@endif
+					@endif
 					@if($log_final->encashment_process_type == 0)
 					<tr>
 						<td colspan="40">

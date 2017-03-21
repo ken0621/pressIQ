@@ -14,7 +14,7 @@ class UpdateTblPayrollTimeSheetV5 extends Migration
     {
         Schema::table('tbl_payroll_time_sheet', function (Blueprint $table)
         {
-            $table->boolean('payroll_time_sheet_approved');
+            $table->boolean('payroll_time_sheet_approved')->default(0);
         });
     }
 

@@ -33,7 +33,7 @@
         </div>         
         <div class="form-group">
             <div class="col-md-12 text-left">            
-                <input type="checkbox" value="update_password" class="up-check" name="update_password"> <label>Update Password</label>
+                <input type="checkbox" onclick="toggle('.update-password', this)" value="update_password" class="up-check" name="update_password"> <label>Update Password</label>
             </div>
         </div>
         <div class="form-group update-password" style="display: none" >          
@@ -64,10 +64,11 @@
 </div>
 </form>
 <script type="text/javascript">
-    $(".up-check").click(function()
-    {
-        $(".update-password").slideDown();
-    });
+    function toggle(className, obj) {
+    var $input = $(obj);
+    if ($input.prop('checked')) $(className).slideDown();
+    else $(className).slideUp();
+    }
 </script>
 <!-- <script type="text/javascript" src="/assets/member/js/truck.js"></script> -->
 <!-- <script type="text/javascript" src="/assets/member/js/warehouse.js"></script> -->

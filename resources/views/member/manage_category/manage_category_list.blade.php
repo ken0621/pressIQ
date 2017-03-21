@@ -90,7 +90,6 @@
     else if(data.status == "error")
     {
         toastr.warning(data.status_message);
-        $(data.target).html(data.view);
     }
   }
 </script>

@@ -25,7 +25,7 @@ class UtilitiesCLientController extends Member
     public function update($id)
     {        
         $data["shop"] = Tbl_shop::getUser()->where("tbl_shop.shop_id",$id)->first();
-
+        // dd(Crypt::decrypt($data["shop"]->user_password));
         return view("member.client.client_update",$data);
     }
     public function update_submit()
@@ -42,19 +42,18 @@ class UtilitiesCLientController extends Member
         $new_password = Request::input("new_password");
         $confirm_password = Request::input("confirm_password");
 
-        if($new_password == $confirm_password)
-        {
-            if($user_id != null) 
-            { 
-                $shop_data = Tbl_shop::getUser()->where("shop_id",$shop_id)->first();
-
+      
+        if($user_id != null) 
+        { 
+            $shop_data = Tbl_shop::getUser()->where("shop_id",$shop_id)->first();
+            if(Request::input("update_password") != null)
+            {
                 if($old_password == Crypt::decrypt($shop_data->user_password))
                 {
                     $update["user_first_name"] = $first_name;
                     $update["user_last_name"] = $last_name;
                     $update["user_email"] = $email_address;
                     $update["user_password"] = Crypt::encrypt($new_password);
-                    $update["user_date_created"] = Carbon::now();
 
                     $rule["user_first_name"] = "required";
                     $rule["user_last_name"] = "required";
@@ -80,9 +79,37 @@ class UtilitiesCLientController extends Member
                 {
                     $data["status"] = "error";
                     $data["status_message"] = "Password not match.";
-                }
-            }   
+                }                
+            }
             else
+            { 
+                $update["user_first_name"] = $first_name;
+                $update["user_last_name"] = $last_name;
+                $update["user_email"] = $email_address;
+
+                $rule["user_first_name"] = "required";
+                $rule["user_last_name"] = "required";
+                $rule["user_email"] = "required|email";
+
+                $validator = Validator::make($update, $rule);
+                if($validator->fails())
+                {
+                    $data["status"] = "error";
+                    foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+                    {
+                        $data["status_message"] .= $message;
+                    }
+                }
+                else
+                {
+                    Tbl_user::where("user_shop",$shop_id)->update($update);
+                    $data["status"] = "success";                    
+                }
+            }
+        }   
+        else
+        {
+            if($new_password == $confirm_password)
             {
                 $ins_user["user_first_name"] = $first_name;
                 $ins_user["user_last_name"] = $last_name;
@@ -109,15 +136,16 @@ class UtilitiesCLientController extends Member
                 {
                     Tbl_user::insert($ins_user);
                     $data["status"] = "success";                    
-                }
+                }   
+             }
+            else
+            {
+                $data["status"] = "error";
+                $data["status_message"] = "Password not match.";
             }
+        }
 
-        }
-        else
-        {
-            $data["status"] = "error";
-            $data["status_message"] = "Password not match.";
-        }
+
 
         return json_encode($data);
 

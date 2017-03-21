@@ -40,9 +40,13 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* EMPLOYEE END */
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
 
+	
+	/* TIMESHEET START */
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');
 	Route::any('/employee_timesheet/timesheet/{id}','Member\PayrollTimeSheetController@timesheet');
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimeSheetController@json_process_time');
+	Route::any('/employee_timesheet/overtime_form','Member\PayrollTimeSheetController@overtime_form');
+	/* TIMESHEET START */
 
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');

@@ -49,6 +49,7 @@ use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_bank_convertion;
+use App\Models\Tbl_payroll_employee_dependent;
 
 use App\Globals\Payroll;
 
@@ -212,6 +213,7 @@ class PayrollController extends Member
 			$payroll_employee_salary_minimum_wage 					= Request::input('payroll_employee_salary_minimum_wage');
 		}
 
+
 		$insert_salary['payroll_employee_salary_minimum_wage'] 		= $payroll_employee_salary_minimum_wage;
 		$insert_salary['payroll_employee_salary_monthly'] 			= Request::input('payroll_employee_salary_monthly');
 		$insert_salary['payroll_employee_salary_daily'] 			= Request::input('payroll_employee_salary_daily');
@@ -276,6 +278,37 @@ class PayrollController extends Member
 		$insert_requirements['valid_id_requirements_id'] 			= Request::input('valid_id_requirements_id');
 		Tbl_payroll_employee_requirements::insert($insert_requirements);
 
+
+		$payroll_dependent_name 		= Request::input('payroll_dependent_name');
+		$payroll_dependent_birthdate 	= Request::input('payroll_dependent_birthdate');
+		$payroll_dependent_relationship = Request::input('payroll_dependent_relationship');
+
+
+		$insert_dependent = array();
+
+		$temp = "";
+		foreach($payroll_dependent_name as $key => $dependent)
+		{
+			if($dependent != "")
+			{
+				$temp['payroll_employee_id']			= $payroll_employee_id;
+				$temp['payroll_dependent_name'] 		= $dependent;
+
+				$birthdate = '';
+				if($payroll_dependent_birthdate[$key] != '')
+				{	
+					$birthdate 							= date('Y-m-d',strtotime($payroll_dependent_birthdate[$key]));
+				}
+
+				$temp['payroll_dependent_birthdate'] 	= $birthdate;
+				$temp['payroll_dependent_relationship'] = $payroll_dependent_relationship[$key];
+
+				array_push($insert_dependent, $temp);
+			}
+		}
+
+		Tbl_payroll_employee_dependent::insert($insert_dependent);
+
 		$return['data'] = '';
 		$return['status'] = 'success';
 		$return['function_name'] = 'employeelist.reload_employee_list';
@@ -301,6 +334,7 @@ class PayrollController extends Member
 		$data['salary']				= Tbl_payroll_employee_salary::selemployee($id)->first();
 		$data['requirement']		= Tbl_payroll_employee_requirements::selrequirements($id)->first();
 		$data['_group'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+		$data['dependent']			= Tbl_payroll_employee_dependent::where('payroll_employee_id', $id)->get();
 		// dd($data);
 
 		return view("member.payroll.modal.modal_view_employee", $data);
@@ -533,6 +567,39 @@ class PayrollController extends Member
 		$update_basic['payroll_employee_remarks']		= Request::input('payroll_employee_remarks');
 
 		Tbl_payroll_employee_basic::where('payroll_employee_id',$payroll_employee_id)->update($update_basic);
+
+
+		$payroll_dependent_name 		= Request::input('payroll_dependent_name');
+		$payroll_dependent_birthdate 	= Request::input('payroll_dependent_birthdate');
+		$payroll_dependent_relationship = Request::input('payroll_dependent_relationship');
+
+		/* dependent insert */
+		Tbl_payroll_employee_dependent::where('payroll_employee_id', $payroll_employee_id)->delete();
+
+		$insert_dependent = array();
+
+		$temp = "";
+		foreach($payroll_dependent_name as $key => $dependent)
+		{
+			if($dependent != "")
+			{
+				$temp['payroll_employee_id']			= $payroll_employee_id;
+				$temp['payroll_dependent_name'] 		= $dependent;
+
+				$birthdate = '';
+				if($payroll_dependent_birthdate[$key] != '')
+				{	
+					$birthdate 							= date('Y-m-d',strtotime($payroll_dependent_birthdate[$key]));
+				}
+				
+				$temp['payroll_dependent_birthdate'] 	= $birthdate;
+				$temp['payroll_dependent_relationship'] = $payroll_dependent_relationship[$key];
+
+				array_push($insert_dependent, $temp);
+			}
+		}
+
+		Tbl_payroll_employee_dependent::insert($insert_dependent);
 
 		$return['function_name'] = 'employeelist.reload_employee_list';
 		$return['status'] = 'success';

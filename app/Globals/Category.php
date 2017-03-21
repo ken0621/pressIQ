@@ -147,9 +147,7 @@ class Category
 	public static function select_tr_html($shop_id = 0, $archived = 0, $parent = 0, $margin_left = 0, $hierarchy = [])
 	{
 		$html = '';
-		$_category = Tbl_category::selecthierarchy($shop_id, $parent, array("all","service","inventory","non-inventory"))->orderBy('type_name','asc')->get();
-		// dd($_category);
-		$childs = null;
+		$_category = Tbl_category::selecthierarchy($shop_id, $parent, array("all","service","inventory","non-inventory"),$archived)->orderBy('type_name','asc')->get();
 		foreach($_category as $key => $cat)
 		{
 			//arcy

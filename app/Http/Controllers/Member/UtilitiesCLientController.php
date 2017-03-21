@@ -9,7 +9,7 @@ use App\Models\Tbl_user;
 use Crypt;
 use Carbon\Carbon;
 use Validator;
-class UtilitiesCLientController extends Member
+class UtilitiesClientController extends Member
 {
     /**
      * Display a listing of the resource.

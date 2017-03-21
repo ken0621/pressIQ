@@ -845,8 +845,10 @@ class MLM_SlotController extends Member
         }
         else if($code =='fix_search')
         {
+            DB::table('tbl_customer_search')->delete();
             $customer = Tbl_customer::leftjoin('tbl_customer_search', 'tbl_customer_search.customer_id', '=', 'tbl_customer.customer_id')->get();
             $customer_2 = Tbl_customer::get();
+
             // dd(count($customer));
             foreach ($customer as $key => $value) 
             {

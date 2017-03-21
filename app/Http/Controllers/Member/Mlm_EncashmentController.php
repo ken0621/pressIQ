@@ -61,6 +61,24 @@ class Mlm_EncashmentController extends Member
         $this->initialize_settings($shop_id);
         $data['encashment_settings'] = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
         $data['payout_gateway'] = payout_getway();
+
+        $data['not_encashed'] = $all_log = Tbl_mlm_slot_wallet_log::where('wallet_log_status', 'released')
+            ->where('wallet_log_plan','!=', 'ENCASHMENT')
+            ->where('shop_id', $shop_id)
+            ->whereNull('encashment_process')
+            ->sum('wallet_log_amount');
+        $data['not_encashed_requested'] = $all_log = Tbl_mlm_slot_wallet_log::where('wallet_log_status', 'released')
+            ->where('wallet_log_plan','ENCASHMENT')
+            ->where('shop_id', $shop_id)
+            ->where('encashment_process_type', 0)
+            ->sum('wallet_log_amount');    
+
+         $data['not_encashed_encashed'] = $all_log = Tbl_mlm_slot_wallet_log::where('wallet_log_status', 'released')
+            ->where('wallet_log_plan','ENCASHMENT')
+            ->where('shop_id', $shop_id)
+            ->where('encashment_process_type', 1)
+            ->sum('wallet_log_amount'); 
+
         if($data['encashment_settings']->enchasment_settings_auto == 0)
         {
             $data['encashment_process'] = Tbl_mlm_encashment_process::where('shop_id', $shop_id)
@@ -68,10 +86,30 @@ class Mlm_EncashmentController extends Member
         }
         else
         {
-            $data['history'] = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', 'ENCASHMENT')
+            $history = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', 'ENCASHMENT')
             ->slot()->customer()
-            ->where('tbl_mlm_slot.shop_id', $shop_id)
-            ->join('tbl_mlm_encashment_process', 'tbl_mlm_encashment_process.encashment_process', '=', 'tbl_mlm_slot_wallet_log.encashment_process')
+            ->where('tbl_mlm_slot.shop_id', $shop_id);
+            $request = Request::input('request');
+            $slot = Request::input('slot');
+            $customer = Request::input('customer');
+            if($request != null)
+            {
+                $history = $history->where('encashment_process_type', $request);
+            }
+            else
+            {
+                $history = $history->where('encashment_process_type', 0);
+            }
+            if($slot != null)
+            {
+                $history = $history->where('slot_no', 'like', '%' . $slot . '%');
+            }
+            if($customer != null)
+            {
+                $history = $history->leftjoin('tbl_customer_search', 'tbl_customer_search.customer_id', '=', 'tbl_customer.customer_id')
+                ->where('tbl_customer_search.body', 'like', '%' . $customer . '%');
+            }
+            $data['history'] = $history->join('tbl_mlm_encashment_process', 'tbl_mlm_encashment_process.encashment_process', '=', 'tbl_mlm_slot_wallet_log.encashment_process')
             ->paginate(10);
         }
         
@@ -192,6 +230,8 @@ class Mlm_EncashmentController extends Member
         ->where('encashment_process', $encashment_process)
         ->slot()->customer()->first();
 
+        $data['encashment_details'] = DB::table('tbl_mlm_encashment_process_details')->where('encashment_process', $encashment_process)->first();
+        
         if(isset($data['slot']->customer_id))
         {
             $data['customer_view'] = Mlm_member::get_customer_info_w_slot($data['slot']->customer_id, $slot_id);

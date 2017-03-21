@@ -222,9 +222,9 @@ Route::any('/member/utilities/audit','Member\AuditTrailController@index');
 /* END AUDIT TRAIL*/
 
 /* START CLIENT INFO*/
-Route::any('/member/utilities/client_list','Member\UtilitiesClientController@index');
-Route::any('/member/utilities/client/update/{id}','Member\UtilitiesClientController@update');
-Route::any('/member/utilities/client/update_submit','Member\UtilitiesClientController@update_submit');
+// Route::any('/member/utilities/client_list','Member\UtilitiesClientController@index');
+// Route::any('/member/utilities/client/update/{id}','Member\UtilitiesClientController@update');
+// Route::any('/member/utilities/client/update_submit','Member\UtilitiesClientController@update_submit');
 /*END CLIENT INFO*/
 
 

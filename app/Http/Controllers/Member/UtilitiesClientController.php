@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Member;
 
-Use Request;
+use Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_user;
 use Crypt;
 use Carbon\Carbon;
 use Validator;
-class UtilitiesCLientController extends Member
+class UtilitiesClientController extends Member
 {
     /**
      * Display a listing of the resource.
@@ -18,7 +18,7 @@ class UtilitiesCLientController extends Member
      */
     public function index()
     {
-        $data["_shop_info"] = Tbl_shop::getUser()->groupBy("tbl_shop.shop_id")->get();
+        $data["_shop_info"] = Tbl_shop::getUser()->groupBy("tbl_shop.shop_id")->where("tbl_shop.shop_id",$this->user_info->shop_id)->get();
 
         return view("member.client.client",$data);
     }

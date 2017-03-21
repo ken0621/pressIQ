@@ -92,6 +92,7 @@
             <li><a data-toggle="tab" href="#government-contribution">Government Contribution</a></li>
             <li><a data-toggle="tab" href="#salary-details">Salary Details</a></li>
             <li><a data-toggle="tab" href="#requirements">Requirements</a></li>
+            <li><a data-toggle="tab" href="#dependents">Dependents</a></li>
             <li><a data-toggle="tab" href="#remarks">Remarks</a></li>
           </ul>
           
@@ -417,6 +418,109 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <div id="dependents" class="tab-pane fade form-horizontal">
+              <div class="form-group">
+                <div class="col-md-6">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="" class="form-control datepicker">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control">
+                          <option value="">Select relationship</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                          <option value="Spouse">Spouse</option>
+                          <option value="Child">Child</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="" class="form-control datepicker">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control">
+                          <option value="">Select relationship</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                          <option value="Spouse">Spouse</option>
+                          <option value="Child">Child</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="" class="form-control datepicker">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control">
+                          <option value="">Select relationship</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                          <option value="Spouse">Spouse</option>
+                          <option value="Child">Child</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="" class="form-control datepicker">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control">
+                          <option value="">Select relationship</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                          <option value="Spouse">Spouse</option>
+                          <option value="Child">Child</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+             
             </div>
             <div id="remarks" class="tab-pane fade">
               <br>

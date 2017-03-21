@@ -67,7 +67,7 @@
         <div class="col-md-6">
 
           <small><b>Print on as check as</b></small>&nbsp;
-          <div class="checkbox display-inline-block"><small for=""><input type="checkbox" name="chck_print_on_as" class="checkbox-toggle-rev check-print-name-as" data-target=".display-name-check" checked="true"/>Use display name</small></div>
+          <div class="checkbox display-inline-block"><label><input type="checkbox" name="chck_print_on_as" class="checkbox-toggle-rev check-print-name-as" data-target=".display-name-check" checked>Use display name</label></div>
 
           <input type="text" name="payroll_employee_display_name" class="form-control display-name-check" value="{{$employee->payroll_employee_display_name}}">
 

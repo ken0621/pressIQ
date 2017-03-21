@@ -18,7 +18,7 @@ class UtilitiesCLientController extends Member
      */
     public function index()
     {
-        $data["_shop_info"] = Tbl_shop::getUser()->groupBy("tbl_shop.shop_id")->get();
+        $data["_shop_info"] = Tbl_shop::getUser()->groupBy("tbl_shop.shop_id")->where("tbl_shop.shop_id",$this->user_info->shop_id)->get();
 
         return view("member.client.client",$data);
     }

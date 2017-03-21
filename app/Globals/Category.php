@@ -163,7 +163,6 @@ class Category
 
 			$caret = '';
 			$count = Tbl_category::selecthierarchy($shop_id, $parent, array("all","service","inventory","non-inventory"), $archived)->count();
-
 			if($count != 0)
 			{
 				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$cat->type_id.'"></i>';

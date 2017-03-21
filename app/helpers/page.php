@@ -699,7 +699,7 @@ function page_list()
     
     /* -- UTILITIES => AUDIT TRAIL */
     $code = "utilities-client-list";
-    $nav[$page]['submenu'][$code]['label'] = "Client List";
+    $nav[$page]['submenu'][$code]['label'] = "Owner's Information Settings";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/client_list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];

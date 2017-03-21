@@ -6,7 +6,7 @@
         <div>
             <i class="fa fa-users"></i>
             <h1>
-                <span class="page-title">Client List</span>
+                <span class="page-title">Owner's Information Settings</span>
             </h1>
         </div>
     </div>

@@ -1292,7 +1292,7 @@ class PayrollController extends Member
 		$jobtitle 	= Request::input('jobtitle');
 
 
-		$emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->groupBy('tbl_payroll_employee_basic.payroll_employee_id')->get();
+		$emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->groupBy('tbl_payroll_employee_basic.payroll_employee_id')->get();
 		// dd($emp);
 		return json_encode($emp);
 	}

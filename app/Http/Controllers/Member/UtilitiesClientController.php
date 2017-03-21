@@ -9,6 +9,8 @@ use App\Models\Tbl_user;
 use Crypt;
 use Carbon\Carbon;
 use Validator;
+use App\Globals\Utilities;
+
 class UtilitiesClientController extends Member
 {
     /**
@@ -18,15 +20,30 @@ class UtilitiesClientController extends Member
      */
     public function index()
     {
-        $data["_shop_info"] = Tbl_shop::getUser()->groupBy("tbl_shop.shop_id")->where("tbl_shop.shop_id",$this->user_info->shop_id)->get();
+        $access = Utilities::checkAccess("utilities-client-list","access_page");
+        if($access != 0)
+        {
+            $data["_shop_info"] = Tbl_shop::getUser()->groupBy("tbl_shop.shop_id")->where("tbl_shop.shop_id",$this->user_info->shop_id)->get();
 
-        return view("member.client.client",$data);
+            return view("member.client.client",$data);
+        }
+        else
+        {
+            return $this->show_no_access();
+        }
     }
     public function update($id)
-    {        
-        $data["shop"] = Tbl_shop::getUser()->where("tbl_shop.shop_id",$id)->first();
-        // dd(Crypt::decrypt($data["shop"]->user_password));
-        return view("member.client.client_update",$data);
+    {     
+        $access = Utilities::checkAccess("utilities-client-list","update_password");
+        if($access != 0)
+        {            
+            $data["shop"] = Tbl_shop::getUser()->where("tbl_shop.shop_id",$id)->first();
+            return view("member.client.client_update",$data);
+        }
+        else
+        {
+            return $this->show_no_access_modal();
+        }
     }
     public function update_submit()
     {

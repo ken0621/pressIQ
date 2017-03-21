@@ -42,9 +42,9 @@ class Tbl_category extends Model
         return $query;
     }
 
-    public function scopeselecthierarchy($query, $shop_id = 0, $type_parent_id = 0, $cat_type = array("all","service","inventory","non-inventory"))
+    public function scopeselecthierarchy($query, $shop_id = 0, $type_parent_id = 0, $cat_type = array("all","service","inventory","non-inventory"),$archived = 0)
     {
-        return $query->where('type_shop', $shop_id)->where('type_parent_id', $type_parent_id);
+        return $query->where('type_shop', $shop_id)->where('type_parent_id', $type_parent_id)->where("archived",$archived);
     }
 
     public function scopeProduct($query)

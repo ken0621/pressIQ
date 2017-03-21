@@ -352,8 +352,8 @@ class Payroll
 		/* CHECK EACH TIME */
 		foreach($_time_record as $time_record)
 		{
-			$time_in = c_time_to_int($time_record->time_in);
-			$time_out = c_time_to_int($time_record->time_out);
+			$time_in = c_time_to_int($time_record->payroll_time_sheet_in);
+			$time_out = c_time_to_int($time_record->payroll_time_sheet_out);
 			$early_overtime = 0;
 			$late_overtime = 0;
 
@@ -460,7 +460,8 @@ class Payroll
 		$return->extra_day_hours = date("H:i", 0);
 		$return->total_hours = date("H:i", $total_hours);
 		$return->night_differential = date("H:i", $total_night_differential);
-		
+		$return->payroll_time_sheet_record_id = $time_record->payroll_time_sheet_record_id;
+		$return->payroll_time_sheet_approved = $time_record->payroll_time_sheet_record_id;
 		return $return;
 	}
 }

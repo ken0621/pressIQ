@@ -22,6 +22,8 @@ Route::any('/mlm/network/unilevel', 'Mlm\MlmNetworkController@unilevel'); //EDWA
 Route::any('/mlm/profile/edit/password', 'Mlm\MlmProfileController@password'); //EDWARD GUEVARRA
 Route::any('/mlm/profile/edit/contact', 'Mlm\MlmProfileController@contact');
 Route::any('/mlm/profile/edit/basic', 'Mlm\MlmProfileController@basic');
+Route::any('/mlm/profile/edit/picture', 'Mlm\MlmProfileController@profile_picture_upload');
+Route::any('/mlm/profile/edit/encashment', 'Mlm\MlmProfileController@update_encashment');
 //
 Route::get('/mlm/repurchase', 'Mlm\MlmRepurchaseController@index'); //EDWARD GUEVARRA
 

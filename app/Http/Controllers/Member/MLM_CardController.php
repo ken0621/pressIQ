@@ -57,9 +57,7 @@ class MLM_CardController extends Member
             ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_slot.slot_owner')
             ->where('tbl_customer_address.purpose', 'billing')
             ->membership()->customer()->get();
-
             $ret = null;
-
             foreach ($all_slot as $key => $value) 
             {
                 $ret .= Cards::card_all($value);
@@ -82,7 +80,6 @@ class MLM_CardController extends Member
             
         ->membership()->customer()->first();
         $card = Cards::card_all($slot);
-
 
         return Pdf_global::show_image($card);
 	}

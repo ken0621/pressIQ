@@ -55,7 +55,6 @@ function global()
     function action_global_submit(link, data, modal)
     {
         $(".modal-loader").removeClass("hidden");
-        
         $.ajax({
             url:link,
             dataType:"json",

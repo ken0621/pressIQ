@@ -143,6 +143,12 @@ class MlmRegisterController extends MlmLoginController
                                     // $insert_other['shop_id'] = Self::$shop_id;
                                     DB::table('tbl_customer_other_info')->insert($insert_other);
 
+                                    $updatetSearch['customer_id'] = $cus_id;
+                                    $updatetSearch['body'] = $insert['first_name'].' '.$insert['last_name'].' '.$insert['email'].' '.$insert['mlm_username'];
+                                    $updatetSearch['created_at'] = Carbon::now();
+                                    $updatetSearch['updated_at'] = Carbon::now();
+                                    DB::table('tbl_customer_search')->insert($updatetSearch);
+
                                     $insert_address['customer_id'] = $cus_id;
                                     $insert_address['customer_state'] = Request::input('customer_state');
                                     $insert_address['customer_city'] = Request::input('customer_city');

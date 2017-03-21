@@ -88,6 +88,7 @@ class Cards
         {
             $data['now'] = Carbon::parse($info->slot_card_issued)->format('m/d/Y');
         }
+        // dd(1);
         return view("member.card.card", $data);
     }
 }

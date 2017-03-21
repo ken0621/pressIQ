@@ -96,11 +96,30 @@ You mad bro? what are you doing here.
 			
 
 =======================TASk============================
+-tick ng name on cheque (ok) 
+--request encashment	(ok)
+---Email				
+----Discount Card		
 
 
 
+email_content_key
+email_content
+date_created
+date_updated
+archived
+email_content_subject
 
-
+[Email Notification] Successful Registration Email Notification - success_register
+[Email Notification] Reset Password Notification
+[Email Notification] Purchase Email Notification
+[Email Notification] E-wallet top up email notification
+[Email Notification] E-Wallet transfer - 	e_wallet_transfer
+[Email Notification] Purchase Discount Card Notification
+[Email Notification] Online Order Email Notification
+[Email Notification] Redeem points email Notification
+[Email Notification] Discount Card Purchase - discount_card_purchase
+[Email Notification] Membership Code - membership_code_purchase
 
 APP_KEY=vNYGoBAFOTzqWyeXFkYeO97Z5FIBq5SD
 

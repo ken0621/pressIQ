@@ -251,7 +251,7 @@ class Payroll
 
 
 	/* 	 Returns normal hours rendered and overtime (Guillermo Tabligan) */
-	public static function process_time($time_rule, $default_time_in, $default_time_out, $_time_record, $break = "01:00", $default_working_hours = "08:00", $late_grace_time = 15)
+	public static function process_time($time_rule, $default_time_in, $default_time_out, $_time_record, $break = "01:00", $default_working_hours = "08:00", $late_grace_time = "00:15")
 	{
 		$return = new stdClass();
 
@@ -342,16 +342,18 @@ class Payroll
 		$total_regular_hours = 0;
 		$total_late_hours = 0;
 		$total_hours = 0;
+		$total_night_differential = 0;
 		$earliest_time_in = 86340;
 
 		$default_time_in = c_time_to_int($default_time_in);
 		$default_time_out = c_time_to_int($default_time_out);
+		$shift_night_differential = 0;
 
 		/* CHECK EACH TIME */
 		foreach($_time_record as $time_record)
 		{
-			$time_in = c_time_to_int($time_record->time_in);
-			$time_out = c_time_to_int($time_record->time_out);
+			$time_in = c_time_to_int($time_record->payroll_time_sheet_in);
+			$time_out = c_time_to_int($time_record->payroll_time_sheet_out);
 			$early_overtime = 0;
 			$late_overtime = 0;
 
@@ -376,15 +378,34 @@ class Payroll
 			/* CHECK IF EARLY OVERTIME */
 			if($time_in < $default_time_in && $time_out != 0)
 			{
-				$early_overtime = $default_time_in - $time_in;
-				$regular_hours = $regular_hours - $early_overtime;
+				if($time_out < $default_time_in)
+				{
+					$early_overtime = $time_out - $time_in;
+					$regular_hours = 0;
+				}
+				else
+				{
+					$early_overtime = $default_time_in - $time_in;
+					$regular_hours = $regular_hours - $early_overtime;
+				}
+
+
 			}
 
-			/* CHECK IF EARLY OVERTIME */
+			/* CHECK IF LATE OVERTIME */
 			if($time_out > $default_time_out && $time_out != 0)
 			{
-				$late_overtime = $time_out - $default_time_out;
-				$regular_hours = $regular_hours - $late_overtime;
+				if($time_in > $default_time_out)
+				{
+					$late_overtime = $time_out - $time_in;
+					$regular_hours = 0;
+				}
+				else
+				{
+					$late_overtime = $time_out - $default_time_out;
+					$regular_hours = $regular_hours - $late_overtime;
+				}
+
 			}
 
 			$total_early_overtime += $early_overtime;
@@ -412,9 +433,16 @@ class Payroll
 		}
 
 		/* COMPUTE LATE BASED ON EARLIEST TIME IN */
+		$late_grace_time = c_time_to_int($late_grace_time);
 		if($default_time_in < $earliest_time_in)
 		{
 			$total_late_hours = $earliest_time_in - $default_time_in;
+
+			if($total_late_hours <= $late_grace_time)
+			{
+				$total_late_hours = 0;
+			}
+			
 		}
 		else
 		{
@@ -431,7 +459,9 @@ class Payroll
 		$return->rest_day_hours = date("H:i", 0);
 		$return->extra_day_hours = date("H:i", 0);
 		$return->total_hours = date("H:i", $total_hours);
-		
+		$return->night_differential = date("H:i", $total_night_differential);
+		$return->payroll_time_sheet_record_id = $time_record->payroll_time_sheet_record_id;
+		$return->payroll_time_sheet_approved = $time_record->payroll_time_sheet_record_id;
 		return $return;
 	}
 }

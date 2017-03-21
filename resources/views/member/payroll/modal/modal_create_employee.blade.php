@@ -92,6 +92,7 @@
             <li><a data-toggle="tab" href="#government-contribution">Government Contribution</a></li>
             <li><a data-toggle="tab" href="#salary-details">Salary Details</a></li>
             <li><a data-toggle="tab" href="#requirements">Requirements</a></li>
+            <li><a data-toggle="tab" href="#dependents">Dependents</a></li>
             <li><a data-toggle="tab" href="#remarks">Remarks</a></li>
           </ul>
           
@@ -178,8 +179,11 @@
                     <div class="form-group">
                       <div class="col-md-6 padding-r-1">
                         <small>Payroll Group</small>
-                        <select class="form-control" name="payroll_group_id">
+                        <select class="form-control" name="payroll_group_id" required>
                           <option value="">Select Group</option>
+                          @foreach($_group as $group)
+                          <option value="{{$group->payroll_group_id}}">{{$group->payroll_group_code}}</option>
+                          @endforeach
                         </select>
                       </div>
                       <div class="col-md-6 padding-l-1">
@@ -414,6 +418,109 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <div id="dependents" class="tab-pane fade form-horizontal">
+              <div class="form-group">
+                <div class="col-md-6">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="payroll_dependent_name[]" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control" name="payroll_dependent_relationship[]">
+                          <option value="">Select relationship</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                          <option value="Spouse">Spouse</option>
+                          <option value="Child">Child</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="payroll_dependent_name[]" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control" name="payroll_dependent_relationship[]">
+                          <option value="">Select relationship</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                          <option value="Spouse">Spouse</option>
+                          <option value="Child">Child</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="payroll_dependent_name[]" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control" name="payroll_dependent_relationship[]">
+                          <option value="">Select relationship</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                          <option value="Spouse">Spouse</option>
+                          <option value="Child">Child</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="payroll_dependent_name[]" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control" name="payroll_dependent_relationship[]">
+                          <option value="">Select relationship</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                          <option value="Spouse">Spouse</option>
+                          <option value="Child">Child</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+             
             </div>
             <div id="remarks" class="tab-pane fade">
               <br>

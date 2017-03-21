@@ -12,7 +12,15 @@
       Employee 201 files
       </small>
       </h1>
-      <button class="btn btn-custom-primary panel-buttons pull-right popup" link="/member/payroll/employee_list/modal_create_employee" size="lg">Create Employee</button>
+      <div class="dropdown pull-right">
+        <button class="btn btn-custom-primary dropdown-toggle " type="button" data-toggle="dropdown"><i class="fa fa-gears"></i>&nbsp;Operation
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu dropdown-menu-custom">
+          <li><a href="#" class="popup" link="/member/payroll/employee_list/modal_create_employee" size="lg"><i class="fa fa-plus"></i>&nbsp;Create Employee</a></li>
+          <li><a href="#" class="popup" link="/member/payroll/employee_list/modal_import_employee"><i class="fa fa-upload"></i>&nbsp;Import From Excel</a></li>
+        </ul>
+      </div>
+      
       <input type="hidden" name="_token" value="{{csrf_token()}}" id="_token">
     </div>
   </div>
@@ -47,7 +55,7 @@
           <div class="col-md-4 pull-right padding-lr-1">
             <small>Search Employee</small>
             <i class="fa fa-search calendar-icon pos-absolute" aria-hidden="true" style="margin-left:-76px"></i>
-            <input type="search" name="" class="form-control indent-15">
+            <input type="search" name="" class="form-control indent-18" placeholder="Search employee here">
 
           </div>
         </div>

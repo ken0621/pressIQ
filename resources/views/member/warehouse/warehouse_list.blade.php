@@ -39,6 +39,11 @@
         <div class="form-group tab-content panel-body warehouse-container">
             <div class="form-group">
                 <div class="col-md-12">
+                    <div class="text-left">
+                        <a href="/member/item/view_serials"> Item has Serial Number</a>
+                    </div>
+                </div>
+                <div class="col-md-12">
                     @if($count_no_serial != 0)
                     <div class="text-right" style="margin-top: 10px">
                         <a href="/member/item/inventory_log">{{$count_no_serial}} Item has No Serial Number</a>

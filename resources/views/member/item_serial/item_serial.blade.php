@@ -37,18 +37,17 @@
                             <tr>
                                 <th>#</th>
                                 <th class="text-center">Item Name</th>
-                                <th class="text-center">Quantity</th>
+                                <!-- <th class="text-center">Quantity</th> -->
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody class="table-client">
-                            @if($_shop_info)
-                                @foreach($_shop_info as $shop)
+                            @if($_item_serial)
+                                @foreach($_item_serial as $item)
                                     <tr>
-                                        <td>{{$shop->shop_id}}</td>
-                                        <td class="text-center">{{$shop->shop_key}}</td>
-                                        <td class="text-center">{{$shop->user_first_name." ".$shop->user_last_name}}</td>
-                                        <td class="text-center"><a link="/member/utilities/client/update/{{$shop->shop_id}}" size="md" class="popup">Update</a></td>
+                                        <td>{{$item->serial_id}}</td>
+                                        <td class="text-center">{{$item->item_name}}</td>
+                                        <td class="text-center"><a link="/member/item/serial_number/{{$item->item_id}}" size="md" class="popup">View Serials</a></td>
                                     </tr>
                                 @endforeach
                             @endif

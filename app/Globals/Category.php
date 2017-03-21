@@ -147,7 +147,7 @@ class Category
 	public static function select_tr_html($shop_id = 0, $archived = 0, $parent = 0, $margin_left = 0, $hierarchy = [])
 	{
 		$html = '';
-		$_category = Tbl_category::selecthierarchy($shop_id, $parent, array("all","service","inventory","non-inventory"), $archived)->orderBy('type_name','asc')->get();
+		$_category = Tbl_category::selecthierarchy($shop_id, $parent, array("all","service","inventory","non-inventory"))->orderBy('type_name','asc')->get();
 		// dd($_category);
 		$childs = null;
 		foreach($_category as $key => $cat)
@@ -156,9 +156,34 @@ class Category
 			// if($archived == 1)
 			// {
 			// 	$childs[$key] = Tbl_category::where("type_parent_id",$cat->type_id)->where("archived",1)->get();
-			// 	foreach ($childs as $keys => $values) 
+			// 	if($childs[$key])
 			// 	{
-			// 		$html = "hhhhh";				
+			// 		foreach ($childs as $keys => $values) 
+			// 		{
+			// 			$class = '';
+			// 			// $child = 'header"';
+			// 			$child = '';
+			// 			if($values->type_parent_id != 0)
+			// 			{
+			// 				$class = 'tr-sub-'.$values->type_parent_id.' tr-parent-'.$parent.' ';
+			// 				// $child = 'child"';
+			// 			}
+			// 			$class .= $child;
+
+			// 			$caret = '';
+			// 			$count = Tbl_category::selecthierarchy($shop_id, $parent, $values->type_id)->count();
+			// 			if($count != 0)
+			// 			{
+			// 				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$values->type_id.'"></i>';
+			// 			}
+
+			// 			$data['class'] = $class;
+			// 			$data['cat'] = $values;
+			// 			$data['margin_left'] = 'style="margin-left:'.$margin_left.'px"';
+			// 			$data['category'] = $caret.$values->type_name;
+
+			// 			$html .= view('member.manage_category.tr_row',$data)->render();
+			// 		}					
 			// 	}
 			// }
 			//endarcy

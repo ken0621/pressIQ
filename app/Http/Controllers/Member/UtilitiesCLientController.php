@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Member;
 
-Use Request;
+use Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_user;

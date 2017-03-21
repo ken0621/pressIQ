@@ -114,6 +114,7 @@ class MLM_SlotController extends Member
     public function index()
     {
         // $email = DB::table('tbl_email_content')->where('email_content_id', '!=', 1)->get();
+        // $email = $email->toArray();
         // return $email;
         // $placement_tree_left_list        = Tbl_tree_placement::where("placement_tree_parent_id",1)
         //                                                      ->where("placement_tree_level",11)

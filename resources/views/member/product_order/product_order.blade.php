@@ -11,6 +11,9 @@
                 </small>
             </h1>
             <a class="panel-buttons btn btn-custom-primary pull-right" href="product_order/create_order" >Create Invoice</a>
+<!--             <a class="panel-buttons btn btn-default pull-right" href="product_order/create_order" >Sales by product (Report)</a>
+            <a class="panel-buttons btn btn-default pull-right" href="product_order/create_order" >Sales by month (Report)</a>
+            <a class="panel-buttons btn btn-default pull-right" href="product_order/create_order" >Sales by variant (Report)</a> -->
         </div>
     </div>
 </div>
@@ -91,6 +94,12 @@
                                 <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
                                 <td>{{$order->order_status}}</td>
                                 <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
+
                             </tr>
                             @endforeach
                         @else
@@ -125,6 +134,12 @@
                                 <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
                                 <td>{{$order->order_status}}</td>
                                 <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
+
                             </tr>
                             @endforeach
                         @else
@@ -159,6 +174,12 @@
                                 <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
                                 <td>{{$order->order_status}}</td>
                                 <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
+
                             </tr>
                             @endforeach
                         @else
@@ -193,6 +214,12 @@
                                 <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
                                 <td>{{$order->order_status}}</td>
                                 <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
+
                             </tr>
                             @endforeach
                         @else
@@ -227,6 +254,11 @@
                                 <td>{{$order->first_name}} {{$order->middle_name}} {{$order->last_name}}</td>
                                 <td>{{$order->order_status}}</td>
                                 <td>{{$order->total}}</td>
+                                <th>
+                                    <div class="btn-group">
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$order->ec_order_id}}">View</a>
+                                    </div>
+                                </th>
                             </tr>
                             @endforeach
                         @else

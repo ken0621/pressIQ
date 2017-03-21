@@ -7,7 +7,7 @@ use App\Globals\Accounting;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
-use App\Globals\Ecom_product;
+use App\Globals\Ecom_Product;
 use App\Globals\Pdf_global;
 
 use App\Models\Tbl_customer;
@@ -66,7 +66,7 @@ class ProductOrderController extends Member
                 $data["ec_order_id"] = $sir->ec_order_id;
             }
         }
-
+            // dd($data["_product"]);
         return view('member.product_order.product_create_order', $data);
     }
     public function invoice_list()
@@ -82,7 +82,7 @@ class ProductOrderController extends Member
     public function create_invoice()
     {
         $customer_info                      = [];
-        $customer_info['customer_id']       = Request::input('inv_customer_id');;
+        $customer_info['customer_id']       = Request::input('inv_customer_id');
         $customer_info['customer_email']    = Request::input('inv_customer_email');
 
         $invoice_info                       = [];
@@ -237,6 +237,7 @@ class ProductOrderController extends Member
             {
                 $return["status"]                   = "error";
                 $return["status_message"]           = $response["status_message"];
+                return json_encode($return);
             }
             else
             {

@@ -85,6 +85,7 @@ class ReportsController extends Member
         $start      = $this->startDate();
         $shop_id    = $this->checkuser('user_shop');
         $data       = SalesReport::SalesReportBy('product',$shop_id, $start, $end);
+        // if($data)
         $data['start'] = date('m/d/Y', strtotime($start));
         $data['end'] = date('m/d/Y', strtotime($end));
     	return view("member.reports.sale.product",$data);

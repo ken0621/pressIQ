@@ -14,6 +14,7 @@ use App\Models\Tbl_product_vendor;
 use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_item_discount;
+use App\Models\Tbl_item_multiple_price;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -513,7 +514,7 @@ class ItemController extends Member
 			$data["_income"] 	= Accounting::getAllAccount('all',null,['Income','Other Income']);
 			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset']);
 			$data["_expense"] 	= Accounting::getAllAccount('all',null,['Expense','Other Expense']);						
-			$data['_category'] 	= Category::getAllCategory();
+			$data['_category']  = Category::getAllCategory();
 			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 	  	= UnitMeasurement::load_um();
 			$data['_item']  	= Item::get_all_category_item();
@@ -802,10 +803,38 @@ class ItemController extends Member
     	return json_encode($return);
 	}	
 
-	public function get_multiple_price_modal()
+	public function get_multiple_price_modal($item_id)
 	{
-		$data["name"] = '';
+		$shop_id = $this->user_info->shop_id;
+		$data["_multiple_price"] = Tbl_item_multiple_price::item($shop_id)->get();
+		$data["item_id"]		 = $item_id;
+
 		return view('member/item/item_multiple_price_modal', $data);
+	}
+
+	public function update_multiple_price_modal()
+	{
+		$item_id = Request::input('item_id');
+		$shop_id = $this->user_info->shop_id;
+
+		Tbl_item_multiple_price::item($shop_id)->where("item_id", $item_id)->delete();
+
+		foreach(Request::input('multiprice_qty') as $key=>$qty)
+		{
+			if($qty > 1)
+			{
+				$insert["multiprice_item_id"] = $item_id;
+				$insert["multiprice_qty"]	  = $qty;
+				$insert["multiprice_price"]	  = Request::input('multiprice_price')[$key];
+
+				Tbl_item_multiple_price::insert($insert);
+			}
+		}
+
+		$json["status"] 	= "success";
+		$json["type"] 		= "multiple_price";
+		$json["message"]	= "Success";
+		return json_encode($json);
 	}
 
 	public function insert_session()

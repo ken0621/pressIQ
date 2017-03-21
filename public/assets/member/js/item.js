@@ -250,6 +250,11 @@ function submit_done(data)
         data.element.modal("hide");
         // $('.multiple_global_modal').modal('hide');
     }
+    else if(data.type == "mulitple_price")
+    {
+        toastr.success(data.message);
+        data.element.modal("toggle");
+    }
     else if(data.status == "success-adding-serial")
     {
         toastr.success("Success");

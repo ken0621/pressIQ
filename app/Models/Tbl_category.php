@@ -44,8 +44,7 @@ class Tbl_category extends Model
 
     public function scopeselecthierarchy($query, $shop_id = 0, $type_parent_id = 0, $cat_type = array("all","service","inventory","non-inventory"), $archived = 0)
     {
-        $query->where('type_shop', $shop_id)->where('type_parent_id', $type_parent_id)->whereIn("type_category",$cat_type)->where('archived',$archived);
-        return $query;
+        return $query->where('type_shop', $shop_id)->where('type_parent_id', $type_parent_id)->where('archived',$archived);
     }
 
     public function scopeProduct($query)

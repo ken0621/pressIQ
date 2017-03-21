@@ -96,12 +96,19 @@ You mad bro? what are you doing here.
 			
 
 =======================TASk============================
-----tick ng name on cheque 
------request encashment
+-tick ng name on cheque (ok) 
+--request encashment	(ok)
+---Email				
+----Discount Card		
 
 
 
-
+email_content_key
+email_content
+date_created
+date_updated
+archived
+email_content_subject
 
 APP_KEY=vNYGoBAFOTzqWyeXFkYeO97Z5FIBq5SD
 

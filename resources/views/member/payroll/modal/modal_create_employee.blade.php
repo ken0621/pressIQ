@@ -426,17 +426,17 @@
                     <div class="form-group">
                       <div  class="col-md-12">
                         <small>Dependent Full Name</small>
-                        <input type="text" name="" class="form-control">
+                        <input type="text" name="payroll_dependent_name[]" class="form-control">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-6">
                         <small>Birth Date</small>
-                        <input type="text" name="" class="form-control datepicker">
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker">
                       </div>
                       <div class="col-md-6">
                         <small>Relationship</small>
-                        <select class="form-control">
+                        <select class="form-control" name="payroll_dependent_relationship[]">
                           <option value="">Select relationship</option>
                           <option value="Father">Father</option>
                           <option value="Mother">Mother</option>
@@ -449,17 +449,17 @@
                     <div class="form-group">
                       <div  class="col-md-12">
                         <small>Dependent Full Name</small>
-                        <input type="text" name="" class="form-control">
+                        <input type="text" name="payroll_dependent_name[]" class="form-control">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-6">
                         <small>Birth Date</small>
-                        <input type="text" name="" class="form-control datepicker">
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker">
                       </div>
                       <div class="col-md-6">
                         <small>Relationship</small>
-                        <select class="form-control">
+                        <select class="form-control" name="payroll_dependent_relationship[]">
                           <option value="">Select relationship</option>
                           <option value="Father">Father</option>
                           <option value="Mother">Mother</option>
@@ -475,17 +475,17 @@
                     <div class="form-group">
                       <div  class="col-md-12">
                         <small>Dependent Full Name</small>
-                        <input type="text" name="" class="form-control">
+                        <input type="text" name="payroll_dependent_name[]" class="form-control">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-6">
                         <small>Birth Date</small>
-                        <input type="text" name="" class="form-control datepicker">
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker">
                       </div>
                       <div class="col-md-6">
                         <small>Relationship</small>
-                        <select class="form-control">
+                        <select class="form-control" name="payroll_dependent_relationship[]">
                           <option value="">Select relationship</option>
                           <option value="Father">Father</option>
                           <option value="Mother">Mother</option>
@@ -498,17 +498,17 @@
                     <div class="form-group">
                       <div  class="col-md-12">
                         <small>Dependent Full Name</small>
-                        <input type="text" name="" class="form-control">
+                        <input type="text" name="payroll_dependent_name[]" class="form-control">
                       </div>
                     </div>
                     <div class="form-group">
                       <div class="col-md-6">
                         <small>Birth Date</small>
-                        <input type="text" name="" class="form-control datepicker">
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker">
                       </div>
                       <div class="col-md-6">
                         <small>Relationship</small>
-                        <select class="form-control">
+                        <select class="form-control" name="payroll_dependent_relationship[]">
                           <option value="">Select relationship</option>
                           <option value="Father">Father</option>
                           <option value="Mother">Mother</option>

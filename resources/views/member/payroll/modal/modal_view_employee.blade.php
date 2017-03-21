@@ -96,6 +96,7 @@
             <li><a data-toggle="tab" href="#government-contribution">Government Contribution</a></li>
             <li><a data-toggle="tab" href="#salary-details">Salary Details</a></li>
             <li><a data-toggle="tab" href="#requirements">Requirements</a></li>
+            <li><a data-toggle="tab" href="#dependents">Dependents</a></li>
             <li><a data-toggle="tab" href="#remarks">Remarks</a></li>
           </ul>
           
@@ -440,6 +441,109 @@
                   </div>
                 </div>
               </div>
+            </div>
+            <div id="dependents" class="tab-pane fade form-horizontal">
+              <div class="form-group">
+                <div class="col-md-6">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="payroll_dependent_name[]" class="form-control" value="{{isset($dependent[0]) ? $dependent[0]->payroll_dependent_name : ''}}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker" value="{{isset($dependent[0]) ? date('Y-m-d',strtotime($dependent[0]->payroll_dependent_birthdate)) : ''}}">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control" name="payroll_dependent_relationship[]">
+                          <option value="">Select relationship</option>
+                          <option value="Father" {{isset($dependent[0]) ? ($dependent[0]->payroll_dependent_relationship == 'Father' ? 'selected="selected"' : '') : ''}}>Father</option>
+                          <option value="Mother" {{isset($dependent[0]) ? ($dependent[0]->payroll_dependent_relationship == 'Mother' ? 'selected="selected"' : '') : ''}}>Mother</option>
+                          <option value="Spouse" {{isset($dependent[0]) ? ($dependent[0]->payroll_dependent_relationship == 'Spouse' ? 'selected="selected"' : '') : ''}}>Spouse</option>
+                          <option value="Child" {{isset($dependent[0]) ? ($dependent[0]->payroll_dependent_relationship == 'Child' ? 'selected="selected"' : '') : ''}}>Child</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="payroll_dependent_name[]" class="form-control" value="{{isset($dependent[1]) ? $dependent[1]->payroll_dependent_name : ''}}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker" value="{{isset($dependent[1]) ? date('Y-m-d',strtotime($dependent[1]->payroll_dependent_birthdate)) : ''}}">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control" name="payroll_dependent_relationship[]">
+                          <option value="">Select relationship</option>
+                          <option value="Father" {{isset($dependent[1]) ? ($dependent[1]->payroll_dependent_relationship == 'Father' ? 'selected="selected"' : '') : ''}}>Father</option>
+                          <option value="Mother" {{isset($dependent[1]) ? ($dependent[1]->payroll_dependent_relationship == 'Mother' ? 'selected="selected"' : '') : ''}}>Mother</option>
+                          <option value="Spouse" {{isset($dependent[1]) ? ($dependent[1]->payroll_dependent_relationship == 'Spouse' ? 'selected="selected"' : '') : ''}}>Spouse</option>
+                          <option value="Child" {{isset($dependent[1]) ? ($dependent[1]->payroll_dependent_relationship == 'Child' ? 'selected="selected"' : '') : ''}}>Child</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="payroll_dependent_name[]" class="form-control" value="{{isset($dependent[2]) ? $dependent[2]->payroll_dependent_name : ''}}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker" value="{{isset($dependent[2]) ? date('Y-m-d',strtotime($dependent[2]->payroll_dependent_birthdate)) : ''}}">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control" name="payroll_dependent_relationship[]">
+                          <option value="">Select relationship</option>
+                          <option value="Father" {{isset($dependent[2]) ? ($dependent[2]->payroll_dependent_relationship == 'Father' ? 'selected="selected"' : '') : ''}}>Father</option>
+                          <option value="Mother" {{isset($dependent[2]) ? ($dependent[2]->payroll_dependent_relationship == 'Mother' ? 'selected="selected"' : '') : ''}}>Mother</option>
+                          <option value="Spouse" {{isset($dependent[2]) ? ($dependent[2]->payroll_dependent_relationship == 'Spouse' ? 'selected="selected"' : '') : ''}}>Spouse</option>
+                          <option value="Child" {{isset($dependent[2]) ? ($dependent[2]->payroll_dependent_relationship == 'Child' ? 'selected="selected"' : '') : ''}}>Child</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="payroll_dependent_name[]" class="form-control" value="{{isset($dependent[3]) ? $dependent[3]->payroll_dependent_name : ''}}">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker" value="{{isset($dependent[3]) ? date('Y-m-d',strtotime($dependent[3]->payroll_dependent_birthdate)) : ''}}">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control" name="payroll_dependent_relationship[]">
+                          <option value="">Select relationship</option>
+                          <option value="Father" {{isset($dependent[3]) ? ($dependent[3]->payroll_dependent_relationship == 'Father' ? 'selected="selected"' : '') : ''}}>Father</option>
+                          <option value="Mother" {{isset($dependent[3]) ? ($dependent[3]->payroll_dependent_relationship == 'Mother' ? 'selected="selected"' : '') : ''}}>Mother</option>
+                          <option value="Spouse" {{isset($dependent[3]) ? ($dependent[3]->payroll_dependent_relationship == 'Spouse' ? 'selected="selected"' : '') : ''}}>Spouse</option>
+                          <option value="Child" {{isset($dependent[3]) ? ($dependent[3]->payroll_dependent_relationship == 'Child' ? 'selected="selected"' : '') : ''}}>Child</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+             
             </div>
             <div id="remarks" class="tab-pane fade">
               <br>

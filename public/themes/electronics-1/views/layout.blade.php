@@ -61,12 +61,12 @@
                         <nav class="navbar navbar-default">
                             <div class="">
                                 <!-- Collect the nav links, forms, and other content for toggling -->
-                                <div class="navbar navbar-default"">
+                                <div class="navbar-default"">
                                   <ul class="nav navbar-nav">
-                                    <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME <span class="sr-only">(current)</span></a></li>
-                                    <li class="nav-border {{ Request::input('cat') == 'electronics' ? 'active' : '' }}"><a href="/product?cat=electronics">SHOP</a></li>
-                                    <li class="nav-border {{ Request::input('cat') == 'fashion' ? 'active' : '' }}"><a href="/about">COMPANY</a></li>
-                                    <li class="nav-border {{ Request::input('cat') == 'kids' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li>
+                                    <li class="{{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME <span class="sr-only">(current)</span></a></li>
+                                    <li class="{{ Request::input('cat') == 'electronics' ? 'active' : '' }}"><a href="/product?cat=electronics">SHOP</a></li>
+                                    <li class="{{ Request::input('cat') == 'fashion' ? 'active' : '' }}"><a href="/about">COMPANY</a></li>
+                                    <li class="{{ Request::input('cat') == 'kids' ? 'active' : '' }}"><a href="/contact">CONTACT US</a></li>
                                   </ul>
                                 </div><!-- /.navbar-collapse -->
                             </div><!-- /.container-fluid -->
@@ -195,7 +195,7 @@
         </div>
   	<footer>
    	    <div class="container ftr">
-            <div class="row clearfix">
+            <div class="contact-ftr">
                 <div class="col-md-3 col-sm-6">
                     <div class="footer-logo"><img src="/themes/{{ $shop_theme }}/img/footer-logo.png"></div>
                     <div>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</div>
@@ -234,7 +234,7 @@
                     </div>
                 </div>
                     
-                <div class="col-md-3 col-sm-6">
+                <div class="col-md-3 col-sm-6 shop-footer">
                     <div class="btm-title">SHOP</div>
                     <div class="col-md-6 btm-link">
                         <div class="btm-sub-title"><a href="#">Desktops</a></div>

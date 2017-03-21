@@ -184,21 +184,21 @@ class UtilitiesController extends Member
         //     return json_encode($json);
         // }
 
-        $check_level                  = Tbl_user_position::where("position_id",$insert["user_level"])->first();
-        // dd($check_level,$this->user_info);
-        if($check_level->position_rank <= $this->user_info()->position_rank)
-        {
-            $json['message']          = "Invalid rank";
-            $json['response_status']  = "error-message";
-            $json['redirect_to']      = Redirect::back()->getTargetUrl();
-            return json_encode($json); 
-        }
-
         $message = $this->validate_add_user($insert);
 
         if($message)
         {
             $json['message']          = "Fill all of the boxes";
+            $json['response_status']  = "error-message";
+            $json['redirect_to']      = Redirect::back()->getTargetUrl();
+            return json_encode($json); 
+        }
+
+        $check_level                  = Tbl_user_position::where("position_id",$insert["user_level"])->first();
+        // dd($check_level,$this->user_info);
+        if($check_level->position_rank <= $this->user_info()->position_rank)
+        {
+            $json['message']          = "Invalid rank";
             $json['response_status']  = "error-message";
             $json['redirect_to']      = Redirect::back()->getTargetUrl();
             return json_encode($json); 
@@ -535,6 +535,10 @@ class UtilitiesController extends Member
             {
                 $data["is_developer"] = false;
                 $data["_rank"] = Tbl_user_position::where("position_shop_id", $user_info->user_shop)->where("position_rank", ">", $user_info->position_rank)->orderBy('position_rank')->get(['position_rank'])->toArray();
+                if(!$data["_rank"])
+                {
+                    $data["_rank"][0] = ['position_rank' => ($this->user_info()->position_rank)+1];
+                }
             }
             $data["_shop"] = Tbl_shop::get();
             

@@ -44,6 +44,12 @@
               @endforeach
             </select>
           </div>
+          <div class="col-md-4 pull-right padding-lr-1">
+            <small>Search Employee</small>
+            <i class="fa fa-search calendar-icon pos-absolute" aria-hidden="true" style="margin-left:-76px"></i>
+            <input type="search" name="" class="form-control">
+
+          </div>
         </div>
       </div>
       <div class="form-group">

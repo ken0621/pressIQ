@@ -111,8 +111,8 @@
       transition: .3s all ease; }
   .featured .content-container .left-container .item-content {
     padding: 0px 0px 30px 20px; }
-    .featured .content-container .left-container .item-content .item-title a {
-      color: #616161;
+    .featured .content-container .left-container .item-content .item-title {
+      color: #505050;
       font-size: 17px;
       font-weight: 600;
       text-decoration: none; }
@@ -121,9 +121,12 @@
     .featured .content-container .left-container .item-content .item-price {
       font-size: 18px !important;
       font-weight: 700;
-      padding-top: 10px; }
+      padding-top: 10px;
+      color: #1e1e1e; }
   .featured .content-container .left-container:hover {
     cursor: pointer; }
+    .featured .content-container .left-container:hover a {
+      text-decoration: none; }
     .featured .content-container .left-container:hover .asus-cellphone img {
       max-width: 100%; }
     .featured .content-container .left-container:hover .asus-cellphone .first-image {
@@ -133,8 +136,12 @@
       left: 0;
       top: 0;
       opacity: 1; }
-    .featured .content-container .left-container:hover .item-content .item-title a {
+    .featured .content-container .left-container:hover .item-content .item-title {
       text-decoration: underline; }
+    .featured .content-container .left-container:hover .item-content .item-rating {
+      text-decoration: none; }
+    .featured .content-container .left-container:hover .item-content .item-price {
+      text-decoration: none; }
   .featured .content-container .right-container .product-holder {
     border: solid 1px #eaeaea;
     padding: 0; }
@@ -165,17 +172,19 @@
           color: #616161;
           font-size: 15px;
           font-weight: 600; }
-          .featured .content-container .right-container .product-holder .per-item-container .product-content .product-details .item-name a {
-            color: #505050;
-            text-decoration: none; }
         .featured .content-container .right-container .product-holder .per-item-container .product-content .product-details .item-rating {
           padding-top: 5px; }
         .featured .content-container .right-container .product-holder .per-item-container .product-content .product-details .item-price {
           font-size: 15px !important;
           font-weight: 700;
-          padding-top: 10px; }
+          padding-top: 10px;
+          color: #1e1e1e; }
     .featured .content-container .right-container .product-holder .per-item-container:hover {
-      cursor: pointer; }
+      -moz-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.5);
+      -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.5);
+      box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      opacity: 0.7; }
       .featured .content-container .right-container .product-holder .per-item-container:hover .image-holder .first-image {
         opacity: 0;
         right: 100%;
@@ -231,10 +240,9 @@
         transition: 0.3s all ease; }
     .most-viewed .most-viewed-content .product-holder .product-content {
       padding-top: 15px; }
-      .most-viewed .most-viewed-content .product-holder .product-content .item-name a {
+      .most-viewed .most-viewed-content .product-holder .product-content .item-name {
         color: #505050;
-        font-weight: 600;
-        text-decoration: none; }
+        font-weight: 600; }
       .most-viewed .most-viewed-content .product-holder .product-content .item-price {
         color: #1e1e1e;
         font-weight: 700;
@@ -250,7 +258,7 @@
         position: absolute;
         left: 0;
         opacity: 1; }
-      .most-viewed .most-viewed-content .product-holder:hover .product-content .item-name a {
+      .most-viewed .most-viewed-content .product-holder:hover .product-content .item-name {
         text-decoration: underline; }
 
 .news-letter {
@@ -348,19 +356,25 @@
     padding-top: 30px; }
     .new-releases .new-releases-content .product-holder .per-item-container {
       opacity: 1; }
+      .new-releases .new-releases-content .product-holder .per-item-container a {
+        text-decoration: none; }
       .new-releases .new-releases-content .product-holder .per-item-container .image-holder {
         text-align: center; }
         .new-releases .new-releases-content .product-holder .per-item-container .image-holder img {
           max-width: 100%; }
-      .new-releases .new-releases-content .product-holder .per-item-container .item-details .item-title a {
+      .new-releases .new-releases-content .product-holder .per-item-container .item-details .item-title {
         color: #505050;
         font-size: 15px;
-        text-decoration: none;
-        font-weight: 600; }
+        font-weight: 600;
+        text-decoration: none; }
+      .new-releases .new-releases-content .product-holder .per-item-container .item-details .rating {
+        text-decoration: none; }
       .new-releases .new-releases-content .product-holder .per-item-container .item-details .item-price {
         font-size: 15px;
         font-weight: 700;
-        padding-top: 5px; }
+        padding-top: 5px;
+        text-decoration: none;
+        color: #1e1e1e; }
       .new-releases .new-releases-content .product-holder .per-item-container .icons {
         position: absolute;
         top: 7px;
@@ -470,11 +484,15 @@
     -webkit-box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.5);
     box-shadow: 0px 0px 14px rgba(0, 0, 0, 0.5);
     cursor: pointer; }
-    .new-releases .new-releases-content .product-holder:hover .item-details {
+    .new-releases .new-releases-content .product-holder:hover .per-item-container .item-details {
       opacity: 0.5; }
-    .new-releases .new-releases-content .product-holder:hover .image-holder {
+      .new-releases .new-releases-content .product-holder:hover .per-item-container .item-details .rating {
+        text-decoration: none; }
+      .new-releases .new-releases-content .product-holder:hover .per-item-container .item-details .item-price {
+        text-decoration: none; }
+    .new-releases .new-releases-content .product-holder:hover .per-item-container .image-holder {
       opacity: 0.5; }
-    .new-releases .new-releases-content .product-holder:hover .icons .fa-shopping-cart {
+    .new-releases .new-releases-content .product-holder:hover .per-item-container .icons .fa-shopping-cart {
       position: absolute;
       margin: auto;
       color: #fff;
@@ -482,7 +500,7 @@
       right: 5px;
       visibility: visible;
       opacity: 1; }
-    .new-releases .new-releases-content .product-holder:hover .icons .fa-heart {
+    .new-releases .new-releases-content .product-holder:hover .per-item-container .icons .fa-heart {
       position: absolute;
       margin: auto;
       color: #fff;
@@ -490,7 +508,7 @@
       right: 5px;
       visibility: visible;
       opacity: 1; }
-    .new-releases .new-releases-content .product-holder:hover .icons .fa-search {
+    .new-releases .new-releases-content .product-holder:hover .per-item-container .icons .fa-search {
       position: absolute;
       margin: auto;
       color: #fff;
@@ -498,7 +516,7 @@
       right: 5px;
       visibility: visible;
       opacity: 1; }
-    .new-releases .new-releases-content .product-holder:hover .icons .fa-camera {
+    .new-releases .new-releases-content .product-holder:hover .per-item-container .icons .fa-camera {
       position: absolute;
       margin: auto;
       color: #fff;

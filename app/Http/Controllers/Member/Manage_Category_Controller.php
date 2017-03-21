@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Http\Controllers\Member;
 
 use Request;
 use App\Models\Tbl_category;
+use App\Models\Tbl_item;
 use Carbon\Carbon;
 use App\Globals\Category;
 use App\Globals\Utilities;
@@ -24,6 +24,7 @@ class Manage_Category_Controller extends Member
             $shop_id = $this->user_info->user_shop;
             $data['category'] = Category::select_tr_html($shop_id, 0);
             $data['archived_category'] = Category::select_tr_html($shop_id, 1);
+            // dd($data['archived_category']); 
             return view('member.manage_category.manage_category_list', $data);
         }
         else
@@ -61,15 +62,33 @@ class Manage_Category_Controller extends Member
         $id = Request::input("cat_id");
         $action = Request::input("action");
 
+        $chk = Tbl_item::where("item_category_id",$id)->count();
+
         $update["archived"] = 0;
+        $data["status"] = "success-category"; 
         if($action == "archived")
         {
-            $update["archived"] = 1;
+            if($chk == 0)
+            {          
+                $update["archived"] = 1;
+                $data["status"] = "success-category";         
+            }
+            else
+            {
+                $data["status"] = "error";
+                $data["status_message"] = "The category is in used";
+            }
         }
-
+        $all = Tbl_category::where("type_parent_id",$id)->get();
+        if($all)
+        {
+            foreach ($all as $key => $value) 
+            {
+                Tbl_category::where("type_id",$value->type_id)->update($update);
+            }            
+        }
         Tbl_category::where("type_id",$id)->update($update);
 
-        $data["status"] = "success-category";
         return json_encode($data);
     }
     public function modal_create_category()

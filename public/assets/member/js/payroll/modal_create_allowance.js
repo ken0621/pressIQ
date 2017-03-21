@@ -45,7 +45,7 @@ function modal_create_allowance()
 		});
 	}
 
-	this.load_emoloyee_tag = function()
+	this.load_employee_tag = function()
 	{
 		reload_allowance_employee();
 		$(".tbl-tag").html('<tr><td colspan="2" class="text-center">'+misc('loader') + '</td></tr>');

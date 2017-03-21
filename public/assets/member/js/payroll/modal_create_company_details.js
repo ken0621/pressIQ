@@ -10,6 +10,11 @@ function modal_create_company_details()
 		department_change_event();
 	}
 
+	this.init = function()
+	{
+		init();
+	}
+
 	function department_change_event()
 	{
 		$(".create-department-list").unbind("change");
@@ -45,11 +50,16 @@ function modal_create_company_details()
 		});
 	}
 
+	
+
 }
 
 
 function submit_done(data)
 {
+	
+	// console.log(data.element);
 	data.element.modal("toggle");
-	console.log(data.element);
+	executeFunctionByName(data.function_name, window);
+	
 }

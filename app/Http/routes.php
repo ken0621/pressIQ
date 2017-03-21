@@ -221,6 +221,13 @@ Route::any('/member/item/um/select_type','Member\UnitOfMeasurementController@sel
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
 /* END AUDIT TRAIL*/
 
+/* START CLIENT INFO*/
+Route::any('/member/utilities/client_list','Member\UtilitiesClientController@index');
+Route::any('/member/utilities/client/update/{id}','Member\UtilitiesClientController@update');
+Route::any('/member/utilities/client/update_submit','Member\UtilitiesClientController@update_submit');
+/*END CLIENT INFO*/
+
+
 /* START TRUCK ARCY*/
 Route::any('/member/pis/truck_list','Member\TruckController@index');
 Route::any('/member/pis/truck_list/add','Member\TruckController@add');

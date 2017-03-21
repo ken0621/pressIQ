@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Member;
 
 use Request;
 use App\Models\Tbl_category;
+use App\Models\Tbl_item;
 use Carbon\Carbon;
 use App\Globals\Category;
 use App\Globals\Utilities;
@@ -61,15 +62,24 @@ class Manage_Category_Controller extends Member
         $id = Request::input("cat_id");
         $action = Request::input("action");
 
+        $chk = Tbl_item::where("item_category_id",$id)->count();
+
         $update["archived"] = 0;
         if($action == "archived")
         {
-            $update["archived"] = 1;
+            if($chk == 0)
+            {                
+                $update["archived"] = 1;
+                $data["status"] = "success-category";            
+            }
+            else
+            {
+                $data["status"] = "error";
+                $data["status_message"] = "The category is in used";
+            }
         }
-
         Tbl_category::where("type_id",$id)->update($update);
 
-        $data["status"] = "success-category";
         return json_encode($data);
     }
     public function modal_create_category()

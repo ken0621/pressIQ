@@ -20,6 +20,7 @@ class UtilitiesClientController extends Member
      */
     public function index()
     {
+        // dd(Crypt::decrypt("eyJpdiI6InFnOEU5d1g5YWt5VGc3VU12bkRvXC9BPT0iLCJ2YWx1ZSI6Imk1RERrUkQ0dVNMWmpoa3JBSkh2djc5cUFVaUcxV2Z3QUo5bVoyejU2UlE9IiwibWFjIjoiZDAyYjExNWIxYjhiODEyYmJiOWZiYjc2MWZmOTg2NDRiYjhkMTk0ODI0MWNlN2QxMWU3NzAzYWNkNWU2YTdmNSJ9"));
         $access = Utilities::checkAccess("utilities-client-list","access_page");
         if($access != 0)
         {
@@ -62,7 +63,8 @@ class UtilitiesClientController extends Member
       
         if($user_id != null) 
         { 
-            $shop_data = Tbl_shop::getUser()->where("shop_id",$shop_id)->first();
+            $shop_data = Tbl_shop::getUser()->where("shop_id",$shop_id)->where("user_id",$user_id)->first();
+            // dd($shop_data);  
             if(Request::input("update_password") != null)
             {
                 if($old_password == Crypt::decrypt($shop_data->user_password))
@@ -75,7 +77,7 @@ class UtilitiesClientController extends Member
                     $rule["user_first_name"] = "required";
                     $rule["user_last_name"] = "required";
                     $rule["user_password"] = "required";
-                    $rule["user_email"] = "required|email";
+                    $rule["user_email"] = "required|email|unique:tbl_user,user_email,".$user_id.",user_id";
 
                     $validator = Validator::make($update, $rule);
                     if($validator->fails())
@@ -88,7 +90,7 @@ class UtilitiesClientController extends Member
                     }
                     else
                     {
-                        Tbl_user::where("user_shop",$shop_id)->update($update);
+                        Tbl_user::where("user_shop",$shop_id)->where("user_id",$user_id)->update($update);
                         $data["status"] = "success";                    
                     }
                 }
@@ -106,7 +108,7 @@ class UtilitiesClientController extends Member
 
                 $rule["user_first_name"] = "required";
                 $rule["user_last_name"] = "required";
-                $rule["user_email"] = "required|email";
+                $rule["user_email"] = "required|email|unique:tbl_user,user_email,".$user_id.",user_id";
 
                 $validator = Validator::make($update, $rule);
                 if($validator->fails())
@@ -119,7 +121,7 @@ class UtilitiesClientController extends Member
                 }
                 else
                 {
-                    Tbl_user::where("user_shop",$shop_id)->update($update);
+                    Tbl_user::where("user_shop",$shop_id)->where("user_id",$user_id)->update($update);
                     $data["status"] = "success";                    
                 }
             }
@@ -138,7 +140,7 @@ class UtilitiesClientController extends Member
                 $rule["user_first_name"] = "required";
                 $rule["user_last_name"] = "required";
                 $rule["user_password"] = "required";
-                $rule["user_email"] = "required|email";
+                $rule["user_email"] = "required|email|unique:tbl_user,user_email";
 
                 $validator = Validator::make($ins_user, $rule);
                 if($validator->fails())

@@ -153,7 +153,14 @@ class Category
 		foreach($_category as $key => $cat)
 		{
 			//arcy
-			$childs[$key] = Tbl_category::where("type_parent_id",$cat->type_id)->get();
+			// if($archived == 1)
+			// {
+			// 	$childs[$key] = Tbl_category::where("type_parent_id",$cat->type_id)->where("archived",1)->get();
+			// 	foreach ($childs as $keys => $values) 
+			// 	{
+			// 		$html = "hhhhh";				
+			// 	}
+			// }
 			//endarcy
 
 			$class = '';

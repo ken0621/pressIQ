@@ -150,42 +150,6 @@ class Category
 		$_category = Tbl_category::selecthierarchy($shop_id, $parent, array("all","service","inventory","non-inventory"),$archived)->orderBy('type_name','asc')->get();
 		foreach($_category as $key => $cat)
 		{
-			//arcy
-			// if($archived == 1)
-			// {
-			// 	$childs[$key] = Tbl_category::where("type_parent_id",$cat->type_id)->where("archived",1)->get();
-			// 	if($childs[$key])
-			// 	{
-			// 		foreach ($childs as $keys => $values) 
-			// 		{
-			// 			$class = '';
-			// 			// $child = 'header"';
-			// 			$child = '';
-			// 			if($values->type_parent_id != 0)
-			// 			{
-			// 				$class = 'tr-sub-'.$values->type_parent_id.' tr-parent-'.$parent.' ';
-			// 				// $child = 'child"';
-			// 			}
-			// 			$class .= $child;
-
-			// 			$caret = '';
-			// 			$count = Tbl_category::selecthierarchy($shop_id, $parent, $values->type_id)->count();
-			// 			if($count != 0)
-			// 			{
-			// 				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$values->type_id.'"></i>';
-			// 			}
-
-			// 			$data['class'] = $class;
-			// 			$data['cat'] = $values;
-			// 			$data['margin_left'] = 'style="margin-left:'.$margin_left.'px"';
-			// 			$data['category'] = $caret.$values->type_name;
-
-			// 			$html .= view('member.manage_category.tr_row',$data)->render();
-			// 		}					
-			// 	}
-			// }
-			//endarcy
-
 			$class = '';
 			// $child = 'header"';
 			$child = '';
@@ -216,4 +180,43 @@ class Category
 		}
 		return $html;
 	}
+	public static function select_category_archived($margin_left = 0)
+	{
+		$html = "";
+		$_category = Tbl_category::where("archived",1)->get();
+
+		foreach ($_category as $key => $value) 
+		{
+			$class = '';
+			// $child = 'header"';
+			$child = '';
+			if($value->type_parent_id != 0)
+			{
+				$class = 'tr-sub-'.$value->type_parent_id.' tr-parent-'.$value->type_parent_id.' ';
+				// $child = 'child"';
+			}
+			$class .= $child;
+
+			$caret = '';
+			$count = Tbl_category::selecthierarchy(Category::getShopId(), $value->type_parent_id, $value->type_id, 1)->count();
+			if($count != 0)
+			{
+				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$value->type_id.'"></i>';
+			}
+
+			$data['class'] = $class;
+			$data['cat'] = $value;
+			$data['margin_left'] = 'style="margin-left:'.$margin_left.'px"';
+			$data['category'] = $caret.$value->type_name;
+
+			$html .= view('member.manage_category.tr_row',$data)->render();
+			if($count != 0)
+			{	
+				$html .= Category::select_tr_html(Category::getShopId(), 1, $value->type_id, $margin_left + 30);
+			}			
+		}
+
+		return $html;
+	}
+
 }

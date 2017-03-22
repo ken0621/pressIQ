@@ -20,7 +20,7 @@ class ShopCheckoutController extends Shop
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
         $data["_payment_method"] = Tbl_online_pymnt_method::get();
-        // dd($data["get_cart"]);
+
         return view("checkout", $data);
     }
     public function submit()
@@ -105,7 +105,7 @@ class ShopCheckoutController extends Shop
 
             Cart::clear_all($this->shop_info->shop_id);
             
-            return Redirect::to("/");
+            return Redirect::to("/order_placed");
         }
     }
     public function order_placed()

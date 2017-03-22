@@ -135,7 +135,7 @@ class MlmLoginController extends Controller
                 $content_key = "forget_password";
                 $return["subject"] = EmailContent::getSubject($content_key);
                 $return["shop_key"] = EmailContent::getShopkey();
-                $return["email"] = "arcylen103095@gmail.com";
+                $return["email"] = $ctr_email->email;
 
                 $new_password = strtoupper($ctr_email->first_name."_".str_random(5));
 

@@ -20,8 +20,14 @@ class ShopCheckoutController extends Shop
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
         $data["_payment_method"] = Tbl_online_pymnt_method::get();
-
-        return view("checkout", $data);
+        if (count($data["get_cart"]) > 0) 
+        {
+            return Redirect::to('/');
+        }
+        else
+        {
+            return view("checkout", $data);
+        }
     }
     public function submit()
     {

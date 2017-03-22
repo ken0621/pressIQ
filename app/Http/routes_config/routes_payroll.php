@@ -53,7 +53,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');
 	Route::any('/employee_timesheet/timesheet/{id}','Member\PayrollTimeSheetController@timesheet');
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimeSheetController@json_process_time');
-	Route::any('/employee_timesheet/overtime_form','Member\PayrollTimeSheetController@overtime_form');
+	Route::any('/employee_timesheet/json_process_time_single/{date}/{employee_id}','Member\PayrollTimeSheetController@json_process_time_single');
+	Route::any('/employee_timesheet/adjustment_form','Member\PayrollTimeSheetController@adjustment_form');
 	/* TIMESHEET START */
 
 	/* DEPARTMENT START */

@@ -15,9 +15,16 @@
 			"default":"",
 			"size":"12"
 		},
-		"home_main_product_image" :
+		"home_main_product_image_1" :
 		{
-			"label":"Main Product Image",
+			"label":"Main Product Image 1",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"home_main_product_image_2" :
+		{
+			"label":"Main Product Image 2",
 			"type":"image",
 			"default":"",
 			"size":"4"
@@ -27,14 +34,14 @@
 			"label":"Main Product Title",
 			"type":"textbox",
 			"default":"",
-			"size":"4"
+			"size":"2"
 		},
 		"home_main_product_price" :
 		{
 			"label":"Main Product Price",
 			"type":"textbox",
 			"default":"",
-			"size":"4"
+			"size":"2"
 		},
 		"home_product_1_image" :
 		{

@@ -29,7 +29,7 @@
 <div class="{{ Request::input('pdf') == 'true' ? '' : 'col-md-6' }} clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 1000px;' : '' }}">
 	<div class="containers" style="{{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : '' }} height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}.jpg') !important;">
 		<div class="backdesu">
-			<div style="font-weight: 600;">For inquiries, email at philtechglobalmainoffice@gmail.com</div>
+			<div style="font-weight: 600;"><center>For inquiries, email at philtechglobalmainoffice@gmail.com</center></div>
 			<div class="signature">
 			</div>
 			<div class="sign-label">Cardholder's Signature</div>
@@ -67,7 +67,7 @@
 					</tbody>
 				</table>
 			</div>
-			<div style="font-weight: 700; color: @if($color == 'gold') black @else white @endif ; font-size: 10px; text-align: justify; margin-top: 3px;" style="margin-top: 5px;  ">By signing this card, the Cardholder agrees to be bound by the terms and conditions of the VIP Loyalty Program. Present this card along with the valid ID when purchasing or availing privilleges and benefits in the head office, all BCO and partner merchants nationwide.</div>
+			<div style="font-weight: 700; color: @if($color == 'gold') black @else white @endif ; font-size: 10px; text-align: justify; margin-top: 3px; letter-spacing: 0.5px;" style="margin-top: 5px;  ">By signing this card, the Cardholder agrees to be bound by the terms and conditions of the VIP Loyalty Program. Present this card along with the valid ID when purchasing or availing privilleges and benefits in the head office, all BCO and partner merchants nationwide.</div>
 			<div style="color: white; font-weight: 600; font-size: 15px; text-align: center; margin-top: 8px;">Non-Transferable&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Annual Fee&nbsp;&nbsp;&#149;&nbsp;&nbsp;No Expiry</div>
 			<div class="text-right" style="font-weight: 600; color: @if($color == 'gold') black @else white @endif ; font-size: 12px;">Tampering invalidates the card.</div>
 		</div>

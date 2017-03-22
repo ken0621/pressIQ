@@ -100,12 +100,12 @@
 									</tr>
 								</thead>
 								<tbody>
-									@if(count($get_cart['cart']) > 0)
+									@if(isset($get_cart['cart']))
 										@foreach($get_cart["cart"] as $cart)
 										<tr>
 											<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
 											<td>{{ $cart["quantity"] }}</td>
-											<td>P {{ number_format($cart["quantity"] * $cart["cart_product_information"]["product_price"], 2) }}</td>
+											<td>P {{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</td>
 										</tr>
 										@endforeach
 									@endif

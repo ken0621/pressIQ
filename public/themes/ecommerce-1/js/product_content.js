@@ -10,6 +10,8 @@ $(document).ready(function()
 
 function event_change_image()
 {
+	$(".item-image-large").elevateZoom();
+	
 	$(document).on('click', '.item-content .thumb .holder', function(event) 
 	{
 		event.preventDefault();

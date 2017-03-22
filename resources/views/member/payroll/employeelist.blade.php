@@ -56,7 +56,13 @@
             <small>Search Employee</small>
             <i class="fa fa-search calendar-icon pos-absolute" aria-hidden="true" style="margin-left:-76px"></i>
             <input type="search" name="" class="form-control indent-18" placeholder="Search employee here">
-
+            <div class="search-container">
+             <div class="list-group">
+                <a href="#" class="list-group-item">First item</a>
+                <a href="#" class="list-group-item">Second item</a>
+                <a href="#" class="list-group-item">Third item</a>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -16,6 +16,8 @@ class Tbl_payroll_time_sheet_record extends Model
 	// [INTEGER] 		payroll_company_id
 	// [TIME] 			payroll_time_sheet_in
 	// [TIME] 			payroll_time_sheet_out
+	// [TIME]			payroll_time_sheet_approved_in
+	// [TIME]			payroll_time_sheet_approved_out
 	// [TEXT] 			payroll_time_shee_activity
 	// [VARCHAR] 		payroll_time_sheet_origin
 	// [VARCHAR] 		payroll_time_sheet_status

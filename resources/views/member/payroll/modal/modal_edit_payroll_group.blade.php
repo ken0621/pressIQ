@@ -289,11 +289,11 @@
 									<div class="form-group">
 										<div class="col-md-6">
 											<small>Grace Time Period (minutes)</small>
-											<input type="number" name="payroll_group_grace_time" class="form-control text-right" {{$group->payroll_group_grace_time}}>
+											<input type="number" name="payroll_group_grace_time" class="form-control text-right" value="{{$group->payroll_group_grace_time}}">
 										</div>
 										<div class="col-md-6">
 											<small>Break (minutes)</small>
-											<input type="number" name="payroll_group_break" class="form-control text-right" {{$group->payroll_group_break}}>
+											<input type="number" name="payroll_group_break" class="form-control text-right" value="{{$group->payroll_group_break}}">
 										</div>
 									</div>
 									<div class="form-group">

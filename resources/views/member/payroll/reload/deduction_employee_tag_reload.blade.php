@@ -16,7 +16,7 @@
 			<tbody class="table-employee-tag">
 				@foreach($emp['active'] as $active)
 				<tr>
-					<td>
+					 <td>
 						{{$active['deduction']->payroll_employee_title_name.' '.$active['deduction']->payroll_employee_first_name.' '.$active['deduction']->payroll_employee_middle_name.' '.$active['deduction']->payroll_employee_last_name.' '.$active['deduction']->payroll_employee_suffix_name}}
 					</td>
 					<td class="text-right">

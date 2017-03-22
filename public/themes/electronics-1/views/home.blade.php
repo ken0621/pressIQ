@@ -18,8 +18,8 @@
 						<div class="col-md-4 left-container">
 							<a href="">
 								<div class="asus-cellphone">
-									<img class="item-image first-image" src="{{ get_content($shop_theme_info, "home", "home_main_product_image", "/themes/". $shop_theme ."/img/asus-cellphone.png") }}">
-									<img class="item-image second-image" src="{{ get_content($shop_theme_info, "home", "home_main_product_image", "/themes/". $shop_theme ."/img/asus-cellphone.png") }}">
+									<img class="item-image first-image" src="{{ get_content($shop_theme_info, "home", "home_main_product_image_1", "/themes/". $shop_theme ."/img/asus-cellphone.png") }}">
+									<img class="item-image second-image" src="{{ get_content($shop_theme_info, "home", "home_main_product_image_2", "/themes/". $shop_theme ."/img/asus-cellphone.png") }}">
 								</div>
 								<div class="item-content">
 									<div class="item-title">{{ get_content($shop_theme_info, "home", "home_main_product_title", "Lorem ipsum dolor sit amet consectetuer") }}</div>

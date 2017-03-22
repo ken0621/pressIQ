@@ -57,7 +57,7 @@
 							<div class="col-md-5 product-image">
 								<div class="image-holder">
 									<img class="item-image first-image" src="{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_2_image_1", "/themes/". $shop_theme ."/img/most-viewed-img2.png" )}}">
-									<img class="item-image second-image" src="{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_2_image_1", "/themes/". $shop_theme ."/img/most-viewed-img2.png" )}}">
+									<img class="item-image second-image" src="{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_2_image_2", "/themes/". $shop_theme ."/img/most-viewed-img2.png" )}}">
 								</div>
 							</div>
 							<div class="col-md-7 product-content">
@@ -79,13 +79,13 @@
 						<a href="">
 							<div class="col-md-5 product-image">
 								<div class="image-holder">
-									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img3.png">
-									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img3.png">
+									<img class="item-image first-image" src="{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_3_image_1", "/themes/". $shop_theme ."/img/most-viewed-img3.png" )}}">
+									<img class="item-image second-image" src="{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_3_image_2", "/themes/". $shop_theme ."/img/most-viewed-img3.png" )}}">
 								</div>
 							</div>
 							<div class="col-md-7 product-content">
 								<div class="product-details">
-									<div class="item-name">Lorem ipsum dolor sit</div>
+									<div class="item-name">{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_3_title", "Lorem ipsum dolor sit") }}</div>
 									<div class="item-rating">
 										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -93,7 +93,7 @@
 										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 										<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
 									</div>
-									<div class="item-price">PHP 5,000.00</div>
+									<div class="item-price">{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_3_price", "PHP 5,000.00") }}</div>
 								</div>
 							</div>
 						</a>
@@ -102,13 +102,13 @@
 						<a href="">
 							<div class="col-md-5 product-image">
 								<div class="image-holder">
-									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img4.png">
-									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img4.png">
+									<img class="item-image first-image" src="{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_4_image_1", "/themes/". $shop_theme ."/img/most-viewed-img4.png" )}}">
+									<img class="item-image second-image" src="{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_4_image_2", "/themes/". $shop_theme ."/img/most-viewed-img4.png" )}}">
 								</div>
 							</div>
 							<div class="col-md-7 product-content">
 								<div class="product-details">
-									<div class="item-name">Lorem ipsum dolor sit</div>
+									<div class="item-name">{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_4_title", "Lorem ipsum dolor sit") }}</div>
 									<div class="item-rating">
 										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -116,7 +116,7 @@
 										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 										<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
 									</div>
-									<div class="item-price">PHP 5,000.00</div>
+									<div class="item-price">{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_4_price", "PHP 5,000.00") }}</div>
 								</div>
 							</div>
 						</a>

@@ -81,6 +81,11 @@ class VendorController extends Member
         {
             $data['_vendor'] = Tbl_vendor::info()->where('vendor_shop_id', $this->getShopId())
                                         ->orderBy('vendor_first_name')
+                                        ->where("tbl_vendor.archived",0)
+                                        ->paginate(5);
+            $data['_archived_vendor'] = Tbl_vendor::info()->where('vendor_shop_id', $this->getShopId())
+                                        ->orderBy('vendor_first_name')
+                                        ->where("tbl_vendor.archived",1)
                                         ->paginate(5);
 
             /* IF REQUEST TYPE IS AJAX = RETURN ONLY TABLE DATA */ 
@@ -101,6 +106,11 @@ class VendorController extends Member
     {
         $data['_vendor'] = Tbl_vendor::info()->where('vendor_shop_id', $this->getShopId())
                                     ->orderBy('vendor_first_name')
+                                    ->where("tbl_vendor.archived",0)
+                                    ->paginate(5);
+        $data['_archived_vendor'] = Tbl_vendor::info()->where('vendor_shop_id', $this->getShopId())
+                                    ->orderBy('vendor_first_name')
+                                    ->where("tbl_vendor.archived",1)
                                     ->paginate(5);
 
         return view('member.vendor.load_vendor_tbl', $data)->render();  

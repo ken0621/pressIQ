@@ -71,6 +71,7 @@ class Tbl_payroll_employee_contract extends Model
 		$query->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
 			  ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
 			  ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
+			  ->leftjoin('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
 			  ->where(function($query1) use ($date)
 			  {
 			  	$query1->where('tbl_payroll_employee_contract.payroll_employee_contract_date_end','>=', $date)

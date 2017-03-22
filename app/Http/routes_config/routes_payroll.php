@@ -15,6 +15,12 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/* EMPLOYEE START */
 	Route::any('/employee_list','Member\PayrollController@employee_list');
+
+	/* import from excel start */
+	Route::any('/employee_list/modal_import_employee','Member\PayrollController@modal_import_employee');
+	Route::any('/employee_list/modal_import_employee/get_201_template','Member\PayrollController@get_201_template');
+	Route::any('/employee_list/modal_import_employee/import_201_template','Member\PayrollController@import_201_template');
+	/* import from excel end */
 	Route::any('/employee_list/modal_create_employee','Member\PayrollController@modal_create_employee');
 	Route::any('/employee_list/employee_updload_requirements','Member\PayrollController@employee_updload_requirements');
 	Route::any('/employee_list/remove_employee_requirement','Member\PayrollController@remove_employee_requirement');
@@ -40,9 +46,13 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* EMPLOYEE END */
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
 
+	
+	/* TIMESHEET START */
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');
 	Route::any('/employee_timesheet/timesheet/{id}','Member\PayrollTimeSheetController@timesheet');
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimeSheetController@json_process_time');
+	Route::any('/employee_timesheet/overtime_form','Member\PayrollTimeSheetController@overtime_form');
+	/* TIMESHEET START */
 
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');

@@ -28,6 +28,7 @@
                                         <tr>
                                             <th style="width: 30px;"> # </th>
                                             <th style="width: 15px;" class="text-center">Serial Number</th>
+                                            <th style="width: 15px;" class="text-center">Sold</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -35,6 +36,7 @@
                                         <tr>
                                             <td>{{$serial->serial_id}}</td>
                                             <td class="text-center">{{$serial->serial_number}}</td>
+                                            <td class="text-center"><input type="checkbox" name="sold_serial"></td>
                                         </tr>
                                     @endforeach
                                     </tbody>                                   

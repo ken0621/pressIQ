@@ -67,6 +67,9 @@ class WarehouseController extends Member
                     }
                     $data["_warehouse"][$key]->total_selling_price = $selling_price;
                     $data["_warehouse"][$key]->total_cost_price = $cost_price;
+
+
+                    $data["_warehouse"][$key]->count_no_serial = count(Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->where("tbl_item.shop_id",$this->user_info->shop_id)->where("tbl_warehouse.warehouse_id",$value->warehouse_id)->whereNull("serial_id")->get()->toArray());
                 }
             }
 
@@ -101,12 +104,6 @@ class WarehouseController extends Member
 
             $this->create_main();
 
-            $chk = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$this->user_info->shop_id)->first();
-            $data["count_no_serial"] = 0;
-            if($chk)
-            {
-                $data["count_no_serial"] = count(Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->get()->toArray());
-            }
 
             return view("member.warehouse.warehouse_list",$data);
         }
@@ -120,10 +117,9 @@ class WarehouseController extends Member
         // dd($count_on_hand);
 
     }
-    public function inventory_log()
+    public function inventory_log($warehouse_id)
     {
-        $data["_inventory_log"] = Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->orderBy("inventory_id","DESC")->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->get();
-
+        $data["_inventory_log"] = Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->orderBy("inventory_id","DESC")->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->where("tbl_item.shop_id",$this->user_info->shop_id)->where("tbl_warehouse.warehouse_id",$warehouse_id)->get();
         return view("member.warehouse.inventory_log",$data);
     }
     public function item()
@@ -272,6 +268,8 @@ class WarehouseController extends Member
                 $insert[$key]["item_count"] = $count;
                 $id = $value;
 
+                $update_item["has_serial_number"] = 1;
+                Tbl_item::where("item_id",$value)->update($update_item);
 
                 $rules[$key]["serial_number"] = 'required|alpha_num|unique:tbl_inventory_serial_number,serial_number';
 

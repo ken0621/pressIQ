@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Request;
 use Session;
 use Excel;
+use DB;
 
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_rdo;
@@ -1239,6 +1240,23 @@ class PayrollController extends Member
 		$return['function_name'] = 'employeelist.reload_employee_list';
 		$return['status'] = 'success';
 		return json_encode($return);
+	}
+
+
+	public function search_employee_ahead()
+	{
+		$query = Request::input('query');
+		$_return = Tbl_payroll_employee_search::search($query)
+											 ->select('tbl_payroll_employee_basic.payroll_employee_display_name as employee')
+											 ->orderBy("tbl_payroll_employee_basic.payroll_employee_first_name")
+											 ->get();
+		$data = array();
+		foreach($_return as $return)
+		{
+			array_push($data, $return->employee);
+		}
+
+		return json_encode($data);
 	}
 
 	public function update_tbl_search()
@@ -2835,8 +2853,8 @@ class PayrollController extends Member
 
 
 
-		$restday 										= array();
-		$extraday 										= array();
+		$_restday 										= array();
+		$_extraday 										= array();
 		if(Request::has('restday'))
 		{
 			$_restday 									= Request::input('restday');

@@ -1,3 +1,8 @@
+.timeEntry-control
+{
+	display: none !important;
+}
+
 .timesheet-table-loading
 {
 	min-height: 1500px;
@@ -9,10 +14,7 @@
 }
 .timesheet
 {
-	.timeEntry-control
-	{
-		display: none !important;
-	}
+
 	thead
 	{
 		background-color: #FBFBFB;

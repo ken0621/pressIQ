@@ -38,6 +38,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/basic.css">
     <link rel="stylesheet" type="text/css" href="/assets/custom_plugin/myDropList/css/myDropList.css">
+
     <!-- <link rel="stylesheet" type="text/css" href="/assets/chartist/chartist.css"> -->
     <!-- <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/dropzone.min.css"> -->
 
@@ -462,6 +463,10 @@
     <script type="text/javascript" src='/assets/member/js/match-height.js'></script>
     <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
     <script type="text/javascript" src="/assets/mlm/pace.min.js"></script>
+    <!-- <script type="text/javascript" src="/plugins/typeahead/typeahead.bundle.min.js"></script> -->
+    <!-- <script type="text/javascript" src="/plugins/typeahead/typeahead.jquery.min.js"></script> -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>  
     <script type="text/javascript">
 	  $(document).ajaxStart(function() { Pace.restart(); }); 
 	</script>

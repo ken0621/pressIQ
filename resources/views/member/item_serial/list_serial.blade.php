@@ -19,11 +19,14 @@
         </div>
         <div class="row clearfix draggable-container">
             <div class="table-responsive">
+            <div class="col-md-12">
+                <input type="text" class="form-control" id="search_txt" placeholder="Search Serial Number...">
+            </div>
              <div class="col-md-12">
                     <div class="row clearfix draggable-container ilr-container">
                         <div class="table-responsive">
                             <div class="col-sm-12">
-                                <table class="digima-table">
+                                <table class="digima-table" id="serial_table">
                                     <thead >
                                         <tr>
                                             <th style="width: 30px;"> # </th>
@@ -53,3 +56,31 @@
 <div class="modal-footer" >
     <button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
 </div>
+<script type="text/javascript">
+    $('#search_txt').keyup(function()
+    {
+        searchTable($(this).val());
+    });
+    function searchTable(inputVal)
+    {
+        var table = $('#serial_table');
+        table.find('tr').each(function(index, row)
+        {
+            var allCells = $(row).find('td');
+            if(allCells.length > 0)
+            {
+                var found = false;
+                allCells.each(function(index, td)
+                {
+                    var regExp = new RegExp(inputVal, 'i');
+                    if(regExp.test($(td).text()))
+                    {
+                        found = true;
+                        return false;
+                    }
+                });
+                if(found == true)$(row).show();else $(row).hide();
+            }
+        });
+    }
+</script>

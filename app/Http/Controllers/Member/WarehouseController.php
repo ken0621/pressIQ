@@ -101,6 +101,7 @@ class WarehouseController extends Member
                     $data["_warehouse_archived"][$key3]->total_cost_price = $cost_price_a;
                 }
             }
+            $data["enable_serial"] = Tbl_settings::where("shop_id",$this->user_info->shop_id)->where("settings_key","item_serial")->pluck("settings_value");
 
             $this->create_main();
 

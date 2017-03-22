@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Member;
 use Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_inventory_serial_number;
-class ItemSerialController extends Controller
+use App\Globals\ItemSerial;
+use App\Models\Tbl_item;
+class ItemSerialController extends Member
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +16,16 @@ class ItemSerialController extends Controller
      */
     public function index()
     {
-        // $data["_item_serial"] = Tbl_inventory_serial_number::where("")
+        $data["_item_serial"] = Tbl_inventory_serial_number::item()->where("has_serial_number",1)->groupBy("tbl_item.item_id")->get();
+
+        return view("member.item_serial.item_serial",$data);
+    }
+    public function view_serial($item_id)
+    {
+        $data["item_name"] = Tbl_item::where("item_id",$item_id)->first();
+        $data["_item_serial"] = ItemSerial::getItemSerial($item_id);
+
+        return view("member.item_serial.list_serial",$data);
     }
 
     /**

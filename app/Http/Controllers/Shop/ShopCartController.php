@@ -50,7 +50,7 @@ class ShopCartController extends Shop
     {
         $variant_id = Request::input("variation_id");
         $quantity = Request::input("quantity");
-        $result = Cart::update_cart($quantity, $this->shop_info->shop_id);
+        $result = Cart::update_cart($variant_id, $quantity, $this->shop_info->shop_id);
 
         echo json_encode($result);
     }

@@ -1,4 +1,5 @@
 var cart = new cart();
+var ajax_quantity = {abort: function () {}};
 
 function cart()
 {
@@ -21,21 +22,24 @@ function cart()
 		$('.qty-control-add').bind("click", function(event) 
 		{
 			event.preventDefault();
+			var key = $(event.currentTarget).attr("key");
 			
-			action_qty_control("+", $(event.currentTarget).attr("variation-id"))
+			action_qty_control("+", $(event.currentTarget).attr("variation-id"), key)
 		})
 
 		$('.qty-control-minus').unbind("click");
 		$('.qty-control-minus').bind("click", function(event) 
 		{
 			event.preventDefault();
+			var key = $(event.currentTarget).attr("key");
 			
-			action_qty_control("-", $(event.currentTarget).attr("variation-id"));
+			action_qty_control("-", $(event.currentTarget).attr("variation-id"), key);
 		})
 	}
-	function action_qty_control(sign, id)
+	function action_qty_control(sign, id, key)
 	{
 		var current = parseInt($('.qty-control[variation-id="'+id+'"]').val());
+		var price = parseInt($('.upc span[key="'+key+'"]').attr('raw-price'));
 
 		if (sign == "+") 
 		{
@@ -51,7 +55,20 @@ function cart()
 
 		var quantity = parseInt($('.qty-control[variation-id="'+id+'"]').val());
 
-		$.ajax({
+		$('.ttl span[key="'+key+'"]').html((price * quantity).toFixed(2));
+
+		total_price = 0;
+
+		$('.upc span').each(function(index, el) 
+		{
+			total_price += parseInt($(el).attr("raw-price")) * parseInt($('.qty-control[variation-id="'+$(el).attr('key')+'"]').val());
+		});
+
+		$('.subtotal-value span').html(parseInt(total_price).toFixed(2));
+
+		ajax_quantity.abort();
+
+		ajax_quantity = $.ajax({
 			url: '/cart/update',
 			type: 'get',
 			dataType: 'json',

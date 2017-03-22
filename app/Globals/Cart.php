@@ -224,7 +224,7 @@ class Cart
         return $data;
     }
 
-    public static function update_cart($quantity, $shop_id = null)
+    public static function update_cart($variant_id, $quantity, $shop_id = null)
     {
         //get_shop_info
         if (!$shop_id) 
@@ -237,7 +237,10 @@ class Cart
         $insert                  = Session::get($unique_id);
         foreach ($insert['cart'] as $key => $value) 
         {
-            $insert['cart'][$key]["quantity"] = $quantity;
+            if($value['product_id'] == $variant_id)
+            {
+                $insert['cart'][$key]["quantity"] = $quantity;
+            }
         }
        
         Session::put($unique_id,$insert);

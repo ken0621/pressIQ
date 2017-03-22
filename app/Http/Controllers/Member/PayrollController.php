@@ -59,6 +59,9 @@ use App\Globals\Payroll;
 class PayrollController extends Member
 {
 
+	/*Set data per page for pagination*/
+	protected $paginate_count = 10;
+
 	public function shop_id()
 	{
 		return $shop_id = $this->user_info->user_shop;
@@ -79,17 +82,17 @@ class PayrollController extends Member
 		$separated_status[0] = 8;
 		$separated_status[1] = 9;
 
-		$data['_active']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id())->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
+		$data['_active']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id())->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
 
-		$data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
+		$data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
 
-		$data['_company']					= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
-
-		
-		$data['_status_active']				= Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $active_status)->orderBy('employment_status')->get();
+		$data['_company']					= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
 
 		
-		$data['_status_separated']			= Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $separated_status)->orderBy('employment_status')->get();
+		$data['_status_active']				= Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $active_status)->orderBy('employment_status')->paginate($this->paginate_count);
+
+		
+		$data['_status_separated']			= Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $separated_status)->orderBy('employment_status')->paginate($this->paginate_count);
 		return view('member.payroll.employeelist', $data);
 	}   
 
@@ -1310,8 +1313,8 @@ class PayrollController extends Member
 
 	public function company_list()
 	{
-		$data['_active'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
-		$data['_archived'] = Tbl_payroll_company::selcompany(Self::shop_id(),1)->orderBy('tbl_payroll_company.payroll_company_name')->get();
+		$data['_active'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
+		$data['_archived'] = Tbl_payroll_company::selcompany(Self::shop_id(),1)->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
 
 		return view('member.payroll.companylist', $data);
 	}
@@ -1463,8 +1466,8 @@ class PayrollController extends Member
 	/* DEPARTMENT START */
 	public function department_list()
 	{
-		$data['_active'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-		$data['_archived'] = Tbl_payroll_department::sel(Self::shop_id(), 1)->orderBy('payroll_department_name')->get();
+		$data['_active'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->paginate($this->paginate_count);
+		$data['_archived'] = Tbl_payroll_department::sel(Self::shop_id(), 1)->orderBy('payroll_department_name')->paginate($this->paginate_count);
 		return view('member.payroll.side_container.departmentlist', $data);
 	}
 
@@ -1547,8 +1550,8 @@ class PayrollController extends Member
 
 	public function jobtitle_list()
 	{
-		$data['_active'] = Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->get();
-		$data['_archived'] = Tbl_payroll_jobtitle::sel(Self::shop_id(), 1)->orderBy('payroll_jobtitle_name')->get();
+		$data['_active'] = Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('payroll_jobtitle_name')->paginate($this->paginate_count);
+		$data['_archived'] = Tbl_payroll_jobtitle::sel(Self::shop_id(), 1)->orderBy('payroll_jobtitle_name')->paginate($this->paginate_count);
 		return view('member.payroll.side_container.jobtitlelist', $data);
 	}
 
@@ -1722,7 +1725,7 @@ class PayrollController extends Member
 	/* SSS TABLE START */
 	public function sss_table_list()
 	{
-		$data['_sss'] = Tbl_payroll_sss::where('shop_id', Self::shop_id())->orderBy('payroll_sss_min')->get();
+		$data['_sss'] = Tbl_payroll_sss::where('shop_id', Self::shop_id())->orderBy('payroll_sss_min')->paginate($this->paginate_count);
 		return view('member.payroll.side_container.ssslist', $data);
 	}
 
@@ -1794,8 +1797,8 @@ class PayrollController extends Member
 	/* PHILHEALTH TABLE START */
 	public function philhealth_table_list()
 	{
-		$data['_philhealth'] = Tbl_payroll_philhealth::where('shop_id', Self::shop_id())->orderBy('payroll_philhealth_min')->get();
-		return view('member.payroll.side_container.philhealthlist', $data);
+		$data['_philhealth'] = Tbl_payroll_philhealth::where('shop_id', Self::shop_id())->orderBy('payroll_philhealth_min')->paginate($this->paginate_count);
+		return view('member.payroll.side_container.philhealthlist', $data); 
 	}
 
 	public function philhealth_table_save()
@@ -1898,8 +1901,8 @@ class PayrollController extends Member
 	/* DEDUCTION START */
 	public function deduction()
 	{
-		$data['_active'] = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')->get();
-		$data['_archived'] = Tbl_payroll_deduction::seldeduction(Self::shop_id(), 1)->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')->get();
+		$data['_active'] = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')->paginate($this->paginate_count);
+		$data['_archived'] = Tbl_payroll_deduction::seldeduction(Self::shop_id(), 1)->orderBy('tbl_payroll_deduction.payroll_deduction_category','tbl_payroll_deduction.payroll_deduction_name')->paginate($this->paginate_count);
 		return view('member.payroll.side_container.deduction', $data);
 	}
 
@@ -2208,8 +2211,8 @@ class PayrollController extends Member
 	public function holiday()
 	{
 
-		$data['_active'] = Tbl_payroll_holiday::getholiday(Self::shop_id())->orderBy('payroll_holiday_date','desc')->get();
-		$data['_archived'] = Tbl_payroll_holiday::getholiday(Self::shop_id(), 1)->orderBy('payroll_holiday_date','desc')->get();
+		$data['_active'] = Tbl_payroll_holiday::getholiday(Self::shop_id())->orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
+		$data['_archived'] = Tbl_payroll_holiday::getholiday(Self::shop_id(), 1)->orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
 
 		return view('member.payroll.side_container.holiday',$data);
 	}
@@ -2339,9 +2342,9 @@ class PayrollController extends Member
 
 	/* ALLOWANCE START */
 	public function allowance()
-	{
-		$data['_active'] = Tbl_payroll_allowance::sel(Self::shop_id())->orderBy('payroll_allowance_name')->get();
-		$data['_archived'] = Tbl_payroll_allowance::sel(Self::shop_id(), 1)->orderBy('payroll_allowance_name')->get();
+	{		
+		$data['_active'] = Tbl_payroll_allowance::sel(Self::shop_id())->orderBy('payroll_allowance_name')->paginate($this->paginate_count);
+		$data['_archived'] = Tbl_payroll_allowance::sel(Self::shop_id(), 1)->orderBy('payroll_allowance_name')->paginate($this->paginate_count);
 		return view('member.payroll.side_container.allowance', $data);
 	}
 
@@ -2549,9 +2552,10 @@ class PayrollController extends Member
 	/* LEAVE START */
 	public function leave()
 	{
-		$data['_active'] = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->get();
-		$data['_archived'] = Tbl_payroll_leave_temp::sel(Self::shop_id(), 1)->orderBy('payroll_leave_temp_name')->get();
-		return view('member.payroll.side_container.leave', $data);		
+		$data['_active'] = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->paginate($this->paginate_count);
+		$data['_archived'] = Tbl_payroll_leave_temp::sel(Self::shop_id(), 1)->orderBy('payroll_leave_temp_name')->paginate($this->paginate_count);
+		/*return view('member.payroll.side_container.leave', $data);*/
+		return view('member.payroll.side_container.leave', $data)->with('data', $data);
 	}
 
 	/*Function to view modal to create leave_temp*/
@@ -2696,9 +2700,6 @@ class PayrollController extends Member
 
 	}
 
-
-
-
 	public function modal_edit_leave_temp($id)
 	{
 		$data['leave_temp'] = Tbl_payroll_leave_temp::where('payroll_leave_temp_id', $id)->first();
@@ -2762,15 +2763,6 @@ class PayrollController extends Member
 		return view('member.payroll.reload.leave_employee_reload', $data);
 	}
 
-	/*public function reload_allowance_employee()
-	{
-		$payroll_allowance_id = Request::input('payroll_allowance_id');
-		$data['_active'] = Tbl_payroll_employee_allowance::getperallowance($payroll_allowance_id)->get();
-		$data['_archived'] = Tbl_payroll_employee_allowance::getperallowance($payroll_allowance_id , 1)->get();
-		return view('member.payroll.reload.allowance_employee_reload', $data);
-	}*/
-	
-
 	/* LEAVE END */
 
 
@@ -2778,8 +2770,8 @@ class PayrollController extends Member
 	public function payroll_group()
 	{
 		// Tbl_payroll_overtime_rate
-		$data['_active'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
-		$data['_archived'] = Tbl_payroll_group::sel(Self::shop_id(), 1)->orderBy('payroll_group_code')->get();
+		$data['_active'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->paginate($this->paginate_count);
+		$data['_archived'] = Tbl_payroll_group::sel(Self::shop_id(), 1)->orderBy('payroll_group_code')->paginate($this->paginate_count);
 		return view('member.payroll.side_container.payroll_group', $data);
 	}
 
@@ -3064,8 +3056,8 @@ class PayrollController extends Member
 	/* PAYROLL PERIOD START*/
 	public function payroll_period_list()
 	{	
-		$data['_active'] = Tbl_payroll_period::sel(Self::shop_id())->orderBy('payroll_period_start','desc')->get();
-		$data['_archived'] = Tbl_payroll_period::sel(Self::shop_id(), 1)->orderBy('payroll_period_start','desc')->get();
+		$data['_active'] = Tbl_payroll_period::sel(Self::shop_id())->orderBy('payroll_period_start','desc')->paginate($this->paginate_count);
+		$data['_archived'] = Tbl_payroll_period::sel(Self::shop_id(), 1)->orderBy('payroll_period_start','desc')->paginate($this->paginate_count);
 		return view('member.payroll.payroll_period_list', $data);
 	}
 

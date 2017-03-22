@@ -37,20 +37,6 @@
         </div>
 
         <div class="form-group tab-content panel-body warehouse-container">
-            <div class="form-group">
-                <div class="col-md-12">
-                    <div class="text-left">
-                        <a href="/member/item/view_serials"> Item has Serial Number</a>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    @if($count_no_serial != 0)
-                    <div class="text-right" style="margin-top: 10px">
-                        <a href="/member/item/inventory_log">{{$count_no_serial}} Item has No Serial Number</a>
-                    </div>
-                    @endif
-                </div>
-            </div>
             <div id="all" class="tab-pane fade in active">
                 <div class="form-group order-tags"></div>
                 <div class="table-responsive">
@@ -79,6 +65,13 @@
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
                                         <li><a size="lg" link="/member/item/warehouse/view/{{$warehouse->warehouse_id}}" href="javascript:" class="popup">View Warehouse</a></li>
+
+                                        @if($enable_serial != null)
+                                            @if($enable_serial == "enable")
+                                                <li><a href="/member/item/view_serials/{{$warehouse->warehouse_id}}">View Item Serials Number</a></li>
+                                                <li><a href="/member/item/inventory_log/{{$warehouse->warehouse_id}}">{{$warehouse->count_no_serial}} Item has No Serials Number</a></li>
+                                            @endif
+                                        @endif
                                         <li><a size="lg" link="/member/item/warehouse/refill?warehouse_id={{$warehouse->warehouse_id}}" href="javascript:" class="popup">Refill  Warehouse</a></li>
                                         <li><a href="javascript:" class="popup" link="/member/item/warehouse/edit/{{$warehouse->warehouse_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit</a></li>
                                         <li><a link="/member/item/warehouse/archived/{{$warehouse->warehouse_id}}" href="javascript:" class="popup">Archived</a></li>

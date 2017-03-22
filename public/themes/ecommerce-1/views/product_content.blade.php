@@ -46,16 +46,14 @@
                             <div class="col-md-5 product">
                                 <div>
                                     @foreach($product_variant['image'] as $key => $image)
-                                    <img id="yellow-bag-image" class="item-image-large {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
+                                    <img id="yellow-bag-image" key="{{ $key }}" class="item-image-large {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
                                     @endforeach
                                 </div>
-                                <!-- <table style="table-layout: fixed; width: 100%;">
-                                    <tr>
-                                        @foreach($product_variant['image'] as $key => $image)
-                                        <td><img style="width: 100%; object-fit: cover;" class="item-image-small small-yellow-bag match-height" src="{{ $image['image_path'] }}"></td>
-                                        @endforeach
-                                    </tr>
-                                </table> -->
+                                <div class="thumb">
+                                    @foreach($product_variant['image'] as $key => $image)
+                                    <div class="holder" key="{{ $key }}"><img class="4-3-ratio" style="width: 100%; object-fit: cover;" class="item-image-small small-yellow-bag match-height" src="{{ $image['image_path'] }}"></div>
+                                    @endforeach
+                                </div>
                             </div>
                             <div class="col-md-7 item-selected-content">
                                 <div class="item-and-description">
@@ -175,6 +173,7 @@
 </div>
 @endsection
 @section("js")
+<script type="text/javascript" src="/resources/assets/frontend/js/zoom.js"></script>
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/product_content.js"></script>
 @endsection
 @section("css")

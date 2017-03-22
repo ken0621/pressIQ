@@ -37,7 +37,7 @@
 				<table>
 					<tbody>
 						<tr>
-							<td style="width: 100px;">Date Activated:</td>
+							<td style="width: 100px; padding-left: 5px;">Date Activated:</td>
 							<td>{{$info->slot_created_date}}</td>
 						</tr>
 					</tbody>
@@ -45,7 +45,7 @@
 				<table>
 					<tbody>
 						<tr>
-							<td style="width: 65px;">Phone No.</td>
+							<td style="width: 70px; padding-left: 5px;">Phone No.</td>
 							<td>{{$number}}</td>
 						</tr>
 					</tbody>
@@ -53,7 +53,7 @@
 				<table>
 					<tbody>
 						<tr>
-							<td style="width: 130px;">Complete Address:</td>
+							<td style="width: 130px; padding-left: 5px;">Complete Address:</td>
 							<td>{{ mb_strimwidth($address, 0, 45, "...")}}</td>
 						</tr>
 					</tbody>
@@ -61,7 +61,7 @@
 				<table>
 					<tbody>
 						<tr>
-							<td style="width: 320px;">In case of loss please notify PHILTECH Head Office:</td>
+							<td style="width: 320px; padding-left: 5px;">In case of loss please notify PHILTECH Head Office:</td>
 							<td> <small>(+63)9175422614</small></td>
 						</tr>
 					</tbody>

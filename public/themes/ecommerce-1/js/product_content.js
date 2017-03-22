@@ -10,19 +10,19 @@ $(document).ready(function()
 
 function event_change_image()
 {
-	$(document).on('click', '.single-product-holder .thumb .holder', function(event) 
+	$(document).on('click', '.item-content .thumb .holder', function(event) 
 	{
 		event.preventDefault();
 		
 		var variant_id = $(event.currentTarget).attr("variant-id");
 		var key = $(event.currentTarget).attr("key");
 
-		$('.single-product-content[variant-id="'+variant_id+'"] .single-product-img').addClass("hide");
-		$('.single-product-content[variant-id="'+variant_id+'"] .single-product-img[key="'+key+'"]').removeClass("hide");
+		$('.item-content[variant-id="'+variant_id+'"] .item-image-large').addClass("hide");
+		$('.item-content[variant-id="'+variant_id+'"] .item-image-large[key="'+key+'"]').removeClass("hide");
 
 		image_crop(".4-3-ratio", 4, 3);
 
-		$(".single-product-img").elevateZoom();
+		$(".item-image-large").elevateZoom();
 	});
 }
 

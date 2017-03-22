@@ -850,6 +850,16 @@ class WarehouseController extends Member
         { 
            // $data = Tbl_user_warehouse_access::join("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_user_warehouse_access.warehouse_id")->where("user_id",$this->user_info->user_id)->where("archived",0)->get();
            $data["warehouse"] = Tbl_warehouse::where("archived",0)->where("warehouse_shop_id",$this->user_info->shop_id)->get();
+           foreach ($data["warehouse"] as $key => $value) 
+           {
+               $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$value->warehouse_id)->first();
+               if(!$check_if_owned)
+                {
+                    unset($data["warehouse"][$key]);
+                }
+                            
+           } 
+
            return view("member.warehouse.warehouse_transfer",$data);
         }
         else

@@ -1,5 +1,6 @@
 @extends('member.layout')
 @section('css')
+
 @endsection
 @section('content')
 <div class="panel panel-default panel-block panel-title-block" id="top">
@@ -55,8 +56,8 @@
           <div class="col-md-4 pull-right padding-lr-1">
             <small>Search Employee</small>
             <i class="fa fa-search calendar-icon pos-absolute" aria-hidden="true" style="margin-left:-76px"></i>
-            <input type="search" name="" class="form-control indent-18" placeholder="Search employee here">
-
+            <input type="search" name="" class="form-control indent-18 typeahead width-100" placeholder="Search employee here">
+           <ul class="typeahead dropdown-menu" role="listbox" style="top: 400px; left: 104.5px; display: none;"></ul>
           </div>
         </div>
       </div>
@@ -194,6 +195,7 @@
 </div>
 @endsection
 @section('script')
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
 <script type="text/javascript" src="/assets/member/js/payroll/employeelist.js"></script>
 <script type="text/javascript">
   function loading_done_paginate (data)

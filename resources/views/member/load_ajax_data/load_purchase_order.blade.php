@@ -1,6 +1,6 @@
 @if(isset($_po))
 	@foreach($_po as $po)
-		<div class="col-md-3 po-style">
+		<div class="col-md-12 po-style">
 			<div class="form-group">
 				<div class="col-md-12">
 					<strong>Purchase Order #{{$po->po_id}}</strong>

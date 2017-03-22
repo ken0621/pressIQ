@@ -2,9 +2,27 @@ var timesheet = new timesheet();
 var timesheet_request = null;
 var new_sub_ctr = 1000;
 
+function loading_done(url)
+{
+	/* ADD TIME ENTRY */
+	$(".over-time-entry").each(function(key, val)
+	{
+		$min = $(this).attr("time_min");
+		$max = $(this).attr("time_max");
+		$(this).timeEntry({ampmPrefix: ' ',minTime: $min, maxTime: $max});
+		timesheet.external_compute_overtime_form();
+	});
+}
+
+
 function timesheet()
 {
 	init();
+
+	this.external_compute_overtime_form = function()
+	{
+		action_compute_overtime_form();
+	}
 
 	function init()
 	{
@@ -22,12 +40,71 @@ function timesheet()
 		event_create_sub_time();
 		event_delete_sub_time();
 		event_load_overtime_form();
+		event_for_overtime_form();
 	}
 	function event_load_overtime_form()
 	{
-		$("body").on("click", ".load-overtime-form", function()
+		$("body").on("click", ".load-overtime-form", function(e)
 		{
-			action_load_link_to_modal("/member/payroll/employee_timesheet/overtime_form", "sm");
+			tid = $(e.currentTarget).closest("tr").attr("tid");
+			action_load_link_to_modal("/member/payroll/employee_timesheet/adjustment_form?payroll_time_sheet_id=" + tid, "md");
+		});
+	}
+	function event_for_overtime_form()
+	{
+		$("body").on("change", ".over-time-entry", function(e)
+		{
+
+			action_compute_overtime_form();
+		});
+	}
+	function action_compute_overtime_form()
+	{
+		date = $(".over-time-form").find(".field-hidden-date").val();
+		employee_id = $(".over-time-form").find(".field-hidden-employee-id").val();
+
+		$.ajax(
+		{
+			url:"/member/payroll/employee_timesheet/json_process_time_single/" + date + "/" + employee_id,
+			dataType:"json",
+			type:"get",
+			success: function(data)
+			{
+				$(".old_regular_hours").text(data.pending_timesheet.regular_hours);
+				$(".old_night_differential").text(data.pending_timesheet.night_differential);
+				$(".old_early_overtime").text(data.pending_timesheet.early_overtime);
+				$(".old_late_overtime").text(data.pending_timesheet.late_overtime);
+				$(".old_extra_day").text(data.pending_timesheet.extra_day_hours);
+				$(".old_rest_day").text(data.pending_timesheet.rest_day_hours);
+
+				$(".new_regular_hours").text(data.approved_timesheet.regular_hours);
+				$(".new_night_differential").text(data.approved_timesheet.night_differential);
+				$(".new_early_overtime").text(data.approved_timesheet.early_overtime);
+				$(".new_late_overtime").text(data.approved_timesheet.late_overtime);
+				$(".new_extra_day").text(data.approved_timesheet.extra_day_hours);
+				$(".new_rest_day").text(data.approved_timesheet.rest_day_hours);
+
+
+				$(".time-summary-adjustment").each(function()
+				{
+					if($(this).text() == "00:00")
+					{
+						$(this).css(
+						{
+							"color":"#000",
+							"font-weight":"normal"
+						});
+					}
+					else
+					{
+						$(this).css(
+						{
+							"color":"red",
+							"font-weight":"bold"
+						});
+					}
+				});		
+			}
 		});
 	}
 	function action_load_timesheet()
@@ -191,7 +268,7 @@ function timesheet()
 			{
 				$.each(data, function(key, val)
 				{
-					update_time_record_on_table(val.date, val.regular_hours, val.early_overtime, val.late_overtime, val.extra_day_hours, val.rest_day_hours, val.late_hours, val.total_hours);
+					update_time_record_on_table(val.date, val.regular_hours, val.early_overtime, val.late_overtime, val.extra_day_hours, val.rest_day_hours, val.late_hours, val.total_hours,val.night_differential, val.payroll_time_sheet_id);
 				});
 
 				$(".table-loader").addClass("hidden");
@@ -204,8 +281,9 @@ function timesheet()
 		});
 	}
 
-	function update_time_record_on_table(date, regular_hours, early_overtime, late_overtime,  extra_day_hours = "00:00", rest_day_hours = "00:00", late_hours="00:00",total_hours = "00:00",night_differential = "00:00")
+	function update_time_record_on_table(date, regular_hours, early_overtime, late_overtime,  extra_day_hours = "00:00", rest_day_hours = "00:00", late_hours="00:00",total_hours = "00:00",night_differential = "00:00", tid="0")
 	{
+		$(".time-record[date='" + date + "']").attr("tid", tid);
 		$(".time-record[date='" + date + "']").find(".normal-hours").text(regular_hours);
 		$(".time-record[date='" + date + "']").find(".overtime-hours.late").text(late_overtime);
 		$(".time-record[date='" + date + "']").find(".overtime-hours.early").text(early_overtime);

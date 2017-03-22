@@ -40,103 +40,105 @@
             <div class="col-md-9">
                 <?php $ctr = 0; ?>
                 @foreach($product['variant'] as $key => $product_variant)
-                <div class="featured-container item-content {{ $ctr != 0 ? 'hide' : '' }}" variant-id="{{ $product_variant['evariant_id'] }}">
-                    <div class="row clearfix">
-                        <div class="col-md-5 product">
-                            <div>
-                                @foreach($product_variant['image'] as $key => $image)
-                                <img id="yellow-bag-image" class="item-image-large {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
-                                @endforeach
-                            </div>
-                            <!-- <table style="table-layout: fixed; width: 100%;">
-                                <tr>
+                <div class="item-content {{ $ctr != 0 ? 'hide' : '' }}" variant-id="{{ $product_variant['evariant_id'] }}">
+                    <div class="featured-container">
+                        <div class="row clearfix">
+                            <div class="col-md-5 product">
+                                <div>
                                     @foreach($product_variant['image'] as $key => $image)
-                                    <td><img style="width: 100%; object-fit: cover;" class="item-image-small small-yellow-bag match-height" src="{{ $image['image_path'] }}"></td>
+                                    <img id="yellow-bag-image" key="{{ $key }}" variant-id="{{ $product_variant['evariant_id'] }}" class="item-image-large {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
                                     @endforeach
-                                </tr>
-                            </table> -->
-                        </div>
-                        <div class="col-md-7 item-selected-content">
-                            <div class="item-and-description">
-                                <div class="item-title">{{ $product["eprod_name"] }}</div>
-                                <!-- <div class="rating">
-                                   <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                   <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                   <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                   <img src="/themes/{{ $shop_theme }}/img/star-active.png">
-                                   <img src="/themes/{{ $shop_theme }}/img/star-disable.png">
-                                </div> -->
-                                <div class="availability">Availability : <span id="stock">In-stock</span></div>
-                                <!-- <div class="item-description">{!! $product_variant['evariant_description'] !!}</div> -->
-                            </div>
-                            <div class="variant-holder">
-                                @foreach($_variant as $variant)
-                                <div class="holder">
-                                    <div class="s-label">{{ $variant['option_name'] }}</div>
-                                    <div class="select">
-                                        <select name="attr[{{ $variant['option_name_id'] }}]" style="text-transform: capitalize;" class="form-control select-variation" variant-label="{{ $variant['option_name'] }}" product-id="{{ $product['eprod_id'] }}" variant-id="{{ $product_variant['evariant_id'] }}">
-                                            <option value="0" style="text-transform: capitalize;">Select {{ $variant['option_name'] }}</option>
-                                            @foreach(explode(",", $variant['variant_value']) as $option)
-                                            <option value="{{ $option }}" style="text-transform: capitalize;">{{ $option }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
                                 </div>
-                                @endforeach
+                                <div class="thumb">
+                                    @foreach($product_variant['image'] as $key => $image)
+                                    <div class="holder" style="cursor: pointer;" key="{{ $key }}" variant-id="{{ $product_variant['evariant_id'] }}"><img class="4-3-ratio" style="width: 100%; object-fit: cover;" class="item-image-small small-yellow-bag match-height" src="{{ $image['image_path'] }}"></div>
+                                    @endforeach
+                                </div>
                             </div>
-                            <div class="container-quantity-price">
-                                <div class="row clearfix">
-                                    <div class="col-md-5 price-old-new">
-                                       <!-- if($product_variant['discounted'] == "true") -->
-                                       <!-- <div class="present-item-price">PHP {{ number_format($product_variant['item_discount_value'], 2) }}</div>
-                                       <div class="item-old-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div> -->
-                                       <!-- else -->
-                                       <div class="present-item-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
-                                       <!-- endif -->
-                                    </div>
-                                    <div class="col-md-7 item-quantity">
-                                        <div class="quantity-input">
-                                           <form>QTY: <input type="number" name="quantity" min="0" max="100"></form>
+                            <div class="col-md-7 item-selected-content">
+                                <div class="item-and-description">
+                                    <div class="item-title">{{ $product["eprod_name"] }}</div>
+                                    <!-- <div class="rating">
+                                       <img src="/themes/{{ $shop_theme }}/img/star-active.png">
+                                       <img src="/themes/{{ $shop_theme }}/img/star-active.png">
+                                       <img src="/themes/{{ $shop_theme }}/img/star-active.png">
+                                       <img src="/themes/{{ $shop_theme }}/img/star-active.png">
+                                       <img src="/themes/{{ $shop_theme }}/img/star-disable.png">
+                                    </div> -->
+                                    <div class="availability">Availability : <span id="stock">{{ ucwords($product_variant['inventory_status']) }}</span></div>
+                                    <!-- <div class="item-description">{!! $product_variant['evariant_description'] !!}</div> -->
+                                </div>
+                                <div class="variant-holder">
+                                    @foreach($_variant as $variant)
+                                    <div class="holder">
+                                        <div class="s-label">{{ $variant['option_name'] }}</div>
+                                        <div class="select">
+                                            <select name="attr[{{ $variant['option_name_id'] }}]" style="text-transform: capitalize;" class="form-control select-variation" variant-label="{{ $variant['option_name'] }}" product-id="{{ $product['eprod_id'] }}" variant-id="{{ $product_variant['evariant_id'] }}">
+                                                <option value="0" style="text-transform: capitalize;">Select {{ $variant['option_name'] }}</option>
+                                                @foreach(explode(",", $variant['variant_value']) as $option)
+                                                <option value="{{ $option }}" style="text-transform: capitalize;">{{ $option }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
-                                       
-                                         <div>
-                                            <button data-toggle="modal" data-target="#shopping_cart" type="button"><i class="fa fa-shopping-cart" aria-hidden="true"></i> ADD TO CART</button>
-                                         </div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                <div class="container-quantity-price">
+                                    <div class="row clearfix">
+                                        <div class="col-md-5 price-old-new">
+                                           @if($product_variant['discounted'] == "true")
+                                           <div class="present-item-price">PHP {{ number_format($product_variant['discounted_price'], 2) }}</div>
+                                           <div class="item-old-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
+                                           @else
+                                           <div class="present-item-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
+                                           @endif
+                                        </div>
+                                        <div class="col-md-7 item-quantity">
+                                            <div class="quantity-input">
+                                               <form>QTY: <input class="variation-qty" variant-id="{{ $product_variant['evariant_id'] }}" type="number" name="quantity" min="1" max="100" value="1"></form>
+                                            </div>
+                                           
+                                             <div>
+                                                <button class="add-to-cart disabled" variant-id="{{ $product_variant['evariant_id'] }}" disabled type="button"><i class="fa fa-shopping-cart" aria-hidden="true"></i> ADD TO CART</button>
+                                             </div>
+                                        </div>
                                     </div>
                                 </div>
+                                @if(count($product_variant['mlm_discount']) > 0)
+                                <div style="margin-top: 15px;">
+                                    <table class="table table-bordered table-striped table-hover table-condensed">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Product Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($product_variant['mlm_discount'] as $key => $mlm_discount)
+                                            <tr>
+                                                <td>{{ $mlm_discount['discount_name'] }}</td>   
+                                                <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                @endif
+                                <!-- <div class="facebook-share">
+                                    <img class="item-image-small" src="/themes/{{ $shop_theme }}/img/facebook-logo.jpg">
+                                    <a class="tooltips" href="#">Share<span>20</span></a>
+                                </div> -->
                             </div>
-                            @if(count($product_variant['mlm_discount']) > 0)
-                            <div style="margin-top: 15px;">
-                                <table class="table table-bordered table-striped table-hover table-condensed">
-                                    <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Product Price</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($product_variant['mlm_discount'] as $key => $mlm_discount)
-                                        <tr>
-                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
-                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                            @endif
-                            <!-- <div class="facebook-share">
-                                <img class="item-image-small" src="/themes/{{ $shop_theme }}/img/facebook-logo.jpg">
-                                <a class="tooltips" href="#">Share<span>20</span></a>
-                            </div> -->
                         </div>
                     </div>
+                    @if($product_variant['evariant_description'])
+                    <div class="featured-container" style="padding: 25px;">
+                        <div class="item-description" style="overflow: auto;">{!! $product_variant['evariant_description'] !!}</div>
+                    </div>
+                    @endif
                 </div>
                 <?php $ctr++; ?>
                 @endforeach
-                <div class="featured-container" style="padding: 25px;">
-                    <div class="item-description" style="overflow: auto;">{!! $product_variant['evariant_description'] !!}</div>
-                </div>
                 <div class="featured-container clearfix">
                     <div class="other-related"><strong>Other Related Products</strong></div>
                     <div class="other-related-items row clearfix">
@@ -169,142 +171,9 @@
         </div>
     </div>
 </div>
-<!-- Modal -->
-<div id="shopping_cart" class="modal fade global-modal shopping-cart-modal" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <div class="success">
-            <img src="/themes/{{ $shop_theme }}/img/mini-check.png">
-            <span>Item was successfully added to your cart.</span>
-        </div>
-        <h4 class="modal-title">
-            <img src="/themes/{{ $shop_theme }}/img/shopping-cart-icon.png">
-            <span>SHOPPING <span>CART</span></span>
-        </h4>
-      </div>
-      <div class="modal-body">
-        <table class="table table-scroll">
-            <thead>
-                <tr>
-                    <th class="text-left">ITEM</th>
-                    <th>QTY</th>
-                    <th>UNIT PRICE</th>
-                    <th>TOTAL</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="text-left">
-                        <div class="img">
-                            <img src="/themes/{{ $shop_theme }}/img/yellow-bag.jpg">
-                        </div>
-                        <div class="name">Lorem Ipsum Loret</div>
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <span class="input-group-addon">+</span>
-                            <input type="text" class="form-control">
-                            <span class="input-group-addon">-</span>
-                        </div>
-                    </td>
-                    <td class="upc">P 300.00</td>
-                    <td class="ttl">P 300.00</td>
-                    <td class="rmv"><a href="javascript:">Remove</a></td>
-                </tr>
-                <tr>
-                    <td class="text-left">
-                        <div class="img">
-                            <img src="/themes/{{ $shop_theme }}/img/yellow-bag.jpg">
-                        </div>
-                        <div class="name">Lorem Ipsum Loret</div>
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <span class="input-group-addon">+</span>
-                            <input type="text" class="form-control">
-                            <span class="input-group-addon">-</span>
-                        </div>
-                    </td>
-                    <td class="upc">P 300.00</td>
-                    <td class="ttl">P 300.00</td>
-                    <td class="rmv"><a href="javascript:">Remove</a></td>
-                </tr>
-                <tr>
-                    <td class="text-left">
-                        <div class="img">
-                            <img src="/themes/{{ $shop_theme }}/img/yellow-bag.jpg">
-                        </div>
-                        <div class="name">Lorem Ipsum Loret</div>
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <span class="input-group-addon">+</span>
-                            <input type="text" class="form-control">
-                            <span class="input-group-addon">-</span>
-                        </div>
-                    </td>
-                    <td class="upc">P 300.00</td>
-                    <td class="ttl">P 300.00</td>
-                    <td class="rmv"><a href="javascript:">Remove</a></td>
-                </tr>
-                <tr>
-                    <td class="text-left">
-                        <div class="img">
-                            <img src="/themes/{{ $shop_theme }}/img/yellow-bag.jpg">
-                        </div>
-                        <div class="name">Lorem Ipsum Loret</div>
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <span class="input-group-addon">+</span>
-                            <input type="text" class="form-control">
-                            <span class="input-group-addon">-</span>
-                        </div>
-                    </td>
-                    <td class="upc">P 300.00</td>
-                    <td class="ttl">P 300.00</td>
-                    <td class="rmv"><a href="javascript:">Remove</a></td>
-                </tr>
-                <tr>
-                    <td class="text-left">
-                        <div class="img">
-                            <img src="/themes/{{ $shop_theme }}/img/yellow-bag.jpg">
-                        </div>
-                        <div class="name">Lorem Ipsum Loret</div>
-                    </td>
-                    <td>
-                        <div class="input-group">
-                            <span class="input-group-addon">+</span>
-                            <input type="text" class="form-control">
-                            <span class="input-group-addon">-</span>
-                        </div>
-                    </td>
-                    <td class="upc">P 300.00</td>
-                    <td class="ttl">P 300.00</td>
-                    <td class="rmv"><a href="javascript:">Remove</a></td>
-                </tr>
-            </tbody>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <div class="text-right">
-            <div class="subtotal-label">Subtotal:</div>
-            <div class="subtotal-value">P 3,350.00</div>
-        </div>
-        <div style="margin-top: 10px;">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">CHECK OUT</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 @endsection
 @section("js")
+<script type="text/javascript" src="/resources/assets/frontend/js/zoom.js"></script>
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/product_content.js"></script>
 @endsection
 @section("css")

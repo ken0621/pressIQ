@@ -64,7 +64,7 @@ class Vendor_CreateBillController extends Member
     public function load_po_item()
     {
         $po_id = Request::input("po_id");
-        $data = Tbl_purchase_order_line::where("poline_po_id",$po_id)->get();
+        $data = Tbl_purchase_order_line::um()->where("poline_po_id",$po_id)->get();
 
         return json_encode($data);
     }

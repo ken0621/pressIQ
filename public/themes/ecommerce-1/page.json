@@ -107,6 +107,16 @@
 			"size":"6"
 		}
 	},
+	"product":
+	{
+		"product_banner" :
+		{
+			"label":"Product Banner",
+			"type":"image",
+			"default":"",
+			"size":"12"
+		}
+	},
 	"about":
 	{
 		"about_title" :

@@ -6,14 +6,14 @@
 	<div class="row clearfix">
 		<div class="col-md-4 left-content">
 			<div class="categories">
-				<div class="categories-title"><i class="fa fa-bars" aria-hidden="true"></i><span class="title">CATEGORIES</span></div>
+				<div class="categories-title"><i class="fa fa-bars" aria-hidden="true"></i><span class="title">{{ get_content($shop_theme_info, "shop", "shop_menu_tab_title", "CATEGORIES") }}</span></div>
 				<div class="categories-content">
-					<div class="list"><a href="">DESKTOP & PC PARTS</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
-					<div class="list"><a href="">LAPTOP & TABLET</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
-					<div class="list"><a href="">SMART PHONE</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
-					<div class="list"><a href="">CAMERA</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
-					<div class="list"><a href="">HEADPHONE & SPEAKER</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
-					<div class="list"><a href="">TV & COMPONENTS</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
+					<div class="list"><a href="">{{ get_content($shop_theme_info, "shop", "shop_menu_list_1", "DESKTOP & PC PARTS") }}</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
+					<div class="list"><a href="">{{ get_content($shop_theme_info, "shop", "shop_menu_list_2", "LAPTOP & TABLET") }}</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
+					<div class="list"><a href="">{{ get_content($shop_theme_info, "shop", "shop_menu_list_3", "SMART PHONE") }}</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
+					<div class="list"><a href="">{{ get_content($shop_theme_info, "shop", "shop_menu_list_4", "CAMERA") }}</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
+					<div class="list"><a href="">{{ get_content($shop_theme_info, "shop", "shop_menu_list_5", "HEADPHONE & SPEAKER") }}</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
+					<div class="list"><a href="">{{ get_content($shop_theme_info, "shop", "shop_menu_list_6", "TV & COMPONENTS") }}</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
 				</div>
 			</div>
 
@@ -26,20 +26,20 @@
 
 			<div class="most-viewed">
 				<div class="featured-content-container">
-					<div class="container-title"><i class="fa fa-star-o" aria-hidden="true"></i><span class="title">MOST VIEWED</span></div>
+					<div class="container-title"><i class="fa fa-star-o" aria-hidden="true"></i><span class="title">{{ get_content($shop_theme_info, "shop", "shop_mostviewed_title", "MOST VIEWED") }}</span></div>
 				</div>
 				<div class="most-viewed-content">
 					<div class="product-holder row clearfix">
 						<a href="">
 							<div class="col-md-5 product-image">
 								<div class="image-holder">
-									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
-									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
+									<img class="item-image first-image" src="{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_1_image_1", "/themes/". $shop_theme ."/img/most-viewed-img1.png") }}">
+									<img class="item-image second-image" src="{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_1_image_2", "/themes/". $shop_theme ."/img/most-viewed-img1.png") }}">
 								</div>
 							</div>
 							<div class="col-md-7 product-content">
 								<div class="product-details">
-									<div class="item-name">Lorem ipsum dolor sit</div>
+									<div class="item-name">{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_1_title", "Lorem ipsum dolor sit") }}</div>
 									<div class="item-rating">
 										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -47,7 +47,7 @@
 										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 										<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
 									</div>
-									<div class="item-price">PHP 5,000.00</div>
+									<div class="item-price">{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_1_price", "PHP 5,000.00") }}</div>
 								</div>
 							</div>
 						</a>
@@ -56,13 +56,13 @@
 						<a href="">
 							<div class="col-md-5 product-image">
 								<div class="image-holder">
-									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img2.png">
-									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img2.png">
+									<img class="item-image first-image" src="{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_2_image_1", "/themes/". $shop_theme ."/img/most-viewed-img2.png" )}}">
+									<img class="item-image second-image" src="{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_2_image_1", "/themes/". $shop_theme ."/img/most-viewed-img2.png" )}}">
 								</div>
 							</div>
 							<div class="col-md-7 product-content">
 								<div class="product-details">
-									<div class="item-name">Lorem ipsum dolor sit</div>
+									<div class="item-name">{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_2_title", "Lorem ipsum dolor sit") }}</div>
 									<div class="item-rating">
 										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
@@ -70,7 +70,7 @@
 										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
 										<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
 									</div>
-									<div class="item-price">PHP 5,000.00</div>
+									<div class="item-price">{{ get_content($shop_theme_info, "shop", "shop_mostviewed_product_2_price", "PHP 5,000.00") }}</div>
 								</div>
 							</div>
 						</a>
@@ -127,7 +127,7 @@
 
 		<div class="col-md-8 right-content">
 			<div class="banner-holder">
-				<img src="/themes/{{ $shop_theme }}/img/productpage-banner.png">
+				<img src="{{ get_content($shop_theme_info, "shop", "shop_banner", "/themes/". $shop_theme ."/img/productpage-banner.png") }}">
 				<button>SHOP NOW</button>
 			</div>
 

@@ -57,7 +57,7 @@ class Mlm extends Controller
                 Self::$slot_id = null;
                 Self::$slot_now = null;
             }
-            if($session['discount_card'])
+            if(isset($session['discount_card']))
             {
                 // Self::$discount_card_log_id = $session['discount_card']->discount_card_log_id;
                 // Self::$discount_card_log =  $session['discount_card'];

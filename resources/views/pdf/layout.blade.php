@@ -13,6 +13,7 @@
     
     <!-- <link rel="stylesheet" href="/assets/member/styles/92bc1fe4.bootstrap.css"> -->
     <link rel="stylesheet" href="{{ public_path().'/assets/member/styles/92bc1fe4.bootstrap.css' }}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">  
     <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
     <script src="/assets/member/scripts/vendor/respond.min.js"></script>

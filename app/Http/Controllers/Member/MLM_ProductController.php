@@ -38,17 +38,32 @@ class MLM_ProductController extends Member
 	    $data['membership_active'] = Tbl_membership::getactive(0, $shop_id)->get();
 
 	    // setup product on first try : no error on leftjoin
-	    $_inventory = Tbl_item::where("shop_id",$shop_id)
-        ->where('archived', 0)->orderBy('tbl_item.item_id','asc')->paginate(20);
+	    $_inventory = Tbl_item::where("shop_id",$shop_id);
+
+        $item_search = Request::input('item');
+        if($item_search != null)
+        {
+            $_inventory = $_inventory->where('item_sku', 'like', '%' . $item_search . '%')
+            ->orWhere('item_name', 'like', '%' . $item_search . '%');
+        }
+        $_inventory = $_inventory->where('tbl_item.archived', 0)->orderBy('tbl_item.item_id','asc')->paginate(10);
+
 	    $this->setup_points_initial($_inventory);
 	    // end setup
 	    
 	    $_inventory  = Tbl_item::where("tbl_item.shop_id",$shop_id)
-        ->where('tbl_item.archived', 0)
-        // ->join("tbl_mlm_item_points","tbl_mlm_item_points.item_id","=","tbl_item.item_id")
-        ->orderBy('tbl_item.item_id','asc')
-        ->type()->category()
+        
+        ->orderBy('tbl_item.item_id','asc');
+        
+        $item_search = Request::input('item');
+        if($item_search != null)
+        {
+            $_inventory = $_inventory->where('item_sku', 'like', '%' . $item_search . '%')
+            ->orWhere('item_name', 'like', '%' . $item_search . '%');
+        }
+        $_inventory = $_inventory->where('tbl_item.archived', 0)->type()->category()
         ->paginate(10);
+
 
         foreach($_inventory as $key => $value)
         {
@@ -179,9 +194,17 @@ class MLM_ProductController extends Member
             return $this->show_no_access(); 
         }
     	$shop_id = $this->user_info->shop_id;
-    	$data['items'] = Tbl_item::where("shop_id",$shop_id)
+        $items = Tbl_item::where("shop_id",$shop_id)
         ->where('tbl_item.archived', 0)
-        ->orderBy('tbl_item.item_id','asc')->type()->category()->paginate(5);
+        ->orderBy('tbl_item.item_id','asc');
+        $item_search = Request::input('item');
+        if($item_search != null)
+        {
+            $items = $items->where('item_sku', 'like', '%' . $item_search . '%')
+            ->orWhere('item_name', 'like', '%' . $item_search . '%');
+        }
+
+    	$data['items'] = $items->type()->category()->paginate(10);
     	$data['membership_active'] = Tbl_membership::getactive(0, $shop_id)->get();
     	$item_discount = [];
     	$item_percentage = [];

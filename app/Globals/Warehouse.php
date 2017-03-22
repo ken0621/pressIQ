@@ -32,6 +32,22 @@ class Warehouse
     	return $data; 
 
     }
+    public static function warehouse_access()
+    {
+        $warehouse = Tbl_user_warehouse_access::where("user_id",Warehouse::getUserid())->get();
+
+        $return["warehouse_id"] = null;
+        foreach ($warehouse as $key => $value) 
+        {
+            $return["warehouse_id"][$key] = $value->warehouse_id;
+        }
+        return $return;        
+    }
+
+    public static function getUserid()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+    }
     public static function check_inventory_on_warehouse($warehouse_id = 0, $item_id = 0, $return = 'array')
     {
     	$data = Tbl_warehouse::Warehouseitem()

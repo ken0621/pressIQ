@@ -87,27 +87,26 @@
 
                     <div id="wrapper">
                         <div id="login" class="animate form">
-                            <form method="post" action="/mlm/login" class="global-submit" autocomplete="on"> 
-                            <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
-                                <div class="lol-title"><span>Members</span> Login</div>
-                                <p> 
-                                    <input id="username" name="user" required="required" type="text" placeholder="Username"/>
-                                </p>
-                                <p> 
-                                    <input id="password" name="pass" required="required" type="password" placeholder="Password" /> 
-                                </p>
-                                <p class="login button"> 
-                                    <input type="submit" value="Login" > 
-                                </p>
-                                <div class="divider-holder" style="margin-bottom: 15px;">
-                                    <div class="divider"></div>
-                                    <span>Don't have an account yet?</span>
-                                </div>
-                                <p class="register button"> 
-                                    <input type="button" value="Create an Account" onClick="location.href='/mlm/register'" /> 
+                            <form method="post" action="/mlm/login/forgot_password/submit" class="global-submit" autocomplete="on"> 
+                                <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
+                                <div class="lol-title"><span>Forgot</span> Password</div>
+                                <p>
+                                    <h3>Lost Password</h3>
+                                    <small>Follow these simple steps to reset your password</small>
                                 </p>
                                 <p>
-                                    <a href="/mlm/login/forgot_password" style="text-decoration: none">Forgot Password ?</a>
+                                    <ul style="list-style: none">
+                                        <li>1. Enter your <a style="text-decoration: none">{{$_SERVER['SERVER_NAME']}}</a> E-mail Address</li>
+                                        <li>2. Wait for your recovery details to be sent</li>
+                                        <li>3. Follow instruction to login your account again.</li>
+                                    </ul>
+                                </p>
+                                <br>
+                                <p> 
+                                    <input id="email" name="email" required="required" type="text" placeholder="Email Address"/>
+                                </p>
+                                <p class="login button"> 
+                                    <input type="submit" value="Get New Password"> 
                                 </p>
                             </form>
                         </div>

@@ -42,6 +42,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/modal_save_salary','Member\PayrollController@modal_save_salary');
 	Route::any('/employee_list/modal_employee_update','Member\PayrollController@modal_employee_update');
 	Route::any('/employee_list/reload_employee_list','Member\PayrollController@reload_employee_list');
+	/* EMPLOYEE SEARCH */
+	Route::any('/employee_list/search_employee_ahead','Member\PayrollController@search_employee_ahead');
 
 	/* EMPLOYEE END */
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');

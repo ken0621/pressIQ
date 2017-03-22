@@ -6,7 +6,7 @@
     <input type="hidden" class="button-action" name="button_action" value="">
     <input type="hidden" name="bill_id" value="{{Request::input('id')}}" >
 
-    <button class="drawer-toggle" type="button"> <i class="fa fa-reorder"></i>BUTTON</button>
+    <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
 
     <div class="drawer drawer-default">
         <nav class="drawer-nav">
@@ -21,7 +21,7 @@
         </nav>
     </div>
 
-<!--     <div class="panel panel-default panel-block panel-title-block purchase-order hidden">
+<!--<div class="panel panel-default panel-block panel-title-block purchase-order hidden">
         <div class="panel-heading">
              <div class="form-group">
                  <div class="col-md-12">
@@ -47,8 +47,6 @@
             </div>
         </div>
     </div>
-
-
     <div class="panel panel-default panel-block panel-title-block panel-gray">  
         <div class="tab-content">
             <div class="row">
@@ -280,6 +278,7 @@
     .po-style
     {
         padding: 10px;
+        background-color: #fff;
     }
 </style>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>

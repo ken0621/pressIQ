@@ -32,6 +32,8 @@
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
+                <div class="load-data" target="reciept-paginate">
+                    <div id="reciept-paginate">
                 <table class="table table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
@@ -62,6 +64,8 @@
                     </tbody>
                 </table>
                 <center>{!! $_invoice->render() !!}</center>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -124,4 +128,5 @@
         $(".codes_container").html('<center><div class="loader-16-gray"></div></center>');
     }
 </script>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 @endsection

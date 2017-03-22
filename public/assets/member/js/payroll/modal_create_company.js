@@ -24,6 +24,7 @@ function modal_create_company()
 		{
 			var file = $(this)[0].files[0];
 			logo_upload(file, "update");
+			console.log("changed");
 		});
 
 		$(".btn-edit").unbind("click");
@@ -32,6 +33,7 @@ function modal_create_company()
 			$(this).addClass("display-none");
 			$(".btn-submit").removeClass("display-none");
 			$(".view-form").removeAttr("disabled");
+			event_function();
 		});
 	}
 
@@ -55,6 +57,7 @@ function modal_create_company()
 	{
 		var total = ( event.loaded / event.total ) * 100;
 		$(".custom-progress").css("width",total + "%");
+		event_function();
 	}
 	function loadFinish(event)
 	{
@@ -62,6 +65,7 @@ function modal_create_company()
 		$(".custom-progress-container").addClass("display-none");
 		var img = event.target.responseText;
 		$(".company_logo").attr("src", img);
+		event_function();
 	}
 
 }

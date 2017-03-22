@@ -2,7 +2,7 @@
 
 @section('css')
 <link rel="stylesheet" type="text/css" href="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/style.css">
-<link href="https://fonts.googleapis.com/css?family=Poppins:300,600" rel="stylesheet">  
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">  
 @endsection
 @section('content')
 <div class="panel panel-default panel-block panel-title-block panel-gray col-md-4">

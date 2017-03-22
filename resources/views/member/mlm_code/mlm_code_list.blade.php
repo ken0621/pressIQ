@@ -51,84 +51,95 @@
         <div id="pending-codes" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
-                <table class="table table-condensed">
-                    <thead style="text-transform: uppercase">
-                        <tr>
-                            <th>Activation Code</th>
-                            <th>Membership</th>
-                            <th>Package</th>
-                            <th class="text-center">Type</th>
-                            <th>Sold To</th>
-                            <th class="text-center">Date Issued</th>
-                            <th class="text-center">Product Issued</th>
-                            <!-- <th class="text-center">Receipt</th> -->
-                            <th class="text-center"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($_code_unused as $code)
+                <div class="load-data" target="unused-code">
+                    <div id="unused-code">
+                    <table class="table table-condensed">
+                        <thead style="text-transform: uppercase">
                             <tr>
-                                <td>{{$code->membership_activation_code}}</td>
-                                <td>{{$code->membership_name}}</td>
-                                <td><a href="javascript:">{{$code->membership_package_name}}</a></td>
-                                <td class="text-center">{{$code->membership_type}}</td>
-                                <td class="text-left">{{$code->membership_code_invoice_f_name}} {{$code->membership_code_invoice_m_name}} {{$code->membership_code_invoice_l_name}}</td>
-                                <td class="text-center">{{$code->membership_date_created}}</td>
-                                <td class="text-center"><input type="checkbox" {{$code->membership_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
-
-                                <td>
-                                    <a link="/member/mlm/code/block/{{$code->membership_code_id}}" href="javascript:" class="popup">BLOCK</a>
-                                </td>
+                                <th>Activation Code</th>
+                                <th>Membership</th>
+                                <th>Package</th>
+                                <th class="text-center">Type</th>
+                                <th>Sold To</th>
+                                <th class="text-center">Date Issued</th>
+                                <th class="text-center">Product Issued</th>
+                                <!-- <th class="text-center">Receipt</th> -->
+                                <th class="text-center"></th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <center>{!! $_code_unused->render() !!}</center>
+                        </thead>
+                        <tbody>
+                            @foreach($_code_unused as $code)
+                                <tr>
+                                    <td>{{$code->membership_activation_code}}</td>
+                                    <td>{{$code->membership_name}}</td>
+                                    <td><a href="javascript:">{{$code->membership_package_name}}</a></td>
+                                    <td class="text-center">{{$code->membership_type}}</td>
+                                    <td class="text-left">{{$code->membership_code_invoice_f_name}} {{$code->membership_code_invoice_m_name}} {{$code->membership_code_invoice_l_name}}</td>
+                                    <td class="text-center">{{$code->membership_date_created}}</td>
+                                    <td class="text-center"><input type="checkbox" {{$code->membership_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
+
+                                    <td>
+                                        <a link="/member/mlm/code/block/{{$code->membership_code_id}}" href="javascript:" class="popup">BLOCK</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <center>{!! $_code_unused->render() !!}</center>
+                    </div> 
+                </div>
+                
             </div>
         </div>
         <div id="used-codes" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
-                <table class="table table-condensed">
-                    <thead style="text-transform: uppercase">
-                        <tr>
-                            <th>Activation Code</th>
-                            <th>Membership</th>
-                            <th>Package</th>
-                            <th class="text-center">Type</th>
-                            <th>Sold To</th>
-                            <th class="text-center">Date Issued</th>
-                            <th class="text-center">Product Issued</th>
-                            <!-- <th class="text-center">Receipt</th> -->
-                            <th class="text-center"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($_code_used as $code)
+                <div class="load-data" target="used-code-filter">
+                    <div id="used-code-filter">
+                    <table class="table table-condensed">
+                        <thead style="text-transform: uppercase">
                             <tr>
-                                <td>{{$code->membership_activation_code}}</td>
-                                <td>{{$code->membership_name}}</td>
-                                <td><a href="javascript:">{{$code->membership_package_name}}</a></td>
-                                <td class="text-center">{{$code->membership_type}}</td>
-                                <td class="text-left">{{$code->membership_code_invoice_f_name}} {{$code->membership_code_invoice_m_name}} {{$code->membership_code_invoice_l_name}}</td>
-                                <td class="text-center">{{$code->membership_date_created}}</td>
-                                <td class="text-center"><input type="checkbox" {{$code->membership_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
-<!--                                 <td class="text-center">
-                                    <a href="/member/mlm/code/receipt/{{$code->membership_code_id}}">View</a>
-                                </td>   -->                              
-                                <td>
-                                    <!--<a link="/member/mlm/code/block/{{$code->membership_code_id}}" href="javascript:" class="popup">BLOCK</a>-->
-                                </td>
+                                <th>Activation Code</th>
+                                <th>Membership</th>
+                                <th>Package</th>
+                                <th class="text-center">Type</th>
+                                <th>Sold To</th>
+                                <th class="text-center">Date Issued</th>
+                                <th class="text-center">Product Issued</th>
+                                <!-- <th class="text-center">Receipt</th> -->
+                                <th class="text-center"></th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <center>{!! $_code_used->render() !!}</center>
+                        </thead>
+                        <tbody>
+                            @foreach($_code_used as $code)
+                                <tr>
+                                    <td>{{$code->membership_activation_code}}</td>
+                                    <td>{{$code->membership_name}}</td>
+                                    <td><a href="javascript:">{{$code->membership_package_name}}</a></td>
+                                    <td class="text-center">{{$code->membership_type}}</td>
+                                    <td class="text-left">{{$code->membership_code_invoice_f_name}} {{$code->membership_code_invoice_m_name}} {{$code->membership_code_invoice_l_name}}</td>
+                                    <td class="text-center">{{$code->membership_date_created}}</td>
+                                    <td class="text-center"><input type="checkbox" {{$code->membership_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
+    <!--                                 <td class="text-center">
+                                        <a href="/member/mlm/code/receipt/{{$code->membership_code_id}}">View</a>
+                                    </td>   -->                              
+                                    <td>
+                                        <!--<a link="/member/mlm/code/block/{{$code->membership_code_id}}" href="javascript:" class="popup">BLOCK</a>-->
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <center>{!! $_code_used->render() !!}</center>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="blocked-codes" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
+                <div class="load-data" target="blocked-code-filter">
+                    <div id="blocked-code-filter">
                 <table class="table table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
@@ -160,6 +171,8 @@
                     </tbody>
                 </table>
                 <center>{!! $_code_blocked->render() !!}</center>
+                    </div>
+                </div>    
             </div>
         </div>
     </div>
@@ -310,4 +323,5 @@ if (url.match('#')) {
 
 
 </script>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 @endsection

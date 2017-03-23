@@ -48,7 +48,7 @@ class TesterController extends Controller
         $data[0] = "09178868381";
         $data[1] = "09167703064";
 
-        Sms::sendRegistration("639175857495","Raymond");
+        // Sms::sendRegistration("639177190080","Arnold");
     }
 
 	public function getIndex()

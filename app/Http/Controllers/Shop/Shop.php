@@ -9,6 +9,7 @@ use App\Models\Tbl_shop;
 use App\Models\Tbl_content;
 use App\Models\Tbl_ec_product;
 use App\Globals\Ecom_Product;
+use App\Globals\Cart;
 
 class Shop extends Controller
 {
@@ -62,6 +63,7 @@ class Shop extends Controller
       
         $company_info = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->get())->keyBy('key');
         $product_category = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+        $global_cart = Cart::get_cart($this->shop_info->shop_id);
         
         View::addLocation(base_path() . '/public/themes/' . $this->shop_theme . '/views/');
         View::share("shop_info", $this->shop_info);
@@ -71,6 +73,7 @@ class Shop extends Controller
         View::share("company_info", $company_info);
         View::share("shop_id", $this->shop_info->shop_id);
         View::share("_categories", $product_category);
+        View::share("global_cart", $global_cart);
     }
     public function file($theme, $type, $filename)
     {

@@ -26,6 +26,7 @@ class Tbl_sub_warehouse extends Model
               ->leftjoin('tbl_item','tbl_item.item_id','=','tbl_sub_warehouse.item_id')
               ->where('tbl_sub_warehouse.warehouse_id',$from_id)
               ->where('to_warehouse.warehouse_id',$to_id)
+              ->where('tbl_item.archived',0)
               ->groupBy('to_warehouse.item_id')
               ->select(DB::raw('tbl_item.item_id as product_id, tbl_item.item_name as product_name, tbl_item.item_sku as product_sku, (select sum(from_inventory.inventory_count) 
                 from tbl_warehouse_inventory as from_inventory 

@@ -710,7 +710,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Owner's Information Settings";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/client_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','update_password'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
@@ -810,10 +810,35 @@ function page_list()
     $page = "report"; 
     $nav[$page]['name'] = "Reports";
     $nav[$page]['segment'] = $page;
-    $nav[$page]['url'] = $path . $page . "/";
     $nav[$page]['icon'] = "area-chart";
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    
+
+
+    /* -- REPORT => PRODUCTS  */
+    $code = "report-product-sales";
+    $nav[$page]['submenu'][$code]['label'] = "Product Sales Report";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sale/product";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
+    /* -- REPORT => MONTHLY PRODUCT  */
+    $code = "report-product-sales-monthly";
+    $nav[$page]['submenu'][$code]['label'] = "Product Sales Monthly Report";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sale/month";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
+    /* -- REPORT => PRODUCTS VARIANT  */
+    $code = "report-product-variant-sales";
+    $nav[$page]['submenu'][$code]['label'] = "Product Variant Sales Report";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sale/product_variant";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
     
     return $nav;
 }

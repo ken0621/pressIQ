@@ -71,7 +71,7 @@
                                     <input type="text" class="number-input render-point-txt render-point-txt{{$key+1}}" name="reoder_point[{{$w_item->item_id}}]" value="{{$w_item->sub_reorder_point}}">
                                 </td>
                                 <td class="hide"><input type="text" class="qty-txt qty-txt1 number-input" value="{{$w_item->item_qty}}" name="quantity[{{$w_item->item_id}}]"></td>
-                                <td class="text-center cursor-pointer"><i class="fa fa-trash-o remove-tr" aria-hidden="true"></i></td>
+                               <td></td>
                             </tr>
                             <input type="hidden" value="{{$key++}}">
                             @endforeach

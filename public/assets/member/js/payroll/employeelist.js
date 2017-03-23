@@ -40,11 +40,9 @@ function employeelist()
 				success 	: 	function(data)
 				{	
 					data = JSON.parse(data);
-					// console.log(data);
 					$(element).autocomplete({
 						source : data
 					});
-					// return response(data);
 				},
 				error 		: 	function(err)
 				{
@@ -52,34 +50,6 @@ function employeelist()
 				}	
 			});
 		});
-		// $(".perdictive-active").autocomplete({
-		// 	source : function(query, response)
-		// 	{
-		// 		var trigger = $(this).attr('data-trigger');
-
-		// 		console.log($(this).hasClass("perdictive-active"));
-		// 		$.ajax({
-		// 			url 		: "/member/payroll/employee_list/search_employee_ahead",
-		// 			type 		: "POST",
-		// 			data 		: {
-		// 				_token:misc('_token'),
-		// 				query:query.term,
-		// 				status:trigger
-		// 			},
-		// 			success 	: 	function(data)
-		// 			{	
-		// 				data = JSON.parse(data);
-		// 				return response(data);
-		// 			},
-		// 			error 		: 	function(err)
-		// 			{
-		// 				console.log(err);
-		// 			}	
-		// 		});
-		// 	},
-		// 	minLength: 1
-		// });
-		
 	}
 
 	function filter_change_event()

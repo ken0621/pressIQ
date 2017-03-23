@@ -31,6 +31,7 @@ class ShopProductController extends Shop
             // Get Breadcrumbs
             $data["breadcrumbs"] = [];
         }
+        dd($product);
         // Get Category
         $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         // Count total product
@@ -111,7 +112,7 @@ class ShopProductController extends Shop
         $perPage = 12;
         $data["current_count"] = count($product);
         $data["_product"] = self::paginate($product, $perPage);
-
+        dd($data["_product"]);
         return view("product", $data);
     }
     public function paginate($items,$perPage)

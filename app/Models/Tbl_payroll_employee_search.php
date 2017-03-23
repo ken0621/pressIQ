@@ -27,6 +27,7 @@ class Tbl_payroll_employee_search extends Model
 			  ->whereRaw("MATCH(tbl_payroll_employee_search.body) AGAINST('*".$body."*' IN BOOLEAN MODE)")
 			  ->where(function($query1) use ($date, $status)
 			  {
+			  	// dd($status);
 			  	if($status == 'active')
 			  	{
 			  		$query1->where('tbl_payroll_employee_contract.payroll_employee_contract_date_end','>=', $date)

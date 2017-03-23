@@ -191,21 +191,21 @@ class Accounting
 		$account_income 	= Tbl_item::where("item_id", 39)->pluck("item_income_account_id");
 		$account_expense 	= Tbl_item::where("item_id", 39)->pluck("item_expense_account_id");
 
-		if($reference_module == "invoice")
-		{
-			$insert["je_shop_id"] 			= "";
-			$insert["je_reference_module"]	= $reference_module;
-			$insert["je_reference_id"]		= 1;
-			$insert["je_entry_date"]		= Carbon::now();
-			$insert["je_remarks"]			= '';
+		// if($reference_module == "invoice")
+		// {
+		// 	$insert["je_shop_id"] 			= "";
+		// 	$insert["je_reference_module"]	= $reference_module;
+		// 	$insert["je_reference_id"]		= 1;
+		// 	$insert["je_entry_date"]		= Carbon::now();
+		// 	$insert["je_remarks"]			= '';
 
-			$je_id = Tbl_journal_entry::
+		// 	$je_id = Tbl_journal_entry::
  
-			foreach($entry_data as $data)
-			{
-				$insertline["jline_je_id"]
-			}
-		}
+		// 	foreach($entry_data as $data)
+		// 	{
+		// 		$insertline["jline_je_id"]
+		// 	}
+		// }
 
 		foreach($entry_data as $entry)
 		{

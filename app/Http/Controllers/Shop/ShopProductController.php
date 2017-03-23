@@ -16,12 +16,24 @@ class ShopProductController extends Shop
     public function index()
     {
         $data["page"] = "Product";
+        $type = Request::input("type");
+        if ($type) 
+        {
+            // Get Product by Category
+            $product = Ecom_Product::getAllProductByCategory($type, $this->shop_info->shop_id);
+            // Get Breadcrumbs
+            $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($type, $this->shop_info);
+        }
+        else
+        {
+            // Get Product by Category
+            $product = Ecom_Product::getAllProduct($this->shop_info->shop_id);
+            // Get Breadcrumbs
+            $data["breadcrumbs"] = [];
+        }
+        dd($product);
         // Get Category
         $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
-        // Get Product by Category
-        $product = Ecom_Product::getAllProductByCategory(Request::input("type"), $this->shop_info->shop_id);
-        // Get Breadcrumbs
-        $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs(Request::input("type"), $this->shop_info);
         // Count total product
         $data["total_product"] = count($product);
         // Filter Price
@@ -100,7 +112,7 @@ class ShopProductController extends Shop
         $perPage = 12;
         $data["current_count"] = count($product);
         $data["_product"] = self::paginate($product, $perPage);
-
+        dd($data["_product"]);
         return view("product", $data);
     }
     public function paginate($items,$perPage)

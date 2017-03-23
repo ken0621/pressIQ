@@ -16,8 +16,21 @@ use DB;
 use Carbon\Carbon;
 use Session;
 class Warehouse
-{
+{   
+    public static function inventory_input_report($inventory_slip_id)
+    {
+        $data = Tbl_inventory_slip::shop()->vendor()->warehouse()->where("inventory_slip_shop_id",Warehouse::getShopId())
+                                                ->where("tbl_user.user_id",Warehouse::getUserid())
+                                                ->where("inventory_slip_id",$inventory_slip_id)
+                                                ->first();
 
+        return $data;
+    }
+    public static function inventory_input_report_item($inventory_slip_id)
+    {
+        $data = Tbl_warehouse_inventory::inventoryslip()->item()->where("tbl_warehouse_inventory.inventory_slip_id",$inventory_slip_id)->groupBy("tbl_item.item_id")->where("tbl_unit_measurement_multi.is_base",1)->get();
+        return $data;
+    }
     public static function select_item_warehouse_single($warehouse_id = 0, $return = 'array')
     {
     	$data = Tbl_warehouse::Warehouseitem()
@@ -352,6 +365,7 @@ class Warehouse
                     $data['status'] = 'success-serial';
 
                     $items["item_id"] = "";
+                    // $items["slip_id"] = $inventory_slip_id;
                     $items["item_list"] = $for_serial_item;
                     Session::put("item", $items);
                 }                

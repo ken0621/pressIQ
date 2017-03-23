@@ -21,16 +21,16 @@
 	<div class="container">
 		<div class="row clearfix">
 			<div class="col-md-4">
-				<div class="title"><img src="/themes/{{ $shop_theme }}/img/check.png"> MISSION</div>
-				<div class="sub-title">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</div>
+				<div class="title"><img src="/themes/{{ $shop_theme }}/img/check.png"> {{ get_content($shop_theme_info, "about", "about_mission_title", "MISSION") }}</div>
+				<div class="sub-title">{{ get_content($shop_theme_info, "about", "about_mission_description", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.") }}</div>
 			</div>
 			<div class="col-md-4">
-				<div class="title"><img src="/themes/{{ $shop_theme }}/img/check.png"> VISION</div>
-				<div class="sub-title">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</div>
+				<div class="title"><img src="/themes/{{ $shop_theme }}/img/check.png"> {{ get_content($shop_theme_info, "about", "about_vision_title", "VISION") }}</div>
+				<div class="sub-title">{{ get_content($shop_theme_info, "about", "about_vision_description", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.") }}</div>
 			</div>
 			<div class="col-md-4">
-				<div class="title"><img src="/themes/{{ $shop_theme }}/img/check.png"> CORE VALUES</div>
-				<div class="sub-title">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</div>
+				<div class="title"><img src="/themes/{{ $shop_theme }}/img/check.png"> {{ get_content($shop_theme_info, "about", "about_core_values_title", "CORE VALUES") }}</div>
+				<div class="sub-title">{{ get_content($shop_theme_info, "about", "about_core_values_description", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.") }}</div>
 			</div>
 		</div>
 	</div>
@@ -39,13 +39,13 @@
 <div class="our-team">
 	<div class="container">
 
-		<div class="title">MEET OUR <span>TEAM</span></div>
+		<div class="title">{{ get_content($shop_theme_info, "about", "about_meet_our_team_title_1", "MEET OUR") }} <span>{{ get_content($shop_theme_info, "about", "about_meet_our_team_title_2", "TEAM") }}</span></div>
 
 		<div class="row clearfix team-details">
 			<div class="col-md-3 person-details">
-				<div class="person-image"><img src="/themes/{{ $shop_theme }}/img/person.png"></div>
-				<div class="person-name">Lorem Ipsum Dolor</div>
-				<div class="person-position">Lorem Ipsum</div>
+				<div class="person-image"><img src="{{ get_content($shop_theme_info, "about", "about_employee_1_image", "/themes/". $shop_theme ."/img/person.png") }}"></div>
+				<div class="person-name">{{ get_content($shop_theme_info, "about", "about_employee_1_name", "Lorem Ipsum Dolor") }}</div>
+				<div class="person-position">{{ get_content($shop_theme_info, "about", "about_employee_1_position", "Lorem Ipsum") }}</div>
 			</div>
 			<div class="col-md-3 person-details">
 				<div class="person-image"><img src="/themes/{{ $shop_theme }}/img/person.png"></div>

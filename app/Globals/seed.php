@@ -66,7 +66,7 @@ class Seed
         $email[1]['email_content_key'] = 'membership_code_purchase';
         $email[1]['email_content'] = '<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Greetings!</p>
 <p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
-<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">You have successfully purchased a [membership_name] Membership Package. Your Membership Code is/are:</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">You have successfully purchased [membership_count] Membership Package. Your Membership Code is/are:</p>
 <p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">[membership_code]</p>
 <p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
 <p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">As a PhilTECH VIP, you are entitled to Lifetime Privileges and Benefits exclusively designed for our VIPs. Experience shopping convenience like never before with our E-Commerce System. Enjoy Discounts and Earn Cashback + Rewards Points with every purchase on all products of the company. Just present your PhilTECH VIP Card during payment and all these exciting benefits will be yours.</p>

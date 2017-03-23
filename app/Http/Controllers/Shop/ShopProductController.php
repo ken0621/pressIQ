@@ -111,11 +111,7 @@ class ShopProductController extends Shop
         $perPage = 12;
         $data["current_count"] = count($product);
         $data["_product"] = self::paginate($product, $perPage);
-<<<<<<< HEAD
 
-=======
-   
->>>>>>> 3de9a406bfa3ef6bd86b76f2e87eaca997e244aa
         return view("product", $data);
     }
     public function paginate($items,$perPage)

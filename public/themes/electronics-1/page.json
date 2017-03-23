@@ -24,6 +24,14 @@
 			"size":"12"
 		},
 
+		"home_newreleases_title" :
+		{
+			"label":"New Releases Title",
+			"type":"textbox",
+			"default":"",
+			"size":"12"
+		},
+
 		"home_small_banner_1" :
 		{
 			"label":"Small Banner 1 Image",

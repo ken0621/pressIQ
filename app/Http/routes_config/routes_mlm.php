@@ -15,6 +15,7 @@ Route::post('/mlm/register', 'Mlm\MlmRegisterController@post_register'); //EDWAR
 Route::get('/mlm/register/get/membership_code/{membership_code}', 'Mlm\MlmRegisterController@view_customer_info_via_mem_code');
 
 Route::get('/mlm', 'Mlm\MlmDashboardController@index'); //EDWARD GUEVARRA
+Route::get('/mlm/news/{id}', 'Mlm\MlmDashboardController@news_content'); //EDWARD GUEVARRA
 Route::get('/mlm/profile', 'Mlm\MlmProfileController@index'); //EDWARD GUEVARRA
 Route::get('/mlm/notification', 'Mlm\MlmNotificationController@index'); //EDWARD GUEVARRA
 Route::any('/mlm/claim/slot', 'Mlm\MlmDashboardController@claim_slot'); //EDWARD GUEVARRA

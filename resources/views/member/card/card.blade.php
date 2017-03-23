@@ -11,10 +11,17 @@
 		</div>
 		<div class="mid-container clearfix" style="margin: 0; height: 149px;"><img style="display: block; width: 380px; margin-left: 10px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/{{ $color }}-logo.png"></div>
 		<div class="bottom-container clearfix" style="margin-top: -7.5px;">
-			<div class="member">
+			@if(strlen($name) <= 18)
+			<div class="member" style="width: 280px;">
 				<div class="member-name">{{ $name }}</div>
 				<div class="member-label" style="padding-left: 0;">ISSUED: <small>{{$now}}</small></div>
 			</div>
+			@else
+			<div class="member" style="width: 280px;">
+				<div class="member-name" style="font-size: 17px;">{{ $name }}</div>
+				<div class="member-label" style="padding-left: 0;">ISSUED: <small>{{$now}}</small></div>
+			</div>
+			@endif
 			<div class="barcode">
 				<div class="barcodeimg" style="background-color: #fff; padding: 7.5px 0;"><img src="{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/barcode?text={{ $membership_code }}&size=35"></div>
 				<div class="barcodetxt" style="font-size: 8px; margin-top: -5px; padding-bottom: 5px;">

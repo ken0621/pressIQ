@@ -20,8 +20,8 @@
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body">
         <ul class="nav nav-tabs">
-            <li class="active cursor-pointer vendor-tab" data-value="1"><a class="cursor-pointer" data-toggle="tab" href="#actives"><i class="fa fa-star"></i> Active Vendor</a></li>
-            <!-- <li class="cursor-pointer vendor-tab" data-value="0"><a class="cursor-pointer" data-toggle="tab" href="#inactives"><i class="fa fa-trash"></i> Inactive Vendor</a></li> -->
+            <li class="active cursor-pointer vendor-tab" data-value="1"><a class="cursor-pointer" data-toggle="tab" href="#active"><i class="fa fa-star"></i> Active Vendor</a></li>
+            <li class="cursor-pointer vendor-tab" data-value="0"><a class="cursor-pointer" data-toggle="tab" href="#inactive"><i class="fa fa-trash"></i> Inactive Vendor</a></li>
         </ul>
 
         <div class="search-filter-box">
@@ -32,8 +32,21 @@
                 </div>
             </div>  
         </div>
-        <div class=" panel-vendor load-data">
-            @include('member.vendor.load_vendor_tbl')
+
+        <div class="load-vendor">
+            <div class="tab-content load-vendor-data">
+                <div id="active" class="tab-pane fade in active">
+                    <div class="panel-vendor load-data">   
+                        @include('member.vendor.load_vendor_tbl')
+                    </div>
+                </div>
+
+                <div id="inactive" class="tab-pane fade in">
+                    <div class="panel-vendor load-data">   
+                       @include('member.vendor.load_vendor_tbl', ["_vendor" => $_archived_vendor])
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
@@ -53,7 +66,8 @@ function submit_done(data)
     else
     {
         toastr.success("success");
-        $(".load-data").load("/member/vendor/load-vendor-tbl");
+        location.reload();
+        // $(".load-vendor-data").load("/member/vendor/list .load-vendor");
         // load_vendor_data();
         $("#global_modal").modal("toggle");
     }

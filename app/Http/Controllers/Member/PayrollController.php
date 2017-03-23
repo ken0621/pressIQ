@@ -1249,9 +1249,12 @@ class PayrollController extends Member
 	public function search_employee_ahead()
 	{
 		$query = Request::input('query');
-		$_return = Tbl_payroll_employee_search::search($query)
+		$status = Request::input("status");
+		// dd($status);
+		$_return = Tbl_payroll_employee_search::search($query, $status)
 											 ->select('tbl_payroll_employee_basic.payroll_employee_display_name as employee')
 											 ->orderBy("tbl_payroll_employee_basic.payroll_employee_first_name")
+											 ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
 											 ->get();
 		$data = array();
 		foreach($_return as $return)
@@ -1260,6 +1263,7 @@ class PayrollController extends Member
 		}
 
 		return json_encode($data);
+		// return $_return->toJson();
 	}
 
 	public function update_tbl_search()

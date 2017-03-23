@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Models\Tbl_item;
 use App\Globals\Warehouse;
 use App\Globals\Utilities;
+use App\Globals\Vendor;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_sub_warehouse;
@@ -346,7 +347,7 @@ class WarehouseController extends Member
             }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
             $data["warehouse_item"] = Warehouse::select_item_warehouse_single($id,'array');
-            dd($data["warehouse_item"]);
+            // dd($data["warehouse_item"]);
 
             return view("member.warehouse.warehouse_view",$data);
         }
@@ -369,6 +370,7 @@ class WarehouseController extends Member
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
             
             $data["warehouse_item"] = Warehouse::select_item_warehouse_single($id,'array');
+            $data["_vendor"]    = Vendor::getAllVendor('active');
             
             $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)
                                                                             ->where("type_shop",$this->user_info->shop_id)
@@ -565,8 +567,9 @@ class WarehouseController extends Member
         { 
             $warehouse_id = Request::input("warehouse_id");
             $remarks = Request::input("remarks");
-            $reason_refill = Request::input("reason_refill");
-            $refill_source = 0;
+            $reason_refill = Request::input("reason_refill") == "other" ? "other" : "vendor";
+            $refill_source = Request::input("reason_refill") == "other" ? 0 : Request::input("reason_refill");
+            
             $quantity_product = Request::input("quantity");
 
             $warehouse_refill_product = null;

@@ -40,8 +40,4 @@ class EmailContent
 
         return $content;
     }
-    public static function membership_code_email()
-    {
-        $body = EmailContent::email_txt_replace($content_key, $change_content);
-    }
 }

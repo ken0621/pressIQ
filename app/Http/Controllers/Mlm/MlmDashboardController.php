@@ -162,6 +162,12 @@ class MlmDashboardController extends Mlm
 
     	return view('mlm.dashboard.news', $data);
     }
+    public function news_content($id)
+    {
+        $data["post"] = Tbl_post::where("post_id", $id)->first();
+
+        return view('mlm.dashboard.news_content', $data);
+    }
     public static function profile()
     {
     	$data = [];

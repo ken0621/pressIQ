@@ -10,7 +10,7 @@
                                 <div class="img">
                                     <img src="{{ $post->post_image }}">
                                 </div>
-                                <div class="title">{{ $post->post_title }}</div>
+                                <div class="title"><a href="/mlm/news/{{ $post->post_id }}">{{ $post->post_title }}</a></div>
                                 <div class="desc">{{ substr($post->post_excerpt, 0, 100) }} ...</div>
                                 <div class="date">{{ date("M. j, Y", strtotime($post->post_date)) }}</div>
                             </div>
@@ -25,7 +25,7 @@
                                                 </div>
                                             </td>
                                             <td class="td-text">
-                                                <div class="title">{{ $post->post_title }}</div>
+                                                <div class="title"><a href="/mlm/news/{{ $post->post_id }}">{{ $post->post_title }}</a></div>
                                                 <div class="desc">{{ substr($post->post_excerpt, 0, 100) }} ...</div>
                                                 <div class="date">{{ date("M. j, Y", strtotime($post->post_date)) }}</div>
                                             </td>

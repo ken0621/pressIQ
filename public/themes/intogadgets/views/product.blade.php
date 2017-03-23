@@ -123,7 +123,10 @@
                             <div class="name">{{ get_product_first_name($product) }}</div>
                             <!-- <div class="price-left">P34,000</div> -->
                             <div class="price-right">{{ get_product_first_price($product) }}</div>
-                            <div class="hover"><a href="/product/view/{{ $product['eprod_id'] }}" class="text">VIEW MORE</a></div>
+                            <div class="hover">
+                                <a href="/product/view/{{ $product['eprod_id'] }}" class="text">ADD TO CART</a>
+                                <a href="/product/view/{{ $product['eprod_id'] }}" class="text">VIEW MORE</a>
+                            </div>
                         </div>
                     </div>
                 </a>

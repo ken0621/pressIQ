@@ -878,28 +878,38 @@ class ItemController extends Member
         $shop_id    = $this->user_info->shop_id;
         $id         = Request::input("item_id");
         $code       = Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->first();
-        if($code)
+        $ctr_inventory = Tbl_item::leftjoin("tbl_warehouse_inventory","tbl_warehouse_inventory.inventory_item_id","=","tbl_item.item_id")->where("tbl_item.item_id",$id)->where("tbl_item.shop_id",$shop_id)->sum("inventory_count");
+
+        if($ctr_inventory <= 0)
         {
-            if($code->used == 0 && $code->blocked == 0)
-            {
-               $update["archived"] = 1;
-               Tbl_item::where("item_id",$id)->update($update);
-			   $return["error"][0]  = "Successfully archived";
-			   $return["message"]   = "Sucess-archived";   
-            }
-            else if($code->archive == 1)
-            {
-				$return["error"][0]  = "Already archived";
-				$return["message"]   = "Failed";  
-            }
+	        if($code)
+	        {
+	            if($code->used == 0 && $code->blocked == 0)
+	            {
+	               $update["archived"] = 1;
+	               Tbl_item::where("item_id",$id)->update($update);
+				   $return["error"][0]  = "Successfully archived";
+				   $return["message"]   = "Sucess-archived";   
+	            }
+	            else if($code->archive == 1)
+	            {
+					$return["error"][0]  = "Already archived";
+					$return["message"]   = "Failed";  
+	            }
 
-	        $item = Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->first()->toArray();
+		        $item = Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->first()->toArray();
 
-	        AuditTrail::record_logs("Archived","item",$id,"",serialize($item));
+		        AuditTrail::record_logs("Archived","item",$id,"",serialize($item));
+	        }
+	        else
+	        {
+				$return["error"][0]  = "Please try again";
+				$return["message"]   = "Failed";
+	        }
         }
         else
         {
-			$return["error"][0]  = "Please try again";
+        	$return["error"][0]  = "You can't delete Item, ".$code->item_name." it has ".$ctr_inventory." quantity";
 			$return["message"]   = "Failed";
         }
 

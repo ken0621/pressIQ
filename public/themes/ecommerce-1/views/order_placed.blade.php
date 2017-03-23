@@ -25,9 +25,8 @@
 		<img id="truck1" src="/themes/{{ $shop_theme }}/img/truck.png">
 		<img id="truck2" src="/themes/{{ $shop_theme }}/img/truck2.png">
 	</div>
-	<div class="sub">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean </br> commodo ligula eget dolor. Aenean massa! </div>
 	<div class="text-center">
-		<button class="btn btn-primary">BACK TO SHOP</button>
+		<button class="btn btn-primary" onClick="location.href='/'">BACK TO SHOP</button>
 	</div>
 	<div style="margin-bottom: 100px;"></div>
 </div>

@@ -99,7 +99,7 @@
 										<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ get_collection_first_name($collection) }}</div></a>
 										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 									</div>
-									<button class="new-add-to-cart-button btn" style="margin-top: 25px;">
+									<button type="button" onCLick="location.href='/product/view/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn" style="margin-top: 25px;">
 										<table>
 											<tbody>
 												<tr>
@@ -144,7 +144,7 @@
 							<div class="per-item-container">
 								<div class="image-content-1">
 									<img class="item-image-large 4-3-ratio" src="{{ get_collection_first_image($collection) }}">
-									<button class="new-add-to-cart-button btn">
+									<button type="button" onCLick="location.href='/product/view/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn">
 										<table>
 											<tbody>
 												<tr>

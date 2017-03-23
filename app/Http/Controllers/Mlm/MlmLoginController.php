@@ -7,7 +7,10 @@ use Request;
 use View;
 use Route;
 use Session;
+use Validator;
+use Mail;
 use App\Globals\Mlm_member;
+use App\Globals\EmailContent;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_membership_code;
@@ -99,6 +102,79 @@ class MlmLoginController extends Controller
         $data["page"] = "Login";
         return view("mlm.login", $data);
     }   
+    public function forgot_password()
+    {
+        $data["page"] = "Forgot Password";
+        return view("mlm.forgot_password",$data);
+    }
+    public function forgot_password_submit()
+    {
+        $email = Request::input("email");
+        $data["type"] = "";
+        $data["message"] = "";
+
+        $ctr_email = Tbl_customer::where("email",$email)->first();
+        if($ctr_email)
+        {
+            $update["email"] = $email;
+
+            $rules["email"] = 'required|email';
+
+            $validator = Validator::make($update, $rules);
+
+            if($validator->fails())
+            {                
+                $data["type"] = "error";
+                foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+                {
+                    $data["message"] .= $message;
+                }
+            }
+            else
+            {
+                $content_key = "forget_password";
+                $return["subject"] = EmailContent::getSubject($content_key);
+                $return["shop_key"] = EmailContent::getShopkey();
+                $return["email"] = $ctr_email->email;
+
+                $new_password = strtoupper($ctr_email->first_name."_".str_random(5));
+
+                $txt[0]["txt_to_be_replace"] = "[name]";
+                $txt[0]["txt_to_replace"] = $ctr_email->first_name." ".$ctr_email->middle_name." ".$ctr_email->last_name;
+
+                $txt[1]["txt_to_be_replace"] = "[domain_name]";
+                $txt[1]["txt_to_replace"] = $_SERVER["SERVER_NAME"];
+
+                $txt[2]["txt_to_be_replace"] = "[new_password]";
+                $txt[2]["txt_to_replace"] = $new_password;
+
+                $change_content = $txt;
+
+                $return["content"] = EmailContent::email_txt_replace($content_key, $change_content);
+
+                $update_new_password["password"] = Crypt::encrypt($new_password);
+                Tbl_customer::where("customer_id",$ctr_email->customer_id)->update($update_new_password);
+
+                Mail::send('emails.test', $return, function ($message) use ($return)
+                {
+                    $message->from(env('MAIL_USERNAME'), $return["shop_key"]);
+
+                    $message->to($return["email"])->subject($return["subject"]);
+                });
+
+                $data["message"] = "Successfully Sent Email";
+
+            }
+
+        }
+        else
+        {
+            $data["type"] = "error";
+            $data["message"] = "The E-mail Address is incorrect";
+        }
+
+        return json_encode($data);
+    }
     public static function error404()
     {
     	 return view('errors.404');

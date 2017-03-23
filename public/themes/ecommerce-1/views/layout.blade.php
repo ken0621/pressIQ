@@ -70,65 +70,9 @@
 	    			</div>
 	    			<div class="col-md-3 woaw">
 	    				<div class="shopping-cart-container">
-	    					<div class="shopping-cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="badge">1</span> <span>CART PHP. 000.00</span></div>
-	    				    <div class="container-cart">
-                                <table>
-                                    <tbody>
-                                        <!-- <tr>
-                                            <td class="img"><img src="/themes/{{ $shop_theme }}/img/item-1.jpg"></td>
-                                            <td class="info">
-                                                <div class="name">Item Name 1</div>
-                                                <div class="quantity">x2</div>
-                                                <div class="price">P 600.00</div>
-                                            </td>
-                                            <td class="remove">
-                                                <a href="javascript:"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="img"><img src="/themes/{{ $shop_theme }}/img/item-1.jpg"></td>
-                                            <td class="info">
-                                                <div class="name">Item Name 1</div>
-                                                <div class="quantity">x2</div>
-                                                <div class="price">P 600.00</div>
-                                            </td>
-                                            <td class="remove">
-                                                <a href="javascript:"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="img"><img src="/themes/{{ $shop_theme }}/img/item-1.jpg"></td>
-                                            <td class="info">
-                                                <div class="name">Item Name 1</div>
-                                                <div class="quantity">x2</div>
-                                                <div class="price">P 600.00</div>
-                                            </td>
-                                            <td class="remove">
-                                                <a href="javascript:"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="img"><img src="/themes/{{ $shop_theme }}/img/item-1.jpg"></td>
-                                            <td class="info">
-                                                <div class="name">Item Name 1</div>
-                                                <div class="quantity">x2</div>
-                                                <div class="price">P 600.00</div>
-                                            </td>
-                                            <td class="remove">
-                                                <a href="javascript:"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                            </td>
-                                        </tr> -->
-                                        <tr style="border: 0;">
-                                            <td class="sub-title">Subtotal:</td>
-                                            <td class="sub-price">P 00.00</td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td colspan="2"><button class="btn btn-checkout" type="button" onClick="location.href='/checkout'">Checkout</button></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+	    					<div class="shopping-cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="badge mini-cart-quantity">{{ $global_cart['sale_information']['total_quantity'] }}</span> <span>CART PHP.</span> <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }}</span></div>
+	    				    <div class="container-cart mini-cart">
+                                
                             </div>
                         </div>
 	    			</div>
@@ -231,6 +175,16 @@
             </div>
         </div>
     </footer>
+
+    <!-- Modal -->
+    <div id="shopping_cart" class="modal fade global-modal shopping-cart-modal" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          
+        </div>
+      </div>
+    </div>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>

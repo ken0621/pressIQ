@@ -15,7 +15,7 @@
             <th width="60px" class="text-center"></th>
             <th width="55px" class="text-center"></th>
             <th width="55px" class="text-center"></th>
-            <th width="165px" colspan="3" class="text-center">Non-Reg Time</th>
+            <th width="165px" colspan="3" class="text-center">Non-Reg Day</th>
             <th width="110px" colspan="2" class="text-center">Overtime</th>
             <th width="55px" class="text-center"></th>
 
@@ -29,7 +29,7 @@
             <th class="text-center">Time Out</th>
             <th class="text-center">Activities</th>
             <th class="text-center">Break</th>
-            <th class="text-center">NRM</th>
+            <th class="text-center">REG</th>
             <th class="text-center">Late</th>
             <th class="text-center">R.D</th>
             <th class="text-center">E.D</th>
@@ -49,10 +49,17 @@
     <tbody>
         @foreach($_timesheet as $timesheet)
             @foreach($timesheet->time_record as $key => $time_record)
-            <tr class="time-record {{ $key == 0 ? 'main' : '' }}" date="{{ $timesheet->date }}" total_hours="00:00" total_normal_hours="00:00" total_early_overtime="00:00" total_late_overtime="00:00">
+            <tr class="time-record {{ $key == 0 ? 'main' : '' }}" tid="0" date="{{ $timesheet->date }}" total_hours="00:00" total_normal_hours="00:00" total_early_overtime="00:00" total_late_overtime="00:00">
                 @if($key == 0) <!--MAIN -->
                     <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $timesheet->date }}">
-                    <td class="text-center table-loading"><i class="table-check fa fa-check hidden"></i> <i class="table-loader fa fa-spinner fa-spin fa-fw"></i></td>
+                    <td class="text-center table-loading">
+                        @if($timesheet->payroll_time_sheet_approved == 1)
+                        <i class="table-check fa fa-lock hidden"></i>
+                        @else
+                        <i class="table-check fa fa-check hidden"></i>
+                        @endif
+                        <i class="table-loader fa fa-spinner fa-spin fa-fw"></i>
+                    </td>
                     <td class="text-center edit-data day-number">{{ $timesheet->day_number }}</td>
                     <td class="text-center edit-data day-word">{{ $timesheet->day_word }}</td>
                     <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}"></td>
@@ -91,7 +98,7 @@
                     <td class="text-center edit-data"></td>
                     <td class="text-center edit-data"></td>
                     <td class="text-center edit-data"></td>
-                    <td class="text-center edit-data">REGULAR</td>
+                    <td class="text-center edit-data"></td>
                     <td class="text-center"><span class="button delete-sub-time"><i class="fa fa-close"></i></span></td>
                 @endif
 
@@ -119,7 +126,7 @@
                 <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>
-                <td class="text-center edit-data">REGULAR</td>
+                <td class="text-center edit-data"></td>
                 <td class="text-center"><span class="button delete-sub-time"><i class="fa fa-close"></i></span></td>
             </tr>
         </tfoot>

@@ -9,11 +9,47 @@ function employeelist()
 		// reload_employee_list();
 		// reload_employee_list('separated');
 		filter_change_event();
+		search_type_ahead();
 	}
 
 	function tbl_btn_event()
 	{
 
+	}
+
+	function search_type_ahead()
+	{
+		$(".perdictive").unbind("keypress");
+		$(".perdictive").bind("keypress", function(){
+			var trigger = $(this).data("trigger");
+			var query 	= $(this).val();
+			var element = ".perdictive-active";
+			// console.log(trigger);
+			if(($(this).hasClass('perdictive-separated')))
+			{
+				element = ".perdictive-separated";
+			}
+			$.ajax({
+				url 		: "/member/payroll/employee_list/search_employee_ahead",
+				type 		: "POST",
+				data 		: {
+					_token:misc('_token'),
+					query:query,
+					status:trigger
+				},
+				success 	: 	function(data)
+				{	
+					data = JSON.parse(data);
+					$(element).autocomplete({
+						source : data
+					});
+				},
+				error 		: 	function(err)
+				{
+					console.log(err);
+				}	
+			});
+		});
 	}
 
 	function filter_change_event()

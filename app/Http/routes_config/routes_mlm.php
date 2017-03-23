@@ -4,6 +4,9 @@ Route::post('/mlm/membership_active_code/active/code', 'Mlm\MlmLoginController@m
 Route::get('/mlm/login', 'Mlm\MlmLoginController@index'); //EDWARD GUEVARRA
 Route::post('/mlm/login', 'Mlm\MlmLoginController@post_login'); //EDWARD GUEVARRA
 
+Route::get('/mlm/login/forgot_password','Mlm\MlmLoginController@forgot_password'); //ARCY
+Route::any('/mlm/login/forgot_password/submit','Mlm\MlmLoginController@forgot_password_submit'); //ARCY
+
 Route::get('/mlm/register', 'Mlm\MlmRegisterController@index'); //EDWARD GUEVARRA
 Route::get('/mlm/register/package', 'Mlm\MlmRegisterController@package'); //EDWARD GUEVARRA
 Route::get('/mlm/register/payment', 'Mlm\MlmRegisterController@payment'); //EDWARD GUEVARRA

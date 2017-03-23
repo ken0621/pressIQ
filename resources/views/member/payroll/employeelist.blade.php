@@ -1,5 +1,6 @@
 @extends('member.layout')
 @section('css')
+
 @endsection
 @section('content')
 <div class="panel panel-default panel-block panel-title-block" id="top">
@@ -54,56 +55,66 @@
           </div>
           <div class="col-md-4 pull-right padding-lr-1">
             <small>Search Employee</small>
-            <i class="fa fa-search calendar-icon pos-absolute" aria-hidden="true" style="margin-left:-76px"></i>
-            <input type="search" name="" class="form-control indent-18" placeholder="Search employee here">
-
+            <div class="input-group">
+              <input type="search" name="" data-trigger="active" data-target="#active-employee" class="form-control perdictive perdictive-active width-100" placeholder="Search employee here">
+              <span class="input-group-btn">
+                <button class="btn btn-custom-primary" type="button"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+            
+           
           </div>
         </div>
       </div>
       <div class="form-group">
         <div class="col-md-12" id="active-employee">
-          <table class="table table-condensed table-bordered">
-            <thead>
-              <tr>
-                <th>Employee No</th>
-                <th>Employee Name</th>
-                <th>Employee Company</th>
-                <th>Department</th>
-                <th>Position</th>
-                <th class="text-center">Action</th>
-              </tr>
-            </thead>
-            @foreach($_active as $active)
-            <tr>
-              <td>
-                {{$active->payroll_employee_number}}
-              </td>
-              <td>
-                {{$active->payroll_employee_display_name}}
-              </td>
-              <td>
-                {{$active->payroll_company_name}}
-              </td>
-              <td>
-                {{$active->payroll_department_name}}
-              </td>
-              <td>
-                {{$active->payroll_jobtitle_name}}
-              </td>
-              <td class="text-center">
-                <div class="dropdown">
-                  <button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
-                  <span class="caret"></span></button>
-                  <ul class="dropdown-menu dropdown-menu-custom">
-                    <li>
-                      <a href="#" class="popup" link="/member/payroll/employee_list/modal_employee_view/{{$active->payroll_employee_id}}" size="lg"><i class="fa fa-search"></i>&nbsp;View</a>
-                    </li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-            @endforeach
-          </table>
+          <div class="load-data" target="value-id-1">
+            <div id="value-id-1">
+              <table class="table table-condensed table-bordered">
+                <thead>
+                  <tr>
+                    <th>Employee No</th>
+                    <th>Employee Name</th>
+                    <th>Employee Company</th>
+                    <th>Department</th>
+                    <th>Position</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                @foreach($_active as $active)
+                <tr>
+                  <td>
+                    {{$active->payroll_employee_number}}
+                  </td>
+                  <td>
+                    {{$active->payroll_employee_display_name}}
+                  </td>
+                  <td>
+                    {{$active->payroll_company_name}}
+                  </td>
+                  <td>
+                    {{$active->payroll_department_name}}
+                  </td>
+                  <td>
+                    {{$active->payroll_jobtitle_name}}
+                  </td>
+                  <td class="text-center">
+                    <div class="dropdown">
+                      <button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu dropdown-menu-custom">
+                        <li>
+                          <a href="#" class="popup" link="/member/payroll/employee_list/modal_employee_view/{{$active->payroll_employee_id}}" size="lg"><i class="fa fa-search"></i>&nbsp;View</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+                @endforeach
+              </table>
+              <div class="pagination"> {!! $_active->render() !!} </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -131,59 +142,82 @@
               @endforeach
             </select>
           </div>
+          <div class="col-md-4 pull-right padding-lr-1">
+            <small>Search Employee</small>
+            <div class="input-group">
+              <input type="search" name="" data-trigger="separated" data-target="#separated-employee" class="form-control perdictive perdictive-separated width-100" placeholder="Search employee here">
+              <span class="input-group-btn">
+                <button class="btn btn-custom-primary" type="button"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+            
+           
+          </div>
         </div>
       </div>
       <div class="form-group">
         <div class="col-md-12" id="separated-employee">
-          <table class="table table-condensed table-bordered">
-            <thead>
-              <tr>
-                <th>Employee No</th>
-                <th>Employee Name</th>
-                <th>Employee Company</th>
-                <th>Department</th>
-                <th>Position</th>
-                <th class="text-center">Action</th>
-              </tr>
-            </thead>
-            @foreach($_separated as $separated)
-            <tr>
-              <td>
-                {{$separated->payroll_employee_number}}
-              </td>
-              <td>
-                {{$separated->payroll_employee_display_name}}
-              </td>
-              <td>
-                {{$separated->payroll_company_name}}
-              </td>
-              <td>
-                {{$separated->payroll_department_name}}
-              </td>
-              <td>
-                {{$separated->payroll_jobtitle_name}}
-              </td>
-              <td class="text-center">
-                <div class="dropdown">
-                  <button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
-                  <span class="caret"></span></button>
-                  <ul class="dropdown-menu dropdown-menu-custom">
-                    <li>
-                      <a href="#" class="popup" link="/member/payroll/employee_list/modal_employee_view/{{$separated->payroll_employee_id}}" size="lg"><i class="fa fa-search"></i>&nbsp;View</a>
-                    </li>
-                  </ul>
-                </div>
-              </td>
-            </tr>
-            @endforeach
-          </table>
+          <div class="load-data" target="value-id-2">
+            <div id="value-id-2">
+              <table class="table table-condensed table-bordered">
+                <thead>
+                  <tr>
+                    <th>Employee No</th>
+                    <th>Employee Name</th>
+                    <th>Employee Company</th>
+                    <th>Department</th>
+                    <th>Position</th>
+                    <th class="text-center">Action</th>
+                  </tr>
+                </thead>
+                @foreach($_separated as $separated)
+                <tr>
+                  <td>
+                    {{$separated->payroll_employee_number}}
+                  </td>
+                  <td>
+                    {{$separated->payroll_employee_display_name}}
+                  </td>
+                  <td>
+                    {{$separated->payroll_company_name}}
+                  </td>
+                  <td>
+                    {{$separated->payroll_department_name}}
+                  </td>
+                  <td>
+                    {{$separated->payroll_jobtitle_name}}
+                  </td>
+                  <td class="text-center">
+                    <div class="dropdown">
+                      <button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu dropdown-menu-custom">
+                        <li>
+                          <a href="#" class="popup" link="/member/payroll/employee_list/modal_employee_view/{{$separated->payroll_employee_id}}" size="lg"><i class="fa fa-search"></i>&nbsp;View</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </td>
+                </tr>
+                @endforeach
+              </table>
+              <div class="pagination"> {!! $_separated->render() !!} </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    
+    </div>    
   </div>
 </div>
 @endsection
 @section('script')
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script> -->
 <script type="text/javascript" src="/assets/member/js/payroll/employeelist.js"></script>
+<script type="text/javascript">
+  function loading_done_paginate (data)
+  {
+    console.log(data);
+  }
+</script>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 @endsection

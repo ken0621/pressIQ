@@ -114,6 +114,7 @@ class Cart
         $total_shipping        = 0;
         $total_coupon_discount = 0;
         $total_overall_price   = 0;
+        $total_quantity        = 0;
 
         /* CHECK IF COUPON ALREADY USED */
         if(isset($data["applied_coupon_id"]))
@@ -180,7 +181,8 @@ class Cart
                 $data["cart"][$key]["cart_product_information"]["product_discounted_remark"]      = isset($item_discounted_remark) ? $item_discounted_remark : null;
                 $data["cart"][$key]["cart_product_information"]["product_current_price"]          = $current_price;
 
-                $total_product_price = $total_product_price + $current_price;
+                $total_product_price = $total_product_price + ($current_price * $info['quantity']);
+                $total_quantity += $info['quantity'];
             }
         }        
 
@@ -188,7 +190,8 @@ class Cart
         $data["sale_information"]                                      = null;
         $data["sale_information"]["total_product_price"]               = $total_product_price;  
         $data["sale_information"]["total_shipping"]                    = $total_shipping;
-        
+        $data["sale_information"]["total_quantity"]                    = $total_quantity;
+        $data["sale_information"]["minimum_purchase"]                  = "500";
 
         /* APPLY COUPON DISCOUNT */
         if(isset($data["applied_coupon_id"]))
@@ -222,7 +225,7 @@ class Cart
         return $data;
     }
 
-    public static function update_cart($quantity, $shop_id = null)
+    public static function update_cart($variant_id, $quantity, $shop_id = null)
     {
         //get_shop_info
         if (!$shop_id) 
@@ -235,7 +238,10 @@ class Cart
         $insert                  = Session::get($unique_id);
         foreach ($insert['cart'] as $key => $value) 
         {
-            $insert['cart'][$key]["quantity"] = $quantity;
+            if($value['product_id'] == $variant_id)
+            {
+                $insert['cart'][$key]["quantity"] = $quantity;
+            }
         }
        
         Session::put($unique_id,$insert);

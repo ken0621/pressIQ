@@ -22,8 +22,8 @@
         <div class="form-group">
             <div class="col-md-6">
                 <label>Source *</label>
-                <select name="reason_refill" class="form-control input-sm">
-                    <option value="vendor">Vendor</option>
+                <select name="reason_refill" class="form-control droplist-vendor input-sm">
+                    @include('member.load_ajax_data.load_vendor')
                     <option value="other">Others</option>
                 </select>
             </div>
@@ -113,4 +113,12 @@
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <!-- <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script> -->
 <!-- <script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script> -->
+<script type="text/javascript">
+    
+$('.droplist-vendor').globalDropList(
+{ 
+    width : "100%",
+    link : "/member/vendor/add"
+});
+</script>
 <script type="text/javascript" src="/assets/member/js/warehouse.js"></script>

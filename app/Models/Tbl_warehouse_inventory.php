@@ -16,7 +16,8 @@ class Tbl_warehouse_inventory extends Model
     }
     public function scopeItem($query)
     {
-    	return $query->join("tbl_item","tbl_item.item_id","=","inventory_item_id");
+    	return $query->join("tbl_item","tbl_item.item_id","=","inventory_item_id")
+                     ->leftjoin("tbl_unit_measurement_multi","tbl_item.item_measurement_id","=","tbl_unit_measurement_multi.multi_um_id");
     }
     public function scopeWarehouse($query)
     {

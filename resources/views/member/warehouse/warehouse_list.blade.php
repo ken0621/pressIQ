@@ -73,6 +73,7 @@
                                             @endif
                                         @endif
                                         <li><a size="lg" link="/member/item/warehouse/refill?warehouse_id={{$warehouse->warehouse_id}}" href="javascript:" class="popup">Refill  Warehouse</a></li>
+                                        <li><a href="/member/item/warehouse/refill_log/{{$warehouse->warehouse_id}}">Refill Logs</a></li>
                                         <li><a href="javascript:" class="popup" link="/member/item/warehouse/edit/{{$warehouse->warehouse_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit</a></li>
                                         <li><a link="/member/item/warehouse/archived/{{$warehouse->warehouse_id}}" href="javascript:" class="popup">Archived</a></li>
                                       </ul>

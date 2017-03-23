@@ -309,7 +309,9 @@ Route::any('/member/item/add_serial_number_submit','Member\WarehouseController@a
 
 Route::any('/member/item/confirm_serial','Member\WarehouseController@confirm_serial');
 Route::any('/member/item/confirm_serial_submit','Member\WarehouseController@confirm_serial_submit');
-
+Route::any('/member/item/warehouse/refill_log/{id}','Member\WarehouseController@refill_log');
+Route::any('/member/item/warehouse/view_pdf/{id}','Member\WarehouseController@view_pdf');
+Route::any('/member/item/warehouse/stock_input_report/{id}','Member\WarehouseController@stock_input');
 /* END WAREHOUSE ARCY*/
 
 /* START PIS ARCY*/

@@ -506,7 +506,6 @@ Route::any('/member/maintenance/payment_method/archived/{id}/{action}','Member\M
 Route::any('/member/maintenance/payment_method/archived_submit','Member\MaintenancePaymentMethodController@archived_submit');
 Route::any('/member/maintenance/payment_method/update','Member\MaintenancePaymentMethodController@update_default');
 
-
 Route::any('/member/maintenance/email_content','Member\EmailContentController@index');
 Route::any('/member/maintenance/email_content/add','Member\EmailContentController@add');
 Route::any('/member/maintenance/email_content/add_submit','Member\EmailContentController@add_submit');
@@ -702,6 +701,9 @@ Route::controller('/member/vendor', 'Member\VendorController');
 /* End */
 /* ONLINE PAYMENT METHOD */
 Route::controller('/member/maintenance/online_payment', 'Member\OnlinePaymentMethodController');
+/* End */
+/* ONLINE PAYMENT METHOD */
+Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* End */
 
 

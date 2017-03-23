@@ -7,6 +7,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_email_content;
 use App\Models\Tbl_email_template;
 use Carbon\Carbon;
+
 class Seed
 {
     public static function auto_seed()

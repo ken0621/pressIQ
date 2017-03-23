@@ -296,7 +296,7 @@
 
 						    img
 						    {
-						    	max-width: 100%
+						    	min-width: 100%
 						    }
 
 						    .first-image
@@ -438,6 +438,11 @@
 			    position: relative;
 			    padding-bottom: 25%;
 			    overflow: hidden;
+
+			    img
+			    {
+			    	max-width: 100%;
+			    }
 
 			    .first-image
 			    {

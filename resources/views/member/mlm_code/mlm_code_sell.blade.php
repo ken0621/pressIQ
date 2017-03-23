@@ -161,9 +161,9 @@
 									<option value="0">NO</option>
 								</select>
 							</div>
-							<div class="form-group col-md-3">
+							<div class="form-group col-md-3 hide">
 								<label for="basic-input">Warehouse (Inventory)</label>
-								<select class="form-control" name="warehouse_id">
+								<select class="form-control hide" name="warehouse_id">
 									@foreach($warehouse as $key => $value)
 									<option value="{{$value->warehouse_id}}">{{$value->warehouse_name}}</option>
 									@endforeach

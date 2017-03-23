@@ -13,7 +13,7 @@ use App\Globals\Ecom_Product;
 use DB;
 use Session;
 use Carbon\Carbon;
-
+use App\Globals\Mlm_discount;
 class Cart
 {
     public static function get_shop_info()
@@ -170,11 +170,36 @@ class Cart
                             $item_discounted       = "percentage";
                             $item_discounted_value = $item->item_price * ($check_discount->item_discount_value);
                         }
-
                         $item_discounted_remark    = $check_discount->item_discount_remark;
                     }
                 }
+                if(Session::get('mlm_member') != null)
+                {
+                    $session = Session::get('mlm_member');
+                    if($session['slot_now'])
+                    {
+                        $discount_membership = Mlm_discount::get_discount_single($session['slot_now']->shop_id, $item->item_id, $session['slot_now']->slot_membership);
+                    // dd($discount_membership);
+                        if(isset($item_discounted))
+                        {
+                            $discount_a =  $item_discounted_value;
+                        }
+                        else
+                        {
+                            $discount_a = $item->item_price;
+                        }
 
+                        if($discount_membership['type'] == 0)
+                        {
+                            $item_discounted_value = $discount_membership['value']; 
+                        }
+                        else
+                        {
+                            $item_discounted_value =   $discount_a *   ($discount_membership['value']/100); 
+                        }
+                    }
+                }
+                //u s 2  q n a  m a m a t a y i h h h h
                 $current_price                                                                    = $item->evariant_price - $item_discounted_value;
                 $data["cart"][$key]["cart_product_information"]["product_discounted"]             = isset($item_discounted) ? $item_discounted : null;
                 $data["cart"][$key]["cart_product_information"]["product_discounted_value"]       = isset($item_discounted_value) ? $item_discounted_value : null;

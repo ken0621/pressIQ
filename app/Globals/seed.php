@@ -984,6 +984,11 @@ class Seed
         $insert[4]['method_code_name']  = "bpi";
         $insert[4]['method_gateway_accepted']  = "1,2,3,4,5";
 
+        $insert[5]['method_id']         = 6; 
+        $insert[5]['method_name']       = "E-Wallet";
+        $insert[5]['method_code_name']  = "e-wallet";
+        $insert[5]['method_gateway_accepted']  = "";
+
         DB::table('tbl_online_pymnt_method')->insert($insert);
     }
 

@@ -12,7 +12,9 @@ use App\Globals\Customer;
 use App\Globals\Ec_order;
 use Validator;
 use Carbon\Carbon;
-
+use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Globals\Mlm_slot_log;
+// use App\Globals\Mlm_slot_log;    
 class ShopCheckoutController extends Shop
 {
     public function index()
@@ -70,6 +72,9 @@ class ShopCheckoutController extends Shop
             // Date (Array)
             $invline_service_date = [];
             // Restructure Cart
+
+            // Get sum
+            $sum = 0;
             foreach ($get_cart['cart'] as $key => $value) 
             {
                 array_push($invline_item_id, $value["product_id"]);
@@ -79,7 +84,10 @@ class ShopCheckoutController extends Shop
                 array_push($invline_discount_remark, "");
                 array_push($invline_description, "");
                 array_push($invline_service_date, date('Y-m-d H:i:s'));
+                $add_sum = ($value["cart_product_information"]["product_price"]- $value["cart_product_information"]["product_discounted_value"]) * $value["quantity"];
+                $sum += $add_sum;
             }
+            // dd($add_sum);
             $cart["invline_item_id"] = $invline_item_id;
             $cart["invline_discount"] = $invline_discount;
             $cart["invline_rate"] = $invline_rate;
@@ -101,13 +109,59 @@ class ShopCheckoutController extends Shop
             $cart["payment_method_id"] = Request::input("payment_method_id");
             $cart["taxable"] = Request::input("taxable");
             $cart["shop_id"] = $this->shop_info->shop_id;
-
+            
+            if($cart["payment_method_id"] == 6)
+            {
+                if(Self::$slot_now != null)
+                {
+                    $check_wallet = $this->check_wallet(Self::$slot_now);
+                    if($check_wallet >= $sum )
+                    {
+                        // return $check_wallet;
+                        $log = 'Thank you for purchasing. ' .$sum. ' is deducted to your wallet';
+                        $arry_log['wallet_log_slot'] = Self::$slot_now->slot_id;
+                        $arry_log['shop_id'] = Self::$slot_now->shop_id;
+                        $arry_log['wallet_log_slot_sponsor'] = Self::$slot_now->slot_id;
+                        $arry_log['wallet_log_details'] = $log;
+                        $arry_log['wallet_log_amount'] = $sum * (-1);
+                        $arry_log['wallet_log_plan'] = "REPURCHASE";
+                        $arry_log['wallet_log_status'] = "released";   
+                        $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                        Mlm_slot_log::slot_array($arry_log);
+                    }
+                    else
+                    {
+                        $send['errors'][0] = "Your wallet only have, " . number_format($check_wallet) . ' where the needed amount is ' . number_format($sum) ;
+                        return Redirect::back()
+                            ->withErrors($send)
+                            ->withInput();
+                    }
+                    // dd($sum);
+                }
+                else
+                {
+                    $send['errors'][0] = "Only members with slot can use the wallet option.";
+                    return Redirect::back()
+                        ->withErrors($send)
+                        ->withInput();
+                }
+            }
             $result = Ec_order::create_ec_order_automatic($cart);
 
+            if($cart["payment_method_id"] == 6)
+            {
+
+            }
             Cart::clear_all($this->shop_info->shop_id);
             
             return Redirect::to("/order_placed");
         }
+    }
+    public function check_wallet($slot_now)
+    {
+        $slot_id = $slot_now->slot_id;
+        $sum_wallet = Mlm_slot_log::get_sum_wallet($slot_id);
+        return $sum_wallet;
     }
     public function order_placed()
     {

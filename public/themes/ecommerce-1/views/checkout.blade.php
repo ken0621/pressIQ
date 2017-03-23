@@ -57,6 +57,15 @@
 															<img class="img-responsive" src="/themes/{{ $shop_theme }}/img/paypal.png">
 														</td>
 													</tr>
+												@elseif($payment_method->method_name == "E-Wallet")
+													@if($slot_now != null)
+													<tr>
+														<td class="ray"><input name="payment_method_id" value="{{ $payment_method->method_id }}" type="radio"></td>
+														<td>
+															<div class="name">{{ $payment_method->method_name }}</div>
+														</td>
+													</tr>
+													@endif
 												@else
 													<tr>
 														<td class="ray"><input name="payment_method_id" value="{{ $payment_method->method_id }}" type="radio"></td>

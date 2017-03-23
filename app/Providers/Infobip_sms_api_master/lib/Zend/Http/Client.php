@@ -1,5 +1,7 @@
 <?php
+namespace App\Providers\Infobip_sms_api_master\lib\Zend\Http;
 
+use App\Providers\Infobip_sms_api_master\lib\Zend\Zend_Uri;
 /**
  * Zend Framework
  *

@@ -1,4 +1,6 @@
 <?php
+namespace App\Providers\Infobip_sms_api_master\lib\Zend;
+
 /**
  * Zend Framework
  *
@@ -93,4 +95,8 @@ class Zend_Exception extends Exception
     {
         return $this->_previous;
     }
+}
+class Exception
+{
+    
 }

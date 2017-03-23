@@ -1,4 +1,7 @@
 <?php
+namespace App\Providers\Infobip_sms_api_master;
+
+use App\Providers\Infobip_sms_api_master\lib\Zend\Http\Zend_Http_Client;
 
 /**
  *
@@ -26,14 +29,14 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  *
-  /**
+/**
  * @author      Boorgeon <boorgeon@gmail.com>
  * @author      Serge NTONG <sergentong@gmail.com>
  * @copyright   Copyright (c) 2013, Boorgeon.
  * @license     http://opensource.org/licenses/gpl-license.php GNU Public License
  * @category	Libraries
  * @version   1.0
- */
+*/
 
 set_include_path(implode(PATH_SEPARATOR, array(
     realpath(dirname(__FILE__)) . '/lib',
@@ -43,14 +46,14 @@ set_include_path(implode(PATH_SEPARATOR, array(
 /**
  * Zend_Http_Client
  */
-require_once 'Zend/Http/Client.php';
+require_once 'lib/Zend/Http/Client.php';
 
 /**
  * Infobip_sms_message
  */
 require_once 'Infobip_sms_message.php';
 
-class Infobip_sms_api {
+class Infobip_sms_api{
 
     /**
      * HTTP method responses.

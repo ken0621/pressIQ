@@ -1,4 +1,5 @@
 <?php
+namespace App\Providers\Infobip_sms_api_master;
 
 /**
  *
@@ -657,5 +658,10 @@ class Infobip_sms_message {
 
         return $this;
     }
+
+}
+
+class stdClass
+{
 
 }

@@ -826,15 +826,21 @@ class ItemController extends Member
 				$insert["multiprice_item_id"] = $item_id;
 				$insert["multiprice_qty"]	  = $qty;
 				$insert["multiprice_price"]	  = Request::input('multiprice_price')[$key];
+				$insert["date_created"]		  = Carbon::now();
 
 				Tbl_item_multiple_price::insert($insert);
 			}
 		}
 
-		$json["status"] 	= "success";
-		$json["type"] 		= "multiple_price";
-		$json["message"]	= "Success";
+		$json["response_status"] 	= "success";
+		$json["type"] 				= "multiple_price";
+		$json["message"]			= "Success ";
 		return json_encode($json);
+	}
+
+	public function get_item_new_price($item_id, $qty)
+	{
+		return Tbl_item::newPrice($qty)->where("item_id", $item_id)->pluck("new_price");
 	}
 
 	public function insert_session()

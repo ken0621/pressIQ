@@ -148,16 +148,14 @@ class Category
 	{
 		$html = '';
 		$_category = Tbl_category::selecthierarchy($shop_id, $parent, array("all","service","inventory","non-inventory"), $archived)->orderBy('type_name','asc')->get();
-
 		foreach($_category as $key => $cat)
 		{
 			$class = '';
-			// $child = 'header"';
 			$child = '';
+
 			if($cat->type_parent_id != 0)
 			{
 				$class = 'tr-sub-'.$cat->type_parent_id.' tr-parent-'.$parent.' ';
-				// $child = 'child"';
 			}
 			$class .= $child;
 
@@ -168,8 +166,8 @@ class Category
 				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$cat->type_id.'"></i>';
 			}
 
-			$data['class'] = $class;
-			$data['cat'] = $cat;
+			$data['class'] 	= $class;
+			$data['cat'] 	= $cat;
 			$data['margin_left'] = 'style="margin-left:'.$margin_left.'px"';
 			$data['category'] = $caret.$cat->type_name;
 

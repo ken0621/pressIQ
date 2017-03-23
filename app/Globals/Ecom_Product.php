@@ -119,7 +119,7 @@ class Ecom_Product
 				foreach($_product[$key1]["variant"] as $key2=>$variant)
 				{
 					$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
-					$_product[$key1]["variant"]["$key2"]["image"] = Tbl_ec_variant_image::where("eimg_variant_id", $variant["evariant_id"])->get()->toArray();
+					$_product[$key1]["variant"][$key2]["image"] = Tbl_ec_variant_image::where("eimg_variant_id", $variant["evariant_id"])->get()->toArray();
 
 					foreach($variant_option_name as $key3=>$option_name)
 					{

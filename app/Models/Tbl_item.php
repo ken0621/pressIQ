@@ -69,4 +69,22 @@ class Tbl_item extends Model
                      ->groupBy("item_id");
     }
 
+    public function scopeNewPrice($query, $qty)
+    {
+        return $query->selectRaw("*, IFNULL(multiprice_price, item_price) as new_price")
+                     ->leftJoin("tbl_item_multiple_price", function($on) use($qty)
+                     {
+                        $on->on("multiprice_item_id","=","item_id");
+                        $on->on("multiprice_qty","=",DB::raw("(Select max(multiprice_qty) from tbl_item_multiple_price where multiprice_qty <= $qty and tbl_item.item_id = multiprice_item_id group by multiprice_item_id)"));
+                     });                  
+    }
+
+    public function scopeMultiPrice($query)
+    {
+        return $query->select("multiprice_qty","multiprice_price")
+                     ->join("tbl_item_multiple_price","multiprice_item_id","=","item_id");
+    }
+
+    // public function scope
+
 }

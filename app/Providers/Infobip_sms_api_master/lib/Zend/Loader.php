@@ -1,4 +1,7 @@
 <?php
+namespace App\Providers\Infobip_sms_api_master\lib\Zend;
+
+use App\Providers\Infobip_sms_api_master\lib\Zend\Zend_Exception;
 /**
  * Zend Framework
  *

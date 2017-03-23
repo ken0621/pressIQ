@@ -188,38 +188,38 @@
 										<div class="form-group">
 											<div class="col-md-4">
 												<div class="radio">
-													<label><input type="radio" name="">Base on Salary</label>
+													<label><input class="late-category-change" type="radio" value="Base on Salary" name="payroll_late_category">Base on Salary</label>
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="radio">
-													<label><input type="radio" name="">Custom</label>
+													<label><input class="late-category-change" type="radio" value="Custom" name="payroll_late_category">Custom</label>
 												</div>
 											</div>
 											<div class="col-md-4">
 												<div class="radio">
-													<label><input type="radio" name="">Not Deducted</label>
+													<label><input class="late-category-change" type="radio" name="payroll_late_category" value="Not Deducted" checked>Not Deducted</label>
 												</div>
 											</div>
 										</div>
-										<div class="form-group">
+										<div class="form-group display-none late-custom-form">
 											<div class="col-md-6">
-												<small>Every</small>
+												<small>Late parameter</small>
 												<div class="input-group">
-													<input type="number" name="" class="form-control">
+													<input type="number" name="payroll_late_interval" class="form-control late-param-change late-param-number text-right">
 													<span class="input-group-btn" style="width: 100px">
-														<select class="form-control">
-															<option value="">Second</option>
-															<option value="">Minute</option>
-															<option value="">Hour</option>
+														<select class="form-control late-param-change late-param-select" name="payroll_late_parameter">
+															<option value="Second">Second</option>
+															<option value="Minute">Minute</option>
+															<option value="Hour">Hour</option>
 														</select>
 													</span>
 												</div>
 
 											</div>
 											<div class="col-md-6">
-												<small>Deduction for every (<span class="">0</span>)</small>
-												<input type="number" name="" class="form-control text-right">
+												<small>Deduction for every (<span class="late-label-param">0</span>)</small>
+												<input type="number" name="payroll_late_deduction" class="form-control text-right">
 											</div>
 										</div>
 									</div>
@@ -304,7 +304,6 @@
 						<div class="form-horizontal">
 							<div class="form-group">
 								<div class="col-md-8 form-horizontal">
-									
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="checkbox">
@@ -333,15 +332,15 @@
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="checkbox">
-												<label><input type="checkbox" name="is_flexi_break" value="1">Flexible Break</label>
+												<label><input type="checkbox" name="payroll_group_is_flexi_break" class="payroll_group_is_flexi_break" value="1">Flexible Break</label>
 											</div>
 										</div>
 									</div>
 									<div class="form-group">
 										<div class="col-md-12">
-											<table class="table table-bordered table-condensed timesheet">
+											<table class="table table-bordered table-condensed timesheet tbl-schedule-break">
 												<tr>
-													<td colspan="2" class="text-center">Schedule</td>
+													<td colspan="2" class="text-center">Break Schedule</td>
 												</tr>
 												<tr>
 													<td class="text-center" width="50%">Break Start</td>
@@ -349,11 +348,11 @@
 												</tr>
 												<tr class="editable">
 													<td class="text-center editable">
-														<input type="text" name="payroll_group_start" class="text-table time-entry" >
+														<input type="text" name="payroll_group_break_start" class="text-table time-entry" >
 
 													</td>
 													<td class="text-center editable">
-														<input type="text" name="payroll_group_end" class="text-table time-entry">
+														<input type="text" name="payroll_group_break_end" class="text-table time-entry">
 													</td>
 												</tr>
 											</table>
@@ -364,16 +363,16 @@
 											<small>Grace Time Period (minutes)</small>
 											<input type="number" name="payroll_group_grace_time" class="form-control text-center">
 										</div>
-										<div class="col-md-6">
+										<div class="col-md-6 display-none flexi-break-container">
 											<small>Flexi Break (minutes)</small>
-											<input type="number" name="payroll_group_break" class="form-control text-center">
+											<input type="number" name="payroll_group_flexi_break" class="form-control text-center">
 										</div>
 									</div>
 									<div class="form-group">
 										<div class="col-md-12">
 											<table class="table table-bordered table-condensed timesheet">
 												<tr>
-													<td colspan="2" class="text-center">Schedule</td>
+													<td colspan="2" class="text-center">Work Schedule</td>
 												</tr>
 												<tr>
 													<td class="text-center" width="50%">Work Start</td>
@@ -464,4 +463,60 @@
 	});
 	$(".time-entry").timeEntry('destroy');
 	$(".time-entry").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+	late_categoy_change_event();
+	late_param_change();
+	function late_categoy_change_event()
+	{
+		$(".late-category-change").unbind("change");
+		$(".late-category-change").bind("change", function()
+		{
+			if($(this).val() == "Custom")
+			{
+				if($(".late-custom-form").hasClass('display-none'))
+				{
+					$(".late-custom-form").removeClass("display-none");
+				}
+			}
+			else
+			{
+				if(!$(".late-custom-form").hasClass('display-none'))
+				{
+					$(".late-custom-form").addClass("display-none");
+				}
+			}
+		});
+
+		$(".payroll_group_is_flexi_break").unbind("change");
+		$(".payroll_group_is_flexi_break").bind("change", function(){
+
+			if($(this).is(":checked"))
+			{
+				$(".tbl-schedule-break").addClass("display-none");
+				$(".flexi-break-container").removeClass("display-none");
+			}
+			else
+			{
+				$(".tbl-schedule-break").removeClass("display-none");
+				$(".flexi-break-container").addClass("display-none");
+			}
+		});
+
+		$(".late-param-change").unbind("change");
+		$(".late-param-change").bind("change", function()
+		{
+			late_param_change();
+		});
+
+	}
+
+	function late_param_change()
+	{
+		var number = $('.late-param-number').val();
+		var select = $('.late-param-select').val();
+		if(number == null || number == '')
+		{
+			number = 0
+		}
+		$('.late-label-param').html(number + ' ' + select);
+	}
 </script>

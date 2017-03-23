@@ -2916,8 +2916,18 @@ class PayrollController extends Member
 		$insert['payroll_group_agency'] 				= Request::input('payroll_group_agency');
 		$insert['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
 		$insert['payroll_group_grace_time'] 			= Request::input('payroll_group_grace_time');
-		$insert['payroll_group_break']					= Request::input('payroll_group_break');
 		$insert['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
+		$insert['payroll_late_category'] 				= Request::input('payroll_late_category');
+		$insert['payroll_late_interval'] 				= Request::input('payroll_late_interval');
+		$insert['payroll_late_parameter'] 				= Request::input('payroll_late_parameter');
+		$insert['payroll_late_deduction'] 				= Request::input('payroll_late_deduction');
+		if(Request::has('payroll_group_is_flexi_break'))
+		{
+			$insert['payroll_group_is_flexi_break'] 	= Request::input('payroll_group_is_flexi_break');
+		}
+		$insert['payroll_group_break_start'] 			= date('H:i:s',strtotime(Request::input('payroll_group_break_start')));
+		$insert['payroll_group_break_end'] 				= date('H:i:s',strtotime(Request::input('payroll_group_break_end')));
+		$insert['payroll_group_flexi_break'] 			= Request::input('payroll_group_flexi_break');
 		
 		if(Request::has('payroll_group_is_flexi_time'))
 		{
@@ -2930,8 +2940,8 @@ class PayrollController extends Member
 			$insert['payroll_group_target_hour_parameter'] 	= Request::input('payroll_group_target_hour_parameter');
 		}
 		$insert['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
-		$insert['payroll_group_start'] 					= Request::input('payroll_group_start');
-		$insert['payroll_group_end'] 					= Request::input('payroll_group_end');
+		$insert['payroll_group_start'] 					= date('H:i:s',strtotime(Request::input('payroll_group_start')));
+		$insert['payroll_group_end'] 					= date('H:i:s',strtotime(Request::input('payroll_group_end')));
 
 		// dd($insert);
 		/* INSERT PAYROLL GROUP AND GET ID */ 
@@ -3040,7 +3050,7 @@ class PayrollController extends Member
 		$update['payroll_group_13month_basis'] 			= Request::input('payroll_group_13month_basis');
 
 		$update['payroll_group_grace_time'] 			= Request::input('payroll_group_grace_time');
-		$update['payroll_group_break']					= Request::input('payroll_group_break');
+		// $update['payroll_group_break']					= Request::input('payroll_group_break');
 		$update['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
 		
 		$payroll_group_deduct_before_absences 			= 0;
@@ -3056,6 +3066,18 @@ class PayrollController extends Member
 		$update['payroll_group_pagibig'] 				= Request::input('payroll_group_pagibig');
 		$update['payroll_group_agency'] 				= Request::input('payroll_group_agency');
 		$update['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
+
+		$payroll_group_is_flexi_break 					= 0;
+		if(Request::has('payroll_group_is_flexi_break'))
+		{
+			$payroll_group_is_flexi_break 				= Request::input('payroll_group_is_flexi_break');
+		}
+		$update['payroll_group_is_flexi_break'] 		= $payroll_group_is_flexi_break;
+		$update['payroll_group_flexi_break'] 			= Request::input('payroll_group_flexi_break');
+		$update['payroll_late_category'] 				= Request::input('payroll_late_category');
+		$update['payroll_late_interval'] 				= Request::input('payroll_late_interval');
+		$update['payroll_late_parameter'] 				= Request::input('payroll_late_parameter');
+		$update['payroll_late_deduction'] 				= Request::input('payroll_late_deduction');
 		
 		$payroll_group_is_flexi_time					= 0;
 		if(Request::has('payroll_group_is_flexi_time'))
@@ -3066,16 +3088,21 @@ class PayrollController extends Member
 		$update['payroll_group_is_flexi_time'] 			= $payroll_group_is_flexi_time;
 		$update['payroll_group_working_day_month'] 		= Request::input('payroll_group_working_day_month');
 
-		$payroll_group_target_hour_parameter = 0;
-		if(Request::has('payroll_group_target_hour_parameter'))
+		$payroll_group_is_flexi_break = 0;
+		if(Request::has('payroll_group_is_flexi_break'))
 		{
-			$payroll_group_target_hour_parameter		= Request::input('payroll_group_target_hour_parameter');
+			$payroll_group_is_flexi_break		= Request::input('payroll_group_is_flexi_break');
 		}
-
-		$update['payroll_group_target_hour_parameter'] 	= $payroll_group_target_hour_parameter;
+		$payroll_group_is_flexi_break = 0;
+		$update['payroll_group_break_start'] 			= date('H:i:s', strtotime(Request::input('payroll_group_break_start')));
+		$update['payroll_group_break_end'] 				= date('H:i:s', strtotime(Request::input('payroll_group_break_end')));
+		$update['payroll_group_flexi_break']			= Request::input('payroll_group_flexi_break');
+		$update['payroll_group_is_flexi_break']			= $payroll_group_is_flexi_break;
+		$update['payroll_group_target_hour_parameter'] 	= Request::input('payroll_group_target_hour_parameter');;
 		$update['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
-		$update['payroll_group_start'] 					= Request::input('payroll_group_start');
-		$update['payroll_group_end'] 					= Request::input('payroll_group_end');
+		$update['payroll_group_start'] 					= date('H:i:s',strtotime(Request::input('payroll_group_start')));
+		$update['payroll_group_end'] 					= date('H:i:s',strtotime(Request::input('payroll_group_end')));
+		// dd($update);
 
 		/* UPDATE PAYROLL GROUP*/ 
 		Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->update($update);
@@ -3098,8 +3125,8 @@ class PayrollController extends Member
 		/* INSERT PAYROLL OVERTIME NIGHT DIFFERENTIALS REST DAY HOLIDAY */
 		Tbl_payroll_overtime_rate::insert($insert_rate);
 
-		$restday 										= array();
-		$extraday 										= array();
+		$_restday 										= array();
+		$_extraday 										= array();
 		if(Request::has('restday'))
 		{
 			$_restday 									= Request::input('restday');

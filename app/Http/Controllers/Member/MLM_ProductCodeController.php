@@ -68,7 +68,8 @@ class MLM_ProductCodeController extends Member
 	    $data["_customer"]  = Tbl_customer::where("archived",0)->where("shop_id",$shop_id)->get();
 	    $data['table_body'] = $this->view_all_lines();
         // dd(1);
-        $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get();
+        // $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get();
+        $data['warehouse'][0] = $this->current_warehouse;
         return view('member.mlm_product_code.mlm_product_code_sell', $data);
     }
 

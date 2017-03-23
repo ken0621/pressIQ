@@ -6,12 +6,12 @@
 	<div class="container">
 		<div class="row clearfix">
 			<div class="col-md-6 image-holder">
-				<img src="/themes/{{ $shop_theme }}/img/about-us-image.png">
+				<img src="{{ get_content($shop_theme_info, "about", "about_company_image", "/themes/". $shop_theme ."/img/about-us-image.png") }}">
 			</div>
 			<div class="col-md-6 content-holder">
-				<div class="content-title">WELCOME TO<span id="tech"> TECH</span>SIDE<span id="electronics"> ELECTRONICS</span></div>
-				<div class="content-sub">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.</div>
-				<div class="content-sub">Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.</div>
+				<div class="content-title">{{ get_content($shop_theme_info, "about", "about_welcome_title", "WELCOME TO") }}<span id="tech"> {{ get_content($shop_theme_info, "about", "about_company_name_1", "TECH") }}</span>{{ get_content($shop_theme_info, "about", "about_company_name_2", "SIDE") }}<span id="electronics"> {{ get_content($shop_theme_info, "about", "about_company_name_3", "ELECTRONICS") }}</span></div>
+				<div class="content-sub">{{ get_content($shop_theme_info, "about", "about_company_description_1", "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.") }}</div>
+				<div class="content-sub">{{ get_content($shop_theme_info, "about", "about_company_description_2", "Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.") }}</div>
 			</div>
 		</div>
 	</div>

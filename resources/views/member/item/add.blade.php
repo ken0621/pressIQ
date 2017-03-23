@@ -112,9 +112,7 @@
                                 <div class="col-md-1">
                                     per <span class="abbreviation"></span>
                                 </div>
-                                <div class="col-md-3">
-                                    <a href="javascript:" class="btn btn-custom-white btn-sm popup" link="/member/item/mulitple_price_modal">More Price</a>
-                                </div>
+                                
                             </div>
                         </div>                 
                         <div class="col-md-6">

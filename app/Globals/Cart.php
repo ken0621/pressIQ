@@ -160,22 +160,23 @@ class Cart
                 {
                     if(strtotime($check_discount->item_discount_date_start) <= strtotime($date_now) && strtotime($check_discount->item_discount_date_end) >= strtotime($date_now))
                     {
-                        if($check_discount->item_discount_type == "fixed")
-                        {
-                            $item_discounted       = "fixed";
-                            $item_discounted_value = $check_discount->item_discount_value;
-                        }
-                        else if($check_discount->item_discount_type == "percentage")
-                        {
-                            $item_discounted       = "percentage";
-                            $item_discounted_value = $item->item_price * ($check_discount->item_discount_value);
-                        }
+                        $current_price = $check_discount->item_discount_value;
+                        // if($check_discount->item_discount_type == "fixed")
+                        // {
+                        //     $item_discounted       = "fixed";
+                        //     $item_discounted_value = $check_discount->item_discount_value;
+                        // }
+                        // else if($check_discount->item_discount_type == "percentage")
+                        // {
+                        //     $item_discounted       = "percentage";
+                        //     $item_discounted_value = $item->item_price * ($check_discount->item_discount_value);
+                        // }
 
                         $item_discounted_remark    = $check_discount->item_discount_remark;
                     }
                 }
 
-                $current_price                                                                    = $item->evariant_price - $item_discounted_value;
+                //$current_price                                                                    = $item->evariant_price - $item_discounted_value;
                 $data["cart"][$key]["cart_product_information"]["product_discounted"]             = isset($item_discounted) ? $item_discounted : null;
                 $data["cart"][$key]["cart_product_information"]["product_discounted_value"]       = isset($item_discounted_value) ? $item_discounted_value : null;
                 $data["cart"][$key]["cart_product_information"]["product_discounted_remark"]      = isset($item_discounted_remark) ? $item_discounted_remark : null;

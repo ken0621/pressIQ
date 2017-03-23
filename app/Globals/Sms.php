@@ -1,5 +1,9 @@
 <?php
 namespace App\Globals;
+
+use App\Providers\Infobip_sms_api_master\Infobip_sms_api;
+use App\Providers\Infobip_sms_api_master\Infobip_sms_message;
+
 use DB;
 use Log;
 use Request;
@@ -15,34 +19,56 @@ use Carbon\carbon;
  * @author Bryan Kier Aradanas
  */
 
+class bakit
+{
+
+}
 class Sms
 {
-	public static function Send($recipient, $content)
+	public static function SingleText($recipient, $content)
 	{
-		File::requireOnce('assets/libraries/Infobip_sms_api-master/Infobip_sms_api.php');
+		if(is_array($recipient))
+		{
+			$_recipient = "";
+			foreach($recipient as $key=>$number)
+			{
+				$key == 0 ? $_recipient .= "\"$number\"" : $_recipient .= ",\"$number\"" ;
+			}
+			$recipient = "[$_recipient]";
+		}
+		else
+		{
+			$recipient = "\"$recipient\"";
+		}
 
-		$infobip = new Infobip_sms_api();
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "http://api.infobip.com/sms/1/text/single",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "POST",
+			CURLOPT_POSTFIELDS => "{ \"from\":\"PhilTECH\", \"to\":$recipient, \"text\":\"$content.\" }",
+			CURLOPT_HTTPHEADER => array(
+				"accept: application/json",
+				"authorization: Basic UGhpbFRlY2g6VEEyNTJzeGM=",
+				"content-type: application/json"
+			),
+		));
 
-		// infobip username
-		$infobip->setUsername('username'); 
-		// infobip password
-		$infobip->setPassword('password'); 
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
 
-		$infobip->setMethod(Infobip_sms_api::OUTPUT_XML);
-		$infobip->setMethod(Infobip_sms_api::OUTPUT_JSON);
-		$infobip->setMethod(Infobip_sms_api::OUTPUT_PLAIN);
+		curl_close($curl);
 
-		$message = new Infobip_sms_message();
-
-		$message->setSender('Philtech');
-		$message->setText($content);
-		$message->setRecipients($recipient);
-
-		$infobip->addMessages(array($message));
-
-		$results = $infobip->sendSMS();
-
-		return $results;
+		if ($err) {
+			return "cURL Error #:" . $err;
+		} 
+		else {
+			return $response;
+		}
 	}
 
 	/**
@@ -53,8 +79,8 @@ class Sms
 	public static function sendRegistration($recipient, $name)
 	{
 		$text = "Hi " . $name . ",%0a" . "You have successfully completed your PhilTECH registration.For inquiries, call us at 0917-542-2614(Mobile) or at (062) 310-2256(Landline)";
-		dd($text);
-		// return Sms::send($recipient, $text);
+		
+		return Sms::SingleText($recipient, $text);
 	}
 
 	public static function sendPurchaseMembershipCode($recipient, $name, $link)
@@ -103,5 +129,4 @@ class Sms
 			return substr($x,0,$length) . '...';
 		}
 	}
-
 }

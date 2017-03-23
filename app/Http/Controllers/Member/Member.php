@@ -65,6 +65,7 @@ class Member extends Controller
 					}
 
 					$this->user_info = $user_info;
+					$this->current_warehouse = $current_warehouse;
 					$warehouse_list  = Tbl_warehouse::inventory()->join("tbl_user_warehouse_access","tbl_user_warehouse_access.warehouse_id","=","tbl_warehouse.warehouse_id")->where("tbl_user_warehouse_access.user_id",$user_info->user_id)->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get(); 
 					View::share('user_info', $user_info);
 					View::share('current_warehouse', $current_warehouse);

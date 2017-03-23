@@ -118,11 +118,19 @@
 										<td class="text-right"><b>Subtotal</b></td>
 										<td>P {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</td>
 									</tr>
+									@if($get_cart["sale_information"]["total_overall_price"] > $get_cart["sale_information"]["minimum_purchase"])
+									<tr>
+										<td></td>
+										<td class="text-right"><b>Shipping Fee</b></td>
+										<td>FREE</td>
+									</tr>
+									@else
 									<tr>
 										<td></td>
 										<td class="text-right"><b>Shipping Fee</b></td>
 										<td>P {{ number_format($get_cart["sale_information"]["total_shipping"], 2) }}</td>
 									</tr>
+									@endif
 									<tr>
 										<td></td>
 										<td class="text-right"><b>Total</b></td>

@@ -95,7 +95,7 @@
 
 			<div class="col-md-9 prod-content">
 				<!-- FEATURED TODAY -->
-				<span class="prod-big-image"><img id="prod-big-image" src="/themes/{{ $shop_theme }}/img/2017-banner.jpg"></span>
+				<span class="prod-big-image"><img id="prod-big-image" src="{{ get_content($shop_theme_info, 'product', 'product_banner', '/themes/'. $shop_theme .'/img/2017-banner.jpg') }}"></span>
 					<div class="featured-container">
 						<div class="left-container-title">
 							<form class="sort-by" method="get">

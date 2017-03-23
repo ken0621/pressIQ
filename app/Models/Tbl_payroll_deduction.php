@@ -20,6 +20,7 @@ class Tbl_payroll_deduction extends Model
 	// [DOUBLE] 		payroll_periodal_deduction
 	// [DATE] 			payroll_deduction_date_filed
 	// [DATE] 			payroll_deduction_date_start
+	// [DATE]			payroll_deduction_date_end
 	// [VARCHAR] 		payroll_deduction_period
 	// [VARCHAR] 		payroll_deduction_category
 	// [INTEGER] 		payroll_deduction_type

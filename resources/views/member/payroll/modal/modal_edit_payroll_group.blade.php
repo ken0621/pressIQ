@@ -425,7 +425,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-primary btn-custom-primary" type="Submit">Submit</button>
+		<button class="btn btn-primary btn-custom-primary" type="Submit">Update</button>
 	</div>
 </form>
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>

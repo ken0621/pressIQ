@@ -2111,6 +2111,7 @@ class PayrollController extends Member
 		$insert['payroll_periodal_deduction'] 	= Request::input('payroll_periodal_deduction');
 		$insert['payroll_deduction_date_filed'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_filed')));
 		$insert['payroll_deduction_date_start'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_start')));
+		$insert['payroll_deduction_date_end']	= date('Y-m-d', strtotime(Request::input('payroll_deduction_date_end')));
 		$insert['payroll_deduction_period'] 	= Request::input('payroll_deduction_period');
 		$insert['payroll_deduction_category'] 	= Request::input('payroll_deduction_category');
 		$insert['payroll_deduction_type'] 		= Request::input('payroll_deduction_type');
@@ -2276,6 +2277,7 @@ class PayrollController extends Member
 		$update['payroll_periodal_deduction'] 	= Request::input('payroll_periodal_deduction');
 		$update['payroll_deduction_date_filed'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_filed')));
 		$update['payroll_deduction_date_start'] = date('Y-m-d',strtotime(Request::input('payroll_deduction_date_start')));
+		$update['payroll_deduction_date_end']	= date('Y-m-d', strtotime(Request::input('payroll_deduction_date_end')));
 		$update['payroll_deduction_period'] 	= Request::input('payroll_deduction_period');
 		$update['payroll_deduction_category'] 	= Request::input('payroll_deduction_category');
 		$update['payroll_deduction_type'] 		= Request::input('payroll_deduction_type');

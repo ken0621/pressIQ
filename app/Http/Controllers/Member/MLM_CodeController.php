@@ -131,7 +131,8 @@ class MLM_CodeController extends Member
             $data['talbe_body']         = $this->view_all_lines();
             $data["page"]               = "Sell Membership";
             $data["_customer"]          = Tbl_customer::where("archived",0)->where('shop_id', $shop_id)->get();
-            $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get();
+            // $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get();
+            $data['warehouse'][0] = $this->current_warehouse;
             return view('member.mlm_code.mlm_code_sell', $data);
         }
         else

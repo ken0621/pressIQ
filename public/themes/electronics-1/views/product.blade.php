@@ -56,8 +56,8 @@
 						<a href="">
 							<div class="col-md-5 product-image">
 								<div class="image-holder">
-									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
-									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
+									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img2.png">
+									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img2.png">
 								</div>
 							</div>
 							<div class="col-md-7 product-content">
@@ -79,8 +79,8 @@
 						<a href="">
 							<div class="col-md-5 product-image">
 								<div class="image-holder">
-									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
-									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
+									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img3.png">
+									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img3.png">
 								</div>
 							</div>
 							<div class="col-md-7 product-content">
@@ -102,8 +102,8 @@
 						<a href="">
 							<div class="col-md-5 product-image">
 								<div class="image-holder">
-									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
-									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
+									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img4.png">
+									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img4.png">
 								</div>
 							</div>
 							<div class="col-md-7 product-content">
@@ -185,7 +185,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image2.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -212,7 +212,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image3.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -239,7 +239,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image4.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -266,7 +266,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image5.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -293,7 +293,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image6.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -320,7 +320,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image7.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -347,7 +347,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image8.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -374,7 +374,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image9.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -401,7 +401,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image10.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -428,7 +428,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image11.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -455,7 +455,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image12.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -482,7 +482,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image13.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -509,7 +509,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image14.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -536,7 +536,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image15.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>
@@ -563,7 +563,7 @@
 						<a href="">
 							<div class="per-item-container">
 								<div class="image-holder">
-									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
+									<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image16.png">
 								</div>
 								<div class="item-details">
 									<div class="item-title">Lorem ipsum dolor sit</div>

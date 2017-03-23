@@ -22,7 +22,7 @@
                 </div>
                 <div class="cover-container">
                     <div class="cover-img">
-                        <img src="{{isset($content['company_logo']) ? $content['company_logo'] : '/assets/mlm/img/pic-shop.jpg'}}">
+                        <img src="{{isset($content['company_logo']) ? $content['company_logo'] : '/assets/mlm/img/pic-shop.jpg'}}" width="200px">
                     </div>
                     <div class="cover-text">
                         <div class="name">@if(isset($content['company_name']))  {{$content['company_name']}} @endif</div>

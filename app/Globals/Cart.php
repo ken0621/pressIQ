@@ -14,6 +14,8 @@ use DB;
 use Session;
 use Carbon\Carbon;
 use App\Globals\Mlm_discount;
+use App\Models\Tbl_mlm_item_points;
+use App\Globals\Mlm_plan;
 class Cart
 {
     public static function get_shop_info()
@@ -147,6 +149,7 @@ class Cart
                 $item = Ecom_Product::getVariantInfo($info["product_id"]);
                 $data["cart"][$key]["cart_product_information"]                                   = null;
                 $data["cart"][$key]["cart_product_information"]["variant_id"]                     = $item->evariant_id;
+                $data["cart"][$key]["cart_product_information"]["item_id"]                        = $item->item_id;
                 $data["cart"][$key]["cart_product_information"]["product_name"]                   = $item->eprod_name;
                 $data["cart"][$key]["cart_product_information"]["variant_name"]                   = $item->evariant_item_label;
                 $data["cart"][$key]["cart_product_information"]["product_stocks"]                 = $item->inventory_count;
@@ -160,16 +163,18 @@ class Cart
                 {
                     if(strtotime($check_discount->item_discount_date_start) <= strtotime($date_now) && strtotime($check_discount->item_discount_date_end) >= strtotime($date_now))
                     {
-                        if($check_discount->item_discount_type == "fixed")
-                        {
-                            $item_discounted       = "fixed";
-                            $item_discounted_value = $check_discount->item_discount_value;
-                        }
-                        else if($check_discount->item_discount_type == "percentage")
-                        {
-                            $item_discounted       = "percentage";
-                            $item_discounted_value = $item->item_price * ($check_discount->item_discount_value);
-                        }
+
+                        $current_price = $check_discount->item_discount_value;
+                        // if($check_discount->item_discount_type == "fixed")
+                        // {
+                        //     $item_discounted       = "fixed";
+                        //     $item_discounted_value = $check_discount->item_discount_value;
+                        // }
+                        // else if($check_discount->item_discount_type == "percentage")
+                        // {
+                        //     $item_discounted       = "percentage";
+                        //     $item_discounted_value = $item->item_price * ($check_discount->item_discount_value);
+                        // }
                         $item_discounted_remark    = $check_discount->item_discount_remark;
                     }
                 }
@@ -179,16 +184,14 @@ class Cart
                     if($session['slot_now'])
                     {
                         $discount_membership = Mlm_discount::get_discount_single($session['slot_now']->shop_id, $item->item_id, $session['slot_now']->slot_membership);
-                    // dd($discount_membership);
-                        if(isset($item_discounted))
+                        if(isset($current_price))
                         {
-                            $discount_a =  $item_discounted_value;
+                             $discount_a = $current_price;
                         }
-                        else
-                        {
+                       else
+                       {
                             $discount_a = $item->item_price;
-                        }
-
+                       }
                         if($discount_membership['type'] == 0)
                         {
                             $item_discounted_value = $discount_membership['value']; 
@@ -196,6 +199,16 @@ class Cart
                         else
                         {
                             $item_discounted_value =   $discount_a *   ($discount_membership['value']/100); 
+                        }
+                        $active_plan_product_repurchase = Mlm_plan::get_all_active_plan_repurchase($session['slot_now']->shop_id);
+                        $item_points = Tbl_mlm_item_points::where('item_id', $item->item_id)->where('membership_id', $session['slot_now']->slot_membership)->first();
+                        if($item_points)
+                        {
+                           foreach($active_plan_product_repurchase as $key2 => $value2)
+                            {
+                                $code = $value2->marketing_plan_code;
+                                $data["cart"][$key]["cart_product_information"]["membership_points"][$value2->marketing_plan_label] = $item_points->$code;
+                            } 
                         }
                     }
                 }

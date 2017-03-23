@@ -99,7 +99,7 @@
                                             </div>
                                            
                                              <div>
-                                                <button class="add-to-cart {{ isset($product_variant[1]) ? 'disabled' : '' }}" {{ isset($product_variant[1]) ? 'disabled' : '' }} variant-id="{{ $product_variant['evariant_id'] }}" type="button"><i class="fa fa-shopping-cart" aria-hidden="true"></i> ADD TO CART</button>
+                                                <button class="add-to-cart {{ isset($product['variant'][1]) ? 'disabled' : '' }}" {{ isset($product['variant'][1]) ? 'disabled' : '' }} variant-id="{{ $product_variant['evariant_id'] }}" type="button"><i class="fa fa-shopping-cart" aria-hidden="true"></i> ADD TO CART</button>
                                              </div>
                                         </div>
                                     </div>

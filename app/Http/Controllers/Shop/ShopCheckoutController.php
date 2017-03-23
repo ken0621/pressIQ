@@ -29,17 +29,17 @@ class ShopCheckoutController extends Shop
     public function submit()
     {
         // Validate Customer Info
-        $rules["customer_first_name"] = 'required';
-        $rules["customer_middle_name"] = 'required';
-        $rules["customer_last_name"] = 'required';
-        $rules["customer_email"] = 'required';
-        $rules["customer_birthdate"] = 'required';
-        $rules["customer_mobile"] = 'required';
+        $rules["customer_first_name"]   = 'required';
+        $rules["customer_middle_name"]  = 'required';
+        $rules["customer_last_name"]    = 'required';
+        $rules["customer_email"]        = 'required';
+        $rules["customer_birthdate"]    = 'required';
+        $rules["customer_mobile"]       = 'required';
         $rules["customer_state_province"] = 'required';
-        $rules["customer_city"] = 'required';
-        $rules["customer_address"] = 'required';
-        $rules["payment_method_id"] = 'required';
-        $rules["taxable"] = 'required';
+        $rules["customer_city"]         = 'required';
+        $rules["customer_address"]      = 'required';
+        $rules["payment_method_id"]     = 'required';
+        $rules["taxable"]               = 'required';
 
         $validator = Validator::make(Request::input(), $rules);
 

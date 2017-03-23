@@ -6,10 +6,12 @@ use App\Models\Tbl_item;
 use App\Globals\Warehouse;
 use App\Globals\Utilities;
 use App\Globals\Vendor;
+use App\Globals\Pdf_global;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_user_warehouse_access;
+use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_settings;
 use Request;
 use App\Http\Controllers\Controller;
@@ -26,6 +28,29 @@ class WarehouseController extends Member
      *
      * @return \Illuminate\Http\Response
      */
+    public function stock_input($slip_id = 42)
+    {
+        $data["slip"] = Warehouse::inventory_input_report($slip_id);
+        $data["slip_item"] = Warehouse::inventory_input_report_item($slip_id);
+
+        foreach ($data["slip_item"] as $key => $value) 
+        {
+            $data["slip_item"][$key]->serial_number_list = Tbl_inventory_serial_number::where("serial_inventory_id",$value->inventory_id)->get(); 
+        }
+        $pdf = view("member.warehouse.stock_input_pdf",$data);
+        return Pdf_global::show_pdf($pdf);
+    }
+    public function refill_log($warehouse_id)
+    {
+        $data["_slip"] = Tbl_inventory_slip::where("inventory_reason",'refill')->where("warehouse_id",$warehouse_id)->where("inventory_slip_shop_id",$this->user_info->shop_id)->get();
+
+        return view("member.warehouse.refill_log",$data);
+    }
+    public function view_pdf($slip_id)
+    {
+        $data["slip_id"] = $slip_id;
+        return view("member.warehouse.stock_view",$data);
+    }
     public function index()
     {
         $this->item();
@@ -567,8 +592,9 @@ class WarehouseController extends Member
         { 
             $warehouse_id = Request::input("warehouse_id");
             $remarks = Request::input("remarks");
-            $reason_refill = Request::input("reason_refill");
-            $refill_source = 0;
+            $reason_refill = Request::input("reason_refill") == "other" ? "other" : "vendor";
+            $refill_source = Request::input("reason_refill") == "other" ? 0 : Request::input("reason_refill");
+
             $quantity_product = Request::input("quantity");
 
             $warehouse_refill_product = null;

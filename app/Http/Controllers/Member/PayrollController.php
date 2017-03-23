@@ -738,6 +738,9 @@ class PayrollController extends Member
 		$data['_country'] = Tbl_country::orderBy('country_name')->get();
 		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
 		$data['_group'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+		$data['_allowance'] = Tbl_payroll_allowance::sel(Self::shop_id())->orderBy('payroll_allowance_name')->get();
+		$data['_deduction'] = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('payroll_deduction_name')->get();
+		$data['_leave'] = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->get();
 		return view("member.payroll.modal.modal_create_employee", $data);
 	}
 
@@ -948,6 +951,67 @@ class PayrollController extends Member
 
 		Tbl_payroll_employee_dependent::insert($insert_dependent);
 
+
+		/* INSERT ALLOWANCES */
+		$_allowance = array();
+		if(Request::has('allowance'))
+		{
+			$_allowance = Request::input('allowance');
+		}
+
+		$insert_allowance = array();
+		$temp = "";
+		foreach ($_allowance as $allowance) {
+			$temp['payroll_allowance_id']	= $allowance;
+			$temp['payroll_employee_id'] 	= $payroll_employee_id;
+			array_push($insert_allowance, $temp);
+		}
+		if(!empty($insert_allowance))
+		{
+			Tbl_payroll_employee_allowance::insert($insert_allowance);
+		}
+		
+
+		/* INSERT LEAVES */
+		$_leave = array();
+		if(Request::has('leave'))
+		{
+			$_leave = Request::input('leave');
+		}
+
+		$insert_leave = array();
+		$temp = '';
+		foreach($_leave as $leave)
+		{
+			$temp['payroll_leave_temp_id'] 	= $leave;
+			$temp['payroll_employee_id'] 	= $payroll_employee_id;
+			array_push($insert_leave, $temp);
+		}
+
+		if(!empty($insert_leave))
+		{
+			Tbl_payroll_leave_employee::insert($insert_leave);
+		}
+
+		/* INSERT DEDUCTION */
+		$_deduction = array();
+		if(Request::has('deduction'))
+		{
+			$_deduction = Request::input('deduction');
+		}
+		$insert_deduction = array();
+		$temp = '';
+		foreach($_deduction as $deduction)
+		{
+			$temp['payroll_deduction_id'] = $deduction;
+			$temp['payroll_employee_id'] = 	$payroll_employee_id;
+			array_push($insert_deduction, $temp);
+		}
+		if(!empty($insert_deduction))
+		{
+			Tbl_payroll_deduction_employee::insert($insert_deduction);
+		}
+
 		$return['data'] = '';
 		$return['status'] = 'success';
 		$return['function_name'] = 'employeelist.reload_employee_list';
@@ -969,12 +1033,11 @@ class PayrollController extends Member
 
 		$data['employee'] 			= Tbl_payroll_employee_basic::where('payroll_employee_id',$id)->first();
 		$data['contract'] 			= Tbl_payroll_employee_contract::selemployee($id)->first();
-		// dd($data['contract']);
+
 		$data['salary']				= Tbl_payroll_employee_salary::selemployee($id)->first();
 		$data['requirement']		= Tbl_payroll_employee_requirements::selrequirements($id)->first();
 		$data['_group'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
 		$data['dependent']			= Tbl_payroll_employee_dependent::where('payroll_employee_id', $id)->get();
-		// dd($data);
 
 		return view("member.payroll.modal.modal_view_employee", $data);
 	}
@@ -1245,7 +1308,7 @@ class PayrollController extends Member
 		return json_encode($return);
 	}
 
-
+	/* PREDICTIVE TEXT SEARCH*/
 	public function search_employee_ahead()
 	{
 		$query = Request::input('query');
@@ -1264,6 +1327,18 @@ class PayrollController extends Member
 
 		return json_encode($data);
 		// return $_return->toJson();
+	}
+
+	public function search_employee()
+	{
+		$trigger 			= Request::input('trigger');
+		$employee_search 	= Request::input('employee_search');
+		$data['_active'] = Tbl_payroll_employee_search::search($employee_search, $trigger)
+											 ->orderBy("tbl_payroll_employee_basic.payroll_employee_first_name")
+											 ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
+											 ->get();
+
+		return view('member.payroll.reload.employee_list_reload', $data);
 	}
 
 	public function update_tbl_search()
@@ -1485,8 +1560,23 @@ class PayrollController extends Member
 	{
 		$insert['payroll_department_name'] = Request::input('payroll_department_name');
 		$insert['shop_id']				   = Self::shop_id();
-		Tbl_payroll_department::insert($insert);
+		$id = Tbl_payroll_department::insertGetId($insert);
 
+		$data['_data'] 		= array();
+		$data['selected'] 	= $id;
+
+		$_department = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+		foreach($_department as $deparmtent)
+		{
+			$temp['id']		= $deparmtent->payroll_department_id;
+			$temp['name']	= $deparmtent->payroll_department_name;
+			$temp['attr']	= '';
+			array_push($data['_data'], $temp);
+		}
+
+		$view = view('member.payroll.misc.misc_option', $data)->render();
+
+		$return['view']				= $view;
 		$return['status'] 			= 'success';
 		$return['data']	   			= '';
 		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
@@ -1561,7 +1651,13 @@ class PayrollController extends Member
 
 	public function modal_create_jobtitle()
 	{
+		$selected = 0;
+		if(Request::has('selected'))
+		{
+			$selected = Request::input('selected');
+		}
 		$data['_department'] = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+		$data['selected'] = $selected;
 		return view('member.payroll.modal.modal_create_jobtitle', $data);
 	}
 
@@ -1570,10 +1666,23 @@ class PayrollController extends Member
 		$insert['payroll_jobtitle_department_id'] 	= Request::input('payroll_jobtitle_department_id');
 		$insert['payroll_jobtitle_name'] 			= Request::input('payroll_jobtitle_name');
 		$insert['shop_id']							= Self::shop_id();
-		Tbl_payroll_jobtitle::insert($insert);
+		$id = Tbl_payroll_jobtitle::insertGetId($insert);
 
+		$data['_data'] 		= array();
+		$data['selected'] 	= $id;
+		$_jobtitle = Tbl_payroll_jobtitle::sel(Self::shop_id())->where('payroll_jobtitle_department_id',Request::input('payroll_jobtitle_department_id'))->orderBy('payroll_jobtitle_name')->get();
+		foreach($_jobtitle as $job_title)
+		{
+			$temp['id'] = $job_title->payroll_jobtitle_id;
+			$temp['name'] = $job_title->payroll_jobtitle_name;
+			$temp['attr'] = '';
+			array_push($data['_data'], $temp);
+		}
+		$view = view('member.payroll.misc.misc_option', $data)->render();
+
+		$return['view']				= $view;
 		$return['status'] 			= 'success';
-		$return['data']	   			= '';
+		$return['data']	   			= $id;
 		$return['function_name'] 	= 'payrollconfiguration.reload_tbl_jobtitle';
 		return json_encode($return);
 	}
@@ -2894,6 +3003,20 @@ class PayrollController extends Member
 		}
 
 
+		$data['_data'] 		= array();
+		$data['selected'] 	= $group_id;
+		$_group = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+		foreach($_group as $group)
+		{
+			$temp['id']		= $group->payroll_group_id;
+			$temp['name']	= $group->payroll_group_code;
+			$temp['attr']	= '';
+			array_push($data['_data'], $temp);
+		}
+
+		$view = view('member.payroll.misc.misc_option', $data)->render();
+
+		$return['view']				= $view;
 		$return['status'] = 'success';
 		$return['function_name'] = 'payrollconfiguration.reload_payroll_group';
 		return json_encode($return);

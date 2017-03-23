@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="/assets/member/payroll/css/timesheet.css">
+<link rel="stylesheet" type="text/css" href="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.css">
 <form class="global-submit form-horizontal" role="form" action="/member/payroll/payroll_group/modal_save_payroll_group" method="post">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
@@ -178,6 +180,50 @@
 										</div>
 									</div>
 								</div>
+								<div class="panel panel-default">
+									<div class="panel-body form-horizontal">
+										<div class="form-group">
+											<label class="col-md-12">Late Deduction</label>
+										</div>
+										<div class="form-group">
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input type="radio" name="">Base on Salary</label>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input type="radio" name="">Custom</label>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input type="radio" name="">Not Deducted</label>
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<div class="col-md-6">
+												<small>Every</small>
+												<div class="input-group">
+													<input type="number" name="" class="form-control">
+													<span class="input-group-btn" style="width: 100px">
+														<select class="form-control">
+															<option value="">Second</option>
+															<option value="">Minute</option>
+															<option value="">Hour</option>
+														</select>
+													</span>
+												</div>
+
+											</div>
+											<div class="col-md-6">
+												<small>Deduction for every (<span class="">0</span>)</small>
+												<input type="number" name="" class="form-control text-right">
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="panel panel-default">
@@ -285,18 +331,47 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<div class="col-md-6">
-											<small>Grace Time Period (minutes)</small>
-											<input type="number" name="payroll_group_grace_time" class="form-control text-right">
-										</div>
-										<div class="col-md-6">
-											<small>Break (minutes)</small>
-											<input type="number" name="payroll_group_break" class="form-control text-right">
+										<div class="col-md-12">
+											<div class="checkbox">
+												<label><input type="checkbox" name="is_flexi_break" value="1">Flexible Break</label>
+											</div>
 										</div>
 									</div>
 									<div class="form-group">
 										<div class="col-md-12">
-											<table class="table table-bordered table-condensed">
+											<table class="table table-bordered table-condensed timesheet">
+												<tr>
+													<td colspan="2" class="text-center">Schedule</td>
+												</tr>
+												<tr>
+													<td class="text-center" width="50%">Break Start</td>
+													<td class="text-center" width="50%">Break End</td>
+												</tr>
+												<tr class="editable">
+													<td class="text-center editable">
+														<input type="text" name="payroll_group_start" class="text-table time-entry" >
+
+													</td>
+													<td class="text-center editable">
+														<input type="text" name="payroll_group_end" class="text-table time-entry">
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-6">
+											<small>Grace Time Period (minutes)</small>
+											<input type="number" name="payroll_group_grace_time" class="form-control text-center">
+										</div>
+										<div class="col-md-6">
+											<small>Flexi Break (minutes)</small>
+											<input type="number" name="payroll_group_break" class="form-control text-center">
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<table class="table table-bordered table-condensed timesheet">
 												<tr>
 													<td colspan="2" class="text-center">Schedule</td>
 												</tr>
@@ -304,19 +379,18 @@
 													<td class="text-center" width="50%">Work Start</td>
 													<td class="text-center" width="50%">Work End</td>
 												</tr>
-												<tr>
+												<tr class="editable">
 													<td class="text-center editable">
-														<input type="time" name="payroll_group_start" class="form-control">
+														<input type="text" name="payroll_group_start" class="text-table time-entry" >
+
 													</td>
 													<td class="text-center editable">
-														<input type="time" name="payroll_group_end" class="form-control">
+														<input type="text" name="payroll_group_end" class="text-table time-entry">
 													</td>
 												</tr>
 											</table>
 										</div>
 									</div>
-									
-									
 								</div>
 								<div class="col-md-4">
 									<table class="table table-bordered table-condensed padding-tb-2">
@@ -349,9 +423,14 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-primary btn-custom-primary" type="Submit">Submit</button>
+		<button class="btn btn-primary btn-custom-primary" type="Submit">Save</button>
 	</div>
 </form>
+
+<!-- <script type="text/javascript" src="/assets/member/payroll/js/timesheet.js"></script> -->
+<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
+<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
+
 <script type="text/javascript">
 	$(".restday-check").unbind("change");
 	$(".restday-check").bind("change", function () {
@@ -360,10 +439,7 @@
 		{
 			parent.prop("checked", false);
 		}
-		// else
-		// {
-			// 	parent.prop("checked", true);
-		// }
+
 	});
 	$(".extraday-check").unbind("change");
 	$(".extraday-check").bind("change", function () {
@@ -372,10 +448,7 @@
 		{
 			parent.prop("checked", false);
 		}
-		// else
-		// {
-			// 	parent.prop("checked", true);
-		// }
+
 	});
 	$(".check-flexi").unbind("change");
 	$(".check-flexi").bind("change", function(){
@@ -389,4 +462,6 @@
 			$(".select-target-hours").val("Daily");
 		}
 	});
+	$(".time-entry").timeEntry('destroy');
+	$(".time-entry").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 </script>

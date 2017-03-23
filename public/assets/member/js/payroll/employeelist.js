@@ -19,8 +19,8 @@ function employeelist()
 
 	function search_type_ahead()
 	{
-		$(".perdictive").unbind("keypress");
-		$(".perdictive").bind("keypress", function(){
+		$(".perdictive").unbind("keyup");
+		$(".perdictive").bind("keyup", function(){
 			var trigger = $(this).data("trigger");
 			var query 	= $(this).val();
 			var element = ".perdictive-active";
@@ -49,6 +49,18 @@ function employeelist()
 					console.log(err);
 				}	
 			});
+		});
+
+		$(".search-form").unbind("submit");
+		$(".search-form").bind("submit", function(e){
+			e.preventDefault();
+			var formdata = $(this).serialize();
+			var action	 = $(this).attr('action');
+			var method   = $(this).attr("method");
+			var target   = $(this).data("target");
+			var function_name = 'employeelist.tbl_btn_event';
+			$(target).html(misc('loader'));
+			load_configuration(action, method, formdata, target, function_name);
 		});
 	}
 
@@ -211,9 +223,32 @@ function executeFunctionByName(functionName, context /*, args */) {
 
 function submit_done(data)
 {
-	data = JSON.parse(data);
-	console.log(data);
-	data.element.modal("toggle");
-	executeFunctionByName(data.function_name, window);
+	// console.log(data);
+	try
+	{
+		data = JSON.parse(data);
+	}
+	catch(err)
+	{
+
+	}
 	
+	data.element.modal("toggle");
+	if(data.function_name == 'payrollconfiguration.reload_tbl_jobtitle')
+	{
+		modal_create_employee.reload_option(data.view, '.jobtitle-select');
+	}
+	if(data.function_name == 'payrollconfiguration.relaod_tbl_department')
+	{
+		modal_create_employee.reload_option(data.view, '.department-select');
+	}	
+	if(data.function_name == 'payrollconfiguration.reload_payroll_group')
+	{
+		modal_create_employee.reload_option(data.view, '.payroll-group-select');
+	}
+	else
+	{
+		executeFunctionByName(data.function_name, window);
+	}
+
 }

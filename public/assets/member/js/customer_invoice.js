@@ -1,3 +1,4 @@
+
 var customer_invoice = new customer_invoice();
 var global_tr_html = $(".div-script tbody").html();
 var item_selected = ''; 

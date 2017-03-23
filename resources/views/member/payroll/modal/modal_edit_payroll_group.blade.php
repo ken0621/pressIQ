@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="/assets/member/payroll/css/timesheet.css">
+<link rel="stylesheet" type="text/css" href="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.css">
 <form class="global-submit form-horizontal" role="form" action="/member/payroll/payroll_group/modal_update_payroll_group" method="post">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
@@ -298,7 +300,7 @@
 									</div>
 									<div class="form-group">
 										<div class="col-md-12">
-											<table class="table table-bordered table-condensed">
+											<table class="table table-bordered table-condensed timesheet">
 												<tr>
 													<td colspan="2" class="text-center">Schedule</td>
 												</tr>
@@ -308,10 +310,10 @@
 												</tr>
 												<tr>
 													<td class="text-center editable">
-														<input type="time" name="payroll_group_start" class="form-control" value="{{$group->payroll_group_start}}">
+														<input type="text" name="payroll_group_start" class="text-table time-entry" value="{{$group->payroll_group_start}}">
 													</td>
 													<td class="text-center editable">
-														<input type="time" name="payroll_group_end" class="form-control" value="{{$group->payroll_group_end}}">
+														<input type="text" name="payroll_group_end" class="text-table time-entry" value="{{$group->payroll_group_end}}">
 													</td>
 												</tr>
 											</table>
@@ -354,6 +356,8 @@
 		<button class="btn btn-primary btn-custom-primary" type="Submit">Submit</button>
 	</div>
 </form>
+<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
+<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 <script type="text/javascript">
 	$(".restday-check").unbind("change");
 	$(".restday-check").bind("change", function () {
@@ -391,4 +395,6 @@
 			$(".select-target-hours").val("Daily");
 		}
 	});
+	$(".time-entry").timeEntry('destroy');
+	$(".time-entry").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 </script>

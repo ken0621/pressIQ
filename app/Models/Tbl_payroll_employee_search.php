@@ -35,7 +35,8 @@ class Tbl_payroll_employee_search extends Model
 			  	}
 			  	else
 			  	{
-			  		$query1->where('tbl_payroll_employee_contract.payroll_employee_contract_date_end','<=', $date);
+			  		$query1->where('tbl_payroll_employee_contract.payroll_employee_contract_date_end','<=', $date)
+			  				->where('tbl_payroll_employee_contract.payroll_employee_contract_date_end','!=','0000-00-00');
 			  	}
 			  	
 			  	return $query1;

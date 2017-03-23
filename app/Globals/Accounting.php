@@ -172,16 +172,52 @@ class Accounting
 	 *
 	 * @param string  	$reference_module 	Type of transaction
 	 * @param integer  	$reference_id  		Id of the transaction
-	 * @param array  	$entry_date 		Entry date for the journal Entry
+	 * @param array  	$entry_data 		Entry data for the journal Entry
 	 * @param array  	$entry_date      	
-	 * @param boolean  	$balance    		If it will show total balance of each account (true, false)
+	 * @param boolean  	$remarks   			
 	 */
-	public static function postJournalEntry($reference_module, $reference_id, $entry_data, $extra_data, $remarks)
+	public static function postJournalEntry($reference_module = '', $reference_id = '', $entry_data = '', $remarks = '')
 	{
-		// foreach($entry_data as $entry)
-		// {
-		// 	// $_account = Tbl_item::where("item_id", $entry["item_id"])
-		// }
+		$reference_module = "invoice";
+
+		$entry_data[0]['item_id'] 		= 41;
+		$entry_data[0]['entry_qty'] 	= 5;
+		$entry_data[0]['entry_amount'] 	= 200;
+
+		$account_receivable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("chart_type_name","Accounts Receivable")->pluck("account_id");
+		$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("chart_type_name","Accounts Payable")->pluck("account_id");
+
+		$account_asset 		= Tbl_item::where("item_id", 39)->pluck("item_asset_account_id");
+		$account_income 	= Tbl_item::where("item_id", 39)->pluck("item_income_account_id");
+		$account_expense 	= Tbl_item::where("item_id", 39)->pluck("item_expense_account_id");
+
+		if($reference_module == "invoice")
+		{
+			$insert["je_shop_id"] 			= "";
+			$insert["je_reference_module"]	= $reference_module;
+			$insert["je_reference_id"]		= 1;
+			$insert["je_entry_date"]		= Carbon::now();
+			$insert["je_remarks"]			= '';
+
+			$je_id = Tbl_journal_entry::
+ 
+			foreach($entry_data as $data)
+			{
+				$insertline["jline_je_id"]
+			}
+		}
+
+		foreach($entry_data as $entry)
+		{
+			// $_account = Tbl_item::where("item_id", $entry["item_id"])
+		}
+
+
+		// $_first 	= Tbl_item::accountAsset()->where("item_id", 39)->select("item_id","item_asset_account_id as account_id", "account_name", "chart_type_name", "normal_balance")->where("item_asset_account_id","<>", "NULL");
+		// $_second 	= Tbl_item::accountIncome()->where("item_id", 39)->select("item_id","item_income_account_id as account_id", "account_name", "chart_type_name", "normal_balance")->where("item_income_account_id","<>", "NULL");
+		// $_third 	= Tbl_item::accountExpense()->where("item_id", 39)->select("item_id","item_expense_account_id  as account_id", "account_name", "chart_type_name", "normal_balance")->where("item_expense_account_id","<>", "NULL");	
+
+		// dd($_second->union($_first)->union($_third)->get()->toArray());
 	}
 
 	public static function getJournalById($reference_module, $reference_id)

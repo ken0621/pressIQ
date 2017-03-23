@@ -2,7 +2,11 @@
 namespace App\Globals;
 use Session;
 use DB;
-
+use App\Globals\Seed;
+use App\Models\Tbl_user;
+use App\Models\Tbl_email_content;
+use App\Models\Tbl_email_template;
+use Carbon\Carbon;
 class Seed
 {
     public static function auto_seed()
@@ -31,20 +35,241 @@ class Seed
         {
           Seed::seed_tbl_online_pymnt_gateway();
         }
-        // $this->seed_email_default();
+        Seed::seed_email_default();
     }
     //luke
-    public function seed_email_default()
+    public static function seed_email_default()
     {
-        // $default_email = [{"email_content_id":2,"email_content_key":"success_register","email_content":"<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Greetings!<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">You have successfully completed yourPhilTECH registration made under the name [name_of_registrant] with TIN [tin_of_registrant] . Your PhilTECH Username is [user_name] .<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">To start accessing our E-commerce website, log-in with your PhilTECH Username and Password. Please click on the link provided below. If clicking the link does not seem to work, you can copy and paste the link into your browser&rsquo;s address window.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">philtechglobalinc.com\/mlm<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href=\"mailto:philtechglobalmainoffice@gmail.com\">philtechglobalmainoffice@gmail.com<\/a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd<\/sup> Level), Gallera Road, Guiwan, Zamboanga City.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Best Regards,<\/p>\r\n<p>&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\"><strong>The PhilTECH Admin Team<\/strong><\/p>","shop_id":1,"date_created":"2017-03-21 08:40:47","date_updated":"0000-00-00 00:00:00","archived":0,"email_content_subject":"Successful Registration"},{"email_content_id":3,"email_content_key":"membership_code_purchase","email_content":"<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Greetings!<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">You have successfully purchased a [membership_name] Membership Package. Your Membership Code is\/are:<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">[membership_code]<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">As a PhilTECH VIP, you are entitled to Lifetime Privileges and Benefits exclusively designed for our VIPs. Experience shopping convenience like never before with our E-Commerce System. Enjoy Discounts and Earn Cashback + Rewards Points with every purchase on all products of the company. Just present your PhilTECH VIP Card during payment and all these exciting benefits will be yours.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href=\"mailto:philtechglobalmainoffice@gmail.com\">philtechglobalmainoffice@gmail.com<\/a> (Email), or you may visit us at our Main Office located at PhilTECH Bldg. (2<sup>nd<\/sup> Level), Gallera Road, Guiwan, Zamboanga City.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Congratulations!<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Best Regards,<\/p>\r\n<p>&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\"><strong>The PhilTECH Admin Team<\/strong><\/p>","shop_id":1,"date_created":"2017-03-21 08:42:39","date_updated":"0000-00-00 00:00:00","archived":0,"email_content_subject":"Membership Code Purchase"},{"email_content_id":4,"email_content_key":"discount_card_purchase","email_content":"<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Greetings!<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">You have successfully purchased a PhilTECH [membership_name]&nbsp;from [sponsor] Please read important details below:<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Date Issued:&nbsp;[date_issued]<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Date of Expiry: [date_expiry]<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">You may now enjoy a full year of Discount Privilege with every purchase on all products of the company by simply presenting your Discount Card during payment.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href=\"mailto:philtechglobalmainoffice@gmail.com\">philtechglobalmainoffice@gmail.com<\/a> (Email), or you may visit us at our Main Office located at PhilTECH Bldg. (2<sup>nd<\/sup> Level), Gallera Road, Guiwan, Zamboanga City.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Congratulations!<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Sincerely,<\/p>\r\n<p>&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\"><strong>The PhilTECH Admin Team<\/strong><\/p>","shop_id":1,"date_created":"2017-03-21 08:58:08","date_updated":"2017-03-21 09:13:00","archived":0,"email_content_subject":"Discount Card Purchase"},{"email_content_id":5,"email_content_key":"e_wallet_transfer","email_content":"<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>Greetings!<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>&nbsp;<\/strong><\/p>\r\n<div style=\"mso-element: para-border-div; border: none; border-bottom: solid windowtext 1.0pt; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in 0in 1.0pt 0in;\">\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; border: none; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in; mso-padding-alt: 0in 0in 1.0pt 0in;\"><strong>Thank you for using E-wallet money transfer. We have successfully processed your transfer request.&nbsp; Transaction details are as follows;<\/strong><\/p>\r\n<\/div>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>&nbsp;<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>Transaction #: [transaction_id]<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>Transaction Date: [transaction_date]<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>Amount transferred: [amount]<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>E-wallet Recipient: [sponsor]<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>E-wallet Transfer Fee: [fee]<\/strong><\/p>\r\n<div style=\"mso-element: para-border-div; border: none; border-bottom: solid windowtext 1.0pt; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in 0in 1.0pt 0in;\">\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; border: none; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in; mso-padding-alt: 0in 0in 1.0pt 0in;\"><strong>Total Amount charged on E-wallet: [amount_plus_fee]<\/strong><\/p>\r\n<\/div>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>&nbsp;<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>If there is a problem with executing your request, please call us at 0917-542-2614 (Globe Mobile) or at (062) 310-2256 (Globe Landline). You can always check your transfer status on the Account Dashboard. Just click the link below:<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>(link to account dashboard)<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>&nbsp;<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>Best Regards,<\/strong><\/p>\r\n<p>&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>PhilTech Admin Team<\/strong><\/p>","shop_id":1,"date_created":"2017-03-21 09:14:40","date_updated":"0000-00-00 00:00:00","archived":0,"email_content_subject":"E-wallet Transfer"},{"email_content_id":6,"email_content_key":"merchant_registration","email_content":"<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Greetings!<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">You have successfully registered as a PhilTECH Merchant under the company name [business_name]&nbsp;with Mr.\/Ms. [name_of_merchant]&nbsp; as your representative. Your PhilTECH Username is [username].<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">To start registering your products and services through our Merchant Module System, log-in with your PhilTECH Username and Password. Please click on the link provided below. If clicking the link does not seem to work, you can copy and paste the link into your browser&rsquo;s address window.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">(Link to PhilTECH&rsquo;s Merchant Module System log-in page)<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href=\"mailto:philtechglobalmainoffice@gmail.com\">philtechglobalmainoffice@gmail.com<\/a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd<\/sup> Level), Gallera Road, Guiwan, Zamboanga City.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Best Regards,<\/p>\r\n<p>&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\"><strong>The PhilTECH Admin Team<\/strong><\/p>","shop_id":1,"date_created":"2017-03-21 09:16:17","date_updated":"0000-00-00 00:00:00","archived":0,"email_content_subject":"Merchant Registration"},{"email_content_id":7,"email_content_key":"merchant_product_registration","email_content":"<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Greetings!<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">You have successfully registered your product through the Merchant Module System. Please be advised that processing time is 1-3 working days before your products\/services get uploaded to the PhilTECH website. This is to ensure that the company&rsquo;s set standards are being followed at all times.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">These are the list of all the registered product:<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">[products]&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href=\"mailto:philtechglobalmainoffice@gmail.com\">philtechglobalmainoffice@gmail.com<\/a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd<\/sup> Level), Gallera Road, Guiwan, Zamboanga City.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Best Regards,<\/p>\r\n<p>&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\"><strong>The PhilTECH Admin Team<\/strong><\/p>","shop_id":1,"date_created":"2017-03-21 09:17:37","date_updated":"0000-00-00 00:00:00","archived":0,"email_content_subject":"Product Registration"},{"email_content_id":8,"email_content_key":"e_wallet_refill","email_content":"<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\">Greetings!<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\">&nbsp;<\/p>\r\n<div style=\"mso-element: para-border-div; border: none; border-bottom: solid windowtext 1.0pt; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in 0in 1.0pt 0in;\">\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; border: none; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in; mso-padding-alt: 0in 0in 1.0pt 0in;\">We are pleased to inform you that we have already received your payment and had successfully processed your E-wallet funds replenishment request. Transaction details are as follows;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; border: none; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in; mso-padding-alt: 0in 0in 1.0pt 0in;\">&nbsp;<\/p>\r\n<\/div>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>Transaction #: [transaction_number]<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>Transaction Date: [transaction_date]<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>Amount transferred: [amount]<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>E-wallet Recipient: [sponsor]<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\"><strong>E-wallet Transfer Fee: [fee]<\/strong><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\">You may now enjoy using your E-wallet funds for any of your purchases. To check your new E-wallet balance, simply click the link provided below;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt;\">(link to e-wallet page)<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href=\"mailto:philtechglobalmainoffice@gmail.com\">philtechglobalmainoffice@gmail.com<\/a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd<\/sup> Level), Gallera Road, Guiwan, Zamboanga City.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Best Regards,<\/p>\r\n<p>&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\"><strong>The PhilTECH Admin Team<\/strong><\/p>","shop_id":1,"date_created":"2017-03-21 09:20:28","date_updated":"0000-00-00 00:00:00","archived":0,"email_content_subject":"E-wallet Refill"},{"email_content_id":9,"email_content_key":"inquire_current_points","email_content":"<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Greetings!<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Your current available points are [current_points] . Please be reminded that points may only be redeemed thru items and cannot be converted to cash.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href=\"mailto:philtechglobalmainoffice@gmail.com\">philtechglobalmainoffice@gmail.com<\/a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd<\/sup> Level), Gallera Road, Guiwan, Zamboanga City.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Best Regards,<\/p>\r\n<p>&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\"><strong>The PhilTECH Admin Team<\/strong><\/p>","shop_id":1,"date_created":"2017-03-21 09:21:56","date_updated":"0000-00-00 00:00:00","archived":0,"email_content_subject":"Inquire Current Points"},{"email_content_id":10,"email_content_key":"redeem_points","email_content":"<p>&nbsp;<span style=\"text-align: justify;\">Greetings!<\/span><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">You have successfully redeemed <u>[points]<\/u>. You may claim your <u>[item_redeem]<\/u>&nbsp;at any BCO branch Nationwide. Please present your VIP Card and any valid ID when claiming.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href=\"mailto:philtechglobalmainoffice@gmail.com\">philtechglobalmainoffice@gmail.com<\/a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd<\/sup> Level), Gallera Road, Guiwan, Zamboanga City.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Best Regards,<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\"><strong>The PhilTECH Admin Team<\/strong><\/p>","shop_id":1,"date_created":"2017-03-21 09:23:06","date_updated":"0000-00-00 00:00:00","archived":0,"email_content_subject":"Redeem Points"},{"email_content_id":11,"email_content_key":"pass_word_reset","email_content":"<p>Greetings!<\/p>\r\n<p>&nbsp; &nbsp;We've received a request to reset your password. If you didn't make the request, just ignore this email. Otherwise you can reset your password using this link<\/p>\r\n<p>&nbsp;[password_reset_link]<br \/><br \/><\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href=\"mailto:philtechglobalmainoffice@gmail.com\">philtechglobalmainoffice@gmail.com<\/a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd<\/sup> Level), Gallera Road, Guiwan, Zamboanga City.<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\">Best Regards,<\/p>\r\n<p>&nbsp;<\/p>\r\n<p class=\"MsoNormal\" style=\"margin-bottom: .0001pt; text-align: justify;\"><strong>The PhilTECH Admin Team<\/strong><\/p>\r\n<p>&nbsp;<\/p>","shop_id":1,"date_created":"2017-03-21 09:30:36","date_updated":"0000-00-00 00:00:00","archived":0,"email_content_subject":"Password Reset"}];
+        $shop_id = Seed::getShopId();
+        $date_created = Carbon::now();
+        $date_updated = Carbon::now();
+        $email[0]['email_content_key'] = 'success_register';
+        $email[0]['email_content'] = '<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Greetings!</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">You have successfully completed yourPhilTECH registration made under the name [name_of_registrant] with TIN [tin_of_registrant] . Your PhilTECH Username is [user_name] .</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">To start accessing our E-commerce website, log-in with your PhilTECH Username and Password. Please click on the link provided below. If clicking the link does not seem to work, you can copy and paste the link into your browser&rsquo;s address window.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">philtechglobalinc.com/mlm</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd</sup> Level), Gallera Road, Guiwan, Zamboanga City.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Best Regards,</p>
+<p>&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>';
+        $email[0]['email_content_subject'] = 'Successful Registration';
+        $email[0]['shop_id'] = $shop_id;
+        $email[0]['date_created'] = $date_created;
+        $email[0]['date_updated'] = $date_updated;
+        $email[0]['archived'] = 0;
 
-           // dd($default_email);
-            // email_content_key
-            // email_content
-            // date_created
-            // date_updated
-            // archived
-            // email_content_subject
+        $email[1]['email_content_key'] = 'membership_code_purchase';
+        $email[1]['email_content'] = '<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Greetings!</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">You have successfully purchased a [membership_name] Membership Package. Your Membership Code is/are:</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">[membership_code]</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">As a PhilTECH VIP, you are entitled to Lifetime Privileges and Benefits exclusively designed for our VIPs. Experience shopping convenience like never before with our E-Commerce System. Enjoy Discounts and Earn Cashback + Rewards Points with every purchase on all products of the company. Just present your PhilTECH VIP Card during payment and all these exciting benefits will be yours.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a> (Email), or you may visit us at our Main Office located at PhilTECH Bldg. (2<sup>nd</sup> Level), Gallera Road, Guiwan, Zamboanga City.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Congratulations!</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Best Regards,</p>
+<p>&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>';
+        $email[1]['email_content_subject'] = 'Membership Code Purchase';
+        $email[1]['shop_id'] = $shop_id;
+        $email[1]['date_created'] = $date_created;
+        $email[1]['date_updated'] = $date_updated;
+        $email[1]['archived'] = 0;
+
+        $email[2]['email_content_key'] = 'discount_card_purchase';
+        $email[2]['email_content'] = '<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Greetings!</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">You have successfully purchased a PhilTECH [membership_name]&nbsp;from [sponsor] Please read important details below:</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Date Issued:&nbsp;[date_issued]</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Date of Expiry: [date_expiry]</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">You may now enjoy a full year of Discount Privilege with every purchase on all products of the company by simply presenting your Discount Card during payment.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a> (Email), or you may visit us at our Main Office located at PhilTECH Bldg. (2<sup>nd</sup> Level), Gallera Road, Guiwan, Zamboanga City.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Congratulations!</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Sincerely,</p>
+<p>&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>';
+        $email[2]['email_content_subject'] = 'Discount Card Purchase';
+        $email[2]['shop_id'] = $shop_id;
+        $email[2]['date_created'] = $date_created;
+        $email[2]['date_updated'] = $date_updated;
+        $email[2]['archived'] = 0;
+
+        $email[3]['email_content_key'] = 'e_wallet_transfer';
+        $email[3]['email_content'] = '<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>Greetings!</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>&nbsp;</strong></p>
+<div style="mso-element: para-border-div; border: none; border-bottom: solid windowtext 1.0pt; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in 0in 1.0pt 0in;">
+<p class="MsoNormal" style="margin-bottom: .0001pt; border: none; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in; mso-padding-alt: 0in 0in 1.0pt 0in;"><strong>Thank you for using E-wallet money transfer. We have successfully processed your transfer request.&nbsp; Transaction details are as follows;</strong></p>
+</div>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>&nbsp;</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>Transaction #: [transaction_id]</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>Transaction Date: [transaction_date]</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>Amount transferred: [amount]</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>E-wallet Recipient: [sponsor]</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>E-wallet Transfer Fee: [fee]</strong></p>
+<div style="mso-element: para-border-div; border: none; border-bottom: solid windowtext 1.0pt; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in 0in 1.0pt 0in;">
+<p class="MsoNormal" style="margin-bottom: .0001pt; border: none; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in; mso-padding-alt: 0in 0in 1.0pt 0in;"><strong>Total Amount charged on E-wallet: [amount_plus_fee]</strong></p>
+</div>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>&nbsp;</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>If there is a problem with executing your request, please call us at 0917-542-2614 (Globe Mobile) or at (062) 310-2256 (Globe Landline). You can always check your transfer status on the Account Dashboard. Just click the link below:</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>(link to account dashboard)</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>&nbsp;</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>Best Regards,</strong></p>
+<p>&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>PhilTech Admin Team</strong></p>';
+        $email[3]['email_content_subject'] = 'E-wallet Transfer';
+        $email[3]['shop_id'] = $shop_id;
+        $email[3]['date_created'] = $date_created;
+        $email[3]['date_updated'] = $date_updated;
+        $email[3]['archived'] = 0;
+
+        $email[4]['email_content_key'] = 'merchant_registration';
+        $email[4]['email_content'] = '<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Greetings!</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">You have successfully registered as a PhilTECH Merchant under the company name [business_name]&nbsp;with Mr./Ms. [name_of_merchant]&nbsp; as your representative. Your PhilTECH Username is [username].</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">To start registering your products and services through our Merchant Module System, log-in with your PhilTECH Username and Password. Please click on the link provided below. If clicking the link does not seem to work, you can copy and paste the link into your browser&rsquo;s address window.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">(Link to PhilTECH&rsquo;s Merchant Module System log-in page)</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd</sup> Level), Gallera Road, Guiwan, Zamboanga City.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Best Regards,</p>
+<p>&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>';
+        $email[4]['email_content_subject'] = 'Merchant Registration';
+        $email[4]['shop_id'] = $shop_id;
+        $email[4]['date_created'] = $date_created;
+        $email[4]['date_updated'] = $date_updated;
+        $email[4]['archived'] = 0;
+
+
+        $email[5]['email_content_key'] = 'merchant_product_registration';
+        $email[5]['email_content'] = '<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Greetings!</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">You have successfully registered your product through the Merchant Module System. Please be advised that processing time is 1-3 working days before your products/services get uploaded to the PhilTECH website. This is to ensure that the company&rsquo;s set standards are being followed at all times.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">These are the list of all the registered product:</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">[products]&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd</sup> Level), Gallera Road, Guiwan, Zamboanga City.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Best Regards,</p>
+<p>&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>';
+        $email[5]['email_content_subject'] = 'Product Registration';
+        $email[5]['shop_id'] = $shop_id;
+        $email[5]['date_created'] = $date_created;
+        $email[5]['date_updated'] = $date_updated;
+        $email[5]['archived'] = 0;
+
+        $email[6]['email_content_key'] = 'e_wallet_refill';
+        $email[6]['email_content'] = '<p class="MsoNormal" style="margin-bottom: .0001pt;">Greetings!</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;">&nbsp;</p>
+<div style="mso-element: para-border-div; border: none; border-bottom: solid windowtext 1.0pt; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in 0in 1.0pt 0in;">
+<p class="MsoNormal" style="margin-bottom: .0001pt; border: none; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in; mso-padding-alt: 0in 0in 1.0pt 0in;">We are pleased to inform you that we have already received your payment and had successfully processed your E-wallet funds replenishment request. Transaction details are as follows;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; border: none; mso-border-bottom-alt: solid windowtext .75pt; padding: 0in; mso-padding-alt: 0in 0in 1.0pt 0in;">&nbsp;</p>
+</div>
+<p class="MsoNormal" style="margin-bottom: .0001pt;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>Transaction #: [transaction_number]</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>Transaction Date: [transaction_date]</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>Amount transferred: [amount]</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>E-wallet Recipient: [sponsor]</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;"><strong>E-wallet Transfer Fee: [fee]</strong></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;">You may now enjoy using your E-wallet funds for any of your purchases. To check your new E-wallet balance, simply click the link provided below;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt;">(link to e-wallet page)</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd</sup> Level), Gallera Road, Guiwan, Zamboanga City.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Best Regards,</p>
+<p>&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>';
+        $email[6]['email_content_subject'] = 'E-wallet Refill';
+        $email[6]['shop_id'] = $shop_id;
+        $email[6]['date_created'] = $date_created;
+        $email[6]['date_updated'] = $date_updated;
+        $email[6]['archived'] = 0;
+
+        $email[7]['email_content_key'] = 'inquire_current_points';
+        $email[7]['email_content'] = '<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Greetings!</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Your current available points are [current_points] . Please be reminded that points may only be redeemed thru items and cannot be converted to cash.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd</sup> Level), Gallera Road, Guiwan, Zamboanga City.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Best Regards,</p>
+<p>&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>';
+        $email[7]['email_content_subject'] = 'Inquire Current Points';
+        $email[7]['shop_id'] = $shop_id;
+        $email[7]['date_created'] = $date_created;
+        $email[7]['date_updated'] = $date_updated;
+        $email[7]['archived'] = 0;
+
+        $email[8]['email_content_key'] = 'redeem_points';
+        $email[8]['email_content'] = '<p>&nbsp;<span style="text-align: justify;">Greetings!</span></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">You have successfully redeemed <u>[points]</u>. You may claim your <u>[item_redeem]</u>&nbsp;at any BCO branch Nationwide. Please present your VIP Card and any valid ID when claiming.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd</sup> Level), Gallera Road, Guiwan, Zamboanga City.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Best Regards,</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>';
+        $email[8]['email_content_subject'] = 'Redeem Points';
+        $email[8]['shop_id'] = $shop_id;
+        $email[8]['date_created'] = $date_created;
+        $email[8]['date_updated'] = $date_updated;
+        $email[8]['archived'] = 0;
+
+        $email[9]['email_content_key'] = 'pass_word_reset';
+        $email[9]['email_content'] = '<p>Greetings!</p>
+<p>&nbsp; &nbsp;We have received a request to reset your password. If you did not make the request, just ignore this email. Otherwise you can reset your password using this link</p>
+<p>&nbsp;[password_reset_link]<br /><br /></p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd</sup> Level), Gallera Road, Guiwan, Zamboanga City.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Best Regards,</p>
+<p>&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>
+<p>&nbsp;</p>';
+        $email[9]['email_content_subject'] = 'Password Reset';
+        $email[9]['shop_id'] = $shop_id;
+        $email[9]['date_created'] = $date_created;
+        $email[9]['date_updated'] = $date_updated;
+        $email[9]['archived'] = 0;
+
+        foreach ($email as $key => $value) 
+        {
+            $count = Tbl_email_content::where('shop_id', $value['shop_id'])->where('email_content_key', $value['email_content_key'])->count();
+            if($count == 0)
+            {
+                Tbl_email_content::insert($value);  
+            }
+        }
+        $count_header = Tbl_email_template::where('shop_id', $shop_id)->count();
+        if($count_header == 0)
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['header_image'] = '/assets/card/images/philtech-logo-blue-2.png';
+            $insert['header_txt'] = '';
+            $insert['header_background_color'] = '#0080ff';
+            $insert['footer_txt']= '<h2 style="text-align: center;"><span style="text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline),&nbsp;</span><a style="text-align: justify;" href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a><span style="text-align: justify;">&nbsp;(Email), or you may visit our Main Office located at PhilTECH Bldg. (2</span><sup style="text-align: justify;">nd</sup><span style="text-align: justify;">&nbsp;Level), Gallera Road, Guiwan, Zamboanga City.</span></h2>';
+            $insert['footer_background_color']= '#0080ff';
+            $insert['footer_text_color'] ='#ffffff';
+            $insert['header_text_color'] = '#ffffff';
+            Tbl_email_template::insert($insert);
+        }
     }
     //endluke
     public static function getShopId()
@@ -64,6 +289,7 @@ class Seed
     
     public static function seed_tbl_chart_account_type()
     {
+        $insert[1]['chart_type_id']             = 1; 
         $insert[1]['chart_type_name']           = "Bank"; 
         $insert[1]['chart_type_description']    = '<p>Create one for each cash account, such as:<br /><br /></p>
                                                 <p style="padding-left: 30px;">&bull; Petty cash</p>
@@ -74,6 +300,7 @@ class Seed
         $insert[1]['chart_type_category']       = "";
         $insert[1]['normal_balance']            = "debit"; 
         
+        $insert[2]['chart_type_id']             = 2; 
         $insert[2]['chart_type_name']           = "Accounts Receivable"; 
         $insert[2]['chart_type_description']    = '<p>Tracks money your customers owe you on unpaid incvoices</p>
                                                 <p>&nbsp;</p>
@@ -82,6 +309,7 @@ class Seed
         $insert[2]['chart_type_category']       = "";
         $insert[2]['normal_balance']            = "debit"; 
         
+        $insert[3]['chart_type_id']             = 3; 
         $insert[3]['chart_type_name']           = "Other Current Asset"; 
         $insert[3]['chart_type_description']    = '<p><span>Tracks the value of things that can be converted to cash or used up within one year, such as:</p>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Prepaid expenses</p>
@@ -92,6 +320,7 @@ class Seed
         $insert[3]['chart_type_category']       = "";
         $insert[3]['normal_balance']            = "debit";
         
+        $insert[4]['chart_type_id']             = 4; 
         $insert[4]['chart_type_name']           = "Fixed Asset"; 
         $insert[4]['chart_type_description']    = '<p>Tracks the value of significant items* that have a useful life of more than one yeat, such us:<br /><br /></p>
                                                 <p style="padding-left: 30px;">&bull; Buildings</p>
@@ -105,6 +334,7 @@ class Seed
         $insert[4]['chart_type_category']       = "";
         $insert[4]['normal_balance']            = "debit";
         
+        $insert[5]['chart_type_id']             = 5; 
         $insert[5]['chart_type_name']           = "Other Asset"; 
         $insert[5]['chart_type_description']    = '<p>Tracks the value of things that are neither Fixed Assets nor Other Current Assets, such as:</p></br>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Goodwill</p></br>
@@ -114,6 +344,7 @@ class Seed
         $insert[5]['chart_type_category']       = "";
         $insert[5]['normal_balance']            = "debit";
         
+        $insert[6]['chart_type_id']             = 6; 
         $insert[6]['chart_type_name']           = "Accounts Payable"; 
         $insert[6]['chart_type_description']    = '<p>Tracks money your&nbsp;owe to vendors for purchase made on credit.</p></br>
                                                 <p>&nbsp;</p></br>
@@ -122,12 +353,14 @@ class Seed
         $insert[6]['chart_type_category']       = "";
         $insert[6]['normal_balance']            = "credit";
         
+        $insert[7]['chart_type_id']             = 7; 
         $insert[7]['chart_type_name']           = "Credit Card"; 
         $insert[7]['chart_type_description']    = '<p>Create one for each credit card your business uses.</p>';
         $insert[7]['has_open_balance']          = "0"; 
         $insert[7]['chart_type_category']       = "";
         $insert[7]['normal_balance']            = "credit";
         
+        $insert[8]['chart_type_id']             = 8; 
         $insert[8]['chart_type_name']           = "Other Current Liability"; 
         $insert[8]['chart_type_description']    = '<p>Tracks money your business owes and expect to pay within one year, such as:</p>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Sales tax</p>
@@ -137,6 +370,7 @@ class Seed
         $insert[8]['chart_type_category']       = "";
         $insert[8]['normal_balance']            = "credit";
         
+        $insert[9]['chart_type_id']             = 9; 
         $insert[9]['chart_type_name']           = "Long Term Liability"; 
         $insert[9]['chart_type_description']    = '<p>Tracks money your business owes and expect to pay back over more than one year, such as:</p>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Mortgages</p></br>
@@ -146,6 +380,7 @@ class Seed
         $insert[9]['chart_type_category']       = "";
         $insert[9]['normal_balance']            = "credit";
         
+        $insert[10]['chart_type_id']             = 10; 
         $insert[10]['chart_type_name']          = "Equity"; 
         $insert[10]['chart_type_description']   = '<p>Track money invested in, or money taken out of the business by owners or shareholders. Payroll and&nbsp;</p></br>
                                                 <p>reimbursable expenses should not be included</p>';
@@ -153,6 +388,7 @@ class Seed
         $insert[10]['chart_type_category']      = "";
         $insert[10]['normal_balance']            = "credit";
         
+        $insert[11]['chart_type_id']             = 11; 
         $insert[11]['chart_type_name']          = "Income"; 
         $insert[11]['chart_type_description']   = '<p>Categorizes money earned from normal business operations, such as:<br /><br /></p></br>
                                                 <p style="padding-left: 30px;">&bull; Product sales</p></br>
@@ -164,6 +400,7 @@ class Seed
         $insert[11]['chart_type_category']      = "";
         $insert[11]['normal_balance']           = "credit";
         
+        $insert[12]['chart_type_id']             = 12; 
         $insert[12]['chart_type_name']          = "Cost of Goods Sold"; 
         $insert[12]['chart_type_description']   = '<p>Tracks the direct costs to produce the items that your business sells, such as:</p></br>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Cost of materials</p></br>
@@ -174,6 +411,7 @@ class Seed
         $insert[12]['chart_type_category']      = "";
         $insert[12]['normal_balance']           = "debit";
         
+        $insert[13]['chart_type_id']             = 13; 
         $insert[13]['chart_type_name']          = "Expense"; 
         $insert[13]['chart_type_description']   = '<p>Categorizes money spent in the course of normal business operations, such us:<br /><br /></p>
                                                 <p style="padding-left: 30px;">&bull; Advertising and promotion</p>
@@ -188,6 +426,7 @@ class Seed
         $insert[13]['chart_type_category']      = "";
         $insert[13]['normal_balance']           = "debit";
         
+        $insert[14]['chart_type_id']             = 14; 
         $insert[14]['chart_type_name']          = "Other Income"; 
         $insert[14]['chart_type_description']   = '<p>Categorizes the money that your business earns that is unrelated to normal business operations, such as:<br /></p>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Dividend income</p>
@@ -197,6 +436,7 @@ class Seed
         $insert[14]['chart_type_category']      = "";
         $insert[14]['normal_balance']           = "credit";
         
+        $insert[15]['chart_type_id']             = 15; 
         $insert[15]['chart_type_name']          = "Other Expense"; 
         $insert[15]['chart_type_description']   = '<p>Categorizes the money that your business spends that is unrelated to normal business operations, such as:<br /></p>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Corporation taxes</p>

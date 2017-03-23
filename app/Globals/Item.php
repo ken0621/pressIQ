@@ -117,28 +117,34 @@ class Item
     public static function get_all_category_item($type = array(1,2,3,4))
     {
         $shop_id = Item::getShopId();
-        $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get();
+        $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get()->toArray();
 
         foreach($_category as $key =>$category)
         {
-            $_category[$key]->item_list   = Tbl_item::where("item_category_id",$category->type_id)->whereIn("item_type_id",$type)->get()->toArray();
-            $_category[$key]->subcategory = Item::get_item_per_sub($category->type_id, $type);
-        
+            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->get()->toArray();
+            foreach($_category[$key]['item_list'] as $key1=>$item_list)
+            {
+                $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
+            }
+            $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }
 
-        return collect($_category)->toArray();
+        return $_category;
     }
-
     public static function get_item_per_sub($category_id, $type = array())
     {
-        $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get();
+        $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get()->toArray();
         foreach($_category as $key =>$category)
         {
-            $_category[$key]->item_list   = Tbl_item::where("item_category_id",$category->type_id)->whereIn("item_type_id",$type)->get()->toArray();
-            $_category[$key]->subcategory = Item::get_item_per_sub($category->type_id, $type);
+            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->get()->toArray();
+            foreach($_category[$key]['item_list'] as $key1=>$item_list)
+            {
+                $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
+            }
+            $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }
 
-        return collect($_category)->toArray();
+        return $_category;
     } 
    
     public static function get_all_item_sir($sir_id)

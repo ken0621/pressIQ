@@ -17,6 +17,7 @@ use App\Globals\Item;
 use App\Globals\Ecom_Product;
 use App\Globals\Category;
 use App\Globals\Utilities;
+use App\Globals\Warehouse;
 
 use Carbon\Carbon;
 use Request;
@@ -229,7 +230,7 @@ class EcommerceProductController extends Member
 		$item_id		= Request::input("evariant_item_id"); 
 		$variant_price	= Request::input("evariant_price"); 
 		$item_code		= Request::input("item_code"); 
-		
+		$item_qty		= Request::input("item_qty_refill");
 		
 		foreach($item_id as $key => $item){
 			
@@ -289,10 +290,26 @@ class EcommerceProductController extends Member
 						Tbl_variant_name::insert($insert_variant_name);
 					}
 				}
+
+				/* ITEM REFILL */
+				$this->refillItemInventory($item, $item_qty[$key]); 
 			}
 		}
 
 		return null;
+	}
+
+	public function refillItemInventory($item_id, $item_qty) 
+	{ 
+		$warehouse_id 		= Ecom_Product::getWarehouseId();
+		$warehouse_remarks 	= "Initial Quantity on Hand For Product";
+		$return_type		= "array";
+
+		$warehouse_refill_product[0]['product_id'] 	= $item_id;
+		$warehouse_refill_product[0]['quantity'] 	= $item_qty;
+
+
+		Warehouse::inventory_refill($warehouse_id, '', 0, $warehouse_remarks, $warehouse_refill_product, $return_type);
 	}
 
 	public function postSaveProductInfo()

@@ -22,7 +22,7 @@
         <div class="form-group">
             <div class="col-md-6">
                 <label>Source *</label>
-                <select name="reason_refill" class="form-control droplist-vendor input-sm">
+                <select name="reason_refill" required class="form-control droplist-vendor input-sm">
                     @include('member.load_ajax_data.load_vendor')
                     <option value="other">Others</option>
                 </select>

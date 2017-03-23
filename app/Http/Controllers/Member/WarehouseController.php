@@ -567,8 +567,9 @@ class WarehouseController extends Member
         { 
             $warehouse_id = Request::input("warehouse_id");
             $remarks = Request::input("remarks");
-            $reason_refill = Request::input("reason_refill");
-            $refill_source = 0;
+            $reason_refill = Request::input("reason_refill") == "other" ? "other" : "vendor";
+            $refill_source = Request::input("reason_refill") == "other" ? 0 : Request::input("reason_refill");
+            
             $quantity_product = Request::input("quantity");
 
             $warehouse_refill_product = null;

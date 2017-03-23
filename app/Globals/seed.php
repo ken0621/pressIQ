@@ -289,6 +289,7 @@ class Seed
     
     public static function seed_tbl_chart_account_type()
     {
+        $insert[1]['chart_type_id']             = 1; 
         $insert[1]['chart_type_name']           = "Bank"; 
         $insert[1]['chart_type_description']    = '<p>Create one for each cash account, such as:<br /><br /></p>
                                                 <p style="padding-left: 30px;">&bull; Petty cash</p>
@@ -299,6 +300,7 @@ class Seed
         $insert[1]['chart_type_category']       = "";
         $insert[1]['normal_balance']            = "debit"; 
         
+        $insert[2]['chart_type_id']             = 2; 
         $insert[2]['chart_type_name']           = "Accounts Receivable"; 
         $insert[2]['chart_type_description']    = '<p>Tracks money your customers owe you on unpaid incvoices</p>
                                                 <p>&nbsp;</p>
@@ -307,6 +309,7 @@ class Seed
         $insert[2]['chart_type_category']       = "";
         $insert[2]['normal_balance']            = "debit"; 
         
+        $insert[3]['chart_type_id']             = 3; 
         $insert[3]['chart_type_name']           = "Other Current Asset"; 
         $insert[3]['chart_type_description']    = '<p><span>Tracks the value of things that can be converted to cash or used up within one year, such as:</p>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Prepaid expenses</p>
@@ -317,6 +320,7 @@ class Seed
         $insert[3]['chart_type_category']       = "";
         $insert[3]['normal_balance']            = "debit";
         
+        $insert[4]['chart_type_id']             = 4; 
         $insert[4]['chart_type_name']           = "Fixed Asset"; 
         $insert[4]['chart_type_description']    = '<p>Tracks the value of significant items* that have a useful life of more than one yeat, such us:<br /><br /></p>
                                                 <p style="padding-left: 30px;">&bull; Buildings</p>
@@ -330,6 +334,7 @@ class Seed
         $insert[4]['chart_type_category']       = "";
         $insert[4]['normal_balance']            = "debit";
         
+        $insert[5]['chart_type_id']             = 5; 
         $insert[5]['chart_type_name']           = "Other Asset"; 
         $insert[5]['chart_type_description']    = '<p>Tracks the value of things that are neither Fixed Assets nor Other Current Assets, such as:</p></br>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Goodwill</p></br>
@@ -339,6 +344,7 @@ class Seed
         $insert[5]['chart_type_category']       = "";
         $insert[5]['normal_balance']            = "debit";
         
+        $insert[6]['chart_type_id']             = 6; 
         $insert[6]['chart_type_name']           = "Accounts Payable"; 
         $insert[6]['chart_type_description']    = '<p>Tracks money your&nbsp;owe to vendors for purchase made on credit.</p></br>
                                                 <p>&nbsp;</p></br>
@@ -347,12 +353,14 @@ class Seed
         $insert[6]['chart_type_category']       = "";
         $insert[6]['normal_balance']            = "credit";
         
+        $insert[7]['chart_type_id']             = 7; 
         $insert[7]['chart_type_name']           = "Credit Card"; 
         $insert[7]['chart_type_description']    = '<p>Create one for each credit card your business uses.</p>';
         $insert[7]['has_open_balance']          = "0"; 
         $insert[7]['chart_type_category']       = "";
         $insert[7]['normal_balance']            = "credit";
         
+        $insert[8]['chart_type_id']             = 8; 
         $insert[8]['chart_type_name']           = "Other Current Liability"; 
         $insert[8]['chart_type_description']    = '<p>Tracks money your business owes and expect to pay within one year, such as:</p>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Sales tax</p>
@@ -362,6 +370,7 @@ class Seed
         $insert[8]['chart_type_category']       = "";
         $insert[8]['normal_balance']            = "credit";
         
+        $insert[9]['chart_type_id']             = 9; 
         $insert[9]['chart_type_name']           = "Long Term Liability"; 
         $insert[9]['chart_type_description']    = '<p>Tracks money your business owes and expect to pay back over more than one year, such as:</p>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Mortgages</p></br>
@@ -371,6 +380,7 @@ class Seed
         $insert[9]['chart_type_category']       = "";
         $insert[9]['normal_balance']            = "credit";
         
+        $insert[10]['chart_type_id']             = 10; 
         $insert[10]['chart_type_name']          = "Equity"; 
         $insert[10]['chart_type_description']   = '<p>Track money invested in, or money taken out of the business by owners or shareholders. Payroll and&nbsp;</p></br>
                                                 <p>reimbursable expenses should not be included</p>';
@@ -378,6 +388,7 @@ class Seed
         $insert[10]['chart_type_category']      = "";
         $insert[10]['normal_balance']            = "credit";
         
+        $insert[11]['chart_type_id']             = 11; 
         $insert[11]['chart_type_name']          = "Income"; 
         $insert[11]['chart_type_description']   = '<p>Categorizes money earned from normal business operations, such as:<br /><br /></p></br>
                                                 <p style="padding-left: 30px;">&bull; Product sales</p></br>
@@ -389,6 +400,7 @@ class Seed
         $insert[11]['chart_type_category']      = "";
         $insert[11]['normal_balance']           = "credit";
         
+        $insert[12]['chart_type_id']             = 12; 
         $insert[12]['chart_type_name']          = "Cost of Goods Sold"; 
         $insert[12]['chart_type_description']   = '<p>Tracks the direct costs to produce the items that your business sells, such as:</p></br>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Cost of materials</p></br>
@@ -399,6 +411,7 @@ class Seed
         $insert[12]['chart_type_category']      = "";
         $insert[12]['normal_balance']           = "debit";
         
+        $insert[13]['chart_type_id']             = 13; 
         $insert[13]['chart_type_name']          = "Expense"; 
         $insert[13]['chart_type_description']   = '<p>Categorizes money spent in the course of normal business operations, such us:<br /><br /></p>
                                                 <p style="padding-left: 30px;">&bull; Advertising and promotion</p>
@@ -413,6 +426,7 @@ class Seed
         $insert[13]['chart_type_category']      = "";
         $insert[13]['normal_balance']           = "debit";
         
+        $insert[14]['chart_type_id']             = 14; 
         $insert[14]['chart_type_name']          = "Other Income"; 
         $insert[14]['chart_type_description']   = '<p>Categorizes the money that your business earns that is unrelated to normal business operations, such as:<br /></p>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Dividend income</p>
@@ -422,6 +436,7 @@ class Seed
         $insert[14]['chart_type_category']      = "";
         $insert[14]['normal_balance']           = "credit";
         
+        $insert[15]['chart_type_id']             = 15; 
         $insert[15]['chart_type_name']          = "Other Expense"; 
         $insert[15]['chart_type_description']   = '<p>Categorizes the money that your business spends that is unrelated to normal business operations, such as:<br /></p>
                                                 <p style="padding-left: 30px;"><span style="white-space: pre; background-color: #f5f5f5;">&bull; Corporation taxes</p>

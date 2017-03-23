@@ -25,6 +25,10 @@ class EmailContent
     {
         return Tbl_email_content::where("email_content_key",$content_key)->pluck("email_content_subject");
     }
+    public static function checkIfexisting($content_key)
+    {
+        return Tbl_email_content::where("email_content_key",$content_key)->count();
+    }
     public static function email_txt_replace($content_key, $change_content = array())
     {    	
         $content = Tbl_email_content::where("email_content_key",$content_key)->pluck("email_content");

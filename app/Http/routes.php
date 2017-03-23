@@ -82,6 +82,10 @@ Route::any('/member/accounting/chart_of_account/popup/add', 'Member\ChartOfAccou
 Route::any('/member/accounting/chart_of_account/popup/update/{id}', 'Member\ChartOfAccountController@load_update_account');
 /* END ACCOUNTNG - CHART OF ACCOUNTS - BRYAN KIER ARADANAS */
 
+/* MEMBER - ACCOUNTING - SETTINGS */
+Route::controller('/member/accounting/settings', 'Member\AccountingSettingController');
+/* END */
+
 /* API - Bryan Kier Aradanas */
 Route::get('/api/{shop_id}/{shop_key}/product', 'Api\Api@product');
 Route::get('/api/{shop_id}/{shop_key}/product/{product_id}', 'Api\Api@product_info');
@@ -191,8 +195,9 @@ Route::any('/member/item/insert_saved_data', 'Member\ItemController@insert_sessi
 Route::any('/member/item/data', 'Member\ItemController@data'); /* ERWIN */
 Route::get('/member/item/mulitple_price_modal/{id}', 'Member\ItemController@get_multiple_price_modal'); /* B */
 Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_multiple_price_modal'); /* B */
+Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_item_new_price'); /* B */
 
-Route::any("/member/item/view_serials","Member\ItemSerialController@index");
+Route::any("/member/item/view_serials/{id}","Member\ItemSerialController@index");
 Route::any("/member/item/serial_number/{id}",'Member\ItemSerialController@view_serial');
 
 Route::any('/member/functiontester', 'Member\FunctionTesterController@index'); /* ERWIN */
@@ -276,7 +281,7 @@ Route::any('/member/item/select_um','Member\UnitOfMeasurementController@select_u
 
 /* WAREHOUSE ARCY*/
 Route::any('/member/item/warehouse', 'Member\WarehouseController@index');
-Route::any('member/item/inventory_log','Member\WarehouseController@inventory_log');
+Route::any('/member/item/inventory_log/{id}','Member\WarehouseController@inventory_log');
 Route::any('/member/item/warehouse/add', 'Member\WarehouseController@add');
 Route::any('/member/item/warehouse/edit/{id}', 'Member\WarehouseController@edit');
 Route::any('/member/item/warehouse/edit_submit', 'Member\WarehouseController@edit_submit');

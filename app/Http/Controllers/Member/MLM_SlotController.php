@@ -45,6 +45,7 @@ use App\Globals\Mlm_compute;
 use App\Globals\Mlm_member;
 use App\Globals\Mlm_discount;
 // use App\Globals\Mlm_compute;
+use App\Models\Tbl_email_content;
 use Crypt;
 class MLM_SlotController extends Member
 {
@@ -113,9 +114,7 @@ class MLM_SlotController extends Member
     }
     public function index()
     {
-        // $email = DB::table('tbl_email_content')->where('email_content_id', '!=', 1)->get();
-        // $email = $email->toArray();
-        // return $email;
+        // return  Membership_code::set_up_mail(332, 1);
         // $placement_tree_left_list        = Tbl_tree_placement::where("placement_tree_parent_id",1)
         //                                                      ->where("placement_tree_level",11)
         //                                                      ->where("placement_tree_position","left")

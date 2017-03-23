@@ -19,7 +19,15 @@ class ShopProductContentController extends Shop
         $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
         $data["_variant"]    = Ecom_Product::getProductOption($id, ",");
         $data["_related"]    = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
-    
+
+        foreach ($data["_related"] as $key => $value) 
+        {
+            if ($value["eprod_id"] == $data["product"]["eprod_id"]) 
+            {
+                unset($data["_related"][$key]);
+            }
+        }
+
         foreach ($data["product"]["variant"] as $keys => $values) 
         {
             // Convert to timestamp
@@ -32,6 +40,14 @@ class ShopProductContentController extends Shop
             if ($result)
             {
                 $data["product"]["variant"][$keys]["discounted"] = true;
+                if ($values["item_discount_type"] == "fixed") 
+                {
+                    $data["product"]["variant"][$keys]["discounted_price"] = $values['evariant_price'] - $values["item_discount_value"];
+                }
+                else
+                {
+                    $data["product"]["variant"][$keys]["discounted_price"] = $values['evariant_price'] - ((100 - $values["item_discount_value"]) / 100);
+                }
             }
             else
             {
@@ -40,7 +56,7 @@ class ShopProductContentController extends Shop
 
             $data["product"]["variant"][$keys]["variant_image"] = Ecom_Product::getVariantImage($values["evariant_id"])->toArray();
         }
-        
+  
         return view("product_content", $data);
     }
 

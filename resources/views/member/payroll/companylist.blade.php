@@ -23,95 +23,114 @@
 </ul>
 <div class="tab-content tab-pane-div">
 	<div id="active-company" class="tab-pane fade in active">
-		<table class="table table-condensed table-bordered table-hover">
-			<thead>
-				<tr>
-					<th class="text-center">Company Name</th>
-					<th class="text-center">Company Code</th>
-					<th class="text-center">Company RDO</th>
-					<th class="text-center">Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach($_active as $active)
-				<tr>
-					<td>
-						{{$active->payroll_company_name}}
-					</td>
-					<td class="text-center">
-						{{$active->payroll_company_code}}
-					</td>
-					<td class="text-center">
-						{{$active->rdo_code}}
-					</td>
-					<td class="text-center">
-						<div class="dropdown">
-							<button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
-							<span class="caret"></span></button>
-							<ul class="dropdown-menu dropdown-menu-custom">
-								<li>
-									<a href="#" class="popup" link="/member/payroll/company_list/view_company_modal/{{$active->payroll_company_id}}" ><i class="fa fa-search"></i>&nbsp;View</a>
-								</li>
-								<li>
-									<a href="#" class="popup" link="/member/payroll/company_list/edit_company_modal/{{$active->payroll_company_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
-								</li>
-								<li>
-									<a href="#" data-content="{{$active->payroll_company_id}}" data-archived="1" class="btn-archived"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
-								</li>
-							</ul>
-						</div>
-					</td>
-				</tr>
-				@endforeach
-			</tbody>
-		</table>
+		<div class="load-data" target="value-id-1">
+			<div id="value-id-1">
+				<table class="table table-condensed table-bordered table-hover">
+					<thead>
+						<tr>
+							<th class="text-center">Company Name</th>
+							<th class="text-center">Company Code</th>
+							<th class="text-center">Company RDO</th>
+							<th class="text-center">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach($_active as $active)
+						<tr>
+							<td>
+								{{$active->payroll_company_name}}
+							</td>
+							<td class="text-center">
+								{{$active->payroll_company_code}}
+							</td>
+							<td class="text-center">
+								{{$active->rdo_code}}
+							</td>
+							<td class="text-center">
+								<div class="dropdown">
+									<button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
+									<span class="caret"></span></button>
+									<ul class="dropdown-menu dropdown-menu-custom">
+										<li>
+											<a href="#" class="popup" link="/member/payroll/company_list/view_company_modal/{{$active->payroll_company_id}}" ><i class="fa fa-search"></i>&nbsp;View</a>
+										</li>
+										<li>
+											<a href="#" class="popup" link="/member/payroll/company_list/edit_company_modal/{{$active->payroll_company_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+										</li>
+										<li>
+											<a href="#" data-content="{{$active->payroll_company_id}}" data-archived="1" class="btn-archived"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
+										</li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						@endforeach
+					</tbody>
+				</table>
+				<div class="pagination"> {!! $_active->render() !!} </div>
+			</div>
+		</div>
 	</div>
 	<div id="archived-company" class="tab-pane fade">
-		<table class="table table-condensed table-bordered table-hover">
-			<thead>
-				<tr>
-					<th class="text-center">Company Name</th>
-					<th class="text-center">Company Code</th>
-					<th class="text-center">Company RDO</th>
-					<th class="text-center">Action</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach($_archived as $archived)
-				<tr>
-					<td>
-						{{$archived->payroll_company_name}}
-					</td>
-					<td class="text-center">
-						{{$archived->payroll_company_code}}
-					</td>
-					<td class="text-center">
-						{{$archived->rdo_code}}
-					</td>
-					<td class="text-center">
-						<div class="dropdown">
-							<button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
-							<span class="caret"></span></button>
-							<ul class="dropdown-menu dropdown-menu-custom">
-								<li>
-									<a href="#" class="popup" link="/member/payroll/company_list/view_company_modal/{{$archived->payroll_company_id}}" ><i class="fa fa-search"></i>&nbsp;View</a>
-								</li>
-								<li>
-									<a href="#" class="popup" link="/member/payroll/company_list/edit_company_modal/{{$archived->payroll_company_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
-								</li>
-								<li>
-									<a href="#" data-content="{{$archived->payroll_company_id}}" data-archived="0" class="btn-archived"><i class="fa fa-recycle"></i>&nbsp;Re-use</a>
-								</li>
-							</ul>
-						</div>
-					</td>
-				</tr>
-				@endforeach
-			</tbody>
-		</table>
+		<div class="load-data" target="value-id-2">
+			<div id="value-id-2">
+				<table class="table table-condensed table-bordered table-hover">
+					<thead>
+						<tr>
+							<th class="text-center">Company Name</th>
+							<th class="text-center">Company Code</th>
+							<th class="text-center">Company RDO</th>
+							<th class="text-center">Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach($_archived as $archived)
+						<tr>
+							<td>
+								{{$archived->payroll_company_name}}
+							</td>
+							<td class="text-center">
+								{{$archived->payroll_company_code}}
+							</td>
+							<td class="text-center">
+								{{$archived->rdo_code}}
+							</td>
+							<td class="text-center">
+								<div class="dropdown">
+									<button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
+									<span class="caret"></span></button>
+									<ul class="dropdown-menu dropdown-menu-custom">
+										<li>
+											<a href="#" class="popup" link="/member/payroll/company_list/view_company_modal/{{$archived->payroll_company_id}}" ><i class="fa fa-search"></i>&nbsp;View</a>
+										</li>
+										<li>
+											<a href="#" class="popup" link="/member/payroll/company_list/edit_company_modal/{{$archived->payroll_company_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+										</li>
+										<li>
+											<a href="#" data-content="{{$archived->payroll_company_id}}" data-archived="0" class="btn-archived"><i class="fa fa-recycle"></i>&nbsp;Re-use</a>
+										</li>
+									</ul>
+								</div>
+							</td>
+						</tr>
+						@endforeach
+					</tbody>
+				</table>
+				<div class="pagination"> {!! $_archived->render() !!} </div>
+			</div>
+		</div>
 	</div>
 </div>
 @endsection
 @section('script')
 <script type="text/javascript" src="/assets/member/js/payroll/companylist.js"></script>
+
+<script type="text/javascript">
+	function loading_done_paginate (data)
+	{
+		console.log(data);
+	}
+</script>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
+
 @endsection

@@ -37,7 +37,7 @@
                             <tr>
                                 <th>#</th>
                                 <th class="text-center">Item Name</th>
-                                <!-- <th class="text-center">Quantity</th> -->
+                                <th class="text-center">Quantity</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -47,6 +47,7 @@
                                     <tr>
                                         <td>{{$item->serial_id}}</td>
                                         <td class="text-center">{{$item->item_name}}</td>
+                                        <td class="text-center">{{$item->inventory_count}}</td>
                                         <td class="text-center"><a link="/member/item/serial_number/{{$item->item_id}}" size="md" class="popup">View Serials</a></td>
                                     </tr>
                                 @endforeach

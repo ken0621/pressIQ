@@ -13,13 +13,14 @@ class Tbl_payroll_leave_temp extends Model
     public $timestamps = false;
 
 
-/*    	tbl_payroll_leave_temp
-		$table->increments('tbl_payroll_leave_temp');
-        $table->integer('shop_id');
-        $table->string('payroll_leave_temp_name',100);
-        $table->integer('payroll_leave_temp_days_cap');
-        $table->tinyInteger('payroll_leave_temp_with_pay');
-        $table->tinyInteger('payroll_leave_temp_is_cummulative');*/   
+    /* COLUMN REFERENCE NAME */
+    // [PRIMARY KEY]    tbl_payroll_leave_temp_id
+    // [INTEGER]        shop_id
+    // [VARCHAR]        payroll_leave_temp_name
+    // [INTEGER]        payroll_leave_temp_days_cap
+    // [TINY INTEGER]   payroll_leave_temp_with_pay
+    // [TINYINTEGER]    payroll_leave_temp_is_cummulative
+  
     public function scopesel($query, $shop_id = 0, $archived = 0)
 	{
 		return $query->where('shop_id', $shop_id)->where('payroll_leave_temp_archived', $archived);

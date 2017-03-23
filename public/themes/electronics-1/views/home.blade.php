@@ -37,154 +37,154 @@
 
 						<div class="col-md-8 right-container">
 							<div class="col-md-6 product-holder">
-									<a href="">
-										<div class="per-item-container clearfix">
-											<div class="col-md-6 product-image">
-												<div class="image-holder">
-													<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
-													<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
-												</div>
-											</div>
-											<div class="col-md-6 product-content">
-												<div class="product-details">
-													<div class="item-name">Lorem ipsum dolor sit</div>
-													<div class="item-rating">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-													</div>
-													<div class="item-price">PHP 5,000.00</div>
-												</div>
+								<a href="">
+									<div class="per-item-container clearfix">
+										<div class="col-md-6 product-image">
+											<div class="image-holder">
+												<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
+												<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
 											</div>
 										</div>
-									</a>
+										<div class="col-md-6 product-content">
+											<div class="product-details">
+												<div class="item-name">Lorem ipsum dolor sit</div>
+												<div class="item-rating">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+												</div>
+												<div class="item-price">PHP 5,000.00</div>
+											</div>
+										</div>
+									</div>
+								</a>
 							</div>
 							<div class="col-md-6 product-holder">
-									<a href="">
-										<div class="per-item-container clearfix">
-											<div class="col-md-6 product-image">
-												<div class="image-holder">
-													<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
-													<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
-												</div>
-											</div>
-											<div class="col-md-6 product-content">
-												<div class="product-details">
-													<div class="item-name">Lorem ipsum dolor sit</div>
-													<div class="item-rating">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-													</div>
-													<div class="item-price">PHP 5,000.00</div>
-												</div>
+								<a href="">
+									<div class="per-item-container clearfix">
+										<div class="col-md-6 product-image">
+											<div class="image-holder">
+												<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/featured-content-img2.png">
+												<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/featured-content-img2.png">
 											</div>
 										</div>
-									</a>
+										<div class="col-md-6 product-content">
+											<div class="product-details">
+												<div class="item-name">Lorem ipsum dolor sit</div>
+												<div class="item-rating">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+												</div>
+												<div class="item-price">PHP 5,000.00</div>
+											</div>
+										</div>
+									</div>
+								</a>
 							</div>
 							<div class="col-md-6 product-holder">
-									<a href="">
-										<div class="per-item-container clearfix">
-											<div class="col-md-6 product-image">
-												<div class="image-holder">
-													<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
-													<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
-												</div>
-											</div>
-											<div class="col-md-6 product-content">
-												<div class="product-details">
-													<div class="item-name">Lorem ipsum dolor sit</div>
-													<div class="item-rating">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-													</div>
-													<div class="item-price">PHP 5,000.00</div>
-												</div>
+								<a href="">
+									<div class="per-item-container clearfix">
+										<div class="col-md-6 product-image">
+											<div class="image-holder">
+												<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/featured-content-img3.png">
+												<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/featured-content-img3.png">
 											</div>
 										</div>
-									</a>
+										<div class="col-md-6 product-content">
+											<div class="product-details">
+												<div class="item-name">Lorem ipsum dolor sit</div>
+												<div class="item-rating">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+												</div>
+												<div class="item-price">PHP 5,000.00</div>
+											</div>
+										</div>
+									</div>
+								</a>
 							</div>
 							<div class="col-md-6 product-holder">
-									<a href="">
-										<div class="per-item-container clearfix">
-											<div class="col-md-6 product-image">
-												<div class="image-holder">
-													<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
-													<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
-												</div>
-											</div>
-											<div class="col-md-6 product-content">
-												<div class="product-details">
-													<div class="item-name">Lorem ipsum dolor sit</div>
-													<div class="item-rating">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-													</div>
-													<div class="item-price">PHP 5,000.00</div>
-												</div>
+								<a href="">
+									<div class="per-item-container clearfix">
+										<div class="col-md-6 product-image">
+											<div class="image-holder">
+												<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/featured-content-img4.png">
+												<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/featured-content-img4.png">
 											</div>
 										</div>
-									</a>
+										<div class="col-md-6 product-content">
+											<div class="product-details">
+												<div class="item-name">Lorem ipsum dolor sit</div>
+												<div class="item-rating">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+												</div>
+												<div class="item-price">PHP 5,000.00</div>
+											</div>
+										</div>
+									</div>
+								</a>
 							</div>
 							<div class="col-md-6 product-holder">
-									<a href="">
-										<div class="per-item-container clearfix">
-											<div class="col-md-6 product-image">
-												<div class="image-holder">
-													<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
-													<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
-												</div>
-											</div>
-											<div class="col-md-6 product-content">
-												<div class="product-details">
-													<div class="item-name">Lorem ipsum dolor sit</div>
-													<div class="item-rating">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-													</div>
-													<div class="item-price">PHP 5,000.00</div>
-												</div>
+								<a href="">
+									<div class="per-item-container clearfix">
+										<div class="col-md-6 product-image">
+											<div class="image-holder">
+												<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/featured-content-img5.png">
+												<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/featured-content-img5.png">
 											</div>
 										</div>
-									</a>
+										<div class="col-md-6 product-content">
+											<div class="product-details">
+												<div class="item-name">Lorem ipsum dolor sit</div>
+												<div class="item-rating">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+												</div>
+												<div class="item-price">PHP 5,000.00</div>
+											</div>
+										</div>
+									</div>
+								</a>
 							</div>
 							<div class="col-md-6 product-holder">
-									<a href="">
-										<div class="per-item-container clearfix">
-											<div class="col-md-6 product-image">
-												<div class="image-holder">
-													<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
-													<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/featured-content-img1.png">
-												</div>
-											</div>
-											<div class="col-md-6 product-content">
-												<div class="product-details">
-													<div class="item-name">Lorem ipsum dolor sit</div>
-													<div class="item-rating">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-														<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-													</div>
-													<div class="item-price">PHP 5,000.00</div>
-												</div>
+								<a href="">
+									<div class="per-item-container clearfix">
+										<div class="col-md-6 product-image">
+											<div class="image-holder">
+												<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/featured-content-img6.png">
+												<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/featured-content-img6.png">
 											</div>
 										</div>
-									</a>
+										<div class="col-md-6 product-content">
+											<div class="product-details">
+												<div class="item-name">Lorem ipsum dolor sit</div>
+												<div class="item-rating">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+													<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+												</div>
+												<div class="item-price">PHP 5,000.00</div>
+											</div>
+										</div>
+									</div>
+								</a>
 							</div>
 						</div>
 					</div>
@@ -229,8 +229,8 @@
 						<a href="">
 							<div class="col-md-5 product-image">
 								<div class="image-holder">
-									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
-									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
+									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img2.png">
+									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img2.png">
 								</div>
 							</div>
 							<div class="col-md-7 product-content">
@@ -252,8 +252,8 @@
 						<a href="">
 							<div class="col-md-5 product-image">
 								<div class="image-holder">
-									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
-									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
+									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img3.png">
+									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img3.png">
 								</div>
 							</div>
 							<div class="col-md-7 product-content">
@@ -275,8 +275,8 @@
 						<a href="">
 							<div class="col-md-5 product-image">
 								<div class="image-holder">
-									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
-									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
+									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img4.png">
+									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img4.png">
 								</div>
 							</div>
 							<div class="col-md-7 product-content">
@@ -382,7 +382,7 @@
 							<a href="">
 								<div class="per-item-container">
 									<div class="image-holder">
-										<img src="/themes/{{ $shop_theme }}/img/prod-content-image2.png">
+										<img src="/themes/{{ $shop_theme }}/img/prod-content-image3.png">
 									</div>
 									<div class="item-details">
 										<div class="item-title">Lorem ipsum dolor sit</div>
@@ -409,7 +409,7 @@
 							<a href="">
 								<div class="per-item-container">
 									<div class="image-holder">
-										<img src="/themes/{{ $shop_theme }}/img/prod-content-image2.png">
+										<img src="/themes/{{ $shop_theme }}/img/prod-content-image4.png">
 									</div>
 									<div class="item-details">
 										<div class="item-title">Lorem ipsum dolor sit</div>

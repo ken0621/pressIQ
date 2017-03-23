@@ -172,6 +172,50 @@
 			"size":"6"
 		},
 
+		"about_mission_title" :
+		{
+			"label":"Mission Title",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_vision_title" :
+		{
+			"label":"Vision Title",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_core_values_title" :
+		{
+			"label":"Core Values Title",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+
+		"about_mission_description" :
+		{
+			"label":"Mission Description",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_vision_description" :
+		{
+			"label":"Vision Description",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"about_core_values_description" :
+		{
+			"label":"Core Values Description",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+
 		"about_meet_our_team_title_1" :
 		{
 			"label":"Meet Our Team Title 1",

@@ -118,7 +118,7 @@
 
 	<div class="modal-footer">
 		<button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-custom-primary btn-submit" type="submit">Save</button>
+		<button class="btn btn-custom-primary btn-submit" type="submit">Update</button>
 	</div>
 </form>
 <script type="text/javascript" src="/assets/member/js/payroll/modal_create_leave_temp.js"></script>

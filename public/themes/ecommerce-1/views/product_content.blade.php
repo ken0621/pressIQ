@@ -20,7 +20,7 @@
                                         <div class="item-title">{{ $collection['product']['eprod_name'] }}</div>
                                         <div class="item-price">{{ get_collection_first_price($collection) }}</div>
                                     </div>
-                                    <button class="new-add-to-cart-button btn" style="margin-top: 25px;">
+                                    <button type="button" onClick="location.href='/product/view/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn" style="margin-top: 25px;">
                                         <table>
                                             <tbody>
                                                 <tr>
@@ -46,12 +46,12 @@
                             <div class="col-md-5 product">
                                 <div>
                                     @foreach($product_variant['image'] as $key => $image)
-                                    <img id="yellow-bag-image" key="{{ $key }}" class="item-image-large {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
+                                    <img id="yellow-bag-image" key="{{ $key }}" variant-id="{{ $product_variant['evariant_id'] }}" class="item-image-large {{ $key == 0 ? '' : 'hide' }}" key="{{ $key }}" style="width: 100%;" src="{{ $image['image_path'] }}" data-zoom-image="{{ $image['image_path'] }}">
                                     @endforeach
                                 </div>
                                 <div class="thumb">
                                     @foreach($product_variant['image'] as $key => $image)
-                                    <div class="holder" key="{{ $key }}"><img class="4-3-ratio" style="width: 100%; object-fit: cover;" class="item-image-small small-yellow-bag match-height" src="{{ $image['image_path'] }}"></div>
+                                    <div class="holder" style="cursor: pointer;" key="{{ $key }}" variant-id="{{ $product_variant['evariant_id'] }}"><img class="4-3-ratio" style="width: 100%; object-fit: cover;" class="item-image-small small-yellow-bag match-height" src="{{ $image['image_path'] }}"></div>
                                     @endforeach
                                 </div>
                             </div>
@@ -147,7 +147,7 @@
                             <div class="per-item-container">
                                 <div class="image-content-1">
                                     <img class="4-3-ratio item-image-large other-related-images" src="{{ get_product_first_image($related) }}">
-                                    <button class="new-add-to-cart-button btn" >
+                                    <button type="button" onClick="location.href='/product/view/{{ $related['eprod_id'] }}'" class="new-add-to-cart-button btn" >
                                         <table>
                                             <tbody>
                                                 <tr>
@@ -159,7 +159,7 @@
                                     </button>
                                 </div>
                                 <div class="item-details">
-                                    <div class="item-name">{{ get_product_first_name($related) }}</div>
+                                    <div class="item-name"><a href="/product/view/{{ $related['eprod_id'] }}" style="color: #1a1a1a;">{{ get_product_first_name($related) }}</a></div>
                                     <div class="item-price">{{ get_product_first_price($related) }}</div>
                                 </div>
                             </div>

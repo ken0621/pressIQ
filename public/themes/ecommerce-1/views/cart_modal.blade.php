@@ -33,13 +33,13 @@
                </td>
                <td>
                   <div class="input-group">
-                     <span style="cursor: pointer;" class="input-group-addon qty-control-add" variation-id="{{ $cart['product_id'] }}">+</span>
+                     <span key="{{ $cart['product_id'] }}" style="cursor: pointer;" class="input-group-addon qty-control-add" variation-id="{{ $cart['product_id'] }}">+</span>
                      <input type="text" class="form-control qty-control" variation-id="{{ $cart['product_id'] }}" value="{{ $cart['quantity'] }}">
-                     <span style="cursor: pointer;" class="input-group-addon qty-control-minus" variation-id="{{ $cart['product_id'] }}">-</span>
+                     <span key="{{ $cart['product_id'] }}" style="cursor: pointer;" class="input-group-addon qty-control-minus" variation-id="{{ $cart['product_id'] }}">-</span>
                   </div>
                </td>
-               <td class="upc">&#8369; <span raw-price="{{ $cart['cart_product_information']['product_current_price'] }}">{{ number_format($cart['cart_product_information']['product_current_price'], 2) }}</span></td>
-               <td class="ttl">&#8369; <span>{{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</span></td>
+               <td class="upc">&#8369; <span key="{{ $cart['product_id'] }}" raw-price="{{ $cart['cart_product_information']['product_current_price'] }}">{{ number_format($cart['cart_product_information']['product_current_price'], 2) }}</span></td>
+               <td class="ttl">&#8369; <span key="{{ $cart['product_id'] }}">{{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</span></td>
                <td class="rmv"><a class="remove-cart" variation-id="{{ $cart['product_id'] }}" href="javascript:">Remove</a></td>
             </tr>
             @endforeach

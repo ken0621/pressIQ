@@ -212,6 +212,87 @@ class Warehouse
         return $data;
 
     }
+      public static function adjust_inventory($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
+    {
+        
+        $shop_id = Warehouse::get_shop_id($warehouse_id);
+
+        $insert_slip['inventory_slip_id_sibling']    = 0;
+        $insert_slip['inventory_reason']             = 'adjust';
+        $insert_slip['warehouse_id']                 = $warehouse_id;
+        $insert_slip['inventory_remarks']            = $remarks;
+        $insert_slip['inventory_slip_date']          = Carbon::now();
+        $insert_slip['inventory_slip_shop_id']       = $shop_id;
+        $insert_slip['inventory_slip_status']        = 'adjust';
+        $insert_slip['inventroy_source_reason']      = $reason_refill;
+        $insert_slip['inventory_source_id']          = $refill_source;
+        $insert_slip['inventory_slip_consume_refill']= 'adjust';
+
+        $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
+
+        $inventory_success = '';
+        $inventory_err = '';
+        $success = 0;
+        $err = 0;
+        $insert_refill = '';
+
+        $for_serial_item = '';
+        
+        if($warehouse_refill_product)
+        {
+            foreach($warehouse_refill_product as $key => $refill_product)
+            {
+               
+                $insert_refill['inventory_item_id']        = $refill_product['product_id'];
+                $insert_refill['warehouse_id']             = $warehouse_id;
+                $insert_refill['inventory_created']        = Carbon::now();
+                $insert_refill['inventory_count']          = $refill_product['quantity'];
+                $insert_refill['inventory_slip_id']        = $inventory_slip_id;
+
+                $inventory_success[$success] = Warehouse::array_tansfer('success', $refill_product['product_id']);
+                $success++;
+
+                $inventory_id = Tbl_warehouse_inventory::insertGetId($insert_refill);
+
+                $for_serial_item[$key]["quantity"] = $refill_product['quantity'];
+                $for_serial_item[$key]["product_id"] = $refill_product['product_id'];
+                $for_serial_item[$key]["inventory_id"] = $inventory_id;
+            }
+             $data['status'] = '';
+            
+
+            $serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$shop_id)->first();
+
+            $data['status'] = 'success';
+            if($is_return == null)
+            {
+                if($serial != null)
+                {
+                    $data['status'] = 'success-serial';
+
+                    $items["item_id"] = "";
+                    $items["item_list"] = $for_serial_item;
+                    Session::put("item", $items);
+                }                
+            }
+ 
+            $data['inventory_slip_id'] = $inventory_slip_id;
+
+        }
+        else
+        {
+            $data['status'] = 'error';
+            $data['status_message'] = 'some fields are missing';
+        }
+       
+
+        $space = '';
+        if($return == 'json')
+        {
+            $data = json_encode($data);
+        }
+        return $data;
+    }
     public static function inventory_refill($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
     {
         

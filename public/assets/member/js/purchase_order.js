@@ -373,7 +373,12 @@ function purchase_order(){
 				method: 'get',
 				success: function(data)
 				{
-					$parent.find(".select-um").html(data).globalDropList("reload").globalDropList("enabled");
+					$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
+					{
+						$(this).globalDropList("reload").globalDropList("enabled");
+						console.log($(this).find("option:first").val());
+						$(this).val($(this).find("option:first").val()).change()		;
+					})
 				},
 				error: function(e)
 				{

@@ -391,8 +391,7 @@ function customer_invoice(){
 		$parent.find(".txt-qty").val(1).change();
 
 		if($this.find("option:selected").attr("has-um") != '')
-		{
-			
+		{			
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$(this).globalDropList("reload").globalDropList("enabled");

@@ -5,8 +5,8 @@ use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_email_content;
 use App\Models\Tbl_shop;
 use DB;
+use App\Globals\EmailContent;
 use App\Models\Tbl_user;
-
 class EmailContent
 {    
     public static function getShopId()
@@ -25,6 +25,10 @@ class EmailContent
     {
         return Tbl_email_content::where("email_content_key",$content_key)->pluck("email_content_subject");
     }
+    public static function checkIfexisting($content_key)
+    {
+        return Tbl_email_content::where("email_content_key",$content_key)->count();
+    }
     public static function email_txt_replace($content_key, $change_content = array())
     {    	
         $content = Tbl_email_content::where("email_content_key",$content_key)->pluck("email_content");
@@ -35,5 +39,9 @@ class EmailContent
         }
 
         return $content;
+    }
+    public static function membership_code_email()
+    {
+        $body = EmailContent::email_txt_replace($content_key, $change_content);
     }
 }

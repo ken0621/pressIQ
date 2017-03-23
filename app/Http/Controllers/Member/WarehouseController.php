@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Member;
 use App\Models\Tbl_item;
 use App\Globals\Warehouse;
 use App\Globals\Utilities;
+use App\Globals\Vendor;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_sub_warehouse;
@@ -369,6 +370,7 @@ class WarehouseController extends Member
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
             
             $data["warehouse_item"] = Warehouse::select_item_warehouse_single($id,'array');
+            $data["_vendor"]    = Vendor::getAllVendor('active');
             
             $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)
                                                                             ->where("type_shop",$this->user_info->shop_id)

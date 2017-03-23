@@ -34,6 +34,7 @@
 								</div>
 							</a>
 						</div>
+
 						<div class="col-md-8 right-container">
 							<div class="col-md-6 product-holder">
 									<a href="">

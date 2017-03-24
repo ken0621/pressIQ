@@ -151,6 +151,24 @@
                             </div>
                         </div>
                         <div class="col-md-6" style="margin-bottom: 5px;">
+                            <label>Receipt Logo</label>
+                            <div class="match-height">
+                                <input type="hidden" name="info[receipt_logo][type]" value="{{ isset($company_info['receipt_logo']) ? $company_info['receipt_logo']->type : 'image' }}">
+                                <input class="image-value" key="receipt_logo" type="hidden" name="info[receipt_logo][value]" value="{{ isset($company_info['receipt_logo']) ? $company_info['receipt_logo']->value : '' }}">
+                                <div class="gallery-list image-gallery image-gallery-single" key="receipt_logo">
+                                    @if(isset($company_info['receipt_logo']))
+                                    <div>
+                                        <div class="img-holder">
+                                            <img class="img-responsive" src="{{ $company_info['receipt_logo']->value }}">
+                                        </div>
+                                    </div>
+                                    @else
+                                    <div class="empty-notify"><i class="fa fa-image"></i> No Image Yet</div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="margin-bottom: 5px;">
                             <label>Company Address</label>
                             <div>
                                 <div class="match-height">

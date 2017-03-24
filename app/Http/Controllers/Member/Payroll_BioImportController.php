@@ -110,7 +110,11 @@ class Payroll_BioImportController extends Member
 		$biometric 	= Request::input('biometric');
 		if($biometric == 'ZKTime 5.0')
 		{
-			Self::import_ZKTime_5_0($file);
+			return Self::import_ZKTime_5_0($file);
+		}
+		if($biometric == 'Digital Persona')
+		{
+			return Self::import_Digital_Persona($file);
 		}
 	}
 
@@ -119,7 +123,10 @@ class Payroll_BioImportController extends Member
     public function import_ZKTime_5_0($file)
     {
     	// $file = Request::file('file');
+    	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('no','datetime'));
+    	// dd($_time);
+
     	if(isset($_time[0]['no']) && isset($_time[0]['datetime']))
     	{
 
@@ -183,17 +190,25 @@ class Payroll_BioImportController extends Member
 	    		$count_inserted = count($insert_time_record);
 	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
 	    	}
-
-	    	return $message;
+	    	
+	    	// return $message;
     	}
-    	else
-    	{
-    		return '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
-    	}
-    	
+    	// else
+    	// {
+    	// 	return '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
+    	// }
+    	return $message;
     	
     }
 
+    public function import_Digital_Persona($file)
+    {
+    	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('id_no','date','time_in','time_out'));
+    	dd($_time);
+    	$space = '        ';
+    }
+
+    /* TEMPLATE START */
     public function template_global()
     {
     	$biometric_name = Request::input('biometric_name');

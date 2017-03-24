@@ -71,6 +71,7 @@
                             <th class="text-left">Date Delivered</th>
                             <th class="text-left">Status</th>
                             <th class="text-left">Recipient</th>
+                            <th class="text-left">Description</th>
                             <th class="text-left">Remarks</th>
                         </tr>
                     </thead>
@@ -81,6 +82,7 @@
                             <td class="text-left">{{$system_logs->doneAt}}</td>
                             <td class="text-left" style="color: {{$system_logs->status->groupName == 'DELIVERED' ? 'green' : 'red'}}">{{$system_logs->status->groupName}}</td>
                             <td class="text-left">{{$system_logs->to}}</td>
+                            <td class="text-left">{{$system_logs->status->description}}</td>
                             <td class="text-left">{{$system_logs->text}}</td>
                         </tr>
                         @endforeach

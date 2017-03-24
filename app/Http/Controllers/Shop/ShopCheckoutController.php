@@ -14,6 +14,7 @@ use Validator;
 use Carbon\Carbon;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Globals\Mlm_slot_log;
+use App\Models\Tbl_customer;
 // use App\Globals\Mlm_slot_log;    
 class ShopCheckoutController extends Shop
 {
@@ -22,6 +23,34 @@ class ShopCheckoutController extends Shop
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
         $data["_payment_method"] = Tbl_online_pymnt_method::get();
+        if(Self::$customer_info != null)
+        {
+            $customer_info = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_info->customer_id)->info()->first();
+            
+            // dd($data);
+        }
+        if(isset($customer_info))
+        {
+            $data['customer_first_name'] = $customer_info->first_name;
+            $data['customer_middle_name'] = $customer_info->middle_name;
+            $data['customer_last_name'] = $customer_info->last_name;
+            $data['customer_email'] = $customer_info->email;
+            $data['customer_mobile'] = $customer_info->customer_mobile;
+            $data['customer_state_province'] = $customer_info->customer_state;
+            $data['customer_city'] = $customer_info->customer_city;
+            $data['customer_address'] = $customer_info->customer_street . ' ' .  $customer_info->customer_state . ' ' . $customer_info->customer_city;
+        }
+        else
+        {
+            $data['customer_first_name'] = '';
+            $data['customer_middle_name'] = '';
+            $data['customer_last_name'] = '';
+            $data['customer_email'] = '';
+            $data['customer_mobile'] = '';
+            $data['customer_state_province'] = '';
+            $data['customer_city'] = '';
+            $data['customer_address'] = '';
+        }
 
         return view("checkout", $data);
         
@@ -110,7 +139,15 @@ class ShopCheckoutController extends Shop
             $cart["taxable"] = Request::input("taxable");
             $cart["shop_id"] = $this->shop_info->shop_id;
             // LUKE uwu desu
-            $cart["customer_id"] = null;
+            if(isset(Self::$customer_info->customer_id))
+            {
+                $cart["customer_id"] = Self::$customer_info->customer_id;
+            }
+            else
+            {
+                $cart["customer_id"] = null;
+            }
+            
             
             if($cart["payment_method_id"] == 6)
             {

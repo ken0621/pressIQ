@@ -20,7 +20,6 @@ function global()
         add_event_global_onclose_popup();
         add_event_overlay_fix();
         select_current_warehouse();
-        //arcy
         add_event_global_submit_for_page();
     }
     function add_event_global_popup()
@@ -93,12 +92,21 @@ function global()
                     }
 				}
             },
-            error: function()
+            error: function(x,t,m)
             {
-                setTimeout(function()
-                {
-                    action_global_submit(link, data, modal);
-                }, 2000);
+                // console.log(x + ' ' + t +' ' + m); 
+                if(t==="timeout") {
+                    toastr.warning(m);
+                    setTimeout(function()
+                    {
+                        action_global_submit(link, data, modal);
+                    }, 2000);
+                } 
+                else {
+                    $(".modal-loader").addClass("hidden");
+                    toastr.error(m + '. Please Contact The Administrator.');
+                }
+                
             }
         })
     }

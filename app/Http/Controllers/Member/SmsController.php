@@ -4,14 +4,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Tbl_sms_key;
 use App\Models\Tbl_sms_template;
 use App\Models\Tbl_sms_default_key;
+use App\Models\Tbl_sms_logs;
 use App\Models\Tbl_user;
 
-use App\Globals\Variant;
-use App\Globals\Item;
-use App\Globals\Ecom_Product;
-use App\Globals\Category;
-use App\Globals\Utilities;
-use App\Globals\Warehouse;
+use App\Globals\Sms;
 
 use Carbon\Carbon;
 use Request;
@@ -106,6 +102,15 @@ class SmsController extends Member
 		$json["type"] 		= "authorization_key";
 		$json["message"]	= "Success ";
 		return json_encode($json);
+	}
+
+	public function getLogs()
+	{
+		$data["_sms_system_logs"] = Tbl_sms_logs::where("sms_logs_shop_id", $this->getShopId())->orderBy("sms_logs_id", "DESC")->paginate(10);
+
+		$data["_sms_api_logs"]	  = Sms::getSmsLogs();
+
+		return view('member/sms/sms_logs', $data);
 	}
 }
  

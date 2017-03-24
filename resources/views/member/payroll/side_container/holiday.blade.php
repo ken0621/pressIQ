@@ -5,8 +5,9 @@
 		</div>
 	</div>
 	<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="#active-holiday"><i class="fa fa-star"></i>&nbsp;Active Job Title</a></li>
-		<li><a data-toggle="tab" href="#archived-holiday"><i class="fa fa-trash-o"></i>&nbsp;Archived Job Title</a></li>
+		<li class="active"><a data-toggle="tab" href="#active-holiday"><i class="fa fa-star"></i>&nbsp;Active Holiday Title</a></li>
+		<li><a data-toggle="tab" href="#archived-holiday"><i class="fa fa-trash-o"></i>&nbsp;Archived Holiday Title</a></li>
+		<li><a data-toggle="tab" href="#default-holiday"><i class="fa fa-star"></i>&nbsp;Default Holiday Title</a></li>
 	</ul>
 	<div class="tab-content padding-10">
 		<div id="active-holiday" class="tab-pane fade in active">
@@ -99,6 +100,57 @@
 					</table>
 					<div class="pagination"> {!! $_archived->render() !!} </div>
 				</div>
+			</div>
+		</div>
+		<div id="default-holiday" class="tab-pane fade">			
+			<div class="load-data" target="value-id-3">
+				<div id="value-id-3">						
+					<table class="table table-bordered table-condensed">
+						<thead>
+							<tr>
+								<th>Default Holiday Name</th>
+								<th>Date</th>
+								<th>Category</th>
+								<th class="text-center">Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach($_default as $default)
+							<tr>
+								<td>
+									{{$default->payroll_holiday_name}}
+								</td>
+								<td>
+									{{date('M d, Y', strtotime($default->payroll_holiday_date))}}
+								</td>
+								<td>
+									{{$default->payroll_holiday_category}}
+								</td>
+								<td class="text-center">
+									<div class="dropdown">
+										<button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
+										<span class="caret"></span></button>
+										<ul class="dropdown-menu dropdown-menu-custom">
+											<li>
+												<a href="#" class="popup" link="/member/payroll/holiday_default/modal_edit_holiday_default/{{$default->payroll_holiday_default_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>		
+											</li>
+											<li>
+												<!--a href="#" class="popup" link="/member/payroll/holiday/archive_holiday_default/1/{{$default->payroll_holiday_default_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a-->
+											</li>
+										</ul>
+									</div>
+								</td>
+							</tr>
+							@endforeach
+						</tbody>
+					</table>
+					<div class="pagination"> {!! $_default->render() !!} </div>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="row">
+					<button class="btn btn-custom-primary pull-right popup" link="/member/payroll/holiday_default/modal_create_holiday_default">Create Holiday Default</button>
+				</div>			
 			</div>
 		</div>
 </div>

@@ -21,8 +21,8 @@
                     <img src="/assets/mlm/img/shadow.png">
                 </div>
                 <div class="cover-container">
-                    <div class="cover-img">
-                        <img src="{{isset($content['company_logo']) ? $content['company_logo'] : '/assets/mlm/img/pic-shop.jpg'}}">
+                    <div class="cover-img hide">
+                        
                     </div>
                     <div class="cover-text">
                         <div class="name">@if(isset($content['company_name']))  {{$content['company_name']}} @endif</div>
@@ -33,6 +33,7 @@
                 </div>
             </div>
         </div>
+        <center><img src="{{isset($content['company_logo']) ? $content['company_logo'] : '/assets/mlm/img/pic-shop.jpg'}}" width="200px"></center>
         <br />
         <div class="tab-content panel panel-default panel-block">
             <!-- OVERVIEW -->

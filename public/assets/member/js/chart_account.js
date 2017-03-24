@@ -13,7 +13,8 @@ function chart_account()
 		event_click_edit_account();
 		event_checkbox_sub_account_change();
 		event_combobox_account_type_change();
-	
+		
+		trigger_put_account_desciption();
 	}
 	
 	function event_click_edit_account()

@@ -37,23 +37,7 @@
                     </div>
                     <div class="form-group row clearfix">
                         @if(isset($template))
-                            <div class="col-md-8 col-md-offset-2">
-                                <div class="form-group clearfix">
-                                    <table style="width: 100%;background-color: {{$template->header_background_color}}">
-                                        <tbody>
-                                            <tr>
-                                                <td style="width: 180px">
-                                                    <img style="width: 100%;" src="{{$template->header_image}}">
-                                                </td>
-                                                <td>
-                                                    <div style="color: {{$template->header_text_color}}">{!! $template->header_txt !!}</div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="col-md-2"></div>
+                            @include('emails.header', $template)
                         @endif
                     </div>
                 </div>
@@ -66,20 +50,7 @@
                     </div>
                     <div class="form-group row clearfix">
                         @if(isset($template))
-                            <div class="col-md-8 col-md-offset-2">
-                                <div class="form-group clearfix">
-                                    <table style="width: 100%;background-color: {{$template->footer_background_color}}">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <div style="color: {{$template->footer_text_color}}">{!! $template->footer_txt !!}</div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                            <div class="col-md-2"></div>
+                            @include('emails.footer', $template)
                         @endif
                     </div>
                 </div>

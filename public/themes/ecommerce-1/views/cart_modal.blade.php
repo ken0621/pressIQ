@@ -29,7 +29,7 @@
                   <div class="img">
                      <img src="{{ $cart['cart_product_information']['image_path'] }}">
                   </div>
-                  <div class="name">{{ $cart['cart_product_information']['product_name'] }}</div>
+                  <div class="name" style="width: 100px;">{{ $cart['cart_product_information']['product_name'] }}</div>
                </td>
                <td>
                   <div class="input-group">
@@ -42,6 +42,21 @@
                <td class="ttl">&#8369; <span key="{{ $cart['product_id'] }}">{{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</span></td>
                <td class="rmv"><a class="remove-cart" variation-id="{{ $cart['product_id'] }}" href="javascript:">Remove</a></td>
             </tr>
+
+               @if(isset($cart['cart_product_information']['membership_points']))
+                  <tr>
+                     <td colspan="40">
+                        <table class="table table-bordered">
+                           <tr>
+                           @foreach($cart['cart_product_information']['membership_points'] as $key2 => $value2)
+                           <td><small><small>{{$key2}} <br><span class="points_membership_{{$cart['product_id']}}" base_points="{{$value2/$cart['quantity']}}" current_points="{{$value2}}">{{number_format($value2, 2)}}</span></small></small></td>
+                           @endforeach
+                           </tr>
+                        </table>
+                     </td>
+                  </tr>
+                  
+               @endif
             @endforeach
          </tbody>
       </table>
@@ -52,14 +67,15 @@
          <div class="subtotal-value">P <span>{{ number_format($get_cart['sale_information']['total_product_price'], 2) }}</span></div>
       </div>
       <div style="margin-top: 10px;">
-         <button type="button" class="btn btn-primary" onClick="location.href='/checkout'">CHECK OUT</button>
+         <span class="cart-loader hide"><img style="height: 37px; margin-right: 7.5px;" src="/assets/front/img/loader.gif"></span>
+         <button type="button" class="checkout-modal-button btn btn-primary" onClick="location.href='/checkout'">CHECK OUT</button>
       </div>
    </div>
    @else
-   <div class="empty-cart">
-      <div class="title">There is no items in this cart</div>
-      <div class="sub">Try to search or find something from one of our categories</div>
-      <a href="javascript:" data-dismiss="modal">Continue Shopping</a>
+   <div class="empty-cart" style="padding: 15px; text-align: center;">
+      <div class="title" style="font-weight: 400; font-size: 18px;">There is no <span style="color: #2e3192; font-weight: 700;">items</span> in this cart</div>
+      <div class="sub" style="font-weight: 700; font-size: 16px;">Try to search or find something from one of our categories</div>
+      <a href="javascript:" data-dismiss="modal" style="padding: 7.5px; max-width: 150px; display: block; margin: auto; color: #fff; background-color: #2e3192; font-weight: 700; border-radius: 2.5px;">Continue Shopping</a>
    </div>
    @endif
 </form>

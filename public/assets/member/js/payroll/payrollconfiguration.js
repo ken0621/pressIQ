@@ -218,6 +218,11 @@ function payrollconfiguration()
 	{
 		reload_configuration("/member/payroll/payroll_group");
 	}
+
+	/*this.reload_holiday_default = function()
+	{
+		reload_configuration("/member/payroll/holiday_default");
+	}*/
 	
 }
 

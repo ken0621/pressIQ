@@ -53,12 +53,19 @@
               @endforeach
             </select>
           </div>
-          <div class="col-md-4 pull-right padding-lr-1">
+          <form class="col-md-4 pull-right padding-lr-1 search-form" data-target="#active-employee" method="POST" action="/member/payroll/employee_list/search_employee">
+            <input type="hidden" name="_token" value="{{csrf_token()}}">
+            <input type="hidden" name="trigger" value="active">
             <small>Search Employee</small>
-            <i class="fa fa-search calendar-icon pos-absolute" aria-hidden="true" style="margin-left:-76px"></i>
-            <input type="search" name="" class="form-control indent-18 typeahead width-100" placeholder="Search employee here">
-           <ul class="typeahead dropdown-menu" role="listbox" style="top: 400px; left: 104.5px; display: none;"></ul>
-          </div>
+            <div class="input-group">
+              <input type="search" name="employee_search" data-trigger="active" class="form-control perdictive perdictive-active width-100" placeholder="Search employee here">
+              <span class="input-group-btn">
+                <button class="btn btn-custom-primary" type="submit"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+            
+           
+          </form>
         </div>
       </div>
       <div class="form-group">
@@ -137,6 +144,19 @@
               @endforeach
             </select>
           </div>
+          <form class="col-md-4 pull-right padding-lr-1 search-form" data-target="#separated-employee" action="/member/payroll/employee_list/search_employee" method="POST">
+            <input type="hidden" name="_token" value="{{csrf_token()}}">
+            <input type="hidden" name="trigger" value="separated">
+            <small>Search Employee</small>
+            <div class="input-group">
+              <input type="search" name="employee_search" data-trigger="separated" class="form-control perdictive perdictive-separated width-100" placeholder="Search employee here">
+              <span class="input-group-btn">
+                <button class="btn btn-custom-primary" type="submit"><i class="fa fa-search"></i></button>
+              </span>
+            </div>
+            
+           
+          </form>
         </div>
       </div>
       <div class="form-group">

@@ -133,36 +133,47 @@ class MlmLoginController extends Controller
             else
             {
                 $content_key = "forget_password";
-                $return["subject"] = EmailContent::getSubject($content_key);
-                $return["shop_key"] = EmailContent::getShopkey();
-                $return["email"] = $ctr_email->email;
-
-                $new_password = strtoupper($ctr_email->first_name."_".str_random(5));
-
-                $txt[0]["txt_to_be_replace"] = "[name]";
-                $txt[0]["txt_to_replace"] = $ctr_email->first_name." ".$ctr_email->middle_name." ".$ctr_email->last_name;
-
-                $txt[1]["txt_to_be_replace"] = "[domain_name]";
-                $txt[1]["txt_to_replace"] = $_SERVER["SERVER_NAME"];
-
-                $txt[2]["txt_to_be_replace"] = "[new_password]";
-                $txt[2]["txt_to_replace"] = $new_password;
-
-                $change_content = $txt;
-
-                $return["content"] = EmailContent::email_txt_replace($content_key, $change_content);
-
-                $update_new_password["password"] = Crypt::encrypt($new_password);
-                Tbl_customer::where("customer_id",$ctr_email->customer_id)->update($update_new_password);
-
-                Mail::send('emails.test', $return, function ($message) use ($return)
+                if(EmailContent::checkIfexisting($content_key) != 0)
                 {
-                    $message->from(env('MAIL_USERNAME'), $return["shop_key"]);
+                    $return["subject"] = EmailContent::getSubject($content_key);
+                    $return["shop_key"] = EmailContent::getShopkey();
+                    $return["email"] = $ctr_email->email;
 
-                    $message->to($return["email"])->subject($return["subject"]);
-                });
+                    $new_password = strtoupper($ctr_email->first_name."_".str_random(5));
 
-                $data["message"] = "Successfully Sent Email";
+                    $txt[0]["txt_to_be_replace"] = "[name]";
+                    $txt[0]["txt_to_replace"] = $ctr_email->first_name." ".$ctr_email->middle_name." ".$ctr_email->last_name;
+
+                    $txt[1]["txt_to_be_replace"] = "[domain_name]";
+                    $txt[1]["txt_to_replace"] = $_SERVER["SERVER_NAME"];
+
+                    $txt[2]["txt_to_be_replace"] = "[new_password]";
+                    $txt[2]["txt_to_replace"] = $new_password;
+
+                    $change_content = $txt;
+
+                    $return["content"] = EmailContent::email_txt_replace($content_key, $change_content);
+
+                    $update_new_password["password"] = Crypt::encrypt($new_password);
+                    Tbl_customer::where("customer_id",$ctr_email->customer_id)->update($update_new_password);
+
+                    Mail::send('emails.test', $return, function ($message) use ($return)
+                    {
+                        $message->from(env('MAIL_USERNAME'), $return["shop_key"]);
+
+                        $message->to($return["email"])->subject($return["subject"]);
+                    });
+
+                    $data["message"] = "Successfully Sent Email";
+                }
+                else
+                {
+                    $data["type"] = "error";
+
+                    $data["message"] = "Something wen't wrong!";
+
+                }
+                
 
             }
 

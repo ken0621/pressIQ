@@ -19,77 +19,49 @@ function employeelist()
 
 	function search_type_ahead()
 	{
-		// $('.typeahead').typeahead('open');
-		$(".typeahead").typeahead({
-			source : function(query, process)
+		$(".perdictive").unbind("keyup");
+		$(".perdictive").bind("keyup", function(){
+			var trigger = $(this).data("trigger");
+			var query 	= $(this).val();
+			var element = ".perdictive-active";
+			// console.log(trigger);
+			if(($(this).hasClass('perdictive-separated')))
 			{
-
-				$.ajax({
-					url 		: "/member/payroll/employee_list/search_employee_ahead",
-					type 		: "POST",
-					data 		: {
-						_token:misc('_token'),
-						query:query
-					},
-					success 	: 	function(result)
-					{	
-						// console.log(reload_salary_listult);
-						return process(result);
-					},
-					error 		: 	function(err)
-					{
-						console.log(err);
-					}	
-				});
+				element = ".perdictive-separated";
 			}
+			$.ajax({
+				url 		: "/member/payroll/employee_list/search_employee_ahead",
+				type 		: "POST",
+				data 		: {
+					_token:misc('_token'),
+					query:query,
+					status:trigger
+				},
+				success 	: 	function(data)
+				{	
+					data = JSON.parse(data);
+					$(element).autocomplete({
+						source : data
+					});
+				},
+				error 		: 	function(err)
+				{
+					console.log(err);
+				}	
+			});
 		});
-		// var substringMatcher = function(strs) {
-		//   return function findMatches(q, cb) {
-		//     var matches, substringRegex;
 
-		//     // an array that will be populated with substring matches
-		//     matches = [];
-
-		//     // regex used to determine if a string contains the substring `q`
-		//     substrRegex = new RegExp(q, 'i');
-
-		//     // iterate through the pool of strings and for any string that
-		//     // contains the substring `q`, add it to the `matches` array
-		//     $.each(strs, function(i, str) {
-		//       if (substrRegex.test(str)) {
-		//         matches.push(str);
-		//       }
-		//     });
-
-		//     cb(matches);
-		//   };
-		// };
-
-		// var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-		//   'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-		//   'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-		//   'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-		//   'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-		//   'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-		//   'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-		//   'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-		//   'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-		// ];
-
-		// $('.typeahead').typeahead({
-		//   hint: true,
-		//   highlight: true,
-		//   minLength: 1
-		// },
-		// {
-		//   name: 'states',
-		//   source: substringMatcher(states),
-		//   classNames: {
-		//     input: 'Typeahead-input',
-		//     hint: 'Typeahead-hint',
-		//     selectable: 'Typeahead-selectable'
-		//   },
-		// });
+		$(".search-form").unbind("submit");
+		$(".search-form").bind("submit", function(e){
+			e.preventDefault();
+			var formdata = $(this).serialize();
+			var action	 = $(this).attr('action');
+			var method   = $(this).attr("method");
+			var target   = $(this).data("target");
+			var function_name = 'employeelist.tbl_btn_event';
+			$(target).html(misc('loader'));
+			load_configuration(action, method, formdata, target, function_name);
+		});
 	}
 
 	function filter_change_event()
@@ -251,9 +223,32 @@ function executeFunctionByName(functionName, context /*, args */) {
 
 function submit_done(data)
 {
-	data = JSON.parse(data);
-	console.log(data);
-	data.element.modal("toggle");
-	executeFunctionByName(data.function_name, window);
+	// console.log(data);
+	try
+	{
+		data = JSON.parse(data);
+	}
+	catch(err)
+	{
+
+	}
 	
+	data.element.modal("toggle");
+	if(data.function_name == 'payrollconfiguration.reload_tbl_jobtitle')
+	{
+		modal_create_employee.reload_option(data.view, '.jobtitle-select');
+	}
+	if(data.function_name == 'payrollconfiguration.relaod_tbl_department')
+	{
+		modal_create_employee.reload_option(data.view, '.department-select');
+	}	
+	if(data.function_name == 'payrollconfiguration.reload_payroll_group')
+	{
+		modal_create_employee.reload_option(data.view, '.payroll-group-select');
+	}
+	else
+	{
+		executeFunctionByName(data.function_name, window);
+	}
+
 }

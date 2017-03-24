@@ -1,3 +1,5 @@
+var jqxhr = {abort: function () {}};
+
 $(document).ready(function()
 {
 	action_zoom_image();
@@ -107,7 +109,9 @@ function action_select_variation(e)
 		$('.add-to-cart').addClass("disabled");
 	}
 
-	$.ajax({
+	jqxhr.abort();
+
+	jqxhr = $.ajax({
 		url: '/product/variant/',
 		type: 'GET',
 		dataType: 'json',

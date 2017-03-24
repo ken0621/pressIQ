@@ -134,7 +134,8 @@ class MlmTransferController extends Mlm
         Tbl_mlm_slot_wallet_log_refill::insert($insert);
         $data['status'] = 'success';
         $data['message'] = 'Wallet Request is Sent';
-        return $this->refill($data);
+        return Redirect::to('/mlm/refill');
+        // $this->refill($data);
 
     }
     public function transfer()
@@ -314,7 +315,8 @@ class MlmTransferController extends Mlm
 
             $data['unprocessed'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)
             ->where('wallet_log_status', 'released')
-            ->whereNull('encashment_process')   
+            ->whereNull('encashment_process')
+            // ->where('wallet_log_amount', '>=',  1)   
             ->get()->toArray();
 
             $data['bank'] = DB::table('tbl_encashment_bank_deposit')->where('shop_id', Self::$shop_id)->where('encashment_bank_deposit_archive', 0)->get();

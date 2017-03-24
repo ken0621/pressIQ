@@ -20,13 +20,15 @@ class PayrollTimeSheetController extends Member
 	{
 		$data["_employee"] = Tbl_payroll_employee_basic::where("shop_id", $this->user_info->shop_id)->get();
 		$data["current_employee"] = $current_employee = Tbl_payroll_employee_basic::where("shop_id", $this->user_info->shop_id)->where("payroll_employee_id", Request::input("employee_id"))->first();
-		
+
 		/* REDIRECT IF NO DEFAULT */
 		if(empty($data["current_employee"]))
 		{
 			return Redirect::to("/member/payroll/employee_timesheet?employee_id=" . $data["_employee"][0]->payroll_employee_id)->send();
 		}
 
+		$data["employee_info"] = Tbl_payroll_employee_contract::selemployee($data["current_employee"]->payroll_employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();		$data["default_time_in"] = Carbon::parse($data["employee_info"]->payroll_group_start)->format("h:i A");
+		$data["default_time_out"] = Carbon::parse($data["employee_info"]->payroll_group_end)->format("h:i A");
 		return view('member.payroll.employee_timesheet', $data);
 	}
 	public function timesheet($employee_id)
@@ -132,7 +134,7 @@ class PayrollTimeSheetController extends Member
 			if(empty($check_time_sheet)) //TIMESHEET RECORD NOT EXIST
 			{
 				$insert_timesheet["payroll_employee_id"] = $employee_id;
-				$insert_timesheet["payroll_time_sheet_type"] = "RG";
+				$insert_timesheet["payroll_time_sheet_type"] = "Regular";
 				$insert_timesheet["payroll_time_date"] = $date;
 				$insert_timesheet["payroll_time_sheet_break"] = Request::input("break")[$key];
 				$payroll_time_sheet_id = Tbl_payroll_time_sheet::insert($insert_timesheet);
@@ -140,7 +142,7 @@ class PayrollTimeSheetController extends Member
 			else //TIMESHEET RECORD EXIST
 			{
 				$payroll_time_sheet_approved = $check_time_sheet->payroll_time_sheet_approved;
-				$update_timesheet["payroll_time_sheet_type"] = "RG";
+				$update_timesheet["payroll_time_sheet_type"] = "Regular";
 				$update_timesheet["payroll_time_sheet_break"] = Request::input("break")[$key];
 				Tbl_payroll_time_sheet::where("payroll_time_date", $date)->where("payroll_employee_id", $employee_id)->update($update_timesheet);
 				$payroll_time_sheet_id = $check_time_sheet->payroll_time_sheet_id;
@@ -203,6 +205,9 @@ class PayrollTimeSheetController extends Member
 				$_timesheet[$key]->late_hours = $processed_timesheet->approved_timesheet->late_hours;
 				$_timesheet[$key]->night_differential = $processed_timesheet->approved_timesheet->night_differential;
 				$_timesheet[$key]->time_record = $processed_timesheet->approved_timesheet->time_record;
+				$_timesheet[$key]->special_holiday_hours = $processed_timesheet->approved_timesheet->special_holiday_hours;
+				$_timesheet[$key]->regular_holiday_hours = $processed_timesheet->approved_timesheet->regular_holiday_hours;
+				$_timesheet[$key]->break = $processed_timesheet->approved_timesheet->break;
 			}
 			else
 			{
@@ -218,6 +223,9 @@ class PayrollTimeSheetController extends Member
 				$_timesheet[$key]->late_hours = $processed_timesheet->pending_timesheet->late_hours;
 				$_timesheet[$key]->night_differential = $processed_timesheet->pending_timesheet->night_differential;
 				$_timesheet[$key]->time_record = $processed_timesheet->pending_timesheet->time_record;
+				$_timesheet[$key]->special_holiday_hours = $processed_timesheet->pending_timesheet->special_holiday_hours;
+				$_timesheet[$key]->regular_holiday_hours = $processed_timesheet->pending_timesheet->regular_holiday_hours;
+				$_timesheet[$key]->break = $processed_timesheet->pending_timesheet->break;
 			}
 
 			$_timesheet[$key]->payroll_time_sheet_approved = $processed_timesheet->payroll_time_sheet_approved;

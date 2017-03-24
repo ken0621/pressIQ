@@ -83,6 +83,18 @@
                                         @endif
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <label>Automatic use of product code</label>
+                                        <select name="plan_settings_use_item_code" class="form-control">
+                                            <option value="0" {{$plan_settings->plan_settings_use_item_code == 0 ? 'selected' : ''}}>Disable</option>
+                                            <option value="1" {{$plan_settings->plan_settings_use_item_code == 1 ? 'selected' : ''}}>Enable</option>
+                                        </select>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
                             </tbody>
                         
                         @else

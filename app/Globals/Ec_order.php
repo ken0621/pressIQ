@@ -58,7 +58,7 @@ class Ec_order
         $data['coupon_code']          = 0;
 
         $data['taxable']              = $order_info['taxable'];
-        $data['order_status']         = "Pending";
+        $data['order_status']         = $order_info['order_status'];
 
         $order_id = Ec_order::create_ec_order($data);
         

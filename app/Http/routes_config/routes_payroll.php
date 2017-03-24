@@ -44,6 +44,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/reload_employee_list','Member\PayrollController@reload_employee_list');
 	/* EMPLOYEE SEARCH */
 	Route::any('/employee_list/search_employee_ahead','Member\PayrollController@search_employee_ahead');
+	Route::any('/employee_list/search_employee','Member\PayrollController@search_employee');
 
 	/* EMPLOYEE END */
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');

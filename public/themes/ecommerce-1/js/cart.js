@@ -38,8 +38,8 @@ function cart()
 	}
 	function action_qty_control(sign, id, key)
 	{
-		var current = parseInt($('.qty-control[variation-id="'+id+'"]').val());
-		var price = parseInt($('.upc span[key="'+key+'"]').attr('raw-price'));
+		var current = parseFloat($('.qty-control[variation-id="'+id+'"]').val());
+		var price = parseFloat($('.upc span[key="'+key+'"]').attr('raw-price'));
 
 		if (sign == "+") 
 		{
@@ -53,7 +53,7 @@ function cart()
 			}
 		}	
 
-		var quantity = parseInt($('.qty-control[variation-id="'+id+'"]').val());
+		var quantity = parseFloat($('.qty-control[variation-id="'+id+'"]').val());
 
 		$('.ttl span[key="'+key+'"]').html((price * quantity).toFixed(2));
 
@@ -61,10 +61,10 @@ function cart()
 
 		$('.upc span').each(function(index, el) 
 		{
-			total_price += parseInt($(el).attr("raw-price")) * parseInt($('.qty-control[variation-id="'+$(el).attr('key')+'"]').val());
+			total_price += parseFloat($(el).attr("raw-price")) * parseFloat($('.qty-control[variation-id="'+$(el).attr('key')+'"]').val());
 		});
 
-		$('.subtotal-value span').html(parseInt(total_price).toFixed(2));
+		$('.subtotal-value span').html(parseFloat(total_price).toFixed(2));
 
 		ajax_quantity.abort();
 

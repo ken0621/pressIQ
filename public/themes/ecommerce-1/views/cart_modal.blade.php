@@ -29,7 +29,7 @@
                   <div class="img">
                      <img src="{{ $cart['cart_product_information']['image_path'] }}">
                   </div>
-                  <div class="name">{{ $cart['cart_product_information']['product_name'] }}</div>
+                  <div class="name" style="width: 100px;">{{ $cart['cart_product_information']['product_name'] }}</div>
                </td>
                <td>
                   <div class="input-group">

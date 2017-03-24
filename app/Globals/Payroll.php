@@ -19,6 +19,7 @@ use App\Models\Tbl_payroll_group_rest_day;
 use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
+use App\Models\Tbl_payroll_company;
 use Carbon\Carbon;
 use stdClass;
 
@@ -185,6 +186,33 @@ class Payroll
 		
 
 	}
+
+	public static function company_hierarchy($shop_id = 0, $archived = 0)
+	{
+		$_company = Tbl_payroll_company::selcompany($shop_id, $archived)->where('payroll_parent_company_id',0)->orderBy('payroll_company_name')->get();
+
+		$data = array();
+		foreach($_company as $company)
+		{
+			$temp['company'] = $company;
+			$temp['sub']	 = Tbl_payroll_company::selcompany($shop_id)->where('payroll_parent_company_id',$company->payroll_company_id)->orderBy('payroll_company_name')->get();
+			array_push($data, $temp);
+		}
+
+		/* SELECT ALL THE LOST BRANCHES IN QUERY ABOVE */
+		
+		$_lost = Tbl_payroll_company::sellost($shop_id,$archived)->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+		foreach($_lost as $lost)
+		{
+			$temp['company'] = $lost;
+			$temp['sub']	 = array();
+			array_push($data, $temp);
+		}
+		
+		return $data;
+
+	}
 	
 	/* GET EMPLOYEE DEDUCTION BALANCE */
 	public static function getbalance($shop_id = 0, $deduction_id = 0)
@@ -217,7 +245,7 @@ class Payroll
 			$balance = $total_amount - Tbl_payroll_deduction_payment::selbyemployee($cancel->payroll_employee_id, $deduction_id)->sum('payroll_payment_amount');
 
 			$data['cancel'][$key]['deduction'] 	= $cancel;
-			$data['cancel'][$key]['balance'] 		= $balance;
+			$data['cancel'][$key]['balance'] 	= $balance;
 		}
 		
 		return $data;
@@ -252,7 +280,7 @@ class Payroll
 	}
 
 
-	/* 	 Returns normal hours rendered and overtime (Guillermo Tabligan) */
+	/* Returns normal hours rendered and overtime (Guillermo Tabligan) */
 	public static function process_time($employee_id, $date)
 	{
 		$time_sheet_info = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
@@ -378,13 +406,11 @@ class Payroll
 		$earliest_time_in = 86340;
 
 		$default_time_in = c_time_to_int($default_time_in);
-
 		$default_time_out = c_time_to_int($default_time_out);
-
 		$shift_night_differential = 0;
 
 		/* CHECK EACH TIME */
-		foreach($_time_record as $time_record)
+		foreach($_time_record as $key => $time_record)
 		{
 			if($compute_approved == 1)
 			{
@@ -396,6 +422,8 @@ class Payroll
 				$time_in = c_time_to_int($time_record->payroll_time_sheet_in);
 				$time_out = c_time_to_int($time_record->payroll_time_sheet_out);
 			}
+
+
 
 			$early_overtime = 0;
 			$late_overtime = 0;
@@ -455,6 +483,18 @@ class Payroll
 			$total_late_overtime += $late_overtime;
 			$total_regular_hours += $regular_hours;
 			$total_time_spent += $time_spent;
+
+			if($time_in == "")
+			{
+				$time_rec[$key]["time_in"] = "";
+				$time_rec[$key]["time_out"] = "";
+			}
+			else
+			{
+				$time_rec[$key]["time_in"] = date("h:i A", $time_in);
+				$time_rec[$key]["time_out"] = date("h:i A", $time_out);
+			}
+
 		}
 
 
@@ -502,6 +542,7 @@ class Payroll
 		$return->extra_day_hours = date("H:i", 0);
 		$return->total_hours = date("H:i", $total_hours);
 		$return->night_differential = date("H:i", $total_night_differential);
+		$return->time_record = $time_rec;
 		return $return;
 	}
 }

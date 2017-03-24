@@ -61,22 +61,22 @@
 			@endforeach		
 		</tbody>
 	</table>
-	<table style="width: 100%">
+	<table style="width: 100%;">
 		<tbody>
 			<tr>
-				<td colspan="3" class="text-left">
+				<td style="padding: 20px" colspan="3" class="text-left">
 					<strong>TOTAL</strong>
 				</td>
-				<td colspan="3" class="text-right">	
+				<td style="padding: 20px" colspan="3" class="text-right">	
 					<strong>{{currency('P',$total_price)}}</strong>
 				</td>
 			</tr>	
 			<tr>
-				<td colspan="2">
+				<td style="padding: 20px" colspan="2">
 					<div>Prepared By:</div><br><br>
 					<div style="border-bottom: 1px solid #000;width: 50%">{{$slip->user_first_name." ".$slip->user_last_name}}</div>
 				</td>
-				<td colspan="4">
+				<td style="padding: 20px" colspan="4">
 					<div>Checked By:</div><br><br>
 					<div style="border-bottom: 1px solid #000;width: 50%;color: #fff">INVISIBLE NAME</div>
 				</td>

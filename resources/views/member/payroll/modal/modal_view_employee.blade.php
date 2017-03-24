@@ -568,7 +568,7 @@
     
     <button type="button" class="btn btn-custom-white " data-dismiss="modal">Cancel</button>
     <!--<button type="button" class="btn btn-custom-red-white btn-del-modallarge" data-url="" data-value="">Delete</button>-->
-    <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Update customer</button>
+    <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Update</button>
   </div>
 </form>
 <script type="text/javascript" src="/assets/member/js/customer.js"></script>

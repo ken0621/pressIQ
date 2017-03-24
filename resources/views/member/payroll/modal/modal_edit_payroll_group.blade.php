@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="/assets/member/payroll/css/timesheet.css">
+<link rel="stylesheet" type="text/css" href="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.css">
 <form class="global-submit form-horizontal" role="form" action="/member/payroll/payroll_group/modal_update_payroll_group" method="post">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
@@ -179,7 +181,50 @@
 										</div>
 									</div>
 								</div>
-								
+								<div class="panel panel-default">
+									<div class="panel-body form-horizontal">
+										<div class="form-group">
+											<label class="col-md-12">Late Deduction</label>
+										</div>
+										<div class="form-group">
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="late-category-change" type="radio" value="Base on Salary" name="payroll_late_category" {{$group->payroll_late_category == 'Base on Salary' ? 'checked':''}}>Base on Salary</label>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="late-category-change" type="radio" value="Custom" name="payroll_late_category" {{$group->payroll_late_category == 'Custom' ? 'checked':''}}>Custom</label>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="late-category-change" type="radio" name="payroll_late_category" value="Not Deducted" {{$group->payroll_late_category == 'Not Deducted' ? 'checked':''}}>Not Deducted</label>
+												</div>
+											</div>
+										</div>
+										<div class="form-group {{$group->payroll_late_category == 'Custom' ? '':'display-none'}} late-custom-form">
+											<div class="col-md-6">
+												<small>Late parameter</small>
+												<div class="input-group">
+													<input type="number" name="payroll_late_interval" class="form-control late-param-change late-param-number text-right" value="{{$group->payroll_late_interval}}">
+													<span class="input-group-btn" style="width: 100px">
+														<select class="form-control late-param-change late-param-select" name="payroll_late_parameter">
+															<option value="Second" {{$group->payroll_late_parameter == 'Second' ? '' : ''}}>Second</option>
+															<option value="Minute" {{$group->payroll_late_parameter == 'Minute' ? '' : ''}}>Minute</option>
+															<option value="Hour" {{$group->payroll_late_parameter == 'Hour' ? '' : ''}}>Hour</option>
+														</select>
+													</span>
+												</div>
+
+											</div>
+											<div class="col-md-6">
+												<small>Deduction for every (<span class="late-label-param">0</span>)</small>
+												<input type="number" name="payroll_late_deduction" class="form-control text-right" value="{{$group->payroll_late_deduction}}">
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="panel panel-default">
@@ -287,18 +332,47 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<div class="col-md-6">
-											<small>Grace Time Period (minutes)</small>
-											<input type="number" name="payroll_group_grace_time" class="form-control text-right" value="{{$group->payroll_group_grace_time}}">
-										</div>
-										<div class="col-md-6">
-											<small>Break (minutes)</small>
-											<input type="number" name="payroll_group_break" class="form-control text-right" value="{{$group->payroll_group_break}}">
+										<div class="col-md-12">
+											<div class="checkbox">
+												<label><input type="checkbox" name="payroll_group_is_flexi_break" class="payroll_group_is_flexi_break" value="1" {{$group->payroll_group_is_flexi_break == 1 ? 'checked':''}}>Flexible Break</label>
+											</div>
 										</div>
 									</div>
 									<div class="form-group">
 										<div class="col-md-12">
-											<table class="table table-bordered table-condensed">
+											<table class="table table-bordered table-condensed timesheet tbl-schedule-break {{$group->payroll_group_is_flexi_break == 1 ? 'display-none':''}}">
+												<tr>
+													<td colspan="2" class="text-center">Break Schedule</td>
+												</tr>
+												<tr>
+													<td class="text-center" width="50%">Break Start</td>
+													<td class="text-center" width="50%">Break End</td>
+												</tr>
+												<tr class="editable">
+													<td class="text-center editable">
+														<input type="text" name="payroll_group_break_start" class="text-table time-entry" value="{{$group->payroll_group_break_start}}">
+
+													</td>
+													<td class="text-center editable">
+														<input type="text" name="payroll_group_break_end" class="text-table time-entry" value="{{$group->payroll_group_break_end}}">
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-6">
+											<small>Grace Time Period (minutes)</small>
+											<input type="number" name="payroll_group_grace_time" class="form-control text-center" value="{{$group->payroll_group_grace_time}}">
+										</div>
+										<div class="col-md-6 {{$group->payroll_group_is_flexi_break == 0 ? 'display-none':''}} flexi-break-container">
+											<small>Flexi Break (minutes)</small>
+											<input type="number" name="payroll_group_flexi_break" class="form-control text-center" value="{{$group->payroll_group_flexi_break}}">
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<table class="table table-bordered table-condensed timesheet">
 												<tr>
 													<td colspan="2" class="text-center">Schedule</td>
 												</tr>
@@ -308,10 +382,10 @@
 												</tr>
 												<tr>
 													<td class="text-center editable">
-														<input type="time" name="payroll_group_start" class="form-control" value="{{$group->payroll_group_start}}">
+														<input type="text" name="payroll_group_start" class="text-table time-entry" value="{{$group->payroll_group_start}}">
 													</td>
 													<td class="text-center editable">
-														<input type="time" name="payroll_group_end" class="form-control" value="{{$group->payroll_group_end}}">
+														<input type="text" name="payroll_group_end" class="text-table time-entry" value="{{$group->payroll_group_end}}">
 													</td>
 												</tr>
 											</table>
@@ -351,9 +425,11 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-primary btn-custom-primary" type="Submit">Submit</button>
+		<button class="btn btn-primary btn-custom-primary" type="Submit">Update</button>
 	</div>
 </form>
+<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
+<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 <script type="text/javascript">
 	$(".restday-check").unbind("change");
 	$(".restday-check").bind("change", function () {
@@ -391,4 +467,62 @@
 			$(".select-target-hours").val("Daily");
 		}
 	});
+	$(".time-entry").timeEntry('destroy');
+	$(".time-entry").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+	late_categoy_change_event();
+	late_param_change();
+	function late_categoy_change_event()
+	{
+		$(".late-category-change").unbind("change");
+		$(".late-category-change").bind("change", function()
+		{
+			if($(this).val() == "Custom")
+			{
+				if($(".late-custom-form").hasClass('display-none'))
+				{
+					$(".late-custom-form").removeClass("display-none");
+				}
+			}
+			else
+			{
+				if(!$(".late-custom-form").hasClass('display-none'))
+				{
+					$(".late-custom-form").addClass("display-none");
+				}
+			}
+		});
+
+		$(".payroll_group_is_flexi_break").unbind("change");
+		$(".payroll_group_is_flexi_break").bind("change", function(){
+
+			if($(this).is(":checked"))
+			{
+				$(".tbl-schedule-break").addClass("display-none");
+				$(".flexi-break-container").removeClass("display-none");
+			}
+			else
+			{
+				$(".tbl-schedule-break").removeClass("display-none");
+				$(".flexi-break-container").addClass("display-none");
+			}
+		});
+
+		$(".late-param-change").unbind("change");
+		$(".late-param-change").bind("change", function()
+		{
+			late_param_change();
+		});
+
+	}
+
+	function late_param_change()
+	{
+		var number = $('.late-param-number').val();
+		var select = $('.late-param-select').val();
+		if(number == null || number == '')
+		{
+			number = 0
+		}
+		$('.late-label-param').html(number + ' ' + select);
+	}
 </script>

@@ -73,6 +73,8 @@
 					color: red;
 				}
 			}
+
+
 			&:hover
 			{
 				background-color: #fcfcfc;
@@ -106,6 +108,15 @@
 					}
 
 				}
+			}
+		}
+		tr.disable-hover
+		{
+			background-color: #fdfdfd;
+			cursor: default;
+			.text-table
+			{
+				cursor: default;
 			}
 		}
 	}

@@ -117,7 +117,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-custom-primary btn-submit {{$action == 'view' ? 'display-none':''}}" type="submit" >Save</button>
+		<button class="btn btn-custom-primary btn-submit {{$action == 'view' ? 'display-none':''}}" type="submit" >Update</button>
 		<button class="btn btn-danger btn-edit {{$action == 'edit' ? 'display-none':''}}" type="button">Edit</button>
 	</div>
 </form>

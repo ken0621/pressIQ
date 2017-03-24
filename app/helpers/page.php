@@ -746,7 +746,6 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
-
     $code = "maintenance-email-header-footer";
     $nav[$page]['submenu'][$code]['label'] = "Email Header & Footer"; 
     $nav[$page]['submenu'][$code]['code'] = $code;
@@ -754,6 +753,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    /* -- MAINTENACE => Sms Settings */
+    $code = "maintenance-email-header-footer";
+    $nav[$page]['submenu'][$code]['label'] = "SMS"; 
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sms";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
     /* DEVELOPERS  */
     $page = "developer"; 

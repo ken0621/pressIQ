@@ -11,6 +11,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_list/reload_company','Member\PayrollController@reload_company');
 	Route::any('/company_list/archived_company','Member\PayrollController@archived_company');
 	Route::any('/company_list/update_company','Member\PayrollController@update_company');
+	Route::any('/company_list/modal_archived_company/{archived}/{id}','Member\PayrollController@modal_archived_company');
 	/* COMPANY END */
 
 	/* EMPLOYEE START */
@@ -44,6 +45,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/reload_employee_list','Member\PayrollController@reload_employee_list');
 	/* EMPLOYEE SEARCH */
 	Route::any('/employee_list/search_employee_ahead','Member\PayrollController@search_employee_ahead');
+	Route::any('/employee_list/search_employee','Member\PayrollController@search_employee');
 
 	/* EMPLOYEE END */
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
@@ -55,17 +57,21 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimeSheetController@json_process_time');
 	Route::any('/employee_timesheet/json_process_time_single/{date}/{employee_id}','Member\PayrollTimeSheetController@json_process_time_single');
 	Route::any('/employee_timesheet/adjustment_form','Member\PayrollTimeSheetController@adjustment_form');
+	Route::post('/employee_timesheet/adjustment_form_approve','Member\PayrollTimeSheetController@adjustment_form_approve');
 	/* TIMESHEET START */
 
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');
 	Route::any('/departmentlist/department_modal_create','Member\PayrollController@department_modal_create');
 	Route::any('/departmentlist/department_save','Member\PayrollController@department_save');
+	Route::any('/departmentlist/modal_archived_department/{archived}/{department_id}',"Member\PayrollController@modal_archived_department");
 	Route::any('/departmentlist/archived_department','Member\PayrollController@archived_department');
 	Route::any('/departmentlist/department_reload','Member\PayrollController@department_reload');
 	Route::any('/departmentlist/modal_view_department/{id}','Member\PayrollController@modal_view_department');
 	Route::any('/departmentlist/modal_edit_department/{id}','Member\PayrollController@modal_edit_department');
 	Route::any('/departmentlist/modal_update_department','Member\PayrollController@modal_update_department');
+
+
 	/* DEPARTMENT END */
 
 	/* JOB TITLE START */
@@ -74,8 +80,12 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any("/jobtitlelist/modal_save_department","Member\PayrollController@modal_save_department");
 	Route::any("/jobtitlelist/reload_tbl_jobtitle","Member\PayrollController@reload_tbl_jobtitle");
 	Route::any("/jobtitlelist/get_job_title_by_department","Member\PayrollController@get_job_title_by_department");
+	Route::any("/jobtitlelist/modal_view_jobtitle/{id}","Member\PayrollController@modal_view_jobtitle");
+	Route::any("/jobtitlelist/modal_update_jobtitle","Member\PayrollController@modal_update_jobtitle");
 	Route::any("/jobtitlelist/modal_edit_jobtitle/{id}","Member\PayrollController@modal_edit_jobtitle");
 	Route::any("/jobtitlelist/modal_save_jobtitle","Member\PayrollController@modal_save_jobtitle");
+	Route::any('/jobtitlelist/modal_archived_jobtitle/{archived}/{jobtitle_id}',"Member\PayrollController@modal_archived_jobtitle");
+	Route::any('/jobtitlelist/archived_jobtitle','Member\PayrollController@archived_jobtitle');
 	/* JOB TITLE END */
 
 
@@ -95,6 +105,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* saving default data for developer */
 	Route::any('/sss_table_list/sss_table_save_default',"Member\PayrollController@sss_table_save_default");
 	/* SSS TABLE END */
+
 
 	/* PHILHEALTH TABLE START */
 	Route::any('/philhealth_table_list',"Member\PayrollController@philhealth_table_list");
@@ -210,4 +221,25 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_period_list/modal_edit_period/{id}','Member\PayrollController@modal_edit_period');
 	Route::any('/payroll_period_list/modal_update_period','Member\PayrollController@modal_update_period');
 	/* PAYROLL PERIOD END */
+
+	/* HOLIDAY DEFAULT START */
+	Route::any('/holiday_default/modal_create_holiday_default',"Member\PayrollController@modal_create_holiday_default");
+	Route::any('/holiday_default/modal_save_holiday_default',"Member\PayrollController@modal_save_holiday_default");	
+
+	Route::any('/holiday_default/modal_edit_holiday_default/{id}',"Member\PayrollController@modal_edit_holiday_default");
+	Route::any('/holiday_default/update_holiday_default',"Member\PayrollController@update_holiday_default");
+	/* HOLIDAY END */
+
+
+
+	/* BIO METRICS IMPORT START */
+	Route::any('/import_bio/modal_biometrics','Member\Payroll_BioImportController@modal_biometrics');
+
+		
+	/* dmsph start */
+	Route::any('/import_bio/import_global','Member\Payroll_BioImportController@import_global');
+	Route::any('/import_bio/template_global','Member\Payroll_BioImportController@template_global');
+	/* dmsph end */
+
+	/* BIO METRICS IMPORT END */
 });

@@ -48,12 +48,27 @@ class TesterController extends Controller
         $data[0] = "09178868381";
         $data[1] = "09167703064";
 
-        Sms::sendRegistration("639175857495","Raymond");
+        // Sms::sendRegistration("639177190080","Arnold");
     }
 
 	public function getIndex()
     {
-        dd(Accounting::postJournalEntry());
+        dd(Sms::getSmsLogs());
+        // $txt[0]["txt_to_be_replace"]    = "[name]";
+        // $txt[0]["txt_to_replace"]       = "bryan";
+
+        // $txt[1]["txt_to_be_replace"]    = "[link]";
+        // $txt[1]["txt_to_replace"]       = "link ko to";
+
+        // dd(Sms::getSmsContent("membership_code_purchase", $txt));
+        // $data ="{"messages":[{"to":"639971276494","status":{"groupId":1,"groupName":"PENDING","id":7,"name":"PENDING_ENROUTE","description":"Message sent to next instance"},"smsCount":1,"messageId":"ea7b9ea6-bbda-4e7f-a1b0-cc9a8af1d45c"}]}";
+
+        
+        // dd(json_decode({"messages":[{"to":"639971276494","status":{"groupId":1,"groupName":"PENDING","id":7,"name":"PENDING_ENROUTE","description":"Message sent to next instance"},"smsCount":1,"messageId":"ea7b9ea6-bbda-4e7f-a1b0-cc9a8af1d45c"}]}));
+
+
+
+        // dd(Accounting::postJournalEntry());
         // dd(Tbl_ec_product::variant()->item()->inventory()->get()->toArray());
         // dd(Ecom_Product::getProductList());
         // dd(Ecom_Product::getProduct(5));\

@@ -154,7 +154,7 @@
         height: 0;
         overflow: hidden; }
         .featured .content-container .right-container .product-holder .per-item-container .product-image .image-holder img {
-          max-width: 100%; }
+          min-width: 100%; }
         .featured .content-container .right-container .product-holder .per-item-container .product-image .image-holder .first-image {
           position: absolute;
           right: 0;
@@ -228,6 +228,8 @@
       position: relative;
       padding-bottom: 25%;
       overflow: hidden; }
+      .most-viewed .most-viewed-content .product-holder .product-image img {
+        max-width: 100%; }
       .most-viewed .most-viewed-content .product-holder .product-image .first-image {
         position: absolute;
         right: 0;

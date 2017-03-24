@@ -11,7 +11,7 @@
 				<select  class="form-control" required name="payroll_jobtitle_department_id">
 					<option value="">Select Department</option>
 					@foreach($_department as $department)
-					<option value="{{$department->payroll_department_id}}">{{$department->payroll_department_name}}</option>
+					<option value="{{$department->payroll_department_id}}" {{$selected == $department->payroll_department_id ? 'selected="selected"' : ''}}>{{$department->payroll_department_name}}</option>
 					@endforeach
 				</select>
 			</div>

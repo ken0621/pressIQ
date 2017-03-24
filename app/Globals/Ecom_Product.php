@@ -51,7 +51,7 @@ class Ecom_Product
 			$shop_id = Ecom_Product::getShopId();
 		}
 
-		return Tbl_warehouse::where("warehouse_name", "Ecommerce Warehouse")->where("warehouse_shop_id", $shop_id)->pluck('warehouse_id');
+		return Tbl_warehouse::where("main_warehouse", 2)->where("warehouse_shop_id", $shop_id)->pluck('warehouse_id');
 	}
 
 	/**
@@ -70,19 +70,19 @@ class Ecom_Product
 		
 		foreach($_product as $key=>$product)
 		{
-			$_product[$key]			 	= $product;
-			$_product[$key]["variant"] = Tbl_ec_variant::where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
+			$_product[$key]			 	= Ecom_Product::getProduct($product["eprod_id"], $shop_id);
+			// $_product[$key]["variant"] = Tbl_ec_variant::where("evariant_prod_id", $product["eprod_id"])->get()->toArray();
 
-			foreach($_product[$key]["variant"] as $key2=>$variant)
-			{
-				$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
+			// foreach($_product[$key]["variant"] as $key2=>$variant)
+			// {
+			// 	$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
 				
-				foreach($variant_option_name as $key3=>$option_name)
-				{
-					$variant_option_value = Tbl_option_value::where("option_value_id", $option_name["option_value_id"])->first()->toArray();
-					$_product[$key]["variant"][$key2]["options"][$option_name['option_name']] = $variant_option_value["option_value"];
-				}
-			}
+			// 	foreach($variant_option_name as $key3=>$option_name)
+			// 	{
+			// 		$variant_option_value = Tbl_option_value::where("option_value_id", $option_name["option_value_id"])->first()->toArray();
+			// 		$_product[$key]["variant"][$key2]["options"][$option_name['option_name']] = $variant_option_value["option_value"];
+			// 	}
+			// }
 		}
 		
 		return $_product;

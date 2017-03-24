@@ -10,16 +10,38 @@ use App\Models\Tbl_content;
 use App\Models\Tbl_ec_product;
 use App\Globals\Ecom_Product;
 use App\Globals\Cart;
+use Session;
 
 class Shop extends Controller
 {
 	public $shop_info;
     public $shop_theme;
     public $shop_theme_color;
+
+
+    public static $customer_info;
+    public static $slot_now;
+
     public function __construct()
     {
     	$domain = get_domain();
     	$check_domain = Tbl_shop::where("shop_domain", $domain)->first();
+        // dd(Session::get('mlm_member'));
+        if(Session::get('mlm_member') != null)
+        {
+            $session = Session::get('mlm_member');
+
+            Self::$customer_info = $session['customer_info'];
+            if($session['slot_now'])
+            {
+                Self::$slot_now = $session['slot_now'];
+            }
+        }
+        else
+        {
+            Self::$customer_info = null;
+            Self::$slot_now = null;
+        }
 
         if(hasSubdomain())
         {
@@ -65,6 +87,8 @@ class Shop extends Controller
         $product_category = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         $global_cart = Cart::get_cart($this->shop_info->shop_id);
         
+        View::share("slot_now", Self::$slot_now);
+        View::share("customer_info", Self::$customer_info);
         View::addLocation(base_path() . '/public/themes/' . $this->shop_theme . '/views/');
         View::share("shop_info", $this->shop_info);
         View::share("shop_theme", $this->shop_info->shop_theme);

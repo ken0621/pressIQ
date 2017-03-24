@@ -57,6 +57,15 @@
 															<img class="img-responsive" src="/themes/{{ $shop_theme }}/img/paypal.png">
 														</td>
 													</tr>
+												@elseif($payment_method->method_name == "E-Wallet")
+													@if($slot_now != null)
+													<tr>
+														<td class="ray"><input name="payment_method_id" value="{{ $payment_method->method_id }}" type="radio"></td>
+														<td>
+															<div class="name">{{ $payment_method->method_name }}</div>
+														</td>
+													</tr>
+													@endif
 												@else
 													<tr>
 														<td class="ray"><input name="payment_method_id" value="{{ $payment_method->method_id }}" type="radio"></td>
@@ -90,6 +99,15 @@
 				<div class="hold-container">
 					<div class="hold-header">CART SUMMARY</div>
 					<div class="hold-content match-height">
+						@if (session('fail'))
+						    <div class="alert alert-danger" style="margin-top: -25px; margin-left: -25px; margin-right: -25px;">
+							    <ul>
+							        @foreach(session('fail') as $fail)
+						        		<li>{{ $fail }}</li>
+							        @endforeach
+							    </ul>
+						    </div>
+						@endif
 						<div class="cart-summary">
 							<table class="table">
 								<thead>
@@ -138,6 +156,7 @@
 									</tr>
 								</tbody>
 							</table>
+							<div style="margin-top: 15px; font-size: 16px; font-weight: 700; text-align: center;">Free shipping for orders above ₱ {{ number_format($get_cart['sale_information']['minimum_purchase'], 2) }}</div>
 						</div>
 					</div>
 				</div>
@@ -160,19 +179,19 @@
 								<div class="col-md-7">
 									<div class="form-group">
 										<label>FIRST NAME</label>
-										<input value="{{ Request::old('customer_first_name') }}" type="text" name="customer_first_name" class="form-control">
+										<input value="{{ $customer_first_name != null ? $customer_first_name : Request::old('customer_first_name') }}" type="text" name="customer_first_name" class="form-control">
 									</div>
 									<div class="form-group">
 										<label>MIDDLE NAME</label>
-										<input value="{{ Request::old('customer_middle_name') }}" type="text" name="customer_middle_name" class="form-control">
+										<input value="{{ $customer_middle_name != null ? $customer_middle_name : Request::old('customer_middle_name') }}" type="text" name="customer_middle_name" class="form-control">
 									</div>
 									<div class="form-group">
 										<label>LAST NAME</label>
-										<input value="{{ Request::old('customer_last_name') }}" type="text" name="customer_last_name" class="form-control">
+										<input value="{{ $customer_last_name != null ? $customer_last_name : Request::old('customer_last_name') }}" type="text" name="customer_last_name" class="form-control">
 									</div>
 									<div class="form-group">
 										<label>EMAIL ADDRESS</label>
-										<input value="{{ Request::old('customer_email') }}" type="email" name="customer_email" class="form-control">
+										<input value="{{ $customer_email != null ? $customer_email : Request::old('customer_email') }}" type="email" name="customer_email" class="form-control">
 									</div>
 									<div class="form-group">
 										<label>BIRTHDAY</label>
@@ -215,8 +234,15 @@
 									</div>
 									<div class="form-group">
 										<label>CONTACT NUMBER</label>
-										<input value="{{ Request::old('customer_mobile') }}" name="customer_mobile" type="text" class="form-control">
+										<input value="{{ $customer_mobile != null ? $customer_mobile : Request::old('customer_mobile') }}" name="customer_mobile" type="text" class="form-control">
 									</div>
+									<input type="hidden" name="ec_order_load" value="{{$ec_order_load}}">
+									@if($ec_order_load == 1)
+									<div class="form-group">
+										<label>LOAD TO: (Number)</label>
+										<input value="{{ Request::old('ec_order_load_number') }}" name="ec_order_load_number" type="text" class="form-control">
+									</div>
+									@endif
 								</div>
 								<div class="col-md-5">
 									<div class="form-group">
@@ -228,15 +254,15 @@
 									</div>
 									<div class="form-group">
 										<label>PROVINCE</label>
-										<input value="{{ Request::old('customer_state_province') }}" name="customer_state_province" type="text" class="form-control">
+										<input value="{{ $customer_state_province != null ? $customer_state_province : Request::old('customer_state_province') }}" name="customer_state_province" type="text" class="form-control">
 									</div>
 									<div class="form-group">
 										<label>CITY / MUNICIPALITY</label>
-										<input value="{{ Request::old('customer_city') }}" name="customer_city" type="text" class="form-control">
+										<input value="{{ $customer_city != null ? $customer_city : Request::old('customer_city') }}" name="customer_city" type="text" class="form-control">
 									</div>
 									<div class="form-group">
 										<label>COMPLETE SHIPPING ADDRESS</label>
-										<textarea name="customer_address" class="form-control" style="height: 180px;">{{ Request::old('customer_address') }}</textarea>
+										<textarea name="customer_address" class="form-control" style="height: 180px;">{{ $customer_address != null ? $customer_address : Request::old('customer_address') }}</textarea>
 									</div>
 								</div>
 							</div>

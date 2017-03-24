@@ -58,6 +58,7 @@ class MLM_PlanController extends Member
     }
     public function save_settings()
     {
+        // asd
     	// Input from form 
     	$validate['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
     	$validate['plan_settings_enable_mlm'] = Request::input('plan_settings_enable_mlm');
@@ -65,6 +66,7 @@ class MLM_PlanController extends Member
     	$validate['plan_settings_slot_id_format'] = Request::input('plan_settings_slot_id_format');
     	$validate['plan_settings_format'] = Request::input('plan_settings_format');
     	$validate['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
+        $validate['plan_settings_use_item_code'] = Request::input('plan_settings_use_item_code');
     	// end input from form
     	
     	// Validator rules
@@ -74,6 +76,7 @@ class MLM_PlanController extends Member
 		$rules['plan_settings_slot_id_format'] = "required";
 		$rules['plan_settings_format'] = "required";
 		$rules['plan_settings_prefix_count'] = "required";
+        $rules['plan_settings_use_item_code'] = "required";
 		// end validator rules
 		
 		// validate
@@ -96,6 +99,7 @@ class MLM_PlanController extends Member
     		$update['plan_settings_slot_id_format'] = Request::input('plan_settings_slot_id_format');
     		$update['plan_settings_format'] = Request::input('plan_settings_format');
     		$update['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
+            $update['plan_settings_use_item_code'] = Request::input('plan_settings_use_item_code');
     		// end
     		
     		// update settings

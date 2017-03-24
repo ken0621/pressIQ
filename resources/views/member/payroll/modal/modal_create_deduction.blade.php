@@ -39,6 +39,12 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<div class="col-md-6">
+				<small>Date End</small>
+				<input type="text" name="payroll_deduction_date_end" class="form-control datepicker" required>
+			</div>
+		</div>
+		<div class="form-group">
 			<div class="col-md-12">
 				<small>Deduct Every</small>
 				<div class="panel panel-default">

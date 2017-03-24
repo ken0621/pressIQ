@@ -16,7 +16,6 @@ class ShopCartController extends Shop
     {
         $data["page"]  = "Product Cart";
         $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
-        
         return view("cart_modal", $data);
     }
 
@@ -24,7 +23,7 @@ class ShopCartController extends Shop
     {
         $data["page"] = "Mini Product Cart";
         $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
-
+    
         return view("mini_cart_modal", $data);
     }
 

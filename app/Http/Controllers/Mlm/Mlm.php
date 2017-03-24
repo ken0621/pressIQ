@@ -29,6 +29,7 @@ class Mlm extends Controller
     public function __construct()
     {	
         // dd(Self::$slot_id);  
+        // dd(Session::get('mlm_member') );
         if(Session::get('mlm_member') != null)
         {
             $session = Session::get('mlm_member');

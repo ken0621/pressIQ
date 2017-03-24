@@ -181,7 +181,8 @@ function payrollconfiguration()
 	{
 		jobtitle_archived();
 		jobtitle_archived(1);
-	}
+	} 
+	
 
 	this.btn_modal_button_event = function()
 	{
@@ -218,6 +219,21 @@ function payrollconfiguration()
 	{
 		reload_configuration("/member/payroll/payroll_group");
 	}
+
+	this.reload_jobtitlelist = function()
+	{
+		reload_configuration("/member/payroll/jobtitlelist");
+	}
+
+	this.reload_departmentlist = function()
+	{
+		reload_configuration("/member/payroll/departmentlist");
+	}
+
+	/*this.reload_holiday_default = function()
+	{
+		reload_configuration("/member/payroll/holiday_default");
+	}*/
 	
 }
 

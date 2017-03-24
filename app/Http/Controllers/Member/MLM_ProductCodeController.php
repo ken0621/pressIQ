@@ -68,7 +68,8 @@ class MLM_ProductCodeController extends Member
 	    $data["_customer"]  = Tbl_customer::where("archived",0)->where("shop_id",$shop_id)->get();
 	    $data['table_body'] = $this->view_all_lines();
         // dd(1);
-        $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get();
+        // $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get();
+        $data['warehouse'][0] = $this->current_warehouse;
         return view('member.mlm_product_code.mlm_product_code_sell', $data);
     }
 
@@ -260,21 +261,31 @@ class MLM_ProductCodeController extends Member
     {
         if(Request::input())
         {
-            // return $_POST;
-            $shop_id = $this->user_info->shop_id;
-            $data    = Item_code::add_code(Request::input(),$shop_id);
-            if($data["response_status"] == "success")
+            if(isset($this->current_warehouse->warehouse_id))
             {
-                return json_encode($data);
-                Session::flash('success', "Successfully purchased a product/s");
-                return redirect('/member/mlm/product_code/receipt?invoice_id='. $data['invoice_id'])->send();
+                // return $_POST;
+                $shop_id = $this->user_info->shop_id;
+                $data    = Item_code::add_code(Request::input(),$shop_id);
+                if($data["response_status"] == "success")
+                {
+                    return json_encode($data);
+                    Session::flash('success', "Successfully purchased a product/s");
+                    return redirect('/member/mlm/product_code/receipt?invoice_id='. $data['invoice_id'])->send();
+                }
+                else
+                {
+                    return json_encode($data);
+                    Session::flash('code_error', $data["warning_validator"]);
+                    return redirect('/member/mlm/product_code/sell')->send();
+                }
             }
             else
             {
+                $data["warning_validator"][0] = 'Invalid Warehouse';
                 return json_encode($data);
                 Session::flash('code_error', $data["warning_validator"]);
                 return redirect('/member/mlm/product_code/sell')->send();
-            }          
+            }     
         }
         else
         {

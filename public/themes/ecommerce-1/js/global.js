@@ -121,8 +121,8 @@ function ready_load_mini_ecom_cart()
 	{
 		var quantity = $('.mini-cart .quantity-get').val();
 		var total_price = $('.mini-cart .total-get').val();
-
+		
 		$('.mini-cart-quantity').html(quantity);
-		$('.mini-cart-total').html(total_price);
+		$('.mini-cart-total-price').html(total_price);
 	});
 }

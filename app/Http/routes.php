@@ -294,6 +294,10 @@ Route::any('/member/item/warehouse/view/{id}','Member\WarehouseController@view')
 Route::any('/member/item/warehouse/refill','Member\WarehouseController@refill');
 Route::any('/member/item/warehouse/refill_submit','Member\WarehouseController@refill_submit');
 
+//adjust inventory
+Route::any('/member/item/warehouse/adjust/{id}','Member\WarehouseController@adjust');
+Route::any('/member/item/warehouse/adjust_submit','Member\WarehouseController@adjust_submit');
+
 Route::any('/member/item/warehouse/load_item','Member\WarehouseController@filter_item');
 
 Route::any('/member/item/warehouse/restore/{id}','Member\WarehouseController@restore');
@@ -309,7 +313,9 @@ Route::any('/member/item/add_serial_number_submit','Member\WarehouseController@a
 
 Route::any('/member/item/confirm_serial','Member\WarehouseController@confirm_serial');
 Route::any('/member/item/confirm_serial_submit','Member\WarehouseController@confirm_serial_submit');
-
+Route::any('/member/item/warehouse/refill_log/{id}','Member\WarehouseController@refill_log');
+Route::any('/member/item/warehouse/view_pdf/{id}','Member\WarehouseController@view_pdf');
+Route::any('/member/item/warehouse/stock_input_report/{id}','Member\WarehouseController@stock_input');
 /* END WAREHOUSE ARCY*/
 
 /* START PIS ARCY*/
@@ -506,7 +512,6 @@ Route::any('/member/maintenance/payment_method/archived/{id}/{action}','Member\M
 Route::any('/member/maintenance/payment_method/archived_submit','Member\MaintenancePaymentMethodController@archived_submit');
 Route::any('/member/maintenance/payment_method/update','Member\MaintenancePaymentMethodController@update_default');
 
-
 Route::any('/member/maintenance/email_content','Member\EmailContentController@index');
 Route::any('/member/maintenance/email_content/add','Member\EmailContentController@add');
 Route::any('/member/maintenance/email_content/add_submit','Member\EmailContentController@add_submit');
@@ -702,6 +707,9 @@ Route::controller('/member/vendor', 'Member\VendorController');
 /* End */
 /* ONLINE PAYMENT METHOD */
 Route::controller('/member/maintenance/online_payment', 'Member\OnlinePaymentMethodController');
+/* End */
+/* ONLINE PAYMENT METHOD */
+Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* End */
 
 

@@ -481,6 +481,18 @@ class Item_code
             }
         } 
     }
+    public static function use_item_code_all_ec_order($ec_order_id)
+    {
+        $item_code = Tbl_item_code::where('ec_order_id', $ec_order_id)->get();
+        foreach($item_code as $key => $value)
+        {
+            $slot_info = Mlm_compute::get_slot_info($value->slot_id);
+            if($value->used === 0)
+            {
+                $a = Item_code::use_item_code_single($value, $slot_info);
+            }
+        }
+    }
     public static function use_item_code_single($item_code, $slot_info)
     {
         $update["used"]          = 1;

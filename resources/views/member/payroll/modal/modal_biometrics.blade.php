@@ -3,14 +3,14 @@
 	<h4 class="modal-title"><i class="fa fa-file-excel-o color-green" aria-hidden="true"></i>&nbsp;Import Time Sheet</h4>
 </div>
 <div class="modal-body clearfix form-horizontal">
-	<form class="form-group" action="/member/payroll/import_bio/template_dmsph" method="POST">
+	<form class="form-group" action="/member/payroll/import_bio/template_global" method="GET">
 		<input type="hidden" value="{{csrf_token()}}" class="_token" name="_token">
 		<div class="col-md-6">
 			<button class="btn btn-custom-primary">Download Template</button>
 		</div>
 		<div class="col-md-6">
 			<select class="form-control" id="biometric_name" name="biometric_name">
-				<option value="name">Bio Metric Name here</option>
+				<option value="ZKTime 5.0">ZKTime 5.0</option>
 			</select>
 		</div>
 	</form>

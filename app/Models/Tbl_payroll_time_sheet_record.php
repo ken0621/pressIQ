@@ -29,4 +29,13 @@ class Tbl_payroll_time_sheet_record extends Model
 		• cancelled = time entry has been cancelled
 		• processed = time has been used for computation and the computation has already approved.
 	*/
+
+	public function scopewherearray($query, $array = array())
+	{
+		foreach($array as $key => $value)
+		{
+			$query->where($key, $value);
+		}
+		return $query;
+	}
 }

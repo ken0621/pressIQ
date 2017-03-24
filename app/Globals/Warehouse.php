@@ -5,6 +5,7 @@ use App\Models\Tbl_default_chart_account;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_warehouse_inventory;
+use App\Models\Tbl_inventory_serial_number;
 use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_item;
 use App\Models\Tbl_inventory_slip;
@@ -16,8 +17,46 @@ use DB;
 use Carbon\Carbon;
 use Session;
 class Warehouse
-{
+{   
+    public static function insert_access($warehouse_id)
+    {
+        $ins_access["user_id"] = Warehouse::getUserid();
+        $ins_access["warehouse_id"] = $warehouse_id;
+        Tbl_user_warehouse_access::insert($ins_access);
 
+        $user_position = Tbl_user::position()->where("user_id",Warehouse::getUserid())->pluck("position_rank");
+
+        $all_user = Tbl_user::position()->where("user_shop",Warehouse::getShopId())->where("user_id","!=", Warehouse::getUserid())->where("tbl_user.archived",0)->get();
+
+        foreach ($all_user as $key => $value) 
+        {
+            if($value->position_rank < $user_position)
+            {
+                $ins_access["user_id"] = $value->user_id;
+                $ins_access["warehouse_id"] = $warehouse_id;
+                Tbl_user_warehouse_access::insert($ins_access);
+            }
+        }
+    }
+    public static function inventory_input_report($inventory_slip_id)
+    {
+        $data = Tbl_inventory_slip::shop()->vendor()->warehouse()->where("inventory_slip_shop_id",Warehouse::getShopId())
+                                                ->where("tbl_user.user_id",Warehouse::getUserid())
+                                                ->where("inventory_slip_id",$inventory_slip_id)
+                                                ->first();
+
+        return $data;
+    }
+    public static function inventory_input_report_item($inventory_slip_id)
+    {
+        $data = Tbl_warehouse_inventory::inventoryslip()->item()->where("tbl_warehouse_inventory.inventory_slip_id",$inventory_slip_id)->groupBy("tbl_item.item_id")->where("tbl_unit_measurement_multi.is_base",1)->get();
+
+        foreach ($data as $key => $value) 
+        {
+            $data[$key]->serial_number_list = Tbl_inventory_serial_number::where("serial_inventory_id",$value->inventory_id)->get(); 
+        }
+        return $data;
+    }
     public static function select_item_warehouse_single($warehouse_id = 0, $return = 'array')
     {
     	$data = Tbl_warehouse::Warehouseitem()
@@ -30,7 +69,6 @@ class Warehouse
     		$data = json_encode($data);
     	}
     	return $data; 
-
     }
     public static function warehouse_access()
     {
@@ -212,7 +250,7 @@ class Warehouse
         return $data;
 
     }
-      public static function adjust_inventory($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
+    public static function adjust_inventory($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
     {
         
         $shop_id = Warehouse::get_shop_id($warehouse_id);
@@ -261,21 +299,21 @@ class Warehouse
              $data['status'] = '';
             
 
-            $serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$shop_id)->first();
+            // $serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$shop_id)->first();
 
-            $data['status'] = 'success';
-            if($is_return == null)
-            {
-                if($serial != null)
-                {
-                    $data['status'] = 'success-serial';
+            // if($is_return == null)
+            // {
+            //     if($serial != null)
+            //     {
+            //         $data['status'] = 'success-serial';
 
-                    $items["item_id"] = "";
-                    $items["item_list"] = $for_serial_item;
-                    Session::put("item", $items);
-                }                
-            }
- 
+            //         $items["item_id"] = "";
+            //         $items["item_list"] = $for_serial_item;
+            //         Session::put("item", $items);
+            //     }                
+            // }
+
+            $data['status'] = 'success'; 
             $data['inventory_slip_id'] = $inventory_slip_id;
 
         }
@@ -352,6 +390,7 @@ class Warehouse
                     $data['status'] = 'success-serial';
 
                     $items["item_id"] = "";
+                    // $items["slip_id"] = $inventory_slip_id;
                     $items["item_list"] = $for_serial_item;
                     Session::put("item", $items);
                 }                

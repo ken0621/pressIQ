@@ -53,17 +53,19 @@
               @endforeach
             </select>
           </div>
-          <div class="col-md-4 pull-right padding-lr-1">
+          <form class="col-md-4 pull-right padding-lr-1 search-form" data-target="#active-employee" method="POST" action="/member/payroll/employee_list/search_employee">
+            <input type="hidden" name="_token" value="{{csrf_token()}}">
+            <input type="hidden" name="trigger" value="active">
             <small>Search Employee</small>
             <div class="input-group">
-              <input type="search" name="" data-trigger="active" data-target="#active-employee" class="form-control perdictive perdictive-active width-100" placeholder="Search employee here">
+              <input type="search" name="employee_search" data-trigger="active" class="form-control perdictive perdictive-active width-100" placeholder="Search employee here">
               <span class="input-group-btn">
-                <button class="btn btn-custom-primary" type="button"><i class="fa fa-search"></i></button>
+                <button class="btn btn-custom-primary" type="submit"><i class="fa fa-search"></i></button>
               </span>
             </div>
             
            
-          </div>
+          </form>
         </div>
       </div>
       <div class="form-group">
@@ -142,17 +144,19 @@
               @endforeach
             </select>
           </div>
-          <div class="col-md-4 pull-right padding-lr-1">
+          <form class="col-md-4 pull-right padding-lr-1 search-form" data-target="#separated-employee" action="/member/payroll/employee_list/search_employee" method="POST">
+            <input type="hidden" name="_token" value="{{csrf_token()}}">
+            <input type="hidden" name="trigger" value="separated">
             <small>Search Employee</small>
             <div class="input-group">
-              <input type="search" name="" data-trigger="separated" data-target="#separated-employee" class="form-control perdictive perdictive-separated width-100" placeholder="Search employee here">
+              <input type="search" name="employee_search" data-trigger="separated" class="form-control perdictive perdictive-separated width-100" placeholder="Search employee here">
               <span class="input-group-btn">
-                <button class="btn btn-custom-primary" type="button"><i class="fa fa-search"></i></button>
+                <button class="btn btn-custom-primary" type="submit"><i class="fa fa-search"></i></button>
               </span>
             </div>
             
            
-          </div>
+          </form>
         </div>
       </div>
       <div class="form-group">

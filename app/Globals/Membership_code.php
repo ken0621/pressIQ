@@ -24,8 +24,9 @@ use App\Globals\Item;
 use App\Globals\EmailContent;
 class Membership_code
 {
-	public static function add_code($data, $shop_id)
+	public static function add_code($data, $shop_id, $warehouse_id)
 	{
+        $data['warehouse_id'] =  $warehouse_id;
         $insert['customer_id']                                   = $data["customer_id"];
         $insert['membership_code_customer_email']                = $data["membership_code_customer_email"];
         $insert['membership_code_paid']                          = $data["membership_code_paid"];

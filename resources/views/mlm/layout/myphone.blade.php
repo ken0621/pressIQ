@@ -9,6 +9,7 @@
       <title>Brown and Proud | Members Control Panel</title>
       <!-- Bootstrap -->
       <link href="/member-theme/myphone/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
       <!-- Font Awesome -->
       <link href="/member-theme/myphone/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
       <!-- NProgress -->
@@ -89,6 +90,16 @@
           display: block;
           padding: 7.5px 0;
         }
+
+        .box.box-primary
+        {
+          overflow: hidden;
+        }
+
+        .bg-aqua, .callout.callout-info, .alert-info, .label-info, .modal-info .modal-body
+        {
+          background-color: #5C3424 !important;
+        }
       </style>
    </head>
    <body class="nav-md">
@@ -103,11 +114,11 @@
                   <!-- menu profile quick info -->
                   <div class="profile clearfix">
                      <div class="profile_pic">
-                        <img src="/member-theme/myphone/images/img.jpg" alt="..." class="img-circle profile_img">
+                        <img src="{{$profile}}" alt="..." class="img-circle profile_img">
                      </div>
                      <div class="profile_info">
                         <span>Magandang Araw (Good Day) ,</span>
-                        <h2>Juan dela Cruz</h2>
+                        <h2>{{$customer_info->title_name}} {{$customer_info->first_name}} {{$customer_info->last_name}} {{$customer_info->suffix_name}}</h2>
                      </div>
                   </div>
                   <!-- /menu profile quick info -->
@@ -210,7 +221,7 @@
                      <ul class="nav navbar-nav navbar-right">
                         <li class="">
                            <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                           <img src="/member-theme/myphone/images/img.jpg" alt="">Juan Dela Cruz
+                           <img src="{{$profile}}" alt="">{{$customer_info->title_name}} {{$customer_info->first_name}} {{$customer_info->last_name}} {{$customer_info->suffix_name}}
                            <span class=" fa fa-angle-down"></span>
                            </a>
                            <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -330,5 +341,53 @@
       <script src="/member-theme/myphone/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
       <!-- Custom Theme Scripts -->
       <script src="/member-theme/myphone/build/js/custom.min.js"></script>
+
+      <!-- From Default Template -->
+      
+      <!-- AdminLTE App -->
+      <script src="/dist/js/app.min.js"></script>
+
+      <!-- Optionally, you can add Slimscroll and FastClick plugins.
+      Both of these plugins are recommended to enhance the
+      user experience. Slimscroll is required when using the
+      fixed layout. -->
+      <!-- // <script src="/resources/assets/distributor/scripts/e1d08589.bootstrap.min.js"></script> -->
+      <script src="/resources/assets/distributor/scripts/9f7a46ed.proton.js"></script>
+
+
+      <script src="/resources/assets/distributor/scripts/vendor/jquery.jstree.js"></script>
+
+      <script src="/resources/assets/distributor/scripts/vendor/raphael-min.js"></script>
+      <script src="/resources/assets/distributor/scripts/vendor/morris.min.js"></script>
+
+      <script src="/resources/assets/distributor/scripts/vendor/jquery.textareaCounter.js"></script>
+
+      <script src="/resources/assets/distributor/scripts/vendor/fileinput.js"></script>       
+
+      <!-- View Voucher -->
+      <script type="text/javascript" src="/resources/assets/distributor/js/voucher.js"></script>
+      <script type="text/javascript" src="/resources/assets/remodal/src/jquery.remodal.js"></script>
+      <div id="luke"></div>
+
+      <!-- ADDITIONALS -->
+
+      <script type="text/javascript" src="/assets/mlm/js/slot_change.js"></script>
+      <script type="text/javascript" src="/assets/member/global.js"></script>
+      <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script> 
+      <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
+      <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script>
+      <script type="text/javascript" src="/assets/mlm/pace.min.js"></script>
+      <script type="text/javascript">
+      $(document).ajaxStart(function() { Pace.restart(); });
+
+      @if (Session::has('success'))
+      toastr.success("{{ Session::get('success') }}");
+      @endif  
+      @if (Session::has('warning'))
+      toastr.warning("{{ Session::get('warning') }}");
+      @endif  
+      </script>
+
+      @yield('js')   
    </body>
 </html>

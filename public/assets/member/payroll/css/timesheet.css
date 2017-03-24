@@ -54,5 +54,10 @@
     .timesheet tbody tr.focus td input[type=text] {
       border: 1px solid #bbb;
       cursor: text; }
+.timesheet tbody tr.disable-hover {
+  background-color: #fdfdfd;
+  cursor: default; }
+  .timesheet tbody tr.disable-hover .text-table {
+    cursor: default; }
 
 /*# sourceMappingURL=timesheet.css.map */

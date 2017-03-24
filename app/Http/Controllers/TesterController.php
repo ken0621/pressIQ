@@ -53,6 +53,7 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
+        dd(Sms::getSmsLogs());
         // $txt[0]["txt_to_be_replace"]    = "[name]";
         // $txt[0]["txt_to_replace"]       = "bryan";
 

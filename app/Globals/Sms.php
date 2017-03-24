@@ -74,7 +74,7 @@ class Sms
 		curl_close($curl);
 
 		if ($err) {
-			$status = "failed";
+			$status = "FAILED";
 			$data 	= "cURL Error #:" . $err;
 		} 
 		else {
@@ -102,7 +102,7 @@ class Sms
 		/* Check Content */
 		$content_status = Sms::getSmsContent($key, $replace_data, $recipient, $shop_id);
 
-		if($content_status['status'] == "failed")
+		if($content_status['status'] == "FAILED")
 		{
 			$data["status"]  = $content_status['status'];
 			$data["message"] = $content_status['message'];
@@ -150,11 +150,11 @@ class Sms
 		curl_close($curl);
 
 		if ($err) {
-			$status = "failed";
+			$status = "FAILED";
 			$result = "cURL Error #:" . $err;
 		} 
 		else {
-			$status = "pending";
+			$status = "UNKNOWN";
 			$result = $response;
 		}
 
@@ -178,7 +178,7 @@ class Sms
 		$sms_key 		= Tbl_sms_key::where("sms_shop_id", $shop_id)->first();
 
 		/* IF THER IS SMS AUTHORIZATION KEY */
-		if($sms_key)
+		if($sms_key && $sms_key != '')
 		{
 			/* IF THERE IS TEMPLATE FOR SMS KEY */
 			if($sms_content)
@@ -198,17 +198,17 @@ class Sms
 		    	}
 		    	else
 		    	{
-		    		$data["status"] 	= "failed";
+		    		$data["status"] 	= "FAILED";
 			        $data["message"] 	= "template for this sms key is disabled";
 		    	}
 			}
 			else
 			{
-				$data["status"] 	= "failed";
+				$data["status"] 	= "FAILED";
 				$data["message"] 	= "template not found";
 			}
 
-			if($data["status"] == "failed")
+			if($data["status"] == "FAILED")
 			{
 				$insert["sms_logs_shop_id"] = $shop_id;
 				$insert["sms_logs_key"]		= $key;
@@ -221,7 +221,7 @@ class Sms
 		}
 		else
 		{
-			$data["status"] = "failed";
+			$data["status"] = "FAILED";
 			$data["message"] = "No Sms Key Found";
 		}
 
@@ -251,26 +251,45 @@ class Sms
 		}
 	}
 
-	public static function put_default_account($shop)
-    {
-        
-        $is_account_has_data = Tbl_chart_of_account::accountInfo($shop)->first();
-        $shop_id             = Tbl_shop::where("shop_id", $shop)->orWhere("shop_key")->pluck("shop_id");
-        
-        if(!$is_account_has_data)
-        {
-            $default_account = Tbl_default_chart_account::get();
-            
-            foreach($default_account as $default)
-            {
-                $insert["account_shop_id"]          = $shop_id;
-                $insert["account_type_id"]          = $default->default_type_id;
-                $insert["account_number"]           = $default->default_number;
-                $insert["account_name"]             = $default->default_name;
-                $insert["account_description"]      = $default->default_description;
-                
-                Tbl_chart_of_account::insert($insert);
-            }
-        }
-    }
+	public static function getSmsLogs($shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Sms::getShopId();
+		}
+
+		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
+
+		$curl = curl_init();
+
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "http://api.infobip.com/sms/1/logs",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "GET",
+			CURLOPT_HTTPHEADER => array(
+			"accept: application/json",
+			"authorization: Basic UGhpbFRlY2g6VEEyNTJzeGM="
+			),
+		));
+
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+
+		curl_close($curl);
+
+	    if(!$sms_key) {
+	    	return array();
+	    }
+		else if ($err) {
+		  	return "cURL Error #:" . $err;
+		} else {
+		  	$data = json_decode($response);
+		  	return $data->results;
+		}
+
+	}
 }

@@ -112,6 +112,10 @@ class Payroll_BioImportController extends Member
 		{
 			return Self::import_ZKTime_5_0($file);
 		}
+		if($biometric == 'Digital Persona')
+		{
+			return Self::import_Digital_Persona($file);
+		}
 	}
 
     /* BIO METRICS START */
@@ -197,6 +201,14 @@ class Payroll_BioImportController extends Member
     	
     }
 
+    public function import_Digital_Persona($file)
+    {
+    	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('id_no','date','time_in','time_out'));
+    	dd($_time);
+    	$space = '        ';
+    }
+
+    /* TEMPLATE START */
     public function template_global()
     {
     	$biometric_name = Request::input('biometric_name');

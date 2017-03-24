@@ -120,6 +120,14 @@ email_content_subject
 [Email Notification] Redeem points email Notification
 [Email Notification] Discount Card Purchase - discount_card_purchase
 [Email Notification] Membership Code - membership_code_purchase
+Check kung may serial ()
+kung may serial may option kung ano yung serial()
+Kung load yung binebenta may number na field LOAD WALLEt ()
+Bentahan ng discount card()
+No. to be loaded field ()
+Load wallet ()
+use discount card()
+Product code use option - kung dadaan ng product code () 
 
 APP_KEY=vNYGoBAFOTzqWyeXFkYeO97Z5FIBq5SD
 

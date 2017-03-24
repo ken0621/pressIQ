@@ -221,4 +221,17 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/holiday_default/modal_edit_holiday_default/{id}',"Member\PayrollController@modal_edit_holiday_default");
 	Route::any('/holiday_default/update_holiday_default',"Member\PayrollController@update_holiday_default");
 	/* HOLIDAY END */
+
+
+
+	/* BIO METRICS IMPORT START */
+	Route::any('/import_bio/modal_biometrics','Member\Payroll_BioImportController@modal_biometrics');
+
+		
+	/* dmsph start */
+	Route::any('/import_bio/import_dmsph','Member\Payroll_BioImportController@import_dmsph');
+	Route::any('/import_bio/template_dmsph','Member\Payroll_BioImportController@import_dmsph');
+	/* dmsph end */
+
+	/* BIO METRICS IMPORT END */
 });

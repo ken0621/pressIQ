@@ -40,10 +40,10 @@
                             <thead>
                                 <tr>
                                     <th class="text-left" width="10%">Date</th>
-                                    <th class="text-left" width="12%">Key</th>
+                                    <th class="text-left" width="22%">Key</th>
                                     <th class="text-left" width="8%">Status</th>
                                     <th class="text-left" width="10%">Recipient</th>
-                                    <th class="text-left" width="60%">Remarks</th>
+                                    <th class="text-left" width="48%">Remarks</th>
                                 </tr>
                             </thead>
                             <tbody>

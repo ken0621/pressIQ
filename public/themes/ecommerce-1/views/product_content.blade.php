@@ -65,7 +65,9 @@
                                        <img src="/themes/{{ $shop_theme }}/img/star-active.png">
                                        <img src="/themes/{{ $shop_theme }}/img/star-disable.png">
                                     </div> -->
-                                    <div class="availability">Availability : <span id="stock">{{ ucwords($product_variant['inventory_status']) }}</span></div>
+                                    @if($product_variant['item_type_id'] != 2)
+                                        <div class="availability">Availability : <span id="stock">{{ ucwords($product_variant['inventory_status']) }}</span></div>
+                                    @endif
                                     <!-- <div class="item-description">{!! $product_variant['evariant_description'] !!}</div> -->
                                 </div>
                                 <div class="variant-holder">

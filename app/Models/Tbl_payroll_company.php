@@ -39,5 +39,21 @@ class Tbl_payroll_company extends Model
         return $query;
     }
 
+    public function scopesellost($query, $shop_id = 0, $archived = 0)
+    {
+        $lost = 0;
+        if($archived == 0)
+        {
+            $lost = 1;
+        }
+        $query->join('tbl_payroll_company as parent','parent.payroll_company_id','=','tbl_payroll_company.payroll_company_id')
+             ->leftjoin('tbl_payroll_rdo','tbl_payroll_rdo.payroll_rdo_id','=','tbl_payroll_company.payroll_company_rdo')
+             ->where('tbl_payroll_company.shop_id',$shop_id)
+             ->where('tbl_payroll_company.payroll_company_archived',$archived)
+             ->where('parent.payroll_company_archived',$lost)
+             ->select('tbl_payroll_company.*','parent.payroll_company_archived as parent_archived');
+
+        return $query;
+    }
 
 }

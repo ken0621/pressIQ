@@ -11,6 +11,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_list/reload_company','Member\PayrollController@reload_company');
 	Route::any('/company_list/archived_company','Member\PayrollController@archived_company');
 	Route::any('/company_list/update_company','Member\PayrollController@update_company');
+	Route::any('/company_list/modal_archived_company/{archived}/{id}','Member\PayrollController@modal_archived_company');
 	/* COMPANY END */
 
 	/* EMPLOYEE START */
@@ -56,6 +57,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimeSheetController@json_process_time');
 	Route::any('/employee_timesheet/json_process_time_single/{date}/{employee_id}','Member\PayrollTimeSheetController@json_process_time_single');
 	Route::any('/employee_timesheet/adjustment_form','Member\PayrollTimeSheetController@adjustment_form');
+	Route::post('/employee_timesheet/adjustment_form_approve','Member\PayrollTimeSheetController@adjustment_form_approve');
 	/* TIMESHEET START */
 
 	/* DEPARTMENT START */
@@ -96,6 +98,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* saving default data for developer */
 	Route::any('/sss_table_list/sss_table_save_default',"Member\PayrollController@sss_table_save_default");
 	/* SSS TABLE END */
+
 
 	/* PHILHEALTH TABLE START */
 	Route::any('/philhealth_table_list',"Member\PayrollController@philhealth_table_list");
@@ -211,4 +214,25 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_period_list/modal_edit_period/{id}','Member\PayrollController@modal_edit_period');
 	Route::any('/payroll_period_list/modal_update_period','Member\PayrollController@modal_update_period');
 	/* PAYROLL PERIOD END */
+
+	/* HOLIDAY DEFAULT START */
+	Route::any('/holiday_default/modal_create_holiday_default',"Member\PayrollController@modal_create_holiday_default");
+	Route::any('/holiday_default/modal_save_holiday_default',"Member\PayrollController@modal_save_holiday_default");	
+
+	Route::any('/holiday_default/modal_edit_holiday_default/{id}',"Member\PayrollController@modal_edit_holiday_default");
+	Route::any('/holiday_default/update_holiday_default',"Member\PayrollController@update_holiday_default");
+	/* HOLIDAY END */
+
+
+
+	/* BIO METRICS IMPORT START */
+	Route::any('/import_bio/modal_biometrics','Member\Payroll_BioImportController@modal_biometrics');
+
+		
+	/* dmsph start */
+	Route::any('/import_bio/import_dmsph','Member\Payroll_BioImportController@import_dmsph');
+	Route::any('/import_bio/template_dmsph','Member\Payroll_BioImportController@import_dmsph');
+	/* dmsph end */
+
+	/* BIO METRICS IMPORT END */
 });

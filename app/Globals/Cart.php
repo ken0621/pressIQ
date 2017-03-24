@@ -147,6 +147,7 @@ class Cart
                 $item_discounted_remark = "";
 
                 $item = Ecom_Product::getVariantInfo($info["product_id"]);
+                // dd($item);
                 $data["cart"][$key]["cart_product_information"]                                   = null;
                 $data["cart"][$key]["cart_product_information"]["variant_id"]                     = $item->evariant_id;
                 $data["cart"][$key]["cart_product_information"]["item_id"]                        = $item->item_id;
@@ -156,7 +157,7 @@ class Cart
                 $data["cart"][$key]["cart_product_information"]["product_sku"]                    = $item->item_sku;
                 $data["cart"][$key]["cart_product_information"]["product_price"]                  = $item->evariant_price;
                 $data["cart"][$key]["cart_product_information"]["image_path"]                     = $item->image_path;
-
+                $data["cart"][$key]["cart_product_information"]["item_category_id"]               = $item->item_category_id;
                 /* CHECK IF DISCOUNT EXISTS */
                 $check_discount = Tbl_item_discount::where("discount_item_id",$item->item_id)->first();
                 if($check_discount)
@@ -602,5 +603,23 @@ class Cart
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    public static function check_product_stock($cart)
+    {
+        $message["status"] = "success";
+
+        foreach ($cart["cart"] as $key => $value) 
+        {
+            $item = Ecom_Product::getVariantInfo($value["product_id"]);
+            
+            if ($value["quantity"] > $item->inventory_count) 
+            {
+                $message["status"]       = "fail";
+                $message["error"][$key]  = $item->eprod_name . " exceeds the current stock (" . $item->inventory_count . ")";
+            }
+        }
+
+        return $message;
     }
 }

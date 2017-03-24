@@ -28,12 +28,22 @@ class ShopCheckoutController extends Shop
     {
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
+        $data['ec_order_load'] = 0;
+        foreach($data['get_cart'] as $value)
+        {
+            foreach($value as $key2=>$value2)
+            {
+                if($value2['cart_product_information']['item_category_id'] == 17)
+                {
+                    $data['ec_order_load'] = 1;
+                }
+            }
+            
+        }
         $data["_payment_method"] = Tbl_online_pymnt_method::get();
         if(Self::$customer_info != null)
         {
             $customer_info = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_info->customer_id)->info()->first();
-            
-            // dd($data);
         }
         if(isset($customer_info))
         {
@@ -75,6 +85,12 @@ class ShopCheckoutController extends Shop
         $rules["customer_address"]      = 'required';
         $rules["payment_method_id"]     = 'required';
         $rules["taxable"]               = 'required';
+
+        $ec_order_load = Request::input('ec_order_load');
+        if($ec_order_load == 1)
+        {
+            $rules['ec_order_load_number'] = 'required';
+        }
 
         $validator = Validator::make(Request::input(), $rules);
 
@@ -124,6 +140,17 @@ class ShopCheckoutController extends Shop
             }
             
             // dd($add_sum);
+
+            $cart['ec_order_load'] = Request::input('ec_order_load');
+            if($ec_order_load == 1)
+            {
+                $cart['ec_order_load_number'] = Request::input('ec_order_load_number');
+            }
+            else
+            {
+                $cart['ec_order_load_number'] = null;
+            }
+            
             $cart["invline_item_id"] = $invline_item_id;
             $cart["invline_discount"] = $invline_discount;
             $cart["invline_rate"] = $invline_rate;
@@ -195,6 +222,13 @@ class ShopCheckoutController extends Shop
                         ->withInput();
                 }
             }
+
+            $stock = Cart::check_product_stock($get_cart);
+            if ($stock["status"] == "fail") 
+            {
+                return Redirect::back()->with('fail', $stock["error"]);
+            }
+
             $result = Ec_order::create_ec_order_automatic($cart);
                if(isset($result['order_id']['status']))
                {

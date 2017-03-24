@@ -134,7 +134,8 @@ class MlmTransferController extends Mlm
         Tbl_mlm_slot_wallet_log_refill::insert($insert);
         $data['status'] = 'success';
         $data['message'] = 'Wallet Request is Sent';
-        return $this->refill($data);
+        return Redirect::to('/mlm/refill');
+        // $this->refill($data);
 
     }
     public function transfer()

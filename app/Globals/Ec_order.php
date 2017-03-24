@@ -57,6 +57,8 @@ class Ec_order
         $data['payment_method_id']    = $order_info['payment_method_id'];
         $data['coupon_code']          = 0;
 
+        $data['ec_order_load']              = $order_info["ec_order_load"];
+        $data['ec_order_load_number']       = $order_info["ec_order_load_number"];
         $data['taxable']              = $order_info['taxable'];
         $data['order_status']         = $order_info['order_status'];
 
@@ -192,7 +194,10 @@ class Ec_order
             $ec_total = $ec_total + $vat_total;
         }
 
-        
+        $ec_order['ec_order_load']              = $data["ec_order_load"];
+        $ec_order['ec_order_load_number']                    = $data["ec_order_load_number"];
+
+
         $ec_order['payment_method_id']              = $data["payment_method_id"];
         $ec_order['customer_id']                    = $data["inv_customer_id"];
         $ec_order['customer_email']                 = $data["inv_customer_email"];

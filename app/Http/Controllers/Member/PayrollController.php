@@ -1611,19 +1611,6 @@ class PayrollController extends Member
  		return view('member.payroll.reload.departmentlist_reload', $data);
 	}
 
-/*	public function archived_department()
-	{
-		$archived = Request::input('archived');
-		$content  = Request::input('content');
-		$update['payroll_department_archived'] = $archived;
-		Tbl_payroll_department::where('payroll_department_id',$content)->update($update);
-
-		$return['status'] 			= 'success';
-		$return['data']	   			= '';
-		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
-		return json_encode($return);
-	}*/
-
 	public function archived_department()
 	{
 		$id = Request::input('id');
@@ -1631,7 +1618,7 @@ class PayrollController extends Member
 		Tbl_payroll_department::where('payroll_department_id', $id)->update($update);
 
 		$return['status'] 			= 'success';
-		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
+		$return['function_name'] 	= 'payrollconfiguration.reload_departmentlist';
 		return json_encode($return);
 
 	}
@@ -1734,7 +1721,7 @@ class PayrollController extends Member
 		$return['view']				= $view;
 		$return['status'] 			= 'success';
 		$return['data']	   			= $id;
-		$return['function_name'] 	= 'payrollconfiguration.reload_tbl_jobtitle';
+		$return['function_name'] 	= 'payrollconfiguration.reload_jobtitlelist';
 		return json_encode($return);
 	}
 

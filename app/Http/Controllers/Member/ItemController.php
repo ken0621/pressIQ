@@ -226,6 +226,7 @@ class ItemController extends Member
 
 				$warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->first();
 
+				$slip_id = 0 ;
 				if($warehouse == null)
 				{
 					//MAKE MAIN WAREHOUSE

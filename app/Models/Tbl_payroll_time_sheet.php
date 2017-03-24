@@ -27,4 +27,9 @@ class Tbl_payroll_time_sheet extends Model
 		• REASON : DETEMINE IF THE TIME SHEET CAME FROM BIO METRICS OR IN ANY OTHER SOURCE
 	*/
 
+	public function scopecheckdata($query, $payroll_employee_id = 0, $payroll_time_date = '0000-00-00')
+	{
+		return $query->where('payroll_employee_id', $payroll_employee_id)->where('payroll_time_date',$payroll_time_date);
+	}
+
 }

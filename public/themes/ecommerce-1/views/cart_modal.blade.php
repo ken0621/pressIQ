@@ -29,7 +29,7 @@
                   <div class="img">
                      <img src="{{ $cart['cart_product_information']['image_path'] }}">
                   </div>
-                  <div class="name">{{ $cart['cart_product_information']['product_name'] }}</div>
+                  <div class="name" style="width: 100px;">{{ $cart['cart_product_information']['product_name'] }}</div>
                </td>
                <td>
                   <div class="input-group">
@@ -42,6 +42,21 @@
                <td class="ttl">&#8369; <span key="{{ $cart['product_id'] }}">{{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</span></td>
                <td class="rmv"><a class="remove-cart" variation-id="{{ $cart['product_id'] }}" href="javascript:">Remove</a></td>
             </tr>
+
+               @if($cart['cart_product_information']['membership_points'])
+                  <tr>
+                     <td colspan="40">
+                        <table class="table table-bordered">
+                           <tr>
+                           @foreach($cart['cart_product_information']['membership_points'] as $key2 => $value2)
+                           <td><small><small>{{$key2}} <br><span class="points_membership_{{$cart['product_id']}}" base_points="{{$value2/$cart['quantity']}}" current_points="{{$value2}}">{{number_format($value2, 2)}}</span></small></small></td>
+                           @endforeach
+                           </tr>
+                        </table>
+                     </td>
+                  </tr>
+                  
+               @endif
             @endforeach
          </tbody>
       </table>

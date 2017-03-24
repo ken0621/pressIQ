@@ -207,7 +207,7 @@ class Cart
                            foreach($active_plan_product_repurchase as $key2 => $value2)
                             {
                                 $code = $value2->marketing_plan_code;
-                                $data["cart"][$key]["cart_product_information"]["membership_points"][$value2->marketing_plan_label] = $item_points->$code;
+                                $data["cart"][$key]["cart_product_information"]["membership_points"][$value2->marketing_plan_label] = $item_points->$code * $info['quantity'];
                             } 
                         }
                     }

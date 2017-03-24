@@ -113,47 +113,43 @@ class Payroll_BioImportController extends Controller
 	    	$time_sheet = array();
 	    	foreach($_time as $key => $time)
 	    	{
-	    		
 	    		$temp_record['employee_number'] = $time['no'];
 	    		$temp_record['time']			= date('H:i:s', strtotime($time['datetime']));
 	    		$temp_record['date']			= date('Y-m-d', strtotime($time['datetime']));
 	    		array_push($time_sheet, $temp_record);
-	    		// if(Self::check_employee_number($time['no']))
-	    		// {
-	    		// 	$emp = Tbl_payroll_employee_basic::where('payroll_employee_number', $time['no'])->where('shop_id', Self::shop_id())->first();
-	    		// 	$date = date('Y-m-d', strtotime($time['datetime']));
-
-	    		// 	/* CHECK IF DATA EXIST */
-	    		// 	$count_time = Tbl_payroll_time_sheet::checkdata($emp->payroll_employee_id, $date)->count();
-	    		// 	$payroll_time_sheet_id = 0;
-	    		// 	if($count_time == 0)
-	    		// 	{
-	    		// 		$insert_time['payroll_employee_id'] = $emp->payroll_employee_id;
-	    		// 		$insert_time['payroll_time_date'] 	= $date;
-	    		// 		$payroll_time_sheet_id = Tbl_payroll_time_sheet::insertGetId($insert_time);
-	    		// 	}
-	    		// 	else
-	    		// 	{
-	    		// 		$payroll_time_sheet_id = Tbl_payroll_time_sheet::checkdata($emp->payroll_employee_id, $date)->pluck('payroll_time_sheet_id');
-	    		// 	}
-
-	    		// 	/*  */
-
-	    		// 	if($temp_date != $date && $temp_date != '')
-	    		// 	{
-	    		// 		if($key > 0)
-	    		// 		{
-
-	    		// 		}
-	    		// 	}
-	    			
-	    		// 	$temp_date = $date;
-	    		// }
 	    	}
-	    	// dd($time_sheet);
 
-	    	$_date = collect($time_sheet)->groupBy('employee_number','date');
-	    	dd($_date);
+	    	$_date_collect = collect($time_sheet)->groupBy('employee_number','date');
+	    	foreach($_date_collect as $key => $date_collect)
+	    	{
+	    		$_date = collect($date_collect)->groupBy('date');
+	    		$temp = '';
+	    		foreach($_date as $date)
+	    		{
+	    			$start = $date[0];
+	    			$end = $date[count($date) - 1];
+	    			
+	    			$count = Tbl_payroll_time_sheet::checkdata(Self::check_employee_number($start['employee_number']),$start['date'])->count();
+	    			$payroll_time_sheet_id = 0;
+	    			if($count == 0)
+	    			{
+	    				$insert_time['payroll_employee_id'] = Self::check_employee_number($start['employee_number']);
+	    				$insert_time['payroll_time_date'] 	= $start['date'];
+	    				$payroll_time_sheet_id = Tbl_payroll_time_sheet::insertGetId($insert_time);
+	    			}
+	    			else
+	    			{
+	    				$payroll_time_sheet_id = Tbl_payroll_time_sheet::checkdata(Self::check_employee_number($start['employee_number']),$start['date'])->pluck('payroll_time_sheet_id');
+	    			}
+
+	    			$temp_record['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
+	    			$temp_record['payroll_time_sheet_in'] 		= $start['time'];
+	    			$temp_record['payroll_time_sheet_out'] 		= $end['time'];
+	    			$temp_record['payroll_time_sheet_origin'] 	= 'Biometrics';
+	    			array_push($insert_time_record, $temp_record);
+	    		}
+	    		
+	    	}
     	}
     	else
     	{

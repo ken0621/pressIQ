@@ -367,7 +367,7 @@
 										</div>
 										<div class="col-md-6 {{$group->payroll_group_is_flexi_break == 0 ? 'display-none':''}} flexi-break-container">
 											<small>Flexi Break (minutes)</small>
-											<input type="number" name="payroll_group_flexi_break" class="form-control text-center">
+											<input type="number" name="payroll_group_flexi_break" class="form-control text-center" value="{{$group->payroll_group_flexi_break}}">
 										</div>
 									</div>
 									<div class="form-group">

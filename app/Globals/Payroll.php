@@ -71,7 +71,8 @@ class Payroll
 			if($count == 1)
 			{
 				$status = 'active';
-			}	
+			}
+
 			$data[$key]['status'] = $status;
 			$count++;
 		}
@@ -123,6 +124,7 @@ class Payroll
 				$insert[$key]['payroll_philhealth_ee_share'] = $philhealth->payroll_philhealth_ee_share;
 				$insert[$key]['payroll_philhealth_er_share'] = $philhealth->payroll_philhealth_er_share;
 			}
+
 			Tbl_payroll_philhealth::insert($insert);
 
 			$insertlog['shop_id'] 					= $shop_id;
@@ -284,38 +286,39 @@ class Payroll
 	public static function process_time($employee_id, $date)
 	{
 		$time_sheet_info = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
-		$employee_information = Tbl_payroll_employee_contract::selemployee($employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
+		$data["employee_information"] = $employee_information = Tbl_payroll_employee_contract::selemployee($employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
 
 		/* EMPLOYEE COMPUTATION SETTINGS */
 		if($employee_information->payroll_group_is_flexi_time == 1)
 		{
-			$time_rule = "flexitime";
+			$data["time_rule"] = "flexitime";
 		}
 		else
 		{
-			$time_rule = "regulartime";
+			$data["time_rule"] = "regulartime";
 		}
 
 		/* EMPLOYEE COMPUTATION SETTINGS */
-		$default_time_in = $employee_information->payroll_group_start;
-		$default_time_out = $employee_information->payroll_group_end;
-		$default_working_hours = $employee_information->payroll_group_target_hour;
-		$late_grace_time = $employee_information->payroll_group_grace_time;
-		$break = $time_sheet_info->payroll_time_sheet_break;
+		$data["default_time_in"] = $employee_information->payroll_group_start;
+		$data["default_time_out"] = $employee_information->payroll_group_end;
+		$data["default_working_hours"] = $employee_information->payroll_group_target_hour;
+		$data["late_grace_time"] = $employee_information->payroll_group_grace_time;
 		$approved = $time_sheet_info->payroll_time_sheet_approved;
-		$_time_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $time_sheet_info->payroll_time_sheet_id)->get();
+		$data["_time_record"] = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $time_sheet_info->payroll_time_sheet_id)->get();
 
 		$return = new stdClass();
 
 
-		switch($time_rule)
+		switch($data["time_rule"])
 		{
 			case "flexitime": 
-				$return = Payroll::process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
+				//$return = Payroll::process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
 			break;
-			case "regulartime": 
-				$return->pending_timesheet = Payroll::process_time_regulartime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours, $late_grace_time, 0);
-				$return->approved_timesheet = Payroll::process_time_regulartime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours, $late_grace_time, 1);
+			case "regulartime":
+				$data["compute_approved"] = 0;
+				$return->pending_timesheet = Payroll::process_time_regulartime($data);
+				$data["compute_approved"] = 1;
+				$return->approved_timesheet = Payroll::process_time_regulartime($data);
 			break;
 		}
 
@@ -390,10 +393,18 @@ class Payroll
 		return $return;
 	}
 
-	public static function process_time_regulartime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours, $late_grace_time, $compute_approved = 0)
+	public static function process_time_regulartime($data)
 	{
+		$time_rule = $data["time_rule"];
+		$default_time_in = $data["default_time_in"];
+		$default_time_out = $data["default_time_out"];
+		$_time_record = $data["_time_record"];
+		$default_working_hours = $data["default_working_hours"];
+		$late_grace_time = $data["late_grace_time"];
+		$compute_approved = $data["compute_approved"];
+
+
 		$return = new stdClass();
-		$data["break"] = $break = c_time_to_int($break);
 		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
 
 		$total_time_spent = 0;
@@ -404,14 +415,25 @@ class Payroll
 		$total_hours = 0;
 		$total_night_differential = 0;
 		$earliest_time_in = 86340;
+		$special_holiday_hours = 0;
+		$regular_holiday_hours = 0;
+		$break = 0;
 
 		$default_time_in = c_time_to_int($default_time_in);
 		$default_time_out = c_time_to_int($default_time_out);
 		$shift_night_differential = 0;
+		$time_rec = null;
+
+		/* BREAK COMPUTATION */
+		if($data["employee_information"]->payroll_group_is_flexi_break == 0)
+		{
+			$break = $data["employee_information"]->payroll_group_flexi_break * 60;
+		}
 
 		/* CHECK EACH TIME */
 		foreach($_time_record as $key => $time_record)
 		{
+
 			if($compute_approved == 1)
 			{
 				$time_in = c_time_to_int($time_record->payroll_time_sheet_approved_in);
@@ -423,6 +445,41 @@ class Payroll
 				$time_out = c_time_to_int($time_record->payroll_time_sheet_out);
 			}
 
+			/* IF TIME IN HAS DATA AND TIME OUT DOESN'T HAVE */
+			if($time_in != 0 && $time_out == 0)
+			{
+				$time_out = $default_time_out;
+			}
+
+			if($time_in == 0) //SET BOTH TO BLANK IF TIME IN HAS NO INPUT
+			{
+				$time_rec[$key]["time_in"] = "";
+				$time_rec[$key]["time_out"] = "";
+			}
+			else
+			{
+				$time_rec[$key]["time_in"] = date("h:i A", $time_in);
+				$time_rec[$key]["time_out"] = date("h:i A", $time_out);
+			}
+
+
+			if($data["employee_information"]->payroll_group_is_flexi_break == 1) //IF BREAK IS STRICT 
+			{
+				$start_break = c_time_to_int($data["employee_information"]->payroll_group_break_start);
+				$end_break = c_time_to_int($data["employee_information"]->payroll_group_break_end);
+
+
+	
+				//CHECK IF BREAK IN IS WITHIN TIME RANGE
+				if(($time_in <= $start_break) && ($start_break <= $time_out))
+				{
+
+					if(($time_in <= $end_break) && ($end_break <= $time_out)) //BOTH TIME IN AND TIME OUT IS WITHIN RANGE
+					{
+						$break += $start_break - $end_break;
+					}
+				}
+			}
 
 
 			$early_overtime = 0;
@@ -484,19 +541,13 @@ class Payroll
 			$total_regular_hours += $regular_hours;
 			$total_time_spent += $time_spent;
 
-			if($time_in == "")
-			{
-				$time_rec[$key]["time_in"] = "";
-				$time_rec[$key]["time_out"] = "";
-			}
-			else
-			{
-				$time_rec[$key]["time_in"] = date("h:i A", $time_in);
-				$time_rec[$key]["time_out"] = date("h:i A", $time_out);
-			}
 
 		}
 
+		if($time_rec == null)
+		{
+			$earliest_time_in = 0;
+		}
 
 		if($total_time_spent <= 0)
 		{
@@ -517,6 +568,7 @@ class Payroll
 
 		/* COMPUTE LATE BASED ON EARLIEST TIME IN */
 		$late_grace_time = c_time_to_int($late_grace_time);
+
 		if($default_time_in < $earliest_time_in)
 		{
 			$total_late_hours = $earliest_time_in - $default_time_in;
@@ -525,7 +577,6 @@ class Payroll
 			{
 				$total_late_hours = 0;
 			}
-			
 		}
 		else
 		{
@@ -542,6 +593,9 @@ class Payroll
 		$return->extra_day_hours = date("H:i", 0);
 		$return->total_hours = date("H:i", $total_hours);
 		$return->night_differential = date("H:i", $total_night_differential);
+		$return->special_holiday_hours = date("H:i", $special_holiday_hours);
+		$return->regular_holiday_hours = date("H:i", $regular_holiday_hours);
+		$return->break = date("H:i", $break);
 		$return->time_record = $time_rec;
 		return $return;
 	}

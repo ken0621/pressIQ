@@ -15,6 +15,7 @@ use App\Models\Tbl_manufacturer;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_item_multiple_price;
+use App\Models\Tbl_inventory_slip;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -225,6 +226,7 @@ class ItemController extends Member
 
 				$warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->first();
 
+				$slip_id = 0 ;
 				if($warehouse == null)
 				{
 					//MAKE MAIN WAREHOUSE
@@ -240,6 +242,16 @@ class ItemController extends Member
 					$ins["item_reorder_point"] = $item_reorder_point;
 
 					Tbl_sub_warehouse::insert($ins);
+
+					$ins_slip["inventory_reason"] = "insert_item";
+					$ins_slip["warehouse_id"] = $warehouse_id;
+					$ins_slip["inventory_remarks"] = "Insert Item";
+					$ins_slip["inventory_slip_date"] = Carbon::now();
+					$ins_slip["inventory_slip_shop_id"] = $this->user_info->user_shop;
+					$ins_slip["inventroy_source_reason"] = "item";
+					$ins_slip["inventory_source_id"] = $item_id;
+
+					$slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
 
 					$ins_inven["inventory_item_id"] = $item_id;
 					$ins_inven["warehouse_id"] = $warehouse_id;
@@ -257,10 +269,21 @@ class ItemController extends Member
 
 					Tbl_sub_warehouse::insert($insert_sub);
 
+					$ins_slip["inventory_reason"] = "insert_item";
+					$ins_slip["warehouse_id"] = $warehouse->warehouse_id;
+					$ins_slip["inventory_remarks"] = "Insert Item";
+					$ins_slip["inventory_slip_date"] = Carbon::now();
+					$ins_slip["inventory_slip_shop_id"] = $this->user_info->user_shop;
+					$ins_slip["inventroy_source_reason"] = "item";
+					$ins_slip["inventory_source_id"] = $item_id;
+
+					$slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
+
 					$ins_inven["inventory_item_id"] = $item_id;
 					$ins_inven["warehouse_id"] =  $warehouse->warehouse_id;
 					$ins_inven["inventory_created"] = Carbon::now();
 					$ins_inven["inventory_count"] = $item_quantity;
+					$ins_inven["inventory_slip_id"] = $slip_id;
 
 					$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
 				}
@@ -269,7 +292,7 @@ class ItemController extends Member
                 $for_serial_item[$item_id]["product_id"] = $item_id;
                 $for_serial_item[$item_id]["inventory_id"] = $inventory_id;
 
-                //for session  tomorrow na to 
+                //
                 $items["item_id"] = $item_id;
                 $items["item_list"] = $for_serial_item;
 

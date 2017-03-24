@@ -38,7 +38,7 @@ class WarehouseController extends Member
     }
     public function refill_log($warehouse_id)
     {
-        $data["_slip"] = Tbl_inventory_slip::where("inventory_reason",'refill')->where("warehouse_id",$warehouse_id)->where("inventory_slip_shop_id",$this->user_info->shop_id)->orderBy("inventory_slip_date","DESC")->get();
+        $data["_slip"] = Tbl_inventory_slip::whereIn("inventory_reason",['refill','insert_item'])->where("warehouse_id",$warehouse_id)->where("inventory_slip_shop_id",$this->user_info->shop_id)->orderBy("inventory_slip_date","DESC")->get();
 
         return view("member.warehouse.refill_log",$data);
     }
@@ -242,6 +242,7 @@ class WarehouseController extends Member
             }
 
             $data["items"] = null;
+            // $data["slip_id"] = $item["slip_id"];
             foreach ($items["item_list"] as $key => $value) 
             {
                 $data["items"][$key] = Tbl_item::where("item_id",$key)->first();

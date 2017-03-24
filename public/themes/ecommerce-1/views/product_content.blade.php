@@ -101,7 +101,7 @@
                                             </div>
                                            
                                              <div>
-                                                <button class="add-to-cart {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? 'disabled' : ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '')) }}" {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? 'disabled' : ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '')) }} variant-id="{{ $product_variant['evariant_id'] }}" type="button"><i class="fa fa-shopping-cart" aria-hidden="true"></i> ADD TO CART</button>
+                                                <button class="add-to-cart {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }}" {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }} variant-id="{{ $product_variant['evariant_id'] }}" type="button"><i class="fa fa-shopping-cart" aria-hidden="true"></i> ADD TO CART</button>
                                              </div>
                                         </div>
                                     </div>

@@ -252,7 +252,7 @@ class Payroll
 	}
 
 
-	/* 	 Returns normal hours rendered and overtime (Guillermo Tabligan) */
+	/* Returns normal hours rendered and overtime (Guillermo Tabligan) */
 	public static function process_time($employee_id, $date)
 	{
 		$time_sheet_info = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
@@ -378,13 +378,11 @@ class Payroll
 		$earliest_time_in = 86340;
 
 		$default_time_in = c_time_to_int($default_time_in);
-
 		$default_time_out = c_time_to_int($default_time_out);
-
 		$shift_night_differential = 0;
 
 		/* CHECK EACH TIME */
-		foreach($_time_record as $time_record)
+		foreach($_time_record as $key => $time_record)
 		{
 			if($compute_approved == 1)
 			{
@@ -396,6 +394,8 @@ class Payroll
 				$time_in = c_time_to_int($time_record->payroll_time_sheet_in);
 				$time_out = c_time_to_int($time_record->payroll_time_sheet_out);
 			}
+
+
 
 			$early_overtime = 0;
 			$late_overtime = 0;
@@ -455,6 +455,18 @@ class Payroll
 			$total_late_overtime += $late_overtime;
 			$total_regular_hours += $regular_hours;
 			$total_time_spent += $time_spent;
+
+			if($time_in == "")
+			{
+				$time_rec[$key]["time_in"] = "";
+				$time_rec[$key]["time_out"] = "";
+			}
+			else
+			{
+				$time_rec[$key]["time_in"] = date("h:i A", $time_in);
+				$time_rec[$key]["time_out"] = date("h:i A", $time_out);
+			}
+
 		}
 
 
@@ -502,6 +514,7 @@ class Payroll
 		$return->extra_day_hours = date("H:i", 0);
 		$return->total_hours = date("H:i", $total_hours);
 		$return->night_differential = date("H:i", $total_night_differential);
+		$return->time_record = $time_rec;
 		return $return;
 	}
 }

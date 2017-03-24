@@ -1,7 +1,3 @@
-<input type="hidden" name="time_rule" value="{{ $time_rule }}">
-<input type="hidden" name="default_time_in" value="{{ $default_time_in }}">
-<input type="hidden" name="default_time_out" value="{{ $default_time_out }}">
-<input type="hidden" name="default_working_hours" value="{{ $default_working_hours }}">
 <input type="hidden" name="employee_id" value="{{ $employee_id }}">
 <table style="table-layout: fixed;" class="timesheet table table-condensed table-bordered table-sale-month">
     <thead style="text-transform: uppercase;">
@@ -53,11 +49,7 @@
                 @if($key == 0) <!--MAIN -->
                     <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $timesheet->date }}">
                     <td class="text-center table-loading">
-                        @if($timesheet->payroll_time_sheet_approved == 1)
-                        <i class="table-check fa fa-lock hidden"></i>
-                        @else
                         <i class="table-check fa fa-check hidden"></i>
-                        @endif
                         <i class="table-loader fa fa-spinner fa-spin fa-fw"></i>
                     </td>
                     <td class="text-center edit-data day-number">{{ $timesheet->day_number }}</td>

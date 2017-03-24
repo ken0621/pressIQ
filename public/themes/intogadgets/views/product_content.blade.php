@@ -95,7 +95,7 @@
             </div>
             <!-- <button class="single-order-button " pid="" vid="" mode="cart" onclick="window.open('','_blank')">BUY NOW</button> 
             <button href="product/#order" class="single-order-button order-button add-cart" mode="reservation">STORE PICK-UP</button> -->
-            <button type="button" class="single-order-button add-to-cart disabled" variant-id="{{ $product_variant['evariant_id'] }}" disabled>ADD TO CART</button>
+            <button type="button" class="single-order-button add-to-cart {{ isset($product['variant'][1]) ? 'disabled' : '' }}" variant-id="{{ $product_variant['evariant_id'] }}" {{ isset($product['variant'][1]) ? 'disabled' : '' }}>ADD TO CART</button>
             <div class="divider" style="margin: 35px 0; opacity: 0;"></div>
             <!-- <div class="single-order-rate" id="single-product-rate">
                @for ($i = 1; $i <= 5; $i++)

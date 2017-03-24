@@ -58,7 +58,11 @@
 					</td>			
 				</tr>
 				@endif	
-			@endforeach
+			@endforeach		
+		</tbody>
+	</table>
+	<table style="width: 100%">
+		<tbody>
 			<tr>
 				<td colspan="3" class="text-left">
 					<strong>TOTAL</strong>
@@ -66,7 +70,7 @@
 				<td colspan="3" class="text-right">	
 					<strong>{{currency('P',$total_price)}}</strong>
 				</td>
-			</tr>
+			</tr>	
 			<tr>
 				<td colspan="2">
 					<div>Prepared By:</div><br><br>

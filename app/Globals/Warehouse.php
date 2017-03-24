@@ -43,7 +43,6 @@ class Warehouse
     		$data = json_encode($data);
     	}
     	return $data; 
-
     }
     public static function warehouse_access()
     {
@@ -225,7 +224,7 @@ class Warehouse
         return $data;
 
     }
-      public static function adjust_inventory($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
+    public static function adjust_inventory($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
     {
         
         $shop_id = Warehouse::get_shop_id($warehouse_id);

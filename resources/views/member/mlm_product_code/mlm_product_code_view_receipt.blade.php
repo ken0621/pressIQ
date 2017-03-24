@@ -61,7 +61,7 @@
                         <div class="table-responsive">
                             <table class="table table-condensed">                        
                                     <tr>
-                                        <td rowspan="4" class="bill-title col-md-2">Bill To</td>
+                                        <td rowspan="4" class="bill-title col-md-2">V.I.P. Member</td>
                                     </tr>                        
                                     <tr>                                
                                         <td>Name: {{name_format_from_customer_info($invoice)}}</td>

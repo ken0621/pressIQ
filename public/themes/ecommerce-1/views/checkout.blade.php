@@ -170,19 +170,19 @@
 								<div class="col-md-7">
 									<div class="form-group">
 										<label>FIRST NAME</label>
-										<input value="{{ Request::old('customer_first_name') }}" type="text" name="customer_first_name" class="form-control">
+										<input value="{{ $customer_first_name != null ? $customer_first_name : Request::old('customer_first_name') }}" type="text" name="customer_first_name" class="form-control">
 									</div>
 									<div class="form-group">
 										<label>MIDDLE NAME</label>
-										<input value="{{ Request::old('customer_middle_name') }}" type="text" name="customer_middle_name" class="form-control">
+										<input value="{{ $customer_middle_name != null ? $customer_middle_name : Request::old('customer_middle_name') }}" type="text" name="customer_middle_name" class="form-control">
 									</div>
 									<div class="form-group">
 										<label>LAST NAME</label>
-										<input value="{{ Request::old('customer_last_name') }}" type="text" name="customer_last_name" class="form-control">
+										<input value="{{ $customer_last_name != null ? $customer_last_name : Request::old('customer_last_name') }}" type="text" name="customer_last_name" class="form-control">
 									</div>
 									<div class="form-group">
 										<label>EMAIL ADDRESS</label>
-										<input value="{{ Request::old('customer_email') }}" type="email" name="customer_email" class="form-control">
+										<input value="{{ $customer_email != null ? $customer_email : Request::old('customer_email') }}" type="email" name="customer_email" class="form-control">
 									</div>
 									<div class="form-group">
 										<label>BIRTHDAY</label>
@@ -225,7 +225,7 @@
 									</div>
 									<div class="form-group">
 										<label>CONTACT NUMBER</label>
-										<input value="{{ Request::old('customer_mobile') }}" name="customer_mobile" type="text" class="form-control">
+										<input value="{{ $customer_mobile != null ? $customer_mobile : Request::old('customer_mobile') }}" name="customer_mobile" type="text" class="form-control">
 									</div>
 								</div>
 								<div class="col-md-5">
@@ -238,15 +238,15 @@
 									</div>
 									<div class="form-group">
 										<label>PROVINCE</label>
-										<input value="{{ Request::old('customer_state_province') }}" name="customer_state_province" type="text" class="form-control">
+										<input value="{{ $customer_state_province != null ? $customer_state_province : Request::old('customer_state_province') }}" name="customer_state_province" type="text" class="form-control">
 									</div>
 									<div class="form-group">
 										<label>CITY / MUNICIPALITY</label>
-										<input value="{{ Request::old('customer_city') }}" name="customer_city" type="text" class="form-control">
+										<input value="{{ $customer_city != null ? $customer_city : Request::old('customer_city') }}" name="customer_city" type="text" class="form-control">
 									</div>
 									<div class="form-group">
 										<label>COMPLETE SHIPPING ADDRESS</label>
-										<textarea name="customer_address" class="form-control" style="height: 180px;">{{ Request::old('customer_address') }}</textarea>
+										<textarea name="customer_address" class="form-control" style="height: 180px;">{{ $customer_address != null ? $customer_address : Request::old('customer_address') }}</textarea>
 									</div>
 								</div>
 							</div>

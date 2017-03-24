@@ -12,7 +12,7 @@
                 <div class="price">&#8369; {{ number_format($cart['cart_product_information']['product_current_price'], 2) }}</div>
             </td>
             <td class="remove">
-                <a href="javascript:"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                <a class="remove-cart" variation-id="{{ $cart['product_id'] }}" href="javascript:"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
             </td>
         </tr>
         @endforeach
@@ -42,3 +42,4 @@
     </tbody>
 </table>
 @endif
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/cart.js"></script>

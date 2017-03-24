@@ -23,9 +23,9 @@
 </div>
 <br>
 <div>
-	<table class="table">
-		<thead>
-			<tr>
+	<table class="table" style="border-bottom: 2px solid #000">
+		<thead >
+			<tr style="border-bottom: 2px solid #000">
 				<th class="text-center">Item ID</th>
 				<th class="text-center">Item Name</th>
 				<th class="text-center">QTY</th>
@@ -47,9 +47,9 @@
 				@if($item->serial_number_list != null)
 				<tr class="{{$num = 1}}">
 					<td colspan="6">
-						<div style="padding: 20px">		
+						<div style="padding: 10px">		
 							@foreach($item->serial_number_list as $serial)
-								<small style="margin-right: 100px;" {{$num++}}> S/N - {{$serial->serial_number}} -</small>
+								<small style="margin-right: 95px;" {{$num++}}> S/N - {{$serial->serial_number}} -</small>
 								@if($num == 5)
 								<br class="{{$num == 1}}">
 								@endif
@@ -58,21 +58,25 @@
 					</td>			
 				</tr>
 				@endif	
-			@endforeach
+			@endforeach		
+		</tbody>
+	</table>
+	<table style="width: 100%;">
+		<tbody>
 			<tr>
-				<td colspan="3" class="text-left">
+				<td style="padding: 20px" colspan="5" class="text-left">
 					<strong>TOTAL</strong>
 				</td>
-				<td colspan="3" class="text-right">	
+				<td style="padding: 20px;" class="text-right">	
 					<strong>{{currency('P',$total_price)}}</strong>
 				</td>
-			</tr>
+			</tr>	
 			<tr>
-				<td colspan="2">
+				<td style="padding: 20px" colspan="2">
 					<div>Prepared By:</div><br><br>
 					<div style="border-bottom: 1px solid #000;width: 50%">{{$slip->user_first_name." ".$slip->user_last_name}}</div>
 				</td>
-				<td colspan="4">
+				<td style="padding: 20px" colspan="4">
 					<div>Checked By:</div><br><br>
 					<div style="border-bottom: 1px solid #000;width: 50%;color: #fff">INVISIBLE NAME</div>
 				</td>

@@ -11,6 +11,7 @@
 		<div class="col-md-6">
 			<select class="form-control" id="biometric_name" name="biometric_name">
 				<option value="ZKTime 5.0">ZKTime 5.0</option>
+				<option value="Digital Persona">Digital Persona</option>
 			</select>
 		</div>
 	</form>

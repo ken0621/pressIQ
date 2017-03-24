@@ -1,13 +1,13 @@
-<form class="global-submit" role="form" action="/member/payroll/holiday/modal_save_holiday" method="POST">
+<form class="global-submit" role="form" action="/member/payroll/holiday_default/modal_save_holiday_default" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
-		<h4 class="modal-title">Create Holiday</h4>
+		<h4 class="modal-title">Create Default Holiday</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
 	</div>
 	<div class="modal-body form-horizontal">
 		<div class="form-group">
 			<div class="col-md-12">
-				<small>Holiday Name</small>
+				<small>Default Holiday Name</small>
 				<input type="text" name="payroll_holiday_name" class="form-control">
 			</div>
 		</div>
@@ -24,26 +24,7 @@
 					<option value="Special">Special</option>
 				</select>
 			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-md-12">
-				<small>Affected Company</small>
-				<ul class="list-group">
-				  <li class="list-group-item padding-3-10">
-				  	<div class="checkbox">
-				  		<label><input type="checkbox" name="" class="check-all">Check All</label>
-				  	</div>
-				  </li>
-				  @foreach($_company as $company)
-				  <li class="list-group-item padding-3-10">
-				  	<div class="checkbox">
-				  		<label><input type="checkbox" name="company[]" class="company-check" value="{{$company->payroll_company_id}}">{{$company->payroll_company_name}}</label>
-				  	</div>
-				  </li>
-				  @endforeach
-				</ul>
-			</div>
-		</div>
+		</div>		
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>

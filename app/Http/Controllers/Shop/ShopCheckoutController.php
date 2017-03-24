@@ -138,6 +138,16 @@ class ShopCheckoutController extends Shop
             $cart["payment_method_id"] = Request::input("payment_method_id");
             $cart["taxable"] = Request::input("taxable");
             $cart["shop_id"] = $this->shop_info->shop_id;
+            // LUKE uwu desu
+            if(isset(Self::$customer_info->customer_id))
+            {
+                $cart["customer_id"] = Self::$customer_info->customer_id;
+            }
+            else
+            {
+                $cart["customer_id"] = null;
+            }
+            
             
             if($cart["payment_method_id"] == 6)
             {

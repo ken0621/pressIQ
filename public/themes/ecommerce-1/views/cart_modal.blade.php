@@ -57,10 +57,10 @@
       </div>
    </div>
    @else
-   <div class="empty-cart">
-      <div class="title">There is no items in this cart</div>
-      <div class="sub">Try to search or find something from one of our categories</div>
-      <a href="javascript:" data-dismiss="modal">Continue Shopping</a>
+   <div class="empty-cart" style="padding: 15px; text-align: center;">
+      <div class="title" style="font-weight: 400; font-size: 18px;">There is no <span style="color: #2e3192; font-weight: 700;">items</span> in this cart</div>
+      <div class="sub" style="font-weight: 700; font-size: 16px;">Try to search or find something from one of our categories</div>
+      <a href="javascript:" data-dismiss="modal" style="padding: 7.5px; max-width: 150px; display: block; margin: auto; color: #fff; background-color: #2e3192; font-weight: 700; border-radius: 2.5px;">Continue Shopping</a>
    </div>
    @endif
 </form>

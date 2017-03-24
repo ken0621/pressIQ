@@ -22,8 +22,8 @@
             <td></td>
         </tr>
         <tr>
-            <td></td>
-            <td colspan="2"><button type="button" class="btn btn-checkout show-cart" type="button">Checkout</button></td>
+            <td><span class="cart-loader hide"><img style="height: 39px; margin-right: 7.5px;" src="/assets/front/img/loader.gif"></span></td>
+            <td colspan="2"><button type="button" class="btn btn-checkout show-cart checkout-modal-button" type="button">Checkout</button></td>
         </tr>
     </tbody>
 </table>

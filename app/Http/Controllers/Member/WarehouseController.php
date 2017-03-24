@@ -28,7 +28,7 @@ class WarehouseController extends Member
      *
      * @return \Illuminate\Http\Response
      */
-    public function stock_input($slip_id = 42)
+    public function stock_input($slip_id = 0)
     {
         $data["slip"] = Warehouse::inventory_input_report($slip_id);
         $data["slip_item"] = Warehouse::inventory_input_report_item($slip_id);

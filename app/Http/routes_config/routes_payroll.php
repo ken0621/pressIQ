@@ -64,11 +64,14 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/departmentlist','Member\PayrollController@department_list');
 	Route::any('/departmentlist/department_modal_create','Member\PayrollController@department_modal_create');
 	Route::any('/departmentlist/department_save','Member\PayrollController@department_save');
+	Route::any('/departmentlist/modal_archived_department/{archived}/{department_id}',"Member\PayrollController@modal_archived_department");
 	Route::any('/departmentlist/archived_department','Member\PayrollController@archived_department');
 	Route::any('/departmentlist/department_reload','Member\PayrollController@department_reload');
 	Route::any('/departmentlist/modal_view_department/{id}','Member\PayrollController@modal_view_department');
 	Route::any('/departmentlist/modal_edit_department/{id}','Member\PayrollController@modal_edit_department');
 	Route::any('/departmentlist/modal_update_department','Member\PayrollController@modal_update_department');
+
+
 	/* DEPARTMENT END */
 
 	/* JOB TITLE START */
@@ -77,8 +80,12 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any("/jobtitlelist/modal_save_department","Member\PayrollController@modal_save_department");
 	Route::any("/jobtitlelist/reload_tbl_jobtitle","Member\PayrollController@reload_tbl_jobtitle");
 	Route::any("/jobtitlelist/get_job_title_by_department","Member\PayrollController@get_job_title_by_department");
+	Route::any("/jobtitlelist/modal_view_jobtitle/{id}","Member\PayrollController@modal_view_jobtitle");
+	Route::any("/jobtitlelist/modal_update_jobtitle","Member\PayrollController@modal_update_jobtitle");
 	Route::any("/jobtitlelist/modal_edit_jobtitle/{id}","Member\PayrollController@modal_edit_jobtitle");
 	Route::any("/jobtitlelist/modal_save_jobtitle","Member\PayrollController@modal_save_jobtitle");
+	Route::any('/jobtitlelist/modal_archived_jobtitle/{archived}/{jobtitle_id}',"Member\PayrollController@modal_archived_jobtitle");
+	Route::any('/jobtitlelist/archived_jobtitle','Member\PayrollController@archived_jobtitle');
 	/* JOB TITLE END */
 
 

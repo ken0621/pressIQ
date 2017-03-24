@@ -568,7 +568,7 @@ class Warehouse
             $insert2["warehouse_name"]    = "Ecommerce Warehouse";
             $insert2["warehouse_shop_id"] = $shop_id;
             $insert2["warehouse_created"] = Carbon::now();
-            $insert2["main_warehouse"]    = "0";
+            $insert2["main_warehouse"]    = "2";
 
             Tbl_warehouse::insertGetId($insert2);
         }

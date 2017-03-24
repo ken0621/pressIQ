@@ -39,7 +39,10 @@ class SmsController extends Member
 
 	public function getIndex()
 	{
-		$data["_sms"] = Tbl_sms_default_key::template($this->getShopId())->get();
+		$data["sms_key"] 	= Tbl_sms_key::where("sms_shop_id", $this->getShopId())->first();
+		$data["_sms"] 		= Tbl_sms_default_key::template($this->getShopId())->get();
+		$data["user"]		= $this->user_info;
+
 		return view('member.sms.sms', $data);
 	}
 
@@ -53,22 +56,54 @@ class SmsController extends Member
 	{
 		$data["sms_temp_shop_id"] 	= $this->getShopId();
 		$data["sms_temp_key"] 		= Request::input('sms_temp_key');
-		$data["sms_temp_is_on"]		= Request::input('sms_temp_is_on');
+		$data["sms_temp_is_on"]		= Request::input('sms_temp_is_on') ? Request::input('sms_temp_is_on') : 0;
 		$data["sms_temp_content"] 	= Request::input('sms_temp_content');
 
-		$sms_data	= Tbl_sms_template::where("sms_temp_shop_id", $this->getShopId())->where("sms_temp_key", $data["sms_temp_key"])->first();
-		if($sms_data)
+		$authorization_key = Tbl_sms_key::where("sms_shop_id", $this->getShopId())->first();
+
+		if($authorization_key)
 		{
-			Tbl_sms_template::where("sms_temp_id", $sms_data->sms_temp_id)->update($data);
+			$sms_data	= Tbl_sms_template::where("sms_temp_shop_id", $this->getShopId())->where("sms_temp_key", $data["sms_temp_key"])->first();
+			if($sms_data)
+			{
+				Tbl_sms_template::where("sms_temp_id", $sms_data->sms_temp_id)->update($data);
+			}
+			else
+			{
+				Tbl_sms_template::insert($data);
+			}
 		}
 		else
 		{
-			Tbl_sms_template::insert($data);
+			$json["status"] 	= "error";
+			$json["type"] 		= "sms";
+			$json["message"]	= "Authorization Key Required!";
+			return json_encode($json);	
 		}
-
 
 		$json["status"] 	= "success";
 		$json["type"] 		= "sms";
+		$json["message"]	= "Success ";
+		return json_encode($json);
+	}
+
+	public function postAuthorizationKey()
+	{
+		$data["sms_shop_id"] 			= $this->getShopId();
+		$data["sms_authorization_key"]  = Request::input('sms_authorization_key');
+
+		$sms_data	= Tbl_sms_key::where("sms_shop_id", $data["sms_shop_id"])->first();
+		if($sms_data)
+		{
+			Tbl_sms_key::where("sms_id", $sms_data->sms_id)->update($data);
+		}
+		else
+		{
+			Tbl_sms_key::insert($data);
+		}
+
+		$json["status"] 	= "success";
+		$json["type"] 		= "authorization_key";
 		$json["message"]	= "Success ";
 		return json_encode($json);
 	}

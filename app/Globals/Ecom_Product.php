@@ -51,7 +51,7 @@ class Ecom_Product
 			$shop_id = Ecom_Product::getShopId();
 		}
 
-		return Tbl_warehouse::where("warehouse_name", "Ecommerce Warehouse")->where("warehouse_shop_id", $shop_id)->pluck('warehouse_id');
+		return Tbl_warehouse::where("main_warehouse", 2)->where("warehouse_shop_id", $shop_id)->pluck('warehouse_id');
 	}
 
 	/**

@@ -147,6 +147,7 @@ class Cart
                 $item_discounted_remark = "";
 
                 $item = Ecom_Product::getVariantInfo($info["product_id"]);
+                // dd($item);
                 $data["cart"][$key]["cart_product_information"]                                   = null;
                 $data["cart"][$key]["cart_product_information"]["variant_id"]                     = $item->evariant_id;
                 $data["cart"][$key]["cart_product_information"]["item_id"]                        = $item->item_id;
@@ -156,7 +157,7 @@ class Cart
                 $data["cart"][$key]["cart_product_information"]["product_sku"]                    = $item->item_sku;
                 $data["cart"][$key]["cart_product_information"]["product_price"]                  = $item->evariant_price;
                 $data["cart"][$key]["cart_product_information"]["image_path"]                     = $item->image_path;
-
+                $data["cart"][$key]["cart_product_information"]["item_category_id"]               = $item->item_category_id;
                 /* CHECK IF DISCOUNT EXISTS */
                 $check_discount = Tbl_item_discount::where("discount_item_id",$item->item_id)->first();
                 if($check_discount)

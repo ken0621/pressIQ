@@ -220,6 +220,12 @@
                         <div class="col-sm-3">
                             <label>Message Displayed on Invoice</label>
                             <textarea {{isset($inv) ? 'disabled' : ''}} class="form-control input-sm textarea-expand" name="inv_message" placeholder="">{{$inv->invoice_message or ''}}</textarea>
+                            @if(isset($inv))
+                                @if($inv->ec_order_load == 1)
+                                <label>Load to:</label>
+                                <input type="text" class="form-control" value="{{$inv->ec_order_load_number}}" disabled>
+                                @endif
+                            @endif
                         </div>
                         <div class="col-sm-3">
                             <label>Statement Memo</label>

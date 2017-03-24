@@ -3150,8 +3150,8 @@ class PayrollController extends Member
 		if(Request::has('payroll_group_is_flexi_break'))
 		{
 			$payroll_group_is_flexi_break		= Request::input('payroll_group_is_flexi_break');
+
 		}
-		$payroll_group_is_flexi_break = 0;
 		$update['payroll_group_break_start'] 			= date('H:i:s', strtotime(Request::input('payroll_group_break_start')));
 		$update['payroll_group_break_end'] 				= date('H:i:s', strtotime(Request::input('payroll_group_break_end')));
 		$update['payroll_group_flexi_break']			= Request::input('payroll_group_flexi_break');
@@ -3160,7 +3160,6 @@ class PayrollController extends Member
 		$update['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
 		$update['payroll_group_start'] 					= date('H:i:s',strtotime(Request::input('payroll_group_start')));
 		$update['payroll_group_end'] 					= date('H:i:s',strtotime(Request::input('payroll_group_end')));
-		// dd($update);
 
 		/* UPDATE PAYROLL GROUP*/ 
 		Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->update($update);

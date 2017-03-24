@@ -27,7 +27,7 @@ class Item_code
 	public static function add_code($data,$shop_id)
 	{ 
 	   // $shop_id                                                 = $this->user_info->shop_id;
-
+        // dd($data);
         if(!isset($data["customer_id"]))
         {
             if(!isset($data["slot_id"]))

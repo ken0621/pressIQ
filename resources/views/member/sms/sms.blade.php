@@ -6,14 +6,14 @@
         <div>
             <i class="fa fa-envelope"></i>
             <h1>
-                <span class="page-title">Email Content</span>
+                <span class="page-title">SMS Content</span>
                 <small>
-                    List of Email Content.
+                    List of Sms Content.
                 </small>
             </h1>
             <div class="text-right row">
                 <div class="col-md-4 pull-right">
-                    @if($user->user_level == 0)
+                    @if($user->user_level == 1)
                     <form class="global-submit" action="/member/maintenance/sms/authorization-key">
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                         <div class="input-group">
@@ -65,7 +65,7 @@
         <div class="row vcenter" style="margin-top: 20%;">
             <div class="col-md-12">
                 <div class="error-template">
-                    <h2 class="message">403 Permission Denied</h2>
+                    <h2 class="message">Create Authorization Key First</h2>
                     <div class="error-details">
                         Sorry, please contact your administrator.
                     </div>

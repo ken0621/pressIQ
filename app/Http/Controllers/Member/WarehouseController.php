@@ -403,6 +403,92 @@ class WarehouseController extends Member
             return $this->show_no_access_modal();
         }
     }
+    public function adjust($id)
+    {
+        $access = Utilities::checkAccess('item-warehouse', 'access_page');
+        if($access == 1)
+        { 
+            // $id = Request::input("warehouse_id");
+            $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$id)->first();
+            if(!$check_if_owned)
+            {
+                return $this->show_no_access_modal();
+            }
+            $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
+            
+            $data["warehouse_item"] = Warehouse::select_item_warehouse_single($id,'array');
+            
+            $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)
+                                                                            ->where("type_shop",$this->user_info->shop_id)
+                                                                            ->get();                                                          
+            return view("member.warehouse.adjust_inventory",$data);
+        }
+        else
+        {
+            return $this->show_no_access_modal();
+        }
+    }
+    public function adjust_submit()
+    {      
+        $return["status"] = "";
+        $return["status_message"] = "";
+
+        $warehouse_id = Request::input("warehouse_id");
+        $remarks = Request::input("remarks");
+
+        $item_id = Request::input("item_id");
+        $quantity_product = Request::input("quantity");
+        
+        $warehouse_adjust_product = null;
+
+        $cnt = 0;
+        foreach ($item_id as $key => $value) 
+        {
+            if($value != "")
+            {
+                $item[$key]["item_id"] = $value;
+                $item[$key]["quantity"] = $quantity_product[$key];
+                
+                $rules[$key]["item_id"] = "required";
+                $rules[$key]["quantity"] = "required";
+
+                $validator[$key] = Validator::make($item[$key],$rules[$key]);
+                if($validator[$key]->fails())
+                {
+                    $return["status"] = "error";
+                    $item_name = Item::get_item_details($value);
+                    foreach ($validator[$key]->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+                    {
+                        $return["status_message"] .= $message. " : ".$item_name->item_name;
+                    }
+                }                
+            }
+            else
+            {
+                $return["status"] = "error";
+                $return["status_message"] = "Please insert Item";
+                $cnt++;
+            }
+        }
+        if($return["status"] == "" && $cnt == 0)
+        {
+            foreach ($item_id as $key => $value) 
+            {
+                if($value != null)
+                {
+                    $warehouse_adjust_product[$key]['product_id'] = $value;
+                    $warehouse_adjust_product[$key]['quantity'] = $quantity_product[$key];
+                }
+            }
+            $data = Warehouse::adjust_inventory($warehouse_id, "", "", $remarks, $warehouse_adjust_product,'json');
+        }
+        else
+        {
+            $data = json_encode($return);
+        }
+
+        return $data;
+    }
     public static function check_if_critical($c_stock, $reorder_point)
     {
         $color = "";
@@ -533,6 +619,66 @@ class WarehouseController extends Member
             return $this->show_no_access();
         }
     }
+
+    public function archived_submit()
+    {
+        $access = Utilities::checkAccess('item-warehouse', 'access_page');
+        if($access == 1)
+        { 
+            $shop_id    = $this->user_info->shop_id;
+            $id         = Request::input("warehouse_id");
+            $warehouse  = Tbl_warehouse::where("warehouse_id",$id)->where("warehouse_shop_id",$shop_id)->first();
+
+
+            $all_item = Tbl_sub_warehouse::join("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_sub_warehouse.warehouse_id")
+                                             ->join("tbl_item","tbl_item.item_id","=","tbl_sub_warehouse.item_id")
+                                             ->where("tbl_sub_warehouse.warehouse_id",$id) 
+                                             ->get();
+            $qty = 0;
+            foreach ($all_item as $key2 => $value2) 
+            {
+                $qty += Tbl_warehouse_inventory::where("inventory_item_id",$value2->item_id)
+                                                    ->where("warehouse_id",$id)
+                                                    ->sum("inventory_count");
+            }
+
+            if($qty == 0)
+            {
+                if($warehouse->main_warehouse == 0)
+                {
+                    if($warehouse)
+                    {
+                           $update["archived"] = 1;
+                           Tbl_warehouse::where("warehouse_id",$id)->update($update);
+                           $return["error"][0]  = "Successfully archived";
+                           $return["status"]   = "Sucess-archived";
+                    }
+                    else
+                    {
+                        $return["error"][0]  = "Please try again";
+                        $return["status"]   = "Failed";
+                    }            
+                }
+                else
+                {
+                    $return["error"][0]  = "You cannot Archived the a Default Warehouse";
+                    $return["status"]   = "Failed";
+                }                
+            }
+            else
+            {
+                $return["error"][0]  = "You cannot Archived this Warehouse, it has Total of: ".$qty." item/s";
+                $return["status"]   = "Failed";                
+            }
+
+
+            return json_encode($return);
+        }
+        else
+        {
+            return $this->show_no_access();
+        }
+    }
     public function restore($warehouse_id)
     {
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
@@ -640,42 +786,6 @@ class WarehouseController extends Member
             return $this->show_no_access();
         }
     }
-    public function archived_submit()
-    {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
-        if($access == 1)
-        { 
-            $shop_id    = $this->user_info->shop_id;
-            $id         = Request::input("warehouse_id");
-            $warehouse  = Tbl_warehouse::where("warehouse_id",$id)->where("warehouse_shop_id",$shop_id)->first();
-            if($warehouse->main_warehouse != 1 )
-            {
-                if($warehouse)
-                {
-                       $update["archived"] = 1;
-                       Tbl_warehouse::where("warehouse_id",$id)->update($update);
-                       $return["error"][0]  = "Successfully archived";
-                       $return["status"]   = "Sucess-archived";
-                }
-                else
-                {
-                    $return["error"][0]  = "Please try again";
-                    $return["status"]   = "Failed";
-                }            
-            }
-            else
-            {
-                $return["error"][0]  = "You cannot Delete the Main Warehouse";
-                $return["status"]   = "Failed";
-            }
-
-            return json_encode($return);
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
-    }
     public function select_item()
     {
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
@@ -722,9 +832,8 @@ class WarehouseController extends Member
 
             $id = Tbl_warehouse::insertGetId($ins_warehouse);
 
-            $ins_access["user_id"] = $this->user_info->user_id;
-            $ins_access["warehouse_id"] = $id;
-            Tbl_user_warehouse_access::insert($ins_access);
+            Warehouse::insert_access($id);
+
             //INSERT tbl_warehouse per item reorderpoint
             $reorderpoint = Request::input("reoder_point");
             if($reorderpoint != null)

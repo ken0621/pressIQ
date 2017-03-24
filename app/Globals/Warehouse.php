@@ -18,6 +18,26 @@ use Carbon\Carbon;
 use Session;
 class Warehouse
 {   
+    public static function insert_access($warehouse_id)
+    {
+        $ins_access["user_id"] = Warehouse::getUserid();
+        $ins_access["warehouse_id"] = $warehouse_id;
+        Tbl_user_warehouse_access::insert($ins_access);
+
+        $user_position = Tbl_user::position()->where("user_id",Warehouse::getUserid())->pluck("position_rank");
+
+        $all_user = Tbl_user::position()->where("user_shop",Warehouse::getShopId())->where("user_id","!=", Warehouse::getUserid())->where("tbl_user.archived",0)->get();
+
+        foreach ($all_user as $key => $value) 
+        {
+            if($value->position_rank < $user_position)
+            {
+                $ins_access["user_id"] = $value->user_id;
+                $ins_access["warehouse_id"] = $warehouse_id;
+                Tbl_user_warehouse_access::insert($ins_access);
+            }
+        }
+    }
     public static function inventory_input_report($inventory_slip_id)
     {
         $data = Tbl_inventory_slip::shop()->vendor()->warehouse()->where("inventory_slip_shop_id",Warehouse::getShopId())
@@ -279,21 +299,21 @@ class Warehouse
              $data['status'] = '';
             
 
-            $serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$shop_id)->first();
+            // $serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$shop_id)->first();
 
-            $data['status'] = 'success';
-            if($is_return == null)
-            {
-                if($serial != null)
-                {
-                    $data['status'] = 'success-serial';
+            // if($is_return == null)
+            // {
+            //     if($serial != null)
+            //     {
+            //         $data['status'] = 'success-serial';
 
-                    $items["item_id"] = "";
-                    $items["item_list"] = $for_serial_item;
-                    Session::put("item", $items);
-                }                
-            }
- 
+            //         $items["item_id"] = "";
+            //         $items["item_list"] = $for_serial_item;
+            //         Session::put("item", $items);
+            //     }                
+            // }
+
+            $data['status'] = 'success'; 
             $data['inventory_slip_id'] = $inventory_slip_id;
 
         }

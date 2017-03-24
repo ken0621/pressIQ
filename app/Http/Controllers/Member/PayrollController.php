@@ -1533,9 +1533,31 @@ class PayrollController extends Member
 	public function archived_company()
 	{
 		$archived 	= Request::input('archived');
-		$content	= Request::input('content');
+		$id			= Request::input('id');
 		$update['payroll_company_archived'] = $archived;
-		Tbl_payroll_company::where('payroll_company_id', $content)->update($update);
+		Tbl_payroll_company::where('payroll_company_id', $id)->update($update);
+		$return['function_name'] = 'companylist.save_company';
+		$return['status'] = 'success';
+		$return['data'] = '';
+
+		return json_encode($return);
+	}
+
+	public function modal_archived_company($archived, $id)
+	{
+		$statement = 'archive';
+		if($archived == 0)
+		{
+			$statement = 'restore';
+		}
+		$file_name 			= Tbl_payroll_company::where('payroll_company_id', $id)->pluck('payroll_company_name');
+		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
+		$data['html'] 		= '';
+		$data['action'] 	= '/member/payroll/company_list/archived_company';
+		$data['id'] 		= $id;
+		$data['archived'] 	= $archived;
+
+		return view('member.modal.modal_confirm_archived', $data);
 	}
 
 	/* COMPANY END */
@@ -1591,16 +1613,33 @@ class PayrollController extends Member
 
 	public function archived_department()
 	{
-		$archived = Request::input('archived');
-		$content  = Request::input('content');
-		$update['payroll_department_archived'] = $archived;
-		Tbl_payroll_department::where('payroll_department_id',$content)->update($update);
+		$id = Request::input('id');
+		$update['payroll_department_archived'] = Request::input('archived');
+		Tbl_payroll_department::where('payroll_department_id', $id)->update($update);
 
 		$return['status'] 			= 'success';
-		$return['data']	   			= '';
-		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
+		$return['function_name'] 	= 'payrollconfiguration.reload_departmentlist';
 		return json_encode($return);
+
 	}
+
+	public function modal_archived_department($archived, $department_id)
+	{
+		$statement = 'archive';
+		if($archived == 0)
+		{
+			$statement = 'restore';
+		}
+		$file_name 			= Tbl_payroll_department::where('payroll_department_id', $department_id)->pluck('payroll_department_name');
+		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
+		$data['html'] 		= '';
+		$data['action'] 	= '/member/payroll/departmentlist/archived_department';
+		$data['id'] 		= $department_id;
+		$data['archived'] 	= $archived;
+
+		return view('member.modal.modal_confirm_archived', $data);
+	}
+
 
 	public function modal_view_department($id)
 	{
@@ -1682,24 +1721,40 @@ class PayrollController extends Member
 		$return['view']				= $view;
 		$return['status'] 			= 'success';
 		$return['data']	   			= $id;
-		$return['function_name'] 	= 'payrollconfiguration.reload_tbl_jobtitle';
+		$return['function_name'] 	= 'payrollconfiguration.reload_jobtitlelist';
 		return json_encode($return);
 	}
 
 
 	public function archived_jobtitle()
 	{
-		$archived = Request::input('archived');
-		$content  = Request::input("content");
-		$update['payroll_jobtitle_archived'] = $archived;
-		Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $content)->update($update);
+		$id = Request::input('id');
+		$update['payroll_jobtitle_archived'] = Request::input('archived');
+		Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $id)->update($update);
 
 		$return['status'] 			= 'success';
-		$return['data']	   			= '';
 		$return['function_name'] 	= 'payrollconfiguration.reload_tbl_jobtitle';
 		return json_encode($return);
+
 	}
 
+	public function modal_archived_jobtitle($archived, $jobtitle_id)
+	{
+		$statement = 'archive';
+		if($archived == 0)
+		{
+			$statement = 'restore';
+		}
+		$file_name 			= Tbl_payroll_jobtitle::where('payroll_jobtitle_id', $jobtitle_id)->pluck('payroll_jobtitle_name');
+		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
+		$data['html'] 		= '';
+		$data['action'] 	= '/member/payroll/jobtitlelist/archived_jobtitle';
+		$data['id'] 		= $jobtitle_id;
+		$data['archived'] 	= $archived;
+
+		return view('member.modal.modal_confirm_archived', $data);
+	}
+	
 	public function reload_tbl_jobtitle()
 	{
 		$archived = Request::input('archived');

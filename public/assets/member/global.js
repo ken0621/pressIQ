@@ -92,12 +92,21 @@ function global()
                     }
 				}
             },
-            error: function()
+            error: function(x,t,m)
             {
-                setTimeout(function()
-                {
-                    action_global_submit(link, data, modal);
-                }, 2000);
+                // console.log(x + ' ' + t +' ' + m); 
+                if(t==="timeout") {
+                    toastr.warning(m);
+                    setTimeout(function()
+                    {
+                        action_global_submit(link, data, modal);
+                    }, 2000);
+                } 
+                else {
+                    $(".modal-loader").addClass("hidden");
+                    toastr.error(m + '. Please Contact The Administrator.');
+                }
+                
             }
         })
     }

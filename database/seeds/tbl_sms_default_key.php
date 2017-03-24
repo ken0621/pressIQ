@@ -22,7 +22,7 @@ class tbl_sms_default_key extends Seeder
             (7, 'e_wallet_refill'),
             (8, 'inquire_current_points'),
             (9, 'redeem_points'),
-            (10, 'pass_word_reset')";
+            (10, 'password_reset')";
 
         DB::statement($statement);
     }

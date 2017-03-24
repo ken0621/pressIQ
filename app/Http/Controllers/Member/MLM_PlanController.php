@@ -58,6 +58,7 @@ class MLM_PlanController extends Member
     }
     public function save_settings()
     {
+        // asd
     	// Input from form 
     	$validate['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
     	$validate['plan_settings_enable_mlm'] = Request::input('plan_settings_enable_mlm');

@@ -12,6 +12,7 @@ use App\Models\Tbl_country;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_mlm_lead;
 use App\Globals\Mlm_member;
+use App\Globals\Sms;
 
 class MlmRegisterController extends MlmLoginController
 {
@@ -164,8 +165,15 @@ class MlmRegisterController extends MlmLoginController
 			                			$insert_lead['lead_customer_id_lead'] = $cus_id;
 			                			Tbl_mlm_lead::insert($insert_lead);
 			                		}
+
+                                    $txt[0]["txt_to_be_replace"]    = "[name]";
+                                    $txt[0]["txt_to_replace"]       = $insert['first_name'];
+                                    /* Sms Notification */
+                                    $result  = Sms::SendSms($insert_other['customer_mobile'], "success_register", $txt, Self::$shop_id);
+
 			                		$data['type']   = "success";
 		    						$data['message'] = "Success! you will be redirected";
+
     							}
     							else
     							{

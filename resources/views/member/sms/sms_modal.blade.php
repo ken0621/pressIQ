@@ -9,7 +9,7 @@
             <div class="form-group">
                 <div class="col-md-12 pull-right">
                     <div class="checkbox">
-                        <label><input type="checkbox" name="sms_temp_is_on" value="1">Is Enabled</label>
+                        <label><input type="checkbox" name="sms_temp_is_on" value="1" {{isset($sms) ? $sms->sms_temp_is_on ? 'checked' : '' : ''}}>Is Enabled</label>
                     </div>
                 </div>
             </div>
@@ -30,6 +30,6 @@
     </div>
     <div class="modal-footer" >
         <button type="button" class="btn btn-custom-white" data-dismiss="modal">Cancel</button>
-        <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Savet</button>
+        <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Save</button>
     </div>
 </form>

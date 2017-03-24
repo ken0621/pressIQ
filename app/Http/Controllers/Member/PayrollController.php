@@ -1534,9 +1534,31 @@ class PayrollController extends Member
 	public function archived_company()
 	{
 		$archived 	= Request::input('archived');
-		$content	= Request::input('content');
+		$id			= Request::input('id');
 		$update['payroll_company_archived'] = $archived;
-		Tbl_payroll_company::where('payroll_company_id', $content)->update($update);
+		Tbl_payroll_company::where('payroll_company_id', $id)->update($update);
+		$return['function_name'] = 'companylist.save_company';
+		$return['status'] = 'success';
+		$return['data'] = '';
+
+		return json_encode($return);
+	}
+
+	public function modal_archived_company($archived, $id)
+	{
+		$statement = 'archive';
+		if($archived == 0)
+		{
+			$statement = 'restore';
+		}
+		$file_name 			= Tbl_payroll_company::where('payroll_company_id', $id)->pluck('payroll_company_name');
+		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
+		$data['html'] 		= '';
+		$data['action'] 	= '/member/payroll/company_list/archived_company';
+		$data['id'] 		= $id;
+		$data['archived'] 	= $archived;
+
+		return view('member.modal.modal_confirm_archived', $data);
 	}
 
 	/* COMPANY END */

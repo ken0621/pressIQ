@@ -11,6 +11,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/company_list/reload_company','Member\PayrollController@reload_company');
 	Route::any('/company_list/archived_company','Member\PayrollController@archived_company');
 	Route::any('/company_list/update_company','Member\PayrollController@update_company');
+	Route::any('/company_list/modal_archived_company/{archived}/{id}','Member\PayrollController@modal_archived_company');
 	/* COMPANY END */
 
 	/* EMPLOYEE START */

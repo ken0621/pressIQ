@@ -33,10 +33,6 @@ class WarehouseController extends Member
         $data["slip"] = Warehouse::inventory_input_report($slip_id);
         $data["slip_item"] = Warehouse::inventory_input_report_item($slip_id);
 
-        foreach ($data["slip_item"] as $key => $value) 
-        {
-            $data["slip_item"][$key]->serial_number_list = Tbl_inventory_serial_number::where("serial_inventory_id",$value->inventory_id)->get(); 
-        }
         $pdf = view("member.warehouse.stock_input_pdf",$data);
         return Pdf_global::show_pdf($pdf);
     }

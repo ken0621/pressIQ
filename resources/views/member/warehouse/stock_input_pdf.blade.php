@@ -24,8 +24,8 @@
 <br>
 <div>
 	<table class="table" style="border-bottom: 2px solid #000">
-		<thead>
-			<tr>
+		<thead >
+			<tr style="border-bottom: 2px solid #000">
 				<th class="text-center">Item ID</th>
 				<th class="text-center">Item Name</th>
 				<th class="text-center">QTY</th>
@@ -49,7 +49,7 @@
 					<td colspan="6">
 						<div style="padding: 10px">		
 							@foreach($item->serial_number_list as $serial)
-								<small style="margin-right: 50px;" {{$num++}}> S/N - {{$serial->serial_number}} -</small>
+								<small style="margin-right: 95px;" {{$num++}}> S/N - {{$serial->serial_number}} -</small>
 								@if($num == 5)
 								<br class="{{$num == 1}}">
 								@endif

@@ -294,6 +294,9 @@ Route::any('/member/item/warehouse/view/{id}','Member\WarehouseController@view')
 Route::any('/member/item/warehouse/refill','Member\WarehouseController@refill');
 Route::any('/member/item/warehouse/refill_submit','Member\WarehouseController@refill_submit');
 
+//adjust inventory
+Route::any('/member/item/warehouse/adjust/{id}','Member\WarehouseController@adjust_inventory');
+
 Route::any('/member/item/warehouse/load_item','Member\WarehouseController@filter_item');
 
 Route::any('/member/item/warehouse/restore/{id}','Member\WarehouseController@restore');

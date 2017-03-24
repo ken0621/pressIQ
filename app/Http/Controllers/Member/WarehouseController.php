@@ -28,21 +28,17 @@ class WarehouseController extends Member
      *
      * @return \Illuminate\Http\Response
      */
-    public function stock_input($slip_id = 42)
+    public function stock_input($slip_id = 0)
     {
         $data["slip"] = Warehouse::inventory_input_report($slip_id);
         $data["slip_item"] = Warehouse::inventory_input_report_item($slip_id);
 
-        foreach ($data["slip_item"] as $key => $value) 
-        {
-            $data["slip_item"][$key]->serial_number_list = Tbl_inventory_serial_number::where("serial_inventory_id",$value->inventory_id)->get(); 
-        }
         $pdf = view("member.warehouse.stock_input_pdf",$data);
         return Pdf_global::show_pdf($pdf);
     }
     public function refill_log($warehouse_id)
     {
-        $data["_slip"] = Tbl_inventory_slip::where("inventory_reason",'refill')->where("warehouse_id",$warehouse_id)->where("inventory_slip_shop_id",$this->user_info->shop_id)->get();
+        $data["_slip"] = Tbl_inventory_slip::where("inventory_reason",'refill')->where("warehouse_id",$warehouse_id)->where("inventory_slip_shop_id",$this->user_info->shop_id)->orderBy("inventory_slip_date","DESC")->get();
 
         return view("member.warehouse.refill_log",$data);
     }

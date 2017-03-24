@@ -95,6 +95,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/sss_table_list/sss_table_save_default',"Member\PayrollController@sss_table_save_default");
 	/* SSS TABLE END */
 
+
 	/* PHILHEALTH TABLE START */
 	Route::any('/philhealth_table_list',"Member\PayrollController@philhealth_table_list");
 	Route::any('/philhealth_table_list/philhealth_table_save',"Member\PayrollController@philhealth_table_save");
@@ -209,4 +210,12 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_period_list/modal_edit_period/{id}','Member\PayrollController@modal_edit_period');
 	Route::any('/payroll_period_list/modal_update_period','Member\PayrollController@modal_update_period');
 	/* PAYROLL PERIOD END */
+
+	/* HOLIDAY DEFAULT START */
+	Route::any('/holiday_default/modal_create_holiday_default',"Member\PayrollController@modal_create_holiday_default");
+	Route::any('/holiday_default/modal_save_holiday_default',"Member\PayrollController@modal_save_holiday_default");	
+
+	Route::any('/holiday_default/modal_edit_holiday_default/{id}',"Member\PayrollController@modal_edit_holiday_default");
+	Route::any('/holiday_default/update_holiday_default',"Member\PayrollController@update_holiday_default");
+	/* HOLIDAY END */
 });

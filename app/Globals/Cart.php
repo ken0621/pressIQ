@@ -603,4 +603,22 @@ class Cart
         }
         return $randomString;
     }
+
+    public static function check_product_stock($cart)
+    {
+        $message["status"] = "success";
+
+        foreach ($cart["cart"] as $key => $value) 
+        {
+            $item = Ecom_Product::getVariantInfo($value["product_id"]);
+            
+            if ($value["quantity"] > $item->inventory_count) 
+            {
+                $message["status"]       = "fail";
+                $message["error"][$key]  = $item->eprod_name . " exceeds the current stock (" . $item->inventory_count . ")";
+            }
+        }
+
+        return $message;
+    }
 }

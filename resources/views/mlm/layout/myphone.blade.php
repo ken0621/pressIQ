@@ -136,7 +136,7 @@
                             <a> Genealogy <span class="fa fa-chevron-down"></span></a>
                             <ul style="display: none;">
                               <li>
-                                  <a  href="/mlm/genealogy/binary">
+                                  <a href="/mlm/genealogy/binary">
                                       Binary Genealogy
                                   </a> 
                               </li>

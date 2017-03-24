@@ -1,5 +1,6 @@
 var timesheet = new timesheet();
 var timesheet_request = null;
+var adjust_form_request = null;
 var new_sub_ctr = 1000;
 
 function loading_done(url)
@@ -11,6 +12,7 @@ function loading_done(url)
 		$max = $(this).attr("time_max");
 		$(this).timeEntry({ampmPrefix: ' ',minTime: $min, maxTime: $max});
 		timesheet.external_compute_overtime_form();
+		
 	});
 }
 
@@ -41,6 +43,7 @@ function timesheet()
 		event_delete_sub_time();
 		event_load_overtime_form();
 		event_for_overtime_form();
+
 	}
 	function event_load_overtime_form()
 	{
@@ -54,8 +57,36 @@ function timesheet()
 	{
 		$("body").on("change", ".over-time-entry", function(e)
 		{
-
 			action_compute_overtime_form();
+		});
+
+		$("body").on("click", ".submit-overtime-form", function()
+		{
+			action_approve_overtime_form();
+		});
+	}
+	function action_approve_overtime_form()
+	{
+		$(".adjust-form-icon").addClass("hidden");
+		$(".adjust-form-loader").removeClass("hidden");
+
+		date = $(".over-time-form").find(".field-hidden-date").val();
+		employee_id = $(".over-time-form").find(".field-hidden-employee-id").val();
+		token = $(".ot-token").val();
+
+		$.ajax(
+		{
+			url:"/member/payroll/employee_timesheet/adjustment_form_approve",
+			dataType:"json",
+			data:{"date":date, "employee_id":employee_id,"_token":token},
+			type:"post",
+			success: function(data)
+			{
+				$(".adjust-form-icon").removeClass("hidden");
+				$(".adjust-form-loader").addClass("hidden");
+				$("#global_modal").modal("hide");
+				action_compute_work_hours();
+			}
 		});
 	}
 	function action_compute_overtime_form()
@@ -63,13 +94,22 @@ function timesheet()
 		date = $(".over-time-form").find(".field-hidden-date").val();
 		employee_id = $(".over-time-form").find(".field-hidden-employee-id").val();
 
-		$.ajax(
+		if(adjust_form_request !== null)
+		{
+			adjust_form_request.abort();
+		}
+
+		$(".time-summary-adjustment.new").text("__:__").css({"color":"#000", "font-weight":"normal"});
+
+		adjust_form_request = $.ajax(
 		{
 			url:"/member/payroll/employee_timesheet/json_process_time_single/" + date + "/" + employee_id,
 			dataType:"json",
-			type:"get",
+			data:  $(".over-time-form").serialize(),
+			type:"post",
 			success: function(data)
 			{
+				
 				$(".old_regular_hours").text(data.pending_timesheet.regular_hours);
 				$(".old_night_differential").text(data.pending_timesheet.night_differential);
 				$(".old_early_overtime").text(data.pending_timesheet.early_overtime);
@@ -103,7 +143,19 @@ function timesheet()
 							"font-weight":"bold"
 						});
 					}
-				});		
+				});	
+
+				$(".time-summary-adjustment.new").each(function()
+				{
+					s = $(this).attr("s");
+					old = $(".time-summary-adjustment.old[s=" + s + "]");
+
+					if($(this).text() != old.text())
+					{
+						$(this).css({"color":"green", "font-weight":"bold"});
+					};
+				});
+
 			}
 		});
 	}
@@ -189,7 +241,6 @@ function timesheet()
 		{
 			action_compute_work_hours();
 		});
-
 	}
 	function event_focus_edit()
 	{
@@ -257,7 +308,7 @@ function timesheet()
 		{
 			timesheet_request.abort();
 		}
-		
+
 		timesheet_request = $.ajax(
 		{
 			url:"/member/payroll/employee_timesheet/json_process_time",
@@ -268,7 +319,7 @@ function timesheet()
 			{
 				$.each(data, function(key, val)
 				{
-					update_time_record_on_table(val.date, val.regular_hours, val.early_overtime, val.late_overtime, val.extra_day_hours, val.rest_day_hours, val.late_hours, val.total_hours,val.night_differential, val.payroll_time_sheet_id);
+					update_time_record_on_table(val);
 				});
 
 				$(".table-loader").addClass("hidden");
@@ -281,97 +332,151 @@ function timesheet()
 		});
 	}
 
-	function update_time_record_on_table(date, regular_hours, early_overtime, late_overtime,  extra_day_hours = "00:00", rest_day_hours = "00:00", late_hours="00:00",total_hours = "00:00",night_differential = "00:00", tid="0")
+	function update_time_record_on_table(val)
 	{
-		$(".time-record[date='" + date + "']").attr("tid", tid);
-		$(".time-record[date='" + date + "']").find(".normal-hours").text(regular_hours);
-		$(".time-record[date='" + date + "']").find(".overtime-hours.late").text(late_overtime);
-		$(".time-record[date='" + date + "']").find(".overtime-hours.early").text(early_overtime);
-		$(".time-record[date='" + date + "']").find(".extra-day-hours").text(extra_day_hours);
-		$(".time-record[date='" + date + "']").find(".rest-day-hours").text(rest_day_hours);
-		$(".time-record[date='" + date + "']").find(".total-hours").text(total_hours);
-		$(".time-record[date='" + date + "']").find(".late-hours").text(late_hours);
-		$(".time-record[date='" + date + "']").find(".night-differential").text(night_differential);
+		$(".time-record[date='" + val.date + "']").attr("tid", val.payroll_time_sheet_id);
 
-		/* ND GRAY IF ZERO */
-		if(night_differential != "00:00")
+		$(".time-record[date='" + val.date + "']").find(".normal-hours").text(val.regular_hours);
+		$(".time-record[date='" + val.date + "']").find(".overtime-hours.late").text(val.late_overtime);
+		$(".time-record[date='" + val.date + "']").find(".overtime-hours.early").text(val.early_overtime);
+		$(".time-record[date='" + val.date + "']").find(".extra-day-hours").text(val.extra_day_hours);
+		$(".time-record[date='" + val.date + "']").find(".rest-day-hours").text(val.rest_day_hours);
+		$(".time-record[date='" + val.date + "']").find(".total-hours").text(val.total_hours);
+		$(".time-record[date='" + val.date + "']").find(".late-hours").text(val.late_hours);
+		$(".time-record[date='" + val.date + "']").find(".night-differential").text(val.night_differential);
+
+		$(".time-record[date='" + val.date + "']").each(function(key)
 		{
-			$(".time-record[date='" + date + "']").find(".night-differential").css("color", "black");
+			$(this).find(".time-entry.time-in").val(val.time_record[key].time_in);
+			$(this).find(".time-entry.time-out").val(val.time_record[key].time_out);
+		});
+
+		if(val.payroll_time_sheet_approved == 1)
+		{
+			warncolor = "green"; 
 		}
 		else
 		{
-			$(".time-record[date='" + date + "']").find(".night-differential").css("color", "#bbb");
+			warncolor = "red";
+		}
+		
+
+		/* ND GRAY IF ZERO */
+		if(val.night_differential != "00:00")
+		{
+			$(".time-record[date='" + val.date + "']").find(".night-differential").css("color", "black");
+		}
+		else
+		{
+			$(".time-record[date='" + val.date + "']").find(".night-differential").css("color", "#bbb");
 		}
 
 		/* LATE HOURS GRAY IF ZERO */
-		if(late_hours != "00:00")
+		if(val.late_hours != "00:00")
 		{
-			$(".time-record[date='" + date + "']").find(".late-hours").css("color", "black");
+			$(".time-record[date='" + val.date + "']").find(".late-hours").css("color", "black");
 		}
 		else
 		{
-			$(".time-record[date='" + date + "']").find(".late-hours").css("color", "#bbb");
+			$(".time-record[date='" + val.date + "']").find(".late-hours").css("color", "#bbb");
 		}
 
 		/* NORM HOURS GRAY IF ZERO */
-		if(regular_hours != "00:00")
+		if(val.regular_hours != "00:00")
 		{
-			$(".time-record[date='" + date + "']").find(".normal-hours").css("color", "black");
+			$(".time-record[date='" + val.date + "']").find(".normal-hours").css("color", "black");
 		}
 		else
 		{
-			$(".time-record[date='" + date + "']").find(".normal-hours").css("color", "#bbb");
+			$(".time-record[date='" + val.date + "']").find(".normal-hours").css("color", "#bbb");
 		}
 
 		/* EXTRA DAY GRAY IF ZERO */
-		if(extra_day_hours != "00:00")
+		if(val.extra_day_hours != "00:00")
 		{
-			$(".time-record[date='" + date + "']").find(".extra-day-hours").css("color", "black");
+			$(".time-record[date='" + val.date + "']").find(".extra-day-hours").css("color", "black");
 		}
 		else
 		{
-			$(".time-record[date='" + date + "']").find(".extra-day-hours").css("color", "#bbb");
+			$(".time-record[date='" + val.date + "']").find(".extra-day-hours").css("color", "#bbb");
 		}
 
 		/* REST DAY GRAY IF ZERO */
-		if(rest_day_hours != "00:00")
+		if(val.rest_day_hours != "00:00")
 		{
-			$(".time-record[date='" + date + "']").find(".rest-day-hours").css("color", "black");
+			$(".time-record[date='" + val.date + "']").find(".rest-day-hours").css("color", "black");
 		}
 		else
 		{
-			$(".time-record[date='" + date + "']").find(".rest-day-hours").css("color", "#bbb");
+			$(".time-record[date='" + val.date + "']").find(".rest-day-hours").css("color", "#bbb");
 		}
 
 		/* TOTAL GRAY IF ZERO */
-		if(total_hours != "00:00")
+		if(val.total_hours != "00:00")
 		{
-			$(".time-record[date='" + date + "']").find(".total-hours").css("color", "black");
+			$(".time-record[date='" + val.date + "']").find(".total-hours").css("color", "black");
 		}
 		else
 		{
-			$(".time-record[date='" + date + "']").find(".total-hours").css("color", "#bbb");
+			$(".time-record[date='" + val.date + "']").find(".total-hours").css("color", "#bbb");
 		}
 
-		if(late_overtime != "00:00")
+		if(val.late_overtime != "00:00")
 		{
-			$(".time-record[date='" + date + "']").find(".overtime-hours.late").css("color", "red");
-			$(".time-record[date='" + date + "']").find(".overtime-hours.late").addClass("load-overtime-form");
+			$(".time-record[date='" + val.date + "']").find(".overtime-hours.late").css("color", warncolor);
+			if(val.payroll_time_sheet_approved == 1)
+			{
+				$(".time-record[date='" + val.date + "']").find(".overtime-hours.late").addClass("cancel-approve").css("cursor","pointer");
+				$(".time-record[date='" + val.date + "']").find(".overtime-hours.late").removeClass("load-overtime-form").css("cursor","pointer");
+			}
+			else
+			{
+				$(".time-record[date='" + val.date + "']").find(".overtime-hours.late").addClass("load-overtime-form").css("cursor","pointer");
+				$(".time-record[date='" + val.date + "']").find(".overtime-hours.late").removeClass("cancel-approve").css("cursor","pointer");
+			}
 		}
 		else
 		{
-			$(".time-record[date='" + date + "']").find(".overtime-hours.late").css("color", "#bbb");
+			$(".time-record[date='" + val.date + "']").find(".overtime-hours.late").css("color", "#bbb").css("cursor","");
 		}
 
-		if(early_overtime != "00:00")
+		if(val.early_overtime != "00:00")
 		{
-			$(".time-record[date='" + date + "']").find(".overtime-hours.early").css("color", "red");
-			$(".time-record[date='" + date + "']").find(".overtime-hours.early").addClass("load-overtime-form");
+			$(".time-record[date='" + val.date + "']").find(".overtime-hours.early").css("color", warncolor);
+
+			if(val.payroll_time_sheet_approved == 1)
+			{
+				$(".time-record[date='" + val.date + "']").find(".overtime-hours.early").addClass("cancel-approve");
+				$(".time-record[date='" + val.date + "']").find(".overtime-hours.early").removeClass("load-overtime-form");
+			}
+			else
+			{
+				$(".time-record[date='" + val.date + "']").find(".overtime-hours.early").addClass("load-overtime-form");
+				$(".time-record[date='" + val.date + "']").find(".overtime-hours.early").removeClass("cancel-approve");
+			}
+			
 		}
 		else
 		{
-			$(".time-record[date='" + date + "']").find(".overtime-hours.early").css("color", "#bbb");
+			$(".time-record[date='" + val.date + "']").find(".overtime-hours.early").css("color", "#bbb");
+			$(".time-record[date='" + val.date + "']").find(".overtime-hours.early").removeClass("load-overtime-form");
+			$(".time-record[date='" + val.date + "']").find(".overtime-hours.early").removeClass("cancel-approve");
 		}
+
+		/* DISABLE IF APPROVED */
+		if(val.payroll_time_sheet_approved == 1)
+		{
+			//$(".time-record[date='" + val.date + "']").find(".text-table").attr("disabled", "disabled").prop("disabled", "disabled");
+			$(".time-record[date='" + val.date + "']").find(".table-check").removeClass("fa-check").addClass("fa-check").css("color","#000");
+			$(".time-record[date='" + val.date + "']").addClass("disable-hover");
+		}
+		else
+		{
+			//$(".time-record[date='" + val.date + "']").find(".text-table").removeAttr("disabled", "disabled").removeProp("disabled", "disabled");
+			$(".time-record[date='" + val.date + "']").find(".table-check").removeClass("fa-star").addClass("fa-check").css("color","#aaa");
+			$(".time-record[date='" + val.date + "']").removeClass("disable-hover");
+		}
+
 
 
 	}

@@ -7,11 +7,17 @@
                     <tr>
                         <td style="border-right: 2.5px solid #1E5649; padding-bottom: 20px;">
                             <div class="row clearfix">
-                                <div class="col-md-12" style="background-color: #24267A;">
+                                <div class="col-md-12" >
+                                <!-- style="background-color: #24267A;" -->
+                                @if($company_logo != null)
                                      <div class="item">
-                                         <center><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/philtech-official-logo.png'}} @else {{'/assets/philtech-official-logo.png'}}@endif" alt="" ></center>
+                                         <center><img src="@if(Request::input('pdf') == 'true'){{public_path().$company_logo}} @else {{$company_logo}}@endif" alt="" style="object-fit: cover; width: 100% "></center>
                                      </div>
-                                    
+                                @else 
+                                    <div class="item">
+                                         <center><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/philtech-official-logo.png'}} @else {{'/assets/philtech-official-logo.png'}}@endif" alt="" style="object-fit: cover; width: 100% " ></center>
+                                     </div>
+                                @endif    
                                 </div>
                                 <div class="col-md-12">
                                     <div class="col-md-12" style="font-weight: bold;">{{$company_name}}</div>

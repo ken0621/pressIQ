@@ -24,7 +24,8 @@ function cart()
 			event.preventDefault();
 			var key = $(event.currentTarget).attr("key");
 			
-			action_qty_control("+", $(event.currentTarget).attr("variation-id"), key)
+			action_qty_control("+", $(event.currentTarget).attr("variation-id"), key);
+			action_qty_control_points("+", $(event.currentTarget).attr("variation-id"), key);
 		})
 
 		$('.qty-control-minus').unbind("click");
@@ -34,7 +35,36 @@ function cart()
 			var key = $(event.currentTarget).attr("key");
 			
 			action_qty_control("-", $(event.currentTarget).attr("variation-id"), key);
+			action_qty_control_points("-", $(event.currentTarget).attr("variation-id"), key);
 		})
+	}
+	function action_qty_control_points(sign, id, susi)
+	{
+		var class_susi = '.points_membership_' + susi;
+		$(class_susi).each(function(){
+			var points = parseFloat($(this).attr('current_points'));
+			var base_points = parseFloat($(this).attr('base_points'));
+			// console.log(sign);
+			if(sign == "+")
+			{
+				points = points + base_points;
+				var p = points.toFixed(2);
+				$(this).attr('current_points', p);
+				$(this).html(p);
+			}
+			else
+			{
+				var new_points = points - base_points;
+				if(points > base_points)
+				{
+					points = points - base_points;
+					var p = points.toFixed(2);;
+					$(this).attr('current_points', p);
+					$(this).html(p);
+				}
+				
+			}
+		});
 	}
 	function action_qty_control(sign, id, key)
 	{

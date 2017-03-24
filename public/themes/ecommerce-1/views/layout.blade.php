@@ -42,7 +42,11 @@
     <div class="header-nav">
     	<div class="header-nav-top">
     		<div class="container">
+                @if($slot_now == null)
                 <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
+                @else
+                <div class="holder"><a href="/mlm"><i class="fa fa-user" aria-hidden="true"></i> Member's Area</a></div>
+                @endif
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> My Cart</a></div>
                 <div class="holder"><div class="linya"></div></div>

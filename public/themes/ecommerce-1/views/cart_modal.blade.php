@@ -52,7 +52,8 @@
          <div class="subtotal-value">P <span>{{ number_format($get_cart['sale_information']['total_product_price'], 2) }}</span></div>
       </div>
       <div style="margin-top: 10px;">
-         <button type="button" class="btn btn-primary" onClick="location.href='/checkout'">CHECK OUT</button>
+         <span class="cart-loader hide"><img style="height: 37px; margin-right: 7.5px;" src="/assets/front/img/loader.gif"></span>
+         <button type="button" class="checkout-modal-button btn btn-primary" onClick="location.href='/checkout'">CHECK OUT</button>
       </div>
    </div>
    @else

@@ -100,7 +100,7 @@
 					<div class="hold-header">CART SUMMARY</div>
 					<div class="hold-content match-height">
 						@if (session('fail'))
-						    <div class="alert alert-danger">
+						    <div class="alert alert-danger" style="margin-top: -25px; margin-left: -25px; margin-right: -25px;">
 							    <ul>
 							        @foreach(session('fail') as $fail)
 						        		<li>{{ $fail }}</li>

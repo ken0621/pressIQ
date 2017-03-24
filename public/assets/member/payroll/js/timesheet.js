@@ -209,6 +209,15 @@ function timesheet()
 			{
 				$(e.currentTarget).closest("tr").find(".time-out").val("");
 			}
+			else
+			{
+				if($(e.currentTarget).closest("tr").find(".time-out").val() == "")
+				{
+					$(e.currentTarget).closest("tr").find(".time-out").val(default_time_out);
+				}
+			}
+
+
 
 			$date = $(e.currentTarget).closest("tr").attr("date");
 			action_recompute_loading($date);
@@ -224,6 +233,14 @@ function timesheet()
 			{
 				$(e.currentTarget).closest("tr").find(".time-in").val("");
 			}
+			else
+			{
+				if($(e.currentTarget).closest("tr").find(".time-in").val() == "")
+				{
+					$(e.currentTarget).closest("tr").find(".time-in").val(default_time_in);
+				}
+			}
+
 
 			$date = $(e.currentTarget).closest("tr").attr("date");
 			action_recompute_loading($date);
@@ -277,6 +294,9 @@ function timesheet()
 		$(".time-record.main[date='" + date + "']").find(".total-hours").text("__:__");
 		$(".time-record.main[date='" + date + "']").find(".late-hours").text("__:__");
 		$(".time-record.main[date='" + date + "']").find(".night-differential").text("__:__");
+		$(".time-record.main[date='" + date + "']").find(".special-holiday-hours").text("__:__");
+		$(".time-record.main[date='" + date + "']").find(".regular-holiday-hours").text("__:__");
+		$(".time-record.main[date='" + date + "']").find(".break").text("__:__");
 		$(".time-record.main[date='" + date + "']").find(".overtime-hours").removeClass("red");
 	}
 	function action_create_sub_time(date, $time_in = "", $time_out = "")
@@ -324,10 +344,10 @@ function timesheet()
 
 				$(".table-loader").addClass("hidden");
 				$(".table-check").removeClass("hidden");
+
 			},
 			error: function()
 			{
-				console.log("Error");
 			}
 		});
 	}
@@ -344,11 +364,22 @@ function timesheet()
 		$(".time-record[date='" + val.date + "']").find(".total-hours").text(val.total_hours);
 		$(".time-record[date='" + val.date + "']").find(".late-hours").text(val.late_hours);
 		$(".time-record[date='" + val.date + "']").find(".night-differential").text(val.night_differential);
-
+		$(".time-record[date='" + val.date + "']").find(".special-holiday-hours").text(val.special_holiday_hours);
+		$(".time-record[date='" + val.date + "']").find(".regular-holiday-hours").text(val.regular_holiday_hours);
+		$(".time-record[date='" + val.date + "']").find(".break").text(val.break);
 		$(".time-record[date='" + val.date + "']").each(function(key)
 		{
-			$(this).find(".time-entry.time-in").val(val.time_record[key].time_in);
-			$(this).find(".time-entry.time-out").val(val.time_record[key].time_out);
+			if(val.time_record)
+			{
+				$(this).find(".time-entry.time-in").val(val.time_record[key].time_in);
+				$(this).find(".time-entry.time-out").val(val.time_record[key].time_out);
+			}
+			else
+			{
+				$(this).find(".time-entry.time-in").val("");
+				$(this).find(".time-entry.time-out").val("");
+			}
+
 		});
 
 		if(val.payroll_time_sheet_approved == 1)
@@ -359,7 +390,37 @@ function timesheet()
 		{
 			warncolor = "red";
 		}
-		
+	
+		/* SH GRAY IF ZERO */
+		if(val.break != "00:00")
+		{
+			$(".time-record[date='" + val.date + "']").find(".break").css("color", "black");
+		}
+		else
+		{
+			$(".time-record[date='" + val.date + "']").find(".break").css("color", "#bbb");
+		}
+
+
+		/* SH GRAY IF ZERO */
+		if(val.special_holiday_hours != "00:00")
+		{
+			$(".time-record[date='" + val.date + "']").find(".special-holiday-hours").css("color", "black");
+		}
+		else
+		{
+			$(".time-record[date='" + val.date + "']").find(".special-holiday-hours").css("color", "#bbb");
+		}
+
+		/* RH GRAY IF ZERO */
+		if(val.special_holiday_hours != "00:00")
+		{
+			$(".time-record[date='" + val.date + "']").find(".regular-holiday-hours").css("color", "black");
+		}
+		else
+		{
+			$(".time-record[date='" + val.date + "']").find(".regular-holiday-hours").css("color", "#bbb");
+		}
 
 		/* ND GRAY IF ZERO */
 		if(val.night_differential != "00:00")

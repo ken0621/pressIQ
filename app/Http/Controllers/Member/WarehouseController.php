@@ -242,6 +242,7 @@ class WarehouseController extends Member
             }
 
             $data["items"] = null;
+            // $data["slip_id"] = $item["slip_id"];
             foreach ($items["item_list"] as $key => $value) 
             {
                 $data["items"][$key] = Tbl_item::where("item_id",$key)->first();

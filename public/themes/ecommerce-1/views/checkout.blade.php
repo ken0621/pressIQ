@@ -57,6 +57,15 @@
 															<img class="img-responsive" src="/themes/{{ $shop_theme }}/img/paypal.png">
 														</td>
 													</tr>
+												@elseif($payment_method->method_name == "E-Wallet")
+													@if($slot_now != null)
+													<tr>
+														<td class="ray"><input name="payment_method_id" value="{{ $payment_method->method_id }}" type="radio"></td>
+														<td>
+															<div class="name">{{ $payment_method->method_name }}</div>
+														</td>
+													</tr>
+													@endif
 												@else
 													<tr>
 														<td class="ray"><input name="payment_method_id" value="{{ $payment_method->method_id }}" type="radio"></td>
@@ -100,12 +109,12 @@
 									</tr>
 								</thead>
 								<tbody>
-									@if(count($get_cart['cart']) > 0)
+									@if(isset($get_cart['cart']))
 										@foreach($get_cart["cart"] as $cart)
 										<tr>
 											<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
 											<td>{{ $cart["quantity"] }}</td>
-											<td>P {{ number_format($cart["quantity"] * $cart["cart_product_information"]["product_price"], 2) }}</td>
+											<td>P {{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</td>
 										</tr>
 										@endforeach
 									@endif
@@ -118,11 +127,19 @@
 										<td class="text-right"><b>Subtotal</b></td>
 										<td>P {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</td>
 									</tr>
+									@if($get_cart["sale_information"]["total_overall_price"] > $get_cart["sale_information"]["minimum_purchase"])
+									<tr>
+										<td></td>
+										<td class="text-right"><b>Shipping Fee</b></td>
+										<td>FREE</td>
+									</tr>
+									@else
 									<tr>
 										<td></td>
 										<td class="text-right"><b>Shipping Fee</b></td>
 										<td>P {{ number_format($get_cart["sale_information"]["total_shipping"], 2) }}</td>
 									</tr>
+									@endif
 									<tr>
 										<td></td>
 										<td class="text-right"><b>Total</b></td>
@@ -130,6 +147,7 @@
 									</tr>
 								</tbody>
 							</table>
+							<div style="margin-top: 15px; font-size: 16px; font-weight: 700; text-align: center;">Free shipping for orders above ₱ {{ number_format($get_cart['sale_information']['minimum_purchase'], 2) }}</div>
 						</div>
 					</div>
 				</div>

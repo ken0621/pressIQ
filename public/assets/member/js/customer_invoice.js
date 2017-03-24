@@ -1,3 +1,4 @@
+
 var customer_invoice = new customer_invoice();
 var global_tr_html = $(".div-script tbody").html();
 var item_selected = ''; 
@@ -14,6 +15,7 @@ function customer_invoice(){
 		event_accept_number_only();
 		event_compute_class_change();
 		event_taxable_check_change();
+		event_item_qty_change();
 		
 		action_lastclick_row();
 		action_compute();
@@ -93,6 +95,7 @@ function customer_invoice(){
 			num++;
 		});
 	}
+
 	function action_date_picker()
 	{
 		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
@@ -391,19 +394,31 @@ function customer_invoice(){
 		$parent.find(".txt-qty").val(1).change();
 
 		if($this.find("option:selected").attr("has-um") != '')
-		{
-			
+		{			
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$(this).globalDropList("reload").globalDropList("enabled");
-				console.log($(this).find("option:first").val());
-				$(this).val($(this).find("option:first").val()).change()		;
+				$(this).val($(this).find("option:first").val()).change();
 			})
 		}
 		else
 		{
 			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
+	}
+
+	function event_item_qty_change()
+	{
+		$(document).on("change", ".txt-qty", function()
+		{
+			$parent 	= $(this).closest(".tr-draggable");
+			$item_id 	= $parent.find("option:selected").val();
+			$item_qty 	= $(this).val();
+			$.get('/member/item/get_new_price/'+$item_id +"/"+$item_qty, function(data)
+			{
+				$parent.find(".txt-rate").val(data).change();
+			});
+		})
 	}
 
 	function action_load_unit_measurement($this)

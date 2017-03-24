@@ -42,7 +42,11 @@
     <div class="header-nav">
     	<div class="header-nav-top">
     		<div class="container">
+                @if($slot_now == null)
                 <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
+                @else
+                <div class="holder"><a href="/mlm"><i class="fa fa-user" aria-hidden="true"></i> Member's Area</a></div>
+                @endif
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> My Cart</a></div>
                 <div class="holder"><div class="linya"></div></div>
@@ -72,7 +76,7 @@
 	    				<div class="shopping-cart-container">
 	    					<div class="shopping-cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="badge mini-cart-quantity">{{ $global_cart['sale_information']['total_quantity'] }}</span> <span>CART PHP.</span> <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }}</span></div>
 	    				    <div class="container-cart mini-cart">
-                                
+                                <div class="text-center"><span class="cart-loader text-center"><img style="height: 50px; margin: auto;" src="/assets/front/img/loader.gif"></span></div>
                             </div>
                         </div>
 	    			</div>

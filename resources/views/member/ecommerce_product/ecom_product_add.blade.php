@@ -52,7 +52,8 @@
                 </div>
                 <div class="dividers half"></div>
                 <div class="row product-container">
-                    <div class="col-md-7">
+                    <div class="col-md-5">
+                        <label>Item</label>
                         <div class="fieldset">
                             <div>
                                 <input name="variant_checked[]" type="hidden" value="true">
@@ -64,14 +65,23 @@
                         </div>
                     </div>
                     <div class="col-md-3">
+                        <label>Product Price</label>
                         <div class="fieldset">
                             <input type="text" name="evariant_price[]" class="form-control input-sm" placeholder="Price" required> 
                         </div>
                     </div>
                     <div class="col-md-2">
+                        <label>Qty on Hand</label>
                         <div class="fieldset">
-                            <a href="#" class="product-info popup" link="/member/ecommerce/product/variant-modal/" size="lg" product-id="" product-code="">
-                            <i class="fa fa-cog fa-lg"></i> Information</a>
+                            <input type="text" name="item_qty_refill[]" class="form-control input-sm" placeholder="Quantity" value="0">
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <label>More Info</label>
+                        <div class="fieldset">
+                            <div class="btn-group">
+                                <a href="#" class="btn btn-primary btn-grp-primary product-info popup input-sm" link="/member/ecommerce/product/variant-modal/" size="lg" product-id="" product-code=""> Info</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -127,9 +137,10 @@
                                         <tr>
                                             <td width="5%"></td>
                                             <th width="20%">Variant</th>
-                                            <th width="40%">Product</th>
-                                            <th width="25%">Product</th>
-                                            <th width="10%"></th>
+                                            <th width="40%">Item</th>
+                                            <th width="15%">Product Price</th>
+                                            <th width="15%">Qty on Hand</th>
+                                            <th width="5%"></th>
                                         </tr>
                                     </thead>
                                     <tbody class="variant-main-container">
@@ -179,8 +190,12 @@
                     <input type="text" name="evariant_price[]" class="form-control input-sm" placeholder="Price">
                 </td>
                 <td>
-                    <a href="#" class="product-info popup" link="/member/ecommerce/product/variant-modal/" size="lg"  product-id="" product-code="">
-                    <i class="fa fa-cog fa-lg"></i> Info</a>
+                    <input type="text" name="item_qty_refill[]" class="form-control input-sm" placeholder="Quantity" value="0">
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-primary btn-grp-primary product-info popup input-sm" link="/member/ecommerce/product/variant-modal/" size="lg" product-id="" product-code=""> Info</a>
+                    </div>
                 </td>
                 <td>
                     <input class="variant_checked" name="variant_checked[]" type="hidden" value="true">

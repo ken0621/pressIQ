@@ -72,7 +72,39 @@ class Mlm_discount
 		{
 			return $data;
 		}
-		
-		
+	}
+	public static function get_discount_single($shop_id, $item_id, $membership_id)
+	{
+		$membership = Tbl_membership::where('shop_id', $shop_id)->where('membership_id', $membership_id)->where('membership_archive', 0)->get();
+		if($membership)
+		{
+			
+			$item = Tbl_item::where('item_id', $item_id)->first();
+			if($item)
+			{
+				$dis = Tbl_mlm_item_discount::where('item_id', $item_id)->where('membership_id', $membership_id)->first(); 
+				if($dis)
+				{
+					$discount['type'] 	= $dis->item_discount_percentage;
+					$discount['value']	 = $dis->item_discount_price;
+				}
+				else
+				{
+					$discount['type'] = 0;
+					$discount['value'] = 0;
+				}
+			}
+			else
+			{
+				$discount['type'] = 0;
+				$discount['value'] = 0;
+			}
+		}
+		else
+		{
+			$discount['type'] = 0;
+			$discount['value'] = 0;
+		}
+		return $discount;
 	}
 }

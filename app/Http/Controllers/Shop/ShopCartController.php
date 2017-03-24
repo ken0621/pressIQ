@@ -16,7 +16,8 @@ class ShopCartController extends Shop
     {
         $data["page"]  = "Product Cart";
         $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
-        
+        // dd($data);
+        // evariant_item_id
         return view("cart_modal", $data);
     }
 
@@ -24,7 +25,7 @@ class ShopCartController extends Shop
     {
         $data["page"] = "Mini Product Cart";
         $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
-
+    
         return view("mini_cart_modal", $data);
     }
 
@@ -50,7 +51,7 @@ class ShopCartController extends Shop
     {
         $variant_id = Request::input("variation_id");
         $quantity = Request::input("quantity");
-        $result = Cart::update_cart($quantity, $this->shop_info->shop_id);
+        $result = Cart::update_cart($variant_id, $quantity, $this->shop_info->shop_id);
 
         echo json_encode($result);
     }

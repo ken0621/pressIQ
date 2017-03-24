@@ -44,6 +44,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_list/reload_employee_list','Member\PayrollController@reload_employee_list');
 	/* EMPLOYEE SEARCH */
 	Route::any('/employee_list/search_employee_ahead','Member\PayrollController@search_employee_ahead');
+	Route::any('/employee_list/search_employee','Member\PayrollController@search_employee');
 
 	/* EMPLOYEE END */
 	Route::any('/payroll_configuration','Member\PayrollController@payroll_configuration');
@@ -53,7 +54,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');
 	Route::any('/employee_timesheet/timesheet/{id}','Member\PayrollTimeSheetController@timesheet');
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimeSheetController@json_process_time');
-	Route::any('/employee_timesheet/overtime_form','Member\PayrollTimeSheetController@overtime_form');
+	Route::any('/employee_timesheet/json_process_time_single/{date}/{employee_id}','Member\PayrollTimeSheetController@json_process_time_single');
+	Route::any('/employee_timesheet/adjustment_form','Member\PayrollTimeSheetController@adjustment_form');
 	/* TIMESHEET START */
 
 	/* DEPARTMENT START */

@@ -153,7 +153,17 @@
                                     <tr>                                
                                         <td>Total</td>
                                         <td>{{$total}}</td>
-                                    </tr>                                       
+                                    </tr>     
+                                    <tr>
+                                        <td colspan="2">
+                                        <center>
+                                            <br>
+                                            <br>
+                                            ______________________________________<br>
+                                            Authorized Siginature over printed name
+                                        </center>
+                                        </td>
+                                    </tr>                                  
                                 </table>
                             </td>
                         </tr>                    

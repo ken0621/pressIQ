@@ -4,6 +4,9 @@ Route::post('/mlm/membership_active_code/active/code', 'Mlm\MlmLoginController@m
 Route::get('/mlm/login', 'Mlm\MlmLoginController@index'); //EDWARD GUEVARRA
 Route::post('/mlm/login', 'Mlm\MlmLoginController@post_login'); //EDWARD GUEVARRA
 
+Route::get('/mlm/login/forgot_password','Mlm\MlmLoginController@forgot_password'); //ARCY
+Route::any('/mlm/login/forgot_password/submit','Mlm\MlmLoginController@forgot_password_submit'); //ARCY
+
 Route::get('/mlm/register', 'Mlm\MlmRegisterController@index'); //EDWARD GUEVARRA
 Route::get('/mlm/register/package', 'Mlm\MlmRegisterController@package'); //EDWARD GUEVARRA
 Route::get('/mlm/register/payment', 'Mlm\MlmRegisterController@payment'); //EDWARD GUEVARRA
@@ -12,6 +15,7 @@ Route::post('/mlm/register', 'Mlm\MlmRegisterController@post_register'); //EDWAR
 Route::get('/mlm/register/get/membership_code/{membership_code}', 'Mlm\MlmRegisterController@view_customer_info_via_mem_code');
 
 Route::get('/mlm', 'Mlm\MlmDashboardController@index'); //EDWARD GUEVARRA
+Route::get('/mlm/news/{id}', 'Mlm\MlmDashboardController@news_content'); //EDWARD GUEVARRA
 Route::get('/mlm/profile', 'Mlm\MlmProfileController@index'); //EDWARD GUEVARRA
 Route::get('/mlm/notification', 'Mlm\MlmNotificationController@index'); //EDWARD GUEVARRA
 Route::any('/mlm/claim/slot', 'Mlm\MlmDashboardController@claim_slot'); //EDWARD GUEVARRA

@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Member;
 use App\Models\Tbl_item;
 use App\Globals\Warehouse;
 use App\Globals\Utilities;
+use App\Globals\Vendor;
+use App\Globals\Pdf_global;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_user_warehouse_access;
+use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_settings;
 use Request;
 use App\Http\Controllers\Controller;
@@ -25,6 +28,25 @@ class WarehouseController extends Member
      *
      * @return \Illuminate\Http\Response
      */
+    public function stock_input($slip_id = 0)
+    {
+        $data["slip"] = Warehouse::inventory_input_report($slip_id);
+        $data["slip_item"] = Warehouse::inventory_input_report_item($slip_id);
+
+        $pdf = view("member.warehouse.stock_input_pdf",$data);
+        return Pdf_global::show_pdf($pdf);
+    }
+    public function refill_log($warehouse_id)
+    {
+        $data["_slip"] = Tbl_inventory_slip::where("inventory_reason",'refill')->where("warehouse_id",$warehouse_id)->where("inventory_slip_shop_id",$this->user_info->shop_id)->orderBy("inventory_slip_date","DESC")->get();
+
+        return view("member.warehouse.refill_log",$data);
+    }
+    public function view_pdf($slip_id)
+    {
+        $data["slip_id"] = $slip_id;
+        return view("member.warehouse.stock_view",$data);
+    }
     public function index()
     {
         $this->item();
@@ -369,6 +391,7 @@ class WarehouseController extends Member
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
             
             $data["warehouse_item"] = Warehouse::select_item_warehouse_single($id,'array');
+            $data["_vendor"]    = Vendor::getAllVendor('active');
             
             $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)
                                                                             ->where("type_shop",$this->user_info->shop_id)
@@ -565,8 +588,9 @@ class WarehouseController extends Member
         { 
             $warehouse_id = Request::input("warehouse_id");
             $remarks = Request::input("remarks");
-            $reason_refill = Request::input("reason_refill");
-            $refill_source = 0;
+            $reason_refill = Request::input("reason_refill") == "other" ? "other" : "vendor";
+            $refill_source = Request::input("reason_refill") == "other" ? 0 : Request::input("reason_refill");
+
             $quantity_product = Request::input("quantity");
 
             $warehouse_refill_product = null;
@@ -689,6 +713,7 @@ class WarehouseController extends Member
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
         { 
+            $for_serial_item = null;
             //INSERT TO tbl_warehouse
             $ins_warehouse["warehouse_name"] = Request::input("warehouse_name");
             $ins_warehouse["warehouse_address"] = Request::input("warehouse_address");
@@ -697,34 +722,44 @@ class WarehouseController extends Member
 
             $id = Tbl_warehouse::insertGetId($ins_warehouse);
 
+            $ins_access["user_id"] = $this->user_info->user_id;
+            $ins_access["warehouse_id"] = $id;
+            Tbl_user_warehouse_access::insert($ins_access);
             //INSERT tbl_warehouse per item reorderpoint
             $reorderpoint = Request::input("reoder_point");
-            foreach ($reorderpoint as $key => $value) 
+            if($reorderpoint != null)
             {
-                $check = Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",$id)->first();
-                if($check == null)
+                foreach ($reorderpoint as $key => $value) 
                 {
-                    $ins_sub["warehouse_id"] = $id;
-                    $ins_sub["item_id"] = $key;
-                    $ins_sub["item_reorder_point"] = str_replace(",","",$value);
+                    $check = Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",$id)->first();
+                    if($check == null)
+                    {
+                        $ins_sub["warehouse_id"] = $id;
+                        $ins_sub["item_id"] = $key;
+                        $ins_sub["item_reorder_point"] = str_replace(",","",$value);
 
-                    Tbl_sub_warehouse::insert($ins_sub);
-                }
+                        Tbl_sub_warehouse::insert($ins_sub);
+                    }
+                }                
             }
             //TRANSFER INVENTORY From MAIN to NEW warehouse 
             $quantity = Request::input("quantity");
-            foreach($quantity as $key => $value)
+            // dd($quantity);
+            if($quantity != null)
             {
-                $ins_inventory["inventory_item_id"] = $key;
-                $ins_inventory["warehouse_id"] = $id;
-                $ins_inventory["inventory_created"] = Carbon::now();  
-                $ins_inventory["inventory_count"] = str_replace(",","",$value);
+                foreach($quantity as $key => $value)
+                {
+                    $ins_inventory["inventory_item_id"] = $key;
+                    $ins_inventory["warehouse_id"] = $id;
+                    $ins_inventory["inventory_created"] = Carbon::now();  
+                    $ins_inventory["inventory_count"] = str_replace(",","",$value);
 
-                $inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inventory);
+                    $inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inventory);
 
-                $for_serial_item[$key]["quantity"] = str_replace(",","",$value);
-                $for_serial_item[$key]["product_id"] = $key;
-                $for_serial_item[$key]["inventory_id"] = $inventory_id;       
+                    $for_serial_item[$key]["quantity"] = str_replace(",","",$value);
+                    $for_serial_item[$key]["product_id"] = $key;
+                    $for_serial_item[$key]["inventory_id"] = $inventory_id;       
+                }                
             }
 
                 $items["item_id"] = "";
@@ -732,13 +767,13 @@ class WarehouseController extends Member
 
 
             $serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$this->user_info->shop_id)->first();
-            if($serial != null)
+            if($serial != null && $for_serial_item != null)
             {
                 $data['status'] = 'success-serial';
                 Session::put("item", $items);
             }
             else
-            {
+            {                
                 $data['status'] = 'success';
             }
 
@@ -799,29 +834,33 @@ class WarehouseController extends Member
             $quantity = Request::input("quantity");
 
             // dd($reorderpoint);
-            foreach ($reorderpoint as $key => $value) 
+            if($reorderpoint != null)
             {
-                $up_sub["warehouse_id"] = Request::input("warehouse_id");
-                $up_sub["item_id"] = $key;
-                $up_sub["item_reorder_point"] = str_replace(",","",$value);
-
-                $sub = Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",Request::input("warehouse_id"))->first();
-                if($sub)
+                foreach ($reorderpoint as $key => $value) 
                 {
-                    Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",Request::input("warehouse_id"))->update($up_sub);                
-                }
-                else
-                {
-                    Tbl_sub_warehouse::insert($up_sub);
-                    
-                    $ins_inventory["inventory_item_id"] = $key;
-                    $ins_inventory["warehouse_id"] = Request::input("warehouse_id");
-                    $ins_inventory["inventory_created"] = Carbon::now();            
-                    $ins_inventory["inventory_count"] = $quantity[$key];
+                    $up_sub["warehouse_id"] = Request::input("warehouse_id");
+                    $up_sub["item_id"] = $key;
+                    $up_sub["item_reorder_point"] = str_replace(",","",$value);
 
-                    Tbl_warehouse_inventory::insert($ins_inventory);
+                    $sub = Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",Request::input("warehouse_id"))->first();
+                    if($sub)
+                    {
+                        Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",Request::input("warehouse_id"))->update($up_sub);                
+                    }
+                    else
+                    {
+                        Tbl_sub_warehouse::insert($up_sub);
+                        
+                        $ins_inventory["inventory_item_id"] = $key;
+                        $ins_inventory["warehouse_id"] = Request::input("warehouse_id");
+                        $ins_inventory["inventory_created"] = Carbon::now();            
+                        $ins_inventory["inventory_count"] = $quantity[$key];
+
+                        Tbl_warehouse_inventory::insert($ins_inventory);
+                    }
                 }
             }
+
             //CREATE INVENTORY From warehouse 
             // foreach($quantity as $key => $value)
             // {          

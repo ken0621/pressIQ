@@ -8,6 +8,7 @@ use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_user;
+use App\Models\Tbl_item;
 use App\Models\Tbl_ec_product;
 
 use App\Models\Tbl_journal_entry_line;
@@ -18,6 +19,7 @@ use App\Globals\Item;
 use App\Globals\Customer;
 use App\Globals\Ecom_Product;
 use App\Globals\Sms;
+
 use Request;
 use Carbon\Carbon;
 use Session;
@@ -25,7 +27,7 @@ use Validator;
 use Redirect;
 use Crypt;
 
-class TesterController extends Member
+class TesterController extends Controller
 {
 
     public function getShopId()
@@ -43,17 +45,22 @@ class TesterController extends Member
 
     public function getSms()
     {
-        Sms::sendRegistration("1234","Bryan");
+        $data[0] = "09178868381";
+        $data[1] = "09167703064";
+
+        // Sms::sendRegistration("639177190080","Arnold");
     }
 
 	public function getIndex()
     {
+        dd(Accounting::postJournalEntry());
         // dd(Tbl_ec_product::variant()->item()->inventory()->get()->toArray());
         // dd(Ecom_Product::getProductList());
         // dd(Ecom_Product::getProduct(5));\
-        dd(Ecom_Product::getVariantInfo(36));
+        // dd(Ecom_Product::getVariantInfo(36));
+        // dd(Tbl_item::multiPrice()->get()->toArray());
         // dd(Tbl_customer::Transaction($this->getShopId(), 8)->get());
-        // dd(Item::get_all_category_item());
+        // dd(Tbl_item::newPrice(19)->where("tem_id", 15)->get());
         //dd(Ecom_Product::getAllCategory());
 
         //dd(Item::get_all_category_item());

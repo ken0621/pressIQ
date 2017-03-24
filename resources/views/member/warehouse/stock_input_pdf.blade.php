@@ -61,6 +61,7 @@
 			@endforeach		
 		</tbody>
 	</table>
+
 	<table style="width: 100%;">
 		<tbody>
 			<tr>
@@ -71,6 +72,14 @@
 					<strong>{{currency('P',$total_price)}}</strong>
 				</td>
 			</tr>	
+			<tr>
+				<td colspan="6">
+					<div style="padding: 50px">
+						<strong> REMARKS : </strong> <br>
+						<div>{{$slip->inventory_remarks}}</div>
+					</div>
+				</td>
+			</tr>
 			<tr>
 				<td style="padding: 20px" colspan="2">
 					<div>Prepared By:</div><br><br>

@@ -185,6 +185,13 @@ class ShopCheckoutController extends Shop
                         ->withInput();
                 }
             }
+
+            $stock = Cart::check_product_stock($get_cart);
+            if ($stock["status"] == "fail") 
+            {
+                return Redirect::back()->with('fail', $stock["error"]);
+            }
+
             $result = Ec_order::create_ec_order_automatic($cart);
 
             if($cart["payment_method_id"] == 6)

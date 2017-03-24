@@ -19,6 +19,7 @@ use App\Models\Tbl_payroll_group_rest_day;
 use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
+use App\Models\Tbl_payroll_company;
 use Carbon\Carbon;
 use stdClass;
 
@@ -187,6 +188,33 @@ class Payroll
 		
 
 	}
+
+	public static function company_hierarchy($shop_id = 0, $archived = 0)
+	{
+		$_company = Tbl_payroll_company::selcompany($shop_id, $archived)->where('payroll_parent_company_id',0)->orderBy('payroll_company_name')->get();
+
+		$data = array();
+		foreach($_company as $company)
+		{
+			$temp['company'] = $company;
+			$temp['sub']	 = Tbl_payroll_company::selcompany($shop_id)->where('payroll_parent_company_id',$company->payroll_company_id)->orderBy('payroll_company_name')->get();
+			array_push($data, $temp);
+		}
+
+		/* SELECT ALL THE LOST BRANCHES IN QUERY ABOVE */
+		
+		$_lost = Tbl_payroll_company::sellost($shop_id,$archived)->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+		foreach($_lost as $lost)
+		{
+			$temp['company'] = $lost;
+			$temp['sub']	 = array();
+			array_push($data, $temp);
+		}
+		
+		return $data;
+
+	}
 	
 	/* GET EMPLOYEE DEDUCTION BALANCE */
 	public static function getbalance($shop_id = 0, $deduction_id = 0)
@@ -219,7 +247,7 @@ class Payroll
 			$balance = $total_amount - Tbl_payroll_deduction_payment::selbyemployee($cancel->payroll_employee_id, $deduction_id)->sum('payroll_payment_amount');
 
 			$data['cancel'][$key]['deduction'] 	= $cancel;
-			$data['cancel'][$key]['balance'] 		= $balance;
+			$data['cancel'][$key]['balance'] 	= $balance;
 		}
 		
 		return $data;

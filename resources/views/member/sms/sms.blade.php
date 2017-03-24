@@ -6,20 +6,24 @@
         <div>
             <i class="fa fa-envelope"></i>
             <h1>
-                <span class="page-title">Email Content</span>
+                <span class="page-title">SMS Content</span>
                 <small>
-                    List of Email Content.
+                    List of Sms Content.
                 </small>
             </h1>
             <div class="text-right row">
                 <div class="col-md-4 pull-right">
-                    <form class=""
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Authorization Key">
-                        <span class="input-group-btn">
-                            <button class="btn btn-custom-primary pane pul-buttons popup" link="/member/maintenance/email_content/add" type="button" size="md">Save SMS Key</button>
-                        </span>
-                    </div>  
+                    @if($user->user_level == 1)
+                    <form class="global-submit" action="/member/maintenance/sms/authorization-key">
+                        <input type="hidden" name="_token" value="{{csrf_token()}}">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="sms_authorization_key" placeholder="Authorization Key" value="{{$sms_key->sms_authorization_key or ''}}">
+                            <span class="input-group-btn">
+                                <button class="btn btn-custom-primary pane" type="submit" size="md">Save SMS Key</button>
+                            </span>
+                        </div>  
+                    </form>
+                    @endif
                 </div>                            
             </div>
         </div>
@@ -27,6 +31,8 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal load-data">
+        @if(isset($sms_key->sms_authorization_key))
+        <button class="btn btn-custom-white">SMS Logs</button>
         <div class="form-group tab-content panel-body sms-content-container">
             <div class="table-responsive">
                 <table class="table table-bordered table-condensed">
@@ -55,6 +61,18 @@
                 </table>
             </div>
         </div>
+        @else
+        <div class="row vcenter" style="margin-top: 20%;">
+            <div class="col-md-12">
+                <div class="error-template">
+                    <h2 class="message">Create Authorization Key First</h2>
+                    <div class="error-details">
+                        Sorry, please contact your administrator.
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 @endsection
@@ -66,12 +84,20 @@
         {
             if(data.type == "sms")
             {
+                data.element.modal("toggle");
                 $(".load-data").load("/member/maintenance/sms .sms-content-container", function()
                 {
                     toastr.success(data.message);
-                    data.element.modal("toggle");
                 })   
             }
+            else if(data.type == "authorization_key")
+            {
+                toastr.success(data.message);
+            }
+        }
+        else
+        {
+            toastr.error(data.message);
         }
     }
 

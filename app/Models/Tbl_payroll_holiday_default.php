@@ -19,8 +19,8 @@ class Tbl_payroll_holiday_default extends Model
 
 	public function scopegetholidaydefault($query)
     {
-    	/*$query->where('shop_id', '', );
+    	$query->where('shop_id', '<>', );
 
-    	return $query;*/
+    	return $query;
     }
 }

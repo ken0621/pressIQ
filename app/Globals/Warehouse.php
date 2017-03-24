@@ -13,11 +13,32 @@ use App\Models\Tbl_settings;
 use App\Models\Tbl_user;
 use App\Models\Tbl_user_warehouse_access ;
 use App\Globals\Item;
+use App\Models\Tbl_unit_measurement_multi;
 use DB;
 use Carbon\Carbon;
 use Session;
 class Warehouse
 {   
+    public static function insert_access($warehouse_id)
+    {
+        $ins_access["user_id"] = Warehouse::getUserid();
+        $ins_access["warehouse_id"] = $warehouse_id;
+        Tbl_user_warehouse_access::insert($ins_access);
+
+        $user_position = Tbl_user::position()->where("user_id",Warehouse::getUserid())->pluck("position_rank");
+
+        $all_user = Tbl_user::position()->where("user_shop",Warehouse::getShopId())->where("user_id","!=", Warehouse::getUserid())->where("tbl_user.archived",0)->get();
+
+        foreach ($all_user as $key => $value) 
+        {
+            if($value->position_rank < $user_position)
+            {
+                $ins_access["user_id"] = $value->user_id;
+                $ins_access["warehouse_id"] = $warehouse_id;
+                Tbl_user_warehouse_access::insert($ins_access);
+            }
+        }
+    }
     public static function inventory_input_report($inventory_slip_id)
     {
         $data = Tbl_inventory_slip::shop()->vendor()->warehouse()->where("inventory_slip_shop_id",Warehouse::getShopId())
@@ -29,11 +50,13 @@ class Warehouse
     }
     public static function inventory_input_report_item($inventory_slip_id)
     {
-        $data = Tbl_warehouse_inventory::inventoryslip()->item()->where("tbl_warehouse_inventory.inventory_slip_id",$inventory_slip_id)->groupBy("tbl_item.item_id")->where("tbl_unit_measurement_multi.is_base",1)->get();
+        $data = Tbl_warehouse_inventory::inventoryslip()->item()->where("tbl_warehouse_inventory.inventory_slip_id",$inventory_slip_id)->groupBy("tbl_item.item_id")->get();
 
         foreach ($data as $key => $value) 
         {
-            $data[$key]->serial_number_list = Tbl_inventory_serial_number::where("serial_inventory_id",$value->inventory_id)->get(); 
+            $data[$key]->serial_number_list = Tbl_inventory_serial_number::where("serial_inventory_id",$value->inventory_id)->get();
+            $abbrev = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",1)->pluck("multi_abbrev");
+            $data[$key]->multi_abbrev = $abbrev != "" ? $data[$key]->multi_abbrev : '-';
         }
         return $data;
     }
@@ -279,21 +302,21 @@ class Warehouse
              $data['status'] = '';
             
 
-            $serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$shop_id)->first();
+            // $serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$shop_id)->first();
 
-            $data['status'] = 'success';
-            if($is_return == null)
-            {
-                if($serial != null)
-                {
-                    $data['status'] = 'success-serial';
+            // if($is_return == null)
+            // {
+            //     if($serial != null)
+            //     {
+            //         $data['status'] = 'success-serial';
 
-                    $items["item_id"] = "";
-                    $items["item_list"] = $for_serial_item;
-                    Session::put("item", $items);
-                }                
-            }
- 
+            //         $items["item_id"] = "";
+            //         $items["item_list"] = $for_serial_item;
+            //         Session::put("item", $items);
+            //     }                
+            // }
+
+            $data['status'] = 'success'; 
             $data['inventory_slip_id'] = $inventory_slip_id;
 
         }
@@ -545,7 +568,7 @@ class Warehouse
             $insert2["warehouse_name"]    = "Ecommerce Warehouse";
             $insert2["warehouse_shop_id"] = $shop_id;
             $insert2["warehouse_created"] = Carbon::now();
-            $insert2["main_warehouse"]    = "0";
+            $insert2["main_warehouse"]    = "2";
 
             Tbl_warehouse::insertGetId($insert2);
         }

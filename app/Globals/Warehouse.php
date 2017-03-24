@@ -5,6 +5,7 @@ use App\Models\Tbl_default_chart_account;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_warehouse_inventory;
+use App\Models\Tbl_inventory_serial_number;
 use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_item;
 use App\Models\Tbl_inventory_slip;
@@ -29,6 +30,11 @@ class Warehouse
     public static function inventory_input_report_item($inventory_slip_id)
     {
         $data = Tbl_warehouse_inventory::inventoryslip()->item()->where("tbl_warehouse_inventory.inventory_slip_id",$inventory_slip_id)->groupBy("tbl_item.item_id")->where("tbl_unit_measurement_multi.is_base",1)->get();
+
+        foreach ($data as $key => $value) 
+        {
+            $data[$key]->serial_number_list = Tbl_inventory_serial_number::where("serial_inventory_id",$value->inventory_id)->get(); 
+        }
         return $data;
     }
     public static function select_item_warehouse_single($warehouse_id = 0, $return = 'array')
@@ -43,7 +49,6 @@ class Warehouse
     		$data = json_encode($data);
     	}
     	return $data; 
-
     }
     public static function warehouse_access()
     {
@@ -225,7 +230,7 @@ class Warehouse
         return $data;
 
     }
-      public static function adjust_inventory($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
+    public static function adjust_inventory($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
     {
         
         $shop_id = Warehouse::get_shop_id($warehouse_id);

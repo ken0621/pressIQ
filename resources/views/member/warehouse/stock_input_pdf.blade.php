@@ -23,7 +23,7 @@
 </div>
 <br>
 <div>
-	<table class="table">
+	<table class="table" style="border-bottom: 2px solid #000">
 		<thead>
 			<tr>
 				<th class="text-center">Item ID</th>
@@ -47,9 +47,9 @@
 				@if($item->serial_number_list != null)
 				<tr class="{{$num = 1}}">
 					<td colspan="6">
-						<div style="padding: 20px">		
+						<div style="padding: 10px">		
 							@foreach($item->serial_number_list as $serial)
-								<small style="margin-right: 100px;" {{$num++}}> S/N - {{$serial->serial_number}} -</small>
+								<small style="margin-right: 50px;" {{$num++}}> S/N - {{$serial->serial_number}} -</small>
 								@if($num == 5)
 								<br class="{{$num == 1}}">
 								@endif
@@ -64,10 +64,10 @@
 	<table style="width: 100%;">
 		<tbody>
 			<tr>
-				<td style="padding: 20px" colspan="3" class="text-left">
+				<td style="padding: 20px" colspan="5" class="text-left">
 					<strong>TOTAL</strong>
 				</td>
-				<td style="padding: 20px" colspan="3" class="text-right">	
+				<td style="padding: 20px;" class="text-right">	
 					<strong>{{currency('P',$total_price)}}</strong>
 				</td>
 			</tr>	

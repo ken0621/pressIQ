@@ -43,7 +43,7 @@
                <td class="rmv"><a class="remove-cart" variation-id="{{ $cart['product_id'] }}" href="javascript:">Remove</a></td>
             </tr>
 
-               @if($cart['cart_product_information']['membership_points'])
+               @if(isset($cart['cart_product_information']['membership_points']))
                   <tr>
                      <td colspan="40">
                         <table class="table table-bordered">

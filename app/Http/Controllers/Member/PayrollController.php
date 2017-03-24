@@ -37,11 +37,10 @@ use App\Models\Tbl_payroll_deduction_employee;
 use App\Models\Tbl_payroll_deduction_payment;
 use App\Models\Tbl_payroll_allowance;
 use App\Models\Tbl_payroll_employee_allowance;
-/*Leave Template Model
-Created by Brain*/
 use App\Models\Tbl_payroll_leave_temp;
 use App\Models\Tbl_payroll_leave_employee;
 use App\Models\Tbl_payroll_holiday;
+use App\Models\Tbl_payroll_holiday_default;
 use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_overtime_rate;
 use App\Models\Tbl_payroll_over_time_rate_default;
@@ -2350,8 +2349,10 @@ class PayrollController extends Member
 
 		$data['_active'] = Tbl_payroll_holiday::getholiday(Self::shop_id())->orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
 		$data['_archived'] = Tbl_payroll_holiday::getholiday(Self::shop_id(), 1)->orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
-
+		/*Temporary holiday default*/ 
+		$data['_default'] = Tbl_payroll_holiday_default::orderBy('payroll_holiday_date','desc')->paginate($this->paginate_count);
 		return view('member.payroll.side_container.holiday',$data);
+
 	}
 
 	public function modal_create_holiday()
@@ -3346,4 +3347,54 @@ class PayrollController extends Member
 		return json_encode($return);
 	}
 	/* PAYROLL PERIOD END */
+
+	/*HOLIDAY DEFAULT START*/
+	public function modal_create_holiday_default()
+	{
+		/*$data = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('payroll_company_name')->get();*/
+		return view('member.payroll.modal.modal_create_holiday_default');
+	}
+
+	public function modal_save_holiday_default()
+	{		
+		$insert['payroll_holiday_name'] 	= Request::input('payroll_holiday_name');
+		$insert['payroll_holiday_date'] 	= date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
+		$insert['payroll_holiday_category'] = Request::input('payroll_holiday_category');
+
+		Tbl_payroll_holiday_default::insert($insert);
+
+		$date_inserted = $insert['payroll_holiday_date'];
+		$data['_active'] = Tbl_payroll_holiday::where('payroll_holiday_date', $date_inserted)->first();
+
+		if (!$data['_active']) 
+		{	
+			$insert['shop_id']	= Self::shop_id();
+		 	Tbl_payroll_holiday::insert($insert);		 	
+		} 
+
+		$return['status'] = 'success';
+		$return['function_name'] = 'payrollconfiguration.reload_holiday';
+		return json_encode($return);
+	}
+
+	public function modal_edit_holiday_default($id)
+	{	
+		$data['_active'] = Tbl_payroll_holiday_default::where('payroll_holiday_default_id', $id)->first();
+		return view('member.payroll.modal.modal_edit_holiday_default', $data);
+	}
+
+	public function update_holiday_default()
+	{
+		$payroll_holiday_default_id 			= Request::input('payroll_holiday_default_id');
+		$update['payroll_holiday_name'] 		= Request::input('payroll_holiday_name');
+		$update['payroll_holiday_date'] 		= date('Y-m-d',strtotime(Request::input('payroll_holiday_date')));
+		$update['payroll_holiday_category'] 	= Request::input('payroll_holiday_category');		
+		Tbl_payroll_holiday_default::where('payroll_holiday_default_id', $payroll_holiday_default_id)->update($update);
+		
+		$return['status'] 			= 'success';
+		$return['function_name'] 	= 'payrollconfiguration.reload_holiday';
+		return json_encode($return);
+	}
+	
+	/*HOLIDAY DEFAULT END*/
 }

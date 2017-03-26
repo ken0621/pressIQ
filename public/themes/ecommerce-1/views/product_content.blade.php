@@ -65,7 +65,9 @@
                                        <img src="/themes/{{ $shop_theme }}/img/star-active.png">
                                        <img src="/themes/{{ $shop_theme }}/img/star-disable.png">
                                     </div> -->
-                                    <div class="availability">Availability : <span id="stock">{{ ucwords($product_variant['inventory_status']) }}</span></div>
+                                    @if($product_variant['item_type_id'] != 2)
+                                        <div class="availability">Availability : <span id="stock">{{ ucwords($product_variant['inventory_status']) }}</span></div>
+                                    @endif
                                     <!-- <div class="item-description">{!! $product_variant['evariant_description'] !!}</div> -->
                                 </div>
                                 <div class="variant-holder">
@@ -99,7 +101,7 @@
                                             </div>
                                            
                                              <div>
-                                                <button class="add-to-cart {{ isset($product['variant'][1]) ? 'disabled' : '' }}" {{ isset($product['variant'][1]) ? 'disabled' : '' }} variant-id="{{ $product_variant['evariant_id'] }}" type="button"><i class="fa fa-shopping-cart" aria-hidden="true"></i> ADD TO CART</button>
+                                                <button class="add-to-cart {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }}" {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }} variant-id="{{ $product_variant['evariant_id'] }}" type="button"><i class="fa fa-shopping-cart" aria-hidden="true"></i> ADD TO CART</button>
                                              </div>
                                         </div>
                                     </div>

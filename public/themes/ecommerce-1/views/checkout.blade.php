@@ -100,7 +100,7 @@
 					<div class="hold-header">CART SUMMARY</div>
 					<div class="hold-content match-height">
 						@if (session('fail'))
-						    <div class="alert alert-danger">
+						    <div class="alert alert-danger" style="margin-top: -25px; margin-left: -25px; margin-right: -25px;">
 							    <ul>
 							        @foreach(session('fail') as $fail)
 						        		<li>{{ $fail }}</li>
@@ -236,6 +236,13 @@
 										<label>CONTACT NUMBER</label>
 										<input value="{{ $customer_mobile != null ? $customer_mobile : Request::old('customer_mobile') }}" name="customer_mobile" type="text" class="form-control">
 									</div>
+									<input type="hidden" name="ec_order_load" value="{{$ec_order_load}}">
+									@if($ec_order_load == 1)
+									<div class="form-group">
+										<label>LOAD TO: (Number)</label>
+										<input value="{{ Request::old('ec_order_load_number') }}" name="ec_order_load_number" type="text" class="form-control">
+									</div>
+									@endif
 								</div>
 								<div class="col-md-5">
 									<div class="form-group">

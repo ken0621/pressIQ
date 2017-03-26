@@ -17,7 +17,7 @@ use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_employee_contract;
 
 
-class Payroll_BioImportController extends Controller
+class Payroll_BioImportController extends Member
 {
 
 	/* SHOP ID */
@@ -45,6 +45,14 @@ class Payroll_BioImportController extends Controller
 		return $bool;
 	}
 	/* CHECK EMPLOYEE NUMBER END */
+
+
+	/* GET EMPLOYEE ID START */
+	public function getemployeeId($payroll_employee_number = '', $pluck = 'payroll_employee_id')
+	{
+		return Tbl_payroll_employee_basic::where('payroll_employee_number', $payroll_employee_number)->where('shop_id', Self::shop_id())->pluck($pluck);
+	}
+	/* GET EMPLOYEE ID END */
 
 
 	/* CHECK IF HOLIDAY OR REGULAR DAY START */
@@ -96,16 +104,32 @@ class Payroll_BioImportController extends Controller
 	}	
 	/* CHECK IF REST DAY, EXTRA DAY OR REGULAR DAY END */
 
+	public function import_global()
+	{
+		$file 		= Request::file('file');
+		$biometric 	= Request::input('biometric');
+		if($biometric == 'ZKTime 5.0')
+		{
+			return Self::import_ZKTime_5_0($file);
+		}
+		if($biometric == 'Digital Persona')
+		{
+			return Self::import_Digital_Persona($file);
+		}
+	}
 
-    /* DMSPH BIO METRICS START */
+    /* BIO METRICS START */
 
-    public function import_dmsph()
+    public function import_ZKTime_5_0($file)
     {
-    	$file = Request::file('file');
+    	// $file = Request::file('file');
+    	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('no','datetime'));
+    	// dd($_time);
+
     	if(isset($_time[0]['no']) && isset($_time[0]['datetime']))
     	{
-    		// dd($_time);
+
 
 	    	$success_count = 0;
 	    	$temp_date = '';
@@ -126,43 +150,93 @@ class Payroll_BioImportController extends Controller
 	    		$temp = '';
 	    		foreach($_date as $date)
 	    		{
-	    			$start = $date[0];
-	    			$end = $date[count($date) - 1];
-	    			
-	    			$count = Tbl_payroll_time_sheet::checkdata(Self::check_employee_number($start['employee_number']),$start['date'])->count();
-	    			$payroll_time_sheet_id = 0;
-	    			if($count == 0)
+	    			$start 	= $date[0];
+	    			$end 	= $date[count($date) - 1];
+	    			if(Self::check_employee_number($start['employee_number']))
 	    			{
-	    				$insert_time['payroll_employee_id'] = Self::check_employee_number($start['employee_number']);
-	    				$insert_time['payroll_time_date'] 	= $start['date'];
-	    				$payroll_time_sheet_id = Tbl_payroll_time_sheet::insertGetId($insert_time);
-	    			}
-	    			else
-	    			{
-	    				$payroll_time_sheet_id = Tbl_payroll_time_sheet::checkdata(Self::check_employee_number($start['employee_number']),$start['date'])->pluck('payroll_time_sheet_id');
-	    			}
+	    				$count = Tbl_payroll_time_sheet::checkdata(Self::getemployeeId($start['employee_number']),$start['date'])->count();
+		    			$payroll_time_sheet_id = 0;
+		    			if($count == 0)
+		    			{
+		    				$insert_time['payroll_employee_id'] = Self::getemployeeId($start['employee_number']);
+		    				$insert_time['payroll_time_date'] 	= $start['date'];
+		    				$payroll_time_sheet_id = Tbl_payroll_time_sheet::insertGetId($insert_time);
+		    			}
+		    			else
+		    			{
+		    				$payroll_time_sheet_id = Tbl_payroll_time_sheet::checkdata(Self::getemployeeId($start['employee_number']),$start['date'])->pluck('payroll_time_sheet_id');
+		    			}
 
-	    			$temp_record['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
-	    			$temp_record['payroll_time_sheet_in'] 		= $start['time'];
-	    			$temp_record['payroll_time_sheet_out'] 		= $end['time'];
-	    			$temp_record['payroll_time_sheet_origin'] 	= 'Biometrics';
-	    			array_push($insert_time_record, $temp_record);
+		    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
+		    			$temp_array['payroll_time_sheet_in'] 		= $start['time'];
+		    			$temp_array['payroll_time_sheet_out'] 		= $end['time'];
+		    			$temp_array['payroll_time_sheet_origin'] 	= 'Biometrics';
+		    			$temp_array['payroll_company_id']			= Self::getemployeeId($start['employee_number'],'payroll_employee_company_id');
+
+		    			$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
+		    			if($count_record == 0)
+		    			{
+		    				array_push($insert_time_record, $temp_array);
+		    			}
+	    			}
+	    			
 	    		}
 	    		
 	    	}
+	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
+	    	if(!empty($insert_time_record))
+	    	{
+	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
+	    		$count_inserted = count($insert_time_record);
+	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
+	    	}
+	    	
+	    	// return $message;
     	}
-    	else
-    	{
-    		return '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
-    	}
-    	
+    	// else
+    	// {
+    	// 	return '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
+    	// }
+    	return $message;
     	
     }
 
-    public function template_dmsph()
+    public function import_Digital_Persona($file)
     {
-
+    	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('id_no','date','time_in','time_out'));
+    	dd($_time);
+    	$space = '        ';
     }
 
-    /* DMSPH BIO METRICS END */
+    /* TEMPLATE START */
+    public function template_global()
+    {
+    	$biometric_name = Request::input('biometric_name');
+    	if($biometric_name == 'ZKTime 5.0')
+    	{
+    		Self::ZKTime_template();
+    	}
+    }
+
+    public function ZKTime_template()
+    {
+    	$excels['data'][0] = ['Department','Name', 'No.','Date/Time','Location ID','ID Number','VerifyCode','CardNo'];
+        $excels['data'][1] = ['','', '','','','','',''];
+        // dd($excels);
+        return Excel::create('Timesheet Template (ZKTime 5.0)', function($excel) use ($excels) {
+
+            $data = $excels['data'];
+            $date = 'template';
+            $excel->setTitle('Payroll');
+            $excel->setCreator('Laravel')->setCompany('DIGIMA');
+            $excel->setDescription('payroll file');
+
+            $excel->sheet($date, function($sheet) use ($data) {
+                $sheet->fromArray($data, null, 'A1', false, false);
+            });
+
+        })->download('xlsx');
+    }
+
+    /* BIO METRICS END */
 }

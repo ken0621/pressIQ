@@ -34,6 +34,7 @@ function modal_biometrics()
 
 				formdata.append("_token", $("._token").val());
 				formdata.append("file",file);
+				formdata.append("biometric", $("#biometric_name").val())
 
 				ajax.upload.addEventListener("progress",function(event)
 				{
@@ -45,7 +46,7 @@ function modal_biometrics()
 					$(".import-status").html(event.target.responseText);
 				},false);
 
-				ajax.open("POST","/member/payroll/import_bio/import_dmsph");
+				ajax.open("POST","/member/payroll/import_bio/import_global");
 				ajax.send(formdata);
 			}
 			else

@@ -523,6 +523,11 @@ class Payroll
 				$time_rec[$key]["time_in"] = "";
 				$time_rec[$key]["time_out"] = "";
 			}
+			elseif($time_in == $time_out)
+			{
+				$time_rec[$key]["time_in"] = "";
+				$time_rec[$key]["time_out"] = "";
+			}
 			else
 			{
 				$time_rec[$key]["time_in"] = convert_seconds_to_hours_minutes("h:i A", $time_in);

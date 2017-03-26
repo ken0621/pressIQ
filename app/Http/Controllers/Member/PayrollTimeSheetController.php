@@ -276,8 +276,8 @@ class PayrollTimeSheetController extends Member
 				if($rest_day == true)
 				{
 					$data["_time_record"][$key]->time_in_enabled = true;
-					//$data["_time_record"][$key]->time_in_max = Carbon::parse($time_record->payroll_time_sheet_in)->format("h:i A");
-					//$data["_time_record"][$key]->time_in_min = Carbon::parse($time_record->payroll_time_sheet_in)->format("h:i A");
+					$data["_time_record"][$key]->time_in_max = Carbon::parse($time_record->payroll_time_sheet_out)->format("h:i A");
+					$data["_time_record"][$key]->time_in_min = Carbon::parse($time_record->payroll_time_sheet_in)->format("h:i A");
 				}
 				else
 				{
@@ -308,10 +308,18 @@ class PayrollTimeSheetController extends Member
 			}
 			else //DISABLED TIME-OUT
 			{
-				$data["_time_record"][$key]->time_out_enabled = false;
-				$data["_time_record"][$key]->time_out_max = Carbon::parse($time_record->payroll_time_sheet_out)->format("h:i A");
-				$data["_time_record"][$key]->time_out_min = Carbon::parse($time_record->payroll_time_sheet_out)->format("h:i A");
-
+				if($rest_day == true)
+				{
+					$data["_time_record"][$key]->time_out_enabled = true;
+					$data["_time_record"][$key]->time_out_max = Carbon::parse($time_record->payroll_time_sheet_out)->format("h:i A");
+					$data["_time_record"][$key]->time_out_min = Carbon::parse($time_record->payroll_time_sheet_in)->format("h:i A");
+				}
+				else
+				{
+					$data["_time_record"][$key]->time_out_enabled = false;
+					$data["_time_record"][$key]->time_out_max = Carbon::parse($time_record->payroll_time_sheet_out)->format("h:i A");
+					$data["_time_record"][$key]->time_out_min = Carbon::parse($time_record->payroll_time_sheet_out)->format("h:i A");
+				}
 			}
 
 		}

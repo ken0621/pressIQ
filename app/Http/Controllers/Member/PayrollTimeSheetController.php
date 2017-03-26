@@ -12,6 +12,7 @@ use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_employee_contract;
+use App\Models\Tbl_payroll_group_rest_day;
 use Redirect;
 
 class PayrollTimeSheetController extends Member
@@ -27,7 +28,8 @@ class PayrollTimeSheetController extends Member
 			return Redirect::to("/member/payroll/employee_timesheet?employee_id=" . $data["_employee"][0]->payroll_employee_id)->send();
 		}
 
-		$data["employee_info"] = Tbl_payroll_employee_contract::selemployee($data["current_employee"]->payroll_employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();		$data["default_time_in"] = Carbon::parse($data["employee_info"]->payroll_group_start)->format("h:i A");
+		$data["employee_info"] = Tbl_payroll_employee_contract::selemployee($data["current_employee"]->payroll_employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
+		$data["default_time_in"] = Carbon::parse($data["employee_info"]->payroll_group_start)->format("h:i A");
 		$data["default_time_out"] = Carbon::parse($data["employee_info"]->payroll_group_end)->format("h:i A");
 		return view('member.payroll.employee_timesheet', $data);
 	}
@@ -119,6 +121,7 @@ class PayrollTimeSheetController extends Member
 
 		return view('member.payroll.employee_timesheet_table', $data);
 	}
+
 	public function json_process_time()
 	{
 		$employee_id = Request::input("employee_id");
@@ -136,14 +139,12 @@ class PayrollTimeSheetController extends Member
 				$insert_timesheet["payroll_employee_id"] = $employee_id;
 				$insert_timesheet["payroll_time_sheet_type"] = "Regular";
 				$insert_timesheet["payroll_time_date"] = $date;
-				$insert_timesheet["payroll_time_sheet_break"] = Request::input("break")[$key];
 				$payroll_time_sheet_id = Tbl_payroll_time_sheet::insert($insert_timesheet);
 			}
 			else //TIMESHEET RECORD EXIST
 			{
 				$payroll_time_sheet_approved = $check_time_sheet->payroll_time_sheet_approved;
 				$update_timesheet["payroll_time_sheet_type"] = "Regular";
-				$update_timesheet["payroll_time_sheet_break"] = Request::input("break")[$key];
 				Tbl_payroll_time_sheet::where("payroll_time_date", $date)->where("payroll_employee_id", $employee_id)->update($update_timesheet);
 				$payroll_time_sheet_id = $check_time_sheet->payroll_time_sheet_id;
 			}
@@ -162,13 +163,9 @@ class PayrollTimeSheetController extends Member
 					{
 						$_insert_time_record[$i]["payroll_time_sheet_in"] = "";
 						$_insert_time_record[$i]["payroll_time_sheet_out"] = "";
-						$_insert_time_record[$i]["payroll_time_sheet_approved_in"] = "";
-						$_insert_time_record[$i]["payroll_time_sheet_approved_out"] = "";
 					}
 					else
-					{
-						$_insert_time_record[$i]["payroll_time_sheet_approved_in"] = Carbon::parse(Request::input("time_in")[$key][$i])->format("H:i");;
-						$_insert_time_record[$i]["payroll_time_sheet_approved_out"] = Carbon::parse(Request::input("time_out")[$key][$i])->format("H:i");					
+					{				
 						$_insert_time_record[$i]["payroll_time_sheet_in"] = Carbon::parse(Request::input("time_in")[$key][$i])->format("H:i");
 						$_insert_time_record[$i]["payroll_time_sheet_out"] = Carbon::parse(Request::input("time_out")[$key][$i])->format("H:i");
 					}
@@ -189,49 +186,11 @@ class PayrollTimeSheetController extends Member
 			$_timesheet[$key]->date = $key;
 
 			$default_working_hours = Request::input("default_working_hours");
-			$processed_timesheet = Payroll::process_time($employee_id, $key);
-
-			if($processed_timesheet->payroll_time_sheet_approved == 1)
-			{
-				$_timesheet[$key]->payroll_time_sheet_id = $processed_timesheet->payroll_time_sheet_id;
-				$_timesheet[$key]->payroll_time_sheet_approved = $processed_timesheet->payroll_time_sheet_approved;
-				$_timesheet[$key]->time_spent = $processed_timesheet->approved_timesheet->time_spent;
-				$_timesheet[$key]->regular_hours = $processed_timesheet->approved_timesheet->regular_hours;
-				$_timesheet[$key]->late_overtime = $processed_timesheet->approved_timesheet->late_overtime;
-				$_timesheet[$key]->early_overtime = $processed_timesheet->approved_timesheet->early_overtime;
-				$_timesheet[$key]->total_hours = $processed_timesheet->approved_timesheet->total_hours;
-				$_timesheet[$key]->extra_day_hours = $processed_timesheet->approved_timesheet->extra_day_hours;
-				$_timesheet[$key]->rest_day_hours = $processed_timesheet->approved_timesheet->rest_day_hours;
-				$_timesheet[$key]->late_hours = $processed_timesheet->approved_timesheet->late_hours;
-				$_timesheet[$key]->night_differential = $processed_timesheet->approved_timesheet->night_differential;
-				$_timesheet[$key]->time_record = $processed_timesheet->approved_timesheet->time_record;
-				$_timesheet[$key]->special_holiday_hours = $processed_timesheet->approved_timesheet->special_holiday_hours;
-				$_timesheet[$key]->regular_holiday_hours = $processed_timesheet->approved_timesheet->regular_holiday_hours;
-				$_timesheet[$key]->break = $processed_timesheet->approved_timesheet->break;
-			}
-			else
-			{
-				$_timesheet[$key]->payroll_time_sheet_id = $processed_timesheet->payroll_time_sheet_id;
-				$_timesheet[$key]->payroll_time_sheet_approved = $processed_timesheet->payroll_time_sheet_approved;
-				$_timesheet[$key]->time_spent = $processed_timesheet->pending_timesheet->time_spent;
-				$_timesheet[$key]->regular_hours = $processed_timesheet->pending_timesheet->regular_hours;
-				$_timesheet[$key]->late_overtime = $processed_timesheet->pending_timesheet->late_overtime;
-				$_timesheet[$key]->early_overtime = $processed_timesheet->pending_timesheet->early_overtime;
-				$_timesheet[$key]->total_hours = $processed_timesheet->pending_timesheet->total_hours;
-				$_timesheet[$key]->extra_day_hours = $processed_timesheet->pending_timesheet->extra_day_hours;
-				$_timesheet[$key]->rest_day_hours = $processed_timesheet->pending_timesheet->rest_day_hours;
-				$_timesheet[$key]->late_hours = $processed_timesheet->pending_timesheet->late_hours;
-				$_timesheet[$key]->night_differential = $processed_timesheet->pending_timesheet->night_differential;
-				$_timesheet[$key]->time_record = $processed_timesheet->pending_timesheet->time_record;
-				$_timesheet[$key]->special_holiday_hours = $processed_timesheet->pending_timesheet->special_holiday_hours;
-				$_timesheet[$key]->regular_holiday_hours = $processed_timesheet->pending_timesheet->regular_holiday_hours;
-				$_timesheet[$key]->break = $processed_timesheet->pending_timesheet->break;
-			}
-
-			$_timesheet[$key]->payroll_time_sheet_approved = $processed_timesheet->payroll_time_sheet_approved;
+			Payroll::adjust_payroll_approved_in_and_out($employee_id, $key);
+			$processed_timesheet[$key] = Payroll::process_time($employee_id, $key, true);
  		}
 
-		return json_encode($_timesheet);
+		return json_encode($processed_timesheet);
 	}
 	public function json_process_time_single($date, $employee_id, $return_type = "json")
 	{
@@ -259,6 +218,7 @@ class PayrollTimeSheetController extends Member
 
 		/* GET TIMESHEET */
 		$_timesheet = new stdClass();
+
 		$processed_timesheet = Payroll::process_time($employee_id, $date);
 		return json_encode($processed_timesheet);
 	}
@@ -268,6 +228,18 @@ class PayrollTimeSheetController extends Member
 
 		$data["timesheet_info"] = $timesheet_info = Tbl_payroll_time_sheet::where("payroll_time_sheet_id", Request::input("payroll_time_sheet_id"))->first();
 		$employee_information = Tbl_payroll_employee_contract::selemployee($timesheet_info->payroll_employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
+		$_rest_day = Tbl_payroll_group_rest_day::where("payroll_group_id", $employee_information->payroll_group_id)->get();
+		$data["rest_day"] = $rest_day = false;
+
+		/* REST DAY TICK */
+		foreach($_rest_day as $rest_day)
+		{
+			if($rest_day->payroll_group_rest_day == Carbon::parse($timesheet_info->payroll_time_date)->format("l"))
+			{
+				$data["rest_day"] = $rest_day = true;
+			}
+		}
+
 
 		/* SETTINGS FOR EMPLOYEE PAYROLL GROUP */
 		$data["default_time_in"] = $default_time_in = Carbon::parse($employee_information->payroll_group_start)->format("h:i A");
@@ -301,9 +273,19 @@ class PayrollTimeSheetController extends Member
 			}
 			else //DISABLE TIME-IN
 			{
-				$data["_time_record"][$key]->time_in_enabled = false;
-				$data["_time_record"][$key]->time_in_max = "";
-				$data["_time_record"][$key]->time_in_min = "";
+				if($rest_day == true)
+				{
+					$data["_time_record"][$key]->time_in_enabled = true;
+					//$data["_time_record"][$key]->time_in_max = Carbon::parse($time_record->payroll_time_sheet_in)->format("h:i A");
+					//$data["_time_record"][$key]->time_in_min = Carbon::parse($time_record->payroll_time_sheet_in)->format("h:i A");
+				}
+				else
+				{
+					$data["_time_record"][$key]->time_in_enabled = false;
+					$data["_time_record"][$key]->time_in_max = Carbon::parse($time_record->payroll_time_sheet_in)->format("h:i A");
+					$data["_time_record"][$key]->time_in_min = Carbon::parse($time_record->payroll_time_sheet_in)->format("h:i A");
+				}
+
 			}
 
 			/* CHECK TIME OUT */
@@ -327,10 +309,11 @@ class PayrollTimeSheetController extends Member
 			else //DISABLED TIME-OUT
 			{
 				$data["_time_record"][$key]->time_out_enabled = false;
-				$data["_time_record"][$key]->time_out_max = "";
-				$data["_time_record"][$key]->time_out_min = "";
+				$data["_time_record"][$key]->time_out_max = Carbon::parse($time_record->payroll_time_sheet_out)->format("h:i A");
+				$data["_time_record"][$key]->time_out_min = Carbon::parse($time_record->payroll_time_sheet_out)->format("h:i A");
 
 			}
+
 		}
 
 		return view('member.payroll.employee_timesheet_adjustment', $data);

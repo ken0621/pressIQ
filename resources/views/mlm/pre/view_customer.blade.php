@@ -10,7 +10,13 @@
 		<span class="pull-right"> <svg id="barcode" ></svg> </span> 
 		<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="{{$slot->slot_id}}">
 		@else
-		<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="{{$slot_info->slot_id}}">
+			@if(isset($slot_info))
+				<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="{{$slot_info->slot_id}}">
+			@else
+				@if(isset($discount_card))
+				<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="{{$discount_card->discount_card_slot_sponsor}}">
+				@endif
+			@endif	
 		@endif
 		@if(isset($discount_card->discount_card_log_code)) 
 		<input type="hidden" class="discount_card_log_id" name="discount_card_log_id" value="{{$discount_card->discount_card_log_id}}">

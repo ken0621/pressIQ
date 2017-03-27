@@ -194,8 +194,11 @@ class Ec_order
             $ec_total = $ec_total + $vat_total;
         }
 
-        $ec_order['ec_order_load']              = $data["ec_order_load"];
-        $ec_order['ec_order_load_number']                    = $data["ec_order_load_number"];
+        if(isset($data["ec_order_load"]))
+        {
+            $ec_order['ec_order_load']                  = $data["ec_order_load"];
+            $ec_order['ec_order_load_number']           = $data["ec_order_load_number"];
+        }
 
 
         $ec_order['payment_method_id']              = $data["payment_method_id"];
@@ -227,23 +230,31 @@ class Ec_order
         {
             $warehouse_id = Ecom_Product::getWarehouseId();
             $ctr = 0;
+            
             foreach($ec_order_item as $ordered)
             {  
                 $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered["item_id"])->first();
-                $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
-                $warehouse_consume_product[$ctr]["quantity"]   = $ordered["quantity"];
-                $ctr++;             
+                $check_type                                    = Tbl_item::where("item_id",$get_prod_id->evariant_item_id)->first();
+                if($check_type->item_type_id == 1)
+                {
+                    $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
+                    $warehouse_consume_product[$ctr]["quantity"]   = $ordered["quantity"];
+                    $ctr++;             
+                }
             }
 
-            $warehouse_consume_remarks  = "";                                                            
-            $warehouse_consumer_id      = $ec_order["customer_id"];                          
-            $warehouse_consume_reason   = "";                              
-            $return_type                = "array";              
-            $warehouse_response         = Warehouse::inventory_consume($warehouse_id, $warehouse_consume_remarks, $warehouse_consume_product, $warehouse_consumer_id, $warehouse_consume_reason, $return_type);
-
-            if($warehouse_response["status"] == "error")
+            if($ctr != 0)
             {
-                return $warehouse_response;
+                $warehouse_consume_remarks  = "";                                                            
+                $warehouse_consumer_id      = $ec_order["customer_id"];                          
+                $warehouse_consume_reason   = "";                              
+                $return_type                = "array";              
+                $warehouse_response         = Warehouse::inventory_consume($warehouse_id, $warehouse_consume_remarks, $warehouse_consume_product, $warehouse_consumer_id, $warehouse_consume_reason, $return_type);
+
+                if($warehouse_response["status"] == "error")
+                {
+                    return $warehouse_response;
+                }
             }
         }
 

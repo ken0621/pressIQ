@@ -406,8 +406,8 @@ function bill()
 	{
 		$(".purchase-order-container").load("/member/vendor/load_purchase_order/"+vendor_id , function()
 			{
-				// alert(vendor_id);
 				$(".purchase-order").removeClass("hidden");
+				$(".drawer").drawer({openClass: "drawer-open"});
 			});
 	}
 	function action_load_item_info($this)
@@ -568,7 +568,7 @@ function add_po_to_bill(po_id)
 
 	             $container.find(".select-item").val(b.poline_item_id).change();
 	             $container.find(".txt-desc").val(b.poline_description);
-	             $container.find(".select-um").load('/member/item/load_one_um/'+b.poline_um);
+	             $container.find(".select-um").load('/member/item/load_one_um/'+b.multi_um_id);
 
 	             
 	             $container.find(".txt-qty").val(b.poline_qty);

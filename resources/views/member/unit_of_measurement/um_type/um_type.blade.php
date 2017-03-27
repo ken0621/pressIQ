@@ -19,18 +19,18 @@
 <div class="panel panel-default panel-block panel-title-block">
 	<div class="panel-body form-horizontal">
 		<div class="form-group">
-			<div class="col-md-6">
+			<div class="col-md-6 col-xs-12">
 				<ul class="nav nav-tabs">
 				  <li class="active"><a data-toggle="tab" href="#"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;Active U/M Type</a></li>
-				  <li><a data-toggle="tab" href="#"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;Archived U/M Type</a></li>
+			<!-- 	  <li><a data-toggle="tab" href="#"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;Archived U/M Type</a></li> -->
 				</ul>
 			</div>
-			<div class="col-md-4 pull-right">
+			<!-- <div class="col-md-4 pull-right">
 				<div class="input-group">
 					<span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
 					<input type="search" name="" class="form-control" placeholder="Start typing category">
 				</div>
-			</div>
+			</div> -->
 		</div>
 		<div class="form-group panel-body um-container">
 			<table class="table table-bordered table-condensed">

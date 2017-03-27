@@ -72,6 +72,20 @@ class Warehouse
     		$data = json_encode($data);
     	}
     	return $data; 
+    }  
+
+    public static function select_item_warehouse_single_vendor($warehouse_id = 0, $return = 'array',$vendor_id)
+    {
+        $data = Tbl_warehouse::Warehouseitem_vendor($vendor_id)
+                             ->select_inventory($warehouse_id)
+                             ->orderBy('product_name','asc')
+                             ->get();
+                             
+        if($return == 'json')
+        {
+            $data = json_encode($data);
+        }
+        return $data; 
     }
     public static function warehouse_access()
     {

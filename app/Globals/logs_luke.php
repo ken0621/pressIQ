@@ -121,5 +121,19 @@ email_content_subject
 [Email Notification] Discount Card Purchase - discount_card_purchase
 [Email Notification] Membership Code - membership_code_purchase
 
+
+
+Load wallet () - back end 
+No. to be loaded field ()
+
+
+--
+Product code use option - kung dadaan ng product code () 
+use discount card()
+Bentahan ng discount card()
+Kung load yung binebenta may number na field LOAD WALLEt ()
+Check kung may serial ()
+kung may serial may option kung ano yung serial()
+
 APP_KEY=vNYGoBAFOTzqWyeXFkYeO97Z5FIBq5SD
 

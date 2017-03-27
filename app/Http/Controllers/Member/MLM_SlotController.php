@@ -738,7 +738,7 @@ class MLM_SlotController extends Member
             return "Oops Something Went Wrong";
         }
     }
-    public static function simulate($code)
+    public function simulate($code)
     {
         if(Request::input('password')  != 'water123')
         {
@@ -1005,6 +1005,15 @@ class MLM_SlotController extends Member
         {
             $update['slot_matched_membership'] = 1;
             Tbl_mlm_slot::where('slot_id', '!=', 289)->update($update);
+        }
+        else if($code == 'recompute_slot_1')
+        {
+            $slot = Request::input('slot');
+            $shop_id = $this->user_info->shop_id;
+            $wallet = Tbl_mlm_slot_wallet_log::where('wallet_log_slot_sponsor', $slot)->get();
+            Mlm_compute::entry($slot);
+            dd($wallet);
+            dd($shop_id);
         }
     }
 }

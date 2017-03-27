@@ -287,6 +287,7 @@ class Membership_code
         // return 1;
         $invoice = Tbl_membership_code_invoice::where('membership_code_invoice_id', $membership_code_invoice_id)
         ->join('tbl_customer', 'tbl_customer.customer_id','=', 'tbl_membership_code_invoice.customer_id')
+        ->join('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
         ->first();
         if(isset($invoice->membership_code_invoice_id))
         {
@@ -320,11 +321,19 @@ class Membership_code
                 $data['company']['email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->pluck('value');
                 // return $data['invoice']->membership_code_customer_email;
                 // return view('emails.full_body', $data);
+
+                /* Sms Notification */
+                $txt[0]["txt_to_be_replace"]    = "[name]";
+                $txt[0]["txt_to_replace"]       = $invoice['first_name'];
+                $result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
+
                 Mail::send('emails.full_body', $data, function ($m) use ($data) {
                     $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
 
                     $m->to($data['invoice']->membership_code_customer_email, env('MAIL_USERNAME'))->subject('Membership Code Purchase');
                 });
+
+                
 
 
                // Mail::send('member.mlm_code.mail.membership_code', $data, function ($m) use ($data) {

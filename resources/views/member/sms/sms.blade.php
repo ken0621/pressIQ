@@ -32,7 +32,7 @@
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal load-data">
         @if(isset($sms_key->sms_authorization_key))
-        <button class="btn btn-custom-white">SMS Logs</button>
+        <a class="btn btn-custom-white" href="/member/maintenance/sms/logs">SMS Logs</a>
         <div class="form-group tab-content panel-body sms-content-container">
             <div class="table-responsive">
                 <table class="table table-bordered table-condensed">
@@ -62,13 +62,11 @@
             </div>
         </div>
         @else
-        <div class="row vcenter" style="margin-top: 20%;">
-            <div class="col-md-12">
-                <div class="error-template">
-                    <h2 class="message">Create Authorization Key First</h2>
-                    <div class="error-details">
-                        Sorry, please contact your administrator.
-                    </div>
+        <div class="col-md-12">
+            <div class="error-template">
+                <h2 class="message">Create Authorization Key First</h2>
+                <div class="error-details">
+                    Sorry, please contact your administrator.
                 </div>
             </div>
         </div>

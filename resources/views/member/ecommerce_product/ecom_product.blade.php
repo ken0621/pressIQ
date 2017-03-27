@@ -39,13 +39,12 @@
             <div class="col-md-4 col-md-offset-8" style="padding: 10px">
                 <div class="input-group">
                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                    <input type="text" class="form-control vendor-search" data-value="1" placeholder="Search by vendor Name" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control global-search" url="/member/ecommerce/product/list" data-value="1" placeholder="Search" aria-describedby="basic-addon1">
                 </div>
             </div>
         </div>
         <div class="tab-content">
             <div id="actives" class="tab-pane fade in active">
-                <div class="form-group order-tags"></div>
                 <div class="load-data" target="active_product" filter="active" filteru="anime" >
                     <div id="active_product">
                         @include('member.ecommerce_product.ecom_load_product_tbl', ['filter' => 'active'])
@@ -53,7 +52,6 @@
                 </div>
             </div>
             <div id="inactives" class="tab-pane fade in">
-                <div class="form-group order-tags"></div>
                 <div class="load-data" filter="inactive" target="inactive_product">
                     <div id="inactive_product">
                         @include('member.ecommerce_product.ecom_load_product_tbl',['_product' => $_product_archived, 'filter' => 'inactive'])

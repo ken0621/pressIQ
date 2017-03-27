@@ -33,11 +33,18 @@
         </ul>
         
         <div class="search-filter-box">
-            <div class="col-md-3" style="padding: 10px">
+            <div class="col-md-3 hide" style="padding: 10px">
                 <select class="form-control">
                     <option>All Customers</option>
                     <option>Customer with Open Balances</option>
                     <option>Customer with Overdue Invoices</option>
+                </select>
+            </div>
+            <div class="col-md-3" style="padding: 10px">
+                <select class="form-control" onChange="filter_customer_slot(this)">
+                    <option value="all" {{Request::input('filter_slot') == 'all' ? 'selected' : ''}}>All Customers</option>
+                    <option value="w_slot" {{Request::input('filter_slot') == 'w_slot' ? 'selected' : ''}}>Customer With Membership</option>
+                    <option value="w_o_slot" {{Request::input('filter_slot') == 'w_o_slot' ? 'selected' : ''}}>Customer Without Membership</option>
                 </select>
             </div>
             <div class="col-md-4 col-md-offset-5" style="padding: 10px">
@@ -89,7 +96,7 @@
                 </tbody>
             </table>
             <div class="padding-10 text-center">
-                {!!$_customer->render()!!}
+                {!!$_customer->appends(Request::capture()->except('page'))->render()!!}
             </div>
         </div>
     </div>
@@ -97,6 +104,17 @@
 @endsection
 
 @section('script')
+<script type="text/javascript">
+    function filter_customer_slot(sel)
+    {
+        var filter = $(sel).val();
+        var link = '/member/customer/list?filter_slot=' + filter;
+        // location.redirect(link);
+        window.location = link;
+        // $('.load-data').html('<div style="margin: 100px auto;" class="loader-16-gray"></div>');
+        // $('.load-data').load(link);
+    }
+</script>
 <script type="text/javascript" src="/assets/member/js/customer.js"></script>
 <script type="text/javascript" src="/assets/member/js/customerlist.js"></script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax.js"></script>

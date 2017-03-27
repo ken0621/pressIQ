@@ -237,8 +237,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 		
 	/* dmsph start */
-	Route::any('/import_bio/import_dmsph','Member\Payroll_BioImportController@import_dmsph');
-	Route::any('/import_bio/template_dmsph','Member\Payroll_BioImportController@import_dmsph');
+	Route::any('/import_bio/import_global','Member\Payroll_BioImportController@import_global');
+	Route::any('/import_bio/template_global','Member\Payroll_BioImportController@template_global');
 	/* dmsph end */
 
 	/* BIO METRICS IMPORT END */

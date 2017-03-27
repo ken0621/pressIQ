@@ -5,40 +5,40 @@
             <th width="40px" class="text-center"></th>
             <th width="40px" class="text-center"></th>
             <th width="40px" class="text-center"></th>
-            <th width="180px" class="text-center" colspan="2">Time</th>
-            <th class="text-center"></th>
+            <th width="160px" class="text-center" colspan="2">Actual</th>
+            <th width="160px" class="text-center" colspan="2">Approved</th>
             
-            <th width="60px" class="text-center"></th>
             <th width="55px" class="text-center"></th>
             <th width="55px" class="text-center"></th>
-            <th width="165px" colspan="3" class="text-center">Non-Reg Day</th>
+            <th width="55px" class="text-center"></th>
+            <th width="55px" class="text-center"></th>
             <th width="110px" colspan="2" class="text-center">Overtime</th>
+            <th width="275px" colspan="5" class="text-center">Non-Reg Day</th>
             <th width="55px" class="text-center"></th>
 
-            <th width="95px" class="text-center"></th>
-            <th width="40px" class="text-center"></th>
         </tr>
         <tr>
             <th width="40px" class="text-center"></th>
             <th class="text-center" colspan="2">Day</th>
-            <th class="text-center">Time In</th>
-            <th class="text-center">Time Out</th>
-            <th class="text-center">Activities</th>
-            <th class="text-center">Break</th>
+            <th class="text-center">In</th>
+            <th class="text-center">Out</th>
+            <th class="text-center">In</th>
+            <th class="text-center">Out</th>
+            <th class="text-center">BRK</th>
             <th class="text-center">REG</th>
             <th class="text-center">Late</th>
-            <th class="text-center">R.D</th>
-            <th class="text-center">E.D</th>
-            <th class="text-center">N.D</th>
-
+            <th class="text-center">U.T</th>
             @if($time_rule == "flexitime")
             <th colspan="2" width="80px" class="text-center">O.T Hours</th>
             @else
             <th class="text-center">Early</th>
             <th class="text-center">Reg</th>
             @endif
-            <th class="text-center">Total</th>
-            <th class="text-center">TYPE</i></th>
+            <th class="text-center">R.D</th>
+            <th class="text-center">E.D</th>
+            <th class="text-center">N.D</th>
+            <th class="text-center">S.H</th>
+            <th class="text-center">R.H</th>
             <th class="text-center"></th>
         </tr>
     </thead>
@@ -49,29 +49,30 @@
                 @if($key == 0) <!--MAIN -->
                     <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $timesheet->date }}">
                     <td class="text-center table-loading">
-                        <i class="table-check fa fa-check hidden"></i>
+                        <i class="table-check fa fa-unlock-alt hidden"></i>
                         <i class="table-loader fa fa-spinner fa-spin fa-fw"></i>
                     </td>
                     <td class="text-center edit-data day-number">{{ $timesheet->day_number }}</td>
                     <td class="text-center edit-data day-word">{{ $timesheet->day_word }}</td>
                     <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}"></td>
                     <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}"></td>
-                    <td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
-                    <td class="text-center edit-data"><input class="text-table break-time time-entry-24"  type="text" name="break[{{ $timesheet->date}}]" value="{{ $timesheet->break }}"></td>
-                    <td class="text-center edit-data normal-hours">__:__</td>
-                    <td class="text-center edit-data late-hours">__:__</td>
-                    <td class="text-center edit-data rest-day-hours">__:__</td>
-                    <td class="text-center edit-data extra-day-hours">__:__</td>
-                    <td class="text-center edit-data night-differential">__:__</td>
-
+                    <td class="text-center editable approved-in">__:__ __</td>
+                    <td class="text-center editable approved-out">__:__ __</td>
+                    <td class="text-center edit-data zerotogray break">__:__</td>
+                    <td class="text-center edit-data zerotogray normal-hours">__:__</td>
+                    <td class="text-center edit-data zerotogray late-hours">__:__</td>
+                    <td class="text-center edit-data zerotogray under-time">__:__</td>
                     @if($time_rule == "flexitime")
                     <td class="text-center edit-data overtime-hours late" colspan="2">__:__</td>
                     @else
-                    <td class="text-center edit-data overtime-hours early">__:__</td>
-                    <td class="text-center edit-data overtime-hours late">__:__</td>
+                    <td class="text-center edit-data zerotogray overtime-hours early">__:__</td>
+                    <td class="text-center edit-data zerotogray overtime-hours late">__:__</td>
                     @endif
-                    <td class="text-center edit-data total-hours">__:__</td>
-                    <td class="text-center edit-data">REGULAR</td>
+                    <td class="text-center edit-data zerotogray rest-day-hours">__:__</td>
+                    <td class="text-center edit-data zerotogray extra-day-hours">__:__</td>
+                    <td class="text-center edit-data zerotogray night-differential">__:__</td>
+                    <td class="text-center edit-data zerotogray special-holiday-hours">__:__</td>
+                    <td class="text-center edit-data zerotogray regular-holiday-hours">__:__</td>
                     <td class="text-center"><span class="button create-sub-time"><i class="fa fa-plus"></i></span></td>
                 @else 
                     <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $timesheet->date }}">
@@ -80,7 +81,9 @@
                     <td class="text-center edit-data day-word"></td>
                     <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}"></td>
                     <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}"></td>
-                    <td class="text-center editable"><textarea placeholder="" class="text-table" ></textarea></td>
+                    <td class="text-center edit-data approved-in">__:__ __</td>
+                    <td class="text-center edit-data approved-out">__:__ __</td>
+                    <td class="text-center edit-data"></td>
                     <td class="text-center edit-data"></td>
                     <td class="text-center edit-data"></td>
                     <td class="text-center edit-data"></td>
@@ -107,8 +110,10 @@
                 <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>
                 <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in is-timeEntry" name="" value="9:00AM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span></td>
-                <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out is-timeEntry" name="" value="6:00PM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span></td>
-                <td class="text-center editable"><textarea placeholder="" class="text-table"></textarea></td>   
+                <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out is-timeEntry" name="" value="6:00PM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span></td>   
+                <td class="text-center edit-data approved-in">__:__ __</td>
+                <td class="text-center edit-data approved-out">__:__ __</td>
+                <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>
                 <td class="text-center edit-data"></td>

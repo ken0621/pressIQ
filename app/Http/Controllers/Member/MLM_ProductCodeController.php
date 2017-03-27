@@ -338,7 +338,7 @@ class MLM_ProductCodeController extends Member
         $data["shop_contact"]    = $this->user_info->shop_contact;
         $data['company_name'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
         $data['company_email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
-        $data['company_logo'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_logo')->pluck('value');
+        $data['company_logo'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
         $data['item_list'] = Tbl_item_code_item::where('item_code_invoice_id', $id)->get();    
         // dd($data['item_list']);
         // dd($this->user_info);

@@ -36,5 +36,5 @@
     </tbody>
 </table>
 <div class="padding-10 text-center">
-    {!!$_customer->render()!!}
+    {!!$_customer->appends(Request::capture()->except('page'))->render()!!}
 </div>

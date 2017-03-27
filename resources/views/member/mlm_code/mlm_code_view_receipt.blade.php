@@ -7,7 +7,8 @@
                     <tr>
                         <td style="border-right: 2.5px solid #1E5649; padding-bottom: 20px;">
                             <div class="row clearfix">
-                                <div class="col-md-12" style="background-color: #24267A;">
+                                <div class="col-md-12" style="">
+                                <!-- background-color: #24267A; --> 
                                      <div class="item">
                                      @if(isset($company_logo))
                                         @if($company_logo != null)
@@ -100,7 +101,7 @@
                         <div class="table-responsive">
                             <table class="table table-condensed">                        
                                     <tr>
-                                        <td rowspan="4" class="bill-title col-md-2">Bill To</td>
+                                        <td rowspan="4" class="bill-title col-md-2">V.I.P. Member</td>
                                     </tr>                        
                                     <tr>                                
                                         <td>Name:{{$invoice->membership_code_invoice_f_name}} {{$invoice->membership_code_invoice_m_name}} {{$invoice->membership_code_invoice_l_name}}</td>

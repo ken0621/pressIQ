@@ -2,10 +2,16 @@
 
 function c_time_to_int($time)
 {
-    date_default_timezone_set('UTC');
     $time = date("H:i", strtotime($time));
-    $return = strtotime("01/01/70 " . $time);
+    $return = strtotime("01/01/70 " . $time . " UTC");
     return $return;
+}
+function convert_seconds_to_hours_minutes($format = "H:i", $d)
+{
+    date_default_timezone_set('UTC');
+    $r = date($format, $d);
+    date_default_timezone_set(config('app.timezone'));
+    return $r;
 }
 function createPath($path)
 {

@@ -35,7 +35,7 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
         <li class="active cursor-pointer all-sir"><a class="cursor-pointer" onclick="select('all')" data-toggle="tab" href="#all"><i class="fa fa-star"></i> All</a></li>
-        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select('notall',[1,3],0,0,0)" data-toggle="tab" href="#new"><i class="fa fa-reorder"></i> STEP 1: Load Out Form </a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select('notall',1,0,0,0)" data-toggle="tab" href="#new"><i class="fa fa-reorder"></i> STEP 1: Load Out Form </a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select('notall',2,1,0,0)" data-toggle="tab" href="#new"><i class="fa fa-reorder"></i> STEP 2: Convert To SIR</a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select('notall',2,1,0,1)" data-toggle="tab" href="#confirmed"><i class="fa fa-check"></i> STEP 3: Stock Issuance Report </a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select('notall',2,2,1,1)" data-toggle="tab" href="#rejected"><i class="fa fa-close"></i>STEP 4: Open Incoming Load Report </a></li>

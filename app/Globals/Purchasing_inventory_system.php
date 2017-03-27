@@ -275,7 +275,7 @@ class Purchasing_inventory_system
     public static function select_sir_list_status($lof_status,$sir_status,$ilr_status,$sync, $srch_sir = '')
     {
         $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",Purchasing_inventory_system::getShopId())
-                        ->whereIn("tbl_sir.lof_status",$lof_status)
+                        ->where("tbl_sir.lof_status",$lof_status)
                         ->where("tbl_sir.sir_status",$sir_status)
                         ->where("tbl_sir.ilr_status",$ilr_status)
                         ->where("tbl_sir.is_sync",$sync)

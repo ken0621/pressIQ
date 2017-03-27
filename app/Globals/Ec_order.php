@@ -2,6 +2,7 @@
 namespace App\Globals;
 use DB;
 use App\Globals\Ec_order;
+use App\Globals\Ecom_Product;
 use App\Globals\Warehouse;
 use App\Globals\Customer;
 use App\Models\Tbl_chart_of_account;
@@ -13,6 +14,7 @@ use App\Models\Tbl_ec_order;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_position;
 use App\Models\Tbl_coupon_code;
+use App\Models\Tbl_ec_variant;
 
 use Log;
 use Request;
@@ -38,10 +40,10 @@ class Ec_order
 
         $data['inv_terms_id']  = '';
         $data['inv_date']      = '';
-        $data['inv_due_date']       = '';
+        $data['inv_due_date']  = '';
         $data['inv_customer_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province'];
         $data['inv_message']          = '';
-        $data['inv_memo']         = '';
+        $data['inv_memo']             = '';
         $data['ewt']                  = 0;
         $data['inv_discount_type']    = '';
         $data['inv_discount_value']   = 0;
@@ -52,10 +54,13 @@ class Ec_order
         $data['invline_rate']         = $order_info['invline_rate'];
         $data['invline_discount']     = $order_info['invline_discount'];
         $data['invline_discount_remark'] = $order_info['invline_discount_remark'];
-        $data['payment_method_id'] = $order_info['payment_method_id'];
-        $data['coupon_code'] = 0;
-        
+        $data['payment_method_id']    = $order_info['payment_method_id'];
+        $data['coupon_code']          = 0;
+
+        $data['ec_order_load']              = $order_info["ec_order_load"];
+        $data['ec_order_load_number']       = $order_info["ec_order_load_number"];
         $data['taxable']              = $order_info['taxable'];
+        $data['order_status']         = $order_info['order_status'];
 
         $order_id = Ec_order::create_ec_order($data);
         
@@ -189,7 +194,10 @@ class Ec_order
             $ec_total = $ec_total + $vat_total;
         }
 
-        
+        $ec_order['ec_order_load']              = $data["ec_order_load"];
+        $ec_order['ec_order_load_number']                    = $data["ec_order_load_number"];
+
+
         $ec_order['payment_method_id']              = $data["payment_method_id"];
         $ec_order['customer_id']                    = $data["inv_customer_id"];
         $ec_order['customer_email']                 = $data["inv_customer_email"];
@@ -217,11 +225,12 @@ class Ec_order
 
         if($ec_order["order_status"] == "Processing" || $ec_order["order_status"] == "Completed" || $ec_order["order_status"] == "On-hold")
         {
-            $warehouse_id = Warehouse::getMainwarehouse();
+            $warehouse_id = Ecom_Product::getWarehouseId();
             $ctr = 0;
             foreach($ec_order_item as $ordered)
             {  
-                $warehouse_consume_product[$ctr]["product_id"] = $ordered["item_id"];             
+                $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered["item_id"])->first();
+                $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
                 $warehouse_consume_product[$ctr]["quantity"]   = $ordered["quantity"];
                 $ctr++;             
             }
@@ -305,28 +314,40 @@ class Ec_order
             }
         }
 
-        if($response["status"] == "error")
-        {
-            return $response;
+
+        if(isset($response["status"]))
+        { 
+            if($response["status"] == "error")
+            {
+                return $response;
+            }
+            else
+            {
+                Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
+                return $response; 
+            }
         }
         else
         {
             Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
-            return $response; 
+            $response           = null;
+            $response["status"] = "success";
+            return $response;
         }
 	}
 
     public static function update_inventory($type,$ec_order_id)
     {
-        $warehouse_id = Warehouse::getMainwarehouse();
         $ec_order     = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
         if($type == "deduct")
         {
+            $warehouse_id = Ecom_Product::getWarehouseId();
             $ec_order_item = Tbl_ec_order_item::where("ec_order_id",$ec_order_id)->get();
             $ctr = 0;
             foreach($ec_order_item as $ordered)
             {  
-                $warehouse_consume_product[$ctr]["product_id"] = $ordered->item_id;             
+                $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered->item_id)->first();
+                $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
                 $warehouse_consume_product[$ctr]["quantity"]   = $ordered->quantity;
                 $ctr++;             
             }
@@ -340,12 +361,14 @@ class Ec_order
         }
         else if($type == "add")
         {
+            $warehouse_id  = Ecom_Product::getWarehouseId();
             $ec_order_item = Tbl_ec_order_item::where("ec_order_id",$ec_order_id)->get();
             $ctr = 0;
             foreach($ec_order_item as $ordered)
             {  
-                $warehouse_refill_product[$ctr]["product_id"] = $ordered->item_id;             
-                $warehouse_refill_product[$ctr]["quantity"]   = $ordered->quantity;
+                $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered->item_id)->first();
+                $warehouse_refill_product[$ctr]["product_id"]  = $get_prod_id->evariant_item_id;            
+                $warehouse_refill_product[$ctr]["quantity"]    = $ordered->quantity;
                 $ctr++;             
             }
 
@@ -354,6 +377,8 @@ class Ec_order
             $warehouse_remarks        = "";    
             $return_type              = "array";             
             $data                     = Warehouse::inventory_refill($warehouse_id, $warehouse_reason_refill, $warehouse_refill_source, $warehouse_remarks, $warehouse_refill_product, $return_type);
+            
+
             return $data;
         }
     }

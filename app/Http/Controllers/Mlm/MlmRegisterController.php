@@ -12,6 +12,7 @@ use App\Models\Tbl_country;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_mlm_lead;
 use App\Globals\Mlm_member;
+use App\Globals\Sms;
 
 class MlmRegisterController extends MlmLoginController
 {
@@ -143,6 +144,12 @@ class MlmRegisterController extends MlmLoginController
                                     // $insert_other['shop_id'] = Self::$shop_id;
                                     DB::table('tbl_customer_other_info')->insert($insert_other);
 
+                                    $updatetSearch['customer_id'] = $cus_id;
+                                    $updatetSearch['body'] = $insert['first_name'].' '.$insert['last_name'].' '.$insert['email'].' '.$insert['mlm_username'];
+                                    $updatetSearch['created_at'] = Carbon::now();
+                                    $updatetSearch['updated_at'] = Carbon::now();
+                                    DB::table('tbl_customer_search')->insert($updatetSearch);
+
                                     $insert_address['customer_id'] = $cus_id;
                                     $insert_address['customer_state'] = Request::input('customer_state');
                                     $insert_address['customer_city'] = Request::input('customer_city');
@@ -158,8 +165,15 @@ class MlmRegisterController extends MlmLoginController
 			                			$insert_lead['lead_customer_id_lead'] = $cus_id;
 			                			Tbl_mlm_lead::insert($insert_lead);
 			                		}
+
+                                    $txt[0]["txt_to_be_replace"]    = "[name]";
+                                    $txt[0]["txt_to_replace"]       = $insert['first_name'];
+                                    /* Sms Notification */
+                                    $result  = Sms::SendSms($insert_other['customer_mobile'], "success_register", $txt, Self::$shop_id);
+
 			                		$data['type']   = "success";
 		    						$data['message'] = "Success! you will be redirected";
+
     							}
     							else
     							{

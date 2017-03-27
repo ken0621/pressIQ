@@ -1,5 +1,8 @@
+var jqxhr = {abort: function () {}};
+
 $(document).ready(function()
 {
+	action_zoom_image();
 	add_event_availability();
 	event_select_variation();
 	event_slick();
@@ -22,6 +25,11 @@ $(document).ready(function()
 	// check_disable_button_for_variation();
 	// show_imagebox();
 });
+
+function action_zoom_image()
+{
+	$(".single-product-img").elevateZoom();
+}
 
 function event_change_image()
 {
@@ -101,7 +109,9 @@ function action_select_variation(e)
 		$('.add-to-cart').addClass("disabled");
 	}
 
-	$.ajax({
+	jqxhr.abort();
+
+	jqxhr = $.ajax({
 		url: '/product/variant/',
 		type: 'GET',
 		dataType: 'json',
@@ -142,9 +152,9 @@ function action_select_variation(e)
 		}
 		else
 		{
+			$('.attribute-variation[variant-label="'+variant_label+'"]').val($(e.currentTarget).val());
 			if (toload == true) 
 			{
-				$('.attribute-variation[variant-label="'+variant_label+'"]').val($(e.currentTarget).val());
 				$(".loader").fadeOut();
 			}
 		}

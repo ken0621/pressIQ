@@ -13,6 +13,8 @@ function item_multiple_price()
         event_item_qty_change();
         event_item_price_change();
         event_item_price_total_change();
+
+        $(".tbody-item-price .item-price-value").change();
     }
 
     function event_remove_tr()
@@ -35,21 +37,20 @@ function item_multiple_price()
     {
         $(document).on("change", ".tbody-item-price .item-price-qty", function()
         {
-            $parent = $(this).parents(".tbody-item-price");
-            
-            if(last_price_change == ".item-price-value")      action_item_price($(last_price_change));
-            else if(last_price_change = ".item-price-total")  action_item_price_total($(last_price_change));
+            $tr_container = $(this).closest(".tr-item-price");
+            if(last_price_change == ".item-price-value")      action_item_price($tr_container.find(last_price_change));
+            else if(last_price_change == ".item-price-total")  action_item_price_total($tr_container.find(last_price_change));
         })
     }
 
     function event_item_price_change()
     {
-        $(document).on("change", ".tr-item-price .item-price-value", function()
+        $(document).on("change", ".tbody-item-price .item-price-value", function()
         {
             action_item_price($(this));
         })
 
-        $(document).on("keyup", ".tr-item-price .item-price-value", function()
+        $(document).on("keyup", ".tbody-item-price .item-price-value", function()
         {
             last_price_change = ".item-price-value";
         })
@@ -60,26 +61,22 @@ function item_multiple_price()
         val = $this.val();
         $this.val(formatMoney(val));
 
-        qty_val     = $(".tr-item-price .item-price-qty").val();
-        price_total = $(".tr-item-price .item-price-total");
+        $tr_container = $this.closest(".tr-item-price");
+
+        qty_val     = $tr_container.find(".item-price-qty").val();
+        price_total = $tr_container.find(".item-price-total");
         if(qty_val > 0)  price_total.val(formatMoney( val * qty_val));
         else             price_total.val("0.00");
     }
 
     function event_item_price_total_change()
     {
-        $(document).on("change", ".tr-item-price .item-price-total", function()
+        $(document).on("change", ".tbody-item-price .item-price-total", function()
         {
-            val = $(this).val();
-            $(this).val(formatMoney(val));
-
-            qty_val     = $(".tr-item-price .item-price-qty").val();
-            price_value = $(".tr-item-price .item-price-value");
-            if(qty_val > 0)  price_value.val(formatMoney( val / qty_val));
-            else             price_total.val("0.00");
+            action_item_price_total($(this));
         })
 
-        $(document).on("keyup", ".tr-item-price .item-price-total", function()
+        $(document).on("keyup", ".tbody-item-price .item-price-total", function()
         {
             last_price_change = ".item-price-total";
         })
@@ -88,11 +85,12 @@ function item_multiple_price()
     function action_item_price_total($this)
     {
         val = $this.val();
-            
         $this.val(formatMoney(val));
 
-        qty_val     = $(".tr-item-price .item-price-qty").val();
-        price_value = $(".tr-item-price .item-price-value");
+        $tr_container = $this.closest(".tr-item-price");
+
+        qty_val     = $tr_container.find(".item-price-qty").val();
+        price_value = $tr_container.find(".item-price-value");
         if(qty_val > 0)  price_value.val(formatMoney( val / qty_val));
         else             price_total.val("0.00");
     }

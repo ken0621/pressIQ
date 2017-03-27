@@ -2,12 +2,13 @@ var bill = new bill();
 var global_tr_html = $(".div-script tbody").html();
 var item_selected = ''; 
 
-function bill(){
+function bill()
+{
 	init();
 
 	function init()
 	{
-		initialize_select();
+		iniatilize_select();
 		draggable_row.dragtable();
 
 		event_remove_tr();
@@ -24,8 +25,11 @@ function bill(){
 
 	function event_remove_tr()
 	{
+		//cycy
 		$(document).on("click", ".remove-tr", function(e){
 			if($(".tbody-item .remove-tr").length > 1){
+				// var remove = $(this).attr("tr-id");
+				// $(remove).remove();
 				$(this).parent().remove();
 				action_reassign_number();
 				action_compute();
@@ -326,8 +330,20 @@ function bill(){
 	}
 	/* Make select input into a drop down list plugin */
 
-	function initialize_select()
+	
+	function iniatilize_select()
 	{
+		$('.droplist-vendor').globalDropList(
+		{ 
+			width : "100%",
+			link : "/member/vendor/add",
+			onChangeValue: function()
+			{
+				$(".customer-email").val($(this).find("option:selected").attr("email"));
+				load_purchase_order_vendor($(this).find("option:selected").attr("value"));
+
+			}
+		});
 		$(".drop-down-customer").globalDropList(
 		{
 		    link 		: '/member/customer/modalcreatecustomer',
@@ -342,15 +358,6 @@ function bill(){
 		    		action_compute_maximum_amount();
 		    	})
 		    }
-		});
-		$('.droplist-vendor').globalDropList(
-		{ 
-			width : "100%",
-			link : "/member/vendor/add",
-			onChangeValue: function()
-			{
-				$(".customer-email").val($(this).find("option:selected").attr("email"));
-			}
 		});
 
 	    $('.droplist-item').globalDropList(
@@ -395,7 +402,14 @@ function bill(){
 		});
 	}
 
-
+	function load_purchase_order_vendor(vendor_id)
+	{
+		$(".purchase-order-container").load("/member/vendor/load_purchase_order/"+vendor_id , function()
+			{
+				// alert(vendor_id);
+				$(".purchase-order").removeClass("hidden");
+			});
+	}
 	function action_load_item_info($this)
 	{
 		$parent = $this.closest(".tr-draggable");
@@ -410,8 +424,13 @@ function bill(){
 				url: '/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"),
 				method: 'get',
 				success: function(data)
-				{
-					$parent.find(".select-um").html(data).globalDropList("reload").globalDropList("enabled");
+				{						
+					$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
+					{
+						$(this).globalDropList("reload").globalDropList("enabled");
+						console.log($(this).find("option:first").val());
+						$(this).val($(this).find("option:first").val()).change();
+					})
 				},
 				error: function(e)
 				{
@@ -494,6 +513,18 @@ function bill(){
 
 		})
 	}
+	this.action_compute = function()
+	{
+		action_compute();
+	}
+	this.iniatilize_select = function()
+	{
+		iniatilize_select();
+	}
+	this.action_trigger_select_plugin = function()
+	{
+		action_trigger_select_plugin();
+	}
 
 }	
 
@@ -502,6 +533,7 @@ function bill(){
 function dragging_done()
 {
 	bill.action_reassign_number();
+    bill.action_compute();
 }
 
 /* AFTER ADDING A CUSTOMER */
@@ -516,18 +548,58 @@ function submit_done_customer(result)
 // 	bill.action_reload_item(data.item_id);
 // 	$("#global_modal").modal("toggle");
 // }
+function add_po_to_bill(po_id)
+{
+	$.ajax({
+		url : "/member/vendor/load_po_item",
+		data : {po_id: po_id},
+		type : "get",
+		success : function(data)
+		{
+			var item = $.parseJSON(data);
+			// console.log(item);
+			var html = "";
+             $(item).each(function (a, b)
+             {				
+	             $("tbody.draggable").append(global_tr_html);
+	             $container = $("tbody.draggable .tr-draggable:last");
+	             // $this.closest(".tr-draggable");
+	             bill.action_trigger_select_plugin();
 
+	             $container.find(".select-item").val(b.poline_item_id).change();
+	             $container.find(".txt-desc").val(b.poline_description);
+	             $container.find(".select-um").load('/member/item/load_one_um/'+b.poline_um);
+
+	             
+	             $container.find(".txt-qty").val(b.poline_qty);
+	             $container.find(".txt-rate").val(b.poline_rate);
+	             $container.find(".txt-amount").val(b.poline_amount);
+             });
+             // $(html).insertBefore(".tbody-item tr:first");
+             // bill.iniatilize_select();
+             // bill.action_reassign_number();
+             // bill.action_compute();
+		},
+		error : function()
+		{
+			alert("Something wen't wrong.");
+		}
+	});
+}
+function iniatilize(id)
+{
+   $('.select-poline-item-'+id).globalDropList(
+    {
+        link : "/member/item/add",
+        width : "100%"
+    });
+}
 function submit_done(data)
 {
-	if(data.status == 'success-po')
+	if(data.status == 'success-bill')
 	{		
         toastr.success("Success");
-       	location.href = data.redirect_to;
-	}
-	else if(data.status == 'success-tablet')
-	{		
-        toastr.success("Success");
-       	location.href = "/tablet";
+       	location.href = data.redirect;
 	}
     else if(data.status == "error")
     {

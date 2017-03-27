@@ -21,7 +21,8 @@ use View;
 
 class ReportsController extends Member
 {
-	public function checkuser($str = ''){
+	public function checkuser($str = '')
+    {
         $user_info = Tbl_user::where("user_email", Session('user_email'))->shop()->first();
         switch ($str) {
             case 'user_id':
@@ -35,7 +36,8 @@ class ReportsController extends Member
                 break;
         }
     }
-	public function index(){
+	public function index()
+    {
 		$shop_id = $this->checkuser('user_shop');
 		
 		$data = SalesReport::reportcount($shop_id);
@@ -61,16 +63,18 @@ class ReportsController extends Member
         return $start;
     }
 	
-    public function monthlysale(){
+    public function monthlysale()
+    {
     	$end    = $this->endDate();
         $start  = $this->startDate();
         $shop_id = $this->checkuser('user_shop');
-        $data['_sales'] = SalesReport::monthlysale($shop_id, $start, $end);
+        $data['_sales'] = SalesReport::monthreport($shop_id, $start, $end);
         // dd($data);
     	return view('member.reports.sale.month',$data);
     }
     
-    public function monthlysaleAjax(){
+    public function monthlysaleAjax()
+    {
     	$start = date('Y-m-d', strtotime(Request::input("start")));
     	$end = date('Y-m-d', strtotime(Request::input("end")));
     	$shop_id = $this->checkuser('user_shop');
@@ -84,9 +88,10 @@ class ReportsController extends Member
         $end        = $this->endDate();
         $start      = $this->startDate();
         $shop_id    = $this->checkuser('user_shop');
-        $data       = SalesReport::SalesReportBy('product',$shop_id, $start, $end);
+        $data       = SalesReport::productreport($shop_id,$start, $end);
+        // if($data)
         $data['start'] = date('m/d/Y', strtotime($start));
-        $data['end'] = date('m/d/Y', strtotime($end));
+        $data['end']   = date('m/d/Y', strtotime($end));
     	return view("member.reports.sale.product",$data);
     }
     
@@ -94,10 +99,9 @@ class ReportsController extends Member
     	$end    = $this->endDate();
         $start  = $this->startDate();
         $shop_id= $this->checkuser('user_shop');
-        $data   = SalesReport::SalesReportBy('product_variant',$shop_id, $start, $end);
+        $data   = SalesReport::variantreport($shop_id, $start, $end);
         $data['start'] = date('m/d/Y', strtotime($start));
         $data['end'] = date('m/d/Y', strtotime($end));
-        // dd($data);
         
     	return view("member.reports.sale.product_variant",$data);
     }
@@ -121,10 +125,12 @@ class ReportsController extends Member
     	$shop_id    = $this->checkuser('user_shop');
     	$data       = SalesReport::SalesReportBy($name, $shop_id, $start, $end);
     	
-    	if($data == 'no data'){
+    	if($data == 'no data')
+        {
     	    return $data;
     	}
-    	else{
+    	else
+        {
     	    
     	    return view('member.reports.sale.' .$name .'_table',$data);
     	}

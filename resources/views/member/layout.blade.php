@@ -38,10 +38,12 @@
     <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/basic.css">
     <link rel="stylesheet" type="text/css" href="/assets/custom_plugin/myDropList/css/myDropList.css">
+
     <!-- <link rel="stylesheet" type="text/css" href="/assets/chartist/chartist.css"> -->
     <!-- <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/dropzone.min.css"> -->
 
     <link rel="stylesheet" href="/assets/external/jquery_css/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="/assets/mlm/pace.css">
 
     <style type="text/css">
     a
@@ -460,7 +462,11 @@
     <script type="text/javascript" src="/assets/member/js/prompt_serial_number.js"></script>
     <script type="text/javascript" src='/assets/member/js/match-height.js'></script>
     <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
-    
+    <script type="text/javascript" src="/assets/mlm/pace.min.js"></script>
+
+    <script type="text/javascript">
+	  $(document).ajaxStart(function() { Pace.restart(); }); 
+	</script>
     @yield('script')
 </body>
 </html>

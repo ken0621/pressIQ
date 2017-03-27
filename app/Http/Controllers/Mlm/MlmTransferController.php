@@ -8,6 +8,7 @@ use Request;
 use View;
 use Input;
 use File;
+use DB;
 use Carbon\Carbon;
 
 use App\Globals\Mlm_member;
@@ -133,7 +134,8 @@ class MlmTransferController extends Mlm
         Tbl_mlm_slot_wallet_log_refill::insert($insert);
         $data['status'] = 'success';
         $data['message'] = 'Wallet Request is Sent';
-        return $this->refill($data);
+        return Redirect::to('/mlm/refill');
+        // $this->refill($data);
 
     }
     public function transfer()
@@ -313,9 +315,14 @@ class MlmTransferController extends Mlm
 
             $data['unprocessed'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)
             ->where('wallet_log_status', 'released')
-            ->whereNull('encashment_process')   
+            ->whereNull('encashment_process')
+            // ->where('wallet_log_amount', '>=',  1)   
             ->get()->toArray();
-            
+
+            $data['bank'] = DB::table('tbl_encashment_bank_deposit')->where('shop_id', Self::$shop_id)->where('encashment_bank_deposit_archive', 0)->get();
+            $data['customer_payout'] = DB::table('tbl_customer_payout')->where('customer_id', Self::$customer_id)->first();
+            $data['encashment_settings'] = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+            $data['encashment'] =  view('mlm.profile.encashment', $data);
             // dd($data['unprocessed']);
             return view('mlm.wallet.encashment', $data);
         }
@@ -324,8 +331,85 @@ class MlmTransferController extends Mlm
             return Self::show_no_access();
         }  
     }
+    public function check_details()
+    {
+        // Session::flash('success', "Membership Saved");
+        $data['status'] = 'success';
+        $customer_id = Self::$customer_id;
+        $shop_id = Self::$shop_id;
+        $encashment_settings = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+        $count = DB::table('tbl_customer_payout')->where('customer_id', $customer_id)->count();
+        if($count == 0)
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['customer_id'] = $customer_id;
+            $insert['customer_payout_type'] = $encashment_settings->enchasment_settings_type;
+            $insert['customer_payout_name_on_cheque'] = name_format_from_customer_info(Self::$customer_info);
+            $insert['encashment_bank_deposit_id'] = '';
+            $insert['customer_payout_bank_branch'] = '';
+            $insert['customer_payout_bank_account_number'] = '';
+            $insert['customer_payout_bank_account_name'] = name_format_from_customer_info(Self::$customer_info);
+
+            DB::table('tbl_customer_payout')->insert($insert);
+
+            $data['status'] = 'warning';
+            $data['message'] = 'Please set your encashment settings first at the profile tab.';
+        }
+        else
+        {
+            $customer_payout  = DB::table('tbl_customer_payout')->where('customer_id', $customer_id)->first();
+            if($encashment_settings->enchasment_settings_type == 0)
+            {
+                if($encashment_settings->enchasment_settings_cheque_edit == 0)
+                {
+                    //encashment_bank_deposit_id
+                    
+                    if(Self::$slot_id != null)
+                    {
+                        if($customer_payout->encashment_bank_deposit_id == 0)
+                        {
+                            $data['status'] = 'warning';
+                            $data['message'] = 'Please set your encashment settings first at the profile tab.';
+                        }
+                        else
+                        {
+                            $bank_details = DB::table('tbl_encashment_bank_deposit')->where('encashment_bank_deposit_id', $customer_payout->encashment_bank_deposit_id)->where('encashment_bank_deposit_archive', 0)->count();
+                            if($bank_details >= 1)
+                            {
+
+                            }
+                            else
+                            {
+                                $data['status'] = 'warning';
+                                $data['message'] = 'Please set your encashment settings first at the profile tab.';
+                            }
+                        }
+                    }
+                    
+                    $update['customer_payout_bank_account_name'] = name_format_from_customer_info(Self::$customer_info);
+                    DB::table('tbl_customer_payout')->where('customer_id', Self::$customer_id)->update($update);
+                }
+            }
+            else if($encashment_settings->enchasment_settings_type == 1)
+            {
+                //cheque
+                // dd(1);
+                if($encashment_settings->enchasment_settings_cheque_edit == 0)
+                {
+                    $update['customer_payout_name_on_cheque'] = name_format_from_customer_info(Self::$customer_info);
+                    DB::table('tbl_customer_payout')->where('customer_id', Self::$customer_id)->update($update);
+                }
+            }
+        }
+        return $data;
+    }
     public function encashment_request()
     {
+        $a = $this->check_details();
+        if($a['status'] == 'warning')
+        {
+            return json_encode($a);
+        }
         if(isset($_POST['wallet_log_id']))
         {
             $shop_id = Self::$shop_id;
@@ -359,6 +443,23 @@ class MlmTransferController extends Mlm
             $encashment_settings = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
             if($sum >= $encashment_settings->enchasment_settings_minimum)
             {
+                $customer_id = Self::$customer_id;
+                $shop_id = Self::$shop_id;
+                $encashment_settings = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+                $count = DB::table('tbl_customer_payout')->where('customer_id', $customer_id)->count();
+                $customer_payout  = DB::table('tbl_customer_payout')->where('customer_id', $customer_id)->first();
+                $bank = DB::table('tbl_encashment_bank_deposit')->where('encashment_bank_deposit_id', $customer_payout->encashment_bank_deposit_id)->where('encashment_bank_deposit_archive', 0)->first();
+                
+                if($encashment_settings->enchasment_settings_type == 0)
+                {
+                    if(!isset($bank->encashment_bank_deposit_id))
+                    {
+                        $data['status'] = 'warning';
+                        $data['message'] = 'Please Choose a bank in the encashment details tab.';
+                        $data['bank'] = $bank;
+                        return json_encode($data);
+                    }
+                }
                 $insert['shop_id'] = $shop_id;
                 $insert['enchasment_process_from'] = $date1;
                 $insert['enchasment_process_to'] = $date2;
@@ -375,6 +476,35 @@ class MlmTransferController extends Mlm
                 $data['status'] = 'Success';
                 $data['message'] = 'Encashment Requested.';
                 $data['affected'] = $insert;
+
+                
+                
+                
+                // return $bank;
+                if($encashment_settings->enchasment_settings_type == 0)
+                {
+                    $insert_d['encashment_process'] = $id;
+                    $insert_d['encashment_bank_deposit_id'] = $customer_payout->encashment_bank_deposit_id; 
+                    $insert_d['encashment_type'] = $encashment_settings->enchasment_settings_type;
+                    $insert_d['bank_name'] = $bank->encashment_bank_deposit_name;
+                    $insert_d['bank_account_branch'] = $customer_payout->customer_payout_bank_branch;
+                    $insert_d['bank_account_name'] = $customer_payout->customer_payout_bank_account_name;
+                    $insert_d['bank_account_number'] = $customer_payout->customer_payout_bank_account_number;
+                    $insert_d['cheque_name'] = $customer_payout->customer_payout_name_on_cheque;
+                }
+                else if ($encashment_settings->enchasment_settings_type == 1)
+                {
+                    $insert_d['encashment_process'] = $id;
+                    $insert_d['encashment_bank_deposit_id'] = $customer_payout->encashment_bank_deposit_id; 
+                    $insert_d['encashment_type'] = $encashment_settings->enchasment_settings_type;
+                    $insert_d['bank_name'] = '';
+                    $insert_d['bank_account_branch'] = $customer_payout->customer_payout_bank_branch;
+                    $insert_d['bank_account_name'] = $customer_payout->customer_payout_bank_account_name;
+                    $insert_d['bank_account_number'] = $customer_payout->customer_payout_bank_account_number;
+                    $insert_d['cheque_name'] = $customer_payout->customer_payout_name_on_cheque;
+                }
+                
+                DB::table('tbl_mlm_encashment_process_details')->insert($insert_d);
             }
             else
             {
@@ -411,6 +541,7 @@ class MlmTransferController extends Mlm
         ->where('encashment_process', $encashment_process)
         ->slot()->customer()->first();
 
+        $data['encashment_details'] = DB::table('tbl_mlm_encashment_process_details')->where('encashment_process', $encashment_process)->first();
         if(isset($data['slot']->customer_id))
         {
             $data['customer_view'] = Mlm_member::get_customer_info_w_slot($data['slot']->customer_id, $slot_id);

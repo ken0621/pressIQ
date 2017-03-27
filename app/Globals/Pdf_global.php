@@ -14,6 +14,7 @@ class Pdf_global
 	public static function show_image($html)
 	{
 		$html_b = Pdf_global::bootstrap($html);
+		// return $html_b;
         $pdf = App::make('snappy.image.wrapper');
         $pdf->loadHTML($html_b);
         return $pdf->download('card.jpg');

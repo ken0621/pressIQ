@@ -181,7 +181,8 @@ function payrollconfiguration()
 	{
 		jobtitle_archived();
 		jobtitle_archived(1);
-	}
+	} 
+	
 
 	this.btn_modal_button_event = function()
 	{
@@ -203,6 +204,11 @@ function payrollconfiguration()
 	{
 		reload_configuration("/member/payroll/allowance");
 	}
+
+	this.reload_leave_temp = function()
+	{
+		reload_configuration("/member/payroll/leave");
+	}
 	
 	this.reload_holiday = function()
 	{
@@ -213,6 +219,21 @@ function payrollconfiguration()
 	{
 		reload_configuration("/member/payroll/payroll_group");
 	}
+
+	this.reload_jobtitlelist = function()
+	{
+		reload_configuration("/member/payroll/jobtitlelist");
+	}
+
+	this.reload_departmentlist = function()
+	{
+		reload_configuration("/member/payroll/departmentlist");
+	}
+
+	/*this.reload_holiday_default = function()
+	{
+		reload_configuration("/member/payroll/holiday_default");
+	}*/
 	
 }
 
@@ -229,9 +250,7 @@ function executeFunctionByName(functionName, context /*, args */) {
 
 function submit_done(data)
 {
-	console.log(data);
 	data.element.modal("toggle");
-	// data = JSON.parse(data);
 	executeFunctionByName(data.function_name, window);
 }
 

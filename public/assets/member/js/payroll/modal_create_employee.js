@@ -1,4 +1,4 @@
-var modal_create_employee = modal_create_employee();
+var modal_create_employee = new modal_create_employee();
 
 function modal_create_employee()
 {
@@ -10,6 +10,104 @@ function modal_create_employee()
 		remove_requirements();
 		select_change_action();
 		select_change_event();
+		autoname();
+	}
+
+	function autoname()
+	{
+		$(".auto-name").unbind("change");
+		$(".auto-name").bind("change", function(){
+			var  combonames = comboname();
+			$(".drop-down-display-name").html(combonames['html']);
+			$(".display-name-check").val(combonames['combo'][0]);
+			listdropdownname();
+		});
+
+		$(".check-print-name-as").unbind("change");
+	    $(".check-print-name-as").bind("change", function(){
+	    	var combo = comboname();
+	    	var target = $(this).attr("data-target");
+	    	
+	    	if($(this).is(':checked')){
+	    		$(target).attr("readonly", true);
+	    		// console.log(combo['combo'][0]);
+	    		$(target).val(combo['combo'][0]);
+	    	}
+	    	else{
+	    		$(target).attr("readonly", false);
+	    	}
+	    });
+
+	    $(".checkbox-toggle-rev").each(function(){
+	        var target = $(this).attr("data-target");
+	        // console.log(target);
+	        if($(this).is(':checked')){
+	            $(target).attr("readonly", true);
+	        }
+	        else{
+	            $(target).attr("readonly", false);
+	        }
+	        
+	    });
+	}
+
+	function listdropdownname(){
+		$(".list-drop-display-name").unbind("click");
+	    $(".list-drop-display-name").bind("click", function(){
+	        var html = $(this).attr("data-html");
+	        $(".txt-display-name").val(html);
+	        $(".drop-down-display-name").slideToggle("fast");
+	    });
+	}
+
+	function comboname(){
+		var title = $(".title").val();
+		var first_name = $(".first_name").val();
+		var middle_name = $(".middle_name").val();
+		var last_name = $(".last_name").val();
+		var last_name2 = last_name;
+		var suffix = $(".suffix").val();
+		if(suffix != null && suffix != '')
+		{
+			suffix = ' '+suffix;
+		}
+		var title_suffix = title + suffix + last_name;;
+		
+		
+		if(title != ""){
+			title = title + ' ';
+		}
+		if(first_name != ""){
+			first_name = first_name + ' ';
+		}
+		if(middle_name != ""){
+			middle_name = middle_name + ' ';
+		}
+		
+		var combo = [];
+		combo[0] = title + first_name + middle_name + last_name + suffix;
+		combo[1] = first_name + last_name2;
+		combo[2] = last_name2 + ', ' + first_name;
+		var html = '';
+		var min = 0;
+		var max = 2;
+		
+		if(first_name != '' && middle_name != "" && title_suffix != ""){
+			min = 0;
+			max = 2;
+		}
+		else{
+			min = 0;
+			max = 0;
+		}
+		for(var i = min; i <= max; i++){
+			html += '<a href="#" class="list-group-item list-drop-display-name" data-html="'+combo[i]+'">'+combo[i]+'</a>';
+		}
+
+		var returns = [];
+		returns['combo'] = combo;
+		returns['html'] = html;
+		return returns;
 	}
 
 	function file_requirement_change_event()
@@ -91,13 +189,45 @@ function modal_create_employee()
 		$(".department-select").unbind("change");
 		$(".department-select").bind("change", function()
 		{
-			select_change_action();
+			// alert("Test");
+			select_change_action()
+		});
+		$(".department-select").globalDropList({
+			link 		:  '/member/payroll/departmentlist/department_modal_create',
+			link_size 	: 'md',
+			placeholder	: 'Department',
+			width 		: '100%',
+			onChangeValue : function()
+			{
+				select_change_action($(this).val());
+				console.log('/member/payroll/jobtitlelist/modal_create_jobtitle?selected='+$(this).val());
+				$(".jobtitle-select").globalDropList("reload");
+				$(".jobtitle-select").globalDropList({
+					link 		: '/member/payroll/jobtitlelist/modal_create_jobtitle?selected='+$(this).val(),
+					link_size 	: 'md',
+					placeholder : '...loading'
+				});
+
+			}
+		});
+		$(".jobtitle-select").globalDropList({
+			link 		: '/member/payroll/jobtitlelist/modal_create_jobtitle',
+			link_size 	: 'md',
+			placeholder : 'Job Title',
+			width 		: '100%'
+		});
+
+		$(".payroll-group-select").globalDropList({
+			link 		: '/member/payroll/payroll_group/modal_create_payroll_group',
+			link_size 	: 'lg',
+			placeholder : 'Payroll Group',
+			width 		: '100%',
 		});
 	}
 
-	function select_change_action()
+	function select_change_action(payroll_department_id = 0)
 	{
-		var payroll_department_id = $(".department-select").val();
+		// var payroll_department_id = $(".department-select").val();
 		var pre_data = '<option value="">...loading job title</option>';
 		$(".jobtitle-select").html(pre_data);
 		$.ajax(
@@ -119,12 +249,30 @@ function modal_create_employee()
 						html += '<option value="'+data.payroll_jobtitle_id+'">'+data.payroll_jobtitle_name+'</option>';
 					});
 					$(".jobtitle-select").html(html);
+					$(".jobtitle-select").globalDropList("destroy");
+					$(".jobtitle-select").globalDropList({
+						link 		: '/member/payroll/jobtitlelist/modal_create_jobtitle?selected='+payroll_department_id,
+						link_size 	: 'md',
+						placeholder : 'Job Title',
+						width 		: '100%'
+					});
+					$(".jobtitle-select").globalDropList("reload");
+					
 				},
 				error 	: 	function(err)
 				{
 					error_function();
 				}
 			});
+	}
+
+
+	this.reload_option = function(html = '', target ='')
+	{
+		$(target).html(html);
+		$(target).globalDropList("reload");
+		parent = $(target).parents(".droplist");
+		parent.find("input[type=text]").val($(target).find(":selected").text());
 	}
 
 	function remove_requirements()

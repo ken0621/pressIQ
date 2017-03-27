@@ -65,6 +65,7 @@ class Member extends Controller
 					}
 
 					$this->user_info = $user_info;
+					$this->current_warehouse = $current_warehouse;
 					$warehouse_list  = Tbl_warehouse::inventory()->join("tbl_user_warehouse_access","tbl_user_warehouse_access.warehouse_id","=","tbl_warehouse.warehouse_id")->where("tbl_user_warehouse_access.user_id",$user_info->user_id)->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get(); 
 					View::share('user_info', $user_info);
 					View::share('current_warehouse', $current_warehouse);
@@ -99,21 +100,14 @@ class Member extends Controller
 
 		/* INSERT DEFAULT CHART OF ACCOUNT */
 		Account::put_default_account($this->user_info->shop_id);
-
-
-
 		/* INSERT TAX TABLE PER SHOP */
 		Payroll::tax_reference($this->user_info->shop_id);
-
 		/* INSERT SSS TABLE PER SHOP */
 		Payroll::generate_sss($this->user_info->shop_id);
-
 		/* INSERT PHILHEALTH TABLE PER SHOP */
 		Payroll::generate_philhealth($this->user_info->shop_id);
-
 		/* INSERT PAGIBIG TABLE PER SHOP */
 		Payroll::generate_pagibig($this->user_info->shop_id);
-
 		/* INSERT DEFAULT WAREHOUSE */
 		Warehouse::put_default_warehouse($this->user_info->shop_id);
 		/* INSERT MAIN WAREHOUSE */

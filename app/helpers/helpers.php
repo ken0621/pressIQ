@@ -2,8 +2,10 @@
 
 function c_time_to_int($time)
 {
+    date_default_timezone_set('UTC');
     $time = date("H:i", strtotime($time));
-    return strtotime("01/01/70 " . $time);
+    $return = strtotime("01/01/70 " . $time);
+    return $return;
 }
 function createPath($path)
 {
@@ -495,4 +497,10 @@ function limit_foreach($iterable, $limit)
         if (!$limit--) break;
         yield $key => $value;
     }
+}
+function payout_getway()
+{
+    $data[0] = 'Bank Deposit';
+    $data[1] = 'Cheque';
+    return $data;
 }

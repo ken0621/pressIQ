@@ -38,6 +38,7 @@ class CustomerController extends Member
 	{
         if($this->hasAccess("customer-list","access_page"))
         {
+            
             $data['_customer'] = $this->customerlist();
             
             if (Request::ajax()) 
@@ -56,16 +57,26 @@ class CustomerController extends Member
 	
 	public function customerlist($archived = 0, $IsWalkin = 0)
     {
-       
+
+            $filter_by_slot = Request::input('filter_slot');
+
     	    $shop_id = $this->checkuser('user_shop');
     	    $paginate = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
                                     ->select('tbl_customer.customer_id as customer_id1', 'tbl_customer.*', 'tbl_customer_other_info.*', 'tbl_customer_other_info.customer_id as cus_id')
                                     ->where('tbl_customer.shop_id',$shop_id)
                                     ->where('tbl_customer.archived',$archived)
                                     ->where('tbl_customer.IsWalkin',$IsWalkin)
-    								->orderBy('tbl_customer.first_name')
-    								->paginate(10);
-    		return $paginate;
+    								->orderBy('tbl_customer.first_name');
+    		if($filter_by_slot == 'w_slot')
+            {
+                $paginate = $paginate->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner','=', 'tbl_customer.customer_id');
+            }		
+            else if($filter_by_slot == 'w_o_slot')
+            {
+                $paginate = $paginate->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner','=', 'tbl_customer.customer_id')
+                ->whereNull('tbl_mlm_slot.slot_id');
+            }				
+    		return $paginate->paginate(10);
 	}
 
     public function load_customer()

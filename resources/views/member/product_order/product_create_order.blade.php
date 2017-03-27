@@ -142,7 +142,7 @@
                                                     <td class="invoice-number-td text-right">1</td>
                                                     <td>
                                                         <select disabled class="form-control select-item input-sm pull-left {{$invline->item_id}}" name="invline_item_id[]" required>
-                                                            @include("member.load_ajax_data.load_product_category", ['add_search' => "", 'product_id' => $invline->item_id])
+                                                            @include("member.load_ajax_data.load_product_category", ['add_search' => "", 'variant_id' => $invline->item_id])
                                                         </select>
                                                     </td>
                                                     <td><textarea disabled class="textarea-expand txt-desc" name="invline_description[]">{{$invline->description}}</textarea></td>
@@ -220,6 +220,12 @@
                         <div class="col-sm-3">
                             <label>Message Displayed on Invoice</label>
                             <textarea {{isset($inv) ? 'disabled' : ''}} class="form-control input-sm textarea-expand" name="inv_message" placeholder="">{{$inv->invoice_message or ''}}</textarea>
+                            @if(isset($inv))
+                                @if($inv->ec_order_load == 1)
+                                <label>Load to:</label>
+                                <input type="text" class="form-control" value="{{$inv->ec_order_load_number}}" disabled>
+                                @endif
+                            @endif
                         </div>
                         <div class="col-sm-3">
                             <label>Statement Memo</label>

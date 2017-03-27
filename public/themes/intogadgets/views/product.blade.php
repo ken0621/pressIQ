@@ -50,8 +50,8 @@
                     <option value="" {{ Request::input('sort') == '' ? 'selected' : '' }}>Relevance</option>
                     <option value="name_asc" {{ Request::input('sort') == 'name_asc' ? 'selected' : '' }}>Sort by Name: A - Z</option>
                     <option value="name_desc" {{ Request::input('sort') == 'name_desc' ? 'selected' : '' }}>Sort by Name: Z - A</option>
-                    <option value="price_desc" {{ Request::input('sort') == 'price_desc' ? 'selected' : '' }}>Sort by Price: Low - High</option>
-                    <option value="price_asc" {{ Request::input('sort') == 'price_asc' ? 'selected' : '' }}>Sort by Price: High - Low</option>
+                    <option value="price_desc" {{ Request::input('sort') == 'price_desc' ? 'selected' : '' }}>Sort by Price: High - Low</option>
+                    <option value="price_asc" {{ Request::input('sort') == 'price_asc' ? 'selected' : '' }}>Sort by Price: Low - High</option>
                     <option value="newest" {{ Request::input('sort') == 'newest' ? 'selected' : '' }}>Sort by: Newest</option>
                 </select>
             </div>
@@ -123,7 +123,10 @@
                             <div class="name">{{ get_product_first_name($product) }}</div>
                             <!-- <div class="price-left">P34,000</div> -->
                             <div class="price-right">{{ get_product_first_price($product) }}</div>
-                            <div class="hover"><a href="/product/view/{{ $product['eprod_id'] }}" class="text">VIEW MORE</a></div>
+                            <div class="hover">
+                                <a href="/product/view/{{ $product['eprod_id'] }}" class="text">ADD TO CART</a>
+                                <a href="/product/view/{{ $product['eprod_id'] }}" class="text">VIEW MORE</a>
+                            </div>
                         </div>
                     </div>
                 </a>

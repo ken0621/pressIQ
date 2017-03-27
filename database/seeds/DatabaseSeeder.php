@@ -26,6 +26,9 @@ class DatabaseSeeder extends Seeder
         $this->call(tbl_payroll_philhealth_default::class);
         $this->call(tbl_payroll_over_time_rate_default::class);
         $this->call(tbl_payroll_pagibig_default::class);
+        $this->call(tbl_payroll_bank_convertion::class);
+        $this->call(tbl_sms_default_key::class);
+        
         Model::reguard();
     }
 }

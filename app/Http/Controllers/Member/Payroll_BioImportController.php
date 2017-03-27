@@ -108,6 +108,9 @@ class Payroll_BioImportController extends Member
 	{
 		$file 		= Request::file('file');
 		$biometric 	= Request::input('biometric');
+
+		
+
 		if($biometric == 'ZKTime 5.0')
 		{
 			return Self::import_ZKTime_5_0($file);
@@ -122,11 +125,8 @@ class Payroll_BioImportController extends Member
 
     public function import_ZKTime_5_0($file)
     {
-    	// $file = Request::file('file');
     	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('no','datetime'));
-    	// dd($_time);
-
     	if(isset($_time[0]['no']) && isset($_time[0]['datetime']))
     	{
 
@@ -193,10 +193,7 @@ class Payroll_BioImportController extends Member
 	    	
 	    	// return $message;
     	}
-    	// else
-    	// {
-    	// 	return '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
-    	// }
+
     	return $message;
     	
     }
@@ -204,8 +201,37 @@ class Payroll_BioImportController extends Member
     public function import_Digital_Persona($file)
     {
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('id_no','date','time_in','time_out'));
-    	dd($_time);
+
     	$space = '        ';
+    	$old_id_no = 0;
+    	$old_date = '';
+    	$record_array = array();
+    	foreach($_time as $time)
+    	{
+    		$time['id_no'] 		= trim($time['id_no'],' ');
+    		$time['date'] 		= trim((string)$time['date'], ' ');
+    		$time['time_in'] 	= trim((string)$time['time_in'], ' ');
+    		$time['time_out'] 	= trim((string)$time['time_out'], ' ');
+
+    		if($time['id_no'] == '')
+    		{
+    			$time['id_no'] = $old_id_no;
+    		}
+    		if(trim((string)$time['date'], ' ') == '')
+    		{
+    			$time['date'] = $old_date;
+    		}
+    		if($old_id_no != $time['id_no'] && $time['id_no'] != "")
+    		{
+    			$old_id_no = $time['id_no'];
+    		}
+    		if(trim((string)$time['date'], ' ') != '')
+    		{
+    			$old_date = trim((string)$time['date'], ' ');
+    		}
+    		array_push($record_array, $time);
+    	}
+    	dd($record_array);
     }
 
     /* TEMPLATE START */
@@ -216,6 +242,10 @@ class Payroll_BioImportController extends Member
     	{
     		Self::ZKTime_template();
     	}
+    	if($biometric_name == 'Digital Persona')
+    	{
+    		Self::Digital_Persona_template();
+    	}
     }
 
     public function ZKTime_template()
@@ -224,6 +254,26 @@ class Payroll_BioImportController extends Member
         $excels['data'][1] = ['','', '','','','','',''];
         // dd($excels);
         return Excel::create('Timesheet Template (ZKTime 5.0)', function($excel) use ($excels) {
+
+            $data = $excels['data'];
+            $date = 'template';
+            $excel->setTitle('Payroll');
+            $excel->setCreator('Laravel')->setCompany('DIGIMA');
+            $excel->setDescription('payroll file');
+
+            $excel->sheet($date, function($sheet) use ($data) {
+                $sheet->fromArray($data, null, 'A1', false, false);
+            });
+
+        })->download('xlsx');
+    }
+
+    public function Digital_Persona_template()
+    {
+    	$excels['data'][0] = ['Name','Id No', 'Date','Time In','Time Out'];
+        $excels['data'][1] = ['','', '','',''];
+        // dd($excels);
+        return Excel::create('Timesheet Template (Digital Persona)', function($excel) use ($excels) {
 
             $data = $excels['data'];
             $date = 'template';

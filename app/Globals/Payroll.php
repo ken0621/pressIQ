@@ -20,7 +20,6 @@ use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_tax_period_default;
-use App\Models\Tbl_payroll_tax_period;
 
 use Carbon\Carbon;
 use stdClass;

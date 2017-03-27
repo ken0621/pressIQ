@@ -234,16 +234,21 @@ class Seed
         $email[8]['date_updated'] = $date_updated;
         $email[8]['archived'] = 0;
 
-        $email[9]['email_content_key'] = 'pass_word_reset';
-        $email[9]['email_content'] = '<p>Greetings!</p>
-<p>&nbsp; &nbsp;We have received a request to reset your password. If you did not make the request, just ignore this email. Otherwise you can reset your password using this link</p>
-<p>&nbsp;[password_reset_link]<br /><br /></p>
+        $email[9]['email_content_key'] = 'forget_password';
+        $email[9]['email_content'] = '<p>Greetings [name],</p>
+<p>&nbsp;</p>
+<p>We received a request to reset your password &nbsp;for [domain_name].</p>
+<p>&nbsp;</p>
+<p>We set a temporary password for you, then you can change it in the website with the&nbsp;Profile Setting</p>
+<p>&nbsp;</p>
+<h3 style="text-align: center;"><strong>New Password</strong></h3>
+<h3 style="text-align: center;"><strong>[new_password]</strong></h3>
+<p style="text-align: center;">&nbsp;</p>
 <p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd</sup> Level), Gallera Road, Guiwan, Zamboanga City.</p>
 <p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
 <p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Best Regards,</p>
 <p>&nbsp;</p>
-<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>
-<p>&nbsp;</p>';
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>';
         $email[9]['email_content_subject'] = 'Password Reset';
         $email[9]['shop_id'] = $shop_id;
         $email[9]['date_created'] = $date_created;

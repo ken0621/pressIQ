@@ -8,6 +8,7 @@ function paginate_ajax()
 		$(document).ready(function()
 		{
 			document_ready();
+            
 		});
 	}
 	

@@ -21,6 +21,8 @@ function global()
         add_event_overlay_fix();
         select_current_warehouse();
         add_event_global_submit_for_page();
+
+        action_global_search();
     }
     function add_event_global_popup()
     {
@@ -161,6 +163,16 @@ function global()
         })
     }
     //end arcy
+
+    function action_global_search()
+    {
+        $(document).on("change", ".global-search", function()
+        {
+            var url     = $(this).attr("url");
+            var value   = $(this).val()
+            $(".tab-content .tab-pane.active").load(url+"?search="+value+" .tab-pane.active .load-data");
+        })
+    }
 }
 
 function error_popup(title, message)

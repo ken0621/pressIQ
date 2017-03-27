@@ -452,6 +452,19 @@ class MLM_PlanController extends Member
             $insert['marketing_plan_release_schedule_date'] = Carbon::now();
             Tbl_mlm_plan::insert($insert);
         }
+        $count = Tbl_mlm_plan::where('shop_id', $shop_id)->count();
+        if($count == 16)
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "DISCOUNT_CARD_REPURCHASE";
+            $insert['marketing_plan_name'] = "Discount Card Repurchase";
+            $insert['marketing_plan_trigger'] = "Product Repurchase";
+            $insert['marketing_plan_label'] = "Discount Card Repurchase";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
 
         // end basic complan
         
@@ -1999,5 +2012,11 @@ class MLM_PlanController extends Member
         $data['message'] = "success";
 
         return json_encode($data);
+    }
+    public function discount_card_repurchase($shop_id)
+    {
+        $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['basic_settings'] = MLM_PlanController::basic_settings('DISCOUNT_CARD_REPURCHASE');
+        return view('member.mlm_plan.configure.discount_card_repurchase', $data);
     }
 }

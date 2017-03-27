@@ -71,8 +71,8 @@
                                             <th style="width: 30px;"></th>
                                             <th style="width: 15px;" class="text-right">#</th>
                                             <th style="width: 200px;">Product Code</th>
-                                            <th style="width: 200px;">Unit</th>
                                             <th>Description</th>
+                                            <th style="width: 200px;">Unit</th>
                                             <th style="width: 70px;">Qty</th>
                                             <th style="width: 120px;">Unit Price</th>
                                             <th style="width: 120px;">Amount</th>
@@ -88,14 +88,14 @@
                                                 <select class="form-control select-item droplist-item input-sm pull-left" name="item[]">
                                                     @include('member.load_ajax_data.load_item_category', ["add_search" => ""]);
                                                 </select>
-                                            </td>                                            
-                                            <td>
-                                                <select class="um-list form-control select-item droplist-unit input-sm pull-left" name="related_um_type[]">
-                                                </select>
-                                            </td>
+                                            </td>           
                                             <td>
                                                 <textarea class="textarea-expand txt-desc"  class="txt-desc" name="invline_description[]"></textarea>
                                                 <input type="hidden" name="um_qty[]" class="um-qty" >
+                                            </td>                                 
+                                            <td>
+                                                <select class="um-list form-control select-item droplist-unit input-sm pull-left" name="related_um_type[]">
+                                                </select>
                                             </td>
                                             <td><input class="text-center number-input txt-qty" type="text"  name="item_qty[]"/></td>
                                             <td><input class="text-right number-input txt-rate" type="text" readonly="true" name="item_rate[]"/></td>
@@ -110,14 +110,14 @@
                                                 <select class="form-control select-item droplist-item input-sm pull-left" name="item[]" data-placeholder="Select a Customer" style=";">
                                                    @include('member.load_ajax_data.load_item_category', ["add_search" => ""]);
                                                 </select>
-                                            </td>                                          
-                                            <td>
-                                                <select class="um-list form-control select-item droplist-unit input-sm pull-left" name="related_um_type[]" data-placeholder="Select a Customer" style=";">
-                                                </select>
-                                            </td>
+                                            </td>            
                                             <td>
                                                 <textarea class="textarea-expand txt-desc"  class="txt-desc" name="invline_description[]"></textarea>
                                                 <input type="hidden" name="um_qty[]" class="um-qty" >
+                                            </td>                              
+                                            <td>
+                                                <select class="um-list form-control select-item droplist-unit input-sm pull-left" name="related_um_type[]" data-placeholder="Select a Customer" style=";">
+                                                </select>
                                             </td>
                                             <td><input class="text-center number-input txt-qty" type="text" name="item_qty[]"/></td>
                                             <td><input class="text-right number-input txt-rate" type="text" readonly="true" name="item_rate[]"/></td>
@@ -147,12 +147,12 @@
                 </select>
             </td>
             <td>
-                <select class="um-list form-control select-item unit-class input-sm pull-left" name="related_um_type[]" data-placeholder="Select a Customer" style=";">
-                </select>
-            </td>
-            <td>
                 <textarea class="textarea-expand txt-desc"  class="txt-desc" name="invline_description[]"></textarea>
                 <input type="hidden" name="um_qty[]" class="um-qty" >
+            </td>
+            <td>
+                <select class="um-list form-control select-item unit-class input-sm pull-left" name="related_um_type[]" data-placeholder="Select a Customer" style=";">
+                </select>
             </td>
             <td><input class="text-center number-input txt-qty" type="text" name="item_qty[]"/></td>
             <td><input class="text-right number-input txt-rate" type="text" readonly="true" name="item_rate[]"/></td>

@@ -322,7 +322,7 @@ Route::any('/member/item/warehouse/stock_input_report/{id}','Member\WarehouseCon
 /* START PIS ARCY*/
 Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
 
-Route::any('/member/pis/sir','Member\PurchasingInventorySystemController@sir_list');
+Route::any('/member/pis/sir','Member\PurchasingInventorySystemController@sir');
 Route::any('/member/pis/sir/archived_submit','Member\PurchasingInventorySystemController@archived_sir_submit');
 Route::any('/member/pis/sir/create','Member\PurchasingInventorySystemController@create_sir');
 Route::any('/member/pis/sir/create_submit','Member\PurchasingInventorySystemController@create_sir_submit');

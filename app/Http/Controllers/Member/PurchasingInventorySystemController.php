@@ -438,7 +438,7 @@ class PurchasingInventorySystemController extends Member
         {            
             $data["_sir"] = Purchasing_inventory_system::select_sir($this->user_info->shop_id,'array',Request::input("sir_id"));
         }
-        return view("member.purchasing_inventory_system.sir_list",$data);
+        return view("member.purchasing_inventory_system.sir",$data);
     }
 
     public function lof()

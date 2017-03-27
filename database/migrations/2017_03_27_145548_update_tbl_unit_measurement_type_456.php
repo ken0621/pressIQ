@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblItem34r5t6y7u extends Migration
+class UpdateTblUnitMeasurementType456 extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class UpdateTblItem34r5t6y7u extends Migration
      */
     public function up()
     {
-        Schema::table('tbl_item', function (Blueprint $table) {
-            $table->integer("item_vendor_id")->default(0)->after("item_measurement_id")->nullable();
+        Schema::table('tbl_unit_measurement_type', function (Blueprint $table) {
+            $table->integer("shop_id")->default(0);
         });
     }
 
@@ -24,7 +24,7 @@ class UpdateTblItem34r5t6y7u extends Migration
      */
     public function down()
     {
-        Schema::table('tbl_item', function (Blueprint $table) {
+        Schema::table('tbl_unit_measurement_type', function (Blueprint $table) {
             //
         });
     }

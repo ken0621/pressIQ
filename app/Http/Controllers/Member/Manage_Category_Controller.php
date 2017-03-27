@@ -62,7 +62,7 @@ class Manage_Category_Controller extends Member
         $id = Request::input("cat_id");
         $action = Request::input("action");
 
-        $chk = Tbl_item::where("item_category_id",$id)->count();
+        $chk = Tbl_item::where("item_category_id",$id)->where("archived",0)->count();
 
         $update["archived"] = 0;
         $data["status"] = "success-category"; 

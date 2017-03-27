@@ -1015,5 +1015,11 @@ class MLM_SlotController extends Member
             dd($wallet);
             dd($shop_id);
         }
+        else if ($code == 'match_wallet')
+        {
+            $shop_id = $this->user_info->shop_id;
+            $slots = Tbl_mlm_slot::where('shop_id', $shop_id)->get();
+            Mlm_slot_log::update_all_released();
+        }
     }
 }

@@ -293,6 +293,7 @@ Route::any('/member/item/warehouse/archive_submit','Member\WarehouseController@a
 Route::any('/member/item/warehouse/view/{id}','Member\WarehouseController@view');
 Route::any('/member/item/warehouse/refill','Member\WarehouseController@refill');
 Route::any('/member/item/warehouse/refill_submit','Member\WarehouseController@refill_submit');
+Route::any('/item/warehouse/refill/by_vendor/{warehouse_id}/{id}','Member\WarehouseController@refill_item_vendor');
 
 //adjust inventory
 Route::any('/member/item/warehouse/adjust/{id}','Member\WarehouseController@adjust');

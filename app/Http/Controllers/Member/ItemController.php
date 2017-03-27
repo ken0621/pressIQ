@@ -22,6 +22,7 @@ use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 use App\Globals\DigimaTable;
 use App\Globals\Item;
+use App\Globals\Vendor;
 use App\Globals\UnitMeasurement;
 use App\Globals\Utilities;
 
@@ -118,6 +119,7 @@ class ItemController extends Member
 			$data['_item']  	= Item::get_all_category_item();
 			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 		= UnitMeasurement::load_um();
+            $data["_vendor"]    = Vendor::getAllVendor('active');
 
 		    return view('member.item.add',$data);
         }
@@ -149,6 +151,7 @@ class ItemController extends Member
 		$item_measurement_id 			= Request::input("item_measurement_id");
 		$item_manufacturer_id 			= Request::input("item_manufacturer_id");
 		$packing_size 					= Request::input("packing_size");
+		$item_vendor_id 					= Request::input("item_vendor_id");
 
 		$item_sale_to_customer 			= Request::input("item_sale_to_customer") ? 1 : 0; 
 		$item_purchase_from_supplier    = Request::input("item_purchase_from_supplier") ? 1 : 0;
@@ -186,7 +189,8 @@ class ItemController extends Member
 			$insert["item_expense_account_id"]	      = $item_expense_account_id ;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id ;
 			$insert["item_manufacturer_id"]	      	  = $item_manufacturer_id ;
-			$insert["packing_size"]				      = $packing_size ;
+			$insert["packing_size"]				      = $packing_size;
+			$insert["item_vendor_id"]		 	      = $item_vendor_id;
 
 			$rules["item_name"]					      = 'required';
 			$rules["item_barcode"]					  = 'alpha_num';
@@ -541,6 +545,7 @@ class ItemController extends Member
 			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 	  	= UnitMeasurement::load_um();
 			$data['_item']  	= Item::get_all_category_item();
+            $data["_vendor"]    = Vendor::getAllVendor('active');
 
 			// dd($data);
 		    return view('member.item.edit',$data);
@@ -603,8 +608,9 @@ class ItemController extends Member
 			$insert["item_date_created"]	    	  = Carbon::now();
 			$insert["item_measurement_id"]	      	  = Request::input("item_measurement_id");
 			$insert["item_manufacturer_id"]	      	  = Request::input("item_manufacturer_id");
+			$insert["item_vendor_id"]	 	      	  = Request::input("item_vendor_id");
 			$insert["shop_id"]	    				  = $shop_id;
-			
+				
 			$rules["item_name"]					      = 'required';
 			$rules["item_sku"]					      = 'required';
 			$rules["item_barcode"]					      = 'alpha_num';

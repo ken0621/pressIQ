@@ -293,8 +293,29 @@ class Purchasing_inventory_system
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
             }
+            $data[$key]->total_amount += $price;
 
-            $data[$key]->total_amount += $price; 
+            if($lof_status == 3)
+            {
+                $data[$key]->status = "Rejected";
+                $data[$key]->status_color = "danger";
+            }
+            elseif($lof_status == 2 && $sir_status == 1 && $ilr_status == 0 && $sync == 1 )
+            {
+                $data[$key]->status = "SIR";
+                $data[$key]->status_color = "success";
+            }
+            elseif($lof_status == 2 && $sir_status == 2 && $ilr_status == 1 && $sync == 1 )
+            {
+                $data[$key]->status = "ILR";
+                $data[$key]->status_color = "warning";
+            }
+            elseif($lof_status == 2 || $lof_status == 1 && $sir_status == 0 && $ilr_status == 0 && $sync == 0 )
+            {
+                $data[$key]->status = "LOF";
+                $data[$key]->status_color = "info";
+            }
+
         }
 
         return $data;         

@@ -50,7 +50,7 @@ class WarehouseController extends Member
     public function index()
     {
         $this->item();
-
+        Warehouse::check_item_every_warehouse();
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
         { 

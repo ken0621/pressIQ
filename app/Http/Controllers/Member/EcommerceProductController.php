@@ -63,13 +63,16 @@ class EcommerceProductController extends Member
 		if($this->hasAccess("product-list","access_page"))
         {	
         	$warehouse_id = Ecom_Product::getWarehouseId();
-        	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->paginate(10);
-			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1)->paginate(10);
+        	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0);
+			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1);
 
 			if(Request::input('search'))
 			{
-				
+				$active_product = $active_product->where("eprod_name","like","%Request::input('search')%");
 			}
+			dd($active_product->toSql());
+			$active_product 	= $active_product->paginate(10);
+			$inactive_product 	= $inactive_product->paginate(10);
 
 	        $data["_product"]			= $active_product;
 	        $data["_product_archived"]	= $inactive_product;
@@ -731,10 +734,10 @@ class EcommerceProductController extends Member
 		return Redirect::back();
 	}
 
-	public function getDeletePoduct($product_id)
+	public function getDeleteProduct($product_id)
 	{
 		$update["archived"] = 1;
-		Tbl_ec_product::where("eprod_id", $product_id)->update();
+		Tbl_ec_product::where("eprod_id", $product_id)->update($update);
 
 		Request::session()->flash('success', 'Product Successfully Deleted');
 		return Redirect::to('/member/ecommerce/product/list');

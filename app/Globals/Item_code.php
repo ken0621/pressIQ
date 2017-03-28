@@ -376,6 +376,7 @@ class Item_code
                                 $item[0]['product_id'] = $iteme->item_id;
                                 $item[0]['quantity'] = $value;
                                 // dd($item);
+                                // dd($data["warehouse_id"]);
                                $a = Warehouse::inventory_consume($data['warehouse_id'], 'Used for consuming of inventory in product code', $item,$data["customer_id"], $warehouse_consume_reason, 'array');
                                 if($a['status'] == 'error')
                                 {
@@ -474,7 +475,7 @@ class Item_code
                             $arry_log['wallet_log_amount'] = ($insert["item_total"]) * (-1);
                             $arry_log['wallet_log_plan'] = "REPURCHASE";
                             $arry_log['wallet_log_status'] = "released";   
-                            $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                            $arry_log['wallet_log_claimbale_on'] = Carbon::now();
                             Mlm_slot_log::slot_array($arry_log);
                         }
 

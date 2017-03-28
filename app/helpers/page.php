@@ -544,6 +544,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
+    /* PAYROLL CONFIGURATION [SETTTINGS] */
     $code = "payroll-configuration";
     $nav[$page]['submenu'][$code]['label'] = "Payroll Configuration";
     $nav[$page]['submenu'][$code]['code'] = $code;
@@ -552,7 +553,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
     
-    /* -- EMPLOYEE POSITION=> LIST  */
+    /* -- EMPLOYEE TIMESHEET=> LIST  */
     $code = "employee-timesheet";
     $nav[$page]['submenu'][$code]['label'] = "Employee Timesheet";
     $nav[$page]['submenu'][$code]['code'] = $code;
@@ -560,6 +561,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Guillermo Tabligan";
+
+    /* PAYROLL TIME KEEPING */
+    $code = "payroll-timekeeping";
+    $nav[$page]['submenu'][$code]['label'] = "Time Keeping";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/time_keeping";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
 
     /* VENDORS */

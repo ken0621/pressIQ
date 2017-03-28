@@ -76,13 +76,19 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <label>Manufacturer</label>
                             <select class="form-control input-sm drop-down-manufacturer" name="item_manufacturer_id">
                                 @include("member.load_ajax_data.load_manufacturer", ['manufacturer_id' => $data["item_manufacturer_id"]])
                             </select>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <label>Vendor</label>
+                            <select class="form-control input-sm drop-down-vendor" name="item_vendor_id">
+                                @include('member.load_ajax_data.load_vendor', ['vendor_id' => $data["item_vendor_id"]] )
+                            </select>
+                        </div>
+                        <div class="col-md-4">
                             <label>Inventory Asset Account *</label>
                             <select name="item_asset_account_id" class="drop-down-coa form-control" id="item_asset_account_id" required>
                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_asset, 'account_id' => $data['item_asset_account_id']])

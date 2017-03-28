@@ -3429,4 +3429,20 @@ class PayrollController extends Member
 	}
 	
 	/*HOLIDAY DEFAULT END*/
+
+
+     /* PAYROLL TIME KEEPING START */
+     public function time_keeping()
+     {
+          return view('member.payroll.payroll_timekeeping');
+     }
+
+     public function modal_generate_period()
+     {
+
+          // $['_period'] = 
+          return view('member.payroll.modal.modal_generate_period');
+     }
+
+     /* PAYROLL TIME KEEPING END */
 }

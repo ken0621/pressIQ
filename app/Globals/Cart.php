@@ -202,13 +202,23 @@ class Cart
                             $item_discounted_value =   $discount_a *   ($discount_membership['value']/100); 
                         }
                         $active_plan_product_repurchase = Mlm_plan::get_all_active_plan_repurchase($session['slot_now']->shop_id);
-                        $item_points = Tbl_mlm_item_points::where('item_id', $item->item_id)->where('membership_id', $session['slot_now']->slot_membership)->first();
+                        $item_points = Tbl_mlm_item_points::where('item_id', $item->item_id)->where('membership_id', $session['slot_now']->slot_membership)
+                        ->first();
                         if($item_points)
                         {
                            foreach($active_plan_product_repurchase as $key2 => $value2)
                             {
                                 $code = $value2->marketing_plan_code;
-                                $data["cart"][$key]["cart_product_information"]["membership_points"][$value2->marketing_plan_label] = $item_points->$code * $info['quantity'];
+                                if($code == 'DISCOUNT_CARD_REPURCHASE' || $code == 'UNILEVEL_REPURCHASE_POINTS' || $code == 'UNILEVEL')
+                                {
+                                    
+                                    
+                                }
+                                else
+                                {
+                                    // dd($code);
+                                    $data["cart"][$key]["cart_product_information"]["membership_points"][$value2->marketing_plan_label] = $item_points->$code * $info['quantity'];
+                                }
                             } 
                         }
                     }
@@ -260,7 +270,6 @@ class Cart
         /* SET OTHER PRICE INFO  */
         $data["sale_information"]["total_coupon_discount"]             = $total_coupon_discount; 
         $data["sale_information"]["total_overall_price"]               = $total_overall_price; 
-
         return $data;
     }
 

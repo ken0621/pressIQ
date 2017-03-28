@@ -234,21 +234,51 @@ class Seed
         $email[8]['date_updated'] = $date_updated;
         $email[8]['archived'] = 0;
 
-        $email[9]['email_content_key'] = 'pass_word_reset';
-        $email[9]['email_content'] = '<p>Greetings!</p>
-<p>&nbsp; &nbsp;We have received a request to reset your password. If you did not make the request, just ignore this email. Otherwise you can reset your password using this link</p>
-<p>&nbsp;[password_reset_link]<br /><br /></p>
+        $email[9]['email_content_key'] = 'forget_password';
+        $email[9]['email_content'] = '<p>Greetings [name],</p>
+<p>&nbsp;</p>
+<p>We received a request to reset your password &nbsp;for [domain_name].</p>
+<p>&nbsp;</p>
+<p>We set a temporary password for you, then you can change it in the website with the&nbsp;Profile Setting</p>
+<p>&nbsp;</p>
+<h3 style="text-align: center;"><strong>New Password</strong></h3>
+<h3 style="text-align: center;"><strong>[new_password]</strong></h3>
+<p style="text-align: center;">&nbsp;</p>
 <p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline), <a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a> (Email), or you may visit our Main Office located at PhilTECH Bldg. (2<sup>nd</sup> Level), Gallera Road, Guiwan, Zamboanga City.</p>
 <p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
 <p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Best Regards,</p>
 <p>&nbsp;</p>
-<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>
-<p>&nbsp;</p>';
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>';
         $email[9]['email_content_subject'] = 'Password Reset';
         $email[9]['shop_id'] = $shop_id;
         $email[9]['date_created'] = $date_created;
         $email[9]['date_updated'] = $date_updated;
         $email[9]['archived'] = 0;
+
+        $email[10]['email_content_key'] = 'product_repurchase';
+        $email[10]['email_content'] = '<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Greetings!</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">You have successfully purchased</p>
+<p class="MsoNormal" style="line-height: 12.6px; margin-bottom: 0.0001pt; text-align: center;">[product_list]</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Your Product&nbsp;Code is/are:</p>
+<p class="MsoNormal" style="line-height: 12.6px; margin-bottom: 0.0001pt; text-align: center;">[product_code]</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">As a PhilTECH VIP, you are entitled to Lifetime Privileges and Benefits exclusively designed for our VIPs. Experience shopping convenience like never before with our E-Commerce System. Enjoy Discounts and Earn Cashback + Rewards Points with every purchase on all products of the company. Just present your PhilTECH VIP Card during payment and all these exciting benefits will be yours.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">For inquiries, please feel free to contact us at (0917) 542-2614 (Globe Mobile), (062) 310-2256 (Globe Landline),&nbsp;<a href="mailto:philtechglobalmainoffice@gmail.com">philtechglobalmainoffice@gmail.com</a>&nbsp;(Email), or you may visit us at our Main Office located at PhilTECH Bldg. (2<sup>nd</sup>&nbsp;Level), Gallera Road, Guiwan, Zamboanga City.</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Congratulations!</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;">Best Regards,</p>
+<p style="line-height: 12.6px;">&nbsp;</p>
+<p class="MsoNormal" style="margin-bottom: .0001pt; text-align: justify;"><strong>The PhilTECH Admin Team</strong></p>';
+        $email[10]['email_content_subject'] = 'Product Repurchase';
+        $email[10]['shop_id'] = $shop_id;
+        $email[10]['date_created'] = $date_created;
+        $email[10]['date_updated'] = $date_updated;
+        $email[10]['archived'] = 0;
+
+        // product_repurchase
 
         foreach ($email as $key => $value) 
         {

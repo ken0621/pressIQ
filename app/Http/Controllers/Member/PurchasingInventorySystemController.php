@@ -464,6 +464,30 @@ class PurchasingInventorySystemController extends Member
         }
         return view("member.purchasing_inventory_system.lof.lof",$data);
     }
+    public function sir_list()
+    {
+        if(Request::input("status") != null)
+        {
+            if(Request::input("status") != 'all')
+            {
+                $lof_status = Request::input("lof_status");
+                $sir_status = Request::input("sir_status");
+                $ilr_status = Request::input("ilr_status");
+                $sync = Request::input("sync");
+                echo($lof_status." ".$sir_status." ".$ilr_status." ".$sync);
+                $data["_sir"] = Purchasing_inventory_system::select_sir_list_status($lof_status,$sir_status,$ilr_status,$sync,Request::input("sir_id"));
+            }
+            else
+            {
+                $data["_sir"] = Purchasing_inventory_system::select_sir_list(Request::input("sir_id"));
+            }
+        }
+        else
+        {            
+            $data["_sir"] = Purchasing_inventory_system::select_sir_list(Request::input("sir_id"));
+        } 
+        return view("member.purchasing_inventory_system.sir_list",$data);
+    }
     public function create_sir()
     {
         $access = Utilities::checkAccess("pis-sir","add");

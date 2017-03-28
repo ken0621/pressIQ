@@ -20,6 +20,13 @@ class Tbl_warehouse extends Model
                      ->leftjoin('tbl_item','tbl_item.item_id','=','tbl_sub_warehouse.item_id');
 
     }
+    public function scopeWarehouseitem_vendor($query,$vendor_id = 0)
+    {
+         return $query->leftjoin('tbl_sub_warehouse', 'tbl_sub_warehouse.warehouse_id', '=', 'tbl_warehouse.warehouse_id')
+                     ->leftjoin('tbl_item','tbl_item.item_id','=','tbl_sub_warehouse.item_id')
+                     ->whereIn("item_vendor_id",[$vendor_id,0]);
+
+    }
     public function scopeselect_info($query, $shop_id = 0, $archived = 0)
     {
         $query->selectRaw('*, tbl_warehouse.warehouse_id as warehouse_id, sum(tbl_warehouse_inventory.inventory_count) as total_qty')

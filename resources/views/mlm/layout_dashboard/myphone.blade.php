@@ -24,18 +24,18 @@
             </div>
             <div class="col-md-12 col-sm-12 col-xs-6">
                <div>
-                  <p>Direct Referral</p>
+                  <p>Direct Referral - {{currency('PHP', $direct)}}</p>
                   <div class="">
-                     <div class="progress progress_sm" style="width: 76%;">
-                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="80"></div>
+                     <div class="progress progress_sm" style="width: 100%;">
+                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{$direct_percent}}"></div>
                      </div>
                   </div>
                </div>
                <div>
-                  <p>Pairing</p>
+                  <p>Pairing - {{currency('PHP', $binary)}}</p>
                   <div class="">
-                     <div class="progress progress_sm" style="width: 76%;">
-                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
+                     <div class="progress progress_sm" style="width: 100%;">
+                        <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="{{$binary_percent}}"></div>
                      </div>
                   </div>
                </div>
@@ -73,14 +73,16 @@
                   <li>
                      <div class="block">
                         <div class="block_content">
+                           @foreach($recent_activity as $key => $value)
                            <h2 class="title">
-                              <a>New Downline Acquired</a>
+                              <a>{{$value->wallet_log_details}}</a>
                            </h2>
                            <div class="byline">
-                              <span>13 hours ago</span>
+                              <span>{{$value->ago}}</span>
                            </div>
-                           <p class="excerpt">A new downline member has been acquired <a>Details</a>
+                           <p class="excerpt"> Wallet Amount: {{$value->wallet_log_amount}}<a class="hide">Details</a>
                            </p>
+                           @endforeach
                         </div>
                      </div>
                   </li>
@@ -115,18 +117,20 @@
                <div class="x_content">
                   <div class="dashboard-widget-content">
                      <div class="col-md-4 hidden-small">
-                        <h2 class="line_30">30 members/downlines from different countries</h2>
+                        <h2 class="line_30">{{$count_downline}} members/downlines from different countries</h2>
                         <table class="countries_list">
                            <tbody>
+                              @foreach($country_name as $key => $value)
                               <tr>
-                                 <td>Philippines</td>
-                                 <td class="fs15 fw700 text-right">33%</td>
+                                 <td>{{$key}}</td>
+                                 <td class="fs15 fw700 text-right">{{number_format($value, 2)}}%</td>
                               </tr>
-                              <tr>
+                              @endforeach
+                              <tr class="hide">
                                  <td>Hongkong</td>
                                  <td class="fs15 fw700 text-right">27%</td>
                               </tr>
-                              <tr>
+                              <tr class="hide">
                                  <td>China</td>
                                  <td class="fs15 fw700 text-right">16%</td>
                               </tr>

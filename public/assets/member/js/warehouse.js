@@ -407,7 +407,7 @@ function submit_done(data)
     if(data.status == "success")
     {
         toastr.success("Success");
-        $(".warehouse-container").load("/member/item/warehouse .load-warehouse-container"); 
+        $(".warehouse-container").load("/member/item/warehouse .warehouse-container"); 
         $('#global_modal').modal('toggle');
         data.element.modal("hide");
     }

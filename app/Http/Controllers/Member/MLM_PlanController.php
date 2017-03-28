@@ -67,6 +67,8 @@ class MLM_PlanController extends Member
     	$validate['plan_settings_format'] = Request::input('plan_settings_format');
     	$validate['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
         $validate['plan_settings_use_item_code'] = Request::input('plan_settings_use_item_code');
+        $validate['plan_settings_email_membership_code'] = Request::input('plan_settings_email_membership_code');
+        $validate['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
     	// end input from form
     	
     	// Validator rules
@@ -77,6 +79,8 @@ class MLM_PlanController extends Member
 		$rules['plan_settings_format'] = "required";
 		$rules['plan_settings_prefix_count'] = "required";
         $rules['plan_settings_use_item_code'] = "required";
+        $rules['plan_settings_email_membership_code'] = 'required';
+        $rules['plan_settings_email_product_code'] = 'required';
 		// end validator rules
 		
 		// validate
@@ -100,6 +104,8 @@ class MLM_PlanController extends Member
     		$update['plan_settings_format'] = Request::input('plan_settings_format');
     		$update['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
             $update['plan_settings_use_item_code'] = Request::input('plan_settings_use_item_code');
+            $update['plan_settings_email_membership_code'] = Request::input('plan_settings_email_membership_code');
+            $update['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
     		// end
     		
     		// update settings
@@ -447,6 +453,19 @@ class MLM_PlanController extends Member
             $insert['marketing_plan_name'] = "Discount Card";
             $insert['marketing_plan_trigger'] = "Slot Creation";
             $insert['marketing_plan_label'] = "Discount Card";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+        $count = Tbl_mlm_plan::where('shop_id', $shop_id)->count();
+        if($count == 16)
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "DISCOUNT_CARD_REPURCHASE";
+            $insert['marketing_plan_name'] = "Discount Card Repurchase";
+            $insert['marketing_plan_trigger'] = "Product Repurchase";
+            $insert['marketing_plan_label'] = "Discount Card Repurchase";
             $insert['marketing_plan_enable'] = 0;
             $insert['marketing_plan_release_schedule'] = 1;
             $insert['marketing_plan_release_schedule_date'] = Carbon::now();
@@ -1999,5 +2018,11 @@ class MLM_PlanController extends Member
         $data['message'] = "success";
 
         return json_encode($data);
+    }
+    public function discount_card_repurchase($shop_id)
+    {
+        $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['basic_settings'] = MLM_PlanController::basic_settings('DISCOUNT_CARD_REPURCHASE');
+        return view('member.mlm_plan.configure.discount_card_repurchase', $data);
     }
 }

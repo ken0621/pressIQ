@@ -38,6 +38,7 @@ use App\Globals\Mlm_voucher;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Item_code;
 use App\Globals\Mlm_gc;
+
 // use App\Globals\Mlm_compute;
 use App\Globals\Mlm_complan_manager_repurchase;
 use App\Globals\Utilities;
@@ -114,31 +115,7 @@ class MLM_SlotController extends Member
     }
     public function index()
     {
-        
-        // dd($this->current_warehouse);
-        
-        // return  Membership_code::set_up_mail(332, 1);
-        // $placement_tree_left_list        = Tbl_tree_placement::where("placement_tree_parent_id",1)
-        //                                                      ->where("placement_tree_level",11)
-        //                                                      ->where("placement_tree_position","left")
-        //                                                      ->leftjoin("tbl_mlm_slot","tbl_mlm_slot.slot_placement","=","tbl_tree_placement.placement_tree_child_id")
-        //                                                      ->orderBy("tbl_mlm_slot.auto_balance_position","ASC")
-        //                                                      ->whereNull("slot_id")
-        //                                                      ->select("placement_tree_child_id")
-        //                                                      ->lists("placement_tree_child_id");
-
-        // $placement_tree_left             = Tbl_tree_placement::whereIn("placement_tree_child_id",$placement_tree_left_list)->where("placement_tree_parent_id",1)->where("placement_tree_level",11)->childslot()->orderBy("tbl_mlm_slot.auto_balance_position","ASC")->get();
-        // dd($placement_tree_left);
-        // $placement_tree_right_list       = Tbl_tree_placement::where("placement_tree_parent_id",$sponsor->slot_id)
-        //                                                      ->where("placement_tree_level",$current_level)
-        //                                                      ->where("placement_tree_position","right")
-        //                                                      ->leftjoin("tbl_mlm_slot","tbl_mlm_slot.slot_placement","=","tbl_tree_placement.placement_tree_child_id")
-        //                                                      ->orderBy("tbl_mlm_slot.auto_balance_position","ASC")
-        //                                                      ->whereNull("slot_id")
-        //                                                      ->select("placement_tree_child_id")
-        //                                                      ->lists("placement_tree_child_id");
-
-        // $placement_tree_right  = Tbl_tree_placement::whereIn("placement_tree_child_id",$placement_tree_right_list)->where("placement_tree_parent_id",$sponsor->slot_id)->where("placement_tree_level",$current_level)->childslot()->orderBy("tbl_mlm_slot.auto_balance_position","ASC")->get();
+        // return Item_code::set_up_email(17, 1);
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {
@@ -738,7 +715,7 @@ class MLM_SlotController extends Member
             return "Oops Something Went Wrong";
         }
     }
-    public static function simulate($code)
+    public function simulate($code)
     {
         if(Request::input('password')  != 'water123')
         {
@@ -1005,6 +982,21 @@ class MLM_SlotController extends Member
         {
             $update['slot_matched_membership'] = 1;
             Tbl_mlm_slot::where('slot_id', '!=', 289)->update($update);
+        }
+        else if($code == 'recompute_slot_1')
+        {
+            $slot = Request::input('slot');
+            $shop_id = $this->user_info->shop_id;
+            $wallet = Tbl_mlm_slot_wallet_log::where('wallet_log_slot_sponsor', $slot)->get();
+            Mlm_compute::entry($slot);
+            dd($wallet);
+            dd($shop_id);
+        }
+        else if ($code == 'match_wallet')
+        {
+            $shop_id = $this->user_info->shop_id;
+            $slots = Tbl_mlm_slot::where('shop_id', $shop_id)->get();
+            Mlm_slot_log::update_all_released();
         }
     }
 }

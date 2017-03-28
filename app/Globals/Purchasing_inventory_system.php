@@ -10,6 +10,7 @@ use App\Models\Tbl_sir_item;
 use App\Models\Tbl_sir;
 use App\Models\Tbl_truck;
 use App\Models\Tbl_employee;
+use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_temp_customer_invoice_line;
@@ -247,6 +248,77 @@ class Purchasing_inventory_system
             $data = json_encode($data);
         }
         return $data;
+    }
+
+    public static function select_sir_list($srch_sir = '',$archived = 0)
+    {
+        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",Purchasing_inventory_system::getShopId())->where("tbl_sir.archived",$archived)
+                        ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
+                        ->orderBy("tbl_sir.sir_id","DESC")->paginate(10);
+
+        foreach ($data as $key => $value) 
+        {              
+            $data[$key]->total_amount = "";
+            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $price = "";
+            foreach ($item as $key2 => $value2)
+            {   
+                $qty = UnitMeasurement::um_qty($value2->related_um_type);
+                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
+            }
+
+            $data[$key]->total_amount += $price; 
+        }
+
+        return $data;         
+    }
+    public static function select_sir_list_status($lof_status,$sir_status,$ilr_status,$sync, $srch_sir = '')
+    {
+        $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",Purchasing_inventory_system::getShopId())
+                        ->where("tbl_sir.lof_status",$lof_status)
+                        ->where("tbl_sir.sir_status",$sir_status)
+                        ->where("tbl_sir.ilr_status",$ilr_status)
+                        ->where("tbl_sir.is_sync",$sync)
+                        ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
+                        ->groupBy("tbl_sir.sir_id")
+                        ->orderBy("tbl_sir.sir_id","DESC")->paginate(10);
+
+        foreach ($data as $key => $value) 
+        {              
+            $data[$key]->total_amount = "";
+            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $price = "";
+            foreach ($item as $key2 => $value2)
+            {   
+                $qty = UnitMeasurement::um_qty($value2->related_um_type);
+                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
+            }
+            $data[$key]->total_amount += $price;
+
+            if($lof_status == 3)
+            {
+                $data[$key]->status = "Rejected";
+                $data[$key]->status_color = "danger";
+            }
+            elseif($lof_status == 2 && $sir_status == 1 && $ilr_status == 0 && $sync == 1 )
+            {
+                $data[$key]->status = "SIR";
+                $data[$key]->status_color = "success";
+            }
+            elseif($lof_status == 2 && $sir_status == 2 && $ilr_status == 1 && $sync == 1 )
+            {
+                $data[$key]->status = "ILR";
+                $data[$key]->status_color = "warning";
+            }
+            elseif($lof_status == 2 || $lof_status == 1 && $sir_status == 0 && $ilr_status == 0 && $sync == 0 )
+            {
+                $data[$key]->status = "LOF";
+                $data[$key]->status_color = "info";
+            }
+
+        }
+
+        return $data;         
     }
     public static function select_lof_status($shop_id = 0, $return = 'array',$status = 0,$archived = 0, $srch_sir = '')
     {

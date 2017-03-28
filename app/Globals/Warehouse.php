@@ -466,7 +466,7 @@ class Warehouse
                 $count_on_hand = 0;   
             }
 
-            if($product['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand > $product['quantity'])
+            if($product['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $product['quantity'])
             {
                 $insert_consume[$key]['inventory_item_id']        = $product['product_id'];
                 $insert_consume[$key]['warehouse_id']             = $warehouse_id;

@@ -55,6 +55,10 @@ class MlmDashboardController extends Mlm
             {
                 $data['binary'] = 1;
             }
+            if($sum == 0)
+            {
+                $sum = 1;
+            }
             $data['direct_percent'] = ($data['direct']/$sum) * 100;
             $data['binary_percent'] = ($data['binary']/$sum) * 100;
 

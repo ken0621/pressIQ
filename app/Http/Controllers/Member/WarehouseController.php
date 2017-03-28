@@ -60,7 +60,7 @@ class WarehouseController extends Member
             }
 
             $data["_warehouse_archived"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 1)->groupBy("tbl_warehouse.warehouse_id")->get();
-            dd($data["_warehouse_archived"]);
+            
             $all_item = null;
             foreach($data["_warehouse"] as $key => $value)
             {

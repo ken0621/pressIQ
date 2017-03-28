@@ -169,8 +169,9 @@ function global()
         $(document).on("change", ".global-search", function()
         {
             var url     = $(this).attr("url");
-            var value   = $(this).val()
-            $(".tab-content .tab-pane.active").load(url+"?search="+value+" .tab-pane.active .load-data");
+            var value   = $(this).val();
+            $tab_content =  $(".tab-content .tab-pane.active");
+            $tab_content.load(url+"?search="+value+" "+$tab_content.find(".load-data"));
         })
     }
 }

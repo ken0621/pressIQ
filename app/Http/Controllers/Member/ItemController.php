@@ -193,7 +193,7 @@ class ItemController extends Member
 			$insert["item_vendor_id"]		 	      = $item_vendor_id;
 
 			$rules["item_name"]					      = 'required';
-			$rules["item_barcode"]					  = 'alpha_num';
+			// $rules["item_barcode"]					  = 'required';
 			// $rules["item_category_id"]			  = '';
 			// $rules["item_img"]					  = '';
 			// $rules["item_type_id"]				  = '';
@@ -316,7 +316,7 @@ class ItemController extends Member
 	                $return["type"]		= "item";
 	            }
 
-	            $retun['item_id'] = $item_id;
+	            $return['item_id'] = $item_id;
 	            // $return["type"]		= "item";
 			}
 		}
@@ -500,7 +500,6 @@ class ItemController extends Member
 			$return["item_id"] = null;
 			$return["type"]		= "item";
 		}
-		
 		if($return["message"] == "Success" || $return['status'] = 'success-serial')
 		{
 			Session::forget("item_temporary_data");

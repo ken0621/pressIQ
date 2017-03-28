@@ -70,6 +70,7 @@ class MlmDashboardController extends Mlm
             ->get();
             // foreach()
             // dd($data['count_downline_per_countr_data'][0]);
+            $data['country_name'] = [];
             foreach($data['count_downline_per_countr_data'] as $key => $value)
             {
                 if(isset($data['country_name'][$value->country_name]))

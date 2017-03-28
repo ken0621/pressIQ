@@ -170,9 +170,26 @@ class MlmRepurchaseController extends Mlm
         ->first();
 
         $data['active_plan'] = Mlm_plan::get_all_active_plan_repurchase(Self::$shop_id);
-        
+        if($data['item_code'])
+        {
+           foreach($data['active_plan'] as $key2 => $value2)
+            {
+                $code = $value2->marketing_plan_code;
+                if($code == 'DISCOUNT_CARD_REPURCHASE' || $code == 'UNILEVEL_REPURCHASE_POINTS' || $code == 'UNILEVEL')
+                {
+                    
+                    
+                }
+                else
+                {
+                    // dd($code);
+                    $data["membership_points"][$value2->marketing_plan_label] = $data['item_code']->$code;
+                }
+            } 
+        }
 
-        dd($data);
+
+        // dd($data);
         return view('mlm.repurchase.use', $data);
     }
 }

@@ -215,7 +215,6 @@ class ItemController extends Member
 			{
 				$return["error"]  	= $validator->errors()->all();
 				$return["message"] 	= "Failed";
-				$return["type"]		= "item";
 			}
 			else
 			{
@@ -612,7 +611,7 @@ class ItemController extends Member
 				
 			$rules["item_name"]					      = 'required';
 			$rules["item_sku"]					      = 'required';
-			$rules["item_barcode"]					      = 'alpha_num';
+			// $rules["item_barcode"]					      = 'alpha_num';
 			// $rules["item_category_id"]			  = '';
 			// $rules["item_img"]					  = '';
 			// $rules["item_type_id"]				  = '';

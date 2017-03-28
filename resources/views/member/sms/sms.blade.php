@@ -16,6 +16,7 @@
                     @if($user->user_level == 1)
                     <form class="global-submit" action="/member/maintenance/sms/authorization-key">
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
+                        <a class="btn btn-custom-white pull-right" href="/member/maintenance/sms/logs">SMS Logs</a>
                         <div class="input-group">
                             <input type="text" class="form-control" name="sms_authorization_key" placeholder="Authorization Key" value="{{$sms_key->sms_authorization_key or ''}}">
                             <span class="input-group-btn">
@@ -32,7 +33,6 @@
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal load-data">
         @if(isset($sms_key->sms_authorization_key))
-        <a class="btn btn-custom-white" href="/member/maintenance/sms/logs">SMS Logs</a>
         <div class="form-group tab-content panel-body sms-content-container">
             <div class="table-responsive">
                 <table class="table table-bordered table-condensed">

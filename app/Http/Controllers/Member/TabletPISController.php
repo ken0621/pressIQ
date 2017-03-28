@@ -196,12 +196,13 @@ class TabletPISController extends Member
         if($action == "confirm")
         {
         	$update["lof_status"] = 2;
-        	
         }
         else if($action == "reject")
         {
         	$update["lof_status"] = 3;
             $update["rejection_reason"] = Request::input("reason_txt");
+
+            Purchasing_inventory_system::reject_return_stock($id);
         }
 
         Tbl_sir::where("sir_id",$id)->update($update);

@@ -166,9 +166,9 @@ class MlmRegisterController extends MlmLoginController
 			                			Tbl_mlm_lead::insert($insert_lead);
 			                		}
 
+                                    /* Sms Notification */
                                     $txt[0]["txt_to_be_replace"]    = "[name]";
                                     $txt[0]["txt_to_replace"]       = $insert['first_name'];
-                                    /* Sms Notification */
                                     $result  = Sms::SendSms($insert_other['customer_mobile'], "success_register", $txt, Self::$shop_id);
 
 			                		$data['type']   = "success";

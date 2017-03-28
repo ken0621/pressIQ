@@ -32,7 +32,10 @@ class Ec_order
 
     public static function create_ec_order_automatic($order_info)
     {
-        $customer_id = Customer::createCustomer($order_info['shop_id'] ,$order_info['customer']);
+        if($order_info['customer_id'] == null)
+        {
+            $customer_id = Customer::createCustomer($order_info['shop_id'] ,$order_info['customer']);
+        }
 
         $data['shop_id']           = $order_info['shop_id'];
         $data['inv_customer_id']   = $customer_id;;

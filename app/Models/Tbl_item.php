@@ -58,7 +58,7 @@ class Tbl_item extends Model
     public function scopeInventory($query, $warehouse_id = null)
     {
         return $query->selectRaw("*, IFNULL(sum(inventory_count),0) as inventory_count")
-                     ->leftjoin("tbl_warehouse_inventory", function($join) use ($warehouse_id)
+                     ->leftjoin(DB::raw("Select * from tbl_warehouse_inventory JOIN tbl_warehouse warehouse where warehouse.archived = 0"), function($join) use ($warehouse_id)
                      {
                         $join->on("inventory_item_id","=","item_id");
                         if($warehouse_id)

@@ -116,20 +116,18 @@
         <div class="grid-view">
         	@foreach($_product as $product)
         		@if(count($product['variant']) > 0)
-                <a href="/product/view/1">
-                    <div class="holder">
-                        <div class="border">
-                            <div class="img"><img class="4-3-ratio" src="{{ get_product_first_image($product) }}"></div>
-                            <div class="name">{{ get_product_first_name($product) }}</div>
-                            <!-- <div class="price-left">P34,000</div> -->
-                            <div class="price-right">{{ get_product_first_price($product) }}</div>
-                            <div class="hover">
-                                <a href="/product/view/{{ $product['eprod_id'] }}" class="text">ADD TO CART</a>
-                                <a href="/product/view/{{ $product['eprod_id'] }}" class="text">VIEW MORE</a>
-                            </div>
+                <div class="holder">
+                    <div class="border">
+                        <div class="img"><img class="4-3-ratio" src="{{ get_product_first_image($product) }}"></div>
+                        <div class="name">{{ get_product_first_name($product) }}</div>
+                        <!-- <div class="price-left">P34,000</div> -->
+                        <div class="price-right">{{ get_product_first_price($product) }}</div>
+                        <div class="hover">
+                            <a product-id="{{ $product['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
+                            <a style="display: block; margin-top: 50px;" href="/product/view/{{ $product['eprod_id'] }}" class="text">VIEW MORE</a>
                         </div>
                     </div>
-                </a>
+                </div>
                 @endif
             @endforeach
         </div>
@@ -188,6 +186,22 @@
             @endforeach
         </div>
     </form>
+</div>
+<div id="quick-add-cart" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add to Cart</h4>
+      </div>
+      <div class="quick-cart-content">
+          
+      </div>
+    </div>
+
+  </div>
 </div>
 
     <script type="text/javascript">

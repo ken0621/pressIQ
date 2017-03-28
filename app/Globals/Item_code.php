@@ -458,7 +458,7 @@ class Item_code
                             $update_gc['mlm_gc_used_date'] = Carbon::now();
                             Tbl_mlm_gc::where('mlm_gc_code', $data['gc_code'])->update($update_gc);
 
-                            $return = $gc_amount - $insert["item_total"];
+                            $return = $gc_amount - ($insert["item_total"]);
                             if($return >= 1)
                             {
                                 Mlm_gc::return_gc($insert['slot_id'], $data['gc_code'], $return);
@@ -466,12 +466,12 @@ class Item_code
                         }
                         if($wallet == 2)
                         {
-                            $log = 'Thank you for purchasing. ' .$insert["item_subtotal"]. ' is deducted to your wallet';
+                            $log = 'Thank you for purchasing. ' .$insert["item_total"]. ' is deducted to your wallet';
                             $arry_log['wallet_log_slot'] = $insert['slot_id'];
                             $arry_log['shop_id'] = $shop_id;
                             $arry_log['wallet_log_slot_sponsor'] = $insert['slot_id'];
                             $arry_log['wallet_log_details'] = $log;
-                            $arry_log['wallet_log_amount'] = $insert["item_total"] * (-1);
+                            $arry_log['wallet_log_amount'] = ($insert["item_total"]) * (-1);
                             $arry_log['wallet_log_plan'] = "REPURCHASE";
                             $arry_log['wallet_log_status'] = "released";   
                             $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 

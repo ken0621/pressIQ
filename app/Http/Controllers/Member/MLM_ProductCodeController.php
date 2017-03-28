@@ -59,18 +59,20 @@ class MLM_ProductCodeController extends Member
     public function sell()
     {
         $access = Utilities::checkAccess('mlm-product-code', 'product_code_sell_codes');
+
+        $data['_item']  = Item::get_all_category_item();
+        // dd($data);
         if($access == 0)
         {
             return $this->show_no_access(); 
         }
 
         $shop_id            = $this->user_info->shop_id;
-	    $data["_item"] 	    = null;
+	    $data['_item']  = Item::get_all_category_item();
 	    $data["_customer"]  = Tbl_customer::where("archived",0)->where("shop_id",$shop_id)->get();
 	    $data['table_body'] = $this->view_all_lines();
-        // dd(1);
-        // $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get();
         $data['warehouse'][0] = $this->current_warehouse;
+        // dd($data);
         return view('member.mlm_product_code.mlm_product_code_sell', $data);
     }
 
@@ -119,6 +121,8 @@ class MLM_ProductCodeController extends Member
     public function add_line()
     {
         $data['item_list'] = Item::view_item_dropdown($this->user_info->shop_id);
+
+
         if(Request::input('slot_id') != null)
         {
             $data['slot_id'] = Request::input('slot_id');

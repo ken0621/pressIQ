@@ -40,6 +40,11 @@ function item()
             link        : '/member/item/manufacturer/add',
             link_size   : 'md'
         });
+        $('.drop-down-vendor').globalDropList(
+        { 
+            width : "100%",
+            link : "/member/vendor/add"
+        });
 
         $(".drop-down-um").globalDropList(
         {

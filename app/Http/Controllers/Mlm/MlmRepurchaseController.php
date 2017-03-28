@@ -17,6 +17,7 @@ use App\Models\Tbl_mlm_item_discount;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_item;
 use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Models\Tbl_item_code;
 class MlmRepurchaseController extends Mlm
 {
     public function index()
@@ -160,5 +161,35 @@ class MlmRepurchaseController extends Mlm
     		$data['message'] = 'Please Choose an Item.';
     	}
     	return json_encode($data);
+    }
+    public function use_item_code($item_code_id)
+    {
+        $data = [];
+        $data['item_code'] = Tbl_item_code::where('item_code_id', $item_code_id)
+        ->join('tbl_mlm_item_points', 'tbl_mlm_item_points.item_id', '=', 'tbl_item_code.item_id')
+        ->first();
+
+        $data['active_plan'] = Mlm_plan::get_all_active_plan_repurchase(Self::$shop_id);
+        if($data['item_code'])
+        {
+           foreach($data['active_plan'] as $key2 => $value2)
+            {
+                $code = $value2->marketing_plan_code;
+                if($code == 'DISCOUNT_CARD_REPURCHASE' || $code == 'UNILEVEL_REPURCHASE_POINTS' || $code == 'UNILEVEL')
+                {
+                    
+                    
+                }
+                else
+                {
+                    // dd($code);
+                    $data["membership_points"][$value2->marketing_plan_label] = $data['item_code']->$code;
+                }
+            } 
+        }
+
+
+        // dd($data);
+        return view('mlm.repurchase.use', $data);
     }
 }

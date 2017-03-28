@@ -28,6 +28,15 @@ class Sms
 		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
 	}
 
+	/**
+	 * Send single sms with a template content
+	 *
+	 * @param string or array  	$recipient 		Mobile Number of the recipient (e.g. 63912345678)
+	 * @param array  			$content  		Contains the content of the sms
+	 * @param string  			$key      		Contains the key of a specific sms type or can be null
+	 * @param int  				$shop_id    	Shop id of the products that you wnat to get. null if auto get
+	 * @return array 			$response
+	 */
 	public static function SendSingleText($recipient, $content, $key, $shop_id = null)
 	{
 		if(!$shop_id)
@@ -40,9 +49,9 @@ class Sms
 		if(is_array($recipient))
 		{
 			$_recipient = "";
-			foreach($recipient as $key=>$number)
+			foreach($recipient as $key1=>$number)
 			{
-				$key == 0 ? $_recipient .= "\"$number\"" : $_recipient .= ",\"$number\"" ;
+				$key1 == 0 ? $_recipient .= "\"$number\"" : $_recipient .= ",\"$number\"" ;
 			}
 			$recipient = "[$_recipient]";
 		}
@@ -92,6 +101,16 @@ class Sms
 		return $response;
 	}
 
+	/**
+	 * Send single sms with a template content
+	 *
+	 * @param string or array  	$recipient 		Mobile Number of the recipient (e.g. 63912345678)
+	 * @param array  			$replace_data  	Contains the text to be replace (e.g : [name] => Juan) 
+	 *											(variable : data[0][txt_to_be_replace] , $txt[0]["txt_to_replace"]) 
+	 * @param string  			$key      		Contains the key of a specific sms tamplate
+	 * @param int  				$shop_id    	Shop id of the products that you wnat to get. null if auto get
+	 * @return array 			['status'], ['message']
+	 */
 	public static function SendSms($recipient, $key, $replace_data, $shop_id = null)
 	{
 		if(!$shop_id)

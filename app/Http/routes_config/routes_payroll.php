@@ -242,4 +242,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* dmsph end */
 
 	/* BIO METRICS IMPORT END */
+
+
+	/* PAYORLL TIME KEEPING START */
+	Route::any('/time_keeping','Member\PayrollController@time_keeping');
+	Route::any('/time_keeping/modal_generate_period','Member\PayrollController@modal_generate_period');
+	/* PAYROLL TIME KEEPING END */
 });

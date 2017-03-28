@@ -33,6 +33,10 @@ use App\Globals\Mlm_compute;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Mlm_complan_manager_repurchase;
 
+use App\Models\Tbl_mlm_discount_card_settings;
+use App\Models\Tbl_mlm_discount_card_log;
+use App\Globals\Membership_code;
+
 class Mlm_complan_manager_repurchase
 {   
     public static function unilevel($slot_info, $item_code_id)
@@ -452,22 +456,22 @@ class Mlm_complan_manager_repurchase
         }
         if($membership_points_repurchase_cashback != 0)
         {
-                    $log_array['earning'] = $membership_points_repurchase_cashback;
-                    $log_array['level'] = 0;
-                    $log_array['level_tree'] = 'Sponsor Tree';
-                    $log_array['complan'] = 'REPURCHASE_CASHBACK';
+            $log_array['earning'] = $membership_points_repurchase_cashback;
+            $log_array['level'] = 0;
+            $log_array['level_tree'] = 'Sponsor Tree';
+            $log_array['complan'] = 'REPURCHASE_CASHBACK';
 
-                    $log = Mlm_slot_log::log_constructor($slot_info, $slot_info,  $log_array);
+            $log = Mlm_slot_log::log_constructor($slot_info, $slot_info,  $log_array);
 
-                    $arry_log['wallet_log_slot'] = $slot_info->slot_id;
-                    $arry_log['shop_id'] = $slot_info->shop_id;
-                    $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
-                    $arry_log['wallet_log_details'] = $log;
-                    $arry_log['wallet_log_amount'] = $membership_points_repurchase_cashback;
-                    $arry_log['wallet_log_plan'] = "REPURCHASE_CASHBACK";
-                    $arry_log['wallet_log_status'] = "n_ready";   
-                    $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK', $slot_info->shop_id); 
-                    Mlm_slot_log::slot_array($arry_log);
+            $arry_log['wallet_log_slot'] = $slot_info->slot_id;
+            $arry_log['shop_id'] = $slot_info->shop_id;
+            $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+            $arry_log['wallet_log_details'] = $log;
+            $arry_log['wallet_log_amount'] = $membership_points_repurchase_cashback;
+            $arry_log['wallet_log_plan'] = "REPURCHASE_CASHBACK";
+            $arry_log['wallet_log_status'] = "n_ready";   
+            $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK', $slot_info->shop_id); 
+            Mlm_slot_log::slot_array($arry_log);
         }
     }
     public static function unilevel_repurchase_points($slot_info, $item_code_id)
@@ -542,47 +546,40 @@ class Mlm_complan_manager_repurchase
         }
         Mlm_complan_manager_repurchase::unilevel_cutoff('UNILEVEL_REPURCHASE_POINTS', $slot_info->shop_id);
     }
+    
+    public static function discount_card_repurchase($slot_info, $item_code_id)
+    {
+        $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first();  
+       if($item_code)
+        {
+            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)
+            ->where('membership_id', $slot_info->membership_id)
+            ->first();
+            $dc_count = 0;
+            if($mlm_item_points)
+            {
+                $dc_count = $mlm_item_points->DISCOUNT_CARD_REPURCHASE;
+            }
+            else
+            {
+                $dc_count = 0;
 
-    // public static function over_ride_bonus($slot_info,$slot_pv)
-    // {
-    //     $placement_tree  = Tbl_tree_placement::where("placement_tree_child_id",$slot_info->slot_id)->orderBy("placement_tree_level","ASC")->get();
-    //     $percentage      = null;
-    //     $check_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$slot_info->shop_id)->first();
+            }
+        }
+        if($dc_count != 0)
+        {
+            $membership_id = $slot_info->slot_membership;
+            $settings = Tbl_mlm_discount_card_settings::where('membership_id', $membership_id)->first();
+            for($i = 0; $i < $dc_count; $i++)
+            {
+                $insert['discount_card_log_date_created'] = Carbon::now();
+                $insert['discount_card_slot_sponsor'] = $slot_info->slot_id;
+                $insert['discount_card_customer_sponsor'] = $slot_info->slot_owner;
+                $insert['discount_card_membership'] = $settings->discount_card_membership;
+                $insert['discount_card_log_code'] = Membership_code::random_code_generator(8);
+                Tbl_mlm_discount_card_log::insert($insert);
+            }
+        }
+    }
 
-    //     if($check_stairstep)
-    //     {
-    //         foreach($placement_tree as $placement)
-    //         {
-    //             $owned_pv = Tbl_mlm_slot_points_log::where("points_log_slot",$placement->placement_tree_parent_id)->sum("points_log_points");
-    //             if(!$percentage)
-    //             {
-    //                 $slot_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$slot_info->shop_id)
-    //                                                         ->where("stairstep_required_pv","<=",$owned_pv)
-    //                                                         ->first();
-    //                 if($slot_stairstep->stairstep_bonus != 0)
-    //                 {
-    //                     $computed_points = ($slot_stairstep->stairstep_bonus/100) * $slot_pv;
-    //                 }         
-
-    //                 $percentage     = $slot_stairstep->stairstep_bonus;
-    //             }
-    //             else
-    //             {
-    //                 $slot_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$slot_info->shop_id)
-    //                                                         ->where("stairstep_required_pv","<=",$owned_pv)
-    //                                                         ->first();
-
-    //                 if($slot_stairstep->stairstep_bonus > $percentage)
-    //                 { 
-    //                     if($slot_stairstep->stairstep_bonus != 0)
-    //                     {
-    //                         $computed_points = (($slot_stairstep->stairstep_bonus - $percentage)/100) * $slot_pv;
-    //                     }    
-
-    //                     $percentage     = $slot_stairstep->stairstep_bonus;
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 }

@@ -170,6 +170,7 @@ class MlmProfileController extends Mlm
 				$update['customer_city'] = $customer_city;
 				$update['customer_zipcode'] = $customer_zipcode;
 				$update['customer_street'] = $customer_street;
+				$update['purpose'] = 'billing';
 				DB::table('tbl_customer_address')->where('customer_id', $customer_id)->update($update);
 	    	}
 	    	else
@@ -180,6 +181,7 @@ class MlmProfileController extends Mlm
 				$update['customer_city'] = $customer_city;
 				$update['customer_zipcode'] = $customer_zipcode;
 				$update['customer_street'] = $customer_street;
+				$update['purpose'] = 'billing';
 				DB::table('tbl_customer_address')->insert($update);
 	    	}
 	    	

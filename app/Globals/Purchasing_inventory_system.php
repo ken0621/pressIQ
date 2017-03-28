@@ -61,6 +61,30 @@ class Purchasing_inventory_system
 
         return $data;
     }
+    public static function reject_return_stock($sir_id)
+    {
+        // inventroy_source_reason
+        // inventory_source_id
+        $warehouse_id = Purchasing_inventory_system::get_warehouse_based_sir($sir_id);
+        $reason_refill = "sir_return";
+        $refill_source = $sir_id;
+        $remarks = "Return Stock from SIR NO: ".$sir_id;
+
+        $sir_item = Tbl_sir_item::where("sir_id",$sir_id)->get();
+
+        foreach ($sir_item as $key => $value) 
+        {
+            $warehouse_refill_product[$key]["product_id"] = $value->item_id;
+            $warehouse_refill_product[$key]["quantity"] = UnitMeasurement::um_qty($value->related_um_type) * $value->item_qty;
+        }
+
+        $data = Warehouse::inventory_refill($warehouse_id, $reason_refill, $refill_source, $remarks, $warehouse_refill_product,'array',$is_return = 1);
+
+        // $up["ilr_status"] = 2;
+        // Tbl_sir::where("sir_id",$sir_id)->update($up);
+
+        return $data;
+    }
     public static function view_status($sir_id)
     {
         $sir_data["sir"] = Tbl_sir::saleagent()->truck()->where("sir_id",$sir_id)->first();
@@ -275,7 +299,7 @@ class Purchasing_inventory_system
     public static function select_sir_list_status($lof_status,$sir_status,$ilr_status,$sync, $srch_sir = '')
     {
         $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",Purchasing_inventory_system::getShopId())
-                        ->whereIn("tbl_sir.lof_status",$lof_status)
+                        ->where("tbl_sir.lof_status",$lof_status)
                         ->where("tbl_sir.sir_status",$sir_status)
                         ->where("tbl_sir.ilr_status",$ilr_status)
                         ->where("tbl_sir.is_sync",$sync)
@@ -293,8 +317,29 @@ class Purchasing_inventory_system
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
             }
+            $data[$key]->total_amount += $price;
 
-            $data[$key]->total_amount += $price; 
+            if($lof_status == 3)
+            {
+                $data[$key]->status = "Rejected";
+                $data[$key]->status_color = "danger";
+            }
+            elseif($lof_status == 2 && $sir_status == 1 && $ilr_status == 0 && $sync == 1 )
+            {
+                $data[$key]->status = "SIR";
+                $data[$key]->status_color = "success";
+            }
+            elseif($lof_status == 2 && $sir_status == 2 && $ilr_status == 1 && $sync == 1 )
+            {
+                $data[$key]->status = "ILR";
+                $data[$key]->status_color = "warning";
+            }
+            elseif($lof_status == 2 || $lof_status == 1 && $sir_status == 0 && $ilr_status == 0 && $sync == 0 )
+            {
+                $data[$key]->status = "LOF";
+                $data[$key]->status_color = "info";
+            }
+
         }
 
         return $data;         

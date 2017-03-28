@@ -18,6 +18,7 @@ class Tbl_payroll_period extends Model
 	// [DATE] 			payroll_period_end
 	// [VARCHAR] 		payroll_period_category
 	// [TINY INTEGER] 	payroll_period_archived
+	// [VARCHAR]		payroll_period_status [DEFAULT {pending}]
 
 	public function scopesel($query, $shop_id = 0, $payroll_period_archived = 0)
 	{

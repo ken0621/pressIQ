@@ -19,6 +19,8 @@ use App\Models\Tbl_payroll_group_rest_day;
 use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
+use App\Models\Tbl_payroll_tax_period_default;
+
 use Carbon\Carbon;
 use stdClass;
 
@@ -78,6 +80,25 @@ class Payroll
 		}
 
 		return $data;
+	}
+
+	public static function generate_tax_period($shop_id = 0)
+	{
+		$_default = Tbl_payroll_tax_period_default::get();
+		$insert = array();
+		foreach($_default as $default)
+		{
+			$count = Tbl_payroll_tax_period::where('shop_id', $shop_id)->where('payroll_tax_period',$default->payroll_tax_period)->count();
+			if($count == 0)
+			{
+				$temp['payroll_tax_period'] = $default->payroll_tax_period;
+				$temp['shop_id']			= $shop_id;
+			}
+		}
+		if(!empty($insert))
+		{
+			Tbl_payroll_tax_period::insert($insert);
+		}
 	}
 
 	public static function generate_sss($shop_id = 0)

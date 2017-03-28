@@ -84,6 +84,11 @@
             refresh_data()
             data.element.modal("toggle");
         }
+        else
+        {
+            toastr.error(data.message);
+            data.element.modal("toggle");
+        }
     }
 
     function refresh_data()

@@ -98,6 +98,8 @@ class Member extends Controller
 
 		View::share("frontend_domain", $data["frontend_domain"]);
 
+		/* INSERT TAX PERIOD */
+		Payroll::generate_tax_period($this->user_info->shop_id);
 		/* INSERT DEFAULT CHART OF ACCOUNT */
 		Account::put_default_account($this->user_info->shop_id);
 		/* INSERT TAX TABLE PER SHOP */
@@ -108,6 +110,7 @@ class Member extends Controller
 		Payroll::generate_philhealth($this->user_info->shop_id);
 		/* INSERT PAGIBIG TABLE PER SHOP */
 		Payroll::generate_pagibig($this->user_info->shop_id);
+
 		/* INSERT DEFAULT WAREHOUSE */
 		Warehouse::put_default_warehouse($this->user_info->shop_id);
 		/* INSERT MAIN WAREHOUSE */

@@ -161,14 +161,26 @@ function timesheet()
 	}
 	function action_load_timesheet()
 	{
-		$(".load-timesheet").html("<div class='timesheet-table-loading'><div class='spin'><i class='table-loader fa fa-spinner fa-spin fa-fw'></i></div> <div>LOADING</div> </div>");
+		$(".load-timesheet").html("<div class='timesheet-table-loading'><div class='spin'><i class='table-loader fa fa-spinner fa-pulse fa-fw'></i></div> <div>LOADING</div> </div>");
 
 		var selected_employee = $(".choose-employee").val();
-		$(".load-timesheet").load('/member/payroll/employee_timesheet/timesheet/' + selected_employee, function()
+		var payroll_period_id = $("#payroll_period_id").val();
+		var employee_name = $(".choose-employee").find(':selected').text();
+		$(".employee-name").html(employee_name);
+
+		if(selected_employee == null || selected_employee == "" || selected_employee == 0 || selected_employee == undefined)
+		{ 
+			$(".load-timesheet").load('/member/payroll/no_records');
+		}
+		else
 		{
-			action_compute_work_hours();
-			event_time_entry();
-		});
+			$(".load-timesheet").load('/member/payroll/employee_timesheet/timesheet/' + selected_employee + '/' + payroll_period_id, function()
+			{
+				action_compute_work_hours();
+				event_time_entry();
+			});
+		}
+		
 	}
 	function event_change_employee()
 	{

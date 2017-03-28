@@ -240,7 +240,7 @@ class EcommerceProductController extends Member
 		$item_id		= Request::input("evariant_item_id"); 
 		$variant_price	= Request::input("evariant_price"); 
 		$item_code		= Request::input("item_code"); 
-		$item_qty		= Request::input("item_qty_refill");
+		$item_qty		= Request::input("item_qty_refill)";
 		
 		foreach($item_id as $key => $item){
 			
@@ -576,7 +576,7 @@ class EcommerceProductController extends Member
 			$update_variant["evariant_item_id"] 	= Request::input("evariant_item_id");
 			$update_variant["evariant_item_label"] 	= Request::input("evariant_item_label");
 			$update_variant["evariant_description"] = Request::input("evariant_description");
-			$update_variant["evariant_price"] 		= Request::input("evariant_price");
+			$update_variant["evariant_price"] 		= convertToNumber(Request::input("evariant_price"));
 
 			Tbl_ec_variant::where("evariant_id", $variant_id)->update($update_variant);
 
@@ -693,7 +693,7 @@ class EcommerceProductController extends Member
 		$insertVariant['evariant_item_id']		= Request::input("evariant_item_id");
 		$insertVariant["evariant_item_label"] 	= Request::input('evariant_item_label');
 		$insertVariant["evariant_description"] 	= Request::input('evariant_description');
-		$insertVariant["evariant_price"] 		= Request::input('evariant_price');
+		$insertVariant["evariant_price"] 		= convertToNumber(Request::input('evariant_price'));
 		$insertVariant["date_created"] 			= Carbon::now();
 		$insertVariant["date_visible"] 			= Carbon::now();
 
@@ -815,9 +815,17 @@ class EcommerceProductController extends Member
 		{
 			$data["_product"][$key1]["product_new_name"] = $product["eprod_name"] . ($product["variant_name"] ? ' : '.$product["variant_name"] : '');
 		}
-
-		// dd($data["_product"]);
-		
 		return view('member.ecommerce_product.ecom_bulk_edit_price', $data);
+	}
+
+	public function postBulkEditPrice()
+	{
+		$evariant_new_price = Request::input('evariant_new_price');
+		$evariant_id 		= Request::input('evariant_id');
+
+		foreach($evariant_new_price as $new_price)
+		{
+
+		}
 	}
 }

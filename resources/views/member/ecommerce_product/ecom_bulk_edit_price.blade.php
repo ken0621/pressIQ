@@ -14,7 +14,6 @@
                     </small>
                 </h1>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right save-and-edit" method="post">Save</button>
-                <button type="submit" class="panel-buttons btn btn-custom-white pull-right save-and-new" method="post">Save And New</button>
                 <a href="/member/ecommerce/product/list" class="panel-buttons btn btn-default pull-right">Cancel</a>
             </div>
         </div>
@@ -39,8 +38,8 @@
                                     <td>{{$product['eprod_name']}}</td>
                                     <td>{{currency('',$product['evariant_price'])}}</td>
                                     <td>
-                                        <input type="hidden" name="evariant_id" value="{{$product['evariant_id']}}">
-                                        <input type="text" class="form-control input-sm" name="evariant_new_price">
+                                        <input type="hidden" name="evariant_id[]" value="{{$product['evariant_id']}}">
+                                        <input type="text" class="form-control input-sm money-format" name="evariant_new_price[]">
                                     </td>
                                 </tr>
                                 @endforeach
@@ -66,18 +65,5 @@
     @if(Session::has('success'))
         toastr.success('{{Session::get('success')}}');
     @endif
-
-    function formatMoney($this)
-    {
-        var n = formatFloat($this), 
-        c = isNaN(c = Math.abs(c)) ? 2 : c, 
-        d = d == undefined ? "." : d, 
-        t = t == undefined ? "," : t, 
-        s = n < 0 ? "-" : "", 
-        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
-        j = (j = i.length) > 3 ? j % 3 : 0;
-       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-    }
-
 </script>
 @endsection

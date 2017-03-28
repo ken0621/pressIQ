@@ -66,13 +66,15 @@ class EcommerceProductController extends Member
         	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0);
 			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1);
 
-			if(Request::input('search'))
+			$search = Request::input('search');
+			if($search)
 			{
-				$active_product = $active_product->where("eprod_name","like","%Request::input('search')%");
+				$active_product 	= $active_product->where("eprod_name","like","%$search%");
+				$inactive_product 	= $inactive_product->where("eprod_name","like","%$search%");
 			}
-			dd($active_product->toSql());
+
 			$active_product 	= $active_product->paginate(10);
-			$inactive_product 	= $inactive_product->paginate(10);
+			$inactive_product 	= $inactive_product->paginate(1);
 
 	        $data["_product"]			= $active_product;
 	        $data["_product_archived"]	= $inactive_product;

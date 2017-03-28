@@ -19,6 +19,35 @@ use Carbon\Carbon;
 use Session;
 class Warehouse
 {   
+    public static function check_item_every_warehouse()
+    {
+        $all_warehouse = Tbl_warehouse::where("warehouse_shop_id",Warehouse::getShopId())->where("archived",0)->get();
+
+        foreach ($all_warehouse as $key => $value) 
+        {
+            $all_item = Tbl_item::where("shop_id",Warehouse::getShopId())->where("archived",0)->get();
+            foreach ($all_item as $key1 => $value1)
+            {
+                $item = Tbl_sub_warehouse::where("warehouse_id",$value->warehouse_id)->where("item_id",$value1->item_id)->first();
+                if($item == null)
+                {
+                    $ins["warehouse_id"] = $value->warehouse_id;
+                    $ins["item_id"] = $value1->item_id;
+                    $ins["item_reorder_point"] = 0;
+
+                    Tbl_sub_warehouse::insert($ins);
+
+                    $ins_inventory["inventory_item_id"] = $value1->item_id;
+                    $ins_inventory["warehouse_id"] = $value->warehouse_id;
+                    $ins_inventory["inventory_created"] = Carbon::now();
+                    $ins_inventory["inventory_count"] = 0;
+
+                    Tbl_warehouse_inventory::insert($ins_inventory);
+                }
+            }
+        }
+        // dd("success");
+    }
     public static function insert_access($warehouse_id)
     {
         $ins_access["user_id"] = Warehouse::getUserid();
@@ -72,6 +101,20 @@ class Warehouse
     		$data = json_encode($data);
     	}
     	return $data; 
+    }  
+
+    public static function select_item_warehouse_single_vendor($warehouse_id = 0, $return = 'array',$vendor_id)
+    {
+        $data = Tbl_warehouse::Warehouseitem_vendor($vendor_id)
+                             ->select_inventory($warehouse_id)
+                             ->orderBy('product_name','asc')
+                             ->get();
+                             
+        if($return == 'json')
+        {
+            $data = json_encode($data);
+        }
+        return $data; 
     }
     public static function warehouse_access()
     {
@@ -227,7 +270,7 @@ class Warehouse
             $count = Tbl_warehouse_inventory::check_inventory_single($inventory_slip->warehouse_id, $value2['product_id'])->pluck('inventory_count');
             $count_on_hand = $count + $value2["quantity"];
 
-            if($value2['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand > $value2['quantity'])
+            if($value2['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value2['quantity'])
             {     
                 $insert["inventory_item_id"] = $value2["product_id"];
                 $insert["inventory_count"] = $value2["quantity"] * -1;
@@ -452,7 +495,7 @@ class Warehouse
                 $count_on_hand = 0;   
             }
 
-            if($product['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand > $product['quantity'])
+            if($product['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $product['quantity'])
             {
                 $insert_consume[$key]['inventory_item_id']        = $product['product_id'];
                 $insert_consume[$key]['warehouse_id']             = $warehouse_id;

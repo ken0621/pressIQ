@@ -67,6 +67,8 @@ class MLM_PlanController extends Member
     	$validate['plan_settings_format'] = Request::input('plan_settings_format');
     	$validate['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
         $validate['plan_settings_use_item_code'] = Request::input('plan_settings_use_item_code');
+        $validate['plan_settings_email_membership_code'] = Request::input('plan_settings_email_membership_code');
+        $validate['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
     	// end input from form
     	
     	// Validator rules
@@ -77,6 +79,8 @@ class MLM_PlanController extends Member
 		$rules['plan_settings_format'] = "required";
 		$rules['plan_settings_prefix_count'] = "required";
         $rules['plan_settings_use_item_code'] = "required";
+        $rules['plan_settings_email_membership_code'] = 'required';
+        $rules['plan_settings_email_product_code'] = 'required';
 		// end validator rules
 		
 		// validate
@@ -100,6 +104,8 @@ class MLM_PlanController extends Member
     		$update['plan_settings_format'] = Request::input('plan_settings_format');
     		$update['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
             $update['plan_settings_use_item_code'] = Request::input('plan_settings_use_item_code');
+            $update['plan_settings_email_membership_code'] = Request::input('plan_settings_email_membership_code');
+            $update['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
     		// end
     		
     		// update settings

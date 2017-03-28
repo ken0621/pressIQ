@@ -86,7 +86,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="tbody-item">
-                                        @include('member.receive_payment.load_receive_payment_items');
+                                        @include('member.receive_payment.load_receive_payment_items')
                                     </tbody>
                                 </table>
                             </div>

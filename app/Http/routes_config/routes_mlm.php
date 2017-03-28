@@ -30,6 +30,7 @@ Route::any('/mlm/profile/edit/picture', 'Mlm\MlmProfileController@profile_pictur
 Route::any('/mlm/profile/edit/encashment', 'Mlm\MlmProfileController@update_encashment');
 //
 Route::get('/mlm/repurchase', 'Mlm\MlmRepurchaseController@index'); //EDWARD GUEVARRA
+Route::get('/mlm/repurchase/use/{item_code_id}', 'Mlm\MlmRepurchaseController@use_item_code'); //EDWARD GUEVARRA
 
 Route::any('/mlm/repurchase/add/cart', 'Mlm\MlmRepurchaseController@add_to_cart'); //EDWARD GUEVARRA
 Route::any('/mlm/repurchase/get/cart', 'Mlm\MlmRepurchaseController@get_cart_repurchase'); //EDWARD GUEVARRA

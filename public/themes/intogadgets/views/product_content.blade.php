@@ -52,7 +52,9 @@
             </div> -->
             <div class="price-container">
                <div id="single-order-price" class="single-order-price">&#8369;&nbsp;{{ number_format($product_variant['evariant_price'], 2) }}</div>
-               <div class="single-order-availability" style="text-transform: capitalize;">{{ $product_variant['inventory_status'] }}</div>
+               @if($product_variant['item_type_id'] != 2)
+                <div class="single-order-availability" style="text-transform: capitalize;">{{ $product_variant['inventory_status'] }}</div>
+               @endif
             </div>
             <div class="product-selection">
                <form id="prod-attr-form" method="GET">
@@ -95,7 +97,7 @@
             </div>
             <!-- <button class="single-order-button " pid="" vid="" mode="cart" onclick="window.open('','_blank')">BUY NOW</button> 
             <button href="product/#order" class="single-order-button order-button add-cart" mode="reservation">STORE PICK-UP</button> -->
-            <button type="button" class="single-order-button add-to-cart {{ isset($product['variant'][1]) ? 'disabled' : '' }}" variant-id="{{ $product_variant['evariant_id'] }}" {{ isset($product['variant'][1]) ? 'disabled' : '' }}>ADD TO CART</button>
+            <button type="button" class="single-order-button add-to-cart {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }}" variant-id="{{ $product_variant['evariant_id'] }}" {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }}>ADD TO CART</button>
             <div class="divider" style="margin: 35px 0; opacity: 0;"></div>
             <!-- <div class="single-order-rate" id="single-product-rate">
                @for ($i = 1; $i <= 5; $i++)

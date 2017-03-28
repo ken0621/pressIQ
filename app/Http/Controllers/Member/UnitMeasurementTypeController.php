@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Member;
 
 use Request;
 use App\Http\Controllers\Controller;
+use App\Globals\Utilities;
 use App\Models\Tbl_unit_measurement_type;
 use Validator;
 use Carbon\Carbon;
@@ -19,8 +20,8 @@ class UnitMeasurementTypeController extends Member
         $access = Utilities::checkAccess('item-um-type', 'access_page');
         if($access == 1)
         { 
-            $data["_um_type_parent"] = Tbl_unit_measurement_type::where("um_type_parent_id",0)->where("archived",0)->get();
-            $data["_um_type"] = Tbl_unit_measurement_type::where("archived",0)->get();
+            $data["_um_type_parent"] = Tbl_unit_measurement_type::where("um_type_parent_id",0)->where("archived",0)->where("shop_id",$this->user_info->shop_id)->get();
+            $data["_um_type"] = Tbl_unit_measurement_type::where("archived",0)->where("shop_id",$this->user_info->shop_id)->get();
             
             $data["um_type"] = null;
             foreach ($data["_um_type"] as $key => $value) 
@@ -32,7 +33,7 @@ class UnitMeasurementTypeController extends Member
                                             <td>".$value->um_type_abbrev."</td>
                                             <td class='text-center'><a class='popup' size='md' link='/member/item/um_type/edit/".$value->um_type_id."'>Edit</a></td>
                                           </tr>";
-                    $data["sub"] = Tbl_unit_measurement_type::where("um_type_parent_id",$value->um_type_id)->get();
+                    $data["sub"] = Tbl_unit_measurement_type::where("um_type_parent_id",$value->um_type_id)->where("shop_id",$this->user_info->shop_id)->get();
                     foreach ($data["sub"] as $key2 => $value2) 
                     {
                         $data["um_type"] .= "<tr>
@@ -57,7 +58,7 @@ class UnitMeasurementTypeController extends Member
         $access = Utilities::checkAccess('item-um-type', 'access_page');
         if($access == 1)
         { 
-            $data["_um_type_parent"] = Tbl_unit_measurement_type::where("um_type_parent_id",0)->where("archived",0)->get();
+            $data["_um_type_parent"] = Tbl_unit_measurement_type::where("um_type_parent_id",0)->where("archived",0)->where("shop_id",$this->user_info->shop_id)->get();
             return view('member.unit_of_measurement.um_type.um_type_add',$data);
         }
         else
@@ -82,6 +83,7 @@ class UnitMeasurementTypeController extends Member
             $ins["um_type_parent_id"] = $um_type_parent;
             $ins["um_type_name"] = $um_type_name;
             $ins["um_type_abbrev"] = $um_type_abbre;
+            $ins["shop_id"] = $this->user_info->shop_id;
             $ins["created_at"] = Carbon::now();
 
             $rule["um_type_parent_id"] = "required";
@@ -123,8 +125,8 @@ class UnitMeasurementTypeController extends Member
         $access = Utilities::checkAccess('item-um-type', 'access_page');
         if($access == 1)
         { 
-            $data["_um_type_parent"] = Tbl_unit_measurement_type::where("um_type_parent_id",0)->where("archived",0)->get();
-            $data["edit"] = Tbl_unit_measurement_type::where("um_type_id",$id)->first();
+            $data["_um_type_parent"] = Tbl_unit_measurement_type::where("um_type_parent_id",0)->where("archived",0)->where("shop_id",$this->user_info->shop_id)->get();
+            $data["edit"] = Tbl_unit_measurement_type::where("um_type_id",$id)->where("shop_id",$this->user_info->shop_id)->first();
 
             return view('member.unit_of_measurement.um_type.um_type_edit',$data);
         }

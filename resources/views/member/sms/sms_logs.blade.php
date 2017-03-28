@@ -10,7 +10,6 @@
                 <small>
                 </small>
             </h1>
-            <button type="button" class="panel-buttons btn btn-custom-primary pull-right popup" link="/member/utilities/modal-position" size="sm">Create Position</button>
         </div>
     </div>
 </div>

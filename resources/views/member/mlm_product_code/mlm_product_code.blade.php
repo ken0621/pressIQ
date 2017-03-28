@@ -38,98 +38,110 @@
     <div class="tab-content codes_container">
         <div id="pending-codes" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
-            <div class="table-responsive">
-                <table class="table table-condensed">
-                    <thead style="text-transform: uppercase">
-                        <tr>
-                            <th>Activation Code</th>
-                            <th>Item</th>
-                            <th>Sold To</th>
-                            <th class="text-center">Date Issued</th>
-                            <th class="text-center">Product Issued</th>
-                            <th class="text-center"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($_code_unused as $code)
-                            <tr>
-                                <td>{{$code->item_activation_code}}</td>
-                                <td>{{$code->item_name}}</td>
-                                <td class="text-left"><a href="javascript:">{{$code->first_name}}</a></td>
-                                <td class="text-center">{{$code->item_date_created}}</td>
-                                <td class="text-center"><input type="checkbox" {{$code->item_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
-                                <td>
-                                    <a link="/member/mlm/product_code/block/{{$code->item_code_id}}" href="javascript:" class="popup">BLOCK</a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <center>{!! $_code_unused->render() !!}</center>
-            </div>
+            <div class="load-data" target="code-unused-a">
+                <div id="code-unused-a">
+                    <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <thead style="text-transform: uppercase">
+                                <tr>
+                                    <th>Activation Code</th>
+                                    <th>Item</th>
+                                    <th>Sold To</th>
+                                    <th class="text-center">Date Issued</th>
+                                    <th class="text-center">Product Issued</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($_code_unused as $code)
+                                    <tr>
+                                        <td>{{$code->item_activation_code}}</td>
+                                        <td>{{$code->item_name}}</td>
+                                        <td class="text-left"><a href="javascript:">{{$code->first_name}}</a></td>
+                                        <td class="text-center">{{$code->item_date_created}}</td>
+                                        <td class="text-center"><input type="checkbox" {{$code->item_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
+                                        <td>
+                                            <a link="/member/mlm/product_code/block/{{$code->item_code_id}}" href="javascript:" class="popup">BLOCK</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <center>{!! $_code_unused->render() !!}</center>
+                    </div>
+                </div>
+            </div>    
         </div>
         <div id="used-codes" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
-            <div class="table-responsive">
-                <table class="table table-condensed">
-                    <thead style="text-transform: uppercase">
-                        <tr>
-                            <th>Activation Code</th>
-                            <th>Item</th>
-                            <th>Sold To</th>
-                            <th class="text-center">Date Issued</th>
-                            <th class="text-center">Product Issued</th>
-                            <th class="text-center"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($_code_used as $code)
-                            <tr>
-                                <td>{{$code->item_activation_code}}</td>
-                                <td>{{$code->item_name}}</td>
-                                <td class="text-left"><a href="javascript:">{{$code->first_name}}</a></td>
-                                <td class="text-center">{{$code->item_date_created}}</td>
-                                <td class="text-center"><input type="checkbox" {{$code->item_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
-                                <td>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <center>{!! $_code_used->render() !!}</center>
-            </div>
+            <div class="load-data" target="code-unused-b">
+                <div id="code-unused-b">
+                    <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <thead style="text-transform: uppercase">
+                                <tr>
+                                    <th>Activation Code</th>
+                                    <th>Item</th>
+                                    <th>Sold To</th>
+                                    <th class="text-center">Date Issued</th>
+                                    <th class="text-center">Product Issued</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($_code_used as $code)
+                                    <tr>
+                                        <td>{{$code->item_activation_code}}</td>
+                                        <td>{{$code->item_name}}</td>
+                                        <td class="text-left"><a href="javascript:">{{$code->first_name}}</a></td>
+                                        <td class="text-center">{{$code->item_date_created}}</td>
+                                        <td class="text-center"><input type="checkbox" {{$code->item_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <center>{!! $_code_used->render() !!}</center>
+                    </div>
+                </div>
+            </div>        
         </div>
         <div id="blocked-codes" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
-            <div class="table-responsive">
-                <table class="table table-condensed">
-                    <thead style="text-transform: uppercase">
-                        <tr>
-                            <th>Activation Code</th>
-                            <th>Item</th>
-                            <th>Sold To</th>
-                            <th class="text-center">Date Issued</th>
-                            <th class="text-center">Product Issued</th>
-                            <th class="text-center"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($_code_blocked as $code)
-                            <tr>
-                                <td>{{$code->item_activation_code}}</td>
-                                <td>{{$code->item_name}}</td>
-                                <td class="text-left"><a href="javascript:">{{$code->first_name}}</a></td>
-                                <td class="text-center">{{$code->item_date_created}}</td>
-                                <td class="text-center"><input type="checkbox" {{$code->item_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
-                                <td>
-                                    
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <center>{!! $_code_blocked->render() !!}</center>
-            </div>
+            <div class="load-data" target="code-unused-c">
+                <div id="code-unused-c">
+                    <div class="table-responsive">
+                        <table class="table table-condensed">
+                            <thead style="text-transform: uppercase">
+                                <tr>
+                                    <th>Activation Code</th>
+                                    <th>Item</th>
+                                    <th>Sold To</th>
+                                    <th class="text-center">Date Issued</th>
+                                    <th class="text-center">Product Issued</th>
+                                    <th class="text-center"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($_code_blocked as $code)
+                                    <tr>
+                                        <td>{{$code->item_activation_code}}</td>
+                                        <td>{{$code->item_name}}</td>
+                                        <td class="text-left"><a href="javascript:">{{$code->first_name}}</a></td>
+                                        <td class="text-center">{{$code->item_date_created}}</td>
+                                        <td class="text-center"><input type="checkbox" {{$code->item_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
+                                        <td>
+                                            
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <center>{!! $_code_blocked->render() !!}</center>
+                    </div>
+                </div>
+            </div>        
         </div>
     </div> 
 </div>
@@ -231,4 +243,5 @@ function dynamic_tab($tab_name)
         }
 }
 </script>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 @endsection

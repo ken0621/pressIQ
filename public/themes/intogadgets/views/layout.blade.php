@@ -26,7 +26,9 @@
 
     <link rel="stylesheet" href="resources/assets/font-awesome/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="resources/assets/remodal/src/jquery.remodal.css">
+    <link rel="stylesheet" href="resources/assets/remodal/src/remodal.css">
+
+    <link rel="stylesheet" href="resources/assets/remodal/src/remodal-default-theme.css">
 
     <link rel="stylesheet" href="resources/assets/slider/dist/slippry.css">
 
@@ -40,6 +42,17 @@
 
     @yield('css')
 
+    <style type="text/css">
+    /* Hide HTML5 Up and Down arrows. */
+    input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+     
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+    </style>
   </head>
 
   <body class="opa-hide">
@@ -373,7 +386,7 @@
 
         </nav>
 
-        <div class="loader">
+        <div class="loader" style="z-index: 1051;">
           <span><img src="/resources/assets/frontend/img/loader.gif"></span>
         </div>
 
@@ -899,13 +912,13 @@
 
   <script src="resources/assets/external/bootstrap.min.js"></script>
 
-  <script src="resources/assets/remodal/src/jquery.remodal.js"></script>
+  <script src="resources/assets/remodal/src/remodal.js"></script>
 
   <script src="resources/assets/rutsen/js/lazy.js"></script>
 
   <script src="resources/assets/rutsen/js/global.js"></script>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
 
   <script type="text/javascript" src="http://arrow.scrolltotop.com/arrow33.js"></script>
 
@@ -944,6 +957,28 @@
     {
       $('body').removeClass("opa-hide");
     });
+
+  jQuery(document).ready( function($) {
+   
+      // Disable scroll when focused on a number input.
+      $('form').on('focus', 'input[type=number]', function(e) {
+          $(this).on('wheel', function(e) {
+              e.preventDefault();
+          });
+      });
+   
+      // Restore scroll on number inputs.
+      $('form').on('blur', 'input[type=number]', function(e) {
+          $(this).off('wheel');
+      });
+   
+      // Disable up and down keys.
+      $('form').on('keydown', 'input[type=number]', function(e) {
+          if ( e.which == 38 || e.which == 40 )
+              e.preventDefault();
+      });  
+        
+  });
   </script>
 
   <!-- // <script src="/resources/assets/rutsen/js/subscribe.js"></script> -->

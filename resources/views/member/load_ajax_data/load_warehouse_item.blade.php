@@ -3,6 +3,3 @@
 			current-qty="{{$product->product_current_qty}}" reorder-point="{{$product->product_reorder_point}}" 
 			{{ isset($product_id) ?  $product_id == $product->product_id ? 'selected' : '' : '' }}>{{$product->product_name}}</option>
 @endforeach
-@if(sizeOf($warehouse_list)-1 == $key)
-	<option class="hidden" value="" />
-@endif

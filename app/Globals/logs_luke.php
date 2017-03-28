@@ -134,6 +134,11 @@ Bentahan ng discount card()
 Kung load yung binebenta may number na field LOAD WALLEt ()
 Check kung may serial ()
 kung may serial may option kung ano yung serial()
+search sa add new line
+after transaction mawawala yung laman
+bar codde
 
+
+street
 APP_KEY=vNYGoBAFOTzqWyeXFkYeO97Z5FIBq5SD
 

@@ -1,5 +1,6 @@
 @if(isset($item_list))
     @foreach($item_list as $key => $value)
+
         <tr>
             <td>
             	{!! $item_list[$key] !!}
@@ -22,6 +23,20 @@
             	</a>
             </td>
         </tr>
+
+        @if(isset($item_array[$key]['item_serial']))
+            @if($item_array[$key]['item_serial'] != null)
+                <tr>
+                    <td colspan="40">
+                    <input type="hidden" name="item_serial_enable" value="1">
+                        <center>Input Serial Number</center>
+                @for($i = 0; $i < $item_array[$key]['quantity']; $i++ )
+                    <div class="col-md-3"><input type="text" class="form-control col-md-3" value="{{ old('item_serial['.$key.']['.$i.']') }}" name="item_serial[{{$key}}][{{$i}}]" required></div>
+                @endfor
+                    </td>
+                </tr>
+            @endif
+        @endif
     @endforeach
 @else
     <tr>

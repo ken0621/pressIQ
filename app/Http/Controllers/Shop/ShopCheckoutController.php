@@ -21,6 +21,7 @@ use App\Models\Tbl_country;
 use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_code_item;
+use App\Models\Tbl_ec_order_item;
 // use App\Globals\Mlm_slot_log;    
 class ShopCheckoutController extends Shop
 {
@@ -262,7 +263,7 @@ class ShopCheckoutController extends Shop
 
             $result["page"] = "Order Placed";
 
-            return view("order_placed", $result);
+            return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
         }
     }
     public function give_product_code($cart, $slot_info, $order_id)
@@ -330,6 +331,30 @@ class ShopCheckoutController extends Shop
     public function order_placed()
     {
     	$data["page"] = "Checkout - Order Placed";
+        $order = Request::input('order');
+        if (!$order) 
+        {
+            return Redirect::to("/");
+        }
+
+        $data = unserialize(Crypt::decrypt($order));
+
+        $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $data["order_id"])
+                                            ->leftJoin('tbl_item', 'tbl_ec_order_item.item_id', '=', 'tbl_item.item_id')
+                                            ->get();
+
+        $data['summary'] = [];
+        $subtotal = 0;
+        $shipping = 0;
+        $total = 0;
+
+        foreach ($data['_order'] as $key => $value) 
+        {
+            $subtotal += $value->total;
+        }
+        
+        $data['summary']['subtotal'] = $subtotal;
+
     	return view("order_placed", $data);
     }
     public function addtocart()

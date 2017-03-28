@@ -243,7 +243,7 @@
 						<tr>
 							<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
 							<td class="text-center">{{ $cart["quantity"] }}</td>
-							<td class="text-right">&#8369; {{ number_format($cart["cart_product_information"]["product_price"], 2) }}</td>
+							<td class="text-right">&#8369; {{ number_format($cart['quantity'] * $cart["cart_product_information"]["product_price"], 2) }}</td>
 						</tr>
 						@endforeach
 					</tbody>

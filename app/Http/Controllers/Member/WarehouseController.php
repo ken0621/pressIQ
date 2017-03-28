@@ -368,7 +368,7 @@ class WarehouseController extends Member
             }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
             $data["warehouse_item"] = Warehouse::select_item_warehouse_single($id,'array');
-            // dd($data["warehouse_item"]);
+            // dd(collect($data["warehouse_item"])->toArray());
 
             return view("member.warehouse.warehouse_view",$data);
         }

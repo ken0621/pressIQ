@@ -21,7 +21,14 @@ class DatabaseSeeder extends Seeder
         $this->call(tbl_payroll_tax_status::class);
         $this->call(tbl_payroll_rdo::class);
         $this->call(tbl_payroll_tax_period::class);
-
+        $this->call(tbl_payroll_tax_default::class);
+        $this->call(tbl_payroll_sss_default::class);
+        $this->call(tbl_payroll_philhealth_default::class);
+        $this->call(tbl_payroll_over_time_rate_default::class);
+        $this->call(tbl_payroll_pagibig_default::class);
+        $this->call(tbl_payroll_bank_convertion::class);
+        $this->call(tbl_sms_default_key::class);
+        
         Model::reguard();
     }
 }

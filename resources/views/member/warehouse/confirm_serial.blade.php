@@ -11,8 +11,8 @@
     <input type="hidden" name="answer" id="answer">
 </div>
 <div class="modal-footer">
-    <div class="col-md-6"><button type="button" onclick="click_answer('yes')" class="btn btn-custom-blue col-md-12">Yes</button></div>
-    <div class="col-md-6"><button type="button" onclick="click_answer('no')" class="btn btn-def-white btn-custom-white col-md-12">No</button></div>
+    <div class="col-md-6 col-xs-6"><button type="button" onclick="click_answer('yes')" class="form-control btn btn-custom-blue">Yes</button></div>
+    <div class="col-md-6 col-xs-6"><button type="button" onclick="click_answer('no')" class="form-control btn btn-def-white btn-custom-white">No</button></div>
 </div>	
 </form>
 <script type="text/javascript">
@@ -22,5 +22,3 @@
         $("#confirm_answer").submit();
     }
 </script>
-<!-- <script type="text/javascript" src="/assets/member/js/warehouse.js"></script> -->
-<!-- <script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script> -->

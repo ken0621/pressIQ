@@ -11,8 +11,12 @@
             Action <span class="caret"></span>
           </button>
           <ul class="dropdown-menu dropdown-menu-custom">
+          	@if($cat->archived != 1)
             <li><a href="javascript:" link="/member/item/category/edit_category/{{$cat->type_id}}" class="popup">Edit Category</a></li>
-            <li><a href="#">Archived Category</a></li>
+            <li><a link="/member/item/category/archived/{{$cat->type_id}}/archived" size="md" class="popup" >Archived Category</a></li>
+            @else
+            <li><a link="/member/item/category/archived/{{$cat->type_id}}/restore" size="md" class="popup" >Restore Category</a></li>
+            @endif
           </ul>
         </div>
 	</td>

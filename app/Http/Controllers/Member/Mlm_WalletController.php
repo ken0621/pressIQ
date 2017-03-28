@@ -105,7 +105,7 @@ class MLM_WalletController extends Member
         $slot_id = $data['request']->slot_id;
         $data['slot_info'] = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
         $data['customer_view'] = Mlm_member::get_customer_info_w_slot($data['slot_info']->slot_owner, $slot_id);
-        return view('member.mlm_wallet.refill_View', $data);
+        return view('member.mlm_wallet.refill_view', $data);
     }
     public function refill_process()
     {

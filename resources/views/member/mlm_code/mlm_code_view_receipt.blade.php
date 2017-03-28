@@ -7,11 +7,20 @@
                     <tr>
                         <td style="border-right: 2.5px solid #1E5649; padding-bottom: 20px;">
                             <div class="row clearfix">
-                                <div class="col-md-12" style="background-color: #24267A;">
+                                <div class="col-md-12" style="">
+                                <!-- background-color: #24267A; --> 
                                      <div class="item">
-                                         <center><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/philtech-official-logo.png'}} @else {{'/assets/philtech-official-logo.png'}}@endif" alt="" ></center>
+                                     @if(isset($company_logo))
+                                        @if($company_logo != null)
+                                         <center><img src="@if(Request::input('pdf') == 'true'){{public_path().$company_logo}} @else {{$company_logo}}@endif" alt="" style="object-fit: cover; width: 100% " ></center>
+                                        @else
+                                        <center style="color:white">Please Change Your At Logo Manage Pages Tab.</center>
+                                        @endif
+                                     @else
+                                        <center style="color:white">Please Change Your At Logo Manage Pages Tab.</center>
+                                     @endif
                                      </div>
-                                    
+                                    <!-- /assets/front/img/default.jpg -->
                                 </div>
                                 <div class="col-md-12">
                                     <div class="col-md-12" style="font-weight: bold;">{{$company_name}}</div>
@@ -92,7 +101,7 @@
                         <div class="table-responsive">
                             <table class="table table-condensed">                        
                                     <tr>
-                                        <td rowspan="4" class="bill-title col-md-2">Bill To</td>
+                                        <td rowspan="4" class="bill-title col-md-2">V.I.P. Member</td>
                                     </tr>                        
                                     <tr>                                
                                         <td>Name:{{$invoice->membership_code_invoice_f_name}} {{$invoice->membership_code_invoice_m_name}} {{$invoice->membership_code_invoice_l_name}}</td>
@@ -145,7 +154,17 @@
                                     <tr>                                
                                         <td>Total</td>
                                         <td>{{$total}}</td>
-                                    </tr>                                       
+                                    </tr>     
+                                    <tr>
+                                        <td colspan="2">
+                                        <center>
+                                            <br>
+                                            <br>
+                                            ______________________________________<br>
+                                            Authorized Siginature over printed name
+                                        </center>
+                                        </td>
+                                    </tr>                                  
                                 </table>
                             </td>
                         </tr>                    

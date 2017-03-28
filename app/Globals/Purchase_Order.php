@@ -61,7 +61,8 @@ class Purchase_Order
 
         $po_id = Tbl_purchase_order::insertGetId($insert);
 
-        AuditTrail::record_logs("Added","purchase",$po_id,"",serialize($insert));
+        $po_data = AuditTrail::get_table_data("tbl_purchase_order","po_id",$po_id);
+        AuditTrail::record_logs("Added","purchase_order",$po_id,"",serialize($po_data));
 
         Purchase_Order::insert_po_line($po_id, $item_info);
 
@@ -73,7 +74,7 @@ class Purchase_Order
     }
     public static function updatePurchase($po_id, $vendor_info, $po_info, $po_other_info, $item_info, $total_info)
     {
-        $old = Tbl_purchase_order::where("po_id",$po_id)->first()->toArray();
+        $old = AuditTrail::get_table_data("tbl_purchase_order","po_id",$po_id);
 
         $update['po_vendor_id']                  = $vendor_info['po_vendor_id'];        
         $update['po_billing_address']   = $po_info['billing_address'];
@@ -92,7 +93,9 @@ class Purchase_Order
 
         Tbl_purchase_order::where("po_id", $po_id)->update($update);
 
-        AuditTrail::record_logs("Edited","purchase",$po_id,serialize($old),serialize($update));
+
+        $new = AuditTrail::get_table_data("tbl_purchase_order","po_id",$po_id);
+        AuditTrail::record_logs("Edited","purchase_order",$po_id,serialize($old),serialize($new));
 
         Tbl_purchase_order_line::where("poline_po_id", $po_id)->delete();
         Purchase_Order::insert_po_line($po_id, $item_info);

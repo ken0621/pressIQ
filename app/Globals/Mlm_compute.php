@@ -89,8 +89,9 @@ class Mlm_compute
                         }
                         else if($tbl_mlm_binary_setttings->binary_settings_auto_placement == "auto_balance")
                         {
-                            $a = Mlm_tree::auto_place_slot_binary_auto_balance($slot_info);
-                        }
+                            // $a = Mlm_tree::auto_place_slot_binary_auto_balance($slot_info);
+                                $a = Mlm_tree::auto_place_slot_binary_auto_balance_revised($slot_info);
+                            }
                     }
                 }
             }
@@ -225,16 +226,19 @@ class Mlm_compute
         $insert['slot_no'] = Mlm_plan::set_slot_no();
         $insert['shop_id'] = $shop_id;
         $insert['slot_owner'] = $random_customer;
+        $insert['slot_sponsor'] = 0;
         $insert['slot_created_date'] = Carbon::now();
         $insert['slot_membership'] = $membership_id[$random_membership];
         $insert['slot_status'] = 'PS';
         $insert['slot_placement'] = 'left';
-        Tbl_mlm_slot::insert($insert);
+        $id = Tbl_mlm_slot::insertGetId($insert);
+        Mlm_compute::entry($id);
         // end slot head
         $sponsor = 1;
         $sponsor_count = 1;
         for($i = 2; $i < $slot_no; $i++)
         {
+            
             $limit = $downline_count -1;
             if($sponsor == 1 )
             {
@@ -256,6 +260,7 @@ class Mlm_compute
         $slot_sponsor = 1;
         for($i = 2; $i < $slot_no; $i++)
         {
+
             $random_membership = rand ( 0 , $membership_count_id );
             $random_customer = rand ( 300 , 308 );
             $insert['slot_no'] = Mlm_plan::set_slot_no();
@@ -275,8 +280,10 @@ class Mlm_compute
                 $slot_sponsor = ($i - 1)/2;
             }
             $slot_sponsor = $slot_s[$i];
-            $insert['slot_sponsor'] = $slot_sponsor;
+            $insert['slot_sponsor'] = 1;
             $id = Tbl_mlm_slot::insertGetId($insert);
+
+            Mlm_compute::entry($id);
             
         }
 
@@ -302,13 +309,13 @@ class Mlm_compute
     }
     public static function simulate_perfect()
     {
+        ini_set('max_execution_time', 60000);
         $slot_no = 5000;
-        $downline_count = 5000;
+        $downline_count = 500;
         $shop_id = 5;
         Mlm_compute::reset_all_slot();
         Mlm_compute::create_slot_simulate($slot_no, $downline_count);
         // Mlm_compute::computer($shop_id);
-
         $d['all_slot'] = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
         ->orderBy('tbl_mlm_slot.slot_id')->membership()->membership_points()->customer()
         ->get();
@@ -359,5 +366,18 @@ class Mlm_compute
         $data['all_slot'] = $d['all_slot'];
         $data['total_cashin'] = $total; 
         return view('member.mlm_slot.simulate', $data);
+    }
+    public static function set_slot_nick_name_2($slot_info)
+    {
+        $count_customer = Tbl_mlm_slot::where('slot_owner', $slot_info->slot_owner)-count();
+        if($count_customer == 0)
+        {
+            $update['slot_defaul'] = 1;
+            // $update['slot_nick_name'] = 
+        }
+    }
+    public static function set_slot_nick_name($slot_info)
+    {
+
     }
 }

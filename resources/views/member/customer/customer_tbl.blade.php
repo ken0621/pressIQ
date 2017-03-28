@@ -26,8 +26,8 @@
                     <li><a href="/member/customer/invoice">Create Invoice</a></li>
                     <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
                     <!-- <li><a href="/member/customer/estimate">Create Estimate</li> -->
-                    <li><a href="javascript:" class="active-toggle" data-content="{{$customer->customer_id}}" data-target="#tr-customer-{{$customer->customer_id}}" data-value="{{$customer->archived}}" data-html="{{$customer->archived == 0? 'inactive':'active'}}">{{$customer->archived == 0? 'Make Inactive':'Make active'}}</a></li>
-                    <li><a href="javascript:" class="popup" link="/member/customer/customeredit/{{$customer->customer_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
+                    <li><a href="javascript:" class="active-toggle" data-content="{{$customer->customer_id1}}" data-target="#tr-customer-{{$customer->customer_id1}}" data-value="{{$customer->archived}}" data-html="{{$customer->archived == 0? 'inactive':'active'}}">{{$customer->archived == 0? 'Make Inactive':'Make active'}}</a></li>
+                    <li><a href="javascript:" class="popup" link="/member/customer/customeredit/{{$customer->customer_id1}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
                   </ul>
                 </div>
             </td>
@@ -36,5 +36,5 @@
     </tbody>
 </table>
 <div class="padding-10 text-center">
-    {!!$_customer->render()!!}
+    {!!$_customer->appends(Request::capture()->except('page'))->render()!!}
 </div>

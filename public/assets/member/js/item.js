@@ -40,6 +40,11 @@ function item()
             link        : '/member/item/manufacturer/add',
             link_size   : 'md'
         });
+        $('.drop-down-vendor').globalDropList(
+        { 
+            width : "100%",
+            link : "/member/vendor/add"
+        });
 
         $(".drop-down-um").globalDropList(
         {
@@ -249,6 +254,12 @@ function submit_done(data)
         });
         data.element.modal("hide");
         // $('.multiple_global_modal').modal('hide');
+    }
+    else if(data.type == "multiple_price")
+    {
+        console.log("hello");
+        toastr.success(data.message);
+        data.element.modal("hide");
     }
     else if(data.status == "success-adding-serial")
     {

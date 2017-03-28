@@ -41,6 +41,7 @@ class MLM_CardController extends Member
             ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
             ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
             ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+            ->where('tbl_customer_address.purpose', 'billing')
             ->get();
             foreach ($card_info as $key => $value) {
                 # code...
@@ -57,9 +58,7 @@ class MLM_CardController extends Member
             ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_slot.slot_owner')
             ->where('tbl_customer_address.purpose', 'billing')
             ->membership()->customer()->get();
-
             $ret = null;
-
             foreach ($all_slot as $key => $value) 
             {
                 $ret .= Cards::card_all($value);
@@ -82,7 +81,6 @@ class MLM_CardController extends Member
             
         ->membership()->customer()->first();
         $card = Cards::card_all($slot);
-
 
         return Pdf_global::show_image($card);
 	}

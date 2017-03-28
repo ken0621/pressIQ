@@ -32,6 +32,7 @@ class UnitOfMeasurementController extends Member
         {
             $data["_um"] = Tbl_unit_measurement::where("um_archived",0)
                                                         ->groupBy("tbl_unit_measurement.um_id")
+                                                        ->where("um_shop",$this->user_info->shop_id)
                                                         ->get();
             foreach ($data["_um"] as $key => $value) 
             {
@@ -110,7 +111,7 @@ class UnitOfMeasurementController extends Member
         $access = Utilities::checkAccess('item-unit-measurement', 'access_page');
         if($access == 1)
         {
-            $data["_um_type"] = Tbl_unit_measurement_type::where("um_type_parent_id",0)->where("archived",0)->get();
+            $data["_um_type"] = Tbl_unit_measurement_type::where("um_type_parent_id",0)->where("archived",0)->where("shop_id",$this->user_info->shop_id)->get();
 
             return view("member.unit_of_measurement.unit_measurement_add",$data);
         }
@@ -451,7 +452,7 @@ class UnitOfMeasurementController extends Member
         {
             $type_id = Request::input("type_id");
 
-            $data = Tbl_unit_measurement_type::where("um_type_parent_id",$type_id)->get();
+            $data = Tbl_unit_measurement_type::where("um_type_parent_id",$type_id)->where("shop_id",$this->user_info->shop_id)->get();
 
             return json_encode($data);
         }

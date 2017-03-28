@@ -7,11 +7,17 @@
                     <tr>
                         <td style="border-right: 2.5px solid #1E5649; padding-bottom: 20px;">
                             <div class="row clearfix">
-                                <div class="col-md-12" style="background-color: #24267A;">
+                                <div class="col-md-12" >
+                                <!-- style="background-color: #24267A;" -->
+                                @if($company_logo != null)
                                      <div class="item">
-                                         <center><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/philtech-official-logo.png'}} @else {{'/assets/philtech-official-logo.png'}}@endif" alt="" ></center>
+                                         <center><img src="@if(Request::input('pdf') == 'true'){{public_path().$company_logo}} @else {{$company_logo}}@endif" alt="" style="object-fit: cover; width: 100% "></center>
                                      </div>
-                                    
+                                @else 
+                                    <div class="item">
+                                         <center><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/philtech-official-logo.png'}} @else {{'/assets/philtech-official-logo.png'}}@endif" alt="" style="object-fit: cover; width: 100% " ></center>
+                                     </div>
+                                @endif    
                                 </div>
                                 <div class="col-md-12">
                                     <div class="col-md-12" style="font-weight: bold;">{{$company_name}}</div>
@@ -55,7 +61,7 @@
                         <div class="table-responsive">
                             <table class="table table-condensed">                        
                                     <tr>
-                                        <td rowspan="4" class="bill-title col-md-2">Bill To</td>
+                                        <td rowspan="4" class="bill-title col-md-2">V.I.P. Member</td>
                                     </tr>                        
                                     <tr>                                
                                         <td>Name: {{name_format_from_customer_info($invoice)}}</td>
@@ -67,6 +73,34 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-md-12" style="margin-top:25px;">
+                <table class="table table-condensed tadble">     
+                    <thead>                   
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Quantity</th>
+                                <th>Serial</th>
+                            </tr>   
+                    </thead>    
+                    <tbody>
+                    @if(isset($item_list))
+                        @foreach($item_list as $key => $value)
+                        <tr>
+                            <td>{{$value->item_name}}</td>
+                            <td>{{$value->item_quantity}}</td>
+                            <td>{{$value->item_serial}}</td>
+                        </tr>
+                        @endforeach
+                    @else
+                    <tr>
+                        <td colspan="40"><center></center></td>
+                    </tr>    
+                    @endif    
+                    </tbody>               
+                </table>
             </div>
         </div>
         <div class="row clearfix">
@@ -108,7 +142,17 @@
                                     <tr>                                
                                         <td>Total</td>
                                         <td>{{$total}}</td>
-                                    </tr>                                       
+                                    </tr>      
+                                    <tr>
+                                        <td colspan="2">
+                                        <center>
+                                            <br>
+                                            <br>
+                                            ______________________________________<br>
+                                            Authorized Siginature over printed name
+                                        </center>
+                                        </td>
+                                    </tr>                                 
                                 </table>
                             </td>
                         </tr>                    

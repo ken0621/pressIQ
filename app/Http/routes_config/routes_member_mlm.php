@@ -40,6 +40,7 @@ Route::post('/member/mlm/claim_voucher/check_claim/void', 'Member\MLM_ClaimVouch
 
 /* Start MLM Slot */
 Route::any('/member/mlm/slot', 'Member\MLM_SlotController@index'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/slot/login', 'Member\MLM_SlotController@force_login'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/slot/simulate/{code}', 'Member\MLM_SlotController@simulate');
 Route::any('/member/mlm/slot/add', 'Member\MLM_SlotController@add_slot');
 Route::any('/member/mlm/slot/view/{slot_id}', 'Member\MLM_SlotController@view_slot_info');
@@ -128,6 +129,10 @@ Route::any('/member/mlm/plan/unilevel_repurchase_points/edit/membership/points',
 Route::any('/member/mlm/plan/discountcard/add', 'Member\MLM_PlanController@discount_card_add');//luke
 /* end discount card Plan */
 
+/* start direct promotions */
+Route::any('/member/mlm/plan/direct_promotions/save', 'Member\MLM_PlanController@save_direct_promotions');//luke
+/* end direct promotions  Plan */
+
 /* end MLM Plan */
 
 /* start MLM Product */
@@ -151,6 +156,11 @@ Route::any('/member/mlm/encashment/view/{encashment_process}', 'Member\Mlm_Encas
 Route::any('/member/mlm/encashment/view/breakdown/{encashment_process}/{slot_id}', 'Member\Mlm_EncashmentController@breakdown_slot');//luke
 Route::any('/member/mlm/encashment/view/breakdown/process', 'Member\Mlm_EncashmentController@process_breakdown');//luke
 Route::any('/member/mlm/encashment/view/pdf/{encashment_process}/{slot_id}', 'Member\Mlm_EncashmentController@show_pdf');//luke
+Route::any('/member/mlm/encashment/view/type/{type}', 'Member\Mlm_EncashmentController@show_type');//luke
+Route::any('/member/mlm/encashment/view/type/cheque/edit', 'Member\Mlm_EncashmentController@cheque_edit');//luke
+Route::any('/member/mlm/encashment/view/type/bank/add', 'Member\Mlm_EncashmentController@bank_add');//luke
+Route::any('/member/mlm/encashment/view/type/bank/archive', 'Member\Mlm_EncashmentController@bank_archive');//luke
+Route::any('/member/mlm/encashment/view/type/bank/edit/name', 'Member\Mlm_EncashmentController@bank_edit_name');//luke
 /* end MLM Product */
 
 /* start MLM Product */
@@ -187,3 +197,6 @@ Route::get('member/mlm/card/image/{slot}', 'Member\MLM_CardController@generate')
 Route::get('member/mlm/card/all', 'Member\MLM_CardController@all_slot');
 Route::post('member/mlm/card/done', 'Member\MLM_CardController@done');
 Route::post('member/mlm/card/pending', 'Member\MLM_CardController@pending');
+
+
+Route::get('/member/mlm/report', 'Member\MLM_ReportController@index');

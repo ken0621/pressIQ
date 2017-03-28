@@ -1,14 +1,13 @@
 <form class="global-submit" action="/member/ecommerce/product/save-product-info" method="post">
     <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
-    <input type="hidden" class="token" name="product_code" value="{{ $product_code }}">
-    <input type="hidden" class="token" name="item_id" value="{{ $item_info->item_id }}">
+    <input type="hidden" class="" name="product_code" value="{{ $product_code }}">
+    <input type="hidden" class="" name="item_id" value="{{ $item_info->item_id }}">
     <div class="modal-header" style="padding-bottom: 0px;">
     	<button type="button" class="close" data-dismiss="modal">×</button>
     	<h4 class="modal-title">{{strtoupper($item_info->item_name)}}</h4>
         <ul class="nav nav-tabs">
-            <li class="active cursor-pointer"><a class="cursor-pointer tab-upload-files" data-toggle="tab" href="#description"><i class="fa fa-tag"></i> Name & Description</a></li>
-            <li class="cursor-pointer"><a class="cursor-pointer tab-media-library" data-toggle="tab" href="#info"><i class="fa fa-info"></i> Info</a></li>
-            <li class="cursor-pointer"><a class="cursor-pointer tab-media-library" data-toggle="tab" href="#image"><i class="fa fa-picture-o"></i> Images</a></li>
+            <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#description"><i class="fa fa-tag"></i> Name & Description</a></li>
+            <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#image"><i class="fa fa-picture-o"></i> Images</a></li>
         </ul>
     </div>
 
@@ -30,26 +29,6 @@
                         <label>Description<i class="fa fa-angle-double-down product-description"></i></label>
                         <div class="product-desc-content">
                             <textarea name="evariant_description" class="form-control input-sm tinymce" >{{ $product_data['product_description'] or '' }}</textarea>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade in" id="info">
-            <div class="modal-body clearfix">
-                <!-- FORM.TITLE -->
-                <div class="form-box-divider">
-                    <div class="fieldset">
-                        <label>Product </label>
-                        <div>
-                            <input class="form-control input-sm" name="evariant_price" placeholder="Product Price" value="{{$product_data['product_price'] or ''}}">
-                        </div>
-                    </div>
-
-                    <div class="fieldset">
-                        <!-- description -->
-                        <label>Promo Price</label>
-                        <div >
                         </div>
                     </div>
                 </div>

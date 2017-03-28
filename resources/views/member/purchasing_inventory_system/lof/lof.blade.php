@@ -51,60 +51,70 @@
     <div class="form-group tab-content panel-body sir_container">
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
-            <div class="table-responsive">
-                <table class="table table-bordered table-condensed">
-                    <thead style="text-transform: uppercase">
-                        <tr>
-                            <th>SIR No</th>
-                            <th>SIR Created</th>
-                            <th>Truck Plate No</th>
-                            <th>Sales Agent</th>
-                            <th>Total Item</th>
-                            <th>Total Amount</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                       @if($_sir)
-                           @foreach($_sir as $sir)
-                            @if($sir->sir_status == 2)
-                            @else
+            <div class="load-data" target="lof_data" >
+                <div id="lof_data">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-condensed">
+                            <thead style="text-transform: uppercase">
                                 <tr>
-                                    <td align="center">{{$sir->sir_id}}</td>
-                                    <td>{{date('F d, Y', strtotime($sir->sir_created))}}</td>
-                                    <td>{{$sir->plate_number}}</td>
-                                    <td>{{$sir->first_name}} {{$sir->middle_name}} {{$sir->last_name}}</td>
-                                    <td>{{$sir->total_item}}</td>
-                                    <td>{{currency("PHP",$sir->total_amount)}}</td>
-                                    <td class="text-center">
-                                        <div class="btn-group">
-                                          <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Action <span class="caret"></span>
-                                          </button>
-                                            <ul class="dropdown-menu dropdown-menu-custom"> 
-                                          @if($sir->sir_archived == 1)
-                                                <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/restore" class="popup">Restore SIR</a></li>
-                                          @else
-                                                <li><a size="lg" link="/member/pis/lof/view_status/{{$sir->sir_id}}/" class="popup">View Status</a></li>
-                                              @if($sir->sir_status == 1)
-                                              @elseif($sir->lof_status == 2)
-                                                <li><a size="md" link="/member/pis/sir/open/{{$sir->sir_id}}/open" class="popup">Open SIR</a></li>
-                                              @elseif($sir->lof_status == 3)
-                                                <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/lof" class="popup">View Load Out Form</a></li>
-                                                <li><a href="/member/pis/sir/lof/edit/{{$sir->sir_id}}">Edit Load Out Form</a></li>
-                                                <li><a size="md" link="/member/pis/lof/{{$sir->sir_id}}/archived" class="popup">Archive L.O.F</a></li>
-                                              @endif
-
-                                            </ul>
-                                          @endif
-                                        </div>
-                                    </td>
+                                    <th>SIR No</th>
+                                    <th>SIR Created</th>
+                                    <th>Truck Plate No</th>
+                                    <th>Sales Agent</th>
+                                    <th>Total Item</th>
+                                    <th>Total Amount</th>
+                                    <th>Action</th>
                                 </tr>
-                            @endif
-                           @endforeach
-                       @endif
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody>
+                               @if($_sir != null)
+                                   @foreach($_sir as $sir)
+                                    @if($sir->sir_status == 2)
+                                    @else
+                                        <tr>
+                                            <td align="center">{{$sir->sir_id}}</td>
+                                            <td>{{date('F d, Y', strtotime($sir->sir_created))}}</td>
+                                            <td>{{$sir->plate_number}}</td>
+                                            <td>{{$sir->first_name}} {{$sir->middle_name}} {{$sir->last_name}}</td>
+                                            <td>{{$sir->total_item}}</td>
+                                            <td>{{currency("PHP",$sir->total_amount)}}</td>
+                                            <td class="text-center">
+                                                <div class="btn-group">
+                                                  <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Action <span class="caret"></span>
+                                                  </button>
+                                                    <ul class="dropdown-menu dropdown-menu-custom"> 
+                                                  @if($sir->sir_archived == 1)
+                                                        <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/restore" class="popup">Restore SIR</a></li>
+                                                  @else
+                                                       <li><a size="lg" link="/member/pis/sir/view_status/{{$sir->sir_id}}" class="popup">View Status</a></li>
+                                                      @if($sir->sir_status == 1)
+                                                      @elseif($sir->lof_status == 2)
+                                                        <li><a size="md" link="/member/pis/sir/open/{{$sir->sir_id}}/open" class="popup">Open SIR</a></li>
+                                                      @elseif($sir->lof_status == 3)
+                                                        <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/lof" class="popup">View Load Out Form</a></li>
+                                                        <li><a href="/member/pis/lof/edit/{{$sir->sir_id}}">Edit Load Out Form</a></li>
+                                                        <li><a size="md" link="/member/pis/lof/{{$sir->sir_id}}/archived" class="popup">Archive L.O.F</a></li>
+                                                      @endif
+
+                                                    </ul>
+                                                  @endif
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                   @endforeach                      
+                               @endif
+                              <!--  <tr>
+                                   <td colspan="7" class="text-center"><strong>No Data Found...</strong></td>
+                               </tr> -->
+                            </tbody>
+                        </table>
+                    </div> 
+                    <div class="text-center pull-right">
+                        {!!$_sir->render()!!}
+                    </div>                
+                </div>
             </div>
         </div>
     </div>
@@ -117,6 +127,7 @@
     $("#srch_sir_id").keyup(function()
     {
         select(status_s, archived_s, $(this).val());
+        $(".load-data").attr("sir_id",$(this).val());
     });
     function select(status,archived,sir_id = '')
     {        
@@ -126,9 +137,13 @@
         $(".sir_container").load("/member/pis/lof?status="+status +"&archived="+archived + "&sir_id="+sir_id + " .sir_container", function()
             {
                 $(".modal-loader").addClass("hidden");
+                $(".load-data").attr("status",status);
+                $(".load-data").attr("archived",archived);
+                $(".load-data").attr("sir_id",sir_id);
             });
         
     }
 </script>
 <script type="text/javascript" src="/assets/member/js/sir.js"></script>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 @endsection

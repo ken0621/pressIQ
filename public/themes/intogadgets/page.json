@@ -92,5 +92,88 @@
 			"default":"BEST SELLER",
 			"size":"4"
 		}
+	},
+	"product":
+	{
+		"top_rated_products" :
+		{
+			"label":"Top Rated Products",
+			"type":"collection",
+			"default":"",
+			"size":"12"
+		},
+		"most_viewed" :
+		{
+			"label":"Most Viewed",
+			"type":"collection",
+			"default":"",
+			"size":"12"
+		}
+	},
+	"info":
+	{
+		"facebook_link" :
+		{
+			"label":"Facebook Link",
+			"type":"textbox",
+			"default":"https://www.facebook.com/Intogadgetstore",
+			"size":"4"
+		},
+		"twitter_link" :
+		{
+			"label":"Twitter Link",
+			"type":"textbox",
+			"default":"https://www.twitter.com/intogadgetstore",
+			"size":"4"
+		},
+		"instagram_link" :
+		{
+			"label":"Instagram Link",
+			"type":"textbox",
+			"default":"https://www.instagram.com/intogadgetsPH",
+			"size":"4"
+		},
+		"dakasi_image" :
+		{
+			"label":"Dakasi Logo Image",
+			"type":"image",
+			"default":"/resources/assets/frontend/img/dakasi-logo.png",
+			"size":"6"
+		},
+		"dakasi_link" :
+		{
+			"label":"Dakasi Logo Link",
+			"type":"textbox",
+			"default":"https://www.facebook.com/DakasiPH/",
+			"size":"6"
+		},
+		"primia_image" :
+		{
+			"label":"Primia Logo Image",
+			"type":"image",
+			"default":"/resources/assets/frontend/img/primia-logo.png",
+			"size":"6"
+		},
+		"primia_link" :
+		{
+			"label":"Primia Logo Link",
+			"type":"textbox",
+			"default":"http://primiaworks.com",
+			"size":"6"
+		},
+		"bank_image":
+		{
+			"label":"Bank Image",
+			"type":"image",
+			"default":"/resources/assets/frontend/img/brands/payment.png",
+			"size":"12"
+		},
+		"copyright_text":
+		{
+			"label":"Copyright Text",
+			"type":"textbox",
+			"default":"Intogadgets Inc. © Copyright 2015. All Rights Reserved.",
+			"size":"12"
+		}
 	}
 }

@@ -1,4 +1,4 @@
-var receive_payment = receive_payment();
+var receive_payment = new receive_payment();
 var maximum_payment = 0;
 var is_amount_receive_modified = false;
 
@@ -53,7 +53,7 @@ function receive_payment()
 		$(".drop-down-payment").globalDropList(
 		{
 		    link 		: '/member/maintenance/payment_method/add',
-		    link_size 	: 'lg',
+		    link_size 	: 'sm',
 		    width 		: "100%",
 		    placeholder : 'Payment Method'
 		});
@@ -144,6 +144,7 @@ function receive_payment()
 	{
 		$(document).on("change",".amount-payment", function(e)
 		{
+			console.log($(".amount-payment").length);
 			$(this).val(formatFloat($(this).val()) == 0 ? '' : formatMoney($(this).val()));
 
 			!is_amount_receive_modified ? $(".amount-received").val(action_total_amount_apply()).change() : $(".amount-received").change();
@@ -180,7 +181,6 @@ function receive_payment()
 		{
 			line_payment_amount += formatFloat($(this).val());
 		})
-
 		return formatMoney(line_payment_amount);
 	}
 
@@ -208,21 +208,34 @@ function receive_payment()
 			$(".button-action").val($(this).attr("data-action"));
 		})
 	}
+
 }
 
 function submit_done(data)
 {
 	if(data.status == "success")
 	{
-		toastr.success(data.message);
-		if(data.redirect)
+		if(data.type == "payment_method")
+		{
+			$(".drop-down-payment").load("/member/maintenance/load_payment_method", function()
+			{
+				$(this).globalDropList("reload");
+				$(this).val(data.payment_method_id).change();
+			});
+			data.element.modal("toggle");
+		}
+		else if(data.redirect)
         {
+        	toastr.success(data.message);
         	location.href = data.redirect;
     	}
     	else
     	{
-    		$(".tab-content").load(data.url+" .tab-content .row:first");
-    		receive_payment.action_initialize_load();
+    		$(".rcvpymnt-container").load(data.url+" .rcvpymnt-container .rcvpymnt-load-data", function()
+			{
+				receive_payment.action_initialize_load();
+				toastr.success(data.message);
+			});
     	}
 	}
 }

@@ -38,12 +38,12 @@
     <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/basic.css">
     <link rel="stylesheet" type="text/css" href="/assets/custom_plugin/myDropList/css/myDropList.css">
+
+    <!-- <link rel="stylesheet" type="text/css" href="/assets/chartist/chartist.css"> -->
     <!-- <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/dropzone.min.css"> -->
 
     <link rel="stylesheet" href="/assets/external/jquery_css/jquery-ui.css">
-
-
-    
+    <link rel="stylesheet" type="text/css" href="/assets/mlm/pace.css">
 
     <style type="text/css">
     a
@@ -69,7 +69,7 @@
     <script>
     $(function()
     {
-        $(".datepicker").datepicker({ dateFormat: "mm-dd-yy" });
+        $(".datepicker").datepicker();
     });
     </script>
 </head>
@@ -174,6 +174,9 @@
                 <i class="icon-reorder"></i>
             </a>
             <section class="user-menu-wrapper">
+                <a href="javascript:;" data-expand=".warehouse-view" class="warehouse-access" style="min-height: 50px; margin-top:25px;">
+                    <span class="warehouse-access-name">{{$current_warehouse ? "Warehouse: ".$current_warehouse->warehouse_name : "No Warehouse"}}</span>
+                </a>
                 <a href="javascript:;" data-expand=".messages-view" class="messages-access">
                     <i class="icon-envelope-alt"></i>
                 </a>
@@ -182,6 +185,26 @@
                     <div class="menu-counter">6</div>
                 </a>
             </section>
+            <div class="warehouse_loader_container">
+                <div class="panel panel-default nav-view warehouse-view">
+                    <div class="arrow user-menu-arrow"></div>
+                    <div class="panel-heading">
+                        <!-- <i class="icon-envelope-alt"></i> -->
+                        <span>Choose a warehouse</span>
+                        <a href="javascript:;" class="close-user-menu"><i class="icon-remove"></i></a>
+                        <select class="form-control select_current_warehouse">
+                            @foreach($warehouse_list as $solo_warehouse)
+                                @if($current_warehouse)
+                                    <option value="{{$solo_warehouse->warehouse_id}}" {{$current_warehouse->warehouse_id == $solo_warehouse->warehouse_id ? "selected" : ""}}>{{$solo_warehouse->warehouse_name}}</option>
+                                @else
+                                    <option value="{{$solo_warehouse->warehouse_id}}"> {{$solo_warehouse->warehouse_name}}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                        <div class="col-md-12" style="min-height:25px;"></div>
+                    </div>
+                </div>
+            </div>
             <div class="panel panel-default nav-view messages-view">
                 <div class="arrow user-menu-arrow"></div>
                 <div class="panel-heading">
@@ -395,7 +418,7 @@
                                 </div>
                             </div>
                             <div calss="middle-content">
-                               @include('member.modal.load_media_library')
+                               
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -438,7 +461,12 @@
     <script type="text/javascript" src='/assets/custom_plugin/myDropList/js/myDropList.js'></script>
     <script type="text/javascript" src="/assets/member/js/prompt_serial_number.js"></script>
     <script type="text/javascript" src='/assets/member/js/match-height.js'></script>
-    
+    <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
+    <script type="text/javascript" src="/assets/mlm/pace.min.js"></script>
+
+    <script type="text/javascript">
+	  $(document).ajaxStart(function() { Pace.restart(); }); 
+	</script>
     @yield('script')
 </body>
 </html>

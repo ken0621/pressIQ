@@ -33,11 +33,18 @@
         </ul>
         
         <div class="search-filter-box">
-            <div class="col-md-3" style="padding: 10px">
+            <div class="col-md-3 hide" style="padding: 10px">
                 <select class="form-control">
                     <option>All Customers</option>
                     <option>Customer with Open Balances</option>
                     <option>Customer with Overdue Invoices</option>
+                </select>
+            </div>
+            <div class="col-md-3" style="padding: 10px">
+                <select class="form-control" onChange="filter_customer_slot(this)">
+                    <option value="all" {{Request::input('filter_slot') == 'all' ? 'selected' : ''}}>All Customers</option>
+                    <option value="w_slot" {{Request::input('filter_slot') == 'w_slot' ? 'selected' : ''}}>Customer With Membership</option>
+                    <option value="w_o_slot" {{Request::input('filter_slot') == 'w_o_slot' ? 'selected' : ''}}>Customer Without Membership</option>
                 </select>
             </div>
             <div class="col-md-4 col-md-offset-5" style="padding: 10px">
@@ -61,7 +68,7 @@
                 </thead>
                 <tbody>
                     @foreach($_customer as $customer)
-                        <tr class="cursor-pointer" id="tr-customer-{{$customer->customer_id}}" style="color: {{$customer->approved == 1? '#000' : '#ff3333' }};">
+                        <tr class="cursor-pointer" id="tr-customer-{{$customer->customer_id1}}" style="color: {{$customer->approved == 1? '#000' : '#ff3333' }};">
                             <td class="text-left">{{$customer->title_name.' '.$customer->first_name.' '.$customer->middle_name.' '.$customer->last_name.' '.$customer->suffix_name}}</td>
                             <td class="text-left">{{$customer->customer_phone != null ? $customer->customer_phone : 'No Phone Number' }} / {{$customer->customer_mobile != null ? $customer->customer_mobile : 'No Mobile Number'}} </td>
                             <td class="text-left">{{$customer->email}}</td>
@@ -69,18 +76,18 @@
                             <td class="text-center">
                                 <!-- ACTION BUTTON -->
                                 <div class="btn-group">
-                                  <button type="button" class="btn btn-sm btn-custom-white btn-action-{{$customer->customer_id}} dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <button type="button" class="btn btn-sm btn-custom-white btn-action-{{$customer->customer_id1}} dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Action <span class="caret"></span>
                                   </button>
                                   <ul class="dropdown-menu dropdown-menu-custom">
-                                    <li><a href="/member/customer/receive_payment">Receive Payment</a></li>
-                                    <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id}}">Create Invoice</a></li>
+                                    <li><a href="/member/customer/receive_payment?customer_id={{$customer->customer_id1}}">Receive Payment</a></li>
+                                    <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id1}}">Create Invoice</a></li>
                                     <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
                                     <li><a href="/member/customer/transaction_list">Transaction List</a></li>
-                                    <li><a href="/member/customer/details/{{$customer->customer_id}}">View Customer Details</a></li>
+                                    <li><a href="/member/customer/details/{{$customer->customer_id1}}">View Customer Details</a></li>
                                     <!-- <li><a href="/member/customer/estimate">Create Estimate</li> -->
-                                    <li><a class="popup" link="/member/customer/customeredit/{{$customer->customer_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
-                                    <li><a class="active-toggle" data-content="{{$customer->customer_id}}" data-target="#tr-customer-{{$customer->customer_id}}" data-value="0" data-html="inactive">Make Inactive</a></li>
+                                    <li><a class="popup" link="/member/customer/customeredit/{{$customer->customer_id1}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
+                                    <li><a class="active-toggle" data-content="{{$customer->customer_id1}}" data-target="#tr-customer-{{$customer->customer_id1}}" data-value="0" data-html="inactive">Make Inactive</a></li>
                                   </ul>
                                 </div>
                             </td>
@@ -89,7 +96,7 @@
                 </tbody>
             </table>
             <div class="padding-10 text-center">
-                {!!$_customer->render()!!}
+                {!!$_customer->appends(Request::capture()->except('page'))->render()!!}
             </div>
         </div>
     </div>
@@ -97,6 +104,17 @@
 @endsection
 
 @section('script')
+<script type="text/javascript">
+    function filter_customer_slot(sel)
+    {
+        var filter = $(sel).val();
+        var link = '/member/customer/list?filter_slot=' + filter;
+        // location.redirect(link);
+        window.location = link;
+        // $('.load-data').html('<div style="margin: 100px auto;" class="loader-16-gray"></div>');
+        // $('.load-data').load(link);
+    }
+</script>
 <script type="text/javascript" src="/assets/member/js/customer.js"></script>
 <script type="text/javascript" src="/assets/member/js/customerlist.js"></script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax.js"></script>

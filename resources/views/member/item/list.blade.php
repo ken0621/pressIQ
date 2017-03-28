@@ -1,7 +1,7 @@
 @extends('member.layout')
 @section('content')
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -43,18 +43,18 @@
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
-                <table class="table table-condensed">
+                <table class="table table-hover table-bordered table-striped table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
                             <th>Item ID</th>
                             <th>Item Name</th>
-                            <th>Item SKU</th>
+                            <!-- <th>Item SKU</th> -->
                             <th>Item Category</th>
                             <th>Item Type</th>
+                            <th>Inventory</th>
                             <th>Item Price</th>
-                            <th>Item Date Created</th>
-                            <th></th>
-                            <th></th>
+                            <!-- <th>Item Date Created</th> -->
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -62,13 +62,18 @@
                         <tr>
                             <td>{{$item->item_id}}</td>
                             <td>{{$item->item_name}}</td>
-                            <td>{{$item->item_sku}}</td>
+                            <!-- <td>{{$item->item_sku}}</td> -->
                             <td>{{$item->type_name}}</td>
                             <td>{{$item->item_type_name}}</td>
+                            <td>{{$item->inventory_count}}</td>
                             <td>{{currency("PHP", $item->item_price)}}</td>
-                            <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td>
-                            <td><a link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:" class="popup">Edit</a></td>
-                            <td><a link="/member/item/archive/{{$item->item_id}}" href="javascript:" class="popup">Archive</a></td>
+                            <!-- <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td> -->
+                            <td>
+                                <div class="btn-group">
+                                    <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>
+                                    <a class="btn btn-primary btn-grp-primary popup" link="/member/item/archive/{{$item->item_id}}" size="sm" href="javascript:"> |<span class="fa fa-trash "> </span> </a>
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -78,7 +83,7 @@
         <div id="archived" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
-                <table class="table table-condensed">
+                <table class="table table-hover table-bordered table-striped table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
                             <th>Item ID</th>
@@ -101,7 +106,11 @@
                             <td>{{$item->item_type_name}}</td>
                             <td>{{currency("PHP", $item->item_price)}}</td>
                             <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td>
-                            <td><a link="/member/item/restore/{{$item->item_id}}" href="javascript:" class="popup">Restore</a></td>
+                            <td>
+                                <div class="btn-group">
+                                    <a link="/member/item/restore/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Restore</a>
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

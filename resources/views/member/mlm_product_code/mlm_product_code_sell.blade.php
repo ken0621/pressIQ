@@ -101,8 +101,8 @@
 									<option value="1">YES</option>
 									<option value="0">NO</option>
 								</select>
-								<label for="basic-input">Warehouse (Inventory)</label>
-								<select class="form-control" name="warehouse_id">
+								<label for="basic-input" class="hide">Warehouse (Inventory)</label>
+								<select class="form-control hide" name="warehouse_id">
 									@foreach($warehouse as $key => $value)
 									<option value="{{$value->warehouse_id}}">{{$value->warehouse_name}}</option>
 									@endforeach
@@ -118,6 +118,13 @@
 								      <span class="input-group-addon" >USE GC</span>
 								      <input type="text" class="form-control" aria-label="Text input with checkbox" name="gc_code">
 								    </div>
+								  </div>
+								</div>
+								<div class="row">
+									<br>
+								  <div class="col-lg-12">
+								  <label>USE WALLET</label>
+								   <input type="checkbox"  name="use_wallet">
 								  </div>
 								</div>
 
@@ -175,7 +182,6 @@ function load_session()
 		discount_card_log_id = 0;
 	}
 	var link = '/member/mlm/product_code/sell/add_line/view?slot_id=' + slot_id + '&discount_card_log_id=' + discount_card_log_id;
-	console.log(link);
     $('.item_body').load(link, function() 
 	{
 		compute();
@@ -202,7 +208,6 @@ function submit_done(data)
 {
     if(data.response_status == "warning")
     {
-        console.log(data);
         var htmls 		  = "<div class='alert alert-danger'>";
         var warning_vali  = data.warning_validator;
         if (warning_vali != undefined) {
@@ -212,12 +217,10 @@ function submit_done(data)
             
             
             $(item_id).each(function(a, b){
-               console.log(b); 
                htmls += b + "<br/>";
             });
 
             $(quantity).each(function(a, b){
-               console.log(b); 
                htmls += b + "<br/>";
             });
         }
@@ -228,14 +231,10 @@ function submit_done(data)
         }
         
         htmls += "</div>";
-        console.log(htmls);
         $('#add-new-line-warning').html(htmls);
     }
     else if(data.response_status == "success")
     {
-    	// /member/mlm/product_code/receipt?invoice_id=
-    	// window.location=
-
         $('#add-new-line-warning').html(" ");
         toastr.success('Line Successfully Added!');
         load_session();
@@ -263,7 +262,6 @@ function update_container($container,$type = null)
 	$(".item_container").on("focus",".item_id",function()
 	{
 		past_value = $(this).val();
-		console.log("value = ",past_value);
     });
 
 	var box_container      = $container;
@@ -358,7 +356,6 @@ function get_slot(ito)
 {
     $('#slot_div').html('<center><div class="loader-16-gray"></div></center>');
     var customer_id = ito.value;
-    // console.log(customer_id);
     $('#slot_div').load('/member/customer/product_repurchase/get_slot/' + customer_id, function() {
         $(".chosen-slot_id").chosen({no_results_text: "The slot does not exist."});
     });
@@ -366,10 +363,12 @@ function get_slot(ito)
 function bar_code_membership_code(ito)
 {
 	var membership_code = ito.value;
+	console.log(membership_code);
+	$('.customer_data').html('<center><div class="loader-16-gray"></div></center>');
 	$('.customer_data').load('/member/customer/product_repurchase/get_slot_v_membership_code/' + membership_code, function(){
 		change_slot_class();
 	});
-	
+	$(ito).val('');
 	
 }
 $(".membership_code").on("paste",function(e){
@@ -400,13 +399,12 @@ function load_no_discount()
 
 	$('.load_fix_session').load('/member/mlm/product/discount/fix/session/0', function(data){
 		load_session();
-		console.log('----load_no_discount');
 	});
 }
 $(".chosen-select").chosen({no_results_text: "The customer doesn't exist."});
 function submit_done(data)
 {
-	console.log(data);
+	$('.close').click();
 	if(data.response_status == 'warning')
 	{
 		var validtor = data.warning_validator;
@@ -418,8 +416,6 @@ function submit_done(data)
 	{
 		toastr.success('Success');
 		load_session();
-		// location.reload();
-		// window.location = "/member/mlm/product_code/receipt?invoice_id=" + data.invoice_id;
 	}
 
 	else if(data.response_status == 'success_process')
@@ -431,20 +427,24 @@ function submit_done(data)
 
 $(document).on("keydown", ".membership_code", function(e)
 {
-	e.preventDefault();
+	
 	if(e.which == 13)
 	{
-		console.log($(this).val());
-		bar_code_membership_code(this)
+		e.preventDefault();
+		bar_code_membership_code(this);
+	}
+});
+$(document).on("keydown", ".class_item_serial", function(e)
+{
+	
+	if(e.which == 13)
+	{
+		e.preventDefault();
+		var serail_key = parseInt($(this).attr('serial_key')) + 1;
+		console.log(serail_key);
+		$(".class_item_serial_" + serail_key ).focus();
+		// bar_code_membership_code(this);
 	}
 })
-// window.addEventListener('keydown', function(e) {
-//         if (e.keyIdentifier == 'U+000A' || e.keyIdentifier == 'Enter' || e.keyCode == 13) {
-//             if (e.target.nodeName == 'INPUT' && e.target.type == 'text') {
-//                 e.preventDefault();
-//                 return false;
-//             }
-//         }
-//     }, true);
 </script>
 @endsection

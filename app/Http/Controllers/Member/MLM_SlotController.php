@@ -29,7 +29,6 @@ use App\Models\Tbl_mlm_matching_log;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
 use App\Globals\Mlm_plan;
-use App\Globals\Mlm_compute;
 use App\Globals\Mlm_complan_manager;
 use App\Globals\Mlm_complan_manager_cd;
 use App\Globals\Mlm_tree;
@@ -39,13 +38,86 @@ use App\Globals\Mlm_voucher;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Item_code;
 use App\Globals\Mlm_gc;
+
+// use App\Globals\Mlm_compute;
 use App\Globals\Mlm_complan_manager_repurchase;
 use App\Globals\Utilities;
+use App\Globals\Mlm_compute;
+use App\Globals\Mlm_member;
+use App\Globals\Mlm_discount;
+// use App\Globals\Mlm_compute;
+use App\Models\Tbl_email_content;
 use Crypt;
 class MLM_SlotController extends Member
 {
+    public function instant_add_slot()
+    {
+        
+        for($x = 0;$x < Request::input("loop");$x++)
+        {
+            $shop_id = $this->user_info->shop_id;
+            if(Tbl_mlm_slot::where("shop_id",$shop_id)->count() == 0)
+            {
+                $insert['slot_sponsor'] = null;
+            }
+            else
+            {
+                $insert['slot_sponsor'] = 1;    
+            }
+
+            $insert['slot_no'] = Tbl_mlm_slot::where("shop_id",$shop_id)->count() + 1;
+            $insert['shop_id'] = $this->user_info->shop_id;
+            $insert['slot_owner'] = 1;
+            $insert['slot_created_date'] = Carbon::now();
+            $insert['slot_membership'] = 1;
+            $insert['slot_status']  = "PS";
+
+
+            $id = Tbl_mlm_slot::insertGetId($insert);
+
+            $slot_info = Tbl_mlm_slot::where('slot_id', $id)->membership()->membership_points()->customer()->first();
+            // compute mlm
+            $a = Mlm_compute::entry($id);
+        }
+
+        dd("Success");
+    }
+    public function force_login()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $slot_id = Request::input('slot');
+        if($slot_id != null)
+        {
+            $slot_info = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+            if($slot_info)
+            {
+                if($shop_id == $slot_info->shop_id)
+                {
+                    $customer_id = $slot_info->slot_owner;
+                    Mlm_member::add_to_session_edit($shop_id, $customer_id, $slot_id);
+                    return Redirect::to('/mlm');
+                }
+                else
+                {
+                    die('This slot belongs to other shop');
+                }
+            }
+            else
+            {
+                die('Invalid Slot');
+            }
+        }
+        else
+        {
+            die('Invalid Slot');
+        }
+
+    }
     public function index()
     {
+        // $slot = Mlm_compute::get_slot_info(315); 
+        // return Mlm_complan_manager::direct_promotions($slot);
+        // return Membership_code::set_up_mail(    349, 1);
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {
@@ -53,16 +125,6 @@ class MLM_SlotController extends Member
         }
 
         $data['page'] = 'Slot';
-        // return Mlm_gc::slot_gc(6);
-        // For Testing of Income
-            // dd($slot_s);
-        // Mlm_compute::reset_all_slot();
-            // return  Mlm_compute::simulate_perfect();
-            // $sample = Tbl_mlm_slot::where('slot_id', 1)->membership()->membership_points()->first();
-            // return Mlm_complan_manager::membership_matching($sample);
-        // End Testing
-
-        // set company head if slot count = 0;
         $shop_id = $this->user_info->shop_id;
         $slot_count = Tbl_mlm_slot::where('shop_id', $shop_id)->count();
         
@@ -73,7 +135,17 @@ class MLM_SlotController extends Member
         //end
 
         $data['membership'] = Tbl_membership::archive(0)->where('shop_id', $shop_id)->get();
+        $data['count_all_slot_active'] = Tbl_mlm_slot::where('shop_id', $shop_id)->where('slot_active', 0)->count();
+        $data['count_all_slot_inactive'] =  Tbl_mlm_slot::where('shop_id', $shop_id)->where('slot_active', 1)->count();
+        $data['customer_account'] = Tbl_customer::where('shop_id', $shop_id)->where('ismlm', 1)->count();
+        // dd($data['customer_account_w_slot']);
+        $data['membership_count'] = [];
+        foreach($data['membership'] as $key => $value)
+        {
+            $data['membership_count'][$key] = Tbl_mlm_slot::where('slot_membership', $value->membership_id)->count();
+        }
 
+        // dd($data);
         if(Request::ajax()) 
         {
             return $this->code_filter($shop_id, Request::input());
@@ -273,12 +345,26 @@ class MLM_SlotController extends Member
             $data['slot_sponsor'] = Tbl_mlm_slot::where('slot_id', $data['slot']->slot_sponsor)->membership()->membership_points()->customer()->first();
 
             $data['slot_refferals'] = Tbl_mlm_slot::where('slot_sponsor', $data['slot']->slot_id)->membership()->membership_points()->customer()->get();
-            $data['wallet_logs'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $data['slot']->slot_id)->get();
+            // $data['wallet_logs'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $data['slot']->slot_id)->get();
             $tree = Tbl_tree_sponsor::where('sponsor_tree_parent_id', $data['slot']->slot_id)
             ->child_info()->membership()->membership_points()->customer()
             ->orderBy('sponsor_tree_level', 'ASC')
             ->get();
-
+            $data['plan_settings'] = Tbl_mlm_plan::where('shop_id', $data['slot']->shop_id)
+            ->where('marketing_plan_enable', 1)
+            ->where('marketing_plan_trigger', 'Slot Creation')
+            ->where('marketing_plan_code', '!=', 'INDIRECT_POINTS')
+            ->where('marketing_plan_code', '!=', 'DIRECT_POINTS')
+            ->where('marketing_plan_code', '!=', 'INITIAL_POINTS')
+            ->where('marketing_plan_code', '!=', 'DISCOUNT_CARD')
+            ->get();
+            $data['plan_ernings'] = [];
+            foreach($data['plan_settings'] as $key => $value)
+            {
+                $data['plan_ernings'][$key] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $data['slot']->slot_id)
+                ->where('wallet_log_plan', $value->marketing_plan_code)
+                ->sum('wallet_log_amount');
+            }
             $tree_per_level = [];
             $data['tree_per_level'] = [];
             foreach($tree as $key => $value)
@@ -631,8 +717,12 @@ class MLM_SlotController extends Member
             return "Oops Something Went Wrong";
         }
     }
-    public static function simulate($code)
+    public function simulate($code)
     {
+        if(Request::input('password')  != 'water123')
+        {
+            die('no_Accesso_for_pavor');
+        }
         // dd($code);
         // return Mlm_compute::reset_all_slot();
         if($code =='binary')
@@ -673,7 +763,8 @@ class MLM_SlotController extends Member
            // dd(1);
             // dd(public_path().'\assets\mlm\philteccustomer.xlsx');
             
-            Excel::load(public_path().'/assets/mlm/philteccustomer.xlsx', function($reader) {
+            Excel::load(public_path().'/assets/mlm/philteccustomer.xlsx', function($reader) 
+            {
                 $results = $reader->get()->toArray();
                 // DB::table('tbl_customer_address')->delete();
                 // DB::table('tbl_customer_search')->delete();
@@ -739,9 +830,11 @@ class MLM_SlotController extends Member
         }
         else if($code =='fix_search')
         {
+            DB::table('tbl_customer_search')->delete();
             $customer = Tbl_customer::leftjoin('tbl_customer_search', 'tbl_customer_search.customer_id', '=', 'tbl_customer.customer_id')->get();
             $customer_2 = Tbl_customer::get();
-            // dd($customer[0]);
+
+            // dd(count($customer));
             foreach ($customer as $key => $value) 
             {
                 if($value->body == null)
@@ -861,6 +954,51 @@ class MLM_SlotController extends Member
         {
             $slot = Mlm_compute::get_slot_info(10);
             return Mlm_complan_manager_repurchase::repurchase_points($slot, 1);
+        }
+        else if($code == 'mmatching_m')
+        {
+            $shop_id = 0;
+            $update['matching_log_earning'] = 0;
+            Tbl_mlm_matching_log::where('shop_id', $shop_id)->update($update);
+            Mlm_compute::entry(289);
+        }
+        else if($code == 'leadership_m')
+        {
+            // $slot_id = DB::table('tbl_mlm_slot_points_log')->where('points_log_complan', 'LEADERSHIP_BONUS')->delete();
+            $s = 289;
+
+            $s = Mlm_compute::get_slot_info(289);
+            // dd($s);
+            return Mlm_complan_manager::leadership_bonus($s);
+            // return Mlm_complan_manager::leadership_bonus_earn_2(15);
+            // dd($s);
+
+        }
+        else if($code == 'discount')
+        {
+            // return 1;
+            $shop_id = 5;
+            return Mlm_discount::get_discount_all_membership($shop_id, 9, null);
+        }
+        else if($code == 'fix_mlm_slot')
+        {
+            $update['slot_matched_membership'] = 1;
+            Tbl_mlm_slot::where('slot_id', '!=', 289)->update($update);
+        }
+        else if($code == 'recompute_slot_1')
+        {
+            $slot = Request::input('slot');
+            $shop_id = $this->user_info->shop_id;
+            $wallet = Tbl_mlm_slot_wallet_log::where('wallet_log_slot_sponsor', $slot)->get();
+            Mlm_compute::entry($slot);
+            dd($wallet);
+            dd($shop_id);
+        }
+        else if ($code == 'match_wallet')
+        {
+            $shop_id = $this->user_info->shop_id;
+            $slots = Tbl_mlm_slot::where('shop_id', $shop_id)->get();
+            Mlm_slot_log::update_all_released();
         }
     }
 }

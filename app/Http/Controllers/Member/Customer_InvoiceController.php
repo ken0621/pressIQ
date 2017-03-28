@@ -46,7 +46,7 @@ class Customer_InvoiceController extends Member
         $id = Request::input('id');
         if($id)
         {
-            $data["inv"]            = Tbl_customer_invoice::appliedPayment($this->getShopId())->where("inv_id", $id)->first();
+            $data["inv"]            = Tbl_customer_invoice::where("inv_id", $id)->first();
             
             $data["_invline"]       = Tbl_customer_invoice_line::um()->where("invline_inv_id", $id)->get();
             $data["action"]         = "/member/customer/invoice/update";
@@ -67,7 +67,7 @@ class Customer_InvoiceController extends Member
 
     public function invoice_list()
     {
-        $data["_invoices"] = Tbl_customer_invoice::customer()->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_shop_id",$this->user_info->shop_id)->get();
+        $data["_invoices"] = Tbl_customer_invoice::manual_invoice()->customer()->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_shop_id",$this->user_info->shop_id)->get();
         return view("member.customer_invoice.customer_invoice_list",$data);
     }
     public function create_invoice()
@@ -82,8 +82,8 @@ class Customer_InvoiceController extends Member
         $invoice_info                       = [];
         $invoice_info['invoice_terms_id']   = Request::input('inv_terms_id');
         $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
-        $invoice_info['invoice_date']       = Request::input('inv_date');
-        $invoice_info['invoice_due']        = Request::input('inv_due_date');
+        $invoice_info['invoice_date']       = datepicker_input(Request::input('inv_date'));
+        $invoice_info['invoice_due']        = datepicker_input(Request::input('inv_due_date'));
         $invoice_info['billing_address']    = Request::input('inv_customer_billing_address');
 
         $invoice_other_info                 = [];
@@ -91,12 +91,10 @@ class Customer_InvoiceController extends Member
         $invoice_other_info['invoice_memo'] = Request::input('inv_memo');
 
         $total_info                         = [];
-        $total_info['total_subtotal_price'] = Request::input('subtotal_price');
         $total_info['ewt']                  = Request::input('ewt');
         $total_info['total_discount_type']  = Request::input('inv_discount_type');
         $total_info['total_discount_value'] = Request::input('inv_discount_value');
         $total_info['taxable']              = Request::input('taxable');
-        $total_info['total_overall_price']  = Request::input('overall_price');
 
         $item_info                          = [];
         $_itemline                          = Request::input('invline_item_id');
@@ -109,12 +107,11 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
                 $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
                 $item_info[$key]['um']                 = Request::input('invline_um')[$key];
-                $item_info[$key]['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
-                $item_info[$key]['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
+                $item_info[$key]['quantity']           = Request::input('invline_qty')[$key];
+                $item_info[$key]['rate']               = Request::input('invline_rate')[$key];
                 $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
-                $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
 
 
                 $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
@@ -163,8 +160,8 @@ class Customer_InvoiceController extends Member
     }
     public function update_invoice()
     {
-        $invoice_id = Request::input("invoice_id");
-        $button_action = Request::input('button_action');
+        $invoice_id     = Request::input("invoice_id");
+        $button_action  = Request::input('button_action');
 
         $customer_info                      = [];
         $customer_info['customer_id']       = Request::input('inv_customer_id');;
@@ -172,9 +169,9 @@ class Customer_InvoiceController extends Member
 
         $invoice_info                       = [];
         $invoice_info['invoice_terms_id']   = Request::input('inv_terms_id');
-        $invoice_info['invoice_date']       = Request::input('inv_date');
+        $invoice_info['invoice_date']       = datepicker_input(Request::input('inv_date'));
         $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
-        $invoice_info['invoice_due']        = Request::input('inv_due_date');
+        $invoice_info['invoice_due']        = datepicker_input(Request::input('inv_due_date'));
         $invoice_info['billing_address']    = Request::input('inv_customer_billing_address');
 
         $invoice_other_info                 = [];
@@ -213,6 +210,8 @@ class Customer_InvoiceController extends Member
             }
         }
 
+        Invoice::updateIsPaid($invoice_id);
+
         $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
 
         if($inv <= 1 || Request::input("keep_val") == "keep")
@@ -229,11 +228,7 @@ class Customer_InvoiceController extends Member
                 $json["invoice_id"]     = $inv_id;
                 $json["link"]           = "/member/customer/invoice?id=".$inv_id;
 
-                if($button_action == "save-and-edit")
-                {
-                    $json["redirect"]    = "/member/customer/invoice?id=".$inv_id;
-                }
-                elseif($button_action == "save-and-new")
+                if($button_action == "save-and-new")
                 {
                     $json["redirect"]   = '/member/customer/invoice';
                 }

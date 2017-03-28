@@ -16,9 +16,9 @@
     <input type="hidden" name="action" value="{{$action}}">
 </div>
 <div class="modal-footer">
-    <div class="col-md-6"><button type="submit" class="btn btn-custom-blue col-md-12">Yes</button></div>
-    <div class="col-md-6"><button data-dismiss="modal" class="btn btn-def-white btn-custom-white col-md-12">No</button></div>
-</div>	
+    <div class="col-md-6 col-xs-6"><button type="submit" class="btn btn-custom-blue form-control">Yes</button></div>
+    <div class="col-md-6 col-xs-6"><button data-dismiss="modal" class="btn btn-def-white btn-custom-white form-control">No</button></div>
+</div>  	
 </form>
 <script type="text/javascript">   
 function submit_done(data)
@@ -28,6 +28,7 @@ function submit_done(data)
         toastr.success("Success");
         $('#global_modal').modal('toggle');
         $(".sir_container").load("/member/pis/lof .sir_container");
+        data.element.modal("hide");
         $(".all-sir").addClass("active");
         $(".sir-class").removeClass("active");
     }

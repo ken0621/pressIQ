@@ -9,8 +9,7 @@
 	    <div class="form-group">
 	    	<div class="col-md-12">
 	    		<label>From: </label>
-	    		<select name="inventory_from" id="transfer_from" class="form-control">
-	    			<option value="">Select Warehouse</option>
+	    		<select required name="inventory_from" id="transfer_from" class="form-control">
 	    			@if($warehouse)
 	    				@foreach($warehouse as $ware)
 			    			<option value="{{$ware->warehouse_id}}">{{$ware->warehouse_name}}</option>
@@ -22,7 +21,7 @@
 	    <div class="form-group">
 	    	<div class="col-md-12">
 	    		<label>To: </label>
-	    		<select name="inventory_to" id="transfer_to" class="form-control transfer_to">
+	    		<select required name="inventory_to" id="transfer_to" class="form-control transfer_to">
 	    		
 	    		</select>
 	    	</div>

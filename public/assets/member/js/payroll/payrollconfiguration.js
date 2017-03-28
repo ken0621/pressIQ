@@ -18,13 +18,18 @@ function payrollconfiguration()
 		{
 			e.preventDefault();
 			var link 		= $(this).attr("href");
-			var formdata 	= {_token:misc('_token')};
-			var target 		= ".configuration-div";
-			load_configuration(link, "POST", target, formdata);
+			reload_configuration(link);
 		});
 	}
 
-	function load_configuration(action = "", method = "POST", target = ".configuration-div", formdata = [])
+	function reload_configuration(link = "")
+	{
+		var formdata 	= {_token:misc('_token')};
+		var target 		= ".configuration-div";
+		load_configuration(link, "POST", target, formdata);
+	}
+
+	function load_configuration(action = "", method = "POST", target = ".configuration-div", formdata = [], toaster_str = '')
 	{
 		$(target).html(misc('loader'));
 		$.ajax({
@@ -34,7 +39,11 @@ function payrollconfiguration()
 			success : 	function(result)
 			{
 				$(target).html(result);
-				load_configuration_event();
+				console.log(toaster_str);
+				if(toaster_str != '')
+				{
+					toastr.success(toaster_str);
+				}
 			},
 			error  	: 	function()
 			{
@@ -161,9 +170,14 @@ function payrollconfiguration()
 		load_configuration(action, "POST",target, formdata);
 	}
 
-	this.executeFunctionByName = function(functionName)
+	// this.executeFunctionByName = function(functionName)
+	// {
+	// 	executeFunctionByName(functionName, window);
+	// }
+
+	this.load_configuration = function(action = "", method = "POST", target = "", formdata = [])
 	{
-		executeFunctionByName(functionName, window);
+		load_configuration(action, method, target, formdata);
 	}
 
 	this.relaod_tbl_department = function()
@@ -176,7 +190,8 @@ function payrollconfiguration()
 	{
 		jobtitle_archived();
 		jobtitle_archived(1);
-	}
+	} 
+	
 
 	this.btn_modal_button_event = function()
 	{
@@ -189,23 +204,63 @@ function payrollconfiguration()
 		});
 	}
 
-
-	/* CALL A FUNCTION BY NAME */
-	function executeFunctionByName(functionName, context /*, args */) {
-	  var args = [].slice.call(arguments).splice(2);
-	  var namespaces = functionName.split(".");
-	  var func = namespaces.pop();
-	  for(var i = 0; i < namespaces.length; i++) {
-	    context = context[namespaces[i]];
-	  }
-	  return context[func].apply(context, args);
+	this.reload_deduction = function()
+	{
+		reload_configuration("/member/payroll/deduction");
 	}
+
+	this.reload_allowance = function()
+	{
+		reload_configuration("/member/payroll/allowance");
+	}
+
+	this.reload_leave_temp = function()
+	{
+		reload_configuration("/member/payroll/leave");
+	}
+	
+	this.reload_holiday = function()
+	{
+		reload_configuration("/member/payroll/holiday");
+	}
+
+	this.reload_payroll_group = function()
+	{
+		reload_configuration("/member/payroll/payroll_group");
+	}
+
+	this.reload_jobtitlelist = function()
+	{
+		reload_configuration("/member/payroll/jobtitlelist");
+	}
+
+	this.reload_departmentlist = function()
+	{
+		reload_configuration("/member/payroll/departmentlist");
+	}
+
+	/*this.reload_holiday_default = function()
+	{
+		reload_configuration("/member/payroll/holiday_default");
+	}*/
+	
 }
+
+/* CALL A FUNCTION BY NAME */
+function executeFunctionByName(functionName, context /*, args */) {
+  var args = [].slice.call(arguments).splice(2);
+  var namespaces = functionName.split(".");
+  var func = namespaces.pop();
+  for(var i = 0; i < namespaces.length; i++) {
+    context = context[namespaces[i]];
+  }
+  return context[func].apply(context, args);
+}
+
 function submit_done(data)
 {
-	payrollconfiguration.executeFunctionByName(data.function_name);
-	console.log(data.function_name);
-	$("#global_modal").modal("hide");
+	data.element.modal("toggle");
+	executeFunctionByName(data.function_name, window);
 }
 
 function loading_done(url)

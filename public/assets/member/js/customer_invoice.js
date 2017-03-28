@@ -1,3 +1,4 @@
+
 var customer_invoice = new customer_invoice();
 var global_tr_html = $(".div-script tbody").html();
 var item_selected = ''; 
@@ -14,6 +15,7 @@ function customer_invoice(){
 		event_accept_number_only();
 		event_compute_class_change();
 		event_taxable_check_change();
+		event_item_qty_change();
 		
 		action_lastclick_row();
 		action_compute();
@@ -34,6 +36,20 @@ function customer_invoice(){
 		});
 	}
 
+	this.action_initialized = function()
+	{
+		action_initialize();
+	}
+
+	function action_initialize()
+	{
+		iniatilize_select();
+		action_compute();
+		action_convert_number();
+		action_date_picker();
+		draggable_row.dragtable();
+	}
+
 	this.action_lastclick_row = function()
 	{
 		action_lastclick_row();
@@ -48,7 +64,6 @@ function customer_invoice(){
 
 	function action_return_to_number(number = '')
 	{
-
 		number += '';
 		number = number.replace(/,/g, "");
 		if(number == "" || number == null || isNaN(number)){
@@ -56,7 +71,6 @@ function customer_invoice(){
 		}
 		
 		return parseFloat(number);
-	
 	}
 
 	function action_lastclick_row_op()
@@ -67,10 +81,6 @@ function customer_invoice(){
 		action_date_picker();
 	}
 
-	function action_date_picker()
-	{
-		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
-	}
 
 	this.action_reassign_number = function()
 	{
@@ -84,6 +94,11 @@ function customer_invoice(){
 			$(this).html(num);
 			num++;
 		});
+	}
+
+	function action_date_picker()
+	{
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
 	}
 
 	function event_accept_number_only()
@@ -246,7 +261,6 @@ function customer_invoice(){
 
 		/* action payment applied */
 		var payment_applied   	= parseFloat($(".payment-applied").html());
-		console.log(total + "|" + payment_applied);
 		var balance_due 		= total - payment_applied;
 
 		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));
@@ -259,7 +273,7 @@ function customer_invoice(){
 		$(".total-amount").html(action_add_comma(total.toFixed(2)));
 		$(".total-amount-input").val(total.toFixed(2));
 
-		$(".balance-due").html(balance_due.toFixed(2));
+		$(".balance-due").html(action_add_comma(balance_due.toFixed(2)));
 
 	}
 
@@ -315,7 +329,7 @@ function customer_invoice(){
 		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
             link : "/member/item/add",
-            width : "150px",
+            width : "100%",
             onCreateNew : function()
             {
             	item_selected = $(this);
@@ -347,7 +361,7 @@ function customer_invoice(){
 	    $('.droplist-item').globalDropList(
         {
             link : "/member/item/add",
-            width : "150px",
+            width : "100%",
             onCreateNew : function()
             {
             	item_selected = $(this);
@@ -380,19 +394,31 @@ function customer_invoice(){
 		$parent.find(".txt-qty").val(1).change();
 
 		if($this.find("option:selected").attr("has-um") != '')
-		{
-			
+		{			
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$(this).globalDropList("reload").globalDropList("enabled");
-				console.log($(this).find("option:first").val());
-				$(this).val($(this).find("option:first").val()).change()		;
+				$(this).val($(this).find("option:first").val()).change();
 			})
 		}
 		else
 		{
 			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
+	}
+
+	function event_item_qty_change()
+	{
+		$(document).on("change", ".txt-qty", function()
+		{
+			$parent 	= $(this).closest(".tr-draggable");
+			$item_id 	= $parent.find("option:selected").val();
+			$item_qty 	= $(this).val();
+			$.get('/member/item/get_new_price/'+$item_id +"/"+$item_qty, function(data)
+			{
+				$parent.find(".txt-rate").val(data).change();
+			});
+		})
 	}
 
 	function action_load_unit_measurement($this)
@@ -452,14 +478,18 @@ function submit_done(data)
 {
 	if(data.status == "success-invoice")
 	{
-        toastr.success("Success");
         if(data.redirect)
         {
+        	toastr.success("Success");
         	location.href = data.redirect;
     	}
     	else
     	{
-    		$("")
+    		$(".load-data:last").load(data.link+" .load-data .data-container", function()
+    		{
+    			customer_invoice.action_initialized();
+    			toastr.success("Success");
+    		})
     	}
 	}
 	else if(data.status == 'error-inv-no')
@@ -474,7 +504,7 @@ function submit_done(data)
 	else if(data.status == 'success-tablet')
 	{		
         toastr.success("Success");
-       	location.href = "/tablet";
+       	location.href = "/tablet/invoice";
 	}
     else if(data.status == "error")
     {

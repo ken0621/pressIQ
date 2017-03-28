@@ -43,6 +43,7 @@ class Cards
     }
     public static function discount_card($info)
     {
+        // dd($info);
         $data['color'] = 'discount';
         $data['name'] = name_format_from_customer_info($info);
         $data['membership_code'] = $info->discount_card_log_code;    
@@ -87,6 +88,7 @@ class Cards
         {
             $data['now'] = Carbon::parse($info->slot_card_issued)->format('m/d/Y');
         }
+        // dd(1);
         return view("member.card.card", $data);
     }
 }

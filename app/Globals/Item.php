@@ -10,6 +10,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_sir_item;
 use App\Models\Tbl_mlm_discount_card_log;
+use App\Models\Tbl_item_discount;
 
 use App\Globals\Item;
 use Session;
@@ -21,6 +22,10 @@ class Item
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
+    public static function get_item_details($item_id = 0)
+    {
+        return Tbl_item::category()->where("item_id",$item_id)->first();
+    }
 	public static function breakdown($_item='')
 	{
 		$data = '';
@@ -87,39 +92,66 @@ class Item
     {
         return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();
     }
+    public static function insert_item_discount($item_info)
+    {
+        $chck = Tbl_item_discount::where("discount_item_id",$item_info["item_id"])->first();
 
+        if($chck == null)
+        {
+            $insert["discount_item_id"] = $item_info["item_id"];
+            $insert["item_discount_value"] = $item_info["item_discount_value"];
+            $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
+            $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
+
+            Tbl_item_discount::insert($insert);            
+        }
+        else
+        {
+            $insert["item_discount_value"] = $item_info["item_discount_value"];
+            $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
+            $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
+
+            Tbl_item_discount::where("discount_item_id",$item_info["item_id"])->update($insert);  
+        }
+    }
     public static function get_all_category_item($type = array(1,2,3,4))
     {
         $shop_id = Item::getShopId();
-        $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get();
+        $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get()->toArray();
 
         foreach($_category as $key =>$category)
         {
-            $_category[$key]->item_list   = Tbl_item::where("item_category_id",$category->type_id)->whereIn("item_type_id",$type)->get()->toArray();
-            $_category[$key]->subcategory = Item::get_item_per_sub($category->type_id, $type);
-        
+            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->get()->toArray();
+            foreach($_category[$key]['item_list'] as $key1=>$item_list)
+            {
+                $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
+            }
+            $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }
 
-        return collect($_category)->toArray();
+        return $_category;
     }
-
     public static function get_item_per_sub($category_id, $type = array())
     {
-        $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get();
+        $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get()->toArray();
         foreach($_category as $key =>$category)
         {
-            $_category[$key]->item_list   = Tbl_item::where("item_category_id",$category->type_id)->whereIn("item_type_id",$type)->get()->toArray();
-            $_category[$key]->subcategory = Item::get_item_per_sub($category->type_id, $type);
+            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->get()->toArray();
+            foreach($_category[$key]['item_list'] as $key1=>$item_list)
+            {
+                $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
+            }
+            $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }
 
-        return collect($_category)->toArray();
+        return $_category;
     } 
    
     public static function get_all_item_sir($sir_id)
     {
         $shop_id = Item::getShopId();
 
-        $item = Tbl_sir_item::select_sir_item()->leftjoin("tbl_category","tbl_category.type_id","=","tbl_item.item_category_id")->where("tbl_sir_item.sir_id",$sir_id)->groupBy("tbl_item.item_category_id")->get();
+        $item = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->groupBy("tbl_item.item_category_id")->get();
         foreach ($item as $key1 => $value) 
         {         
             $_category[$key1] = Tbl_category::where("type_shop",$shop_id)->where("archived",0)->where("type_id",$value->item_category_id)->first();  

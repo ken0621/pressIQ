@@ -17,12 +17,14 @@ use App\Models\Tbl_membership_code_invoice;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_item_code_item;
 use App\Globals\Item;
 use App\Globals\Item_code;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_warehouse;
 use App\Globals\Pdf_global;
 use App\Globals\Utilities;
+use App\Models\Tbl_inventory_serial_number;
 class MLM_ProductCodeController extends Member
 {
     public function index()
@@ -57,17 +59,21 @@ class MLM_ProductCodeController extends Member
     public function sell()
     {
         $access = Utilities::checkAccess('mlm-product-code', 'product_code_sell_codes');
+
+        $data['_item']  = Item::get_all_category_item();
+        // dd($data);
         if($access == 0)
         {
             return $this->show_no_access(); 
         }
 
         $shop_id            = $this->user_info->shop_id;
-	    $data["_item"] 	    = null;
+	    $data['_item']  = Item::get_all_category_item();
 	    $data["_customer"]  = Tbl_customer::where("archived",0)->where("shop_id",$shop_id)->get();
-	    $data['table_body'] = $this->view_all_lines();
-        // dd(1);
-        $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get();
+	    // $data['table_body'] = $this->view_all_lines();
+        $data['table_body'] = $this->view_all_lines();
+        $data['warehouse'][0] = $this->current_warehouse;
+        // dd($data);
         return view('member.mlm_product_code.mlm_product_code_sell', $data);
     }
 
@@ -116,6 +122,8 @@ class MLM_ProductCodeController extends Member
     public function add_line()
     {
         $data['item_list'] = Item::view_item_dropdown($this->user_info->shop_id);
+
+
         if(Request::input('slot_id') != null)
         {
             $data['slot_id'] = Request::input('slot_id');
@@ -202,9 +210,10 @@ class MLM_ProductCodeController extends Member
             {
                 $data['item_array'][$key]         = $value;
         	    $data['item_list'][$key]          = Item::view_item_dropdown($this->user_info->shop_id,$key,true);
+                $data['item_array'][$key]['item_serial'] = Tbl_inventory_serial_number::where('item_id', $key)->get()->toArray();
             }  
         }
-
+        // dd($data['item_array']);
         return view('member.mlm_product_code.mlm_product_code_view_line', $data);
     }
 
@@ -257,23 +266,35 @@ class MLM_ProductCodeController extends Member
 
     public function process()
     {
+        // return $_POST;
         if(Request::input())
         {
-            // return $_POST;
-            $shop_id = $this->user_info->shop_id;
-            $data    = Item_code::add_code(Request::input(),$shop_id);
-            if($data["response_status"] == "success")
+            if(isset($this->current_warehouse->warehouse_id))
             {
-                return json_encode($data);
-                Session::flash('success', "Successfully purchased a product/s");
-                return redirect('/member/mlm/product_code/receipt?invoice_id='. $data['invoice_id'])->send();
+                // return $_POST;
+                $shop_id = $this->user_info->shop_id;
+                $data    = Item_code::add_code(Request::input(),$shop_id);
+                if($data["response_status"] == "success")
+                {
+                    Session::forget("sell_codes_session");
+                    return json_encode($data);
+                    Session::flash('success', "Successfully purchased a product/s");
+                    return redirect('/member/mlm/product_code/receipt?invoice_id='. $data['invoice_id'])->send();
+                }
+                else
+                {
+                    return json_encode($data);
+                    Session::flash('code_error', $data["warning_validator"]);
+                    return redirect('/member/mlm/product_code/sell')->send();
+                }
             }
             else
             {
+                $data["warning_validator"][0] = 'Invalid Warehouse';
                 return json_encode($data);
                 Session::flash('code_error', $data["warning_validator"]);
                 return redirect('/member/mlm/product_code/sell')->send();
-            }          
+            }     
         }
         else
         {
@@ -302,9 +323,14 @@ class MLM_ProductCodeController extends Member
         }
 
         $shop_id          = $this->user_info->shop_id;
-        $_invoice         = Tbl_item_code_invoice::customer()->orderBy('item_code_invoice_id', 'DESC')->where("tbl_item_code_invoice.shop_id",$shop_id)->paginate(10);
+        $_invoice         = Tbl_item_code_invoice::customer()->orderBy('item_code_invoice_id', 'DESC')->where("tbl_item_code_invoice.shop_id",$shop_id);
         
-        $data["_invoice"] = $_invoice;
+        if(Request::input('search_name'))
+        {
+            $search_email = Request::input('search_name');
+            $_invoice  = $_invoice->where("tbl_item_code_invoice.item_code_customer_email","LIKE","%".$search_email."%");
+        }
+        $data["_invoice"] = $_invoice->paginate(10);;
         // dd($code);
         return view('member.mlm_product_code.mlm_product_code_receipt',$data);   
     }
@@ -326,8 +352,9 @@ class MLM_ProductCodeController extends Member
         $data["shop_contact"]    = $this->user_info->shop_contact;
         $data['company_name'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
         $data['company_email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
-        $data['company_logo'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_logo')->pluck('value');
-        
+        $data['company_logo'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
+        $data['item_list'] = Tbl_item_code_item::where('item_code_invoice_id', $id)->get();    
+        // dd($data['item_list']);
         // dd($this->user_info);
         $subtotal                = Tbl_item_code::where("item_code_invoice_id",$invoice->item_code_invoice_id)->item()->sum("item_code_price");
         $discount_amount         = $invoice->item_discount;

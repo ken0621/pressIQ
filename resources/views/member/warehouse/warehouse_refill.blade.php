@@ -12,7 +12,7 @@
     <h4 class="modal-title layout-modallarge-title item_title">Warehouse Inventory Refill</h4>
 </div>
 <div class="modal-body modallarge-body-layout background-white form-horizontal menu_container">
-    <input type="hidden" name="warehouse_id" value="{{$warehouse->warehouse_id}}">
+    <input type="hidden" name="warehouse_id" id="warehouse_id" value="{{$warehouse->warehouse_id}}">
     <div class="panel-body form-horizontal">
         <div class="form-group">
             <div class="col-md-6">            
@@ -21,9 +21,9 @@
         </div>
         <div class="form-group">
             <div class="col-md-6">
-                <label>Source *</label>
-                <select name="reason_refill" class="form-control input-sm">
-                    <option value="vendor">Vendor</option>
+                <label>Vendor *</label>
+                <select name="reason_refill" required class="form-control droplist-vendor input-sm">
+                    @include('member.load_ajax_data.load_vendor')
                     <option value="other">Others</option>
                 </select>
             </div>
@@ -113,4 +113,18 @@
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <!-- <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script> -->
 <!-- <script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script> -->
+<script type="text/javascript">
+    
+$('.droplist-vendor').globalDropList(
+{ 
+    width : "100%",
+    link : "/member/vendor/add",
+    onChangeValue : function ()
+    {
+        var vendor_id = $(this).val();
+        var warehouse_id = $("#warehouse_id").val();
+        $(".warehouse-refill-container").load("/item/warehouse/refill/by_vendor/"+warehouse_id+"/"+vendor_id +" .warehouse-refill-container")
+    }
+});
+</script>
 <script type="text/javascript" src="/assets/member/js/warehouse.js"></script>

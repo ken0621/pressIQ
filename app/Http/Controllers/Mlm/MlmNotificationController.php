@@ -12,7 +12,6 @@ class MlmNotificationController extends Mlm
 {
     public function index()
     {
-    	// return Self::show_maintenance();
 
     	$data = [];
     	$data['report'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)

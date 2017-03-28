@@ -12,7 +12,7 @@ class Tbl_ec_product extends Model
 
     public function scopeVariant($query, $separator = ' • ' )
     {
-    	$query->selectRaw("eprod_id, evariant_id, group_concat(option_value ORDER BY variant_name_order ASC SEPARATOR '$separator') as variant_name, evariant_item_id, evariant_item_label, evariant_description")
+    	$query->selectRaw("eprod_id, eprod_name, evariant_id, eprod_is_single, tbl_ec_product.date_created, group_concat(option_value ORDER BY variant_name_order ASC SEPARATOR '$separator') as variant_name, evariant_item_id, evariant_item_label, evariant_description, evariant_price")
     		  ->join("tbl_ec_variant","eprod_id","=","evariant_prod_id")
     		  ->leftjoin(DB::raw("tbl_variant_name as var_name"),"evariant_id","=", "variant_id")
     		  ->leftjoin(DB::raw("tbl_option_name as op_name"),"op_name.option_name_id","=","var_name.option_name_id")
@@ -29,12 +29,36 @@ class Tbl_ec_product extends Model
     		  ->join(DB::raw('tbl_option_value as op_value'), "var_name.option_value_id", "=", "op_value.option_value_id")
     		  ->groupBy(DB::raw("concat(eprod_id,'-',op_name.option_name)"))
     		  ->orderBy("variant_name_order");
-
     }
 
+    /* DEPENDENT on scopeVariant */
     public function scopeItem($query)
     {
     	$query->join("tbl_item","item_id","=","evariant_item_id");
+    }
+
+    /* Returns Group By evariant_id */
+    public function scopeItemVariant($query)
+    {
+        return $query->join(DB::raw('('.DB::table("tbl_ec_variant")
+                                        ->select("item_id","evariant_prod_id")
+                                        ->join("tbl_item","item_id","=","evariant_item_id")
+                                        ->groupBy("evariant_id")->toSql().') as item_variant'), "evariant_prod_id","=","eprod_id");
+    }
+
+    /* DEPENDENT on scopeItem */
+    public function scopeInventory($query, $warehouse_id = null)
+    {
+        return $query->selectRaw("*, IFNULL(sum(inventory_count), 0) as inventory_count")
+                     ->leftjoin("tbl_warehouse_inventory", function($join) use ($warehouse_id)
+                     {
+                        $join->on("inventory_item_id","=","item_id");
+                        if($warehouse_id)
+                        {
+                            $join->on("warehouse_id","=", DB::raw($warehouse_id));
+                        }
+                     })
+                     ->groupBy("eprod_id");
     }
 
     public function scopePrice($query)

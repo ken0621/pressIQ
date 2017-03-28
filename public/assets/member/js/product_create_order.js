@@ -268,7 +268,7 @@ function customer_invoice(){
 			if(discount.indexOf('%') >= 0)
 			{
 				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
-				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * action_return_to_number(rate);
+				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
 			}
 			else if(discount == "" || discount == null)
 			{
@@ -440,23 +440,13 @@ function customer_invoice(){
 	{
 		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
-            link : "/member/item/add",
-            width : "150px",
-            onCreateNew : function()
-            {
-            	item_selected = $(this);
-            },
+            hasPopup : "false",
+            width 	: "100%",
             onChangeValue : function()
             {
             	action_load_item_info($(this));
             }
         });
-      //   $(".draggable .tr-draggable:last td select.select-um").globalDropList(
-      //   {
-      //   	hasPopup: "false",
-    		// width : "110px",
-    		// placeholder : "um.."
-      //   }).globalDropList('disabled');
 	}
 
 	/* Make select input into a drop down list plugin */
@@ -471,31 +461,24 @@ function customer_invoice(){
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
 			}
 		});
+		
 	    $('.droplist-item').globalDropList(
         {
-            link : "/member/item/add",
-            width : "150px",
-            onCreateNew : function()
-            {
-            	item_selected = $(this);
-            },
+        	hasPopup: "false",
+            width : "100%",
             onChangeValue : function()
             {
             	action_load_item_info($(this));
             }
         });
-        $('.droplist-um').globalDropList(
-    	{
-    		hasPopup: "false",
-    		width : "110px",
-    		placeholder : "um..",
-    		onChangeValue: function()
-    		{
-    			action_load_unit_measurement($(this));
-    		}
 
-    	});
-        $('.droplist-um:not(.has-value)').globalDropList("disabled");
+        $(".drop-down-payment").globalDropList(
+		{
+		    link 		: '/member/maintenance/payment_method/add',
+		    link_size 	: 'sm',
+		    width 		: "100%",
+		    placeholder : 'Payment Method'
+		});
 	}
 
 
@@ -505,27 +488,6 @@ function customer_invoice(){
 		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
-
-		// if($this.find("option:selected").attr("has-um") != '')
-		// {
-		// 	$.ajax(
-		// 	{
-		// 		url: '/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"),
-		// 		method: 'get',
-		// 		success: function(data)
-		// 		{
-		// 			$parent.find(".select-um").html(data).globalDropList("reload").globalDropList("enabled");
-		// 		},
-		// 		error: function(e)
-		// 		{
-		// 			console.log(e.error());
-		// 		}
-		// 	})
-		// }
-		// else
-		// {
-		// 	$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
-		// }
 	}
 
 	function action_load_unit_measurement($this)
@@ -567,37 +529,6 @@ function customer_invoice(){
 
 		})
 	}
-
-	this.action_reload_item = function($id)
-	{
-		action_reload_item($id);
-	}
-
-	function action_reload_item($id)
-	{
-		$.ajax(
-		{
-			url: '/member/item/load_item_category',
-			method: 'GET',
-			success: function(data)
-			{
-				$element = $(".tbody-item .select-item");
-
-				$element.html(data);
-				
-				$element.globalDropList("reload");
-
-				// Filter selected combobox only
-				item_selected.val($id).change();
-			},
-			error: function()
-			{
-				console.log("error");
-			}
-
-		})
-	}
-
 }	
 
 
@@ -613,14 +544,7 @@ function submit_done_customer(result)
 	customer_invoice.action_reload_customer(result['customer_info']['customer_id']);
 }
 
-/* AFTER ADDING AN  ITEM */
 function submit_done(data)
-{
-	customer_invoice.action_reload_item(data.item_id);
-	$("#global_modal").modal("toggle");
-}
-
-function submit_done_for_page(data)
 {
 	if(data.status == "success-invoice")
 	{
@@ -632,15 +556,14 @@ function submit_done_for_page(data)
         toastr.success("Successfully updated");
        	location.href = data.redirect_to;
 	}
-	else if(data.status == 'success-sir')
-	{		
-        toastr.success("Success");
-       	location.href = "/member/pis/manual_invoice";
-	}
-	else if(data.status == 'success-tablet')
-	{		
-        toastr.success("Success");
-       	location.href = "/tablet";
+	else if(data.type == "payment_method")
+	{
+		$(".drop-down-payment").load("/member/maintenance/load_payment_method", function()
+		{
+			$(this).globalDropList("reload");
+			$(this).val(data.payment_method_id).change();
+		});
+		data.element.modal("toggle");
 	}
     else if(data.status == "error")
     {

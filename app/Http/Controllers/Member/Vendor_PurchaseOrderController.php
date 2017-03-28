@@ -19,6 +19,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_vendor;
 use App\Globals\Vendor;
+use App\Globals\AuditTrail;
 use App\Globals\Purchase_Order;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
@@ -35,8 +36,9 @@ class Vendor_PurchaseOrderController extends Member
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["action"]     = "/member/vendor/purchase_order/create_po";
-
+        $data["v_id"]       = Request::input("vendor_id");
         $id = Request::input('id');
+
         if($id)
         {
             $data["po"]            = Tbl_purchase_order::where("po_id", $id)->first();
@@ -67,8 +69,8 @@ class Vendor_PurchaseOrderController extends Member
 
         $po_info                            = [];
         $po_info['po_terms_id']             = Request::input('po_terms_id');
-        $po_info['po_date']                 = Request::input('po_date');
-        $po_info['po_due_date']             = Request::input('po_due_date');
+        $po_info['po_date']                 = datepicker_input(Request::input('po_date'));
+        $po_info['po_due_date']             = datepicker_input(Request::input('po_due_date'));
         $po_info['billing_address']         = Request::input('po_billing_address');
 
         $po_other_info                      = [];
@@ -122,8 +124,8 @@ class Vendor_PurchaseOrderController extends Member
 
         $po_info                            = [];
         $po_info['po_terms_id']             = Request::input('po_terms_id');
-        $po_info['po_date']                 = Request::input('po_date');
-        $po_info['po_due_date']             = Request::input('po_due_date');
+        $po_info['po_date']                 = datepicker_input(Request::input('po_date'));
+        $po_info['po_due_date']             = datepicker_input(Request::input('po_due_date'));
         $po_info['billing_address']         = Request::input('po_billing_address');
 
         $po_other_info                      = [];

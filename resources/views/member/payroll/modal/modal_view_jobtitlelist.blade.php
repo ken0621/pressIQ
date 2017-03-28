@@ -1,7 +1,7 @@
 <form class="global-submit" role="form" action="/member/payroll/jobtitlelist/modal_update_jobtitle" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
-		<h4 class="modal-title">Create Job Title</h4>
+		<h4 class="modal-title">Job Title</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
 		<input type="hidden" name="payroll_jobtitle_id" value="{{$position->payroll_jobtitle_id}}">
 	</div>

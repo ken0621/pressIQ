@@ -96,14 +96,11 @@
                                     <input id="username" name="email" required="required" type="email" placeholder="Your Email"/>
                                 </p>
                                 <p>
-                                    <input type='number' class="form-control" name="customer_mobile" placeholder="Mobile Number">
+                                    <input type='number' class="form-control" name="customer_mobile" placeholder="Number (e.g. 639191234567)">
                                 </p>
                                 <p> 
                                     <input id="tinnumber" name="tinnumber" required="required" type="number" placeholder="Your TIN"/>
                                 </p>
-
-                                
-                                
                                 <p> 
                                     <input id="username" name="username" required="" type="text" placeholder="Your Username"/>
                                 </p>

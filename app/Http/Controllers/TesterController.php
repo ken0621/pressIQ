@@ -8,6 +8,9 @@ use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_user;
+use App\Models\Tbl_item;
+use App\Models\Tbl_ec_product;
+
 use App\Models\Tbl_journal_entry_line;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
@@ -15,6 +18,8 @@ use App\Globals\Category;
 use App\Globals\Item;
 use App\Globals\Customer;
 use App\Globals\Ecom_Product;
+use App\Globals\Sms;
+
 use Request;
 use Carbon\Carbon;
 use Session;
@@ -22,7 +27,7 @@ use Validator;
 use Redirect;
 use Crypt;
 
-class TesterController extends Member
+class TesterController extends Controller
 {
 
     public function getShopId()
@@ -38,10 +43,39 @@ class TesterController extends Member
         }
     }
 
+    public function getSms()
+    {
+        $data[0] = "09178868381";
+        $data[1] = "09167703064";
+
+        // Sms::sendRegistration("639177190080","Arnold");
+    }
+
 	public function getIndex()
     {
-        dd(Tbl_customer::Transaction($this->getShopId(), 8)->get());
-        // dd(Item::get_all_category_item());
+        dd(Sms::getSmsLogs());
+        // $txt[0]["txt_to_be_replace"]    = "[name]";
+        // $txt[0]["txt_to_replace"]       = "bryan";
+
+        // $txt[1]["txt_to_be_replace"]    = "[link]";
+        // $txt[1]["txt_to_replace"]       = "link ko to";
+
+        // dd(Sms::getSmsContent("membership_code_purchase", $txt));
+        // $data ="{"messages":[{"to":"639971276494","status":{"groupId":1,"groupName":"PENDING","id":7,"name":"PENDING_ENROUTE","description":"Message sent to next instance"},"smsCount":1,"messageId":"ea7b9ea6-bbda-4e7f-a1b0-cc9a8af1d45c"}]}";
+
+        
+        // dd(json_decode({"messages":[{"to":"639971276494","status":{"groupId":1,"groupName":"PENDING","id":7,"name":"PENDING_ENROUTE","description":"Message sent to next instance"},"smsCount":1,"messageId":"ea7b9ea6-bbda-4e7f-a1b0-cc9a8af1d45c"}]}));
+
+
+
+        // dd(Accounting::postJournalEntry());
+        // dd(Tbl_ec_product::variant()->item()->inventory()->get()->toArray());
+        // dd(Ecom_Product::getProductList());
+        // dd(Ecom_Product::getProduct(5));\
+        // dd(Ecom_Product::getVariantInfo(36));
+        // dd(Tbl_item::multiPrice()->get()->toArray());
+        // dd(Tbl_customer::Transaction($this->getShopId(), 8)->get());
+        // dd(Tbl_item::newPrice(19)->where("tem_id", 15)->get());
         //dd(Ecom_Product::getAllCategory());
 
         //dd(Item::get_all_category_item());
@@ -120,5 +154,13 @@ class TesterController extends Member
         // dd($data['tbl_journal_entry']);
 
         return view('member.tester_journal', $data);
+    }
+
+    public function getCustomer()
+    {
+        $shop_id = 1;
+        $data["customer_first_name"] = "Bryan";
+
+        dd(Customer::createCustomer($shop_id, $data))   ;
     }
 }

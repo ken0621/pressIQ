@@ -1,9 +1,9 @@
 <?php
-
 namespace App\Http\Controllers\Member;
 
 use Request;
 use App\Models\Tbl_category;
+use App\Models\Tbl_item;
 use Carbon\Carbon;
 use App\Globals\Category;
 use App\Globals\Utilities;
@@ -22,7 +22,9 @@ class Manage_Category_Controller extends Member
         if($access == 1)
         {
             $shop_id = $this->user_info->user_shop;
-            $data['category'] = Category::select_tr_html($shop_id);
+            $data['category'] = Category::select_tr_html($shop_id, 0);
+            $data['archived_category'] = Category::select_category_archived();
+            // dd($data['archived_category']); 
             return view('member.manage_category.manage_category_list', $data);
         }
         else
@@ -46,7 +48,49 @@ class Manage_Category_Controller extends Member
             return $this->show_no_access();
         }
     }
+    public function archived($id, $action)
+    {
+        $data["cat_id"] = $id;
+        $data["action"] = $action;
 
+        $data["cat"] = Tbl_category::where("type_id",$id)->first();
+
+        return view("member.manage_category.category_confirm",$data);
+    }
+    public function archived_submit()
+    {
+        $id = Request::input("cat_id");
+        $action = Request::input("action");
+
+        $chk = Tbl_item::where("item_category_id",$id)->where("archived",0)->count();
+
+        $update["archived"] = 0;
+        $data["status"] = "success-category"; 
+        if($action == "archived")
+        {
+            if($chk == 0)
+            {          
+                $update["archived"] = 1;
+                $data["status"] = "success-category";         
+            }
+            else
+            {
+                $data["status"] = "error";
+                $data["status_message"] = "The category is in used";
+            }
+        }
+        $all = Tbl_category::where("type_parent_id",$id)->get();
+        if($all)
+        {
+            foreach ($all as $key => $value) 
+            {
+                Tbl_category::where("type_id",$value->type_id)->update($update);
+            }            
+        }
+        Tbl_category::where("type_id",$id)->update($update);
+
+        return json_encode($data);
+    }
     public function modal_create_category()
     {
         $access = Utilities::checkAccess('item-categories', 'access_page');

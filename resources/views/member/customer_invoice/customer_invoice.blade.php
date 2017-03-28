@@ -36,20 +36,18 @@
                         <div style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
                             <div class="row clearfix">
                                 <div class="col-sm-4">
-                                    <div class="col-sm-3">                                    
-                                        <label>Invoice No:</label>
-                                    </div>
-                                    <div class="col-sm-9">                                    
-                                        <input type="text" class="form-control input-sm" name="new_invoice_id" value="{{$inv->new_inv_id or $new_inv_id}}">
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
                                     <select class="form-control droplist-customer input-sm pull-left" name="inv_customer_id" data-placeholder="Select a Customer" required>
                                         @include('member.load_ajax_data.load_customer', ['customer_id' => isset($inv) ? $inv->inv_customer_id : (isset($c_id) ? $c_id : '') ]);
                                     </select>
                                 </div>
                                 <div class="col-sm-4">
                                     <input type="text" class="form-control input-sm customer-email" name="inv_customer_email" placeholder="E-Mail (Separate E-Mails with comma)" value="{{$inv->inv_customer_email or ''}}"/>
+                                </div>
+                                <div class="col-sm-4">    
+                                    <label for="new_invoice_id" class="col-md-4">Invoice No:</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control input-sm" name="new_invoice_id" value="{{$inv->new_inv_id or $new_inv_id}}">
+                                    </div>
                                 </div>
                             </div>
                         </div>                          
@@ -60,7 +58,7 @@
                             </div>
                             <div class="col-sm-2">  
                                 <label>Terms</label>
-                                <select class="form-control" name="inv_terms_id">
+                                <select class="form-control input-sm" name="inv_terms_id">
                                     <option value="1" {{isset($inv) ? $inv->inv_terms_id == 1 ? 'selected' : '' : ''}}>Net 10</option>
                                     <option value="2" {{isset($inv) ? $inv->inv_terms_id == 2 ? 'selected' : '' : ''}}>Net 30</option>
                                 </select>
@@ -81,18 +79,18 @@
                                     <table class="digima-table">
                                         <thead >
                                             <tr>
-                                                <th style="width: 10px;" ></th>
-                                                <th style="width: 120px;">Service Date</th>
-                                                <th style="width: 15px;" class="text-right">#</th>
-                                                <th style="width: 180px;">Product/Service</th>
-                                                <th>Description</th>
-                                                <th style="width: 120px;">U/M</th>
-                                                <th style="width: 70px;">Qty</th>
-                                                <th style="width: 100px;">Rate</th>
-                                                <th style="width: 100px;">Discount</th>
-                                                <th style="width: 100px;">Remark</th>
-                                                <th style="width: 100px;">Amount</th>
-                                                <th style="width: 10px;">Tax</th>
+                                                <th style="" ></th>
+                                                <th style="">Service Date</th>
+                                                <th style="" class="text-right">#</th>
+                                                <th style="width: 200px">Product/Service</th>
+                                                <th style="">Description</th>
+                                                <th style="">U/M</th>
+                                                <th style="">Qty</th>
+                                                <th style="">Rate</th>
+                                                <th style="">Discount</th>
+                                                <th style="">Remark</th>
+                                                <th style="">Amount</th>
+                                                <th style="">Tax</th>
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>
@@ -122,7 +120,7 @@
                                                         </td>
                                                         <td><input class="text-center number-input txt-qty compute" type="text" name="invline_qty[]" value="{{$invline->invline_qty}}" /></td>
                                                         <td><input class="text-right number-input txt-rate compute" type="text" name="invline_rate[]" value="{{$invline->invline_rate}}" /></td>
-                                                        <td><input class="text-right txt-discount compute" type="text" name="invline_discount[]" value="{{$invline->invline_discount}}" /></td>
+                                                        <td><input class="text-right txt-discount compute" type="text" name="invline_discount[]" value="{{$invline->invline_discount}}{{$invline->invline_discount_type == 'percent' ? '%' : ''}}" /></td>
                                                         <td><textarea class="textarea-expand" type="text" name="invline_discount_remark[]" value="{{$invline->invline_discount_remark}}"></textarea></td>
                                                         <td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]" value="{{$invline->invline_amount}}" /></td>
                                                         <td class="text-center">
@@ -278,7 +276,7 @@
                                         </div>
                                         <div class="col-md-5 text-right digima-table-value">
                                             <input type="hidden" name="payment-receive" class="payment-receive-input" />
-                                            PHP&nbsp;<span class="  ">{{$inv->amount_applied}}</span>
+                                            PHP&nbsp;<span class="payment-applied">{{$inv->inv_payment_applied}}</span>
                                         </div>
                                     </div>
                                     <div class="row">

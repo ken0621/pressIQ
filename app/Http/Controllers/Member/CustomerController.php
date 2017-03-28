@@ -38,12 +38,14 @@ class CustomerController extends Member
 	{
         if($this->hasAccess("customer-list","access_page"))
         {
+            
             $data['_customer'] = $this->customerlist();
             
             if (Request::ajax()) 
             {
                 return view('member.customer.customer_tbl', $data)->render();  
             }
+            // dd($data);
 
     		return view('member.customer.index',$data);
         }
@@ -55,16 +57,26 @@ class CustomerController extends Member
 	
 	public function customerlist($archived = 0, $IsWalkin = 0)
     {
-       
+
+            $filter_by_slot = Request::input('filter_slot');
+
     	    $shop_id = $this->checkuser('user_shop');
     	    $paginate = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
-                                    ->select('tbl_customer.customer_id as customer_id', 'tbl_customer.*', 'tbl_customer_other_info.*', 'tbl_customer_other_info.customer_id as cus_id')
+                                    ->select('tbl_customer.customer_id as customer_id1', 'tbl_customer.*', 'tbl_customer_other_info.*', 'tbl_customer_other_info.customer_id as cus_id')
                                     ->where('tbl_customer.shop_id',$shop_id)
                                     ->where('tbl_customer.archived',$archived)
                                     ->where('tbl_customer.IsWalkin',$IsWalkin)
-    								->orderBy('tbl_customer.first_name')
-    								->paginate(10);
-    		return $paginate;
+    								->orderBy('tbl_customer.first_name');
+    		if($filter_by_slot == 'w_slot')
+            {
+                $paginate = $paginate->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner','=', 'tbl_customer.customer_id');
+            }		
+            else if($filter_by_slot == 'w_o_slot')
+            {
+                $paginate = $paginate->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner','=', 'tbl_customer.customer_id')
+                ->whereNull('tbl_mlm_slot.slot_id');
+            }				
+    		return $paginate->paginate(10);
 	}
 
     public function load_customer()
@@ -348,7 +360,7 @@ class CustomerController extends Member
             $mlm_password = Request::input('mlm_password');
             if($mlm_username != null || $mlm_username != "")
             {
-                if(strlen($mlm_username) >= 6)
+                if(strlen($mlm_username) >= 4)
                 {
                     $count_username = Tbl_customer::where('mlm_username', $mlm_username)->count();
                     if($count_username == 0)
@@ -560,7 +572,7 @@ class CustomerController extends Member
 	
     public function customeredit($id)
     {
-        // $id = Crypt::decrypt($id);
+
         if($this->hasAccess("customer-list","edit"))
         {
             $shop_id = $this->checkuser('user_shop');
@@ -679,7 +691,7 @@ class CustomerController extends Member
             $mlm_password = Request::input('mlm_password');
             if($mlm_username != null || $mlm_username != "")
             {
-                if(strlen($mlm_username) >= 6)
+                if(strlen($mlm_username) >= 4)
                 {
                     $count_username = Tbl_customer::where('mlm_username', $mlm_username)->where('customer_id', '!=', $client_id)->count();
                     if($count_username == 0)
@@ -834,7 +846,7 @@ class CustomerController extends Member
             }
             
             $data['message'] = 'success';
-            $data['customer'] = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')->where('tbl_customer.customer_id',$client_id)->first();
+            $data['customer'] = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')->where('tbl_customer.customer_id',$client_id)->select('tbl_customer.customer_id as customer_id1', 'tbl_customer.*', 'tbl_customer_other_info.*', 'tbl_customer_other_info.customer_id as cus_id')->first();
             $data['view'] = view('member.customer.customer_update_result',$data)->render();
             $data['address'] = Tbl_customer_address::where('customer_id',$client_id)->get();
             $data['target'] = '#tr-customer-'.$client_id;
@@ -856,10 +868,8 @@ class CustomerController extends Member
 	
     public function view_customer_details($id)
     {
-        $data["customer"]       = Tbl_customer::info()->where("tbl_customer.customer_id", $id)->first();
-        // dd($data["customer"]);
+        $data["customer"]       = Tbl_customer::info()->balance($this->checkuser('user_shop'), $id)->where("tbl_customer.customer_id", $id)->first();
         $data["_transaction"]   = Tbl_customer::transaction($this->checkuser('user_shop'), $id)->get();
-        // dd($data["_transaction"]);
 
         return view('member.customer.customer_details', $data);
     }

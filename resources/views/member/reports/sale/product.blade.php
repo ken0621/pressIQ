@@ -17,7 +17,9 @@
                 Generate your reports
                 </small>
             </h1>
+            @if(isset($range))
             <button class="btn btn-custom-white pull-right" id="btn-date-range" data-placement="bottom"><span class="date-str">{{$range}}</span>&nbsp;<i class="fa fa-caret-down" aria-hidden="true"></i></button>
+            @endif
             <a href="" class="btn btn-custom-red-white margin-right-10 pull-right btn-pdf" data-url="" data-start="{{$start}}" data-end="{{$end}}"><i class="fa fa-file-pdf-o"></i>&nbsp;Export to PDF</a>
             <div class="hide padding0" id="popover-daterange">
                 <div class="form-horizontal">
@@ -62,28 +64,39 @@
                 <th class="text-center">Total Sales</th>
             </thead>
             <tbody class="tbl-monthly">
-                @foreach($item as $key => $prod)
-                <tr>
-                    <td><a href="#">{{$prod['info']->type_name}}</a></td>
-                    <td><a href="#">{{$prod['info']->product_name}}</a></td>
-                    <td class="text-center">{{$prod['quantity']}}</td>
-                    <td class="text-right">
-                        <span class="pull-left">PHP</span>{{currency('',$prod['gross'])}}
-                    </td>
-                    <td class="text-right">
-                        <span class="pull-left">PHP</span>{{currency('PHP',$prod['discount'])}}
-                    </td>
-                    <td class="text-right">
-                        {{$prod['info']->refunded}}
-                    </td>
-                    <td class="text-right">
-                        <span class="pull-left">PHP</span>{{currency('',$prod['net'])}}</td>
-                    <td class="text-right">
-                        <span class="pull-left">PHP</span>{{currency('',$prod['tax'])}}</td>
-                    <td class="text-right">
-                        <span class="pull-left">PHP</span>{{currency('',$prod['total'])}}</td>
-                </tr>
-                @endforeach
+                @if(isset($item))
+                    @foreach($item as $key => $prod)
+                    <tr>
+                        <td><a href="#">{{$prod['category_name']}}</a></td>
+
+                        <td><a href="#">{{$prod["info"]->eprod_name}}</a></td>
+
+                        <td class="text-center">{{$prod['quantity_sold']}}</td>
+
+                        <td class="text-right">
+                            <span class="pull-left">PHP</span>{{currency('',$prod['gross_sales'])}}
+                        </td>
+
+                        <td class="text-right">
+                            <span class="pull-left">PHP</span>{{currency('PHP',$prod['discount'])}}
+                        </td>
+
+                        <td class="text-right">{{$prod['refund']}}</td>
+
+                        <td class="text-right">
+                            <span class="pull-left">PHP</span>{{currency('',$prod['net_sales'])}}
+                        </td>
+
+                        <td class="text-right">
+                            <span class="pull-left">PHP</span>{{currency('',$prod['tax'])}}
+                        </td>
+
+                        <td class="text-right">
+                            <span class="pull-left">PHP</span>{{currency('',$prod['total'])}}
+                        </td>
+                    </tr>
+                    @endforeach
+                @endif
             </tbody>
         </table>
     </div>

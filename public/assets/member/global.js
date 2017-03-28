@@ -19,9 +19,11 @@ function global()
         add_event_global_submit();
         add_event_global_onclose_popup();
         add_event_overlay_fix();
-
-        //arcy
+        select_current_warehouse();
         add_event_global_submit_for_page();
+
+        action_global_search();
+        action_money_format();
     }
     function add_event_global_popup()
     {
@@ -55,7 +57,6 @@ function global()
     function action_global_submit(link, data, modal)
     {
         $(".modal-loader").removeClass("hidden");
-        
         $.ajax({
             url:link,
             dataType:"json",
@@ -94,12 +95,21 @@ function global()
                     }
 				}
             },
-            error: function()
+            error: function(x,t,m)
             {
-                setTimeout(function()
-                {
-                    action_global_submit(link, data, modal);
-                }, 2000);
+                // console.log(x + ' ' + t +' ' + m); 
+                if(t==="timeout") {
+                    toastr.warning(m);
+                    setTimeout(function()
+                    {
+                        action_global_submit(link, data, modal);
+                    }, 2000);
+                } 
+                else {
+                    $(".modal-loader").addClass("hidden");
+                    toastr.error(m + '. Please Contact The Administrator.');
+                }
+                
             }
         })
     }
@@ -154,6 +164,44 @@ function global()
         })
     }
     //end arcy
+
+
+    function action_global_search() // Bryan Kier
+    {
+        $(document).on("change", ".global-search", function()
+        {
+            var url     = $(this).attr("url");
+            var value   = $(this).val();
+            $load_content =  $(".tab-pane.active").find(".load-data").attr("target");
+
+            $(".tab-pane.active .load-data").load(url+"?search="+value+" #"+$load_content);
+        })
+    }
+
+    function action_money_format() // Bryan Kier
+    {
+        $(document).on("change",".money-format", function()
+        {
+            $(this).val(formatMoney($(this).val()));
+        });
+    }
+
+    function formatFloat($this) // Bryan Kier
+    {
+        return Number($this.toString().replace(/[^0-9\.]+/g,""));
+    }
+
+    function formatMoney($this) // Bryan Kier
+    {
+        var n = formatFloat($this), 
+        c = isNaN(c = Math.abs(c)) ? 2 : c, 
+        d = d == undefined ? "." : d, 
+        t = t == undefined ? "," : t, 
+        s = n < 0 ? "-" : "", 
+        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+        j = (j = i.length) > 3 ? j % 3 : 0;
+       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+    }
 }
 
 function error_popup(title, message)
@@ -276,6 +324,31 @@ function add_event_overlay_fix()
         setTimeout(function() {
             $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
         }, 0);
+    });
+}
+
+function select_current_warehouse()
+{
+    $(".warehouse_loader_container").on("change",".select_current_warehouse",function()
+    {
+        $.ajax({
+            url:"/member/change_warehouse",
+            dataType:"json",
+            data: {_token: $(".token").val(), change_warehouse: $(this).val()},
+            type:"post",
+            success: function(data)
+            {
+                if(data.response == "success")
+                {
+                    // $('.select_current_warehouse').load(document.URL +  ' .select_current_warehouse');
+                    $('.warehouse-access-name').load(document.URL +  ' .warehouse-access-name');
+                }
+            },
+            error: function()
+            {
+
+            }
+        })
     });
 }
 

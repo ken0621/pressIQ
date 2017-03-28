@@ -20,10 +20,11 @@ use App\Globals\Mlm_compute;
 
 class Mlm_tree
 {   
-	public static function insert_tree_placement($slot_info, $new_slot, $level)
+    public static function insert_tree_placement($slot_info, $new_slot, $level)
     {
         if($slot_info != null)
         {
+            $old_level   = $level;
             $upline_info = Tbl_mlm_slot::id($slot_info->slot_placement)->first();
 
             if($upline_info)
@@ -37,14 +38,58 @@ class Mlm_tree
                 $level++;
                 Mlm_tree::insert_tree_placement($upline_info, $new_slot, $level);  
             }  
+
+            if($old_level == 1)
+            {
+                MLM_tree::update_auto_balance_position($new_slot,$old_level);
+            }
         }
-    	 
+         
     }
+
+    public static function update_auto_balance_position($new_slot,$level)
+    {
+        $top_slot                        = Tbl_mlm_slot::where("shop_id",$new_slot->shop_id)->orderBy("slot_id","ASC")->first();
+        $get_top_level                   = Tbl_tree_placement::where("placement_tree_parent_id",$top_slot->slot_id)->where("placement_tree_child_id",$new_slot->slot_placement)->first();
+        $placement                       = Tbl_mlm_slot::where("slot_id",$new_slot->slot_placement)->first();
+        if($get_top_level)
+        {     
+            if($new_slot->slot_position == "left")
+            {
+                $auto_balance_position  = $placement->auto_balance_position + pow(2,$get_top_level->placement_tree_level);
+            }
+            else
+            {
+                $auto_balance_position  = $placement->auto_balance_position + (pow(2,$get_top_level->placement_tree_level) * 2);
+            }
+        }
+        else
+        {
+            $top_slot                  = Tbl_mlm_slot::where("shop_id",$new_slot->shop_id)->orderBy("slot_id","ASC")->first();
+            if($new_slot->slot_sponsor == $top_slot->slot_id)
+            {
+                if($new_slot->slot_position == "left")
+                {
+                    $auto_balance_position = 2;
+                }
+                else
+                {
+                    $auto_balance_position = 3;
+                }
+            }
+        }
+        if(isset($auto_balance_position))
+        {
+            $update["auto_balance_position"] = $auto_balance_position;
+            Tbl_mlm_slot::where("slot_id",$new_slot->slot_id)->update($update);
+        }
+    }
+
     public static function insert_tree_sponsor($slot_info, $new_slot, $level)
     {
         if($slot_info != null)
         {
-        	$upline_info = Tbl_mlm_slot::id($slot_info->slot_sponsor)->first();
+            $upline_info = Tbl_mlm_slot::id($slot_info->slot_sponsor)->first();
 
             if($upline_info)
             {
@@ -534,4 +579,118 @@ class Mlm_tree
         // dd($update);
     }
     
+    public static function auto_place_slot_binary_auto_balance_revised($slot_info)
+    {
+        if($slot_info->slot_sponsor != 0 && $slot_info->slot_sponsor != null)
+        {
+            $sponsor = Tbl_mlm_slot::where("slot_id",$slot_info->slot_sponsor)->first();
+            if($sponsor)
+            {
+                $condition_update = false;
+                $current_level = $sponsor->current_level;
+                while($condition_update == false)
+                {                 
+                    if($current_level == 0)
+                    {
+                        $check_placement = Tbl_mlm_slot::where("slot_placement",$slot_info->slot_sponsor)->where("slot_position","left")->first();
+                        if(!$check_placement)
+                        {
+                            $slot_placement   = $slot_info->slot_sponsor;
+                            $slot_position    = "left";
+                            $slot_level       = 0;
+                            $condition_update = true;
+                            break;
+                        }
+                        else
+                        {
+                           $check_placement = Tbl_mlm_slot::where("slot_placement",$slot_info->slot_sponsor)->where("slot_position","right")->first();
+                           if(!$check_placement)
+                           {
+                             $slot_placement   = $slot_info->slot_sponsor;
+                             $slot_position    = "right";
+                             $slot_level       = 1;
+                             $condition_update = true;
+                             break;
+                           }
+                        }
+                    }
+                    else
+                    {
+                        $placement_tree = Tbl_tree_placement::where("placement_tree_parent_id",$sponsor->slot_id)->where("placement_tree_level",$current_level)->childslot()->orderBy("tbl_mlm_slot.auto_balance_position","ASC")->get();
+                        $current_count  = Tbl_tree_placement::where("placement_tree_parent_id",$sponsor->slot_id)->where("placement_tree_level",$current_level + 1)->childslot()->orderBy("tbl_mlm_slot.auto_balance_position","ASC")->count();
+                        $max_count      = pow(2, $current_level + 1);
+                        if($current_count < $max_count)
+                        {   
+                            $condition_right = true;
+
+                            foreach($placement_tree as $placement)
+                            {
+                                $check_placement = Tbl_mlm_slot::where("slot_placement",$placement->placement_tree_child_id)->where("slot_position","left")->first();
+                                if(!$check_placement)
+                                {
+                                    $slot_placement   = $placement->placement_tree_child_id;
+                                    $slot_position    = "left";
+                                    $condition_update = true;
+                                    $condition_right  = false;
+                                    if(($current_count + 1) >= $max_count)
+                                    {
+                                        $slot_level = $current_level + 1;
+                                    }
+                                    else
+                                    {
+                                        $slot_level = $current_level;
+                                    }
+                                    break;
+                                }
+                            }
+
+
+                            if($condition_right == true)
+                            {
+                                foreach($placement_tree as $placement)
+                                {
+                                    $check_placement = Tbl_mlm_slot::where("slot_placement",$placement->placement_tree_child_id)->where("slot_position","right")->first();
+                                    if(!$check_placement)
+                                    {
+                                        $slot_placement   = $placement->placement_tree_child_id;
+                                        $slot_position    = "right";
+                                        $condition_update = true;
+                                        $condition_right  = false;
+                                        if(($current_count + 1) >= $max_count)
+                                        {
+                                            $slot_level = $current_level + 1;
+                                        }
+                                        else
+                                        {
+                                            $slot_level = $current_level;
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    $current_level++;
+                }
+
+
+
+                if($condition_update == true)
+                {
+                    $update_sponsor['current_level']  = $slot_level;
+                    Tbl_mlm_slot::where('slot_id', $slot_info->slot_sponsor)->update($update_sponsor);
+
+                    // got the slot
+                    $update['slot_placement'] = $slot_placement;
+                    $update['slot_position']  = $slot_position;
+
+                    Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->update($update);
+
+                    $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->first();
+                    Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+                }
+            }
+        }
+    }
 }

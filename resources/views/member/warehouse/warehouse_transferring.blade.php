@@ -25,15 +25,15 @@
         <input type="hidden" name="warehouse_from" value="{{$from->warehouse_id}}">
         <input type="hidden" name="warehouse_to" value="{{$to->warehouse_id}}">
         <div class="form-group" >
-            <div class="col-md-4">            
+            <div class="col-md-4 col-xs-6">            
                 <h3><strong>From :</strong> <label> {{$from->warehouse_name}}</label></h3>
             </div>
-            <div class="col-md-4">            
+            <div class="col-md-4 col-xs-6">            
                 <h3><strong> To :</strong> <label> {{$to->warehouse_name}}</label></h3>
             </div>
-            <div class="col-md-4 text-right" style="padding-top: 30px">            
+            <!-- <div class="col-md-4 text-right" style="padding-top: 30px">            
                 <a href="javascript:" style="text-decoration: underline;font-size: 16px">Load {{$ctr}} critical items</a>
-            </div>
+            </div> -->
         </div>
         <div class="form-group">
             <div class="col-md-6">
@@ -54,64 +54,93 @@
                 </div>
             </div>
         </div> -->
+
         <div class="row clearfix draggable-container">
-                <div class="table-responsive">
-                    <div class="col-sm-12">
-                        <table class="digima-table">
-                            <thead >
-                                <tr>
-                                    <th>Product ID</th>
-                                    <th>Product Name</th>
-                                    <th>Product SKU</th>
-                                    <th class="text-center" style="width: 250px;">Source QTY</th>
-                                    <th class="text-center" style="width: 250px;">Current QTY</th>
-                                    <th class="text-center" style="width: 250px;">Transfer QTY</th>
+            <div class="table-responsive">
+                <div class="col-sm-12">
+                    <table class="digima-table">
+                        <thead >
+                            <tr>
+                                <th></th>
+                                <th>#</th>
+                                <th>Product Name</th>
+                                <th>Product SKU</th>
+                                <th class="text-center" style="width: 250px;">Source QTY</th>
+                                <th class="text-center" style="width: 250px;">Current QTY</th>
+                                <th class="text-center" style="width: 250px;">Transfer QTY</th>
+                                <th width="10"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="draggable tbody-item">                                 
+                                <tr class="tr-draggable">
+                                    <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+                                    <td class="invoice-number-td text-right">1</td>
+                                    <td>
+                                        <select class="1111 form-control select-item droplist-item input-sm pull-left input-item" name="selected_item_id[]" >
+                                            @include("member.load_ajax_data.load_warehouse_item", ['add_search' => ""])
+                                        </select>
+                                    </td>
+                                    <td><span class="product_sku"></span></td>
+                                    <td><span class="product_source_qty"></span></td>
+                                    <td><span class="product_current_qty"></span></td>
+                                    <td><input type="text" value="0" class="form-control number-input input-sm input-qty" name="quantity[]"></td>
+                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @if($warehouse_list)
-                                    @foreach($warehouse_list as $item)
-                                        <tr>
-                                            <td>
-                                                {{$item->product_id}}
-                                            </td>
-                                            <td>                                                
-                                                {{$item->product_name}}
-                                            </td>                                            
-                                            <td>                                                
-                                                {{$item->product_sku}}
-                                            </td>                                            
-                                            <td class="text-center">                                                
-                                                {{$item->product_source_qty}}
-                                            </td>                  
-                                            <td class="text-center">                                                
-                                                @if($item->product_current_qty <= $item->product_reorder_point)
-                                                <label style="color: red">{{$item->product_current_qty}}</label>
-                                                @else
-                                                <label >{{$item->product_current_qty}}</label>
-                                                @endif
-                                            </td>
-                                            <td><input type="text" value="0" class="form-control number-input input-sm" name="quantity[{{$item->product_id}}]"></td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                            </tbody>
-                        </table>
-                    </div>
+                                    
+                                <tr class="tr-draggable">
+                                     <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+                                    <td class="invoice-number-td text-right">1</td>
+                                    <td>
+                                        <select class="1111 form-control select-item droplist-item input-sm pull-left" name="selected_item_id[]" >
+                                            @include("member.load_ajax_data.load_warehouse_item", ['add_search' => ""])
+                                        </select>
+                                    </td>
+                                    <td><span class="product_sku"></span></td>
+                                    <td><span class="product_source_qty"></span></td>
+                                    <td><span class="product_current_qty"></span></td>
+                                    <td><input type="text" value="0" class="form-control number-input input-sm input-qty" name="quantity[]"></td>
+                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                </tr>
+
+                        </tbody>
+                    </table>
                 </div>
+            </div>
         </div>
-        
     </div>
 </div>
+
 </form>
 
+<div class="div-script">
+    <table class="div-item-row-script hide">
+        <tr class="tr-draggable">
+             <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+            <td class="invoice-number-td text-right">1</td>
+            <td>
+                <select class="1111 form-control select-item input-sm pull-left" name="selected_item_id[]" >
+                    @include("member.load_ajax_data.load_warehouse_item", ['add_search' => ""])
+                </select>
+            </td>
+            <td><span class="product_sku"></span></td>
+            <td><span class="product_source_qty"></span></td>
+            <td><span class="product_current_qty"></span></td>
+            <td><input type="text" value="0" class="form-control number-input input-sm input-qty" name="quantity[]" ></td>
+            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+        </tr>
+    </table>
+</div>
 @endsection
 
 @section('script')
-<!-- <script type="text/javascript">
-    $(".chosen-select").chosen({no_results_text: "The customer doesn't exist."});
-</script>
- --><!-- <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script> -->
+<style type="text/css">
+    .red-color
+    {
+        color: #ff1a1a;
+    }
+
+</style>
+ <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 <script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script>
-<script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
+<!-- <script type="text/javascript" src="/assets/member/js/warehouse.js"></script> -->
 @endsection

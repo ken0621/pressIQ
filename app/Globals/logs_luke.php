@@ -89,108 +89,58 @@ You mad bro? what are you doing here.
 	9:30 pumasok
 2/1/2017
 	9:13 pumasok
+
+3/16/2017 O.B. 1-8
+3/13/2017 O.B. 1-9
+
 			
 
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
-
-
--------------------------------------------------------------------------------------------------------------------------
-/													1/13/2017(digimahouse)												/
--------------------------------------------------------------------------------------------------------------------------
-1.) binary placement
-2.) left to right/ auto balance
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
-
-
--------------------------------------------------------------------------------------------------------------------------
-/													1/20/2017(digimahouse)												/
--------------------------------------------------------------------------------------------------------------------------
-Done:
-1.) Archive must not show.
-2.) Delete 1 line of product in package compile
-5.) Company Head dapat wala yung binary genealogy kapag naka disable
-6.) Product Used when product issued = Yes
-7.) Hide when there's no company head, -Sponsor, -Slot Position, -Placement -script with membership code
-8.) Back switch position with Submit (http://digimahouse.dev/member/mlm/slot/head)
-9.) Save button layout (http://digimahouse.dev/member/mlm/plan)
-11.) Switch Back button to submit (http://digimahouse.dev/member/customer/product_repurchase)
-10.) Product code description
-4.) Ask Jimby - Same Customer Name -Report Space on Suffix -Required Email 
-	(yung email ang unique, ok lang mag kamuka ang pangalan)
-15.) membership code voucher/ product code voucher
-16.) Philtec -> matching bonus settings
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
-
-
--------------------------------------------------------------------------------------------------------------------------
-/													1/23/2017(digimahouse)												/
--------------------------------------------------------------------------------------------------------------------------
-Done:
-1.) Membership Matching
-2.) Tree Sort
-3.) pag mag kahiwalay ng level
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
-
-
--------------------------------------------------------------------------------------------------------------------------
-/													1/24/2017(digimahouse)												/
--------------------------------------------------------------------------------------------------------------------------
-Done:
-1. Sponsor Genealogy no l: r:
-2.) Executive Bonus 	* (Settings)
-3.) Executive Bonus 	* (Compute)
-4.) Point System
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
+=======================TASk============================
+-tick ng name on cheque (ok) 
+--request encashment	(ok)
+---Email				
+----Discount Card		
 
 
 
--------------------------------------------------------------------------------------------------------------------------
-/													1/26/2017(digimahouse)												/
--------------------------------------------------------------------------------------------------------------------------
-Done:
+email_content_key
+email_content
+date_created
+date_updated
+archived
+email_content_subject
 
-1.) Leadership Bonus 	* (Compute)
-2.) Leadership Bonus 	* (Settings)
-
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
-
-
--------------------------------------------------------------------------------------------------------------------------
-/													1/27/2017(digimahouse)												/
--------------------------------------------------------------------------------------------------------------------------
-Done: 
-1.) Direct Points
-2.) Indirect Points
-3.) Layout of the popup in "Add New Slot" (digimahouse.dev/member/mlm/slot)
-4.) Settings ok
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
+[Email Notification] Successful Registration Email Notification - success_register
+[Email Notification] Reset Password Notification
+[Email Notification] Purchase Email Notification
+[Email Notification] E-wallet top up email notification
+[Email Notification] E-Wallet transfer - 	e_wallet_transfer
+[Email Notification] Purchase Discount Card Notification
+[Email Notification] Online Order Email Notification
+[Email Notification] Redeem points email Notification
+[Email Notification] Discount Card Purchase - discount_card_purchase
+[Email Notification] Membership Code - membership_code_purchase
 
 
--------------------------------------------------------------------------------------------------------------------------
-/													1/31/2017(digimahouse)												/
--------------------------------------------------------------------------------------------------------------------------
-Done: 
-1. Auto Balance (Myhpone)
--------------------------------------------------------------------------------------------------------------------------
-to Do:
-1.) Pag walang nakaenable na complan sa product repurchase, hindi dapat papasok yung product code. same with code
-2.) wallet adjust / log
-3.) add label to logs
-4.) Wallet 
-5.) complan Wallet
-Pending:
-1.) wala ng code vault  --email sa kanila yung membership code saka pin
-2.) Pending (Wallet, GC, Logs)
-3.) GC process. --Printable GC --Remove GC as wallet --Make List of GC
-4.) change structure of repurchase
--------------------------------------------------------------------------------------------------------------------------
--------------------------------------------------------------------------------------------------------------------------
 
+Load wallet () - back end 
+No. to be loaded field ()
+Bentahan ng discount card()
+Kung load yung binebenta may number na field LOAD WALLEt ()
+after transaction mawawala yung laman
+use discount card()
+
+--
+Product code use option - kung dadaan ng product code () 
+
+
+Check kung may serial ()
+kung may serial may option kung ano yung serial()
+search sa add new line
+
+bar codde
+
+
+street
+APP_KEY=vNYGoBAFOTzqWyeXFkYeO97Z5FIBq5SD
 

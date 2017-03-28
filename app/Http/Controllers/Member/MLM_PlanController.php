@@ -58,6 +58,7 @@ class MLM_PlanController extends Member
     }
     public function save_settings()
     {
+        // asd
     	// Input from form 
     	$validate['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
     	$validate['plan_settings_enable_mlm'] = Request::input('plan_settings_enable_mlm');
@@ -65,6 +66,9 @@ class MLM_PlanController extends Member
     	$validate['plan_settings_slot_id_format'] = Request::input('plan_settings_slot_id_format');
     	$validate['plan_settings_format'] = Request::input('plan_settings_format');
     	$validate['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
+        $validate['plan_settings_use_item_code'] = Request::input('plan_settings_use_item_code');
+        $validate['plan_settings_email_membership_code'] = Request::input('plan_settings_email_membership_code');
+        $validate['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
     	// end input from form
     	
     	// Validator rules
@@ -74,6 +78,9 @@ class MLM_PlanController extends Member
 		$rules['plan_settings_slot_id_format'] = "required";
 		$rules['plan_settings_format'] = "required";
 		$rules['plan_settings_prefix_count'] = "required";
+        $rules['plan_settings_use_item_code'] = "required";
+        $rules['plan_settings_email_membership_code'] = 'required';
+        $rules['plan_settings_email_product_code'] = 'required';
 		// end validator rules
 		
 		// validate
@@ -96,6 +103,9 @@ class MLM_PlanController extends Member
     		$update['plan_settings_slot_id_format'] = Request::input('plan_settings_slot_id_format');
     		$update['plan_settings_format'] = Request::input('plan_settings_format');
     		$update['plan_settings_prefix_count'] = Request::input('plan_settings_prefix_count');
+            $update['plan_settings_use_item_code'] = Request::input('plan_settings_use_item_code');
+            $update['plan_settings_email_membership_code'] = Request::input('plan_settings_email_membership_code');
+            $update['plan_settings_email_product_code'] = Request::input('plan_settings_email_product_code');
     		// end
     		
     		// update settings
@@ -443,6 +453,31 @@ class MLM_PlanController extends Member
             $insert['marketing_plan_name'] = "Discount Card";
             $insert['marketing_plan_trigger'] = "Slot Creation";
             $insert['marketing_plan_label'] = "Discount Card";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+        $count = Tbl_mlm_plan::where('shop_id', $shop_id)->count();
+        if($count == 16)
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "DISCOUNT_CARD_REPURCHASE";
+            $insert['marketing_plan_name'] = "Discount Card Repurchase";
+            $insert['marketing_plan_trigger'] = "Product Repurchase";
+            $insert['marketing_plan_label'] = "Discount Card Repurchase";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+        if($count == 17)
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "DIRECT_PROMOTIONS";
+            $insert['marketing_plan_name'] = "Direct Promotions";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Direct Promotions";
             $insert['marketing_plan_enable'] = 0;
             $insert['marketing_plan_release_schedule'] = 1;
             $insert['marketing_plan_release_schedule_date'] = Carbon::now();
@@ -1994,6 +2029,64 @@ class MLM_PlanController extends Member
         $data['response_status'] = "success";
         $data['message'] = "success";
 
+        return json_encode($data);
+    }
+    public function discount_card_repurchase($shop_id)
+    {
+        $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['basic_settings'] = MLM_PlanController::basic_settings('DISCOUNT_CARD_REPURCHASE');
+        return view('member.mlm_plan.configure.discount_card_repurchase', $data);
+    }
+    public function direct_promotions($shop_id)
+    {
+        $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        foreach($data['membership'] as $key => $value)
+        {
+            
+            $count = DB::table('tbl_mlm_plan_settings_direct_promotions')->where('shop_id', $shop_id)->where('membership_id', $value->membership_id)->count();
+            if($count == 0)
+            {
+                $insert['settings_direct_promotions_count'] = 0;
+                $insert['settings_direct_promotions_bonus'] = 0;
+                $insert['settings_direct_promotions_type'] = 0;
+                $insert['shop_id'] = $shop_id;
+                $insert['membership_id'] = $value->membership_id;
+                DB::table('tbl_mlm_plan_settings_direct_promotions')->insert($insert);
+                $data['direct_promotions'][$key] = DB::table('tbl_mlm_plan_settings_direct_promotions')->where('shop_id', $shop_id)->where('membership_id', $value->membership_id)->first();
+            }
+            else
+            {
+                $data['direct_promotions'][$key] = DB::table('tbl_mlm_plan_settings_direct_promotions')->where('shop_id', $shop_id)->where('membership_id', $value->membership_id)->first();
+            }
+        }
+        // dd($data);
+        $data['basic_settings'] = MLM_PlanController::basic_settings('DIRECT_PROMOTIONS');
+        return view('member.mlm_plan.configure.direct_promotions', $data);
+    }
+    public function save_direct_promotions()
+    {
+        // return $_POST;
+        $shop_id = $this->user_info->shop_id;
+        $membership_id = Request::input('membership_id');
+        $count = DB::table('tbl_mlm_plan_settings_direct_promotions')->where('shop_id', $shop_id)->where('membership_id', $membership_id)->count();
+        if($count == 0)
+        {
+            $insert['settings_direct_promotions_count'] = Request::input('settings_direct_promotions_count');
+            $insert['settings_direct_promotions_bonus'] = Request::input('settings_direct_promotions_bonus');
+            $insert['settings_direct_promotions_type'] = Request::input('settings_direct_promotions_type');
+            $insert['shop_id'] = $shop_id;
+            $insert['membership_id'] = $membership_id;
+            DB::table('tbl_mlm_plan_settings_direct_promotions')->insert($insert);
+        }
+        else
+        {
+            $update['settings_direct_promotions_count'] = Request::input('settings_direct_promotions_count');
+            $update['settings_direct_promotions_bonus'] = Request::input('settings_direct_promotions_bonus');
+            $update['settings_direct_promotions_type'] = Request::input('settings_direct_promotions_type');
+            DB::table('tbl_mlm_plan_settings_direct_promotions')->where('shop_id', $shop_id)->where('membership_id', $membership_id)->update($update);
+        }
+        $data['response_status'] = 'success';
+        $data['message'] = 'Success';
         return json_encode($data);
     }
 }

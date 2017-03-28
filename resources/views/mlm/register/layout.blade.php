@@ -10,13 +10,25 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:700" rel="stylesheet">
         <link rel="stylesheet" href="/assets/initializr/css/bootstrap.min.css">
         <link rel="stylesheet" href="/assets/initializr/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" type="text/css" href="/assets/mlm/css/register-global.css">
+        <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
         @yield("css")
+        <style type="text/css">
+            #load{
+            width:100%;
+            height:100%;
+            position:fixed;
+            z-index:9999;
+            background:url("/assets/mlm/loading.gif") no-repeat center center rgba(0,0,0,0.25)
+        }
+        </style>
         <script src="/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
+    <div id="load" class="hide a"></div>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -28,7 +40,7 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
     <script src="/assets/initializr/js/vendor/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/assets/front/js/global.js"></script>
+    <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
     @yield("script")
     </body>
 </html>

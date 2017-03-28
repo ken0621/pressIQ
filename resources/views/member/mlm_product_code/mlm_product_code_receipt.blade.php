@@ -25,13 +25,15 @@
         <div class="col-md-4 col-md-offset-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search_name" placeholder="Search by item name" aria-describedby="basic-addon1">
+                <input type="text" class="form-control search_email" placeholder="Search by email" aria-describedby="basic-addon1" onchange="search_email(this)">
             </div>
         </div>  
     </div>
     <div class="tab-content codes_container">
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
+            <div class="load-data" target="invoice_append">
+                <div id="invoice_append">
             <div class="table-responsive">
                 <table class="table table-condensed">
                     <thead style="text-transform: uppercase">
@@ -65,9 +67,11 @@
 
                 </table>
                 @if(count($_invoice) == 0)
-                <center>No Product Codes Available</center>
+                <center>No Invoice Available</center>
                 @endif   
                 <center>{!! $_invoice->render() !!}</center>
+            </div>
+                </div> 
             </div>
         </div>
     </div>
@@ -96,7 +100,14 @@
         $('.append_receipt').html('<center><div class="loader-16-gray"></div></center>');
         $('.append_receipt').load(link);
     }
+    function search_email(ito)
+    {
+        var search = $(ito).val();
+        var link ='/member/mlm/product_code/receipt?search_name=' + search + ' #invoice_append';
+        $('#invoice_append').load(link);
+    }
 </script>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 <!--     <script type="text/javascript">
         $(".popup").click(function()
         {

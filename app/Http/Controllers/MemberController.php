@@ -6,12 +6,356 @@ use App\Globals\Pdf_global;
 use PDF;
 use App;
 use App\Models\Tbl_mlm_discount_card_log;
+use App\Models\Tbl_country;
+use App\Models\Tbl_shop;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_membership;
+use App\Models\Tbl_membership_package;
+use App\Models\Tbl_membership_code;
+use Validator;
+use Session;
+use Redirect;
+use App\Globals\Mlm_member;
 class MemberController extends Controller
 {
+    public static $shop_id;
+    public static $lead;
+    public function __construct()
+    {   
+        $domain = Request::url();
+        $check_expole = explode('//', $domain);
+        if(count($check_expole) == 2 )
+        {
+            $check_expole_2 = explode('.', $check_expole[1]);
+            $key = $check_expole_2[0];
+            $check_domain = Tbl_shop::where('shop_key', $key)->first();
+            $lead_e = null;
+            if($check_domain == null)
+            {
+                $check_domain = Tbl_customer::where('mlm_username', $key)->first();
+                $lead_e = $check_domain;
+            }
+            
+        }
+        if($check_domain != null)
+        {
+             Self::$shop_id = $check_domain->shop_id;
+             if($lead_e != null)
+             {
+                Self::$lead = $lead_e;
+             }
+             else
+             {
+                Self::$lead = null;
+             }
+        }
+        else
+        {
+            $domain = Request::url();
+            $check_expole = explode('.', $domain);
+            if(isset($check_expole[2]))
+            {
+                $check_expole_2 = explode('/', $check_expole[2]);
+                if(isset($check_expole_2[0]))
+                {
+                    $shop_domain = $check_expole[1] . '.' . $check_expole_2[0];
+                    $shop = Tbl_shop::where('shop_domain', $shop_domain)->first();
+                    if($shop != null)
+                    {
+                        Self::$shop_id = $shop->shop_id;
+                    }
+
+                }
+            }
+            else
+            {
+                if(isset($check_expole[1]))
+                {
+
+                    $check_expole_2 = explode('/', $check_expole[1]);
+                    if(isset($check_expole_2[0]))
+                    {
+                        $check_expole_slash = explode('//', $check_expole[0]);
+                        if(count($check_expole_slash) >= 2)
+                        {
+                          $check_expole[0] = $check_expole_slash[1];  
+                        }
+                        $shop_domain = $check_expole[0] . '.' . $check_expole_2[0];
+                        $shop = Tbl_shop::where('shop_domain', $shop_domain)->first();
+                        if($shop != null)
+                        {
+                            Self::$shop_id = $shop->shop_id;
+                        }
+                    }   
+                }
+            }
+        }
+    }
+
 	public function index()
 	{
 		echo "hello world";
 	}
+    public function register()
+    {
+        $data['country'] = Tbl_country::get();
+        return view("mlm.register.register", $data);
+    }
+    public function register_post()
+    {
+        // return json_encode($_POST);
+        $info['company'] = Request::input('company');
+        $info['country'] = Request::input('country');
+        $info['email'] = Request::input('email');
+        $info['first_name'] = Request::input('first_name');
+        $info['last_name'] = Request::input('last_name');
+        $info['password'] = Request::input('password');
+        $info['password_confirm'] = Request::input('password_confirm');
+        $info['tin_number'] = Request::input('tin_number');
+        $info['username'] = Request::input('username');
+        $info['sponsor'] = Request::input('sponsor');
+
+        $rules['first_name'] = 'required';
+        $rules['last_name'] = 'required';
+        $rules['password'] = 'required|min:6';
+        $rules['password_confirm'] = 'required|min:6';
+        $rules['email'] = 'required';
+        if(!isset($_POST['terms']))
+        {
+            $data['status'] = 'warning';
+            $data['message'][0] = 'Terms and Agreement is required';
+            return $data;
+        }
+         $validator = Validator::make($info, $rules);
+         if ($validator->passes()) 
+         {
+            $count_email = Tbl_customer::where('email', $info['email'])->count();
+            if($count_email == 0)
+            {
+                $count_username = Tbl_customer::where('mlm_username', $info['username'])->count();
+                if($count_username == 0)
+                {
+                    if($info['sponsor'] != null)
+                    {
+                        $count_slot = Tbl_mlm_slot::where('slot_nick_name', $info['sponsor'])->count();
+                        if($count_slot == 0)
+                        {
+                            $data['status'] = 'warning';
+                            $data['message'][0] = 'Sponsor does not exist';
+                            return $data;
+                        }
+                    }
+
+                    if($info['password'] == $info['password_confirm'])
+                    {
+                        Session::put('mlm_register_step_1', $info);
+                        $data['status'] = 'success';
+                        $data['message'][0] = 'Sucess!';
+                        $data['link'] = '/member/register/package';
+                    }
+                    else
+                    {
+                        $data['status'] = 'warning';
+                        $data['message'][0] = "password did not match.";
+                    }
+                }
+                else
+                {
+                    $data['status'] = 'warning';
+                    $data['message'][0] = 'Username already used.';
+                }
+            }
+            else
+            {
+                $data['status'] = 'warning';
+                $data['message'][0] = 'Email already used.';
+            }
+         }
+         else
+         {
+            $data['status'] = "warning";
+            $data['message'] = $validator->messages();
+         }
+         return json_encode($data);
+    }
+
+    public function payment()
+    {
+        $register_session = Session::get('mlm_register_step_1');
+        if($register_session == null)
+        {
+            return Redirect::to('/member/register');
+        }
+        // return $register_session;
+        $register_session_2 = Session::get('mlm_register_step_2');
+        if($register_session_2 == null)
+        {
+            return Redirect::to('/member/register/package');
+        }
+
+        return view("mlm.register.payment");
+    }
+    public function payment_post()
+    {
+        // return $_POST;
+        $info['payment_type'] = Request::input('payment_type');
+        $info['membership_pin'] = Request::input('membership_pin');
+        $info['membership_code'] = Request::input('membership_code');
+
+        $s['first_name'] = Request::input('first_name');
+        $s['last_name'] = Request::input('last_name');
+        $s['contact_info'] = Request::input('contact_info');
+        $s['contact_other'] = Request::input('contact_other');
+        $s['shipping_address'] = Request::input('shipping_address');
+
+        $rules['first_name'] = 'required';
+        $rules['last_name'] = 'required';
+        $rules['contact_info'] = 'required';
+        $rules['contact_other'] = 'required';
+        $rules['shipping_address'] = 'required';
+        $validator = Validator::make($s, $rules);
+        if (!$validator->passes()) 
+         {
+            $data['status'] = "warning";
+            $data['message'] = $validator->messages();
+            return json_encode($data);
+         }
+
+        if($info['payment_type'] != null)
+        {
+            if($info['payment_type'] == 'membership_code')
+            {
+                if($info['membership_pin'] != null && $info['membership_code'] != null)
+                {
+                    $count_code = Tbl_membership_code::where('membership_code_id', $info['membership_pin'])
+                    ->where('membership_activation_code', $info['membership_code'])->count();
+                    if($count_code >= 1)
+                    {
+                        $code = Tbl_membership_code::where('membership_code_id', $info['membership_pin'])
+                        ->where('membership_activation_code', $info['membership_code'])->package()->membership()->first();
+                        if($code->used == 0)
+                        {
+                            $shop_id = Self::$shop_id;
+                            if($shop_id == null)
+                            {
+                                $shop_id = 5;
+                            }
+                            $register_session = Session::get('mlm_register_step_1');
+                            $register_session_2 = Session::get('mlm_register_step_2');
+                            $ship = $s;
+                            $code_info = $code;
+                            $code = $info;
+                            Mlm_member::register_slot_membership_code($shop_id, $register_session, $register_session_2, $ship, $code, $code_info);
+                            Session::forget('mlm_register_step_1');
+                            Session::forget('mlm_register_step_2');
+                            $data['status'] = 'success';
+                            $data['message'][0] = 'Membership Code Already Used.';
+                            $data['link'] = '/mlm';
+                        }
+                        else
+                        {
+                            $data['status'] = 'warning';
+                            $data['message'][0] = 'Membership Code Already Used.';
+                        }
+                        
+                    }
+                    else
+                    {
+                        $data['status'] = 'warning';
+                        $data['message'][0] = 'Invalid Membership Code/Pin.';
+                    }
+                }
+                else
+                {
+                    $data['status'] = 'warning';
+                    $data['message'][0] = 'Invalid Membership Code/Pin.';
+                }
+                
+            }
+            else
+            {
+                $data['status'] = 'warning';
+                $data['message'][0] = 'The chosen payment facility is under maintenance.';
+            }
+        }
+        else
+        {
+            $data['status'] = 'warning';
+            $data['message'][0] = 'Invalid Payment Type';
+        }
+        return json_encode($data);
+    }
+
+
+    public function package()
+    {
+        $register_session = Session::get('mlm_register_step_1');
+        if($register_session == null)
+        {
+            return Redirect::to('/member/register');
+        }
+
+        $data['membership'] = Tbl_membership::where('shop_id', Self::$shop_id)->where('membership_archive', 0)->get();
+        $data['package'] = [];
+
+        foreach($data['membership'] as $key => $value)
+        {
+            $data['package'][$key] = Tbl_membership_package::where('membership_id', $value->membership_id)->get();
+        }
+
+        return view("mlm.register.package", $data);
+    }
+    public function package_post()
+    {
+        $info['membership'] = Request::input('membership');
+        $info['package'] = Request::input('package');
+        if($info['membership'] != null)
+        {
+            if(isset($info['package'][$info['membership']]))
+            {
+                $d['membership'] = $info['membership'];
+                $d['package'] = $info['package'][$info['membership']];
+                Session::put('mlm_register_step_2', $d);
+                $data['status'] = 'success';
+                $data['message'][0] = 'Sucess!';
+                $data['link'] = '/member/register/payment';
+            }
+            else
+            {
+                $data['status'] = 'warning';
+                $data['message'][0] = 'Email already used.';
+            }
+        }
+        else
+        {
+            $data['status'] = 'warning';
+            $data['message'][0] = 'Email already used.';
+        }
+        return json_encode($data);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function barcode( $filepath="", $text="0", $size="20", $orientation="horizontal", $code_type="code128", $print=false, $SizeFactor=1 ) 
     {

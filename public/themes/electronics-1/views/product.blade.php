@@ -6,14 +6,14 @@
 	<div class="row clearfix">
 		<div class="col-md-4 left-content">
 			<div class="categories">
-				<div class="categories-title"><i class="fa fa-bars" aria-hidden="true"></i><span class="title">CATEGORIES</span></div>
+				<div class="categories-title"><i class="fa fa-bars" aria-hidden="true"></i><span class="title">{{ get_content($shop_theme_info, "shop", "shop_menu_tab_title", "CATEGORIES") }}</span></div>
 				<div class="categories-content">
-					<div class="list"><a href="">DESKTOP & PC PARTS</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
-					<div class="list"><a href="">LAPTOP & TABLET</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
-					<div class="list"><a href="">SMART PHONE</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
-					<div class="list"><a href="">CAMERA</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
-					<div class="list"><a href="">HEADPHONE & SPEAKER</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
-					<div class="list"><a href="">TV & COMPONENTS</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
+					<div class="list"><a href="">{{ get_content($shop_theme_info, "shop", "shop_menu_list_1", "DESKTOP & PC PARTS") }}</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
+					<div class="list"><a href="">{{ get_content($shop_theme_info, "shop", "shop_menu_list_2", "LAPTOP & TABLET") }}</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
+					<div class="list"><a href="">{{ get_content($shop_theme_info, "shop", "shop_menu_list_3", "SMART PHONE") }}</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
+					<div class="list"><a href="">{{ get_content($shop_theme_info, "shop", "shop_menu_list_4", "CAMERA") }}</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
+					<div class="list"><a href="">{{ get_content($shop_theme_info, "shop", "shop_menu_list_5", "HEADPHONE & SPEAKER") }}</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
+					<div class="list"><a href="">{{ get_content($shop_theme_info, "shop", "shop_menu_list_6", "TV & COMPONENTS") }}</a><span><a href=""><img src="/themes/{{ $shop_theme }}/img/categories-cross.png"></a></span></div>
 				</div>
 			</div>
 
@@ -26,76 +26,109 @@
 
 			<div class="most-viewed">
 				<div class="featured-content-container">
-					<div class="container-title"><i class="fa fa-star-o" aria-hidden="true"></i><span class="title">MOST VIEWED</span></div>
+					<div class="container-title"><i class="fa fa-star-o" aria-hidden="true"></i><span class="title">{{ get_content($shop_theme_info, "shop", "shop_mostviewed_title", "MOST VIEWED") }}</span></div>
 				</div>
 				<div class="most-viewed-content">
-					<table>
-						<tbody>
-							<tr>
-								<td class="most-viewed-image"><img src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png"></td>
-								<td>
+					<div class="product-holder row clearfix">
+						<a href="">
+							<div class="col-md-5 product-image">
+								<div class="image-holder">
+									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
+									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img1.png">
+								</div>
+							</div>
+							<div class="col-md-7 product-content">
+								<div class="product-details">
 									<div class="item-name">Lorem ipsum dolor sit</div>
-										<div class="item-rating">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-										</div>
+									<div class="item-rating">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+									</div>
 									<div class="item-price">PHP 5,000.00</div>
-								</td>
-							</tr>
-							<tr>
-								<td class="most-viewed-image"><img src="/themes/{{ $shop_theme }}/img/most-viewed-img2.png"></td>
-								<td>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="product-holder row clearfix">
+						<a href="">
+							<div class="col-md-5 product-image">
+								<div class="image-holder">
+									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img2.png">
+									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img2.png">
+								</div>
+							</div>
+							<div class="col-md-7 product-content">
+								<div class="product-details">
 									<div class="item-name">Lorem ipsum dolor sit</div>
-										<div class="item-rating">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-										</div>
+									<div class="item-rating">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+									</div>
 									<div class="item-price">PHP 5,000.00</div>
-								</td>
-							</tr>
-							<tr>
-								<td class="most-viewed-image"><img src="/themes/{{ $shop_theme }}/img/most-viewed-img3.png"></td>
-								<td>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="product-holder row clearfix">
+						<a href="">
+							<div class="col-md-5 product-image">
+								<div class="image-holder">
+									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img3.png">
+									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img3.png">
+								</div>
+							</div>
+							<div class="col-md-7 product-content">
+								<div class="product-details">
 									<div class="item-name">Lorem ipsum dolor sit</div>
-										<div class="item-rating">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-										</div>
+									<div class="item-rating">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+									</div>
 									<div class="item-price">PHP 5,000.00</div>
-								</td>
-							</tr>
-							<tr>
-								<td class="most-viewed-image"><img src="/themes/{{ $shop_theme }}/img/most-viewed-img4.png"></td>
-								<td>
+								</div>
+							</div>
+						</a>
+					</div>
+					<div class="product-holder row clearfix">
+						<a href="">
+							<div class="col-md-5 product-image">
+								<div class="image-holder">
+									<img class="item-image first-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img4.png">
+									<img class="item-image second-image" src="/themes/{{ $shop_theme }}/img/most-viewed-img4.png">
+								</div>
+							</div>
+							<div class="col-md-7 product-content">
+								<div class="product-details">
 									<div class="item-name">Lorem ipsum dolor sit</div>
-										<div class="item-rating">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-											<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-										</div>
+									<div class="item-rating">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+									</div>
 									<div class="item-price">PHP 5,000.00</div>
-								</td>
-							</tr>
-						</tbody>
-					</table>
+								</div>
+							</div>
+						</a>
+					</div>
 				</div>
 			</div>
 		</div>
 
 		<div class="col-md-8 right-content">
 			<div class="banner-holder">
-				<img src="/themes/{{ $shop_theme }}/img/productpage-banner.png">
+				<img src="{{ get_content($shop_theme_info, "shop", "shop_banner", "/themes/". $shop_theme ."/img/productpage-banner.png") }}">
+				<button>SHOP NOW</button>
 			</div>
 
 			<div class="prod-content">
@@ -121,405 +154,34 @@
 
 				<div class="row clearfix">
 				<div class="col-md-12 products-container">
+					@foreach($_product as $product)
 					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image1.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+						<a href="">
+							<div class="per-item-container">
+								<div class="image-holder">
+									<img class="item-image-large first-image" src="{{ get_product_first_image($product) }}">
 								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image2.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+								<div class="item-details">
+									<div class="item-title">{{ get_product_first_name($product) }}</div>
+									<div class="rating">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
+										<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+									</div>
+									<div class="item-price">{{ get_product_first_price($product) }}</div>
 								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image3.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
+								<div class="icons">
+									<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
+									<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
+									<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
+									<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
 								</div>
-								<div class="item-price">PHP 5,000.00</div>
 							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
+						</a>
 					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image4.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image5.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image6.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image7.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image8.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image9.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image10.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image11.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image12.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image13.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image14.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image15.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-3 product-holder">
-						<div class="per-item-container">
-							<div class="image-holder">
-								<img class="item-image-large first-image" src="/themes/{{ $shop_theme }}/img/prod-content-image16.png">
-							</div>
-							<div class="item-details">
-								<div class="item-title"><a href="/product/view">Lorem ipsum dolor sit</a></div>
-								<div class="rating">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-colored.png">
-									<img src="/themes/{{ $shop_theme }}/img/star-not-colored.png">
-								</div>
-								<div class="item-price">PHP 5,000.00</div>
-							</div>
-							<div class="icons">
-								<a class="tooltips" href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i><span>Add to cart</span></a>
-								<a class="tooltips" href=""><i class="fa fa-heart" aria-hidden="true"></i><span>Add to Favorite</span></a>
-								<a class="tooltips" href=""><i class="fa fa-search" aria-hidden="true"></i><span>Search</span></a>
-								<a class="tooltips" href=""><i class="fa fa-camera" aria-hidden="true"></i><span>See Pictures</span></a>
-							</div>
-						</div>
-					</div>
+					@endforeach
 				</div>	
 				</div>
 

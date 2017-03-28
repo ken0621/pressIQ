@@ -55,10 +55,10 @@
 								<div class="hot-deals-item-container">
 									<img class="4-3-ratio" src="{{ get_collection_first_image($collection) }}">
 									<div class="item-details">
-										<div class="item-title">{{ $collection['product']['eprod_name'] }}</div>
+										<div class="item-title"><a href="/product/view/{{ $collection['product']['eprod_id'] }}">{{ $collection['product']['eprod_name'] }}</a></div>
 										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 									</div>
-									<button class="new-add-to-cart-button btn" style="margin-top: 25px;">
+									<button type="button" onClick="location.href='/product/view/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn" style="margin-top: 25px;">
 										<table>
 											<tbody>
 												<tr>
@@ -83,7 +83,7 @@
 							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
 							<div class="col-xs-8">
 								<div class=" item-details-container">
-									<div class="item-title">{{ $collection['product']['eprod_name'] }}</div>
+									<div class="item-title"><a href="/product/view/{{ $collection['product']['eprod_id'] }}">{{ $collection['product']['eprod_name'] }}</a></div>
 									<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 								</div>
 							</div>
@@ -95,12 +95,8 @@
 
 			<div class="col-md-9 prod-content">
 				<!-- FEATURED TODAY -->
-
-				<span class="prod-big-image"><img id="prod-big-image" src="/themes/{{ $shop_theme }}/img/2017-banner.jpg"></span>
-
-				
+				<span class="prod-big-image"><img id="prod-big-image" src="{{ get_content($shop_theme_info, 'product', 'product_banner', '/themes/'. $shop_theme .'/img/2017-banner.jpg') }}"></span>
 					<div class="featured-container">
-						
 						<div class="left-container-title">
 							<form class="sort-by" method="get">
 							<input type="hidden" name="type" value="{{ Request::input('type') }}">
@@ -125,8 +121,8 @@
 								<div class="col-md-3">
 									<div class="per-item-container">
 										<div class="image-content-1">
-											<div class="item-image-large" style="background-image: url({{ $product['variant'][0]['image'] ? $product['variant'][0]['image'][0]['image_path'] : '' }})"></div>
-											<button class="new-add-to-cart-button btn" >
+											<div class="item-image-large" style="background-image: url({{ get_product_first_image($product) }})"></div>
+											<button type="button" onClick="location.href='/product/view/{{ $product['eprod_id'] }}'" class="new-add-to-cart-button btn" >
 											<table>
 												<tbody>
 													<tr>
@@ -148,6 +144,26 @@
 											</div> -->
 											<div class="item-price">&#8369; {{ $product['min_price'] == $product['max_price'] ? number_format($product['max_price'], 2) : number_format($product['min_price'], 2) . ' - ' . number_format($product['max_price'], 2) }}</div>
 										</div>
+										@if(count($product['variant'][0]['mlm_discount']) > 0)
+			                            <div style="margin-top: 15px;">
+			                                <table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 12px;">
+			                                    <thead>
+			                                        <tr>
+			                                            <th>Membership</th>
+			                                            <th>Price</th>
+			                                        </tr>
+			                                    </thead>
+			                                    <tbody>
+			                                        @foreach($product['variant'][0]['mlm_discount'] as $key => $mlm_discount)
+			                                        <tr>
+			                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
+			                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
+			                                        </tr>
+			                                        @endforeach
+			                                    </tbody>
+			                                </table>
+			                            </div>
+			                            @endif
 									</div>
 								</div>
 								@endforeach

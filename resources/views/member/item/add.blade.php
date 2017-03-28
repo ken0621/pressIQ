@@ -32,7 +32,7 @@
                         <div class="col-md-8">
                             <label>Name *</label>
                             <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
-                            <textarea required class="form-control" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                            <textarea required class="form-control input-sm" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
                         </div>
                         <div class="col-md-4 text-center">
                             <input type="hidden" name="item_img" class="image-value" key="1" required>
@@ -43,11 +43,11 @@
                     <div class="form-group">       
                         <div class="col-md-4">
                             <label>SKU</label>
-                            <input type="text" class="form-control" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku" required>
+                            <input type="text" class="form-control input-sm" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku" required>
                         </div>
                         <div class="col-md-4">
                             <label>Barcode</label>
-                            <input type="text" class="form-control" id="item_barcode" value="{{isset($data['item_barcode']) ? $data['item_barcode'] : ''}}" name="item_barcode">
+                            <input type="text" class="form-control input-sm" id="item_barcode" value="{{isset($data['item_barcode']) ? $data['item_barcode'] : ''}}" name="item_barcode">
                         </div>
                         <div class="col-md-4">
                             <label>Category *</label>
@@ -56,20 +56,18 @@
                             </select>
                         </div>
                     </div>
-
-                    <!-- <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
                     <div class="form-group">
                         <div class="col-md-4">
                             <label>Initial quantity on hand *</label>
-                            <input type="number" class="form-control" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" required>
+                            <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" required>
                         </div>                     
                         <div class="col-md-4">
                             <label>Reorder Point </label>
-                            <input type="text" class="form-control" id="item_reorder_point" value="{{isset($data['item_reorder_point']) ? $data['item_reorder_point'] : ''}}" name="item_reorder_point" >
+                            <input type="text" class="form-control input-sm" id="item_reorder_point" value="{{isset($data['item_reorder_point']) ? $data['item_reorder_point'] : ''}}" name="item_reorder_point" >
                         </div> 
                         <div class="col-md-4">
                             <label>As of date</label>
-                            <input type="text" class="form-control datepicker" id="item_date_tracked" name="item_date_tracked" value="{{isset($data['item_date_tracked']) ? $data['item_date_tracked'] : ''}}" >
+                            <input type="text" class="form-control input-sm datepicker" id="item_date_tracked" name="item_date_tracked" value="{{isset($data['item_date_tracked']) ? $data['item_date_tracked'] : ''}}" >
                         </div>
                     </div>
                     <div class="form-group">
@@ -85,38 +83,42 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <label>Manufacturer</label>
                             <select class="form-control input-sm drop-down-manufacturer" name="item_manufacturer_id">
                                 @include("member.load_ajax_data.load_manufacturer")
                             </select>
                         </div>
-                    </div>
-                    <!-- <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
-                    <div class="form-group">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
+                            <label>Vendor</label>
+                            <select class="form-control input-sm drop-down-vendor" name="item_vendor_id">
+                                @include('member.load_ajax_data.load_vendor')
+                            </select>
+                        </div>
+                        <div class="col-md-4">
                             <label>Inventory Asset Account *</label>
                             <select name="item_asset_account_id" class="drop-down-coa form-control" required id="item_asset_account_id">
                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_asset])
                             </select>
                         </div>
                     </div>
-                    <!-- <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
                     <div class="form-group">
                         <div class="col-md-12">
                             <label>Sales information</label>
-                            <!-- <input type="text" class="form-control" id="item_sales_information" value="{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}" name="item_sales_information" placeholder="Description on sales forms"> -->
-                            <textarea class="form-control" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>
+                            <textarea class="form-control input-sm" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>
                         </div> 
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
-                        <label class="col-md-12">Sales price/rate *</label>
-                            <div class="col-md-8">    
-                                <input type="text" class="form-control number-input" id="item_price" value="{{isset($data['item_price']) ? $data['item_price'] : ''}}" name="item_price" required>
-                            </div>
-                            <div class="col-md-4">
-                                per <span class="abbreviation"></span>
+                            <label>Sales price/rate *</label>
+                            <div class="row">
+                                <div class="col-md-8">    
+                                    <input type="text" class="form-control number-input input-sm" id="item_price" value="{{isset($data['item_price']) ? $data['item_price'] : ''}}" name="item_price" required>
+                                </div>
+                                <div class="col-md-1">
+                                    per <span class="abbreviation"></span>
+                                </div>
+                                
                             </div>
                         </div>                 
                         <div class="col-md-6">
@@ -126,36 +128,39 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group">                   
                         <div class="col-md-4">
                             <label>Promo Price</label>
-                            <input type="text" class="form-control input-sm" name="promo_price"  value="{{isset($data['promo_price']) ? $data['promo_price'] : ''}}">                            
+                            <input type="text" class="form-control input-sm" name="promo_price"  value="{{isset($data['item_discount_value']) ? $data['item_discount_value'] : ''}}">                            
                         </div>
                         <div class="col-md-4">
                             <label>Promo Start Date</label>
-                            <input type="text" class="form-control datepicker" name="start_promo_date" value="{{isset($data['start_promo_date']) ? $data['start_promo_date'] : ''}}" >
+                            <input type="text" class="form-control datepicker input-sm" name="start_promo_date" value="{{isset($data['item_discount_date_start']) ? $data['item_discount_date_start'] : ''}}" >
                         </div>
                         <div class="col-md-4">
                             <label>Promo End Date</label>
-                            <input type="text" class="form-control datepicker" name="end_promo_date" value="{{isset($data['end_promo_date']) ? $data['end_promo_date'] : ''}}" >                            
+                            <input type="text" class="form-control datepicker input-sm" name="end_promo_date" value="{{isset($data['item_discount_date_end']) ? $data['item_discount_date_end'] : ''}}" >
                         </div>
                     </div>
-                    <!-- <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
+                    <!-- <div class="col-md-12" style="border-bottom: solid 1px #A CACAC; padding-top:20px;margin-bottom: 5px"></div> -->
                     <div class="form-group">
                         <div class="col-md-12">
                             <label>Purchasing information</label>
-                            <!-- <input type="text" class="form-control" id="item_purchasing_information" value="{{isset($data['item_purchasing_information']) ? $data['item_purchasing_information'] : ''}}" name="item_purchasing_information" placeholder="Description on purchase forms"> -->
-                            <textarea class="form-control" id="item_purchasing_information" name="item_purchasing_information" placeholder="Description on purchase forms" >{{isset($data['item_purchasing_information']) ? $data['item_purchasing_information'] : ''}}</textarea>
+                            <textarea class="form-control input-sm" id="item_purchasing_information" name="item_purchasing_information" placeholder="Description on purchase forms" >{{isset($data['item_purchasing_information']) ? $data['item_purchasing_information'] : ''}}</textarea>
                         </div>                     
                     </div>
                     <div class="form-group">
-                        <div class="col-md-6">
-                        <label class="col-md-12">Cost *</label>
-                            <div class="col-md-8">    
-                               <input type="text" class="form-control" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
-                            </div>
-                            <div class="col-md-4">
-                                per <span class="abbreviation"></span>
+                        <div class="col-md-6">  
+                            <label>Cost *</label>
+                            <div class="row">
+                                <div>
+                                    <div class="col-md-8">    
+                                       <input type="text" class="form-control input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
+                                    </div>
+                                    <div class="col-md-4">
+                                        per <span class="abbreviation"></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>               
                         <div class="col-md-6">
@@ -247,15 +252,15 @@
                 <div class="form-group">
                     <div class="col-md-4">
                         <label>Promo Price</label>
-                        <input type="text" class="form-control input-sm" name="promo_price"  value="{{isset($data['promo_price']) ? $data['promo_price'] : ''}}">                            
+                        <input type="text" class="form-control input-sm" name="promo_price"  value="{{isset($data['item_discount_value']) ? $data['item_discount_value'] : ''}}">                            
                     </div>
                     <div class="col-md-4">
                         <label>Promo Start Date</label>
-                        <input type="text" class="form-control datepicker" name="start_promo_date" value="{{isset($data['start_promo_date']) ? $data['start_promo_date'] : ''}}" >
+                        <input type="text" class="form-control datepicker" name="start_promo_date" value="{{isset($data['item_discount_date_start']) ? $data['item_discount_date_start'] : ''}}" >
                     </div>
                     <div class="col-md-4">
                         <label>Promo End Date</label>
-                        <input type="text" class="form-control datepicker" name="end_promo_date" value="{{isset($data['end_promo_date']) ? $data['end_promo_date'] : ''}}" >                            
+                        <input type="text" class="form-control datepicker" name="end_promo_date" value="{{isset($data['item_discount_date_end']) ? $data['item_discount_date_end'] : ''}}" >
                     </div>
                 </div>
                 <!--<div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div>-->
@@ -343,19 +348,19 @@
                         </select>
                     </div>
                 </div>
-                
-                    <div class="form-group">
+                 
+                    <div class="form-group">                   
                         <div class="col-md-4">
                             <label>Promo Price</label>
-                            <input type="text" class="form-control input-sm" name="promo_price"  value="{{isset($data['promo_price']) ? $data['promo_price'] : ''}}">                            
+                            <input type="text" class="form-control input-sm" name="promo_price"  value="{{isset($data['item_discount_value']) ? $data['item_discount_value'] : ''}}">                            
                         </div>
                         <div class="col-md-4">
                             <label>Promo Start Date</label>
-                            <input type="text" class="form-control datepicker" name="start_promo_date" value="{{isset($data['start_promo_date']) ? $data['start_promo_date'] : ''}}" >
+                            <input type="text" class="form-control datepicker" name="start_promo_date" value="{{isset($data['item_discount_date_start']) ? $data['item_discount_date_start'] : ''}}" >
                         </div>
                         <div class="col-md-4">
                             <label>Promo End Date</label>
-                            <input type="text" class="form-control datepicker" name="end_promo_date" value="{{isset($data['end_promo_date']) ? $data['end_promo_date'] : ''}}" >                            
+                            <input type="text" class="form-control datepicker" name="end_promo_date" value="{{isset($data['item_discount_date_end']) ? $data['item_discount_date_end'] : ''}}" >
                         </div>
                     </div>
                 <!-- <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
@@ -407,18 +412,18 @@
                             <textarea class="form-control" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>
                         </div>
                      </div>
-                    <div class="form-group">
+                    <div class="form-group">                   
                         <div class="col-md-4">
                             <label>Promo Price</label>
-                            <input type="text" class="form-control input-sm" name="promo_price"  value="{{isset($data['promo_price']) ? $data['promo_price'] : ''}}">                            
+                            <input type="text" class="form-control input-sm" name="promo_price"  value="{{isset($data['item_discount_value']) ? $data['item_discount_value'] : ''}}">                            
                         </div>
                         <div class="col-md-4">
                             <label>Promo Start Date</label>
-                            <input type="text" class="form-control datepicker" name="start_promo_date" value="{{isset($data['start_promo_date']) ? $data['start_promo_date'] : ''}}" >
+                            <input type="text" class="form-control datepicker" name="start_promo_date" value="{{isset($data['item_discount_date_start']) ? $data['item_discount_date_start'] : ''}}" >
                         </div>
                         <div class="col-md-4">
                             <label>Promo End Date</label>
-                            <input type="text" class="form-control datepicker" name="end_promo_date" value="{{isset($data['end_promo_date']) ? $data['end_promo_date'] : ''}}" >                            
+                            <input type="text" class="form-control datepicker" name="end_promo_date" value="{{isset($data['item_discount_date_end']) ? $data['item_discount_date_end'] : ''}}" >
                         </div>
                     </div>
                 </div>

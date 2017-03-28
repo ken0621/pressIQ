@@ -42,7 +42,7 @@ function companylist()
 					{	
 						tr.remove();
 						reload_company();
-						reload_company(1);
+						// reload_company(1);
 					},
 					error 	: 	function()
 					{
@@ -55,29 +55,34 @@ function companylist()
 		});
 	}
 
-	function reload_company(archived = 0)
+	function reload_company()
 	{
-		var target 		= "#active-company";
-		if(archived == 1)
+		// var target 		= "#active-company";
+		// if(archived == 1)
+		// {
+		// 	target	  = "#archived-company";
+		// }
+		// $.ajax({
+		// 	url 	: 	"/member/payroll/company_list/reload_company",
+		// 	type 	: 	"POST",
+		// 	data 	: 	{
+		// 		archived:archived,
+		// 		_token:misc('_token')
+		// 	},
+		// 	success : 	function(result)
+		// 	{	
+		// 		$(target).html(result);
+		// 		btn_operation_event();
+		// 	},
+		// 	error 	: 	function()
+		// 	{
+		// 		error_function();
+		// 	}
+		// });
+		$(".company-list").unbind("load");
+		$(".company-list").load("/member/payroll/company_list .company-list", function()
 		{
-			target	  = "#archived-company";
-		}
-		$.ajax({
-			url 	: 	"/member/payroll/company_list/reload_company",
-			type 	: 	"POST",
-			data 	: 	{
-				archived:archived,
-				_token:misc('_token')
-			},
-			success : 	function(result)
-			{	
-				$(target).html(result);
-				btn_operation_event();
-			},
-			error 	: 	function()
-			{
-				error_function();
-			}
+			toastr.success("Company list has been updated");
 		});
 	}
 

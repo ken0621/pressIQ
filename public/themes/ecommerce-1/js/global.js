@@ -16,6 +16,8 @@ function global()
 			action_fit_text();
 			action_slick();
 			event_image_crop();
+			ready_load_ecom_cart();
+			ready_load_mini_ecom_cart();
 		});
 	}
 	function event_show_cart()
@@ -82,4 +84,45 @@ function global()
 	{
 		
 	}
+}
+
+// CART GLOBAL
+function ready_load_ecom_cart()
+{
+	$('#shopping_cart .modal-content').load('/cart',
+	function()
+	{
+		event_load_cart();
+	});
+}
+
+function event_load_cart()
+{
+	$('body').on('click', '.show-cart', function(event) 
+	{
+		event.preventDefault();
+		
+		$('#shopping_cart').modal();
+	});
+}
+
+function action_load_cart()
+{
+	$('#shopping_cart .modal-content').load('/cart',
+	function()
+	{
+		$('#shopping_cart').modal();
+	});
+}
+
+function ready_load_mini_ecom_cart()
+{
+	$('.mini-cart').load('/mini_cart', function()
+	{
+		var quantity = $('.mini-cart .quantity-get').val();
+		var total_price = $('.mini-cart .total-get').val();
+		
+		$('.mini-cart-quantity').html(quantity);
+		$('.mini-cart-total-price').html(total_price);
+	});
 }

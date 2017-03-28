@@ -14,7 +14,11 @@ class Tbl_customer_invoice extends Model
     {
     	return $query->join("tbl_customer","tbl_customer.customer_id","=","tbl_customer_invoice.inv_customer_id");
     }
-
+    public static function scopeManual_invoice($query)
+    {
+        return $query->leftJoin("tbl_manual_invoice","tbl_manual_invoice.inv_id","=","tbl_customer_invoice.inv_id")
+                    ->selectRaw("*, tbl_customer_invoice.inv_id as inv_id");
+    }
     public static function scopeInvoice_item($query)
     {
     	return $query->join("tbl_customer_invoice_line","tbl_customer_invoice_line.invline_inv_id","=","tbl_customer_invoice.inv_id")
@@ -28,11 +32,19 @@ class Tbl_customer_invoice extends Model
 
     public static function scopeByCustomer($query, $shop_id, $customer_id)
     {
-        return $query->where("inv_shop_id", $shop_id)->where("inv_customer_id", $customer_id)->where("inv_is_paid", 0);
+        return $query->where("inv_shop_id", $shop_id)->where("inv_customer_id", $customer_id);
     }
 
-    public static function scopeRcvPayment($query, $rcvpayment_id)
+    public static function scopeRcvPayment($query, $rcvpayment_id, $invoice_id)
     {
-        return $query->leftJoin(DB::raw("(select * from tbl_receive_payment_line where rpline_rp_id =" .$rcvpayment_id ." and rpline_reference_name = 'invoice') rp"),"rp.rpline_reference_id","=","inv_id");
+        return $query->leftJoin(DB::raw("(select * from tbl_receive_payment_line where rpline_rp_id =" .$rcvpayment_id ." and rpline_reference_name = 'invoice') rp"),"rp.rpline_reference_id","=","inv_id")
+                     ->where(function($query) use ($invoice_id)
+                     {
+                        $query->where("inv_is_paid", 0);
+                        $query->orWhere(function($query) use ($invoice_id)
+                        {
+                            $query->whereIn("inv_id", $invoice_id);
+                        });
+                     });
     }
 }

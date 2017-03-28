@@ -13,8 +13,8 @@
                 </small>
             </h1>
             <div class="text-right">
-            <a class="btn btn-custom-white panel-buttons popup" link="/member/item/transferinventory" size="md" data-toggle="modal" data-target="#global_modal">Transfer Inventory</a>
-            <a class="btn btn-primary panel-buttons popup" link="/member/item/warehouse/add" size="lg" data-toggle="modal" data-target="#global_modal">Add Warehouse</a>
+                <a class="btn btn-custom-white panel-buttons popup" link="/member/item/transferinventory" size="md" data-toggle="modal" data-target="#global_modal">Transfer Inventory</a>
+                <a class="btn btn-primary panel-buttons popup" link="/member/item/warehouse/add" size="lg" data-toggle="modal" data-target="#global_modal">Add Warehouse</a>
             </div>
         </div>
     </div>
@@ -65,7 +65,16 @@
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
                                         <li><a size="lg" link="/member/item/warehouse/view/{{$warehouse->warehouse_id}}" href="javascript:" class="popup">View Warehouse</a></li>
+
+                                        @if($enable_serial != null)
+                                            @if($enable_serial == "enable")
+                                                <li><a href="/member/item/view_serials/{{$warehouse->warehouse_id}}">View Item Serials Number</a></li>
+                                                <li><a href="/member/item/inventory_log/{{$warehouse->warehouse_id}}">{{$warehouse->count_no_serial}} Item has No Serials Number</a></li>
+                                            @endif
+                                        @endif
                                         <li><a size="lg" link="/member/item/warehouse/refill?warehouse_id={{$warehouse->warehouse_id}}" href="javascript:" class="popup">Refill  Warehouse</a></li>
+                                        <li><a href="/member/item/warehouse/refill_log/{{$warehouse->warehouse_id}}">Refill Logs</a></li>
+                                        <li><a class="popup" size="lg" link="/member/item/warehouse/adjust/{{$warehouse->warehouse_id}}">Adjust Inventory</a></li>
                                         <li><a href="javascript:" class="popup" link="/member/item/warehouse/edit/{{$warehouse->warehouse_id}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit</a></li>
                                         <li><a link="/member/item/warehouse/archived/{{$warehouse->warehouse_id}}" href="javascript:" class="popup">Archived</a></li>
                                       </ul>

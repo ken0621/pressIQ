@@ -43,7 +43,7 @@ function variant()
 		{
 			link: '/member/item/add',
 		    link_size: 'lg',
-		    width: '50%',
+		    width: '100%',
 		    maxHeight: "309px",
 		    placeholder: 'Item',
             onCreateNew : function()
@@ -72,6 +72,8 @@ function variant()
 		{
 			var variant_id 	= $(this).attr("id");
 			var default_tab = $(".tab.active").attr("data-id");
+
+			$(".variant-info-container").css("opacity", "0.5");
 			
 			$(".variant-item").find(".variant-nav-list").removeClass("active");
 			$(this).find(".variant-nav-list").addClass("active");
@@ -84,6 +86,7 @@ function variant()
 				success: function(data)
 				{
 					$(".variant-info-container").html(data);
+					$(".variant-info-container").css("opacity", "1");
 				},
 				error: function(e)
 				{
@@ -179,20 +182,24 @@ function submit_done(data)
 		{
 			$(".load-container").load("/member/ecommerce/product/edit/"+data.product_id +"? .data-container", function()
 			{
+
 				variant.initialize_select_plugin();
 
-                tinyMCE.init(
-			    { 
-			        selector:'.tinymce',
-			        menubar:false,
-			        height:200, 
-			        content_css : "/assets/member/css/tinymce.css",
-			        setup: function(val) {
-			            val.on('change', function(e) {
+				if($(".tinymce").length)
+				{
+	                tinyMCE.init(
+				    { 
+				        selector:'.tinymce',
+				        menubar:false,
+				        height:200, 
+				        content_css : "/assets/member/css/tinymce.css",
+				        setup: function(val) {
+				            val.on('change', function(e) {
 
-			            });
-			        }
-			    });
+				            });
+				        }
+				    });
+				}
 
 				toastr.success("Successfully updated the product");
 			});

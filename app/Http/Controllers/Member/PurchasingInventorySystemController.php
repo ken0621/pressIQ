@@ -675,7 +675,7 @@ class PurchasingInventorySystemController extends Member
             else
             {
                 $data["status"] = "error";
-                $data["status_message"] = "You cannot issue Load out form. The sales agent have currently SIR";
+                $data["status_message"] = "You cannot issue Load out form. The sales agent has an unprocessed SIR";
             }
 
             if($data["status"] == "")

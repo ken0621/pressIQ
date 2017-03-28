@@ -106,7 +106,11 @@
                             <td>{{$item->item_type_name}}</td>
                             <td>{{currency("PHP", $item->item_price)}}</td>
                             <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td>
-                            <td><a link="/member/item/restore/{{$item->item_id}}" href="javascript:" class="popup">Restore</a></td>
+                            <td>
+                                <div class="btn-group">
+                                    <a link="/member/item/restore/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Restore</a>
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

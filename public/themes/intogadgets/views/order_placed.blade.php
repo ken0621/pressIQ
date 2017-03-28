@@ -28,11 +28,6 @@
 							</tr>
 							@endforeach
 							<tr>
-								<td>&nbsp;</td>
-								<td>&nbsp;</td>
-								<td>&nbsp;</td>
-							</tr>
-							<tr>
 								<td></td>
 								<td>Total</td>
 								<td>&#8369; {{ number_format($summary['subtotal'], 2) }}</td>

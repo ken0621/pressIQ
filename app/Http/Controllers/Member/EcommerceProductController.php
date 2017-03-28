@@ -806,4 +806,18 @@ class EcommerceProductController extends Member
 		}
 		return false;
 	}
+
+	public function getBulkEditPrice()
+	{
+		$data["_product"] = Tbl_ec_product::variant()->where("tbl_ec_product.archived",0)->get()->toArray();
+		
+		foreach($data["_product"] as $key1=>$product)
+		{
+			$data["_product"][$key1]["product_new_name"] = $product["eprod_name"] . ($product["variant_name"] ? ' : '.$product["variant_name"] : '');
+		}
+
+		// dd($data["_product"]);
+		
+		return view('member.ecommerce_product.ecom_bulk_edit_price', $data);
+	}
 }

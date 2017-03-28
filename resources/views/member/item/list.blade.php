@@ -1,7 +1,7 @@
 @extends('member.layout')
 @section('content')
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -43,7 +43,7 @@
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
-                <table class="table table-condensed">
+                <table class="table table-hover table-bordered table-striped table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
                             <th>Item ID</th>
@@ -83,7 +83,7 @@
         <div id="archived" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
-                <table class="table table-condensed">
+                <table class="table table-hover table-bordered table-striped table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
                             <th>Item ID</th>

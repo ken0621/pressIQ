@@ -83,6 +83,7 @@ class Mlm extends Controller
             $plan_settings_repurchase = Tbl_mlm_plan::where('shop_id', Self::$shop_id)
             ->where('marketing_plan_enable', 1)
             ->where('marketing_plan_trigger', 'Product Repurchase')
+            ->where('marketing_plan_code', '!=', 'DISCOUNT_CARD_REPURCHASE')
             ->get();  
 
             $notification_s = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)

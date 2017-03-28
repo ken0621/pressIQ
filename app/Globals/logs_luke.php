@@ -125,17 +125,19 @@ email_content_subject
 
 Load wallet () - back end 
 No. to be loaded field ()
-
+Bentahan ng discount card()
+Kung load yung binebenta may number na field LOAD WALLEt ()
+after transaction mawawala yung laman
+use discount card()
 
 --
 Product code use option - kung dadaan ng product code () 
-use discount card()
-Bentahan ng discount card()
-Kung load yung binebenta may number na field LOAD WALLEt ()
+
+
 Check kung may serial ()
 kung may serial may option kung ano yung serial()
 search sa add new line
-after transaction mawawala yung laman
+
 bar codde
 
 

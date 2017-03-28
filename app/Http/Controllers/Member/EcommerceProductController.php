@@ -240,7 +240,7 @@ class EcommerceProductController extends Member
 		$item_id		= Request::input("evariant_item_id"); 
 		$variant_price	= Request::input("evariant_price"); 
 		$item_code		= Request::input("item_code"); 
-		$item_qty		= Request::input("item_qty_refill)";
+		$item_qty		= Request::input("item_qty_refill");
 		
 		foreach($item_id as $key => $item){
 			

@@ -244,6 +244,11 @@ class ShopCheckoutController extends Shop
                     {
                         Mlm_slot_log::slot_array($arry_log);
                         $this->give_product_code($get_cart['cart'], Self::$slot_now, $result['order_id']);
+
+                        /* SMS Notification */
+                        // $txt[0]["txt_to_be_replace"]    = "[name]";
+                        // $txt[0]["txt_to_replace"]       = $invoice['first_name'];
+                        // $result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
                     }
                 }
             }

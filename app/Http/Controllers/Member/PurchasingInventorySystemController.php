@@ -836,9 +836,16 @@ class PurchasingInventorySystemController extends Member
 
             if($data["status"] == "")
             {
-                $transaction_id = $sir_id;
+                // $transaction_id = $sir_id;
+                // $transaction_type = "sir";
+                // $data = Warehouse::inventory_update($transaction_id, $transaction_type, $inventory_update_item, $return = 'array');
+                $remarks = "SIR Edit consume";
+                // $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
+                $warehouse_id = Purchasing_inventory_system::get_warehouse_based_sir($sir_id);
                 $transaction_type = "sir";
-                $data = Warehouse::inventory_update($transaction_id, $transaction_type, $inventory_update_item, $return = 'array');
+                $transaction_id = $sir_id;
+
+                $data = Warehouse::inventory_consume($warehouse_id, $remarks, $inventory_update_item,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type, $transaction_id);   
             }
             if($data["status"] == "success")
             {

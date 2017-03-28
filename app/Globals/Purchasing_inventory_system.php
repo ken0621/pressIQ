@@ -61,6 +61,30 @@ class Purchasing_inventory_system
 
         return $data;
     }
+    public static function reject_return_stock($sir_id)
+    {
+        // inventroy_source_reason
+        // inventory_source_id
+        $warehouse_id = Purchasing_inventory_system::get_warehouse_based_sir($sir_id);
+        $reason_refill = "sir_return";
+        $refill_source = $sir_id;
+        $remarks = "Return Stock from SIR NO: ".$sir_id;
+
+        $sir_item = Tbl_sir_item::where("sir_id",$sir_id)->get();
+
+        foreach ($sir_item as $key => $value) 
+        {
+            $warehouse_refill_product[$key]["product_id"] = $value->item_id;
+            $warehouse_refill_product[$key]["quantity"] = UnitMeasurement::um_qty($value->related_um_type) * $value->item_qty;
+        }
+
+        $data = Warehouse::inventory_refill($warehouse_id, $reason_refill, $refill_source, $remarks, $warehouse_refill_product,'array',$is_return = 1);
+
+        // $up["ilr_status"] = 2;
+        // Tbl_sir::where("sir_id",$sir_id)->update($up);
+
+        return $data;
+    }
     public static function view_status($sir_id)
     {
         $sir_data["sir"] = Tbl_sir::saleagent()->truck()->where("sir_id",$sir_id)->first();

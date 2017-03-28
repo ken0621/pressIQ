@@ -241,7 +241,7 @@ class Warehouse
             $count = Tbl_warehouse_inventory::check_inventory_single($inventory_slip->warehouse_id, $value2['product_id'])->pluck('inventory_count');
             $count_on_hand = $count + $value2["quantity"];
 
-            if($value2['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand > $value2['quantity'])
+            if($value2['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value2['quantity'])
             {     
                 $insert["inventory_item_id"] = $value2["product_id"];
                 $insert["inventory_count"] = $value2["quantity"] * -1;

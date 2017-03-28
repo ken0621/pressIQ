@@ -28,7 +28,7 @@ class Warehouse
             $all_item = Tbl_item::where("shop_id",Warehouse::getShopId())->where("archived",0)->get();
             foreach ($all_item as $key1 => $value1)
             {
-                $item = Tbl_sub_warehouse::where("warehouse_id",154)->where("item_id",$value1->item_id)->first();
+                $item = Tbl_sub_warehouse::where("warehouse_id",$value->warehouse_id)->where("item_id",$value1->item_id)->first();
                 if($item == null)
                 {
                     $ins["warehouse_id"] = $value->warehouse_id;

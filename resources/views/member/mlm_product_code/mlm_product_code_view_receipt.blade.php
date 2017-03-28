@@ -82,6 +82,7 @@
                             <tr>
                                 <th>Item Name</th>
                                 <th>Quantity</th>
+                                <th>Serial</th>
                             </tr>   
                     </thead>    
                     <tbody>
@@ -90,6 +91,7 @@
                         <tr>
                             <td>{{$value->item_name}}</td>
                             <td>{{$value->item_quantity}}</td>
+                            <td>{{$value->item_serial}}</td>
                         </tr>
                         @endforeach
                     @else

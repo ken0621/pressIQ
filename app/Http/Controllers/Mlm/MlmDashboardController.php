@@ -47,6 +47,18 @@ class MlmDashboardController extends Mlm
             $data['direct'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'DIRECT')->sum('wallet_log_amount');
             $data['binary'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'BINARY')->sum('wallet_log_amount');
             $sum = $data['direct'] + $data['binary'];
+            if($data['direct'] == 0)
+            {
+                $data['direct'] = 1;
+            }
+            if($data['binary'] == 0)
+            {
+                $data['binary'] = 1;
+            }
+            if($sum == 0)
+            {
+                $sum = 1;
+            }
             $data['direct_percent'] = ($data['direct']/$sum) * 100;
             $data['binary_percent'] = ($data['binary']/$sum) * 100;
 
@@ -58,6 +70,7 @@ class MlmDashboardController extends Mlm
             ->get();
             // foreach()
             // dd($data['count_downline_per_countr_data'][0]);
+            $data['country_name'] = [];
             foreach($data['count_downline_per_countr_data'] as $key => $value)
             {
                 if(isset($data['country_name'][$value->country_name]))

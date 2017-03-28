@@ -23,11 +23,23 @@
 		</div>
 	</div>
 </div>
-<div class="panel panel-default panel-block">
-	<div class="panel-body">
-		
+<div class="panel-timekeeping-list">
+	<div class="panel panel-default panel-block">
+		<div class="panel-body">
+			<ul class="list-group">
+			@foreach($_period as $period)
+				<li class="list-group-item padding-tb-10">
+					<label><b>{{date('M d, Y',strtotime($period->payroll_period_start)).' - '.date('M d, Y',strtotime($period->payroll_period_end))}}</b></label><br>
+					<small>{{$period->payroll_period_category}}</small>
+					<a href="/member/payroll/time_keeping/company_period/{{$period->payroll_period_id}}" class="btn btn-custom-primary pull-right margin-nt-18">View</a>
+				</li>
+			@endforeach
+			</ul>
+		</div>
 	</div>
 </div>
+
 @endsection
 @section('script')
+<script type="text/javascript" src="/assets/member/js/payroll/payroll_timekeeping.js"></script>
 @endsection

@@ -17,10 +17,10 @@ class Tbl_payroll_holiday_default extends Model
 	// [VARCHAR] 		payroll_holiday_category
 	// [TINY INTEGER] 	payroll_holiday_archived
 
-	public function scopegetholidaydefault($query)
-    {
-    	$query->where('shop_id', '<>', );
+	// public function scopegetholidaydefault($query)
+ //    {
+ //    	$query->where('shop_id', '<>', );
 
-    	return $query;
-    }
+ //    	return $query;
+ //    }
 }

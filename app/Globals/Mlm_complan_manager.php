@@ -23,7 +23,8 @@ use App\Models\Tbl_mlm_leadership_settings;
 use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_discount_card_settings;
-
+use App\Globals\Mlm_gc;
+use App\Models\Tbl_mlm_gc;
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
 
@@ -1332,6 +1333,98 @@ class Mlm_complan_manager
         // Tbl_mlm_discount_card_settings
     }
     // End discount Card
+
+    public static function direct_promotions($slot_info)
+    {
+        $slot_sponsor = Tbl_mlm_slot::where('slot_id', $slot_info->slot_sponsor)->membership()->first();
+        /* CHECK IF SLOT RECIPIENT EXIST */
+        if($slot_sponsor)
+        {
+            $membership = Tbl_membership::where('shop_id', $slot_info->shop_id) ->where('membership_archive', 0)->get();
+            foreach($membership as $key => $value)
+            {
+                $direct_promotion = DB::table('tbl_mlm_plan_settings_direct_promotions')->where('shop_id', $slot_sponsor->shop_id)->where('membership_id', $value->membership_id)->first();
+                if($direct_promotion)
+                {
+                    /* Count Direct */
+                    $count_direct = Tbl_tree_sponsor::where('sponsor_tree_parent_id', $slot_sponsor->slot_id)->where('sponsor_tree_level', 1)
+                    ->child_info()
+                    ->where('slot_membership', $value->membership_id)
+                    ->where('slot_matched_membership', 0)
+                    ->count();
+                    if(isset($direct_promotion->settings_direct_promotions_count))
+                    {
+                        if($direct_promotion->settings_direct_promotions_count != 0)
+                        {
+                            if($direct_promotion->settings_direct_promotions_bonus != 0)
+                            {
+                                $count_income = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot_sponsor->slot_id)->where('wallet_log_plan', 'DIRECT_PROMOTIONS')
+                                ->where('wallet_log_membership_filter', $value->membership_id)
+                                ->count();
+                                
+                                $mod = $count_direct / $direct_promotion->settings_direct_promotions_count;
+                                $mod2 = round($mod, 0, PHP_ROUND_HALF_DOWN);
+                                if($mod2 > $count_income)
+                                {
+                                    $mod3 = $mod2 - $count_income;
+                                    for($i = 0; $i < $mod3; $i++ )
+                                    {
+                                        $plan = Tbl_mlm_plan::where('marketing_plan_code', 'DIRECT_PROMOTIONS')->where('shop_id', $slot_info->shop_id)->first();
+                                        if($direct_promotion->settings_direct_promotions_type == 0)
+                                        {
+                                            for($z = 0; $z < $direct_promotion->settings_direct_promotions_bonus; $z++ )
+                                            {
+                                                $insert['discount_card_log_date_created'] = Carbon::now();
+                                                $insert['discount_card_slot_sponsor'] = $slot_sponsor->slot_id;
+                                                $insert['discount_card_customer_sponsor'] = $slot_sponsor->slot_owner;
+                                                $insert['discount_card_membership'] = 1;
+                                                $insert['discount_card_log_code'] = Membership_code::random_code_generator(8);
+                                                Tbl_mlm_discount_card_log::insert($insert);
+                                                // return $mod3;
+                                            }
+                                            $log = 'Congratulations you earned ' . $direct_promotion->settings_direct_promotions_bonus . ' Discount Card thru ' . $plan->marketing_plan_label .'. You can check your other Discount Card at the Report, Discount Card Tab.';
+                                        }
+                                        else if($direct_promotion->settings_direct_promotions_type == 1)
+                                        {
+                                            $insert['mlm_gc_tag'] = 'DIP';
+                                            $insert['mlm_gc_code'] = Mlm_gc::random_code_generator(8, $slot_sponsor->slot_id, $insert['mlm_gc_tag']);
+                                            $insert['mlm_gc_amount'] = $direct_promotion->settings_direct_promotions_bonus;
+                                            $insert['mlm_gc_member'] = $slot_sponsor->slot_owner;
+                                            $insert['mlm_gc_slot'] = $slot_sponsor->slot_id;
+                                            $insert['mlm_gc_date'] = Carbon::now();
+                                            Tbl_mlm_gc::insert($insert);
+
+                                            $log = 'Congratulations you earned ' . $direct_promotion->settings_direct_promotions_bonus . ' GC thru ' . $plan->marketing_plan_label .'. You can check your other G.C. at the Gift Certificates Tab.';
+                                        }
+                                        
+                                        $arry_log['wallet_log_slot'] = $slot_sponsor->slot_id;
+                                        $arry_log['shop_id'] = $slot_sponsor->shop_id;
+                                        $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+                                        $arry_log['wallet_log_details'] = $log;
+                                        $arry_log['wallet_log_amount'] = 0;
+                                        $arry_log['wallet_log_plan'] = "DIRECT_PROMOTIONS";
+                                        $arry_log['wallet_log_status'] = "n_ready"; 
+                                        $arry_log['wallet_log_membership_filter'] = $value->membership_id;
+                                        $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                                        Mlm_slot_log::slot_array($arry_log);
+                                        
+
+                                    }
+                                    // return $mod3;
+                                }
+                                // return $mod2;
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }   
+    }
+
+
+
     // OTHER FUNCTIONS
     public static function date_current($type)
     {

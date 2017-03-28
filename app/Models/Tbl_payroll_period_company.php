@@ -24,4 +24,28 @@ class Tbl_payroll_period_company extends Model
 	• posted
 	• approved
 	*/
+	public function scopeselperiod($query, $payroll_period_id = 0)
+	{
+		$query->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_period_company.payroll_company_id')
+			
+			  ->where('payroll_period_id', $payroll_period_id);
+		return $query;
+	}
+
+	public function scopesel($query, $payroll_period_company_id = 0)
+	{
+		$query->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_period_company.payroll_company_id')
+			  ->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+			  ->where('payroll_period_company_id', $payroll_period_company_id);
+		return $query;
+	}
+
+	public function scopecheck($query, $payroll_period_company_id = 0, $shop_id = 0)
+	{
+		$query->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+			 ->where('tbl_payroll_period_company.payroll_period_company_id', $payroll_period_company_id)
+			 ->where('tbl_payroll_period.shop_id', $shop_id);
+
+		return $query;
+	}
 }

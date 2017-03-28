@@ -53,7 +53,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	
 	/* TIMESHEET START */
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');
-	Route::any('/employee_timesheet/timesheet/{id}','Member\PayrollTimeSheetController@timesheet');
+	Route::any('/company_timesheet/{id}','Member\PayrollTimeSheetController@company_timesheet');
+	Route::any('/employee_timesheet/timesheet/{id}/{period_id}','Member\PayrollTimeSheetController@timesheet');
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimeSheetController@json_process_time');
 	Route::any('/employee_timesheet/json_process_time_single/{date}/{employee_id}','Member\PayrollTimeSheetController@json_process_time_single');
 	Route::any('/employee_timesheet/adjustment_form','Member\PayrollTimeSheetController@adjustment_form');
@@ -88,6 +89,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/jobtitlelist/archived_jobtitle','Member\PayrollController@archived_jobtitle');
 	/* JOB TITLE END */
 
+
+	/* TAX PERIOD START */
+	Route::any('/tax_period',"Member\PayrollController@tax_period");
+	Route::any('/tax_period/taxt_perid_change',"Member\PayrollController@taxt_perid_change");
+	/* TAX PERIOD END */
 
 	/* TAX TABLE START */
 	Route::any('/tax_table_list',"Member\PayrollController@tax_table_list");
@@ -247,5 +253,18 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* PAYORLL TIME KEEPING START */
 	Route::any('/time_keeping','Member\PayrollController@time_keeping');
 	Route::any('/time_keeping/modal_generate_period','Member\PayrollController@modal_generate_period');
+	Route::any('/time_keeping/generate_period','Member\PayrollController@generate_period');
+	Route::any('/time_keeping/company_period/{id}','Member\PayrollController@company_period');
 	/* PAYROLL TIME KEEPING END */
-});
+
+
+	/* NO RECORDS FOUND */
+	Route::any('/no_records','Member\PayrollController@no_records');
+
+
+
+	/* PAYROLL PROCESS START */
+	Route::any('/payroll_process','Member\PayrollController@payroll_process');
+	Route::any('/payroll_process/modal_create_process','Member\PayrollController@modal_create_process');
+	/* PAYROLL PROCESS END */
+});	

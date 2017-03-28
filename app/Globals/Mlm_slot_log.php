@@ -60,6 +60,10 @@ class Mlm_slot_log
 		{
 			$insert['encashment_process_taxed'] = $arry_log['encashment_process_taxed'];
 		}
+		if(isset($arry_log['wallet_log_membership_filter']))
+		{
+			$insert['wallet_log_membership_filter'] = $arry_log['wallet_log_membership_filter'];
+		}
 
 		$wallet_log_id = Tbl_mlm_slot_wallet_log::insertGetId($insert);
 		// $wallet_log_data = AuditTrail::get_table_data("tbl_mlm_slot_wallet_log","wallet_log_id",$wallet_log_id);

@@ -24,4 +24,14 @@ class Tbl_payroll_period extends Model
 	{
 		return $query->where('shop_id', $shop_id)->where('payroll_period_archived', $payroll_period_archived);
 	}
+
+	public function scopecheck($query, $_param = array())
+	{
+		foreach($_param as $key => $param)
+		{
+			$query->where($key, $param);
+		}
+		return $query;
+	}
+
 }

@@ -334,7 +334,7 @@ class Payroll_BioImportController extends Member
     {
     	$excels['data'][0] = ['Name','Id No', 'Date','Time In','Time Out'];
         $excels['data'][1] = ['','', '','',''];
-        // dd($excels);
+
         return Excel::create('Timesheet Template (Digital Persona)', function($excel) use ($excels) {
 
             $data = $excels['data'];

@@ -28,6 +28,10 @@ class ShopCheckoutController extends Shop
     {
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
+        if (!isset($data["get_cart"]['cart'])) 
+        {
+            return Redirect::to('/');
+        }
         $data['ec_order_load'] = 0;
         foreach($data['get_cart'] as $value)
         {
@@ -142,13 +146,14 @@ class ShopCheckoutController extends Shop
             // dd($add_sum);
 
             $cart['ec_order_load'] = Request::input('ec_order_load');
-            if($ec_order_load == 1)
+            if($cart['ec_order_load'] == 1)
             {
                 $cart['ec_order_load_number'] = Request::input('ec_order_load_number');
             }
             else
             {
                 $cart['ec_order_load_number'] = null;
+                $cart['ec_order_load'] = 0;
             }
             
             $cart["invline_item_id"] = $invline_item_id;
@@ -254,8 +259,10 @@ class ShopCheckoutController extends Shop
             }
 
             Cart::clear_all($this->shop_info->shop_id);
-            
-            return Redirect::to("/order_placed");
+
+            $result["page"] = "Order Placed";
+
+            return view("order_placed", $result);
         }
     }
     public function give_product_code($cart, $slot_info, $order_id)

@@ -1,39 +1,23 @@
 @extends("layout")
 @section("content")
-<div class="container" style="background-color: #fff; margin-bottom: 50px;">
-	<div class="header">
-		<img src="/themes/{{ $shop_theme }}/img/check.png">
-		<span>CHECK OUT</span>
-	</div>
-	<div class="wizard">
-		<div class="holder">
-			<div class="circle">1</div>
-			<div class="name">Shopping</div>
+<div class="clearfix">
+	<div class="container" style="background-color: #fff; margin-bottom: 50px; margin-top: 50px;">
+		<div class="text-center">
+			<img src="/themes/{{ $shop_theme }}/img/check.png">
+			<span style="font-size: 20px;">&nbsp;&nbsp;<strong>CHECK</strong> OUT</span>
 		</div>
-		<div class="line"></div>
-		<div class="holder">
-			<div class="circle">2</div>
-			<div class="name">Payment</div>
+		<div class="sub" style="text-align: center;
+    font-size: 16px;
+    margin: 25px 0;">Your <strong>order</strong> # {{ isset($order_id) ? $order_id : 0 }} is being processed.</div>
+		<div class="text-center">
+			<button class="btn btn-primary">BACK TO SHOP</button>
 		</div>
-		<div class="line"></div>
-		<div class="holder active">
-			<div class="circle">3</div>
-			<div class="name">Shipping</div>
-		</div>
+		<div style="margin-bottom: 100px;"></div>
 	</div>
-	<div class="truck">
-		<img id="truck1" src="/themes/{{ $shop_theme }}/img/truck.png">
-		<img id="truck2" src="/themes/{{ $shop_theme }}/img/truck2.png">
-	</div>
-	<div class="sub">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean </br> commodo ligula eget dolor. Aenean massa! </div>
-	<div class="text-center">
-		<button class="btn btn-primary">BACK TO SHOP</button>
-	</div>
-	<div style="margin-bottom: 100px;"></div>
 </div>
 @endsection
 
 @section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/checkout.css">
+
 @endsection
 

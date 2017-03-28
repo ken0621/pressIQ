@@ -220,7 +220,16 @@
 		<div class="checkout-summary">
 			<div class="title">Order Summary</div>
 			<div class="order-summary">
-				<div class="number-in-cart">You have  in your cart.</div>
+				@if (session('fail'))
+				    <div class="alert alert-danger">
+					    <ul>
+					        @foreach(session('fail') as $fail)
+				        		<li>{{ $fail }}</li>
+					        @endforeach
+					    </ul>
+				    </div>
+				@endif
+				<div class="number-in-cart">You have {{ count($get_cart["cart"]) }} in your cart.</div>
 				<table>
 					<thead>
 						<tr>
@@ -234,13 +243,13 @@
 						<tr>
 							<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
 							<td class="text-center">{{ $cart["quantity"] }}</td>
-							<td class="text-right">{{ $cart["cart_product_information"]["product_price"] }}</td>
+							<td class="text-right">&#8369; {{ number_format($cart["cart_product_information"]["product_price"], 2) }}</td>
 						</tr>
 						@endforeach
 					</tbody>
 				</table>
 				<div class="text-right total">
-					<div class="total-price">{{ $get_cart["sale_information"]["total_product_price"] }}</div>
+					<div class="total-price">&#8369; {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</div>
 					<div class="total-label">Subtotal</div>
 				</div>	
 				<!-- <div class="text-right total">
@@ -248,11 +257,11 @@
 					<div class="total-label">tax()</div>
 				</div> -->
 				<div class="text-right total">
-					<div class="total-price">{{ $get_cart["sale_information"]["total_shipping"] }}</div>
+					<div class="total-price">&#8369; {{ number_format($get_cart["sale_information"]["total_shipping"], 2) }}</div>
 					<div class="total-label">Shipping Fee</div>
 				</div>
 				<div class="text-right total ">
-					<div class="total-price supertotal">{{ $get_cart["sale_information"]["total_overall_price"] }}</div>
+					<div class="total-price supertotal">&#8369; {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</div>
 					<div class="total-label">Total</div>
 				</div>
 			</div>

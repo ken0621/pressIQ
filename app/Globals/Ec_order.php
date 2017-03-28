@@ -15,6 +15,7 @@ use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_position;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_ec_variant;
+use App\Models\Tbl_item;
 
 use Log;
 use Request;
@@ -358,17 +359,25 @@ class Ec_order
             foreach($ec_order_item as $ordered)
             {  
                 $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered->item_id)->first();
-                $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
-                $warehouse_consume_product[$ctr]["quantity"]   = $ordered->quantity;
-                $ctr++;             
+                $check_type                                    = Tbl_item::where("item_id",$get_prod_id->evariant_item_id)->first();
+                if($check_type->item_type_id == 1)
+                {    
+                    $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
+                    $warehouse_consume_product[$ctr]["quantity"]   = $ordered->quantity;
+                    $ctr++;             
+                }
             }
 
-            $warehouse_consume_remarks  = "";                                                            
-            $warehouse_consumer_id      = $ec_order->customer_id;                          
-            $warehouse_consume_reason   = "";                              
-            $return_type                = "array";              
-            $data                       = Warehouse::inventory_consume($warehouse_id, $warehouse_consume_remarks, $warehouse_consume_product, $warehouse_consumer_id, $warehouse_consume_reason, $return_type);
-            return $data;
+
+            if($ctr != 0)
+            {
+                $warehouse_consume_remarks  = "";                                                            
+                $warehouse_consumer_id      = $ec_order->customer_id;                          
+                $warehouse_consume_reason   = "";                              
+                $return_type                = "array";              
+                $data                       = Warehouse::inventory_consume($warehouse_id, $warehouse_consume_remarks, $warehouse_consume_product, $warehouse_consumer_id, $warehouse_consume_reason, $return_type);
+                return $data;
+            }
         }
         else if($type == "add")
         {
@@ -376,21 +385,31 @@ class Ec_order
             $ec_order_item = Tbl_ec_order_item::where("ec_order_id",$ec_order_id)->get();
             $ctr = 0;
             foreach($ec_order_item as $ordered)
-            {  
+            { 
                 $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered->item_id)->first();
-                $warehouse_refill_product[$ctr]["product_id"]  = $get_prod_id->evariant_item_id;            
-                $warehouse_refill_product[$ctr]["quantity"]    = $ordered->quantity;
-                $ctr++;             
+                $check_type                                    = Tbl_item::where("item_id",$get_prod_id->evariant_item_id)->first();
+
+                if($check_type->item_type_id == 1)
+                {   
+                    $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$ordered->item_id)->first();
+                    $warehouse_refill_product[$ctr]["product_id"]  = $get_prod_id->evariant_item_id;            
+                    $warehouse_refill_product[$ctr]["quantity"]    = $ordered->quantity;
+                    $ctr++;             
+                }
             }
 
-            $warehouse_reason_refill  = "";  
-            $warehouse_refill_source  = $ec_order_id;  
-            $warehouse_remarks        = "";    
-            $return_type              = "array";             
-            $data                     = Warehouse::inventory_refill($warehouse_id, $warehouse_reason_refill, $warehouse_refill_source, $warehouse_remarks, $warehouse_refill_product, $return_type);
-            
+            if($ctr != 0)
+            {
+                $warehouse_reason_refill  = "";  
+                $warehouse_refill_source  = $ec_order_id;  
+                $warehouse_remarks        = "";    
+                $return_type              = "array";             
+                $data                     = Warehouse::inventory_refill($warehouse_id, $warehouse_reason_refill, $warehouse_refill_source, $warehouse_remarks, $warehouse_refill_product, $return_type);
+                
 
-            return $data;
+                return $data;
+            } 
+
         }
     }
 }

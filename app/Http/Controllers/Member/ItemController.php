@@ -306,6 +306,10 @@ class ItemController extends Member
 
 				$serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$shop_id)->first();
 
+				if($item_quantity == 0)
+				{
+					$serial = null;
+				}
 	            if($serial != null)
 	            {
 	                $return['status'] 	= 'success-serial';

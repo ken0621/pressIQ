@@ -14,7 +14,7 @@
                 <td class="col-md-5 text-left">{{$vendor->vendor_company}}</td>
                 <td class="col-md-2 text-left">{{$vendor->vendor_title_name.' '.$vendor->vendor_first_name.' '.$vendor->vendor_middle_name.' '.$vendor->vendor_last_name.' '.$vendor->vendor_suffix_name}}</td>
                 <td class="col-md-3 text-left">
-                    Tel No : {{$vendor->ven_info_phone}}<br>
+                    Tel No : {{$vendor->ven_info_phone != "" ? $vendor->ven_info_phone : "---"}}<br>
                     Mobile : {{$vendor->ven_info_mobile != "" ? $vendor->ven_info_mobile : "---" }}<br>
                     Fax : {{$vendor->ven_info_fax != "" ? $vendor->ven_info_fax : "---"}}<br>
                     Email Address : <a target="_blank" {{$vendor->vendor_email != "" ? 'href=https://mail.google.com/mail/?view=cm&fs=1&to='.$vendor->vendor_email : '' }}>{{$vendor->vendor_email != "" ? $vendor->vendor_email : "---" }}</a>

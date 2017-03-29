@@ -340,7 +340,7 @@ function purchase_order(){
 	    $('.droplist-item').globalDropList(
         {
             link : "/member/item/add",
-            width : "150px",
+            width : "100%",
             onCreateNew : function()
             {
             	item_selected = $(this);
@@ -353,7 +353,7 @@ function purchase_order(){
         $('.droplist-um').globalDropList(
     	{
     		hasPopup: "false",
-    		width : "110px",
+    		width : "100%",
     		placeholder : "um..",
     		onChangeValue: function()
     		{

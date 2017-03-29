@@ -22,14 +22,18 @@
         <div class="col-md-12">
             <!-- FORM.TITLE -->
             <div class="form-box-divider">
-                <div class="row clearfix">
-                    <div class="table-responsive">
+                <div class="row clearfix load-data">
+                    <div class="table-responsive data-content">
                         <table class="table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th>Product Name</th>
-                                    <th>Current Price</th>
-                                    <th>New Price</th>
+                                    <th class="text-center">Product Name</th>
+                                    <th class="text-center">Current Price</th>
+                                    <th class="text-center">New Price</th>
+                                    <th class="text-center">Current Promo Price</th>
+                                    <th class="text-center">New Promo Price</th>
+                                    <th class="text-center">Start Date</th>
+                                    <th class="text-center">End Date</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -41,6 +45,18 @@
                                         <input type="hidden" name="evariant_id[]" value="{{$product['evariant_id']}}">
                                         <input type="text" class="form-control input-sm money-format" name="evariant_new_price[]">
                                     </td>
+                                    <td>
+                                        @if($product['item_discount_value'] != null)
+                                            {{currency('',$product['item_discount_value'])}}
+                                            </br>
+                                            ({{dateFormat($product['item_discount_date_start'])}}-{{dateFormat($product['item_discount_date_end'])}})
+                                        @else
+                                            None
+                                        @endif
+                                    </td>
+                                    <td><input type="text" class="form-control input-sm money-format" name="item_promo_price"></td>
+                                    <td><input type="text" class="form-control input-sm datepicker" name="item_start_date"></td>
+                                    <td><input type="text" class="form-control input-sm datepicker" name="item_end_date"></td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -65,5 +81,16 @@
     @if(Session::has('success'))
         toastr.success('{{Session::get('success')}}');
     @endif
+
+    function submit_done(data)
+    {
+        if(data.status == "success")
+        {
+            $('.load-data').load("/member/ecommerce/product/bulk-edit-price .data-content", function()
+            {
+                toastr.success(data.message);
+            })
+        }
+    }
 </script>
 @endsection

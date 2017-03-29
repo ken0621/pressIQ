@@ -60,7 +60,7 @@ class WarehouseController extends Member
             }
 
             $data["_warehouse_archived"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 1)->groupBy("tbl_warehouse.warehouse_id")->get();
-
+            
             $all_item = null;
             foreach($data["_warehouse"] as $key => $value)
             {
@@ -841,7 +841,6 @@ class WarehouseController extends Member
             $ins_warehouse["warehouse_created"] = Carbon::now();
 
             $id = Tbl_warehouse::insertGetId($ins_warehouse);
-            Warehouse::check_item_every_warehouse();
 
             Warehouse::insert_access($id);
 
@@ -948,7 +947,6 @@ class WarehouseController extends Member
             // $up_warehouse["warehouse_created"] = Carbon::now();
 
             Tbl_warehouse::where("warehouse_id",Request::input("warehouse_id"))->update($up_warehouse);
-            Warehouse::check_item_every_warehouse();
 
             //EDIT tbl_warehouse per item reorderpoint
             $reorderpoint = Request::input("reoder_point");

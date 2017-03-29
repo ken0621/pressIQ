@@ -129,6 +129,10 @@ Route::any('/member/mlm/plan/unilevel_repurchase_points/edit/membership/points',
 Route::any('/member/mlm/plan/discountcard/add', 'Member\MLM_PlanController@discount_card_add');//luke
 /* end discount card Plan */
 
+/* start direct promotions */
+Route::any('/member/mlm/plan/direct_promotions/save', 'Member\MLM_PlanController@save_direct_promotions');//luke
+/* end direct promotions  Plan */
+
 /* end MLM Plan */
 
 /* start MLM Product */

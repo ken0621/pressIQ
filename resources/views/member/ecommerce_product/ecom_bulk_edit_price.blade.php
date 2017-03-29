@@ -20,10 +20,20 @@
     </div>
     <div class="row">
         <div class="col-md-12">
+
+            <div class="search-filter-box">
+
+                <div class="col-md-4 col-md-offset-8" style="padding: 10px">
+                    <div class="input-group">
+                        <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                        <input type="text" class="form-control global-search" url="/member/ecommerce/product/bulk-edit-price" placeholder="Search (Press Enter)" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
             <!-- FORM.TITLE -->
             <div class="form-box-divider">
-                <div class="row clearfix load-data">
-                    <div class="table-responsive data-content">
+                <div class="row clearfix load-data" target="product-list">
+                    <div class="table-responsive data-content" id="product-list">
                         <table class="table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
@@ -54,9 +64,9 @@
                                             None
                                         @endif
                                     </td>
-                                    <td><input type="text" class="form-control input-sm money-format" name="item_promo_price[]"></td>
-                                    <td><input type="text" class="form-control input-sm datepicker" name="item_start_date[]"></td>
-                                    <td><input type="text" class="form-control input-sm datepicker" name="item_end_date[]"></td>
+                                    <td><input type="text" class="form-control input-sm money-format" name="item_promo_price[]" placeholder="Put 0 to remove"></td>
+                                    <td><input type="text" class="form-control input-sm datepicker" name="item_start_date[]" placeholder="promo start date"></td>
+                                    <td><input type="text" class="form-control input-sm datepicker" name="item_end_date[]" placeholder="promo end date"></td>
                                 </tr>
                                 @endforeach
                             </tbody>

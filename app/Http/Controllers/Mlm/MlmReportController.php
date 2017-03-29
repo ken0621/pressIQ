@@ -234,7 +234,7 @@ class MlmReportController extends Mlm
                         ->where('wallet_log_membership_filter', $value->membership_id)
                         ->count();
         }
-        // dd($data['count_direct']);
+        dd($data);
         return view("mlm.report.report_direct_promotion", $data);
     }
 }

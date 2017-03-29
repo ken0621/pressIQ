@@ -270,7 +270,10 @@
 		{
 			"label":"Career Job List",
 			"type":"maintenance",
-			"field":["title","description"],
+			"field":[
+				{"name":"title", "type":"text"},
+				{"name":"description", "type":"textarea"}
+			],
 			"default":"",
 			"size":"12"
 		},

@@ -2,21 +2,21 @@
  @extends('layout')
  <div class="career">
  	<div class="career-header">
- 		<div class="title"><span>Work at Intogadgets</span></br>We have the right Job for YOU!</div>
- 		<button>Join our team</button>
+ 		<div class="title"><span>{{ get_content($shop_theme_info, "career", "career_title") }}</span></br>{{ get_content($shop_theme_info, "career", "career_subtitle") }}</div>
+ 		<button>{{ get_content($shop_theme_info, "career", "career_join_text") }}</button>
  		<div class="dots"></div>
  		<div class="text">
- 			At Intogadgets, our employees are our most valuable asset, and we know our success as a company depends entirely on them. If you think you have the talent, the drive, and the dedication to further our success we invite you to join us.
+ 			{{ get_content($shop_theme_info, "career", "career_description") }}
 		</div>
  	</div>
  	<div class="career-job">
  		<div class="title">JOB LISTING</div>
  		<div class="container">
 	 		<div class="containers">
-				<div class="img"><img src="/resources/assets/frontend/img/career3.png"></div>
+				<div class="img"><img src="{{ get_content($shop_theme_info, "career", "career_intro_image") }}"></div>
 				<div class="text">
 					<div class="title">Sales Assistant Frontliner</div>
-					<div class="description">Intogadgets is changing how millions of people Nation wide Engage in Smartphones and other gadgets. Your work will help tens of hundred of mobile phone to be sold. </div>
+					<div class="description">{{ get_content($shop_theme_info, "career", "career_intro_description") }}</div>
 				</div>
 	 		</div>
  		</div>

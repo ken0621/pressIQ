@@ -3,7 +3,7 @@
 <input type="hidden" name="_token" value="{{csrf_token()}}">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
-        <div class="col-md-8">
+        <div class="col-md-8 col-xs-6">
             <i class="fa fa-tablet"></i>
             <h1>
                 <span class="page-title">Tablet</span>
@@ -12,7 +12,7 @@
                 </small>
             </h1>
         </div>
-        <div class="col-md-4 text-right">
+        <div class="col-md-4 col-xs-6 text-right">
             <div class="col-md-12 text-left">
                 <label>{{$employee_name}}</label><br>
                 <label>{{$employee_position}}</label><br>

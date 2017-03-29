@@ -363,6 +363,7 @@ function get_slot(ito)
 function bar_code_membership_code(ito)
 {
 	var membership_code = ito.value;
+	console.log(membership_code);
 	$('.customer_data').html('<center><div class="loader-16-gray"></div></center>');
 	$('.customer_data').load('/member/customer/product_repurchase/get_slot_v_membership_code/' + membership_code, function(){
 		change_slot_class();
@@ -431,6 +432,18 @@ $(document).on("keydown", ".membership_code", function(e)
 	{
 		e.preventDefault();
 		bar_code_membership_code(this);
+	}
+});
+$(document).on("keydown", ".class_item_serial", function(e)
+{
+	
+	if(e.which == 13)
+	{
+		e.preventDefault();
+		var serail_key = parseInt($(this).attr('serial_key')) + 1;
+		console.log(serail_key);
+		$(".class_item_serial_" + serail_key ).focus();
+		// bar_code_membership_code(this);
 	}
 })
 </script>

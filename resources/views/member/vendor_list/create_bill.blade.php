@@ -9,8 +9,8 @@
     <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
 
     <div class="drawer drawer-default">
+            <div class="drawer-brand">Purchase Order</div>
         <nav class="drawer-nav">
-            <div class="drawer-brand">jQuery Drawer </div>
             <div class="form-group">
                 <div class="col-md-12">
                     <div class="clearfix purchase-order-container">
@@ -283,9 +283,11 @@
 </style>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
-<script type="text/javascript" src="/assets/member/js/bill.js"></script>
 <script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
 <link rel="stylesheet" type="text/css" href="/assets/member/bootstrap_drawer/cooker.drawer.css">
+
+<script type="text/javascript" src="/assets/member/js/bill.js"></script>
+
 <script type="text/javascript">
 
     $("#acct-a").click(function()

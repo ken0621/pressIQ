@@ -9,7 +9,8 @@ use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_mlm_gc;
 use App\Models\Tbl_item_code_item;
-
+use App\Models\Tbl_inventory_serial_number;
+use App\Models\Tbl_mlm_plan_setting;
 use App\Globals\Mlm_voucher;
 use App\Globals\Item;
 use App\Globals\Item_code;
@@ -21,13 +22,57 @@ use App\Globals\Mlm_slot_log;
 use Session;
 use Carbon\Carbon;
 use Validator;
-
+use App\Models\Tbl_email_template;
+use App\Globals\EmailContent;
+use Mail;
 class Item_code
 {
 	public static function add_code($data,$shop_id)
 	{ 
 	   // $shop_id                                                 = $this->user_info->shop_id;
+        $go_serial = 0;
+        if(isset($data['item_serial_enable']))
+        {
+            if(isset($data['item_serial']))
+            {
+                foreach($data["item_id"] as $key => $value)
+                {
+                    if(isset($data['item_serial'][$value]))
+                    {
+                        foreach($data['item_serial'][$value] as $key2 => $value2)
+                        {
+                            $check_serial = Tbl_inventory_serial_number::where('serial_number', $value2)->where('item_consumed', 0)->count();
+                            if($check_serial >= 1)
+                            {
+                                $check_serial_first = Tbl_inventory_serial_number::where('serial_number', $value2)->where('item_consumed', 0)->first();
+                                // return $check_serial_first;
+                                if($check_serial_first->item_id == $value)
+                                {
+                                    $go_serial = 1;
+                                }
+                                else
+                                {
+                                    $send['response_status']      = "warning";
+                                    $send['warning_validator'][0] = "Sorry, the serial : " . $value2 . ' does not belong to the item.';
+                                    return $send;
+                                }
+                            }
+                            else
+                            {
+                                $send['response_status']      = "warning";
+                                $send['warning_validator'][0] = "Sorry, we can't find the serial : " . $value2;
+                                return $send;
+                            }
+                        }
+                    }
+                    
+                }
+            }
+            else
+            {
 
+            }
+        }
         if(!isset($data["customer_id"]))
         {
             if(!isset($data["slot_id"]))
@@ -331,6 +376,7 @@ class Item_code
                                 $item[0]['product_id'] = $iteme->item_id;
                                 $item[0]['quantity'] = $value;
                                 // dd($item);
+                                // dd($data["warehouse_id"]);
                                $a = Warehouse::inventory_consume($data['warehouse_id'], 'Used for consuming of inventory in product code', $item,$data["customer_id"], $warehouse_consume_reason, 'array');
                                 if($a['status'] == 'error')
                                 {
@@ -371,6 +417,28 @@ class Item_code
                                 $insert_item_per[$value->item_id]['item_price'] = $item->item_price;  
                                 $insert_item_per[$value->item_id]['item_code_invoice_id'] = $invoice_id;
                                 $insert_item_per[$value->item_id]['item_code_id'] = $value->item_code_id;
+
+                                if($go_serial == 1)
+                                {
+                                     $insert_item_per[$value->item_id]['item_serial'] = null;
+                                     if(isset($data['item_serial'][$value->item_id]))
+                                     {
+                                        foreach($data['item_serial'][$value->item_id] as $key2 => $value2)
+                                        {
+                                            if($insert_item_per[$value->item_id]['item_serial'] == null)
+                                            {
+                                                $insert_item_per[$value->item_id]['item_serial'] .= $value2;
+                                            }
+                                            else
+                                            {
+                                                $insert_item_per[$value->item_id]['item_serial'] .= ', '. $value2;
+                                            }
+                                            $update_serail['item_consumed'] = 1;
+                                            $update_serail['sold'] = 1;
+                                            Tbl_inventory_serial_number::where('serial_number', $value2)->where('item_consumed', 0)->update($update_serail);
+                                        }
+                                    }
+                                }
                                 if(isset($insert_item_per[$value->item_id]['item_quantity']))
                                 {
                                     $insert_item_per[$value->item_id]['item_quantity'] += 1;
@@ -391,7 +459,7 @@ class Item_code
                             $update_gc['mlm_gc_used_date'] = Carbon::now();
                             Tbl_mlm_gc::where('mlm_gc_code', $data['gc_code'])->update($update_gc);
 
-                            $return = $gc_amount - $insert["item_total"];
+                            $return = $gc_amount - ($insert["item_total"]);
                             if($return >= 1)
                             {
                                 Mlm_gc::return_gc($insert['slot_id'], $data['gc_code'], $return);
@@ -399,15 +467,15 @@ class Item_code
                         }
                         if($wallet == 2)
                         {
-                            $log = 'Thank you for purchasing. ' .$insert["item_subtotal"]. ' is deducted to your wallet';
+                            $log = 'Thank you for purchasing. ' .$insert["item_total"]. ' is deducted to your wallet';
                             $arry_log['wallet_log_slot'] = $insert['slot_id'];
                             $arry_log['shop_id'] = $shop_id;
                             $arry_log['wallet_log_slot_sponsor'] = $insert['slot_id'];
                             $arry_log['wallet_log_details'] = $log;
-                            $arry_log['wallet_log_amount'] = $insert["item_total"] * (-1);
+                            $arry_log['wallet_log_amount'] = ($insert["item_total"]) * (-1);
                             $arry_log['wallet_log_plan'] = "REPURCHASE";
                             $arry_log['wallet_log_status'] = "released";   
-                            $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                            $arry_log['wallet_log_claimbale_on'] = Carbon::now();
                             Mlm_slot_log::slot_array($arry_log);
                         }
 
@@ -416,10 +484,15 @@ class Item_code
                             if($data['use_item_code_auto'] == 1)
                             {
                                 Item_code::use_item_code_all_invoice($invoice_id);
+                                Item_code::set_up_email($invoice_id, $shop_id);
+                            }
+                            else
+                            {
+
                             }
                         }
         	            /* FORGET ALL SESSION FOR PURCHASED ITEM */
-        	            Session::forget("sell_codes_session");
+        	            Session::forget("sell_item_codes_session");
                         $send["response_status"] = "success_process";    
                         $send['invoice_id'] = $invoice_id;
 
@@ -452,10 +525,63 @@ class Item_code
 
         return $send;
 	}
-	
+	public static function set_up_email($invoice_id, $shop_id)
+    {
+        $plan_settings = Tbl_mlm_plan_setting::where('shop_id', $shop_id)->first();
+        if($plan_settings->plan_settings_email_product_code == 0)
+        {
+            return 1;
+        }
+
+        $invoice = Tbl_item_code_invoice::where('item_code_invoice_id', $invoice_id)
+        ->leftjoin('tbl_customer', 'tbl_customer.customer_id','=', 'tbl_item_code_invoice.customer_id')
+        ->leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
+        ->first();
+        if($invoice)
+        {
+            if(isset($invoice->item_code_invoice_id))
+            {
+                if($invoice->item_code_customer_email != null)
+                {
+                    $data['invoice'] = $invoice;
+                    $data['item_code'] = Tbl_item_code::where('item_code_invoice_id', $invoice_id)
+                    ->get();
+
+                    $change_content[0]["txt_to_be_replace"] = "[product_list]";
+                    $change_content[0]["txt_to_replace"] = '<table><tr><td>Item</td><td>Quantity</td></tr>';
+                    $data['item_code_item'] = Tbl_item_code_item::where('item_code_invoice_id', $invoice_id)->get();
+                    foreach($data['item_code_item'] as $key => $value)
+                    {
+                        $change_content[0]["txt_to_replace"] .= '<tr><td>'.$value->item_name.'</td><td>'. $value->item_quantity.'</td></tr>';
+                    }
+                    $change_content[0]["txt_to_replace"] .= '</table>';
+
+                    $change_content[1]["txt_to_be_replace"] = "[product_code]";
+                    $change_content[1]["txt_to_replace"] = '<table><tr><td>Product Code</td><td>Pin</td></tr>';
+                    foreach($data['item_code'] as $key => $value)
+                    {
+                        $change_content[1]["txt_to_replace"] .= '<tr><td>'.$value->item_activation_code.' </td><td>'. $value->item_code_id.'</td></tr>';
+                    }
+                    $change_content[1]["txt_to_replace"] .= '</table>';
+                    // dd($change_content);
+                    
+
+                    $data["template"] = Tbl_email_template::where("shop_id",$shop_id)->first();
+
+                    $content_key = 'product_repurchase';
+                    $data['body'] = EmailContent::email_txt_replace($content_key, $change_content);
+                    // return view('emails.full_body', $data);
+                    Mail::send('emails.full_body', $data, function ($m) use ($data) {
+                    $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
+
+                    $m->to($data['invoice']->item_code_customer_email, env('MAIL_USERNAME'))->subject('Product Repurchase')->cc('lukeglennjordan2@gmail.com');
+                    });
+                }
+            }
+        } 
+    }
 	public static function random_code_generator($word_limit)
 	{
-        // $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';

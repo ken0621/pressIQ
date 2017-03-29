@@ -36,7 +36,17 @@
         </ul>
         
         <div class="search-filter-box">
-            <div class="col-md-4 col-md-offset-8" style="padding: 10px">
+            <div class="col-md-4"  style="padding: 10px; padding-left: 16px;">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Bulk Action <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-custom">
+                        <li><a size="lg" href="/member/ecommerce/product/bulk-edit-price" class="">Edit Product Price</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4 col-md-offset-4" style="padding: 10px">
                 <div class="input-group">
                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
                     <input type="text" class="form-control global-search" url="/member/ecommerce/product/list" data-value="1" placeholder="Search" aria-describedby="basic-addon1">
@@ -82,6 +92,11 @@
         {
             toastr.success(data.message);
             refresh_data()
+            data.element.modal("toggle");
+        }
+        else
+        {
+            toastr.error(data.message);
             data.element.modal("toggle");
         }
     }

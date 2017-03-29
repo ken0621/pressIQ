@@ -44,7 +44,7 @@
                 @foreach($plan_settings_2 as $key => $value)
                 <li><a href="javascript:">{{$value->marketing_plan_label}} <span class="pull-right badge bg-aqua">{{$earning_2[$key]}}</span></a></li>
                 @endforeach 
-                <li class="hide">
+                <li class="">
                 <?php if(!isset($earning_2)) $earning_2[0] = 0; ?>
                   <a href="javascript:" class="clearfix"><h4>Total<span class="pull-right badge bg-aqua" style="font-size: 15px">{{array_sum($earning_2)}}</h4></span></a>
                 </li>

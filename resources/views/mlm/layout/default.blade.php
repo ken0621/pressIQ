@@ -308,12 +308,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <span class="nav-text">Profile</span>
                     </a>
                 </li>
-                <!-- <li class="{{Request::segment(2) == 'repurchase' ? 'active' : '' }}">
-                    <a href="/mlm/repurchase">
+                <li class="{{Request::segment(2) == 'repurchase' ? 'active' : '' }}">
+                    <a href="/">
                         <i class="icon-shopping-cart nav-icon"></i>
                         <span class="nav-text">Repurchase</span>
                     </a>
-                </li> -->
+                </li>
                 @if($discount_card_log != null)
                 <li class="treeview" class="{{Request::segment(3) == 'report' ? 'active' : '' }}">
                   <a href="javascript:">

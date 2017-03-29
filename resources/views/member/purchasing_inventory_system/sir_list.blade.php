@@ -35,9 +35,10 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
         <li class="active cursor-pointer all-sir"><a class="cursor-pointer" onclick="select('all')" data-toggle="tab" href="#all"><i class="fa fa-star"></i> All</a></li>
-        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select('notall',[1,3],0,0,0)" data-toggle="tab" href="#new"><i class="fa fa-reorder"></i> STEP 1: Load Out Form </a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select('notall',1,0,0,0)" data-toggle="tab" href="#new"><i class="fa fa-reorder"></i> STEP 1: Load Out Form </a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select('notall',3,0,0,0)" data-toggle="tab" href="#new"><i class="fa fa-reorder"></i> Rejected LOF </a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select('notall',2,1,0,0)" data-toggle="tab" href="#new"><i class="fa fa-reorder"></i> STEP 2: Convert To SIR</a></li>
-        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select('notall',2,1,0,1)" data-toggle="tab" href="#confirmed"><i class="fa fa-check"></i> STEP 3: Stock Issuance Report </a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select('notall',2,1,0,1)" data-toggle="tab" href="#confirmed"><i class="fa fa-check"></i> STEP 3: S.I.R </a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select('notall',2,2,1,1)" data-toggle="tab" href="#rejected"><i class="fa fa-close"></i>STEP 4: Open Incoming Load Report </a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer" onclick="select('notall',2,2,2,1)" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> STEP 5 : Closed Incoming Load Report</a></li>
     </ul>
@@ -64,6 +65,7 @@
                                     <th>Sales Agent</th>
                                     <th>Total Item</th>
                                     <th>Total Amount</th>
+                                    <th>STATUS</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -77,6 +79,9 @@
                                             <td>{{$sir->first_name}} {{$sir->middle_name}} {{$sir->last_name}}</td>
                                             <td>{{$sir->total_item}}</td>
                                             <td>{{currency("PHP",$sir->total_amount)}}</td>
+                                            <td>
+                                                <button style="width: 100%" class="btn btn-{{$sir->status_color}}" >{{$sir->status}}</button>
+                                            </td>
                                             <td class="text-center">
                                                 <div class="btn-group">
                                                   <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

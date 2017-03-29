@@ -12,7 +12,7 @@
     <h4 class="modal-title layout-modallarge-title item_title">Warehouse Inventory Refill</h4>
 </div>
 <div class="modal-body modallarge-body-layout background-white form-horizontal menu_container">
-    <input type="hidden" name="warehouse_id" value="{{$warehouse->warehouse_id}}">
+    <input type="hidden" name="warehouse_id" id="warehouse_id" value="{{$warehouse->warehouse_id}}">
     <div class="panel-body form-horizontal">
         <div class="form-group">
             <div class="col-md-6">            
@@ -118,7 +118,13 @@
 $('.droplist-vendor').globalDropList(
 { 
     width : "100%",
-    link : "/member/vendor/add"
+    link : "/member/vendor/add",
+    onChangeValue : function ()
+    {
+        var vendor_id = $(this).val();
+        var warehouse_id = $("#warehouse_id").val();
+        $(".warehouse-refill-container").load("/item/warehouse/refill/by_vendor/"+warehouse_id+"/"+vendor_id +" .warehouse-refill-container")
+    }
 });
 </script>
 <script type="text/javascript" src="/assets/member/js/warehouse.js"></script>

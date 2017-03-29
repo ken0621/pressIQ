@@ -1,5 +1,6 @@
 @extends("layout")
 @section("content")
+
 <form method="post">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 	<div class="container" style="background-color: #fff; margin-bottom: 50px;">

@@ -11,6 +11,7 @@ use App\Models\Tbl_membership_package_has;
 use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_item;
 use App\Models\Tbl_email_template;
+use App\Models\Tbl_mlm_plan_setting;
 
 use App\Globals\Mlm_voucher;
 use App\Globals\Membership_code;
@@ -285,9 +286,15 @@ class Membership_code
     public static function set_up_mail($membership_code_invoice_id, $shop_id)
     {
         // return 1;
+        $plan_settings = Tbl_mlm_plan_setting::where('shop_id', $shop_id)->first();
+        if($plan_settings->plan_settings_email_membership_code == 0)
+        {
+            return 1;
+        }
+
         $invoice = Tbl_membership_code_invoice::where('membership_code_invoice_id', $membership_code_invoice_id)
-        ->join('tbl_customer', 'tbl_customer.customer_id','=', 'tbl_membership_code_invoice.customer_id')
-        ->join('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
+        ->leftjoin('tbl_customer', 'tbl_customer.customer_id','=', 'tbl_membership_code_invoice.customer_id')
+        ->leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
         ->first();
         if(isset($invoice->membership_code_invoice_id))
         {
@@ -319,28 +326,22 @@ class Membership_code
                 $content_key = 'membership_code_purchase';
                 $data['body'] = EmailContent::email_txt_replace($content_key, $change_content);
                 $data['company']['email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->pluck('value');
-                // return $data['invoice']->membership_code_customer_email;
-                // return view('emails.full_body', $data);
 
                 /* Sms Notification */
                 $txt[0]["txt_to_be_replace"]    = "[name]";
                 $txt[0]["txt_to_replace"]       = $invoice['first_name'];
+<<<<<<< HEAD
+                //$result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
+               
+=======
                 $result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
 
+>>>>>>> 7009fd95fb0d9ff88d235083cce06b723d95ec62
                 Mail::send('emails.full_body', $data, function ($m) use ($data) {
                     $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
 
-                    $m->to($data['invoice']->membership_code_customer_email, env('MAIL_USERNAME'))->subject('Membership Code Purchase');
+                    $m->to($data['invoice']->membership_code_customer_email, env('MAIL_USERNAME'))->subject('Membership Code Purchase')->cc('lukeglennjordan2@gmail.com');
                 });
-
-                
-
-
-               // Mail::send('member.mlm_code.mail.membership_code', $data, function ($m) use ($data) {
-               //      $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
-
-               //      $m->to($data['invoice']->membership_code_customer_email, env('MAIL_USERNAME'))->subject('Membership Code');
-               //  });
             }
             else
             {
@@ -353,5 +354,6 @@ class Membership_code
             $data['status'] = 'success';
             $data['message'] = 'Invalid, invoice id';
         }
+
     }
 }

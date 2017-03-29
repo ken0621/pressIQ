@@ -293,6 +293,7 @@ Route::any('/member/item/warehouse/archive_submit','Member\WarehouseController@a
 Route::any('/member/item/warehouse/view/{id}','Member\WarehouseController@view');
 Route::any('/member/item/warehouse/refill','Member\WarehouseController@refill');
 Route::any('/member/item/warehouse/refill_submit','Member\WarehouseController@refill_submit');
+Route::any('/item/warehouse/refill/by_vendor/{warehouse_id}/{id}','Member\WarehouseController@refill_item_vendor');
 
 //adjust inventory
 Route::any('/member/item/warehouse/adjust/{id}','Member\WarehouseController@adjust');
@@ -321,7 +322,7 @@ Route::any('/member/item/warehouse/stock_input_report/{id}','Member\WarehouseCon
 /* START PIS ARCY*/
 Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
 
-Route::any('/member/pis/sir','Member\PurchasingInventorySystemController@sir_list');
+Route::any('/member/pis/sir','Member\PurchasingInventorySystemController@sir');
 Route::any('/member/pis/sir/archived_submit','Member\PurchasingInventorySystemController@archived_sir_submit');
 Route::any('/member/pis/sir/create','Member\PurchasingInventorySystemController@create_sir');
 Route::any('/member/pis/sir/create_submit','Member\PurchasingInventorySystemController@create_sir_submit');
@@ -684,6 +685,7 @@ Route::get('/member/item/load_item_category','Member\ItemController@load_item_ca
 Route::get('/member/ecommerce/load_product_category','Member\EcommerceProductController@load_product_category');
 Route::get('/member/item/load_um','Member\UnitOfMeasurementController@load_um');
 Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
+// Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
 Route::get('/member/item/load_category','Member\Manage_Category_Controller@load_category');
 Route::get('/member/item/manufacturer/load_manufacturer','Member\ManufacturerController@load_manufacturer');
 Route::get('/member/maintenance/load_payment_method','Member\MaintenancePaymentMethodController@load_payment_method');

@@ -58,12 +58,12 @@ class Tbl_item extends Model
     public function scopeInventory($query, $warehouse_id = null)
     {
         return $query->selectRaw("*, IFNULL(sum(inventory_count),0) as inventory_count")
-                     ->leftjoin("tbl_warehouse_inventory", function($join) use ($warehouse_id)
+                     ->leftjoin(DB::raw("(Select wi.* from tbl_warehouse_inventory wi INNER JOIN tbl_warehouse wh on wh.warehouse_id = wi.warehouse_id where wh.archived = 0) warehouse"), function($join) use ($warehouse_id)
                      {
                         $join->on("inventory_item_id","=","item_id");
                         if($warehouse_id)
                         {
-                            $join->on("warehouse_id","=", DB::raw($warehouse_id));
+                            $join->on("warehouse.warehouse_id","=", DB::raw($warehouse_id));
                         }
                      })
                      ->groupBy("item_id");

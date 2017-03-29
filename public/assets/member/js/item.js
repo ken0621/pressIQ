@@ -14,7 +14,7 @@ function item()
         saved_input();
         $(".datepicker").datepicker();
         
-        event_accept_number_only();
+        // event_accept_number_only();
         event_item_type_click();
         event_back_menu_click();
         event_image_change();

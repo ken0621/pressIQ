@@ -11,10 +11,10 @@
 		<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="{{$slot->slot_id}}">
 		@else
 			@if(isset($slot_info))
-				<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="{{$slot_info->slot_id}}">
+				<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="">
 			@else
 				@if(isset($discount_card))
-				<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="{{$discount_card->discount_card_slot_sponsor}}">
+				<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="">
 				@endif
 			@endif	
 		@endif

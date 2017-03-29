@@ -43,7 +43,7 @@ function timesheet()
 		event_delete_sub_time();
 		event_load_overtime_form();
 		event_for_overtime_form();
-
+		event_mark_ready();
 	}
 	function event_load_overtime_form()
 	{
@@ -52,7 +52,60 @@ function timesheet()
 			tid = $(e.currentTarget).closest("tr").attr("tid");
 			action_load_link_to_modal("/member/payroll/employee_timesheet/adjustment_form?payroll_time_sheet_id=" + tid, "md");
 		});
+
+		
 	}
+
+	function event_mark_ready()
+	{
+		$('.btn-mark-ready').unbind("click");
+		$('.btn-mark-ready').bind("click", function(){
+			var content = $('.btn-mark-ready').data("content");
+			var spinner = '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
+			var ready 	= '<i class="fa fa-check"></i>&nbsp;Ready';
+			var html 	= $('.btn-mark-ready').html();
+
+			var formdata = new FormData();
+			var ajax = new XMLHttpRequest();
+			formdata.append("_token", $("#_token").val());
+			formdata.append("content", content);
+			ajax.upload.addEventListener("progress", function(event)
+			{
+				$('.btn-mark-ready').html(spinner);
+			}, false);
+			ajax.addEventListener("load", function(event)
+			{
+				$('.btn-mark-ready').html(ready);
+				$('.btn-mark-ready').attr("disabled",true);
+				console.log(event.target.responseText);
+			}, false);
+			ajax.open("POST","/member/payroll/company_timesheet/mark_ready_company");
+			ajax.send(formdata);
+			
+			// $('.btn-mark-ready').html(spinner);
+			// $.ajax({
+			// 	url 	: 	"/member/payroll/company_timesheet/mark_ready_company",
+			// 	type 	: 	"POST",
+			// 	data 	: 	{
+			// 		_token:$("#_token").val(),
+			// 		content:content
+			// 	},
+			// 	success : 	function(result)
+			// 	{
+			// 		$('.btn-mark-ready').html(ready);
+			// 		$('.btn-mark-ready').attr("disabled",true);
+			// 		console.log(result);
+			// 	},
+			// 	error 	: 	function(err)
+			// 	{
+			// 		$('.btn-mark-ready').html(html);
+			// 		toastr.error("Error, something went wrong.");
+			// 	}
+			// });
+		});
+	
+	}
+
 	function event_for_overtime_form()
 	{
 		$("body").on("change", ".over-time-entry", function(e)
@@ -161,14 +214,26 @@ function timesheet()
 	}
 	function action_load_timesheet()
 	{
-		$(".load-timesheet").html("<div class='timesheet-table-loading'><div class='spin'><i class='table-loader fa fa-spinner fa-spin fa-fw'></i></div> <div>LOADING</div> </div>");
+		$(".load-timesheet").html("<div class='timesheet-table-loading'><div class='spin'><i class='table-loader fa fa-spinner fa-pulse fa-fw'></i></div> <div>LOADING</div> </div>");
 
 		var selected_employee = $(".choose-employee").val();
-		$(".load-timesheet").load('/member/payroll/employee_timesheet/timesheet/' + selected_employee, function()
+		var payroll_period_id = $("#payroll_period_id").val();
+		var employee_name = $(".choose-employee").find(':selected').text();
+		$(".employee-name").html(employee_name);
+
+		if(selected_employee == null || selected_employee == "" || selected_employee == 0 || selected_employee == undefined)
+		{ 
+			$(".load-timesheet").load('/member/payroll/no_records');
+		}
+		else
 		{
-			action_compute_work_hours();
-			event_time_entry();
-		});
+			$(".load-timesheet").load('/member/payroll/employee_timesheet/timesheet/' + selected_employee + '/' + payroll_period_id, function()
+			{
+				action_compute_work_hours();
+				event_time_entry();
+			});
+		}
+		
 	}
 	function event_change_employee()
 	{

@@ -458,6 +458,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
+    /* -- ITEM => INVENTORY LOGS  */
+    $code = "item-inventory-log";
+    $nav[$page]['submenu'][$code]['label'] = "Inventory Logs";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/inventory_log";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Still developing";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
     /* -- ITEM => WAREHOUSE  */
     $code = "item-manufacturer";
     $nav[$page]['submenu'][$code]['label'] = "Manufacturer";
@@ -567,6 +576,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Time Keeping";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/time_keeping";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+    /* PAYROLL PROCESS */
+    $code = "payroll-process";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Process";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_process";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";

@@ -14,12 +14,11 @@ class Tbl_sub_warehouse extends Model
     {
     	$query->join("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_sub_warehouse.warehouse_id")
              ->join("tbl_item","tbl_item.item_id","=","tbl_sub_warehouse.item_id")
+             ->where("tbl_item.archived",0)
              ->where("tbl_sub_warehouse.warehouse_id",$warehouse_id);
 
         return $query;
     }
-
-
     public function scopewarehousetowarehouse($query, $from_id = 0, $to_id = 0)
     {
         $query->leftjoin('tbl_sub_warehouse as to_warehouse','to_warehouse.item_id','=','tbl_sub_warehouse.item_id')

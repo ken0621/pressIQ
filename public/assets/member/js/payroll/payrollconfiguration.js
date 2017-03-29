@@ -29,7 +29,7 @@ function payrollconfiguration()
 		load_configuration(link, "POST", target, formdata);
 	}
 
-	function load_configuration(action = "", method = "POST", target = ".configuration-div", formdata = [])
+	function load_configuration(action = "", method = "POST", target = ".configuration-div", formdata = [], toaster_str = '')
 	{
 		$(target).html(misc('loader'));
 		$.ajax({
@@ -39,7 +39,11 @@ function payrollconfiguration()
 			success : 	function(result)
 			{
 				$(target).html(result);
-				load_configuration_event();
+				console.log(toaster_str);
+				if(toaster_str != '')
+				{
+					toastr.success(toaster_str);
+				}
 			},
 			error  	: 	function()
 			{
@@ -170,6 +174,11 @@ function payrollconfiguration()
 	// {
 	// 	executeFunctionByName(functionName, window);
 	// }
+
+	this.load_configuration = function(action = "", method = "POST", target = "", formdata = [])
+	{
+		load_configuration(action, method, target, formdata);
+	}
 
 	this.relaod_tbl_department = function()
 	{

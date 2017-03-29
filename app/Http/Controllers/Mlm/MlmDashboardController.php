@@ -49,11 +49,11 @@ class MlmDashboardController extends Mlm
             $sum = $data['direct'] + $data['binary'];
             if($data['direct'] == 0)
             {
-                $data['direct'] = 1;
+                $data['direct'] = 0;
             }
             if($data['binary'] == 0)
             {
-                $data['binary'] = 1;
+                $data['binary'] = 0;
             }
             if($sum == 0)
             {
@@ -119,21 +119,28 @@ class MlmDashboardController extends Mlm
 
     	$data['plan_settings'] = Tbl_mlm_plan::where('shop_id', $shop_id)
         ->where('marketing_plan_enable', 1)
-        ->where('marketing_plan_trigger', 'Slot Creation')
+        // ->where('marketing_plan_trigger', 'Slot Creation')
         ->where('marketing_plan_code', '!=', 'INDIRECT_POINTS')
         ->where('marketing_plan_code', '!=', 'DIRECT_POINTS')
         ->where('marketing_plan_code', '!=', 'INITIAL_POINTS')
         ->where('marketing_plan_code', '!=', 'DISCOUNT_CARD')
+        ->where('marketing_plan_code', '!=', 'REPURCHASE_POINTS')
+        ->where('marketing_plan_code', '!=', 'UNILEVEL_REPURCHASE_POINTS')
+        ->where('marketing_plan_code', '!=', 'DISCOUNT_CARD_REPURCHASE')
         ->get();
 
         $data['plan_settings_2'] = Tbl_mlm_plan::where('shop_id', $shop_id)
         ->where('marketing_plan_enable', 1)
-        ->where('marketing_plan_trigger', 'Slot Creation')
+        // ->where('marketing_plan_trigger', 'Slot Creation')
         ->where('marketing_plan_code', '!=', 'DIRECT')
         ->where('marketing_plan_code', '!=', 'INDIRECT')
         ->where('marketing_plan_code', '!=', 'MEMBERSHIP_MATCHING')
         ->where('marketing_plan_code', '!=', 'LEADERSHIP_BONUS')
+        ->where('marketing_plan_code', '!=', 'EXECUTIVE_BONUS')
         ->where('marketing_plan_code', '!=', 'DISCOUNT_CARD')
+        ->where('marketing_plan_code', '!=', 'UNILEVEL')
+        ->where('marketing_plan_code', '!=', 'REPURCHASE_CASHBACK')
+        ->where('marketing_plan_code', '!=', 'DISCOUNT_CARD_REPURCHASE')
         ->where('marketing_plan_code', '!=', 'BINARY')
         ->get();
         // dd($data['plan_settings']);

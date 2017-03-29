@@ -5,7 +5,7 @@ use Crypt;
 use Redirect;
 use Request;
 use View;
-
+use DB;
 use App\Globals\Mlm_member_report;
 
 use App\Models\Tbl_mlm_slot;
@@ -16,6 +16,7 @@ use App\Models\Tbl_mlm_matching_log;
 use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_leadership_settings;
+use App\Models\Tbl_membership;
 class MlmReportController extends Mlm
 {
     public function index($complan)
@@ -211,5 +212,29 @@ class MlmReportController extends Mlm
         ->membership()->get();
         // dd($data);
         return view("mlm.report.report_discount_card", $data);
+    }
+    public function direct_promotions()
+    {
+        // $data['report']     = Mlm_member_report::get_wallet('DIRECT_PROMOTIONS', Self::$slot_id); 
+        $data['plan']       = Mlm_member_report::get_plan('DIRECT_PROMOTIONS', Self::$shop_id); 
+        $data['header'] = Mlm_member_report::header($data['plan']);
+        $data['membership'] = Tbl_membership::where('shop_id', Self::$shop_id) 
+        ->where('membership_id', '!=', 1)
+        ->where('membership_archive', 0)->get();
+
+        foreach($data['membership'] as $key => $value)
+        {
+            $data['direct_promotion'][$key] =   DB::table('tbl_mlm_plan_settings_direct_promotions')->where('shop_id', Self::$shop_id)->where('membership_id', $value->membership_id)->first();
+            $data['count_direct'][$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)->where('sponsor_tree_level', 1)
+                    ->child_info()
+                    ->where('slot_membership', $value->membership_id)
+                    ->where('slot_matched_membership', 0)
+                    ->count();
+            $data['count_matched'][$key] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'DIRECT_PROMOTIONS')
+                        ->where('wallet_log_membership_filter', $value->membership_id)
+                        ->count();
+        }
+        // dd($data['count_direct']);
+        return view("mlm.report.report_direct_promotion", $data);
     }
 }

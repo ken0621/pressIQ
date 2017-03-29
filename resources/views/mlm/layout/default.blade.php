@@ -308,7 +308,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <span class="nav-text">Profile</span>
                     </a>
                 </li>
-                <li class="{{Request::segment(2) == 'repurchase' ? 'active' : '' }}">
+                <li class="{{Request::segment(2) == 'repurchase' ? 'active' : '' }} hide">
                     <a href="/">
                         <i class="icon-shopping-cart nav-icon"></i>
                         <span class="nav-text">Repurchase</span>

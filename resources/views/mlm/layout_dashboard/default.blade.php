@@ -33,7 +33,20 @@
                 </div>
             </div>
         </div>
-        <center><img src="{{isset($content['company_logo']) ? $content['company_logo'] : '/assets/mlm/img/pic-shop.jpg'}}" width="200px"></center>
+        <center class="hide"><img src="{{isset($content['company_logo']) ? $content['company_logo'] : '/assets/mlm/img/pic-shop.jpg'}}" width="200px" style="margin-top: -11px !important; "></center>
+        
+        <div class="info-box bg-aqua">
+	        <span class="info-box-icon" style="width: 40% !important;"><img  src="{{isset($content['company_logo']) ? $content['company_logo'] : '/assets/mlm/img/pic-shop.jpg'}}" alt="User Avatar" style="margin-top: -11px !important; " width="100%"></span>
+
+	        <div class="info-box-content">
+	        <span class="info-box-text"></span>
+	          <span class="info-box-number"><center>CONGRATULATIONS!  YOU CAN NOW SEE ALL YOUR INCOME REPORTS HERE!</center></span>
+
+	          <div class="progress">
+	            <div class="progress-bar" style="width: 100%"></div>
+	          </div>
+	        </div>
+	      </div>
         <br />
         <div class="tab-content panel panel-default panel-block">
             <!-- OVERVIEW -->

@@ -19,8 +19,15 @@ function purchase_order(){
 		action_compute();
 		action_date_picker();
 		action_reassign_number();
+		event_button_action_click();
 	}
-
+	function event_button_action_click()
+	{
+		$(document).on("click","button[type='submit']", function()
+		{
+			$(".button-action").val($(this).attr("data-action"));
+		})
+	}
 	function event_remove_tr()
 	{
 		$(document).on("click", ".remove-tr", function(e){

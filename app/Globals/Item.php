@@ -92,6 +92,7 @@ class Item
     {
         return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();
     }
+
     public static function insert_item_discount($item_info)
     {
         $chck = Tbl_item_discount::where("discount_item_id",$item_info["item_id"])->first();

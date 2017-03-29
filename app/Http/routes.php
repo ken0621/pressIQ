@@ -318,7 +318,9 @@ Route::any('/member/item/warehouse/refill_log/{id}','Member\WarehouseController@
 Route::any('/member/item/warehouse/view_pdf/{id}','Member\WarehouseController@view_pdf');
 Route::any('/member/item/warehouse/stock_input_report/{id}','Member\WarehouseController@stock_input');
 /* END WAREHOUSE ARCY*/
-
+/* INVENTORY LOG*/
+Route::any('/member/item/inventory_log','Member\InventoryLogController@index');
+/*END INVENTORY LOG*/
 /* START PIS ARCY*/
 Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
 

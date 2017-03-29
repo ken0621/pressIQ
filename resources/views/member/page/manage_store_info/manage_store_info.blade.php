@@ -39,7 +39,7 @@
                     <div class="form-group">
                         <div class="col-xs-12">
                             <label>Store Name</label>
-                            <input type="text" class="form-control" value="{{$store_info->shop_key}}" name="store_name">
+                            <input type="text" style="cursor: not-allowed;" readonly class="form-control" value="{{$store_info->shop_key}}" name="store_name">
                         </div>
                     </div>
                     <div class="form-group">

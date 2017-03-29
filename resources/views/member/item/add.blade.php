@@ -155,7 +155,7 @@
                             <div class="row">
                                 <div>
                                     <div class="col-md-8">    
-                                       <input type="text" class="form-control input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
+                                       <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
                                     </div>
                                     <div class="col-md-4">
                                         per <span class="abbreviation"></span>

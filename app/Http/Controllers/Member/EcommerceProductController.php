@@ -809,12 +809,14 @@ class EcommerceProductController extends Member
 
 	public function getBulkEditPrice()
 	{
-		$data["_product"] = Tbl_ec_product::variant()->where("tbl_ec_product.archived",0)->get()->toArray();
+		$data["_product"] = Tbl_ec_product::variant()->item()->itemDiscount()->where("tbl_ec_product.archived",0)->where("eprod_shop_id", $this->getShopId())->get()->toArray();
 		
 		foreach($data["_product"] as $key1=>$product)
 		{
 			$data["_product"][$key1]["product_new_name"] = $product["eprod_name"] . ($product["variant_name"] ? ' : '.$product["variant_name"] : '');
 		}
+
+		// dd($data["_product"]);
 		return view('member.ecommerce_product.ecom_bulk_edit_price', $data);
 	}
 
@@ -823,9 +825,24 @@ class EcommerceProductController extends Member
 		$evariant_new_price = Request::input('evariant_new_price');
 		$evariant_id 		= Request::input('evariant_id');
 
-		foreach($evariant_new_price as $new_price)
+		foreach($evariant_new_price as $key=>$new_price)
 		{
+			if($new_price > 0)
+			{
+				Tbl_ec_variant::where("evariant_id", $evariant_id[$key])->update(['evariant_price' => $new_price]);
 
+				$item_info['item_id']					=
+				$item_info['item_discount_value']		=
+				$item_info['item_discount_date_start']	=
+				$item_info['item_discount_date_end']	=
+				Item::insert_item_discount($item_info);
+			}
 		}
+
+		Request::session()->flash('success', 'Product Price Successfully updated');
+
+		$json["status"] 	= "success";
+		$json["message"]	= "Product Price Successfully updated";
+		return json_encode($json);
 	}
 }

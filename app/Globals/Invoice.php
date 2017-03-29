@@ -72,7 +72,7 @@ class Invoice
         $insert['inv_overall_price']            = $overall_price;
         $insert['inv_message']                  = $invoice_other_info['invoice_msg'];
         $insert['inv_memo']                     = $invoice_other_info['invoice_memo'];
-        $insert['date_created']                 = Carbon::now();       
+        $insert['date_created']                 = Carbon::now();     
 
         $invoice_id = Tbl_customer_invoice::insertGetId($insert);
 
@@ -88,19 +88,32 @@ class Invoice
     {        
         $old = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
 
+        /* DISCOUNT */
+        $discount = $total_info['total_discount_value'];
+        if($total_info['total_discount_type'] == 'percent') $discount = convertToNumber($total_info['total_discount_value']) / 100;
+
+        /* SUBTOTAL */
+        $subtotal_price = collect($item_info)->sum('amount');
+
+        /* TAX */
+        $tax = collect($item_info)->where('taxable', '1')->sum('amount');
+
+        /* OVERALL TOTAL */
+        $overall_price  = convertToNumber($subtotal_price) - convertToNumber($total_info['ewt']) - ($discount * $subtotal_price) + $tax;
+        
         $update['inv_customer_id']              = $customer_info['customer_id'];        
         $update['inv_customer_email']           = $customer_info['customer_email'];
         $update['new_inv_id']                   = $invoice_info['new_inv_id'];
         $update['inv_customer_billing_address'] = $invoice_info['billing_address'];
         $update['inv_terms_id']                 = $invoice_info['invoice_terms_id'];
-        $update['inv_date']                     = $invoice_info['invoice_date'];
-        $update['inv_due_date']                 = $invoice_info['invoice_due'];
-        $update['inv_subtotal_price']           = $total_info['total_subtotal_price'];
+        $update['inv_date']                     = date("Y-m-d", strtotime($invoice_info['invoice_date']));
+        $update['inv_due_date']                 = date("Y-m-d", strtotime($invoice_info['invoice_due']));
+        $update['inv_subtotal_price']           = $subtotal_price;
         $update['ewt']                          = $total_info['ewt'];
         $update['inv_discount_type']            = $total_info['total_discount_type'];
         $update['inv_discount_value']           = $total_info['total_discount_value'];
         $update['taxable']                      = $total_info['taxable'];
-        $update['inv_overall_price']            = $total_info['total_overall_price'];
+        $update['inv_overall_price']            = $overall_price;
         $update['inv_message']                  = $invoice_other_info['invoice_msg'];
         $update['inv_memo']                     = $invoice_other_info['invoice_memo'];   
 

@@ -92,6 +92,7 @@ class Item
     {
         return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();
     }
+
     public static function insert_item_discount($item_info)
     {
         $chck = Tbl_item_discount::where("discount_item_id",$item_info["item_id"])->first();
@@ -99,7 +100,7 @@ class Item
         if($chck == null)
         {
             $insert["discount_item_id"] = $item_info["item_id"];
-            $insert["item_discount_value"] = $item_info["item_discount_value"];
+            $insert["item_discount_value"] = convertToNumber($item_info["item_discount_value"]);
             $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
             $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
 
@@ -107,7 +108,7 @@ class Item
         }
         else
         {
-            $insert["item_discount_value"] = $item_info["item_discount_value"];
+            $insert["item_discount_value"] = convertToNumber($item_info["item_discount_value"]);
             $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
             $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
 

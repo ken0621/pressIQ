@@ -22,10 +22,10 @@
 		<ul class="list-group">
 		  @foreach($_company as $company)
 		  	<li class="list-group-item">
-		  		{{$company->payroll_company_name}}
+		  		{{$company['payroll_company_name']}}
 		  		
-		  		<a href="/member/payroll/company_timesheet/{{$company->payroll_period_company_id}}" class="btn btn-custom-primary pull-right margin-nt-4">View</a>
-		  		<span class="custom-badge custom-badge-default pull-right margin-right-80 margin-top-6px">{{$company->payroll_period_status}}</span>
+		  		<a href="/member/payroll/company_timesheet/{{$company['payroll_period_company_id']}}" class="btn btn-custom-primary pull-right margin-nt-4">View</a>
+		  		<span class="custom-badge {{$company['badge']}} pull-right margin-right-80 margin-top-6px">{{$company['payroll_period_status']}}</span>
 		  	</li>
 		  @endforeach
 		</ul>

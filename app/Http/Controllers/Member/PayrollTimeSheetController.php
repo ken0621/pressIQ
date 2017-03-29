@@ -50,7 +50,7 @@ class PayrollTimeSheetController extends Member
 		{
 			return Redirect::to('/member/payroll/time_keeping')->send();
 		}
-
+		$data['payroll_period_company_id'] = $id;
 		$data['company'] = Tbl_payroll_period_company::sel($id)->first();
 		// dd($data);
 
@@ -93,9 +93,11 @@ class PayrollTimeSheetController extends Member
 		return view('member.payroll.employee_timesheet', $data);
 	}
 
+
+
 	public function timesheet($employee_id, $payroll_period_id)
 	{
-		// dd(Self::timesheet_summary($employee_id, $payroll_period_id));
+
 		$data["employee_id"] = $employee_id;
 		$data["page"] = "Timesheet Table";
 
@@ -498,4 +500,5 @@ class PayrollTimeSheetController extends Member
 		Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->update($update);
 		echo json_encode("success");
 	}
+
 }

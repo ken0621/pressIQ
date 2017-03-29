@@ -883,3 +883,80 @@
 .box .space { height: 30px; }
 
 
+/* custom panel drop down */
+.custom-panel-header
+{
+    width: 100%;
+    padding: 5px;
+    color:#fff;
+    background-color: #106189;
+}
+.custom-panel-body
+{
+    padding: 5px;
+    width: 100%;
+    border: 1px solid #b5c1c7;
+    position: relative;
+    margin-top: -13px;
+    margin-left: 12px;
+}
+
+/* triangle */
+.up-triangle {
+    width: 0;
+    height: 0;
+    border-bottom: 140px solid #103252;
+    border-left: 70px solid transparent;
+    border-right: 70px solid transparent;
+}
+ 
+.down-triangle {
+    width: 0;
+    height: 0;
+    border-top: 140px solid #103252;
+    border-left: 70px solid transparent;
+    border-right: 70px solid transparent;
+}
+ 
+.left-triangle {
+    width: 0;
+    height: 0;
+    border-right: 140px solid #103252;
+    border-top: 70px solid transparent;
+    border-bottom: 70px solid transparent;
+}
+ 
+.right-triangle {
+    width: 0;
+    height: 0;
+    border-left: 140px solid #103252;
+    border-top: 70px solid transparent;
+    border-bottom: 70px solid transparent;
+}
+.triangle-top-right {
+    width: 0;
+    height: 0;
+    border-top: 13px solid #106189;
+    border-left: 13px solid transparent;
+}
+ 
+.triangle-top-left {
+    width: 0;
+    height: 0;
+    border-top: 140px solid #103252;
+    border-right: 140px solid transparent;
+}
+    
+.triangle-bottom-right {
+    width: 0;
+    height: 0;
+    border-bottom: 140px solid #103252;
+    border-left: 140px solid transparent;
+}
+ 
+.triangle-bottom-left {
+    width: 0;
+    height: 0;
+    border-bottom: 140px solid #103252;
+    border-right: 140px solid transparent;
+}

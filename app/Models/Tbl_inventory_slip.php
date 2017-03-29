@@ -19,6 +19,10 @@ class Tbl_inventory_slip extends Model
     {
     	return $query->leftjoin("tbl_vendor","tbl_vendor.vendor_id","=","tbl_inventory_slip.inventory_source_id");
     }
+    public function scopeCustomer($query)
+    {
+        return $query->leftjoin("tbl_vendor","tbl_vendor.vendor_id","=","tbl_inventory_slip.inventory_source_id");
+    }
     public function scopeWarehouse($query)
     {
     	return $query->leftjoin("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_inventory_slip.warehouse_id");

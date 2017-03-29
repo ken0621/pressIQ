@@ -18,7 +18,7 @@
 </div>
 <br>
 <div>
-	<div>Supplier: {{$slip->vendor_company != null ? strtoupper($slip->vendor_company) : strtoupper($slip->vendor_first_name." ".$slip->vendor_middle_name." ".$slip->vendor_last_name)}}</div>
+	<div class="{{$slip->vendor_id == '' ? 'hidden' : '' }}">{{$slip->vendor_id == '' ? 'hidden' : '' }} Supplier: {{$slip->vendor_company != null ? strtoupper($slip->vendor_company) : strtoupper($slip->vendor_first_name." ".$slip->vendor_middle_name." ".$slip->vendor_last_name)}}</div>
 	<div>Date: {{dateFormat($slip->inventory_slip_date)}}</div>
 </div>
 <br>

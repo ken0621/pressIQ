@@ -42,7 +42,8 @@
                     <thead style="text-transform: uppercase">
                         <tr>
                             <th>P.O No</th>
-                            <th>Customer Name</th>
+                            <th>Company Name</th>
+                            <th>Vendor Name</th>
                             <th>Total</th>
                             <th>Action</th>
                         </tr>
@@ -52,6 +53,7 @@
                         @foreach($_po as $po)
                             <tr>
                                 <td>{{$po->po_id}}</td>
+                                <td>{{$po->vendor_company}}</td>
                                 <td>{{$po->vendor_title_name." ".$po->vendor_first_name." ".$po->vendor_middle_name." ".$po->vendor_last_name." ".$po->vendor_suffix_name}}</td>
                                 <td>{{currency("PHP",$po->po_overall_price)}}</td>
                                 <td class="text-center">

@@ -14,6 +14,7 @@ use App\Models\Tbl_delivery_method;
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Utilities;
+use App\Globals\Item;
 use Carbon\Carbon;
 use Request;
 use Response;
@@ -101,6 +102,17 @@ class VendorController extends Member
             return $this->show_no_access();
         }
 	}
+    public function getTag($id)
+    {
+        $data["vendor"] = Tbl_vendor::where("vendor_id",$id)->first();
+        $type[0] = 1; 
+        $data["_item"] = Item::get_all_category_item($type);
+        return view("member.vendor.vendor_tag_item",$data);
+    }
+    public function postUpdateTaggingItem()
+    {
+        dd(Request::input());
+    }
 
     public function getLoadVendorTbl()
     {

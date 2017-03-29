@@ -539,7 +539,6 @@ class ItemController extends Member
 				$data["data"]["bundle"]		  = Tbl_item_bundle::item()->where("bundle_bundle_id", $id)->get()->toArray();
 			}
 			$data["data"]["item_date_tracked"] = date('m/d/Y',strtotime($data["data"]["item_date_tracked"]));
-
 			
 			$data["_income"] 	= Accounting::getAllAccount('all',null,['Income','Other Income']);
 			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);

@@ -34,7 +34,7 @@ class WarehouseController extends Member
         $data["slip_item"] = Warehouse::inventory_input_report_item($slip_id);
         if($data["slip"])
         {
-            if($data["slip"]->inventory_reason == "refill" || $data["slip"]->inventory_reason == "insert_item")
+            if($data["slip"]->inventory_reason == "refill" || $data["slip"]->inventory_reason == "insert_item" || $data["slip"]->inventory_reason == "destination")
             {
                 $data["report_title"] = "STOCK INPUT";
             }

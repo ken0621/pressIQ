@@ -809,14 +809,21 @@ class EcommerceProductController extends Member
 
 	public function getBulkEditPrice()
 	{
-		$data["_product"] = Tbl_ec_product::variant()->item()->itemDiscount()->where("tbl_ec_product.archived",0)->where("eprod_shop_id", $this->getShopId())->get()->toArray();
+		$data["_product"] = Tbl_ec_product::variant()->item()->itemDiscount()->where("tbl_ec_product.archived",0)->where("eprod_shop_id", $this->getShopId());
+
+		$search = Request::input('search');
+		if($search)
+		{
+			$data["_product"] = $data["_product"]->whereRaw("concat(eprod_name,variant_name) like '%$search%'");
+		}
+
+		$data["_product"] = $data["_product"]->get()->toArray();
 		
 		foreach($data["_product"] as $key1=>$product)
 		{
 			$data["_product"][$key1]["product_new_name"] = $product["eprod_name"] . ($product["variant_name"] ? ' : '.$product["variant_name"] : '');
 		}
 
-		// dd($data["_product"]);
 		return view('member.ecommerce_product.ecom_bulk_edit_price', $data);
 	}
 
@@ -835,13 +842,16 @@ class EcommerceProductController extends Member
 				Tbl_ec_variant::where("evariant_id", $evariant_id[$key])->update(['evariant_price' => $new_price]);
 			}
 
-			$item_id = Tbl_ec_variant::item()->where("evariant_id", $evariant_id[$key])->pluck("item_id");
+			if($promo_price[$key] != ''	)
+			{
+				$item_id = Tbl_ec_variant::item()->where("evariant_id", $evariant_id[$key])->pluck("item_id");
 
-			$item_info['item_id']					= $item_id;
-			$item_info['item_discount_value']		= $promo_price[$key];
-			$item_info['item_discount_date_start']	= $start_date[$key];
-			$item_info['item_discount_date_end']	= $end_date[$key];
-			Item::insert_item_discount($item_info);
+				$item_info['item_id']					= $item_id;
+				$item_info['item_discount_value']		= $promo_price[$key];
+				$item_info['item_discount_date_start']	= $start_date[$key];
+				$item_info['item_discount_date_end']	= $end_date[$key];
+				Item::insert_item_discount($item_info);
+			}
 		}
 
 		Request::session()->flash('success', 'Product Price Successfully updated');

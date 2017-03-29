@@ -14,7 +14,7 @@ $data['icon'] = 'icon-barcode';
   <!-- Widget: user widget style 1 -->
   <div class="box box-widget widget-user">
     <!-- Add the bg color to the header using any of the bg-* classes -->
-    <div class="widget-user-header bg-aqua-active">
+    <div class="widget-user-header {{$value->mlm_gc_used == 0 ? 'bg-aqua-active' : 'bg-green-active'}} ">
       <h3 class="widget-user-username">@if(isset($content['company_name']))  {{$content['company_name']}} @endif</h3>
       <h5 class="widget-user-desc">GIFT CERTIFICATE</h5>
     </div>

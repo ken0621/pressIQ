@@ -118,7 +118,7 @@ class MlmGenealogyController extends Mlm
         {
             $tree_string .= '<li class="width-reference">
                                 <span class="parent parent-reference VC">
-                                    <div class="id">+</div>
+                                    <div class="id">NO<br>SLOT</div>
                                 </span>
                             </li>';
 
@@ -128,6 +128,81 @@ class MlmGenealogyController extends Mlm
         return $tree_string;
     }
     public function downline_format_unilevel($slot_info,$position = null,$placement = null)
+    {
+
+        if($slot_info)
+        {
+            $l = Tbl_tree_placement::where('placement_tree_parent_id',$slot_info->slot_id)->where('placement_tree_position','left')->count();
+            $r = Tbl_tree_placement::where('placement_tree_parent_id',$slot_info->slot_id)->where('placement_tree_position','right')->count();
+            
+
+            $str_slot = '<span class="downline parent parent-reference PS SILVER" x="' . $slot_info->slot_id . '">';    
+
+
+
+            if($slot_info->profile == null)
+            {
+                return  '<li class="width-reference">'.$str_slot.
+                                    '<div id="info">
+                                        <div id="photo">
+                                            <img src="/assets/slot_genealogy/member/img/default-image.jpg" alt="" />
+                                        </div>
+                                        <div id="cont">
+                                            <div>' . strtoupper($slot_info->first_name) . ' </div>
+                                            <b>' . $slot_info->membership_name . ' </b>
+                                        </div>
+                                        <div>' . $slot_info->slot_status . '</div>
+                                        <div>
+                                        </div>
+                                    </div>
+                                    <div class="id">' . $slot_info->slot_no . '</div>
+                                </span>
+                                <i class="downline-container"></i>
+                            </li>';
+            }
+            else
+            {
+                return  '<li class="width-reference">'.$str_slot.
+                                    '<div id="info">
+                                        <div id="photo">
+                                            <img src="'.$slot_info->profile.'">
+                                        </div>
+                                        <div id="cont">
+                                            <div>' . strtoupper($slot_info->first_name) . ' </div>
+                                            <b>' . $slot_info->membership_name . ' </b>
+                                        </div>
+                                        <div>' . $slot_info->slot_status . '</div>
+                                        <div>
+                                        </div>
+                                    </div>
+                                    <div class="id">' . $slot_info->slot_no . '</div>
+                                </span>
+                                <i class="downline-container"></i>
+                            </li>';             
+            }
+
+        }
+        else if($position) 
+        {
+            $slot_info = Tbl_mlm_slot::where('slot_id',$placement)->customer()->first();
+
+            return  '   <li class="width-reference">
+                            <span class="positioning parent parent-reference VC" position="'.$position.'" placement="'.$placement.'" y="'.$slot_info->first_name.'">
+                                <div class="id">+</div>
+                            </span>
+                        </li>';
+        }
+        else
+        {
+            return  '   <li class="width-reference">
+                            <span class="parent parent-reference VC">
+                                <div class="id">+</div>
+                            </span>
+                        </li>';
+        }
+    }
+
+    public function downline_format_unilevel_a($slot_info,$position = null,$placement = null)
     {
 
         if($slot_info)

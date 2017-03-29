@@ -62,17 +62,7 @@ function customer_invoice(){
 		});
 	}
 
-	function action_return_to_number(number = '')
-	{
-		number += '';
-		number = number.replace(/,/g, "");
-		if(number == "" || number == null || isNaN(number)){
-			number = 0;
-		}
-		
-		return parseFloat(number);
-	}
-
+	
 	function action_lastclick_row_op()
 	{
 		$("tbody.draggable").append(global_tr_html);
@@ -134,6 +124,27 @@ function customer_invoice(){
 				return ret;
 			  });
 		});
+	}
+	function action_add_comma(number)
+	{
+		number += '';
+		if(number == '0' || number == ''){
+			return '';
+		}
+
+		else{
+			return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+	}
+	function action_return_to_number(number = '')
+	{
+		number += '';
+		number = number.replace(/,/g, "");
+		if(number == "" || number == null || isNaN(number)){
+			number = 0;
+		}
+		
+		return parseFloat(number);
 	}
 
 	function event_compute_class_change()
@@ -282,17 +293,6 @@ function customer_invoice(){
 		$(".payment-applied").html(action_add_comma(parseFloat($(".payment-applied").html()).toFixed(2)));
 	}
 
-	function action_add_comma(number)
-	{
-		number += '';
-		if(number == '0' || number == ''){
-			return '';
-		}
-
-		else{
-			return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-		}
-	}
 
 	/* CHECK BOX FOR TAXABLE */
 	function event_taxable_check_change()

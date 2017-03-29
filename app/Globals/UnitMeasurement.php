@@ -56,7 +56,7 @@ class UnitMeasurement
         }
         else
         {
-            $return = $qty == 0 ? 1 : $qty." PC";
+            $return = $qty." PC";
         }
 
         return $return;

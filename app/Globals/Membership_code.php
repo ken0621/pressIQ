@@ -330,13 +330,8 @@ class Membership_code
                 /* Sms Notification */
                 $txt[0]["txt_to_be_replace"]    = "[name]";
                 $txt[0]["txt_to_replace"]       = $invoice['first_name'];
-<<<<<<< HEAD
-                //$result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
-               
-=======
                 $result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
 
->>>>>>> 7009fd95fb0d9ff88d235083cce06b723d95ec62
                 Mail::send('emails.full_body', $data, function ($m) use ($data) {
                     $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
 

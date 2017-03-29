@@ -11,6 +11,7 @@
             Time Record for Employee (<span class="employee-name"></span>)
             </small>
             </h1>
+
             <div class="dropdown pull-right">
                 <button class="btn btn-custom-danger dropdown-toggle " type="button" data-toggle="dropdown"><i class="fa fa-file-pdf-o"></i>&nbsp;Summary
                 <span class="caret"></span></button>
@@ -20,6 +21,7 @@
                     <li><a href="#">Over Time Summary</a></li>
                 </ul>
             </div>
+            <button class="btn btn-custom-primary pull-right margin-right-20 btn-mark-ready" data-content="{{$payroll_period_company_id}}" type="button">Mark as Ready</button>
             <input type="hidden" name="" value="{{$company->payroll_period_id}}" id="payroll_period_id">
         </div>
     </div>

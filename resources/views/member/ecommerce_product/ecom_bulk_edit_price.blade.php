@@ -54,9 +54,9 @@
                                             None
                                         @endif
                                     </td>
-                                    <td><input type="text" class="form-control input-sm money-format" name="item_promo_price"></td>
-                                    <td><input type="text" class="form-control input-sm datepicker" name="item_start_date"></td>
-                                    <td><input type="text" class="form-control input-sm datepicker" name="item_end_date"></td>
+                                    <td><input type="text" class="form-control input-sm money-format" name="item_promo_price[]"></td>
+                                    <td><input type="text" class="form-control input-sm datepicker" name="item_start_date[]"></td>
+                                    <td><input type="text" class="form-control input-sm datepicker" name="item_end_date[]"></td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -68,7 +68,6 @@
         </div>
     </div>
 </form>
-
 @endsection
 
 @section('css')
@@ -89,6 +88,7 @@
             $('.load-data').load("/member/ecommerce/product/bulk-edit-price .data-content", function()
             {
                 toastr.success(data.message);
+                $(".datepicker").datepicker();
             })
         }
     }

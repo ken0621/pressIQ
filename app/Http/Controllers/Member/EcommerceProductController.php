@@ -824,19 +824,24 @@ class EcommerceProductController extends Member
 	{
 		$evariant_new_price = Request::input('evariant_new_price');
 		$evariant_id 		= Request::input('evariant_id');
+		$promo_price 		= Request::input('item_promo_price');
+		$start_date 		= Request::input('item_start_date');
+		$end_date 			= Request::input('item_end_date');
 
 		foreach($evariant_new_price as $key=>$new_price)
 		{
 			if($new_price > 0)
 			{
 				Tbl_ec_variant::where("evariant_id", $evariant_id[$key])->update(['evariant_price' => $new_price]);
-
-				$item_info['item_id']					= ;
-				$item_info['item_discount_value']		= ;
-				$item_info['item_discount_date_start']	= ;
-				$item_info['item_discount_date_end']	= ;
-				Item::insert_item_discount($item_info);
 			}
+
+			$item_id = Tbl_ec_variant::item()->where("evariant_id", $evariant_id[$key])->pluck("item_id");
+
+			$item_info['item_id']					= $item_id;
+			$item_info['item_discount_value']		= $promo_price[$key];
+			$item_info['item_discount_date_start']	= $start_date[$key];
+			$item_info['item_discount_date_end']	= $end_date[$key];
+			Item::insert_item_discount($item_info);
 		}
 
 		Request::session()->flash('success', 'Product Price Successfully updated');

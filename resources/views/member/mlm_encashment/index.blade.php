@@ -359,7 +359,7 @@
                     @endif
                     </tbody>
                   </table>
-                  {!! $history->render() !!}
+                  <center>{!! $history->render() !!}</center>
                     </div> 
                 </div>
             </div>
@@ -409,7 +409,7 @@ function change_request(search)
 function search_slot(search)
 {
     slot = $('.search_filter_slot').val();
-    var link_load = link + '?request=' + request + '&slot=' + slot;
+    var link_load = link + '?request=' + request + '&slots=' + slot;
     $('#encashment_table').html('<div style="margin: 100px auto;" class="loader-16-gray"></div>');
     $('#encashment_table').load(link_load + ' #encashment_table');
 }

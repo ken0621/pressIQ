@@ -111,6 +111,7 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['rate']               = Request::input('invline_rate')[$key];
                 $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
+                $item_info[$key]['amount']             = Request::input('invline_amount')[$key];
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
 
 
@@ -119,7 +120,6 @@ class Customer_InvoiceController extends Member
                 $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
             }
         }
-
 
         $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
 
@@ -179,12 +179,10 @@ class Customer_InvoiceController extends Member
         $invoice_other_info['invoice_memo'] = Request::input('inv_memo');
 
         $total_info                         = [];
-        $total_info['total_subtotal_price'] = Request::input('subtotal_price');
         $total_info['ewt']                  = Request::input('ewt');
         $total_info['total_discount_type']  = Request::input('inv_discount_type');
         $total_info['total_discount_value'] = Request::input('inv_discount_value');
         $total_info['taxable']              = Request::input('taxable');
-        $total_info['total_overall_price']  = Request::input('overall_price');
 
         $item_info                          = [];
         $_itemline                          = Request::input('invline_item_id');

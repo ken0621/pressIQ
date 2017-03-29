@@ -2,18 +2,23 @@
     <table class="table table-hover table-condensed table-bordered">
         <thead>
             <tr>
-                <th class="text-left">Name</th>
-                <th class="text-left">Phone</th>
-                <th class="text-left">Email</th>
+                <th class="text-left">Company Name</th>
+                <th class="text-left">Contact Person</th>
+                <th class="text-left">Contact Details</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach($_vendor as $vendor)
              <tr class="cursor-pointer" id="tr-vendor-{{$vendor->vendor_id_s}}">
-                <td class="col-md-5 text-left">{{$vendor->vendor_title_name.' '.$vendor->vendor_first_name.' '.$vendor->vendor_middle_name.' '.$vendor->vendor_last_name.' '.$vendor->vendor_suffix_name}}</td>
-                <td class="col-md-2 text-left">{{$vendor->ven_info_phone}}</td>
-                <td class="col-md-3 text-left">{{$vendor->vendor_email}}</td>
+                <td class="col-md-5 text-left">{{$vendor->vendor_company}}</td>
+                <td class="col-md-2 text-left">{{$vendor->vendor_title_name.' '.$vendor->vendor_first_name.' '.$vendor->vendor_middle_name.' '.$vendor->vendor_last_name.' '.$vendor->vendor_suffix_name}}</td>
+                <td class="col-md-3 text-left">
+                    Tel No : {{$vendor->ven_info_phone != "" ? $vendor->ven_info_phone : "---"}}<br>
+                    Mobile : {{$vendor->ven_info_mobile != "" ? $vendor->ven_info_mobile : "---" }}<br>
+                    Fax : {{$vendor->ven_info_fax != "" ? $vendor->ven_info_fax : "---"}}<br>
+                    Email Address : <a target="_blank" {{$vendor->vendor_email != "" ? 'href=https://mail.google.com/mail/?view=cm&fs=1&to='.$vendor->vendor_email : '' }}>{{$vendor->vendor_email != "" ? $vendor->vendor_email : "---" }}</a>
+                </td>
                 <td class="col-md-2 text-center">
                     <!-- ACTION BUTTON -->
                     @if($vendor->archived == 0)

@@ -1357,6 +1357,8 @@ class MLM_PlanController extends Member
         $earn = Request::input('earn');
         $start = Request::input('start');
         $end = Request::input('end');
+        $gc_count = Request::input('gc_count');
+		$gc_amount = Request::input('gc_amount');
         $shop_id = $this->user_info->shop_id;
         $insertion = [];
 
@@ -1368,6 +1370,8 @@ class MLM_PlanController extends Member
             $insertion[$key]['matching_settings_end']    = $end[$key];
             $insertion[$key]['matching_settings_earnings'] = $earn[$key];
             $insertion[$key]['shop_id'] = $shop_id;
+            $insertion[$key]['matching_settings_gc_count'] = $gc_count[$key];
+			$insertion[$key]['matching_settings_gc_amount'] = $gc_amount[$key];
         }
         Tbl_mlm_matching::insert($insertion);
 

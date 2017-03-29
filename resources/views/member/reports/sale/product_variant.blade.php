@@ -73,24 +73,24 @@
 
                         <td class="text-center">{{$prod['quantity_sold']}}</td>
 
-                        <td class="text-right">
-                            <span class="pull-left">PHP</span>{{currency('',$prod['gross_sales'])}}
+                        <td class="text-center">
+                            <span class="pull-left"></span>{{currency('PHP',$prod['gross_sales'])}}
                         </td>
 
-                        <td class="text-right">
-                            <span class="pull-left">PHP</span>{{currency('PHP',$prod['discount'])}}
+                        <td class="text-center">
+                            <span class="pull-left"></span>{{currency('PHP',$prod['discount'])}}
                         </td>
 
-                        <td class="text-right">
-                            <span class="pull-left">PHP</span>{{currency('',$prod['net_sales'])}}
+                        <td class="text-center">
+                            <span class="pull-left"></span>{{currency('PHP',$prod['net_sales'])}}
                         </td>
 
-                        <td class="text-right">
-                            <span class="pull-left">PHP</span>{{currency('',$prod['tax'])}}
+                        <td class="text-center">
+                            <span class="pull-left"></span>{{currency('PHP',$prod['tax'])}}
                         </td>
 
-                        <td class="text-right">
-                            <span class="pull-left">PHP</span>{{currency('',$prod['total'])}}
+                        <td class="text-center">
+                            <span class="pull-left"></span>{{currency('PHP',$prod['total'])}}
                         </td>
                     </tr>
                 @endforeach

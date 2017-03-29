@@ -63,6 +63,11 @@ class ItemController extends Member
 	        }
 	        
 			$data["_item"]			   = $item->get();
+			//item_convertion with unit measurement
+			foreach ($data["_item"] as $key => $value) 
+			{
+				$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
+			}
 			$data["_item_archived"]	   = $item_archived->get();
 			      
 	        
@@ -301,6 +306,10 @@ class ItemController extends Member
 
 				$serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$shop_id)->first();
 
+				if($item_quantity == 0)
+				{
+					$serial = null;
+				}
 	            if($serial != null)
 	            {
 	                $return['status'] 	= 'success-serial';
@@ -534,13 +543,13 @@ class ItemController extends Member
 				$data["data"]["bundle"]		  = Tbl_item_bundle::item()->where("bundle_bundle_id", $id)->get()->toArray();
 			}
 			$data["data"]["item_date_tracked"] = date('m/d/Y',strtotime($data["data"]["item_date_tracked"]));
-
 			
 			$data["_income"] 	= Accounting::getAllAccount('all',null,['Income','Other Income']);
-			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset']);
-			$data["_expense"] 	= Accounting::getAllAccount('all',null,['Expense','Other Expense']);						
+			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
+			$data["_expense"] 	= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
+
 			$data['_category']  = Category::getAllCategory();
-			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
+			$data["_manufacturer"] = Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 	  	= UnitMeasurement::load_um();
 			$data['_item']  	= Item::get_all_category_item();
             $data["_vendor"]    = Vendor::getAllVendor('active');

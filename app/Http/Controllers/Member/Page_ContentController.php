@@ -162,4 +162,92 @@ class Page_ContentController extends Member
 
         return json_encode($response);
     }
+
+    public function getMaintenance()
+    {
+        $field = Request::input("field");
+        $key   = Request::input("key");
+
+        if ($field && $key) 
+        {
+            $data["field"] = $field;
+            $data["key"]   = $key;
+            $content = Tbl_content::where("key", $key)->first()->value;
+            if (is_serialized($content)) 
+            {
+                $data["_content"] = unserialize($content);
+                foreach ($data["_content"] as $key => $value) 
+                {
+                    if (isset($data["_content"][$key]["key"])) 
+                    {
+                        unset($data["_content"][$key]["key"]);
+                    }
+                }
+            }
+            else
+            {
+                $data["_content"] = [];
+            }
+
+            return view("member.page.page_maintenance", $data);
+        }
+    }
+
+    public function getAddMaintenance()
+    {
+        $field = unserialize(Request::input("field"));
+        $key   = Request::input("key");
+
+        if ($field && $key) 
+        {
+            $data["field"] = $field;
+            $data["key"]   = $key;
+
+            return view("member.page.page_maintenance_add", $data);
+        }
+    }
+
+    public function postSubmitMaintenance($id)
+    {
+        if ($id > 0) 
+        {
+            // Edit
+        }
+        else
+        {
+            // Add
+            $all = Request::except("_token");
+            $key = Request::input('key');
+            $exist = Tbl_content::where('key', $key)->first();
+            if ($exist) 
+            {
+                $content_id = $exist->content_id;
+                $get_content = $exist->value;
+
+                if (is_serialized($get_content)) 
+                {
+                    $get_content = unserialize($get_content);
+                }
+                else
+                {
+                    $get_content = [];
+                }
+
+                array_push($get_content, $all);
+                $get_content = serialize($get_content);
+                Tbl_content::where('content_id', $content_id)->update(["value" => $get_content]);
+            }
+            else
+            {
+                $content_id = Tbl_content::insertGetId(["key" => $key, "value" => $all]);
+            }
+            
+            $response["result"] = Tbl_content::where('content_id', $content_id)->first();
+            $response["response_status"] = "success";
+            $response["from"] = "add";
+            $response["key"] = $key;
+
+            return json_encode($response);
+        }
+    }
 }

@@ -2,6 +2,7 @@
 @section('content')
 <form class="global-submit form-to-submit-transfer load-po-container" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" name="_token" value="{{csrf_token()}}" >
+    <input type="hidden" class="button-action" name="button_action" value="">
     <input type="hidden" name="po_id" value="{{$po->po_id or ''}}" >
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">

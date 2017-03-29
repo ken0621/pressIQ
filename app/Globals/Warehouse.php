@@ -41,11 +41,19 @@ class Warehouse
     }
     public static function inventory_input_report($inventory_slip_id)
     {
-        $data = Tbl_inventory_slip::shop()->vendor()->warehouse()->where("inventory_slip_shop_id",Warehouse::getShopId())
+        $return["slip"] = Tbl_inventory_slip::shop()->warehouse()->where("inventory_slip_shop_id",Warehouse::getShopId())
                                                 ->where("tbl_user.user_id",Warehouse::getUserid())
                                                 ->where("inventory_slip_id",$inventory_slip_id)
                                                 ->first();
-
+        if($return["slip"]->inventroy_source_reason == "vendor")
+        {
+            $return["slip"] = Tbl_inventory_slip::shop()->vendor()->warehouse()->where("inventory_slip_shop_id",Warehouse::getShopId())
+                                                ->where("tbl_user.user_id",Warehouse::getUserid())
+                                                ->where("inventory_slip_id",$inventory_slip_id)
+                                                ->first();
+        }
+        $data = $return["slip"];
+        // dd($data);
         return $data;
     }
     public static function inventory_input_report_item($inventory_slip_id)

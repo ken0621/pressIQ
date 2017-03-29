@@ -4,12 +4,18 @@
     <button type="button" class="close" data-dismiss="modal">&times;</button>
     <h4 class="modal-title layout-modallarge-title">Add New Line</h4>
   </div>
-  <div class="modal-body max-450 modallarge-body-layout background-white">
-      <div class="col-md-6">
-          <label for="item_id">Item</label>
-          {!! $item_list !!}
+  <div class="modal-body clearfix modallarge-body-layout background-white" style="z-index: 999 !important;">
+      <div class="col-md-12">
+        <label>Item:</label>
+        <select class="drop-down-item" name="item_id">
+            @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+        </select>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-6 hide">
+          <label for="item_id">Item</label>
+         $item_list 
+      </div>
+      <div class="col-md-12">
           <label for="quantity">Quantity:</label>
           <input type="number" class="form-control quantity_e" name="quantity" value="1" onchange="get_price()">
       </div>
@@ -66,5 +72,13 @@ function get_discounted_price(item_id)
 }
 $('.item_id_multiple').on('change', function(){
   get_price();
+});
+$(".drop-down-item").globalDropList(
+{
+    link: '/member/item/add',
+    link_size: 'lg',
+    maxHeight: "309px",
+    width: '100%',
+    placeholder: 'Item'
 });
 </script>

@@ -751,12 +751,12 @@ class PayrollController extends Member
 		// dd($file);
 
 		$requirement_original_name 	= $file->getClientOriginalName();
-		$requirement_extension_name = $file->getClientOriginalExtension();
+		$requirement_extension_name   = $file->getClientOriginalExtension();
 		$requirement_mime_type		= $file->getMimeType();
 
 		$requirement_new_name 		= value(function() use ($file){
-            $filename = str_random(10). date('ymdhis') . '.' . $file->getClientOriginalExtension();
-            return strtolower($filename);
+          $filename = str_random(10). date('ymdhis') . '.' . $file->getClientOriginalExtension();
+          return strtolower($filename);
         });
 
         $path = '/assets/payroll/employee_requirements';
@@ -1553,8 +1553,8 @@ class PayrollController extends Member
 		{
 			$statement = 'restore';
 		}
-		$file_name 			= Tbl_payroll_company::where('payroll_company_id', $id)->pluck('payroll_company_name');
-		$data['title'] 		= 'Do you really want to '.$statement.' '.$file_name.'?';
+		$file_name 		= Tbl_payroll_company::where('payroll_company_id', $id)->pluck('payroll_company_name');
+		$data['title'] 	= 'Do you really want to '.$statement.' '.$file_name.'?';
 		$data['html'] 		= '';
 		$data['action'] 	= '/member/payroll/company_list/archived_company';
 		$data['id'] 		= $id;
@@ -3565,11 +3565,8 @@ class PayrollController extends Member
      /* PAYROLL PROCESS START */
      public function payroll_process()
      {
-          $data['_period'] = Tbl_payroll_period_company::period(Self::shop_id(),'processed')
-                                                       ->orderBy('.tbl_payroll_period.payroll_period_category')
-                                                       ->orderBy('tbl_payroll_period.payroll_period_start')
-                                                       ->get();
-          // dd($data);
+          $data['_period'] = Payroll::process_compute(Self::shop_id(), 'processed');
+          dd($data);
           return view('member.payroll.payroll_process', $data);
      }
 

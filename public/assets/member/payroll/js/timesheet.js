@@ -65,43 +65,43 @@ function timesheet()
 			var ready 	= '<i class="fa fa-check"></i>&nbsp;Ready';
 			var html 	= $('.btn-mark-ready').html();
 
-			var formdata = new FormData();
-			var ajax = new XMLHttpRequest();
-			formdata.append("_token", $("#_token").val());
-			formdata.append("content", content);
-			ajax.upload.addEventListener("progress", function(event)
-			{
-				$('.btn-mark-ready').html(spinner);
-			}, false);
-			ajax.addEventListener("load", function(event)
-			{
-				$('.btn-mark-ready').html(ready);
-				$('.btn-mark-ready').attr("disabled",true);
-				console.log(event.target.responseText);
-			}, false);
-			ajax.open("POST","/member/payroll/company_timesheet/mark_ready_company");
-			ajax.send(formdata);
+			// var formdata = new FormData();
+			// var ajax = new XMLHttpRequest();
+			// formdata.append("_token", $("#_token").val());
+			// formdata.append("content", content);
+			// ajax.upload.addEventListener("progress", function(event)
+			// {
+			// 	$('.btn-mark-ready').html(spinner);
+			// }, false);
+			// ajax.addEventListener("load", function(event)
+			// {
+			// 	$('.btn-mark-ready').html(ready);
+			// 	$('.btn-mark-ready').attr("disabled",true);
+			// 	console.log(event.target.responseText);
+			// }, false);
+			// ajax.open("POST","/member/payroll/company_timesheet/mark_ready_company");
+			// ajax.send(formdata);
 			
-			// $('.btn-mark-ready').html(spinner);
-			// $.ajax({
-			// 	url 	: 	"/member/payroll/company_timesheet/mark_ready_company",
-			// 	type 	: 	"POST",
-			// 	data 	: 	{
-			// 		_token:$("#_token").val(),
-			// 		content:content
-			// 	},
-			// 	success : 	function(result)
-			// 	{
-			// 		$('.btn-mark-ready').html(ready);
-			// 		$('.btn-mark-ready').attr("disabled",true);
-			// 		console.log(result);
-			// 	},
-			// 	error 	: 	function(err)
-			// 	{
-			// 		$('.btn-mark-ready').html(html);
-			// 		toastr.error("Error, something went wrong.");
-			// 	}
-			// });
+			$('.btn-mark-ready').html(spinner);
+			$.ajax({
+				url 	: 	"/member/payroll/company_timesheet/mark_ready_company",
+				type 	: 	"POST",
+				data 	: 	{
+					_token:$("#_token").val(),
+					content:content
+				},
+				success : 	function(result)
+				{
+					$('.btn-mark-ready').html(ready);
+					$('.btn-mark-ready').attr("disabled",true);
+					console.log(result);
+				},
+				error 	: 	function(err)
+				{
+					$('.btn-mark-ready').html(html);
+					toastr.error("Error, something went wrong.");
+				}
+			});
 		});
 	
 	}

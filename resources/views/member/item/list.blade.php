@@ -65,7 +65,7 @@
                             <!-- <td>{{$item->item_sku}}</td> -->
                             <td>{{$item->type_name}}</td>
                             <td>{{$item->item_type_name}}</td>
-                            <td>{{$item->inventory_count}}</td>
+                            <td>{{$item->inventory_count_um}}</td>
                             <td>{{currency("PHP", $item->item_price)}}</td>
                             <!-- <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td> -->
                             <td>

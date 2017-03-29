@@ -123,6 +123,7 @@ class MLM_ProductCodeController extends Member
     {
         $data['item_list'] = Item::view_item_dropdown($this->user_info->shop_id);
 
+        $data['_item']  = Item::get_all_category_item();
 
         if(Request::input('slot_id') != null)
         {

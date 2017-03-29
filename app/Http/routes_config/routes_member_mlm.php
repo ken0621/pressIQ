@@ -194,9 +194,12 @@ Route::any('/member/mlm/product_code/receipt/view/{id}', 'Member\MLM_ProductCode
 Route::get('member/mlm/card', 'Member\MLM_CardController@all_slot');
 Route::post('member/mlm/card/filter', 'Member\MLM_CardController@filter');
 Route::get('member/mlm/card/image/{slot}', 'Member\MLM_CardController@generate');
+Route::get('member/mlm/card/image/discount/{id}', 'Member\MLM_CardController@generate_discount');
 Route::get('member/mlm/card/all', 'Member\MLM_CardController@all_slot');
 Route::post('member/mlm/card/done', 'Member\MLM_CardController@done');
+Route::post('member/mlm/card/done/discount', 'Member\MLM_CardController@done_discount');
 Route::post('member/mlm/card/pending', 'Member\MLM_CardController@pending');
+Route::post('member/mlm/card/pending/discount', 'Member\MLM_CardController@pending_discount');
 
 
 Route::get('/member/mlm/report', 'Member\MLM_ReportController@index');

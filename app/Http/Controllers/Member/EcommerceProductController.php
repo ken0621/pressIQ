@@ -831,10 +831,10 @@ class EcommerceProductController extends Member
 			{
 				Tbl_ec_variant::where("evariant_id", $evariant_id[$key])->update(['evariant_price' => $new_price]);
 
-				$item_info['item_id']					=
-				$item_info['item_discount_value']		=
-				$item_info['item_discount_date_start']	=
-				$item_info['item_discount_date_end']	=
+				$item_info['item_id']					= ;
+				$item_info['item_discount_value']		= ;
+				$item_info['item_discount_date_start']	= ;
+				$item_info['item_discount_date_end']	= ;
 				Item::insert_item_discount($item_info);
 			}
 		}

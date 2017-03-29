@@ -948,19 +948,61 @@ class Mlm_complan_manager
                         $insert['matching_log_earner'] =    $matching_log_earner;
                         $insert['matching_log_earning'] = $matching_log_earning;
 
+                        
+                        
+
+                        if($settingss->matching_settings_gc_count != 0 && $settingss->matching_settings_gc_amount != 0)
+                        {
+                        	$count_matching = Tbl_mlm_matching_log::where('matching_log_earner', $matching_log_earner)->count() + 1;
+                        	$mod = $count_matching % $settingss->matching_settings_gc_count;
+                        	if($mod == 0)
+                        	{
+                        		$slot_i = Mlm_compute::get_slot_info($matching_log_earner);
+                        		$insert_gc['mlm_gc_tag'] = 'MAT';
+                                $insert_gc['mlm_gc_code'] = Mlm_gc::random_code_generator(8, $slot_i->slot_id, $insert_gc['mlm_gc_tag']);
+                                $insert_gc['mlm_gc_amount'] = $settingss->matching_settings_gc_amount;
+                                $insert_gc['mlm_gc_member'] = $slot_i->slot_owner;
+                                $insert_gc['mlm_gc_slot'] = $slot_i->slot_id;
+                                $insert_gc['mlm_gc_date'] = Carbon::now();
+                                Tbl_mlm_gc::insert($insert_gc);
+                                 $insert['matching_log_earning'] = 0;
+                                 $insert['matching_log_gc_amount'] = $settingss->matching_settings_gc_amount;
+                                 $insert['matching_log_is_gc'] = 1;
+                                 $insert['matching_log_gc'] = $insert_gc['mlm_gc_code'];
+                        	}
+                        	else
+                        	{
+                        		$slot_aaa = Tbl_mlm_slot::where('slot_id', $matching_log_slot_1)->first();
+		                        $slot_bbb = Tbl_mlm_slot::where('slot_id', $matching_log_slot_2)->first();
+		                        $log = "Congratulations Your Slot " . $matching_log_earner . " Earned " . $matching_log_earning . " From Membership Matching. Slot " . $slot_aaa->slot_no . "(level ". $matching_log_level_1 .") and Slot " . $slot_bbb->slot_no . "(level ". $matching_log_level_2 .") Matched.";
+		                        $arry_log['wallet_log_slot'] = $matching_log_earner;
+		                        $arry_log['shop_id'] = $slot_info->shop_id;
+		                        $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+		                        $arry_log['wallet_log_details'] = $log;
+		                        $arry_log['wallet_log_amount'] = $matching_log_earning;
+		                        $arry_log['wallet_log_plan'] = "MEMBERSHIP_MATCHING";
+		                        $arry_log['wallet_log_status'] = "n_ready";   
+		                        $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('MEMBERSHIP_MATCHING', $slot_info->shop_id); 
+		                        Mlm_slot_log::slot_array($arry_log);
+                        	}
+                        }
+                        else
+                        {
+                        	$slot_aaa = Tbl_mlm_slot::where('slot_id', $matching_log_slot_1)->first();
+	                        $slot_bbb = Tbl_mlm_slot::where('slot_id', $matching_log_slot_2)->first();
+	                        $log = "Congratulations Your Slot " . $matching_log_earner . " Earned " . $matching_log_earning . " From Membership Matching. Slot " . $slot_aaa->slot_no . "(level ". $matching_log_level_1 .") and Slot " . $slot_bbb->slot_no . "(level ". $matching_log_level_2 .") Matched.";
+	                        $arry_log['wallet_log_slot'] = $matching_log_earner;
+	                        $arry_log['shop_id'] = $slot_info->shop_id;
+	                        $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
+	                        $arry_log['wallet_log_details'] = $log;
+	                        $arry_log['wallet_log_amount'] = $matching_log_earning;
+	                        $arry_log['wallet_log_plan'] = "MEMBERSHIP_MATCHING";
+	                        $arry_log['wallet_log_status'] = "n_ready";   
+	                        $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('MEMBERSHIP_MATCHING', $slot_info->shop_id); 
+	                        Mlm_slot_log::slot_array($arry_log);
+                        }
                         Tbl_mlm_matching_log::insert($insert);
-                        $slot_aaa = Tbl_mlm_slot::where('slot_id', $matching_log_slot_1)->first();
-                        $slot_bbb = Tbl_mlm_slot::where('slot_id', $matching_log_slot_2)->first();
-                        $log = "Congratulations Your Slot " . $matching_log_earner . " Earned " . $matching_log_earning . " From Membership Matching. Slot " . $slot_aaa->slot_no . "(level ". $matching_log_level_1 .") and Slot " . $slot_bbb->slot_no . "(level ". $matching_log_level_2 .") Matched.";
-                        $arry_log['wallet_log_slot'] = $matching_log_earner;
-                        $arry_log['shop_id'] = $slot_info->shop_id;
-                        $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
-                        $arry_log['wallet_log_details'] = $log;
-                        $arry_log['wallet_log_amount'] = $matching_log_earning;
-                        $arry_log['wallet_log_plan'] = "MEMBERSHIP_MATCHING";
-                        $arry_log['wallet_log_status'] = "n_ready";   
-                        $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('MEMBERSHIP_MATCHING', $slot_info->shop_id); 
-                        Mlm_slot_log::slot_array($arry_log);
+                        
                     }                  
                 }
             }

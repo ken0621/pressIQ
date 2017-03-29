@@ -54,13 +54,19 @@ class MLM_WalletController extends Member
         }
 
         $data = [];
-        $data['wallet_log'] = Tbl_mlm_slot_wallet_log::where('tbl_mlm_slot_wallet_log.shop_id', $this->user_info->shop_id)
+        $wallet_log = Tbl_mlm_slot_wallet_log::where('tbl_mlm_slot_wallet_log.shop_id', $this->user_info->shop_id)
         ->orderBy('wallet_log_date_created', 'DESC')
         ->groupBy('wallet_log_slot')
         ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=','tbl_mlm_slot_wallet_log.wallet_log_slot')
         ->join('tbl_customer', 'tbl_customer.customer_id', '=','tbl_mlm_slot.slot_owner')
-        ->selectRaw('sum(wallet_log_amount) as sum_wallet, tbl_mlm_slot_wallet_log.*, tbl_mlm_slot.*, tbl_customer.*')
-        ->paginate(20);
+        ->selectRaw('sum(wallet_log_amount) as sum_wallet, tbl_mlm_slot_wallet_log.*, tbl_mlm_slot.*, tbl_customer.*');
+
+        if(Request::input('search'))
+        {
+            $wallet_log = $wallet_log->where('tbl_mlm_slot.slot_no', 'like', '%'.Request::input('search').'%'); 
+        }
+        $data['wallet_log'] = $wallet_log->paginate(20);
+        
         // dd($data);
         return view('member.mlm_wallet.index', $data);
     }

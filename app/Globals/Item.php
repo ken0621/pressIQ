@@ -99,20 +99,44 @@ class Item
 
         if($chck == null)
         {
+<<<<<<< HEAD
             $insert["discount_item_id"] = $item_info["item_id"];
             $insert["item_discount_value"] = convertToNumber($item_info["item_discount_value"]);
             $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
             $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
+=======
+            if($item_info["item_discount_value"] >= 1)
+            {
+                $insert["discount_item_id"] = $item_info["item_id"];
+                $insert["item_discount_value"] = $item_info["item_discount_value"];
+                $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
+                $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
+>>>>>>> cc21e8316be25acdb8905aaa7cb3deff19dce62e
 
-            Tbl_item_discount::insert($insert);            
+                Tbl_item_discount::insert($insert);
+            }   
         }
         else
         {
+<<<<<<< HEAD
             $insert["item_discount_value"] = convertToNumber($item_info["item_discount_value"]);
             $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
             $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
+=======
+            if($item_info["item_discount_value"] <= 0)
+            {
+                Tbl_item_discount::where("item_discount_id",$chck->item_discount_id)->delete();
+                Tbl_item_discount::where("item_discount_value",0)->delete();
+            }
+            else
+            {
+                $insert["item_discount_value"] = $item_info["item_discount_value"];
+                $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
+                $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
+>>>>>>> cc21e8316be25acdb8905aaa7cb3deff19dce62e
 
-            Tbl_item_discount::where("discount_item_id",$item_info["item_id"])->update($insert);  
+                Tbl_item_discount::where("discount_item_id",$item_info["item_id"])->update($insert);
+            }
         }
     }
     public static function get_all_category_item($type = array(1,2,3,4))

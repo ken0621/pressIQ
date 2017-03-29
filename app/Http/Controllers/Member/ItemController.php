@@ -63,6 +63,11 @@ class ItemController extends Member
 	        }
 	        
 			$data["_item"]			   = $item->get();
+			//item_convertion with unit measurement
+			foreach ($data["_item"] as $key => $value) 
+			{
+				$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
+			}
 			$data["_item_archived"]	   = $item_archived->get();
 			      
 	        

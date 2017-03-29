@@ -54,11 +54,15 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* TIMESHEET START */
 	Route::any('/employee_timesheet','Member\PayrollTimeSheetController@index');
 	Route::any('/company_timesheet/{id}','Member\PayrollTimeSheetController@company_timesheet');
+
 	Route::any('/employee_timesheet/timesheet/{id}/{period_id}','Member\PayrollTimeSheetController@timesheet');
 	Route::any('/employee_timesheet/json_process_time','Member\PayrollTimeSheetController@json_process_time');
 	Route::any('/employee_timesheet/json_process_time_single/{date}/{employee_id}','Member\PayrollTimeSheetController@json_process_time_single');
 	Route::any('/employee_timesheet/adjustment_form','Member\PayrollTimeSheetController@adjustment_form');
 	Route::post('/employee_timesheet/adjustment_form_approve','Member\PayrollTimeSheetController@adjustment_form_approve');
+
+
+	Route::post('/company_timesheet/mark_ready_company','Member\PayrollController@mark_ready_company');
 	/* TIMESHEET START */
 
 	/* DEPARTMENT START */
@@ -266,5 +270,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* PAYROLL PROCESS START */
 	Route::any('/payroll_process','Member\PayrollController@payroll_process');
 	Route::any('/payroll_process/modal_create_process','Member\PayrollController@modal_create_process');
+	Route::any('/payroll_process/ajax_load_payroll_period','Member\PayrollController@ajax_load_payroll_period');
+	Route::any('/payroll_process/ajax_payroll_company_period','Member\PayrollController@ajax_payroll_company_period');
+	Route::any('/payroll_process/process_payroll','Member\PayrollController@process_payroll');
 	/* PAYROLL PROCESS END */
 });	

@@ -16,7 +16,7 @@
         <a class="pull-right btn btn-primary" href="/member/mlm/wallet/refill">Wallet Refill Request</a>
     </div>
 </div>
-<div class="panel panel-default panel-block panel-title-block panel-gray col-md-6">
+<div class="panel panel-default panel-block panel-title-block panel-gray col-md-7">
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">
             <div class="panel-heading">
@@ -28,7 +28,7 @@
                 <div class="load-data" target="wallet_logs_paginate">
                     <div id="wallet_logs_paginate">
                         <div class="table-responsive">
-                            <table class="table table-condensed">
+                            <table class="table table-condensed table-bordered">
                                 <thead>
                                     <th>NAME</th>
                                     <th>USERNAME</th>
@@ -63,7 +63,7 @@
         </div>
     </div>
 </div>
-<div class="panel panel-default panel-block panel-title-block panel-gray col-md-6">
+<div class="panel panel-default panel-block panel-title-block panel-gray col-md-5">
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">
             <div class="panel-heading">

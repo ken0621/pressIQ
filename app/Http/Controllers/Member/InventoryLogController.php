@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Member;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
+use Request;
 use App\Http\Controllers\Controller;
-
-class MemberWarehouseController extends Controller
+use Session;
+use App\Models\Tbl_inventory_slip;
+class InventoryLogController extends Member
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +15,11 @@ class MemberWarehouseController extends Controller
      */
     public function index()
     {
-        //
+        $warehouse_id = Session::get("warehouse_id");
+        $data["_slip"] = Tbl_inventory_slip::where("warehouse_id",$warehouse_id)->where("inventory_slip_shop_id",$this->user_info->shop_id)->orderBy("inventory_slip_date","DESC")->get();
+        // dd($data["_slip"]);
+        return view("member.warehouse.inventory_log.general_inventory_log",$data);
+
     }
 
     /**

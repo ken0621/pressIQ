@@ -5,7 +5,7 @@
 </div>
 <br>
 <div class="text-center">
-	<h3>STOCK INPUT</h3>
+	<h3>{{$report_title}}</h3>
 </div>
 
 <div class="form-group">

@@ -249,25 +249,25 @@ class SalesReport
             {
                 if(isset($data["item"][$product->evariant_prod_id]["quantity_sold"]))
                 {
-                    $data["item"][$product->evariant_prod_id]["quantity_sold"] = $data["item"][$product->evariant_prod_id]["quantity_sold"] + Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
-                    $data["item"][$product->evariant_prod_id]["gross_sales"]   = $data["item"][$product->evariant_prod_id]["gross_sales"] + Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
-                    $data["item"][$product->evariant_prod_id]["discount"]      = $data["item"][$product->evariant_prod_id]["discount"] + Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
+                    $data["item"][$product->evariant_prod_id]["quantity_sold"] = $data["item"][$product->evariant_prod_id]["quantity_sold"] + Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
+                    $data["item"][$product->evariant_prod_id]["gross_sales"]   = $data["item"][$product->evariant_prod_id]["gross_sales"] + Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
+                    $data["item"][$product->evariant_prod_id]["discount"]      = $data["item"][$product->evariant_prod_id]["discount"] + Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
                     $data["item"][$product->evariant_prod_id]["refund"]        = $data["item"][$product->evariant_prod_id]["refund"] + 0;
-                    $data["item"][$product->evariant_prod_id]["net_sales"]     = $data["item"][$product->evariant_prod_id]["net_sales"] + Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
-                    $data["item"][$product->evariant_prod_id]["tax"]           = $data["item"][$product->evariant_prod_id]["tax"] + Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.tax");
-                    $data["item"][$product->evariant_prod_id]["total"]         = $data["item"][$product->evariant_prod_id]["total"] + Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.total");
+                    $data["item"][$product->evariant_prod_id]["net_sales"]     = $data["item"][$product->evariant_prod_id]["net_sales"] + Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
+                    $data["item"][$product->evariant_prod_id]["tax"]           = $data["item"][$product->evariant_prod_id]["tax"] + Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.tax");
+                    $data["item"][$product->evariant_prod_id]["total"]         = $data["item"][$product->evariant_prod_id]["total"] + Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.total");
                 }
                 else
                 {
                     $data["item"][$product->evariant_prod_id]["info"]          = $product;
-                    $data["item"][$product->evariant_prod_id]["quantity_sold"] = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
+                    $data["item"][$product->evariant_prod_id]["quantity_sold"] = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
                     $data["item"][$product->evariant_prod_id]["category_name"] = Tbl_category::where("type_id",$product->eprod_category_id)->first()->type_name;
-                    $data["item"][$product->evariant_prod_id]["gross_sales"]   = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
-                    $data["item"][$product->evariant_prod_id]["discount"]      = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
+                    $data["item"][$product->evariant_prod_id]["gross_sales"]   = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
+                    $data["item"][$product->evariant_prod_id]["discount"]      = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
                     $data["item"][$product->evariant_prod_id]["refund"]        = 0;
-                    $data["item"][$product->evariant_prod_id]["net_sales"]     = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
-                    $data["item"][$product->evariant_prod_id]["tax"]           = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.tax");
-                    $data["item"][$product->evariant_prod_id]["total"]         = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.total");                
+                    $data["item"][$product->evariant_prod_id]["net_sales"]     = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
+                    $data["item"][$product->evariant_prod_id]["tax"]           = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.tax");
+                    $data["item"][$product->evariant_prod_id]["total"]         = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.total");                
                 }
             }
 
@@ -359,14 +359,14 @@ class SalesReport
 
                 $name                                 = $product->variant_name ? $product["variant_name"] : '--None--';
                 $data["item"][$ctr]["variant_name"]   = $name;
-                $data["item"][$ctr]["quantity_sold"]  = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
+                $data["item"][$ctr]["quantity_sold"]  = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
                 $data["item"][$ctr]["category_name"]  = $product->eprod_name;
-                $data["item"][$ctr]["gross_sales"]    = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
-                $data["item"][$ctr]["discount"]       = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
+                $data["item"][$ctr]["gross_sales"]    = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
+                $data["item"][$ctr]["discount"]       = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
                 $data["item"][$ctr]["refund"]         = 0;
-                $data["item"][$ctr]["net_sales"]      = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
-                $data["item"][$ctr]["tax"]            = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.tax");
-                $data["item"][$ctr]["total"]          = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.total");                
+                $data["item"][$ctr]["net_sales"]      = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
+                $data["item"][$ctr]["tax"]            = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.tax");
+                $data["item"][$ctr]["total"]          = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.total");                
                 $ctr++;
             }
 
@@ -396,25 +396,25 @@ class SalesReport
         {
             if(isset($data["item"][$product->evariant_prod_id]["quantity_sold"]))
             {
-                $data["item"][$product->evariant_prod_id]["quantity_sold"] = $data["item"][$product->evariant_prod_id]["quantity_sold"] + Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
-                $data["item"][$product->evariant_prod_id]["gross_sales"]   = $data["item"][$product->evariant_prod_id]["gross_sales"] + Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
-                $data["item"][$product->evariant_prod_id]["discount"]      = $data["item"][$product->evariant_prod_id]["discount"] + Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
+                $data["item"][$product->evariant_prod_id]["quantity_sold"] = $data["item"][$product->evariant_prod_id]["quantity_sold"] + Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
+                $data["item"][$product->evariant_prod_id]["gross_sales"]   = $data["item"][$product->evariant_prod_id]["gross_sales"] + Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
+                $data["item"][$product->evariant_prod_id]["discount"]      = $data["item"][$product->evariant_prod_id]["discount"] + Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
                 $data["item"][$product->evariant_prod_id]["refund"]        = $data["item"][$product->evariant_prod_id]["refund"] + 0;
-                $data["item"][$product->evariant_prod_id]["net_sales"]     = $data["item"][$product->evariant_prod_id]["net_sales"] + Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
-                $data["item"][$product->evariant_prod_id]["tax"]           = $data["item"][$product->evariant_prod_id]["tax"] + Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.tax");
-                $data["item"][$product->evariant_prod_id]["total"]         = $data["item"][$product->evariant_prod_id]["total"] + Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.total");
+                $data["item"][$product->evariant_prod_id]["net_sales"]     = $data["item"][$product->evariant_prod_id]["net_sales"] + Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
+                $data["item"][$product->evariant_prod_id]["tax"]           = $data["item"][$product->evariant_prod_id]["tax"] + Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.tax");
+                $data["item"][$product->evariant_prod_id]["total"]         = $data["item"][$product->evariant_prod_id]["total"] + Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.total");
             }
             else
             {
                 $data["item"][$product->evariant_prod_id]["info"]          = $product;
-                $data["item"][$product->evariant_prod_id]["quantity_sold"] = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
+                $data["item"][$product->evariant_prod_id]["quantity_sold"] = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
                 $data["item"][$product->evariant_prod_id]["category_name"] = Tbl_category::where("type_id",$product->eprod_category_id)->first()->type_name;
-                $data["item"][$product->evariant_prod_id]["gross_sales"]   = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
-                $data["item"][$product->evariant_prod_id]["discount"]      = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
+                $data["item"][$product->evariant_prod_id]["gross_sales"]   = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
+                $data["item"][$product->evariant_prod_id]["discount"]      = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
                 $data["item"][$product->evariant_prod_id]["refund"]        = 0;
-                $data["item"][$product->evariant_prod_id]["net_sales"]     = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
-                $data["item"][$product->evariant_prod_id]["tax"]           = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.tax");
-                $data["item"][$product->evariant_prod_id]["total"]         = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.total");                
+                $data["item"][$product->evariant_prod_id]["net_sales"]     = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
+                $data["item"][$product->evariant_prod_id]["tax"]           = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.tax");
+                $data["item"][$product->evariant_prod_id]["total"]         = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.total");                
             }
         }
 
@@ -508,14 +508,14 @@ class SalesReport
 
             $name = $product->variant_name ? $product["variant_name"] : '--None--';
             $data["item"][$ctr]["variant_name"]   = $name;
-            $data["item"][$ctr]["quantity_sold"]  = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
+            $data["item"][$ctr]["quantity_sold"]  = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
             $data["item"][$ctr]["category_name"]  = $product->eprod_name;
-            $data["item"][$ctr]["gross_sales"]    = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
-            $data["item"][$ctr]["discount"]       = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
+            $data["item"][$ctr]["gross_sales"]    = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
+            $data["item"][$ctr]["discount"]       = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
             $data["item"][$ctr]["refund"]         = 0;
-            $data["item"][$ctr]["net_sales"]      = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
-            $data["item"][$ctr]["tax"]            = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.tax");
-            $data["item"][$ctr]["total"]          = Tbl_ec_order_item::ecorder(['Complete'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.total");                
+            $data["item"][$ctr]["net_sales"]      = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
+            $data["item"][$ctr]["tax"]            = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.tax");
+            $data["item"][$ctr]["total"]          = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.total");                
             $ctr++;
         }
 

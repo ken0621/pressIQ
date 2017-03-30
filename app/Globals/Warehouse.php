@@ -42,13 +42,13 @@ class Warehouse
     public static function inventory_input_report($inventory_slip_id)
     {
         $return["slip"] = Tbl_inventory_slip::shop()->warehouse()->where("inventory_slip_shop_id",Warehouse::getShopId())
-                                                ->where("tbl_user.user_id",Warehouse::getUserid())
+                                                ->user()
                                                 ->where("inventory_slip_id",$inventory_slip_id)
                                                 ->first();
         if($return["slip"]->inventroy_source_reason == "vendor")
         {
             $return["slip"] = Tbl_inventory_slip::shop()->vendor()->warehouse()->where("inventory_slip_shop_id",Warehouse::getShopId())
-                                                ->where("tbl_user.user_id",Warehouse::getUserid())
+                                                ->user()
                                                 ->where("inventory_slip_id",$inventory_slip_id)
                                                 ->first();
         }
@@ -138,6 +138,7 @@ class Warehouse
         $insert_slip_source['inventory_slip_status']        = 'transfer';
         $insert_slip_source['inventroy_source_reason']      = 'warehouse';
         $insert_slip_source['inventory_slip_consume_refill']= 'consume';
+        $insert_slip_source['slip_user_id']= Warehouse::getUserid();
 
         $inventory_slip_id_source = Tbl_inventory_slip::insertGetId($insert_slip_source);
 
@@ -151,6 +152,7 @@ class Warehouse
         $insert_slip_destination['inventroy_source_reason']      = 'warehouse';
         $insert_slip_destination['inventory_source_id']          = $source_id;
         $insert_slip_destination['inventory_slip_consume_refill']= 'refill';
+        $insert_slip_destination['slip_user_id']= Warehouse::getUserid();
 
         $inventory_slip_id_destination = Tbl_inventory_slip::insertGetId($insert_slip_destination);
 
@@ -290,6 +292,7 @@ class Warehouse
         $insert_slip['inventroy_source_reason']      = $reason_refill;
         $insert_slip['inventory_source_id']          = $refill_source;
         $insert_slip['inventory_slip_consume_refill']= 'adjust';
+        $insert_slip['slip_user_id']= Warehouse::getUserid();
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
@@ -371,6 +374,7 @@ class Warehouse
         $insert_slip['inventroy_source_reason']      = $reason_refill;
         $insert_slip['inventory_source_id']          = $refill_source;
         $insert_slip['inventory_slip_consume_refill']= 'refill';
+        $insert_slip['slip_user_id']= Warehouse::getUserid();
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
@@ -454,6 +458,7 @@ class Warehouse
         $insert_slip['inventory_slip_consume_refill'] = 'consume';
         $insert_slip['inventory_slip_consumer_id']    =  $consumer_id;
         $insert_slip['inventory_slip_consume_cause']  =  $consume_cause;
+        $insert_slip['slip_user_id']= Warehouse::getUserid();
 
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);

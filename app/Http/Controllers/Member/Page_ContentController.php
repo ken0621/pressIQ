@@ -168,7 +168,7 @@ class Page_ContentController extends Member
         $field = Request::input("field");
         $key   = Request::input("key");
 
-        if ($field && $key) 
+        if (isset($field) && isset($key)) 
         {
             $data["field"] = $field;
             $data["key"]   = $key;
@@ -198,7 +198,7 @@ class Page_ContentController extends Member
         $field = unserialize(Request::input("field"));
         $key   = Request::input("key");
 
-        if ($field && $key) 
+        if (isset($field) && isset($key)) 
         {
             $data["field"] = $field;
             $data["key"]   = $key;
@@ -207,11 +207,62 @@ class Page_ContentController extends Member
         }
     }
 
+    public function getEditMaintenance()
+    {
+        $key   = Request::input("key");
+        $id    = Request::input("id");
+        $field = unserialize(Request::input("field"));
+
+        if (isset($key) && isset($id) && isset($field)) 
+        {
+            $content = Tbl_content::where('key', $key)->first();
+
+            $data["edit"]  = unserialize($content->value)[$id];
+            $data["field"] = $field;
+            $data["key"]   = $key;
+            $data["id"]    = $id;
+
+            return view("member.page.page_maintenance_edit", $data);
+        }
+    }
+
     public function postSubmitMaintenance($id)
     {
-        if ($id > 0) 
+        if ($id > -1) 
         {
             // Edit
+            $all = Request::except("_token");
+            $key = Request::input('key');
+            $exist = Tbl_content::where('key', $key)->first();
+            if ($exist) 
+            {
+                $content_id = $exist->content_id;
+                $get_content = $exist->value;
+
+                if (is_serialized($get_content)) 
+                {
+                    $get_content = unserialize($get_content);
+                }
+                else
+                {
+                    $get_content = [];
+                }
+
+                $get_content[$id] = $all;
+
+                $get_content = serialize($get_content);
+                Tbl_content::where('content_id', $content_id)->update(["value" => $get_content]);
+            }
+            else
+            {
+                $content_id = Tbl_content::insertGetId(["key" => $key, "value" => $all]);
+            }
+            
+            $response["result"] = Tbl_content::where('content_id', $content_id)->first();
+            $response["response_status"] = "success";
+            $response["key"] = $key;
+
+            return json_encode($response);
         }
         else
         {
@@ -244,10 +295,37 @@ class Page_ContentController extends Member
             
             $response["result"] = Tbl_content::where('content_id', $content_id)->first();
             $response["response_status"] = "success";
-            $response["from"] = "add";
             $response["key"] = $key;
 
             return json_encode($response);
         }
+    }
+
+    public function getDeleteMaintenance()
+    {
+        return view("member.page.page_maintenance_delete");
+    }
+
+    public function postDeleteMaintenance()
+    {
+        $id    = Request::input("id");
+        $key   = Request::input('key');
+        $exist = Tbl_content::where('key', $key)->first();
+        if ($exist) 
+        {
+            $content_id = $exist->content_id;
+            $get_content = unserialize($exist->value);
+       
+            unset($get_content[$id]);
+
+            $get_content = serialize($get_content);
+            Tbl_content::where('content_id', $content_id)->update(["value" => $get_content]);
+        }
+        
+        $response["result"] = Tbl_content::where('content_id', $content_id)->first();
+        $response["response_status"] = "success";
+        $response["key"] = $key;
+
+        return json_encode($response);
     }
 }

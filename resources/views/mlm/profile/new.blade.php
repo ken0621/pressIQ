@@ -17,7 +17,7 @@
     </div>
   </div>
 </div> 
-@if(isset($card))
+@if(isset($cards))
 <div class="row">
   <div class="col-md-12">
     <div class="box box-primary">

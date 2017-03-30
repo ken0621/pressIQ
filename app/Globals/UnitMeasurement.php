@@ -47,6 +47,20 @@ class UnitMeasurement
         }
         return $return_qty;
     }
+    public static function um_convert($qty, $um_base_id = "")
+    {
+        $um_base = Tbl_unit_measurement_multi::where("multi_um_id",$um_base_id)->where("is_base",1)->first();
+        if($um_base != null)
+        {
+            $return = $qty." ".$um_base->multi_abbrev;
+        }
+        else
+        {
+            $return = $qty." PC";
+        }
+
+        return $return;
+    }
     public static function um_view($qty, $um_base_id = "", $um_issued_id = "")
     {
         // if($um_issued_id == "")
@@ -56,10 +70,9 @@ class UnitMeasurement
         
         $um_issued = Tbl_unit_measurement_multi::where("multi_id",$um_issued_id)->first();
         $um_base = Tbl_unit_measurement_multi::where("multi_um_id",$um_base_id)->where("is_base",1)->first();
-        // dd($um_base_id." ".$um_issued_id);
         if($um_base_id == $um_issued_id)
         {
-            if($um_issued != null || $um_base != null)
+            if($um_base != null || $um_issued != null)
             {
                 $return = $qty." ".$um_base->multi_abbrev;
             }

@@ -9,6 +9,7 @@ use Request;
 use Session;
 use Excel;
 use DB;
+use File;
 
 use App\Models\Tbl_payroll_employee_basic;
 use App\Models\Tbl_payroll_time_sheet;
@@ -136,6 +137,11 @@ class Payroll_BioImportController extends Member
 		if($biometric == 'Digital Persona')
 		{
 			return Self::import_Digital_Persona($file);
+		}
+
+		if($biometric == 'C7')
+		{
+			return Self::import_c7($file);
 		}
 	}
 
@@ -296,6 +302,19 @@ class Payroll_BioImportController extends Member
     	return $message;
     }	
 
+
+    public function import_c7($file)
+    {
+
+		$_test = file($file, FILE_IGNORE_NEW_LINES);
+		foreach($_test as $key => $test)
+		{
+			$extest = preg_split("/[\t]/", $test);
+			// dd($extest);
+		}
+
+    }
+
     /* TEMPLATE START */
     public function template_global()
     {
@@ -334,7 +353,7 @@ class Payroll_BioImportController extends Member
     {
     	$excels['data'][0] = ['Name','Id No', 'Date','Time In','Time Out'];
         $excels['data'][1] = ['','', '','',''];
-        // dd($excels);
+
         return Excel::create('Timesheet Template (Digital Persona)', function($excel) use ($excels) {
 
             $data = $excels['data'];

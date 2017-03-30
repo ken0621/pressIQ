@@ -207,7 +207,7 @@ class CollectionController extends Member
             Tbl_collection_item::where("collection_id",$id)->delete();
             foreach ($collection_item_id as $key => $value) 
             {
-                if($value != null)
+                if($value != "")
                 {                    
                     $ctr = Tbl_collection_item::where("collection_id",$id)->where("ec_product_id",$value)->count();
                     if($ctr == 0)

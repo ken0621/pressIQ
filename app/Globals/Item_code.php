@@ -494,7 +494,7 @@ class Item_code
                             }
                         }
         	            /* FORGET ALL SESSION FOR PURCHASED ITEM */
-        	            Session::forget("sell_codes_session");
+        	            Session::forget("sell_item_codes_session");
                         $send["response_status"] = "success_process";    
                         $send['invoice_id'] = $invoice_id;
 

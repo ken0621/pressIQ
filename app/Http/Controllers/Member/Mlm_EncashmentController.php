@@ -90,7 +90,7 @@ class Mlm_EncashmentController extends Member
             ->slot()->customer()
             ->where('tbl_mlm_slot.shop_id', $shop_id);
             $request = Request::input('request');
-            $slot = Request::input('slot');
+            $slot = Request::input('slots');
             $customer = Request::input('customer');
             if($request != null)
             {

@@ -70,7 +70,8 @@ class MLM_ProductCodeController extends Member
         $shop_id            = $this->user_info->shop_id;
 	    $data['_item']  = Item::get_all_category_item();
 	    $data["_customer"]  = Tbl_customer::where("archived",0)->where("shop_id",$shop_id)->get();
-	    $data['table_body'] = $this->view_all_lines();
+	    // $data['table_body'] = $this->view_all_lines();
+        $data['table_body'] = $this->view_all_lines();
         $data['warehouse'][0] = $this->current_warehouse;
         // dd($data);
         return view('member.mlm_product_code.mlm_product_code_sell', $data);
@@ -122,6 +123,7 @@ class MLM_ProductCodeController extends Member
     {
         $data['item_list'] = Item::view_item_dropdown($this->user_info->shop_id);
 
+        $data['_item']  = Item::get_all_category_item();
 
         if(Request::input('slot_id') != null)
         {
@@ -275,6 +277,7 @@ class MLM_ProductCodeController extends Member
                 $data    = Item_code::add_code(Request::input(),$shop_id);
                 if($data["response_status"] == "success")
                 {
+                    Session::forget("sell_codes_session");
                     return json_encode($data);
                     Session::flash('success', "Successfully purchased a product/s");
                     return redirect('/member/mlm/product_code/receipt?invoice_id='. $data['invoice_id'])->send();

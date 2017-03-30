@@ -14,34 +14,59 @@
                     </small>
                 </h1>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right save-and-edit" method="post">Save</button>
-                <button type="submit" class="panel-buttons btn btn-custom-white pull-right save-and-new" method="post">Save And New</button>
                 <a href="/member/ecommerce/product/list" class="panel-buttons btn btn-default pull-right">Cancel</a>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
+
+            <div class="search-filter-box">
+
+                <div class="col-md-4 col-md-offset-8" style="padding: 10px">
+                    <div class="input-group">
+                        <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                        <input type="text" class="form-control global-search" url="/member/ecommerce/product/bulk-edit-price" placeholder="Search (Press Enter)" aria-describedby="basic-addon1">
+                    </div>
+                </div>
+            </div>
             <!-- FORM.TITLE -->
             <div class="form-box-divider">
-                <div class="row clearfix">
-                    <div class="table-responsive">
+                <div class="row clearfix load-data" target="product-list">
+                    <div class="table-responsive data-content" id="product-list">
                         <table class="table table-bordered table-condensed table-striped">
                             <thead>
                                 <tr>
-                                    <th>Product Name</th>
-                                    <th>Current Price</th>
-                                    <th>New Price</th>
+                                    <th class="text-center">Product Name</th>
+                                    <th class="text-center">Current Price</th>
+                                    <th class="text-center">New Price</th>
+                                    <th class="text-center">Current Promo Price</th>
+                                    <th class="text-center">New Promo Price</th>
+                                    <th class="text-center">Start Date</th>
+                                    <th class="text-center">End Date</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($_product as $product)
                                 <tr>
-                                    <td>{{$product['eprod_name']}}</td>
+                                    <td>{{$product['product_new_name']}}</td>
                                     <td>{{currency('',$product['evariant_price'])}}</td>
                                     <td>
-                                        <input type="hidden" name="evariant_id" value="{{$product['evariant_id']}}">
-                                        <input type="text" class="form-control input-sm" name="evariant_new_price">
+                                        <input type="hidden" name="evariant_id[]" value="{{$product['evariant_id']}}">
+                                        <input type="text" class="form-control input-sm money-format" name="evariant_new_price[]">
                                     </td>
+                                    <td>
+                                        @if($product['item_discount_value'] != null)
+                                            {{currency('',$product['item_discount_value'])}}
+                                            </br>
+                                            ({{dateFormat($product['item_discount_date_start'])}}-{{dateFormat($product['item_discount_date_end'])}})
+                                        @else
+                                            None
+                                        @endif
+                                    </td>
+                                    <td><input type="text" class="form-control input-sm money-format" name="item_promo_price[]" placeholder="Put 0 to remove"></td>
+                                    <td><input type="text" class="form-control input-sm datepicker" name="item_start_date[]" placeholder="promo start date"></td>
+                                    <td><input type="text" class="form-control input-sm datepicker" name="item_end_date[]" placeholder="promo end date"></td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -53,7 +78,6 @@
         </div>
     </div>
 </form>
-
 @endsection
 
 @section('css')
@@ -67,17 +91,16 @@
         toastr.success('{{Session::get('success')}}');
     @endif
 
-    function formatMoney($this)
+    function submit_done(data)
     {
-        var n = formatFloat($this), 
-        c = isNaN(c = Math.abs(c)) ? 2 : c, 
-        d = d == undefined ? "." : d, 
-        t = t == undefined ? "," : t, 
-        s = n < 0 ? "-" : "", 
-        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
-        j = (j = i.length) > 3 ? j % 3 : 0;
-       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        if(data.status == "success")
+        {
+            $('.load-data').load("/member/ecommerce/product/bulk-edit-price .data-content", function()
+            {
+                toastr.success(data.message);
+                $(".datepicker").datepicker();
+            })
+        }
     }
-
 </script>
 @endsection

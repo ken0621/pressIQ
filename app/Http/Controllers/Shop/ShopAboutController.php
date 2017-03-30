@@ -9,7 +9,6 @@ class ShopAboutController extends Shop
 {
     public function index()
     {
-
         $data["page"] = "About";
         return view("about", $data);
     }

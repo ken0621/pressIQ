@@ -20,6 +20,12 @@ use App\Models\Tbl_payroll_employee_contract;
 use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_tax_period_default;
+use App\Models\Tbl_payroll_company;
+use App\Models\Tbl_payroll_holiday;
+use App\Models\Tbl_payroll_holiday_company;
+use App\Models\Tbl_payroll_period_company;
+use App\Models\Tbl_payroll_overtime_rate;
+use App\Models\Tbl_payroll_employee_salary;
 
 use Carbon\Carbon;
 use stdClass;
@@ -38,8 +44,11 @@ class Payroll
 
 			foreach($_tax as $key => $tax)
 			{
+
+				$payroll_tax_status_id = Tbl_payroll_tax_period::getperiod($shop_id,$tax->payroll_tax_status_id)->pluck('payroll_tax_period_id');
+
 				$insert[$key]['shop_id'] 				= $shop_id;
-				$insert[$key]['payroll_tax_status_id'] 	= $tax->payroll_tax_status_id;
+				$insert[$key]['payroll_tax_status_id'] 	= $payroll_tax_status_id;
 				$insert[$key]['tax_category'] 			= $tax->tax_category;
 				$insert[$key]['tax_first_range'] 		= $tax->tax_first_range;
 				$insert[$key]['tax_second_range'] 		= $tax->tax_second_range;
@@ -62,7 +71,7 @@ class Payroll
 	public static function tax_break($shop_id = 0)
 	{
 		$data = array();
-		$_period = Tbl_payroll_tax_period::get();
+		$_period = Tbl_payroll_tax_period::check($shop_id)->get();
 		$count = 1;
 		foreach($_period as $key => $period)
 		{
@@ -89,10 +98,12 @@ class Payroll
 		foreach($_default as $default)
 		{
 			$count = Tbl_payroll_tax_period::where('shop_id', $shop_id)->where('payroll_tax_period',$default->payroll_tax_period)->count();
+
 			if($count == 0)
 			{
 				$temp['payroll_tax_period'] = $default->payroll_tax_period;
 				$temp['shop_id']			= $shop_id;
+				array_push($insert, $temp);
 			}
 		}
 		if(!empty($insert))
@@ -173,6 +184,23 @@ class Payroll
 		}
 	}
 
+	/* GET HEIRARCHICAL COMPANY */
+	public static function company_heirarchy($shop_id = 0)
+	{
+		$data = array();
+		$_parent = Tbl_payroll_company::selcompany($shop_id)->where('payroll_parent_company_id',0)->orderBy('payroll_company_name')->get();
+
+		foreach($_parent as $parent)
+		{
+			$temp['company'] = $parent;
+			$temp['branch'] = Tbl_payroll_company::selcompany($shop_id)->where('payroll_parent_company_id', $parent->payroll_company_id)->orderBy('payroll_company_name')->get();
+			array_push($data, $temp);
+		}
+
+		return $data;
+
+	}
+
 
 	/* TABLE FOR EMPLOYEE SEARCH INSERT OR UPDATE */
 	public static function generate_emplyoee_search($employee_id = 0)
@@ -219,7 +247,7 @@ class Payroll
 
 
 		$_deduction = Tbl_payroll_deduction_employee::selbyemployee($deduction_id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
-		// dd($_deduction);
+
 		$data['active'] = array();
 		$data['zero']	= array();
 		$data['cancel']	= array();
@@ -371,11 +399,19 @@ class Payroll
 		}
 	}
 
+
+
 	/* Returns normal hours rendered and overtime (Guillermo Tabligan) */
 	public static function process_time($employee_id, $date)
 	{
 		$data["time_sheet_info"] = $time_sheet_info = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
 		$data["employee_information"] = $employee_information = Tbl_payroll_employee_contract::selemployee($employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
+
+		/* GET HOLIDAY PER COMPANY */
+		$payroll_company_id = Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_company_id');
+
+		$data['holiday']	= Tbl_payroll_holiday_company::getholiday($payroll_company_id, $date)->select('tbl_payroll_holiday.*')->first();
+
 		/* EMPLOYEE COMPUTATION SETTINGS */
 		if($employee_information->payroll_group_is_flexi_time == 1)
 		{
@@ -483,34 +519,34 @@ class Payroll
 
 	public static function process_time_regulartime($data)
 	{
-		$time_rule = $data["time_rule"];
-		$default_time_in = $data["default_time_in"];
-		$default_time_out = $data["default_time_out"];
-		$_time_record = $data["_time_record"];
-		$default_working_hours = $data["default_working_hours"];
-		$late_grace_time = $data["employee_information"]->payroll_group_grace_time * 60;
-		$compute_approved = $data["compute_approved"];
-
+		$time_rule 				= $data["time_rule"];
+		$default_time_in 		= $data["default_time_in"];
+		$default_time_out 		= $data["default_time_out"];
+		$_time_record 			= $data["_time_record"];
+		$default_working_hours 	= $data["default_working_hours"];
+		$late_grace_time 		= $data["employee_information"]->payroll_group_grace_time * 60;
+		$compute_approved 		= $data["compute_approved"];
+		$holiday 				= $data['holiday'];
 
 		$return = new stdClass();
 		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
 
-		$total_time_spent = 0;
-		$total_early_overtime = 0;
-		$total_late_overtime = 0;
-		$total_regular_hours = 0;
-		$total_late_hours = 0;
-		$total_hours = 0;
-		$total_night_differential = 0;
-		$earliest_time_in = 86340;
-		$latest_time_out = 0;
-		$special_holiday_hours = 0;
-		$regular_holiday_hours = 0;
-		$break = 0;
-		$total_under_time = 0;
+		$total_time_spent 			= 0;
+		$total_early_overtime 		= 0;
+		$total_late_overtime 		= 0;
+		$total_regular_hours 		= 0;
+		$total_late_hours 			= 0;
+		$total_hours 				= 0;
+		$total_night_differential 	= 0;
+		$earliest_time_in 			= 86340;
+		$latest_time_out 			= 0;
+		$special_holiday_hours 		= 0;
+		$regular_holiday_hours 		= 0;
+		$break 						= 0;
+		$total_under_time 			= 0;
 
-		$default_time_in = c_time_to_int($default_time_in);
-		$default_time_out = c_time_to_int($default_time_out);
+		$default_time_in 	= c_time_to_int($default_time_in);
+		$default_time_out 	= c_time_to_int($default_time_out);
 		$time_rec = null;
 
 
@@ -706,6 +742,7 @@ class Payroll
 			if($total_late_hours <= $late_grace_time)
 			{
 				$total_late_hours = 0;
+
 			}
 		}
 		else
@@ -742,24 +779,362 @@ class Payroll
 				{
 					$total_extra_day_hours = $total_hours;
 				}
+				$total_regular_hours = 0;
+			}
+		}
+
+		if($holiday != null || !empty($holiday))
+		{
+			$total_regular_hours = 0;
+			if($holiday->payroll_holiday_category == 'Regular')
+			{
+				$regular_holiday_hours = $total_hours;
+			}
+			else
+			{
+				$special_holiday_hours = $total_hours;
 			}
 		}
 
 
-		$return->time_spent = convert_seconds_to_hours_minutes("H:i", $total_time_spent);
-		$return->regular_hours = convert_seconds_to_hours_minutes("H:i", $total_regular_hours);
-		$return->late_overtime = convert_seconds_to_hours_minutes("H:i", $total_late_overtime);
-		$return->early_overtime = convert_seconds_to_hours_minutes("H:i", $total_early_overtime);
-		$return->late_hours = convert_seconds_to_hours_minutes("H:i", $total_late_hours);
-		$return->under_time = convert_seconds_to_hours_minutes("H:i", $total_under_time);
-		$return->rest_day_hours = convert_seconds_to_hours_minutes("H:i", $total_rest_day_hours);
-		$return->extra_day_hours = convert_seconds_to_hours_minutes("H:i", $total_extra_day_hours);
-		$return->total_hours = convert_seconds_to_hours_minutes("H:i", $total_hours);
+		$return->time_spent 		= convert_seconds_to_hours_minutes("H:i", $total_time_spent);
+		$return->regular_hours 		= convert_seconds_to_hours_minutes("H:i", $total_regular_hours);
+		$return->late_overtime 		= convert_seconds_to_hours_minutes("H:i", $total_late_overtime);
+		$return->early_overtime 	= convert_seconds_to_hours_minutes("H:i", $total_early_overtime);
+		$return->late_hours 		= convert_seconds_to_hours_minutes("H:i", $total_late_hours);
+		$return->under_time 		= convert_seconds_to_hours_minutes("H:i", $total_under_time);
+		$return->rest_day_hours 	= convert_seconds_to_hours_minutes("H:i", $total_rest_day_hours);
+		$return->extra_day_hours 	= convert_seconds_to_hours_minutes("H:i", $total_extra_day_hours);
+		$return->total_hours 		= convert_seconds_to_hours_minutes("H:i", $total_hours);
 		$return->night_differential = convert_seconds_to_hours_minutes("H:i", $total_night_differential);
 		$return->special_holiday_hours = convert_seconds_to_hours_minutes("H:i", $special_holiday_hours);
 		$return->regular_holiday_hours = convert_seconds_to_hours_minutes("H:i", $regular_holiday_hours);
-		$return->break = convert_seconds_to_hours_minutes("H:i", $break);
-		$return->time_record = $time_rec;
+		$return->break 				= convert_seconds_to_hours_minutes("H:i", $break);
+		$return->time_record 		= $time_rec;
+
 		return $return;
 	}
+
+	public static function sum_time($time_1 = '00:00', $time_2 = '00:00')
+	{
+		$extime1 = explode(':', $time_1);
+		$extime2 = explode(':', $time_2);
+
+		$hour = $extime1[0] + $extime2[0];
+		$min = 0;
+		if(isset($extime1[1]) && isset($extime2[1]))
+		{
+			$min = $extime1[1] + $extime2[1];
+		}
+
+		return Payroll::return_time($hour, $min);
+	}
+
+	public static function return_time($hour = 0, $min = 0)
+	{
+
+		if($min >= 60)
+		{	
+			$min = $min - 60;
+			$hour++;
+		}
+
+		if($min <= 9)
+		{
+			$min = '0'.$min;
+		}
+		if($hour <= 9)
+		{
+			$hour = '0'.$hour;
+		}
+
+		return $hour.':'.$min;
+	}
+
+	public static function if_zero_time($time = '00:00')
+	{
+		if($time == '00:00')
+		{
+			$time = '--:--';
+		}
+		return $time;
+	}
+
+	public static function if_zero($value = 0)
+	{
+		if($value <= 0)
+		{
+			$value = '--';
+		}
+		else
+		{
+			$value = number_format($value,2);
+		}
+		return $value;
+	}
+
+	public static function time_float($time = '00:00')
+	{
+		$extime = explode(':', $time);
+		$hour = $extime[0];
+		$min = $extime[1] / 60;
+		return $hour + $min;
+	}
+
+	public static function process_compute($shop_id = 0, $status = 'processed')
+	{
+		$_period = Tbl_payroll_period_company::period($shop_id, $status)
+                                                       ->orderBy('.tbl_payroll_period.payroll_period_category')
+                                                       ->orderBy('tbl_payroll_period.payroll_period_start')
+                                                       ->get();
+        foreach($_period as $period)
+        {
+        	$payroll_period_category = $period->payroll_period_category;
+        	$payroll_company_id = $period->payroll_company_id;
+
+        	$_employee = Tbl_payroll_employee_contract::employeefilter($payroll_company_id, 0, 0, date('Y-m-d'), $shop_id)
+							->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
+							->where('tbl_payroll_group.payroll_group_period', $payroll_period_category)
+							->get();
+			$start 	= $period->payroll_period_start;
+			$end 	= $period->payroll_period_end;
+			foreach($_employee as $employee)
+			{
+				$ddata = Payroll::compute_per_employee($employee->payroll_employee_id, $start, $end);
+			}	
+        }
+	}
+
+
+	public static function compute_per_employee($employee_id, $start = '0000-00-00', $end = '0000-00-00')
+	{
+
+		$salary_taxabl 		= 0;
+		$salary_sss 		= 0;
+		$salary_pagibig 	= 0;
+		$salary_philhealth 	= 0;
+
+		$regular_salary 	= 0;
+		$regular_overtime 	= 0;
+		$regular_night_diff = 0;
+
+		$rest_day_salary 		= 0;
+		$rest_day_overtime 		= 0;
+		$rest_day_night_diff 	= 0;
+
+		$rest_day_sh 			= 0;
+		$rest_day_sh_overtime 	= 0;
+		$rest_day_sh_night_diff = 0;
+
+		$rest_day_rh 			= 0;
+		$rest_day_rh_overtime 	= 0;
+		$rest_day_rh_night_diff = 0;
+
+		$rh_salary 		= 0;
+		$rh_overtime 	= 0;
+		$rh_night_diff 	= 0;
+
+		$sh_salary 		= 0;
+		$sh_overtime 	= 0;
+		$sh_night_diff 	= 0;
+
+		$tax_status 	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_tax_status');
+
+		while($start <= $end)
+		{
+			$date = Carbon::parse($start)->format("Y-m-d"); 
+
+			$time = Payroll::process_time($employee_id, $date);
+
+			$approved = $time->approved_timesheet;
+
+			$regular_hours 			= Payroll::time_float($approved->regular_hours);
+			$late_overtime 			= Payroll::time_float($approved->late_overtime);
+			$early_overtime 		= Payroll::time_float($approved->early_overtime);
+			$late_hours 			= Payroll::time_float($approved->late_hours);
+			$under_time 			= Payroll::time_float($approved->under_time);
+			$rest_day_hours 		= Payroll::time_float($approved->rest_day_hours);
+			$extra_day_hours 		= Payroll::time_float($approved->extra_day_hours);
+			$total_hours 			= Payroll::time_float($approved->total_hours);
+			$night_differential 	= Payroll::time_float($approved->night_differential);
+			$special_holiday_hours 	= Payroll::time_float($approved->special_holiday_hours);
+			$regular_holiday_hours 	= Payroll::time_float($approved->regular_holiday_hours);
+
+			/* EMPLOYEE SALARY */
+			$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->where('payroll_employee_salary_archived',0)->first();
+
+			$minimum_wage 		= $salary->payroll_employee_salary_minimum_wage;
+			$salary_monthly 	= $salary->payroll_employee_salary_monthly;
+			$salary_daily 		= $salary->payroll_employee_salary_daily;
+			$salary_taxable 	= $salary->payroll_employee_salary_taxable;
+			$salary_sss 		= $salary->payroll_employee_salary_sss;
+			$salary_pagibig 	= $salary->payroll_employee_salary_pagibig;
+			$salary_philhealth 	= $salary->payroll_employee_salary_philhealth;
+
+
+			$group = Tbl_payroll_employee_contract::selemployee($employee_id, $date)
+												   ->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
+												   ->select('tbl_payroll_group.*')
+												   ->first();
+
+
+			$target_hour = $group->payroll_group_target_hour;
+
+			if($group->payroll_group_is_flexi_time == 1 && $group->payroll_group_target_hour_parameter == 'Per Period')
+			{
+				$target_hour = $group->payroll_group_target_hour / $group->payroll_group_working_day_month;
+			}
+
+			/* PAYROLL OVER TIME RATES */
+			$regular_query['payroll_group_id'] 			= $group->payroll_group_id;
+			$regular_query['payroll_overtime_name'] 	= 'Regular';
+
+
+			/* REGULAR DAYS */
+			$regular_hour['regular'] 					= divide($regular_hours, $target_hour);
+			$regular_hour['late_overtime'] 				= divide($late_overtime, $target_hour);
+			$regular_hour['early_overtime'] 			= divide($early_overtime, $target_hour);
+			$regular_hour['night_differential']  		= divide($night_differential, $target_hour);
+
+			$rest_reg_hour['regular']					= divide($rest_day_hours, $target_hour);
+			$rest_reg_hour['late_overtime']				= divide($late_overtime, $target_hour);
+			$rest_reg_hour['early_overtime'] 			= divide($early_overtime, $target_hour);
+			$rest_reg_hour['night_differential']  		= divide($night_differential, $target_hour);
+
+			/* REGULAR DAY REST DAY */
+			if($rest_day_hours > 0)
+			{
+				$regular_hour['regular']				= 0;
+				$regular_hour['late_overtime'] 			= 0;
+				$regular_hour['early_overtime'] 		= 0;
+				$regular_hour['night_differential']  	= 0;
+			}
+
+			/* SPECIAL HOLIDAY */
+			$sh_hour['regular'] 			= divide($special_holiday_hours, $target_hour);
+			$sh_hour['late_overtime'] 		= divide($late_overtime, $target_hour);
+			$sh_hour['early_overtime'] 		= divide($early_overtime, $target_hour);
+			$sh_hour['night_differential']  = divide($night_differential, $target_hour);
+
+			if($special_holiday_hours > 0 || $regular_holiday_hours > 0)
+			{
+				$rest_reg_hour['regular']				= 0;
+				$rest_reg_hour['late_overtime'] 		= 0;
+				$rest_reg_hour['early_overtime'] 		= 0;
+				$rest_reg_hour['night_differential']  	= 0;
+
+				$regular_hour['regular']				= 0;
+				$regular_hour['late_overtime'] 			= 0;
+				$regular_hour['early_overtime'] 		= 0;
+				$regular_hour['night_differential']  	= 0;
+			}
+
+			/* SPECIAL HOLIDAY REST DAY */
+			$sh_rest_hour['regular'] 			= 0;
+			$sh_rest_hour['late_overtime'] 		= 0;
+			$sh_rest_hour['early_overtime'] 	= 0;
+			$sh_rest_hour['night_differential'] = 0;
+
+			if($special_holiday_hours > 0 && $rest_day_hours > 0 && $regular_holiday_hours <= 0)
+			{
+				$sh_rest_hour['regular'] 			= divide($rest_day_hours, $target_hour);
+				$sh_rest_hour['late_overtime'] 		= divide($late_overtime, $target_hour);
+				$sh_rest_hour['early_overtime'] 	= divide($early_overtime, $target_hour);
+				$sh_rest_hour['night_differential'] = divide($night_differential, $target_hour);
+
+				$sh_hour['regular'] 			= 0;
+				$sh_hour['late_overtime'] 		= 0;
+				$sh_hour['early_overtime'] 		= 0;
+				$sh_hour['night_differential']  = 0;
+			}
+
+
+			/* LEGAL HOLIDAY */
+			if($regular_holiday_hours > 0)
+			{
+				$sh_hour['regular'] 			= 0;
+				$sh_hour['late_overtime'] 		= 0;
+				$sh_hour['early_overtime'] 		= 0;
+				$sh_hour['night_differential']  = 0;
+			}
+
+			$rh_hour['regular'] 			= divide($regular_holiday_hours, $target_hour);
+			$rh_hour['late_overtime'] 		= divide($late_overtime, $target_hour);
+			$rh_hour['early_overtime'] 		= divide($early_overtime, $target_hour);
+			$rh_hour['night_differential'] 	= divide($night_differential, $target_hour);
+
+			/* LEGAL HOLIDAY REST DAY */
+			$rh_rest_hour['regular'] 			= 0;
+			$rh_rest_hour['late_overtime'] 		= 0;
+			$rh_rest_hour['early_overtime'] 	= 0;
+			$rh_rest_hour['night_differential'] = 0;
+
+			if($regular_holiday_hours > 0 && $rest_day_hours > 0 && $special_holiday_hours <= 0)
+			{
+				$rh_rest_hour['regular'] 			= divide($rest_day_hours, $target_hour);
+				$rh_rest_hour['late_overtime'] 		= divide($late_overtime, $target_hour);
+				$rh_rest_hour['early_overtime'] 	= divide($early_overtime, $target_hour);
+				$rh_rest_hour['night_differential'] = divide($night_differential, $target_hour);
+			}
+			
+			// dd($regular_hour);
+
+			$regular_day = Payroll::compute_overtime($regular_query, $regular_hour);
+
+			$legal_holiday = Tbl_payroll_overtime_rate::getrate($group->payroll_group_id, 'Legal Holiday')->first();
+
+			$special_holiday = Tbl_payroll_overtime_rate::getrate($group->payroll_group_id, 'Special Holiday')->first();
+
+			$start = Carbon::parse($start)->addDay()->format("Y-m-d");
+		}
+	}
+
+
+	public static function compute_overtime($query = array(), $hours = array(), $rate = 0, $day_type = 'Regular')
+	{
+		$param = Tbl_payroll_overtime_rate::getrate($query['payroll_group_id'], $query['payroll_overtime_name'])->first();
+	}
+	
+
+	/* GET TAX VALUE */
+	public static function tax_deduction($shop_id = 0, $rate = 0, $payroll_tax_status_id = 0, $tax_category = '')
+	{
+		$tax 		= Tbl_payroll_tax_reference::where('shop_id', $shop_id)->where('payroll_tax_status_id', $payroll_tax_status_id)->where('tax_category', $tax_category)->first();
+		
+		$exemption 	= Tbl_payroll_tax_reference::where('shop_id', $shop_id)->where('payroll_tax_status_id', $payroll_tax_status_id)->where('tax_category', 'Excemption')->first();
+
+		$status 	= Tbl_payroll_tax_reference::where('shop_id', $shop_id)->where('payroll_tax_status_id', $payroll_tax_status_id)->where('tax_category', 'Status')->first();
+
+
+	}
+
+	/* GET SSS VALUE */
+	public static function sss_deduction($shop_id = 0, $rate = 0)
+	{
+		$max_sss = Tbl_payroll_sss::where('shop_id', $shop_id)->orderBy('payroll_sss_min','desc')->first();
+		$sss = Tbl_payroll_sss::where('shop_id', $shop_id)->where('payroll_sss_min','>=',$rate)->where('payroll_sss_max','<=',$rate)->first();
+	}
+
+	/* GET PHILHEALTH VALUE */
+	public static function philhealth_deduction($shop_id = 0, $rate = 0)
+	{
+		$_philhealth_max = Tbl_payroll_philhealth::where('shop_id', $shop_id)->orderBy('payroll_philhealth_min','desc')->first();
+
+		$philhealth = Tbl_payroll_philhealth::where('shop_id', $shop_id)
+											->where('payroll_philhealth_min','>=', $rate)
+											->where('payroll_philhealth_max','<=', $rate)
+											->first();
+	}
+
+	public static function pagibig_deduction($shop_id = 0, $rate)
+	{
+		$pagibig = Tbl_payroll_pagibig::where('shop_id', $shop_id)->first();
+	}
+
+
+
+	// Tbl_payroll_tax_reference
+	// Tbl_payroll_sss
+	// Tbl_payroll_philhealth
+	// Tbl_payroll_pagibig
 }

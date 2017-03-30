@@ -510,3 +510,14 @@ function payout_getway()
     $data[1] = 'Cheque';
     return $data;
 }
+
+function divide($num1, $num2)
+{
+    $result = 0;
+    if($num1 > 0)
+    {
+       $result =  $num1 / $num2;
+    }
+
+    return $result;
+}

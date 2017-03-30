@@ -1,5 +1,54 @@
 @extends('member.layout')
 @section('content')
+<style type="text/css">
+    .info-box{
+            display: block;
+            min-height: 90px;
+            background: #fff;
+            width: 100%;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+            border-radius: 2px;
+            margin-bottom: 15px;
+    }
+    .info-box-number
+    {
+            display: block;
+            font-weight: bold;
+            font-size: 18px;
+    }
+    .info-box-icon
+    {
+            border-top-left-radius: 2px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 2px;
+            display: block;
+            float: left;
+            height: 90px;
+            width: 90px;
+            text-align: center;
+            font-size: 45px;
+            line-height: 90px;
+            background: rgba(0,0,0,0.2);
+    }
+    .bg-primary
+    {
+        background-color: #76b6ec !important;
+    }
+    .info-box-text
+    {
+        display: block;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .info-box-content
+    {
+            padding: 5px 10px;
+            margin-left: 90px;
+    }
+</style>
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -13,79 +62,65 @@
         </div>
     </div>
 </div>
+<div class="col-md-12">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-primary"><i class="fa fa-sitemap"></i></span>
 
+        <div class="info-box-content">
+          <span class="info-box-text">ACTIVE SLOTS:</span>
+          <span class="info-box-number">{{$count_all_slot_active}}</span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div> 
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-primary"><i class="fa fa-sitemap"></i></span>
+
+        <div class="info-box-content">
+          <span class="info-box-text">INACTIVE SLOTS:</span>
+          <span class="info-box-number">{{$count_all_slot_inactive}}</span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div> 
+</div>
+<div class="col-md-12">
+    <?php $total_membership_price = 0; ?>
+    @foreach($membership as $key => $value)
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-primary"><i class="fa fa-flag-checkered"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">{{$value->membership_name}}: </span>
+          <span class="info-box-number">
+            {{$membership_count[$key]}}
+            <?php $total_membership_price += $membership_price[$key];?>
+           </span>
+        </div>
+      </div>
+    </div> 
+    @endforeach
+</div>
+<div class="col-md-12">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon bg-primary"><i class="fa fa-user"></i></span>
+        <div class="info-box-content">
+          <span class="info-box-text">Registered Accounts: </span>
+          <span class="info-box-number">
+            {{$customer_account}}
+           </span>
+        </div>
+      </div>
+    </div> 
+</div>
 
 <div class="container">
     <div class="row">
-        <!-- Boxes de Acoes -->
-        <div class="col-xs-12 col-sm-6 col-lg-4">
-            <div class="box">                           
-                <div class="icon">
-                    <div class="image"><i class="fa fa-sitemap"></i></div>
-                    <div class="info">
-                        <h3 class="title">SLOTS</h3>
-                        <p>
-                           
-                        </p>
-                        <div class="more">
-                           ACTIVE SLOTS: {{$count_all_slot_active}}
-                        </div>
-                        <div class="more">
-                           INACTIVE SLOTS: {{$count_all_slot_inactive}}
-                        </div>
-                    </div>
-                </div>
-                <div class="space"></div>
-            </div> 
-        </div>
-        <div class="col-xs-12 col-sm-6 col-lg-4">
-            <div class="box">                           
-                <div class="icon">
-                    <div class="image"><i class="fa fa-flag-checkered"></i></div>
-                    <div class="info">
-                        <h3 class="title">SLOTS PER MEMBERSHIP</h3>
-                        <p>
-                           
-                        </p>
-                        <?php $total_membership_price = 0; ?>
-                        @foreach($membership as $key => $value)
-                        <div class="more">
-                           {{$value->membership_name}}: {{$membership_count[$key]}}
-                           <?php $total_membership_price += $membership_price[$key];?>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                <div class="space"></div>
-            </div> 
-        </div>
-        <div class="col-xs-12 col-sm-6 col-lg-4">
-            <div class="box">                           
-                <div class="icon">
-                    <div class="image"><i class="fa fa-user"></i></div>
-                    <div class="info">
-                        <h3 class="title">ACOUNTS</h3>
-                        <p>
-                           
-                        </p>
-                        
-                        <div class="more">
-                           Registered Accounts: {{$customer_account}}
-                        </div>
-                        <div class="more">
-                            <br>
-                        </div>
-                    </div>
-                </div>
-                <div class="space"></div>
-            </div> 
-        </div>
-
-        
-
-        
-
-        
     </div>
 </div>
 <div class="col-md-12"><hr></div>
@@ -94,30 +129,50 @@
         <canvas  id="myChart" width="100%" height="50%"></canvas>
     </div>
     <div class="col-md-6">
-        <div class="box">                           
-            <div class="icon">
-                <div class="image"><i class="fa fa-money"></i></div>
-                <div class="info">
-                    <h3 class="title">Encashment</h3>
-                    <p>
-                       
-                    </p>
-                   <?php $total_wallet = 0; ?>
-                   <div class="more">
-                       Pending : {{number_format($not_encashed)}}
-                   </div>
-                   <div class="more">
-                       Requested : {{number_format($not_encashed_requested * (-1))}}
-                   </div>
-                   <div class="more">
-                       Released : {{number_format($not_encashed_encashed * (-1))}}
-                   </div>
-                   <div class="more">
-                       Total : {{number_format($total_wallet += ($not_encashed_encashed * (-1))+ ($not_encashed_requested * (-1)) + $not_encashed )}}
-                   </div>
-                </div>
+        <?php $total_wallet = 0; ?>
+        <div class="col-md-6 col-sm-12 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-primary"><i class="fa fa-money"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Pending : </span>
+              <span class="info-box-number">
+                {{number_format($not_encashed)}}
+               </span>
             </div>
-            <div class="space"></div>
+          </div>
+        </div> 
+        <div class="col-md-6 col-sm-12 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-primary"><i class="fa fa-money"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Requested : </span>
+              <span class="info-box-number">
+                {{number_format($not_encashed_requested * (-1))}}
+               </span>
+            </div>
+          </div>
+        </div> 
+        <div class="col-md-6 col-sm-12 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-primary"><i class="fa fa-money"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Released : </span>
+              <span class="info-box-number">
+                {{number_format($not_encashed_encashed * (-1))}}
+               </span>
+            </div>
+          </div>
+        </div> 
+        <div class="col-md-6 col-sm-12 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-primary"><i class="fa fa-money"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Total : </span>
+              <span class="info-box-number">
+                {{number_format($total_wallet += ($not_encashed_encashed * (-1))+ ($not_encashed_requested * (-1)) + $not_encashed )}}
+               </span>
+            </div>
+          </div>
         </div> 
     </div>
 </div>
@@ -127,57 +182,73 @@
         <canvas  id="myChart_encashment" width="100%" height="50%"></canvas>
     </div>
     <div class="col-md-6">
-        <div class="box">                           
-            <div class="icon">
-                <div class="image"><i class="fa fa-money"></i></div>
-                <div class="info">
-                    <h3 class="title">INCOME PER COMPLAN</h3>
-                    <p>
-                       
-                    </p>
-                    <?php $total_income_per_complan = 0; ?>
-                    @foreach($chart_per_complan_raw['plan'] as $key => $value)
-                    <div class="more">
-                       {{$value}} : {{number_format($chart_per_complan_raw['series'][$key])}}
-                    </div>
-                    <?php $total_income_per_complan += $chart_per_complan_raw['series'][$key]; ?>
-                    @endforeach
-                    <div class="more">
-                        Total : {{number_format($total_income_per_complan)}}
-                    </div>
-                </div>
+        <?php $total_income_per_complan = 0; ?>
+        @foreach($chart_per_complan_raw['plan'] as $key => $value)
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-primary"><i class="fa fa-money"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">{{$value}} : </span>
+              <span class="info-box-number">
+                 {{number_format($chart_per_complan_raw['series'][$key])}}
+               </span>
             </div>
-            <div class="space"></div>
+          </div>
+        </div> 
+        <?php $total_income_per_complan += $chart_per_complan_raw['series'][$key]; ?>
+        @endforeach
+        <div class="col-md-12 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-primary"><i class="fa fa-money"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">Total : </span>
+              <span class="info-box-number">
+                {{number_format($total_income_per_complan)}}
+               </span>
+            </div>
+          </div>
         </div> 
     </div>
 </div>
+<div class="col-md-12"><hr></div>
 <div class="col-md-12">
     <div class="col-md-6">
         <canvas  id="myChart_in_out" width="100%" height="50%"></canvas>
     </div>
     <div class="col-md-6">
-        <div class="box">                           
-            <div class="icon">
-                <div class="image"><i class="fa fa-money"></i></div>
-                <div class="info">
-                    <h3 class="title">PAYIN/PAYOUT</h3>
-                    <p>
-                       
-                    </p>
-                    
-                    <div class="more">
-                       PAYIN : {{number_format($total_membership_price)}}
-                    </div>
-                    <div class="more">
-                       EXPECTED PAYOUT: {{number_format($total_income_per_complan)}}
-                    </div>
-                    <div class="more">
-                    <?php $div = 0;  if($total_income_per_complan == 0){$div = 0;} else{ $div = $total_income_per_complan/$total_membership_price; }?>
-                        COMPANY EARNINGS : {{$total_membership_price - $total_income_per_complan }} ({{  ((($div) - 1) * (-1)) *100}}%)
-                    </div>
-                </div>
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-primary"><i class="fa fa-money"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">PAYIN : </span>
+              <span class="info-box-number">
+                {{number_format($total_membership_price)}}
+               </span>
             </div>
-            <div class="space"></div>
+          </div>
+        </div> 
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-primary"><i class="fa fa-money"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">EXPECTED PAYOUT: </span>
+              <span class="info-box-number">
+                {{number_format($total_income_per_complan)}}
+               </span>
+            </div>
+          </div>
+        </div> 
+        <div class="col-md-6 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-primary"><i class="fa fa-money"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text"> COMPANY EARNINGS : </span>
+              <span class="info-box-number">
+                <?php $div = 0;  if($total_income_per_complan == 0){$div = 0;} else{ $div = $total_income_per_complan/$total_membership_price; }?>
+               {{$total_membership_price - $total_income_per_complan }} ({{  ((($div) - 1) * (-1)) *100}}%)
+               </span>
+            </div>
+          </div>
         </div> 
     </div>
 </div>

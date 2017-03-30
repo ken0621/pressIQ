@@ -13,7 +13,8 @@ function item()
         initialize_select();
         saved_input();
         $(".datepicker").datepicker();
-
+        
+        // event_accept_number_only();
         event_item_type_click();
         event_back_menu_click();
         event_image_change();
@@ -24,6 +25,62 @@ function item()
 
         var option = $('option:selected', $(".measure_container")).attr('abbrev');
         $(".abbreviation").text(option);
+    }
+
+    function event_accept_number_only()
+    {
+        $(document).on("keypress",".number-input", function(event){
+            if(event.which < 46 || event.which > 59) {
+                event.preventDefault();
+            } // prevent if not number/dot
+
+            if(event.which == 46 && $(this).val().indexOf('.') != -1) {
+                event.preventDefault();
+            } // prevent if already dot
+
+        });
+
+        $(document).on("change",".number-input", function(){
+            $(this).val(function(index, value) {         
+                var ret = '';
+                value = action_return_to_number(value);
+                if(!$(this).hasClass("txt-qty")){
+                    value = parseFloat(value);
+                    value = value.toFixed(2);
+                }
+                if(value != '' && !isNaN(value)){
+                    value = parseFloat(value);
+                    ret = action_add_comma(value).toLocaleString();
+                }
+                
+                if(ret == 0){
+                    ret = '';
+                }
+
+                return ret;
+              });
+        });
+    }
+    function action_add_comma(number)
+    {
+        number += '';
+        if(number == '0' || number == ''){
+            return '';
+        }
+
+        else{
+            return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    }
+    function action_return_to_number(number = '')
+    {
+        number += '';
+        number = number.replace(/,/g, "");
+        if(number == "" || number == null || isNaN(number)){
+            number = 0;
+        }
+        
+        return parseFloat(number);
     }
 
     function initialize_select()

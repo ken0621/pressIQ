@@ -37,6 +37,21 @@
                             </tr>
                         </thead>
                         <tbody class="draggable tbody-item">
+                            @if($vendor_item != null)
+                                @foreach($vendor_item as $item)
+                                    <tr class="tr-draggable">
+                                        <td class="invoice-number-td text-right">1</td>
+                                        <td class="">
+                                            <select class="form-control input-sm droplist-item select-item" name="item_id[]">
+                                                @include('member.load_ajax_data.load_item_category', ["add_search" => "", "item_id" => $item->tag_item_id]);
+                                            </select>
+                                        </td>
+                                        <td><span class="txt-desc">{{$item->item_sales_information}}</span></td>
+                                        <td><label class="txt-sku">{{$item->item_sku}}</label></td>
+                                        <td class="text-center cursor-pointer remove-tr"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                    </tr>
+                                @endforeach
+                            @endif
                             <tr class="tr-draggable">
                                 <td class="invoice-number-td text-right">1</td>
                                 <td class="">

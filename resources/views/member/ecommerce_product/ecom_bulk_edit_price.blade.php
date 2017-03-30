@@ -49,7 +49,7 @@
                             <tbody>
                                 @foreach($_product as $product)
                                 <tr>
-                                    <td>{{$product['product_new_name']}}</td>
+                                    <td><a href="{{$product['eprod_is_single'] == 1 ? '/member/ecommerce/product/edit/'.$product['eprod_id'] : '/member/ecommerce/product/edit-variant/'.$product['eprod_id'].'?variant_id='.$product['evariant_id']}}">{{$product['product_new_name']}}</a></td>
                                     <td>{{currency('',$product['evariant_price'])}}</td>
                                     <td>
                                         <input type="hidden" name="evariant_id[]" value="{{$product['evariant_id']}}">

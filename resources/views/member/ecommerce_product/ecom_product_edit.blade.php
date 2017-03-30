@@ -83,7 +83,7 @@
                                             <td>{{$column}}</td>
                                         @endforeach
                                         <td>{{$variants->evariant_item_label}}</td>
-                                        <td>{{$variants->evariant_price}}</td>
+                                        <td>{{currency('',$variants->evariant_price)}}</td>
                                         <td>
                                             <div class="btn-group"> 
                                                 <a class="btn btn-primary grp-btn" href="/member/ecommerce/product/edit-variant/{{ $variants->evariant_prod_id }}?variant_id={{ $variants->evariant_id }}">Edit</a>

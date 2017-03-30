@@ -156,7 +156,6 @@ class ItemController extends Member
 		$item_measurement_id 			= Request::input("item_measurement_id");
 		$item_manufacturer_id 			= Request::input("item_manufacturer_id");
 		$packing_size 					= Request::input("packing_size");
-		$item_vendor_id 					= Request::input("item_vendor_id");
 
 		$item_sale_to_customer 			= Request::input("item_sale_to_customer") ? 1 : 0; 
 		$item_purchase_from_supplier    = Request::input("item_purchase_from_supplier") ? 1 : 0;
@@ -195,7 +194,6 @@ class ItemController extends Member
 			$insert["item_measurement_id"]	      	  = $item_measurement_id ;
 			$insert["item_manufacturer_id"]	      	  = $item_manufacturer_id ;
 			$insert["packing_size"]				      = $packing_size;
-			$insert["item_vendor_id"]		 	      = $item_vendor_id;
 
 			$rules["item_name"]					      = 'required';
 			// $rules["item_barcode"]					  = 'required';
@@ -615,7 +613,6 @@ class ItemController extends Member
 			$insert["item_date_created"]	    	  = Carbon::now();
 			$insert["item_measurement_id"]	      	  = Request::input("item_measurement_id");
 			$insert["item_manufacturer_id"]	      	  = Request::input("item_manufacturer_id");
-			$insert["item_vendor_id"]	 	      	  = Request::input("item_vendor_id");
 			$insert["shop_id"]	    				  = $shop_id;
 				
 			$rules["item_name"]					      = 'required';

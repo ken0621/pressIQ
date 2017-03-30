@@ -17,11 +17,19 @@ use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_leadership_settings;
 use App\Models\Tbl_membership;
+use App\Models\Tbl_mlm_matching;
 class MlmReportController extends Mlm
 {
     public function index($complan)
     {
-        return $this->$complan();
+    	if(Self::$slot_id != null)
+        {
+        	return $this->$complan();
+        }
+        else
+        {
+            return Self::show_no_access();
+        }
     }
     public static function direct()
     {
@@ -69,11 +77,51 @@ class MlmReportController extends Mlm
             $data['slot_1'][$key] = Tbl_mlm_slot::where('slot_id', $value->matching_log_slot_1)->customer()->first();
             $data['slot_2'][$key] = Tbl_mlm_slot::where('slot_id', $value->matching_log_slot_2)->customer()->first();
         }
-        // $unmatch_1 = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)->join('tbl_mlm_matching_log', 'tbl_mlm_matching_log.matching_log_earner', '=', 'tbl_tree_sponsor.sponsor_tree_parent_id' )->get();
-        // dd($unmatch_1);
         $data['matching_count'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->count();
         $data['count'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->get();
-        // dd($data['report_matching']);
+
+
+        $settings = 
+        Tbl_mlm_matching::where('shop_id', Self::$shop_id)
+        ->where('membership_id', Self::$slot_now->slot_membership)
+        ->get()
+        ->toArray();
+        foreach($settings as $key => $value)
+        {
+        	$slot_per_level[$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
+        	->where('sponsor_tree_level', '>=', $value['matching_settings_start'])
+        	->where('sponsor_tree_level', '<=', $value['matching_settings_end'])
+        	->join('tbl_mlm_slot', 'Tbl_mlm_slot.slot_id', '=', 'tbl_tree_sponsor.sponsor_tree_child_id')
+        	->where('slot_matched_membership', 0)
+        	->get()->keyBy('slot_id');
+        	$matched_list[$key] = [];
+        	$un_matched_list[$key] = [];
+        	foreach($slot_per_level[$key] as $key2 => $value2)
+        	{
+        		$matched = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)
+        		->where('matching_log_slot_1', $key2)
+        		// ->orWhere('matching_log_slot_2', $key2)
+        		->count();
+        		$matched_2 = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)
+        		->where('matching_log_slot_2', $key2)
+        		// ->orWhere('matching_log_slot_2', $key2)
+        		->count();
+
+        		if($key2 == 344)
+        		{
+        			// dd($matched_2);
+        		}
+        		if($matched >= 1 || $matched_2 >= 1)
+        		{
+        			$matched_list[$key][$key2] = $value2;
+        		}
+        		else
+        		{
+        			$un_matched_list[$key][$key2] = $value2;
+        		}
+        	}
+        }
+
         return view("mlm.report.report_membership_matching", $data);
     }
     public static function executive_bonus()
@@ -225,8 +273,7 @@ class MlmReportController extends Mlm
         foreach($data['membership'] as $key => $value)
         {
             $data['direct_promotion'][$key] =   DB::table('tbl_mlm_plan_settings_direct_promotions')->where('shop_id', Self::$shop_id)->where('membership_id', $value->membership_id)->first();
-            $data['count_direct'][$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)->where('sponsor_tree_level', 1)
-                    ->child_info()
+            $data['count_direct'][$key] = Tbl_mlm_slot::where('slot_sponsor', Self::$shop_id)
                     ->where('slot_membership', $value->membership_id)
                     ->where('slot_matched_membership', 0)
                     ->count();
@@ -234,7 +281,7 @@ class MlmReportController extends Mlm
                         ->where('wallet_log_membership_filter', $value->membership_id)
                         ->count();
         }
-        // dd($data['count_direct']);
+        // dd($data);
         return view("mlm.report.report_direct_promotion", $data);
     }
 }

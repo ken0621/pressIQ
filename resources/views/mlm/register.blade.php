@@ -96,7 +96,7 @@
                                     <input id="username" name="email" required="required" type="email" placeholder="Your Email"/>
                                 </p>
                                 <p>
-                                    <input type='number' class="form-control" name="customer_mobile" placeholder="Number (e.g. 639191234567)">
+                                    <input type='number' class="form-control" name="customer_mobile" placeholder="Contact Number (e.g. 639191234567)">
                                 </p>
                                 <p> 
                                     <input id="tinnumber" name="tinnumber" required="required" type="number" placeholder="Your TIN"/>
@@ -110,17 +110,19 @@
                                 <p> 
                                     <input id="password" name="pass2" required="required" type="password" placeholder="Confirm Password" /> 
                                 </p>
+                                
+                                
                                 <p>
-                                    <input id="first-name" name="customer_state" required="required" class="form-control"  value="" placeholder="Province">
+                                    <input id="first-name" name="customer_street" required="required" class="form-control"  value="" placeholder="Street">
                                 </p>
                                 <p>
                                     <input id="first-name" name="customer_city" required="required" class="form-control" value="" placeholder="City">
                                 </p>
                                 <p>
-                                    <input type="number" id="first-name" name="customer_zipcode" required="required" class="form-control"  value="" placeholder="Zip Code">
+                                    <input id="first-name" name="customer_state" required="required" class="form-control"  value="" placeholder="Province">
                                 </p>
                                 <p>
-                                    <input id="first-name" name="customer_street" required="required" class="form-control"  value="" placeholder="Street">
+                                    <input type="number" id="first-name" name="customer_zipcode" required="required" class="form-control"  value="" placeholder="Zip Code">
                                 </p>
                                 <p> 
                                     <select class="form-control select_country" name="country" style="">

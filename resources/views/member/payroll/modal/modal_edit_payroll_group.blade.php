@@ -75,14 +75,14 @@
 					<div id="deduction-basis" class="tab-pane fade form-horizontal">
 						<div class="form-group">
 							<div class="col-md-8">
-								<div class="panel panel-default">
+								<!-- <div class="panel panel-default">
 									<div class="panel-body">
 										<label>Periods of Basic Deduction</label>
 										<div class="checkbox">
 											<label><input type="checkbox" name="payroll_group_deduct_before_absences" value="1" {{$group->payroll_group_deduct_before_absences == '1' ? 'checked':''}}>Deduct before absences and lates is deducted.</label>
 										</div>
 									</div>
-								</div>
+								</div> -->
 								<div class="panel panel-default">
 									<div class="panel-body form-horizontal">
 										<div class="form-group">

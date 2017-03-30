@@ -493,6 +493,14 @@
 .display-block{
     display: block !important;
 }
+.display-table
+{
+    display: table;
+}
+.display-table-cell
+{
+    display: table-cell;
+}
 /*dispaly end*/
 
 

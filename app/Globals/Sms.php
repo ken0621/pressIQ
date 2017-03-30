@@ -210,7 +210,7 @@ class Sms
 			        {        	
 			        	$content = str_replace($value["txt_to_be_replace"], $value["txt_to_replace"], $content);	
 			        }
-
+			        
 			        $data["status"] 	= "success";
 			        $data["message"] 	= $content;
 			        

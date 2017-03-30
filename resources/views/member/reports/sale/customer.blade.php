@@ -83,5 +83,5 @@
 
 @section('script')
 <script type="text/javascript" src="/assets/member/js/report/sale/customer.js"></script>
-<script type="text/javascript" src="/assets/member/js/calendar.js"></script>
+<script type="text/javascript" src="/assets/member/js/calendarv2.js"></script>
 @endsection

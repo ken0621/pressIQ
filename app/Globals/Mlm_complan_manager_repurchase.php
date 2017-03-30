@@ -14,8 +14,11 @@ use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_mlm_indirect_setting;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_unilevel_settings;
+use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_mlm_unilevel_points_settings;
+use App\Models\Tbl_mlm_stairstep_settings;
+
 
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
@@ -287,10 +290,111 @@ class Mlm_complan_manager_repurchase
         $a = Mlm_complan_manager::binary_pairing($slot_info);
         Mlm_complan_manager::cutoff_binary('BINARY', $slot_info->shop_id); 
     }
+
     public static function stairstep($slot_info,$item_code_id)
     {
-        
+        $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 
+        if($item_code)
+        {
+            $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)
+            ->where('membership_id', $slot_info->membership_id)
+            ->first();
+
+            if($mlm_item_points)
+            {
+                $unilevel_pts = $mlm_item_points->UNILEVEL;
+            }
+            else
+            {
+                $unilevel_pts = 0;
+            }
+        }
+        else
+        {
+            $unilevel_pts = 0;
+        }
+
+
+
+        $placement_tree  = Tbl_tree_placement::where("placement_tree_child_id",$slot_info->slot_id)->orderBy("placement_tree_level","ASC")->get();
+        $percentage      = null;
+        $check_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$slot_info->shop_id)->first();
+        $slot_pv         = $unilevel_pts;
+
+        if($check_stairstep)
+        {
+            foreach($placement_tree as $placement)
+            {
+                $reduced_percent = 0;
+                $owned_pv        = Tbl_mlm_slot_points_log::where("points_log_slot",$placement->placement_tree_parent_id)->where("points_log_type","PV")->sum("points_log_points");
+                $owned_gpv       = Tbl_mlm_slot_points_log::where("points_log_slot",$placement->placement_tree_parent_id)->where("points_log_type","GPV")->sum("points_log_points");
+                if($owned_pv == null)
+                {
+                    $owned_pv = 0;
+                }                
+
+                if($owned_gpv == null)
+                {
+                    $owned_gpv = 0;
+                }
+
+                $computed_points = 0;
+
+                if(!$percentage)
+                {
+                    $slot_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$slot_info->shop_id)
+                                                            ->where("stairstep_required_pv","<=",$owned_pv)
+                                                            ->where("stairstep_required_gv","<=",$owned_gpv)
+                                                            ->orderBy("stairstep_level","DESC")
+                                                            ->first();
+
+                    if($slot_stairstep->stairstep_bonus != 0)
+                    {
+                        $computed_points = ($slot_stairstep->stairstep_bonus/100) * $slot_pv;
+                    }         
+
+                    $percentage      = $slot_stairstep->stairstep_bonus;
+                    $reduced_percent = $slot_stairstep->stairstep_bonus;
+                }
+                else
+                {
+                    $slot_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$slot_info->shop_id)
+                                                            ->where("stairstep_required_pv","<=",$owned_pv)
+                                                            ->where("stairstep_required_gv","<=",$owned_gpv)
+                                                            ->orderBy("stairstep_level","DESC")
+                                                            ->first();
+                                                            
+                    if($slot_stairstep->stairstep_bonus > $percentage)
+                    { 
+                        if($slot_stairstep->stairstep_bonus != 0)
+                        {
+                            $reduced_percent = $slot_stairstep->stairstep_bonus - $percentage;
+                            if($reduced_percent > 0)
+                            {
+                                $computed_points = (($reduced_percent)/100) * $slot_pv;
+                                $percentage      = $slot_stairstep->stairstep_bonus;
+                            }
+                        }    
+                    }
+                }
+
+                if($computed_points > 0)
+                {             
+                    $log                                    = "You earned ".$reduced_percent."% of ".$unilevel_pts."(".$computed_points.") from slot #".$slot_info->slot_id."(Current Rank:".$slot_stairstep->stairstep_name.").";
+                    $arry_log['wallet_log_slot']            = $placement->placement_tree_parent_id;
+                    $arry_log['shop_id']                    = $slot_info->shop_id;
+                    $arry_log['wallet_log_slot_sponsor']    = $placement->placement_tree_parent_id;
+                    $arry_log['wallet_log_details']         = $log;
+                    $arry_log['wallet_log_amount']          = $computed_points;
+                    $arry_log['wallet_log_plan']            = "STAIRSTEP";
+                    $arry_log['wallet_log_status']          = "n_ready";   
+                    $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('STAIRSTEP', $slot_info->shop_id); 
+                    Mlm_slot_log::slot_array($arry_log);    
+                }
+            }
+        }
     }
+
     public static function repurchase_points($slot_info,$item_code_id)
     {
         $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 
@@ -442,6 +546,7 @@ class Mlm_complan_manager_repurchase
         }
         Mlm_complan_manager_repurchase::unilevel_cutoff('UNILEVEL_REPURCHASE_POINTS', $slot_info->shop_id);
     }
+    
     public static function discount_card_repurchase($slot_info, $item_code_id)
     {
         $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first();  
@@ -476,4 +581,5 @@ class Mlm_complan_manager_repurchase
             }
         }
     }
+
 }

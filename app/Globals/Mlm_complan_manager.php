@@ -1389,11 +1389,18 @@ class Mlm_complan_manager
                 if($direct_promotion)
                 {
                     /* Count Direct */
-                    $count_direct = Tbl_tree_sponsor::where('sponsor_tree_parent_id', $slot_sponsor->slot_id)->where('sponsor_tree_level', 1)
-                    ->child_info()
+                    // $count_direct = Tbl_tree_sponsor::where('sponsor_tree_parent_id', $slot_sponsor->slot_id)->where('sponsor_tree_level', 1)
+                    // ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_tree_sponsor.sponsor_tree_child_id')
+                    // ->where('slot_membership', $value->membership_id)
+                    // ->where('slot_matched_membership', 0)
+                    // ->count();
+
+                    $count_direct = Tbl_mlm_slot::where('slot_sponsor', $slot_sponsor->slot_id)
                     ->where('slot_membership', $value->membership_id)
                     ->where('slot_matched_membership', 0)
                     ->count();
+                    
+                    
                     if(isset($direct_promotion->settings_direct_promotions_count))
                     {
                         if($direct_promotion->settings_direct_promotions_count != 0)
@@ -1403,12 +1410,15 @@ class Mlm_complan_manager
                                 $count_income = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot_sponsor->slot_id)->where('wallet_log_plan', 'DIRECT_PROMOTIONS')
                                 ->where('wallet_log_membership_filter', $value->membership_id)
                                 ->count();
-                                
-                                $mod = $count_direct / $direct_promotion->settings_direct_promotions_count;
+                                $mod = $count_direct - ($count_income * $direct_promotion->settings_direct_promotions_count);
                                 $mod2 = round($mod, 0, PHP_ROUND_HALF_DOWN);
-                                if($mod2 > $count_income)
+                                $mod2 = $mod;
+
+                                
+                                if($mod2 >= $direct_promotion->settings_direct_promotions_count)
                                 {
-                                    $mod3 = $mod2 - $count_income;
+                                    $mod4 = $mod/$direct_promotion->settings_direct_promotions_count;
+                                    $mod3 = round($mod4, 0, PHP_ROUND_HALF_DOWN);
                                     for($i = 0; $i < $mod3; $i++ )
                                     {
                                         $plan = Tbl_mlm_plan::where('marketing_plan_code', 'DIRECT_PROMOTIONS')->where('shop_id', $slot_info->shop_id)->first();
@@ -1449,7 +1459,6 @@ class Mlm_complan_manager
                                         $arry_log['wallet_log_membership_filter'] = $value->membership_id;
                                         $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
                                         Mlm_slot_log::slot_array($arry_log);
-                                        
 
                                     }
                                     // return $mod3;

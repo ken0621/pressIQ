@@ -79,7 +79,7 @@ need assistance on payment options, or just wanted to drop a</br> line,we want t
 		</div>
 		<div class="col-md-6 right nopadding">
 			<div class="field">
-				<textarea name="sender_message"placeholder="Your Message Here...."></textarea>
+				<textarea name="sender_message" placeholder="Your Message Here...."></textarea>
 				<button id="send-email">Send <i class="fa fa-paper-plane-o"></i></button>
 				<img id="sending-message-loading" style="display: none;" src="../../resources/assets/img/small-loading.GIF" alt="">
 			</div>

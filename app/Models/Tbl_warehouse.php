@@ -24,8 +24,8 @@ class Tbl_warehouse extends Model
     {
          return $query->leftjoin('tbl_sub_warehouse', 'tbl_sub_warehouse.warehouse_id', '=', 'tbl_warehouse.warehouse_id')
                      ->leftjoin('tbl_item','tbl_item.item_id','=','tbl_sub_warehouse.item_id')
-                     ->whereIn("item_vendor_id",[$vendor_id,0]);
-
+                     ->leftjoin("tbl_vendor_item","tag_item_id","=","tbl_item.item_id")
+                     ->orderBy("tag_vendor_id","<=",$vendor_id);
     }
     public function scopeselect_info($query, $shop_id = 0, $archived = 0)
     {

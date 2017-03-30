@@ -21,9 +21,12 @@
 	<div class="panel-body">
    @foreach($_period as $period)
    <div class="custom-panel">
-     <div class="custom-panel-header">{{date('M d, Y',strtotime($period->payroll_period_start))}} to {{date('M d, Y',strtotime($period->payroll_period_end))}} ({{$period->payroll_period_category}})</div>
-     <div class="triangle-top-right"></div>
-     <div class="custom-panel-body"></div>
+     <div class="custom-panel-header cursor-pointer">{{date('M d, Y',strtotime($period->payroll_period_start))}} to {{date('M d, Y',strtotime($period->payroll_period_end))}} ({{$period->payroll_period_category}})</div>
+     <div class="width-100 display-table">
+        <div class="triangle-top-right"></div>
+        <div class="custom-panel-body display-table-cell"></div>
+     </div>
+     
    </div>
    @endforeach
   </div>

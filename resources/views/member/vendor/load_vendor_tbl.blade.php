@@ -32,6 +32,7 @@
                         <li><a href="javascript:" class="popup" link="/member/vendor/archived/{{$vendor->vendor_id}}/inactive" size="md">Make Inactive</a></li>
                         <!-- <li><a href="javascript:" data-html="inactive">Make Inactive</a></li> -->
                         <li><a href="javascript:" class="popup" link="/member/vendor/edit/{{$vendor->vendor_id}}" size="lg">Edit vendor Info</a></li>
+                        <li ><a class="popup" link="/member/vendor/tag/{{$vendor->vendor_id}}" size="lg">Tag Item </a></li>
                       </ul>
                     </div>
                     @else

@@ -21,4 +21,18 @@ class Tbl_payroll_overtime_rate extends Model
 	// [DOUBLE] 		payroll_overtime_rest_day
 	// [DOUBLE] 		payroll_overtime_rest_overtime
 	// [DOUBLE] 		payroll_overtime_rest_night
+
+	/* naming */
+	/*
+	• Regular
+	• Legal Holiday
+	• Special Holiday
+	*/
+
+	public function scopegetrate($query, $payroll_group_id = 0, $payroll_overtime_name = '')
+	{
+		$query->where('payroll_group_id', $payroll_group_id)->where('payroll_overtime_name', $payroll_overtime_name);
+
+		return $query;
+	}	
 }

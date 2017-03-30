@@ -156,7 +156,6 @@ class ItemController extends Member
 		$item_measurement_id 			= Request::input("item_measurement_id");
 		$item_manufacturer_id 			= Request::input("item_manufacturer_id");
 		$packing_size 					= Request::input("packing_size");
-		$item_vendor_id 					= Request::input("item_vendor_id");
 
 		$item_sale_to_customer 			= Request::input("item_sale_to_customer") ? 1 : 0; 
 		$item_purchase_from_supplier    = Request::input("item_purchase_from_supplier") ? 1 : 0;
@@ -195,7 +194,6 @@ class ItemController extends Member
 			$insert["item_measurement_id"]	      	  = $item_measurement_id ;
 			$insert["item_manufacturer_id"]	      	  = $item_manufacturer_id ;
 			$insert["packing_size"]				      = $packing_size;
-			$insert["item_vendor_id"]		 	      = $item_vendor_id;
 
 			$rules["item_name"]					      = 'required';
 			// $rules["item_barcode"]					  = 'required';
@@ -232,41 +230,71 @@ class ItemController extends Member
 
 				Item::insert_item_discount($insert_item_discount);
 
-				$warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->first();
+				$warehouse = Tbl_warehouse::where("warehouse_id",Session::get("warehouse_id"))->first();
 
 				$slip_id = 0 ;
 				if($warehouse == null)
 				{
-					//MAKE MAIN WAREHOUSE
-					$ins_warehouse["warehouse_name"] = "Main Warehouse";
-					$ins_warehouse["warehouse_shop_id"] = $shop_id;
-					$ins_warehouse["warehouse_created"] = Carbon::now();
-					$ins_warehouse["main_warehouse"] = 1;
+					$warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->first();
+					if($warehouse == null)
+					{
+						//MAKE MAIN WAREHOUSE
+						$ins_warehouse["warehouse_name"] = "Main Warehouse";
+						$ins_warehouse["warehouse_shop_id"] = $shop_id;
+						$ins_warehouse["warehouse_created"] = Carbon::now();
+						$ins_warehouse["main_warehouse"] = 1;
 
-					$warehouse_id = Tbl_warehouse::insertGetId($ins_warehouse);
+						$warehouse_id = Tbl_warehouse::insertGetId($ins_warehouse);
 
-					$ins["warehouse_id"] = $warehouse_id;
-					$ins["item_id"] = $item_id;
-					$ins["item_reorder_point"] = $item_reorder_point;
+						$ins["warehouse_id"] = $warehouse_id;
+						$ins["item_id"] = $item_id;
+						$ins["item_reorder_point"] = $item_reorder_point;
 
-					Tbl_sub_warehouse::insert($ins);
+						Tbl_sub_warehouse::insert($ins);
 
-					$ins_slip["inventory_reason"] = "insert_item";
-					$ins_slip["warehouse_id"] = $warehouse_id;
-					$ins_slip["inventory_remarks"] = "Insert Item";
-					$ins_slip["inventory_slip_date"] = Carbon::now();
-					$ins_slip["inventory_slip_shop_id"] = $this->user_info->user_shop;
-					$ins_slip["inventroy_source_reason"] = "item";
-					$ins_slip["inventory_source_id"] = $item_id;
+						$ins_slip["inventory_reason"] = "insert_item";
+						$ins_slip["warehouse_id"] = $warehouse_id;
+						$ins_slip["inventory_remarks"] = "Insert Item";
+						$ins_slip["inventory_slip_date"] = Carbon::now();
+						$ins_slip["inventory_slip_shop_id"] = $this->user_info->user_shop;
+						$ins_slip["inventroy_source_reason"] = "item";
+						$ins_slip["inventory_source_id"] = $item_id;
 
-					$slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
+						$slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
 
-					$ins_inven["inventory_item_id"] = $item_id;
-					$ins_inven["warehouse_id"] = $warehouse_id;
-					$ins_inven["inventory_created"] = Carbon::now();
-					$ins_inven["inventory_count"] = $item_quantity;
+						$ins_inven["inventory_item_id"] = $item_id;
+						$ins_inven["warehouse_id"] = $warehouse_id;
+						$ins_inven["inventory_created"] = Carbon::now();
+						$ins_inven["inventory_count"] = $item_quantity;
 
-					$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
+						$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);						
+					}
+					else
+					{
+						$insert_sub["warehouse_id"] = $warehouse->warehouse_id;
+						$insert_sub["item_id"] = $item_id;
+						$insert_sub["item_reorder_point"] = $item_reorder_point;
+
+						Tbl_sub_warehouse::insert($insert_sub);
+
+						$ins_slip["inventory_reason"] = "insert_item";
+						$ins_slip["warehouse_id"] = $warehouse->warehouse_id;
+						$ins_slip["inventory_remarks"] = "Insert Item";
+						$ins_slip["inventory_slip_date"] = Carbon::now();
+						$ins_slip["inventory_slip_shop_id"] = $this->user_info->user_shop;
+						$ins_slip["inventroy_source_reason"] = "item";
+						$ins_slip["inventory_source_id"] = $item_id;
+
+						$slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
+
+						$ins_inven["inventory_item_id"] = $item_id;
+						$ins_inven["warehouse_id"] =  $warehouse->warehouse_id;
+						$ins_inven["inventory_created"] = Carbon::now();
+						$ins_inven["inventory_count"] = $item_quantity;
+						$ins_inven["inventory_slip_id"] = $slip_id;
+
+						$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
+					}
 				}
 				else
 				{
@@ -615,7 +643,6 @@ class ItemController extends Member
 			$insert["item_date_created"]	    	  = Carbon::now();
 			$insert["item_measurement_id"]	      	  = Request::input("item_measurement_id");
 			$insert["item_manufacturer_id"]	      	  = Request::input("item_manufacturer_id");
-			$insert["item_vendor_id"]	 	      	  = Request::input("item_vendor_id");
 			$insert["shop_id"]	    				  = $shop_id;
 				
 			$rules["item_name"]					      = 'required';

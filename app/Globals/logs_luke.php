@@ -110,11 +110,11 @@ date_updated
 archived
 email_content_subject
 
-[Email Notification] Successful Registration Email Notification - success_register
-[Email Notification] Reset Password Notification
-[Email Notification] Purchase Email Notification
-[Email Notification] E-wallet top up email notification
-[Email Notification] E-Wallet transfer - 	e_wallet_transfer
+[Email Notification] - Successful Registration Email Notification - success_register
+[Email Notification] - Reset Password Notification
+[Email Notification] - Purchase Email Notification
+[Email Notification] - E-wallet top up email notification
+[Email Notification] - E-Wallet transfer - 	e_wallet_transfer
 [Email Notification] Purchase Discount Card Notification
 [Email Notification] Online Order Email Notification
 [Email Notification] Redeem points email Notification
@@ -130,13 +130,16 @@ Kung load yung binebenta may number na field LOAD WALLEt ()
 after transaction mawawala yung laman
 use discount card()
 
---
-Product code use option - kung dadaan ng product code () 
-
-
 Check kung may serial ()
+
 kung may serial may option kung ano yung serial()
 search sa add new line
+Product code use option - kung dadaan ng product code () 
+--
+
+
+
+
 
 bar codde
 
@@ -144,3 +147,17 @@ bar codde
 street
 APP_KEY=vNYGoBAFOTzqWyeXFkYeO97Z5FIBq5SD
 
+
+
+* change label Active Customers, Inactive Customers on Customer Window to Active VIPs, Inactive VIPs –  (DONE)
+
+* Order of fields during Sign Up should be like this: Street, City, Province, ZIP Code instead of the current order – (DONE)
+
+* Number field be changed to Contact Number – (On Progress – Lukz – Registration Page) - (DONE)
+
+* Search function on adding new lines when selling products for faster viewing of Product – (DONE)
+* Previously sold item(s) should no longer appear on the new sell product page/window once previous transaction has been successful - (DONE)
+
+
+Ranking ng Marketing Plan
+Unilevel Bonus GPV Saka PV

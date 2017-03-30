@@ -418,8 +418,8 @@ class WarehouseController extends Member
             $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)
                                                                             ->where("type_shop",$this->user_info->shop_id)
                                                                             ->get();
-            $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$warehouse_id)->first();
-            $data["_vendor"]    = Vendor::getAllVendor('active');
+        $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$warehouse_id)->first();
+        $data["_vendor"]    = Vendor::getAllVendor('active');
         $data["warehouse_item"] = Warehouse::select_item_warehouse_single_vendor($warehouse_id,'array',$vendor_id);
         return view("member.warehouse.warehouse_refill",$data);
     }

@@ -31,15 +31,30 @@
     </form>    
     </div>
 </div>
-
 <div class="col-md-12">
   <div class="box">
     <div class="box-header with-border">
       <h3 class="box-title">Refill Logs</h3>
+      <div class="col-md-3">
+        <select class="form-control">
+          <option value="">Pending</option>
+          <option value="">Requested</option>
+          <option value="">Denied</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <div class="input-group">
+            <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+            <input type="text" class="form-control search_name input-md" onchange="search_name_function(this)" placeholder="Search by Slot" aria-describedby="basic-addon1">
+        </div>
+      </div>
+      <hr>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
-      <table class="table table-bordered">
+      <div class="load-data" target="paginate_request">
+      <div id="paginate_request">
+        <table class="table table-bordered">
         <thead>
             <th>Date Request</th>
             <th>Amount Paid</th>
@@ -82,6 +97,10 @@
         </tbody>
       </table>
       <center>{!! $request->render() !!}</center>
+      </div> 
+    </div>
+
+      
     </div>
     <!-- /.box-body -->
     <div class="box-footer clearfix">
@@ -94,5 +113,5 @@
 
 @section('script')
 
-
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 @endsection

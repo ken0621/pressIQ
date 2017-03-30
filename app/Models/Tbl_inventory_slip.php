@@ -12,12 +12,15 @@ class Tbl_inventory_slip extends Model
 
     public function scopeShop($query)
     {
-    	return $query->leftjoin("tbl_shop","tbl_shop.shop_id","=","tbl_inventory_slip.inventory_slip_shop_id")
-    				 ->leftjoin("tbl_user","tbl_shop.shop_id","=","tbl_user.user_shop");
+    	return $query->leftjoin("tbl_shop","tbl_shop.shop_id","=","tbl_inventory_slip.inventory_slip_shop_id");
     }
     public function scopeVendor($query)
     {
     	return $query->leftjoin("tbl_vendor","tbl_vendor.vendor_id","=","tbl_inventory_slip.inventory_source_id");
+    }
+    public function scopeUser($query)
+    {
+        return $query->leftjoin("tbl_user","user_id","=","tbl_inventory_slip.slip_user_id");
     }
     public function scopeCustomer($query)
     {

@@ -496,9 +496,8 @@ class SalesReport
     {
         $data['range']    = date('M d Y', strtotime($start)).' - '.date('M d Y', strtotime($end));
         $data["_product"] = null;
-        $_product         = Tbl_ec_product::where('eprod_shop_id',$shop_id)
+        $_product         = Tbl_ec_product::variant()->where('eprod_shop_id',$shop_id)
                                       ->where("tbl_ec_product.archived",0)
-                                      ->join("tbl_ec_variant","tbl_ec_variant.evariant_prod_id","=","tbl_ec_product.eprod_id")
                                       ->get();
 
         $ctr = 0;
@@ -508,10 +507,10 @@ class SalesReport
         foreach($_product as $product)
         {
 
-            $name = $product->evariant_item_label;
+            $name = ($product->variant_name ? ' : '.$product->variant_name : '--None--');
+            $data["item"][$ctr]["category_name"]  = $product->eprod_name;
             $data["item"][$ctr]["variant_name"]   = $name;
             $data["item"][$ctr]["quantity_sold"]  = Tbl_ec_order_item::ecorder()->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
-            $data["item"][$ctr]["category_name"]  = $product->eprod_name;
             $data["item"][$ctr]["gross_sales"]    = Tbl_ec_order_item::ecorder()->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
             $data["item"][$ctr]["discount"]       = Tbl_ec_order_item::ecorder()->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
             $data["item"][$ctr]["refund"]         = 0;

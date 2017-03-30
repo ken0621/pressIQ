@@ -335,7 +335,13 @@ class Membership_code
                 Mail::send('emails.full_body', $data, function ($m) use ($data) {
                     $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
 
-                    $m->to($data['invoice']->membership_code_customer_email, env('MAIL_USERNAME'))->subject('Membership Code Purchase')->cc('lukeglennjordan2@gmail.com');
+                    $m->to($data['invoice']->membership_code_customer_email, env('MAIL_USERNAME'))->subject('Membership Code Purchase');
+                });
+
+                Mail::send('emails.full_body', $data, function ($m) use ($data) {
+                    $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
+
+                    $m->to('lukeglennjordan2@gmail.com', env('MAIL_USERNAME'))->subject('Membership Code Purchase');
                 });
             }
             else

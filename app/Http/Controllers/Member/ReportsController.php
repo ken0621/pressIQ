@@ -78,7 +78,7 @@ class ReportsController extends Member
     	$start = date('Y-m-d', strtotime(Request::input("start")));
     	$end = date('Y-m-d', strtotime(Request::input("end")));
     	$shop_id = $this->checkuser('user_shop');
-    	$data['_sales'] = SalesReport::monthlysale($shop_id, $start, $end);
+    	$data['_sales'] = SalesReport::SalesReportBy("month",$shop_id,$start, $end);
     	
     	return view('member.reports.sale.month_table',$data);
     }

@@ -214,6 +214,7 @@ class MLM_ProductCodeController extends Member
                 $data['item_array'][$key]['item_serial'] = Tbl_inventory_serial_number::where('item_id', $key)->get()->toArray();
             }  
         }
+        $data['_item']  = Item::get_all_category_item();
         // dd($data['item_array']);
         return view('member.mlm_product_code.mlm_product_code_view_line', $data);
     }

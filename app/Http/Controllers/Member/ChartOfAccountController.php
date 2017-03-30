@@ -138,7 +138,7 @@ class ChartOfAccountController extends Member
         $rules['account_sublevel']          = "required";
         
         /* IF DUPLICATION OF ACCOUNT NAME */
-        $account_name = Tbl_chart_of_account::where("account_shop_id", $this->user_info->shop_id)->where("account_name", $data['account_name'])->where("account_id","<>",$account_id)->pluck("account_name"); 
+        $account_name = Tbl_chart_of_account::where("account_shop_id", $this->user_info->shop_id)->where("account_name", $data['account_name'])->where("account_id","<>",$account_id)->pluck("account_name");
 
         $validator = Validator::make($data, $rules);
 

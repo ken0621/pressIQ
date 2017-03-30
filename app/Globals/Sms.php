@@ -180,7 +180,7 @@ class Sms
 		$insert["sms_logs_shop_id"] = $shop_id;
 		$insert["sms_logs_key"]		= $key;
 		$insert["sms_logs_status"]	= $status;
-		$insert["sms_logs_recipient"] = $recipient;
+		$insert["sms_logs_recipient"] = $recipient == null ? '' : $recipient;
 		$insert["sms_logs_remarks"]	= json_encode($result);
 		$insert["created_at"]		= Carbon::now();
 		Tbl_sms_logs::insert($insert);
@@ -210,7 +210,7 @@ class Sms
 			        {        	
 			        	$content = str_replace($value["txt_to_be_replace"], $value["txt_to_replace"], $content);	
 			        }
-
+			        
 			        $data["status"] 	= "success";
 			        $data["message"] 	= $content;
 			        
@@ -232,7 +232,7 @@ class Sms
 				$insert["sms_logs_shop_id"] = $shop_id;
 				$insert["sms_logs_key"]		= $key;
 				$insert["sms_logs_status"]	= $data["status"];
-				$insert["sms_logs_recipient"] = $recipient;
+				$insert["sms_logs_recipient"] = $recipient == null ? '' : $recipient;
 				$insert["sms_logs_remarks"]	= $data["message"];
 				$insert["created_at"]		= Carbon::now();
 				Tbl_sms_logs::insert($insert);

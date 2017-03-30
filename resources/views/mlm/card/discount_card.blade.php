@@ -3,7 +3,7 @@
 <div class="{{ Request::input('pdf') == 'true' ? '' : 'row' }} clearfix">
 
 <div class="{{ Request::input('pdf') == 'true' ? '' : 'col-md-6' }} clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 450px;' : '' }}">
-	<div class="containers" style="overflow: hidden; {{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : '' }} ;height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}.jpg') !important;">
+	<div class="containers" style="overflow: hidden; {{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : '' }} ;height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}_2.jpg') !important;">
 		<div class="top-container clearfix">
 			<span class="website">{{ URL::to('/') }}</span>
 			<div class="logo"><img style="width: 200px;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/philtech-logo.png"></div>
@@ -26,10 +26,10 @@
 </div>
 
 <div class="{{ Request::input('pdf') == 'true' ? '' : 'col-md-6' }} clearfix" style="{{ Request::input('pdf') == 'true' ? 'margin-top: 1000px;' : '' }}">
-	<div class="containers" style="{{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : '' }} height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}.jpg') !important;">
-		<div style="color: #fff; overflow: hidden;">
-			<div class="clearfix" style="text-align: center;" style="margin-top: -2px;">
-				<h1 class="clearfix" style="margin: auto; margin-bottom: 5px; width: 100%; max-width: 100%; font-weight: 600; font-size: 17px !important; " >TERMS AND CONDITION</h1>
+	<div class="containers" style="{{ Request::input('pdf') == 'true' ? '-webkit-transform: scale(5,5); transform: scale(5,5);' : '' }} height: 276px; background-color: transparent; background-image: url('{{Request::input('pdf') == 'true' ? URL::to('/') : ''}}/assets/card/images/BG-{{ $color }}_2.jpg') !important;">
+		<div style="color: #fff; overflow: hidden;" >
+			<div class="clearfix" style="text-align: center; margin-top: -6px;">
+				<h1 class="clearfix" style="margin: auto; margin-bottom: 5px; width: 100%; max-width: 100%; font-weight: 600; font-size: 30px !important;" >TERMS AND CONDITION</h1>
 			</div>
 			<ol class="clearfix" style="padding-left: 20px; font-weight: 500; font-size: 11px; letter-spacing: 1px;">
 				<li style="margin-top: -5px;">The Cardholder agrees to be bound by the Terms and Conditions of the PhilTECH,Inc. Discount Program. Present this card when purchasing products or availing services in the Head Office, all BCO and Partner Merchants Nationwide.</li>
@@ -38,7 +38,7 @@
 				<li>Renewable after one (1) Year</li>
 				<li>Tampering of original signatures invalidates this Card.</li>
 			</ol>
-			<div class="row clearfix" style="margin-top: -3px !important;">
+			<div class=" clearfix" style="margin-top: -3px !important;">
 				<div class="col-xs-6">
 					<img style="width: 100%;" src="{{Request::input('pdf') == 'true' ? public_path() : ''}}/assets/card/images/sign-1.jpg">
 				</div>

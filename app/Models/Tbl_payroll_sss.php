@@ -21,4 +21,9 @@ class Tbl_payroll_sss extends Model
 	// [DOUBLE] 		payroll_sss_ee
 	// [DOUBLE] 		payroll_sss_total
 	// [DOUBLE] 		payroll_sss_eec
+
+	// public function scopegetsss($shop_id = 0, $rate)
+	// {
+		
+	// }
 }

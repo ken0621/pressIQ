@@ -68,7 +68,7 @@ function variant()
 
 	function event_variant_item_click()
 	{
-		$(document).on("click",".variant-nav-list:not(active)", function()
+		$(document).on("click",".variant-item", function()
 		{
 			var variant_id 	= $(this).attr("id");
 			var default_tab = $(".tab.active").attr("data-id");

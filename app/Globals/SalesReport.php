@@ -358,10 +358,10 @@ class SalesReport
             foreach($_product as $product)
             {
 
-                $name                                 = $product->evariant_item_label;
+                $name = ($product->variant_name ? $product->variant_name : '--None--');
+                $data["item"][$ctr]["category_name"]  = $product->eprod_name;
                 $data["item"][$ctr]["variant_name"]   = $name;
                 $data["item"][$ctr]["quantity_sold"]  = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");
-                $data["item"][$ctr]["category_name"]  = $product->eprod_name;
                 $data["item"][$ctr]["gross_sales"]    = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.subtotal");
                 $data["item"][$ctr]["discount"]       = Tbl_ec_order_item::ecorder(['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("tbl_ec_order_item.discount_amount");
                 $data["item"][$ctr]["refund"]         = 0;

@@ -68,7 +68,7 @@ function variant()
 
 	function event_variant_item_click()
 	{
-		$(document).on("click",".variant-item", function()
+		$(document).on("click",".variant-item:not(.active)", function()
 		{
 			var variant_id 	= $(this).attr("id");
 			var default_tab = $(".tab.active").attr("data-id");
@@ -76,7 +76,10 @@ function variant()
 			$(".variant-info-container").css("opacity", "0.5");
 			
 			$(".variant-item").find(".variant-nav-list").removeClass("active");
+			$(".variant-item").removeClass("active");
 			$(this).find(".variant-nav-list").addClass("active");
+			$(this).addClass("active");
+
 			$("#delete_variant").removeClass("hidden");
 
 			$.ajax(

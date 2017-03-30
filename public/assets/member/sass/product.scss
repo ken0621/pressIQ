@@ -287,15 +287,16 @@
 	    	}
 		}
 
-		.variant-nav-list.active
-		{
-			color: #000;
-		}
-
 		.variant-nav-list:hover
 		{
 			background-color: #76b6ec;
 			color: #fff;
+		}
+
+		.variant-nav-list.active
+		{
+			color: #000;
+			pointer-events: none!important;
 		}
 	}
 

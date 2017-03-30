@@ -111,11 +111,23 @@ class VendorController extends Member
     }
     public function postUpdateTaggingItem()
     {
-        dd(Request::input());
-
         $item_id = Request::input("item_id");
+        $vendor_id = Request::input("vendor_id");
 
-        
+        foreach ($item_id as $key => $value) 
+        {
+           if($value == "")
+           {
+                unset($item_id[$key]);
+           }
+        }
+        dd($item_id);
+
+        foreach ($item_id as $key => $value) 
+        {
+            $ins["tag_vendor_id"] = $vendor_id; 
+            $ins["tag_item_id"] = $item_id;
+        }
     }
 
     public function getLoadVendorTbl()

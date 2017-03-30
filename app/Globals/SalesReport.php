@@ -314,15 +314,15 @@ class SalesReport
                 $date[0]          = $tempStart;
                 $date[1]          = $tempEnd;
 
-                $totalGross       = Tbl_ec_order::whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("subtotal");
-                $totalOrder       = Tbl_ec_order::whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->count();
-                $totalDiscount    = Tbl_ec_order::whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("discount_amount");
+                $totalGross       = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("subtotal");
+                $totalOrder       = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->count();
+                $totalDiscount    = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("discount_amount");
                 $totalRefund      = 0;
                 $totalNet         = $totalGross - ($totalRefund - $totalDiscount);
                 $totalShipping    = 0;
-                $totalTax         = Tbl_ec_order::whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("tax");
-                $totalSales       = Tbl_ec_order::whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("total");
-                $customerCount    = Tbl_ec_order::whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->count();
+                $totalTax         = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("tax");
+                $totalSales       = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("total");
+                $customerCount    = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->count();
 
 
 
@@ -462,15 +462,15 @@ class SalesReport
             $date[0]                            = $tempStart;
             $date[1]                            = $tempEnd;
 
-            $totalGross       = Tbl_ec_order::whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("subtotal");
-            $totalOrder       = Tbl_ec_order::whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->count();
-            $totalDiscount    = Tbl_ec_order::whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("discount_amount");
+            $totalGross       = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("subtotal");
+            $totalOrder       = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->count();
+            $totalDiscount    = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("discount_amount");
             $totalRefund      = 0;
             $totalNet         = $totalGross - ($totalRefund - $totalDiscount);
             $totalShipping    = 0;
-            $totalTax         = Tbl_ec_order::whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("tax");
-            $totalSales       = Tbl_ec_order::whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("total");
-            $customerCount    = Tbl_ec_order::whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->count();
+            $totalTax         = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("tax");
+            $totalSales       = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("total");
+            $customerCount    = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->count();
 
 
 

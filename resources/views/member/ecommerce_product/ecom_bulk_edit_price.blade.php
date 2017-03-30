@@ -49,7 +49,7 @@
                             <tbody>
                                 @foreach($_product as $product)
                                 <tr>
-                                    <td>{{$product['eprod_name']}}</td>
+                                    <td>{{$product['product_new_name']}}</td>
                                     <td>{{currency('',$product['evariant_price'])}}</td>
                                     <td>
                                         <input type="hidden" name="evariant_id[]" value="{{$product['evariant_id']}}">

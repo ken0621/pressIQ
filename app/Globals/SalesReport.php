@@ -507,7 +507,7 @@ class SalesReport
         foreach($_product as $product)
         {
 
-            $name = ($product->variant_name ? ' : '.$product->variant_name : '--None--');
+            $name = ($product->variant_name ? $product->variant_name : '--None--');
             $data["item"][$ctr]["category_name"]  = $product->eprod_name;
             $data["item"][$ctr]["variant_name"]   = $name;
             $data["item"][$ctr]["quantity_sold"]  = Tbl_ec_order_item::ecorder()->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->where("item_id",$product->evariant_id)->sum("quantity");

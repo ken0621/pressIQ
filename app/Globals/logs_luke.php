@@ -157,3 +157,7 @@ APP_KEY=vNYGoBAFOTzqWyeXFkYeO97Z5FIBq5SD
 
 * Search function on adding new lines when selling products for faster viewing of Product – (DONE)
 * Previously sold item(s) should no longer appear on the new sell product page/window once previous transaction has been successful - (DONE)
+
+
+Ranking ng Marketing Plan
+Unilevel Bonus GPV Saka PV

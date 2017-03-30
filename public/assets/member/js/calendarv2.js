@@ -1,5 +1,6 @@
-var calendar = new calendar();
-
+var calendar   = new calendar();
+var start_deto = $(".start-date").val();           
+var end_deto   = $(".end-date").val();           
 function calendar()
 {
     init();
@@ -13,21 +14,23 @@ function calendar()
         popovers();
         calendars();
         pdfclick();
+        click_generate();
     }
     
     function popovers() {
         $("#btn-date-range").popover({ 
 		    html : true,
 		    content: function() {
-				
+
 				return $("#popover-daterange").html();
 		    }
 		});
 		var range = $("#btn-date-range").popover();
 		
 		range.on("shown.bs.popover", function(e){
-            
-           
+
+            $(".start-date").val(start_deto);
+            $(".end-date").val(end_deto);
             calendars();
             generateReport();
             loaddate();
@@ -41,7 +44,19 @@ function calendar()
     
     function  calendars() {
         $('body').on('focus',".calendar-text", function(){
-            $(this).datepicker();
+            $(this).datepicker({
+                onSelect: function(dateText, inst) 
+                {   
+                   if($(this).hasClass("start-date"))
+                   {
+                        start_deto = $(".start-date").val();
+                   }
+                   else if($(this).hasClass("end-date"))
+                   {
+                        end_deto = $(".end-date").val(); 
+                   }
+                }
+            });
             loaddate();
         });
     }
@@ -69,5 +84,14 @@ function calendar()
            
         });
        
+    }
+
+    function click_generate()
+    {
+        $('body').on('click',".btn-generate-report", function()
+        {
+            start_deto = $(".start-date").val();
+            end_deto = $(".end-date").val(); 
+        });
     }
 }

@@ -18,14 +18,16 @@
 					@foreach(reset($_content) as $keys => $header)
 					<th>{{ ucwords(str_replace(' ', '_', $keys)) }}</th>
 					@endforeach
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
-				@foreach($_content as $content)
+				@foreach($_content as $id => $content)
 				<tr>
 					@foreach($content as $value)
 					<td>{{ $value }}</td>
 					@endforeach
+					<td><a style="cursor: pointer;" class="popup" link="/member/page/content/edit-maintenance?key={{ $key }}&id={{ $id }}&field={{ $field }}">Edit</a> | <a class="popup" style="cursor: pointer;" link="/member/page/content/delete-maintenance?key={{ $key }}&id={{ $id }}">Delete</a></td>
 				</tr>
 				@endforeach
 			</tbody>
@@ -38,11 +40,12 @@ function submit_done(data)
 { 
 	if (data.response_status == "success") 
 	{
-		$('.modal-loader').addClass("hidden");
-		$('.table-holder').load('/member/page/content/maintenance?field={{ $field }}&key={{ $key }} .table-holder',
-			function(){
+		$('.modal-loader').removeClass("hidden");
+		$('.table-holder').load('/member/page/content/maintenance?field={!! $field !!}&key={{ $key }} .table-holder',
+		function()
+		{
 			$('.maintenance-holder[key="'+data.key+'"]').val(data.result);
-			$('.modal-loader').removeClass("hidden");
+			$('.modal-loader').addClass("hidden");
 			toastr.success("Data has been successfully added.");
 			$(data.element).modal("hide");
 		});

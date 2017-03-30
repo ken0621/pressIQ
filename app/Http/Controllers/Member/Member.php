@@ -49,10 +49,20 @@ class Member extends Controller
 				}
 				else
 				{
-					$check_warehouse = Tbl_user_warehouse_access::where("user_id",$user_info->user_id)->where("warehouse_id",session("warehouse_id"))->first();
+					$shop_id_used    = $user_info->shop_id;
+					$check_warehouse = Tbl_user_warehouse_access::where("user_id",$user_info->user_id)->where("warehouse_id",session("warehouse_id_".$shop_id_used))->first();
 					if($check_warehouse)
 					{
-						$current_warehouse = Tbl_warehouse::where("warehouse_id",$check_warehouse->warehouse_id)->first();
+						$current_warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->where("warehouse_id",$check_warehouse->warehouse_id)->first();
+						
+						if(!$current_warehouse)
+						{
+							$check_if_got_one  = Tbl_user_warehouse_access::where("user_id",$user_info->user_id)->first();
+							if($check_if_got_one)
+							{
+								$current_warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->where("warehouse_id",$check_if_got_one->warehouse_id)->first();
+							}
+						}
 					}
 					else
 					{
@@ -60,7 +70,7 @@ class Member extends Controller
 						$check_if_got_one  = Tbl_user_warehouse_access::where("user_id",$user_info->user_id)->first();
 						if($check_if_got_one)
 						{
-							$current_warehouse = Tbl_warehouse::where("warehouse_id",$check_if_got_one->warehouse_id)->first();
+							$current_warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->where("warehouse_id",$check_if_got_one->warehouse_id)->first();
 						}
 					}
 
@@ -133,7 +143,7 @@ class Member extends Controller
 	{
 		$user 			  = Tbl_user::where("user_email", session('user_email'))->shop()->first();
 		$check_warehouse  = Tbl_user_warehouse_access::where("user_id",$user->user_id)->where("warehouse_id",$warehouse_id)->first();
-
+		$shop_id_used     = $user->shop_id;
 		if($check_warehouse)
 		{
 			$data["response"] = "success";
@@ -145,7 +155,7 @@ class Member extends Controller
 			$warehouse_id = null;
 		}
 
-		Session::put('warehouse_id', $warehouse_id);
+		Session::put('warehouse_id_'.$shop_id_used, $warehouse_id);
 
 		return $data;
 	}

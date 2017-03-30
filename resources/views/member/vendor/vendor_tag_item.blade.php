@@ -7,6 +7,7 @@
     }
 </style>
 <input type="hidden" name="_token" value="{{csrf_token()}}">
+<input type="hidden" name="vendor_id" value="{{$vendor->vendor_id}}">
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
     <h4 class="modal-title layout-modallarge-title item_title">Tag Item</h4>

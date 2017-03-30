@@ -112,6 +112,10 @@ class VendorController extends Member
     public function postUpdateTaggingItem()
     {
         dd(Request::input());
+
+        $item_id = Request::input("item_id");
+
+        
     }
 
     public function getLoadVendorTbl()

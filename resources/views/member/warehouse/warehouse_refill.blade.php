@@ -122,8 +122,11 @@ $('.droplist-vendor').globalDropList(
     onChangeValue : function ()
     {
         var vendor_id = $(this).val();
-        var warehouse_id = $("#warehouse_id").val();
-        $(".warehouse-refill-container").load("/item/warehouse/refill/by_vendor/"+warehouse_id+"/"+vendor_id +" .warehouse-refill-container")
+        if(vendor_id != "other")
+        {
+            var warehouse_id = $("#warehouse_id").val();
+            $(".warehouse-refill-container").load("/item/warehouse/refill/by_vendor/"+warehouse_id+"/"+vendor_id +" .warehouse-refill-container") 
+        }
     }
 });
 $('#search_txt').keyup(function()

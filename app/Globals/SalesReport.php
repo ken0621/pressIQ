@@ -346,10 +346,9 @@ class SalesReport
         {
             $data['range']    = date('M d Y', strtotime($start)).' - '.date('M d Y', strtotime($end));
             $data["_product"] = null;
-            $_product         = Tbl_ec_product::where('eprod_shop_id',$shop_id)
-                                          ->where("tbl_ec_product.archived",0)
-                                          ->join("tbl_ec_variant","tbl_ec_variant.evariant_prod_id","=","tbl_ec_product.eprod_id")
-                                          ->get();
+            $_product         = Tbl_ec_product::variant(' / ')->where('eprod_shop_id',$shop_id)
+                                      ->where("tbl_ec_product.archived",0)
+                                      ->get();
 
             $ctr     = 0;
             $date[0] = $start;

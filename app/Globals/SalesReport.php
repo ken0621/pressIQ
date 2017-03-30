@@ -294,7 +294,14 @@ class SalesReport
             while (($min_date = strtotime("+1 MONTH", $min_date)) <= $max_date) 
             {
                 $i++;
-            }   
+            }  
+
+            
+            if($i != 0)
+            {
+                $i++;
+            } 
+
             // dd($explodeStart);
             $month = $explodeStart[1];
             $year = $explodeStart[0];
@@ -309,10 +316,12 @@ class SalesReport
                     $year++;
                 }
 
-                $tempStart        = $year.'-'.$month.'-01';
-                $tempEnd          = date('Y-m-t',strtotime($tempStart));
-                $date[0]          = $tempStart;
-                $date[1]          = $tempEnd;
+                $tempStart                          = $year.'-'.$month.'-01';
+                $tempEnd                            = date('Y-m-t',strtotime($tempStart));
+                $date[0]                            = $tempStart;
+                $date[1]                            = $tempEnd;
+
+
 
                 $totalGross       = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("subtotal");
                 $totalOrder       = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->count();
@@ -323,6 +332,7 @@ class SalesReport
                 $totalTax         = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("tax");
                 $totalSales       = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("total");
                 $customerCount    = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->count();
+
 
 
 
@@ -442,6 +452,11 @@ class SalesReport
         while (($min_date = strtotime("+1 MONTH", $min_date)) <= $max_date) 
         {
             $i++;
+        }
+
+        if($i != 0)
+        {
+            $i++;
         }   
         // dd($explodeStart);
         $month = $explodeStart[1];
@@ -451,7 +466,7 @@ class SalesReport
 
         for($j = 0; $j <= $i; $j++)
         {
-            if($month >= 12)
+            if($month > 12)
             {
                 $month = 1;
                 $year++;
@@ -462,6 +477,8 @@ class SalesReport
             $date[0]                            = $tempStart;
             $date[1]                            = $tempEnd;
 
+
+
             $totalGross       = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("subtotal");
             $totalOrder       = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->count();
             $totalDiscount    = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("discount_amount");
@@ -471,6 +488,7 @@ class SalesReport
             $totalTax         = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("tax");
             $totalSales       = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->sum("total");
             $customerCount    = Tbl_ec_order::whereIn("order_status",['Completed'])->whereBetween(DB::raw('date(tbl_ec_order.created_date)'),$date)->count();
+
 
 
 

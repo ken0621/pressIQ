@@ -225,6 +225,10 @@ Route::any('/member/item/unit_of_measurement/edit_submit','Member\UnitOfMeasurem
 Route::any('/member/item/um/select_type','Member\UnitOfMeasurementController@select_type');
 /* END U/M ARCY*/
 
+/*PIS*/
+Route::any('/member/item/um/',"Member\UnitOfMeasurementController@check");
+Route::any('/member/item/um/add_base/{id}',"Member\UnitOfMeasurementController@add_base");
+
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
 /* END AUDIT TRAIL*/

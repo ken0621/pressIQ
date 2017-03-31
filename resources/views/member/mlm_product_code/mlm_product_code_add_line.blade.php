@@ -2,7 +2,7 @@
     {!! csrf_field() !!}
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <h4 class="modal-title layout-modallarge-title">Add New Line</h4>
+    <h4 class="modal-title layout-modallarge-title">Add Products</h4>
   </div>
   <div class="modal-body clearfix modallarge-body-layout background-white" style="z-index: 999 !important;">
       <div class="col-md-12">

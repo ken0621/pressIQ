@@ -247,17 +247,6 @@ class Sms
 		return $data;
 	} 
 
-	public static function sendPurchaseUsingCreditCard($recipient, $name, $amount)
-	{
-		$text = "Hi " . $name . ", " . "You have successfully completed your PhilTECH registration.For inquiries, call us at 0917-542-2614(Mobile) or at (062) 310-2256(Landline)";
-		$text = "Hi " . $name . ",%0a" . "You have successfully purchased a new membership package!For further details, please log in to your account at " . $link;
-		$text = "Hi " . $name . ",%0a" . "We have already processed your order amounting to " . $amount . ".Your E-wallet account was charged upon check-out. Thank you for your purchase!";
-		$text = "Hi " . $name . ",%0a" . "This is to confirm your Discount Card purchase issued on " . $start_date . " and will expire on " .$end_date . " .Please be guided. Thank you!";
-
-		$text = "Hi " . $name . ",%0a" . "We have already processed your order amounting to " . $amount . " . Your credit card was charged upon check-out. Thank you for your purchase!";
-
-	}
-
 	public static function limit($str, $length)
 	{
 		if(strlen($x)<=$length)
@@ -291,7 +280,7 @@ class Sms
 			CURLOPT_CUSTOMREQUEST => "GET",
 			CURLOPT_HTTPHEADER => array(
 			"accept: application/json",
-			"authorization: Basic UGhpbFRlY2g6VEEyNTJzeGM="
+			"authorization: Basic $sms_key"
 			),
 		));
 
@@ -310,5 +299,55 @@ class Sms
 		  	return $data->results;
 		}
 
+	}
+
+	public static function getSmsBalance($shop_id = null)
+	{
+		// if(!$shop_id)
+		// {
+		// 	$shop_id = Sms::getShopId();
+		// }
+
+		// $sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
+
+		// $request = new HttpRequest();
+		// $request::setUrl('https://api.infobip.com/account/1/balance');
+		// $request->setMethod(HTTP_METH_GET);
+
+		// $request->setHeaders(array(
+		//   'accept' => 'application/json',
+		//   'authorization' => 'Basic $sms_key'
+		// ));
+
+		// $curl = curl_init();
+
+		// curl_setopt_array($curl, array(
+		// 	CURLOPT_URL => "http://api.infobip.com/sms/1/logs",
+		// 	CURLOPT_RETURNTRANSFER => true,
+		// 	CURLOPT_ENCODING => "",
+		// 	CURLOPT_MAXREDIRS => 10,
+		// 	CURLOPT_TIMEOUT => 30,
+		// 	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		// 	CURLOPT_CUSTOMREQUEST => "GET",
+		// 	CURLOPT_HTTPHEADER => array(
+		// 	'accept' => 'application/json',
+		//     'authorization' => 'Basic $sms_key'
+		// 	),
+		// ));
+
+		// $response = curl_exec($curl);
+		// $err = curl_error($curl);
+
+		// curl_close($curl);
+
+	 //    if(!$sms_key) {
+	 //    	return array();
+	 //    }
+		// else if ($err) {
+		//   	return "cURL Error #:" . $err;
+		// } else {
+		//   	$data = json_decode($response);
+		//   	return $data->results;
+		// }
 	}
 }

@@ -50,8 +50,8 @@ function home()
   $window.resize(function() {
     var gridSize = getGridSize();
  
-    flexslider.vars.minItems = gridSize;
-    flexslider.vars.maxItems = gridSize;
+	    // flexslider.vars.minItems = gridSize;
+    	// flexslider.vars.maxItems = gridSize;
   });
 	}
 	function add_slider_script()

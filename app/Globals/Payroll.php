@@ -1017,9 +1017,16 @@ class Payroll
 			$sh_rest_hour['early_overtime'] 			= 0;
 			$sh_rest_hour['night_differential'] 		= 0;
 
+			$rh_rest_hour['regular'] 					= 0;
+			$rh_rest_hour['late_overtime'] 				= 0;
+			$rh_rest_hour['early_overtime'] 			= 0;
+			$rh_rest_hour['night_differential'] 		= 0;
 
 
-			if($regular_hours > 0)
+
+
+
+			if($regular_hours > 0 && $rest_day_hours <= 0 && $special_holiday_hours <= 0 && $regular_holiday_hours <= 0)
 			{
 				$regular_hour['regular'] 					= divide($regular_hours, $target_hour);
 				$regular_hour['late_overtime'] 				= divide($late_overtime, $target_hour);
@@ -1027,12 +1034,37 @@ class Payroll
 				$regular_hour['night_differential']  		= divide($night_differential, $target_hour);
 			}
 
+			if($regular_hours <= 0 && $rest_day_hours > 0 && $special_holiday_hours <= 0 && $regular_holiday_hours <= 0)
+			{
+				$rest_reg_hour['regular']					= divide($rest_day_hours, $target_hour);
+				$rest_reg_hour['late_overtime']				= divide($late_overtime, $target_hour);
+				$rest_reg_hour['early_overtime'] 			= divide($early_overtime, $target_hour);
+				$rest_reg_hour['night_differential']  		= divide($night_differential, $target_hour);
+			}
 			
+			if($regular_hours <= 0 && $rest_day_hours <= 0 && $special_holiday_hours > 0 && $regular_holiday_hours <= 0)
+			{
+				$sh_hour['regular'] 			= divide($special_holiday_hours, $target_hour);
+				$sh_hour['late_overtime'] 		= divide($late_overtime, $target_hour);
+				$sh_hour['early_overtime'] 		= divide($early_overtime, $target_hour);
+				$sh_hour['night_differential']  = divide($night_differential, $target_hour);
+			}
 
-			$rest_reg_hour['regular']					= divide($rest_day_hours, $target_hour);
-			$rest_reg_hour['late_overtime']				= divide($late_overtime, $target_hour);
-			$rest_reg_hour['early_overtime'] 			= divide($early_overtime, $target_hour);
-			$rest_reg_hour['night_differential']  		= divide($night_differential, $target_hour);
+			if($regular_hours <= 0 && $rest_day_hours > 0 && $special_holiday_hours > 0 && $regular_holiday_hours <= 0)
+			{
+				$sh_rest_hour['regular'] 			= divide($rest_day_hours, $target_hour);
+				$sh_rest_hour['late_overtime'] 		= divide($late_overtime, $target_hour);
+				$sh_rest_hour['early_overtime'] 	= divide($early_overtime, $target_hour);
+				$sh_rest_hour['night_differential'] = divide($night_differential, $target_hour);
+			}
+			
+			if($regular_hours <= 0 && $rest_day_hours <= 0 && $special_holiday_hours <= 0 && $regular_holiday_hours > 0)
+			{
+				$rh_hour['regular'] 			= divide($regular_holiday_hours, $target_hour);
+				$rh_hour['late_overtime'] 		= divide($late_overtime, $target_hour);
+				$rh_hour['early_overtime'] 		= divide($early_overtime, $target_hour);
+				$rh_hour['night_differential'] 	= divide($night_differential, $target_hour);
+			}
 
 			/* REGULAR DAY REST DAY */
 			if($rest_day_hours > 0 || $extra_day_hours > 0)
@@ -1055,17 +1087,7 @@ class Payroll
 				$extra_hour['night_differential']  	= divide($night_differential, $target_hour);
 			}
 
-			/* SPECIAL HOLIDAY */
-
-			
-
-			if($special_holiday_hours > 0)
-			{
-				$sh_hour['regular'] 			= divide($special_holiday_hours, $target_hour);
-				$sh_hour['late_overtime'] 		= divide($late_overtime, $target_hour);
-				$sh_hour['early_overtime'] 		= divide($early_overtime, $target_hour);
-				$sh_hour['night_differential']  = divide($night_differential, $target_hour);
-			}
+		
 			
 
 			if($special_holiday_hours > 0 || $regular_holiday_hours > 0)
@@ -1081,43 +1103,18 @@ class Payroll
 				$regular_hour['night_differential']  	= 0;
 			}
 
-			/* SPECIAL HOLIDAY REST DAY */
-			
-
-			if($special_holiday_hours > 0 && $rest_day_hours > 0 && $regular_holiday_hours <= 0)
-			{
-				$sh_rest_hour['regular'] 			= divide($rest_day_hours, $target_hour);
-				$sh_rest_hour['late_overtime'] 		= divide($late_overtime, $target_hour);
-				$sh_rest_hour['early_overtime'] 	= divide($early_overtime, $target_hour);
-				$sh_rest_hour['night_differential'] = divide($night_differential, $target_hour);
-
-				$sh_hour['regular'] 			= 0;
-				$sh_hour['late_overtime'] 		= 0;
-				$sh_hour['early_overtime'] 		= 0;
-				$sh_hour['night_differential']  = 0;
-			}
 
 
 			/* LEGAL HOLIDAY */
 			if($regular_holiday_hours > 0)
 			{
-				$sh_hour['regular'] 			= 0;
-				$sh_hour['late_overtime'] 		= 0;
-				$sh_hour['early_overtime'] 		= 0;
-				$sh_hour['night_differential']  = 0;
+				
 			}
 
-			$rh_hour['regular'] 			= divide($regular_holiday_hours, $target_hour);
-			$rh_hour['late_overtime'] 		= divide($late_overtime, $target_hour);
-			$rh_hour['early_overtime'] 		= divide($early_overtime, $target_hour);
-			$rh_hour['night_differential'] 	= divide($night_differential, $target_hour);
+			
 
 			/* LEGAL HOLIDAY REST DAY */
-			$rh_rest_hour['regular'] 			= 0;
-			$rh_rest_hour['late_overtime'] 		= 0;
-			$rh_rest_hour['early_overtime'] 	= 0;
-			$rh_rest_hour['night_differential'] = 0;
-
+			
 			if($regular_holiday_hours > 0 && $rest_day_hours > 0 && $special_holiday_hours <= 0)
 			{
 				$rh_rest_hour['regular'] 			= divide($rest_day_hours, $target_hour);

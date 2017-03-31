@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tbl_unit_measurement;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_unit_measurement_type;
+use App\Models\Tbl_settings;
 use App\Globals\UnitMeasurement;
 use App\Globals\Utilities;
 use Carbon\Carbon;
@@ -25,6 +26,25 @@ class UnitOfMeasurementController extends Member
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
+    public function check()
+    {
+        $um_id = Request::input("id");
+
+        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",$this->user_info->shop_id)->pluck("settings_setup_done");
+
+        $data["status"] = "" ;
+        if($check != 0)
+        {
+            $data["status"] = "pop-up-um";
+            $data["action"] = "/member/item/um/add_base/".$um_id;
+        }
+
+        return json_encode($data);
+    }
+    public function add_base($id)
+    {
+        
+    }
     public function index()
     {
         $access = Utilities::checkAccess('item-unit-measurement', 'access_page');

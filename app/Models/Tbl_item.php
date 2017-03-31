@@ -85,6 +85,15 @@ class Tbl_item extends Model
                      ->join("tbl_item_multiple_price","multiprice_item_id","=","item_id");
     }
 
+    public function scopeProduct($query, $archived = null)
+    {
+        $query->join("tbl_ec_variant","item_id","=","evariant_item_id")
+              ->join("tbl_ec_product","evariant_prod_id","=","eprod_id");
+        if($archived != null) $query->where("tbl_ec_product.archived",$archived);
+
+        return $query;
+    }
+
     // public function scope
 
 }

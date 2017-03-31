@@ -230,41 +230,71 @@ class ItemController extends Member
 
 				Item::insert_item_discount($insert_item_discount);
 
-				$warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->first();
+				$warehouse = Tbl_warehouse::where("warehouse_id",Session::get("warehouse_id"))->first();
 
 				$slip_id = 0 ;
 				if($warehouse == null)
 				{
-					//MAKE MAIN WAREHOUSE
-					$ins_warehouse["warehouse_name"] = "Main Warehouse";
-					$ins_warehouse["warehouse_shop_id"] = $shop_id;
-					$ins_warehouse["warehouse_created"] = Carbon::now();
-					$ins_warehouse["main_warehouse"] = 1;
+					$warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->first();
+					if($warehouse == null)
+					{
+						//MAKE MAIN WAREHOUSE
+						$ins_warehouse["warehouse_name"] = "Main Warehouse";
+						$ins_warehouse["warehouse_shop_id"] = $shop_id;
+						$ins_warehouse["warehouse_created"] = Carbon::now();
+						$ins_warehouse["main_warehouse"] = 1;
 
-					$warehouse_id = Tbl_warehouse::insertGetId($ins_warehouse);
+						$warehouse_id = Tbl_warehouse::insertGetId($ins_warehouse);
 
-					$ins["warehouse_id"] = $warehouse_id;
-					$ins["item_id"] = $item_id;
-					$ins["item_reorder_point"] = $item_reorder_point;
+						$ins["warehouse_id"] = $warehouse_id;
+						$ins["item_id"] = $item_id;
+						$ins["item_reorder_point"] = $item_reorder_point;
 
-					Tbl_sub_warehouse::insert($ins);
+						Tbl_sub_warehouse::insert($ins);
 
-					$ins_slip["inventory_reason"] = "insert_item";
-					$ins_slip["warehouse_id"] = $warehouse_id;
-					$ins_slip["inventory_remarks"] = "Insert Item";
-					$ins_slip["inventory_slip_date"] = Carbon::now();
-					$ins_slip["inventory_slip_shop_id"] = $this->user_info->user_shop;
-					$ins_slip["inventroy_source_reason"] = "item";
-					$ins_slip["inventory_source_id"] = $item_id;
+						$ins_slip["inventory_reason"] = "insert_item";
+						$ins_slip["warehouse_id"] = $warehouse_id;
+						$ins_slip["inventory_remarks"] = "Insert Item";
+						$ins_slip["inventory_slip_date"] = Carbon::now();
+						$ins_slip["inventory_slip_shop_id"] = $this->user_info->user_shop;
+						$ins_slip["inventroy_source_reason"] = "item";
+						$ins_slip["inventory_source_id"] = $item_id;
 
-					$slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
+						$slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
 
-					$ins_inven["inventory_item_id"] = $item_id;
-					$ins_inven["warehouse_id"] = $warehouse_id;
-					$ins_inven["inventory_created"] = Carbon::now();
-					$ins_inven["inventory_count"] = $item_quantity;
+						$ins_inven["inventory_item_id"] = $item_id;
+						$ins_inven["warehouse_id"] = $warehouse_id;
+						$ins_inven["inventory_created"] = Carbon::now();
+						$ins_inven["inventory_count"] = $item_quantity;
 
-					$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
+						$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);						
+					}
+					else
+					{
+						$insert_sub["warehouse_id"] = $warehouse->warehouse_id;
+						$insert_sub["item_id"] = $item_id;
+						$insert_sub["item_reorder_point"] = $item_reorder_point;
+
+						Tbl_sub_warehouse::insert($insert_sub);
+
+						$ins_slip["inventory_reason"] = "insert_item";
+						$ins_slip["warehouse_id"] = $warehouse->warehouse_id;
+						$ins_slip["inventory_remarks"] = "Insert Item";
+						$ins_slip["inventory_slip_date"] = Carbon::now();
+						$ins_slip["inventory_slip_shop_id"] = $this->user_info->user_shop;
+						$ins_slip["inventroy_source_reason"] = "item";
+						$ins_slip["inventory_source_id"] = $item_id;
+
+						$slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
+
+						$ins_inven["inventory_item_id"] = $item_id;
+						$ins_inven["warehouse_id"] =  $warehouse->warehouse_id;
+						$ins_inven["inventory_created"] = Carbon::now();
+						$ins_inven["inventory_count"] = $item_quantity;
+						$ins_inven["inventory_slip_id"] = $slip_id;
+
+						$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
+					}
 				}
 				else
 				{
@@ -919,38 +949,48 @@ class ItemController extends Member
         $code       = Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->first();
         $ctr_inventory = Tbl_item::leftjoin("tbl_warehouse_inventory","tbl_warehouse_inventory.inventory_item_id","=","tbl_item.item_id")->where("tbl_item.item_id",$id)->where("tbl_item.shop_id",$shop_id)->sum("inventory_count");
 
-        if($ctr_inventory <= 0)
+        $has_product = Tbl_item::product('0')->where("item_id", $id)->first();
+
+        if(!$has_product)
         {
-	        if($code)
+	        if($ctr_inventory <= 0)
 	        {
-	            if($code->used == 0 && $code->blocked == 0)
-	            {
-	               $update["archived"] = 1;
-	               Tbl_item::where("item_id",$id)->update($update);
-				   $return["error"][0]  = "Successfully archived";
-				   $return["message"]   = "Sucess-archived";   
-	            }
-	            else if($code->archive == 1)
-	            {
-					$return["error"][0]  = "Already archived";
-					$return["message"]   = "Failed";  
-	            }
+		        if($code)
+		        {
+		            if($code->used == 0 && $code->blocked == 0)
+		            {
+		               $update["archived"] = 1;
+		               Tbl_item::where("item_id",$id)->update($update);
+					   $return["error"][0]  = "Successfully archived";
+					   $return["message"]   = "Sucess-archived";   
+		            }
+		            else if($code->archive == 1)
+		            {
+						$return["error"][0]  = "Already archived";
+						$return["message"]   = "Failed";  
+		            }
 
-		        $item = Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->first()->toArray();
+			        $item = Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->first()->toArray();
 
-		        AuditTrail::record_logs("Archived","item",$id,"",serialize($item));
+			        AuditTrail::record_logs("Archived","item",$id,"",serialize($item));
+		        }
+		        else
+		        {
+					$return["error"][0]  = "Please try again";
+					$return["message"]   = "Failed";
+		        }
 	        }
 	        else
 	        {
-				$return["error"][0]  = "Please try again";
+	        	$return["error"][0]  = "You can't delete Item, ".$code->item_name." it has ".$ctr_inventory." quantity";
 				$return["message"]   = "Failed";
 	        }
-        }
-        else
-        {
-        	$return["error"][0]  = "You can't delete Item, ".$code->item_name." it has ".$ctr_inventory." quantity";
-			$return["message"]   = "Failed";
-        }
+    	}
+    	else
+    	{
+    		$return["error"][0]  = "You can't delete Item ".$code->item_name.". It's being use in ecommerce products. ";
+				$return["message"]   = "Failed";
+    	}
 
         return json_encode($return);
 	}

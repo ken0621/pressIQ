@@ -83,18 +83,30 @@
 			<tr>
 				<td style="padding: 20px" colspan="2">
 					<div>Prepared By:</div><br><br>
+					@if($slip->user_first_name != "")
 					<div style="border-bottom: 1px solid #000;width: 50%">{{$slip->user_first_name." ".$slip->user_last_name}}</div>
+					@else
+					<div style="border-bottom: 1px solid #000;width: 50%;color: #fff">_______________</div>
+					@endif
 				</td>
-				<td style="padding: 20px" colspan="4">
+				<td style="padding: 20px" colspan="2">
 					<div>Checked By:</div><br><br>
-					<div style="border-bottom: 1px solid #000;width: 50%;color: #fff">INVISIBLE NAME</div>
+					<div style="border-bottom: 1px solid #000;width: 50%;color: #fff">_______________</div>
+				</td>
+				<td style="padding: 20px" colspan="2">
+					<div>Printed By:</div><br><br>
+					<div style="border-bottom: 1px solid #000;width: 50%">{{$current_user->user_first_name." ".$current_user->user_last_name}}</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4" class="text-right">
+				</td>
+				<td style="padding-left: 20px" colspan="2">
+					{{date("F d, Y")}}
 				</td>
 			</tr>
 		</tbody>
 	</table>
-</div>
-<div>
-	
 </div>
 
 

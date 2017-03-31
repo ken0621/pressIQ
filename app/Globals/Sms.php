@@ -138,13 +138,13 @@ class Sms
 			$_recipient = "";
 			foreach($recipient as $key=>$number)
 			{
-				$key == 0 ? $_recipient .= "\"$number\"" : $_recipient .= ",\"$number\"" ;
+				$key == 0 ? $_recipient .= '"' . $number . '"' : $_recipient .= ',"' . $number . '"';
 			}
-			$new_recipient = "[$_recipient]";
+			$new_recipient = '[' . $_recipient . ']';
 		}
 		else
 		{
-			$new_recipient = "\"$recipient\"";
+			$new_recipient = '"' . $recipient . '"';
 		}
 
 		$curl = curl_init();
@@ -156,10 +156,10 @@ class Sms
 			CURLOPT_TIMEOUT => 30,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => "POST",
-			CURLOPT_POSTFIELDS => "{ \"from\":\"PhilTECH\", \"to\":$new_recipient, \"text\":\"$content.\" }",
+			CURLOPT_POSTFIELDS => '{ "from":"PhilTECH", "to":'.$new_recipient.', "text":"'.$content.'." }',
 			CURLOPT_HTTPHEADER => array(
 				"accept: application/json",
-				"authorization: Basic $sms_key",
+				"authorization: Basic " . $sms_key,
 				"content-type: application/json"
 			),
 		));
@@ -188,7 +188,6 @@ class Sms
 
 		$data["status"]   = $status;
 		$data["message"]  = $result;
-
 		return $data;
 	}
 

@@ -74,7 +74,7 @@ class EcommerceProductController extends Member
 			}
 
 			$active_product 	= $active_product->paginate(10);
-			$inactive_product 	= $inactive_product->paginate(1);
+			$inactive_product 	= $inactive_product->paginate(10);
 
 	        $data["_product"]			= $active_product;
 	        $data["_product_archived"]	= $inactive_product;

@@ -62,8 +62,8 @@
 			                    <tbody>
 								    <tr>
 								    	<td colspan="3">
-								    		<a href="javascript:" class="btn btn-default popup add_line_link" link="/member/mlm/product_code/sell/add_line">Add Lines</a>
-								    		<a href="javascript:" class="btn btn-default clear_all_lines" onClick="clear_all_lines()">Clear All Lines</a>
+								    		<a href="javascript:" class="btn btn-default popup add_line_link" link="/member/mlm/product_code/sell/add_line">Add Products</a>
+								    		<a href="javascript:" class="btn btn-default clear_all_lines" onClick="clear_all_lines()">Clear All Products</a>
 								    	</td>
 								    	<td class="text-right" style="font-weight: bold;">Total</td>
 								    	<td class="text-right" style="font-weight: bold; font-size: 20px; color: green;"><span class="total_bot">PHP 00.00</span></td>
@@ -128,6 +128,7 @@
 								   <input type="checkbox"  name="use_wallet">
 								  </div>
 								</div>
+								
 
 							</div>
 						</form>

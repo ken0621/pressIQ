@@ -32,9 +32,15 @@ class UtilitiesController extends Member
         if($this->hasAccess("utilities-admin-accounts","access_page"))
         {
             $user_info              = $this->user_info();
+            $data["user"]           = $user_info;
             $data["_list"]          = Tbl_user::where("user_shop",$user_info->user_shop)->position()->where("position_rank",">",$user_info->position_rank)->where("tbl_user.archived",0)->get();
             $data["_list_archived"] = Tbl_user::where("user_shop",$user_info->user_shop)->where("tbl_user.archived",1)->position()->where("position_rank",">",$user_info->position_rank)->get();
 
+            foreach($data["_list"] as $key=>$list)
+            {
+                $data["_list"][$key]->user_passkey = Crypt::decrypt($list->user_password);
+            }
+            
             return view('member/utilities/admin_list', $data);
         }
         else

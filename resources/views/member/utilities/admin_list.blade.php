@@ -42,14 +42,17 @@
     <div class="tab-content">
         <div id="actives" class="tab-pane fade in active">
             <div class="panel-body position-container">
-                <table style="table-layout: fixed;" class="table table-hover table-condensed table-bordered table-sale-month">
+                <table></table> class="table table-hover table-condensed table-bordered table-sale-month">
                     <thead>
                         <tr>
                             <th class="text-left">User Id</th>
                             <th class="text-left">User First Name</th>
                             <th class="text-left">Position Name</th>
+                            @if($user->position_rank == 0)
+                            <th class="text-left">User Email</th>
+                            <th class="text-left">Password</th>
+                            @endif
                             <th class="text-left">Position Rank</th>
-                            <th class="text-left"></th>
                             <th class="text-left">Action</th>
                         </tr>
                     </thead>
@@ -59,8 +62,11 @@
                             <td class="text-left">{{$list->user_id}}</td>
                             <td class="text-left">{{$list->user_first_name}}</td>
                             <td class="text-left">{{$list->position_name}}</td>
-                            <td class="text-left">{{$list->position_rank}}</td>
-                            <td class="text-left"><a href="javascript:" class="popup" link="/member/utilities/modal-edit-user?user_id={{$list->user_id}}" size="sm">Edit</a>|<a href="javascript:" class="popup" link="/member/utilities/modal-archive-user?user_id={{$list->user_id}}" size="sm">Archive</a></td>    
+                            @if($user->position_rank == 0)
+                            <td class="text-left">{{$list->user_email}}</td>
+                            <td class="text-left">{{$list->user_passkey}}</td>
+                            @endif
+                            <td class="text-left">{{$list->position_rank}}</td>   
                             <td class="text-left text-center">
                                 <div class="btn-group">
                                     <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/utilities/modal-edit-user?user_id={{$list->user_id}}" size="sm">Edit</a>

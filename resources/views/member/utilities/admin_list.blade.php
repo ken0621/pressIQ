@@ -42,7 +42,7 @@
     <div class="tab-content">
         <div id="actives" class="tab-pane fade in active">
             <div class="panel-body position-container">
-                <table></table> class="table table-hover table-condensed table-bordered table-sale-month">
+                <table class="table table-hover table-condensed table-bordered table-sale-month">
                     <thead>
                         <tr>
                             <th class="text-left">User Id</th>

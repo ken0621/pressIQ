@@ -25,16 +25,18 @@
  	<div class="joblist">
  		<div class="job-title">Job List</div>
  		<div class="job-content container">
-
- 			<div class="holder col-md-4">
- 				<div class="border">
-	 				<div class="title">Test</div>
-	 				<div class="line"></div>
-	 				Content
- 				</div>
- 			</div>
- 	
- 			<div class="quote">Working here is very challenging. </br>But you'll absolutely love it.</div>
+ 			@if(is_serialized(get_content($shop_theme_info, "career", "career_job_list")))
+	 			@foreach(unserialize(get_content($shop_theme_info, "career", "career_job_list")) as $key => $job_list)
+	 			<div class="holder col-md-4">
+	 				<div class="border">
+		 				<div class="title">{{ $job_list["title"] }}</div>
+		 				<div class="line"></div>
+		 				{!! $job_list["description"] !!}
+	 				</div>
+	 			</div>
+	 			@endforeach
+ 			@endif
+ 			<div class="quote">{{ get_content($shop_theme_info, "career", "career_job_quote") }}</div>
  		</div>
  	</div>
 	 <form id="career-form" method="POST" enctype="multipart/form-data">

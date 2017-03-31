@@ -171,7 +171,10 @@ class ItemController extends Member
 			$insert["item_date_created"]	    	  = Carbon::now();
 			$insert["shop_id"]	    				  = $shop_id;
 
-
+		if(Session::get("um_id") != null)
+		{
+			$item_measurement_id = Session::get("um_id");
+		}
 		if(Request::input("item_type") == "inventory")
 		{
 			$insert["item_type_id"]				      = 1; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
@@ -229,6 +232,8 @@ class ItemController extends Member
 				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;			
 
 				Item::insert_item_discount($insert_item_discount);
+
+				UnitMeasurement::update_um(Session::get("um_id"),$item_name,$item_id);
 
 				$warehouse = Tbl_warehouse::where("warehouse_id",Session::get("warehouse_id"))->first();
 
@@ -551,7 +556,7 @@ class ItemController extends Member
         if($access == 1)
         {
 			$shop_id          = $this->user_info->shop_id;
-			$data["data"]	  = Tbl_item::where("item_id",$id)->itemDiscount()->first()->toArray();
+			$data["data"]	  = Tbl_item::um()->where("item_id",$id)->itemDiscount()->first()->toArray();
 			$data["item_id"]  = $id;
 			if($data["data"]["item_type_id"] == 1)
 			{
@@ -569,6 +574,12 @@ class ItemController extends Member
 			{
 				$data["data"]["type_of_item"] = "bundle_type";
 				$data["data"]["bundle"]		  = Tbl_item_bundle::item()->where("bundle_bundle_id", $id)->get()->toArray();
+			}
+
+
+			if($data["data"]["parent_basis_um"] != 0)
+			{
+				$data["data"]["item_measurement_id"] = $data["data"]["parent_basis_um"];	
 			}
 			$data["data"]["item_date_tracked"] = date('m/d/Y',strtotime($data["data"]["item_date_tracked"]));
 			
@@ -621,6 +632,10 @@ class ItemController extends Member
 		$start_promo_date 		= Request::input("start_promo_date");
 		$end_promo_date 		= Request::input("end_promo_date");
 		
+		if(Session::get("um_id") != null)
+		{
+			$item_measurement_id = Session::get("um_id");
+		}
 
 		if(Request::input("item_type") == "inventory")
 		{
@@ -641,7 +656,7 @@ class ItemController extends Member
 			$insert["item_cost"]				      = Request::input("item_cost");
 			$insert["item_expense_account_id"]	      = Request::input("item_expense_account_id");
 			$insert["item_date_created"]	    	  = Carbon::now();
-			$insert["item_measurement_id"]	      	  = Request::input("item_measurement_id");
+			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_manufacturer_id"]	      	  = Request::input("item_manufacturer_id");
 			$insert["shop_id"]	    				  = $shop_id;
 				
@@ -678,11 +693,14 @@ class ItemController extends Member
 
 				Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->update($insert);
 
+
 				$insert_item_discount["item_id"] = $id;
 				$insert_item_discount["item_discount_value"] = $promo_price;
 				$insert_item_discount["item_discount_date_start"] = $start_promo_date;
 				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;	
 				Item::insert_item_discount($insert_item_discount);
+
+				UnitMeasurement::update_um(Session::get("um_id"),Request::input("item_name"),$id);
 
 				$return["message"] = "Success";
 			}
@@ -702,7 +720,7 @@ class ItemController extends Member
 			$insert["item_date_tracked"]	          = date("Y-m-d g:i:s",strtotime(Request::input("item_date_tracked")));
 			$insert["item_date_created"]	    	  = Carbon::now();
 			$insert["shop_id"]	    				  = $shop_id;
-			$insert["item_measurement_id"]	      	  = Request::input("item_measurement_id");
+			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
 
 			$rules["item_name"]					      = 'required';
@@ -751,7 +769,7 @@ class ItemController extends Member
 			$insert["item_purchase_from_supplier"]	  = Request::input("item_purchase_from_supplier") ? 1 : 0;
 			$insert["item_date_created"]	    	  = Carbon::now();
 			$insert["shop_id"]	    				  = $shop_id;
-			$insert["item_measurement_id"]	      	  = Request::input("item_measurement_id");
+			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
 			
 			$rules["item_name"]					      = 'required';

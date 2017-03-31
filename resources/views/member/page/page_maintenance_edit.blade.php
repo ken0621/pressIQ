@@ -19,7 +19,7 @@
 			<div class="form-group">
 				<label>{{ ucwords(str_replace(' ', '_', $fields->name)) }}</label>
 				@if($fields->type == "textarea")
-				<textarea class="form-control" name="{{ $fields->name }}">{{ $edit[$fields->name] }}</textarea>
+				<textarea class="form-control mce" name="{{ $fields->name }}">{{ $edit[$fields->name] }}</textarea>
 				@else
 				<input class="form-control" type="{{ $fields->type }}" name="{{ $fields->name }}" value="{{ $edit[$fields->name] }}">
 				@endif
@@ -29,3 +29,4 @@
 		@endif
 	</div>
 </form>
+@include("member.page.page_assets")

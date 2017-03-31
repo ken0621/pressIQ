@@ -257,7 +257,7 @@
 			"label":"Career Intro Image",
 			"type":"image",
 			"default":"/resources/assets/frontend/img/career3.png",
-			"size":"6"
+			"size":"12"
 		},
 		"career_intro_description" :
 		{
@@ -282,6 +282,16 @@
 			"label":"Career Job Quote",
 			"type":"textbox",
 			"default":"Working here is very challenging. But you'll absolutely love it.",
+			"size":"12"
+		}
+	},
+	"order":
+	{
+		"how_to_order_image" : 
+		{
+			"label":"How to Order Image",
+			"type":"image",
+			"default":"resources/assets/frontend/img/how.jpg",
 			"size":"12"
 		}
 	},

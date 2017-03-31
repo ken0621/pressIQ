@@ -260,6 +260,7 @@ class Page_ContentController extends Member
             
             $response["result"] = Tbl_content::where('content_id', $content_id)->first();
             $response["response_status"] = "success";
+            $response["do"] = "manage";
             $response["key"] = $key;
 
             return json_encode($response);
@@ -295,6 +296,7 @@ class Page_ContentController extends Member
             
             $response["result"] = Tbl_content::where('content_id', $content_id)->first();
             $response["response_status"] = "success";
+            $response["do"] = "manage";
             $response["key"] = $key;
 
             return json_encode($response);
@@ -324,8 +326,37 @@ class Page_ContentController extends Member
         
         $response["result"] = Tbl_content::where('content_id', $content_id)->first();
         $response["response_status"] = "success";
+        $response["do"] = "delete";
         $response["key"] = $key;
 
         return json_encode($response);
+    }
+
+    public function getMaintenanceCount()
+    {
+        $key = Request::input('key');
+        $exist = Tbl_content::where('key', $key)->first();
+        if ($exist) 
+        {
+            $content_id = $exist->content_id;
+            $get_content = $exist->value;
+
+            if (is_serialized($get_content)) 
+            {
+                $get_content = unserialize($get_content);
+            }
+            else
+            {
+                $get_content = [];
+            }
+        }
+        else
+        {
+            $get_content = [];
+        }
+
+        $count = count($get_content);
+
+        return json_encode($count);
     }
 }

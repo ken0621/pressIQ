@@ -721,7 +721,9 @@ Route::controller('/member/maintenance/online_payment', 'Member\OnlinePaymentMet
 /* ONLINE PAYMENT METHOD */
 Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* End */
-
+/* ITEM IMPORT*/
+Route::controller('/member/item/import', 'Member\ItemImportController');
+/* End */
 
 Route::controller('/tester','TesterController');
 

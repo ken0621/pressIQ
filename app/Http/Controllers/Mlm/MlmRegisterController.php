@@ -169,7 +169,7 @@ class MlmRegisterController extends MlmLoginController
 			                			$insert_lead['lead_customer_id_lead'] = $cus_id;
 			                			Tbl_mlm_lead::insert($insert_lead);
 			                		}
-                                    $this->mail_customer_success_register(Self::$shop_id, $cus_id);
+                                    //$this->mail_customer_success_register(Self::$shop_id, $cus_id);
                                     /* Sms Notification */
                                     $txt[0]["txt_to_be_replace"]    = "[name]";
                                     $txt[0]["txt_to_replace"]       = $insert['first_name'];

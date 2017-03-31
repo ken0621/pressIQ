@@ -35,6 +35,10 @@ class Mlm_plan
 	        {
 	            DB::statement('ALTER TABLE `tbl_mlm_item_points` ADD '.$value->marketing_plan_code.' double DEFAULT 0');
 	        }
+	        if(!Schema::hasColumn('tbl_item_code', $value->marketing_plan_code))
+	        {
+	            DB::statement('ALTER TABLE `tbl_item_code` ADD '.$value->marketing_plan_code.' double DEFAULT 0');
+	        }
         }
 		return $data;
 	}

@@ -17,6 +17,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/contact', 'Shop\ShopContactController@index'); //EDWARD GUEVARRA
 	Route::get('/career', 'Shop\ShopCareerController@index'); //EDWARD GUEVARRA
 	Route::get('/how', 'Shop\ShopHowController@index'); //EDWARD GUEVARRA
+	Route::get('/youwin', 'Shop\ShopYouWinController@index'); //EDWARD GUEVARRA
 
 	Route::get('/blog', 'Shop\ShopBlogController@index'); //EDWARD GUEVARRA
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index'); //EDWARD GUEVARRA

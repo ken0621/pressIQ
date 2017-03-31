@@ -1,5 +1,6 @@
 @extends('member.layout')
 @section('content')
+
 <style type="text/css">
     .info-box{
             display: block;
@@ -59,6 +60,22 @@
                     Reports from multilevel marketing
                 </small>
             </h1>
+            <div class="col-md-8 pull-right">
+              <div class="col-md-3">
+                <select name="report_choose" class="form-control">
+                  <option value="general">General Report</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <input type="date" class="form-control">
+              </div>
+              <div class="col-md-3">
+                <input type="date" class="form-control">
+              </div>
+              <div class="col-md-3">
+              <button class="btn btn-primary col-md-12">Generate</button>
+              </div>
+            </div>
         </div>
     </div>
 </div>

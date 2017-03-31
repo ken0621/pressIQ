@@ -128,7 +128,30 @@
 								   <input type="checkbox"  name="use_wallet">
 								  </div>
 								</div>
-								
+								<div class="col-md-12">
+								    <div class="row">
+								        <div class="form-group">
+								            <label for="inpuFname" class="payment_label" data-bind="payment-label">Choose Payment</label>
+								            <div class="input-group">
+								                <input id="payment-value"  name="payment_value" type="text" value="0" class="form-control payment-value" name="text" readonly data-bind="payment-value">
+								                <div class="input-group-btn bs-dropdown-to-select-group">
+								                	<ul class="dropdown-menu" role="menu" style="">
+								                        <li data-value="1"><a href="#">Cash</a></li>
+								                        <li data-value="2"><a href="#">GC</a></li>
+								                        <li data-value="3"><a href="#">Wallet</a></li>
+								                    </ul>
+								                    <button type="button" class="btn btn-default dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
+								                        <span data-bind="bs-drp-sel-label" style="color: black !important">Payment</span>
+								                        <input type="hidden" name="payment_type_choose" data-bind="bs-drp-sel-value" value="0">
+								                        <span class="caret" style="color: black !important"></span>
+								                        <span class="sr-only">Toggle Dropdown</span>
+								                    </button>
+								                    
+								                </div>
+								            </div>
+								        </div>
+								    </div>
+								</div>
 
 							</div>
 						</form>
@@ -149,7 +172,35 @@
 <link rel="stylesheet" href="/assets/external/loading/jquery.loading.css" />
 <script type="text/javascript" src="/assets/external/loading/jquery.loading.js"></script>
 <script type="text/javascript">
-
+$(document).ready(function(e){
+    $( document ).on( 'click', '.bs-dropdown-to-select-group .dropdown-menu li', function( event ) {
+    	var $target = $( event.currentTarget );
+		$target.closest('.bs-dropdown-to-select-group')
+			.find('[data-bind="bs-drp-sel-value"]').val($target.attr('data-value'))
+			.end()
+			.children('.dropdown-toggle').dropdown('toggle');
+		$target.closest('.bs-dropdown-to-select-group')
+    		.find('[data-bind="bs-drp-sel-label"]').text($target.context.textContent);
+    		var payment_value = $target.attr('data-value');
+    		console.log(payment_value);
+    		if(payment_value == 1)
+    		{
+    			$('.payment_label').text("Input Tendered Payment");
+    			document.getElementById('payment-value').readOnly =false;
+    		}
+    		else if(payment_value == 2)
+    		{
+    			$('.payment_label').text("Input GC Code");
+    			document.getElementById('payment-value').readOnly =false;
+    		}
+    		else if(payment_value == 3)
+    		{
+    			$('.payment_label').text("Wallet Payment (Auto Compute)");
+    			document.getElementById('payment-value').readOnly =true;
+    		}
+		return false;
+	});
+});
 // compute();
 load_no_discount();
 chosen_select_on_change();

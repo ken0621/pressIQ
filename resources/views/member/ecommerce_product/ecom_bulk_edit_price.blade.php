@@ -26,12 +26,12 @@
                 <div class="col-md-4 col-md-offset-8" style="padding: 10px">
                     <div class="input-group">
                         <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                        <input type="text" class="form-control global-search" url="/member/ecommerce/product/bulk-edit-price" placeholder="Search (Press Enter)" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control global-search" url="/member/ecommerce/product/bulk-edit-price" placeholder="Search (Press Enter)">
                     </div>
                 </div>
             </div>
             <!-- FORM.TITLE -->
-            <div class="form-box-divider">
+            <div class="form-box-divider tab-pane active">
                 <div class="row clearfix load-data" target="product-list">
                     <div class="table-responsive data-content" id="product-list">
                         <table class="table table-bordered table-condensed table-striped">

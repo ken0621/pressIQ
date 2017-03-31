@@ -174,7 +174,7 @@ class Sms
 			$result = "cURL Error #:" . $err;
 		} 
 		else {
-			$status = "UNKNOWN[#$shop_id]";
+			$status = "UNKNOWN";
 			$result = $response;
 		}
 
@@ -182,7 +182,7 @@ class Sms
 		$insert["sms_logs_key"]		= $key;
 		$insert["sms_logs_status"]	= $status;
 		$insert["sms_logs_recipient"] = $recipient == null ? '' : $recipient;
-		$insert["sms_logs_remarks"]	= json_encode($result)."|{ \"from\":\"PhilTECH\", \"to\":$new_recipient, \"text\":\"$content.\" }";
+		$insert["sms_logs_remarks"]	= json_encode($result);
 		$insert["created_at"]		= Carbon::now();
 		Tbl_sms_logs::insert($insert);
 

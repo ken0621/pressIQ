@@ -13,10 +13,10 @@
             </h1>
             <div class="text-right row">
                 <div class="col-md-4 pull-right">
+                    <a class="btn btn-custom-white pull-right" href="/member/maintenance/sms/logs">SMS Logs</a>
                     @if($user->user_level == 1)
                     <form class="global-submit" action="/member/maintenance/sms/authorization-key">
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
-                        <a class="btn btn-custom-white pull-right" href="/member/maintenance/sms/logs">SMS Logs</a>
                         <div class="input-group">
                             <input type="text" class="form-control" name="sms_authorization_key" placeholder="Authorization Key" value="{{$sms_key->sms_authorization_key or ''}}">
                             <span class="input-group-btn">

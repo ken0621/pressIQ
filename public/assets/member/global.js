@@ -168,8 +168,9 @@ function global()
 
     function action_global_search() // Bryan Kier
     {
-        $(document).on("change", ".global-search", function()
+        $(document).on("change", ".global-search", function(e)
         {
+            e.preventDefault();
             var url     = $(this).attr("url");
             var value   = $(this).val().replace(/ /g, "%20");
             $load_content =  $(".tab-pane.active").find(".load-data").attr("target");

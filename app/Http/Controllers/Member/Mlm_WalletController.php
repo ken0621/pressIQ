@@ -81,7 +81,7 @@ class MLM_WalletController extends Member
         $shop_id = $this->user_info->shop_id;
         Mlm_pre::pre_req($shop_id);
         $data['settings'] = Tbl_mlm_slot_wallet_log_refill_settings::where('shop_id', $shop_id)->first();
-        $data['request'] = Tbl_mlm_slot_wallet_log_refill::where('shop_id', $shop_id)->paginate(20);
+        $data['request'] = Tbl_mlm_slot_wallet_log_refill::where('shop_id', $shop_id)->paginate(10);
         return view('member.mlm_wallet.refill', $data);
     }
 

@@ -24,6 +24,8 @@ use Carbon\Carbon;
 use Validator;
 use App\Models\Tbl_email_template;
 use App\Globals\EmailContent;
+use App\Globals\Mlm_plan;
+use App\Models\Tbl_mlm_item_points;
 use Mail;
 class Item_code
 {
@@ -428,8 +430,18 @@ class Item_code
         	            {
         	                $rel_insert[$key]["item_code_invoice_id"] = $invoice_id;
                             $rel_insert[$key]["slot_id"] = $insert['slot_id'];
-
-                            // item_id
+                            $active_plan_product_repurchase = Mlm_plan::get_all_active_plan_repurchase($shop_id);
+                            $item_points = Tbl_mlm_item_points::where('item_id', $rel_insert[$key]['item_id'])->where('membership_id', $slot)->first();
+                            
+                            foreach($active_plan_product_repurchase as $key2 => $value)
+                            {
+                                $code = $value->marketing_plan_code;
+                                if(isset($item_points->$code))
+                                {
+                                    $rel_insert[$key][$code] = $item_points->$code;
+                                }
+                                
+                            }
         	            }
         	            Tbl_item_code::insert($rel_insert);
         	            
@@ -475,6 +487,9 @@ class Item_code
                                     $insert_item_per[$value->item_id]['item_quantity'] = 1;
                                 }
                             }
+                            $insert_item_per[$value->item_id]['item_membership_discount'] = Item::get_discount_only($value->item_id, $slot);
+                            $insert_item_per[$value->item_id]['item_membership_discounted'] = $insert_item_per[$value->item_id]['item_price'] - $insert_item_per[$value->item_id]['item_membership_discount'];
+                        
                         }
                         Tbl_item_code_item::insert($insert_item_per);
                         

@@ -88,7 +88,8 @@
                             <tr>
                                 <th>Item Name</th>
                                 <th>Quantity</th>
-                                <th>Serial</th>
+                                <th>Original Price</th>
+                                <th>V.I.P. Price</th>
                             </tr>   
                     </thead>    
                     <tbody>
@@ -97,8 +98,15 @@
                         <tr>
                             <td>{{$value->item_name}}</td>
                             <td>{{$value->item_quantity}}</td>
-                            <td>{{$value->item_serial}}</td>
+                            <td>{{$value->item_price * $value->item_quantity}}</td>
+                            <td>{{$value->item_membership_discounted * $value->item_quantity}}</td>
                         </tr>
+                        @if($value->item_serial != null)
+                        <tr>
+                            <td colspan="2"><span class="pull-right">Serial/s:</span></td>
+                            <td colspan="2">{{$value->item_serial}}</td>
+                        </tr>
+                        @endif
                         @endforeach
                     @else
                     <tr>

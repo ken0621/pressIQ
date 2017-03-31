@@ -38,7 +38,7 @@ class MLM_ProductController extends Member
 	    $data['membership_active'] = Tbl_membership::getactive(0, $shop_id)->get();
 
 	    // setup product on first try : no error on leftjoin
-	    $_inventory = Tbl_item::where("shop_id",$shop_id);
+	    $_inventory = Tbl_item::where("tbl_item.shop_id",$shop_id);
 
         $item_search = Request::input('item');
         if($item_search != null)
@@ -51,9 +51,7 @@ class MLM_ProductController extends Member
 	    $this->setup_points_initial($_inventory);
 	    // end setup
 	    
-	    $_inventory  = Tbl_item::where("tbl_item.shop_id",$shop_id)
-        
-        ->orderBy('tbl_item.item_id','asc');
+	    $_inventory  = Tbl_item::orderBy('tbl_item.item_id','asc');
         
         $item_search = Request::input('item');
         if($item_search != null)
@@ -62,6 +60,7 @@ class MLM_ProductController extends Member
             ->orWhere('item_name', 'like', '%' . $item_search . '%');
         }
         $_inventory = $_inventory->where('tbl_item.archived', 0)->type()->category()
+        ->where("tbl_item.shop_id",$shop_id)
         ->paginate(10);
 
 
@@ -73,7 +72,6 @@ class MLM_ProductController extends Member
             }
             $_inventory[$key]->item_points = $item_points;
         }
-        // dd($_inventory);
 	    $data['active'] = [];
 	    foreach($data['active_plan_product_repurchase'] as $key => $value)
 	    {
@@ -194,8 +192,7 @@ class MLM_ProductController extends Member
             return $this->show_no_access(); 
         }
     	$shop_id = $this->user_info->shop_id;
-        $items = Tbl_item::where("shop_id",$shop_id)
-        ->where('tbl_item.archived', 0)
+        $items = Tbl_item::where('tbl_item.archived', 0)
         ->orderBy('tbl_item.item_id','asc');
         $item_search = Request::input('item');
         if($item_search != null)
@@ -204,7 +201,7 @@ class MLM_ProductController extends Member
             ->orWhere('item_name', 'like', '%' . $item_search . '%');
         }
 
-    	$data['items'] = $items->type()->category()->paginate(10);
+    	$data['items'] = $items->type()->category()->where("tbl_item.shop_id",$shop_id)->paginate(10);
     	$data['membership_active'] = Tbl_membership::getactive(0, $shop_id)->get();
     	$item_discount = [];
     	$item_percentage = [];

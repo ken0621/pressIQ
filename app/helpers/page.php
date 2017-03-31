@@ -5,7 +5,7 @@ function page_list()
     $path = '/member/';
     
     /* TRANSACTION */
-    $page = "transaction List";  
+    $page = "transaction_list";  
     $nav[$page]['name'] = "Transaction";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "refresh";

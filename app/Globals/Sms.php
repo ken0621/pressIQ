@@ -273,7 +273,7 @@ class Sms
 			$curl = curl_init();
 
 			curl_setopt_array($curl, array(
-				CURLOPT_URL => "http://api.infobip.com/sms/1/logs",
+				CURLOPT_URL => "https://api.infobip.com/sms/1/logs",
 				CURLOPT_RETURNTRANSFER => true,
 				CURLOPT_ENCODING => "",
 				CURLOPT_MAXREDIRS => 10,
@@ -308,51 +308,86 @@ class Sms
 
 	public static function getSmsBalance($shop_id = null)
 	{
-		// if(!$shop_id)
-		// {
-		// 	$shop_id = Sms::getShopId();
-		// }
+		if(!$shop_id)
+		{
+			$shop_id = Sms::getShopId();
+		}
 
-		// $sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
+		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
 
-		// $request = new HttpRequest();
-		// $request::setUrl('https://api.infobip.com/account/1/balance');
-		// $request->setMethod(HTTP_METH_GET);
+		$curl = curl_init();
 
-		// $request->setHeaders(array(
-		//   'accept' => 'application/json',
-		//   'authorization' => 'Basic $sms_key'
-		// ));
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "http://api.infobip.com/account/1/balance",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "GET",
+			CURLOPT_HTTPHEADER => array(
+			'accept' => 'application/json',
+		    'authorization' => 'App 28c1e4151653849dc9640db2bea7d773-3c4f2e4b-b934-49ea-93b5-e7d712c06bbc'
+			),
+		));
 
-		// $curl = curl_init();
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
 
-		// curl_setopt_array($curl, array(
-		// 	CURLOPT_URL => "http://api.infobip.com/sms/1/logs",
-		// 	CURLOPT_RETURNTRANSFER => true,
-		// 	CURLOPT_ENCODING => "",
-		// 	CURLOPT_MAXREDIRS => 10,
-		// 	CURLOPT_TIMEOUT => 30,
-		// 	CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-		// 	CURLOPT_CUSTOMREQUEST => "GET",
-		// 	CURLOPT_HTTPHEADER => array(
-		// 	'accept' => 'application/json',
-		//     'authorization' => 'Basic $sms_key'
-		// 	),
-		// ));
+		curl_close($curl);
 
-		// $response = curl_exec($curl);
-		// $err = curl_error($curl);
+	    if(!$sms_key) {
+	    	return [];
+	    }
+		else if ($err) {
+		  	return "cURL Error #:" . $err;
+		} else {
+		  	$data = json_decode($response);
+		  	dd($response);
+		  	return $data->results;
+		}
+	}
 
-		// curl_close($curl);
+	public static function apiKey($shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Sms::getShopId();
+		}
 
-	 //    if(!$sms_key) {
-	 //    	return array();
-	 //    }
-		// else if ($err) {
-		//   	return "cURL Error #:" . $err;
-		// } else {
-		//   	$data = json_decode($response);
-		//   	return $data->results;
-		// }
+		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
+
+		$curl = curl_init();
+
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "http://api.infobip.com/2fa/1/api-key",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "POST",
+			CURLOPT_HTTPHEADER => array(
+			'accept' => 'application/json',
+		    'authorization' => 'Basic UGhpbFRlY2g6VEEyNTJzeGM=',
+		    "content-type: application/json"
+			),
+		));
+
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+
+		curl_close($curl);
+
+	    if(!$sms_key) {
+	    	return [];
+	    }
+		else if ($err) {
+		  	return "cURL Error #:" . $err;
+		} else {
+		  	$data = json_decode($response);
+		  	dd($response);
+		  	return $data->results;
+		}
 	}
 }

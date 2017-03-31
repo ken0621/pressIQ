@@ -111,10 +111,11 @@ function item()
             onChangeValue : function()
             {
                 var id = $(this).val();
+                var item_id = $(".item_id").val();
                 $.ajax({
                     url : "/member/item/um/",
                     type : "get",
-                    data : { id:id },
+                    data : { id:id , item_id:item_id},
                     success : function(data)
                     {      
                         data = $.parseJSON(data);                                          

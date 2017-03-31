@@ -47,15 +47,20 @@ class UnitMeasurement
         }
         return $return_qty;
     }
-    public static function update_um($um_id,$item_name)
+    public static function update_um($um_id,$item_name,$item_id)
     {
         if($um_id != null)
         {
-            $um_id = Session::get("um_id");
-            $old_um = Tbl_unit_measurement::where("um_id",$um_id)->first();
-            $up["um_name"] = $old_um."(".$item_name.")";
+            $chk = Tbl_unit_measurement::where("um_id",$um_id)->first();
 
-            Tbl_unit_measurement::where("um_id",$um_id)->update($old);              
+            $old_um = Tbl_unit_measurement::where("um_id",$chk->parent_basis_um)->first();
+            if($old_um)
+            {
+                $up["um_name"] = $old_um->um_name."(".$item_name.")";
+                $up["um_item_id"] = $item_id;
+
+                Tbl_unit_measurement::where("um_id",$um_id)->update($up);                
+            }
         }
         Session::forget("um_id");   
     }

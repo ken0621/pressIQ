@@ -223,11 +223,13 @@ Route::any('/member/item/unit_of_measurement/add_submit','Member\UnitOfMeasureme
 Route::any('/member/item/unit_of_measurement/edit/{id}','Member\UnitOfMeasurementController@edit');
 Route::any('/member/item/unit_of_measurement/edit_submit','Member\UnitOfMeasurementController@edit_submit');
 Route::any('/member/item/um/select_type','Member\UnitOfMeasurementController@select_type');
+Route::any('/member/item/unit_of_measurement/{id}/{action}','Member\UnitOfMeasurementController@archived');
+Route::any('/member/item/unit_of_measurement/archived_submit','Member\UnitOfMeasurementController@archived_submit');
 /* END U/M ARCY*/
 
 /*PIS*/
 Route::any('/member/item/um/',"Member\UnitOfMeasurementController@check");
-Route::any('/member/item/um/add_base/{id}',"Member\UnitOfMeasurementController@add_base");
+Route::any('/member/item/um/add_base/{id}/{item_id}',"Member\UnitOfMeasurementController@add_base");
 Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController@add_base_submit');
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');

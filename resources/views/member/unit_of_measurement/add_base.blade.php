@@ -17,7 +17,7 @@
     		</div>
     		<div class="col-md-6">
     			<label>{{$sub->multi_name." ".$sub->multi_abbrev}}</label>
-    			<input type="text" class="form-control input-sm" name="sub_qty">
+    			<input type="text" class="form-control input-sm" name="sub_qty" value="{{$sub->unit_qty}}">
     		</div>    		
     	</div>
     </div>

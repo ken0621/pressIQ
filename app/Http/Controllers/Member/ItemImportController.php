@@ -53,7 +53,39 @@ class ItemImportController extends Member
 	public function getIndex()
 	{
 
-		return view('member.sms.sms', $data);
+		return view('member.import.item_import');
+	}
+
+	public function postReadFile()
+	{
+		dd(Request::input('value'));
+		$_value     = Request::input('value');
+
+		/* Validation */
+		// $has_Category = Tbl_category::where("type_name", $value["Category"])->where("type_shop", $this->getShopId())->first();
+		// $has_Account  = Tbl_chart_of_account::where("account_name", $value[""])
+
+
+		// $username = Tbl_register::Account()->where("username", "homerun")->first();
+  //       Session::put("member", $username);
+
+  //       $_value     = Request::input('value');
+  //       $message    = "";
+        
+  //       foreach($_value as $key=>$value)
+  //       {
+  //           $message = $this->save_account($value["Account Name"],$value["Sponsor Name"], $value["Matrix Name"], $value["First Name"], $value["Last Name"], $value["Product"]);
+  //           if($message != "")
+  //           {
+  //               $data["stat"]       = 0;
+  //               $data["message"]    = $message;
+  //               return json_encode($data);
+  //           }
+  //       }
+        
+  //       $data["message"]    = $message;
+
+        return json_encode($data);
 	}
 
 }

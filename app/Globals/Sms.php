@@ -164,7 +164,7 @@ class Sms
 			),
 		));
 
-		dd($curl);
+		// dd($curl);
 
 		$response 	= curl_exec($curl);
 		$err 		= curl_error($curl);

@@ -177,11 +177,11 @@
                                     </tr>
                                     <tr>
                                         <td>Tendered Amount :</td>
-                                        <td>{{number_format($invoice->item_code_tendered_payment)}}</td>
+                                        <td>{{number_format($invoice->item_code_tendered_payment, 2)}}</td>
                                     </tr>
                                     <tr>
                                         <td>Change :</td>
-                                        <td>{{number_format($invoice->item_code_change)}}</td>
+                                        <td>{{number_format($invoice->item_code_change, 2)}}</td>
                                     </tr>
                                     <tr>
                                         <td colspan="2">

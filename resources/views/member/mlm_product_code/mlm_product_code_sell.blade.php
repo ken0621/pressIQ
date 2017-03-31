@@ -111,23 +111,6 @@
 
 								<div class="row">
 									<br>
-								  <div class="col-lg-12">
-								    <div class="input-group">
-								      <span class="input-group-addon">
-								        <input type="checkbox" name="use_gc" aria-label="Checkbox for following text input">
-								      </span>
-								      <span class="input-group-addon" >USE GC</span>
-								      <input type="text" class="form-control" aria-label="Text input with checkbox" name="gc_code">
-								    </div>
-								  </div>
-								</div>
-								<div class="row">
-									<br>
-								  <div class="col-lg-12">
-								  <label>USE WALLET</label>
-								   <input type="checkbox"  name="use_wallet">
-								  </div>
-								</div>
 								<div class="col-md-12">
 								    <div class="row">
 								        <div class="form-group">

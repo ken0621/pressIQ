@@ -131,8 +131,8 @@ class Sms
 
 		$content = $content_status["message"];
 		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
-		$sms_key = Sms::apiKey($sms_key);
-
+		// $sms_key = Sms::apiKey($sms_key);
+		
 		if(is_array($recipient))
 		{
 			$_recipient = "";
@@ -159,7 +159,7 @@ class Sms
 			CURLOPT_POSTFIELDS => "{ \"from\":\"PhilTECH\", \"to\":$new_recipient, \"text\":\"$content.\" }",
 			CURLOPT_HTTPHEADER => array(
 				"accept: application/json",
-				"authorization: App $sms_key",
+				"authorization: Basic $sms_key",
 				"content-type: application/json"
 			),
 		));

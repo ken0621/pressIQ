@@ -814,7 +814,7 @@ class EcommerceProductController extends Member
 		$search = Request::input('search');
 		if($search)
 		{
-			$data["_product"] = $data["_product"]->whereRaw("concat(eprod_name,variant_name) like '%$search%'");
+			$data["_product"] = $data["_product"]->havingRaw("concat(eprod_name, IFNULL(variant_name, '')) like '%$search%'");
 		}
 
 		$data["_product"] = $data["_product"]->get()->toArray();

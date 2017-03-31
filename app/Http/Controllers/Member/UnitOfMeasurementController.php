@@ -13,6 +13,7 @@ use App\Globals\UnitMeasurement;
 use App\Globals\Utilities;
 use Carbon\Carbon;
 use Validator;
+use Session;
 class UnitOfMeasurementController extends Member
 {
     /**
@@ -43,7 +44,48 @@ class UnitOfMeasurementController extends Member
     }
     public function add_base($id)
     {
+        $data["um"] = Tbl_unit_measurement::where("um_id",$id)->first();
+        $data["um_multi"] = Tbl_unit_measurement_multi::where("multi_um_id",$id)->get();
+
+        $count = Tbl_unit_measurement::where("parent_basis_um",$id)->count();
+
+        $ins["um_shop"] = $this->user_info->shop_id;
+        $ins["um_name"] = $data["um"]->um_name."_".($count+1);
+        $ins["um_date_created"] = Carbon::now();
+        $ins["um_type"] = $data["um"]->um_type;
+        $ins["parent_basis_um"] = $id;
+
+        $um_id = Tbl_unit_measurement::insertGetId($ins);
+
+        foreach ($data["um_multi"] as $key => $value) 
+        {
+            $ins_multi["multi_um_id"] = $um_id;
+            $ins_multi["multi_name"] = $value->multi_name;
+            $ins_multi["unit_qty"] = $value->unit_qty;
+            $ins_multi["multi_abbrev"] = $value->multi_abbrev;
+            $ins_multi["is_base"] = $value->is_base;
+
+            Tbl_unit_measurement_multi::insert($ins_multi);
+        }
         
+        $data["base"] = Tbl_unit_measurement_multi::where("multi_um_id",$um_id)->where("is_base",1)->first();
+        $data["sub"] = Tbl_unit_measurement_multi::where("multi_um_id",$um_id)->where("is_base",0)->first();
+
+        return view("member.unit_of_measurement.add_base",$data);
+    }
+    public function add_base_submit()
+    {
+        $um_id = Request::input("um_id");
+        $sub_multi_id = Request::input("sub_multi_id");
+
+        $update_qty["unit_qty"] = Request::input("sub_qty");
+
+        Tbl_unit_measurement_multi::where("multi_id",$sub_multi_id)->update($update_qty);
+
+        Session::put("um_id",$um_id);
+
+        $data["type"] = "base-um";
+        return json_encode($data);
     }
     public function index()
     {

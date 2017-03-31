@@ -107,7 +107,25 @@ function item()
         {
             width       : '100%',
             link        : '/member/item/unit_of_measurement/add',
-            link_size   : 'lg'
+            link_size   : 'lg',
+            onChangeValue : function()
+            {
+                var id = $(this).val();
+                $.ajax({
+                    url : "/member/item/um/",
+                    type : "get",
+                    data : { id:id },
+                    success : function(data)
+                    {      
+                        data = $.parseJSON(data);                                          
+                        if(data.status == "pop-up-um")
+                        {
+                            console.log(data.status);
+                            action_load_link_to_modal(data.action,"md");
+                        }
+                    }
+                });
+            }
         });
 
         $(".drop-down-coa").globalDropList(
@@ -289,6 +307,10 @@ function submit_done(data)
              $(".drop-down-manufacturer").globalDropList("reload"); 
              $(".drop-down-manufacturer").val(data.id).change();              
         });
+        data.element.modal("hide");
+    }
+    else if(data.type == "base-um")
+    {        
         data.element.modal("hide");
     }
     else if(data.type == "unit-measurement")

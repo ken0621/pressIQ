@@ -228,7 +228,7 @@ Route::any('/member/item/um/select_type','Member\UnitOfMeasurementController@sel
 /*PIS*/
 Route::any('/member/item/um/',"Member\UnitOfMeasurementController@check");
 Route::any('/member/item/um/add_base/{id}',"Member\UnitOfMeasurementController@add_base");
-
+Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController@add_base_submit');
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
 /* END AUDIT TRAIL*/

@@ -171,7 +171,10 @@ class ItemController extends Member
 			$insert["item_date_created"]	    	  = Carbon::now();
 			$insert["shop_id"]	    				  = $shop_id;
 
-
+		if(Session::get("um_id") != null)
+		{
+			$item_measurement_id = Session::get("um_id");
+		}
 		if(Request::input("item_type") == "inventory")
 		{
 			$insert["item_type_id"]				      = 1; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
@@ -229,6 +232,8 @@ class ItemController extends Member
 				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;			
 
 				Item::insert_item_discount($insert_item_discount);
+
+				UnitMeasurement::update_um(Session::get("um_id"),$item_name);
 
 				$warehouse = Tbl_warehouse::where("warehouse_id",Session::get("warehouse_id"))->first();
 

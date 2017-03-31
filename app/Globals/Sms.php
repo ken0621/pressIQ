@@ -173,7 +173,7 @@ class Sms
 			$result = "cURL Error #:" . $err;
 		} 
 		else {
-			$status = "UNKNOWN";
+			$status = "UNKNOWN[#$shop_id]";
 			$result = $response;
 		}
 

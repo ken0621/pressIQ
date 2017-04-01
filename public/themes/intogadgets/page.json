@@ -8,25 +8,74 @@
 			"default":"",
 			"size":"12"
 		},
+		"home_category_sale" :
+		{
+			"label":"Category Sale Image",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
 		"home_category_sale_label" :
 		{
 			"label":"Category Sale Label",
 			"type":"textbox",
 			"default":"SALE SALE",
-			"size":"6"
+			"size":"4"
+		},
+		"home_category_sale_link" :
+		{
+			"label":"Category Sale Link",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"home_category_featured" :
+		{
+			"label":"Category Featured Image",
+			"type":"image",
+			"default":"",
+			"size":"4"
 		},
 		"home_category_featured_label" :
 		{
 			"label":"Category Featured Label",
 			"type":"textbox",
 			"default":"FEATURED",
-			"size":"6"
+			"size":"4"
+		},
+		"home_category_featured_link" :
+		{
+			"label":"Category Featured Link",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"home_category_tablet" :
+		{
+			"label":"Category Tablet Image",
+			"type":"image",
+			"default":"",
+			"size":"4"
 		},
 		"home_category_tablet_label" :
 		{
 			"label":"Category Tablet Label",
 			"type":"textbox",
 			"default":"TABLETS",
+			"size":"4"
+		},
+		"home_category_tablet_link" :
+		{
+			"label":"Category Tablet Link",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"home_category_accessories" :
+		{
+			"label":"Category Accessories Image",
+			"type":"image",
+			"default":"",
 			"size":"4"
 		},
 		"home_category_accessories_label" :
@@ -36,6 +85,20 @@
 			"default":"ACCESSORIES",
 			"size":"4"
 		},
+		"home_category_accessories_link" :
+		{
+			"label":"Category Accessories Link",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
+		},
+		"home_category_smartphone" :
+		{
+			"label":"Category Smartphone Image",
+			"type":"image",
+			"default":"",
+			"size":"4"
+		},
 		"home_category_smartphone_label" :
 		{
 			"label":"Category Smartphone Label",
@@ -43,38 +106,10 @@
 			"default":"SMARTPHONES",
 			"size":"4"
 		},
-		"home_category_sale" :
+		"home_category_smartphone_link" :
 		{
-			"label":"Category Sale",
-			"type":"image",
-			"default":"",
-			"size":"6"
-		},
-		"home_category_featured" :
-		{
-			"label":"Category Featured",
-			"type":"image",
-			"default":"",
-			"size":"6"
-		},
-		"home_category_tablet" :
-		{
-			"label":"Category Tablet",
-			"type":"image",
-			"default":"",
-			"size":"4"
-		},
-		"home_category_accessories" :
-		{
-			"label":"Category Accessories",
-			"type":"image",
-			"default":"",
-			"size":"4"
-		},
-		"home_category_smartphone" :
-		{
-			"label":"Category Smartphone",
-			"type":"image",
+			"label":"Category Smartphone Link",
+			"type":"textbox",
 			"default":"",
 			"size":"4"
 		},
@@ -257,6 +292,79 @@
 			"size":"12"
 		}
 	},
+	"contact":
+	{
+		"contact_header_cover" :
+		{
+			"label":"Contact Header Cover",
+			"type":"image",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/contact-header.png",
+			"size":"12"
+		},
+		"contact_title" :
+		{
+			"label":"Contact Title",
+			"type":"textbox",
+			"default":"LEAVE US A MESSAGE",
+			"size":"12"
+		},
+		"contact_subtitle" :
+		{
+			"label":"Contact Sub-Title",
+			"type":"textbox",
+			"default":"Whether you have a question about bulk orders, need assistance on payment options, or just wanted to drop a line,we want to know what’s on your mind.",
+			"size":"12"
+		},
+		"contact_quote" :
+		{
+			"label":"Contact Quote",
+			"type":"textbox",
+			"default":"We’ll help you get your orders out.",
+			"size":"12"
+		},
+		"contact_location_link" :
+		{
+			"label":"Contact Location Link",
+			"type":"textbox",
+			"default":"http://www.google.com/maps/d/edit?mid=zbBh_Yccu5o0.ksjUvC1cQtLE&usp=sharing",
+			"size":"3"
+		},
+		"contact_facebook_link" :
+		{
+			"label":"Contact Facebook Link",
+			"type":"textbox",
+			"default":"http://facebook.com/intogadgetstore",
+			"size":"3"
+		},
+		"contact_twitter_link" :
+		{
+			"label":"Contact Twitter Link",
+			"type":"textbox",
+			"default":"http://twitter.com/intogadgetstore",
+			"size":"3"
+		},
+		"contact_instagram_link" :
+		{
+			"label":"Contact Instagram Link",
+			"type":"textbox",
+			"default":"http://instagram.com/intogadgetsph",
+			"size":"3"
+		},
+		"contact_store_maintenance" :
+		{
+			"label":"Contact Store Maintenance",
+			"type":"maintenance",
+			"default":"",
+			"field":[
+				{"name":"image", "type":"image"},
+				{"name":"name", "type":"text"},
+				{"name":"branch", "type":"text"},
+				{"name":"contact", "type":"text"},
+				{"name":"link", "type":"text"}
+			],
+			"size":"12"
+		}
+	},
 	"career":
 	{
 		"career_title" :
@@ -416,6 +524,20 @@
 	},
 	"product":
 	{
+		"product_banner" :
+		{
+			"label":"Product Banner",
+			"type":"image",
+			"default":"",
+			"size":"12"
+		},
+		"product_banner_link" :
+		{
+			"label":"Product Banner Link",
+			"type":"textbox",
+			"default":"",
+			"size":"12"
+		},
 		"top_rated_products" :
 		{
 			"label":"Top Rated Products",
@@ -433,6 +555,27 @@
 	},
 	"info":
 	{
+		"footer_ads" :
+		{
+			"label":"Footer Ads",
+			"type":"image",
+			"default":"",
+			"size":"12"
+		},
+		"footer_ads_link" :
+		{
+			"label":"Footer Ads Link",
+			"type":"textbox",
+			"default":"",
+			"size":"12"
+		},
+		"newsletter_popup_cover_image" :
+		{
+			"label":"Newsletter Popup Cover Image",
+			"type":"image",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/popup-signup.jpg",
+			"size":"12"
+		},
 		"footer_contact_number_1" :
 		{
 			"label":"Footer Contact Number #1",

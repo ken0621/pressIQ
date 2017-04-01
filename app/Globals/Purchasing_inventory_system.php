@@ -61,10 +61,9 @@ class Purchasing_inventory_system
 
         return $data;
     }
-
     public static function reload_sir_item($sir_id)
     {
-        
+    
     }
     public static function reject_return_stock($sir_id)
     {

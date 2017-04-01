@@ -242,7 +242,7 @@ class ItemController extends Member
 
 				UnitMeasurement::update_um(Session::get("um_id"),$item_name,$item_id);
 
-				$warehouse = Tbl_warehouse::where("warehouse_id",Session::get("warehouse_id_".$this->user_info->shop_id))->first();
+				$warehouse = Tbl_warehouse::where("warehouse_id",$this->current_warehouse->warehouse_id)->first();
 
 				$slip_id = 0 ;
 				if($warehouse == null)
@@ -638,7 +638,14 @@ class ItemController extends Member
 		$promo_price 			= Request::input("promo_price");
 		$start_promo_date 		= Request::input("start_promo_date");
 		$end_promo_date 		= Request::input("end_promo_date");
-		$item_measurement_id = "";
+
+
+		$item_measurement_id = Request::input("item_measurement_id");
+		$check = UnitMeasurement::check();
+        if($check != 0)
+        {
+        	$item_measurement_id = Tbl_unit_measurement::where("um_id",$old["item_measurement_id"])->pluck("um_id");
+        }
 		if(Session::get("um_id") != null)
 		{
 			$item_measurement_id = Session::get("um_id");

@@ -36,7 +36,24 @@ class UnitMeasurement
         return Tbl_unit_measurement::multi()->where("um_shop", UnitMeasurement::getShopId())
                                     ->where("um_archived",0)
                                     ->get();
+    }
+    public static function archived_um()
+    {        
+        $del = Tbl_unit_measurement::where("parent_basis_um","!=",0)->where("um_item_id",0)->where("um_shop",UnitMeasurement::getShopId())->get();
+
+        foreach ($del as $key => $value) 
+        {
+           $up["is_multi"] = 1;
+           $up["um_archived"] = 1;
+
+           Tbl_unit_measurement::where("um_id",$value->um_id)->update($up);
+        }
     } 
+    public static function check()
+    {
+        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",UnitMeasurement::getShopId())->pluck("settings_setup_done");
+        return $check;
+    }
     public static function um_qty($um_id)
     {
         $um_info = UnitMeasurement::um_info($um_id);

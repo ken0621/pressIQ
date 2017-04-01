@@ -142,6 +142,7 @@ Route::any('/member/mlm/wallet/adjust/submit', 'Member\Mlm_WalletController@adju
 Route::any('/member/mlm/wallet/breakdown/{slot_id}', 'Member\Mlm_WalletController@breakdown_wallet');//luke
 Route::any('/member/mlm/wallet/refill', 'Member\Mlm_WalletController@refill');//luke
 Route::any('/member/mlm/wallet/refill/{id}', 'Member\Mlm_WalletController@refill_id');//luke
+Route::any('/member/mlm/wallet/refill/change/attachment', 'Member\Mlm_WalletController@refill_change');//luke
 Route::any('/member/mlm/wallet/refill/process/submit', 'Member\Mlm_WalletController@refill_process');//luke
 Route::any('/member/mlm/wallet/refill/change/settings', 'Member\Mlm_WalletController@refill_settings');//luke
 Route::any('/member/mlm/wallet/transfer', 'Member\Mlm_WalletController@transfer');
@@ -179,6 +180,7 @@ Route::any('/member/mlm/product/set/all/points', 'Member\MLM_ProductController@s
 Route::any('/member/mlm/product_code', 'Member\MLM_ProductCodeController@index');//ewen
 Route::any('/member/mlm/product_code/sell', 'Member\MLM_ProductCodeController@sell');//ewen
 Route::any('/member/mlm/product_code/sell/add_line', 'Member\MLM_ProductCodeController@add_line'); //ewen
+Route::any('/member/mlm/product_code/sell/add_line/product_barcode/submit', 'Member\MLM_ProductCodeController@add_line_barcode_product'); //ewen
 Route::any('/member/mlm/product_code/sell/add_line/submit', 'Member\MLM_ProductCodeController@add_line_submit'); //ewen
 Route::any('/member/mlm/product_code/sell/add_line/view', 'Member\MLM_ProductCodeController@view_all_lines'); //ewen
 Route::any('/member/mlm/product_code/sell/compute', 'Member\MLM_ProductCodeController@compute'); //ewen

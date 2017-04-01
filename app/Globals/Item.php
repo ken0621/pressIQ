@@ -264,7 +264,7 @@ class Item
                    $condition = "true";
                 }
             }
-
+            // return $get_session;
             if($condition == "false")
             {
                 $get_session[$array['item_id']] = $array;

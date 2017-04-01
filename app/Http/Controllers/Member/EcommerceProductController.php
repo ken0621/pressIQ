@@ -74,7 +74,7 @@ class EcommerceProductController extends Member
 			}
 
 			$active_product 	= $active_product->paginate(10);
-			$inactive_product 	= $inactive_product->paginate(1);
+			$inactive_product 	= $inactive_product->paginate(10);
 
 	        $data["_product"]			= $active_product;
 	        $data["_product_archived"]	= $inactive_product;
@@ -814,7 +814,7 @@ class EcommerceProductController extends Member
 		$search = Request::input('search');
 		if($search)
 		{
-			$data["_product"] = $data["_product"]->whereRaw("concat(eprod_name,variant_name) like '%$search%'");
+			$data["_product"] = $data["_product"]->havingRaw("concat(eprod_name, IFNULL(variant_name, '')) like '%$search%'");
 		}
 
 		$data["_product"] = $data["_product"]->get()->toArray();

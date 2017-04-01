@@ -356,12 +356,10 @@ class MLM_ProductCodeController extends Member
         $data['company_email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
         $data['company_logo'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
         $data['item_list'] = Tbl_item_code_item::where('item_code_invoice_id', $id)->get();    
-        // dd($data['item_list']);
-        // dd($this->user_info);
         $subtotal                = Tbl_item_code::where("item_code_invoice_id",$invoice->item_code_invoice_id)->item()->sum("item_code_price");
         $discount_amount         = $invoice->item_discount;
         $total                   = $subtotal - $discount_amount;
-
+        $data['slot'] = Tbl_mlm_slot::where('slot_id', $invoice->slot_id)->first();
         $data["subtotal"]        = $subtotal;
         $data["discount_amount"] = $discount_amount;
         $data["total"]           = $total;

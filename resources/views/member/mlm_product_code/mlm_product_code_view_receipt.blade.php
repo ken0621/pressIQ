@@ -66,9 +66,15 @@
                                     <tr>                                
                                         <td>Name: {{name_format_from_customer_info($invoice)}}</td>
                                     </tr>
+                                    @if(isset($slot->slot_no))
+                                    <tr>
+                                        <td>Slot: {{$slot->slot_no}}</td>
+                                    </tr>   
+                                    @endif
                                     <tr>                                
                                         <td>Email:{{$invoice->email}}</td>
-                                    </tr>                        
+                                    </tr>    
+                                                     
                             </table>
                         </div>
                     </div>
@@ -82,7 +88,8 @@
                             <tr>
                                 <th>Item Name</th>
                                 <th>Quantity</th>
-                                <th>Serial</th>
+                                <th>Original Price</th>
+                                <th>V.I.P. Price</th>
                             </tr>   
                     </thead>    
                     <tbody>
@@ -91,8 +98,15 @@
                         <tr>
                             <td>{{$value->item_name}}</td>
                             <td>{{$value->item_quantity}}</td>
-                            <td>{{$value->item_serial}}</td>
+                            <td>{{$value->item_price * $value->item_quantity}}</td>
+                            <td>{{$value->item_membership_discounted * $value->item_quantity}}</td>
                         </tr>
+                        @if($value->item_serial != null)
+                        <tr>
+                            <td colspan="2"><span class="pull-right">Serial/s:</span></td>
+                            <td colspan="2">{{$value->item_serial}}</td>
+                        </tr>
+                        @endif
                         @endforeach
                     @else
                     <tr>
@@ -107,7 +121,7 @@
             <div class="col-md-12" style="margin-top:25px;">
                 <table class="table table-condensed tadble">     
                     <thead>                   
-                            <tr>
+                            <tr class="hide">
                                 <th>Code ID</th>
                                 <th>Activation Code</th>
                                 <th>Used on slot</th>
@@ -116,7 +130,7 @@
                     </thead>   
                     <tbody>
                         @foreach($_code as $code)
-                            <tr>                                
+                            <tr class="hide">                                
                                 <td>{{$code->item_code_id}}</td>
                                 <td>{{$code->item_activation_code}}</td>
                                 <td>{{$code->slot_no}}</td>
@@ -125,7 +139,7 @@
                         @endforeach
                         <tr>
                             <td style="vertical-align: top !important; padding: 0;" colspan="2">
-                                <textarea class="form-control" style="height:135px; resize: none;" disabled>
+                                <textarea class="form-control" style="height:250px; resize: none;" disabled>
                                     {{$invoice->item_code_statement_memo}}
                                 </textarea>
                             </td>
@@ -142,7 +156,41 @@
                                     <tr>                                
                                         <td>Total</td>
                                         <td>{{$total}}</td>
-                                    </tr>      
+                                    </tr> 
+
+                                    <tr>
+                                        <td colspan="2">
+                                            <hr>
+                                        </td>
+                                    </tr>     
+                                    <tr>
+                                        <td>Payment :</td>
+                                        <td>
+                                            <?php
+                                            switch ($invoice->item_code_payment_type) {
+                                                case 1:
+                                                    echo 'Cash';
+                                                    break;
+                                                case 2:
+                                                    echo 'GC';
+                                                    break;  
+                                                case 3:
+                                                    echo 'Wallet';
+                                                    break;        
+                                                default:
+                                                    echo 'Cash';
+                                            }
+                                            ?>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tendered Amount :</td>
+                                        <td>{{number_format($invoice->item_code_tendered_payment, 2)}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Change :</td>
+                                        <td>{{number_format($invoice->item_code_change, 2)}}</td>
+                                    </tr>
                                     <tr>
                                         <td colspan="2">
                                         <center>

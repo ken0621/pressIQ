@@ -142,8 +142,8 @@
                         <div class="description">{!! get_product_first_description($product) !!}</div>
                     </div>
                     <div class="cart">
-                        <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div>
-                        <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div>
+                        <!-- <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div> -->
+                        <!-- <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div> -->
                         <button class="button" onclick="location.href='product/'">View Info</button>
                     </div>
                 </div>

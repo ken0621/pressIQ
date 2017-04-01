@@ -25,7 +25,7 @@
 				@foreach($_content as $id => $content)
 				<tr>
 					@foreach($content as $value)
-					<td>{!! $value !!}</td>
+					<td style="word-break: break-all;">{!! $value !!}</td>
 					@endforeach
 					<td><a style="cursor: pointer;" class="popup" link="/member/page/content/edit-maintenance?key={{ $key }}&id={{ $id }}&field={{ $field }}">Edit</a> | <a class="popup" style="cursor: pointer;" link="/member/page/content/delete-maintenance?key={{ $key }}&id={{ $id }}">Delete</a></td>
 				</tr>

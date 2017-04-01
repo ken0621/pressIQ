@@ -173,7 +173,7 @@ class Page_ContentController extends Member
         {
             $data["field"] = $field;
             $data["key"]   = $key;
-            $content = Tbl_content::where("key", $key)->first();
+            $content = Tbl_content::where("key", $key)->where("shop_id", $this->user_info->shop_id)->first();
             if (isset($content->value))
             {
                 $content = $content->value;
@@ -220,7 +220,7 @@ class Page_ContentController extends Member
 
         if (isset($key) && isset($id) && isset($field)) 
         {
-            $content = Tbl_content::where('key', $key)->first();
+            $content = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
 
             $data["edit"]  = unserialize($content->value)[$id];
             $data["field"] = $field;
@@ -238,7 +238,7 @@ class Page_ContentController extends Member
             // Edit
             $all = Request::except("_token");
             $key = Request::input('key');
-            $exist = Tbl_content::where('key', $key)->first();
+            $exist = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
             if ($exist) 
             {
                 $content_id = $exist->content_id;
@@ -260,7 +260,7 @@ class Page_ContentController extends Member
             }
             else
             {
-                $content_id = Tbl_content::insertGetId(["key" => $key, "value" => $all]);
+                $content_id = Tbl_content::insertGetId(["key" => $key, "value" => $all, "shop_id" => $this->user_info->shop_id]);
             }
             
             $response["result"] = Tbl_content::where('content_id', $content_id)->first();
@@ -275,7 +275,7 @@ class Page_ContentController extends Member
             // Add
             $all = Request::except("_token");
             $key = Request::input('key');
-            $exist = Tbl_content::where('key', $key)->first();
+            $exist = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
             if ($exist) 
             {
                 $content_id = $exist->content_id;
@@ -296,7 +296,7 @@ class Page_ContentController extends Member
             }
             else
             {
-                $content_id = Tbl_content::insertGetId(["key" => $key, "value" => $all]);
+                $content_id = Tbl_content::insertGetId(["key" => $key, "value" => $all, "shop_id" => $this->user_info->shop_id]);
             }
             
             $response["result"] = Tbl_content::where('content_id', $content_id)->first();
@@ -317,7 +317,7 @@ class Page_ContentController extends Member
     {
         $id    = Request::input("id");
         $key   = Request::input('key');
-        $exist = Tbl_content::where('key', $key)->first();
+        $exist = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
         if ($exist) 
         {
             $content_id = $exist->content_id;
@@ -340,7 +340,7 @@ class Page_ContentController extends Member
     public function getMaintenanceCount()
     {
         $key = Request::input('key');
-        $exist = Tbl_content::where('key', $key)->first();
+        $exist = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
         if ($exist) 
         {
             $content_id = $exist->content_id;

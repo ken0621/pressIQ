@@ -77,8 +77,8 @@ class ItemImportController extends Member
 		/* Validation */
 		$duplicate_item		= Tbl_item::where("shop_id", $this->getShopId())->where("item_name", $name)->first();
 		$has_Category 		= Tbl_category::where("type_name", $category)->where("type_shop", $this->getShopId())->first();
-		$has_Income_Account = Tbl_chart_of_account::where("account_name", $income_account)->where("account_shop_id", $this->getShopId())->first();
-		// $has_UM 			= Tbl_unit_measurement::->where("account_shop_id", $this->getShopId())->where("um_name", $um)->first();
+		$has_Income_Account = Tbl_chart_of_account::where("account_shop_id", $this->getShopId())->where("account_name", $income_account)->first();
+		$has_UM 			= Tbl_unit_measurement::where("um_shop", $this->getShopId())->where("um_name", $um)->first();
 
 		if(!$duplicate_item)
 		{
@@ -117,9 +117,20 @@ class ItemImportController extends Member
 							$rules["item_purchase_from_supplier"]     = 'required|numeric|min:0|max:1';
 						}
 
+						$validator = Validator::make($insert, $rules);
+						if ($validator->fails())
+						{
+							$return["status"] 	= "error";
+							$return["message"]  = $validator->errors()->first();
+						}
+						else
+						{
+							$item_id = Tbl_item::insertGetId($insert);
 
-						$json["status"]		= "success";
-						$json["message"]	= "Success";
+							$json["status"]		= "success";
+							$json["message"]	= "Success";
+							$json["item_id"]	= $item_id;
+						}
 					}
 					else
 					{
@@ -145,30 +156,10 @@ class ItemImportController extends Member
 			$json["message"]	= "Duplicate Item Name";
 		}
 
-		$json["item_name"]	= $value["name"];
-		dd(json_encode($json));
+		$json["item_name"]	= $value["Name"];
 
 
-		// $username = Tbl_register::Account()->where("username", "homerun")->first();
-  //       Session::put("member", $username);
-
-  //       $_value     = Request::input('value');
-  //       $message    = "";
-        
-  //       foreach($_value as $key=>$value)
-  //       {
-  //           $message = $this->save_account($value["Account Name"],$value["Sponsor Name"], $value["Matrix Name"], $value["First Name"], $value["Last Name"], $value["Product"]);
-  //           if($message != "")
-  //           {
-  //               $data["stat"]       = 0;
-  //               $data["message"]    = $message;
-  //               return json_encode($data);
-  //           }
-  //       }
-        
-  //       $data["message"]    = $message;
-
-        return json_encode($data);
+        return json_encode($json);
 	}
 
 }

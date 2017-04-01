@@ -16,34 +16,44 @@
     </div>
 </div>
 
-<div class="panel panel-default panel-block panel-title-block">
-    <div class="search-filter-box">
-        <div class="col-md-3">
-
-        </div> 
-        <div class="col-md-4 col-md-offset-5" style="padding: 10px">
-            <div class="input-group">
-                <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control" placeholder="Search by User Name" aria-describedby="basic-addon1">
+<div class="panel panel-default panel-block panel-title-block clearfix">
+    <div class="col-md-6">
+        <span class="counter">0</span>
+        <div class="progress">
+            <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}" >
             </div>
-        </div>  
+            <div id="inputs" class="custom-upload">
+                <input type="file" id="files" name="files[]" class="form-control" style="width: 100%; height: 100%;" />
+            </div>
+            <div>   
+                <output id="list"></output>
+            </div>
+            <div class="form-group">
+                <button class="form-control btn btn-primary btn-submit" disabled="disabled">Generate Accounts</button>
+            </div>
+        </form>
+        </br>
     </div>
-
-    <form method="post" class="col-md-6" enctype="multipart/form-data">
-        <div class="form-group">
-            <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}" >
-        </div>
-        <div id="inputs" class="clearfix form-group">
-            <input type="file" id="files" name="files[]" multiple />
-        </div>
-        <div>   
-            <output id="list"></output>
-        </div>
-        <div class="form-group">
-            <button class="form-control btn btn-primary btn-submit" disabled="disabled">Generate Accounts</button>
-        </div>
-    </form>
+    <div class="col-md-6">
+    </div>
+    <div class="col-md-12">
+    </div>
 </div>
+@endsection
+@section('css')
+<style>
+    .custom-upload
+    {
+        width: 100%;
+        height: 100px;
+        border: black dashed 2px;
+        background-color: white;
+    }
+</style>
 @endsection
 @section('script')
 <script type="text/javascript" src="/assets/member/plugin/jquery-csv-master/src/jquery.csv.js"></script>

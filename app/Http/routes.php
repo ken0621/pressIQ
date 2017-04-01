@@ -223,12 +223,14 @@ Route::any('/member/item/unit_of_measurement/add_submit','Member\UnitOfMeasureme
 Route::any('/member/item/unit_of_measurement/edit/{id}','Member\UnitOfMeasurementController@edit');
 Route::any('/member/item/unit_of_measurement/edit_submit','Member\UnitOfMeasurementController@edit_submit');
 Route::any('/member/item/um/select_type','Member\UnitOfMeasurementController@select_type');
+Route::any('/member/item/unit_of_measurement/{id}/{action}','Member\UnitOfMeasurementController@archived');
+Route::any('/member/item/unit_of_measurement/archived_submit','Member\UnitOfMeasurementController@archived_submit');
 /* END U/M ARCY*/
 
 /*PIS*/
 Route::any('/member/item/um/',"Member\UnitOfMeasurementController@check");
-Route::any('/member/item/um/add_base/{id}',"Member\UnitOfMeasurementController@add_base");
-
+Route::any('/member/item/um/add_base/{id}/{item_id}',"Member\UnitOfMeasurementController@add_base");
+Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController@add_base_submit');
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
 /* END AUDIT TRAIL*/
@@ -382,6 +384,8 @@ Route::any('/tablet/sync_import',"Member\TabletPISController@sync_import");
 Route::any('/tablet/sync_export','Member\TabletPISController@sync_export');
 Route::any('/tablet/logout','Member\TabletPISController@logout');
 Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_sir');
+Route::any('/tablet/sir_reload/{id}','Member\TabletPISController@sir_reload');
+
 
 Route::any('/tablet/customer',"Member\TabletPISController@customer");
 Route::any('/tablet/customer_details/{id}',"Member\TabletPISController@customer_details");
@@ -719,7 +723,9 @@ Route::controller('/member/maintenance/online_payment', 'Member\OnlinePaymentMet
 /* ONLINE PAYMENT METHOD */
 Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* End */
-
+/* ITEM IMPORT*/
+Route::controller('/member/item/import', 'Member\ItemImportController');
+/* End */
 
 Route::controller('/tester','TesterController');
 

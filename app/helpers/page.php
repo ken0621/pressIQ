@@ -5,7 +5,7 @@ function page_list()
     $path = '/member/';
     
     /* TRANSACTION */
-    $page = "transaction List";  
+    $page = "transaction_list";  
     $nav[$page]['name'] = "Transaction";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "refresh";
@@ -475,6 +475,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    /* -- ITEM => IMPORT  */
+    $code = "item-import";
+    $nav[$page]['submenu'][$code]['label'] = "Import";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/import";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Still developing";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
     
     /* CUSTOMERS */
     $page = "customer";  

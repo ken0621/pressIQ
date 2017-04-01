@@ -18,7 +18,7 @@
             <div class="col-md-12">
                 
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
-                    <input type="hidden" name="item_id" value="{{$item_id}}">
+                    <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                     <div class="form-group">
                         <div class="col-md-8">
                             <label>Name *</label>
@@ -177,7 +177,7 @@
     <div class="modal-body clearfix modallarge-body-layout background-white form-horizontal noninventory_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'noninventory_type' ? '' : 'display:none;') : 'display:none;'}}">
             <div class="col-md-12">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
-                <input type="hidden" name="item_id" value="{{$item_id}}">
+                <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                 <div class="form-group">
                         <div class="col-md-8">
                             <label>Name *</label>
@@ -281,7 +281,7 @@
     <div class="modal-body clearfix modallarge-body-layout background-white form-horizontal service_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'service_type' ? '' : 'display:none;') : 'display:none;'}}">
             <div class="col-md-12">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
-                <input type="hidden" name="item_id" value="{{$item_id}}">
+                <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                  <div class="form-group">
                         <div class="col-md-8">
                             <label>Name *</label>
@@ -380,7 +380,7 @@
 <form action="/member/item/edit_submit?item_type=bundle" class="global-submit form_four" method="post" type_of_item="bundle_type">
     <div class="clearfix modal-body modallarge-body-layout background-white bundle_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'bundle_type' ? '' : 'display:none;') : 'display:none;'}}">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="hidden" name="item_id" value="{{$item_id}}">
+        <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
         <!-- BUNDLE -->
         <div class="form-horizontal">
             <div class="clearfix col-md-12">

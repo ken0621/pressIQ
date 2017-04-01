@@ -39,7 +39,11 @@ function global()
         $('.loader').fadeOut();
         image_crop(".4-3-ratio", 4, 3);
         image_crop(".ratio-fix img", 396, 241);
-        image_crop(".category-ratio img", 500, 342.5);
+        image_crop(".category-ratio .1", 100, 51.5);
+        image_crop(".category-ratio .2", 100, 77.5);
+        image_crop(".category-ratio .3", 100, 89.5);
+        image_crop(".category-ratio .4", 100, 89.5);
+        image_crop(".category-ratio .5", 100, 89.5);
         image_crop(".brand img", 200, 125);
     }
 }

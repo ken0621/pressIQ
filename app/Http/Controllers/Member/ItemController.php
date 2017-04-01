@@ -67,6 +67,13 @@ class ItemController extends Member
 			foreach ($data["_item"] as $key => $value) 
 			{
 				$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
+
+				$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
+				$data["_item"][$key]->inventory_count_um_view = "";
+				if($um)
+				{
+					$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+				}
 			}
 			$data["_item_archived"]	   = $item_archived->get();
 			      

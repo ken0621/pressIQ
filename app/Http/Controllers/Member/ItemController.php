@@ -242,7 +242,7 @@ class ItemController extends Member
 
 				UnitMeasurement::update_um(Session::get("um_id"),$item_name,$item_id);
 
-				$warehouse = Tbl_warehouse::where("warehouse_id",Session::get("warehouse_id"))->first();
+				$warehouse = Tbl_warehouse::where("warehouse_id",Session::get("warehouse_id".$this->user_info->shop_id))->first();
 
 				$slip_id = 0 ;
 				if($warehouse == null)

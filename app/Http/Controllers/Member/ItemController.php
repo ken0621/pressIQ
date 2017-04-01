@@ -67,6 +67,13 @@ class ItemController extends Member
 			foreach ($data["_item"] as $key => $value) 
 			{
 				$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
+
+				$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
+				$data["_item"][$key]->inventory_count_um_view = "";
+				if($um)
+				{
+					$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+				}
 			}
 			$data["_item_archived"]	   = $item_archived->get();
 			      
@@ -235,7 +242,7 @@ class ItemController extends Member
 
 				UnitMeasurement::update_um(Session::get("um_id"),$item_name,$item_id);
 
-				$warehouse = Tbl_warehouse::where("warehouse_id",Session::get("warehouse_id"))->first();
+				$warehouse = Tbl_warehouse::where("warehouse_id",Session::get("warehouse_id_".$this->user_info->shop_id))->first();
 
 				$slip_id = 0 ;
 				if($warehouse == null)
@@ -628,7 +635,7 @@ class ItemController extends Member
 		$promo_price 			= Request::input("promo_price");
 		$start_promo_date 		= Request::input("start_promo_date");
 		$end_promo_date 		= Request::input("end_promo_date");
-		
+		$item_measurement_id = "";
 		if(Session::get("um_id") != null)
 		{
 			$item_measurement_id = Session::get("um_id");

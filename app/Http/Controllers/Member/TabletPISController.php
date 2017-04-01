@@ -52,6 +52,10 @@ class TabletPISController extends Member
 
         return json_encode($data);
 	}
+    public function sir_reload($sir_id)
+    {
+        // $data[""]
+    }
 	public function index()
 	{
 		$data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);

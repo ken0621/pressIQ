@@ -172,7 +172,7 @@ class Mlm_member
 
                         $count_tree_if_exist = Tbl_tree_placement::where('placement_tree_position', $validate['slot_position'])
                         ->where('placement_tree_parent_id', $validate['slot_placement'])
-                        ->where('shop_id', $this->user_info->shop_id)
+                        ->where('shop_id', $shop_id)
                         ->count();
                     } 
                 }

@@ -1909,7 +1909,7 @@ class PayrollController extends Member
 	/* SSS TABLE START */
 	public function sss_table_list()
 	{
-		$data['_sss'] = Tbl_payroll_sss::where('shop_id', Self::shop_id())->orderBy('payroll_sss_min')->paginate($this->paginate_count);
+		$data['_sss'] = Tbl_payroll_sss::where('shop_id', Self::shop_id())->orderBy('payroll_sss_min')->get();
 		return view('member.payroll.side_container.ssslist', $data);
 	}
 
@@ -1981,7 +1981,7 @@ class PayrollController extends Member
 	/* PHILHEALTH TABLE START */
 	public function philhealth_table_list()
 	{
-		$data['_philhealth'] = Tbl_payroll_philhealth::where('shop_id', Self::shop_id())->orderBy('payroll_philhealth_min')->paginate($this->paginate_count);
+		$data['_philhealth'] = Tbl_payroll_philhealth::where('shop_id', Self::shop_id())->orderBy('payroll_philhealth_min')->get();
 		return view('member.payroll.side_container.philhealthlist', $data); 
 	}
 
@@ -2623,6 +2623,7 @@ class PayrollController extends Member
 		$insert['payroll_allowance_name'] 		= Request::input('payroll_allowance_name');
 		$insert['payroll_allowance_amount'] 	= Request::input('payroll_allowance_amount');
 		$insert['payroll_allowance_category'] 	= Request::input('payroll_allowance_category');
+          $insert['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
 		$insert['shop_id']						= Self::shop_id();
 		$allowance_id = Tbl_payroll_allowance::insertGetId($insert);
 
@@ -2715,11 +2716,12 @@ class PayrollController extends Member
 
 	public function update_allowance()
 	{
-		$payroll_allowance_id 					= Request::input('payroll_allowance_id');
+		$payroll_allowance_id 				= Request::input('payroll_allowance_id');
 		$update['payroll_allowance_name'] 		= Request::input('payroll_allowance_name');
 		$update['payroll_allowance_amount'] 	= Request::input('payroll_allowance_amount');
 		$update['payroll_allowance_category'] 	= Request::input('payroll_allowance_category');
-		$update['payroll_allowance_category'] 	= Request::input('payroll_allowance_category');
+		$update['payroll_allowance_add_period'] = Request::input('payroll_allowance_add_period');
+
 		Tbl_payroll_allowance::where('payroll_allowance_id', $payroll_allowance_id)->update($update);
 
 		$return['status'] 			= 'success';
@@ -3309,7 +3311,7 @@ class PayrollController extends Member
 	public function modal_save_payroll_period()
 	{
 		$insert['shop_id'] 					= Self::shop_id();
-		$insert['payroll_period_start'] 	= date('Y-m-d',strtotime(Request::input('payroll_period_start')));
+		$insert['payroll_period_start'] 	     = date('Y-m-d',strtotime(Request::input('payroll_period_start')));
 		$insert['payroll_period_end'] 		= date('Y-m-d',strtotime(Request::input('payroll_period_end')));
 		$insert['payroll_period_category'] 	= Request::input('payroll_period_category');
 
@@ -3330,7 +3332,7 @@ class PayrollController extends Member
                     $insert_company[$key]['payroll_company_id']  = $company->payroll_company_id;
                     $insert_company[$key]['payroll_period_status']    = 'pending';
                }
-               // dd($insert_company);
+
                if(!empty($insert_company))
                {
                     Tbl_payroll_period_company::insert($insert_company);

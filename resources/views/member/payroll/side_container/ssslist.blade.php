@@ -87,7 +87,6 @@
 					</tr>
 				</tbody>
 			</table>
-			<div class="pagination"> {!! $_sss->render() !!} </div>
 		</div>
 	</div>
 	<div class="form-group">

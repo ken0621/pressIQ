@@ -282,4 +282,10 @@ class MlmReportController extends Mlm
         // dd($data);
         return view("mlm.report.report_direct_promotion", $data);
     }
+
+    public function stairstep()
+    {
+        dd("Not yet working...");
+        return view("mlm.report.report_stairstep", $data);
+    }
 }

@@ -20,7 +20,7 @@
 		@endif
 		@if(isset($discount_card->discount_card_log_code)) 
 		<input type="hidden" class="discount_card_log_id" name="discount_card_log_id" value="{{$discount_card->discount_card_log_id}}">
-		<span class="pull-right" @if($discount_card->discount_card_log_is_expired == 1) style="color:red;" @endif> <svg id="barcode" ></svg> <br>Expiry: {{$discount_card->discount_card_log_date_expired}}</span> 
+		<span class="pull-right" @if($discount_card->discount_card_log_is_expired == 1) style="color:red;" @endif> <svg id="barcode" ></svg> <br>Expiry: {{$discount_card->discount_card_log_date_expired == null ? 'Expiry Date will Generate After Use' : $discount_card->discount_card_log_date_expired }}</span> 
 		@else
 		<input type="hidden" class="discount_card_log_id" name="discount_card_log_id">
 		@endif

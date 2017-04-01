@@ -88,6 +88,29 @@ class Item_code
                 }
                 else
                 {
+                    $dis = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->first();
+                    if($dis->discount_card_log_issued_date == null)
+                    {
+                        $update_dis['discount_card_log_date_expired'] = Carbon::now()->addYear(1);
+                        $update_dis['discount_card_log_issued_date'] = Carbon::now();
+                        Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->update($update_dis);
+                    }
+
+                    $dis = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->first();
+                    if($dis->discount_card_log_date_expired != null)
+                    {
+                        if($dis->discount_card_log_date_expired <= Carbon::now())
+                        {
+                            $update_dis['discount_card_log_is_expired'] = 1;
+                            Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->update($update_dis);
+
+                            $send['response_status']      = "warning";
+                            $send['warning_validator'][0] = "Discount Card Is Already Expired a";
+                            return $send; 
+                        }
+                    }
+
+
                     $slot = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->pluck('discount_card_membership');
                     $insert['slot_id'] = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->pluck('discount_card_slot_sponsor'); 
                     $insert['discount_card_log_id'] = $data['discount_card_log_id'];
@@ -111,17 +134,32 @@ class Item_code
                 }
                 else
                 {
+                   
+
+                    $dis = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->first();
+                    if($dis->discount_card_log_issued_date == null)
+                    {
+                        $update_dis['discount_card_log_date_expired'] = Carbon::now()->addYear(1);
+                        $update_dis['discount_card_log_issued_date'] = Carbon::now();
+                        Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->update($update_dis);
+                    }
+                    $dis = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->first();
+                    if($dis->discount_card_log_date_expired != null)
+                    {
+                        if($dis->discount_card_log_date_expired <= Carbon::now())
+                        {
+                            $update_dis['discount_card_log_is_expired'] = 1;
+                            Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->update($update_dis);
+
+                            $send['response_status']      = "warning";
+                            $send['warning_validator'][0] = "Discount Card Is Already Expired b";
+                            return $send; 
+                        }
+                    }
+
                     $slot = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->pluck('discount_card_membership');
                     $insert['slot_id'] = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->pluck('discount_card_slot_sponsor'); 
                     $insert['discount_card_log_id'] = $data['discount_card_log_id'];
-
-                    $dis = Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card_log_id'])->first();
-                    if($dis->discount_card_log_is_expired == 1)
-                    {
-                        $send['response_status']      = "warning";
-                        $send['warning_validator'][0] = "Discount Card Is Already Expired";
-                        return $send; 
-                    }
                 }
             }
             else
@@ -142,6 +180,7 @@ class Item_code
         $wallet_amount = 0;
         $tendered = 0;
         $tendered_amount = 0;
+        $data['response_status']      = "warning";
         if(isset($data['payment_type_choose']))
         {
             if($data['payment_type_choose'] == '3')
@@ -217,6 +256,7 @@ class Item_code
                 $send['warning_validator'][0] = "Invalid Payment Type";
                 return $send;
             }
+
         }
         else
         {

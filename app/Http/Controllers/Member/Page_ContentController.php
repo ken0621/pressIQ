@@ -260,7 +260,12 @@ class Page_ContentController extends Member
             }
             else
             {
-                $content_id = Tbl_content::insertGetId(["key" => $key, "value" => $all, "shop_id" => $this->user_info->shop_id]);
+                $get_content = [];
+
+                array_push($get_content, $all);
+                $get_content = serialize($get_content);
+
+                $content_id = Tbl_content::insertGetId(["type" => "maintenance", "key" => $key, "value" => $get_content, "shop_id" => $this->user_info->shop_id]);
             }
             
             $response["result"] = Tbl_content::where('content_id', $content_id)->first();
@@ -296,7 +301,12 @@ class Page_ContentController extends Member
             }
             else
             {
-                $content_id = Tbl_content::insertGetId(["key" => $key, "value" => $all, "shop_id" => $this->user_info->shop_id]);
+                $get_content = [];
+
+                array_push($get_content, $all);
+                $get_content = serialize($get_content);
+
+                $content_id = Tbl_content::insertGetId(["type" => "maintenance", "key" => $key, "value" => $get_content, "shop_id" => $this->user_info->shop_id]);
             }
             
             $response["result"] = Tbl_content::where('content_id', $content_id)->first();

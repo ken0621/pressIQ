@@ -16,29 +16,29 @@
         </div>
         <div class="right nopadding category-ratio">
             <div class="container-fluid nopadding clearfix">
-                <a href="" class="holder nopadding 1 one">
+                <a href="{{ get_content($shop_theme_info, 'home', 'home_category_sale_link') }}" class="holder nopadding 1 one">
                     <img src="{{ get_content($shop_theme_info, 'home', 'home_category_sale') }}">
                     <div class="text">{{ get_content($shop_theme_info, 'home', 'home_category_sale_label') }}</div>
                     <div class="hover"></div>
                 </a>
-                <a href="" class="holder nopadding 2 two">
+                <a href="{{ get_content($shop_theme_info, 'home', 'home_category_featured_link') }}" class="holder nopadding 2 two">
                     <img src="{{ get_content($shop_theme_info, 'home', 'home_category_featured') }}">
                     <div class="text" style="left: 15px !important;">{{ get_content($shop_theme_info, 'home', 'home_category_featured_label') }}</div>
                     <div class="hover"></div>
                 </a>
             </div>
             <div class="container-fluid nopadding clearfix">
-                <a href="" class="holder nopadding 3 three">
+                <a href="{{ get_content($shop_theme_info, 'home', 'home_category_tablet_link') }}" class="holder nopadding 3 three">
                     <img src="{{ get_content($shop_theme_info, 'home', 'home_category_tablet') }}">
                     <div class="text x">{{ get_content($shop_theme_info, 'home', 'home_category_tablet_label') }}</div>
                     <div class="hover"></div>
                 </a>
-                <a href="" class="holder nopadding 4 four">
+                <a href="{{ get_content($shop_theme_info, 'home', 'home_category_accessories_link') }}" class="holder nopadding 4 four">
                     <img src="{{ get_content($shop_theme_info, 'home', 'home_category_accessories') }}">
                     <div class="text x">{{ get_content($shop_theme_info, 'home', 'home_category_accessories_label') }}</div>
                     <div class="hover"></div>
                 </a>
-                <a href="" class="holder nopadding 5 five">
+                <a href="{{ get_content($shop_theme_info, 'home', 'home_category_smartphone_link') }}" class="holder nopadding 5 five">
                     <img src="{{ get_content($shop_theme_info, 'home', 'home_category_smartphone') }}">
                     <div class="text x">{{ get_content($shop_theme_info, 'home', 'home_category_smartphone_label') }}</div>
                     <div class="hover"></div>
@@ -81,20 +81,20 @@
 </div>
 <!-- feature -->
 <div class="feature">
-    <div class="feature-header">FEATURED ITEMS</div>
+    <div class="feature-header">{{ get_content($shop_theme_info, "home", "home_featured_title") }}</div>
     <div class="feature-content container">
         @foreach(get_collection(get_content($shop_theme_info, "home", "home_featured"), $shop_id) as $collection)
         <div class="holder col-md-3 col-sm-6">
            <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
            </a>
            <div class="border">
-              <a href="product/huawei-gr5-2017">
+              <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
                  <div class="img"><img src="{{ get_collection_first_image($collection) }}"></div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
                  <div class="price-right">₱ 13,990.00</div>
               </a>
-              <div class="hover"><a href="product/huawei-gr5-2017"></a><a href="product/huawei-gr5-2017" class="text">VIEW MORE</a></div>
+              <div class="hover"><a href="/product/view/{{ $collection['product']['eprod_id'] }}"></a><a href="/product/view/{{ $collection['product']['eprod_id'] }}" class="text">VIEW MORE</a></div>
            </div>
         </div>
         @endforeach
@@ -104,20 +104,48 @@
 <div class="arrival">
     <div class="arrival-header">
         <div class="line"></div>
-        <div class="text">{{ get_content($shop_theme_info, 'home', 'home_new_arrival_title', 'FEATURED') }}</div>
+        <div class="text">{{ get_content($shop_theme_info, 'home', 'home_new_arrival_title') }}</div>
     </div>
     <div class="arrival-content container">
-
+        @foreach(get_collection(get_content($shop_theme_info, "home", "home_new_arrival"), $shop_id) as $collection)
+        <div class="holder col-md-3 col-sm-6">
+           <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
+           </a>
+           <div class="border">
+              <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
+                 <div class="img"><img src="{{ get_collection_first_image($collection) }}"></div>
+                 <div class="name">{{ get_collection_first_name($collection) }}</div>
+                 <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
+                 <div class="price-right">₱ 13,990.00</div>
+              </a>
+              <div class="hover"><a href="/product/view/{{ $collection['product']['eprod_id'] }}"></a><a href="/product/view/{{ $collection['product']['eprod_id'] }}" class="text">VIEW MORE</a></div>
+           </div>
+        </div>
+        @endforeach
     </div>
 </div>
 <!-- best seller -->
 <div class="best">
     <div class="best-header">
         <div class="line"></div>
-        <div class="text">{{ get_content($shop_theme_info, 'home', 'home_best_seller_title', 'BEST SELLER') }}</div>
+        <div class="text">{{ get_content($shop_theme_info, 'home', 'home_best_seller_title') }}</div>
     </div>
     <div class="best-content container">
-
+        @foreach(get_collection(get_content($shop_theme_info, "home", "home_best_seller"), $shop_id) as $collection)
+        <div class="holder col-md-3 col-sm-6">
+           <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
+           </a>
+           <div class="border">
+              <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
+                 <div class="img"><img src="{{ get_collection_first_image($collection) }}"></div>
+                 <div class="name">{{ get_collection_first_name($collection) }}</div>
+                 <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
+                 <div class="price-right">₱ 13,990.00</div>
+              </a>
+              <div class="hover"><a href="/product/view/{{ $collection['product']['eprod_id'] }}"></a><a href="/product/view/{{ $collection['product']['eprod_id'] }}" class="text">VIEW MORE</a></div>
+           </div>
+        </div>
+        @endforeach
     </div>
 </div>
 @endsection
@@ -135,7 +163,7 @@
     <div class="remodal subscribe" data-remodal-id="subscribe">
         <div class="holder">
             <form method = "POST" id="subform" action="//intogadgets.us10.list-manage.com/subscribe/post?u=cd02508127b42de13d02bb528&id=74973f9e9e">
-                <img src="/resources/assets/frontend/img/popup-signup.jpg">
+                <img src="{{ get_content($shop_theme_info, 'info', 'newsletter_popup_cover_image') }}">
                 <div class="mobil">Sign up for exclusive promo and sales</div>
                 <div class="input">
                     <input type="text" placeholder="Name" name="FNAME">

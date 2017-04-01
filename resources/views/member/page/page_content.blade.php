@@ -77,7 +77,7 @@
                                             @if($info->default)
                                             <div>
                                                 <div class="img-holder">
-                                                    <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $info->default }}">
+                                                    <img style="object-fit: contain; object-position: center;" class="img-responsive" src="/themes/{{ $shop_theme }}/{{ $info->default }}">
                                                 </div>
                                             </div>
                                             @else

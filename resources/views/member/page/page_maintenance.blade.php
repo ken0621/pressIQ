@@ -24,8 +24,12 @@
 			<tbody>
 				@foreach($_content as $id => $content)
 				<tr>
-					@foreach($content as $value)
-					<td style="word-break: break-all;">{!! $value !!}</td>
+					@foreach($content as $label => $value)
+						@if($label == "image")
+						<td><img style="width: 75px; display: block; margin: auto;" src="{{ $value }}"></td>
+						@else
+						<td style="word-break: break-all;">{!! $value !!}</td>
+						@endif
 					@endforeach
 					<td><a style="cursor: pointer;" class="popup" link="/member/page/content/edit-maintenance?key={{ $key }}&id={{ $id }}&field={{ $field }}">Edit</a> | <a class="popup" style="cursor: pointer;" link="/member/page/content/delete-maintenance?key={{ $key }}&id={{ $id }}">Delete</a></td>
 				</tr>

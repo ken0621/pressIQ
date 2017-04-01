@@ -1,10 +1,10 @@
 @extends('layout')
 @section('content')
 
-@if(isset($image))
+@if(get_content($shop_theme_info, 'product', 'product_banner') && get_content($shop_theme_info, 'product', 'product_banner_link'))
 <div class="aadd">
-    <a href="{{$image->ads_link}}" target="_blank">
-        <img src="{{$image->url}}" style="" >
+    <a href="{{ get_content($shop_theme_info, 'product', 'product_banner') }}" target="_blank">
+        <img src="{{ get_content($shop_theme_info, 'product', 'product_banner_link') }}" style="" >
     </a>
 </div>
 @endif

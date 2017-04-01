@@ -75,10 +75,26 @@ class ItemImportController extends Member
 			{
 				if($has_Income_Account)
 				{
-					if($type == "SERVICE")
+					if($type == "INVENTORY")
 					{
 						$json["status"]		= "success";
 						$json["message"]	= "Success";
+					}
+					elseif($type == "NON-INVENTORY")
+					{
+
+					}
+					elseif($type == "SERVICE")
+					{
+
+						
+						$json["status"]		= "success";
+						$json["message"]	= "Success";
+					}
+					else
+					{
+						$json["status"]		= "error";
+						$json["message"]	= "Item Type Unknown [INVENTORY, NON-INVENTORY , SERVICE]";
 					}
 				}
 				else

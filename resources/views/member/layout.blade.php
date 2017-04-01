@@ -466,6 +466,10 @@
 
     <script type="text/javascript">
 	  $(document).ajaxStart(function() { Pace.restart(); }); 
+      $('.select_current_warehouse').click(function(event) 
+      {
+        event.stopPropagation();
+      });
 	</script>
     @yield('script')
 </body>

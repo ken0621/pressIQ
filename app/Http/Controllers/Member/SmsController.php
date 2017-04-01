@@ -38,6 +38,7 @@ class SmsController extends Member
 		$data["sms_key"] 	= Tbl_sms_key::where("sms_shop_id", $this->getShopId())->first();
 		$data["_sms"] 		= Tbl_sms_default_key::template($this->getShopId())->get();
 		$data["user"]		= $this->user_info;
+		$data["sms_balance"]= Sms::getSmsBalance();
 
 		return view('member.sms.sms', $data);
 	}

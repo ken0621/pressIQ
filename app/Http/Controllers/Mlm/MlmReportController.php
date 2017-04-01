@@ -82,8 +82,9 @@ class MlmReportController extends Mlm
 
 
         $settings = 
-        Tbl_mlm_matching::where('shop_id', Self::$shop_id)
-        ->where('membership_id', Self::$slot_now->slot_membership)
+        Tbl_mlm_matching::where('tbl_mlm_matching.shop_id', Self::$shop_id)
+        // ->where('membership_id', Self::$slot_now->slot_membership)
+        ->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_matching.membership_id')
         ->get()
         ->toArray();
         foreach($settings as $key => $value)
@@ -94,8 +95,8 @@ class MlmReportController extends Mlm
         	->join('tbl_mlm_slot', 'Tbl_mlm_slot.slot_id', '=', 'tbl_tree_sponsor.sponsor_tree_child_id')
         	->where('slot_matched_membership', 0)
         	->get()->keyBy('slot_id');
-        	$matched_list[$key] = [];
-        	$un_matched_list[$key] = [];
+        	$data['matched_list'][$key] = [];
+        	$data['un_matched_list'][$key] = [];
         	foreach($slot_per_level[$key] as $key2 => $value2)
         	{
         		$matched = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)
@@ -106,21 +107,18 @@ class MlmReportController extends Mlm
         		->where('matching_log_slot_2', $key2)
         		// ->orWhere('matching_log_slot_2', $key2)
         		->count();
-
-        		if($key2 == 344)
-        		{
-        			// dd($matched_2);
-        		}
         		if($matched >= 1 || $matched_2 >= 1)
         		{
-        			$matched_list[$key][$key2] = $value2;
+        			$data['matched_list'][$key][$key2] = $value2;
         		}
         		else
         		{
-        			$un_matched_list[$key][$key2] = $value2;
+        			$data['un_matched_list'][$key][$key2] = $value2;
         		}
         	}
         }
+        $data['settings_a'] = $settings;
+        // dd($data);
 
         return view("mlm.report.report_membership_matching", $data);
     }

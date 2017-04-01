@@ -184,10 +184,11 @@
     function search_item(search)
     {
         var item_search = $(search).val();
-        console.log(item_search);
-        var link_load = link + '?item=' + item_search;
+       
+        var link_load = link + '?item=' + item_search + ' #productdiscount-paginate';
+        
         $('#productdiscount-paginate').html('<div style="margin: 100px auto;" class="loader-16-gray"></div>');
-        $('#productdiscount-paginate').load(link_load + ' #productpoints-paginate');
+        $('#productdiscount-paginate').load(link_load);
     }
 </script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>

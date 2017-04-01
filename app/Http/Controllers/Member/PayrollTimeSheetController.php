@@ -239,8 +239,6 @@ class PayrollTimeSheetController extends Member
 				$extra_day_count   += Payroll::time_float($approved_timesheet->extra_day_hours) / $param_hour;
 				$special_holiday_count += Payroll::time_float($approved_timesheet->special_holiday_hours) / $param_hour;
 				$regular_holiday_count += Payroll::time_float($approved_timesheet->regular_holiday_hours) / $param_hour;
-
-				
 			}
 
 			$total_time_spent = Payroll::sum_time($total_time_spent, $approved_timesheet->time_spent);
@@ -292,6 +290,7 @@ class PayrollTimeSheetController extends Member
 		$employee_id = Request::input("employee_id");
 
 		/* SAVE REQUEST INPUT */
+		
 		foreach(Request::input('date') as $key => $_time)
 		{
 			$date = Carbon::parse($key)->format("Y-m-d");

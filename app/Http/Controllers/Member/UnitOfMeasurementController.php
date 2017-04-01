@@ -8,10 +8,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Tbl_unit_measurement;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_unit_measurement_type;
+use App\Models\Tbl_item;
+use App\Models\Tbl_settings;
 use App\Globals\UnitMeasurement;
 use App\Globals\Utilities;
 use Carbon\Carbon;
 use Validator;
+use Session;
 class UnitOfMeasurementController extends Member
 {
     /**
@@ -25,6 +28,119 @@ class UnitOfMeasurementController extends Member
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
+    public function check()
+    {
+        $um_id = Request::input("id");
+        $item_id = Request::input("item_id");
+        $item_id = $item_id == null ? 0 : $item_id;
+        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",$this->user_info->shop_id)->pluck("settings_setup_done");
+
+        $data["status"] = "" ;
+        if($check != 0)
+        {
+            $data["status"] = "pop-up-um";
+            $data["action"] = "/member/item/um/add_base/".$um_id."/".$item_id;
+        }
+
+        return json_encode($data);
+    }
+    public function add_base($id,$item_id)
+    {
+        $ctr = Tbl_unit_measurement::where("um_item_id",$item_id)->where("parent_basis_um",$id)->first();
+        if($ctr == null)
+        {
+            $data["um"] = Tbl_unit_measurement::where("um_id",$id)->first();
+            $data["um_multi"] = Tbl_unit_measurement_multi::where("multi_um_id",$id)->get();
+
+            $count = Tbl_unit_measurement::where("parent_basis_um",$id)->count();
+
+            $ins["um_shop"] = $this->user_info->shop_id;
+            $ins["um_name"] = $data["um"]->um_name;
+            $ins["um_date_created"] = Carbon::now();
+            $ins["um_type"] = $data["um"]->um_type;
+            $ins["parent_basis_um"] = $id;
+
+            $um_id = Tbl_unit_measurement::insertGetId($ins);
+
+            foreach ($data["um_multi"] as $key => $value) 
+            {
+                $ins_multi["multi_um_id"] = $um_id;
+                $ins_multi["multi_name"] = $value->multi_name;
+                $ins_multi["unit_qty"] = $value->unit_qty;
+                $ins_multi["multi_abbrev"] = $value->multi_abbrev;
+                $ins_multi["is_base"] = $value->is_base;
+
+                Tbl_unit_measurement_multi::insert($ins_multi);
+            }
+            
+            $data["base"] = Tbl_unit_measurement_multi::where("multi_um_id",$um_id)->where("is_base",1)->first();
+            $data["sub"] = Tbl_unit_measurement_multi::where("multi_um_id",$um_id)->where("is_base",0)->first();
+
+        }
+        else
+        {
+            $data["base"] = Tbl_unit_measurement_multi::where("multi_um_id",$ctr->um_id)->where("is_base",1)->first();
+            $data["sub"] = Tbl_unit_measurement_multi::where("multi_um_id",$ctr->um_id)->where("is_base",0)->first();
+        }
+        return view("member.unit_of_measurement.add_base",$data);
+    }
+    public function add_base_submit()
+    {
+        $um_id = Request::input("um_id");
+        $sub_multi_id = Request::input("sub_multi_id");
+
+        $update_qty["unit_qty"] = Request::input("sub_qty");
+
+        Tbl_unit_measurement_multi::where("multi_id",$sub_multi_id)->update($update_qty);
+
+        Session::put("um_id",$um_id);
+
+        $data["type"] = "base-um";
+        return json_encode($data);
+    }
+    public function archived($id, $action)
+    {
+        $access = Utilities::checkAccess("item-unit-measurement","access_page");
+        if($access != 0)
+        {
+            $data["um_id"] = $id;
+            $data["um_info"] = Tbl_unit_measurement::where("um_id",$id)->first();
+            $data["action"] = $action;
+
+            return view("member.unit_of_measurement.confirm_um",$data);
+        }
+        else
+        {
+            return $this->show_no_access_modal();
+        }
+    }
+    public function archived_submit()
+    {
+        $id = Request::input("um_id");
+        $action = Request::input("action");
+
+        $chk = Tbl_item::where("item_measurement_id",$id)->count();
+        $update["um_archived"] = 0;
+
+        $data["status"] = "success";
+        if($action == "archive")
+        {
+            if($chk <= 0)
+            {
+                $update["um_archived"] = 1;
+            }
+            else
+            {
+                $data["status"] = "error";
+                $data["status_message"] = "The unit of measurement is in used";
+            }
+        }
+
+        Tbl_unit_measurement::where("um_id",$id)->update($update);
+
+        return json_encode($data);
+
+    }
     public function index()
     {
         $access = Utilities::checkAccess('item-unit-measurement', 'access_page');
@@ -43,6 +159,25 @@ class UnitOfMeasurementController extends Member
                     {
                         $data["_um"][$key]->um_base_name = $value1->multi_name;
                         $data["_um"][$key]->um_base_abbrev = $value1->multi_abbrev;
+                    }                
+                }
+            }
+
+
+            $data["_um_archived"] = Tbl_unit_measurement::where("um_archived",1)
+                                                        ->groupBy("tbl_unit_measurement.um_id")
+                                                        ->where("um_shop",$this->user_info->shop_id)
+                                                        ->get();
+
+            foreach ($data["_um_archived"] as $key => $value) 
+            {
+                $multi = Tbl_unit_measurement_multi::where("multi_um_id",$value->um_id)->get();
+                foreach ($multi as $key1 => $value1) 
+                {
+                    if($value1->is_base == 1)
+                    {
+                        $data["_um_archived"][$key]->um_base_name = $value1->multi_name;
+                        $data["_um_archived"][$key]->um_base_abbrev = $value1->multi_abbrev;
                     }                
                 }
             }
@@ -144,7 +279,7 @@ class UnitOfMeasurementController extends Member
             $insert["um_shop"] = $this->user_info->shop_id;
             $insert["um_type"] = $um_type;
 
-            $rule["um_name"]            = "required|unique:tbl_unit_measurement,um_name";
+            $rule["um_name"]            = "required|unique:tbl_unit_measurement,um_name,".$this->user_info->shop_id.",um_shop";
             // $rule["um_base_name"]       = "required";
             // $rule["um_base_abbrev"]     = "required";
             $rule["um_type"]            = "";

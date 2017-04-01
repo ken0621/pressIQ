@@ -24,13 +24,14 @@ use Carbon\Carbon;
 use Validator;
 use App\Models\Tbl_email_template;
 use App\Globals\EmailContent;
+use App\Globals\Mlm_plan;
+use App\Models\Tbl_mlm_item_points;
 use Mail;
 class Item_code
 {
 	public static function add_code($data,$shop_id)
 	{ 
 	   // $shop_id                                                 = $this->user_info->shop_id;
-
         $go_serial = 0;
         if(isset($data['item_serial_enable']))
         {
@@ -139,14 +140,17 @@ class Item_code
         $gc_amount = 0;
         $wallet = 0;
         $wallet_amount = 0;
-        if(isset($data['use_wallet']))
+        $tendered = 0;
+        $tendered_amount = 0;
+        if(isset($data['payment_type_choose']))
         {
-            if($data['use_wallet'] == 'on')
+            if($data['payment_type_choose'] == '3')
             {
                 if(isset($data["slot_id"]))
                 {
                     $wallet = 1;
                     $wallet_amount = Mlm_slot_log::get_sum_wallet($data["slot_id"]);
+                    $tendered_amount = $wallet_amount;
                 }
                 else
                 {
@@ -155,14 +159,11 @@ class Item_code
                     return $send;
                 }
             }
-        }
-        if(isset($data['use_gc']))
-        {
-            if($data['use_gc'] == 'on')
+            else if($data['payment_type_choose'] == '2')
             {
-                if($data['gc_code'] != null)
+                if($data['payment_value'] != null)
                 {
-                    $gc = Tbl_mlm_gc::where('mlm_gc_code', $data['gc_code'])->first();
+                    $gc = Tbl_mlm_gc::where('mlm_gc_code', $data['payment_value'])->first();
                     if(isset($gc->mlm_gc_slot))
                     {
                         if($data["slot_id"] == $gc->mlm_gc_slot)
@@ -173,6 +174,7 @@ class Item_code
                                 $update_gc['mlm_gc_used_date'] = Carbon::now();
                                 $gc_amount = $gc->mlm_gc_amount;
                                 $gc = 1;
+                                $tendered_amount = $gc_amount;
                             }
                             else
                             {
@@ -204,6 +206,23 @@ class Item_code
                     return $send;
                 }
             }
+            else if($data['payment_type_choose'] == '1')
+            {
+                $tendered = 1;
+                $tendered_amount = $data['payment_value'];
+            }
+            else
+            {
+                $send['response_status']      = "warning";
+                $send['warning_validator'][0] = "Invalid Payment Type";
+                return $send;
+            }
+        }
+        else
+        {
+            $send['response_status']      = "warning";
+            $send['warning_validator'][0] = "Invalid Payment Type";
+            return $send;
         }
         if($gc  ==1 && $wallet == 1)
         {
@@ -393,7 +412,15 @@ class Item_code
 
                         $insert["item_discount_percentage"] = (1 - ($insert["item_total"]  / $insert["item_subtotal"])) * 100;
 
-
+                        $insert['item_code_payment_type'] = $data['payment_type_choose'];
+                        $insert['item_code_tendered_payment'] = $tendered_amount;
+                        $insert['item_code_change'] =$tendered_amount -  $insert["item_total"];
+                        if($insert['item_code_change'] < 0)
+                        {
+                            $send['response_status']      = "warning";
+                             $send['warning_validator'][0] = 'Tendered Amount is less than total purchase amount';
+                             return $send;
+                        }
         	            /* INSERTING AREA */
         	            $invoice_id = Tbl_item_code_invoice::insertGetId($insert);
         	            
@@ -403,8 +430,18 @@ class Item_code
         	            {
         	                $rel_insert[$key]["item_code_invoice_id"] = $invoice_id;
                             $rel_insert[$key]["slot_id"] = $insert['slot_id'];
-
-                            // item_id
+                            $active_plan_product_repurchase = Mlm_plan::get_all_active_plan_repurchase($shop_id);
+                            $item_points = Tbl_mlm_item_points::where('item_id', $rel_insert[$key]['item_id'])->where('membership_id', $slot)->first();
+                            
+                            foreach($active_plan_product_repurchase as $key2 => $value)
+                            {
+                                $code = $value->marketing_plan_code;
+                                if(isset($item_points->$code))
+                                {
+                                    $rel_insert[$key][$code] = $item_points->$code;
+                                }
+                                
+                            }
         	            }
         	            Tbl_item_code::insert($rel_insert);
         	            
@@ -450,6 +487,9 @@ class Item_code
                                     $insert_item_per[$value->item_id]['item_quantity'] = 1;
                                 }
                             }
+                            $insert_item_per[$value->item_id]['item_membership_discount'] = Item::get_discount_only($value->item_id, $slot);
+                            $insert_item_per[$value->item_id]['item_membership_discounted'] = $insert_item_per[$value->item_id]['item_price'] - $insert_item_per[$value->item_id]['item_membership_discount'];
+                        
                         }
                         Tbl_item_code_item::insert($insert_item_per);
                         
@@ -459,7 +499,7 @@ class Item_code
 
                             $update_gc['mlm_gc_used'] = 1;
                             $update_gc['mlm_gc_used_date'] = Carbon::now();
-                            Tbl_mlm_gc::where('mlm_gc_code', $data['gc_code'])->update($update_gc);
+                            Tbl_mlm_gc::where('mlm_gc_code', $data['payment_value'])->update($update_gc);
 
                             $return = $gc_amount - ($insert["item_total"]);
                             if($return >= 1)

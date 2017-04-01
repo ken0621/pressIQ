@@ -84,6 +84,19 @@ class Tbl_item extends Model
         return $query->select("multiprice_qty","multiprice_price")
                      ->join("tbl_item_multiple_price","multiprice_item_id","=","item_id");
     }
+    public function scopeUm($query)
+    {
+        return $query->leftjoin("tbl_unit_measurement","item_measurement_id","=","um_id");
+    }
+
+    public function scopeProduct($query, $archived = null)
+    {
+        $query->join("tbl_ec_variant","item_id","=","evariant_item_id")
+              ->join("tbl_ec_product","evariant_prod_id","=","eprod_id");
+        if($archived != null) $query->where("tbl_ec_product.archived",$archived);
+
+        return $query;
+    }
 
     // public function scope
 

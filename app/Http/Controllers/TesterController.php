@@ -43,17 +43,20 @@ class TesterController extends Controller
         }
     }
 
-    public function getSms()
+    public function getSms($recipient)
     {
-        $data[0] = "09178868381";
-        $data[1] = "09167703064";
-
-        // Sms::sendRegistration("639177190080","Arnold");
+        Sms::sendSms($recipient,"success_register",array());
     }
 
 	public function getIndex()
     {
-        dd(Sms::getSmsLogs());
+        dd(phpinfo());
+        // $data[0]['value'] = 2;
+        // $data[1]['value'] = 3;
+        // $data[2]['value'] = 4;
+
+        // dd(collect($data)->where("value",3)->all());
+        // dd(Sms::getSmsLogs());
         // $txt[0]["txt_to_be_replace"]    = "[name]";
         // $txt[0]["txt_to_replace"]       = "bryan";
 

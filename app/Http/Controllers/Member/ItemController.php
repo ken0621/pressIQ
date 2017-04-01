@@ -638,7 +638,7 @@ class ItemController extends Member
 		$promo_price 			= Request::input("promo_price");
 		$start_promo_date 		= Request::input("start_promo_date");
 		$end_promo_date 		= Request::input("end_promo_date");
-		
+		$item_measurement_id = "";
 		if(Session::get("um_id") != null)
 		{
 			$item_measurement_id = Session::get("um_id");

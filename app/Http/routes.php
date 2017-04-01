@@ -384,6 +384,8 @@ Route::any('/tablet/sync_import',"Member\TabletPISController@sync_import");
 Route::any('/tablet/sync_export','Member\TabletPISController@sync_export');
 Route::any('/tablet/logout','Member\TabletPISController@logout');
 Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_sir');
+Route::any('/tablet/sir_reload/{id}','Member\TabletPISController@sir_reload');
+
 
 Route::any('/tablet/customer',"Member\TabletPISController@customer");
 Route::any('/tablet/customer_details/{id}',"Member\TabletPISController@customer_details");

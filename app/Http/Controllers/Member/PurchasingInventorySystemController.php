@@ -587,6 +587,7 @@ class PurchasingInventorySystemController extends Member
         $insert_sir["shop_id"] = $shop_id;
         $insert_sir["sales_agent_id"] = $sales_agent_id;
         $insert_sir["truck_id"] = $truck_id;
+        $insert_sir["sir_warehouse_id"] = Session::get("warehouse_id_".$this->user_info->shop_id);
         $insert_sir["created_at"] = $sir_date;
         $insert_sir["lof_status"] = 1;
 
@@ -597,9 +598,8 @@ class PurchasingInventorySystemController extends Member
 
         $validator = Validator::make($insert_sir,$rule_sir);
 
-        $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
+        $warehouse_id = Session::get("warehouse_id_".$this->user_info->shop_id);
         $sir_id = 0;
-
         if($validator->fails())
         {
             $data["status"] = "error";
@@ -762,7 +762,7 @@ class PurchasingInventorySystemController extends Member
 
         $validator = Validator::make($insert_sir,$rule_sir);
 
-        $warehouse_id = Tbl_warehouse::where("warehouse_shop_id",$this->user_info->shop_id)->where("main_warehouse",1)->pluck("warehouse_id");
+        $warehouse_id = Purchasing_inventory_system::get_warehouse_based_sir($sir_id);
         if($validator->fails())
         {
             $data["status"] = "error";

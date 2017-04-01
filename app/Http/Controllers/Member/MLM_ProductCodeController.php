@@ -59,7 +59,6 @@ class MLM_ProductCodeController extends Member
     public function sell()
     {
         $access = Utilities::checkAccess('mlm-product-code', 'product_code_sell_codes');
-
         $data['_item']  = Item::get_all_category_item();
         // dd($data);
         if($access == 0)
@@ -72,8 +71,15 @@ class MLM_ProductCodeController extends Member
 	    $data["_customer"]  = Tbl_customer::where("archived",0)->where("shop_id",$shop_id)->get();
 	    // $data['table_body'] = $this->view_all_lines();
         $data['table_body'] = $this->view_all_lines();
-        $data['warehouse'][0] = $this->current_warehouse;
-        // dd($data);
+        if($this->current_warehouse == null)
+        {
+            $data['warehouse'][0] = [];
+        }
+        else
+        {
+            $data['warehouse'][0] = $this->current_warehouse;
+        }
+
         return view('member.mlm_product_code.mlm_product_code_sell', $data);
     }
 
@@ -134,6 +140,28 @@ class MLM_ProductCodeController extends Member
             $data['slot_id'] = 0;
         }
         return view('member.mlm_product_code.mlm_product_code_add_line', $data);
+    }
+    public function add_line_barcode_product()
+    {
+        $code = Request::input('product_barcode');
+        $item = Tbl_item::where('item_barcode', $code)->first();
+        if($item)
+        {
+            $validate['item_id']         = $item->item_id;
+            $validate['quantity']        = 1;
+            $validate['slot_id']         = 0;
+            $arry['item_id']         = $item->item_id;
+            $arry['quantity']        = 1;
+            $arry['price']           = $item->item_price;
+            $arry['total']           = $arry['quantity'] * $arry['price'];
+
+            Item::sell_item_add_to_session($arry);
+            $data['item'] = $item;
+        }
+        $data['response_status'] = 'success_a_item_barcode';
+        $data['message'] = ' asda';
+
+        return json_encode($data);
     }
 
     public function add_line_submit()
@@ -231,7 +259,6 @@ class MLM_ProductCodeController extends Member
                 $data['item_array'][$key] = $value;
                 $data['item_id'][$key] = Tbl_item::where("item_id",$key)->first();
                 $total += $value['membership_discounted_price_total'];
-                // $total += $value['total'];
             }  
         }
         return currency('PHP', $total);

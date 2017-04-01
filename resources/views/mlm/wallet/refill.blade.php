@@ -41,7 +41,7 @@ $data['button'][0] = '<a href="/mlm/refill/request" class="small-box-footer pull
             <th>Aprroved</th>
             <th>Remarks</th>
             <th>Attachment</th>
-            <th>Date Approved</th>
+            <th>Date Approved/Deniedc      </th>
         </thead>
         <tbody>
             @if(count($request) >= 1)
@@ -60,7 +60,11 @@ $data['button'][0] = '<a href="/mlm/refill/request" class="small-box-footer pull
                   @endif
                   <td>{{$value->wallet_log_refill_remarks}}</td>
                   <td>
-                  <a href="{{$value->wallet_log_refill_attachment}}" target="_blank">Download</a>
+                  @if($value->wallet_log_refill_attachment != null)
+                  <center><a href="{{$value->wallet_log_refill_attachment}}" target="_blank">Download</a></center>
+                  @else
+                  <center>No Attachment</center>
+                  @endif
                   </td>
                   <td>{{$value->wallet_log_refill_date_approved}}</td>
                 </tr>

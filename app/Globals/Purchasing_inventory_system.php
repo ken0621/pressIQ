@@ -61,6 +61,11 @@ class Purchasing_inventory_system
 
         return $data;
     }
+
+    public static function reload_sir_item($sir_id)
+    {
+        
+    }
     public static function reject_return_stock($sir_id)
     {
         // inventroy_source_reason
@@ -162,7 +167,7 @@ class Purchasing_inventory_system
     {
         $sir = Tbl_sir::truck()->where("sir_id",$sir_id)->first();
 
-        return $sir->warehouse_id;
+        return $sir->sir_warehouse_id;
     }
     public static function getShopId()
     {

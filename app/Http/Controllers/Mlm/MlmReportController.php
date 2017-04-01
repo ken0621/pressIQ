@@ -282,4 +282,15 @@ class MlmReportController extends Mlm
         // dd($data);
         return view("mlm.report.report_direct_promotion", $data);
     }
+
+    public function stairstep()
+    {
+        $data['report']     = Mlm_member_report::get_wallet('STAIRSTEP', Self::$slot_id); 
+        $data['plan']       = Mlm_member_report::get_plan('STAIRSTEP', Self::$shop_id); 
+        $data['header']     = Mlm_member_report::header($data['plan']);
+        $data["page"]       = "Report - Stairstep";
+
+
+        return view("mlm.report.report_stairstep", $data);
+    }
 }

@@ -96,7 +96,7 @@
                                     <input id="username" name="email" required="required" type="email" placeholder="Your Email"/>
                                 </p>
                                 <p>
-                                    <input type='number' class="form-control" name="customer_mobile" placeholder="Contact Number (e.g. 639191234567)">
+                                    <input type='number' class="form-control" name="customer_mobile" value="639">
                                 </p>
                                 <p> 
                                     <input id="tinnumber" name="tinnumber" required="required" type="number" placeholder="Your TIN"/>

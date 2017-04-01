@@ -105,7 +105,7 @@
                                         <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
                                         <input type="hidden" class="form-control maintenance-holder" key="{{ $keys }}" name="info[{{ $keys }}][value]">
                                         <button class="btn btn-primary popup" type="button" link="/member/page/content/maintenance?field={{ serialize($info->field) }}&key={{ $keys }}">Manage {{ $info->label }}</button>
-                                        <div style="display: inline-block; margin-left: 5px;">This maintenance currently has <span class="maintenance-count" key="{{ $keys }}">0</span> data.</div>
+                                        <div style="display: inline-block; margin-left: 5px;">This maintenance currently has <span class="maintenance-count" key="{{ $keys }}">{{ is_serialized($info->default) ? count(unserialize($info->default)) : 0 }}</span> data.</div>
                                     </div>
                                     @else
                                     <div class="match-height">

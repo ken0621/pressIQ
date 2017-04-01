@@ -84,6 +84,10 @@ class Tbl_item extends Model
         return $query->select("multiprice_qty","multiprice_price")
                      ->join("tbl_item_multiple_price","multiprice_item_id","=","item_id");
     }
+    public function scopeUm($query)
+    {
+        return $query->leftjoin("tbl_unit_measurement","item_measurement_id","=","um_id");
+    }
 
     public function scopeProduct($query, $archived = null)
     {

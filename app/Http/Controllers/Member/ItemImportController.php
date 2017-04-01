@@ -62,12 +62,23 @@ class ItemImportController extends Member
 		// dd(Request::input('value'));
 		$value     = Request::input('value');
 
-		$type = $value["Type"];
+		$type 					= $value["Type"];
+		$name 					= $value["Name"];
+		$sku 					= $value["Sku"];
+		$um 					= $value["UM"];
+		$category 				= $value["Category"];
+		$sales_information 		= $value["Sales Information"];
+		$sales_price 			= $value["Sales Price"];
+		$income_account 		= $value["Income Account"];
+		$sale_to_customer 		= $value["Sale to Customer"];
+		$purchase_from_supplier = $value["Purchase From Supplier"];
+
 
 		/* Validation */
-		$duplicate_item		= Tbl_item::where("shop_id", $this->getShopId())->where("item_name", $value["Name"])->first();
-		$has_Category 		= Tbl_category::where("type_name", $value["Category"])->where("type_shop", $this->getShopId())->first();
-		$has_Income_Account = Tbl_chart_of_account::where("account_name", $value["Income Account"])->where("account_shop_id", $this->getShopId())->first();
+		$duplicate_item		= Tbl_item::where("shop_id", $this->getShopId())->where("item_name", $name)->first();
+		$has_Category 		= Tbl_category::where("type_name", $category)->where("type_shop", $this->getShopId())->first();
+		$has_Income_Account = Tbl_chart_of_account::where("account_name", $income_account)->where("account_shop_id", $this->getShopId())->first();
+		// $has_UM 			= Tbl_unit_measurement::->where("account_shop_id", $this->getShopId())->where("um_name", $um)->first();
 
 		if(!$duplicate_item)
 		{
@@ -75,10 +86,45 @@ class ItemImportController extends Member
 			{
 				if($has_Income_Account)
 				{
-					if($type == "SERVICE")
+					if($type == "INVENTORY" || $type == "NON-INVENTORY" || $type == "SERVICE")
 					{
+						$insert["item_name"]				      = $name;
+						$insert["item_sku"]					      = $sku;
+						$insert["item_category_id"]			      = $has_Category->type_id;
+						$insert["item_sales_information"] 	      = $sales_information;
+						$insert["item_price"] 				      = $sale_price;
+						$insert["item_income_account_id"]         = $income_account;
+
+						if($type == "INVENTORY")
+						{
+
+						}
+						elseif($type == "NON-INVENTORY")
+						{
+
+						}
+						elseif($type == "SERVICE")
+						{
+							$insert["item_type_id"]				      = 3;
+							$insert["item_sale_to_customer"]		  = isset($sale_to_customer) ? $sale_to_customer : 0;
+							$insert["item_purchase_from_supplier"]	  = isset($purchase_from_supplier) ? $purchase_from_supplier : 0;
+							
+							$rules["item_name"]					      = 'required';
+							$rules["item_sku"]					      = 'required';
+							$rules["item_price"]				      = 'required|numeric';
+							$rules["item_income_account_id"]		  = 'required';
+							$rules["item_sale_to_customer"]		      = 'required|numeric|min:0|max:1';
+							$rules["item_purchase_from_supplier"]     = 'required|numeric|min:0|max:1';
+						}
+
+
 						$json["status"]		= "success";
 						$json["message"]	= "Success";
+					}
+					else
+					{
+						$json["status"]		= "error";
+						$json["message"]	= "Item Type Unknown [INVENTORY, NON-INVENTORY , SERVICE]";
 					}
 				}
 				else

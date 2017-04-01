@@ -1,7 +1,7 @@
 @section('content')
 @extends('layout')
 <div class="container">
-  <img src="resources/assets/frontend/img/how.jpg" width="100%">
+  <img src="{{ get_content($shop_theme_info, 'order', 'how_to_order_image') }}" width="100%">
 </div>
 @endsection
 @section('script')

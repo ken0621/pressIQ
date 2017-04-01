@@ -1,41 +1,46 @@
 @section('content')
 @extends('layout')
 <div class="youwin">
-   <div class="youwin-job" style="background-image: url(resources/assets/frontend/img/youwin-header.jpg);">
+   <div class="youwin-job" style="background-image: url({{ get_content($shop_theme_info, 'youwin', 'you_win_cover') }});">
       <div class="container">
          <div class="containers">
             <div class="text">
-               <div class="description">YOUWIN DEVICES AUTHORIZED SERVICE </div>
-               <div class="description1">CLICK BELOW TO SEE HOW WE CAN BEST SERVE YOU.</div>
+               <div class="description">{{ get_content($shop_theme_info, 'youwin', 'you_win_description_1') }}</div>
+               <div class="description1">{{ get_content($shop_theme_info, 'youwin', 'you_win_description_2') }}</div>
             </div>
          </div>
       </div>
    </div>
    <div class="service">
       <div class="holder">
-         <a href="/contact" target="_blank">
-         <img src="resources/assets/frontend/img/location.jpg">
+         <a href="{{ get_content($shop_theme_info, 'youwin', 'you_win_locate_link') }}" target="_blank">
+         <img src="{{ get_content($shop_theme_info, 'youwin', 'you_win_locate_image') }}">
          </a>
       </div>
       <div class="holder">
-         <a href="https://docs.google.com/forms/d/e/1FAIpQLSd7G9SWq8BxmCIZIrI5h04ctPtBFt6AVfyUl2AG-rP-S6FysA/viewform" target="_blank">
-         <img src="resources/assets/frontend/img/message.jpg">
+         <a href="{{ get_content($shop_theme_info, 'youwin', 'you_win_send_link') }}" target="_blank">
+         <img src="{{ get_content($shop_theme_info, 'youwin', 'you_win_send_image') }}">
          </a>
       </div>
       <div class="holder">
-         <img src="resources/assets/frontend/img/contact.jpg">
+         <img src="{{ get_content($shop_theme_info, 'youwin', 'you_win_contact_image') }}">
       </div>
    </div>
    <div class="manual">
       <div class="header-manual">
          <div class="line"></div>
-         <div class="text">MANUALS</div>
+         <div class="text">{{ get_content($shop_theme_info, 'youwin', 'you_win_manual_title') }}</div>
       </div>
       <!-- Place somewhere in the <body> of your page -->
       <div class="manualdownload">
-         <div class="text1">DOWNLOAD PDF MANUAL ACCORDING TO DEVICE        
-            MODEL
-         </div>
+         <div class="text1">{{ get_content($shop_theme_info, 'youwin', 'you_win_manual_subtitle') }}</div>
+         @if(is_serialized(get_content($shop_theme_info, 'youwin', 'you_win_manual_maintenance')))
+            @foreach(unserialize(get_content($shop_theme_info, 'youwin', 'you_win_manual_maintenance')) as $key => $value)
+            <div class="manual-box">
+               <input class="download-box" type="button" value="{{ $value['label'] }}" onclick="window.location.href='{{ $value['link'] }}'" />
+            </div>
+            @endforeach
+         @else
          <div class="manual-box">
             <input class="download-box" type="button" value="DOWNLOAD M022 MODEL" onclick="window.location.href='https://drive.google.com/open?id=0B1CyP3NtcWQKRTlkcElvTFg0VDQ'" />
          </div>
@@ -45,6 +50,7 @@
          <div class="manual-box">
             <input class="download-box" type="button" value="DOWNLOAD R01 MODEL" onclick="window.location.href='https://drive.google.com/open?id=0B1CyP3NtcWQKU0lIdk9NdldmQzg'" />
          </div>
+         @endif
       </div>
    </div>
 </div>

@@ -53,7 +53,11 @@
         <div id="all-orders" class="tab-pane fade in active">
             <div class="panel-heading">
             <center>Proof of payment</center>
+            @if($request->wallet_log_refill_attachment != null)
             <img src="{{public_path(). '/' . $request->wallet_log_refill_attachment}}" width="100%">
+            @else
+            <center>No Attachment</center>
+            @endif
             <hr>
             </div>
         </div>

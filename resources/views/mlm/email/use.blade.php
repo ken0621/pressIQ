@@ -141,7 +141,13 @@
                                                 @if($binary_advance->binary_settings_placement == 0)
                                                     <div class="col-md-12">
                                                         <label for="">Slot Placement (Binary)</label>
-                                                        <input type="text" class="form-control" name="slot_placement">
+                                                        <select name="slot_placement" class="form-control">
+                                                        @if(count($_slots) != 0)
+                                                            @foreach($_slots as $slot)
+                                                                <option value="{{$slot->slot_id}}">{{$slot->first_name}} {{$slot->middle_name}} {{$slot->last_name}} ({{$slot->slot_no}})</option>
+                                                            @endforeach
+                                                        @endif
+                                                        </select>
                                                     </div>
                                                     <div class="col-md-12">
                                                         <label for="">Slot Position</label>

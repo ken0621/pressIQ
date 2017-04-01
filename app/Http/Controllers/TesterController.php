@@ -43,12 +43,9 @@ class TesterController extends Controller
         }
     }
 
-    public function getSms()
+    public function getSms($recipient)
     {
-        $data[0] = "09178868381";
-        $data[1] = "09167703064";
-
-        // Sms::sendRegistration("639177190080","Arnold");
+        Sms::sendSms($recipient,"success_register",array());
     }
 
 	public function getIndex()

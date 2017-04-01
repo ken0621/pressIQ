@@ -434,9 +434,6 @@ class ItemController extends Member
 			
 			$rules["item_name"]					      = 'required';
 			$rules["item_sku"]					      = 'required';
-			// $rules["item_category_id"]			  = '';
-			// $rules["item_img"]					  = '';
-			// $rules["item_type_id"]				  = '';
 			$rules["item_price"]				      = 'required|numeric';
 			$rules["item_sales_information"]	      = '';
 			$rules["item_asset_account_id"]		      = '';

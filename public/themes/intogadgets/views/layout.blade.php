@@ -396,17 +396,15 @@
 
         </div>
 
-        @if(isset($ads))
-
-          @if($ads->ads_active == 1 && $ads->ads_position == 1)
+        @if(get_content($shop_theme_info, 'info', 'footer_ads'))
 
             <div class="footer-add">
 
               <div class="footer-add-wrapper">
 
-                <a href="{{$ads->ads_link}}" target="_blank">
+                <a href="{{ get_content($shop_theme_info, 'info', 'footer_ads_link') }}" target="_blank">
 
-                  <img src="{{$ads_image}}"></img>
+                  <img src="{{ get_content($shop_theme_info, 'info', 'footer_ads') }}">
 
                 </a>
 
@@ -415,8 +413,6 @@
               </div>
 
             </div>
-
-          @endif
 
         @endif
 

@@ -20,6 +20,10 @@
 				<label>{{ ucwords(str_replace(' ', '_', $fields->name)) }}</label>
 				@if($fields->type == "textarea")
 				<textarea class="form-control mce" name="{{ $fields->name }}"></textarea>
+				@elseif($fields->type == "image")
+				<input type="hidden" name="{{ $fields->name }}" class="maintenance-image-input" key="{{ $key }}-{{ $fields->type }}">
+				<div class="maintenance-image-holder" key="{{ $key }}-{{ $fields->type }}"></div>
+				<div><button class="image-gallery image-gallery-single btn btn-primary" key="{{ $key }}-{{ $fields->type }}"> Upload Image</button></div>
 				@else
 				<input class="form-control" type="{{ $fields->type }}" name="{{ $fields->name }}">
 				@endif

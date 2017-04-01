@@ -21,7 +21,7 @@ use Carbon\carbon;
  * @author Bryan Kier Aradanas
  */
 
-class Sms
+class Sms 
 {
 	public static function getShopId()
 	{

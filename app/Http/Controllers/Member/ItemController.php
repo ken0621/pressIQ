@@ -639,10 +639,13 @@ class ItemController extends Member
 
 		$item_measurement_id = Request::input("item_measurement_id");
 		$check = UnitMeasurement::check();
-        if($check != 0)
-        {
-        	$item_measurement_id = Tbl_unit_measurement::where("um_id",$old["item_measurement_id"])->pluck("um_id");
-        }
+        if($item_measurement_id == $old["item_measurement_id"])
+		{
+	        if($check != 0)
+	        {
+	        	$item_measurement_id = Tbl_unit_measurement::where("um_id",$old["item_measurement_id"])->pluck("um_id");
+	        }			
+		}
 		if(Session::get("um_id") != null)
 		{
 			$item_measurement_id = Session::get("um_id");

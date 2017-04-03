@@ -50,17 +50,19 @@ class ShopCartController extends Shop
             {
                 $data["product"]["variant"][$keys]["discounted"] = true;
                 $data["product"]["variant"][$keys]["discounted_price"] = $values["item_discount_value"];
-
-                foreach ($data["product"]["variant"][$keys]["mlm_discount"] as $key0 => $value0) 
+                if (isset($data["product"]["variant"][$keys]["mlm_discount"])) 
                 {
-                    if ($value0["discount_type"] == 0) 
+                    foreach ($data["product"]["variant"][$keys]["mlm_discount"] as $key0 => $value0) 
                     {
-                        $data["product"]["variant"][$keys]["mlm_discount"][$key0]["discounted_amount"] = $values["item_discount_value"] - $value0['discount_value'];
+                        if ($value0["discount_type"] == 0) 
+                        {
+                            $data["product"]["variant"][$keys]["mlm_discount"][$key0]["discounted_amount"] = $values["item_discount_value"] - $value0['discount_value'];
+                        }
+                        else
+                        {
+                           $data["product"]["variant"][$keys]["mlm_discount"][$key0]["discounted_amount"] = $values["item_discount_value"] - ($value0['discount_value'] / 100) * $values["item_discount_value"];
+                        }                    
                     }
-                    else
-                    {
-                       $data["product"]["variant"][$keys]["mlm_discount"][$key0]["discounted_amount"] = $values["item_discount_value"] - ($value0['discount_value'] / 100) * $values["item_discount_value"];
-                    }                    
                 }
             }
             else

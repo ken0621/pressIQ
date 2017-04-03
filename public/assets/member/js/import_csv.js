@@ -1,4 +1,5 @@
 var import_csv  = new import_csv();
+var target_file = '';
 var main_file   = '';
 var ctr         = 0;
 var data_value  = '';
@@ -16,14 +17,14 @@ function import_csv()
     {
         event_bind_files();
         event_submit_button();
+        csv_upload_configuration();
     }
 
     function event_bind_files()
     {
         if(isAPIAvailable()) 
         {
-            $('#files').bind('change', handleFileSelect);
-            console.log("true");
+            $(document).on('change', '#files', handleFileSelect);
         }
     }
 
@@ -53,7 +54,8 @@ function import_csv()
 
     function handleFileSelect(evt) 
     {
-        var files = evt.target.files; // FileList object
+        console.log(evt);
+        var files = target_file; // Dropzone File object
         var file  = files[0];
         main_file = file;
 
@@ -64,17 +66,16 @@ function import_csv()
         output += ' - FileSize: ' + file.size + ' bytes<br />\n';
         output += ' - LastModified: ' + (file.lastModifiedDate ? file.lastModifiedDate.toLocaleDateString() : 'n/a') + '<br />\n';
 
-        $(".btn-submit").removeAttr("disabled");
-
         // post the results
-        $('#list').append(output);
+        $('#list').html(output);
+        // enable button
+        $(".btn-submit").removeAttr("disabled");
     }
 
     function event_submit_button(evt)
     {
         $(".btn-submit").click( function()
         {
-            $(".btn-submit").html(spinner());
             $(this).attr("disabled","disabled");
 
             Load_array(main_file);
@@ -112,8 +113,17 @@ function import_csv()
                 },
                 success: function(data)
                 {
+                    // counter and percentage loading
                     ctr++;
                     $(".counter").html(ctr);
+                    var percent = parseInt((ctr*100)/data_length);
+                    $(".progress-bar").css("width", percent+"%");
+                    $(".progress-bar").html(percent+"%");
+
+                    // append tr result and status
+                    console.log(data.tr_data);
+                    $(".table-import-container tbody").append(data.tr_data);
+
                     submit_data(data_value[ctr]);
                 },
                 error: function(e)
@@ -125,8 +135,52 @@ function import_csv()
         }
     }
 
-    function spinner() 
+    function csv_upload_configuration()
     {
-        return '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
+        Dropzone.options.myDropZoneImport = 
+        {
+            maxFilesize: 2,
+            thumbnailWidth: 148,
+            thumbnailHeight: 148,
+            acceptedFiles: ".csv",
+            init: function() 
+            {
+                this.on("uploadprogress", function(file, progress) 
+                {
+                    console.log("File progress", progress);
+                })
+
+                this.on("error", function(file, response)
+                {
+                    console.log(response);
+                })
+
+                this.on("addedfile", function(file)
+                {
+                    $("#ImportContainer .dz-message").fadeOut();
+                    if (this.files[1]!=null){
+                        this.removeFile(this.files[0]);
+                    }
+
+                    target_file = this.files;
+                    $("#files").change();
+                })
+
+                this.on("dragover", function()
+                {
+                    // $("#ModalGallery .dropzone").addClass("dropzone-drag");
+                })
+
+                this.on("dragleave", function()
+                {
+                    // $("#ModalGallery .dropzone").removeClass("dropzone-drag");
+                })
+
+                this.on("drop", function()
+                {
+                    // $("#ModalGallery .dropzone").removeClass("dropzone-drag");
+                })
+            }
+        };
     }
 }

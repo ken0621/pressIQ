@@ -6,12 +6,10 @@
         <div>
             <i class="fa fa-user-secret"></i>
             <h1>
-                <span class="page-title">Utilities &raquo; Admin User</span>
+                <span class="page-title">Items &raquo; Import</span>
                 <small>
-                Add a user
                 </small>
             </h1>
-            <button type="button" class="panel-buttons btn btn-custom-primary pull-right popup" link="/member/utilities/modal-add-user" size="sm">Create User</button>
         </div>
     </div>
 </div>
@@ -22,25 +20,52 @@
         <div class="progress">
             <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
         </div>
-        <form method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}" >
-            </div>
-            <div id="inputs" class="custom-upload">
-                <input type="file" id="files" name="files[]" class="form-control" style="width: 100%; height: 100%;" />
-            </div>
-            <div>   
-                <output id="list"></output>
-            </div>
-            <div class="form-group">
-                <button class="form-control btn btn-primary btn-submit" disabled="disabled">Generate Accounts</button>
-            </div>
-        </form>
+        <div id="ImportContainer">
+            <form action="/member/item/import/url" id="myDropZoneImport" class="dropzone" method="post" enctype="multipart/form-data">
+                <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
+                <input type="file" id="files" name="files[]" style="display: none"><br>
+                <div class="dz-message">
+                    <span class="needsclick">
+                        <h1><b>DRAG & DROP</b></h1>
+                        <h4>your CSV File here or click it to browse</h4>
+                    </span>
+                </div>
+                <div class="pull-right">
+                    <output id="list"></output> 
+                </div>
+            </form>
+        </div>
+        </br>
+        <div class="form-group">
+            <button class="form-control btn btn-custom-primary btn-submit" disabled="disabled">Generate Accounts</button>
+        </div>
         </br>
     </div>
     <div class="col-md-6">
     </div>
     <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-condensed table-stripped table-hover table-import-container">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Name</th>
+                        <th>Sku</th>
+                        <th>UM</th>
+                        <th>Category</th>
+                        <th>Sales Information</th>
+                        <th>Sales Price</th>
+                        <th>Income Account</th>
+                        <th>Sale to Customer</th>
+                        <th>Purchase From Supplier</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 @endsection
@@ -53,6 +78,30 @@
         border: black dashed 2px;
         background-color: white;
     }
+    .dropzone
+    {
+        position: relative;
+        border: dashed 3px #76b6ec;
+        min-height: 100px;
+        padding: 5px 15px;
+        cursor: pointer;
+    }
+    .dropzone .dz-message *
+    {
+        text-align: center;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+    .dropzone .dz-preview
+    {
+        position: initial;
+    }
+    
 </style>
 @endsection
 @section('script')

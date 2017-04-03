@@ -73,7 +73,6 @@ class ItemImportController extends Member
 		$sale_to_customer 		= $value["Sale to Customer"];
 		$purchase_from_supplier = $value["Purchase From Supplier"];
 
-
 		/* Validation */
 		$duplicate_item		= Tbl_item::where("shop_id", $this->getShopId())->where("item_name", $name)->first();
 		$has_Category 		= Tbl_category::where("type_name", $category)->where("type_shop", $this->getShopId())->first();
@@ -88,16 +87,17 @@ class ItemImportController extends Member
 				{
 					if($type == "INVENTORY" || $type == "NON-INVENTORY" || $type == "SERVICE")
 					{
+						$insert["shop_id"]				      	  = $this->getShopId();
 						$insert["item_name"]				      = $name;
 						$insert["item_sku"]					      = $sku;
 						$insert["item_category_id"]			      = $has_Category->type_id;
 						$insert["item_sales_information"] 	      = $sales_information;
-						$insert["item_price"] 				      = $sale_price;
+						$insert["item_price"] 				      = $sales_price;
 						$insert["item_income_account_id"]         = $income_account;
 
 						if($type == "INVENTORY")
 						{
-
+							// $insert[""] = ;
 						}
 						elseif($type == "NON-INVENTORY")
 						{
@@ -157,9 +157,27 @@ class ItemImportController extends Member
 		}
 
 		$json["item_name"]	= $value["Name"];
-
+		$json["tr_data"]	= "<tr>";
+		$json["tr_data"]   .= "<td>".$value['Type']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Name']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Sku']."</td>";
+		$json["tr_data"]   .= "<td>".$value['UM']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Category']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Sales Information']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Sales Price']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Income Account']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Sale to Customer']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Purchase From Supplier']."</td>";
+		$json["tr_data"]   .= "<td>".$json["status"]."</td>";
+		$json["tr_data"]   .= "<td>".$json["message"]."</td>";
+		$json["tr_data"]   .= "</tr>";
 
         return json_encode($json);
+	}
+
+	public function postUrl()
+	{
+
 	}
 
 }

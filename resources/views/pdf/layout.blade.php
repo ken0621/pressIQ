@@ -80,6 +80,7 @@
                 padding: 5px 10px;
                 margin-left: 90px;
         }
+        thead, tfoot { display: table-row-group }
     </style>
     @yield('css')
 </head>

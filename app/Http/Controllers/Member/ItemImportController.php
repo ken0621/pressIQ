@@ -168,7 +168,7 @@ class ItemImportController extends Member
 		$json["tr_data"]   .= "<td>".$value['Income Account']."</td>";
 		$json["tr_data"]   .= "<td>".$value['Sale to Customer']."</td>";
 		$json["tr_data"]   .= "<td>".$value['Purchase From Supplier']."</td>";
-		$json["tr_data"]   .= "<td>".$json["status"]."</td>";
+		$json["tr_data"]   .= "<td class=\"" .$json["status"] == 'success' ? 'green' : 'red' ."\">".$json["status"]."</td>";
 		$json["tr_data"]   .= "<td>".$json["message"]."</td>";
 		$json["tr_data"]   .= "</tr>";
 

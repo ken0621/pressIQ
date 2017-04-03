@@ -202,22 +202,22 @@ function image_gallery()
 
 	function image_upload_configuration()
 	{
-		Dropzone.options.myDropZone = 
+		Dropzone.options.myDropZone= 
 		{
 			maxFilesize: 2,
-			thumbnailWidth: 148,
-	    	thumbnailHeight: 148,
-		    acceptedFiles: "image/*",
-		    init: function() 
-		    {
+            thumbnailWidth: 148,
+            thumbnailHeight: 148,
+            acceptedFiles: "image/*",
+            init: function() 
+            {
 		        this.on("uploadprogress", function(file, progress) 
 		        {
 		            console.log("File progress", progress);
 		        })
 
-		        this.on("error", function(file)
+		        this.on("error", function(file, response)
 		        {
-		        	console.log("Error");
+		        	console.log(response);
 		        })
 
 		        this.on("addedfile", function(file)

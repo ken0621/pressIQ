@@ -104,6 +104,7 @@ class UnitMeasurement
         
         $um_issued = Tbl_unit_measurement_multi::where("multi_id",$um_issued_id)->first();
         $um_base = Tbl_unit_measurement_multi::where("multi_um_id",$um_base_id)->where("is_base",1)->first();
+        // dd($um_issued);
         if($um_base_id == $um_issued_id)
         {
             if($um_base != null || $um_issued != null)
@@ -129,8 +130,8 @@ class UnitMeasurement
             }
 
             $issued_um = floor($qty / $issued_um_qty);
-            $each = (($qty / $issued_um_qty) - floor($qty / $issued_um_qty)) * $issued_um_qty;
-            // dd($um_base);
+            // dd(($qty/$issued_um_qty - ($issued_um)) * $issued_um_qty);
+            $each = round((($qty / $issued_um_qty) - floor($qty / $issued_um_qty)) * $issued_um_qty);
             $return = $issued_um." ".$um_issued->multi_abbrev." & ".$each." ".$um_base->multi_abbrev;
         }
         else

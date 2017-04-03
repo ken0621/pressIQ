@@ -37,7 +37,7 @@
                             <tr>
                                 <th>#</th>
                                 <th class="text-center">Item Name</th>
-                                <th class="text-center">Quantity</th>
+                                <th class="text-center">Current Quantity</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>

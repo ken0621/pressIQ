@@ -199,6 +199,7 @@ Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_i
 
 Route::any("/member/item/view_serials/{id}","Member\ItemSerialController@index");
 Route::any("/member/item/serial_number/{id}",'Member\ItemSerialController@view_serial');
+Route::any("/member/item/save_serial",'Member\ItemSerialController@save_serial');
 
 Route::any('/member/functiontester', 'Member\FunctionTesterController@index'); /* ERWIN */
 Route::any('/member/functiontester/clear_all', 'Member\FunctionTesterController@clear_all'); /* ERWIN */

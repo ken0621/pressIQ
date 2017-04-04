@@ -28,9 +28,11 @@ use App\Models\Tbl_payroll_overtime_rate;
 use App\Models\Tbl_payroll_employee_salary;
 use App\Models\Tbl_payroll_employee_allowance;
 use App\Models\Tbl_payroll_period;
+use App\Models\Tbl_payroll_record;
 
 use Carbon\Carbon;
 use stdClass;
+use DB;
 
 class Payroll
 {
@@ -885,6 +887,8 @@ class Payroll
 
 	public static function process_compute($shop_id = 0, $status = 'processed')
 	{
+		$data = array();
+
 		$_period = Tbl_payroll_period_company::period($shop_id, $status)
                                                        ->orderBy('.tbl_payroll_period.payroll_period_category')
                                                        ->orderBy('tbl_payroll_period.payroll_period_start')
@@ -901,14 +905,37 @@ class Payroll
 			$start 	= $period->payroll_period_start;
 			$end 	= $period->payroll_period_end;
 
-			
+			$temp_period['period'] 			= $period;
+			$temp_period['total_gross'] 	= 0;
+			$temp_period['total_deduction'] = 0;
+			$temp_period['total_net'] 		= 0;
+			$temp_period['_list']			= array();
 
 			foreach($_employee as $employee)
 			{
 
-				$ddata = Payroll::compute_per_employee($employee->payroll_employee_id, $start, $end, $shop_id, $payroll_period_category);
+				$compute = Payroll::compute_per_employee($employee->payroll_employee_id, $start, $end, $shop_id, $payroll_period_category);
+
+				$temp['payroll_employee_id'] 			= $employee->payroll_employee_id;
+				$temp['payroll_employee_first_name'] 	= $employee->payroll_employee_first_name;
+				$temp['payroll_employee_middle_name'] 	= $employee->payroll_employee_middle_name;
+				$temp['payroll_employee_last_name'] 	= $employee->payroll_employee_last_name;
+				$temp['payroll_employee_suffix_name'] 	= $employee->payroll_employee_suffix_name;
+				$temp['payroll_employee_display_name'] 	= $employee->payroll_employee_display_name;
+				$temp['total_gross'] 					= $compute['total_gross'];
+				$temp['total_deduction'] 				= $compute['total_deduction'];
+				$temp['total_net'] 						= $compute['total_net'];
+
+				$temp_period['total_gross'] 			+= $compute['total_gross'];
+				$temp_period['total_deduction'] 		+= $compute['total_deduction'];
+				$temp_period['total_net'] 				+= $compute['total_net'];
+
+				array_push($temp_period['_list'], $temp);
 			}	
+			array_push($data, $temp_period);
         }
+
+        return $data;
 	}
 
 	
@@ -978,10 +1005,14 @@ class Payroll
 		$data['allowance']					= array();
 
 		$data['deduction']					= array();
-		$data['total_deduction']			= 0;
+		
+		$data['late_deduction'] 			= 0;
+		$data['under_time']					= 0;
+		$data['agency_deduction'] 			= 0;
 
 		$data['total_net']					= 0;
 		$data['total_gross']				= 0;
+		$data['total_deduction']			= 0;
 
 
 		$tax_status 	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_tax_status');
@@ -1039,6 +1070,7 @@ class Payroll
 												   ->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 												   ->select('tbl_payroll_group.*')
 												   ->first();
+
 
 			$working_day_month = $group->payroll_group_working_day_month;
 
@@ -1237,6 +1269,39 @@ class Payroll
 
 			$data['total_gross'] 				+= array_sum($extra_day) + array_sum($regular_day) + array_sum($regular_day_rest) + array_sum($special_holiday_rest) + array_sum($legal_holiday_rest)  + array_sum($legal_holiday)  + array_sum($special_holiday); 
 
+
+			/* LATE COMPUTATION START */
+
+			$late_deduction = 0;
+
+			if($group->payroll_late_category == 'Custom')
+			{	
+				$interval 				= $group->payroll_late_interval;
+				$parameter 				= $group->payroll_late_parameter;
+				$payroll_late_deduction = $group->payroll_late_deduction;
+
+				if($parameter == 'Second')
+				{
+					$late_hours = ($late_hours * 60) * 60;
+				}
+				else if($parameter == 'Minute')
+				{
+					$late_hours = $late_hours * 60;
+				}
+
+				$interval = intval(divide($late_hours, $intval));
+
+				$late_deduction = $interval * $payroll_late_deduction;
+			}
+			else if($group->payroll_late_category == 'Base on Salary')
+			{
+				$late_deduction = $late_hours * $daily_rate;
+			}
+
+			$data['under_time'] = $under_time * $daily_rate;
+
+			$data['late_deduction']	+= round($late_deduction, 2);
+
 			$start = Carbon::parse($start)->addDay()->format("Y-m-d");
 
 		}
@@ -1346,7 +1411,6 @@ class Payroll
 			}
 		}
 
-// salary_pagibig
 		/* GET TAX CONTRIBUTION */
 		if($data['minimum_wage'] == 1)
 		{
@@ -1366,18 +1430,28 @@ class Payroll
 			}
 			
 		}
+		if($group->payroll_group_agency == Payroll::return_ave($period_category))
+		{
+			$data['agency_deduction'] = $group->payroll_group_agency_fee;
+		}
 
+		$data['total_deduction']	+= $data['tax_contribution'];
+		$data['total_deduction']	+= $data['sss_contribution_ee'];
+		$data['total_deduction']	+= $data['pagibig_contribution'];
+		$data['total_deduction']	+= $data['philhealth_contribution_ee'];
+		$data['total_deduction']	+= $data['late_deduction'];
+		$data['total_deduction']	+= $data['under_time'];
+		$data['total_deduction']	+= $data['agency_deduction'];
+		$data['total_deduction']	+= $data['agency_deduction'];
+		$data['total_deduction']	+= $data['agency_deduction'];
 
 		// DEDUCTION START [LOANS, CASH ADVANCE, CASH BOND AND OTHER DEDUCTION]
+		$deduction = Payroll::getdeduction($employee_id, $date,$period_category, $payroll_period_category, $shop_id);
 
-		$_deduction = Payroll::getdeduction($employee_id, $date,$period_category);
-
-// 		deduction
-// total_deduction
-
-		// dd($_deduction);
-		dd($data);
-
+		$data['deduction'] 			= $deduction['deduction'];
+		$data['total_deduction'] 	+= $deduction['total_deduction'];
+		$data['total_net'] 			= $data['total_gross'] - $data['total_deduction'];
+		// dd($data);
 		return $data;
 	}
 
@@ -1692,27 +1766,41 @@ class Payroll
 	}
 
 
-	public static function getdeduction($employee_id = 0, $date = '0000-00-00', $period = '')
+	public static function getdeduction($employee_id = 0, $date = '0000-00-00', $period = '', $payroll_period_category = '', $shop_id = 0)
 	{
+
 
 		$month[0] = date('Y-m-01', strtotime($date));
 		$month[1] = date('Y-m-t', strtotime($date));
 
 		$_deduction = Tbl_payroll_deduction_employee::getdeduction($employee_id, $date, $period, $month)->get();
 		
+		$payroll_record_id = Tbl_payroll_record::getperiod($shop_id, $payroll_period_category)->lists('payroll_record_id');
+
+		
+
 		$data['deduction'] 			= array();
 		$data['total_deduction'] 	= 0;
-		 dd($_deduction);
 
-		foreach($_deduction as $dedutcion)
+		
+
+		foreach($_deduction as $deduction)
 		{
 			$temp['deduction_name'] 		= $deduction->payroll_deduction_name;
 			$temp['deduction_category'] 	= $deduction->payroll_deduction_category;
 			$temp['payroll_deduction_id'] 	= $deduction->payroll_deduction_id;
+			$temp['payroll_periodal_deduction'] = $deduction->payroll_periodal_deduction;
+			/* get total payment deduction per month */
+			$total_payment = Tbl_payroll_deduction_payment::getpayment($employee_id, $payroll_record_id, $deduction->payroll_deduction_id)->select(DB::raw('IFNULL(sum(payroll_payment_amount), 0) as total_payment'))->pluck('total_payment');
 
+			if($temp == 'Last Period')
+			{
+				$temp['payroll_periodal_deduction'] = $deduction->payroll_monthly_amortization - $total_payment;
+			}
+			$data['total_deduction'] += $temp['payroll_periodal_deduction'];
 			array_push($data['deduction'], $temp);
 		}
-
+		// dd($data);
 		return $data;
 	}
 

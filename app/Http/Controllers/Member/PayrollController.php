@@ -3568,7 +3568,7 @@ class PayrollController extends Member
      public function payroll_process()
      {
           $data['_period'] = Payroll::process_compute(Self::shop_id(), 'processed');
-          dd($data);
+          // dd($data);
           return view('member.payroll.payroll_process', $data);
      }
 

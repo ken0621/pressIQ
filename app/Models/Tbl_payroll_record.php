@@ -13,6 +13,7 @@ class Tbl_payroll_record extends Model
     /* COLUMN REFERENCE NAME */
 
 	// payroll_record_id
+	// shop_id
 	// payroll_employee_id
 	// payroll_period_company_id
 	// salary_monthly
@@ -60,4 +61,15 @@ class Tbl_payroll_record extends Model
 	// philhealth_contribution_ee
 	// philhealth_contribution_er
 	// pagibig_contribution
+
+	public function scopegetperiod($query, $shop_id = 0, $payroll_period_category = '', $status = 'approved')
+	{
+		$query->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_company_id','=','tbl_payroll_record.payroll_period_company_id')
+			  ->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+			  ->where('tbl_payroll_period.payroll_period_category', $payroll_period_category)
+			  ->where('tbl_payroll_record.shop_id', $shop_id)
+			  ->where('tbl_payroll_period_company.payroll_period_status', $status);
+
+		return $query;
+	}	
 }

@@ -898,15 +898,16 @@
     padding: 5px;
     color:#fff;
     background-color: #106189;
+
 }
 .custom-panel-body
 {
     padding: 5px;
-    width: 100%;
     border: 1px solid #b5c1c7;
     position: relative;
     margin-top: -13px;
     margin-left: 12px;
+    margin-bottom: 30px;
 }
 
 /* triangle */

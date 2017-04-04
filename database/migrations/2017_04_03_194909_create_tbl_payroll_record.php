@@ -17,7 +17,6 @@ class CreateTblPayrollRecord extends Migration
             $table->integer('shop_id');
             $table->integer('payroll_employee_id');
             $table->integer('payroll_period_company_id');
-            $table->integer('payroll_period_id');
             $table->double('salary_monthly',18,2);
             $table->double('salary_daily',18,2);
             $table->double('regular_salary', 18, 2);
@@ -63,6 +62,9 @@ class CreateTblPayrollRecord extends Migration
             $table->double('philhealth_contribution_ee',18,2);
             $table->double('philhealth_contribution_er',18,2);
             $table->double('pagibig_contribution',18,2);
+            $table->double('late_deduction', 18, 2);
+            $table->double('under_time', 18,2);
+            $table->double('agency_deduction', 18,2);
         });
     }
 

@@ -217,7 +217,17 @@ class Item
     }    
     public static function get_bundle_item_qty($item_id = null)
     {
-        
+        $qty = 0;
+        $item_type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        if($item_id != null && $item_type == 4)
+        {
+            $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+            foreach ($bundle_item as $key => $value) 
+            {
+                
+            }
+        }
+        return $qty;
     }    
     public static function get_item_bundle($item_id = null)
     {

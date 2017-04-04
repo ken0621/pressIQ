@@ -108,11 +108,12 @@ function import_csv()
                 datatype:'json',
                 type:'post',
                 data: {
-                _token:token,
-                value:value
+                    _token:token,
+                    value:value
                 },
                 success: function(data)
                 {
+                    data = jQuery.parseJSON(data);
                     // counter and percentage loading
                     ctr++;
                     $(".counter").html(ctr);

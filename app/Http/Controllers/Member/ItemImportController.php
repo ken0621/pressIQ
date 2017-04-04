@@ -73,12 +73,11 @@ class ItemImportController extends Member
 		$sale_to_customer 		= $value["Sale to Customer"];
 		$purchase_from_supplier = $value["Purchase From Supplier"];
 
-
 		/* Validation */
 		$duplicate_item		= Tbl_item::where("shop_id", $this->getShopId())->where("item_name", $name)->first();
 		$has_Category 		= Tbl_category::where("type_name", $category)->where("type_shop", $this->getShopId())->first();
-		$has_Income_Account = Tbl_chart_of_account::where("account_name", $income_account)->where("account_shop_id", $this->getShopId())->first();
-		// $has_UM 			= Tbl_unit_measurement::->where("account_shop_id", $this->getShopId())->where("um_name", $um)->first();
+		$has_Income_Account = Tbl_chart_of_account::where("account_shop_id", $this->getShopId())->where("account_name", $income_account)->first();
+		$has_UM 			= Tbl_unit_measurement::where("um_shop", $this->getShopId())->where("um_name", $um)->first();
 
 		if(!$duplicate_item)
 		{
@@ -88,16 +87,17 @@ class ItemImportController extends Member
 				{
 					if($type == "INVENTORY" || $type == "NON-INVENTORY" || $type == "SERVICE")
 					{
+						$insert["shop_id"]				      	  = $this->getShopId();
 						$insert["item_name"]				      = $name;
 						$insert["item_sku"]					      = $sku;
 						$insert["item_category_id"]			      = $has_Category->type_id;
 						$insert["item_sales_information"] 	      = $sales_information;
-						$insert["item_price"] 				      = $sale_price;
+						$insert["item_price"] 				      = $sales_price;
 						$insert["item_income_account_id"]         = $income_account;
 
 						if($type == "INVENTORY")
 						{
-
+							// $insert[""] = ;
 						}
 						elseif($type == "NON-INVENTORY")
 						{
@@ -117,9 +117,20 @@ class ItemImportController extends Member
 							$rules["item_purchase_from_supplier"]     = 'required|numeric|min:0|max:1';
 						}
 
+						$validator = Validator::make($insert, $rules);
+						if ($validator->fails())
+						{
+							$return["status"] 	= "error";
+							$return["message"]  = $validator->errors()->first();
+						}
+						else
+						{
+							$item_id = Tbl_item::insertGetId($insert);
 
-						$json["status"]		= "success";
-						$json["message"]	= "Success";
+							$json["status"]		= "success";
+							$json["message"]	= "Success";
+							$json["item_id"]	= $item_id;
+						}
 					}
 					else
 					{
@@ -145,30 +156,28 @@ class ItemImportController extends Member
 			$json["message"]	= "Duplicate Item Name";
 		}
 
-		$json["item_name"]	= $value["name"];
-		dd(json_encode($json));
+		$json["item_name"]	= $value["Name"];
+		$json["tr_data"]	= "<tr>";
+		$json["tr_data"]   .= "<td>".$value['Type']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Name']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Sku']."</td>";
+		$json["tr_data"]   .= "<td>".$value['UM']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Category']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Sales Information']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Sales Price']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Income Account']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Sale to Customer']."</td>";
+		$json["tr_data"]   .= "<td>".$value['Purchase From Supplier']."</td>";
+		$json["tr_data"]   .= "<td>".$json["status"]."</td>";
+		$json["tr_data"]   .= "<td>".$json["message"]."</td>";
+		$json["tr_data"]   .= "</tr>";
 
+        return json_encode($json);
+	}
 
-		// $username = Tbl_register::Account()->where("username", "homerun")->first();
-  //       Session::put("member", $username);
+	public function postUrl()
+	{
 
-  //       $_value     = Request::input('value');
-  //       $message    = "";
-        
-  //       foreach($_value as $key=>$value)
-  //       {
-  //           $message = $this->save_account($value["Account Name"],$value["Sponsor Name"], $value["Matrix Name"], $value["First Name"], $value["Last Name"], $value["Product"]);
-  //           if($message != "")
-  //           {
-  //               $data["stat"]       = 0;
-  //               $data["message"]    = $message;
-  //               return json_encode($data);
-  //           }
-  //       }
-        
-  //       $data["message"]    = $message;
-
-        return json_encode($data);
 	}
 
 }

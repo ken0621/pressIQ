@@ -171,10 +171,14 @@ class MlmDashboardController extends Mlm
         		$data['earning'][$key] = 0;
         	}
         }
+        $data['repurchase_cash'] = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', 'REPURCHASE')
+            ->where('wallet_log_slot', $slot_id)
+            ->sum('wallet_log_amount');
         $data['binary'] = $binary;
         $data['left'] = Self::$slot_now->slot_binary_left;
         $data['right'] = Self::$slot_now->slot_binary_right;
         // dd($binary);
+        // dd($data);
     	return view('mlm.dashboard.income', $data);
     }
     public static function no_slot($shop_id)

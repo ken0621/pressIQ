@@ -146,6 +146,8 @@ class UnitOfMeasurementController extends Member
         $access = Utilities::checkAccess('item-unit-measurement', 'access_page');
         if($access == 1)
         {
+            UnitMeasurement::archived_um();
+
             $data["_um"] = Tbl_unit_measurement::where("um_archived",0)
                                                         ->groupBy("tbl_unit_measurement.um_id")
                                                         ->where("um_shop",$this->user_info->shop_id)
@@ -165,6 +167,7 @@ class UnitOfMeasurementController extends Member
 
 
             $data["_um_archived"] = Tbl_unit_measurement::where("um_archived",1)
+                                                        ->where("is_multi",0)
                                                         ->groupBy("tbl_unit_measurement.um_id")
                                                         ->where("um_shop",$this->user_info->shop_id)
                                                         ->get();
@@ -279,7 +282,7 @@ class UnitOfMeasurementController extends Member
             $insert["um_shop"] = $this->user_info->shop_id;
             $insert["um_type"] = $um_type;
 
-            $rule["um_name"]            = "required|unique:tbl_unit_measurement,um_name,".$this->user_info->shop_id.",um_shop";
+            $rule["um_name"]            = "required";
             // $rule["um_base_name"]       = "required";
             // $rule["um_base_abbrev"]     = "required";
             $rule["um_type"]            = "";
@@ -301,6 +304,12 @@ class UnitOfMeasurementController extends Member
                     }                
                 }
             }
+            $ctr = Tbl_unit_measurement::where("um_name",$set_name)->count();
+            if($ctr >= 1)
+            {
+                $data["status"] = "error";
+                $data["status_message"] .= "The U/M Name is already been taken";
+            } 
             if($validator->fails())
             {
                 $data["status"] = "error";
@@ -447,7 +456,7 @@ class UnitOfMeasurementController extends Member
             $insert["um_date_created"] = Carbon::now();
             $insert["um_shop"] = $this->user_info->shop_id;
 
-            $rule["um_name"]            = "required|unique:tbl_unit_measurement,um_name,".$um_id.",um_id";
+            $rule["um_name"]            = "required";
             // $rule["um_base_name"]       = "required|unique:tbl_unit_measurement,um_base_name,".$um_id.",um_id";
             // $rule["um_base_abbrev"]     = "required|unique:tbl_unit_measurement,um_base_abbrev,".$um_id.",um_id";
             $rule["um_type"]            = "";
@@ -457,7 +466,12 @@ class UnitOfMeasurementController extends Member
             $multi_id_first = null;
 
             $multi_id_first = Tbl_unit_measurement_multi::where("is_base",1)->where("multi_um_id",$um_id)->pluck("multi_id");
-
+            $ctr = Tbl_unit_measurement::where("um_name",$set_name)->where("um_id","!=",$um_id)->count();
+            if($ctr >= 1)
+            {
+                $data["status"] = "error";
+                $data["status_message"] .= "The U/M Name is already been taken";
+            } 
             if($validator->fails())
             {
                 $data["status"] = "error";

@@ -13,6 +13,7 @@ class AlterForeignKeyVariantId extends Migration
     public function up()
     {
         Schema::table('tbl_variant_name', function (Blueprint $table) {
+            $table->dropForeign("tbl_variant_name_variant_id_foreign");
             $table->foreign("variant_id")->references("evariant_id")->on("tbl_ec_variant")->onDelete("cascade");
         });
     }

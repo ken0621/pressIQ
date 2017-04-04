@@ -459,7 +459,11 @@
                                     </td>
                                     <td>
                                         <select class="form-control drop-down-um select-um input-sm pull-left" name="bundle_um_id[]">
-                                            <option value=""></option> 
+                                            @if($bundle['bundle_um_id'])
+                                                @include("member.load_ajax_data.load_one_unit_measure", ['_um' => $_um_multi, 'item_um_id' => $bundle['multi_um_id'], 'selected_um_id' => $bundle['bundle_um_id']])
+                                            @else
+                                                <option class="hidden" value="" />
+                                            @endif
                                         </select>
                                     </td>   
                                     <td><input class="text-center form-control input-sm" type="text" name="bundle_qty[]" value="{{ $bundle['bundle_qty'] }}" /></td>

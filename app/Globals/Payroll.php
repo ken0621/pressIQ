@@ -885,6 +885,13 @@ class Payroll
 		return $hour + $min;
 	}
 
+	public static function float_time($float = 0)
+	{
+		$hour = intval($float);
+		$min = round(($float - $hour) * 60);
+		return Payroll::return_time($hour, $min);
+	}
+
 	public static function process_compute($shop_id = 0, $status = 'processed')
 	{
 		$data = array();
@@ -1014,6 +1021,25 @@ class Payroll
 		$data['total_gross']				= 0;
 		$data['total_deduction']			= 0;
 
+		$data['regular_hours']				= 0;
+		$data['late_overtime']				= 0;
+		$data['early_overtime']				= 0;
+		$data['late_hours']					= 0;
+		$data['under_time']					= 0;
+		$data['rest_day_hours']				= 0;
+		$data['extra_day_hours']			= 0;
+		$data['total_hours']				= 0;
+		$data['night_differential']			= 0;
+		$data['special_holiday_hours']		= 0;
+		$data['regular_holiday_hours']		= 0;
+
+		$data['total_regular_days']			= 0;
+		$data['total_rest_days']			= 0;
+		$data['total_extra_days']			= 0;
+		$data['total_rh']					= 0;
+		$data['total_sh']					= 0;
+		$data['total_worked_days']			= 0;
+
 
 		$tax_status 	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_tax_status');
 
@@ -1054,16 +1080,44 @@ class Payroll
 			$special_holiday_hours 		= Payroll::time_float($approved->special_holiday_hours);
 			$regular_holiday_hours 		= Payroll::time_float($approved->regular_holiday_hours);
 
+
+			$data['regular_hours']				+= $regular_hours;
+			$data['late_overtime']				+= $late_overtime;
+			$data['early_overtime']				+= $early_overtime;
+			$data['late_hours']					+= $late_hours;
+			$data['under_time']					+= $under_time;
+			$data['rest_day_hours']				+= $rest_day_hours;
+			$data['extra_day_hours']			+= $extra_day_hours;
+			$data['total_hours']				+= $total_hours;
+			$data['night_differential']			+= $night_differential;
+			$data['special_holiday_hours']		+= $special_holiday_hours;
+			$data['regular_holiday_hours']		+= $regular_holiday_hours;
+
+
+
 			/* EMPLOYEE SALARY */
 			$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->where('payroll_employee_salary_archived',0)->first();
 
-			$data['minimum_wage'] 		= $salary->payroll_employee_salary_minimum_wage;
-			$data['salary_monthly'] 	= $salary->payroll_employee_salary_monthly;
-			$data['salary_daily'] 		= $salary->payroll_employee_salary_daily;
-			$data['salary_taxable'] 	= $salary->payroll_employee_salary_taxable;
-			$data['salary_sss'] 		= $salary->payroll_employee_salary_sss;
-			$data['salary_pagibig'] 	= $salary->payroll_employee_salary_pagibig;
-			$data['salary_philhealth'] 	= $salary->payroll_employee_salary_philhealth;
+			$data['minimum_wage'] 			= 0;
+			$data['salary_monthly'] 		= 0;
+			$data['salary_daily'] 			= 0;
+			$data['salary_taxable'] 		= 0;
+			$data['salary_sss'] 			= 0;
+			$data['salary_pagibig'] 		= 0;
+			$data['salary_philhealth'] 		= 0;
+
+			if(isset($salary->payroll_employee_salary_minimum_wage))
+			{
+				$data['minimum_wage'] 		= $salary->payroll_employee_salary_minimum_wage;
+				$data['salary_monthly'] 	= $salary->payroll_employee_salary_monthly;
+				$data['salary_daily'] 		= $salary->payroll_employee_salary_daily;
+				$data['salary_taxable'] 	= $salary->payroll_employee_salary_taxable;
+				$data['salary_sss'] 		= $salary->payroll_employee_salary_sss;
+				$data['salary_pagibig'] 	= $salary->payroll_employee_salary_pagibig;
+				$data['salary_philhealth'] 	= $salary->payroll_employee_salary_philhealth;
+			}
+
+			
 
 
 			$group = Tbl_payroll_employee_contract::selemployee($employee_id, $date)
@@ -1080,6 +1134,12 @@ class Payroll
 			{
 				$target_hour = $group->payroll_group_target_hour / $group->payroll_group_working_day_month;
 			}
+
+			$data['total_regular_days']			+= divide($regular_hours, $target_hour);
+			$data['total_rest_days']			+= divide($rest_day_hours, $target_hour);
+			$data['total_extra_days']			+= divide($extra_day_hours, $target_hour);
+			$data['total_rh']					+= divide($special_holiday_hours, $target_hour);
+			$data['total_sh']					+= divide($regular_holiday_hours, $target_hour);
 
 			$daily_rate = $data['salary_monthly'] / $working_day_month;
 
@@ -1207,7 +1267,7 @@ class Payroll
 				$query_arr['payroll_overtime_name'] 	= 'Legal Holiday';
 				$temp_hour								= $rest_day_hours;
 			}
-
+			// dd($rh_hour);
 			$regular_day = Payroll::compute_overtime($query_arr, $regular_hour, $daily_rate, 'Regular');
 
 			$regular_day_rest = Payroll::compute_overtime($query_arr, $rest_reg_hour, $daily_rate, 'Rest Regular');
@@ -1218,7 +1278,7 @@ class Payroll
 			$legal_holiday_rest = Payroll::compute_overtime($query_arr, $rh_rest_hour, $daily_rate, 'Rest Legal Holiday');
 			$special_holiday = Payroll::compute_overtime($query_arr, $sh_hour, $daily_rate, 'Special Holiday');
 			$special_holiday_rest = Payroll::compute_overtime($query_arr, $sh_rest_hour, $daily_rate, 'Rest Special Holiday');
-
+			// dd($legal_holiday);
 
 			/* ALLOWANCE DAILY START */
 			$total_hours_render += $regular_hours + $rest_day_hours + $extra_day_hours + $special_holiday_hours + $regular_holiday_hours;
@@ -1451,6 +1511,16 @@ class Payroll
 		$data['deduction'] 			= $deduction['deduction'];
 		$data['total_deduction'] 	+= $deduction['total_deduction'];
 		$data['total_net'] 			= $data['total_gross'] - $data['total_deduction'];
+
+
+		$data['total_regular_days']			= round($data['total_regular_days'], 2);
+		$data['total_rest_days']			= round($data['total_rest_days'], 2);
+		$data['total_extra_days']			= round($data['total_extra_days'], 2);
+		$data['total_rh']					= round($data['total_rh'], 2);
+		$data['total_sh']					= round($data['total_sh'], 2);
+
+		$data['total_worked_days'] = $data['total_regular_days'] + $data['total_rest_days'] + $data['total_extra_days'] + $data['total_rh'] + $data['total_sh'];
+
 		// dd($data);
 		return $data;
 	}

@@ -52,7 +52,7 @@
                     {{number_format($list['total_net'], 2)}}
                   </td>
                   <td class="text-center">
-                    <button class="btn btn-custom-white btn-xs" type="button"><i class="fa fa-search"></i>&nbsp;View</button>
+                    <button class="btn btn-custom-white btn-xs popup" link="/member/payroll/payroll_process/payroll_compute_brk_unsaved/{{$list['payroll_employee_id']}}/{{$period['period']->payroll_period_company_id}}" size="lg" type="button"><i class="fa fa-search"></i>&nbsp;View</button>
                   </td>
                 </tr>
                 @endforeach

@@ -87,7 +87,7 @@ class Sms
 			$data 	= "cURL Error #:" . $err;
 		} 
 		else {
-			$status = "pending";
+			$status = "UNKNOWN";
 			$data   = $response;
 		}
 

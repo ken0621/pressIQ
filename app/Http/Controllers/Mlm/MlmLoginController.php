@@ -9,6 +9,7 @@ use Route;
 use Session;
 use Validator;
 use Mail;
+use App\Globals\Settings;
 use App\Globals\Mlm_member;
 use App\Globals\EmailContent;
 use App\Models\Tbl_shop;
@@ -93,8 +94,9 @@ class MlmLoginController extends Controller
                 }
             }
         }
-
-    	
+   
+        /* Set Email Configuration */
+        Settings::set_mail_setting(Self::$shop_id);
     }
     public function index()
     {

@@ -15,6 +15,7 @@ use App\Globals\Mlm_member;
 use App\Globals\Sms;
 use App\Models\Tbl_email_template;
 use App\Globals\EmailContent;
+use App\Globals\Settings;
 use Mail;
 
 class MlmRegisterController extends MlmLoginController

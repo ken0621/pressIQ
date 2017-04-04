@@ -215,6 +215,10 @@ class Item
         }
         return $price;
     }    
+    public static function get_bundle_item_qty($item_id = null)
+    {
+        
+    }    
     public static function get_item_bundle($item_id = null)
     {
         $data = Tbl_item::where("item_type_id", 4);

@@ -107,6 +107,7 @@
                                                             <option value="{{$um->multi_id}}" unit-qty="{{$um->unit_qty}}">{{$um->multi_name}} ({{$um->multi_abbrev}})</option>
                                                         @endforeach                                                        
                                                     @endif
+                                                   <option value="" unit-qty=1>No U/M</option>
                                                 </select>
                                             </td>
                                             <td><input class="text-center number-input txt-qty" type="text" value="{{$sir_item->item_qty}}" name="item_qty[]"/></td>

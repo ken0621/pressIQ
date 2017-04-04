@@ -12,6 +12,7 @@ use App\Models\Tbl_sir_item;
 use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_sir;
 use App\Models\Tbl_item;
+use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_warehouse;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
@@ -599,7 +600,42 @@ class PurchasingInventorySystemController extends Member
             {
                 $qty = UnitMeasurement::um_qty($related_um_type[$key]);
                 $items[$key]['id'] = $value;
-                $items[$key]['quantity'] = $item_qty[$key] * $qty;                 
+                $items[$key]['quantity'] = $item_qty[$key] * $qty;
+            }
+
+        }
+        foreach ($item_id as $key_item => $value_item)
+        {
+            $type = Tbl_item::where("item_id",$value_item)->pluck("item_type_id");
+            if($type == 4)
+            {
+                $bundle = Tbl_item_bundle::where("bundle_bundle_id",$value_item)->get();
+                foreach ($bundle as $key_bundle => $value_bundle) 
+                {
+                    $qty = UnitMeasurement::um_qty($related_um_type[$key_item]);
+                    $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
+                    $_bundle[$key_bundle]['id'] = $value_bundle->bundle_item_id;
+                    $_bundle[$key_bundle]['quantity'] = ($item_qty[$key_item] * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
+
+                    array_push($items, $_bundle[$key_bundle]);
+                }
+            }
+            $bundle_item[$key_item] = $_bundle;
+            
+        }  
+        foreach ($items as $key_items => $value_items) 
+        {
+            $i = null;
+            foreach ($item_id as $value_itemid) 
+            {
+                if($value_itemid == $value_items['id'])
+                {
+                    $i = "true";
+                }
+            }
+            if($i != null)
+            {
+                unset($items[$key_items]);
             }
         }
         $result = array();
@@ -614,8 +650,8 @@ class PurchasingInventorySystemController extends Member
         {
             $new_item[$key1] = array('id' => $key1, 'quantity' => array_sum($value1));
         }
-        $validator = Validator::make($insert_sir,$rule_sir);
 
+        $validator = Validator::make($insert_sir,$rule_sir);
         $warehouse_id = $this->current_warehouse->warehouse_id;
         $sir_id = 0;
         if($validator->fails())
@@ -682,7 +718,7 @@ class PurchasingInventorySystemController extends Member
                     {
                         $count_on_hand = 0;   
                     }
-                    if($inventory_consume_product[$key]["quantity"] > 0 && $count_on_hand > 0 && $count_on_hand >= $inventory_consume_product[$key]["quantity"])
+                    if($inventory_consume_product[$key]["quantity"] < 0 && $count_on_hand < 0 && $count_on_hand < $inventory_consume_product[$key]["quantity"])
                     {
                         $item_name = Tbl_item::where("item_id",$value["id"])->pluck("item_name");
 
@@ -691,7 +727,6 @@ class PurchasingInventorySystemController extends Member
                     }
                 }                
             }
-            // dd($data);
             if($data["status"] == "")
             {
                 $sir_id = Tbl_sir::insertGetId($insert_sir);
@@ -792,6 +827,41 @@ class PurchasingInventorySystemController extends Member
                 $items[$key]['quantity'] = $item_qty[$key] * $qty;                 
             }
         }
+
+        foreach ($item_id as $key_item => $value_item)
+        {
+            $type = Tbl_item::where("item_id",$value_item)->pluck("item_type_id");
+            if($type == 4)
+            {
+                $bundle = Tbl_item_bundle::where("bundle_bundle_id",$value_item)->get();
+                foreach ($bundle as $key_bundle => $value_bundle) 
+                {
+                    $qty = UnitMeasurement::um_qty($related_um_type[$key_item]);
+                    $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
+                    $_bundle[$key_bundle]['id'] = $value_bundle->bundle_item_id;
+                    $_bundle[$key_bundle]['quantity'] = ($item_qty[$key_item] * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
+
+                    array_push($items, $_bundle[$key_bundle]);
+                }
+            }
+            $bundle_item[$key_item] = $_bundle;
+            
+        }  
+        foreach ($items as $key_items => $value_items) 
+        {
+            $i = null;
+            foreach ($item_id as $value_itemid) 
+            {
+                if($value_itemid == $value_items['id'])
+                {
+                    $i = "true";
+                }
+            }
+            if($i != null)
+            {
+                unset($items[$key_items]);
+            }
+        }
         $result = array();
         foreach($items as $k => $v)
         {
@@ -840,7 +910,6 @@ class PurchasingInventorySystemController extends Member
 
                         $rule[$key]["item_id"]    = "required";
                         $rule[$key]["item_qty"]  = "required|numeric|min:1";
-                        $rule[$key]["related_um_type"] = "required";
                         // $rule[$key]["um_qty"] = "required|numeric|min:1";
 
                         $validator2[$key] = Validator::make($insert_sir_item[$key], $rule[$key]);
@@ -960,6 +1029,10 @@ class PurchasingInventorySystemController extends Member
             {
                 foreach ($data["_sir_item"] as $key => $value) 
                 {
+                    if($value->item_type_id == 4)
+                    {
+                        $data["_sir_item"][$key]->item_price = Item::get_item_bundle_price($value->item_id);
+                    }
                     $um = UnitMeasurement::select_um_array($value->related_um_type, 'array');
                      
                     $data["_sir_item"][$key]->um_list = $um;

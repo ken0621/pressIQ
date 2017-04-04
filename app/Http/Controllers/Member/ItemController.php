@@ -850,7 +850,7 @@ class ItemController extends Member
 			{
 				Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->update($insert);
 
-				$insert_item_discount["item_id"] = $item_idid;
+				$insert_item_discount["item_id"] = $id;
 				$insert_item_discount["item_discount_value"] = $promo_price;
 				$insert_item_discount["item_discount_date_start"] = $start_promo_date;
 				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;	

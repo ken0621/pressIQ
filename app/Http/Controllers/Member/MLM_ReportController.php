@@ -48,6 +48,8 @@ class MLM_ReportController extends Member
 {
     public function index()
     {
+        $item_bundle =Item::get_item_bundle(102);
+        dd ($item_bundle);
         # code...
         $data = [];
         $shop_id = $this->user_info->shop_id;
@@ -62,6 +64,7 @@ class MLM_ReportController extends Member
         $data['report_list']['new_register'] = 'Registered Account';
         $data['report_list']['encashment_rep'] = 'Encashment';
         $data['report_list']['product_sales_report'] = 'Product Sales Report';
+        $data['report_list']['membership_code_sales_report'] = 'Membership Code Sales Report';
         return view('member.mlm_report.index', $data);
     }
     public function get_report()

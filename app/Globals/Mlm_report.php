@@ -28,6 +28,8 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_matching_log;
 use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_item_code_item;
+use App\Models\Tbl_membership_package;
+use App\Models\Tbl_membership_code_invoice;
 class Mlm_report
 {   
     public static function general($shop_id)
@@ -325,6 +327,7 @@ class Mlm_report
                 $inventory[$value->item_name]['Price'] += ($value->item_price * $value->item_quantity);
                 $inventory[$value->item_name]['Membership Discount'] += $value->item_membership_discount * $value->item_quantity;
                 $inventory[$value->item_name]['Membership Discounted'] += $value->item_membership_discounted * $value->item_quantity;
+                // $inventory[$value->item_name]['Membership Discounted'] .= $value->item_membership_discounted * $value->item_quantity;
             }
             else
             {
@@ -335,6 +338,7 @@ class Mlm_report
             }
             
         }
+
         $filter['Quantity'] = 'Quantity';
         $filter['Price'] = 'Price';
         $filter['Membership Discount'] = 'Membership Discount';
@@ -345,6 +349,33 @@ class Mlm_report
         $data['invoice'] = $invoice;
         $data['filter'] = $filter;
         return view('member.mlm_report.report.inventory', $data);
+    }
+    public static function membership_code_sales_report($shop_id)
+    {
+        $invoice = Tbl_membership_code_invoice::where('shop_id', $shop_id)->get();
+
+        $membership_code = Tbl_membership_code::where('shop_id', $shop_id)->get();
+
+        $package = Tbl_membership_package::get()->keyBy('membership_package_id');
+        $by_membership = [];
+        foreach($membership_code as $key => $value)
+        {
+            if(isset($by_membership[$value->membership_package_id]))
+            {
+                $by_membership[$value->membership_package_id] += $value->membership_code_price;
+            }
+            else
+            {
+                $by_membership[$value->membership_package_id] = $value->membership_code_price;
+            }
+            
+        }
+
+        $data['invoice'] = $invoice;
+        $data['package'] = $package;
+        $data['by_membership'] = $by_membership;
+
+        return view('member.mlm_report.report.membership_code', $data);
     }
     public static function encashment($shop_id)
     {

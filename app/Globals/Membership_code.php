@@ -320,7 +320,7 @@ class Membership_code
                 foreach($data['membership_code_invoice_id'] as $key => $value)
                 {
                     $change_content[0]["txt_to_replace"] += 1;
-                    $change_content[1]["txt_to_replace"] .= '<p> '. $value->membership_name .' with a package of '. $value->membership_package_name .'. Your membership code is '. $value->membership_activation_code .' and membership pin '. $value->membership_code_id .'. </p><a href="'. $_SERVER['SERVER_NAME'] .'/mlm/membership_active_code/'.Crypt::encrypt($value->membership_code_id).'">Click here to activate the code.</a><br>';
+                    $change_content[1]["txt_to_replace"] .= '<p> '. $value->membership_name .' with a package of '. $value->membership_package_name .'. Your membership code is '. $value->membership_activation_code .' and membership pin '. $value->membership_code_id .'. </p><a rel="nofollow" href="'. $_SERVER['SERVER_NAME'] .'/mlm/membership_active_code/'.Crypt::encrypt($value->membership_code_id).'">Click here to activate the code.</a><br> If you cant click the link, please copy and paste this in the url <span><b>'. $_SERVER['SERVER_NAME'] .'/mlm/membership_active_code/'.Crypt::encrypt($value->membership_code_id).'</b></span>';
                 } 
                 // dd($change_content);
                 $content_key = 'membership_code_purchase';

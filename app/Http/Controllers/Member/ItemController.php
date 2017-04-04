@@ -24,6 +24,7 @@ use App\Globals\DigimaTable;
 use App\Globals\Item;
 use App\Globals\Vendor;
 use App\Globals\UnitMeasurement;
+use App\Globals\Purchasing_inventory_system;
 use App\Globals\Utilities;
 
 use Crypt;
@@ -73,6 +74,11 @@ class ItemController extends Member
 				if($um)
 				{
 					$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+				}
+
+				if($value->item_type_id == 4)
+				{
+					$data["_item"][$key]->item_price = Item::get_item_bundle_price($value->item_id);
 				}
 			}
 			$data["_item_archived"]	   = $item_archived->get();

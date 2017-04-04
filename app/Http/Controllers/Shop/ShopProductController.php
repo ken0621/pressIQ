@@ -71,40 +71,43 @@ class ShopProductController extends Shop
             case 'name_asc':
                 usort($product, function($a, $b) 
                 {
-                    return $a['eprod_name'] - $b['eprod_name'];
+                    return $a['eprod_name'] <=> $b['eprod_name'];
                 });
             break;
 
             case 'name_desc':
                 usort($product, function($a, $b) 
                 {
-                    return $b['eprod_name'] - $a['eprod_name'];
+                    return $b['eprod_name'] <=> $a['eprod_name'];
                 });
             break;
 
             case 'price_asc':
                 usort($product, function($a, $b) 
                 {
-                    return $a['max_price'] - $b['max_price'];
+                    return $a['max_price'] <=> $b['max_price'];
                 });
             break;
 
             case 'price_desc':
                 usort($product, function($a, $b) 
                 {
-                    return $b['min_price'] - $a['min_price'];
+                    return $b['min_price'] <=> $a['min_price'];
                 });
             break;
 
             case 'newest':
                 usort($product, function($a, $b) 
                 {
-                    return $b['date_created'] - $a['date_created'];
+                    return $b['date_created'] <=> $a['date_created'];
                 });
             break;
             
             default:
-                # code...
+                usort($product, function($a, $b) 
+                {
+                    return $a['eprod_name'] <=> $b['eprod_name'];
+                });
             break;
         }
         // Pagination

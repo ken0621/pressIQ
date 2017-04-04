@@ -138,17 +138,17 @@
 										<td>P {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</td>
 									</tr>
 									@if($get_cart["sale_information"]["total_overall_price"] > $get_cart["sale_information"]["minimum_purchase"])
-									<tr>
+									<!-- <tr>
 										<td></td>
 										<td class="text-right"><b>Shipping Fee</b></td>
 										<td>FREE</td>
-									</tr>
+									</tr> -->
 									@else
-									<tr>
+									<!-- <tr>
 										<td></td>
 										<td class="text-right"><b>Shipping Fee</b></td>
 										<td>P {{ number_format($get_cart["sale_information"]["total_shipping"], 2) }}</td>
-									</tr>
+									</tr> -->
 									@endif
 									<tr>
 										<td></td>

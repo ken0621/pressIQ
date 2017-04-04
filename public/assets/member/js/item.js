@@ -141,8 +141,8 @@ function item()
             }
         });
 
-        action_select_plugin_item(".drop-down-item")
-        action_select_plugin_um(".drop-down-um")
+        action_select_plugin_item(".drop-down-item");
+        action_select_plugin_um_one(".drop-down-um-one");
     }
 
     function action_select_plugin_item($this)
@@ -158,6 +158,10 @@ function item()
             onCreateNew : function()
             {
                 item_selected = $(this);
+            },
+            onChangeValue: function()
+            {
+                action_load_item_info($(this));
             }
         });
     }
@@ -175,6 +179,39 @@ function item()
                 $(".abbreviation").text(option);
             }
         });
+    }
+
+    function action_select_plugin_um_one($this)
+    {
+        $($this).globalDropList(
+        {
+            width       : '100%',
+            hasPopup    : "false",
+            placeholder : 'Units of Measurement',
+            onChangeValue : function()
+            {
+                var option = $('option:selected', this).attr('abbrev');
+                $(".abbreviation").text(option);
+            }
+        });
+    }
+
+    function action_load_item_info($this)
+    {
+        if($this.find("option:selected").attr("has-um") != '')
+        {          
+            $parent = $this.closest("tr");
+            console.log("true"); 
+            $parent.find(".select-um-one").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
+            {
+                $(this).globalDropList("reload").globalDropList("enabled");
+                $(this).val($(this).find("option:first").val()).change();
+            })
+        }
+        else
+        {
+            $parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+        }
     }
 
     function event_back_menu_click()
@@ -278,7 +315,7 @@ function item()
     function action_trigger_select_plugin()
     {
         action_select_plugin_item(".tbody-item tr:last select.select-item");
-        action_select_plugin_um(".tbody-item tr:last select.select-um");
+        action_select_plugin_um(".tbody-item tr:last select.select-um-one");
     }
 
     function action_remain_only_one_add()

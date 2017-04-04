@@ -26,7 +26,8 @@ use App\Models\Tbl_customer_search;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_matching_log;
-
+use App\Models\Tbl_item_code_invoice;
+use App\Models\Tbl_item_code_item;
 class Mlm_report
 {   
     public static function general($shop_id)
@@ -303,7 +304,48 @@ class Mlm_report
     	return view('member.mlm_report.report.encashment', $data);
     }
 
+    public static function product_sales_report($shop_id)
+    {
+        $invoice = Tbl_item_code_invoice::where('shop_id', $shop_id)->get()->keyBy('item_code_invoice_id');
 
+        // $item_code_item = Tbl_item_code_item::
+        $where_in = [];
+        foreach ($invoice as $key => $value) {
+            # code...
+            $where_in[$key] = $key;
+        }
+        $items = Tbl_item_code_item::whereIn('item_code_invoice_id', $where_in)->get();
+        $inventory = [];
+        $filter = [];
+        foreach($items as $key => $value)
+        {
+            if(isset($inventory[$value->item_name]['Price']))
+            {
+                $inventory[$value->item_name]['Quantity'] += $value->item_quantity;
+                $inventory[$value->item_name]['Price'] += ($value->item_price * $value->item_quantity);
+                $inventory[$value->item_name]['Membership Discount'] += $value->item_membership_discount * $value->item_quantity;
+                $inventory[$value->item_name]['Membership Discounted'] += $value->item_membership_discounted * $value->item_quantity;
+            }
+            else
+            {
+                $inventory[$value->item_name]['Quantity'] = $value->item_quantity;
+                $inventory[$value->item_name]['Price'] = $value->item_price * $value->item_quantity;
+                $inventory[$value->item_name]['Membership Discount'] = $value->item_membership_discount * $value->item_quantity;
+                $inventory[$value->item_name]['Membership Discounted'] = $value->item_membership_discounted * $value->item_quantity;
+            }
+            
+        }
+        $filter['Quantity'] = 'Quantity';
+        $filter['Price'] = 'Price';
+        $filter['Membership Discount'] = 'Membership Discount';
+        $filter['Membership Discounted'] = 'Membership Discounted';
+
+        $data['inventory'] = $inventory;
+        $data['items'] = $items;
+        $data['invoice'] = $invoice;
+        $data['filter'] = $filter;
+        return view('member.mlm_report.report.inventory', $data);
+    }
     public static function encashment($shop_id)
     {
         $data['not_encashed'] = $all_log = Tbl_mlm_slot_wallet_log::where('wallet_log_status', 'released')

@@ -12,6 +12,7 @@ use App\Models\Tbl_truck;
 use App\Models\Tbl_employee;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
+use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_temp_customer_invoice_line;
 use App\Models\Tbl_temp_customer_invoice;
@@ -46,12 +47,46 @@ class Purchasing_inventory_system
         $refill_source = $sir_id;
         $remarks = "Return Stock from SIR NO: ".$sir_id;
 
-        $sir_item = Tbl_sir_item::where("sir_id",$sir_id)->get();
+        $sir_item = Tbl_sir_item::item()->where("sir_id",$sir_id)->get();
 
         foreach ($sir_item as $key => $value) 
         {
             $warehouse_refill_product[$key]["product_id"] = $value->item_id;
             $warehouse_refill_product[$key]["quantity"] = $value->physical_count;
+        }
+        $unset_key = null;
+        foreach ($sir_item as $keyitem => $valueitem) 
+        {            
+            if($value->item_type_id == 4)
+            {
+                $bundle = Tbl_item_bundle::where("bundle_bundle_id",$valueitem->item_id)->get();
+                foreach ($bundle as $key_bundle => $value_bundle) 
+                {
+                   $qty =  UnitMeasurement::um_qty($valueitem->related_um_type);
+                    $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
+                    $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
+                    $_bundle[$key_bundle]['quantity'] = ($valueitem->item_qty * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
+
+                    array_push($warehouse_refill_product, $_bundle[$key_bundle]);
+                }
+                $unset_key[$keyitem] = $valueitem->item_id;
+            }
+        }
+
+        foreach ($warehouse_refill_product as $key_items => $value_items) 
+        {
+            $i = null;
+            foreach ($item_id as $value_itemid) 
+            {
+                if($value_itemid == $value_items['id'])
+                {
+                    $i = "true";
+                }
+            }
+            if($i != null)
+            {
+                unset($items[$key_items]);
+            }
         }
 
         $data = Warehouse::inventory_refill($warehouse_id, $reason_refill, $refill_source, $remarks, $warehouse_refill_product,'array',$is_return = 1);
@@ -65,6 +100,18 @@ class Purchasing_inventory_system
     {
     
     }
+    // public static function counter_lof()
+    // {
+    //     return Tbl_sir::whereIn("lof_status",[1,2,3])->where("sir_status",0)->where("ilr_status",0)->where("is_sync",0)->where("shop_id",Purchasing_inventory_system::getShopId())->count();
+    // }
+    // public static function counter_sir()
+    // {
+    //     return Tbl_sir::whereIn("sir_status",[1,2])->where("lof_status",0)->where("ilr_status",0)->where("is_sync",0)->where("shop_id",Purchasing_inventory_system::getShopId())->count();
+    // }
+    // public static function counter_ilr()
+    // {
+    
+    // }
     public static function reject_return_stock($sir_id)
     {
         // inventroy_source_reason
@@ -74,12 +121,46 @@ class Purchasing_inventory_system
         $refill_source = $sir_id;
         $remarks = "Return Stock from SIR NO: ".$sir_id;
 
-        $sir_item = Tbl_sir_item::where("sir_id",$sir_id)->get();
+        $sir_item = Tbl_sir_item::item()->where("sir_id",$sir_id)->get();
 
         foreach ($sir_item as $key => $value) 
         {
             $warehouse_refill_product[$key]["product_id"] = $value->item_id;
             $warehouse_refill_product[$key]["quantity"] = UnitMeasurement::um_qty($value->related_um_type) * $value->item_qty;
+        }
+
+         $unset_key = null;
+        foreach ($sir_item as $keyitem => $valueitem) 
+        {            
+            if($value->item_type_id == 4)
+            {
+                $bundle = Tbl_item_bundle::where("bundle_bundle_id",$valueitem->item_id)->get();
+                foreach ($bundle as $key_bundle => $value_bundle) 
+                {
+                    $qty =  UnitMeasurement::um_qty($valueitem->related_um_type);
+                    $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
+                    $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
+                    $_bundle[$key_bundle]['quantity'] = ($valueitem->item_qty * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
+
+                    array_push($warehouse_refill_product, $_bundle[$key_bundle]);
+                }
+                $unset_key[$keyitem] = $valueitem->item_id;
+            }
+        }
+        foreach($warehouse_refill_product as $key_items => $value_items) 
+        {
+            $i = null;
+            foreach ($unset_key as $value_itemid) 
+            {
+                if($value_itemid == $value_items['product_id'])
+                {
+                    $i = "true";
+                }
+            }
+            if($i != null)
+            {
+                unset($warehouse_refill_product[$key_items]);
+            }
         }
 
         $data = Warehouse::inventory_refill($warehouse_id, $reason_refill, $refill_source, $remarks, $warehouse_refill_product,'array',$is_return = 1);
@@ -224,17 +305,19 @@ class Purchasing_inventory_system
         foreach ($data as $key => $value) 
         {              
             $data[$key]->total_amount = "";
-            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $item = Tbl_sir_item::item()->where("sir_id",$value->sir_id)->get();
             $price = "";
             foreach ($item as $key2 => $value2)
             {   
-                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();
-                $qty = 1;
-                if($unit_m != null)
+                $qty = UnitMeasurement::um_qty($value2->related_um_type);
+                if($value2->item_type_id == 4)
                 {
-                    $qty = $unit_m->unit_qty;
+                    $price += Item::get_item_bundle_price($value2->item_id);
                 }
-                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
+                else
+                {
+                    $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                    
+                }
             }
 
             $data[$key]->total_amount += $price; 
@@ -252,21 +335,23 @@ class Purchasing_inventory_system
                                 ->where("tbl_sir.sir_status","!=",2)
                                 ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
                                 ->orderBy("tbl_sir.sir_id","DESC")->paginate(10);
-
+                                
         foreach ($data as $key => $value) 
         {              
             $data[$key]->total_amount = "";
-            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $item = Tbl_sir_item::item()->where("sir_id",$value->sir_id)->get();
             $price = "";
             foreach ($item as $key2 => $value2)
             {   
-                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();
-                $qty = 1;
-                if($unit_m != null)
+                $qty = UnitMeasurement::um_qty($value2->related_um_type);
+                if($value2->item_type_id == 4)
                 {
-                    $qty = $unit_m->unit_qty;
+                    $price += Item::get_item_bundle_price($value2->item_id);
                 }
-                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
+                else
+                {
+                    $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                    
+                }
             }
 
             $data[$key]->total_amount += $price; 
@@ -287,12 +372,19 @@ class Purchasing_inventory_system
         foreach ($data as $key => $value) 
         {              
             $data[$key]->total_amount = "";
-            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $item = Tbl_sir_item::item()->where("sir_id",$value->sir_id)->get();
             $price = "";
             foreach ($item as $key2 => $value2)
             {   
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
-                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
+                if($value2->item_type_id == 4)
+                {
+                    $price += Item::get_item_bundle_price($value2->item_id);
+                }
+                else
+                {
+                    $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                    
+                }             
             }
 
             $data[$key]->total_amount += $price; 
@@ -319,7 +411,14 @@ class Purchasing_inventory_system
             foreach ($item as $key2 => $value2)
             {   
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
-                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
+                if($value2->item_type_id == 4)
+                {
+                    $price += Item::get_item_bundle_price($value2->item_id);
+                }
+                else
+                {
+                    $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                    
+                }              
             }
             $data[$key]->total_amount += $price;
 
@@ -359,17 +458,19 @@ class Purchasing_inventory_system
         foreach ($data as $key => $value) 
         {              
             $data[$key]->total_amount = "";
-            $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
+            $item = Tbl_sir_item::item()->where("sir_id",$value->sir_id)->get();
             $price = "";
             foreach ($item as $key2 => $value2)
             {   
-                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();   
-                $qty = 1;
-                if($unit_m != null)
+               $qty = UnitMeasurement::um_qty($value2->related_um_type);
+                if($value2->item_type_id == 4)
                 {
-                    $qty = $unit_m->unit_qty;
+                    $price += Item::get_item_bundle_price($value2->item_id);
                 }
-                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
+                else
+                {
+                    $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                    
+                }               
             }
 
             $data[$key]->total_amount += $price; 
@@ -403,11 +504,7 @@ class Purchasing_inventory_system
 
                 $data["_sir_item"][$key]->um_name = isset($um->multi_name) ? $um->multi_name : "";
                 $data["_sir_item"][$key]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
-                $qty = 1;
-                if($um != null)
-                {
-                    $qty = $um->unit_qty;
-                }
+                $qty = UnitMeasurement::um_qty($value->related_um_type);
 
                 $issued_qty = $value->item_qty * $qty;
                 $remaining_qty = $issued_qty - $value->sold_qty;
@@ -447,14 +544,16 @@ class Purchasing_inventory_system
             $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
             $price = "";
             foreach ($item as $key2 => $value2)
-            {   
-                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();   
-                $qty = 1;
-                if($unit_m != null)
+            {                  
+                $qty = UnitMeasurement::um_qty($value2->related_um_type);
+                if($value2->item_type_id == 4)
                 {
-                    $qty = $unit_m->unit_qty;
+                    $price += Item::get_item_bundle_price($value2->item_id);
                 }
-                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
+                else
+                {
+                    $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                    
+                }               
             }
 
             $data[$key]->total_amount += $price; 
@@ -509,13 +608,8 @@ class Purchasing_inventory_system
             $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
             $price = "";
             foreach ($item as $key2 => $value2)
-            {   
-                $unit_m = Tbl_unit_measurement_multi::where("multi_id",$value2->related_um_type)->first();   
-                $qty = 1;
-                if($unit_m != null)
-                {
-                    $qty = $unit_m->unit_qty;
-                }
+            {                   
+                $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                
             }
 
@@ -544,9 +638,15 @@ class Purchasing_inventory_system
             $price = "";
             foreach ($item as $key2 => $value2)
             {   
-                $qty = UnitMeasurement::um_qty($value2->related_um_type);
-
-                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
+               $qty = UnitMeasurement::um_qty($value2->related_um_type);
+                if($value2->item_type_id == 4)
+                {
+                    $price += Item::get_item_bundle_price($value2->item_id);
+                }
+                else
+                {
+                    $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                    
+                }
             }
 
             $data[$key]->total_amount += $price;
@@ -572,9 +672,15 @@ class Purchasing_inventory_system
             $price = "";
             foreach ($item as $key2 => $value2)
             {   
-                $qty = UnitMeasurement::um_qty($value2->related_um_type); 
-
-                $price += ($value2->sir_item_price * $qty) * $value2->item_qty;
+                $qty = UnitMeasurement::um_qty($value2->related_um_type);
+                if($value2->item_type_id == 4)
+                {
+                    $price += Item::get_item_bundle_price($value2->item_id);
+                }
+                else
+                {
+                    $price += ($value2->sir_item_price * $qty) * $value2->item_qty;                    
+                }
             }
 
             $data[$key]->total_amount += $price; 
@@ -588,9 +694,10 @@ class Purchasing_inventory_system
     }
     public static function check_qty_sir($sir_id, $item_id, $um, $qty, $invoice_id = 0, $invoice_table)
     {
+        //make array here
         $sir_item = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->first();
-        $sir_qty = UnitMeasurement::um_qty($sir_item->related_um_type);
 
+        $sir_qty = UnitMeasurement::um_qty($sir_item->related_um_type);
         $total_qty = $sir_item->item_qty * $sir_qty;
 
         $inv_data = DB::table($invoice_table)->where("invline_inv_id",$invoice_id)->where("invline_item_id",$item_id)->first();

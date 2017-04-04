@@ -12,6 +12,7 @@ use App\Models\Tbl_sir_item;
 use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_sir;
 use App\Models\Tbl_item;
+use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_warehouse;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
@@ -418,7 +419,6 @@ class PurchasingInventorySystemController extends Member
     }
     public function sir()
     {     
-
         if(Request::input("status") != null)
         {
             if(Request::input("status") != 'all')
@@ -496,7 +496,7 @@ class PurchasingInventorySystemController extends Member
             $data["_truck"] = Tbl_truck::where("archived",0)->where("truck_shop_id",$this->user_info->shop_id)->get();
             $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("tbl_employee.archived",0)->where("shop_id",$this->user_info->shop_id)->get();
 
-            $type[0] = 1; 
+            $type = [1,4]; 
             $data["_item"] = Item::get_all_category_item($type);
             return view("member.purchasing_inventory_system.create_sir",$data);
         } 
@@ -600,7 +600,42 @@ class PurchasingInventorySystemController extends Member
             {
                 $qty = UnitMeasurement::um_qty($related_um_type[$key]);
                 $items[$key]['id'] = $value;
-                $items[$key]['quantity'] = $item_qty[$key] * $qty;                 
+                $items[$key]['quantity'] = $item_qty[$key] * $qty;
+            }
+
+        }
+        foreach ($item_id as $key_item => $value_item)
+        {
+            $type = Tbl_item::where("item_id",$value_item)->pluck("item_type_id");
+            if($type == 4)
+            {
+                $bundle = Tbl_item_bundle::where("bundle_bundle_id",$value_item)->get();
+                foreach ($bundle as $key_bundle => $value_bundle) 
+                {
+                    $qty = UnitMeasurement::um_qty($related_um_type[$key_item]);
+                    $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
+                    $_bundle[$key_bundle]['id'] = $value_bundle->bundle_item_id;
+                    $_bundle[$key_bundle]['quantity'] = ($item_qty[$key_item] * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
+
+                    array_push($items, $_bundle[$key_bundle]);
+                }
+            }
+            $bundle_item[$key_item] = $_bundle;
+            
+        }  
+        foreach ($items as $key_items => $value_items) 
+        {
+            $i = null;
+            foreach ($item_id as $value_itemid) 
+            {
+                if($value_itemid == $value_items['id'])
+                {
+                    $i = "true";
+                }
+            }
+            if($i != null)
+            {
+                unset($items[$key_items]);
             }
         }
         $result = array();
@@ -615,8 +650,8 @@ class PurchasingInventorySystemController extends Member
         {
             $new_item[$key1] = array('id' => $key1, 'quantity' => array_sum($value1));
         }
-        $validator = Validator::make($insert_sir,$rule_sir);
 
+        $validator = Validator::make($insert_sir,$rule_sir);
         $warehouse_id = $this->current_warehouse->warehouse_id;
         $sir_id = 0;
         if($validator->fails())
@@ -671,30 +706,27 @@ class PurchasingInventorySystemController extends Member
                 $data["status"] = "error";
                 $data["status_message"] = "You cannot issue Load out form. The sales agent has an unprocessed SIR";
             }
-
-            foreach ($new_item as $key => $value) 
+            if($new_item)
             {
-               $inventory_consume_product[$key]["product_id"] = $value["id"];
-               $inventory_consume_product[$key]["quantity"] = $value["quantity"];
-
-               $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["id"])->pluck('inventory_count');
-                if($count_on_hand == null)
+                foreach ($new_item as $key => $value) 
                 {
-                    $count_on_hand = 0;   
-                }
-                if($inventory_consume_product[$key]["quantity"] > 0 && $count_on_hand > 0 && $count_on_hand >= $inventory_consume_product[$key]["quantity"])
-                {
+                   $inventory_consume_product[$key]["product_id"] = $value["id"];
+                   $inventory_consume_product[$key]["quantity"] = $value["quantity"];
 
-                }
-                else
-                {
-                    $item_name = Tbl_item::where("item_id",$value["id"])->pluck("item_name");
+                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["id"])->pluck('inventory_count');
+                    if($count_on_hand == null)
+                    {
+                        $count_on_hand = 0;   
+                    }
+                    if($inventory_consume_product[$key]["quantity"] < 0 && $count_on_hand < 0 && $count_on_hand < $inventory_consume_product[$key]["quantity"])
+                    {
+                        $item_name = Tbl_item::where("item_id",$value["id"])->pluck("item_name");
 
-                    $data["status"] = "error";
-                    $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
-                }
+                        $data["status"] = "error";
+                        $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
+                    }
+                }                
             }
-dd($new_item);
             if($data["status"] == "")
             {
                 $sir_id = Tbl_sir::insertGetId($insert_sir);
@@ -715,18 +747,28 @@ dd($new_item);
                     {
                         if($value != "")
                         {
-                            $unit_qty = Tbl_unit_measurement_multi::where("multi_id",$related_um_type[$key])->pluck("unit_qty");
-                            $insert_sir_item["sir_id"] = $sir_id;
-                            $insert_sir_item["item_id"] = $value;
-                            $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
-                            $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
-                            $insert_sir_item["related_um_type"] = $related_um_type[$key];
-                            $qty = UnitMeasurement::um_qty($related_um_type[$key]);
+                            $chck = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$value)->where("related_um_type",$related_um_type[$key])->first();
 
-                            $related_um_qty = $qty;
-                            $insert_sir_item["um_qty"] = $related_um_qty;
+                            if($chck == null)
+                            {
+                                $insert_sir_item["sir_id"] = $sir_id;
+                                $insert_sir_item["item_id"] = $value;
+                                $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
+                                $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
+                                $insert_sir_item["related_um_type"] = $related_um_type[$key];
+                                $qty = UnitMeasurement::um_qty($related_um_type[$key]);
 
-                            Tbl_sir_item::insert($insert_sir_item);
+                                $related_um_qty = $qty;
+                                $insert_sir_item["um_qty"] = $related_um_qty;
+
+                                Tbl_sir_item::insert($insert_sir_item);                                
+                            }
+                            else
+                            {
+                                $insert_sir_item["item_qty"] = $chck->item_qty + str_replace(",","",$item_qty[$key]);
+
+                                Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$value)->where("related_um_type",$related_um_type[$key])->update($insert_sir_item);   
+                            }
 
                         }
                     }                    
@@ -776,6 +818,63 @@ dd($new_item);
         $rule_sir["sales_agent_id"] = 'required';
         $rule_sir["truck_id"] = 'required';
 
+        foreach ($item_id as $key => $value) 
+        {
+            if($value != "")
+            {
+                $qty = UnitMeasurement::um_qty($related_um_type[$key]);
+                $items[$key]['id'] = $value;
+                $items[$key]['quantity'] = $item_qty[$key] * $qty;                 
+            }
+        }
+
+        foreach ($item_id as $key_item => $value_item)
+        {
+            $type = Tbl_item::where("item_id",$value_item)->pluck("item_type_id");
+            if($type == 4)
+            {
+                $bundle = Tbl_item_bundle::where("bundle_bundle_id",$value_item)->get();
+                foreach ($bundle as $key_bundle => $value_bundle) 
+                {
+                    $qty = UnitMeasurement::um_qty($related_um_type[$key_item]);
+                    $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
+                    $_bundle[$key_bundle]['id'] = $value_bundle->bundle_item_id;
+                    $_bundle[$key_bundle]['quantity'] = ($item_qty[$key_item] * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
+
+                    array_push($items, $_bundle[$key_bundle]);
+                }
+            }
+            $bundle_item[$key_item] = $_bundle;
+            
+        }  
+        foreach ($items as $key_items => $value_items) 
+        {
+            $i = null;
+            foreach ($item_id as $value_itemid) 
+            {
+                if($value_itemid == $value_items['id'])
+                {
+                    $i = "true";
+                }
+            }
+            if($i != null)
+            {
+                unset($items[$key_items]);
+            }
+        }
+        $result = array();
+        foreach($items as $k => $v)
+        {
+            $id = $v['id'];
+            $result[$id][] = $v['quantity'];
+        }
+
+        $new_item = array();
+        foreach($result as $key1 => $value1) 
+        {
+            $new_item[$key1] = array('id' => $key1, 'quantity' => array_sum($value1));
+        }
+
         $validator = Validator::make($insert_sir,$rule_sir);
 
         $warehouse_id = Purchasing_inventory_system::get_warehouse_based_sir($sir_id);
@@ -811,7 +910,6 @@ dd($new_item);
 
                         $rule[$key]["item_id"]    = "required";
                         $rule[$key]["item_qty"]  = "required|numeric|min:1";
-                        $rule[$key]["related_um_type"] = "required";
                         // $rule[$key]["um_qty"] = "required|numeric|min:1";
 
                         $validator2[$key] = Validator::make($insert_sir_item[$key], $rule[$key]);
@@ -823,23 +921,6 @@ dd($new_item);
                                 $data["status_message"] .= $message;
                             }
                         }
-                        $related_um_qty = UnitMeasurement::um_qty($related_um_type[$key]);
-
-                        $inventory_update_item[$key]["product_id"] = $value;
-                        $inventory_update_item[$key]["quantity"] = $insert_sir_item[$key]["item_qty"] * $related_um_qty;
-
-                        $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value)->pluck('inventory_count');
-                        if($inventory_update_item[$key]["quantity"] > 0 && $count_on_hand > 0 && $count_on_hand >= $inventory_update_item[$key]["quantity"])
-                        {
-
-                        }
-                        else
-                        {
-                            $item_name = Tbl_item::where("item_id",$value)->pluck("item_name");
-
-                            $data["status"] = "error";
-                            $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
-                        }
                     }
                 }
             }
@@ -847,6 +928,24 @@ dd($new_item);
             {
                 $data["status"] = "error";
                 $data["status_message"] = "Please insert items";
+            }
+            foreach ($new_item as $key => $value) 
+            {
+               $inventory_update_item[$key]["product_id"] = $value["id"];
+               $inventory_update_item[$key]["quantity"] = $value["quantity"];
+
+               $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["id"])->pluck('inventory_count');
+                if($count_on_hand == null)
+                {
+                    $count_on_hand = 0;   
+                }
+                if($inventory_update_item[$key]["quantity"] < 0 && $count_on_hand < 0 && $count_on_hand < $inventory_update_item[$key]["quantity"])
+                {
+                     $item_name = Tbl_item::where("item_id",$value["id"])->pluck("item_name");
+
+                    $data["status"] = "error";
+                    $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
+                }
             }
             $insert_sir_item = null;
 
@@ -875,14 +974,28 @@ dd($new_item);
                     {
                         if($value != "")
                         {
-                            $insert_sir_item["sir_id"] = $sir_id;
-                            $insert_sir_item["item_id"] = $value;
-                            $insert_sir_item["item_qty"] = $item_qty[$key];                            
-                            $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
-                            $insert_sir_item["related_um_type"] = $related_um_type[$key];
-                            $qty = UnitMeasurement::um_qty($related_um_type[$key]);
-                            $insert_sir_item["um_qty"] = $qty;                            
-                            Tbl_sir_item::insert($insert_sir_item);    
+                            $chck = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$value)->where("related_um_type",$related_um_type[$key])->first();
+
+                            if($chck == null)
+                            {
+                                $insert_sir_item["sir_id"] = $sir_id;
+                                $insert_sir_item["item_id"] = $value;
+                                $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
+                                $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
+                                $insert_sir_item["related_um_type"] = $related_um_type[$key];
+                                $qty = UnitMeasurement::um_qty($related_um_type[$key]);
+
+                                $related_um_qty = $qty;
+                                $insert_sir_item["um_qty"] = $related_um_qty;
+
+                                Tbl_sir_item::insert($insert_sir_item);                                
+                            }
+                            else
+                            {
+                                $insert_sir_item["item_qty"] = $chck->item_qty + str_replace(",","",$item_qty[$key]);
+
+                                Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$value)->where("related_um_type",$related_um_type[$key])->update($insert_sir_item);   
+                            }
                         }
                     }
                 }
@@ -904,7 +1017,10 @@ dd($new_item);
         {
             $data["_truck"] = Tbl_truck::where("archived",0)->where("truck_shop_id",$this->user_info->shop_id)->get();
             $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("shop_id",$this->user_info->shop_id)->where("tbl_employee.archived",0)->get();
-            $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->where("shop_id",$this->user_info->shop_id)->get();
+
+            
+            $type = [1,4]; 
+            $data["_item"] = Item::get_all_category_item($type);
 
             $data["sir"] = Tbl_sir::where("sir_id",$sir_id)->where("shop_id",$this->user_info->shop_id)->where("archived",0)->first();
             $data["_sir_item"] = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->get();
@@ -913,6 +1029,10 @@ dd($new_item);
             {
                 foreach ($data["_sir_item"] as $key => $value) 
                 {
+                    if($value->item_type_id == 4)
+                    {
+                        $data["_sir_item"][$key]->item_price = Item::get_item_bundle_price($value->item_id);
+                    }
                     $um = UnitMeasurement::select_um_array($value->related_um_type, 'array');
                      
                     $data["_sir_item"][$key]->um_list = $um;

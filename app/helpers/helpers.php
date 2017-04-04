@@ -514,10 +514,11 @@ function payout_getway()
 function divide($num1, $num2)
 {
     $result = 0;
-    if($num1 > 0)
+    if($num1 > 0 && $num2 > 0)
     {
        $result =  $num1 / $num2;
     }
 
     return $result;
 }
+

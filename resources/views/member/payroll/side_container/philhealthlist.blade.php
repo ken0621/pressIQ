@@ -78,7 +78,6 @@
 						</tr>
 					</tbody>
 				</table>
-				<div class="pagination"> {!! $_philhealth->render() !!} </div>
 			</div>
 		</div>
 	<div class="form-group">

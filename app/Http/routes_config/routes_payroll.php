@@ -273,5 +273,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_process/ajax_load_payroll_period','Member\PayrollController@ajax_load_payroll_period');
 	Route::any('/payroll_process/ajax_payroll_company_period','Member\PayrollController@ajax_payroll_company_period');
 	Route::any('/payroll_process/process_payroll','Member\PayrollController@process_payroll');
+	Route::any('/payroll_process/payroll_compute_brk_unsaved/{employee_id}/{period_company_id}','Member\PayrollController@payroll_compute_brk_unsaved');
 	/* PAYROLL PROCESS END */
 });	

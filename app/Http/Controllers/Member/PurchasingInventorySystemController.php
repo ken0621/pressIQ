@@ -587,18 +587,37 @@ class PurchasingInventorySystemController extends Member
         $insert_sir["shop_id"] = $shop_id;
         $insert_sir["sales_agent_id"] = $sales_agent_id;
         $insert_sir["truck_id"] = $truck_id;
-        $insert_sir["sir_warehouse_id"] = Session::get("warehouse_id_".$this->user_info->shop_id);
+        $insert_sir["sir_warehouse_id"] = $this->current_warehouse->warehouse_id;
         $insert_sir["created_at"] = $sir_date;
         $insert_sir["lof_status"] = 1;
 
         $rule_sir["sales_agent_id"] = 'required';
         $rule_sir["truck_id"] = 'required';
 
+        foreach ($item_id as $key => $value) 
+        {
+            if($value != "")
+            {
+                $qty = UnitMeasurement::um_qty($related_um_type[$key]);
+                $items[$key]['id'] = $value;
+                $items[$key]['quantity'] = $item_qty[$key] * $qty;                 
+            }
+        }
+        $result = array();
+        foreach($items as $k => $v)
+        {
+            $id = $v['id'];
+            $result[$id][] = $v['quantity'];
+        }
 
-
+        $new_item = array();
+        foreach($result as $key1 => $value1) 
+        {
+            $new_item[$key1] = array('id' => $key1, 'quantity' => array_sum($value1));
+        }
         $validator = Validator::make($insert_sir,$rule_sir);
 
-        $warehouse_id = Session::get("warehouse_id_".$this->user_info->shop_id);
+        $warehouse_id = $this->current_warehouse->warehouse_id;
         $sir_id = 0;
         if($validator->fails())
         {
@@ -638,31 +657,6 @@ class PurchasingInventorySystemController extends Member
                                     $data["status_message"] .= $message;
                                 }
                             }
-
-                            $related_um_qty = Tbl_unit_measurement_multi::where("multi_id",$related_um_type[$key])->pluck("unit_qty");
-                            if($related_um_qty == null)
-                            {
-                                $related_um_qty = 1;
-                            }
-                            $inventory_consume_product[$key]["product_id"] = $value;
-                            $inventory_consume_product[$key]["quantity"] = $insert_sir_item[$key]["item_qty"] * $related_um_qty;
-                            
-                            $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value)->pluck('inventory_count');
-                            if($count_on_hand == null)
-                            {
-                                $count_on_hand = 0;   
-                            }
-                            if($inventory_consume_product[$key]["quantity"] > 0 && $count_on_hand > 0 && $count_on_hand >= $inventory_consume_product[$key]["quantity"])
-                            {
-
-                            }
-                            else
-                            {
-                                $item_name = Tbl_item::where("item_id",$value)->pluck("item_name");
-
-                                $data["status"] = "error";
-                                $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
-                            }
                         }
                     }
                 }
@@ -678,6 +672,29 @@ class PurchasingInventorySystemController extends Member
                 $data["status_message"] = "You cannot issue Load out form. The sales agent has an unprocessed SIR";
             }
 
+            foreach ($new_item as $key => $value) 
+            {
+               $inventory_consume_product[$key]["product_id"] = $value["id"];
+               $inventory_consume_product[$key]["quantity"] = $value["quantity"];
+
+               $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["id"])->pluck('inventory_count');
+                if($count_on_hand == null)
+                {
+                    $count_on_hand = 0;   
+                }
+                if($inventory_consume_product[$key]["quantity"] > 0 && $count_on_hand > 0 && $count_on_hand >= $inventory_consume_product[$key]["quantity"])
+                {
+
+                }
+                else
+                {
+                    $item_name = Tbl_item::where("item_id",$value["id"])->pluck("item_name");
+
+                    $data["status"] = "error";
+                    $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
+                }
+            }
+dd($new_item);
             if($data["status"] == "")
             {
                 $sir_id = Tbl_sir::insertGetId($insert_sir);
@@ -687,8 +704,7 @@ class PurchasingInventorySystemController extends Member
                 $transaction_type = "sir";
                 $transaction_id = $sir_id;
 
-                $data = Warehouse::inventory_consume($warehouse_id, $remarks, $inventory_consume_product,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type, $transaction_id);                
-
+                $data = Warehouse::inventory_consume($warehouse_id, $remarks, $inventory_consume_product,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type, $transaction_id);
             }
             $insert_sir_item = null;
             if($data["status"] == "success")

@@ -10,6 +10,7 @@ use App\Models\Tbl_content;
 use App\Models\Tbl_ec_product;
 use App\Globals\Ecom_Product;
 use App\Globals\Cart;
+use App\Globals\Settings;
 use Session;
 
 class Shop extends Controller
@@ -86,6 +87,9 @@ class Shop extends Controller
         $company_info = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->get())->keyBy('key');
         $product_category = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         $global_cart = Cart::get_cart($this->shop_info->shop_id);
+
+        /* Set Email Configuration */
+        Settings::set_mail_setting($this->shop_info->shop_id);
         
         View::share("slot_now", Self::$slot_now);
         View::share("customer_info", Self::$customer_info);

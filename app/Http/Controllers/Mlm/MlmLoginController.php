@@ -9,6 +9,7 @@ use Route;
 use Session;
 use Validator;
 use Mail;
+use Config;
 use App\Globals\Settings;
 use App\Globals\Mlm_member;
 use App\Globals\EmailContent;

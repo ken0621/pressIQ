@@ -157,6 +157,7 @@ class ItemImportController extends Member
 		}
 
 		$json["item_name"]	= $value["Name"];
+		$status_color 		= $json["status"] == 'success' ? 'green' : 'red';
 		$json["tr_data"]	= "<tr>";
 		$json["tr_data"]   .= "<td>".$value['Type']."</td>";
 		$json["tr_data"]   .= "<td>".$value['Name']."</td>";
@@ -168,7 +169,7 @@ class ItemImportController extends Member
 		$json["tr_data"]   .= "<td>".$value['Income Account']."</td>";
 		$json["tr_data"]   .= "<td>".$value['Sale to Customer']."</td>";
 		$json["tr_data"]   .= "<td>".$value['Purchase From Supplier']."</td>";
-		$json["tr_data"]   .= "<td>".$json["status"]."</td>";
+		$json["tr_data"]   .= "<td class='$status_color'>".$json["status"]."</td>";
 		$json["tr_data"]   .= "<td>".$json["message"]."</td>";
 		$json["tr_data"]   .= "</tr>";
 

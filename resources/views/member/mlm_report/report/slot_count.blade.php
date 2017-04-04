@@ -24,7 +24,7 @@
         				<thead>
                             <th>Slot</th>
                             @foreach($tree_level as $key => $value)
-                            <th>Level {{$key}}</th>
+                            <th>{{$key}}</th>
                             @endforeach            
                         </thead>
                         <tbody>

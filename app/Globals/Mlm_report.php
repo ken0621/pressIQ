@@ -135,6 +135,7 @@ class Mlm_report
     	->customer()
     	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
     	->orderBy('wallet_log_date_created', 'DESC')
+        ->where('wallet_log_amount', '!=', 0)
     	->get();
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
         ->where('marketing_plan_enable', 1)

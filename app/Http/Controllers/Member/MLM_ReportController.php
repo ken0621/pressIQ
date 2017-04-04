@@ -76,7 +76,7 @@ class MLM_ReportController extends Member
         // return $view;
         if($pdf == true)
         {
-            return Pdf_global::show_pdf($data['view']);
+            return Pdf_global::show_pdf($data['view'], 'landscape');
         }
         else
         {

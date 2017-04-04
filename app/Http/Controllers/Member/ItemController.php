@@ -639,7 +639,8 @@ class ItemController extends Member
 
 		$item_measurement_id = Request::input("item_measurement_id");
 		$check = UnitMeasurement::check();
-		if($item_measurement_id == $old["item_measurement_id"])
+
+        if($item_measurement_id == $old["item_measurement_id"])
 		{
 	        if($check != 0)
 	        {

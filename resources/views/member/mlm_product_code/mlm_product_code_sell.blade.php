@@ -184,17 +184,23 @@ $(document).ready(function(e){
     		if(payment_value == 1)
     		{
     			$('.payment_label').text("Input Tendered Payment");
+    			$('.payment-value').val('');
     			document.getElementById('payment-value').readOnly =false;
+    			
     		}
     		else if(payment_value == 2)
     		{
     			$('.payment_label').text("Input GC Code");
+    			$('.payment-value').val('');
     			document.getElementById('payment-value').readOnly =false;
+    			
     		}
     		else if(payment_value == 3)
     		{
     			$('.payment_label').text("Wallet Payment (Auto Compute)");
+    			$('.payment-value').val('');
     			document.getElementById('payment-value').readOnly =true;
+
     		}
 		return false;
 	});

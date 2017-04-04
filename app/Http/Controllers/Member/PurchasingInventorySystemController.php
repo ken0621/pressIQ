@@ -495,7 +495,7 @@ class PurchasingInventorySystemController extends Member
             $data["_truck"] = Tbl_truck::where("archived",0)->where("truck_shop_id",$this->user_info->shop_id)->get();
             $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("tbl_employee.archived",0)->where("shop_id",$this->user_info->shop_id)->get();
 
-            $type[0] = 1; 
+            $type = [1,4]; 
             $data["_item"] = Item::get_all_category_item($type);
             return view("member.purchasing_inventory_system.create_sir",$data);
         } 
@@ -948,7 +948,9 @@ class PurchasingInventorySystemController extends Member
         {
             $data["_truck"] = Tbl_truck::where("archived",0)->where("truck_shop_id",$this->user_info->shop_id)->get();
             $data["_employees"] = Tbl_employee::position()->where("position_code","sales_agent")->where("shop_id",$this->user_info->shop_id)->where("tbl_employee.archived",0)->get();
-            $type[0] = 1; 
+
+            
+            $type = [1,4]; 
             $data["_item"] = Item::get_all_category_item($type);
 
             $data["sir"] = Tbl_sir::where("sir_id",$sir_id)->where("shop_id",$this->user_info->shop_id)->where("archived",0)->first();

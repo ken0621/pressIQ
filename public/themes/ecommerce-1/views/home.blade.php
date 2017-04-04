@@ -104,7 +104,7 @@
 											<tbody>
 												<tr>
 													<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-													<td class="text">Add to cart</td>
+													<td class="text">View More</td>
 												</tr>
 											</tbody>
 										</table>
@@ -149,7 +149,7 @@
 											<tbody>
 												<tr>
 													<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-													<td class="text">Add to cart</td>
+													<td class="text">View More</td>
 												</tr>
 											</tbody>
 										</table>

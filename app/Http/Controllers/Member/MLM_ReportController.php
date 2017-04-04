@@ -61,6 +61,7 @@ class MLM_ReportController extends Member
         $data['report_list']['top_earners'] = 'Top Earners';
         $data['report_list']['new_register'] = 'Registered Account';
         $data['report_list']['encashment_rep'] = 'Encashment';
+        $data['report_list']['product_sales_report'] = 'Product Sales Report';
         return view('member.mlm_report.index', $data);
     }
     public function get_report()

@@ -577,9 +577,8 @@ class ItemController extends Member
 			else if($data["data"]["item_type_id"] == 4)
 			{
 				$data["data"]["type_of_item"] = "bundle_type";
-				$data["data"]["bundle"]		  = Tbl_item_bundle::item()->where("bundle_bundle_id", $id)->get()->toArray();
+				$data["data"]["bundle"]		  = Tbl_item_bundle::item()->um()->where("bundle_bundle_id", $id)->get()->toArray();
 			}
-
 
 			if($data["data"]["parent_basis_um"] != 0)
 			{
@@ -594,6 +593,7 @@ class ItemController extends Member
 			$data['_category']  = Category::getAllCategory();
 			$data["_manufacturer"] = Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 	  	= UnitMeasurement::load_um();
+			$data["_um_multi"] 	= UnitMeasurement::load_um_multi();
 			$data['_item']  	= Item::get_all_category_item();
             $data["_vendor"]    = Vendor::getAllVendor('active');
 

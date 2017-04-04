@@ -45,7 +45,7 @@ class TesterController extends Controller
 
     public function getSms($recipient)
     {
-        dd(Sms::sendSms($recipient,"Test","success_register"));
+        dd(Sms::SendSingleText($recipient,"Test","success_register"));
     }
 
 	public function getIndex()

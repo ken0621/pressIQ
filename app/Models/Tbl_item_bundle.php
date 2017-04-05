@@ -13,4 +13,10 @@ class Tbl_item_bundle extends Model
     {
     	return $query->join("tbl_item","item_id","=","bundle_item_id");
     }
+
+    /* Dependent on scopeItem() */
+    public function scopeUm($query)
+    {
+        return $query->leftjoin("tbl_unit_measurement_multi", "multi_id", "=", "bundle_um_id");
+    }
 }

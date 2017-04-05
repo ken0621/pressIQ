@@ -35,6 +35,7 @@ class UnitMeasurement
     {
         return Tbl_unit_measurement::multi()->where("um_shop", UnitMeasurement::getShopId())
                                     ->where("um_archived",0)
+                                    ->groupBy("tbl_unit_measurement.um_id")
                                     ->get();
     }
     public static function archived_um()
@@ -104,6 +105,7 @@ class UnitMeasurement
         
         $um_issued = Tbl_unit_measurement_multi::where("multi_id",$um_issued_id)->first();
         $um_base = Tbl_unit_measurement_multi::where("multi_um_id",$um_base_id)->where("is_base",1)->first();
+        // dd($um_issued);
         if($um_base_id == $um_issued_id)
         {
             if($um_base != null || $um_issued != null)
@@ -112,7 +114,7 @@ class UnitMeasurement
             }
             else
             {
-                $return = $qty == 0 ? 1 : $qty." PC";
+                $return = $qty." PC";
             }
         }
         else if($um_issued != null && $um_base != null )
@@ -129,8 +131,8 @@ class UnitMeasurement
             }
 
             $issued_um = floor($qty / $issued_um_qty);
-            $each = (($qty / $issued_um_qty) - floor($qty / $issued_um_qty)) * $issued_um_qty;
-            // dd($um_base);
+            // dd(($qty/$issued_um_qty - ($issued_um)) * $issued_um_qty);
+            $each = round((($qty / $issued_um_qty) - floor($qty / $issued_um_qty)) * $issued_um_qty);
             $return = $issued_um." ".$um_issued->multi_abbrev." & ".$each." ".$um_base->multi_abbrev;
         }
         else

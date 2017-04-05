@@ -215,8 +215,8 @@ class ManualInvoiceController extends Member
                     $item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
                 }
 
-                $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
-                $product_consume[$key]["quantity"] = $um_info->unit_qty * $item_info[$key]['quantity'];
+                $um_info = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
+                $product_consume[$key]["quantity"] = $um_info * $item_info[$key]['quantity'];
                 $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
             }
         }

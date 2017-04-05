@@ -20,21 +20,41 @@
 			</div>
 			<div class="col-md-6">
 				<small>Category</small>
-				<div class="form-control padding-b-37">
-					<div class="col-md-6">
-						<div class="radio">
-							<label><input type="radio" name="payroll_allowance_category" value="fixed" checked {{$allowance->payroll_allowance_category == 'fixed' ? 'checked' : ''}}>fixed</label>
+				<select class="form-control" name="payroll_allowance_category">
+					<option value="fixed" {{$allowance->payroll_allowance_category == 'fixed' ? 'selected' : ''}}>fixed</option>
+					<option value="daily" {{$allowance->payroll_allowance_category == 'daily' ? 'selected' : ''}}>daily</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-12">
+				<small>Add Every</small>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="radio">
+									<label><input type="radio" name="payroll_allowance_add_period"  value="First Period" {{$allowance->payroll_allowance_add_period == 'First Period' ? 'checked' : ''}}>First Period</label>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="radio">
+									<label><input type="radio" name="payroll_allowance_add_period" value="Second Period" {{$allowance->payroll_allowance_add_period == 'Second Period' ? 'checked' : ''}}>Second Period</label>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="radio">
+									<label><input type="radio" name="payroll_allowance_add_period" value="Last Period" {{$allowance->payroll_allowance_add_period == 'Last Period' ? 'checked' : ''}}>Last Period</label>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="radio">
+									<label><input type="radio" name="payroll_allowance_add_period" value="Every Period" {{$allowance->payroll_allowance_add_period == 'Every Period' ? 'checked' : ''}}>Every Period</label>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="radio">
-							<label><input type="radio" name="payroll_allowance_category" value="daily" {{$allowance->payroll_allowance_category == 'daily' ? 'checked' : ''}}>daily</label>
-						</div>
-					</div>
-					
 				</div>
-				
-				
 			</div>
 		</div>
 		<div class="form-group">
@@ -99,7 +119,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-custom-primary btn-submit" type="submit">Save</button>
+		<button class="btn btn-custom-primary btn-submit" type="submit">Update</button>
 	</div>
 </form>
 <script type="text/javascript" src="/assets/member/js/payroll/modal_create_allowance.js"></script>

@@ -63,7 +63,7 @@
 							</div>
 							<div class="col-md-6">
 								<div class="radio">
-									<label><input type="radio" name="payroll_deduction_period" value="Every other Period" {{$deduction->payroll_deduction_period == 'Every other Period' ? 'checked':''}}>Every other Period</label>
+									<label><input type="radio" name="payroll_deduction_period" value="Last Period" {{$deduction->payroll_deduction_period == 'Last Period' ? 'checked':''}}>Last Period</label>
 								</div>
 							</div>
 							<div class="col-md-6">

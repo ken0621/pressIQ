@@ -23,4 +23,13 @@ class Tbl_payroll_tax_reference extends Model
 	// [DOUBLE] 		tax_fifth_range
 	// [DOUBLE] 		taxt_sixth_range
 	// [DOUBLE] 		tax_seventh_range
+
+	public function scopesel($query, $shop_id = 0, $tax_category = '', $payroll_tax_period = '')
+	{
+		$query->join('tbl_payroll_tax_period','tbl_payroll_tax_period.payroll_tax_period_id','=','tbl_payroll_tax_reference.payroll_tax_status_id')
+				->where('tbl_payroll_tax_reference.shop_id', $shop_id)
+				->where('tbl_payroll_tax_reference.tax_category', $tax_category)
+				->where('tbl_payroll_tax_period.payroll_tax_period', $payroll_tax_period);
+		return $query;
+	}
 }

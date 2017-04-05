@@ -16,7 +16,7 @@
                     
                     </small>
                 </h1>
-                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save</button>
+                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save and Close</button>
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
                <!--  <a href="javascript:" class="panel-buttons btn btn-custom-white pull-right popup" link="/member/item/add" size="lg">Save</a> -->
             </div>

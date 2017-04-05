@@ -234,6 +234,9 @@
 											<label><input type="radio" name="payroll_group_agency" value="2nd Period" {{$group->payroll_group_agency == '2nd Period' ? 'checked':''}}>2nd Period</label>
 										</div>
 										<div class="radio">
+											<label><input type="radio" name="payroll_group_agency" value="Last Period" {{$group->payroll_group_agency == 'Last Period' ? 'checked':''}}>Last Period</label>
+										</div>
+										<div class="radio">
 											<label><input type="radio" name="payroll_group_agency" value="Every Period" {{$group->payroll_group_agency == 'Every Period' ? 'checked':''}}>Every Period</label>
 										</div>
 										<div class="radio">

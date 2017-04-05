@@ -144,7 +144,7 @@
                         @else
                             <li>
                                 <a class="subnav-text" href="{{ $sub_page['url'] }}">
-                                    {{ $sub_page["label"] }}
+                                    {!! $sub_page["label"] !!}
                                 </a>
                             </li>
                         @endif

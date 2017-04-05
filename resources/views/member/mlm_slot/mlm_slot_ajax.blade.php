@@ -1,5 +1,5 @@
 <div class="table-responsive">
-    <table class="table table-condensed">
+    <table class="table table-condensed table-bordered">
         <thead>
             <th class="text-center">Slot</th>
             <th class="text-center">Membership</th>

@@ -35,6 +35,22 @@ class Vendor_CreateBillController extends Member
      */
     public function index()
     {
+        $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->get();
+
+        foreach ($data["_bill_list"] as $key => $value) 
+        {
+           $price = 0;
+           $item = Tbl_bill_item_line::where("itemline_bill_id",$value->bill_id)->get();
+           foreach ($item as $key_item => $value_item) 
+           {
+                $price += (UnitMeasurement::um_qty($value_item->itemline_um) * $value_item->itemline_qty) * $value_item->itemline_rate;
+           }
+           $data["_bill_list"][$key]->bill_price = $price;
+        }
+        return view("member.vendor_list.bill_list",$data);
+    }    
+    public function create_bill()
+    {
         $data["_vendor"]    = Vendor::getAllVendor('active');
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();

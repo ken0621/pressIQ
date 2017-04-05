@@ -14,4 +14,8 @@ class Tbl_sir_item extends Model
         return $query->leftjoin("tbl_item","tbl_item.item_id","=","tbl_sir_item.item_id")
         			->leftjoin('tbl_category','tbl_category.type_id','=','tbl_item.item_category_id');
     }
+    public function scopeItem($query)
+    {
+        return $query->leftjoin("tbl_item","tbl_item.item_id","=","tbl_sir_item.item_id");
+    }
 }

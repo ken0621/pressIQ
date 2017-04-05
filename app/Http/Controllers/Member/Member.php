@@ -11,6 +11,7 @@ use App\Globals\Warehouse;
 use App\Globals\Seed;
 use App\Globals\Utilities;
 use App\Globals\Payroll;
+use App\Globals\Settings;
 
 use Crypt;
 use Redirect;
@@ -132,6 +133,9 @@ class Member extends Controller
 		
 		/* Seeding */
 		Seed::auto_seed();
+
+		/* Set Email Configuration */
+		Settings::set_mail_setting($this->user_info->shop_id);
 		
 		/* GET CURRENT DOMAIN FOR FRONTEND */
 		if($this->user_info->shop_domain != "unset_yet")

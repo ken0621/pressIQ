@@ -116,10 +116,6 @@ function customer_invoice(){
 			    	value = parseFloat(value);
 			    	ret = action_add_comma(value).toLocaleString();
 			    }
-			   	
-			    if(ret == 0){
-			    	ret = '';
-			    }
 
 				return ret;
 			  });
@@ -128,7 +124,7 @@ function customer_invoice(){
 	function action_add_comma(number)
 	{
 		number += '';
-		if(number == '0' || number == ''){
+		if(number == ''){
 			return '';
 		}
 
@@ -201,10 +197,10 @@ function customer_invoice(){
 			subtotal += parseFloat(total_per_tr);
 
 			/* AVOID ZEROES */
-			if(total_per_tr <= 0)
-			{
-				total_per_tr = '';
-			}
+			// if(total_per_tr <= 0)
+			// {
+			// 	total_per_tr = '';
+			// }
 
 			/* CONVERT TO INTEGER */
 			var amount_val = amount.val();
@@ -343,7 +339,12 @@ function customer_invoice(){
         {
         	hasPopup: "false",
     		width : "110px",
-    		placeholder : "um.."
+    		placeholder : "um..",
+    		onChangeValue: function()
+    		{
+    			action_load_unit_measurement($(this));
+    		}
+
         }).globalDropList('disabled');
 	}
 
@@ -412,12 +413,15 @@ function customer_invoice(){
 		$(document).on("change", ".txt-qty", function()
 		{
 			$parent 	= $(this).closest(".tr-draggable");
-			$item_id 	= $parent.find("option:selected").val();
-			$item_qty 	= $(this).val();
-			$.get('/member/item/get_new_price/'+$item_id +"/"+$item_qty, function(data)
+			if($parent.find(".select-item").val() != '')
 			{
-				$parent.find(".txt-rate").val(data).change();
-			});
+				$item_id 	= $parent.find(".select-item option:selected").val();
+				$item_qty 	= $(this).val();
+				$.get('/member/item/get_new_price/'+$item_id +"/"+$item_qty, function(data)
+				{
+					$parent.find(".txt-rate").val(data).change();
+				});
+			}
 		})
 	}
 

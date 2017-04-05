@@ -33,9 +33,9 @@
                             <td>{{$key}}</td>
                             @foreach($filter as $key2 => $value2)
                                 @if(isset($value[$key2]))
-                                <td>{{$value[$key2]}}</td>
+                                <td>{{currency('PHP', $value[$key2])}}</td>
                                 @else
-                                <td>0</td>
+                                <td>{{currency('PHP', 0)}}</td>
                                 @endif
                             @endforeach
                         </tr>    
@@ -80,9 +80,9 @@
                             <td>{{$key}}</td>
                             @foreach($filter as $key2 => $value2)
                                 @if(isset($value[$key2]))
-                                <td>{{$value[$key2]}}</td>
+                                <td>{{currency('PHP', $value[$key2])}}</td>
                                 @else
-                                <td>0</td>
+                                <td>{{currency('PHP', 0)}}</td>
                                 @endif
                             @endforeach
                         </tr>        
@@ -129,9 +129,9 @@
                             <td>{{$key}}</td>
                             @foreach($filter as $key2 => $value2)
                                 @if(isset($value[$key2]))
-                                <td>{{$value[$key2]}}</td>
+                                <td>{{currency('PHP', $value[$key2])}}</td>
                                 @else
-                                <td>0</td>
+                                <td>{{currency('PHP', 0)}}</td>
                                 @endif
                             @endforeach
                         </tr>   

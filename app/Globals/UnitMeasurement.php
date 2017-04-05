@@ -114,7 +114,7 @@ class UnitMeasurement
             }
             else
             {
-                $return = $qty == 0 ? 1 : $qty." PC";
+                $return = $qty." PC";
             }
         }
         else if($um_issued != null && $um_base != null )

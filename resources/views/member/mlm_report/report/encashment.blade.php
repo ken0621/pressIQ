@@ -50,7 +50,7 @@
                                 @endif
                                 @foreach($request as $key2 => $value2)
                                     @if(isset($value[$key2]))
-                                    <td>{{$value[$key2]}}</td>
+                                    <td class="change_currency">{{$value[$key2]}}</td>
                                     @else
                                     <td>0</td>
                                     @endif
@@ -67,3 +67,6 @@
         </div>
     </div>
 </div>    
+<script type="text/javascript">
+    show_currency();
+</script>

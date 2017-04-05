@@ -86,7 +86,7 @@ class Purchasing_inventory_system
                 $type = Tbl_item::where("item_id",$value_itemid)->pluck("item_type_id");
                 if($type == 4)
                 {
-                    if($value_itemid == $value_items['id'])
+                    if($value_itemid == $value_items['product_id'])
                     {
                         $i = "true";
                     }
@@ -164,7 +164,7 @@ class Purchasing_inventory_system
                $type = Tbl_item::where("item_id",$value_itemid)->pluck("item_type_id");
                 if($type == 4)
                 {
-                    if($value_itemid == $value_items['id'])
+                    if($value_itemid == $value_items['product_id'])
                     {
                         $i = "true";
                     }

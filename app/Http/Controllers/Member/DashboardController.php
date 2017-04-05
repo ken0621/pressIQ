@@ -5,6 +5,10 @@ use App\Globals\Accounting;
 use App\Globals\Category;
 use App\Globals\Item;
 use App\Globals\Customer;
+use App\Globals\Purchase_Order;
+use App\Globals\Invoice;
+use App\Globals\UnitMeasurement;
+use App\Globals\Purchasing_inventory_system;
 use App\Models\Tbl_User;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_unit_measurement;
@@ -19,14 +23,21 @@ class DashboardController extends Member
 
 	public function index()
 	{
+		$data["shop_name"]		= $this->user_info->shop_key;
+
+		$data["po_amount"]		= currency("PHP",Purchase_Order::get_po_amount());
+		$data["count_po"]		= Purchase_Order::count_po();
+
+
+		$data["ar_amount"]		= currency("PHP",Invoice::get_ar_amount());
+		$data["count_ar"]		= Invoice::count_ar();
+		$data["pis"]			= Purchasing_inventory_system::check();
+
 		$data['_account']       = Accounting::getAllAccount();
 		$data['_category']      = Category::getAllCategory();
 		$data['_customer']      = Customer::getAllCustomer();
 		$data['_item']			= Item::get_all_category_item();
-		$data['_um']			= Tbl_unit_measurement::multi()->where("um_shop", $this->getShopId())
-                                ->where("um_archived",0)
-                                ->groupBy("tbl_unit_measurement.um_id")
-                                ->get();
+		$data['_um']			= UnitMeasurement::load_um_multi();
 
 		// dd($data['_category']);
 		return view('member.dashboard.dashboard', $data);

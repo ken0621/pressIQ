@@ -38,6 +38,11 @@ use Session;
      */
 class Purchasing_inventory_system
 {
+    public static function check()
+    {
+        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",Purchasing_inventory_system::getShopId())->pluck("settings_setup_done");
+        return $check;
+    }
     public static function return_stock($sir_id)
     {
         // inventroy_source_reason

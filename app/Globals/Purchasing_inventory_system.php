@@ -750,8 +750,8 @@ class Purchasing_inventory_system
     {
         $sir_item = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->first();
 
-        $um_info = UnitMeasurement::um_info($um);
-        $invoice_qty = $um_info->unit_qty * $qty;
+        $um_qty = UnitMeasurement::um_qty($um);
+        $invoice_qty = $um_qty * $qty;
 
         $update_sold["sold_qty"] = $invoice_qty + $sir_item->sold_qty;
 

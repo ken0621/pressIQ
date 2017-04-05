@@ -81,12 +81,12 @@ class Purchasing_inventory_system
         foreach ($warehouse_refill_product as $key_items => $value_items) 
         {
             $i = null;
-            foreach ($item_id as $value_itemid) 
+            foreach ($sir_item as $value_itemid) 
             {
-                $type = Tbl_item::where("item_id",$value_itemid)->pluck("item_type_id");
+                $type = Tbl_item::where("item_id",$value_itemid->item_id)->pluck("item_type_id");
                 if($type == 4)
                 {
-                    if($value_itemid == $value_items['product_id'])
+                    if($value_itemid->item_id == $value_items['product_id'])
                     {
                         $i = "true";
                     }

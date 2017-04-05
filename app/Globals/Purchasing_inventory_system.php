@@ -94,7 +94,7 @@ class Purchasing_inventory_system
             }
             if($i != null)
             {
-                unset($items[$key_items]);
+                unset($warehouse_refill_product[$key_items]);
             }
         }
 

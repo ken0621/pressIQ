@@ -205,3 +205,5 @@ Route::post('member/mlm/card/pending/discount', 'Member\MLM_CardController@pendi
 
 
 Route::get('/member/mlm/report', 'Member\MLM_ReportController@index');
+Route::any('/member/mlm/report/get', 'Member\MLM_ReportController@get_report');
+

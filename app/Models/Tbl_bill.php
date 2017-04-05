@@ -18,4 +18,8 @@ class Tbl_bill extends Model
     {
     	 return $query->join('tbl_bill_item_line', 'tbl_bill_item_line.itemline_bill_id', '=', 'tbl_bill.bill_id');
     }
+    public function scopeVendor($query)
+    {
+         return $query->join('tbl_vendor', 'tbl_bill.bill_vendor_id', '=', 'tbl_vendor.vendor_id');
+    }
 }

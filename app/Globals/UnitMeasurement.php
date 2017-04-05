@@ -35,6 +35,7 @@ class UnitMeasurement
     {
         return Tbl_unit_measurement::multi()->where("um_shop", UnitMeasurement::getShopId())
                                     ->where("um_archived",0)
+                                    ->groupBy("tbl_unit_measurement.um_id")
                                     ->get();
     }
     public static function archived_um()

@@ -16,6 +16,7 @@ class Tbl_payroll_allowance extends Model
 	// [VARCHAR] 		payroll_allowance_name
 	// [DOUBLE] 		payroll_allowance_amount
 	// [VARCHAR] 		payroll_allowance_category
+	// [VARCHAR]		payroll_allowance_add_period
 	// [TINY INTEGER] 	payroll_allowance_archived
 
 	public function scopesel($query, $shop_id = 0, $payroll_allowance_archived = 0)

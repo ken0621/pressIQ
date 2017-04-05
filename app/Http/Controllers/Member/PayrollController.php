@@ -3639,6 +3639,7 @@ class PayrollController extends Member
           $data['emp'] = Tbl_payroll_employee_basic::where('payroll_employee_id',$employee_id)->first();
 
           $data['_breakdown'] = Self::breakdown_uncompute($process);
+          $data['payroll_period_company_id'] = $payroll_period_company_id;
           // dd($data);
           return view('member.payroll.modal.modal_view_payroll_computation_unsaved',$data);
 

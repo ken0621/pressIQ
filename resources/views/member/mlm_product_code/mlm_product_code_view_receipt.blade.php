@@ -184,15 +184,21 @@
                                         <td>Payment :</td>
                                         <td>
                                             <?php
+                                            $label = 'Tendered Amount';
+                                            $label_change = 'Change';
                                             switch ($invoice->item_code_payment_type) {
                                                 case 1:
-                                                    echo 'Cash';
+                                                    echo 'Cash'; 
                                                     break;
                                                 case 2:
                                                     echo 'GC';
+                                                    $label = 'GC Amount';
+                                                    $label_change = 'GC Change';
                                                     break;  
                                                 case 3:
                                                     echo 'Wallet';
+                                                    $label = 'Current Wallet';
+                                                    $label_change = 'Remaining Wallet';
                                                     break;        
                                                 default:
                                                     echo 'Cash';
@@ -201,11 +207,11 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Tendered Amount :</td>
+                                        <td>{{$label}} :</td>
                                         <td>{{number_format($invoice->item_code_tendered_payment, 2)}}</td>
                                     </tr>
                                     <tr>
-                                        <td>Change :</td>
+                                        <td>{{$label_change}} :</td>
                                         <td>{{number_format($invoice->item_code_change, 2)}}</td>
                                     </tr>
                                     <tr>

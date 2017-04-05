@@ -233,6 +233,9 @@
 											<label><input type="radio" name="payroll_group_agency" value="2nd Period">2nd Period</label>
 										</div>
 										<div class="radio">
+											<label><input type="radio" name="payroll_group_agency" value="Last Period" checked>Last Period</label>
+										</div>
+										<div class="radio">
 											<label><input type="radio" name="payroll_group_agency" value="Every Period" checked>Every Period</label>
 										</div>
 										<div class="radio">

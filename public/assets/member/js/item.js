@@ -110,22 +110,25 @@ function item()
             link_size   : 'lg',
             onChangeValue : function()
             {
-                var id = $(this).val();
-                var item_id = $(".item_id").val();
-                $.ajax({
-                    url : "/member/item/um/",
-                    type : "get",
-                    data : { id:id , item_id:item_id},
-                    success : function(data)
-                    {      
-                        data = $.parseJSON(data);                                          
-                        if(data.status == "pop-up-um")
-                        {
-                            console.log(data.status);
-                            action_load_link_to_modal(data.action,"md");
+                if($(this).attr("add") == "add")
+                {
+                    var id = $(this).val();
+                    var item_id = $(".item_id").val();
+                    $.ajax({
+                        url : "/member/item/um/",
+                        type : "get",
+                        data : { id:id , item_id:item_id},
+                        success : function(data)
+                        {      
+                            data = $.parseJSON(data);                                          
+                            if(data.status == "pop-up-um")
+                            {
+                                console.log(data.status);
+                                action_load_link_to_modal(data.action,"md");
+                            }
                         }
-                    }
-                });
+                    });                    
+                }
             }
         });
 

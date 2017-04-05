@@ -428,6 +428,7 @@ function sir(){
 	function action_load_unit($this, $unit_id, $price)
 	{
 		var option = "";
+		console.log($unit_id);
 		if($unit_id != "")
 		{
 			console.log("unit_id "+$unit_id);
@@ -442,11 +443,6 @@ function sir(){
 	            	var ctr = 0;
            			$(um_list).each(function (a, b)
 		            {
-		            	// if(ctr == 0)
-		            	// {
-			            //     option += '<option value='+b.um_id+"_um"+' selected unit-qty="1">'+b.um_base_name +" ("+b.um_base_abbrev+")"+'</option>';
-			            //     ctr = 1;
-		            	// }
 		            	if(b.multi_id != null)
 		            	{
 			                option += '<option value='+b.multi_id+' unit-qty='+b.unit_qty+'>'+b.multi_name +" ("+b.multi_abbrev+")"+'</option>';
@@ -456,6 +452,8 @@ function sir(){
 					$parent.find(".um-list").attr("price", $price);
 					$parent.find(".um-list").html(option).change();
 					$parent.find(".um-list").globalDropList("reload");
+					$parent.find(".um-list").val($parent.find(".um-list option:first").val()).change();
+
 				}
 			});
 		}
@@ -467,6 +465,7 @@ function sir(){
 			$parent.find(".um-list").attr("price", $price);
 			$parent.find(".um-list").html(option).change();
 			$parent.find(".um-list").globalDropList("reload");
+			$parent.find(".um-list").val($parent.find(".um-list option:first").val()).change();
 		}
 	}
 	this.action_reload_customer = function($id)
@@ -634,7 +633,6 @@ function submit_done(data)
     else if(data.status == "error")
     {
         toastr.warning(data.status_message);
-        $(data.target).html(data.view);
     }
 }
 function submit_done_customer(result)

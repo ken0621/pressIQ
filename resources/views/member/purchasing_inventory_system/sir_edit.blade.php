@@ -1,4 +1,4 @@
-
+ 
 @extends('member.layout')
 @section('content')
 <form class="global-submit form-to-submit-transfer" role="form" action="/member/pis/sir/edit_submit" method="POST" >
@@ -72,8 +72,8 @@
                                             <th style="width: 30px;"></th>
                                             <th style="width: 15px;" class="text-right">#</th>
                                             <th style="width: 200px;">Product Code</th>
-                                            <th style="width: 200px;">Unit</th>
                                             <th>Description</th>
+                                            <th style="width: 200px;">Unit</th>
                                             <th style="width: 70px;">Qty</th>
                                             <th style="width: 120px;">Unit Price</th>
                                             <th style="width: 120px;">Amount</th>
@@ -89,11 +89,13 @@
                                             <td class="invoice-number-td text-right">{{$key + 1}}</td>
                                             <td>
                                                 <select class="form-control select-item droplist-item input-sm pull-left" name="item[]">
-                                                    @foreach($_item as $item)
-                                                        <option value="{{$item->item_id}}" {{$sir_item->item_id == $item->item_id ? 'selected' : ''}} unit="{{$item->item_measurement_id}}" sales-info="{{$item->item_sales_information}}" purchase-info="{{$item->item_purchasing_information}}" price="{{$item->item_price}}" cost="{{$item->item_cost}}">{{$item->item_name}}</option>
-                                                    @endforeach
+                                                    @include('member.load_ajax_data.load_item_category', ["add_search" => "", 'item_id' => $sir_item->item_id]);
                                                 </select>
-                                            </td>                                            
+                                            </td>  
+                                            <td>
+                                                <textarea class="textarea-expand txt-desc" readonly="true" class="txt-desc" name="invline_description[]">{{$sir_item->item_sales_information}}</textarea>
+                                                <input type="hidden" name="um_qty[]" class="um-qty" >
+                                            </td>                                          
                                             <td>
                                                 <select class="um-list form-control select-item droplist-unit input-sm pull-left {{$ctr = 0}}" price="{{$sir_item->item_price}}" name="related_um_type[]">
                                                     @if(is_numeric($sir_item->related_um_type))
@@ -105,11 +107,8 @@
                                                             <option value="{{$um->multi_id}}" unit-qty="{{$um->unit_qty}}">{{$um->multi_name}} ({{$um->multi_abbrev}})</option>
                                                         @endforeach                                                        
                                                     @endif
+                                                   <option value="" unit-qty=1>No U/M</option>
                                                 </select>
-                                            </td>
-                                            <td>
-                                                <textarea class="textarea-expand txt-desc" readonly="true" class="txt-desc" name="invline_description[]">{{$sir_item->item_sales_information}}</textarea>
-                                                <input type="hidden" name="um_qty[]" class="um-qty" >
                                             </td>
                                             <td><input class="text-center number-input txt-qty" type="text" value="{{$sir_item->item_qty}}" name="item_qty[]"/></td>
                                             <td><input class="text-right number-input txt-rate" type="text" value="{{number_format($sir_item->um_qty * $sir_item->item_price,2)}}" readonly="true" name="item_rate[]"/></td>
@@ -123,16 +122,16 @@
                                             <td class="invoice-number-td text-right">2</td>
                                             <td>
                                                 <select class="form-control select-item droplist-item input-sm pull-left" name="item[]" data-placeholder="Select a Customer" style=";">
-                                                   @include('member.load_ajax_data.load_item');
+                                                   @include('member.load_ajax_data.load_item_category', ["add_search" => ""]);
                                                 </select>
-                                            </td>                                          
-                                            <td>
-                                                <select class="um-list form-control select-item droplist-unit input-sm pull-left" name="related_um_type[]" data-placeholder="Select a Customer" style=";">
-                                                </select>
-                                            </td>
+                                            </td>         
                                             <td>
                                                 <textarea class="textarea-expand txt-desc"  class="txt-desc" name="invline_description[]"></textarea>
                                                 <input type="hidden" name="um_qty[]" class="um-qty" >
+                                            </td>                                 
+                                            <td>
+                                                <select class="um-list form-control select-item droplist-unit input-sm pull-left" name="related_um_type[]" data-placeholder="Select a Customer" style=";">
+                                                </select>
                                             </td>
                                             <td><input class="text-center number-input txt-qty" type="text" name="item_qty[]"/></td>
                                             <td><input class="text-right number-input txt-rate" type="text" readonly="true" name="item_rate[]"/></td>
@@ -158,16 +157,16 @@
             <td class="invoice-number-td text-right">2</td>
             <td>
                 <select class="form-control select-item item-class input-sm pull-left" name="item[]" data-placeholder="Select a Customer" style=";">
-                    @include('member.load_ajax_data.load_item');
-                </select>
-            </td>
-            <td>
-                <select class="um-list form-control select-item unit-class input-sm pull-left" name="related_um_type[]" data-placeholder="Select a Customer" style=";">
+                    @include('member.load_ajax_data.load_item_category', ["add_search" => ""]);
                 </select>
             </td>
             <td>
                 <textarea class="textarea-expand txt-desc"  class="txt-desc" name="invline_description[]"></textarea>
                 <input type="hidden" name="um_qty[]" class="um-qty" >
+            </td>
+            <td>
+                <select class="um-list form-control select-item unit-class input-sm pull-left" name="related_um_type[]" data-placeholder="Select a Customer" style=";">
+                </select>
             </td>
             <td><input class="text-center number-input txt-qty" type="text" name="item_qty[]"/></td>
             <td><input class="text-right number-input txt-rate" type="text" readonly="true" name="item_rate[]"/></td>

@@ -55,6 +55,7 @@ use App\Models\Tbl_payroll_employee_dependent;
 use App\Models\Tbl_payroll_employee_search;
 
 use App\Globals\Payroll;
+use App\Globals\PayrollJournalEntries;
 
 class PayrollController extends Member
 {
@@ -4025,4 +4026,10 @@ class PayrollController extends Member
           return $data;
      }
      /* PAYROLL PROCESS END */
+
+     public function payroll_summary()
+     {
+          $date_now = date("Y/m/d");
+          return view('member.payroll.payroll_journal_entries');
+     }
 }

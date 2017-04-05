@@ -168,7 +168,7 @@ function import_csv()
                     if (this.files[1]!=null){
                         this.removeFile(this.files[0]);
                     }
-
+                    $("#ImportContainer .dz-message").slideUp();
                     target_file = this.files;
                     $("#files").change();
                 })
@@ -185,7 +185,6 @@ function import_csv()
 
                 this.on("drop", function()
                 {
-                     $("#ImportContainer .dz-message").fadeOut();
                     // $("#ModalGallery .dropzone").removeClass("dropzone-drag");
                 })
             }

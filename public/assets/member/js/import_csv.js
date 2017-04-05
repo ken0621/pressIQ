@@ -105,15 +105,15 @@ function import_csv()
             $.ajax(
             {
                 url:'/member/item/import/read-file',
-                datatype:'json',
+                dataType:'json',
                 type:'post',
-                data: {
-                    _token:token,
-                    value:value
+                data:{
+                    _token: token,
+                    value: value,
+                    input: objectifyForm($(".import-validation").serializeArray())
                 },
                 success: function(data)
                 {
-                    data = jQuery.parseJSON(data);
                     // counter and percentage loading
                     ctr++;
                     $(".counter").html(ctr);
@@ -121,8 +121,6 @@ function import_csv()
                     $(".progress-bar").css("width", percent+"%");
                     $(".progress-bar").html(percent+"%");
 
-                    // append tr result and status
-                    console.log(data.tr_data);
                     $(".table-import-container tbody").append(data.tr_data);
 
                     submit_data(data_value[ctr]);
@@ -134,6 +132,15 @@ function import_csv()
                 }
             });
         }
+    }
+
+    function objectifyForm(formArray)
+    {
+        var returnArray = {};
+        for (var i = 0; i < formArray.length; i++){
+            returnArray[formArray[i]['name']] = formArray[i]['value'];
+        }
+        return returnArray;
     }
 
     function csv_upload_configuration()
@@ -158,7 +165,6 @@ function import_csv()
 
                 this.on("addedfile", function(file)
                 {
-                    $("#ImportContainer .dz-message").fadeOut();
                     if (this.files[1]!=null){
                         this.removeFile(this.files[0]);
                     }
@@ -179,6 +185,7 @@ function import_csv()
 
                 this.on("drop", function()
                 {
+                     $("#ImportContainer .dz-message").fadeOut();
                     // $("#ModalGallery .dropzone").removeClass("dropzone-drag");
                 })
             }

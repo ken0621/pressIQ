@@ -47,8 +47,12 @@
           <select class="form-control" name="payroll_employee_company_id" required>
             <option value="">Select Company</option>
             @foreach($_company as $company)
-            <option value="{{$company->payroll_company_id}}" {{$company->payroll_company_id == $employee->payroll_employee_company_id ? 'selected="selected"':''}} >{{$company->payroll_company_name}}</option>
+            <option value="{{$company['company']->payroll_company_id}}" {{$company['company']->payroll_company_id == $employee->payroll_employee_company_id ? 'selected="selected"':''}}>{{$company['company']->payroll_company_name}}</option> 
+              @foreach($company['branch'] as $branch)
+              <option value="{{$branch->payroll_company_id}}" {{$branch->payroll_company_id == $employee->payroll_employee_company_id ? 'selected="selected"':''}}>&nbsp;&nbsp;• {{$branch->payroll_company_name}}</option>
+              @endforeach
             @endforeach
+           
           </select>
         </div>
         <div class="col-md-6">

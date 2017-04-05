@@ -19,21 +19,41 @@
 			</div>
 			<div class="col-md-6">
 				<small>Category</small>
-				<div class="form-control padding-b-37">
-					<div class="col-md-6">
-						<div class="radio">
-							<label><input type="radio" name="payroll_allowance_category" value="fixed" checked>fixed</label>
+				<select class="form-control" name="payroll_allowance_category">
+					<option value="fixed">fixed</option>
+					<option value="daily">daily</option>
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-12">
+				<small>Add Every</small>
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="radio">
+									<label><input type="radio" name="payroll_allowance_add_period" value="First Period">First Period</label>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="radio">
+									<label><input type="radio" name="payroll_allowance_add_period" value="Second Period">Second Period</label>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="radio">
+									<label><input type="radio" name="payroll_allowance_add_period" value="Last Period">Last Period</label>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="radio">
+									<label><input type="radio" name="payroll_allowance_add_period" checked value="Every Period">Every Period</label>
+								</div>
+							</div>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="radio">
-							<label><input type="radio" name="payroll_allowance_category" value="daily">daily</label>
-						</div>
-					</div>
-					
 				</div>
-				
-			
 			</div>
 		</div>
 		<div class="form-group">

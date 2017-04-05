@@ -101,3 +101,49 @@
         </div>
     </div>
 </div>  
+
+<div class="col-md-12 col-sm-6 col-xs-12">
+  <div class="info-box">
+    <span class="info-box-icon bg-primary"><i class="fa fa-cart-arrow-down"></i></span>
+
+    <div class="info-box-content">
+      <span class="info-box-text">Membership Sale Report / Package</span>
+      <span class="info-box-number">Per Package Item</span>
+    </div>
+    <!-- /.info-box-content -->
+  </div>
+  <!-- /.info-box -->
+</div> 
+<br>
+<br>
+<br>
+<br>
+<br>
+<div class="panel panel-default panel-block panel-title-block" id="top">
+    <div class="panel-heading">
+        <div>
+            <div style="overflow-x:auto;">
+                <table class="table table-condensed table-bordered">
+                    <thead>
+                        <thead>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Bundle Quantity</th>
+                        </thead>
+                        <tbody>
+                            @foreach($package_item as $key => $value)
+                            <tr>
+                                <td>{{$key}}</td>
+                                <td>{{$value['item_quantity']}}</td>
+                                <td>{{$value['item_bundle_quantity']}}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>   

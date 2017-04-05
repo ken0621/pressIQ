@@ -78,6 +78,7 @@ class Mlm_voucher
 					if(isset($insert_item))
 					{
 						Tbl_voucher_item::insert($insert_item);
+						Mlm_voucher::give_item_name_add_item($invoice_id);
 					}
 				}
 			// }
@@ -93,25 +94,36 @@ class Mlm_voucher
 			foreach($voucher as  $key => $value)
 			{
 				$voucher_bundle = Tbl_voucher_item::where('voucher_id', $value->voucher_id)->get();
+
 				if($voucher_bundle)
 				{
 					foreach ($voucher_bundle as $key2 => $value2) 
 					{
-						# code...
-						$item_info = Tbl_item::where('item_id', $value->item_id)->first();
-						if($item_info)
+						if($value2->voucher_is_bundle == 1)
 						{
-							$update_item['item_name']  = $item_info->item_name;
-							$update_item['item_price']  = $item_info->item_price;
-							$update_item['item_quantity'] = $value2->voucher_item_quantity;
-							$update_item['voucher_is_bundle'] = 1;
-							Tbl_voucher_item::where('voucher_item_id', $value->voucher_item_id)->update($update);
-							$item_bundle =Item::get_item_bundle($item_info->item_id);
-							if($item_bundle)
+							# code...
+							$item_info = Tbl_item::where('item_id', $value2->item_id)->first();
+							if($item_info)
 							{
-								foreach($item_bundle as $key3 => $value3)
+								$update_item['item_name']  = $item_info->item_name;
+								$update_item['item_price']  = $item_info->item_price;
+								$update_item['item_quantity'] = $value2->voucher_item_quantity;
+								$update_item['voucher_is_bundle'] = 1;
+								Tbl_voucher_item::where('voucher_item_id', $value2->voucher_item_id)->update($update_item);
+								$item_bundle =Item::get_item_bundle($item_info->item_id);
+								if($item_bundle)
 								{
-									
+									foreach($item_bundle['bundle'] as $key3 => $value3)
+									{
+										$insert_item_n_bundle['voucher_id'] = $value->voucher_id;
+										$insert_item_n_bundle['item_id'] = $value3['item_id'];
+										$insert_item_n_bundle['voucher_item_quantity'] = $value3['bundle_qty']; 
+										$insert_item_n_bundle['voucher_is_bundle'] = 0;
+										$insert_item_n_bundle['item_name'] = $value3['item_name'];
+										$insert_item_n_bundle['item_price'] = $value3['item_price'];
+										$insert_item_n_bundle['item_quantity'] = $value3['bundle_qty'];
+										Tbl_voucher_item::insert($insert_item_n_bundle);
+									}
 								}
 							}
 						}

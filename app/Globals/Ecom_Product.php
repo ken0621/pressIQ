@@ -90,7 +90,7 @@ class Ecom_Product
 
 	/**
 	 * Getting all Product w/ cateogry, variants and options. If shop_id is null, the current shop id that logged on will be used.
-	 *
+	 * 
 	 * @param int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
 	 */
 	public static function getAllCategoryProduct($shop_id = null)
@@ -196,7 +196,7 @@ class Ecom_Product
 
 	/**
 	 * Getting specific product. If shop_id is null, the current shop id that logged on will be used.
-	 *
+	 * B
 	 * @param int    $product_id 	Product ID of the specific product.
 	 * @param int    $shop_id 		Shop id of the products that you wnat to get. null if auto get
 	 */
@@ -357,6 +357,30 @@ class Ecom_Product
 
 		return $_category;
 	}
+
+	/**
+	 * Getting all Product w/ a specific category name regardless of the level, thus product with the same category name
+	 *
+	 * @param  int    $shop_id 	  Shop id of the products that you wnat to get. null if auto get
+	 * @param  string $type_name  Name of the category
+	 * @return array  Porduct Details
+	 */
+	public static function getProductByCategoryName($type_name, $shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		$_products = Tbl_ec_product::Category()->where("eprod_shop_id", $shop_id)->where("type_name", $type_name)->where("tbl_ec_product.archived", 0)->get()->toArray();
+
+		Foreach($_products as $key=>$product)
+		{
+			$_product[$key]	= Ecom_Product::getProduct($product["eprod_id"], $shop_id);
+		}
+
+        return $_products;     
+    }
 
 	/**
 	 * Getting all category for breadcrumbs.

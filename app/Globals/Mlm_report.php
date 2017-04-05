@@ -28,6 +28,9 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_matching_log;
 use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_item_code_item;
+use App\Models\Tbl_membership_package;
+use App\Models\Tbl_membership_code_invoice;
+use App\Models\Tbl_voucher_item;
 class Mlm_report
 {   
     public static function general($shop_id)
@@ -77,6 +80,12 @@ class Mlm_report
     	->customer()
     	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
     	->orderBy('wallet_log_date_created', 'DESC')
+
+        ->select(DB::raw('wallet_log_date_created as wallet_log_date_created'), DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
+        ->groupBy(DB::raw('wallet_log_plan') )
+        ->groupBy('wallet_log_date_created')
+
+
     	->get();
 
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
@@ -86,11 +95,14 @@ class Mlm_report
        	$per_day = [];  
        	$per_month = []; 
        	$per_year = [];
+
+        $filter = [];
        	// dd($complan_per_day);
         foreach($complan_per_day as $key => $value)
         {
         	// $date = Carbon::parse($value->)
         	// $date = Carbon::createFromFormat('d/m/Y', $value->wallet_log_date_created);
+            $filter[$value->wallet_log_plan] = $value->wallet_log_plan;
         	$date = Carbon::parse($value->wallet_log_date_created)->format('d/m/Y');
         	$date_m = Carbon::parse($value->wallet_log_date_created)->format('M/Y');
         	$date_y = Carbon::parse($value->wallet_log_date_created)->format('Y');
@@ -123,6 +135,7 @@ class Mlm_report
         	}
 
         }
+        $data['filter'] = $filter;
         $data['per_day'] = $per_day;
         $data['per_month'] = $per_month;
         $data['per_year'] = $per_year;
@@ -134,8 +147,12 @@ class Mlm_report
     	$complan_per_day =Tbl_mlm_slot_wallet_log::slot()
     	->customer()
     	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
-    	->orderBy('wallet_log_date_created', 'DESC')
+    	->orderBy('wallet_log_slot', 'ASC')
         ->where('wallet_log_amount', '!=', 0)
+        ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
+        ->groupBy(DB::raw('wallet_log_plan') )
+        ->groupBy('wallet_log_slot')
+        // ->paginate(100);
     	->get();
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
         ->where('marketing_plan_enable', 1)
@@ -156,6 +173,7 @@ class Mlm_report
         	}
         	
         }
+        $data['complan_per_day'] = $complan_per_day;
         $data['per_complan'] = $per_complan;
         $data['plan'] = $plan;
         $data['plan_settings'] = $plan_settings;
@@ -186,17 +204,75 @@ class Mlm_report
     	$data['tree_level'] = $tree_level;
     	return view('member.mlm_report.report.slot_count', $data);
     }
+    public static function binary_slot_count($shop_id)
+    {
+        $slot = Tbl_mlm_slot::where('shop_id', $shop_id)->get()->keyBy('slot_id');
+
+
+
+        // ------------------------------------------------------------------------
+        $tree = Tbl_tree_placement::where('shop_id', $shop_id)
+        ->where('placement_tree_position', 'left')
+        ->orderBy('placement_tree_level', 'ASC')->get();
+        $tree_count = [];
+        $tree_level = [];
+
+        foreach($tree as $key => $value)
+        {
+            $tree_level[$value->placement_tree_level] = $value->placement_tree_level;
+            if(isset($tree_count[$value->placement_tree_parent_id][$value->placement_tree_level]))
+            {
+                $tree_count[$value->placement_tree_parent_id][$value->placement_tree_level] += 1;
+            }
+            else
+            {
+                $tree_count[$value->placement_tree_parent_id][$value->placement_tree_level] = 1;
+            }
+        }
+        // ------------------------------------------------------------------------
+        $tree_r = Tbl_tree_placement::where('shop_id', $shop_id)
+        ->where('placement_tree_position', 'right')
+        ->orderBy('placement_tree_level', 'ASC')->get();
+
+        $tree_count_r = [];
+        $tree_level_r = [];
+
+        foreach($tree_r as $key => $value)
+        {
+            $tree_level_r[$value->placement_tree_level] = $value->placement_tree_level;
+            if(isset($tree_count_r[$value->placement_tree_parent_id][$value->placement_tree_level]))
+            {
+                $tree_count_r[$value->placement_tree_parent_id][$value->placement_tree_level] += 1;
+            }
+            else
+            {
+                $tree_count_r[$value->placement_tree_parent_id][$value->placement_tree_level] = 1;
+            }
+        }
+        // ------------------------------------------------------------------------
+
+        $data['slot'] = $slot;
+        $data['tree'] = $tree_count;
+        $data['tree_level'] = $tree_level;
+        $data['tree_r'] = $tree_count_r;
+        $data['tree_level_r'] = $tree_level_r;
+        return view('member.mlm_report.report.binary_slot_count', $data);
+    }
     public static function top_earners($shop_id)
     {
+
     	$income =Tbl_mlm_slot_wallet_log::slot()
     	->customer()
     	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
-    	->orderBy('wallet_log_date_created', 'DESC');
-
+    	// ->orderBy('wallet_log_date_created', 'DESC')
+        ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
+        ->groupBy(DB::raw('wallet_log_plan') )
+        ->groupBy('wallet_log_slot')
+        ->orderBy('wallet_log_amount', 'DESC');
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
         ->where('marketing_plan_enable', 1)
         ->get();
-
+        $filter = [];
         $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get()->keyBy('slot_id');
 
         // ->keyBy('marketing_plan_code')
@@ -204,7 +280,8 @@ class Mlm_report
         {
         	$filter[$key] = $value->marketing_plan_code;
         }
-        $income = $income->whereIn('wallet_log_plan', $filter)->get();
+        $income = $income->whereIn('wallet_log_plan', $filter)->take(100)->get();
+        // dd($income[1]);
         $income_top = [];
         foreach($income as $key => $value)
         {
@@ -219,6 +296,7 @@ class Mlm_report
         }
         arsort($income_top);
         $data['income_top'] = $income_top;
+
         $data['slot'] = $slot;
         return view('member.mlm_report.report.top_earners', $data);
 
@@ -254,10 +332,14 @@ class Mlm_report
     	$complan_per_day =Tbl_mlm_slot_wallet_log::slot()
     	->customer()
     	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
-    	->orderBy('wallet_log_date_created', 'DESC')
-    	// ->where('wallet_log_plan','=', 'ENCASHMENT')
-    	->get();
+        ->select(DB::raw('encashment_process_type as encashment_process_type'), DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
+        ->groupBy('encashment_process_type')
+        ->groupBy(DB::raw('wallet_log_plan') )
+        
+        ->groupBy('wallet_log_slot')
 
+        ->orderBy('wallet_log_amount', 'DESC')
+    	->get();
     	$request_a = [];
     	$encashment = [];
     	foreach($complan_per_day as $key => $value)
@@ -325,6 +407,7 @@ class Mlm_report
                 $inventory[$value->item_name]['Price'] += ($value->item_price * $value->item_quantity);
                 $inventory[$value->item_name]['Membership Discount'] += $value->item_membership_discount * $value->item_quantity;
                 $inventory[$value->item_name]['Membership Discounted'] += $value->item_membership_discounted * $value->item_quantity;
+                // $inventory[$value->item_name]['Membership Discounted'] .= $value->item_membership_discounted * $value->item_quantity;
             }
             else
             {
@@ -335,6 +418,7 @@ class Mlm_report
             }
             
         }
+
         $filter['Quantity'] = 'Quantity';
         $filter['Price'] = 'Price';
         $filter['Membership Discount'] = 'Membership Discount';
@@ -345,6 +429,75 @@ class Mlm_report
         $data['invoice'] = $invoice;
         $data['filter'] = $filter;
         return view('member.mlm_report.report.inventory', $data);
+    }
+    public static function membership_code_sales_report($shop_id)
+    {
+        $invoice = Tbl_membership_code_invoice::where('shop_id', $shop_id)->get();
+
+        $membership_code = Tbl_membership_code::where('shop_id', $shop_id)->get();
+
+        $package = Tbl_membership_package::get()->keyBy('membership_package_id');
+        $by_membership = [];
+        foreach($membership_code as $key => $value)
+        {
+            if(isset($by_membership[$value->membership_package_id]))
+            {
+                $by_membership[$value->membership_package_id] += $value->membership_code_price;
+            }
+            else
+            {
+                $by_membership[$value->membership_package_id] = $value->membership_code_price;
+            }
+            
+        }
+        $per_package_item = Tbl_voucher_item::join('tbl_voucher', 'tbl_voucher.voucher_id', '=', 'tbl_voucher_item.voucher_id')
+        ->join('tbl_membership_code_invoice', 'tbl_membership_code_invoice.membership_code_invoice_id', '=','tbl_voucher.voucher_invoice_membership_id')
+        ->where('voucher_is_bundle', 0)
+        ->get();
+
+        $per_package_item_bundle = Tbl_voucher_item::join('tbl_voucher', 'tbl_voucher.voucher_id', '=', 'tbl_voucher_item.voucher_id')
+        ->join('tbl_membership_code_invoice', 'tbl_membership_code_invoice.membership_code_invoice_id', '=','tbl_voucher.voucher_invoice_membership_id')
+        ->where('voucher_is_bundle', 1)
+        ->get()->keyBy('voucher_id');
+        // dd($per_package_item_bundle);
+        $item_package = [];
+        foreach($per_package_item as $key => $value)
+        {
+            if(isset($item_package[$value->item_name]['item_price']))
+            {
+                $item_package[$value->item_name]['item_price'] += $value->item_price;
+                $item_package[$value->item_name]['item_quantity'] +=  $value->item_quantity;
+                if(isset($per_package_item_bundle[$value->voucher_id]))
+                {
+                    $item_package[$value->item_name]['item_bundle_quantity'] += $value->item_quantity * $per_package_item_bundle[$value->voucher_id]->item_quantity;
+                }
+                else
+                {
+                    $item_package[$value->item_name]['item_bundle_quantity'] += $value->item_quantity;
+                }
+                
+            }
+            else
+            {
+                $item_package[$value->item_name]['item_price'] = $value->item_price;
+                $item_package[$value->item_name]['item_quantity'] =  $value->item_quantity;
+                if(isset($per_package_item_bundle[$value->voucher_id]))
+                {
+                    $item_package[$value->item_name]['item_bundle_quantity'] = $value->item_quantity * $per_package_item_bundle[$value->voucher_id]->item_quantity;
+                }
+                else
+                {
+                    $item_package[$value->item_name]['item_bundle_quantity'] = $value->item_quantity;
+                }
+            }
+            
+        }
+        $data['package_item'] = $item_package;
+        $data['invoice'] = $invoice;
+        $data['package'] = $package;
+        $data['by_membership'] = $by_membership;
+
+        return view('member.mlm_report.report.membership_code', $data);
     }
     public static function encashment($shop_id)
     {
@@ -385,6 +538,7 @@ class Mlm_report
 
         return json_encode($data);    
     }
+
     public static function per_complan($shop_id, $mode)
     {
         $plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)

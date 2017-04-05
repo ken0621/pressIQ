@@ -43,14 +43,17 @@ use App\Globals\Utilities;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_report;
 use App\Globals\Pdf_global;
+use App\Models\Tbl_membership_code_invoice;
 use Crypt;
 class MLM_ReportController extends Member
 {
     public function index()
     {
+        $shop_id = $this->user_info->shop_id; 
         # code...
         $data = [];
-        $shop_id = $this->user_info->shop_id;
+        // return Mlm_report::top_earners($shop_id);
+        
 
 
 
@@ -58,10 +61,19 @@ class MLM_ReportController extends Member
         $data['report_list']['cashflow'] = 'Complan Income Report';
         $data['report_list']['e_wallet'] = 'E-Wallet Report';
         $data['report_list']['slot_count'] = 'Slot Count';
+        $data['report_list']['binary_slot_count'] = 'Binary Slot Count';
         $data['report_list']['top_earners'] = 'Top Earners';
         $data['report_list']['new_register'] = 'Registered Account';
         $data['report_list']['encashment_rep'] = 'Encashment';
         $data['report_list']['product_sales_report'] = 'Product Sales Report';
+        $data['report_list']['membership_code_sales_report'] = 'Membership Sales Report';
+        
+
+        $report_get = Request::input('report_choose');
+        if($report_get != null)
+        {
+            return $this->get_report();
+        }
         return view('member.mlm_report.index', $data);
     }
     public function get_report()
@@ -74,6 +86,11 @@ class MLM_ReportController extends Member
         $data['status'] = 'success';
         $data['view'] = $view->render();
         // return $view;
+        $from = Request::input('from');
+        if($from == 'paginate')
+        {
+            return $data['view'];
+        }
         if($pdf == true)
         {
             return Pdf_global::show_pdf($data['view'], 'landscape');

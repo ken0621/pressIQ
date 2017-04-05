@@ -846,7 +846,6 @@ class PurchasingInventorySystemController extends Member
                     array_push($items, $_bundle[$key_bundle]);
                 }
             }
-            
         }  
         foreach ($items as $key_items => $value_items) 
         {

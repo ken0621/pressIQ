@@ -63,7 +63,7 @@ class Purchasing_inventory_system
          $unset_key = null;
         foreach ($sir_item as $keyitem => $valueitem) 
         {            
-            if($value->item_type_id == 4)
+            if($valueitem->item_type_id == 4)
             {
                 $bundle = Tbl_item_bundle::where("bundle_bundle_id",$valueitem->item_id)->get();
                 foreach ($bundle as $key_bundle => $value_bundle) 
@@ -78,6 +78,7 @@ class Purchasing_inventory_system
                 $unset_key[$keyitem] = $valueitem->item_id;
             }
         }
+
         foreach($warehouse_refill_product as $key_items => $value_items) 
         {
             $i = null;
@@ -97,6 +98,7 @@ class Purchasing_inventory_system
                 unset($warehouse_refill_product[$key_items]);
             }
         }
+
 
         $data = Warehouse::inventory_refill($warehouse_id, $reason_refill, $refill_source, $remarks, $warehouse_refill_product,'array',$is_return = 1);
 
@@ -124,7 +126,7 @@ class Purchasing_inventory_system
         $unset_key = null;
         foreach ($sir_item as $keyitem => $valueitem) 
         {            
-            if($value->item_type_id == 4)
+            if($valueitem->item_type_id == 4)
             {
                 $bundle = Tbl_item_bundle::where("bundle_bundle_id",$valueitem->item_id)->get();
                 foreach ($bundle as $key_bundle => $value_bundle) 

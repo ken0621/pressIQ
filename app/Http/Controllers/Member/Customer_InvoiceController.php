@@ -143,9 +143,13 @@ class Customer_InvoiceController extends Member
              $i = null;
              foreach ($_itemline as $keyitemline => $valueitemline)
              {
-                if(Request::input("invline_item_id")[$keyitemline] == $value_items['product_id'])
+                $type = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitemline])->pluck("item_type_id");
+                if($type == 4)
                 {
-                    $i = "true";
+                    if(Request::input("invline_item_id")[$keyitemline] == $value_items['product_id'])
+                    {
+                        $i = "true";
+                    }                    
                 }
              }
             if($i != null)
@@ -265,9 +269,13 @@ class Customer_InvoiceController extends Member
              $i = null;
              foreach ($_itemline as $keyitemline => $valueitemline)
              {
-                if(Request::input("invline_item_id")[$keyitemline] == $value_items['product_id'])
+                $type = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitemline])->pluck("item_type_id");
+                if($type == 4)
                 {
-                    $i = "true";
+                    if(Request::input("invline_item_id")[$keyitemline] == $value_items['product_id'])
+                    {
+                        $i = "true";
+                    }                    
                 }
              }
             if($i != null)

@@ -38,6 +38,11 @@ use Session;
      */
 class Purchasing_inventory_system
 {
+    public static function check()
+    {
+        $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",Purchasing_inventory_system::getShopId())->pluck("settings_setup_done");
+        return $check;
+    }
     public static function return_stock($sir_id)
     {
         // inventroy_source_reason
@@ -76,16 +81,20 @@ class Purchasing_inventory_system
         foreach ($warehouse_refill_product as $key_items => $value_items) 
         {
             $i = null;
-            foreach ($item_id as $value_itemid) 
+            foreach ($sir_item as $value_itemid) 
             {
-                if($value_itemid == $value_items['id'])
+                $type = Tbl_item::where("item_id",$value_itemid->item_id)->pluck("item_type_id");
+                if($type == 4)
                 {
-                    $i = "true";
-                }
+                    if($value_itemid->item_id == $value_items['product_id'])
+                    {
+                        $i = "true";
+                    }
+                }                
             }
             if($i != null)
             {
-                unset($items[$key_items]);
+                unset($warehouse_refill_product[$key_items]);
             }
         }
 
@@ -152,10 +161,14 @@ class Purchasing_inventory_system
             $i = null;
             foreach ($unset_key as $value_itemid) 
             {
-                if($value_itemid == $value_items['product_id'])
+               $type = Tbl_item::where("item_id",$value_itemid)->pluck("item_type_id");
+                if($type == 4)
                 {
-                    $i = "true";
-                }
+                    if($value_itemid == $value_items['product_id'])
+                    {
+                        $i = "true";
+                    }
+                }     
             }
             if($i != null)
             {
@@ -737,8 +750,8 @@ class Purchasing_inventory_system
     {
         $sir_item = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->first();
 
-        $um_info = UnitMeasurement::um_info($um);
-        $invoice_qty = $um_info->unit_qty * $qty;
+        $um_qty = UnitMeasurement::um_qty($um);
+        $invoice_qty = $um_qty * $qty;
 
         $update_sold["sold_qty"] = $invoice_qty + $sir_item->sold_qty;
 

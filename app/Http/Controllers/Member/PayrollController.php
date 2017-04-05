@@ -53,6 +53,7 @@ use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_bank_convertion;
 use App\Models\Tbl_payroll_employee_dependent;
 use App\Models\Tbl_payroll_employee_search;
+use App\Models\Tbl_payroll_adjustment;
 
 use App\Globals\Payroll;
 
@@ -86,9 +87,10 @@ class PayrollController extends Member
 
 		$data['_separated']					= Tbl_payroll_employee_contract::employeefilter(0,0,0,date('Y-m-d'), Self::shop_id(), $separated_status)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->paginate($this->paginate_count);
 
-		$data['_company']					= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
+		// $data['_company']					= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->paginate($this->paginate_count);
 
-		
+          $data['_company']                       = Payroll::company_heirarchy(Self::shop_id());
+		// dd($data['_company']);
 		$data['_status_active']				= Tbl_payroll_employment_status::whereIn('payroll_employment_status_id', $active_status)->orderBy('employment_status')->paginate($this->paginate_count);
 
 		
@@ -105,13 +107,13 @@ class PayrollController extends Member
 
 	public function get_201_template()
 	{
-		$excels['number_of_rows'] = Request::input('number_of_rows');
+          $excels['number_of_rows'] = Request::input('number_of_rows');
 
-        $excels['data'] = ['Company','Employee Number','Title Name','First Name','Middle Name','Last Name','Suffix Name','ATM/Account Number','Gender (M/F)','Birthdate','Civil Status','Street','City/Town','State/Province','Country','Zip Code', 'Contact','Email Address','Tax Status','Monthly Salary','Daily Rate' ,'Taxable Salary','SSS Salary','HDMF Salary','PHIC Salary','Minimum Wage (Y/N)','Department','Position','Start Date','Employment Status','SSS Number','Philhealth Number','Pagibig Number','TIN','BioData/Resume(Y/N)','Police Clearance(Y/N)','NBI(Y/N)','Health Certificate(Y/N)','School Credentials(Y/N)','Valid ID(Y/N)','Dependent Full Name(1)','Dependent Relationship(1)','Dependent Birthdate(1)','Dependent Full Name(2)','Dependent Relationship(2)','Dependent Birthdate(2)','Dependent Full Name(3)','Dependent Relationship(3)','Dependent Birthdate(3)','Dependent Full Name(4)','Dependent Relationship(4)','Dependent Birthdate(4)','Remarks'];
+          $excels['data'] = ['Company','Employee Number','Title Name','First Name','Middle Name','Last Name','Suffix Name','ATM/Account Number','Gender (M/F)','Birthdate','Civil Status','Street','City/Town','State/Province','Country','Zip Code', 'Contact','Email Address','Tax Status','Monthly Salary','Daily Rate' ,'Taxable Salary','SSS Salary','HDMF Salary','PHIC Salary','Minimum Wage (Y/N)','Department','Position','Start Date','Employment Status','SSS Number','Philhealth Number','Pagibig Number','TIN','BioData/Resume(Y/N)','Police Clearance(Y/N)','NBI(Y/N)','Health Certificate(Y/N)','School Credentials(Y/N)','Valid ID(Y/N)','Dependent Full Name(1)','Dependent Relationship(1)','Dependent Birthdate(1)','Dependent Full Name(2)','Dependent Relationship(2)','Dependent Birthdate(2)','Dependent Full Name(3)','Dependent Relationship(3)','Dependent Birthdate(3)','Dependent Full Name(4)','Dependent Relationship(4)','Dependent Birthdate(4)','Remarks'];
 
-        Excel::create('201 Template', function($excel) use ($excels) {
+          Excel::create('201 Template', function($excel) use ($excels) {
 
-            $excel->sheet('template', function($sheet) use ($excels) {
+               $excel->sheet('template', function($sheet) use ($excels) {
 
                 $data = $excels['data'];
                 $number_of_rows = $excels['number_of_rows'];
@@ -359,7 +361,7 @@ class PayrollController extends Member
                     $boidata_yesno_cell->setFormula1('relotionship');
                 }
 
-            });
+               });
 
             /* DATA VALIDATION (REFERENCE FOR DROPDOWN LIST) */
             $excel->sheet('reference', function($sheet) {
@@ -731,7 +733,10 @@ class PayrollController extends Member
 
 	public function modal_create_employee()
 	{
-		$data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+		// $data['_company'] = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+          $data['_company']  = Payroll::company_heirarchy(Self::shop_id());
+
 		$data['employement_status'] = Tbl_payroll_employment_status::get();
 		$data['tax_status'] = Tbl_payroll_tax_status::get();
 		$data['civil_status'] = Tbl_payroll_civil_status::get();
@@ -1023,7 +1028,10 @@ class PayrollController extends Member
 	public function modal_employee_view($id)
 	{
 
-		$data['_company'] 			= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+		// $data['_company'] 			= Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+          $data['_company']  = Payroll::company_heirarchy(Self::shop_id());
+
 		$data['employement_status'] = Tbl_payroll_employment_status::get();
 		$data['tax_status'] 		= Tbl_payroll_tax_status::get();
 		$data['civil_status'] 		= Tbl_payroll_civil_status::get();
@@ -4025,4 +4033,30 @@ class PayrollController extends Member
           return $data;
      }
      /* PAYROLL PROCESS END */
+
+     /* PAYROLL ADJUSTMENT START */
+     public function modal_create_payroll_adjustment($payroll_employee_id, $payroll_period_company_id)
+     {
+          $data['payroll_employee_id']  = $payroll_employee_id;
+          $data['company_period']       = $payroll_period_company_id;
+          return view('member.payroll.modal.modal_create_adjustment', $data);
+     }
+
+     public function create_payroll_adjustment()
+     {
+          // Tbl_payroll_adjustment
+          $insert['payroll_employee_id']          = Request::input('payroll_employee_id');
+          $insert['payroll_period_company_id']    = Request::input('company_period');
+          $insert['payroll_adjustment_name']      = Request::input('payroll_adjustment_name');
+          $insert['payroll_adjustment_amount']    = Request::input('payroll_adjustment_amount');
+          $insert['payroll_adjustment_category']  = Request::input('payroll_adjustment_category');
+
+          Tbl_payroll_adjustment::insert($insert);
+
+          $data['status'] = 'success';
+          $data['function_name'] = 'reload_break_down';
+
+          return json_encode($data);
+     }
+     /* PAYROLL ADJUSTMENT END */
 }

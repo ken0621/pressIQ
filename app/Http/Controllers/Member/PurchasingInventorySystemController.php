@@ -620,17 +620,19 @@ class PurchasingInventorySystemController extends Member
                     array_push($items, $_bundle[$key_bundle]);
                 }
             }
-            $bundle_item[$key_item] = $_bundle;
-            
         }  
         foreach ($items as $key_items => $value_items) 
         {
             $i = null;
             foreach ($item_id as $value_itemid) 
             {
-                if($value_itemid == $value_items['id'])
+                $type = Tbl_item::where("item_id",$value_itemid)->pluck("item_type_id");
+                if($type == 4)
                 {
-                    $i = "true";
+                    if($value_itemid == $value_items['id'])
+                    {
+                        $i = "true";
+                    }                    
                 }
             }
             if($i != null)
@@ -844,7 +846,6 @@ class PurchasingInventorySystemController extends Member
                     array_push($items, $_bundle[$key_bundle]);
                 }
             }
-            $bundle_item[$key_item] = $_bundle;
             
         }  
         foreach ($items as $key_items => $value_items) 
@@ -852,9 +853,13 @@ class PurchasingInventorySystemController extends Member
             $i = null;
             foreach ($item_id as $value_itemid) 
             {
-                if($value_itemid == $value_items['id'])
+                $type = Tbl_item::where("item_id",$value_itemid)->pluck("item_type_id");
+                if($type == 4)
                 {
-                    $i = "true";
+                    if($value_itemid == $value_items['id'])
+                    {
+                        $i = "true";
+                    }                    
                 }
             }
             if($i != null)

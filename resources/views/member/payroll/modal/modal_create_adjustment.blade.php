@@ -4,6 +4,7 @@
 		<h4 class="modal-title">Payroll Adjustment</h4>
 		<input type="hidden" value="{{$payroll_employee_id}}" name="payroll_employee_id">
 		<input type="hidden" value="{{$company_period}}" name="company_period">
+		<input type="hidden" name="_token" value="{{csrf_token()}}">
 	</div>
 	<div class="modal-body form-horizontal">
 		<div class="form-group">
@@ -23,8 +24,9 @@
 				<small>Category</small>
 				<select class="form-control" name="payroll_adjustment_category" required>
 					<option value="">Select Category</option>
-					<option value="Incentives">Incentives</option>
+					<option value="Bonus">Bonus</option>
 					<option value="Commissions">Commissions</option>
+					<option value="Incentives">Incentives</option>
 					<option value="Deductions">Deductions</option>
 				</select>
 			</div>
@@ -32,6 +34,6 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-primary btn-custom-primary" type="button"">Submit</button>
+		<button class="btn btn-primary btn-custom-primary" type="submit"">Submit</button>
 	</div>
 </form>

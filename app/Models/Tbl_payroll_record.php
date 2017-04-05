@@ -18,6 +18,7 @@ class Tbl_payroll_record extends Model
 	// payroll_period_company_id
 	// salary_monthly
 	// salary_daily
+	// payroll_cola
 	// regular_salary
 	// regular_early_overtime
 	// regular_reg_overtime

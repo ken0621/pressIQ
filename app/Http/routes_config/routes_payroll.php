@@ -276,5 +276,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_process/payroll_compute_brk_unsaved/{employee_id}/{period_company_id}','Member\PayrollController@payroll_compute_brk_unsaved');
 	Route::any('/payroll_process/modal_create_payroll_adjustment/{payroll_employee_id}/{payroll_period_company_id}','Member\PayrollController@modal_create_payroll_adjustment');
 	Route::any('/payroll_process/create_payroll_adjustment','Member\PayrollController@create_payroll_adjustment');
+	Route::any('/payroll_process/confirm_remove_adjustment/{id}','Member\PayrollController@confirm_remove_adjustment');
+	Route::any('/payroll_process/remove_adjustment','Member\PayrollController@remove_adjustment');
+	Route::any('/payroll_process/confirm_register_payroll/{id}','Member\PayrollController@confirm_register_payroll');
+	Route::any('/payroll_process/register_payroll','Member\PayrollController@register_payroll');
 	/* PAYROLL PROCESS END */
 });	

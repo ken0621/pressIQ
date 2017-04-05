@@ -13,7 +13,7 @@ class UpdateTblPayrollRecordV2 extends Migration
     public function up()
     {
         Schema::table('tbl_payroll_record', function (Blueprint $table) {
-            $table->double('payroll_cola', 18,2)->before('regular_salary');
+            $table->double('payroll_cola', 18,2);
         });
     }
 

@@ -62,7 +62,7 @@
 							</div>
 							<div class="col-md-6">
 								<div class="radio">
-									<label><input type="radio" name="payroll_deduction_period" value="Every other Period">Every other Period</label>
+									<label><input type="radio" name="payroll_deduction_period" value="Last Period">Last Period</label>
 								</div>
 							</div>
 							<div class="col-md-6">

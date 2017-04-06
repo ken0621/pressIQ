@@ -35,7 +35,7 @@
                                 <td>{{$value->membership_code_customer_email}}</td>
                                 <td>{{$value->membership_code_invoice_f_name}} {{$value->membership_code_invoice_m_name}} {{$value->membership_code_invoice_l_name}}</td>
                                 <td>{{$value->membership_code_date_created}}</td>
-                                <td>{{$value->membership_total}}</td>
+                                <td>{{currency('PHP', $value->membership_total)}}</td>
                             </tr>
                             @endforeach
                         </tbody>
@@ -79,7 +79,7 @@
                         <tbody>
                             @foreach($by_membership as $key => $value)
                             <tr>
-                                <td>
+                                <td class="">
                                     @if(isset($package[$key]))
                                     {{$package[$key]->membership_package_name}}
                                     @else
@@ -87,7 +87,7 @@
                                     @endif
 
                                 </td>
-                                <td>
+                                <td class="change_currency">
                                     {{$value}}
                                 </td>
                             </tr>
@@ -147,3 +147,6 @@
         </div>
     </div>
 </div>   
+<script type="text/javascript">
+    show_currency();
+</script>

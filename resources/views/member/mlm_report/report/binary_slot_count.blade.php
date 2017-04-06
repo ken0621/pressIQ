@@ -31,7 +31,8 @@
                                 @foreach($tree_level_r as $key => $value)
                                 <th>LEVEL {{$key}}<br>(L/R)</th>
                                 @endforeach 
-                            @endif               
+                            @endif   
+                            <th>Total</th>            
                         </thead>
                         <tbody>
                             <?php
@@ -55,6 +56,7 @@
                                     @endif
                                     </a>
                                 </td>
+                                <?php $l_t = 0; $r_t = 0; ?>
                                 @if(count($tree_level) >= count($tree_level_r))
                                     @foreach($tree_level as $key2 => $value2)
                                         <?php
@@ -79,6 +81,7 @@
                                             }
                                         ?>
                                             <td>{{$l}}/{{$r}}</td>
+                                            <?php $l_t += $l; $r_t += $r ?>
                                     @endforeach  
                                 @else
                                     @foreach($tree_level_r as $key2 => $value2)
@@ -106,6 +109,7 @@
                                         <td>{{$l}}/{{$r}}</td>
                                     @endforeach 
                                 @endif    
+                                <td>{{$l_t}}/{{$r_t}}</td>
                             </tr>
                             @endforeach
                         </tbody>

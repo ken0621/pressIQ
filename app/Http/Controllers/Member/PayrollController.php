@@ -4160,21 +4160,48 @@ class PayrollController extends Member
      }
 
 
-     public function confirm_register_payroll($id)
+     public function confirm_action_payroll($action,$id)
      {
           $period = Tbl_payroll_period_company::sel($id)->first();
 
           // dd($period);
 
           $data['title']      = 'Do you really want to register '.$period->payroll_company_name.' ('.date('M d Y', strtotime($period->payroll_period_start)).' to '.date('M d Y', strtotime($period->payroll_period_end)).')';
-          $data['action']     = '/member/payroll/payroll_process/register_payroll';
+          $data['action']     = '/member/payroll/payroll_process/action_payroll';
           $data['id']         = $period->payroll_period_company_id;
-          $data['html']       = '';
+          $data['html']       = '<input type="hidden" value="'.$action.'" name="payroll_action">';
 
           return view('member.modal.modal_confirm_archived', $data);
      }
 
-     public function register_payroll()
+     
+
+     public function action_payroll()
+     {
+          $id = Request::input('id');
+          $payroll_action = Request::input('payroll_action');
+     }
+
+     public function confirm_cancel_payroll($action ,$id)
+     {
+          $period = Tbl_payroll_period_company::sel($id)->first();
+
+          $statement = '';
+
+          if($action == 'pending')
+          {
+               $statement = 'unprocess';
+          }
+
+          $data['title']      = 'Do you really want to '.$statement.' '.$period->payroll_company_name.' ('.date('M d Y', strtotime($period->payroll_period_start)).' to '.date('M d Y', strtotime($period->payroll_period_end)).')';
+          $data['action']     = '/member/payroll/payroll_process/register_payroll';
+          $data['id']         = $period->payroll_period_company_id;
+          $data['html']       = '<input type="hidden" value="'.$action.'" name="payroll_action">';
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+     public function cancel_payroll()
      {
 
      }

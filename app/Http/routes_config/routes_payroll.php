@@ -278,7 +278,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_process/create_payroll_adjustment','Member\PayrollController@create_payroll_adjustment');
 	Route::any('/payroll_process/confirm_remove_adjustment/{id}','Member\PayrollController@confirm_remove_adjustment');
 	Route::any('/payroll_process/remove_adjustment','Member\PayrollController@remove_adjustment');
-	Route::any('/payroll_process/confirm_register_payroll/{id}','Member\PayrollController@confirm_register_payroll');
-	Route::any('/payroll_process/register_payroll','Member\PayrollController@register_payroll');
+	Route::any('/payroll_process/confirm_action_payroll/{action}/{id}','Member\PayrollController@confirm_action_payroll');
+	Route::any('/payroll_process/action_payroll','Member\PayrollController@action_payroll');
+	Route::any('/payroll_process/confirm_cancel_payroll/{action}/{id}','Member\PayrollController@confirm_cancel_payroll');
 	/* PAYROLL PROCESS END */
 });	

@@ -24,8 +24,8 @@
       <div class="custom-panel">
         <div class="custom-panel-header cursor-pointer">
           {{date('M d, Y',strtotime($period['period']->payroll_period_start))}} to {{date('M d, Y',strtotime($period['period']->payroll_period_end))}} ({{$period['period']->payroll_period_category}})
-          <button class="btn btn-custom-white pull-right btn-xs popup" link="/member/payroll/payroll_process/confirm_register_payroll/{{$period['period']->payroll_period_company_id}}" size="sm">Register</button>
-          <button class="btn btn-custom-red-white pull-right btn-xs margin-right-10 popup" link="" size="sm">Unprocess</button>
+          <button class="btn btn-custom-white pull-right btn-xs popup" link="/member/payroll/payroll_process/confirm_action_payroll/registered/{{$period['period']->payroll_period_company_id}}" size="sm">Register</button>
+          <button class="btn btn-custom-red-white pull-right btn-xs margin-right-10 popup" link="/member/payroll/payroll_process/confirm_cancel_payroll/pending/{{$period['period']->payroll_period_company_id}}" size="sm">Unprocess</button>
           <button class="btn btn-custom-white-gray pull-right btn-xs margin-right-10 popup" link="" size="sm"><i class="fa fa-comments" aria-hidden="true"></i></button>
          
           </div>

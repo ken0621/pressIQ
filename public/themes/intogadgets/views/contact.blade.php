@@ -106,7 +106,17 @@
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
+			$('body').on('click', '.footable .footable-row-detail', function(event) 
+			{
+				event.preventDefault();
+				$(event.currentTarget).prev("tr").toggleClass("hid");
+			});
 
+			$('.footable-toggle').trigger('click');
+			$('.footable-toggle').trigger('click');
+
+			$('.footable .footable-row-detail').prev("tr").addClass("hid");
+			
 			var $message_result = $('#email-form-result');
 			$('button#send-email').on('click', function(e)
 			{

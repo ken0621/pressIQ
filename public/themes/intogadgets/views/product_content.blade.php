@@ -51,7 +51,13 @@
                <div class="title">PACKAGE INCLUSION</div>
             </div> -->
             <div class="price-container">
-               <div id="single-order-price" class="single-order-price">&#8369;&nbsp;{{ number_format($product_variant['evariant_price'], 2) }}</div>
+              @if($product_variant['discounted'] == "true")
+              <div id="single-order-price" class="single-order-price">PHP {{ number_format($product_variant['discounted_price'], 2) }}</div>
+              <div id="single-order-price" class="single-order-price" style="text-decoration: line-through;">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
+              @else
+              <div id="single-order-price" class="single-order-price">PHP {{ number_format($product_variant['evariant_price'], 2) }}</div>
+              @endif
+               <!-- <div id="single-order-price" class="single-order-price">&#8369;&nbsp;{{ number_format($product_variant['evariant_price'], 2) }}</div> -->
                @if($product_variant['item_type_id'] != 2)
                 <div class="single-order-availability" style="text-transform: capitalize;">{{ $product_variant['inventory_status'] }}</div>
                @endif

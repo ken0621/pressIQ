@@ -262,10 +262,12 @@ class TabletPISController extends Member
 	{         
 		$sir_id = Request::input("sir_id");
         $data["c_id"] = Request::input("customer_id");
+        $data["pis"]       = Purchasing_inventory_system::check();
         
 		$data["_customer"]  = Customer::getAllCustomer();
         $data['_um']        = UnitMeasurement::load_um_multi();
 		$data['_item']      = Item::get_all_item_sir($sir_id);
+        $data['_cm_item']   = Item::get_all_category_item([1,4]);
         $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id"); 
 		$data["sir_id"] = $sir_id;
 		// dd($data["sir_id"]);

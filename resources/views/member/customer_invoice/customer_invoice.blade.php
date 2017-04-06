@@ -306,7 +306,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="returns-class" {{Request::input("id") != 0 ? 'style="display: none"' : ''}}  >
+                            <div class="returns-class" style="{{Request::input('id') == null ? 'display:none' : ''}}"  >
                                 <div class="row clearfix draggable-container">
                                      <div class="table-responsive">
                                         <div class="col-sm-12">
@@ -368,7 +368,7 @@
                                                             <td class="cm-number-td text-right">1</td>
                                                             <td>
                                                                 <select class="1111 form-control select-item droplist-item-cm input-sm pull-left" name="cmline_item_id[]" >
-                                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => "", "_item" => $_cm_item])
                                                                     <option class="hidden" value="" />
                                                                 </select>
                                                             </td>
@@ -391,7 +391,7 @@
                                                             <td class="cm-number-td text-right">2</td>
                                                             <td>
                                                                 <select class="22222 form-control select-item droplist-item-cm input-sm pull-left" name="cmline_item_id[]" >
-                                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => "","_item" => $_cm_item])
                                                                     <option class="hidden" value="" />
                                                                 </select>
                                                             </td>
@@ -486,7 +486,7 @@
             <td class="cm-number-td text-right">2</td>
             <td>
                 <select class="22222 form-control select-item input-sm pull-left" name="cmline_item_id[]" >
-                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                    @include("member.load_ajax_data.load_item_category", ['add_search' => "","_item" => $_cm_item])
                     <option class="hidden" value="" />
                 </select>
             </td>

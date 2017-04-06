@@ -669,7 +669,7 @@ class EcommerceProductController extends Member
 				$option_value = $option_value." • ";
 			}
 		}
-		$exist_variant 	= Tbl_ec_product::Variant(" • ")->where("prod_id", $product_id)->where("evariant_id","<>",$variant_id)->where("eprod_shop_id", $this->getShopId())->first();
+		$exist_variant 	= Tbl_ec_product::Variant(" • ")->where("eprod_id", $product_id)->where("evariant_id","<>",$variant_id)->where("eprod_shop_id", $this->getShopId())->first();
 
 		if($exit_variant)
 		{

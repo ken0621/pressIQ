@@ -38,6 +38,7 @@ use URL;
 use DB;
 use Crypt;
 use Session;
+use Excel;
 
 /**
  * Import Item Module - all importation related module
@@ -56,6 +57,48 @@ class ItemImportController extends Member
 	{
 
 		return view('member.import.item_import');
+	}
+
+	public function getItemTemplate()
+	{
+		Excel::create("ItemTemplate", function($excel)
+		{
+			// Set the title
+		    $excel->setTitle('Digimahouse');
+
+		    // Chain the setters
+		    $excel->setCreator('DigimaWebSolutions')
+		          ->setCompany('DigimaWebSolutions');
+
+		    $excel->sheet('Template', function($sheet) {
+		    	$header = [
+		    				'Type',
+		    				'Name',
+		    				'Sku',
+		    				'UM',
+		    				'Category',
+		    				'Sales Information',
+		    				'Sales Price',
+		    				'Income Account',
+		    				'Sale to Customer',
+		    				'Purchase From Supplier',
+		    				'Purchasing Information',
+		    				'Purchase Cost',
+		    				'Barcode',
+		    				'Qty on Hand',
+		    				'Reorder Point',
+		    				'As of Date',
+		    				'Asset Account',
+		    				'Packing Size',
+		    				'Manufacturer'
+		    				];
+		    	$sheet->freezeFirstRow();
+		        $sheet->row(1, $header);
+
+		    });
+
+
+		})->download('csv');
 	}
 
 	public function postReadFile()
@@ -302,9 +345,64 @@ class ItemImportController extends Member
 		$json["tr_data"]   .= "<td nowrap>".$manufacturer."</td>";
 		$json["tr_data"]   .= "</tr>";
 
-		$json["input_data"]	= Request::input();
+		$json["value_data"]	= $value;
 
         return json_encode($json);
+	}
+
+	public function postExportError()
+	{
+		$_value = Request::input('error_data');
+
+		if($_value)
+		{
+			Excel::create("ItemImportError", function($excel)
+			{
+				// Set the title
+			    $excel->setTitle('Digimahouse');
+
+			    // Chain the setters
+			    $excel->setCreator('DigimaWebSolutions')
+			          ->setCompany('DigimaWebSolutions');
+
+			    $excel->sheet('Template', function($sheet) {
+			    	$header = [
+			    				'Type',
+			    				'Name',
+			    				'Sku',
+			    				'UM',
+			    				'Category',
+			    				'Sales Information',
+			    				'Sales Price',
+			    				'Income Account',
+			    				'Sale to Customer',
+			    				'Purchase From Supplier',
+			    				'Purchasing Information',
+			    				'Purchase Cost',
+			    				'Barcode',
+			    				'Qty on Hand',
+			    				'Reorder Point',
+			    				'As of Date',
+			    				'Asset Account',
+			    				'Packing Size',
+			    				'Manufacturer'
+			    				];
+			    	$sheet->freezeFirstRow();
+			        $sheet->row(1, $header);
+			        foreach($_value as $key=>$value)
+			        {
+			        	$sheet->row($key+2, $value);
+			        }
+
+			    });
+
+
+			})->download('csv');
+		}
+
+		$json["status"] = 'success';
+
+		return json_encode($json);
 	}
 
 	public function create_category($name)

@@ -4,6 +4,7 @@ var main_file   = '';
 var ctr         = 0;
 var data_value  = '';
 var data_length = '';
+var error_data  = [];
 
 function import_csv()
 {
@@ -100,6 +101,7 @@ function import_csv()
     function submit_data(value)
     {
         token = $(".token").val();
+
         if(ctr < data_length)
         {
             $.ajax(
@@ -110,6 +112,7 @@ function import_csv()
                 data:{
                     _token: token,
                     value: value,
+                    error_data: error_data,
                     input: objectifyForm($(".import-validation").serializeArray())
                 },
                 success: function(data)
@@ -122,14 +125,40 @@ function import_csv()
                     $(".progress-bar").html(percent+"%");
 
                     $(".table-import-container tbody").append(data.tr_data);
-
-                    submit_data(data_value[ctr]);
+                    
+                    if(data.status == "error") error_data.push(value);
+                    
+                    if(ctr < 2)
+                    {
+                        submit_data(data_value[ctr]);
+                    }
                 },
                 error: function(e)
                 {
                     console.log(e.error());
                     toastr.error(e.error() + '. Please Contact The Administrator.');
                 }
+            });
+        }
+        else
+        {
+            $.ajax(
+            {
+                url: '/member/item/import/export-error',
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    error_data: error_data
+                },
+                success: function(data)
+                {
+
+                },
+                error: function(e)
+                {
+
+                }
+                
             });
         }
     }

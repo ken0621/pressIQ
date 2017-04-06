@@ -10,6 +10,7 @@
                 <small>
                 </small>
             </h1>
+            <a href="/member/item/import/item-template" target="_new" class="btn btn-custom-white pull-right">Download Item Template</a>
         </div>
     </div>
 </div>

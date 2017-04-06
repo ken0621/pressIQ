@@ -33,6 +33,8 @@ class DashboardController extends Member
 		$data["count_ar"]		= Invoice::count_ar();
 		$data["pis"]			= Purchasing_inventory_system::check();
 
+		$data["sales_amount"]	= currency("PHP",Invoice::get_sales_amount());
+
 		$data['_account']       = Accounting::getAllAccount();
 		$data['_category']      = Category::getAllCategory();
 		$data['_customer']      = Customer::getAllCustomer();

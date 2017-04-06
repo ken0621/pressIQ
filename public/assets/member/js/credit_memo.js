@@ -373,19 +373,11 @@ function credit_memo(){
 		$parent.find(".txt-qty").val(1).change();
 
 		if($this.find("option:selected").attr("has-um") != '')
-		{
-			$.ajax(
+		{			
+			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
-				url: '/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"),
-				method: 'get',
-				success: function(data)
-				{
-					$parent.find(".select-um").html(data).globalDropList("reload").globalDropList("enabled");
-				},
-				error: function(e)
-				{
-					console.log(e.error());
-				}
+				$(this).globalDropList("reload").globalDropList("enabled");
+				$(this).val($(this).find("option:first").val()).change();
 			})
 		}
 		else

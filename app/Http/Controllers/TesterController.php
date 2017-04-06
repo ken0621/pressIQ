@@ -50,7 +50,12 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        
+        $var = ['hi','pi'];
+        if($var)
+        {
+            dd(true);
+        }
+        dd(false);
     }
 
     public function getJournal()

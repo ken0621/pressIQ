@@ -17,12 +17,19 @@ class ShopProductController extends Shop
     {
         $data["page"] = "Product";
         $type = Request::input("type");
+        $brand = Request::input("brand");
         if ($type) 
         {
             // Get Product by Category
             $product = Ecom_Product::getAllProductByCategory($type, $this->shop_info->shop_id);
             // Get Breadcrumbs
-            $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($type, $this->shop_info);
+            $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($type, $this->shop_info->shop_id);
+        }
+        elseif($brand)
+        {
+            $product = Ecom_product::getProductByCategoryName($brand, $this->shop_info->shop_id);
+            dd($product);
+            $data["breadcrumbs"][0]["type_name"] = $brand;
         }
         else
         {

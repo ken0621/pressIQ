@@ -305,60 +305,74 @@
             </div>
                 <div class="load-data" target="encashment_table" slot="50" orderby="asc">
                     <div id="encashment_table">
-                        <table class="table table-bordered table-condensed">
-                    <thead>
-                        <th>Slot</th>
-                        <th>Name</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Tax</th>
-                        <th>Processing Fee</th>
-                        <th>Amount</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>View</th>
-                    </thead>
-                    <tbody>
-                    @if(count($history) >= 1)
-                      @foreach($history as $key => $value)
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <td><input type="checkbox"></td>
+                            <th>Slot</th>
+                            <th>Name</th>
+                            <th>From</th>
+                            <th>To</th>
+                            <th>Tax</th>
+                            <th>Processing Fee</th>
+                            <th>Amount</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>View</th>
+                        </thead>
+                        <tbody>
+                        @if(count($history) >= 1)
+                          @foreach($history as $key => $value)
+                            <tr>
+                              <td><input type="checkbox"></td>
+                              <td><a href="javascript:" class="popup" link="/member/mlm/slot/view/{{$value->slot_id}}" size="lg">{{$value->slot_no}}</a></td>
+                              <td><a href="javascript:" class="popup" link="/member/customer/customeredit/{{$value->customer_id}}">{{ name_format_from_customer_info($value) }}</a></td>
+                              <td>{{$value->enchasment_process_from}}</td>
+                              <td>{{$value->enchasment_process_to}}</td>
+
+                              @if($value->enchasment_process_tax_type == 0)
+                              <td>{{$value->enchasment_process_tax}}</td>
+                              @else
+                              <td>{{$value->enchasment_process_tax}}%</td>
+                              @endif
+
+                              @if($value->enchasment_process_p_fee_type == 0)
+                              <td>{{$value->enchasment_process_p_fee}}</td>
+                              @else
+                              <td>{{$value->enchasment_process_p_fee}}%</td>
+                              @endif
+
+                              <td>{{$value->encashment_process_taxed}}</td>
+                              <td>{{$value->wallet_log_amount * -1}}</td>
+
+                              @if($value->encashment_process_type == 0)
+                              <td class="alert alert-warning">Pending</td>
+                              @else
+                              <td class="bg-primary">Processed</td>
+                              @endif
+
+                              <td><a class="btn btn-primary" href="/member/mlm/encashment/view/{{$value->encashment_process}}">View</a></td> </tr>
+                          @endforeach
+                          @if($request != 1)
+                          <tr>
+                              <td></td>
+                              <td colspan="20"><button class="btn btn-success col-md-1">Process</button> <span class="alert-warning col-md-12">By using the Process Button, all checked request will be process. Note: Please verify all encashment details before processing. You can view the Encashement report at under<a target="_blank" href="/member/mlm/report"> Encashment(Requested)</a> </span></td>
+                          </tr>
+                          <tr>
+                              <td></td>
+                              <td colspan="20"><button class="btn btn-danger col-md-1">Deny</button> <span class="alert-warning col-md-12">By using the Deny Button, all checked request will be denied and all the wallet will be returned to the account. Note: Please verify all encashment details before Denying. You can view the Encashement report at under<a target="_blank" href="/member/mlm/report">Encashment (Requested)</a></span></td>
+                          </tr>
+                          @endif
+
+
+                        @else
                         <tr>
-                          <td><a href="javascript:" class="popup" link="/member/mlm/slot/view/{{$value->slot_id}}" size="lg">{{$value->slot_no}}</a></td>
-                          <td><a href="javascript:" class="popup" link="/member/customer/customeredit/{{$value->customer_id}}">{{ name_format_from_customer_info($value) }}</a></td>
-                          <td>{{$value->enchasment_process_from}}</td>
-                          <td>{{$value->enchasment_process_to}}</td>
-
-                          @if($value->enchasment_process_tax_type == 0)
-                          <td>{{$value->enchasment_process_tax}}</td>
-                          @else
-                          <td>{{$value->enchasment_process_tax}}%</td>
-                          @endif
-
-                          @if($value->enchasment_process_p_fee_type == 0)
-                          <td>{{$value->enchasment_process_p_fee}}</td>
-                          @else
-                          <td>{{$value->enchasment_process_p_fee}}%</td>
-                          @endif
-
-                          <td>{{$value->encashment_process_taxed}}</td>
-                          <td>{{$value->wallet_log_amount * -1}}</td>
-
-                          @if($value->encashment_process_type == 0)
-                          <td class="alert alert-warning">Pending</td>
-                          @else
-                          <td class="bg-primary">Processed</td>
-                          @endif
-
-                          <td><a class="btn btn-primary" href="/member/mlm/encashment/view/{{$value->encashment_process}}">View</a></td> </tr>
-                      @endforeach
-                    @else
-                    <tr>
-                      <td colspan="40">
-                        <center>No Encashment History.</center>
-                      </td>
-                    </tr>
-                    @endif
-                    </tbody>
-                  </table>
+                          <td colspan="40">
+                            <center>No Encashment History.</center>
+                          </td>
+                        </tr>
+                        @endif
+                        </tbody>
+                    </table>
                   <center>{!! $history->render() !!}</center>
                     </div> 
                 </div>

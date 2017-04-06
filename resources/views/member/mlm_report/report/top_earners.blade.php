@@ -52,7 +52,7 @@
                                         {{$key}}
                                     @endif 
                                 </td>
-                                <td class="change_currency">{{$value}}</td>
+                                <td>{{currency('PHP', $value)}}</td>
                             </tr>
                             <?php $rank++;?>
                             @endforeach

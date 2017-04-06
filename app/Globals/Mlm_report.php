@@ -346,7 +346,7 @@ class Mlm_report
     	{
     		if($value->wallet_log_plan == 'ENCASHMENT')
     		{
-    			$request = 'Requested';
+    			$request = 'Wallet';
 	    		if($value->encashment_process_type  == 1)
 	    		{
 	    			$request = 'Processed';
@@ -360,7 +360,7 @@ class Mlm_report
     		{
     			if($value->encashment_process == null)
     			{
-    				$request = 'Pending';
+    				$request = 'Wallet';
     			}
     			else
     			{
@@ -384,6 +384,60 @@ class Mlm_report
     	$data['request'] = $request_a;
 
     	return view('member.mlm_report.report.encashment', $data);
+    }
+    public static function encashment_rep_req($shop_id)
+    {
+        $encashment_req =Tbl_mlm_slot_wallet_log::slot()
+        ->customer()
+        ->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
+        ->join('tbl_mlm_encashment_process', 'tbl_mlm_encashment_process.encashment_process', '=', 'tbl_mlm_slot_wallet_log.encashment_process')
+        ->join('tbl_mlm_encashment_process_details', 'tbl_mlm_encashment_process_details.encashment_process','=', 'tbl_mlm_slot_wallet_log.encashment_process')
+        ->where('wallet_log_plan', 'ENCASHMENT')
+        ->where('encashment_process_type', 0)
+        ->orderBy('wallet_log_id', 'DESC')
+        ->orderBy('bank_name', 'DESC')
+        ->get()->keyBy('wallet_log_id');
+        $request_by_day = [];
+        $request_by_month = [];
+        foreach($encashment_req as $key => $value)
+        {
+            $date = Carbon::parse($value->wallet_log_date_created)->format('d-M-Y');
+            $date_m = Carbon::parse($value->wallet_log_date_created)->format('M/Y');
+            $date_y = Carbon::parse($value->wallet_log_date_created)->format('Y');
+            $request_by_day[$date][$key] = $value;
+            $request_by_month[$date_m][$key] = $value;
+        }
+
+        $data['by_day'] = $request_by_day;
+        $data['by_month'] = $request_by_month;
+        return view('member.mlm_report.report.encashment_requested', $data);
+    }
+    public static function encashment_rep_pro($shop_id)
+    {
+        $encashment_req =Tbl_mlm_slot_wallet_log::slot()
+        ->customer()
+        ->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
+        ->join('tbl_mlm_encashment_process', 'tbl_mlm_encashment_process.encashment_process', '=', 'tbl_mlm_slot_wallet_log.encashment_process')
+        ->join('tbl_mlm_encashment_process_details', 'tbl_mlm_encashment_process_details.encashment_process','=', 'tbl_mlm_slot_wallet_log.encashment_process')
+        ->where('wallet_log_plan', 'ENCASHMENT')
+        ->where('encashment_process_type', 1)
+        ->orderBy('wallet_log_id', 'DESC')
+        ->orderBy('bank_name', 'DESC')
+        ->get()->keyBy('wallet_log_id');
+        $request_by_day = [];
+        $request_by_month = [];
+        foreach($encashment_req as $key => $value)
+        {
+            $date = Carbon::parse($value->wallet_log_date_created)->format('d-M-Y');
+            $date_m = Carbon::parse($value->wallet_log_date_created)->format('M/Y');
+            $date_y = Carbon::parse($value->wallet_log_date_created)->format('Y');
+            $request_by_day[$date][$key] = $value;
+            $request_by_month[$date_m][$key] = $value;
+        }
+
+        $data['by_day'] = $request_by_day;
+        $data['by_month'] = $request_by_month;
+        return view('member.mlm_report.report.encashment_processed', $data);
     }
 
     public static function product_sales_report($shop_id)

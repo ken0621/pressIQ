@@ -111,6 +111,8 @@ class Mlm_EncashmentController extends Member
             }
             $data['history'] = $history->join('tbl_mlm_encashment_process', 'tbl_mlm_encashment_process.encashment_process', '=', 'tbl_mlm_slot_wallet_log.encashment_process')
             ->paginate(10);
+
+            $data['request'] = $request;
         }
         
         $data['from'] = $this->get_last_wallet($shop_id);

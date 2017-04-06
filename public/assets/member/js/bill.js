@@ -28,9 +28,16 @@ function bill()
 		//cycy
 		$(document).on("click", ".remove-tr", function(e){
 			if($(".tbody-item .remove-tr").length > 1){
-				// var remove = $(this).attr("tr-id");
-				// $(remove).remove();
-				$(this).parent().remove();
+				if($(this).attr("tr_id") != null)
+				{
+					$(".tr-"+$(this).attr("tr_id")).remove();
+			        $(".po-"+po_id).removeClass("hidden");
+				}
+				else
+				{
+					$(this).parent().remove();
+				}
+
 				action_reassign_number();
 				action_compute();
 			}			
@@ -429,7 +436,8 @@ function bill()
 		$(".purchase-order-container").load("/member/vendor/load_purchase_order/"+vendor_id , function()
 			{
 				$(".purchase-order").removeClass("hidden");
-				$(".drawer").drawer({openClass: "drawer-open"});
+				// $(".drawer").drawer({openClass: "drawer-open"});
+				$(".drawer-toggle").trigger("click");
 			});
 	}
 	function action_load_item_info($this)
@@ -583,33 +591,30 @@ function add_po_to_bill(po_id)
 		type : "get",
 		success : function(data)
 		{
-			// var item = $.parseJSON(data);
-			// console.log(item);
-			var html = "";
              $(data).each(function (a, b)
              {				
 	             $("tbody.draggable").prepend(global_tr_html);
-	             $container = $("tbody.draggable .tr-draggable:first");
+	             bill.action_trigger_select_plugin_not_last();
+	             var $container = $("tbody.draggable .tr-draggable:first");
 	             // $this.closest(".tr-draggable");
 
+	             $container.addClass("tr-"+b.poline_po_id);
 	             $container.find(".select-item").val(b.poline_item_id).change();
 	             $container.find(".txt-desc").val(b.poline_description);
-	         	 // bill.action_trigger_select_plugin_not_last();
 	             $container.find(".select-um").load('/member/item/load_one_um/'+b.multi_um_id, function()
 	             	{
 	             		$container.find(".select-um").globalDropList("reload");
 	             		$container.find(".select-um").val(b.poline_um).change();
 	             	});
 
-	             
 	             $container.find(".txt-qty").val(b.poline_qty);
 	             $container.find(".txt-rate").val(b.poline_rate);
 	             $container.find(".txt-amount").val(b.poline_amount);
+	             $container.find(".remove-tr").addClass("remove-tr"+b.poline_po_id);
+	             $container.find(".remove-tr").attr("tr_id", b.poline_po_id);
              });
-
-             // $(html).insertBefore(".tbody-item tr:first");
-             // bill.action_reassign_number();
-             // bill.action_compute();
+             bill.action_reassign_number();
+	        $(".po-"+po_id).addClass("hidden");
 		},
 		error : function()
 		{

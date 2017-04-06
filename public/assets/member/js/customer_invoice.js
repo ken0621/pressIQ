@@ -325,7 +325,7 @@ function customer_invoice(){
 
 			/* RETURN TO NUMBER IF THERE IS COMMA */
 			cm_qty 		= action_return_to_number(cm_qty);
-			cm_rate 		= action_return_to_number(cm_rate);
+			cm_rate 	= action_return_to_number(cm_rate);
 
 			var cm_total_per_tr = (cm_qty * cm_rate).toFixed(2);
 

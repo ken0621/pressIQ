@@ -11,13 +11,9 @@
     <div class="drawer drawer-default">
             <div class="drawer-brand">Purchase Order</div>
         <nav class="drawer-nav">
-            <div class="form-group">
-                <div class="col-md-12">
-                    <div class="clearfix purchase-order-container">
-                            @include('member.load_ajax_data.load_purchase_order')
-                    </div>   
-                </div>
-            </div>
+            <div class="clearfix purchase-order-container">
+                    @include('member.load_ajax_data.load_purchase_order')
+            </div>   
         </nav>
     </div>
 

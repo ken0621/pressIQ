@@ -56,7 +56,7 @@
                         </div>
                         <div class="col-sm-2">
                             <label>P.O Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="po_date" value="{{$po->po_date or ''}}"/>
+                            <input type="text" class="datepicker form-control input-sm" name="po_date" value="{{$po->po_date or date('m/d/y')}}"/>
                         </div>
                         <div class="col-sm-2">
                             <label>Due Date</label>

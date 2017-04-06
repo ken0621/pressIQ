@@ -31,7 +31,7 @@ function bill()
 				if($(this).attr("tr_id") != null)
 				{
 					$(".tr-"+$(this).attr("tr_id")).remove();
-			        $(".po-"+po_id).removeClass("hidden");
+			        $(".po-"+$(this).attr("tr_id")).removeClass("hidden");
 				}
 				else
 				{

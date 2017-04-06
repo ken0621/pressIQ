@@ -56,8 +56,6 @@ class Vendor_CreateBillController extends Member
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['action']     = "/member/vendor/create_bill/add";
-
-        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_paid",0)->get();
         
         $id = Request::input("id");
         if($id)
@@ -73,7 +71,7 @@ class Vendor_CreateBillController extends Member
     }
     public function load_purchase_order($vendor_id)
     {
-        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$vendor_id)->where("po_is_paid",0)->get();
+        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$vendor_id)->where("po_is_billed",0)->get();
 
         return view("member.load_ajax_data.load_purchase_order",$data);
     }

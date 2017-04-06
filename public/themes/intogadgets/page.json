@@ -158,7 +158,7 @@
 		"home_brand_image" :
 		{
 			"label":"Brand Images",
-			"type":"gallery",
+			"type":"brand",
 			"default":"",
 			"size":"6"
 		},
@@ -189,6 +189,13 @@
 			"type":"collection",
 			"default":"",
 			"size":"6"
+		},
+		"home_brand_image_link" :
+		{
+			"label":"Home Brand Image and Link",
+			"type":"brand",
+			"default":"",
+			"size":"12"
 		}
 	},
 	"about":

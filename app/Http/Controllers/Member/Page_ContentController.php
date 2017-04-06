@@ -45,7 +45,7 @@ class Page_ContentController extends Member
 
         $data["company_info"] = collect(Tbl_content::where("shop_id", $this->user_info->shop_id)->get())->keyBy('key');
         $data["_collection"] = Tbl_collection::where("shop_id", $this->user_info->shop_id)->where("archived", 0)->where("collection_status", 1)->get();
-        
+
         return view('member.page.page_content', $data);
     }
 

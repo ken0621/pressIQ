@@ -91,9 +91,9 @@
                                     <td>{{$value->item_code_customer_email}}</td>
                                     
                                     <td>{{$value->item_code_date_created}}</td>
-                                    <td>{{$value->item_subtotal}}</td>
-                                    <td>{{$value->item_discount}}</td>
-                                    <td>{{$value->item_total}}</td>
+                                    <td>{{currency('PHP', $value->item_subtotal)}}</td>
+                                    <td>{{currency('PHP', $value->item_discount)}}</td>
+                                    <td>{{currency('PHP', $value->item_total)}}</td>
                                     <td>
                                         
                                         <?php 
@@ -114,8 +114,8 @@
                                         }
                                         ?>
                                     </td>
-                                    <td>{{$value->item_code_tendered_payment}}</td>
-                                    <td>{{$value->item_code_change}}</td>
+                                    <td>{{currency('PHP', $value->item_code_tendered_payment)}}</td>
+                                    <td>{{currency('PHP', $value->item_code_change)}}</td>
                                 </tr>
                             @endforeach
                         </tbody>

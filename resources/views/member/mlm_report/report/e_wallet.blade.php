@@ -52,10 +52,10 @@
                                         </td>
                                         @foreach($plan as $key2 => $value2)
                                             @if(isset($value[$key2]))
-                                                <td class="change_currency">{{$value[$key2]}}</td>
+                                                <td >{{currency('PHP', $value[$key2])}}</td>
                                                 <?php $current += $value[$key2]; ?>
                                             @else
-                                                <td class="change_currency">0</td>
+                                                <td class="">{{currency('PHP', 0)}}</td>
                                             @endif
                                         @endforeach
                                         <td class="change_currency">

@@ -50,9 +50,9 @@
                                 @endif
                                 @foreach($request as $key2 => $value2)
                                     @if(isset($value[$key2]))
-                                    <td class="change_currency">{{$value[$key2]}}</td>
+                                    <td>{{currency('PHP', $value[$key2])}}</td>
                                     @else
-                                    <td>0</td>
+                                    <td>{{currency('PHP',0)}}</td>
                                     @endif
                                 @endforeach
 

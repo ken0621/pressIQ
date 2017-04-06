@@ -36,16 +36,16 @@ $data['icon'] = 'fa fa-money';
               @if($value->enchasment_process_tax_type == 1)
               <td>{{$value->enchasment_process_tax}}%</td>
               @else
-              <td>{{$value->enchasment_process_tax}}</td>
+              <td>{{currency('PHP', $value->enchasment_process_tax)}}</td>
               @endif
               @if($value->enchasment_process_p_fee_type == 1)
               <td>{{$value->enchasment_process_p_fee}}%</td>
               @else
-              <td>{{$value->enchasment_process_p_fee}}</td>
+              <td>{{currency('PHP',$value->enchasment_process_p_fee)}}</td>
               @endif
 
-              <td>{{$value->encashment_process_taxed}}</td>
-              <td>{{$value->wallet_log_amount * -1}}</td>
+              <td>{{currency('PHP',$value->encashment_process_taxed)}}</td>
+              <td>{{currency('PHP',$value->wallet_log_amount * -1)}}</td>
 
               @if($value->encashment_process_type == 0)
               <td class="alert alert-warning">Pending</td>
@@ -126,7 +126,7 @@ $data['icon'] = 'fa fa-money';
                 @endif
               </td>
               <td>{{$value['wallet_log_date_created']}}</td>
-              <td>{{$value['wallet_log_amount']}}</td>
+              <td>{{currency('PHP', $value['wallet_log_amount'])}}</td>
               <td>{{$value['wallet_log_plan']}}</td>
             </tr>
           @endforeach

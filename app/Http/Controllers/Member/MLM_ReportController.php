@@ -65,6 +65,8 @@ class MLM_ReportController extends Member
         $data['report_list']['top_earners'] = 'Top Earners';
         $data['report_list']['new_register'] = 'Registered Account';
         $data['report_list']['encashment_rep'] = 'Encashment';
+        $data['report_list']['encashment_rep_req'] = 'Encashment(Requested)';
+        $data['report_list']['encashment_rep_pro'] = 'Encashment(Processed)';
         $data['report_list']['product_sales_report'] = 'Product Sales Report';
         $data['report_list']['membership_code_sales_report'] = 'Membership Sales Report';
         

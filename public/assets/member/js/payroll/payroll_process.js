@@ -15,7 +15,7 @@ function payroll_process()
 		$(".custom-panel-header .btn").unbind("click");
 		$(".custom-panel-header .btn").bind("click", function(e)
 		{
-			e.stopPropagation();
+			// e.stopPropagation();
 		});
 	}
 

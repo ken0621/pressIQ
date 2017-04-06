@@ -62,6 +62,23 @@ class Tbl_payroll_record extends Model
 	// philhealth_contribution_ee
 	// philhealth_contribution_er
 	// pagibig_contribution
+	// regular_hours
+	// late_overtime
+	// early_overtime
+	// late_hours
+	// under_time_hours
+	// rest_day_hours
+	// extra_day_hours
+	// total_hours
+	// night_differential
+	// special_holiday_hours
+	// regular_holiday_hours
+	// total_regular_days
+	// total_rest_days
+	// total_extra_days
+	// total_rh
+	// total_sh
+	// total_worked_days
 
 	public function scopegetperiod($query, $shop_id = 0, $payroll_period_category = '', $status = 'approved')
 	{

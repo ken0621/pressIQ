@@ -282,4 +282,20 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_process/action_payroll','Member\PayrollController@action_payroll');
 	Route::any('/payroll_process/confirm_cancel_payroll/{action}/{id}','Member\PayrollController@confirm_cancel_payroll');
 	/* PAYROLL PROCESS END */
-});	
+
+	/* PAYROLL REGISTER START */
+	Route::any('/payroll_register','Member\PayrollController@payroll_register');
+	Route::any('/payroll_register/breakdown_uncompute_static/{employee_id}/{period_company_id}','Member\PayrollController@breakdown_uncompute_static');
+	/* PAYROLL REGISTER END */
+
+
+	/* PAYROLL POSTED START */
+	Route::any('/payroll_post','Member\PayrollController@payroll_post');
+	/* PAYROLL POSTED END */
+
+	/* PAYROLL APPROVED START */
+	Route::any('/payroll_approved_view','Member\PayrollController@payroll_approved_view');
+	Route::any('/payroll_approved_view/approve_payroll','Member\PayrollController@approve_payroll');
+	Route::any('/payroll_approved_view/payroll_approved_company/{id}','Member\PayrollController@payroll_approved_company');
+	/* PAYROLLL APPROVED END */
+});	 

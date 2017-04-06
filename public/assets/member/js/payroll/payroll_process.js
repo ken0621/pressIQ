@@ -33,7 +33,7 @@ function payroll_process()
 	{
 		$(".break-down-div").load('/member/payroll/payroll_process/payroll_compute_brk_unsaved/' + employee_id + '/' + period_id + ' .break-down-div', function()
 		{
-			toastr.success("Computation has been updated.");
+			toastr.success("Payroll has been updated.");
 			
 		});
 
@@ -44,6 +44,15 @@ function payroll_process()
 	{
 		$(".process-container").load("/member/payroll/payroll_process .process-container", function()
 		{
+			toggle_custom_panel_header_event();
+		});
+	}
+
+	this.reload_page = function()
+	{
+		$(".payroll-body").load("/member/payroll/payroll_process .payroll-body", function()
+		{
+			toastr.success("Payroll has been updated.");
 			toggle_custom_panel_header_event();
 		});
 	}
@@ -62,6 +71,11 @@ function submit_done(data)
 	if(data.function_name == 'reload_break_down')
 	{
 		payroll_process.reload_break_down(data.payroll_employee_id, data.payroll_period_company_id);
+	}
+
+	if(data.function_name == 'reload_page')
+	{
+		payroll_process.reload_page();
 	}
 	data.element.modal("toggle");
 }

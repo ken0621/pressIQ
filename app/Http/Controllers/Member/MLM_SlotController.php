@@ -1002,5 +1002,9 @@ class MLM_SlotController extends Member
             $slots = Tbl_mlm_slot::where('shop_id', $shop_id)->get();
             Mlm_slot_log::update_all_released();
         }
+        else if ($code == 'fix_give_voucher')
+        {
+            
+        }
     }
 }

@@ -16,6 +16,7 @@ use App\Models\Tbl_membership_code;
 use App\Models\Tbl_mlm_encashment_settings;
 
 use App\Globals\Mlm_member;
+use App\Globals\Settings;
 class Mlm extends Controller
 {
     public static $customer_id;
@@ -30,6 +31,10 @@ class Mlm extends Controller
     {	
         // dd(Self::$slot_id);  
         // dd(Session::get('mlm_member') );
+        
+        /* Set Email Configuration */
+        Settings::set_mail_setting(Self::$shop_id);
+
         if(Session::get('mlm_member') != null)
         {
             $session = Session::get('mlm_member');

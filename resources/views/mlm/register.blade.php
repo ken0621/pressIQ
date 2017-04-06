@@ -68,6 +68,27 @@
         </style>
     </head>
     <body style="background-image: url('/resources/assets/new_front/img/login-bg.jpg'); overflow: auto;">
+    <div class="modal-loader hidden"></div>
+    <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+            <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Modal Header</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Some text in the modal.</p>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
         <div class="container">
             <header>
                 <nav class="codrops-demos" style="text-align: center;">
@@ -154,7 +175,7 @@
 
 
                                 <p class="login button"> 
-                                    <input type="submit" value="Sign Up" /> 
+                                    <input type="submit" value="Sign Up" class="butonn_register" onclick="click_submit_button(this)" /> 
                                 </p>
                                 <div class="divider-holder" style="margin-bottom: 15px;">
                                     <div class="divider"></div>
@@ -172,15 +193,26 @@
         <script type="text/javascript" src="/assets/member/global.js"></script>
         <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
         <script type="text/javascript">
+        function click_submit_button(ito)
+        {
+            $('.global-submit').submit();
+            $('.butonn_register').attr("disabled", true);
+        }
+        
         function submit_done(data)
         {
+            $('.butonn_register').prop("disabled", false);
+            // $('.butonn_register').removeAttr("disabled");
             console.log(data);
             if(data.type == 'error')
             {
                 toastr.error(data.message);
+                $('.butonn_register').attr("disabled", false);
+                $('.butonn_register').removeAttr("disabled");
             }
             else
             {
+                $('.butonn_register').attr("disabled", true);
                 toastr.success(data.message);
                 location.href = '/mlm';
             }

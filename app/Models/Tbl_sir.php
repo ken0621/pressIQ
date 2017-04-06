@@ -11,7 +11,7 @@ class Tbl_sir extends Model
 
     public function scopeTruck($query)
     {
-    	return $query->join("tbl_truck","tbl_truck.truck_id","=","tbl_sir.truck_id");
+    	return $query->leftjoin("tbl_truck","tbl_truck.truck_id","=","tbl_sir.truck_id");
     }
     public function scopeSaleagent($query)
     {

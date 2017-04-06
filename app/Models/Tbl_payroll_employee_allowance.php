@@ -32,4 +32,15 @@ class Tbl_payroll_employee_allowance extends Model
 
 		return $query;
 	}
+
+	public function scopeemployee_allowance($query, $payroll_employee_id = 0, $payroll_allowance_category = 'fixed')
+	{
+		$query->join('tbl_payroll_allowance','tbl_payroll_allowance.payroll_allowance_id','=','tbl_payroll_employee_allowance.payroll_allowance_id')
+			 ->where('tbl_payroll_employee_allowance.payroll_employee_id', $payroll_employee_id)
+			 ->where('tbl_payroll_allowance.payroll_allowance_category', $payroll_allowance_category)
+			 ->where('tbl_payroll_employee_allowance.payroll_employee_allowance_archived', 0)
+			 ->where('tbl_payroll_allowance.payroll_allowance_archived',0);
+
+		return $query;
+	}
 }

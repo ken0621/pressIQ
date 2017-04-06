@@ -35,11 +35,15 @@ class UnitOfMeasurementController extends Member
         $item_id = $item_id == null ? 0 : $item_id;
         $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",$this->user_info->shop_id)->pluck("settings_setup_done");
 
-        $data["status"] = "" ;
-        if($check != 0)
+        $data["status"] = "";
+        $data["um_multi"] = Tbl_unit_measurement_multi::where("multi_um_id",$um_id)->where("is_base",0)->count();
+        if($data["um_multi"] != 0)
         {
-            $data["status"] = "pop-up-um";
-            $data["action"] = "/member/item/um/add_base/".$um_id."/".$item_id;
+            if($check != 0)
+            {
+                $data["status"] = "pop-up-um";
+                $data["action"] = "/member/item/um/add_base/".$um_id."/".$item_id;
+            }            
         }
 
         return json_encode($data);
@@ -466,7 +470,8 @@ class UnitOfMeasurementController extends Member
             $multi_id_first = null;
 
             $multi_id_first = Tbl_unit_measurement_multi::where("is_base",1)->where("multi_um_id",$um_id)->pluck("multi_id");
-            $ctr = Tbl_unit_measurement::where("um_name",$set_name)->where("um_id","!=",$um_id)->count();
+            $ctr = Tbl_unit_measurement::where("um_name",$set_name)->where("um_id","!=",$um_id)->where("um_shop",$this->user_info->shop_id)->count();
+            
             if($ctr >= 1)
             {
                 $data["status"] = "error";

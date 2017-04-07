@@ -48,6 +48,7 @@ use App\Models\Tbl_payroll_over_time_rate_default;
 use App\Models\Tbl_payroll_group;
 use App\Models\Tbl_payroll_group_rest_day;
 use App\Models\Tbl_payroll_time_sheet_record;
+use App\Models\Tbl_payroll_record;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_bank_convertion;
@@ -56,6 +57,7 @@ use App\Models\Tbl_payroll_employee_search;
 use App\Models\Tbl_payroll_adjustment;
 
 use App\Globals\Payroll;
+use App\Globals\PayrollJournalEntries;
 
 class PayrollController extends Member
 {
@@ -4033,6 +4035,18 @@ class PayrollController extends Member
           return $data;
      }
      /* PAYROLL PROCESS END */
+
+     public function payroll_summary()
+     {
+          $data['date_start'] = date('m/d/Y', strtotime('first day of this month'));
+          $data['date_end']   = date('m/d/Y', strtotime('last day of this month'));
+
+          $record = Tbl_payroll_record::getperiod(Self::shop_id(), 'Semi-monthly')->get();
+
+          dd($record);
+
+          return view('member.payroll.payroll_journal_entries', $data);
+     }
 
      /* PAYROLL ADJUSTMENT START */
      public function modal_create_payroll_adjustment($payroll_employee_id, $payroll_period_company_id)

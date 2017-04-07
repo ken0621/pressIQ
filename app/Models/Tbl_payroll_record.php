@@ -72,4 +72,6 @@ class Tbl_payroll_record extends Model
 
 		return $query;
 	}	
+
+	public function scope
 }

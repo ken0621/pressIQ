@@ -116,6 +116,9 @@ class Vendor_CreateBillController extends Member
         {
             if($item_line)
             {
+                $item_info[$key]['itemline_poline_id']  = Request::input('poline_id')[$key];
+                $item_info[$key]['itemline_po_id']      = Request::input('itemline_po_id')[$key];
+                
                 $item_info[$key]['itemline_description']  = Request::input('itemline_description')[$key];
                 $item_info[$key]['itemline_um']           = Request::input('itemline_um')[$key];
                 $item_info[$key]['itemline_item_id']      = Request::input('itemline_item_id')[$key];

@@ -628,8 +628,8 @@ function add_po_to_bill(po_id)
 	         $(".po-listing .po_id:first").addClass("div_po_id"+po_id);
 	         $po_id.find(".po-id-input").val(po_id).change();
 
-	        $(".total-amount-input").val(po_total);
-	        $(".total-amount").html(po_total);
+	        $(".total-amount-input").val(po_total.toFixed(2));
+	        $(".total-amount").html(po_total.toFixed(2));
 
 	        $(".po-"+po_id).addClass("hidden");
 			$(".modal-loader").addClass("hidden");

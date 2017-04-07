@@ -403,7 +403,7 @@ class Customer_InvoiceController extends Member
             $cm_customer_info["cm_date"] = datepicker_input(Request::input('inv_date'));
             $cm_customer_info["cm_message"] = "";
             $cm_customer_info["cm_memo"] = "";
-            $cm_customer_info["cm_amount"] = str_repalace(",","",Request::input("subtotal_price_returns"));
+            $cm_customer_info["cm_amount"] = str_replace(",","",Request::input("subtotal_price_returns"));
 
             $cm_item_info[] = null;
             $_cm_items = Request::input("cmline_item_id");

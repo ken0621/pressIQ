@@ -617,10 +617,8 @@ function add_po_to_bill(po_id)
 	            $container.find(".txt-amount").val(b.poline_amount);
 	            $container.find(".remove-tr").addClass("remove-tr"+b.poline_po_id);
 	            $container.find(".remove-tr").attr("tr_id", b.poline_po_id);
-
              });
 
-             console.log(po_total);
 	         $(".po-listing").prepend(po_id_list);
 	         var $po_id = $(".po-listing .po_id:first");
 	         $(".po-listing .po_id:first").addClass("div_po_id"+po_id);

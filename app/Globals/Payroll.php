@@ -30,6 +30,7 @@ use App\Models\Tbl_payroll_employee_allowance;
 use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_record;
 use App\Models\Tbl_payroll_adjustment;
+use App\Models\Tbl_payroll_allowance_record;
 
 use Carbon\Carbon;
 use stdClass;
@@ -1993,95 +1994,95 @@ class Payroll
 
 	public static function getrecord_breakdown($record = array())
 	{
-		$data['payroll_employee_id']		= 0;
-		$data['payroll_period_company_id']	= 0;
-		$data['tax_status']					= 0;
-		$data['salary_taxable'] 			= 0;
-		$data['salary_sss'] 				= 0;
-		$data['salary_pagibig'] 			= 0;
-		$data['salary_philhealth'] 			= 0;
-
-		$data['tax_contribution']			= 0;
-		$data['sss_contribution_ee']		= 0;
-		$data['sss_contribution_er']		= 0;
-		$data['sss_contribution_ec']		= 0;
-		$data['pagibig_contribution']		= 0;
-		$data['philhealth_contribution_ee']	= 0;
-		$data['philhealth_contribution_er']	= 0;
-
-		$data['payroll_cola']				= 0;
-
-		$data['extra_salary']				= 0;
-		$data['extra_early_overtime'] 		= 0;
-		$data['extra_reg_overtime'] 		= 0;
-		$data['extra_night_diff'] 			= 0;
-
-		$data['regular_salary'] 			= 0;
-		$data['regular_early_overtime'] 	= 0;
-		$data['regular_reg_overtime'] 		= 0;
-		$data['regular_night_diff'] 		= 0;
-
-		$data['rest_day_salary'] 			= 0;
-		$data['rest_day_early_overtime']	= 0;
-		$data['rest_day_reg_overtime'] 		= 0;
-		$data['rest_day_night_diff'] 		= 0;
-
-		$data['rest_day_sh'] 				= 0;
-		$data['rest_day_sh_early_overtime'] = 0;
-		$data['rest_day_sh_reg_overtime'] 	= 0;
-		$data['rest_day_sh_night_diff'] 	= 0;
-
-		$data['rest_day_rh'] 				= 0;
-		$data['rest_day_rh_early_overtime'] = 0;
-		$data['rest_day_rh_reg_overtime'] 	= 0;
-		$data['rest_day_rh_night_diff'] 	= 0;
-
-		$data['rh_salary'] 					= 0;
-		$data['rh_early_overtime'] 			= 0;
-		$data['rh_reg_overtime'] 			= 0;
-		$data['rh_night_diff'] 				= 0;
-
-		$data['sh_salary'] 					= 0;
-		$data['sh_early_overtime'] 			= 0;
-		$data['sh_reg_overtime'] 			= 0;
-		$data['sh_night_diff'] 				= 0;
-
-		$data['13_month']					= 0;
-		$data['13_month_computed'] 			= 1;
 		
-		$data['total_allowance']			= 0;
+		$data = $record->toArray();
+
+		$employee_id 				= $data['payroll_employee_id'];
+		$payroll_period_company_id 	= $data['payroll_period_company_id'];
+
+		$_deduction = Tbl_payroll_deduction_payment::where('payroll_record_id', $data['payroll_record_id'])
+												  ->orderBy('deduction_name')
+												  ->get();
+
+		$_allowance = Tbl_payroll_allowance_record::where('payroll_record_id', $data['payroll_record_id'])
+												 ->orderBy('payroll_allowance_name')
+												 ->get();
+
 		$data['allowance']					= array();
-
 		$data['deduction']					= array();
+
+		$total_allowance = 0;
+		$total_deduction = 0;
+
+		foreach ($_allowance as $key => $allowance) {
+			$temp_allowance['payroll_allowance_id'] 	= $allowance->payroll_allowance_id;
+			$temp_allowance['payroll_allowance_name'] 	= $allowance->payroll_allowance_name;
+			$temp_allowance['payroll_allowance_amount'] = $allowance->payroll_record_allowance_amount;
+
+			$total_allowance += $allowance->payroll_record_allowance_amount;
+
+			array_push($data['allowance'], $temp_allowance);	
+		}
+
+		foreach($_deduction as $deduction)
+		{
+			$temp_deduction['deduction_name'] 				= $deduction->deduction_name;
+			$temp_deduction['deduction_category'] 			= $deduction->deduction_category;
+			$temp_deduction['payroll_deduction_id'] 		= $deduction->payroll_deduction_id;
+			$temp_deduction['payroll_periodal_deduction'] 	= $deduction->payroll_payment_amount;
+
+			$total_deduction += $deduction->payroll_payment_amount;
+
+			array_push($data['deduction'], $temp_deduction);
+		}
+
+		$adjustment_bonus = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Bonus')->get();
+
+		$adjustment_bonus_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Bonus')->sum('payroll_adjustment_amount');
 		
-		$data['late_deduction'] 			= 0;
-		$data['under_time']					= 0;
-		$data['agency_deduction'] 			= 0;
+		/* commission */
+		$adjustment_commission = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Commissions')->get();
 
-		$data['total_net']					= 0;
-		$data['total_gross']				= 0;
-		$data['total_deduction']			= 0;
+		$adjustment_commission_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Commissions')->sum('payroll_adjustment_amount');
 
-		$data['regular_hours']				= 0;
-		$data['late_overtime']				= 0;
-		$data['early_overtime']				= 0;
-		$data['late_hours']					= 0;
-		$data['under_time_hours']			= 0;
-		$data['rest_day_hours']				= 0;
-		$data['extra_day_hours']			= 0;
-		$data['total_hours']				= 0;
-		$data['night_differential']			= 0;
-		$data['special_holiday_hours']		= 0;
-		$data['regular_holiday_hours']		= 0;
+		/* incentives */
+		$adjustment_incentives = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Incentives')->get();
 
-		$data['total_regular_days']			= 0;
-		$data['total_rest_days']			= 0;
-		$data['total_extra_days']			= 0;
-		$data['total_rh']					= 0;
-		$data['total_sh']					= 0;
-		$data['total_worked_days']			= 0;
+		$adjustment_incentives_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Incentives')->sum('payroll_adjustment_amount');
 
-		$data['adjustment']					= array();
+		/* deductions */
+		$adjustment_deductions = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Deductions')->get();
+
+		$adjustment_deductions_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Deductions')->sum('payroll_adjustment_amount');
+
+		$data['adjustment']['bonus'] 				= $adjustment_bonus;
+		$data['adjustment']['total_bonus'] 			= $adjustment_bonus_total;
+
+		$data['adjustment']['incentives'] 			= $adjustment_incentives;
+		$data['adjustment']['total_incentives'] 	= $adjustment_incentives_total;
+
+		$data['adjustment']['commission'] 			= $adjustment_commission;
+		$data['adjustment']['total_commission'] 	= $adjustment_commission_total;
+
+		$data['adjustment']['deductions'] 			= $adjustment_deductions;
+		$data['adjustment']['total_deductions'] 	= $adjustment_deductions_total;
+		// $total_contribution 				= $data['']
+		$data['total_gross'] = 0;
+		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff'] + $data['payroll_cola'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total);
+
+
+
+
+		$data['total_deminimis'] = $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total;
+
+
+		$total_deduction += $data['tax_contribution'] + $data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution'] + $data['late_deduction'] + $data['under_time'] + $data['agency_deduction'] + $data['late_deduction'] + $data['adjustment']['total_deductions'];
+
+
+		$data['total_net']					= $data['total_gross'] - $total_deduction;
+		$data['total_deduction']			= $total_deduction;
+		$data['total_allowance']			= $total_allowance;
+		return $data;
 	}
 
 }

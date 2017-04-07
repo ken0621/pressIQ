@@ -4455,9 +4455,40 @@ class PayrollController extends Member
                return Redirect::to('/member/payroll/payroll_approved_view')->send();
           }
 
-          $data['period'] = Tbl_payroll_period_company::sel($id)->first();
+          $data['period']          = Tbl_payroll_period_company::sel($id)->first();
+          $data['_record']         = array();
+          $data['total_gross']     = 0;
+          $data['total_deduction'] = 0;
+          $data['total_net']       = 0;
 
+          $_record = Tbl_payroll_record::getcompanyrecord($id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
+          foreach($_record as $record)
+          {
+               $compute = Payroll::getrecord_breakdown($record);
+               array_push($data['_record'], $compute);
+               // dd($record);
+               $data['total_gross']     += $compute['total_gross'];
+               $data['total_deduction'] += $compute['total_deduction'];
+               $data['total_net']       += $compute['total_net'];
+          }
+          
+          // dd($data);
           return view('member.payroll.payroll_approved_company', $data);
+     }
+
+     public function payroll_record_by_id($id)
+     {
+          $record = Tbl_payroll_record::getrecord($id)->first();
+          // dd($record);
+          $compute = Payroll::getrecord_breakdown($record);
+
+          $data['emp'] = Tbl_payroll_employee_basic::where('payroll_employee_id',$record->payroll_employee_id)->first();
+
+          $data['_breakdown'] = Self::breakdown_uncompute($compute,'approved');
+          $data['payroll_period_company_id'] = $record->payroll_period_company_id;
+          $data['status'] = 'approved';
+          // dd($data);
+          return view('member.payroll.modal.modal_view_payroll_computation_unsaved',$data);
      }
      /* PAYRLL APPROVED END */
 

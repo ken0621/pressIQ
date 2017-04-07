@@ -297,5 +297,6 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_approved_view','Member\PayrollController@payroll_approved_view');
 	Route::any('/payroll_approved_view/approve_payroll','Member\PayrollController@approve_payroll');
 	Route::any('/payroll_approved_view/payroll_approved_company/{id}','Member\PayrollController@payroll_approved_company');
+	Route::any('/payroll_approved_view/payroll_record_by_id/{id}','Member\PayrollController@payroll_record_by_id');
 	/* PAYROLLL APPROVED END */
 });	 

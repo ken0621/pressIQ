@@ -83,14 +83,14 @@
 			<td style="text-align: right; font-weight: bold">{{currency("PHP",$taxable_item * (12/100))  }}</td>
 		</tr>
 		@endif
-		<tr>
+		<tr class="{{$cm_total = 0}}">
 			<td colspan="3"></td>
 			<td style="text-align: left;font-weight: bold">INVOICE TOTAL</td>
 			<td style="text-align: right; font-weight: bold">{{currency("PHP",$invoice->inv_overall_price)}}</td>
 		</tr>
 
 		@if($cm != null)
-			<tr>
+			<tr class="{{$cm_total = $cm->cm_amount}}">
 				<td colspan="5">
 					<strong>RETURNS</strong>
 				</td>
@@ -117,7 +117,7 @@
 	</tbody>
 </table>
 	<div class="row pull-right">
-		<h3><strong>TOTAL</strong> {{currency('PHP',($invoice->inv_overall_price - $cm->cm_amount))}}</h3>
+		<h3><strong>TOTAL</strong> {{currency('PHP',($invoice->inv_overall_price - $cm_total))}}</h3>
 	</div>
 </body>
 <style type="text/css">

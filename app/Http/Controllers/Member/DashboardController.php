@@ -6,6 +6,7 @@ use App\Globals\Category;
 use App\Globals\Item;
 use App\Globals\Customer;
 use App\Globals\Purchase_Order;
+use App\Globals\Purchasing_inventory_system;
 use App\Globals\Invoice;
 use App\Models\Tbl_User;
 use App\Models\Tbl_customer;

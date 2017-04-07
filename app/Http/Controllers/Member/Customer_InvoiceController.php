@@ -555,6 +555,7 @@ class Customer_InvoiceController extends Member
             }
         }
           $pdf = view('member.customer_invoice.invoice_pdf', $data);
+          dd($pdf);
           return Pdf_global::show_pdf($pdf);
     }
 }

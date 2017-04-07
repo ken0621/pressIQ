@@ -277,4 +277,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_process/modal_create_payroll_adjustment/{payroll_employee_id}/{payroll_period_company_id}','Member\PayrollController@modal_create_payroll_adjustment');
 	Route::any('/payroll_process/create_payroll_adjustment','Member\PayrollController@create_payroll_adjustment');
 	/* PAYROLL PROCESS END */
+
+	/* PAYROLL SUMMARY JOURNAL ENTRIES */
+	Route::get('/payroll_summary','Member\PayrollController@payroll_summary');
+
+	/* END */
 });	

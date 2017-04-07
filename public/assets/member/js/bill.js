@@ -3,7 +3,6 @@ var global_tr_html = $(".div-script tbody").html();
 var po_id_list = $(".div-script-po").html();
 var item_selected = ''; 
 
-var po_total = 0 ;
 function bill()
 {
 	init();
@@ -487,7 +486,7 @@ function bill()
 		$sales  = parseFloat($item.find("option:selected").attr("cost"));
 		$qty    = parseFloat($parent.find(".txt-qty").val());
 		console.log($um_qty +"|" + $sales +"|" +$qty);
-		// $parent.find(".txt-rate").val( $um_qty * $sales * $qty ).change();
+		$parent.find(".txt-rate").val( $um_qty * $sales * $qty ).change();
 	}
 
 	this.action_reload_customer = function($id)
@@ -619,7 +618,6 @@ function add_po_to_bill(po_id)
 	            $container.find(".remove-tr").addClass("remove-tr"+b.poline_po_id);
 	            $container.find(".remove-tr").attr("tr_id", b.poline_po_id);
 
-	            po_total += b.poline_amount;
              });
 
              console.log(po_total);
@@ -627,9 +625,6 @@ function add_po_to_bill(po_id)
 	         var $po_id = $(".po-listing .po_id:first");
 	         $(".po-listing .po_id:first").addClass("div_po_id"+po_id);
 	         $po_id.find(".po-id-input").val(po_id).change();
-
-	        $(".total-amount-input").val(po_total.toFixed(2));
-	        $(".total-amount").html(po_total.toFixed(2));
 
 	        $(".po-"+po_id).addClass("hidden");
 			$(".modal-loader").addClass("hidden");

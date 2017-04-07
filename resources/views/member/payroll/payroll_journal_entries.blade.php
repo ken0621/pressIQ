@@ -13,10 +13,10 @@
 			</small>
 			</h1>
 			<div class="pull-right">
-				<input type="text" class="datepicker form-control start-date" name="start_date" placeholder="End Date" />
+				<input type="text" class="datepicker form-control end-date" name="end_date" placeholder="End Date" value="{{$date_end}}" />
 			</div>
 			<div class="pull-right margin-right-10">
-				<input type="text" class="datepicker form-control end-date" name="end_date" placeholder="Start Date" />
+				<input type="text" class="datepicker form-control start-date" name="start_date" placeholder="Start Date" value="{{$date_start}}"/>
 			</div>
 		</div>
 	</div>

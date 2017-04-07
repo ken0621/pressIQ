@@ -4035,11 +4035,12 @@ class PayrollController extends Member
      }
      /* PAYROLL PROCESS END */
 
-     /
      public function payroll_summary()
      {
-          $date_now = date("Y/m/d");
-          return view('member.payroll.payroll_journal_entries');
+          $data['date_start'] = date('m/d/Y', strtotime('first day of this month'));
+          $data['date_end']   = date('m/d/Y', strtotime('last day of this month'));
+
+          return view('member.payroll.payroll_journal_entries', $data);
      }
 
      /* PAYROLL ADJUSTMENT START */

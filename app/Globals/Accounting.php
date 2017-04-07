@@ -19,7 +19,6 @@ use Carbon\carbon;
  *
  * @author Bryan Kier Aradanas
  */
-
 class Accounting
 {
 
@@ -334,10 +333,5 @@ class Accounting
 		}
 
 		return $data;
-	}
-
-	public function Payroll_Summary_journal_Entries()
-	{
-
 	}
 }

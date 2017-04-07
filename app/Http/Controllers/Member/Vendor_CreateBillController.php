@@ -56,7 +56,10 @@ class Vendor_CreateBillController extends Member
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data['action']     = "/member/vendor/create_bill/add";
+        $data['vendor_id']     = Request::input("vendor_id");
         
+        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_billed",0)->get();
+
         $id = Request::input("id");
         if($id)
         {
@@ -129,7 +132,7 @@ class Vendor_CreateBillController extends Member
             $json["status"]         = "success-bill";
             if($button_action == "save-and-edit")
             {
-                $json["redirect"]    = "/member/vendor/create_bill?id=".$bill_id;
+                $json["redirect"]    = "/member/vendor/bill_list";
             }
             elseif($button_action == "save-and-new")
             {

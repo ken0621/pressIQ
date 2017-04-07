@@ -9,10 +9,10 @@
     <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
 
     <div class="drawer drawer-default">
-            <div class="drawer-brand">Purchase Order</div>
+        <div class="drawer-brand">Purchase Order</div>
         <nav class="drawer-nav">
             <div class="clearfix purchase-order-container">
-                    @include('member.load_ajax_data.load_purchase_order')
+                @include('member.load_ajax_data.load_purchase_order')
             </div>   
         </nav>
     </div>
@@ -55,7 +55,7 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-3">
                                             <select class="form-control droplist-vendor input-sm pull-left" name="bill_vendor_id">
-                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : '']);
+                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')]);
                                             </select>
                                         </div>
                                         <div class="col-sm-4">
@@ -159,7 +159,7 @@
                                                 <tbody class="draggable tbody-item">
                                                     @if(isset($bill))
                                                         @foreach($_bill_item_line as $item)
-                                                        <tr  class="tr-draggable">
+                                                        <tr class="tr-draggable">
                                                             <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
                                                             <td class="invoice-number-td text-right">1</td>
                                                             <td>

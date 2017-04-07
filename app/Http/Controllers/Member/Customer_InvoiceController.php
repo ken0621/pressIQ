@@ -16,6 +16,7 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo;
+use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_customer_invoice_line;
 use App\Models\Tbl_unit_measurement_multi;
@@ -533,15 +534,25 @@ class Customer_InvoiceController extends Member
         $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
         foreach($data["invoice_item"] as $key => $value) 
         {
-          $um = Tbl_unit_measurement_multi::where("multi_id",$value->invline_um)->first();
-            $qty = 1;
-            if($um != null)
-            {
-                $qty = $um->unit_qty;
-            }
+            $qty = UnitMeasurement::um_qty($value->invline_um);
 
             $total_qty = $value->invline_qty * $qty;
             $data["invoice_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
+        }
+        $data["cm"] = null;
+        $data["_cmline"] = null;
+        if($data["invoice"] != null)
+        {
+            $data["cm"] = Tbl_credit_memo::where("cm_id",$data["invoice"]->credit_memo_id)->first();
+            $data["_cmline"] = Tbl_credit_memo_line::cm_item()->where("cmline_cm_id",$data["invoice"]->credit_memo_id)->get();
+
+            foreach ($data["_cmline"] as $keys => $values)
+            {
+                $qtys = UnitMeasurement::um_qty($values->cmline_um);
+
+                $total_qtys = $values->cmline_qty * $qtys;
+                $data["_cmline"][$keys]->cm_qty = UnitMeasurement::um_view($total_qtys,$values->item_measurement_id,$values->cmline_um);
+            }
         }
           $pdf = view('member.customer_invoice.invoice_pdf', $data);
           return Pdf_global::show_pdf($pdf);

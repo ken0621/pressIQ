@@ -57,7 +57,7 @@ class MLM_ReportController extends Member
 
 
 
-        $data['report_list']['general'] = 'General Report';
+        // $data['report_list']['general'] = 'General Report';
         $data['report_list']['cashflow'] = 'Complan Income Report';
         $data['report_list']['e_wallet'] = 'E-Wallet Report';
         $data['report_list']['slot_count'] = 'Slot Count';

@@ -3,6 +3,7 @@ var global_tr_html = $(".div-script tbody").html();
 var po_id_list = $(".div-script-po").html();
 var item_selected = ''; 
 
+var po_total = 0 ;
 function bill()
 {
 	init();
@@ -595,7 +596,6 @@ function add_po_to_bill(po_id)
 		type : "get",
 		success : function(data)
 		{
-			var total =0;
              $(data).each(function (a, b)
              {				
 	             $("tbody.draggable").prepend(global_tr_html);
@@ -619,7 +619,7 @@ function add_po_to_bill(po_id)
 	            $container.find(".remove-tr").addClass("remove-tr"+b.poline_po_id);
 	            $container.find(".remove-tr").attr("tr_id", b.poline_po_id);
 
-	            total += b.poline_amount;
+	            po_total += b.poline_amount;
              });
 
              console.log(total);
@@ -627,6 +627,9 @@ function add_po_to_bill(po_id)
 	         var $po_id = $(".po-listing .po_id:first");
 	         $(".po-listing .po_id:first").addClass("div_po_id"+po_id);
 	         $po_id.find(".po-id-input").val(po_id).change();
+
+	        $(".total-amount-input").val(po_total);
+	        $(".total-amount").html(po_total);
 
 	        $(".po-"+po_id).addClass("hidden");
 			$(".modal-loader").addClass("hidden");

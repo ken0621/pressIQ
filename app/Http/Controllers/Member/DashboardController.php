@@ -5,14 +5,10 @@ use App\Globals\Accounting;
 use App\Globals\Category;
 use App\Globals\Item;
 use App\Globals\Customer;
-use App\Globals\Purchase_Order;
-use App\Globals\Invoice;
-use App\Globals\UnitMeasurement;
-use App\Globals\Purchasing_inventory_system;
 use App\Models\Tbl_User;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_unit_measurement;
-use Request;
+
 class DashboardController extends Member
 {
 
@@ -33,13 +29,8 @@ class DashboardController extends Member
 		$data["count_ar"]		= Invoice::count_ar();
 		$data["pis"]			= Purchasing_inventory_system::check();
 
-		$data['_account']       = Accounting::getAllAccount();
-		$data['_category']      = Category::getAllCategory();
-		$data['_customer']      = Customer::getAllCustomer();
-		$data['_item']			= Item::get_all_category_item();
-		$data['_um']			= UnitMeasurement::load_um_multi();
+		$data["sales_amount"]	= currency("PHP",Invoice::get_sales_amount());
 
-		// dd($data['_category']);
 		return view('member.dashboard.dashboard', $data);
 	}
 

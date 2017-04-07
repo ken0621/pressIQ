@@ -10,6 +10,8 @@
                 <small>
                 </small>
             </h1>
+            <a href="/member/item/import/item-template" class="btn btn-custom-white pull-right">Download Item Template</a>
+            <a href="/member/item/import/export-error" class="btn btn-custom-white pull-right import-error"></a>
         </div>
     </div>
 </div>

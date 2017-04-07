@@ -295,18 +295,19 @@
                         </div>
                         
                         <!--PIS CM here -->
+
                         @if(isset($pis) && $pis != 0)
                         <div class="row clearfix">
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <label>
                                         <h3>
-                                            <input {{Request::input("id") != 0 ? 'checked' : ''}} type="checkbox" onclick="toggle_returns('.returns-class', this)" value="returns" class="returns-check"  value="returns" name="returns"> Returns 
+                                            <input {{isset($inv->credit_memo) != 0 ? 'checked' : ''}} type="checkbox" onclick="toggle_returns('.returns-class', this)" value="returns" class="returns-check"  value="returns" name="returns"> Returns 
                                         </h3>
                                     </label>
                                 </div>
                             </div>
-                            <div class="returns-class" style="{{Request::input('id') == null ? 'display:none' : ''}}"  >
+                            <div class="returns-class" style="{{isset($inv->credit_memo) == null ? 'display:none' : ''}}"  >
                                 <div class="row clearfix draggable-container">
                                      <div class="table-responsive">
                                         <div class="col-sm-12">
@@ -361,7 +362,7 @@
                                                                 <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                             </tr>
                                                         @endforeach
-                                                    @else                                
+                                                    @endif                               
                                                         <tr class="tr-cm-draggable">
                                                             <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
@@ -408,7 +409,6 @@
                                                             </td> -->
                                                             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                         </tr>
-                                                    @endif
                                                 </tbody>
                                             </table>
                                         </div>

@@ -287,7 +287,7 @@
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <small>COLA (monthly)</small>
+                        <small>COLA (Daily)</small>
                         <input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" value="{{$salary->payroll_employee_salary_cola}}" readonly>
                       </div>
                     </div>

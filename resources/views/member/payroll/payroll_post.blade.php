@@ -7,12 +7,11 @@
     <div>
       <i class="fa fa-calculator"></i>
       <h1>
-      <span class="page-title">Payroll Process</span>
+      <span class="page-title">Payroll Post</span>
       <small>
       Payroll Computation
       </small>
       </h1>
-      <button class="btn btn-custom-primary pull-right popup" link="/member/payroll/payroll_process/modal_create_process">Create Process</button>
       <input type="hidden" name="_token" value="{{csrf_token()}}" id="_token">
     </div>
   </div>
@@ -24,11 +23,11 @@
       <div class="custom-panel">
         <div class="custom-panel-header cursor-pointer">
           {{date('M d, Y',strtotime($period['period']->payroll_period_start))}} to {{date('M d, Y',strtotime($period['period']->payroll_period_end))}} ({{$period['period']->payroll_period_category}})
-          <button class="btn btn-custom-white pull-right btn-xs popup" link="/member/payroll/payroll_process/confirm_action_payroll/registered/{{$period['period']->payroll_period_company_id}}" size="sm">Register</button>
-          <button class="btn btn-custom-red-white pull-right btn-xs margin-right-10 popup" link="/member/payroll/payroll_process/confirm_action_payroll/pending/{{$period['period']->payroll_period_company_id}}" size="sm">Unprocess</button>
+          <button class="btn btn-custom-white pull-right btn-xs popup" link="/member/payroll/payroll_process/confirm_action_payroll/approved/{{$period['period']->payroll_period_company_id}}" size="sm">Approve</button>
+          <button class="btn btn-custom-red-white pull-right btn-xs margin-right-10 popup" link="/member/payroll/payroll_process/confirm_action_payroll/unpost/{{$period['period']->payroll_period_company_id}}" size="sm">Unpost</button>
           <button class="btn btn-custom-white-gray pull-right btn-xs margin-right-10 popup" link="" size="sm"><i class="fa fa-comments" aria-hidden="true"></i></button>
          
-          </div>
+        </div>
         <div class="width-100 display-table">
           <div class="triangle-top-right"></div>
           <div class="custom-panel-body">
@@ -60,7 +59,7 @@
                         {{number_format($list['total_net'], 2)}}
                       </td>
                       <td class="text-center">
-                        <button class="btn btn-custom-white btn-xs popup" link="/member/payroll/payroll_process/payroll_compute_brk_unsaved/{{$list['payroll_employee_id']}}/{{$period['period']->payroll_period_company_id}}" size="lg" type="button"><i class="fa fa-search"></i>&nbsp;View</button>
+                        <button class="btn btn-custom-white btn-xs popup" link="/member/payroll/payroll_register/breakdown_uncompute_static/{{$list['payroll_employee_id']}}/{{$period['period']->payroll_period_company_id}}" size="lg" type="button"><i class="fa fa-search"></i>&nbsp;View</button>
                       </td>
                     </tr>
                     @endforeach

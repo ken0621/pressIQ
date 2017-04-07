@@ -895,10 +895,15 @@
 .custom-panel-header
 {
     width: 100%;
-    padding: 5px;
+    padding: 5px !important;
     color:#fff;
-    background-color: #106189;
+    background-color: #106189 !important;
 
+}
+.custom-panel-header a
+{
+    color:#fff !important;
+    background-color: #106189;
 }
 .custom-panel-body
 {

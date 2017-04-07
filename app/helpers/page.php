@@ -572,13 +572,13 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
     
     /* -- EMPLOYEE TIMESHEET=> LIST  */
-    $code = "employee-timesheet";
-    $nav[$page]['submenu'][$code]['label'] = "Employee Timesheet";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/employee_timesheet";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Guillermo Tabligan";
+    // $code = "employee-timesheet";
+    // $nav[$page]['submenu'][$code]['label'] = "Employee Timesheet";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/employee_timesheet";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "Guillermo Tabligan";
 
     /* PAYROLL TIME KEEPING */
     $code = "payroll-timekeeping";
@@ -598,6 +598,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
+
     /* PAYROLL SUMMARY */
     $code = "payroll-summary";
     $nav[$page]['submenu'][$code]['label'] = "Payroll Summary";
@@ -606,6 +607,35 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
+
+    /* PAYROLL REGISTER */
+    $code = "payroll-register";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Register";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_register";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+    /* PAYROLL POST */
+    $code = "payroll-post";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Post";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_post";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+
+    /* PAYROLL APPROVED */
+    $code = "payroll-approved";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Approved";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_approved_view";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
 
 
     /* VENDORS */

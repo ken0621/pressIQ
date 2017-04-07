@@ -34,6 +34,7 @@ function bill()
 					$(".tr-"+$(this).attr("tr_id")).remove();
 			        $(".po-"+$(this).attr("tr_id")).removeClass("hidden");
 			        $(".div_po_id"+$(this).attr("tr_id")).remove();
+					$(".drawer-toggle").trigger("click");
 				}
 				else
 				{

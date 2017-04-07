@@ -331,4 +331,13 @@ class Mlm_EncashmentController extends Member
         $data['message'] = 'Bank account name option editted';
         return json_encode($data);
     }
+    public function add_to_list()
+    {
+        return $_POST;
+        $add_to_list = Request::input('add_to_list');
+        if($add_to_list == null)
+        {
+            
+        }
+    }
 }

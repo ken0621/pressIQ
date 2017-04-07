@@ -84,7 +84,8 @@
                     <input type="number" class="form-control" value="0">
                 </div>
             </div>
-        </form>    
+        </form>  
+        </div>  
     </div>
 </div>        
 <div class="append_report"></div>

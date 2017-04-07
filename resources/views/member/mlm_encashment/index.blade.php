@@ -310,8 +310,9 @@
                             <td><input type="checkbox"></td>
                             <th>Slot</th>
                             <th>Name</th>
-                            <th>From</th>
-                            <th>To</th>
+                            <th class="hide">From</th>
+                            <th class="hide">To</th>
+                            <th>Date Requested</th>
                             <th>Tax</th>
                             <th>Processing Fee</th>
                             <th>Amount</th>
@@ -323,12 +324,19 @@
                         @if(count($history) >= 1)
                           @foreach($history as $key => $value)
                             <tr>
-                              <td><input type="checkbox"></td>
+                              <td>
+                                <form class="global-submit" id="form_id_{{$value->wallet_log_id}}" role="form" method="post" action="/member/mlm/encashment/add/to/list">
+                                    <input type="checkbox" name="add_to_list" onchange="$('#form_id_{{$value->wallet_log_id}}').submit();">
+                                    <input type="hidden" name="wallet_log_id" value="{{$value->wallet_log_id}}">
+                                    {!! csrf_field() !!}
+                                </form>
+                                
+                              </td>
                               <td><a href="javascript:" class="popup" link="/member/mlm/slot/view/{{$value->slot_id}}" size="lg">{{$value->slot_no}}</a></td>
                               <td><a href="javascript:" class="popup" link="/member/customer/customeredit/{{$value->customer_id}}">{{ name_format_from_customer_info($value) }}</a></td>
-                              <td>{{$value->enchasment_process_from}}</td>
-                              <td>{{$value->enchasment_process_to}}</td>
-
+                              <td class="hide">{{$value->enchasment_process_from}}</td>
+                              <td class="hide">{{$value->enchasment_process_to}}</td>
+                              <td>{{$value->wallet_log_date_created}}</td>
                               @if($value->enchasment_process_tax_type == 0)
                               <td>{{$value->enchasment_process_tax}}</td>
                               @else
@@ -354,12 +362,35 @@
                           @endforeach
                           @if($request != 1)
                           <tr>
-                              <td></td>
-                              <td colspan="20"><button class="btn btn-success col-md-1">Process</button> <span class="alert-warning col-md-12">By using the Process Button, all checked request will be process. Note: Please verify all encashment details before processing. You can view the Encashement report at under<a target="_blank" href="/member/mlm/report"> Encashment(Requested)</a> </span></td>
+                              <td>
+                                  
+                              </td>
+                              <td colspan="20">
+                                  <button class="btn btn-info col-md-1">Summary</button> 
+                                  <span class="alert-warning col-md-12">
+                                    This will show all checked encashment request
+                                  </span>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>
+                                  
+                              </td>
+                              <td colspan="20">
+                                <small><span class="color: gray">Remarks</span></small>
+                                <textarea class="form-control"></textarea>
+                                <hr>
+                                <button class="btn btn-success col-md-1">Process</button> <span class="alert-warning col-md-12">By using the Process Button, all checked request will be process. Note: Please verify all encashment details before processing. You can view the Encashement report at under<a target="_blank" href="/member/mlm/report"> Encashment(Requested)</a> </span>
+                              </td>
                           </tr>
                           <tr>
                               <td></td>
-                              <td colspan="20"><button class="btn btn-danger col-md-1">Deny</button> <span class="alert-warning col-md-12">By using the Deny Button, all checked request will be denied and all the wallet will be returned to the account. Note: Please verify all encashment details before Denying. You can view the Encashement report at under<a target="_blank" href="/member/mlm/report">Encashment (Requested)</a></span></td>
+                              <td colspan="20">
+                                <small><span class="color: gray">Remarks</span></small>
+                                <textarea class="form-control"></textarea>
+                                <hr>
+                                <button class="btn btn-danger col-md-1">Deny</button> <span class="alert-warning col-md-12">By using the Deny Button, all checked request will be denied and all the wallet will be returned to the account. Note: Please verify all encashment details before Denying. You can view the Encashement report at under<a target="_blank" href="/member/mlm/report">Encashment (Requested)</a></span>
+                              </td>
                           </tr>
                           @endif
 
@@ -434,8 +465,6 @@ function search_by_customer(search)
     $('#encashment_table').html('<div style="margin: 100px auto;" class="loader-16-gray"></div>');
     $('#encashment_table').load(link_load + ' #encashment_table');
 }
-
-// .load( "/member/mlm/code #encashment_table");
 </script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 @endsection

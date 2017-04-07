@@ -162,6 +162,8 @@ Route::any('/member/mlm/encashment/view/type/cheque/edit', 'Member\Mlm_Encashmen
 Route::any('/member/mlm/encashment/view/type/bank/add', 'Member\Mlm_EncashmentController@bank_add');//luke
 Route::any('/member/mlm/encashment/view/type/bank/archive', 'Member\Mlm_EncashmentController@bank_archive');//luke
 Route::any('/member/mlm/encashment/view/type/bank/edit/name', 'Member\Mlm_EncashmentController@bank_edit_name');//luke
+
+Route::any('/member/mlm/encashment/add/to/list', 'Member\Mlm_EncashmentController@add_to_list');//luke
 /* end MLM Product */
 
 /* start MLM Product */

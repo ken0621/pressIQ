@@ -19,6 +19,31 @@ class DashboardController extends Member
 
 	public function index()
 	{
-		return view('member.dashboard.dashboard');
+		$data["shop_name"]		= $this->user_info->shop_key;
+
+		$data["po_amount"]		= currency("PHP",Purchase_Order::get_po_amount());
+		$data["count_po"]		= Purchase_Order::count_po();
+
+
+		$data["ar_amount"]		= currency("PHP",Invoice::get_ar_amount());
+		$data["count_ar"]		= Invoice::count_ar();
+		$data["pis"]			= Purchasing_inventory_system::check();
+
+		$data["sales_amount"]	= currency("PHP",Invoice::get_sales_amount());
+
+		return view('member.dashboard.dashboard', $data);
+	}
+
+	public function change_warehouse()
+	{
+		if(Request::input("change_warehouse"))
+		{
+			$data = $this->save_warehouse_id(Request::input("change_warehouse"));
+			return json_encode($data);
+		}
+		else
+		{
+			dd("Error 404");
+		}
 	}
 }

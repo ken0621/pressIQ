@@ -43,6 +43,20 @@ class Invoice
 
         return $price;
     }
+    public static function get_sales_amount()
+    {
+        $price = 0;
+        $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->where("inv_is_paid",1)->get();
+        if(isset($ar))
+        {
+            foreach ($ar as $key => $value) 
+            {
+               $price += $value->inv_overall_price;
+            }            
+        }
+
+        return $price;
+    }
     public static function getShopId()
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');

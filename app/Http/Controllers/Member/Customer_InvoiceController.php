@@ -125,10 +125,10 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
                 $item_info[$key]['um']                 = Request::input('invline_um')[$key];
                 $item_info[$key]['quantity']           = Request::input('invline_qty')[$key];
-                $item_info[$key]['rate']               = Request::input('invline_rate')[$key];
+                $item_info[$key]['rate']               = convertToNumber(Request::input('invline_rate')[$key]);
                 $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
-                $item_info[$key]['amount']             = Request::input('invline_amount')[$key];
+                $item_info[$key]['amount']             = convertToNumber(Request::input('invline_amount')[$key]);
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
 
 
@@ -341,12 +341,12 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
                 $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
                 $item_info[$key]['um']                 = Request::input('invline_um')[$key];
-                $item_info[$key]['quantity']           = str_replace(',', "",Request::input('invline_qty')[$key]);
-                $item_info[$key]['rate']               = str_replace(',', "", Request::input('invline_rate')[$key]);
+                $item_info[$key]['quantity']           = Request::input('invline_qty')[$key];
+                $item_info[$key]['rate']               = convertToNumber(Request::input('invline_rate')[$key]);
                 $item_info[$key]['discount']           = Request::input('invline_discount')[$key];
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
-                $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
+                $item_info[$key]['amount']             = convertToNumber(Request::input('invline_amount')[$key]);
 
                 $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
                 $product_consume[$key]["quantity"] = $qty * $item_info[$key]['quantity'];

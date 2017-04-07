@@ -13,6 +13,7 @@ use App\Models\Tbl_ec_product;
 
 use App\Models\Tbl_journal_entry_line;
 use App\Globals\Accounting;
+use App\Globals\Account;
 use App\Globals\Invoice;
 use App\Globals\Category;
 use App\Globals\Item;
@@ -50,12 +51,7 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        $var = ['hi','pi'];
-        if($var)
-        {
-            dd(true);
-        }
-        dd(false);
+        Account::put_default_account_payroll($this->getShopId());
     }
 
     public function getJournal()
@@ -74,5 +70,10 @@ class TesterController extends Controller
         $data["customer_first_name"] = "Bryan";
 
         dd(Customer::createCustomer($shop_id, $data))   ;
+    }
+
+    public function getPayroll()
+    {
+        
     }
 }

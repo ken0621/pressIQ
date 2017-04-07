@@ -19,7 +19,6 @@ use Carbon\carbon;
  *
  * @author Bryan Kier Aradanas
  */
-
 class Accounting
 {
 
@@ -310,7 +309,6 @@ class Accounting
 	 * @param 	string  	$type 		Type of a transaction
 	 * @return 	array[2] 	$table_name | id_name
 	 */
-
 	public static function checkReferenceId($type)
 	{
 		switch($type)
@@ -335,6 +333,5 @@ class Accounting
 		}
 
 		return $data;
-
 	}
 }

@@ -160,7 +160,10 @@
                                                     @if(isset($bill))
                                                         @foreach($_bill_item_line as $item)
                                                         <tr class="tr-draggable">
-                                                            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+                                                            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i>                
+                                                                <input type="text" class="hidden poline_id" name="poline_id[]" value="{{$item->itemline_poline_id}}">
+                                                                <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]" value="{{$item->itemline_po_id}}">
+                                                            </td>
                                                             <td class="invoice-number-td text-right">1</td>
                                                             <td>
                                                                 <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
@@ -185,7 +188,11 @@
                                                         @endforeach
                                                     @endif
                                                     <tr class="tr-draggable">
-                                                         <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+                                                         <td class="text-center cursor-move move">
+                                                            <i class="fa fa-th-large colo-mid-dark-gray"></i>
+                                                            <input type="text" class="hidden poline_id" name="poline_id[]">
+                                                            <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]">
+                                                         </td>
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
                                                             <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
@@ -200,7 +207,11 @@
                                                         <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                     <tr class="tr-draggable">
-                                                         <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+                                                         <td class="text-center cursor-move move">
+                                                            <i class="fa fa-th-large colo-mid-dark-gray"></i>         
+                                                            <input type="text" class="hidden poline_id" name="poline_id[]">
+                                                            <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]">
+                                                         </td>
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
                                                             <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
@@ -246,11 +257,22 @@
         </div>
     </div>
 </div>
+<div class="po-listing hide">
+</div>
 </form>
+<div class="div-script-po hide">
+    <div class="po_id">
+        <input type="text" class="po-id-input" name="po_id[]">    
+    </div>
+</div>
 <div class="div-script">
     <table class="div-item-row-script hide">
        <tr class="tr-draggable">
-            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+            <td class="text-center cursor-move move">
+                <i class="fa fa-th-large colo-mid-dark-gray"></i>
+                <input type="text" class="hidden poline_id" name="poline_id[]">
+                <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]">
+            </td>
             <td class="invoice-number-td text-right">1</td>
             <td>
                 <select class="1111 form-control select-item input-sm pull-left" name="itemline_item_id[]" >

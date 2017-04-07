@@ -356,10 +356,9 @@ class ItemImportController extends Member
 			$json["value_data"] = $value;
 			$length 			= sizeOf($json["value_data"]);
 
-			dd($json["value_data"]);
 			foreach($json["value_data"] as $key=>$value)
 			{
-				$json["value_data"][$key]['Error Description'] = $json["message"];
+				$json["value_data"]['Error Description'] = $json["message"];
 			}
 		}
 		else /* DETERMINE IF LAST IN CSV */

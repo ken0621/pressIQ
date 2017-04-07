@@ -69,10 +69,13 @@ class Invoice
         $subtotal_price = collect($item_info)->sum('amount');
 
         /* TAX */
-        $tax = collect($item_info)->where('taxable', '1')->sum('amount');
+        $tax = (collect($item_info)->where('taxable', '1')->sum('amount')) * 0.12;
+
+        /* EWT */
+        $ewt = $subtotal_price*convertToNumber($total_info['ewt']);
 
         /* OVERALL TOTAL */
-        $overall_price  = convertToNumber($subtotal_price) - convertToNumber($total_info['ewt']) - ($discount * $subtotal_price) + $tax;
+        $overall_price  = convertToNumber($subtotal_price) - $ewt - ($discount * $subtotal_price) + $tax;
 
         $insert['inv_shop_id']                  = Invoice::getShopId();  
 		$insert['inv_customer_id']              = $customer_info['customer_id'];        
@@ -114,10 +117,13 @@ class Invoice
         $subtotal_price = collect($item_info)->sum('amount');
 
         /* TAX */
-        $tax = collect($item_info)->where('taxable', '1')->sum('amount');
+        $tax = (collect($item_info)->where('taxable', '1')->sum('amount')) * 0.12;
+
+        /* EWT */
+        $ewt = $subtotal_price*convertToNumber($total_info['ewt']);
 
         /* OVERALL TOTAL */
-        $overall_price  = convertToNumber($subtotal_price) - convertToNumber($total_info['ewt']) - ($discount * $subtotal_price) + $tax;
+        $overall_price  = convertToNumber($subtotal_price) - $ewt - ($discount * $subtotal_price) + $tax;
         
         $update['inv_customer_id']              = $customer_info['customer_id'];        
         $update['inv_customer_email']           = $customer_info['customer_email'];

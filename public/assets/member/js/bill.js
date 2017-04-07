@@ -622,7 +622,7 @@ function add_po_to_bill(po_id)
 	            po_total += b.poline_amount;
              });
 
-             console.log(total);
+             console.log(po_total);
 	         $(".po-listing").prepend(po_id_list);
 	         var $po_id = $(".po-listing .po_id:first");
 	         $(".po-listing .po_id:first").addClass("div_po_id"+po_id);

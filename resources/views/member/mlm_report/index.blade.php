@@ -105,4 +105,5 @@
     window.open('/member/mlm/report/get?report_choose=' + choose + '&pdf=true', '_blank');
   }
 </script>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 @endsection

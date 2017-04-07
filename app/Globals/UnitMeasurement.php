@@ -35,6 +35,7 @@ class UnitMeasurement
     {
         return Tbl_unit_measurement::multi()->where("um_shop", UnitMeasurement::getShopId())
                                     ->where("um_archived",0)
+                                    ->groupBy("tbl_unit_measurement.um_id")
                                     ->get();
     }
     public static function archived_um()
@@ -113,7 +114,7 @@ class UnitMeasurement
             }
             else
             {
-                $return = $qty == 0 ? 1 : $qty." PC";
+                $return = $qty." PC";
             }
         }
         else if($um_issued != null && $um_base != null )

@@ -40,7 +40,10 @@
             <select class="form-control filter-change filter-change-company" data-target="#active-employee">
               <option value="0">Select Company</option>
               @foreach($_company as $company)
-              <option value="{{$company->payroll_company_id}}">{{$company->payroll_company_name}}</option>
+              <option value="{{$company['company']->payroll_company_id}}">{{$company['company']->payroll_company_name}}</option> 
+                @foreach($company['branch'] as $branch)
+                <option value="{{$branch->payroll_company_id}}">&nbsp;&nbsp;• {{$branch->payroll_company_name}}</option>
+                @endforeach
               @endforeach
             </select>
           </div>
@@ -131,7 +134,10 @@
             <select class="form-control filter-change-company filter-change" data-target="#separated-employee">
               <option value="0">Select Company</option>
               @foreach($_company as $company)
-              <option value="{{$company->payroll_company_id}}">{{$company->payroll_company_name}}</option>
+              <option value="{{$company['company']->payroll_company_id}}">{{$company['company']->payroll_company_name}}</option> 
+                @foreach($company['branch'] as $branch)
+                <option value="{{$branch->payroll_company_id}}">&nbsp;&nbsp;• {{$branch->payroll_company_name}}</option>
+                @endforeach
               @endforeach
             </select>
           </div>

@@ -1064,6 +1064,10 @@ class Payroll
 
 			$time = Payroll::process_time($employee_id, $date);
 
+			$count_rh = Tbl_payroll_holiday_company::getholiday($basic_employee->payroll_employee_company_id, $date)
+													->where('tbl_payroll_holiday.payroll_holiday_category','Regular')
+													->count();
+
 			$approved = $time->approved_timesheet;
 
 			$temp_hour 					= 0;
@@ -1118,8 +1122,6 @@ class Payroll
 			}
 
 			
-
-
 			$group = Tbl_payroll_employee_contract::selemployee($employee_id, $date)
 												   ->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 												   ->select('tbl_payroll_group.*')
@@ -1185,9 +1187,9 @@ class Payroll
 
 
 			/* for legal holiday if not rest day */
-			if($rest_day_hours <= 0)
+			if($rest_day_hours <= 0 && $count_rh > 0)
 			{
-				$rh_hour['regular'] = 1;
+				$rh_hour['regular'] = $count_rh;
 			}
 
 			/* EXTRA DAYS */
@@ -1233,6 +1235,7 @@ class Payroll
 				$sh_hour['night_differential']  		= divide($night_differential, $target_hour);
 				$query_arr['payroll_overtime_name'] 	= 'Special Holiday';
 				$temp_hour								= $special_holiday_hours;
+
 			}
 
 
@@ -1266,6 +1269,7 @@ class Payroll
 				$rh_rest_hour['night_differential'] 	= divide($night_differential, $target_hour);
 				$query_arr['payroll_overtime_name'] 	= 'Legal Holiday';
 				$temp_hour								= $rest_day_hours;
+
 			}
 			// dd($rh_hour);
 			$regular_day = Payroll::compute_overtime($query_arr, $regular_hour, $daily_rate, 'Regular');
@@ -1511,6 +1515,21 @@ class Payroll
 		$data['deduction'] 			= $deduction['deduction'];
 		$data['total_deduction'] 	+= $deduction['total_deduction'];
 		$data['total_net'] 			= $data['total_gross'] - $data['total_deduction'];
+
+		if($data['total_deduction'] > $data['total_gross'])
+		{
+			$data['total_net'] 					= $data['total_gross'];
+			$data['total_deduction']			= 0;
+			$data['tax_contribution'] 			= 0;
+			$data['sss_contribution_ee'] 		= 0;
+			$data['pagibig_contribution'] 		= 0;
+			$data['philhealth_contribution_ee'] = 0;
+			$data['late_deduction'] 			= 0;
+			$data['under_time'] 				= 0;
+			$data['agency_deduction'] 			= 0;
+			$data['agency_deduction'] 			= 0;
+			$data['agency_deduction'] 			= 0;
+		}
 
 
 		$data['total_regular_days']			= round($data['total_regular_days'], 2);

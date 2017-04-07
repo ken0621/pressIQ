@@ -12,7 +12,7 @@ use App\Globals\Transaction;
 use App\Globals\Customer;
 
 use App\Models\Tbl_customer;
-use App\Models\Tbl_warehousea;
+use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_customer_invoice_line;
@@ -115,11 +115,49 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
 
 
-                $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
-                $product_consume[$key]["quantity"] = (isset($um_info->unit_qty) ? $um_info->unit_qty : 1) * $item_info[$key]['quantity'];
+                $um_qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
+                $product_consume[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
                 $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
             }
         }
+        //START if bundle inventory_consume arcy
+        foreach ($_itemline as $keyitem => $value_item) 
+        {
+            $item_bundle_info = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitem])->where("item_type_id",4)->first();
+            if($item_bundle_info)
+            {
+                $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("invline_item_id")[$keyitem])->get();
+                foreach ($bundle as $key_bundle => $value_bundle) 
+                {
+                    $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$keyitem]);
+                    $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
+                    $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
+                    $_bundle[$key_bundle]['quantity'] = (Request::input('invline_qty')[$keyitem] * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
+
+                    array_push($product_consume, $_bundle[$key_bundle]);
+                }
+            } 
+        }
+        foreach ($product_consume as $key_items => $value_items) 
+        {
+             $i = null;
+             foreach ($_itemline as $keyitemline => $valueitemline)
+             {
+                $type = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitemline])->pluck("item_type_id");
+                if($type == 4)
+                {
+                    if(Request::input("invline_item_id")[$keyitemline] == $value_items['product_id'])
+                    {
+                        $i = "true";
+                    }                    
+                }
+             }
+            if($i != null)
+            {
+                unset($product_consume[$key_items]);
+            }           
+        }
+        //END if bundle inventory_consume arcy
 
         $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
 
@@ -202,11 +240,50 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('invline_amount')[$key]);
 
-                $um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
-                $product_consume[$key]["quantity"] = isset($um_info->unit_qty) ? $um_info->unit_qty : 1 * $item_info[$key]['quantity'];
+                $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
+                $product_consume[$key]["quantity"] = $qty * $item_info[$key]['quantity'];
                 $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
             }
         }
+
+         //START if bundle inventory_consume arcy
+        foreach ($_itemline as $keyitem => $value_item) 
+        {
+            $item_bundle_info = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitem])->where("item_type_id",4)->first();
+            if($item_bundle_info)
+            {
+                $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("invline_item_id")[$keyitem])->get();
+                foreach ($bundle as $key_bundle => $value_bundle) 
+                {
+                    $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$keyitem]);
+                    $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
+                    $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
+                    $_bundle[$key_bundle]['quantity'] = (Request::input('invline_qty')[$keyitem] * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
+
+                    array_push($product_consume, $_bundle[$key_bundle]);
+                }
+            } 
+        }
+        foreach ($product_consume as $key_items => $value_items) 
+        {
+             $i = null;
+             foreach ($_itemline as $keyitemline => $valueitemline)
+             {
+                $type = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitemline])->pluck("item_type_id");
+                if($type == 4)
+                {
+                    if(Request::input("invline_item_id")[$keyitemline] == $value_items['product_id'])
+                    {
+                        $i = "true";
+                    }                    
+                }
+             }
+            if($i != null)
+            {
+                unset($product_consume[$key_items]);
+            }           
+        }
+        //END if bundle inventory_consume arcy
 
         Invoice::updateIsPaid($invoice_id);
 
@@ -224,7 +301,7 @@ class Customer_InvoiceController extends Member
             {
                 $json["status"]         = "success-invoice";
                 $json["invoice_id"]     = $inv_id;
-                $json["link"]           = "/member/customer/invoice?id=".$inv_id;
+                $json["link"]           = "/member/customer/invoice_list";
 
                 if($button_action == "save-and-new")
                 {

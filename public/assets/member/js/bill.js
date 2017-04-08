@@ -34,6 +34,7 @@ function bill()
 					$(".tr-"+$(this).attr("tr_id")).remove();
 			        $(".po-"+$(this).attr("tr_id")).removeClass("hidden");
 			        $(".div_po_id"+$(this).attr("tr_id")).remove();
+					$(".drawer-toggle").trigger("click");
 				}
 				else
 				{
@@ -328,7 +329,7 @@ function bill()
         	hasPopup: "false",
     		width : "100%",
     		placeholder : "um.."
-        }).globalDropList('disabled');
+        });
 	}	
 	function action_trigger_select_plugin()
 	{
@@ -350,7 +351,7 @@ function bill()
         	hasPopup: "false",
     		width : "100%",
     		placeholder : "um.."
-        }).globalDropList('disabled');
+        });
 	}
 	function event_button_action_click()
 	{
@@ -415,7 +416,7 @@ function bill()
     		}
 
     	});
-        $('.droplist-um:not(.has-value)').globalDropList("disabled");
+        // $('.droplist-um:not(.has-value)').globalDropList("disabled");
 		$(".drop-down-payment").globalDropList(
 		{
 		    link 		: '/member/maintenance/payment_method/add',
@@ -472,7 +473,7 @@ function bill()
 		}
 		else
 		{
-			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("clear");
 		}
 	}
 
@@ -482,7 +483,7 @@ function bill()
 		$item   = $this.closest(".tr-draggable").find(".select-item");
 
 		$um_qty = parseFloat($this.find("option:selected").attr("qty"));
-		$sales  = parseFloat($item.find("option:selected").attr("price"));
+		$sales  = parseFloat($item.find("option:selected").attr("cost"));
 		$qty    = parseFloat($parent.find(".txt-qty").val());
 		console.log($um_qty +"|" + $sales +"|" +$qty);
 		$parent.find(".txt-rate").val( $um_qty * $sales * $qty ).change();
@@ -616,9 +617,10 @@ function add_po_to_bill(po_id)
 	            $container.find(".txt-amount").val(b.poline_amount);
 	            $container.find(".remove-tr").addClass("remove-tr"+b.poline_po_id);
 	            $container.find(".remove-tr").attr("tr_id", b.poline_po_id);
-             });
-             bill.action_reassign_number();
 
+             });
+
+             console.log(po_total);
 	         $(".po-listing").prepend(po_id_list);
 	         var $po_id = $(".po-listing .po_id:first");
 	         $(".po-listing .po_id:first").addClass("div_po_id"+po_id);
@@ -626,6 +628,8 @@ function add_po_to_bill(po_id)
 
 	        $(".po-"+po_id).addClass("hidden");
 			$(".modal-loader").addClass("hidden");
+
+             bill.action_reassign_number();
 		},
 		error : function()
 		{

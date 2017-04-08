@@ -1,36 +1,43 @@
 @extends('layout')
 @section('content')
 <div class="contact">
-	<div class="contact-header">
-		<div class="title">LEAVE US A <span>MESSAGE</span></div>
-		<div class="sub">Whether you have a question about bulk orders,</br> 
-need assistance on payment options, or just wanted to drop a</br> line,we want to know what’s on your mind.</div>
-		<div class="text">We’ll help you get yours orders out.</div>
+	<div class="contact-header" style="background-image: url('{{ get_content($shop_theme_info, 'contact', 'contact_header_cover') }}')">
+		<div class="title">{{ get_content($shop_theme_info, 'contact', 'contact_title') }}</div>
+		<div class="sub">{{ get_content($shop_theme_info, 'contact', 'contact_subtitle') }}</div>
+		<div class="text" style="color: #fff;">{{ get_content($shop_theme_info, 'contact', 'contact_quote') }}</div>
 		<div class="icon">
-			<div class="holder">
+			<!-- <div class="holder">
 				<i class="fa fa-phone"></i>
 				<div class="text">+63932-187-9511</br>+63916-336-2012</div>
+			</div> -->
+			<div class="holder">
+				<a style="color: #fff;" href="{{ get_content($shop_theme_info, 'contact', 'contact_location_link') }}">
+					<i class="fa fa-map-marker"></i>
+					<div class="text">Store Locations</div>
+				</a>
 			</div>
 			<div class="holder">
-				<i class="fa fa-map-marker"></i>
-				<div class="text">Store Locations</div>
+				<a style="color: #fff;" href="{{ get_content($shop_theme_info, 'contact', 'contact_facebook_link') }}">
+					<i class="fa fa-facebook"></i>
+					<div class="text">{{ get_content($shop_theme_info, 'contact', 'contact_facebook_link') }}</div>
+				</a>
 			</div>
 			<div class="holder">
-				<i class="fa fa-facebook"></i>
-				<div class="text">facebook.com/intogadgetstore</div>
+				<a style="color: #fff;" href="{{ get_content($shop_theme_info, 'contact', 'contact_twitter_link') }}">
+					<i class="fa fa-twitter"></i>
+					<div class="text">{{ get_content($shop_theme_info, 'contact', 'contact_twitter_link') }}</div>
+				</a>
 			</div>
 			<div class="holder">
-				<i class="fa fa-twitter"></i>
-				<div class="text">twitter.com/intogadgetstore</div>
-			</div>
-			<div class="holder">
-				<i class="fa fa-instagram"></i>
-				<div class="text">instagram.com/intogadgetstore</div>
+				<a style="color: #fff;" href="{{ get_content($shop_theme_info, 'contact', 'contact_instagram_link') }}">
+					<i class="fa fa-instagram"></i>
+					<div class="text">{{ get_content($shop_theme_info, 'contact', 'contact_instagram_link') }}</div>
+				</a>
 			</div>
 		</div>
 	</div>
 	<div class="store-content container">
-		@if(isset($_data) && $_data)
+		@if(is_serialized(get_content($shop_theme_info, "contact", "contact_store_maintenance")))
 		<div>
 			<table id="branches">
 				<thead>
@@ -43,13 +50,13 @@ need assistance on payment options, or just wanted to drop a</br> line,we want t
 					</tr>
 				</thead>
 				<tbody>
-					@foreach($_data as $store)
+					@foreach(unserialize(get_content($shop_theme_info, "contact", "contact_store_maintenance")) as $store)
 					<tr>
-						<td>{!! $store->url == "" ? "<img src='$store->show_image'>": "<a data-fancybox-group='gallery' class='fancybox' id='fancyboxes' href='$store->url'><img src='$store->show_image'></img></a>" !!}</td>
-						<td class="storename">{{$store->store_name}}</td>
-						<td>{{$store->store_branch}}</td>
-						<td>{{$store->store_contact_number}}</td>
-						<td>{!!$store->store_location == "" ? "<a href='/contact#'>" : "<a href='http://$store->store_location'>" !!}View</a></td>
+						<td><a data-fancybox-group='gallery' class='fancybox' id='fancyboxes' href='{{ $store["image"] }}'><img src='{{ $store["image"] }}'></img></a></td>
+						<td class="storename">{{$store["name"]}}</td>
+						<td>{{$store["branch"]}}</td>
+						<td>{{$store["contact"]}}</td>
+						<td><a href='{{ $store["link"] }}'>View</a></td>
 					</tr>
 					@endforeach
 				</tbody>
@@ -99,7 +106,17 @@ need assistance on payment options, or just wanted to drop a</br> line,we want t
 	<script type="text/javascript">
 		$(document).ready(function()
 		{
+			$('body').on('click', '.footable .footable-row-detail', function(event) 
+			{
+				event.preventDefault();
+				$(event.currentTarget).prev("tr").toggleClass("hid");
+			});
 
+			$('.footable-toggle').trigger('click');
+			$('.footable-toggle').trigger('click');
+
+			$('.footable .footable-row-detail').prev("tr").addClass("hid");
+			
 			var $message_result = $('#email-form-result');
 			$('button#send-email').on('click', function(e)
 			{

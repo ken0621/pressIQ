@@ -1,5 +1,5 @@
 <?php
-if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "my168shop-primia.c9users.io") || (hasSubdomain() && $domain != "my168shop-primia.c9users.io"))
+if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "digimatest.com") || (hasSubdomain() && $domain != "my168shop-primia.c9users.io"))
 {
 	Route::get('/', 'Shop\ShopHomeController@index');
 	Route::get('/cart', 'Shop\ShopCartController@index'); //EDWARD GUEVARRA
@@ -17,6 +17,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/contact', 'Shop\ShopContactController@index'); //EDWARD GUEVARRA
 	Route::get('/career', 'Shop\ShopCareerController@index'); //EDWARD GUEVARRA
 	Route::get('/how', 'Shop\ShopHowController@index'); //EDWARD GUEVARRA
+	Route::get('/youwin', 'Shop\ShopYouWinController@index'); //EDWARD GUEVARRA
 
 	Route::get('/blog', 'Shop\ShopBlogController@index'); //EDWARD GUEVARRA
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index'); //EDWARD GUEVARRA

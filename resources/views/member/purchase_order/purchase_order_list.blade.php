@@ -63,7 +63,13 @@
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
                                           <!-- <li ><a class="popup" link="/member/customer/view_cm/{{$po->cm_id}}" size="lg">View CM</a></li> -->
-                                          <li ><a href="/member/vendor/purchase_order?id={{$po->po_id}}">Edit P.O</a></li>
+                                        <li>
+                                            @if($po->po_is_billed != 0)                                            
+                                            <a>Print (Closed PO)</a>
+                                            @else
+                                            <a href="/member/vendor/purchase_order?id={{$po->po_id}}">Edit P.O</a>
+                                            @endif
+                                        </li>
                                       </ul>
                                     </div>
                                 </td>

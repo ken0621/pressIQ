@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_user;
+use App\Models\Tbl_user_position;
 use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_warehouse;
 
@@ -10,6 +11,7 @@ use App\Globals\Warehouse;
 use App\Globals\Seed;
 use App\Globals\Utilities;
 use App\Globals\Payroll;
+use App\Globals\Settings;
 
 use Crypt;
 use Redirect;
@@ -23,7 +25,7 @@ class Member extends Controller
 	public $current_warehouse; 
 	function __construct()
 	{
-		
+
 		/* IF SESSION FOR EMAIL OR PASSWORD DOESN'T EXIST - REDIRECT TO FRONTPAGE */
 		if(!session('user_email') || !session('user_password'))
 		{
@@ -49,9 +51,39 @@ class Member extends Controller
 				}
 				else
 				{
+					$this->user_info = $user_info;
+
+
+					/* INSERT DEFAULT WAREHOUSE */
+					Warehouse::put_default_warehouse($this->user_info->shop_id);
+
 					$shop_id_used    = $user_info->shop_id;
+					$check_if_dev    = Tbl_user_position::where("position_id",$this->user_info->user_level)->first();
+					$is_dev          = 0;
+					if($check_if_dev)
+					{
+						if($check_if_dev->position_rank == 0)
+						{
+							$is_dev = 1;
+						}
+					}
+
+
 					$check_warehouse = Tbl_user_warehouse_access::where("user_id",$user_info->user_id)->where("warehouse_id",session("warehouse_id_".$shop_id_used))->first();
-					if($check_warehouse)
+					if($is_dev == 1)
+					{   
+						$check_session = session("warehouse_id_".$shop_id_used);
+						$check_exist   = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->where("warehouse_id",$check_session)->first();
+						if(!$check_exist)
+						{
+							$current_warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->orderBy("main_warehouse","DESC")->first();
+						}
+						else
+						{
+							$current_warehouse = $check_exist;
+						}
+					}
+					else if($check_warehouse)
 					{
 						$current_warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id_used)->where("warehouse_id",$check_warehouse->warehouse_id)->first();
 						
@@ -74,9 +106,16 @@ class Member extends Controller
 						}
 					}
 
-					$this->user_info = $user_info;
 					$this->current_warehouse = $current_warehouse;
-					$warehouse_list  = Tbl_warehouse::inventory()->join("tbl_user_warehouse_access","tbl_user_warehouse_access.warehouse_id","=","tbl_warehouse.warehouse_id")->where("tbl_user_warehouse_access.user_id",$user_info->user_id)->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get(); 
+					if($is_dev == 1)
+					{
+						$warehouse_list  = Tbl_warehouse::inventory()->orderBy("main_warehouse","DESC")->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get(); 
+					}
+					else
+					{
+						$warehouse_list  = Tbl_warehouse::inventory()->join("tbl_user_warehouse_access","tbl_user_warehouse_access.warehouse_id","=","tbl_warehouse.warehouse_id")->where("tbl_user_warehouse_access.user_id",$user_info->user_id)->select_info($user_info->shop_id, 0)->groupBy("tbl_warehouse.warehouse_id")->get(); 
+					}
+
 					View::share('user_info', $user_info);
 					View::share('current_warehouse', $current_warehouse);
 					View::share('warehouse_list', $warehouse_list);
@@ -94,6 +133,9 @@ class Member extends Controller
 		
 		/* Seeding */
 		Seed::auto_seed();
+
+		/* Set Email Configuration */
+		Settings::set_mail_setting($this->user_info->shop_id);
 		
 		/* GET CURRENT DOMAIN FOR FRONTEND */
 		if($this->user_info->shop_domain != "unset_yet")
@@ -121,8 +163,6 @@ class Member extends Controller
 		/* INSERT PAGIBIG TABLE PER SHOP */
 		Payroll::generate_pagibig($this->user_info->shop_id);
 
-		/* INSERT DEFAULT WAREHOUSE */
-		Warehouse::put_default_warehouse($this->user_info->shop_id);
 		/* INSERT MAIN WAREHOUSE */
 		Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);
 

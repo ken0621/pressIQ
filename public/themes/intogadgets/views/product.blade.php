@@ -1,10 +1,10 @@
 @extends('layout')
 @section('content')
 
-@if(isset($image))
+@if(get_content($shop_theme_info, 'product', 'product_banner') && get_content($shop_theme_info, 'product', 'product_banner_link'))
 <div class="aadd">
-    <a href="{{$image->ads_link}}" target="_blank">
-        <img src="{{$image->url}}" style="" >
+    <a href="{{ get_content($shop_theme_info, 'product', 'product_banner') }}" target="_blank">
+        <img src="{{ get_content($shop_theme_info, 'product', 'product_banner_link') }}" style="" >
     </a>
 </div>
 @endif
@@ -142,8 +142,8 @@
                         <div class="description">{!! get_product_first_description($product) !!}</div>
                     </div>
                     <div class="cart">
-                        <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div>
-                        <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div>
+                        <!-- <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div> -->
+                        <!-- <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div> -->
                         <button class="button" onclick="location.href='product/'">View Info</button>
                     </div>
                 </div>

@@ -16,7 +16,7 @@
                     
                     </small>
                 </h1>
-                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save</button>
+                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save and Close</button>
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
                <!--  <a href="javascript:" class="panel-buttons btn btn-custom-white pull-right popup" link="/member/item/add" size="lg">Save</a> -->
             </div>
@@ -65,11 +65,11 @@
                             </div>
                             <div class="col-sm-2">
                                 <label>Invoice Date</label>
-                                <input type="text" class="datepicker form-control input-sm" name="inv_date" value="{{$inv->inv_date or ''}}"/>
+                                <input type="text" class="datepicker form-control input-sm" name="inv_date" value="{{$inv->inv_date or date('m/d/y')}}"/>
                             </div>
                             <div class="col-sm-2">
                                 <label>Due Date</label>
-                                <input type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{$inv->inv_due_date or ''}}" />
+                                <input type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{$inv->inv_due_date or date('m/d/y')}}" />
                             </div>
                         </div>
                         
@@ -187,7 +187,6 @@
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <label>Message Displayed on Invoice</label>
@@ -262,7 +261,10 @@
                                 </div> 
                                 <div class="row">
                                     <div class="col-md-7 text-right digima-table-label">
-                                        Total
+                                     @if(isset($pis) && $pis != 0)
+                                     Invoice
+                                     @endif
+                                      Total
                                     </div>
                                     <div class="col-md-5 text-right digima-table-value total">
                                         <input type="hidden" name="overall_price" class="total-amount-input" />
@@ -292,6 +294,155 @@
                             </div>
                         </div>
                         
+                        <!--PIS CM here -->
+
+                        @if(isset($pis) && $pis != 0)
+                        <div class="row clearfix">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>
+                                        <h3>
+                                            <input {{isset($inv->credit_memo) != 0 ? 'checked' : ''}} type="checkbox" onclick="toggle_returns('.returns-class', this)" value="returns" class="returns-check"  value="returns" name="returns"> Returns 
+                                        </h3>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="returns-class" style="{{isset($inv->credit_memo) == null ? 'display:none' : ''}}"  >
+                                <div class="row clearfix draggable-container">
+                                     <div class="table-responsive">
+                                        <div class="col-sm-12">
+                                            <table class="digima-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th style="width: 10px;" ></th>
+                                                        <th style="width: 15px;" class="text-right">#</th>
+                                                        <th style="width: 180px;">Product/Service</th>
+                                                        <th>Description</th>
+                                                        <th style="width: 120px;">U/M</th>
+                                                        <th style="width: 70px;">Qty</th>
+                                                        <th style="width: 100px;">Rate</th>
+                                                        <!-- <th style="width: 100px;">Discount</th> -->
+                                                        <!-- <th style="width: 100px;">Remark</th> -->
+                                                        <th style="width: 100px;">Amount</th>
+                                                        <!-- <th style="width: 10px;">Tax</th> -->
+                                                        <th width="10"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody class="cm-draggable tbody-item-cm">     
+                                                    @if(isset($_cmline))
+                                                        @foreach($_cmline as $cmline)
+                                                            <tr class="tr-cm-draggable">
+                                                                <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+
+                                                                <td class="cm-number-td text-right">1</td>
+                                                                <td>
+                                                                    <select class="form-control select-item droplist-item-cm input-sm pull-left {{$cmline->cmline_item_id}}" name="cmline_item_id[]" required>
+                                                                        @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $cmline->cmline_item_id])
+                                                                    </select>
+                                                                </td>
+                                                                <td><textarea class="textarea-expand txt-desc" name="cmline_description[]" value="{{$cmline->cmline_service_date}}"></textarea></td>
+                                                                <td>
+                                                                    <select class="1111 droplist-um-cm select-um {{isset($cmline->multi_id) ? 'has-value' : ''}}" name="cmline_um[]">
+                                                                        @if($cmline->cmline_um)
+                                                                            @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $cmline->multi_um_id, 'selected_um_id' => $cmline->cmline_um])
+                                                                        @else
+                                                                            <option class="hidden" value="" />
+                                                                        @endif
+                                                                    </select>
+                                                                </td>
+                                                                <td><input class="text-center number-input txt-qty compute" type="text" name="cmline_qty[]" value="{{$cmline->cmline_qty}}" /></td>
+                                                                <td><input class="text-right number-input txt-rate compute" type="text" name="cmline_rate[]" value="{{$cmline->cmline_rate}}" /></td>
+                                                               <!-- <td><input class="text-right txt-discount compute" type="text" name="cmline_discount[]" value="" /> </td>
+                                                                <td><textarea class="textarea-expand" type="text" name="cmline_discount_remark[]" value=""></textarea></td> -->
+                                                                <td><input class="text-right number-input txt-amount" type="text" name="cmline_amount[]" value="{{$cmline->cmline_amount}}" /></td>
+                                                               <!--  <td class="text-center">
+                                                                    <input type="hidden" class="cmline_taxable" name="cmline_taxable[]" value="" >
+                                                                    <input type="checkbox" name="" class="taxable-check" >
+                                                                </td> -->
+                                                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                            </tr>
+                                                        @endforeach
+                                                    @endif                               
+                                                        <tr class="tr-cm-draggable">
+                                                            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+
+                                                            <td class="cm-number-td text-right">1</td>
+                                                            <td>
+                                                                <select class="1111 form-control select-item droplist-item-cm input-sm pull-left" name="cmline_item_id[]" >
+                                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => "", "_item" => $_cm_item])
+                                                                    <option class="hidden" value="" />
+                                                                </select>
+                                                            </td>
+                                                            <td><textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea></td>
+                                                            <td><select class="2222 droplist-um-cm select-um" name="cmline_um[]"><option class="hidden" value="" /></select></td>
+                                                            <td><input class="text-center number-input txt-qty compute" type="text" name="cmline_qty[]"/></td>
+                                                            <td><input class="text-right number-input txt-rate compute" type="text" name="cmline_rate[]"/></td>
+                                                           <!--  <td><input class="text-right txt-discount compute" type="text" name="cmline_discount[]"/></td>
+                                                            <td><textarea class="textarea-expand" type="text" name="cmline_discount_remark[]" ></textarea></td> -->
+                                                            <td><input class="text-right number-input txt-amount" type="text" name="cmline_amount[]"/></td>
+                                                           <!--  <td class="text-center">
+                                                                <input type="hidden" class="cmline_taxable" name="cmline_taxable[]" value="" >
+                                                                <input type="checkbox" name="" class="taxable-check" value="checked">
+                                                            </td> -->
+                                                            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                        </tr>
+                                                            
+                                                        <tr class="tr-cm-draggable">
+                                                            <td class="text-center cursor-move move" ><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+                                                            <td class="cm-number-td text-right">2</td>
+                                                            <td>
+                                                                <select class="22222 form-control select-item droplist-item-cm input-sm pull-left" name="cmline_item_id[]" >
+                                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => "","_item" => $_cm_item])
+                                                                    <option class="hidden" value="" />
+                                                                </select>
+                                                            </td>
+                                                            <td><textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea></td>
+                                                            <td><select class="3333 droplist-um-cm select-um" name="cmline_um[]"><option class="hidden" value="" /></select></td>
+                                                            <td><input class="text-center number-input txt-qty compute" type="text" name="cmline_qty[]"/></td>
+                                                            <td><input class="text-right number-input txt-rate compute" type="text" name="cmline_rate[]"/></td>
+                                                           <!--  <td><input class="text-right txt-discount compute" type="text" name="cmline_discount[]"/></td>
+                                                            <td><input class="text-right number-input" type="text" name="cmline_discount_remark[]"/></td> -->
+                                                            <td><input class="text-right number-input txt-amount" type="text" name="cmline_amount[]"/></td>
+                                                           <!--  <td class="text-center">
+                                                                <input type="hidden" class="cmline_taxable" name="cmline_taxable[]" value="" >
+                                                                <input type="checkbox" name="" class="taxable-check" value="checked">
+                                                            </td> -->
+                                                            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                        </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row clearfix">
+                            <div class="col-sm-6 col-sm-offset-6 text-right">
+                                <div class="row">
+                                    <div class="col-md-7 text-right digima-table-label">
+                                        Returns Sub Total
+                                    </div>
+                                    <div class="col-md-5 text-right digima-table-value">
+                                        <input type="hidden" name="subtotal_price_returns" class="subtotal-amount-input-returns" />
+                                        PHP&nbsp;<span class="sub-total-returns">0.00</span>
+                                    </div>
+                                </div> 
+                                <div class="row">
+                                    <div class="col-md-7 text-right digima-table-label">
+                                        <h3>Total<h3>
+                                    </div>
+                                    <div class="col-md-5 text-right digima-table-value total">
+                                        <h3>
+                                            <input type="hidden" name="overall_price_with_return" class="total-amount-input-with-returns" />
+                                            PHP&nbsp;<span class="total-amount-with-returns">0.00</span>
+                                        </h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @endif
                         <!-- END CONTENT -->
                     </div>
                 </div>
@@ -323,6 +474,27 @@
                 <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
                 <input type="checkbox" name="" class="taxable-check compute" value="checked">
             </td>
+            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+        </tr>
+    </table>
+</div>
+
+<div class="div-script-cm">
+    <table class="div-item-row-script-cm hide">
+        <tr class="tr-cm-draggable">
+            <td class="text-center cursor-move move" ><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+            <td class="cm-number-td text-right">2</td>
+            <td>
+                <select class="22222 form-control select-item input-sm pull-left" name="cmline_item_id[]" >
+                    @include("member.load_ajax_data.load_item_category", ['add_search' => "","_item" => $_cm_item])
+                    <option class="hidden" value="" />
+                </select>
+            </td>
+            <td><textarea class="textarea-expand txt-desc" name="cmline_description[]"></textarea></td>
+            <td><select class="3333 select-um" name="cmline_um[]"><option class="hidden" value="" /></select></td>
+            <td><input class="text-center number-input txt-qty compute" type="text" name="cmline_qty[]"/></td>
+            <td><input class="text-right number-input txt-rate compute" type="text" name="cmline_rate[]"/></td>
+            <td><input class="text-right number-input txt-amount" type="text" name="cmline_amount[]"/></td>
             <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
         </tr>
     </table>

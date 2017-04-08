@@ -152,6 +152,7 @@ return [
         // Dingo Laravel sevice
         // Dingo\Api\Provider\LaravelServiceProvider::class,
         Msurguy\Honeypot\HoneypotServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class
     ],
 
     /*
@@ -208,6 +209,7 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'Honeypot' => Msurguy\Honeypot\HoneypotFacade::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 
 ];

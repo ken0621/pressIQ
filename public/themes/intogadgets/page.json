@@ -10,36 +10,106 @@
 		},
 		"home_category_sale" :
 		{
-			"label":"Category Sale",
+			"label":"Category Sale Image",
 			"type":"image",
 			"default":"",
-			"size":"6"
+			"size":"4"
+		},
+		"home_category_sale_label" :
+		{
+			"label":"Category Sale Label",
+			"type":"textbox",
+			"default":"SALE SALE",
+			"size":"4"
+		},
+		"home_category_sale_link" :
+		{
+			"label":"Category Sale Link",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
 		},
 		"home_category_featured" :
 		{
-			"label":"Category Featured",
+			"label":"Category Featured Image",
 			"type":"image",
 			"default":"",
-			"size":"6"
+			"size":"4"
+		},
+		"home_category_featured_label" :
+		{
+			"label":"Category Featured Label",
+			"type":"textbox",
+			"default":"FEATURED",
+			"size":"4"
+		},
+		"home_category_featured_link" :
+		{
+			"label":"Category Featured Link",
+			"type":"textbox",
+			"default":"",
+			"size":"4"
 		},
 		"home_category_tablet" :
 		{
-			"label":"Category Tablet",
+			"label":"Category Tablet Image",
 			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"home_category_tablet_label" :
+		{
+			"label":"Category Tablet Label",
+			"type":"textbox",
+			"default":"TABLETS",
+			"size":"4"
+		},
+		"home_category_tablet_link" :
+		{
+			"label":"Category Tablet Link",
+			"type":"textbox",
 			"default":"",
 			"size":"4"
 		},
 		"home_category_accessories" :
 		{
-			"label":"Category Accessories",
+			"label":"Category Accessories Image",
 			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"home_category_accessories_label" :
+		{
+			"label":"Category Accessories Label",
+			"type":"textbox",
+			"default":"ACCESSORIES",
+			"size":"4"
+		},
+		"home_category_accessories_link" :
+		{
+			"label":"Category Accessories Link",
+			"type":"textbox",
 			"default":"",
 			"size":"4"
 		},
 		"home_category_smartphone" :
 		{
-			"label":"Category Smartphone",
+			"label":"Category Smartphone Image",
 			"type":"image",
+			"default":"",
+			"size":"4"
+		},
+		"home_category_smartphone_label" :
+		{
+			"label":"Category Smartphone Label",
+			"type":"textbox",
+			"default":"SMARTPHONES",
+			"size":"4"
+		},
+		"home_category_smartphone_link" :
+		{
+			"label":"Category Smartphone Link",
+			"type":"textbox",
 			"default":"",
 			"size":"4"
 		},
@@ -47,21 +117,21 @@
 		{
 			"label":"First Service",
 			"type":"image",
-			"default":"/resources/assets/frontend/img/shipping.jpg",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/shipping.jpg",
 			"size":"4"
 		},
 		"home_second_service" :
 		{
 			"label":"Second Service",
 			"type":"image",
-			"default":"/resources/assets/frontend/img/business.jpg",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/business.jpg",
 			"size":"4"
 		},
 		"home_third_service" :
 		{
 			"label":"Third Service",
 			"type":"image",
-			"default":"/resources/assets/frontend/img/garentee.jpg",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/garentee.jpg",
 			"size":"4"
 		},
 		"home_featured_title" :
@@ -134,7 +204,7 @@
 		{
 			"label":"About First Row Image",
 			"type":"image",
-			"default":"/resources/assets/frontend/img/about-logo.png",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/about-logo.png",
 			"size":"6"
 		},
 		"about_first_row_text" :
@@ -148,7 +218,7 @@
 		{
 			"label":"About Second Row Image",
 			"type":"image",
-			"default":"/resources/assets/frontend/img/about-logo2.png",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/about-logo2.png",
 			"size":"6"
 		},
 		"about_second_row_text" :
@@ -162,7 +232,7 @@
 		{
 			"label":"About Third Row Image",
 			"type":"image",
-			"default":"/resources/assets/frontend/img/about-logo3.png",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/about-logo3.png",
 			"size":"6"
 		},
 		"about_third_row_text" :
@@ -176,7 +246,7 @@
 		{
 			"label":"About Third Row Image Award",
 			"type":"image",
-			"default":"/resources/assets/frontend/img/about-award.png",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/about-award.png",
 			"size":"12"
 		},
 		"about_objective_title" :
@@ -222,6 +292,79 @@
 			"size":"12"
 		}
 	},
+	"contact":
+	{
+		"contact_header_cover" :
+		{
+			"label":"Contact Header Cover",
+			"type":"image",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/contact-header.png",
+			"size":"12"
+		},
+		"contact_title" :
+		{
+			"label":"Contact Title",
+			"type":"textbox",
+			"default":"LEAVE US A MESSAGE",
+			"size":"12"
+		},
+		"contact_subtitle" :
+		{
+			"label":"Contact Sub-Title",
+			"type":"textbox",
+			"default":"Whether you have a question about bulk orders, need assistance on payment options, or just wanted to drop a line,we want to know what’s on your mind.",
+			"size":"12"
+		},
+		"contact_quote" :
+		{
+			"label":"Contact Quote",
+			"type":"textbox",
+			"default":"We’ll help you get your orders out.",
+			"size":"12"
+		},
+		"contact_location_link" :
+		{
+			"label":"Contact Location Link",
+			"type":"textbox",
+			"default":"http://www.google.com/maps/d/edit?mid=zbBh_Yccu5o0.ksjUvC1cQtLE&usp=sharing",
+			"size":"3"
+		},
+		"contact_facebook_link" :
+		{
+			"label":"Contact Facebook Link",
+			"type":"textbox",
+			"default":"http://facebook.com/intogadgetstore",
+			"size":"3"
+		},
+		"contact_twitter_link" :
+		{
+			"label":"Contact Twitter Link",
+			"type":"textbox",
+			"default":"http://twitter.com/intogadgetstore",
+			"size":"3"
+		},
+		"contact_instagram_link" :
+		{
+			"label":"Contact Instagram Link",
+			"type":"textbox",
+			"default":"http://instagram.com/intogadgetsph",
+			"size":"3"
+		},
+		"contact_store_maintenance" :
+		{
+			"label":"Contact Store Maintenance",
+			"type":"maintenance",
+			"default":"",
+			"field":[
+				{"name":"image", "type":"image"},
+				{"name":"name", "type":"text"},
+				{"name":"branch", "type":"text"},
+				{"name":"contact", "type":"text"},
+				{"name":"link", "type":"text"}
+			],
+			"size":"12"
+		}
+	},
 	"career":
 	{
 		"career_title" :
@@ -256,8 +399,8 @@
 		{
 			"label":"Career Intro Image",
 			"type":"image",
-			"default":"/resources/assets/frontend/img/career3.png",
-			"size":"6"
+			"default":"/themes/intogadgets/resources/assets/frontend/img/career3.png",
+			"size":"12"
 		},
 		"career_intro_description" :
 		{
@@ -285,8 +428,116 @@
 			"size":"12"
 		}
 	},
+	"order":
+	{
+		"how_to_order_image" : 
+		{
+			"label":"How to Order Image",
+			"type":"image",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/how.jpg",
+			"size":"12"
+		}
+	},
+	"youwin":
+	{
+		"you_win_cover" : 
+		{
+			"label":"You Win Cover",
+			"type":"image",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/youwin-header.jpg",
+			"size":"12"
+		},
+		"you_win_description_1" : 
+		{
+			"label":"You Win Description 1",
+			"type":"textbox",
+			"default":"YOUWIN DEVICES AUTHORIZED SERVICE",
+			"size":"12"
+		},
+		"you_win_description_2" : 
+		{
+			"label":"You Win Description 2",
+			"type":"textbox",
+			"default":"CLICK BELOW TO SEE HOW WE CAN BEST SERVE YOU.",
+			"size":"12"
+		},
+		"you_win_locate_image" :
+		{
+			"label":"You Win Locate Image",
+			"type":"image",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/location.jpg",
+			"size":"6"
+		},
+		"you_win_locate_link" :
+		{
+			"label":"You Win Locate Link",
+			"type":"textbox",
+			"default":"/contact",
+			"size":"6"
+		},
+		"you_win_send_image" :
+		{
+			"label":"You Win Send Image",
+			"type":"image",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/message.jpg",
+			"size":"6"
+		},
+		"you_win_send_link" :
+		{
+			"label":"You Win Send Link",
+			"type":"textbox",
+			"default":"https://docs.google.com/forms/d/e/1FAIpQLSd7G9SWq8BxmCIZIrI5h04ctPtBFt6AVfyUl2AG-rP-S6FysA/viewform",
+			"size":"6"
+		},
+		"you_win_contact_image" :
+		{
+			"label":"You Win Contact Image",
+			"type":"image",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/contact.jpg",
+			"size":"6"
+		},
+		"you_win_manual_title" :
+		{
+			"label":"You Win Manual Title",
+			"type":"textbox",
+			"default":"MANUALS",
+			"size":"12"
+		},
+		"you_win_manual_subtitle" :
+		{
+			"label":"You Win Manual Sub-Title",
+			"type":"textbox",
+			"default":"MANUALS",
+			"size":"12"
+		},
+		"you_win_manual_maintenance" :
+		{
+			"label":"You Win Manual Maintenance",
+			"type":"maintenance",
+			"field":[
+				{"name":"label", "type":"text"},
+				{"name":"link", "type":"text"}
+			],
+			"default":"",
+			"size":"12"
+		}
+	},
 	"product":
 	{
+		"product_banner" :
+		{
+			"label":"Product Banner",
+			"type":"image",
+			"default":"",
+			"size":"12"
+		},
+		"product_banner_link" :
+		{
+			"label":"Product Banner Link",
+			"type":"textbox",
+			"default":"",
+			"size":"12"
+		},
 		"top_rated_products" :
 		{
 			"label":"Top Rated Products",
@@ -304,6 +555,27 @@
 	},
 	"info":
 	{
+		"footer_ads" :
+		{
+			"label":"Footer Ads",
+			"type":"image",
+			"default":"",
+			"size":"12"
+		},
+		"footer_ads_link" :
+		{
+			"label":"Footer Ads Link",
+			"type":"textbox",
+			"default":"",
+			"size":"12"
+		},
+		"newsletter_popup_cover_image" :
+		{
+			"label":"Newsletter Popup Cover Image",
+			"type":"image",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/popup-signup.jpg",
+			"size":"12"
+		},
 		"footer_contact_number_1" :
 		{
 			"label":"Footer Contact Number #1",
@@ -371,7 +643,7 @@
 		{
 			"label":"Dakasi Logo Image",
 			"type":"image",
-			"default":"/resources/assets/frontend/img/dakasi-logo.png",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/dakasi-logo.png",
 			"size":"6"
 		},
 		"dakasi_link" :
@@ -385,7 +657,7 @@
 		{
 			"label":"Primia Logo Image",
 			"type":"image",
-			"default":"/resources/assets/frontend/img/primia-logo.png",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/primia-logo.png",
 			"size":"6"
 		},
 		"primia_link" :
@@ -399,7 +671,7 @@
 		{
 			"label":"Bank Image",
 			"type":"image",
-			"default":"/resources/assets/frontend/img/brands/payment.png",
+			"default":"/themes/intogadgets/resources/assets/frontend/img/brands/payment.png",
 			"size":"12"
 		},
 		"copyright_text":

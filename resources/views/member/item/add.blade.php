@@ -73,7 +73,7 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Unit of Measure</label>
-                            <select class="form-control input-sm measure_container drop-down-um" name="item_measurement_id">
+                            <select class="form-control input-sm measure_container drop-down-um" add="add" name="item_measurement_id">
                                 @include("member.load_ajax_data.load_unit_measurement")
                             </select>
                         </div>
@@ -303,7 +303,7 @@
                     </div>
                     <div class="col-md-4">
                         <label>Unit of Measure</label>
-                            <select class="form-control input-sm measure_container3 drop-down-um" name="item_measurement_id">
+                            <select class="form-control input-sm measure_container3 drop-down-um"name="item_measurement_id">
                                 @include("member.load_ajax_data.load_unit_measurement")
                             </select>
                     </div>
@@ -453,7 +453,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <select class="form-control drop-down-um select-um input-sm pull-left" name="bundle_um_id[]">
+                                    <select class="form-control drop-down-um-one select-um-one input-sm pull-left" name="bundle_um_id[]">
                                         <option value=""></option> 
                                     </select>
                                 </td>   
@@ -482,7 +482,7 @@
                 </select>
             </td>
             <td>
-                <select class="form-control select-um input-sm pull-left" name="bundle_um_id[]">
+                <select class="form-control select-um-one input-sm pull-left" name="bundle_um_id[]">
                     <option value=""></option> 
                 </select>
             </td>   

@@ -671,9 +671,16 @@ class EcommerceProductController extends Member
 		}
 		$exist_variant 	= Tbl_ec_product::Variant(" • ")->where("eprod_id", $product_id)->where("evariant_id","<>",$variant_id)->where("eprod_shop_id", $this->getShopId())->first();
 
-		if(strtolower($exist_variant->variant_name) == strtolower($option_value))
+		if($exist_variant)
 		{
-			return $option_value;
+			if(strtolower($exist_variant->variant_name) == strtolower($option_value))
+			{
+				return $option_value;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{

@@ -273,5 +273,13 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_process/ajax_load_payroll_period','Member\PayrollController@ajax_load_payroll_period');
 	Route::any('/payroll_process/ajax_payroll_company_period','Member\PayrollController@ajax_payroll_company_period');
 	Route::any('/payroll_process/process_payroll','Member\PayrollController@process_payroll');
+	Route::any('/payroll_process/payroll_compute_brk_unsaved/{employee_id}/{period_company_id}','Member\PayrollController@payroll_compute_brk_unsaved');
+	Route::any('/payroll_process/modal_create_payroll_adjustment/{payroll_employee_id}/{payroll_period_company_id}','Member\PayrollController@modal_create_payroll_adjustment');
+	Route::any('/payroll_process/create_payroll_adjustment','Member\PayrollController@create_payroll_adjustment');
 	/* PAYROLL PROCESS END */
+
+	/* PAYROLL SUMMARY JOURNAL ENTRIES */
+	Route::get('/payroll_summary','Member\PayrollController@payroll_summary');
+
+	/* END */
 });	

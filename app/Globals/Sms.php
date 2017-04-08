@@ -21,7 +21,7 @@ use Carbon\carbon;
  * @author Bryan Kier Aradanas
  */
 
-class Sms
+class Sms 
 {
 	public static function getShopId()
 	{
@@ -87,7 +87,7 @@ class Sms
 			$data 	= "cURL Error #:" . $err;
 		} 
 		else {
-			$status = "pending";
+			$status = "UNKNOWN";
 			$data   = $response;
 		}
 
@@ -163,6 +163,8 @@ class Sms
 				"content-type: application/json"
 			),
 		));
+
+		// dd($curl);
 
 		$response 	= curl_exec($curl);
 		$err 		= curl_error($curl);

@@ -2,8 +2,11 @@
 
 @extends('member.layout')
 @section('content')
-
-<form method="post" action="/member/mlm/product_code/sell/process" class="global-submit">
+<form  role="form" id="bardcode_product_form" method="post" action="/member/mlm/product_code/sell/add_line/product_barcode/submit" class="global-submit">
+									{!! csrf_field() !!}
+</form>
+<form method="post" id="item_code_submit_form" action="/member/mlm/product_code/sell/process" class="global-submit">
+{!! csrf_field() !!}
 	<div class="panel panel-default panel-block panel-title-block" id="top">
 	    <div class="panel-heading">
 	        <div>
@@ -37,8 +40,16 @@
 							
 						</div>
 							<div class="col-md-3">
-								<label>Slot</label>
+								<label>Slot </label>
 								<input type="text" class="form-control membership_code" name="membership_code" onChange="bar_code_membership_code(this)">
+								<small style="color:gray;">Barcode or press Enter to search.</small>
+							</div>
+							<div class="col-md-3">
+									<label>Products</label>
+									<input type="text" class="form-control product_barcode" name="product_barcode" form="bardcode_product_form" onChange="bar_code_product(this)">
+									<button class="btn btn-primary barcode_product_button hide" form="bardcode_product_form">Submit</button>
+									<small style="color:gray;">Barcode or press Enter to search.</small>
+								</form>
 							</div>
 					</div>
 				</div>
@@ -78,6 +89,7 @@
 					<div class="row">
 						<form role="form" action="/member/mlm/item/add/save" id="save_item_form" method="post">
 							{!! csrf_field() !!}
+						</form>	
 							<div class="form-group col-md-3">
 								<label for="basic-input">Message displayed on invoice</label>
 								<textarea class="form-control" name="item_code_message_on_invoice"></textarea>
@@ -116,7 +128,7 @@
 								        <div class="form-group">
 								            <label for="inpuFname" class="payment_label" data-bind="payment-label">Choose Payment</label>
 								            <div class="input-group">
-								                <input id="payment-value"  name="payment_value" type="text" value="0" class="form-control payment-value" name="text" readonly data-bind="payment-value">
+								                <input id="payment-value"  form="item_code_submit_form" name="payment_value" type="text" value="0" class="form-control payment-value" name="text" readonly data-bind="payment-value">
 								                <div class="input-group-btn bs-dropdown-to-select-group">
 								                	<ul class="dropdown-menu" role="menu" style="">
 								                        <li data-value="1"><a href="#">Cash</a></li>
@@ -125,7 +137,7 @@
 								                    </ul>
 								                    <button type="button" class="btn btn-default dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
 								                        <span data-bind="bs-drp-sel-label" style="color: black !important">Payment</span>
-								                        <input type="hidden" name="payment_type_choose" data-bind="bs-drp-sel-value" value="0">
+								                        <input type="hidden" name="payment_type_choose" form="item_code_submit_form" data-bind="bs-drp-sel-value" value="0">
 								                        <span class="caret" style="color: black !important"></span>
 								                        <span class="sr-only">Toggle Dropdown</span>
 								                    </button>
@@ -137,17 +149,20 @@
 								</div>
 
 							</div>
-						</form>
 					</div>
 				</div>
 				
 			</div>
 		</div>
 	</div>
+
 </form>
 <div class="clear"></div>
 <div class="col-md-12 load_fix_session hide">
 	<!-- @include('sessionPrinter') -->
+</div>
+<div class="barcode_append">
+	
 </div>
 @endsection
 
@@ -169,17 +184,23 @@ $(document).ready(function(e){
     		if(payment_value == 1)
     		{
     			$('.payment_label').text("Input Tendered Payment");
+    			$('.payment-value').val('');
     			document.getElementById('payment-value').readOnly =false;
+    			
     		}
     		else if(payment_value == 2)
     		{
     			$('.payment_label').text("Input GC Code");
+    			$('.payment-value').val('');
     			document.getElementById('payment-value').readOnly =false;
+    			
     		}
     		else if(payment_value == 3)
     		{
     			$('.payment_label').text("Wallet Payment (Auto Compute)");
+    			$('.payment-value').val('');
     			document.getElementById('payment-value').readOnly =true;
+
     		}
 		return false;
 	});
@@ -276,6 +297,14 @@ function submit_done(data)
         load_session();
         $('#global_modal').modal('toggle');
     }
+    else if(data.response_status == 'success_a_item_barcode')
+    {
+    	toastr.success('Barcode Success');
+    	load_session();
+    }
+
+
+
 }
 
 /* ERWIN */
@@ -459,6 +488,12 @@ function submit_done(data)
 		toastr.success('Success');
 		window.location = "/member/mlm/product_code/receipt?invoice_id=" + data.invoice_id;
 	}
+	else if(data.response_status == 'success_a_item_barcode')
+    {
+    	toastr.success('Barcode Success');
+    	load_session();
+    }
+
 }
 
 $(document).on("keydown", ".membership_code", function(e)
@@ -481,6 +516,29 @@ $(document).on("keydown", ".class_item_serial", function(e)
 		$(".class_item_serial_" + serail_key ).focus();
 		// bar_code_membership_code(this);
 	}
-})
+});
+$(document).on("keydown", ".product_barcode", function(e)
+{
+	if(e.which == 13)
+	{
+		e.preventDefault();
+
+		bar_code_product(this);
+
+	}
+});
+
+function bar_code_product(ito)
+{
+	console.log('asd');
+	var barcode = $(ito).val();
+	$('.barcode_product_button').click();
+	// $('#bardcode_product_form').submit(function(){
+	// 	load_session();
+	// });
+	// var link = '/member/mlm/product_code/sell/add_line/product_barcode/' + barcode;
+	$(ito).val('');
+	
+}
 </script>
 @endsection

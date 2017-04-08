@@ -1,5 +1,8 @@
 <?php
 
+Route::get('/member/mail_setting', 'Member\MailSettingController@index');
+Route::post('/member/mail_setting', 'Member\MailSettingController@submit');
+
 Route::any('/member/instant_add_slot', 'Member\MLM_SlotController@instant_add_slot');
 
 Route::any('/member/raymond', 'Member\RaymondController@index'); //RAYMOND
@@ -21,6 +24,8 @@ Route::post('member/register/package/submit', 'MemberController@package_post');
 Route::get('member/register/payment', 'MemberController@payment');
 Route::post('member/register/payment/submit', 'MemberController@payment_post');
 
+Route::get('member/register/shipping', 'MemberController@shipping');
+Route::post('member/register/shipping/submit', 'MemberController@shipping_post');
 
 Route::get('member/card', 'Member\MLM_CardController@card');
 Route::get('member/card/all', 'Member\MLM_CardController@all_slot');
@@ -199,6 +204,7 @@ Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_i
 
 Route::any("/member/item/view_serials/{id}","Member\ItemSerialController@index");
 Route::any("/member/item/serial_number/{id}",'Member\ItemSerialController@view_serial');
+Route::any("/member/item/save_serial",'Member\ItemSerialController@save_serial');
 
 Route::any('/member/functiontester', 'Member\FunctionTesterController@index'); /* ERWIN */
 Route::any('/member/functiontester/clear_all', 'Member\FunctionTesterController@clear_all'); /* ERWIN */
@@ -223,12 +229,14 @@ Route::any('/member/item/unit_of_measurement/add_submit','Member\UnitOfMeasureme
 Route::any('/member/item/unit_of_measurement/edit/{id}','Member\UnitOfMeasurementController@edit');
 Route::any('/member/item/unit_of_measurement/edit_submit','Member\UnitOfMeasurementController@edit_submit');
 Route::any('/member/item/um/select_type','Member\UnitOfMeasurementController@select_type');
+Route::any('/member/item/unit_of_measurement/{id}/{action}','Member\UnitOfMeasurementController@archived');
+Route::any('/member/item/unit_of_measurement/archived_submit','Member\UnitOfMeasurementController@archived_submit');
 /* END U/M ARCY*/
 
 /*PIS*/
 Route::any('/member/item/um/',"Member\UnitOfMeasurementController@check");
-Route::any('/member/item/um/add_base/{id}',"Member\UnitOfMeasurementController@add_base");
-
+Route::any('/member/item/um/add_base/{id}/{item_id}',"Member\UnitOfMeasurementController@add_base");
+Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController@add_base_submit');
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
 /* END AUDIT TRAIL*/
@@ -382,6 +390,8 @@ Route::any('/tablet/sync_import',"Member\TabletPISController@sync_import");
 Route::any('/tablet/sync_export','Member\TabletPISController@sync_export');
 Route::any('/tablet/logout','Member\TabletPISController@logout');
 Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_sir');
+Route::any('/tablet/sir_reload/{id}','Member\TabletPISController@sir_reload');
+
 
 Route::any('/tablet/customer',"Member\TabletPISController@customer");
 Route::any('/tablet/customer_details/{id}',"Member\TabletPISController@customer_details");
@@ -494,7 +504,8 @@ Route::get('/member/vendor/purchase_order/list','Member\Vendor_PurchaseOrderCont
 Route::any('/member/vendor/purchase_order/create_po','Member\Vendor_PurchaseOrderController@create_po');
 Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrderController@upate_po');
 
-Route::get('/member/vendor/create_bill','Member\Vendor_CreateBillController@index');
+Route::get('/member/vendor/bill_list','Member\Vendor_CreateBillController@index');
+Route::get('/member/vendor/create_bill','Member\Vendor_CreateBillController@create_bill');
 Route::any('/member/vendor/load_purchase_order/{id}','Member\Vendor_CreateBillController@load_purchase_order');
 Route::any('/member/vendor/create_bill/add','Member\Vendor_CreateBillController@add_bill');
 Route::any('/member/vendor/create_bill/update','Member\Vendor_CreateBillController@update_bill');
@@ -719,7 +730,9 @@ Route::controller('/member/maintenance/online_payment', 'Member\OnlinePaymentMet
 /* ONLINE PAYMENT METHOD */
 Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* End */
-
+/* ITEM IMPORT*/
+Route::controller('/member/item/import', 'Member\ItemImportController');
+/* End */
 
 Route::controller('/tester','TesterController');
 

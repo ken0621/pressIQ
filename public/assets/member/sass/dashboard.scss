@@ -35,3 +35,25 @@
 		padding-bottom: 5px;
 	}
 }
+
+.reports-class
+{
+	padding: 20px;
+	margin-top: 10px;
+	font-size: 23px;
+	.po-class
+	{
+		background-color: #21ABF6;
+		color: #fff;
+	}
+	.ar-class
+	{
+		background-color: #FF8000;
+		color: #fff;
+	}
+	.sales-class
+	{
+		background-color: #78C500;
+		color: #fff;
+	}
+}

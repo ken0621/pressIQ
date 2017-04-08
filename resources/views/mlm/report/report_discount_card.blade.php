@@ -15,7 +15,7 @@
                             <thead>
                                 <th>Date Created</th>
                                 <th>Membership Name</th>
-                                <th></th>
+                                <th class="hide"></th>
                             </thead>
                             @if(isset($unused_discount_car))
                                 @if(count($unused_discount_car) >= 1)
@@ -23,7 +23,7 @@
                                         <tr>
                                             <td>{{$value->discount_card_log_date_created}}</td>
                                             <td>{{$value->membership_name}}</td>
-                                            <td>
+                                            <td class="hide">
                                                 <a href="javascript:" class="btn btn-primary" onClick="show_pop_up({{$value->discount_card_log_id}})">Use</a>
                                             </td>
                                         </tr>

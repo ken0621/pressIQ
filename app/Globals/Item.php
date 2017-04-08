@@ -136,6 +136,11 @@ class Item
             $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray();
             foreach($_category[$key]['item_list'] as $key1=>$item_list)
             {
+                //  //cycy
+                if($item_list['item_type_id'] == 4)
+                {
+                   $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
+                }
                 $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
             }
             $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
@@ -151,6 +156,10 @@ class Item
             $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->where("archived",0)->whereIn("item_type_id",$type)->get()->toArray();
             foreach($_category[$key]['item_list'] as $key1=>$item_list)
             {
+                if($item_list['item_type_id'] == 4)
+                {
+                   $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
+                }
                 $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
             }
             $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
@@ -189,7 +198,37 @@ class Item
 
         return collect($_category)->toArray();
     }
+    public static function get_item_bundle_price($item_id = null)
+    {
+        $price = 0;
+        $item_type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        if($item_id != null && $item_type == 4)
+        {
+            $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+            foreach ($bundle_item as $key => $value) 
+            {
+                $item_price =  Purchasing_inventory_system::get_item_price($value->bundle_item_id);
+                $um_qty = UnitMeasurement::um_qty($value->bundle_um_id);
 
+                $price += $item_price * ($um_qty * $value->bundle_qty);
+            }
+        }
+        return $price;
+    }    
+    public static function get_bundle_item_qty($item_id = null)
+    {
+        $qty = 0;
+        $item_type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        if($item_id != null && $item_type == 4)
+        {
+            $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+            foreach ($bundle_item as $key => $value) 
+            {
+                
+            }
+        }
+        return $qty;
+    }    
     public static function get_item_bundle($item_id = null)
     {
         $data = Tbl_item::where("item_type_id", 4);
@@ -264,7 +303,7 @@ class Item
                    $condition = "true";
                 }
             }
-
+            // return $get_session;
             if($condition == "false")
             {
                 $get_session[$array['item_id']] = $array;

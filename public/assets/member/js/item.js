@@ -107,7 +107,29 @@ function item()
         {
             width       : '100%',
             link        : '/member/item/unit_of_measurement/add',
-            link_size   : 'lg'
+            link_size   : 'lg',
+            onChangeValue : function()
+            {
+                if($(this).attr("add") == "add")
+                {
+                    var id = $(this).val();
+                    var item_id = $(".item_id").val();
+                    $.ajax({
+                        url : "/member/item/um/",
+                        type : "get",
+                        data : { id:id , item_id:item_id},
+                        success : function(data)
+                        {      
+                            data = $.parseJSON(data);                                          
+                            if(data.status == "pop-up-um")
+                            {
+                                console.log(data.status);
+                                action_load_link_to_modal(data.action,"md");
+                            }
+                        }
+                    });                    
+                }
+            }
         });
 
         $(".drop-down-coa").globalDropList(
@@ -122,8 +144,8 @@ function item()
             }
         });
 
-        action_select_plugin_item(".drop-down-item")
-        action_select_plugin_um(".drop-down-um")
+        action_select_plugin_item(".drop-down-item");
+        action_select_plugin_um_one(".drop-down-um-one");
     }
 
     function action_select_plugin_item($this)
@@ -139,6 +161,10 @@ function item()
             onCreateNew : function()
             {
                 item_selected = $(this);
+            },
+            onChangeValue: function()
+            {
+                action_load_item_info($(this));
             }
         });
     }
@@ -156,6 +182,39 @@ function item()
                 $(".abbreviation").text(option);
             }
         });
+    }
+
+    function action_select_plugin_um_one($this)
+    {
+        $($this).globalDropList(
+        {
+            width       : '100%',
+            hasPopup    : "false",
+            placeholder : 'Units of Measurement',
+            onChangeValue : function()
+            {
+                var option = $('option:selected', this).attr('abbrev');
+                $(".abbreviation").text(option);
+            }
+        });
+    }
+
+    function action_load_item_info($this)
+    {
+        if($this.find("option:selected").attr("has-um") != '')
+        {          
+            $parent = $this.closest("tr");
+            console.log("true"); 
+            $parent.find(".select-um-one").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
+            {
+                $(this).globalDropList("reload").globalDropList("enabled");
+                $(this).val($(this).find("option:first").val()).change();
+            })
+        }
+        else
+        {
+            $parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+        }
     }
 
     function event_back_menu_click()
@@ -259,7 +318,7 @@ function item()
     function action_trigger_select_plugin()
     {
         action_select_plugin_item(".tbody-item tr:last select.select-item");
-        action_select_plugin_um(".tbody-item tr:last select.select-um");
+        action_select_plugin_um(".tbody-item tr:last select.select-um-one");
     }
 
     function action_remain_only_one_add()
@@ -289,6 +348,10 @@ function submit_done(data)
              $(".drop-down-manufacturer").globalDropList("reload"); 
              $(".drop-down-manufacturer").val(data.id).change();              
         });
+        data.element.modal("hide");
+    }
+    else if(data.type == "base-um")
+    {        
         data.element.modal("hide");
     }
     else if(data.type == "unit-measurement")

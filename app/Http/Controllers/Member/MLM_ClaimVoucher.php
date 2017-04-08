@@ -78,8 +78,12 @@ class MLM_ClaimVoucher extends Member
 			    $data['item_bundle'] =[];
 			    foreach($data['_voucher_product'] as $key => $value)
 			    {
-			    	$data['_voucher_product'][$key]->item_bundle = Item::get_item_bundle($value->item_id);
-			    	$data['item_bundle'][$key] =Item::get_item_bundle($value->item_id);
+			    	if($value->voucher_is_bundle == 1)
+			    	{
+			    		$data['_voucher_product'][$key]->item_bundle = Item::get_item_bundle($value->item_id);
+			    		$data['item_bundle'][$key] =Item::get_item_bundle($value->item_id);
+			    	}
+			    	
 			    }
 			}
 		}

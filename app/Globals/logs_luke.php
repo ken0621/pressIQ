@@ -141,7 +141,7 @@ Product code use option - kung dadaan ng product code ()
 
 
 
-bar codde
+bar code
 
 
 street
@@ -165,4 +165,31 @@ Unilevel Bonus GPV Saka PV
 
 
 
+8.Reject - reason
+9. Register - slot or slot nickname
+10. Sidebar /member/register/payment yung cart/binili/shipping
+11. Payment at Delivery page magkaiba (may sidebar din)
+12. Shipping Fee sa sidebar
+7.Bulk Encashment (checbox) - kahit wala munang functionality *
+8.Reject - reason
+------
+Myphone
+------
+9. Register - slot or slot nickname
+10. Sidebar /member/register/payment yung card/binili
+11. Payment at Delivery page magkaiba (may sidebar din)
+12. Shipping Fee sa sidebar
+----------
+Done
+----------
+2.Pending - Wallet
+3.Member's area number format
 
+
+-- medyo
+7.Bulk Encashment (checbox) - kahit wala munang functionality *
+
+
+-- ok
+2.Pending - Wallet
+3.Member's area number format

@@ -87,9 +87,10 @@
                     <thead>                   
                             <tr>
                                 <th>Item Name</th>
+                                <th>Unit Price</th>
                                 <th>Quantity</th>
-                                <th>Original Price</th>
-                                <th>V.I.P. Price</th>
+                                <th>Original <br>Price</th>
+                                <th>V.I.P. <br>Price</th>
                             </tr>   
                     </thead>    
                     <tbody>
@@ -97,6 +98,7 @@
                         @foreach($item_list as $key => $value)
                         <tr>
                             <td>{{$value->item_name}}</td>
+                            <td>{{$value->item_price}}</td>
                             <td>{{$value->item_quantity}}</td>
                             <td>{{$value->item_price * $value->item_quantity}}</td>
                             <td>{{$value->item_membership_discounted * $value->item_quantity}}</td>
@@ -104,7 +106,7 @@
                         @if($value->item_serial != null)
                         <tr>
                             <td colspan="2"><span class="pull-right">Serial/s:</span></td>
-                            <td colspan="2">{{$value->item_serial}}</td>
+                            <td colspan="3">{{$value->item_serial}}</td>
                         </tr>
                         @endif
                         @endforeach
@@ -129,6 +131,7 @@
                             </tr>   
                     </thead>   
                     <tbody>
+                        <?php $sum_points = 0; ?>
                         @foreach($_code as $code)
                             <tr class="hide">                                
                                 <td>{{$code->item_code_id}}</td>
@@ -136,15 +139,29 @@
                                 <td>{{$code->slot_no}}</td>
                                 <td>{{$code->date_used}}</td>
                             </tr>    
+                            <?php if(isset($code->REPURCHASE_POINTS)){ 
+                                $sum_points += $code->REPURCHASE_POINTS;
+                            }  ?>
                         @endforeach
                         <tr>
                             <td style="vertical-align: top !important; padding: 0;" colspan="2">
-                                <textarea class="form-control" style="height:250px; resize: none;" disabled>
+                                <textarea class="form-control" style="height:auto; resize: none;" disabled>
                                     {{$invoice->item_code_statement_memo}}
                                 </textarea>
                             </td>
                             <td style="vertical-align: top !important; padding: 0; border: 0 !important;" colspan="2">
-                                <table style="width: 100%; border-top: 0;">                  
+                                <table style="width: 100%; border-top: 0;">  
+                                    @if($sum_points != 0)
+                                    <tr>
+                                        <td>Total Points (Repurchase): </td>
+                                        <td>{{$sum_points}}</td>
+                                    </tr>    
+                                    <tr>
+                                        <td colspan="2">
+                                            <hr>
+                                        </td>
+                                    </tr>             
+                                    @endif 
                                     <tr>
                                         <td>Subtotal</td>
                                         <td>{{$subtotal}}</td>
@@ -167,15 +184,21 @@
                                         <td>Payment :</td>
                                         <td>
                                             <?php
+                                            $label = 'Tendered Amount';
+                                            $label_change = 'Change';
                                             switch ($invoice->item_code_payment_type) {
                                                 case 1:
-                                                    echo 'Cash';
+                                                    echo 'Cash'; 
                                                     break;
                                                 case 2:
                                                     echo 'GC';
+                                                    $label = 'GC Amount';
+                                                    $label_change = 'GC Change';
                                                     break;  
                                                 case 3:
                                                     echo 'Wallet';
+                                                    $label = 'Current Wallet';
+                                                    $label_change = 'Remaining Wallet';
                                                     break;        
                                                 default:
                                                     echo 'Cash';
@@ -184,11 +207,11 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Tendered Amount :</td>
+                                        <td>{{$label}} :</td>
                                         <td>{{number_format($invoice->item_code_tendered_payment, 2)}}</td>
                                     </tr>
                                     <tr>
-                                        <td>Change :</td>
+                                        <td>{{$label_change}} :</td>
                                         <td>{{number_format($invoice->item_code_change, 2)}}</td>
                                     </tr>
                                     <tr>

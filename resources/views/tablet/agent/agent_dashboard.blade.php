@@ -35,7 +35,7 @@
         </div>
         <div class="col-md-6 col-xs-6">
             <h3>
-           <a link="/tablet/sir_inventory/{{Session::get('selected_sir')}}" size="lg" class="form-control btn btn-primary popup">VIew Inventory</a>
+           <a link="/tablet/sir_inventory/{{Session::get('selected_sir')}}" size="lg" class="form-control btn btn-primary popup">View Inventory</a>
            </h3>
         </div>
     </div>

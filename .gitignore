@@ -7,3 +7,4 @@ Homestead.json
 /public/uploads/*
 /config/snappy.php
 /config/session.php
+/config/debugbar.php

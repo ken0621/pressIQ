@@ -177,7 +177,6 @@ class MlmRegisterController extends MlmLoginController
 
 			                		$data['type']   = "success";
 		    						$data['message'] = "Success! you will be redirected";
-
     							}
     							else
     							{

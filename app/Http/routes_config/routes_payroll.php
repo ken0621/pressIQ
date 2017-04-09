@@ -222,6 +222,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_group/archived_payroll_group',"Member\PayrollController@archived_payroll_group");
 	/* PAYROLL GROUP END */
 
+	/* PAYROLL JOURNAL SETTINGS START */
+	Route::any('/payroll_jouarnal',"Member\PayrollController@payroll_jouarnal");
+	Route::any('/payroll_jouarnal/modal_create_journal_tag',"Member\PayrollController@modal_create_journal_tag");
+	/* PAYROLL JOURNAL SETTINGS END */
+
 	/* PAYROLL PERIOD START */
 	Route::any('/payroll_period_list','Member\PayrollController@payroll_period_list');
 	Route::any('/payroll_period_list/modal_create_payroll_period','Member\PayrollController@modal_create_payroll_period');

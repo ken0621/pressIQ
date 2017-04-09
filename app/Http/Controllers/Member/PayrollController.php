@@ -1035,7 +1035,7 @@ class PayrollController extends Member
 
           $data['_company']  = Payroll::company_heirarchy(Self::shop_id());
 
-		$data['employement_status'] = Tbl_payroll_employment_status::get();
+		$data['employement_status']   = Tbl_payroll_employment_status::get();
 		$data['tax_status'] 		= Tbl_payroll_tax_status::get();
 		$data['civil_status'] 		= Tbl_payroll_civil_status::get();
 		$data['_country'] 			= Tbl_country::orderBy('country_name')->get();
@@ -1047,11 +1047,68 @@ class PayrollController extends Member
 
 		$data['salary']				= Tbl_payroll_employee_salary::selemployee($id)->first();
 		$data['requirement']		= Tbl_payroll_employee_requirements::selrequirements($id)->first();
-		$data['_group'] = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
+		$data['_group']               = Tbl_payroll_group::sel(Self::shop_id())->orderBy('payroll_group_code')->get();
 		$data['dependent']			= Tbl_payroll_employee_dependent::where('payroll_employee_id', $id)->get();
 
+          $data['_allowance']           = Self::check_if_allowance_selected($id);
+          $data['_deduction']           = Self::check_if_deduction_selected($id);
+          $data['_leave']               = Self::check_if_leave_selected($id);
+          // dd($data);
 		return view("member.payroll.modal.modal_view_employee", $data);
 	}
+
+     public function check_if_allowance_selected($employee_id = 0)
+     {
+          $data = array();
+          $_allowance = Tbl_payroll_allowance::sel(Self::shop_id())->orderBy('payroll_allowance_name')->get()->toArray();
+          foreach($_allowance as $allowance)
+          {
+               $allowance['status_checked'] = '';
+               $check = Tbl_payroll_employee_allowance::checkallowance($employee_id, $allowance['payroll_allowance_id'])->count();
+               if($check == 1)
+               {
+                    $allowance['status_checked'] = 'checked';
+               }
+               array_push($data, $allowance);
+
+          }
+          return $data;
+     }
+
+     public function check_if_deduction_selected($employee_id = 0)
+     {
+          $data = array();
+          $_deduction = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('payroll_deduction_name')->get()->toArray();
+          foreach($_deduction as $deduction)
+          {
+               $deduction['status_checked'] = '';
+               $check = Tbl_payroll_deduction_employee::checkdeduction($employee_id, $deduction['payroll_deduction_id'])->count();
+               if($check == 1)
+               {
+                    $deduction['status_checked'] = 'checked';
+               }
+               array_push($data, $deduction);
+          }
+          return $data;
+     }
+
+     public function check_if_leave_selected($employee_id = 0)
+     {
+          $data = array();
+          $_leave = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->get()->toArray();
+          foreach($_leave as $leave)
+          {
+               $leave['status_checked'] = '';
+               $check = Tbl_payroll_leave_employee::checkleave($employee_id, $leave['payroll_leave_temp_id'])->count();
+               if($check == 1)
+               {
+                    $leave['status_checked'] = 'checked';
+               }
+               array_push($data, $leave);
+          }
+          // dd($data);
+          return $data;
+     }
 
 	public function modal_view_contract_list($id)
 	{
@@ -1397,8 +1454,6 @@ class PayrollController extends Member
 	{
 		return view('member.payroll.payrollconfiguration');
 	}
-
-
 
 
 	/* COMPANY START */
@@ -3306,6 +3361,20 @@ class PayrollController extends Member
 	/* PAYROLL GROUP END */
 
 
+     /* PAYROLL JOURNAL START */
+     public function payroll_jouarnal()
+     {
+          return view('member.payroll.side_container.journal');
+     }
+
+     public function modal_create_journal_tag()
+     {
+          return view('member.payroll.modal.modal_create_journal_tag');
+     }
+
+     /* PAYROLL JOUARNAL END */ 
+
+
 	/* PAYROLL PERIOD START*/
 	public function payroll_period_list()
 	{	
@@ -3931,7 +4000,7 @@ class PayrollController extends Member
 
           // deduction
           /* OTHER DEDUCTIONS */
-          $total_deduction = collect($process['deduction'])->sum('payroll_periodal_deduction') + $process['late_deduction'];
+          $total_deduction = collect($process['deduction'])->sum('payroll_periodal_deduction') + $process['late_deduction'] + $process['adjustment']['total_deductions'];
 
           $temp = '';
           if($total_deduction > 0)
@@ -3971,6 +4040,7 @@ class PayrollController extends Member
                          $temp_sub['name'].=Self::btn_adjustment($deductions->payroll_adjustment_id);
                     }
                     $temp['amount']     = number_format($deductions->payroll_adjustment_amount, 2);
+
                     $temp['sub']        = array();
                     array_push($deduction, $temp);
                }    
@@ -3995,7 +4065,7 @@ class PayrollController extends Member
                     {
                          $temp_sub['name']       = $deductionlist['deduction_name'];
                          $temp_sub['amount']     = number_format($deductionlist['payroll_periodal_deduction'], 2);
-     
+    
                          array_push($temp['sub'], $temp_sub);
                     }
 
@@ -4006,7 +4076,7 @@ class PayrollController extends Member
           }  
 
           
-
+          // dd($total_deduction);
 
           $temp = '';
           if($total_deduction > 0)

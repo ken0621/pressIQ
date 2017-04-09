@@ -410,7 +410,20 @@ class Payroll
 	/* Returns normal hours rendered and overtime (Guillermo Tabligan) */
 	public static function process_time($employee_id, $date)
 	{
-		$data["time_sheet_info"] = $time_sheet_info = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
+
+		$data["time_sheet_info"] = array();
+		$time_sheet_info = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
+
+		if(!empty($time_sheet_info))
+		{
+			$data["time_sheet_info"] = $time_sheet_info;
+		}
+
+		// else  {
+		// 	$data["time_sheet_info"] = new stdClass();
+		// 	$data["time_sheet_info"]->payroll_time_date;
+		// }
+
 		$data["employee_information"] = $employee_information = Tbl_payroll_employee_contract::selemployee($employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
 		// dd($time_sheet_info);
 		/* GET HOLIDAY PER COMPANY */
@@ -432,8 +445,22 @@ class Payroll
 		$data["default_time_in"] = $employee_information->payroll_group_start;
 		$data["default_time_out"] = $employee_information->payroll_group_end;
 		$data["default_working_hours"] = $employee_information->payroll_group_target_hour;
-		$approved = $time_sheet_info->payroll_time_sheet_approved;
-		$data["_time_record"] = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $time_sheet_info->payroll_time_sheet_id)->get();
+
+		$payroll_time_sheet_approved = 0;
+		if(isset($time_sheet_info->payroll_time_sheet_approved))
+		{
+			$payroll_time_sheet_approved = $time_sheet_info->payroll_time_sheet_approved;
+		}
+
+
+		
+		$payroll_time_sheet_id = 0;
+		if(isset($time_sheet_info->payroll_time_sheet_id))
+		{
+			$payroll_time_sheet_id = $time_sheet_info->payroll_time_sheet_id;
+		}
+
+		$data["_time_record"] = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $payroll_time_sheet_id)->get();
 		
 
 		$return = new stdClass();
@@ -445,15 +472,21 @@ class Payroll
 			break;
 			case "regulartime":
 				$data["compute_approved"] = 0;
-				$return->pending_timesheet = Payroll::process_time_regulartime($data);
+				$return->pending_timesheet = Payroll::process_time_regulartime($data, $date);
 				$data["compute_approved"] = 1;
-				$return->approved_timesheet = Payroll::process_time_regulartime($data);
+				$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
 			break;
 		}
 
-		$return->payroll_time_sheet_id = $time_sheet_info->payroll_time_sheet_id;
-		$return->date = $time_sheet_info->payroll_time_date;
-		$return->payroll_time_sheet_approved = $time_sheet_info->payroll_time_sheet_approved;
+		$payroll_time_date = '0000-00-00';
+		if(isset($time_sheet_info->payroll_time_date))
+		{
+			$payroll_time_date = $time_sheet_info->payroll_time_date;
+		}
+
+		$return->payroll_time_sheet_id = $payroll_time_sheet_id;
+		$return->date = $payroll_time_date;
+		$return->payroll_time_sheet_approved = $payroll_time_sheet_approved;
 
 		return $return;
 	}
@@ -523,7 +556,7 @@ class Payroll
 		return $return;
 	}
 
-	public static function process_time_regulartime($data)
+	public static function process_time_regulartime($data, $date = '0000-00-00')
 	{
 		$time_rule 				= $data["time_rule"];
 		$default_time_in 		= $data["default_time_in"];
@@ -773,9 +806,14 @@ class Payroll
 		$total_extra_day_hours = 0;
 		$_rest_day = Tbl_payroll_group_rest_day::where("payroll_group_id", $data["employee_information"]->payroll_group_id)->get();
 
+		// dd($data["time_sheet_info"]);date
+		if(isset($data["time_sheet_info"]->payroll_time_date))
+		{	
+			$date = $data["time_sheet_info"]->payroll_time_date;
+		}
 		foreach($_rest_day as $rest_day)
 		{
-			if($rest_day->payroll_group_rest_day == Carbon::parse($data["time_sheet_info"]->payroll_time_date)->format("l"))
+			if($rest_day->payroll_group_rest_day == Carbon::parse($date)->format("l"))
 			{
 				if($rest_day->payroll_group_rest_day_category == "rest day")
 				{
@@ -2055,6 +2093,8 @@ class Payroll
 
 		$adjustment_deductions_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Deductions')->sum('payroll_adjustment_amount');
 
+
+
 		$data['adjustment']['bonus'] 				= $adjustment_bonus;
 		$data['adjustment']['total_bonus'] 			= $adjustment_bonus_total;
 
@@ -2068,7 +2108,7 @@ class Payroll
 		$data['adjustment']['total_deductions'] 	= $adjustment_deductions_total;
 		// $total_contribution 				= $data['']
 		$data['total_gross'] = 0;
-		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff'] + $data['payroll_cola'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total);
+		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total);
 
 
 
@@ -2076,8 +2116,10 @@ class Payroll
 		$data['total_deminimis'] = $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total;
 
 
-		$total_deduction += $data['tax_contribution'] + $data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution'] + $data['late_deduction'] + $data['under_time'] + $data['agency_deduction'] + $data['late_deduction'] + $data['adjustment']['total_deductions'];
+		$total_deduction += $data['tax_contribution'] + $data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution'] + $data['late_deduction'] + $data['under_time'] + $data['agency_deduction'] + $data['adjustment']['total_deductions'];
 
+
+		// dd($total_deduction);
 
 		$data['total_net']					= $data['total_gross'] - $total_deduction;
 		$data['total_deduction']			= $total_deduction;

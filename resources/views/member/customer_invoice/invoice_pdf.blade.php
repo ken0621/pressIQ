@@ -128,7 +128,7 @@
 	}
 	tr th
 	{
-		padding: 0;
+		padding: 5px;
 		border: 1px solid #000;
 	}
 	.watermark

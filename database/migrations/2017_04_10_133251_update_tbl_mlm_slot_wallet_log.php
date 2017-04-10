@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTblMlmSlotWalletLog2 extends Migration
+class UpdateTblMlmSlotWalletLog extends Migration
 {
     /**
      * Run the migrations.

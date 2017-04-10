@@ -537,14 +537,15 @@ function customer_invoice(){
 	}
 	function action_load_item_info_cm($this)
 	{
-		$parent = $this.closest(".tr-cm-draggable");
-		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
-		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
-		$parent.find(".txt-qty").val(1).change();
+		$parent_cm = $this.closest(".tr-cm-draggable");
+		$parent_cm.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
+		$parent_cm.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
+		$parent_cm.find(".txt-qty").val(1).change();
 
 		if($this.find("option:selected").attr("has-um") != '')
-		{			
-			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
+		{		
+			alert($this.find("option:selected").attr("has-um"));	
+			$parent_cm.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$(this).globalDropList("reload").globalDropList("enabled");
 				$(this).val($(this).find("option:first").val()).change();
@@ -552,7 +553,7 @@ function customer_invoice(){
 		}
 		else
 		{
-			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+			$parent_cm.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
 	}
 	function event_item_qty_change()

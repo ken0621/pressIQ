@@ -1,9 +1,9 @@
-var bill = new bill();
+var receive_inventory = new receive_inventory();
 var global_tr_html = $(".div-script tbody").html();
 var po_id_list = $(".div-script-po").html();
 var item_selected = ''; 
 
-function bill()
+function receive_inventory()
 {
 	init();
 
@@ -569,23 +569,23 @@ function bill()
 /* AFTER DRAGGING A TABLE ROW */
 function dragging_done()
 {
-	bill.action_reassign_number();
-    bill.action_compute();
+	receive_inventory.action_reassign_number();
+    receive_inventory.action_compute();
 }
 
 /* AFTER ADDING A CUSTOMER */
 function submit_done_customer(result)
 {
-	bill.action_reload_customer(result['customer_info']['customer_id']);
+	receive_inventory.action_reload_customer(result['customer_info']['customer_id']);
 }
 
 /* AFTER ADDING AN  ITEM */
 // function submit_done(data)
 // {
-// 	bill.action_reload_item(data.item_id);
+// 	receive_inventory.action_reload_item(data.item_id);
 // 	$("#global_modal").modal("toggle");
 // }
-function add_po_to_bill(po_id)
+function add_po_to_receive_inventory(po_id)
 {
 	$(".modal-loader").removeClass("hidden");
 	$.ajax({
@@ -598,7 +598,7 @@ function add_po_to_bill(po_id)
              $(data).each(function (a, b)
              {				
 	             $("tbody.draggable").prepend(global_tr_html);
-	             bill.action_trigger_select_plugin_not_last();
+	             receive_inventory.action_trigger_select_plugin_not_last();
 	             var $container = $("tbody.draggable .tr-draggable:first");
 	             // $this.closest(".tr-draggable");
 
@@ -627,7 +627,7 @@ function add_po_to_bill(po_id)
 	        $(".po-"+po_id).addClass("hidden");
 			$(".modal-loader").addClass("hidden");
 
-             bill.action_reassign_number();
+             receive_inventory.action_reassign_number();
 		},
 		error : function()
 		{

@@ -284,7 +284,7 @@ class Customer_InvoiceController extends Member
             $json["status"]         = "success-invoice";
             if($button_action == "save-and-edit")
             {
-                $json["redirect"]    = "/member/customer/invoice?id=".$inv_id;
+                $json["redirect"]    = "/member/customer/invoice_list";
             }
             elseif($button_action == "save-and-new")
             {

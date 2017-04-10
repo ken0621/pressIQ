@@ -22,11 +22,13 @@
         		<table class="table table-condensed table-bordered">
         			<thead>
         				<thead>
-                            <th>Invoice ID</th>
-                            <th>Email</th>
-                            <th>Name</th>
-                            <th>Date</th>  
-                            <th>Amount</th>
+                            <tr>
+                                <th>Invoice ID</th>
+                                <th>Email</th>
+                                <th>Name</th>
+                                <th>Date</th>  
+                                <th>Amount</th>
+                            </tr>
                         </thead>
                         <tbody>
                             @foreach($invoice as $key => $value)
@@ -73,8 +75,10 @@
                 <table class="table table-condensed table-bordered">
                     <thead>
                         <thead>
-                            <th>Package</th>
-                            <th>Amount</th>
+                            <tr>
+                                <th>Package</th>
+                                <th>Amount</th>
+                            </tr>
                         </thead>
                         <tbody>
                             @foreach($by_membership as $key => $value)
@@ -126,9 +130,11 @@
                 <table class="table table-condensed table-bordered">
                     <thead>
                         <thead>
-                            <th>Item</th>
-                            <th>Quantity</th>
-                            <th>Bundle Quantity</th>
+                            <tr>
+                                <th>Item</th>
+                                <th>Quantity</th>
+                                <th>Bundle Quantity</th>
+                            </tr>
                         </thead>
                         <tbody>
                             @foreach($package_item as $key => $value)

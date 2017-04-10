@@ -126,3 +126,7 @@ function ready_load_mini_ecom_cart()
 		$('.mini-cart-total-price').html(total_price);
 	});
 }
+function action_after_load()
+{
+	
+}

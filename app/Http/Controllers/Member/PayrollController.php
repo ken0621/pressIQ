@@ -55,7 +55,6 @@ use App\Models\Tbl_payroll_bank_convertion;
 use App\Models\Tbl_payroll_employee_dependent;
 use App\Models\Tbl_payroll_employee_search;
 use App\Models\Tbl_payroll_adjustment;
-use App\Models\Tbl_payroll_record;
 use App\Models\Tbl_payroll_allowance_record;
 
 use App\Globals\Payroll;

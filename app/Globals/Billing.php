@@ -3,7 +3,9 @@ namespace App\Globals;
 
 use App\Globals\Accounting;
 use App\Models\Tbl_bill;
+use App\Models\Tbl_bill_po;
 use App\Models\Tbl_bill_item_line;
+use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Globals\AuditTrail;
@@ -55,7 +57,27 @@ class Billing
         return $bill_id;
 
     }
+    public static function insertPotoBill($bill_id = null, $_po_id = array())
+    {
+        if($bill_id != null && $_po_id != null)
+        {
+            $ins["billed_id"] = $bill_id;
+            foreach ($_po_id as $key => $value) 
+            {
+                if($value != "")
+                {
+                    $ins["purchase_order_id"] = $value;
 
+                    Tbl_bill_po::insert($ins);
+
+                    $up_po["po_is_billed"] = $bill_id;
+                    Tbl_purchase_order::where("po_id",$value)->update($up_po);                    
+                }
+            }
+
+        }
+        
+    }
     public static function updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info)
     {
         $old = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
@@ -93,7 +115,8 @@ class Billing
                 // {
                 //     $discount = substr($discount, 0, strpos($discount, '%')) / 100;
                 // }
-
+                $insert_line['itemline_poline_id']     = $item_line['itemline_poline_id'] ;
+                $insert_line['itemline_po_id']         = $item_line['itemline_po_id'] ;
                 $insert_line['itemline_bill_id']       = $bill_id;
                 $insert_line['itemline_item_id']       = $item_line['itemline_item_id'];
                 $insert_line['itemline_poline_id']     = 0;

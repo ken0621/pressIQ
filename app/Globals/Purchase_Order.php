@@ -40,13 +40,13 @@ class Purchase_Order
 	 */
     public static function count_po()
     {
-         $po = Tbl_purchase_order::where("po_shop_id",Purchase_Order::getShopId())->where("po_is_paid",0)->count();
+         $po = Tbl_purchase_order::where("po_shop_id",Purchase_Order::getShopId())->where("po_is_billed",0)->count();
          return $po;
     }
     public static function get_po_amount()
     {
         $price = 0;
-        $po = Tbl_purchase_order::where("po_shop_id",Purchase_Order::getShopId())->where("po_is_paid",0)->get();
+        $po = Tbl_purchase_order::where("po_shop_id",Purchase_Order::getShopId())->where("po_is_billed",0)->get();
         if(isset($po))
         {
             foreach ($po as $key => $value) 

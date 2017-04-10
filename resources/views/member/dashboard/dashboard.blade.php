@@ -11,15 +11,17 @@
 </div>
 <div class="row">
     <div class="form-group reports-class">
-        <div class="col-md-3 po-class">
-            <!-- <i class="fa fa-shopping-basket fa-2x"></i> --> 
+        <div class="col-md-3 col-xs-3 po-class"> 
             <span>{{$po_amount or ''}}</span><br>
             <span>{{$count_po or 0}} Purchase Orders</span>
         </div>
-        <div class="col-md-3 ar-class">
-            <!-- <i class="fa fa-shopping-basket fa-2x"></i> --> 
+        <div class="col-md-3 col-xs-3 ar-class">
             <span>{{$ar_amount or ''}}</span><br>
             <span>{{$count_ar or 0}} Account Receivable</span>
+        </div>
+        <div class="col-md-3 col-xs-3 sales-class">
+            <span>{{$sales_amount or ''}}</span><br>
+            <span>Sales</span>
         </div>
     </div>
 </div>

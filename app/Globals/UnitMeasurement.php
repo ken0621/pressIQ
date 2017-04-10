@@ -35,7 +35,6 @@ class UnitMeasurement
     {
         return Tbl_unit_measurement::multi()->where("um_shop", UnitMeasurement::getShopId())
                                     ->where("um_archived",0)
-                                    ->groupBy("tbl_unit_measurement.um_id")
                                     ->get();
     }
     public static function archived_um()
@@ -105,8 +104,11 @@ class UnitMeasurement
         
         $um_issued = Tbl_unit_measurement_multi::where("multi_id",$um_issued_id)->first();
         $um_base = Tbl_unit_measurement_multi::where("multi_um_id",$um_base_id)->where("is_base",1)->first();
-        // dd($um_issued);
-        if($um_base_id == $um_issued_id)
+        if($um_base != null && $um_issued == null)
+        {
+             $return = $qty." ".$um_base->multi_abbrev;
+        }
+        else if($um_base_id == $um_issued_id)
         {
             if($um_base != null || $um_issued != null)
             {

@@ -183,7 +183,13 @@ class Mlm_report
     public static function slot_count($shop_id)
     {
     	$slot = Tbl_mlm_slot::where('shop_id', $shop_id)->get()->keyBy('slot_id');
-    	$tree = Tbl_tree_sponsor::where('shop_id', $shop_id)->orderBy('sponsor_tree_level', 'ASC')->get();
+    	$tree = Tbl_tree_sponsor::where('shop_id', $shop_id)->orderBy('sponsor_tree_level', 'ASC')
+
+        ->select(DB::raw('count(sponsor_tree_level) as count_slot'), DB::raw('tbl_tree_sponsor.*'))
+        ->groupBy(DB::raw('sponsor_tree_level') )
+        ->groupBy('sponsor_tree_parent_id')
+
+        ->get();
 
     	$tree_count = [];
     	$tree_level = [];
@@ -192,11 +198,11 @@ class Mlm_report
     		$tree_level[$value->sponsor_tree_level] = $value->sponsor_tree_level;
     		if(isset($tree_count[$value->sponsor_tree_parent_id][$value->sponsor_tree_level]))
     		{
-    			$tree_count[$value->sponsor_tree_parent_id][$value->sponsor_tree_level] += 1;
+    			$tree_count[$value->sponsor_tree_parent_id][$value->sponsor_tree_level] += $value->count_slot;
     		}
     		else
     		{
-    			$tree_count[$value->sponsor_tree_parent_id][$value->sponsor_tree_level] = 1;
+    			$tree_count[$value->sponsor_tree_parent_id][$value->sponsor_tree_level] = $value->count_slot;
     		}
     	}
     	$data['slot'] = $slot;
@@ -213,6 +219,12 @@ class Mlm_report
         // ------------------------------------------------------------------------
         $tree = Tbl_tree_placement::where('shop_id', $shop_id)
         ->where('placement_tree_position', 'left')
+
+        ->select(DB::raw('count(placement_tree_level ) as count_slot'), DB::raw('tbl_tree_placement.*'))
+        ->groupBy(DB::raw('placement_tree_level') )
+        ->groupBy('placement_tree_parent_id')
+
+
         ->orderBy('placement_tree_level', 'ASC')->get();
         $tree_count = [];
         $tree_level = [];
@@ -222,16 +234,22 @@ class Mlm_report
             $tree_level[$value->placement_tree_level] = $value->placement_tree_level;
             if(isset($tree_count[$value->placement_tree_parent_id][$value->placement_tree_level]))
             {
-                $tree_count[$value->placement_tree_parent_id][$value->placement_tree_level] += 1;
+                $tree_count[$value->placement_tree_parent_id][$value->placement_tree_level] += $value->count_slot;
             }
             else
             {
-                $tree_count[$value->placement_tree_parent_id][$value->placement_tree_level] = 1;
+                $tree_count[$value->placement_tree_parent_id][$value->placement_tree_level] = $value->count_slot;
             }
         }
         // ------------------------------------------------------------------------
         $tree_r = Tbl_tree_placement::where('shop_id', $shop_id)
         ->where('placement_tree_position', 'right')
+
+        ->select(DB::raw('count(placement_tree_level ) as count_slot'), DB::raw('tbl_tree_placement.*'))
+        ->groupBy(DB::raw('placement_tree_level') )
+        ->groupBy('placement_tree_parent_id')
+
+
         ->orderBy('placement_tree_level', 'ASC')->get();
 
         $tree_count_r = [];
@@ -242,11 +260,11 @@ class Mlm_report
             $tree_level_r[$value->placement_tree_level] = $value->placement_tree_level;
             if(isset($tree_count_r[$value->placement_tree_parent_id][$value->placement_tree_level]))
             {
-                $tree_count_r[$value->placement_tree_parent_id][$value->placement_tree_level] += 1;
+                $tree_count_r[$value->placement_tree_parent_id][$value->placement_tree_level] += $value->count_slot;
             }
             else
             {
-                $tree_count_r[$value->placement_tree_parent_id][$value->placement_tree_level] = 1;
+                $tree_count_r[$value->placement_tree_parent_id][$value->placement_tree_level] = $value->count_slot;
             }
         }
         // ------------------------------------------------------------------------

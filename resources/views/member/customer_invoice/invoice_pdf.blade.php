@@ -83,13 +83,42 @@
 			<td style="text-align: right; font-weight: bold">{{currency("PHP",$taxable_item * (12/100))  }}</td>
 		</tr>
 		@endif
-		<tr>
+		<tr class="{{$cm_total = 0}}">
 			<td colspan="3"></td>
-			<td style="text-align: left;font-weight: bold">TOTAL</td>
+			<td style="text-align: left;font-weight: bold">INVOICE TOTAL</td>
 			<td style="text-align: right; font-weight: bold">{{currency("PHP",$invoice->inv_overall_price)}}</td>
 		</tr>
+
+		@if($cm != null)
+			<tr class="{{$cm_total = $cm->cm_amount}}">
+				<td colspan="5">
+					<strong>RETURNS</strong>
+				</td>
+			</tr>
+			@if($_cmline != null)
+				@foreach($_cmline as $cmline)
+				<tr>
+					<td>{{$cmline->item_name}}</td>
+					<td style="text-align: center;">{{$cmline->cm_qty}}</td>
+					<td style="text-align: right;">{{currency("PHP",$cmline->cmline_rate)}}</td>
+					<td style="text-align: right;">{{currency("PHP",$cmline->cmline_amount)}}</td>
+					<td></td>
+				</tr>
+				@endforeach
+			@endif
+			<tr>
+				<td colspan="3"></td>
+				<td style="text-align: left;font-weight: bold">RETURNS SUBTOTAL</td>
+				<td style="text-align: right; font-weight: bold">{{currency('PHP', $cm->cm_amount)}}</td>
+				<td></td>
+			</tr>
+		@endif
+
 	</tbody>
 </table>
+	<div class="row pull-right">
+		<h3><strong>TOTAL</strong> {{currency('PHP',($invoice->inv_overall_price - $cm_total))}}</h3>
+	</div>
 </body>
 <style type="text/css">
 	table

@@ -56,4 +56,11 @@ class Tbl_payroll_deduction_employee extends Model
 
 		return $query;
 	}
+
+	public function scopecheckdeduction($query, $payroll_employee_id = 0, $payroll_deduction_id = 0)
+	{
+		$query->where('payroll_employee_id', $payroll_employee_id)->where('payroll_deduction_id', $payroll_deduction_id);
+
+		return $query;
+	}
 }

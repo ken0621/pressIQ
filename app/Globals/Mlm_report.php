@@ -403,7 +403,7 @@ class Mlm_report
 
     	return view('member.mlm_report.report.encashment', $data);
     }
-    public static function encashment_rep_req($shop_id)
+    public static function encashment_rep_req($shop_id, $select= null)
     {
         $encashment_req =Tbl_mlm_slot_wallet_log::slot()
         ->customer()
@@ -413,8 +413,17 @@ class Mlm_report
         ->where('wallet_log_plan', 'ENCASHMENT')
         ->where('encashment_process_type', 0)
         ->orderBy('wallet_log_id', 'DESC')
-        ->orderBy('bank_name', 'DESC')
-        ->get()->keyBy('wallet_log_id');
+        ->orderBy('bank_name', 'DESC');
+
+        if($select == null)
+        {
+            $encashment_req = $encashment_req->get()->keyBy('wallet_log_id');
+        }
+        else
+        {
+            $encashment_req = $encashment_req->where('wallet_log_selected', 1)->get()->keyBy('wallet_log_id');
+        }
+        
         $request_by_day = [];
         $request_by_month = [];
         foreach($encashment_req as $key => $value)

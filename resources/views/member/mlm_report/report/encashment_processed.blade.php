@@ -73,11 +73,11 @@
 
                                     if($tax_p == 0)
                                     {
-                                        $req = $value2 - $tax;
+                                        $req = $req - $tax;
                                     }
                                     else
                                     {
-                                        $tax = ($value2 * $tax)/100;
+                                        $tax = ($req * $tax)/100;
                                         $req = $req-$tax;
                                     }
                                 ?>

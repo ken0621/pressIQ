@@ -38,7 +38,7 @@ class Vendor_CreateBillController extends Member
      */
     public function index()
     {
-        $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->get();
+        $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderBy("bill_id","DESC")->get();
 
         foreach ($data["_bill_list"] as $key => $value) 
         {

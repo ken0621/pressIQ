@@ -19,13 +19,17 @@
             <span>{{$ar_amount or ''}}</span><br>
             <span>{{$count_ar or 0}} Account Receivable</span>
         </div>
+        <div class="col-md-3 col-xs-3 ap-class">
+            <span>{{$ap_amount or ''}}</span><br>
+            <span>{{$count_ap or 0}} Account Payables</span>
+        </div>
         <div class="col-md-3 col-xs-3 sales-class">
             <span>{{$sales_amount or ''}}</span><br>
             <span>Sales</span>
         </div>
     </div>
 </div>
-@endif
+@else
 <div class="row">
     <div class="col-md-12 text-center">
         <h3>Welcome to Digima House</h3>
@@ -106,6 +110,7 @@
     </div> -->
 </div>
 
+@endif
 
 @endsection
 @section('css')

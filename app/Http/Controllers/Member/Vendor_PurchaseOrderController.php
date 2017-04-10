@@ -55,6 +55,12 @@ class Vendor_PurchaseOrderController extends Member
 
         return view("member.purchase_order.purchase_order_list",$data);
     }
+    public function po_pdf($po_id)
+    {
+        $data["po"] = Tbl_purchase_order::customer()->where("po_id",$po_id)->first();
+        $data["_poline"] = Tbl_purchase_order_line::um()->where("poline_po_id",$po_id)->get();
+        return view("member.vendor_list.po_pdf",$data);
+    }
     public function invoice_list()
     {
         $data["_invoices"] = Tbl_customer_invoice::customer()->invoice_item()->orderBy("tbl_customer_invoice.inv_id","DESC")->get();

@@ -189,7 +189,7 @@ class Vendor_ReceiveInventoryController extends Member
         $json["status"]         = "success-receive-inventory";
         if($button_action == "save-and-edit")
         {
-            $json["redirect"]    = "/member/vendor/receive_inventory_list";
+            $json["redirect"]    = "/member/vendor/receive_inventory/list";
         }
         elseif($button_action == "save-and-new")
         {
@@ -300,7 +300,7 @@ class Vendor_ReceiveInventoryController extends Member
         $json["status"]         = "success-bill";
         if($button_action == "save-and-edit")
         {
-            $json["redirect"]    = "/member/vendor/receive_inventory_list";
+            $json["redirect"]    = "/member/vendor/receive_inventory/list";
         }
         elseif($button_action == "save-and-new")
         {

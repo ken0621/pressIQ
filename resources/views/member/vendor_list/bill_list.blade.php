@@ -12,7 +12,7 @@
                     List of Bills
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/create_bill?action=bill" >Create Bill</a>
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/create_bill" >Create Bill</a>
         </div>
     </div>
 </div>

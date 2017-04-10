@@ -39,7 +39,7 @@ class MLM_CardController extends Member
         	$slot_card_printed = Request::input('card_status');
             $card_info = Tbl_mlm_discount_card_log::membership()
             // ->whereNotNull('tbl_mlm_discount_card_log.discount_card_customer_holder')
-            // ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+            ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_sponsor')
             // ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
             // ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
             // ->where('tbl_customer_address.purpose', 'billing')
@@ -146,11 +146,12 @@ class MLM_CardController extends Member
 		$shop_id = $this->getShop_Id();
 
 		$card = Tbl_mlm_discount_card_log::membership()
-            ->whereNotNull('tbl_mlm_discount_card_log.discount_card_customer_holder')
-            ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
-            ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
-            ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
-            ->where('tbl_customer_address.purpose', 'billing')
+            // ->whereNotNull('tbl_mlm_discount_card_log.discount_card_customer_holder')
+            // ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+            // ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+            // ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+            // ->where('tbl_customer_address.purpose', 'billing')
+            ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_sponsor')
             ->where('discount_card_log_id', $discount_card_log_id)
             ->first();
         $card = Cards::discount_card($card);

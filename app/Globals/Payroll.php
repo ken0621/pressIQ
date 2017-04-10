@@ -780,8 +780,8 @@ class Payroll
 
 			if($total_late_hours <= $late_grace_time)
 			{
+				$total_regular_hours = $total_regular_hours + $total_late_hours;
 				$total_late_hours = 0;
-
 			}
 		}
 		else

@@ -48,6 +48,7 @@ use App\Models\Tbl_payroll_over_time_rate_default;
 use App\Models\Tbl_payroll_group;
 use App\Models\Tbl_payroll_group_rest_day;
 use App\Models\Tbl_payroll_time_sheet_record;
+use App\Models\Tbl_payroll_record;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_bank_convertion;
@@ -4303,6 +4304,10 @@ class PayrollController extends Member
      {
           $data['date_start'] = date('m/d/Y', strtotime('first day of this month'));
           $data['date_end']   = date('m/d/Y', strtotime('last day of this month'));
+
+          $record = Tbl_payroll_record::getperiod(Self::shop_id(), 'Semi-monthly')->get();
+
+          dd($record);
 
           return view('member.payroll.payroll_journal_entries', $data);
      }

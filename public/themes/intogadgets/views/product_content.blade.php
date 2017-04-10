@@ -138,7 +138,11 @@
          </div>
          <div class="single-detail-content">
             <div class="single-detail-review min-300 hide">
-               <div id="prod-comments-header">
+                <?PHP    
+                $url = $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+                echo "<div class='fb-comments' data-href='$url' data-num-posts='10' data-width='100%'></div>";
+                ?>
+               <div id="prod-comments-header" style="display: none;">
                   <div class="single-detail-review-comment"></div>
                   <div class="single-detail-review-rate">
                      <div class="single-detail-review-rate-text">Rate this Product</div>
@@ -168,7 +172,7 @@
                      </div>
                   </div>
                </div>
-               <div id="product-comment-list">
+               <div id="product-comment-list" style="display: none;">
                   <div class="single-detail-review-comment comment clear">
                      <div class="review-comment-img" style="display: inline-block;">
                         <img src="">

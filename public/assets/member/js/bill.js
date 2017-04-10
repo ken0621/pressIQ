@@ -587,7 +587,7 @@ function submit_done_customer(result)
 // }
 function add_po_to_bill(po_id)
 {
-	$(".modal-loader").removeClass("hidden");
+	// $(".modal-loader").removeClass("hidden");
 	$.ajax({
 		url : "/member/vendor/load_po_item",
 		data : {po_id: po_id},
@@ -625,7 +625,7 @@ function add_po_to_bill(po_id)
 	         $po_id.find(".po-id-input").val(po_id).change();
 
 	        $(".po-"+po_id).addClass("hidden");
-			$(".modal-loader").addClass("hidden");
+			// $(".modal-loader").addClass("hidden");
 
              bill.action_reassign_number();
 		},

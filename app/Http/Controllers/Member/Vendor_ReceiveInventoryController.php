@@ -29,16 +29,16 @@ use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_bill_item_line;
 use Carbon\Carbon;
 
-class Vendor_CreateBillController extends Member
+class Vendor_ReceiveInventoryController extends Member
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+      public function index()
     {
-        $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderBy("bill_id","DESC")->get();
+        $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderby("bill_id","DESC")->where("inventory_only",1)->get();
 
         foreach ($data["_bill_list"] as $key => $value) 
         {
@@ -50,15 +50,15 @@ class Vendor_CreateBillController extends Member
            }
            $data["_bill_list"][$key]->bill_price = $price;
         }
-        return view("member.vendor_list.bill_list",$data);
+        return view("member.receive_inventory.receive_inventory_list",$data);
     }    
-    public function create_bill()
+    public function receive_inventory()
     {
         $data["_vendor"]    = Vendor::getAllVendor('active');
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
-        $data['action']     = "/member/vendor/create_bill/add";
+        $data['action']     = "/member/vendor/receive_inventory/add";
         $data['vendor_id']     = Request::input("vendor_id");
         
         $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_billed",0)->get();
@@ -70,10 +70,10 @@ class Vendor_CreateBillController extends Member
            $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
            $data['_item']      = Item::get_all_category_item();
            $data['_account']   = Accounting::getAllAccount();
-           $data['action']     = "/member/vendor/create_bill/update";
+           $data['action']     = "/member/vendor/receive_inventory/update";
         }
         
-       return view("member.vendor_list.create_bill",$data);
+        return view("member.receive_inventory.receive_inventory",$data);
     }
     public function load_purchase_order($vendor_id)
     {
@@ -88,7 +88,7 @@ class Vendor_CreateBillController extends Member
 
         return json_encode($data);
     }
-    public function add_bill()
+    public function add_receive_inventory()
     {
         $button_action = Request::input('button_action');
 
@@ -102,7 +102,7 @@ class Vendor_CreateBillController extends Member
         // $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
         $bill_info['bill_date']             = datepicker_input(Request::input('bill_date'));
         $bill_info['bill_due_date']         = datepicker_input(Request::input('bill_due_date'));
-        $bill_info['inventory_only']        = 0;
+        $bill_info['inventory_only']        = 1;
 
         $bill_other_info                    = [];
         $bill_other_info['bill_memo']       = Request::input('bill_memo');
@@ -180,20 +180,20 @@ class Vendor_CreateBillController extends Member
         $bill_id = Billing::postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
         Billing::insertPotoBill($bill_id, Request::input("po_id"));
 
-        $remarks            = "Refill Items with Bill # ". $bill_id;
+        $remarks            = "Refill Items with RECEIVE INVENTORY #". $bill_id;
         $warehouse_id       = $this->current_warehouse->warehouse_id;
         $transaction_type   = "bill";
         $transaction_id     = $bill_id;
         $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
 
-        $json["status"]         = "success-bill";
+        $json["status"]         = "success-receive-inventory";
         if($button_action == "save-and-edit")
         {
-            $json["redirect"]    = "/member/vendor/bill_list";
+            $json["redirect"]    = "/member/vendor/receive_inventory_list";
         }
         elseif($button_action == "save-and-new")
         {
-            $json["redirect"]   = '/member/vendor/create_bill';
+            $json["redirect"]   = '/member/vendor/receive_inventory';
         }
         Request::session()->flash('success', 'Successfully Created');
 
@@ -201,7 +201,7 @@ class Vendor_CreateBillController extends Member
         return json_encode($json);
 
     }
-    public function update_bill()
+    public function update_receive_inventory()
     {
         $bill_id = Request::input("bill_id");
         $button_action = Request::input('button_action');
@@ -216,7 +216,7 @@ class Vendor_CreateBillController extends Member
         // $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
         $bill_info['bill_date']             = datepicker_input(Request::input('bill_date'));
         $bill_info['bill_due_date']         = datepicker_input(Request::input('bill_due_date'));
-        $bill_info['inventory_only']        = 0;
+        $bill_info['inventory_only']        = 1;
 
         $bill_other_info                    = [];
         $bill_other_info['bill_memo']       = Request::input('bill_memo');
@@ -300,11 +300,11 @@ class Vendor_CreateBillController extends Member
         $json["status"]         = "success-bill";
         if($button_action == "save-and-edit")
         {
-            $json["redirect"]    = "/member/vendor/bill_list";
+            $json["redirect"]    = "/member/vendor/receive_inventory_list";
         }
         elseif($button_action == "save-and-new")
         {
-            $json["redirect"]   = '/member/vendor/create_bill';
+            $json["redirect"]   = '/member/vendor/receive_inventory';
         }
         Request::session()->flash('success', 'Successfully Created');
 

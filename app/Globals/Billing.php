@@ -41,6 +41,9 @@ class Billing
         $insert['bill_terms_id']            = $bill_info['bill_terms_id'];
         $insert['bill_date']                = $bill_info['bill_date'];
         $insert['bill_due_date']            = $bill_info['bill_due_date'];
+
+        $insert['inventory_only']           = $bill_info['inventory_only'];
+
         $insert['bill_memo']                = $bill_other_info['bill_memo'];
         $insert['bill_total_amount']        = $total_info['bill_total_amount'];
         $insert['bill_payment_method']      = 0;

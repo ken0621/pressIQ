@@ -5,14 +5,11 @@
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
-            <i class="fa fa-tags"></i>
+            <i class="fa fa-linode"></i>
             <h1>
-                <span class="page-title">Bill &raquo; List </span>
-                <small>
-                    List of Bills
-                </small>
+                <span class="page-title">Receive Inventory &raquo; List </span>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/create_bill?action=bill" >Create Bill</a>
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/receive_inventory" >Receive Inventory</a>
         </div>
     </div>
 </div>
@@ -40,9 +37,9 @@
                 <table class="table table-bordered table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
-                            <th>Bill No</th>
+                            <th>Receive Inventory No</th>
                             <th>Vendor Name</th>
-                            <th>Total</th>
+                            <th>Total Items</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -59,7 +56,8 @@
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
-                                        <li><a href="/member/vendor/create_bill?id={{$bill_list->bill_id}}">Edit Bill </a></li>
+                                        <li><a href="/member/vendor/create_bill?id={{$bill_list->bill_id}}">Create Bill </a></li>
+                                        <li><a href="/member/vendor/receive_inventory?id={{$bill_list->bill_id}}">Edit this Inventory </a></li>
                                       </ul>
                                     </div>
                                 </td>

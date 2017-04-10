@@ -650,6 +650,11 @@ function submit_done(data)
         toastr.success("Success");
        	location.href = data.redirect;
 	}
+	else if(data.status == 'success-receive-inventory')
+	{
+        toastr.success("Success");
+       	location.href = data.redirect;		
+	}
     else if(data.status == "error")
     {
         toastr.warning(data.status_message);

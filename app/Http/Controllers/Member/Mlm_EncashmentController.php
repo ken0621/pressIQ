@@ -45,11 +45,14 @@ use App\Globals\Mlm_member;
 use App\Globals\Pdf_global;
 use App\Globals\Utilities;
 use App\Globals\AuditTrail;
+use App\Globals\Mlm_report;
 
 class Mlm_EncashmentController extends Member
 {
     public function index()
     {
+        // return $this->tree_view();
+        
         $access = Utilities::checkAccess('mlm-wallet-encashment', 'access_page');
         if($access == 0)
         {
@@ -118,6 +121,7 @@ class Mlm_EncashmentController extends Member
         $data['from'] = $this->get_last_wallet($shop_id);
         return view('member.mlm_encashment.index', $data);
     }
+    
     public function get_last_wallet($shop_id)
     {
         $date_last = Tbl_mlm_slot_wallet_log::where('shop_id', $shop_id)->whereNull('encashment_process')->first();
@@ -333,11 +337,99 @@ class Mlm_EncashmentController extends Member
     }
     public function add_to_list()
     {
-        return $_POST;
+        // return $_POST;
+        $wallet_log_id = Request::input('wallet_log_id');
         $add_to_list = Request::input('add_to_list');
-        if($add_to_list == null)
+        $data['status'] = 'success_new';
+        $data['message'] = 'Selected';
+        if($wallet_log_id != null)
         {
+            if($add_to_list == 'on')
+            {
+                $update['wallet_log_selected'] = 1;
+                Tbl_mlm_slot_wallet_log::where('wallet_log_id', $wallet_log_id)->update($update);
+            }
+            else
+            {
+                $update['wallet_log_selected'] = 0;
+                Tbl_mlm_slot_wallet_log::where('wallet_log_id', $wallet_log_id)->update($update);
+                $data['status'] = 'success_new';
+                $data['message'] = 'Removed from Selected';
+            }
             
         }
+        
+        return json_encode($data);
+    }
+    public function add_to_list_date()
+    {
+        $shop_id = $this->user_info->shop_id;
+
+        // ---------------------------------
+         $update['wallet_log_selected'] = 0;
+         Tbl_mlm_slot_wallet_log::where('shop_id', $shop_id)->update($update);
+
+        $from = Request::input('from');
+        $to = Request::input('to');
+
+
+        $update_2['wallet_log_selected'] = 1;
+        $all_affected = Tbl_mlm_slot_wallet_log::where('shop_id', $shop_id)
+        ->where('wallet_log_date_created', '<=', $to)
+        ->where('wallet_log_date_created', '>=', $from)
+        ->where('wallet_log_plan', 'ENCASHMENT')
+        ->update($update_2);
+        $data['status'] = 'success_new';
+        $data['message'] = 'Removed from Selected';
+        return json_encode($data);
+    }
+    public function view_all_selected()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $data['a'] = Mlm_report::encashment_rep_req($shop_id, 1);
+        return view('member.mlm_encashment.requested_selected', $data);
+    }
+    public function request_all_selected()
+    {
+        // return $_POST;
+        $shop_id = $this->user_info->shop_id;
+        $encashment_settings = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+
+        $update_wallet['encashment_process_type'] = 1;
+        $update_wallet['wallet_log_selected'] =0;
+        $update_wallet['wallet_log_remarks'] = Request::input('remarks');
+        Tbl_mlm_slot_wallet_log::where('wallet_log_selected', 1)->where('shop_id', $shop_id)->update($update_wallet);
+        
+        $data['status'] = 'success_new';
+        $data['message'] = 'Encashment Processed';
+        return json_encode($data);
+
+
+    }
+    public function deny_all_selected()
+    {
+        $shop_id = $this->user_info->shop_id;
+
+        $all_selected = Tbl_mlm_slot_wallet_log::where('wallet_log_selected', 1)->where('shop_id', $shop_id)->get();
+
+        foreach ($all_selected as $key => $value) {
+            # code...
+            $update['wallet_log_selected'] = 0;
+            $update['wallet_log_denied_amount'] = $value->wallet_log_amount;
+            $update['wallet_log_amount'] = 0;
+            $update['encashment_process_type'] = 2;
+            $update['wallet_log_notified'] = 0;
+            $update['wallet_log_details'] = 'Your wallet request has been denied';
+            Tbl_mlm_slot_wallet_log::where('wallet_log_id', $value->wallet_log_id)->update($update);
+
+            $update_status['encashment_process'] = null;
+            Tbl_mlm_slot_wallet_log::where('encashment_process', $value->encashment_process)
+            ->where('wallet_log_plan', '!=', 'ENCASHMENT')
+            ->update($update_status);
+        }
+
+        $data['status'] = 'success_new';
+        $data['message'] = 'Encashment Denied';
+        return json_encode($data);
     }
 }

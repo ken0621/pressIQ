@@ -175,16 +175,21 @@ class Accounting
 	 * @param array  	$entry_date      	
 	 * @param boolean  	$remarks   			
 	 */
-	public static function postJournalEntry($reference_module = '', $reference_id = '', $entry_data = '', $remarks = '')
+	public static function postJournalEntry($entry, $entry_data, $remarks = '')
 	{
-		$reference_module = "invoice";
+		// $entry["reference_module"]	= "invoice";
+		// $entry["reference_id"]		= "invoice";
 
-		$entry_data[0]['item_id'] 		= 41;
-		$entry_data[0]['entry_qty'] 	= 5;
-		$entry_data[0]['vatable']		= 0;
-		$entry_data[0]['ewt']			= 0;
-		$entry_data[0]['discount']		= 0;
-		$entry_data[0]['entry_amount'] 	= 200;
+		// $entry["total"]		= 180;
+		// $entry["vatable"]	= 0;
+		// $entry["discount"]	= 20;
+		// $entry["ewt"]		= 0;
+
+		// $entry_data[0]['item_id'] 		= 15;
+		// $entry_data[0]['entry_qty'] 	= 5;
+		// $entry_data[0]['vatable']		= 0;
+		// $entry_data[0]['discount']		= 0;
+		// $entry_data[0]['entry_amount'] 	= 200;
 
 		$account_receivable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-receivable")->pluck("account_id");
 		$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
@@ -193,12 +198,119 @@ class Accounting
 		$account_income 	= Tbl_item::where("item_id", 39)->pluck("item_income_account_id");  //Sales
 		$account_expense 	= Tbl_item::where("item_id", 39)->pluck("item_expense_account_id"); //Cost of Good Sold
 
-		foreach($entry_data as $entry)
+
+		/* INSERT JOURNAL ENTRY */
+		$journal_entry['je_shop_id'] 			= Accounting::getShopId();
+		$journal_entry['je_reference_module'] 	= $entry["reference_module"];
+		$journal_entry['je_reference_id'] 		= $entry["reference_id"];
+		$journal_entry['je_entry_date'] 		= carbon::now();
+		$journal_entry['je_remarks']			= $remarks;
+
+		$line_data["je_id"] 	= Tbl_journal_entry::insertGetId($journal_entry);
+		$line_data["item_id"]	= '';
+
+		/* RECIVABLE OR PAYABLE */
+		if(Accounting::checkReceivable($entry["reference_module"]))
 		{
-			// $_account = Tbl_item::where("item_id", $entry["item_id"])
+			$line_data["entry_amount"]	= $entry["total"];
+			$line_data["entry_type"] 	= "Debit";
+			$line_data["account_id"] 	= $account_receivable;
+			Accounting::insertJournalLine($line_data);
+
+			/* DISCOUNT AS WHOLE */
+			if($entry["discount"] > 0)
+			{
+				$line_data["entry_amount"]	= $entry["discount"];
+				$line_data["entry_type"] 	= "Debit";
+				$line_data["account_id"] 	= Accounting::getDiscountSale();
+				Accounting::insertJournalLine($line_data);
+			}
+
+			/* VATABLE AS WHOLE */
+			if($entry["vatable"] > 0)
+			{
+				$line_data["entry_amount"]	= $entry["vatable"];
+				$line_data["entry_type"] 	= "Credit";
+				$line_data["account_id"] 	= Accounting::getOutputVatPayable();
+				Accounting::insertJournalLine($line_data);
+			}
+
+			/* EWT AS WHOLE */
+			if($entry["ewt"] > 0)
+			{
+				$line_data["entry_amount"]	= $entry["ewt"];
+				$line_data["entry_type"] 	= "Debit";
+				$line_data["account_id"] 	= Accounting::getWitholdingTax();
+				Accounting::insertJournalLine($line_data);
+			}
+		}
+		else
+		{
+			$line_data["entry_amount"]	= $entry["total"];
+			$line_data["entry_type"] 	= "Credit";
+			$line_data["account_id"] 	= $account_payable;
+			Accounting::insertJournalLine($line_data);
+
+			/* DISCOUNT AS WHOLE */
+			if($entry["discount"] > 0)
+			{
+				$line_data["entry_amount"]	= $entry["discount"];
+				$line_data["entry_type"] 	= "Credit";
+				$line_data["account_id"] 	= Accounting::getDiscountPurchase();
+				Accounting::insertJournalLine($line_data);
+			}
+
+			/* VATABLE AS WHOLE */
+			if($entry["vatable"] > 0)
+			{
+				$line_data["entry_amount"]	= $entry["vatable"];
+				$line_data["entry_type"] 	= "Debit";
+				$line_data["account_id"] 	= Accounting::getOutputVatPayable();
+				Accounting::insertJournalLine($line_data);
+			}
+
+			/* EWT AS WHOLE */
+			if($entry["ewt"] > 0)
+			{
+				$line_data["entry_amount"]	= $entry["ewt"];
+				$line_data["entry_type"] 	= "Credit";
+				$line_data["account_id"] 	= Accounting::getWitholdingTax();
+				Accounting::insertJournalLine($line_data);
+			}
 		}
 
+		foreach($entry_data as $entry_line)
+		{
+			$item = Tbl_item::where("item_id", $entry_line["item_id"])->first();
 
+			$line_data["item_id"] = $entry_line["item_id"];
+
+			if($entry["reference_module"] == "invoice")
+			{
+				/* INCOME ACCOUNT */
+				$line_data["entry_amount"]	= $entry_line["entry_amount"];
+				$line_data["entry_type"] 	= "Credit";
+				$line_data["account_id"] 	= $account_income;
+				Accounting::insertJournalLine($line_data);
+
+				if($item->item_type_id == 1)
+				{
+					/* EXPENSE ACCOUNT */
+					$line_data["entry_amount"]	= $item->item_cost;
+					$line_data["entry_type"] 	= "Debit";
+					$line_data["account_id"] 	= $account_expense;
+					Accounting::insertJournalLine($line_data);
+
+					/* ASSET ACCOUNT */
+					$line_data["entry_amount"]	= $item->item_cost;
+					$line_data["entry_type"] 	= "Credit";
+					$line_data["account_id"] 	= $account_asset;
+					Accounting::insertJournalLine($line_data);
+				}
+			}
+		}
+
+		return $line_data["je_id"];
 		// $_first 	= Tbl_item::accountAsset()->where("item_id", 39)->select("item_id","item_asset_account_id as account_id", "account_name", "chart_type_name", "normal_balance")->where("item_asset_account_id","<>", "NULL");
 		// $_second 	= Tbl_item::accountIncome()->where("item_id", 39)->select("item_id","item_income_account_id as account_id", "account_name", "chart_type_name", "normal_balance")->where("item_income_account_id","<>", "NULL");
 		// $_third 	= Tbl_item::accountExpense()->where("item_id", 39)->select("item_id","item_expense_account_id  as account_id", "account_name", "chart_type_name", "normal_balance")->where("item_expense_account_id","<>", "NULL");	
@@ -206,7 +318,166 @@ class Accounting
 		// dd($_second->union($_first)->union($_third)->get()->toArray());
 	}
 
-	public static function getJournalById($reference_module, $reference_id)
+	public static function insertJournalLine($line)
+	{
+		$journal_line['jline_je_id']		= $line["je_id"];
+		$journal_line['jline_item_id'] 		= $line["item_id"];
+		$journal_line['jline_account_id'] 	= $line["account_id"];
+		$journal_line['jline_type'] 		= $line["entry_type"];
+		$journal_line['jline_amount'] 		= $line["entry_amount"];
+		$journal_line['jline_description'] 	= isset($line["entry_description"]) ? $line["entry_description"] : '';
+
+		Tbl_journal_entry_line::insert($journal_line);
+	}
+
+	public static function checkReceivable($type)
+	{
+		if($type == "invoice")
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * Check what table reference
+	 *
+	 * @param 	string  	$type 		Type of a transaction
+	 * @return 	array[2] 	$table_name | id_name
+	 */
+	public static function checkReferenceId($type)
+	{
+		switch($type)
+		{
+			case 'invoice':
+				$data["table_txn_reference"] 	= 'Tbl_customer_invoice';
+				$data["txn_id"]					= 'je_id';			
+				$data["table_name_reference"]	= 'Tbl_customer';
+				$data["name_id"]				= 'customer_id';
+				break;
+
+			case 'purchase_order':
+				$data["table_txn_reference"] 	= 'Tbl_purchase_order';
+				$data["txn_id"]					= 'je_id';			
+				$data["table_name_reference"]	= 'Tbl_vendor';
+				$data["name_id"]				= 'vendor_id';
+				break;
+			case 'receive-payment':
+				break;
+			default:
+				$data = null;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Get Chart of Account - Output Vat Payable for Vatable transaction
+	 *
+	 * @return 	int 	ID
+	 */
+	public static function getOutputVatPayable()
+	{
+		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "tax-output-vat-payable")->first();
+        if(!$exist_account)
+        {
+            $insert["account_shop_id"]          = $shop_id;
+            $insert["account_type_id"]          = 9;
+            $insert["account_number"]           = "00000";
+            $insert["account_name"]             = "Output Vat Payable";
+            $insert["account_description"]      = "";
+            $insert["account_protected"]        = 1;
+            $insert["account_code"]             = "tax-output-vat-payable";
+            
+            return Tbl_chart_of_account::insertGetId($insert);
+        }
+
+        return $exist_account->account_id;
+	}
+
+	/**
+	 * Get Chart of Account - Creditable witholding tax for Witholding transaction
+	 *
+	 * @return 	int 	ID
+	 */
+	public static function getWitholdingTax()
+	{
+		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "tax-credit-tax-1")->first();
+        if(!$exist_account)
+        {
+            $insert["account_shop_id"]          = Accounting::getShopId();
+            $insert["account_type_id"]          = 3;
+            $insert["account_number"]           = "00000";
+            $insert["account_name"]             = "Creditable Withholding Tax - 1%";
+            $insert["account_description"]      = "";
+            $insert["account_protected"]        = 1;
+            $insert["account_code"]             = "tax-credit-tax-1";
+            
+            return Tbl_chart_of_account::insertGetId($insert);
+        }
+
+        return $exist_account->account_id;
+	}
+
+	/**
+	 * Get Chart of Account - Discount for Discounted Sale transaction
+	 *
+	 * @return 	int 	ID
+	 */
+	public static function getDiscountSale()
+	{
+		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "discount-sale")->first();
+        if(!$exist_account)
+        {
+            $insert["account_shop_id"]          = Accounting::getShopId();
+            $insert["account_type_id"]          = 4;
+            $insert["account_number"]           = "00000";
+            $insert["account_name"]             = "Discount";
+            $insert["account_description"]      = "";
+            $insert["account_protected"]        = 1;
+            $insert["account_code"]             = "discount-sale";
+            
+            return Tbl_chart_of_account::insertGetId($insert);
+        }
+
+        return $exist_account->account_id;
+	}
+
+	/**
+	 * Get Chart of Account - Discount for Discounted Purchase transaction
+	 *
+	 * @return 	int 	ID
+	 */
+	public static function getDiscountPurchase()
+	{
+		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "discount-purchase")->first();
+        if(!$exist_account)
+        {
+            $insert["account_shop_id"]          = Accounting::getShopId();
+            $insert["account_type_id"]          = 4;
+            $insert["account_number"]           = "00000";
+            $insert["account_name"]             = "Discount";
+            $insert["account_description"]      = "";
+            $insert["account_protected"]        = 1;
+            $insert["account_code"]             = "discount-puchase";
+            
+            return Tbl_chart_of_account::insertGetId($insert);
+        }
+
+        return $exist_account->account_id;
+	}
+
+	/* REFERENCE OF THE NAMING OF THE CHART OF ACCOUNT TABLE */
+
+	// Output Vat Payable 						= tax-output-vat-payable
+	// Creditable Withholding Tax - 1%			= tax-credit-tax-1
+	// Discount									= discount-sale
+	// Discount									= discount-purchase
+
+		public static function getJournalById($reference_module, $reference_id)
 	{
 		// $journal = Tbl_journal_entry::where("je_reference_id", $reference_id)->where("je_reference_module", $reference_module)->first();
 
@@ -288,115 +559,4 @@ class Accounting
         // dd($data['tbl_journal_entry']);
         return $data['tbl_journal_entry'];
 	}
-
-	/**
-	 * Check what table reference
-	 *
-	 * @param 	string  	$type 		Type of a transaction
-	 * @return 	array[2] 	$table_name | id_name
-	 */
-	public static function checkReferenceId($type)
-	{
-		switch($type)
-		{
-			case 'invoice':
-				$data["table_txn_reference"] 	= 'Tbl_customer_invoice';
-				$data["txn_id"]					= 'je_id';			
-				$data["table_name_reference"]	= 'Tbl_customer';
-				$data["name_id"]				= 'customer_id';
-				break;
-
-			case 'purchase_order':
-				$data["table_txn_reference"] 	= 'Tbl_purchase_order';
-				$data["txn_id"]					= 'je_id';			
-				$data["table_name_reference"]	= 'Tbl_vendor';
-				$data["name_id"]				= 'vendor_id';
-				break;
-			case 'receive-payment':
-				break;
-			default:
-				$data = null;
-		}
-
-		return $data;
-	}
-
-	/**
-	 * Get Chart of Account - Output Vat Payable for Vatable transaction
-	 *
-	 * @return 	int 	ID
-	 */
-	public static function getOutputVatPayable()
-	{
-		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "tax-output-vat-payable")->first();
-        if(!$exist_account)
-        {
-            $insert["account_shop_id"]          = $shop_id;
-            $insert["account_type_id"]          = 9;
-            $insert["account_number"]           = "00000";
-            $insert["account_name"]             = "Output Vat Payable";
-            $insert["account_description"]      = "";
-            $insert["account_protected"]        = 1;
-            $insert["account_code"]             = "tax-output-vat-payable";
-            
-            return Tbl_chart_of_account::insertGetId($insert);
-        }
-
-        return $exist_account->account_id;
-	}
-
-	/**
-	 * Get Chart of Account - Creditable witholding tax for Witholding transaction
-	 *
-	 * @return 	int 	ID
-	 */
-	public static function getWitholdingTax()
-	{
-		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "tax-credit-tax-1")->first();
-        if(!$exist_account)
-        {
-            $insert["account_shop_id"]          = $shop_id;
-            $insert["account_type_id"]          = 3;
-            $insert["account_number"]           = "00000";
-            $insert["account_name"]             = "Creditable Withholding Tax - 1%";
-            $insert["account_description"]      = "";
-            $insert["account_protected"]        = 1;
-            $insert["account_code"]             = "tax-credit-tax-1";
-            
-            return Tbl_chart_of_account::insertGetId($insert);
-        }
-
-        return $exist_account->account_id;
-	}
-
-	/**
-	 * Get Chart of Account - Discount for Discounted transaction
-	 *
-	 * @return 	int 	ID
-	 */
-	public static function getDiscount()
-	{
-		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "discount-account")->first();
-        if(!$exist_account)
-        {
-            $insert["account_shop_id"]          = $shop_id;
-            $insert["account_type_id"]          = 4;
-            $insert["account_number"]           = "00000";
-            $insert["account_name"]             = "Discount";
-            $insert["account_description"]      = "";
-            $insert["account_protected"]        = 1;
-            $insert["account_code"]             = "discount-account";
-            
-            return Tbl_chart_of_account::insertGetId($insert);
-        }
-
-        return $exist_account->account_id;
-	}
-
-	/* REFERENCE OF THE NAMING OF THE CHART OF ACCOUNT TABLE */
-
-	// Output Vat Payable 						= tax-output-vat-payable
-	// Creditable Withholding Tax - 1%			= tax-credit-tax-1
-	// Discount									= discount-account
-	// 
 }

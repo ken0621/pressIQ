@@ -262,6 +262,7 @@ class Customer_InvoiceController extends Member
 
         if($inv == 0 || Request::input("keep_val") == "keep")
         {
+
             $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
             
             if($cm_customer_info != null && $cm_item_info != null)

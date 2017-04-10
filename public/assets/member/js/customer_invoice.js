@@ -544,7 +544,6 @@ function customer_invoice(){
 
 		if($this.find("option:selected").attr("has-um") != '')
 		{		
-			alert($this.find("option:selected").attr("has-um"));	
 			$parent_cm.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
 				$(this).globalDropList("reload").globalDropList("enabled");

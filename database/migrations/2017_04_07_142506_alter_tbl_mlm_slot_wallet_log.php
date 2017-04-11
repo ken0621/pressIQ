@@ -14,7 +14,7 @@ class AlterTblMlmSlotWalletLogv2 extends Migration
     {
         Schema::table('tbl_mlm_slot_wallet_log', function (Blueprint $table) {
             //
-            if(!schema::hasColumn('wallet_log_selected'))
+            if(!schema::hasColumn('tbl_mlm_slot_wallet_log','wallet_log_selected'))
             {
                 $table->integer('wallet_log_selected')->default(0);
             }

@@ -3,12 +3,12 @@
 <?php 
 $data['title'] = 'Slots';
 $data['sub'] = 'The nickname of the slot will be used as reference for the registration page';
-$data['icon'] = 'fa fa-linode';
+$data['icon'] = 'icon-sitemap';
 ?>
 @include('mlm.header.index', $data)
 
 <div class="col-md-6">
-  <div class="box">
+  <div class="box clearfix" style="overflow: hidden !important;">
     <div class="box-header with-border">
       <h3 class="box-title">Choose Default Slot</h3>
     </div>

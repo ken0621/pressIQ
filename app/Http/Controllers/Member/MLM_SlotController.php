@@ -117,6 +117,8 @@ class MLM_SlotController extends Member
     {
         // return 1;
         // $shop_id = $this->user_info->shop_id;
+        // $slot = Mlm_compute::get_slot_info(336);
+        // return Mlm_complan_manager::binary_triangle_matrix($slot, 999, 500);
         // $plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
         //     ->where('marketing_plan_enable', 1)
         //     ->where('marketing_plan_trigger', 'Slot Creation')

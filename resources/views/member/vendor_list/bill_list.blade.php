@@ -58,7 +58,7 @@
                                     @if($bill_list->bill_is_paid == 0)
                                     <a class="btn btn-warning form-control">Open</a>
                                     @else
-                                    <a class="btn form-control" style="background-color: #78C500;color: #fff">Closed</a>
+                                    <a class="btn form-control" style="background-color: #78C500;color: #fff">Paid</a>
                                     @endif
                                 </td>
                                 <td class="text-center">
@@ -67,7 +67,6 @@
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
-
                                         @if($bill_list->bill_is_paid == 0)
                                         <li><a href="/member/vendor/create_bill?id={{$bill_list->bill_id}}">Edit Bill </a></li>
                                         <li><a href="/member/vendor/paybill?bill_id={{$bill_list->bill_id}}&vendor_id={{$bill_list->vendor_id}}">Pay Bill</a></li>

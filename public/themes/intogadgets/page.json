@@ -363,11 +363,9 @@
 				{"name":"link", "type":"text"},
 				{"name":"address", "type":"hidden"},
 				{"name":"latitude", "type":"hidden"},
-				{"name":"longitude", "type":"hidden"},
-				{"name":"map", "type":"map"}
+				{"name":"longitude", "type":"hidden"}
 			],
-			"size":"12",
-			"apikey":"AIzaSyDntbTzqtnwMA7hdMBAeX37YwTjRJi6cDY"
+			"size":"12"
 		}
 	},
 	"career":

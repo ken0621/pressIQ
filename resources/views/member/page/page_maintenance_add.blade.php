@@ -17,30 +17,15 @@
 		<div style="margin-top: 15px;">
 			@foreach($field as $fields)
 			<div class="form-group">
-				<label class="{{ $fields->type == "hidden" ? "hide" : "" }}">{{ ucwords(str_replace(' ', '_', $fields->name)) }}</label>
+				<label>{{ ucwords(str_replace(' ', '_', $fields->name)) }}</label>
 				@if($fields->type == "textarea")
-					<textarea class="form-control mce" name="{{ $fields->name }}"></textarea>
+				<textarea class="form-control mce" name="{{ $fields->name }}"></textarea>
 				@elseif($fields->type == "image")
-					<input type="hidden" name="{{ $fields->name }}" class="maintenance-image-input" key="{{ $key }}-{{ $fields->type }}">
-					<div class="maintenance-image-holder" key="{{ $key }}-{{ $fields->type }}"></div>
-					<div><button class="image-gallery image-gallery-single btn btn-primary" key="{{ $key }}-{{ $fields->type }}"> Upload Image</button></div>
-				@elseif($fields->type == "map")
-					<div id="map" style="height: 300px;"></div>
-				    <script>
-				      function initMap() {
-				        // Create a map object and specify the DOM element for display.
-				        var map = new google.maps.Map(document.getElementById('map'), {
-				          center: {lat: -34.397, lng: 150.644},
-				          scrollwheel: false,
-				          zoom: 8
-				        });
-				      }
-
-				    </script>
-				    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDntbTzqtnwMA7hdMBAeX37YwTjRJi6cDY&callback=initMap"
-				    async defer></script>
+				<input type="hidden" name="{{ $fields->name }}" class="maintenance-image-input" key="{{ $key }}-{{ $fields->type }}">
+				<div class="maintenance-image-holder" key="{{ $key }}-{{ $fields->type }}"></div>
+				<div><button class="image-gallery image-gallery-single btn btn-primary" key="{{ $key }}-{{ $fields->type }}"> Upload Image</button></div>
 				@else
-					<input class="form-control" type="{{ $fields->type }}" name="{{ $fields->name }}">
+				<input class="form-control" type="{{ $fields->type }}" name="{{ $fields->name }}">
 				@endif
 			</div>
 			@endforeach

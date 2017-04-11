@@ -209,7 +209,7 @@ class Invoice
 
                 Tbl_customer_invoice_line::insert($insert_line);
 
-                $entry_data[$key]['item_id']       = 15;
+                $entry_data[$key]['item_id']       = $item_line['item_id'];
                 $entry_data[$key]['entry_qty']     = $item_line['quantity'];
                 $entry_data[$key]['vatable']       = 0;
                 $entry_data[$key]['discount']      = $discount;

@@ -570,6 +570,7 @@ class Customer_SaleReceiptController extends Member
     public function invoice_view($invoice_id)
     {
         $data["invoice_id"] = $invoice_id;
+        $data["transaction_type"] = "Sales Receipt";
         $data["action_load"] = "/member/customer/customer_invoice_pdf";
         return view("member.customer_invoice.invoice_view",$data);
     }
@@ -577,6 +578,7 @@ class Customer_SaleReceiptController extends Member
     {
         $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
 
+        $data["transaction_type"] = "Sales Receipt";
         $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
         foreach($data["invoice_item"] as $key => $value) 
         {

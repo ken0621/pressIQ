@@ -12,6 +12,8 @@ use App\Globals\Invoice;
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
+use App\Models\Tbl_pay_bill;
+use App\Models\Tbl_pay_bill_line;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_user;
 
@@ -35,17 +37,17 @@ class Vendor_PayBillController extends Member
         $data["_vendor"]        = Vendor::getAllVendor('active');
         $data['_account']       = Accounting::getAllAccount();
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
-        $data['action']         = "/member/customer/pay_bill/add";
+        $data['action']         = "/member/vendor/paybill/add";
         $data["_bill"]       = Billing::getAllBillByVendor($data["v_id"]);
 
         $id = Request::input('id');
         if($id)
         {
-            $data["paybill"]         = Tbl_receive_payment::where("rp_id", $id)->first();
-            $data["_paybill_line"]   = Tbl_receive_payment_line::where("rpline_rp_id", $id)->get();
-            $data["_bill"]           = Billing::getAllInvoiceByCustomerWithRcvPymnt($data["paybill"]->paybill_vendor_id, $data["paybill"]->paybill_id);
+            $data["paybill"]         = Tbl_pay_bill::where("paybill_id", $id)->first();
+            $data["_paybill_line"]   = Tbl_pay_bill_line::where("pbline_pb_id", $id)->get();
+            $data["_bill"]           = Billing::getAllBillByVendorWithPaybill($data["paybill"]->paybill_vendor_id, $data["paybill"]->paybill_id);
             // dd($data["_invoice"]);
-            $data['action']             = "/member/customer/receive_payment/update/".$data["paybill"]->paybill_id;
+            $data['action']             = "/member/vendor/paybill/update/".$data["paybill"]->paybill_id;
         }
 
         return view("member.pay_bill.pay_bill", $data);
@@ -57,104 +59,111 @@ class Vendor_PayBillController extends Member
         return view('member.pay_bill.load_pay_bill_items', $data);
     }
 
-    public function add_receive_payment()
+    public function add_pay_bill()
     {
         // dd(Request::input());
-        $insert["rp_shop_id"]           = $this->getShopId();
-        $insert["rp_customer_id"]       = Request::input('rp_customer_id');
-        $insert["rp_ar_account"]        = Request::input('rp_ar_account') or 0;
-        $insert["rp_date"]              = datepicker_input(Request::input('rp_date'));
-        $insert["rp_total_amount"]      = convertToNumber(Request::input('rp_total_amount'));
-        $insert["rp_payment_method"]    = Request::input('rp_payment_method');
-        $insert["rp_memo"]              = Request::input('rp_memo');
-        $insert["date_created"]         = Carbon::now();
+        $insert["paybill_shop_id"]           = $this->getShopId();
+        $insert["paybill_vendor_id"]         = Request::input('paybill_vendor_id');
+        $insert["paybill_ap_id"]           = Request::input('paybill_ap_id') != "" ? Request::input('paybill_ap_id') : 0;
+        $insert["paybill_date"]              = datepicker_input(Request::input('paybill_date'));
+        $insert["paybill_total_amount"]      = convertToNumber(Request::input('paybill_total_amount'));
+        $insert["paybill_payment_method"]    = Request::input('paybill_payment_method');
+        $insert["paybill_memo"]              = Request::input('paybill_memo');
+        $insert["paybill_date_created"]      = Carbon::now();
 
-        $rcvpayment_id  = Tbl_receive_payment::insertGetId($insert);
+        $paybill_id  = Tbl_pay_bill::insertGetId($insert);
 
         $txn_line = Request::input('line_is_checked');
         foreach($txn_line as $key=>$txn)
         {
             if($txn == 1)
             {
-                $insert_line["rpline_rp_id"]            = $rcvpayment_id;
-                $insert_line["rpline_reference_name"]   = Request::input('rpline_txn_type')[$key];
-                $insert_line["rpline_reference_id"]     = Request::input('rpline_txn_id')[$key];
-                $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
+                $insert_line["pbline_pb_id"]            = $paybill_id;
+                $insert_line["pbline_reference_name"]   = Request::input('pbline_txn_type')[$key];
+                $insert_line["pbline_reference_id"]     = Request::input('pbline_bill_id')[$key];
+                $insert_line["pbline_amount"]           = convertToNumber(Request::input('pbline_amount')[$key]);
 
-                Tbl_receive_payment_line::insert($insert_line);
-                if($insert_line["rpline_reference_name"] == 'invoice')
+                Tbl_pay_bill_line::insert($insert_line);
+                if($insert_line["pbline_reference_name"] == 'bill')
                 {
-                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                    //bill
+                    Billing::updateAmountApplied($insert_line["pbline_reference_id"]);
                 }
             }
         }
 
-        $rcv_data = AuditTrail::get_table_data("tbl_receive_payment","rp_id",$rcvpayment_id);
-        AuditTrail::record_logs("Added","receive_payment",$rcvpayment_id,"",serialize($rcv_data));
+        $bill_data = AuditTrail::get_table_data("tbl_bill","bill_id",$paybill_id);
+        AuditTrail::record_logs("Added","bill",$paybill_id,"",serialize($bill_data));
 
         $button_action = Request::input('button_action');
 
         $json["status"]         = "success";
-        $json["rcvpayment_id"]  = $rcvpayment_id;
-        $json["message"]        = "Successfully received payment";
-        $json["redirect"]            = "/member/customer/receive_payment";
+        $json["rcvpayment_id"]  = $paybill_id;
+        $json["message"]        = "Successfully Pay Bill";
+        $json["redirect"]            = "/member/vendor/paybill";
 
         if($button_action == "save-and-edit")
         {
-            $json["redirect"]    = "/member/customer/receive_payment?id=".$rcvpayment_id;
+            $json["redirect"]    = "/member/vendor/paybill?id=".$paybill_id;
         }
 
         return json_encode($json);
     }
 
-    public function update_receive_payment($rcvpayment_id)
+    public function update_pay_bill($paybill_id)
     {
-        // dd(Request::input());
 
-        $old_data = AuditTrail::get_table_data("tbl_receive_payment","rp_id",$rcvpayment_id);
+        $old_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
 
-        $update["rp_customer_id"]       = Request::input('rp_customer_id');
-        $update["rp_ar_account"]        = Request::input('rp_ar_account') or 0;
-        $update["rp_date"]              = datepicker_input(Request::input('rp_date'));
-        $update["rp_total_amount"]      = convertToNumber(Request::input('rp_total_amount'));
-        $update["rp_payment_method"]    = Request::input('rp_payment_method');
-        $update["rp_memo"]              = Request::input('rp_memo');
+        $update["paybill_shop_id"]           = $this->getShopId();
+        $update["paybill_vendor_id"]         = Request::input('paybill_vendor_id');
+        $update["paybill_ap_id"]             = Request::input('paybill_ap_id') != "" ? Request::input('paybill_ap_id') : 0;
+        $update["paybill_date"]              = datepicker_input(Request::input('paybill_date'));
+        $update["paybill_total_amount"]      = convertToNumber(Request::input('paybill_total_amount'));
+        $update["paybill_payment_method"]    = Request::input('paybill_payment_method');
+        $update["paybill_memo"]              = Request::input('paybill_memo');
+        $update["paybill_date_created"]      = Carbon::now();
 
-        Tbl_receive_payment::where("rp_id", $rcvpayment_id)->update($update);
-        Tbl_receive_payment_line::where("rpline_rp_id", $rcvpayment_id)->delete();
+        Tbl_pay_bill::where("paybill_id", $paybill_id)->update($update);
+        Tbl_pay_bill_line::where("pbline_pb_id", $paybill_id)->delete();
 
         $txn_line = Request::input('line_is_checked');
         foreach($txn_line as $key=>$txn)
         {
             if($txn == 1)
             {
-                $insert_line["rpline_rp_id"]            = $rcvpayment_id;
-                $insert_line["rpline_reference_name"]   = Request::input('rpline_txn_type')[$key];
-                $insert_line["rpline_reference_id"]     = Request::input('rpline_txn_id')[$key];
-                $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
+                $insert_line["pbline_pb_id"]            = $paybill_id;
+                $insert_line["pbline_reference_name"]   = Request::input('pbline_txn_type')[$key];
+                $insert_line["pbline_reference_id"]     = Request::input('pbline_bill_id')[$key];
+                $insert_line["pbline_amount"]           = convertToNumber(Request::input('pbline_amount')[$key]);
 
-                Tbl_receive_payment_line::insert($insert_line);
-                if($insert_line["rpline_reference_name"] == 'invoice')
+                Tbl_pay_bill_line::insert($insert_line);
+                if($insert_line["pbline_reference_name"] == 'bill')
                 {
-                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                    //bill
+                    Billing::updateAmountApplied($insert_line["pbline_reference_id"]);
                 }
+            }
+            else
+            {
+                Billing::updateAmountApplied(Request::input('pbline_bill_id')[$key]);
             }
         }
 
-        $new_data = AuditTrail::get_table_data("tbl_receive_payment","rp_id",$rcvpayment_id);
-        AuditTrail::record_logs("Updated","receive_payment",$rcvpayment_id,serialize($old_data),serialize($new_data));
+        $new_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
+        AuditTrail::record_logs("Updated","bill",$paybill_id,serialize($old_data),serialize($new_data));
 
 
         $button_action = Request::input('button_action');
 
         $json["status"]         = "success";
-        $json["rcvpayment_id"]  = $rcvpayment_id;
-        $json["message"]        = "Successfully updated payment";
-        $json["url"]            = "/member/customer/receive_payment?id=".$rcvpayment_id;
+        $json["bill_id"]        = $paybill_id;
+        $json["message"]        = "Successfully updated Pay Bills";
+        $json["redirect"]            = "/member/vendor/paybill?id=".$paybill_id;
         
         if($button_action == "save-and-new")
         {
-            $json["redirect"]   = '/member/customer/receive_payment';
+            $json["redirect"]   = '/member/vendor/paybill';
         }
 
         return json_encode($json);

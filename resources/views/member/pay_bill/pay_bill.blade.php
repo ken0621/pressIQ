@@ -29,7 +29,7 @@
                         <div class="row clearfix">
                             <div class="col-sm-3">
                                 <select class="drop-down-vendor" name="paybill_vendor_id" required>
-                                    @include("member.load_ajax_data.load_vendor", ['vendor_id' => isset($rcvpayment) ? $rcvpayment->rp_customer_id : (isset($v_id) ? $v_id : '')])
+                                    @include("member.load_ajax_data.load_vendor", ['vendor_id' => isset($paybill) ? $paybill->paybill_vendor_id : (isset($v_id) ? $v_id : '')])
                                 </select>
                             </div>
                            <!--  <div class="col-sm-4">
@@ -47,7 +47,7 @@
                         <div class="col-sm-3">
                             <label>Payment Method</label>
                             <select class="drop-down-payment" name="paybill_payment_method">
-                                @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($rcvpayment) ? $rcvpayment->paybill_payment_method : ''])
+                                @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($paybill) ? $paybill->paybill_payment_method : ''])
                             </select>
                         </div>
                         <div class="col-sm-2">
@@ -57,12 +57,12 @@
                         <div class="col-sm-3">
                             <label>Deposit to</label>
                             <select class="drop-down-coa" name="rp_ar_account">
-                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", "account_id" => isset($rcvpayment) ? $rcvpayment->paybill_ap_id : ''])
+                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", "account_id" => isset($paybill) ? $paybill->paybill_ap_id : ''])
                             </select>
                         </div>
                         <div class="col-sm-2 pull-right">
                         	<label>Amount Received</label>
-                        	<input type="text" name="paybill_total_amount" class="input-sm form-control amount-received" value="{{$rcvpayment->paybill_total_amount or ''}}">
+                        	<input type="text" name="paybill_total_amount" class="input-sm form-control amount-received" value="{{$paybill->paybill_total_amount or ''}}">
                         </div>
                     </div>
                    <!--  <div class="row clearfix">

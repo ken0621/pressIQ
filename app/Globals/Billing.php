@@ -5,6 +5,8 @@ use App\Globals\Accounting;
 use App\Models\Tbl_bill;
 use App\Models\Tbl_bill_po;
 use App\Models\Tbl_bill_item_line;
+use App\Models\Tbl_pay_bill;
+use App\Models\Tbl_pay_bill_line;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
@@ -45,6 +47,25 @@ class Billing
         }
 
         return $price;
+    }
+    public static function updateAmountApplied($bill_id)
+    {
+        $payment_applied = Tbl_bill::appliedPayment(Billing::getShopId())->where("bill_id",$bill_id)->pluck("amount_applied");
+        
+        $data["bill_applied_payment"] = $payment_applied;
+        Tbl_bill::where("bill_id", $bill_id)->update($data);
+
+        Billing::updateIsPaid($bill_id);
+    }
+     public static function updateIsPaid($bill_id)
+    {
+        $payment_applied   = Tbl_bill::where("bill_id", $bill_id)->pluck("bill_applied_payment"); 
+        $overall_price     = Tbl_bill::where("bill_id", $bill_id)->pluck("bill_total_amount"); 
+
+        if($payment_applied == $overall_price)  $data["bill_is_paid"] = 1;
+        else                                    $data["bill_is_paid"] = 0;
+
+        Tbl_bill::where("bill_id", $bill_id)->update($data);
     }
     public static function getShopId()
     {

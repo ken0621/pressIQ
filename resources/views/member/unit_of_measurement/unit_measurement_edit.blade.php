@@ -60,7 +60,7 @@
                                 <th>Name</th>
                                 <th style="width: 200px;">Abbreviation</th>
                                 <!-- <th class="text-center" style="width: 100px;">Main Warehouse QTY</th> -->
-                                <th class="text-center" style="width: 200px;"># of <span class="abb">{{$edit_um->um_base_abbrev}}</span></th>
+                                <th class="text-center" style="width: 200px;">Qty per <span class="abb">{{$edit_um->um_base_abbrev}}</span></th>
 
                                 <th style="width: 20px"></th>
                             </tr>

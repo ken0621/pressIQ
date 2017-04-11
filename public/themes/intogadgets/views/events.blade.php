@@ -11,7 +11,7 @@
                <div class="event-slider">
                   @if(count($_post) > 0)
                      @foreach($_post as $key => $post)
-                        <div class="slider-holder" onClick="location.href='/events/view/{{ $post->post_id }}'">
+                        <div class="slider-holder" onClick="location.href='/events/view/{{ $post->main_id }}'">
                            <img style="width: 100%;" src="{{ $post->post_image }}">
                            <div class="shadow"></div>
                            <div class="title">{{ $post->post_title }}</div>
@@ -23,7 +23,7 @@
             @if(count($_post) > 0)
                @foreach($_post as $key => $post)
                <div class="grid-item clearfix">
-                  <div class="event-holder" onClick="location.href='/events/view/{{ $post->post_id }}'">
+                  <div class="event-holder" onClick="location.href='/events/view/{{ $post->main_id }}'">
                      <div class="img">
                         <img class="4-3-ratio" style="width: 100%;" src="{{ $post->post_image }}">
                      </div>

@@ -463,6 +463,13 @@ Route::post('/member/customer/invoice/update','Member\Customer_InvoiceController
 Route::any('/member/customer/customer_invoice_view/{id}','Member\Customer_InvoiceController@invoice_view');
 Route::any('/member/customer/customer_invoice_pdf/{id}','Member\Customer_InvoiceController@invoice_view_pdf');
 
+//sales receipt
+Route::get('/member/customer/sales_receipt','Member\Customer_SaleReceiptController@index');
+Route::get('/member/customer/sales_receipt/list','Member\Customer_SaleReceiptController@sales_receipt_list');
+Route::any('/member/customer/sales_receipt/create','Member\Customer_SaleReceiptController@create_sales_receipt');
+Route::any('/member/customer/sales_receipt/update','Member\Customer_SaleReceiptController@update_sales_receipt');
+
+
 Route::get('/member/customer/product_repurchase','Member\MLM_ProductRepurchaseController@index');//ERWIN
 Route::post('/member/customer/product_repurchase/submit','Member\MLM_ProductRepurchaseController@submit');//ERWIN
 Route::get('/member/customer/product_repurchase/get_product_code/{id}','Member\MLM_ProductRepurchaseController@get_code');//ERWIN
@@ -477,8 +484,6 @@ Route::post('/member/about/update','Member\StoreInfoController@update');
 Route::get('/member/about/remove/{id}','Member\StoreInfoController@remove');
 
 //arcy
-//-sales-receipt start
-Route::get('/member/customer/sales_receipt','Member\Customer_SaleReceiptController@index');
 Route::get('/member/customer/estimate','Member\Customer_EstimateController@index');
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
 
@@ -518,7 +523,12 @@ Route::any('/member/vendor/receive_inventory','Member\Vendor_ReceiveInventoryCon
 Route::any('/member/vendor/receive_inventory/add','Member\Vendor_ReceiveInventoryController@add_receive_inventory');
 Route::any('/member/vendor/receive_inventory/update','Member\Vendor_ReceiveInventoryController@update_receive_inventory');
 
-
+// VENDOR PAYBILLS
+Route::any('/member/vendor/paybill','Member\Vendor_PayBillController@index');
+Route::any('/member/vendor/paybill/list','Member\Vendor_PayBillController@paybill_list');
+Route::get('/member/vendor/load_pb/{id}','Member\Vendor_PayBillController@load_vendor_pb');
+Route::any('/member/vendor/paybill/add','Member\Vendor_PayBillController@add_pay_bill');
+Route::any('/member/vendor/paybill/update/{id}','Member\Vendor_PayBillController@update_pay_bill');
 
 Route::get('/member/vendor/write_check','Member\Vendor_WriteCheckController@index');
 

@@ -36,7 +36,7 @@
 			</div>
 		</div>
 	</div>
-	{{-- <div class="container">
+	<div class="container">
 		<div onload="initMap()">
 			<div>
 				<label for="raddressInput">Search location:</label>
@@ -53,7 +53,7 @@
 			<div><select id="locationSelect" style="width: 10%; visibility: hidden"></select></div>
 			<div id="map" style="width: 100%; height: 90%"></div>
 		</div>
-	</div> --}}
+	</div>
 	<div class="store-content container">
 		@if(is_serialized(get_content($shop_theme_info, "contact", "contact_store_maintenance")))
 		<div>

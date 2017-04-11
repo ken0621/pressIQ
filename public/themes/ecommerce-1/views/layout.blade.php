@@ -159,9 +159,15 @@
                 <div class="col-md-2 col-sm-6">
                     <div class="btm-title">FOLLOW US ON</div>
                     <div>
-                        <a href="#"><i class="fa fa-facebook site-icon" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-twitter site-icon" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-pinterest-p site-icon" aria-hidden="true"></i></i></a>
+                        @if(get_content($shop_theme_info, "info", "facebook_link"))
+                        <a href="{{ get_content($shop_theme_info, "info", "facebook_link") }}"><i class="fa fa-facebook site-icon" aria-hidden="true"></i></a>
+                        @endif
+                        @if(get_content($shop_theme_info, "info", "twitter_link"))
+                        <a href="{{ get_content($shop_theme_info, "info", "twitter_link") }}"><i class="fa fa-twitter site-icon" aria-hidden="true"></i></a>
+                        @endif
+                        @if(get_content($shop_theme_info, "info", "pinterest_link"))
+                        <a href="{{ get_content($shop_theme_info, "info", "pinterest_link") }}"><i class="fa fa-pinterest-p site-icon" aria-hidden="true"></i></i></a>
+                        @endif
                     </div>
                 </div>
             </div>

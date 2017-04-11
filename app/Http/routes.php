@@ -503,6 +503,8 @@ Route::get('/member/vendor/purchase_order','Member\Vendor_PurchaseOrderControlle
 Route::get('/member/vendor/purchase_order/list','Member\Vendor_PurchaseOrderController@po_list');
 Route::any('/member/vendor/purchase_order/create_po','Member\Vendor_PurchaseOrderController@create_po');
 Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrderController@upate_po');
+Route::any('/member/vendor/purchase_order/view_pdf/{id}','Member\Vendor_PurchaseOrderController@view_po_pdf');
+Route::any('/member/vendor/purchase_order/pdf/{id}','Member\Vendor_PurchaseOrderController@po_pdf');
 
 Route::get('/member/vendor/bill_list','Member\Vendor_CreateBillController@index');
 Route::get('/member/vendor/create_bill','Member\Vendor_CreateBillController@create_bill');

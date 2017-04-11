@@ -14,10 +14,10 @@
 	<div class="form-group">
 		<h2>Purchase Order</h2>		
 	</div>
-<div class="form-group">
+<div class="form-group" style="padding-bottom: 50px">
 	<div class="col-md-6 text-left" style="float: left; width: 50%">
 		<strong>Vendor </strong><br>
-		<span>{{$po->vendor_company}}</span>
+		<span>{{$po->vendor_company}}</span><br>
 		<span>{{$po->title_name." ".$po->first_name." ".$po->middle_name." ".$po->last_name." ".$po->suffix_name}}</span>
 	</div>
 	<div class="col-md-6 text-right" style="float: right; width: 50%">
@@ -38,7 +38,6 @@
 		<th width="20%">QTY</th>
 		<th width="15%">PRICE</th>
 		<th width="15%">AMOUNT</th>
-		<th width="15%">Taxable</th>
 	</tr>
 		<input type="hidden" name="{{$total = 0}}" class="{{$taxable_item = 0}}" >
 	<tbody>
@@ -47,23 +46,23 @@
 			<tr >
 				<td>{{$poline->item_name}}</td>
 				<td style="text-align: center;">{{$poline->qty}}</td>
-				<td style="text-align: right;">{{currency("PHP",$poline->invline_rate)}}</td>
-				<td style="text-align: right;">{{currency("PHP",$poline->invline_amount)}}</td>
+				<td style="text-align: right;">{{currency("PHP",$poline->poline_rate)}}</td>
+				<td style="text-align: right;">{{currency("PHP",$poline->poline_amount)}}</td>
 			</tr>
 		@endforeach
-		<!-- <div class="{{$invoice->inv_is_paid == 1 ? 'watermark' : 'hidden'"> PAID </div> -->
+		<!-- <div class="$invoice->inv_is_paid == 1 ? 'watermark' : 'hidden'"> PAID </div> -->
 	@endif	
 		<tr>
-			<td colspan="2"></td>
+			<td colspan="1"></td>
 			<td colspan="2" style="text-align: left;font-weight: bold">SUBTOTAL</td>
-			<td style="text-align: right; font-weight: bold">{{currency('PHP', $invoice->inv_subtotal_price)}}</td>
+			<td style="text-align: right; font-weight: bold">{{currency('PHP', $po->po_subtotal_price)}}</td>
 		</tr>
 		
 
 	</tbody>
 </table>
-	<div class="row pull-right">
-		<h3><strong>TOTAL</strong> {{currency('PHP',($invoice->inv_overall_price - $cm_total))}}</h3>
+	<div class="row pull-right" >
+		<h3><strong>TOTAL</strong> {{currency('PHP',($po->po_overall_price))}}</h3>
 	</div>
 </body>
 <style type="text/css">

@@ -65,9 +65,10 @@
                                           <!-- <li ><a class="popup" link="/member/customer/view_cm/{{$po->cm_id}}" size="lg">View CM</a></li> -->
                                         <li>
                                             @if($po->po_is_billed != 0)                                            
-                                            <a>Print (Closed PO)</a>
+                                            <a link="/member/vendor/purchase_order/view_pdf/{{$po->po_id}}" class="popup" size="lg">Print (Closed PO)</a>
                                             @else
                                             <a href="/member/vendor/purchase_order?id={{$po->po_id}}">Edit P.O</a>
+                                            <a link="/member/vendor/purchase_order/view_pdf/{{$po->po_id}}" class="popup" size="lg">Print</a>
                                             @endif
                                         </li>
                                       </ul>

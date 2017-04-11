@@ -55,11 +55,27 @@ class Vendor_PurchaseOrderController extends Member
 
         return view("member.purchase_order.purchase_order_list",$data);
     }
+
+    public function view_po_pdf($po_id)
+    {
+        $data["action"] = "/member/vendor/purchase_order/pdf";
+        $data["po_id"] = $po_id;
+
+        return view("member.vendor_list.view_po_pdf",$data);
+    }
     public function po_pdf($po_id)
     {
-        $data["po"] = Tbl_purchase_order::customer()->where("po_id",$po_id)->first();
-        $data["_poline"] = Tbl_purchase_order_line::um()->where("poline_po_id",$po_id)->get();
-        return view("member.vendor_list.po_pdf",$data);
+        $data["po"] = Tbl_purchase_order::vendor()->where("po_id",$po_id)->first();
+        $data["_poline"] = Tbl_purchase_order_line::um()->item()->where("poline_po_id",$po_id)->get();
+        foreach($data["_poline"] as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->poline_um);
+
+            $total_qty = $value->poline_qty * $qty;
+            $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
+        }
+        $pdf = view("member.vendor_list.po_pdf",$data);
+        return Pdf_global::show_pdf($pdf);
     }
     public function invoice_list()
     {

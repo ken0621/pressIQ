@@ -24,10 +24,10 @@
             </a>
         </div>
         <div class="col-md-3">
-            <div class="btn-class ap-class">
+            <a href="/member/vendor/bill_list" class="btn-class ap-class">
                 <span><strong>{{$ap_amount or 0}}</strong></span><br>
                 <span>{{$count_ap or 0}} Account Payables</span>
-            </div>
+            </a>
         </div>
         <div class="col-md-3">
             <div class="btn-class sales-class">

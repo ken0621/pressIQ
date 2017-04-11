@@ -13,25 +13,25 @@
     <div class="row cleafix">
         <div class="col-md-3">
             <a href="/member/vendor/purchase_order/list" class="btn-class po-class"> 
-                <span><strong>{{$po_amount or ''}}</strong></span><br>
+                <span><strong>{{$po_amount or 0}}</strong></span><br>
                 <span>{{$count_po or 0}} Purchase Orders</span>
             </a>
         </div>
         <div class="col-md-3">
             <div class="btn-class ar-class">
-                <span><strong>{{$ar_amount or ''}}</strong></span><br>
+                <span><strong>{{$ar_amount or 0}}</strong></span><br>
                 <span>{{$count_ar or 0}} Account Receivable</span>
             </div>
         </div>
         <div class="col-md-3">
             <div class="btn-class ap-class">
-                <span><strong>{{$ap_amount or ''}}</strong></span><br>
+                <span><strong>{{$ap_amount or 0}}</strong></span><br>
                 <span>{{$count_ap or 0}} Account Payables</span>
             </div>
         </div>
         <div class="col-md-3">
             <div class="btn-class sales-class">
-                <span><strong>{{$sales_amount or ''}}</strong></span><br>
+                <span><strong>{{$sales_amount or 0}}</strong></span><br>
                 <span>Total Sales</span>
             </div>
         </div>

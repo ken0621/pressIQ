@@ -184,11 +184,13 @@ class Accounting
 		/* FOR OLD DATABASE - CHECKING IF THERE IS ALREADY AN ACCOUNT CODE*/
 		if(!$account_receivable)
 		{
-			$account_receivable = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Receivable")->update(['account_code'=>"accounting-receivable"]);
+			Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Receivable")->update(['account_code'=>"accounting-receivable"]);
+			$account_receivable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-receivable")->pluck("account_id");
 		}
 		if(!$account_payable)
 		{
-			$account_payable = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Payable")->update(['account_code'=>"accounting-payable"]);
+			Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Payable")->update(['account_code'=>"accounting-payable"]);
+			$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
 		}
 		/* END */
 
@@ -207,6 +209,7 @@ class Accounting
 
 		/* CHECK IF THE TRANSACTION JOURNAL IS ALREADY EXIST - USE IF NEW OR UPDATE TRANSACTION */
 		$exist_journal = Tbl_journal_entry::where("je_reference_module", $journal_entry['je_reference_module'])->where("je_reference_id", $journal_entry['je_reference_id'])->first();
+
 		if(!$exist_journal)
 		{
 			$line_data["je_id"] 	= Tbl_journal_entry::insertGetId($journal_entry);
@@ -215,7 +218,8 @@ class Accounting
 		{
 			unset($journal_entry['je_entry_date']);
 			Tbl_journal_entry_line::where("jline_je_id", $exist_journal->je_id)->delete();
-			$line_data["je_id"] 	= Tbl_journal_entry::where("je_id", $exist_journal->je_id)->update($journal_entry);
+			Tbl_journal_entry::where("je_id", $exist_journal->je_id)->update($journal_entry);
+			$line_data["je_id"] = $exist_journal->je_id;
 		}
 
 		$line_data["item_id"]	= '';

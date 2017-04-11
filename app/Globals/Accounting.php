@@ -323,6 +323,7 @@ class Accounting
 					Accounting::insertJournalLine($line_data);
 				}
 			}
+			elseif()
 		}
 
 		return $line_data["je_id"];
@@ -351,10 +352,28 @@ class Accounting
 		{
 			return true;
 		}
-		else
+		elseif($type == "credit_memo")
 		{
 			return false;
 		}
+		else
+		{
+			dd("Invalid Reference Module");
+		}
+	}
+
+	public static function normalBalance($account_id)
+	{
+		$balance = Tbl_chart_of_account::type()->where("account_id", $account_id)->pluck("normal_balance");
+		if($balance == "credit") 	return 'Credit';
+		elseif($balance == "debit") return 'Debit';
+	}
+
+	public static function contraAccount($account_id)
+	{
+		$balance = Tbl_chart_of_account::type()->where("account_id", $account_id)->pluck("normal_balance");
+		if($balance == "credit") 	return 'Debit';
+		elseif($balance == "debit") return 'Credit';
 	}
 
 	/**

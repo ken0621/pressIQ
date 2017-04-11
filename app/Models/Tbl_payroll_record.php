@@ -98,4 +98,11 @@ class Tbl_payroll_record extends Model
 
 		return $query;
 	}
+	public function scopegetrecord($query, $payroll_record_id = 0)
+	{
+		$query->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_record.payroll_employee_id')
+			  ->where('tbl_payroll_record.payroll_record_id', $payroll_record_id);
+
+		return $query;
+	}
 }

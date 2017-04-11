@@ -26,6 +26,23 @@ class Category
 		return $data;
 	}
 
+	/**
+	 * Getting all Unique Category in each level 
+	 *
+	 * @param  int    $shop_id 	  Shop id of the products that you wnat to get. null if auto get
+	 * @return array  			  Category Name list
+	 */
+	public static function getUniqueCategory($shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		return $_category = Tbl_category::select("type_name","type_sub_level")->where("type_shop",$shop_id)->groupBy("type_name")->groupBy("type_sub_level")->where("archived",0)->get()->toArray();
+
+	}
+
 	/* RECURSIVE SELECTION OF RAW DATA */ 
 	public static function re_select_raw($shop_id = 0, $parent = 0, $cat_type = array("all","service","inventory","non-inventory"))
 	{

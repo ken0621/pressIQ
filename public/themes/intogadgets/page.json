@@ -153,14 +153,14 @@
 			"label":"Brand Title",
 			"type":"textbox",
 			"default":"BRANDS",
-			"size":"6"
+			"size":"12"
 		},
 		"home_brand_image" :
 		{
 			"label":"Brand Images",
-			"type":"gallery",
+			"type":"brand",
 			"default":"",
-			"size":"6"
+			"size":"12"
 		},
  		"home_new_arrival_title" :
 		{

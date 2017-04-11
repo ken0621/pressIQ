@@ -206,5 +206,29 @@
 			"default":"Business Hours",
 			"size":"12"
 		}
+	},
+	"info":
+	{
+		"facebook_link" :
+		{
+			"label":"Facebook Link",
+			"type":"text",
+			"default":"https://www.facebook.com/PhilTech-Global-Inc-426231987728771/?ref=aymt_homepage_panel",
+			"size":"12"
+		},
+		"twitter_link" :
+		{
+			"label":"Twitter Link",
+			"type":"text",
+			"default":"",
+			"size":"12"
+		},
+		"pinterest_link" :
+		{
+			"label":"Pinterest Link",
+			"type":"text",
+			"default":"",
+			"size":"12"
+		}
 	}
 }

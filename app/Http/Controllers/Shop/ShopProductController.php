@@ -28,7 +28,6 @@ class ShopProductController extends Shop
         elseif($brand)
         {
             $product = Ecom_product::getProductByCategoryName($brand, $this->shop_info->shop_id);
-            dd($product);
             $data["breadcrumbs"][0]["type_name"] = $brand;
         }
         else

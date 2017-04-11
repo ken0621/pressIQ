@@ -4,6 +4,7 @@ namespace App\Globals;
 use App\Globals\Accounting;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_customer_invoice_line;
+use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
@@ -73,7 +74,7 @@ class Invoice
 	 * @param array  $total_info   	        (total_item_price => '', total_addons => [[0]label => '', [0]value => ''], 
 	 *										 total_discount_type => '', total_discount_value => '', total_overall_price => '')
 	 */
-	public static function postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = 0)
+	public static function postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = '')
 	{
         /* SUBTOTAL */
         $subtotal_price = collect($item_info)->sum('amount');
@@ -109,14 +110,14 @@ class Invoice
         $insert['inv_memo']                     = $invoice_other_info['invoice_memo'];
         $insert['date_created']                 = Carbon::now();    
 
-        if($is_sales_receipt != 0)
+        if($is_sales_receipt != '')
         {
             $insert['inv_payment_applied']        = $overall_price;
-        } 
-
+            $insert['is_sales_receipt']           = 1;
+        }
         $invoice_id = Tbl_customer_invoice::insertGetId($insert);
 
-        if($is_sales_receipt != 0)
+        if($is_sales_receipt != '')
         {
             Invoice::postSales_receipt_payment($customer_info,$invoice_info,$overall_price,$invoice_id);
         } 
@@ -141,7 +142,7 @@ class Invoice
         $insert["rp_shop_id"]           = Invoice::getShopId();
         $insert["rp_customer_id"]       = $customer_info['customer_id'];
         $insert["rp_ar_account"]        = 0;
-        $insert["rp_date"]              = datepicker_input($invoice_info['inv_date']);
+        $insert["rp_date"]              = datepicker_input($invoice_info['invoice_date']);
         $insert["rp_total_amount"]      = convertToNumber($overall_price);
         // $insert["rp_payment_method"]    = Request::input('rp_payment_method');
         // $insert["rp_memo"]              = Request::input('rp_memo');
@@ -161,7 +162,7 @@ class Invoice
         }
     }
 
-    public static function updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info)
+    public static function updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = '')
     {        
         $old = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
 
@@ -197,6 +198,10 @@ class Invoice
         $update['inv_message']                  = $invoice_other_info['invoice_msg'];
         $update['inv_memo']                     = $invoice_other_info['invoice_memo'];   
 
+        if($is_sales_receipt != '')
+        {
+            $update["inv_payment_applied"] = $overall_price;
+        }
         Tbl_customer_invoice::where("inv_id", $invoice_id)->update($update);
 
 

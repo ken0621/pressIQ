@@ -79,7 +79,7 @@ class Customer_SaleReceiptController extends Member
 
     public function sales_receipt_list()
     {
-        $data["_invoices"] = Tbl_customer_invoice::manual_invoice()->customer()->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_shop_id",$this->user_info->shop_id)->get();
+        $data["_invoices"] = Tbl_customer_invoice::manual_invoice()->customer()->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_shop_id",$this->user_info->shop_id)->where("is_sales_receipt",1)->get();
 
         foreach ($data["_invoices"] as $key => $value) 
         {
@@ -89,8 +89,7 @@ class Customer_SaleReceiptController extends Member
               $data["_invoices"][$key]->inv_overall_price = $value->inv_overall_price - $cm->cm_amount;  
             }
         }
-
-        return view("member.customer_invoice.customer_invoice_list",$data);
+        return view("member.customer.sales_receipt.sales_receipt_list",$data);
     }
     public function create_sales_receipt()
     {
@@ -161,24 +160,27 @@ class Customer_SaleReceiptController extends Member
                 }
             } 
         }
-        foreach ($product_consume as $key_items => $value_items) 
+        if($product_consume != null)
         {
-             $i = null;
-             foreach ($_itemline as $keyitemline => $valueitemline)
-             {
-                $type = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitemline])->pluck("item_type_id");
-                if($type == 4)
-                {
-                    if(Request::input("invline_item_id")[$keyitemline] == $value_items['product_id'])
-                    {
-                        $i = "true";
-                    }                    
-                }
-             }
-            if($i != null)
+            foreach ($product_consume as $key_items => $value_items) 
             {
-                unset($product_consume[$key_items]);
-            }           
+                 $i = null;
+                 foreach ($_itemline as $keyitemline => $valueitemline)
+                 {
+                    $type = Tbl_item::where("item_id",Request::input("invline_item_id")[$keyitemline])->pluck("item_type_id");
+                    if($type == 4)
+                    {
+                        if(Request::input("invline_item_id")[$keyitemline] == $value_items['product_id'])
+                        {
+                            $i = "true";
+                        }                    
+                    }
+                 }
+                if($i != null)
+                {
+                    unset($product_consume[$key_items]);
+                }           
+            }            
         }
         //END if bundle inventory_consume arcy
 
@@ -271,7 +273,6 @@ class Customer_SaleReceiptController extends Member
 
             if($inv == 0 || Request::input("keep_val") == "keep")
             {
-
                 $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, "sales_receipt");
                 
                 if($cm_customer_info != null && $cm_item_info != null)
@@ -294,13 +295,17 @@ class Customer_SaleReceiptController extends Member
                 $json["status"]         = "success-invoice";
                 if($button_action == "save-and-edit")
                 {
-                    $json["redirect"]    = "/member/customer/invoice_list";
+                    $json["redirect"]    = "/member/customer/sales_receipt?id=".$inv_id;
                 }
                 elseif($button_action == "save-and-new")
                 {
-                    $json["redirect"]   = '/member/customer/invoice';
+                    $json["redirect"]   = '/member/customer/sales_receipt';
                 }
-                Request::session()->flash('success', 'Invoice Successfully Created');
+                else
+                {
+                    $json["redirect"] = '/member/customer/sales_receipt/list';
+                }
+                Request::session()->flash('success', 'Sales Receipt Successfully Created');
             }
             else
             {
@@ -498,7 +503,7 @@ class Customer_SaleReceiptController extends Member
 
         if($inv <= 1 || Request::input("keep_val") == "keep")
         {
-            $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+            $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,'sales_receipt');
 
             if($cm_customer_info != null && $cm_item_info != null)
             {
@@ -532,13 +537,17 @@ class Customer_SaleReceiptController extends Member
             {
                 $json["status"]         = "success-invoice";
                 $json["invoice_id"]     = $inv_id;
-                $json["redirect"]           = "/member/customer/invoice_list";
+                $json["redirect"]           = "/member/customer/sales_receipt?id=".$inv_id;
 
                 if($button_action == "save-and-new")
                 {
-                    $json["redirect"]   = '/member/customer/invoice';
+                    $json["redirect"]   = '/member/customer/sales_receipt';
                 }
-                Request::session()->flash('success', 'Invoice Successfully Updated');
+                elseif($button_action == "save-and-close")
+                {
+                    $json["redirect"]   = '/member/customer/sales_receipt/list';
+                }
+                Request::session()->flash('success', 'Sales Receipt Successfully Updated');
             }
         }
         else

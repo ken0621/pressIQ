@@ -466,6 +466,7 @@ Route::any('/member/customer/customer_invoice_pdf/{id}','Member\Customer_Invoice
 
 //sales receipt
 Route::get('/member/customer/sales_receipt','Member\Customer_SaleReceiptController@index');
+Route::get('/member/customer/sales_receipt/list','Member\Customer_SaleReceiptController@sales_receipt_list');
 Route::any('/member/customer/sales_receipt/create','Member\Customer_SaleReceiptController@create_sales_receipt');
 Route::any('/member/customer/sales_receipt/update','Member\Customer_SaleReceiptController@update_sales_receipt');
 

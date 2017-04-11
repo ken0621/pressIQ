@@ -194,6 +194,17 @@ class Accounting
 		$account_receivable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-receivable")->pluck("account_id");
 		$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
 
+		/* FOR OLD DATABASE */
+		if(!$account_receivable)
+		{
+			$account_receivable = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Receivable")->update(['account_code'=>"accounting-receivable"]);
+		}
+		if(!$account_payable)
+		{
+			$account_payable = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Payable")->update(['account_code'=>"accounting-payable"]);
+		}
+		/* END */
+
 		$account_asset 		= Tbl_item::where("item_id", 39)->pluck("item_asset_account_id");   //Inventory 
 		$account_income 	= Tbl_item::where("item_id", 39)->pluck("item_income_account_id");  //Sales
 		$account_expense 	= Tbl_item::where("item_id", 39)->pluck("item_expense_account_id"); //Cost of Good Sold

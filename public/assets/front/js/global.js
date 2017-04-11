@@ -38,7 +38,10 @@ function global()
     {
         $('.loader').fadeOut('400', function() 
         {
-            action_after_load();
+            if (typeof action_after_load == 'function') 
+            {
+                action_after_load();    
+            }
         });
 
         image_crop(".4-3-ratio", 4, 3);

@@ -59,6 +59,7 @@
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
+                                        <li><a href="/member/vendor/create_bill?id={{$bill_list->bill_id}}">Edit Bill </a></li>
                                       </ul>
                                     </div>
                                 </td>

@@ -79,11 +79,11 @@
                                         </div>
                                         <div class="col-sm-2">
                                             <label>Billing Date</label>
-                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_date : ''}}" name="bill_date">
+                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_date : date('m/d/y')}}" name="bill_date">
                                         </div>
                                         <div class="col-sm-2">
                                             <label>Due Date</label>
-                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_due_date : ''}}" name="bill_due_date">
+                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_due_date : date('m/d/y')}}" name="bill_due_date">
                                         </div>
                                     </div>
                                 </div>

@@ -502,7 +502,9 @@ Route::any('/member/customer/credit_memo/update',"Member\CreditMemoController@up
 Route::get('/member/vendor/purchase_order','Member\Vendor_PurchaseOrderController@index');
 Route::get('/member/vendor/purchase_order/list','Member\Vendor_PurchaseOrderController@po_list');
 Route::any('/member/vendor/purchase_order/create_po','Member\Vendor_PurchaseOrderController@create_po');
-Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrderController@upate_po');
+Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrderController@update_po');
+Route::any('/member/vendor/purchase_order/view_pdf/{id}','Member\Vendor_PurchaseOrderController@view_po_pdf');
+Route::any('/member/vendor/purchase_order/pdf/{id}','Member\Vendor_PurchaseOrderController@po_pdf');
 
 Route::get('/member/vendor/bill_list','Member\Vendor_CreateBillController@index');
 Route::get('/member/vendor/create_bill','Member\Vendor_CreateBillController@create_bill');
@@ -510,6 +512,14 @@ Route::any('/member/vendor/load_purchase_order/{id}','Member\Vendor_CreateBillCo
 Route::any('/member/vendor/create_bill/add','Member\Vendor_CreateBillController@add_bill');
 Route::any('/member/vendor/create_bill/update','Member\Vendor_CreateBillController@update_bill');
 Route::any('/member/vendor/load_po_item','Member\Vendor_CreateBillController@load_po_item');
+
+
+Route::any('/member/vendor/receive_inventory/list','Member\Vendor_ReceiveInventoryController@index');
+Route::any('/member/vendor/receive_inventory','Member\Vendor_ReceiveInventoryController@receive_inventory');
+Route::any('/member/vendor/receive_inventory/add','Member\Vendor_ReceiveInventoryController@add_receive_inventory');
+Route::any('/member/vendor/receive_inventory/update','Member\Vendor_ReceiveInventoryController@update_receive_inventory');
+
+
 
 Route::get('/member/vendor/write_check','Member\Vendor_WriteCheckController@index');
 
@@ -732,6 +742,9 @@ Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* End */
 /* ITEM IMPORT*/
 Route::controller('/member/item/import', 'Member\ItemImportController');
+/* End */
+/* ITEM IMPORT*/
+Route::controller('/member/accounting/journal', 'Member\JournalEntryController');
 /* End */
 
 Route::controller('/tester','TesterController');

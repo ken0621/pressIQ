@@ -587,7 +587,7 @@ function submit_done_customer(result)
 // }
 function add_po_to_bill(po_id)
 {
-	$(".modal-loader").removeClass("hidden");
+	// $(".modal-loader").removeClass("hidden");
 	$.ajax({
 		url : "/member/vendor/load_po_item",
 		data : {po_id: po_id},
@@ -617,17 +617,15 @@ function add_po_to_bill(po_id)
 	            $container.find(".txt-amount").val(b.poline_amount);
 	            $container.find(".remove-tr").addClass("remove-tr"+b.poline_po_id);
 	            $container.find(".remove-tr").attr("tr_id", b.poline_po_id);
-
              });
 
-             console.log(po_total);
 	         $(".po-listing").prepend(po_id_list);
 	         var $po_id = $(".po-listing .po_id:first");
 	         $(".po-listing .po_id:first").addClass("div_po_id"+po_id);
 	         $po_id.find(".po-id-input").val(po_id).change();
 
 	        $(".po-"+po_id).addClass("hidden");
-			$(".modal-loader").addClass("hidden");
+			// $(".modal-loader").addClass("hidden");
 
              bill.action_reassign_number();
 		},
@@ -651,6 +649,11 @@ function submit_done(data)
 	{		
         toastr.success("Success");
        	location.href = data.redirect;
+	}
+	else if(data.status == 'success-receive-inventory')
+	{
+        toastr.success("Success");
+       	location.href = data.redirect;		
 	}
     else if(data.status == "error")
     {

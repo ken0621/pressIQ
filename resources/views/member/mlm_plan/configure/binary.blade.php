@@ -36,22 +36,22 @@
                                     </span>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="binary_settings_gc_enable">Enable Pairing GC</label>
+                                    <label for="binary_settings_gc_enable"><small><span stype="color: gray">Enable Pairing GC</span></small></label>
                                     <select name="binary_settings_gc_enable" class="form-control">
                                         <option value="enable" {{$advance_binary->binary_settings_gc_enable == 'enable' ? 'selected' : ''}}>Enable</option>
                                         <option value="disable" {{$advance_binary->binary_settings_gc_enable == 'disable' ? 'selected' : ''}}>Disable</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="binary_settings_gc_enable">GC Every Pair</label>
+                                    <label for="binary_settings_gc_enable"><small><span stype="color: gray">GC Every Pair</span></small></label>
                                     <input type="number" name="binary_settings_gc_every_pair" class="form-control" value="{{$advance_binary->binary_settings_gc_every_pair}}">
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="binary_settings_gc_title">GC Title</label>
+                                    <label for="binary_settings_gc_title"><small><span stype="color: gray">GC Title</span></small></label>
                                     <input type="text" name="binary_settings_gc_title" class="form-control" value="{{$advance_binary->binary_settings_gc_title}}">
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="binary_settings_gc_amount">GC Amount</label>
+                                    <label for="binary_settings_gc_amount"><small><span stype="color: gray">GC Amount</span></small></label>
                                     <input type="number" name="binary_settings_gc_amount" class="form-control" value="{{$advance_binary->binary_settings_gc_amount}}">
                                 </div>
                                 <div class="col-md-12">
@@ -61,14 +61,14 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label for="binary_settings_no_of_cycle">No. Of Cycle</label>
+                                    <label for="binary_settings_no_of_cycle"><small><span stype="color: gray">No. Of Cycle</span></small></label>
                                     <select name="binary_settings_no_of_cycle" class="form-control" onchange="change_no_of_cycle(this)">
                                         <option value="1" {{$advance_binary->binary_settings_no_of_cycle == '1' ? 'selected' : ''}}>1</option>
                                         <option value="2" {{$advance_binary->binary_settings_no_of_cycle == '2' ? 'selected' : ''}}>2</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="binary_settings_time_of_cycle">Time Of Cycle (Every) </label>
+                                    <label for="binary_settings_time_of_cycle"><small><span stype="color: gray">Time Of Cycle (Every) </span></small></label>
                                     <!-- mlm_plan_release_schedule_hour -->
                                     <span class="hours_cycle">
                                     @if($advance_binary->binary_settings_no_of_cycle == 1)
@@ -79,14 +79,14 @@
                                     </span>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="binary_settings_no_of_cycle">Enable Strong Leg Retention</label>
+                                    <label for="binary_settings_no_of_cycle"><small><span stype="color: gray">Enable Strong Leg Retention</span></small></label>
                                     <select name="binary_settings_strong_leg" class="form-control">
                                         <option value="strong_leg" {{$advance_binary->binary_settings_strong_leg == 'strong_leg' ? 'selected' : ''}}>Enable</option>
                                         <option value="no_strong_leg" {{$advance_binary->binary_settings_strong_leg == 'no_strong_leg' ? 'selected' : ''}}>Disable</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
-                                    <label for="binary_settings_max_tree_level">Maximum Tree Level</label>
+                                    <label for="binary_settings_max_tree_level"><small><span stype="color: gray">Maximum Tree Level</span></small></label>
                                     <input type="text" class="form-control" name="binary_settings_max_tree_level" value="{{$advance_binary->binary_settings_max_tree_level}}">  
                                 </div>
                                 <div class="col-md-12">
@@ -109,6 +109,22 @@
                                             <option value="auto_balance"  @if($advance_binary->binary_settings_auto_placement == 'auto_balance') selected @endif >AUTO BALANCE</option>
                                         </select>
                                     @endif
+                                </div>
+                                <div class="col-md-12">
+                                    <hr />
+                                    <center>Binary Type</center>
+                                    <br />
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="binary_settings_max_tree_level"><span stype="color: gray"><small>Points/Matrix</small></span></label>
+                                    <select class="form-control" name="binary_settings_type">
+                                        <option value="0" {{$advance_binary->binary_settings_type == 0 ? 'selected' : ''}}>Points System</option>
+                                        <option value="1" {{$advance_binary->binary_settings_type == 1 ? 'selected' : ''}}>Triangle Matrix</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="binary_settings_max_tree_level"><span stype="color: gray"><small>Earning for triangle matrix</small></span></label>
+                                    <input type="number" class="form-control" name="binary_settings_matrix_income" value="{{$advance_binary->binary_settings_matrix_income}}">
                                 </div>
                                 </form>
                                 @else

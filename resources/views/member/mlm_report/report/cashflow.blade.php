@@ -22,10 +22,12 @@
         	<div class="table-reponsive">
         		<table class="table table-condensed table-bordered">
         			<thead>
-        				<th>Day</th>
-                        @foreach($filter as $key => $value)
-        				<th>{{$key}}</th>
-                        @endforeach
+                        <tr>
+            				<th>Day</th>
+                            @foreach($filter as $key => $value)
+            				<th>{{$key}}</th>
+                            @endforeach
+                        </tr>
         			</thead>
         			<tbody>
         				@foreach($per_day as $key => $value)
@@ -69,10 +71,12 @@
         	<div class="table-reponsive">
         		<table class="table table-condensed table-bordered">
         			<thead>
-        				<th>Month</th>
-        				@foreach($filter as $key => $value)
-                        <th>{{$key}}</th>
-                        @endforeach
+                        <tr>
+            				<th>Month</th>
+            				@foreach($filter as $key => $value)
+                            <th>{{$key}}</th>
+                            @endforeach
+                        </tr>
         			</thead>
         			<tbody>
         				@foreach($per_month as $key => $value)
@@ -118,10 +122,12 @@
         	<div class="table-reponsive">
         		<table class="table table-condensed table-bordered">
         			<thead>
-        				<th>Month</th>
-        				@foreach($filter as $key => $value)
-                        <th>{{$key}}</th>
-                        @endforeach
+                        <tr>
+            				<th>Year</th>
+            				@foreach($filter as $key => $value)
+                            <th>{{$key}}</th>
+                            @endforeach
+                        </tr>
         			</thead>
         			<tbody>
         				@foreach($per_year as $key => $value)

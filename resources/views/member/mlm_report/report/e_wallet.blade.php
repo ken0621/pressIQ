@@ -22,20 +22,23 @@
                 <div id="target_paginate_e_wallet_report">
                     <div style="overflow-x:auto;">
                         <table class="table table-condensed table-bordered">
-                            <thead >
-                                <th>Slot</th>
-                                @foreach($plan as $key => $value)
-                                <th>
-                                   
-                                    @if(isset($plan_settings[$key]))
-                                        {{$plan_settings[$key]->marketing_plan_label}}
-                                    @else
-                                        {{$key}}
-                                    @endif
+                            <thead>
+                                <tr>
+                                    <th>Slot</th>
+                                    <th>Member</th>
+                                    @foreach($plan as $key => $value)
+                                    <th>
+                                       
+                                        @if(isset($plan_settings[$key]))
+                                            {{$plan_settings[$key]->marketing_plan_label}}
+                                        @else
+                                            {{$key}}
+                                        @endif
 
-                                </th>
-                                @endforeach
-                                <th>Current</th>
+                                    </th>
+                                    @endforeach
+                                    <th>Current</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 @foreach($per_complan as $key => $value)
@@ -50,6 +53,11 @@
                                             @endif
                                             </a>
                                         </td>
+                                        <td>
+                                            <a href="javascript:" class="popup" link="/member/customer/customeredit/{{$slot[$key]->customer_id}}" size="lg">
+                                            {{name_format_from_customer_info($slot[$key])}}
+                                            </a>
+                                        </td>
                                         @foreach($plan as $key2 => $value2)
                                             @if(isset($value[$key2]))
                                                 <td >{{currency('PHP', $value[$key2])}}</td>
@@ -58,8 +66,8 @@
                                                 <td class="">{{currency('PHP', 0)}}</td>
                                             @endif
                                         @endforeach
-                                        <td class="change_currency">
-                                            {{$current}}
+                                        <td>
+                                            {{currency('PHP', $current)}}
                                         </td>
                                     </tr>
                                 @endforeach

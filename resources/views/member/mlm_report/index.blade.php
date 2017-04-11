@@ -18,7 +18,7 @@
     </div>
 </div>
 <div class="panel panel-default panel-block panel-title-block" id="top">
-    <div class="panel-heading">
+    <div class="panel-heading clearfix">
         <div>
         <form class="global-submit" method="post" action="/member/mlm/report/get">
         {!! csrf_field() !!}
@@ -36,9 +36,9 @@
               </div>
               <div class="col-md-7 pull-right">
                   <button class="btn btn-custom-red-white margin-right-10 btn-pdf pull-right" onClick="print_pdf()"><i class="fa fa-file-pdf-o"></i>&nbsp;Export to PDF</button>
-                   <button class="btn btn-custom-green-white margin-right-10 btn-pdf pull-right" onClick="print_pdf()"><i class="fa fa-file-excel-o"></i>&nbsp;Export to Excel</button>
+                   <button class="btn btn-custom-green-white margin-right-10 btn-pdf pull-right" onClick="print_excel()"><i class="fa fa-file-excel-o"></i>&nbsp;Export to Excel</button>
               </div>
-              <div class="col-md-12">
+
             </div>
             <div class="col-md-12">
                 <hr>
@@ -58,20 +58,6 @@
             </div>
             <div class="col-md-12">
                 <hr>
-                <small><span style="color: gray">Filter by date period</span></small>
-            </div>
-            <div class="col-md-12">
-                <div class="col-md-3">
-                    <label><small>Date Period</small></label>
-                    <select class="form-control">
-                        <option value="day">Day</option>
-                        <option value="month">Month</option>
-                        <option value="Year">Year</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-md-12">
-                <hr>
                 <small><span style="color: gray">Data Count</span></small>
             </div>
             <div class="col-md-12">
@@ -84,9 +70,10 @@
                     <input type="number" class="form-control" value="0">
                 </div>
             </div>
-        </form>    
+        </form>  
+        </div>  
     </div>
-</div>        
+</div>
 <div class="append_report"></div>
 @endsection
 
@@ -99,6 +86,11 @@
       toastr.success('Fetched Report');
       $('.append_report').html(data.view);
     }
+  }
+  function print_excel()
+  {
+    var choose = $('.report_choose').val();
+    window.open('/member/mlm/report/get?report_choose=' + choose + '&pdf=excel', '_blank');
   }
   function print_pdf()
   {

@@ -22,10 +22,12 @@
         		<table class="table table-condensed table-bordered">
         			<thead>
         				<thead>   
-                            <th>Rank</th>
-                            <th>Slot</th>
-                            <th>Member</th>
-                            <th>Amount</th>      
+                            <tr>
+                                <th>Rank</th>
+                                <th>Slot</th>
+                                <th>Member</th>
+                                <th>Amount</th>    
+                            </tr>  
                         </thead>
                         <tbody>
                             <?php $rank = 1; ?>

@@ -22,22 +22,26 @@
                 <small>
                 <table class="table table-condensed table-bordered">
                     <thead>
-                        <th>Day</th>
-                        <th>Slot</th>
-                        <th>Name</th>
-                        <th>Amount Requested</th>
-                        <th>Processing Fee</th>
-                        <th>Tax</th>
-                        <th>Total</th>
-                        <th>Bank</th>
-                        <th>Branch</th>
-                        <th>Account <br>Name</th>
-                        <th>Account <br>No.</th>
+                        <tr>
+                            <th>Day Requested</th>
+                            <th>Slot</th>
+                            <th>Name</th>
+                            <th>Amount Requested</th>
+                            <th>Processing Fee</th>
+                            <th>Tax</th>
+                            <th>Total</th>
+                            <th>Bank</th>
+                            <th>Branch</th>
+                            <th>Account <br>Name</th>
+                            <th>Account <br>No.</th>
+                            <th>Tin Number</th>
+                        </tr>
                     </thead>
                     <tbody>
                     @foreach($by_day as $key => $value)
                     <tr>
                         <td>{{$key}}</td>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -73,11 +77,11 @@
 
                                     if($tax_p == 0)
                                     {
-                                        $req = $value2 - $tax;
+                                        $req = $req - $tax;
                                     }
                                     else
                                     {
-                                        $tax = ($value2 * $tax)/100;
+                                        $tax = ($req * $tax)/100;
                                         $req = $req-$tax;
                                     }
                                 ?>
@@ -96,6 +100,9 @@
                                         Name on cheque: {{$value2->cheque_name}}
                                     </td>
                                 @endif
+                                <td>
+                                    {{$value2->tin_number}}
+                                </td>
 
                             </tr>
                         @endforeach

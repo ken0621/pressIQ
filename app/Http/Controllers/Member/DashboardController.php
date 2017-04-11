@@ -8,6 +8,7 @@ use App\Globals\Customer;
 use App\Globals\Purchase_Order;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Invoice;
+use App\Globals\Billing;
 use App\Models\Tbl_User;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_unit_measurement;
@@ -27,9 +28,12 @@ class DashboardController extends Member
 		$data["po_amount"]		= currency("PHP",Purchase_Order::get_po_amount());
 		$data["count_po"]		= Purchase_Order::count_po();
 
-
 		$data["ar_amount"]		= currency("PHP",Invoice::get_ar_amount());
 		$data["count_ar"]		= Invoice::count_ar();
+
+		$data["ap_amount"]		= currency("PHP",Billing::get_ap_amount());
+		$data["count_ap"]		= Billing::count_ap();
+
 		$data["pis"]			= Purchasing_inventory_system::check();
 
 		$data["sales_amount"]	= currency("PHP",Invoice::get_sales_amount());

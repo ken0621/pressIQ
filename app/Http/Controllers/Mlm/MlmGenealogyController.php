@@ -30,6 +30,12 @@ class MlmGenealogyController extends Mlm
     public function binary()
     {
         $data = [];
+        $data['slot_now'] = Self::$slot_now;
+        if(Self::$slot_id == null)
+        {
+            Self::show_maintenance();
+        }
+        $data['slot_i'] = Self::$slot_id;
     	return view("mlm.genealogy.binary", $data);
     }
 

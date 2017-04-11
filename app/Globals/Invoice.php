@@ -73,7 +73,7 @@ class Invoice
 	 * @param array  $total_info   	        (total_item_price => '', total_addons => [[0]label => '', [0]value => ''], 
 	 *										 total_discount_type => '', total_discount_value => '', total_overall_price => '')
 	 */
-	public static function postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info)
+	public static function postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = 0)
 	{
         /* SUBTOTAL */
         $subtotal_price = collect($item_info)->sum('amount');
@@ -107,10 +107,19 @@ class Invoice
         $insert['inv_overall_price']            = $overall_price;
         $insert['inv_message']                  = $invoice_other_info['invoice_msg'];
         $insert['inv_memo']                     = $invoice_other_info['invoice_memo'];
-        $insert['date_created']                 = Carbon::now();     
+        $insert['date_created']                 = Carbon::now();    
+
+        if($is_sales_receipt != 0)
+        {
+            $insert['inv_payment_applied']        = $overall_price;
+        } 
 
         $invoice_id = Tbl_customer_invoice::insertGetId($insert);
 
+        if($is_sales_receipt != 0)
+        {
+            Invoice::postSales_receipt_payment($customer_info,$invoice_info,$overall_price,$invoice_id);
+        } 
         /* Transaction Journal */
         $entry["reference_module"]  = "invoice";
         $entry["reference_id"]      = $invoice_id;
@@ -126,6 +135,31 @@ class Invoice
 
         return $invoice_id;
 	}
+
+    public static function postSales_receipt_payment($customer_info,$invoice_info,$overall_price,$inv_id)
+    {
+        $insert["rp_shop_id"]           = Invoice::getShopId();
+        $insert["rp_customer_id"]       = $customer_info['customer_id'];
+        $insert["rp_ar_account"]        = 0;
+        $insert["rp_date"]              = datepicker_input($invoice_info['inv_date']);
+        $insert["rp_total_amount"]      = convertToNumber($overall_price);
+        // $insert["rp_payment_method"]    = Request::input('rp_payment_method');
+        // $insert["rp_memo"]              = Request::input('rp_memo');
+        $insert["date_created"]         = Carbon::now();
+
+        $rcvpayment_id  = Tbl_receive_payment::insertGetId($insert);
+
+        $insert_line["rpline_rp_id"]            = $rcvpayment_id;
+        $insert_line["rpline_reference_name"]   = "invoice";
+        $insert_line["rpline_reference_id"]     = $inv_id;
+        $insert_line["rpline_amount"]           = convertToNumber($overall_price);
+
+        Tbl_receive_payment_line::insert($insert_line);
+        if($insert_line["rpline_reference_name"] == 'invoice')
+        {
+            Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+        }
+    }
 
     public static function updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info)
     {        

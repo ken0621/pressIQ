@@ -12,7 +12,7 @@
                     List of Coupon
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right popup" size="md" link="/member/ecommerce/coupon/generate-code" >Generate Coupon Code</a>
+            <a class="panel-buttons btn btn-custom-primary pull-right popup" size="sm" link="/member/ecommerce/coupon/generate-code" >Generate Coupon Code</a>
         </div>
     </div>
 </div>
@@ -28,7 +28,7 @@
             <div class="col-md-4 col-md-offset-8" style="padding: 10px">
                 <div class="input-group">
                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                    <input type="text" class="form-control " url="" data-value="1" placeholder="Search" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control global-search" url="" data-value="1" placeholder="Search" aria-describedby="basic-addon1">
                 </div>
             </div>
         </div>

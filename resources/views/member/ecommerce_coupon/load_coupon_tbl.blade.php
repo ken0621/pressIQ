@@ -5,8 +5,8 @@
                 <!-- <td class="col-md-2"></td> -->
                 <th class="text-center">ID</th>
                 <th class="text-center">Coupon Code</th>
-                <th class="text-center">Discount</th>
-                <th class="text-center">Discount Type</th>
+                <th class="text-center">Coupon Amount</th>
+                <th class="text-center">Coupon Type</th>
                 <th class="text-center">Date Created</th>
                 <th class="text-center">Action</th>
             </tr>
@@ -23,7 +23,7 @@
                     <!-- ACTION BUTTON -->
                     @if($filter == "unused")
                         <div class="btn-group">
-                            <a class="btn btn-primary btn-grp-primary" href="" >Edit</a>
+                            <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/ecommerce/coupon/edit-generate-code/{{$coupon->coupon_code_id}}" size="sm">Edit</a>
                             <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="" size="md"><span class="fa fa-trash"></span></a>
                         </div>
                     @else

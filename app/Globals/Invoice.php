@@ -166,12 +166,12 @@ class Invoice
     {        
         $old = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
 
-        /* DISCOUNT */
-        $discount = $total_info['total_discount_value'];
-        if($total_info['total_discount_type'] == 'percent') $discount = convertToNumber($total_info['total_discount_value']) / 100;
-
         /* SUBTOTAL */
         $subtotal_price = collect($item_info)->sum('amount');
+        
+        /* DISCOUNT */
+        $discount = $total_info['total_discount_value'];
+        if($total_info['total_discount_type'] == 'percent') $discount = (convertToNumber($total_info['total_discount_value']) / 100) * $subtotal_price;
 
         /* TAX */
         $tax = (collect($item_info)->where('taxable', '1')->sum('amount')) * 0.12;
@@ -180,7 +180,7 @@ class Invoice
         $ewt = $subtotal_price*convertToNumber($total_info['ewt']);
 
         /* OVERALL TOTAL */
-        $overall_price  = convertToNumber($subtotal_price) - $ewt - ($discount * $subtotal_price) + $tax;
+        $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
         
         $update['inv_customer_id']              = $customer_info['customer_id'];        
         $update['inv_customer_email']           = $customer_info['customer_email'];
@@ -208,8 +208,17 @@ class Invoice
         $new = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
         AuditTrail::record_logs("Edited","invoice",$invoice_id,serialize($old),serialize($new));
 
+        
+        /* Transaction Journal */
+        $entry["reference_module"]  = "invoice";
+        $entry["reference_id"]      = $invoice_id;
+        $entry["total"]             = $overall_price;
+        $entry["vatable"]           = $tax;
+        $entry["discount"]          = $discount;
+        $entry["ewt"]               = $ewt;
+
         Tbl_customer_invoice_line::where("invline_inv_id", $invoice_id)->delete();
-        Invoice::insert_invoice_line($invoice_id, $item_info);
+        Invoice::insert_invoice_line($invoice_id, $item_info, $entry);
 
         return $invoice_id;
     }

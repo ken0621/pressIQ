@@ -28,14 +28,27 @@
   padding: 20px;
   margin-top: 10px;
   font-size: 23px; }
+  .reports-class a {
+    text-decoration: none; }
+  .reports-class .row {
+    margin-left: -5px;
+    margin-right: -5px; }
+    .reports-class .row .col-md-3 {
+      padding: 0 5px; }
+  .reports-class .btn-class {
+    margin: 0;
+    padding: 20px 30px; }
   .reports-class .po-class {
-    background-color: #21ABF6;
-    color: #fff; }
+    border: 5px solid #21ABF6;
+    color: #21ABF6; }
   .reports-class .ar-class {
-    background-color: #FF8000;
-    color: #fff; }
+    border: 5px solid #0070BA;
+    color: #0070BA; }
+  .reports-class .ap-class {
+    border: 5px solid #FF8000;
+    color: #FF8000; }
   .reports-class .sales-class {
-    background-color: #78C500;
-    color: #fff; }
+    border: 5px solid #78C500;
+    color: #78C500; }
 
 /*# sourceMappingURL=dashboard.css.map */

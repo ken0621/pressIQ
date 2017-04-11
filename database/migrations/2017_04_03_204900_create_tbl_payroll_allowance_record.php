@@ -17,6 +17,7 @@ class CreateTblPayrollAllowanceRecord extends Migration
             $table->integer('payroll_record_id');
             $table->integer('payroll_employee_id');
             $table->integer('payroll_employee_allowance_id');
+            
             $table->double('payroll_record_allowance_amount', 18,2);
         });
     }

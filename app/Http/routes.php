@@ -26,7 +26,6 @@ Route::post('member/register/payment/submit', 'MemberController@payment_post');
 
 Route::get('member/register/shipping', 'MemberController@shipping');
 Route::post('member/register/shipping/submit', 'MemberController@shipping_post');
-
 Route::get('member/card', 'Member\MLM_CardController@card');
 Route::get('member/card/all', 'Member\MLM_CardController@all_slot');
 
@@ -502,7 +501,9 @@ Route::any('/member/customer/credit_memo/update',"Member\CreditMemoController@up
 Route::get('/member/vendor/purchase_order','Member\Vendor_PurchaseOrderController@index');
 Route::get('/member/vendor/purchase_order/list','Member\Vendor_PurchaseOrderController@po_list');
 Route::any('/member/vendor/purchase_order/create_po','Member\Vendor_PurchaseOrderController@create_po');
-Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrderController@upate_po');
+Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrderController@update_po');
+Route::any('/member/vendor/purchase_order/view_pdf/{id}','Member\Vendor_PurchaseOrderController@view_po_pdf');
+Route::any('/member/vendor/purchase_order/pdf/{id}','Member\Vendor_PurchaseOrderController@po_pdf');
 
 Route::get('/member/vendor/bill_list','Member\Vendor_CreateBillController@index');
 Route::get('/member/vendor/create_bill','Member\Vendor_CreateBillController@create_bill');
@@ -741,6 +742,9 @@ Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* ITEM IMPORT*/
 Route::controller('/member/item/import', 'Member\ItemImportController');
 /* End */
+/* ITEM IMPORT*/
+Route::controller('/member/accounting/journal', 'Member\JournalEntryController');
+/* End */
 
 Route::controller('/tester','TesterController');
 
@@ -789,7 +793,7 @@ Route::any("/member/load_position","Member\EmployeePositionController@load_posit
 // 	Route::any('/departmentlist/modal_update_department','Member\PayrollController@modal_update_department');
 // 	/* DEPARTMENT END */
 
-// 	/* JOB TITLE START */
+// 	/* JOB TITLE START */ 
 // 	Route::any("/jobtitlelist","Member\PayrollController@jobtitle_list");
 // 	Route::any("/jobtitlelist/modal_create_jobtitle","Member\PayrollController@modal_create_jobtitle");
 // 	Route::any("/jobtitlelist/modal_save_jobtitle","Member\PayrollController@modal_save_jobtitle");

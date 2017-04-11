@@ -70,17 +70,17 @@ class Invoice
 	 * @param array  $invoice_other_info    (invoice_msg => '', invoice_memo => '')
 	 * @param array  $item_info   	        ([0]item_service_date => '', [0]item_id => '', [0]item_description => '', [0]quantity => '', 
 	 *										 [0]rate => '', [0]discount => '', [0]discount_remark => '', [0]amount => '')
-	 * @param array  $total_info   	       (total_item_price => '', total_addons => [[0]label => '', [0]value => ''], 
+	 * @param array  $total_info   	        (total_item_price => '', total_addons => [[0]label => '', [0]value => ''], 
 	 *										 total_discount_type => '', total_discount_value => '', total_overall_price => '')
 	 */
 	public static function postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info)
 	{
-        /* DISCOUNT */
-        $discount = $total_info['total_discount_value'];
-        if($total_info['total_discount_type'] == 'percent') $discount = convertToNumber($total_info['total_discount_value']) / 100;
-
         /* SUBTOTAL */
         $subtotal_price = collect($item_info)->sum('amount');
+
+        /* DISCOUNT */
+        $discount = $total_info['total_discount_value'];
+        if($total_info['total_discount_type'] == 'percent') $discount = (convertToNumber($total_info['total_discount_value']) / 100) * $subtotal_price;
 
         /* TAX */
         $tax = (collect($item_info)->where('taxable', '1')->sum('amount')) * 0.12;
@@ -89,7 +89,7 @@ class Invoice
         $ewt = $subtotal_price*convertToNumber($total_info['ewt']);
 
         /* OVERALL TOTAL */
-        $overall_price  = convertToNumber($subtotal_price) - $ewt - ($discount * $subtotal_price) + $tax;
+        $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
 
         $insert['inv_shop_id']                  = Invoice::getShopId();  
 		$insert['inv_customer_id']              = $customer_info['customer_id'];        
@@ -111,7 +111,15 @@ class Invoice
 
         $invoice_id = Tbl_customer_invoice::insertGetId($insert);
 
-        Invoice::insert_invoice_line($invoice_id, $item_info);
+        /* Transaction Journal */
+        $entry["reference_module"]  = "invoice";
+        $entry["reference_id"]      = $invoice_id;
+        $entry["total"]             = $overall_price;
+        $entry["vatable"]           = $tax;
+        $entry["discount"]          = $discount;
+        $entry["ewt"]               = $ewt;
+
+        Invoice::insert_invoice_line($invoice_id, $item_info, $entry);
 
         $inv_data = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
         AuditTrail::record_logs("Added","invoice",$invoice_id,"",serialize($inv_data));
@@ -167,7 +175,7 @@ class Invoice
         return $invoice_id;
     }
 
-    public static function insert_invoice_line($invoice_id, $item_info)
+    public static function insert_invoice_line($invoice_id, $item_info, $entry)
     {        
         foreach($item_info as $key => $item_line)
         {
@@ -200,8 +208,16 @@ class Invoice
                 $insert_line['date_created']            = Carbon::now();
 
                 Tbl_customer_invoice_line::insert($insert_line);
+
+                $entry_data[$key]['item_id']       = $item_line['item_id'];
+                $entry_data[$key]['entry_qty']     = $item_line['quantity'];
+                $entry_data[$key]['vatable']       = 0;
+                $entry_data[$key]['discount']      = $discount;
+                $entry_data[$key]['entry_amount']  = $amount;
             }
         }
+
+        $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
 
         return $insert_line;
     }

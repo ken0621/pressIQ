@@ -21,6 +21,11 @@ class Tbl_item extends Model
         $query->join('tbl_category','type_id','=','item_category_id');
         return $query;
     }
+    public function scopeUm_multi($query)
+    {
+        return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','item_measurement_id')->where("is_base",1);
+         
+    }
 
     public function scopeselitem($query, $item_id)
     {

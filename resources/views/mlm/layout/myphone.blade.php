@@ -12,6 +12,7 @@
       <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
       <!-- Font Awesome -->
       <link href="/member-theme/myphone/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="/resources/assets/distributor/styles/6227bbe5.font-awesome.css" type="text/css" />
       <!-- NProgress -->
       <link href="/member-theme/myphone/vendors/nprogress/nprogress.css" rel="stylesheet">
       <!-- iCheck -->
@@ -189,6 +190,7 @@
                             </li>
                             </ul>
                             </li>
+                              <li><a href="/mlm/slots"> My Slots <span class="fa fa-chevron-down"></span></a></li>
                         </ul>
                      </div>
                   </div>
@@ -204,7 +206,7 @@
                      <a data-toggle="tooltip" data-placement="top" title="Lock">
                      <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
                      </a>
-                     <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
+                     <a data-toggle="tooltip" data-placement="top" title="Logout" href="/mlm/login">
                      <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
                      </a>
                   </div>
@@ -233,13 +235,13 @@
                                  </a>
                               </li>
                               <li><a href="javascript:;">Help</a></li>
-                              <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+                              <li><a href="/mlm/login"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
                            </ul>
                         </li>
                         <li role="presentation" class="dropdown">
                            <a href="javascript:;" class="dropdown-toggle info-number" data-toggle="dropdown" aria-expanded="false">
                            <i class="fa fa-envelope-o"></i>
-                           <span class="badge bg-green">6</span>
+                           <span class="badge bg-green">{{$notification_count}}</span>
                            </a>
                            <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                               <li class="hide">

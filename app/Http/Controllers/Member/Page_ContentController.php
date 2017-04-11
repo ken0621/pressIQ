@@ -11,6 +11,7 @@ use App\Models\Tbl_post_category;
 use Redirect;
 use App\Models\Tbl_post;
 use App\Models\Tbl_collection;
+use App\Globals\Category;
 
 class Page_ContentController extends Member
 {
@@ -29,7 +30,6 @@ class Page_ContentController extends Member
                 foreach ($value as $keys => $values) 
                 {
                     $get = Tbl_content::where("key", $keys)->where("type", $values->type)->where("shop_id", $this->user_info->shop_id)->first();
-
                     if ($get) 
                     {
                         $data["page_info"]->$key->$keys->type = $get->type;
@@ -45,21 +45,29 @@ class Page_ContentController extends Member
 
         $data["company_info"] = collect(Tbl_content::where("shop_id", $this->user_info->shop_id)->get())->keyBy('key');
         $data["_collection"] = Tbl_collection::where("shop_id", $this->user_info->shop_id)->where("archived", 0)->where("collection_status", 1)->get();
-        
+        $data["_brand"] = Category::getUniqueCategory();
+        foreach ($data["_brand"] as $key => $value) 
+        {
+            if ($value["type_sub_level"] != 1) 
+            {
+                unset($data["_brand"][$key]);
+            }
+        }
+
         return view('member.page.page_content', $data);
     }
 
     public function postIndex()
     {
     	$info  = Request::input("info");
-   
+      
     	foreach ($info as $key => $value) 
     	{
     		$exist = Tbl_content::where("key", $key)->where("type", $value["type"])->where("shop_id", $this->user_info->shop_id)->first();
 
     		$insert["key"]       = $key;
 
-            if ($value["type"]   == "gallery") 
+            if ($value["type"] == "gallery") 
             {
                 if (is_serialized($value["value"])) 
                 {
@@ -76,6 +84,10 @@ class Page_ContentController extends Member
                         $insert["value"] = "";
                     }
                 }   
+            }
+            elseif ($value["type"] == "brand") 
+            {
+                $insert["value"] = serialize($value["value"]);
             }
             else
             {

@@ -72,7 +72,15 @@ function coupon_code()
 
 function submit_done(data)
 {
-    if(data.)
+    if(data.status == "success")
+    {
+        toastr.success(data.status_message);
+        data.element.modal("toggle");
+    }
+    else
+    {
+        toastr.error(data.status_message);
+    }
 }
 </script>
 @endsection

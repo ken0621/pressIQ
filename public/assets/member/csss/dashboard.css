@@ -28,27 +28,33 @@
   padding: 20px;
   margin-top: 10px;
   font-size: 23px; }
-  .reports-class a {
-    text-decoration: none; }
-  .reports-class .row {
-    margin-left: -5px;
-    margin-right: -5px; }
-    .reports-class .row .col-md-3 {
-      padding: 0 5px; }
   .reports-class .btn-class {
-    margin: 0;
-    padding: 20px 30px; }
+    padding: 20px 60px;
+    font-size: inherit;
+    cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
+    margin: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    -webkit-transition: all 0.3s;
+    -moz-transition: all 0.3s;
+    transition: all 0.3s;
+    border: 3px solid #f45556;
+    color: #f45556;
+    overflow: hidden; }
   .reports-class .po-class {
-    border: 5px solid #21ABF6;
-    color: #21ABF6; }
+    background-color: #21ABF6;
+    color: #fff; }
   .reports-class .ar-class {
-    border: 5px solid #0070BA;
-    color: #0070BA; }
+    background-color: #0070BA;
+    color: #fff; }
   .reports-class .ap-class {
-    border: 5px solid #FF8000;
-    color: #FF8000; }
+    background-color: #FF8000;
+    color: #fff; }
   .reports-class .sales-class {
-    border: 5px solid #78C500;
-    color: #78C500; }
+    background-color: #78C500;
+    color: #fff; }
 
 /*# sourceMappingURL=dashboard.css.map */

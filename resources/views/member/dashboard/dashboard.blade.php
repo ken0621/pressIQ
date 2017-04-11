@@ -9,26 +9,35 @@
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="form-group reports-class">
-        <div class="col-md-3 col-xs-3 po-class"> 
-            <span>{{$po_amount or ''}}</span><br>
-            <span>{{$count_po or 0}} Purchase Orders</span>
+<div class="reports-class">
+    <div class="row cleafix">
+        <div class="col-md-3">
+            <a href="/member/vendor/purchase_order/list" class="btn-class po-class"> 
+                <span><strong>{{$po_amount or ''}}</strong></span><br>
+                <span>{{$count_po or 0}} Purchase Orders</span>
+            </a>
         </div>
-        <div class="col-md-3 col-xs-3 ar-class">
-            <span>{{$ar_amount or ''}}</span><br>
-            <span>{{$count_ar or 0}} Account Receivable</span>
+        <div class="col-md-3">
+            <div class="btn-class ar-class">
+                <span><strong>{{$ar_amount or ''}}</strong></span><br>
+                <span>{{$count_ar or 0}} Account Receivable</span>
+            </div>
         </div>
-        <div class="col-md-3 col-xs-3 ap-class">
-            <span>{{$ap_amount or ''}}</span><br>
-            <span>{{$count_ap or 0}} Account Payables</span>
+        <div class="col-md-3">
+            <div class="btn-class ap-class">
+                <span><strong>{{$ap_amount or ''}}</strong></span><br>
+                <span>{{$count_ap or 0}} Account Payables</span>
+            </div>
         </div>
-        <div class="col-md-3 col-xs-3 sales-class">
-            <span>{{$sales_amount or ''}}</span><br>
-            <span>Sales</span>
+        <div class="col-md-3">
+            <div class="btn-class sales-class">
+                <span><strong>{{$sales_amount or ''}}</strong></span><br>
+                <span>Total Sales</span>
+            </div>
         </div>
     </div>
 </div>
+
 @else
 <div class="row">
     <div class="col-md-12 text-center">
@@ -114,6 +123,7 @@
 
 @endsection
 @section('css')
+<link rel="stylesheet" type="text/css" href="/assets/member/css/btn_dashboard.css">
 <link rel="stylesheet" type="text/css" href="/assets/member/css/dashboard.css">
 @endsection
 @section('script')
@@ -125,5 +135,6 @@
         toastr.error('{{Session::get('error')}}');
     @endif
 
+    $('.btn-class').matchHeight();
 </script>
 @endsection

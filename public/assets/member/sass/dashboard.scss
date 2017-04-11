@@ -41,24 +41,41 @@
 	padding: 20px;
 	margin-top: 10px;
 	font-size: 23px;
+	a {
+	  text-decoration: none;
+	}
+	.row
+	{
+		margin-left: -5px;
+		margin-right: -5px;
+		.col-md-3
+		{
+			padding: 0 5px;
+		}
+	}
+	.btn-class
+	{
+		margin: 0;
+		padding: 20px 30px;
+	}
 	.po-class
 	{
-		background-color: #21ABF6;
-		color: #fff;
+		border: 5px solid #21ABF6;
+		color: #21ABF6;
 	}
 	.ar-class
 	{
-		background-color: #0070BA;
-		color: #fff;
+		border: 5px solid #0070BA;
+		color: #0070BA;
 	}
 	.ap-class
 	{
-		background-color: #FF8000;
-		color: #fff;
+		border: 5px solid #FF8000;
+		color: #FF8000;
 	}
 	.sales-class
 	{
-		background-color: #78C500;
-		color: #fff;
+		border: 5px solid #78C500;
+		color: #78C500;
 	}
 }

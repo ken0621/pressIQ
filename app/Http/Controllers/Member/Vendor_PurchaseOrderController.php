@@ -51,7 +51,7 @@ class Vendor_PurchaseOrderController extends Member
     }
     public function po_list()
     {
-        $data["_po"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->get();
+        $data["_po"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->where("po_shop_id",Purchase_Order::getShopId())->get();
 
         return view("member.purchase_order.purchase_order_list",$data);
     }
@@ -76,11 +76,6 @@ class Vendor_PurchaseOrderController extends Member
         }
         $pdf = view("member.vendor_list.po_pdf",$data);
         return Pdf_global::show_pdf($pdf);
-    }
-    public function invoice_list()
-    {
-        $data["_invoices"] = Tbl_customer_invoice::customer()->invoice_item()->orderBy("tbl_customer_invoice.inv_id","DESC")->get();
-        return view("member.customer_invoice.customer_invoice_list",$data);
     }
     public function create_po()
     {
@@ -146,7 +141,7 @@ class Vendor_PurchaseOrderController extends Member
 
     }
 
-    public function upate_po()
+    public function update_po()
     {
         $po_id = Request::input("po_id");
 
@@ -205,24 +200,4 @@ class Vendor_PurchaseOrderController extends Member
 
     }
     
-    public function invoice_view($invoice_id)
-    {
-        $data["invoice_id"] = $invoice_id;
-
-        return view("member.customer_invoice.invoice_view",$data);
-    }
-    public function invoice_view_pdf($inv_id)
-    {
-        $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
-
-        $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->um()->where("invline_inv_id",$inv_id)->get();
-        foreach($data["invoice_item"] as $key => $value) 
-        {
-            $total_qty = $value->invline_qty * $value->unit_qty;
-            $data["invoice_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
-        }
-
-          $pdf = view('member.customer_invoice.invoice_pdf', $data);
-          return Pdf_global::show_pdf($pdf);
-    }
 }

@@ -293,4 +293,8 @@ class MlmReportController extends Mlm
 
         return view("mlm.report.report_stairstep", $data);
     }
+    public function binary_repurchase()
+    {
+        return $this->show_maintenance();
+    }
 }

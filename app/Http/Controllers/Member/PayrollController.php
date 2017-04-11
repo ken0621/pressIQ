@@ -56,6 +56,7 @@ use App\Models\Tbl_payroll_employee_dependent;
 use App\Models\Tbl_payroll_employee_search;
 use App\Models\Tbl_payroll_adjustment;
 use App\Models\Tbl_payroll_allowance_record;
+use App\Models\Tbl_chart_of_account;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -534,7 +535,7 @@ class PayrollController extends Member
 		$file = Request::file('file');
 		$_data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
 		$first = $_data[0]; 
-
+          // dd($_data);
 		/* check index exist */
 		
 		if(isset($first['company']) && isset($first['first_name']) && isset($first['department']) && isset($first['start_date']))
@@ -3369,7 +3370,9 @@ class PayrollController extends Member
 
      public function modal_create_journal_tag()
      {
-          return view('member.payroll.modal.modal_create_journal_tag');
+          /* account_type_id = 13 = Expense */
+          $data['_expense'] = Tbl_chart_of_account::getbytype(Self::shop_id(), 13)->orderBy('account_name')->get();
+          return view('member.payroll.modal.modal_create_journal_tag', $data);
      }
 
      /* PAYROLL JOUARNAL END */ 

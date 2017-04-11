@@ -19,4 +19,11 @@ class Tbl_chart_of_account extends Model
                           ->orWhere("shop_key", $shop);
               });
     }
+
+    public function scopegetbytype($query, $shop_id, $account_type_id)
+    {
+        $query->where('account_shop_id', $shop_id)
+              ->where('account_type_id', $account_type_id);
+        return $query;
+    }
 }

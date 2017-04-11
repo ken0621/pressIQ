@@ -88,7 +88,7 @@ class PayrollTimeSheetController extends Member
 		$data["default_time_in"] = Carbon::parse($payroll_group_start)->format("h:i A");
 
 		$data["default_time_out"] = Carbon::parse($payroll_group_end)->format("h:i A");
-		// dd($data);
+
 
 		return view('member.payroll.employee_timesheet', $data);
 	}
@@ -183,7 +183,7 @@ class PayrollTimeSheetController extends Member
 
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 		}
-
+		// dd($data);
 		$data['summary'] = Self::timesheet_summary($employee_id, $payroll_period_id);
 
 		return view('member.payroll.employee_timesheet_table', $data);
@@ -192,6 +192,7 @@ class PayrollTimeSheetController extends Member
 
 	public function timesheet_summary($employee_id = 0, $payroll_period_id = 0)
 	{
+
 		$period = Tbl_payroll_period::where('payroll_period_id',$payroll_period_id)->first();		
 		$group  = Tbl_payroll_employee_contract::selemployee($employee_id)
 												->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
@@ -228,6 +229,7 @@ class PayrollTimeSheetController extends Member
 		$array = array();
 		while($from <= $to)
 		{
+			
 			$date = Carbon::parse($from)->format("Y-m-d");
 			$record = Payroll::process_time($employee_id, $date);
 			$approved_timesheet = $record->approved_timesheet;

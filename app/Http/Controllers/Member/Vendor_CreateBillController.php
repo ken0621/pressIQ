@@ -67,7 +67,7 @@ class Vendor_CreateBillController extends Member
         if($id)
         {
            $data["bill"] = Tbl_bill::where("bill_id",$id)->first();
-           $data["_bill_item_line"] = Tbl_bill_item_line::where("itemline_bill_id",$id)->get();
+           $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
            $data['_item']      = Item::get_all_category_item();
            $data['_account']   = Accounting::getAllAccount();
            $data['action']     = "/member/vendor/create_bill/update";
@@ -102,6 +102,7 @@ class Vendor_CreateBillController extends Member
         // $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
         $bill_info['bill_date']             = datepicker_input(Request::input('bill_date'));
         $bill_info['bill_due_date']         = datepicker_input(Request::input('bill_due_date'));
+        $bill_info['inventory_only']        = 0;
 
         $bill_other_info                    = [];
         $bill_other_info['bill_memo']       = Request::input('bill_memo');
@@ -194,7 +195,7 @@ class Vendor_CreateBillController extends Member
         {
             $json["redirect"]   = '/member/vendor/create_bill';
         }
-        Request::session()->flash('success', 'Invoice Successfully Created');
+        Request::session()->flash('success', 'Successfully Created');
 
 
         return json_encode($json);
@@ -215,6 +216,7 @@ class Vendor_CreateBillController extends Member
         // $invoice_info['new_inv_id']         = Request::input('new_invoice_id');
         $bill_info['bill_date']             = datepicker_input(Request::input('bill_date'));
         $bill_info['bill_due_date']         = datepicker_input(Request::input('bill_due_date'));
+        $bill_info['inventory_only']        = 0;
 
         $bill_other_info                    = [];
         $bill_other_info['bill_memo']       = Request::input('bill_memo');
@@ -298,13 +300,13 @@ class Vendor_CreateBillController extends Member
         $json["status"]         = "success-bill";
         if($button_action == "save-and-edit")
         {
-            $json["redirect"]    = "/member/vendor/create_bill?id=".$bill_id;
+            $json["redirect"]    = "/member/vendor/bill_list";
         }
         elseif($button_action == "save-and-new")
         {
             $json["redirect"]   = '/member/vendor/create_bill';
         }
-        Request::session()->flash('success', 'Invoice Successfully Created');
+        Request::session()->flash('success', 'Successfully Created');
 
         return json_encode($json);
 

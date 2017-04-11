@@ -139,6 +139,14 @@
 
               </a>
 
+              <a href="/events" class="nabigation">
+
+                <div class="nabigation-hover"></div>
+
+                <div class="nabigation-text">EVENTS</div>
+
+              </a>
+
             </div>
 
 
@@ -390,7 +398,7 @@
           <span><img src="/resources/assets/frontend/img/loader.gif"></span>
         </div>
 
-        <div class="content">
+        <div class="content clearfix">
 
             @yield('content')
 

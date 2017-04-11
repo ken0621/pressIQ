@@ -52,7 +52,7 @@
                             <th>Item Category</th>
                             <th>Item Type</th>
                             <th>Inventory</th>
-                            <th>Item Price</th>
+                            <th class="text-center">Item Price</th>
                             <!-- <th>Item Date Created</th> -->
                             <th>Action</th>
                         </tr>
@@ -69,7 +69,14 @@
                                 <span class="pull-left">{{$item->inventory_count_um}}</span> 
                                 <span class="pull-right">{{$item->inventory_count_um_view}}</span>
                             </td>
-                            <td>{{currency("PHP", $item->item_price)}}</td>
+                            <td>
+                                <span class="pull-left">{{currency("PHP", $item->item_price)}}/ {{$item->multi_abbrev or 'pc'}}</span> 
+                                <span class="pull-right">
+                                    @if($item->um_whole != "")
+                                    {{currency("PHP", $item->item_whole_price)}} / {{$item->um_whole or 'pc'}}
+                                    @endif
+                                </span>
+                            </td>
                             <!-- <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td> -->
                             <td>
                                 <div class="btn-group">

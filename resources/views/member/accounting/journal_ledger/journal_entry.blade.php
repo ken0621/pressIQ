@@ -30,6 +30,7 @@
 					<th>Transaction Type</th>
 					<th>Num</th> 
 					<th>Name</th>
+					<th>Item Name</th>
 					<th>Account Name</th>
 					<th>Account Type</th>
 					<th>Debit</th>
@@ -48,6 +49,7 @@
 							</a>
 						</td>
 						<td>{{$key2 == 0 ? $journal->first_name.' '.$journal->last_name : ''}}</td>
+						<td>{{$entry->item_name or ''}}</td>
 						<td>{{$entry->account_name}}</td>
 						<td>{{$entry->chart_type_name}}</td>
 						<td>{{$entry->jline_type == 'Debit' ? currency('PHP', $entry->jline_amount) : ''}}</td>

@@ -362,6 +362,8 @@
 
 <meta property="product:price:amount" content="" />
 
+<meta property="fb:app_id" content="1920870814798104" />
+
 @endsection
 
 @section('social-script')

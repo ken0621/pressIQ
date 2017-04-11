@@ -50,6 +50,11 @@ class Billing
     {
     	return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
+    public static function getAllBillByVendor($vendor_id)
+    {
+          return  Tbl_bill::appliedPayment(Billing::getShopId())->byVendor(Billing::getShopId(), $vendor_id)->where("bill_is_paid", 0)->get()->toArray();
+    }
+
 
     public static function postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info)
     {

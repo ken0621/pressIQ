@@ -323,17 +323,20 @@ class Membership_code
                 {
                     $change_content[0]["txt_to_replace"] += 1;
                     $change_content[1]["txt_to_replace"] .= '<p> '. $value->membership_name .' with a package of '. $value->membership_package_name .'. Your membership code is '. $value->membership_activation_code .' and membership pin '. $value->membership_code_id .'. </p><a rel="nofollow" href="'. $_SERVER['SERVER_NAME'] .'/mlm/membership_active_code/'.Crypt::encrypt($value->membership_code_id).'">Click here to activate the code.</a><br> If you cant click the link, please copy and paste this in the url <span><b>'. $_SERVER['SERVER_NAME'] .'/mlm/membership_active_code/'.Crypt::encrypt($value->membership_code_id).'</b></span>';
+
+
+                    /* Sms Notification */
+                    $txt[0]["txt_to_be_replace"]    = "[name]";
+                    $txt[0]["txt_to_replace"]       = $invoice['first_name'];
+                    $txt[1]["txt_to_be_replace"]    = "[membership_code]";
+                    $txt[1]["txt_to_replace"]       = $value->membership_activation_code;
+                    //$result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
+                    $result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
                 } 
                 // dd($change_content);
                 $content_key = 'membership_code_purchase';
                 $data['body'] = EmailContent::email_txt_replace($content_key, $change_content);
                 $data['company']['email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->pluck('value');
-
-                /* Sms Notification */
-                $txt[0]["txt_to_be_replace"]    = "[name]";
-                $txt[0]["txt_to_replace"]       = $invoice['first_name'];
-                //$result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
-                $result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
 
                 // ---------------------------------------------
                 $data['mail_to'] = $data['invoice']->membership_code_customer_email;

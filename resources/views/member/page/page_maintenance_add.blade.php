@@ -25,7 +25,7 @@
 					<div class="maintenance-image-holder" key="{{ $key }}-{{ $fields->type }}"></div>
 					<div><button class="image-gallery image-gallery-single btn btn-primary" key="{{ $key }}-{{ $fields->type }}"> Upload Image</button></div>
 				@elseif($fields->type == "map")
-					<div id="map"></div>
+					<div id="map" style="height: 300px;"></div>
 				    <script>
 				      function initMap() {
 				        // Create a map object and specify the DOM element for display.

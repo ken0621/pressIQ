@@ -4,8 +4,8 @@
 			<input type="hidden" value="bill" name="pbline_txn_type[]">
 			<input type="hidden" value="{{$bill['bill_id']}}" name="pbline_bill_id[]">
 		    <td class="text-center">
-		    	<input type="hidden" class="line-is-checked" name="line_is_checked[]" value="" >
-		    	<input type="checkbox" class="line-checked">
+		    	<input type="hidden" class="line-is-checked" name="line_is_checked[]" value="{{$bill_id == $bill['bill_id'] ? '1' : ''}}" >
+		    	<input type="checkbox" {{$bill_id == $bill['bill_id'] ? 'checked' : ''}} class="line-checked">
 		    </td>
 		    <td>Bill # {{$bill["bill_id"]}} ( {{dateFormat($bill["bill_date"])}} )</td>
 		    <td class="text-right">{{dateFormat($bill["bill_due_date"])}}</td>

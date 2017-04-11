@@ -22,10 +22,13 @@
         		<table class="table table-condensed table-bordered">
         			<thead>
         				<thead>
-                            <th>Slot</th>
-                            @foreach($tree_level as $key => $value)
-                            <th>{{$key}}</th>
-                            @endforeach            
+                            <tr>
+                                <th>Slot</th>
+                                <th>Member</th>
+                                @foreach($tree_level as $key => $value)
+                                <th>{{$key}}</th>
+                                @endforeach  
+                            </tr>          
                         </thead>
                         <tbody>
                             @foreach($tree as $key => $value)
@@ -39,6 +42,12 @@
                                     @endif
                                     </a>
                                 </td>
+                                 <td>
+                                    <a href="javascript:" class="popup" link="/member/customer/customeredit/{{$slot[$key]->customer_id}}" size="lg">
+                                    {{name_format_from_customer_info($slot[$key])}}
+                                    </a>
+                                </td>
+
                                 @foreach($tree_level as $key2 => $value2)
                                     @if(isset($value[$key2]))
                                         <td>{{$value[$key2]}}</td>

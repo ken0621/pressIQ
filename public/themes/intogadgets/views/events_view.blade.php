@@ -18,14 +18,14 @@
                   <?php $i = 0; ?>
                   @foreach($_related as $related)
                      @if($i == 0)
-                     <div class="holder first" style="cursor: pointer;" onClick="location.href='/product/view/{{ $related->main_id }}'">
+                     <div class="holder first" style="cursor: pointer;" onClick="location.href='/events/view/{{ $related->main_id }}'">
                         <div class="img">
                            <img class="4-3-ratio" src="{{ $related->post_image }}">
                         </div>
                         <div class="side-content">{{ $post->post_title }}</div>
                      </div>
                      @else
-                     <table class="holder" style="cursor: pointer;" onClick="location.href='/product/view/{{ $related->main_id }}'">
+                     <table class="holder" style="cursor: pointer;" onClick="location.href='/events/view/{{ $related->main_id }}'">
                         <tbody>
                            <tr>
                               <td class="img">

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTblMlmSlotWalletLog extends Migration
+class AlterTblMlmSlotWalletLogv2 extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,10 @@ class AlterTblMlmSlotWalletLog extends Migration
     {
         Schema::table('tbl_mlm_slot_wallet_log', function (Blueprint $table) {
             //
-            $table->integer('wallet_log_selected')->default(0);
+            if(!schema::hasColumn('wallet_log_selected'))
+            {
+                $table->integer('wallet_log_selected')->default(0);
+            }
         });
     }
 

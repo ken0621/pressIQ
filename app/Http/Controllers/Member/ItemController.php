@@ -46,7 +46,7 @@ class ItemController extends Member
         {
 			$shop_id        		   = $this->user_info->shop_id;
 			$warehouse_id 			   = Tbl_warehouse::where("main_warehouse", 1)->where("warehouse_shop_id", $this->user_info->shop_id)->pluck("warehouse_id");
-	        $item 		    		   = Tbl_item::inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
+	        $item 		    		   = Tbl_item::um_multi()->inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
 	        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)->where("shop_id",$shop_id)->type()->category();
 	        $item_type				   = Request::input("item_type");
 	        $search_name			   = Request::input("search_name");
@@ -71,9 +71,14 @@ class ItemController extends Member
 
 				$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
 				$data["_item"][$key]->inventory_count_um_view = "";
+				$data["_item"][$key]->item_whole_price = 0;
+				$data["_item"][$key]->um_whole = "";
 				if($um)
 				{
 					$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+
+					$data["_item"][$key]->item_whole_price = $um->unit_qty * $value->item_price;
+					$data["_item"][$key]->um_whole = $um->multi_abbrev;
 				}
 
 				if($value->item_type_id == 4)

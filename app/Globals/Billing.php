@@ -26,6 +26,26 @@ use Carbon\carbon;
 class Billing
 {
 
+
+    public static function count_ap()
+    {
+         $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())->where("bill_is_paid",0)->count();
+         return $bill;
+    }
+    public static function get_ap_amount()
+    {
+        $price = 0;
+        $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())->where("bill_is_paid",0)->get();
+        if(isset($bill))
+        {
+            foreach ($bill as $key => $value) 
+            {
+               $price += $value->bill_total_amount;
+            }            
+        }
+
+        return $price;
+    }
     public static function getShopId()
     {
     	return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
@@ -41,6 +61,9 @@ class Billing
         $insert['bill_terms_id']            = $bill_info['bill_terms_id'];
         $insert['bill_date']                = $bill_info['bill_date'];
         $insert['bill_due_date']            = $bill_info['bill_due_date'];
+
+        $insert['inventory_only']           = $bill_info['inventory_only'];
+
         $insert['bill_memo']                = $bill_other_info['bill_memo'];
         $insert['bill_total_amount']        = $total_info['bill_total_amount'];
         $insert['bill_payment_method']      = 0;

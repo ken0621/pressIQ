@@ -26,7 +26,6 @@ Route::post('member/register/payment/submit', 'MemberController@payment_post');
 
 Route::get('member/register/shipping', 'MemberController@shipping');
 Route::post('member/register/shipping/submit', 'MemberController@shipping_post');
-
 Route::get('member/card', 'Member\MLM_CardController@card');
 Route::get('member/card/all', 'Member\MLM_CardController@all_slot');
 

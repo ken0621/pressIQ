@@ -376,7 +376,7 @@ class Ecom_Product
 
 		Foreach($_products as $key=>$product)
 		{
-			$_product[$key]	= Ecom_Product::getProduct($product["eprod_id"], $shop_id);
+			$_products[$key]	= Ecom_Product::getProduct($product["eprod_id"], $shop_id);
 		}
 
         return $_products;     

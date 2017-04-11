@@ -1,8 +1,8 @@
-var receive_payment = new receive_payment();
+var pay_bill = new pay_bill();
 var maximum_payment = 0;
 var is_amount_receive_modified = false;
 
-function receive_payment()
+function pay_bill()
 {
 	init();
 
@@ -34,16 +34,16 @@ function receive_payment()
 
 	function initialize_select_plugin()
 	{
-		$(".drop-down-customer").globalDropList(
+		$(".drop-down-vendor").globalDropList(
 		{
 		    link 		: '/member/customer/modalcreatecustomer',
 		    link_size 	: 'lg',
 		    width 		: "100%",
-		    placeholder : 'Customer',
+		    placeholder : 'Vendor',
 		    onChangeValue: function()
 		    {
-		    	var customer_id = $(this).val();
-		    	$(".tbody-item").load("/member/customer/load_rp/"+ (customer_id != '' ? customer_id : 0), function()
+		    	var vendor_id = $(this).val();
+		    	$(".tbody-item").load("/member/vendor/load_pb/"+ (vendor_id != '' ? vendor_id : 0), function()
 		    	{
 		    		action_compute_maximum_amount();
 		    	})
@@ -233,7 +233,7 @@ function submit_done(data)
     	{
     		$(".rcvpymnt-container").load(data.url+" .rcvpymnt-container .rcvpymnt-load-data", function()
 			{
-				receive_payment.action_initialize_load();
+				pay_bill.action_initialize_load();
 				toastr.success(data.message);
 			});
     	}

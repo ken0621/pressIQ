@@ -54,6 +54,14 @@ class Billing
     {
           return  Tbl_bill::appliedPayment(Billing::getShopId())->byVendor(Billing::getShopId(), $vendor_id)->where("bill_is_paid", 0)->get()->toArray();
     }
+    public static function getAllBillByVendorWithPaybill($vendor_id, $paybill_id)
+    {
+        $bill_in_paybill = Tbl_pay_bill_line::select("pbline_reference_id")->where("pbline_reference_name", 'bill')
+                            ->where("pbline_pb_id", $paybill_id)->get()->toArray();
+
+        return  Tbl_bill::appliedPayment(Billing::getShopId())->byVendor(Billing::getShopId(), $vendor_id)
+                ->payBill($paybill_id, $bill_in_paybill)->orderBy("bill_id")->get()->toArray();
+    }
 
 
     public static function postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info)

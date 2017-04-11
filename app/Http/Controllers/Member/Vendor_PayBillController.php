@@ -41,20 +41,20 @@ class Vendor_PayBillController extends Member
         $id = Request::input('id');
         if($id)
         {
-            $data["rcvpayment"]         = Tbl_receive_payment::where("rp_id", $id)->first();
-            $data["_rcvpayment_line"]   = Tbl_receive_payment_line::where("rpline_rp_id", $id)->get();
-            $data["_invoice"]           = Invoice::getAllInvoiceByCustomerWithRcvPymnt($data["rcvpayment"]->rp_customer_id, $data["rcvpayment"]->rp_id);
+            $data["paybill"]         = Tbl_receive_payment::where("rp_id", $id)->first();
+            $data["_paybill_line"]   = Tbl_receive_payment_line::where("rpline_rp_id", $id)->get();
+            $data["_bill"]           = Billing::getAllInvoiceByCustomerWithRcvPymnt($data["paybill"]->paybill_vendor_id, $data["paybill"]->paybill_id);
             // dd($data["_invoice"]);
-            $data['action']             = "/member/customer/receive_payment/update/".$data["rcvpayment"]->rp_id;
+            $data['action']             = "/member/customer/receive_payment/update/".$data["paybill"]->paybill_id;
         }
 
         return view("member.pay_bill.pay_bill", $data);
     }
 
-    public function load_customer_rp($customer_id)
+    public function load_vendor_pb($vendor_id)
     {
-        $data["_invoice"] = Invoice::getAllInvoiceByCustomer($customer_id);
-        return view('member.receive_payment.load_receive_payment_items', $data);
+        $data["_bill"] = Billing::getAllBillByVendor($vendor_id);
+        return view('member.pay_bill.load_pay_bill_items', $data);
     }
 
     public function add_receive_payment()

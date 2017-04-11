@@ -525,6 +525,7 @@ Route::any('/member/vendor/receive_inventory/update','Member\Vendor_ReceiveInven
 
 // VENDOR PAYBILLS
 Route::any('/member/vendor/paybill','Member\Vendor_PayBillController@index');
+Route::get('/member/vendor/load_pb/{id}','Member\Vendor_PayBillController@load_vendor_pb');
 
 Route::get('/member/vendor/write_check','Member\Vendor_WriteCheckController@index');
 

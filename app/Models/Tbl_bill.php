@@ -30,4 +30,16 @@ class Tbl_bill extends Model
     {
          return $query->join('tbl_vendor', 'tbl_bill.bill_vendor_id', '=', 'tbl_vendor.vendor_id');
     }
+    public static function scopePayBill($query, $pb_id, $bill_id)
+    {
+        return $query->leftJoin(DB::raw("(select * from tbl_pay_bill_line where pbline_pb_id =" .$pb_id ." and pbline_reference_name = 'bill') pb"),"pb.pbline_reference_id","=","bill_id")
+                     ->where(function($query) use ($bill_id)
+                     {
+                        $query->where("bill_is_paid", 0);
+                        $query->orWhere(function($query) use ($bill_id)
+                        {
+                            $query->whereIn("bill_id", $bill_id);
+                        });
+                     });
+    }
 }

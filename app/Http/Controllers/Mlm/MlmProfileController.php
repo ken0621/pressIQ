@@ -240,13 +240,13 @@ class MlmProfileController extends Mlm
         $rules = array(
           'image' => 'mimes:jpeg,jpg,png,gif|required|max:1000' // max 10000kb
         );
-        // $validator = Validator::make($fileArray, $rules);
-        // if ($validator->fails())
-        // {
-        //     $data['status'] = 'warning';
-        //     $data['message'] = 'file size exceeded';
-        //     return $this->refill($data);
-        // }
+        $validator = Validator::make($fileArray, $rules);
+        if ($validator->fails())
+        {
+            $data['status'] = 'warning';
+            $data['message'] = 'file size exceeded';
+            return Redirect::back();
+        }
         // else
         // {
         // 	dd($validator->messages());

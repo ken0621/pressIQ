@@ -31,6 +31,8 @@ class ShopProductController extends Shop
             // Get Breadcrumbs
             $data["breadcrumbs"] = [];
         }
+        // Get Most Searched
+        $data["_most_searched"] = Ecom_Product::getMostSearched(5, $this->shop_info->shop_id);
         // Get Category
         $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         // Count total product

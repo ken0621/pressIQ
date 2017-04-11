@@ -169,33 +169,33 @@ function add_search_events()
                             var price = data[index]['min_price'] + ' - ' + data[index]['max_price'];
                         }
 
-                        $append += '<div class="search-popup-holder">' +
+                        $append += 
+                                    '<div class="search-popup-holder">' +
                                         '<a href="/product/view/'+data[index]['eprod_id']+'">'+
-                                        '<div class="search-popup-img">'+
-                                          '<img src="">' +
-                                        '</div>'+
-                                        '<div class="search-popup-text">' +
-                                          '<div class="search-popup-name">' +
-                                           data[index]['eprod_name'] +
-                                         '</div>'+
-                                         '<div class="search-popup-description">'+
-                                          '<div class="price">'+
-                                              price
-                                          '</div>' +
-                                          '<div class="search-popup-rate">' +
-                                            '' +
-                                          '</div>' +
-                                         '</div>'+
-                                        '</div>'+
-                                        '</div>'+
+                                            '<div class="search-popup-img">'+
+                                                '<img style="width: 100%; object-fit: cover; height: 80px;" src="'+data[index]['variant'][0]['item_img']+'">' +
+                                            '</div>'+
+                                            '<div class="search-popup-text">' +
+                                                '<div class="search-popup-name">' +
+                                                    data[index]['eprod_name'] +
+                                                '</div>'+
+                                                '<div class="search-popup-description">'+
+                                                    '<div class="price">'+
+                                                       '&#8369 ' + parseFloat(price).toFixed(2) +
+                                                    '</div>' +
+                                                    '<div class="search-popup-rate">' +
+                                                        '' +
+                                                    '</div>' +
+                                                '</div>' +
+                                            '</div>' +
                                         '</a>'+
-                                      '</div>';
+                                    '</div>';
 
                         if(ctr==3)
                         {
                             $append += '<div class="search-popup-holder">' +
                                         '<div class="see-all-results">'+
-                                            '<a href="/product?search-pokus='+$(".search-input").val()+'">View more results</a>'+
+                                            '<a href="/product?search='+$(".search-input").val()+'">View more results</a>'+
                                         '</div>'+
                                    '</div>';
                             

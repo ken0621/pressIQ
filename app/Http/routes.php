@@ -26,7 +26,6 @@ Route::post('member/register/payment/submit', 'MemberController@payment_post');
 
 Route::get('member/register/shipping', 'MemberController@shipping');
 Route::post('member/register/shipping/submit', 'MemberController@shipping_post');
-
 Route::get('member/card', 'Member\MLM_CardController@card');
 Route::get('member/card/all', 'Member\MLM_CardController@all_slot');
 
@@ -794,7 +793,7 @@ Route::any("/member/load_position","Member\EmployeePositionController@load_posit
 // 	Route::any('/departmentlist/modal_update_department','Member\PayrollController@modal_update_department');
 // 	/* DEPARTMENT END */
 
-// 	/* JOB TITLE START */
+// 	/* JOB TITLE START */ 
 // 	Route::any("/jobtitlelist","Member\PayrollController@jobtitle_list");
 // 	Route::any("/jobtitlelist/modal_create_jobtitle","Member\PayrollController@modal_create_jobtitle");
 // 	Route::any("/jobtitlelist/modal_save_jobtitle","Member\PayrollController@modal_save_jobtitle");

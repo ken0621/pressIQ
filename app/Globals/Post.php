@@ -221,6 +221,38 @@ class Post
     }
 
     /**
+     * For getting related post.
+     *
+     * @param array    $category_id   Paremeter for current category.
+     * @param array    $shop_id   Get posts for current shop. If shop_id is null, the current shop id that logged on will be used.
+     */
+    public static function get_related_posts($category_id, $shop_id)
+    {
+        if(!$shop_id)
+        {
+            $shop_id = Ecom_Product::getShopId();
+        }
+
+        $post = Tbl_post::select("*","tbl_post.post_id as main_id",DB::raw('group_concat(rel_post_category.post_category_id) as post_categories'))
+                          ->where("tbl_post.archived", 0)
+                          ->where("tbl_post.shop_id", $shop_id)
+                          ->where("tbl_post_category.post_category_id", $category_id)
+                          ->leftJoin("rel_post_category", "tbl_post.post_id", "=", "rel_post_category.post_id")
+                          ->leftJoin("tbl_post_category", "rel_post_category.post_category_id", "=", "tbl_post_category.post_category_id")
+                          ->groupBy("tbl_post.post_id")
+                          ->get();
+
+        foreach ($post as $key => $value) 
+        {
+            $category_id = explode(",", $value->post_categories);
+            $category = DB::table("tbl_post_category")->select("post_category_name")->whereIn("post_category_id", $category_id)->get();
+            $post[$key]->categories = $category;
+        }        
+
+        return $post;
+    }
+
+    /**
      * For getting single post.
      *
      * @param array    $shop_id   Get posts for current shop. If shop_id is null, the current shop id that logged on will be used.
@@ -228,6 +260,24 @@ class Post
      */
     public static function get_post($post_id, $shop_id)
     {
-        
+        if(!$shop_id)
+        {
+            $shop_id = Ecom_Product::getShopId();
+        }
+
+        $post = Tbl_post::select("*","tbl_post.post_id as main_id",DB::raw('group_concat(rel_post_category.post_category_id) as post_categories'))
+                          ->where("tbl_post.archived", 0)
+                          ->where("tbl_post.shop_id", $shop_id)
+                          ->where("tbl_post.post_id", $post_id)
+                          ->leftJoin("rel_post_category", "tbl_post.post_id", "=", "rel_post_category.post_id")
+                          ->leftJoin("tbl_post_category", "rel_post_category.post_category_id", "=", "tbl_post_category.post_category_id")
+                          ->groupBy("tbl_post.post_id")
+                          ->first();
+
+        $category_id = explode(",", $post->post_categories);
+        $category = DB::table("tbl_post_category")->select("post_category_name")->whereIn("post_category_id", $category_id)->get();
+        $post->categories = $category;
+
+        return $post;
     }
 }

@@ -9,21 +9,15 @@
             <div class="gutter-sizer"></div>
             <div class="grid-item grid-item--width2">
                <div class="event-slider">
-                  <div class="slider-holder">
-                     <img style="width: 100%;" src="/uploads/intogadgets-2/syScijvUVUoxuTm.jpg">
-                     <div class="shadow"></div>
-                     <div class="title">Test</div>
-                  </div>
-                  <div class="slider-holder">
-                     <img style="width: 100%;" src="/uploads/intogadgets-2/syScijvUVUoxuTm.jpg">
-                     <div class="shadow"></div>
-                     <div class="title">Test</div>
-                  </div>
-                  <div class="slider-holder">
-                     <img style="width: 100%;" src="/uploads/intogadgets-2/syScijvUVUoxuTm.jpg">
-                     <div class="shadow"></div>
-                     <div class="title">Test</div>
-                  </div>
+                  @if(count($_post) > 0)
+                     @foreach($_post as $key => $post)
+                        <div class="slider-holder" onClick="location.href='/events/view/{{ $post->post_id }}'">
+                           <img style="width: 100%;" src="{{ $post->post_image }}">
+                           <div class="shadow"></div>
+                           <div class="title">{{ $post->post_title }}</div>
+                        </div>
+                     @endforeach
+                  @endif
                </div>
             </div>
             @if(count($_post) > 0)
@@ -36,8 +30,13 @@
                      <div class="text">
                         <div class="cat">
                            @if(count($post->categories) > 0)
-                              @foreach($post->categories as $categories)
-                                 <span>{{ $categories->post_category_name }}</span>
+                              <?php $len = count($post->categories); ?>
+                              @foreach($post->categories as $key => $categories)
+                                 @if($key == $len - 1)
+                                    <span>{{ $categories->post_category_name }}</span>
+                                 @else
+                                    <span>{{ $categories->post_category_name }}, </span>
+                                 @endif
                               @endforeach
                            @endif
                         </div>

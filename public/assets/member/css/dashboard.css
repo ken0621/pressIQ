@@ -50,5 +50,8 @@
   .reports-class .sales-class {
     border: 5px solid #78C500;
     color: #78C500; }
+  .reports-class .pb-class {
+    border: 5px solid #f45556;
+    color: #f45556; }
 
 /*# sourceMappingURL=dashboard.css.map */

@@ -22,29 +22,37 @@
         </form>
     </div>
     <div class="row cleafix">
-        <div class="col-md-3">
+        <div class="col-md-6">
+            <div class="btn-class sales-class">
+                <span><strong>{{$sales_amount or 0}}</strong></span><br>
+                <span>Total Sales</span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <a href="/member/vendor/paybill/list" class="btn-class pb-class">
+                <span><strong>{{$pb_amount or 0}}</strong></span><br>
+                <span>Total Paid Bills</span>
+            </a>
+        </div>
+    </div>
+    <div class="row cleafix">
+        <div class="col-md-4">
             <a href="/member/vendor/purchase_order/list" class="btn-class po-class"> 
                 <span><strong>{{$po_amount or 0}}</strong></span><br>
                 <span>{{$count_po or 0}} Purchase Orders</span>
             </a>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <a href="/member/customer/invoice_list" class="btn-class ar-class">
                 <span><strong>{{$ar_amount or 0}}</strong></span><br>
                 <span>{{$count_ar or 0}} Account Receivable</span>
             </a>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <a href="/member/vendor/bill_list" class="btn-class ap-class">
                 <span><strong>{{$ap_amount or 0}}</strong></span><br>
                 <span>{{$count_ap or 0}} Account Payables</span>
             </a>
-        </div>
-        <div class="col-md-3">
-            <div class="btn-class sales-class">
-                <span><strong>{{$sales_amount or 0}}</strong></span><br>
-                <span>Total Sales</span>
-            </div>
         </div>
     </div>
 </div>

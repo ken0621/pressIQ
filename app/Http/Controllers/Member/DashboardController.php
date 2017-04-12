@@ -45,6 +45,9 @@ class DashboardController extends Member
 		$data["ap_amount"]		= currency("PHP",Billing::get_ap_amount($start_date, $end_date));
 		$data["count_ap"]		= Billing::count_ap($start_date, $end_date);
 
+		$data["pb_amount"]		= currency("PHP",Billing::get_paid_bills_amount($start_date, $end_date));
+		$data["count_pb"]		= Billing::count_paid_bills($start_date, $end_date);
+
 		$data["pis"]			= Purchasing_inventory_system::check();
 
 		$data["sales_amount"]	= currency("PHP",Invoice::get_sales_amount($start_date, $end_date));

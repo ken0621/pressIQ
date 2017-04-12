@@ -27,9 +27,14 @@
                             <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="" size="md"><span class="fa fa-trash"></span></a>
                         </div>
                     @else
-                        <div class="btn-group">
+                        <!-- <div class="btn-group">
                             <a class="btn btn-primary btn-grp-primary popup" link="" size="md">Restore</a>
-                        </div>
+                        </div> -->
+                        @if(isset($coupon->ec_order_id))
+                            <div class="btn-group">
+                                <a class="btn btn-primary btn-grp-primary" href="/member/ecommerce/product_order/create_order?id={{$coupon->ec_order_id}}">View Transaction</a>
+                            </div>
+                        @endif
                     @endif
                 </td>
             </tr>

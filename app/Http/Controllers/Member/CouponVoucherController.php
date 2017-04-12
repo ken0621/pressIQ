@@ -32,7 +32,7 @@ class CouponVoucherController extends Member
     public function getList()
     {
         $unused_coupon  = Tbl_coupon_code::where("used", 0); 
-        $used_coupon    = Tbl_coupon_code::where("used", 1);
+        $used_coupon    = Tbl_coupon_code::where("used", 1)->order();
 
         /* Filter Coupon By Search */
         $search = Request::input('search');

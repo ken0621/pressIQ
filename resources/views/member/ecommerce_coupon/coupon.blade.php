@@ -28,7 +28,7 @@
             <div class="col-md-4 col-md-offset-8" style="padding: 10px">
                 <div class="input-group">
                     <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                    <input type="text" class="form-control global-search" url="" data-value="1" placeholder="Search" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control global-search" url="" data-value="1" placeholder="Press Enter to Search" aria-describedby="basic-addon1">
                 </div>
             </div>
         </div>
@@ -76,6 +76,8 @@ function submit_done(data)
     {
         toastr.success(data.status_message);
         data.element.modal("toggle");
+        $("#unused .load-data").load("/member/ecommerce/coupon/list #unused_coupon");
+
     }
     else
     {

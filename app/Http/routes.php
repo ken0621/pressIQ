@@ -270,7 +270,7 @@ Route::any('/member/pis/agent/position/archived_submit','Member\AgentPositionCon
 /* END EMPLOYEE POSITION*/
 
 
-/* START EMPLOYEE*/
+/* START AGENT*/
 Route::any('/member/pis/agent_list','Member\AgentController@index');
 Route::any('/member/pis/agent/add','Member\AgentController@add');
 Route::any('/member/pis/agent/add_submit','Member\AgentController@add_submit');
@@ -278,7 +278,10 @@ Route::any('/member/pis/agent/edit/{id}','Member\AgentController@edit');
 Route::any('/member/pis/agent/edit_submit','Member\AgentController@edit_submit');
 Route::any('/member/pis/agent/archived/{id}/{action}','Member\AgentController@archived');
 Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_submit');
-/* END EMPLOYEE*/
+/* END AGENT*/
+
+/*AGENT TRANSACTION*/
+Route::any('/member/pis/agent/transaction/{id}','Member\AgentTransactionController@agents_transaction');
 
 /* START U/M TYPES ARCY*/
 Route::any('/member/item/um_type','Member\UnitMeasurementTypeController@index');

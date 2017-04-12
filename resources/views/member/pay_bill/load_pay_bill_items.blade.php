@@ -11,7 +11,7 @@
 		    <td class="text-right">{{dateFormat($bill["bill_due_date"])}}</td>
 		    <td><input type="text" class="text-right original-amount" value="{{currency('',$bill['bill_total_amount'])}}" disabled /></td>
 		    <td><input type="text" class="text-right balance-due" value="{{currency('', $bill['bill_total_amount'] - $bill['amount_applied'] + (isset($bill['pbline_amount']) ? $bill['pbline_amount'] : 0 ))}}" disabled /></td>
-		    <td><input type="text" class="text-right amount-payment" name="pbline_amount[]" value="{{$bill['pbline_amount'] or ''}}" data="{{$bill['pbline_amount'] or 0}}"/></td>
+		    <td><input type="text" class="text-right amount-payment" name="pbline_amount[]" value="{{$bill['pbline_amount'] or ($bill_id == $bill['bill_id'] ? $bill['bill_total_amount'] : 0)}}" data="{{$bill['pbline_amount'] or 0}}"/></td>
 		</tr>
 	@endforeach
 @else

@@ -316,7 +316,7 @@ class UnitOfMeasurementController extends Member
                     }                
                 }
             }
-            $ctr = Tbl_unit_measurement::where("um_name",$set_name)->count();
+            $ctr = Tbl_unit_measurement::where("um_name",$set_name)->where("um_shop",UnitMeasurement::getShopId())->count();
             if($ctr >= 1)
             {
                 $data["status"] = "error";

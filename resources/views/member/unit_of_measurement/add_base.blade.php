@@ -3,6 +3,7 @@
 
 <input type="hidden" name="_token" value="{{csrf_token()}}">
 <input type="hidden" name="um_id" value="{{$base->multi_um_id}}">
+<input type="hidden" name="um_id_2" value="{{$um_id}}">
 <input type="hidden" name="sub_multi_id" value="{{$sub->multi_id}}">
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>

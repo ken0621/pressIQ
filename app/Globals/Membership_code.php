@@ -328,8 +328,8 @@ class Membership_code
                     /* Sms Notification */
                     $txt[0]["txt_to_be_replace"]    = "[name]";
                     $txt[0]["txt_to_replace"]       = $invoice['first_name'];
-                    $txt[1]["txt_to_be_replace"]    = "[membership_code]";
-                    $txt[1]["txt_to_replace"]       = $value->membership_activation_code;
+                    $txt[1]["txt_to_be_replace"]    = "[membership_name]";
+                    $txt[1]["txt_to_replace"]       = $value->membership_name;
                     //$result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
                     $result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
                 } 

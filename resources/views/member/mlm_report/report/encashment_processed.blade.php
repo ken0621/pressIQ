@@ -22,17 +22,19 @@
                 <small>
                 <table class="table table-condensed table-bordered">
                     <thead>
-                        <th>Day</th>
-                        <th>Slot</th>
-                        <th>Name</th>
-                        <th>Amount Requested</th>
-                        <th>Processing Fee</th>
-                        <th>Tax</th>
-                        <th>Total</th>
-                        <th>Bank</th>
-                        <th>Branch</th>
-                        <th>Account <br>Name</th>
-                        <th>Account <br>No.</th>
+                        <tr>
+                            <th>Day</th>
+                            <th>Slot</th>
+                            <th>Name</th>
+                            <th>Amount Requested</th>
+                            <th>Processing Fee</th>
+                            <th>Tax</th>
+                            <th>Total</th>
+                            <th>Bank</th>
+                            <th>Branch</th>
+                            <th>Account <br>Name</th>
+                            <th>Account <br>No.</th>
+                        </tr>
                     </thead>
                     <tbody>
                     @foreach($by_day as $key => $value)
@@ -73,11 +75,11 @@
 
                                     if($tax_p == 0)
                                     {
-                                        $req = $value2 - $tax;
+                                        $req = $req - $tax;
                                     }
                                     else
                                     {
-                                        $tax = ($value2 * $tax)/100;
+                                        $tax = ($req * $tax)/100;
                                         $req = $req-$tax;
                                     }
                                 ?>

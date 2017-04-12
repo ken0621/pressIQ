@@ -73,7 +73,8 @@ class Customer_InvoiceController extends Member
 
     public function invoice_list()
     {
-        $data["_invoices"] = Tbl_customer_invoice::manual_invoice()->customer()->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_shop_id",$this->user_info->shop_id)->get();
+        $data["_invoices"] = Tbl_customer_invoice::manual_invoice()->customer()->orderBy("tbl_customer_invoice.inv_id","DESC")->where("inv_shop_id",$this->user_info->shop_id)
+            ->where("is_sales_receipt",0)->get();
 
         foreach ($data["_invoices"] as $key => $value) 
         {
@@ -262,6 +263,7 @@ class Customer_InvoiceController extends Member
 
         if($inv == 0 || Request::input("keep_val") == "keep")
         {
+
             $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
             
             if($cm_customer_info != null && $cm_item_info != null)
@@ -545,6 +547,11 @@ class Customer_InvoiceController extends Member
     public function invoice_view($invoice_id)
     {
         $data["invoice_id"] = $invoice_id;
+        $data["transaction_type"] = "INVOICE";
+        if(Tbl_customer_invoice::where("inv_id",$invoice_id)->pluck("is_sales_receipt") != 0)
+        {
+            $data["transaction_type"] = "Sales Receipt";            
+        }
         $data["action_load"] = "/member/customer/customer_invoice_pdf";
         return view("member.customer_invoice.invoice_view",$data);
     }
@@ -552,6 +559,11 @@ class Customer_InvoiceController extends Member
     {
         $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
 
+        $data["transaction_type"] = "INVOICE";
+        if(Tbl_customer_invoice::where("inv_id",$inv_id)->pluck("is_sales_receipt") != 0)
+        {
+            $data["transaction_type"] = "Sales Receipt";            
+        }
         $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
         foreach($data["invoice_item"] as $key => $value) 
         {

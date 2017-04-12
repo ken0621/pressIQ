@@ -22,10 +22,12 @@
         		<table class="table table-condensed table-bordered">
         			<thead>
         				<thead>
-                            <th>Item Name</th>  
-                            @foreach($filter as $key => $value)  
-                                <th>{{$key}}</th> 
-                            @endforeach
+                            <tr>
+                                <th>Item Name</th>  
+                                @foreach($filter as $key => $value)  
+                                    <th>{{$key}}</th> 
+                                @endforeach
+                            </tr>
                         </thead>
                         <tbody>
                             @foreach($inventory as $key => $value)
@@ -73,16 +75,17 @@
                 <table class="table table-condensed table-bordered">
                     <thead>
                         <thead>
-                            <th>Invoice Id</th>  
-                            <th>Email</th>
-                            
-                            <th>Date</th>
-                            <th>Subtotal</th>
-                            <th>Discount</th>
-                            <th>Total</th>
-                            <th>Payment Type</th>
-                            <th>Amount/Wallet/Gc</th>
-                            <th>Change</th>
+                            <tr>
+                                <th>Invoice Id</th>  
+                                <th>Email</th>
+                                <th>Date</th>
+                                <th>Subtotal</th>
+                                <th>Discount</th>
+                                <th>Total</th>
+                                <th>Payment Type</th>
+                                <th>Amount/Wallet/Gc</th>
+                                <th>Change</th>
+                            </tr>
                         </thead>
                         <tbody>
                             @foreach($invoice as $key => $value)

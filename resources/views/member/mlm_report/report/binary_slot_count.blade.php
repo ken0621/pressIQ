@@ -22,17 +22,20 @@
         		<table class="table table-condensed table-bordered">
         			<thead>
         				<thead>
-                            <th>Slot</th>
-                            @if(count($tree_level) >= count($tree_level_r))
-                                @foreach($tree_level as $key => $value)
-                                <th>LEVEL {{$key}}<br>(L/R)</th>
-                                @endforeach 
-                            @else
-                                @foreach($tree_level_r as $key => $value)
-                                <th>LEVEL {{$key}}<br>(L/R)</th>
-                                @endforeach 
-                            @endif   
-                            <th>Total</th>            
+                            <tr>
+                                <th>Slot</th>
+                                <th>Member</th>
+                                @if(count($tree_level) >= count($tree_level_r))
+                                    @foreach($tree_level as $key => $value)
+                                    <th>LEVEL {{$key}}<br>(L/R)</th>
+                                    @endforeach 
+                                @else
+                                    @foreach($tree_level_r as $key => $value)
+                                    <th>LEVEL {{$key}}<br>(L/R)</th>
+                                    @endforeach 
+                                @endif   
+                                <th>Total</th>       
+                            </tr>     
                         </thead>
                         <tbody>
                             <?php
@@ -56,6 +59,12 @@
                                     @endif
                                     </a>
                                 </td>
+                                 <td>
+                                    <a href="javascript:" class="popup" link="/member/customer/customeredit/{{$slot[$key]->customer_id}}" size="lg">
+                                    {{name_format_from_customer_info($slot[$key])}}
+                                    </a>
+                                </td>
+
                                 <?php $l_t = 0; $r_t = 0; ?>
                                 @if(count($tree_level) >= count($tree_level_r))
                                     @foreach($tree_level as $key2 => $value2)

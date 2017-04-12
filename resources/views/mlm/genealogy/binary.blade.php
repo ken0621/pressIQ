@@ -20,7 +20,7 @@ $('#foo').attr('height', screen.height);
 $('#foo').css('width', screen.width);
 $('#foo').css('height', screen.height);
 $(document).ready(function() {
-	var src1 = '/mlm/slot/genealogy?id=1&mode=binary';
+	var src1 = '/mlm/slot/genealogy?id={{$slot_i}}&mode=binary';
 	$("#foo").attr("src", src1);
  });
 $('#foo').ready(function () {

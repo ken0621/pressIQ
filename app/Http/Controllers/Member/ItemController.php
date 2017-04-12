@@ -185,7 +185,6 @@ class ItemController extends Member
 		$end_promo_date 		= Request::input("end_promo_date");
 
 		$shop_id = $this->user_info->shop_id;
-
 			
 			$insert["item_date_created"]	    	  = Carbon::now();
 			$insert["shop_id"]	    				  = $shop_id;

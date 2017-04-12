@@ -509,8 +509,7 @@ class Cart
     public static function generate_coupon_code($word_limit,$price,$type="fixed")
     {
         //get_shop_info
-        $shop_info = Cart::get_shop_info();
-        $shop_id = $shop_info->shop_id;
+        $shop_id = Cart::get_shop_info();
 
         if($type != "fixed" && $type != "percentage")
         {
@@ -559,7 +558,9 @@ class Cart
 
             $message["status"]         = "success";
             $message["status_message"] = "Successfully generate a coupon code.";
-        }                                
+        }  
+
+        return $message;                              
     }
 
     public static function use_coupon_code($coupon_code)

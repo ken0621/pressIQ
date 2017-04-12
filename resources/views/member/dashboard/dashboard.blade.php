@@ -1,4 +1,4 @@
-@extends('member.layout')
+    @extends('member.layout')
 @section('content')
 
 @if(isset($pis) && $pis != 0)
@@ -18,10 +18,10 @@
             </a>
         </div>
         <div class="col-md-3">
-            <div class="btn-class ar-class">
+            <a href="/member/customer/invoice_list" class="btn-class ar-class">
                 <span><strong>{{$ar_amount or 0}}</strong></span><br>
                 <span>{{$count_ar or 0}} Account Receivable</span>
-            </div>
+            </a>
         </div>
         <div class="col-md-3">
             <div class="btn-class ap-class">

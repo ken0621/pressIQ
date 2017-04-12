@@ -83,16 +83,25 @@ function page_list()
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/product/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit'];
-    $nav[$page]['submenu'][$code]['status'] = "Working 90% - Under Revision";
+    $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
-    /* -- PRODUCTS => PRODUCT LIST */
+    /* -- PRODUCTS => PRODUCT COLLECTION */
     $code = "product-collection";
     $nav[$page]['submenu'][$code]['label'] = "Collection";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/product/collection/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Working 10% - Under Revision";
+    $nav[$page]['submenu'][$code]['status'] = "";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+
+    /* -- PRODUCTS => PRODUCT CODE */
+    $code = "product-coupon";
+    $nav[$page]['submenu'][$code]['label'] = "Coupon Code";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/coupon/list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
     
     /* -- E-COMMERCE => SHIPPING */

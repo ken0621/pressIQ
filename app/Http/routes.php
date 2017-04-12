@@ -755,7 +755,9 @@ Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* ITEM IMPORT*/
 Route::controller('/member/item/import', 'Member\ItemImportController');
 /* End */
-/* ITEM IMPORT*/
+/* ECOMMERCE COUPON CODE*/
+Route::controller('/member/ecommerce/coupon', 'Member\CouponVoucherController');
+
 Route::controller('/member/accounting/journal', 'Member\JournalEntryController');
 /* End */
 

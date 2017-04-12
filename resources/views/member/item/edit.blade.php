@@ -49,7 +49,7 @@
                     </div>
 
                    <!--  <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
-                    <div class="form-group">
+                    <div class="form-group hidden">
                         <div class="col-md-4">
                             <label>Initial quantity on hand </label>
                             <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" disabled>

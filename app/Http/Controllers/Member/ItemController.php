@@ -142,6 +142,7 @@ class ItemController extends Member
 			$data['_item']  	= Item::get_all_category_item();
 			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 		= UnitMeasurement::load_um();
+			$data["_um_multi"]  = UnitMeasurement::load_um_multi();
             $data["_vendor"]    = Vendor::getAllVendor('active');
 
 		    return view('member.item.add',$data);
@@ -163,7 +164,7 @@ class ItemController extends Member
 		$item_price 					= Request::input("item_price");
 		$item_sales_information 		= Request::input("item_sales_information");
 		$item_asset_account_id 			= Request::input("item_asset_account_id");
-		$item_quantity 					= Request::input("item_quantity");
+		$item_quantity 					= Request::input("item_quantity") * Request::input("initial_qty") != 0 ? Request::input("initial_qty") : 1 ;
 		$item_date_tracked 				= date("Y-m-d g:i:s",strtotime(Request::input("item_date_tracked")));
 		$item_reorder_point 			= Request::input("item_reorder_point");
 		$item_income_account_id 		= Request::input("item_income_account_id");

@@ -628,6 +628,7 @@ function add_po_to_bill(po_id)
 	        $(".po-"+po_id).addClass("hidden");
 			// $(".modal-loader").addClass("hidden");
 
+             bill.action_compute();
              bill.action_reassign_number();
 		},
 		error : function()

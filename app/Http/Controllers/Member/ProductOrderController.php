@@ -71,12 +71,12 @@ class ProductOrderController extends Member
     }
     public function invoice_list()
     {
-        $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("order_status","Pending")->get();
-        $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("order_status","Failed")->get();
-        $data["ec_order_processing"] = Tbl_ec_order::customer()->where("order_status","Processing")->get();
-        $data["ec_order_completed"]  = Tbl_ec_order::customer()->where("order_status","Completed")->get();
-        $data["ec_order_on_hold"]    = Tbl_ec_order::customer()->where("order_status","On-hold")->get();
-        $data["ec_order_cancelled"]  = Tbl_ec_order::customer()->where("order_status","Cancelled")->get();
+        $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Pending")->get();
+        $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Failed")->get();
+        $data["ec_order_processing"] = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Processing")->get();
+        $data["ec_order_completed"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Completed")->get();
+        $data["ec_order_on_hold"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","On-hold")->get();
+        $data["ec_order_cancelled"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Cancelled")->get();
         return view("member.product_order.product_order",$data);
     }
     public function create_invoice()
@@ -229,6 +229,7 @@ class ProductOrderController extends Member
     {   
         $data["ec_order_id"]                = Request::input("ec_order_id");
         $data["order_status"]               = Request::input("order_status");
+        $data["payment_method_id"]          = Request::input("payment_method_id");
 
         $response                           = Ec_order::update_ec_order($data);
         if(isset($response["status"]))

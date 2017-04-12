@@ -37,6 +37,10 @@ class Ec_order
         {
             $customer_id = Customer::createCustomer($order_info['shop_id'] ,$order_info['customer']);
         }
+        else
+        {
+            $customer_id = $order_info['customer_id'];
+        }
 
         $data['shop_id']           = $order_info['shop_id'];
         $data['inv_customer_id']   = $customer_id;;
@@ -46,6 +50,7 @@ class Ec_order
         $data['inv_date']      = '';
         $data['inv_due_date']  = '';
         $data['inv_customer_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province'];
+
         $data['inv_message']          = '';
         $data['inv_memo']             = '';
         $data['ewt']                  = 0;
@@ -294,6 +299,7 @@ class Ec_order
 	{
         $ec_order_id             = $data["ec_order_id"];
         $update['order_status']  = $data["order_status"];
+        $update['payment_method_id'] = $data["payment_method_id"];
         $order_status            = $data["order_status"];
         $order                   = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
         $response                = "nothing";
@@ -326,6 +332,17 @@ class Ec_order
             else if($order_status == "Cancelled")
             {
                 $response = Ec_order::update_inventory("add",$ec_order_id);
+            }
+        }
+
+        if($order_status == "Completed")
+        {
+            if(!$update['payment_method_id'] > 0)
+            {
+                $response                    = null;
+                $response['status']          = "error";
+                $response['status_message']  = "Cannot Complete Order without Payment Method";
+                return $response;
             }
         }
 

@@ -36,7 +36,11 @@ function global()
     }
     function window_load()
     {
-        $('.loader').fadeOut();
+        $('.loader').fadeOut('400', function() 
+        {
+            action_after_load();
+        });
+
         image_crop(".4-3-ratio", 4, 3);
         image_crop(".ratio-fix img", 396, 241);
         image_crop(".category-ratio .1", 100, 51.5);

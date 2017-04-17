@@ -20,15 +20,17 @@
         		<table class="table table-condensed table-bordered">
         			<thead>
         				<thead> 
-                            <th>
-                                Slot
-                            </th>  
-                            <th>
-                                Member
-                            </th>
-                            @foreach($request as $key => $value)
-                            <th>{{$value}}</th>
-                            @endforeach
+                            <tr>
+                                <th>
+                                    Slot
+                                </th>  
+                                <th>
+                                    Member
+                                </th>
+                                @foreach($request as $key => $value)
+                                <th>{{$value}}</th>
+                                @endforeach
+                            </tr>
                         </thead>
                         <tbody>
                             @foreach($encashment as $key => $value)

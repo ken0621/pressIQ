@@ -8,8 +8,29 @@ use App\Models\Rel_post_category;
 use Carbon\Carbon;
 use Validator;
 
+/**
+ * Post Maintenance - all post of shop or front related module
+ *
+ * @author Edward Guevarra
+ */
+
 class Post
 {
+    /**
+     * Get the id of current shop_id that logged in.
+     *
+     * @return int      Shop id
+     */
+    public static function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
+
+    /**
+     * For adding post.
+     *
+     * @param array    $insert   Needed data for adding post. This is required.
+     */
     public static function add($insert)
     {
         $post_category_id       = $insert["post_category_id"];
@@ -19,7 +40,7 @@ class Post
         $rules['post_date']     = 'required|date';
         $rules['post_title']    = 'required';
         $rules['post_content']  = 'required';
-        $rules['post_excerpt']  = 'required';
+        // $rules['post_excerpt']  = 'required';
         $rules['post_type']     = 'required';
         $rules['post_image']    = 'required';
 
@@ -66,6 +87,11 @@ class Post
         return $response;
     }
 
+    /**
+     * For editing post.
+     *
+     * @param array    $insert   Needed data for editing post. This is required.
+     */
     public static function edit($insert, $id)
     {
         $post_category_id       = $insert["post_category_id"];
@@ -75,7 +101,7 @@ class Post
         $rules['post_date']     = 'required|date';
         $rules['post_title']    = 'required';
         $rules['post_content']  = 'required';
-        $rules['post_excerpt']  = 'required';
+        // $rules['post_excerpt']  = 'required';
         $rules['post_type']     = 'required';
         $rules['post_image']    = 'required';
 
@@ -122,6 +148,11 @@ class Post
         return $response;
     }
 
+    /**
+     * For adding category post.
+     *
+     * @param array    $insert   Needed data for adding category post. This is required.
+     */
     public static function category_add($insert)
     {
         $response['id']              = null;
@@ -157,5 +188,46 @@ class Post
         }
 
         return $response;
+    }
+
+    /**
+     * For getting post.
+     *
+     * @param array    $shop_id   Get posts for current shop. If shop_id is null, the current shop id that logged on will be used.
+     */
+    public static function get_posts($shop_id)
+    {
+        if(!$shop_id)
+        {
+            $shop_id = Ecom_Product::getShopId();
+        }
+
+        $post = Tbl_post::select("*","tbl_post.post_id as main_id",DB::raw('group_concat(rel_post_category.post_category_id) as post_categories'))
+                          ->where("tbl_post.archived", 0)
+                          ->where("tbl_post.shop_id", $shop_id)
+                          ->leftJoin("rel_post_category", "tbl_post.post_id", "=", "rel_post_category.post_id")
+                          ->leftJoin("tbl_post_category", "rel_post_category.post_category_id", "=", "tbl_post_category.post_category_id")
+                          ->groupBy("tbl_post.post_id")
+                          ->get();
+
+        foreach ($post as $key => $value) 
+        {
+            $category_id = explode(",", $value->post_categories);
+            $category = DB::table("tbl_post_category")->select("post_category_name")->whereIn("post_category_id", $category_id)->get();
+            $post[$key]->categories = $category;
+        }        
+
+        return $post;
+    }
+
+    /**
+     * For getting single post.
+     *
+     * @param array    $shop_id   Get posts for current shop. If shop_id is null, the current shop id that logged on will be used.
+     * @param array    $post_id   Get specific post. If shop_id is null, the current shop id that logged on will be used.
+     */
+    public static function get_post($post_id, $shop_id)
+    {
+        
     }
 }

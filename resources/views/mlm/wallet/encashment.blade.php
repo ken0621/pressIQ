@@ -49,8 +49,10 @@ $data['icon'] = 'fa fa-money';
 
               @if($value->encashment_process_type == 0)
               <td class="alert alert-warning">Pending</td>
-              @else
+              @elseif($value->encashment_process_type  == 1)
               <td class="alert alert-success">Processed</td>
+              @else
+              <td class="alert alert-danger">Denied ({{currency('PHP', $value->wallet_log_denied_amount)}})</td>
               @endif
 
               <td><button class="btn btn-primary" onclick="show_breakdown({{$value->encashment_process}}, {{$value->slot_id}})">Breakdown</button></td>

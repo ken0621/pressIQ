@@ -53,6 +53,9 @@ class PurchasingInventorySystemController extends Member
     public function update_count($sir_id, $item_id)
     {
         $data["sir_item"] = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->where("tbl_sir_item.item_id",$item_id)->first();
+        
+        $rem_qty = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->sum("sir_inventory_count");
+        $sold_qty = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->where("sir_inventory_count","<=",0)->sum("sir_inventory_count");
 
         $um = Tbl_unit_measurement_multi::where("multi_id",$data["sir_item"]->related_um_type)->first();
 
@@ -62,7 +65,7 @@ class PurchasingInventorySystemController extends Member
 
         $issued_qty = $data["sir_item"]->item_qty * UnitMeasurement::um_qty($data["sir_item"]->related_um_type);
         // dd($issued_qty);
-        $remaining_qty = $issued_qty - $data["sir_item"]->sold_qty;
+        $remaining_qty = $rem_qty;
         $rem = "";
         $sold = "";
 
@@ -80,7 +83,7 @@ class PurchasingInventorySystemController extends Member
             if($um != null)
             {                
                $rem = $remaining_qty." ".$um->multi_abbrev;
-               $sold = $data["sir_item"]->sold_qty." ".$um->multi_abbrev;
+               $sold = abs($sold_qty)." ".$um->multi_abbrev;
 
                $data["base_qty"] = $remaining_qty;
                $data["base_name"] = $um->multi_name." (".$um->multi_abbrev.")";
@@ -100,17 +103,17 @@ class PurchasingInventorySystemController extends Member
 
             //for remaining
             $total_qty_issued =  $data["sir_item"]->item_qty * $um->unit_qty;
-            $rem_qty = $total_qty_issued - $data["sir_item"]->sold_qty;
+            $rem_qty = $remaining_qty;
             $issued_um_qty = $um->unit_qty;
             $issued_um = floor($rem_qty / $issued_um_qty);
             $each = (($rem_qty / $issued_um_qty) - floor($rem_qty / $issued_um_qty)) * $issued_um_qty;                
 
             //for sold
-            $um_q = floor($data["sir_item"]->sold_qty / $issued_um_qty);
-            $sold_each = (($data["sir_item"]->sold_qty / $issued_um_qty) - floor($data["sir_item"]->sold_qty / $issued_um_qty)) * $issued_um_qty;                
+            $um_q = floor(abs($sold_qty) / $issued_um_qty);
+            $sold_each = ((abs($sold_qty) / $issued_um_qty) - floor(abs($sold_qty) / $issued_um_qty)) * $issued_um_qty;                
 
 
-            if($data["sir_item"]->sold_qty != 0)
+            if(abs($sold_qty) != 0)
             {
                 $data["base_name"] = $base_um->multi_name." (".$base_um->multi_abbrev.")";
                 $data["base_qty"] = $each;
@@ -134,7 +137,7 @@ class PurchasingInventorySystemController extends Member
             if($um_info->is_base == 1)
             {
                $rem = $remaining_qty." ".$um_info->multi_abbrev;
-               $sold = $data["sir_item"]->sold_qty." ".$um_info->multi_abbrev;
+               $sold = abs($sold_qty)." ".$um_info->multi_abbrev;
 
                $data["base_qty"] = $remaining_qty;
                $data["base_name"] = $um_info->multi_name." (".$um_info->multi_abbrev.")";
@@ -161,9 +164,14 @@ class PurchasingInventorySystemController extends Member
         $sir_info = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->first();
         $unit_qty = Tbl_unit_measurement_multi::where("multi_id",$sir_info->related_um_type)->pluck("unit_qty");
 
+
+
+        $rem_qty = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->sum("sir_inventory_count");
+        $sold_qty = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->where("sir_inventory_count","<=",0)->sum("sir_inventory_count");
+
         $qt = UnitMeasurement::um_qty($sir_info->related_um_type);
                     
-        $remaining_qty = ($sir_info->item_qty * $qt ) - $sir_info->sold_qty;
+        $remaining_qty = $rem_qty;
 
         $item_info = Tbl_item::where("item_id",$item_id)->first();
         $base_um_id = $item_info->item_measurement_id;
@@ -283,7 +291,9 @@ class PurchasingInventorySystemController extends Member
         if($data["_sir_item"] != null)
         {
             foreach($data["_sir_item"] as $key => $value) 
-            {              
+            {    
+                $rem_qty = Tbl_sir_inventory::where("inventory_sir_id",$id)->where("sir_item_id",$value->item_id)->sum("sir_inventory_count");
+                $sold_qty = Tbl_sir_inventory::where("inventory_sir_id",$id)->where("sir_item_id",$value->item_id)->where("sir_inventory_count","<=",0)->sum("sir_inventory_count");
 
                 $um = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
 
@@ -293,18 +303,18 @@ class PurchasingInventorySystemController extends Member
                 $qt = UnitMeasurement::um_qty($value->related_um_type);
                     
                 $issued_qty = $value->item_qty * $qt;
-                $remaining_qty = $issued_qty - $value->sold_qty;
-                $total_sold_qty = $value->sold_qty;
+                $remaining_qty = $rem_qty;
+                $total_sold_qty = abs($sold_qty);
                 
                 $physical_ctr = $value->physical_count;
                 $rem = "";
                 $sold = "";
                 $physical_count = "";
                 $rem = UnitMeasurement::um_view($remaining_qty, $value->item_measurement_id, $value->related_um_type);
-                $sold = UnitMeasurement::um_view($value->sold_qty, $value->item_measurement_id, $value->related_um_type);
+                $sold = UnitMeasurement::um_view($total_sold_qty, $value->item_measurement_id, $value->related_um_type);
                 $physical_count = UnitMeasurement::um_view($value->physical_count, $value->item_measurement_id,$value->related_um_type);
             
-                $data["_sir_item"][$key]->quantity_sold = $value->sold_qty;
+                $data["_sir_item"][$key]->quantity_sold = $total_sold_qty;
                 $data["_sir_item"][$key]->remaining_qty = $rem;
                 $data["_sir_item"][$key]->sold_qty = $sold;
                 $data["_sir_item"][$key]->physical_count = $physical_count;
@@ -359,6 +369,8 @@ class PurchasingInventorySystemController extends Member
             {
                 foreach($data["_sir_item"] as $key => $value) 
                 {              
+                    $rem_qty = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$value->item_id)->sum("sir_inventory_count");
+                    $sold_qty = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$value->item_id)->where("sir_inventory_count","<=",0)->sum("sir_inventory_count");
 
                     $um = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
 
@@ -369,15 +381,15 @@ class PurchasingInventorySystemController extends Member
 
                     $issued_qty = $value->item_qty * $qt;
 
-                    $remaining_qty = $issued_qty - $value->sold_qty;
-                    $total_sold_qty = $value->sold_qty;
+                    $remaining_qty = $rem_qty;
+                    $total_sold_qty = abs($sold_qty);
                     
                     $physical_ctr = $value->physical_count;
                     $rem = "";
                     $sold = "";
                     $physical_count = "";
                     $rem = UnitMeasurement::um_view($remaining_qty, $value->item_measurement_id, $value->related_um_type);
-                    $sold = UnitMeasurement::um_view($value->sold_qty, $value->item_measurement_id, $value->related_um_type);
+                    $sold = UnitMeasurement::um_view($total_sold_qty, $value->item_measurement_id, $value->related_um_type);
                     $physical_count = UnitMeasurement::um_view($value->physical_count, $value->item_measurement_id,$value->related_um_type);
                     
                     $test[$key] = $remaining_qty." ".$rem." | ".$physical_ctr." ".$physical_count;
@@ -756,14 +768,20 @@ class PurchasingInventorySystemController extends Member
                             {
                                 $insert_sir_item["sir_id"] = $sir_id;
                                 $insert_sir_item["item_id"] = $value;
-                                // $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
+                                $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
                                 $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
                                 $insert_sir_item["related_um_type"] = $related_um_type[$key];
-                                // $qty = UnitMeasurement::um_qty($related_um_type[$key]);
-                                // $related_um_qty = $qty;
-                                // $insert_sir_item["um_qty"] = $related_um_qty;
+                                $qty = UnitMeasurement::um_qty($related_um_type[$key]);
+                                $related_um_qty = $qty;
+                                $insert_sir_item["um_qty"] = $related_um_qty;
 
                                 Tbl_sir_item::insert($insert_sir_item);
+                            }
+                            else
+                            {
+                                $insert_sir_item["item_qty"] = $chck->item_qty + str_replace(",","",$item_qty[$key]);
+
+                                Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$value)->where("related_um_type",$related_um_type[$key])->update($insert_sir_item);   
                             }
                             
                             //record truck inventory                            
@@ -985,13 +1003,19 @@ class PurchasingInventorySystemController extends Member
                                 $insert_sir_item["item_id"] = $value;
                                 $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
                                 $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
-                                // $insert_sir_item["related_um_type"] = $related_um_type[$key];
-                                // $qty = UnitMeasurement::um_qty($related_um_type[$key]);
+                                $insert_sir_item["related_um_type"] = $related_um_type[$key];
+                                $qty = UnitMeasurement::um_qty($related_um_type[$key]);
 
-                                // $related_um_qty = $qty;
-                                // $insert_sir_item["um_qty"] = $related_um_qty;
+                                $related_um_qty = $qty;
+                                $insert_sir_item["um_qty"] = $related_um_qty;
 
                                 Tbl_sir_item::insert($insert_sir_item);                                
+                            }
+                            else
+                            {
+                                $insert_sir_item["item_qty"] = $chck->item_qty + str_replace(",","",$item_qty[$key]);
+
+                                Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$value)->where("related_um_type",$related_um_type[$key])->update($insert_sir_item);   
                             }
 
                             //record truck inventory                            

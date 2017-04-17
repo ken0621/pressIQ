@@ -69,7 +69,10 @@ class Purchasing_inventory_system
             Tbl_sir_inventory::insert($insert);
         }        
     }
-
+    public static function insert_sir_returns()
+    {
+        
+    }
     public static function get_qty_item_sir($sir_id,$item_id)
     {
         $qty = 0;
@@ -557,7 +560,11 @@ class Purchasing_inventory_system
         if($data["_sir_item"] != null)
         {
             foreach($data["_sir_item"] as $key => $value) 
-            {                      
+            {                    
+                $rem_qty = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$value->item_id)->sum("sir_inventory_count");
+                $sold_qty = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$value->item_id)->where("sir_inventory_count","<=",0)->sum("sir_inventory_count");
+
+
                 $um = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
 
                 $data["_sir_item"][$key]->um_name = isset($um->multi_name) ? $um->multi_name : "";
@@ -565,14 +572,14 @@ class Purchasing_inventory_system
                 $qty = UnitMeasurement::um_qty($value->related_um_type);
 
                 $issued_qty = $value->item_qty * $qty;
-                $remaining_qty = $issued_qty - $value->sold_qty;
-                $total_sold_qty = $value->sold_qty;
+                $remaining_qty = $rem_qty;
+                $total_sold_qty = abs($sold_qty);
                 
                 $rem = "";
                 $sold = "";
                 $physical_count = "";
                 $rem = UnitMeasurement::um_view($remaining_qty, $value->item_measurement_id, $value->related_um_type);
-                $sold = UnitMeasurement::um_view($value->sold_qty, $value->item_measurement_id, $value->related_um_type);
+                $sold = UnitMeasurement::um_view($total_sold_qty, $value->item_measurement_id, $value->related_um_type);
                 $physical_count = UnitMeasurement::um_view($value->physical_count, $value->item_measurement_id,$value->related_um_type);
             
                 $data["_sir_item"][$key]->remaining_qty = $rem;
@@ -769,14 +776,13 @@ class Purchasing_inventory_system
         {
             $sir_item_count = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->sum("sir_inventory_count");
 
-            $inv_data = Tbl_sir_inventory::where("sir_inventory_ref_name","invoice")->where("sir_item_id",$item_id)->where("sir_inventory_ref_name",$invoice_id)->sum("sir_inventory_count");
+            $inv_data = Tbl_sir_inventory::where("sir_inventory_ref_name","invoice")->where("sir_item_id",$item_id)->where("sir_inventory_ref_id",$invoice_id)->sum("sir_inventory_count");
             $old_invoice_qty = 0;
             if($inv_data != 0)
             {
                 $old_invoice_qty = abs($inv_data);   
             }      
             $item_count = $sir_item_count + $old_invoice_qty; 
-
             $qty_1 = UnitMeasurement::um_qty($um);
 
             $new_invoice_qty = $qty_1 * $qty;

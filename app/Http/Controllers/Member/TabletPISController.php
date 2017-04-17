@@ -495,14 +495,11 @@ class TabletPISController extends Member
                     if($item_line)
                     {
                         $item["item_id"] = Request::input('invline_item_id')[$key];
-                        $item["qty"] = (UnitMeasurement::um_qty(Request::input('invline_um')[$key]) * Request::input('invline_qty')[$keys]) * -1;
+                        $item["qty"] = (UnitMeasurement::um_qty(Request::input('invline_um')[$key]) * Request::input('invline_qty')[$key]) * -1;
 
                         Purchasing_inventory_system::insert_sir_inventory($sir_id,$item,"invoice",$invoice_id);
                     }
                 }
-
-
-
                 $data["status"] = "success-tablet";
             }
             else
@@ -577,6 +574,90 @@ class TabletPISController extends Member
 			}
 		}
 
+        //CM returns
+        $cm_customer_info[] = null;
+        $cm_item_info = null;
+        $item_returns = null;    
+        if(Request::input("returns") != null && Purchasing_inventory_system::check() != 0)
+        {
+            $cm_customer_info["cm_customer_id"] = Request::input('inv_customer_id');
+            $cm_customer_info["cm_customer_email"] = Request::input('inv_customer_email');
+            $cm_customer_info["cm_date"] = datepicker_input(Request::input('inv_date'));
+            $cm_customer_info["cm_message"] = "";
+            $cm_customer_info["cm_memo"] = "";
+            $cm_customer_info["cm_amount"] = str_replace(",","",Request::input("subtotal_price_returns"));
+
+            $cm_item_info[] = null;
+            $_cm_items = Request::input("cmline_item_id");
+            if($_cm_items != null)
+            {
+                foreach ($_cm_items as $keys => $values) 
+                { 
+                    if($values != null)
+                    {
+                        $cm_item_info[$keys]['item_service_date']  = datepicker_input(Request::input('cmline_service_date')[$keys]);
+                        $cm_item_info[$keys]['item_id']            = Request::input('cmline_item_id')[$keys];
+                        $cm_item_info[$keys]['item_description']   = Request::input('cmline_description')[$keys];
+                        $cm_item_info[$keys]['um']                 = Request::input('cmline_um')[$keys];
+                        $cm_item_info[$keys]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$keys]);
+                        $cm_item_info[$keys]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$keys]);
+                        $cm_item_info[$keys]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$keys]);
+                
+                        $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
+                        $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];
+                        $item_returns[$keys]["product_id"] = Request::input('cmline_item_id')[$keys];                    
+                    }          
+                } 
+                // --> for bundles
+                foreach ($_cm_items as $keyitem_cm => $value_item) 
+                {
+                    if($value_item != null)
+                    {
+                        $item_bundle_info = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitem_cm])->where("item_type_id",4)->first();
+                        if($item_bundle_info)
+                        {
+                            $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("cmline_item_id")[$keyitem_cm])->get();
+                            foreach ($bundle as $key_bundle_cm => $value_bundle_cm) 
+                            {
+                                $qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keyitem_cm]);
+                                $bundle_qty = UnitMeasurement::um_qty($value_bundle_cm->bundle_um_id);
+                                $_bundle[$key_bundle_cm]['product_id'] = $value_bundle_cm->bundle_item_id;
+                                $_bundle[$key_bundle_cm]['quantity'] = (Request::input('cmline_qty')[$keyitem_cm] * $qty) * ($value_bundle_cm->bundle_qty * $bundle_qty);
+
+                                array_push($item_returns, $_bundle[$key_bundle_cm]);
+                            }
+                        }                 
+                    }
+                }
+                if($item_returns != null)
+                {
+                    foreach ($item_returns as $key_items_cm => $value_items_cm) 
+                    {
+                         $i = null;
+                         foreach ($_cm_items as $keyitemline_cm => $valueitemline)
+                         {
+                            $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                            if($type == 4)
+                            {
+                                if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['product_id'])
+                                {
+                                    $i = "true";
+                                }                    
+                            }
+                         }
+                        if($i != null)
+                        {
+                            unset($item_returns[$key_items_cm]);
+                        }           
+                    }
+                }
+                // <-- end bundle                
+            }
+
+        }
+        // END CM/RETURNS
+
+
 		if($return == 0)
 		{
 		    $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
@@ -584,6 +665,18 @@ class TabletPISController extends Member
 	        if($inv == 0 || Request::input("keep_val") == "keep")
 	        {
 		   		$invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+
+
+                 if($cm_customer_info != null && $cm_item_info != null)
+                {
+                    $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $invoice_id);
+
+                    $cm_remarks            = "Returns Items with Invoice # ". $invoice_id;
+                    $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
+                    $cm_transaction_type   = "credit_memo";
+                    $cm_transaction_id     = $cm_id;
+                    // $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
+                }
 
 			   if($sir_id != null && $invoice_id != null)
 			   {

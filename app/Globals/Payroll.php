@@ -2163,7 +2163,7 @@ class Payroll
 			$temp['Regular Holiday Pay']	= $record['rh_salary'];
 			$temp['Regular Over Time Pay']	= $record['regular_reg_overtime'] + $record['extra_reg_overtime'] + $record['rest_day_reg_overtime'] + $record['rest_day_sh_reg_overtime'] + $record['rest_day_rh_reg_overtime'] + $record['rh_reg_overtime'] + $record['sh_reg_overtime'];
 			$temp['Rest Day Pay']			= $record['rest_day_salary'];
-			$temp['	COLA']					= $record['payroll_cola'];
+			$temp['COLA']					= $record['payroll_cola'];
 			$temp['Special Holiday Pay']	= $record['sh_salary'];
 
 			$allowance 						= 0;
@@ -2204,11 +2204,6 @@ class Payroll
 		// dd($data);
 
 		return $data;
-	}
-
-	public static function entitytocolumn($entity_name = '')
-	{
-		$data = array();
 	}
 
 }

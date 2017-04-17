@@ -3589,6 +3589,11 @@ class PayrollController extends Member
           return view('member.payroll.side_container.custom_payslip');
      }
 
+     public function modal_create_payslip()
+     {
+          return view('member.payroll.modal.modal_create_payslip');
+     }
+
      /* PAYROLL CUSTOM PAYSLIP END */
 
 

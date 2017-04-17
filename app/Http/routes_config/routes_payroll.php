@@ -236,6 +236,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/* PAYROLL CUSTOM PAYSLIP START */
 	Route::any('/custom_payslip',"Member\PayrollController@custom_payslip");
+	Route::any('/custom_payslip/modal_create_payslip',"Member\PayrollController@modal_create_payslip");
+	
 	/* PAYROLL CUSTOM PAYSLIP END */
 
 	/* PAYROLL PERIOD START */

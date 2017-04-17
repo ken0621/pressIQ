@@ -169,31 +169,32 @@ class Accounting
 	/**
 	 * Create a journal entry for the transaction 
 	 *
-	 * @param string  	$reference_module 	Type of transaction
-	 * @param integer  	$reference_id  		Id of the transaction
-	 * @param array  	$entry_data 		Entry data for the journal Entry
-	 * @param array  	$entry_date      	
-	 * @param boolean  	$remarks   			
+	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["total"] , 
+	 									$entry["vatable"] , $entry["discount"] , $entry["ewt"]
+	 * @param array  	$entry_date     $entry_data[0]['item_id'] , $entry_data[0]['entry_qty'] , $entry_data[0]['vatable']
+	 									$entry_data[0]['discount'] , $entry_data[0]['entry_amount']
+	 * @param boolean  	$remarks   		Description of the journal entry	
 	 */
 	public static function postJournalEntry($entry, $entry_data, $remarks = '')
 	{
-		// $entry["reference_module"]	= "invoice";
-		// $entry["reference_id"]		= "invoice";
-
-		// $entry["total"]		= 180;
-		// $entry["vatable"]	= 0;
-		// $entry["discount"]	= 20;
-		// $entry["ewt"]		= 0;
-
-		// $entry_data[0]['item_id'] 		= 15;
-		// $entry_data[0]['entry_qty'] 	= 5;
-		// $entry_data[0]['vatable']		= 0;
-		// $entry_data[0]['discount']		= 0;
-		// $entry_data[0]['entry_amount'] 	= 200;
-
+		/* GETTING THE DEFAULT ACCOUNTS RECEIVABLE AND ACCOUNTS PAYABLE */
 		$account_receivable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-receivable")->pluck("account_id");
 		$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
 
+		/* FOR OLD DATABASE - CHECKING IF THERE IS ALREADY AN ACCOUNT CODE*/
+		if(!$account_receivable)
+		{
+			Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Receivable")->update(['account_code'=>"accounting-receivable"]);
+			$account_receivable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-receivable")->pluck("account_id");
+		}
+		if(!$account_payable)
+		{
+			Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Payable")->update(['account_code'=>"accounting-payable"]);
+			$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
+		}
+		/* END */
+
+		/* GETTING CHART OF ACCOUNTS THAT TAGGED ON THE ITEM */
 		$account_asset 		= Tbl_item::where("item_id", 39)->pluck("item_asset_account_id");   //Inventory 
 		$account_income 	= Tbl_item::where("item_id", 39)->pluck("item_income_account_id");  //Sales
 		$account_expense 	= Tbl_item::where("item_id", 39)->pluck("item_expense_account_id"); //Cost of Good Sold
@@ -206,7 +207,21 @@ class Accounting
 		$journal_entry['je_entry_date'] 		= carbon::now();
 		$journal_entry['je_remarks']			= $remarks;
 
-		$line_data["je_id"] 	= Tbl_journal_entry::insertGetId($journal_entry);
+		/* CHECK IF THE TRANSACTION JOURNAL IS ALREADY EXIST - USE IF NEW OR UPDATE TRANSACTION */
+		$exist_journal = Tbl_journal_entry::where("je_reference_module", $journal_entry['je_reference_module'])->where("je_reference_id", $journal_entry['je_reference_id'])->first();
+
+		if(!$exist_journal)
+		{
+			$line_data["je_id"] 	= Tbl_journal_entry::insertGetId($journal_entry);
+		}
+		else
+		{
+			unset($journal_entry['je_entry_date']);
+			Tbl_journal_entry_line::where("jline_je_id", $exist_journal->je_id)->delete();
+			Tbl_journal_entry::where("je_id", $exist_journal->je_id)->update($journal_entry);
+			$line_data["je_id"] = $exist_journal->je_id;
+		}
+
 		$line_data["item_id"]	= '';
 
 		/* RECIVABLE OR PAYABLE */

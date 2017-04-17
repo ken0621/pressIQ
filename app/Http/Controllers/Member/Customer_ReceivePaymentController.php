@@ -141,8 +141,12 @@ class Customer_ReceivePaymentController extends Member
                 Tbl_receive_payment_line::insert($insert_line);
                 if($insert_line["rpline_reference_name"] == 'invoice')
                 {
-                    Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                    Invoice::updateAmountApplied(Request::input('rpline_txn_id')[$key]);
                 }
+            }
+            else
+            {
+                Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
             }
         }
 

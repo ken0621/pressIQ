@@ -158,7 +158,7 @@
                   <div class="single-detail-review-comment clear">
                      <div class="review-comment-img"><img src=""></div>
                      <div class="review-comment-input">
-                        <textarea  placeholder="Enter your message here..."></textarea>
+                        <textarea placeholder="Enter your message here..."></textarea>
                      </div>
                      <div class="text-right" id="comment_button_container">
                         <button style="display: inline-block;" class="review-comment-button" user-id="" product-id="" >
@@ -361,6 +361,8 @@
 <meta property="product:price:currency"    content="PHP"/>
 
 <meta property="product:price:amount" content="" />
+
+<meta property="fb:app_id" content="1920870814798104" />
 
 @endsection
 

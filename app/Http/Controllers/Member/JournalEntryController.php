@@ -41,7 +41,7 @@ class JournalEntryController extends Member
 		$data['_journal'] = Tbl_journal_entry::transaction($module)->where("je_reference_id", $id)->get();
 		foreach($data['_journal'] as $key=>$journal)
 		{
-			$data['_journal'][$key]->entries = Tbl_journal_entry_line::account()->where("jline_je_id", $journal->je_id)->get();
+			$data['_journal'][$key]->entries = Tbl_journal_entry_line::account()->item()->where("jline_je_id", $journal->je_id)->get();
 		}
 
 		return view('member.accounting.journal_ledger.journal_entry', $data);

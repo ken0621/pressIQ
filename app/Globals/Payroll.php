@@ -2036,6 +2036,7 @@ class Payroll
 	{
 		
 		$data = $record->toArray();
+		// dd($data);
 
 		$employee_id 				= $data['payroll_employee_id'];
 		$payroll_period_company_id 	= $data['payroll_period_company_id'];
@@ -2126,6 +2127,24 @@ class Payroll
 		$data['total_net']					= $data['total_gross'] - $total_deduction;
 		$data['total_deduction']			= $total_deduction;
 		$data['total_allowance']			= $total_allowance;
+		return $data;
+	}
+
+	public static function record_by_date($shop_id = 0, $date_start = '0000-00-00', $date_end = '0000-00-00')
+	{
+		$date[0] = date('Y-m-d',strtotime($date_start));
+		$date[1] = date('Y-m-d',strtotime($date_end));
+		$_record = Tbl_payroll_record::getdate($shop_id, $date)->get();
+
+		$data = array();
+
+		foreach($_record as $record)
+		{
+			array_push($data, Payroll::getrecord_breakdown($record));
+		}
+
+		// dd($data);
+
 		return $data;
 	}
 

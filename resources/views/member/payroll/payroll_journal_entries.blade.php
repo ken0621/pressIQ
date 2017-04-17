@@ -34,13 +34,15 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-				</tr>
+				@foreach()
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				@endforeach
 			</tbody>
 		</table>
 	</div>
@@ -69,7 +71,9 @@ function payroll_journal_entry()
 	{
 		$(document).on('change', '.start-date, .end-date', function(event) {
 			event.preventDefault();
-			$(".load-data").load("/member/payroll/payroll_summary .load-data table", function()
+			var start 	= $(".start-date").val();
+			var end 	= $(".end-date").val();
+			$(".load-data").load("/member/payroll/payroll_summary?start=" +start +"&&end=" +end +" .load-data table", function()
 			{
 				toastr.success("Generated");
 			})

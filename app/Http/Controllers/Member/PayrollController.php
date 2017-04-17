@@ -4528,10 +4528,17 @@ class PayrollController extends Member
 
      public function payroll_summary()
      {
+          // dd(Request::input());
           $data['date_start'] = date('m/d/Y', strtotime('first day of this month'));
           $data['date_end']   = date('m/d/Y', strtotime('last day of this month'));
+
+          if(Request::input())
+          {
+               $data['date_start'] = Request::input('start');
+               $data['date_end']   = Request::input('end');
+          }
           
-          $record = Tbl_payroll_record::getperiod(Self::shop_id(), 'Semi-monthly')->get();
+          $data['record'] = PayrollJournalEntries::payroll_summary($data['date_start'], $data['date_end']);
 
           // dd(collect($record)->toArray());
 

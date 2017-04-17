@@ -14,6 +14,8 @@ use App\Models\Tbl_payroll_deduction_employee;
 use App\Models\Tbl_payroll_entity;
 use App\Models\Tbl_payroll_journal_tag;
 
+use App\Globals\payroll;
+
 use Log;
 use Request;
 use Session;
@@ -40,26 +42,42 @@ class PayrollJournalEntries
 	 */
 	public static function payroll_summary($start_date, $end_date)
 	{
-		
+		$start_date 	= "01-26-2017";
+		$end_date		= "02-10-2017";
+
+		$_record = Payroll::record_by_date(PayrollJournalEntries::getShopId(), $start_date, $end_date);
+
+		foreach($_record as $key=>$record)
+		{
+			$_record[$key]['accounts'] = PayrollJournalEntries::check_payroll_entity_account_id($record['payroll_employee_id']);
+		}
+
+		$_journal = collect($_record)->groupBy(function ($item, $b)
+			{
+				dd($item);
+				// return $item['accounts']['']
+			});
+		dd($_journal);
+		return $_record;
 	}
 
 	/**
 	 * Check the default or settled account id for specific entity name
 	 *
 	 */
-	public static function check_payroll_entity_account_id()
+	public static function check_payroll_entity_account_id($employee_id)
 	{
 		$_entity = Tbl_payroll_entity::get();
 		foreach($_entity as $key=>$entity)
 		{
-			$data[$entity->entity_name] = Tbl_payroll_journal_tag::where("shop_id", PayrollJournalEntries::getShopId())->where("payroll_entity_id", $entity->payroll_entity_id)->tagEntity()->tagEmployee(23)->account()->first();
+			$data[$entity->entity_name] = Tbl_payroll_journal_tag::where("shop_id", PayrollJournalEntries::getShopId())->where("payroll_entity_id", $entity->payroll_entity_id)->tagEntity()->tagEmployee($employee_id)->account()->first();
 			if(!$data[$entity->entity_name])
 			{
 				$data[$entity->entity_name] = PayrollJournalEntries::get_default_entity($entity->entity_category);
 			}
 		}
 
-		return $data;
+		return collect($data)->toArray();
 	}
 
 	public static function get_default_entity($entity_category)

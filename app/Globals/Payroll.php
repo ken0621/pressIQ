@@ -2144,7 +2144,6 @@ class Payroll
 		}
 
 		// dd($data);
-
 		return $data;
 	}
 

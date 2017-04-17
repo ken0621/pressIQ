@@ -3485,7 +3485,7 @@ class PayrollController extends Member
           $data['tag'] = Tbl_payroll_journal_tag::where('payroll_journal_tag_id', $id)->first();
 
           $account_type_id = [1,3,8,13];
-          
+
           $data['_expense'] = Tbl_chart_of_account::getbytype(Self::shop_id(), $account_type_id)->orderBy('account_name')->get();
 
           $data['_entity'] = array();

@@ -31,6 +31,8 @@ use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_record;
 use App\Models\Tbl_payroll_adjustment;
 use App\Models\Tbl_payroll_allowance_record;
+use App\Models\Tbl_chart_account_type;
+use App\Models\Tbl_payroll_entity;
 
 use Carbon\Carbon;
 use stdClass;

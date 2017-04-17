@@ -15,6 +15,7 @@ class CreateTblPayrollEntity extends Migration
         Schema::create('tbl_payroll_entity', function (Blueprint $table) {
             $table->increments('payroll_entity_id');
             $table->string('entity_name');
+            $table->string('entity_category');
         });
     }
 

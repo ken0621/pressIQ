@@ -21,7 +21,8 @@ function modal_create_journal_tag()
 		  placeholder             : "Chart of Accounts",
 		  no_result_message       : "No result found!",
 		  onChangeValue           : function(){},
-		  onCreateNew             : function(){},
+		  onCreateNew             : function(){
+		  },
 		});
 	}
 }

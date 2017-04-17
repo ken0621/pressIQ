@@ -57,6 +57,10 @@ use App\Models\Tbl_payroll_employee_search;
 use App\Models\Tbl_payroll_adjustment;
 use App\Models\Tbl_payroll_allowance_record;
 use App\Models\Tbl_chart_of_account;
+use App\Models\Tbl_payroll_entity;
+use App\Models\Tbl_payroll_journal_tag;
+use App\Models\Tbl_payroll_journal_tag_entity;
+use App\Models\Tbl_payroll_journal_tag_employee;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -750,6 +754,8 @@ class PayrollController extends Member
 		$data['_allowance'] = Tbl_payroll_allowance::sel(Self::shop_id())->orderBy('payroll_allowance_name')->get();
 		$data['_deduction'] = Tbl_payroll_deduction::seldeduction(Self::shop_id())->orderBy('payroll_deduction_name')->get();
 		$data['_leave'] = Tbl_payroll_leave_temp::sel(Self::shop_id())->orderBy('payroll_leave_temp_name')->get();
+          $data['_journal_tag'] = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get();
+
 		return view("member.payroll.modal.modal_create_employee", $data);
 	}
 
@@ -1012,14 +1018,33 @@ class PayrollController extends Member
 		$temp = '';
 		foreach($_deduction as $deduction)
 		{
-			$temp['payroll_deduction_id'] = $deduction;
-			$temp['payroll_employee_id'] = 	$payroll_employee_id;
+			$temp['payroll_deduction_id']   = $deduction;
+			$temp['payroll_employee_id']    = $payroll_employee_id;
 			array_push($insert_deduction, $temp);
 		}
 		if(!empty($insert_deduction))
 		{
 			Tbl_payroll_deduction_employee::insert($insert_deduction);
 		}
+
+
+          /* INSERT JOURNAL TAGS */
+          if(Request::has('journal_tag'))
+          {
+
+               $insert_journal = array();
+               foreach(Request::input('journal_tag') as $tag){
+                    $temp_journal['payroll_employee_id']    = $payroll_employee_id;
+                    $temp_journal['payroll_journal_tag_id'] = $tag;
+                    array_push($insert_journal, $temp_journal);
+               }
+
+               if(!empty($insert_journal))
+               {
+                    Tbl_payroll_journal_tag_employee::insert($insert_journal);
+               }
+          }
+
 
 		$return['data'] = '';
 		$return['status'] = 'success';
@@ -1054,6 +1079,22 @@ class PayrollController extends Member
           $data['_allowance']           = Self::check_if_allowance_selected($id);
           $data['_deduction']           = Self::check_if_deduction_selected($id);
           $data['_leave']               = Self::check_if_leave_selected($id);
+
+          $_journal_tag                 = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get()->toArray();
+
+          $data['_journal_tag']         = array();
+          foreach($_journal_tag as $tag)
+          {
+               $count_tag = Tbl_payroll_journal_tag_employee::checkdata($id, $tag['payroll_journal_tag_id'])->count(); 
+               $tag['status'] = '';
+               if($count_tag == 1)
+               {
+                    $tag['status'] = 'checked';
+               }
+
+               array_push($data['_journal_tag'], $tag);
+          }
+
           // dd($data);
 		return view("member.payroll.modal.modal_view_employee", $data);
 	}
@@ -1371,6 +1412,26 @@ class PayrollController extends Member
 		}
 
 		Tbl_payroll_employee_dependent::insert($insert_dependent);
+
+          Tbl_payroll_journal_tag_employee::where('payroll_employee_id' ,$payroll_employee_id)->delete();
+
+          /* INSERT JOURNAL TAGS */
+          if(Request::has('journal_tag'))
+          {
+
+               $insert_journal = array();
+               foreach(Request::input('journal_tag') as $tag){
+                    $temp_journal['payroll_employee_id']    = $payroll_employee_id;
+                    $temp_journal['payroll_journal_tag_id'] = $tag;
+                    array_push($insert_journal, $temp_journal);
+               }
+
+               if(!empty($insert_journal))
+               {
+                    Tbl_payroll_journal_tag_employee::insert($insert_journal);
+               }
+          }
+
 		// Self::update_tbl_search();
 		$return['function_name'] = 'employeelist.reload_employee_list';
 		$return['status'] = 'success';
@@ -3365,17 +3426,170 @@ class PayrollController extends Member
      /* PAYROLL JOURNAL START */
      public function payroll_jouarnal()
      {
-          return view('member.payroll.side_container.journal');
+          $data['_tag'] = Tbl_payroll_journal_tag::gettag(Self::shop_id())->orderBy('tbl_chart_of_account.account_name')->get();
+          return view('member.payroll.side_container.journal', $data);
      }
 
      public function modal_create_journal_tag()
      {
           /* account_type_id = 13 = Expense */
           $data['_expense'] = Tbl_chart_of_account::getbytype(Self::shop_id(), 13)->orderBy('account_name')->get();
+
+          $data['_entity']  = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+          // dd($data);
           return view('member.payroll.modal.modal_create_journal_tag', $data);
      }
 
+     public function create_journal_tag()
+     {    
+          // Tbl_payroll_journal_tag
+          // Tbl_payroll_journal_tag_entity
+          // Tbl_payroll_journal_tag_employee
+          $insert_tag['account_id']     = Request::input('account_id');
+          $insert_tag['shop_id']        = Self::shop_id();
+
+          $payroll_journal_tag_id = Tbl_payroll_journal_tag::insertGetId($insert_tag);
+
+          $insert_entity = array();
+
+          if(Request::has('entity'))
+          {
+               foreach(Request::input('entity') as $entity)
+               {
+                    $temp['payroll_journal_tag_id'] = $payroll_journal_tag_id;
+                    $temp['payroll_entity_id']      = $entity;
+
+                    array_push($insert_entity, $temp);
+               }
+          }
+
+          if(!empty($insert_entity))
+          {
+               Tbl_payroll_journal_tag_entity::insert($insert_entity);
+          }    
+
+
+          $return['status'] = 'success';
+          $return['function_name'] = 'payrollconfiguration.reload_journal_tags';
+
+          return collect($return)->toJson();
+          
+     }   
+
+     public function modal_edit_journal_tag($id)
+     {
+
+          $data['tag'] = Tbl_payroll_journal_tag::where('payroll_journal_tag_id', $id)->first();
+
+          $data['_expense'] = Tbl_chart_of_account::getbytype(Self::shop_id(), 13)->orderBy('account_name')->get();
+
+          $data['_entity'] = array();
+          $_entity  = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+
+          foreach($_entity as $key => $entity_data)
+          {
+               $data['_entity'][$key] = array();
+               foreach($entity_data as $entity)
+               {
+                    $count = Tbl_payroll_journal_tag_entity::checkentity($id, $entity['payroll_entity_id'])->count();
+
+                    $entity['status'] = '';
+                    if($count == 1)
+                    {
+                         $entity['status'] = 'checked';
+                    }
+                    array_push($data['_entity'][$key], $entity);
+               }
+          }
+          // dd($data['_entity']);
+
+          return view('member.payroll.modal.modal_edit_journal_tag', $data);
+     } 
+
+     public function modal_confimr_del_journal_tag($id)
+     {
+
+          $data['title']      = 'Do you really want to remove this tag?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/payroll_jouarnal/del_journal_tag';
+          $data['id']         = $id;
+          $data['archived']   = 1;
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+     public function del_journal_tag()
+     {
+          $id = Request::input('id');
+          Tbl_payroll_journal_tag::where('payroll_journal_tag_id',$id)->delete();
+          $return['status'] = 'success';
+          $return['function_name'] = 'payrollconfiguration.reload_journal_tags';
+
+          return collect($return)->toJson();
+     }
+
+     public function update_payroll_journal_tag()
+     {
+          $payroll_journal_tag_id = Request::input('payroll_journal_tag_id');
+          $update['account_id'] = Request::input('account_id');
+          Tbl_payroll_journal_tag::where('payroll_journal_tag_id', $payroll_journal_tag_id)->update($update);
+
+          Tbl_payroll_journal_tag_entity::where('payroll_journal_tag_id', $payroll_journal_tag_id)->delete();
+
+          $insert_entity = array();
+
+          if(Request::has('entity'))
+          {
+               foreach(Request::input('entity') as $entity)
+               {
+                    $temp['payroll_journal_tag_id'] = $payroll_journal_tag_id;
+                    $temp['payroll_entity_id']      = $entity;
+
+                    array_push($insert_entity, $temp);
+               }
+          }
+
+          if(!empty($insert_entity))
+          {
+               Tbl_payroll_journal_tag_entity::insert($insert_entity);
+          }    
+
+
+          $return['status'] = 'success';
+          $return['function_name'] = 'payrollconfiguration.reload_journal_tags';
+
+          return collect($return)->toJson();
+     }
+
+     public function relaod_payroll_journal_sel()
+     {
+          $id = Request::input('id');
+          $_expense = Tbl_chart_of_account::getbytype(Self::shop_id(), 13)->orderBy('account_name')->get()->toArray();
+
+          $html = '';
+          foreach($_expense as $expense)
+          {
+               $status = '';
+               if($expense['account_id'] == $id)
+               {
+                    $status = 'selected="selected"';
+               }
+               $html.='<option value="'.$expense['account_id'].'" '.$status.'>'.$expense['account_number'].' . '.$expense['account_name'].'</option>';
+          }
+          return $html;
+     }
+
      /* PAYROLL JOUARNAL END */ 
+
+
+     /* PAYROLL CUSTOM PAYSLIP START */
+
+     public function custom_payslip()
+     {
+          return view('member.payroll.side_container.custom_payslip');
+     }
+
+     /* PAYROLL CUSTOM PAYSLIP END */
 
 
 	/* PAYROLL PERIOD START*/

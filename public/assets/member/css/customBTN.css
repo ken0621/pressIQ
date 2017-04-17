@@ -425,6 +425,7 @@
     border:1px dotted silver;
     cursor:pointer;
 }
+
 .border-gray{
     border:1px solid silver;
     cursor:pointer;
@@ -1025,9 +1026,20 @@
 .payslip-div
 {
     border:1px silver solid;
-    padding:2px;
     width: 100%;
     height: 100%;
 }
 
+.payslip-gray-dotted{
+    border:1px dotted silver;
+    cursor:pointer;
+}
 
+.paper-portrait
+{
+    height:600px;
+}
+.paper-landscape
+{
+    height:350px;
+}

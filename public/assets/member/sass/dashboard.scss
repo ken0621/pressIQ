@@ -38,7 +38,6 @@
 
 .reports-class
 {
-	height: auto;
 	padding: 20px;
 	margin-top: 10px;
 	font-size: 23px;
@@ -50,6 +49,11 @@
 	.ar-class
 	{
 		background-color: #FF8000;
+		color: #fff;
+	}
+	.sales-class
+	{
+		background-color: #78C500;
 		color: #fff;
 	}
 }

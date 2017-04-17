@@ -43,4 +43,10 @@ class Tbl_payroll_employee_allowance extends Model
 
 		return $query;
 	}
+
+	public function scopecheckallowance($query, $payroll_employee_id = 0, $payroll_allowance_id = 0)
+	{
+		$query->where('payroll_employee_id', $payroll_employee_id)->where('payroll_allowance_id', $payroll_allowance_id);
+		return $query;
+	}
 }

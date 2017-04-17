@@ -3433,10 +3433,13 @@ class PayrollController extends Member
      public function modal_create_journal_tag()
      {
           /* account_type_id = 13 = Expense */
-          $data['_expense'] = Tbl_chart_of_account::getbytype(Self::shop_id(), 13)->orderBy('account_name')->get();
+
+          $account_type_id = [1,3,8,13];
+
+          $data['_expense'] = Tbl_chart_of_account::getbytype(Self::shop_id(), $account_type_id)->orderBy('account_name')->get();
 
           $data['_entity']  = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
-          // dd($data);
+          
           return view('member.payroll.modal.modal_create_journal_tag', $data);
      }
 
@@ -3481,7 +3484,9 @@ class PayrollController extends Member
 
           $data['tag'] = Tbl_payroll_journal_tag::where('payroll_journal_tag_id', $id)->first();
 
-          $data['_expense'] = Tbl_chart_of_account::getbytype(Self::shop_id(), 13)->orderBy('account_name')->get();
+          $account_type_id = [1,3,8,13];
+          
+          $data['_expense'] = Tbl_chart_of_account::getbytype(Self::shop_id(), $account_type_id)->orderBy('account_name')->get();
 
           $data['_entity'] = array();
           $_entity  = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');

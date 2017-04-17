@@ -80,7 +80,7 @@
         </div>
         <div class="holder sshide">
             <div class="title text-left">Most Viewed</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
+            @foreach(get_collection(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['eprod_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">
@@ -91,6 +91,20 @@
                     </div>
                 </a>    
             @endforeach 
+        </div>
+        <div class="holder sshide">
+            <div class="title text-left">Most Searched Products</div>
+            @foreach($_most_searched as $most_searched)
+                <a href="/product/view/{{ $most_searched['eprod_id'] }}" class="text">
+                    <div class="product-top">
+                        <div class="text">
+                            <div class="name">{{ get_product_first_name($most_searched) }}</div>
+                            <div class="price">{{ get_product_first_price($most_searched) }}</div>
+                        </div>
+                        <div class="img"><img class="4-3-ratio" src="{{ get_product_first_image($most_searched) }}"></div>
+                    </div>
+                </a>    
+            @endforeach
         </div>
     </form>
 </div>
@@ -173,7 +187,7 @@
         </div>
         <div class="holder">
             <div class="title text-left">Most Viewed</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
+            @foreach(get_collection(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['eprod_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">

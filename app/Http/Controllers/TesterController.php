@@ -20,6 +20,7 @@ use App\Globals\Item;
 use App\Globals\Customer;
 use App\Globals\Ecom_Product;
 use App\Globals\Sms;
+use App\Globals\PayrollJournalEntries;
 
 use Request;
 use Carbon\Carbon;
@@ -51,9 +52,7 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        // Account::put_default_account_payroll($this->getShopId());
-        // Accounting::postJournalEntry();
-        dd(Tbl_journal_entry::where("je_id", 12)->transaction("invoice")->get()->toArray());
+        dd(collect(PayrollJournalEntries::check_payroll_entity_account_id())->toArray());
     }
 
     public function getJournal()

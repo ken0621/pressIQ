@@ -11,6 +11,8 @@ use App\Models\Tbl_payroll_record;
 use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_deduction_employee;
+use App\Models\Tbl_payroll_entity;
+use App\Models\Tbl_payroll_journal_tag;
 
 use Log;
 use Request;
@@ -25,7 +27,7 @@ use Carbon\carbon;
  * 
  * @author Bryan Kier Aradanas
  */
-class PayrollJournalEntries()
+class PayrollJournalEntries
 {
 	public static function getShopId()
 	{
@@ -36,8 +38,121 @@ class PayrollJournalEntries()
 	 * Generate a report for the journal entries in payroll
 	 *
 	 */
-	public function payroll_summary($start_date, $end_date)
+	public static function payroll_summary($start_date, $end_date)
 	{
 		
+	}
+
+	/**
+	 * Check the default or settled account id for specific entity name
+	 *
+	 */
+	public static function check_payroll_entity_account_id()
+	{
+		$_entity = Tbl_payroll_entity::get();
+		foreach($_entity as $key=>$entity)
+		{
+			$data[$entity->entity_name] = Tbl_payroll_journal_tag::where("shop_id", PayrollJournalEntries::getShopId())->where("payroll_entity_id", $entity->payroll_entity_id)->tagEntity()->tagEmployee(23)->account()->first();
+			if(!$data[$entity->entity_name])
+			{
+				$data[$entity->entity_name] = PayrollJournalEntries::get_default_entity($entity->entity_category);
+			}
+		}
+
+		return $data;
+	}
+
+	public static function get_default_entity($entity_category)
+	{
+		switch($entity_category)
+		{
+			case "basic":
+				return PayrollJournalEntries::getOtherExpense();
+				break;
+			case "deminimis":
+				return PayrollJournalEntries::getOtherExpense();
+				break;
+			case "goverment":
+				return PayrollJournalEntries::getOtherLiability();
+				break;
+			case "deductions":
+				return PayrollJournalEntries::getOtherExpense();
+				break;
+		}
+	}
+
+	/**
+	 * Get Chart of Account - Default for Other Payroll Expense
+	 *
+	 * @return 	int 	ID
+	 */
+	public static function getOtherExpense()
+	{
+		$exist_account = Tbl_chart_of_account::accountType()->where("account_shop_id", Accounting::getShopId())->where("account_code", "payroll-other-expense")->first();
+        if(!$exist_account)
+        {
+            $insert["account_shop_id"]          = Accounting::getShopId();
+            $insert["account_type_id"]          = 13;
+            $insert["account_number"]           = "00000";
+            $insert["account_name"]             = "Other Expense - Payroll";
+            $insert["account_description"]      = "Default for Payroll";
+            $insert["account_protected"]        = 1;
+            $insert["account_code"]             = "payroll-other-expense";
+            
+            $id = Tbl_chart_of_account::insertGetId($insert);
+            return Tbl_chart_of_account::accountType()->where("account_id", $id)->first();
+        }
+
+        return $exist_account;
+	}
+
+	/**
+	 * Get Chart of Account - Default for Other Payroll Asset
+	 *
+	 * @return 	int 	ID
+	 */
+	public static function getOtherAsset()
+	{
+		$exist_account = Tbl_chart_of_account::accountType()->where("account_shop_id", Accounting::getShopId())->where("account_code", "payroll-other-asset")->first();
+        if(!$exist_account)
+        {
+            $insert["account_shop_id"]          = Accounting::getShopId();
+            $insert["account_type_id"]          = 3;
+            $insert["account_number"]           = "00000";
+            $insert["account_name"]             = "Other Current Asset - Payroll";
+            $insert["account_description"]      = "Default for Payroll";
+            $insert["account_protected"]        = 1;
+            $insert["account_code"]             = "payroll-other-asset";
+            
+            $id = Tbl_chart_of_account::insertGetId($insert);
+            return Tbl_chart_of_account::accountType()->where("account_id", $id)->first();
+        }
+
+        return $exist_account;
+	}
+
+	/**
+	 * Get Chart of Account - Default for Othe Payroll Liability
+	 *
+	 * @return 	int 	ID
+	 */
+	public static function getOtherLiability()
+	{
+		$exist_account = Tbl_chart_of_account::accountType()->where("account_shop_id", Accounting::getShopId())->where("account_code", "payroll-other-liability")->first();
+        if(!$exist_account)
+        {
+            $insert["account_shop_id"]          = Accounting::getShopId();
+            $insert["account_type_id"]          = 8;
+            $insert["account_number"]           = "00000";
+            $insert["account_name"]             = "Other Current Liability - Payroll";
+            $insert["account_description"]      = "Default for Payroll";
+            $insert["account_protected"]        = 1;
+            $insert["account_code"]             = "payroll-other-liability";
+            
+            $id = Tbl_chart_of_account::insertGetId($insert);
+            return Tbl_chart_of_account::accountType()->where("account_id", $id)->first();
+        }
+
+        return $exist_account;
 	}
 }

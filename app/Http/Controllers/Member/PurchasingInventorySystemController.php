@@ -11,6 +11,7 @@ use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_sir_item;
 use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_sir;
+use App\Models\Tbl_sir_inventory;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_warehouse;
@@ -666,9 +667,9 @@ class PurchasingInventorySystemController extends Member
         }
         else
         {
-            $check_sales_agent = Tbl_sir::where("ilr_status",0)->where("sales_agent_id",$sales_agent_id)->count();
-            if($check_sales_agent == 0)
-            {
+            // $check_sales_agent = Tbl_sir::where("ilr_status",0)->where("sales_agent_id",$sales_agent_id)->count();
+            // if($check_sales_agent == 0)
+            // {
                 if($item_id != null && $item_qty != null)
                 {
                     foreach ($item_id as $key => $value) 
@@ -702,12 +703,12 @@ class PurchasingInventorySystemController extends Member
                     $data["status"] = "error";
                     $data["status_message"] = "Please insert items";
                 }                
-            }
-            else
-            {
-                $data["status"] = "error";
-                $data["status_message"] = "You cannot issue Load out form. The sales agent has an unprocessed SIR";
-            }
+            // }
+            // else
+            // {
+            //     $data["status"] = "error";
+            //     $data["status_message"] = "You cannot issue Load out form. The sales agent has an unprocessed SIR";
+            // }
             if($new_item)
             {
                 foreach ($new_item as $key => $value) 
@@ -755,22 +756,20 @@ class PurchasingInventorySystemController extends Member
                             {
                                 $insert_sir_item["sir_id"] = $sir_id;
                                 $insert_sir_item["item_id"] = $value;
-                                $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
+                                // $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
                                 $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
                                 $insert_sir_item["related_um_type"] = $related_um_type[$key];
-                                $qty = UnitMeasurement::um_qty($related_um_type[$key]);
+                                // $qty = UnitMeasurement::um_qty($related_um_type[$key]);
+                                // $related_um_qty = $qty;
+                                // $insert_sir_item["um_qty"] = $related_um_qty;
 
-                                $related_um_qty = $qty;
-                                $insert_sir_item["um_qty"] = $related_um_qty;
-
-                                Tbl_sir_item::insert($insert_sir_item);                                
+                                Tbl_sir_item::insert($insert_sir_item);
                             }
-                            else
-                            {
-                                $insert_sir_item["item_qty"] = $chck->item_qty + str_replace(",","",$item_qty[$key]);
-
-                                Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$value)->where("related_um_type",$related_um_type[$key])->update($insert_sir_item);   
-                            }
+                            
+                            //record truck inventory                            
+                            $item["item_id"] = $value;
+                            $item["qty"] = str_replace(",","",$item_qty[$key]) * UnitMeasurement::um_qty($related_um_type[$key]);
+                            Purchasing_inventory_system::insert_sir_inventory($sir_id,$item,"sir",$sir_id);
 
                         }
                     }                    
@@ -973,7 +972,7 @@ class PurchasingInventorySystemController extends Member
                if($item_id != null && $item_qty != null && $related_um_type != null )
                 {
                     Tbl_sir_item::where("sir_id",$sir_id)->delete();
-
+                    Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->delete();
                     foreach ($item_id as $key => $value) 
                     {
                         if($value != "")
@@ -984,22 +983,21 @@ class PurchasingInventorySystemController extends Member
                             {
                                 $insert_sir_item["sir_id"] = $sir_id;
                                 $insert_sir_item["item_id"] = $value;
-                                $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
+                                // $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
                                 $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
-                                $insert_sir_item["related_um_type"] = $related_um_type[$key];
-                                $qty = UnitMeasurement::um_qty($related_um_type[$key]);
+                                // $insert_sir_item["related_um_type"] = $related_um_type[$key];
+                                // $qty = UnitMeasurement::um_qty($related_um_type[$key]);
 
-                                $related_um_qty = $qty;
-                                $insert_sir_item["um_qty"] = $related_um_qty;
+                                // $related_um_qty = $qty;
+                                // $insert_sir_item["um_qty"] = $related_um_qty;
 
                                 Tbl_sir_item::insert($insert_sir_item);                                
                             }
-                            else
-                            {
-                                $insert_sir_item["item_qty"] = $chck->item_qty + str_replace(",","",$item_qty[$key]);
 
-                                Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$value)->where("related_um_type",$related_um_type[$key])->update($insert_sir_item);   
-                            }
+                            //record truck inventory                            
+                            $item["item_id"] = $value;
+                            $item["qty"] = str_replace(",","",$item_qty[$key]) * UnitMeasurement::um_qty($related_um_type[$key]);
+                            Purchasing_inventory_system::insert_sir_inventory($sir_id,$item,"sir",$sir_id);
                         }
                     }
                 }

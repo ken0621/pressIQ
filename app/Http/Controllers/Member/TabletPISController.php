@@ -26,6 +26,7 @@ use App\Models\Tbl_manual_receive_payment;
 use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_unit_measurement_multi;
+use App\Models\Tbl_sir_inventory;
 use Session;
 use Crypt;
 use Redirect;
@@ -479,23 +480,28 @@ class TabletPISController extends Member
 
             if($inv <= 1 || Request::input("keep_val") == "keep")
             {
-                $inv_item = Tbl_customer_invoice_line::where("invline_inv_id",$invoice_id)->get();
-                // dd($inv_item);
-                foreach ($inv_item as $keys => $value) 
-                {                 
-                    Purchasing_inventory_system::return_qty($sir_id, $value->invline_item_id, $value->invline_um, $value->invline_qty); 
-                }
+                // $inv_item = Tbl_customer_invoice_line::where("invline_inv_id",$invoice_id)->get();
+                // // dd($inv_item);
+                // foreach ($inv_item as $keys => $value) 
+                // {                 
+                //     Purchasing_inventory_system::return_qty($sir_id, $value->invline_item_id, $value->invline_um, $value->invline_qty); 
+                // }
 
                 $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
 
-
+                Tbl_sir_inventory::where("sir_inventory_ref_name","invoice")->where("sir_inventory_ref_id",$invoice_id)->delete();
                 foreach($_itemline as $key => $item_line)
                 {
                     if($item_line)
                     {
-                        Purchasing_inventory_system::mark_as_sold($sir_id, Request::input('invline_item_id')[$key],Request::input('invline_um')[$key],Request::input('invline_qty')[$key]); 
+                        $item["item_id"] = Request::input('invline_item_id')[$key];
+                        $item["qty"] = (UnitMeasurement::um_qty(Request::input('invline_um')[$key]) * Request::input('invline_qty')[$keys]) * -1;
+
+                        Purchasing_inventory_system::insert_sir_inventory($sir_id,$item,"invoice",$invoice_id);
                     }
                 }
+
+
 
                 $data["status"] = "success-tablet";
             }
@@ -568,16 +574,6 @@ class TabletPISController extends Member
 				{
 					$item_name[$key] = Tbl_item::where("item_id",Request::input("invline_item_id")[$key])->pluck("item_name");
 				}
-
-				$um_info = UnitMeasurement::um_info(Request::input("invline_um")[$key]);
-				$qty = 1;
-				if($um_info != null)
-				{
-					$qty = $um_info->unit_qty;
-				}
-
-				$product_consume[$key]["quantity"] = $qty * $item_info[$key]['quantity'];
-				$product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
 			}
 		}
 
@@ -601,7 +597,12 @@ class TabletPISController extends Member
 					{
 						if($item_line)
 						{
-							Purchasing_inventory_system::mark_as_sold($sir_id, Request::input('invline_item_id')[$keys],Request::input('invline_um')[$keys],Request::input('invline_qty')[$keys]);
+							// Purchasing_inventory_system::mark_as_sold($sir_id, Request::input('invline_item_id')[$keys],Request::input('invline_um')[$keys],Request::input('invline_qty')[$keys]);
+
+                            $item["item_id"] = Request::input('invline_item_id')[$keys];
+                            $item["qty"] = (UnitMeasurement::um_qty(Request::input('invline_um')[$keys]) * Request::input('invline_qty')[$keys]) * -1;
+
+                            Purchasing_inventory_system::insert_sir_inventory($sir_id,$item,"invoice",$invoice_id);
 						}
 					}
 					$data["status"] = "success-tablet";

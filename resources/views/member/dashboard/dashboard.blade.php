@@ -1,4 +1,4 @@
-    @extends('member.layout')
+@extends('member.layout')
 @section('content')
 
 @if(isset($pis) && $pis != 0)
@@ -10,30 +10,52 @@
     </div>
 </div>
 <div class="reports-class">
+    <div class="row clearfix" style="margin-bottom: 15px;">
+        <form method="get" class="range-date">
+            <div class="col-md-12">
+            <small>Date Range </small>                
+            </div>
+            <div class="col-sm-5">
+                <input class="form-control datepicker" type="text" name="start_date" placeholder="Start Date" value="{{ Request::input('start_date') ? Request::input('start_date') : date('m/d/Y',strtotime($mants)) }}">
+            </div>
+            <div class="col-sm-5">
+                <input class="form-control datepicker" type="text" name="end_date" placeholder="End Date" value="{{ Request::input('end_date') ? Request::input('end_date') : date('m/d/Y') }}">
+            </div>
+            <div class="col-md-2 text-center"><button type="button" class="btn btn-primary" onClick="location.href='/member'">Clear Date</button></div>
+        </form>
+    </div>
     <div class="row cleafix">
-        <div class="col-md-3">
+        <div class="col-md-6">
+            <div class="btn-class sales-class">
+                <span><strong>{{$sales_amount or 0}}</strong></span><br>
+                <span>Total Sales</span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <a href="/member/vendor/paybill/list" class="btn-class pb-class">
+                <span><strong>{{$pb_amount or 0}}</strong></span><br>
+                <span>Total Paid Bills</span>
+            </a>
+        </div>
+    </div>
+    <div class="row cleafix">
+        <div class="col-md-4">
             <a href="/member/vendor/purchase_order/list" class="btn-class po-class"> 
                 <span><strong>{{$po_amount or 0}}</strong></span><br>
                 <span>{{$count_po or 0}} Purchase Orders</span>
             </a>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <a href="/member/customer/invoice_list" class="btn-class ar-class">
                 <span><strong>{{$ar_amount or 0}}</strong></span><br>
                 <span>{{$count_ar or 0}} Account Receivable</span>
             </a>
         </div>
-        <div class="col-md-3">
-            <div class="btn-class ap-class">
+        <div class="col-md-4">
+            <a href="/member/vendor/bill_list" class="btn-class ap-class">
                 <span><strong>{{$ap_amount or 0}}</strong></span><br>
                 <span>{{$count_ap or 0}} Account Payables</span>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="btn-class sales-class">
-                <span><strong>{{$sales_amount or 0}}</strong></span><br>
-                <span>Total Sales</span>
-            </div>
+            </a>
         </div>
     </div>
 </div>
@@ -136,5 +158,17 @@
     @endif
 
     $('.btn-class').matchHeight();
+
+
+    $('body').on("change", ".datepicker", function()
+    {
+        if($('.range-date input[name="start_date"]').val().length != 0)
+        {
+            if($('.range-date input[name="end_date"]').val().length != 0)
+            {
+                $('.range-date').submit();
+            }
+        }
+    });
 </script>
 @endsection

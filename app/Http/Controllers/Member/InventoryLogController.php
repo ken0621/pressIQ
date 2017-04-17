@@ -17,7 +17,7 @@ class InventoryLogController extends Member
     {
         $warehouse_id = Session::get("warehouse_id");
         $data["_slip"] = Tbl_inventory_slip::where("warehouse_id",$warehouse_id)->where("inventory_slip_shop_id",$this->user_info->shop_id)->orderBy("inventory_slip_date","DESC")->get();
-        // dd($data["_slip"]);
+        
         foreach ($data["_slip"] as $key => $value) 
         {
             if($value->inventory_reason == "destination")

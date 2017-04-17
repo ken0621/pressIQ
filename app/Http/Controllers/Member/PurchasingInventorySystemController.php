@@ -983,7 +983,7 @@ class PurchasingInventorySystemController extends Member
                             {
                                 $insert_sir_item["sir_id"] = $sir_id;
                                 $insert_sir_item["item_id"] = $value;
-                                // $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
+                                $insert_sir_item["item_qty"] = str_replace(",","",$item_qty[$key]);
                                 $insert_sir_item["sir_item_price"] = Purchasing_inventory_system::get_item_price($value);
                                 // $insert_sir_item["related_um_type"] = $related_um_type[$key];
                                 // $qty = UnitMeasurement::um_qty($related_um_type[$key]);

@@ -2140,12 +2140,75 @@ class Payroll
 
 		foreach($_record as $record)
 		{
-			array_push($data, Payroll::getrecord_breakdown($record));
+			
+			// array_push($data, Payroll::getrecord_breakdown($record));
+
+			$record = Payroll::getrecord_breakdown($record);
+			
+			$employee_details = Tbl_payroll_employee_basic::where('payroll_employee_id', $record['payroll_employee_id'])->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')->first();
+
+
+
+			$temp['payroll_employee_id'] 	= $record['payroll_employee_id'];
+			$temp['employee_name'] 			= $employee_details->payroll_employee_title_name.' '.$employee_details->payroll_employee_first_name.' '.$employee_details->payroll_employee_middle_name.' '.$employee_details->payroll_employee_last_name.' '.$employee_details->payroll_employee_suffix_name;
+			$temp['employee_name']			= $employee_details->payroll_employee_display_name;
+			$temp['payroll_company_id']		= $employee_details->payroll_company_id;
+			$temp['payroll_company_name']	= $employee_details->payroll_company_name;
+			$temp['13 Month Pay'] 			= $record['13_month'];
+			$temp['Basic Salary Pay'] 		= $record['regular_salary'];
+			$temp['Early Over Time Pay'] 	= $record['regular_early_overtime'] + $record['extra_early_overtime'] + $record['rest_day_early_overtime'] + $record['rest_day_sh_early_overtime'] + $record['rest_day_rh_early_overtime'] + $record['rh_early_overtime'] + $record['sh_early_overtime'];
+			$temp['Extra Day Pay'] 			= $record['extra_salary'];
+			$temp['Leave With Pay'] 		= 0;
+			$temp['Night Differential Pay'] = $record['regular_night_diff'] + $record['extra_night_diff'] + $record['rest_day_night_diff'] + $record['rest_day_sh_night_diff'] + $record['rest_day_rh_night_diff'] + $record['rh_night_diff'] + $record['sh_night_diff'];
+			$temp['Regular Holiday Pay']	= $record['rh_salary'];
+			$temp['Regular Over Time Pay']	= $record['regular_reg_overtime'] + $record['extra_reg_overtime'] + $record['rest_day_reg_overtime'] + $record['rest_day_sh_reg_overtime'] + $record['rest_day_rh_reg_overtime'] + $record['rh_reg_overtime'] + $record['sh_reg_overtime'];
+			$temp['Rest Day Pay']			= $record['rest_day_salary'];
+			$temp['	COLA']					= $record['payroll_cola'];
+			$temp['Special Holiday Pay']	= $record['sh_salary'];
+
+			$allowance 						= 0;
+			foreach($record['allowance'] as $all)
+			{
+				$allowance += $all['payroll_allowance_amount'];
+			}
+
+			$temp['Bonus Pay']			= n2z($record['adjustment']['total_bonus']);
+			$temp['Commission Pay']		= n2z($record['adjustment']['total_commission']);
+			$temp['Incentive Pay']		= n2z($record['adjustment']['total_incentives']);
+			$temp['Pagibig']			= $record['pagibig_contribution'];
+			$temp['Philhealth EE']		= $record['philhealth_contribution_ee'];
+			$temp['Philhealth ER']		= $record['philhealth_contribution_er'];
+			$temp['SSS EC']				= $record['sss_contribution_ec'];
+			$temp['SSS EE']				= $record['sss_contribution_ee'];
+			$temp['SSS ER']				= $record['sss_contribution_er'];
+			$temp['Tax']				= $record['tax_contribution'];
+
+			$deduction 					= collect($record['deduction']);
+
+			// dd($deduction);
+			$temp['Cash Advance']		= n2z($deduction->where('deduction_category','Cash Advance')->sum('payroll_periodal_deduction'));
+
+			$temp['Cash Bond']			= n2z($deduction->where('deduction_category','Cash Bond')->sum('payroll_periodal_deduction'));
+
+			$temp['Loans']				= n2z($deduction->where('deduction_category','Loans')->sum('payroll_periodal_deduction'));
+
+			$temp['Loans']				= n2z($deduction->where('deduction_category','Other Deduction')->sum('payroll_periodal_deduction'));
+
+			$temp['Late']				= $record['late_deduction'];
+			$temp['Absent']				= 0;
+			$temp['Under Time']			= $record['under_time'];
+
+			array_push($data, $temp);
 		}
 
 		// dd($data);
 
 		return $data;
+	}
+
+	public static function entitytocolumn($entity_name = '')
+	{
+		$data = array();
 	}
 
 }

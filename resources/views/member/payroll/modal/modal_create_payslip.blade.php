@@ -85,7 +85,7 @@
 					<div class="panel-heading">Payslip Preview</div>
 					<div class="panel-body">
 						<div class="payslip-div paper-portrait">
-							<div class="payslip-gray-dotted width-21"></div>
+							<div class="payslip-gray-dotted width-25"></div>
 						</div>
 					</div>
 				</div>

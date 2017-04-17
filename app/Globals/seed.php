@@ -23,14 +23,14 @@ class Seed
         {
           Seed::seed_tbl_item_type();
         }
-        if(!DB::table("tbl_online_pymnt_method")->first())
-        {
-          Seed::seed_tbl_online_pymnt_method();
-        }
-        if(!DB::table("tbl_online_pymnt_gateway")->first())
-        {
-          Seed::seed_tbl_online_pymnt_gateway();
-        }
+        // if(!DB::table("tbl_online_pymnt_method")->first())
+        // {
+        //   Seed::seed_tbl_online_pymnt_method();
+        // }
+        // if(!DB::table("tbl_online_pymnt_gateway")->first())
+        // {
+        //   Seed::seed_tbl_online_pymnt_gateway();
+        // }
     }
 
     public static function getShopId()
@@ -743,7 +743,7 @@ class Seed
         $insert[4]['method_id']         = 5; 
         $insert[4]['method_name']       = "BPI";
         $insert[4]['method_code_name']  = "bpi";
-        $insert[4]['method_gateway_accepted']  = "[1],[2],[3],[4]";
+        $insert[4]['method_gateway_accepted']  = "1,2,3,4";
 
         DB::table('tbl_online_pymnt_method')->insert($insert);
     }

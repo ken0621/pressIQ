@@ -7,12 +7,12 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Bill &raquo; List </span>
+                <span class="page-title">Vendor Pay Bills &raquo; List </span>
                 <small>
-                    List of Bills
+                    List of Paid Bills
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/create_bill" >Create Bill</a>
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/paybill" >Pay Bills</a>
         </div>
     </div>
 </div>
@@ -40,37 +40,26 @@
                 <table class="table table-bordered table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
-                            <th>Bill No</th>
+                            <th>PayBill No</th>
                             <th>Vendor Name</th>
                             <th>Total</th>
-                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                    @if($_bill_list)
-                        @foreach($_bill_list as $bill_list)
+                    @if($_paybill)
+                        @foreach($_paybill as $paybill)
                             <tr>
-                                <td>{{$bill_list->bill_id}}</td>
-                                <td>{{$bill_list->vendor_company}}</td>
-                                <td>{{currency("PHP",$bill_list->bill_total_amount)}}</td>
-                                <td>
-                                    @if($bill_list->bill_is_paid == 0)
-                                    <a class="btn btn-warning form-control">Open</a>
-                                    @else
-                                    <a class="btn form-control" style="background-color: #78C500;color: #fff">Paid</a>
-                                    @endif
-                                </td>
+                                <td>{{$paybill->paybill_id}}</td>
+                                <td>{{$paybill->vendor_company}}</td>
+                                <td>{{currency("PHP",$paybill->paybill_total_amount)}}</td>
                                 <td class="text-center">
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
-                                        @if($bill_list->bill_is_paid == 0)
-                                        <li><a href="/member/vendor/create_bill?id={{$bill_list->bill_id}}">Edit Bill </a></li>
-                                        <li><a href="/member/vendor/paybill?bill_id={{$bill_list->bill_id}}&vendor_id={{$bill_list->vendor_id}}">Pay Bill</a></li>
-                                        @endif
+                                          <li ><a href="/member/vendor/paybill?id={{$paybill->paybill_id}}">Edit Bill Payment</a></li>
                                       </ul>
                                     </div>
                                 </td>

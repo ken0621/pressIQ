@@ -3596,6 +3596,7 @@ class PayrollController extends Member
 
      public function modal_create_payslip()
      {
+          Payroll::record_by_date(Self::shop_id(), '2017-01-26','2017-02-10');
           return view('member.payroll.modal.modal_create_payslip');
      }
 

@@ -5,6 +5,8 @@ use App\Globals\Accounting;
 use App\Models\Tbl_bill;
 use App\Models\Tbl_bill_po;
 use App\Models\Tbl_bill_item_line;
+use App\Models\Tbl_pay_bill;
+use App\Models\Tbl_pay_bill_line;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
@@ -46,10 +48,42 @@ class Billing
 
         return $price;
     }
+    public static function updateAmountApplied($bill_id)
+    {
+        $payment_applied = Tbl_bill::appliedPayment(Billing::getShopId())->where("bill_id",$bill_id)->pluck("amount_applied");
+        
+        $data["bill_applied_payment"] = $payment_applied;
+        Tbl_bill::where("bill_id", $bill_id)->update($data);
+
+        Billing::updateIsPaid($bill_id);
+    }
+     public static function updateIsPaid($bill_id)
+    {
+        $payment_applied   = Tbl_bill::where("bill_id", $bill_id)->pluck("bill_applied_payment"); 
+        $overall_price     = Tbl_bill::where("bill_id", $bill_id)->pluck("bill_total_amount"); 
+
+        if($payment_applied == $overall_price)  $data["bill_is_paid"] = 1;
+        else                                    $data["bill_is_paid"] = 0;
+
+        Tbl_bill::where("bill_id", $bill_id)->update($data);
+    }
     public static function getShopId()
     {
     	return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
+    public static function getAllBillByVendor($vendor_id)
+    {
+          return  Tbl_bill::appliedPayment(Billing::getShopId())->byVendor(Billing::getShopId(), $vendor_id)->where("bill_is_paid", 0)->get()->toArray();
+    }
+    public static function getAllBillByVendorWithPaybill($vendor_id, $paybill_id)
+    {
+        $bill_in_paybill = Tbl_pay_bill_line::select("pbline_reference_id")->where("pbline_reference_name", 'bill')
+                            ->where("pbline_pb_id", $paybill_id)->get()->toArray();
+
+        return  Tbl_bill::appliedPayment(Billing::getShopId())->byVendor(Billing::getShopId(), $vendor_id)
+                ->payBill($paybill_id, $bill_in_paybill)->orderBy("bill_id")->get()->toArray();
+    }
+
 
     public static function postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info)
     {

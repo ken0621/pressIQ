@@ -12,7 +12,7 @@
 </head>
 <body>
 	<div class="form-group">
-		<h2>INVOICE</h2>		
+		<h2>{{$transaction_type}}</h2>		
 	</div>
 <div class="form-group">
 	<div class="col-md-6 text-left" style="float: left; width: 50%">

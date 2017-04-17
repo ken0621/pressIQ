@@ -28,6 +28,16 @@ class AgentTransactionController extends Member
     }
     public function agents_transaction($agent_id)
     {
+        $data["agent_id"] = $agent_id;
+        $data["day"] = Carbon::now()->subDays(1);
+        // dd(Request::input("start_date"));
+        $start_date = date("Y-m-d H:i:s",strtotime(Carbon::now()->subDays(1)->format("Y-m-d") . " 00:00:00"));
+        $end_date = date("Y-m-d H:i:s",strtotime(Carbon::now()));    
+        if(Request::input("start_date") != null && Request::input("end_date") != null)
+        {
+           $start_date = date("Y-m-d H:i:s",strtotime(Request::input("start_date")));
+           $end_date   = date("Y-m-d H:i:s", strtotime(Request::input("end_date")));   
+        }
         $data["agent"] = Tbl_employee::position()->where("employee_id",$agent_id)->first();
     
         $data["_sir"] = Tbl_sir::where("sales_agent_id",$agent_id)->whereIn("ilr_status",[1,2])->get();
@@ -36,7 +46,7 @@ class AgentTransactionController extends Member
         foreach ($data["_sir"] as $key => $value) 
         {
             //for invoice
-            $data["invoices"] = Tbl_manual_invoice::customer_invoice()->where("sir_id",$value->sir_id)->get(); 
+            $data["invoices"] = Tbl_manual_invoice::customer_invoice()->whereBetween("manual_invoice_date",array($start_date,$end_date))->where("sir_id",$value->sir_id)->get(); 
 
             //union of invoice and receive payment
             foreach ($data["invoices"] as $inv_key => $inv_value) 
@@ -57,7 +67,7 @@ class AgentTransactionController extends Member
         foreach ($data["_sir"] as $keys => $values) 
         {
             //for receive payment
-            $data["rcv_payment"] = Tbl_manual_receive_payment::customer_receive_payment()->where("sir_id",$values->sir_id)->get();
+            $data["rcv_payment"] = Tbl_manual_receive_payment::customer_receive_payment()->whereBetween("tbl_manual_receive_payment.rp_date",array($start_date,$end_date))->where("sir_id",$values->sir_id)->get();
             foreach ($data["rcv_payment"] as $rp_key => $rp_value) 
             {
                 $_transaction[$rp_key]['date'] = $rp_value->rp_date;

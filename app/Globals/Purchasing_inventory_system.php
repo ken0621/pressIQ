@@ -69,7 +69,7 @@ class Purchasing_inventory_system
             Tbl_sir_inventory::insert($insert);
         }        
     }
-    public static function insert_sir_returns()
+    public static function insert_sir_empties_returns()
     {
         
     }

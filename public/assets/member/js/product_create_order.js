@@ -26,6 +26,8 @@ function customer_invoice(){
 		submit_coupon();
 		initial_submit_coupon();
 		remove_coupon();
+
+		payment_upload_configuration();
 	}
 
 	function event_remove_tr()
@@ -529,6 +531,53 @@ function customer_invoice(){
 
 		})
 	}
+
+	function payment_upload_configuration()
+    {
+        Dropzone.options.myDropZoneImport = 
+        {
+            maxFilesize: 2,
+            thumbnailWidth: 148,
+            thumbnailHeight: 148,
+            acceptedFiles: ".jpg, .jpeg, .png",
+            init: function() 
+            {
+                this.on("uploadprogress", function(file, progress) 
+                {
+                })
+
+                this.on("error", function(file, response)
+                {
+                    console.log(response);
+                })
+
+                this.on("addedfile", function(file)
+                {
+                    if (this.files[1]!=null){
+                        this.removeFile(this.files[0]);
+                    }
+                    $("#ImportContainer .dz-message").slideUp();
+                    target_file = this.files;
+                    $("#files").change();
+                })
+
+                this.on("dragover", function()
+                {
+                    // $("#ModalGallery .dropzone").addClass("dropzone-drag");
+                })
+
+                this.on("dragleave", function()
+                {
+                    // $("#ModalGallery .dropzone").removeClass("dropzone-drag");
+                })
+
+                this.on("drop", function()
+                {
+                    // $("#ModalGallery .dropzone").removeClass("dropzone-drag");
+                })
+            }
+        };
+    }
 }	
 
 

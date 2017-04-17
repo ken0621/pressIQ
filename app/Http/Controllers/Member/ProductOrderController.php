@@ -24,6 +24,9 @@ use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_payment_method;
 
 use Request;
+use Input;
+use File;
+use Response;
 use Carbon\Carbon;
 use Session;
 use Redirect;
@@ -71,12 +74,13 @@ class ProductOrderController extends Member
     }
     public function invoice_list()
     {
-        $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Pending")->get();
-        $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Failed")->get();
-        $data["ec_order_processing"] = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Processing")->get();
-        $data["ec_order_completed"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Completed")->get();
-        $data["ec_order_on_hold"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","On-hold")->get();
-        $data["ec_order_cancelled"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Cancelled")->get();
+        $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Pending")->paginate(10);
+        $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Failed")->paginate(10);
+        $data["ec_order_processing"] = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Processing")->paginate(10);
+        $data["ec_order_shipped"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Shipped")->paginate(10);
+        $data["ec_order_completed"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Completed")->paginate(10);
+        $data["ec_order_on_hold"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","On-hold")->paginate(10);
+        $data["ec_order_cancelled"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Cancelled")->paginate(10);
         return view("member.product_order.product_order",$data);
     }
     public function create_invoice()
@@ -252,6 +256,42 @@ class ProductOrderController extends Member
             $return["status"]                   = "success-update-invoice";
             $return["redirect_to"]              = "/member/ecommerce/product_order/create_order?id=".$data["ec_order_id"];
             return json_encode($return);
+        }
+    }
+
+    public function submit_payment_upload()
+    {
+        $shop_id    = $this->user_info->shop_id;
+        $shop_key   = $this->user_info->shop_key;
+        $order_id   = Request::input('ec_order_id');
+
+        /* SAVE THE IMAGE IN THE FOLDER */
+        $file               = Input::file('file');
+        $extension          = ".pdf";
+        //$filename         = $file->getClientOriginalName();
+        $filename           = str_random(15).".".$extension;
+        $destinationPath    = 'uploads/'.$shop_key."-".$shop_id.'/ecommerce-upload';
+
+        if(!File::exists($destinationPath)) 
+        {
+            $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+        }
+
+        $upload_success    = Input::file('file')->move($destinationPath, $filename);
+
+        /* SAVE THE IMAGE PATH IN THE DATABASE */
+        $image_path = $destinationPath."/".$filename;
+
+        $update["payment_upload"] = "/" . $image_path;
+        $image_id = Tbl_ec_order::where("ec_order_id", $order_id)->update($update);
+
+        if( $upload_success ) 
+        {
+           return Response::json('success', 200);
+        } 
+        else 
+        {
+           return Response::json('error', 400);
         }
     }
 

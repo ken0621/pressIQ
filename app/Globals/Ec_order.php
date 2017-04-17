@@ -314,12 +314,16 @@ class Ec_order
             {
                 $response = Ec_order::update_inventory("deduct",$ec_order_id);   
             }
+            else if($order_status == "Shipped")
+            {
+                $response = Ec_order::update_inventory("deduct",$ec_order_id);   
+            }
             else if($order_status == "On-hold")
             {
                 $response = Ec_order::update_inventory("deduct",$ec_order_id);
             }
         }
-        else if($order->order_status == "Processing" || $order->order_status == "Completed" || $order->order_status == "On-hold")
+        else if($order->order_status == "Processing" || $order->order_status == "Completed" || $order->order_status == "On-hold" || $order->order_status == "Shipped")
         {
             if($order_status == "Pending")
             {

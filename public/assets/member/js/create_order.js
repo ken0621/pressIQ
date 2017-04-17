@@ -1,6 +1,7 @@
 var create_order = new create_order();
 
-function  create_order(argument) {
+function  create_order(argument) 
+{
 	init();
 	function init(){
 		document_ready();

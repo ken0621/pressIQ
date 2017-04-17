@@ -71,7 +71,7 @@
         @if(is_serialized(get_content($shop_theme_info, 'home', 'home_brand_image', '')))
             @foreach(unserialize(get_content($shop_theme_info, 'home', 'home_brand_image', '')) as $brand)
             <li>
-              <img src="{{ $brand }}">
+              <a href="/product?brand={{ $brand['link'] }}"><img src="{{ $brand['image'] }}"></a>
             </li>
             @endforeach
         @endif

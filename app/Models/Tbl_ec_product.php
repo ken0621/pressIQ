@@ -75,8 +75,8 @@ class Tbl_ec_product extends Model
               ->groupBy("eprod_id");
     }
 
-    public function scopeCategory($query)
+    public function scopeCategory($query, $archived = [0])
     {
-        return $query->join("tbl_category","type_id","=","eprod_category_id");
+        return $query->join("tbl_category","type_id","=","eprod_category_id")->whereIn("tbl_category.archived", $archived);
     }
 }

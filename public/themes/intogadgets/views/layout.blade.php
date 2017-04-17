@@ -358,7 +358,7 @@
 
                   <div class="form-group">
 
-                    <input type="text" name="search-pokus" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
+                    <input type="text" name="search" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
 
                   </div>
 

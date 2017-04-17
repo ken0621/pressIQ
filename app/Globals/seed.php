@@ -806,7 +806,10 @@ class Seed
         (23,    'Cash Advance',  'deductions'),
         (24,    'Cash Bond',    'deductions'),
         (25,    'Loans',    'deductions'),
-        (26,    'Other Deduction',   'deductions');";
+        (26,    'Other Deduction',   'deductions'),
+        (26,    'Late',   'deductions'),
+        (26,    'Absent',   'deductions'),
+        (26,    'Under Time',   'deductions');";
 
         DB::statement($statment);
 

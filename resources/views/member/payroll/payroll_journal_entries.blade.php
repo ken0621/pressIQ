@@ -48,7 +48,7 @@
 				<tr>
 					<td colspan="3"></td>
 					<td>{{currency('PHP', collect($_record)->where('normal_balance', 'debit')->sum('total'))}}</td>
-					<td>{{currency('PHP', collect($_record)->where('normal_balance', 'debit')->sum('total'))}}</td>
+					<td>{{currency('PHP', collect($_record)->where('normal_balance', 'credit')->sum('total'))}}</td>
 				</tr>
 			</tbody>
 		</table>

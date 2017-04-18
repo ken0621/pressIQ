@@ -15,7 +15,7 @@ use Redirect;
 use Carbon\carbon;
 
 /**
- * Accounting Module - all accounting related module
+ * Accounting Module - all accounting related module -accounts
  *
  * @author Bryan Kier Aradanas
  */

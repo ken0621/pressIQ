@@ -81,7 +81,7 @@ class PayrollJournalEntries
 			}
 		}
 
-		return $_journal;
+		return collect($_journal)->sortByDesc('normal_balance')->toArray();
 	}
 
 	/**

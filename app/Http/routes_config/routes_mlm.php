@@ -73,4 +73,5 @@ Route::post('/mlm/report/discount_add/use/submit', 'Mlm\MlmDiscountCardControlle
 /* MLM SLOTs */
 Route::get('/mlm/slots', 'Mlm\MlmSlotsController@index'); 
 Route::post('/mlm/slots/set_nickname', 'Mlm\MlmSlotsController@set_nickname'); 
+
 /* MLM SLOTs REPORTS */

@@ -79,6 +79,7 @@ Route::any('/member/mlm/plan/indirect/edit/settings/addlevel/save', 'Member\MLM_
 Route::any('/member/mlm/plan/stairstep/get', 'Member\MLM_PlanController@get_stairstep');//Luke
 Route::any('/member/mlm/plan/stairstep/save', 'Member\MLM_PlanController@save_stairstep');//Luke
 Route::any('/member/mlm/plan/stairstep/edit/save', 'Member\MLM_PlanController@edit_save_stairstep');//Luke
+Route::any('/member/mlm/plan/stairstep/edit/save_level', 'Member\MLM_PlanController@save_stairstep_level');//Erwin
 /* end stairstep Plan */
 
 /* start unilevel Plan */
@@ -212,4 +213,10 @@ Route::post('member/mlm/card/pending/discount', 'Member\MLM_CardController@pendi
 
 Route::get('/member/mlm/report', 'Member\MLM_ReportController@index');
 Route::any('/member/mlm/report/get', 'Member\MLM_ReportController@get_report');
+
+
+/* MLM STAIRSTEP */
+Route::any('member/mlm/stairstep_compute', 'Member\MLM_StairstepController@index'); 
+Route::any('member/mlm/stairstep_compute/start', 'Member\MLM_StairstepController@start'); 
+Route::any('member/mlm/stairstep_compute/start/compute', 'Member\MLM_StairstepController@compute'); 
 

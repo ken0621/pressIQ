@@ -20,8 +20,9 @@ use Redirect;
 use Carbon\carbon;
 
 /**
- * Accounting Module - all accounting related module
- *
+ * Tentative Payroll Module - all tentative payroll journal entries related module
+ * Journal Entries Like report - not detailed
+ * 
  * @author Bryan Kier Aradanas
  */
 class PayrollJournalEntries()

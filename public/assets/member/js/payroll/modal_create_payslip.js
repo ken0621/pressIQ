@@ -26,6 +26,16 @@ function modal_create_payslip()
 
 			check_orientation(orientation);
 		});
+
+		$(".company-position").unbind("click");
+		$(".company-position").bind("click", function()
+		{
+			var target = $(this).data("target");
+			$(".company-logo").addClass("display-none");
+			$(target).removeClass("display-none");
+			$(".company-position").removeClass("active");
+			$(this).addClass("active");
+		});
 	}
 
 

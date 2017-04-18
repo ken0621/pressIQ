@@ -48,6 +48,8 @@ class PayrollJournalEntries
 		/* GET ALL TOTALS OF EACH EMPLOYEE */
 		$_record = Payroll::record_by_date(PayrollJournalEntries::getShopId(), $start_date, $end_date);
 
+		// dd($_record);
+
 		/* INSERT ACCOUNT ID FOR EACH ENTITY PER EMPLOYEE - SET DEFAULT IF NOT SET*/
 		foreach($_record as $key=>$record)
 		{

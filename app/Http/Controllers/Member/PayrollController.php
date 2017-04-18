@@ -4539,7 +4539,7 @@ class PayrollController extends Member
                $data['date_end']   = Request::input('end');
           }
           
-          $data['record'] = PayrollJournalEntries::payroll_summary($data['date_start'], $data['date_end']);
+          $data['_record'] = PayrollJournalEntries::payroll_summary($data['date_start'], $data['date_end']);
 
           // dd(collect($record)->toArray());
 

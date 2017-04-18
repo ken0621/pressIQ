@@ -2200,8 +2200,8 @@ class Payroll
 
 			array_push($data, $temp);
 		}
-
-		// dd($data);
+		
+		// dd(collect($data)->groupBy());
 		return $data;
 	}
 

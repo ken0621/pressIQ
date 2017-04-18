@@ -42,23 +42,44 @@ class PayrollJournalEntries
 	 */
 	public static function payroll_summary($start_date, $end_date)
 	{
-		$start_date 	= "01-26-2017";
-		$end_date		= "02-10-2017";
+		// $start_date 	= "01-26-2017";
+		// $end_date		= "02-10-2017";
 
+		/* GET ALL TOTALS OF EACH EMPLOYEE */
 		$_record = Payroll::record_by_date(PayrollJournalEntries::getShopId(), $start_date, $end_date);
 
+		/* INSERT ACCOUNT ID FOR EACH ENTITY PER EMPLOYEE - SET DEFAULT IF NOT SET*/
 		foreach($_record as $key=>$record)
 		{
 			$_record[$key]['accounts'] = PayrollJournalEntries::check_payroll_entity_account_id($record['payroll_employee_id']);
 		}
 
-		$_journal = collect($_record)->groupBy(function ($item, $b)
+
+		$_journal = [];
+
+		/* GET ALL PAYROLL ENTOTY */
+		$_payroll_entity = Tbl_payroll_entity::get();
+		foreach($_payroll_entity as $key=>$entity)
+		{
+			/* GROUP EMPLOYEE BY GIVEN ENTITY */
+			$temp_journal = collect($_record)->groupBy( function($item) use($entity)
 			{
-				dd($item);
-				// return $item['accounts']['']
+				return $item['accounts'][$entity->entity_name];
 			});
-		dd($_journal);
-		return $_record;
+
+			/* AFTER GROUPING INTO EACH ENTITY, GET TOTAL OF EACH PAYROLL ENTITY */
+			foreach($temp_journal as $key2=>$tjournal)
+			{
+				$total = collect($tjournal)->sum($entity->entity_name);
+
+				/* GET ALL ACCOUNT DETAILS AND ADD THE TOTAL AMOUNT */
+				$account 			= Tbl_chart_of_account::accountType()->where("account_id", $key2)->first()->toArray();
+				$account['total'] 	= $total;
+				array_push($_journal, $account);
+			}
+		}
+
+		return $_journal;
 	}
 
 	/**
@@ -70,7 +91,8 @@ class PayrollJournalEntries
 		$_entity = Tbl_payroll_entity::get();
 		foreach($_entity as $key=>$entity)
 		{
-			$data[$entity->entity_name] = Tbl_payroll_journal_tag::where("shop_id", PayrollJournalEntries::getShopId())->where("payroll_entity_id", $entity->payroll_entity_id)->tagEntity()->tagEmployee($employee_id)->account()->first();
+			// $data[$entity->entity_name] = Tbl_payroll_journal_tag::where("shop_id", PayrollJournalEntries::getShopId())->where("payroll_entity_id", $entity->payroll_entity_id)->tagEntity()->tagEmployee($employee_id)->account()->first();
+			$data[$entity->entity_name] = Tbl_payroll_journal_tag::where("shop_id", PayrollJournalEntries::getShopId())->where("payroll_entity_id", $entity->payroll_entity_id)->tagEntity()->tagEmployee($employee_id)->pluck("account_id");
 			if(!$data[$entity->entity_name])
 			{
 				$data[$entity->entity_name] = PayrollJournalEntries::get_default_entity($entity->entity_category);
@@ -117,11 +139,12 @@ class PayrollJournalEntries
             $insert["account_protected"]        = 1;
             $insert["account_code"]             = "payroll-other-expense";
             
-            $id = Tbl_chart_of_account::insertGetId($insert);
-            return Tbl_chart_of_account::accountType()->where("account_id", $id)->first();
+            return Tbl_chart_of_account::insertGetId($insert);
+            // $id = Tbl_chart_of_account::insertGetId($insert);
+            // return Tbl_chart_of_account::accountType()->where("account_id", $id)->first();
         }
 
-        return $exist_account;
+        return $exist_account->account_id;
 	}
 
 	/**
@@ -142,11 +165,12 @@ class PayrollJournalEntries
             $insert["account_protected"]        = 1;
             $insert["account_code"]             = "payroll-other-asset";
             
-            $id = Tbl_chart_of_account::insertGetId($insert);
-            return Tbl_chart_of_account::accountType()->where("account_id", $id)->first();
+            return Tbl_chart_of_account::insertGetId($insert);
+            // $id = Tbl_chart_of_account::insertGetId($insert);
+            // return Tbl_chart_of_account::accountType()->where("account_id", $id)->first();
         }
 
-        return $exist_account;
+        return $exist_account->account_id;
 	}
 
 	/**
@@ -167,10 +191,11 @@ class PayrollJournalEntries
             $insert["account_protected"]        = 1;
             $insert["account_code"]             = "payroll-other-liability";
             
-            $id = Tbl_chart_of_account::insertGetId($insert);
-            return Tbl_chart_of_account::accountType()->where("account_id", $id)->first();
+            return Tbl_chart_of_account::insertGetId($insert);
+            // $id = Tbl_chart_of_account::insertGetId($insert);
+            // return Tbl_chart_of_account::accountType()->where("account_id", $id)->first();
         }
 
-        return $exist_account;
+        return $exist_account->account_id;
 	}
 }

@@ -309,9 +309,10 @@ function bill()
 		}
 	}
 
+
 	function action_trigger_select_plugin_not_last()
 	{
-		$(".draggable .tr-draggable td select.select-item").globalDropList(
+		$(".draggable .tr-draggable:first td select.select-item").globalDropList(
         {
             link : "/member/item/add",
             width : "100%",
@@ -324,7 +325,7 @@ function bill()
             	action_load_item_info($(this));
             }
         });
-        $(".draggable .tr-draggable td select.select-um").globalDropList(
+        $(".draggable .tr-draggable:first td select.select-um").globalDropList(
         {
         	hasPopup: "false",
     		width : "100%",
@@ -597,7 +598,7 @@ function add_po_to_bill(po_id)
 		{
              $(data).each(function (a, b)
              {				
-	             $("tbody.draggable").prepend(global_tr_html);
+	             var con = $("tbody.draggable").prepend(global_tr_html);
 	             bill.action_trigger_select_plugin_not_last();
 	             var $container = $("tbody.draggable .tr-draggable:first");
 	             // $this.closest(".tr-draggable");
@@ -627,6 +628,7 @@ function add_po_to_bill(po_id)
 	        $(".po-"+po_id).addClass("hidden");
 			// $(".modal-loader").addClass("hidden");
 
+             bill.action_compute();
              bill.action_reassign_number();
 		},
 		error : function()

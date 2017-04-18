@@ -15,7 +15,7 @@
                     
                     </small>
                 </h1>
-                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save and Send</button>
+                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
                 <a href="/member/ecommerce/product_order" class="panel-buttons btn btn-default pull-right btn-custom-white">&laquo; Back</a>
             </div>
         </div>
@@ -40,16 +40,16 @@
                                 <input type="radio" name="order_status" id="option2" value="Failed" {{isset($inv) ? $inv->order_status == 'Failed' ? 'checked' : '' : ''}}> Failed
                                 </label>
                                 <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Processing' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option3" value="Processing" {{isset($inv) ? $inv->order_status == 'Processing' ? 'checked' : '' : ''}}"> Processing
+                                <input type="radio" name="order_status" id="option3" value="Processing" {{isset($inv) ? $inv->order_status == 'Processing' ? 'checked' : '' : ''}}> Processing
                                 </label>
                                 <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Completed' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option4" value="Completed" {{isset($inv) ? $inv->order_status == 'Completed' ? 'checked' : '' : ''}}"> Completed
+                                <input type="radio" name="order_status" id="option4" value="Completed" {{isset($inv) ? $inv->order_status == 'Completed' ? 'checked' : '' : ''}}> Completed
                                 </label>
                                 <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option5" value="On-hold" {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'checked' : '' : ''}}"> On-Hold
+                                <input type="radio" name="order_status" id="option5" value="On-hold" {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'checked' : '' : ''}}> On-Hold
                                 </label>
                                 <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option6" value="Cancelled" {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'checked' : '' : ''}}"> Cancelled
+                                <input type="radio" name="order_status" id="option6" value="Cancelled" {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'checked' : '' : ''}}> Cancelled
                                 </label>
                                 <!-- <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Refunded' ? 'active' : '' : ''}}">
                                 <input type="radio" name="order_status" id="option3" value="Void"> Refunded
@@ -108,6 +108,15 @@
                         <div class="col-sm-2">
                             <label>Due Date</label>
                             <input {{isset($inv) ? 'disabled' : ''}} type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{isset($inv) ? date('m/d/Y',strtotime($inv->due_date)) : ''}}" />
+                        </div>
+                        <div class="col-sm-3">
+                            @if(isset($inv))
+                                @if($inv->payment_method_id > 0)
+                                <div class="text-center">
+                                    <h2 class="green">PAID <span class="fa fa-check-circle"></span></h2>
+                                </div>
+                                @endif
+                            @endif
                         </div>
                     </div>
                     
@@ -337,7 +346,6 @@
                             </div> 
                         </div>
                     </div>
-                    
                     <!-- END CONTENT -->
                 </div>
             </div>

@@ -157,7 +157,7 @@
 									</tr>
 								</tbody>
 							</table>
-							<div style="margin-top: 15px; font-size: 16px; font-weight: 700; text-align: center;">Free shipping for orders above ₱ {{ number_format($get_cart['sale_information']['minimum_purchase'], 2) }}</div>
+							<!-- <div style="margin-top: 15px; font-size: 16px; font-weight: 700; text-align: center;">Free shipping for orders above ₱ {{ number_format($get_cart['sale_information']['minimum_purchase'], 2) }}</div> -->
 						</div>
 					</div>
 				</div>

@@ -49,7 +49,7 @@
                     </div>
 
                    <!--  <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
-                    <div class="form-group">
+                    <div class="form-group hidden">
                         <div class="col-md-4">
                             <label>Initial quantity on hand </label>
                             <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" disabled>
@@ -66,7 +66,7 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Unit of Measure</label>
-                            <select class="form-control input-sm measure_container drop-down-um" name="item_measurement_id">
+                            <select class="form-control input-sm measure_container drop-down-um" add="add" name="item_measurement_id">
                                 @include("member.load_ajax_data.load_unit_measurement", ['um_id' => $data["item_measurement_id"]])
                             </select>
                         </div>
@@ -459,7 +459,11 @@
                                     </td>
                                     <td>
                                         <select class="form-control drop-down-um select-um input-sm pull-left" name="bundle_um_id[]">
-                                            <option value=""></option> 
+                                            @if($bundle['bundle_um_id'])
+                                                @include("member.load_ajax_data.load_one_unit_measure", ['_um' => $_um_multi, 'item_um_id' => $bundle['multi_um_id'], 'selected_um_id' => $bundle['bundle_um_id']])
+                                            @else
+                                                <option class="hidden" value="" />
+                                            @endif
                                         </select>
                                     </td>   
                                     <td><input class="text-center form-control input-sm" type="text" name="bundle_qty[]" value="{{ $bundle['bundle_qty'] }}" /></td>
@@ -489,7 +493,7 @@
                 </select>
             </td>
             <td>
-                <select class="form-control select-um input-sm pull-left" name="bundle_um_id[]">
+                <select class="form-control select-um-one input-sm pull-left" name="bundle_um_id[]">
                     <option value=""></option> 
                 </select>
             </td>   

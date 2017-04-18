@@ -27,7 +27,8 @@
                         Action <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-custom">
-                        <li><a href="/member/vendor/purchase_order?vendor_id={{$vendor->vendor_id}}">Create Purchase Order</a></li>
+                        <li><a href="/member/vendor/purchase_order?vendor_id={{$vendor->vendor_id}}">Purchase Order</a></li>
+                        <li><a href="/member/vendor/create_bill?vendor_id={{$vendor->vendor_id}}">Create Bill</a></li>
                         <!-- <li><a href="/member/vendor/estimate">Create Estimate</li> -->
                         <li><a href="javascript:" class="popup" link="/member/vendor/archived/{{$vendor->vendor_id}}/inactive" size="md">Make Inactive</a></li>
                         <!-- <li><a href="javascript:" data-html="inactive">Make Inactive</a></li> -->

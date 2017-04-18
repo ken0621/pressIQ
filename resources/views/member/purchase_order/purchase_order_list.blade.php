@@ -45,6 +45,7 @@
                             <th>Company Name</th>
                             <th>Vendor Name</th>
                             <th>Total</th>
+                            <th class="text-center">Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -57,13 +58,25 @@
                                 <td>{{$po->vendor_title_name." ".$po->vendor_first_name." ".$po->vendor_middle_name." ".$po->vendor_last_name." ".$po->vendor_suffix_name}}</td>
                                 <td>{{currency("PHP",$po->po_overall_price)}}</td>
                                 <td class="text-center">
+                                    @if($po->po_is_billed == 0)
+                                    <a class="btn btn-warning form-control">Open</a>
+                                    @else
+                                    <a class="btn btn-default form-control">Close</a>
+                                    @endif
+                                </td>
+                                <td class="text-center">
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
                                           <!-- <li ><a class="popup" link="/member/customer/view_cm/{{$po->cm_id}}" size="lg">View CM</a></li> -->
-                                          <li ><a href="/member/vendor/purchase_order?id={{$po->po_id}}">Edit P.O</a></li>
+                                        <li>
+                                            @if($po->po_is_billed == 0)                                            
+                                            <a href="/member/vendor/purchase_order?id={{$po->po_id}}">Edit P.O</a>
+                                            @endif
+                                            <a link="/member/vendor/purchase_order/view_pdf/{{$po->po_id}}" class="popup" size="lg">Print</a>
+                                        </li>
                                       </ul>
                                     </div>
                                 </td>

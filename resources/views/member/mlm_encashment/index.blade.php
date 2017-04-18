@@ -288,6 +288,7 @@
                     <select class="form-control request_dropdown" onchange="change_request(this)">
                         <option value="0">Requested</option>
                         <option value="1">Processed</option>
+                        <!-- <option value="2">Denied</option> -->
                     </select>
                 </div>
                 <div class="col-md-4 col-md-offset-2" style="padding: 10px">
@@ -305,60 +306,108 @@
             </div>
                 <div class="load-data" target="encashment_table" slot="50" orderby="asc">
                     <div id="encashment_table">
-                        <table class="table table-bordered table-condensed">
-                    <thead>
-                        <th>Slot</th>
-                        <th>Name</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Tax</th>
-                        <th>Processing Fee</th>
-                        <th>Amount</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>View</th>
-                    </thead>
-                    <tbody>
-                    @if(count($history) >= 1)
-                      @foreach($history as $key => $value)
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <td></td>
+                            <th>Slot</th>
+                            <th>Name</th>
+                            <th class="hide">From</th>
+                            <th class="hide">To</th>
+                            <th>Date Requested</th>
+                            <th>Tax</th>
+                            <th>Processing Fee</th>
+                            <th>Amount</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>View</th>
+                        </thead>
+                        <tbody>
+                        @if(count($history) >= 1)
+                          @foreach($history as $key => $value)
+                            <tr>
+                              <td>
+                              @if($value->encashment_process_type == 0)
+                                <form class="global-submit" id="form_id_{{$value->wallet_log_id}}" role="form" method="post" action="/member/mlm/encashment/add/to/list">
+                                    <input type="checkbox" name="add_to_list" onchange="$('#form_id_{{$value->wallet_log_id}}').submit();" {{$value->wallet_log_selected == 1 ? 'checked' : ''}}>
+                                    <input type="hidden" name="wallet_log_id" value="{{$value->wallet_log_id}}">
+                                    {!! csrf_field() !!}
+                                </form>
+                              @endif
+                                
+                              </td>
+                              <td><a href="javascript:" class="popup" link="/member/mlm/slot/view/{{$value->slot_id}}" size="lg">{{$value->slot_no}}</a></td>
+                              <td><a href="javascript:" class="popup" link="/member/customer/customeredit/{{$value->customer_id}}">{{ name_format_from_customer_info($value) }}</a></td>
+                              <td class="hide">{{$value->enchasment_process_from}}</td>
+                              <td class="hide">{{$value->enchasment_process_to}}</td>
+                              <td>{{$value->wallet_log_date_created}}</td>
+                              @if($value->enchasment_process_tax_type == 0)
+                              <td>{{$value->enchasment_process_tax}}</td>
+                              @else
+                              <td>{{$value->enchasment_process_tax}}%</td>
+                              @endif
+
+                              @if($value->enchasment_process_p_fee_type == 0)
+                              <td>{{$value->enchasment_process_p_fee}}</td>
+                              @else
+                              <td>{{$value->enchasment_process_p_fee}}%</td>
+                              @endif
+
+                              <td>{{$value->encashment_process_taxed}}</td>
+                              <td>{{$value->wallet_log_amount * -1}}</td>
+
+                              @if($value->encashment_process_type == 0)
+                              <td class="alert alert-warning">Pending</td>
+                              @else
+                              <td class="bg-primary">Processed</td>
+                              @endif
+
+                              <td><a class="btn btn-primary" href="/member/mlm/encashment/view/{{$value->encashment_process}}">View</a></td> </tr>
+                          @endforeach
+                          @if($request != 1)
+                          <tr>
+                              <td>
+                                  
+                              </td>
+                              <td colspan="20">
+                                  <a class="btn btn-info col-md-1" href="/member/mlm/encashment/view/all/selected" target="_blank">Summary</a> 
+                                  <span class="alert-warning col-md-12">
+                                    This will show all checked encashment request
+                                  </span>
+                              </td>
+                          </tr>
+                          <tr>
+                              <td>
+                
+                              </td>
+                              <td colspan="20">
+                                <form class="global-submit" method="post" action="/member/mlm/encashment/add/to/list/date">
+                                <div class="col-md-6">
+                                    <label><small style="color: gray">From:</small></label>
+                                    <input type="date" class="form-control" name="from">
+                                </div>
+                                <div class="col-md-6">
+                                    <label><small style="color: gray">To:</small></label>
+                                    <input type="date" class="form-control" name="to"> 
+                                </div>  
+                                <div class="col-md-12">
+                                    <label><small style="color: gray">Get all requested encashment by date range</small></label><br>
+                                    <button class="btn btn-primary">Get</button>
+                                </div>  
+                                  
+                              </td>
+                          </tr>
+                          @endif
+
+
+                        @else
                         <tr>
-                          <td><a href="javascript:" class="popup" link="/member/mlm/slot/view/{{$value->slot_id}}" size="lg">{{$value->slot_no}}</a></td>
-                          <td><a href="javascript:" class="popup" link="/member/customer/customeredit/{{$value->customer_id}}">{{ name_format_from_customer_info($value) }}</a></td>
-                          <td>{{$value->enchasment_process_from}}</td>
-                          <td>{{$value->enchasment_process_to}}</td>
-
-                          @if($value->enchasment_process_tax_type == 0)
-                          <td>{{$value->enchasment_process_tax}}</td>
-                          @else
-                          <td>{{$value->enchasment_process_tax}}%</td>
-                          @endif
-
-                          @if($value->enchasment_process_p_fee_type == 0)
-                          <td>{{$value->enchasment_process_p_fee}}</td>
-                          @else
-                          <td>{{$value->enchasment_process_p_fee}}%</td>
-                          @endif
-
-                          <td>{{$value->encashment_process_taxed}}</td>
-                          <td>{{$value->wallet_log_amount * -1}}</td>
-
-                          @if($value->encashment_process_type == 0)
-                          <td class="alert alert-warning">Pending</td>
-                          @else
-                          <td class="bg-primary">Processed</td>
-                          @endif
-
-                          <td><a class="btn btn-primary" href="/member/mlm/encashment/view/{{$value->encashment_process}}">View</a></td> </tr>
-                      @endforeach
-                    @else
-                    <tr>
-                      <td colspan="40">
-                        <center>No Encashment History.</center>
-                      </td>
-                    </tr>
-                    @endif
-                    </tbody>
-                  </table>
+                          <td colspan="40">
+                            <center>No Encashment History.</center>
+                          </td>
+                        </tr>
+                        @endif
+                        </tbody>
+                    </table>
                   <center>{!! $history->render() !!}</center>
                     </div> 
                 </div>
@@ -385,7 +434,8 @@ function submit_done(data)
     else if(data.status == 'success_new')
     {
         toastr.success(data.message);
-        encashmet_type();   
+        encashmet_type();  
+        change_request(); 
     }
 }
 encashmet_type();
@@ -420,8 +470,6 @@ function search_by_customer(search)
     $('#encashment_table').html('<div style="margin: 100px auto;" class="loader-16-gray"></div>');
     $('#encashment_table').load(link_load + ' #encashment_table');
 }
-
-// .load( "/member/mlm/code #encashment_table");
 </script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 @endsection

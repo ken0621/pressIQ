@@ -38,6 +38,27 @@ class Purchase_Order
 	 * @param array  $total_information    	(total_item_price => '', total_addons => [[0]label => '', [0]value => ''], 
 	 *										 total_discount_type => '', total_discount_value => '', total_overall_price => '')
 	 */
+    public static function count_po($start_date, $end_date)
+    {
+         $po = Tbl_purchase_order::where("po_shop_id",Purchase_Order::getShopId())->whereBetween("date_created",array($start_date,$end_date))->where("po_is_billed",0)->count();
+         return $po;
+    }
+    public static function get_po_amount($start_date, $end_date)
+    {
+        $price = 0;
+        $po = Tbl_purchase_order::where("po_shop_id",Purchase_Order::getShopId())
+                                ->whereBetween("date_created",array($start_date,$end_date))
+                                ->where("po_is_billed",0)->get();
+        if(isset($po))
+        {
+            foreach ($po as $key => $value) 
+            {
+               $price += $value->po_overall_price;
+            }            
+        }
+
+        return $price;
+    }
 	public static function postOrder($vendor_info, $po_info, $po_other_info, $item_info, $total_info)
 	{
         $insert['po_shop_id']                    = Purchase_Order::getShopId();        

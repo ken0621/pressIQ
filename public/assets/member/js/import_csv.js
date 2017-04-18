@@ -4,6 +4,8 @@ var main_file   = '';
 var ctr         = 0;
 var data_value  = '';
 var data_length = '';
+var error_data  = [];
+var token       = $(".token").val();
 
 function import_csv()
 {
@@ -54,7 +56,6 @@ function import_csv()
 
     function handleFileSelect(evt) 
     {
-        console.log(evt);
         var files = target_file; // Dropzone File object
         var file  = files[0];
         main_file = file;
@@ -99,33 +100,47 @@ function import_csv()
 
     function submit_data(value)
     {
-        token = $(".token").val();
-        if(ctr < data_length)
+        if(ctr <= data_length)
         {
             $.ajax(
             {
                 url:'/member/item/import/read-file',
-                datatype:'json',
+                dataType:'json',
                 type:'post',
-                data: {
-                    _token:token,
-                    value:value
+                data:{
+                    _token      : token,
+                    value       : value,
+                    ctr         : ctr,
+                    data_length : data_length,
+                    error_data  : error_data,
+                    input: objectifyForm($(".import-validation").serializeArray())
                 },
                 success: function(data)
                 {
-                    data = jQuery.parseJSON(data);
-                    // counter and percentage loading
-                    ctr++;
-                    $(".counter").html(ctr);
-                    var percent = parseInt((ctr*100)/data_length);
-                    $(".progress-bar").css("width", percent+"%");
-                    $(".progress-bar").html(percent+"%");
+                    if(data.status != 'end')
+                    {
+                        // counter and percentage loading
+                        ctr++;
+                        var percent     = parseInt((ctr*100)/data_length);
+                        var ctr_success = 0; 
 
-                    // append tr result and status
-                    console.log(data.tr_data);
-                    $(".table-import-container tbody").append(data.tr_data);
+                        if(data.status == "success") ctr_success++;
+                        else                         error_data.push(data.value_data);
 
-                    submit_data(data_value[ctr]);
+                        $(".progress-bar").css("width", percent+"%");
+                        $(".progress-bar").html(percent+"%");
+                        $(".counter").html(ctr_success+"/"+data_length);
+
+                        $(".table-import-container tbody").append(data.tr_data);
+
+                        submit_data(data_value[ctr]);
+                    }
+                    else
+                    {
+                        $('.import-error').trigger("click");
+                        var href = $('.import-error').attr('href');
+                        window.location.href = href;
+                    }
                 },
                 error: function(e)
                 {
@@ -134,6 +149,15 @@ function import_csv()
                 }
             });
         }
+    }
+
+    function objectifyForm(formArray)
+    {
+        var returnArray = {};
+        for (var i = 0; i < formArray.length; i++){
+            returnArray[formArray[i]['name']] = formArray[i]['value'];
+        }
+        return returnArray;
     }
 
     function csv_upload_configuration()
@@ -148,7 +172,6 @@ function import_csv()
             {
                 this.on("uploadprogress", function(file, progress) 
                 {
-                    console.log("File progress", progress);
                 })
 
                 this.on("error", function(file, response)
@@ -158,11 +181,10 @@ function import_csv()
 
                 this.on("addedfile", function(file)
                 {
-                    $("#ImportContainer .dz-message").fadeOut();
                     if (this.files[1]!=null){
                         this.removeFile(this.files[0]);
                     }
-
+                    $("#ImportContainer .dz-message").slideUp();
                     target_file = this.files;
                     $("#files").change();
                 })

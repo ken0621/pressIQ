@@ -20,15 +20,17 @@
         		<table class="table table-condensed table-bordered">
         			<thead>
         				<thead> 
-                            <th>
-                                Slot
-                            </th>  
-                            <th>
-                                Member
-                            </th>
-                            @foreach($request as $key => $value)
-                            <th>{{$value}}</th>
-                            @endforeach
+                            <tr>
+                                <th>
+                                    Slot
+                                </th>  
+                                <th>
+                                    Member
+                                </th>
+                                @foreach($request as $key => $value)
+                                <th>{{$value}}</th>
+                                @endforeach
+                            </tr>
                         </thead>
                         <tbody>
                             @foreach($encashment as $key => $value)
@@ -50,9 +52,9 @@
                                 @endif
                                 @foreach($request as $key2 => $value2)
                                     @if(isset($value[$key2]))
-                                    <td>{{$value[$key2]}}</td>
+                                    <td>{{currency('PHP', $value[$key2])}}</td>
                                     @else
-                                    <td>0</td>
+                                    <td>{{currency('PHP',0)}}</td>
                                     @endif
                                 @endforeach
 
@@ -67,3 +69,6 @@
         </div>
     </div>
 </div>    
+<script type="text/javascript">
+    show_currency();
+</script>

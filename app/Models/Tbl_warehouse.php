@@ -46,7 +46,7 @@ class Tbl_warehouse extends Model
             $query->where('tbl_item.archived',$archived)             
                  ->groupBy('tbl_warehouse_inventory.inventory_item_id')
                  ->select(DB::raw('tbl_item.item_id as product_id, tbl_item.item_name as product_name, tbl_item.item_sku as product_sku, sum(tbl_warehouse_inventory.inventory_count) as product_warehouse_stocks, tbl_sub_warehouse.item_reorder_point as product_reorder_point, tbl_item.has_serial_number as has_serial_number,sum(tbl_warehouse_inventory.inventory_count) as product_current_qty'))
-                 ->orderBy("product_warehouse_stocks","ASC");
+                 ->orderBy("tbl_item.item_name","ASC");
 
         return $query;
     }

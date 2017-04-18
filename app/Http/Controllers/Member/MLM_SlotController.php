@@ -115,11 +115,26 @@ class MLM_SlotController extends Member
     }
     public function index()
     {
-        // $slot = Mlm_compute::get_slot_info(2); 
-        // return Mlm_complan_manager::direct_promotions($slot);
-        // return Membership_code::set_up_mail(    349, 1);
-        // $mod3 = round(5/5, 0, PHP_ROUND_HALF_DOWN);
-        // return $mod3;
+        // return 1;
+        // $shop_id = $this->user_info->shop_id;
+        // $slot = Mlm_compute::get_slot_info(336);
+        // return Mlm_complan_manager::binary_triangle_matrix($slot, 999, 500);
+        // $plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
+        //     ->where('marketing_plan_enable', 1)
+        //     ->where('marketing_plan_trigger', 'Slot Creation')
+        //     ->get();
+        // $slots = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->membership()->membership_points()->customer()->get();
+        // // dd($slots);
+        // foreach($slots as $key => $value)
+        // {
+        //     $b = Mlm_complan_manager::binary($value);
+        //     $a = Mlm_complan_manager::direct($value);
+        // }
+        
+        // return 1;
+
+
+
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {
@@ -1001,6 +1016,10 @@ class MLM_SlotController extends Member
             $shop_id = $this->user_info->shop_id;
             $slots = Tbl_mlm_slot::where('shop_id', $shop_id)->get();
             Mlm_slot_log::update_all_released();
+        }
+        else if ($code == 'fix_give_voucher')
+        {
+            
         }
     }
 }

@@ -136,9 +136,6 @@ class WarehouseController extends Member
             }
             $data["enable_serial"] = Tbl_settings::where("shop_id",$this->user_info->shop_id)->where("settings_key","item_serial")->pluck("settings_value");
 
-            $this->create_main();
-
-
             return view("member.warehouse.warehouse_list",$data);
         }
         else

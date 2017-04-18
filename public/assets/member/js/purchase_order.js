@@ -306,7 +306,7 @@ function purchase_order(){
 		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
             link : "/member/item/add",
-            width : "150px",
+            width : "100%",
             onCreateNew : function()
             {
             	item_selected = $(this);
@@ -319,8 +319,12 @@ function purchase_order(){
         $(".draggable .tr-draggable:last td select.select-um").globalDropList(
         {
         	hasPopup: "false",
-    		width : "110px",
-    		placeholder : "um.."
+    		width : "100%",
+    		placeholder : "um..",
+    		onChangeValue: function()
+    		{
+    			action_load_unit_measurement($(this));
+    		}
         }).globalDropList('disabled');
 	}
 

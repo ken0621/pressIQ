@@ -20,9 +20,12 @@
         		<table class="table table-condensed table-bordered">
         			<thead>
         				<thead>   
-                            <th>Day</th>
-                            <th>Name</th>
-                            <th>Username </th>
+                            <tr>
+                                <th>Day</th>
+                                <th>Name</th>
+                                <th>Username </th>
+                                <th>Slot count</th>
+                            </tr>
                         </thead>
                         <tbody>
                         	@foreach($customer_per_day as $key => $value)
@@ -36,7 +39,7 @@
 		                        		<td></td>
 		                        		<td></td>
 		                        		@endif
-		                        		
+		                        		<td>{{$customer[$key2]->count_slot}}</td>
 		                        	</tr>
                         		@endforeach
                         	@endforeach

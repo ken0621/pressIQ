@@ -24,6 +24,7 @@ use App\Globals\DigimaTable;
 use App\Globals\Item;
 use App\Globals\Vendor;
 use App\Globals\UnitMeasurement;
+use App\Globals\Purchasing_inventory_system;
 use App\Globals\Utilities;
 
 use Crypt;
@@ -45,7 +46,7 @@ class ItemController extends Member
         {
 			$shop_id        		   = $this->user_info->shop_id;
 			$warehouse_id 			   = Tbl_warehouse::where("main_warehouse", 1)->where("warehouse_shop_id", $this->user_info->shop_id)->pluck("warehouse_id");
-	        $item 		    		   = Tbl_item::inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
+	        $item 		    		   = Tbl_item::um_multi()->inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
 	        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)->where("shop_id",$shop_id)->type()->category();
 	        $item_type				   = Request::input("item_type");
 	        $search_name			   = Request::input("search_name");
@@ -70,9 +71,19 @@ class ItemController extends Member
 
 				$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
 				$data["_item"][$key]->inventory_count_um_view = "";
+				$data["_item"][$key]->item_whole_price = 0;
+				$data["_item"][$key]->um_whole = "";
 				if($um)
 				{
 					$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+
+					$data["_item"][$key]->item_whole_price = $um->unit_qty * $value->item_price;
+					$data["_item"][$key]->um_whole = $um->multi_abbrev;
+				}
+
+				if($value->item_type_id == 4)
+				{
+					$data["_item"][$key]->item_price = Item::get_item_bundle_price($value->item_id);
 				}
 			}
 			$data["_item_archived"]	   = $item_archived->get();
@@ -131,6 +142,7 @@ class ItemController extends Member
 			$data['_item']  	= Item::get_all_category_item();
 			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 		= UnitMeasurement::load_um();
+			$data["_um_multi"]  = UnitMeasurement::load_um_multi();
             $data["_vendor"]    = Vendor::getAllVendor('active');
 
 		    return view('member.item.add',$data);
@@ -152,7 +164,7 @@ class ItemController extends Member
 		$item_price 					= Request::input("item_price");
 		$item_sales_information 		= Request::input("item_sales_information");
 		$item_asset_account_id 			= Request::input("item_asset_account_id");
-		$item_quantity 					= Request::input("item_quantity");
+		$item_quantity 					= Request::input("item_quantity") * (Request::input("initial_qty") != 0 ? Request::input("initial_qty") : 1 );
 		$item_date_tracked 				= date("Y-m-d g:i:s",strtotime(Request::input("item_date_tracked")));
 		$item_reorder_point 			= Request::input("item_reorder_point");
 		$item_income_account_id 		= Request::input("item_income_account_id");
@@ -173,7 +185,6 @@ class ItemController extends Member
 		$end_promo_date 		= Request::input("end_promo_date");
 
 		$shop_id = $this->user_info->shop_id;
-
 			
 			$insert["item_date_created"]	    	  = Carbon::now();
 			$insert["shop_id"]	    				  = $shop_id;
@@ -577,9 +588,8 @@ class ItemController extends Member
 			else if($data["data"]["item_type_id"] == 4)
 			{
 				$data["data"]["type_of_item"] = "bundle_type";
-				$data["data"]["bundle"]		  = Tbl_item_bundle::item()->where("bundle_bundle_id", $id)->get()->toArray();
+				$data["data"]["bundle"]		  = Tbl_item_bundle::item()->um()->where("bundle_bundle_id", $id)->get()->toArray();
 			}
-
 
 			if($data["data"]["parent_basis_um"] != 0)
 			{
@@ -594,6 +604,7 @@ class ItemController extends Member
 			$data['_category']  = Category::getAllCategory();
 			$data["_manufacturer"] = Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 	  	= UnitMeasurement::load_um();
+			$data["_um_multi"] 	= UnitMeasurement::load_um_multi();
 			$data['_item']  	= Item::get_all_category_item();
             $data["_vendor"]    = Vendor::getAllVendor('active');
 
@@ -639,10 +650,14 @@ class ItemController extends Member
 
 		$item_measurement_id = Request::input("item_measurement_id");
 		$check = UnitMeasurement::check();
-        if($check != 0)
-        {
-        	$item_measurement_id = Tbl_unit_measurement::where("um_id",$old["item_measurement_id"])->pluck("um_id");
-        }
+
+        if($item_measurement_id == $old["item_measurement_id"])
+		{
+	        if($check != 0)
+	        {
+	        	$item_measurement_id = Tbl_unit_measurement::where("um_id",$old["item_measurement_id"])->pluck("um_id");
+	        }			
+		}
 		if(Session::get("um_id") != null)
 		{
 			$item_measurement_id = Session::get("um_id");
@@ -840,7 +855,7 @@ class ItemController extends Member
 			{
 				Tbl_item::where("item_id",$id)->where("shop_id",$shop_id)->update($insert);
 
-				$insert_item_discount["item_id"] = $item_idid;
+				$insert_item_discount["item_id"] = $id;
 				$insert_item_discount["item_discount_value"] = $promo_price;
 				$insert_item_discount["item_discount_date_start"] = $start_promo_date;
 				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;	

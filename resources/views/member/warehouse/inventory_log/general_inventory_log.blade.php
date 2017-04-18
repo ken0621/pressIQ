@@ -35,7 +35,7 @@
                                 <tr>
                                     <td>{{$slip->inventory_slip_id}}</td>
                                     <td>{{strtoupper($slip->inventory_reason)}}</td>
-                                    <td class="text-center">{{date("M d, Y a",strtotime($slip->inventory_slip_date))}}</td>
+                                    <td class="text-center">{{date("M d, Y h:i a",strtotime($slip->inventory_slip_date))}}</td>
                                     <td class="text-center">
                                         <a class="popup" size="lg" link="/member/item/warehouse/view_pdf/{{$slip->inventory_slip_id}}">View Report</a>
                                     </tr>

@@ -22,19 +22,25 @@
         	<div class="table-reponsive">
         		<table class="table table-condensed table-bordered">
         			<thead>
-        				<th>Day</th>
-        				<th>PLAN</th>
-        				<th>Amount</th>
+                        <tr>
+            				<th>Day</th>
+                            @foreach($filter as $key => $value)
+            				<th>{{$key}}</th>
+                            @endforeach
+                        </tr>
         			</thead>
         			<tbody>
         				@foreach($per_day as $key => $value)
-	        				@foreach($value as $key2 => $value2)
-	        				<tr>
-	        					<td>{{$key}}</td>
-	        					<td>{{$key2}}</td>
-	        					<td>{{$value2}}</td>
-	        				</tr>
-	        				@endforeach
+                        <tr>
+                            <td>{{$key}}</td>
+                            @foreach($filter as $key2 => $value2)
+                                @if(isset($value[$key2]))
+                                <td>{{currency('PHP', $value[$key2])}}</td>
+                                @else
+                                <td>{{currency('PHP', 0)}}</td>
+                                @endif
+                            @endforeach
+                        </tr>    
         				@endforeach
         			</tbody>
         		</table>
@@ -65,27 +71,26 @@
         	<div class="table-reponsive">
         		<table class="table table-condensed table-bordered">
         			<thead>
-        				<th>Month</th>
-        				<th>PLAN</th>
-        				<th>Amount</th>
+                        <tr>
+            				<th>Month</th>
+            				@foreach($filter as $key => $value)
+                            <th>{{$key}}</th>
+                            @endforeach
+                        </tr>
         			</thead>
         			<tbody>
         				@foreach($per_month as $key => $value)
-	        				@foreach($value as $key2 => $value2)
-	        				<tr>
-	        					<td>{{$key}}</td>
-	        					<td>
-
-	        					
-	        					@if(isset($plan_settings[$key2]))
-	        					{{$plan_settings[$key2]->marketing_plan_label}}
-	        					@else
-	        					{{$key2}}
-	        					@endif
-	        					</td>
-	        					<td>{{$value2}}</td>
-	        				</tr>
-	        				@endforeach
+                        <tr>
+                            <td>{{$key}}</td>
+                            @foreach($filter as $key2 => $value2)
+                                @if(isset($value[$key2]))
+                                <td>{{currency('PHP', $value[$key2])}}</td>
+                                @else
+                                <td>{{currency('PHP', 0)}}</td>
+                                @endif
+                            @endforeach
+                        </tr>        
+	        				
         				@endforeach
         			</tbody>
         		</table>
@@ -117,27 +122,25 @@
         	<div class="table-reponsive">
         		<table class="table table-condensed table-bordered">
         			<thead>
-        				<th>Month</th>
-        				<th>PLAN</th>
-        				<th>Amount</th>
+                        <tr>
+            				<th>Year</th>
+            				@foreach($filter as $key => $value)
+                            <th>{{$key}}</th>
+                            @endforeach
+                        </tr>
         			</thead>
         			<tbody>
         				@foreach($per_year as $key => $value)
-	        				@foreach($value as $key2 => $value2)
-	        				<tr>
-	        					<td>{{$key}}</td>
-	        					<td>
-
-	        					
-	        					@if(isset($plan_settings[$key2]))
-	        					{{$plan_settings[$key2]->marketing_plan_label}}
-	        					@else
-	        					{{$key2}}
-	        					@endif
-	        					</td>
-	        					<td>{{$value2}}</td>
-	        				</tr>
-	        				@endforeach
+                        <tr>
+                            <td>{{$key}}</td>
+                            @foreach($filter as $key2 => $value2)
+                                @if(isset($value[$key2]))
+                                <td>{{currency('PHP', $value[$key2])}}</td>
+                                @else
+                                <td>{{currency('PHP', 0)}}</td>
+                                @endif
+                            @endforeach
+                        </tr>   
         				@endforeach
         			</tbody>
         		</table>

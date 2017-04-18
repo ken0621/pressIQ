@@ -334,6 +334,11 @@ class MemberController extends Controller
         return json_encode($data);
     }
 
+    public function shipping()
+    {
+        return view("mlm.register.shipping");
+    }
+
 
 
 

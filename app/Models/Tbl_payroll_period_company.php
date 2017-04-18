@@ -67,4 +67,13 @@ class Tbl_payroll_period_company extends Model
 
 		return $query;
 	}
+
+	public function scopegetcompanyperiod($query, $payroll_period_company_id = 0)
+	{
+		$query->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+			 	->where('tbl_payroll_period_company.payroll_period_company_id', $payroll_period_company_id);
+
+		return $query;
+	}
+
 }

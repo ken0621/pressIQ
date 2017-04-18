@@ -10,13 +10,15 @@
                 <small>
                 </small>
             </h1>
+            <a href="/member/item/import/item-template" class="btn btn-custom-white pull-right">Download Item Template</a>
+            <a href="/member/item/import/export-error" class="btn btn-custom-white pull-right import-error"></a>
         </div>
     </div>
 </div>
 
 <div class="panel panel-default panel-block panel-title-block clearfix">
     <div class="col-md-6">
-        <span class="counter">0</span>
+        <h4><span class="counter">0</span> Items Added</h4>
         <div class="progress">
             <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
         </div>
@@ -36,21 +38,45 @@
             </form>
         </div>
         </br>
-        <div class="form-group">
-            <button class="form-control btn btn-custom-primary btn-submit" disabled="disabled">Generate Accounts</button>
-        </div>
         </br>
     </div>
     <div class="col-md-6">
+        </br>
+        <form role="form" method="post" class="import-validation">
+            <label>Automatic creation if not exist:</label>
+            <div class="row clearfix">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="category" >Category</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="income_account">Income Account</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="expense_account">Expense Account</label>
+                        </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="asset_account">Asset Account</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="form-control btn btn-custom-primary btn-submit" disabled="disabled">Generate Accounts</button>
+            </div>
+        </form>
     </div>
     <div class="col-md-12">
-        <div class="table-responsive">
-            <table class="table table-condensed table-stripped table-hover table-import-container">
+        <div class="table-responsive" style="overflow: auto">
+            <table class="table table-condensed table-stripped table-hover table-import-container table-bordered">
                 <thead>
                     <tr>
+                        <th>Status</th>
+                        <th>Description</th>
                         <th>Type</th>
                         <th>Name</th>
-                        <th>Sku</th>
+                        <th>SKU</th>
                         <th>UM</th>
                         <th>Category</th>
                         <th>Sales Information</th>
@@ -58,8 +84,16 @@
                         <th>Income Account</th>
                         <th>Sale to Customer</th>
                         <th>Purchase From Supplier</th>
-                        <th>Status</th>
-                        <th>Description</th>
+                        <th>Purchasing Information</th>
+                        <th>Purchase Cost</th>
+                        <th>Expense Account</th>
+                        <th>Barcode</th>
+                        <th>Qty on Hand</th>
+                        <th>Reorder Point</th>
+                        <th>As of Date</th>
+                        <th>Asset Account</th>
+                        <th>Packing Size</th>
+                        <th>Manufacturer</th>
                     </tr>
                 </thead>
                 <tbody>

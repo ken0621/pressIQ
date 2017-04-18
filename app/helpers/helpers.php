@@ -514,10 +514,33 @@ function payout_getway()
 function divide($num1, $num2)
 {
     $result = 0;
-    if($num1 > 0)
+    if($num1 > 0 && $num2 > 0)
     {
        $result =  $num1 / $num2;
     }
 
     return $result;
+}
+
+function limit_char($x, $length)
+{
+    if(strlen($x)<=$length)
+    {
+        echo $x;
+    }
+    else
+    {
+        $y=substr($x,0,$length) . '...';
+        echo $y;
+    }
+}
+
+/* return null value to zero */
+function n2z($value)
+{
+    if(is_null($value))
+    {
+        $value = 0;
+    }
+    return $value;
 }

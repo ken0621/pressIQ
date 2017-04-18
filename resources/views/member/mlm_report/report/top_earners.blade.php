@@ -22,10 +22,12 @@
         		<table class="table table-condensed table-bordered">
         			<thead>
         				<thead>   
-                            <th>Rank</th>
-                            <th>Slot</th>
-                            <th>Member</th>
-                            <th>Amount</th>      
+                            <tr>
+                                <th>Rank</th>
+                                <th>Slot</th>
+                                <th>Member</th>
+                                <th>Amount</th>    
+                            </tr>  
                         </thead>
                         <tbody>
                             <?php $rank = 1; ?>
@@ -52,7 +54,7 @@
                                         {{$key}}
                                     @endif 
                                 </td>
-                                <td>{{$value}}</td>
+                                <td>{{currency('PHP', $value)}}</td>
                             </tr>
                             <?php $rank++;?>
                             @endforeach
@@ -65,3 +67,6 @@
         </div>
     </div>
 </div>    
+<script type="text/javascript">
+    show_currency();
+</script>

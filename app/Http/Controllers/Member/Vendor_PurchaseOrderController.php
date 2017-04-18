@@ -51,14 +51,31 @@ class Vendor_PurchaseOrderController extends Member
     }
     public function po_list()
     {
-        $data["_po"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->get();
+        $data["_po"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->where("po_shop_id",Purchase_Order::getShopId())->get();
 
         return view("member.purchase_order.purchase_order_list",$data);
     }
-    public function invoice_list()
+
+    public function view_po_pdf($po_id)
     {
-        $data["_invoices"] = Tbl_customer_invoice::customer()->invoice_item()->orderBy("tbl_customer_invoice.inv_id","DESC")->get();
-        return view("member.customer_invoice.customer_invoice_list",$data);
+        $data["action"] = "/member/vendor/purchase_order/pdf";
+        $data["po_id"] = $po_id;
+
+        return view("member.vendor_list.view_po_pdf",$data);
+    }
+    public function po_pdf($po_id)
+    {
+        $data["po"] = Tbl_purchase_order::vendor()->where("po_id",$po_id)->first();
+        $data["_poline"] = Tbl_purchase_order_line::um()->item()->where("poline_po_id",$po_id)->get();
+        foreach($data["_poline"] as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->poline_um);
+
+            $total_qty = $value->poline_qty * $qty;
+            $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
+        }
+        $pdf = view("member.vendor_list.po_pdf",$data);
+        return Pdf_global::show_pdf($pdf);
     }
     public function create_po()
     {
@@ -81,12 +98,12 @@ class Vendor_PurchaseOrderController extends Member
         $po_other_info['po_memo']           = Request::input('po_memo');
 
         $total_info                         = [];
-        $total_info['po_subtotal_price']    = Request::input('subtotal_price');
-        $total_info['ewt']                  = Request::input('ewt');
-        $total_info['po_discount_value']    = Request::input('po_discount_type');
-        $total_info['po_discount_type']     = Request::input('po_discount_value');
-        $total_info['taxable']              = Request::input('taxable');
-        $total_info['po_overall_price']     = Request::input('overall_price');
+        $total_info['po_subtotal_price']    = str_replace(",","",Request::input('subtotal_price'));
+        $total_info['ewt']                  = str_replace(",","",Request::input('ewt'));
+        $total_info['po_discount_value']    = str_replace(",","",Request::input('po_discount_type'));
+        $total_info['po_discount_type']     = str_replace(",","",Request::input('po_discount_value'));
+        $total_info['taxable']              = str_replace(",","",Request::input('taxable'));
+        $total_info['po_overall_price']     = str_replace(",","",Request::input('overall_price'));
 
         $item_info                          = [];
         $_itemline                          = Request::input('poline_item_id');
@@ -101,9 +118,9 @@ class Vendor_PurchaseOrderController extends Member
                 $item_info[$key]['um']                 = Request::input('poline_um')[$key];
                 $item_info[$key]['quantity']           = str_replace(',', "",Request::input('poline_qty')[$key]);
                 $item_info[$key]['rate']               = str_replace(',', "", Request::input('poline_rate')[$key]);
-                $item_info[$key]['discount']           = Request::input('poline_discount')[$key];
-                $item_info[$key]['discount_remark']    = Request::input('poline_discount_remark')[$key];
-                $item_info[$key]['taxable']            = Request::input('poline_taxable')[$key];
+                $item_info[$key]['discount']           = str_replace(",","",Request::input('poline_discount')[$key]);
+                $item_info[$key]['discount_remark']    = str_replace(",","",Request::input('poline_discount_remark')[$key]);
+                $item_info[$key]['taxable']            = str_replace(",","",Request::input('poline_taxable')[$key]);
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('poline_amount')[$key]);
             }
         }
@@ -124,7 +141,7 @@ class Vendor_PurchaseOrderController extends Member
 
     }
 
-    public function upate_po()
+    public function update_po()
     {
         $po_id = Request::input("po_id");
 
@@ -143,12 +160,12 @@ class Vendor_PurchaseOrderController extends Member
         $po_other_info['po_memo']           = Request::input('po_memo');
 
         $total_info                         = [];
-        $total_info['po_subtotal_price']    = Request::input('subtotal_price');
-        $total_info['ewt']                  = Request::input('ewt');
-        $total_info['po_discount_value']    = Request::input('po_discount_type');
-        $total_info['po_discount_type']     = Request::input('po_discount_value');
-        $total_info['taxable']              = Request::input('taxable');
-        $total_info['po_overall_price']     = Request::input('overall_price');
+        $total_info['po_subtotal_price']    = str_replace(",","",Request::input('subtotal_price'));
+        $total_info['ewt']                  = str_replace(",","",Request::input('ewt'));
+        $total_info['po_discount_value']    = str_replace(",","",Request::input('po_discount_type'));
+        $total_info['po_discount_type']     = str_replace(",","",Request::input('po_discount_value'));
+        $total_info['taxable']              = str_replace(",","",Request::input('taxable'));
+        $total_info['po_overall_price']     = str_replace(",","",Request::input('overall_price'));
 
         $item_info                          = [];
         $_itemline                          = Request::input('poline_item_id');
@@ -163,9 +180,9 @@ class Vendor_PurchaseOrderController extends Member
                 $item_info[$key]['um']                 = Request::input('poline_um')[$key];
                 $item_info[$key]['quantity']           = str_replace(',', "",Request::input('poline_qty')[$key]);
                 $item_info[$key]['rate']               = str_replace(',', "", Request::input('poline_rate')[$key]);
-                $item_info[$key]['discount']           = Request::input('poline_discount')[$key];
-                $item_info[$key]['discount_remark']    = Request::input('poline_discount_remark')[$key];
-                $item_info[$key]['taxable']            = Request::input('poline_taxable')[$key];
+                $item_info[$key]['discount']           = str_replace(",","",Request::input('poline_discount')[$key]);
+                $item_info[$key]['discount_remark']    = str_replace(",","",Request::input('poline_discount_remark')[$key]);
+                $item_info[$key]['taxable']            = str_replace(",","",Request::input('poline_taxable')[$key]);
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('poline_amount')[$key]);
 
                 $um_info = UnitMeasurement::um_info(Request::input("po_um")[$key]);
@@ -183,24 +200,4 @@ class Vendor_PurchaseOrderController extends Member
 
     }
     
-    public function invoice_view($invoice_id)
-    {
-        $data["invoice_id"] = $invoice_id;
-
-        return view("member.customer_invoice.invoice_view",$data);
-    }
-    public function invoice_view_pdf($inv_id)
-    {
-        $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
-
-        $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->um()->where("invline_inv_id",$inv_id)->get();
-        foreach($data["invoice_item"] as $key => $value) 
-        {
-            $total_qty = $value->invline_qty * $value->unit_qty;
-            $data["invoice_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
-        }
-
-          $pdf = view('member.customer_invoice.invoice_pdf', $data);
-          return Pdf_global::show_pdf($pdf);
-    }
 }

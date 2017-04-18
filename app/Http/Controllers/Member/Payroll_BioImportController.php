@@ -143,6 +143,10 @@ class Payroll_BioImportController extends Member
 		{
 			return Self::import_c7($file);
 		}
+		if($biometric == 'Manual Template')
+		{
+			return Self::import_manual($file);
+		}
 	}
 
     /* BIO METRICS START */
@@ -315,6 +319,55 @@ class Payroll_BioImportController extends Member
 
     }
 
+    public function import_manual($file)
+    {
+    	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
+    	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','date','time_in','time_out'));
+    	// dd($_time);
+    	if(isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['time_in']) && isset($_time[0]['time_out']))
+    	{
+
+	    	$success_count = 0;
+	    	$temp_date = '';
+	    	$insert_time_record = array();
+	    	$time_sheet = array();
+	    	foreach($_time as $key => $time)
+	    	{
+
+	    		if(Self::check_employee_number($time['employee_no']))
+    			{
+    				
+	    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($time['employee_no']), date('Y-m-d', strtotime($time['date'])));
+
+	    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
+	    			$temp_array['payroll_time_sheet_in'] 		= date('H:i:s', strtotime($time['time_in']));
+	    			$temp_array['payroll_time_sheet_out'] 		= date('H:i:s', strtotime($time['time_out']));
+	    			$temp_array['payroll_time_sheet_origin'] 	= 'Manual Template';
+	    			$temp_array['payroll_company_id']			= Self::getemployeeId($time['employee_no'],'payroll_employee_company_id');
+
+	    			$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
+	    			if($count_record == 0)
+	    			{
+	    				array_push($insert_time_record, $temp_array);
+	    			}
+    			}
+	    	}
+
+	    	
+	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
+	    	if(!empty($insert_time_record))
+	    	{
+	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
+	    		$count_inserted = count($insert_time_record);
+	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
+	    	}
+	    	
+	    	// return $message;
+    	}
+
+    	return $message;
+    }
+
     /* TEMPLATE START */
     public function template_global()
     {
@@ -327,6 +380,31 @@ class Payroll_BioImportController extends Member
     	{
     		Self::Digital_Persona_template();
     	}
+
+    	if($biometric_name == 'Manual Template')
+    	{
+    		Self::manual_template();
+    	}
+    }
+
+    public function manual_template()
+    {
+    	$excels['data'][0] = ['Employee No.','Employee Name', 'Date','Time In','Time Out'];
+        $excels['data'][1] = ['','', '','',''];
+        // dd($excels);
+        return Excel::create('Timesheet Template (Manual)', function($excel) use ($excels) {
+
+            $data = $excels['data'];
+            $date = 'template';
+            $excel->setTitle('Payroll');
+            $excel->setCreator('Laravel')->setCompany('DIGIMA');
+            $excel->setDescription('payroll file');
+
+            $excel->sheet($date, function($sheet) use ($data) {
+                $sheet->fromArray($data, null, 'A1', false, false);
+            });
+
+        })->download('xlsx');
     }
 
     public function ZKTime_template()

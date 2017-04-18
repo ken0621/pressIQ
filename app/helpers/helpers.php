@@ -534,3 +534,13 @@ function limit_char($x, $length)
         echo $y;
     }
 }
+
+/* return null value to zero */
+function n2z($value)
+{
+    if(is_null($value))
+    {
+        $value = 0;
+    }
+    return $value;
+}

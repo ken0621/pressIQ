@@ -12,6 +12,9 @@
 <div class="reports-class">
     <div class="row clearfix" style="margin-bottom: 15px;">
         <form method="get" class="range-date">
+            <div class="col-md-12">
+            <small>Date Range </small>                
+            </div>
             <div class="col-sm-5">
                 <input class="form-control datepicker" type="text" name="start_date" placeholder="Start Date" value="{{ Request::input('start_date') ? Request::input('start_date') : date('m/d/Y',strtotime($mants)) }}">
             </div>

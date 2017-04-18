@@ -535,6 +535,7 @@ function limit_char($x, $length)
     }
 }
 
+/* return null value to zero */
 function n2z($value)
 {
     if(is_null($value))

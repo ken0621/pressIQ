@@ -724,6 +724,7 @@ Route::get('/member/item/load_item_category','Member\ItemController@load_item_ca
 Route::get('/member/ecommerce/load_product_category','Member\EcommerceProductController@load_product_category');
 Route::get('/member/item/load_um','Member\UnitOfMeasurementController@load_um');
 Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
+Route::get('/member/item/load_one_um_multi/{id}','Member\UnitOfMeasurementController@load_one_um_multi');
 // Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
 Route::get('/member/item/load_category','Member\Manage_Category_Controller@load_category');
 Route::get('/member/item/manufacturer/load_manufacturer','Member\ManufacturerController@load_manufacturer');

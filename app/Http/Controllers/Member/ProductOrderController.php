@@ -267,32 +267,41 @@ class ProductOrderController extends Member
 
         /* SAVE THE IMAGE IN THE FOLDER */
         $file               = Input::file('file');
-        $extension          = ".pdf";
-        //$filename         = $file->getClientOriginalName();
-        $filename           = str_random(15).".".$extension;
-        $destinationPath    = 'uploads/'.$shop_key."-".$shop_id.'/ecommerce-upload';
 
-        if(!File::exists($destinationPath)) 
+        if($file)
         {
-            $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+            $extension          = $file->getClientOriginalExtension();
+            //$filename         = $file->getClientOriginalName();
+            $filename           = str_random(15).".".$extension;
+            $destinationPath    = 'uploads/'.$shop_key."-".$shop_id.'/ecommerce-upload';
+
+            if(!File::exists($destinationPath)) 
+            {
+                $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+            }
+
+            $upload_success    = Input::file('file')->move($destinationPath, $filename);
+
+            /* SAVE THE IMAGE PATH IN THE DATABASE */
+            $image_path = $destinationPath."/".$filename;
+
+            $update["payment_upload"] = "/" . $image_path;
+            $image_id = Tbl_ec_order::where("ec_order_id", $order_id)->update($update);
+
+            if( $upload_success) 
+            {
+               return Response::json('success', 200);
+            } 
+            else 
+            {
+               return Response::json('error', 400);
+            }
+        }
+        else
+        {
+            return Response::json('success', 200);
         }
 
-        $upload_success    = Input::file('file')->move($destinationPath, $filename);
-
-        /* SAVE THE IMAGE PATH IN THE DATABASE */
-        $image_path = $destinationPath."/".$filename;
-
-        $update["payment_upload"] = "/" . $image_path;
-        $image_id = Tbl_ec_order::where("ec_order_id", $order_id)->update($update);
-
-        if( $upload_success ) 
-        {
-           return Response::json('success', 200);
-        } 
-        else 
-        {
-           return Response::json('error', 400);
-        }
     }
 
     public function invoice_view($invoice_id)

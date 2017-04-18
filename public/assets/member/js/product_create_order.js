@@ -1,7 +1,7 @@
 var customer_invoice = new customer_invoice();
 var global_tr_html = $(".div-script tbody").html();
 var check_if_view = $(".check_if_view").val();
-var item_selected = ''; 
+var item_selected = '';
 
 function customer_invoice(){
 	init();
@@ -539,7 +539,7 @@ function customer_invoice(){
             maxFilesize: 2,
             thumbnailWidth: 148,
             thumbnailHeight: 148,
-            acceptedFiles: ".jpg, .jpeg, .png",
+            acceptedFiles: "image/*",
             init: function() 
             {
                 this.on("uploadprogress", function(file, progress) 
@@ -559,6 +559,11 @@ function customer_invoice(){
                     $("#ImportContainer .dz-message").slideUp();
                     target_file = this.files;
                     $("#files").change();
+                    if(order_id)
+                    {
+                    	$(".load-data").load("/member/ecommerce/product_order/create_order?id="+order_id +" .content-data");
+                    	console.log("/member/ecommerce/product_order/create_order?id="+order_id +" .content-data");
+                	}
                 })
 
                 this.on("dragover", function()
@@ -575,6 +580,10 @@ function customer_invoice(){
                 {
                     // $("#ModalGallery .dropzone").removeClass("dropzone-drag");
                 })
+
+                // var mockFile = { name: "", size: 12345, type: 'image/*' };
+                // this.addFile.call(this, mockFile);
+                // this.options.thumbnail.call(this, mockFile, "/uploads/PhilTECH-1/ecommerce-upload/M48OlMXW3amkLSc.png");
             }
         };
     }

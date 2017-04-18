@@ -356,9 +356,9 @@
     </div>
 </form>
 @if(isset($inv))
-<div class="panel panel-default panel-block panel-title-block panel-gray clearfix">
-    <div class="row" style="padding: 10px 30px;">
-        <div class="col-md-4">
+<div class="panel panel-default panel-block panel-title-block panel-gray clearfix col-md-4">
+    <h4>Upload</h4>
+    <div class="row" style="padding: 10px 10px;">
             <div id="ImportContainer">
                 <form action="/member/ecommerce/product_order/create_order/submit_payment_upload" id="myDropZoneImport" class="dropzone" method="post" enctype="multipart/form-data">
                     <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
@@ -372,13 +372,13 @@
                     </div>
                 </form>
             </div>
-        </div>
-        <div class="col-md-8">
-            <div>
-                <object data="test.pdf" type="application/pdf" width="300" height="200">
-                    alt : <a href="test.pdf">test.pdf</a>
-                </object>
-            </div
+    </div>
+</div>
+<div class="panel panel-default panel-block panel-title-block panel-gray clearfix col-md-8">
+    <h4>Preview</h4>
+    <div class="row load-data" style="padding: 30px 30px;">
+        <div class="content-data">
+            <img src="{{$inv->payment_upload or ''}}" style="width: 100%">
         </div>
     </div>
 </div>
@@ -451,5 +451,8 @@
 @if(!isset($inv))
 <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 @endif
+<script type="text/javascript">
+    var order_id = "{{$ec_order_id or null}}";
+</script>
 <script type="text/javascript" src="/assets/member/js/product_create_order.js"></script>
 @endsection

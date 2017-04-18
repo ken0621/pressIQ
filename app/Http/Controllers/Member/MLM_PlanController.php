@@ -13,6 +13,7 @@ use App\Globals\AuditTrail;
 
 use App\Models\Tbl_mlm_indirect_setting;
 use App\Models\Tbl_mlm_stairstep_settings;
+use App\Models\Tbl_mlm_stairstep_points_settings;
 use App\Models\Tbl_mlm_binary_pairing;
 use App\Models\Tbl_mlm_unilevel_settings;
 use App\Models\Tbl_mlm_plan;
@@ -1078,9 +1079,11 @@ class MLM_PlanController extends Member
 	}
 	public static function stairstep($shop_id)
 	{
-	    $data['membership'] = Tbl_membership::getactive(0, $shop_id)->get();
-	    $data['basic_settings'] = MLM_PlanController::basic_settings('STAIRSTEP');
-	    $data['stair_get'] = MLM_PlanController::get_stairstep($shop_id);
+	    $data['membership']      = Tbl_membership::getactive(0, $shop_id)->get();
+	    $data['basic_settings']  = MLM_PlanController::basic_settings('STAIRSTEP');
+        $data['stair_get']       = MLM_PlanController::get_stairstep($shop_id);
+        $data['stair_count']     = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->count();
+	    $data['points_settings'] = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->orderBy("stairstep_points_level","ASC ")->get();
 	    return view('member.mlm_plan.configure.stairstep', $data);
 	}
 	public static function get_stairstep($shop_id = null)
@@ -1129,42 +1132,80 @@ class MLM_PlanController extends Member
     	}
     	echo json_encode($data);
 	}
-	public function edit_save_stairstep()
+    public function edit_save_stairstep()
+    {
+        // return $_POST;
+        
+        $validate['stairstep_id'] = Request::input('stairstep_id');
+        $validate['stairstep_level'] = Request::input('stairstep_level');
+        $validate['stairstep_name'] = Request::input('stairstep_name');
+        $validate['stairstep_required_gv'] = Request::input('stairstep_required_gv');
+        $validate['stairstep_required_pv'] = Request::input('stairstep_required_pv');
+        $validate['stairstep_bonus'] = Request::input('stairstep_bonus');
+       
+        $rules['stairstep_id'] ="required";
+        $rules['stairstep_level'] ="required";
+        $rules['stairstep_name'] = "required";
+        $rules['stairstep_required_gv'] = "required";
+        $rules['stairstep_required_pv'] = "required";
+        $rules['stairstep_bonus'] = "required";
+        
+        $validator = Validator::make($validate,$rules);
+        if ($validator->passes())
+        {
+            $update['stairstep_level'] = Request::input('stairstep_level');
+            $update['stairstep_name'] = Request::input('stairstep_name');
+            $update['stairstep_required_gv'] = Request::input('stairstep_required_gv');
+            $update['stairstep_required_pv'] = Request::input('stairstep_required_pv');
+            $update['stairstep_bonus'] = Request::input('stairstep_bonus');
+            $update['shop_id'] = $this->user_info->shop_id;
+            Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
+            $data['response_status'] = "success_edit_stairstep";
+        }
+        else
+        {
+            $data['response_status'] = "warning";
+            $data['warning_validator'] = $validator->messages();
+        }
+        echo json_encode($data);
+    }
+
+	public function save_stairstep_level()
 	{
-		// return $_POST;
-		
-		$validate['stairstep_id'] = Request::input('stairstep_id');
-		$validate['stairstep_level'] = Request::input('stairstep_level');
-	    $validate['stairstep_name'] = Request::input('stairstep_name');
-	    $validate['stairstep_required_gv'] = Request::input('stairstep_required_gv');
-	    $validate['stairstep_required_pv'] = Request::input('stairstep_required_pv');
-	    $validate['stairstep_bonus'] = Request::input('stairstep_bonus');
-	   
-		$rules['stairstep_id'] ="required";
-	    $rules['stairstep_level'] ="required";
-	    $rules['stairstep_name'] = "required";
-	    $rules['stairstep_required_gv'] = "required";
-	    $rules['stairstep_required_pv'] = "required";
-	    $rules['stairstep_bonus'] = "required";
-	    
-	    $validator = Validator::make($validate,$rules);
-	    if ($validator->passes())
-    	{
-    	    $update['stairstep_level'] = Request::input('stairstep_level');
-    	    $update['stairstep_name'] = Request::input('stairstep_name');
-    	    $update['stairstep_required_gv'] = Request::input('stairstep_required_gv');
-    	    $update['stairstep_required_pv'] = Request::input('stairstep_required_pv');
-    	    $update['stairstep_bonus'] = Request::input('stairstep_bonus');
-    	    $update['shop_id'] = $this->user_info->shop_id;
-    	    Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
-    	    $data['response_status'] = "success_edit_stairstep";
-    	}
-    	else
-    	{
-    	    $data['response_status'] = "warning";
-    	    $data['warning_validator'] = $validator->messages();
-    	}
-    	echo json_encode($data);
+        $shop_id = $this->user_info->shop_id;
+        $old_count   = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->count();
+        $new_count   = count(Request::input("stairstep_settings_level"));
+                       Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->where("stairstep_points_level",">",$new_count)->delete(); 
+
+        if($new_count != 0)
+        {
+            foreach(Request::input("stairstep_settings_level") as $key => $stairstep)
+            {
+                $exist  = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->where("stairstep_points_level",Request::input("stairstep_settings_level")[$key])->first(); 
+                if($exist)
+                {
+                    $update["stairstep_points_level"]      = Request::input("stairstep_settings_level")[$key];
+                    $update["stairstep_points_amount"]     = Request::input("stairstep_settings_amount")[$key];
+                    $update["stairstep_points_percentage"] = Request::input("stairstep_settings_percent")[$key];
+                    $update["shop_id"]                     = $shop_id;
+
+                    Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->where("stairstep_points_level",Request::input("stairstep_settings_level")[$key])->update($update); 
+                }
+                else
+                {
+                    $insert["stairstep_points_level"]      = Request::input("stairstep_settings_level")[$key];
+                    $insert["stairstep_points_amount"]     = Request::input("stairstep_settings_amount")[$key];
+                    $insert["stairstep_points_percentage"] = Request::input("stairstep_settings_percent")[$key];
+                    $insert["shop_id"]                     = $shop_id;
+                    Tbl_mlm_stairstep_points_settings::insert($insert);
+                }
+            }
+        }   
+
+        $data['response_status'] = "success";
+
+        echo json_encode($data);        
+        
 	}
 	public function get_basicsettings($marketing_plan_code)
 	{

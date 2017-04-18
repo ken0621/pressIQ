@@ -44,7 +44,7 @@ class tbl_payroll_entity extends Seeder
         (27,    'Late',   'deductions'),
         (28,    'Absent',   'deductions'),
         (29,    'Under Time',   'deductions'),
-        (30,    'Net Salary',   'Bank');";
+        (30,    'Net Salary',   'net');";
 
         DB::statement($statment);
 

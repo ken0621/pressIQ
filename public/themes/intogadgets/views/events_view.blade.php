@@ -2,7 +2,7 @@
 @extends('layout')
 <div class="container-fluid">
    <div class="events">
-      <table>
+      <table style="width: 100%;">
          <tbody>
             <tr>
                <td colspan="2"><div class="title">{{ $post->post_title }}</div></td>

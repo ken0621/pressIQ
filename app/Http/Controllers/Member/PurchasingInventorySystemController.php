@@ -15,6 +15,9 @@ use App\Models\Tbl_sir_inventory;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_warehouse;
+use App\Models\Tbl_manual_invoice;
+use App\Models\Tbl_customer_invoice;
+use App\Models\Tbl_customer_invoice_line;
 use App\Globals\UnitMeasurement;
 use App\Globals\Warehouse;
 use App\Globals\Pdf_global;
@@ -418,31 +421,39 @@ class PurchasingInventorySystemController extends Member
 
                 }
 
-
-                $data["_returns"] = Tbl_sir_inventory::item()->where("inventory_sir_id",$sir_id)->get();
-                foreach ($data["_returns"] as $key_returns => $value_returns)
-                {
-                    $data["_returns"][$key_returns]->sir_item_returns = UnitMeasurement::um_view($value_returns->sir_return_item_count,$value->item_measurement_id,'');
-                }
-
                 $m_inv = Tbl_manual_invoice::where("sir_id",$sir_id)->get();
                 $item_returns = array();
                 foreach ($m_inv as $key_m => $value_m) 
                 {
-                    $cm_items = Tbl_customer_invoice_line::where("credit_memo_id",$value_m->credit_memo_id)->get();
+                    $cm_items = Tbl_customer_invoice::returns_item()->where("inv_id",$value_m->inv_id)->get();
                     if($cm_items)
                     {
                         foreach ($cm_items as $key_cm => $value_cm) 
                         {
+                             $cm_item["cm_id"]   = $value_cm->credit_memo_id;
                              $cm_item["item_id"] = $value_cm->cmline_item_id;
                              $cm_item["item_um"] = $value_cm->cmline_um;
+                             $cm_item["item_qty"]= UnitMeasurement::um_qty($value_cm->cmline_um) * $value_cm->cmline_qty;
 
                              array_push($item_returns, $cm_item);
                         }
                     }
                 }
+                $data["_returns"] = $item_returns;
+                foreach ($data["_returns"] as $key1 => $value1) 
+                {
+                    $item_info = Tbl_item::where("item_id",$value1["item_id"])->first();
+                    $data["_returns"][$key1]['item_name'] = "";
+                    $data["_returns"][$key1]['item_count'] = "";
+                    $data["_returns"][$key1]['item_base_um'] = "";
+                    if($item_info)
+                    {
+                        $data["_returns"][$key1]['item_name'] = $item_info->item_name;
+                        $data["_returns"][$key1]['item_count'] = UnitMeasurement::um_view($value1["item_qty"],$item_info->item_measurement_id,$value1["item_um"]);
+                    $data["_returns"][$key1]['item_base_um'] = $item_info->item_measurement_id;
+                    }
+                }
 
-                dd($item_returns);
                 // dd($test);
                 return view("member.purchasing_inventory_system.ilr.ilr",$data);
             }

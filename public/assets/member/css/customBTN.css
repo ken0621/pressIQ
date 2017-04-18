@@ -283,6 +283,15 @@
 {
     width:25% !important;
 }
+.width-25-n
+{
+    width:25%;
+}
+
+.width-50
+{
+    width:50%;
+}
 
 /* width section end */
 
@@ -1036,7 +1045,6 @@
 
 .payslip-gray-dotted{
     border:1px dotted silver;
-    cursor:pointer;
 }
 
 .paper-portrait
@@ -1047,3 +1055,22 @@
 {
     height:350px;
 }
+.payslip-container
+{
+    padding:5px;
+}
+
+/* height start */
+.height-17-m
+{
+    height: 17em;
+}
+.height-50
+{
+    height: 50%;
+}
+.height-100
+{
+    height: 100%;
+}
+/* height end */

@@ -4534,7 +4534,7 @@ class PayrollController extends Member
 
           $record = Tbl_payroll_record::getperiod(Self::shop_id(), 'Semi-monthly')->get();
 
-          dd($record);
+          // dd($record);
 
           return view('member.payroll.payroll_journal_entries', $data);
      }

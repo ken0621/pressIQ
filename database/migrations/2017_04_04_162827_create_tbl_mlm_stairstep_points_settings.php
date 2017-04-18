@@ -12,12 +12,13 @@ class CreateTblMlmStairstepPointsSettings extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_stairstep_distribute_slot', function (Blueprint $table) 
+        Schema::create('tbl_mlm_stairstep_points_settings', function (Blueprint $table) 
         {
-            $table->increments('stairstep_distributed_slot_id');
-            $table->integer('slot_id')->unsigned();
-            $table->integer('stairstep_distribute_id')->unsigned();
-        });    
+            $table->integer('stairstep_points_level');
+            $table->double('stairstep_points_amount');
+            $table->tinyInteger('stairstep_points_percentage');
+            $table->integer('shop_id')->unsigned();
+        });  
     }
 
     /**

@@ -663,6 +663,10 @@ class Warehouse
                  }
             }
         }
+        // elseif(!Tbl_user_warehouse_access::where("user_id", $user_id)->where("warehouse_id", $warehouse_id)->first())
+        // {
+        //     Tbl_user_warehouse_access::insert(['user_id' => $user_id, 'warehouse_id' => $warehouse_id]);
+        // }
     }
    
 }

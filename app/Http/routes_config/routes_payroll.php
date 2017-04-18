@@ -225,7 +225,20 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* PAYROLL JOURNAL SETTINGS START */
 	Route::any('/payroll_jouarnal',"Member\PayrollController@payroll_jouarnal");
 	Route::any('/payroll_jouarnal/modal_create_journal_tag',"Member\PayrollController@modal_create_journal_tag");
+	Route::any('/payroll_jouarnal/create_journal_tag',"Member\PayrollController@create_journal_tag");
+	Route::any('/payroll_jouarnal/modal_edit_journal_tag/{id}',"Member\PayrollController@modal_edit_journal_tag");
+	Route::any('/payroll_jouarnal/modal_confimr_del_journal_tag/{id}',"Member\PayrollController@modal_confimr_del_journal_tag");
+	Route::any('/payroll_jouarnal/update_payroll_journal_tag',"Member\PayrollController@update_payroll_journal_tag");
+	Route::any('/payroll_jouarnal/del_journal_tag',"Member\PayrollController@del_journal_tag");
+	Route::any('/payroll_jouarnal/relaod_payroll_journal_sel',"Member\PayrollController@relaod_payroll_journal_sel");
 	/* PAYROLL JOURNAL SETTINGS END */
+
+
+	/* PAYROLL CUSTOM PAYSLIP START */
+	Route::any('/custom_payslip',"Member\PayrollController@custom_payslip");
+	Route::any('/custom_payslip/modal_create_payslip',"Member\PayrollController@modal_create_payslip");
+	
+	/* PAYROLL CUSTOM PAYSLIP END */
 
 	/* PAYROLL PERIOD START */
 	Route::any('/payroll_period_list','Member\PayrollController@payroll_period_list');

@@ -69,9 +69,14 @@ class Purchasing_inventory_system
             Tbl_sir_inventory::insert($insert);
         }        
     }
-    public static function insert_sir_empties_returns()
+
+    public static function count_rem_qty($sir_id,$item_id)
     {
-        
+        return Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->where("sir_inventory_ref_name","!=","credit_memo")->sum("sir_inventory_count");
+    }
+    public static function count_sold_qty($sir_id,$item_id)
+    {
+        return abs(Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$item_id)->where("sir_inventory_count","<=",0)->where("sir_inventory_ref_name","!=","credit_memo")->sum("sir_inventory_count"));
     }
     public static function get_qty_item_sir($sir_id,$item_id)
     {
@@ -561,8 +566,8 @@ class Purchasing_inventory_system
         {
             foreach($data["_sir_item"] as $key => $value) 
             {                    
-                $rem_qty = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$value->item_id)->sum("sir_inventory_count");
-                $sold_qty = Tbl_sir_inventory::where("inventory_sir_id",$sir_id)->where("sir_item_id",$value->item_id)->where("sir_inventory_count","<=",0)->sum("sir_inventory_count");
+                $rem_qty = Purchasing_inventory_system::count_rem_qty($sir_id, $value->item_id);
+                $sold_qty = Purchasing_inventory_system::count_sold_qty($sir_id, $value->item_id);
 
 
                 $um = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
@@ -573,7 +578,7 @@ class Purchasing_inventory_system
 
                 $issued_qty = $value->item_qty * $qty;
                 $remaining_qty = $rem_qty;
-                $total_sold_qty = abs($sold_qty);
+                $total_sold_qty = $sold_qty;
                 
                 $rem = "";
                 $sold = "";

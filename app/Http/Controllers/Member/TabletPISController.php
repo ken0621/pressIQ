@@ -14,6 +14,7 @@ use App\Globals\Customer;
 use App\Globals\Accounting;
 use App\Globals\Pdf_global;
 use App\Globals\Category;
+use App\Globals\CreditMemo;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_employee;
@@ -604,8 +605,8 @@ class TabletPISController extends Member
                         $cm_item_info[$keys]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$keys]);
                 
                         $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
-                        $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];
-                        $item_returns[$keys]["product_id"] = Request::input('cmline_item_id')[$keys];                    
+                        $item_returns[$keys]["qty"] = $um_qty * $cm_item_info[$keys]['quantity'];
+                        $item_returns[$keys]["item_id"] = Request::input('cmline_item_id')[$keys];                    
                     }          
                 } 
                 // --> for bundles
@@ -621,8 +622,8 @@ class TabletPISController extends Member
                             {
                                 $qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keyitem_cm]);
                                 $bundle_qty = UnitMeasurement::um_qty($value_bundle_cm->bundle_um_id);
-                                $_bundle[$key_bundle_cm]['product_id'] = $value_bundle_cm->bundle_item_id;
-                                $_bundle[$key_bundle_cm]['quantity'] = (Request::input('cmline_qty')[$keyitem_cm] * $qty) * ($value_bundle_cm->bundle_qty * $bundle_qty);
+                                $_bundle[$key_bundle_cm]['item_id'] = $value_bundle_cm->bundle_item_id;
+                                $_bundle[$key_bundle_cm]['qty'] = (Request::input('cmline_qty')[$keyitem_cm] * $qty) * ($value_bundle_cm->bundle_qty * $bundle_qty);
 
                                 array_push($item_returns, $_bundle[$key_bundle_cm]);
                             }
@@ -639,7 +640,7 @@ class TabletPISController extends Member
                             $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
                             if($type == 4)
                             {
-                                if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['product_id'])
+                                if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['item_id'])
                                 {
                                     $i = "true";
                                 }                    
@@ -656,8 +657,6 @@ class TabletPISController extends Member
 
         }
         // END CM/RETURNS
-
-
 		if($return == 0)
 		{
 		    $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
@@ -671,10 +670,13 @@ class TabletPISController extends Member
                 {
                     $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $invoice_id);
 
-                    $cm_transaction_type   = "credit_memo";
-                    $cm_transaction_id     = $cm_id;
+                    $ref_name   = "credit_memo";
+                    $ref_id     = $cm_id;
                     //arcy refill sir_inventory
-                    // $cm_data               = Purchasing_inventory_system::insert_sir_empties_returns($sir_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
+                    foreach ($item_returns as $key_returns => $value_returns) 
+                    {
+                        $cm_data = Purchasing_inventory_system::insert_sir_inventory($sir_id, $value_returns, $ref_name, $ref_id);                        
+                    }
                 }
 
 			   if($sir_id != null && $invoice_id != null)

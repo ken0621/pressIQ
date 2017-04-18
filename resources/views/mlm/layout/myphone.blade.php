@@ -25,6 +25,10 @@
       <link href="/member-theme/myphone/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
       <!-- Custom Theme Style -->
       <link href="/member-theme/myphone/build/css/custom.min.css" rel="stylesheet">
+
+      <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
+      <link rel="stylesheet" href="/assets/member/css/member.css" type="text/css"/>
+      <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
       <style>
          .navbar, .left_col { background-color: #5c3424; }
          #menu_toggle { color: #5c3424; }
@@ -303,6 +307,37 @@
             </footer>
             <!-- /footer content -->
          </div>
+      </div>
+      <div id="global_modal" class="modal fade" role="dialog" >
+          <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+                  
+              </div>
+          </div>
+      </div>
+
+      <div class="modal-loader hidden"></div>
+        <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+
+                <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Modal Header</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Some text in the modal.</p>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
       </div>
       <!-- jQuery -->
       <script src="/member-theme/myphone/vendors/jquery/dist/jquery.min.js"></script>

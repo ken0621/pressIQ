@@ -60,7 +60,7 @@
                 </form>
 
                 <div class="col-md-12 table-responsive">
-                    <div class="load-data" target="productpoints-paginate">
+                    <div class="load-data" target="productpoints-paginate" @if($item_search != null) item="{{$item_search}}" @endif >
                         <div id="productpoints-paginate">
                     <table class="table table-condensed table-bordered">
                         <thead>
@@ -175,6 +175,8 @@
     function search_item(search)
     {
         var item_search = $(search).val();
+        window.location = link + '?item=' + item_search;
+        
         console.log(item_search);
         var link_load = link + '?item=' + item_search;
         $('#productpoints-paginate').html('<div style="margin: 100px auto;" class="loader-16-gray"></div>');

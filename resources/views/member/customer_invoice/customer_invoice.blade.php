@@ -92,7 +92,7 @@
                             <div class="table-responsive">
                                 <div class="col-sm-12">
                                     <table class="digima-table">
-                                        <thead >
+                                        <thead>
                                             <tr>
                                                 <th style="" ></th>
                                                 <th style="">Service Date</th>

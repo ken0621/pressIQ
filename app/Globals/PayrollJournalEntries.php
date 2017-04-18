@@ -42,8 +42,8 @@ class PayrollJournalEntries
 	 */
 	public static function payroll_summary($start_date, $end_date)
 	{
-		// $start_date 	= "01-26-2017";
-		// $end_date		= "02-10-2017";
+		$start_date = "01-26-2017";
+		$end_date	= "02-10-2017";
 
 		/* GET ALL TOTALS OF EACH EMPLOYEE */
 		$_record = Payroll::record_by_date(PayrollJournalEntries::getShopId(), $start_date, $end_date);
@@ -56,27 +56,35 @@ class PayrollJournalEntries
 
 
 		$_journal = [];
+		$_temp_journal = [];
 
-		/* GET ALL PAYROLL ENTOTY */
+		/* GET ALL PAYROLL ENTITY */
 		$_payroll_entity = Tbl_payroll_entity::get();
 		foreach($_payroll_entity as $key=>$entity)
 		{
 			/* GROUP EMPLOYEE BY GIVEN ENTITY */
-			$temp_journal = collect($_record)->groupBy( function($item) use($entity)
+			$_groupEntity = collect($_record)->groupBy( function($item) use($entity)
 			{
 				return $item['accounts'][$entity->entity_name];
 			});
 
-			/* AFTER GROUPING INTO EACH ENTITY, GET TOTAL OF EACH PAYROLL ENTITY */
-			foreach($temp_journal as $key2=>$tjournal)
+			/* AFTER GROUPING INTO EACH ENTITY, GET TOTAL OF EACH PAYROLL ENTITY AND INSERT INTO TEMPORARY JOURNAL */
+			foreach($_groupEntity as $key2=>$groupEntity)
 			{
-				$total = collect($tjournal)->sum($entity->entity_name);
-
-				/* GET ALL ACCOUNT DETAILS AND ADD THE TOTAL AMOUNT */
-				$account 			= Tbl_chart_of_account::accountType()->where("account_id", $key2)->first()->toArray();
-				$account['total'] 	= $total;
-				array_push($_journal, $account);
+				$temp_journal['account_id']		= $key2;
+				$temp_journal['total'] 			= collect($groupEntity)->sum($entity->entity_name);	
+				array_push($_temp_journal, $temp_journal);
 			}
+		}
+
+		/* TEMPORARY JOURNAL MAY HAVE SAME CHART OF ACCOUNT IN DIFFERENT ENTITY [GROUPING JOURNAL TAGS IN PAYROLL CONFIG] */
+		$_result_journal = collect($_temp_journal)->groupBy("account_id");
+		foreach($_result_journal as $key3=>$result)
+		{
+			/* GET ALL ACCOUNT DETAILS AND ADD THE TOTAL AMOUNT */
+			$journal			= Tbl_chart_of_account::accountType()->where("account_id", $key3)->first()->toArray();
+			$journal['total'] 	= collect($result)->sum('total');
+			array_push($_journal, $journal);
 		}
 
 		return collect($_journal)->sortByDesc('normal_balance')->toArray();

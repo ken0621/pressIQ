@@ -437,12 +437,12 @@ class PurchasingInventorySystemController extends Member
                              $cm_item["item_id"] = $value_cm->cmline_item_id;
                              $cm_item["item_um"] = $value_cm->cmline_um;
 
-
+                             array_push($item_returns, $cm_item);
                         }
                     }
                 }
 
-                dd($data["_returns"]);
+                dd($item_returns);
                 // dd($test);
                 return view("member.purchasing_inventory_system.ilr.ilr",$data);
             }

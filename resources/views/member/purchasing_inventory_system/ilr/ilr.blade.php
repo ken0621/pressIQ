@@ -123,6 +123,60 @@
                     </div>
                 </div>                
             </div>
+
+
+            <div class="form-group">
+                <div class="col-md-12">
+                    <div class="row clearfix draggable-container ilr-container">
+                        <div class="table-responsive">
+                            <div class="col-sm-12">
+                                <table class="digima-table">
+                                    <thead >
+                                        <tr>
+                                            <th style="width: 30px;"></th>
+                                            <th style="width: 15px;" class="text-right">#</th>
+                                            <th style="width: 200px;">Product Name</th>
+                                            <th style="width: 200px;">Returns QTY</th>
+                                            <th style="width: 30px;"></th>
+                                            <th style="width: 200px;">Physical Count</th>
+                                            <th style="width: 200px;">Status</th>
+                                            <th style="width: 200px;">Info</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                    @if($_returns)
+                                        @foreach($_returns as $keys => $returns)                                
+                                        <tr class="tr-draggable tr-draggable-html">
+                                            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+                                            <td class="invoice-number-td text-right">{{$keys+1}}</td>
+                                            <td>
+                                                <label>{{$returns->item_name}}</label>
+                                            </td>                                            
+                                            <td>
+                                                <label>{{$returns->sir_return_item_count}} {{$sir_item->um_abbrev}} </label>
+                                            </td>
+                                            <td>
+                                                <i size="sm" link="/member/pis/ilr/update_count/{{$sir_item->sir_id}}/{{$sir_item->item_id}}" class="popup btn btn-custom-white fa fa-upload"></i>
+                                            </td>
+                                            <td>
+                                                <input type="text" readonly="true" name="physical[]" value="{{$sir_item->physical_count}}" class="input-sm">
+                                            </td>
+                                            <td>
+                                                <input type="text" readonly="true" name="status[]" value="{{$sir_item->status}}" class="input-sm text-center">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="info[]" readonly="true" style="color: red" value="{{$sir_item->is_updated == 1 ? currency('PHP',$sir_item->infos) : ''}}" class="number-input input-sm">
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    @endif
+                                    </tbody>                                   
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+            </div>
         </div>
     </div>
 </form>

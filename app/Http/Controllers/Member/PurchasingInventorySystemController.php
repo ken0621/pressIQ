@@ -417,6 +417,32 @@ class PurchasingInventorySystemController extends Member
                     $data["_sir_item"][$key]->status = $status;
 
                 }
+
+
+                $data["_returns"] = Tbl_sir_inventory::item()->where("inventory_sir_id",$sir_id)->get();
+                foreach ($data["_returns"] as $key_returns => $value_returns)
+                {
+                    $data["_returns"][$key_returns]->sir_item_returns = UnitMeasurement::um_view($value_returns->sir_return_item_count,$value->item_measurement_id,'');
+                }
+
+                $m_inv = Tbl_manual_invoice::where("sir_id",$sir_id)->get();
+                $item_returns = array();
+                foreach ($m_inv as $key_m => $value_m) 
+                {
+                    $cm_items = Tbl_customer_invoice_line::where("credit_memo_id",$value_m->credit_memo_id)->get();
+                    if($cm_items)
+                    {
+                        foreach ($cm_items as $key_cm => $value_cm) 
+                        {
+                             $cm_item["item_id"] = $value_cm->cmline_item_id;
+                             $cm_item["item_um"] = $value_cm->cmline_um;
+
+
+                        }
+                    }
+                }
+
+                dd($data["_returns"]);
                 // dd($test);
                 return view("member.purchasing_inventory_system.ilr.ilr",$data);
             }

@@ -96,27 +96,30 @@ class Utilities
                                 }
                             }
 
-                            foreach($submenu['user_settings'] as $key3=>$access_name)
+                            if(isset($_page_list[$key]['submenu'][$key2]))
                             {
-                                // dd(Utilities::checkAccess($page_code, $access_name)."|".$page_code."-".$access_name);
-                                if(Utilities::checkAccess($page_code, $access_name) == 0)
+                                foreach($submenu['user_settings'] as $key3=>$access_name)
                                 {
-                                    array_forget($_page_list, $key.'.submenu.'.$key2.".user_settings.".$key3);
-                                    $setting_counter--;
+                                    // dd(Utilities::checkAccess($page_code, $access_name)."|".$page_code."-".$access_name);
+                                    if(Utilities::checkAccess($page_code, $access_name) == 0)
+                                    {
+                                        array_forget($_page_list, $key.'.submenu.'.$key2.".user_settings.".$key3);
+                                        $setting_counter--;
+                                    }
+                                    if($position_id <> null)
+                                    {
+                                    	// dd(true);
+                                    	$if_has_access = Tbl_user_access::where("access_position_id", $position_id)
+                                    					->where("access_page_code", $page_code)
+                                    					->where("access_name", $access_name)->first();
+                                    	$_page_list[$key]['submenu'][$key2]['setting_is_checked'][$key3] = $if_has_access ? 1 : 0;
+                                	}
                                 }
-                                if($position_id <> null)
+                                if($setting_counter < 1)
                                 {
-                                	// dd(true);
-                                	$if_has_access = Tbl_user_access::where("access_position_id", $position_id)
-                                					->where("access_page_code", $page_code)
-                                					->where("access_name", $access_name)->first();
-                                	$_page_list[$key]['submenu'][$key2]['setting_is_checked'][$key3] = $if_has_access ? 1 : 0;
-                            	}
-                            }
-                            if($setting_counter < 1)
-                            {
-                                array_forget($_page_list, $key.'.submenu.'.$key2);
-                                $submenu_counter--;
+                                    array_forget($_page_list, $key.'.submenu.'.$key2);
+                                    $submenu_counter--;
+                                }
                             }
                        }
 

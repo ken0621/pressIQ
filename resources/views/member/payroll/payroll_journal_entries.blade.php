@@ -34,12 +34,21 @@
 				</tr>
 			</thead>
 			<tbody>
+				@foreach($_record as $record)
+					@if($record['total'] > 0)
+						<tr>
+							<td>{{$record['account_number']}}</td>
+							<td>{{$record['account_name']}}</td>
+							<td>{{$record['chart_type_name']}}</td>
+							<td>{{$record['normal_balance'] == 'debit' ? currency('PHP', $record['total']) : ''}}</td>
+							<td>{{$record['normal_balance'] == 'credit' ? currency('PHP', $record['total']) : ''}}</td>
+						</tr>
+					@endif
+				@endforeach
 				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td colspan="3"></td>
+					<td>{{currency('PHP', collect($_record)->where('normal_balance', 'debit')->sum('total'))}}</td>
+					<td>{{currency('PHP', collect($_record)->where('normal_balance', 'debit')->sum('total'))}}</td>
 				</tr>
 			</tbody>
 		</table>
@@ -69,7 +78,9 @@ function payroll_journal_entry()
 	{
 		$(document).on('change', '.start-date, .end-date', function(event) {
 			event.preventDefault();
-			$(".load-data").load("/member/payroll/payroll_summary .load-data table", function()
+			var start 	= $(".start-date").val();
+			var end 	= $(".end-date").val();
+			$(".load-data").load("/member/payroll/payroll_summary?start=" +start +"&&end=" +end +" .load-data table", function()
 			{
 				toastr.success("Generated");
 			})

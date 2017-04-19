@@ -269,7 +269,7 @@ Route::any('/member/pis/agent/position/archived_submit','Member\AgentPositionCon
 /* END EMPLOYEE POSITION*/
 
 
-/* START EMPLOYEE*/
+/* START AGENT*/
 Route::any('/member/pis/agent_list','Member\AgentController@index');
 Route::any('/member/pis/agent/add','Member\AgentController@add');
 Route::any('/member/pis/agent/add_submit','Member\AgentController@add_submit');
@@ -277,7 +277,10 @@ Route::any('/member/pis/agent/edit/{id}','Member\AgentController@edit');
 Route::any('/member/pis/agent/edit_submit','Member\AgentController@edit_submit');
 Route::any('/member/pis/agent/archived/{id}/{action}','Member\AgentController@archived');
 Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_submit');
-/* END EMPLOYEE*/
+/* END AGENT*/
+
+/*AGENT TRANSACTION*/
+Route::any('/member/pis/agent/transaction/{id}','Member\AgentTransactionController@agents_transaction');
 
 /* START U/M TYPES ARCY*/
 Route::any('/member/item/um_type','Member\UnitMeasurementTypeController@index');
@@ -463,6 +466,13 @@ Route::post('/member/customer/invoice/update','Member\Customer_InvoiceController
 Route::any('/member/customer/customer_invoice_view/{id}','Member\Customer_InvoiceController@invoice_view');
 Route::any('/member/customer/customer_invoice_pdf/{id}','Member\Customer_InvoiceController@invoice_view_pdf');
 
+//sales receipt
+Route::get('/member/customer/sales_receipt','Member\Customer_SaleReceiptController@index');
+Route::get('/member/customer/sales_receipt/list','Member\Customer_SaleReceiptController@sales_receipt_list');
+Route::any('/member/customer/sales_receipt/create','Member\Customer_SaleReceiptController@create_sales_receipt');
+Route::any('/member/customer/sales_receipt/update','Member\Customer_SaleReceiptController@update_sales_receipt');
+
+
 Route::get('/member/customer/product_repurchase','Member\MLM_ProductRepurchaseController@index');//ERWIN
 Route::post('/member/customer/product_repurchase/submit','Member\MLM_ProductRepurchaseController@submit');//ERWIN
 Route::get('/member/customer/product_repurchase/get_product_code/{id}','Member\MLM_ProductRepurchaseController@get_code');//ERWIN
@@ -477,8 +487,6 @@ Route::post('/member/about/update','Member\StoreInfoController@update');
 Route::get('/member/about/remove/{id}','Member\StoreInfoController@remove');
 
 //arcy
-//-sales-receipt start
-Route::get('/member/customer/sales_receipt','Member\Customer_SaleReceiptController@index');
 Route::get('/member/customer/estimate','Member\Customer_EstimateController@index');
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
 
@@ -518,7 +526,12 @@ Route::any('/member/vendor/receive_inventory','Member\Vendor_ReceiveInventoryCon
 Route::any('/member/vendor/receive_inventory/add','Member\Vendor_ReceiveInventoryController@add_receive_inventory');
 Route::any('/member/vendor/receive_inventory/update','Member\Vendor_ReceiveInventoryController@update_receive_inventory');
 
-
+// VENDOR PAYBILLS
+Route::any('/member/vendor/paybill','Member\Vendor_PayBillController@index');
+Route::any('/member/vendor/paybill/list','Member\Vendor_PayBillController@paybill_list');
+Route::get('/member/vendor/load_pb/{id}','Member\Vendor_PayBillController@load_vendor_pb');
+Route::any('/member/vendor/paybill/add','Member\Vendor_PayBillController@add_pay_bill');
+Route::any('/member/vendor/paybill/update/{id}','Member\Vendor_PayBillController@update_pay_bill');
 
 Route::get('/member/vendor/write_check','Member\Vendor_WriteCheckController@index');
 
@@ -711,6 +724,7 @@ Route::get('/member/item/load_item_category','Member\ItemController@load_item_ca
 Route::get('/member/ecommerce/load_product_category','Member\EcommerceProductController@load_product_category');
 Route::get('/member/item/load_um','Member\UnitOfMeasurementController@load_um');
 Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
+Route::get('/member/item/load_one_um_multi/{id}','Member\UnitOfMeasurementController@load_one_um_multi');
 // Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
 Route::get('/member/item/load_category','Member\Manage_Category_Controller@load_category');
 Route::get('/member/item/manufacturer/load_manufacturer','Member\ManufacturerController@load_manufacturer');
@@ -742,7 +756,9 @@ Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* ITEM IMPORT*/
 Route::controller('/member/item/import', 'Member\ItemImportController');
 /* End */
-/* ITEM IMPORT*/
+/* ECOMMERCE COUPON CODE*/
+Route::controller('/member/ecommerce/coupon', 'Member\CouponVoucherController');
+
 Route::controller('/member/accounting/journal', 'Member\JournalEntryController');
 /* End */
 

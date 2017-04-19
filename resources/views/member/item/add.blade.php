@@ -71,10 +71,18 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-4">
-                            <label>Initial quantity on hand *</label>
-                            <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" required>
-                        </div>                     
+                        <div class="col-md-4">    
+                            <label>Initial quantity on hand *</label>                    
+                            <div class="col-md-6">
+                                <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" required>
+                            </div>              
+                            <div class="col-md-6">
+                                <input type="hidden" name="initial_qty" value="1" class="unit-qty">
+                                <select class="select-um form-control">
+                                     @include("member.load_ajax_data.load_um_multi")
+                                </select>
+                            </div>   
+                        </div>                  
                         <div class="col-md-4">
                             <label>Reorder Point </label>
                             <input type="text" class="form-control input-sm" id="item_reorder_point" value="{{isset($data['item_reorder_point']) ? $data['item_reorder_point'] : ''}}" name="item_reorder_point" >

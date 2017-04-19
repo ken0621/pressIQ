@@ -478,6 +478,7 @@ function customer_invoice(){
 		{
 		    link 		: '/member/maintenance/payment_method/add',
 		    link_size 	: 'sm',
+		    hasPopup 	: 'false',
 		    width 		: "100%",
 		    placeholder : 'Payment Method'
 		});
@@ -568,7 +569,10 @@ function customer_invoice(){
                 	if(order_id)
                     {
                     	console.log("hello");
-                    	$(".load-data").load("/member/ecommerce/product_order/create_order?id="+order_id +" .content-data");
+                    	$(".load-data").load("/member/ecommerce/product_order/create_order?id="+order_id +" .content-data", function()
+                    		{
+                    			toastr.success("Successfully changed attachment");
+                    		});
                 	}
                 })
 

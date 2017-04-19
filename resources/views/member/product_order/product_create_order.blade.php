@@ -91,17 +91,18 @@
                             <label>Billing Address</label>
                             <textarea {{isset($inv) ? 'disabled' : ''}} class="form-control input-sm textarea-expand" name="inv_customer_billing_address" placeholder="">{{$inv->billing_address or ''}}</textarea>
                         </div>
-                        <div class="col-sm-1">  
-                            <label>Terms</label>
-                            <select {{isset($inv) ? 'disabled' : ''}} class="form-control input-sm" name="inv_terms_id">
-                                <option value="1" {{isset($inv) ? $inv->term_id == 1 ? 'selected' : '' : ''}}>Net 10</option>
-                                <option value="2" {{isset($inv) ? $inv->term_id == 2 ? 'selected' : '' : ''}}>Net 30</option>
+                        <div class="col-sm-2">  
+                            <label>Online Payment Method</label>
+                            <select {{isset($inv) ? 'disabled' : ''}} class="form-control input-sm {{isset($inv) ? '' : 'drop-down-payment'}}" name="payment_method_id">
+                                <option class="hidden" value=""></option>
+                                @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($inv) ? $inv->payment_method_id : ''])
                             </select>
                         </div>
                         <div class="col-sm-2">  
-                            <label>Online Payment Method</label>
-                            <select {{isset($inv) ? 'disabled' : ''}} class="form-control input-sm drop-down-payment" name="payment_method_id">
-                                @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($inv) ? $inv->payment_method_id : ''])
+                            <label>Payment Status</label>
+                            <select class="form-control input-sm" name="payment_status">
+                                <option value="0" {{isset($inv) ? $inv->payment_status == 0 ? 'selected' : '' : ''}}>Unpaid</option>
+                                <option value="1" {{isset($inv) ? $inv->payment_status == 1 ? 'selected' : '' : ''}}>Paid</option>
                             </select>
                         </div>
                         <div class="col-sm-2">
@@ -112,9 +113,9 @@
                             <label>Due Date</label>
                             <input {{isset($inv) ? 'disabled' : ''}} type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{isset($inv) ? date('m/d/Y',strtotime($inv->due_date)) : ''}}" />
                         </div>
-                        <div class="col-sm-3">
+                        <div class="col-sm-2">
                             @if(isset($inv))
-                                @if($inv->payment_method_id > 0)
+                                @if($inv->payment_status == 1)
                                 <div class="text-center">
                                     <h2 class="green">PAID <span class="fa fa-check-circle"></span></h2>
                                 </div>

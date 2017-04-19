@@ -231,9 +231,9 @@ class ProductOrderController extends Member
     }
     public function update_invoice()
     {   
-        $data["ec_order_id"]                = Request::input("ec_order_id");
-        $data["order_status"]               = Request::input("order_status");
-        $data["payment_method_id"]          = Request::input("payment_method_id");
+        $data["ec_order_id"]    = Request::input("ec_order_id");
+        $data["order_status"]   = Request::input("order_status");
+        $data["payment_status"] = Request::input("payment_status");
 
         $response                           = Ec_order::update_ec_order($data);
         if(isset($response["status"]))

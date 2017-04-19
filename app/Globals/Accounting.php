@@ -228,7 +228,7 @@ class Accounting
 		if(Accounting::checkReceivable($entry["reference_module"]))
 		{
 			$line_data["entry_amount"]	= $entry["total"];
-			$line_data["entry_type"] 	= "Debit";
+			$line_data["entry_type"] 	= Accounting::normalBalance($account_receivable);
 			$line_data["account_id"] 	= $account_receivable;
 			Accounting::insertJournalLine($line_data);
 
@@ -236,7 +236,7 @@ class Accounting
 			if($entry["discount"] > 0)
 			{
 				$line_data["entry_amount"]	= $entry["discount"];
-				$line_data["entry_type"] 	= "Debit";
+				$line_data["entry_type"] 	= Accounting::normalBalance(Accounting::getDiscountSale());
 				$line_data["account_id"] 	= Accounting::getDiscountSale();
 				Accounting::insertJournalLine($line_data);
 			}
@@ -245,7 +245,7 @@ class Accounting
 			if($entry["vatable"] > 0)
 			{
 				$line_data["entry_amount"]	= $entry["vatable"];
-				$line_data["entry_type"] 	= "Credit";
+				$line_data["entry_type"] 	= Accounting::normalBalance(Accounting::getOutputVatPayable());
 				$line_data["account_id"] 	= Accounting::getOutputVatPayable();
 				Accounting::insertJournalLine($line_data);
 			}
@@ -254,7 +254,7 @@ class Accounting
 			if($entry["ewt"] > 0)
 			{
 				$line_data["entry_amount"]	= $entry["ewt"];
-				$line_data["entry_type"] 	= "Debit";
+				$line_data["entry_type"] 	= Accounting::normalBalance(Accounting::getWitholdingTax());
 				$line_data["account_id"] 	= Accounting::getWitholdingTax();
 				Accounting::insertJournalLine($line_data);
 			}
@@ -262,7 +262,7 @@ class Accounting
 		else
 		{
 			$line_data["entry_amount"]	= $entry["total"];
-			$line_data["entry_type"] 	= "Credit";
+			$line_data["entry_type"] 	= Accounting::normalBalance($account_payable);
 			$line_data["account_id"] 	= $account_payable;
 			Accounting::insertJournalLine($line_data);
 
@@ -270,7 +270,7 @@ class Accounting
 			if($entry["discount"] > 0)
 			{
 				$line_data["entry_amount"]	= $entry["discount"];
-				$line_data["entry_type"] 	= "Credit";
+				$line_data["entry_type"] 	= Accounting::contraAccount(Accounting::getDiscountPurchase());
 				$line_data["account_id"] 	= Accounting::getDiscountPurchase();
 				Accounting::insertJournalLine($line_data);
 			}
@@ -279,7 +279,7 @@ class Accounting
 			if($entry["vatable"] > 0)
 			{
 				$line_data["entry_amount"]	= $entry["vatable"];
-				$line_data["entry_type"] 	= "Debit";
+				$line_data["entry_type"] 	= Accounting::contraAccount(Accounting::getOutputVatPayable());
 				$line_data["account_id"] 	= Accounting::getOutputVatPayable();
 				Accounting::insertJournalLine($line_data);
 			}
@@ -288,7 +288,7 @@ class Accounting
 			if($entry["ewt"] > 0)
 			{
 				$line_data["entry_amount"]	= $entry["ewt"];
-				$line_data["entry_type"] 	= "Credit";
+				$line_data["entry_type"] 	= Accounting::contraAccount(Accounting::getWitholdingTax());
 				$line_data["account_id"] 	= Accounting::getWitholdingTax();
 				Accounting::insertJournalLine($line_data);
 			}
@@ -300,39 +300,47 @@ class Accounting
 
 			$line_data["item_id"] = $entry_line["item_id"];
 
-			if($entry["reference_module"] == "invoice")
+			switch($entry["reference_module"])
 			{
-				/* INCOME ACCOUNT */
-				$line_data["entry_amount"]	= $entry_line["entry_amount"];
-				$line_data["entry_type"] 	= "Credit";
-				$line_data["account_id"] 	= $account_income;
-				Accounting::insertJournalLine($line_data);
-
-				if($item->item_type_id == 1)
-				{
-					/* EXPENSE ACCOUNT */
-					$line_data["entry_amount"]	= $item->item_cost;
-					$line_data["entry_type"] 	= "Debit";
-					$line_data["account_id"] 	= $account_expense;
+				case "invoice":
+					/* INCOME ACCOUNT */
+					$line_data["entry_amount"]	= $entry_line["entry_amount"];
+					$line_data["entry_type"] 	= Accounting::normalBalance($account_income);
+					$line_data["account_id"] 	= $account_income;
 					Accounting::insertJournalLine($line_data);
 
-					/* ASSET ACCOUNT */
-					$line_data["entry_amount"]	= $item->item_cost;
-					$line_data["entry_type"] 	= "Credit";
-					$line_data["account_id"] 	= $account_asset;
-					Accounting::insertJournalLine($line_data);
-				}
+					if($item->item_type_id == 1)
+					{
+						/* EXPENSE ACCOUNT */
+						$line_data["entry_amount"]	= $item->item_cost;
+						$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
+						$line_data["account_id"] 	= $account_expense;
+						Accounting::insertJournalLine($line_data);
+
+						/* ASSET ACCOUNT */
+						$line_data["entry_amount"]	= $item->item_cost;
+						$line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
+						$line_data["account_id"] 	= $account_asset;
+						Accounting::insertJournalLine($line_data);
+					}
+					break;
+
+				case "purchase-order":
+					break;
+				case "sales-receipt":
+					break;
+				case "bill":
+					break;
+				case "credit-memo":
+					break;
+				case "debit-memo":
+					break;
+				// SO ON
 			}
 		}
 
 		return $line_data["je_id"];
-		// $_first 	= Tbl_item::accountAsset()->where("item_id", 39)->select("item_id","item_asset_account_id as account_id", "account_name", "chart_type_name", "normal_balance")->where("item_asset_account_id","<>", "NULL");
-		// $_second 	= Tbl_item::accountIncome()->where("item_id", 39)->select("item_id","item_income_account_id as account_id", "account_name", "chart_type_name", "normal_balance")->where("item_income_account_id","<>", "NULL");
-		// $_third 	= Tbl_item::accountExpense()->where("item_id", 39)->select("item_id","item_expense_account_id  as account_id", "account_name", "chart_type_name", "normal_balance")->where("item_expense_account_id","<>", "NULL");	
-
-		// dd($_second->union($_first)->union($_third)->get()->toArray());
 	}
-
 	public static function insertJournalLine($line)
 	{
 		$journal_line['jline_je_id']		= $line["je_id"];
@@ -345,16 +353,51 @@ class Accounting
 		Tbl_journal_entry_line::insert($journal_line);
 	}
 
+	/** 
+	 * Checking if the given $type is a receivable or payable type
+	 * @param 	string 		$type 			Reference module / type of transaction
+	 * @return 	boolean 					true if it is receivable and false if not - DD for invalid(For developer purpose)
+	*/
 	public static function checkReceivable($type)
 	{
 		if($type == "invoice")
 		{
 			return true;
 		}
-		else
+		elseif($type == "credit-memo")
 		{
 			return false;
 		}
+		else
+		{
+			dd("Invalid Reference Module");
+		}
+	}
+
+	/**
+	 * Getting normal balance of the given account
+	 *
+	 * @param 	string  	$account_id 	account id of specific account
+	 * @return 	string 						Credit or Debit
+	 */
+	public static function normalBalance($account_id)
+	{
+		$balance = Tbl_chart_of_account::type()->where("account_id", $account_id)->pluck("normal_balance");
+		if($balance == "credit") 	return 'Credit';
+		elseif($balance == "debit") return 'Debit';
+	}
+
+	/**
+	 * Getting reverse normal balance of the given account
+	 *
+	 * @param 	string  	$account_id 	account id of specific account
+	 * @return 	string 						Credit or Debit
+	 */
+	public static function contraAccount($account_id)
+	{
+		$balance = Tbl_chart_of_account::type()->where("account_id", $account_id)->pluck("normal_balance");
+		if($balance == "credit") 	return 'Debit';
+		elseif($balance == "debit") return 'Credit';
 	}
 
 	/**
@@ -399,7 +442,7 @@ class Accounting
 		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "tax-output-vat-payable")->first();
         if(!$exist_account)
         {
-            $insert["account_shop_id"]          = $shop_id;
+            $insert["account_shop_id"]          = Accounting::getShopId();
             $insert["account_type_id"]          = 9;
             $insert["account_number"]           = "00000";
             $insert["account_name"]             = "Output Vat Payable";
@@ -492,7 +535,7 @@ class Accounting
 	// Discount									= discount-sale
 	// Discount									= discount-purchase
 
-		public static function getJournalById($reference_module, $reference_id)
+	public static function getJournalById($reference_module, $reference_id)
 	{
 		// $journal = Tbl_journal_entry::where("je_reference_id", $reference_id)->where("je_reference_module", $reference_module)->first();
 

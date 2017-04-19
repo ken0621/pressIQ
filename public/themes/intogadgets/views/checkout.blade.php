@@ -228,11 +228,17 @@
 			<div class="order-summary">
 				@if (session('fail'))
 				    <div class="alert alert-danger">
-					    <ul>
+				    	@if(is_array(session('fail')))
+				    		<ul>
 					        @foreach(session('fail') as $fail)
 				        		<li>{{ $fail }}</li>
 					        @endforeach
-					    </ul>
+					        </ul>
+					    @else
+					    	<ul style="padding: 0; margin: 0;">
+					    		<li>{{ session('fail') }}</li>
+					    	</ul>
+				        @endif
 				    </div>
 				@endif
 				<div class="number-in-cart">You have {{ count($get_cart["cart"]) }} in your cart.</div>

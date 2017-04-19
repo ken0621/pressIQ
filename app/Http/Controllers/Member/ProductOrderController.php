@@ -21,7 +21,7 @@ use App\Models\Tbl_ec_order;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_coupon_code;
-use App\Models\Tbl_payment_method;
+use App\Models\Tbl_online_pymnt_method;
 
 use Request;
 use Input;
@@ -37,11 +37,11 @@ class ProductOrderController extends Member
     {
         $data["page"]               = "Customer Invoice";
         $data["_customer"]          = Tbl_customer::where("archived", 0)->get();
-        $data["_payment_method"]    = Tbl_payment_method::where("archived", 0)->where("shop_id",$this->user_info->shop_id)->get();
+    $data["_payment_method"]        = Tbl_online_pymnt_method::get();
         $data['_product']           = Ecom_Product::getProductList();
         // dd($data);
-        $data['_um']        = UnitMeasurement::load_um_multi();
-        $data["action"]     = "/member/ecommerce/product_order/create_order/create_invoice";
+        $data['_um']                = UnitMeasurement::load_um_multi();
+        $data["action"]             = "/member/ecommerce/product_order/create_order/create_invoice";
 
         $id = Request::input('id');
         if($id)

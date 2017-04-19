@@ -24,6 +24,8 @@ function global()
 
         action_global_search();
         action_money_format();
+
+        $('[data-toggle="tooltip"]').tooltip({container: 'body'}); 
     }
     function add_event_global_popup()
     {

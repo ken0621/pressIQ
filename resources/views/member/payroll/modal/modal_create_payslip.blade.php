@@ -92,7 +92,7 @@
 					<div class="panel-heading">Payslip Preview</div>
 					<div class="panel-body">
 						<div class="payslip-div paper-portrait">
-							<div class="payslip-gray-dotted width-25-n payslip-container" style="height:auto;position: absolute;">
+							<div class="payslip-gray-dotted width-25-n payslip-container" style="height:auto;display: inline-block;">
 								<div class="col-md-12 padding-5">
 									<div class="payslip-div padding-5">
 										<div class="company-logo company-logo-left">

@@ -442,7 +442,7 @@ class Accounting
 		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "tax-output-vat-payable")->first();
         if(!$exist_account)
         {
-            $insert["account_shop_id"]          = $shop_id;
+            $insert["account_shop_id"]          = Accounting::getShopId();
             $insert["account_type_id"]          = 9;
             $insert["account_number"]           = "00000";
             $insert["account_name"]             = "Output Vat Payable";

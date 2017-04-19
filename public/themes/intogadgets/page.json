@@ -363,7 +363,8 @@
 				{"name":"link", "type":"text"},
 				{"name":"address", "type":"hidden"},
 				{"name":"latitude", "type":"hidden"},
-				{"name":"longitude", "type":"hidden"}
+				{"name":"longitude", "type":"hidden"},
+				{"name":"map", "type":"map"}
 			],
 			"size":"12"
 		}

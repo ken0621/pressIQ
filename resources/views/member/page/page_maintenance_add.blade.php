@@ -16,7 +16,7 @@
 		@if(isset($field) && count($field) > 0)
 		<div style="margin-top: 15px;">
 			@foreach($field as $fields)
-			<div class="form-group">
+			<div class="form-group {{ $fields->type == "hidden" ? "hide" : "" }}">
 				<label>{{ ucwords(str_replace(' ', '_', $fields->name)) }}</label>
 				@if($fields->type == "textarea")
 				<textarea class="form-control mce" name="{{ $fields->name }}"></textarea>
@@ -24,6 +24,18 @@
 				<input type="hidden" name="{{ $fields->name }}" class="maintenance-image-input" key="{{ $key }}-{{ $fields->type }}">
 				<div class="maintenance-image-holder" key="{{ $key }}-{{ $fields->type }}"></div>
 				<div><button class="image-gallery image-gallery-single btn btn-primary" key="{{ $key }}-{{ $fields->type }}"> Upload Image</button></div>
+				@elseif($fields->type == "map")
+				<div id="map"></div>
+			    <script>
+			      var map;
+			      function initMap() {
+			        map = new google.maps.Map(document.getElementById('map'), {
+			          center: {lat: -34.397, lng: 150.644},
+			          zoom: 8
+			        });
+			      }
+			    </script>
+			    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDntbTzqtnwMA7hdMBAeX37YwTjRJi6cDY&callback=initMap" async defer></script>
 				@else
 				<input class="form-control" type="{{ $fields->type }}" name="{{ $fields->name }}">
 				@endif

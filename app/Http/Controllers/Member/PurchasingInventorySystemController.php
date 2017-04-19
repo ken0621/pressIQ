@@ -295,8 +295,8 @@ class PurchasingInventorySystemController extends Member
         {
             foreach($data["_sir_item"] as $key => $value) 
             {    
-                $rem_qty = Purchasing_inventory_system::count_rem_qty($sir_id, $item_id);
-                $sold_qty = Purchasing_inventory_system::count_sold_qty($sir_id, $item_id);
+                $rem_qty = Purchasing_inventory_system::count_rem_qty($id, $value->item_id);
+                $sold_qty = Purchasing_inventory_system::count_sold_qty($id, $value->item_id);
 
                 $um = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
 
@@ -831,6 +831,8 @@ class PurchasingInventorySystemController extends Member
 
                 }
                 $data["status"] = "success-lof";
+                // Session::put("sir_id",$sir_id);
+                $data["sir_id"] = $sir_id;
 
                 $sir_data = Purchasing_inventory_system::get_sir_data($sir_id);
                 AuditTrail::record_logs("Added","pis_load_out_form",$sir_id,"",serialize($sir_data));

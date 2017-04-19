@@ -124,14 +124,12 @@
                 </div>                
             </div>
 
-            <div class="form-group">                
+            <div class="form-group hidden">                
                 <div class="col-md-12">
-                    <div class="row clearfix draggable-container ilr-container">
-                        <h4>Empties Returns</h4>
-                    </div>
+                    <h4>Empties Returns</h4>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group hidden">
                 <div class="col-md-12">
                     <div class="row clearfix draggable-container ilr-container">
                         <div class="table-responsive">

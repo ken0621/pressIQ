@@ -166,6 +166,7 @@
 
 @section('script')
 <script type="text/javascript">
+// alert($('#server_name').val());
     $(".select-truck").globalDropList(
     { 
       hasPopup                : "true",      

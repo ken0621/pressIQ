@@ -54,7 +54,7 @@
                             	{{$sir_item->remaining_qty}}
                             </td>
                             <td class="total_sold {{$total_sold += ($sir_item->quantity_sold * $sir_item->sir_item_price)}}">
-                                {{$sir_item->physical_count}}
+                                {{$sir->ilr_status == 1 ? '' : $sir_item->physical_count}}
                             </td>
                             <td class="loss {{$loss += $sir_item->infos < 0 ? $sir_item->infos : 0}}">
                                 {{$sir_item->status}}

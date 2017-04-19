@@ -16,6 +16,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_manual_invoice;
+use App\Models\Tbl_sir_cm_item;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_customer_invoice_line;
 use App\Globals\UnitMeasurement;
@@ -154,6 +155,70 @@ class PurchasingInventorySystemController extends Member
         $data["sir_item"]->remaining_qty = $rem;
 
         return view("member.purchasing_inventory_system.ilr.update_count",$data);
+    }
+
+    public function update_count_empties($sc_id)
+    {
+        $data["item"] = Tbl_sir_cm_item::item()->where("s_cm_item_id",$sc_id)->first();
+
+        $data["base_name"] = null;
+        $data["base_qty"] = null;
+        $data["base_um_id"] = null;
+
+        $data["issued_um_qty"] = null;
+        $data["issued_um_name"] = null;
+        $data["issued_um_id"] = null;
+
+
+        $item_issued_um = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+        if($data["item"]->item_measurement_id != null && $item_issued_um != null)
+        {  
+           $um_base_info = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",1)->first();
+            $um_issued_info = UnitMeasurement::um_info($item_issued_um);
+
+           $base_qty = $data["item"]->sc_item_qty;
+           $um_qty = 1;
+           if($um_issued_info)
+           {
+               $um_qty = $um_issued_info->unit_qty;
+           }
+           $each = round((($base_qty / $um_qty) - floor($base_qty / $um_qty)) * $um_qty);
+           $data["base_qty"] = $each;
+           $data["base_name"] = $um_base_info->multi_name."(".$um_base_info->multi_abbrev.")";
+           $data["base_um_id"] = $data["item"]->item_measurement_id;
+
+
+            $issued_qty = $data["item"]->sc_item_qty;
+            $data["issued_um_qty"] = floor($issued_qty / $um_issued_info->unit_qty);
+            $data["issued_um_name"] =  $um_issued_info->multi_name."(".$um_issued_info->multi_abbrev.")";
+            $data["issued_um_id"] = $item_issued_um;
+
+        }
+        elseif($data["item"]->item_measurement_id != null)
+        {
+           $um_base_info = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",1)->first();
+           $um_qty = 1;
+           if($um_issued_info)
+           {
+               $um_qty = $um_base_info->unit_qty;
+           }
+           $each = round((($base_qty / $um_qty) - floor($base_qty / $um_qty)) * $um_qty);
+           $data["base_qty"] = $each;
+           $data["base_name"] = $um_base_info->multi_name."(".$um_base_info->multi_abbrev.")";
+           $data["base_um_id"] = $data["item"]->item_measurement_id;
+        }
+        else
+        {
+               $data["base_qty"] = $data["item"]->sc_item_qty;
+               $data["base_name"] = "Piece(s)";
+               $data["base_um_id"] = "";   
+        }
+        return view("member.purchasing_inventory_system.ilr.update_count_empties",$data);
+
+    }
+    public function update_count_empties_submit()
+    {
+        
     }
     public function update_count_submit()
     {
@@ -421,40 +486,16 @@ class PurchasingInventorySystemController extends Member
 
                 }
 
-                $m_inv = Tbl_manual_invoice::where("sir_id",$sir_id)->get();
-                $item_returns = array();
-                foreach ($m_inv as $key_m => $value_m) 
+                //arcylen
+                $data["_returns"] = Tbl_sir_cm_item::item()->where("sc_sir_id",$sir_id)->get();
+                foreach($data["_returns"] as $key_return => $value_return) 
                 {
-                    $cm_items = Tbl_customer_invoice::returns_item()->where("inv_id",$value_m->inv_id)->get();
-                    if($cm_items)
-                    {
-                        foreach ($cm_items as $key_cm => $value_cm) 
-                        {
-                             $cm_item["cm_id"]   = $value_cm->credit_memo_id;
-                             $cm_item["item_id"] = $value_cm->cmline_item_id;
-                             $cm_item["item_um"] = $value_cm->cmline_um;
-                             $cm_item["item_qty"]= UnitMeasurement::um_qty($value_cm->cmline_um) * $value_cm->cmline_qty;
+                    $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$value_return->item_measurement_id)->where("is_base",0)->pluck("multi_id");
 
-                             array_push($item_returns, $cm_item);
-                        }
-                    }
-                }
-                $data["_returns"] = $item_returns;
-                foreach ($data["_returns"] as $key1 => $value1) 
-                {
-                    $item_info = Tbl_item::where("item_id",$value1["item_id"])->first();
-                    $data["_returns"][$key1]['item_name'] = "";
-                    $data["_returns"][$key1]['item_count'] = "";
-                    $data["_returns"][$key1]['item_base_um'] = "";
-                    if($item_info)
-                    {
-                        $data["_returns"][$key1]['item_name'] = $item_info->item_name;
-                        $data["_returns"][$key1]['item_count'] = UnitMeasurement::um_view($value1["item_qty"],$item_info->item_measurement_id,$value1["item_um"]);
-                    $data["_returns"][$key1]['item_base_um'] = $item_info->item_measurement_id;
-                    }
+                    $data["_returns"][$key_return]->item_count = UnitMeasurement::um_view($value_return->sc_item_qty,$value_return->item_measurement_id,$item_um); 
+                    $data["_returns"][$key_return]->item_physical_count = UnitMeasurement::um_view($value_return->sc_physical_count,$value_return->item_measurement_id,$item_um); 
                 }
 
-                // dd($test);
                 return view("member.purchasing_inventory_system.ilr.ilr",$data);
             }
             else

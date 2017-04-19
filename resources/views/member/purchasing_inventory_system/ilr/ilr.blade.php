@@ -124,14 +124,14 @@
                 </div>                
             </div>
 
-            <div class="form-group hidden">                
+            <div class="form-group">                
                 <div class="col-md-12">
                     <h4>Empties Returns</h4>
                 </div>
             </div>
-            <div class="form-group hidden">
+            <div class="form-group">
                 <div class="col-md-12">
-                    <div class="row clearfix draggable-container ilr-container">
+                    <div class="row clearfix draggable-container empties-container">
                         <div class="table-responsive">
                             <div class="col-sm-12">
                                 <table class="digima-table">
@@ -154,16 +154,16 @@
                                             <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
                                             <td class="invoice-number-td text-right">{{$keys+1}}</td>
                                             <td>
-                                                <label>{{$returns['item_name']}}</label>
+                                                <label>{{$returns->item_name}}</label>
                                             </td>                                            
                                             <td>
-                                                <label>{{$returns['item_count']}}</label>
+                                                <label>{{$returns->item_count}}</label>
                                             </td>
                                             <td>
-                                                <i size="sm" class="popup btn btn-custom-white fa fa-upload"></i>
+                                                <i size="sm" link="/member/pis/ilr/update_count_empties/{{$returns->s_cm_item_id}}" class="popup btn btn-custom-white fa fa-upload"></i>
                                             </td>
                                             <td>
-                                                <input type="text" readonly="true" name="physical[]"  class="input-sm">
+                                                <input type="text" readonly="true" name="physical[]"  value="{{$returns->item_physical_count}}" class="input-sm">
                                             </td>
                                             <td>
                                                 <input type="text" readonly="true" name="status[]"  class="input-sm text-center">

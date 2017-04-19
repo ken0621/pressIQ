@@ -8,6 +8,7 @@ use App\Models\Tbl_employee;
 use App\Models\Tbl_position;
 use App\Models\Tbl_sir;
 use App\Models\Tbl_manual_receive_payment;
+use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_manual_invoice;
 use App\Globals\Employee;
 use Validator;
@@ -51,12 +52,18 @@ class AgentTransactionController extends Member
             //union of invoice and receive payment
             foreach ($data["invoices"] as $inv_key => $inv_value) 
             {
+                $cm = Tbl_credit_memo::where("cm_id",$inv_value->credit_memo_id)->first();
+                $cm_amt = 0;
+                if($cm != null)
+                {
+                  $cm_amt = $cm->cm_amount;  
+                }
                 $_transaction[$inv_key]['date'] = $inv_value->inv_date;
                 $_transaction[$inv_key]['type'] = 'Invoice';
                 $_transaction[$inv_key]['reference_name'] = 'invoice';
                 $_transaction[$inv_key]['customer_name'] = $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
                 $_transaction[$inv_key]['no'] = $inv_value->inv_id;
-                $_transaction[$inv_key]['balance'] = $inv_value->inv_overall_price - $inv_value->inv_payment_applied;
+                $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;
                 $_transaction[$inv_key]['due_date'] = $inv_value->inv_due_date;
                 $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price;
                 $_transaction[$inv_key]['status'] = $inv_value->inv_is_paid;

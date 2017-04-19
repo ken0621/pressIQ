@@ -349,6 +349,9 @@ Route::any('/member/pis/sir/edit_submit','Member\PurchasingInventorySystemContro
 
 Route::any('/member/pis/ilr/update_count_submit','Member\PurchasingInventorySystemController@update_count_submit');
 Route::any('/member/pis/ilr/update_count/{sir_id}/{item_id}','Member\PurchasingInventorySystemController@update_count');
+
+Route::any('/member/pis/ilr/update_count_empties_submit','Member\PurchasingInventorySystemController@update_count_empties_submit');
+Route::any('/member/pis/ilr/update_count_empties/{s_cm_id}','Member\PurchasingInventorySystemController@update_count_empties');
 //lof
 Route::any('/member/pis/lof','Member\PurchasingInventorySystemController@lof');
 Route::any('/member/pis/lof/archived_submit','Member\PurchasingInventorySystemController@archived_sir_submit');

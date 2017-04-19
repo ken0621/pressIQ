@@ -12,10 +12,12 @@ use App\Models\Tbl_sir;
 use App\Models\Tbl_truck;
 use App\Models\Tbl_employee;
 use App\Models\Tbl_user;
+use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_sir_inventory;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_inventory_slip;
+use App\Models\Tbl_sir_cm_item;
 use App\Models\Tbl_temp_customer_invoice_line;
 use App\Models\Tbl_temp_customer_invoice;
 use App\Models\Tbl_manual_invoice;
@@ -896,6 +898,76 @@ class Purchasing_inventory_system
 
         return $data;
     }    
+    public static function close_sir($sir_id)
+    {         
+        $update["sir_status"] = 2;
+        $update["ilr_status"] = 1;
+ 
+        Tbl_sir::where("sir_id",$sir_id)->update($update);
+        
+        $m_inv = Tbl_manual_invoice::where("sir_id",$sir_id)->get();
+        $items = array();
+        foreach ($m_inv as $key_m => $value_m) 
+        {
+            $cm_items = Tbl_customer_invoice::returns_item()->where("inv_id",$value_m->inv_id)->get();
+            if($cm_items)
+            {
+                foreach ($cm_items as $key_cm => $value_cm) 
+                {
+                     $cm_item["item_id"] = $value_cm->cmline_item_id;
+                     $cm_item["item_qty"]= UnitMeasurement::um_qty($value_cm->cmline_um) * $value_cm->cmline_qty;
+
+                     array_push($items, $cm_item);
+                }
+            }
+        }
+
+        $result = array();
+        foreach($items as $k => $v)
+        {
+            $id = $v['item_id'];
+            $result[$id][] = $v['item_qty'];
+        }
+
+        $new_item = array();
+        foreach($result as $key1 => $value1) 
+        {
+            $new_item[$key1] = array('item_id' => $key1, 'item_qty' => array_sum($value1));
+        }
+        foreach ($new_item as $key1 => $value1) 
+        {
+            $item_info = Tbl_item::where("item_id",$value1["item_id"])->first();
+            // $data["_returns"][$key1]['item_name'] = "";
+            // $data["_returns"][$key1]['item_count'] = "";
+            // $data["_returns"][$key1]['item_base_um'] = "";
+            // $data["_returns"][$key1]['item_issued_um'] = "";
+            // $data["_returns"][$key1]['item_price'] = "";
+            if($item_info)
+            {
+                // $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$item_info->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+                // $data["_returns"][$key1]['item_name'] = $item_info->item_name;
+                // $data["_returns"][$key1]['item_count'] = UnitMeasurement::um_view($value1["item_qty"],$item_info->item_measurement_id,$item_um);
+                // $data["_returns"][$key1]['item_base_um'] = $item_info->item_measurement_id;
+                // $data["_returns"][$key1]['item_issued_um'] = $item_um;
+                // $data["_returns"][$key1]['item_price'] = $item_info->item_price;
+
+                $ins["sc_sir_id"] = $sir_id;
+                $ins["sc_item_id"] = $value1["item_id"];
+                $ins["sc_item_qty"] = $value1["item_qty"];
+                $item_price = $item_info->item_price;
+                if($item_info->item_type_id == 4)
+                {
+                    $item_price = Item::get_item_bundle_price($value1["item_id"]);
+                }
+                $ins["sc_item_price"] = $item_price;
+                Tbl_sir_cm_item::insert($ins);
+            }
+        }
+
+        $data = "success";
+        return $data;        
+    }
+
     public static function close_sir_general()
     {        
         $update["sir_status"] = 2;

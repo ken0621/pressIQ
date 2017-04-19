@@ -1,5 +1,5 @@
 
-<form class="global-submit form-to-submit-add" action="/member/pis/ilr/update_count_submit" method="post">
+<form class="global-submit form-to-submit-add" action="/member/pis/ilr/update_count_empties_submit" method="post">
 <style type="text/css">
     .chosen-container
     {
@@ -15,9 +15,9 @@
     <div class="panel-body form-horizontal">
         <div class="form-group">
             <div class="col-md-12">
-                <h4>{{$sir_item->item_name}}</h4>
-                <input type="hidden" class="form-control" name="sir_id" value="{{$sir_item->sir_id}}">
-                <input type="hidden" class="form-control" name="item_id" value="{{$sir_item->item_id}}">
+                <h4>{{$item->item_name}}</h4>
+                <input type="hidden" class="form-control" name="sir_id" value="{{$item->s_cm}}">
+                <input type="hidden" class="form-control" name="item_id" value="{{$item->item_id}}">
             </div>
         </div>
         @if($issued_um_name)         

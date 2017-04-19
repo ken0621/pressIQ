@@ -585,7 +585,6 @@ function submit_done_for_page(data)
     else if(data.status == "error")
     {
         toastr.warning(data.status_message);
-        $(data.target).html(data.view);
     }
 
 }

@@ -357,7 +357,7 @@
 </form>
 @if(isset($inv))
 <div class="panel panel-default panel-block panel-title-block panel-gray clearfix col-md-4">
-    <h4>Upload</h4>
+    <h4>Upload:</h4>
     <div class="row" style="padding: 10px 10px;">
             <div id="ImportContainer">
                 <form action="/member/ecommerce/product_order/create_order/submit_payment_upload" id="myDropZoneImport" class="dropzone" method="post" enctype="multipart/form-data">
@@ -375,7 +375,7 @@
     </div>
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray clearfix col-md-8">
-    <h4>Preview</h4>
+    <h4>Preview:</h4>
     <div class="row load-data" style="padding: 30px 30px;">
         <div class="content-data">
             <img src="{{$inv->payment_upload or ''}}" style="width: 100%">
@@ -452,7 +452,8 @@
 <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 @endif
 <script type="text/javascript">
-    var order_id = "{{$ec_order_id or null}}";
+    var order_id    = "{{$ec_order_id or null}}";
+    var file_path   = "{{$inv->payment_upload or ''}}";
 </script>
 <script type="text/javascript" src="/assets/member/js/product_create_order.js"></script>
 @endsection

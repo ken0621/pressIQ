@@ -16,7 +16,8 @@
         <div class="form-group">
             <div class="col-md-12">
                 <h4>{{$item->item_name}}</h4>
-                <input type="hidden" class="form-control" name="sir_id" value="{{$item->s_cm}}">
+                <input type="hidden" name="sc_id" value="{{$item->s_cm_item_id}}">
+                <input type="hidden" class="form-control" name="sir_id" value="{{$item->sc_sir_id}}">
                 <input type="hidden" class="form-control" name="item_id" value="{{$item->item_id}}">
             </div>
         </div>

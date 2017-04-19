@@ -185,7 +185,7 @@ class PurchasingInventorySystemController extends Member
            $each = round((($base_qty / $um_qty) - floor($base_qty / $um_qty)) * $um_qty);
            $data["base_qty"] = $each;
            $data["base_name"] = $um_base_info->multi_name."(".$um_base_info->multi_abbrev.")";
-           $data["base_um_id"] = $data["item"]->item_measurement_id;
+           $data["base_um_id"] = $um_base_info->multi_id;
 
 
             $issued_qty = $data["item"]->sc_item_qty;
@@ -205,7 +205,7 @@ class PurchasingInventorySystemController extends Member
            $each = round((($base_qty / $um_qty) - floor($base_qty / $um_qty)) * $um_qty);
            $data["base_qty"] = $each;
            $data["base_name"] = $um_base_info->multi_name."(".$um_base_info->multi_abbrev.")";
-           $data["base_um_id"] = $data["item"]->item_measurement_id;
+           $data["base_um_id"] = $um_base_info->multi_id;
         }
         else
         {
@@ -218,7 +218,32 @@ class PurchasingInventorySystemController extends Member
     }
     public function update_count_empties_submit()
     {
+        $sc_id = Request::input("sc_id");
+
+        $sir_id = Request::input("sir_id");
+        $item_id = Request::input("item_id");
+
+        $base_um_id = Request::input("base_um_id");
+        $base_qty = Request::input("base_qty");
+
+        $issued_um_id = Request::input("issued_um_id");
+        $issued_qty = Request::input("issued_qty");
+
+
+        $data["item"] = Tbl_sir_cm_item::item()->where("s_cm_item_id",$sc_id)->first();
+        $um_base_info = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",1)->first();
+        $item_issued_um = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+        $um_issued_info = UnitMeasurement::um_info($item_issued_um);
+
+
+        $physical_count = ($base_qty * UnitMeasurement::um_qty($base_um_id)) + ($issued_qty * UnitMeasurement::um_qty($issued_um_id));
+        // dd($physical_count);
+
+        $update["sc_physical_count"] = $physical_count;
+        Tbl_sir_cm_item::where("s_cm_item_id",$sc_id)->update($update);
+        $data["status"] = "success";
         
+        return json_encode($data);
     }
     public function update_count_submit()
     {
@@ -231,8 +256,6 @@ class PurchasingInventorySystemController extends Member
 
         $sir_info = Tbl_sir_item::where("sir_id",$sir_id)->where("item_id",$item_id)->first();
         $unit_qty = Tbl_unit_measurement_multi::where("multi_id",$sir_info->related_um_type)->pluck("unit_qty");
-
-
  
         $rem_qty = Purchasing_inventory_system::count_rem_qty($sir_id, $item_id);
         $sold_qty = Purchasing_inventory_system::count_sold_qty($sir_id, $item_id);

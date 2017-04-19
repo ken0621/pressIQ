@@ -42,17 +42,17 @@
                                 <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Processing' ? 'active' : '' : ''}}" data-toggle="tooltip" title="Processing or On Shipment - the order is awaiting fulfillment. Stock has been reduced">
                                 <input type="radio" name="order_status" id="option3" value="Processing" {{isset($inv) ? $inv->order_status == 'Processing' ? 'checked' : '' : ''}}> Processing
                                 </label>
-                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Completed' ? 'active' : '' : ''}}" data-toggle="tooltip" title="Orders that have been shipped but have not yet reached the customer. Stock has been reduced">
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Shipped' ? 'active' : '' : ''}}" data-toggle="tooltip" title="Orders that have been shipped but have not yet reached the customer. Stock has been reduced">
                                 <input type="radio" name="order_status" id="option4" value="Shipped" {{isset($inv) ? $inv->order_status == 'Shipped' ? 'checked' : '' : ''}}> Shipped
                                 </label>
                                 <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Completed' ? 'active' : '' : ''}}" data-toggle="tooltip" title="Order fulfilled and complete – requires no further action">
-                                <input type="radio" name="order_status" id="option4" value="Completed" {{isset($inv) ? $inv->order_status == 'Completed' ? 'checked' : '' : ''}}> Completed
+                                <input type="radio" name="order_status" id="option5" value="Completed" {{isset($inv) ? $inv->order_status == 'Completed' ? 'checked' : '' : ''}}> Completed
                                 </label>
                                 <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'active' : '' : ''}}" data-toggle="tooltip" title="Awaiting payment. Stock has been reduced">
-                                <input type="radio" name="order_status" id="option5" value="On-hold" {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'checked' : '' : ''}}> On-Hold
+                                <input type="radio" name="order_status" id="option6" value="On-hold" {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'checked' : '' : ''}}> On-Hold
                                 </label>
                                 <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'active' : '' : ''}}" data-toggle="tooltip" title="Cancelled by an admin or the customer – no further action required">
-                                <input type="radio" name="order_status" id="option6" value="Cancelled" {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'checked' : '' : ''}}> Cancelled
+                                <input type="radio" name="order_status" id="option7" value="Cancelled" {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'checked' : '' : ''}}> Cancelled
                                 </label>
                                 <!-- <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Refunded' ? 'active' : '' : ''}}">
                                 <input type="radio" name="order_status" id="option3" value="Void"> Refunded

@@ -25,15 +25,46 @@
 				<div class="maintenance-image-holder" key="{{ $key }}-{{ $fields->type }}"></div>
 				<div><button class="image-gallery image-gallery-single btn btn-primary" key="{{ $key }}-{{ $fields->type }}"> Upload Image</button></div>
 				@elseif($fields->type == "map")
-				<div id="map"></div>
+				<div id="map" style="height: 300px;"></div>
 			    <script>
-			      var map;
-			      function initMap() {
-			        map = new google.maps.Map(document.getElementById('map'), {
-			          center: {lat: -34.397, lng: 150.644},
-			          zoom: 8
-			        });
-			      }
+				  // In the following example, markers appear when the user clicks on the map.
+				  // Each marker is labeled with a single alphabetical character.
+				  var labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+				  var labelIndex = 0;
+
+				  function initialize() 
+				  {
+				    var current_place = { lat: 12.97, lng: 77.59 };
+				    var map = new google.maps.Map(document.getElementById('map'), 
+				    {
+				      zoom: 12,
+				      center: current_place
+				    });
+
+				    // This event listener calls addMarker() when the map is clicked.
+				    google.maps.event.addListener(map, 'click', function(event) 
+				    {
+				      addMarker(event.latLng, map);
+				      // alert( 'Lat: ' + event.latLng.lat() + ' and Longitude is: ' + event.latLng.lng() );
+				    });
+
+				    // Add a marker at the center of the map.
+				    addMarker(current_place, map);
+				  }
+
+				  // Adds a marker to the map.
+				  function addMarker(location, map) 
+				  {
+				    // Add the marker at the clicked location, and add the next-available label
+				    // from the array of alphabetical characters.
+				    var marker = new google.maps.Marker({
+				      position: location,
+				      label: labels[labelIndex++ % labels.length],
+				      map: map
+				    });
+				  }	
+
+				  google.maps.event.addDomListener(window, 'load', initialize);
 			    </script>
 			    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDntbTzqtnwMA7hdMBAeX37YwTjRJi6cDY&callback=initMap" async defer></script>
 				@else

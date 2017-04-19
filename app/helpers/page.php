@@ -15,7 +15,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = "$path" . "customer" . "/invoice_list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Refer to Customer -> Create Invoice";
+    $nav[$page]['submenu'][$code]['status'] = "Refer to Customer -> Create Invoices";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
     
     // /* -- TRANSACTION => RECEIVE PAYMENT */

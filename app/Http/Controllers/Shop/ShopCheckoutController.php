@@ -46,7 +46,11 @@ class ShopCheckoutController extends Shop
             }
             
         }
-        $data["_payment_method"] = Tbl_online_pymnt_method::get();
+        $data["_payment_method"] = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
+                                                          ->where("tbl_online_pymnt_link.link_shop_id", $this->shop_info->shop_id)
+                                                          ->where("tbl_online_pymnt_link.link_is_enabled", 1)
+                                                          ->get();
+  
         if(Self::$customer_info != null)
         {
             $customer_info = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_info->customer_id)->info()->first();
@@ -188,6 +192,20 @@ class ShopCheckoutController extends Shop
             else
             {
                 $cart["customer_id"] = null;
+            }
+
+            /* -------------------------------------------------------------------------- */
+
+            // Check Payment Method if enabled
+            $payment_method = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
+                                                      ->where("tbl_online_pymnt_method.method_id", $cart["payment_method_id"])
+                                                      ->where("tbl_online_pymnt_link.link_shop_id", $this->shop_info->shop_id)
+                                                      ->where("tbl_online_pymnt_link.link_is_enabled", 1)
+                                                      ->first();
+
+            if (!$payment_method) 
+            {
+                return Redirect::back()->with('fail', 'Invalid payment method. Please try again.');
             }
 
             /* -------------------------------------------------------------------------- */

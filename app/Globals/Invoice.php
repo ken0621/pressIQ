@@ -164,6 +164,8 @@ class Invoice
         {
             Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
         }
+
+        return $rcvpayment_id;
     }
 
     public static function updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = '')

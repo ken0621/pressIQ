@@ -55,10 +55,11 @@
 <script type="text/javascript">
 function submit_done(data)
 {
-    if(data.status == "success")
+    if(data.status == "success-ilr-empties")
     {
         toastr.success("Success");
-        location.href = "/member/pis/sir/";
+        $(".empties-container").load("/member/pis/ilr/"+data.id+" .empties-container");
+        $('#global_modal').modal('toggle');
     }
     else if(data.status == "success-ilr")
     {       

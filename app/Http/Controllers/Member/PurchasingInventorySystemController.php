@@ -238,10 +238,28 @@ class PurchasingInventorySystemController extends Member
 
         $physical_count = ($base_qty * UnitMeasurement::um_qty($base_um_id)) + ($issued_qty * UnitMeasurement::um_qty($issued_um_id));
         // dd($physical_count);
+        $qty = $data["item"]->sc_item_qty;
+        $update["sc_infos"] = null;
+        if($qty == $physical_count)
+        {
+            $update["sc_infos"] = 0;
+        }
+        elseif($physical_count > $qty)
+        {
+            //over
+            $update["sc_infos"] = ($physical_count - $qty) * $data['item']->sc_item_price;   
+        }
+        elseif($physical_count < $qty) 
+        {
+            //short
+            $update["sc_infos"] = ($qty - $physical_count) * -$data['item']->sc_item_price;
+        }
 
         $update["sc_physical_count"] = $physical_count;
+        $update["sc_is_updated"] = 1;
         Tbl_sir_cm_item::where("s_cm_item_id",$sc_id)->update($update);
-        $data["status"] = "success";
+        $data["status"] = "success-ilr-empties";
+        $data["id"] = $sir_id;
         
         return json_encode($data);
     }
@@ -359,12 +377,25 @@ class PurchasingInventorySystemController extends Member
             if($value->is_updated == 0)
             {
                 $data["status"] = "error";
-                $data["status_message"] .= "The item ".$value->item_name." is not updated <br>";
+                $data["status_message"] .= "The item ".$value->item_name." is not updated from SIR Item<br>";
             }
         }
+
+        $check_item = Tbl_sir_cm_item::item()->where("sc_sir_id",$sir_id)->get();
+
+        foreach ($check_item as $keys => $values) 
+        {
+            if($values->sc_is_updated == 0)
+            {
+                $data["status"] = "error";
+                $data["status_message"] .= "The item ".$values->item_name." is not updated from EMPTIES<br>";
+            }
+        }
+
         if($data["status"] == null)
         {
             $data = Purchasing_inventory_system::return_stock($sir_id);
+            Purchasing_inventory_system::return_cm_item($sir_id);
         }
 
         $ilr = Purchasing_inventory_system::get_ilr_data($sir_id);
@@ -376,6 +407,8 @@ class PurchasingInventorySystemController extends Member
     {
         $data["sir"] = Purchasing_inventory_system::select_single_sir($this->user_info->shop_id,$id,'array');
         $data["_sir_item"] = Purchasing_inventory_system::select_sir_item($this->user_info->shop_id,$id,'array');
+
+        $data["_returns"] = Tbl_sir_cm_item::item()->where("sc_sir_id",$id)->get();
 
         $data["type"] = "I.L.R";
 
@@ -430,7 +463,39 @@ class PurchasingInventorySystemController extends Member
                 $data["_sir_item"][$key]->status = $status;
 
             }
-            // dd($data["rem_total"]);
+        }
+        $data["ctr_returns"] = count($data["_returns"]);
+        if($data["_returns"] != null)
+        {
+            foreach ($data["_returns"] as $key_return => $value_return)
+            {
+                $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$value_return->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+
+                $data["_returns"][$key_return]->item_count = UnitMeasurement::um_view($value_return->sc_item_qty,$value_return->item_measurement_id,$item_um); 
+                $data["_returns"][$key_return]->item_physical_count = UnitMeasurement::um_view($value_return->sc_physical_count,$value_return->item_measurement_id,$item_um); 
+
+                $original_qty = $value_return->sc_item_qty;
+                $physical_qty = $value_return->sc_physical_count;
+                $status = null;
+                if($value_return->sc_is_updated != 0)
+                {
+                    if($original_qty == $physical_qty)
+                    {
+                        $status = "OK";
+                    }
+                    elseif($physical_qty > $original_qty)
+                    {
+                        $status = "OVER ".(UnitMeasurement::um_view($physical_qty - $original_qty,$value_return->item_measurement_id,$item_um));   
+                    }
+                    elseif($physical_qty < $original_qty) 
+                    {
+                        $status = "SHORT ".(UnitMeasurement::um_view($original_qty - $physical_qty,$value_return->item_measurement_id,$item_um));
+                    }                 
+                }
+
+                $data["_returns"][$key_return]->sc_physical_count = UnitMeasurement::um_view($physical_qty,$value_return->item_measurement_id,$item_um); 
+                $data["_returns"][$key_return]->status = $status;        
+            }
         }
 
         $html = view('member.purchasing_inventory_system.ilr.ilr_pdf', $data);
@@ -511,12 +576,36 @@ class PurchasingInventorySystemController extends Member
 
                 //arcylen
                 $data["_returns"] = Tbl_sir_cm_item::item()->where("sc_sir_id",$sir_id)->get();
-                foreach($data["_returns"] as $key_return => $value_return) 
+                $data["ctr_returns"] = count($data["_returns"]);
+                if($data["ctr_returns"] != 0)
                 {
-                    $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$value_return->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+                    foreach($data["_returns"] as $key_return => $value_return) 
+                    {
+                        $item_um = Tbl_unit_measurement_multi::where("multi_um_id",$value_return->item_measurement_id)->where("is_base",0)->pluck("multi_id");
 
-                    $data["_returns"][$key_return]->item_count = UnitMeasurement::um_view($value_return->sc_item_qty,$value_return->item_measurement_id,$item_um); 
-                    $data["_returns"][$key_return]->item_physical_count = UnitMeasurement::um_view($value_return->sc_physical_count,$value_return->item_measurement_id,$item_um); 
+                        $data["_returns"][$key_return]->item_count = UnitMeasurement::um_view($value_return->sc_item_qty,$value_return->item_measurement_id,$item_um); 
+                        $data["_returns"][$key_return]->item_physical_count = UnitMeasurement::um_view($value_return->sc_physical_count,$value_return->item_measurement_id,$item_um); 
+
+                        $original_qty = $value_return->sc_item_qty;
+                        $physical_qty = $value_return->sc_physical_count;
+                        $status = null;
+                        if($value_return->sc_is_updated != 0)
+                        {
+                            if($original_qty == $physical_qty)
+                            {
+                                $status = "OK";
+                            }
+                            elseif($physical_qty > $original_qty)
+                            {
+                                $status = "OVER ".(UnitMeasurement::um_view($physical_qty - $original_qty,$value_return->item_measurement_id,$item_um));   
+                            }
+                            elseif($physical_qty < $original_qty) 
+                            {
+                                $status = "SHORT ".(UnitMeasurement::um_view($original_qty - $physical_qty,$value_return->item_measurement_id,$item_um));
+                            }                 
+                        }
+                        $data["_returns"][$key_return]->status = $status;
+                    }
                 }
 
                 return view("member.purchasing_inventory_system.ilr.ilr",$data);

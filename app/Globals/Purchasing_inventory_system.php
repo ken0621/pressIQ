@@ -15,6 +15,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_sir_inventory;
 use App\Models\Tbl_item;
+use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_sir_cm_item;
@@ -22,6 +23,7 @@ use App\Models\Tbl_temp_customer_invoice_line;
 use App\Models\Tbl_temp_customer_invoice;
 use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_unit_measurement;
+use App\Models\Tbl_manual_credit_memo;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_settings;
 use App\Globals\UnitMeasurement;
@@ -215,6 +217,70 @@ class Purchasing_inventory_system
         Tbl_sir::where("sir_id",$sir_id)->update($up);
 
         return $data;
+    }
+    public static function return_cm_item($sir_id)
+    {
+        // inventroy_source_reason
+        // inventory_source_id
+        $warehouse_id = Purchasing_inventory_system::get_warehouse_based_sir($sir_id);
+        $reason_refill = "sir_empties_return";
+        $refill_source = $sir_id;
+        $remarks = "Return Empties Stock from SIR NO: ".$sir_id;
+
+        $sir_item = Tbl_sir_cm_item::item()->where("sc_sir_id",$sir_id)->get();
+        $data = [];
+        $ctr = count($sir_item);
+        if($ctr != 0)
+        {
+            foreach ($sir_item as $key => $value) 
+            {
+                $warehouse_refill_product[$key]["product_id"] = $value->sc_item_id;
+                $warehouse_refill_product[$key]["quantity"] = $value->sc_physical_count;
+            }
+            // dd($warehouse_refill_product);
+            $unset_key = null;
+            foreach ($sir_item as $keyitem => $valueitem) 
+            {            
+                if($valueitem->item_type_id == 4)
+                {
+                    $bundle = Tbl_item_bundle::where("bundle_bundle_id",$valueitem->item_id)->get();
+                    foreach ($bundle as $key_bundle => $value_bundle) 
+                    {
+                        // $qty =  UnitMeasurement::um_qty($valueitem->related_um_type);
+                        $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
+                        $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
+                        $_bundle[$key_bundle]['quantity'] = ($valueitem->sc_physical_count) * ($value_bundle->bundle_qty * $bundle_qty);
+
+                        array_push($warehouse_refill_product, $_bundle[$key_bundle]);
+                    }
+                    $unset_key[$keyitem] = $valueitem->item_id;
+                }
+            }
+            foreach ($warehouse_refill_product as $key_items => $value_items) 
+            {
+                $i = null;
+                foreach ($sir_item as $value_itemid) 
+                {
+                    $type = Tbl_item::where("item_id",$value_itemid->item_id)->pluck("item_type_id");
+                    if($type == 4)
+                    {
+                        if($value_itemid->item_id == $value_items['product_id'])
+                        {
+                            $i = "true";
+                        }
+                    }                
+                }
+                if($i != null)
+                {
+                    unset($warehouse_refill_product[$key_items]);
+                }
+            }
+            $data = Warehouse::inventory_refill($warehouse_id, $reason_refill, $refill_source, $remarks, $warehouse_refill_product,'array',$is_return = 1);
+
+        }
+
+        return $data;
+
     }
     public static function reload_sir_item($sir_id)
     {
@@ -921,7 +987,23 @@ class Purchasing_inventory_system
                 }
             }
         }
+        $cm_items = null;
+        $cm = Tbl_manual_credit_memo::where("sir_id",$sir_id)->get();
+        foreach ($cm as $cm_key => $cm_value)
+        {
+            $cm_itemss = Tbl_credit_memo_line::where("cmline_cm_id",$cm_value->cm_id)->get();
+            if($cm_itemss)
+            {
+                foreach ($cm_itemss as $keycm => $valuecm) 
+                {
+                    $cm_items["item_id"] = $valuecm->cmline_item_id;
+                    $cm_items["item_qty"]= UnitMeasurement::um_qty($valuecm->cmline_um) * $valuecm->cmline_qty;
 
+                     array_push($items, $cm_items);
+                    
+                }
+            }            
+        }
         $result = array();
         foreach($items as $k => $v)
         {

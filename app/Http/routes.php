@@ -416,6 +416,16 @@ Route::any('/tablet/receive_payment/update/{id}','Member\TabletPISController@upd
 Route::any('/tablet/view_invoice_view/{id}','Member\TabletPISController@view_invoices_view');
 Route::any('/tablet/view_invoice_pdf/{id}','Member\TabletPISController@view_invoice_pdf');
 
+Route::any('/tablet/credit_memo','Member\TabletPISController@credit_memo');
+Route::any('/tablet/credit_memo/add','Member\TabletPISController@add_cm');
+Route::any('/tablet/credit_memo/add_cm_submit','Member\TabletPISController@add_cm_submit');
+Route::any('/tablet/credit_memo/edit_cm_submit','Member\TabletPISController@edit_cm_submit');
+
+Route::any('/tablet/sales_receipt','Member\TabletPISController@sales_receipt');
+Route::any('/tablet/sales_receipt/list','Member\TabletPISController@sales_receipt_list');
+Route::any('/tablet/sales_receipt/create_submit','Member\TabletPISController@create_sales_receipt_submit');
+Route::any('/tablet/sales_receipt/update_submit','Member\TabletPISController@update_sales_receipt_submit');
+
 Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_submission');
 Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
 /* END PIS TABLEt*/

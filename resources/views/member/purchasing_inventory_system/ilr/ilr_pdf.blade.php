@@ -91,6 +91,69 @@
         </div>
     </div>                
 </div>
+
+@if($ctr_returns != 0)
+<div class="form-group">
+    <div class="col-md-12">
+        <label>EMPTIES</label>
+    </div>
+</div>
+ <div class="form-group">
+    <div class="col-md-12">
+        <div class="row clearfix draggable-container empties-container">
+            <div class="col-sm-12">
+                <table class="digima-table">
+                    <thead >
+                        <tr>
+                            <th style="width: 30px;" class="text-center">#</th>
+                            <th style="width: 200px;">Product Name</th>
+                            <th style="width: 200px;">RETURNS QTY</th>
+                            <th style="width: 200px;">Physical Count</th>
+                            <th style="width: 200px;">Status</th>
+                            <th style="width: 200px;">Info</th>
+                        </tr>
+                    </thead>
+                    <tbody class="{{$empties_loss = 0}} {{$empties_over = 0}} {{$total_return = 0}}">
+                    @if($_returns)
+                        @foreach($_returns as $keys => $return)                                
+                        <tr class="tr-draggable tr-draggable-html">
+                            <td class="invoice-number-td text-center">{{$keys+1}}</td>
+                            <td>{{$return->item_name}}</td>                                            
+                            <td>{{$return->item_count}}</td>
+                            <td class="total_sold {{$total_return += ($return->sc_item_qty * $return->sc_item_price)}}">
+                                {{$sir->ilr_status == 1 ? '' : $return->sc_physical_count}}
+                            </td>
+                            <td class="loss {{$empties_loss += $return->sc_infos < 0 ? $return->sc_infos : 0}}">
+                                {{$return->status}}
+                            </td>
+                            <td class="over {{$empties_over += $return->sc_infos > 0 ? $return->sc_infos : 0}} text-right">
+                                {{$return->sc_is_updated == 1 ? number_format($return->sc_infos,2) : ''}}
+                            </td>
+                        </tr>
+                        @endforeach
+                        <tr>                            
+                            <td colspan="4"></td>
+                            <td><strong>TOTAL RETURN</strong></td>
+                            <td>{{currency('PHP',$total_return)}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                            <td><strong>LOSS AMOUNT</strong></td>
+                            <td>{{currency('PHP',$empties_loss)}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="4"></td>
+                            <td><strong>OVER AMOUNT</strong></td>
+                            <td>{{currency('PHP',$empties_over)}}</td>
+                        </tr>
+                    @endif
+                    </tbody>                                   
+                </table>
+            </div>
+        </div>
+    </div>                
+</div>
+@endif
 </body>
 <style type="text/css">
 	table

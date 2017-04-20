@@ -123,7 +123,7 @@
                     </div>
                 </div>                
             </div>
-
+            @if($ctr_returns != 0)
             <div class="form-group">                
                 <div class="col-md-12">
                     <h4>Empties Returns</h4>
@@ -166,10 +166,10 @@
                                                 <input type="text" readonly="true" name="physical[]"  value="{{$returns->item_physical_count}}" class="input-sm">
                                             </td>
                                             <td>
-                                                <input type="text" readonly="true" name="status[]"  class="input-sm text-center">
+                                                <input type="text" readonly="true" name="status[]"  class="input-sm text-center" value="{{$returns->status}}">
                                             </td>
                                             <td>
-                                               
+                                               <input type="text" name="info[]" readonly="true" style="color: red" value="{{$returns->sc_is_updated == 1 ? currency('PHP',$returns->sc_infos) : ''}}" class="number-input input-sm">
                                             </td>
                                         </tr>
                                         @endforeach
@@ -181,6 +181,7 @@
                     </div>
                 </div>                
             </div>
+            @endif
         </div>
     </div>
 </form>

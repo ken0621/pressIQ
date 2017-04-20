@@ -5,7 +5,8 @@ use Crypt;
 use Redirect;
 use Request;
 use View;
-
+use File;
+use Input;
 use Validator;
 use Carbon\Carbon;
 
@@ -29,10 +30,12 @@ class ShopCheckoutController extends Shop
     {
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
-        if (!isset($data["get_cart"]['cart'])) 
+ 
+        if (!$data["get_cart"]['cart']) 
         {
             return Redirect::to('/');
         }
+
         $data['ec_order_load'] = 0;
         foreach($data['get_cart'] as $value)
         {
@@ -42,14 +45,19 @@ class ShopCheckoutController extends Shop
                 {
                     $data['ec_order_load'] = 1;
                 }
-            }
-            
+            }           
         }
-        $data["_payment_method"] = Tbl_online_pymnt_method::get();
+
+        $data["_payment_method"] = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
+                                                          ->where("tbl_online_pymnt_link.link_shop_id", $this->shop_info->shop_id)
+                                                          ->where("tbl_online_pymnt_link.link_is_enabled", 1)
+                                                          ->get();
+  
         if(Self::$customer_info != null)
         {
             $customer_info = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_info->customer_id)->info()->first();
         }
+
         if(isset($customer_info))
         {
             $data['customer_first_name'] = $customer_info->first_name;
@@ -61,6 +69,7 @@ class ShopCheckoutController extends Shop
             $data['customer_city'] = $customer_info->customer_city;
             $data['customer_address'] = $customer_info->customer_street . ' ' .  $customer_info->customer_state . ' ' . $customer_info->customer_city;
         }
+        
         else
         {
             $data['customer_first_name'] = '';
@@ -74,7 +83,6 @@ class ShopCheckoutController extends Shop
         }
 
         return view("checkout", $data);
-        
     }
     public function submit()
     {
@@ -143,8 +151,6 @@ class ShopCheckoutController extends Shop
                 $add_sum = ($value["cart_product_information"]["product_price"]- $value["cart_product_information"]["product_discounted_value"]) * $value["quantity"];
                 $sum += $add_sum;
             }
-            
-            // dd($add_sum);
 
             $cart['ec_order_load'] = Request::input('ec_order_load');
             if($cart['ec_order_load'] == 1)
@@ -179,7 +185,9 @@ class ShopCheckoutController extends Shop
             $cart["taxable"] = Request::input("taxable");
             $cart["order_status"] = "Pending"; // Processing
             $cart["shop_id"] = $this->shop_info->shop_id;
-            // LUKE uwu desu
+            $cart["payment_status"] = 0;
+            $cart["payment_upload"] = "";
+
             if(isset(Self::$customer_info->customer_id))
             {
                 $cart["customer_id"] = Self::$customer_info->customer_id;
@@ -188,8 +196,24 @@ class ShopCheckoutController extends Shop
             {
                 $cart["customer_id"] = null;
             }
+
+            /* -------------------------------------------------------------------------- */
+
+            // Check Payment Method if enabled
+            $payment_method = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
+                                                      ->where("tbl_online_pymnt_method.method_id", $cart["payment_method_id"])
+                                                      ->where("tbl_online_pymnt_link.link_shop_id", $this->shop_info->shop_id)
+                                                      ->where("tbl_online_pymnt_link.link_is_enabled", 1)
+                                                      ->first();
+
+            if (!$payment_method) 
+            {
+                return Redirect::back()->with('fail', 'Invalid payment method. Please try again.');
+            }
+
+            /* -------------------------------------------------------------------------- */
             
-            
+            // Payment Method using E-Wallet
             if($cart["payment_method_id"] == 6)
             {
                 if(Self::$slot_now != null)
@@ -218,7 +242,6 @@ class ShopCheckoutController extends Shop
                             ->withErrors($send)
                             ->withInput();
                     }
-                    // dd($sum);
                 }
                 else
                 {
@@ -228,20 +251,74 @@ class ShopCheckoutController extends Shop
                         ->withInput();
                 }
             }
+            // Payment Method With Proof of Payment
+            elseif($cart["payment_method_id"] != 1 && $cart["payment_method_id"] != 2)
+            {
+                $shop_id    = $this->shop_info->shop_id;
+                $shop_key   = $this->shop_info->shop_key;
 
+                /* SAVE THE IMAGE IN THE FOLDER */
+                $file               = Input::file('payment_upload');
+
+                if ($file) 
+                {
+                    $extension          = $file->getClientOriginalExtension();
+                    $filename           = str_random(15).".".$extension;
+                    $destinationPath    = 'uploads/'.$shop_key."-".$shop_id.'/ecommerce-upload';
+
+                    if(!File::exists($destinationPath)) 
+                    {
+                        $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+                    }
+
+                    $upload_success    = Input::file('payment_upload')->move($destinationPath, $filename);
+
+                    /* SAVE THE IMAGE PATH IN THE DATABASE */
+                    $image_path = $destinationPath."/".$filename;
+
+                    if( $upload_success ) 
+                    {
+                       $cart['payment_upload'] = "/" . $image_path;
+                    } 
+                    else 
+                    {
+                       return Redirect::back()->with('fail', 'Image upload failed. Please try again.');
+                    }
+                }
+                else 
+                {
+                   return Redirect::back()->with('fail', 'Image upload failed. Please try again.');
+                }
+            }
+            // Payment Method with Payment Facility (Temporary)
+            elseif ($cart["payment_method_id"] == 1 || $cart["payment_method_id"] == 2) 
+            {
+                $cart["payment_status"] = 1;
+            }
+
+            /* -------------------------------------------------------------------------- */
+
+            // Check Stocks
             $stock = Cart::check_product_stock($get_cart);
             if ($stock["status"] == "fail") 
             {
                 return Redirect::back()->with('fail', $stock["error"]);
             }
 
+            /* -------------------------------------------------------------------------- */
+
+            // Create Order
             $result = Ec_order::create_ec_order_automatic($cart);
-               if(isset($result['order_id']['status']))
-               {
-                        return Redirect::back()
-                            ->withErrors($result['order_id']['status_message'])
-                            ->withInput();
-               }
+            if(isset($result['order_id']['status']))
+            {
+                  return Redirect::back()
+                     ->withErrors($result['order_id']['status_message'])
+                     ->withInput();
+            }
+
+            /* -------------------------------------------------------------------------- */
+
+            // Luke's Process with E-Wallet
             if($cart["payment_method_id"] == 6)
             {
                 if(Self::$slot_now != null)
@@ -259,8 +336,14 @@ class ShopCheckoutController extends Shop
                 }
             }
 
+            /* -------------------------------------------------------------------------- */
+
+            // Clear Cart
             Cart::clear_all($this->shop_info->shop_id);
 
+            /* -------------------------------------------------------------------------- */
+
+            // Redirect
             $result["page"] = "Order Placed";
 
             return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));

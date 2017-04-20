@@ -764,7 +764,7 @@ class WarehouseController extends Member
                 $warehouse_refill_product[$key]['quantity'] = str_replace(",","",$value);                
             }
         }
-
+        // dd($warehouse_refill_product);/
         $data = Warehouse::inventory_refill($warehouse_id, $reason_refill, $refill_source, $remarks, $warehouse_refill_product,'json');
 
         return $data;

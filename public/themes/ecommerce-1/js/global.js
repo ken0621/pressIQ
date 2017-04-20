@@ -15,9 +15,9 @@ function global()
 			event_show_cart();
 			action_fit_text();
 			action_slick();
-			event_image_crop();
 			ready_load_ecom_cart();
 			ready_load_mini_ecom_cart();
+			event_sticky_nav();
 		});
 	}
 	function event_show_cart()
@@ -80,9 +80,41 @@ function global()
 			}
 		});
 	}
-	function event_image_crop()
+	function event_sticky_nav()
 	{
-		
+		var element_position = $('.content').offset().top;
+	    var y_scroll_pos = window.pageYOffset;
+	    var scroll_pos_test = element_position;
+
+	    var get_height = $('.navbar').height();
+
+	    if(y_scroll_pos > scroll_pos_test) 
+        {
+            $('.header-nav').css("margin-bottom", get_height+"px");
+	        $('.navbar').addClass("sticky");
+        }
+        else
+        {
+            $('.header-nav').css("margin-bottom", "0px");
+		    $('.navbar').removeClass("sticky");
+        }
+	    
+	    $(window).on('scroll', function() 
+	    {
+	        var y_scroll_pos = window.pageYOffset;
+	        var scroll_pos_test = element_position;
+	        
+	        if(y_scroll_pos > scroll_pos_test) 
+	        {
+	            $('.header-nav').css("margin-bottom", get_height+"px");
+	        	$('.navbar').addClass("sticky");
+	        }
+	        else
+	        {
+	            $('.header-nav').css("margin-bottom", "0px");
+		    	$('.navbar').removeClass("sticky");
+	        }
+	    });
 	}
 }
 

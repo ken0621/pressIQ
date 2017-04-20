@@ -97,7 +97,7 @@
                                         </div>
                                         <div class="col-md-7 item-quantity">
                                             <div class="quantity-input">
-                                               <form>QTY: <input class="variation-qty" variant-id="{{ $product_variant['evariant_id'] }}" type="number" name="quantity" min="1" max="100" value="1"></form>
+                                               <form>QTY: <input style="width: 60px;" class="variation-qty" variant-id="{{ $product_variant['evariant_id'] }}" type="number" name="quantity" min="1" max="100" value="1"></form>
                                             </div>
                                            
                                              <div>

@@ -18,6 +18,9 @@ use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_leadership_settings;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_matching;
+use App\Models\Tbl_mlm_triangle_repurchase_slot;
+use App\Models\Tbl_item_code_invoice;
+
 class MlmReportController extends Mlm
 {
     public function index($complan)
@@ -296,5 +299,18 @@ class MlmReportController extends Mlm
     public function binary_repurchase()
     {
         return $this->show_maintenance();
+    }
+    public function triangle_repurchase()
+    {
+        $data['plan']       = Mlm_member_report::get_plan('TRIANGLE_REPURCHASE', Self::$shop_id); 
+        $data['header']     = Mlm_member_report::header($data['plan']);
+        $data["page"]       = "Report - Stairstep";
+        $data['slots_tri'] = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_slot_id', Self::$slot_id)
+        ->join('tbl_item_code_invoice', 'tbl_item_code_invoice.item_code_invoice_id', '=', 'tbl_mlm_triangle_repurchase_slot.repurchase_slot_invoice_id')
+        ->get();
+        $data['invoice'] = Tbl_item_code_invoice::where('slot_id', Self::$slot_id)->get()->keyBy('item_code_invoice_id');
+        // dd($data);
+        return view("mlm.report.report_triangle_repurchase", $data);
+
     }
 }

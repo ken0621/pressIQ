@@ -9,7 +9,7 @@
       <title>Brown and Proud | Members Control Panel</title>
       <!-- Bootstrap -->
       <link href="/member-theme/myphone/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-      <link rel="stylesheet" href="/dist/css/AdminLTE.min.css">
+      <link rel="stylesheet" href="/asssets/dist/css/AdminLTE.min.css">
       <!-- Font Awesome -->
       <link href="/member-theme/myphone/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
       <link rel="stylesheet" href="/resources/assets/distributor/styles/6227bbe5.font-awesome.css" type="text/css" />

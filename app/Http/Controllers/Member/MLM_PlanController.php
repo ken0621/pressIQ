@@ -484,6 +484,19 @@ class MLM_PlanController extends Member
             Tbl_mlm_plan::insert($insert);
         }
 
+        if($count == 18)
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "TRIANGLE_REPURCHASE";
+            $insert['marketing_plan_name'] = "Triangle Repurchase";
+            $insert['marketing_plan_trigger'] = "Product Repurchase";
+            $insert['marketing_plan_label'] = "Triangle Repurchase";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+
         // end basic complan
         
         
@@ -2098,4 +2111,44 @@ class MLM_PlanController extends Member
         $data['message'] = 'Success';
         return json_encode($data);
     }
+    public function triangle_repurchase($shop_id)
+    {
+        $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+
+        foreach($data['membership'] as $key => $value)
+        {
+            $count = DB::table('tbl_mlm_triangle_repurchase')->where('shop_id', $shop_id)->where('membership_id', $value->membership_id)->count();
+            if($count == 0)
+            {
+                $insert['membership_id'] = $value->membership_id;
+                $insert['shop_id'] = $shop_id;
+                DB::table('tbl_mlm_triangle_repurchase')->insert($insert);
+            }
+            $settings = DB::table('tbl_mlm_triangle_repurchase')->where('shop_id', $shop_id)->where('membership_id', $value->membership_id)->first();
+
+            $data['membership'][$key]->settings = $settings;
+        }
+        // dd($data);
+        $data['basic_settings'] = MLM_PlanController::basic_settings('TRIANGLE_REPURCHASE');
+
+        return view('member.mlm_plan.configure.triangle_repurchase', $data);
+    }
+    public function save_triangle_repurchase()
+    {
+        // return $_POST;
+
+        $update['membership_id'] = Request::input('membership_id');
+        $update['shop_id'] = Request::input('shop_id');
+
+        $update_value['triangle_repurchase_amount'] = Request::input('triangle_repurchase_amount');
+        $update_value['triangle_repurchase_count'] = Request::input('triangle_repurchase_count');
+        $update_value['triangle_repurchase_income'] = Request::input('triangle_repurchase_income');
+        DB::table('tbl_mlm_triangle_repurchase')->where('shop_id', $update['shop_id'])->where('membership_id', $update['membership_id'])->update($update_value);
+
+        $data['response_status'] = 'successd';
+        $data['message'] = 'Settings Edited';
+
+        return json_encode($data);
+    }
+
 }

@@ -25,6 +25,8 @@
       <link href="/assets/member-theme/myphone/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
       <!-- Custom Theme Style -->
       <link href="/assets/member-theme/myphone/build/css/custom.min.css" rel="stylesheet">
+
+      <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
       <style>
          .navbar, .left_col { background-color: #5c3424; }
          #menu_toggle { color: #5c3424; }

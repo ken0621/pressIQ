@@ -361,9 +361,8 @@ class MemberController extends Controller
 
         foreach($data['membership'] as $key => $value)
         {
-            $data['package'][$key] = Tbl_membership_package::where('membership_id', $value->membership_id)->get();
+            $data['package'][$key] = Tbl_membership_package::where('membership_id', $value->membership_id)->where('membership_package_archive', 0)->get();
         }
-
         return view("mlm.register.package", $data);
     }
     public function package_post()

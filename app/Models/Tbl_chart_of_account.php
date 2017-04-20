@@ -7,6 +7,7 @@ class Tbl_chart_of_account extends Model
 {
 	protected $table = 'tbl_chart_of_account';
 	protected $primaryKey = "account_id";
+
     public $timestamps = false;
     
     public function scopeAccountInfo($query, $shop)
@@ -20,10 +21,20 @@ class Tbl_chart_of_account extends Model
               });
     }
 
+    public function scopeAccountType($query)
+    {
+      return $query->join('tbl_chart_account_type','account_type_id','=','chart_type_id');
+    }
+
     public function scopegetbytype($query, $shop_id, $account_type_id = array())
     {
         $query->where('account_shop_id', $shop_id)
               ->whereIn('account_type_id', $account_type_id);
         return $query;
     }
+
+    public function scopeType($query)
+    {
+      return $query->join('tbl_chart_account_type','chart_type_id','=','account_type_id');
+    } 
 }

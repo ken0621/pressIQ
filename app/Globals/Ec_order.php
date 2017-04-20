@@ -66,12 +66,16 @@ class Ec_order
         $data['payment_method_id']    = $order_info['payment_method_id'];
         $data['coupon_code']          = 0;
 
-        $data['ec_order_load']              = $order_info["ec_order_load"];
-        $data['ec_order_load_number']       = $order_info["ec_order_load_number"];
+        $data['ec_order_load']        = $order_info["ec_order_load"];
+        $data['ec_order_load_number'] = $order_info["ec_order_load_number"];
         $data['taxable']              = $order_info['taxable'];
         $data['order_status']         = $order_info['order_status'];
+        $data['payment_status']       = isset($order_info['payment_status']) ? $order_info['payment_status'] : 0;
 
         $order_id = Ec_order::create_ec_order($data);
+
+        $update["payment_upload"] = isset($order_info['payment_upload']) ? $order_info['payment_upload'] : '';
+        $image_id = Tbl_ec_order::where("ec_order_id", $order_id)->update($update);
         
         $return["status"]           = "success";
         $return["order_id"]         = $order_id;
@@ -209,8 +213,6 @@ class Ec_order
             $ec_order['ec_order_load_number']           = $data["ec_order_load_number"];
         }
 
-
-        $ec_order['payment_method_id']              = $data["payment_method_id"];
         $ec_order['customer_id']                    = $data["inv_customer_id"];
         $ec_order['customer_email']                 = $data["inv_customer_email"];
         $ec_order['billing_address']                = $data["inv_customer_billing_address"];
@@ -218,6 +220,8 @@ class Ec_order
         $ec_order['due_date']                       = $data["inv_due_date"];
         $ec_order['invoice_message']                = $data["inv_message"];
         $ec_order['order_status']                   = $data["order_status"];
+        $ec_order['payment_method_id']              = $data["payment_method_id"];
+        $ec_order['payment_status']                 = $data["payment_status"];
         $ec_order['statement_memo']                 = $data["inv_memo"];
         $ec_order['subtotal']                       = $prod_total;
         $ec_order['ewt']                            = $data["ewt"];
@@ -299,7 +303,7 @@ class Ec_order
 	{
         $ec_order_id             = $data["ec_order_id"];
         $update['order_status']  = $data["order_status"];
-        $update['payment_method_id'] = $data["payment_method_id"];
+        $update['payment_status'] = $data["payment_status"];
         $order_status            = $data["order_status"];
         $order                   = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
         $response                = "nothing";
@@ -314,12 +318,16 @@ class Ec_order
             {
                 $response = Ec_order::update_inventory("deduct",$ec_order_id);   
             }
+            else if($order_status == "Shipped")
+            {
+                $response = Ec_order::update_inventory("deduct",$ec_order_id);   
+            }
             else if($order_status == "On-hold")
             {
                 $response = Ec_order::update_inventory("deduct",$ec_order_id);
             }
         }
-        else if($order->order_status == "Processing" || $order->order_status == "Completed" || $order->order_status == "On-hold")
+        else if($order->order_status == "Processing" || $order->order_status == "Completed" || $order->order_status == "On-hold" || $order->order_status == "Shipped")
         {
             if($order_status == "Pending")
             {
@@ -337,11 +345,11 @@ class Ec_order
 
         if($order_status == "Completed")
         {
-            if(!$update['payment_method_id'] > 0)
+            if($update['payment_status'] == 0)
             {
                 $response                    = null;
                 $response['status']          = "error";
-                $response['status_message']  = "Cannot Complete Order without Payment Method";
+                $response['status_message']  = "Cannot Complete Order with unpaid status";
                 return $response;
             }
         }

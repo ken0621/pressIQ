@@ -24,20 +24,6 @@ class Seed
           Seed::seed_tbl_item_type();
         }
 
-        if(!DB::table("tbl_online_pymnt_method")->first())
-        {
-          Seed::seed_tbl_online_pymnt_method();
-        }
-        if(!DB::table("tbl_online_pymnt_gateway")->first())
-        {
-          Seed::seed_tbl_online_pymnt_gateway();
-        }
-
-        if(!DB::table('tbl_payroll_entity')->first())
-        {
-            Seed::seed_tbl_payroll_entity();
-        }
-
         // if(!DB::table("tbl_online_pymnt_method")->first())
         // {
         //   Seed::seed_tbl_online_pymnt_method();
@@ -47,6 +33,10 @@ class Seed
         //   Seed::seed_tbl_online_pymnt_gateway();
         // }
 
+        if(!DB::table('tbl_payroll_entity')->first())
+        {
+            Seed::seed_tbl_payroll_entity();
+        }
     }
 
     public static function getShopId()

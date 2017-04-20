@@ -62,7 +62,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::post('/employee_timesheet/adjustment_form_approve','Member\PayrollTimeSheetController@adjustment_form_approve');
 
 
-	Route::post('/company_timesheet/mark_ready_company','Member\PayrollController@mark_ready_company');
+	Route::any('/timesheet/mark_ready_company','Member\PayrollController@mark_ready_company');
 	/* TIMESHEET START */
 
 	/* DEPARTMENT START */

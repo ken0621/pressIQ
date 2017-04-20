@@ -51,14 +51,12 @@ class PayrollTimeSheetController extends Member
 			return Redirect::to('/member/payroll/time_keeping')->send();
 		}
 		$data['payroll_period_company_id'] = $id;
-		$data['company'] = Tbl_payroll_period_company::sel($id)->first();
-		// dd($data);
-
+		$data['company'] = Tbl_payroll_period_company::sel($id)->select('tbl_payroll_company.*','tbl_payroll_period.*','tbl_payroll_period_company.*')->first();
 		$data['_employee'] = Tbl_payroll_employee_contract::employeefilter($data['company']->payroll_company_id, 0, 0, date('Y-m-d'), $this->user_info->shop_id)
 							->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 							->where('tbl_payroll_group.payroll_group_period', $data['company']->payroll_period_category)
 							->get();
-		// dd($data['_employee']);
+		
 		$payroll_employee_id = 0;
 		if(isset($data['_employee'][0]))
 		{
@@ -89,7 +87,7 @@ class PayrollTimeSheetController extends Member
 
 		$data["default_time_out"] = Carbon::parse($payroll_group_end)->format("h:i A");
 
-
+		// dd($data);
 		return view('member.payroll.employee_timesheet', $data);
 	}
 

@@ -102,47 +102,47 @@ Route::post('/createAccount', 'Frontend\HomeController@createAccount');
 Route::group(array('prefix' => '/member/{page}/'), function()
 {
 	//order start
-	Route::any('order','Member\OrderController@orders');
-	Route::get('order/new_order','Member\OrderController@new_order');
-	Route::post('order/new_order/create_customer','Member\OrderController@create_customer');
-	Route::post('order/new_order/searchscustomer','Member\OrderController@searchscustomer');
-	Route::any('order/new_order/customerinfo','Member\OrderController@customerinfo');
-	Route::post('order/new_order/updateEmail','Member\OrderController@updateEmail');
-	Route::post('order/new_order/updateShipping','Member\O/member/itemrderController@updateShipping');
-	Route::post('order/new_order/itemlist','Member\OrderController@itemlist');
-	Route::post('order/new_order/create_order','Member\OrderController@create_order');
-	Route::post('order/new_order/removeitemorder','Member\OrderController@removeitemorder');
-	Route::post('order/new_order/addIndiDiscount','Member\OrderController@addIndiDiscount');
-	Route::post('order/new_order/chagequantity','Member\OrderController@chagequantity');
-	Route::post('order/new_order/addMainDiscount','Member\OrderController@addMainDiscount');
-	Route::post('order/new_order/applytax','Member\OrderController@applytax');
-	Route::post('order/new_order/removecustomer','Member\OrderController@removecustomer');
-	Route::post('order/new_order/addshipping','Member\OrderController@addshipping');
-	Route::post('order/new_order/savetodraft','Member\OrderController@savetodraft');
-	Route::post('order/new_order/OrderStatus','Member\OrderController@OrderStatus');
+	// Route::any('order','Member\OrderController@orders');
+	// Route::get('order/new_order','Member\OrderController@new_order');
+	// Route::post('order/new_order/create_customer','Member\OrderController@create_customer');
+	// Route::post('order/new_order/searchscustomer','Member\OrderController@searchscustomer');
+	// Route::any('order/new_order/customerinfo','Member\OrderController@customerinfo');
+	// Route::post('order/new_order/updateEmail','Member\OrderController@updateEmail');
+	// Route::post('order/new_order/updateShipping','Member\O/member/itemrderController@updateShipping');
+	// Route::post('order/new_order/itemlist','Member\OrderController@itemlist');
+	// Route::post('order/new_order/create_order','Member\OrderController@create_order');
+	// Route::post('order/new_order/removeitemorder','Member\OrderController@removeitemorder');
+	// Route::post('order/new_order/addIndiDiscount','Member\OrderController@addIndiDiscount');
+	// Route::post('order/new_order/chagequantity','Member\OrderController@chagequantity');
+	// Route::post('order/new_order/addMainDiscount','Member\OrderController@addMainDiscount');
+	// Route::post('order/new_order/applytax','Member\OrderController@applytax');
+	// Route::post('order/new_order/removecustomer','Member\OrderController@removecustomer');
+	// Route::post('order/new_order/addshipping','Member\OrderController@addshipping');
+	// Route::post('order/new_order/savetodraft','Member\OrderController@savetodraft');
+	// Route::post('order/new_order/OrderStatus','Member\OrderController@OrderStatus');
 	
 	//search for item start
-	Route::post('search_item','Member\OrderController@search_item');
+	// Route::post('search_item','Member\OrderController@search_item');
 	//search for item end
 
-	Route::get('order/{id}','Member\OrderListController@item');
-	Route::post('order/addnote','Member\OrderListController@addnote');
-	Route::post('order/refunditem','Member\OrderListController@refunditem');
-	Route::post('order/recordrefund','Member\OrderListController@recordrefund');
-	Route::post('order/updatepaystatus','Member\OrderListController@update_pay_status');
-	Route::get('order/filter/{status}/{payment_stat}/{fulfillment_status}','Member\OrderController@get_orders_with_view');
+	// Route::get('order/{id}','Member\OrderListController@item');
+	// Route::post('order/addnote','Member\OrderListController@addnote');
+	// Route::post('order/refunditem','Member\OrderListController@refunditem');
+	// Route::post('order/recordrefund','Member\OrderListController@recordrefund');
+	// Route::post('order/updatepaystatus','Member\OrderListController@update_pay_status');
+	// Route::get('order/filter/{status}/{payment_stat}/{fulfillment_status}','Member\OrderController@get_orders_with_view');
 	
-	Route::get('orders/draft','Member\DraftController@index');
-	Route::get('orders/draft/{id}','Member\DraftController@view_draft');
-	Route::get('orders/abandoned','Member\CheckOutController@index');
+	// Route::get('orders/draft','Member\DraftController@index');
+	// Route::get('orders/draft/{id}','Member\DraftController@view_draft');
+	// Route::get('orders/abandoned','Member\CheckOutController@index');
 	//order end
 	
 	//shipping start
-	Route::get('shipping','Member\ShipInfoController@index');
-	Route::post('shipping/create','Member\ShipInfoController@create');
-	Route::post('shipping/load','Member\ShipInfoController@load');
-	Route::get('shipping/remove','Member\ShipInfoController@remove');
-	Route::post('shipping/update','Member\ShipInfoController@update');
+	// Route::get('shipping','Member\ShipInfoController@index');
+	// Route::post('shipping/create','Member\ShipInfoController@create');
+	// Route::post('shipping/load','Member\ShipInfoController@load');
+	// Route::get('shipping/remove','Member\ShipInfoController@remove');
+	// Route::post('shipping/update','Member\ShipInfoController@update');
 	//shipping end
 
 	//product order start
@@ -151,6 +151,7 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::post('product_order/create_order/create_invoice','Member\ProductOrderController@create_invoice');
 	Route::post('product_order/create_order/update_invoice','Member\ProductOrderController@update_invoice');
 	Route::get('product_order/create_order/submit_coupon','Member\ProductOrderController@submit_coupon');
+	Route::any('product_order/create_order/submit_payment_upload','Member\ProductOrderController@submit_payment_upload');
 	//product order end
 });
 

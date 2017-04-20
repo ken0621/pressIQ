@@ -57,7 +57,7 @@
 					</tr>
 					@endforeach
 					<tr>
-						<td colspan="6"></td>
+						<td colspan="7"></td>
 						<td>{{currency('PHP', collect($journal->entries)->where("jline_type", 'Debit')->sum('jline_amount'))}}</td>
 						<td>{{currency('PHP', collect($journal->entries)->where("jline_type", 'Credit')->sum('jline_amount'))}}</td>
 					</tr>

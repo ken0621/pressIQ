@@ -109,7 +109,7 @@
             <div class="col-md-3 left_col">
                <div class="left_col scroll-view">
                   <div class="navbar nav_title" style="border: 0;">
-                     <a href="index.html" class="site_title"><img src="/member-theme/myphone/images/Brown_Logo.png" alt="Brown and Proud"></a>
+                     <a href="index.html" class="site_title"><img src="/assets/member-theme/myphone/images/Brown_Logo.png" alt="Brown and Proud"></a>
                   </div>
                   <div class="clearfix"></div>
                   <!-- menu profile quick info -->
@@ -246,7 +246,7 @@
                            <ul id="menu1" class="dropdown-menu list-unstyled msg_list" role="menu">
                               <li class="hide">
                                  <a>
-                                 <span class="image"><img src="/member-theme/myphone/images/img.jpg" alt="Profile Image" /></span>
+                                 <span class="image"><img src="/assets/member-theme/myphone/images/img.jpg" alt="Profile Image" /></span>
                                  <span>
                                  <span>John Smith</span>
                                  <span class="time">3 mins ago</span>

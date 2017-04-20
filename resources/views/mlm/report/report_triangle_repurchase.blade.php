@@ -15,22 +15,33 @@
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead>
-                                    <th>Slot</th>
-                                    <th>Upline</th>
                                     <th></th>
+                                    <th>Amount</th>
+                                    <th>Discounted Amount</th>
+                                    <th>Date</th>
+                                    <th>Slots Created</th>
                                 </thead>
                             <tbody>
-                            @if(isset($slots_tri))
-                                @foreach($slots_tri as $key => $value)
+                            @if(isset($invoice))
+                                @foreach($invoice as $key => $value)
                                 <tr>
-                                    <td>
-                                        {{$value->repurchase_slot_id}}
-                                    </td>
-                                    <td>
-                                        {{$value->repurchase_slot_placement}}
-                                    </td>
-                                    <td></td>
+                                    <td>#{{$key}}</td>
+                                    <td>{{$value->item_subtotal}}</td>
+                                    <td>{{$value->item_total}}</td>
+                                    <td>{{$value->item_code_date_created}}</td>
+                                    <td>{{$value->count}}</td>
                                 </tr>
+                                    @if(count($repurchase[$key]) >= 1)
+                                    <tr>
+                                        <td colspan="20">
+                                        <div class="col-md-12">Slots created:</div>
+                                        @foreach($repurchase[$key] as $key => $value2)
+                                            <a class="btn btn-primary" target="_blank" href="/mlm/genealogy/repurchase?slot_repurchase={{$value2->repurchase_slot_id}}">{{$value2->repurchase_slot_id}}</a>
+
+                                        @endforeach
+                                        <td>
+                                    </tr>
+                                    @endif
                                 @endforeach
                             @else
                             <tr><td colspan="20"><center>No Slots In @if(isset($plan->marketing_plan_label)) {{$plan->marketing_plan_label}} @endif</center></td></tr>

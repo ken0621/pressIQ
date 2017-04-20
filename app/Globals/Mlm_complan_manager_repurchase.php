@@ -741,7 +741,7 @@ class Mlm_complan_manager_repurchase
                     if($settings)
                     {
                         $label = Mlm_compute::get_label_plan('TRIANGLE_REPURCHASE', $shop_id);
-                        $log = 'Congratulations! You earned ' .  $settings->triangle_repurchase_income . ' in ' . $label . ' Repurchase Slot #' . $repurchase_slot_id ;
+                        $log = 'Congratulations! You earned ' .  $settings->triangle_repurchase_income . ' in ' . $label . '. Slot #' . $repurchase_slot_id ;
                         $arry_log['wallet_log_slot'] = $slot_earn->slot_id;
                         $arry_log['shop_id'] = $slot_earn->shop_id;
                         $arry_log['wallet_log_slot_sponsor'] = $slot_earn->slot_id;

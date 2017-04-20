@@ -146,6 +146,17 @@
                                   Binary Network List
                                 </a>
                               </li>
+                              @if(count($complan_repurchase) >=1)
+                                  @foreach($complan_repurchase as $value)
+                                  @if($value->marketing_plan_code == 'TRIANGLE_REPURCHASE')
+                                    <li>
+                                        <a href="/mlm/genealogy/repurchase" class="subnav-text">
+                                            Repurchase Genealogy
+                                        </a> 
+                                    </li>
+                                  @endif
+                                  @endforeach
+                              @endif
                             </ul>
                            </li>
                            <li><a> Report <span class="fa fa-chevron-down"></span></a>

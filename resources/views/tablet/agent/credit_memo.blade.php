@@ -4,38 +4,36 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
-        <div>
-            <i class="fa fa-tags"></i>
+       <div class="col-md-8 col-xs-6">
+            <i class="fa fa-tablet"></i>
             <h1>
                 <span class="page-title">Tablet &raquo; Credit Memo</span>
                 <small>
-                    List of Customer CM
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/customer/credit_memo" >Create CM</a>
+        </div>
+        <div class="col-md-4 col-xs-6 text-right">
+            <div class="col-md-12 text-left">
+                <label>{{$employee_name}}</label><br>
+                <label>{{$employee_position}}</label><br>
+                <a href="/tablet/logout">Logout</a>
+            </div>  
         </div>
     </div>
 </div>
 
 <!-- NO PRODUCT YET -->
-<div class="panel panel-default panel-block panel-title-block panel-gray ">
-   <!--  <ul class="nav nav-tabs">
-        <li class="active cursor-pointer"><a class="cursor-pointer" onclick="select('all')" data-toggle="tab" href="#all"><i class="fa fa-star"></i> All SIR</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer"  onclick="select(0,0)" data-toggle="tab" href="#open"><i class="fa fa-folder-open"></i> Open SIR</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer"  onclick="select(1,0)" data-toggle="tab" href="#closed"><i class="fa fa-window-close"></i> Closed SIR</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer" onclick="select('',1)" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived SIR</a></li>
-    </ul> -->
-    <div class="search-filter-box">
-        <div class="col-md-4" style="padding: 10px">
-            <div class="input-group">
-                <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search_name" placeholder="Search by CM Number" aria-describedby="basic-addon1">
+<div class="panel panel-default panel-block panel-title-block panel-gray">
+    <div class="tab-content panel-body form-horizontal tablet-container">
+        <div id="invoice" class="tab-pane fade in active">
+            <div class="form-group">
+                <div class="col-md-4 col-xs-6">
+                    <a class="btn btn-primary form-control" href="/tablet/credit_memo/add?sir_id={{Session::get('selected_sir')}}">Create CM</a>
+                </div>
+                <div class="col-md-8 col-xs-6 text-right">
+                    <a href="/tablet/dashboard"><< Back to Dashboard</a>
+                </div> 
             </div>
-        </div>  
-    </div>
-    <div class="form-group tab-content panel-body sir_container">
-        <div id="all" class="tab-pane fade in active">
-            <div class="form-group order-tags"></div>
             <div class="table-responsive">
                 <table class="table table-bordered table-condensed">
                     <thead style="text-transform: uppercase">
@@ -60,9 +58,7 @@
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
                                           <!-- <li ><a class="popup" link="/member/customer/view_cm/{{$cm->cm_id}}" size="lg">View CM</a></li> -->
-                                        @if($cm->manual_cm_id== null)
-                                          <li ><a href="/member/customer/credit_memo?id={{$cm->cm_id}}">Edit CM</a></li>
-                                        @endif
+                                          <li ><a href="/tablet/credit_memo/add?id={{$cm->cm_id}}&sir_id={{$sir_id or ''}}">Edit CM</a></li>
                                       </ul>
                                     </div>
                                 </td>

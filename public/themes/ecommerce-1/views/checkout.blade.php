@@ -116,6 +116,7 @@
 										<th>PRODUCT</th>
 										<th>QTY</th>
 										<th>PRICE</th>
+										<th></th>
 									</tr>
 								</thead>
 								<tbody>
@@ -125,6 +126,7 @@
 											<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
 											<td>{{ $cart["quantity"] }}</td>
 											<td>P {{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</td>
+											<td style="padding-left: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&variation_id={{ $cart["product_id"] }}"><i class="fa fa-close"></i></a></td>
 										</tr>
 										@endforeach
 									@endif
@@ -136,6 +138,7 @@
 										<td></td>
 										<td class="text-right"><b>Subtotal</b></td>
 										<td>P {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</td>
+										<td></td>
 									</tr>
 									@if($get_cart["sale_information"]["total_overall_price"] > $get_cart["sale_information"]["minimum_purchase"])
 									<!-- <tr>

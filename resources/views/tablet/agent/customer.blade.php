@@ -59,7 +59,7 @@
                                   <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Action <span class="caret"></span>
                                   </button>
                                     <ul class="dropdown-menu dropdown-menu-custom">
-                                        <li><a href="/tablet/create_invoices/add?sir_id={{Session::get('selected_sir')}}&customer_id={{$customer->customer_id}}">Create Invoice</a></li>  
+                                        <li><a href="/tablet/create_invoices/add?sir_id={{Session::get('sir_id')}}&customer_id={{$customer->customer_id}}">Create Invoice</a></li>  
                                         <li><a href="/tablet/receive_payment/add?customer_id={{$customer->customer_id}}">Receive Payment</a></li>  
                                         <li><a href="/tablet/customer_details/{{$customer->customer_id}}">View Customer Details</a></li>                                        
                                     </ul>

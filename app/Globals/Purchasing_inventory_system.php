@@ -1002,7 +1002,10 @@ class Purchasing_inventory_system
                      array_push($items, $cm_items);
                     
                 }
-            }            
+            } 
+
+            $up["is_sync"] = 1 ;
+            Tbl_manual_credit_memo::where("manual_cm_id",$cm_value->manual_cm_id)->update($up);   
         }
         $result = array();
         foreach($items as $k => $v)

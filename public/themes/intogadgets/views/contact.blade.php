@@ -211,7 +211,7 @@
       var locationSelect;
 
         function initMap() {
-          var sydney = {lat: -33.863276, lng: 151.107977};
+          var sydney = {lat: 14.5995, lng: 120.9842};
           map = new google.maps.Map(document.getElementById('map'), {
             center: sydney,
             zoom: 11,
@@ -261,30 +261,38 @@
          clearLocations();
 
          var radius = document.getElementById('radiusSelect').value;
-         var searchUrl = 'storelocator.php?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius;
+         var searchUrl = '/contact/find_store/?lat=' + center.lat() + '&lng=' + center.lng() + '&radius=' + radius;
          downloadUrl(searchUrl, function(data) {
            var xml = parseXml(data);
            var markerNodes = xml.documentElement.getElementsByTagName("marker");
-           var bounds = new google.maps.LatLngBounds();
-           for (var i = 0; i < markerNodes.length; i++) {
-             var id = markerNodes[i].getAttribute("id");
-             var name = markerNodes[i].getAttribute("name");
-             var address = markerNodes[i].getAttribute("address");
-             var distance = parseFloat(markerNodes[i].getAttribute("distance"));
-             var latlng = new google.maps.LatLng(
-                  parseFloat(markerNodes[i].getAttribute("lat")),
-                  parseFloat(markerNodes[i].getAttribute("lng")));
+           console.log(markerNodes);
+           if (!markerNodes.is(':empty')) 
+           {
+           	   var bounds = new google.maps.LatLngBounds();
+	           for (var i = 0; i < markerNodes.length; i++) {
+	             var id = markerNodes[i].getAttribute("id");
+	             var name = markerNodes[i].getAttribute("name");
+	             var address = markerNodes[i].getAttribute("address");
+	             var distance = parseFloat(markerNodes[i].getAttribute("distance"));
+	             var latlng = new google.maps.LatLng(
+	                  parseFloat(markerNodes[i].getAttribute("lat")),
+	                  parseFloat(markerNodes[i].getAttribute("lng")));
 
-             createOption(name, distance, i);
-             createMarker(latlng, name, address);
-             bounds.extend(latlng);
+	             createOption(name, distance, i);
+	             createMarker(latlng, name, address);
+	             bounds.extend(latlng);
+	           }
+	           map.fitBounds(bounds);
+	           locationSelect.style.visibility = "visible";
+	           locationSelect.onchange = function() {
+	             var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
+	             google.maps.event.trigger(markers[markerNum], 'click');
+	           };
            }
-           map.fitBounds(bounds);
-           locationSelect.style.visibility = "visible";
-           locationSelect.onchange = function() {
-             var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
-             google.maps.event.trigger(markers[markerNum], 'click');
-           };
+           else
+           {
+           		alert("There are no stores in this area.");
+           }
          });
        }
 

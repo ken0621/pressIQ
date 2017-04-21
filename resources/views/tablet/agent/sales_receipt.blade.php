@@ -66,7 +66,7 @@
                                         @else
                                          <li><a size="lg" link="/tablet/view_invoice_view/{{$inv->inv_id}}" class="popup">View Receipt</a></li>
                                         @endif
-                                        <li><a href="/tablet/create_invoices/add?id={{$inv->inv_id}}&sir_id={{Session::get('selected_sir')}}">Edit Sales Receipt</a></li>                                        
+                                        <li><a href="/tablet/sales_receipt?id={{$inv->inv_id}}&sir_id={{Session::get('selected_sir')}}">Edit Sales Receipt</a></li>                                        
                                     </ul>
                                 </div>
                             </td>

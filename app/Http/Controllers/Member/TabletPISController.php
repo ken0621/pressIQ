@@ -1432,8 +1432,6 @@ class TabletPISController extends Member
     }
     public function update_sales_receipt_submit()
     {
-        dd(Request::input());
-
         $invoice_id = Request::input("invoice_id");
         $sir_id = Request::input("sir_id");
         $data["status_message"] = "";
@@ -1590,6 +1588,27 @@ class TabletPISController extends Member
 
                 $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
 
+                 /* SUBTOTAL */
+                $subtotal_price = collect($item_info)->sum('amount');
+
+                /* DISCOUNT */
+                $discount = $total_info['total_discount_value'];
+                if($total_info['total_discount_type'] == 'percent') $discount = (convertToNumber($total_info['total_discount_value']) / 100) * $subtotal_price;
+
+                /* TAX */
+                $tax = (collect($item_info)->where('taxable', '1')->sum('amount')) * 0.12;
+
+                /* EWT */
+                $ewt = $subtotal_price*convertToNumber($total_info['ewt']);
+
+                /* OVERALL TOTAL */
+                $overall_price  = convertToNumber($subtotal_price) - $ewt - $discount + $tax;
+
+                $update['inv_payment_applied']        = $overall_price;
+                Tbl_customer_invoice::where("inv_id",$invoice_id)->update($update);
+
+                Invoice::update_rcv_payment("invoice",$invoice_id,$overall_price);
+
                 Tbl_sir_inventory::where("sir_inventory_ref_name","invoice")->where("sir_inventory_ref_id",$invoice_id)->delete();
                 foreach($_itemline as $key => $item_line)
                 {
@@ -1631,7 +1650,7 @@ class TabletPISController extends Member
 
                     }
                 }
-                $data["status"] = "success-tablet";
+                $data["status"] = "success-tablet-sr";
             }
             else
             {

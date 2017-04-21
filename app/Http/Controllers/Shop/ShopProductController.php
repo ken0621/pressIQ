@@ -17,12 +17,18 @@ class ShopProductController extends Shop
     {
         $data["page"] = "Product";
         $type = Request::input("type");
+        $brand = Request::input("brand");
         if ($type) 
         {
             // Get Product by Category
             $product = Ecom_Product::getAllProductByCategory($type, $this->shop_info->shop_id);
             // Get Breadcrumbs
-            $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($type, $this->shop_info);
+            $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($type, $this->shop_info->shop_id);
+        }
+        elseif($brand)
+        {
+            $product = Ecom_product::getProductByCategoryName($brand, $this->shop_info->shop_id);
+            $data["breadcrumbs"][0]["type_name"] = $brand;
         }
         else
         {
@@ -31,6 +37,8 @@ class ShopProductController extends Shop
             // Get Breadcrumbs
             $data["breadcrumbs"] = [];
         }
+        // Get Most Searched
+        $data["_most_searched"] = Ecom_Product::getMostSearched(5, $this->shop_info->shop_id);
         // Get Category
         $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         // Count total product
@@ -110,7 +118,7 @@ class ShopProductController extends Shop
                 });
             break;
         }
-        // Pagination
+        Pagination
         $perPage = 12;
         $data["current_count"] = count($product);
         $data["_product"] = self::paginate($product, $perPage);

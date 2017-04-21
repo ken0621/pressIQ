@@ -37,6 +37,10 @@
 
 					  <a href="/member/payroll/payroll_group" class="list-group-item a-navigation-configuration">Payroll Group</a>
 
+					  <a href="/member/payroll/payroll_jouarnal" class="list-group-item a-navigation-configuration">Journal Tags</a>
+
+					  <a href="/member/payroll/custom_payslip" class="list-group-item a-navigation-configuration">Payslip</a>
+
 					  <a href="/member/payroll/tax_period" class="list-group-item a-navigation-configuration">Tax Period</a>
 
 					  <a href="/member/payroll/tax_table_list" class="list-group-item a-navigation-configuration">Tax Table</a>

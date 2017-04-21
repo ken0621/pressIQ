@@ -15,7 +15,7 @@ use Redirect;
 use Carbon\carbon;
 
 /**
- * Accounting Module - all accounting related module
+ * Accounting Module - all accounting related module -accounts
  *
  * @author Bryan Kier Aradanas
  */
@@ -169,55 +169,371 @@ class Accounting
 	/**
 	 * Create a journal entry for the transaction 
 	 *
-	 * @param string  	$reference_module 	Type of transaction
-	 * @param integer  	$reference_id  		Id of the transaction
-	 * @param array  	$entry_data 		Entry data for the journal Entry
-	 * @param array  	$entry_date      	
-	 * @param boolean  	$remarks   			
+	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["total"] , 
+	 									$entry["vatable"] , $entry["discount"] , $entry["ewt"]
+	 * @param array  	$entry_date     $entry_data[0]['item_id'] , $entry_data[0]['entry_qty'] , $entry_data[0]['vatable']
+	 									$entry_data[0]['discount'] , $entry_data[0]['entry_amount']
+	 * @param boolean  	$remarks   		Description of the journal entry	
 	 */
-	public static function postJournalEntry($reference_module = '', $reference_id = '', $entry_data = '', $remarks = '')
+	public static function postJournalEntry($entry, $entry_data, $remarks = '')
 	{
-		$reference_module = "invoice";
+		/* GETTING THE DEFAULT ACCOUNTS RECEIVABLE AND ACCOUNTS PAYABLE */
+		$account_receivable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-receivable")->pluck("account_id");
+		$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
 
-		$entry_data[0]['item_id'] 		= 41;
-		$entry_data[0]['entry_qty'] 	= 5;
-		$entry_data[0]['entry_amount'] 	= 200;
-
-		$account_receivable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("chart_type_name","Accounts Receivable")->pluck("account_id");
-		$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("chart_type_name","Accounts Payable")->pluck("account_id");
-
-		$account_asset 		= Tbl_item::where("item_id", 39)->pluck("item_asset_account_id");
-		$account_income 	= Tbl_item::where("item_id", 39)->pluck("item_income_account_id");
-		$account_expense 	= Tbl_item::where("item_id", 39)->pluck("item_expense_account_id");
-
-		// if($reference_module == "invoice")
-		// {
-		// 	$insert["je_shop_id"] 			= "";
-		// 	$insert["je_reference_module"]	= $reference_module;
-		// 	$insert["je_reference_id"]		= 1;
-		// 	$insert["je_entry_date"]		= Carbon::now();
-		// 	$insert["je_remarks"]			= '';
-
-		// 	$je_id = Tbl_journal_entry::
- 
-		// 	foreach($entry_data as $data)
-		// 	{
-		// 		$insertline["jline_je_id"]
-		// 	}
-		// }
-
-		foreach($entry_data as $entry)
+		/* FOR OLD DATABASE - CHECKING IF THERE IS ALREADY AN ACCOUNT CODE*/
+		if(!$account_receivable)
 		{
-			// $_account = Tbl_item::where("item_id", $entry["item_id"])
+			Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Receivable")->update(['account_code'=>"accounting-receivable"]);
+			$account_receivable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-receivable")->pluck("account_id");
+		}
+		if(!$account_payable)
+		{
+			Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Payable")->update(['account_code'=>"accounting-payable"]);
+			$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
+		}
+		/* END */
+
+		/* GETTING CHART OF ACCOUNTS THAT TAGGED ON THE ITEM */
+		$account_asset 		= Tbl_item::where("item_id", 39)->pluck("item_asset_account_id");   //Inventory 
+		$account_income 	= Tbl_item::where("item_id", 39)->pluck("item_income_account_id");  //Sales
+		$account_expense 	= Tbl_item::where("item_id", 39)->pluck("item_expense_account_id"); //Cost of Good Sold
+
+
+		/* INSERT JOURNAL ENTRY */
+		$journal_entry['je_shop_id'] 			= Accounting::getShopId();
+		$journal_entry['je_reference_module'] 	= $entry["reference_module"];
+		$journal_entry['je_reference_id'] 		= $entry["reference_id"];
+		$journal_entry['je_entry_date'] 		= carbon::now();
+		$journal_entry['je_remarks']			= $remarks;
+
+		/* CHECK IF THE TRANSACTION JOURNAL IS ALREADY EXIST - USE IF NEW OR UPDATE TRANSACTION */
+		$exist_journal = Tbl_journal_entry::where("je_reference_module", $journal_entry['je_reference_module'])->where("je_reference_id", $journal_entry['je_reference_id'])->first();
+
+		if(!$exist_journal)
+		{
+			$line_data["je_id"] 	= Tbl_journal_entry::insertGetId($journal_entry);
+		}
+		else
+		{
+			unset($journal_entry['je_entry_date']);
+			Tbl_journal_entry_line::where("jline_je_id", $exist_journal->je_id)->delete();
+			Tbl_journal_entry::where("je_id", $exist_journal->je_id)->update($journal_entry);
+			$line_data["je_id"] = $exist_journal->je_id;
 		}
 
+		$line_data["item_id"]	= '';
 
-		// $_first 	= Tbl_item::accountAsset()->where("item_id", 39)->select("item_id","item_asset_account_id as account_id", "account_name", "chart_type_name", "normal_balance")->where("item_asset_account_id","<>", "NULL");
-		// $_second 	= Tbl_item::accountIncome()->where("item_id", 39)->select("item_id","item_income_account_id as account_id", "account_name", "chart_type_name", "normal_balance")->where("item_income_account_id","<>", "NULL");
-		// $_third 	= Tbl_item::accountExpense()->where("item_id", 39)->select("item_id","item_expense_account_id  as account_id", "account_name", "chart_type_name", "normal_balance")->where("item_expense_account_id","<>", "NULL");	
+		/* RECIVABLE OR PAYABLE */
+		if(Accounting::checkReceivable($entry["reference_module"]))
+		{
+			$line_data["entry_amount"]	= $entry["total"];
+			$line_data["entry_type"] 	= Accounting::normalBalance($account_receivable);
+			$line_data["account_id"] 	= $account_receivable;
+			Accounting::insertJournalLine($line_data);
 
-		// dd($_second->union($_first)->union($_third)->get()->toArray());
+			/* DISCOUNT AS WHOLE */
+			if($entry["discount"] > 0)
+			{
+				$line_data["entry_amount"]	= $entry["discount"];
+				$line_data["entry_type"] 	= Accounting::normalBalance(Accounting::getDiscountSale());
+				$line_data["account_id"] 	= Accounting::getDiscountSale();
+				Accounting::insertJournalLine($line_data);
+			}
+
+			/* VATABLE AS WHOLE */
+			if($entry["vatable"] > 0)
+			{
+				$line_data["entry_amount"]	= $entry["vatable"];
+				$line_data["entry_type"] 	= Accounting::normalBalance(Accounting::getOutputVatPayable());
+				$line_data["account_id"] 	= Accounting::getOutputVatPayable();
+				Accounting::insertJournalLine($line_data);
+			}
+
+			/* EWT AS WHOLE */
+			if($entry["ewt"] > 0)
+			{
+				$line_data["entry_amount"]	= $entry["ewt"];
+				$line_data["entry_type"] 	= Accounting::normalBalance(Accounting::getWitholdingTax());
+				$line_data["account_id"] 	= Accounting::getWitholdingTax();
+				Accounting::insertJournalLine($line_data);
+			}
+		}
+		else
+		{
+			$line_data["entry_amount"]	= $entry["total"];
+			$line_data["entry_type"] 	= Accounting::normalBalance($account_payable);
+			$line_data["account_id"] 	= $account_payable;
+			Accounting::insertJournalLine($line_data);
+
+			/* DISCOUNT AS WHOLE */
+			if($entry["discount"] > 0)
+			{
+				$line_data["entry_amount"]	= $entry["discount"];
+				$line_data["entry_type"] 	= Accounting::contraAccount(Accounting::getDiscountPurchase());
+				$line_data["account_id"] 	= Accounting::getDiscountPurchase();
+				Accounting::insertJournalLine($line_data);
+			}
+
+			/* VATABLE AS WHOLE */
+			if($entry["vatable"] > 0)
+			{
+				$line_data["entry_amount"]	= $entry["vatable"];
+				$line_data["entry_type"] 	= Accounting::contraAccount(Accounting::getOutputVatPayable());
+				$line_data["account_id"] 	= Accounting::getOutputVatPayable();
+				Accounting::insertJournalLine($line_data);
+			}
+
+			/* EWT AS WHOLE */
+			if($entry["ewt"] > 0)
+			{
+				$line_data["entry_amount"]	= $entry["ewt"];
+				$line_data["entry_type"] 	= Accounting::contraAccount(Accounting::getWitholdingTax());
+				$line_data["account_id"] 	= Accounting::getWitholdingTax();
+				Accounting::insertJournalLine($line_data);
+			}
+		}
+
+		foreach($entry_data as $entry_line)
+		{
+			$item = Tbl_item::where("item_id", $entry_line["item_id"])->first();
+
+			$line_data["item_id"] = $entry_line["item_id"];
+
+			switch($entry["reference_module"])
+			{
+				case "invoice":
+					/* INCOME ACCOUNT */
+					$line_data["entry_amount"]	= $entry_line["entry_amount"];
+					$line_data["entry_type"] 	= Accounting::normalBalance($account_income);
+					$line_data["account_id"] 	= $account_income;
+					Accounting::insertJournalLine($line_data);
+
+					if($item->item_type_id == 1)
+					{
+						/* EXPENSE ACCOUNT */
+						$line_data["entry_amount"]	= $item->item_cost;
+						$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
+						$line_data["account_id"] 	= $account_expense;
+						Accounting::insertJournalLine($line_data);
+
+						/* ASSET ACCOUNT */
+						$line_data["entry_amount"]	= $item->item_cost;
+						$line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
+						$line_data["account_id"] 	= $account_asset;
+						Accounting::insertJournalLine($line_data);
+					}
+					break;
+
+				case "purchase-order":
+					break;
+				case "sales-receipt":
+					break;
+				case "bill":
+					break;
+				case "credit-memo":
+					break;
+				case "debit-memo":
+					break;
+				// SO ON
+			}
+		}
+
+		return $line_data["je_id"];
 	}
+	public static function insertJournalLine($line)
+	{
+		$journal_line['jline_je_id']		= $line["je_id"];
+		$journal_line['jline_item_id'] 		= $line["item_id"];
+		$journal_line['jline_account_id'] 	= $line["account_id"];
+		$journal_line['jline_type'] 		= $line["entry_type"];
+		$journal_line['jline_amount'] 		= $line["entry_amount"];
+		$journal_line['jline_description'] 	= isset($line["entry_description"]) ? $line["entry_description"] : '';
+
+		Tbl_journal_entry_line::insert($journal_line);
+	}
+
+	/** 
+	 * Checking if the given $type is a receivable or payable type
+	 * @param 	string 		$type 			Reference module / type of transaction
+	 * @return 	boolean 					true if it is receivable and false if not - DD for invalid(For developer purpose)
+	*/
+	public static function checkReceivable($type)
+	{
+		if($type == "invoice")
+		{
+			return true;
+		}
+		elseif($type == "credit-memo")
+		{
+			return false;
+		}
+		else
+		{
+			dd("Invalid Reference Module");
+		}
+	}
+
+	/**
+	 * Getting normal balance of the given account
+	 *
+	 * @param 	string  	$account_id 	account id of specific account
+	 * @return 	string 						Credit or Debit
+	 */
+	public static function normalBalance($account_id)
+	{
+		$balance = Tbl_chart_of_account::type()->where("account_id", $account_id)->pluck("normal_balance");
+		if($balance == "credit") 	return 'Credit';
+		elseif($balance == "debit") return 'Debit';
+	}
+
+	/**
+	 * Getting reverse normal balance of the given account
+	 *
+	 * @param 	string  	$account_id 	account id of specific account
+	 * @return 	string 						Credit or Debit
+	 */
+	public static function contraAccount($account_id)
+	{
+		$balance = Tbl_chart_of_account::type()->where("account_id", $account_id)->pluck("normal_balance");
+		if($balance == "credit") 	return 'Debit';
+		elseif($balance == "debit") return 'Credit';
+	}
+
+	/**
+	 * Check what table reference
+	 *
+	 * @param 	string  	$type 		Type of a transaction
+	 * @return 	array[2] 	$table_name | id_name
+	 */
+	public static function checkReferenceId($type)
+	{
+		switch($type)
+		{
+			case 'invoice':
+				$data["table_txn_reference"] 	= 'Tbl_customer_invoice';
+				$data["txn_id"]					= 'je_id';			
+				$data["table_name_reference"]	= 'Tbl_customer';
+				$data["name_id"]				= 'customer_id';
+				break;
+
+			case 'purchase_order':
+				$data["table_txn_reference"] 	= 'Tbl_purchase_order';
+				$data["txn_id"]					= 'je_id';			
+				$data["table_name_reference"]	= 'Tbl_vendor';
+				$data["name_id"]				= 'vendor_id';
+				break;
+			case 'receive-payment':
+				break;
+			default:
+				$data = null;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Get Chart of Account - Output Vat Payable for Vatable transaction
+	 *
+	 * @return 	int 	ID
+	 */
+	public static function getOutputVatPayable()
+	{
+		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "tax-output-vat-payable")->first();
+        if(!$exist_account)
+        {
+            $insert["account_shop_id"]          = Accounting::getShopId();
+            $insert["account_type_id"]          = 9;
+            $insert["account_number"]           = "00000";
+            $insert["account_name"]             = "Output Vat Payable";
+            $insert["account_description"]      = "";
+            $insert["account_protected"]        = 1;
+            $insert["account_code"]             = "tax-output-vat-payable";
+            
+            return Tbl_chart_of_account::insertGetId($insert);
+        }
+
+        return $exist_account->account_id;
+	}
+
+	/**
+	 * Get Chart of Account - Creditable witholding tax for Witholding transaction
+	 *
+	 * @return 	int 	ID
+	 */
+	public static function getWitholdingTax()
+	{
+		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "tax-credit-tax-1")->first();
+        if(!$exist_account)
+        {
+            $insert["account_shop_id"]          = Accounting::getShopId();
+            $insert["account_type_id"]          = 3;
+            $insert["account_number"]           = "00000";
+            $insert["account_name"]             = "Creditable Withholding Tax - 1%";
+            $insert["account_description"]      = "";
+            $insert["account_protected"]        = 1;
+            $insert["account_code"]             = "tax-credit-tax-1";
+            
+            return Tbl_chart_of_account::insertGetId($insert);
+        }
+
+        return $exist_account->account_id;
+	}
+
+	/**
+	 * Get Chart of Account - Discount for Discounted Sale transaction
+	 *
+	 * @return 	int 	ID
+	 */
+	public static function getDiscountSale()
+	{
+		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "discount-sale")->first();
+        if(!$exist_account)
+        {
+            $insert["account_shop_id"]          = Accounting::getShopId();
+            $insert["account_type_id"]          = 4;
+            $insert["account_number"]           = "00000";
+            $insert["account_name"]             = "Discount";
+            $insert["account_description"]      = "";
+            $insert["account_protected"]        = 1;
+            $insert["account_code"]             = "discount-sale";
+            
+            return Tbl_chart_of_account::insertGetId($insert);
+        }
+
+        return $exist_account->account_id;
+	}
+
+	/**
+	 * Get Chart of Account - Discount for Discounted Purchase transaction
+	 *
+	 * @return 	int 	ID
+	 */
+	public static function getDiscountPurchase()
+	{
+		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "discount-purchase")->first();
+        if(!$exist_account)
+        {
+            $insert["account_shop_id"]          = Accounting::getShopId();
+            $insert["account_type_id"]          = 4;
+            $insert["account_number"]           = "00000";
+            $insert["account_name"]             = "Discount";
+            $insert["account_description"]      = "";
+            $insert["account_protected"]        = 1;
+            $insert["account_code"]             = "discount-puchase";
+            
+            return Tbl_chart_of_account::insertGetId($insert);
+        }
+
+        return $exist_account->account_id;
+	}
+
+	/* REFERENCE OF THE NAMING OF THE CHART OF ACCOUNT TABLE */
+
+	// Output Vat Payable 						= tax-output-vat-payable
+	// Creditable Withholding Tax - 1%			= tax-credit-tax-1
+	// Discount									= discount-sale
+	// Discount									= discount-purchase
 
 	public static function getJournalById($reference_module, $reference_id)
 	{
@@ -300,38 +616,5 @@ class Accounting
         }
         // dd($data['tbl_journal_entry']);
         return $data['tbl_journal_entry'];
-	}
-
-
-	/**
-	 * Check what table reference
-	 *
-	 * @param 	string  	$type 		Type of a transaction
-	 * @return 	array[2] 	$table_name | id_name
-	 */
-	public static function checkReferenceId($type)
-	{
-		switch($type)
-		{
-			case 'invoice':
-				$data["table_txn_reference"] 	= 'Tbl_customer_invoice';
-				$data["txn_id"]					= 'je_id';			
-				$data["table_name_reference"]	= 'Tbl_customer';
-				$data["name_id"]				= 'customer_id';
-				break;
-
-			case 'purchase_order':
-				$data["table_txn_reference"] 	= 'Tbl_purchase_order';
-				$data["txn_id"]					= 'je_id';			
-				$data["table_name_reference"]	= 'Tbl_vendor';
-				$data["name_id"]				= 'vendor_id';
-				break;
-			case 'receive-payment':
-				break;
-			default:
-				$data = null;
-		}
-
-		return $data;
 	}
 }

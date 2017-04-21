@@ -33,4 +33,11 @@ class Tbl_payroll_leave_employee extends Model
 		return $query;
 	}
 
+	public function scopecheckleave($query, $payroll_employee_id = 0, $payroll_leave_temp_id = 0)
+	{
+		$query->where('payroll_employee_id', $payroll_employee_id)->where('payroll_leave_temp_id', $payroll_leave_temp_id);
+
+		return $query;
+	}
+
 }

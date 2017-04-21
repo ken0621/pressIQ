@@ -270,7 +270,7 @@
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <small>COLA (monthly)</small>
+                        <small>COLA (Daily)</small>
                         <input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right">
                       </div>
                     </div>
@@ -542,6 +542,7 @@
                 <li class="active"><a data-toggle="tab" href="#allowance">Allowance</a></li>
                 <li><a data-toggle="tab" href="#leave">Leave</a></li>
                 <li><a data-toggle="tab" href="#deduction">Deduction</a></li>
+                <li><a data-toggle="tab" href="#jouarnal">Journal</a></li>
               </ul>
               <div class="tab-content tab-content-custom">
                 <div id="allowance" class="tab-pane fade in active">
@@ -562,6 +563,13 @@
                   @foreach($_deduction as $deduction)
                   <div class="checkbox">
                     <label><input type="checkbox" name="deduction[]" value="{{$deduction->payroll_deduction_id}}">{{$deduction->payroll_deduction_name}}</label>
+                  </div>
+                  @endforeach
+                </div>
+                <div id="jouarnal" class="tab-pane fade">
+                  @foreach($_journal_tag as $tag)
+                  <div class="checkbox">
+                    <label><input type="checkbox" name="journal_tag[]" value="{{$tag->payroll_journal_tag_id}}">{{$tag->account_number.' • '.$tag->account_name}}</label>
                   </div>
                   @endforeach
                 </div>

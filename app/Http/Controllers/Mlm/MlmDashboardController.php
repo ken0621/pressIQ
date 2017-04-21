@@ -19,11 +19,13 @@ use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_country;
+use App\Models\Tbl_tree_placement;
 use Carbon\Carbon;
 class MlmDashboardController extends Mlm
 {
     public function index()
     {
+        // return $this->tree_view();
         // return Mlm_member::add_to_session_edit(5, 301, 1);
     	// return Self::show_maintenance();
         $data["page"] = "Dashboard";
@@ -98,6 +100,24 @@ class MlmDashboardController extends Mlm
         $data['news'] = Self::news();
         
         return view("mlm.dashboard", $data);
+    }
+    public function tree_view()
+    {
+        $slot_tree = Tbl_tree_placement::child(4098)->orderby("placement_tree_level", "asc")->distinct_level()->parentslot()->membership()->get();
+        // dd($slot_tree);
+        foreach ($slot_tree as $key => $value) {
+            # code...
+            $key2 = $key + 1;
+             // = $value2;
+            if(isset($slot_tree[$key2]))
+            {
+                $slot[$key][$key2] = $slot_tree[$key2];
+            }
+        }
+        // dd($slot);/
+        $data['slotss'] = $slot;
+        $data['slot_tree'] = $slot_tree;
+        return view('mlm.new_tree.index', $data);
     }
     public static function income_discount()
     {

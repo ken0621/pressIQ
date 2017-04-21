@@ -62,7 +62,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::post('/employee_timesheet/adjustment_form_approve','Member\PayrollTimeSheetController@adjustment_form_approve');
 
 
-	Route::post('/company_timesheet/mark_ready_company','Member\PayrollController@mark_ready_company');
+	Route::any('/timesheet/mark_ready_company','Member\PayrollController@mark_ready_company');
 	/* TIMESHEET START */
 
 	/* DEPARTMENT START */
@@ -222,6 +222,24 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_group/archived_payroll_group',"Member\PayrollController@archived_payroll_group");
 	/* PAYROLL GROUP END */
 
+	/* PAYROLL JOURNAL SETTINGS START */
+	Route::any('/payroll_jouarnal',"Member\PayrollController@payroll_jouarnal");
+	Route::any('/payroll_jouarnal/modal_create_journal_tag',"Member\PayrollController@modal_create_journal_tag");
+	Route::any('/payroll_jouarnal/create_journal_tag',"Member\PayrollController@create_journal_tag");
+	Route::any('/payroll_jouarnal/modal_edit_journal_tag/{id}',"Member\PayrollController@modal_edit_journal_tag");
+	Route::any('/payroll_jouarnal/modal_confimr_del_journal_tag/{id}',"Member\PayrollController@modal_confimr_del_journal_tag");
+	Route::any('/payroll_jouarnal/update_payroll_journal_tag',"Member\PayrollController@update_payroll_journal_tag");
+	Route::any('/payroll_jouarnal/del_journal_tag',"Member\PayrollController@del_journal_tag");
+	Route::any('/payroll_jouarnal/relaod_payroll_journal_sel',"Member\PayrollController@relaod_payroll_journal_sel");
+	/* PAYROLL JOURNAL SETTINGS END */
+
+
+	/* PAYROLL CUSTOM PAYSLIP START */
+	Route::any('/custom_payslip',"Member\PayrollController@custom_payslip");
+	Route::any('/custom_payslip/modal_create_payslip',"Member\PayrollController@modal_create_payslip");
+	
+	/* PAYROLL CUSTOM PAYSLIP END */
+
 	/* PAYROLL PERIOD START */
 	Route::any('/payroll_period_list','Member\PayrollController@payroll_period_list');
 	Route::any('/payroll_period_list/modal_create_payroll_period','Member\PayrollController@modal_create_payroll_period');
@@ -276,10 +294,33 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_process/payroll_compute_brk_unsaved/{employee_id}/{period_company_id}','Member\PayrollController@payroll_compute_brk_unsaved');
 	Route::any('/payroll_process/modal_create_payroll_adjustment/{payroll_employee_id}/{payroll_period_company_id}','Member\PayrollController@modal_create_payroll_adjustment');
 	Route::any('/payroll_process/create_payroll_adjustment','Member\PayrollController@create_payroll_adjustment');
+	Route::any('/payroll_process/confirm_remove_adjustment/{id}','Member\PayrollController@confirm_remove_adjustment');
+	Route::any('/payroll_process/remove_adjustment','Member\PayrollController@remove_adjustment');
+	Route::any('/payroll_process/confirm_action_payroll/{action}/{id}','Member\PayrollController@confirm_action_payroll');
+	Route::any('/payroll_process/action_payroll','Member\PayrollController@action_payroll');
+	Route::any('/payroll_process/confirm_cancel_payroll/{action}/{id}','Member\PayrollController@confirm_cancel_payroll');
 	/* PAYROLL PROCESS END */
+
 
 	/* PAYROLL SUMMARY JOURNAL ENTRIES */
 	Route::get('/payroll_summary','Member\PayrollController@payroll_summary');
 
 	/* END */
-});	
+
+	/* PAYROLL REGISTER START */
+	Route::any('/payroll_register','Member\PayrollController@payroll_register');
+	Route::any('/payroll_register/breakdown_uncompute_static/{employee_id}/{period_company_id}','Member\PayrollController@breakdown_uncompute_static');
+	/* PAYROLL REGISTER END */
+
+
+	/* PAYROLL POSTED START */
+	Route::any('/payroll_post','Member\PayrollController@payroll_post');
+	/* PAYROLL POSTED END */
+
+	/* PAYROLL APPROVED START */
+	Route::any('/payroll_approved_view','Member\PayrollController@payroll_approved_view');
+	Route::any('/payroll_approved_view/approve_payroll','Member\PayrollController@approve_payroll');
+	Route::any('/payroll_approved_view/payroll_approved_company/{id}','Member\PayrollController@payroll_approved_company');
+	Route::any('/payroll_approved_view/payroll_record_by_id/{id}','Member\PayrollController@payroll_record_by_id');
+	/* PAYROLLL APPROVED END */
+});	 

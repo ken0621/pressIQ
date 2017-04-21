@@ -23,13 +23,19 @@ class Seed
         {
           Seed::seed_tbl_item_type();
         }
-        if(!DB::table("tbl_online_pymnt_method")->first())
+
+        // if(!DB::table("tbl_online_pymnt_method")->first())
+        // {
+        //   Seed::seed_tbl_online_pymnt_method();
+        // }
+        // if(!DB::table("tbl_online_pymnt_gateway")->first())
+        // {
+        //   Seed::seed_tbl_online_pymnt_gateway();
+        // }
+
+        if(!DB::table('tbl_payroll_entity')->first())
         {
-          Seed::seed_tbl_online_pymnt_method();
-        }
-        if(!DB::table("tbl_online_pymnt_gateway")->first())
-        {
-          Seed::seed_tbl_online_pymnt_gateway();
+            Seed::seed_tbl_payroll_entity();
         }
     }
 
@@ -211,7 +217,7 @@ class Seed
     
     public static function seed_tbl_default_chart_account()
     {
-       $insert[1]['default_id']                 = ""; 
+       $insert[1]['default_id']                 = 1; 
        $insert[1]['default_type_id']            = "2";    
        $insert[1]['default_number']             = "11000";
        $insert[1]['default_name']               = "Accounts Receivable";
@@ -223,9 +229,9 @@ class Seed
        $insert[1]['default_open_balance_date']  = "";
        $insert[1]['is_tax_account']             = "";
        $insert[1]['account_tax_code_id']        = "";
-       $insert[1]['default_for_code']           = "";
+       $insert[1]['default_for_code']           = "accounting-receivable";
 
-       $insert[2]['default_id']                 = ""; 
+       $insert[2]['default_id']                 = 2; 
        $insert[2]['default_type_id']            = "3";    
        $insert[2]['default_number']             = "22000";
        $insert[2]['default_name']               = "Undeposited Funds";
@@ -237,9 +243,9 @@ class Seed
        $insert[2]['default_open_balance_date']  = "";
        $insert[2]['is_tax_account']             = "";
        $insert[2]['account_tax_code_id']        = "";
-       $insert[2]['default_for_code']           = "";
+       $insert[2]['default_for_code']           = "accounting-endeposit-funds";
 
-       $insert[3]['default_id']                 = ""; 
+       $insert[3]['default_id']                 = 3; 
        $insert[3]['default_type_id']            = "3";    
        $insert[3]['default_number']             = "12100";
        $insert[3]['default_name']               = "Inventory Asset";
@@ -251,13 +257,13 @@ class Seed
        $insert[3]['default_open_balance_date']  = "";
        $insert[3]['is_tax_account']             = "";
        $insert[3]['account_tax_code_id']        = "";
-       $insert[3]['default_for_code']           = "";
+       $insert[3]['default_for_code']           = "accounting-inventory-asset";
 
-       $insert[4]['default_id']                 = ""; 
+       $insert[4]['default_id']                 = 4; 
        $insert[4]['default_type_id']            = "4";   	
        $insert[4]['default_number']             = "17000";
        $insert[4]['default_name']               = "Accumulated Depreciation";
-       $insert[4]['default_description']        = "Accumulated depreciation on equipment, buildings and improvements";           	
+       $insert[4]['default_description']        = "Accumulated depreciation on equipment, buildings and improvements";
        $insert[4]['default_parent_id']          = "";           	
        $insert[4]['default_sublevel']           = "";   
        $insert[4]['default_balance']            = "";
@@ -267,7 +273,7 @@ class Seed
        $insert[4]['account_tax_code_id']        = "";
        $insert[4]['default_for_code']           = "";
        
-       $insert[5]['default_id']                 = ""; 
+       $insert[5]['default_id']                 = 5; 
        $insert[5]['default_type_id']            = "4";   	
        $insert[5]['default_number']             = "15000";
        $insert[5]['default_name']               = "Furniture and Equipment";
@@ -281,7 +287,7 @@ class Seed
        $insert[5]['account_tax_code_id']        = "";
        $insert[5]['default_for_code']           = "";
 
-       $insert[6]['default_id']                 = ""; 
+       $insert[6]['default_id']                 = 6; 
        $insert[6]['default_type_id']            = "6";    
        $insert[6]['default_number']             = "60000";
        $insert[6]['default_name']               = "Accounts Payable";
@@ -293,9 +299,9 @@ class Seed
        $insert[6]['default_open_balance_date']  = "";
        $insert[6]['is_tax_account']             = "";
        $insert[6]['account_tax_code_id']        = "";
-       $insert[6]['default_for_code']           = "";
+       $insert[6]['default_for_code']           = "accounting-payable";
        
-       $insert[7]['default_id']                 = ""; 
+       $insert[7]['default_id']                 = 7; 
        $insert[7]['default_type_id']            = "8";   	
        $insert[7]['default_number']             = "24000";
        $insert[7]['default_name']               = "Payroll Liabilities";
@@ -309,7 +315,7 @@ class Seed
        $insert[7]['account_tax_code_id']        = "";
        $insert[7]['default_for_code']           = "";
        
-       $insert[8]['default_id']                 = ""; 
+       $insert[8]['default_id']                 = 8; 
        $insert[8]['default_type_id']            = "10";   	
        $insert[8]['default_number']             = "80100";
        $insert[8]['default_name']               = "Capital Stock";
@@ -323,7 +329,7 @@ class Seed
        $insert[8]['account_tax_code_id']        = "";
        $insert[8]['default_for_code']           = "";
        
-       $insert[9]['default_id']                 = ""; 
+       $insert[9]['default_id']                 = 9; 
        $insert[9]['default_type_id']            = "10";   	
        $insert[9]['default_number']             = "30200";
        $insert[9]['default_name']               = "Dividends Paid";
@@ -337,7 +343,7 @@ class Seed
        $insert[9]['account_tax_code_id']        = "";
        $insert[9]['default_for_code']           = "";
        
-       $insert[10]['default_id']                 = ""; 
+       $insert[10]['default_id']                 = 10; 
        $insert[10]['default_type_id']            = "10";   	
        $insert[10]['default_number']             = "30000";
        $insert[10]['default_name']               = "Opening Balance Equity";
@@ -351,7 +357,7 @@ class Seed
        $insert[10]['account_tax_code_id']        = "";
        $insert[10]['default_for_code']           = "";
        
-       $insert[11]['default_id']                 = ""; 
+       $insert[11]['default_id']                 = 11; 
        $insert[11]['default_type_id']            = "11";   	
        $insert[11]['default_number']             = "411900";
        $insert[11]['default_name']               = "Sales";
@@ -363,9 +369,9 @@ class Seed
        $insert[11]['default_open_balance_date']  = "";
        $insert[11]['is_tax_account']             = "";
        $insert[11]['account_tax_code_id']        = "";
-       $insert[11]['default_for_code']           = "";
+       $insert[11]['default_for_code']           = "accounting-sales";
        
-       $insert[12]['default_id']                 = ""; 
+       $insert[12]['default_id']                 = 12; 
        $insert[12]['default_type_id']            = "11";   	
        $insert[12]['default_number']             = "412900";
        $insert[12]['default_name']               = "Shipping and Delivery Income";
@@ -379,7 +385,7 @@ class Seed
        $insert[12]['account_tax_code_id']        = "";
        $insert[12]['default_for_code']           = "";
        
-       $insert[13]['default_id']                 = ""; 
+       $insert[13]['default_id']                 = 13; 
        $insert[13]['default_type_id']            = "12";   	
        $insert[13]['default_number']             = "51100";
        $insert[13]['default_name']               = "Freight and Shipping Costs";
@@ -393,7 +399,7 @@ class Seed
        $insert[13]['account_tax_code_id']        = "";
        $insert[13]['default_for_code']           = "";
        
-       $insert[14]['default_id']                 = ""; 
+       $insert[14]['default_id']                 = 14; 
        $insert[14]['default_type_id']            = "12";   	
        $insert[14]['default_number']             = "51800";
        $insert[14]['default_name']               = "Merchant Account Fees";
@@ -407,10 +413,10 @@ class Seed
        $insert[14]['account_tax_code_id']        = "";
        $insert[14]['default_for_code']           = "";
        
-       $insert[15]['default_id']                 = ""; 
+       $insert[15]['default_id']                 = 15; 
        $insert[15]['default_type_id']            = "12";   	
        $insert[15]['default_number']             = "52300";
-       $insert[15]['default_name']               = "Product Samples Expense";
+       $insert[15]['default_name']               = "Product Expense";
        $insert[15]['default_description']        = "Cost of products used as floor samples or given to customers for trial or demonstration";           	
        $insert[15]['default_parent_id']          = "";           	
        $insert[15]['default_sublevel']           = "";   
@@ -419,9 +425,9 @@ class Seed
        $insert[15]['default_open_balance_date']  = "";
        $insert[15]['is_tax_account']             = "";
        $insert[15]['account_tax_code_id']        = "";
-       $insert[15]['default_for_code']           = "";
+       $insert[15]['default_for_code']           = "accounting-expense";
        
-       $insert[16]['default_id']                 = ""; 
+       $insert[16]['default_id']                 = 16; 
        $insert[16]['default_type_id']            = "12";   	
        $insert[16]['default_number']             = "52900";
        $insert[16]['default_name']               = "Purchases - Resale Items";
@@ -435,7 +441,7 @@ class Seed
        $insert[16]['account_tax_code_id']        = "";
        $insert[16]['default_for_code']           = "";
        
-       $insert[17]['default_id']                 = ""; 
+       $insert[17]['default_id']                 = 17; 
        $insert[17]['default_type_id']            = "13";   	
        $insert[17]['default_number']             = "60000";
        $insert[17]['default_name']               = "Advertising and Promotion";
@@ -449,7 +455,7 @@ class Seed
        $insert[17]['account_tax_code_id']        = "";
        $insert[17]['default_for_code']           = "";
        
-       $insert[18]['default_id']                 = ""; 
+       $insert[18]['default_id']                 = 18; 
        $insert[18]['default_type_id']            = "13";   	
        $insert[18]['default_number']             = "60200";
        $insert[18]['default_name']               = "Automobile Expense";
@@ -463,7 +469,7 @@ class Seed
        $insert[18]['account_tax_code_id']        = "";
        $insert[18]['default_for_code']           = "";
        
-       $insert[19]['default_id']                 = ""; 
+       $insert[19]['default_id']                 = 19; 
        $insert[19]['default_type_id']            = "13";   	
        $insert[19]['default_number']             = "60400";
        $insert[19]['default_name']               = "Bank Service Charges";
@@ -477,7 +483,7 @@ class Seed
        $insert[19]['account_tax_code_id']        = "";
        $insert[19]['default_for_code']           = "";
        
-       $insert[20]['default_id']                 = ""; 
+       $insert[20]['default_id']                 = 20; 
        $insert[20]['default_type_id']            = "13";   	
        $insert[20]['default_number']             = "61700";
        $insert[20]['default_name']               = "Computer and Internet Expenses";
@@ -491,7 +497,7 @@ class Seed
        $insert[20]['account_tax_code_id']        = "";
        $insert[20]['default_for_code']           = "";
        
-       $insert[21]['default_id']                 = ""; 
+       $insert[21]['default_id']                 = 21; 
        $insert[21]['default_type_id']            = "13";   	
        $insert[21]['default_number']             = "62400";
        $insert[21]['default_name']               = "Depreciation Expense";
@@ -505,7 +511,7 @@ class Seed
        $insert[21]['account_tax_code_id']        = "";
        $insert[21]['default_for_code']           = "";
        
-       $insert[22]['default_id']                 = ""; 
+       $insert[22]['default_id']                 = 22; 
        $insert[22]['default_type_id']            = "13";   	
        $insert[22]['default_number']             = "62500";
        $insert[22]['default_name']               = "Dues and Subscriptions";
@@ -519,7 +525,7 @@ class Seed
        $insert[22]['account_tax_code_id']        = "";
        $insert[22]['default_for_code']           = "";
        
-       $insert[23]['default_id']                 = ""; 
+       $insert[23]['default_id']                 = 23; 
        $insert[23]['default_type_id']            = "13";   	
        $insert[23]['default_number']             = "63300";
        $insert[23]['default_name']               = "Insurance Expense";
@@ -533,7 +539,7 @@ class Seed
        $insert[23]['account_tax_code_id']        = "";
        $insert[23]['default_for_code']           = "";
        
-       $insert[24]['default_id']                 = ""; 
+       $insert[24]['default_id']                 = 24; 
        $insert[24]['default_type_id']            = "13";   	
        $insert[24]['default_number']             = "63400";
        $insert[24]['default_name']               = "Interest Expense";
@@ -547,7 +553,7 @@ class Seed
        $insert[24]['account_tax_code_id']        = "";
        $insert[24]['default_for_code']           = "";
        
-       $insert[25]['default_id']                 = ""; 
+       $insert[25]['default_id']                 = 25; 
        $insert[25]['default_type_id']            = "13";   	
        $insert[25]['default_number']             = "64300";
        $insert[25]['default_name']               = "Meals and Entertainment";
@@ -561,7 +567,7 @@ class Seed
        $insert[25]['account_tax_code_id']        = "";
        $insert[25]['default_for_code']           = "";
        
-       $insert[26]['default_id']                 = ""; 
+       $insert[26]['default_id']                 = 26; 
        $insert[26]['default_type_id']            = "13";   	
        $insert[26]['default_number']             = "64900";
        $insert[26]['default_name']               = "Office Supplies";
@@ -575,7 +581,7 @@ class Seed
        $insert[26]['account_tax_code_id']        = "";
        $insert[26]['default_for_code']           = "";
        
-       $insert[27]['default_id']                 = ""; 
+       $insert[27]['default_id']                 = 27; 
        $insert[27]['default_type_id']            = "13";   	
        $insert[27]['default_number']             = "66000";
        $insert[27]['default_name']               = "Payroll Expenses";
@@ -587,9 +593,9 @@ class Seed
        $insert[27]['default_open_balance_date']  = "";
        $insert[27]['is_tax_account']             = "";
        $insert[27]['account_tax_code_id']        = "";
-       $insert[27]['default_for_code']           = "";
+       $insert[27]['default_for_code']           = "accounting-payroll-expense";
        
-       $insert[28]['default_id']                 = ""; 
+       $insert[28]['default_id']                 = 28; 
        $insert[28]['default_type_id']            = "13";   	
        $insert[28]['default_number']             = "66500";
        $insert[28]['default_name']               = "Postage and Delivery";
@@ -603,7 +609,7 @@ class Seed
        $insert[28]['account_tax_code_id']        = "";
        $insert[28]['default_for_code']           = "";
        
-       $insert[29]['default_id']                 = ""; 
+       $insert[29]['default_id']                 = 29; 
        $insert[29]['default_type_id']            = "13";   	
        $insert[29]['default_number']             = "66700";
        $insert[29]['default_name']               = "Professional Fees";
@@ -617,7 +623,7 @@ class Seed
        $insert[29]['account_tax_code_id']        = "";
        $insert[29]['default_for_code']           = "";
        
-       $insert[30]['default_id']                 = ""; 
+       $insert[30]['default_id']                 = 30; 
        $insert[30]['default_type_id']            = "13";   	
        $insert[30]['default_number']             = "67100";
        $insert[30]['default_name']               = "Rent Expense";
@@ -631,7 +637,7 @@ class Seed
        $insert[30]['account_tax_code_id']        = "";
        $insert[30]['default_for_code']           = "";
        
-       $insert[31]['default_id']                 = ""; 
+       $insert[31]['default_id']                 = 31; 
        $insert[31]['default_type_id']            = "13";   	
        $insert[31]['default_number']             = "67200";
        $insert[31]['default_name']               = "Repairs and Maintenance";
@@ -645,7 +651,7 @@ class Seed
        $insert[31]['account_tax_code_id']        = "";
        $insert[31]['default_for_code']           = "";
        
-       $insert[32]['default_id']                 = ""; 
+       $insert[32]['default_id']                 = 32; 
        $insert[32]['default_type_id']            = "13";   	
        $insert[32]['default_number']             = "8100";
        $insert[32]['default_name']               = "Telephone Expense";
@@ -659,7 +665,7 @@ class Seed
        $insert[32]['account_tax_code_id']        = "";
        $insert[32]['default_for_code']           = "";
        
-       $insert[33]['default_id']                 = ""; 
+       $insert[33]['default_id']                 = 33; 
        $insert[33]['default_type_id']            = "13";   	
        $insert[33]['default_number']             = "68400";
        $insert[33]['default_name']               = "Travel Expense";
@@ -673,7 +679,7 @@ class Seed
        $insert[33]['account_tax_code_id']        = "";
        $insert[33]['default_for_code']           = "";
        
-       $insert[34]['default_id']                 = ""; 
+       $insert[34]['default_id']                 = 34; 
        $insert[34]['default_type_id']            = "13";   	
        $insert[34]['default_number']             = "68600";
        $insert[34]['default_name']               = "Utilities";
@@ -687,7 +693,7 @@ class Seed
        $insert[34]['account_tax_code_id']        = "";
        $insert[34]['default_for_code']           = "";
        
-       $insert[35]['default_id']                 = ""; 
+       $insert[35]['default_id']                 = 35; 
        $insert[35]['default_type_id']            = "15";   	
        $insert[35]['default_number']             = "80000";
        $insert[35]['default_name']               = "Ask My Accountant";
@@ -743,7 +749,7 @@ class Seed
         $insert[4]['method_id']         = 5; 
         $insert[4]['method_name']       = "BPI";
         $insert[4]['method_code_name']  = "bpi";
-        $insert[4]['method_gateway_accepted']  = "[1],[2],[3],[4]";
+        $insert[4]['method_gateway_accepted']  = "1,2,3,4";
 
         DB::table('tbl_online_pymnt_method')->insert($insert);
     }
@@ -771,6 +777,43 @@ class Seed
         $insert[4]['gateway_code_name']  = "other";
 
         DB::table('tbl_online_pymnt_gateway')->insert($insert);
+    }
+
+    public static function seed_tbl_payroll_entity()
+    {
+        $statment = "INSERT INTO `tbl_payroll_entity` (`payroll_entity_id`, `entity_name`, `entity_category`) VALUES
+        (1, '13 Month Pay', 'basic'),
+        (2, 'Basic Salary Pay', 'basic'),
+        (3, 'Early Over Time Pay',  'basic'),
+        (4, 'Extra Day Pay',    'basic'),
+        (5, 'Leave With Pay',   'basic'),
+        (6, 'Night Differential Pay',   'basic'),
+        (7, 'Regular Holiday Pay',  'basic'),
+        (8, 'Regular Over Time Pay',    'basic'),
+        (9, 'Rest Day Pay', 'basic'),
+        (10, 'COLA', 'basic'),
+        (11,    'Special Holiday Pay',  'basic'),
+        (12,    'Allowance Pay',    'deminimis'),
+        (13,    'Bonus Pay',    'deminimis'),
+        (14,    'Commission Pay',   'deminimis'),
+        (15,    'Incentive Pay',    'deminimis'),
+        (16,    'Pagibig',  'goverment'),
+        (17,    'Philhealth EE',    'goverment'),
+        (18,    'Philhealth ER',    'goverment'),
+        (19,    'SSS EC',   'goverment'),
+        (20,    'SSS EE',   'goverment'),
+        (21,    'SSS ER',   'goverment'),
+        (22,    'Tax',  'goverment'),
+        (23,    'Cash Advance',  'deductions'),
+        (24,    'Cash Bond',    'deductions'),
+        (25,    'Loans',    'deductions'),
+        (26,    'Other Deduction',   'deductions'),
+        (27,    'Late',   'deductions'),
+        (28,    'Absent',   'deductions'),
+        (29,    'Under Time',   'deductions');";
+
+        DB::statement($statment);
+
     }
 }
 

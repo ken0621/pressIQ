@@ -85,8 +85,10 @@ function submit_done(data)
 		{
 			console.log("other");
 			online_payment.action_other_container_hide();
+			$(".other-load-data").load("/member/maintenance/online_payment .other-load");
+			
 		}
-		$(".other-load-data").load("/member/maintenance/online_payment .other-load");
+		$(".method-load-data").load("/member/maintenance/online_payment .method-data");
 		toastr.success('Success');
 	}
 }

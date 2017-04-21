@@ -18,6 +18,7 @@ class Tbl_payroll_record extends Model
 	// payroll_period_company_id
 	// salary_monthly
 	// salary_daily
+	// payroll_cola
 	// regular_salary
 	// regular_early_overtime
 	// regular_reg_overtime
@@ -61,6 +62,23 @@ class Tbl_payroll_record extends Model
 	// philhealth_contribution_ee
 	// philhealth_contribution_er
 	// pagibig_contribution
+	// regular_hours
+	// late_overtime
+	// early_overtime
+	// late_hours
+	// under_time_hours
+	// rest_day_hours
+	// extra_day_hours
+	// total_hours
+	// night_differential
+	// special_holiday_hours
+	// regular_holiday_hours
+	// total_regular_days
+	// total_rest_days
+	// total_extra_days
+	// total_rh
+	// total_sh
+	// total_worked_days
 
 	public function scopegetperiod($query, $shop_id = 0, $payroll_period_category = '', $status = 'approved')
 	{
@@ -73,5 +91,40 @@ class Tbl_payroll_record extends Model
 		return $query;
 	}	
 
-	public function scope
+	public function scopegetcompanyrecord($query, $payroll_period_company_id = 0)
+	{
+		$query->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_record.payroll_employee_id')
+			  ->where('tbl_payroll_record.payroll_period_company_id', $payroll_period_company_id);
+
+		return $query;
+	}
+	public function scopegetrecord($query, $payroll_record_id = 0)
+	{
+		$query->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_record.payroll_employee_id')
+			  ->where('tbl_payroll_record.payroll_record_id', $payroll_record_id);
+
+		return $query;
+	}
+
+	public function scopegetdate($query, $shop_id = 0 ,$date = array())
+	{
+
+		$query->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_company_id','=','tbl_payroll_record.payroll_period_company_id')
+			  ->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+			  ->where('tbl_payroll_record.shop_id', $shop_id)
+			  ->where(function ($query2) use ($date){
+			  		$query2->where(function($query3) use ($date)
+			  		{
+			  			$query3->whereBetween('tbl_payroll_period.payroll_period_start',$date);
+			  			return $query3;
+			  		})
+			  		->orWhere(function ($query3) use ($date){
+			  			$query3->whereBetween('tbl_payroll_period.payroll_period_end',$date);
+			  			return $query3;
+			  		});
+
+			  		return $query2;
+			  });
+		return $query;
+	}
 }

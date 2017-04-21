@@ -83,6 +83,8 @@ class Shop extends Controller
                 }
             }
         }
+
+        $this->shop_theme_info = $shop_theme_info;
       
         $company_info = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->get())->keyBy('key');
         $product_category = Ecom_Product::getAllCategory($this->shop_info->shop_id);

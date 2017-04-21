@@ -1406,7 +1406,7 @@ class TabletPISController extends Member
                             Purchasing_inventory_system::insert_sir_inventory($sir_id,$item,"invoice",$invoice_id);
                         }
                     }
-                    $data["status"] = "success-tablet";
+                    $data["status"] = "success-tablet-sr";
                }
                else
                {

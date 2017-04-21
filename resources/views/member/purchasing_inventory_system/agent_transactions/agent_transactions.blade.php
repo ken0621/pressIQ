@@ -74,8 +74,7 @@
 			            </tr>
 			        </thead>
 			        <tbody>
-			            @foreach($__transaction as $_transaction)
-			            	@foreach($_transaction as $transaction)
+			            @foreach($__transaction as $transaction)
 				            <tr class="cursor-pointer" onClick="window.location='/member/customer/{{$transaction['reference_name']}}?id={{$transaction['no']}}'">
 				                <td>{{ $transaction['date'] }}</td>
 				                <td>{{ $transaction['type'] }}</td>
@@ -100,7 +99,6 @@
 			                       @endif
 				                </td>
 				            </tr>
-				            @endforeach
 			            @endforeach
 			        </tbody>
 			    </table>

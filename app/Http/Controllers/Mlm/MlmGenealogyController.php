@@ -8,7 +8,8 @@ use View;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_placement;
 use App\Globals\Mlm_genealogy;
-
+use App\Models\Tbl_mlm_triangle_repurchase_slot;
+use App\Models\Tbl_mlm_triangle_repurchase_tree;
 class MlmGenealogyController extends Mlm
 {
     public function index($tree)
@@ -26,6 +27,19 @@ class MlmGenealogyController extends Mlm
         $data['slot_now'] = Self::$slot_now;
         // dd($data);
     	return view("mlm.genealogy.unilevel", $data);
+    }
+    public function repurchase()
+    {
+        $data = [];
+        $data['head'] = Request::input('head');
+        $data['slot_now'] = Self::$slot_now;
+        $data['repurchase_slot'] = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_slot_id', Self::$slot_id)
+        ->join('tbl_item_code_invoice', 'tbl_item_code_invoice.item_code_invoice_id', '=', 'tbl_mlm_triangle_repurchase_slot.repurchase_slot_invoice_id')
+        ->get();
+
+        $data['slot_repurchase'] = Request::input('slot_repurchase');
+        // $data['slot_id'] = 
+        return view("mlm.genealogy.repurchase", $data);
     }
     public function binary()
     {
@@ -48,14 +62,41 @@ class MlmGenealogyController extends Mlm
         $data["slot"]      = Tbl_mlm_slot::membership()->customer()->where("tbl_mlm_slot.shop_id",$shop_id)->where("slot_id",$slot_id)->first();
         $data['l']         = Tbl_tree_placement::where('placement_tree_parent_id',$slot_id)->where('placement_tree_position','left')->count();
         $data['r']         = Tbl_tree_placement::where('placement_tree_parent_id',$slot_id)->where('placement_tree_position','right')->count();
-
+        $data['format'] = Request::input("mode");
         if($data["slot"])
         {
+
+            if($data['format'] == 'repurchase')
+            {
+                $data["slot"] = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_id', $slot_id)->where('repurchase_slot_position','right')->customer()->first();
+                $data['slot']->slot_no = $slot_id;
+                $data['slot']->slot_id = $slot_id;
+                $data['l']         = Tbl_mlm_triangle_repurchase_tree::where('placement_tree_parent_id',$slot_id)->where('placement_tree_position','left')->count() -1;
+                $data['r']         = Tbl_mlm_triangle_repurchase_tree::where('placement_tree_parent_id',$slot_id)->where('placement_tree_position','right')->count() - 1;
+                
+                $data["downline"] = $this->downline($slot_id); 
+            }
+            else{
              $data["downline"] = $this->downline($slot_id);   
+            }
         }
         else
         {
-            die('Invalid Slot');
+            if($data['format'] == 'repurchase')
+            {
+
+                $data["slot"] = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_id', $slot_id)->customer()->first();
+                $data['slot']->slot_no = $slot_id;
+                $data['slot']->slot_id = $slot_id;
+                $data['l']         = Tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_slot_sponsor',$slot_id)->where('tree_repurchase_tree_position','left')->count() -1;
+                $data['r']         = Tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_slot_sponsor',$slot_id)->where('tree_repurchase_tree_position','right')->count() - 1;
+                $data["downline"] = $this->downline($slot_id); 
+            }
+            else
+            {
+                die('Invalid Slot');
+            }
+            
         }
         $data['format'] = Request::input("mode");
         return view('mlm.genealogy.genealogy', $data);
@@ -79,6 +120,10 @@ class MlmGenealogyController extends Mlm
         {
             $return .= $this->binary_downline($slot_id);
         }
+        else if($format =='repurchase')
+        {
+            $return .= $this->repurchase_downline($slot_id);
+        }
         else
         {
             $return .= $this->unilevel_downline($slot_id);
@@ -88,6 +133,7 @@ class MlmGenealogyController extends Mlm
 
         if($x == 0)
         {
+            // return $return;
             return json_encode($return);
         }
         else
@@ -95,16 +141,85 @@ class MlmGenealogyController extends Mlm
             return $return;
         }   
     }
+    public function repurchase_downline($x)
+    {
+        $left_info = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_placement', $x)->where('repurchase_slot_position','left')->customer()->first();
+        $right_info = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_placement', $x)->where('repurchase_slot_position','right')->customer()->first();
+        $tree_string = "";
+        $tree_string .= $this->downline_format_repurchase($left_info,'Left',$x);
+        $tree_string .= $this->downline_format_repurchase($right_info,'Right',$x);
+        return $tree_string;
+   }
     public function binary_downline($slot_id)
     {  
         $left_info  = Tbl_mlm_slot::where("slot_placement", $slot_id)->where("slot_position", "left")->membership()->customer()->first();
         $right_info = Tbl_mlm_slot::where("slot_placement", $slot_id)->where("slot_position", "right")->membership()->customer()->first(); 
-
         $tree_string = "";
         $tree_string .= $this->downline_format($left_info,'Left',$slot_id);
         $tree_string .= $this->downline_format($right_info,'Right',$slot_id);
 
         return $tree_string;
+    }
+    public function downline_format_repurchase($slot_info,$position = null,$placement = null)
+    {   
+        if($slot_info)
+        {
+            $l = Tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_slot_sponsor',$slot_info->repurchase_slot_id)->where('tree_repurchase_tree_position','left')->count();
+            $r = Tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_slot_sponsor',$slot_info->repurchase_slot_id)->where('tree_repurchase_tree_position','right')->count();
+            
+
+            $str_slot = '<span class="downline parent parent-reference PS SILVER" x="' . $slot_info->repurchase_slot_id . '">';    
+
+
+
+            if($slot_info->image == "")
+            {
+                return  '<li class="width-reference">'.$str_slot.
+                                    '<div id="info">
+                                        <div id="photo">
+                                            <img src="/assets/slot_genealogy/member/img/default-image.jpg" alt="" />
+                                        </div>
+                                        <div id="cont">
+                                            <div>' . strtoupper($slot_info->first_name) . ' </div>
+                                        </div>
+                                        <div>' . "L:".$l." R:".$r.'</div>
+                                        <div>
+                                        </div>
+                                    </div>
+                                    <div class="id">' . $slot_info->repurchase_slot_id . '</div>
+                                </span>
+                                <i class="downline-container"></i>
+                            </li>';
+            }
+            else
+            {
+                return  '<li class="width-reference">'.$str_slot.
+                                    '<div id="info">
+                                        <div id="photo">
+                                            <img src="/assets/slot_genealogy/member/img/default-image.jpg">
+                                        </div>
+                                        <div id="cont">
+                                            <div>' . strtoupper($slot_info->first_name) . ' </div>
+                                        </div>
+                                        <div>' . "L:".$l."</br>R:".$r.'</div>
+                                        <div>
+                                        </div>
+                                    </div>
+                                    <div class="id">' . $slot_info->repurchase_slot_id . '</div>
+                                </span>
+                                <i class="downline-container"></i>
+                            </li>';             
+            }
+
+        }
+        else
+        {
+            return  '   <li class="width-reference">
+                            <span class="parent parent-reference VC">
+                                <div class="id">+</div>
+                            </span>
+                        </li>';
+        }
     }
     public function unilevel_downline($slot_id)
     {

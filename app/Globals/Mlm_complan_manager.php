@@ -279,7 +279,7 @@ class Mlm_complan_manager
 
         foreach($notify_max_level as $key => $value)
         {
-            $log = "Sorry, Your Slot has already reached the max level for binary. Slot " . $slot_info->slot_no . "'s binary points will not be added.";
+            $log = "Sorry, Your Slot has already reached the max level for binary. Slot " . $slot_info->slot_no . "'s binary matrix income will not be added.";
             $arry_log['wallet_log_slot']            = $value->slot_id;
             $arry_log['shop_id']                    = $value->shop_id;
             $arry_log['wallet_log_slot_sponsor']    = $slot_info->slot_id;

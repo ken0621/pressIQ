@@ -25,6 +25,8 @@
       <link href="/assets/member-theme/myphone/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
       <!-- Custom Theme Style -->
       <link href="/assets/member-theme/myphone/build/css/custom.min.css" rel="stylesheet">
+
+      <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
       <style>
          .navbar, .left_col { background-color: #5c3424; }
          #menu_toggle { color: #5c3424; }
@@ -146,6 +148,17 @@
                                   Binary Network List
                                 </a>
                               </li>
+                              @if(count($complan_repurchase) >=1)
+                                  @foreach($complan_repurchase as $value)
+                                  @if($value->marketing_plan_code == 'TRIANGLE_REPURCHASE')
+                                    <li>
+                                        <a href="/mlm/genealogy/repurchase" class="subnav-text">
+                                            Repurchase Genealogy
+                                        </a> 
+                                    </li>
+                                  @endif
+                                  @endforeach
+                              @endif
                             </ul>
                            </li>
                            <li><a> Report <span class="fa fa-chevron-down"></span></a>

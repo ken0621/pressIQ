@@ -156,7 +156,7 @@ class Warehouse
 
         $inventory_slip_id_destination = Tbl_inventory_slip::insertGetId($insert_slip_destination);
 
-        $insertsource = '';
+        $insertsource = [];
         $insertdestination = '';
         $inventory_success = '';
         $inventory_err = '';
@@ -400,7 +400,6 @@ class Warehouse
     }
     public static function inventory_refill($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
     {
-        
         $shop_id = Warehouse::get_shop_id($warehouse_id);
 
         $insert_slip['inventory_slip_id_sibling']    = 0;
@@ -421,7 +420,7 @@ class Warehouse
         $inventory_err = '';
         $success = 0;
         $err = 0;
-        $insert_refill = '';
+        $insert_refill = [];
 
         $for_serial_item = '';
         
@@ -429,7 +428,7 @@ class Warehouse
         {
             foreach($warehouse_refill_product as $key => $refill_product)
             {
-               
+                
                 $insert_refill['inventory_item_id']        = $refill_product['product_id'];
                 $insert_refill['warehouse_id']             = $warehouse_id;
                 $insert_refill['inventory_created']        = Carbon::now();
@@ -663,6 +662,10 @@ class Warehouse
                  }
             }
         }
+        // elseif(!Tbl_user_warehouse_access::where("user_id", $user_id)->where("warehouse_id", $warehouse_id)->first())
+        // {
+        //     Tbl_user_warehouse_access::insert(['user_id' => $user_id, 'warehouse_id' => $warehouse_id]);
+        // }
     }
    
 }

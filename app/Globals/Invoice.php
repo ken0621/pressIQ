@@ -25,15 +25,17 @@ use Carbon\carbon;
 
 class Invoice
 {
-    public static function count_ar()
+    public static function count_ar($start_date, $end_date)
     {
-         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->where("inv_is_paid",0)->count();
+         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->whereBetween("date_created",array($start_date,$end_date))->where("inv_is_paid",0)->count();
          return $ar;
     }
-    public static function get_ar_amount()
+    public static function get_ar_amount($start_date, $end_date)
     {
         $price = 0;
-        $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->where("inv_is_paid",0)->get();
+        $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
+                                ->whereBetween("date_created",array($start_date,$end_date))
+                                ->where("inv_is_paid",0)->get();
         if(isset($ar))
         {
             foreach ($ar as $key => $value) 
@@ -44,10 +46,12 @@ class Invoice
 
         return $price;
     }
-    public static function get_sales_amount()
+    public static function get_sales_amount($start_date, $end_date)
     {
         $price = 0;
-        $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->where("inv_is_paid",1)->get();
+        $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
+                                ->whereBetween("date_created",array($start_date,$end_date))
+                                ->where("inv_is_paid",1)->get();
         if(isset($ar))
         {
             foreach ($ar as $key => $value) 
@@ -160,6 +164,8 @@ class Invoice
         {
             Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
         }
+
+        return $rcvpayment_id;
     }
 
     public static function updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = '')

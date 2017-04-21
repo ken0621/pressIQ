@@ -27,7 +27,27 @@
         <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
         <!-- OTHER CSS -->
         @yield("css")
-
+        <style type="text/css">
+        body
+        {
+            background-image: url('/themes/{{ $shop_theme  }}/img/final.jpg'); 
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed;
+        }
+        .content
+        {
+            background-color: transparent;
+        }
+        .navbar.sticky
+        {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
@@ -119,8 +139,10 @@
 	  </div><!-- /.container-fluid -->
 	</nav>
 
-	@yield("content")
-   
+    <div id="scroll-to" class="clearfix">
+	   @yield("content")
+    </div>
+
     <!-- FOOTER -->
   	<footer>
    	    <div class="container ftr">
@@ -159,9 +181,15 @@
                 <div class="col-md-2 col-sm-6">
                     <div class="btm-title">FOLLOW US ON</div>
                     <div>
-                        <a href="#"><i class="fa fa-facebook site-icon" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-twitter site-icon" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-pinterest-p site-icon" aria-hidden="true"></i></i></a>
+                        @if(get_content($shop_theme_info, "info", "facebook_link"))
+                        <a href="{{ get_content($shop_theme_info, "info", "facebook_link") }}"><i class="fa fa-facebook site-icon" aria-hidden="true"></i></a>
+                        @endif
+                        @if(get_content($shop_theme_info, "info", "twitter_link"))
+                        <a href="{{ get_content($shop_theme_info, "info", "twitter_link") }}"><i class="fa fa-twitter site-icon" aria-hidden="true"></i></a>
+                        @endif
+                        @if(get_content($shop_theme_info, "info", "pinterest_link"))
+                        <a href="{{ get_content($shop_theme_info, "info", "pinterest_link") }}"><i class="fa fa-pinterest-p site-icon" aria-hidden="true"></i></i></a>
+                        @endif
                     </div>
                 </div>
             </div>

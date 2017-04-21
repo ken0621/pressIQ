@@ -90,7 +90,7 @@ class Ecom_Product
 
 	/**
 	 * Getting all Product w/ cateogry, variants and options. If shop_id is null, the current shop id that logged on will be used.
-	 *
+	 * 
 	 * @param int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
 	 */
 	public static function getAllCategoryProduct($shop_id = null)
@@ -196,7 +196,7 @@ class Ecom_Product
 
 	/**
 	 * Getting specific product. If shop_id is null, the current shop id that logged on will be used.
-	 *
+	 * B
 	 * @param int    $product_id 	Product ID of the specific product.
 	 * @param int    $shop_id 		Shop id of the products that you wnat to get. null if auto get
 	 */
@@ -359,6 +359,30 @@ class Ecom_Product
 	}
 
 	/**
+	 * Getting all Product w/ a specific category name regardless of the level, thus product with the same category name
+	 *
+	 * @param  int    $shop_id 	  Shop id of the products that you wnat to get. null if auto get
+	 * @param  string $type_name  Name of the category
+	 * @return array  Porduct Details
+	 */
+	public static function getProductByCategoryName($type_name, $shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		$_products = Tbl_ec_product::Category()->where("eprod_shop_id", $shop_id)->where("type_name", $type_name)->where("tbl_ec_product.archived", 0)->get()->toArray();
+
+		Foreach($_products as $key=>$product)
+		{
+			$_products[$key]	= Ecom_Product::getProduct($product["eprod_id"], $shop_id);
+		}
+
+        return $_products;     
+    }
+
+	/**
 	 * Getting all category for breadcrumbs.
 	 *
 	 * @param  int    $category_id 	Shop id of the products that you wnat to get. null if auto get
@@ -409,7 +433,7 @@ class Ecom_Product
 	 * Search product by keywords.
 	 *
 	 * @param  int    $keywords Keywords to search in products.
-	 * @param  int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
+	 * @param  int    $shop_id 	Shop id of the products that you want to get. null if auto get
 	 */
 	public static function searchProduct($keywords, $shop_id)
 	{
@@ -425,16 +449,52 @@ class Ecom_Product
 
 		if($product)
 		{
+			$product = collect($product)->toArray();
+			$product = $product;
 			foreach ($product as $key => $value) 
 			{
-				$product = collect($value)->toArray();
-				$product[$key] = $product;
+				$product[$key]['variant'] = Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $value["eprod_id"])->get()->toArray();
+				
+				$update["eprod_search_count"] = $value["eprod_search_count"] + 1;
+				Tbl_ec_product::where("eprod_id", $value["eprod_id"])->update($update);
+			}
+		}
+
+		return $product;
+	}
+
+	/**
+	 * Get most searched product per shop.
+	 *
+	 * @param  int    $shop_id 	Shop id of the products that you want to get. null if auto get
+	 * @param  int    $limit    Limit of product to show.
+	 */
+	public static function getMostSearched($limit, $shop_id)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		$product = Tbl_ec_product::price()->where('eprod_shop_id', $shop_id)
+										  ->where("tbl_ec_product.archived", 0)
+										  ->orderBy('tbl_ec_product.eprod_search_count', 'DESC')
+										  ->take($limit)
+										  ->get();
+
+		if($product)
+		{
+			$product = collect($product)->toArray();
+			$product = $product;
+
+			foreach ($product as $key => $value) 
+			{
 				$product[$key]['variant'] = Tbl_ec_variant::select("*")->item()->inventory(Ecom_Product::getWarehouseId($shop_id))->where("evariant_prod_id", $value["eprod_id"])->get()->toArray();
 				foreach($product[$key]["variant"] as $key2=>$variant)
 				{
 					$variant_option_name = Tbl_variant_name::nameOnly()->where("variant_id", $variant["evariant_id"])->get()->toArray();
-					$product[$key]["variant"]["$key2"]["mlm_discount"] = Ecom_Product::getMlmDiscount($shop_id, $variant["evariant_item_id"], $variant["evariant_price"]);
-					$product[$key]["variant"]["$key2"]["image"] = Tbl_ec_variant_image::path()->where("eimg_variant_id", $variant["evariant_id"])->get()->toArray();
+					$product[$key]["variant"][$key2]["mlm_discount"] = Ecom_Product::getMlmDiscount($shop_id, $variant["evariant_item_id"], $variant["evariant_price"]);
+					$product[$key]["variant"][$key2]["image"] = Tbl_ec_variant_image::path()->where("eimg_variant_id", $variant["evariant_id"])->get()->toArray();
 
 					foreach($variant_option_name as $key3=>$option_name)
 					{

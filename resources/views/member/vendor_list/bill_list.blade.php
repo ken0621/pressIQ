@@ -43,6 +43,7 @@
                             <th>Bill No</th>
                             <th>Vendor Name</th>
                             <th>Total</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -53,13 +54,23 @@
                                 <td>{{$bill_list->bill_id}}</td>
                                 <td>{{$bill_list->vendor_company}}</td>
                                 <td>{{currency("PHP",$bill_list->bill_total_amount)}}</td>
+                                <td>
+                                    @if($bill_list->bill_is_paid == 0)
+                                    <a class="btn btn-warning form-control">Open</a>
+                                    @else
+                                    <a class="btn form-control" style="background-color: #78C500;color: #fff">Paid</a>
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
+                                        @if($bill_list->bill_is_paid == 0)
                                         <li><a href="/member/vendor/create_bill?id={{$bill_list->bill_id}}">Edit Bill </a></li>
+                                        <li><a href="/member/vendor/paybill?bill_id={{$bill_list->bill_id}}&vendor_id={{$bill_list->vendor_id}}">Pay Bill</a></li>
+                                        @endif
                                       </ul>
                                     </div>
                                 </td>

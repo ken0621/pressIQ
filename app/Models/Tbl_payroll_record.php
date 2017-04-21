@@ -105,4 +105,26 @@ class Tbl_payroll_record extends Model
 
 		return $query;
 	}
+
+	public function scopegetdate($query, $shop_id = 0 ,$date = array())
+	{
+
+		$query->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_company_id','=','tbl_payroll_record.payroll_period_company_id')
+			  ->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+			  ->where('tbl_payroll_record.shop_id', $shop_id)
+			  ->where(function ($query2) use ($date){
+			  		$query2->where(function($query3) use ($date)
+			  		{
+			  			$query3->whereBetween('tbl_payroll_period.payroll_period_start',$date);
+			  			return $query3;
+			  		})
+			  		->orWhere(function ($query3) use ($date){
+			  			$query3->whereBetween('tbl_payroll_period.payroll_period_end',$date);
+			  			return $query3;
+			  		});
+
+			  		return $query2;
+			  });
+		return $query;
+	}
 }

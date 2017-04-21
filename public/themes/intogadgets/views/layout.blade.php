@@ -358,7 +358,7 @@
 
                   <div class="form-group">
 
-                    <input type="text" name="search-pokus" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
+                    <input type="text" name="search" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
 
                   </div>
 
@@ -486,17 +486,17 @@
 
                   <div class="footer-content" style="color: white;">
 
-                      <div class="footer-text">+63 932-187-9511</div>
+                      <div class="footer-text">{{ get_content($shop_theme_info, "info", "footer_contact_number_1") }}</div>
 
-                      <div class="footer-text">+63 977-833-2264</div>
+                      <div class="footer-text">{{ get_content($shop_theme_info, "info", "footer_contact_number_2") }}</div>
 
-                      <div class="footer-text">info@intogadgets.com.ph</div>
+                      <div class="footer-text">{{ get_content($shop_theme_info, "info", "footer_email") }}</div>
 
                       <div class="footer-text">FOR TECHNICAL SUPPORT</div>
 
-                      <div class="footer-text">+63 977-839-9744</div>
+                      <div class="footer-text">{{ get_content($shop_theme_info, "info", "footer_technical_support_number_1") }}</div>
 
-                      <div class="footer-text">+63 923-188-4919</div>
+                      <div class="footer-text">{{ get_content($shop_theme_info, "info", "footer_technical_support_number_2") }}</div>
 
 
 
@@ -512,13 +512,7 @@
 
                   <div class="footer-content">
 
-                      <div class="footer-text width" style="color: white;">Receive special offers and be the 
-
-                                  first to known when new
-
-                                  products are released
-
-                      </div>
+                      <div class="footer-text width" style="color: white;">{{ get_content($shop_theme_info, "info", "newsletter_text") }}</div>
 
                       <div class="footer-newsletter">
 
@@ -548,7 +542,7 @@
 
                   <div class="footer-content">
 
-                      <a href="https://www.facebook.com/Intogadgetstore" target="_blank" class="footer-logo fb">
+                      <a href="{{ get_content($shop_theme_info, "info", "facebook_link") }}" target="_blank" class="footer-logo fb">
 
                         <span class="footer-logo-holder">
 
@@ -560,7 +554,7 @@
 
                       </a>
 
-                      <a href="https://www.twitter.com/intogadgetstore" target="_blank" class="footer-logo tt">
+                      <a href="{{ get_content($shop_theme_info, "info", "twitter_link") }}" target="_blank" class="footer-logo tt">
 
                         <span class="footer-logo-holder">
 
@@ -572,7 +566,7 @@
 
                       </a>
 
-                      <a href="https://www.instagram.com/intogadgetsPH" target="_blank" class="footer-logo gg">
+                      <a href="{{ get_content($shop_theme_info, "info", "instagram_link") }}" target="_blank" class="footer-logo gg">
 
                         <span class="footer-logo-holder">
 
@@ -592,15 +586,15 @@
 
                     <div style="display: table; table-layout: fixed; width: 100%;">
 
-                    <a class="footer-plogo" href="https://www.facebook.com/DakasiPH/" target="_blank" class="footer-plogo">
+                    <a class="footer-plogo" href="{{ get_content($shop_theme_info, "info", "dakasi_link") }}" target="_blank" class="footer-plogo">
 
-                          <img src="/resources/assets/frontend/img/dakasi-logo.png">
+                          <img src="{{ get_content($shop_theme_info, "info", "dakasi_image") }}">
 
                       </a>
 
-                      <a class="footer-plogo" href="http://primiaworks.com" target="_blank" class="footer-plogo">
+                      <a class="footer-plogo" href="{{ get_content($shop_theme_info, "info", "primia_link") }}" target="_blank" class="footer-plogo">
 
-                          <img src="/resources/assets/frontend/img/primia-logo.png">
+                          <img src="{{ get_content($shop_theme_info, "info", "primia_image") }}">
 
                       </a>
 
@@ -616,9 +610,9 @@
 
         <div class="footer-sub">
 
-          <div><img src="/resources/assets/frontend/img/brands/payment.png"></div>
+          <div><img src="{{ get_content($shop_theme_info, "info", "bank_image") }}"></div>
 
-          <div class="text">Intogadgets Inc. © Copyright 2015. All Rights Reserved.</div>
+          <div class="text">{{ get_content($shop_theme_info, "info", "copyright_text") }}</div>
 
         </div>
 

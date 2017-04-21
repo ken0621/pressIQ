@@ -317,15 +317,15 @@ class Cart
         {
             foreach($_cart["cart"] as $key => $cart)
             {
-                if($key == $product_id)
+                if($cart["product_id"] == $product_id)
                 {
                     $condition = true;
 
-                    Tbl_cart::where("date_added",$_cart["cart"][$key]["date_added"])
-                            ->where("shop_id",$_cart["cart"][$key]['shop_id'])
-                            ->where("product_id",$_cart["cart"][$key]['product_id'])
-                            ->where("unique_id_per_pc",$_cart["cart"][$key]['unique_id_per_pc'])
-                            ->delete($_cart["cart"][$key]);
+                    Tbl_cart::where("date_added",$cart["date_added"])
+                            ->where("shop_id",$cart['shop_id'])
+                            ->where("product_id",$cart['product_id'])
+                            ->where("unique_id_per_pc",$cart['unique_id_per_pc'])
+                            ->delete();
 
                     unset($_cart["cart"][$key]);
                 }
@@ -338,7 +338,8 @@ class Cart
             }
             else
             {
-                 Session::put($unique_id,$_cart["cart"]);
+                 Session::put($unique_id,$_cart);
+
                  $message["status"]         = "success";
                  $message["status_message"] = "Successfully removed.";
             }
@@ -509,8 +510,7 @@ class Cart
     public static function generate_coupon_code($word_limit,$price,$type="fixed")
     {
         //get_shop_info
-        $shop_info = Cart::get_shop_info();
-        $shop_id = $shop_info->shop_id;
+        $shop_id = Cart::get_shop_info();
 
         if($type != "fixed" && $type != "percentage")
         {
@@ -559,7 +559,9 @@ class Cart
 
             $message["status"]         = "success";
             $message["status_message"] = "Successfully generate a coupon code.";
-        }                                
+        }  
+
+        return $message;                              
     }
 
     public static function use_coupon_code($coupon_code)

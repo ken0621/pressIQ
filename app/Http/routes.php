@@ -26,7 +26,6 @@ Route::post('member/register/payment/submit', 'MemberController@payment_post');
 
 Route::get('member/register/shipping', 'MemberController@shipping');
 Route::post('member/register/shipping/submit', 'MemberController@shipping_post');
-
 Route::get('member/card', 'Member\MLM_CardController@card');
 Route::get('member/card/all', 'Member\MLM_CardController@all_slot');
 
@@ -103,47 +102,47 @@ Route::post('/createAccount', 'Frontend\HomeController@createAccount');
 Route::group(array('prefix' => '/member/{page}/'), function()
 {
 	//order start
-	Route::any('order','Member\OrderController@orders');
-	Route::get('order/new_order','Member\OrderController@new_order');
-	Route::post('order/new_order/create_customer','Member\OrderController@create_customer');
-	Route::post('order/new_order/searchscustomer','Member\OrderController@searchscustomer');
-	Route::any('order/new_order/customerinfo','Member\OrderController@customerinfo');
-	Route::post('order/new_order/updateEmail','Member\OrderController@updateEmail');
-	Route::post('order/new_order/updateShipping','Member\O/member/itemrderController@updateShipping');
-	Route::post('order/new_order/itemlist','Member\OrderController@itemlist');
-	Route::post('order/new_order/create_order','Member\OrderController@create_order');
-	Route::post('order/new_order/removeitemorder','Member\OrderController@removeitemorder');
-	Route::post('order/new_order/addIndiDiscount','Member\OrderController@addIndiDiscount');
-	Route::post('order/new_order/chagequantity','Member\OrderController@chagequantity');
-	Route::post('order/new_order/addMainDiscount','Member\OrderController@addMainDiscount');
-	Route::post('order/new_order/applytax','Member\OrderController@applytax');
-	Route::post('order/new_order/removecustomer','Member\OrderController@removecustomer');
-	Route::post('order/new_order/addshipping','Member\OrderController@addshipping');
-	Route::post('order/new_order/savetodraft','Member\OrderController@savetodraft');
-	Route::post('order/new_order/OrderStatus','Member\OrderController@OrderStatus');
+	// Route::any('order','Member\OrderController@orders');
+	// Route::get('order/new_order','Member\OrderController@new_order');
+	// Route::post('order/new_order/create_customer','Member\OrderController@create_customer');
+	// Route::post('order/new_order/searchscustomer','Member\OrderController@searchscustomer');
+	// Route::any('order/new_order/customerinfo','Member\OrderController@customerinfo');
+	// Route::post('order/new_order/updateEmail','Member\OrderController@updateEmail');
+	// Route::post('order/new_order/updateShipping','Member\O/member/itemrderController@updateShipping');
+	// Route::post('order/new_order/itemlist','Member\OrderController@itemlist');
+	// Route::post('order/new_order/create_order','Member\OrderController@create_order');
+	// Route::post('order/new_order/removeitemorder','Member\OrderController@removeitemorder');
+	// Route::post('order/new_order/addIndiDiscount','Member\OrderController@addIndiDiscount');
+	// Route::post('order/new_order/chagequantity','Member\OrderController@chagequantity');
+	// Route::post('order/new_order/addMainDiscount','Member\OrderController@addMainDiscount');
+	// Route::post('order/new_order/applytax','Member\OrderController@applytax');
+	// Route::post('order/new_order/removecustomer','Member\OrderController@removecustomer');
+	// Route::post('order/new_order/addshipping','Member\OrderController@addshipping');
+	// Route::post('order/new_order/savetodraft','Member\OrderController@savetodraft');
+	// Route::post('order/new_order/OrderStatus','Member\OrderController@OrderStatus');
 	
 	//search for item start
-	Route::post('search_item','Member\OrderController@search_item');
+	// Route::post('search_item','Member\OrderController@search_item');
 	//search for item end
 
-	Route::get('order/{id}','Member\OrderListController@item');
-	Route::post('order/addnote','Member\OrderListController@addnote');
-	Route::post('order/refunditem','Member\OrderListController@refunditem');
-	Route::post('order/recordrefund','Member\OrderListController@recordrefund');
-	Route::post('order/updatepaystatus','Member\OrderListController@update_pay_status');
-	Route::get('order/filter/{status}/{payment_stat}/{fulfillment_status}','Member\OrderController@get_orders_with_view');
+	// Route::get('order/{id}','Member\OrderListController@item');
+	// Route::post('order/addnote','Member\OrderListController@addnote');
+	// Route::post('order/refunditem','Member\OrderListController@refunditem');
+	// Route::post('order/recordrefund','Member\OrderListController@recordrefund');
+	// Route::post('order/updatepaystatus','Member\OrderListController@update_pay_status');
+	// Route::get('order/filter/{status}/{payment_stat}/{fulfillment_status}','Member\OrderController@get_orders_with_view');
 	
-	Route::get('orders/draft','Member\DraftController@index');
-	Route::get('orders/draft/{id}','Member\DraftController@view_draft');
-	Route::get('orders/abandoned','Member\CheckOutController@index');
+	// Route::get('orders/draft','Member\DraftController@index');
+	// Route::get('orders/draft/{id}','Member\DraftController@view_draft');
+	// Route::get('orders/abandoned','Member\CheckOutController@index');
 	//order end
 	
 	//shipping start
-	Route::get('shipping','Member\ShipInfoController@index');
-	Route::post('shipping/create','Member\ShipInfoController@create');
-	Route::post('shipping/load','Member\ShipInfoController@load');
-	Route::get('shipping/remove','Member\ShipInfoController@remove');
-	Route::post('shipping/update','Member\ShipInfoController@update');
+	// Route::get('shipping','Member\ShipInfoController@index');
+	// Route::post('shipping/create','Member\ShipInfoController@create');
+	// Route::post('shipping/load','Member\ShipInfoController@load');
+	// Route::get('shipping/remove','Member\ShipInfoController@remove');
+	// Route::post('shipping/update','Member\ShipInfoController@update');
 	//shipping end
 
 	//product order start
@@ -152,6 +151,7 @@ Route::group(array('prefix' => '/member/{page}/'), function()
 	Route::post('product_order/create_order/create_invoice','Member\ProductOrderController@create_invoice');
 	Route::post('product_order/create_order/update_invoice','Member\ProductOrderController@update_invoice');
 	Route::get('product_order/create_order/submit_coupon','Member\ProductOrderController@submit_coupon');
+	Route::any('product_order/create_order/submit_payment_upload','Member\ProductOrderController@submit_payment_upload');
 	//product order end
 });
 
@@ -270,7 +270,7 @@ Route::any('/member/pis/agent/position/archived_submit','Member\AgentPositionCon
 /* END EMPLOYEE POSITION*/
 
 
-/* START EMPLOYEE*/
+/* START AGENT*/
 Route::any('/member/pis/agent_list','Member\AgentController@index');
 Route::any('/member/pis/agent/add','Member\AgentController@add');
 Route::any('/member/pis/agent/add_submit','Member\AgentController@add_submit');
@@ -278,7 +278,10 @@ Route::any('/member/pis/agent/edit/{id}','Member\AgentController@edit');
 Route::any('/member/pis/agent/edit_submit','Member\AgentController@edit_submit');
 Route::any('/member/pis/agent/archived/{id}/{action}','Member\AgentController@archived');
 Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_submit');
-/* END EMPLOYEE*/
+/* END AGENT*/
+
+/*AGENT TRANSACTION*/
+Route::any('/member/pis/agent/transaction/{id}','Member\AgentTransactionController@agents_transaction');
 
 /* START U/M TYPES ARCY*/
 Route::any('/member/item/um_type','Member\UnitMeasurementTypeController@index');
@@ -347,6 +350,9 @@ Route::any('/member/pis/sir/edit_submit','Member\PurchasingInventorySystemContro
 
 Route::any('/member/pis/ilr/update_count_submit','Member\PurchasingInventorySystemController@update_count_submit');
 Route::any('/member/pis/ilr/update_count/{sir_id}/{item_id}','Member\PurchasingInventorySystemController@update_count');
+
+Route::any('/member/pis/ilr/update_count_empties_submit','Member\PurchasingInventorySystemController@update_count_empties_submit');
+Route::any('/member/pis/ilr/update_count_empties/{s_cm_id}','Member\PurchasingInventorySystemController@update_count_empties');
 //lof
 Route::any('/member/pis/lof','Member\PurchasingInventorySystemController@lof');
 Route::any('/member/pis/lof/archived_submit','Member\PurchasingInventorySystemController@archived_sir_submit');
@@ -410,6 +416,16 @@ Route::any('/tablet/receive_payment/update/{id}','Member\TabletPISController@upd
 
 Route::any('/tablet/view_invoice_view/{id}','Member\TabletPISController@view_invoices_view');
 Route::any('/tablet/view_invoice_pdf/{id}','Member\TabletPISController@view_invoice_pdf');
+
+Route::any('/tablet/credit_memo','Member\TabletPISController@credit_memo');
+Route::any('/tablet/credit_memo/add','Member\TabletPISController@add_cm');
+Route::any('/tablet/credit_memo/add_cm_submit','Member\TabletPISController@add_cm_submit');
+Route::any('/tablet/credit_memo/edit_cm_submit','Member\TabletPISController@edit_cm_submit');
+
+Route::any('/tablet/sales_receipt','Member\TabletPISController@sales_receipt');
+Route::any('/tablet/sales_receipt/list','Member\TabletPISController@sales_receipt_list');
+Route::any('/tablet/sales_receipt/create_submit','Member\TabletPISController@create_sales_receipt_submit');
+Route::any('/tablet/sales_receipt/update_submit','Member\TabletPISController@update_sales_receipt_submit');
 
 Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_submission');
 Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
@@ -722,6 +738,7 @@ Route::get('/member/item/load_item_category','Member\ItemController@load_item_ca
 Route::get('/member/ecommerce/load_product_category','Member\EcommerceProductController@load_product_category');
 Route::get('/member/item/load_um','Member\UnitOfMeasurementController@load_um');
 Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
+Route::get('/member/item/load_one_um_multi/{id}','Member\UnitOfMeasurementController@load_one_um_multi');
 // Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
 Route::get('/member/item/load_category','Member\Manage_Category_Controller@load_category');
 Route::get('/member/item/manufacturer/load_manufacturer','Member\ManufacturerController@load_manufacturer');
@@ -753,7 +770,9 @@ Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* ITEM IMPORT*/
 Route::controller('/member/item/import', 'Member\ItemImportController');
 /* End */
-/* ITEM IMPORT*/
+/* ECOMMERCE COUPON CODE*/
+Route::controller('/member/ecommerce/coupon', 'Member\CouponVoucherController');
+
 Route::controller('/member/accounting/journal', 'Member\JournalEntryController');
 /* End */
 
@@ -804,7 +823,7 @@ Route::any("/member/load_position","Member\EmployeePositionController@load_posit
 // 	Route::any('/departmentlist/modal_update_department','Member\PayrollController@modal_update_department');
 // 	/* DEPARTMENT END */
 
-// 	/* JOB TITLE START */
+// 	/* JOB TITLE START */ 
 // 	Route::any("/jobtitlelist","Member\PayrollController@jobtitle_list");
 // 	Route::any("/jobtitlelist/modal_create_jobtitle","Member\PayrollController@modal_create_jobtitle");
 // 	Route::any("/jobtitlelist/modal_save_jobtitle","Member\PayrollController@modal_save_jobtitle");

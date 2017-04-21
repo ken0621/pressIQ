@@ -50,6 +50,7 @@ class UnitOfMeasurementController extends Member
     }
     public function add_base($id,$item_id)
     {
+        $data["um_id"] = $id;
         $ctr = Tbl_unit_measurement::where("um_item_id",$item_id)->where("parent_basis_um",$id)->first();
         if($ctr == null)
         {
@@ -90,6 +91,7 @@ class UnitOfMeasurementController extends Member
     }
     public function add_base_submit()
     {
+        $id = Request::input("um_id_2");
         $um_id = Request::input("um_id");
         $sub_multi_id = Request::input("sub_multi_id");
 
@@ -100,6 +102,7 @@ class UnitOfMeasurementController extends Member
         Session::put("um_id",$um_id);
 
         $data["type"] = "base-um";
+        $data["id"] = $id;
         return json_encode($data);
     }
     public function archived($id, $action)
@@ -242,7 +245,12 @@ class UnitOfMeasurementController extends Member
             return $this->show_no_access();
         }
     }
-
+ public function load_one_um_multi($um_id)     
+    {
+        $data["_um_multi"] = UnitMeasurement::load_one_um($um_id);
+        // dd($data["_um_multi"]);
+        return view('member.load_ajax_data.load_um_multi', $data);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -308,7 +316,7 @@ class UnitOfMeasurementController extends Member
                     }                
                 }
             }
-            $ctr = Tbl_unit_measurement::where("um_name",$set_name)->count();
+            $ctr = Tbl_unit_measurement::where("um_name",$set_name)->where("um_shop",UnitMeasurement::getShopId())->count();
             if($ctr >= 1)
             {
                 $data["status"] = "error";

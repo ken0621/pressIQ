@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Member\Member;
+use App\Http\Controllers\Controller;
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
@@ -20,6 +20,8 @@ use App\Globals\Item;
 use App\Globals\Customer;
 use App\Globals\Ecom_Product;
 use App\Globals\Sms;
+use App\Globals\PayrollJournalEntries;
+use App\Globals\Payroll;
 
 use Request;
 use Carbon\Carbon;
@@ -51,9 +53,9 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        // Account::put_default_account_payroll($this->getShopId());
-        // Accounting::postJournalEntry();
-        dd(Tbl_journal_entry::where("je_id", 12)->transaction("invoice")->get()->toArray());
+        dd(PayrollJournalEntries::payroll_summary(0,0));
+        dd(collect(Payroll::record_by_date($this->getShopId(), "01-26-2017", "02-10-2017"))->toArray());
+        dd(collect(PayrollJournalEntries::check_payroll_entity_account_id())->toArray());
     }
 
     public function getJournal()

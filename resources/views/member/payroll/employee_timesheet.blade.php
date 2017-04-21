@@ -21,7 +21,7 @@
                     <li><a href="#">Over Time Summary</a></li>
                 </ul>
             </div>
-            <button class="btn btn-custom-primary pull-right margin-right-20 btn-mark-ready" data-content="{{$payroll_period_company_id}}" type="button">Mark as Ready</button>
+            <button class="btn btn-custom-primary pull-right margin-right-20 btn-mark-ready" data-content="{{$payroll_period_company_id}}" type="button" {{$company->payroll_period_status != 'pending' ? 'disabled' : ''}}>{{$company->payroll_period_status != 'pending' ? 'Ready' : 'Mark as Ready'}}</button>
             <input type="hidden" name="" value="{{$company->payroll_period_id}}" id="payroll_period_id">
         </div>
     </div>

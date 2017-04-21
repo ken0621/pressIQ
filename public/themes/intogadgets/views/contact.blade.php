@@ -36,21 +36,32 @@
 			</div>
 		</div>
 	</div>
-	<div class="container">
+	<div class="container" style="margin-top: 25px;">
 		<div onload="initMap()">
 			<div>
-				<label for="raddressInput">Search location:</label>
-				<input type="text" id="addressInput" size="15"/>
-				<label for="radiusSelect">Radius:</label>
-				<select id="radiusSelect" label="Radius">
-					<option value="50" selected>50 kms</option>
-					<option value="30">30 kms</option>
-					<option value="20">20 kms</option>
-					<option value="10">10 kms</option>
-				</select>
-				<input type="button" id="searchButton" value="Search"/>
+				<div style="display: inline-block; vertical-align: top;">
+					<label for="raddressInput">Search location:</label>
+					<input class="form-control" type="text" id="addressInput" size="15"/>
+				</div>
+				<div style="display: inline-block; vertical-align: top;">
+					<label for="radiusSelect">Radius:</label>
+					<select class="form-control" id="radiusSelect" label="Radius">
+						{{-- <option value="1000">1000 kms</option>
+						<option value="800">800 kms</option>
+						<option value="400">400 kms</option>
+						<option value="200">200 kms</option> --}}
+						<option value="100">100 kms</option>
+						<option value="50">50 kms</option>
+						<option value="30">30 kms</option>
+						<option value="20">20 kms</option>
+						<option value="10">10 kms</option>
+					</select>
+				</div>
+				<div style="display: inline-block; vertical-align: middle;">
+					<input style="margin-top: 25px; margin-left: 15px; margin-bottom: 15px;" class="btn btn-primary" type="button" id="searchButton" value="Search"/>
+				</div>
 			</div>
-			<div><select id="locationSelect" style="width: 10%; visibility: hidden"></select></div>
+			<div><select class="form-control" id="locationSelect" style="width: 200px; display: none; margin-bottom: 15px;"></select></div>
 			<div id="map" style="width: 100%; height: 90%"></div>
 		</div>
 	</div>
@@ -265,8 +276,8 @@
          downloadUrl(searchUrl, function(data) {
            var xml = parseXml(data);
            var markerNodes = xml.documentElement.getElementsByTagName("marker");
-           console.log(markerNodes);
-           if (!markerNodes.is(':empty')) 
+    
+           if (JSON.stringify(markerNodes) != "{}") 
            {
            	   var bounds = new google.maps.LatLngBounds();
 	           for (var i = 0; i < markerNodes.length; i++) {
@@ -283,7 +294,7 @@
 	             bounds.extend(latlng);
 	           }
 	           map.fitBounds(bounds);
-	           locationSelect.style.visibility = "visible";
+	           locationSelect.style.display = "block";
 	           locationSelect.onchange = function() {
 	             var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
 	             google.maps.event.trigger(markers[markerNum], 'click');
@@ -291,7 +302,7 @@
            }
            else
            {
-           		alert("There are no stores in this area.");
+           		alert("There are no stores in this area. Please try other area.");
            }
          });
        }

@@ -42,16 +42,17 @@
 </div>
 <div class="row clearfix" style="margin-bottom: 15px;">
     <form method="get" class="range-date">
-        <div class="col-md-12">
-        <small>Date Range </small>                
+        <div class="col-sm-3">
+        	<select name="sir_id" class="form-control datepicker">
+      			<option value="">All SIR</option>
+        		@foreach($_sir_id as $sir)
+        			<option value="{{$sir->sir_id}}">SIR NO: {{$sir->sir_id}}</option>
+        		@endforeach
+        	</select>
         </div>
-        <div class="col-sm-5">
-            <input class="form-control datepicker" type="text" name="start_date" placeholder="Start Date" value="{{ Request::input('start_date') ? Request::input('start_date') : date('m/d/Y',strtotime($day)) }}">
+        <div class="col-sm-3">
+        <a href="/member/pis/agent_transaction/print/{{$agent->employee_id}}?sir_id={{Request::input('sir_id')}}" class="btn btn-primary form-control" target="_blank">Print Transaction Below</a>
         </div>
-        <div class="col-sm-5">
-            <input class="form-control datepicker" type="text" name="end_date" placeholder="End Date" value="{{ Request::input('end_date') ? Request::input('end_date') : date('m/d/Y') }}">
-        </div>
-        <div class="col-md-2 text-center"><button type="button" class="btn btn-primary" onClick="location.href='/member/pis/agent/transaction/{{$agent_id}}'">Clear Date</button></div>
     </form>
 </div>
 <div class="panel panel-default panel-block panel-title-block">
@@ -125,13 +126,7 @@
 <script type="text/javascript">
 $('body').on("change", ".datepicker", function()
 {
-    if($('.range-date input[name="start_date"]').val().length != 0)
-    {
-        if($('.range-date input[name="end_date"]').val().length != 0)
-        {
-            $('.range-date').submit();
-        }
-    }
+   $('.range-date').submit();
 });	
 </script>
 <script type="text/javascript" src="/assets/member/js/customer_detail.js"></script>

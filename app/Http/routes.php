@@ -282,6 +282,7 @@ Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_
 
 /*AGENT TRANSACTION*/
 Route::any('/member/pis/agent/transaction/{id}','Member\AgentTransactionController@agents_transaction');
+Route::any('/member/pis/agent_transaction/print/{id}','Member\AgentTransactionController@print_transaction');
 
 /* START U/M TYPES ARCY*/
 Route::any('/member/item/um_type','Member\UnitMeasurementTypeController@index');

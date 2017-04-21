@@ -92,7 +92,7 @@
 </div>												
 @endif
 <div class="pull-right">
-	<h4><strong>Payment On Hand :</strong> {{$total}}</h4>
+	<h4><strong>Receive Payment :</strong> {{$total}}</h4>
 </div>
 </body>
 <style type="text/css">

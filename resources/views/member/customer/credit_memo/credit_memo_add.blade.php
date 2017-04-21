@@ -45,7 +45,7 @@
                     <div class="row clearfix">
                         <div class="col-sm-2">
                             <label>Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="cm_date" value="{{isset($cm->cm_date) ? $cm->cm_date : ''}}"/>
+                            <input type="text" class="datepicker form-control input-sm" name="cm_date" value="{{isset($cm->cm_date) ? $cm->cm_date : date('m/d/y')}}"/>
                         </div>
                     </div>
                     

@@ -46,7 +46,7 @@
                 <th>Due Date</th>
                 <th>Balance</th>
                 <th>Total</th>
-                <th>Status</th>
+                <!-- <th>Status</th> -->
             </tr>
         </thead>
         <tbody>
@@ -57,9 +57,9 @@
 	                <td>{{ $transaction['no'] }}</td>
 	                <td>{{ $transaction['customer_name'] }}</td>
 	                <td>{{ $transaction['due_date'] }}</td>
-	                <td>{{ currency("PHP",$transaction['balance']) }}</td>
-	                <td>{{ currency("PHP", $transaction['total']) }}</td>
-	                <td>
+	                <td class="text-right">{{ currency("PHP",$transaction['balance']) }}</td>
+	                <td class="text-right">{{ currency("PHP", $transaction['total']) }}</td>
+	                <!-- <td>
                         @if($transaction['reference_name'] == "receive_payment")
                         <a class="btn btn-default form-control">Closed</a>
 	                	@elseif($transaction['status'] == 0)
@@ -71,7 +71,7 @@
                         		<a class="btn form-control" style="background-color: #78C500;color: #fff">Paid</a>
                         	@endif
 	                	@endif
-	                </td>
+	                </td> -->
 	            </tr>
             @endforeach
         </tbody>
@@ -84,13 +84,16 @@
 			<div class="error-template">
 				<h2 class="message">No Trasaction Found</h2>
 				<div class="error-details">
-				There is no existing transaction for this agent.
+				There is no existing transaction for this SIR.
 				</div>		
 			</div>
 		</div>
 	</div>
 </div>												
 @endif
+<div class="pull-right">
+	<h3><strong>Payment On Hand :</strong> {{$total}}</h3>
+</div>
 </body>
 <style type="text/css">
 	table

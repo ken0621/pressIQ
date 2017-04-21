@@ -207,6 +207,16 @@ class AgentTransactionController extends Member
             }
         
         }
+        $data["total"] = 0;
+        foreach ($data['tr'] as $key2 => $value2)
+        {
+            if($value2['reference_name'] == "receive_payment")
+            {
+                $data['total'] += $value2['total'];
+            }
+        }
+        $data["total"] = currency("Php",$data['total']);
+
         usort($data['tr'], function($a, $b)
         {
             $t1 = strtotime($a['date_created']);
@@ -385,6 +395,15 @@ class AgentTransactionController extends Member
             }
         
         }
+        $data["total"] = 0;
+        foreach ($data['tr'] as $key2 => $value2)
+        {
+            if($value2['reference_name'] == "receive_payment")
+            {
+                $data['total'] += $value2['total'];
+            }
+        }
+        $data["total"] = currency("Php",$data['total']);
         usort($data['tr'], function($a, $b)
         {
             $t1 = strtotime($a['date_created']);

@@ -271,7 +271,7 @@ class Invoice
             }
         }
 
-        $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
+        // $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
 
         return $insert_line;
     }

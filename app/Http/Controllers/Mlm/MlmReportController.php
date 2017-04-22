@@ -309,7 +309,15 @@ class MlmReportController extends Mlm
         ->join('tbl_item_code_invoice', 'tbl_item_code_invoice.item_code_invoice_id', '=', 'tbl_mlm_triangle_repurchase_slot.repurchase_slot_invoice_id')
         ->get();
         $data['invoice'] = Tbl_item_code_invoice::where('slot_id', Self::$slot_id)->get()->keyBy('item_code_invoice_id');
-        // dd($data);
+        foreach($data['invoice'] as $key => $value)
+        {
+            $data['repurchase'][$key] = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_invoice_id', $key)
+        ->join('tbl_item_code_invoice', 'tbl_item_code_invoice.item_code_invoice_id', '=', 'tbl_mlm_triangle_repurchase_slot.repurchase_slot_invoice_id')
+        ->get();
+
+            $data['invoice'][$key]->count = count( $data['repurchase'][$key]);
+        }
+        // dd($data['invoice']);
         return view("mlm.report.report_triangle_repurchase", $data);
 
     }

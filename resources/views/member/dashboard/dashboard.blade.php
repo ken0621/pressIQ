@@ -10,6 +10,7 @@
     </div>
 </div>
 <div class="reports-class">
+<<<<<<< HEAD
     <div class="row clearfix" style="margin-bottom: 15px;">
         <form method="get" class="range-date">
             <div class="col-md-12">
@@ -158,6 +159,7 @@
     @endif
 
     $('.btn-class').matchHeight();
+<<<<<<< HEAD
 
 
     $('body').on("change", ".datepicker", function()
@@ -170,5 +172,7 @@
             }
         }
     });
+=======
+>>>>>>> mod_luk_agp
 </script>
 @endsection

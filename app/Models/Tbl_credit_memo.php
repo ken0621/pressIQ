@@ -14,7 +14,11 @@ class Tbl_credit_memo extends Model
     {
     	return $query->join("tbl_customer","tbl_customer.customer_id","=","tbl_credit_memo.cm_customer_id");
     }
-
+    public function scopeManual_cm($query)
+    {
+        return $query->leftJoin("tbl_manual_credit_memo","tbl_manual_credit_memo.cm_id","=","tbl_credit_memo.cm_id")
+                    ->selectRaw("*, tbl_credit_memo.cm_id as cm_id");
+    }
     public static function scopeCm_item($query)
     {
     	return $query->join("tbl_credit_memo_line","tbl_credit_memo_line.cmline_cm_id","=","tbl_credit_memo.cm_id")

@@ -290,7 +290,7 @@ function page_list()
     
     /* PURCHASING INVENTORY SYSTEM */
     $page = "pis";
-    $nav[$page]['name'] = "PIS";
+    $nav[$page]['name'] = "Truck & Delivery";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "truck";
 
@@ -320,15 +320,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','processed-ilr'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-    
-    /* -- PIS => Auto Invoicing */
-    $code = "pis-auto-invoicing";
-    $nav[$page]['submenu'][$code]['label'] = "Auto Invoicing";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path ."customer/invoice";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
 
     // /* -- PIS => Manual Invoicing */
     // $code = "pis-manual-invoicing";
@@ -369,7 +361,7 @@ function page_list()
 
     /* PURCHASING INVENTORY SYSTEM */
     $page = "pis_tablet";
-    $nav[$page]['name'] = "PIS Tablet";
+    $nav[$page]['name'] = "Agent Tablet";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "tablet";
 
@@ -539,7 +531,7 @@ function page_list()
     $code = "customer-sales-receipt";
     $nav[$page]['submenu'][$code]['label'] = "Create Sales Receipt";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sales_receipt";
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sales_receipt/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Layout Only";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";

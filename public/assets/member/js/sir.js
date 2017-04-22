@@ -585,7 +585,6 @@ function submit_done_for_page(data)
     else if(data.status == "error")
     {
         toastr.warning(data.status_message);
-        $(data.target).html(data.view);
     }
 
 }
@@ -605,7 +604,11 @@ function submit_done(data)
     else if(data.status == "success-lof")
     {
         toastr.success("Success");
-    	location.href = "/member/pis/lof";
+        var url = '/member/pis/sir/view_pdf/'+data.sir_id+'/lof';
+        console.log(url);
+        location.href = url;	
+		// action_load_link_to_modal('/member/pis/sir/view/'+data.sir_id+'/lof','lg');
+    	// location.href = "/member/pis/lof";
     }
     else if(data.status == "success-serial")
     {    

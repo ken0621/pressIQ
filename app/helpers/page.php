@@ -846,7 +846,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
     /* -- MAINTENACE => Sms Settings */
-    $code = "maintenance-email-header-footer";
+    $code = "maintenance-sms-content";
     $nav[$page]['submenu'][$code]['label'] = "SMS"; 
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sms";

@@ -28,7 +28,6 @@ use Carbon\carbon;
 class Billing
 {
 
-
     public static function count_ap($start_date, $end_date)
     {
          $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())->whereBetween("date_created",array($start_date,$end_date))->where("bill_is_paid",0)->count();
@@ -55,7 +54,6 @@ class Billing
 
         return $price;
     }
-
     public static function get_paid_bills_amount($start_date, $end_date)
     {
         $price = 0;

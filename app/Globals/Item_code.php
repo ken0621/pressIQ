@@ -653,6 +653,7 @@ class Item_code
                     $content_key = 'product_repurchase';
                     $data['body'] = EmailContent::email_txt_replace($content_key, $change_content);
                     // return view('emails.full_body', $data);
+                    
                     Mail::send('emails.full_body', $data, function ($m) use ($data) {
                     $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
 

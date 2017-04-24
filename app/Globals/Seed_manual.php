@@ -9,33 +9,33 @@ class Seed_manual
     {
         if(!DB::table("tbl_chart_account_type")->first())
         {
-          Seed::seed_tbl_chart_account_type();
+          Seed_manual::seed_tbl_chart_account_type();
         }
         if(!DB::table("tbl_default_chart_account")->first())
         {
-          Seed::seed_tbl_default_chart_account();
+          Seed_manual::seed_tbl_default_chart_account();
         }
         if(!DB::table("tbl_user_position")->first())
         {
-          Seed::seed_tbl_user_position();
+          Seed_manual::seed_tbl_user_position();
         }
         if(!DB::table("tbl_item_type")->first())
         {
-          Seed::seed_tbl_item_type();
+          Seed_manual::seed_tbl_item_type();
         }
 
         // if(!DB::table("tbl_online_pymnt_method")->first())
         // {
-        //   Seed::seed_tbl_online_pymnt_method();
+        //   Seed_manual::seed_tbl_online_pymnt_method();
         // }
         // if(!DB::table("tbl_online_pymnt_gateway")->first())
         // {
-        //   Seed::seed_tbl_online_pymnt_gateway();
+        //   Seed_manual::seed_tbl_online_pymnt_gateway();
         // }
 
         if(!DB::table('tbl_payroll_entity')->first())
         {
-            Seed::seed_tbl_payroll_entity();
+            Seed_manual::seed_tbl_payroll_entity();
         }
     }
 

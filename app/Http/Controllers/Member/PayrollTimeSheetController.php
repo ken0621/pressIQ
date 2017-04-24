@@ -234,11 +234,11 @@ class PayrollTimeSheetController extends Member
 			
 			if($param_target == 'Daily')
 			{
-				$regular_day_count += Payroll::time_float($approved_timesheet->regular_hours) / $param_hour;
-				$rest_day_count    += Payroll::time_float($approved_timesheet->rest_day_hours) / $param_hour;
-				$extra_day_count   += Payroll::time_float($approved_timesheet->extra_day_hours) / $param_hour;
-				$special_holiday_count += Payroll::time_float($approved_timesheet->special_holiday_hours) / $param_hour;
-				$regular_holiday_count += Payroll::time_float($approved_timesheet->regular_holiday_hours) / $param_hour;
+				$regular_day_count += divide(Payroll::time_float($approved_timesheet->regular_hours) , $param_hour);
+				$rest_day_count    += divide(Payroll::time_float($approved_timesheet->rest_day_hours) , $param_hour);
+				$extra_day_count   += divide(Payroll::time_float($approved_timesheet->extra_day_hours) , $param_hour);
+				$special_holiday_count += divide(Payroll::time_float($approved_timesheet->special_holiday_hours) , $param_hour);
+				$regular_holiday_count += divide(Payroll::time_float($approved_timesheet->regular_holiday_hours) , $param_hour);
 			}
 
 			$total_time_spent = Payroll::sum_time($total_time_spent, $approved_timesheet->time_spent);

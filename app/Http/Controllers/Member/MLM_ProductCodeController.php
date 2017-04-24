@@ -302,8 +302,13 @@ class MLM_ProductCodeController extends Member
             if(isset($this->current_warehouse->warehouse_id))
             {
                 // return $_POST;
+
                 $shop_id = $this->user_info->shop_id;
-                $data    = Item_code::add_code(Request::input(),$shop_id);
+                $user_id = $this->user_info->user_id;
+                $warehouse_id = $this->current_warehouse->warehouse_id;
+
+
+                $data    = Item_code::add_code(Request::input(),$shop_id, $user_id, $warehouse_id);
                 if($data["response_status"] == "success")
                 {
                     Session::forget("sell_codes_session");

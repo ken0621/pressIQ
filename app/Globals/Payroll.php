@@ -1147,6 +1147,10 @@ class Payroll
 		$absent_deduction = 0;
 
 
+		/* salary */
+		$monthly_salary =0;
+
+
 		while($start <= $end)
 		{
 			$date = Carbon::parse($start)->format("Y-m-d"); 
@@ -1161,7 +1165,7 @@ class Payroll
 			$approved = $time->approved_timesheet;
 
 
-			// array_push($dd_array, $approved);
+			array_push($dd_array, $approved);
 
 
 
@@ -1497,7 +1501,7 @@ class Payroll
 
 		}
 
-		// dd($dd_array);
+		dd($dd_array);
 
 		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff']);
 
@@ -1538,8 +1542,6 @@ class Payroll
 
 		/* PAYROLL ADJUSTMENT END */
 
-
-		
 
 		if(isset($group->payroll_group_13month_basis))
 		{
@@ -1679,6 +1681,18 @@ class Payroll
 		if($group->payroll_group_agency == Payroll::return_ave($period_category))
 		{
 			$data['agency_deduction'] = $group->payroll_group_agency_fee;
+		}
+
+		// dd($group);
+		$payroll_group_salary_computation = $group->payroll_group_salary_computation;
+
+		if($payroll_group_salary_computation == 'Flat Rate')
+		{
+
+		}
+		if($payroll_group_salary_computation == 'Monthly Rate')
+		{
+
 		}
 
 		$data['total_deduction']	+= $data['tax_contribution'];

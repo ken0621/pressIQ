@@ -1,6 +1,6 @@
 @extends("mlm.register.layout")
 @section("content")
-<form method="post" class="register-submit" action="/member/register/payment/submit" >
+<form method="post" class="register-submit" action="/member/register/shipping/submit" >
     {!! csrf_field() !!}
 <div class="payment">
   <div class="container-fluid">
@@ -52,6 +52,47 @@
 @endsection
 @section('script')
 <link rel="stylesheet" type="text/css" href="/assets/mlm/css/register-payment.css">
+<script type="text/javascript">
+  $(document).on("submit", ".register-submit", function(e)
+        {
+            var data = $(e.currentTarget).serialize();
+            var link = $(e.currentTarget).attr("action");
+            $('#load').removeClass('hide');
+            submit_form_register(link, data);
+            e.preventDefault();
+            
+        });
+
+  function submit_form_register(link, data)
+    {
+        
+        $.ajax({
+            url:link,
+            dataType:"json",
+            data:data,
+            type:"post",
+            success: function(data)
+            {
+              $('#load').addClass('hide');
+              if(data.status == 'warning')
+              {
+                var message = data.message;
+                $.each( message, function( index, value ){
+              toastr.warning(value);
+          });
+              }
+              else if(data.status == 'success')
+              {
+                window.location = data.link;                
+              }
+            },
+            error: function()
+            {
+                $('#load').addClass('hide');
+            }
+        })
+    }
+</script>
 @endsection
 @section("css")
 

@@ -115,6 +115,8 @@ class MLM_SlotController extends Member
     }
     public function index()
     {
+        // $slot = Mlm_compute::get_slot_info(369);
+        // return Mlm_tree::auto_place_slot_binary_left_to_right_v2($slot);
         // return 1;
         // $shop_id = $this->user_info->shop_id;
         // $slot = Mlm_compute::get_slot_info(336);

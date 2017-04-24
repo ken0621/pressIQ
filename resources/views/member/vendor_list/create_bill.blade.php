@@ -290,15 +290,7 @@
 </div>
 @endsection
 
-
 @section('script')
-<style type="text/css">
-    .po-style
-    {
-        padding: 10px;
-        background-color: #fff;
-    }
-</style>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 <script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
@@ -325,4 +317,67 @@ $(document).ready(function() {
 });
 </script>
 
+@endsection
+
+@section('css')
+<style type="text/css">
+.po-style
+{
+    padding: 10px;
+    background-color: #fff;
+}
+.drawer-toggle
+{
+    background-color: #76B6EC;
+    color: #fff;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 0;
+}
+.drawer-toggle:hover
+{
+    background-color: #76B6EC;
+    color: #fff;
+}
+
+.drawer-default
+{
+    -webkit-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
+    -moz-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
+    box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
+    -webkit-transition: all 0.4s ease;
+       -o-transition: all 0.4s ease;
+          transition: all 0.4s ease;
+    z-index: 2;
+}
+.drawer-toggle
+{
+    -webkit-transition: all 0.4s ease;
+       -o-transition: all 0.4s ease;
+          transition: all 0.4s ease;
+}
+.drawer-default + .drawer-overlay
+{
+    background-color: transparent !important;
+    -webkit-transition: all 0.4s ease;
+       -o-transition: all 0.4s ease;
+          transition: all 0.4s ease;
+}
+.drawer-open .drawer-overlay
+{
+    padding-right: 30px;
+}
+.drawer-close .drawer.drawer-default
+{
+    right: -280px;
+}
+.drawer-open .drawer.drawer-default
+{
+    right: 0;
+}
+nav.user-menu
+{
+    background-color: #F5F5F5;
+}
+</style>
 @endsection

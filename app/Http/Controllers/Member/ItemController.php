@@ -139,12 +139,12 @@ class ItemController extends Member
 			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
 			$data["_expense"] 	= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
 
-			$data['_category']  = Category::getAllCategory();
-			$data['_item']  	= Item::get_all_category_item();
+			$data['_category']  		= Category::getAllCategory();
+			$data['_item']  			= Item::get_all_category_item();
 			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
-			$data["_um"] 		= UnitMeasurement::load_um();
-			$data["_um_multi"]  = UnitMeasurement::load_um_multi();
-            $data["_vendor"]    = Vendor::getAllVendor('active');
+			$data["_um"] 				= UnitMeasurement::load_um();
+			$data["_um_multi"]  		= UnitMeasurement::load_um_multi();
+            $data["_vendor"]    		= Vendor::getAllVendor('active');
 
 		    return view('member.item.add',$data);
         }

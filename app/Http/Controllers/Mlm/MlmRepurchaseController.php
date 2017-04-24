@@ -18,75 +18,13 @@ use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_item;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_item_code;
+use App\Globals\Mlm_repurchase_member;
 class MlmRepurchaseController extends Mlm
 {
     public function index()
     {
-    	// return Session::forget("mlm_repurchase"); 
-    	$data = [];
-    	$filter = ['tbl_item.archived' => 0, 'tbl_item.item_show_in_mlm' => 1];
-    	$data['items'] = Item::get_all_item_per_shop(Self::$shop_id, $filter);
-    	$warehouse_id = Tbl_warehouse::where('warehouse_shop_id', Self::$shop_id)
-    	->where('main_warehouse', 1)
-    	->first();
+    	$data["_item"] = Mlm_repurchase_member::get_all_items(Self::$shop_id);
 
-    	$data['item_w'] = [];
-    	if(isset($warehouse_id->warehouse_id))
-    	{
-    		$warehouse = Warehouse::select_item_warehouse_single($warehouse_id->warehouse_id,'array');
-    		foreach($warehouse as $key => $value)
-    		{
-    			$data['item_w'][$value->product_id] = $value;
-    		}
-    	}
-    	else
-    	{
-    		$warehouse = [];
-    	}
-
-    	$item_discount = [];
-		$item_percentage = [];
-    	if(Self::$slot_now != null)
-    	{
-    		$membership_id= Self::$slot_now->slot_membership;
-    		$membership_active = Tbl_membership::where('membership_id', $membership_id)
-    		->first();
-    		if(isset($membership_active->membership_id))
-    		{
-    			
-    			foreach($data['items'] as $key => $item)
-		    	{
-
-		    		$item_discount[$item->item_id] = Tbl_mlm_item_discount::where('item_id', $item->item_id)->where('membership_id', $membership_active->membership_id)->pluck('item_discount_price'); 
-		    		$item_percentage[$item->item_id] = Tbl_mlm_item_discount::where('item_id', $item->item_id)->where('membership_id', $membership_active->membership_id)->pluck('item_discount_percentage'); 
-		    	}
-    		}
-	    	
-    	}
-    	else
-    	{
-    		$discount_card_log = Self::$discount_card_log;
-    		if($discount_card_log != null)
-    		{
-    			foreach($data['items'] as $key => $item)
-		    	{
-
-		    		$item_discount[$item->item_id] = Tbl_mlm_item_discount::where('item_id', $item->item_id)->where('membership_id', $discount_card_log->discount_card_membership)->pluck('item_discount_price'); 
-		    		$item_percentage[$item->item_id] = Tbl_mlm_item_discount::where('item_id', $item->item_id)->where('membership_id', $discount_card_log->discount_card_membership)->pluck('item_discount_percentage'); 
-		    	}
-    		}
-    	}
-    	$data['active_plan_product_repurchase'] = Mlm_plan::get_all_active_plan_repurchase(Self::$shop_id);
-    	foreach($data['active_plan_product_repurchase'] as $key => $value)
-	    {
-    		$data['active'][$key]  = $value->marketing_plan_code;
-            $data['active_label'][$key]  = $value->marketing_plan_label;
-	    }
-    	$data['item_discount'] = $item_discount;
-    	$data['item_discount_percentage'] = $item_percentage;
-        $data['slot_id'] = Self::$slot_id;
-        // dd($data);
-        $data['cart'] = Self::get_cart_repurchase(); 
     	return view('mlm.repurchase.repurchase', $data);
     }
     public static function get_cart_repurchase()

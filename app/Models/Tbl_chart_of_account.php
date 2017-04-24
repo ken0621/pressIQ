@@ -32,12 +32,9 @@ class Tbl_chart_of_account extends Model
               ->whereIn('account_type_id', $account_type_id);
         return $query;
     }
-<<<<<<< HEAD
-=======
 
     public function scopeType($query)
     {
       return $query->join('tbl_chart_account_type','chart_type_id','=','account_type_id');
     } 
->>>>>>> testing
 }

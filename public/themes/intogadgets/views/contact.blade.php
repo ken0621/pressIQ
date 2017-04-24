@@ -36,11 +36,7 @@
 			</div>
 		</div>
 	</div>
-<<<<<<< HEAD
-	{{-- <div class="container">
-=======
 	<div class="container" style="margin-top: 25px;">
->>>>>>> testing
 		<div onload="initMap()">
 			<div>
 				<div style="display: inline-block; vertical-align: top;">
@@ -68,7 +64,7 @@
 			<div><select class="form-control" id="locationSelect" style="width: 200px; display: none; margin-bottom: 15px;"></select></div>
 			<div id="map" style="width: 100%; height: 90%"></div>
 		</div>
-	</div> --}}
+	</div>
 	<div class="store-content container">
 		@if(is_serialized(get_content($shop_theme_info, "contact", "contact_store_maintenance")))
 		<div>

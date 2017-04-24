@@ -95,11 +95,7 @@
                             <label>Online Payment Method</label>
                             <select {{isset($inv) ? 'disabled' : ''}} class="form-control input-sm {{isset($inv) ? '' : 'drop-down-payment'}}" name="payment_method_id">
                                 <option class="hidden" value=""></option>
-<<<<<<< HEAD
-                                @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($inv) ? $inv->payment_method_id : ''])
-=======
                                 @include("member.load_ajax_data.load_online_payment_method", ['payment_method_id' => isset($inv) ? $inv->payment_method_id : ''])
->>>>>>> testing
                             </select>
                         </div>
                         <div class="col-sm-2">  

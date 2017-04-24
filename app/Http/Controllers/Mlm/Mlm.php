@@ -17,6 +17,7 @@ use App\Models\Tbl_mlm_encashment_settings;
 
 use App\Globals\Mlm_member;
 use App\Globals\Settings;
+use App\Globals\Mlm_repurchase_member;
 class Mlm extends Controller
 {
     public static $customer_id;

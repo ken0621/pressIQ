@@ -170,9 +170,9 @@ class Accounting
 	 * Create a journal entry for the transaction 
 	 *
 	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["total"] , 
-	 									$entry["vatable"] , $entry["discount"] , $entry["ewt"]
+	 *									$entry["vatable"] , $entry["discount"] , $entry["ewt"]
 	 * @param array  	$entry_date     $entry_data[0]['item_id'] , $entry_data[0]['entry_qty'] , $entry_data[0]['vatable']
-	 									$entry_data[0]['discount'] , $entry_data[0]['entry_amount']
+	 *									$entry_data[0]['discount'] , $entry_data[0]['entry_amount']
 	 * @param boolean  	$remarks   		Description of the journal entry	
 	 */
 	public static function postJournalEntry($entry, $entry_data, $remarks = '')
@@ -297,7 +297,6 @@ class Accounting
 		foreach($entry_data as $entry_line)
 		{
 			$item = Tbl_item::where("item_id", $entry_line["item_id"])->first();
-
 			$line_data["item_id"] = $entry_line["item_id"];
 
 			switch($entry["reference_module"])
@@ -534,6 +533,7 @@ class Accounting
 	// Creditable Withholding Tax - 1%			= tax-credit-tax-1
 	// Discount									= discount-sale
 	// Discount									= discount-purchase
+
 
 	public static function getJournalById($reference_module, $reference_id)
 	{

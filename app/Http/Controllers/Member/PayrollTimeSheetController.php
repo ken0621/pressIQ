@@ -36,7 +36,7 @@ class PayrollTimeSheetController extends Member
 		$data["default_time_in"] = Carbon::parse($data["employee_info"]->payroll_group_start)->format("h:i A");
 		$data["default_time_out"] = Carbon::parse($data["employee_info"]->payroll_group_end)->format("h:i A");
 		$data['_company'] = Payroll::company_heirarchy($this->user_info->shop_id);
-
+		dd($data);
 		return view('member.payroll.employee_timesheet', $data);
 	}
 
@@ -235,10 +235,11 @@ class PayrollTimeSheetController extends Member
 			if($param_target == 'Daily')
 			{
 				$regular_day_count += divide(Payroll::time_float($approved_timesheet->regular_hours) , $param_hour);
-				$rest_day_count    += Payroll::time_float($approved_timesheet->rest_day_hours) / $param_hour;
-				$extra_day_count   += Payroll::time_float($approved_timesheet->extra_day_hours) / $param_hour;
-				$special_holiday_count += Payroll::time_float($approved_timesheet->special_holiday_hours) / $param_hour;
-				$regular_holiday_count += Payroll::time_float($approved_timesheet->regular_holiday_hours) / $param_hour;
+
+				$rest_day_count    += divide(Payroll::time_float($approved_timesheet->rest_day_hours) , $param_hour);
+				$extra_day_count   += divide(Payroll::time_float($approved_timesheet->extra_day_hours) , $param_hour);
+				$special_holiday_count += divide(Payroll::time_float($approved_timesheet->special_holiday_hours) , $param_hour);
+				$regular_holiday_count += divide(Payroll::time_float($approved_timesheet->regular_holiday_hours) , $param_hour);
 			}
 
 			$total_time_spent = Payroll::sum_time($total_time_spent, $approved_timesheet->time_spent);

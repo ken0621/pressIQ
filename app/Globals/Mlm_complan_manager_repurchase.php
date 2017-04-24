@@ -475,7 +475,6 @@ class Mlm_complan_manager_repurchase
         // }
     }
 
-
     public static function repurchase_points($slot_info,$item_code_id)
     {
         $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 

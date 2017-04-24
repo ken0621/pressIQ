@@ -32,6 +32,7 @@ use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code_invoice;
 use App\Models\Tbl_voucher_item;
+use App\Models\Tbl_warehouse;
 class Mlm_report
 {   
     public static function general($shop_id, $filter)
@@ -645,6 +646,8 @@ class Mlm_report
     public static function product_sales_report($shop_id, $filters)
     {
         $data['filteru'] = $filters;
+        $user_id = Request::input('user_id');
+        $warehouse_id = Request::input('warehouse_id');
         $invoice = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
 
         ->skip($filters['skip'])
@@ -653,9 +656,20 @@ class Mlm_report
         ->where('item_code_date_created', '<=', $filters['to'])
         ->customer()
         ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_item_code_invoice.slot_id')
-        ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership')
-        ->get()->keyBy('item_code_invoice_id');
+        ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership');
+        
+        if($user_id != null)
+        {
+           $invoice = $invoice->where('user_id', $user_id); 
+           $data['user_a'] = Tbl_user::where('user_id', $user_id)->first();
+        }
+        if($warehouse_id != null)
+        {
+            $invoice = $invoice->where('warehouse_id', $warehouse_id);
+            $data['warehouse'] = Tbl_warehouse::where('warehouse_id', $warehouse_id)->first();
+        }
 
+        $invoice = $invoice->get()->keyBy('item_code_invoice_id');
         // $item_code_item = Tbl_item_code_item::
         $where_in = [];
         foreach ($invoice as $key => $value) {

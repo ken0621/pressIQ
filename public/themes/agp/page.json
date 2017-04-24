@@ -15,7 +15,7 @@
 			"default":"",
 			"size":"6"
 		},
-		"home_welcome_desc" :
+		"home_welcome_description" :
 		{
 			"label":"Welcome to Alpha Global Prestige Family!",
 			"type":"textbox",
@@ -148,6 +148,23 @@
 			"type":"textbox",
 			"default":"Say something to motivate them and start your business. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. ",
 			"size":"12"
+		}
+	},
+	"product":
+	{
+		"product_start_quote" :
+		{
+			"label":"Start Now Quote",
+			"type":"textbox",
+			"default":"Say something to motivate them and start your business. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+			"size":"6"
+		},
+		"product_start_button_text" :
+		{
+			"label":"Start Now Button Text",
+			"type":"textbox",
+			"default":"START NOW!",
+			"size":"6"
 		}
 	}
 }

@@ -8,14 +8,16 @@
     <div class="category">
         <div class="clearfix container">
             <div class="lol-row">
-                @foreach($_category as $category)
-                <div class="vc_col-sm-3 wpb_column column_container">
-                    <div class="holder green">
-                        <div class="name" style="margin-bottom: 25px;">{{ $category["type_name"] }}</div>
-                        <button class="btn" type="button" onClick="location.href='/product?type='">BROWSE PRODUCTS</button>
+                @if(!Request::input("type"))
+                    @foreach($_category as $category)
+                    <div class="vc_col-sm-3 wpb_column column_container">
+                        <div class="holder green">
+                            <div class="name" style="margin-bottom: 25px;">{{ $category["type_name"] }}</div>
+                            <button class="btn" type="button" onClick="location.href='/product?type={{ $category["type_id"] }}'">BROWSE PRODUCTS</button>
+                        </div>
                     </div>
-                </div>
-                @endforeach
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>
@@ -24,12 +26,12 @@
             <div class="headww clearfix">
                 <div class="lebel clearfix">
                     <!-- PLACE CATEGORY -->
-                    @if(Request::input("category"))
-                    @foreach($_category as $category)
-                        <button class="cat-tab {{ $category->product_category_id == Request::input('category') ? 'active' : '' }}" type="button" onClick="location.href='/product?category={{ $category->product_category_id }}'">{{ $category->product_category_name }}</button>
-                    @endforeach
+                    @if(Request::input("type"))
+                        @foreach($_category as $category)
+                            <button class="cat-tab {{ $category["type_id"] == Request::input('type') ? 'active' : '' }}" type="button" onClick="location.href='/product?type={{ $category["type_id"] }}'">{{ $category["type_name"] }}</button>
+                        @endforeach
                     @else
-                    <img src="resources/assets/front/img/random.png"> <span>RANDOM PRODUCTS</span>
+                        <img src="resources/assets/front/img/random.png"> <span>ALL PRODUCTS</span>
                     @endif
                 </div>
                 <div class="filter">
@@ -71,10 +73,10 @@
       <div class="container">
          <div class="clearfix">
             <div class="vc_col-sm-9 wpb_column column_container">
-               {{ isset($content_about['start_now_introduction']) ? $content_about['start_now_introduction'] : "" }}
+               {{ get_content($shop_theme_info, "product", "product_start_quote") }}
             </div>
             <div class="vc_col-sm-3 wpb_column column_container">
-               <button class="btn btn-default" type="button" onClick="location.href='/member/register'">START NOW!</button>
+               <button class="btn btn-default" type="button" onClick="location.href='/member/register'">{{ get_content($shop_theme_info, "product", "product_start_button_text") }}</button>
             </div>
          </div>
       </div>

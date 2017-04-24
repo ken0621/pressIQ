@@ -3,10 +3,12 @@
 <div class="top_wrapper no-transparent">
    <!-- SLIDER -->
    <div class="slide-container">
-      @if(isset($_slider[0]))
-         @foreach($_slider as $slider)
+      @if(is_serialized(get_content($shop_theme_info, "home", "home_slider")))
+         @foreach(unserialize(get_content($shop_theme_info, "home", "home_slider")) as $slider)
          <div>
-            <img src="/uploads/{{ $slider->image }}">
+            <div style="position: relative; padding-bottom: 45%;">
+               <img style="width: 100%; position: absolute; top: 0; left: 0; right: 0; bottom: 0; height: 100%; object-fit: cover; object-position: center;" src="{{ $slider }}">
+            </div>
          </div>
          @endforeach
       @else
@@ -33,20 +35,20 @@
          <div class="tab-content">
             <div id="home" class="tab-pane fade in active">
                <div class="welcome">
-                  <h3>Welcome to Alpha Global Prestige Family!</h3>
-                  <p>Alpha Global Prestige believes in Family, the fundamental unit of a society. It is the living treasure of gold. It is made strong not by the headcounts but by the root of valued culture, commitment of time and harmony. Just like in Prolife Family, we want the best and all the convenience we can share to our members. Together, we have established a company that delivers high quality products and excellent e-services that brings each home the benefits of our natural environment and the comfort of technology. Prolife NWT has strategically ventured with trusted and reputed companies for our associates to enjoy hassle-free online services and privileges at their fingertips. </p>
+                  <h3>{{ get_content($shop_theme_info, "home", "home_welcome_title") }}</h3>
+                  <p>{{ get_content($shop_theme_info, "home", "home_welcome_description") }}</p>
                </div>
             </div>
             <div id="nature" class="tab-pane fade">
                <div class="general">
                   <div class="clearfix">
                      <div class="vc_col-sm-7 wpb_column column_container">
-                        <h3><img src="resources/assets/front/img/nature-icon.png"> Nature</h3>
-                        <p>We offer various lines of natural and organic beauty products that keeps you beautiful and healthy inside and out. Alpha Global Prestige wants to bring out the best in you! Our essential beauty products can help you achieve what you want. Fairer and beautiful skin is not only for the few. Regular use of Alpha Global Prestige beauty soaps will help you achieve that radiant and supple skin . Start your day with our herbal power drinks, from green coffee to chocolate to the very healthy and revitalizing juice!</p>
-                        <div class="note"><strong>BE HEALTHY.</strong> Live a life of beauty and youth.</div>
+                        <h3><img src="resources/assets/front/img/nature-icon.png"> {{ get_content($shop_theme_info, "home", "home_nature_title") }}</h3>
+                        <p>{{ get_content($shop_theme_info, "home", "home_nature_description") }}</p>
+                        <div class="note">{{ get_content($shop_theme_info, "home", "home_nature_quote") }}</div>
                      </div>
                      <div class="vc_col-sm-5 wpb_column column_container">
-                        <img class="img-responsive" src="resources/assets/front/img/nature-pic.jpg">
+                        <img class="img-responsive" src="{{ get_content($shop_theme_info, "home", "home_nature_image") }}">
                      </div>
                   </div>
                </div>
@@ -55,12 +57,12 @@
                <div class="general">
                   <div class="clearfix">
                      <div class="vc_col-sm-7 wpb_column column_container">
-                        <h3><img src="resources/assets/front/img/wealth-icon.png"> Wealth</h3>
-                        <p>Unravel the mystery of financial freedom. Unlock your ability to earn more money, save and get what you dream. We can show you how it can be done. Everybody wishes of alleviating their financial status. Venture into a world wherein you can have the chance to break free from financial lock-ups. Build your dream house, buy a new car or travel as often as you want. Everything is possible. All you need to do is just to invest your time. Act now!</p>
-                        <div class="note"><strong>BE FREE.</strong> Enjoy financial freedom. Earn more, save more... for a better future.</div>
+                        <h3><img src="resources/assets/front/img/wealth-icon.png"> {{ get_content($shop_theme_info, "home", "home_wealth_title") }}</h3>
+                        <p>{{ get_content($shop_theme_info, "home", "home_wealth_description") }}</p>
+                        <div class="note">{{ get_content($shop_theme_info, "home", "home_wealth_quote") }}</div>
                      </div>
                      <div class="vc_col-sm-5 wpb_column column_container">
-                        <img class="img-responsive" src="resources/assets/front/img/wealth-pic.jpg">
+                        <img class="img-responsive" src="{{ get_content($shop_theme_info, "home", "home_wealth_image") }}">
                      </div>
                   </div>
                </div>
@@ -69,12 +71,12 @@
                <div class="general">
                   <div class="clearfix">
                      <div class="vc_col-sm-7 wpb_column column_container">
-                        <h3><img src="resources/assets/front/img/technology-icon.png"> Technology</h3>
-                        <p>Experience the speed and comfort at your fingertips through our fast and reliable on –line services. PROLIFE is your one-stop shop from sending your remittances to booking your flights. We want you to avoid the long queue to send money. Move out of the line and do all these at the comfort of your home.</p>
-                        <div class="note"><strong>BE CONNECTED.</strong> Your e-services at your fingertips.</div>
+                        <h3><img src="resources/assets/front/img/technology-icon.png"> {{ get_content($shop_theme_info, "home", "home_technology_title") }}</h3>
+                        <p>{{ get_content($shop_theme_info, "home", "home_technology_description") }}</p>
+                        <div class="note">{{ get_content($shop_theme_info, "home", "home_technology_quote") }}</div>
                      </div>
                      <div class="vc_col-sm-5 wpb_column column_container">
-                        <img class="img-responsive" src="resources/assets/front/img/technology-pic.jpg">
+                        <img class="img-responsive" src="{{ get_content($shop_theme_info, "home", "home_technology_image") }}">
                      </div>
                   </div>
                </div>
@@ -132,10 +134,10 @@
       <div class="container">
          <div class="clearfix">
             <div class="vc_col-sm-9 wpb_column column_container">
-               Say something to motivate them and start your business. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+               {{ get_content($shop_theme_info, "home", "home_start_quote") }}
             </div>
             <div class="vc_col-sm-3 wpb_column column_container">
-               <button class="btn btn-default" type="button" onClick="location.href='/member/register'">START NOW!</button>
+               <button class="btn btn-default" type="button" onClick="location.href='/member/register'">{{ get_content($shop_theme_info, "home", "home_start_button") }}</button>
             </div>
          </div>
       </div>
@@ -154,17 +156,17 @@
             <div id="partners" class="tab-pane fade in active">
                <div class="list">
                   <div class="clearfix">
-                     @if(isset($_partners[0]))
-                     <div class="loli-list">
-                     @foreach($_partners as $partners)
-                     <div>
-                        <img class="img-responsive" src="/uploads/{{ $partners->image }}">
-                        <h4>{{ $partners->name }}</h4>
-                     </div>
-                     @endforeach
-                     </div>
+                     @if(is_serialized(get_content($shop_theme_info, "home", "home_partners")))
+                        <div class="loli-list">
+                        @foreach(unserialize(get_content($shop_theme_info, "home", "home_partners")) as $partners)
+                           <div>
+                              <img class="img-responsive" src="{{ $partners["image"] }}">
+                              <h4>{{ $partners["name"] }}</h4>
+                           </div>
+                        @endforeach
+                        </div>
                      @else
-                     <h2>There are Currently No Partners</h2>
+                        <h2>There are Currently No Partners</h2>
                      @endif
                   </div>
                </div>
@@ -172,17 +174,17 @@
             <div id="team" class="tab-pane fade in">
                <div class="list">
                   <div class="clearfix">
-                     @if(isset($_team_members[0]))
-                     <div class="loli-list">
-                     @foreach($_team_members as $team_members)
-                     <div>
-                        <img class="img-responsive" src="/uploads/{{ $team_members->image }}">
-                        <h4>{{ $team_members->name }}</h4>
-                     </div>
-                     @endforeach
-                     </div>
+                     @if(is_serialized(get_content($shop_theme_info, "home", "home_team_members")))
+                        <div class="loli-list">
+                        @foreach(unserialize(get_content($shop_theme_info, "home", "home_team_members")) as $team_members)
+                           <div>
+                              <img class="img-responsive" src="{{ $team_members["image"] }}">
+                              <h4>{{ $team_members["name"] }}</h4>
+                           </div>
+                        @endforeach
+                        </div>
                      @else
-                     <h2>There are Currently No Team Members</h2>
+                        <h2>There are Currently No Team Members</h2>
                      @endif
                   </div>
                </div>
@@ -235,7 +237,7 @@
       <div class="container">
          <div class="clearfix">
             <div class="vc_col-sm-12 wpb_column column_container" style="text-align: center;">
-               Say something to motivate them and start your business. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+               {{ get_content($shop_theme_info, "home", "home_quote") }}
             </div>
          </div>
       </div>

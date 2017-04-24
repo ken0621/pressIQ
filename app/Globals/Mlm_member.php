@@ -317,4 +317,69 @@ class Mlm_member
 
         return $id;
     }
+    public static function get_top_earner($shop_id, $take, $from, $to)
+    {
+        $income =Tbl_mlm_slot_wallet_log::slot()
+        ->customer()
+        ->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
+        ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
+        ->groupBy(DB::raw('wallet_log_plan') )
+        ->groupBy('wallet_log_slot')
+        ->orderBy('wallet_log_amount', 'DESC');
+
+        if($from != null)
+        {
+            $from = Carbon::parse($from)->addDays(1);
+            $income = $income->where('wallet_log_date_created', '>=', $from);
+        }
+        if($to != null)
+        {
+            $to = Carbon::parse($to)->addDays(1);
+            $income = $income->where('wallet_log_date_created', '<=', $to);
+        }
+        
+        $plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
+        ->where('marketing_plan_enable', 1)
+        ->get();
+
+        foreach($plan_settings as $key => $value)
+        {
+            $filter[$key] = $value->marketing_plan_code;
+        }
+
+
+        $income = $income->whereIn('wallet_log_plan', $filter)->get();
+
+        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get()->keyBy('slot_id');
+
+        $income_top = [];
+        foreach($income as $key => $value)
+        {
+            if(isset($income_top[$value->wallet_log_slot]))
+            {
+                $income_top[$value->wallet_log_slot] += $value->wallet_log_amount;
+            }
+            else
+            {
+                $income_top[$value->wallet_log_slot] = $value->wallet_log_amount;
+            }
+        }
+        arsort($income_top);
+
+        $rank = 1;
+        $top_earnersss = [];
+        $take = $take + 1;
+        foreach ($income_top as $key => $value) 
+        {
+            if($rank < $take)
+            {
+                $info = $slot[$key];
+                $top_earnersss[$rank]['info'] = $info;
+                $top_earnersss[$rank]['amount'] = $value; 
+
+                $rank++;
+            }
+        }
+        return $top_earnersss;
+    }
 }

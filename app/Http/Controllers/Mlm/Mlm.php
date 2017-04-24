@@ -124,7 +124,7 @@ class Mlm extends Controller
             View::share("slot", $all_slot);
             View::share("notification", $notification_s);
             View::share("notification_count", $noti_count);
-            View::share('discount_card_log', Self::$discount_card_log );
+            View::share('discount_card_log', Self::$discount_card_log);
         }
         else
         {

@@ -597,10 +597,11 @@ function add_po_to_bill(po_id)
 		success : function(data)
 		{
              $(data).each(function (a, b)
-             {				
+             {		
+	             var $container = "";
 	             var con = $("tbody.draggable").prepend(global_tr_html);
 	             bill.action_trigger_select_plugin_not_last();
-	             var $container = $("tbody.draggable .tr-draggable:first");
+	             $container = $("tbody.draggable .tr-draggable:first");
 	             // $this.closest(".tr-draggable");
 
 	            $container.addClass("tr-"+b.poline_po_id);

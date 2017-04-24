@@ -46,7 +46,7 @@ class ItemController extends Member
         {
 			$shop_id        		   = $this->user_info->shop_id;
 			$warehouse_id 			   = Tbl_warehouse::where("main_warehouse", 1)->where("warehouse_shop_id", $this->user_info->shop_id)->pluck("warehouse_id");
-	        $item 		    		   = Tbl_item::um_multi()->inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
+	        $item 		    		   = Tbl_item::inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
 	        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)->where("shop_id",$shop_id)->type()->category();
 	        $item_type				   = Request::input("item_type");
 	        $search_name			   = Request::input("search_name");
@@ -64,15 +64,16 @@ class ItemController extends Member
 	        }
 	        
 			$data["_item"]			   = $item->get();
+			// dd($data["_item"]);
 			//item_convertion with unit measurement
 			foreach ($data["_item"] as $key => $value) 
 			{
-				$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
-
-				$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
 				$data["_item"][$key]->inventory_count_um_view = "";
 				$data["_item"][$key]->item_whole_price = 0;
 				$data["_item"][$key]->um_whole = "";
+				$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
+
+				$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
 				if($um)
 				{
 					$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
@@ -518,7 +519,7 @@ class ItemController extends Member
 					{
 						$insert_bundle["bundle_bundle_id"] 	= $item_id;
 						$insert_bundle["bundle_item_id"] 	= $item;
-						$insert_bundle["bundle_um_id"]		= $_um[$key];
+						$insert_bundle["bundle_um_id"]		= isset($_um[$key]) ? $_um[$key] : 0;
 						$insert_bundle["bundle_qty"]		= $_qty[$key];
 						Tbl_item_bundle::insert($insert_bundle);
 					}

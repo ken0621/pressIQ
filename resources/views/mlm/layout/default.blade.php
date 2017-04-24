@@ -58,7 +58,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script type="text/javascript" src="/resources/assets/external/jquery.min.js"></script>
   <script src="/resources/assets/distributor/scripts/vendor/modernizr.js"></script>
   <script src="/resources/assets/distributor/scripts/vendor/jquery.cookie.js"></script>
-   <link rel="stylesheet" type="text/css" href="/assets/mlm/pace.css">
+  <link rel="stylesheet" type="text/css" href="/assets/mlm/pace.css">
   <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
     <script>
     (function () {

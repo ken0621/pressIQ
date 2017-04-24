@@ -85,15 +85,17 @@ function global()
 		var element_position = $('.content').offset().top;
 	    var y_scroll_pos = window.pageYOffset;
 	    var scroll_pos_test = element_position;
-	    
+
+	    var get_height = $('.navbar').height();
+
 	    if(y_scroll_pos > scroll_pos_test) 
         {
-            $('.header-nav').css("margin-bottom", "50px");
+            $('.header-nav').css("margin-bottom", get_height+"px");
 	        $('.navbar').addClass("sticky");
         }
         else
         {
-            $('.header-nav').css("margin-bottom", "00px");
+            $('.header-nav').css("margin-bottom", "0px");
 		    $('.navbar').removeClass("sticky");
         }
 	    
@@ -104,12 +106,12 @@ function global()
 	        
 	        if(y_scroll_pos > scroll_pos_test) 
 	        {
-	            $('.header-nav').css("margin-bottom", "50px");
+	            $('.header-nav').css("margin-bottom", get_height+"px");
 	        	$('.navbar').addClass("sticky");
 	        }
 	        else
 	        {
-	            $('.header-nav').css("margin-bottom", "00px");
+	            $('.header-nav').css("margin-bottom", "0px");
 		    	$('.navbar').removeClass("sticky");
 	        }
 	    });

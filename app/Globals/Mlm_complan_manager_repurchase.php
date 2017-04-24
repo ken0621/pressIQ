@@ -723,7 +723,7 @@ class Mlm_complan_manager_repurchase
 
         if($slot)
         {
-            $slot_placement_grad_count = tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_slot_sponsor', $slot->repurchase_slot_placement)
+            $slot_placement_grad_count = Tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_slot_sponsor', $slot->repurchase_slot_placement)
             ->where('tree_repurchase_tree_level', 1)
             ->count();
             if($slot_placement_grad_count == 2)
@@ -741,7 +741,7 @@ class Mlm_complan_manager_repurchase
                     if($settings)
                     {
                         $label = Mlm_compute::get_label_plan('TRIANGLE_REPURCHASE', $shop_id);
-                        $log = 'Congratulations! You earned ' .  $settings->triangle_repurchase_income . ' in ' . $label . ' Repurchase Slot #' . $repurchase_slot_id ;
+                        $log = 'Congratulations! Your repurchase slot #'.$slot_earn->repurchase_slot_id.' earned ' .  $settings->triangle_repurchase_income . ' in ' . $label . '. From tree of Repurchase Slot #' . $slot->repurchase_slot_placement ;
                         $arry_log['wallet_log_slot'] = $slot_earn->slot_id;
                         $arry_log['shop_id'] = $slot_earn->shop_id;
                         $arry_log['wallet_log_slot_sponsor'] = $slot_earn->slot_id;
@@ -751,6 +751,29 @@ class Mlm_complan_manager_repurchase
                         $arry_log['wallet_log_status'] = "released";   
                         $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
                         Mlm_slot_log::slot_array($arry_log); 
+
+                        $tree_income = Tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_slot_child', $slot_earn->repurchase_slot_id)
+                        ->distinct_level()
+                        ->get();
+                        
+                        foreach($tree_income as $key => $value)
+                        {
+                            $slot_earn = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_id', $value->tree_repurchase_slot_sponsor)
+                            ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_triangle_repurchase_slot.repurchase_slot_slot_id')
+                            ->first();
+
+                            $label = Mlm_compute::get_label_plan('TRIANGLE_REPURCHASE', $shop_id);
+                            $log = 'Congratulations! Your repurchase slot #'.$slot_earn->repurchase_slot_id.' earned ' .  $settings->triangle_repurchase_income . ' in ' . $label . '. From tree of Repurchase Slot #' . $slot->repurchase_slot_placement ;
+                            $arry_log['wallet_log_slot'] = $slot_earn->slot_id;
+                            $arry_log['shop_id'] = $slot_earn->shop_id;
+                            $arry_log['wallet_log_slot_sponsor'] = $slot_earn->slot_id;
+                            $arry_log['wallet_log_details'] = $log;
+                            $arry_log['wallet_log_amount'] = $settings->triangle_repurchase_income;
+                            $arry_log['wallet_log_plan'] = "TRIANGLE_REPURCHASE";
+                            $arry_log['wallet_log_status'] = "released";   
+                            $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                            Mlm_slot_log::slot_array($arry_log); 
+                        }
                     }
                     
                 }

@@ -491,7 +491,12 @@ function submit_done_customer(result)
 /* AFTER ADDING AN  ITEM */
 function submit_done_item(data)
 {
-	purchase_order.action_reload_item(data.id);
+	toastr.success("Success");
+    $(".tbody-item .select-item").load("/member/item/load_item_category", function()
+    {                
+         $(".tbody-item .select-item").globalDropList("reload"); 
+         item_selected.val(data.item_id).change();          
+    });
     data.element.modal("hide");
 }
 

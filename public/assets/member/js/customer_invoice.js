@@ -623,8 +623,7 @@ function submit_done_item(data)
     $(".tbody-item .select-item").load("/member/item/load_item_category", function()
     {                
          $(".tbody-item .select-item").globalDropList("reload"); 
-         console.log(item_selected);	
-         item_selected.val(data.id).change();          
+         item_selected.val(data.item_id).change();          
     });
     data.element.modal("hide");
 }

@@ -418,7 +418,7 @@ function customer_invoice(){
     		width : "100%",
     		placeholder : "um..",
     		onChangeValue: function()
-    		{
+    		{  
     			action_load_unit_measurement($(this));
     		}
 

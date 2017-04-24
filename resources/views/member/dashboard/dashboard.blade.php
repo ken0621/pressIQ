@@ -158,8 +158,6 @@
     @endif
 
     $('.btn-class').matchHeight();
-
-
     $('body').on("change", ".datepicker", function()
     {
         if($('.range-date input[name="start_date"]').val().length != 0)

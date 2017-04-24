@@ -8,6 +8,8 @@ use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_mlm_plan_setting;
 use App\Models\Tbl_tree_placement;
 use App\Models\Tbl_tree_sponsor;
+use App\Models\Tbl_mlm_triangle_repurchase_tree;
+use App\Models\Tbl_mlm_triangle_repurchase_slot;
 
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
@@ -44,9 +46,7 @@ class Mlm_tree
                 MLM_tree::update_auto_balance_position($new_slot,$old_level);
             }
         }
-         
     }
-
     public static function update_auto_balance_position($new_slot,$level)
     {
         $top_slot                        = Tbl_mlm_slot::where("shop_id",$new_slot->shop_id)->orderBy("slot_id","ASC")->first();
@@ -84,7 +84,6 @@ class Mlm_tree
             Tbl_mlm_slot::where("slot_id",$new_slot->slot_id)->update($update);
         }
     }
-
     public static function insert_tree_sponsor($slot_info, $new_slot, $level)
     {
         if($slot_info != null)
@@ -578,7 +577,6 @@ class Mlm_tree
         // dd($arr_slot);
         // dd($update);
     }
-    
     public static function auto_place_slot_binary_auto_balance_revised($slot_info)
     {
         if($slot_info->slot_sponsor != 0 && $slot_info->slot_sponsor != null)
@@ -692,5 +690,122 @@ class Mlm_tree
                 }
             }
         }
+    }
+    public static function triangle_repurchase_tree($slot_info, $new_tree, $level)
+    {
+        if($slot_info != null)
+        {
+            $old_level   = $level;
+            $upline_info = Tbl_mlm_triangle_repurchase_slot::id($slot_info->repurchase_slot_placement)->first();
+            if($upline_info)
+            {
+                $insert['tree_repurchase_shop_id'] = $slot_info->repurchase_slot_shop_id;
+                $insert["tree_repurchase_slot_sponsor"] = $upline_info->repurchase_slot_id;
+                $insert["tree_repurchase_slot_child"] = $new_tree->repurchase_slot_id;
+                $insert["tree_repurchase_tree_position"] = $slot_info->repurchase_slot_position;
+                $insert["tree_repurchase_tree_level"] = $level;
+                Tbl_mlm_triangle_repurchase_tree::insert($insert);
+                $level++;
+                Mlm_tree::triangle_repurchase_tree($upline_info, $new_tree, $level);  
+            }
+        }
+    }
+    public static function triangle_repurchase_tree_l_r($slot_info)
+    {
+        if($slot_info != null)
+        {
+            $shop_id = $slot_info->repurchase_slot_shop_id;
+
+            $head = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_shop_id', $shop_id)->first();
+            $get_last_level = Tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_shop_id', $shop_id)
+            // ->where('tree_repurchase_slot_sponsor', $head->repurchase_slot_id)
+            ->groupBy('tree_repurchase_tree_level')
+            ->orderBy('tree_repurchase_tree_level', 'DESC')
+            ->first();
+            
+
+            $last_level = 0;
+            if(isset($get_last_level->tree_repurchase_tree_level))
+            {
+                if($get_last_level->tree_repurchase_tree_level != null)
+                {
+                    $last_level = $get_last_level->tree_repurchase_tree_level;
+                }
+            }
+            if($last_level == 0 || $last_level == 1)
+            {
+                $slot = $head;
+
+                $update['repurchase_slot_placement'] = $slot->repurchase_slot_id;
+
+                if($last_level == 0)
+                {
+                    $update['repurchase_slot_position'] = 'left';
+                }
+                else
+                {
+                    $update['repurchase_slot_position'] = 'right';
+
+                    $get_last_placement = Tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_shop_id', $shop_id)
+                    ->where('tree_repurchase_slot_sponsor', $head->repurchase_slot_id)
+                    ->where('tree_repurchase_tree_level', $last_level)
+                    ->get()->last();
+
+                    $update = Mlm_tree::get_last_placement_triangle($get_last_placement->tree_repurchase_slot_sponsor, $last_level, $shop_id);
+
+                }
+                // Update Genealogy
+                Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_id', $slot_info->repurchase_slot_id)->update($update);
+                $slot_info = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_id', $slot_info->repurchase_slot_id)->first();
+                Mlm_tree::triangle_repurchase_tree($slot_info, $slot_info, 1);
+                // End
+            }
+            else
+            {
+                $get_last_placement = Tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_shop_id', $shop_id)
+                ->where('tree_repurchase_slot_sponsor', $head->repurchase_slot_id)
+                ->where('tree_repurchase_tree_level', $last_level)
+                ->get()->last();
+
+                $update = Mlm_tree::get_last_placement_triangle($get_last_placement->tree_repurchase_slot_sponsor, $last_level, $shop_id);
+
+                // Update Genealogy
+                Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_id', $slot_info->repurchase_slot_id)->update($update);
+                $slot_info = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_id', $slot_info->repurchase_slot_id)->first();
+                Mlm_tree::triangle_repurchase_tree($slot_info, $slot_info, 1);
+                // End
+
+            }
+        }
+    }
+    public static function get_last_placement_triangle($last_place, $last_level, $shop_id)
+    {
+
+        $count_level_1 = Tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_shop_id', $shop_id)
+        ->where('tree_repurchase_slot_sponsor', $last_place)
+        ->where('tree_repurchase_tree_level', 1)
+        ->count();
+        if($count_level_1 == 0)
+        {
+            $update['repurchase_slot_placement'] = $last_place;
+            $update['repurchase_slot_position'] = 'left';
+
+            return $update;
+        }
+        else if($count_level_1 == 1)
+        {
+            $update['repurchase_slot_placement'] = $last_place;
+            $update['repurchase_slot_position'] = 'right';
+
+            return $update;
+        }
+        else if($count_level_1 == 2)
+        {
+
+            $get_last_placement = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_id', '>',  $last_place)
+            ->orderBy('repurchase_slot_id', 'ASC')
+            ->first();    
+            return Mlm_tree::get_last_placement_triangle($get_last_placement->repurchase_slot_id, $last_level, $shop_id);    
+        }    
     }
 }

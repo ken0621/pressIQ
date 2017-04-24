@@ -61,7 +61,6 @@ function samplewebdb()
 			      {
 			      	$(".search-result").append("<li>" + results.rows.item(i).log + "</li>")
 			      }
-				
 			}, null);
 		});
 	}

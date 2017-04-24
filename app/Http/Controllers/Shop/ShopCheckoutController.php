@@ -30,10 +30,12 @@ class ShopCheckoutController extends Shop
     {
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
-        if (!isset($data["get_cart"]['cart'])) 
+ 
+        if (!$data["get_cart"]['cart']) 
         {
             return Redirect::to('/');
         }
+
         $data['ec_order_load'] = 0;
         foreach($data['get_cart'] as $value)
         {
@@ -43,14 +45,19 @@ class ShopCheckoutController extends Shop
                 {
                     $data['ec_order_load'] = 1;
                 }
-            }
-            
+            }           
         }
-        $data["_payment_method"] = Tbl_online_pymnt_method::get();
+
+        $data["_payment_method"] = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
+                                                          ->where("tbl_online_pymnt_link.link_shop_id", $this->shop_info->shop_id)
+                                                          ->where("tbl_online_pymnt_link.link_is_enabled", 1)
+                                                          ->get();
+  
         if(Self::$customer_info != null)
         {
             $customer_info = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_info->customer_id)->info()->first();
         }
+
         if(isset($customer_info))
         {
             $data['customer_first_name'] = $customer_info->first_name;
@@ -62,6 +69,7 @@ class ShopCheckoutController extends Shop
             $data['customer_city'] = $customer_info->customer_city;
             $data['customer_address'] = $customer_info->customer_street . ' ' .  $customer_info->customer_state . ' ' . $customer_info->customer_city;
         }
+        
         else
         {
             $data['customer_first_name'] = '';
@@ -75,7 +83,6 @@ class ShopCheckoutController extends Shop
         }
 
         return view("checkout", $data);
-        
     }
     public function submit()
     {
@@ -188,6 +195,20 @@ class ShopCheckoutController extends Shop
             else
             {
                 $cart["customer_id"] = null;
+            }
+
+            /* -------------------------------------------------------------------------- */
+
+            // Check Payment Method if enabled
+            $payment_method = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
+                                                      ->where("tbl_online_pymnt_method.method_id", $cart["payment_method_id"])
+                                                      ->where("tbl_online_pymnt_link.link_shop_id", $this->shop_info->shop_id)
+                                                      ->where("tbl_online_pymnt_link.link_is_enabled", 1)
+                                                      ->first();
+
+            if (!$payment_method) 
+            {
+                return Redirect::back()->with('fail', 'Invalid payment method. Please try again.');
             }
 
             /* -------------------------------------------------------------------------- */

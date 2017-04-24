@@ -120,6 +120,19 @@
                                     <td>{{currency('PHP', $value->item_code_tendered_payment)}}</td>
                                     <td>{{currency('PHP', $value->item_code_change)}}</td>
                                 </tr>
+                                @if(isset($items_unfiltered[$key]))
+                                @foreach($items_unfiltered[$key] as $key2 => $items2)
+                                <tr>
+                                    <td colspan="3"></td>
+                                    <td><small><label><span style="color: green">Item Name:</span></label><br>{{$items2->item_name}}</small></td>
+                                    <td><small><label><span style="color: green">Quantity:</span></label><br>{{$items2->item_quantity}}</small></td>
+                                    <td><small><label><span style="color: green">Subtotal:</span></label><br>{{$items2->item_price * $items2->item_quantity}}</small></td>
+                                    <td><small><label><span style="color: green">Discount:</span></label><br>{{$items2->item_membership_discount * $items2->item_quantity}}</small></td>
+                                    <td><small><label><span style="color: green">Discounted:</span></label><br>{{$items2->item_membership_discounted * $items2->item_quantity}}</small></td>
+                                    <td><small><label><span style="color: green">Serial:</span></label><br>{{$items2->item_serial != null ? $items2->item_serial : 'N/A'}}</small></td>
+                                </tr>
+                                @endforeach
+                                @endif
                             @endforeach
                         </tbody>
                     </thead>

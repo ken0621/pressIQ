@@ -380,4 +380,19 @@ class Mlm_compute
     {
 
     }
+    public static function get_label_plan($plan, $shop_id)
+    {
+        $plan = Tbl_mlm_plan::where('shop_id', $shop_id)->where('marketing_plan_code', $plan)->first();
+
+        if($plan)
+        {
+                $label = $plan->marketing_plan_label;
+                return $label;
+        }
+        else
+        {
+            $label = 'Earnings';
+            return  $label;
+        }
+    }
 }

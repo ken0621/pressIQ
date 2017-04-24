@@ -19,7 +19,16 @@ use App\Models\Tbl_mlm_item_points;
 use App\Models\Tbl_mlm_unilevel_points_settings;
 use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_stairstep_points_settings;
+<<<<<<< HEAD
 
+=======
+use App\Models\Tbl_item_code_invoice;
+use App\Models\Tbl_mlm_triangle_repurchase;
+use App\Models\Tbl_mlm_triangle_repurchase_slot;
+use App\Models\Tbl_mlm_discount_card_settings;
+use App\Models\Tbl_mlm_discount_card_log;
+use App\Models\Tbl_mlm_triangle_repurchase_tree;
+>>>>>>> testing
 
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
@@ -33,10 +42,11 @@ use Carbon\Carbon;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Mlm_complan_manager_repurchase;
-
-use App\Models\Tbl_mlm_discount_card_settings;
-use App\Models\Tbl_mlm_discount_card_log;
+use App\Globals\Mlm_tree;
 use App\Globals\Membership_code;
+
+
+
 
 class Mlm_complan_manager_repurchase
 {   
@@ -385,6 +395,7 @@ class Mlm_complan_manager_repurchase
             }
         }
         Mlm_complan_manager_repurchase::stairstep_cutoff('STAIRSTEP', $slot_info->shop_id);  
+<<<<<<< HEAD
     }
 
     public static function stairstep_cutoff($code,$slot_info)
@@ -469,6 +480,92 @@ class Mlm_complan_manager_repurchase
         // }
     }
 
+=======
+    }
+
+    public static function stairstep_cutoff($code,$slot_info)
+    { 
+
+        // $placement_tree  = Tbl_tree_placement::where("placement_tree_child_id",$slot_info->slot_id)->orderBy("placement_tree_level","ASC")->get();
+        // $percentage      = null;
+        // $check_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$slot_info->shop_id)->first();
+        // $slot_pv         = $unilevel_pts;
+
+        // if($check_stairstep)
+        // {
+        //     foreach($placement_tree as $placement)
+        //     {
+        //         $reduced_percent = 0;
+        //         $owned_pv        = Tbl_mlm_slot_points_log::where("points_log_slot",$placement->placement_tree_parent_id)->where("points_log_type","PV")->sum("points_log_points");
+        //         $owned_gpv       = Tbl_mlm_slot_points_log::where("points_log_slot",$placement->placement_tree_parent_id)->where("points_log_type","GPV")->sum("points_log_points");
+        //         if($owned_pv == null)
+        //         {
+        //             $owned_pv = 0;
+        //         }                
+
+        //         if($owned_gpv == null)
+        //         {
+        //             $owned_gpv = 0;
+        //         }
+
+        //         $computed_points = 0;
+
+        //         if(!$percentage)
+        //         {
+        //             $slot_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$slot_info->shop_id)
+        //                                                     ->where("stairstep_required_pv","<=",$owned_pv)
+        //                                                     ->where("stairstep_required_gv","<=",$owned_gpv)
+        //                                                     ->orderBy("stairstep_level","DESC")
+        //                                                     ->first();
+
+        //             if($slot_stairstep->stairstep_bonus != 0)
+        //             {
+        //                 $computed_points = ($slot_stairstep->stairstep_bonus/100) * $slot_pv;
+        //             }         
+
+        //             $percentage      = $slot_stairstep->stairstep_bonus;
+        //             $reduced_percent = $slot_stairstep->stairstep_bonus;
+        //         }
+        //         else
+        //         {
+        //             $slot_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$slot_info->shop_id)
+        //                                                     ->where("stairstep_required_pv","<=",$owned_pv)
+        //                                                     ->where("stairstep_required_gv","<=",$owned_gpv)
+        //                                                     ->orderBy("stairstep_level","DESC")
+        //                                                     ->first();
+                                                            
+        //             if($slot_stairstep->stairstep_bonus > $percentage)
+        //             { 
+        //                 if($slot_stairstep->stairstep_bonus != 0)
+        //                 {
+        //                     $reduced_percent = $slot_stairstep->stairstep_bonus - $percentage;
+        //                     if($reduced_percent > 0)
+        //                     {
+        //                         $computed_points = (($reduced_percent)/100) * $slot_pv;
+        //                         $percentage      = $slot_stairstep->stairstep_bonus;
+        //                     }
+        //                 }    
+        //             }
+        //         }
+
+        //         if($computed_points > 0)
+        //         {             
+        //             $log                                    = "You earned ".$reduced_percent."% of ".$unilevel_pts."(".$computed_points.") from slot #".$slot_info->slot_id."(Current Rank:".$slot_stairstep->stairstep_name.").";
+        //             $arry_log['wallet_log_slot']            = $placement->placement_tree_parent_id;
+        //             $arry_log['shop_id']                    = $slot_info->shop_id;
+        //             $arry_log['wallet_log_slot_sponsor']    = $placement->placement_tree_parent_id;
+        //             $arry_log['wallet_log_details']         = $log;
+        //             $arry_log['wallet_log_amount']          = $computed_points;
+        //             $arry_log['wallet_log_plan']            = "STAIRSTEP";
+        //             $arry_log['wallet_log_status']          = "n_ready";   
+        //             $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('STAIRSTEP', $slot_info->shop_id); 
+        //             Mlm_slot_log::slot_array($arry_log);    
+        //         }
+        //     }
+        // }
+    }
+
+>>>>>>> testing
 
     public static function repurchase_points($slot_info,$item_code_id)
     {
@@ -656,5 +753,123 @@ class Mlm_complan_manager_repurchase
             }
         }
     }
+    public static function triangle_repurchase($slot_info, $item_code_id)
+    {
+        ini_set('xdebug.max_nesting_level', 500);
+        $item_code = Tbl_item_code::where('item_code_id', $item_code_id)->first();
+        if($item_code)
+        {
+            $invoice = Tbl_item_code_invoice::where('item_code_invoice_id', $item_code->item_code_invoice_id)->first();
 
+            if($invoice)
+            {
+                $amount = $invoice->item_subtotal;
+                Mlm_complan_manager_repurchase::triangle_repurchase_amount($slot_info, $amount, $item_code->item_code_invoice_id);
+            }
+        }
+    }
+    public static function triangle_repurchase_amount($slot_info, $amount, $invoice_id)
+    {
+        $shop_id =  $slot_info->shop_id;
+        $settings = Tbl_mlm_triangle_repurchase::where('shop_id', $shop_id)
+        ->where('membership_id', $slot_info->membership_id)  
+        ->first();
+        if($settings)
+        {
+            if($settings->triangle_repurchase_amount != 0 || $settings->triangle_repurchase != null)
+            {
+                $mod = floor($amount/ $settings->triangle_repurchase_amount);
+
+                $count_i = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_invoice_id', $invoice_id)->count();
+                if($count_i == 0)
+                {
+                    if($mod >= 1)
+                    {
+                        for($i = 0; $i < $mod; $i++)
+                        {
+                            // repurchase_slot_no
+                            $insert['repurchase_slot_owner'] = $slot_info->customer_id;
+                            $insert['repurchase_slot_slot_id'] = $slot_info->slot_id;
+                            $insert['repurchase_slot_invoice_id'] = $invoice_id;
+                            $insert['repurchase_slot_amount'] = $settings->triangle_repurchase_amount;
+                            $insert['repurchase_slot_shop_id'] = $shop_id;  
+
+                            $id = Tbl_mlm_triangle_repurchase_slot::insertGetId($insert);
+                            $count_slot = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_shop_id', $shop_id)->count();
+                            $slot = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_id', $id)->first();
+                            if($count_slot >= 2)
+                            {
+                                Mlm_tree::triangle_repurchase_tree_l_r($slot);
+                            }
+                            Mlm_complan_manager_repurchase::triangle_repurchase_graduate($id, $shop_id);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public static function triangle_repurchase_graduate($repurchase_slot_id, $shop_id)
+    {
+        $slot = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_id', $repurchase_slot_id)->first();
+
+        if($slot)
+        {
+            $slot_placement_grad_count = Tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_slot_sponsor', $slot->repurchase_slot_placement)
+            ->where('tree_repurchase_tree_level', 1)
+            ->count();
+            if($slot_placement_grad_count == 2)
+            {
+
+                $slot_earn = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_id', $slot->repurchase_slot_placement)
+                ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_triangle_repurchase_slot.repurchase_slot_slot_id')
+                ->first();
+                if($slot_earn)
+                {
+                    $settings = Tbl_mlm_triangle_repurchase::where('shop_id', $shop_id)
+                    ->where('membership_id', $slot_earn->slot_membership)  
+                    ->first();
+
+                    if($settings)
+                    {
+                        $label = Mlm_compute::get_label_plan('TRIANGLE_REPURCHASE', $shop_id);
+                        $log = 'Congratulations! Your repurchase slot #'.$slot_earn->repurchase_slot_id.' earned ' .  $settings->triangle_repurchase_income . ' in ' . $label . '. From tree of Repurchase Slot #' . $slot->repurchase_slot_placement ;
+                        $arry_log['wallet_log_slot'] = $slot_earn->slot_id;
+                        $arry_log['shop_id'] = $slot_earn->shop_id;
+                        $arry_log['wallet_log_slot_sponsor'] = $slot_earn->slot_id;
+                        $arry_log['wallet_log_details'] = $log;
+                        $arry_log['wallet_log_amount'] = $settings->triangle_repurchase_income;
+                        $arry_log['wallet_log_plan'] = "TRIANGLE_REPURCHASE";
+                        $arry_log['wallet_log_status'] = "released";   
+                        $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                        Mlm_slot_log::slot_array($arry_log); 
+
+                        $tree_income = Tbl_mlm_triangle_repurchase_tree::where('tree_repurchase_slot_child', $slot_earn->repurchase_slot_id)
+                        ->distinct_level()
+                        ->get();
+                        
+                        foreach($tree_income as $key => $value)
+                        {
+                            $slot_earn = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_id', $value->tree_repurchase_slot_sponsor)
+                            ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_triangle_repurchase_slot.repurchase_slot_slot_id')
+                            ->first();
+
+                            $label = Mlm_compute::get_label_plan('TRIANGLE_REPURCHASE', $shop_id);
+                            $log = 'Congratulations! Your repurchase slot #'.$slot_earn->repurchase_slot_id.' earned ' .  $settings->triangle_repurchase_income . ' in ' . $label . '. From tree of Repurchase Slot #' . $slot->repurchase_slot_placement ;
+                            $arry_log['wallet_log_slot'] = $slot_earn->slot_id;
+                            $arry_log['shop_id'] = $slot_earn->shop_id;
+                            $arry_log['wallet_log_slot_sponsor'] = $slot_earn->slot_id;
+                            $arry_log['wallet_log_details'] = $log;
+                            $arry_log['wallet_log_amount'] = $settings->triangle_repurchase_income;
+                            $arry_log['wallet_log_plan'] = "TRIANGLE_REPURCHASE";
+                            $arry_log['wallet_log_status'] = "released";   
+                            $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                            Mlm_slot_log::slot_array($arry_log); 
+                        }
+                    }
+                    
+                }
+                
+            }
+        }
+    }
 }

@@ -118,7 +118,7 @@ class ShopProductController extends Shop
                 });
             break;
         }
-        // Pagination
+        Pagination
         $perPage = 12;
         $data["current_count"] = count($product);
         $data["_product"] = self::paginate($product, $perPage);

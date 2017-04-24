@@ -116,7 +116,6 @@
                                 <div class="col-md-1">
                                     per <span class="abbreviation"></span>
                                 </div>
-                                
                             </div>
                         </div>                 
                         <div class="col-md-6">

@@ -29,7 +29,7 @@ use App\Models\Tbl_mlm_item_points;
 use Mail;
 class Item_code
 {
-	public static function add_code($data,$shop_id)
+	public static function add_code($data,$shop_id, $user_id, $warehouse_id)
 	{ 
 	   // $shop_id                                                 = $this->user_info->shop_id;
         $go_serial = 0;
@@ -455,6 +455,9 @@ class Item_code
                         $insert['item_code_payment_type'] = $data['payment_type_choose'];
                         $insert['item_code_tendered_payment'] = $tendered_amount;
                         $insert['item_code_change'] =$tendered_amount -  $insert["item_total"];
+                        $insert['warehouse_id'] = $warehouse_id;
+                        $insert['user_id'] = $user_id;
+                        
                         if($insert['item_code_change'] < 0)
                         {
                             $send['response_status']      = "warning";
@@ -653,6 +656,7 @@ class Item_code
                     $content_key = 'product_repurchase';
                     $data['body'] = EmailContent::email_txt_replace($content_key, $change_content);
                     // return view('emails.full_body', $data);
+                    
                     Mail::send('emails.full_body', $data, function ($m) use ($data) {
                     $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
 

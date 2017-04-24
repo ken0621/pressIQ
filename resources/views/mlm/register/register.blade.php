@@ -12,7 +12,7 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label>First Name</label>
-							<input type="text" class="form-control input-lg" name="first_name" value="{{Request::old('first_name')}}"required>
+							<input type="text" class="form-control input-lg" name="first_name" value="{{Request::old('first_name')}}" required>
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -35,8 +35,8 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Tin No. (Optional)</label>
-							<input type="text" class="form-control input-lg" name="tin_number">
+							<label>Tin No.</label>
+							<input type="text" class="form-control input-lg" name="tin_number" required>
 						</div>
 					</div>
 					<div class="col-md-6">

@@ -1,5 +1,5 @@
 
-<form class="global-submit-page form-to-submit-add" action="/member/pis/ilr/update_count_submit" method="post">
+<form class="global-submit form-to-submit-add" action="/member/pis/ilr/update_count_submit" method="post">
 <style type="text/css">
     .chosen-container
     {
@@ -49,10 +49,10 @@
 </form>
 
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
-<script type="text/javascript" src="/assets/member/js/truck.js"></script>
-<script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
+<!-- <script type="text/javascript" src="/assets/member/js/truck.js"></script>
+<script type="text/javascript" src="/assets/member/js/warehouse.js"></script> -->
 <script type="text/javascript">
-function submit_done_for_page(data)
+function submit_done(data)
 {
     if(data.status == "success")
     {

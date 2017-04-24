@@ -9,6 +9,7 @@ use App\Globals\Pdf_global;
 use App\Globals\Cart;
 
 use App\Models\Tbl_customer;
+use App\Models\Tbl_user;
 use App\Models\Tbl_warehousea;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_manual_invoice;
@@ -32,6 +33,11 @@ use PDF;
 
 class CouponVoucherController extends Member
 {
+    public function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
+
     public function index()
     {
         
@@ -39,8 +45,8 @@ class CouponVoucherController extends Member
 
     public function getList()
     {
-        $unused_coupon  = Tbl_coupon_code::where("used", 0); 
-        $used_coupon    = Tbl_coupon_code::where("used", 1)->order();
+        $unused_coupon  = Tbl_coupon_code::where("used", 0)->product()->where("tbl_coupon_code.shop_id", $this->getShopId()); 
+        $used_coupon    = Tbl_coupon_code::where("used", 1)->product()->order()->where("tbl_coupon_code.shop_id", $this->getShopId());
 
         /* Filter Coupon By Search */
         $search = Request::input('search');
@@ -49,7 +55,7 @@ class CouponVoucherController extends Member
             $unused_coupon   = $unused_coupon->where("coupon_code","like","%$search%");
             $used_coupon     = $used_coupon->where("coupon_code","like","%$search%");
         }
-
+        
         $data["unused_coupon"]  = $unused_coupon->paginate(10);
         $data["used_coupon"]    = $used_coupon->paginate(10);
 

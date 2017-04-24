@@ -20,33 +20,28 @@
                         </div>
                     @endif
                     <div class="form-group">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                            <label>Product</label>
                            <select name="coupon_product_id" class="select-product">
                                 @include("member.load_ajax_data.load_product_category", ['add_search' => "", 'variant_id' => isset($coupon) ? $coupon->coupon_product_id : ''])
                            </select>         
                         </div>
+                        <div class="col-md-6">
+                           <label>Minimum Quantity</label>
+                           <input class="form-control int-format" type="text" name="coupon_minimum_quantity" value="{{$coupon->coupon_minimum_quantity or ''}}">         
+                        </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                            <label>Coupon Amount</label>
                            <input type="text" class="form-control input-sm" name="coupon_amount" value="{{$coupon->coupon_code_amount or ''}}">                    
                         </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label>Coupon Type</label>
                             <select class="form-control input-sm" name="coupon_amount_type" value="">
                                 <option value="fixed" {{isset($coupon) ? $coupon->coupon_discounted == 'fixed' ? 'selected' : '' : ''}}>Fixed</option>
                                 <option value="percentage" {{isset($coupon) ? $coupon->coupon_discounted == 'percentage' ? 'selected' : '' : ''}}>Percentage</option>   
                             </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                           <label>Minimum Quantity</label>
-                           <input class="form-control" type="text" name="coupon_minimum_quantity" value="">         
                         </div>
                     </div>
                     <!-- END CONTENT -->

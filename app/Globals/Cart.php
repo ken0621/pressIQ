@@ -551,11 +551,11 @@ class Cart
 
             $insert["id_per_coupon"]           =  $id_per_coupon;                
             $insert["coupon_code"]             =  $generated_word;  
-            $insert["coupon_product_id"]       =  $product_id;              
+            $insert["coupon_product_id"]       =  isset($coupon_product_id) ? $coupon_product_id : null;              
             $insert["coupon_code_amount"]      =  $price;                     
             $insert["coupon_discounted"]       =  $type;                     
             $insert["shop_id"]                 =  $shop_id;
-            $insert["coupon_minimum_quantity"] =  $minimum_quantity           
+            $insert["coupon_minimum_quantity"] =  $minimum_quantity;         
             $insert["date_created"]            =  Carbon::now();  
             Tbl_coupon_code::insert($insert);
 

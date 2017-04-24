@@ -7,6 +7,7 @@
                 <th class="text-center">Coupon Code</th>
                 <th class="text-center">Coupon Amount</th>
                 <th class="text-center">Coupon Type</th>
+                <th class="text-center">Product</th>
                 <th class="text-center">Date Created</th>
                 <th class="text-center">Action</th>
             </tr>
@@ -18,12 +19,13 @@
                 <td class="text-center">{{ $coupon->coupon_code}}</td>
                 <td class="text-center">{{ $coupon->coupon_code_amount}}</td>
                 <td class="text-center">{{ $coupon->coupon_discounted}}</td>
-                <td class="text-center">{{ $coupon->date_created }}</td>
+                <td class="text-center">{{ $coupon->evariant_item_label}}</td>
+                <td class="text-center">{{ $coupon->coupon_date_created }}</td>
                 <td class="text-center">
                     <!-- ACTION BUTTON -->
                     @if($filter == "unused")
                         <div class="btn-group">
-                            <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/ecommerce/coupon/edit-generate-code/{{$coupon->coupon_code_id}}" size="sm">Edit</a>
+                            <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/ecommerce/coupon/edit-generate-code/{{$coupon->coupon_code_id}}" size="md">Edit</a>
                             <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="" size="md"><span class="fa fa-trash"></span></a>
                         </div>
                     @else

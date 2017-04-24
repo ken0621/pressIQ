@@ -118,7 +118,7 @@
                     </span>
                 </a>
             </li>
-    
+        
         <!-- PAGE LIST -->
         @foreach($_page as $page)
             <li>
@@ -134,7 +134,7 @@
                 
                 @if(!isset($page['url']))
                     <ul>
-                    @foreach($page['submenu'] as $sub_page)
+                    @foreach($page['submenu'] as $key=> $sub_page)
                         @if(isset($sub_page["popup"]))
                             <li>
                                 <a class="subnav-text popup" size="flex" href="javascript:" link="{{ $sub_page['url'] }}">
@@ -143,7 +143,7 @@
                             </li>
                         @else
                             <li>
-                                <a class="subnav-text" href="{{ $sub_page['url'] }}">
+                                <a class="subnav-text" href="{{ isset($sub_page['url']) ? $sub_page['url'] : dd($sub_page) }}">
                                     {!! $sub_page["label"] !!}
                                 </a>
                             </li>

@@ -1124,6 +1124,7 @@ class Payroll
 														->select('tbl_payroll_allowance.*')
 														->get();
 
+		$dd_array = array();
 
 		while($start <= $end)
 		{
@@ -1197,6 +1198,7 @@ class Payroll
 												   ->select('tbl_payroll_group.*')
 												   ->first();
 
+			dd($group);
 
 			$working_day_month = $group->payroll_group_working_day_month;
 
@@ -1414,6 +1416,11 @@ class Payroll
 
 			$data['payroll_cola']				+= $extra_day['cola'] + $regular_day['cola'] + $regular_day_rest['cola'] + $special_holiday_rest['cola'] + $legal_holiday_rest['cola'] + $legal_holiday['cola'] + $special_holiday['cola'];
 
+			$temp_cola = $extra_day['cola'] + $regular_day['cola'] + $regular_day_rest['cola'] + $special_holiday_rest['cola'] + $legal_holiday_rest['cola'] + $legal_holiday['cola'] + $special_holiday['cola'];
+
+			array_push($dd_array, $temp_cola);
+
+			// dd($special_holiday);
 
 			/* LATE COMPUTATION START */
 
@@ -1454,8 +1461,7 @@ class Payroll
 		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff']);
 
 		$data['total_gross'] += $data['payroll_cola'];
-// 		employee_id
-// payroll_period_company_id
+
 		/* PAYROLL ADJUSTMEMT START */
 		/* bonus */
 		$adjustment_bonus = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Bonus')->get();
@@ -1791,15 +1797,17 @@ class Payroll
 
 	}
 
-	public static function compute_overtime($query = array(), $hours = array(), $rate = 0, $day_type = 'Regular', $cola)
+	public static function compute_overtime($query = array(), $hours = array(), $rate = 0, $day_type = 'Regular', $cola = 0)
 	{
-		// dd($hours);
+		// dd($rate);
 		$param = Tbl_payroll_overtime_rate::getrate($query['payroll_group_id'], $query['payroll_overtime_name'])->first();
 
 		$regular 			= 0;
 		$late_overtime 		= 0;
 		$early_overtime 	= 0;
 		$night_differential = 0;
+		$cola_var 			= 0;
+
 
 		if($day_type == 'Regular' || $day_type == 'Extra' || $day_type == 'Legal Holiday' || $day_type == 'Special Holiday')
 		{
@@ -1807,6 +1815,11 @@ class Payroll
 			$late_overtime 		= $param->payroll_overtime_overtime;
 			$early_overtime 	= $param->payroll_overtime_overtime;
 			$night_differential = $param->payroll_overtime_nigth_diff;
+			$cola_var			= $regular;
+			// if($regular == 0)
+			// {
+			// 	$cola_var = 1;
+			// }
 		}
 
 		else if($day_type == 'Rest Regular' || $day_type == 'Rest Legal Holiday' || $day_type == 'Rest Special Holiday')
@@ -1815,9 +1828,14 @@ class Payroll
 			$late_overtime 		= $param->payroll_overtime_rest_overtime;
 			$early_overtime 	= $param->payroll_overtime_rest_overtime;
 			$night_differential = $param->payroll_overtime_rest_night;
+			$cola_var			= $regular;
+			// if($regular == 0)
+			// {
+			// 	$cola_var = 1;
+			// }
 		}
 
-		$cola 				= $regular * $cola;
+		$cola_var 			= $cola_var * $cola;
 
 		$regular 			= $regular * $rate;
 		$late_overtime 		= $late_overtime * $rate;
@@ -1847,8 +1865,20 @@ class Payroll
 		$data['early_overtime']		= round(($early_overtime + ( $hours['early_overtime'] * $rate )), 2);
 		$data['night_differential']	= round(($night_differential + ( $hours['night_differential'] * $rate )), 2);
 
-		$data['cola'] 				= round($cola, 2);
+		$tota = 0;
 
+		$total = $data['regular'] + $data['late_overtime'] + $data['early_overtime'] + $data['night_differential'];
+
+		$data['cola'] 				= round(($cola_var + ($cola * $hours['regular'])), 2);
+
+
+		// dd($total);
+		if($total <= 0)
+		{
+			
+			$data['cola'] = 0;
+		}
+		// dd($data);
 		return $data;
 		
 	}

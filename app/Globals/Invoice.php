@@ -164,6 +164,8 @@ class Invoice
         {
             Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
         }
+
+        return $rcvpayment_id;
     }
 
     public static function updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = '')
@@ -205,9 +207,11 @@ class Invoice
         if($is_sales_receipt != '')
         {
             $update["inv_payment_applied"] = $overall_price;
+
+            Invoice::update_rcv_payment("invoice",$invoice_id,$overall_price);
         }
         Tbl_customer_invoice::where("inv_id", $invoice_id)->update($update);
-
+        
 
         $new = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
         AuditTrail::record_logs("Edited","invoice",$invoice_id,serialize($old),serialize($new));
@@ -227,6 +231,21 @@ class Invoice
         return $invoice_id;
     }
 
+    public static function update_rcv_payment($ref_name = '', $ref_id = 0, $amount = 0)
+    {   
+        $data = Tbl_receive_payment_line::where("rpline_reference_name",$ref_name)->where("rpline_reference_id",$ref_id)->first();
+
+        if($data)
+        {
+            $rcv_data = Tbl_receive_payment::where("rp_id",$data->rpline_rp_id)->first();
+            $up["rp_total_amount"] = ($rcv_data->rp_total_amount - $data->rpline_amount) + $amount;
+            Tbl_receive_payment::where("rp_id",$rcv_data->rp_id)->update($up);
+
+            $up_rcv["rpline_amount"] = $amount;
+            Tbl_receive_payment_line::where("rpline_reference_name",$ref_name)->where("rpline_reference_id",$ref_id)->update($up_rcv);
+        }
+
+    }
     public static function insert_invoice_line($invoice_id, $item_info, $entry)
     {        
         foreach($item_info as $key => $item_line)

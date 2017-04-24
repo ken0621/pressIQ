@@ -17,6 +17,7 @@ Route::any('/member/mlm/membership/view/package/{membership_id}', 'Member\MLM_Me
 Route::any('/member/mlm/membership/edit/package/{membership_package_id}', 'Member\MLM_MembershipController@edit_package_popup'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/membership/edit/package/archive/{membership_package_id}', 'Member\MLM_MembershipController@edit_package_popup_archive'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/membership/edit/package/save/submit', 'Member\MLM_MembershipController@save_package_popup'); 
+Route::any('/member/mlm/membership/change_picture', 'Member\MLM_MembershipController@change_picture_package'); //GUILLERMO TABLIGAN
 
 Route::any('/member/mlm/code', 'Member\MLM_CodeController@index'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/code/block/{id}', 'Member\MLM_CodeController@block'); //ERWIN
@@ -133,6 +134,10 @@ Route::any('/member/mlm/plan/discountcard/add', 'Member\MLM_PlanController@disco
 /* start direct promotions */
 Route::any('/member/mlm/plan/direct_promotions/save', 'Member\MLM_PlanController@save_direct_promotions');//luke
 /* end direct promotions  Plan */
+
+/* start triangle repurchase */
+Route::any('/member/mlm/plan/triangle_repurchase/save', 'Member\MLM_PlanController@save_triangle_repurchase');//luke
+/* end triangle repurchase  Plan */
 
 /* end MLM Plan */
 

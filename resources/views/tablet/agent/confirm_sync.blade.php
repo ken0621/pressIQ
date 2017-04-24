@@ -6,6 +6,7 @@
 </div>
 <div class="modal-body add_new_package_modal_body clearfix">
     <div class="col-md-12">
+        <input type="hidden" name="sir_id" value="{{$sir_id}}">
         <h3>Are you sure you want to {{strtoupper($action)}} now ?</h3>
     </div>
     <div class="col-md-12 text-center">

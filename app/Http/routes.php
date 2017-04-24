@@ -282,6 +282,7 @@ Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_
 
 /*AGENT TRANSACTION*/
 Route::any('/member/pis/agent/transaction/{id}','Member\AgentTransactionController@agents_transaction');
+Route::any('/member/pis/agent_transaction/print/{id}','Member\AgentTransactionController@print_transaction');
 
 /* START U/M TYPES ARCY*/
 Route::any('/member/item/um_type','Member\UnitMeasurementTypeController@index');
@@ -350,6 +351,9 @@ Route::any('/member/pis/sir/edit_submit','Member\PurchasingInventorySystemContro
 
 Route::any('/member/pis/ilr/update_count_submit','Member\PurchasingInventorySystemController@update_count_submit');
 Route::any('/member/pis/ilr/update_count/{sir_id}/{item_id}','Member\PurchasingInventorySystemController@update_count');
+
+Route::any('/member/pis/ilr/update_count_empties_submit','Member\PurchasingInventorySystemController@update_count_empties_submit');
+Route::any('/member/pis/ilr/update_count_empties/{s_cm_id}','Member\PurchasingInventorySystemController@update_count_empties');
 //lof
 Route::any('/member/pis/lof','Member\PurchasingInventorySystemController@lof');
 Route::any('/member/pis/lof/archived_submit','Member\PurchasingInventorySystemController@archived_sir_submit');
@@ -414,6 +418,16 @@ Route::any('/tablet/receive_payment/update/{id}','Member\TabletPISController@upd
 Route::any('/tablet/view_invoice_view/{id}','Member\TabletPISController@view_invoices_view');
 Route::any('/tablet/view_invoice_pdf/{id}','Member\TabletPISController@view_invoice_pdf');
 
+Route::any('/tablet/credit_memo','Member\TabletPISController@credit_memo');
+Route::any('/tablet/credit_memo/add','Member\TabletPISController@add_cm');
+Route::any('/tablet/credit_memo/add_cm_submit','Member\TabletPISController@add_cm_submit');
+Route::any('/tablet/credit_memo/edit_cm_submit','Member\TabletPISController@edit_cm_submit');
+
+Route::any('/tablet/sales_receipt','Member\TabletPISController@sales_receipt');
+Route::any('/tablet/sales_receipt/list','Member\TabletPISController@sales_receipt_list');
+Route::any('/tablet/sales_receipt/create_submit','Member\TabletPISController@create_sales_receipt_submit');
+Route::any('/tablet/sales_receipt/update_submit','Member\TabletPISController@update_sales_receipt_submit');
+
 Route::any('/tablet/submit_all_transaction','Member\TabletPISController@confirm_submission');
 Route::any('/tablet/submit_all_transaction/submit','Member\TabletPISController@submit_transactions');
 /* END PIS TABLEt*/
@@ -459,13 +473,13 @@ Route::get('/member/contact','Store\StoreInfoController@contactInfo');
 Route::post('/member/contact/craeteContact','Store\StoreInfoController@craeteContact');
 //contact end
 
+Route::any('/member/customer/customer_invoice_view/{id}','Member\Customer_InvoiceController@invoice_view');
+Route::any('/member/customer/customer_invoice_pdf/{id}','Member\Customer_InvoiceController@invoice_view_pdf');
 Route::any('/member/customer/invoice_list','Member\Customer_InvoiceController@invoice_list');
 Route::get('/member/customer/invoice','Member\Customer_InvoiceController@index');
 Route::any('/member/customer/invoice/error/{id}', 'Member\Customer_InvoiceController@error_inv_no');
 Route::post('/member/customer/invoice/create','Member\Customer_InvoiceController@create_invoice');
 Route::post('/member/customer/invoice/update','Member\Customer_InvoiceController@update_invoice');
-Route::any('/member/customer/customer_invoice_view/{id}','Member\Customer_InvoiceController@invoice_view');
-Route::any('/member/customer/customer_invoice_pdf/{id}','Member\Customer_InvoiceController@invoice_view_pdf');
 
 //sales receipt
 Route::get('/member/customer/sales_receipt','Member\Customer_SaleReceiptController@index');

@@ -19,6 +19,36 @@ use Carbon\Carbon;
 use Session;
 class Warehouse
 {   
+    public static function insert_item_to_all_warehouse($item_id, $reorder_point = 0)
+    {
+        if($item_id)
+        {
+            $all_warehouse = Tbl_warehouse::where("warehouse_shop_id",Warehouse::getShopId())->get();
+            foreach ($all_warehouse as $key => $value) 
+            {
+                $chk_if_existing = Tbl_sub_warehouse::where("item_id",$item_id)->where("warehouse_id",$value->warehouse_id)->first();
+                if($chk_if_existing == null)
+                {
+                    $ins["item_id"] = $item_id;
+                    $ins["warehouse_id"] = $value->warehouse_id;
+                    $ins["item_reorder_point"] = $reorder_point;
+
+                    Tbl_sub_warehouse::insert($ins);
+                }
+
+                $inventory = Tbl_warehouse_inventory::where("inventory_item_id",$item_id)->where("warehouse_id",$value->warehouse_id)->first();
+                if($inventory == null)
+                {
+                    $ins_inventory["inventory_item_id"] = $item_id;
+                    $ins_inventory["warehouse_id"] = $value->warehouse_id;
+                    $ins_inventory["inventory_created"] = Carbon::now();
+                    $ins_inventory["inventory_count"] = 0;
+
+                    Tbl_warehouse_inventory::insert($ins_inventory);
+                }
+            }            
+        }
+    }
     public static function insert_access($warehouse_id)
     {
         $ins_access["user_id"] = Warehouse::getUserid();
@@ -156,7 +186,7 @@ class Warehouse
 
         $inventory_slip_id_destination = Tbl_inventory_slip::insertGetId($insert_slip_destination);
 
-        $insertsource = '';
+        $insertsource = [];
         $insertdestination = '';
         $inventory_success = '';
         $inventory_err = '';
@@ -400,7 +430,6 @@ class Warehouse
     }
     public static function inventory_refill($warehouse_id = 0, $reason_refill = '', $refill_source = 0, $remarks = '', $warehouse_refill_product = array(), $return = 'array', $is_return = null)
     {
-        
         $shop_id = Warehouse::get_shop_id($warehouse_id);
 
         $insert_slip['inventory_slip_id_sibling']    = 0;
@@ -421,7 +450,7 @@ class Warehouse
         $inventory_err = '';
         $success = 0;
         $err = 0;
-        $insert_refill = '';
+        $insert_refill = [];
 
         $for_serial_item = '';
         
@@ -429,7 +458,7 @@ class Warehouse
         {
             foreach($warehouse_refill_product as $key => $refill_product)
             {
-               
+                
                 $insert_refill['inventory_item_id']        = $refill_product['product_id'];
                 $insert_refill['warehouse_id']             = $warehouse_id;
                 $insert_refill['inventory_created']        = Carbon::now();

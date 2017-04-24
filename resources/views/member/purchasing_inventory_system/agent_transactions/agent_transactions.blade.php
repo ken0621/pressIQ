@@ -40,7 +40,21 @@
 	    </div>
     </div>
 </div>
-
+<div class="row clearfix" style="margin-bottom: 15px;">
+    <form method="get" class="range-date">
+        <div class="col-sm-3">
+        	<select name="sir_id" class="form-control datepicker">
+      			<option value="">All SIR</option>
+        		@foreach($_sir_id as $sir)
+        			<option value="{{$sir->sir_id}}">SIR NO: {{$sir->sir_id}}</option>
+        		@endforeach
+        	</select>
+        </div>
+        <div class="col-sm-3">
+        <a href="/member/pis/agent_transaction/print/{{$agent->employee_id}}?sir_id={{Request::input('sir_id')}}" class="btn btn-primary form-control" target="_blank">Print Transaction Below</a>
+        </div>
+    </form>
+</div>
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body">
     	@if(count($__transaction) > 0)
@@ -61,8 +75,7 @@
 			            </tr>
 			        </thead>
 			        <tbody>
-			            @foreach($__transaction as $_transaction)
-			            	@foreach($_transaction as $transaction)
+			            @foreach($__transaction as $transaction)
 				            <tr class="cursor-pointer" onClick="window.location='/member/customer/{{$transaction['reference_name']}}?id={{$transaction['no']}}'">
 				                <td>{{ $transaction['date'] }}</td>
 				                <td>{{ $transaction['type'] }}</td>
@@ -87,7 +100,6 @@
 			                       @endif
 				                </td>
 				            </tr>
-				            @endforeach
 			            @endforeach
 			        </tbody>
 			    </table>
@@ -111,5 +123,11 @@
 
 @endsection
 @section('script')
+<script type="text/javascript">
+$('body').on("change", ".datepicker", function()
+{
+   $('.range-date').submit();
+});	
+</script>
 <script type="text/javascript" src="/assets/member/js/customer_detail.js"></script>
 @endsection

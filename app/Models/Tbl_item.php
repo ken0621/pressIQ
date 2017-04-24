@@ -23,10 +23,9 @@ class Tbl_item extends Model
     }
     public function scopeUm_multi($query)
     {
-        return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','item_measurement_id')->where("is_base",1);
+        return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','item_measurement_id');
          
     }
-
     public function scopeselitem($query, $item_id)
     {
         $query->where('item_id',$item_id);

@@ -844,8 +844,11 @@ class Payroll
 			}
 		}
 
+		/* CHECK IF LEAVE */
+		
+
 		/* CHECK IF ABSENT */
-		if($total_rest_day_hours == 0 && $total_extra_day_hours == 0 && $total_hours == 0)
+		if($total_rest_day_hours == 0 && $total_extra_day_hours == 0 && $total_time_spent == 0)
 		{
 			$absent = true;
 		}
@@ -868,7 +871,7 @@ class Payroll
 		$return->regular_holiday_hours = convert_seconds_to_hours_minutes("H:i", $regular_holiday_hours);
 		$return->break 				= convert_seconds_to_hours_minutes("H:i", $break);
 		$return->time_record 		= $time_rec;
-		$return->absent 			= true;
+		$return->absent 			= $absent;
 
 		return $return;
 	}

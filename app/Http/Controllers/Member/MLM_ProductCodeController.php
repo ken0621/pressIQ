@@ -52,12 +52,17 @@ class MLM_ProductCodeController extends Member
         $data["_code_unused"]  = $code_unused->paginate(10, ['*'], '_code_unused');
         $data["_code_used"]    = $code_used->paginate(10, ['*'], '_code_used');
         $data["_code_blocked"] = $code_blocked->paginate(10, ['*'], '_code_blocked');
+
+        $data['user_a'] = $this->user_info->user_id;
+        $data['warehouse_a'] = $this->current_warehouse->warehouse_id;
+        // dd($data);
         // dd($data["_code_used"]);
         return view('member.mlm_product_code.mlm_product_code', $data);
     }
 
     public function sell()
     {
+        // dd(php_info);
         $access = Utilities::checkAccess('mlm-product-code', 'product_code_sell_codes');
         $data['_item']  = Item::get_all_category_item();
         // dd($data);
@@ -301,8 +306,13 @@ class MLM_ProductCodeController extends Member
             if(isset($this->current_warehouse->warehouse_id))
             {
                 // return $_POST;
+
                 $shop_id = $this->user_info->shop_id;
-                $data    = Item_code::add_code(Request::input(),$shop_id);
+                $user_id = $this->user_info->user_id;
+                $warehouse_id = $this->current_warehouse->warehouse_id;
+
+
+                $data    = Item_code::add_code(Request::input(),$shop_id, $user_id, $warehouse_id);
                 if($data["response_status"] == "success")
                 {
                     Session::forget("sell_codes_session");

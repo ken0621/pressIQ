@@ -8,7 +8,7 @@ use App\Models\Tbl_warehouse;
 
 use App\Globals\Account;
 use App\Globals\Warehouse;
-use App\Globals\Seed;
+use App\Globals\Seed_manual;
 use App\Globals\Utilities;
 use App\Globals\Payroll;
 use App\Globals\Settings;
@@ -132,7 +132,7 @@ class Member extends Controller
 		View::share("_page", Utilities::filterPageList());
 		
 		/* Seeding */
-		Seed::auto_seed();
+		Seed_manual::auto_seed();
 
 		/* Set Email Configuration */
 		Settings::set_mail_setting($this->user_info->shop_id);
@@ -165,7 +165,7 @@ class Member extends Controller
 
 		/* INSERT MAIN WAREHOUSE */
 		Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);
-
+		// dd($this->user_info);
 	}
 	public function show_no_access()
 	{

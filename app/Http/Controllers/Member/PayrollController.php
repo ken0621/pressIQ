@@ -61,6 +61,7 @@ use App\Models\Tbl_payroll_entity;
 use App\Models\Tbl_payroll_journal_tag;
 use App\Models\Tbl_payroll_journal_tag_entity;
 use App\Models\Tbl_payroll_journal_tag_employee;
+use App\Models\Tbl_payroll_leave_schedule;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -3794,11 +3795,9 @@ class PayrollController extends Member
      public function leave_schedule_tag_employee($id)
      {
           $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
-
           $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
-
-          $data['leave_id']    =    $id;
-          $data['action']          =    '/member/payroll/deduction/set_employee_deduction_tag';
+          $data['leave_id']        =    $id;
+          $data['action']          =    '/member/payroll/leave_schedule/session_tag_leave';
 
           return view('member.payroll.modal.modal_schedule_employee_leave', $data);
      }
@@ -3813,12 +3812,41 @@ class PayrollController extends Member
 
           $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())
                     ->join('tbl_payroll_leave_employee','tbl_payroll_leave_employee.payroll_leave_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
-                    // ->where('')
+                    ->where('tbl_payroll_leave_employee.payroll_leave_temp_id',$leave_id)
                     ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
                     ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
                     ->get();
           // dd($emp);
           return json_encode($emp);
+     }
+
+     // Session::put('allowance_employee_tag', array());
+     // $insert_tag = array();
+
+     //      foreach($employee_tag as $tag)
+     //      {
+     //           array_push($array, $tag);
+     //           if($allowance_id != 0)
+     //           {
+     //                $count = Tbl_payroll_employee_allowance::where('payroll_allowance_id', $allowance_id)->where('payroll_employee_id',$tag)->count();
+     //                if($count == 0)
+     //                {
+     //                     $insert['payroll_allowance_id'] = $allowance_id;
+     //                     $insert['payroll_employee_id']     = $tag;
+     //                     array_push($insert_tag, $insert);
+     //                }
+     //           }
+     //      }
+
+     public function session_tag_leave()
+     {
+
+
+          $employee_tag = array();
+          foreach(Request::input('employee_tag') as $tag)
+          {
+
+          }
      }
 
      /* CALDENDAR LEAVE END */

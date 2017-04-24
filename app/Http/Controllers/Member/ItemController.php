@@ -88,8 +88,7 @@ class ItemController extends Member
 				}
 			}
 			$data["_item_archived"]	   = $item_archived->get();
-			      
-	        
+
 		    return view('member.item.list',$data);
         }
         else

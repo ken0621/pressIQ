@@ -19,7 +19,7 @@ class ShopProductContentController extends Shop
         $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
         $data["_variant"]    = Ecom_Product::getProductOption($id, ",");
         $data["_related"]    = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
-
+    
         foreach ($data["_related"] as $key => $value) 
         {
             if ($value["eprod_id"] == $data["product"]["eprod_id"]) 

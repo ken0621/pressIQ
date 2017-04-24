@@ -58,6 +58,7 @@ class MLM_ProductCodeController extends Member
 
     public function sell()
     {
+        // dd(php_info);
         $access = Utilities::checkAccess('mlm-product-code', 'product_code_sell_codes');
         $data['_item']  = Item::get_all_category_item();
         // dd($data);
@@ -301,8 +302,13 @@ class MLM_ProductCodeController extends Member
             if(isset($this->current_warehouse->warehouse_id))
             {
                 // return $_POST;
+
                 $shop_id = $this->user_info->shop_id;
-                $data    = Item_code::add_code(Request::input(),$shop_id);
+                $user_id = $this->user_info->user_id;
+                $warehouse_id = $this->current_warehouse->warehouse_id;
+
+
+                $data    = Item_code::add_code(Request::input(),$shop_id, $user_id, $warehouse_id);
                 if($data["response_status"] == "success")
                 {
                     Session::forget("sell_codes_session");

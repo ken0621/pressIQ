@@ -418,7 +418,7 @@ function customer_invoice(){
     		width : "100%",
     		placeholder : "um..",
     		onChangeValue: function()
-    		{
+    		{  
     			action_load_unit_measurement($(this));
     		}
 
@@ -433,7 +433,7 @@ function customer_invoice(){
             {
             	action_load_item_info_cm($(this));
             }
-        });
+        });                   
         $(".cm-draggable .tr-cm-draggable:last td select.select-um").globalDropList(
         {
         	hasPopup: "false",
@@ -446,7 +446,7 @@ function customer_invoice(){
 
         }).globalDropList('disabled');
 	}
-
+                             
 	/* Make select input into a drop down list plugin */
 	function iniatilize_select()
 	{

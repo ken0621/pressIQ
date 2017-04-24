@@ -8,6 +8,7 @@ use View;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_placement;
 use App\Globals\Mlm_genealogy;
+use App\Globals\Mlm_complan_manager_repurchase;
 use App\Models\Tbl_mlm_triangle_repurchase_slot;
 use App\Models\Tbl_mlm_triangle_repurchase_tree;
 class MlmGenealogyController extends Mlm

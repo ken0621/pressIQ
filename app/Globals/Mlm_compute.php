@@ -85,7 +85,8 @@ class Mlm_compute
                         // auto placement
                         if($tbl_mlm_binary_setttings->binary_settings_auto_placement == 'left_to_right')
                         {
-                            $a =  Mlm_tree::auto_place_slot_binary_left_to_right($slot_info);
+                            $a =  Mlm_tree::auto_place_slot_binary_left_to_right_v2($slot_info);
+                            // $a =  Mlm_tree::auto_place_slot_binary_left_to_right($slot_info);
                         }
                         else if($tbl_mlm_binary_setttings->binary_settings_auto_placement == "auto_balance")
                         {

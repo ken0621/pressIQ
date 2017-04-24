@@ -94,6 +94,12 @@
                             <tr>
                                 <th colspan="12"><center><h2>CASHIER'S END SESSION REPORT</h2></center></th>
                             </tr>
+                            @if(isset($warehouse))
+                            <tr>
+                                <td>Branch / Warehouse Name</td>
+                                <td>{{$warehouse->warehouse_name}}</td>
+                            </tr>
+                            @endif
                             <tr>
                                 <td>{{$filteru['from']}}</td>
                                 <td>{{$filteru['to']}}</td>
@@ -175,7 +181,6 @@
                                     </td>
                                     <td>{{$value->item_code_date_created}}</td>
                                 </tr>
-
                             @endforeach
                             <tr>
                                 <td colspan="8">Total Sales</td>
@@ -206,6 +211,12 @@
                             <td>{{$value}}</td>
                         </tr>
                         @endforeach
+                    @endif
+                    @if(isset($user_a))
+                        <tr>
+                            <td>Reported by:</td>
+                            <td>{{$user_a->user_first_name}} {{$user_a->user_last_name}}</td>
+                        </tr>
                     @endif
                 </tbody>
                 

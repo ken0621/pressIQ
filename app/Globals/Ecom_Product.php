@@ -358,6 +358,15 @@ class Ecom_Product
 		return $_category;
 	}
 
+	public static function getVariantFullName($variant_id)
+	{
+		$_product = Tbl_ec_product::variant()->first()->toArray();
+
+		$_product["product_new_name"] = $product["eprod_name"] . ($product["variant_name"] ? ' : '.$product["variant_name"] : '');
+
+		return $_product["product_new_name"];
+	}
+
 	/**
 	 * Getting all Product w/ a specific category name regardless of the level, thus product with the same category name
 	 *

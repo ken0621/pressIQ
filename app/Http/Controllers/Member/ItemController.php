@@ -21,6 +21,7 @@ use App\Globals\Category;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 use App\Globals\DigimaTable;
+use App\Globals\Warehouse;
 use App\Globals\Item;
 use App\Globals\Vendor;
 use App\Globals\UnitMeasurement;
@@ -68,18 +69,21 @@ class ItemController extends Member
 			//item_convertion with unit measurement
 			foreach ($data["_item"] as $key => $value) 
 			{
-				$data["_item"][$key]->inventory_count_um_view = "";
-				$data["_item"][$key]->item_whole_price = 0;
-				$data["_item"][$key]->um_whole = "";
-				$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
-
-				$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
-				if($um)
+				if($value->item_type_id == 1)
 				{
-					$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+					$data["_item"][$key]->inventory_count_um_view = "";
+					$data["_item"][$key]->item_whole_price = 0;
+					$data["_item"][$key]->um_whole = "";
+					$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
 
-					$data["_item"][$key]->item_whole_price = $um->unit_qty * $value->item_price;
-					$data["_item"][$key]->um_whole = $um->multi_abbrev;
+					$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
+					if($um)
+					{
+						$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+
+						$data["_item"][$key]->item_whole_price = $um->unit_qty * $value->item_price;
+						$data["_item"][$key]->um_whole = $um->multi_abbrev;
+					}
 				}
 
 				if($value->item_type_id == 4)
@@ -138,12 +142,12 @@ class ItemController extends Member
 			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
 			$data["_expense"] 	= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
 
-			$data['_category']  = Category::getAllCategory();
-			$data['_item']  	= Item::get_all_category_item();
+			$data['_category']  		= Category::getAllCategory();
+			$data['_item']  			= Item::get_all_category_item();
 			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
-			$data["_um"] 		= UnitMeasurement::load_um();
-			$data["_um_multi"]  = UnitMeasurement::load_um_multi();
-            $data["_vendor"]    = Vendor::getAllVendor('active');
+			$data["_um"] 				= UnitMeasurement::load_um();
+			$data["_um_multi"]  		= UnitMeasurement::load_um_multi();
+            $data["_vendor"]    		= Vendor::getAllVendor('active');
 
 		    return view('member.item.add',$data);
         }
@@ -346,6 +350,7 @@ class ItemController extends Member
 
 					$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
 				}
+				Warehouse::insert_item_to_all_warehouse($item_id, $item_reorder_point);
 
 				$for_serial_item[$item_id]["quantity"] = $item_quantity;
                 $for_serial_item[$item_id]["product_id"] = $item_id;

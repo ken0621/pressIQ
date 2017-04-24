@@ -473,13 +473,13 @@ Route::get('/member/contact','Store\StoreInfoController@contactInfo');
 Route::post('/member/contact/craeteContact','Store\StoreInfoController@craeteContact');
 //contact end
 
+Route::any('/member/customer/customer_invoice_view/{id}','Member\Customer_InvoiceController@invoice_view');
+Route::any('/member/customer/customer_invoice_pdf/{id}','Member\Customer_InvoiceController@invoice_view_pdf');
 Route::any('/member/customer/invoice_list','Member\Customer_InvoiceController@invoice_list');
 Route::get('/member/customer/invoice','Member\Customer_InvoiceController@index');
 Route::any('/member/customer/invoice/error/{id}', 'Member\Customer_InvoiceController@error_inv_no');
 Route::post('/member/customer/invoice/create','Member\Customer_InvoiceController@create_invoice');
 Route::post('/member/customer/invoice/update','Member\Customer_InvoiceController@update_invoice');
-Route::any('/member/customer/customer_invoice_view/{id}','Member\Customer_InvoiceController@invoice_view');
-Route::any('/member/customer/customer_invoice_pdf/{id}','Member\Customer_InvoiceController@invoice_view_pdf');
 
 //sales receipt
 Route::get('/member/customer/sales_receipt','Member\Customer_SaleReceiptController@index');
@@ -502,8 +502,17 @@ Route::post('/member/about/update','Member\StoreInfoController@update');
 Route::get('/member/about/remove/{id}','Member\StoreInfoController@remove');
 
 //arcy
-Route::get('/member/customer/estimate','Member\Customer_EstimateController@index');
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
+
+
+/* Customer - Create Estimate */
+Route::get('/member/customer/estimate_list','Member\Customer_EstimateController@index');
+Route::any('/member/customer/estimate','Member\Customer_EstimateController@estimate');
+Route::any('/member/customer/estimate/create','Member\Customer_EstimateController@create_submit');
+Route::any('/member/customer/estimate/update','Member\Customer_EstimateController@update_submit');
+Route::any('/member/customer/customer_estimate_view/{id}','Member\Customer_EstimateController@estimate_pdf');
+Route::any('/member/customer/update_status/{id}','Member\Customer_EstimateController@update_status');
+Route::any('/member/customer/update_status_submit','Member\Customer_EstimateController@update_status_submit');
 
 /* Customer - Receive Payment */
 Route::get('/member/customer/receive_payment','Member\Customer_ReceivePaymentController@index');

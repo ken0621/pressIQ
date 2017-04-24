@@ -36,7 +36,8 @@ class account
                 $insert["account_number"]           = $default->default_number;
                 $insert["account_name"]             = $default->default_name;
                 $insert["account_description"]      = $default->default_description;
-                $insert["account_code"]             = $default->default_description;
+                $insert["account_code"]             = $default->default_for_code;
+                $insert['account_timecreated']      = Carbon::now();
                 
                 Tbl_chart_of_account::insert($insert);
             }

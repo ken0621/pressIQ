@@ -228,20 +228,27 @@
 			<div class="order-summary">
 				@if (session('fail'))
 				    <div class="alert alert-danger">
-					    <ul>
+				    	@if(is_array(session('fail')))
+				    		<ul>
 					        @foreach(session('fail') as $fail)
 				        		<li>{{ $fail }}</li>
 					        @endforeach
-					    </ul>
+					        </ul>
+					    @else
+					    	<ul style="padding: 0; margin: 0;">
+					    		<li>{{ session('fail') }}</li>
+					    	</ul>
+				        @endif
 				    </div>
 				@endif
 				<div class="number-in-cart">You have {{ count($get_cart["cart"]) }} in your cart.</div>
 				<table>
 					<thead>
 						<tr>
-							<td>Product</td>
-							<td class="text-center">Qty.</td>
-							<td class="text-right">Price</td>
+							<th>Product</th>
+							<th class="text-center">Qty.</th>
+							<th class="text-right">Price</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -250,6 +257,7 @@
 							<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
 							<td class="text-center">{{ $cart["quantity"] }}</td>
 							<td class="text-right">&#8369; {{ number_format($cart['quantity'] * $cart["cart_product_information"]["product_price"], 2) }}</td>
+							<td style="padding-left: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&variation_id={{ $cart["product_id"] }}"><i class="fa fa-close"></i></a></td>
 						</tr>
 						@endforeach
 					</tbody>

@@ -58,6 +58,8 @@ class MLM_ProductController extends Member
         {
             $_inventory = $_inventory->where('item_sku', 'like', '%' . $item_search . '%')
             ->orWhere('item_name', 'like', '%' . $item_search . '%');
+
+            // filter="status"
         }
         $_inventory = $_inventory->where('tbl_item.archived', 0)->type()->category()
         ->where("tbl_item.shop_id",$shop_id)
@@ -81,7 +83,7 @@ class MLM_ProductController extends Member
 
 	    $data['item'] 		 = $this->iteminventory($_inventory, $data['active']);
 	    $data['_inventory']  = $_inventory;	    
-        
+        $data['item_search'] = $item_search;
         return view('member.mlm_product.product', $data);
     }
 

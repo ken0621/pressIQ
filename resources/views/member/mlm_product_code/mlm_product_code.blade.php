@@ -10,8 +10,35 @@
                     Repurchasing of products.
                 </small>
             </h1>
-            <a href="/member/mlm/product_code/sell" class="panel-buttons btn btn-primary pull-right">Sell Product</a>
-            <a href="/member/mlm/product_code/receipt" class="panel-buttons btn btn-default pull-right">View Receipt(s)</a>
+            <div class="col-md-12">
+                <form method="post" action="/member/mlm/report/get" target="_blank">
+                {!! csrf_field() !!}
+                <input type="hidden" name="skip" value="0">
+                <input type="hidden" name="take" value="9999">
+                <input type="hidden" name="user_id" value="{{$user_a}}">
+                <input type="hidden" name="warehouse_id" value="{{$warehouse_a}}">
+
+                <input type="hidden" name="report_choose" value="product_sales_report">
+                <input type="hidden" name="pdf" value="excel">
+                <div class="col-md-3">
+                    <span><small style="color:gray">From</small></span>
+                    <input type="date" class="form-control" name="from" value="{{Carbon\Carbon::now()->format('Y-m-d')}}">
+                </div>
+                <div class="col-md-3">
+                    <span><small style="color:gray">To</small></span>
+                    <input type="date" class="form-control" name="to" value="{{Carbon\Carbon::now()->format('Y-m-d')}}">
+                </div>
+                <div class="col-md-3">
+                    <span><small style="color:gray">CASHIER'S END SESSION REPORT</small></span>
+                    <button class="btn btn-custom-green-white btn-pdf"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                </div>
+                </form>
+                <div class="col-md-3">
+                    <a href="/member/mlm/product_code/sell" class="panel-buttons btn btn-primary pull-right">Sell Product</a>
+                    <a href="/member/mlm/product_code/receipt" class="panel-buttons btn btn-default pull-right">View Receipt(s)</a>
+                </div>
+            </div>
+            
         </div>
     </div>
 </div>
@@ -24,9 +51,8 @@
         <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#blocked-codes"><i class="fa fa-trash"></i> Blocked Codes</a></li>
     </ul>
     <div class="search-filter-box">
-        <div class="col-md-2" style="padding: 10px">
-        </div>  
-        <div class="col-md-2" style="padding: 10px">
+        <div class="col-md-4" style="padding: 10px">
+
         </div>  
         <div class="col-md-4 col-md-offset-4" style="padding: 10px">
             <div class="input-group">

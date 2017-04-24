@@ -63,8 +63,6 @@ class PayrollTimeSheetController extends Member
 			$payroll_employee_id = $data['_employee'][0]->payroll_employee_id;
 		}
 
-		
-
 		$data["current_employee"] = $current_employee = Tbl_payroll_employee_basic::where("payroll_employee_id", $payroll_employee_id)->first();
 
 		$current_employee_id = 0;
@@ -84,7 +82,6 @@ class PayrollTimeSheetController extends Member
 		}
 
 		$data["default_time_in"] = Carbon::parse($payroll_group_start)->format("h:i A");
-
 		$data["default_time_out"] = Carbon::parse($payroll_group_end)->format("h:i A");
 
 		// dd($data);
@@ -106,11 +103,15 @@ class PayrollTimeSheetController extends Member
 
 		/* GET EMPLOYEE INFORMATION */
 		$data["employee_info"] = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->first();
+		$data["employee_contract"] = Tbl_payroll_employee_contract::selemployee($employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
+
+		$payroll_group_start 	= $data["employee_contract"]->payroll_group_start;
+		$payroll_group_end 		= $data["employee_contract"]->payroll_group_end;
 
 		/* INITALIZE SETTINGS FOR EMPLOYEE */
 		$time_rule = $data["time_rule"] = "regulartime"; //flexitime, regulartime
-		$data["default_time_in"] = $default_time_in = "09:00 AM";
-		$data["default_time_out"] = $default_time_out = "06:00 PM";
+		$data["default_time_in"] = $default_time_in = Carbon::parse($payroll_group_start)->format("h:i A");
+		$data["default_time_out"] = $default_time_out =Carbon::parse($payroll_group_end)->format("h:i A");
 		$data["default_working_hours"] = $default_working_hours = "08:00";
 
 		/* CREATE ARRAY TIMESHEET */

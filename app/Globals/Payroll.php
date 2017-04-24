@@ -585,6 +585,7 @@ class Payroll
 		$regular_holiday_hours 		= 0;
 		$break 						= 0;
 		$total_under_time 			= 0;
+		$absent						= false;
 
 		$default_time_in 	= c_time_to_int($default_time_in);
 		$default_time_out 	= c_time_to_int($default_time_out);
@@ -813,6 +814,7 @@ class Payroll
 		{	
 			$date = $data["time_sheet_info"]->payroll_time_date;
 		}
+
 		foreach($_rest_day as $rest_day)
 		{
 			if($rest_day->payroll_group_rest_day == Carbon::parse($date)->format("l"))
@@ -842,6 +844,15 @@ class Payroll
 			}
 		}
 
+		/* CHECK IF ABSENT */
+		if($total_rest_day_hours == 0 && $total_extra_day_hours == 0 && $total_hours == 0)
+		{
+			$absent = true;
+		}
+		else
+		{
+			$absent = false;
+		}
 
 		$return->time_spent 		= convert_seconds_to_hours_minutes("H:i", $total_time_spent);
 		$return->regular_hours 		= convert_seconds_to_hours_minutes("H:i", $total_regular_hours);
@@ -857,6 +868,7 @@ class Payroll
 		$return->regular_holiday_hours = convert_seconds_to_hours_minutes("H:i", $regular_holiday_hours);
 		$return->break 				= convert_seconds_to_hours_minutes("H:i", $break);
 		$return->time_record 		= $time_rec;
+		$return->absent 			= true;
 
 		return $return;
 	}

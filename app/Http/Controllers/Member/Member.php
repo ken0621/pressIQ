@@ -8,7 +8,7 @@ use App\Models\Tbl_warehouse;
 
 use App\Globals\Account;
 use App\Globals\Warehouse;
-use App\Globals\Seed_manual;
+use App\Globals\Seed_manuals;
 use App\Globals\Utilities;
 use App\Globals\Payroll;
 use App\Globals\Settings;

@@ -58,10 +58,7 @@
 <link rel="stylesheet" type="text/css" href="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.css">
 @endsection
 @section('script')
-<script type="text/javascript">
-default_time_in = '{{ $default_time_in }}';
-default_time_out = '{{ $default_time_out }}';
-</script>
+
 <script type="text/javascript" src="/assets/member/payroll/js/timesheet.js"></script>
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>

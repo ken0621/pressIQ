@@ -261,3 +261,7 @@
     </div>
 </div>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
+<script type="text/javascript">
+    default_time_in = '{{ $default_time_in }}';
+    default_time_out = '{{ $default_time_out }}';
+</script>

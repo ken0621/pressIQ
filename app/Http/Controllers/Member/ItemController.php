@@ -347,6 +347,7 @@ class ItemController extends Member
 
 					$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
 				}
+				Warehouse::insert_item_to_all_warehouse($item_id, $item_reorder_point);
 
 				$for_serial_item[$item_id]["quantity"] = $item_quantity;
                 $for_serial_item[$item_id]["product_id"] = $item_id;

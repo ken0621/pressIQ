@@ -205,10 +205,13 @@ class MLM_ReportController extends Member
     }
     public function get_report()
     {
-        // return $_POST;
 
         $filter['from'] = Request::input('from');
         $filter['to'] = Request::input('to');
+        $from = Carbon::parse($filter['from']);
+        $to = Carbon::parse($filter['to'])->addDay(1);
+        $filter['to'] = $to;
+        $filter['from'] = $from;
         $filter['skip'] = Request::input('skip');
         $filter['take'] = Request::input('take');
 

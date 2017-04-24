@@ -58,6 +58,7 @@ class MLM_ProductCodeController extends Member
 
     public function sell()
     {
+        dd(php_info);
         $access = Utilities::checkAccess('mlm-product-code', 'product_code_sell_codes');
         $data['_item']  = Item::get_all_category_item();
         // dd($data);

@@ -166,5 +166,226 @@
 			"default":"START NOW!",
 			"size":"6"
 		}
+	},
+	"company":
+	{
+		"company_intro_image" : 
+		{
+			"label":"Company Intro Image",
+			"type":"image",
+			"default":"",
+			"size":"12"
+		},
+		"about_title" :
+		{
+			"label":"About Title",
+			"type":"textbox",
+			"default":"ABOUT US",
+			"size":"12"
+		},
+		"about_description" :
+		{
+			"label":"About Description",
+			"type":"textbox",
+			"default":"ALPHA GLOBAL PRESTIGE is a company formed by Filipino professionals based in the United Arab Emirates. Bound together by a common goal, each with their own expertise, they have decided it’s about time that expatriates in the UAE will be given a free choice and be catered with all their needs. By providing convenient e-services, the main aim is to help and alleviate the lives of expatriates around the globe. Alpha Global Prestige envisions prosperity for all. Alpha Global Prestige also promotes real estate investments, free entrepreneurships, encourages self development and offers a wide array of natural skincare and healthcare products.",
+			"size":"12"
+		}
+	},
+	"testimonial":
+	{
+		"testimonial_intro_image" : 
+		{
+			"label":"Testimonial Intro Image",
+			"type":"image",
+			"default":"/themes/agp/resources/assets/front/img/testimony-banner.jpg",
+			"size":"6"
+		},
+		"testimonial_testimonies" :
+		{
+			"label":"Testimonies",
+			"type":"maintenance",
+			"default":"",
+			"size":"6",
+			"field":[
+				{"name":"before_image", "type":"image"},
+				{"name":"after_image", "type":"image"},
+				{"name":"name", "type":"text"},
+				{"name":"title", "type":"text"},
+				{"name":"testimony", "type":"textbox"}
+			]
+		}
+	},
+	"policies":
+	{
+		"policies_refund_title" : 
+		{
+			"label":"Refund and Cancellation Title",
+			"type":"textbox",
+			"default":"Alpha Global Prestige Refund and Cancellation Policy",
+			"size":"6"
+		},
+		"policies_refund_description" : 
+		{
+			"label":"Refund and Cancellation Description",
+			"type":"textbox",
+			"default":"There is no refund and or cancellation policy.",
+			"size":"6"
+		},
+		"policies_terms_title" : 
+		{
+			"label":"Terms and Condition Title",
+			"type":"textbox",
+			"default":"Terms and Conditions",
+			"size":"6"
+		},
+		"policies_terms_description" : 
+		{
+			"label":"Terms and Condition Description",
+			"type":"textbox",
+			"default":"Once payment is made, allow 2 to 3 working days for Alpha Global Prestige to ready your product package and confirm your payment so that it can be shipped to your address. The special membership that you purchase online will be shipped once payment is cleared. You will be able to select the type of package if within UAE, for packages outside UAE we have an international package. For packages within UAE, the product can be picked up from our head office in Dubai, there will be separate courier charges if the customer would like the product to be shipped. Product package pick up is optional and no shipping charges will be applied if products will be picked up from Dubai Head office. Please be very careful when selecting your membership package if it is meant for UAE market and to be collected in Dubai Head office or if it meant for outside the UAE it is to be Shipped. If any further information about any of the products is required, please do e-mail and contact us for more information. Once the payment is complete, your unique special membership code will be sent to your email.",
+			"size":"6"
+		},
+		"policies_shipping_title" : 
+		{
+			"label":"Shipping Policy Title",
+			"type":"textbox",
+			"default":"Shipping Policy",
+			"size":"6"
+		},
+		"policies_shipping_description" : 
+		{
+			"label":"Shipping Policy Description",
+			"type":"textbox",
+			"default":"The products / package will be couriered by Fedex. Once the order and payment is complete, the shipment may take a total of 4 to 10 working days depending on the client’s destination. Please make sure the shipping address is correct with accurate contact number. The airway bill and cost of shipping will be sent to the customer. Please make sure you keep us updated with your latest delivery address and contact information. The courier charges are based on the weight and final destination of recipient.",
+			"size":"6"
+		}
+	},
+	"contact":
+	{
+		"contact_title" : 
+		{
+			"label":"Contact Intro Title",
+			"type":"textbox",
+			"default":"Contact Us",
+			"size":"6"
+		},
+		"contact_sub_title" : 
+		{
+			"label":"Contact Sub Title",
+			"type":"textbox",
+			"default":"Get Intouch With Us",
+			"size":"6"
+		},
+		"contact_location_title" : 
+		{
+			"label":"Contact Location Title",
+			"type":"textbox",
+			"default":"Location",
+			"size":"12"
+		},
+		"contact_location_address" : 
+		{
+			"label":"Contact Address",
+			"type":"textbox",
+			"default":" Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+			"size":"4"
+		},
+		"contact_location_phone" : 
+		{
+			"label":"Contact Phone Number",
+			"type":"textbox",
+			"default":"+44 870 888 88 88",
+			"size":"4"
+		},
+		"contact_location_email" : 
+		{
+			"label":"Contact Phone Number",
+			"type":"textbox",
+			"default":"youremail@here.com",
+			"size":"4"
+		},
+		"contact_business_title" : 
+		{
+			"label":"Business Hours Title",
+			"type":"textbox",
+			"default":"Business Hours",
+			"size":"6"
+		},
+		"contact_business_hours" : 
+		{
+			"label":"Business Hours",
+			"type":"textbox",
+			"default":"Monday - Friday at 9:00am - 6:00pm",
+			"size":"6"
+		}
+	},
+	"header":
+	{
+		"header_call_label" : 
+		{
+			"label":"Call Us Now Label",
+			"type":"textbox",
+			"default":"CALL US NOW",
+			"size":"6"
+		},
+		"header_call_number" : 
+		{
+			"label":"Call Us Now Number",
+			"type":"textbox",
+			"default":"09999999999",
+			"size":"6"
+		},
+		"header_email_label" : 
+		{
+			"label":"Email Label",
+			"type":"textbox",
+			"default":"Email US",
+			"size":"6"
+		},
+		"header_email_address" : 
+		{
+			"label":"Email Address",
+			"type":"textbox",
+			"default":"sample@email.com",
+			"size":"6"
+		}
+	},
+	"footer":
+	{
+		"footer_contact_number" : 
+		{
+			"label":"Contact Number",
+			"type":"textbox",
+			"default":"09999999999",
+			"size":"6"
+		},
+		"footer_contact_email" : 
+		{
+			"label":"Email Address",
+			"type":"textbox",
+			"default":"sample@email.com",
+			"size":"6"
+		},
+		"footer_facebook_link" : 
+		{
+			"label":"Facebook Link",
+			"type":"textbox",
+			"default":"http://facebook.com",
+			"size":"6"
+		},
+		"footer_twitter_link" : 
+		{
+			"label":"Twitter Link",
+			"type":"textbox",
+			"default":"http://twitter.com",
+			"size":"6"
+		},
+		"footer_pinterest_link" : 
+		{
+			"label":"Pinterest Link",
+			"type":"textbox",
+			"default":"http://pinterest.com",
+			"size":"6"
+		}
 	}
 }

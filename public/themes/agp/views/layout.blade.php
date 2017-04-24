@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <base href="{{ URL::to('/themes/'.$shop_theme.'') }}/">
     <!-- Title -->
-    <title>Alpha Global Prestige</title>
+    <title>Alpha Global Prestige - {{ $page }}</title>
     <link rel="icon"  type="image/png" href="assets/front/img/logo.png">
     <!-- Responsive Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -85,7 +85,7 @@
                 <div class="span6" id="ewan">
                     <div class="pull-left">
                         <div id="widget_topinfo-2" class="widget widget_topinfo">
-                            <div class="topinfo">CALL US NOW: @if(isset($content_about['contact_us_phone'])) {{$content_about['contact_us_phone']}} @endif</span><span class="email">EMAIL US: @if(isset($content_about['contact_us_email'])) {{$content_about['contact_us_email']}} @endif</span></div>
+                            <div class="topinfo">{{ get_content($shop_theme_info, "header", "header_call_label") }}: {{ get_content($shop_theme_info, "header", "header_call_number") }}</span><span class="email">{{ get_content($shop_theme_info, "header", "header_email_label") }}: {{ get_content($shop_theme_info, "header", "header_email_address") }}</span></div>
                         </div>
                     </div>
                 </div>
@@ -95,9 +95,9 @@
                             <div class="row-fluid social_row">
                                 <div class="span12 account-button">
                                     <ul class="text-center" style="margin-top: 0;">
-                                        <li><a href="/member/login">LOG IN</a></li>
+                                        <li><a href="/mlm/login">LOG IN</a></li>
                                         <li><div class="divider">|</div></li>
-                                        <li><a href="/member/register">SIGN UP</a></li>
+                                        <li><a href="/mlm/register">SIGN UP</a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -143,12 +143,8 @@
                                     <li class="{{ Request::segment(1) == '' ? 'current-menu-ancestor' : '' }} menu-item-has-children"><a href="/">Home</a></li>
                                     <li class="{{ Request::segment(1) == 'product' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/product">Products</a></li>
                                     <li class="{{ Request::segment(1) == 'about' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/about">Company</a></li>
-                                    <li class="{{ Request::segment(1) == 'about' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/testimony">Testimonials</a></li>
-                                    <!-- <li class="hide {{ Request::segment(1) == 'earn' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/earn">Earn</a></li> -->
-                                    <!-- <li class="{{ Request::segment(1) == 'partner' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/partner">Partners</a></li> -->
-                                    <!-- <li class="{{ Request::segment(1) == 'service' ? 'current-menu-ancestor' : '' }} menu-item-has-children"><a href="/service">Services</a></li> -->
+                                    <li class="{{ Request::segment(1) == 'testimony' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/testimony">Testimonials</a></li>
                                     <li class="{{ Request::segment(1) == 'policy' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/policy">Policies</a></li>
-                                    <!-- <li class="{{ Request::segment(1) == 'news' ? 'current-menu-ancestor' : '' }}  menu-item-has-children"><a href="/news">News</a></li> -->
                                     <li class="{{ Request::segment(1) == 'contact' ? 'current-menu-ancestor' : '' }}  menu-item-has-children"><a href="/contact">Contact Us</a></li>
                                 </ul>
                             </nav>
@@ -169,24 +165,21 @@
                 <li class="{{ Request::segment(1) == '' ? 'current-menu-ancestor' : '' }} menu-item-has-children"><a href="/">Home</a></li>
                 <li class="{{ Request::segment(1) == 'product' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/product">Products</a></li>
                 <li class="{{ Request::segment(1) == 'about' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/about">Company</a></li>
-                <li class="{{ Request::segment(1) == 'about' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/testimony">Testimonials</a></li>
-                <!-- <li class="hide {{ Request::segment(1) == 'earn' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/earn">Earn</a></li> -->
-                <!-- <li class="{{ Request::segment(1) == 'partner' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/partner">Partners</a></li> -->
-                <!-- <li class="{{ Request::segment(1) == 'service' ? 'current-menu-ancestor' : '' }} menu-item-has-children"><a href="/service">Services</a></li> -->
+                <li class="{{ Request::segment(1) == 'testimony' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/testimony">Testimonials</a></li>
                 <li class="{{ Request::segment(1) == 'policy' ? 'current-menu-ancestor' : '' }} menu-item   menu-item-has-children"><a href="/policy">Policies</a></li>
-                <!-- <li class="{{ Request::segment(1) == 'news' ? 'current-menu-ancestor' : '' }}  menu-item-has-children"><a href="/news">News</a></li> -->
                 <li class="{{ Request::segment(1) == 'contact' ? 'current-menu-ancestor' : '' }}  menu-item-has-children"><a href="/contact">Contact Us</a></li>
             </ul>
         </div>
         <!-- End Responsive Menu -->
     </div>
+
     @yield('content')
  
     <div class="clearfix"></div>
     <footer>
         <div class="container">
             <div class="clearfix">
-                <div class="vc_col-sm-3 wpb_column column_container">
+                <div class="vc_col-sm-4 wpb_column column_container">
                     <div class="title">INFORMATION</div>
                     <ul class="list">
                         <li><a href="/">HOME</a></li>
@@ -195,26 +188,19 @@
                         <li><a href="/contact">CONTACT</a></li>
                     </ul>
                 </div>
-                <div class="vc_col-sm-3 wpb_column column_container">
+                <div class="vc_col-sm-4 wpb_column column_container">
                     <div class="title">CONTACT US</div>
                     <ul class="list">
-                        <!-- <li><a href="javascript:">0999-000-0000</a></li> -->
-                        <li><a href="javascript:">@if(isset($content_about['contact_us_phone'])) {{$content_about['contact_us_phone']}} @endif</a></li>
-                        <li><a href="mailto:youremail@here.com">@if(isset($content_about['contact_us_email'])) {{$content_about['contact_us_email']}} @endif</a></li>
-
+                        <li><a href="javascript:">{{ get_content($shop_theme_info, "footer", "footer_contact_number") }}</a></li>
+                        <li><a href="mailto:{{ get_content($shop_theme_info, "footer", "footer_contact_email") }}">{{ get_content($shop_theme_info, "footer", "footer_contact_email") }}</a></li>
                     </ul>
                 </div>
-                <div class="vc_col-sm-3 wpb_column column_container">
-                    <div class="title">NEWSLETTER</div>
-                    <p class="desc">@if(isset($content_about['contact_us_news_letter'])) {{$content_about['contact_us_news_letter']}} @endif</p>
-                    <div class="newsletter-holder clearfix"><input class="form-control" type="email" placeholder="Enter your email here"><button><img src="resources/assets/front/img/newsletter-icon.png"></button></div>
-                </div>
-                <div class="vc_col-sm-3 wpb_column column_container">
+                <div class="vc_col-sm-4 wpb_column column_container">
                     <div class="title">FOLLOW US ON</div>
                     <div class="social-holder">
-                        <div class="holder" onClick="location.href='{{ isset($content_about['facebook_link']) ? $content_about['facebook_link'] : '' }}'"><img src="resources/assets/front/img/fb.png"></div>
-                        <div class="holder" onClick="location.href='{{ isset($content_about['twitter_link']) ? $content_about['twitter_link'] : '' }}'"><img src="resources/assets/front/img/tt.png"></div>
-                        <div class="holder" onClick="location.href='{{ isset($content_about['pinterest_link']) ? $content_about['pinterest_link'] : '' }}'"><img src="resources/assets/front/img/pp.png"></div>
+                        <div class="holder" onClick="location.href='{{ get_content($shop_theme_info, "footer", "footer_facebook_link") }}'"><img src="resources/assets/front/img/fb.png"></div>
+                        <div class="holder" onClick="location.href='{{ get_content($shop_theme_info, "footer", "footer_twitter_link") }}'"><img src="resources/assets/front/img/tt.png"></div>
+                        <div class="holder" onClick="location.href='{{ get_content($shop_theme_info, "footer", "footer_pinterest_link") }}'"><img src="resources/assets/front/img/pp.png"></div>
                     </div>
                 </div>
             </div>

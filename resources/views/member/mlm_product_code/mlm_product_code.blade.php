@@ -22,11 +22,11 @@
                 <input type="hidden" name="pdf" value="excel">
                 <div class="col-md-3">
                     <span><small style="color:gray">From</small></span>
-                    <input type="date" class="form-control" name="from">
+                    <input type="date" class="form-control" name="from" value="{{Carbon\Carbon::now()->format('Y-m-d')}}">
                 </div>
                 <div class="col-md-3">
                     <span><small style="color:gray">To</small></span>
-                    <input type="date" class="form-control" name="to">
+                    <input type="date" class="form-control" name="to" value="{{Carbon\Carbon::now()->format('Y-m-d')}}">
                 </div>
                 <div class="col-md-3">
                     <span><small style="color:gray">CASHIER'S END SESSION REPORT</small></span>

@@ -84,7 +84,7 @@ function timesheet()
 			
 			$('.btn-mark-ready').html(spinner);
 			$.ajax({
-				url 	: 	"/member/payroll/company_timesheet/mark_ready_company",
+				url 	: 	"/member/payroll/timesheet/mark_ready_company",
 				type 	: 	"POST",
 				data 	: 	{
 					_token:$("#_token").val(),

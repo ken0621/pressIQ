@@ -28,16 +28,38 @@ use Carbon\carbon;
 class Billing
 {
 
-
-    public static function count_ap()
+    public static function count_ap($start_date, $end_date)
     {
-         $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())->where("bill_is_paid",0)->count();
+         $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())->whereBetween("date_created",array($start_date,$end_date))->where("bill_is_paid",0)->count();
          return $bill;
     }
-    public static function get_ap_amount()
+    public static function count_paid_bills($start_date, $end_date)
+    {
+         $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())->whereBetween("date_created",array($start_date,$end_date))->where("bill_is_paid",1)->count();
+         return $bill;
+    }
+    public static function get_ap_amount($start_date, $end_date)
     {
         $price = 0;
-        $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())->where("bill_is_paid",0)->get();
+        $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())
+                                ->whereBetween("date_created",array($start_date,$end_date))
+                                ->where("bill_is_paid",0)->get();
+        if(isset($bill))
+        {
+            foreach ($bill as $key => $value) 
+            {
+               $price += $value->bill_total_amount;
+            }            
+        }
+
+        return $price;
+    }
+    public static function get_paid_bills_amount($start_date, $end_date)
+    {
+        $price = 0;
+        $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())
+                                ->whereBetween("date_created",array($start_date,$end_date))
+                                ->where("bill_is_paid",1)->get();
         if(isset($bill))
         {
             foreach ($bill as $key => $value) 

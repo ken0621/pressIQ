@@ -115,6 +115,8 @@ class MLM_SlotController extends Member
     }
     public function index()
     {
+        // $slot = Mlm_compute::get_slot_info(1);
+        // return Mlm_complan_manager_repurchase::triangle_repurchase_graduate(178, 1);
         // return 1;
         // $shop_id = $this->user_info->shop_id;
         // $slot = Mlm_compute::get_slot_info(336);

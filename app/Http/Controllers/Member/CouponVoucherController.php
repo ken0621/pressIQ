@@ -22,6 +22,14 @@ use Carbon\Carbon;
 use Session;
 use Redirect;
 use PDF;
+
+/**
+ * Coupon Code Module - all coupon and voucher realated module
+ *
+ * @author Bryan Kier Aradanas
+ * Route Controller
+ */
+
 class CouponVoucherController extends Member
 {
     public function index()
@@ -50,25 +58,30 @@ class CouponVoucherController extends Member
 
     public function getGenerateCode()
     {
-        return view('member.ecommerce_coupon.generate_coupon');
+        $data['_product'] = Ecom_Product::getProductList();
+
+        return view('member.ecommerce_coupon.generate_coupon', $data);
     }
 
     public function getEditGenerateCode($coupon_id)
     {
-        $data["coupon"] = Tbl_coupon_code::where("coupon_code_id", $coupon_id)->first();
+        $data["coupon"]     = Tbl_coupon_code::where("coupon_code_id", $coupon_id)->first();
+        $data['_product']   = Ecom_Product::getProductList();
 
         return view('member.ecommerce_coupon.generate_coupon', $data);
     }
 
     public function postGenerateCode()
     {
-        $coupon_code_id = Request::input('coupon_id');
-        $coupon_amount  = Request::input('coupon_amount');
-        $coupon_type    = Request::input('coupon_amount_type');
+        $coupon_code_id             = Request::input('coupon_id');
+        $coupon_product_id          = Request::input('coupon_product_id');
+        $coupon_amount              = Request::input('coupon_amount');
+        $coupon_type                = Request::input('coupon_amount_type');
+        $coupon_minimum_quantity    = Request::input('coupon_minimum_quantity');
 
         if(!$coupon_code_id)
         {
-            $coupon =  Cart::generate_coupon_code(8, $coupon_amount, $coupon_type);
+            $coupon =  Cart::generate_coupon_code(8, $coupon_amount, $coupon_minimum_quantity, $coupon_type, $coupon_product_id);
             return json_encode($coupon);
         }
         else

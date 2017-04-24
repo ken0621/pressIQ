@@ -317,15 +317,15 @@ class Cart
         {
             foreach($_cart["cart"] as $key => $cart)
             {
-                if($key == $product_id)
+                if($cart["product_id"] == $product_id)
                 {
                     $condition = true;
 
-                    Tbl_cart::where("date_added",$_cart["cart"][$key]["date_added"])
-                            ->where("shop_id",$_cart["cart"][$key]['shop_id'])
-                            ->where("product_id",$_cart["cart"][$key]['product_id'])
-                            ->where("unique_id_per_pc",$_cart["cart"][$key]['unique_id_per_pc'])
-                            ->delete($_cart["cart"][$key]);
+                    Tbl_cart::where("date_added",$cart["date_added"])
+                            ->where("shop_id",$cart['shop_id'])
+                            ->where("product_id",$cart['product_id'])
+                            ->where("unique_id_per_pc",$cart['unique_id_per_pc'])
+                            ->delete();
 
                     unset($_cart["cart"][$key]);
                 }
@@ -338,7 +338,8 @@ class Cart
             }
             else
             {
-                 Session::put($unique_id,$_cart["cart"]);
+                 Session::put($unique_id,$_cart);
+
                  $message["status"]         = "success";
                  $message["status_message"] = "Successfully removed.";
             }
@@ -506,7 +507,7 @@ class Cart
         return $data;
     }
 
-    public static function generate_coupon_code($word_limit,$price,$type="fixed")
+    public static function generate_coupon_code($word_limit, $price, $minimum_quantity = 0, $type="fixed", $coupon_product_id = null)
     {
         //get_shop_info
         $shop_id = Cart::get_shop_info();
@@ -549,10 +550,12 @@ class Cart
             }
 
             $insert["id_per_coupon"]           =  $id_per_coupon;                
-            $insert["coupon_code"]             =  $generated_word;              
+            $insert["coupon_code"]             =  $generated_word;  
+            $insert["coupon_product_id"]       =  $product_id;              
             $insert["coupon_code_amount"]      =  $price;                     
             $insert["coupon_discounted"]       =  $type;                     
-            $insert["shop_id"]                 =  $shop_id;          
+            $insert["shop_id"]                 =  $shop_id;
+            $insert["coupon_minimum_quantity"] =  $minimum_quantity           
             $insert["date_created"]            =  Carbon::now();  
             Tbl_coupon_code::insert($insert);
 

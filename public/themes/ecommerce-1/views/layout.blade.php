@@ -27,7 +27,27 @@
         <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
         <!-- OTHER CSS -->
         @yield("css")
-
+        <style type="text/css">
+        body
+        {
+            background-image: url('/themes/{{ $shop_theme  }}/img/final.jpg'); 
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed;
+        }
+        .content
+        {
+            background-color: transparent;
+        }
+        .navbar.sticky
+        {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
@@ -119,8 +139,10 @@
 	  </div><!-- /.container-fluid -->
 	</nav>
 
-	@yield("content")
-   
+    <div id="scroll-to" class="clearfix">
+	   @yield("content")
+    </div>
+
     <!-- FOOTER -->
   	<footer>
    	    <div class="container ftr">

@@ -21,9 +21,12 @@ use App\Models\Tbl_ec_order;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_coupon_code;
-use App\Models\Tbl_payment_method;
+use App\Models\Tbl_online_pymnt_method;
 
 use Request;
+use Input;
+use File;
+use Response;
 use Carbon\Carbon;
 use Session;
 use Redirect;
@@ -34,11 +37,11 @@ class ProductOrderController extends Member
     {
         $data["page"]               = "Customer Invoice";
         $data["_customer"]          = Tbl_customer::where("archived", 0)->get();
-        $data["_payment_method"]    = Tbl_payment_method::where("archived", 0)->where("shop_id",$this->user_info->shop_id)->get();
+        $data["_payment_method"]    = Tbl_online_pymnt_method::get();
         $data['_product']           = Ecom_Product::getProductList();
         // dd($data);
-        $data['_um']        = UnitMeasurement::load_um_multi();
-        $data["action"]     = "/member/ecommerce/product_order/create_order/create_invoice";
+        $data['_um']                = UnitMeasurement::load_um_multi();
+        $data["action"]             = "/member/ecommerce/product_order/create_order/create_invoice";
 
         $id = Request::input('id');
         if($id)
@@ -71,12 +74,13 @@ class ProductOrderController extends Member
     }
     public function invoice_list()
     {
-        $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Pending")->get();
-        $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Failed")->get();
-        $data["ec_order_processing"] = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Processing")->get();
-        $data["ec_order_completed"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Completed")->get();
-        $data["ec_order_on_hold"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","On-hold")->get();
-        $data["ec_order_cancelled"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Cancelled")->get();
+        $data["ec_order_pending"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Pending")->paginate(10);
+        $data["ec_order_failed"]     = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Failed")->paginate(10);
+        $data["ec_order_processing"] = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Processing")->paginate(10);
+        $data["ec_order_shipped"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Shipped")->paginate(10);
+        $data["ec_order_completed"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Completed")->paginate(10);
+        $data["ec_order_on_hold"]    = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","On-hold")->paginate(10);
+        $data["ec_order_cancelled"]  = Tbl_ec_order::customer()->where("shop_id",$this->user_info->shop_id)->where("order_status","Cancelled")->paginate(10);
         return view("member.product_order.product_order",$data);
     }
     public function create_invoice()
@@ -227,9 +231,9 @@ class ProductOrderController extends Member
     }
     public function update_invoice()
     {   
-        $data["ec_order_id"]                = Request::input("ec_order_id");
-        $data["order_status"]               = Request::input("order_status");
-        $data["payment_method_id"]          = Request::input("payment_method_id");
+        $data["ec_order_id"]    = Request::input("ec_order_id");
+        $data["order_status"]   = Request::input("order_status");
+        $data["payment_status"] = Request::input("payment_status");
 
         $response                           = Ec_order::update_ec_order($data);
         if(isset($response["status"]))
@@ -253,6 +257,51 @@ class ProductOrderController extends Member
             $return["redirect_to"]              = "/member/ecommerce/product_order/create_order?id=".$data["ec_order_id"];
             return json_encode($return);
         }
+    }
+
+    public function submit_payment_upload()
+    {
+        $shop_id    = $this->user_info->shop_id;
+        $shop_key   = $this->user_info->shop_key;
+        $order_id   = Request::input('ec_order_id');
+
+        /* SAVE THE IMAGE IN THE FOLDER */
+        $file               = Input::file('file');
+
+        if($file)
+        {
+            $extension          = $file->getClientOriginalExtension();
+            //$filename         = $file->getClientOriginalName();
+            $filename           = str_random(15).".".$extension;
+            $destinationPath    = 'uploads/'.$shop_key."-".$shop_id.'/ecommerce-upload';
+
+            if(!File::exists($destinationPath)) 
+            {
+                $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+            }
+
+            $upload_success    = Input::file('file')->move($destinationPath, $filename);
+
+            /* SAVE THE IMAGE PATH IN THE DATABASE */
+            $image_path = $destinationPath."/".$filename;
+
+            $update["payment_upload"] = "/" . $image_path;
+            $image_id = Tbl_ec_order::where("ec_order_id", $order_id)->update($update);
+
+            if( $upload_success) 
+            {
+               return Response::json('success', 200);
+            } 
+            else 
+            {
+               return Response::json('error', 400);
+            }
+        }
+        else
+        {
+            return Response::json('success', 200);
+        }
+
     }
 
     public function invoice_view($invoice_id)

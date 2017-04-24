@@ -320,7 +320,11 @@ function purchase_order(){
         {
         	hasPopup: "false",
     		width : "100%",
-    		placeholder : "um.."
+    		placeholder : "um..",
+    		onChangeValue: function()
+    		{
+    			action_load_unit_measurement($(this));
+    		}
         }).globalDropList('disabled');
 	}
 

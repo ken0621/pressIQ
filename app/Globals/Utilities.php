@@ -3,6 +3,7 @@ namespace App\Globals;
 use DB;
 use App\Models\Tbl_user;
 use App\Models\Tbl_user_access;
+use App\Models\Tbl_mlm_plan;
 use Log;
 use Request;
 use Session;
@@ -81,27 +82,44 @@ class Utilities
                        {
                             $page_code         = $submenu['code'];
                             $setting_counter   = $array_count;
-                            foreach($submenu['user_settings'] as $key3=>$access_name)
+                            if($submenu["code"] == "mlm-stairstep-compute")
                             {
-                                // dd(Utilities::checkAccess($page_code, $access_name)."|".$page_code."-".$access_name);
-                                if(Utilities::checkAccess($page_code, $access_name) == 0)
+                                $check_shop         = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+                                if($check_shop)
                                 {
-                                    array_forget($_page_list, $key.'.submenu.'.$key2.".user_settings.".$key3);
-                                    $setting_counter--;
+                                    $check_stairstep = Tbl_mlm_plan::where("marketing_plan_code","STAIRSTEP")->where("shop_id",$check_shop)->where("marketing_plan_enable","1")->first();
+                                    if(!$check_stairstep)
+                                    {
+                                        unset($_page_list[$key]['submenu'][$key2]);
+                                    }
+                                    // dd();
                                 }
-                                if($position_id <> null)
-                                {
-                                	// dd(true);
-                                	$if_has_access = Tbl_user_access::where("access_position_id", $position_id)
-                                					->where("access_page_code", $page_code)
-                                					->where("access_name", $access_name)->first();
-                                	$_page_list[$key]['submenu'][$key2]['setting_is_checked'][$key3] = $if_has_access ? 1 : 0;
-                            	}
                             }
-                            if($setting_counter < 1)
+
+                            if(isset($_page_list[$key]['submenu'][$key2]))
                             {
-                                array_forget($_page_list, $key.'.submenu.'.$key2);
-                                $submenu_counter--;
+                                foreach($submenu['user_settings'] as $key3=>$access_name)
+                                {
+                                    // dd(Utilities::checkAccess($page_code, $access_name)."|".$page_code."-".$access_name);
+                                    if(Utilities::checkAccess($page_code, $access_name) == 0)
+                                    {
+                                        array_forget($_page_list, $key.'.submenu.'.$key2.".user_settings.".$key3);
+                                        $setting_counter--;
+                                    }
+                                    if($position_id <> null)
+                                    {
+                                    	// dd(true);
+                                    	$if_has_access = Tbl_user_access::where("access_position_id", $position_id)
+                                    					->where("access_page_code", $page_code)
+                                    					->where("access_name", $access_name)->first();
+                                    	$_page_list[$key]['submenu'][$key2]['setting_is_checked'][$key3] = $if_has_access ? 1 : 0;
+                                	}
+                                }
+                                if($setting_counter < 1)
+                                {
+                                    array_forget($_page_list, $key.'.submenu.'.$key2);
+                                    $submenu_counter--;
+                                }
                             }
                        }
 

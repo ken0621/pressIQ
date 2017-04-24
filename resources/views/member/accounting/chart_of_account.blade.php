@@ -30,7 +30,7 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
         <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab"><i class="fa fa-star"></i> Active Accounts</a></li>
-        <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"><i class="fa fa-trash"></i> Inactive Accounts</a></li>
+        <!-- <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"><i class="fa fa-trash"></i> Inactive Accounts</a></li> -->
     </ul>
     
     <div class="tab-content">

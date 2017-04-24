@@ -42,8 +42,8 @@
 		    </div>
 		    <div class="tab-pane fade in active" id="method">
 		        <!-- FORM. GROUP -->
-		        <div class="form-box-divider">
-		            <div class="row clearfix">
+		        <div class="form-box-divider method-load-data">
+		            <div class="row clearfix method-data">
 		            	<div class="row col-md-2">
 			                <ul class="nav nav-tabs nav-stacked box-light">
 			                	@foreach($_method as $key=>$method)

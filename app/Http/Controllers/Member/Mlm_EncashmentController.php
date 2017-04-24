@@ -386,7 +386,12 @@ class Mlm_EncashmentController extends Member
     public function view_all_selected()
     {
         $shop_id = $this->user_info->shop_id;
-        $data['a'] = Mlm_report::encashment_rep_req($shop_id, 1);
+        $filter['from'] = Carbon::now()->addYears(-5);
+        $filter['to'] = Carbon::now();
+        $filter['skip'] = 0;
+        $filter['take'] = 99999;
+        // dd($filter);
+        $data['a'] = Mlm_report::encashment_rep_req($shop_id, $filter, 1);
         return view('member.mlm_encashment.requested_selected', $data);
     }
     public function request_all_selected()

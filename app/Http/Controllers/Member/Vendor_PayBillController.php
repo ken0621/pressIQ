@@ -34,11 +34,12 @@ class Vendor_PayBillController extends Member
     public function index()
     {        
         $data["v_id"]           = Request::input("vendor_id");
+        $data["bill_id"]           = Request::input("bill_id");
         $data["_vendor"]        = Vendor::getAllVendor('active');
         $data['_account']       = Accounting::getAllAccount();
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
         $data['action']         = "/member/vendor/paybill/add";
-        $data["_bill"]       = Billing::getAllBillByVendor($data["v_id"]);
+        $data["_bill"]          = Billing::getAllBillByVendor($data["v_id"]);
 
         $id = Request::input('id');
         if($id)
@@ -52,7 +53,12 @@ class Vendor_PayBillController extends Member
 
         return view("member.pay_bill.pay_bill", $data);
     }
+    public function paybill_list()
+    {
+        $data["_paybill"] = Tbl_pay_bill::vendor()->where("paybill_shop_id",$this->getShopId())->get();
 
+        return view("member.pay_bill.pay_bill_list",$data);
+    }
     public function load_vendor_pb($vendor_id)
     {
         $data["_bill"] = Billing::getAllBillByVendor($vendor_id);

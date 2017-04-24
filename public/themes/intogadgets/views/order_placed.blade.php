@@ -22,7 +22,7 @@
 						<tbody>
 							@foreach($_order as $key => $order)
 							<tr>
-								<td>{{ $order->item_name }}</td>
+								<td>{{ $order->evariant_item_label }}</td>
 								<td>{{ $order->quantity }}</td>
 								<td>&#8369; {{ number_format($order->total, 2) }}</td>
 							</tr>
@@ -38,7 +38,7 @@
 			@endif
 		</div>
 		<div class="text-center">
-			<button class="btn btn-primary">BACK TO SHOP</button>
+			<button class="btn btn-primary" onClick="location.href='/'">BACK TO SHOP</button>
 		</div>
 		<div style="margin-bottom: 100px;"></div>
 	</div>

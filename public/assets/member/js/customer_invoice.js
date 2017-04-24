@@ -667,6 +667,11 @@ function submit_done(data)
         toastr.success("Success");
        	location.href = "/tablet/invoice";
 	}
+	else if(data.status == 'success-tablet-sr')
+	{		
+        toastr.success("Success");
+       	location.href = "/tablet/sales_receipt/list";
+	}
     else if(data.status == "error")
     {
         toastr.warning(data.status_message);

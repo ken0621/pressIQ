@@ -71,3 +71,4 @@
         <button class="btn btn-primary btn-edit-account" type="submit">Update account</button>
     </div>
 </form>
+<script type="text/javascript" src="/assets/member/js/chart_account.js"></script>

@@ -547,11 +547,14 @@ class Customer_InvoiceController extends Member
     public function invoice_view($invoice_id)
     {
         $data["invoice_id"] = $invoice_id;
+
         $data["transaction_type"] = "INVOICE";
         if(Tbl_customer_invoice::where("inv_id",$invoice_id)->pluck("is_sales_receipt") != 0)
         {
             $data["transaction_type"] = "Sales Receipt";            
         }
+
+        $data["invoice_id"] = "INVOICE";
         $data["action_load"] = "/member/customer/customer_invoice_pdf";
         return view("member.customer_invoice.invoice_view",$data);
     }

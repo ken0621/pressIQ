@@ -473,13 +473,13 @@ Route::get('/member/contact','Store\StoreInfoController@contactInfo');
 Route::post('/member/contact/craeteContact','Store\StoreInfoController@craeteContact');
 //contact end
 
+Route::any('/member/customer/customer_invoice_view/{id}','Member\Customer_InvoiceController@invoice_view');
+Route::any('/member/customer/customer_invoice_pdf/{id}','Member\Customer_InvoiceController@invoice_view_pdf');
 Route::any('/member/customer/invoice_list','Member\Customer_InvoiceController@invoice_list');
 Route::get('/member/customer/invoice','Member\Customer_InvoiceController@index');
 Route::any('/member/customer/invoice/error/{id}', 'Member\Customer_InvoiceController@error_inv_no');
 Route::post('/member/customer/invoice/create','Member\Customer_InvoiceController@create_invoice');
 Route::post('/member/customer/invoice/update','Member\Customer_InvoiceController@update_invoice');
-Route::any('/member/customer/customer_invoice_view/{id}','Member\Customer_InvoiceController@invoice_view');
-Route::any('/member/customer/customer_invoice_pdf/{id}','Member\Customer_InvoiceController@invoice_view_pdf');
 
 //sales receipt
 Route::get('/member/customer/sales_receipt','Member\Customer_SaleReceiptController@index');

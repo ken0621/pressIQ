@@ -654,6 +654,7 @@ class Mlm_report
         ->take($filters['take'])
         ->where('item_code_date_created', '>=', $filters['from'])
         ->where('item_code_date_created', '<=', $filters['to'])
+
         ->customer()
         ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_item_code_invoice.slot_id')
         ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership');
@@ -669,6 +670,7 @@ class Mlm_report
             $data['warehouse'] = Tbl_warehouse::where('warehouse_id', $warehouse_id)->first();
         }
 
+
         $invoice = $invoice->get()->keyBy('item_code_invoice_id');
         // $item_code_item = Tbl_item_code_item::
         $where_in = [];
@@ -681,6 +683,7 @@ class Mlm_report
         $filter = [];
         $items_unfiltered = [];
         $data['payment'] = [];
+
         foreach($items as $key => $value)
         {
             if(isset($inventory[$value->item_name]['Price']))
@@ -725,7 +728,6 @@ class Mlm_report
             {
                 $data['payment'][$payment_a] = $value->item_membership_discounted * $value->item_quantity;
             }
-            
 
         }
 
@@ -766,7 +768,6 @@ class Mlm_report
         ->take($filters['take'])
         ->where('membership_code_date_created', '>=', $filters['from'])
         ->where('membership_code_date_created', '<=', $filters['to'])
-
         ->get();
 
         $package = Tbl_membership_package::get()->keyBy('membership_package_id');

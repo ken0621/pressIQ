@@ -9,6 +9,7 @@ use App\Globals\Pdf_global;
 use App\Globals\Cart;
 
 use App\Models\Tbl_customer;
+use App\Models\Tbl_user;
 use App\Models\Tbl_warehousea;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_manual_invoice;
@@ -22,8 +23,21 @@ use Carbon\Carbon;
 use Session;
 use Redirect;
 use PDF;
+
+/**
+ * Coupon Code Module - all coupon and voucher realated module
+ *
+ * @author Bryan Kier Aradanas
+ * Route Controller
+ */
+
 class CouponVoucherController extends Member
 {
+    public function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
+
     public function index()
     {
         
@@ -31,8 +45,8 @@ class CouponVoucherController extends Member
 
     public function getList()
     {
-        $unused_coupon  = Tbl_coupon_code::where("used", 0); 
-        $used_coupon    = Tbl_coupon_code::where("used", 1)->order();
+        $unused_coupon  = Tbl_coupon_code::where("used", 0)->product()->where("tbl_coupon_code.shop_id", $this->getShopId()); 
+        $used_coupon    = Tbl_coupon_code::where("used", 1)->product()->order()->where("tbl_coupon_code.shop_id", $this->getShopId());
 
         /* Filter Coupon By Search */
         $search = Request::input('search');
@@ -41,7 +55,7 @@ class CouponVoucherController extends Member
             $unused_coupon   = $unused_coupon->where("coupon_code","like","%$search%");
             $used_coupon     = $used_coupon->where("coupon_code","like","%$search%");
         }
-
+        
         $data["unused_coupon"]  = $unused_coupon->paginate(10);
         $data["used_coupon"]    = $used_coupon->paginate(10);
 
@@ -50,25 +64,30 @@ class CouponVoucherController extends Member
 
     public function getGenerateCode()
     {
-        return view('member.ecommerce_coupon.generate_coupon');
+        $data['_product'] = Ecom_Product::getProductList();
+
+        return view('member.ecommerce_coupon.generate_coupon', $data);
     }
 
     public function getEditGenerateCode($coupon_id)
     {
-        $data["coupon"] = Tbl_coupon_code::where("coupon_code_id", $coupon_id)->first();
+        $data["coupon"]     = Tbl_coupon_code::where("coupon_code_id", $coupon_id)->first();
+        $data['_product']   = Ecom_Product::getProductList();
 
         return view('member.ecommerce_coupon.generate_coupon', $data);
     }
 
     public function postGenerateCode()
     {
-        $coupon_code_id = Request::input('coupon_id');
-        $coupon_amount  = Request::input('coupon_amount');
-        $coupon_type    = Request::input('coupon_amount_type');
+        $coupon_code_id             = Request::input('coupon_id');
+        $coupon_product_id          = Request::input('coupon_product_id');
+        $coupon_amount              = Request::input('coupon_amount');
+        $coupon_type                = Request::input('coupon_amount_type');
+        $coupon_minimum_quantity    = Request::input('coupon_minimum_quantity');
 
         if(!$coupon_code_id)
         {
-            $coupon =  Cart::generate_coupon_code(8, $coupon_amount, $coupon_type);
+            $coupon =  Cart::generate_coupon_code(8, $coupon_amount, $coupon_minimum_quantity, $coupon_type, $coupon_product_id);
             return json_encode($coupon);
         }
         else

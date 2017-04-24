@@ -36,7 +36,7 @@ class PayrollTimeSheetController extends Member
 		$data["default_time_in"] = Carbon::parse($data["employee_info"]->payroll_group_start)->format("h:i A");
 		$data["default_time_out"] = Carbon::parse($data["employee_info"]->payroll_group_end)->format("h:i A");
 		$data['_company'] = Payroll::company_heirarchy($this->user_info->shop_id);
-
+		dd($data);
 		return view('member.payroll.employee_timesheet', $data);
 	}
 

@@ -1,24 +1,24 @@
 @extends('layout')
 @section('content')
-<div class="top_wrapper   no-transparent">
+<div class="top_wrapper no-transparent">
    <!-- SLIDER -->
    <div class="slide-container">
       @if(isset($_slider[0]))
-      @foreach($_slider as $slider)
-      <div>
-         <img src="/uploads/{{ $slider->image }}">
-      </div>
-      @endforeach
+         @foreach($_slider as $slider)
+         <div>
+            <img src="/uploads/{{ $slider->image }}">
+         </div>
+         @endforeach
       @else
-      <div>
-         <img src="resources/assets/front/img/1.jpg">
-      </div>
-      <div>
-         <img src="resources/assets/front/img/2.jpg">
-      </div>
-      <div>
-         <img src="resources/assets/front/img/3.jpg">
-      </div>
+         <div>
+            <img src="resources/assets/front/img/1.jpg">
+         </div>
+         <div>
+            <img src="resources/assets/front/img/2.jpg">
+         </div>
+         <div>
+            <img src="resources/assets/front/img/3.jpg">
+         </div>
       @endif
    </div>
    <!-- INFO TABS -->
@@ -91,7 +91,7 @@
                <div class="name">BEVERAGES</div>
                <div class="view">
                   <div class="not-hover"><img class="img-responsive" src="resources/assets/front/img/big-arrow.png"></div>
-                  <div class="hover"><a href="/product?category=">VIEW PRODUCTS <img src="resources/assets/front/img/small-arrow.png"></a></div>
+                  <div class="hover"><a href="/product">VIEW PRODUCTS <img src="resources/assets/front/img/small-arrow.png"></a></div>
                </div>
             </div>
          </div>
@@ -101,7 +101,7 @@
                <div class="name">BEAUTY PRODUCTS</div>
                <div class="view">
                   <div class="not-hover"><img class="img-responsive" src="resources/assets/front/img/big-arrow.png"></div>
-                  <div class="hover"><a href="/product?category=">VIEW PRODUCTS <img src="resources/assets/front/img/small-arrow.png"></a></div>
+                  <div class="hover"><a href="/product">VIEW PRODUCTS <img src="resources/assets/front/img/small-arrow.png"></a></div>
                </div>
             </div>
          </div>
@@ -111,7 +111,7 @@
                <div class="name">HYGIENE</div>
                <div class="view">
                   <div class="not-hover"><img class="img-responsive" src="resources/assets/front/img/big-arrow.png"></div>
-                  <div class="hover"><a href="/product?category=">VIEW PRODUCTS <img src="resources/assets/front/img/small-arrow.png"></a></div>
+                  <div class="hover"><a href="/product">VIEW PRODUCTS <img src="resources/assets/front/img/small-arrow.png"></a></div>
                </div>
             </div>
          </div>
@@ -121,7 +121,7 @@
                <div class="name">PACKAGES</div>
                <div class="view">
                   <div class="not-hover"><img class="img-responsive" src="resources/assets/front/img/big-arrow.png"></div>
-                  <div class="hover"><a href="/product?category=">VIEW PRODUCTS <img src="resources/assets/front/img/small-arrow.png"></a></div>
+                  <div class="hover"><a href="/product">VIEW PRODUCTS <img src="resources/assets/front/img/small-arrow.png"></a></div>
                </div>
             </div>
          </div>
@@ -222,7 +222,7 @@
                      </div>
                      @endforeach
                      @else
-                     <h2>There are Currently No News</h2>
+                     <h2 style="text-align: center;">There are Currently No News</h2>
                      @endif
                   </div>
                </div>

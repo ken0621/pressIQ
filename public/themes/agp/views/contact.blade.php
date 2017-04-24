@@ -1,70 +1,65 @@
-@extends("layout")
-@section("content")
-<!-- CONTENT -->
-	<div class="container content">
-		<div class="row clearfix">
-			<div class="col-md-12">
-				<div class="col-md-7">
-					<div id="get-intouch" class="content-title">Get Intouch With Us</div>
-					<!-- INPUTS -->
-					<div class="inputs">
-						<div class="col-md-6">
-							
-								<input type="text" class="form-control" placeholder="First Name*">
-								<input type="text" class="form-control" placeholder="Phone Number*">
-								<input type="text" class="form-control" placeholder="Subject">
-							
-						</div>
-						<div class="col-md-6">
-							
-								<input type="text" class="form-control" placeholder="Last Name*">
-								<input type="text" class="form-control" placeholder="Email Address*">
-							
-						</div>
-						<div class="col-md-12">
-							
-								<textarea class="form-control" placeholder="Message" style="height: 180px;"></textarea>
-								<!-- SEND BUTTON -->
-								<button>SEND</button>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-5">
-						<div id="location" class="content-title">Location</div>
-						<table>
-							<tr>
-								<td class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></td>
-								<td class="par">{{ isset($company_info['company_address']) ? $company_info['company_address']->value : 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.' }}</td>
-							</tr>
-							<tr>
-								<td class="icon"><i class="fa fa-mobile" aria-hidden="true"></i></td>
-								<td class="par">{{ isset($company_info['company_mobile']) ? $company_info['company_mobile']->value : '+44 870 888 88 88' }}</td>
-							</tr>
-							<tr>
-								<td class="icon"><i class="fa fa-envelope" aria-hidden="true"></td>
-								<td class="par">{{ isset($company_info['company_email']) ? $company_info['company_email']->value : 'youremailhere@company.com' }}</td>
-							</tr>
-						</table>
-					<div>
-						<div class="content-title business-hours">Business Hours</div>
-						<table>
-							<tr>
-								<td class="icon"><i class="fa fa-clock-o" aria-hidden="true"></i></td>
-								<td class="par">{{ isset($company_info['company_hour']) ? $company_info['company_hour']->value : 'Monday - Friday at 9:00am - 6:00pm' }}</td>
-							</tr>
-						</table>
-					</div>
-				</div>
-			</div>
-			<!-- <div class="google-map">
-				<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.705779275078!2d121.00566831496255!3d14.558810389829077!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c9730adc49fd%3A0xb721aedbb51dd260!2sThe+Linear+Makati+Tower+I!5e0!3m2!1sen!2sph!4v1485887036000" allowfullscreen></iframe>
-			</div> -->
-		</div>
-	</div>
+@extends('layout')
+@section('content')
+<div class="top_wrapper   no-transparent">
+    <div class="header_page basic background_image" style="background-image:url(resources/assets/front/img/contact-bg.jpg);background-repeat: no-repeat; -webkit-background-size: cover;-moz-background-size: cover;-o-background-size: cover;background-size: cover; color:#2f383d; ">
+        <div class="container">
+            <h1 class="title">Contact <strong>Us</strong></h1>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="contact">
+        <div class="container">
+            <div class="lol-row clearfix">
+                <div class="vc_col-sm-6 wpb_column column_container">
+                    <div class="title">Get Intouch With Us</div>
+                    <div class="lol-row clearfix">
+                        <form method="post">
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <div class="vc_col-sm-6 wpb_column column_container">
+                                <input type="text" class="form-control" placeholder="First Name*">
+                            </div>
+                            <div class="vc_col-sm-6 wpb_column column_container">
+                                <input type="text" class="form-control" placeholder="Last Name*">
+                            </div>
+                            <div class="vc_col-sm-6 wpb_column column_container">
+                                <input type="text" class="form-control" placeholder="Phone Number*">
+                            </div>
+                            <div class="vc_col-sm-6 wpb_column column_container">
+                                <input type="email" class="form-control" placeholder="Email Address*">
+                            </div>
+                            <div class="vc_col-sm-6 wpb_column column_container">
+                                <input type="text" class="form-control" placeholder="Subject">
+                            </div>
+                            <div class="vc_col-sm-12 wpb_column column_container">
+                                <textarea class="form-control" placeholder="Message"></textarea>
+                            </div>
+                            <div class="vc_col-sm-12 wpb_column column_container">
+                                <button class="btn" type="submit">SEND</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="vc_col-sm-6 wpb_column column_container">
+                    <div>
+                        <div class="title">Location</div>
+                        <div class="info">
+                            <div class="holder"><img src="resources/assets/front/img/location-icon.png"> Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</div>
+                            <div class="holder"><img src="resources/assets/front/img/mobile-icon.png"> +44 870 888 88 88</div>
+                            <div class="holder"><img src="resources/assets/front/img/mail-icon.png"> youremail@here.com</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 50px;">
+                        <div class="title">Business Hours</div>
+                        <div class="info">
+                            <div class="holder"><img src="resources/assets/front/img/time-icon.png">  Monday - Friday at 9:00am - 6:00pm</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
-
-@section("css")
-<link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/contactus.css">
+@section('css')
+<link rel="stylesheet" type="text/css" href="resources/assets/front/css/contact.css">
 @endsection
-

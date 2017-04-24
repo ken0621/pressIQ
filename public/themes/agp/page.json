@@ -6,228 +6,147 @@
 			"label":"Slideshow",
 			"type":"gallery",
 			"default":"",
-			"size":"6"
+			"size":"12"
 		},
-		"home_brand" :
+		"home_welcome_title" :
 		{
-			"label":"Brand Carousel",
-			"type":"gallery",
+			"label":"Welcome Title",
+			"type":"textbox",
 			"default":"",
 			"size":"6"
 		},
-		"home_intro_title_1" :
+		"home_welcome_desc" :
 		{
-			"label":"Intro Title - 1",
+			"label":"Welcome to Alpha Global Prestige Family!",
 			"type":"textbox",
-			"default":"MONEY BACK",
+			"default":"Alpha Global Prestige believes in Family, the fundamental unit of a society. It is the living treasure of gold. It is made strong not by the headcounts but by the root of valued culture, commitment of time and harmony. Just like in Prolife Family, we want the best and all the convenience we can share to our members. Together, we have established a company that delivers high quality products and excellent e-services that brings each home the benefits of our natural environment and the comfort of technology. Prolife NWT has strategically ventured with trusted and reputed companies for our associates to enjoy hassle-free online services and privileges at their fingertips.",
+			"size":"6"
+		},
+		"home_nature_image" :
+		{
+			"label":"Nature Image",
+			"type":"image",
+			"default":"/themes/agp/resources/assets/front/img/technology-pic.jpg",
+			"size":"2"
+		},
+		"home_nature_title" :
+		{
+			"label":"Nature Title",
+			"type":"textbox",
+			"default":"Nature",
 			"size":"4"
 		},
-		"home_intro_title_2" :
+		"home_nature_description" :
 		{
-			"label":"Intro Title - 2",
+			"label":"Nature Description",
 			"type":"textbox",
-			"default":"FREE SHIPPING",
+			"default":"We offer various lines of natural and organic beauty products that keeps you beautiful and healthy inside and out. Alpha Global Prestige wants to bring out the best in you! Our essential beauty products can help you achieve what you want. Fairer and beautiful skin is not only for the few. Regular use of Alpha Global Prestige beauty soaps will help you achieve that radiant and supple skin . Start your day with our herbal power drinks, from green coffee to chocolate to the very healthy and revitalizing juice!",
 			"size":"4"
 		},
-		"home_intro_title_3" :
+		"home_nature_quote" :
 		{
-			"label":"Intro Title - 3",
+			"label":"Nature Quote",
 			"type":"textbox",
-			"default":"SPECIAL DISCOUNT",
+			"default":"BE HEALTHY. Live a life of beauty and youth.",
+			"size":"2"
+		},
+		"home_wealth_image" :
+		{
+			"label":"Wealth Image",
+			"type":"image",
+			"default":"/themes/agp/resources/assets/front/img/nature-pic.jpg",
+			"size":"2"
+		},
+		"home_wealth_title" :
+		{
+			"label":"Wealth Title",
+			"type":"textbox",
+			"default":"Wealth",
 			"size":"4"
 		},
-		"home_intro_sub_1" :
+		"home_wealth_description" :
 		{
-			"label":"Intro Sub - 1",
+			"label":"Wealth Description",
 			"type":"textbox",
-			"default":"15 Days Money Back Guarantee",
+			"default":"Unravel the mystery of financial freedom. Unlock your ability to earn more money, save and get what you dream. We can show you how it can be done. Everybody wishes of alleviating their financial status. Venture into a world wherein you can have the chance to break free from financial lock-ups. Build your dream house, buy a new car or travel as often as you want. Everything is possible. All you need to do is just to invest your time. Act now!",
 			"size":"4"
 		},
-		"home_intro_sub_2" :
+		"home_wealth_quote" :
 		{
-			"label":"Intro Sub - 2",
+			"label":"Wealth Quote",
 			"type":"textbox",
-			"default":"Shipping on orders over PHP 1000.00",
+			"default":"BE FREE. Enjoy financial freedom. Earn more, save more... for a better future.",
+			"size":"2"
+		},
+		"home_technology_image" :
+		{
+			"label":"Technology Image",
+			"type":"image",
+			"default":"/themes/agp/resources/assets/front/img/technology-pic.jpg",
+			"size":"2"
+		},
+		"home_technology_title" :
+		{
+			"label":"Technology Title",
+			"type":"textbox",
+			"default":"Technology",
 			"size":"4"
 		},
-		"home_intro_sub_3" :
+		"home_technology_description" :
 		{
-			"label":"Intro Sub - 3",
+			"label":"Technology Description",
 			"type":"textbox",
-			"default":"Extra 5% off on all items",
+			"default":"Experience the speed and comfort at your fingertips through our fast and reliable on –line services. PROLIFE is your one-stop shop from sending your remittances to booking your flights. We want you to avoid the long queue to send money. Move out of the line and do all these at the comfort of your home.",
 			"size":"4"
 		},
-		"home_ads_1" :
+		"home_technology_quote" :
 		{
-			"label":"Home Ads - 1",
-			"type":"image",
-			"default":"",
-			"size":"6"
-		},
-		"home_ads_2" :
-		{
-			"label":"Home Ads - 2",
-			"type":"image",
-			"default":"",
-			"size":"6"
-		},
-		"daily_hot_deals" :
-		{
-			"label":"Daily Hot Deals",
-			"type":"collection",
-			"default":"",
-			"size":"6"
-		},
-		"special_offers" :
-		{
-			"label":"Special Offers",
-			"type":"collection",
-			"default":"",
-			"size":"6"
-		},
-		"featured_today" :
-		{
-			"label":"Featured Today",
-			"type":"collection",
-			"default":"",
-			"size":"6"
-		},
-		"best_seller" :
-		{
-			"label":"Best Seller",
-			"type":"collection",
-			"default":"",
-			"size":"6"
-		},
-		"new_arrivals" :
-		{
-			"label":"New Arrivals",
-			"type":"collection",
-			"default":"",
-			"size":"6"
-		}
-	},
-	"product":
-	{
-		"product_banner" :
-		{
-			"label":"Product Banner",
-			"type":"image",
-			"default":"",
-			"size":"12"
-		}
-	},
-	"about":
-	{
-		"about_title" :
-		{
-			"label":"About Title",
+			"label":"Technology Quote",
 			"type":"textbox",
-			"default":"Welcome to Shopshoshop.com",
-			"size":"12"
+			"default":"BE CONNECTED. Your e-services at your fingertips.",
+			"size":"2"
 		},
-		"about_image" :
+		"home_start_quote" :
 		{
-			"label":"About Image",
-			"type":"image",
-			"default":"",
-			"size":"12"
-		},
-		"about_content" :
-		{
-			"label":"About Content",
-			"type":"textarea",
-			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue.",
-			"size":"12"
-		},
-		"about_mission_image" :
-		{
-			"label":"Mission Image",
-			"type":"image",
-			"default":"",
-			"size":"12"
-		},
-		"about_mission_title" : 
-		{
-			"label":"Mission Title",
+			"label":"Start Now Quote",
 			"type":"textbox",
-			"default":"Our Mission",
-			"size":"12"
+			"default":"Say something to motivate them and start your business. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.",
+			"size":"6"
 		},
-		"about_mission_content" :
+		"home_start_button" :
 		{
-			"label":"Mission Content",
-			"type":"textarea",
-			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.",
-			"size":"12"
+			"label":"Start Now Button Text",
+			"type":"textbox",
+			"default":"START NOW!",
+			"size":"6"
 		},
-		"about_vision_image" :
+		"home_partners" :
 		{
-			"label":"Vision Image",
-			"type":"image",
+			"label":"Our Partners",
+			"type":"maintenance",
 			"default":"",
-			"size":"12"
+			"size":"6",
+			"field":[
+				{"name":"image", "type":"image"},
+				{"name":"name", "type":"text"}
+			]
 		},
-		"about_vision_title" :
+		"home_team_members" :
 		{
-			"label":"Vision Title",
-			"type":"textbox",
-			"default":"Our Vision",
-			"size":"12"
-		},
-		"about_vision_content" :
-		{
-			"label":"Vision Content",
-			"type":"textarea",
-			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.",
-			"size":"12"
-		}
-	},
-	"contact":
-	{
-		"contact_title" :
-		{
-			"label":"Contact Title",
-			"type":"textbox",
-			"default":"Get Intouch With Us",
-			"size":"12"
-		},
-		"contact_location_title" :
-		{
-			"label":"Location Title",
-			"type":"textbox",
-			"default":"Location",
-			"size":"12"
-		},
-		"contact_business_hours_title" :
-		{
-			"label":"Business Hours Title",
-			"type":"textbox",
-			"default":"Business Hours",
-			"size":"12"
-		}
-	},
-	"info":
-	{
-		"facebook_link" :
-		{
-			"label":"Facebook Link",
-			"type":"text",
-			"default":"https://www.facebook.com/PhilTech-Global-Inc-426231987728771/?ref=aymt_homepage_panel",
-			"size":"12"
-		},
-		"twitter_link" :
-		{
-			"label":"Twitter Link",
-			"type":"text",
+			"label":"Team Members",
+			"type":"maintenance",
 			"default":"",
-			"size":"12"
+			"size":"6",
+			"field":[
+				{"name":"image", "type":"image"},
+				{"name":"name", "type":"text"}
+			]
 		},
-		"pinterest_link" :
+		"home_quote" :
 		{
-			"label":"Pinterest Link",
-			"type":"text",
-			"default":"",
+			"label":"Quote Text",
+			"type":"textbox",
+			"default":"Say something to motivate them and start your business. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. ",
 			"size":"12"
 		}
 	}

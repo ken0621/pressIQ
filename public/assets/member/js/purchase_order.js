@@ -489,11 +489,16 @@ function submit_done_customer(result)
 }
 
 /* AFTER ADDING AN  ITEM */
-// function submit_done(data)
-// {
-// 	purchase_order.action_reload_item(data.item_id);
-// 	$("#global_modal").modal("toggle");
-// }
+function submit_done_item(data)
+{
+	toastr.success("Success");
+    $(".tbody-item .select-item").load("/member/item/load_item_category", function()
+    {                
+         $(".tbody-item .select-item").globalDropList("reload"); 
+         item_selected.val(data.item_id).change();          
+    });
+    data.element.modal("hide");
+}
 
 function submit_done(data)
 {

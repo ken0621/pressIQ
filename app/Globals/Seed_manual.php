@@ -32,11 +32,6 @@ class Seed_manual
         // {
         //   Seed_manual::seed_tbl_online_pymnt_gateway();
         // }
-
-        if(!DB::table('tbl_payroll_entity')->first())
-        {
-            Seed_manual::seed_tbl_payroll_entity();
-        }
     }
 
     public static function getShopId()

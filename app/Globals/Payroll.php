@@ -807,6 +807,9 @@ class Payroll
 		/* COMPUTE EXTRA DAY AND REST DAY */
 		$total_rest_day_hours = 0;
 		$total_extra_day_hours = 0;
+		$rest_day_today = false;
+		$extra_day_today = false;
+		$holiday_today = false;
 		$_rest_day = Tbl_payroll_group_rest_day::where("payroll_group_id", $data["employee_information"]->payroll_group_id)->get();
 
 		// dd($data["time_sheet_info"]);date
@@ -822,11 +825,14 @@ class Payroll
 				if($rest_day->payroll_group_rest_day_category == "rest day")
 				{
 					$total_rest_day_hours = $total_hours;
+					$rest_day_today = true;
 				}
 				else
 				{
 					$total_extra_day_hours = $total_hours;
+					$extra_day_today = true;
 				}
+
 				$total_regular_hours = 0;
 			}
 		}
@@ -837,6 +843,7 @@ class Payroll
 			if($holiday->payroll_holiday_category == 'Regular')
 			{
 				$regular_holiday_hours = $total_hours;
+				$holiday_today = true;
 			}
 			else
 			{
@@ -844,8 +851,11 @@ class Payroll
 			}
 		}
 
+		/* CHECK IF LEAVE */
+		
+
 		/* CHECK IF ABSENT */
-		if($total_rest_day_hours == 0 && $total_extra_day_hours == 0 && $total_hours == 0)
+		if($total_time_spent == 0 && $extra_day_today == false && $holiday_today == false && $rest_day_today == false)
 		{
 			$absent = true;
 		}
@@ -868,7 +878,7 @@ class Payroll
 		$return->regular_holiday_hours = convert_seconds_to_hours_minutes("H:i", $regular_holiday_hours);
 		$return->break 				= convert_seconds_to_hours_minutes("H:i", $break);
 		$return->time_record 		= $time_rec;
-		$return->absent 			= true;
+		$return->absent 			= $absent;
 
 		return $return;
 	}

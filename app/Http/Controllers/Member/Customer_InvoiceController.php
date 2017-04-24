@@ -554,7 +554,7 @@ class Customer_InvoiceController extends Member
             $data["transaction_type"] = "Sales Receipt";            
         }
 
-        $data["invoice_id"] = "INVOICE";
+        // $data["invoice_id"] = "INVOICE";
         $data["action_load"] = "/member/customer/customer_invoice_pdf";
         return view("member.customer_invoice.invoice_view",$data);
     }

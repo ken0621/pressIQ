@@ -433,7 +433,7 @@ function customer_invoice(){
             {
             	action_load_item_info_cm($(this));
             }
-        });
+        });                   
         $(".cm-draggable .tr-cm-draggable:last td select.select-um").globalDropList(
         {
         	hasPopup: "false",

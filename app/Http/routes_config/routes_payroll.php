@@ -271,6 +271,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 	/* BIO METRICS IMPORT END */
 
+	/* CALENDAR LEAVE START */
+	Route::any('/leave_schedule','Member\PayrollController@leave_schedule');	
+	Route::any('/leave_schedule/modal_create_leave_schedule','Member\PayrollController@modal_create_leave_schedule');	
+	/* CALDENDAR LEAVE END */
+
 
 	/* PAYORLL TIME KEEPING START */
 	Route::any('/time_keeping','Member\PayrollController@time_keeping');

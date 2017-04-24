@@ -1103,6 +1103,8 @@ class Payroll
 		$data['late_deduction'] 			= 0;
 		$data['under_time']					= 0;
 		$data['agency_deduction'] 			= 0;
+		$data['absent_deduction']			= 0;
+		$data['absent_count']				= 0;
 
 		$data['total_net']					= 0;
 		$data['total_gross']				= 0;
@@ -1171,10 +1173,7 @@ class Payroll
 
 			$approved = $time->approved_timesheet;
 
-
 			array_push($dd_array, $approved);
-
-
 
 			$temp_hour 					= 0;
 
@@ -1190,8 +1189,6 @@ class Payroll
 			$special_holiday_hours 		= Payroll::time_float($approved->special_holiday_hours);
 			$regular_holiday_hours 		= Payroll::time_float($approved->regular_holiday_hours);
 
-
-
 			$data['regular_hours']				+= $regular_hours;
 			$data['late_overtime']				+= $late_overtime;
 			$data['early_overtime']				+= $early_overtime;
@@ -1203,8 +1200,6 @@ class Payroll
 			$data['night_differential']			+= $night_differential;
 			$data['special_holiday_hours']		+= $special_holiday_hours;
 			$data['regular_holiday_hours']		+= $regular_holiday_hours;
-
-
 
 			/* EMPLOYEE SALARY */
 			$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->where('payroll_employee_salary_archived',0)->first();
@@ -1237,8 +1232,6 @@ class Payroll
 												   ->select('tbl_payroll_group.*')
 												   ->first();
 
-			$payroll_group_salary_computation = $group->payroll_group_salary_computation;
-
 			// dd($group);
 
 			$working_day_month = $group->payroll_group_working_day_month;
@@ -1262,8 +1255,8 @@ class Payroll
 			/* compute absent */
 			if($approved->absent)
 			{
-				$absent_count++;
-				$absent_deduction += $daily_rate;
+				$data['absent_deduction'] += $daily_rate;
+				$data['absent_count']++;
 			}
 
 
@@ -1508,7 +1501,80 @@ class Payroll
 
 		}
 
-		dd($dd_array);
+		// dd($dd_array);
+		$payroll_group_salary_computation = $group->payroll_group_salary_computation;
+		// dd($data);
+
+		$monthly_salary = $data['salary_monthly'];
+		if($group->payroll_group_period == 'Semi-monthly')
+		{
+			$monthly_salary = $monthly_salary / 2;
+		}
+
+		if($group->payroll_group_period == 'Weekly')
+		{
+			$monthly_salary = $monthly_salary / 4;
+		}
+
+		if($group->payroll_group_period == 'Daily')
+		{
+			$monthly_salary  = $monthly_salary / $group->payroll_group_working_day_month;
+		}
+
+
+
+		if($payroll_group_salary_computation == 'Flat Rate')
+		{
+			$data['extra_salary']				= 0;
+			$data['extra_early_overtime'] 		= 0;
+			$data['extra_reg_overtime'] 		= 0;
+			$data['extra_night_diff'] 			= 0;
+
+			$data['regular_salary'] 			= $monthly_salary;
+			$data['regular_early_overtime'] 	= 0;
+			$data['regular_reg_overtime'] 		= 0;
+			$data['regular_night_diff'] 		= 0;
+
+			$data['rest_day_salary'] 			= 0;
+			$data['rest_day_early_overtime']	= 0;
+			$data['rest_day_reg_overtime'] 		= 0;
+			$data['rest_day_night_diff'] 		= 0;
+
+			$data['rest_day_sh'] 				= 0;
+			$data['rest_day_sh_early_overtime'] = 0;
+			$data['rest_day_sh_reg_overtime'] 	= 0;
+			$data['rest_day_sh_night_diff'] 	= 0;
+
+			$data['rest_day_rh'] 				= 0;
+			$data['rest_day_rh_early_overtime'] = 0;
+			$data['rest_day_rh_reg_overtime'] 	= 0;
+			$data['rest_day_rh_night_diff'] 	= 0;
+
+			$data['rh_salary'] 					= 0;
+			$data['rh_early_overtime'] 			= 0;
+			$data['rh_reg_overtime'] 			= 0;
+			$data['rh_night_diff'] 				= 0;
+
+			$data['sh_salary'] 					= 0;
+			$data['sh_early_overtime'] 			= 0;
+			$data['sh_reg_overtime'] 			= 0;
+			$data['sh_night_diff'] 				= 0;
+
+			$data['late_deduction'] 			= 0;
+			$data['under_time']					= 0;
+
+			$data['absent_deduction']			= 0;
+			$data['absent_count']				= 0;
+
+		}
+
+		if($payroll_group_salary_computation == 'Monthly Rate')
+		{
+			$payroll_sss_monthly_salary = $monthly_salary - ($data['late_deduction'] + $data['under_time'] + $data['absent_deduction']);
+
+			$data['regular_salary'] 			= $monthly_salary;
+		}
+
 
 		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff']);
 
@@ -1653,6 +1719,7 @@ class Payroll
 			// philhealth_contribution
 			$data['pagibig_contribution'] = divide($pagibig_contribution, $period_category_arr['period_count']);
 		}
+
 		else if($group->payroll_group_pagibig == Payroll::return_ave($period_category))
 		{
 			if(Payroll::return_ave($period_category) == '1st Period')
@@ -1690,17 +1757,7 @@ class Payroll
 			$data['agency_deduction'] = $group->payroll_group_agency_fee;
 		}
 
-		// dd($group);
-		$payroll_group_salary_computation = $group->payroll_group_salary_computation;
 
-		if($payroll_group_salary_computation == 'Flat Rate')
-		{
-
-		}
-		if($payroll_group_salary_computation == 'Monthly Rate')
-		{
-
-		}
 
 		$data['total_deduction']	+= $data['tax_contribution'];
 		$data['total_deduction']	+= $data['sss_contribution_ee'];

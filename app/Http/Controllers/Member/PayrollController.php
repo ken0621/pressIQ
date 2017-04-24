@@ -3777,6 +3777,20 @@ class PayrollController extends Member
 	/*HOLIDAY DEFAULT END*/
 
 
+     /* CALENDAR LEAVE START */
+     public function leave_schedule()
+     {
+          return view('member.payroll.leave_schedule');
+     }
+
+     public function modal_create_leave_schedule()
+     {
+          return view('member.payroll.modal.modal_create_leave_schedule');
+     }
+
+     /* CALDENDAR LEAVE END */
+
+
      /* PAYROLL TIME KEEPING START */
      public function time_keeping()
      {

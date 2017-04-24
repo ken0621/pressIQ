@@ -598,6 +598,15 @@ function page_list()
     // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     // $nav[$page]['submenu'][$code]['developer'] = "Guillermo Tabligan";
 
+    /* PAYROLL CALENDAR LEAVE */
+    $code = "payroll-calendar-leave";
+    $nav[$page]['submenu'][$code]['label'] = "Leave Scheduling";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/leave_schedule";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
     /* PAYROLL TIME KEEPING */
     $code = "payroll-timekeeping";
     $nav[$page]['submenu'][$code]['label'] = "Time Keeping";

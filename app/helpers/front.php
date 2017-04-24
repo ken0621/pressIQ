@@ -1,6 +1,6 @@
 <?php
 use App\Globals\Ecom_Product;
-
+use App\Globals\Settings;
 function get_post($shop_id, $key)
 {
     $post_id = explode(",", DB::table("tbl_content")->where("key", $key)->where("shop_id", $shop_id)->first()->value);
@@ -87,8 +87,9 @@ function get_product_first_description($data)
     }
 }
 
-function get_product_first_price($data)
+function get_product_first_price($data, $shop_id = 1)
 {
+    $currency = Settings::get_currency($shop_id);
     if (isset($data['min_price']) && isset($data['max_price'])) 
     {
         return $data['min_price'] == $data['max_price'] ? "&#8369; " . number_format($data['max_price'], 2) : "&#8369; " . number_format($data['min_price'], 2) . " - " . number_format($data['max_price'], 2);

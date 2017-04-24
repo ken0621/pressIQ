@@ -25,6 +25,7 @@ use App\Models\Tbl_warehouse;
 use App\Globals\Pdf_global;
 use App\Globals\Utilities;
 use App\Models\Tbl_inventory_serial_number;
+use App\Globals\Settings;
 class MLM_ProductCodeController extends Member
 {
     public function index()

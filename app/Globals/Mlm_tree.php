@@ -102,6 +102,125 @@ class Mlm_tree
             }
         }
     }
+    public static function auto_place_slot_binary_left_to_right_v2($slot_info)
+    {
+        // tree per level
+        $a[1] = 2;
+        $a[2] = 4;
+        $a[3] = 8;
+        $a[4] = 16;
+        $a[5] = 32;
+        $a[6] = 64;
+        $a[7] = 128;
+        $a[8] = 256;
+        $a[9] = 512;
+        $a[10] = 1024;
+        $a[11] = 2048;
+        $a[12] = 4096;
+        $a[13] = 8192;
+        $a[14] = 16384;
+        $a[15] = 32768;
+        $a[16] = 65536;
+        $a[17] = 131072;
+        $a[18] = 262144;
+        // end tree
+        $tree = Tbl_tree_placement::where('placement_tree_parent_id', $slot_info->slot_sponsor)
+        ->select(DB::raw('count(placement_tree_level ) as count_slot'), DB::raw('tbl_tree_placement.*'))
+        ->groupBy(DB::raw('placement_tree_level') )
+        ->groupBy('placement_tree_parent_id')
+        ->orderBy('placement_tree_level', 'ASC')
+        ->get();
+        if(count($tree) == 0)
+        {
+            $update_slot['slot_position'] = 'left';
+            $update_slot['slot_placement'] = $slot_info->slot_sponsor;
+            Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->update($update_slot);
+            $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->first();
+            return Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+        }
+        else
+        {
+            $last_level = 0;
+            foreach ($tree as $key => $value) 
+            {
+                // dd($a[$value->placement_tree_level]);
+                if($value->count_slot < $a[$value->placement_tree_level])
+                {
+                    $selected_level = $value->placement_tree_level;
+                    $tree = Tbl_tree_placement::where('placement_tree_parent_id', $slot_info->slot_sponsor)
+                    ->groupBy('placement_tree_child_id')
+                    ->orderBy('placement_tree_child_id', 'ASC')
+                    ->where('placement_tree_level', $selected_level -1)
+                    ->select(DB::raw('placement_tree_child_id'))
+                    ->get()->keyBy('placement_tree_child_id');
+
+                    $count_per_slot = Tbl_tree_placement::whereIn('placement_tree_parent_id', $tree)
+                    ->select(DB::raw('count(placement_tree_level ) as count_slot'), DB::raw('tbl_tree_placement.*'))
+                    ->groupBy('placement_tree_parent_id')
+                    ->orderBy('placement_tree_child_id', 'ASC')
+                    ->Where('placement_tree_level', 1)
+                    ->get()->keyBy('placement_tree_parent_id');
+
+                    $cut = 0;
+                    // dd($count_per_slot);
+
+                    foreach ($tree as $key => $value) 
+                    {
+                        if($cut == 0)
+                        {
+                            if(!isset($count_per_slot[$key]))
+                            {
+                                $update_slot['slot_position'] = 'left';
+                                $update_slot['slot_placement'] = $key;
+                                Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->update($update_slot);
+                                $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->first();
+                                return Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+                            }
+                            else
+                            {
+                                if($count_per_slot[$key]->count_slot < 2)
+                                {
+                                    $cut = 1;
+                                }
+                            }
+                        }
+                    }
+                    foreach ($count_per_slot as $key => $value) 
+                    {
+                        if($value->count_slot < 2)
+                        {
+                            $update_slot['slot_position'] = 'right';
+                            $update_slot['slot_placement'] = $key;
+                            Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->update($update_slot);
+                            $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->first();
+                            return Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+                        }
+                    }
+                }
+                else
+                {
+                    $last_level = $value->placement_tree_level;
+                }
+            }
+
+            if($last_level != 0)
+            {
+                
+                $tree = Tbl_tree_placement::where('placement_tree_parent_id', $slot_info->slot_sponsor)
+                    ->groupBy('placement_tree_child_id')
+                    ->orderBy('placement_tree_child_id', 'ASC')
+                    ->where('placement_tree_level', $last_level)
+                    ->select(DB::raw('placement_tree_child_id'))
+                    ->first();
+                $update_slot['slot_position'] = 'left';
+                $update_slot['slot_placement'] = $tree->placement_tree_child_id;
+                Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->update($update_slot);
+                $slot_info_e = Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->first();
+                return Mlm_tree::insert_tree_placement($slot_info_e, $slot_info_e, 1);
+            }
+        }
+        
+    }
     public static function auto_place_slot_binary_left_to_right($slot_info)
     {
         // $slot_placement_sponsor = Tbl_mlm_slot::id()->membership

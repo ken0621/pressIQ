@@ -446,7 +446,7 @@ function customer_invoice(){
 
         }).globalDropList('disabled');
 	}
-
+                             
 	/* Make select input into a drop down list plugin */
 	function iniatilize_select()
 	{

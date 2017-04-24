@@ -3780,12 +3780,45 @@ class PayrollController extends Member
      /* CALENDAR LEAVE START */
      public function leave_schedule()
      {
+          
           return view('member.payroll.leave_schedule');
      }
 
      public function modal_create_leave_schedule()
      {
-          return view('member.payroll.modal.modal_create_leave_schedule');
+          $data['_leave'] = Tbl_payroll_leave_temp::sel(self::shop_id())->orderBy('payroll_leave_temp_name')->get();
+          // dd($data);
+          return view('member.payroll.modal.modal_create_leave_schedule', $data);
+     }
+
+     public function leave_schedule_tag_employee($id)
+     {
+          $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+
+          $data['leave_id']    =    $id;
+          $data['action']          =    '/member/payroll/deduction/set_employee_deduction_tag';
+
+          return view('member.payroll.modal.modal_schedule_employee_leave', $data);
+     }
+
+     public function ajax_shecdule_leave_tag_employee()
+     {
+          $company       = Request::input('company');
+          $department    = Request::input('department');
+          $jobtitle      = Request::input('jobtitle');
+          $leave_id      = Request::input("leave_id");
+
+
+          $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())
+                    ->join('tbl_payroll_leave_employee','tbl_payroll_leave_employee.payroll_leave_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
+                    // ->where('')
+                    ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
+                    ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
+                    ->get();
+          // dd($emp);
+          return json_encode($emp);
      }
 
      /* CALDENDAR LEAVE END */

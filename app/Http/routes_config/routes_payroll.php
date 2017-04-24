@@ -274,6 +274,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* CALENDAR LEAVE START */
 	Route::any('/leave_schedule','Member\PayrollController@leave_schedule');	
 	Route::any('/leave_schedule/modal_create_leave_schedule','Member\PayrollController@modal_create_leave_schedule');	
+	Route::any('/leave_schedule/leave_schedule_tag_employee/{id}','Member\PayrollController@leave_schedule_tag_employee');
 	/* CALDENDAR LEAVE END */
 
 

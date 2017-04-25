@@ -17,20 +17,21 @@
                 <input type="hidden" name="take" value="9999">
                 <input type="hidden" name="user_id" value="{{$user_a}}">
                 <input type="hidden" name="warehouse_id" value="{{$warehouse_a}}">
-
+                <input type="hidden" name="pdf" class="pdf_hidden" value="excel">
                 <input type="hidden" name="report_choose" value="product_sales_report">
-                <input type="hidden" name="pdf" value="excel">
-                <div class="col-md-3">
+                <!-- <input type="hidden" name="pdf" value="excel"> -->
+                <div class="col-md-2">
                     <span><small style="color:gray">From</small></span>
                     <input type="date" class="form-control" name="from" value="{{Carbon\Carbon::now()->format('Y-m-d')}}">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <span><small style="color:gray">To</small></span>
                     <input type="date" class="form-control" name="to" value="{{Carbon\Carbon::now()->format('Y-m-d')}}">
                 </div>
-                <div class="col-md-3">
-                    <span><small style="color:gray">CASHIER'S END SESSION REPORT</small></span>
-                    <button class="btn btn-custom-green-white btn-pdf"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                <div class="col-md-5">
+                    <span><small style="color:gray">CASHIER'S END SESSION REPORT</small></span><Br>
+                    <button  name="pdf" value="excel" class="btn btn-custom-green-white btn-pdf" onclick="$('.pdf_hidden').val('excel');"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                    <button  name="pdf" value="true" class="btn btn-custom-red-white btn-pdf" onclick="$('.pdf_hidden').val('true');"><i class="fa fa-file-pdf-o"></i> Export to PDF</button>
                 </div>
                 </form>
                 <div class="col-md-3">

@@ -645,29 +645,48 @@ class Warehouse
         return $data;
     }
 
-    public static function put_default_warehouse($shop_id)
+    public static function put_default_warehouse($shop_id, $user_id)
     {
-        if(!Tbl_warehouse::where("warehouse_shop_id", $shop_id)->where("main_warehouse", 1)->first())
+        $shop_info = Tbl_shop::where('shop_id', $shop_id)->first();
+        if($shop_info->shop_stockist_is == 0)
         {
-            $insert1["warehouse_name"]    = "Main Warehouse";
-            $insert1["warehouse_shop_id"] = $shop_id;
-            $insert1["warehouse_created"] = Carbon::now();
-            $insert1["main_warehouse"]    = "1";
+            if(!Tbl_warehouse::where("warehouse_shop_id", $shop_id)->where("main_warehouse", 1)->first())
+            {
+                $insert1["warehouse_name"]    = "Main Warehouse";
+                $insert1["warehouse_shop_id"] = $shop_id;
+                $insert1["warehouse_created"] = Carbon::now();
+                $insert1["main_warehouse"]    = "1";
 
-            Tbl_warehouse::insertGetId($insert1);
+                Tbl_warehouse::insertGetId($insert1);
+            }
+
+            if(!Tbl_warehouse::where("warehouse_shop_id", $shop_id)->where("warehouse_name", "Ecommerce Warehouse")->first())
+            {
+                $insert2["warehouse_name"]    = "Ecommerce Warehouse";
+                $insert2["warehouse_shop_id"] = $shop_id;
+                $insert2["warehouse_created"] = Carbon::now();
+                $insert2["main_warehouse"]    = "2";
+
+                Tbl_warehouse::insertGetId($insert2);
+            }
         }
-
-        if(!Tbl_warehouse::where("warehouse_shop_id", $shop_id)->where("warehouse_name", "Ecommerce Warehouse")->first())
+        else if($shop_info->shop_stockist_is == 1)
         {
-            $insert2["warehouse_name"]    = "Ecommerce Warehouse";
-            $insert2["warehouse_shop_id"] = $shop_id;
-            $insert2["warehouse_created"] = Carbon::now();
-            $insert2["main_warehouse"]    = "2";
+            if(!Tbl_warehouse::where("warehouse_shop_id", $shop_id)->where("main_warehouse", 1)->first())
+            {
+                $insert1["warehouse_name"]    = "Main Warehouse";
+                $insert1["warehouse_shop_id"] = $shop_id;
+                $insert1["warehouse_created"] = Carbon::now();
+                $insert1["main_warehouse"]    = "1";
 
-            Tbl_warehouse::insertGetId($insert2);
+                $warehouse = Tbl_warehouse::insertGetId($insert1);
+
+                $insert['user_id'] = $user_id;
+                $insert['warehouse_id'] = $warehouse; 
+                Tbl_user_warehouse_access::insert($insert);
+            }
         }
     }
-
     public static function getMainwarehouse()
     {
         return Tbl_warehouse::where("warehouse_shop_id",Warehouse::getShopId())->where("main_warehouse",1)->pluck("warehouse_id");

@@ -12,6 +12,7 @@ use App\Globals\Seed_manual;
 use App\Globals\Utilities;
 use App\Globals\Payroll;
 use App\Globals\Settings;
+use App\Globals\Mlm_seed;
 
 use Crypt;
 use Redirect;
@@ -25,7 +26,6 @@ class Member extends Controller
 	public $current_warehouse; 
 	function __construct()
 	{
-
 		/* IF SESSION FOR EMAIL OR PASSWORD DOESN'T EXIST - REDIRECT TO FRONTPAGE */
 		if(!session('user_email') || !session('user_password'))
 		{
@@ -33,7 +33,6 @@ class Member extends Controller
 		}
 		else
 		{
-
 			/* CHECK IF USERNAME DOESN'T EXIST IN DB - REDIRECT TO FRONTPAGE */
 			$user_info = Tbl_user::where("user_email", session('user_email'))->shop()->first();
 			if(!$user_info)
@@ -55,7 +54,13 @@ class Member extends Controller
 
 
 					/* INSERT DEFAULT WAREHOUSE */
-					Warehouse::put_default_warehouse($this->user_info->shop_id);
+					Warehouse::put_default_warehouse($this->user_info->shop_id, $this->user_info->user_id);
+
+					/* No Access for stockist without membership */
+					if($this->user_info->user_stockist_is == 1)
+					{
+
+					}
 
 					$shop_id_used    = $user_info->shop_id;
 					$check_if_dev    = Tbl_user_position::where("position_id",$this->user_info->user_level)->first();
@@ -133,6 +138,7 @@ class Member extends Controller
 		
 		/* Seeding */
 		Seed_manual::auto_seed();
+		Mlm_seed::seed($this->user_info->shop_id);
 
 		/* Set Email Configuration */
 		Settings::set_mail_setting($this->user_info->shop_id);

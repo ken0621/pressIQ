@@ -33,6 +33,7 @@
                         <tr>
                             <th>Membership Name</th>
                             <th>Membership Price</th>
+                            <th>Membership Type</th>
                             <th>Membership Rank</th>
                             <th>Packages</th>
                             <th class="text-center"></th>
@@ -46,6 +47,9 @@
                                     <td style="font-weight: bold;">{{$active->membership_name}}</td>
                                     <td>{{currency('PHP', $active->membership_price)}}</td>
                                     <td>{{ordinal($rank = $rank + 1)}}</td>
+                                    <td>
+                                        {{membership_type($active->membership_type)}}  
+                                    </td>
                                     <td class="text-left">
                                         @if($active->package_count == 0)
                                         <a href="/member/mlm/membership/edit/{{$active->membership_id}}#addnewpackage"><span style="color: red;">No Package Yet</span></a>

@@ -119,29 +119,61 @@ class MLM_CodeController extends Member
 
         return json_encode($message);
     }
-    public function sell()
+    public function sell($sell)
     {
         $access = Utilities::checkAccess('mlm-membership-codes', 'sell_codes');
         if($access == 1)
         {
-            $shop_id                    = $this->user_info->shop_id;
-            $data['invoice_number']     = invoice_generator(1);
-            $data['membership_package'] = Membership_package::view_membership_dropdown(0, $shop_id);
-            $data['membership_type']    = Membership_package::view_ps_cd_fs_dropdown(0);
-            $data['talbe_body']         = $this->view_all_lines();
-            $data["page"]               = "Sell Membership";
-            $data["_customer"]          = Tbl_customer::where("archived",0)->where('shop_id', $shop_id)->get();
-            // $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get();
-            // dd($this->current_warehouse->warehouse_id);
-            $data['warehouse'][0] = $this->current_warehouse;
-            return view('member.mlm_code.mlm_code_sell', $data);
+            if($sell == 'sell')
+            {
+                $data = [];
+                return view('member.mlm_code.mlm_code_sell_option', $data);
+            }
+            elseif($sell =='membership')
+            {
+                return $this->member_sell();
+            }
+            elseif($sell == 'stockist')
+            {
+                return $this->stockist_sell();
+            }
+            else
+            {
+                return $this->show_no_access(); 
+            }
+            
         }
         else
         {
            return $this->show_no_access(); 
         }
-
-        
+    }
+    public function member_sell()
+    {
+        $shop_id                    = $this->user_info->shop_id;
+        $data['invoice_number']     = invoice_generator(1);
+        $data['membership_package'] = Membership_package::view_membership_dropdown(0, $shop_id);
+        $data['membership_type']    = Membership_package::view_ps_cd_fs_dropdown(0);
+        $data['talbe_body']         = $this->view_all_lines();
+        $data["page"]               = "Sell Membership";
+        $data["_customer"]          = Tbl_customer::where("archived",0)->where('customer_stockist_is', 0)->where('shop_id', $shop_id)->get();
+        $data['warehouse'][0] = $this->current_warehouse;
+        return view('member.mlm_code.mlm_code_sell', $data);
+    }
+    public function stockist_sell()
+    {
+        $shop_id                    = $this->user_info->shop_id;
+        $data['invoice_number']     = invoice_generator(1);
+        $data['membership_package'] = Tbl_membership_package::membership()->where('tbl_membership.membership_archive', '0')
+        ->where('membership_package_archive', 0)
+        ->where('tbl_membership.shop_id', $shop_id)
+        ->get();
+        $data['membership_type']    = Membership_package::view_ps_cd_fs_dropdown(0);
+        $data['talbe_body']         = $this->view_all_lines();
+        $data["page"]               = "Sell Membership";
+        $data["_customer"]          = Tbl_customer::where("archived",0)->where('customer_stockist_is', 1)->where('shop_id', $shop_id)->get();
+        $data['warehouse'][0] = $this->current_warehouse;
+        return view('member.mlm_code.mlm_code_sell_stockist', $data);
     }
     public function add_line()
     {

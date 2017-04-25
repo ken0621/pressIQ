@@ -21,6 +21,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_term;
 use App\Models\Tbl_delivery_method;
+use App\Models\Tbl_shop;
 use Session;
 use App\Globals\Customer;
 use App\Globals\Utilities;
@@ -406,6 +407,25 @@ class CustomerController extends Member
                 return json_encode($data);
             }
         }
+        $stockist_continue = 0;
+        if(Request::input('isstockist') != null)
+        {
+            $validate_stockist['user_email'] = Request::input('user_email');
+            $validate_stockist['user_password'] = Request::input('user_password');
+            $validate_stockist['user_password_2'] = Request::input('user_password_2');
+            $validate_stockist['shop_key'] = Request::input('shop_key');
+            $stockist_data = $this->validate_stockist_a($validate_stockist);
+            if($stockist_data['status'] == 0)
+            {
+                $data['message'] = 'error';
+                $data['error'] = $stockist_data['error'];
+                return json_encode($data); 
+            }
+            else
+            {
+                $stockist_continue = 1;
+            }
+        }
         // end luke
 
         if($email != ''){
@@ -438,6 +458,13 @@ class CustomerController extends Member
 
             $customer_id = Tbl_customer::insertGetId($insertcustomer);
             
+            if($stockist_continue == 1)
+            {
+                $validate_stockist['customer_id'] = $customer_id;
+                $validate_stockist['shop_id'] = $shop_id;
+                $this->add_stockist_shop($validate_stockist);
+            }
+
             $insertSearch['customer_id'] = $customer_id;
             $insertSearch['body'] = $title.' '.$first_name.' '.$middle_name.' '.$last_name.' '.$suffix.' '.$email.' '.$company;
             
@@ -529,7 +556,77 @@ class CustomerController extends Member
 
         return json_encode($data);
 	}
-	
+    public function validate_stockist_a($validate)
+    {
+        $value["email"] = $validate['user_email'];
+        $rules["email"] = ['required', 'min:5', 'email', 'unique:tbl_user,user_email'];
+        $value["password"] = $validate['user_password'];
+        $value["password_confirmation"] = $validate['user_password_2'];
+        $rules["password"] = ['required', 'min:5','confirmed'];
+        $value["store_name"] = $validate['shop_key'];
+        $rules["store_name"] = ['required', 'min:3', 'unique:tbl_shop,shop_key', 'alpha_num'];
+        $validator = Validator::make($value, $rules);
+
+        if ($validator->fails()) //fail to login
+        {
+            $data['status'] = 0;
+            $data['error'] = $validator->errors()->first();
+        }
+        else
+        {
+            $data['status'] = 1;
+        }
+        return $data;
+    }
+
+	public function add_stockist_shop($stockist)
+    {
+        $country_id = Tbl_country::where("country_code", "PH")->pluck("country_id");
+        
+        // user_email
+        // user_password
+        // user_password_2
+        // shop_key
+        /* INSERT SHOP INFORMATION */
+        $insert_shop["shop_key"] = $stockist["shop_key"];
+        $insert_shop["shop_date_created"] = Carbon::now();
+        $insert_shop["shop_date_expiration"] = Carbon::now()->addDays(31);
+        $insert_shop["shop_last_active_date"] = Carbon::now();
+        $insert_shop["shop_status"] = "initial";
+        $insert_shop["shop_country"] = $country_id;
+        $insert_shop["shop_stockist_is"] = 1;
+        $insert_shop['shop_stockist_shop_head'] = $stockist['shop_id'];
+        $shop_id = Tbl_shop::insertGetId($insert_shop);
+        // shop_stockist_is
+        // shop_stockist_shop_head
+        
+        /* INSERT USER INFORMATION */
+        $insert_user["user_email"] = $stockist["user_email"];
+        $insert_user["user_password"] = Crypt::encrypt($stockist["user_password"]);
+        $insert_user["user_shop"] = $shop_id;
+        $insert_user["user_date_created"] = Carbon::now();
+        $insert_user["user_last_active_date"] = Carbon::now();
+        $insert_user["user_level"] = "main";
+        $insert_user['user_stockist_is'] = 1;
+        $insert_user['user_stockist_customer_id'] = $stockist['customer_id'];
+        $insert_user['user_stockist_shop_head'] = $stockist['shop_id'];
+        // user_stockist_is = 1
+        // user_stockist_customer_id
+        // user_stockist_shop_head
+
+
+        $user_id = Tbl_user::insertGetId($insert_user);
+
+        // customer_stockist_is = 1
+        // customer_stockist_user_id
+        // customer_stockist_shop_id
+        $update_customer['customer_stockist_is'] = 1;
+        $update_customer['customer_stockist_user_id'] = $user_id;
+        $update_customer['customer_stockist_shop_id'] = $shop_id;
+        Tbl_customer::where('customer_id',$stockist['customer_id'])->update($update_customer);
+
+        return 1;
+    }
 	
 	//upload customer file start
 	public function uploadcustomerfile()
@@ -589,6 +686,14 @@ class CustomerController extends Member
             $data['other'] = Tbl_customer_other_info::where('customer_id',$id)->first();
             
             $data['_delivery_method'] = Tbl_delivery_method::where('archived',0)->get();
+
+
+            if($data['customer_info']->customer_stockist_is == 1)
+            {
+                $data['stockist_user'] = Tbl_user::where('user_stockist_customer_id', $data['customer_info']->customer_id)->first();
+                $data['stockist_user']->user_password = Crypt::decrypt($data['stockist_user']->user_password);
+                $data['stockist_shop'] = Tbl_shop::where('shop_id', $data['stockist_user']->user_shop)->first();
+            }
             if(isset($data['other']->customer_payment_method))
             {
                 $data['payment_name'] = Tbl_payment_method::where('payment_method_id',$data['other']->customer_payment_method)->first();

@@ -32,7 +32,7 @@
       </div>
       <div class="col-md-6">
         <label for="">Email</label>
-        <input type="email" name="email" class="form-control"/>
+        <input type="email" name="email" class="form-control email_c"/>
       </div>
     </div>
     <div class="form-group">
@@ -113,6 +113,7 @@
           <li><a data-toggle="tab" href="#payment-and-billing">Payment and billing</a></li>
           <li><a data-toggle="tab" href="#attachment">Attachment</a></li>
           <li><a data-toggle="tab" href="#mlm">MLM</a></li>
+          <li><a data-toggle="tab" href="#stockist">Stockist</a></li>
         </ul>
         
         <div class="tab-content tab-content-custom">
@@ -406,6 +407,41 @@
                   <div class="col-md-6">
                     <label>Password</label>
                     <input type="password" class="form-control mlm_password" name="mlm_password" readonly>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="stockist" class="tab-pane fade">
+            <br>
+            <div class="form-horizontal">
+              <div class="form-group">
+                <div class="col-md-12">
+                  <div class="col-md-12">
+                    <div class="checkbox display-inline-block">
+                      <label for="">
+                        <input type="checkbox" name="isstockist" class="isstockist" value="1" />Use in stockist
+                        
+                        </label>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="col-md-6">
+                    <label>Email (Will be used as username)</label>
+                    <input type="email" class="form-control user_email" name="user_email" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label>Password</label>
+                    <input type="password" class="form-control user_password" name="user_password" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label>Confirm Password</label>
+                    <input type="password" class="form-control user_password_2" name="user_password_2" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label>Store Name</label>
+                    <input type="text" class="form-control shop_key" name="shop_key" readonly>
                   </div>
                 </div>
               </div>

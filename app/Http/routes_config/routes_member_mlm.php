@@ -22,7 +22,7 @@ Route::any('/member/mlm/membership/change_picture', 'Member\MLM_MembershipContro
 Route::any('/member/mlm/code', 'Member\MLM_CodeController@index'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/code/block/{id}', 'Member\MLM_CodeController@block'); //ERWIN
 Route::any('/member/mlm/code/block_submit', 'Member\MLM_CodeController@block_submit'); //ERWIN
-Route::any('/member/mlm/code/sell', 'Member\MLM_CodeController@sell'); //GUILLERMO TABLIGAN
+Route::any('/member/mlm/code/{sell}', 'Member\MLM_CodeController@sell'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/code/sell/add_line', 'Member\MLM_CodeController@add_line'); //Luke
 Route::any('/member/mlm/code/sell/add_line/view', 'Member\MLM_CodeController@view_all_lines'); //Luke
 Route::any('/member/mlm/code/sell/add_line/submit', 'Member\MLM_CodeController@addl_line_submit'); //Luke

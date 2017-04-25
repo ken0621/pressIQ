@@ -24,6 +24,11 @@ class DashboardController extends Member
 
 	public function index()
 	{
+		if($this->user_info->user_stockist_is == 1)
+		{
+			return $this->show_no_access();
+		}
+
 		$data["mants"] = Carbon::now()->subMonths(6);
 
 		$data["shop_name"]		= $this->user_info->shop_key;

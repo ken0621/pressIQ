@@ -77,6 +77,7 @@ class MLM_MembershipController extends Member
     	{
     	    $insert['membership_name'] = Request::input('membership_name');
     	    $insert['membership_price'] = Request::input('membership_price');
+            $insert['membership_type'] = Request::input('membership_type');
     	    $insert['shop_id']= $data['user_info']->shop_id;
     	    $insert['membership_archive'] = 0;
     	    $insert['membership_date_created']= Carbon::now();

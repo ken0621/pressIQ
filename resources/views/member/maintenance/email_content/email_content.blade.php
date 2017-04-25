@@ -17,7 +17,7 @@
         <div class="form-group">
             <div class="col-md-12">            
                 <label>Email Content Key *</label>
-                <input type="text" class="form-control" value="{{$email_content->email_content_key or ''}}" name="email_content_key" >
+                <input type="text" class="form-control" value="{{$email_content->email_content_key or ''}}" name="email_content_key" readonly >
             </div>
         </div>
         <div class="form-group">

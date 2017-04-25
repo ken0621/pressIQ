@@ -35,6 +35,16 @@
 							<input id="input-horizontal-counter" name="membership_price" class="form-control input-counter" value="{{ old('membership_price') }}" placeholder="0.00"><span class="character-counter">Enter how much the customer need to pay in order to become a member.</span>
 						</div>
 					</div>
+					<div class="form-group">
+						<label for="input-horizontal-counter" class="col-lg-4 control-label">Membership Type</label>
+						<div class="col-lg-8">
+							<select id="" class="form-control input-counter" name="membership_type">
+								<option value="0">Member</option>
+								<option value="1">Stockist</option>
+							</select>
+							<span class="character-counter">Choose the membership type.</span>
+						</div>
+					</div>
 				</form>
 			</div>
 		</div>

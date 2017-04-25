@@ -116,6 +116,7 @@
           <li><a data-toggle="tab" href="#payment-and-billing">Payment and billing</a></li>
           <li><a data-toggle="tab" href="#attachment">Attachment</a></li>
           <li><a data-toggle="tab" href="#mlm">MLM</a></li>
+          <li><a data-toggle="tab" href="#stockist">Stockist</a></li>
         </ul>
         
         <div class="tab-content">
@@ -414,6 +415,61 @@
                     <input type="password" class="form-control mlm_password" value="@if($customer_info->password != null){{ Crypt::decrypt($customer_info->password)}}@endif" name="mlm_password" @if($customer_info->ismlm == 0) readonly @endif>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+          <div id="stockist" class="tab-pane fade">
+            <br>
+            <div class="form-horizontal">
+              <div class="form-group">
+                <div class="col-md-12">
+                  <div class="col-md-12">
+                    <div class="checkbox display-inline-block">
+                      <label for="">
+                        <input type="checkbox" name="isstockist" class="isstockist" value="@if($customer_info->customer_stockist_is == 1) 1 @endif" @if($customer_info->customer_stockist_is == 1) checked @endif  readonly disabled="true" />Use in stockist
+                        </label>
+                      </div>
+                  </div>
+                </div>
+                @if($customer_info->customer_stockist_is == 1)
+                <div class="col-md-12">
+                  <div class="col-md-6">
+                    <label>Email (Will be used as username)</label>
+                    <input type="email" class="form-control user_email" name="user_email" value="{{$stockist_user->user_email}}" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label>Password</label>
+                    <input type="password" class="form-control user_password" name="user_password" value="{{$stockist_user->user_password}}" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label>Confirm Password</label>
+                    <input type="password" class="form-control user_password_2" name="user_password_2" value="{{$stockist_user->user_password}}" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label>Store Name</label>
+                    <input type="text" class="form-control shop_key" name="shop_key" value="{{$stockist_shop->shop_key}}" readonly>
+                  </div>
+                </div>
+                @else
+                <div class="col-md-12">
+                  <div class="col-md-6">
+                    <label>Email (Will be used as username)</label>
+                    <input type="email" class="form-control user_email" name="user_email" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label>Password</label>
+                    <input type="password" class="form-control user_password" name="user_password" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label>Confirm Password</label>
+                    <input type="password" class="form-control user_password_2" name="user_password_2" readonly>
+                  </div>
+                  <div class="col-md-6">
+                    <label>Store Name</label>
+                    <input type="text" class="form-control shop_key" name="shop_key" readonly>
+                  </div>
+                </div>
+                @endif
               </div>
             </div>
           </div>

@@ -544,3 +544,14 @@ function n2z($value)
     }
     return $value;
 }
+function membership_type($value)
+{
+    if($value == 0)
+    {
+        return 'Member';
+    }
+    else
+    {
+        return 'Stockist';
+    }
+}

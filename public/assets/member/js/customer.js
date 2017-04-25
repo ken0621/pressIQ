@@ -271,6 +271,27 @@ function customer() {
 	        }
 	    });
 
+	    $(".isstockist").unbind("change");
+	    $(".isstockist").bind("change", function() {
+	        if($(this).is(":checked")){
+	            $('.user_email').attr('readonly', false);
+				$('.user_password').attr('readonly', false);
+				$('.user_password_2').attr('readonly', false);
+				$('.shop_key').attr('readonly', false);
+
+				var email = $('.email_c').val();
+				console.log(email);
+				$('.user_email').val(email);
+	        }
+	        else{
+	            $('.user_email').attr('readonly', true);
+				$('.user_password').attr('readonly', true);
+				$('.user_password_2').attr('readonly', true);
+				$('.shop_key').attr('readonly', true);
+	        }
+	    });
+
+
 	    $(".check-print-name-as").unbind("change");
 	    $(".check-print-name-as").bind("change", function(){
 	    	var combo = comboname();

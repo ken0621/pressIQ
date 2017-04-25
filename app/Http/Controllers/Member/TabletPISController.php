@@ -1139,6 +1139,7 @@ class TabletPISController extends Member
 		$data["action_load"] = "/tablet/view_invoice_pdf";
         return view("member.customer_invoice.invoice_view",$data);
 	}
+
 	public function login()
 	{
 		if(Session::get("sales_agent"))
@@ -1355,13 +1356,6 @@ class TabletPISController extends Member
         }
         return json_encode($data);
     }
-	
-	public function view_invoices_view($id)
-	{
-		$data["invoice_id"] = $id;
-		$data["action_load"] = "/tablet/view_invoice_pdf";
-        return view("member.customer_invoice.invoice_view",$data);
-	}
 	public function login()
 	{
 		if(Session::get("sales_agent"))

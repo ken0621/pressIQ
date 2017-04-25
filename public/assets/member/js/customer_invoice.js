@@ -418,7 +418,7 @@ function customer_invoice(){
     		width : "100%",
     		placeholder : "um..",
     		onChangeValue: function()
-    		{
+    		{  
     			action_load_unit_measurement($(this));
     		}
 
@@ -429,15 +429,11 @@ function customer_invoice(){
         {
             link : "/member/item/add",
             width : "100%",
-            onCreateNew : function()
-            {
-            	item_selected = $(this);
-            },
             onChangeValue : function()
             {
             	action_load_item_info_cm($(this));
             }
-        });
+        });                   
         $(".cm-draggable .tr-cm-draggable:last td select.select-um").globalDropList(
         {
         	hasPopup: "false",
@@ -450,7 +446,7 @@ function customer_invoice(){
 
         }).globalDropList('disabled');
 	}
-
+                             
 	/* Make select input into a drop down list plugin */
 	function iniatilize_select()
 	{
@@ -469,6 +465,7 @@ function customer_invoice(){
             onCreateNew : function()
             {
             	item_selected = $(this);
+            	console.log($(this));
             },
             onChangeValue : function()
             {
@@ -479,10 +476,6 @@ function customer_invoice(){
         {
             link : "/member/item/add",
             width : "100%",
-            onCreateNew : function()
-            {
-            	item_selected = $(this);
-            },
             onChangeValue : function()
             {
             	action_load_item_info_cm($(this));
@@ -628,9 +621,9 @@ function submit_done_item(data)
 {
 	toastr.success("Success");
     $(".tbody-item .select-item").load("/member/item/load_item_category", function()
-    {                
-         $(".tbody-item .select-item").globalDropList("reload");
-         item_selected.val(data.id).change();          
+    {
+        $(".tbody-item .select-item").globalDropList("reload");
+		item_selected.val(data.item_id).change();
     });
     data.element.modal("hide");
 }

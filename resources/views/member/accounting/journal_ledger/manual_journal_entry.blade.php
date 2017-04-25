@@ -46,7 +46,7 @@
                             <div class="row clearfix">
                                 <div class="col-sm-2">
                                     <label>Date</label>
-                                    <input type="text" class="datepicker form-control input-sm" name="je_entry_date" value="{{$journal or date('m/d/Y')}}" />
+                                    <input type="text" class="datepicker form-control input-sm" name="je_entry_date" value="{{$journal->je_entry_date or date('m/d/Y')}}" />
                                 </div>
                                 <div class="col-sm-4 offset-sm-6">    
                                     <label>Invoice No:</label>
@@ -71,9 +71,34 @@
                                             </tr>
                                         </thead>
                                         <tbody class="draggable tbody-item">     
-                                            @if(isset($inv))
-                                                @foreach($_invline as $invline)
-                                                   
+                                            @if(isset($journal))
+                                                @foreach($journal->line as $jline)
+                                                    <tr class="tr-draggable">
+                                                    <td class="invoice-number-td text-right">1</td>
+                                                    <td>
+                                                        <select class="form-control select-coa drop-down-coa input-sm" name="jline_account_id[]" >
+                                                            @include("member.load_ajax_data.load_chart_account", ['add_search' => "", 'account_id' => $jline->jline_account_id])
+                                                            <option class="hidden" value="" />
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <input class="text-right money-format compute debit-amount" type="text" name="jline_debit[]" value="{{$jline->jline_type == 'debit' ? currency('',$jline->jline_amount) : ''}}"/>
+                                                    </td>
+                                                    <td>
+                                                        <input class="text-right money-format compute credit-amount" type="text" name="jline_credit[]" value="{{$jline->jline_type == 'credit' ? currency('',$jline->jline_amount) : ''}}"/>
+                                                    </td>
+                                                    <td>
+                                                        <textarea class="textarea-expand" type="text" name="jline_description[]" >{{$jline->jline_description}}</textarea>
+                                                    </td>
+                                                    <td>
+                                                        <select class="form-control select-name drop-down-name input-sm pull-left" name="jline_name_id[]">
+                                                            @include("member.load_ajax_data.load_name", ['name_id'=>$jline->jline_name_id, 'ref_name'=>$jline->jline_name_reference])
+                                                            <option class="hidden" value="" />
+                                                        </select>
+                                                        <input type="hidden" class="reference_name" name="jline_name_reference[]">
+                                                    </td>
+                                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                </tr>
                                                 @endforeach
                                             @else                                
                                                 <tr class="tr-draggable">

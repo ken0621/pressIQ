@@ -65,15 +65,15 @@
 	  return context[func].apply(context, args);
 	}
 
-	function submit_done(data)
-	{
-		try
-		{
-			data = JSON.parse(data);
-		}
-		catch(error){}
-		data.element.modal('toggle');
-		executeFunctionByName(data.function_name, window);
+	// function submit_done(data)
+	// {
+	// 	try
+	// 	{
+	// 		data = JSON.parse(data);
+	// 	}
+	// 	catch(error){}
+	// 	data.element.modal('toggle');
+	// 	executeFunctionByName(data.function_name, window);
 		
-	}
+	// }
 </script>

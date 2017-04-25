@@ -602,7 +602,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Payroll Configuration";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_configuration";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','Department','Job Title','Holiday','Allowances','Deductions','Leave','Payroll Group','Journal Tags','Payslip','Tax Period','Tax Table','SSS Table','Philhealth Table','Pagibig/HDMF'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
     

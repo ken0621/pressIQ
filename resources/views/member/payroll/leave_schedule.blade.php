@@ -19,21 +19,75 @@
 </div>
 <div class="panel panel-default panel-block">
 	<div class="panel body">
-		<ul class="nav nav-tabs">
-			<li class="active"><a data-toggle="tab" href="#upcoming-leave">Upcoming Leave</a></li>
-			<li><a data-toggle="tab" href="#used-leave">Used Leave</a></li>
-		</ul>
-		<div class="tab-content padding-5">
-			<div id="upcoming-leave" class="tab-pane fade in active">
-				
-			</div>
-			<div id="used-leave" class="tab-pane fade">
-				
-			</div>
+		<div class="leave-container">
+			<ul class="nav nav-tabs">
+				<li class="active"><a data-toggle="tab" href="#upcoming-leave">Upcoming Leave</a></li>
+				<li><a data-toggle="tab" href="#used-leave">Used Leave</a></li>
+			</ul>
+			<div class="tab-content padding-5">
+				<div id="upcoming-leave" class="tab-pane fade in active">
+					@foreach($_upcoming as $key => $upcoming)
+					<div class="custom-panel">
+	       				<div class="custom-panel-header cursor-pointer">
+	       					{{date('F d, Y', strtotime($key)).' '.$upcoming[0]['payroll_leave_temp_name']}}
+	       				</div>
+	       				<div class="width-100 display-table">
+				          <div class="triangle-top-right"></div>
+				          <div class="custom-panel-body">
+				            <div class="custom-panel-child display-none">
+				              <div class="process-container">
+				              	<ul class="list-group">
+				              	 @foreach($upcoming as $tag)
+								  <li class="list-group-item padding-tb-10">{{$tag['payroll_employee_title_name'].' '.$tag['payroll_employee_first_name'].' '.$tag['payroll_employee_middle_name'].' '.$tag['payroll_employee_last_name'].' '.$tag['payroll_employee_suffix_name']}}<a href="#" class="pull-right popup" link="/member/payroll/leave_schedule/delete_confirm_schedule_leave/{{$tag['payroll_leave_schedule_id']}}" size="sm"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+								 @endforeach
+								</ul>
+				              </div>
+				            </div>
+				          </div>
+				        </div>
+	       			</div>
+					@endforeach
+				</div>
+				<div id="used-leave" class="tab-pane fade">
+					
+				</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 @endsection
 @section('script')
+<script type="text/javascript">
+	toggle_custom_panel_header_event();
+	function toggle_custom_panel_header_event()
+	{
+		$(".custom-panel-header").unbind("click");
+		$(".custom-panel-header").bind("click", function()
+		{
+			var child = $(this).parents(".custom-panel").find(".custom-panel-child");
+			child.slideToggle();
+		});
+	}
+
+	function reload_container()
+	{
+		$(".leave-container").load("/member/payroll/leave_schedule .leave-container", function()
+		{
+			toggle_custom_panel_header_event();
+		});
+	}
+
+	function submit_done(data)
+	{
+		try
+		{
+			data = JSON.parse(data);
+		}
+		catch(error){}
+
+		data.element.modal("toggle");
+		reload_container();
+	}
+</script>
 @endsection

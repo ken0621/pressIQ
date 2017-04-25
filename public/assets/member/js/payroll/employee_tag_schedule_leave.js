@@ -85,7 +85,7 @@ function employee_tag_schedule_leave()
 			_token:misc('_token')
 		};
 
-		var action = "/member/payroll/deduction/ajax_deduction_tag_employee";
+		var action = "/member/payroll/leave_schedule/ajax_shecdule_leave_tag_employee";
 		var	method = "POST";
 		var target = ".employee-tag-list";	
 		var function_name = "employee_tag.check_tags_event";
@@ -99,7 +99,7 @@ function employee_tag_schedule_leave()
 			{
 				result = JSON.parse(result);
 
-				var html = '<li class="list-group-item padding-3-10"><div class="checkbox"><label><input type="checkbox" name="" class="check-all-tag">Check All</label></div></li>';
+				var html = '<li class="list-group-item padding-3-10"><div class="checkbox"><label><input type="checkbox" name="" class="check-all-tag">Check All<span class="pull-right">Available Leave</span></label></div></li>';
 
 				$(result).each(function (index, data)
 				{
@@ -119,7 +119,7 @@ function employee_tag_schedule_leave()
 	{
 		var html = '<li class="list-group-item padding-3-10">';
 	  	html 	+= '<div class="checkbox">'
-	  	html 	+= '<label><input type="checkbox" name="employee_tag[]" class="check-tag" value="'+data.payroll_employee_id+'">'+data.payroll_employee_title_name + ' ' +data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name +'</label>';
+	  	html 	+= '<label><input type="checkbox" name="employee_tag[]" class="check-tag" value="'+data.payroll_leave_employee_id_2+'">'+data.payroll_employee_title_name + ' ' +data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name +'<span class="pull-right">'+data.available_count+'</span></label>';
 	  	html 	+= '</div></li>';
 	  	return html;
 	  
@@ -130,21 +130,89 @@ function employee_tag_schedule_leave()
 		check_tags_event();
 	}
 
+
+	this.load_tagged_employee = function()
+	{
+		var action = "/member/payroll/leave_schedule/get_session_leave_tag";
+		var method = "POST";
+		var target = ".table-employee-tag";
+		var formdata = {
+			_token:misc('_token')
+		};
+		var function_name = "modal_create_deduction.remove_tag";
+		$(target).html('<tr><td colspan="2">'+misc('loader') + '</td></tr>');
+		$.ajax({
+			url 	: 	action,
+			type 	: 	method,
+			data 	: 	formdata,
+			success : 	function(result)
+			{
+				var html = '';
+				result = JSON.parse(result);
+				$(result.new_record).each(function(index, data){
+
+					html += tbl_tag(data);
+				});
+				$(target).html(html);
+				remove_tag();
+			},
+			error 	: 	function(err)
+			{
+				error_function();
+			}
+		});
+		// reload_tag_employee();
+	}
+
+	function remove_tag()
+	{
+		$(".btn-remove-tag").unbind("click");
+		$(".btn-remove-tag").bind("click", function()
+		{
+			var content = $(this).data("content");
+			var parent = $(this).parents("tr");
+			var element = $(this);
+			var html = element.html();
+			
+			var con = confirm("Do you realy want to remove this employee?");
+			if(con)
+			{
+				element.html(misc('spinner'));
+				$.ajax({
+					url 	: 	"/member/payroll/leave_schedule/unset_session_leave_tag",
+					type 	: 	"POST",
+					data 	: 	{
+						_token:misc('_token'),
+						content:content
+					},
+					success : 	function(result)
+					{
+						parent.remove();
+					},
+					error 	: 	function(err)
+					{
+						error_function();
+					}
+				});
+			}
+		});
+	}
+
+	function tbl_tag(data)
+	{
+		var html = '<tr>';
+		html += '<td>' + data.payroll_employee_title_name + ' ' + data.payroll_employee_first_name + ' ' + data.payroll_employee_middle_name  + ' ' + data.payroll_employee_last_name  + ' ' + data.payroll_employee_suffix_name  + ' <input type="hidden" name="employee_tag[]" value="'+data.payroll_employee_id+'"></td>';
+		html += '<td class="text-center"><a href="#" class="btn-remove-tag" data-content="'+data.payroll_employee_id+'"><i class="fa fa-times"></i></a></td>';
+		html += '</tr>';
+		return html;
+	}
+
 	function error_function()
 	{
 		toastr.error("Error, something went wrong.");
 	}
 
-	/* CALL A FUNCTION BY NAME */
-	function executeFunctionByName(functionName, context /*, args */) {
-	  var args = [].slice.call(arguments).splice(2);
-	  var namespaces = functionName.split(".");
-	  var func = namespaces.pop();
-	  for(var i = 0; i < namespaces.length; i++) {
-	    context = context[namespaces[i]];
-	  }
-	  return context[func].apply(context, args);
-	}
+	
 
 	function misc(str){
 		var spinner = '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
@@ -181,3 +249,5 @@ function employee_tag_schedule_leave()
 
 
 }
+
+

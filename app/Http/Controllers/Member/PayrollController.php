@@ -3781,8 +3781,17 @@ class PayrollController extends Member
      /* CALENDAR LEAVE START */
      public function leave_schedule()
      {
-          
-          return view('member.payroll.leave_schedule');
+          $data['_upcoming'] = Self::leave_schedule_break();
+
+          $data['_used'] = Self::leave_schedule_break('<');
+
+          return view('member.payroll.leave_schedule', $data);
+     }
+
+     public function leave_schedule_break($param = '>=')
+     {
+          $_leave = collect(Tbl_payroll_leave_schedule::getlist(Self::shop_id(), date('Y-m-d'), $param)->orderBy('payroll_schedule_leave','desc')->get()->toArray())->groupBy('payroll_schedule_leave');
+          return $_leave;
      }
 
      public function modal_create_leave_schedule()
@@ -3799,6 +3808,8 @@ class PayrollController extends Member
           $data['leave_id']        =    $id;
           $data['action']          =    '/member/payroll/leave_schedule/session_tag_leave';
 
+          Session::put('employee_leave_tag', array());
+
           return view('member.payroll.modal.modal_schedule_employee_leave', $data);
      }
 
@@ -3809,44 +3820,121 @@ class PayrollController extends Member
           $jobtitle      = Request::input('jobtitle');
           $leave_id      = Request::input("leave_id");
 
-
+          // dd($leave_id);
           $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())
-                    ->join('tbl_payroll_leave_employee','tbl_payroll_leave_employee.payroll_leave_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
+                    ->join('tbl_payroll_leave_employee','tbl_payroll_leave_employee.payroll_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
+                    ->join('tbl_payroll_leave_temp','tbl_payroll_leave_temp.payroll_leave_temp_id','=','tbl_payroll_leave_employee.payroll_leave_temp_id')
+                    ->leftjoin('tbl_payroll_leave_schedule','tbl_payroll_leave_schedule.payroll_leave_employee_id','=','tbl_payroll_leave_employee.payroll_leave_employee_id')
                     ->where('tbl_payroll_leave_employee.payroll_leave_temp_id',$leave_id)
+                    ->where('tbl_payroll_leave_employee.payroll_leave_employee_is_archived', 0)
+
                     ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
                     ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
+                    ->select(DB::raw('*, tbl_payroll_leave_employee.payroll_leave_employee_id as leave_employee_id, (tbl_payroll_leave_temp.payroll_leave_temp_days_cap - (select count(tbl_payroll_leave_schedule.payroll_leave_employee_id) from tbl_payroll_leave_schedule where (tbl_payroll_leave_schedule.payroll_schedule_leave  BETWEEN "'.date('Y').'-01-01" and "'.date('Y').'-12-31") and tbl_payroll_leave_schedule.payroll_leave_employee_id = leave_employee_id)) as available_count, tbl_payroll_leave_employee.payroll_leave_employee_id as payroll_leave_employee_id_2'))
                     ->get();
-          // dd($emp);
+
           return json_encode($emp);
      }
 
-     // Session::put('allowance_employee_tag', array());
-     // $insert_tag = array();
-
-     //      foreach($employee_tag as $tag)
-     //      {
-     //           array_push($array, $tag);
-     //           if($allowance_id != 0)
-     //           {
-     //                $count = Tbl_payroll_employee_allowance::where('payroll_allowance_id', $allowance_id)->where('payroll_employee_id',$tag)->count();
-     //                if($count == 0)
-     //                {
-     //                     $insert['payroll_allowance_id'] = $allowance_id;
-     //                     $insert['payroll_employee_id']     = $tag;
-     //                     array_push($insert_tag, $insert);
-     //                }
-     //           }
-     //      }
-
      public function session_tag_leave()
      {
-
-
+          // Tbl_payroll_leave_schedule
           $employee_tag = array();
+
+          if(Session::has('employee_leave_tag'))
+          {
+               $employee_tag = Session::get('employee_leave_tag');
+          }
+
           foreach(Request::input('employee_tag') as $tag)
           {
-
+               if(!in_array($tag, $employee_tag))
+               {
+                    array_push($employee_tag, $tag);
+               }
           }
+          Session::put('employee_leave_tag', $employee_tag);
+
+          $data['status'] = 'success';
+          $data['function_name'] = 'employee_tag_schedule_leave.load_tagged_employee';
+
+          return collect($data)->toJson();
+     }
+
+
+     public function get_session_leave_tag()
+     {
+          $employee = [0 => 0];
+          if(Session::has('employee_leave_tag'))
+          {
+               $employee = Session::get('employee_leave_tag');
+          }
+
+          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+          $data['new_record'] = $emp;
+
+          return json_encode($data);
+     }
+
+
+     public function save_schedule_leave_tag()
+     {
+          // Tbl_payroll_leave_schedule
+          $payroll_schedule_leave = Request::input('payroll_schedule_leave');
+          if(Request::has('employee_tag'))
+          {
+               $insert = array();
+
+               foreach(Request::input('employee_tag') as $tag)
+               {
+                    $temp['payroll_leave_employee_id']    = $tag;
+                    $temp['payroll_schedule_leave']       = datepicker_input($payroll_schedule_leave);
+                    $temp['shop_id']                      = Self::shop_id();
+
+                    array_push($insert, $temp);
+               }
+               if(!empty($insert))
+               {
+                    Tbl_payroll_leave_schedule::insert($insert);
+               }
+          }    
+
+          $data['stataus']         = 'success';
+          $data['function_name']   = '';
+
+          return collect($data)->toJson();
+     }
+
+     public function delete_confirm_schedule_leave($id)
+     {
+          // $leave              = Tbl_payroll_leave_schedule::specific($id)->first();
+          $data['title']      = 'Do you really want to remove this schedule';
+          $data['action']     = '/member/payroll/leave_schedule/delete_schedule_leave';
+          $data['id']         = $id;
+          $data['html']       = '';
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+     public function delete_schedule_leave()
+     {
+          $id = Request::input('id');
+          Tbl_payroll_leave_schedule::where('payroll_leave_schedule_id', $id)->delete();
+
+          $data['status'] = 'success';
+          $data['function_name'] = '';
+
+          return collect($data)->toJson();
+     }
+
+     public function unset_session_leave_tag()
+     {
+          $content = Request::input('content');
+          $array     = Session::get('employee_leave_tag');
+          if(($key = array_search($content, $array)) !== false) {
+              unset($array[$key]);
+          }
+          Session::put('employee_leave_tag', $array);
      }
 
      /* CALDENDAR LEAVE END */
@@ -3893,9 +3981,9 @@ class PayrollController extends Member
           {
                return Redirect::to('/member/payroll/time_keeping')->send();
           }
-          $data['_company'] = Self::company_badge($id);
-          $data['period'] = Tbl_payroll_period::where('payroll_period_id', $id)->first();
-          // dd($id);
+          $data['_company']   = Self::company_badge($id);
+          $data['period']     = Tbl_payroll_period::where('payroll_period_id', $id)->first();
+
           return view('member.payroll.payroll_timekeeping_company',$data);
      }
 

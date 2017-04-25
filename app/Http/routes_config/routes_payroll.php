@@ -275,7 +275,17 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/leave_schedule','Member\PayrollController@leave_schedule');	
 	Route::any('/leave_schedule/modal_create_leave_schedule','Member\PayrollController@modal_create_leave_schedule');	
 	Route::any('/leave_schedule/leave_schedule_tag_employee/{id}','Member\PayrollController@leave_schedule_tag_employee');
+	Route::any('/leave_schedule/ajax_shecdule_leave_tag_employee','Member\PayrollController@ajax_shecdule_leave_tag_employee');	
 	Route::any('/leave_schedule/session_tag_leave','Member\PayrollController@session_tag_leave');	
+	Route::any('/leave_schedule/get_session_leave_tag','Member\PayrollController@get_session_leave_tag');
+	Route::any('/leave_schedule/unset_session_leave_tag','Member\PayrollController@unset_session_leave_tag')
+	;
+	Route::any('/leave_schedule/save_schedule_leave_tag','Member\PayrollController@save_schedule_leave_tag')
+	;
+	Route::any('/leave_schedule/delete_confirm_schedule_leave/{id}','Member\PayrollController@delete_confirm_schedule_leave')
+	;
+	Route::any('/leave_schedule/delete_schedule_leave','Member\PayrollController@delete_schedule_leave')
+	;
 	/* CALDENDAR LEAVE END */
 
 

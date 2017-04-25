@@ -249,7 +249,7 @@ class TabletPISController extends Member
 		// {
 		// 	return view("tablet.index",$data);
 		// }
-	}
+	}  
 	public function selected_sir()
 	{
 		Session::forget("sir_id");

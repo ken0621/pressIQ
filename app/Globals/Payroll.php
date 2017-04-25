@@ -589,6 +589,8 @@ class Payroll
 		$break 						= 0;
 		$total_under_time 			= 0;
 		$absent						= false;
+		$leave 						= Payroll::check_if_employee_leave($data["employee_information"]->payroll_employee_id, $date);
+		
 
 		$default_time_in 	= c_time_to_int($default_time_in);
 		$default_time_out 	= c_time_to_int($default_time_out);
@@ -882,6 +884,7 @@ class Payroll
 		$return->break 				= convert_seconds_to_hours_minutes("H:i", $break);
 		$return->time_record 		= $time_rec;
 		$return->absent 			= $absent;
+		$return->leave 				= $leave;
 
 		return $return;
 	}
@@ -2363,10 +2366,6 @@ class Payroll
 	}
 
 
-	// Tbl_payroll_leave_schedule
-	// Tbl_payroll_leave_temp
-	// Tbl_payroll_leave_employee
-
 	/* check if employee has schedule leave */
 	public static function check_if_employee_leave($employee_id = 0, $date = '0000-00-00')
 	{
@@ -2384,9 +2383,7 @@ class Payroll
 				$data = 'with_pay';
 			}
 		}
-
 		return $data;
-
 	}	
 
 }

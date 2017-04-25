@@ -7,12 +7,12 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Customer Estimate &raquo; List </span>
+                <span class="page-title">Customer Sales Order &raquo; List </span>
                 <small>
-                    List of Estimate
+                    List of Sales Order
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/customer/estimate" >Create Estimate</a>
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/customer/sales_order" >Create Sales Order</a>
         </div>
     </div>
 </div>
@@ -40,7 +40,7 @@
                 <table class="table table-bordered table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
-                            <th>Estimate No</th>
+                            <th>Sales Order No</th>
                             <th>Customer Name</th>
                             <th>Total</th>
                             <th>Status</th>
@@ -63,9 +63,9 @@
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
-                                          <li><a href="/member/customer/estimate?id={{$estimate->est_id}}">Edit</a></li>
-                                          <li ><a target="_blank" href="/member/customer/customer_estimate_view/{{$estimate->est_id}}">Print</a></li>
-                                          <li ><a class="popup" size="md" link="/member/customer/update_status/{{$estimate->est_id}}">Update Status</a></li>
+                                          <li><a href="/member/customer/sales_order?id={{$estimate->est_id}}">Edit</a></li>
+                                          <li ><a target="_blank" href="/member/customer/customer_sales_order_view/{{$estimate->est_id}}">Print</a></li>
+                                          <li ><a >Create Invoice</a></li>
                                       </ul>
                                     </div>
                                 </td>

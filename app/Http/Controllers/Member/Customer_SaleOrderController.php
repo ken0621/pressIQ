@@ -33,25 +33,25 @@ use Session;
 use Redirect;
 use PDF;
 
-class Customer_EstimateController extends Member
+class Customer_SaleOrderController extends Member
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-
+  
     public function index()
     {
 
-        $data["_estimates"] = Tbl_customer_estimate::customer()->where("est_shop_id",$this->user_info->shop_id)->where("is_sales_order",0)->get();
+        $data["_estimates"] = Tbl_customer_estimate::customer()->where("est_shop_id",$this->user_info->shop_id)->where("is_sales_order",1)->get();
 
-        return view("member.customer.estimate.estimate_list",$data);
+        return view("member.customer.sales_order.sales_order_list",$data);
     }
-    public function estimate_pdf($est_id)
+    public function so_pdf($est_id)
     {
         $data['estimate'] = Tbl_customer_estimate::customer()->where("est_id",$est_id)->where("est_shop_id",$this->user_info->shop_id)->first();
-        $data["transaction_type"] = "ESTIMATE";
+        $data["transaction_type"] = "SALES ORDER";
         $data["estimate_item"] = Tbl_customer_estimate_line::estimate_item()->where("estline_est_id",$est_id)->get();
         foreach($data["estimate_item"] as $key => $value) 
         {
@@ -92,13 +92,13 @@ class Customer_EstimateController extends Member
 
         return json_encode($data);
     }
-    public function estimate()
+    public function sales_order()
     {
         $data["page"] = "Customer Sales Receipt"; 
         $data["_customer"]  = Customer::getAllCustomer();
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
-        $data["action"]     = "/member/customer/estimate/create";
+        $data["action"]     = "/member/customer/sales_order/create";
         $data["c_id"] = Request::input("customer_id");
         $id = Request::input('id');
         if($id)
@@ -106,9 +106,9 @@ class Customer_EstimateController extends Member
             $data["est"]            = Tbl_customer_estimate::where("est_id", $id)->first();
             
             $data["_estline"]       = Tbl_customer_estimate_line::um()->where("estline_est_id", $id)->get();
-            $data["action"]         = "/member/customer/estimate/update";
+            $data["action"]         = "/member/customer/sales_order/update";
         }
-        return view("member.customer.estimate.create_estimate",$data);
+        return view("member.customer.sales_order.create_sales_order",$data);
     }
     public function create_submit()
     {
@@ -158,20 +158,20 @@ class Customer_EstimateController extends Member
         }
         if($ctr != 0)
         {
-             $est_id = Estimate::postEstimate($customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info);
+             $est_id = Estimate::postEstimate($customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info, true);
 
             $data["status"] = "success-estimate";
             if($button_action == "save-and-edit")
             {
-                $data["redirect"] = "/member/customer/estimate?id=".$est_id;
+                $data["redirect"] = "/member/customer/sales_order?id=".$est_id;
             }
             elseif($button_action == "save-and-close")
             {
-                $data["redirect"] = "/member/customer/estimate_list";
+                $data["redirect"] = "/member/customer/sales_order_list";
             }
             elseif($button_action == "save-and-new")
             {
-                $data["redirect"] = "/member/customer/estimate";
+                $data["redirect"] = "/member/customer/sales_order";
             }
         }
         else
@@ -232,20 +232,20 @@ class Customer_EstimateController extends Member
         }
         if($ctr != 0)
         {
-             $est_id = Estimate::updateEstimate($estimate_id, $customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info);
+             $est_id = Estimate::updateEstimate($estimate_id, $customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info, true);
 
             $data["status"] = "success-estimate";
             if($button_action == "save-and-edit")
             {
-                $data["redirect"] = "/member/customer/estimate?id=".$est_id;
+                $data["redirect"] = "/member/customer/sales_order?id=".$est_id;
             }
             elseif($button_action == "save-and-close")
             {
-                $data["redirect"] = "/member/customer/estimate_list";
+                $data["redirect"] = "/member/customer/sales_order_list";
             }
             elseif($button_action == "save-and-new")
             {
-                $data["redirect"] = "/member/customer/estimate";
+                $data["redirect"] = "/member/customer/sales_order";
             }
         }
         else

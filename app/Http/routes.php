@@ -514,6 +514,13 @@ Route::any('/member/customer/customer_estimate_view/{id}','Member\Customer_Estim
 Route::any('/member/customer/update_status/{id}','Member\Customer_EstimateController@update_status');
 Route::any('/member/customer/update_status_submit','Member\Customer_EstimateController@update_status_submit');
 
+/* Customer - Create Sales Order */
+Route::get('/member/customer/sales_order_list','Member\Customer_SaleOrderController@index');
+Route::any('/member/customer/sales_order','Member\Customer_SaleOrderController@sales_order');
+Route::any('/member/customer/sales_order/create','Member\Customer_SaleOrderController@create_submit');
+Route::any('/member/customer/sales_order/update','Member\Customer_SaleOrderController@update_submit');
+Route::any('/member/customer/customer_sales_order_view/{id}','Member\Customer_SaleOrderController@so_pdf');
+
 /* Customer - Receive Payment */
 Route::get('/member/customer/receive_payment','Member\Customer_ReceivePaymentController@index');
 Route::get('/member/customer/load_rp/{id}','Member\Customer_ReceivePaymentController@load_customer_rp');

@@ -41,7 +41,7 @@ class Estimate
 	 * @param array  $total_info   	        (total_item_price => '', total_addons => [[0]label => '', [0]value => ''], 
 	 *										 total_discount_type => '', total_discount_value => '', total_overall_price => '')
 	 */
-	public static function postEstimate($customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info)
+	public static function postEstimate($customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info, $is_sales_order = false)
 	{
         /* SUBTOTAL */
         $subtotal_price = collect($item_info)->sum('amount');
@@ -75,6 +75,11 @@ class Estimate
         $insert['est_memo']                     = $estimate_other_info['estimate_memo'];
         $insert['date_created']                 = Carbon::now();    
 
+        if($is_sales_order == true)
+        {
+            $insert['is_sales_order'] = 1;    
+            $insert['est_status'] = 'accepted';    
+        }
        
         $estimate_id = Tbl_customer_estimate::insertGetId($insert);
 
@@ -87,7 +92,7 @@ class Estimate
 	}
 
   
-    public static function updateEstimate($estimate_id, $customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info)
+    public static function updateEstimate($estimate_id, $customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info, $is_sales_order = false)
     {        
         $old = AuditTrail::get_table_data("tbl_customer_estimate","est_id",$estimate_id);
 
@@ -120,6 +125,13 @@ class Estimate
         $update['est_overall_price']            = $overall_price;
         $update['est_message']                  = $estimate_other_info['estimate_msg'];
         $update['est_memo']                     = $estimate_other_info['estimate_memo'];   
+
+        
+        if($is_sales_order == true)
+        {
+            $update['is_sales_order'] = 1;    
+            $update['est_status'] = 'accepted';    
+        }
 
         Tbl_customer_estimate::where("est_id", $estimate_id)->update($update);
         

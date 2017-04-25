@@ -25,12 +25,12 @@ class Tbl_journal_entry_line extends Model
     {
         if($type == 'customer')
         {
-            return $query->select(DB::raw(concat('first_name', 'middle_name', 'last_name') as 'name')
-                        ->leftJoin("tbl_customer", "vendor_id", "=", "jline_name_id");
+            return $query->selectRaw("*, concat('first_name', 'middle_name', 'last_name') as 'full_name'")
+                        ->leftJoin("tbl_customer", "customer_id", "=", "jline_name_id");
         }
         elseif($type == 'vendor')
         {
-            return $query->select(DB::raw(concat('vendor_first_name', 'vendor_middle_name', 'vendor_last_name') as 'name')
+            return $query->selectRaw("*, concat('vendor_first_name', 'vendor_middle_name', 'vendor_last_name') as 'full_name'")
                         ->leftJoin("tbl_vendor", "vendor_id", "=", "jline_name_id");
         }
     }

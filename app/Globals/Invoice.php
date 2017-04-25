@@ -125,9 +125,11 @@ class Invoice
         {
             Invoice::postSales_receipt_payment($customer_info,$invoice_info,$overall_price,$invoice_id);
         } 
+
         /* Transaction Journal */
         $entry["reference_module"]  = "invoice";
         $entry["reference_id"]      = $invoice_id;
+        $entry["name_id"]           = $customer_info['customer_id'];
         $entry["total"]             = $overall_price;
         $entry["vatable"]           = $tax;
         $entry["discount"]          = $discount;
@@ -220,6 +222,7 @@ class Invoice
         /* Transaction Journal */
         $entry["reference_module"]  = "invoice";
         $entry["reference_id"]      = $invoice_id;
+        $entry["name_id"]           = $customer_info['customer_id'];
         $entry["total"]             = $overall_price;
         $entry["vatable"]           = $tax;
         $entry["discount"]          = $discount;

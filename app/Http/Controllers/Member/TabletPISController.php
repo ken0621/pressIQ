@@ -1114,14 +1114,14 @@ class TabletPISController extends Member
         return json_encode($data);
     }
 	public function view_invoice_pdf($inv_id)
-	{
-		$data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
+    {
+        $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
 
         $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
         foreach($data["invoice_item"] as $key => $value) 
-        {        	
+        {           
             $um = Tbl_unit_measurement_multi::where("multi_id",$value->invline_um)->first();
-          	$qty = 1;
+            $qty = 1;
             if($um != null)
             {
                 $qty = $um->unit_qty;
@@ -1132,7 +1132,7 @@ class TabletPISController extends Member
         }
           $pdf = view('member.customer_invoice.invoice_pdf', $data);
           return Pdf_global::show_pdf($pdf);
-	}
+    }
 	public function view_invoices_view($id)
 	{
 		$data["invoice_id"] = $id;
@@ -1355,26 +1355,7 @@ class TabletPISController extends Member
         }
         return json_encode($data);
     }
-	public function view_invoice_pdf($inv_id)
-	{
-		$data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
-
-        $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
-        foreach($data["invoice_item"] as $key => $value) 
-        {        	
-            $um = Tbl_unit_measurement_multi::where("multi_id",$value->invline_um)->first();
-          	$qty = 1;
-            if($um != null)
-            {
-                $qty = $um->unit_qty;
-            }
-
-            $total_qty = $value->invline_qty * $qty;
-            $data["invoice_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->invline_um);
-        }
-          $pdf = view('member.customer_invoice.invoice_pdf', $data);
-          return Pdf_global::show_pdf($pdf);
-	}
+	
 	public function view_invoices_view($id)
 	{
 		$data["invoice_id"] = $id;

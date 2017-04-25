@@ -509,6 +509,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Working 90% - Need Search and Edit Customer Information";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Jimar Zape</span>";
     
+    /* -- CUSTOMERS => CREATE ESTIMATE  */
+    $code = "customer-estimate";
+    $nav[$page]['submenu'][$code]['label'] = "Create Estimate";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/estimate_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Layout Only";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Arcylen Gutierrez</span>";
+
     /* -- CUSTOMERS => CUSTOMER INVOICE  */
     $code = "customer-invoice";
     $nav[$page]['submenu'][$code]['label'] = "Create Invoice";

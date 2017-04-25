@@ -388,7 +388,7 @@ function purchase_order(){
 					{
 						$(this).globalDropList("reload").globalDropList("enabled");
 						console.log($(this).find("option:first").val());
-						$(this).val($(this).find("option:first").val()).change()		;
+						$(this).val($(this).find("option:first").val()).change();
 					})
 				},
 				error: function(e)
@@ -399,7 +399,7 @@ function purchase_order(){
 		}
 		else
 		{
-			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+			// $parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
 	}
 

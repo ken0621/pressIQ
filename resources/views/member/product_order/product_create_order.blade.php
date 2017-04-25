@@ -358,27 +358,6 @@
 </form>
 @if(isset($inv))
 <div class="panel panel-default panel-block panel-title-block panel-gray clearfix col-md-4">
-<<<<<<< HEAD
-    <h4>Upload:</h4>
-    <div class="row" style="padding: 10px 10px;">
-            <div id="ImportContainer">
-                <form action="/member/ecommerce/product_order/create_order/submit_payment_upload" id="myDropZoneImport" class="dropzone" method="post" enctype="multipart/form-data">
-                    <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
-                    <input type="hidden" name="ec_order_id" value="{{$ec_order_id or ''}}" >
-                    <input type="file" id="files" name="files[]" style="display: none"><br>
-                    <div class="dz-message">
-                        <span class="needsclick">
-                            <h2><b>DRAG & DROP</b></h2>
-                            <h4>your Image File here or click it to browse</h4>
-                        </span>
-                    </div>
-                </form>
-            </div>
-    </div>
-</div>
-<div class="panel panel-default panel-block panel-title-block panel-gray clearfix col-md-8">
-    <h4>Preview:</h4>
-=======
     <h5>Upload Attachment:</h5>
     <div class="row" style="padding: 10px 10px;">
         <div id="ImportContainer">
@@ -398,7 +377,6 @@
 </div>
 <div class="panel panel-default panel-block panel-title-block panel-gray clearfix col-md-8">
     <h5>Attachment Preview:</h5>
->>>>>>> testing
     <div class="row load-data" style="padding: 30px 30px;">
         <div class="content-data">
             <img src="{{$inv->payment_upload or ''}}" style="width: 100%">

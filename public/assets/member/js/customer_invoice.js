@@ -621,9 +621,9 @@ function submit_done_item(data)
 {
 	toastr.success("Success");
     $(".tbody-item .select-item").load("/member/item/load_item_category", function()
-    {                
-         $(".tbody-item .select-item").globalDropList("reload"); 
-         item_selected.val(data.item_id).change();          
+    {
+        $(".tbody-item .select-item").globalDropList("reload");
+		item_selected.val(data.item_id).change();
     });
     data.element.modal("hide");
 }

@@ -23,19 +23,6 @@ class Seed_manual
         {
           Seed_manual::seed_tbl_item_type();
         }
-<<<<<<< HEAD
-
-        // if(!DB::table("tbl_online_pymnt_method")->first())
-        // {
-        //   Seed_manual::seed_tbl_online_pymnt_method();
-        // }
-        // if(!DB::table("tbl_online_pymnt_gateway")->first())
-        // {
-        //   Seed_manual::seed_tbl_online_pymnt_gateway();
-        // }
-
-=======
->>>>>>> master
     }
 
     public static function getShopId()

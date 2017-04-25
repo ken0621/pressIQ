@@ -507,7 +507,7 @@ class Cart
         return $data;
     }
 
-    public static function generate_coupon_code($word_limit,$price,$type="fixed")
+    public static function generate_coupon_code($word_limit, $price, $minimum_quantity = 0, $type="fixed", $coupon_product_id = null)
     {
         //get_shop_info
         $shop_id = Cart::get_shop_info();
@@ -550,10 +550,12 @@ class Cart
             }
 
             $insert["id_per_coupon"]           =  $id_per_coupon;                
-            $insert["coupon_code"]             =  $generated_word;              
+            $insert["coupon_code"]             =  $generated_word;  
+            $insert["coupon_product_id"]       =  isset($coupon_product_id) ? $coupon_product_id : null;              
             $insert["coupon_code_amount"]      =  $price;                     
             $insert["coupon_discounted"]       =  $type;                     
-            $insert["shop_id"]                 =  $shop_id;          
+            $insert["shop_id"]                 =  $shop_id;
+            $insert["coupon_minimum_quantity"] =  $minimum_quantity;         
             $insert["date_created"]            =  Carbon::now();  
             Tbl_coupon_code::insert($insert);
 

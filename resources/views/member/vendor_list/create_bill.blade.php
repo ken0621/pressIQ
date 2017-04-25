@@ -294,7 +294,6 @@
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 <script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
-<link rel="stylesheet" type="text/css" href="/assets/member/bootstrap_drawer/cooker.drawer.css">
 
 <script type="text/javascript" src="/assets/member/js/bill.js"></script>
 
@@ -320,6 +319,7 @@ $(document).ready(function() {
 @endsection
 
 @section('css')
+<link rel="stylesheet" type="text/css" href="/assets/member/bootstrap_drawer/cooker.drawer.css">
 <style type="text/css">
 .po-style
 {

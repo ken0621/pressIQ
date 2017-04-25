@@ -54,7 +54,7 @@ $data['icon'] = 'fa fa-shopping-cart';
         <h1><i class="fa fa-shopping-cart" aria-hidden="true" style="margin-right: 10px;"></i> Cart</h1>
         <div class="panel panel-default panel-block">
             <div class="repurchase-cart">
-                <div class="loader"></div>
+                <div class="loader"><img src="/assets/mlm/img/ellipsis.gif"></div>
                 {!! $cart !!}
             </div>
         </div>
@@ -68,54 +68,5 @@ $data['icon'] = 'fa fa-shopping-cart';
 <script type="text/javascript" src="/assets/mlm/js/repurchase.js"></script>
 @endsection
 @section("css")
-<style type="text/css">
-.repurchase
-{
-    padding: 15px;
-}
-.repurchase .holder
-{
-    margin-bottom: 15px;
-}
-.repurchase .holder:last-child
-{
-    margin-bottom: 0;
-}
-.repurchase .holder .img
-{
-    padding-bottom: 75%;
-    position: relative;
-    height: 0;
-}
-.repurchase .holder .img img
-{
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    object-fit: cover;
-    object-position: center;
-}
-.repurchase .holder .name
-{
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 7.5px;
-}
-.repurchase .holder .price
-{
-    font-size: 16px;
-}
-.repurchase .holder .btn
-{
-    background-color: #5C3424;
-    color: #fff;
-    border: 0;
-    border-radius: 0;
-    padding: 7.5px 15px;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="/assets/mlm/css/repurchase.css">
 @endsection

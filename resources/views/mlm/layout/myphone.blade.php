@@ -118,6 +118,27 @@
             margin-right: auto;
             margin-left: auto;
         }
+
+        .info-box
+        {
+          border: 1px solid #D9DEE4;
+        }
+
+        .info-box-icon
+        {
+          height: 88px;
+        }
+
+        .info-box-text h2
+        {
+          font-weight: 700;
+          margin-bottom: 5px;
+        }
+
+        .info-box-content
+        {
+          margin-top: 5px;
+        }
       </style>
       @yield("css")
    </head>

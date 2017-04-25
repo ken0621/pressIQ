@@ -981,12 +981,13 @@ class Payroll
                                                        ->orderBy('.tbl_payroll_period.payroll_period_category')
                                                        ->orderBy('tbl_payroll_period.payroll_period_start')
                                                        ->get();
+
         foreach($_period as $period)
         {
         	
 			array_push($data, Payroll::company_period($period, $shop_id));
         }
-
+        // dd($data);
         return $data;
 	}
 
@@ -999,6 +1000,9 @@ class Payroll
 						->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 						->where('tbl_payroll_group.payroll_group_period', $payroll_period_category)
 						->get();
+
+		// dd($period);
+
 		$start 	= $period->payroll_period_start;
 		$end 	= $period->payroll_period_end;
 
@@ -1044,6 +1048,8 @@ class Payroll
 		$basic_employee  = Tbl_payroll_employee_basic::where('payroll_employee_id',$employee_id)->first();
 
 		$total_hours_render					= 0;
+
+		$data['daily_rate']					= 0;
 
 		$data['payroll_employee_id']		= $employee_id;
 		$data['payroll_period_company_id']	= $payroll_period_company_id;
@@ -1179,7 +1185,7 @@ class Payroll
 
 			$approved = $time->approved_timesheet;
 
-			array_push($dd_array, $approved);
+			// array_push($dd_array, $approved);
 
 			$temp_hour 					= 0;
 
@@ -1257,6 +1263,9 @@ class Payroll
 
 			$daily_rate = divide($data['salary_monthly'] , $working_day_month);
 
+			$hourly_rate = divide($daily_rate, $target_hour);
+
+			$data['daily_rate'] = $daily_rate;
 
 			/* compute absent */
 			if($approved->absent)
@@ -1467,10 +1476,7 @@ class Payroll
 
 			$temp_cola = $extra_day['cola'] + $regular_day['cola'] + $regular_day_rest['cola'] + $special_holiday_rest['cola'] + $legal_holiday_rest['cola'] + $legal_holiday['cola'] + $special_holiday['cola'];
 
-			array_push($dd_array, $temp_cola);
-
-			// dd($special_holiday);
-
+			array_push($dd_array, $regular_day['late_overtime']);
 			/* LATE COMPUTATION START */
 
 			$late_deduction = 0;
@@ -1496,12 +1502,14 @@ class Payroll
 			}
 			else if($group->payroll_late_category == 'Base on Salary')
 			{
-				$late_deduction = $late_hours * $daily_rate;
+				$late_deduction = $late_hours * $hourly_rate;
 			}
 
 			$data['under_time'] = $under_time * $daily_rate;
 
 			$data['late_deduction']	+= round($late_deduction, 2);
+
+			// array_push($dd_array, $late_deduction);
 
 			$start = Carbon::parse($start)->addDay()->format("Y-m-d");
 
@@ -1959,18 +1967,15 @@ class Payroll
 			$early_overtime 	= $param->payroll_overtime_rest_overtime;
 			$night_differential = $param->payroll_overtime_rest_night;
 			$cola_var			= $regular;
-			// if($regular == 0)
-			// {
-			// 	$cola_var = 1;
-			// }
+			
 		}
 
 		$cola_var 			= $cola_var * $cola;
 
 		$regular 			= $regular * $rate;
-		$late_overtime 		= $late_overtime * $rate;
-		$early_overtime 	= $early_overtime * $rate;
-		$night_differential = $night_differential * $rate;
+		// $late_overtime 		= $late_overtime * $rate;
+		// $early_overtime 	= $early_overtime * $rate;
+		// $night_differential = $night_differential * $rate;
 		
 
 		if($hours['regular'] <= 0)
@@ -1990,10 +1995,14 @@ class Payroll
 			$night_differential = 0;
 		}	
 
+		$temp_overtime = $hours['late_overtime'] * $rate;
+		$temp_earlyOT = $hours['early_overtime'] * $rate;
+		$temp_night	= $hours['night_differential'] * $rate;
+
 		$data['regular']			= round(($regular + ( $hours['regular'] * $rate )), 2);
-		$data['late_overtime']		= round(($late_overtime + ( $hours['late_overtime'] * $rate )), 2);
-		$data['early_overtime']		= round(($early_overtime + ( $hours['early_overtime'] * $rate )), 2);
-		$data['night_differential']	= round(($night_differential + ( $hours['night_differential'] * $rate )), 2);
+		$data['late_overtime']		= round(($temp_overtime + ($temp_overtime * $late_overtime)), 2);
+		$data['early_overtime']		= round(($early_overtime + ($early_overtime * $early_overtime)), 2);
+		$data['night_differential']	= round(($night_differential + ($temp_night * $night_differential)), 2);
 
 		$tota = 0;
 
@@ -2088,24 +2097,27 @@ class Payroll
 		$data['er'] = 0;
 		$data['ec'] = 0;
 
-		$max_sss = Tbl_payroll_sss::where('shop_id', $shop_id)->orderBy('payroll_sss_min','desc')->first();
-		$sss = Tbl_payroll_sss::where('shop_id', $shop_id)->where('payroll_sss_min','<=',$rate)->where('payroll_sss_max','>=',$rate)->first();
-
-		if($sss == null)
-		{	
-			if($max_sss->payroll_sss_min <= $rate)
-			{
-				$data['ee'] = $max_sss->payroll_sss_ee;
-				$data['er'] = $max_sss->payroll_sss_er;
-				$data['ec'] = $max_sss->payroll_sss_eec;
-
-			}
-		}
-		else if($sss != null)
+		if($rate > 0)
 		{
-			$data['ee'] = $sss->payroll_sss_ee;
-			$data['er'] = $sss->payroll_sss_er;
-			$data['ec'] = $sss->payroll_sss_eec;
+			$max_sss = Tbl_payroll_sss::where('shop_id', $shop_id)->orderBy('payroll_sss_min','desc')->first();
+			$sss = Tbl_payroll_sss::where('shop_id', $shop_id)->where('payroll_sss_min','<=',$rate)->where('payroll_sss_max','>=',$rate)->first();
+
+			if($sss == null)
+			{	
+				if($max_sss->payroll_sss_min <= $rate)
+				{
+					$data['ee'] = $max_sss->payroll_sss_ee;
+					$data['er'] = $max_sss->payroll_sss_er;
+					$data['ec'] = $max_sss->payroll_sss_eec;
+
+				}
+			}
+			else if($sss != null)
+			{
+				$data['ee'] = $sss->payroll_sss_ee;
+				$data['er'] = $sss->payroll_sss_er;
+				$data['ec'] = $sss->payroll_sss_eec;
+			}
 		}
 
 		return $data;
@@ -2116,26 +2128,29 @@ class Payroll
 	{
 		$data['ee'] = 0;
 		$data['er'] = 0;
-
-		$_philhealth_max = Tbl_payroll_philhealth::where('shop_id', $shop_id)->orderBy('payroll_philhealth_min','desc')->first();
-
-		$philhealth = Tbl_payroll_philhealth::where('shop_id', $shop_id)
-											->where('payroll_philhealth_min','<=', $rate)
-											->where('payroll_philhealth_max','>=', $rate)
-											->first();
-
-
-		if($philhealth != null)
+		if($rate > 0)
 		{
-			$data['ee'] = $philhealth->payroll_philhealth_ee_share;
-			$data['er'] = $philhealth->payroll_philhealth_er_share;
+			$_philhealth_max = Tbl_payroll_philhealth::where('shop_id', $shop_id)->orderBy('payroll_philhealth_min','desc')->first();
 
+			$philhealth = Tbl_payroll_philhealth::where('shop_id', $shop_id)
+												->where('payroll_philhealth_min','<=', $rate)
+												->where('payroll_philhealth_max','>=', $rate)
+												->first();
+
+
+			if($philhealth != null)
+			{
+				$data['ee'] = $philhealth->payroll_philhealth_ee_share;
+				$data['er'] = $philhealth->payroll_philhealth_er_share;
+
+			}
+			else if($_philhealth_max->payroll_philhealth_min >= $rate)
+			{	
+				$data['ee'] = $_philhealth_max->payroll_philhealth_ee_share;
+				$data['er'] = $_philhealth_max->payroll_philhealth_er_share;
+			}
 		}
-		else if($_philhealth_max->payroll_philhealth_min >= $rate)
-		{	
-			$data['ee'] = $_philhealth_max->payroll_philhealth_ee_share;
-			$data['er'] = $_philhealth_max->payroll_philhealth_er_share;
-		}
+		
 
 		return $data;
 	}

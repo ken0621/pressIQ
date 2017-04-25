@@ -127,133 +127,135 @@
 </table>
 <hr>
 <div class="col-md-4 div-table-summary">
-    <table class="table table-bordered table-condensed">
-        <tr>
-            <td>Total Regular Hours</td>
-            <td class="text-right">
-                {{$summary['regular_hours']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Late</td>
-            <td class="text-right">
-                {{$summary['late_hours']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Under Time</td>
-            <td class="text-right">
-                {{$summary['under_time']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Reg OverTime</td>
-            <td class="text-right">
-                {{$summary['late_overtime']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Early OverTime</td>
-            <td class="text-right">
-                {{$summary['early_overtime']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Night Differentials</td>
-            <td class="text-right">
-                {{$summary['night_differential']}}
-            </td>
-        </tr>
-        
-        <tr>
-            <td>Total Extra Day Hours</td>
-            <td class="text-right">
-                {{$summary['extra_day_hours']}}
-            </td>
-        </tr>
-        
-        <tr>
-            <td>Total Rest Day Hour</td>
-            <td class="text-right">
-                {{$summary['rest_day_hours']}}
-            </td>
-        </tr>
-        
-        <tr>
-            <td>Total Special Holiday Hour</td>
-            <td class="text-right">
-                {{$summary['special_holiday_hours']}}
-            </td>
-        </tr>
-        
-        <tr>
-            <td>Total Regular Holiday Hour</td>
-            <td class="text-right">
-                {{$summary['regular_holiday_hours']}}
-            </td>
-        </tr>
-        <tr>
-            <td><b>Total Working Hours</b></td>
-            <td class="text-right">
-                <b>{{$summary['time_spent']}}</b>
-            </td>
-        </tr>
-        <tr>
-            <td width="50%">Total Regular Days</td>
-            <td class="text-right">
-                {{$summary['regular_day_count']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Extra Days</td>
-            <td class="text-right">
-                {{$summary['extra_day_count']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Rest Day</td>
-            <td class="text-right">
-                {{$summary['rest_day_count']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Special Holiday</td>
-            <td class="text-right">
-                {{$summary['special_holiday_count']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Regular Holiday</td>
-            <td class="text-right">
-                {{$summary['regular_holiday_count']}}
-            </td>
-        </tr>
-        <tr>
-            <td width="50%">Total Absents</td>
-            <td class="text-right">
-                {{$summary['absent']}}
-            </td>
-        </tr>
+    <div class="div-summary-table">
+        <table class="table table-bordered table-condensed">
+            <tr>
+                <td>Total Regular Hours</td>
+                <td class="text-right">
+                    {{$summary['regular_hours']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Late</td>
+                <td class="text-right">
+                    {{$summary['late_hours']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Under Time</td>
+                <td class="text-right">
+                    {{$summary['under_time']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Reg OverTime</td>
+                <td class="text-right">
+                    {{$summary['late_overtime']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Early OverTime</td>
+                <td class="text-right">
+                    {{$summary['early_overtime']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Night Differentials</td>
+                <td class="text-right">
+                    {{$summary['night_differential']}}
+                </td>
+            </tr>
+            
+            <tr>
+                <td>Total Extra Day Hours</td>
+                <td class="text-right">
+                    {{$summary['extra_day_hours']}}
+                </td>
+            </tr>
+            
+            <tr>
+                <td>Total Rest Day Hour</td>
+                <td class="text-right">
+                    {{$summary['rest_day_hours']}}
+                </td>
+            </tr>
+            
+            <tr>
+                <td>Total Special Holiday Hour</td>
+                <td class="text-right">
+                    {{$summary['special_holiday_hours']}}
+                </td>
+            </tr>
+            
+            <tr>
+                <td>Total Regular Holiday Hour</td>
+                <td class="text-right">
+                    {{$summary['regular_holiday_hours']}}
+                </td>
+            </tr>
+            <tr>
+                <td><b>Total Working Hours</b></td>
+                <td class="text-right">
+                    <b>{{$summary['time_spent']}}</b>
+                </td>
+            </tr>
+            <tr>
+                <td width="50%">Total Regular Days</td>
+                <td class="text-right">
+                    {{$summary['regular_day_count']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Extra Days</td>
+                <td class="text-right">
+                    {{$summary['extra_day_count']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Rest Day</td>
+                <td class="text-right">
+                    {{$summary['rest_day_count']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Special Holiday</td>
+                <td class="text-right">
+                    {{$summary['special_holiday_count']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Regular Holiday</td>
+                <td class="text-right">
+                    {{$summary['regular_holiday_count']}}
+                </td>
+            </tr>
+            <tr>
+                <td width="50%">Total Absents</td>
+                <td class="text-right">
+                    {{$summary['absent']}}
+                </td>
+            </tr>
 
-        <tr>
-            <td><b>Total Working Days</b></td>
-            <td class="text-right">
-                <b>{{$summary['total_working_days']}}</b>
-            </td>
-        </tr>
-        <tr>
-            <td width="50%">Total Leave with Pay</td>
-            <td class="text-right">
-                {{$summary['leave_with_pay']}}
-            </td>
-        </tr>
-        <tr>
-            <td width="50%">Total Leave without Pay</td>
-            <td class="text-right">
-                {{$summary['leave_wo_pay']}}
-            </td>
-        </tr>
-    </table>
+            <tr>
+                <td><b>Total Working Days</b></td>
+                <td class="text-right">
+                    <b>{{$summary['total_working_days']}}</b>
+                </td>
+            </tr>
+            <tr>
+                <td width="50%">Total Leave with Pay</td>
+                <td class="text-right">
+                    {{$summary['leave_with_pay']}}
+                </td>
+            </tr>
+            <tr>
+                <td width="50%">Total Leave without Pay</td>
+                <td class="text-right">
+                    {{$summary['leave_wo_pay']}}
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 <div class="col-md-4 pull-right form-horizontal">
     <div class="form-group">

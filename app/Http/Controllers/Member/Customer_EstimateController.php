@@ -43,6 +43,45 @@ class Customer_EstimateController extends Member
 
     public function index()
     {
+
+        $data["_estimates"] = Tbl_customer_estimate::customer()->where("est_shop_id",$this->user_info->shop_id)->get();
+
+        return view("member.customer.estimate.estimate_list",$data);
+    }
+    public function estimate_pdf($est_id)
+    {
+        $data['estimate'] = Tbl_customer_estimate::customer()->where("est_id",$est_id)->where("est_shop_id",$this->user_info->shop_id)->first();
+        $data["transaction_type"] = "ESTIMATE";
+        $data["estimate_item"] = Tbl_customer_estimate_line::estimate_item()->where("estline_est_id",$est_id)->get();
+        foreach($data["estimate_item"] as $key => $value) 
+        {
+            $qty = UnitMeasurement::um_qty($value->estline_um);
+
+            $total_qty = $value->estline_qty * $qty;
+            $data["estimate_item"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->estline_um);
+        }
+
+       $pdf = view('member.customer.estimate.estimate_pdf', $data);
+       return Pdf_global::show_pdf($pdf);
+
+    }
+    public function update_status($id)
+    {
+        $data["est"] = Tbl_customer_estimate::where("est_id",$id)->first();
+        $data["estimate_id"] = $id;
+
+        $stat[0] = "pending";
+        $stat[1] = "accepted";
+        $stat[2] = "closed";
+        $stat[3] = "rejected";
+
+        $data["status"] = $stat;
+
+        return view("member.customer.estimate.estimate_update_status",$data);
+    }
+    public function update_status_submit()
+    {
+
     }
     public function estimate()
     {
@@ -72,7 +111,6 @@ class Customer_EstimateController extends Member
         $customer_info['customer_email']    = Request::input('est_customer_email');
 
         $estimate_info                       = [];
-        $estimate_info['estimate_terms_id']   = Request::input('est_terms_id');
         $estimate_info['estimate_date']       = datepicker_input(Request::input('est_date'));
         $estimate_info['estimate_due']        = datepicker_input(Request::input('est_exp_date'));
         $estimate_info['billing_address']    = Request::input('est_customer_billing_address');
@@ -114,7 +152,18 @@ class Customer_EstimateController extends Member
              $est_id = Estimate::postEstimate($customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info);
 
             $data["status"] = "success-estimate";
-            $data["redirect"] = "/member/customer/estimate?id=".$est_id;
+            if($button_action == "save-and-edit")
+            {
+                $data["redirect"] = "/member/customer/estimate?id=".$est_id;
+            }
+            elseif($button_action == "save-and-close")
+            {
+                $data["redirect"] = "/member/customer/estimate_list";
+            }
+            elseif($button_action == "save-and-new")
+            {
+                $data["redirect"] = "/member/customer/estimate";
+            }
         }
         else
         {
@@ -126,7 +175,77 @@ class Customer_EstimateController extends Member
     }
     public function update_submit()
     {
-        dd(Request::input());
+
+        $estimate_id = Request::input('estimate_id');
+
+        $button_action = Request::input('button_action');
+
+        $customer_info                      = [];
+        $customer_info['customer_id']       = Request::input('est_customer_id');
+        $customer_info['customer_email']    = Request::input('est_customer_email');
+
+        $estimate_info                       = [];
+        $estimate_info['estimate_date']       = datepicker_input(Request::input('est_date'));
+        $estimate_info['estimate_due']        = datepicker_input(Request::input('est_exp_date'));
+        $estimate_info['billing_address']    = Request::input('est_customer_billing_address');
+
+        $estimate_other_info                 = [];
+        $estimate_other_info['estimate_msg']  = Request::input('est_message');
+        $estimate_other_info['estimate_memo'] = Request::input('est_memo');
+
+        $total_info                         = [];
+        $total_info['ewt']                  = Request::input('ewt');
+        $total_info['total_discount_type']  = Request::input('est_discount_type');
+        $total_info['total_discount_value'] = Request::input('est_discount_value');
+        $total_info['taxable']              = Request::input('taxable');
+
+        $item_info                          = [];
+        $_itemline                          = Request::input('estline_item_id');
+
+        $product_consume = null;
+        $ctr = 0;
+        foreach($_itemline as $key => $item_line)
+        {
+            if($item_line)
+            {
+                $ctr++;
+                $item_info[$key]['item_service_date']  = Request::input('estline_service_date')[$key];
+                $item_info[$key]['item_id']            = Request::input('estline_item_id')[$key];
+                $item_info[$key]['item_description']   = Request::input('estline_description')[$key];
+                $item_info[$key]['um']                 = Request::input('estline_um')[$key];
+                $item_info[$key]['quantity']           = Request::input('estline_qty')[$key];
+                $item_info[$key]['rate']               = convertToNumber(Request::input('estline_rate')[$key]);
+                $item_info[$key]['discount']           = Request::input('estline_discount')[$key];
+                $item_info[$key]['discount_remark']    = Request::input('estline_discount_remark')[$key];
+                $item_info[$key]['amount']             = convertToNumber(Request::input('estline_amount')[$key]);
+                $item_info[$key]['taxable']            = Request::input('estline_taxable')[$key];
+            }
+        }
+        if($ctr != 0)
+        {
+             $est_id = Estimate::updateEstimate($estimate_id, $customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info);
+
+            $data["status"] = "success-estimate";
+            if($button_action == "save-and-edit")
+            {
+                $data["redirect"] = "/member/customer/estimate?id=".$est_id;
+            }
+            elseif($button_action == "save-and-close")
+            {
+                $data["redirect"] = "/member/customer/estimate_list";
+            }
+            elseif($button_action == "save-and-new")
+            {
+                $data["redirect"] = "/member/customer/estimate";
+            }
+        }
+        else
+        {
+            $data["status"] = "error";
+            $data["status_message"] = "Please Insert Item";
+        }
+
+        return json_encode($data);
     }
 
     /**

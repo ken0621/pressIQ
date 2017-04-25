@@ -41,7 +41,7 @@ class Estimate
 	 * @param array  $total_info   	        (total_item_price => '', total_addons => [[0]label => '', [0]value => ''], 
 	 *										 total_discount_type => '', total_discount_value => '', total_overall_price => '')
 	 */
-	public static function postEstimate($customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info, $is_sales_receipt = '')
+	public static function postEstimate($customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info)
 	{
         /* SUBTOTAL */
         $subtotal_price = collect($item_info)->sum('amount');
@@ -63,7 +63,6 @@ class Estimate
 		$insert['est_customer_id']              = $customer_info['customer_id'];        
         $insert['est_customer_email']           = $customer_info['customer_email'];
         $insert['est_customer_billing_address'] = $estimate_info['billing_address'];
-        $insert['est_terms_id']                 = $estimate_info['estimate_terms_id'];
         $insert['est_date']                     = date("Y-m-d", strtotime($estimate_info['estimate_date']));
         $insert['est_exp_date']                 = date("Y-m-d", strtotime($estimate_info['estimate_due']));
         $insert['est_subtotal_price']           = $subtotal_price;
@@ -88,7 +87,7 @@ class Estimate
 	}
 
   
-    public static function updateEstimate($estimate_id, $customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info, $is_sales_receipt = '')
+    public static function updateEstimate($estimate_id, $customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info)
     {        
         $old = AuditTrail::get_table_data("tbl_customer_estimate","est_id",$estimate_id);
 
@@ -111,7 +110,6 @@ class Estimate
         $update['est_customer_id']              = $customer_info['customer_id'];        
         $update['est_customer_email']           = $customer_info['customer_email'];
         $update['est_customer_billing_address'] = $estimate_info['billing_address'];
-        $update['est_terms_id']                 = $estimate_info['estimate_terms_id'];
         $update['est_date']                     = date("Y-m-d", strtotime($estimate_info['estimate_date']));
         $update['est_exp_date']                 = date("Y-m-d", strtotime($estimate_info['estimate_due']));
         $update['est_subtotal_price']           = $subtotal_price;

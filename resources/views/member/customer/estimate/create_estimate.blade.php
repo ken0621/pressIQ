@@ -3,9 +3,7 @@
 <form class="global-submit form-to-submit-transfer" id="estimate_form" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" class="token" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" class="button-action" name="button_action" value="">
-    <input type="hidden" name="sir_id" value="{{$sir_id or ''}}" >
-    <input type="hidden" name="estimate" value="{{Request::input('id')}}" >
-    <input type="hidden" id="keep_val" name="keep_val" value="" >
+    <input type="hidden" name="estimate_id" value="{{Request::input('id')}}" >
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
             <div>
@@ -16,23 +14,9 @@
                     
                     </small>
                 </h1>
-                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save</button>
-                <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
-                @if(isset($est))
-                <div class="pull-right">
-                    <div class="dropdown">
-                        <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
-                        <span class="caret"></span></button>
-                        <ul class="dropdown-menu">
-                            <!-- <li class="dropdown-header">Dropdown header 1</li> -->
-                            <li><a href="/member/accounting/journal/entry/estimate/{{$est->est_id}}">Transaction Journal</a></li>
-                            <!-- <li class="divider"></li> -->
-                            <!-- <li class="dropdown-header">Dropdown header 2</li> -->
-                            <li><a href="#">Void</a></li>
-                        </ul>
-                    </div>
-                </div>
-                @endif  
+                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save & Edit</button>
+                <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save & New</button>
+                <button type="submit" class="panel-buttons btn btn-custom-default pull-right" data-action="save-and-close">Save & Close</button>
                <!--  <a href="javascript:" class="panel-buttons btn btn-custom-white pull-right popup" link="/member/item/add" size="lg">Save</a> -->
             </div>
         </div>

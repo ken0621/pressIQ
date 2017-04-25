@@ -23,15 +23,6 @@ class Seed_manual
         {
           Seed_manual::seed_tbl_item_type();
         }
-<<<<<<< HEAD:app/Globals/seed.php
-        if(!DB::table("tbl_online_pymnt_method")->first())
-        {
-          Seed::seed_tbl_online_pymnt_method();
-        }
-        if(!DB::table("tbl_online_pymnt_gateway")->first())
-        {
-          Seed::seed_tbl_online_pymnt_gateway();
-=======
 
         // if(!DB::table("tbl_online_pymnt_method")->first())
         // {
@@ -42,11 +33,6 @@ class Seed_manual
         //   Seed_manual::seed_tbl_online_pymnt_gateway();
         // }
 
-        if(!DB::table('tbl_payroll_entity')->first())
-        {
-            Seed_manual::seed_tbl_payroll_entity();
->>>>>>> a037c4c79afcfa3c6bc4b9c9fd4bbb9c8147c518:app/Globals/Seed_manual.php~HEAD
-        }
     }
 
     public static function getShopId()

@@ -65,6 +65,7 @@ use App\Models\Tbl_payroll_leave_schedule;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
+use App\Globals\Utilities;
 
 class PayrollController extends Member
 {
@@ -1515,8 +1516,71 @@ class PayrollController extends Member
 
 	public function payroll_configuration()
 	{
-		return view('member.payroll.payrollconfiguration');
+
+          $_access = Self::payroll_configuration_page();
+
+          $link = array();
+
+          foreach($_access as $access)
+          {
+               if(Utilities::checkAccess('payroll-configuration',$access['access_name']) == 1)
+               {
+                    array_push($link, $access);
+               }
+          }
+
+          $data['_link'] = $link;
+		return view('member.payroll.payrollconfiguration', $data);
 	}
+
+     /* payroll configuration access page */
+     public function payroll_configuration_page()
+     {
+
+          $data[0]['access_name'] = 'Department';
+          $data[0]['link']        = '/member/payroll/departmentlist';
+
+          $data[1]['access_name'] = 'Job Title';
+          $data[1]['link']        = '/member/payroll/jobtitlelist';
+
+          $data[2]['access_name'] = 'Holiday';
+          $data[2]['link']        = '/member/payroll/holiday';
+
+          $data[3]['access_name'] = 'Allowances';
+          $data[3]['link']        = '/member/payroll/allowance';
+
+          $data[4]['access_name'] = 'Deductions';
+          $data[4]['link']        = '/member/payroll/deduction';
+
+          $data[5]['access_name'] = 'Leave';
+          $data[5]['link']        = '/member/payroll/leave';
+
+          $data[6]['access_name'] = 'Payroll Group';
+          $data[6]['link']        = '/member/payroll/payroll_group';
+
+          $data[7]['access_name'] = 'Journal Tags';
+          $data[7]['link']        = '/member/payroll/payroll_jouarnal';
+
+          $data[8]['access_name'] = 'Payslip';
+          $data[8]['link']        = '/member/payroll/custom_payslip';
+
+          $data[9]['access_name'] = 'Tax Period';
+          $data[9]['link']        = '/member/payroll/tax_period';
+
+          $data[10]['access_name'] = 'Tax Table';
+          $data[10]['link']        = '/member/payroll/tax_table_list';
+
+          $data[11]['access_name'] = 'SSS Table';
+          $data[11]['link']        = '/member/payroll/sss_table_list';
+
+          $data[12]['access_name'] = 'Philhealth Table';
+          $data[12]['link']        = '/member/payroll/philhealth_table_list';
+
+          $data[13]['access_name'] = 'Pagibig/HDMF';
+          $data[13]['link']        = '/member/payroll/pagibig_formula';
+
+          return $data;
+     }
 
 
 	/* COMPANY START */

@@ -36,7 +36,7 @@ class PayrollTimeSheetController extends Member
 		$data["default_time_in"] = Carbon::parse($data["employee_info"]->payroll_group_start)->format("h:i A");
 		$data["default_time_out"] = Carbon::parse($data["employee_info"]->payroll_group_end)->format("h:i A");
 		$data['_company'] = Payroll::company_heirarchy($this->user_info->shop_id);
-		dd($data);
+		// dd($data);
 		return view('member.payroll.employee_timesheet', $data);
 	}
 
@@ -224,6 +224,10 @@ class PayrollTimeSheetController extends Member
 		$regular_holiday_count			= 0;
 		$total_working_days				= 0;
 
+		$leave_with_pay					= 0;
+		$leave_wo_pay					= 0;
+		$absent 						= 0;
+
 		$data = array();
 		$array = array();
 		while($from <= $to)
@@ -241,6 +245,19 @@ class PayrollTimeSheetController extends Member
 				$extra_day_count   += divide(Payroll::time_float($approved_timesheet->extra_day_hours) , $param_hour);
 				$special_holiday_count += divide(Payroll::time_float($approved_timesheet->special_holiday_hours) , $param_hour);
 				$regular_holiday_count += divide(Payroll::time_float($approved_timesheet->regular_holiday_hours) , $param_hour);
+			}
+
+			if($approved_timesheet->absent)
+			{
+				$absent++;
+			}
+			if($approved_timesheet->leave == 'without_pay')
+			{
+				$leave_wo_pay++;
+			}
+			if($approved_timesheet->leave == 'with_pay')
+			{
+				$leave_with_pay++;
 			}
 
 			$total_time_spent = Payroll::sum_time($total_time_spent, $approved_timesheet->time_spent);
@@ -281,6 +298,9 @@ class PayrollTimeSheetController extends Member
 		$data['special_holiday_count'] 	= Payroll::if_zero($special_holiday_count);
 		$data['regular_holiday_count'] 	= Payroll::if_zero($regular_holiday_count);
 		$data['total_working_days'] 	= Payroll::if_zero($total_working_days);
+		$data['absent']					= Payroll::if_zero($absent);
+		$data['leave_wo_pay']			= Payroll::if_zero($leave_wo_pay);
+		$data['leave_with_pay']			= Payroll::if_zero($leave_with_pay);
 		// dd($data);
 		return $data;
 	}

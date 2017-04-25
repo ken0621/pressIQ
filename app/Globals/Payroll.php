@@ -33,6 +33,9 @@ use App\Models\Tbl_payroll_adjustment;
 use App\Models\Tbl_payroll_allowance_record;
 use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_payroll_entity;
+use App\Models\Tbl_payroll_leave_schedule;
+use App\Models\Tbl_payroll_leave_temp;
+use App\Models\Tbl_payroll_leave_employee;
 
 use Carbon\Carbon;
 use stdClass;
@@ -586,6 +589,8 @@ class Payroll
 		$break 						= 0;
 		$total_under_time 			= 0;
 		$absent						= false;
+		$leave 						= Payroll::check_if_employee_leave($data["employee_information"]->payroll_employee_id, $date);
+		
 
 		$default_time_in 	= c_time_to_int($default_time_in);
 		$default_time_out 	= c_time_to_int($default_time_out);
@@ -879,6 +884,7 @@ class Payroll
 		$return->break 				= convert_seconds_to_hours_minutes("H:i", $break);
 		$return->time_record 		= $time_rec;
 		$return->absent 			= $absent;
+		$return->leave 				= $leave;
 
 		return $return;
 	}
@@ -2358,5 +2364,26 @@ class Payroll
 		// dd(collect($data)->groupBy());
 		return $data;
 	}
+
+
+	/* check if employee has schedule leave */
+	public static function check_if_employee_leave($employee_id = 0, $date = '0000-00-00')
+	{
+		$data = 'no_leave';
+
+		$leave_count = Tbl_payroll_leave_schedule::checkemployee($employee_id, $date)->count();
+		if($leave_count > 0)
+		{
+			$leave = Tbl_payroll_leave_schedule::checkemployee($employee_id, $date)->first();
+
+			$data = 'without_pay';
+			
+			if($leave->payroll_leave_temp_with_pay == 1)
+			{
+				$data = 'with_pay';
+			}
+		}
+		return $data;
+	}	
 
 }

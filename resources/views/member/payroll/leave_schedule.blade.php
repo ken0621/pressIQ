@@ -49,7 +49,27 @@
 					@endforeach
 				</div>
 				<div id="used-leave" class="tab-pane fade">
-					
+					@foreach($_used as $key => $used)
+					<div class="custom-panel">
+	       				<div class="custom-panel-header cursor-pointer">
+	       					{{date('F d, Y', strtotime($key)).' '.$used[0]['payroll_leave_temp_name']}}
+	       				</div>
+	       				<div class="width-100 display-table">
+				          <div class="triangle-top-right"></div>
+				          <div class="custom-panel-body">
+				            <div class="custom-panel-child display-none">
+				              <div class="process-container">
+				              	<ul class="list-group">
+				              	 @foreach($used as $tag)
+								  <li class="list-group-item padding-tb-10">{{$tag['payroll_employee_title_name'].' '.$tag['payroll_employee_first_name'].' '.$tag['payroll_employee_middle_name'].' '.$tag['payroll_employee_last_name'].' '.$tag['payroll_employee_suffix_name']}}<a href="#" class="pull-right popup" link="/member/payroll/leave_schedule/delete_confirm_schedule_leave/{{$tag['payroll_leave_schedule_id']}}" size="sm"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+								 @endforeach
+								</ul>
+				              </div>
+				            </div>
+				          </div>
+				        </div>
+	       			</div>
+					@endforeach
 				</div>
 				</div>
 			</div>
@@ -78,6 +98,17 @@
 		});
 	}
 
+	/* CALL A FUNCTION BY NAME */
+	function executeFunctionByName(functionName, context /*, args */) {
+	  var args = [].slice.call(arguments).splice(2);
+	  var namespaces = functionName.split(".");
+	  var func = namespaces.pop();
+	  for(var i = 0; i < namespaces.length; i++) {
+	    context = context[namespaces[i]];
+	  }
+	  return context[func].apply(context, args);
+	}
+
 	function submit_done(data)
 	{
 		try
@@ -88,6 +119,7 @@
 
 		data.element.modal("toggle");
 		reload_container();
+		executeFunctionByName(data.function_name, window);
 	}
 </script>
 @endsection

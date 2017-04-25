@@ -55,7 +55,7 @@
                                 <td>{{$estimate->title_name." ".$estimate->first_name." ".$estimate->middle_name." ".$estimate->last_name." ".$estimate->suffix_name}}</td>
                                 <td>{{currency("PHP",$estimate->est_overall_price)}}</td>
                                 <td>
-                                  
+                                  <strong>{{ucfirst($estimate->est_status)}}</strong>
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group">
@@ -76,7 +76,14 @@
             </div>
         </div>
     </div>
-    
-    
 </div>
+@endsection
+
+@section('script')
+<script type="text/javascript">
+    @if(Session::has('success'))
+        toastr.success('{{Session::get('success')}}');
+    @endif
+</script>
+<script type="text/javascript" src="/assets/member/js/customer_estimate.js"></script>
 @endsection

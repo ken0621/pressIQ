@@ -91,6 +91,16 @@
 	<div class="row pull-right">
 		<h3><strong>TOTAL</strong> {{currency('PHP',$estimate->est_overall_price)}}</h3>
 	</div>
+	<table width="100%">
+		<tr>
+			<td>
+				Accepted By: <label>{{$estimate->est_accepted_by}}</label>
+			</td>
+			<td>
+				Accepted Date: <label>{{strtotime($estimate->est_accepted_date) == '' ? '' : dateFormat($estimate->est_accepted_date)}}</label>
+			</td>
+		</tr>
+	</table>
 </body>
 <style type="text/css">
 	table

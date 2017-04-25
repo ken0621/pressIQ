@@ -81,7 +81,16 @@ class Customer_EstimateController extends Member
     }
     public function update_status_submit()
     {
+        $update["est_status"] = Request::input("status");
+        $update["est_accepted_by"] = Request::input("accepted_by");
+        $update["est_accepted_date"] = date('Y:m:d h:i:s',strtotime(Request::input("accepted_date")));
+        Tbl_customer_estimate::where("est_id",Request::input("estimate_id"))->update($update);
 
+        $data["status"] = "success-update";
+
+        Request::session()->flash('success', 'Success');
+
+        return json_encode($data);
     }
     public function estimate()
     {

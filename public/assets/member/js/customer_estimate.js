@@ -502,6 +502,11 @@ function submit_done(data)
     		})
     	}
 	}
+	else if(data.status == 'success-update')
+	{
+    	data.element.modal("hide");
+	    location.reload();
+	}
     else if(data.status == "error")
     {
         toastr.warning(data.status_message);

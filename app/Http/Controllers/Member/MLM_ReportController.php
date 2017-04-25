@@ -191,6 +191,18 @@ class MLM_ReportController extends Member
         $data['report_list_d']['membership_code_sales_report']['count'] = $invoice_m;
         // yyyy-MM-dd
         // createFromFormat
+
+       
+        $data['report_list']['product_sales_report_warehouse'] = 'Product Sales Report (Ware house)';
+        $data['report_list_d']['product_sales_report_warehouse']['from'] = Carbon::now();
+        $data['report_list_d']['product_sales_report_warehouse']['to'] = Carbon::now();
+        $data['report_list_d']['product_sales_report_warehouse']['count'] = 0;
+
+        $data['report_list']['product_sales_report_consolidated'] = 'Product Sales Report (Consiladated)';
+        $data['report_list_d']['product_sales_report_consolidated']['from'] = Carbon::now();
+        $data['report_list_d']['product_sales_report_consolidated']['to'] = Carbon::now();
+        $data['report_list_d']['product_sales_report_consolidated']['count'] = 0;
+
         foreach($data['report_list_d'] as $key => $value)
         {
             $data['report_list_d'][$key]['from'] = Carbon::parse($value['from'])->format('Y-m-d');

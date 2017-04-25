@@ -21,7 +21,6 @@ use Carbon\carbon;
  */
 class Accounting
 {
-
 	public static function getShopId()
 	{
 		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');

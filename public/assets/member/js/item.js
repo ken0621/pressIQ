@@ -27,40 +27,40 @@ function item()
         $(".abbreviation").text(option);
     }
 
-    function event_accept_number_only()
-    {
-        $(document).on("keypress",".number-input", function(event){
-            if(event.which < 46 || event.which > 59) {
-                event.preventDefault();
-            } // prevent if not number/dot
+    // function event_accept_number_only()
+    // {
+    //     $(document).on("keypress",".number-input", function(event){
+    //         if(event.which < 46 || event.which > 59) {
+    //             event.preventDefault();
+    //         } // prevent if not number/dot
 
-            if(event.which == 46 && $(this).val().indexOf('.') != -1) {
-                event.preventDefault();
-            } // prevent if already dot
+    //         if(event.which == 46 && $(this).val().indexOf('.') != -1) {
+    //             event.preventDefault();
+    //         } // prevent if already dot
 
-        });
+    //     });
 
-        $(document).on("change",".number-input", function(){
-            $(this).val(function(index, value) {         
-                var ret = '';
-                value = action_return_to_number(value);
-                if(!$(this).hasClass("txt-qty")){
-                    value = parseFloat(value);
-                    value = value.toFixed(2);
-                }
-                if(value != '' && !isNaN(value)){
-                    value = parseFloat(value);
-                    ret = action_add_comma(value).toLocaleString();
-                }
+    //     $(document).on("change",".number-input", function(){
+    //         $(this).val(function(index, value) {         
+    //             var ret = '';
+    //             value = action_return_to_number(value);
+    //             if(!$(this).hasClass("txt-qty")){
+    //                 value = parseFloat(value);
+    //                 value = value.toFixed(2);
+    //             }
+    //             if(value != '' && !isNaN(value)){
+    //                 value = parseFloat(value);
+    //                 ret = action_add_comma(value).toLocaleString();
+    //             }
                 
-                if(ret == 0){
-                    ret = '';
-                }
+    //             if(ret == 0){
+    //                 ret = '';
+    //             }
 
-                return ret;
-              });
-        });
-    }
+    //             return ret;
+    //           });
+    //     });
+    // }
     function action_add_comma(number)
     {
         number += '';

@@ -56,11 +56,11 @@
                     <input type="date" class="form-control to_in" name="to">
                 </div>  
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 hide">
                 <hr>
                 <small><span style="color: gray">Data Count</span></small>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12 hide">
                 <div class="col-md-3">
                     <label><small>Data Count</small></label>
                     <input type="number" class="form-control count_in" value="0">

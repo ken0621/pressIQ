@@ -1,8 +1,9 @@
-var purchase_order = new purchase_order();
+
+var customer_estimate = new customer_estimate();
 var global_tr_html = $(".div-script tbody").html();
 var item_selected = ''; 
 
-function purchase_order(){
+function customer_estimate(){
 	init();
 
 	function init()
@@ -14,19 +15,15 @@ function purchase_order(){
 		event_accept_number_only();
 		event_compute_class_change();
 		event_taxable_check_change();
+		event_item_qty_change();
 		
 		action_lastclick_row();
 		action_compute();
+		action_convert_number();
 		action_date_picker();
 		action_reassign_number();
 		event_button_action_click();
-	}
-	function event_button_action_click()
-	{
-		$(document).on("click","button[type='submit']", function()
-		{
-			$(".button-action").val($(this).attr("data-action"));
-		})
+
 	}
 	function event_remove_tr()
 	{
@@ -37,6 +34,20 @@ function purchase_order(){
 				action_compute();
 			}			
 		});
+	}
+
+	this.action_initialized = function()
+	{
+		action_initialize();
+	}
+
+	function action_initialize()
+	{
+		iniatilize_select();
+		action_compute();
+		action_convert_number();
+		action_date_picker();
+		draggable_row.dragtable();
 	}
 
 	this.action_lastclick_row = function()
@@ -51,18 +62,6 @@ function purchase_order(){
 		});
 	}
 
-	function action_return_to_number(number = '')
-	{
-
-		number += '';
-		number = number.replace(/,/g, "");
-		if(number == "" || number == null || isNaN(number)){
-			number = 0;
-		}
-		
-		return parseFloat(number);
-	
-	}
 
 	function action_lastclick_row_op()
 	{
@@ -72,10 +71,6 @@ function purchase_order(){
 		action_date_picker();
 	}
 
-	function action_date_picker()
-	{
-		$(".draggable .for-datepicker").datepicker();
-	}
 
 	this.action_reassign_number = function()
 	{
@@ -89,6 +84,12 @@ function purchase_order(){
 			$(this).html(num);
 			num++;
 		});
+
+	}
+
+	function action_date_picker()
+	{
+		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
 	}
 
 	function event_accept_number_only()
@@ -116,14 +117,31 @@ function purchase_order(){
 			    	value = parseFloat(value);
 			    	ret = action_add_comma(value).toLocaleString();
 			    }
-			   	
-			    if(ret == 0){
-			    	ret = '';
-			    }
 
 				return ret;
 			  });
 		});
+	}
+	function action_add_comma(number)
+	{
+		number += '';
+		if(number == ''){
+			return '';
+		}
+
+		else{
+			return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+	}
+	function action_return_to_number(number = '')
+	{
+		number += '';
+		number = number.replace(/,/g, "");
+		if(number == "" || number == null || isNaN(number)){
+			number = 0;
+		}
+		
+		return parseFloat(number);
 	}
 
 	function event_compute_class_change()
@@ -138,6 +156,9 @@ function purchase_order(){
 	{
 		var subtotal = 0;
 		var total_taxable = 0;
+
+		var subtotal_returns = 0;
+		var total_returns_with_returns = 0;
 
 		$(".tr-draggable").each(function()
 		{
@@ -158,7 +179,7 @@ function purchase_order(){
 			if(discount.indexOf('%') >= 0)
 			{
 				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
-				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * action_return_to_number(rate);
+				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
 			}
 			else if(discount == "" || discount == null)
 			{
@@ -170,9 +191,9 @@ function purchase_order(){
 			}
 
 			/* RETURN TO NUMBER IF THERE IS COMMA */
-			qty = action_return_to_number(qty);
-			rate = action_return_to_number(rate);
-			discount = action_return_to_number(discount);
+			qty 		= action_return_to_number(qty);
+			rate 		= action_return_to_number(rate);
+			discount 	= action_return_to_number(discount);
 
 			var total_per_tr = ((qty * rate) - discount).toFixed(2);
 
@@ -180,10 +201,10 @@ function purchase_order(){
 			subtotal += parseFloat(total_per_tr);
 
 			/* AVOID ZEROES */
-			if(total_per_tr <= 0)
-			{
-				total_per_tr = '';
-			}
+			// if(total_per_tr <= 0)
+			// {
+			// 	total_per_tr = '';
+			// }
 
 			/* CONVERT TO INTEGER */
 			var amount_val = amount.val();
@@ -249,27 +270,31 @@ function purchase_order(){
 		}
 		total += tax;
 
+		/* action payment applied */
+		var payment_applied   	= parseFloat($(".payment-applied").html());
+		var balance_due 		= total - payment_applied;
+
 		$(".sub-total").html(action_add_comma(subtotal.toFixed(2)));
 		$(".subtotal-amount-input").val(action_add_comma(subtotal.toFixed(2)));
+
 		$(".ewt-total").html(action_add_comma(ewt_value.toFixed(2)));
 		$(".discount-total").html(action_add_comma(discount_total.toFixed(2)));
 		$(".tax-total").html(action_add_comma(tax.toFixed(2)));
+
 		$(".total-amount").html(action_add_comma(total.toFixed(2)));
 		$(".total-amount-input").val(total.toFixed(2));
 
+		$(".balance-due").html(action_add_comma(balance_due.toFixed(2)));
+
+		$(".total-amount-with-returns").html(action_add_comma((total).toFixed(2)));
+		$(".total-amount-input-with-returns").val((total).toFixed(2));
 	}
 
-	function action_add_comma(number)
+	function action_convert_number()
 	{
-		number += '';
-		if(number == '0' || number == ''){
-			return '';
-		}
-
-		else{
-			return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-		}
+		$(".payment-applied").html(action_add_comma(parseFloat($(".payment-applied").html()).toFixed(2)));
 	}
+
 
 	/* CHECK BOX FOR TAXABLE */
 	function event_taxable_check_change()
@@ -322,20 +347,19 @@ function purchase_order(){
     		width : "100%",
     		placeholder : "um..",
     		onChangeValue: function()
-    		{
+    		{  
     			action_load_unit_measurement($(this));
     		}
+
         }).globalDropList('disabled');
 	}
-
+                             
 	/* Make select input into a drop down list plugin */
-
 	function iniatilize_select()
 	{
-		$('.droplist-vendor').globalDropList(
+		$('.droplist-customer').globalDropList(
 		{ 
-			width : "100%",
-			link : "/member/vendor/add",
+			link : "/member/customer/modalcreatecustomer",
 			onChangeValue: function()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
@@ -348,6 +372,7 @@ function purchase_order(){
             onCreateNew : function()
             {
             	item_selected = $(this);
+            	console.log($(this));
             },
             onChangeValue : function()
             {
@@ -373,34 +398,38 @@ function purchase_order(){
 	{
 		$parent = $this.closest(".tr-draggable");
 		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
-		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
+		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
 
 		if($this.find("option:selected").attr("has-um") != '')
-		{
-			$.ajax(
+		{			
+			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
 			{
-				url: '/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"),
-				method: 'get',
-				success: function(data)
-				{
-					$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
-					{
-						$(this).globalDropList("reload").globalDropList("enabled");
-						console.log($(this).find("option:first").val());
-						$(this).val($(this).find("option:first").val()).change();
-					})
-				},
-				error: function(e)
-				{
-					console.log(e.error());
-				}
+				$(this).globalDropList("reload").globalDropList("enabled");
+				$(this).val($(this).find("option:first").val()).change();
 			})
 		}
 		else
 		{
-			// $parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
+	}
+	
+	function event_item_qty_change()
+	{
+		$(document).on("change", ".txt-qty", function()
+		{
+			$parent 	= $(this).closest(".tr-draggable");
+			if($parent.find(".select-item").val() != '')
+			{
+				$item_id 	= $parent.find(".select-item option:selected").val();
+				$item_qty 	= $(this).val();
+				$.get('/member/item/get_new_price/'+$item_id +"/"+$item_qty, function(data)
+				{
+					if(data > 0) $parent.find(".txt-rate").val(data).change();
+				});
+			}
+		})
 	}
 
 	function action_load_unit_measurement($this)
@@ -408,68 +437,17 @@ function purchase_order(){
 		$parent = $this.closest(".tr-draggable");
 		$item   = $this.closest(".tr-draggable").find(".select-item");
 
-		$um_qty = parseFloat($this.find("option:selected").attr("qty"));
-		$sales  = parseFloat($item.find("option:selected").attr("cost"));
+		$um_qty = parseFloat($this.find("option:selected").attr("qty") || 1);
+		$sales  = parseFloat($item.find("option:selected").attr("price"));
 		$qty    = parseFloat($parent.find(".txt-qty").val());
-		console.log($um_qty +"|" + $sales +"|" +$qty);
+
 		$parent.find(".txt-rate").val( $um_qty * $sales * $qty ).change();
 	}
-
-	this.action_reload_customer = function($id)
+	function event_button_action_click()
 	{
-		action_reload_customer($id);
-	}
-
-	function action_reload_customer($id)
-	{
-		$.ajax(
+		$(document).on("click","button[type='submit']", function()
 		{
-			url: '/member/customer/load_customer',
-			method: 'GET',
-			success: function(data)
-			{
-				$element = $(".droplist-customer");
-
-				$element.html(data);
-				$element.globalDropList("reload");
-				$element.val($id).change();
-				
-			},
-			error: function()
-			{
-				console.log("error");
-			}
-
-		})
-	}
-
-	this.action_reload_item = function($id)
-	{
-		action_reload_item($id);
-	}
-
-	function action_reload_item($id)
-	{
-		$.ajax(
-		{
-			url: '/member/item/load_item_category',
-			method: 'GET',
-			success: function(data)
-			{
-				$element = $(".tbody-item .select-item");
-
-				$element.html(data);
-				
-				$element.globalDropList("reload");
-
-				// Filter selected combobox only
-				item_selected.val($id).change();
-			},
-			error: function()
-			{
-				console.log("error");
-			}
-
+			$(".button-action").val($(this).attr("data-action"));
 		})
 	}
 
@@ -479,13 +457,19 @@ function purchase_order(){
 /* AFTER DRAGGING A TABLE ROW */
 function dragging_done()
 {
-	purchase_order.action_reassign_number();
+	customer_estimate.action_reassign_number();
 }
 
 /* AFTER ADDING A CUSTOMER */
 function submit_done_customer(result)
 {
-	purchase_order.action_reload_customer(result['customer_info']['customer_id']);
+	toastr.success("Success");
+    $(".droplist-customer").load("/member/customer/load_customer", function()
+    {                
+         $(".droplist-customer").globalDropList("reload");
+         $(".droplist-customer").val(data.id).change();          
+    });
+    data.element.modal("hide");
 }
 
 /* AFTER ADDING AN  ITEM */
@@ -495,26 +479,48 @@ function submit_done_item(data)
     $(".tbody-item .select-item").load("/member/item/load_item_category", function()
     {                
          $(".tbody-item .select-item").globalDropList("reload"); 
-         item_selected.val(data.item_id).change();  
+         item_selected.val(data.item_id).change();          
     });
     data.element.modal("hide");
 }
 
 function submit_done(data)
 {
-	if(data.status == 'success-po')
-	{		
-        toastr.success("Success");
-       	location.href = data.redirect_to;
+	if(data.status == "success-estimate")
+	{
+        if(data.redirect)
+        {
+        	toastr.success("Success");
+        	location.href = data.redirect;
+    	}
+    	else
+    	{
+    		$(".load-data:last").load(data.link+" .load-data .data-container", function()
+    		{
+    			customer_estimate.action_initialized();
+    			toastr.success("Success");
+    		})
+    	}
 	}
-	else if(data.status == 'success-tablet')
-	{		
-        toastr.success("Success");
-       	location.href = "/tablet";
+	else if(data.status == 'success-update')
+	{
+    	data.element.modal("hide");
+	    location.reload();
 	}
     else if(data.status == "error")
     {
         toastr.warning(data.status_message);
-        $(data.target).html(data.view);
     }
+}
+
+function submit_this_form()
+{
+	$("#keep_val").val("keep");
+    $("#invoice_form").submit();
+}
+
+function toggle_returns(className, obj) {
+var $input = $(obj);
+if ($input.prop('checked')) $(className).slideDown();
+else $(className).slideUp();
 }

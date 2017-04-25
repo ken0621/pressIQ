@@ -229,9 +229,28 @@
             </td>
         </tr>
         <tr>
+            <td width="50%">Total Absents</td>
+            <td class="text-right">
+                {{$summary['absent']}}
+            </td>
+        </tr>
+
+        <tr>
             <td><b>Total Working Days</b></td>
             <td class="text-right">
                 <b>{{$summary['total_working_days']}}</b>
+            </td>
+        </tr>
+        <tr>
+            <td width="50%">Total Leave with Pay</td>
+            <td class="text-right">
+                {{$summary['leave_with_pay']}}
+            </td>
+        </tr>
+        <tr>
+            <td width="50%">Total Leave without Pay</td>
+            <td class="text-right">
+                {{$summary['leave_wo_pay']}}
             </td>
         </tr>
     </table>
@@ -261,3 +280,7 @@
     </div>
 </div>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
+<script type="text/javascript">
+    default_time_in = '{{ $default_time_in }}';
+    default_time_out = '{{ $default_time_out }}';
+</script>

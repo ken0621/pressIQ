@@ -37,7 +37,7 @@ class ProductOrderController extends Member
     {
         $data["page"]               = "Customer Invoice";
         $data["_customer"]          = Tbl_customer::where("archived", 0)->get();
-    $data["_payment_method"]        = Tbl_online_pymnt_method::get();
+        $data["_payment_method"]    = Tbl_online_pymnt_method::get();
         $data['_product']           = Ecom_Product::getProductList();
         // dd($data);
         $data['_um']                = UnitMeasurement::load_um_multi();

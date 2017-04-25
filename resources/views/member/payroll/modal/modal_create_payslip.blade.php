@@ -46,10 +46,10 @@
 									<label><input type="checkbox" name="" class="company-name-logo">Include Company Name and Logo</label>
 								</div>
 								<div class="checkbox">
-									<label><input type="checkbox" name="" class="company-name-logo">Include Department</label>
+									<label><input type="checkbox" name="" class="include-header" data-target=".p-department">Include Department</label>
 								</div>
 								<div class="checkbox">
-									<label><input type="checkbox" name="" class="company-name-logo">Include Job Title</label>
+									<label><input type="checkbox" name="" class="include-header" data-target=".p-job-title">Include Job Title</label>
 								</div>
 								<div class="checkbox">
 									<label><input type="checkbox" name="" class="time-summary">Include Time Summary</label>
@@ -118,16 +118,16 @@
 								<div class="col-md-12 padding-5">
 									<div class="payslip-div padding-5">
 										<p class="f-9 margin-bottom-1">Employee Name here</p>
-										<p class="f-9 margin-bottom-1">Department</p>
-										<p class="f-9 margin-bottom-1">Job Title</p>
+										<p class="f-9 margin-bottom-1 p-department">Department</p>
+										<p class="f-9 margin-bottom-1 p-job-title">Job Title</p>
 									</div>
 								</div>
-								<div class="col-md-6 padding-5" style="height:10em">
+								<div class="col-md-6 padding-5 computaion-field" style="height:10em">
 									<div class="payslip-div text-center">
 										<p class="f-9">Payroll Computation here</p>
 									</div>
 								</div>
-								<div class="col-md-6 padding-5" style="height:10em">
+								<div class="col-md-6 padding-5 time-summary-field" style="height:10em">
 									<div class="payslip-div text-center">
 										<p class="f-9">Time summary here</p>
 									</div>

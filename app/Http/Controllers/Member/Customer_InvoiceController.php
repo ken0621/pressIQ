@@ -276,12 +276,12 @@ class Customer_InvoiceController extends Member
                 $cm_transaction_id     = $cm_id;
                 $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
             }
-
+            
             $remarks            = "Invoice";
             $warehouse_id       = $this->current_warehouse->warehouse_id;
             $transaction_type   = "invoice";
             $transaction_id     = $inv_id;
-            $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id);                
+            $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id,true);                
 
             $json["status"]         = "success-invoice";
             if($button_action == "save-and-edit")

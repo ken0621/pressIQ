@@ -49,7 +49,7 @@ class TabletPISController extends Member
 	public function confirm_submission()
 	{
 		$data["action"] = "close";
-        $data["sir_id"] = Session::get("selected_sir");
+        $data["sir_id"] = Session::get("sir");
 
 		return view("tablet.agent.confirm_sync",$data);
 	}
@@ -221,7 +221,6 @@ class TabletPISController extends Member
 
 
 
-
   //       $data["_sirs"] = Tbl_sir::where("sales_agent_id",$this->get_user()->employee_id)->where("lof_status",1)->where("sir_status",0)->get();
 
 		// $data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);
@@ -250,13 +249,13 @@ class TabletPISController extends Member
 		// {
 		// 	return view("tablet.index",$data);
 		// }
-	}
+	}  
 	public function selected_sir()
 	{
-		Session::forget("selected_sir");
+		Session::forget("sir_id");
 		$sir_id = Request::input("sir_id");
 
-		Session::put("selected_sir",$sir_id);
+		Session::put("sir_id",$sir_id);
 
 		$data["status"] = "success";
 		return json_encode($data);
@@ -267,9 +266,9 @@ class TabletPISController extends Member
         $data["employee_position"] = $this->get_user()->position_name;
         $data["employee_id"] = $this->get_user()->employee_id;
 
-        if(Session::get("selected_sir") != null)
+        if(Session::get("sir_id") != null)
         {
-            $data["_cm"] = Tbl_manual_credit_memo::sir()->customer_cm()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_credit_memo.cm_id","DESC")->get();
+            $data["_cm"] = Tbl_manual_credit_memo::sir()->customer_cm()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_credit_memo.cm_id","DESC")->get();
         }
         return view("tablet.agent.credit_memo",$data);
     }
@@ -396,9 +395,9 @@ class TabletPISController extends Member
         $data["employee_position"] = $this->get_user()->position_name;
         $data["employee_id"] = $this->get_user()->employee_id;
 
-        if(Session::get("selected_sir") != null)
+        if(Session::get("sir_id") != null)
         {
-            $data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",0)->get();
+            $data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",0)->get();
             foreach ($data["_invoices"] as $key => $value) 
             {
                 $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
@@ -417,7 +416,7 @@ class TabletPISController extends Member
         $data["employee_position"] = $this->get_user()->position_name;
         $data["employee_id"] = $this->get_user()->employee_id;
 
-        if(Session::get("selected_sir") != null)
+        if(Session::get("sir_id") != null)
         {    
             $data["_customer"] = Customer::getAllCustomer();
         }
@@ -451,9 +450,9 @@ class TabletPISController extends Member
         $data["employee_position"] = $this->get_user()->position_name;
         $data["employee_id"] = $this->get_user()->employee_id;
 
-        if(Session::get("selected_sir") != null)
+        if(Session::get("sir_id") != null)
         {
-            $data["_receive_payment"] = Tbl_manual_receive_payment::sir()->customer_receive_payment()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_receive_payment.rp_id","DESC")->get();
+            $data["_receive_payment"] = Tbl_manual_receive_payment::sir()->customer_receive_payment()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_receive_payment.rp_id","DESC")->get();
         }
         return view("tablet.agent.receive_payment",$data);
     }
@@ -633,7 +632,7 @@ class TabletPISController extends Member
         $json["url"]            = "/tablet/receive_payment";
 
         $ins_manual_rcv_pymnt["rp_id"] = $rcvpayment_id;
-        $ins_manual_rcv_pymnt["sir_id"] = Session::get("selected_sir");
+        $ins_manual_rcv_pymnt["sir_id"] = Session::get("sir_id");
         $ins_manual_rcv_pymnt["rp_date"] = Carbon::now();
         $ins_manual_rcv_pymnt["agent_id"] = $this->get_user()->employee_id;
 
@@ -1115,14 +1114,14 @@ class TabletPISController extends Member
         return json_encode($data);
     }
 	public function view_invoice_pdf($inv_id)
-	{
-		$data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
+    {
+        $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
 
         $data["invoice_item"] = Tbl_customer_invoice_line::invoice_item()->where("invline_inv_id",$inv_id)->get();
         foreach($data["invoice_item"] as $key => $value) 
-        {        	
+        {           
             $um = Tbl_unit_measurement_multi::where("multi_id",$value->invline_um)->first();
-          	$qty = 1;
+            $qty = 1;
             if($um != null)
             {
                 $qty = $um->unit_qty;
@@ -1133,13 +1132,14 @@ class TabletPISController extends Member
         }
           $pdf = view('member.customer_invoice.invoice_pdf', $data);
           return Pdf_global::show_pdf($pdf);
-	}
+    }
 	public function view_invoices_view($id)
 	{
 		$data["invoice_id"] = $id;
 		$data["action_load"] = "/tablet/view_invoice_pdf";
         return view("member.customer_invoice.invoice_view",$data);
 	}
+
 	public function login()
 	{
 		if(Session::get("sales_agent"))
@@ -1292,9 +1292,9 @@ class TabletPISController extends Member
         $data["employee_position"] = $this->get_user()->position_name;
         $data["employee_id"] = $this->get_user()->employee_id;
 
-        if(Session::get("selected_sir") != null)
+        if(Session::get("sir_id") != null)
         {
-            $data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("selected_sir"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",1)->get();
+            $data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",1)->get();
             foreach ($data["_invoices"] as $key => $value) 
             {
                 $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();

@@ -36,7 +36,7 @@ class PayrollTimeSheetController extends Member
 		$data["default_time_in"] = Carbon::parse($data["employee_info"]->payroll_group_start)->format("h:i A");
 		$data["default_time_out"] = Carbon::parse($data["employee_info"]->payroll_group_end)->format("h:i A");
 		$data['_company'] = Payroll::company_heirarchy($this->user_info->shop_id);
-
+		// dd($data);
 		return view('member.payroll.employee_timesheet', $data);
 	}
 
@@ -63,8 +63,6 @@ class PayrollTimeSheetController extends Member
 			$payroll_employee_id = $data['_employee'][0]->payroll_employee_id;
 		}
 
-		
-
 		$data["current_employee"] = $current_employee = Tbl_payroll_employee_basic::where("payroll_employee_id", $payroll_employee_id)->first();
 
 		$current_employee_id = 0;
@@ -84,7 +82,6 @@ class PayrollTimeSheetController extends Member
 		}
 
 		$data["default_time_in"] = Carbon::parse($payroll_group_start)->format("h:i A");
-
 		$data["default_time_out"] = Carbon::parse($payroll_group_end)->format("h:i A");
 
 		// dd($data);
@@ -106,11 +103,15 @@ class PayrollTimeSheetController extends Member
 
 		/* GET EMPLOYEE INFORMATION */
 		$data["employee_info"] = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->first();
+		$data["employee_contract"] = Tbl_payroll_employee_contract::selemployee($employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
+
+		$payroll_group_start 	= $data["employee_contract"]->payroll_group_start;
+		$payroll_group_end 		= $data["employee_contract"]->payroll_group_end;
 
 		/* INITALIZE SETTINGS FOR EMPLOYEE */
 		$time_rule = $data["time_rule"] = "regulartime"; //flexitime, regulartime
-		$data["default_time_in"] = $default_time_in = "09:00 AM";
-		$data["default_time_out"] = $default_time_out = "06:00 PM";
+		$data["default_time_in"] = $default_time_in = Carbon::parse($payroll_group_start)->format("h:i A");
+		$data["default_time_out"] = $default_time_out =Carbon::parse($payroll_group_end)->format("h:i A");
 		$data["default_working_hours"] = $default_working_hours = "08:00";
 
 		/* CREATE ARRAY TIMESHEET */
@@ -223,6 +224,10 @@ class PayrollTimeSheetController extends Member
 		$regular_holiday_count			= 0;
 		$total_working_days				= 0;
 
+		$leave_with_pay					= 0;
+		$leave_wo_pay					= 0;
+		$absent 						= 0;
+
 		$data = array();
 		$array = array();
 		while($from <= $to)
@@ -235,10 +240,24 @@ class PayrollTimeSheetController extends Member
 			if($param_target == 'Daily')
 			{
 				$regular_day_count += divide(Payroll::time_float($approved_timesheet->regular_hours) , $param_hour);
+
 				$rest_day_count    += divide(Payroll::time_float($approved_timesheet->rest_day_hours) , $param_hour);
 				$extra_day_count   += divide(Payroll::time_float($approved_timesheet->extra_day_hours) , $param_hour);
 				$special_holiday_count += divide(Payroll::time_float($approved_timesheet->special_holiday_hours) , $param_hour);
 				$regular_holiday_count += divide(Payroll::time_float($approved_timesheet->regular_holiday_hours) , $param_hour);
+			}
+
+			if($approved_timesheet->absent)
+			{
+				$absent++;
+			}
+			if($approved_timesheet->leave == 'without_pay')
+			{
+				$leave_wo_pay++;
+			}
+			if($approved_timesheet->leave == 'with_pay')
+			{
+				$leave_with_pay++;
 			}
 
 			$total_time_spent = Payroll::sum_time($total_time_spent, $approved_timesheet->time_spent);
@@ -279,6 +298,9 @@ class PayrollTimeSheetController extends Member
 		$data['special_holiday_count'] 	= Payroll::if_zero($special_holiday_count);
 		$data['regular_holiday_count'] 	= Payroll::if_zero($regular_holiday_count);
 		$data['total_working_days'] 	= Payroll::if_zero($total_working_days);
+		$data['absent']					= Payroll::if_zero($absent);
+		$data['leave_wo_pay']			= Payroll::if_zero($leave_wo_pay);
+		$data['leave_with_pay']			= Payroll::if_zero($leave_with_pay);
 		// dd($data);
 		return $data;
 	}

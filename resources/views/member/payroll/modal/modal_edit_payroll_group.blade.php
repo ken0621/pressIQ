@@ -35,7 +35,10 @@
 											<label><input type="radio" name="payroll_group_salary_computation" value="Flat Rate" {{$group->payroll_group_salary_computation == 'Flat Rate' ? 'checked':''}}>Flat Rate</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_salary_computation" value="Daily"  {{$group->payroll_group_salary_computation == 'Daily' ? 'checked':''}}>Daily</label>
+											<label><input type="radio" name="payroll_group_salary_computation" value="Daily Rate" {{$group->payroll_group_salary_computation == 'Daily Rate' ? 'checked':''}}>Daily Rate</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_salary_computation" value="Monthly Rate" {{$group->payroll_group_salary_computation == 'Monthly Rate' ? 'checked':''}}>Monthly Rate</label>
 										</div>
 									</div>
 								</div>

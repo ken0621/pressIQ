@@ -502,8 +502,17 @@ Route::post('/member/about/update','Member\StoreInfoController@update');
 Route::get('/member/about/remove/{id}','Member\StoreInfoController@remove');
 
 //arcy
-Route::get('/member/customer/estimate','Member\Customer_EstimateController@index');
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
+
+
+/* Customer - Create Estimate */
+Route::get('/member/customer/estimate_list','Member\Customer_EstimateController@index');
+Route::any('/member/customer/estimate','Member\Customer_EstimateController@estimate');
+Route::any('/member/customer/estimate/create','Member\Customer_EstimateController@create_submit');
+Route::any('/member/customer/estimate/update','Member\Customer_EstimateController@update_submit');
+Route::any('/member/customer/customer_estimate_view/{id}','Member\Customer_EstimateController@estimate_pdf');
+Route::any('/member/customer/update_status/{id}','Member\Customer_EstimateController@update_status');
+Route::any('/member/customer/update_status_submit','Member\Customer_EstimateController@update_status_submit');
 
 /* Customer - Receive Payment */
 Route::get('/member/customer/receive_payment','Member\Customer_ReceivePaymentController@index');

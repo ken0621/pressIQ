@@ -34,7 +34,10 @@
 											<label><input type="radio" name="payroll_group_salary_computation" value="Flat Rate">Flat Rate</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_salary_computation" value="Daily" checked>Daily</label>
+											<label><input type="radio" name="payroll_group_salary_computation" value="Daily Rate" checked>Daily Rate</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_salary_computation" value="Monthly Rate" >Monthly Rate</label>
 										</div>
 									</div>
 								</div>

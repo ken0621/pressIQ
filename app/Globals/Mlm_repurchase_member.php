@@ -36,19 +36,54 @@ class Mlm_repurchase_member
 	// update quantity in cart      Mlm_repurchase_member::add_to_cart($item_id, $quantity, $membership_id = null);
 	// delete product in cart 		Mlm_repurchase_member::remove_from_cart($item_id);
 	// clear all product in cart 	Mlm_repurchase_member::clear_all_cart();
-	public static function get_all_items($shop_id)
+	public static function get_all_items($shop_id, $slot_id = null)
 	{
-		$item = Tbl_item::where("shop_id", $shop_id)->where("archived", 0)
-		->get();
+		if($slot_id == null)
+		{
+			$item = Tbl_item::where("shop_id", $shop_id)->where("archived", 0)
+			->get();
+		}
+		else
+		{
+			$slot = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+			$item = Tbl_item::where("shop_id", $shop_id)->where("archived", 0)
+			->get()->keyBy('item_id');
+
+			foreach($item  as $key => $value)
+			{
+				$item[$key]->z_price = intval($value->item_price);
+				$item[$key]->z_discount = Item::get_discount_only($value->item_id, $slot->slot_membership);
+				$item[$key]->z_total = $item[$key]->z_price - $item[$key]->z_discount;
+			}
+		}
 
 		return $item;
 	}
-	public static function get_item($item_id)
+	public static function get_item($item_id, $slot_id = null)
 	{
-		$item = Tbl_item::where("tbl_item.item_id", $item_id)->where("archived", 0)
-		->first();
+		if($slot_id == null)
+		{
+			$item = Tbl_item::where("tbl_item.item_id", $item_id)->where("archived", 0)
+			->first();
+		}
+		else
+		{
 
-		return $item;
+			$slot = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
+			$item = Tbl_item::where("tbl_item.item_id", $item_id)->where("archived", 0)
+			->get();
+
+			foreach($item  as $key => $value)
+			{
+				$item[$key]->z_price = intval($value->item_price);
+				$item[$key]->z_discount = Item::get_discount_only($value->item_id, $slot->slot_membership);
+				$item[$key]->z_total = $item[$key]->z_price - $item[$key]->z_discount;
+			}
+
+		}
+		
+
+		return $item->first();
 	}
 	public static function add_to_cart($item_id, $quantity, $membership_id = null)
 	{

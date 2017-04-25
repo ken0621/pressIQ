@@ -39,6 +39,7 @@ class Customer_InvoiceController extends Member
 
     public function index()
     {
+        // dd(Session::get('est_item'));
         $data["page"]       = "Customer Invoice";
         $data["pis"]        = Purchasing_inventory_system::check();
         $data["_customer"]  = Customer::getAllCustomer();

@@ -121,10 +121,12 @@ class Customer_SaleReceiptController extends Member
         $_itemline                          = Request::input('invline_item_id');
 
         $product_consume = null;
+        $ctr_item = 0;
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
             {
+                $ctr_item++;
                 $item_info[$key]['item_service_date']  = Request::input('invline_service_date')[$key];
                 $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
                 $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
@@ -273,39 +275,48 @@ class Customer_SaleReceiptController extends Member
 
             if($inv == 0 || Request::input("keep_val") == "keep")
             {
-                $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, "sales_receipt");
+                if($ctr_item != 0)
+                {
+                     $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, "sales_receipt");
                 
-                if($cm_customer_info != null && $cm_item_info != null)
-                {
-                    $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $inv_id);
+                    if($cm_customer_info != null && $cm_item_info != null)
+                    {
+                        $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $inv_id);
 
-                    $cm_remarks            = "Returns Items with Invoice # ". $inv_id;
-                    $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
-                    $cm_transaction_type   = "credit_memo";
-                    $cm_transaction_id     = $cm_id;
-                    $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
-                }
+                        $cm_remarks            = "Returns Items with Invoice # ". $inv_id;
+                        $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
+                        $cm_transaction_type   = "credit_memo";
+                        $cm_transaction_id     = $cm_id;
+                        $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
+                    }
 
-                $remarks            = "Invoice";
-                $warehouse_id       = $this->current_warehouse->warehouse_id;
-                $transaction_type   = "invoice";
-                $transaction_id     = $inv_id;
-                $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id);                
+                    $remarks            = "Invoice";
+                    $warehouse_id       = $this->current_warehouse->warehouse_id;
+                    $transaction_type   = "invoice";
+                    $transaction_id     = $inv_id;
+                    $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id);                
 
-                $json["status"]         = "success-invoice";
-                if($button_action == "save-and-edit")
-                {
-                    $json["redirect"]    = "/member/customer/sales_receipt?id=".$inv_id;
-                }
-                elseif($button_action == "save-and-new")
-                {
-                    $json["redirect"]   = '/member/customer/sales_receipt';
+                    $json["status"]         = "success-invoice";
+                    if($button_action == "save-and-edit")
+                    {
+                        $json["redirect"]    = "/member/customer/sales_receipt?id=".$inv_id;
+                    }
+                    elseif($button_action == "save-and-new")
+                    {
+                        $json["redirect"]   = '/member/customer/sales_receipt';
+                    }
+                    else
+                    {
+                        $json["redirect"] = '/member/customer/sales_receipt/list';
+                    }
+                    Request::session()->flash('success', 'Sales Receipt Successfully Created');
                 }
                 else
                 {
-                    $json["redirect"] = '/member/customer/sales_receipt/list';
+                    $json["status"] = "error";
+                    $json["status_message"] = "Please insert item";
                 }
-                Request::session()->flash('success', 'Sales Receipt Successfully Created');
+               
             }
             else
             {
@@ -357,10 +368,12 @@ class Customer_SaleReceiptController extends Member
         $_itemline                          = Request::input('invline_item_id');
 
         $product_consume = null;
+        $ctr_item = 0;
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
-            {               
+            {  
+                $ctr_item++;             
                 $item_info[$key]['item_service_date']  = Request::input('invline_service_date')[$key];
                 $item_info[$key]['item_id']            = Request::input('invline_item_id')[$key];
                 $item_info[$key]['item_description']   = Request::input('invline_description')[$key];
@@ -503,51 +516,60 @@ class Customer_SaleReceiptController extends Member
 
         if($inv <= 1 || Request::input("keep_val") == "keep")
         {
-            $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,'sales_receipt');
-
-            if($cm_customer_info != null && $cm_item_info != null)
+            if($ctr_item != 0)
             {
-                $credit_memo_id = Tbl_customer_invoice::where("inv_id",$inv_id)->pluck("credit_memo_id");
-                if($credit_memo_id != null)
-                {
-                    $cm_id = CreditMemo::updateCM($credit_memo_id, $cm_customer_info, $cm_item_info);
-                    $transaction_id = $credit_memo_id;
-                    $transaction_type = "credit_memo";
-                    $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_returns, $return = 'array');
-                }
-                else
-                {
-                    //
-                    $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $inv_id);
+                $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,'sales_receipt');
 
-                    $cm_remarks            = "Returns Items with Invoice # ". $inv_id;
-                    $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
-                    $cm_transaction_type   = "credit_memo";
-                    $cm_transaction_id     = $cm_id;
-                    $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
+                if($cm_customer_info != null && $cm_item_info != null)
+                {
+                    $credit_memo_id = Tbl_customer_invoice::where("inv_id",$inv_id)->pluck("credit_memo_id");
+                    if($credit_memo_id != null)
+                    {
+                        $cm_id = CreditMemo::updateCM($credit_memo_id, $cm_customer_info, $cm_item_info);
+                        $transaction_id = $credit_memo_id;
+                        $transaction_type = "credit_memo";
+                        $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_returns, $return = 'array');
+                    }
+                    else
+                    {
+                        //
+                        $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $inv_id);
 
+                        $cm_remarks            = "Returns Items with Invoice # ". $inv_id;
+                        $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
+                        $cm_transaction_type   = "credit_memo";
+                        $cm_transaction_id     = $cm_id;
+                        $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
+
+                    }
                 }
+
+                $transaction_id = $inv_id;
+                $transaction_type = "invoice";
+                $json = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array');
+
+                if($json["status"] == "success")
+                {
+                    $json["status"]         = "success-invoice";
+                    $json["invoice_id"]     = $inv_id;
+                    $json["redirect"]           = "/member/customer/sales_receipt?id=".$inv_id;
+
+                    if($button_action == "save-and-new")
+                    {
+                        $json["redirect"]   = '/member/customer/sales_receipt';
+                    }
+                    elseif($button_action == "save-and-close")
+                    {
+                        $json["redirect"]   = '/member/customer/sales_receipt/list';
+                    }
+                    Request::session()->flash('success', 'Sales Receipt Successfully Updated');
+                }
+
             }
-
-            $transaction_id = $inv_id;
-            $transaction_type = "invoice";
-            $json = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array');
-
-            if($json["status"] == "success")
+            else
             {
-                $json["status"]         = "success-invoice";
-                $json["invoice_id"]     = $inv_id;
-                $json["redirect"]           = "/member/customer/sales_receipt?id=".$inv_id;
-
-                if($button_action == "save-and-new")
-                {
-                    $json["redirect"]   = '/member/customer/sales_receipt';
-                }
-                elseif($button_action == "save-and-close")
-                {
-                    $json["redirect"]   = '/member/customer/sales_receipt/list';
-                }
-                Request::session()->flash('success', 'Sales Receipt Successfully Updated');
+                $json["status"] = "error";
+                $json["status_message"] = "Please insert item";
             }
         }
         else

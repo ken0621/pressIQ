@@ -41,6 +41,27 @@ class Customer_EstimateController extends Member
      * @return \Illuminate\Http\Response
      */
 
+    public function load_all($customer_id)
+    {
+        $data["_estimate"] = Tbl_customer_estimate::where("est_customer_id",$customer_id)->where("est_status",'accepted')->get();
+
+        return view("member.load_ajax_data.load_estimate_so",$data);
+    }
+    public function add_item($est_id)
+    {
+        // Session::forget('est_item');
+        $est_data = Tbl_customer_estimate_line::um()->where("estline_est_id",$est_id)->get();
+        foreach ($est_data as $key => $value) 
+        {
+            Session::push('est_item',collect($value)->toArray());
+        }
+
+        $data['_item']      = Item::get_all_category_item();
+        $data['_um']        = UnitMeasurement::load_um_multi();
+
+        return view('member.load_ajax_data.load_est_session_item',$data);
+        
+    }
     public function index()
     {
 

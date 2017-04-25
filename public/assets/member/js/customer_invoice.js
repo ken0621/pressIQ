@@ -448,6 +448,13 @@ function customer_invoice(){
 	}
                              
 	/* Make select input into a drop down list plugin */
+	function load_all_estimate(customer_id)
+	{
+		$(".estimate-container").load("/member/customer/load_estimate_so/"+customer_id , function()
+		{
+			$(".drawer-toggle").trigger("click");
+		});
+	}
 	function iniatilize_select()
 	{
 		$('.droplist-customer').globalDropList(
@@ -456,6 +463,7 @@ function customer_invoice(){
 			onChangeValue: function()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
+				load_all_estimate($(this).val());
 			}
 		});
 	    $('.droplist-item').globalDropList(
@@ -596,7 +604,31 @@ function customer_invoice(){
 	}
 
 }	
+function add_est_to_inv(est_id)
+{
 
+	$(".tbody-item").load('/member/customer/load_added_item/'+est_id, function()
+	{
+		console.log("success");
+	});
+	// $.ajax({
+	// 	url : "/member/customer/load_est_so_item",
+	// 	data : {est_id: est_id},
+	// 	dataType : "json",
+	// 	type : "get",
+	// 	success : function(data)
+	// 	{
+          
+
+ //             customer_invoice.action_compute();
+ //             customer_invoice.action_reassign_number();
+	// 	},
+	// 	error : function()
+	// 	{
+	// 		alert("Something wen't wrong.");
+	// 	}
+	// });
+}
 
 /* AFTER DRAGGING A TABLE ROW */
 function dragging_done()

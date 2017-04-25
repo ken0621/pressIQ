@@ -6,6 +6,20 @@
     <input type="hidden" name="sir_id" value="{{$sir_id or ''}}" >
     <input type="hidden" name="invoice_id" value="{{Request::input('id')}}" >
     <input type="hidden" id="keep_val" name="keep_val" value="" >
+
+
+    <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
+
+    <div class="drawer drawer-default">
+        <div class="drawer-brand">Add to Invoice</div>
+        <nav class="drawer-nav">
+            <div class="clearfix estimate-container">
+                @include('member.load_ajax_data.load_estimate_so')
+            </div>   
+        </nav>
+    </div>
+
+<div class="drawer-overlay">
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
             <div>
@@ -37,7 +51,6 @@
             </div>
         </div>
     </div>
-
     <div class="panel panel-default panel-block panel-title-block panel-gray load-data">
         <div class="data-container" >
             <div class="tab-content">
@@ -109,7 +122,8 @@
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>
-                                        <tbody class="draggable tbody-item">     
+                                        <tbody class="draggable tbody-item">
+                                                @include("member.load_ajax_data.load_est_session_item",['_session_item' => Session::get('est_item')])
                                             @if(isset($inv))
                                                 @foreach($_invline as $invline)
                                                     <tr class="tr-draggable">
@@ -464,6 +478,7 @@
             </div>
         </div>
     </div>
+</div>
 </form>
 
 <div class="div-script">
@@ -525,5 +540,79 @@
 </script>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
+<script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
 <script type="text/javascript" src="/assets/member/js/customer_invoice.js"></script>
+<script type="text/javascript">
+    
+$(document).ready(function() 
+{
+  $('.drawer').drawer({
+    desktopEvent:'click'
+  });
+});
+</script>
+@endsection
+
+@section("css")
+<link rel="stylesheet" type="text/css" href="/assets/member/bootstrap_drawer/cooker.drawer.css">
+<style type="text/css">
+.est-style
+{
+    padding: 10px;
+    background-color: #fff;
+}
+.drawer-toggle
+{
+    background-color: #76B6EC;
+    color: #fff;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 0;
+}
+.drawer-toggle:hover
+{
+    background-color: #76B6EC;
+    color: #fff;
+}
+
+.drawer-default
+{
+    -webkit-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
+    -moz-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
+    box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
+    -webkit-transition: all 0.4s ease;
+       -o-transition: all 0.4s ease;
+          transition: all 0.4s ease;
+    z-index: 2;
+}
+.drawer-toggle
+{
+    -webkit-transition: all 0.4s ease;
+       -o-transition: all 0.4s ease;
+          transition: all 0.4s ease;
+}
+.drawer-default + .drawer-overlay
+{
+    background-color: transparent !important;
+    -webkit-transition: all 0.4s ease;
+       -o-transition: all 0.4s ease;
+          transition: all 0.4s ease;
+}
+.drawer-open .drawer-overlay
+{
+    padding-right: 30px;
+}
+.drawer-close .drawer.drawer-default
+{
+    right: -280px;
+}
+.drawer-open .drawer.drawer-default
+{
+    right: 0;
+}
+nav.user-menu
+{
+    background-color: #F5F5F5;
+}
+</style>
 @endsection

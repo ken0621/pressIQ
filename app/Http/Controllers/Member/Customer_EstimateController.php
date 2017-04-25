@@ -2,10 +2,36 @@
 
 namespace App\Http\Controllers\Member;
 
-use Illuminate\Http\Request;
+use App\Globals\Estimate;
+use App\Globals\Accounting;
+use App\Globals\Item;
+use App\Globals\UnitMeasurement;
+use App\Globals\Warehouse;
+use App\Globals\Pdf_global;
+use App\Globals\CreditMemo;
+use App\Globals\Purchasing_inventory_system;
+use App\Globals\Transaction;
+use App\Globals\Customer;
 
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_item_bundle;
+use App\Models\Tbl_customer_invoice;
+use App\Models\Tbl_credit_memo;
+use App\Models\Tbl_credit_memo_line;
+use App\Models\Tbl_manual_invoice;
+use App\Models\Tbl_customer_invoice_line;
+use App\Models\Tbl_customer_estimate;
+use App\Models\Tbl_customer_estimate_line;
+use App\Models\Tbl_unit_measurement_multi;
+use App\Models\Tbl_item;
+use App\Models\Tbl_warehouse;
+use App\Models\Tbl_user;
+
+use Request;
+use Carbon\Carbon;
+use Session;
+use Redirect;
+use PDF;
 
 class Customer_EstimateController extends Member
 {
@@ -14,10 +40,93 @@ class Customer_EstimateController extends Member
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
-        $data["page"] = "Customer Sales Receipt";
-        return view("member.customer.create_estimate",$data);
+    }
+    public function estimate()
+    {
+        $data["page"] = "Customer Sales Receipt"; 
+        $data["_customer"]  = Customer::getAllCustomer();
+        $data['_item']      = Item::get_all_category_item();
+        $data['_um']        = UnitMeasurement::load_um_multi();
+        $data["action"]     = "/member/customer/estimate/create";
+        $data["c_id"] = Request::input("customer_id");
+        $id = Request::input('id');
+        if($id)
+        {
+            $data["est"]            = Tbl_customer_estimate::where("est_id", $id)->first();
+            
+            $data["_estline"]       = Tbl_customer_estimate_line::um()->where("estline_est_id", $id)->get();
+            $data["action"]         = "/member/customer/estimate/update";
+        }
+        return view("member.customer.estimate.create_estimate",$data);
+    }
+    public function create_submit()
+    {
+        // dd(Request::input()); //estimate
+        $button_action = Request::input('button_action');
+
+        $customer_info                      = [];
+        $customer_info['customer_id']       = Request::input('est_customer_id');
+        $customer_info['customer_email']    = Request::input('est_customer_email');
+
+        $estimate_info                       = [];
+        $estimate_info['estimate_terms_id']   = Request::input('est_terms_id');
+        $estimate_info['estimate_date']       = datepicker_input(Request::input('est_date'));
+        $estimate_info['estimate_due']        = datepicker_input(Request::input('est_exp_date'));
+        $estimate_info['billing_address']    = Request::input('est_customer_billing_address');
+
+        $estimate_other_info                 = [];
+        $estimate_other_info['estimate_msg']  = Request::input('est_message');
+        $estimate_other_info['estimate_memo'] = Request::input('est_memo');
+
+        $total_info                         = [];
+        $total_info['ewt']                  = Request::input('ewt');
+        $total_info['total_discount_type']  = Request::input('est_discount_type');
+        $total_info['total_discount_value'] = Request::input('est_discount_value');
+        $total_info['taxable']              = Request::input('taxable');
+
+        $item_info                          = [];
+        $_itemline                          = Request::input('estline_item_id');
+
+        $product_consume = null;
+        $ctr = 0;
+        foreach($_itemline as $key => $item_line)
+        {
+            if($item_line)
+            {
+                $ctr++;
+                $item_info[$key]['item_service_date']  = Request::input('estline_service_date')[$key];
+                $item_info[$key]['item_id']            = Request::input('estline_item_id')[$key];
+                $item_info[$key]['item_description']   = Request::input('estline_description')[$key];
+                $item_info[$key]['um']                 = Request::input('estline_um')[$key];
+                $item_info[$key]['quantity']           = Request::input('estline_qty')[$key];
+                $item_info[$key]['rate']               = convertToNumber(Request::input('estline_rate')[$key]);
+                $item_info[$key]['discount']           = Request::input('estline_discount')[$key];
+                $item_info[$key]['discount_remark']    = Request::input('estline_discount_remark')[$key];
+                $item_info[$key]['amount']             = convertToNumber(Request::input('estline_amount')[$key]);
+                $item_info[$key]['taxable']            = Request::input('estline_taxable')[$key];
+            }
+        }
+        if($ctr != 0)
+        {
+             $est_id = Estimate::postEstimate($customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info);
+
+            $data["status"] = "success-estimate";
+            $data["redirect"] = "/member/customer/estimate?id=".$est_id;
+        }
+        else
+        {
+            $data["status"] = "error";
+            $data["status_message"] = "Please Insert Item";
+        }
+
+        return json_encode($data);
+    }
+    public function update_submit()
+    {
+        dd(Request::input());
     }
 
     /**

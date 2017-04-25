@@ -510,7 +510,7 @@ class Warehouse
         }
         return $data;
     }
-    public static function inventory_consume($warehouse_id = 0, $remarks = '', $consume_product ,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type = '', $transaction_id = 0)
+    public static function inventory_consume($warehouse_id = 0, $remarks = '', $consume_product ,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type = '', $transaction_id = 0,$allow_out_of_stock = false)
     {
         $shop_id = Warehouse::get_shop_id($warehouse_id);
         $insert_slip['inventory_slip_id_sibling']     = 0;
@@ -530,48 +530,71 @@ class Warehouse
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
-        $insert_consume = '';
+        $insert_consume = null;
 
-        $inventory_success = '';
-        $inventory_err = '';
+        $inventory_success = null;
+        $inventory_err = null;
         $success = 0;
         $err = 0;
         $data['status_message'] = "";
         $err_msg = "";
         foreach($consume_product as $key => $product)
         {
-            $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $product['product_id'])->pluck('inventory_count');
-            if($count_on_hand == null)
+            $item_type = Tbl_item::where("item_id",$product['product_id'])->pluck("item_type_id");
+            if($item_type == 1) //inventory
             {
-                $count_on_hand = 0;   
-            }
+                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $product['product_id'])->pluck('inventory_count');
+                if($count_on_hand == null)
+                {
+                    $count_on_hand = 0;   
+                }
 
-            if($product['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $product['quantity'])
-            {
-                $insert_consume[$key]['inventory_item_id']        = $product['product_id'];
-                $insert_consume[$key]['warehouse_id']             = $warehouse_id;
-                $insert_consume[$key]['inventory_created']        = Carbon::now();
-                $insert_consume[$key]['inventory_count']          = $product['quantity'] * -1;
-                $insert_consume[$key]['inventory_slip_id']        = $inventory_slip_id;
+                
+                if($allow_out_of_stock == true)
+                {
+                    $insert_consume[$key]['inventory_item_id']        = $product['product_id'];
+                    $insert_consume[$key]['warehouse_id']             = $warehouse_id;
+                    $insert_consume[$key]['inventory_created']        = Carbon::now();
+                    $insert_consume[$key]['inventory_count']          = $product['quantity'] * -1;
+                    $insert_consume[$key]['inventory_slip_id']        = $inventory_slip_id;
 
-                $inventory_success[$success] = Warehouse::array_tansfer('success', $product['product_id']);
-                $success++;
-            }
-            else
-            {
-                $item_name = Item::get_item_details($product['product_id']);
-                $err_msg[$key] = "The quantity of ".$item_name->item_name." is not enough for you to transfer.<br>";
-                $inventory_err[$err] = Warehouse::array_tansfer('error', $product['product_id']);
-                $err++;
+                    $inventory_success[$success] = Warehouse::array_tansfer('success', $product['product_id']);
+                    $success++;
+                }
+                else
+                {
+                    if($product['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $product['quantity'])
+                    {
+                        $insert_consume[$key]['inventory_item_id']        = $product['product_id'];
+                        $insert_consume[$key]['warehouse_id']             = $warehouse_id;
+                        $insert_consume[$key]['inventory_created']        = Carbon::now();
+                        $insert_consume[$key]['inventory_count']          = $product['quantity'] * -1;
+                        $insert_consume[$key]['inventory_slip_id']        = $inventory_slip_id;
+
+                        $inventory_success[$success] = Warehouse::array_tansfer('success', $product['product_id']);
+                        $success++;
+                    }
+                    else
+                    {
+                        $item_name = Item::get_item_details($product['product_id']);
+                        $err_msg[$key] = "The quantity of ".$item_name->item_name." is not enough for you to transfer.<br>";
+                        $inventory_err[$err] = Warehouse::array_tansfer('error', $product['product_id']);
+                        $err++;
+                    }
+
+                }                
             }
         }
 
         $data['status'] = '';
-        if($inventory_err == '')
+        if($inventory_err == null)
         {
-            Tbl_warehouse_inventory::insert($insert_consume);
-            $data['status'] = 'success';
-            $data['inventory_slip_id'] = $inventory_slip_id;
+            if($insert_consume != null)
+            {
+                Tbl_warehouse_inventory::insert($insert_consume);
+                $data['status'] = 'success';
+                $data['inventory_slip_id'] = $inventory_slip_id;                
+            }
         }
         else
         {

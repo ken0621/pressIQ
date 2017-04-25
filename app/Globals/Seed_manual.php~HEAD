@@ -23,56 +23,6 @@ class Seed_manual
         {
           Seed_manual::seed_tbl_item_type();
         }
-<<<<<<< HEAD:app/Globals/seed.php
-=======
-<<<<<<< HEAD:app/Globals/seed.php
-<<<<<<< HEAD
-=======
-=======
-<<<<<<< HEAD:app/Globals/seed.php
->>>>>>> testing:app/Globals/Seed_manual.php~HEAD
->>>>>>> mod_payroll
->>>>>>> 83fde2fbb418cbdb9dfd848254c97adec05f5beb:app/Globals/Seed_manual.php~HEAD
-        if(!DB::table("tbl_online_pymnt_method")->first())
-        {
-          Seed::seed_tbl_online_pymnt_method();
-        }
-        if(!DB::table("tbl_online_pymnt_gateway")->first())
-<<<<<<< HEAD:app/Globals/seed.php
-        {
-          Seed::seed_tbl_online_pymnt_gateway();
-=======
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD:app/Globals/seed.php
-        {
-          Seed::seed_tbl_online_pymnt_gateway();
-=======
->>>>>>> mod_payroll
-        {
-          Seed::seed_tbl_online_pymnt_gateway();
-=======
-
-        // if(!DB::table("tbl_online_pymnt_method")->first())
-        // {
-        //   Seed_manual::seed_tbl_online_pymnt_method();
-        // }
-        // if(!DB::table("tbl_online_pymnt_gateway")->first())
-        // {
-        //   Seed_manual::seed_tbl_online_pymnt_gateway();
-        // }
-
-        if(!DB::table('tbl_payroll_entity')->first())
-        {
-            Seed_manual::seed_tbl_payroll_entity();
-<<<<<<< HEAD
->>>>>>> f90ad6c96d33a130dd245ce3989b9807cfda69f0:app/Globals/Seed_manual.php~HEAD
-=======
->>>>>>> a037c4c79afcfa3c6bc4b9c9fd4bbb9c8147c518:app/Globals/Seed_manual.php~HEAD
->>>>>>> testing:app/Globals/Seed_manual.php~HEAD
->>>>>>> mod_payroll
->>>>>>> 83fde2fbb418cbdb9dfd848254c97adec05f5beb:app/Globals/Seed_manual.php~HEAD
-        }
     }
 
     public static function getShopId()

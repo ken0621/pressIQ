@@ -1235,7 +1235,7 @@ class Payroll
 			$data['total_rh']					+= divide($special_holiday_hours, $target_hour);
 			$data['total_sh']					+= divide($regular_holiday_hours, $target_hour);
 
-			$daily_rate = $data['salary_monthly'] / $working_day_month;
+			$daily_rate = divide($data['salary_monthly'] , $working_day_month);
 
 			/* PAYROLL OVER TIME RATES */
 			$query_arr['payroll_group_id'] 				= $group->payroll_group_id;

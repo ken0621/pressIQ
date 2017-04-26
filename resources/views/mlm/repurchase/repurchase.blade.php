@@ -58,7 +58,8 @@ $data['icon'] = 'fa fa-shopping-cart';
             </div>
         </div>
         <div class="text-right">
-            <button class="btn btn-primary">Checkout</button>
+            <button class="btn btn-default clear-cart">Clear</button>
+            <button class="btn btn-primary checkout-button">Checkout</button>
         </div>
     </div>
 </div>

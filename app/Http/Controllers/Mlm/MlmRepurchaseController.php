@@ -60,4 +60,16 @@ class MlmRepurchaseController extends Mlm
 
         echo json_encode("success");
     }
+
+    public function clear_cart()
+    {
+        Mlm_repurchase_member::clear_all_cart();
+
+        echo json_encode("success");
+    }
+
+    public function checkout()
+    {
+        return view("mlm.repurchase.checkout");
+    }
 }

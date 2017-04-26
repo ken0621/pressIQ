@@ -14,6 +14,8 @@ function repurchase()
 	{
 		event_add_to_cart();
 		event_remove_item_cart();
+		event_clear_cart();
+		event_checkout();
 		bootstrap_tooltip();
 	}
 	function isEmpty( el )
@@ -92,6 +94,36 @@ function repurchase()
 		.done(function() 
 		{
 			load_repurchase_cart();
+		});
+	}
+	function event_clear_cart()
+	{
+		$('.clear-cart').unbind("click");
+		$('.clear-cart').bind("click", function()
+		{
+			action_clear_cart();
+		});
+	}
+	function action_clear_cart()
+	{
+		show_cart_loader();
+
+		$.ajax({
+			url: '/mlm/repurchase/clear_cart',
+			type: 'GET',
+			dataType: 'json'
+		})
+		.done(function() 
+		{
+			load_repurchase_cart();
+		});
+	}
+	function event_checkout()
+	{
+		$('.checkout-button').unbind("click");
+		$('.checkout-button').bind("click", function()
+		{
+			alert("Under Development");
 		});
 	}
 }

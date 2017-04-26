@@ -401,7 +401,7 @@ function purchase_order(){
 		}
 		else
 		{
-			// $parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
 	}
 

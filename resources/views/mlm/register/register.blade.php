@@ -29,8 +29,8 @@
 					</div>
 					<div class="col-md-6">
 						<div class="form-group">
-							<label>Company (Optional)</label>
-							<input type="text" class="form-control input-lg" name="company">
+							<label>Contact Number</label>
+							<input type="text" class="form-control input-lg" name="contact_number" required>
 						</div>
 					</div>
 					<div class="col-md-6">

@@ -48,8 +48,8 @@
             <th>Date</th>
             <th>Amount</th>
             <th>Fee</th>
-            <th>Transferer</th>
             <th>Reciever</th>
+            <th>Transferer</th>
         </thead>
         <tbody>
         @foreach($logs_transfer as $key => $value)

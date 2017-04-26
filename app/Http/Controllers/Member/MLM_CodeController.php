@@ -167,6 +167,7 @@ class MLM_CodeController extends Member
         $data['membership_package'] = Tbl_membership_package::membership()->where('tbl_membership.membership_archive', '0')
         ->where('membership_package_archive', 0)
         ->where('tbl_membership.shop_id', $shop_id)
+        ->where('membership_type', 1)
         ->get();
         $data['membership_type']    = Membership_package::view_ps_cd_fs_dropdown(0);
         $data['talbe_body']         = $this->view_all_lines();

@@ -484,7 +484,7 @@ function bill()
 		$parent = $this.closest(".tr-draggable");
 		$item   = $this.closest(".tr-draggable").find(".select-item");
 
-		$um_qty = parseFloat($this.find("option:selected").attr("qty"));
+		$um_qty = parseFloat($this.find("option:selected").attr("qty") || 1);
 		$sales  = parseFloat($item.find("option:selected").attr("cost"));
 		$qty    = parseFloat($parent.find(".txt-qty").val());
 		console.log($um_qty +"|" + $sales +"|" +$qty);

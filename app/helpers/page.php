@@ -244,37 +244,37 @@ function page_list()
     // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     // $nav[$page]['submenu'][$code]['status'] = "Layout (0%)";
     // $nav[$page]['submenu'][$code]['developer'] = "Erwin Guevara";
-    $page = "stockist";  
-    $nav[$page]['name'] = "Stockist";
-    $nav[$page]['segment'] = $page;
-    $nav[$page]['icon'] = "archive";
+    // $page = "stockist";  
+    // $nav[$page]['name'] = "Stockist";
+    // $nav[$page]['segment'] = $page;
+    // $nav[$page]['icon'] = "archive";
 
-    /* -- stockist => Vendor */
-    $code = "stockist-vendor";
-    $nav[$page]['submenu'][$code]['label'] = "Vendor";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/vendor";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    // /* -- stockist => Vendor */
+    // $code = "stockist-vendor";
+    // $nav[$page]['submenu'][$code]['label'] = "Vendor";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/vendor";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
-    /* -- stockist => Vendor */
-    $code = "stockist-pos";
-    $nav[$page]['submenu'][$code]['label'] = "Point of Sale";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/pos";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    // /* -- stockist => Vendor */
+    // $code = "stockist-pos";
+    // $nav[$page]['submenu'][$code]['label'] = "Point of Sale";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/pos";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
-    /* -- stockist => Vendor */
-    $code = "stockist-wallet";
-    $nav[$page]['submenu'][$code]['label'] = "Wallet";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/pos";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    // /* -- stockist => Vendor */
+    // $code = "stockist-wallet";
+    // $nav[$page]['submenu'][$code]['label'] = "Wallet";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/pos";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
 
     /* ACCOUNTING*/

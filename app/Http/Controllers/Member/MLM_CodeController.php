@@ -17,6 +17,7 @@ use DB;
 use App\Globals\Pdf_global;
 use App\Globals\Utilities;
 use App\Globals\AuditTrail;
+use Redirect;
 class MLM_CodeController extends Member
 {
     public function index()
@@ -127,6 +128,18 @@ class MLM_CodeController extends Member
             if($sell == 'sell')
             {
                 $data = [];
+                
+                $shop_id = $this->user_info->shop_id;
+                $stocksit_membership = Tbl_membership_package::membership()->where('tbl_membership.membership_archive', '0')
+                ->where('membership_package_archive', 0)
+                ->where('tbl_membership.shop_id', $shop_id)
+                ->where('membership_type', 1)
+                ->count();
+                if($stocksit_membership == 0)
+                {
+                    return $this->member_sell();
+                }
+
                 return view('member.mlm_code.mlm_code_sell_option', $data);
             }
             elseif($sell =='membership')
@@ -164,7 +177,7 @@ class MLM_CodeController extends Member
     {
         $shop_id                    = $this->user_info->shop_id;
         $data['invoice_number']     = invoice_generator(1);
-        $data['membership_package'] = Tbl_membership_package::membership()->where('tbl_membership.membership_archive', '0')
+        $data['membership_package'] = Tbl_membership_package::membership()->where('tbl_membership.membership_archive', 0)
         ->where('membership_package_archive', 0)
         ->where('tbl_membership.shop_id', $shop_id)
         ->where('membership_type', 1)
@@ -184,7 +197,7 @@ class MLM_CodeController extends Member
             if(isset($this->current_warehouse->warehouse_id))
             {
                 // warehouse_id
-                $data    = Membership_code::add_code(Request::input(),$shop_id, $this->current_warehouse->warehouse_id, 0);
+                $data    = Membership_code::add_code(Request::input(),$shop_id, $this->current_warehouse->warehouse_id, 1);
                 return json_encode($data);
             }
             else

@@ -22,7 +22,6 @@ Route::any('/member/mlm/membership/change_picture', 'Member\MLM_MembershipContro
 Route::any('/member/mlm/code', 'Member\MLM_CodeController@index'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/code/block/{id}', 'Member\MLM_CodeController@block'); //ERWIN
 Route::any('/member/mlm/code/block_submit', 'Member\MLM_CodeController@block_submit'); //ERWIN
-Route::any('/member/mlm/code/{sell}', 'Member\MLM_CodeController@sell'); //GUILLERMO TABLIGAN
 Route::any('/member/mlm/code/sell/add_line', 'Member\MLM_CodeController@add_line'); //Luke
 Route::any('/member/mlm/code/sell/add_line/view', 'Member\MLM_CodeController@view_all_lines'); //Luke
 Route::any('/member/mlm/code/sell/add_line/submit', 'Member\MLM_CodeController@addl_line_submit'); //Luke
@@ -31,8 +30,9 @@ Route::any('/member/mlm/code/sell/clear_line/{id}', 'Member\MLM_CodeController@r
 Route::any('/member/mlm/code/sell/compute', 'Member\MLM_CodeController@compute');//Luke
 Route::any('/member/mlm/code/sell/process', 'Member\MLM_CodeController@process');// ERWIN
 Route::any('/member/mlm/code/sell/process/stockist', 'Member\MLM_CodeController@process_stockist');// ERWIN
-Route::any('/member/mlm/code/receipt/', 'Member\MLM_CodeController@receipt'); //ERWIN
+Route::any('/member/mlm/code/receipt', 'Member\MLM_CodeController@receipt'); //ERWIN
 Route::any('/member/mlm/code/receipt/view/{id}', 'Member\MLM_CodeController@view_receipt'); //ERWIN
+Route::any('/member/mlm/code/{sell}', 'Member\MLM_CodeController@sell'); //GUILLERMO TABLIGAN
 
 Route::any('/member/mlm/claim_voucher', 'Member\MLM_ClaimVoucher@index'); //ERWIN
 Route::any('/member/mlm/claim_voucher/claim', 'Member\MLM_ClaimVoucher@claim'); //ERWIN

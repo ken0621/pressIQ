@@ -169,5 +169,36 @@ function change_membership(ito)
 	$('.price_b').html(price);
 	$('.total_top').html(price);
 }
+function submit_done(data) 
+{
+    if(data.response_status == "warning")
+    {
+        var warning_vali = data.warning_validator;
+        warning_vali.forEach(function(entry) 
+        {
+		    toastr.warning(entry);
+		});
+    }
+    else if(data.response_status == "success")
+    {
+    	if (data.invoice_id  == null) 
+    	{
+		  // your code here
+		  	
+	        // $('#global_modal').modal('toggle');
+	        $('#add-new-line-warning').html(" ");
+	        toastr.success('Line Successfully Added!');
+	        load_session();
+	        $('.close').click();
+
+		  
+		}
+		else
+		{
+			toastr.success('Purchase complete');
+			window.location = "/member/mlm/code/receipt?invoice=" + data.invoice_id;
+		}
+    }
+}
 </script>
 @endsection

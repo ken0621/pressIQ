@@ -33,8 +33,8 @@
                         <tr>
                             <th>Membership Name</th>
                             <th>Membership Price</th>
-                            <th>Membership Type</th>
                             <th>Membership Rank</th>
+                            <th>Membership Type</th>
                             <th>Packages</th>
                             <th class="text-center"></th>
                         </tr>

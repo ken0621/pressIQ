@@ -337,18 +337,33 @@ class PayrollTimeSheetController extends Member
 
 			if($payroll_time_sheet_approved == 0) //overwrite timesheet record only if not yet approved
 			{
+
+				/*  get origin [to avoid duplicate] */
+				$reference = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $payroll_time_sheet_id)
+													   ->where('payroll_time_sheet_origin','!=','Payroll Time Sheet')
+													   ->first();
+				$origin = 'Payroll Time Sheet';
+				$payroll_company_id = 0;
+
+				if(isset($reference->payroll_time_sheet_origin))
+				{
+					$origin = $reference->payroll_time_sheet_origin;
+					$payroll_company_id = $reference->payroll_company_id;
+				}
+
 				Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $payroll_time_sheet_id)->delete();
 				$_insert_time_record = null;
 
 				foreach(Request::input('date')[$key] as $i => $time)
 				{
 					$_insert_time_record[$i]["payroll_time_sheet_id"] = $payroll_time_sheet_id;
-					$_insert_time_record[$i]["payroll_company_id"] = 0;
+					$_insert_time_record[$i]["payroll_company_id"] = $payroll_company_id;
 
 					if(Request::input("time_in")[$key][$i] == "")
 					{
 						$_insert_time_record[$i]["payroll_time_sheet_in"] = "";
 						$_insert_time_record[$i]["payroll_time_sheet_out"] = "";
+						// $_insert_time_record[$i]["payroll_time_sheet_origin"] = "Payroll Time Sheet";
 					}
 					else
 					{				
@@ -357,7 +372,7 @@ class PayrollTimeSheetController extends Member
 					}
 
 					$_insert_time_record[$i]["payroll_time_shee_activity"] = "";
-					$_insert_time_record[$i]["payroll_time_sheet_origin"] = "Payroll Time Sheet";
+					$_insert_time_record[$i]["payroll_time_sheet_origin"] = $origin;
 					$_insert_time_record[$i]["payroll_time_sheet_status"] = "pending";
 				}
 

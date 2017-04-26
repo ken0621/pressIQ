@@ -41,6 +41,7 @@ function modal_import_employee()
 				}, false);
 				ajax.addEventListener("load", function(event)
 				{
+					console.log(event.target.responseText);
 					var data = JSON.parse(event.target.responseText);
 
 					$(".import-status").html(data.message);

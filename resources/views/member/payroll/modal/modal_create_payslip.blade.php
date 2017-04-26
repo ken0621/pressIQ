@@ -56,11 +56,12 @@
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
+						<div class="form-group include-company-logo">
 							
 							<div class="col-md-12">
 								<small>Company Name and Logo Template</small>
 								<div class="list-group">
+									<input type="hidden" id="company-position" value=".company-logo-left" name="company_position">
 								  <a href="#" class="list-group-item company-position active" data-target=".company-logo-left">
 								  	<img src="/assets/images/noimage.png" class="img30x30">&nbsp;<span class="margin-top-10px  pos-absolute">Company Name</span>
 								  </a>
@@ -94,7 +95,7 @@
 						<div class="payslip-div paper-portrait">
 							<div class="payslip-gray-dotted width-25-n payslip-container" style="height:auto;display: inline-block;">
 								<div class="col-md-12 padding-5">
-									<div class="payslip-div padding-5">
+									<div class="payslip-div padding-5 company-logo-container">
 										<div class="company-logo company-logo-left">
 											<img src="/assets/images/noimage.png" class="img20x20">&nbsp;<span class="margin-top-10px f-9 pos-absolute">Company Name</span>
 										</div>

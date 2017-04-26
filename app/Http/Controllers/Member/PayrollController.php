@@ -558,98 +558,105 @@ class PayrollController extends Member
 				if($count_employee == 0)
 				{
 					/* EMPLOYEE BASIC INSERT START */
-					$insert['shop_id'] 							= Self::shop_id();
-					$insert['payroll_employee_company_id'] 		= Self::getid($data['company'], 'company');
-					$insert['payroll_employee_title_name'] 		= Self::nullableToString($data['title_name']);
-					$insert['payroll_employee_first_name'] 		= Self::nullableToString($data['first_name']);
-					$insert['payroll_employee_middle_name'] 	= Self::nullableToString($data['middle_name']);
-					$insert['payroll_employee_last_name'] 		= Self::nullableToString($data['last_name']);
-					$insert['payroll_employee_suffix_name'] 	= Self::nullableToString($data['suffix_name']);
-					$insert['payroll_employee_display_name'] 	= Self::nullableToString($data['title_name']).' '.Self::nullableToString($data['first_name']).' '.Self::nullableToString($data['middle_name']).' '.Self::nullableToString($data['last_name']).' '.Self::nullableToString($data['suffix_name']);
+                         $insert['shop_id']                                = Self::shop_id();
+                         $insert['payroll_employee_company_id']       = Self::getid($data['company'], 'company');
+                         $insert['payroll_employee_title_name']       = Self::nullableToString($data['title_name']);
+                         $insert['payroll_employee_first_name']       = Self::nullableToString($data['first_name']);
+                         $insert['payroll_employee_middle_name']      = Self::nullableToString($data['middle_name']);
+                         $insert['payroll_employee_last_name']        = Self::nullableToString($data['last_name']);
+                         $insert['payroll_employee_suffix_name']      = Self::nullableToString($data['suffix_name']);
+                         $insert['payroll_employee_display_name']     = Self::nullableToString($data['title_name']).' '.Self::nullableToString($data['first_name']).' '.Self::nullableToString($data['middle_name']).' '.Self::nullableToString($data['last_name']).' '.Self::nullableToString($data['suffix_name']);
 
-					$insert['payroll_employee_contact'] 		= Self::nullableToString($data['contact']);
-					$insert['payroll_employee_email'] 			= Self::nullableToString($data['email_address']);
-					$insert['payroll_employee_birthdate'] 		= Self::nullableToString($data['birthdate']);
-					$insert['payroll_employee_gender'] 			= Self::nullableToString($data['gender_mf']);
-					$insert['payroll_employee_number'] 			= Self::nullableToString($data['employee_number']);
-					$insert['payroll_employee_atm_number'] 		= Self::nullableToString($data['atmaccount_number']);
-					$insert['payroll_employee_street'] 			= Self::nullableToString($data['street']);
-					$insert['payroll_employee_city'] 			= Self::nullableToString($data['citytown']);
-					$insert['payroll_employee_state'] 			= Self::nullableToString($data['stateprovince']);
-					$insert['payroll_employee_zipcode'] 		= Self::nullableToString($data['zip_code']);
-					$insert['payroll_employee_country'] 		= Self::getid($data['country'], 'country');
-					$insert['payroll_employee_tax_status'] 		= Self::nullableToString($data['tax_status']);
-					$insert['payroll_employee_tin'] 			= Self::nullableToString($data['tin']);
-					$insert['payroll_employee_sss'] 			= Self::nullableToString($data['sss_number']);
-					$insert['payroll_employee_pagibig'] 		= Self::nullableToString($data['pagibig_number']);
-					$insert['payroll_employee_philhealth'] 		= Self::nullableToString($data['philhealth_number']);
-					$insert['payroll_employee_remarks'] 		= Self::nullableToString($data['remarks']);
-					// dd($insert);
-
-					$payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
-					/* EMPLOYEE BASIC INSERT END */
-
-					/* 	EMPLOYEE CONTRACT START */
-					$insert_contract['payroll_employee_id'] 					= $payroll_employee_id;
-					$insert_contract['payroll_department_id'] 					= Self::getid($data['department'],'department');
-					$insert_contract['payroll_jobtitle_id'] 					= Self::getid($data['position'],'jobtitle');
-					$insert_contract['payroll_employee_contract_date_hired'] 	= Self::nullableToString($data['start_date']);
-					$insert_contract['payroll_employee_contract_status'] 		= Self::getid($data['employment_status'],'employment_status');
-
-					Tbl_payroll_employee_contract::insert($insert_contract);
-
-					/* 	EMPLOYEE CONTRACT END */
+                         $insert['payroll_employee_contact']          = Self::nullableToString($data['contact']);
+                         $insert['payroll_employee_email']            = Self::nullableToString($data['email_address']);
+                         $insert['payroll_employee_birthdate']        = Self::nullableToString($data['birthdate']);
+                         $insert['payroll_employee_gender']                = Self::nullableToString($data['gender_mf']);
+                         $insert['payroll_employee_number']                = Self::nullableToString($data['employee_number']);
+                         $insert['payroll_employee_atm_number']       = Self::nullableToString($data['atmaccount_number']);
+                         $insert['payroll_employee_street']                = Self::nullableToString($data['street']);
+                         $insert['payroll_employee_city']             = Self::nullableToString($data['citytown']);
+                         $insert['payroll_employee_state']            = Self::nullableToString($data['stateprovince']);
+                         $insert['payroll_employee_zipcode']          = Self::nullableToString($data['zip_code']);
+                         $insert['payroll_employee_country']          = Self::getid($data['country'], 'country');
+                         $insert['payroll_employee_tax_status']       = Self::nullableToString($data['tax_status']);
+                         $insert['payroll_employee_tin']              = Self::nullableToString($data['tin']);
+                         $insert['payroll_employee_sss']              = Self::nullableToString($data['sss_number']);
+                         $insert['payroll_employee_pagibig']          = Self::nullableToString($data['pagibig_number']);
+                         $insert['payroll_employee_philhealth']       = Self::nullableToString($data['philhealth_number']);
+                         $insert['payroll_employee_remarks']          = Self::nullableToString($data['remarks']);
 
 
-					/* EMPLOYEE SALARY START */
-					$insert_salary['payroll_employee_id'] 						= $payroll_employee_id;
-					$insert_salary['payroll_employee_salary_effective_date'] 	= Self::nullableToString($data['start_date']);
-					$insert_salary['payroll_employee_salary_minimum_wage'] 		= Self::yesNotoInt($data['minimum_wage_yn']);
-					$insert_salary['payroll_employee_salary_monthly'] 			= Self::nullableToString($data['monthly_salary'],'int');
-					$insert_salary['payroll_employee_salary_daily'] 			= Self::nullableToString($data['daily_rate'],'int');
-					$insert_salary['payroll_employee_salary_taxable'] 			= Self::nullableToString($data['taxable_salary'],'int');
-					$insert_salary['payroll_employee_salary_sss'] 				= Self::nullableToString($data['sss_salary'],'int');
-					$insert_salary['payroll_employee_salary_pagibig'] 			= Self::nullableToString($data['hdmf_salary'],'int');
-					$insert_salary['payroll_employee_salary_philhealth'] 		= Self::nullableToString($data['phic_salary'],'int');
+                         if(Self::getid($data['company'], 'company') != null && Self::checkemployee_exist($insert) == 0)
+                         {
+                              
+                              // dd($insert);
 
-					Tbl_payroll_employee_salary::insert($insert_salary);
-					/* EMPLOYEE SALARY END */
+                              $payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
+                              /* EMPLOYEE BASIC INSERT END */
 
-					/* EMPLOYEE  REQUIREMENTS START*/
-		
-					$insert_requirement['payroll_employee_id'] 		= $payroll_employee_id;
-					$insert_requirement['has_resume'] 				= Self::yesNotoInt($data['biodataresumeyn'],'int');
-					$insert_requirement['has_police_clearance'] 	= Self::yesNotoInt($data['police_clearanceyn'],'int');
-					$insert_requirement['has_nbi'] 					= Self::yesNotoInt($data['nbiyn'],'int');
-					$insert_requirement['has_health_certificate'] 	= Self::yesNotoInt($data['health_certificateyn'],'int');
-					$insert_requirement['has_school_credentials'] 	= Self::yesNotoInt($data['school_credentialsyn'],'int');
-					$insert_requirement['has_valid_id'] 			= Self::yesNotoInt($data['valid_idyn'],'int');
+                              /*   EMPLOYEE CONTRACT START */
+                              $insert_contract['payroll_employee_id']                          = $payroll_employee_id;
+                              $insert_contract['payroll_department_id']                        = Self::getid($data['department'],'department');
+                              $insert_contract['payroll_jobtitle_id']                          = Self::getid($data['position'],'jobtitle');
+                              $insert_contract['payroll_employee_contract_date_hired']    = Self::nullableToString($data['start_date']);
+                              $insert_contract['payroll_employee_contract_status']        = Self::getid($data['employment_status'],'employment_status');
 
-					Tbl_payroll_employee_requirements::insert($insert_requirement);
-					/* EMPLOYEE  REQUIREMENTS END*/
+                              Tbl_payroll_employee_contract::insert($insert_contract);
+
+                              /*   EMPLOYEE CONTRACT END */
 
 
-					/* EMPLOYEE DEPENDENT START */
-					$insert_dependent = array();
-					$temp = '';
-					for($i = 1; $i <= 4; $i++)
-					{
-						if($data['dependent_full_name'.$i] != null || $data['dependent_full_name'.$i] != "")
-						{
-							$temp['payroll_employee_id'] 			= $payroll_employee_id;
-							$temp['payroll_dependent_name'] 		= Self::nullableToString($data['dependent_full_name'.$i]);
-							$temp['payroll_dependent_relationship'] = Self::nullableToString($data['dependent_relationship'.$i]);
-							$temp['payroll_dependent_birthdate'] 	= Self::nullableToString($data['dependent_birthdate'.$i]);
-							array_push($insert_dependent, $temp);
-						}
-					}
+                              /* EMPLOYEE SALARY START */
+                              $insert_salary['payroll_employee_id']                            = $payroll_employee_id;
+                              $insert_salary['payroll_employee_salary_effective_date']    = Self::nullableToString($data['start_date']);
+                              $insert_salary['payroll_employee_salary_minimum_wage']           = Self::yesNotoInt($data['minimum_wage_yn']);
+                              $insert_salary['payroll_employee_salary_monthly']                = Self::nullableToString($data['monthly_salary'],'int');
+                              $insert_salary['payroll_employee_salary_daily']             = Self::nullableToString($data['daily_rate'],'int');
+                              $insert_salary['payroll_employee_salary_taxable']                = Self::nullableToString($data['taxable_salary'],'int');
+                              $insert_salary['payroll_employee_salary_sss']                    = Self::nullableToString($data['sss_salary'],'int');
+                              $insert_salary['payroll_employee_salary_pagibig']                = Self::nullableToString($data['hdmf_salary'],'int');
+                              $insert_salary['payroll_employee_salary_philhealth']        = Self::nullableToString($data['phic_salary'],'int');
+
+                              Tbl_payroll_employee_salary::insert($insert_salary);
+                              /* EMPLOYEE SALARY END */
+
+                              /* EMPLOYEE  REQUIREMENTS START*/
+               
+                              $insert_requirement['payroll_employee_id']        = $payroll_employee_id;
+                              $insert_requirement['has_resume']                 = Self::yesNotoInt($data['biodataresumeyn'],'int');
+                              $insert_requirement['has_police_clearance']  = Self::yesNotoInt($data['police_clearanceyn'],'int');
+                              $insert_requirement['has_nbi']                         = Self::yesNotoInt($data['nbiyn'],'int');
+                              $insert_requirement['has_health_certificate']     = Self::yesNotoInt($data['health_certificateyn'],'int');
+                              $insert_requirement['has_school_credentials']     = Self::yesNotoInt($data['school_credentialsyn'],'int');
+                              $insert_requirement['has_valid_id']               = Self::yesNotoInt($data['valid_idyn'],'int');
+
+                              Tbl_payroll_employee_requirements::insert($insert_requirement);
+                              /* EMPLOYEE  REQUIREMENTS END*/
+
+
+                              /* EMPLOYEE DEPENDENT START */
+                              $insert_dependent = array();
+                              $temp = '';
+                              for($i = 1; $i <= 4; $i++)
+                              {
+                                   if($data['dependent_full_name'.$i] != null || $data['dependent_full_name'.$i] != "")
+                                   {
+                                        $temp['payroll_employee_id']            = $payroll_employee_id;
+                                        $temp['payroll_dependent_name']         = Self::nullableToString($data['dependent_full_name'.$i]);
+                                        $temp['payroll_dependent_relationship'] = Self::nullableToString($data['dependent_relationship'.$i]);
+                                        $temp['payroll_dependent_birthdate']    = Self::nullableToString($data['dependent_birthdate'.$i]);
+                                        array_push($insert_dependent, $temp);
+                                   }
+                              }
+                              
+                              if(!empty($insert_dependent))
+                              {
+                                   Tbl_payroll_employee_dependent::insert($insert_dependent);
+                              }
+                              
+                              $count++;
+                         }
 					
-					if(!empty($insert_dependent))
-					{
-						Tbl_payroll_employee_dependent::insert($insert_dependent);
-					}
-					
-					$count++;
 					/* EMPLOYEE DEPENDENT END */
 				}
 				
@@ -665,13 +672,13 @@ class PayrollController extends Member
 			$return['message'] = $message;
 
 
-			return json_encode($return);
+			return $return;
 		}
 		else
 		{
 			$return['status'] 	= 'error';
 			$return['message'] 	= '<center><b><span class="color-red">Wrong file Format</span></b></center>';
-			return json_encode($return);
+			return $return;
 		}
 	}
 
@@ -712,6 +719,19 @@ class PayrollController extends Member
 				break;
 		}
 	}
+
+     public function checkemployee_exist($data = array())
+     {
+          $check['payroll_employee_company_id'] = $data['payroll_employee_company_id'];
+          $check['payroll_employee_title_name'] = $data['payroll_employee_title_name'];
+          $check['payroll_employee_first_name'] = $data['payroll_employee_first_name'];
+          $check['payroll_employee_middle_name'] = $data['payroll_employee_middle_name'];
+          $check['payroll_employee_last_name'] = $data['payroll_employee_last_name'];
+          $check['payroll_employee_suffix_name'] = $data['payroll_employee_suffix_name'];
+          $check['payroll_employee_number'] = $data['payroll_employee_number'];
+          
+          return Tbl_payroll_employee_basic::checkexist($check)->count();
+     }
 
 	public function nullableToString($data = null, $output = 'string')
 	{

@@ -14,19 +14,6 @@
     </div>
     <div class="form-group">
       <div class="col-md-12">
-        <label>Category Type</label>
-        <select class="form-control type_category" name="type_category" required>
-            <option value="">Select category type</option>
-            <option value="all">All type</option>
-            <option value="inventory">Inventory</option>
-            <option value="non-inventory">Non-inventory</option>  
-            <option value="services">Services</option>
-            <option value="bundles">Bundles</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-12">
         <div class="checkbox">
           <label><input type="checkbox" class="is_sub_category" name="is_sub_category" value="1">Is sub category</label>
         </div>
@@ -43,6 +30,19 @@
 
       </div>
       
+    </div>
+    
+    <div class="form-group">
+      <div class="col-md-12">
+        <label>Category Type</label>
+        <select class="form-control type_category" name="type_category" required>
+            <!-- <option value="all">All type</option> -->
+            <option value="inventory">Inventory</option>
+            <option value="non-inventory">Non-inventory</option>  
+            <option value="services">Services</option>
+            <option value="bundles">Bundles</option>
+        </select>
+      </div>
     </div>
 
   </div>

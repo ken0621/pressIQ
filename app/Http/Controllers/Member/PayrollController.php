@@ -4204,8 +4204,29 @@ class PayrollController extends Member
           $government    = array();
           $deduction     = array();
 
-          dd($process);
+          // dd($process);
+          
+          /* RATE DECLARATION */
+          $temp = '';
+          $temp['name']       = '<b>Rate</b>';
+          $temp['amount']     = '';
+          $temp['sub']        = array();
+          array_push($salary, $temp);
+
+          $temp = '';
+          $temp['name']       = 'Monthly Rate';
+          $temp['amount']     = number_format($process['salary_monthly'], 2);
+          $temp['sub']        = array();
+          array_push($salary, $temp);
+
+          $temp = '';
+          $temp['name']       = 'Daily Rate';
+          $temp['amount']     = number_format($process['salary_daily'], 2);
+          $temp['sub']        = array();
+          array_push($salary, $temp);
+          
           /* ALL POSITIVE */
+
           $temp = '';
           if($process['total_gross'] > 0)
           {    

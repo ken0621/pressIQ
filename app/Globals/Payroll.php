@@ -1265,9 +1265,8 @@ class Payroll
 
 			$hourly_rate = divide($daily_rate, $target_hour);
 
-
 			$data['daily_rate'] = $daily_rate;
-			
+
 			/* compute absent */
 			if($approved->absent)
 			{
@@ -1477,7 +1476,7 @@ class Payroll
 
 			$temp_cola = $extra_day['cola'] + $regular_day['cola'] + $regular_day_rest['cola'] + $special_holiday_rest['cola'] + $legal_holiday_rest['cola'] + $legal_holiday['cola'] + $special_holiday['cola'];
 
-
+			array_push($dd_array, $regular_day['late_overtime']);
 			/* LATE COMPUTATION START */
 
 			$late_deduction = 0;
@@ -1968,18 +1967,15 @@ class Payroll
 			$early_overtime 	= $param->payroll_overtime_rest_overtime;
 			$night_differential = $param->payroll_overtime_rest_night;
 			$cola_var			= $regular;
-			// if($regular == 0)
-			// {
-			// 	$cola_var = 1;
-			// }
+			
 		}
 
 		$cola_var 			= $cola_var * $cola;
 
 		$regular 			= $regular * $rate;
-		$late_overtime 		= $late_overtime * $rate;
-		$early_overtime 	= $early_overtime * $rate;
-		$night_differential = $night_differential * $rate;
+		// $late_overtime 		= $late_overtime * $rate;
+		// $early_overtime 	= $early_overtime * $rate;
+		// $night_differential = $night_differential * $rate;
 		
 
 		if($hours['regular'] <= 0)
@@ -1999,10 +1995,14 @@ class Payroll
 			$night_differential = 0;
 		}	
 
+		$temp_overtime = $hours['late_overtime'] * $rate;
+		$temp_earlyOT = $hours['early_overtime'] * $rate;
+		$temp_night	= $hours['night_differential'] * $rate;
+
 		$data['regular']			= round(($regular + ( $hours['regular'] * $rate )), 2);
-		$data['late_overtime']		= round(($late_overtime + ( $hours['late_overtime'] * $rate )), 2);
-		$data['early_overtime']		= round(($early_overtime + ( $hours['early_overtime'] * $rate )), 2);
-		$data['night_differential']	= round(($night_differential + ( $hours['night_differential'] * $rate )), 2);
+		$data['late_overtime']		= round(($temp_overtime + ($temp_overtime * $late_overtime)), 2);
+		$data['early_overtime']		= round(($early_overtime + ($early_overtime * $early_overtime)), 2);
+		$data['night_differential']	= round(($night_differential + ($temp_night * $night_differential)), 2);
 
 		$tota = 0;
 

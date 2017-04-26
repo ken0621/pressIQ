@@ -271,13 +271,13 @@ class Customer_SaleReceiptController extends Member
         }
         // END CM/RETURNS
 
-        if(str_replace(",","",Request::input("subtotal_price_returns")) < str_replace(",","",Request::input("overall_price")))
+        if($ctr_item != 0)
         {
             $inv = Transaction::check_number_existense("tbl_customer_invoice","new_inv_id","inv_shop_id",Request::input('new_invoice_id'));
 
             if($inv == 0 || Request::input("keep_val") == "keep")
             {
-                if($ctr_item != 0)
+                if(str_replace(",","",Request::input("subtotal_price_returns")) < str_replace(",","",Request::input("overall_price")))
                 {
                      $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, "sales_receipt");
                 
@@ -316,7 +316,7 @@ class Customer_SaleReceiptController extends Member
                 else
                 {
                     $json["status"] = "error";
-                    $json["status_message"] = "Please insert item";
+                    $json["status_message"] = "You can't issue a negative amount of invoice";
                 }
                
             }
@@ -329,7 +329,7 @@ class Customer_SaleReceiptController extends Member
         else
         {   
             $json["status"] = "error";
-            $json["status_message"] = "You can't issue a negative amount of invoice";
+            $json["status_message"] = "Please insert item";
         }
 
         return json_encode($json);

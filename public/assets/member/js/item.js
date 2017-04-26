@@ -11,7 +11,7 @@ function item()
     function init()
     {
         initialize_select();
-        saved_input();
+        // saved_input();
         $(".datepicker").datepicker();
         
         // event_accept_number_only();

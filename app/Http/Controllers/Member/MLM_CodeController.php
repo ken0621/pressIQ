@@ -176,6 +176,40 @@ class MLM_CodeController extends Member
         $data['warehouse'][0] = $this->current_warehouse;
         return view('member.mlm_code.mlm_code_sell_stockist', $data);
     }
+    public function process_stockist()
+    {
+        if(Request::input())
+        {
+            $shop_id = $this->user_info->shop_id;
+            if(isset($this->current_warehouse->warehouse_id))
+            {
+                // warehouse_id
+                $data    = Membership_code::add_code(Request::input(),$shop_id, $this->current_warehouse->warehouse_id, 0);
+                return json_encode($data);
+            }
+            else
+            {
+                $data['warning_validator'][0] = 'Invalid Warehouse';
+                Session::flash('code_error', $data["warning_validator"]);
+                return redirect('/member/mlm/code/stockist')->send();
+            }
+            
+            if($data["response_status"] == "success")
+            {
+                Session::flash('success', "Successfully purchased a package/s");
+                return redirect('/member/mlm/stockist')->send();
+            }
+            else
+            {
+                Session::flash('code_error', $data["warning_validator"]);
+                return redirect('/member/mlm/code/stockist')->send();
+            }          
+        }
+        else
+        {
+            return redirect('/member/mlm/code/stockist');
+        }
+    }
     public function add_line()
     {
         $data['membership_package'] = Membership_package::view_membership_dropdown(0,$this->user_info->shop_id);
@@ -351,7 +385,7 @@ class MLM_CodeController extends Member
             if(isset($this->current_warehouse->warehouse_id))
             {
                 // warehouse_id
-                $data    = Membership_code::add_code(Request::input(),$shop_id, $this->current_warehouse->warehouse_id);
+                $data    = Membership_code::add_code(Request::input(),$shop_id, $this->current_warehouse->warehouse_id, 0);
                 return json_encode($data);
             }
             else

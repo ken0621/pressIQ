@@ -27,8 +27,11 @@ use App\Globals\Mail_global;
 use Config;
 class Membership_code
 {
-	public static function add_code($data, $shop_id, $warehouse_id)
+
+	public static function add_code($data, $shop_id, $warehouse_id, $is_stockist= 0)
 	{
+        //$type = 0 = member;
+        //$type = 1 = stockist;
         $data['warehouse_id'] =  $warehouse_id;
         $insert['customer_id']                                   = $data["customer_id"];
         $insert['membership_code_customer_email']                = $data["membership_code_customer_email"];
@@ -36,28 +39,9 @@ class Membership_code
         $insert['membership_code_product_issued']                = $data["membership_code_product_issued"];
         $insert['membership_code_date_created']                  = Carbon::now();
         $insert['shop_id']                                       = $shop_id;
-        $insert['membership_code_invoice_f_name'] = $data['membership_code_customer_f_name'];
-        $insert['membership_code_invoice_m_name'] = $data['membership_code_customer_m_name'];
-        $insert['membership_code_invoice_l_name'] = $data['membership_code_customer_l_name']; 
-
-        // $rules['customer_id']                                    = 'required|exists:tbl_customer,customer_id|';
-        $rules['membership_code_customer_email']                 = 'required|email';
-        $rules['membership_code_paid']                           = 'required|between:0,1';
-        $rules['membership_code_product_issued']                 = 'required|between:0,1';   
-        $rules['membership_code_invoice_f_name'] = "required";
-        // $rules['membership_code_invoice_m_name'] = "required";
-        $rules['membership_code_invoice_l_name'] = "required";    
-        // $messages['customer_id.required']                        = 'Customer is required.';
-        // $messages['customer_id.exists']                          = 'Something wrong on customers list.';
-        $messages['membership_code_customer_email.required']     = 'Customer email is required.'; 
-        $messages['membership_code_customer_email.email']        = 'Please use a proper format for customer email.';
-        $messages['membership_code_paid.required']               = 'Something wrong on membership code paid.';
-        $messages['membership_code_paid.between']                = 'Something wrong on membership code paid.';
-        $messages['membership_code_product_issued.required']     = 'Something wrong on membership code issued.';
-        $messages['membership_code_product_issued.between']      = 'Something wrong on membership code issued.';
-        $messages['membership_code_invoice_f_name.required'] = "First Name Is Required";
-        // $messages['membership_code_invoice_m_name'] = "Middle Name Is Required";
-        $messages['membership_code_invoice_l_name.required'] = "Last Name Is Required"; 
+        $insert['membership_code_invoice_f_name']                = $data['membership_code_customer_f_name'];
+        $insert['membership_code_invoice_m_name']                = $data['membership_code_customer_m_name'];
+        $insert['membership_code_invoice_l_name']                = $data['membership_code_customer_l_name']; 
 
         $membership_subtotal            = 0;
         $membership_total               = 0;
@@ -73,8 +57,9 @@ class Membership_code
             }
         }
 
-    	$validator = Validator::make($insert,$rules,$messages);
-    	if ($validator->passes())
+    	// $validator = Validator::make($insert,$rules,$messages);
+        $validator = Membership_code::validate($data, $shop_id);
+    	if ($validator['status'] == 1)
     	{
     	    if(isset($data["membership_package"]) && isset($data["quantity"]) && isset($data["membership_type"]))
     	    {
@@ -137,7 +122,7 @@ class Membership_code
         	                }
         	                
         	                
-        	                $code_pin                                                = Tbl_membership_code::where("membership_code_pin",$shop_id)->count() + 1; 
+        	                $code_pin = Tbl_membership_code::where("membership_code_pin",$shop_id)->count() + 1; 
         	                
             	            
 
@@ -157,7 +142,7 @@ class Membership_code
                 	            $rel_insert[$ctr]["shop_id"]                             = $shop_id;
                 	            $rel_insert[$ctr]["membership_code_pin"]                 = $code_pin;
                 	            $rel_insert[$ctr]["membership_type"]                     = $data["membership_type"][$key];
-                	            
+                	            $rel_insert[$ctr]['membership_stockist_is']              = $is_stockist;
                 	            if($rel_insert[$ctr]["membership_type"] == "CD")
                 	            {
                 	                $rel_insert[$ctr]["membership_code_price"]           = 0 - $membership->membership_price;
@@ -212,6 +197,7 @@ class Membership_code
                         $insert["membership_total"]               = $membership_subtotal - $membership_discount;
                         $insert["membership_discount"]            = $membership_discount;
                         $insert["membership_discount_percentage"] = $membership_discount_percentage;
+                        $insert['member_code_invoice_is_stockist'] = $is_stockist;
         	            /* INSERTING AREA */
         	            $invoice_id = Tbl_membership_code_invoice::insertGetId($insert);
         	            
@@ -263,12 +249,47 @@ class Membership_code
     	else
     	{
     	    $send['response_status']   = "warning";
-    	    $send['warning_validator'] = $validator->errors()->all();
+    	    $send['warning_validator'] = $validator['error'];
     	}
-        
-
         return $send;
 	}
+    public static function validate($data, $shop_id)
+    {
+        $insert['customer_id']                                   = $data["customer_id"];
+        $insert['membership_code_customer_email']                = $data["membership_code_customer_email"];
+        $insert['membership_code_paid']                          = $data["membership_code_paid"];
+        $insert['membership_code_product_issued']                = $data["membership_code_product_issued"];
+        $insert['membership_code_date_created']                  = Carbon::now();
+        $insert['shop_id']                                       = $shop_id;
+        $insert['membership_code_invoice_f_name']                = $data['membership_code_customer_f_name'];
+        $insert['membership_code_invoice_m_name']                = $data['membership_code_customer_m_name'];
+        $insert['membership_code_invoice_l_name']                = $data['membership_code_customer_l_name']; 
+        $rules['membership_code_customer_email']                 = 'required|email';
+        $rules['membership_code_paid']                           = 'required|between:0,1';
+        $rules['membership_code_product_issued']                 = 'required|between:0,1';   
+        $rules['membership_code_invoice_f_name']                 = "required";
+        $rules['membership_code_invoice_l_name']                 = "required";    
+        $messages['membership_code_customer_email.required']     = 'Customer email is required.'; 
+        $messages['membership_code_customer_email.email']        = 'Please use a proper format for customer email.';
+        $messages['membership_code_paid.required']               = 'Something wrong on membership code paid.';
+        $messages['membership_code_paid.between']                = 'Something wrong on membership code paid.';
+        $messages['membership_code_product_issued.required']     = 'Something wrong on membership code issued.';
+        $messages['membership_code_product_issued.between']      = 'Something wrong on membership code issued.';
+        $messages['membership_code_invoice_f_name.required']     = "First Name Is Required";
+        $messages['membership_code_invoice_l_name.required']     = "Last Name Is Required"; 
+
+        $validator = Validator::make($insert,$rules,$messages);
+        if($validator->passes())
+        {
+            $ret['status'] = 1;
+        }
+        else
+        {
+            $ret['status'] = 0;
+            $ret['error'] = $validator->errors()->all();
+        }
+        return $ret;
+    }
 	
 	public static function random_code_generator($word_limit)
 	{
@@ -367,6 +388,11 @@ class Membership_code
             $data['status'] = 'success';
             $data['message'] = 'Invalid, invoice id';
         }
+
+    }
+
+    public static function add_code_stockist()
+    {
 
     }
 }

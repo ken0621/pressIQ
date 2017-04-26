@@ -1,6 +1,6 @@
 @extends('member.layout')
 @section('content')
-<form method="post" action="/member/mlm/code/sell/process" class="global-submit">
+<form method="post" action="/member/mlm/code/sell/process/stockist" class="global-submit">
 	<div class="panel panel-default panel-block panel-title-block" id="top">
 	    <div class="panel-heading">
 	        <div>
@@ -83,14 +83,15 @@
 			                    <tbody class="membership_package_body">
 			                    <tr>
 			                    	<td>
-			                    		<select class="form-control membership_package" name="membership_package" onChange="change_membership(this)">
+			                    		<select class="form-control membership_package" name="membership_package[]" onChange="change_membership(this)">
 			                    			@foreach($membership_package as $key => $value)
 												<option value="{{$value->membership_package_id}}" price="{{currency('PHP', $value->membership_price)}}">{{$value->membership_package_name}}</option>
 			                    			@endforeach
 			                    		</select>
 			                    	</td>
 			                    	<td>
-			                    		<input type="number" class="form-control" value="1" readonly>
+			                    		<input type="number" class="form-control" value="1" name="quantity[]" readonly>
+			                    		<input type="hidden" value="PS" name="membership_type[]">
 			                    	</td>
 			                    	<td class="text-right"><span class="price_b"></span></td>
 			                    </tr>

@@ -30,6 +30,7 @@ Route::any('/member/mlm/code/sell/clear_line_all', 'Member\MLM_CodeController@cl
 Route::any('/member/mlm/code/sell/clear_line/{id}', 'Member\MLM_CodeController@remove_one_line'); //Luke
 Route::any('/member/mlm/code/sell/compute', 'Member\MLM_CodeController@compute');//Luke
 Route::any('/member/mlm/code/sell/process', 'Member\MLM_CodeController@process');// ERWIN
+Route::any('/member/mlm/code/sell/process/stockist', 'Member\MLM_CodeController@process_stockist');// ERWIN
 Route::any('/member/mlm/code/receipt/', 'Member\MLM_CodeController@receipt'); //ERWIN
 Route::any('/member/mlm/code/receipt/view/{id}', 'Member\MLM_CodeController@view_receipt'); //ERWIN
 

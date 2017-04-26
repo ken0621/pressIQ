@@ -64,6 +64,7 @@
                                 <th class="text-center">Date Issued</th>
                                 <th class="text-center">Product Issued</th>
                                 <!-- <th class="text-center">Receipt</th> -->
+                                <th>Stockist</th>
                                 <th class="text-center"></th>
                             </tr>
                         </thead>
@@ -77,7 +78,9 @@
                                     <td class="text-left">{{$code->membership_code_invoice_f_name}} {{$code->membership_code_invoice_m_name}} {{$code->membership_code_invoice_l_name}}</td>
                                     <td class="text-center">{{$code->membership_date_created}}</td>
                                     <td class="text-center"><input type="checkbox" {{$code->membership_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
-
+                                    <td>
+                                        {{$code->membership_stockist_is == 1 ? 'Yes' : 'No' }}
+                                    </td>
                                     <td>
                                         <a link="/member/mlm/code/block/{{$code->membership_code_id}}" href="javascript:" class="popup">BLOCK</a>
                                     </td>
@@ -107,6 +110,7 @@
                                 <th class="text-center">Date Issued</th>
                                 <th class="text-center">Product Issued</th>
                                 <!-- <th class="text-center">Receipt</th> -->
+                                <th>Stockist</th>
                                 <th class="text-center"></th>
                             </tr>
                         </thead>
@@ -122,7 +126,10 @@
                                     <td class="text-center"><input type="checkbox" {{$code->membership_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
     <!--                                 <td class="text-center">
                                         <a href="/member/mlm/code/receipt/{{$code->membership_code_id}}">View</a>
-                                    </td>   -->                              
+                                    </td>   -->        
+                                    <td>
+                                        {{$code->membership_stockist_is == 1 ? 'Yes' : 'No' }}
+                                    </td>                      
                                     <td>
                                         <!--<a link="/member/mlm/code/block/{{$code->membership_code_id}}" href="javascript:" class="popup">BLOCK</a>-->
                                     </td>
@@ -150,6 +157,7 @@
                             <th>Sold To</th>
                             <th class="text-center">Date Issued</th>
                             <th class="text-center">Product Issued</th>
+                            <th>Stockist</th>
                             <th class="text-center"></th>
                         </tr>
                     </thead>
@@ -163,6 +171,9 @@
                                 <td class="text-left">{{$code->membership_code_invoice_f_name}} {{$code->membership_code_invoice_m_name}} {{$code->membership_code_invoice_l_name}}</td>
                                 <td class="text-center">{{$code->membership_date_created}}</td>
                                 <td class="text-center"><input type="checkbox" {{$code->membership_code_product_issued == 0 ? "" : "checked"}} disabled="disabled"></td>
+                                <td>
+                                    {{$code->membership_stockist_is == 1 ? 'Yes' : 'No' }}
+                                </td>
                                 <td>
                                     <!--<a link="/member/mlm/code/block/{{$code->membership_code_id}}" href="javascript:" class="popup">BLOCK</a>-->
                                 </td>

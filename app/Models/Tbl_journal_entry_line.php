@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Tbl_journal_entry_line extends Model
 {
@@ -18,6 +19,20 @@ class Tbl_journal_entry_line extends Model
     public function scopeItem($query)
     {
     	return $query->leftjoin("tbl_item", "item_id", "=", "jline_item_id");
+    }
+
+    public function scopeCustomerOrVendor($query, $type = null)
+    {
+        if($type == 'customer')
+        {
+            return $query->selectRaw("*, concat('first_name', 'middle_name', 'last_name') as 'full_name'")
+                        ->leftJoin("tbl_customer", "customer_id", "=", "jline_name_id");
+        }
+        elseif($type == 'vendor')
+        {
+            return $query->selectRaw("*, concat('vendor_first_name', 'vendor_middle_name', 'vendor_last_name') as 'full_name'")
+                        ->leftJoin("tbl_vendor", "vendor_id", "=", "jline_name_id");
+        }
     }
 
     public function scopeSelectedLimit($query)

@@ -32,6 +32,8 @@ function purchase_order(){
 	{
 		$(document).on("click", ".remove-tr", function(e){
 			if($(".tbody-item .remove-tr").length > 1){
+
+				console.log($(".tbody-item .remove-tr").length);
 				$(this).parent().remove();
 				action_reassign_number();
 				action_compute();

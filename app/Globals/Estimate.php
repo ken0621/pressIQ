@@ -41,6 +41,19 @@ class Estimate
 	 * @param array  $total_info   	        (total_item_price => '', total_addons => [[0]label => '', [0]value => ''], 
 	 *										 total_discount_type => '', total_discount_value => '', total_overall_price => '')
 	 */
+    public static function update_all_estimate($items, $inv_id = 0)
+    {
+        foreach($items as $key => $value) 
+        {
+            $update["copy_to_inv_id"] = $inv_id;
+            $update["est_status"] = 'closed';
+
+            Tbl_customer_estimate::where("est_id",$value['estline_est_id'])->update($update);
+        }
+        //update invoice for reference
+        // $inv_item = Tbl_customer_invoice_line::where("invline_inv_id",$inv_id)->get();
+        
+    }
 	public static function postEstimate($customer_info, $estimate_info, $estimate_other_info, $item_info, $total_info, $is_sales_order = false)
 	{
         /* SUBTOTAL */
@@ -70,7 +83,7 @@ class Estimate
         $insert['est_discount_type']            = $total_info['total_discount_type'];
         $insert['est_discount_value']           = $total_info['total_discount_value'];
         $insert['taxable']                      = $total_info['taxable'];
-        $insert['est_overall_price']            = $overall_price;
+        $insert['est_overall_price']            = $subtotal_price;
         $insert['est_message']                  = $estimate_other_info['estimate_msg'];
         $insert['est_memo']                     = $estimate_other_info['estimate_memo'];
         $insert['date_created']                 = Carbon::now();    
@@ -122,7 +135,7 @@ class Estimate
         $update['est_discount_type']            = $total_info['total_discount_type'];
         $update['est_discount_value']           = $total_info['total_discount_value'];
         $update['taxable']                      = $total_info['taxable'];
-        $update['est_overall_price']            = $overall_price;
+        $update['est_overall_price']            = $subtotal_price;
         $update['est_message']                  = $estimate_other_info['estimate_msg'];
         $update['est_memo']                     = $estimate_other_info['estimate_memo'];   
 

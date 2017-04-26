@@ -514,6 +514,13 @@ Route::any('/member/customer/customer_estimate_view/{id}','Member\Customer_Estim
 Route::any('/member/customer/update_status/{id}','Member\Customer_EstimateController@update_status');
 Route::any('/member/customer/update_status_submit','Member\Customer_EstimateController@update_status_submit');
 
+// /member/customer/update_status_submit_continue
+Route::any('/member/customer/prompt_update_status/{id}/{action}','Member\Customer_EstimateController@continue_update');
+Route::any('/member/customer/update_status_submit_continue','Member\Customer_EstimateController@continue_update_submit');
+Route::any('/member/customer/load_estimate_so/{id}','Member\Customer_EstimateController@load_all');
+Route::any('/member/customer/load_est_so_item','Member\Customer_EstimateController@load_est_so_item');
+Route::any('/member/customer/load_added_item/{est_id}','Member\Customer_EstimateController@add_item');
+Route::any('/member/customer/estimate_remove/{est_id}','Member\Customer_EstimateController@remove_items');
 /* Customer - Create Sales Order */
 Route::get('/member/customer/sales_order_list','Member\Customer_SaleOrderController@index');
 Route::any('/member/customer/sales_order','Member\Customer_SaleOrderController@sales_order');

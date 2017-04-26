@@ -798,13 +798,20 @@ Route::controller('/member/item/import', 'Member\ImportController');
 /* CUSTOMER IMPORT*/
 Route::controller('/member/customer/import', 'Member\ImportController');
 /* End */
+/* VENDOR IMPORT*/
+Route::controller('/member/vendors/import', 'Member\ImportController');
+/* End */
 /* CHART OF ACCOUNTS IMPORT*/
 Route::controller('/member/accounting/import', 'Member\ImportController');
 /* End */
 /* ECOMMERCE COUPON CODE*/
 Route::controller('/member/ecommerce/coupon', 'Member\CouponVoucherController');
-
+/* End */
+/* ACCOUNTING JOURNAL*/
 Route::controller('/member/accounting/journal', 'Member\JournalEntryController');
+/* End */
+/* TERMS OF PAYMENT*/
+Route::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
 /* End */
 
 Route::controller('/tester','TesterController');

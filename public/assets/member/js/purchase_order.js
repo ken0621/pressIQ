@@ -401,7 +401,7 @@ function purchase_order(){
 		}
 		else
 		{
-			// $parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+			$parent.find(".select-um").html('<option class="hidden" qty="1" value=""></option>').globalDropList("reload").globalDropList("disabled");
 		}
 	}
 
@@ -410,7 +410,8 @@ function purchase_order(){
 		$parent = $this.closest(".tr-draggable");
 		$item   = $this.closest(".tr-draggable").find(".select-item");
 
-		$um_qty = parseFloat($this.find("option:selected").attr("qty"));
+		$um_qty = parseFloat($this.find("option:selected").attr("qty") || 1 );
+		console.log($um_qty);
 		$sales  = parseFloat($item.find("option:selected").attr("cost"));
 		$qty    = parseFloat($parent.find(".txt-qty").val());
 		console.log($um_qty +"|" + $sales +"|" +$qty);

@@ -214,8 +214,8 @@ class ItemController extends Member
 			$insert["item_income_account_id"] 	      = $item_income_account_id ;
 			$insert["item_purchasing_information"]    = $item_purchasing_information ;
 			$insert["item_cost"]				      = $item_cost ;
-			$insert["item_barcode"]				      = $item_barcode ;
 			$insert["item_expense_account_id"]	      = $item_expense_account_id ;
+			$insert["item_barcode"]				      = $item_barcode ;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id ;
 			$insert["item_manufacturer_id"]	      	  = $item_manufacturer_id ;
 			$insert["packing_size"]				      = $packing_size;
@@ -399,6 +399,9 @@ class ItemController extends Member
 			$insert["item_date_tracked"]	    	  = $item_date_tracked;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
+			$insert["item_purchasing_information"]    = $item_purchasing_information ;
+			$insert["item_cost"]				      = $item_cost ;
+			$insert["item_expense_account_id"]	      = $item_expense_account_id ;
 			
 			$rules["item_name"]					      = 'required';
 			$rules["item_price"]				      = 'required|numeric';
@@ -447,6 +450,9 @@ class ItemController extends Member
 			$insert["item_purchase_from_supplier"]	  = $item_purchase_from_supplier;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
+			$insert["item_purchasing_information"]    = $item_purchasing_information ;
+			$insert["item_cost"]				      = $item_cost ;
+			$insert["item_expense_account_id"]	      = $item_expense_account_id ;
 			
 			$rules["item_name"]					      = 'required';
 			$rules["item_sku"]					      = 'required';
@@ -753,6 +759,9 @@ class ItemController extends Member
 			$insert["shop_id"]	    				  = $shop_id;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
+			$insert["item_purchasing_information"]    = Request::input("item_purchasing_information") ? Request::input("item_purchasing_information") : "";
+			$insert["item_cost"]				      = Request::input("item_cost");
+			$insert["item_expense_account_id"]	      = Request::input("item_expense_account_id");
 
 			$rules["item_name"]					      = 'required';
 			$rules["item_sku"]					      = 'required';
@@ -802,6 +811,9 @@ class ItemController extends Member
 			$insert["shop_id"]	    				  = $shop_id;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
+			$insert["item_purchasing_information"]    = Request::input("item_purchasing_information") ? Request::input("item_purchasing_information") : "";
+			$insert["item_cost"]				      = Request::input("item_cost");
+			$insert["item_expense_account_id"]	      = Request::input("item_expense_account_id");
 			
 			$rules["item_name"]					      = 'required';
 			$rules["item_sku"]					      = 'required';

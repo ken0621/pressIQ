@@ -229,7 +229,6 @@ function global()
     {
         if($this != '')
         {
-            console.log("hi");
             var n = formatFloat($this), 
             c = isNaN(c = Math.abs(c)) ? 2 : c, 
             d = d == undefined ? "." : d, 

@@ -4123,6 +4123,7 @@ class PayrollController extends Member
      public function payroll_process()
      {
           $data['_period'] = Payroll::process_compute(Self::shop_id(), 'processed');
+          // dd($data);
           return view('member.payroll.payroll_process', $data);
      }
 
@@ -4203,9 +4204,9 @@ class PayrollController extends Member
           $government    = array();
           $deduction     = array();
 
-
+          dd($process);
           /* ALL POSITIVE */
-           $temp = '';
+          $temp = '';
           if($process['total_gross'] > 0)
           {    
                $temp['name']       = '<b>Salary</b>';

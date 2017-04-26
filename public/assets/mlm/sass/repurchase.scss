@@ -46,3 +46,34 @@
     border-radius: 0;
     padding: 7.5px 15px;
 }
+.repurchase-cart
+{
+    position: relative;
+    min-height: 100px;
+    .loader
+    {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: auto;
+        height: 100%;
+        width: 100%;
+        background-color: rgba(255,255,255,0.5);
+        .loader-holder
+        {
+            position: absolute;
+            top: 50%;
+            -webkit-transform: translateY(-50%);
+            -ms-transform: translateY(-50%);
+            transform: translateY(-50%);
+            left: 0;
+            right: 0;
+            margin: auto;
+            text-align: center;
+        }
+        img
+        {
+            width: 75px;
+        }
+    }
+}

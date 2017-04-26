@@ -1,3 +1,8 @@
+<div class="loader hide">
+    <div class="loader-holder">
+        <img src="/assets/mlm/img/ellipsis.gif">
+    </div>
+</div>
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover" style="margin-bottom: 0;">
         <thead>

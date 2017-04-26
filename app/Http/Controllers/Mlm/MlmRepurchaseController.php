@@ -53,4 +53,9 @@ class MlmRepurchaseController extends Mlm
 
         echo json_encode("success");
     }
+
+    public function remove_item()
+    {
+        
+    }
 }

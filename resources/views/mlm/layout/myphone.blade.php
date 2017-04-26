@@ -435,6 +435,7 @@
       user experience. Slimscroll is required when using the
       fixed layout. -->
       <!-- // <script src="/resources/assets/distributor/scripts/e1d08589.bootstrap.min.js"></script> -->
+      <script src="/resources/assets/distributor/scripts/vendor/modernizr.js"></script>
       <script src="/resources/assets/distributor/scripts/9f7a46ed.proton.js"></script>
 
 

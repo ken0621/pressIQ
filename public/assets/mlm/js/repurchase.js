@@ -15,7 +15,15 @@ function repurchase()
 		event_add_to_cart();
 		bootstrap_tooltip();
 	}
-	function bootstrap_tooltip
+	function show_cart_loader()
+	{
+		$(".repurchase-cart .loader").removeClass("hide");
+	}
+	function remove_cart_loader()
+	{
+		$(".repurchase-cart .loader").addClass("hide");
+	}
+	function bootstrap_tooltip()
 	{
 		$('[data-toggle="tooltip"]').tooltip();
 	}
@@ -29,6 +37,8 @@ function repurchase()
 	}
 	function action_add_to_cart(x)
 	{
+		show_cart_loader();
+
 		var item_id = $(x).attr("item-id");
 		var quantity = $('.add-to-cart-quantity[item-id="'+item_id+'"]').val();
 
@@ -46,9 +56,12 @@ function repurchase()
 			$(".repurchase-cart .loader").removeClass("hide");
 			$(".repurchase-cart").load('/mlm/repurchase/cart', function()
 			{
-				$(".repurchase-cart .loader").addClass("hide");
+				remove_cart_loader();
 			});
 		});
-		
+	}
+	function event_remove_item_cart()
+	{
+
 	}
 }

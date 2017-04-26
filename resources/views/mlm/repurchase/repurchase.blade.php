@@ -54,7 +54,6 @@ $data['icon'] = 'fa fa-shopping-cart';
         <h1><i class="fa fa-shopping-cart" aria-hidden="true" style="margin-right: 10px;"></i> Cart</h1>
         <div class="panel panel-default panel-block">
             <div class="repurchase-cart">
-                <div class="loader"><img src="/assets/mlm/img/ellipsis.gif"></div>
                 {!! $cart !!}
             </div>
         </div>

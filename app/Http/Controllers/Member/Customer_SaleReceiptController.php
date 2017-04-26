@@ -137,6 +137,8 @@ class Customer_SaleReceiptController extends Member
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
                 $item_info[$key]['amount']             = convertToNumber(Request::input('invline_amount')[$key]);
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
+                $item_info[$key]['ref_name']           = "";
+                $item_info[$key]['ref_id']             = 0;
 
 
                 $um_qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
@@ -384,6 +386,8 @@ class Customer_SaleReceiptController extends Member
                 $item_info[$key]['discount_remark']    = Request::input('invline_discount_remark')[$key];
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
                 $item_info[$key]['amount']             = convertToNumber(Request::input('invline_amount')[$key]);
+                $item_info[$key]['ref_name']           = "";
+                $item_info[$key]['ref_id']             = 0;
 
                 $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
                 $product_consume[$key]["quantity"] = $qty * $item_info[$key]['quantity'];
@@ -454,7 +458,7 @@ class Customer_SaleReceiptController extends Member
                     $cm_item_info[$keys]['um']                 = Request::input('cmline_um')[$keys];
                     $cm_item_info[$keys]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$keys]);
                     $cm_item_info[$keys]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$keys]);
-                    $cm_item_info[$keys]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$keys]);
+                    $cm_item_info[$keys]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$keys]); 
                    
                     $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
                     $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];

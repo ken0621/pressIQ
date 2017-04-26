@@ -29,6 +29,7 @@ function customer_invoice(){
 	function event_remove_tr()
 	{
 		$(document).on("click", ".remove-tr", function(e){
+			var len = $(".tbody-item .remove-tr").length;
 			if($(".tbody-item .remove-tr").length > 1)
 			{
 				if($(this).attr("tr_id") != 0 && $(this).attr("tr_id") != null)
@@ -58,7 +59,11 @@ function customer_invoice(){
 				}
 				action_reassign_number();
 				action_compute();
-			}			
+			}
+			else
+			{
+				console.log("success");
+			}
 		});
 		$(document).on("click", ".remove-tr", function(e){
 			if($(".tbody-item-cm .remove-tr").length > 1){

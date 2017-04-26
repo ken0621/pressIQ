@@ -134,7 +134,6 @@
                                                             1
                                                         </td>
                                                         <td>
-
                                                             <input type="hidden" name="invline_ref_name[]" value="{{$invline->invline_ref_name}}">
                                                             <input type="hidden" name="invline_ref_id[]" value="{{$invline->invline_ref_id}}">
                                                             <select class="form-control select-item droplist-item input-sm pull-left {{$invline->invline_item_id}}" name="invline_item_id[]" required>

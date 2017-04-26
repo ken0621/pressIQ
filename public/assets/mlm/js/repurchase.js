@@ -13,6 +13,7 @@ function repurchase()
 	function document_ready()
 	{
 		event_add_to_cart();
+		event_remove_item_cart();
 		bootstrap_tooltip();
 	}
 	function show_cart_loader()
@@ -62,6 +63,10 @@ function repurchase()
 	}
 	function event_remove_item_cart()
 	{
-
+		$('.remove-item-cart').unbind("click");
+		$('.remove-item-cart').bind("click", function()
+		{
+			alert(123);
+		});
 	}
 }

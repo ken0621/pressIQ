@@ -16,16 +16,20 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($_cart as $cart)
-            <tr>
-                <td>{{ $cart["item_info"]->item_name }}</td>
-                <td>{{ $cart["quantity"] }}</td>
-                <td>{{ currency("PHP", $cart["item_price_single"]) }}</td>
-                <td style="cursor: pointer;" data-toggle="tooltip" title="{{ currency("PHP", $cart["item_discount"]) }}"> {{ $cart["item_discount_percentage"] }}%</td>
-                <td>{{ currency("PHP", $cart["item_price_subtotal"]) }}</td>
-                <td><a class="remove-item-cart" item-id="{{ $cart["item_id"] }}" href="javascript:" style="color: red;"><i class="fa fa-times" aria-hidden="true"></i></a></td>
-            </tr>
-            @endforeach
+            @if(isset($_cart) && count($_cart) > 0)
+                @foreach($_cart as $cart)
+                <tr>
+                    <td>{{ $cart["item_info"]->item_name }}</td>
+                    <td>{{ $cart["quantity"] }}</td>
+                    <td>{{ currency("PHP", $cart["item_price_single"]) }}</td>
+                    <td style="cursor: pointer;" data-toggle="tooltip" title="{{ currency("PHP", $cart["item_discount"]) }}"> {{ $cart["item_discount_percentage"] }}%</td>
+                    <td>{{ currency("PHP", $cart["item_price_subtotal"]) }}</td>
+                    <td><a class="remove-item-cart" item-id="{{ $cart["item_id"] }}" href="javascript:" style="color: red;"><i class="fa fa-times" aria-hidden="true"></i></a></td>
+                </tr>
+                @endforeach
+            @else
+                GG Kay lukz
+            @endif
         </tbody>
     </table>
 </div>

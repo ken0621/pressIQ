@@ -991,7 +991,7 @@ class ImportController extends Member
 
 		if($_value)
 		{
-			Excel::create("CustomerImportError", function($excel) use($_value)
+			Excel::create("COAImportError", function($excel) use($_value)
 			{
 				// Set the title
 			    $excel->setTitle('Digimahouse');

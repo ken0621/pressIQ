@@ -793,7 +793,13 @@ Route::controller('/member/maintenance/online_payment', 'Member\OnlinePaymentMet
 Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* End */
 /* ITEM IMPORT*/
-Route::controller('/member/item/import', 'Member\ItemImportController');
+Route::controller('/member/item/import', 'Member\ImportController');
+/* End */
+/* CUSTOMER IMPORT*/
+Route::controller('/member/customer/import', 'Member\ImportController');
+/* End */
+/* CHART OF ACCOUNTS IMPORT*/
+Route::controller('/member/accounting/import', 'Member\ImportController');
 /* End */
 /* ECOMMERCE COUPON CODE*/
 Route::controller('/member/ecommerce/coupon', 'Member\CouponVoucherController');

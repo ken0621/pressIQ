@@ -810,6 +810,301 @@ class ImportController extends Member
 		}
 	}
 
+	/**
+	 * Start of Chart of Account Module
+	 * 
+	 */
+
+	public function getCoa()
+	{
+		return view('member.import.coa_import');
+	}
+
+	public function getCoaTemplate()
+	{
+		Excel::create("COATemplate", function($excel)
+		{
+			// Set the title
+		    $excel->setTitle('Digimahouse');
+
+		    // Chain the setters
+		    $excel->setCreator('DigimaWebSolutions')
+		          ->setCompany('DigimaWebSolutions');
+
+		    $excel->sheet('Template', function($sheet) {
+		    	$header = [
+		    				'Account Type',
+							'Account Number',
+							'Account Name',
+							'Account Description',
+							'Sub Account Of',
+							'Opening Balance',
+							'Balance As of'
+		    				];
+		    	$sheet->freezeFirstRow();
+		        $sheet->row(1, $header);
+
+		    });
+
+
+		})->download('csv');
+	}
+
+	public function postCoaReadFile()
+	{
+		Session::forget("import_customer_error");
+
+		$value     = Request::input('value');
+		$input     = Request::input('input');
+
+		$ctr 	   		= Request::input('ctr');
+		$data_length 	= Request::input('data_length');
+		$error_data 	= Request::input('error_data');
+
+		if($ctr != $data_length)
+		{
+			$account_type		= isset($value["Account Type"])			? $value["Account Type"] : '' ;
+			$account_number		= isset($value["Account Number"])		? $value["Account Number"] : '' ;
+			$account_name		= isset($value["Account Name"])			? $value["Account Name"] : '' ;
+			$acount_description	= isset($value["Account Description"])	? $value["Account Description"] : '' ;
+			$sub_account_of		= isset($value["Sub Account Of"])		? $value["Sub Account Of"] : '' ;
+			$open_balance		= isset($value["Opening Balance"])		? $value["Opening Balance"] : '' ;
+			$balance_date		= isset($value["Balance As of"])		? $value["Balance As of"] : '' ;
+
+			/* Validation */
+			$duplicate_account	= Tbl_chart_of_account::where("shop_id", $this->getShopId())->where("account_name", $account_name)->first();
+			$duplicate_acc_no	= Tbl_chart_of_account::where("shop_id", $this->getShopId())->where("account_number", $account_number)->first();
+			// $sub_account_of		= Tbl_chart_of_account		
+			$has_bill_country 	= Tbl_country::where("country_name", $bill_country)->first();
+			$has_ship_country 	= Tbl_country::where("country_name", $bill_country)->first();
+
+			if(!$duplicate_customer)
+			{
+				if(!$duplicate_email)
+				{
+					if($has_bill_country || $bill_country == '')
+					{
+						if($has_ship_country || $ship_country == '')
+						{
+
+							$insertcustomer['shop_id'] 		= $this->getShopId();
+				            $insertcustomer['title_name'] 	= $title_name;
+				            $insertcustomer['first_name'] 	= $first_name;
+				            $insertcustomer['middle_name'] 	= $middle_name;
+				            $insertcustomer['last_name'] 	= $last_name;
+				            $insertcustomer['suffix_name'] 	= $suffix_name;
+				            $insertcustomer['email'] 		= $email;
+				            $insertcustomer['company'] 		= $company;
+				            $insertcustomer['created_date'] = Carbon::now();
+				            $insertcustomer['IsWalkin'] 	= 0;
+				            $insertcustomer['tin_number']	= $tin_number;
+
+				            // BILL COUNTRY ID
+				            if($has_bill_country) $insertcustomer['country_id'] = $has_bill_country->country_id;
+				           	else $insertcustomer['country_id'] 					= $bill_country;
+	  
+				            $rules["email"] 				= 'required|email';
+
+							$validator = Validator::make($insertcustomer, $rules);
+							if ($validator->fails())
+							{
+								$json["status"] 	= "error";
+								$json["message"]  	= $validator->errors()->first();
+							}
+							else
+							{
+								$customer_id = Tbl_customer::insertGetId($insertcustomer);
+	            
+					            $insertSearch['customer_id'] = $customer_id;
+					            $insertSearch['body'] = $title_name.' '.$first_name.' '.$middle_name.' '.$last_name.' '.$suffix_name.' '.$email.' '.$company;
+					            Tbl_customer_search::insert($insertSearch);
+				            
+					            $insertInfo['customer_id'] 				= $customer_id;
+					            $insertInfo['customer_phone'] 			= $phone;
+					            $insertInfo['customer_mobile'] 			= $mobile;
+					            $insertInfo['customer_fax'] 			= $fax;
+					            $insertInfo['customer_other_contact'] 	= $other_contact;
+					            $insertInfo['customer_website'] 		= $website;
+					            $insertInfo['customer_display_name'] 	= $display_name;
+					            $insertInfo['customer_print_name']		= $print_name;
+					            $insertInfo['customer_billing'] 		= "";
+					            $insertInfo['customer_tax_resale_no'] 	= $tax_resale_no;
+					            $insertInfo['customer_opening_balance'] = $open_balance;
+					            $insertInfo['customer_balance_date'] 	= $balance_date;
+					            $insertInfo['customer_notes'] 			= $notes;
+					            
+					            Tbl_customer_other_info::insert($insertInfo);
+					            
+					            $insertAddress[0]['customer_id'] 		= $customer_id;
+					            $insertAddress[0]['customer_state'] 	= $bill_state;
+					            $insertAddress[0]['customer_city'] 		= $bill_city;
+					            $insertAddress[0]['customer_zipcode'] 	= $bill_zip_code;
+					            $insertAddress[0]['customer_street'] 	= $bill_address;
+					            $insertAddress[0]['purpose'] 			= 'billing';
+					            if($has_bill_country) $insertAddress[0]['country_id'] 	= $has_bill_country->country_id;
+				           		else 				  $insertAddress[0]['country_id'] 	= $bill_country;
+
+					            $insertAddress[1]['customer_id'] 		= $customer_id;
+					            $insertAddress[1]['country_id'] 		= $ship_country;
+					            $insertAddress[1]['customer_state'] 	= $ship_state;
+					            $insertAddress[1]['customer_city'] 		= $ship_city;
+					            $insertAddress[1]['customer_zipcode'] 	= $ship_zip_code;
+					            $insertAddress[1]['customer_street'] 	= $ship_address;
+					            $insertAddress[1]['purpose'] 			= 'shipping';
+					            if($has_bill_country) $insertAddress[1]['country_id'] 	= $has_ship_country->country_id;
+				           		else 				  $insertAddress[1]['country_id'] 	= $ship_country;
+					            
+					            Tbl_customer_address::insert($insertAddress);
+
+					            $json["status"]		= "success";
+								$json["message"]	= "Success";
+								$json["item_id"]	= $customer_id;
+				        	}
+				        }
+				        else
+				        {
+				        	$json["status"]		= "error";
+							$json["message"]	= "Shipping Country doesn't Exist";
+						}
+		        	}
+		        	else
+		        	{
+		        		$json["status"]		= "error";
+						$json["message"]	= "Billing Country doesn't Exist";
+		        	}
+		        }
+		        else
+		        {
+		        	$json["status"]		= "error";
+					$json["message"]	= "Email Already Exist";
+		        }
+			}
+			else
+			{
+				$json["status"]		= "error";
+				$json["message"]	= "Duplicate Customer Name";
+			}
+
+			$status_color 		= $json["status"] == 'success' ? 'green' : 'red';
+			$json["tr_data"]	= "<tr>";
+			$json["tr_data"]   .= "<td class='$status_color'>".$json["status"]."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$json["message"]."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$title_name."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$first_name."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$middle_name."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$last_name."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$suffix_name."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$email."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$company."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$birth_date."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$tin_number."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$phone."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$mobile."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$open_balance."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$balance_date."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$bill_country."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$bill_state."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$bill_city."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$bill_zip_code."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$bill_address."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$ship_country."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$ship_state."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$ship_city."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$ship_zip_code."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$ship_address."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$ship_state."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$other_contact."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$website."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$fax."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$display_name."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$tax_resale_no."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$notes."</td>";
+			$json["tr_data"]   .= "</tr>";
+
+			$json["value_data"] = $value;
+			$length 			= sizeOf($json["value_data"]);
+
+			foreach($json["value_data"] as $key=>$value)
+			{
+				$json["value_data"]['Error Description'] = $json["message"];
+			}
+		}
+		else /* DETERMINE IF LAST IN CSV */
+		{
+			Session::put("import_customer_error", $error_data);
+			$json["status"] = "end";
+		}
+
+        return json_encode($json);
+	}
+
+	public function getCoaExportError()
+	{
+		$_value = Session::get("import_customer_error");
+
+		if($_value)
+		{
+			Excel::create("CustomerImportError", function($excel) use($_value)
+			{
+				// Set the title
+			    $excel->setTitle('Digimahouse');
+
+			    // Chain the setters
+			    $excel->setCreator('DigimaWebSolutions')
+			          ->setCompany('DigimaWebSolutions');
+
+			    $excel->sheet('Template', function($sheet) use($_value) {
+			    	$header = [
+			    				'Title Name',
+								'First Name',
+								'Middle Name',
+								'Last Name',
+								'Suffix Name',
+								'Email',
+								'Company',
+								'Birth Date',
+								'Tin Number',
+								'Phone Number',
+								'Mobile Number',
+								'Opening Balance',
+								'Balace Date',
+								'Billing Country',
+								'Billing State',
+								'Billing City',
+								'Billing Zipcode',
+								'Billing Address',
+								'Shipping Country',
+								'Shipping State',
+								'Shipping City',
+								'Shipping Zipcode',
+								'Shipping Address',
+								'Other Contact',
+								'Website',
+								'Fax',
+								'Display Name',
+								'Print Name',
+								'Tax Resale No',
+								'Note',
+			    				'Error_Description'
+			    				];
+			    	$sheet->freezeFirstRow();
+			        $sheet->row(1, $header);
+			        foreach($_value as $key=>$value)
+			        {
+			        	$sheet->row($key+2, $value);
+			        }
+
+			    });
+
+
+			})->download('csv');
+		}
+		else
+		{
+			return Redirect::back();
+		}
+	}
+
 	/* Do not Remove */
 	public function postUrl()
 	{

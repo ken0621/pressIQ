@@ -6,24 +6,24 @@
         <div>
             <i class="fa fa-user-secret"></i>
             <h1>
-                <span class="page-title">Items &raquo; Import</span>
+                <span class="page-title">Chart of Accounts &raquo; Import</span>
                 <small>
                 </small>
             </h1>
-            <a href="/member/item/import/item-template" class="btn btn-custom-white pull-right">Download Item Template</a>
-            <a href="/member/item/import/export-error" class="btn btn-custom-white pull-right import-error"></a>
+            <a href="/member/accounting/import/coa-template" class="btn btn-custom-white pull-right">Download COA Template</a>
+            <a href="/member/accounting/import/coa-export-error" class="btn btn-custom-white pull-right import-error hidden"></a>
         </div>
     </div>
 </div>
 
 <div class="panel panel-default panel-block panel-title-block clearfix">
     <div class="col-md-6">
-        <h4><span class="counter">0</span> Items Added</h4>
+        <h4><span class="counter">0</span> Accounts Added</h4>
         <div class="progress">
             <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
         </div>
         <div id="ImportContainer">
-            <form action="/member/item/import/url" id="myDropZoneImport" class="dropzone" method="post" enctype="multipart/form-data">
+            <form action="/member/accounting/import/url" id="myDropZoneImport" class="dropzone" method="post" enctype="multipart/form-data">
                 <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
                 <input type="file" id="files" name="files[]" style="display: none"><br>
                 <div class="dz-message">
@@ -36,36 +36,23 @@
                     <output id="list"></output> 
                 </div>
             </form>
+            </br>
+            <form role="form" method="post" class="import-validation">
+                <div class="form-group">
+                    <button class="form-control btn btn-custom-primary btn-submit" disabled="disabled">Generate Import</button>
+                </div>
+            </form>
         </div>
         </br>
         </br>
     </div>
     <div class="col-md-6">
         </br>
-        <form role="form" method="post" class="import-validation">
-            <label>Automatic creation if not exist:</label>
-            <div class="row clearfix">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="category" >Category</label>
-                        </div>
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="income_account">Income Account</label>
-                        </div>
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="expense_account">Expense Account</label>
-                        </div>
-                        <div class="checkbox">
-                            <label><input type="checkbox" name="asset_account">Asset Account</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- <form role="form" method="post" class="import-validation">
             <div class="form-group">
-                <button class="form-control btn btn-custom-primary btn-submit" disabled="disabled">Generate Accounts</button>
+                <button class="form-control btn btn-custom-primary btn-submit" disabled="disabled">Generate Import</button>
             </div>
-        </form>
+        </form> -->
     </div>
     <div class="col-md-12">
         <div class="table-responsive" style="overflow: auto">
@@ -74,26 +61,13 @@
                     <tr>
                         <th>Status</th>
                         <th>Description</th>
-                        <th>Type</th>
-                        <th>Name</th>
-                        <th>SKU</th>
-                        <th>UM</th>
-                        <th>Category</th>
-                        <th>Sales Information</th>
-                        <th>Sales Price</th>
-                        <th>Income Account</th>
-                        <th>Sale to Customer</th>
-                        <th>Purchase From Supplier</th>
-                        <th>Purchasing Information</th>
-                        <th>Purchase Cost</th>
-                        <th>Expense Account</th>
-                        <th>Barcode</th>
-                        <th>Qty on Hand</th>
-                        <th>Reorder Point</th>
-                        <th>As of Date</th>
-                        <th>Asset Account</th>
-                        <th>Packing Size</th>
-                        <th>Manufacturer</th>
+                        <th>Account Type</th>
+                        <th>Account Number</th>
+                        <th>Account Name</th>
+                        <th>Account Description</th>
+                        <th>Sub Account Of</th>
+                        <th>Opening Balance</th>
+                        <th>Balance As of</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -141,7 +115,7 @@
 @section('script')
 <script type="text/javascript" src="/assets/member/plugin/jquery-csv-master/src/jquery.csv.js"></script>
 <script type="text/javascript">
-    var url_link = '/member/item/import/read-file';
+    var url_link = '/member/item/import/coa-read-file';
 </script>
 <script type="text/javascript" src="/assets/member/js/import_csv.js"></script>
 @endsection

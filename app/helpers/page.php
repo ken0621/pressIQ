@@ -274,7 +274,7 @@ function page_list()
     $code = "accounting-journal";
     $nav[$page]['submenu'][$code]['label'] = "Journal Entry";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/journal";
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/journal/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>"; 

@@ -39,7 +39,13 @@ class JournalEntryController extends Member
 
 	public function getList()
 	{
-		
+		$data['_journal']	= Tbl_journal_entry::where("je_shop_id", $this->getShopId())->get();
+		foreach($data['_journal'] as $key=>$journal)
+		{
+			$data['_journal'][$key]->total = Tbl_journal_entry_line::where("jline_je_id", $journal->je_id)->sum("jline_amount");
+		}
+
+		return view('member.accounting.journal_ledger.manual_journal_entry_list', $data);
 	}
 
 	/* MANUAL JOURNAL ENTRY */

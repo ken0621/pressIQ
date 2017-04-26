@@ -103,7 +103,7 @@ function item()
             link : "/member/vendor/add"
         });
 
-        $(".select-um").globalDropList(
+        $(".droplist-um").globalDropList(
         {
             hasPopup    : 'false',
             width       : '100%',

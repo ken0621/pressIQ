@@ -504,7 +504,17 @@ function submit_done_item(data)
 
 function submit_done(data)
 {
-	if(data.status == 'success-po')
+	if(data.type == 'vendor')
+	{		
+       toastr.success("Success");
+	    $(".droplist-vendor").load("/member/vendor/load_vendor", function()
+	    {                
+	         $(".droplist-vendor").globalDropList("reload");
+	         $(".droplist-vendor").val(data.vendor_id).change();          
+	    });
+    	data.element.modal("hide");
+	}
+	else if(data.status == 'success-po')
 	{		
         toastr.success("Success");
        	location.href = data.redirect_to;

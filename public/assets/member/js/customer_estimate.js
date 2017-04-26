@@ -9,7 +9,6 @@ function customer_estimate(){
 	function init()
 	{
 		iniatilize_select();
-		draggable_row.dragtable();
 
 		event_remove_tr();
 		event_accept_number_only();
@@ -506,6 +505,10 @@ function submit_done(data)
 	{
     	data.element.modal("hide");
 	    location.reload();
+	}
+	else if(data.status == 'promt-estimate')
+	{
+		action_load_link_to_modal('/member/customer/prompt_update_status/'+data.id+"/"+data.action);
 	}
     else if(data.status == "error")
     {

@@ -28,7 +28,8 @@ function bill()
 	{
 		//cycy
 		$(document).on("click", ".remove-tr", function(e){
-			if($(".tbody-item .remove-tr").length > 1){
+			if($(".tbody-item .remove-tr").length > 1)
+			{
 				if($(this).attr("tr_id") != null)
 				{
 					$(".tr-"+$(this).attr("tr_id")).remove();

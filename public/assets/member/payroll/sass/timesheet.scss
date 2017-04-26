@@ -1,3 +1,8 @@
+.timeEntry-control
+{
+	display: none !important;
+}
+
 .timesheet-table-loading
 {
 	min-height: 1500px;
@@ -9,10 +14,7 @@
 }
 .timesheet
 {
-	.timeEntry-control
-	{
-		display: none !important;
-	}
+
 	thead
 	{
 		background-color: #FBFBFB;
@@ -71,6 +73,8 @@
 					color: red;
 				}
 			}
+
+
 			&:hover
 			{
 				background-color: #fcfcfc;
@@ -104,6 +108,15 @@
 					}
 
 				}
+			}
+		}
+		tr.disable-hover
+		{
+			background-color: #fdfdfd;
+			cursor: default;
+			.text-table
+			{
+				cursor: default;
 			}
 		}
 	}

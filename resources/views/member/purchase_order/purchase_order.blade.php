@@ -2,6 +2,7 @@
 @section('content')
 <form class="global-submit form-to-submit-transfer load-po-container" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" name="_token" value="{{csrf_token()}}" >
+    <input type="hidden" class="button-action" name="button_action" value="">
     <input type="hidden" name="po_id" value="{{$po->po_id or ''}}" >
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
@@ -55,11 +56,11 @@
                         </div>
                         <div class="col-sm-2">
                             <label>P.O Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="po_date" value="{{$po->po_date or ''}}"/>
+                            <input type="text" class="datepicker form-control input-sm" name="po_date" value="{{$po->po_date or date('m/d/y')}}"/>
                         </div>
                         <div class="col-sm-2">
                             <label>Due Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="po_due_date" value="{{$po->po_due_date or ''}}" />
+                            <input type="text" class="datepicker form-control input-sm" name="po_due_date" value="{{$po->po_due_date or date('m/d/y')}}" />
                         </div>
                     </div>
                     

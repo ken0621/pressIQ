@@ -7,7 +7,7 @@
                 <center>Process Info</center>
                 <hr>
                 <div class"table-responsive">
-                    <table class="table table-condensed">
+                    <table class="table table-condensed table-bordered">
                         <thead>
                             <th>Process ID</th>
                             <th>From</th>
@@ -56,7 +56,7 @@
                 <center>Process Info</center>
                 <hr>
                 <div class"table-responsive">
-                <table class="table table-condensed">
+                <table class="table table-condensed table-bordered">
                     <thead>
                         <th>Slot No</th>
                         <th>Name</th>

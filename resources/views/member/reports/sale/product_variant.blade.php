@@ -62,38 +62,37 @@
                 <th class="text-center">Tax</th>
                 <th class="text-center">Total Sales</th>
             </thead>
-            <tbody class="tbl-monthly">
-                
+            <tbody class="tbl-monthly">             
                 @foreach($item as $key => $prod)
-                <tr>
-                    <td>
-                        <a href="#">{{$prod['info']->product_name}}</a>
-                    </td>
-                    <td>
-                        <a href="#">{{$prod['variant']}}</a>
-                    </td>
-                    <td>
-                        {{$prod['info']->variant_sku}}
-                    </td>
-                    <td class="text-center">
-                        {{$prod['quantity']}}
-                    </td>
-                    <td class="text-right">
-                        <span class="pull-left">PHP</span>{{currency('',$prod['gross'])}}
-                    </td>
-                    <td class="text-right">
-                        <span class="pull-left">PHP</span>{{currency('',$prod['discount'])}}
-                    </td>
-                    <td class="text-right">
-                        <span class="pull-left">PHP</span>{{currency('',$prod['net'])}}
-                    </td>
-                    <td class="text-right">
-                        <span class="pull-left">PHP</span>{{currency('',$prod['tax'])}}
-                    </td>
-                    <td class="text-right">
-                        <span class="pull-left">PHP</span>{{currency('',$prod['total'])}}
-                    </td>
-                </tr>
+                    <tr>
+                        <td><a href="#">{{$prod['category_name']}}</a></td>
+
+                        <td><a href="#">{{$prod["variant_name"]}}</a></td>
+
+                        <td class="text-center"></td>
+
+                        <td class="text-center">{{$prod['quantity_sold']}}</td>
+
+                        <td class="text-center">
+                            <span class="pull-left"></span>{{currency('PHP',$prod['gross_sales'])}}
+                        </td>
+
+                        <td class="text-center">
+                            <span class="pull-left"></span>{{currency('PHP',$prod['discount'])}}
+                        </td>
+
+                        <td class="text-center">
+                            <span class="pull-left"></span>{{currency('PHP',$prod['net_sales'])}}
+                        </td>
+
+                        <td class="text-center">
+                            <span class="pull-left"></span>{{currency('PHP',$prod['tax'])}}
+                        </td>
+
+                        <td class="text-center">
+                            <span class="pull-left"></span>{{currency('PHP',$prod['total'])}}
+                        </td>
+                    </tr>
                 @endforeach
             </tbody>
         </table>

@@ -23,8 +23,24 @@ class Category
 	public static function getAllCategory($cat_type = array("all","service","inventory","non-inventory"))
 	{
 		$data = Category::re_select_raw(Category::getShopId(), 0, $cat_type);
-
 		return $data;
+	}
+
+	/**
+	 * Getting all Unique Category in each level 
+	 *
+	 * @param  int    $shop_id 	  Shop id of the products that you wnat to get. null if auto get
+	 * @return array  			  Category Name list
+	 */
+	public static function getUniqueCategory($shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		return $_category = Tbl_category::select("type_name","type_sub_level")->where("type_shop",$shop_id)->groupBy("type_name")->groupBy("type_sub_level")->where("archived",0)->get()->toArray();
+
 	}
 
 	/* RECURSIVE SELECTION OF RAW DATA */ 
@@ -32,6 +48,7 @@ class Category
 	{
 		$data = array();
         $_category = Tbl_category::selecthierarchy($shop_id, $parent, $cat_type)->get();
+		// dd($_category);
         foreach($_category as $key => $category)
         {
             $data[$key] = $category;
@@ -147,28 +164,29 @@ class Category
 	public static function select_tr_html($shop_id = 0, $archived = 0, $parent = 0, $margin_left = 0, $hierarchy = [])
 	{
 		$html = '';
-		$_category = Tbl_category::selecthierarchy($shop_id, $parent, $archived)->orderBy('type_name','asc')->get();
+
+		$_category = Tbl_category::selecthierarchy($shop_id, $parent, array("all","service","inventory","non-inventory"), $archived)->orderBy('type_name','asc')->get();
+
 		foreach($_category as $key => $cat)
 		{
 			$class = '';
-			// $child = 'header"';
 			$child = '';
+
 			if($cat->type_parent_id != 0)
 			{
 				$class = 'tr-sub-'.$cat->type_parent_id.' tr-parent-'.$parent.' ';
-				// $child = 'child"';
 			}
 			$class .= $child;
 
 			$caret = '';
-			$count = Tbl_category::selecthierarchy($shop_id, $cat->type_id, $archived)->count();
+			$count = Tbl_category::selecthierarchy($shop_id, $parent, $cat->type_id, $archived)->count();
 			if($count != 0)
 			{
 				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$cat->type_id.'"></i>';
 			}
 
-			$data['class'] = $class;
-			$data['cat'] = $cat;
+			$data['class'] 	= $class;
+			$data['cat'] 	= $cat;
 			$data['margin_left'] = 'style="margin-left:'.$margin_left.'px"';
 			$data['category'] = $caret.$cat->type_name;
 
@@ -180,4 +198,43 @@ class Category
 		}
 		return $html;
 	}
+	public static function select_category_archived($margin_left = 0)
+	{
+		$html = "";
+		$_category = Tbl_category::where("archived",1)->get();
+
+		foreach ($_category as $key => $value) 
+		{
+			$class = '';
+			// $child = 'header"';
+			$child = '';
+			if($value->type_parent_id != 0)
+			{
+				$class = 'tr-sub-'.$value->type_parent_id.' tr-parent-'.$value->type_parent_id.' ';
+				// $child = 'child"';
+			}
+			$class .= $child;
+
+			$caret = '';
+			$count = Tbl_category::selecthierarchy(Category::getShopId(), $value->type_parent_id, $value->type_id, 1)->count();
+			if($count != 0)
+			{
+				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$value->type_id.'"></i>';
+			}
+
+			$data['class'] = $class;
+			$data['cat'] = $value;
+			$data['margin_left'] = 'style="margin-left:'.$margin_left.'px"';
+			$data['category'] = $caret.$value->type_name;
+
+			$html .= view('member.manage_category.tr_row',$data)->render();
+			if($count != 0)
+			{	
+				$html .= Category::select_tr_html(Category::getShopId(), 1, $value->type_id, $margin_left + 30);
+			}			
+		}
+
+		return $html;
+	}
+
 }

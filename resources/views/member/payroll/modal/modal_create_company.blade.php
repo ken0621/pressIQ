@@ -65,6 +65,17 @@
 		</div>
 		<div class="form-group">
 			<div class="col-md-6">
+				<small>Bank</small>
+				<select class="form-control" name="payroll_company_bank">
+					<option value="">Select Bank</option>
+					@foreach($_bank as $bank)
+					<option value="{{$bank->payroll_bank_convertion_id}}">{{$bank->bank_name}}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-md-6">
 				<small>Company TIN</small>
 				<input type="text" name="payroll_company_tin" placeholder="Company TIN" class="form-control">
 			</div>
@@ -83,6 +94,7 @@
 				<input type="text" name="payroll_company_pagibig" placeholder="Company PAGIBIG" class="form-control">
 			</div>
 		</div>
+
 		<div class="form-group">
 			<div class="col-md-12 text-center">
 				<img src="{{$company_logo}}" class="company_logo img-200-200">

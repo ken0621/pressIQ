@@ -31,7 +31,6 @@
 		margin-top: 30px;
 		margin-bottom: 30px;
 
-
 		.product-holder
 		{
 			border: 1px solid #e0e0e0;
@@ -42,6 +41,7 @@
 			.per-item-container
 			{
 				opacity: 1;
+				
 				.image-holder
 				{
 					text-align: center;
@@ -51,20 +51,18 @@
 				{
 					.item-title
 					{
-						a
-						{
-							color: #505050;
-    						font-size: 15px;
-    						text-decoration: none;
-    						font-weight: 600;
-						}
+						color: #505050;
+	    				font-size: 15px;
+	    				text-decoration: none;
+	    				font-weight: 600;
 					}
 
 					.item-price
 					{
 						font-size: 15px;
-					    font-weight: 700;
-					    padding-top: 5px;
+						font-weight: 700;
+						padding-top: 5px;
+						color: #1e1e1e;
 					}
 				}
 
@@ -72,54 +70,59 @@
 				{
 					position: absolute;
 					top: 7px;
-    				right: 0px;
+	    			right: 0px;
 
-    				a.tooltips {
-					  position: relative;
-					  display: inline;
+	    			a.tooltips 
+	    			{
+						position: relative;
+						display: inline;
 					}
-					a.tooltips span {
-					  position: absolute;
-					  width:140px;
-					  color: #474747;
-					  background: #FAFAFA;
-					  border: 2px solid #8F8F8F;
-					  height: 30px;
-					  line-height: 30px;
-					  text-align: center;
-					  visibility: hidden;
-					  border-radius: 0px;
+					a.tooltips span 
+					{
+						position: absolute;
+						width:140px;
+						color: #474747;
+						background: #FAFAFA;
+						border: 2px solid #8F8F8F;
+						height: 30px;
+						line-height: 30px;
+						text-align: center;
+						visibility: hidden;
+						border-radius: 0px;
 					}
-					a.tooltips span:before {
-					  content: '';
-					  position: absolute;
-					  top: 50%;
-					  right: 100%;
-					  margin-top: -12px;
-					  width: 0; height: 0;
-					  border-right: 12px solid #8F8F8F;
-					  border-top: 12px solid transparent;
-					  border-bottom: 12px solid transparent;
+					a.tooltips span:before 
+					{
+					    content: '';
+						position: absolute;
+						top: 50%;
+						right: 100%;
+						margin-top: -12px;
+						width: 0; height: 0;
+						border-right: 12px solid #8F8F8F;
+						border-top: 12px solid transparent;
+						border-bottom: 12px solid transparent;
 					}
-					a.tooltips span:after {
-					  content: '';
-					  position: absolute;
-					  top: 50%;
-					  right: 100%;
-					  margin-top: -8px;
-					  width: 0; height: 0;
-					  border-right: 8px solid #FAFAFA;
-					  border-top: 8px solid transparent;
-					  border-bottom: 8px solid transparent;
+					a.tooltips span:after 
+					{
+						content: '';
+						position: absolute;
+						top: 50%;
+						right: 100%;
+						margin-top: -8px;
+						width: 0; height: 0;
+						border-right: 8px solid #FAFAFA;
+						border-top: 8px solid transparent;
+						border-bottom: 8px solid transparent;
 					}
-					a:hover.tooltips span {
-					  visibility: visible;
-					  opacity: 0.8;
-					  left: 100%;
-					  top: 50%;
-					  margin-top: -15px;
-					  margin-left: 15px;
-					  z-index: 999;
+					a:hover.tooltips span 
+					{
+						visibility: visible;
+						opacity: 0.8;
+						left: 100%;
+						top: 50%;
+						margin-top: -15px;
+						margin-left: 15px;
+						z-index: 999;
 					}
 
 					a:hover
@@ -131,74 +134,74 @@
 					}
 
 
-				    .fa
-				    {
-					    border: 0;
-					    border-radius: 3px;
-					    background-color: #1e1e1e;
-					    color: #fff;
-					    margin-bottom: 5px;
-				    }
+					.fa
+					{
+						border: 0;
+						border-radius: 3px;
+						background-color: #1e1e1e;
+						color: #fff;
+						margin-bottom: 5px;
+					}
 
-				    .fa-shopping-cart
-				    {
-				    	position: absolute;
-					    margin: auto;
-					    color: #fff;
-					    padding: 10px;
-					    border:0;
+					.fa-shopping-cart
+					{
+					  	position: absolute;
+						margin: auto;
+						color: #fff;
+						padding: 10px;
+						border:0;
 						border-radius: 5px;
 						top: 5px;
-	    				right: -35px;
-					    opacity: 0;
-					    visibility: hidden;
-					    transition: all 0.2s;
-				    }
+		    			right: -35px;
+						opacity: 0;
+						visibility: hidden;
+						transition: all 0.2s;
+					}
 
-				    .fa-heart
-				    {
-				    	position: absolute;
-					    margin: auto;
-					    color: #fff;
-					    padding: 9.5px;
-					    border:0;
+					.fa-heart
+					{
+					    position: absolute;
+						margin: auto;
+						color: #fff;
+						padding: 9.5px;
+						border:0;
 						border-radius: 5px;
 						top: 45px;
-	    				right: -35px;
-					    opacity: 0;
-					    visibility: hidden;
-					    transition: all 0.4s;
-				    }
+		    			right: -35px;
+						opacity: 0;
+						visibility: hidden;
+						transition: all 0.4s;
+					}
 
-				    .fa-search
-				    {
-				    	position: absolute;
-					    margin: auto;
-					    color: #fff;
-					    padding: 10px;
-					    border:0;
+					.fa-search
+					{
+					    position: absolute;
+						margin: auto;
+						color: #fff;
+						padding: 10px;
+						border:0;
 						border-radius: 5px;
 						top: 85px;
-	    				right: -35px;
-					    opacity: 0;
-					    visibility: hidden;
-					    transition: all 0.6s;
-				    }
+		    			right: -35px;
+						opacity: 0;
+						visibility: hidden;
+						transition: all 0.6s;
+					}
 
-				    .fa-camera
-				    {
-				    	position: absolute;
-					    margin: auto;
-					    color: #fff;
-					    padding: 9px;
-					    border:0;
+					.fa-camera
+					{
+					    position: absolute;
+						margin: auto;
+						color: #fff;
+						padding: 9px;
+						border:0;
 						border-radius: 5px;
 						top: 125px;
-	    				right: -35px;
-					    opacity: 0;
-					    visibility: hidden;
-					    transition: all 0.8s;
-				    }
+		    			right: -35px;
+						opacity: 0;
+						visibility: hidden;
+						transition: all 0.8s;
+					}
 				}
 			}
 		}
@@ -210,6 +213,11 @@
     		box-shadow: 0px 0px 14px rgba(0,0,0,0.5);
     		cursor: pointer;
     		
+    		a
+    		{
+    			text-decoration: none;
+    		}
+
     		.item-details
     		{
     			opacity: 0.5;
@@ -552,12 +560,9 @@
 				
 				.item-name
 				{
-					a
-		    		{
-		    			color: #505050;
-					    font-weight: 600;
-					    text-decoration: none;
-		    		}
+		    		color: #505050;
+					font-weight: 600;
+					text-decoration: none;
 				}
 
 				.item-price
@@ -595,10 +600,7 @@
 			{
 				.item-name
 				{
-					a
-					{
-						text-decoration: underline;
-					}
+					text-decoration: underline;
 				}
 			}
 		}

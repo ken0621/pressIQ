@@ -24,7 +24,7 @@
         <div id="invoice" class="tab-pane fade in active">
             <div class="form-group">
                 <div class="col-md-4 col-xs-6">
-                    <a class="btn btn-primary form-control" href="/tablet/create_invoices/add?sir_id={{Session::get('selected_sir')}}">Create Invoice</a>
+                    <a class="btn btn-primary form-control" href="/tablet/create_invoices/add?sir_id={{Session::get('sir_id')}}">Create Invoice</a>
                 </div>
                 <div class="col-md-8 col-xs-6 text-right">
                     <a href="/tablet/dashboard"><< Back to Dashboard</a>
@@ -66,7 +66,7 @@
                                         @else
                                          <li><a size="lg" link="/tablet/view_invoice_view/{{$inv->inv_id}}" class="popup">View Receipt</a></li>
                                         @endif
-                                        <li><a href="/tablet/create_invoices/add?id={{$inv->inv_id}}&sir_id={{Session::get('selected_sir')}}">Edit Invoice</a></li>                                        
+                                        <li><a href="/tablet/create_invoices/add?id={{$inv->inv_id}}&sir_id={{Session::get('sir_id')}}">Edit Invoice</a></li>                                        
                                     </ul>
                                 </div>
                             </td>

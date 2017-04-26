@@ -1,7 +1,8 @@
 <div class="col-md-12" style="margin-top: 10px; outline: 1px solid #3c8dbc; background-color: #3c8dbc;">
 	<div class="col-md-12" style="height: 100px; background-color: #3c8dbc;">
 		<center>
-		<img class="card-img-top" src="{{ Request::segment(5) == 'pdf' || Request::input('pdf')=='true' || Request::segment(5) == 'process' ? (public_path().'/assets/mlm/default-pic.png') : '/assets/mlm/default-pic.png' }}" width="100" height="100" alt="Card image cap"></center>
+		<?php $customer_data->profile != null ? $profile = $customer_data->profile :  $profile = '/assets/mlm/default-pic.png' ?>
+		<img style="border-radius: 50%; border: 1px solid white; "class="card-img-top" src="{{ Request::segment(5) == 'pdf' || Request::input('pdf')=='true' || Request::segment(5) == 'process' ? (public_path().$profile) : $profile }}" width="100" height="100" alt="Card image cap"></center>
 		<!--  -->
 	</div>
 	<div class="col-md-12" style="background-color: white;">
@@ -9,11 +10,17 @@
 		<span class="pull-right"> <svg id="barcode" ></svg> </span> 
 		<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="{{$slot->slot_id}}">
 		@else
-		<input type="hidden" class="chosen-slot_id slot_id" name="slot_id">
+			@if(isset($slot_info))
+				<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="">
+			@else
+				@if(isset($discount_card))
+				<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="">
+				@endif
+			@endif	
 		@endif
 		@if(isset($discount_card->discount_card_log_code)) 
 		<input type="hidden" class="discount_card_log_id" name="discount_card_log_id" value="{{$discount_card->discount_card_log_id}}">
-		<span class="pull-right" @if($discount_card->discount_card_log_is_expired == 1) style="color:red;" @endif> <svg id="barcode" ></svg> <br>Expiry: {{$discount_card->discount_card_log_date_expired}}</span> 
+		<span class="pull-right" @if($discount_card->discount_card_log_is_expired == 1) style="color:red;" @endif> <svg id="barcode" ></svg> <br>Expiry: {{$discount_card->discount_card_log_date_expired == null ? 'Expiry Date will Generate After Use' : $discount_card->discount_card_log_date_expired }}</span> 
 		@else
 		<input type="hidden" class="discount_card_log_id" name="discount_card_log_id">
 		@endif

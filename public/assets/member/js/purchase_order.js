@@ -19,8 +19,15 @@ function purchase_order(){
 		action_compute();
 		action_date_picker();
 		action_reassign_number();
+		event_button_action_click();
 	}
-
+	function event_button_action_click()
+	{
+		$(document).on("click","button[type='submit']", function()
+		{
+			$(".button-action").val($(this).attr("data-action"));
+		})
+	}
 	function event_remove_tr()
 	{
 		$(document).on("click", ".remove-tr", function(e){
@@ -299,7 +306,7 @@ function purchase_order(){
 		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
         {
             link : "/member/item/add",
-            width : "150px",
+            width : "100%",
             onCreateNew : function()
             {
             	item_selected = $(this);
@@ -312,8 +319,12 @@ function purchase_order(){
         $(".draggable .tr-draggable:last td select.select-um").globalDropList(
         {
         	hasPopup: "false",
-    		width : "110px",
-    		placeholder : "um.."
+    		width : "100%",
+    		placeholder : "um..",
+    		onChangeValue: function()
+    		{
+    			action_load_unit_measurement($(this));
+    		}
         }).globalDropList('disabled');
 	}
 
@@ -333,7 +344,7 @@ function purchase_order(){
 	    $('.droplist-item').globalDropList(
         {
             link : "/member/item/add",
-            width : "150px",
+            width : "100%",
             onCreateNew : function()
             {
             	item_selected = $(this);
@@ -346,7 +357,7 @@ function purchase_order(){
         $('.droplist-um').globalDropList(
     	{
     		hasPopup: "false",
-    		width : "110px",
+    		width : "100%",
     		placeholder : "um..",
     		onChangeValue: function()
     		{
@@ -373,7 +384,12 @@ function purchase_order(){
 				method: 'get',
 				success: function(data)
 				{
-					$parent.find(".select-um").html(data).globalDropList("reload").globalDropList("enabled");
+					$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
+					{
+						$(this).globalDropList("reload").globalDropList("enabled");
+						console.log($(this).find("option:first").val());
+						$(this).val($(this).find("option:first").val()).change();
+					})
 				},
 				error: function(e)
 				{
@@ -383,7 +399,7 @@ function purchase_order(){
 		}
 		else
 		{
-			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+			// $parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
 	}
 
@@ -473,11 +489,16 @@ function submit_done_customer(result)
 }
 
 /* AFTER ADDING AN  ITEM */
-// function submit_done(data)
-// {
-// 	purchase_order.action_reload_item(data.item_id);
-// 	$("#global_modal").modal("toggle");
-// }
+function submit_done_item(data)
+{
+	toastr.success("Success");
+    $(".tbody-item .select-item").load("/member/item/load_item_category", function()
+    {                
+         $(".tbody-item .select-item").globalDropList("reload"); 
+         item_selected.val(data.item_id).change();  
+    });
+    data.element.modal("hide");
+}
 
 function submit_done(data)
 {

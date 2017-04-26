@@ -43,6 +43,9 @@ use App\Globals\Mlm_member;
 use App\Globals\Mlm_pre;
 use App\Globals\Pdf_global;
 use App\Globals\Utilities;
+
+use Input;
+use File;
 class MLM_WalletController extends Member
 {
     public function index()
@@ -54,13 +57,19 @@ class MLM_WalletController extends Member
         }
 
         $data = [];
-        $data['wallet_log'] = Tbl_mlm_slot_wallet_log::where('tbl_mlm_slot_wallet_log.shop_id', $this->user_info->shop_id)
+        $wallet_log = Tbl_mlm_slot_wallet_log::where('tbl_mlm_slot_wallet_log.shop_id', $this->user_info->shop_id)
         ->orderBy('wallet_log_date_created', 'DESC')
         ->groupBy('wallet_log_slot')
         ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=','tbl_mlm_slot_wallet_log.wallet_log_slot')
         ->join('tbl_customer', 'tbl_customer.customer_id', '=','tbl_mlm_slot.slot_owner')
-        ->selectRaw('sum(wallet_log_amount) as sum_wallet, tbl_mlm_slot_wallet_log.*, tbl_mlm_slot.*, tbl_customer.*')
-        ->paginate(20);
+        ->selectRaw('sum(wallet_log_amount) as sum_wallet, tbl_mlm_slot_wallet_log.*, tbl_mlm_slot.*, tbl_customer.*');
+
+        if(Request::input('search'))
+        {
+            $wallet_log = $wallet_log->where('tbl_mlm_slot.slot_no', 'like', '%'.Request::input('search').'%'); 
+        }
+        $data['wallet_log'] = $wallet_log->paginate(20);
+        
         // dd($data);
         return view('member.mlm_wallet.index', $data);
     }
@@ -75,7 +84,18 @@ class MLM_WalletController extends Member
         $shop_id = $this->user_info->shop_id;
         Mlm_pre::pre_req($shop_id);
         $data['settings'] = Tbl_mlm_slot_wallet_log_refill_settings::where('shop_id', $shop_id)->first();
-        $data['request'] = Tbl_mlm_slot_wallet_log_refill::where('shop_id', $shop_id)->paginate(20);
+        $request = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id','=', 'tbl_mlm_slot_wallet_log_refill.slot_id');
+        $search = Request::input('search');
+        if($search != null)
+        {
+            $request = $request->where('tbl_mlm_slot.slot_no', 'like', '%' . $search . '%');
+        }
+        $filter = Request::input('filter');
+        if($filter != null)
+        {
+            $request = $request->where('tbl_mlm_slot_wallet_log_refill.wallet_log_refill_approved', $filter);
+        }
+        $data['request'] = $request->paginate(10);;;
         return view('member.mlm_wallet.refill', $data);
     }
 
@@ -105,7 +125,7 @@ class MLM_WalletController extends Member
         $slot_id = $data['request']->slot_id;
         $data['slot_info'] = Tbl_mlm_slot::where('slot_id', $slot_id)->first();
         $data['customer_view'] = Mlm_member::get_customer_info_w_slot($data['slot_info']->slot_owner, $slot_id);
-        return view('member.mlm_wallet.refill_View', $data);
+        return view('member.mlm_wallet.refill_view', $data);
     }
     public function refill_process()
     {
@@ -164,6 +184,46 @@ class MLM_WalletController extends Member
             $view = view('member.mlm_wallet.refill_pdf', $data);
             return Pdf_global::show_pdf($view);
         }
+    }
+    public function refill_change()
+    {
+        $shop_id = $this->user_info->shop_id;;
+        $shop_key = $this->user_info->shop_key;;
+
+        $file               = Input::file('upload_picture');
+        $fileArray = array('image' => $file);
+        $rules = array(
+          'image' => 'mimes:jpeg,jpg,png,gif|required|max:10000' // max 10000kb
+        );
+        $validator = Validator::make($fileArray, $rules);
+        if ($validator->fails())
+        {
+            $data['status'] = 'warning';
+            $data['message'] = 'file size exceeded/ or invalid file type';
+            return json_encode($data);
+        }
+
+        $extension          = $file->getClientOriginalExtension();
+        $filename           = str_random(15).".".$extension;
+        $destinationPath    = 'uploads/refill/attachment/'.$shop_key."-".$shop_id;
+        if(!File::exists($destinationPath)) 
+        {
+            $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+        }
+
+        $upload_success    = Input::file('upload_picture')->move($destinationPath, $filename);
+
+        /* SAVE THE IMAGE PATH IN THE DATABASE */
+        $image_path = $destinationPath."/".$filename;
+
+        $data['status'] = 'success';
+        $data['image_path'] = $image_path;
+
+        $update['wallet_log_refill_attachment'] = $image_path;
+
+
+        Tbl_mlm_slot_wallet_log_refill::where('shop_id', $shop_id)->where('wallet_log_refill_id', Request::input('wallet_log_refill_id'))->update($update);
+        return json_encode($data);
     }
     public function adjust()
     {

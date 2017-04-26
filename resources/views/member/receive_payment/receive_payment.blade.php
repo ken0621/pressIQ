@@ -42,7 +42,7 @@
                      <div class="row clearfix">
                       <div class="col-sm-2">
                                 <label>Payment Date</label>
-                                <input type="text" class="datepicker form-control input-sm" value="{{$rp_date or ''}}" />
+                                <input type="text" class="datepicker form-control input-sm" value="{{$rp_date or date('m/d/y')}}" />
                             </div>
                         <div class="col-sm-3">
                             <label>Payment Method</label>
@@ -86,7 +86,7 @@
                                         </tr>
                                     </thead>
                                     <tbody class="tbody-item">
-                                        @include('member.receive_payment.load_receive_payment_items');
+                                        @include('member.receive_payment.load_receive_payment_items')
                                     </tbody>
                                 </table>
                             </div>

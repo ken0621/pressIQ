@@ -18,7 +18,7 @@
             <div class="col-md-12">
                 
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
-                    <input type="hidden" name="item_id" value="{{$item_id}}">
+                    <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                     <div class="form-group">
                         <div class="col-md-8">
                             <label>Name *</label>
@@ -34,11 +34,11 @@
                     <div class="form-group">                        
                         <div class="col-md-4">
                             <label>SKU</label>
-                            <input type="text" class="form-control" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku" >
+                            <input type="text" class="form-control input-sm" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku" >
                         </div>
                          <div class="col-md-4">
                             <label>Barcode</label>
-                            <input type="text" class="form-control" id="item_barcode" value="{{isset($data['item_barcode']) ? $data['item_barcode'] : ''}}" name="item_barcode">
+                            <input type="text" class="form-control input-sm" id="item_barcode" value="{{isset($data['item_barcode']) ? $data['item_barcode'] : ''}}" name="item_barcode">
                         </div>
                         <div class="col-md-4">
                             <label>Category *</label>
@@ -49,24 +49,24 @@
                     </div>
 
                    <!--  <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
-                    <div class="form-group">
+                    <div class="form-group hidden">
                         <div class="col-md-4">
                             <label>Initial quantity on hand </label>
-                            <input type="number" class="form-control" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" disabled>
+                            <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" disabled>
                         </div>                     
                         <div class="col-md-4">
                             <label>Reorder Point </label>
-                            <input type="text" class="form-control" id="item_reorder_point" value="{{isset($data['item_reorder_point']) ? $data['item_reorder_point'] : ''}}" name="item_reorder_point" >
+                            <input type="text" class="form-control input-sm" id="item_reorder_point" value="{{isset($data['item_reorder_point']) ? $data['item_reorder_point'] : ''}}" name="item_reorder_point" >
                         </div> 
                         <div class="col-md-4">
                             <label>As of date </label>
-                            <input type="text" class="form-control datepicker" id="item_date_tracked" name="item_date_tracked" value="{{isset($data['item_date_tracked']) ? $data['item_date_tracked'] : ''}}">
+                            <input type="text" class="form-control datepicker input-sm" id="item_date_tracked" name="item_date_tracked" value="{{isset($data['item_date_tracked']) ? $data['item_date_tracked'] : ''}}">
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Unit of Measure</label>
-                            <select class="form-control input-sm measure_container drop-down-um" name="item_measurement_id">
+                            <select class="form-control input-sm measure_container drop-down-um" add="add" name="item_measurement_id">
                                 @include("member.load_ajax_data.load_unit_measurement", ['um_id' => $data["item_measurement_id"]])
                             </select>
                         </div>
@@ -76,44 +76,42 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label>Manufacturer</label>
                             <select class="form-control input-sm drop-down-manufacturer" name="item_manufacturer_id">
                                 @include("member.load_ajax_data.load_manufacturer", ['manufacturer_id' => $data["item_manufacturer_id"]])
                             </select>
                         </div>
-                    </div>
-                    <!-- <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
-                    <div class="form-group">
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label>Inventory Asset Account *</label>
                             <select name="item_asset_account_id" class="drop-down-coa form-control" id="item_asset_account_id" required>
                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_asset, 'account_id' => $data['item_asset_account_id']])
                             </select>
                         </div>
                     </div>
-                    <!-- <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
                     <div class="form-group">
                         <div class="col-md-12">
                             <label>Sales information</label>
-                            <!-- <input type="text" class="form-control" id="item_sales_information" value="{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}" name="item_sales_information" placeholder="Description on sales forms"> -->
-                            <textarea class="form-control" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>
+                            <textarea class="form-control input-sm" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>
                         </div> 
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
-                            <div class="col-md-12">
-                                <label>Sales price/rate *</label>
-                            </div>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control number-input" id="item_price" value="{{isset($data['item_price']) ? $data['item_price'] : ''}}" name="item_price" required>
-                            </div>
-                            <div class="col-md-4">
-                                per <span class="abbreviation"></span>
+                            <label>Sales price/rate *</label>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control number-input input-sm" id="item_price" value="{{isset($data['item_price']) ? $data['item_price'] : ''}}" name="item_price" required>
+                                </div>
+                                <div class="col-md-1">
+                                    per <span class="abbreviation"></span>
+                                </div>
+                                <div class="col-md-3">
+                                   <a href="javascript:" class="btn btn-custom-white btn-sm popup" link="/member/item/mulitple_price_modal/{{$item_id}}">More Price</a>
+                               </div>
                             </div>
                         </div>                 
                         <div class="col-md-6">
-                        <label class="col-md-12">Income Account *</label>
+                            <label>Income Account *</label>
                             <select name="item_income_account_id" class="drop-down-coa form-control" id="item_income_account_id" required>                                
                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income,'account_id' => $data['item_income_account_id']])
                             </select>
@@ -127,11 +125,11 @@
                         </div>
                         <div class="col-md-4">
                             <label>Promo Start Date</label>
-                            <input type="text" class="form-control datepicker" name="start_promo_date" value="{{isset($data['item_discount_date_start']) ? $data['item_discount_date_start'] : ''}}" >
+                            <input type="text" class="form-control datepicker input-sm" name="start_promo_date" value="{{isset($data['item_discount_date_start']) ? $data['item_discount_date_start'] : ''}}" >
                         </div>
                         <div class="col-md-4">
                             <label>Promo End Date</label>
-                            <input type="text" class="form-control datepicker" name="end_promo_date" value="{{isset($data['item_discount_date_end']) ? $data['item_discount_date_end'] : ''}}" >
+                            <input type="text" class="form-control datepicker input-sm" name="end_promo_date" value="{{isset($data['item_discount_date_end']) ? $data['item_discount_date_end'] : ''}}" >
                         </div>
                     </div>
                     <!-- <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
@@ -139,17 +137,19 @@
                         <div class="col-md-12">
                             <label>Purchasing information</label>
                             <!-- <input type="text" class="form-control" id="item_purchasing_information" value="{{isset($data['item_purchasing_information']) ? $data['item_purchasing_information'] : ''}}" name="item_purchasing_information" placeholder="Description on purchase forms"> -->
-                            <textarea class="form-control" id="item_purchasing_information" name="item_purchasing_information" placeholder="Description on purchase forms" >{{isset($data['item_purchasing_information']) ? $data['item_purchasing_information'] : ''}}</textarea>
+                            <textarea class="form-control input-sm" id="item_purchasing_information" name="item_purchasing_information" placeholder="Description on purchase forms" >{{isset($data['item_purchasing_information']) ? $data['item_purchasing_information'] : ''}}</textarea>
                         </div>                     
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
-                            <label class="col-md-12">Cost *</label>
-                            <div class="col-md-8">
-                                <input type="text" class="form-control" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
-                            </div>
-                            <div class="col-md-4">
-                                per <span class="abbreviation"></span>
+                            <label>Cost *</label>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
+                                </div>
+                                <div class="col-md-4">
+                                    per <span class="abbreviation"></span>
+                                </div>
                             </div>
                         </div>               
                         <div class="col-md-6">
@@ -177,7 +177,7 @@
     <div class="modal-body clearfix modallarge-body-layout background-white form-horizontal noninventory_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'noninventory_type' ? '' : 'display:none;') : 'display:none;'}}">
             <div class="col-md-12">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
-                <input type="hidden" name="item_id" value="{{$item_id}}">
+                <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                 <div class="form-group">
                         <div class="col-md-8">
                             <label>Name *</label>
@@ -281,7 +281,7 @@
     <div class="modal-body clearfix modallarge-body-layout background-white form-horizontal service_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'service_type' ? '' : 'display:none;') : 'display:none;'}}">
             <div class="col-md-12">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
-                <input type="hidden" name="item_id" value="{{$item_id}}">
+                <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                  <div class="form-group">
                         <div class="col-md-8">
                             <label>Name *</label>
@@ -380,7 +380,7 @@
 <form action="/member/item/edit_submit?item_type=bundle" class="global-submit form_four" method="post" type_of_item="bundle_type">
     <div class="clearfix modal-body modallarge-body-layout background-white bundle_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'bundle_type' ? '' : 'display:none;') : 'display:none;'}}">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="hidden" name="item_id" value="{{$item_id}}">
+        <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
         <!-- BUNDLE -->
         <div class="form-horizontal">
             <div class="clearfix col-md-12">
@@ -459,7 +459,11 @@
                                     </td>
                                     <td>
                                         <select class="form-control drop-down-um select-um input-sm pull-left" name="bundle_um_id[]">
-                                            <option value=""></option> 
+                                            @if($bundle['bundle_um_id'])
+                                                @include("member.load_ajax_data.load_one_unit_measure", ['_um' => $_um_multi, 'item_um_id' => $bundle['multi_um_id'], 'selected_um_id' => $bundle['bundle_um_id']])
+                                            @else
+                                                <option class="hidden" value="" />
+                                            @endif
                                         </select>
                                     </td>   
                                     <td><input class="text-center form-control input-sm" type="text" name="bundle_qty[]" value="{{ $bundle['bundle_qty'] }}" /></td>
@@ -489,7 +493,7 @@
                 </select>
             </td>
             <td>
-                <select class="form-control select-um input-sm pull-left" name="bundle_um_id[]">
+                <select class="form-control select-um-one input-sm pull-left" name="bundle_um_id[]">
                     <option value=""></option> 
                 </select>
             </td>   

@@ -1,5 +1,6 @@
 var bill = new bill();
 var global_tr_html = $(".div-script tbody").html();
+var po_id_list = $(".div-script-po").html();
 var item_selected = ''; 
 
 function bill()
@@ -28,9 +29,18 @@ function bill()
 		//cycy
 		$(document).on("click", ".remove-tr", function(e){
 			if($(".tbody-item .remove-tr").length > 1){
-				// var remove = $(this).attr("tr-id");
-				// $(remove).remove();
-				$(this).parent().remove();
+				if($(this).attr("tr_id") != null)
+				{
+					$(".tr-"+$(this).attr("tr_id")).remove();
+			        $(".po-"+$(this).attr("tr_id")).removeClass("hidden");
+			        $(".div_po_id"+$(this).attr("tr_id")).remove();
+					$(".drawer-toggle").trigger("click");
+				}
+				else
+				{
+					$(this).parent().remove();
+				}
+
 				action_reassign_number();
 				action_compute();
 			}			
@@ -299,6 +309,29 @@ function bill()
 		}
 	}
 
+
+	function action_trigger_select_plugin_not_last()
+	{
+		$(".draggable .tr-draggable:first td select.select-item").globalDropList(
+        {
+            link : "/member/item/add",
+            width : "100%",
+            onCreateNew : function()
+            {
+            	item_selected = $(this);
+            },
+            onChangeValue : function()
+            {
+            	action_load_item_info($(this));
+            }
+        });
+        $(".draggable .tr-draggable:first td select.select-um").globalDropList(
+        {
+        	hasPopup: "false",
+    		width : "100%",
+    		placeholder : "um.."
+        });
+	}	
 	function action_trigger_select_plugin()
 	{
 		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
@@ -317,9 +350,9 @@ function bill()
         $(".draggable .tr-draggable:last td select.select-um").globalDropList(
         {
         	hasPopup: "false",
-    		width : "110px",
+    		width : "100%",
     		placeholder : "um.."
-        }).globalDropList('disabled');
+        });
 	}
 	function event_button_action_click()
 	{
@@ -376,7 +409,7 @@ function bill()
         $('.droplist-um').globalDropList(
     	{
     		hasPopup: "false",
-    		width : "110px",
+    		width : "100%",
     		placeholder : "um..",
     		onChangeValue: function()
     		{
@@ -384,7 +417,7 @@ function bill()
     		}
 
     	});
-        $('.droplist-um:not(.has-value)').globalDropList("disabled");
+        // $('.droplist-um:not(.has-value)').globalDropList("disabled");
 		$(".drop-down-payment").globalDropList(
 		{
 		    link 		: '/member/maintenance/payment_method/add',
@@ -406,8 +439,9 @@ function bill()
 	{
 		$(".purchase-order-container").load("/member/vendor/load_purchase_order/"+vendor_id , function()
 			{
-				// alert(vendor_id);
 				$(".purchase-order").removeClass("hidden");
+				// $(".drawer").drawer({openClass: "drawer-open"});
+				$(".drawer-toggle").trigger("click");
 			});
 	}
 	function action_load_item_info($this)
@@ -440,7 +474,7 @@ function bill()
 		}
 		else
 		{
-			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("clear");
 		}
 	}
 
@@ -450,7 +484,7 @@ function bill()
 		$item   = $this.closest(".tr-draggable").find(".select-item");
 
 		$um_qty = parseFloat($this.find("option:selected").attr("qty"));
-		$sales  = parseFloat($item.find("option:selected").attr("price"));
+		$sales  = parseFloat($item.find("option:selected").attr("cost"));
 		$qty    = parseFloat($parent.find(".txt-qty").val());
 		console.log($um_qty +"|" + $sales +"|" +$qty);
 		$parent.find(".txt-rate").val( $um_qty * $sales * $qty ).change();
@@ -521,6 +555,14 @@ function bill()
 	{
 		iniatilize_select();
 	}
+	this.action_trigger_select_plugin = function()
+	{
+		action_trigger_select_plugin();
+	}
+	this.action_trigger_select_plugin_not_last = function()
+	{
+		action_trigger_select_plugin_not_last();
+	}
 
 }	
 
@@ -546,40 +588,49 @@ function submit_done_customer(result)
 // }
 function add_po_to_bill(po_id)
 {
+	// $(".modal-loader").removeClass("hidden");
 	$.ajax({
 		url : "/member/vendor/load_po_item",
 		data : {po_id: po_id},
+		dataType : "json",
 		type : "get",
 		success : function(data)
 		{
-			var item = $.parseJSON(data);
-			// console.log(item);
-			var html = "";
-             $(item).each(function (a, b)
-             {
-             	html += '<tr class="tr-'+b.poline_id+' tr-draggable">';
-             	html += '<td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>';
-             	html += '<td class="invoice-number-td text-right">1</td>';             	
-             	html += '<td><input type="text" disabled value='+b.poline_item_id+' name="poline_item_id[]" class="form-control"/></td>';
-             	html += '<td><textarea class="textarea-expand txt-desc" name="poline_description[]">'+b.poline_description+'</textarea></td>';
-             	html += '<td><input type="text" value='+b.poline_um+' name="poline_um[]" class="form-control"/></td>';
-             	html += '<td><input class="text-center number-input txt-qty compute" type="text" value='+b.poline_qty+' name="poline_qty[]"/></td>';
-             	html += '<td><input class="text-right number-input txt-rate compute" value='+b.poline_rate+' type="text" name="poline_rate[]" /></td>';
-             	html += '<td><input class="text-right number-input txt-amount" value='+b.poline_amount+'  type="text" name="poline_amount[]" /></td>';
-             	html += '<td class="text-center remove-tr cursor-pointer" tr-id=tr-'+b.poline_id+'><i class="fa fa-trash-o" aria-hidden="true"></i></td>';
-             	html += '</tr>';
+             $(data).each(function (a, b)
+             {		
+	             var $container = "";
+	             var con = $("tbody.draggable").prepend(global_tr_html);
+	             bill.action_trigger_select_plugin_not_last();
+	             $container = $("tbody.draggable .tr-draggable:first");
+	             // $this.closest(".tr-draggable");
 
-             	iniatilize(b.poline_id);
-             	$(".select-poline-item-"+b.poline_id).load("/member/item/load_item_category", function()
-		        {                
-		             $(".select-poline-item-"+b.poline_id).globalDropList("reload"); 
-		             $(".select-poline-item-"+b.poline_id).val(b.poline_item_id).change();              
-		        });
+	            $container.addClass("tr-"+b.poline_po_id);
+	            $container.find(".select-item").val(b.poline_item_id).change();
+	            $container.find(".txt-desc").val(b.poline_description);
+	            $container.find(".select-um").load('/member/item/load_one_um/'+b.multi_um_id, function()
+             	{
+             		$container.find(".select-um").globalDropList("reload");
+             		$container.find(".select-um").val(b.poline_um).change();
+             	});
+				$container.find(".poline_id").val(b.poline_id);
+				$container.find(".itemline_po_id").val(po_id);
+	            $container.find(".txt-qty").val(b.poline_qty);
+	            $container.find(".txt-rate").val(b.poline_rate);
+	            $container.find(".txt-amount").val(b.poline_amount);
+	            $container.find(".remove-tr").addClass("remove-tr"+b.poline_po_id);
+	            $container.find(".remove-tr").attr("tr_id", b.poline_po_id);
              });
-             $(html).insertBefore(".tbody-item tr:first");
-             bill.iniatilize_select();
-             bill.action_reassign_number();
+
+	         $(".po-listing").prepend(po_id_list);
+	         var $po_id = $(".po-listing .po_id:first");
+	         $(".po-listing .po_id:first").addClass("div_po_id"+po_id);
+	         $po_id.find(".po-id-input").val(po_id).change();
+
+	        $(".po-"+po_id).addClass("hidden");
+			// $(".modal-loader").addClass("hidden");
+
              bill.action_compute();
+             bill.action_reassign_number();
 		},
 		error : function()
 		{
@@ -601,6 +652,11 @@ function submit_done(data)
 	{		
         toastr.success("Success");
        	location.href = data.redirect;
+	}
+	else if(data.status == 'success-receive-inventory')
+	{
+        toastr.success("Success");
+       	location.href = data.redirect;		
 	}
     else if(data.status == "error")
     {

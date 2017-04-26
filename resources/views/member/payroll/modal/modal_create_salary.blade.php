@@ -40,7 +40,7 @@
 		</div>
 		<div class="form-group">
 			<div class="col-md-6">
-				<small>COLA (monthly)</small>
+				<small>COLA (Daily)</small>
 				<input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" placeholder="0.00">
 			</div>
 			<div class="col-md-6">
@@ -65,6 +65,9 @@
 <script type="text/javascript">
 	function submit_done(data)
 	{
-		data.element.modal('toggle');
+		
+		data.element.modal("toggle");
+		executeFunctionByName(data.function_name, window);
+		
 	}
 </script>

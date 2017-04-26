@@ -1,11 +1,12 @@
+.timeEntry-control {
+  display: none !important; }
+
 .timesheet-table-loading {
   min-height: 1500px;
   text-align: center; }
   .timesheet-table-loading .spin {
     font-size: 20px; }
 
-.timesheet .timeEntry-control {
-  display: none !important; }
 .timesheet thead {
   background-color: #FBFBFB; }
 .timesheet tbody tr {
@@ -53,5 +54,10 @@
     .timesheet tbody tr.focus td input[type=text] {
       border: 1px solid #bbb;
       cursor: text; }
+.timesheet tbody tr.disable-hover {
+  background-color: #fdfdfd;
+  cursor: default; }
+  .timesheet tbody tr.disable-hover .text-table {
+    cursor: default; }
 
 /*# sourceMappingURL=timesheet.css.map */

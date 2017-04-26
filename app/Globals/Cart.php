@@ -13,7 +13,9 @@ use App\Globals\Ecom_Product;
 use DB;
 use Session;
 use Carbon\Carbon;
-
+use App\Globals\Mlm_discount;
+use App\Models\Tbl_mlm_item_points;
+use App\Globals\Mlm_plan;
 class Cart
 {
     public static function get_shop_info()
@@ -114,6 +116,7 @@ class Cart
         $total_shipping        = 0;
         $total_coupon_discount = 0;
         $total_overall_price   = 0;
+        $total_quantity        = 0;
 
         /* CHECK IF COUPON ALREADY USED */
         if(isset($data["applied_coupon_id"]))
@@ -144,43 +147,91 @@ class Cart
                 $item_discounted_remark = "";
 
                 $item = Ecom_Product::getVariantInfo($info["product_id"]);
+                // dd($item);
                 $data["cart"][$key]["cart_product_information"]                                   = null;
                 $data["cart"][$key]["cart_product_information"]["variant_id"]                     = $item->evariant_id;
+                $data["cart"][$key]["cart_product_information"]["item_id"]                        = $item->item_id;
                 $data["cart"][$key]["cart_product_information"]["product_name"]                   = $item->eprod_name;
                 $data["cart"][$key]["cart_product_information"]["variant_name"]                   = $item->evariant_item_label;
                 $data["cart"][$key]["cart_product_information"]["product_stocks"]                 = $item->inventory_count;
                 $data["cart"][$key]["cart_product_information"]["product_sku"]                    = $item->item_sku;
                 $data["cart"][$key]["cart_product_information"]["product_price"]                  = $item->evariant_price;
                 $data["cart"][$key]["cart_product_information"]["image_path"]                     = $item->image_path;
-
+                $data["cart"][$key]["cart_product_information"]["item_category_id"]               = $item->item_category_id;
                 /* CHECK IF DISCOUNT EXISTS */
                 $check_discount = Tbl_item_discount::where("discount_item_id",$item->item_id)->first();
                 if($check_discount)
                 {
                     if(strtotime($check_discount->item_discount_date_start) <= strtotime($date_now) && strtotime($check_discount->item_discount_date_end) >= strtotime($date_now))
                     {
-                        if($check_discount->item_discount_type == "fixed")
-                        {
-                            $item_discounted       = "fixed";
-                            $item_discounted_value = $check_discount->item_discount_value;
-                        }
-                        else if($check_discount->item_discount_type == "percentage")
-                        {
-                            $item_discounted       = "percentage";
-                            $item_discounted_value = $item->item_price * ($check_discount->item_discount_value);
-                        }
 
+                        $current_price = $check_discount->item_discount_value;
+                        // if($check_discount->item_discount_type == "fixed")
+                        // {
+                        //     $item_discounted       = "fixed";
+                        //     $item_discounted_value = $check_discount->item_discount_value;
+                        // }
+                        // else if($check_discount->item_discount_type == "percentage")
+                        // {
+                        //     $item_discounted       = "percentage";
+                        //     $item_discounted_value = $item->item_price * ($check_discount->item_discount_value);
+                        // }
                         $item_discounted_remark    = $check_discount->item_discount_remark;
                     }
                 }
-
+                if(Session::get('mlm_member') != null)
+                {
+                    $session = Session::get('mlm_member');
+                    if($session['slot_now'])
+                    {
+                        $discount_membership = Mlm_discount::get_discount_single($session['slot_now']->shop_id, $item->item_id, $session['slot_now']->slot_membership);
+                        if(isset($current_price))
+                        {
+                             $discount_a = $current_price;
+                        }
+                       else
+                       {
+                            $discount_a = $item->item_price;
+                       }
+                        if($discount_membership['type'] == 0)
+                        {
+                            $item_discounted_value = $discount_membership['value']; 
+                        }
+                        else
+                        {
+                            $item_discounted_value =   $discount_a *   ($discount_membership['value']/100); 
+                        }
+                        $active_plan_product_repurchase = Mlm_plan::get_all_active_plan_repurchase($session['slot_now']->shop_id);
+                        $item_points = Tbl_mlm_item_points::where('item_id', $item->item_id)->where('membership_id', $session['slot_now']->slot_membership)
+                        ->first();
+                        if($item_points)
+                        {
+                           foreach($active_plan_product_repurchase as $key2 => $value2)
+                            {
+                                $code = $value2->marketing_plan_code;
+                                if($code == 'DISCOUNT_CARD_REPURCHASE' || $code == 'UNILEVEL_REPURCHASE_POINTS' || $code == 'UNILEVEL')
+                                {
+                                    
+                                    
+                                }
+                                else
+                                {
+                                    // dd($code);
+                                    $data["cart"][$key]["cart_product_information"]["membership_points"][$value2->marketing_plan_label] = $item_points->$code * $info['quantity'];
+                                }
+                            } 
+                        }
+                    }
+                }
+                //u s 2  q n a  m a m a t a y i h h h h
                 $current_price                                                                    = $item->evariant_price - $item_discounted_value;
                 $data["cart"][$key]["cart_product_information"]["product_discounted"]             = isset($item_discounted) ? $item_discounted : null;
                 $data["cart"][$key]["cart_product_information"]["product_discounted_value"]       = isset($item_discounted_value) ? $item_discounted_value : null;
                 $data["cart"][$key]["cart_product_information"]["product_discounted_remark"]      = isset($item_discounted_remark) ? $item_discounted_remark : null;
                 $data["cart"][$key]["cart_product_information"]["product_current_price"]          = $current_price;
 
-                $total_product_price = $total_product_price + $current_price;
+                $total_product_price = $total_product_price + ($current_price * $info['quantity']);
+                $total_quantity += $info['quantity'];
             }
         }        
 
@@ -188,7 +239,8 @@ class Cart
         $data["sale_information"]                                      = null;
         $data["sale_information"]["total_product_price"]               = $total_product_price;  
         $data["sale_information"]["total_shipping"]                    = $total_shipping;
-        
+        $data["sale_information"]["total_quantity"]                    = $total_quantity;
+        $data["sale_information"]["minimum_purchase"]                  = 500;
 
         /* APPLY COUPON DISCOUNT */
         if(isset($data["applied_coupon_id"]))
@@ -218,11 +270,10 @@ class Cart
         /* SET OTHER PRICE INFO  */
         $data["sale_information"]["total_coupon_discount"]             = $total_coupon_discount; 
         $data["sale_information"]["total_overall_price"]               = $total_overall_price; 
-
         return $data;
     }
 
-    public static function update_cart($quantity, $shop_id = null)
+    public static function update_cart($variant_id, $quantity, $shop_id = null)
     {
         //get_shop_info
         if (!$shop_id) 
@@ -235,7 +286,10 @@ class Cart
         $insert                  = Session::get($unique_id);
         foreach ($insert['cart'] as $key => $value) 
         {
-            $insert['cart'][$key]["quantity"] = $quantity;
+            if($value['product_id'] == $variant_id)
+            {
+                $insert['cart'][$key]["quantity"] = $quantity;
+            }
         }
        
         Session::put($unique_id,$insert);
@@ -263,15 +317,15 @@ class Cart
         {
             foreach($_cart["cart"] as $key => $cart)
             {
-                if($key == $product_id)
+                if($cart["product_id"] == $product_id)
                 {
                     $condition = true;
 
-                    Tbl_cart::where("date_added",$_cart["cart"][$key]["date_added"])
-                            ->where("shop_id",$_cart["cart"][$key]['shop_id'])
-                            ->where("product_id",$_cart["cart"][$key]['product_id'])
-                            ->where("unique_id_per_pc",$_cart["cart"][$key]['unique_id_per_pc'])
-                            ->delete($_cart["cart"][$key]);
+                    Tbl_cart::where("date_added",$cart["date_added"])
+                            ->where("shop_id",$cart['shop_id'])
+                            ->where("product_id",$cart['product_id'])
+                            ->where("unique_id_per_pc",$cart['unique_id_per_pc'])
+                            ->delete();
 
                     unset($_cart["cart"][$key]);
                 }
@@ -284,7 +338,8 @@ class Cart
             }
             else
             {
-                 Session::put($unique_id,$_cart["cart"]);
+                 Session::put($unique_id,$_cart);
+
                  $message["status"]         = "success";
                  $message["status_message"] = "Successfully removed.";
             }
@@ -452,11 +507,10 @@ class Cart
         return $data;
     }
 
-    public static function generate_coupon_code($word_limit,$price,$type="fixed")
+    public static function generate_coupon_code($word_limit, $price, $minimum_quantity = 0, $type="fixed", $coupon_product_id = null)
     {
         //get_shop_info
-        $shop_info = Cart::get_shop_info();
-        $shop_id = $shop_info->shop_id;
+        $shop_id = Cart::get_shop_info();
 
         if($type != "fixed" && $type != "percentage")
         {
@@ -496,16 +550,20 @@ class Cart
             }
 
             $insert["id_per_coupon"]           =  $id_per_coupon;                
-            $insert["coupon_code"]             =  $generated_word;              
+            $insert["coupon_code"]             =  $generated_word;  
+            $insert["coupon_product_id"]       =  isset($coupon_product_id) ? $coupon_product_id : null;              
             $insert["coupon_code_amount"]      =  $price;                     
             $insert["coupon_discounted"]       =  $type;                     
-            $insert["shop_id"]                 =  $shop_id;          
+            $insert["shop_id"]                 =  $shop_id;
+            $insert["coupon_minimum_quantity"] =  $minimum_quantity;         
             $insert["date_created"]            =  Carbon::now();  
             Tbl_coupon_code::insert($insert);
 
             $message["status"]         = "success";
             $message["status_message"] = "Successfully generate a coupon code.";
-        }                                
+        }  
+
+        return $message;                              
     }
 
     public static function use_coupon_code($coupon_code)
@@ -558,5 +616,27 @@ class Cart
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    public static function check_product_stock($cart)
+    {
+        $message["status"] = "success";
+        
+        foreach ($cart["cart"] as $key => $value) 
+        {
+            $item = Ecom_Product::getVariantInfo($value["product_id"]);
+            
+            if ($item["item_type_id"] != 2) 
+            {
+                if ($value["quantity"] > $item->inventory_count) 
+                {
+                    $message["status"]       = "fail";
+                    $message["error"][$key]  = $item->eprod_name . " exceeds the current stock (" . $item->inventory_count . ")";
+                }
+            }
+            
+        }
+        
+        return $message;
     }
 }

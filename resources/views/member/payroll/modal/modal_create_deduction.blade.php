@@ -39,6 +39,12 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<div class="col-md-6">
+				<small>Date End</small>
+				<input type="text" name="payroll_deduction_date_end" class="form-control datepicker" required>
+			</div>
+		</div>
+		<div class="form-group">
 			<div class="col-md-12">
 				<small>Deduct Every</small>
 				<div class="panel panel-default">
@@ -56,7 +62,7 @@
 							</div>
 							<div class="col-md-6">
 								<div class="radio">
-									<label><input type="radio" name="payroll_deduction_period" value="Every other Period">Every other Period</label>
+									<label><input type="radio" name="payroll_deduction_period" value="Last Period">Last Period</label>
 								</div>
 							</div>
 							<div class="col-md-6">

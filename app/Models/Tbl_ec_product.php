@@ -61,6 +61,13 @@ class Tbl_ec_product extends Model
                      ->groupBy("eprod_id");
     }
 
+    /* DEPENDENT ON scopeItem  (Item Promo Price) */
+    public function scopeItemDiscount($query)
+    {
+        return $query->selectRaw("discount.*")
+                     ->leftJoin("tbl_item_discount as discount","discount_item_id","=","item_id");
+    }
+
     public function scopePrice($query)
     {
         $query->selectRaw("tbl_ec_product.*, min(evariant_price) as min_price, max(evariant_price) as max_price")
@@ -68,8 +75,8 @@ class Tbl_ec_product extends Model
               ->groupBy("eprod_id");
     }
 
-    public function scopeCategory($query)
+    public function scopeCategory($query, $archived = [0])
     {
-        return $query->join("tbl_category","type_id","=","eprod_category_id");
+        return $query->join("tbl_category","type_id","=","eprod_category_id")->whereIn("tbl_category.archived", $archived);
     }
 }

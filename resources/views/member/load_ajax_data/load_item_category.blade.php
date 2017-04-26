@@ -6,8 +6,9 @@
 	@if($type['item_list'])
 		@foreach($type['item_list'] as $item)
 			<option value="{{$item['item_id']}}" indent="{{$type['type_sub_level']+1}}" add-search="{{$add_search."|".$type['type_name']}}" 
+					item-sku="{{$item['item_sku']}}"
 					sales-info="{{$item['item_sales_information']}}" purchase-info="{{$item['item_purchasing_information']}}" 
-					price="{{$item['item_price']}}" cost="{{$item['item_cost']}}" has-um="{{$item['item_measurement_id']}}"
+					price="{{$item['item_price']}}" cost="{{$item['item_cost']}}" has-um="{{$item['item_measurement_id']}}" 
 					{{ isset($item_id) ?  $item_id == $item['item_id'] ? 'selected' : '' : '' }} >{{$item['item_name']}}</option>
 		@endforeach
 	@endif

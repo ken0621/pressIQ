@@ -12,6 +12,7 @@ use View;
 use Crypt;
 use PDF;
 use App;
+use DB;
 
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer;
@@ -44,21 +45,43 @@ use App\Globals\Mlm_member;
 use App\Globals\Pdf_global;
 use App\Globals\Utilities;
 use App\Globals\AuditTrail;
+use App\Globals\Mlm_report;
+
 class Mlm_EncashmentController extends Member
 {
     public function index()
     {
+        // return $this->tree_view();
+        
         $access = Utilities::checkAccess('mlm-wallet-encashment', 'access_page');
         if($access == 0)
         {
             return $this->show_no_access(); 
         }
-        // return Mlm_slot_log::encash_all(17);
         $data = [];
         $shop_id = $this->user_info->shop_id;
         $count = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->count();
         $this->initialize_settings($shop_id);
         $data['encashment_settings'] = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+        $data['payout_gateway'] = payout_getway();
+
+        $data['not_encashed'] = $all_log = Tbl_mlm_slot_wallet_log::where('wallet_log_status', 'released')
+            ->where('wallet_log_plan','!=', 'ENCASHMENT')
+            ->where('shop_id', $shop_id)
+            ->whereNull('encashment_process')
+            ->sum('wallet_log_amount');
+        $data['not_encashed_requested'] = $all_log = Tbl_mlm_slot_wallet_log::where('wallet_log_status', 'released')
+            ->where('wallet_log_plan','ENCASHMENT')
+            ->where('shop_id', $shop_id)
+            ->where('encashment_process_type', 0)
+            ->sum('wallet_log_amount');    
+
+         $data['not_encashed_encashed'] = $all_log = Tbl_mlm_slot_wallet_log::where('wallet_log_status', 'released')
+            ->where('wallet_log_plan','ENCASHMENT')
+            ->where('shop_id', $shop_id)
+            ->where('encashment_process_type', 1)
+            ->sum('wallet_log_amount'); 
+
         if($data['encashment_settings']->enchasment_settings_auto == 0)
         {
             $data['encashment_process'] = Tbl_mlm_encashment_process::where('shop_id', $shop_id)
@@ -66,16 +89,39 @@ class Mlm_EncashmentController extends Member
         }
         else
         {
-            $data['history'] = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', 'ENCASHMENT')
+            $history = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', 'ENCASHMENT')
             ->slot()->customer()
-            ->where('tbl_mlm_slot.shop_id', $shop_id)
-            ->join('tbl_mlm_encashment_process', 'tbl_mlm_encashment_process.encashment_process', '=', 'tbl_mlm_slot_wallet_log.encashment_process')
+            ->where('tbl_mlm_slot.shop_id', $shop_id);
+            $request = Request::input('request');
+            $slot = Request::input('slots');
+            $customer = Request::input('customer');
+            if($request != null)
+            {
+                $history = $history->where('encashment_process_type', $request);
+            }
+            else
+            {
+                $history = $history->where('encashment_process_type', 0);
+            }
+            if($slot != null)
+            {
+                $history = $history->where('slot_no', 'like', '%' . $slot . '%');
+            }
+            if($customer != null)
+            {
+                $history = $history->leftjoin('tbl_customer_search', 'tbl_customer_search.customer_id', '=', 'tbl_customer.customer_id')
+                ->where('tbl_customer_search.body', 'like', '%' . $customer . '%');
+            }
+            $data['history'] = $history->join('tbl_mlm_encashment_process', 'tbl_mlm_encashment_process.encashment_process', '=', 'tbl_mlm_slot_wallet_log.encashment_process')
             ->paginate(10);
+
+            $data['request'] = $request;
         }
         
         $data['from'] = $this->get_last_wallet($shop_id);
         return view('member.mlm_encashment.index', $data);
     }
+    
     public function get_last_wallet($shop_id)
     {
         $date_last = Tbl_mlm_slot_wallet_log::where('shop_id', $shop_id)->whereNull('encashment_process')->first();
@@ -112,6 +158,8 @@ class Mlm_EncashmentController extends Member
         $update['enchasment_settings_p_fee'] = Request::input('enchasment_settings_p_fee');
         $update['enchasment_settings_p_fee_type'] = Request::input('enchasment_settings_p_fee_type');
         $update['enchasment_settings_minimum'] = Request::input('enchasment_settings_minimum');
+        $update['enchasment_settings_type'] = Request::input('enchasment_settings_type');
+
         Tbl_mlm_encashment_settings::where('enchasment_settings_id', $enchasment_settings_id)->update($update);
         $data['status'] = 'success';
         $data['message'] = 'Encashment Settings Changed';
@@ -188,6 +236,8 @@ class Mlm_EncashmentController extends Member
         ->where('encashment_process', $encashment_process)
         ->slot()->customer()->first();
 
+        $data['encashment_details'] = DB::table('tbl_mlm_encashment_process_details')->where('encashment_process', $encashment_process)->first();
+        
         if(isset($data['slot']->customer_id))
         {
             $data['customer_view'] = Mlm_member::get_customer_info_w_slot($data['slot']->customer_id, $slot_id);
@@ -219,5 +269,172 @@ class Mlm_EncashmentController extends Member
     {
         $html_a = $this->breakdown_slot($encashment_process, $slot_id, 'true');
         return Pdf_global::show_pdf($html_a);
+    }
+    public function show_type($type)
+    {
+        $shop_id = $this->user_info->shop_id;
+        $data['encashment_settings'] = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+        if($type == 0)
+        {
+            $data['bank_option'] = DB::table('tbl_encashment_bank_deposit')->where('shop_id', $shop_id)->where('encashment_bank_deposit_archive', 0)->get();
+            return view('member.mlm_encashment.type.bank', $data);
+        }
+        else if($type == 1)
+        {
+            return view('member.mlm_encashment.type.cheque', $data);
+        }
+    }
+    public function cheque_edit()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $update['enchasment_settings_cheque_edit'] = Request::input('enchasment_settings_cheque_edit');
+        Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->update($update);
+
+        $data['status'] = 'success_new';
+        $data['message'] = 'Name on cheque option editted';
+        return json_encode($data);
+    }
+    public function bank_add()
+    {
+            // return $_POST;
+            $shop_id = $this->user_info->shop_id;
+            if($_POST['encashment_bank_deposit_name'] != null)
+            {
+                $insert['encashment_bank_deposit_name'] = Request::input('encashment_bank_deposit_name');
+                $insert['shop_id'] = $shop_id;
+                $insert['encashment_bank_deposit_archive'] = 0;
+                DB::table('tbl_encashment_bank_deposit')->insert($insert);
+                $data['status'] = 'success_new';
+                $data['message'] = 'Bank option added.';
+            }
+            else
+            {
+                $data['status'] = 'warning';
+                $data['message'] = 'Bank deposit name is required';
+            }
+            return json_encode($data);
+    }
+    public function bank_archive()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $encashment_bank_deposit_id = Request::input('encashment_bank_deposit_id');
+        $update['encashment_bank_deposit_archive']  = 1;
+        DB::table('tbl_encashment_bank_deposit')->where('encashment_bank_deposit_id', $encashment_bank_deposit_id)->update($update);
+        $data['status'] = 'success_new';
+        $data['message'] = 'Bank option archived.';
+        return json_encode($data);
+
+    }
+    public function bank_edit_name()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $update['enchasment_settings_bank_edit'] = Request::input('enchasment_settings_bank_edit');
+        Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->update($update);
+
+        $data['status'] = 'success_new';
+        $data['message'] = 'Bank account name option editted';
+        return json_encode($data);
+    }
+    public function add_to_list()
+    {
+        // return $_POST;
+        $wallet_log_id = Request::input('wallet_log_id');
+        $add_to_list = Request::input('add_to_list');
+        $data['status'] = 'success_new';
+        $data['message'] = 'Selected';
+        if($wallet_log_id != null)
+        {
+            if($add_to_list == 'on')
+            {
+                $update['wallet_log_selected'] = 1;
+                Tbl_mlm_slot_wallet_log::where('wallet_log_id', $wallet_log_id)->update($update);
+            }
+            else
+            {
+                $update['wallet_log_selected'] = 0;
+                Tbl_mlm_slot_wallet_log::where('wallet_log_id', $wallet_log_id)->update($update);
+                $data['status'] = 'success_new';
+                $data['message'] = 'Removed from Selected';
+            }
+            
+        }
+        
+        return json_encode($data);
+    }
+    public function add_to_list_date()
+    {
+        $shop_id = $this->user_info->shop_id;
+
+        // ---------------------------------
+         $update['wallet_log_selected'] = 0;
+         Tbl_mlm_slot_wallet_log::where('shop_id', $shop_id)->update($update);
+
+        $from = Request::input('from');
+        $to = Request::input('to');
+
+
+        $update_2['wallet_log_selected'] = 1;
+        $all_affected = Tbl_mlm_slot_wallet_log::where('shop_id', $shop_id)
+        ->where('wallet_log_date_created', '<=', $to)
+        ->where('wallet_log_date_created', '>=', $from)
+        ->where('wallet_log_plan', 'ENCASHMENT')
+        ->update($update_2);
+        $data['status'] = 'success_new';
+        $data['message'] = 'Removed from Selected';
+        return json_encode($data);
+    }
+    public function view_all_selected()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $filter['from'] = Carbon::now()->addYears(-5);
+        $filter['to'] = Carbon::now();
+        $filter['skip'] = 0;
+        $filter['take'] = 99999;
+        // dd($filter);
+        $data['a'] = Mlm_report::encashment_rep_req($shop_id, $filter, 1);
+        return view('member.mlm_encashment.requested_selected', $data);
+    }
+    public function request_all_selected()
+    {
+        // return $_POST;
+        $shop_id = $this->user_info->shop_id;
+        $encashment_settings = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+
+        $update_wallet['encashment_process_type'] = 1;
+        $update_wallet['wallet_log_selected'] =0;
+        $update_wallet['wallet_log_remarks'] = Request::input('remarks');
+        Tbl_mlm_slot_wallet_log::where('wallet_log_selected', 1)->where('shop_id', $shop_id)->update($update_wallet);
+        
+        $data['status'] = 'success_new';
+        $data['message'] = 'Encashment Processed';
+        return json_encode($data);
+
+
+    }
+    public function deny_all_selected()
+    {
+        $shop_id = $this->user_info->shop_id;
+
+        $all_selected = Tbl_mlm_slot_wallet_log::where('wallet_log_selected', 1)->where('shop_id', $shop_id)->get();
+
+        foreach ($all_selected as $key => $value) {
+            # code...
+            $update['wallet_log_selected'] = 0;
+            $update['wallet_log_denied_amount'] = $value->wallet_log_amount;
+            $update['wallet_log_amount'] = 0;
+            $update['encashment_process_type'] = 2;
+            $update['wallet_log_notified'] = 0;
+            $update['wallet_log_details'] = 'Your wallet request has been denied';
+            Tbl_mlm_slot_wallet_log::where('wallet_log_id', $value->wallet_log_id)->update($update);
+
+            $update_status['encashment_process'] = null;
+            Tbl_mlm_slot_wallet_log::where('encashment_process', $value->encashment_process)
+            ->where('wallet_log_plan', '!=', 'ENCASHMENT')
+            ->update($update_status);
+        }
+
+        $data['status'] = 'success_new';
+        $data['message'] = 'Encashment Denied';
+        return json_encode($data);
     }
 }

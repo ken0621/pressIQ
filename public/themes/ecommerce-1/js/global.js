@@ -15,7 +15,9 @@ function global()
 			event_show_cart();
 			action_fit_text();
 			action_slick();
-			event_image_crop();
+			ready_load_ecom_cart();
+			ready_load_mini_ecom_cart();
+			event_sticky_nav();
 		});
 	}
 	function event_show_cart()
@@ -78,8 +80,85 @@ function global()
 			}
 		});
 	}
-	function event_image_crop()
+	function event_sticky_nav()
 	{
-		
+		var element_position = $('.content').offset().top;
+	    var y_scroll_pos = window.pageYOffset;
+	    var scroll_pos_test = element_position;
+
+	    var get_height = $('.navbar').height();
+
+	    if(y_scroll_pos > scroll_pos_test) 
+        {
+            $('.header-nav').css("margin-bottom", get_height+"px");
+	        $('.navbar').addClass("sticky");
+        }
+        else
+        {
+            $('.header-nav').css("margin-bottom", "0px");
+		    $('.navbar').removeClass("sticky");
+        }
+	    
+	    $(window).on('scroll', function() 
+	    {
+	        var y_scroll_pos = window.pageYOffset;
+	        var scroll_pos_test = element_position;
+	        
+	        if(y_scroll_pos > scroll_pos_test) 
+	        {
+	            $('.header-nav').css("margin-bottom", get_height+"px");
+	        	$('.navbar').addClass("sticky");
+	        }
+	        else
+	        {
+	            $('.header-nav').css("margin-bottom", "0px");
+		    	$('.navbar').removeClass("sticky");
+	        }
+	    });
 	}
+}
+
+// CART GLOBAL
+function ready_load_ecom_cart()
+{
+	$('#shopping_cart .modal-content').load('/cart',
+	function()
+	{
+		event_load_cart();
+	});
+}
+
+function event_load_cart()
+{
+	$('body').on('click', '.show-cart', function(event) 
+	{
+		event.preventDefault();
+		
+		$('#shopping_cart').modal();
+	});
+}
+
+function action_load_cart()
+{
+	$('#shopping_cart .modal-content').load('/cart',
+	function()
+	{
+		$('#shopping_cart').modal();
+	});
+}
+
+function ready_load_mini_ecom_cart()
+{
+	$('.mini-cart').load('/mini_cart', function()
+	{
+		var quantity = $('.mini-cart .quantity-get').val();
+		var total_price = $('.mini-cart .total-get').val();
+		
+		$('.mini-cart-quantity').html(quantity);
+		$('.mini-cart-total-price').html(total_price);
+	});
+}
+function action_after_load()
+{
+	
 }

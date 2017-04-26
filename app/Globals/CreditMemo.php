@@ -7,6 +7,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_cart;
 use App\Models\Tbl_coupon_code;
+use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_credit_memo;
 use DB;
@@ -15,7 +16,7 @@ use Carbon\Carbon;
 
 class CreditMemo
 {
-	public static function postCM($customer_info, $item_info)
+	public static function postCM($customer_info, $item_info, $inv_id = 0)
 	{
 		$insert_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$insert_cm["cm_customer_email"] = $customer_info["cm_customer_email"];
@@ -29,6 +30,11 @@ class CreditMemo
 
 		CreditMemo::insert_cmline($cm_id, $item_info);
 
+		if($inv_id != 0)
+		{
+			$up["credit_memo_id"] = $cm_id;
+			Tbl_customer_invoice::where("inv_id",$inv_id)->update($up);
+		}
 		return $cm_id;
 	}
 

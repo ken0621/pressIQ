@@ -3,7 +3,15 @@
 function c_time_to_int($time)
 {
     $time = date("H:i", strtotime($time));
-    return strtotime("01/01/70 " . $time);
+    $return = strtotime("01/01/70 " . $time . " UTC");
+    return $return;
+}
+function convert_seconds_to_hours_minutes($format = "H:i", $d)
+{
+    date_default_timezone_set('UTC');
+    $r = date($format, $d);
+    date_default_timezone_set(config('app.timezone'));
+    return $r;
 }
 function createPath($path)
 {
@@ -495,4 +503,44 @@ function limit_foreach($iterable, $limit)
         if (!$limit--) break;
         yield $key => $value;
     }
+}
+function payout_getway()
+{
+    $data[0] = 'Bank Deposit';
+    $data[1] = 'Cheque';
+    return $data;
+}
+
+function divide($num1, $num2)
+{
+    $result = 0;
+    if($num1 > 0 && $num2 > 0)
+    {
+       $result =  $num1 / $num2;
+    }
+
+    return $result;
+}
+
+function limit_char($x, $length)
+{
+    if(strlen($x)<=$length)
+    {
+        echo $x;
+    }
+    else
+    {
+        $y=substr($x,0,$length) . '...';
+        echo $y;
+    }
+}
+
+/* return null value to zero */
+function n2z($value)
+{
+    if(is_null($value))
+    {
+        $value = 0;
+    }
+    return $value;
 }

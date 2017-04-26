@@ -13,6 +13,7 @@
     
     <!-- <link rel="stylesheet" href="/assets/member/styles/92bc1fe4.bootstrap.css"> -->
     <link rel="stylesheet" href="{{ public_path().'/assets/member/styles/92bc1fe4.bootstrap.css' }}">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">  
     <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
     <script src="/assets/member/scripts/vendor/respond.min.js"></script>
@@ -29,6 +30,58 @@
 
     <!-- <script src="/assets/member/scripts/vendor/modernizr.js"></script>
     <script src="/assets/external/jquery.minv1.js"></script> -->
+    <link rel="stylesheet" type="text/css" href="{{public_path()}}/assets/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{public_path()}}/assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
+    <style type="text/css">
+        .info-box{
+                display: block;
+                min-height: 90px;
+                background: #fff;
+                width: 100%;
+                box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+                border-radius: 2px;
+                margin-bottom: 15px;
+        }
+        .info-box-number
+        {
+                display: block;
+                font-weight: bold;
+                font-size: 18px;
+        }
+        .info-box-icon
+        {
+                border-top-left-radius: 2px;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 2px;
+                display: block;
+                float: left;
+                height: 90px;
+                width: 90px;
+                text-align: center;
+                font-size: 45px;
+                line-height: 90px;
+                background: rgba(0,0,0,0.2);
+        }
+        .bg-primary
+        {
+            background-color: #76b6ec !important;
+        }
+        .info-box-text
+        {
+            display: block;
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .info-box-content
+        {
+                padding: 5px 10px;
+                margin-left: 90px;
+        }
+        thead, tfoot { display: table-row-group }
+    </style>
     @yield('css')
 </head>
 <body id="body">

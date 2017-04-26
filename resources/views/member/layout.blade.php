@@ -38,10 +38,12 @@
     <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/basic.css">
     <link rel="stylesheet" type="text/css" href="/assets/custom_plugin/myDropList/css/myDropList.css">
+
     <!-- <link rel="stylesheet" type="text/css" href="/assets/chartist/chartist.css"> -->
     <!-- <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/dropzone.min.css"> -->
 
     <link rel="stylesheet" href="/assets/external/jquery_css/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="/assets/mlm/pace.css">
 
     <style type="text/css">
     a
@@ -116,7 +118,7 @@
                     </span>
                 </a>
             </li>
-    
+        
         <!-- PAGE LIST -->
         @foreach($_page as $page)
             <li>
@@ -132,7 +134,7 @@
                 
                 @if(!isset($page['url']))
                     <ul>
-                    @foreach($page['submenu'] as $sub_page)
+                    @foreach($page['submenu'] as $key=> $sub_page)
                         @if(isset($sub_page["popup"]))
                             <li>
                                 <a class="subnav-text popup" size="flex" href="javascript:" link="{{ $sub_page['url'] }}">
@@ -141,8 +143,8 @@
                             </li>
                         @else
                             <li>
-                                <a class="subnav-text" href="{{ $sub_page['url'] }}">
-                                    {{ $sub_page["label"] }}
+                                <a class="subnav-text" href="{{ isset($sub_page['url']) ? $sub_page['url'] : dd($sub_page) }}">
+                                    {!! $sub_page["label"] !!}
                                 </a>
                             </li>
                         @endif
@@ -460,7 +462,31 @@
     <script type="text/javascript" src="/assets/member/js/prompt_serial_number.js"></script>
     <script type="text/javascript" src='/assets/member/js/match-height.js'></script>
     <script type="text/javascript" src='/assets/chartjs/Chart.bundle.min.js'></script>
-    
+    <script type="text/javascript" src="/assets/mlm/pace.min.js"></script>
+
+    <script type="text/javascript">
+	  $(document).ajaxStart(function() { Pace.restart(); }); 
+      $('.select_current_warehouse').click(function(event) 
+      {
+        event.stopPropagation();
+      });
+      function show_currency()
+      {
+        $('.change_currency').each(function(){
+            var amount = $(this).html();
+            var currency_change = formatPHP(amount); 
+            $(this).html(currency_change);
+          });
+      }
+      show_currency();
+      function formatPHP(num) {
+        var num2 = parseFloat(num);
+        var p = num2.toFixed(2).split(".");
+        return "PHP " + p[0].split("").reverse().reduce(function(acc, num, i, orig) {
+            return  num=="-" ? acc : num + (i && !(i % 3) ? "," : "") + acc;
+        }, "") + "." + p[1];
+    }
+	</script>
     @yield('script')
 </body>
 </html>

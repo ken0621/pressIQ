@@ -58,6 +58,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script type="text/javascript" src="/resources/assets/external/jquery.min.js"></script>
   <script src="/resources/assets/distributor/scripts/vendor/modernizr.js"></script>
   <script src="/resources/assets/distributor/scripts/vendor/jquery.cookie.js"></script>
+  <link rel="stylesheet" type="text/css" href="/assets/mlm/pace.css">
   <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
     <script>
     (function () {
@@ -76,11 +77,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 <body class="hold-transition skin-blue sidebar-mini">
   <script>
-      var theme = $.cookie('protonTheme') || 'default';
-      $('body').removeClass (function (index, css) {
-              return (css.match (/\btheme-\S+/g) || []).join(' ');
-      });
-      if (theme !== 'default') $('body').addClass(theme);
+  //     var theme = $.cookie('protonTheme') || 'default';
+  //     $('body').removeClass (function (index, css) {
+  //             return (css.match (/\btheme-\S+/g) || []).join(' ');
+  //     });
+  //     if (theme !== 'default') $('body').addClass(theme);
   </script>
 <div class="wrapper">
 
@@ -120,7 +121,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <a href="#">
                       <div class="pull-left">
                         <!-- User Image -->
-                        <img src="/assets/mlm/default-pic.png" class="img-circle" alt="User Image">
+                        <img src="{{$profile}}" class="img-circle" alt="User Image">
                       </div>
                       <!-- Message title and timestamp -->
                       <h4>
@@ -214,14 +215,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="/assets/mlm/default-pic.png" width="25px" height="25px" class="user-image" alt="User Image">
+              <img src="{{$profile}}" width="25px" height="25px" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               <span class="hidden-xs">{{$customer_info->title_name}} {{$customer_info->first_name}} {{$customer_info->middle_name}} {{$customer_info->last_name}} {{$customer_info->suffix_name}}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="/assets/mlm/default-pic.png" width="50px" height="50px"  class="img-circle" alt="User Image">
+                <img src="{{$profile}}" width="50px" height="50px"  class="img-circle" alt="User Image">
 
                 <p>
                   {{$customer_info->title_name}} {{$customer_info->first_name}} {{$customer_info->middle_name}} {{$customer_info->last_name}} {{$customer_info->suffix_name}}
@@ -271,7 +272,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="/assets/mlm/default-pic.png" width="160px" height="160px" class="img-circle" alt="User Image">
+          <img src="{{$profile}}" width="160px" height="160px" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
           <p>{{name_format_from_customer_info($customer_info)}}</p>
@@ -307,12 +308,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <span class="nav-text">Profile</span>
                     </a>
                 </li>
-                <!-- <li class="{{Request::segment(2) == 'repurchase' ? 'active' : '' }}">
-                    <a href="/mlm/repurchase">
+                <li class="{{Request::segment(2) == 'repurchase' ? 'active' : '' }}">
+                    <a href="/">
                         <i class="icon-shopping-cart nav-icon"></i>
                         <span class="nav-text">Repurchase</span>
                     </a>
-                </li> -->
+                </li>
                 @if($discount_card_log != null)
                 <li class="treeview" class="{{Request::segment(3) == 'report' ? 'active' : '' }}">
                   <a href="javascript:">
@@ -634,6 +635,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script> 
     <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
      <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script>
+     <script type="text/javascript" src="/assets/mlm/pace.min.js"></script>
+     <script type="text/javascript">
+      $(document).ajaxStart(function() { Pace.restart(); });
+
+      @if (Session::has('success'))
+          toastr.success("{{ Session::get('success') }}");
+      @endif  
+      @if (Session::has('warning'))
+         toastr.warning("{{ Session::get('warning') }}");
+      @endif  
+     </script>
+
     @yield('js')      
 </body>
 </html>

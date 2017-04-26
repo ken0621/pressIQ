@@ -1,5 +1,11 @@
 <?php
 namespace App\Globals;
+
+use App\Models\Tbl_sms_key;
+use App\Models\Tbl_sms_template;
+use App\Models\Tbl_sms_logs;
+use App\Models\Tbl_user;
+
 use DB;
 use Log;
 use Request;
@@ -15,82 +21,234 @@ use Carbon\carbon;
  * @author Bryan Kier Aradanas
  */
 
-class Sms
+class Sms 
 {
-	public static function Send($recipient, $content)
+	public static function getShopId()
 	{
-		File::requireOnce('assets/libraries/Infobip_sms_api-master/Infobip_sms_api.php');
-
-		$infobip = new Infobip_sms_api();
-
-		// infobip username
-		$infobip->setUsername('username'); 
-		// infobip password
-		$infobip->setPassword('password'); 
-
-		$infobip->setMethod(Infobip_sms_api::OUTPUT_XML);
-		$infobip->setMethod(Infobip_sms_api::OUTPUT_JSON);
-		$infobip->setMethod(Infobip_sms_api::OUTPUT_PLAIN);
-
-		$message = new Infobip_sms_message();
-
-		$message->setSender('Philtech');
-		$message->setText($content);
-		$message->setRecipients($recipient);
-
-		$infobip->addMessages(array($message));
-
-		$results = $infobip->sendSMS();
-
-		return $results;
+		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
 	}
 
 	/**
-	 * Send Notification upon |Registration
+	 * Send single sms with a template content
 	 *
-	 * @param string  	$name 	First Name of the VIP person 
+	 * @param string or array  	$recipient 		Mobile Number of the recipient (e.g. 63912345678)
+	 * @param array  			$content  		Contains the content of the sms
+	 * @param string  			$key      		Contains the key of a specific sms type or can be null
+	 * @param int  				$shop_id    	Shop id of the products that you wnat to get. null if auto get
+	 * @return array 			$response
 	 */
-	public static function sendRegistration($recipient, $name)
+	public static function SendSingleText($recipient, $content, $key, $shop_id = null)
 	{
-		$text = "Hi " . $name . ",%0a" . "You have successfully completed your PhilTECH registration.For inquiries, call us at 0917-542-2614(Mobile) or at (062) 310-2256(Landline)";
-		dd($text);
-		// return Sms::send($recipient, $text);
+		if(!$shop_id)
+		{
+			$shop_id = Sms::getShopId();
+		}
+
+		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
+
+		if(is_array($recipient))
+		{
+			$_recipient = "";
+			foreach($recipient as $key1=>$number)
+			{
+				$key1 == 0 ? $_recipient .= "\"$number\"" : $_recipient .= ",\"$number\"" ;
+			}
+			$recipient = "[$_recipient]";
+		}
+		else
+		{
+			$recipient = "\"$recipient\"";
+		}
+
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "http://api.infobip.com/sms/1/text/single",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "POST",
+			CURLOPT_POSTFIELDS => "{ \"from\":\"PhilTECH\", \"to\":$recipient, \"text\":\"$content.\" }",
+			CURLOPT_HTTPHEADER => array(
+				"accept: application/json",
+				"authorization: Basic $sms_key",
+				"content-type: application/json"
+			),
+		));
+
+		$response 	= curl_exec($curl);
+		$err 		= curl_error($curl);
+
+		curl_close($curl);
+
+		if ($err) {
+			$status = "FAILED";
+			$data 	= "cURL Error #:" . $err;
+		} 
+		else {
+			$status = "UNKNOWN";
+			$data   = $response;
+		}
+
+		$insert["sms_logs_shop_id"] = $shop_id;
+		$insert["sms_logs_key"]		= $key;
+		$insert["sms_logs_status"]	= $status;
+		$insert["sms_logs_remarks"]	= json_encode($response);
+		$insert["created_at"]		= Carbon::now();
+		Tbl_sms_logs::insert($insert);
+
+		return $response;
 	}
 
-	public static function sendPurchaseMembershipCode($recipient, $name, $link)
+	/**
+	 * Send single sms with a template content
+	 *
+	 * @param string or array  	$recipient 		Mobile Number of the recipient (e.g. 63912345678)
+	 * @param array  			$replace_data  	Contains the text to be replace (e.g : [name] => Juan) 
+	 *											(variable : data[0][txt_to_be_replace] , $txt[0]["txt_to_replace"]) 
+	 * @param string  			$key      		Contains the key of a specific sms tamplate
+	 * @param int  				$shop_id    	Shop id of the products that you wnat to get. null if auto get
+	 * @return array 			['status'], ['message']
+	 */
+	public static function SendSms($recipient, $key, $replace_data, $shop_id = null)
 	{
-		$text = "Hi " . $name . ",%0a" . "You have successfully purchased a new membership package!For further details, please log in to your account at " . $link;
-		dd($text);
-		// return Sms::send($recipient, $text);
+		if(!$shop_id)
+		{
+			$shop_id = Sms::getShopId();
+		}
+
+		/* Check Content */
+		$content_status = Sms::getSmsContent($key, $replace_data, $recipient, $shop_id);
+
+		if($content_status['status'] == "FAILED")
+		{
+			$data["status"]  = $content_status['status'];
+			$data["message"] = $content_status['message'];
+
+			return $data;
+		}
+
+		$content = $content_status["message"];
+		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
+		// $sms_key = Sms::apiKey($sms_key);
+		
+		if(is_array($recipient))
+		{
+			$_recipient = "";
+			foreach($recipient as $key=>$number)
+			{
+				$key == 0 ? $_recipient .= "\"$number\"" : $_recipient .= ",\"$number\"" ;
+			}
+			$new_recipient = "[$_recipient]";
+		}
+		else
+		{
+			$new_recipient = "\"$recipient\"";
+		}
+
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "http://api.infobip.com/sms/1/text/single",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "POST",
+			CURLOPT_POSTFIELDS => "{ \"from\":\"PhilTECH\", \"to\":$new_recipient, \"text\":\"$content.\" }",
+			CURLOPT_HTTPHEADER => array(
+				"accept: application/json",
+				"authorization: Basic $sms_key",
+				"content-type: application/json"
+			),
+		));
+
+		// dd($curl);
+
+		$response 	= curl_exec($curl);
+		$err 		= curl_error($curl);
+
+		curl_close($curl);
+
+		if ($err) {
+			$status = "FAILED";
+			$result = "cURL Error #:" . $err;
+		} 
+		else {
+			$status = "UNKNOWN";
+			$result = $response;
+		}
+
+		$insert["sms_logs_shop_id"] = $shop_id;
+		$insert["sms_logs_key"]		= $key;
+		$insert["sms_logs_status"]	= $status;
+		$insert["sms_logs_recipient"] = $recipient == null ? '' : $recipient;
+		$insert["sms_logs_remarks"]	= json_encode($result);
+		$insert["created_at"]		= Carbon::now();
+		Tbl_sms_logs::insert($insert);
+
+		$data["status"]   = $status;
+		$data["message"]  = $result;
+
+		return $data;
 	}
 
-	public static function sendPurchaseUsingEwallet($recipient, $name, $amount)
+	public static function getSmsContent($key, $replace_data, $recipient, $shop_id)
 	{
-		$text = "Hi " . $name . ",%0a" . "We have already processed your order amounting to " . $amount . ".Your E-wallet account was charged upon check-out. Thank you for your purchase!";
-		dd($text);
-		// return Sms::send($recipient, $text);
-	}
+		$sms_content 	= Tbl_sms_template::where("sms_temp_shop_id", $shop_id)->where("sms_temp_key", "$key")->first();
+		$sms_key 		= Tbl_sms_key::where("sms_shop_id", $shop_id)->first();
 
-	public static function sendPurchaseUsingDiscount($recipient, $name, $start_date, $end_date)
-	{
-		$text = "Hi " . $name . ",%0a" . "This is to confirm your Discount Card purchase issued on " . $start_date . " and will expire on " .$end_date . " .Please be guided. Thank you!";
-		dd($text);
-		// return Sms::send($recipient, $text);
-	}
+		/* IF THER IS SMS AUTHORIZATION KEY */
+		if($sms_key && $sms_key != '')
+		{
+			/* IF THERE IS TEMPLATE FOR SMS KEY */
+			if($sms_content)
+			{
+				/* IF THE TEMPLATE IS ENABLED */
+				if($sms_content->sms_temp_is_on == 1)
+				{
+					$content = $sms_content->sms_temp_content;
+					foreach ($replace_data as $key => $value)
+			        {        	
+			        	$content = str_replace($value["txt_to_be_replace"], $value["txt_to_replace"], $content);	
+			        }
+			        
+			        $data["status"] 	= "success";
+			        $data["message"] 	= $content;
+			        
+		    	}
+		    	else
+		    	{
+		    		$data["status"] 	= "FAILED";
+			        $data["message"] 	= "template for this sms key is disabled";
+		    	}
+			}
+			else
+			{
+				$data["status"] 	= "FAILED";
+				$data["message"] 	= "template not found";
+			}
 
-	public static function sendPurchaseUsingCreditCard($recipient, $name, $amount)
-	{
-		$text = "Hi " . $name . ",%0a" . "We have already processed your order amounting to " . $amount . " . Your credit card was charged upon check-out. Thank you for your purchase!";
-		dd($text);
-		// return Sms::send($recipient, $text);
-	}
+			if($data["status"] == "FAILED")
+			{
+				$insert["sms_logs_shop_id"] = $shop_id;
+				$insert["sms_logs_key"]		= $key;
+				$insert["sms_logs_status"]	= $data["status"];
+				$insert["sms_logs_recipient"] = $recipient == null ? '' : $recipient;
+				$insert["sms_logs_remarks"]	= $data["message"];
+				$insert["created_at"]		= Carbon::now();
+				Tbl_sms_logs::insert($insert);
+			}
+		}
+		else
+		{
+			$data["status"] = "FAILED";
+			$data["message"] = "No Sms Key Found";
+		}
 
-	public static function sendPurchaseWithPayment($recipient, $name, $amount)
-	{
-		$text = "";
-		dd($text);
-		// return Sms::send($recipient, $text);
-	}
+		return $data;
+	} 
 
 	public static function limit($str, $length)
 	{
@@ -104,4 +262,120 @@ class Sms
 		}
 	}
 
+	public static function getSmsLogs($shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Sms::getShopId();
+		}
+
+		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
+
+		if($sms_key)
+		{
+			$curl = curl_init();
+
+			curl_setopt_array($curl, array(
+				CURLOPT_URL => "http://api.infobip.com/sms/1/logs",
+				CURLOPT_RETURNTRANSFER => true,
+				CURLOPT_ENCODING => "",
+				CURLOPT_MAXREDIRS => 10,
+				CURLOPT_TIMEOUT => 30,
+				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+				CURLOPT_CUSTOMREQUEST => "GET",
+				CURLOPT_HTTPHEADER => array(
+				"accept: application/json",
+				"authorization: Basic $sms_key"
+				),
+			));
+
+			$response = curl_exec($curl);
+			$err = curl_error($curl);
+
+			curl_close($curl);
+
+		    if(!$sms_key) {
+		    	return array();
+		    }
+			else if ($err) {
+			  	return "cURL Error #:" . $err;
+			} else {
+			  	$data = json_decode($response);
+			  	if(isset($data->requestError))  return [];
+			  	else 							return $data->results;
+			}
+		}
+		return [];
+
+	}
+
+	public static function getSmsBalance($shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Sms::getShopId();
+		}
+
+		$sms_key = Tbl_sms_key::where("sms_shop_id", $shop_id)->pluck("sms_authorization_key");
+
+		$curl = curl_init();
+
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "http://api.infobip.com/account/1/balance",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "GET",
+			CURLOPT_HTTPHEADER => array(
+			"accept: application/json",
+			"authorization: Basic $sms_key"
+			),
+		));
+
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+
+		curl_close($curl);
+
+	    if(!$sms_key) {
+	    	return [];
+	    }
+		else if ($err) {
+		  	return "cURL Error #:" . $err;
+		} else {
+		  	$data = json_decode($response);
+		  	if(isset($data->requestError))  return [];
+		  	else 							return $data;
+		}
+	}
+
+	public static function apiKey($sms_key)
+	{
+		$curl = curl_init();
+
+		$curl = curl_init();
+		curl_setopt_array($curl, array(
+			CURLOPT_URL => "http://api.infobip.com/2fa/1/api-key",
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_ENCODING => "",
+			CURLOPT_MAXREDIRS => 10,
+			CURLOPT_TIMEOUT => 30,
+			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			CURLOPT_CUSTOMREQUEST => "POST",
+			CURLOPT_HTTPHEADER => array(
+				"accept: application/json",
+				"authorization: Basic $sms_key",
+				"content-type: application/json"
+			),
+		));
+
+		$response = curl_exec($curl);
+		$err = curl_error($curl);
+
+		curl_close($curl);
+
+		return json_decode($response);
+	}
 }

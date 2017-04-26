@@ -5,6 +5,7 @@ use App\Models\Tbl_mlm_slot;
 use App\Globals\Pdf_global;
 use PDF;
 use App;
+use Carbon\Carbon;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_country;
 use App\Models\Tbl_shop;
@@ -12,10 +13,15 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code;
+use App\Models\Tbl_membership_package_has;
 use Validator;
 use Session;
 use Redirect;
 use App\Globals\Mlm_member;
+use App\Globals\Item;
+use App\Globals\Mlm_plan;
+use App\Globals\Mlm_compute;
+use App\Globals\Mlm_gc;
 class MemberController extends Controller
 {
     public static $shop_id;
@@ -193,7 +199,31 @@ class MemberController extends Controller
             return Redirect::to('/member/register/package');
         }
 
-        return view("mlm.register.payment");
+        $register_session_3 = Session::get('mlm_register_step_3');
+        if($register_session_3 == null)
+        {
+            return Redirect::to('/member/register/shipping');
+        }
+
+        $membership_id = $register_session_2['membership'];
+        $package_id = $register_session_2['package'];
+
+
+
+        $data['membership_packages'] = Tbl_membership_package::where('membership_id', $membership_id)
+        ->where('membership_package_id', $package_id)
+        ->where('membership_package_archive', 0)->get();
+        foreach($data['membership_packages'] as $key => $value)
+        {
+            $data['product_count'][$key] = Tbl_membership_package_has::where('membership_package_id', $package_id)->get();
+            $data['item_bundle'][$key] = Tbl_membership_package_has::where('membership_package_id', $package_id)->get();
+            foreach($data['item_bundle'][$key] as $key2 => $value2)
+            {
+                $data['item_bundle'][$key][$key2]->item_list = Item::get_item_bundle($value2->item_id);
+            }
+        }
+
+        return view("mlm.register.payment", $data);
     }
     public function payment_post()
     {
@@ -202,24 +232,25 @@ class MemberController extends Controller
         $info['membership_pin'] = Request::input('membership_pin');
         $info['membership_code'] = Request::input('membership_code');
 
-        $s['first_name'] = Request::input('first_name');
-        $s['last_name'] = Request::input('last_name');
-        $s['contact_info'] = Request::input('contact_info');
-        $s['contact_other'] = Request::input('contact_other');
-        $s['shipping_address'] = Request::input('shipping_address');
+        // $s['first_name'] = Request::input('first_name');
+        // $s['last_name'] = Request::input('last_name');
+        // $s['contact_info'] = Request::input('contact_info');
+        // $s['contact_other'] = Request::input('contact_other');
+        // $s['shipping_address'] = Request::input('shipping_address');
 
-        $rules['first_name'] = 'required';
-        $rules['last_name'] = 'required';
-        $rules['contact_info'] = 'required';
-        $rules['contact_other'] = 'required';
-        $rules['shipping_address'] = 'required';
-        $validator = Validator::make($s, $rules);
-        if (!$validator->passes()) 
-         {
-            $data['status'] = "warning";
-            $data['message'] = $validator->messages();
-            return json_encode($data);
-         }
+        // $rules['first_name'] = 'required';
+        // $rules['last_name'] = 'required';
+        // $rules['contact_info'] = 'required';
+        // $rules['contact_other'] = 'required';
+        // $rules['shipping_address'] = 'required';
+        // $validator = Validator::make($s, $rules);
+        // if (!$validator->passes()) 
+        //  {
+        //     $data['status'] = "warning";
+        //     $data['message'] = $validator->messages();
+        //     return json_encode($data);
+        //  }
+        $s = Session::get('mlm_register_step_3');
 
         if($info['payment_type'] != null)
         {
@@ -248,6 +279,8 @@ class MemberController extends Controller
                             Mlm_member::register_slot_membership_code($shop_id, $register_session, $register_session_2, $ship, $code, $code_info);
                             Session::forget('mlm_register_step_1');
                             Session::forget('mlm_register_step_2');
+                            Session::forget('mlm_register_step_3');
+
                             $data['status'] = 'success';
                             $data['message'][0] = 'Membership Code Already Used.';
                             $data['link'] = '/mlm';
@@ -274,8 +307,36 @@ class MemberController extends Controller
             }
             else
             {
-                $data['status'] = 'warning';
-                $data['message'][0] = 'The chosen payment facility is under maintenance.';
+                $shop_id = Self::$shop_id;
+                $register_session = Session::get('mlm_register_step_1');
+                $customer_id = Mlm_member::register_slot_insert_customer($shop_id, $register_session);
+
+                $register_session_2 = Session::get('mlm_register_step_2');
+                // dd();
+                $slot_sponsor = Tbl_mlm_slot::where('slot_nick_name', $register_session['sponsor'])->first();
+                $insert['slot_no'] = Mlm_plan::set_slot_no($shop_id, null);
+                $insert['shop_id'] = $shop_id;
+                $insert['slot_owner'] = $customer_id;
+                $insert['slot_created_date'] = Carbon::now();
+                $insert['slot_membership'] = $register_session_2['membership'];
+                $insert['slot_status'] = 'PS';
+                $insert['slot_sponsor'] = $slot_sponsor->slot_id;
+                
+                $id = Tbl_mlm_slot::insertGetId($insert);
+                $a = Mlm_compute::entry($id);
+
+                $c = Mlm_gc::slot_gc($id);
+                $data['status'] = 'success';
+                $data['message'][0] = 'Membership Code Already Used.';
+                $data['link'] = '/mlm';
+
+                Session::forget('mlm_register_step_1');
+                Session::forget('mlm_register_step_2');
+                Session::forget('mlm_register_step_3');
+
+                Mlm_member::add_to_session_edit($shop_id, $customer_id, $id);
+                // $data['status'] = 'warning';
+                // $data['message'][0] = 'The chosen payment facility is under maintenance.';
             }
         }
         else
@@ -300,9 +361,8 @@ class MemberController extends Controller
 
         foreach($data['membership'] as $key => $value)
         {
-            $data['package'][$key] = Tbl_membership_package::where('membership_id', $value->membership_id)->get();
+            $data['package'][$key] = Tbl_membership_package::where('membership_id', $value->membership_id)->where('membership_package_archive', 0)->get();
         }
-
         return view("mlm.register.package", $data);
     }
     public function package_post()
@@ -318,7 +378,7 @@ class MemberController extends Controller
                 Session::put('mlm_register_step_2', $d);
                 $data['status'] = 'success';
                 $data['message'][0] = 'Sucess!';
-                $data['link'] = '/member/register/payment';
+                $data['link'] = '/member/register/shipping';
             }
             else
             {
@@ -329,9 +389,57 @@ class MemberController extends Controller
         else
         {
             $data['status'] = 'warning';
-            $data['message'][0] = 'Email already used.';
+            $data['message'][0] = 'Invalid Membership';
         }
         return json_encode($data);
+    }
+
+    public function shipping()
+    {
+        $register_session = Session::get('mlm_register_step_1');
+        if($register_session == null)
+        {
+            return Redirect::to('/member/register');
+        }
+        // return $register_session;
+        $register_session_2 = Session::get('mlm_register_step_2');
+        if($register_session_2 == null)
+        {
+            return Redirect::to('/member/register/package');
+        }
+
+        return view("mlm.register.shipping");
+    }
+
+    public function shipping_post()
+    {
+        $s['first_name'] = Request::input('first_name');
+        $s['last_name'] = Request::input('last_name');
+        $s['contact_info'] = Request::input('contact_info');
+        $s['contact_other'] = Request::input('contact_other');
+        $s['shipping_address'] = Request::input('shipping_address');
+
+        $rules['first_name'] = 'required';
+        $rules['last_name'] = 'required';
+        $rules['contact_info'] = 'required';
+        $rules['contact_other'] = 'required';
+        $rules['shipping_address'] = 'required';
+        $validator = Validator::make($s, $rules);
+        if (!$validator->passes()) 
+         {
+            $data['status'] = "warning";
+            $data['message'] = $validator->messages();
+            return json_encode($data);
+         }
+         else
+         {
+            Session::put('mlm_register_step_3', $s);
+            $data['status'] = 'success';
+            $data['message'][0] = 'Sucess!';
+            $data['link'] = '/member/register/payment';
+
+            return json_encode($data);
+         }
     }
 
 

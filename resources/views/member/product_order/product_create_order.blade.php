@@ -15,7 +15,7 @@
                     
                     </small>
                 </h1>
-                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save and Send</button>
+                <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
                 <a href="/member/ecommerce/product_order" class="panel-buttons btn btn-default pull-right btn-custom-white">&laquo; Back</a>
             </div>
         </div>
@@ -33,23 +33,26 @@
                         
                         <div class="col-sm-12">
                             <div class="btn-group btn-group-justified" data-toggle="buttons">
-                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Pending' ? 'active' : '' : 'active'}}">
-                                <input type="radio" name="order_status" id="option1" value="Pending" {{isset($inv) ? $inv->order_status == 'Pending' ? 'checked' : '' : 'checked'}}> Pending Payment
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Pending' ? 'active' : '' : 'active'}}" data-toggle="tooltip" title="Order received">
+                                <input type="radio" name="order_status" id="option1" value="Pending" {{isset($inv) ? $inv->order_status == 'Pending' ? 'checked' : '' : 'checked'}}> Pending
                                 </label>
-                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Failed' ? 'active' : '' : ''}}">
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Failed' ? 'active' : '' : ''}}" data-toggle="tooltip" title="Payment failed or was declined">
                                 <input type="radio" name="order_status" id="option2" value="Failed" {{isset($inv) ? $inv->order_status == 'Failed' ? 'checked' : '' : ''}}> Failed
                                 </label>
-                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Processing' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option3" value="Processing" {{isset($inv) ? $inv->order_status == 'Processing' ? 'checked' : '' : ''}}"> Processing
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Processing' ? 'active' : '' : ''}}" data-toggle="tooltip" title="Processing or On Shipment - the order is awaiting fulfillment. Stock has been reduced">
+                                <input type="radio" name="order_status" id="option3" value="Processing" {{isset($inv) ? $inv->order_status == 'Processing' ? 'checked' : '' : ''}}> Processing
                                 </label>
-                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Completed' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option4" value="Completed" {{isset($inv) ? $inv->order_status == 'Completed' ? 'checked' : '' : ''}}"> Completed
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Shipped' ? 'active' : '' : ''}}" data-toggle="tooltip" title="Orders that have been shipped but have not yet reached the customer. Stock has been reduced">
+                                <input type="radio" name="order_status" id="option4" value="Shipped" {{isset($inv) ? $inv->order_status == 'Shipped' ? 'checked' : '' : ''}}> Shipped
                                 </label>
-                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option5" value="On-hold" {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'checked' : '' : ''}}"> On-Hold
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Completed' ? 'active' : '' : ''}}" data-toggle="tooltip" title="Order fulfilled and complete – requires no further action">
+                                <input type="radio" name="order_status" id="option5" value="Completed" {{isset($inv) ? $inv->order_status == 'Completed' ? 'checked' : '' : ''}}> Completed
                                 </label>
-                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'active' : '' : ''}}">
-                                <input type="radio" name="order_status" id="option6" value="Cancelled" {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'checked' : '' : ''}}"> Cancelled
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'active' : '' : ''}}" data-toggle="tooltip" title="Awaiting payment. Stock has been reduced">
+                                <input type="radio" name="order_status" id="option6" value="On-hold" {{isset($inv) ? $inv->order_status == 'On-Hold' ? 'checked' : '' : ''}}> On-Hold
+                                </label>
+                                <label class="btn order_status_btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'active' : '' : ''}}" data-toggle="tooltip" title="Cancelled by an admin or the customer – no further action required">
+                                <input type="radio" name="order_status" id="option7" value="Cancelled" {{isset($inv) ? $inv->order_status == 'Cancelled' ? 'checked' : '' : ''}}> Cancelled
                                 </label>
                                 <!-- <label class="btn btn-custom-white btn-large {{isset($inv) ? $inv->order_status == 'Refunded' ? 'active' : '' : ''}}">
                                 <input type="radio" name="order_status" id="option3" value="Void"> Refunded
@@ -88,17 +91,18 @@
                             <label>Billing Address</label>
                             <textarea {{isset($inv) ? 'disabled' : ''}} class="form-control input-sm textarea-expand" name="inv_customer_billing_address" placeholder="">{{$inv->billing_address or ''}}</textarea>
                         </div>
-                        <div class="col-sm-1">  
-                            <label>Terms</label>
-                            <select {{isset($inv) ? 'disabled' : ''}} class="form-control input-sm" name="inv_terms_id">
-                                <option value="1" {{isset($inv) ? $inv->term_id == 1 ? 'selected' : '' : ''}}>Net 10</option>
-                                <option value="2" {{isset($inv) ? $inv->term_id == 2 ? 'selected' : '' : ''}}>Net 30</option>
+                        <div class="col-sm-2">  
+                            <label>Online Payment Method</label>
+                            <select {{isset($inv) ? 'disabled' : ''}} class="form-control input-sm {{isset($inv) ? '' : 'drop-down-payment'}}" name="payment_method_id">
+                                <option class="hidden" value=""></option>
+                                @include("member.load_ajax_data.load_online_payment_method", ['payment_method_id' => isset($inv) ? $inv->payment_method_id : ''])
                             </select>
                         </div>
                         <div class="col-sm-2">  
-                            <label>Payment Method</label>
-                            <select class="form-control input-sm drop-down-payment" name="payment_method_id">
-                                @include("member.load_ajax_data.load_payment_method", ['payment_method_id' => isset($inv) ? $inv->payment_method_id : ''])
+                            <label>Payment Status</label>
+                            <select class="form-control input-sm" name="payment_status">
+                                <option value="0" {{isset($inv) ? $inv->payment_status == 0 ? 'selected' : '' : ''}}>Unpaid</option>
+                                <option value="1" {{isset($inv) ? $inv->payment_status == 1 ? 'selected' : '' : ''}}>Paid</option>
                             </select>
                         </div>
                         <div class="col-sm-2">
@@ -108,6 +112,15 @@
                         <div class="col-sm-2">
                             <label>Due Date</label>
                             <input {{isset($inv) ? 'disabled' : ''}} type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{isset($inv) ? date('m/d/Y',strtotime($inv->due_date)) : ''}}" />
+                        </div>
+                        <div class="col-sm-2">
+                            @if(isset($inv))
+                                @if($inv->payment_status == 1)
+                                <div class="text-center">
+                                    <h2 class="green">PAID <span class="fa fa-check-circle"></span></h2>
+                                </div>
+                                @endif
+                            @endif
                         </div>
                     </div>
                     
@@ -220,6 +233,12 @@
                         <div class="col-sm-3">
                             <label>Message Displayed on Invoice</label>
                             <textarea {{isset($inv) ? 'disabled' : ''}} class="form-control input-sm textarea-expand" name="inv_message" placeholder="">{{$inv->invoice_message or ''}}</textarea>
+                            @if(isset($inv))
+                                @if($inv->ec_order_load == 1)
+                                <label>Load to:</label>
+                                <input type="text" class="form-control" value="{{$inv->ec_order_load_number}}" disabled>
+                                @endif
+                            @endif
                         </div>
                         <div class="col-sm-3">
                             <label>Statement Memo</label>
@@ -331,13 +350,62 @@
                             </div> 
                         </div>
                     </div>
-                    
                     <!-- END CONTENT -->
                 </div>
             </div>
         </div>
     </div>
 </form>
+@if(isset($inv))
+<div class="panel panel-default panel-block panel-title-block panel-gray clearfix col-md-4">
+<<<<<<< HEAD
+    <h4>Upload:</h4>
+    <div class="row" style="padding: 10px 10px;">
+            <div id="ImportContainer">
+                <form action="/member/ecommerce/product_order/create_order/submit_payment_upload" id="myDropZoneImport" class="dropzone" method="post" enctype="multipart/form-data">
+                    <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="ec_order_id" value="{{$ec_order_id or ''}}" >
+                    <input type="file" id="files" name="files[]" style="display: none"><br>
+                    <div class="dz-message">
+                        <span class="needsclick">
+                            <h2><b>DRAG & DROP</b></h2>
+                            <h4>your Image File here or click it to browse</h4>
+                        </span>
+                    </div>
+                </form>
+            </div>
+    </div>
+</div>
+<div class="panel panel-default panel-block panel-title-block panel-gray clearfix col-md-8">
+    <h4>Preview:</h4>
+=======
+    <h5>Upload Attachment:</h5>
+    <div class="row" style="padding: 10px 10px;">
+        <div id="ImportContainer">
+            <form action="/member/ecommerce/product_order/create_order/submit_payment_upload" id="myDropZoneImport" class="dropzone" method="post" enctype="multipart/form-data">
+                <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="ec_order_id" value="{{$ec_order_id or ''}}" >
+                <input type="file" id="files" name="files[]" style="display: none"><br>
+                <div class="dz-message">
+                    <span class="needsclick">
+                        <h2><b>DRAG & DROP</b></h2>
+                        <h4>your Image File here or click it to browse</h4>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default panel-block panel-title-block panel-gray clearfix col-md-8">
+    <h5>Attachment Preview:</h5>
+>>>>>>> testing
+    <div class="row load-data" style="padding: 30px 30px;">
+        <div class="content-data">
+            <img src="{{$inv->payment_upload or ''}}" style="width: 100%">
+        </div>
+    </div>
+</div>
+@endif
 
 <div class="div-script">
     <table class="div-item-row-script hide">
@@ -375,6 +443,30 @@
         background-color: #106189!important;
         color: white!important;
     }
+    .dropzone
+    {
+        position: relative;
+        border: dashed 3px #76b6ec;
+        min-height: 100px;
+        padding: 5px 15px;
+        cursor: pointer;
+    }
+    .dropzone .dz-message *
+    {
+        text-align: center;
+        top: 50%;
+        -webkit-transform: translateY(-50%);
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+        left: 0;
+        right: 0;
+        margin: auto;
+    }
+    .dropzone .dz-preview
+    {
+        display: inline;
+    }
+    
 </style>
 @endsection
 @section('script')
@@ -382,5 +474,9 @@
 @if(!isset($inv))
 <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 @endif
+<script type="text/javascript">
+    var order_id    = "{{$ec_order_id or null}}";
+    var file_path   = "{{$inv->payment_upload or ''}}";
+</script>
 <script type="text/javascript" src="/assets/member/js/product_create_order.js"></script>
 @endsection

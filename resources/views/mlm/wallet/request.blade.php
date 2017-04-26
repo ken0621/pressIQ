@@ -27,11 +27,16 @@ $data['button'][0] = '<a href="/mlm/refill" class="small-box-footer pull-right">
         </div>
         <div class="col-md-12">
           <label>Proof of Payment</label>
-          <input type="file" class="form-control" name="wallet_log_refill_attachment" max-size="1024" required>
+          <input type="file" class="form-control" name="wallet_log_refill_attachment" max-size="1024">
         </div>
         <div class="col-md-12">
         <label>Remarks</label>
         <textarea class="form-control" name="wallet_log_refill_remarks" required></textarea>
+        
+        </div>
+        <div class="col-md-12">
+          <label>Password</label>
+          <input type="password" class="form-control" name="password" required>
         </div>
         <div class="col-md-12">
         <hr>

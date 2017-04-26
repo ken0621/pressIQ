@@ -16,6 +16,7 @@ function product()
 		add_event_product_filter_button();
 		change_view();
 		add_sidebar_submit_event();
+		event_quick_add_cart();
 	}
 	function add_sidebar_submit_event()
 	{
@@ -76,6 +77,27 @@ function product()
 			$('.grid-non').removeClass("hide");
 			$('.list-view').removeClass("hide");
 			$('.grid-view').addClass("hide");
+		});
+	}
+	function event_quick_add_cart()
+	{
+		$(".quick-add-cart").unbind("click");
+		$(".quick-add-cart").bind("click", function(e)
+		{
+			$('.loader').fadeIn();
+
+			action_quick_add_cart(e.currentTarget);
+		});
+	}
+	function action_quick_add_cart(x)
+	{
+		var product_id = $(x).attr('product-id');
+
+		$(".quick-cart-content").load('/cart/quick?product_id='+product_id,
+		function()
+		{
+			$('.loader').hide();
+			$("#quick-add-cart").modal();
 		});
 	}
 }

@@ -45,9 +45,12 @@
           <small>Company</small>
           <select class="form-control" name="payroll_employee_company_id" required>
             <option value="">Select Company</option>
-            @foreach($_company as $company)
-            <option value="{{$company->payroll_company_id}}">{{$company->payroll_company_name}}</option>
-            @endforeach
+              @foreach($_company as $company)
+              <option value="{{$company['company']->payroll_company_id}}">{{$company['company']->payroll_company_name}}</option> 
+                @foreach($company['branch'] as $branch)
+                <option value="{{$branch->payroll_company_id}}">&nbsp;&nbsp;• {{$branch->payroll_company_name}}</option>
+                @endforeach
+              @endforeach
           </select>
         </div>
         <div class="col-md-6">
@@ -89,10 +92,12 @@
           <ul class="nav nav-tabs nav-tabs-custom">
             <li class="active"><a data-toggle="tab" href="#address">Address</a></li>
             <li><a data-toggle="tab" href="#company-details">Company Details</a></li>
-            <li><a data-toggle="tab" href="#government-contribution">Government Contribution</a></li>
+            <li><a data-toggle="tab" href="#government-contribution">Government</a></li>
             <li><a data-toggle="tab" href="#salary-details">Salary Details</a></li>
             <li><a data-toggle="tab" href="#requirements">Requirements</a></li>
+            <li><a data-toggle="tab" href="#dependents">Dependents</a></li>
             <li><a data-toggle="tab" href="#remarks">Remarks</a></li>
+            <li><a data-toggle="tab" href="#other">Other</a></li>
           </ul>
           
           <div class="tab-content tab-content-custom">
@@ -176,13 +181,16 @@
                       
                     </div>
                     <div class="form-group">
-                      <div class="col-md-6 padding-r-1">
+                      <div class="col-md-6">
                         <small>Payroll Group</small>
-                        <select class="form-control" name="payroll_group_id">
+                        <select class="form-control payroll-group-select" name="payroll_group_id" required>
                           <option value="">Select Group</option>
+                          @foreach($_group as $group)
+                          <option value="{{$group->payroll_group_id}}">{{$group->payroll_group_code}}</option>
+                          @endforeach
                         </select>
                       </div>
-                      <div class="col-md-6 padding-l-1">
+                      <div class="col-md-6">
                         <small>Employment Status</small>
                         <select class="form-control" name="payroll_employee_contract_status">
                           <option value="">Select Status</option>
@@ -262,7 +270,7 @@
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <small>COLA (monthly)</small>
+                        <small>COLA (Daily)</small>
                         <input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right">
                       </div>
                     </div>
@@ -415,6 +423,109 @@
                 </div>
               </div>
             </div>
+            <div id="dependents" class="tab-pane fade form-horizontal">
+              <div class="form-group">
+                <div class="col-md-6">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="payroll_dependent_name[]" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control" name="payroll_dependent_relationship[]">
+                          <option value="">Select relationship</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                          <option value="Spouse">Spouse</option>
+                          <option value="Child">Child</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="payroll_dependent_name[]" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control" name="payroll_dependent_relationship[]">
+                          <option value="">Select relationship</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                          <option value="Spouse">Spouse</option>
+                          <option value="Child">Child</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-horizontal">
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="payroll_dependent_name[]" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control" name="payroll_dependent_relationship[]">
+                          <option value="">Select relationship</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                          <option value="Spouse">Spouse</option>
+                          <option value="Child">Child</option>
+                        </select>
+                      </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                      <div  class="col-md-12">
+                        <small>Dependent Full Name</small>
+                        <input type="text" name="payroll_dependent_name[]" class="form-control">
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <small>Birth Date</small>
+                        <input type="text" name="payroll_dependent_birthdate[]" class="form-control datepicker">
+                      </div>
+                      <div class="col-md-6">
+                        <small>Relationship</small>
+                        <select class="form-control" name="payroll_dependent_relationship[]">
+                          <option value="">Select relationship</option>
+                          <option value="Father">Father</option>
+                          <option value="Mother">Mother</option>
+                          <option value="Spouse">Spouse</option>
+                          <option value="Child">Child</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+             
+            </div>
             <div id="remarks" class="tab-pane fade">
               <br>
               <div class="form-horizontal">
@@ -426,21 +537,54 @@
                 </div>
               </div>
             </div>
+            <div id="other" class="tab-pane fade">
+              <ul class="nav nav-tabs nav-tabs-custom">
+                <li class="active"><a data-toggle="tab" href="#allowance">Allowance</a></li>
+                <li><a data-toggle="tab" href="#leave">Leave</a></li>
+                <li><a data-toggle="tab" href="#deduction">Deduction</a></li>
+                <li><a data-toggle="tab" href="#jouarnal">Journal</a></li>
+              </ul>
+              <div class="tab-content tab-content-custom">
+                <div id="allowance" class="tab-pane fade in active">
+                  @foreach($_allowance as $allowance)
+                  <div class="checkbox">
+                    <label><input type="checkbox" name="allowance[]" value="{{$allowance->payroll_allowance_id}}">{{$allowance->payroll_allowance_name}}</label>
+                  </div>
+                  @endforeach
+                </div>
+                <div id="leave" class="tab-pane fade">
+                  @foreach($_leave as $leave)
+                  <div class="checkbox">
+                    <label><input type="checkbox" name="leave[]" value="{{$leave->tbl_payroll_leave_temp_id}}">{{$leave->payroll_leave_temp_name}}</label>
+                  </div>
+                  @endforeach
+                </div>
+                <div id="deduction" class="tab-pane fade">
+                  @foreach($_deduction as $deduction)
+                  <div class="checkbox">
+                    <label><input type="checkbox" name="deduction[]" value="{{$deduction->payroll_deduction_id}}">{{$deduction->payroll_deduction_name}}</label>
+                  </div>
+                  @endforeach
+                </div>
+                <div id="jouarnal" class="tab-pane fade">
+                  @foreach($_journal_tag as $tag)
+                  <div class="checkbox">
+                    <label><input type="checkbox" name="journal_tag[]" value="{{$tag->payroll_journal_tag_id}}">{{$tag->account_number.' • '.$tag->account_name}}</label>
+                  </div>
+                  @endforeach
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <div class="error-modal text-center">
-      Error
-    </div>
-    
     <button type="button" class="btn btn-custom-white " data-dismiss="modal">Cancel</button>
-    <!--<button type="button" class="btn btn-custom-red-white btn-del-modallarge" data-url="" data-value="">Delete</button>-->
     <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Save customer</button>
   </div>
 </form>
-<script type="text/javascript" src="/assets/member/js/customer.js"></script>
+<!-- <script type="text/javascript" src="/assets/member/js/customer.js"></script> -->
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <script type="text/javascript" src="/assets/member/js/payroll/modal_create_employee.js"></script>

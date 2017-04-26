@@ -57,7 +57,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <td width="50%">
                                         <label for="plan_settings_slot_id_format">Slot # Format</label>
                                         <select class="form-control" name="plan_settings_slot_id_format" onChange="change_format_type(this)">
                                             <option value="0" {{$plan_settings->plan_settings_slot_id_format == 0 ? "selected" : "" }}>Auto</option>
@@ -81,6 +81,39 @@
                                            <label for="plan_settings_prefix_count">Count (E.G. 2 = 01 to 99, 3 = 001 to 999. Automatically increases if exceeded the count)</label>
                                             <input type="number" name="plan_settings_prefix_count" class="form-control" value="{{$plan_settings->plan_settings_prefix_count}}">     
                                         @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>Automatic use of product code</label>
+                                        <select name="plan_settings_use_item_code" class="form-control">
+                                            <option value="0" {{$plan_settings->plan_settings_use_item_code == 0 ? 'selected' : ''}}>Disable</option>
+                                            <option value="1" {{$plan_settings->plan_settings_use_item_code == 1 ? 'selected' : ''}}>Enable</option>
+                                        </select>
+                                    </td>
+                                    <td>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="40"><center>Email</center></td>
+                                </tr>
+                                <tr>
+                                    <td>Membership Code Email</td>
+                                    <td>
+                                        <select name="plan_settings_email_membership_code" class="form-control">
+                                            <option value="0" {{$plan_settings->plan_settings_email_membership_code == 0 ? 'selected' : ''}}>Disable</option>
+                                            <option value="1" {{$plan_settings->plan_settings_email_membership_code == 1 ? 'selected' : ''}}>Enable</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Product Code Email</td>
+                                    <td>
+                                        <select name="plan_settings_email_product_code" class="form-control">
+                                            <option value="0" {{$plan_settings->plan_settings_email_product_code == 0 ? 'selected' : ''}}>Disable</option>
+                                            <option value="1" {{$plan_settings->plan_settings_email_product_code == 1 ? 'selected' : ''}}>Enable</option>
+                                        </select>
                                     </td>
                                 </tr>
                             </tbody>

@@ -55,15 +55,15 @@
 								<div class="hot-deals-item-container">
 									<img class="4-3-ratio" src="{{ get_collection_first_image($collection) }}">
 									<div class="item-details">
-										<div class="item-title">{{ $collection['product']['eprod_name'] }}</div>
+										<div class="item-title"><a href="/product/view/{{ $collection['product']['eprod_id'] }}">{{ $collection['product']['eprod_name'] }}</a></div>
 										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 									</div>
-									<button class="new-add-to-cart-button btn" style="margin-top: 25px;">
+									<button type="button" onClick="location.href='/product/view/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn" style="margin-top: 25px;">
 										<table>
 											<tbody>
 												<tr>
 													<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-													<td class="text">Add to cart</td>
+													<td class="text">View More</td>
 												</tr>
 											</tbody>
 										</table>
@@ -83,7 +83,7 @@
 							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
 							<div class="col-xs-8">
 								<div class=" item-details-container">
-									<div class="item-title">{{ $collection['product']['eprod_name'] }}</div>
+									<div class="item-title"><a href="/product/view/{{ $collection['product']['eprod_id'] }}">{{ $collection['product']['eprod_name'] }}</a></div>
 									<div class="item-price">{{ get_collection_first_price($collection) }}</div>
 								</div>
 							</div>
@@ -95,14 +95,14 @@
 
 			<div class="col-md-9 prod-content">
 				<!-- FEATURED TODAY -->
-				<span class="prod-big-image"><img id="prod-big-image" src="/themes/{{ $shop_theme }}/img/2017-banner.jpg"></span>
+				<span class="prod-big-image"><img id="prod-big-image" src="{{ get_content($shop_theme_info, 'product', 'product_banner', '/themes/'. $shop_theme .'/img/2017-banner.jpg') }}"></span>
 					<div class="featured-container">
 						<div class="left-container-title">
 							<form class="sort-by" method="get">
 							<input type="hidden" name="type" value="{{ Request::input('type') }}">
 								<div class="sortby">Sort By: 
 									<select name="sort" onChange="$('.sort-by').submit();">
-										<option value="" {{ Request::input('sort') == '' ? 'selected' : '' }}>Relevance</option>
+										<!-- <option value="" {{ Request::input('sort') == '' ? 'selected' : '' }}>Relevance</option> -->
 										<option value="name_asc" {{ Request::input('sort') == 'name_asc' ? 'selected' : '' }}>Brand: A - Z</option>
 										<option value="name_desc" {{ Request::input('sort') == 'name_desc' ? 'selected' : '' }}>Brand: Z - A</option>
 										<option value="price_desc" {{ Request::input('sort') == 'price_desc' ? 'selected' : '' }}>Price: Low - High</option>
@@ -122,12 +122,12 @@
 									<div class="per-item-container">
 										<div class="image-content-1">
 											<div class="item-image-large" style="background-image: url({{ get_product_first_image($product) }})"></div>
-											<button class="new-add-to-cart-button btn" >
+											<button type="button" onClick="location.href='/product/view/{{ $product['eprod_id'] }}'" class="new-add-to-cart-button btn" >
 											<table>
 												<tbody>
 													<tr>
 														<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-														<td class="text">Add to cart</td>
+														<td class="text">View More</td>
 													</tr>
 												</tbody>
 											</table>

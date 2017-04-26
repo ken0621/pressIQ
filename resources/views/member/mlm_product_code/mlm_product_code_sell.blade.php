@@ -1,8 +1,12 @@
 
+
 @extends('member.layout')
 @section('content')
-
-<form method="post" action="/member/mlm/product_code/sell/process" class="global-submit">
+<form  role="form" id="bardcode_product_form" method="post" action="/member/mlm/product_code/sell/add_line/product_barcode/submit" class="global-submit">
+									{!! csrf_field() !!}
+</form>
+<form method="post" id="item_code_submit_form" action="/member/mlm/product_code/sell/process" class="global-submit">
+{!! csrf_field() !!}
 	<div class="panel panel-default panel-block panel-title-block" id="top">
 	    <div class="panel-heading">
 	        <div>
@@ -36,8 +40,16 @@
 							
 						</div>
 							<div class="col-md-3">
-								<label>Slot</label>
+								<label>Slot </label>
 								<input type="text" class="form-control membership_code" name="membership_code" onChange="bar_code_membership_code(this)">
+								<small style="color:gray;">Barcode or press Enter to search.</small>
+							</div>
+							<div class="col-md-3">
+									<label>Products</label>
+									<input type="text" class="form-control product_barcode" name="product_barcode" form="bardcode_product_form" onChange="bar_code_product(this)">
+									<button class="btn btn-primary barcode_product_button hide" form="bardcode_product_form">Submit</button>
+									<small style="color:gray;">Barcode or press Enter to search.</small>
+								</form>
 							</div>
 					</div>
 				</div>
@@ -61,8 +73,8 @@
 			                    <tbody>
 								    <tr>
 								    	<td colspan="3">
-								    		<a href="javascript:" class="btn btn-default popup add_line_link" link="/member/mlm/product_code/sell/add_line">Add Lines</a>
-								    		<a href="javascript:" class="btn btn-default clear_all_lines" onClick="clear_all_lines()">Clear All Lines</a>
+								    		<a href="javascript:" class="btn btn-default popup add_line_link" link="/member/mlm/product_code/sell/add_line">Add Products</a>
+								    		<a href="javascript:" class="btn btn-default clear_all_lines" onClick="clear_all_lines()">Clear All Products</a>
 								    	</td>
 								    	<td class="text-right" style="font-weight: bold;">Total</td>
 								    	<td class="text-right" style="font-weight: bold; font-size: 20px; color: green;"><span class="total_bot">PHP 00.00</span></td>
@@ -77,6 +89,7 @@
 					<div class="row">
 						<form role="form" action="/member/mlm/item/add/save" id="save_item_form" method="post">
 							{!! csrf_field() !!}
+						</form>	
 							<div class="form-group col-md-3">
 								<label for="basic-input">Message displayed on invoice</label>
 								<textarea class="form-control" name="item_code_message_on_invoice"></textarea>
@@ -101,8 +114,8 @@
 									<option value="1">YES</option>
 									<option value="0">NO</option>
 								</select>
-								<label for="basic-input">Warehouse (Inventory)</label>
-								<select class="form-control" name="warehouse_id">
+								<label for="basic-input" class="hide">Warehouse (Inventory)</label>
+								<select class="form-control hide" name="warehouse_id">
 									@foreach($warehouse as $key => $value)
 									<option value="{{$value->warehouse_id}}">{{$value->warehouse_name}}</option>
 									@endforeach
@@ -110,36 +123,46 @@
 
 								<div class="row">
 									<br>
-								  <div class="col-lg-12">
-								    <div class="input-group">
-								      <span class="input-group-addon">
-								        <input type="checkbox" name="use_gc" aria-label="Checkbox for following text input">
-								      </span>
-								      <span class="input-group-addon" >USE GC</span>
-								      <input type="text" class="form-control" aria-label="Text input with checkbox" name="gc_code">
+								<div class="col-md-12">
+								    <div class="row">
+								        <div class="form-group">
+								            <label for="inpuFname" class="payment_label" data-bind="payment-label">Choose Payment</label>
+								            <div class="input-group">
+								                <input id="payment-value"  form="item_code_submit_form" name="payment_value" type="text" value="0" class="form-control payment-value" name="text" readonly data-bind="payment-value">
+								                <div class="input-group-btn bs-dropdown-to-select-group">
+								                	<ul class="dropdown-menu" role="menu" style="">
+								                        <li data-value="1"><a href="#">Cash</a></li>
+								                        <li data-value="2"><a href="#">GC</a></li>
+								                        <li data-value="3"><a href="#">Wallet</a></li>
+								                    </ul>
+								                    <button type="button" class="btn btn-default dropdown-toggle as-is bs-dropdown-to-select" data-toggle="dropdown">
+								                        <span data-bind="bs-drp-sel-label" style="color: black !important">Payment</span>
+								                        <input type="hidden" name="payment_type_choose" form="item_code_submit_form" data-bind="bs-drp-sel-value" value="0">
+								                        <span class="caret" style="color: black !important"></span>
+								                        <span class="sr-only">Toggle Dropdown</span>
+								                    </button>
+								                    
+								                </div>
+								            </div>
+								        </div>
 								    </div>
-								  </div>
-								</div>
-								<div class="row">
-									<br>
-								  <div class="col-lg-12">
-								  <label>USE WALLET</label>
-								   <input type="checkbox"  name="use_wallet">
-								  </div>
 								</div>
 
 							</div>
-						</form>
 					</div>
 				</div>
 				
 			</div>
 		</div>
 	</div>
+
 </form>
 <div class="clear"></div>
 <div class="col-md-12 load_fix_session hide">
 	<!-- @include('sessionPrinter') -->
+</div>
+<div class="barcode_append">
+	
 </div>
 @endsection
 
@@ -147,7 +170,41 @@
 <link rel="stylesheet" href="/assets/external/loading/jquery.loading.css" />
 <script type="text/javascript" src="/assets/external/loading/jquery.loading.js"></script>
 <script type="text/javascript">
+$(document).ready(function(e){
+    $( document ).on( 'click', '.bs-dropdown-to-select-group .dropdown-menu li', function( event ) {
+    	var $target = $( event.currentTarget );
+		$target.closest('.bs-dropdown-to-select-group')
+			.find('[data-bind="bs-drp-sel-value"]').val($target.attr('data-value'))
+			.end()
+			.children('.dropdown-toggle').dropdown('toggle');
+		$target.closest('.bs-dropdown-to-select-group')
+    		.find('[data-bind="bs-drp-sel-label"]').text($target.context.textContent);
+    		var payment_value = $target.attr('data-value');
+    		console.log(payment_value);
+    		if(payment_value == 1)
+    		{
+    			$('.payment_label').text("Input Tendered Payment");
+    			$('.payment-value').val('');
+    			document.getElementById('payment-value').readOnly =false;
+    			
+    		}
+    		else if(payment_value == 2)
+    		{
+    			$('.payment_label').text("Input GC Code");
+    			$('.payment-value').val('');
+    			document.getElementById('payment-value').readOnly =false;
+    			
+    		}
+    		else if(payment_value == 3)
+    		{
+    			$('.payment_label').text("Wallet Payment (Auto Compute)");
+    			$('.payment-value').val('');
+    			document.getElementById('payment-value').readOnly =true;
 
+    		}
+		return false;
+	});
+});
 // compute();
 load_no_discount();
 chosen_select_on_change();
@@ -240,6 +297,14 @@ function submit_done(data)
         load_session();
         $('#global_modal').modal('toggle');
     }
+    else if(data.response_status == 'success_a_item_barcode')
+    {
+    	toastr.success('Barcode Success');
+    	load_session();
+    }
+
+
+
 }
 
 /* ERWIN */
@@ -363,6 +428,7 @@ function get_slot(ito)
 function bar_code_membership_code(ito)
 {
 	var membership_code = ito.value;
+	console.log(membership_code);
 	$('.customer_data').html('<center><div class="loader-16-gray"></div></center>');
 	$('.customer_data').load('/member/customer/product_repurchase/get_slot_v_membership_code/' + membership_code, function(){
 		change_slot_class();
@@ -422,6 +488,12 @@ function submit_done(data)
 		toastr.success('Success');
 		window.location = "/member/mlm/product_code/receipt?invoice_id=" + data.invoice_id;
 	}
+	else if(data.response_status == 'success_a_item_barcode')
+    {
+    	toastr.success('Barcode Success');
+    	load_session();
+    }
+
 }
 
 $(document).on("keydown", ".membership_code", function(e)
@@ -432,6 +504,41 @@ $(document).on("keydown", ".membership_code", function(e)
 		e.preventDefault();
 		bar_code_membership_code(this);
 	}
-})
+});
+$(document).on("keydown", ".class_item_serial", function(e)
+{
+	
+	if(e.which == 13)
+	{
+		e.preventDefault();
+		var serail_key = parseInt($(this).attr('serial_key')) + 1;
+		console.log(serail_key);
+		$(".class_item_serial_" + serail_key ).focus();
+		// bar_code_membership_code(this);
+	}
+});
+$(document).on("keydown", ".product_barcode", function(e)
+{
+	if(e.which == 13)
+	{
+		e.preventDefault();
+
+		bar_code_product(this);
+
+	}
+});
+
+function bar_code_product(ito)
+{
+	console.log('asd');
+	var barcode = $(ito).val();
+	$('.barcode_product_button').click();
+	// $('#bardcode_product_form').submit(function(){
+	// 	load_session();
+	// });
+	// var link = '/member/mlm/product_code/sell/add_line/product_barcode/' + barcode;
+	$(ito).val('');
+	
+}
 </script>
 @endsection

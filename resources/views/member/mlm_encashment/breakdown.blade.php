@@ -104,6 +104,50 @@
 							<hr>
 						</td>
 					</tr>
+					@if(isset($encashment_details->encashment_process))
+					<tr>
+						<td colspan="40"><center>Encashment Details</center></td>
+					</tr>
+						@if($encashment_details->encashment_type == 0)
+						<tr>
+							<td>Payment Type: </td>
+							<td>Bank Deposit</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Bank:</td>
+							<td>{{$encashment_details->bank_name}}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Branch:</td>
+							<td>{{$encashment_details->bank_account_branch}}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Name: </td>
+							<td>{{$encashment_details->bank_account_name}}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Account Number: </td>
+							<td>{{$encashment_details->bank_account_number}}</td>
+							<td></td>
+						</tr>
+						@elseif($encashment_details->encashment_type == 1)
+						<tr>
+							<td>Payment Type: </td>
+							<td>Cheque</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Name on cheque:</td>
+							<td>{{$encashment_details->cheque_name}}</td>
+							<td></td>
+						</tr>
+						@endif
+					@endif
+					
 					@if($log_final->encashment_process_type == 0)
 					<tr>
 						<td colspan="40">
@@ -117,7 +161,6 @@
 							<input type="hidden" name="encashment_process" value="{{$encashment_process->encashment_process}}">
 							<button class="btn btn-primary pull-right">Process Payout</button>
 							</form>
-							<a class="btn btn-warning pull-right" >Mail To Customer (Not Functioning)</a> 
 							<a class="btn btn-success pull-right" target="_blank" href="/member/mlm/encashment/view/pdf/{{$log_final->encashment_process}}/{{$log_final->wallet_log_slot}}" >Print PDF</a> 
 						</td>
 					</tr>
@@ -129,7 +172,6 @@
 							<label>Remarks</label>
 							<textarea class="form-control" name="wallet_log_remarks" readonly>{{$log_final->wallet_log_remarks}}</textarea>
 							<br>
-							<button class="btn btn-warning pull-right">Mail To Customer (Not Functioning)</button> 
 							<a class="btn btn-success pull-right" target="_blank" href="/member/mlm/encashment/view/pdf/{{$log_final->encashment_process}}/{{$log_final->wallet_log_slot}}" >Print PDF</a> 
 						</td>
 					</tr>

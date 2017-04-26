@@ -17,6 +17,7 @@ use App\Globals\Item;
 use App\Globals\Ecom_Product;
 use App\Globals\Category;
 use App\Globals\Utilities;
+use App\Globals\Warehouse;
 
 use Carbon\Carbon;
 use Request;
@@ -62,8 +63,18 @@ class EcommerceProductController extends Member
 		if($this->hasAccess("product-list","access_page"))
         {	
         	$warehouse_id = Ecom_Product::getWarehouseId();
-        	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0)->paginate(10);
-			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1)->paginate(10); 
+        	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0);
+			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1);
+
+			$search = Request::input('search');
+			if($search)
+			{
+				$active_product 	= $active_product->where("eprod_name","like","%$search%");
+				$inactive_product 	= $inactive_product->where("eprod_name","like","%$search%");
+			}
+
+			$active_product 	= $active_product->paginate(10);
+			$inactive_product 	= $inactive_product->paginate(10);
 
 	        $data["_product"]			= $active_product;
 	        $data["_product_archived"]	= $inactive_product;
@@ -138,7 +149,7 @@ class EcommerceProductController extends Member
 					$message["evariant_price.required"] = 'You have to set a price for product '.$item_data->item_name;
 
 					/* Custom Validation For 2 Unique Columns */
-					$item_exist = Tbl_ec_variant::product()->where("evariant_item_id", $item_id[$key])->where("eprod_shop_id", $this->getShopId())->first();
+					$item_exist = Tbl_ec_variant::product()->where("evariant_item_id", $item_id[$key])->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived",0)->first();
 					if($item_exist) 
 					{
 						$custom_validation_fails = true;
@@ -229,7 +240,7 @@ class EcommerceProductController extends Member
 		$item_id		= Request::input("evariant_item_id"); 
 		$variant_price	= Request::input("evariant_price"); 
 		$item_code		= Request::input("item_code"); 
-		
+		$item_qty		= Request::input("item_qty_refill");
 		
 		foreach($item_id as $key => $item){
 			
@@ -289,10 +300,26 @@ class EcommerceProductController extends Member
 						Tbl_variant_name::insert($insert_variant_name);
 					}
 				}
+
+				/* ITEM REFILL */
+				$this->refillItemInventory($item, $item_qty[$key]); 
 			}
 		}
 
 		return null;
+	}
+
+	public function refillItemInventory($item_id, $item_qty) 
+	{ 
+		$warehouse_id 		= Ecom_Product::getWarehouseId();
+		$warehouse_remarks 	= "Initial Quantity on Hand For Product";
+		$return_type		= "array";
+
+		$warehouse_refill_product[0]['product_id'] 	= $item_id;
+		$warehouse_refill_product[0]['quantity'] 	= $item_qty;
+
+
+		Warehouse::inventory_refill($warehouse_id, '', 0, $warehouse_remarks, $warehouse_refill_product, $return_type);
 	}
 
 	public function postSaveProductInfo()
@@ -549,7 +576,7 @@ class EcommerceProductController extends Member
 			$update_variant["evariant_item_id"] 	= Request::input("evariant_item_id");
 			$update_variant["evariant_item_label"] 	= Request::input("evariant_item_label");
 			$update_variant["evariant_description"] = Request::input("evariant_description");
-			$update_variant["evariant_price"] 		= Request::input("evariant_price");
+			$update_variant["evariant_price"] 		= convertToNumber(Request::input("evariant_price"));
 
 			Tbl_ec_variant::where("evariant_id", $variant_id)->update($update_variant);
 
@@ -644,9 +671,16 @@ class EcommerceProductController extends Member
 		}
 		$exist_variant 	= Tbl_ec_product::Variant(" • ")->where("eprod_id", $product_id)->where("evariant_id","<>",$variant_id)->where("eprod_shop_id", $this->getShopId())->first();
 
-		if(strtolower($exist_variant->variant_name) == strtolower($option_value))
+		if($exist_variant)
 		{
-			return $option_value;
+			if(strtolower($exist_variant->variant_name) == strtolower($option_value))
+			{
+				return $option_value;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{
@@ -666,7 +700,7 @@ class EcommerceProductController extends Member
 		$insertVariant['evariant_item_id']		= Request::input("evariant_item_id");
 		$insertVariant["evariant_item_label"] 	= Request::input('evariant_item_label');
 		$insertVariant["evariant_description"] 	= Request::input('evariant_description');
-		$insertVariant["evariant_price"] 		= Request::input('evariant_price');
+		$insertVariant["evariant_price"] 		= convertToNumber(Request::input('evariant_price'));
 		$insertVariant["date_created"] 			= Carbon::now();
 		$insertVariant["date_visible"] 			= Carbon::now();
 
@@ -709,10 +743,10 @@ class EcommerceProductController extends Member
 		return Redirect::back();
 	}
 
-	public function getDeletePoduct($product_id)
+	public function getDeleteProduct($product_id)
 	{
 		$update["archived"] = 1;
-		Tbl_ec_product::where("eprod_id", $product_id)->update();
+		Tbl_ec_product::where("eprod_id", $product_id)->update($update);
 
 		Request::session()->flash('success', 'Product Successfully Deleted');
 		return Redirect::to('/member/ecommerce/product/list');
@@ -728,11 +762,22 @@ class EcommerceProductController extends Member
 
 	public function postProductArchiveRestore($id)
 	{
+		$json["status"]		= "success";
+
 		if(Request::input('action') == "restore")
 		{
-			Tbl_ec_product::where("eprod_id", $id)->update(['archived' => 0]);
-			// Request::session()->flash('success', 'Product Successfully Restored');
-			$json["message"] = "Product Successfully Restored";
+			$item_exist = Tbl_ec_variant::product()->where("evariant_item_id", $id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived",0)->first();
+			if($item_exist) 
+			{
+				$json["status"]		= "error";
+				$json["message"] 	= "Item ".$item_exist->evariant_item_label." is already used in active";
+			}
+			else
+			{
+				Tbl_ec_product::where("eprod_id", $id)->update(['archived' => 0]);
+				// Request::session()->flash('success', 'Product Successfully Restored');
+				$json["message"] = "Product Successfully Restored";
+			}
 		}
 		elseif(Request::input('action') == "archive")
 		{
@@ -742,7 +787,6 @@ class EcommerceProductController extends Member
 			";
 		}
 
-		$json["status"]		= "success";
 		$josn["product_id"] = $id;
 
 		return json_encode($json);
@@ -768,5 +812,59 @@ class EcommerceProductController extends Member
 			array_push($dupe_array, $val);
 		}
 		return false;
+	}
+
+	public function getBulkEditPrice()
+	{
+		$data["_product"] = Tbl_ec_product::variant()->item()->itemDiscount()->where("tbl_ec_product.archived",0)->where("eprod_shop_id", $this->getShopId());
+
+		$search = Request::input('search');
+		if($search)
+		{
+			$data["_product"] = $data["_product"]->havingRaw("concat(eprod_name, IFNULL(variant_name, '')) like '%$search%'");
+		}
+
+		$data["_product"] = $data["_product"]->get()->toArray();
+		
+		foreach($data["_product"] as $key1=>$product)
+		{
+			$data["_product"][$key1]["product_new_name"] = $product["eprod_name"] . ($product["variant_name"] ? ' : '.$product["variant_name"] : '');
+		}
+
+		return view('member.ecommerce_product.ecom_bulk_edit_price', $data);
+	}
+
+	public function postBulkEditPrice()
+	{
+		$evariant_new_price = Request::input('evariant_new_price');
+		$evariant_id 		= Request::input('evariant_id');
+		$promo_price 		= Request::input('item_promo_price');
+		$start_date 		= Request::input('item_start_date');
+		$end_date 			= Request::input('item_end_date');
+
+		foreach($evariant_new_price as $key=>$new_price)
+		{
+			if($new_price > 0)
+			{
+				Tbl_ec_variant::where("evariant_id", $evariant_id[$key])->update(['evariant_price' => $new_price]);
+			}
+
+			if($promo_price[$key] != ''	)
+			{
+				$item_id = Tbl_ec_variant::item()->where("evariant_id", $evariant_id[$key])->pluck("item_id");
+
+				$item_info['item_id']					= $item_id;
+				$item_info['item_discount_value']		= $promo_price[$key];
+				$item_info['item_discount_date_start']	= $start_date[$key];
+				$item_info['item_discount_date_end']	= $end_date[$key];
+				Item::insert_item_discount($item_info);
+			}
+		}
+
+		Request::session()->flash('success', 'Product Price Successfully updated');
+
+		$json["status"] 	= "success";
+		$json["message"]	= "Product Price Successfully updated";
+		return json_encode($json);
 	}
 }

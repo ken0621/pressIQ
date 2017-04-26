@@ -6,7 +6,7 @@
 	</div>
 	<div class="col-md-8">
 		<div class="checkout-form">
-			<form id="check-out" method="post">
+			<form id="check-out" method="post" enctype="multipart/form-data">
 				<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
 				<div class="fieldset">
 					@if(!isset($customer))
@@ -184,7 +184,7 @@
 				<div class="fieldset">
 					<label class="col-md-4">Payment Method</label>
 					<div class="field col-md-8">
-						<select class="form-control" name="payment_method_id">
+						<select class="form-control payment-method-select" name="payment_method_id">
 							@if(count($_payment_method) != 0)
 								@foreach($_payment_method as $payment_method)
 								<option value="{{ $payment_method->method_id }}" {{ Request::old('payment_method_id') == $payment_method->method_id ? 'selected' : '' }}>{{ $payment_method->method_name }}</option>
@@ -193,6 +193,12 @@
 								<option disabled selected>No Payment Method Available</option>
 							@endif
 						</select>
+					</div>
+				</div>
+				<div class="fieldset payment-upload hide">
+					<label class="col-md-4">Upload Proof of Payment</label>	
+					<div class="field col-md-8">
+						<input type="file" name="payment_upload">
 					</div>
 				</div>
 				<div class="fieldset">
@@ -220,13 +226,29 @@
 		<div class="checkout-summary">
 			<div class="title">Order Summary</div>
 			<div class="order-summary">
-				<div class="number-in-cart">You have  in your cart.</div>
+				@if (session('fail'))
+				    <div class="alert alert-danger">
+				    	@if(is_array(session('fail')))
+				    		<ul>
+					        @foreach(session('fail') as $fail)
+				        		<li>{{ $fail }}</li>
+					        @endforeach
+					        </ul>
+					    @else
+					    	<ul style="padding: 0; margin: 0;">
+					    		<li>{{ session('fail') }}</li>
+					    	</ul>
+				        @endif
+				    </div>
+				@endif
+				<div class="number-in-cart">You have {{ count($get_cart["cart"]) }} in your cart.</div>
 				<table>
 					<thead>
 						<tr>
-							<td>Product</td>
-							<td class="text-center">Qty.</td>
-							<td class="text-right">Price</td>
+							<th>Product</th>
+							<th class="text-center">Qty.</th>
+							<th class="text-right">Price</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -234,13 +256,14 @@
 						<tr>
 							<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
 							<td class="text-center">{{ $cart["quantity"] }}</td>
-							<td class="text-right">{{ $cart["cart_product_information"]["product_price"] }}</td>
+							<td class="text-right">&#8369; {{ number_format($cart['quantity'] * $cart["cart_product_information"]["product_price"], 2) }}</td>
+							<td style="padding-left: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&variation_id={{ $cart["product_id"] }}"><i class="fa fa-close"></i></a></td>
 						</tr>
 						@endforeach
 					</tbody>
 				</table>
 				<div class="text-right total">
-					<div class="total-price">{{ $get_cart["sale_information"]["total_product_price"] }}</div>
+					<div class="total-price">&#8369; {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</div>
 					<div class="total-label">Subtotal</div>
 				</div>	
 				<!-- <div class="text-right total">
@@ -248,11 +271,11 @@
 					<div class="total-label">tax()</div>
 				</div> -->
 				<div class="text-right total">
-					<div class="total-price">{{ $get_cart["sale_information"]["total_shipping"] }}</div>
+					<div class="total-price">&#8369; {{ number_format($get_cart["sale_information"]["total_shipping"], 2) }}</div>
 					<div class="total-label">Shipping Fee</div>
 				</div>
 				<div class="text-right total ">
-					<div class="total-price supertotal">{{ $get_cart["sale_information"]["total_overall_price"] }}</div>
+					<div class="total-price supertotal">&#8369; {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</div>
 					<div class="total-label">Total</div>
 				</div>
 			</div>
@@ -264,6 +287,31 @@
 
 @section('script')
 <script type="text/javascript" src="resources/assets/rutsen/js/checkout.js"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+	if ( $('.payment-method-select').val() != 1 && $('.payment-method-select').val() != 2 ) 
+	{
+		$('.payment-upload').removeClass("hide");
+	}	
+	else
+	{
+		$('.payment-upload').addClass("hide");
+	}
+
+	$('.payment-method-select').change(function(event) 
+	{
+		if ( $(event.currentTarget).val() != 1 && $(event.currentTarget).val() != 2 ) 
+		{
+			$('.payment-upload').removeClass("hide");
+		}	
+		else
+		{
+			$('.payment-upload').addClass("hide");
+		}
+	});
+});
+</script>
 @endsection
 
 @section('css')

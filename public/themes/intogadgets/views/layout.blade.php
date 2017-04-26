@@ -26,7 +26,9 @@
 
     <link rel="stylesheet" href="resources/assets/font-awesome/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="resources/assets/remodal/src/jquery.remodal.css">
+    <link rel="stylesheet" href="resources/assets/remodal/src/remodal.css">
+
+    <link rel="stylesheet" href="resources/assets/remodal/src/remodal-default-theme.css">
 
     <link rel="stylesheet" href="resources/assets/slider/dist/slippry.css">
 
@@ -40,6 +42,17 @@
 
     @yield('css')
 
+    <style type="text/css">
+    /* Hide HTML5 Up and Down arrows. */
+    input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+     
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+    </style>
   </head>
 
   <body class="opa-hide">
@@ -123,6 +136,14 @@
                 <div class="nabigation-hover"></div>
 
                 <div class="nabigation-text">YOUWIN AFTERSALES</div>
+
+              </a>
+
+              <a href="/events" class="nabigation">
+
+                <div class="nabigation-hover"></div>
+
+                <div class="nabigation-text">EVENTS</div>
 
               </a>
 
@@ -337,7 +358,7 @@
 
                   <div class="form-group">
 
-                    <input type="text" name="search-pokus" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
+                    <input type="text" name="search" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
 
                   </div>
 
@@ -373,27 +394,25 @@
 
         </nav>
 
-        <div class="loader">
+        <div class="loader" style="z-index: 1051;">
           <span><img src="/resources/assets/frontend/img/loader.gif"></span>
         </div>
 
-        <div class="content">
+        <div class="content clearfix">
 
             @yield('content')
 
         </div>
 
-        @if(isset($ads))
-
-          @if($ads->ads_active == 1 && $ads->ads_position == 1)
+        @if(get_content($shop_theme_info, 'info', 'footer_ads'))
 
             <div class="footer-add">
 
               <div class="footer-add-wrapper">
 
-                <a href="{{$ads->ads_link}}" target="_blank">
+                <a href="{{ get_content($shop_theme_info, 'info', 'footer_ads_link') }}" target="_blank">
 
-                  <img src="{{$ads_image}}"></img>
+                  <img src="{{ get_content($shop_theme_info, 'info', 'footer_ads') }}">
 
                 </a>
 
@@ -402,8 +421,6 @@
               </div>
 
             </div>
-
-          @endif
 
         @endif
 
@@ -469,17 +486,17 @@
 
                   <div class="footer-content" style="color: white;">
 
-                      <div class="footer-text">+63 932-187-9511</div>
+                      <div class="footer-text">{{ get_content($shop_theme_info, "info", "footer_contact_number_1") }}</div>
 
-                      <div class="footer-text">+63 977-833-2264</div>
+                      <div class="footer-text">{{ get_content($shop_theme_info, "info", "footer_contact_number_2") }}</div>
 
-                      <div class="footer-text">info@intogadgets.com.ph</div>
+                      <div class="footer-text">{{ get_content($shop_theme_info, "info", "footer_email") }}</div>
 
                       <div class="footer-text">FOR TECHNICAL SUPPORT</div>
 
-                      <div class="footer-text">+63 977-839-9744</div>
+                      <div class="footer-text">{{ get_content($shop_theme_info, "info", "footer_technical_support_number_1") }}</div>
 
-                      <div class="footer-text">+63 923-188-4919</div>
+                      <div class="footer-text">{{ get_content($shop_theme_info, "info", "footer_technical_support_number_2") }}</div>
 
 
 
@@ -495,13 +512,7 @@
 
                   <div class="footer-content">
 
-                      <div class="footer-text width" style="color: white;">Receive special offers and be the 
-
-                                  first to known when new
-
-                                  products are released
-
-                      </div>
+                      <div class="footer-text width" style="color: white;">{{ get_content($shop_theme_info, "info", "newsletter_text") }}</div>
 
                       <div class="footer-newsletter">
 
@@ -531,7 +542,7 @@
 
                   <div class="footer-content">
 
-                      <a href="https://www.facebook.com/Intogadgetstore" target="_blank" class="footer-logo fb">
+                      <a href="{{ get_content($shop_theme_info, "info", "facebook_link") }}" target="_blank" class="footer-logo fb">
 
                         <span class="footer-logo-holder">
 
@@ -543,7 +554,7 @@
 
                       </a>
 
-                      <a href="https://www.twitter.com/intogadgetstore" target="_blank" class="footer-logo tt">
+                      <a href="{{ get_content($shop_theme_info, "info", "twitter_link") }}" target="_blank" class="footer-logo tt">
 
                         <span class="footer-logo-holder">
 
@@ -555,7 +566,7 @@
 
                       </a>
 
-                      <a href="https://www.instagram.com/intogadgetsPH" target="_blank" class="footer-logo gg">
+                      <a href="{{ get_content($shop_theme_info, "info", "instagram_link") }}" target="_blank" class="footer-logo gg">
 
                         <span class="footer-logo-holder">
 
@@ -575,15 +586,15 @@
 
                     <div style="display: table; table-layout: fixed; width: 100%;">
 
-                    <a class="footer-plogo" href="https://www.facebook.com/DakasiPH/" target="_blank" class="footer-plogo">
+                    <a class="footer-plogo" href="{{ get_content($shop_theme_info, "info", "dakasi_link") }}" target="_blank" class="footer-plogo">
 
-                          <img src="/resources/assets/frontend/img/dakasi-logo.png">
+                          <img src="{{ get_content($shop_theme_info, "info", "dakasi_image") }}">
 
                       </a>
 
-                      <a class="footer-plogo" href="http://primiaworks.com" target="_blank" class="footer-plogo">
+                      <a class="footer-plogo" href="{{ get_content($shop_theme_info, "info", "primia_link") }}" target="_blank" class="footer-plogo">
 
-                          <img src="/resources/assets/frontend/img/primia-logo.png">
+                          <img src="{{ get_content($shop_theme_info, "info", "primia_image") }}">
 
                       </a>
 
@@ -599,9 +610,9 @@
 
         <div class="footer-sub">
 
-          <div><img src="/resources/assets/frontend/img/brands/payment.png"></div>
+          <div><img src="{{ get_content($shop_theme_info, "info", "bank_image") }}"></div>
 
-          <div class="text">Intogadgets Inc. © Copyright 2015. All Rights Reserved.</div>
+          <div class="text">{{ get_content($shop_theme_info, "info", "copyright_text") }}</div>
 
         </div>
 
@@ -899,13 +910,13 @@
 
   <script src="resources/assets/external/bootstrap.min.js"></script>
 
-  <script src="resources/assets/remodal/src/jquery.remodal.js"></script>
+  <script src="resources/assets/remodal/src/remodal.js"></script>
 
   <script src="resources/assets/rutsen/js/lazy.js"></script>
 
   <script src="resources/assets/rutsen/js/global.js"></script>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> -->
 
   <script type="text/javascript" src="http://arrow.scrolltotop.com/arrow33.js"></script>
 
@@ -944,6 +955,28 @@
     {
       $('body').removeClass("opa-hide");
     });
+
+  jQuery(document).ready( function($) {
+   
+      // Disable scroll when focused on a number input.
+      $('form').on('focus', 'input[type=number]', function(e) {
+          $(this).on('wheel', function(e) {
+              e.preventDefault();
+          });
+      });
+   
+      // Restore scroll on number inputs.
+      $('form').on('blur', 'input[type=number]', function(e) {
+          $(this).off('wheel');
+      });
+   
+      // Disable up and down keys.
+      $('form').on('keydown', 'input[type=number]', function(e) {
+          if ( e.which == 38 || e.which == 40 )
+              e.preventDefault();
+      });  
+        
+  });
   </script>
 
   <!-- // <script src="/resources/assets/rutsen/js/subscribe.js"></script> -->

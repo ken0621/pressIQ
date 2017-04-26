@@ -92,53 +92,80 @@ class Item
     {
         return Tbl_item::where("shop_id", Item::getShopId())->where("archived", 0)->get();
     }
+
     public static function insert_item_discount($item_info)
     {
         $chck = Tbl_item_discount::where("discount_item_id",$item_info["item_id"])->first();
 
         if($chck == null)
         {
-            $insert["discount_item_id"] = $item_info["item_id"];
-            $insert["item_discount_value"] = $item_info["item_discount_value"];
-            $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
-            $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
+            if($item_info["item_discount_value"] >= 1)
+            {
+                $insert["discount_item_id"] = $item_info["item_id"];
+                $insert["item_discount_value"] = $item_info["item_discount_value"];
+                $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
+                $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
 
-            Tbl_item_discount::insert($insert);            
+                Tbl_item_discount::insert($insert);
+            }   
         }
         else
         {
-            $insert["item_discount_value"] = $item_info["item_discount_value"];
-            $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
-            $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
+            if($item_info["item_discount_value"] <= 0)
+            {
+                Tbl_item_discount::where("item_discount_id",$chck->item_discount_id)->delete();
+                Tbl_item_discount::where("item_discount_value",0)->delete();
+            }
+            else
+            {
+                $insert["item_discount_value"] = $item_info["item_discount_value"];
+                $insert["item_discount_date_start"] = date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_start"]));
+                $insert["item_discount_date_end"]  =  date("Y-m-d g:i:s",strtotime($item_info["item_discount_date_end"]));
 
-            Tbl_item_discount::where("discount_item_id",$item_info["item_id"])->update($insert);  
+                Tbl_item_discount::where("discount_item_id",$item_info["item_id"])->update($insert);
+            }
         }
     }
     public static function get_all_category_item($type = array(1,2,3,4))
     {
         $shop_id = Item::getShopId();
-        $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get();
+        $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get()->toArray();
 
         foreach($_category as $key =>$category)
         {
-            $_category[$key]->item_list   = Tbl_item::where("item_category_id",$category->type_id)->whereIn("item_type_id",$type)->get()->toArray();
-            $_category[$key]->subcategory = Item::get_item_per_sub($category->type_id, $type);
-        
+            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray();
+            foreach($_category[$key]['item_list'] as $key1=>$item_list)
+            {
+                //  //cycy
+                if($item_list['item_type_id'] == 4)
+                {
+                   $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
+                }
+                $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
+            }
+            $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }
 
-        return collect($_category)->toArray();
+        return $_category;
     }
-
     public static function get_item_per_sub($category_id, $type = array())
     {
-        $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get();
+        $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get()->toArray();
         foreach($_category as $key =>$category)
         {
-            $_category[$key]->item_list   = Tbl_item::where("item_category_id",$category->type_id)->whereIn("item_type_id",$type)->get()->toArray();
-            $_category[$key]->subcategory = Item::get_item_per_sub($category->type_id, $type);
+            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->where("archived",0)->whereIn("item_type_id",$type)->get()->toArray();
+            foreach($_category[$key]['item_list'] as $key1=>$item_list)
+            {
+                if($item_list['item_type_id'] == 4)
+                {
+                   $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
+                }
+                $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
+            }
+            $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
         }
 
-        return collect($_category)->toArray();
+        return $_category;
     } 
    
     public static function get_all_item_sir($sir_id)
@@ -171,7 +198,37 @@ class Item
 
         return collect($_category)->toArray();
     }
+    public static function get_item_bundle_price($item_id = null)
+    {
+        $price = 0;
+        $item_type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        if($item_id != null && $item_type == 4)
+        {
+            $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+            foreach ($bundle_item as $key => $value) 
+            {
+                $item_price =  Purchasing_inventory_system::get_item_price($value->bundle_item_id);
+                $um_qty = UnitMeasurement::um_qty($value->bundle_um_id);
 
+                $price += $item_price * ($um_qty * $value->bundle_qty);
+            }
+        }
+        return $price;
+    }    
+    public static function get_bundle_item_qty($item_id = null)
+    {
+        $qty = 0;
+        $item_type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        if($item_id != null && $item_type == 4)
+        {
+            $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+            foreach ($bundle_item as $key => $value) 
+            {
+                
+            }
+        }
+        return $qty;
+    }    
     public static function get_item_bundle($item_id = null)
     {
         $data = Tbl_item::where("item_type_id", 4);
@@ -246,7 +303,7 @@ class Item
                    $condition = "true";
                 }
             }
-
+            // return $get_session;
             if($condition == "false")
             {
                 $get_session[$array['item_id']] = $array;

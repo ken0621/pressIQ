@@ -11,6 +11,7 @@ use App\Models\Tbl_post_category;
 use Redirect;
 use App\Models\Tbl_post;
 use App\Models\Tbl_collection;
+use App\Globals\Category;
 
 class Page_ContentController extends Member
 {
@@ -19,6 +20,7 @@ class Page_ContentController extends Member
         $data["page"] = "Vendor List";
 		$dirs = scandir("../public/themes");
 		$data["theme_color"] = $this->user_info->shop_theme_color;
+        $data["shop_theme"] = $this->user_info->shop_theme;
 		$data["page_info"] = $string = file_get_contents("../public/themes/" . $this->user_info->shop_theme . "/page.json");
         $data["page_info"] = json_decode($string);
         if ($data["page_info"]) 
@@ -28,7 +30,6 @@ class Page_ContentController extends Member
                 foreach ($value as $keys => $values) 
                 {
                     $get = Tbl_content::where("key", $keys)->where("type", $values->type)->where("shop_id", $this->user_info->shop_id)->first();
-
                     if ($get) 
                     {
                         $data["page_info"]->$key->$keys->type = $get->type;
@@ -44,21 +45,29 @@ class Page_ContentController extends Member
 
         $data["company_info"] = collect(Tbl_content::where("shop_id", $this->user_info->shop_id)->get())->keyBy('key');
         $data["_collection"] = Tbl_collection::where("shop_id", $this->user_info->shop_id)->where("archived", 0)->where("collection_status", 1)->get();
-        
+        $data["_brand"] = Category::getUniqueCategory();
+        foreach ($data["_brand"] as $key => $value) 
+        {
+            if ($value["type_sub_level"] != 1) 
+            {
+                unset($data["_brand"][$key]);
+            }
+        }
+
         return view('member.page.page_content', $data);
     }
 
     public function postIndex()
     {
     	$info  = Request::input("info");
-   
+      
     	foreach ($info as $key => $value) 
     	{
-    		$exist = Tbl_content::where("key", $key)->where("type", $value["type"])->first();
+    		$exist = Tbl_content::where("key", $key)->where("type", $value["type"])->where("shop_id", $this->user_info->shop_id)->first();
 
     		$insert["key"]       = $key;
 
-            if ($value["type"]   == "gallery") 
+            if ($value["type"] == "gallery") 
             {
                 if (is_serialized($value["value"])) 
                 {
@@ -75,6 +84,10 @@ class Page_ContentController extends Member
                         $insert["value"] = "";
                     }
                 }   
+            }
+            elseif ($value["type"] == "brand") 
+            {
+                $insert["value"] = serialize($value["value"]);
             }
             else
             {
@@ -93,7 +106,7 @@ class Page_ContentController extends Member
 
     		if ($exist) 
     		{
-				Tbl_content::where("content_id", $exist->content_id)->update($insert);
+				Tbl_content::where("content_id", $exist->content_id)->where("shop_id", $this->user_info->shop_id)->update($insert);
     		}
     		else
     		{	
@@ -161,5 +174,216 @@ class Page_ContentController extends Member
         }
 
         return json_encode($response);
+    }
+
+    public function getMaintenance()
+    {
+        $field = Request::input("field");
+        $key   = Request::input("key");
+
+        if (isset($field) && isset($key)) 
+        {
+            $data["field"] = $field;
+            $data["key"]   = $key;
+            $content = Tbl_content::where("key", $key)->where("shop_id", $this->user_info->shop_id)->first();
+            if (isset($content->value))
+            {
+                $content = $content->value;
+            }
+            if (is_serialized($content)) 
+            {
+                $data["_content"] = unserialize($content);
+                foreach ($data["_content"] as $key => $value) 
+                {
+                    if (isset($data["_content"][$key]["key"])) 
+                    {
+                        unset($data["_content"][$key]["key"]);
+                    }
+                }
+            }
+            else
+            {
+                $data["_content"] = [];
+            }
+
+            return view("member.page.page_maintenance", $data);
+        }
+    }
+
+    public function getAddMaintenance()
+    {
+        $field = unserialize(Request::input("field"));
+        $key   = Request::input("key");
+
+        if (isset($field) && isset($key)) 
+        {
+            $data["field"] = $field;
+            $data["key"]   = $key;
+
+            return view("member.page.page_maintenance_add", $data);
+        }
+    }
+
+    public function getEditMaintenance()
+    {
+        $key   = Request::input("key");
+        $id    = Request::input("id");
+        $field = unserialize(Request::input("field"));
+
+        if (isset($key) && isset($id) && isset($field)) 
+        {
+            $content = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
+
+            $data["edit"]  = unserialize($content->value)[$id];
+            $data["field"] = $field;
+            $data["key"]   = $key;
+            $data["id"]    = $id;
+
+            return view("member.page.page_maintenance_edit", $data);
+        }
+    }
+
+    public function postSubmitMaintenance($id)
+    {
+        if ($id > -1) 
+        {
+            // Edit
+            $all = Request::except("_token");
+            $key = Request::input('key');
+            $exist = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
+            if ($exist) 
+            {
+                $content_id = $exist->content_id;
+                $get_content = $exist->value;
+
+                if (is_serialized($get_content)) 
+                {
+                    $get_content = unserialize($get_content);
+                }
+                else
+                {
+                    $get_content = [];
+                }
+
+                $get_content[$id] = $all;
+
+                $get_content = serialize($get_content);
+                Tbl_content::where('content_id', $content_id)->update(["value" => $get_content]);
+            }
+            else
+            {
+                $get_content = [];
+
+                array_push($get_content, $all);
+                $get_content = serialize($get_content);
+
+                $content_id = Tbl_content::insertGetId(["type" => "maintenance", "key" => $key, "value" => $get_content, "shop_id" => $this->user_info->shop_id]);
+            }
+            
+            $response["result"] = Tbl_content::where('content_id', $content_id)->first();
+            $response["response_status"] = "success";
+            $response["do"] = "manage";
+            $response["key"] = $key;
+
+            return json_encode($response);
+        }
+        else
+        {
+            // Add
+            $all = Request::except("_token");
+            $key = Request::input('key');
+            $exist = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
+            if ($exist) 
+            {
+                $content_id = $exist->content_id;
+                $get_content = $exist->value;
+
+                if (is_serialized($get_content)) 
+                {
+                    $get_content = unserialize($get_content);
+                }
+                else
+                {
+                    $get_content = [];
+                }
+
+                array_push($get_content, $all);
+                $get_content = serialize($get_content);
+                Tbl_content::where('content_id', $content_id)->update(["value" => $get_content]);
+            }
+            else
+            {
+                $get_content = [];
+
+                array_push($get_content, $all);
+                $get_content = serialize($get_content);
+
+                $content_id = Tbl_content::insertGetId(["type" => "maintenance", "key" => $key, "value" => $get_content, "shop_id" => $this->user_info->shop_id]);
+            }
+            
+            $response["result"] = Tbl_content::where('content_id', $content_id)->first();
+            $response["response_status"] = "success";
+            $response["do"] = "manage";
+            $response["key"] = $key;
+
+            return json_encode($response);
+        }
+    }
+
+    public function getDeleteMaintenance()
+    {
+        return view("member.page.page_maintenance_delete");
+    }
+
+    public function postDeleteMaintenance()
+    {
+        $id    = Request::input("id");
+        $key   = Request::input('key');
+        $exist = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
+        if ($exist) 
+        {
+            $content_id = $exist->content_id;
+            $get_content = unserialize($exist->value);
+       
+            unset($get_content[$id]);
+
+            $get_content = serialize($get_content);
+            Tbl_content::where('content_id', $content_id)->update(["value" => $get_content]);
+        }
+        
+        $response["result"] = Tbl_content::where('content_id', $content_id)->first();
+        $response["response_status"] = "success";
+        $response["do"] = "delete";
+        $response["key"] = $key;
+
+        return json_encode($response);
+    }
+
+    public function getMaintenanceCount()
+    {
+        $key = Request::input('key');
+        $exist = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
+        if ($exist) 
+        {
+            $content_id = $exist->content_id;
+            $get_content = $exist->value;
+
+            if (is_serialized($get_content)) 
+            {
+                $get_content = unserialize($get_content);
+            }
+            else
+            {
+                $get_content = [];
+            }
+        }
+        else
+        {
+            $get_content = [];
+        }
+
+        $count = count($get_content);
+
+        return json_encode($count);
     }
 }

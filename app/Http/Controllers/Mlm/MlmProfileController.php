@@ -10,9 +10,13 @@ use Validator;
 use App\Globals\Mlm_member;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_mlm_discount_card_log;
+use App\Models\Tbl_shop;
+use App\Models\Tbl_mlm_encashment_settings;
 use App\Globals\Cards;
 use App\Models\Tbl_mlm_slot;
 use App\Globals\Pdf_global;
+use Input;
+use File;
 class MlmProfileController extends Mlm
 {
     public function index()
@@ -21,29 +25,28 @@ class MlmProfileController extends Mlm
     	$data['country'] = DB::table('tbl_country')->get();
     	$data['customer_address'] = DB::table('tbl_customer_address')->where('customer_id', Self::$customer_id)->first();
     	$data['other_info'] = DB::table('tbl_customer_other_info')->where('customer_id', Self::$customer_id)->first();
+    	$data['cus_info'] = Mlm_member::get_customer_info(Self::$customer_id);
     	if(Self::$slot_id != null)
     	{
-    		$data['cus_info'] = Mlm_member::get_customer_info_w_slot(Self::$customer_id, Self::$slot_id);
-    		$data['card'] = $this->card(Self::$slot_id);
+    		if(Self::$shop_id == 1)
+    		{
+    			$shop_id = Self::$shop_id;
+    			$data['cus_info'] = Mlm_member::get_customer_info_w_slot(Self::$customer_id, Self::$slot_id);
+	    		$data['card'] = $this->card(Self::$slot_id);
+	    		$data['bank'] = DB::table('tbl_encashment_bank_deposit')->where('shop_id', Self::$shop_id)->where('encashment_bank_deposit_archive', 0)->get();
+	    		$data['customer_payout'] = DB::table('tbl_customer_payout')->where('customer_id', Self::$customer_id)->first();
+	    		$data['encashment_settings'] = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
 
-    		if(Request::input('pdf') == 'true')
-    		{
-    			return Pdf_global::show_image($data['card']);
-    		}
-    	}
-    	else
-    	{
-    		$data['cus_info'] = Mlm_member::get_customer_info(Self::$customer_id);
-    		if(Self::$discount_card_log_id != null)
-    		{
-    			$data['card'] = $this->card_discount(Self::$discount_card_log_id);
-    			if(Request::input('pdf') == 'true')
+	    		$data['encashment'] =  view('mlm.profile.encashment', $data);
+	    		if(Request::input('pdf') == 'true')
 	    		{
 	    			return Pdf_global::show_image($data['card']);
 	    		}
+
+	    		
+            	// dd($data);
     		}
     	}
-    	 
 
     	return view('mlm.profile.new', $data);
     }
@@ -167,6 +170,7 @@ class MlmProfileController extends Mlm
 				$update['customer_city'] = $customer_city;
 				$update['customer_zipcode'] = $customer_zipcode;
 				$update['customer_street'] = $customer_street;
+				$update['purpose'] = 'billing';
 				DB::table('tbl_customer_address')->where('customer_id', $customer_id)->update($update);
 	    	}
 	    	else
@@ -177,6 +181,7 @@ class MlmProfileController extends Mlm
 				$update['customer_city'] = $customer_city;
 				$update['customer_zipcode'] = $customer_zipcode;
 				$update['customer_street'] = $customer_street;
+				$update['purpose'] = 'billing';
 				DB::table('tbl_customer_address')->insert($update);
 	    	}
 	    	
@@ -221,5 +226,73 @@ class MlmProfileController extends Mlm
         ->first();
         // dd($card_info);
        	return Cards::discount_card($card_info);
+    }
+    public function profile_picture_upload()
+    {
+    	# code...
+    	if (Input::hasFile('profile_picture'))
+		{
+    	$shop_key = Tbl_shop::where('shop_id', Self::$shop_id)->pluck('shop_key');
+    	$shop_id = Self::$shop_id;
+    	$file               = Input::file('profile_picture');
+
+        $fileArray = array('image' => $file);
+        $rules = array(
+          'image' => 'mimes:jpeg,jpg,png,gif|required|max:1000' // max 10000kb
+        );
+        $validator = Validator::make($fileArray, $rules);
+        if ($validator->fails())
+        {
+            $data['status'] = 'warning';
+            $data['message'] = 'file size exceeded';
+            return Redirect::back();
+        }
+        // else
+        // {
+        // 	dd($validator->messages());
+        // 	return Redirect::back();
+        // }
+        $extension          = $file->getClientOriginalExtension();
+        $filename           = str_random(15).".".$extension;
+        $destinationPath    = 'uploads/mlm/profile/'.$shop_key."-".$shop_id;
+
+        if(!File::exists($destinationPath)) 
+        {
+            $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+        }
+        $upload_success    = Input::file('profile_picture')->move($destinationPath, $filename);
+        /* SAVE THE IMAGE PATH IN THE DATABASE */
+        $dis = '/uploads/mlm/profile/'.$shop_key."-".$shop_id;
+        $image_path = $dis."/".$filename;
+        $update['profile'] = $image_path;
+        Tbl_customer::where('customer_id', Self::$customer_id)->update($update);
+
+    	return Redirect::back();
+    	}
+    }
+    public function update_encashment()
+    {
+    	// return $_POST;
+    	$enchasment_settings_type = Request::input('enchasment_settings_type');
+    	if($enchasment_settings_type  == 0)
+    	{
+    		$update['customer_payout_bank_account_name'] = Request::input('customer_payout_bank_account_name');
+    		$update['customer_payout_bank_account_number'] = Request::input('customer_payout_bank_account_number');
+    		$update['customer_payout_bank_branch'] = Request::input('customer_payout_bank_branch');
+    		$update['encashment_bank_deposit_id'] = Request::input('encashment_bank_deposit_id');
+    		DB::table('tbl_customer_payout')->where('customer_id', Self::$customer_id)->update($update);	
+    		$data['status'] = 'success';
+			$data['message'] = 'Encashment Details Updated';
+    	}
+    	else if($enchasment_settings_type == 1)
+    	{
+    		$update['customer_payout_name_on_cheque'] = Request::input('customer_payout_name_on_cheque');
+    		DB::table('tbl_customer_payout')->where('customer_id', Self::$customer_id)->update($update);	
+    		$data['status'] = 'success';
+			$data['message'] = 'Encashment Details Updated';
+
+    	}
+    	# code...
+    	return json_encode($data);
     }
 }

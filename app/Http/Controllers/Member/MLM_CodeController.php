@@ -131,7 +131,9 @@ class MLM_CodeController extends Member
             $data['talbe_body']         = $this->view_all_lines();
             $data["page"]               = "Sell Membership";
             $data["_customer"]          = Tbl_customer::where("archived",0)->where('shop_id', $shop_id)->get();
-            $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get();
+            // $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get();
+            // dd($this->current_warehouse->warehouse_id);
+            $data['warehouse'][0] = $this->current_warehouse;
             return view('member.mlm_code.mlm_code_sell', $data);
         }
         else
@@ -313,8 +315,19 @@ class MLM_CodeController extends Member
         if(Request::input())
         {
             $shop_id = $this->user_info->shop_id;
-            $data    = Membership_code::add_code(Request::input(),$shop_id);
-            return json_encode($data);
+            if(isset($this->current_warehouse->warehouse_id))
+            {
+                // warehouse_id
+                $data    = Membership_code::add_code(Request::input(),$shop_id, $this->current_warehouse->warehouse_id);
+                return json_encode($data);
+            }
+            else
+            {
+                $data['warning_validator'][0] = 'Invalid Warehouse';
+                Session::flash('code_error', $data["warning_validator"]);
+                return redirect('/member/mlm/code/sell')->send();
+            }
+            
             if($data["response_status"] == "success")
             {
                 Session::flash('success', "Successfully purchased a package/s");
@@ -373,7 +386,7 @@ class MLM_CodeController extends Member
         $data["shop_contact"]    = $this->user_info->shop_contact;
         $data['company_name'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
         $data['company_email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
-        $data['company_logo'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_logo')->pluck('value');
+        $data['company_logo'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
         $subtotal                = Tbl_membership_code::where("membership_code_invoice_id",$invoice->membership_code_invoice_id)->package()->sum("membership_code_price");
         $discount_amount         = $invoice->membership_discount;
         $total                   = $subtotal - $discount_amount;

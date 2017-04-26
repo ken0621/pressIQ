@@ -1,3 +1,5 @@
+<link rel="stylesheet" type="text/css" href="/assets/member/payroll/css/timesheet.css">
+<link rel="stylesheet" type="text/css" href="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.css">
 <form class="global-submit form-horizontal" role="form" action="/member/payroll/payroll_group/modal_save_payroll_group" method="post">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">×</button>
@@ -32,7 +34,10 @@
 											<label><input type="radio" name="payroll_group_salary_computation" value="Flat Rate">Flat Rate</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_salary_computation" value="Daily" checked>Daily</label>
+											<label><input type="radio" name="payroll_group_salary_computation" value="Daily Rate" checked>Daily Rate</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_salary_computation" value="Monthly Rate" >Monthly Rate</label>
 										</div>
 									</div>
 								</div>
@@ -41,15 +46,12 @@
 								<small>Payroll Period</small>
 								<div class="panel panel-default">
 									<div class="panel-body">
+										@foreach($_period as $period)
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_period" value="Weekly">Weekly</label>
+											<label><input type="radio" name="payroll_group_period" value="{{$period->payroll_tax_period}}">{{$period->payroll_tax_period}}</label>
 										</div>
-										<div class="radio">
-											<label><input type="radio" name="payroll_group_period" value="Semi-Monthly" checked>Semi-Monthly</label>
-										</div>
-										<div class="radio">
-											<label><input type="radio" name="payroll_group_period" value="Monthly">Monthly</label>
-										</div>
+										@endforeach
+										
 									</div>
 								</div>
 							</div>
@@ -74,7 +76,7 @@
 					</div>
 					<div id="deduction-basis" class="tab-pane fade form-horizontal">
 						<div class="form-group">
-							<div class="col-md-8">
+							<div class="col-md-8"><!-- 
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<label>Periods of Basic Deduction</label>
@@ -82,7 +84,7 @@
 											<label><input type="checkbox" name="payroll_group_deduct_before_absences" value="1">Deduct before absences and lates is deducted.</label>
 										</div>
 									</div>
-								</div>
+								</div> -->
 								<div class="panel panel-default">
 									<div class="panel-body form-horizontal">
 										<div class="form-group">
@@ -178,6 +180,50 @@
 										</div>
 									</div>
 								</div>
+								<div class="panel panel-default">
+									<div class="panel-body form-horizontal">
+										<div class="form-group">
+											<label class="col-md-12">Late Deduction</label>
+										</div>
+										<div class="form-group">
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="late-category-change" type="radio" value="Base on Salary" name="payroll_late_category">Base on Salary</label>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="late-category-change" type="radio" value="Custom" name="payroll_late_category">Custom</label>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="late-category-change" type="radio" name="payroll_late_category" value="Not Deducted" checked>Not Deducted</label>
+												</div>
+											</div>
+										</div>
+										<div class="form-group display-none late-custom-form">
+											<div class="col-md-6">
+												<small>Late parameter</small>
+												<div class="input-group">
+													<input type="number" name="payroll_late_interval" class="form-control late-param-change late-param-number text-right">
+													<span class="input-group-btn" style="width: 100px">
+														<select class="form-control late-param-change late-param-select" name="payroll_late_parameter">
+															<option value="Second">Second</option>
+															<option value="Minute">Minute</option>
+															<option value="Hour">Hour</option>
+														</select>
+													</span>
+												</div>
+
+											</div>
+											<div class="col-md-6">
+												<small>Deduction for every (<span class="late-label-param">0</span>)</small>
+												<input type="number" name="payroll_late_deduction" class="form-control text-right">
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="panel panel-default">
@@ -188,6 +234,9 @@
 										</div>
 										<div class="radio">
 											<label><input type="radio" name="payroll_group_agency" value="2nd Period">2nd Period</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_agency" value="Last Period" checked>Last Period</label>
 										</div>
 										<div class="radio">
 											<label><input type="radio" name="payroll_group_agency" value="Every Period" checked>Every Period</label>
@@ -258,7 +307,6 @@
 						<div class="form-horizontal">
 							<div class="form-group">
 								<div class="col-md-8 form-horizontal">
-									
 									<div class="form-group">
 										<div class="col-md-12">
 											<div class="checkbox">
@@ -285,38 +333,66 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<div class="col-md-6">
-											<small>Grace Time Period (minutes)</small>
-											<input type="number" name="payroll_group_grace_time" class="form-control text-right">
-										</div>
-										<div class="col-md-6">
-											<small>Break (minutes)</small>
-											<input type="number" name="payroll_group_break" class="form-control text-right">
+										<div class="col-md-12">
+											<div class="checkbox">
+												<label><input type="checkbox" name="payroll_group_is_flexi_break" class="payroll_group_is_flexi_break" value="1">Flexible Break</label>
+											</div>
 										</div>
 									</div>
 									<div class="form-group">
 										<div class="col-md-12">
-											<table class="table table-bordered table-condensed">
+											<table class="table table-bordered table-condensed timesheet tbl-schedule-break">
 												<tr>
-													<td colspan="2" class="text-center">Schedule</td>
+													<td colspan="2" class="text-center">Break Schedule</td>
 												</tr>
 												<tr>
-													<td class="text-center" width="50%">Work Start</td>
-													<td class="text-center" width="50%">Work End</td>
+													<td class="text-center" width="50%">Break Start</td>
+													<td class="text-center" width="50%">Break End</td>
 												</tr>
-												<tr>
+												<tr class="editable">
 													<td class="text-center editable">
-														<input type="time" name="payroll_group_start" class="form-control">
+														<input type="text" name="payroll_group_break_start" class="text-table time-entry" >
+
 													</td>
 													<td class="text-center editable">
-														<input type="time" name="payroll_group_end" class="form-control">
+														<input type="text" name="payroll_group_break_end" class="text-table time-entry">
 													</td>
 												</tr>
 											</table>
 										</div>
 									</div>
-									
-									
+									<div class="form-group">
+										<div class="col-md-6">
+											<small>Grace Time Period (minutes)</small>
+											<input type="number" name="payroll_group_grace_time" class="form-control text-center">
+										</div>
+										<div class="col-md-6 display-none flexi-break-container">
+											<small>Flexi Break (minutes)</small>
+											<input type="number" name="payroll_group_flexi_break" class="form-control text-center">
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="col-md-12">
+											<table class="table table-bordered table-condensed timesheet">
+												<tr>
+													<td colspan="2" class="text-center">Work Schedule</td>
+												</tr>
+												<tr>
+													<td class="text-center" width="50%">Work Start</td>
+													<td class="text-center" width="50%">Work End</td>
+												</tr>
+												<tr class="editable">
+													<td class="text-center editable">
+														<input type="text" name="payroll_group_start" class="text-table time-entry" >
+
+													</td>
+													<td class="text-center editable">
+														<input type="text" name="payroll_group_end" class="text-table time-entry">
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
 								</div>
 								<div class="col-md-4">
 									<table class="table table-bordered table-condensed padding-tb-2">
@@ -349,9 +425,14 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-primary btn-custom-primary" type="Submit">Submit</button>
+		<button class="btn btn-primary btn-custom-primary" type="Submit">Save</button>
 	</div>
 </form>
+
+<!-- <script type="text/javascript" src="/assets/member/payroll/js/timesheet.js"></script> -->
+<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
+<script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
+
 <script type="text/javascript">
 	$(".restday-check").unbind("change");
 	$(".restday-check").bind("change", function () {
@@ -360,10 +441,7 @@
 		{
 			parent.prop("checked", false);
 		}
-		// else
-		// {
-			// 	parent.prop("checked", true);
-		// }
+
 	});
 	$(".extraday-check").unbind("change");
 	$(".extraday-check").bind("change", function () {
@@ -372,10 +450,7 @@
 		{
 			parent.prop("checked", false);
 		}
-		// else
-		// {
-			// 	parent.prop("checked", true);
-		// }
+
 	});
 	$(".check-flexi").unbind("change");
 	$(".check-flexi").bind("change", function(){
@@ -389,4 +464,62 @@
 			$(".select-target-hours").val("Daily");
 		}
 	});
+	$(".time-entry").timeEntry('destroy');
+	$(".time-entry").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
+	late_categoy_change_event();
+	late_param_change();
+	function late_categoy_change_event()
+	{
+		$(".late-category-change").unbind("change");
+		$(".late-category-change").bind("change", function()
+		{
+			if($(this).val() == "Custom")
+			{
+				if($(".late-custom-form").hasClass('display-none'))
+				{
+					$(".late-custom-form").removeClass("display-none");
+				}
+			}
+			else
+			{
+				if(!$(".late-custom-form").hasClass('display-none'))
+				{
+					$(".late-custom-form").addClass("display-none");
+				}
+			}
+		});
+
+		$(".payroll_group_is_flexi_break").unbind("change");
+		$(".payroll_group_is_flexi_break").bind("change", function(){
+
+			if($(this).is(":checked"))
+			{
+				$(".tbl-schedule-break").addClass("display-none");
+				$(".flexi-break-container").removeClass("display-none");
+			}
+			else
+			{
+				$(".tbl-schedule-break").removeClass("display-none");
+				$(".flexi-break-container").addClass("display-none");
+			}
+		});
+
+		$(".late-param-change").unbind("change");
+		$(".late-param-change").bind("change", function()
+		{
+			late_param_change();
+		});
+
+	}
+
+	function late_param_change()
+	{
+		var number = $('.late-param-number').val();
+		var select = $('.late-param-select').val();
+		if(number == null || number == '')
+		{
+			number = 0
+		}
+		$('.late-label-param').html(number + ' ' + select);
+	}
 </script>

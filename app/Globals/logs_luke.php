@@ -96,11 +96,100 @@ You mad bro? what are you doing here.
 			
 
 =======================TASk============================
+-tick ng name on cheque (ok) 
+--request encashment	(ok)
+---Email				
+----Discount Card		
+
+
+
+email_content_key
+email_content
+date_created
+date_updated
+archived
+email_content_subject
+
+[Email Notification] - Successful Registration Email Notification - success_register
+[Email Notification] - Reset Password Notification
+[Email Notification] - Purchase Email Notification
+[Email Notification] - E-wallet top up email notification
+[Email Notification] - E-Wallet transfer - 	e_wallet_transfer
+[Email Notification] Purchase Discount Card Notification
+[Email Notification] Online Order Email Notification
+[Email Notification] Redeem points email Notification
+[Email Notification] Discount Card Purchase - discount_card_purchase
+[Email Notification] Membership Code - membership_code_purchase
+
+
+
+Load wallet () - back end 
+No. to be loaded field ()
+Bentahan ng discount card()
+Kung load yung binebenta may number na field LOAD WALLEt ()
+after transaction mawawala yung laman
+use discount card()
+
+Check kung may serial ()
+
+kung may serial may option kung ano yung serial()
+search sa add new line
+Product code use option - kung dadaan ng product code () 
+--
 
 
 
 
 
+bar code
 
+
+street
 APP_KEY=vNYGoBAFOTzqWyeXFkYeO97Z5FIBq5SD
 
+
+
+* change label Active Customers, Inactive Customers on Customer Window to Active VIPs, Inactive VIPs –  (DONE)
+
+* Order of fields during Sign Up should be like this: Street, City, Province, ZIP Code instead of the current order – (DONE)
+
+* Number field be changed to Contact Number – (On Progress – Lukz – Registration Page) - (DONE)
+
+* Search function on adding new lines when selling products for faster viewing of Product – (DONE)
+* Previously sold item(s) should no longer appear on the new sell product page/window once previous transaction has been successful - (DONE)
+
+
+-------------------------------Urgent
+Ranking ng Marketing Plan
+Unilevel Bonus GPV Saka PV
+
+
+
+8.Reject - reason
+9. Register - slot or slot nickname
+10. Sidebar /member/register/payment yung cart/binili/shipping
+11. Payment at Delivery page magkaiba (may sidebar din)
+12. Shipping Fee sa sidebar
+7.Bulk Encashment (checbox) - kahit wala munang functionality *
+8.Reject - reason
+------
+Myphone
+------
+9. Register - slot or slot nickname
+10. Sidebar /member/register/payment yung card/binili
+11. Payment at Delivery page magkaiba (may sidebar din)
+12. Shipping Fee sa sidebar
+----------
+Done
+----------
+2.Pending - Wallet
+3.Member's area number format
+
+
+-- medyo
+7.Bulk Encashment (checbox) - kahit wala munang functionality *
+
+
+-- ok
+2.Pending - Wallet
+3.Member's area number format

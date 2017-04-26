@@ -10,10 +10,12 @@ use App\Models\Tbl_country;
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_term;
 use App\Models\Tbl_delivery_method;
+use App\Models\Tbl_vendor_item;
 
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Utilities;
+use App\Globals\Item;
 use Carbon\Carbon;
 use Request;
 use Response;
@@ -81,6 +83,11 @@ class VendorController extends Member
         {
             $data['_vendor'] = Tbl_vendor::info()->where('vendor_shop_id', $this->getShopId())
                                         ->orderBy('vendor_first_name')
+                                        ->where("tbl_vendor.archived",0)
+                                        ->paginate(5);
+            $data['_archived_vendor'] = Tbl_vendor::info()->where('vendor_shop_id', $this->getShopId())
+                                        ->orderBy('vendor_first_name')
+                                        ->where("tbl_vendor.archived",1)
                                         ->paginate(5);
 
             /* IF REQUEST TYPE IS AJAX = RETURN ONLY TABLE DATA */ 
@@ -96,11 +103,64 @@ class VendorController extends Member
             return $this->show_no_access();
         }
 	}
+    public function getTag($id)
+    {
+        $data["vendor"] = Tbl_vendor::where("vendor_id",$id)->first();
+        $type[0] = 1; 
+        $data["_item"] = Item::get_all_category_item($type);
+
+        $data["vendor_item"] = Tbl_vendor_item::item()->where("tag_vendor_id",$id)->get();
+
+
+        return view("member.vendor.vendor_tag_item",$data);
+    }
+    public function postUpdateTaggingItem()
+    {
+        $item_id = Request::input("item_id");
+        $vendor_id = Request::input("vendor_id");
+
+        foreach ($item_id as $key => $value) 
+        {
+           if($value == "")
+           {
+                unset($item_id[$key]);
+           }
+        }
+        if($item_id != null)
+        {
+            Tbl_vendor_item::where("tag_vendor_id",$vendor_id)->delete();
+            foreach ($item_id as $key => $value) 
+            {
+                $ctr = Tbl_vendor_item::where("tag_item_id",$value)->count();
+                if($ctr == 0)
+                {
+                    $ins["tag_vendor_id"] = $vendor_id; 
+                    $ins["tag_item_id"] = $value;
+
+                    Tbl_vendor_item::insert($ins);                    
+                }
+            }
+
+            $return["status"] = "success";
+        }
+        else
+        {            
+            $return["status"] = "error";
+            $return["error"] = "Please Select Item";
+        }
+
+        return json_encode($return);
+    }
 
     public function getLoadVendorTbl()
     {
         $data['_vendor'] = Tbl_vendor::info()->where('vendor_shop_id', $this->getShopId())
                                     ->orderBy('vendor_first_name')
+                                    ->where("tbl_vendor.archived",0)
+                                    ->paginate(5);
+        $data['_archived_vendor'] = Tbl_vendor::info()->where('vendor_shop_id', $this->getShopId())
+                                    ->orderBy('vendor_first_name')
+                                    ->where("tbl_vendor.archived",1)
                                     ->paginate(5);
 
         return view('member.vendor.load_vendor_tbl', $data)->render();  

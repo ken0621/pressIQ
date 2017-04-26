@@ -40,6 +40,12 @@
 			</div>
 		</div>
 		<div class="form-group">
+			<div class="col-md-6">
+				<small>Date End</small>
+				<input type="text" name="payroll_deduction_date_end" class="form-control datepicker" required value="{{$deduction->payroll_deduction_date_end != '0000-00-00' ? date('m/d/Y', strtotime($deduction->payroll_deduction_date_end)) : ''}}">
+			</div>
+		</div>
+		<div class="form-group">
 			<div class="col-md-12">
 				<small>Deduct Every</small>
 				<div class="panel panel-default">
@@ -57,7 +63,7 @@
 							</div>
 							<div class="col-md-6">
 								<div class="radio">
-									<label><input type="radio" name="payroll_deduction_period" value="Every other Period" {{$deduction->payroll_deduction_period == 'Every other Period' ? 'checked':''}}>Every other Period</label>
+									<label><input type="radio" name="payroll_deduction_period" value="Last Period" {{$deduction->payroll_deduction_period == 'Last Period' ? 'checked':''}}>Last Period</label>
 								</div>
 							</div>
 							<div class="col-md-6">
@@ -201,7 +207,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-custom-primary btn-submit" type="submit">Save</button>
+		<button class="btn btn-custom-primary btn-submit" type="submit">Update</button>
 	</div>
 </form>
 <script type="text/javascript" src="/assets/member/js/payroll/modal_create_deduction.js"></script>

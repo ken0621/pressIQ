@@ -8,7 +8,9 @@ function payrollconfiguration()
 	{
 		a_navigation_configuration_event();
 		var formdata = {_token:misc('_token')};
-		load_configuration('/member/payroll/departmentlist', "POST",".configuration-div", formdata);
+		// load_configuration('/member/payroll/departmentlist', "POST",".configuration-div", formdata);
+		$(".a-navigation-configuration").first().addClass('active');
+		load_configuration($(".a-navigation-configuration").first().attr("href"),"POST",".configuration-div", formdata);
 	}
 
 	function a_navigation_configuration_event()
@@ -18,6 +20,8 @@ function payrollconfiguration()
 		{
 			e.preventDefault();
 			var link 		= $(this).attr("href");
+			$(".a-navigation-configuration").removeClass('active');
+			$(this).addClass('active');
 			reload_configuration(link);
 		});
 	}
@@ -29,7 +33,7 @@ function payrollconfiguration()
 		load_configuration(link, "POST", target, formdata);
 	}
 
-	function load_configuration(action = "", method = "POST", target = ".configuration-div", formdata = [])
+	function load_configuration(action = "", method = "POST", target = ".configuration-div", formdata = [], toaster_str = '')
 	{
 		$(target).html(misc('loader'));
 		$.ajax({
@@ -39,7 +43,10 @@ function payrollconfiguration()
 			success : 	function(result)
 			{
 				$(target).html(result);
-				load_configuration_event();
+				if(toaster_str != '')
+				{
+					toastr.success(toaster_str);
+				}
 			},
 			error  	: 	function()
 			{
@@ -171,6 +178,11 @@ function payrollconfiguration()
 	// 	executeFunctionByName(functionName, window);
 	// }
 
+	this.load_configuration = function(action = "", method = "POST", target = "", formdata = [])
+	{
+		load_configuration(action, method, target, formdata);
+	}
+
 	this.relaod_tbl_department = function()
 	{
 		department_archived();
@@ -181,7 +193,8 @@ function payrollconfiguration()
 	{
 		jobtitle_archived();
 		jobtitle_archived(1);
-	}
+	} 
+	
 
 	this.btn_modal_button_event = function()
 	{
@@ -203,6 +216,11 @@ function payrollconfiguration()
 	{
 		reload_configuration("/member/payroll/allowance");
 	}
+
+	this.reload_leave_temp = function()
+	{
+		reload_configuration("/member/payroll/leave");
+	}
 	
 	this.reload_holiday = function()
 	{
@@ -213,6 +231,48 @@ function payrollconfiguration()
 	{
 		reload_configuration("/member/payroll/payroll_group");
 	}
+
+	this.reload_jobtitlelist = function()
+	{
+		reload_configuration("/member/payroll/jobtitlelist");
+	}
+
+	this.reload_departmentlist = function()
+	{
+		reload_configuration("/member/payroll/departmentlist");
+	}
+
+	this.reload_journal_tags = function()
+	{
+		reload_configuration("/member/payroll/payroll_jouarnal");
+	}
+
+	this.reload_journal_sel = function(id = 0)
+	{
+		$.ajax({
+			url 	: '/member/payroll/payroll_jouarnal/relaod_payroll_journal_sel',
+			type 	: 'POST',
+			data 	: 	{
+				_token:misc('_token'),
+				id:id
+			},
+			success : 	function(result)
+			{
+				$(".select-account").html(result);
+				$(".select-account").globalDropList("reload");
+				$(".select-account").val(id);
+			},
+			error 	: 	function(Err)
+			{
+				toastr.error("Error while loading the account name.");
+			}
+		});
+	}
+
+	/*this.reload_holiday_default = function()
+	{
+		reload_configuration("/member/payroll/holiday_default");
+	}*/
 	
 }
 
@@ -229,8 +289,28 @@ function executeFunctionByName(functionName, context /*, args */) {
 
 function submit_done(data)
 {
+
+	try
+	{
+		data = JSON.parse(data);
+	}
+	catch(err)
+	{
+
+	}
+
 	data.element.modal("toggle");
-	executeFunctionByName(data.function_name, window);
+
+	if(typeof data.type  !== 'undefined')
+	{
+		payrollconfiguration.reload_journal_sel(data.id);
+	}
+	else
+	{
+		console.log(data.function_name);
+		executeFunctionByName(data.function_name, window);
+	}
+	
 }
 
 function loading_done(url)

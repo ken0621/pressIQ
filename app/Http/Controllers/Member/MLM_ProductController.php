@@ -38,17 +38,33 @@ class MLM_ProductController extends Member
 	    $data['membership_active'] = Tbl_membership::getactive(0, $shop_id)->get();
 
 	    // setup product on first try : no error on leftjoin
-	    $_inventory = Tbl_item::where("shop_id",$shop_id)
-        ->where('archived', 0)->orderBy('tbl_item.item_id','asc')->paginate(20);
+	    $_inventory = Tbl_item::where("tbl_item.shop_id",$shop_id);
+
+        $item_search = Request::input('item');
+        if($item_search != null)
+        {
+            $_inventory = $_inventory->where('item_sku', 'like', '%' . $item_search . '%')
+            ->orWhere('item_name', 'like', '%' . $item_search . '%');
+        }
+        $_inventory = $_inventory->where('tbl_item.archived', 0)->orderBy('tbl_item.item_id','asc')->paginate(10);
+
 	    $this->setup_points_initial($_inventory);
 	    // end setup
 	    
-	    $_inventory  = Tbl_item::where("tbl_item.shop_id",$shop_id)
-        ->where('tbl_item.archived', 0)
-        // ->join("tbl_mlm_item_points","tbl_mlm_item_points.item_id","=","tbl_item.item_id")
-        ->orderBy('tbl_item.item_id','asc')
-        ->type()->category()
+	    $_inventory  = Tbl_item::orderBy('tbl_item.item_id','asc');
+        
+        $item_search = Request::input('item');
+        if($item_search != null)
+        {
+            $_inventory = $_inventory->where('item_sku', 'like', '%' . $item_search . '%')
+            ->orWhere('item_name', 'like', '%' . $item_search . '%');
+
+            // filter="status"
+        }
+        $_inventory = $_inventory->where('tbl_item.archived', 0)->type()->category()
+        ->where("tbl_item.shop_id",$shop_id)
         ->paginate(10);
+
 
         foreach($_inventory as $key => $value)
         {
@@ -58,7 +74,6 @@ class MLM_ProductController extends Member
             }
             $_inventory[$key]->item_points = $item_points;
         }
-        // dd($_inventory);
 	    $data['active'] = [];
 	    foreach($data['active_plan_product_repurchase'] as $key => $value)
 	    {
@@ -68,7 +83,7 @@ class MLM_ProductController extends Member
 
 	    $data['item'] 		 = $this->iteminventory($_inventory, $data['active']);
 	    $data['_inventory']  = $_inventory;	    
-        
+        $data['item_search'] = $item_search;
         return view('member.mlm_product.product', $data);
     }
 
@@ -179,9 +194,16 @@ class MLM_ProductController extends Member
             return $this->show_no_access(); 
         }
     	$shop_id = $this->user_info->shop_id;
-    	$data['items'] = Tbl_item::where("shop_id",$shop_id)
-        ->where('tbl_item.archived', 0)
-        ->orderBy('tbl_item.item_id','asc')->type()->category()->paginate(5);
+        $items = Tbl_item::where('tbl_item.archived', 0)
+        ->orderBy('tbl_item.item_id','asc');
+        $item_search = Request::input('item');
+        if($item_search != null)
+        {
+            $items = $items->where('item_sku', 'like', '%' . $item_search . '%')
+            ->orWhere('item_name', 'like', '%' . $item_search . '%');
+        }
+
+    	$data['items'] = $items->type()->category()->where("tbl_item.shop_id",$shop_id)->paginate(10);
     	$data['membership_active'] = Tbl_membership::getactive(0, $shop_id)->get();
     	$item_discount = [];
     	$item_percentage = [];

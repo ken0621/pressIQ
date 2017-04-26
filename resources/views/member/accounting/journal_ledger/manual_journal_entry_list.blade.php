@@ -37,7 +37,7 @@
                         @foreach($_journal as $journal)
                             <tr>
                                 <td>{{$journal->je_id}}</td>
-                                <td>{{$journal->je_entry_date}}</td>
+                                <td>{{dateFormat($journal->je_entry_date)}}</td>
                                 <td>{{currency("PHP",$journal->total)}}</td>
                                 <td class="text-center">
                                     <div class="btn-group">

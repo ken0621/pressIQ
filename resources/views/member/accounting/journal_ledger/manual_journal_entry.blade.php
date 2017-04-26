@@ -17,6 +17,7 @@
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save</button>
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-close">Save and Close</button>
+                <a class="panel-buttons btn btn-custom-white pull-right" href="/member/accounting/journal/list">Close</a>
                 @if(isset($inv))
                 <div class="pull-right">
                     <div class="dropdown">
@@ -46,12 +47,12 @@
                             <div class="row clearfix">
                                 <div class="col-sm-2">
                                     <label>Date</label>
-                                    <input type="text" class="datepicker form-control input-sm" name="je_entry_date" value="{{$journal->je_entry_date or date('m/d/Y')}}" />
+                                    <input type="text" class="datepicker form-control input-sm" name="je_entry_date" value="{{isset($journal->je_entry_date) ? dateFormat($journal->je_entry_date) : date('m/d/Y')}}" />
                                 </div>
-                                <div class="col-sm-4 offset-sm-6">    
-                                    <label>Invoice No:</label>
-                                    <input type="text" class="form-control input-sm" name="new_invoice_id" value="">
-                                </div>
+                                <!-- <div class="col-sm-4 offset-sm-6">    
+                                    <label>Journal No:</label>
+                                    <input type="text" class="form-control input-sm" name="" value="">
+                                </div> -->
                             </div>
                         </div>
                         
@@ -71,7 +72,7 @@
                                             </tr>
                                         </thead>
                                         <tbody class="draggable tbody-item">     
-                                            @if(isset($journal))
+                                            @if(isset($journal->line))
                                                 @foreach($journal->line as $jline)
                                                     <tr class="tr-draggable">
                                                     <td class="invoice-number-td text-right">1</td>
@@ -82,10 +83,10 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <input class="text-right money-format compute debit-amount" type="text" name="jline_debit[]" value="{{$jline->jline_type == 'debit' ? currency('',$jline->jline_amount) : ''}}"/>
+                                                        <input class="text-right money-format compute debit-amount" type="text" name="jline_debit[]" value="{{$jline->jline_type == 'Debit' ? currency('',$jline->jline_amount) : ''}}"/>
                                                     </td>
                                                     <td>
-                                                        <input class="text-right money-format compute credit-amount" type="text" name="jline_credit[]" value="{{$jline->jline_type == 'credit' ? currency('',$jline->jline_amount) : ''}}"/>
+                                                        <input class="text-right money-format compute credit-amount" type="text" name="jline_credit[]" value="{{$jline->jline_type == 'Credit' ? currency('',$jline->jline_amount) : ''}}"/>
                                                     </td>
                                                     <td>
                                                         <textarea class="textarea-expand" type="text" name="jline_description[]" >{{$jline->jline_description}}</textarea>
@@ -95,7 +96,7 @@
                                                             @include("member.load_ajax_data.load_name", ['name_id'=>$jline->jline_name_id, 'ref_name'=>$jline->jline_name_reference])
                                                             <option class="hidden" value="" />
                                                         </select>
-                                                        <input type="hidden" class="reference_name" name="jline_name_reference[]">
+                                                        <input type="hidden" class="reference_name" name="jline_name_reference[]" value="{{$jline->jline_name_reference}}">
                                                     </td>
                                                     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                 </tr>
@@ -210,6 +211,7 @@ function manual_journal()
         event_remove_tr();
         event_compute_class_change();
         event_debit_credit_change_only_one_accept();
+        event_button_action_click();
 
         action_initialize_select();
         action_lastclick_row();
@@ -346,7 +348,11 @@ function manual_journal()
         {
             width       : '100%',
             hasPopup    : 'false',
-            placeholder : 'Customer or Vendor'
+            placeholder : 'Customer or Vendor',
+            onChangeValue: function()
+            {
+                $(this).parents("td").find(".reference_name").val($(this).find("option:selected").attr("reference"));
+            }
         });
     }
 
@@ -369,13 +375,25 @@ function manual_journal()
     {
         $(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
     }
+
+    function event_button_action_click()
+    {
+        $(document).on("click","button[type='submit']", function()
+        {
+            $(".button-action").val($(this).attr("data-action"));
+        })
+    }
 }
 
 function submit_done(data)
 {
     if(data.status == 'success')
     {
-        toastr.success(data.message);
+        if(data.redirect)
+        {
+            toastr.success("Success");
+            location.href = data.redirect;
+        }
     }
     else
     {

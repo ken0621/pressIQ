@@ -309,7 +309,7 @@ class Accounting
 	/**
 	 * Create a manual journal entry for the transaction type "manual"
 	 *
-	 * @param array  	$entry 			$entry['entry_date'],
+	 * @param array  	$entry 			$entry['entry_date'], $entry['je_id'] (NULL or not null)
 	 * @param array  	$entry_data     $entry_data[0]['account_id'], $entry_data[0]['type'] , 
 	 *									$entry_data[0]['entry_amount'], $entry_data[0]['name_id'], $entry_data[0]['name_reference']
 	 * @param boolean  	$remarks   		Description of the journal entry	
@@ -323,7 +323,18 @@ class Accounting
 		$journal_entry['created_at'] 			= Carbon::now();
 		$journal_entry['je_remarks']			= $remarks;
 
-		$line_data["je_id"] 				= Tbl_journal_entry::insertGetId($journal_entry);
+		/* CHECK IF JOURNAL EXIST - IF THERE IS A JOURNAL ID */
+		if(!$entry['je_id'])
+		{
+			$line_data["je_id"] 	= Tbl_journal_entry::insertGetId($journal_entry);
+		}
+		else
+		{
+			Tbl_journal_entry_line::where("jline_je_id", $entry['je_id'])->delete();
+			Tbl_journal_entry::where("je_id", $entry['je_id'])->update($journal_entry);
+			$line_data["je_id"] = $entry['je_id'];
+		}
+
 		foreach($entry_data as $line)
 		{
 			

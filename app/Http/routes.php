@@ -757,6 +757,7 @@ Route::get('image/load_media_library', 'Member\ImageController@load_media_librar
 /* Load Ajax Data */
 Route::get('/member/accounting/load_coa','Member\ChartOfAccountController@load_coa');
 Route::get('/member/customer/load_customer','Member\CustomerController@load_customer');
+Route::get('/member/vendor/load_vendor','Member\VendorController@load_vendor');
 Route::get('/member/item/load_item','Member\ItemController@load_item');
 Route::get('/member/item/load_item_category','Member\ItemController@load_item_category');
 Route::get('/member/ecommerce/load_product_category','Member\EcommerceProductController@load_product_category');

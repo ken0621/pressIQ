@@ -373,11 +373,9 @@ function purchase_order(){
 
 	function action_load_item_info($this)
 	{
-		$parent = $this.closest(".tr-draggable");
-		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
-		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
-		$parent.find(".txt-qty").val(1).change();
 
+		$parent = $this.closest(".tr-draggable");
+		
 		if($this.find("option:selected").attr("has-um") != '')
 		{
 			$.ajax(
@@ -403,6 +401,11 @@ function purchase_order(){
 		{
 			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
 		}
+
+		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
+		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
+		$parent.find(".txt-qty").val(1).change();
+
 	}
 
 	function action_load_unit_measurement($this)

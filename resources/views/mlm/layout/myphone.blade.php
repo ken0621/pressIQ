@@ -105,7 +105,42 @@
         {
           background-color: #5C3424 !important;
         }
+
+        .timeline::before
+        {
+          left: 3.5px;
+        }
+
+        .content 
+        {
+            min-height: 250px;
+            padding: 0px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .info-box
+        {
+          border: 1px solid #D9DEE4;
+        }
+
+        .info-box-icon
+        {
+          height: 88px;
+        }
+
+        .info-box-text h2
+        {
+          font-weight: 700;
+          margin-bottom: 5px;
+        }
+
+        .info-box-content
+        {
+          margin-top: 5px;
+        }
       </style>
+      @yield("css")
    </head>
    <body class="nav-md">
       <div class="container body">
@@ -136,7 +171,7 @@
                            <li><a href="/mlm"> Home <span class="fa fa-chevron-down"></span></a></li>
                            <li><a href="/mlm/profile"> Profile <span class="fa fa-chevron-down"></span></a></li>
                            <li><a href="/mlm/notification"> Notification <span class="fa fa-chevron-down"></span></a></li>
-                           <!-- <li><a href="/mlm/repurchase"> Repurchase <span class="fa fa-chevron-down"></span></a></li> -->
+                           <li><a href="/mlm/repurchase"> Repurchase <span class="fa fa-chevron-down"></span></a></li>
                            <li>
                             <a> Genealogy <span class="fa fa-chevron-down"></span></a>
                             <ul style="display: none;">
@@ -400,6 +435,7 @@
       user experience. Slimscroll is required when using the
       fixed layout. -->
       <!-- // <script src="/resources/assets/distributor/scripts/e1d08589.bootstrap.min.js"></script> -->
+      <script src="/resources/assets/distributor/scripts/vendor/modernizr.js"></script>
       <script src="/resources/assets/distributor/scripts/9f7a46ed.proton.js"></script>
 
 

@@ -125,9 +125,11 @@ class Invoice
         {
             Invoice::postSales_receipt_payment($customer_info,$invoice_info,$overall_price,$invoice_id);
         } 
+
         /* Transaction Journal */
         $entry["reference_module"]  = "invoice";
         $entry["reference_id"]      = $invoice_id;
+        $entry["name_id"]           = $customer_info['customer_id'];
         $entry["total"]             = $overall_price;
         $entry["vatable"]           = $tax;
         $entry["discount"]          = $discount;
@@ -220,6 +222,7 @@ class Invoice
         /* Transaction Journal */
         $entry["reference_module"]  = "invoice";
         $entry["reference_id"]      = $invoice_id;
+        $entry["name_id"]           = $customer_info['customer_id'];
         $entry["total"]             = $overall_price;
         $entry["vatable"]           = $tax;
         $entry["discount"]          = $discount;
@@ -275,6 +278,8 @@ class Invoice
                 $insert_line['invline_discount_type']   = $discount_type;
                 $insert_line['invline_discount_remark'] = $item_line['discount_remark'];
                 $insert_line['taxable']                 = $item_line['taxable'];
+                $insert_line['invline_ref_name']        = $item_line['ref_name'];
+                $insert_line['invline_ref_id']          = $item_line['ref_id'];
                 $insert_line['invline_amount']          = $amount;
                 $insert_line['date_created']            = Carbon::now();
 

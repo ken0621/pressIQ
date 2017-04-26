@@ -260,8 +260,33 @@
                 <!-- <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
                 <div class="form-group">
                     <div class="col-md-12">
-                        <input type="checkbox" {{isset($data['item_purchase_from_supplier']) ? 'checked' : ''}} id="item_purchase_from_supplier" name="item_purchase_from_supplier"> I purchase this product/service from a supplier.
-                    </div>                
+                        <input type="checkbox" onclick="toggle_po('.noninventory-po', this)" id="item_purchase_from_supplier" {{$data['item_purchase_from_supplier'] != 0 ? 'checked' : '' }} name="item_purchase_from_supplier"> I purchase this product/service from a supplier.
+                    </div>
+                </div>
+                 <div class="form-group noninventory-po" style="{{$data['item_purchase_from_supplier'] != 0 ? '' :  'display: none' }}">
+                    <div class="col-md-12">
+                        <label>Purchasing information</label>
+                        <textarea class="form-control input-sm" id="item_purchasing_information" name="item_purchasing_information" placeholder="Description on purchase forms" >{{isset($data['item_purchasing_information']) ? $data['item_purchasing_information'] : ''}}</textarea>
+                    </div>                     
+                    <div class="col-md-6">  
+                        <label>Cost *</label>
+                        <div class="row">
+                            <div>
+                                <div class="col-md-8">    
+                                   <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
+                                </div>
+                                <div class="col-md-4">
+                                    per <span class="abbreviation"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>               
+                    <div class="col-md-6">
+                        <label>Expense Account *</label>
+                        <select name="item_expense_account_id" class="drop-down-coa form-control" id="item_expense_account_id" required>                                                           
+                           @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $data['item_expense_account_id']])
+                        </select>
+                    </div>
                 </div>
                <!--  <div class="col-md-12 text-right" style="padding-top:50px">
                     <button type="button" class="btn btn-custom-white " data-dismiss="modal">Back</button>
@@ -362,8 +387,36 @@
                         </div>
                     </div>
                 <!-- <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
-                <div class="col-md-12">
-                    <input type="checkbox" id="item_purchase_from_supplier" name="item_purchase_from_supplier"> I purchase this product/service from a supplier.
+                
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="checkbox" onclick="toggle_po('.service-po', this)" id="item_purchase_from_supplier"{{$data['item_purchase_from_supplier'] }}    {{$data['item_purchase_from_supplier'] != 0 ? 'checked' : 's' }} name="item_purchase_from_supplier"> I purchase this product/service from a supplier.
+                    </div>
+                </div>
+                 <div class="form-group service-po" style="{{$data['item_purchase_from_supplier'] != 0 ? '' :  'display: none' }}">
+                    <div class="col-md-12">
+                        <label>Purchasing information</label>
+                        <textarea class="form-control input-sm" id="item_purchasing_information" name="item_purchasing_information" placeholder="Description on purchase forms" >{{isset($data['item_purchasing_information']) ? $data['item_purchasing_information'] : ''}}</textarea>
+                    </div>                     
+                    <div class="col-md-6">  
+                        <label>Cost *</label>
+                        <div class="row">
+                            <div>
+                                <div class="col-md-8">    
+                                   <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
+                                </div>
+                                <div class="col-md-4">
+                                    per <span class="abbreviation"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>               
+                    <div class="col-md-6">
+                        <label>Expense Account *</label>
+                        <select name="item_expense_account_id" class="drop-down-coa form-control" id="item_expense_account_id" required>                                                           
+                           @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $data['item_expense_account_id']])
+                        </select>
+                    </div>
                 </div>
                 <!-- <div class="col-md-12 text-right" style="padding-top:50px">
                     <button type="button" class="btn btn-custom-white " data-dismiss="modal">Back</button>

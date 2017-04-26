@@ -180,9 +180,12 @@
 						<span class="scroll-button"><a href="#"><img src="/themes/{{ $shop_theme }}/img/left-button-scroll.png"></a><a href="#"><img src="/themes/{{ $shop_theme }}/img/right-button-scroll.png"></a></span>
 					</div>
 					<div class="hot-deals-item-container">
-						<img src="/themes/{{ $shop_theme }}/img/hot-deals1.jpg">
-						<div class="item-details">
-							<div class="item-title-hot-deals">Hot Deal Item Name</div>
+						<div class="image-holder">
+							<img src="/themes/{{ $shop_theme }}/img/hot-deals1.jpg">
+							<div class="item-details">
+								<div class="item-title-hot-deals">
+								Hot Deal Item Name
+								</div>
 								<div class="rating">
 									<img src="/themes/{{ $shop_theme }}/img/star-active.png">
 									<img src="/themes/{{ $shop_theme }}/img/star-active.png">
@@ -191,6 +194,7 @@
 									<img src="/themes/{{ $shop_theme }}/img/star-disable.png">
 								</div>
 							<div class="item-price">PHP 5,000.00</div>
+							</div>
 						</div>
 						<div class="add-to-cart-button-container row clearfix">
 							<div class="add-to-cart-button">

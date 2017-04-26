@@ -362,7 +362,6 @@ class Mlm_report
     }
     public static function top_earners($shop_id, $filters)
     {
-
     	$income =Tbl_mlm_slot_wallet_log::slot()
     	->customer()
     	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)

@@ -50,4 +50,15 @@ class Tbl_payroll_leave_schedule extends Model
 			  ->where('tbl_payroll_leave_schedule.payroll_leave_schedule_id', $payroll_leave_schedule_id);
 		return $query;
 	}
+
+
+	public function scopecheckemployee($query, $payroll_employee_id = 0, $payroll_schedule_leave = '0000-00-00')
+	{
+		$query->join('tbl_payroll_leave_employee','tbl_payroll_leave_employee.payroll_leave_employee_id','=','tbl_payroll_leave_schedule.payroll_leave_employee_id')
+			  ->join('tbl_payroll_leave_temp','tbl_payroll_leave_temp.payroll_leave_temp_id','=','tbl_payroll_leave_employee.payroll_leave_temp_id')
+			  ->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_leave_employee.payroll_employee_id')
+			  ->where('tbl_payroll_leave_employee.payroll_employee_id', $payroll_employee_id)
+			  ->where('tbl_payroll_leave_schedule.payroll_schedule_leave', $payroll_schedule_leave);
+		return $query;
+	}
 }

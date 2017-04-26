@@ -114,7 +114,7 @@ class Category
 	/* SEARCH CATEGORY WITH HTML*/
 	public static function search_category($search = '' , $type_category = '', $shop_id = 0)
 	{
-		$data = '';
+		$data = [];
 
 		$_category = Tbl_category::search($search, $type_category, $shop_id)->orderBy('type_name','asc')->get();;
 		

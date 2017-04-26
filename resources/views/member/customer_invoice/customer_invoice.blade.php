@@ -122,7 +122,7 @@
                                                 <th width="10"></th>
                                             </tr>
                                         </thead>
-                                        <tbody class="draggable tbody-item">
+                                        <tbody class="tbody-item">
                                             @if(isset($inv))
                                                 @foreach($_invline as $invline)
                                                     <tr class="tr-draggable tr-id-{{$invline->invline_ref_id}}">

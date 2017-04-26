@@ -8,9 +8,6 @@
 
     </td>
     <td>
-    
-        <input type="hidden" name="invline_ref_name[]" value="{{$items['is_sales_order'] == 1 ? 'sales_order' : 'estimate'}}">
-        <input type="hidden" name="invline_ref_id[]" value="{{$items['estline_est_id']}}">
         <select class="1111 form-control select-item droplist-item input-sm pull-left" name="invline_item_id[]" >
         @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $items['estline_item_id']])
         <option class="hidden" value="" />
@@ -46,10 +43,10 @@
 
 <td class="invoice-number-td text-right">
     1
-    <input type="hidden" name="invline_ref_name[]" value="">
-    <input type="hidden" name="invline_ref_id[]" value="0">
 </td>
 <td>
+    <input type="hidden" name="invline_ref_name[]" value="">
+    <input type="hidden" name="invline_ref_id[]" value="0">
 <select class="1111 form-control select-item droplist-item input-sm pull-left" name="invline_item_id[]" >
     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
     <option class="hidden" value="" />

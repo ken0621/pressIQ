@@ -21,7 +21,7 @@
 	</div>
 	<div class="col-md-6 text-right" style="float: right; width: 50%">
 		<div class="col-md-6 text-right" style="float: left; width: 50%">
-			<strong>ESTIMATE NO.</strong><br>
+			<strong>{{ucwords($transaction_type)}} NO.</strong><br>
 			<strong>DATE.</strong><br>
 			<strong>EXPIRATION DATE</strong><br>
 		</div>
@@ -91,6 +91,7 @@
 	<div class="row pull-right">
 		<h3><strong>TOTAL</strong> {{currency('PHP',$estimate->est_overall_price)}}</h3>
 	</div>
+	@if($estimate->is_sales_order == 0)
 	<table width="100%">
 		<tr>
 			<td>
@@ -101,6 +102,7 @@
 			</td>
 		</tr>
 	</table>
+	@endif
 </body>
 <style type="text/css">
 	table

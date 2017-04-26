@@ -11,7 +11,7 @@
               @endif
             @endif
           <span class="info-box-text"><h2>@if(isset($title)) {{$title}} @endif</h2></span> 
-          <span class="info-box-text" style="color: gray;"><small>@if(isset($sub)) {{$sub}} @endif</small></span>
+          <span class="info-box-text" style="color: gray;"><small>@if(isset($sub)) {!! $sub !!} @endif</small></span>
         </div>
         <!-- /.info-box-content -->
       </div>

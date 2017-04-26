@@ -120,7 +120,8 @@ class MemberController extends Controller
         $info['tin_number'] = Request::input('tin_number');
         $info['username'] = Request::input('username');
         $info['sponsor'] = Request::input('sponsor');
-
+        $info['customer_phone'] = Request::input('contact_number');
+        $info['customer_mobile'] = Request::input('contact_number');
         $rules['first_name'] = 'required';
         $rules['last_name'] = 'required';
         $rules['password'] = 'required|min:6';
@@ -310,6 +311,7 @@ class MemberController extends Controller
                 $shop_id = Self::$shop_id;
                 $register_session = Session::get('mlm_register_step_1');
                 $customer_id = Mlm_member::register_slot_insert_customer($shop_id, $register_session);
+                
 
                 $register_session_2 = Session::get('mlm_register_step_2');
                 // dd();

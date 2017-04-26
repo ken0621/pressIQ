@@ -16,6 +16,10 @@ function repurchase()
 		event_remove_item_cart();
 		bootstrap_tooltip();
 	}
+	function isEmpty( el )
+	{
+		return !$.trim(el.html())
+	}
 	function show_cart_loader()
 	{
 		$(".repurchase-cart .loader").removeClass("hide");
@@ -27,6 +31,14 @@ function repurchase()
 	function bootstrap_tooltip()
 	{
 		$('[data-toggle="tooltip"]').tooltip();
+	}
+	function load_repurchase_cart()
+	{
+		$(".repurchase-cart").load('/mlm/repurchase/cart', function()
+		{
+			remove_cart_loader();
+			event_remove_item_cart();
+		});
 	}
 	function event_add_to_cart()
 	{
@@ -54,19 +66,32 @@ function repurchase()
 		})
 		.done(function() 
 		{
-			$(".repurchase-cart .loader").removeClass("hide");
-			$(".repurchase-cart").load('/mlm/repurchase/cart', function()
-			{
-				remove_cart_loader();
-			});
+			load_repurchase_cart();
 		});
 	}
 	function event_remove_item_cart()
 	{
 		$('.remove-item-cart').unbind("click");
-		$('.remove-item-cart').bind("click", function()
+		$('.remove-item-cart').bind("click", function(e)
 		{
-			alert(123);
+			action_remove_item_cart(e.currentTarget);	
+		});
+	}
+	function action_remove_item_cart(x)
+	{
+		show_cart_loader();
+
+		var item_id = $(x).attr("item-id");
+
+		$.ajax({
+			url: '/mlm/repurchase/remove_item',
+			type: 'GET',
+			dataType: 'json',
+			data: {item_id: item_id},
+		})
+		.done(function() 
+		{
+			load_repurchase_cart();
 		});
 	}
 }

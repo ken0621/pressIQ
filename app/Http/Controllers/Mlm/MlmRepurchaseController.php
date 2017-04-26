@@ -56,6 +56,10 @@ class MlmRepurchaseController extends Mlm
 
     public function remove_item()
     {
-        
+        $item_id = Request::input("item_id");
+
+        Mlm_repurchase_member::remove_from_cart($item_id);
+
+        echo json_encode("success");
     }
 }

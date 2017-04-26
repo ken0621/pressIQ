@@ -32,6 +32,7 @@ Route::any('/mlm/profile/edit/encashment', 'Mlm\MlmProfileController@update_enca
 Route::get('/mlm/repurchase', 'Mlm\MlmRepurchaseController@index'); 
 Route::get('/mlm/repurchase/cart', 'Mlm\MlmRepurchaseController@cart'); 
 Route::get('/mlm/repurchase/add_cart', 'Mlm\MlmRepurchaseController@add_cart'); 
+Route::get('/mlm/repurchase/remove_item', 'Mlm\MlmRepurchaseController@remove_item'); 
 
 Route::get('/mlm/vouchers', 'Mlm\MlmVouchersController@index'); 
 Route::get('/mlm/cheque', 'Mlm\MlmChequeController@index'); 

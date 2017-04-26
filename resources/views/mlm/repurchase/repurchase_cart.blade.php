@@ -15,10 +15,10 @@
                 <th></th>
             </tr>
         </thead>
-        <tbody>
-            @if(isset($_cart) && count($_cart) > 0)
+        @if(isset($_cart) && count($_cart) > 0)
+            <tbody>
                 @foreach($_cart as $cart)
-                <tr>
+                <tr item-id="{{ $cart["item_id"] }}">
                     <td>{{ $cart["item_info"]->item_name }}</td>
                     <td>{{ $cart["quantity"] }}</td>
                     <td>{{ currency("PHP", $cart["item_price_single"]) }}</td>
@@ -27,9 +27,15 @@
                     <td><a class="remove-item-cart" item-id="{{ $cart["item_id"] }}" href="javascript:" style="color: red;"><i class="fa fa-times" aria-hidden="true"></i></a></td>
                 </tr>
                 @endforeach
+            </tbody>
             @else
-                GG Kay lukz
-            @endif
-        </tbody>
+            <tbody class="empty">
+                <tr>
+                    <td class="text-center" colspan="6">
+                        <h2>Your Cart is Empty</h2>
+                    </td>
+                </tr>
+            </tbody>
+        @endif
     </table>
 </div>

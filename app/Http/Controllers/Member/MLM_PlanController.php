@@ -1102,7 +1102,8 @@ class MLM_PlanController extends Member
         $data['stair_get']       = MLM_PlanController::get_stairstep($shop_id);
         $data['stair_count']     = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->count();
 	    $data['points_settings'] = Tbl_mlm_stairstep_points_settings::where("shop_id",$shop_id)->orderBy("stairstep_points_level","ASC ")->get();
-	    return view('member.mlm_plan.configure.stairstep', $data);
+	    $data['rank'] = Tbl_mlm_stairstep_settings::where('shop_id', $shop_id)->orderBy('stairstep_level', 'DESC')->take(1)->get();
+        return view('member.mlm_plan.configure.stairstep', $data);
 	}
 	public static function get_stairstep($shop_id = null)
 	{
@@ -1113,10 +1114,20 @@ class MLM_PlanController extends Member
 	       // $shop_id =  Member::$user_info->shop_id;
 	    }
 	    $data['rank'] = Tbl_mlm_stairstep_settings::where('shop_id', $shop_id)->get();
-	    $data['rank_count'] = Tbl_mlm_stairstep_settings::count() + 1;
-	    $data['rank_count_new'] = Tbl_mlm_stairstep_settings::count() + 2;
+	    $data['rank_count'] = Tbl_mlm_stairstep_settings::where('shop_id', $shop_id)->count() + 1;
+	    $data['rank_count_new'] = Tbl_mlm_stairstep_settings::where('shop_id', $shop_id)->count() + 2;
 	    return view('member.mlm_plan.configure.stairstep_get', $data);
 	}
+    public function stairstep_breakaway()
+    {
+        $update['stairstep_break_away_level'] = Request::input('stairstep_break_away_level');
+        $update['stairstep_break_away_percent'] = Request::input('stairstep_break_away_percent');
+        Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
+
+        $data['response_status'] = 'success';
+        $data['message'] = 'Breakawy Edited';
+        return json_encode($data);
+    }
 	public  function save_stairstep()
 	{
 	    $validate['stairstep_level'] = Request::input('stairstep_level');

@@ -123,16 +123,20 @@
                                             </tr>
                                         </thead>
                                         <tbody class="draggable tbody-item">
-                                                @include("member.load_ajax_data.load_est_session_item",['_session_item' => Session::get('est_item')])
                                             @if(isset($inv))
                                                 @foreach($_invline as $invline)
-                                                    <tr class="tr-draggable">
+                                                    <tr class="tr-draggable tr-id-{{$invline->invline_ref_id}}">
                                                         <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
                                                         <td><input type="text" class="for-datepicker" name="invline_service_date[]" value="{{$invline->invline_service_date}}" /></td>
 
-                                                        <td class="invoice-number-td text-right">1</td>
+                                                        <td class="invoice-number-td text-right">
+                                                            1
+                                                        </td>
                                                         <td>
+
+                                                            <input type="hidden" name="invline_ref_name[]" value="{{$invline->invline_ref_name}}">
+                                                            <input type="hidden" name="invline_ref_id[]" value="{{$invline->invline_ref_id}}">
                                                             <select class="form-control select-item droplist-item input-sm pull-left {{$invline->invline_item_id}}" name="invline_item_id[]" required>
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $invline->invline_item_id])
                                                             </select>
@@ -156,17 +160,24 @@
                                                             <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="{{$invline->taxable}}" >
                                                             <input type="checkbox" name="" class="taxable-check compute" {{$invline->taxable == 1 ? 'checked' : ''}}>
                                                         </td>
-                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                        <td tr_id="{{$invline->invline_ref_id}}" linked_in="{{$invline->invline_ref_name}}" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                     </tr>
                                                 @endforeach
-                                            @else                                
-                                                <tr class="tr-draggable">
+                                            @endif                             
+                                        </tbody>
+                                        <tbody class="draggable tbody-item estimate-tbl">
+                                                @include("member.load_ajax_data.load_est_session_item")  
+                                                 <tr class="tr-draggable">
                                                     <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
 
                                                     <td><input type="text" class="for-datepicker" name="invline_service_date[]"/></td>
 
-                                                    <td class="invoice-number-td text-right">1</td>
+                                                    <td class="invoice-number-td text-right">
+                                                        1
+                                                    </td>
                                                     <td>
+                                                        <input type="hidden" name="invline_ref_name[]" value="">
+                                                        <input type="hidden" name="invline_ref_id[]" value="0">
                                                         <select class="1111 form-control select-item droplist-item input-sm pull-left" name="invline_item_id[]" >
                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             <option class="hidden" value="" />
@@ -185,32 +196,6 @@
                                                     </td>
                                                     <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                 </tr>
-                                                    
-                                                <tr class="tr-draggable">
-                                                    <td class="text-center cursor-move move" ><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-                                                    <td><input type="text" class="datepicker" name="invline_service_date[]"/></td>
-                                                    <td class="invoice-number-td text-right">2</td>
-                                                    <td>
-                                                        <select class="22222 form-control select-item droplist-item input-sm pull-left" name="invline_item_id[]" >
-                                                            @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                                            <option class="hidden" value="" />
-                                                        </select>
-                                                    </td>
-                                                    <td><textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea></td>
-                                                    <td><select class="3333 droplist-um select-um" name="invline_um[]"><option class="hidden" value="" /></select></td>
-                                                    <td><input class="text-center number-input txt-qty compute" type="text" name="invline_qty[]"/></td>
-                                                    <td><input class="text-right number-input txt-rate compute" type="text" name="invline_rate[]"/></td>
-                                                    <td><input class="text-right txt-discount compute" type="text" name="invline_discount[]"/></td>
-                                                    <td><input class="text-right number-input" type="text" name="invline_discount_remark[]"/></td>
-                                                    <td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]"/></td>
-                                                    <td class="text-center">
-                                                        <input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
-                                                        <input type="checkbox" name="" class="taxable-check compute" value="checked">
-                                                    </td>
-                                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                </tr>
-                                            @endif
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -486,8 +471,12 @@
         <tr class="tr-draggable">
             <td class="text-center cursor-move move" ><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
             <td><input type="text" class="for-datepicker"  name="invline_service_date[]"/></td>
-            <td class="invoice-number-td text-right">2</td>
+            <td class="invoice-number-td text-right">
+                2
+            </td>
             <td>
+                <input type="hidden" name="invline_ref_name[]" value="">
+                <input type="hidden" name="invline_ref_id[]" value="0">
                 <select class="form-control select-item input-sm pull-left" name="invline_item_id[]">
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                     <option class="hidden" value="" />

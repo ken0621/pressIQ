@@ -1,9 +1,16 @@
-@foreach($_session_item as $items)
-<tr class="tr-draggable session-item">
+@if(count(Session::get('est_item')) > 0)
+    @foreach(Session::get('est_item') as $items)
+    <tr class="tr-draggable session-item tr-id-{{$items['estline_est_id']}}">
     <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
     <td><input type="text" class="for-datepicker" name="invline_service_date[]" value="{{$items['estline_service_date']}}" /></td>
-    <td class="invoice-number-td text-right">1</td>
+    <td class="invoice-number-td text-right">
+        1
+
+    </td>
     <td>
+    
+        <input type="hidden" name="invline_ref_name[]" value="{{$items['is_sales_order'] == 1 ? 'sales_order' : 'estimate'}}">
+        <input type="hidden" name="invline_ref_id[]" value="{{$items['estline_est_id']}}">
         <select class="1111 form-control select-item droplist-item input-sm pull-left" name="invline_item_id[]" >
         @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $items['estline_item_id']])
         <option class="hidden" value="" />
@@ -28,6 +35,36 @@
         <input type="hidden" class="invline_taxable" {{$items['taxable'] == 1 ? 'checked' : ''}} name="invline_taxable[]" value="" >
         <input type="checkbox" name="" class="taxable-check compute" value="checked">
     </td>
-    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+    <td tr_id="{{$items['estline_est_id']}}" linked_in="no" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+    </tr>
+    @endforeach
+@endif
+<tr class="tr-draggable">
+<td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+
+<td><input type="text" class="for-datepicker" name="invline_service_date[]"/></td>
+
+<td class="invoice-number-td text-right">
+    1
+    <input type="hidden" name="invline_ref_name[]" value="">
+    <input type="hidden" name="invline_ref_id[]" value="0">
+</td>
+<td>
+<select class="1111 form-control select-item droplist-item input-sm pull-left" name="invline_item_id[]" >
+    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+    <option class="hidden" value="" />
+</select>
+</td>
+<td><textarea class="textarea-expand txt-desc" name="invline_description[]"></textarea></td>
+<td><select class="2222 droplist-um select-um" name="invline_um[]"><option class="hidden" value="" /></select></td>
+<td><input class="text-center number-input txt-qty compute" type="text" name="invline_qty[]"/></td>
+<td><input class="text-right number-input txt-rate compute" type="text" name="invline_rate[]"/></td>
+<td><input class="text-right txt-discount compute" type="text" name="invline_discount[]"/></td>
+<td><textarea class="textarea-expand" type="text" name="invline_discount_remark[]" ></textarea></td>
+<td><input class="text-right number-input txt-amount" type="text" name="invline_amount[]"/></td>
+<td class="text-center">
+<input type="hidden" class="invline_taxable" name="invline_taxable[]" value="" >
+<input type="checkbox" name="" class="taxable-check compute" value="checked">
+</td>
+<td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
 </tr>
-@endforeach

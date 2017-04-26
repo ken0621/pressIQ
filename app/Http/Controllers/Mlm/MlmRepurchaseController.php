@@ -26,14 +26,12 @@ class MlmRepurchaseController extends Mlm
     {
     	$data["_item"] = Mlm_repurchase_member::get_all_items(Self::$shop_id, Self::$slot_id);
         $data["cart"] = $this->cart();
-
     	return view('mlm.repurchase.repurchase', $data);
     }
 
     public function cart()
     {
         $data["_cart"] = Mlm_repurchase_member::get_item_cart();
-
         return view('mlm.repurchase.repurchase_cart', $data);
     }
 

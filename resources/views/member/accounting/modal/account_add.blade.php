@@ -53,7 +53,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="account_open_balance">Balance</label>
-                            <input type="number" class="form-control" name="account_open_balance" id="account_open_balance" required>
+                            <input type="number" value="0" class="form-control" name="account_open_balance" id="account_open_balance" required>
                         </div>
                     </div>
                     <div class="col-md-6">

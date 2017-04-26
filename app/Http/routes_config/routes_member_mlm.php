@@ -79,6 +79,7 @@ Route::any('/member/mlm/plan/indirect/edit/settings/addlevel/save', 'Member\MLM_
 
 /* start stairstep PLAN */
 Route::any('/member/mlm/plan/stairstep/get', 'Member\MLM_PlanController@get_stairstep');//Luke
+Route::any('/member/mlm/plan/stairstep/set/breakaway', 'Member\MLM_PlanController@stairstep_breakaway');//Luke
 Route::any('/member/mlm/plan/stairstep/save', 'Member\MLM_PlanController@save_stairstep');//Luke
 Route::any('/member/mlm/plan/stairstep/edit/save', 'Member\MLM_PlanController@edit_save_stairstep');//Luke
 Route::any('/member/mlm/plan/stairstep/edit/save_level', 'Member\MLM_PlanController@save_stairstep_level');//Erwin

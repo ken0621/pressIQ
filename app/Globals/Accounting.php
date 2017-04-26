@@ -32,7 +32,7 @@ class Accounting
 	 * @param string  	$filter 	(all, active, inactive)
 	 * @param integer  	$parent_id  Id of the Chart of Accoutn where will it start
 	 * @param array  	$type      	Filter of type of Chart of Account (eg: Accounts Payable)
-	 * @param boolean  	$balance    If it will show total balance of each account (true, false)
+	 * @param boolean  	$balance    If it will show total balance of each account (true, false) (CURRENTLY NOT WORKING)
 	 */
 	public static function getAllAccount($filter = 'all', $parent_id = null, $type = null, $balance = false)
 	{
@@ -52,7 +52,6 @@ class Accounting
 		//dd($result);
 		return $result;
 	}
-
 	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type)
 	{
 		$query = Tbl_chart_of_account::accountInfo($shop)->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel);
@@ -124,53 +123,12 @@ class Accounting
 		dd($result);
 	}
 
-	public static function insertJournalEntry()
-	{
-		$shop_id = Accounting::getShopId();
-
-		$journal_entry['je_shop_id'] 			= $shop_id;
-		$journal_entry['je_reference_module'] 	= $reference_module;
-		$journal_entry['je_reference_id'] 		= $reference_id;
-		$journal_entry['je_entry_date'] 		= carbon::now();
-		$journal_entry['je_remarks']			= $remarks;
-
-		$rules['je_reference_module']			= 'required';
-		$rules['je_reference_id']				= 'required';
-
-		$validator = Validator::make($journal_entry, $rules);
-
-		if (!$validator->passes())
-		{
-			$json['status'] 		= 'error';
-			$json['status_message']	= $validator->errors()->all();
-			return json_encode($json);
-		}
-
-		$je_id = Tbl_journal_entry::insertGetId($journal_entry);
-
-		foreach($entry_data as $key=>$line)
-		{
-			$journal_line['jline_je_id']		= $je_id;
-			$journal_line['jline_item_id'] 		= $line["item_id"];
-			$journal_line['jline_account_id'] 	= $line["account_id"];
-			$journal_line['jline_type'] 		= $line["entry_type"];
-			$journal_line['jline_amount'] 		= $line["entry_amount"];
-			$journal_line['jline_description'] 	= $line["entry_description"];
-
-			Tbl_journal_entry_line::insert($journal_line);
-		}
-
-		return $je_id;
-		// json['status'] = 'success';
-		// return json_encode($json);
-	}
-
 	/**
 	 * Create a journal entry for the transaction 
 	 *
-	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["total"] , 
+	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["name_id"], $entry["total"] , 
 	 *									$entry["vatable"] , $entry["discount"] , $entry["ewt"]
-	 * @param array  	$entry_date     $entry_data[0]['item_id'] , $entry_data[0]['entry_qty'] , $entry_data[0]['vatable']
+	 * @param array  	$entry_data     $entry_data[0]['item_id'] , $entry_data[0]['entry_qty'] , $entry_data[0]['vatable']
 	 *									$entry_data[0]['discount'] , $entry_data[0]['entry_amount']
 	 * @param boolean  	$remarks   		Description of the journal entry	
 	 */
@@ -192,12 +150,6 @@ class Accounting
 			$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
 		}
 		/* END */
-
-		/* GETTING CHART OF ACCOUNTS THAT TAGGED ON THE ITEM */
-		$account_asset 		= Tbl_item::where("item_id", 39)->pluck("item_asset_account_id");   //Inventory 
-		$account_income 	= Tbl_item::where("item_id", 39)->pluck("item_income_account_id");  //Sales
-		$account_expense 	= Tbl_item::where("item_id", 39)->pluck("item_expense_account_id"); //Cost of Good Sold
-
 
 		/* INSERT JOURNAL ENTRY */
 		$journal_entry['je_shop_id'] 			= Accounting::getShopId();
@@ -221,7 +173,9 @@ class Accounting
 			$line_data["je_id"] = $exist_journal->je_id;
 		}
 
-		$line_data["item_id"]	= '';
+		$line_data["item_id"]				= '';
+		$line_data["jline_name_reference"] 	= Accounting::checkTransactionName($entry["reference_module"]);
+		$line_data["jline_name_id"]			= $entry["name_id"];
 
 		/* RECIVABLE OR PAYABLE */
 		if(Accounting::checkReceivable($entry["reference_module"]))
@@ -298,8 +252,17 @@ class Accounting
 			$item = Tbl_item::where("item_id", $entry_line["item_id"])->first();
 			$line_data["item_id"] = $entry_line["item_id"];
 
+			/* GETTING CHART OF ACCOUNTS THAT TAGGED ON THE ITEM */
+			$account_asset 		= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_asset_account_id");   //Inventory 
+			$account_income 	= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_income_account_id");  //Sales
+			$account_expense 	= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_expense_account_id"); //Cost of Good Sold
+
 			switch($entry["reference_module"])
 			{
+				case "estimate":
+					break;
+				case "sales-order":
+					break;
 				case "invoice":
 					/* INCOME ACCOUNT */
 					$line_data["entry_amount"]	= $entry_line["entry_amount"];
@@ -322,12 +285,15 @@ class Accounting
 						Accounting::insertJournalLine($line_data);
 					}
 					break;
-
-				case "purchase-order":
-					break;
 				case "sales-receipt":
 					break;
+				case "receive-payment":
+					break;
+				case "purchase-order":
+					break;
 				case "bill":
+					break;
+				case "bills-payment":
 					break;
 				case "credit-memo":
 					break;
@@ -339,14 +305,63 @@ class Accounting
 
 		return $line_data["je_id"];
 	}
+
+	/**
+	 * Create a manual journal entry for the transaction type "manual"
+	 *
+	 * @param array  	$entry 			$entry['entry_date'], $entry['je_id'] (NULL or not null)
+	 * @param array  	$entry_data     $entry_data[0]['account_id'], $entry_data[0]['type'] , 
+	 *									$entry_data[0]['entry_amount'], $entry_data[0]['name_id'], $entry_data[0]['name_reference']
+	 * @param boolean  	$remarks   		Description of the journal entry	
+	 */
+	public static function postManualJournalEntry($entry, $entry_data, $remarks = '')
+	{
+		/* INSERT JOURNAL ENTRY */
+		$journal_entry['je_shop_id'] 			= Accounting::getShopId();
+		$journal_entry['je_reference_module'] 	= "journal-entry";
+		$journal_entry['je_entry_date'] 		= $entry['entry_date'];
+		$journal_entry['created_at'] 			= Carbon::now();
+		$journal_entry['je_remarks']			= $remarks;
+
+		/* CHECK IF JOURNAL EXIST - IF THERE IS A JOURNAL ID */
+		if(!$entry['je_id'])
+		{
+			$line_data["je_id"] 	= Tbl_journal_entry::insertGetId($journal_entry);
+		}
+		else
+		{
+			Tbl_journal_entry_line::where("jline_je_id", $entry['je_id'])->delete();
+			Tbl_journal_entry::where("je_id", $entry['je_id'])->update($journal_entry);
+			$line_data["je_id"] = $entry['je_id'];
+		}
+
+		foreach($entry_data as $line)
+		{
+			
+			$line_data["jline_name_id"]			= $line["name_id"];
+			$line_data["jline_name_reference"]	= $line["name_reference"];
+			$line_data["item_id"]				= 0;
+			$line_data["account_id"]			= $line["account_id"];
+			$line_data["entry_type"]			= $line["type"];
+			$line_data["entry_amount"]			= $line["entry_amount"];
+
+			Accounting::insertJournalLine($line_data);
+		}
+
+		return $line_data["je_id"];
+	}
+
 	public static function insertJournalLine($line)
 	{
-		$journal_line['jline_je_id']		= $line["je_id"];
-		$journal_line['jline_item_id'] 		= $line["item_id"];
-		$journal_line['jline_account_id'] 	= $line["account_id"];
-		$journal_line['jline_type'] 		= $line["entry_type"];
-		$journal_line['jline_amount'] 		= $line["entry_amount"];
-		$journal_line['jline_description'] 	= isset($line["entry_description"]) ? $line["entry_description"] : '';
+		$journal_line['jline_je_id']			= $line["je_id"];
+		$journal_line['jline_name_id']			= $line["jline_name_id"];
+		$journal_line['jline_name_reference']	= $line["jline_name_reference"];
+		$journal_line['jline_item_id'] 			= $line["item_id"];
+		$journal_line['jline_account_id'] 		= $line["account_id"];
+		$journal_line['jline_type'] 			= $line["entry_type"];
+		$journal_line['jline_amount'] 			= $line["entry_amount"];
+		$journal_line['jline_description'] 		= isset($line["entry_description"]) ? $line["entry_description"] : '';
+		$journal_line["created_at"]				= Carbon::now();
 
 		Tbl_journal_entry_line::insert($journal_line);
 	}
@@ -399,7 +414,7 @@ class Accounting
 	}
 
 	/**
-	 * Check what table reference
+	 * Check what table reference and type ( CURRENTLY FUNCTION NOT IN USE! )
 	 *
 	 * @param 	string  	$type 		Type of a transaction
 	 * @return 	array[2] 	$table_name | id_name
@@ -414,7 +429,6 @@ class Accounting
 				$data["table_name_reference"]	= 'Tbl_customer';
 				$data["name_id"]				= 'customer_id';
 				break;
-
 			case 'purchase_order':
 				$data["table_txn_reference"] 	= 'Tbl_purchase_order';
 				$data["txn_id"]					= 'je_id';			
@@ -428,6 +442,50 @@ class Accounting
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Check transaction whether it is customer or vendor type
+	 *
+	 * @param 	string  	$type 		Type of a transaction
+	 * @return 	string 		customer or vendor
+	 */
+	public static function checkTransactionName($type)
+	{
+		$customer 	= 'customer';
+		$vendor 	= 'vendor';
+		switch($type)
+		{
+			case 'estimate':
+				return $customer;
+				break;
+			case 'sales-order':
+				return $customer;
+				break;
+			case 'invoice':
+				return $customer;
+				break;
+			case 'credit-memo':
+				return $customer;
+				break;
+			case 'sales-receipt':
+				return $customer;
+				break;
+			case 'receive-payment':
+				return $customer;
+				break;
+			case 'purchase-order':
+				return $vendor;
+				break;
+			case 'bill':
+				return $vendor;
+				break;
+			case 'bill-payment':
+				return $vendor;
+				break;
+			default:
+				$data = null;
+		}
 	}
 
 	/**

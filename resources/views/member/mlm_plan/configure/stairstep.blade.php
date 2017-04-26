@@ -88,6 +88,52 @@
         </div>
     </div>
 </div>
+
+<div class="panel panel-default panel-block panel-title-block panel-gray ">
+    <div class="tab-content">
+        <div id="all-orders" class="tab-pane fade in active">
+            <div class="table-responsive">
+                <table class="table table-condensed">
+                    <thead style="text-transform: uppercase">
+                        <tr><th colspan="3"><center>Breakaway</center></th></tr>
+                    </thead>
+                    <tbody>
+                        @foreach($rank as $key => $value)
+                            <tr>
+                                <td colspan="4">
+                                    <form class="global-submit" method="post" action="/member/mlm/plan/stairstep/set/breakaway">
+                                    {!! csrf_field() !!}
+                                    <input type="hidden" name="stairstep_id" value="{{$value->stairstep_id}}">
+                                    <div class="col-md-2">
+                                        <label>Rank</label>
+                                        <input type="text" class="form-control" value="{{$value->stairstep_name}}" readonly>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Rank Level</label>
+                                        <input type="text" class="form-control" value="{{$value->stairstep_level}}" readonly>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Levels Up With Same Rank</label>
+                                        <input type="text" class="form-control" value="{{$value->stairstep_break_away_level}}" name="stairstep_break_away_level">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Break Away Percent</label>
+                                        <input type="text" class="form-control" value="{{$value->stairstep_break_away_percent}}" name="stairstep_break_away_percent">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Save</label><br>
+                                        <button class="btn btn-primary">Submit</button>
+                                    </div>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table> 
+            </div>  
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('script')

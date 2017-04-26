@@ -466,19 +466,19 @@ function submit_done_customer(result)
     $(".droplist-customer").load("/member/customer/load_customer", function()
     {                
          $(".droplist-customer").globalDropList("reload");
-         $(".droplist-customer").val(data.id).change();          
+         $(".droplist-customer").val(result.id).change();          
     });
-    data.element.modal("hide");
 }
+
 
 /* AFTER ADDING AN  ITEM */
 function submit_done_item(data)
 {
 	toastr.success("Success");
     $(".tbody-item .select-item").load("/member/item/load_item_category", function()
-    {                
-         $(".tbody-item .select-item").globalDropList("reload"); 
-         item_selected.val(data.item_id).change();          
+    {
+        $(".tbody-item .select-item").globalDropList("reload");
+		item_selected.val(data.item_id).change();
     });
     data.element.modal("hide");
 }

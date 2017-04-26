@@ -515,6 +515,7 @@ class CustomerController extends Member
             $data['customer_info'] = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')->where('tbl_customer.customer_id',$customer_id)->first();
             $data['customer_address'] = Tbl_customer_address::where('customer_id',$customer_id)->get();
             $data['message'] = 'success';
+            $data['id'] = $customer_id;
 
             $customer_data = Tbl_customer::where("customer_id",$customer_id)->first()->toArray();
             AuditTrail::record_logs("Added","customer",$customer_id,"",serialize($customer_data));

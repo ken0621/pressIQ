@@ -290,6 +290,7 @@ class Invoice
                 $entry_data[$key]['vatable']       = 0;
                 $entry_data[$key]['discount']      = $discount;
                 $entry_data[$key]['entry_amount']  = $amount;
+                
             }
         }
 

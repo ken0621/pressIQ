@@ -9,24 +9,17 @@
 				<div class="panel panel-default background-white">
 					<div class="panel-body ">
 						<div class="form-group">
-							<div class="col-md-6">
-								<small>Paper width (cm)</small>
-								<input type="number" name="" placeholder="0" min="1" class="form-control text-right paper-width" step="any">
-							</div>
-							<div class="col-md-6">
-								<small>Paper height (cm)</small>
-								<input type="number" name="" placeholder="0" min="1" class="form-control text-right paper-height" step="any">
-							</div>
-						</div>
-						<!-- <div class="form-group">
 							<div class="col-md-12">
-								<small>Paper orientation</small>
-								<select class="form-control paper-orientation">
-									<option value="Landscape">Landscape</option>
-									<option value="Portrait">Portrait</option>
+								<small>Paper Size</small>
+								<select class="form-control drop-down-paper-size">
+									<option value="">Select Paper Size</option>
+									@foreach($_paper as $paper)
+									<option value="{{$paper->payroll_paper_sizes_id}}">{{$paper->paper_size_name.' ( '.$paper->paper_size_width.' cm x '. $paper->paper_size_width. ' cm )'}}</option>
+									@endforeach
 								</select>
 							</div>
-						</div> -->
+						</div>
+						
 						<div class="form-group">
 							<div class="col-md-12">
 								<small>Payslip width (%)</small>

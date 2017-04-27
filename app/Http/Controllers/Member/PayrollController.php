@@ -4400,8 +4400,6 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }  
 
-
-
           $temp = '';
           if($process['adjustment']['total_bonus'] > 0)
           {    

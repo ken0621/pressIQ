@@ -141,6 +141,7 @@ Route::any('/member/mlm/plan/triangle_repurchase/save', 'Member\MLM_PlanControll
 
 /* start triangle repurchase */
 Route::any('/member/mlm/plan/binary_promotions/save', 'Member\MLM_PlanController@binary_promotions_save');//luke
+Route::any('/member/mlm/plan/binary_promotions/get', 'Member\MLM_PlanController@binary_promotions_get');//luke
 /* end triangle repurchase  Plan */
 
 /* end MLM Plan */

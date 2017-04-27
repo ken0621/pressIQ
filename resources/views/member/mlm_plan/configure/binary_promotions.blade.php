@@ -18,7 +18,10 @@
 <div class="bsettings">
     {!! $basic_settings !!}  
 </div>
-<div class="panel panel-default panel-block panel-title-block panel-gray ">
+<div class="append_settings">
+  
+</div>
+<div class="panel panel-default panel-block panel-title-block panel-gray hide">
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">
            <div class="table-responsive">
@@ -74,6 +77,7 @@
 
 @section('script')
 <script type="text/javascript">
+load_settings();
     $(".drop-down-item").globalDropList(
     {
     link: '/member/item/add',
@@ -82,5 +86,10 @@
     width: '100%',
     placeholder: 'Item'
 });
+    function load_settings()
+    {
+        $('.append_settings').html('<div style="margin: 100px auto;" class="loader-16-gray"></div>');
+        $('.append_settings').load('/member/mlm/plan/binary_promotions/get');
+    }
 </script>
 @endsection

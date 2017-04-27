@@ -2219,7 +2219,7 @@ class MLM_PlanController extends Member
     }
     public function binary_promotions_save()
     {
-        return $_POST;
+        // return $_POST;
 
         $insert['binary_promotions_membership_id'] = Request::input('binary_promotions_membership_id');
         $insert['binary_promotions_no_of_units'] = Request::input('binary_promotions_no_of_units');
@@ -2228,6 +2228,17 @@ class MLM_PlanController extends Member
         $insert['binary_promotions_item_id'] = Request::input('binary_promotions_item_id');
 
         Tbl_mlm_plan_binary_promotions::insert($insert);
-    }
 
+        $data['response_status'] = 'successd';
+        $data['message'] = 'Settings Edited';
+
+        return json_encode($data);
+    }
+    public function binary_promotions_get()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $data['binary_promotions'] = Tbl_mlm_plan_binary_promotions::get();
+        $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get()->keyBy('membership_id');
+        return view('member.mlm_plan.configure.binary_promotions_get', $data);
+    }
 }

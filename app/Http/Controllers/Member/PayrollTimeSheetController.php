@@ -16,6 +16,7 @@ use App\Models\Tbl_payroll_group_rest_day;
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_period;
+use App\Models\Tbl_payroll_holiday_company;
 
 use App\Globals\Payroll;
 
@@ -114,14 +115,38 @@ class PayrollTimeSheetController extends Member
 		$data["default_time_out"] = $default_time_out =Carbon::parse($payroll_group_end)->format("h:i A");
 		$data["default_working_hours"] = $default_working_hours = "08:00";
 
-		/* CREATE ARRAY TIMESHEET */
+		/* CREATE ARRAY */
 		while($from <= $to)
 		{
 			/* INITITAL DATA */
+
+			$day 		= Carbon::parse($from)->format("D");
+			$day_number = Carbon::parse($from)->format("d");
+			$symbol 	= '<i class="table-check fa fa-unlock-alt hidden"></i>';
+
+			/* check if holiday */
+			$holiday = Tbl_payroll_holiday_company::getholiday(Carbon::parse($from)->format("Y-m-d"), $data["employee_info"]->payroll_employee_company_id)->get();
+			
+			if(Carbon::parse($from)->format("Y-m-d") == '2017-04-13')
+			{
+				// dd($holiday);
+			}
+
+			if($holiday->count() > 0)
+			{
+				
+				$day 		= '<span class="color-red">'.$day.'</span>';
+				$day_number = '<span class="color-red">'.$day_number.'</span>';
+				$symbol 	= '<i class="table-check fa fa-calendar hidden color-red"></i>';
+			}
+
+
+
 			$data["_timesheet"][$from] = new stdClass();
 			$data["_timesheet"][$from]->date = Carbon::parse($from)->format("Y-m-d");
-			$data["_timesheet"][$from]->day_number = Carbon::parse($from)->format("d");
-			$data["_timesheet"][$from]->day_word = Carbon::parse($from)->format("D");
+			$data["_timesheet"][$from]->day_number = $day_number;
+			$data["_timesheet"][$from]->day_word = $day;
+			$data['_timesheet'][$from]->symbol = $symbol;
 
 			/* GET DATA FOR SPECIFIC DATE */
 			$data["timesheet_info"] = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($from)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();

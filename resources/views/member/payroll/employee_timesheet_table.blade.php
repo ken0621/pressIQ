@@ -48,11 +48,12 @@
             @if($key == 0) <!--MAIN -->
             <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $timesheet->date }}">
             <td class="text-center table-loading">
-                <i class="table-check fa fa-unlock-alt hidden"></i>
+                <!-- <i class="table-check fa fa-unlock-alt hidden"></i> -->
+                {!!$timesheet->symbol!!}
                 <i class="table-loader fa fa-spinner fa-pulse fa-fw"></i>
             </td>
-            <td class="text-center edit-data day-number">{{ $timesheet->day_number }}</td>
-            <td class="text-center edit-data day-word">{{ $timesheet->day_word }}</td>
+            <td class="text-center edit-data day-number">{!! $timesheet->day_number !!}</td>
+            <td class="text-center edit-data day-word">{!! $timesheet->day_word !!}</td>
             <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}"></td>
             <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}"></td>
             <td class="text-center editable approved-in">__:__ __</td>

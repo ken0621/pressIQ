@@ -1748,11 +1748,18 @@ class Payroll
 		}
 
 		/* GET TAX CONTRIBUTION */
-		if($data['minimum_wage'] == 1)
+		if($data['minimum_wage'] == 0)
 		{
 			if($group->payroll_group_tax == 'Every Period' || $group->payroll_group_tax == $period_category)
 			{
-				$salary_taxable = $data['salary_taxable'] - ($data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution']);
+				
+				$salary_taxable = $data['salary_taxable'];
+
+				if($group->payroll_group_before_tax == 1)
+				{
+					$salary_taxable = $data['salary_taxable'] - ($data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution']);
+				}
+				
 				if($salary_taxable <= 0)
 				{
 					$salary_taxable = 0;

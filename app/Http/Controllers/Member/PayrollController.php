@@ -62,6 +62,7 @@ use App\Models\Tbl_payroll_journal_tag;
 use App\Models\Tbl_payroll_journal_tag_entity;
 use App\Models\Tbl_payroll_journal_tag_employee;
 use App\Models\Tbl_payroll_leave_schedule;
+use App\Models\Tbl_payroll_paper_sizes;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -3695,8 +3696,14 @@ class PayrollController extends Member
 
      public function modal_create_payslip()
      {
-          Payroll::record_by_date(Self::shop_id(), '2017-01-26','2017-02-10');
-          return view('member.payroll.modal.modal_create_payslip');
+          $data['_paper'] = Tbl_payroll_paper_sizes::getpaper(Self::shop_id())->orderBy('paper_size_name')->get();
+          return view('member.payroll.modal.modal_create_payslip', $data);
+     }
+
+     public function modal_create_paper_size()
+     {
+          $data['_paper'] = Tbl_payroll_paper_sizes::getpaper(Self::shop_id())->orderBy('paper_size_name')->get();
+          return view('member.payroll.modal.modal_create_paper_size', $data);
      }
 
      /* PAYROLL CUSTOM PAYSLIP END */
@@ -4365,7 +4372,9 @@ class PayrollController extends Member
           }   
 
           $temp = '';
-          if($process['total_allowance'] > 0)
+          $total_allowance = $process['adjustment']['total_allowance'] + $process['total_allowance'];
+
+          if($total_allowance > 0)
           {    
                $temp['name']       = '<b>Allowance</b>';
                $temp['amount']     = '';
@@ -4376,8 +4385,22 @@ class PayrollController extends Member
                     $temp_sub['amount'] = number_format($allowance['payroll_allowance_amount'], 2);
                     array_push($temp['sub'], $temp_sub);
                }
+
+               foreach($process['adjustment']['allowance'] as $allowances)
+               {
+                    $temp_sub['name'] = $allowances->payroll_adjustment_name;
+                    if($status == 'processed')
+                    {
+                         $temp_sub['name'].=Self::btn_adjustment($allowances->payroll_adjustment_id);
+                    }
+                    $temp_sub['amount'] = number_format($allowances->payroll_adjustment_amount, 2);
+                    array_push($temp['sub'], $temp_sub);
+               }
+
                array_push($salary, $temp);
           }  
+
+
 
           $temp = '';
           if($process['adjustment']['total_bonus'] > 0)
@@ -4671,22 +4694,22 @@ class PayrollController extends Member
 
           /* DAY */
           $temp = '';
-          $temp['name']     = 'Regular Days';
+          $temp['name']    = 'Regular Days';
           $temp['day']     = Payroll::if_zero($process['total_regular_days']);
           array_push($day, $temp);
 
           $temp = '';
-          $temp['name']     = 'Rest Days';
+          $temp['name']    = 'Rest Days';
           $temp['day']     = Payroll::if_zero($process['total_rest_days']);
           array_push($day, $temp);
 
           $temp = '';
-          $temp['name']     = 'Extra Days';
+          $temp['name']    = 'Extra Days';
           $temp['day']     = Payroll::if_zero($process['total_extra_days']);
           array_push($day, $temp);
 
           $temp = '';
-          $temp['name']     = 'Special Holidays';
+          $temp['name']    = 'Special Holidays';
           $temp['day']     = Payroll::if_zero($process['total_sh']);
           array_push($day, $temp);
 
@@ -5094,6 +5117,10 @@ class PayrollController extends Member
      }
      /* PAYRLL APPROVED END */
 
-
+     public function modal_payroll_notes($payroll_period_company_id)
+     {
+          
+          return view('member.payroll.modal.modal_payroll_notes');
+     }
 
 }

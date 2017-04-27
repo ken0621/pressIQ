@@ -100,7 +100,7 @@ class Manage_Category_Controller extends Member
 
             // $data['_level_category'] = $this->recursive_select_category($shop_id);
             $data['_category'] = Category::breakdown($shop_id);
-
+            // dd($data['_category']);
             // $data['_category'] = Tbl_category::where('type_shop', $shop_id)->where('archived',0)->get();
             return view('member.modal.create_category_modal', $data);
         }
@@ -175,15 +175,34 @@ class Manage_Category_Controller extends Member
             $type_category = Request::input('type_category');
             $type_name = Request::input('type_name');
             $type_parent_id = 0;
+            $parent_data = null;
 
-            if(Request::input('is_sub_category')){
+            if(Request::input('is_sub_category'))
+            {
                 $type_parent_id = Request::input('hidden_parent_category');
+                $parent_data = Tbl_category::where("type_id",$type_parent_id)->first();
+                $type_category = $parent_data->type_category;
+            }
+
+            $category_data = Tbl_category::where("type_parent_id",$type_id)->get();
+            if(count($category_data) > 0)
+            {
+                foreach ($category_data as $key => $value) 
+                {
+                    $up_child["type_category"] = $type_category;
+                    Tbl_category::where('type_id', $value->type_id)->update($up_child);
+                }
             }
             
             $update['type_name']            = $type_name;
             $update['type_category']        = $type_category;
             $update['type_parent_id']       = $type_parent_id;
             Tbl_category::where('type_id', $type_id)->update($update);
+
+            $data["status"] = "success-category";
+            $data["id"] = $type_id;
+
+            return json_encode($data);
         }
         else
         {

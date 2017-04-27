@@ -135,14 +135,20 @@ class ItemController extends Member
         $access = Utilities::checkAccess('item-list', 'access_page');
         if($access == 1)
         {
+
+			// $data['_category']  		= Category::getAllCategory();
+
+			$data['_service']  		    = Category::getAllCategory(['services']);
+			$data['_inventory']  		= Category::getAllCategory(['inventory']);
+			$data['_noninventory']  	= Category::getAllCategory(['non-inventory']);
+			$data['_bundle']        	= Category::getAllCategory(['bundles']);
+
 			$shop_id          = $this->user_info->shop_id;
 			$data["data"]	  = Session::get("item_temporary_data");
 			
 			$data["_income"] 	= Accounting::getAllAccount('all',null,['Income','Other Income']);
 			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
 			$data["_expense"] 	= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
-
-			$data['_category']  		= Category::getAllCategory();
 			$data['_item']  			= Item::get_all_category_item();
 			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 				= UnitMeasurement::load_um();
@@ -612,7 +618,13 @@ class ItemController extends Member
 			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
 			$data["_expense"] 	= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
 
-			$data['_category']  = Category::getAllCategory();
+			// $data['_category']  = Category::getAllCategory();
+
+			$data['_service']  		    = Category::getAllCategory(['services']);
+			$data['_inventory']  		= Category::getAllCategory(['inventory']);
+			$data['_noninventory']  	= Category::getAllCategory(['non-inventory']);
+			$data['_bundle']        	= Category::getAllCategory(['bundles']);
+			
 			$data["_manufacturer"] = Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 	  	= UnitMeasurement::load_um();
 			$data["_um_multi"] 	= UnitMeasurement::load_um_multi();

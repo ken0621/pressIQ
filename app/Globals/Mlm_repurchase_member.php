@@ -64,7 +64,7 @@ class Mlm_repurchase_member
 		if($slot_id == null)
 		{
 			$item = Tbl_item::where("tbl_item.item_id", $item_id)->where("archived", 0)
-			->first();
+			->get();
 		}
 		else
 		{
@@ -96,7 +96,6 @@ class Mlm_repurchase_member
 			{
 				if($key == $item_info->item_id)
 				{
-
 					$s[$item_info->item_id]['item_id'] = $item_info->item_id;
 					$s[$item_info->item_id]['quantity'] = $value['quantity'] + $quantity;
 					$s[$item_info->item_id]['item_price_single'] = intval($item_info->item_price);

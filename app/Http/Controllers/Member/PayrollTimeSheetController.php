@@ -120,33 +120,31 @@ class PayrollTimeSheetController extends Member
 		{
 			/* INITITAL DATA */
 
-			$day 		= Carbon::parse($from)->format("D");
-			$day_number = Carbon::parse($from)->format("d");
-			$symbol 	= '<i class="table-check fa fa-unlock-alt hidden"></i>';
+			$day 				= Carbon::parse($from)->format("D");
+			$day_number 		= Carbon::parse($from)->format("d");
+			$symbol 			= '<i class="table-check fa fa-unlock-alt hidden"></i>';
+			$holiday_class 		= '';
+			$virtural_holiday 	= '';
 
 			/* check if holiday */
-			$holiday = Tbl_payroll_holiday_company::getholiday(Carbon::parse($from)->format("Y-m-d"), $data["employee_info"]->payroll_employee_company_id)->get();
-			
-			if(Carbon::parse($from)->format("Y-m-d") == '2017-04-13')
-			{
-				// dd($holiday);
-			}
+			$holiday = Tbl_payroll_holiday_company::getholiday($data["employee_info"]->payroll_employee_company_id, Carbon::parse($from)->format("Y-m-d"))->get();
 
 			if($holiday->count() > 0)
 			{
-				
+				$holiday_class = ' color-red';
 				$day 		= '<span class="color-red">'.$day.'</span>';
 				$day_number = '<span class="color-red">'.$day_number.'</span>';
-				$symbol 	= '<i class="table-check fa fa-calendar hidden color-red"></i>';
+				$symbol 	= '<a href="#" class="popup" size="sm" link="/member/payroll/employee_timesheet/show_holiday/'.$data["employee_info"]->payroll_employee_company_id.'/'.Carbon::parse($from)->format("Y-m-d").'"><i class="table-check fa fa-calendar hidden color-red"></i></a>';
+				$virtural_holiday 	= '08:00';
 			}
-
-
 
 			$data["_timesheet"][$from] = new stdClass();
 			$data["_timesheet"][$from]->date = Carbon::parse($from)->format("Y-m-d");
 			$data["_timesheet"][$from]->day_number = $day_number;
 			$data["_timesheet"][$from]->day_word = $day;
 			$data['_timesheet'][$from]->symbol = $symbol;
+			$data['_timesheet'][$from]->holiday_class = $holiday_class;
+			$data['_timesheet'][$from]->virtural_holiday = $virtural_holiday;
 
 			/* GET DATA FOR SPECIFIC DATE */
 			$data["timesheet_info"] = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($from)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
@@ -558,6 +556,13 @@ class PayrollTimeSheetController extends Member
 		$employee_id = Request::input("employee_id");
 		Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->update($update);
 		echo json_encode("success");
+	}
+
+	/* show availabel holidays */
+	public function show_holiday($payroll_company_id, $date)
+	{
+		$data['_holiday'] = Tbl_payroll_holiday_company::getholiday($payroll_company_id, $date)->get();
+		return view('member.payroll.modal.modal_show_holiday', $data);
 	}
 
 }

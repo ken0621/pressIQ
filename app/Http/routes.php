@@ -806,8 +806,12 @@ Route::controller('/member/accounting/import', 'Member\ImportController');
 /* End */
 /* ECOMMERCE COUPON CODE*/
 Route::controller('/member/ecommerce/coupon', 'Member\CouponVoucherController');
-
+/* End */
+/* ACCOUNTING JOURNAL*/
 Route::controller('/member/accounting/journal', 'Member\JournalEntryController');
+/* End */
+/* TERMS OF PAYMENT*/
+Route::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
 /* End */
 
 Route::controller('/tester','TesterController');

@@ -535,11 +535,8 @@ function customer_invoice(){
             onChangeValue: function()
             {
             	var start_date 		= $(".datepicker[name='inv_date']").val();
-            	console.log(start_date);
             	var days 			= $(this).find("option:selected").attr("days");
-            	console.log(days);
             	var new_due_date 	= AddDaysToDate(start_date, days, "/");
-            	console.log(new_due_date);
             	$(".datepicker[name='inv_due_date']").val(new_due_date);
             }
         });

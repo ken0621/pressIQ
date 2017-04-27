@@ -60,7 +60,7 @@
 						</div>
 					</div>
 					<div class="col-md-4">
-						<img class="img-reponsive" src="/themes/{{ $shop_theme }}/img/vision-side.jpg">
+						<img class="img-reponsive" src="/themes/{{ $shop_theme }}/img/vision-side.png">
 					</div>
 				</div>
 			</div>
@@ -70,14 +70,14 @@
 <div class="values" style="background-image: url('/themes/{{ $shop_theme }}/img/values-bg.jpg')">
 	<div class="container">
 		<div class="row clearfix">
-			<div class="col-md-6 left-holder match-height">
+			<div class="col-md-4 left-holder match-height">
 				<div class="holder">
 					<div class="values-title">Company Core Values</div>
 					<div class="divider"></div>
 					<div class="values-sub">-Inspired by "Coach Wooden"</div>
 				</div>
 			</div>
-			<div class="col-md-6 match-height">
+			<div class="col-md-8 match-height">
 				<div class="tower">
 					<div class="tower-row">
 						<div class="holder">
@@ -86,43 +86,43 @@
 						</div>
 					</div>
 					<div class="tower-row">
-						<div class="holder">
+						<div class="holder match-height">
 							<div class="name">Character</div>
 							<div class="desc">The qualities that distinguish individuals</div>
 						</div>
-						<div class="holder">
+						<div class="holder match-height">
 							<div class="name">Integrity</div>
 							<div class="desc">The faithfulness to maintain high moral standards</div>
 						</div>
 					</div>
 					<div class="tower-row">
-						<div class="holder">
+						<div class="holder match-height">
 							<div class="name">Team Work</div>
 							<div class="desc">Subordinating personal prominence to team efficiency</div>
 						</div>
-						<div class="holder">
+						<div class="holder match-height">
 							<div class="name">Communication</div>
 							<div class="desc">The ingredient to organizational success</div>
 						</div>
-						<div class="holder">
+						<div class="holder match-height">
 							<div class="name">Collaboration</div>
 							<div class="desc">The willingness to jointly achieve common goals</div>
 						</div>
 					</div>
 					<div class="tower-row">
-						<div class="holder">
+						<div class="holder match-height">
 							<div class="name">Attitude</div>
 							<div class="desc">Energy, drive and enjoyment will always inspire others</div>
 						</div>
-						<div class="holder">
+						<div class="holder match-height">
 							<div class="name">Discipline</div>
-							<div class="desc">Energy, drive and enjoyment will always inspire others</div>
+							<div class="desc">Relentless Perseverance in all that you do</div>
 						</div>
-						<div class="holder">
+						<div class="holder match-height">
 							<div class="name">Initiative</div>
 							<div class="desc">Failure to act will lead to the biggest failures of all</div>
 						</div>
-						<div class="holder">
+						<div class="holder match-height">
 							<div class="name">Work Ethic</div>
 							<div class="desc">Success travels in the company of very hard work and dedication</div>
 						</div>
@@ -131,6 +131,158 @@
 			</div>
 		</div>
 	</div>	
+</div>
+<div class="product">
+	<div class="container">
+		<div class="row clearfix">
+			<div class="col-md-6">
+				<div class="image">
+					<img src="/themes/{{ $shop_theme }}/img/product-sample.jpg">
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="name">A Real Product Need</div>
+				<div class="desc">Wellness Products are a real need in the marketplace. People may have the money to buy anything, but they can not buy their time on earth. With rising economies and changing lifestyles of people worldwide, people are getting health issues and financial defeat, everybody is looking to save money on hospitalizations.</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="networking">
+	<div class="container">
+		<div class="title">Networking Marketing has come of age</div>
+		<div class="row clearfix">
+			<div class="col-md-4">
+				<div class="holder">
+					<div class="image">
+						<img src="/themes/{{ $shop_theme }}/img/marketing-1.jpg">
+					</div>
+					<div class="desc">58 million people are involved in network marketing worldwide.</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="holder">
+					<div class="image">
+						<img src="/themes/{{ $shop_theme }}/img/marketing-2.jpg">
+					</div>
+					<div class="desc">The network marketing industry has surpassed $100 billion in retail revenue.</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="holder">
+					<div class="image">
+						<img src="/themes/{{ $shop_theme }}/img/marketing-3.jpg">
+					</div>
+					<div class="desc">North American sales have reached over $34 billion dollars.</div>
+				</div>
+			</div>
+		</div>
+		<div class="quote">
+			<div class="text">"I think network marketing has come of age. It’s become undeniable that it’s a viable way to entrepreneurship and independence for millions of people."</div>
+			<div class="name">- <span>Dr. Stephen R. Covey</span></div>
+			<div class="desc">Interview in Network Marketing Lifestyle</div>
+		</div>
+	</div>
+</div>
+<div class="saying">
+	<div class="container">
+		<div class="title">What those who know Network Marketing are saying!</div>
+		<div class="row clearfix">
+			<div class="col-md-4">
+				<div class="holder">
+					<div class="image">
+						<img src="/themes/{{ $shop_theme }}/img/saying-1.jpg">
+					</div>
+					<div class="desc">"Network Marketers are creating FORTUNES at breakneck speeds!"</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="holder">
+					<div class="image">
+						<img src="/themes/{{ $shop_theme }}/img/saying-2.jpg">
+					</div>
+					<div class="desc">"Network Marketers are creating FORTUNES at breakneck speeds!"</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="holder">
+					<div class="image">
+						<img src="/themes/{{ $shop_theme }}/img/saying-3.jpg">
+					</div>
+					<div class="desc">"Network Marketers are creating FORTUNES at breakneck speeds!"</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="professional">
+	<div class="container">
+		<div class="title">What Professionals Say</div>
+		<div class="row clearfix">
+			<div class="col-md-4">
+				<div class="holder">
+					<div class="icon"><img src="/themes/{{ $shop_theme }}/img/black-quote.png"></div>
+					<div class="text">If you really want to learn how to be rich, you must begin to know and understand the power found in networks. The Richest People in the world Build Networks</div>
+					<div class="author">
+						<table>
+							<tbody>
+								<tr>
+									<td class="author-img">
+										<img src="/themes/{{ $shop_theme }}/img/author-1.jpg">
+									</td>
+									<td class="author-text">
+										<div class="name">Robert Kiyosaki</div>
+										<div class="did">Best Selling Author of Rich Poor Dad and many other internationally acclaimed titles.</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="holder">
+					<div class="icon"><img src="/themes/{{ $shop_theme }}/img/black-quote.png"></div>
+					<div class="text">If you really want to learn how to be rich, you must begin to know and understand the power found in networks. The Richest People in the world Build Networks</div>
+					<div class="author">
+						<table>
+							<tbody>
+								<tr>
+									<td class="author-img">
+										<img src="/themes/{{ $shop_theme }}/img/author-1.jpg">
+									</td>
+									<td class="author-text">
+										<div class="name">Robert Kiyosaki</div>
+										<div class="did">Best Selling Author of Rich Poor Dad and many other internationally acclaimed titles.</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="holder">
+					<div class="icon"><img src="/themes/{{ $shop_theme }}/img/black-quote.png"></div>
+					<div class="text">If you really want to learn how to be rich, you must begin to know and understand the power found in networks. The Richest People in the world Build Networks</div>
+					<div class="author">
+						<table>
+							<tbody>
+								<tr>
+									<td class="author-img">
+										<img src="/themes/{{ $shop_theme }}/img/author-1.jpg">
+									</td>
+									<td class="author-text">
+										<div class="name">Robert Kiyosaki</div>
+										<div class="did">Best Selling Author of Rich Poor Dad and many other internationally acclaimed titles.</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 @endsection
 

@@ -558,7 +558,7 @@ class Accounting
         if(!$exist_account)
         {
             $insert["account_shop_id"]          = Accounting::getShopId();
-            $insert["account_type_id"]          = 9;
+            $insert["account_type_id"]          = 8;
             $insert["account_number"]           = "00000";
             $insert["account_name"]             = "Output Vat Payable";
             $insert["account_description"]      = "";
@@ -606,10 +606,10 @@ class Accounting
         if(!$exist_account)
         {
             $insert["account_shop_id"]          = Accounting::getShopId();
-            $insert["account_type_id"]          = 4;
+            $insert["account_type_id"]          = 11;
             $insert["account_number"]           = "00000";
             $insert["account_name"]             = "Discount";
-            $insert["account_description"]      = "";
+            $insert["account_description"]      = "Sale Discount";
             $insert["account_protected"]        = 1;
             $insert["account_code"]             = "discount-sale";
             
@@ -633,7 +633,7 @@ class Accounting
             $insert["account_type_id"]          = 11;
             $insert["account_number"]           = "00000";
             $insert["account_name"]             = "Discount";
-            $insert["account_description"]      = "";
+            $insert["account_description"]      = "Purchase Discount";
             $insert["account_protected"]        = 1;
             $insert["account_code"]             = "discount-puchase";
             

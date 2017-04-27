@@ -869,7 +869,7 @@ class CustomerController extends Member
 	
     public function view_customer_details($id)
     {
-        $data["customer"]       = Tbl_customer::info()->balance($this->checkuser('user_shop'), $id)->where("tbl_customer.customer_id", $id)->first();
+        $data["customer"]       = Tbl_customer::info()->balanceJournal($id)->where("tbl_customer.customer_id", $id)->first();
         $data["_transaction"]   = Tbl_customer::transaction($this->checkuser('user_shop'), $id)->get();
 
         return view('member.customer.customer_details', $data);

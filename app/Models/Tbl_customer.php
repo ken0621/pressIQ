@@ -55,8 +55,15 @@ class Tbl_customer extends Model
         return $query->selectRaw("customer_id as id, first_name as first_name, middle_name as middle_name, last_name as last_name, 'customer' as reference")->where("archived", 0)->where("shop_id", $shop_id)->union($raw);
     }
 
-    public function scopeBalanceJournal($query)
+    public function scopeBalanceJournal($query, $customer_id)
     {
-        
+        $balance = DB::table("tbl_journal_entry_line")->join("tbl_chart_of_account", "account_id", "=", "jline_account_id")
+                                           ->join("tbl_chart_account_type","chart_type_id", "=", "account_type_id")
+                                           ->where("chart_type_name", "Accounts Receivable")
+                                           ->where("jline_name_reference", "customer")
+                                           ->where("jline_name_id", $customer_id)
+                                           ->selectRaw("sum( CASE jline_type WHEN 'credit' then -jline_amount WHEN 'debit' then jline_amount END) as balance")
+                                           ->pluck("balance");
+        return $query->selectRaw("*, $balance as balance");
     }
 }

@@ -155,7 +155,7 @@
 									<tr>
 										<td></td>
 										<td class="text-right"><b>Subtotal</b></td>
-										<td>P {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</td>
+										<td style="word-break: break-all;">P {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</td>
 										<td></td>
 									</tr>
 									@if($get_cart["sale_information"]["total_overall_price"] > $get_cart["sale_information"]["minimum_purchase"])
@@ -174,7 +174,7 @@
 									<tr>
 										<td></td>
 										<td class="text-right"><b>Total</b></td>
-										<td class="total">P {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</td>
+										<td class="total" style="word-break: break-all;">P {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -292,7 +292,7 @@
 					</div>
 				</div>
 				<div class="text-right">
-					<button id="placeorder-button" type="submit">PLACE ORDER</button>
+					<button id="placeorder-button" type="submit">BUY NOW</button>
 				</div>
 			</div>
 		</div>

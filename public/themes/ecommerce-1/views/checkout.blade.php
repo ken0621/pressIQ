@@ -1,7 +1,7 @@
 @extends("layout")
 @section("content")
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 	<div class="container" style="background-color: #fff; margin-bottom: 50px;">
 		<div class="header">
@@ -67,6 +67,14 @@
 														</td>
 													</tr>
 													@endif
+												@elseif($payment_method->link_reference_name == "other")
+													<tr>
+														<td class="ray"><input name="payment_method_id" value="{{ $payment_method->method_id }}" type="radio"></td>
+														<td>
+															<div class="name">{{ $payment_method->other_name }}</div>
+															<div class="description">{{ $payment_method->other_description }}</div>
+														</td>
+													</tr>
 												@else
 													<tr>
 														<td class="ray"><input name="payment_method_id" value="{{ $payment_method->method_id }}" type="radio"></td>
@@ -82,13 +90,17 @@
 							</div>
 						</div>
 
-						<div class="upload-container">
+						<div class="upload-container hide">
 							<div class="row clearfix">
 								<div class="col-md-8">
 									<div id="upload-proof">UPLOAD PROOF OF PAYMENT</div>
 								</div>
 								<div class="col-md-4">
-								<div><button id="upload-button">UPLOAD</button></div>
+								<div>
+									<button id="upload-button" type="button" onClick="$('.payment-upload-file').trigger('click');">UPLOAD</button>
+									<input onChange="$('.upload-name').text($(this).val().split('\\').pop());" class="hide payment-upload-file" type="file" name="payment_upload">
+									<div class="upload-name"></div>
+								</div>
 								</div>
 							</div>
 						</div>
@@ -102,11 +114,17 @@
 					<div class="hold-content match-height">
 						@if (session('fail'))
 						    <div class="alert alert-danger" style="margin-top: -25px; margin-left: -25px; margin-right: -25px;">
-							    <ul>
+						    	@if(is_array(session('fail')))
+						    		<ul>
 							        @foreach(session('fail') as $fail)
 						        		<li>{{ $fail }}</li>
 							        @endforeach
-							    </ul>
+							        </ul>
+							    @else
+							    	<ul style="padding: 0; margin: 0;">
+							    		<li>{{ session('fail') }}</li>
+							    	</ul>
+						        @endif
 						    </div>
 						@endif
 						<div class="cart-summary">
@@ -287,3 +305,32 @@
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/checkout.css">
 @endsection
 
+@section("js")
+<script type="text/javascript">
+$(document).ready(function()
+{
+	var payment_method = $('input[name="payment_method_id"]');
+
+	if ( payment_method.val() != 1 && payment_method.val() != 2 ) 
+	{
+		$('.upload-container').removeClass("hide");
+	}	
+	else
+	{
+		$('.upload-container').addClass("hide");
+	}
+
+	payment_method.change(function(event) 
+	{
+		if ( $(event.currentTarget).val() != 1 && $(event.currentTarget).val() != 2 ) 
+		{
+			$('.upload-container').removeClass("hide");
+		}	
+		else
+		{
+			$('.upload-container').addClass("hide");
+		}
+	});
+});
+</script>
+@endsection

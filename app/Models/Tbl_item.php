@@ -18,7 +18,7 @@ class Tbl_item extends Model
 
     public function scopeCategory($query)
     {
-        $query->join('tbl_category','type_id','=','item_category_id');
+        $query->leftjoin('tbl_category','type_id','=','item_category_id');
         return $query;
     }
     public function scopeUm_multi($query)

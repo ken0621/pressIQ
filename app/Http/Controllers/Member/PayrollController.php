@@ -3199,7 +3199,14 @@ class PayrollController extends Member
 		{
 			$insert['payroll_group_deduct_before_absences'] = Request::input('payroll_group_deduct_before_absences');
 		}
+
+          $payroll_group_before_tax                         = 0;
+          if(Request::has("payroll_group_before_tax"))
+          {
+               $payroll_group_before_tax = Request::input('payroll_group_before_tax');
+          }
 		
+          $insert['payroll_group_before_tax']               = $payroll_group_before_tax;
 		$insert['payroll_group_tax'] 					= Request::input('payroll_group_tax');
 		$insert['payroll_group_sss'] 					= Request::input('payroll_group_sss');
 		$insert['payroll_group_philhealth'] 			= Request::input('payroll_group_philhealth');
@@ -3355,7 +3362,14 @@ class PayrollController extends Member
 			$payroll_group_deduct_before_absences		= Request::input('payroll_group_deduct_before_absences');
 		}
 
-		$update['payroll_group_deduct_before_absences'] = $payroll_group_deduct_before_absences;
+          $payroll_group_before_tax                         = 0;
+          if(Request::has('payroll_group_before_tax'))
+          {
+               $payroll_group_before_tax = Request::has('payroll_group_before_tax');
+          }
+
+          $update['payroll_group_before_tax']               = $payroll_group_before_tax;
+		$update['payroll_group_deduct_before_absences']   = $payroll_group_deduct_before_absences;
 		$update['payroll_group_tax'] 					= Request::input('payroll_group_tax');
 		$update['payroll_group_sss'] 					= Request::input('payroll_group_sss');
 		$update['payroll_group_philhealth'] 			= Request::input('payroll_group_philhealth');

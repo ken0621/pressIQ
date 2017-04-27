@@ -22,11 +22,12 @@ class Tbl_journal_entry extends Model
     			  ->join("tbl_customer_invoice","inv_id","=","je_reference_id")
     			  ->join("tbl_customer","customer_id","=","inv_customer_id");
     	}
-        elseif($reference)
+        elseif($reference == "receive-payment")
         {
             $query->selectRaw("*, concat('/member/customer/receive_payment?id=', rp_id) as txn_link")
                   ->join("tbl_receive_payment","rp_id","=","je_reference_id");
         }
+        elseif()
         return $query;
     }
 }

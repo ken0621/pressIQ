@@ -14,6 +14,8 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
+use App\Models\Tbl_terms;
+
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
@@ -22,6 +24,7 @@ use App\Globals\Billing;
 use App\Globals\Item;
 use App\Globals\Warehouse;
 use App\Globals\UnitMeasurement;
+
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_bill;
@@ -55,6 +58,7 @@ class Vendor_CreateBillController extends Member
     public function create_bill()
     {
         $data["_vendor"]    = Vendor::getAllVendor('active');
+        $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();

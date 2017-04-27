@@ -23,6 +23,8 @@ use App\Globals\AuditTrail;
 use App\Globals\Purchase_Order;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
+use App\Models\Tbl_terms;
+
 use Carbon\Carbon;
 use Session;
 use Redirect;
@@ -33,6 +35,7 @@ class Vendor_PurchaseOrderController extends Member
     {
         $data["page"]       = "Purchase order";
         $data["_vendor"]    = Vendor::getAllVendor('active');
+        $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Purchase_Order::getShopId())->get();
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["action"]     = "/member/vendor/purchase_order/create_po";

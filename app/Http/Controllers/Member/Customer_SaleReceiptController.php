@@ -24,6 +24,7 @@ use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_user;
+use App\Models\Tbl_terms;
 
 use Request;
 use Carbon\Carbon;
@@ -48,6 +49,7 @@ class Customer_SaleReceiptController extends Member
         $data["page"]       = "Customer Sales Receipt";
         $data["pis"]        = Purchasing_inventory_system::check();
         $data["_customer"]  = Customer::getAllCustomer();
+        $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
         $data['_item']      = Item::get_all_category_item();
         $data['_cm_item']   = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();

@@ -41,7 +41,7 @@ class TermsOfPaymentController extends Member
         $active_terms       = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId()); 
         $inactive_terms     = Tbl_terms::where("archived", 1)->where("terms_shop_id", $this->getShopId());
 
-        /* Filter Coupon By Search */
+        /* Filter Terms By Search */
         $search = Request::input('search');
         if($search)
         {
@@ -77,12 +77,18 @@ class TermsOfPaymentController extends Member
         $rules["terms_name"]        = "required";
         $rules["terms_no_of_days"]  = "required";
 
-        $validator = Validator::make($data, $rules);
+        $terms_exist = Tbl_terms::where("terms_shop_id", $this->getShopId())->where("terms_name", $data["terms_name"])->first();
 
+        $validator = Validator::make($data, $rules);
         if($validator->fails())
         {
             $json["status"] = "error";
             $json["message"]= $validator->errors()->first();
+        }
+        elseif($terms_exist)
+        {
+            $json["status"] = "error";
+            $json["message"]= "Terms Name Already Exist";
         }
         else
         {

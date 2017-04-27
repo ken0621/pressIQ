@@ -393,7 +393,19 @@ function bill()
 		    	})
 		    }
 		});
-
+		$('.droplist-terms').globalDropList(
+        {
+            link : "/member/maintenance/terms/terms",
+            link_size : "sm",
+            width : "100%",
+            onChangeValue: function()
+            {
+            	var start_date 		= $(".datepicker[name='bill_date']").val();
+            	var days 			= $(this).find("option:selected").attr("days");
+            	var new_due_date 	= AddDaysToDate(start_date, days, "/");
+            	$(".datepicker[name='bill_due_date']").val(new_due_date);
+            }
+        });
 	    $('.droplist-item').globalDropList(
         {
             link : "/member/item/add",
@@ -434,6 +446,18 @@ function bill()
 		    width 		: "100%",
 		    placeholder : 'Account'
 		});
+	}
+
+	function AddDaysToDate(sDate, iAddDays, sSeperator) {
+    //Purpose: Add the specified number of dates to a given date.
+	    var date = new Date(sDate);
+	    date.setDate(date.getDate() + parseInt(iAddDays));
+	    var sEndDate = LPad(date.getMonth() + 1, 2) + sSeperator + LPad(date.getDate(), 2) + sSeperator + date.getFullYear();
+	    return sEndDate;
+	}
+	function LPad(sValue, iPadBy) {
+	    sValue = sValue.toString();
+	    return sValue.length < iPadBy ? LPad("0" + sValue, iPadBy) : sValue;
 	}
 
 	function load_purchase_order_vendor(vendor_id)

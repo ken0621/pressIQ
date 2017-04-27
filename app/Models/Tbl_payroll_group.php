@@ -40,6 +40,7 @@ class Tbl_payroll_group extends Model
 	// [INTEGER] 		payroll_late_interval
 	// [VARCHAR] 		payroll_late_parameter
 	// [DOUBLE 18, 2] 	payroll_late_deduction
+	// [TINY INTEGER]	payroll_group_before_tax
 
 	public function scopesel($query, $shop_id = 0, $payroll_group_archived = 0)
 	{

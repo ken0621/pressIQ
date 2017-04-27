@@ -751,6 +751,26 @@ class Seed_manual
         DB::statement($statment);
 
     }
+
+    public static function put_default_tbl_terms($shop_id)
+    {
+        if(!DB::table('tbl_terms')->where("terms_shop_id", $shop_id)->first())
+        {
+            $insert[0]['terms_shop_id']    = $shop_id; 
+            $insert[0]['terms_name']       = "Net 10";  
+            $insert[0]['terms_no_of_days'] = "10"; 
+
+            $insert[1]['terms_shop_id']    = $shop_id; 
+            $insert[1]['terms_name']       = "Net 15";  
+            $insert[1]['terms_no_of_days'] = "15"; 
+
+            $insert[2]['terms_shop_id']    = $shop_id; 
+            $insert[2]['terms_name']       = "Net 30";  
+            $insert[2]['terms_no_of_days'] = "30"; 
+
+            DB::table('tbl_terms')->insert($insert);
+        }
+    }
 }
 
 

@@ -54,4 +54,9 @@ class Tbl_customer extends Model
 
         return $query->selectRaw("customer_id as id, first_name as first_name, middle_name as middle_name, last_name as last_name, 'customer' as reference")->where("archived", 0)->where("shop_id", $shop_id)->union($raw);
     }
+
+    public function scopeBalanceJournal($query)
+    {
+        
+    }
 }

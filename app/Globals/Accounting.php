@@ -269,13 +269,22 @@ class Accounting
 
 		foreach($entry_data as $entry_line)
 		{
-			$item = Tbl_item::where("item_id", $entry_line["item_id"])->first();
-			$line_data["item_id"] = $entry_line["item_id"];
+			/* IF ITEM ID OR ACCOUNT ID */
+			if(isset($entry_line["item_id"]))
+			{
+				$item = Tbl_item::where("item_id", $entry_line["item_id"])->first();
+				$line_data["item_id"] = $entry_line["item_id"];
 
-			/* GETTING CHART OF ACCOUNTS THAT TAGGED ON THE ITEM */
-			$account_asset 		= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_asset_account_id");   //Inventory 
-			$account_income 	= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_income_account_id");  //Sales
-			$account_expense 	= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_expense_account_id"); //Cost of Good Sold
+				/* GETTING CHART OF ACCOUNTS THAT TAGGED ON THE ITEM */
+				$account_asset 		= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_asset_account_id");   //Inventory 
+				$account_income 	= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_income_account_id");  //Sales
+				$account_expense 	= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_expense_account_id"); //Cost of Good Sold
+			}
+			elseif(isset(isset($entry_line["account_id"]))
+			{
+				$account = Tbl_chart_of_account::type()->where("account_id", $entry_line["account_id"])->first();
+			}
+
 
 			switch($entry["reference_module"])
 			{
@@ -310,7 +319,7 @@ class Accounting
 				case "receive-payment":
 					/* CASH ACCOUNT - BANK */
 					$line_data["entry_amount"]	= $entry_line["entry_amount"];
-					$line_data["entry_type"] 	= Accounting::normalBalance($account_income);
+					$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
 					$line_data["account_id"] 	= $account_income;
 					Accounting::insertJournalLine($line_data);
 					break;

@@ -57,8 +57,6 @@ class TesterController extends Controller
         // dd(collect(Payroll::record_by_date($this->getShopId(), "01-26-2017", "02-10-2017"))->toArray());
         // dd(collect(PayrollJournalEntries::check_payroll_entity_account_id())->toArray());
 
-        dd(Accounting::checkTransactionName("invoice")['name']);
-
     }
 
     public function getJournal()

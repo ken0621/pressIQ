@@ -92,7 +92,7 @@
             <td class="text-center edit-data"></td>
             <td class="text-center edit-data"></td>
             <td class="text-center edit-data"></td>
-            <td class="text-center edit-data"></td>
+            <td class="text-center edit-data color-red"></td>
             <td class="text-center"><span class="button delete-sub-time"><i class="fa fa-close"></i></span></td>
             @endif
         </tr>

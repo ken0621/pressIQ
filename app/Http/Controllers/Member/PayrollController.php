@@ -4204,7 +4204,6 @@ class PayrollController extends Member
           $government    = array();
           $deduction     = array();
 
-          // dd($process);
           
           /* RATE DECLARATION */
           $temp = '';

@@ -305,8 +305,6 @@ class PayrollTimeSheetController extends Member
 		return $data;
 	}
 
-
-
 	public function json_process_time()
 	{
 		$employee_id = Request::input("employee_id");

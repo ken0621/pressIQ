@@ -35,7 +35,8 @@ class Customer_ReceivePaymentController extends Member
     }
 
     public function index()
-    {        
+    {    
+
         $data["c_id"] = Request::input("customer_id");
         $data["_customer"]      = Customer::getAllCustomer();
         $data['_account']       = Accounting::getAllAccount();
@@ -88,13 +89,6 @@ class Customer_ReceivePaymentController extends Member
 
                 Tbl_receive_payment_line::insert($insert_line);
 
-                // OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-                // $entry_data[$key]['item_id']       = $item_line['item_id'];
-                // $entry_data[$key]['entry_qty']     = $item_line['quantity'];
-                // $entry_data[$key]['vatable']       = 0;
-                // $entry_data[$key]['discount']      = $discount;
-                // $entry_data[$key]['entry_amount']  = $amount;
-
                 if($insert_line["rpline_reference_name"] == 'invoice')
                 {
                     Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
@@ -102,10 +96,15 @@ class Customer_ReceivePaymentController extends Member
             }
         }
 
-        $entry["reference_module"]         = "receive-payment";
-        $entry["reference_id"]             = $rcvpayment_id;
-        $entry["name_id"]                  = $insert["rp_customer_id"];
-        $entry["total"]                    = $insert["rp_total_amount"];
+        $entry["reference_module"]      = "receive-payment";
+        $entry["reference_id"]          = $rcvpayment_id;
+        $entry["name_id"]               = $insert["rp_customer_id"];
+        $entry["total"]                 = $insert["rp_total_amount"];
+        $entry_data[0]['account_id']    = $insert["rp_ar_account"];
+        $entry_data[0]['vatable']       = 0;
+        $entry_data[0]['discount']      = 0;
+        $entry_data[0]['entry_amount']  = $insert["rp_total_amount"];
+        $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
         
         $rcv_data = AuditTrail::get_table_data("tbl_receive_payment","rp_id",$rcvpayment_id);
         AuditTrail::record_logs("Added","receive_payment",$rcvpayment_id,"",serialize($rcv_data));

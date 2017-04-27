@@ -128,7 +128,7 @@ class Accounting
 	 *
 	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["name_id"], $entry["total"] , 
 	 *									$entry["vatable"] , $entry["discount"] , $entry["ewt"]
-	 * @param array  	$entry_data     $entry_data[0]['item_id'] , $entry_data[0]['entry_qty'] , $entry_data[0]['vatable']
+	 * @param array  	$entry_data     $entry_data[0]['item_id'], $entry_data[0]['vatable']
 	 *									$entry_data[0]['discount'] , $entry_data[0]['entry_amount']
 	 * @param boolean  	$remarks   		Description of the journal entry	
 	 */
@@ -178,7 +178,7 @@ class Accounting
 		$line_data["jline_name_id"]			= $entry["name_id"];
 
 		/* RECIVABLE OR PAYABLE */
-		if(Accounting::checkReceivable($entry["reference_module"]))
+		if(Accounting::checkTransaction($entry["reference_module"])['is_receivable'])
 		{
 			$journalType = 	Accounting::checkTransaction($entry["reference_module"])['journal'];	 
 			$line_data["entry_amount"]	= $entry["total"];
@@ -280,7 +280,7 @@ class Accounting
 				$account_income 	= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_income_account_id");  //Sales
 				$account_expense 	= Tbl_item::where("item_id", $entry_line["item_id"])->pluck("item_expense_account_id"); //Cost of Good Sold
 			}
-			elseif(isset(isset($entry_line["account_id"]))
+			elseif(isset($entry_line["account_id"]))
 			{
 				$account = Tbl_chart_of_account::type()->where("account_id", $entry_line["account_id"])->first();
 			}
@@ -320,7 +320,7 @@ class Accounting
 					/* CASH ACCOUNT - BANK */
 					$line_data["entry_amount"]	= $entry_line["entry_amount"];
 					$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
-					$line_data["account_id"] 	= $account_income;
+					$line_data["account_id"] 	= $account->account_id;
 					Accounting::insertJournalLine($line_data);
 					break;
 				case "purchase-order":
@@ -411,7 +411,7 @@ class Accounting
 		{
 			return true;
 		}
-		elseif($type == "credit-memo")
+		elseif($type == "credit-memo" )
 		{
 			return false;
 		}
@@ -489,48 +489,57 @@ class Accounting
 		switch($type)
 		{
 			case 'estimate':
-				$data["name"] 	= 'customer';
-				$data["journal"] = 'normalBalance';
+				$data["is_receivable"]	= true;
+				$data["name"] 			= 'customer';
+				$data["journal"] 		= 'normalBalance';
 				return $data;
 				break;
 			case 'sales-order':
-				$data["name"] 	= 'customer';
-				$data["journal"] = 'normalBalance';
+				$data["is_receivable"]	= true;
+				$data["name"] 			= 'customer';
+				$data["journal"] 		= 'normalBalance';
 				return $data;
 				break;
 			case 'invoice':
-				$data["name"] 	= 'customer';
-				$data["journal"] = 'normalBalance';
+				$data["is_receivable"]	= true;
+				$data["name"] 			= 'customer';
+				$data["journal"] 		= 'normalBalance';
 				return $data;
 				break;
 			case 'credit-memo':
-				$data["name"] 	= 'customer';
-				$data["journal"] = 'contraAccount';
+				$data["is_receivable"]	= true;
+				$data["name"] 			= 'customer';
+				$data["journal"] 		= 'contraAccount';
 				return $data;
 				break;
 			case 'sales-receipt':
-				$data["name"] 	= 'customer';
-				$data["journal"] = 'normalBalance';
+				$data["is_receivable"]	= true;
+				$data["name"] 			= 'customer';
+				$data["journal"] 		= 'normalBalance';
 				return $data;
 				break;
 			case 'receive-payment':
-				$data["name"] 	= 'customer';
-				$data["journal"] = 'contraAccount';
+				$data["is_receivable"]	= true;
+				$data["name"] 			= 'customer';
+				$data["journal"] 		= 'contraAccount';
 				return $data;
 				break;
 			case 'purchase-order':
-				$data["name"] 	= 'vendor';
-				$data["journal"] = 'normalBalance';
+				$data["is_receivable"]	= false;
+				$data["name"] 			= 'vendor';
+				$data["journal"] 		= 'normalBalance';
 				return $data;
 				break;
 			case 'bill':
-				$data["name"] 	= 'vendor';
-				$data["journal"] = 'normalBalance';
+				$data["is_receivable"]	= false;
+				$data["name"] 			= 'vendor';
+				$data["journal"] 		= 'normalBalance';
 				return $data;
 				break;
 			case 'bill-payment':
-				$data["name"] 	= 'vendor';
-				$data["journal"] = 'contraAccount';
+				$data["is_receivable"]	= false;
+				$data["name"] 			= 'vendor';
+				$data["journal"] 		= 'contraAccount';
 				return $data;
 				break;
 			default:

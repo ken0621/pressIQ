@@ -71,7 +71,7 @@
                         </div>
                         <div class="col-sm-3">
                             <label>Deposit to</label>
-                            <select class="drop-down-coa" name="rp_ar_account">
+                            <select class="drop-down-coa" name="rp_ar_account" required>
                                 @include("member.load_ajax_data.load_chart_account", ['add_search' => "", "account_id" => isset($rcvpayment) ? $rcvpayment->rp_ar_account : ''])
                             </select>
                         </div>

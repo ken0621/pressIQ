@@ -32,6 +32,7 @@ use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_unilevel_points_settings;
 use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_item;
+use App\Models\Tbl_mlm_plan_binary_promotions;
 
 use App\Http\Controllers\Member\MLM_ProductController;
 use App\Http\Controllers\Member\MLM_PlanController;
@@ -2219,6 +2220,14 @@ class MLM_PlanController extends Member
     public function binary_promotions_save()
     {
         return $_POST;
+
+        $insert['binary_promotions_membership_id'] = Request::input('binary_promotions_membership_id');
+        $insert['binary_promotions_no_of_units'] = Request::input('binary_promotions_no_of_units');
+        $insert['binary_promotions_required_left'] = Request::input('binary_promotions_required_left');
+        $insert['binary_promotions_required_right'] = Request::input('binary_promotions_required_right');
+        $insert['binary_promotions_item_id'] = Request::input('binary_promotions_item_id');
+
+        Tbl_mlm_plan_binary_promotions::insert($insert);
     }
 
 }

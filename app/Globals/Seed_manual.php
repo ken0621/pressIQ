@@ -24,15 +24,6 @@ class Seed_manual
           Seed_manual::seed_tbl_item_type();
         }
 
-        // if(!DB::table("tbl_online_pymnt_method")->first())
-        // {
-        //   Seed_manual::seed_tbl_online_pymnt_method();
-        // }
-        // if(!DB::table("tbl_online_pymnt_gateway")->first())
-        // {
-        //   Seed_manual::seed_tbl_online_pymnt_gateway();
-        // }
-
         if(!DB::table('tbl_payroll_entity')->first())
         {
             Seed_manual::seed_tbl_payroll_entity();
@@ -724,61 +715,6 @@ class Seed_manual
       DB::table('tbl_item_type')->insert($insert);
     }
 
-    public static function seed_tbl_online_pymnt_method()
-    {
-        $insert[0]['method_id']         = 1; 
-        $insert[0]['method_name']       = "Credit Card";
-        $insert[0]['method_code_name']  = "credit-card";
-        $insert[0]['method_gateway_accepted']  = "[1],[2],[3],[4]";
-
-        $insert[1]['method_id']         = 2; 
-        $insert[1]['method_name']       = "Paypal";
-        $insert[1]['method_code_name']  = "paypal"; 
-        $insert[1]['method_gateway_accepted']  = "[1],[2],[3],[4]";
-
-        $insert[2]['method_id']         = 3; 
-        $insert[2]['method_name']       = "Metro Bank";
-        $insert[2]['method_code_name']  = "metrobank"; 
-        $insert[2]['method_gateway_accepted']  = "[1],[2],[3],[4]";
-
-        $insert[3]['method_id']         = 4; 
-        $insert[3]['method_name']       = "BDO";
-        $insert[3]['method_code_name']  = "bdo"; 
-        $insert[3]['method_gateway_accepted']  = "[1],[2],[3],[4]";
-
-        $insert[4]['method_id']         = 5; 
-        $insert[4]['method_name']       = "BPI";
-        $insert[4]['method_code_name']  = "bpi";
-        $insert[4]['method_gateway_accepted']  = "1,2,3,4";
-
-        DB::table('tbl_online_pymnt_method')->insert($insert);
-    }
-
-    public static function seed_tbl_online_pymnt_gateway()
-    {
-        $insert[0]['gateway_id']         = 1; 
-        $insert[0]['gateway_name']       = "Paypal";
-        $insert[0]['gateway_code_name']  = "paypal2";
-
-        $insert[1]['gateway_id']         = 2; 
-        $insert[1]['gateway_name']       = "Paymaya";
-        $insert[1]['gateway_code_name']  = "paymaya"; 
-
-        $insert[2]['gateway_id']         = 3; 
-        $insert[2]['gateway_name']       = "Paynammics";
-        $insert[2]['gateway_code_name']  = "paynamics"; 
-
-        $insert[3]['gateway_id']         = 4; 
-        $insert[3]['gateway_name']       = "Dragon Pay";
-        $insert[3]['gateway_code_name']  = "dragonpay"; 
-
-        $insert[4]['gateway_id']         = 5; 
-        $insert[4]['gateway_name']       = "Other";
-        $insert[4]['gateway_code_name']  = "other";
-
-        DB::table('tbl_online_pymnt_gateway')->insert($insert);
-    }
-
     public static function seed_tbl_payroll_entity()
     {
         $statment = "INSERT INTO `tbl_payroll_entity` (`payroll_entity_id`, `entity_name`, `entity_category`) VALUES
@@ -814,6 +750,26 @@ class Seed_manual
 
         DB::statement($statment);
 
+    }
+
+    public static function put_default_tbl_terms($shop_id)
+    {
+        if(!DB::table('tbl_terms')->where("terms_shop_id", $shop_id)->first())
+        {
+            $insert[0]['terms_shop_id']    = $shop_id; 
+            $insert[0]['terms_name']       = "Net 10";  
+            $insert[0]['terms_no_of_days'] = "10"; 
+
+            $insert[1]['terms_shop_id']    = $shop_id; 
+            $insert[1]['terms_name']       = "Net 15";  
+            $insert[1]['terms_no_of_days'] = "15"; 
+
+            $insert[2]['terms_shop_id']    = $shop_id; 
+            $insert[2]['terms_name']       = "Net 30";  
+            $insert[2]['terms_no_of_days'] = "30"; 
+
+            DB::table('tbl_terms')->insert($insert);
+        }
     }
 }
 

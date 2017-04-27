@@ -24,6 +24,9 @@ use App\Models\Tbl_customer_address;
 use App\Models\Tbl_customer_attachment;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_customer_search;
+use App\Models\Tbl_vendor;
+use App\Models\Tbl_vendor_address;
+use App\Models\Tbl_vendor_other_info;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -791,6 +794,318 @@ class ImportController extends Member
 								'Print Name',
 								'Tax Resale No',
 								'Note',
+			    				'Error_Description'
+			    				];
+			    	$sheet->freezeFirstRow();
+			        $sheet->row(1, $header);
+			        foreach($_value as $key=>$value)
+			        {
+			        	$sheet->row($key+2, $value);
+			        }
+
+			    });
+
+
+			})->download('csv');
+		}
+		else
+		{
+			return Redirect::back();
+		}
+	}
+
+	/**
+	 * Start of Vendor Module
+	 * 
+	 */
+
+	public function getVendor()
+	{
+		return view('member.import.vendor_import');
+	}
+
+	public function getVendorTemplate()
+	{
+		Excel::create("VendorTemplate", function($excel)
+		{
+			// Set the title
+		    $excel->setTitle('Digimahouse');
+
+		    // Chain the setters
+		    $excel->setCreator('DigimaWebSolutions')
+		          ->setCompany('DigimaWebSolutions');
+
+		    $excel->sheet('Template', function($sheet) {
+		    	$header = [
+		    				'Title Name',
+		    				'First Name',
+		    				'Middle Name',
+		    				'Last Name',
+		    				'Suffix Name',
+		    				'Email',
+		    				'Company',
+		    				'Phone Number',
+		    				'Mobile Number',
+		    				'Opening Balance',
+		    				'Balace Date',
+		    				'Billing Country',
+		    				'Billing State',
+		    				'Billing City',
+		    				'Billing Zipcode',
+		    				'Billing Address',
+		    				'Shipping Country',
+		    				'Shipping State',
+		    				'Shipping City',
+		    				'Shipping Zipcode',
+		    				'Shipping Address',
+		    				'Other Contact',
+		    				'Website',
+		    				'Fax',
+		    				'Display Name',
+		    				'Print Name',
+		    				'Tax Resale No',
+		    				'Note'
+		    				];
+		    	$sheet->freezeFirstRow();
+		        $sheet->row(1, $header);
+		    });
+
+
+		})->download('csv');
+	}
+
+	public function postVendorReadFile()
+	{
+		Session::forget("import_vendor_error");
+
+		$value     = Request::input('value');
+		$input     = Request::input('input');
+
+		$ctr 	   		= Request::input('ctr');
+		$data_length 	= Request::input('data_length');
+		$error_data 	= Request::input('error_data');
+
+		if($ctr != $data_length)
+		{
+			$title_name		= isset($value["Title Name"])		? $value["Title Name"] : '' ;
+			$first_name		= isset($value["First Name"])		? $value["First Name"] : '' ;
+			$middle_name	= isset($value["Middle Name"])		? $value["Middle Name"] : '' ;
+			$last_name		= isset($value["Last Name"])		? $value["Last Name"] : '' ;
+			$suffix_name	= isset($value["Suffix Name"])		? $value["Suffix Name"] : '' ;
+			$email			= isset($value["Email"])			? $value["Email"] : '' ;
+			$company		= isset($value["Company"])			? $value["Company"] : '' ;
+			$phone			= isset($value["Phone Number"])		? $value["Phone Number"] : '' ;
+			$mobile			= isset($value["Mobile Number"])	? $value["Mobile Number"] : '' ;
+			$open_balance	= isset($value["Opening Balance"])	? $value["Opening Balance"] : '' ;
+			$balance_date	= isset($value["Balace Date"])		? $value["Balace Date"] : '' ;
+			$bill_country	= isset($value["Billing Country"])	? $value["Billing Country"] : '' ;
+			$bill_state		= isset($value["Billing State"])	? $value["Billing State"] : '' ;
+			$bill_city		= isset($value["Billing City"])		? $value["Billing City"] : '' ;
+			$bill_zip_code	= isset($value["Billing Zipcode"])	? $value["Billing Zipcode"] : '' ;
+			$bill_address	= isset($value["Billing Address"])	? $value["Billing Address"] : '' ;
+			$ship_country	= isset($value["Shipping Country"])	? $value["Shipping Country"] : '' ;
+			$ship_state		= isset($value["Shipping State"])	? $value["Shipping State"] : '' ;
+			$ship_city		= isset($value["Shipping City"])	? $value["Shipping City"] : '' ;
+			$ship_zip_code	= isset($value["Shipping Zipcode"])	? $value["Shipping Zipcode"] : '' ;
+			$ship_address	= isset($value["Shipping Address"])	? $value["Shipping Address"] : '' ;
+			$other_contact	= isset($value["Other Contact"])	? $value["Other Contact"] : '' ;
+			$website		= isset($value["Website"])			? $value["Website"] : '' ;
+			$fax			= isset($value["Fax"])				? $value["Fax"] : '' ;
+			$display_name	= isset($value["Display Name"])		? $value["Display Name"] : '' ;
+			$print_name		= isset($value["Print Name"])		? $value["Print Name"] : '' ;
+			$tax_resale_no	= isset($value["Tax Resale No"])	? $value["Tax Resale No"] : '' ;
+
+			/* Validation */
+			$duplicate_vendor	= Tbl_vendor::where("vendor_shop_id", $this->getShopId())->where("vendor_first_name", $first_name)->where("vendor_middle_name", $middle_name)->where("vendor_last_name", $last_name)->first();
+			$duplicate_email 	= Tbl_vendor::where("vendor_shop_id", $this->getShopId())->where("vendor_email", $email)->first();
+			$has_bill_country 	= Tbl_country::where("country_name", $bill_country)->first();
+			$has_ship_country 	= Tbl_country::where("country_name", $bill_country)->first();
+
+			if(!$duplicate_vendor)
+			{
+				if(!$duplicate_email)
+				{
+					if($has_bill_country || $bill_country == '')
+					{
+						if($has_ship_country || $ship_country == '')
+						{
+
+							$insertvendor['vendor_shop_id'] 	= $this->getShopId();
+				            $insertvendor['vendor_title_name'] 	= $title_name;
+				            $insertvendor['vendor_first_name'] 	= $first_name;
+				            $insertvendor['vendor_middle_name'] = $middle_name;
+				            $insertvendor['vendor_last_name'] 	= $last_name;
+				            $insertvendor['vendor_suffix_name'] = $suffix_name;
+				            $insertvendor['vendor_email'] 		= $email;
+				            $insertvendor['vendor_company'] 	= $company;
+				            $insertvendor['created_date'] 		= Carbon::now();
+
+				            $insertInfo['ven_info_phone'] 			= $phone;
+				            $insertInfo['ven_info_mobile'] 			= $mobile;
+				            $insertInfo['ven_info_fax'] 			= $fax;
+				            $insertInfo['ven_info_other_contact'] 	= $other_contact;
+				            $insertInfo['ven_info_website'] 		= $website;
+				            $insertInfo['ven_info_display_name'] 	= $display_name;
+				            $insertInfo['ven_info_print_name']		= $print_name;
+				            $insertInfo['ven_info_tax_no'] 			= $tax_resale_no;
+				            $insertInfo['ven_info_opening_balance'] = $open_balance;
+				            $insertInfo['ven_info_balance_date'] 	= $balance_date;
+
+			           		$insert_addr["ven_billing_city"]		= $ship_state;
+							$insert_addr["ven_billing_city"]		= $bill_city;
+							$insert_addr["ven_billing_zipcode"]		= $bill_zip_code;
+							$insert_addr["ven_billing_street"]		= $bill_address;
+							if($has_bill_country) $insert_addr["ven_billing_country_id"] 	= $has_bill_country->country_id;
+			           		else 				  $insert_addr["ven_billing_country_id"] 	= NULL;
+
+							$insert_addr["ven_shipping_state"]		= $ship_state;
+							$insert_addr["ven_shipping_city"]		= $ship_city;
+							$insert_addr["ven_shipping_zipcode"]	= $ship_zip_code;
+							$insert_addr["ven_shipping_street"]		= $ship_address;
+							if($has_bill_country) $insert_addr["ven_shipping_country_id"]	= $has_ship_country->country_id;
+			           		else 				  $insert_addr["ven_shipping_country_id"]	= NULL;
+	  
+				            $rules["vendor_email"] 				= 'required|email';
+
+							$validator = Validator::make($insertvendor, $rules);
+							if ($validator->fails())
+							{
+								$json["status"] 	= "error";
+								$json["message"]  	= $validator->errors()->first();
+							}
+							else
+							{
+								$vendor_id = Tbl_vendor::insertGetId($insertvendor);
+					            
+					            $insertInfo['ven_info_vendor_id'] = $vendor_id;
+					            Tbl_vendor_other_info::insert($insertInfo);
+
+					            $insert_addr["ven_addr_vendor_id"] = $vendor_id;
+					            Tbl_vendor_address::insert($insert_addr);
+
+					            $json["status"]		= "success";
+								$json["message"]	= "Success";
+								$json["item_id"]	= $vendor_id;
+				        	}
+				        }
+				        else
+				        {
+				        	$json["status"]		= "error";
+							$json["message"]	= "Shipping Country doesn't Exist";
+						}
+		        	}
+		        	else
+		        	{
+		        		$json["status"]		= "error";
+						$json["message"]	= "Billing Country doesn't Exist";
+		        	}
+		        }
+		        else
+		        {
+		        	$json["status"]		= "error";
+					$json["message"]	= "Email Already Exist";
+		        }
+			}
+			else
+			{
+				$json["status"]		= "error";
+				$json["message"]	= "Duplicate vendor Name";
+			}
+
+			$status_color 		= $json["status"] == 'success' ? 'green' : 'red';
+			$json["tr_data"]	= "<tr>";
+			$json["tr_data"]   .= "<td class='$status_color'>".$json["status"]."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$json["message"]."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$title_name."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$first_name."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$middle_name."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$last_name."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$suffix_name."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$email."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$company."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$phone."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$mobile."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$open_balance."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$balance_date."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$bill_country."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$bill_state."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$bill_city."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$bill_zip_code."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$bill_address."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$ship_country."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$ship_state."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$ship_city."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$ship_zip_code."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$ship_address."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$ship_state."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$other_contact."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$website."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$fax."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$display_name."</td>";
+			$json["tr_data"]   .= "<td nowrap>".$tax_resale_no."</td>";
+			$json["tr_data"]   .= "</tr>";
+
+			$json["value_data"] = $value;
+			$length 			= sizeOf($json["value_data"]);
+
+			foreach($json["value_data"] as $key=>$value)
+			{
+				$json["value_data"]['Error Description'] = $json["message"];
+			}
+		}
+		else /* DETERMINE IF LAST IN CSV */
+		{
+			Session::put("import_vendor_error", $error_data);
+			$json["status"] = "end";
+		}
+
+        return json_encode($json);
+	}
+
+	public function getVendorExportError()
+	{
+		$_value = Session::get("import_vendor_error");
+
+		if($_value)
+		{
+			Excel::create("VendorImportError", function($excel) use($_value)
+			{
+				// Set the title
+			    $excel->setTitle('Digimahouse');
+
+			    // Chain the setters
+			    $excel->setCreator('DigimaWebSolutions')
+			          ->setCompany('DigimaWebSolutions');
+
+			    $excel->sheet('Template', function($sheet) use($_value) {
+			    	$header = [
+			    				'Title Name',
+								'First Name',
+								'Middle Name',
+								'Last Name',
+								'Suffix Name',
+								'Email',
+								'Company',
+								'Phone Number',
+								'Mobile Number',
+								'Opening Balance',
+								'Balace Date',
+								'Billing Country',
+								'Billing State',
+								'Billing City',
+								'Billing Zipcode',
+								'Billing Address',
+								'Shipping Country',
+								'Shipping State',
+								'Shipping City',
+								'Shipping Zipcode',
+								'Shipping Address',
+								'Other Contact',
+								'Website',
+								'Fax',
+								'Display Name',
+								'Print Name',
+								'Tax Resale No',
 			    				'Error_Description'
 			    				];
 			    	$sheet->freezeFirstRow();

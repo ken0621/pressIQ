@@ -770,11 +770,17 @@ class MLM_PlanController extends Member
 	    	// validate
 	        $validate['membership_id'] = Request::input("membership_id");
             $validate['membership_points_binary'] = Request::input("membership_points_binary");
+            $validate['membership_points_binary_limit'] = Request::input('membership_points_binary_limit');
+            $validate['membership_points_binary_single_line'] = Request::input('membership_points_binary_single_line');
+            $validate['membership_points_binary_single_line_limit'] = Request::input('membership_points_binary_single_line_limit');
             // end
             
             //rules for validation
-            $rules['membership_id']   = "required";
+            $rules['membership_points_binary_limit'] = 'required';
+            $rules['membership_id'] = "required";
             $rules['membership_points_binary']    = "required";
+            $rules['membership_points_binary_single_line'] = 'required';
+            $rules['membership_points_binary_single_line_limit'] =  'required';
             // end
     	    
     	    // validate
@@ -793,6 +799,9 @@ class MLM_PlanController extends Member
         	    	// insert
         	        $insert['membership_id'] = $validate['membership_id'];
             	    $insert['membership_points_binary'] = $validate['membership_points_binary'];
+                    $insert['membership_points_binary_limit'] = $validate['membership_points_binary_limit'];
+                    $insert['membership_points_binary_single_line'] = $validate['membership_points_binary_single_line'];
+                    $insert['membership_points_binary_single_line_limit'] = $validate['membership_points_binary_single_line_limit'];
             	    Tbl_membership_points::insert($insert);
             	    // end
         	    }
@@ -801,6 +810,9 @@ class MLM_PlanController extends Member
         	    {
         	    	// update
         	        $update['membership_points_binary'] = $validate['membership_points_binary'];
+                    $update['membership_points_binary_limit'] = $validate['membership_points_binary_limit'];
+                    $update['membership_points_binary_single_line'] = $validate['membership_points_binary_single_line'];
+                    $update['membership_points_binary_single_line_limit'] = $validate['membership_points_binary_single_line_limit'];
             	    Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
             	    // end
         	    }

@@ -17,13 +17,13 @@ function customer_invoice(){
 		event_compute_class_change();
 		event_taxable_check_change();
 		event_item_qty_change();
+		event_button_action_click();
 		
 		action_lastclick_row();
 		action_compute();
 		action_convert_number();
 		action_date_picker();
 		action_reassign_number();
-		event_button_action_click();
 
 	}
 	function event_remove_tr()
@@ -527,6 +527,19 @@ function customer_invoice(){
             	action_load_item_info_cm($(this));
             }
         });
+        $('.droplist-terms').globalDropList(
+        {
+            link : "/member/maintenance/terms/terms",
+            link_size : "sm",
+            width : "100%",
+            onChangeValue: function()
+            {
+            	var start_date 		= $(".datepicker[name='inv_date']").val();
+            	var days 			= $(this).find("option:selected").attr("days");
+            	var new_due_date 	= AddDaysToDate(start_date, days, "/");
+            	$(".datepicker[name='inv_due_date']").val(new_due_date);
+            }
+        });
         $('.droplist-um').globalDropList(
     	{
     		hasPopup: "false",
@@ -551,6 +564,18 @@ function customer_invoice(){
 
     	});
         $('.droplist-um-cm:not(.has-value)').globalDropList("disabled");
+	}
+
+	function AddDaysToDate(sDate, iAddDays, sSeperator) {
+    //Purpose: Add the specified number of dates to a given date.
+	    var date = new Date(sDate);
+	    date.setDate(date.getDate() + parseInt(iAddDays));
+	    var sEndDate = LPad(date.getMonth() + 1, 2) + sSeperator + LPad(date.getDate(), 2) + sSeperator + date.getFullYear();
+	    return sEndDate;
+	}
+	function LPad(sValue, iPadBy) {
+	    sValue = sValue.toString();
+	    return sValue.length < iPadBy ? LPad("0" + sValue, iPadBy) : sValue;
 	}
 
 

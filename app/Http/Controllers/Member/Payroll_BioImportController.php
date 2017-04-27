@@ -336,7 +336,7 @@ class Payroll_BioImportController extends Member
 
 	    		if(Self::check_employee_number($time['employee_no']))
     			{
-    				
+    				// dd($time['date']);
 	    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($time['employee_no']), date('Y-m-d', strtotime($time['date'])));
 
 	    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
@@ -345,15 +345,19 @@ class Payroll_BioImportController extends Member
 	    			$temp_array['payroll_time_sheet_origin'] 	= 'Manual Template';
 	    			$temp_array['payroll_company_id']			= Self::getemployeeId($time['employee_no'],'payroll_employee_company_id');
 
+	    			Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $payroll_time_sheet_id)->where('payroll_time_sheet_in', '00:00:00')->where('payroll_time_sheet_out','00:00:00')->delete();
+
 	    			$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
+	    			
 	    			if($count_record == 0)
 	    			{
+
 	    				array_push($insert_time_record, $temp_array);
 	    			}
     			}
 	    	}
 
-	    	
+	    	// dd($insert_time_record);
 	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
 	    	if(!empty($insert_time_record))
 	    	{

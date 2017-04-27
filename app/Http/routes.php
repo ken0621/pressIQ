@@ -213,7 +213,7 @@ Route::any('/member/functiontester/get_cart', 'Member\FunctionTesterController@g
 
 /* MANAGE CATEGORIES */
 Route::any('/member/item/category', 'Member\Manage_Category_Controller@index');
-Route::any('/member/item/category/modal_create_category', 'Member\Manage_Category_Controller@modal_create_category');
+Route::any('/member/item/category/modal_create_category/{cat_type}', 'Member\Manage_Category_Controller@modal_create_category');
 Route::any('/member/item/category/edit_category/{id}', 'Member\Manage_Category_Controller@edit_category');
 Route::any('/member/item/category/update_category', 'Member\Manage_Category_Controller@update_category');
 Route::any('/member/item/category/archived/{id}/{action}','Member\Manage_Category_Controller@archived');
@@ -765,7 +765,7 @@ Route::get('/member/item/load_um','Member\UnitOfMeasurementController@load_um');
 Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
 Route::get('/member/item/load_one_um_multi/{id}','Member\UnitOfMeasurementController@load_one_um_multi');
 // Route::get('/member/item/load_one_um/{id}','Member\UnitOfMeasurementController@load_one_um');
-Route::get('/member/item/load_category','Member\Manage_Category_Controller@load_category');
+Route::get('/member/item/load_category/{cat_type}','Member\Manage_Category_Controller@load_category');
 Route::get('/member/item/manufacturer/load_manufacturer','Member\ManufacturerController@load_manufacturer');
 Route::get('/member/maintenance/load_payment_method','Member\MaintenancePaymentMethodController@load_payment_method');
 Route::get('/member/maintenance/load_payment_gateway/{id}','Member\OnlinePaymentMethodController@load_payment_gateway');
@@ -798,13 +798,20 @@ Route::controller('/member/item/import', 'Member\ImportController');
 /* CUSTOMER IMPORT*/
 Route::controller('/member/customer/import', 'Member\ImportController');
 /* End */
+/* VENDOR IMPORT*/
+Route::controller('/member/vendors/import', 'Member\ImportController');
+/* End */
 /* CHART OF ACCOUNTS IMPORT*/
 Route::controller('/member/accounting/import', 'Member\ImportController');
 /* End */
 /* ECOMMERCE COUPON CODE*/
 Route::controller('/member/ecommerce/coupon', 'Member\CouponVoucherController');
-
+/* End */
+/* ACCOUNTING JOURNAL*/
 Route::controller('/member/accounting/journal', 'Member\JournalEntryController');
+/* End */
+/* TERMS OF PAYMENT*/
+Route::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
 /* End */
 
 Route::controller('/tester','TesterController');

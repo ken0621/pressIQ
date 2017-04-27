@@ -31,7 +31,7 @@ class ShopCheckoutController extends Shop
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
  
-        if (!$data["get_cart"]['cart']) 
+        if (!isset($data["get_cart"]['cart'])) 
         {
             return Redirect::to('/');
         }
@@ -49,10 +49,11 @@ class ShopCheckoutController extends Shop
         }
 
         $data["_payment_method"] = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
+                                                          ->leftJoin('tbl_online_pymnt_other', 'tbl_online_pymnt_link.link_reference_id', '=', 'tbl_online_pymnt_other.other_id')
                                                           ->where("tbl_online_pymnt_link.link_shop_id", $this->shop_info->shop_id)
                                                           ->where("tbl_online_pymnt_link.link_is_enabled", 1)
                                                           ->get();
-  
+ 
         if(Self::$customer_info != null)
         {
             $customer_info = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_info->customer_id)->info()->first();

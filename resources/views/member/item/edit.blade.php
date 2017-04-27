@@ -42,7 +42,7 @@
                         </div>
                         <div class="col-md-4">
                             <label>Category *</label>
-                            <select name="item_category_id" cat_type="inventory" class="form-control drop-down-category" id="item_category_id" required>
+                            <select name="item_category_id" cat_type="inventory" class="form-control drop-down-category inventory" id="item_category_id" required>
                              @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_inventory ,'type_id' => $data["item_category_id"]])
                             </select>
                         </div>
@@ -206,7 +206,7 @@
                     </div>
                     <div class="col-md-4">
                         <label>Category *</label>
-                        <select name="item_category_id" cat_type="noninventory" class="form-control drop-down-category" id="item_category_id" required>
+                        <select name="item_category_id" cat_type="noninventory" class="form-control drop-down-category non-inventory" id="item_category_id" required>
                          @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_noninventory , 'type_id' => $data['item_category_id']])
                         </select>
                     </div>
@@ -335,7 +335,7 @@
                     </div>
                     <div class="col-md-4">
                         <label>Category *</label>
-                        <select name="item_category_id" cat_type="service" class="form-control drop-down-category" id="item_category_id" required>
+                        <select name="item_category_id" cat_type="service" class="form-control drop-down-category services" id="item_category_id" required>
                          @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_service , 'type_id' => $data["item_category_id"]])
                         </select>
                     </div>
@@ -452,7 +452,7 @@
                         </div>
                         <div class="col-md-6">
                             <label>Category *</label>
-                            <select name="item_category_id" cat_type="bundle" class="form-control drop-down-category" id="item_category_id" required>
+                            <select name="item_category_id" cat_type="bundle" class="form-control drop-down-category bundles" id="item_category_id" required>
                              @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_bundle , 'type_id' => $data["item_category_id"]])
                             </select>
                         </div>

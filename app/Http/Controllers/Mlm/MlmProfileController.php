@@ -17,6 +17,7 @@ use App\Models\Tbl_mlm_slot;
 use App\Globals\Pdf_global;
 use Input;
 use File;
+use App\Globals\Mlm_repurchase_member;
 class MlmProfileController extends Mlm
 {
     public function index()

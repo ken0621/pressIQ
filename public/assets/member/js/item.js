@@ -3,7 +3,7 @@ var account_selected = '';
 var item_selected; 
 var item_type = null;
 var global_tr_html = $(".div-script tbody").html();
-
+var cat_type = '';
 function item()
 {
     init();
@@ -19,7 +19,7 @@ function item()
         event_back_menu_click();
         event_image_change();
 
-        event_click_show_purchase();
+        // event_click_show_purchase();
 
         /* For Multiple Table */
         event_remove_tr();
@@ -30,10 +30,28 @@ function item()
     }
     function initialize_select()
     {
-        $(".drop-down-category").globalDropList(
+        $(".drop-down-category.inventory").globalDropList(
         {
             width       : '100%',
-            link        : '/member/item/category/modal_create_category',
+            link        : '/member/item/category/modal_create_category/inventory',
+            link_size   : 'md'
+        });
+        $(".drop-down-category.non-inventory").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/item/category/modal_create_category/non-inventory',
+            link_size   : 'md'
+        });
+        $(".drop-down-category.services").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/item/category/modal_create_category/services',
+            link_size   : 'md'
+        });
+        $(".drop-down-category.bundles").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/item/category/modal_create_category/bundles',
             link_size   : 'md'
         });
         $(".drop-down-manufacturer").globalDropList(
@@ -327,7 +345,8 @@ function submit_done(data)
     else if(data.type == "category")
     {
         toastr.success("Success");
-        $(".drop-down-category").load("/member/item/load_category", function()
+        console.log(data.cat_type);
+        $(".drop-down-category."+data.cat_type).load("/member/item/load_category/"+data.cat_type, function()
         {                
              $(".drop-down-category").globalDropList("reload");
              $(".drop-down-category").val(data.id).change();              

@@ -33,12 +33,20 @@ class Manage_Category_Controller extends Member
         }
     }
 
-    public function load_category()
+    public function load_category($category_type = '')
     {
+        if($category_type == '')
+        {
+            $cat_type = array("all","services","inventory","non-inventory","bundles");
+        }
+        else
+        {
+            $cat_type[0] = $category_type;
+        }
         $access = Utilities::checkAccess('item-categories', 'access_page');
         if($access == 1)
         {
-            $data['_category'] = Category::getAllCategory();
+            $data['_category'] = Category::getAllCategory($cat_type);
             $data['add_search'] = '';
 
             return view('member.load_ajax_data.load_category', $data);
@@ -91,15 +99,22 @@ class Manage_Category_Controller extends Member
 
         return json_encode($data);
     }
-    public function modal_create_category()
+    public function modal_create_category($cat_type = "")
     {
         $access = Utilities::checkAccess('item-categories', 'access_page');
         if($access == 1)
         {
-            $shop_id = $this->user_info->user_shop;
+            $cat[0] = "inventory";
+            $cat[1] = "non-inventory";
+            $cat[2] = "services";
+            $cat[3] = "bundles";
 
-            // $data['_level_category'] = $this->recursive_select_category($shop_id);
+            $data["cat"] = $cat;
+
+            $data["selected_category"] = $cat_type;
+            $shop_id = $this->user_info->user_shop;
             $data['_category'] = Category::breakdown($shop_id);
+            // $data['_level_category'] = $this->recursive_select_category($shop_id);
             // dd($data['_category']);
             // $data['_category'] = Tbl_category::where('type_shop', $shop_id)->where('archived',0)->get();
             return view('member.modal.create_category_modal', $data);
@@ -137,6 +152,7 @@ class Manage_Category_Controller extends Member
 
         $data["status"] = "success-category";
         $data["type"] = "category";
+        $data["cat_type"] = $type_category;
         $data["id"] = $category_id;
 
         return json_encode($data);

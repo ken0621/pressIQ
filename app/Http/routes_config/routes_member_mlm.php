@@ -139,6 +139,10 @@ Route::any('/member/mlm/plan/direct_promotions/save', 'Member\MLM_PlanController
 Route::any('/member/mlm/plan/triangle_repurchase/save', 'Member\MLM_PlanController@save_triangle_repurchase');//luke
 /* end triangle repurchase  Plan */
 
+/* start triangle repurchase */
+Route::any('/member/mlm/plan/binary_promotions/save', 'Member\MLM_PlanController@binary_promotions_save');//luke
+/* end triangle repurchase  Plan */
+
 /* end MLM Plan */
 
 /* start MLM Product */

@@ -10,6 +10,7 @@ use DB;
 use Validator;
 use App\Globals\Mlm_plan;
 use App\Globals\AuditTrail;
+use App\Globals\Item;
 
 use App\Models\Tbl_mlm_indirect_setting;
 use App\Models\Tbl_mlm_stairstep_settings;
@@ -30,6 +31,7 @@ use App\Models\Tbl_mlm_leadership_settings;
 use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_unilevel_points_settings;
 use App\Models\Tbl_mlm_discount_card_settings;
+use App\Models\Tbl_item;
 
 use App\Http\Controllers\Member\MLM_ProductController;
 use App\Http\Controllers\Member\MLM_PlanController;
@@ -492,6 +494,19 @@ class MLM_PlanController extends Member
             $insert['marketing_plan_name'] = "Triangle Repurchase";
             $insert['marketing_plan_trigger'] = "Product Repurchase";
             $insert['marketing_plan_label'] = "Triangle Repurchase";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+
+        if($count == 19)
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "BINARY_PROMOTIONS";
+            $insert['marketing_plan_name'] = "Binary Promotions";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Binary Promotions";
             $insert['marketing_plan_enable'] = 0;
             $insert['marketing_plan_release_schedule'] = 1;
             $insert['marketing_plan_release_schedule_date'] = Carbon::now();
@@ -2190,6 +2205,20 @@ class MLM_PlanController extends Member
         $data['message'] = 'Settings Edited';
 
         return json_encode($data);
+    }
+    public function binary_promotions($shop_id)
+    {
+        $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['basic_settings'] = MLM_PlanController::basic_settings('BINARY_PROMOTIONS');
+        $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['item'] = Tbl_item::where("shop_id", $shop_id)->where("archived", 0)
+        ->get();
+        $data['_item']  = Item::get_all_category_item();
+        return view('member.mlm_plan.configure.binary_promotions', $data);
+    }
+    public function binary_promotions_save()
+    {
+        return $_POST;
     }
 
 }

@@ -14,7 +14,11 @@ class AlterTblMembershipEdtType extends Migration
     {
         Schema::table('tbl_membership', function (Blueprint $table) {
             //
-            $table->renameColumn('membership_type', 'membership_type_a');
+            // $table->renameColumn('membership_type', 'membership_type_a');
+            if(schema::hasColumn('tbl_membership','membership_type'))
+            {
+                $table->renameColumn('membership_type', 'membership_type_a');
+            }
         });
     }
 

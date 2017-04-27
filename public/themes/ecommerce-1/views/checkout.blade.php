@@ -72,7 +72,7 @@
 														<td class="ray"><input name="payment_method_id" value="{{ $payment_method->method_id }}" type="radio"></td>
 														<td>
 															<div class="name">{{ $payment_method->other_name }}</div>
-															<div class="description">{{ $payment_method->other_description }}</div>
+															<div class="description" style="white-space: pre-wrap;">{{ $payment_method->other_description }}</div>
 														</td>
 													</tr>
 												@else

@@ -78,7 +78,7 @@
                             </div>              
                             <div class="col-md-6">
                                 <input type="hidden" name="initial_qty" value="1" class="unit-qty">
-                                <select class="select-um form-control">
+                                <select class="droplist-um form-control">
                                      @include("member.load_ajax_data.load_um_multi")
                                 </select>
                             </div>   

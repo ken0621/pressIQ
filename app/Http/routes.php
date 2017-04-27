@@ -514,6 +514,20 @@ Route::any('/member/customer/customer_estimate_view/{id}','Member\Customer_Estim
 Route::any('/member/customer/update_status/{id}','Member\Customer_EstimateController@update_status');
 Route::any('/member/customer/update_status_submit','Member\Customer_EstimateController@update_status_submit');
 
+// /member/customer/update_status_submit_continue
+Route::any('/member/customer/prompt_update_status/{id}/{action}','Member\Customer_EstimateController@continue_update');
+Route::any('/member/customer/update_status_submit_continue','Member\Customer_EstimateController@continue_update_submit');
+Route::any('/member/customer/load_estimate_so/{id}','Member\Customer_EstimateController@load_all');
+Route::any('/member/customer/load_est_so_item','Member\Customer_EstimateController@load_est_so_item');
+Route::any('/member/customer/load_added_item/{est_id}','Member\Customer_EstimateController@add_item');
+Route::any('/member/customer/estimate_remove/{est_id}','Member\Customer_EstimateController@remove_items');
+/* Customer - Create Sales Order */
+Route::get('/member/customer/sales_order_list','Member\Customer_SaleOrderController@index');
+Route::any('/member/customer/sales_order','Member\Customer_SaleOrderController@sales_order');
+Route::any('/member/customer/sales_order/create','Member\Customer_SaleOrderController@create_submit');
+Route::any('/member/customer/sales_order/update','Member\Customer_SaleOrderController@update_submit');
+Route::any('/member/customer/customer_sales_order_view/{id}','Member\Customer_SaleOrderController@so_pdf');
+
 /* Customer - Receive Payment */
 Route::get('/member/customer/receive_payment','Member\Customer_ReceivePaymentController@index');
 Route::get('/member/customer/load_rp/{id}','Member\Customer_ReceivePaymentController@load_customer_rp');
@@ -743,6 +757,7 @@ Route::get('image/load_media_library', 'Member\ImageController@load_media_librar
 /* Load Ajax Data */
 Route::get('/member/accounting/load_coa','Member\ChartOfAccountController@load_coa');
 Route::get('/member/customer/load_customer','Member\CustomerController@load_customer');
+Route::get('/member/vendor/load_vendor','Member\VendorController@load_vendor');
 Route::get('/member/item/load_item','Member\ItemController@load_item');
 Route::get('/member/item/load_item_category','Member\ItemController@load_item_category');
 Route::get('/member/ecommerce/load_product_category','Member\EcommerceProductController@load_product_category');
@@ -778,7 +793,13 @@ Route::controller('/member/maintenance/online_payment', 'Member\OnlinePaymentMet
 Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* End */
 /* ITEM IMPORT*/
-Route::controller('/member/item/import', 'Member\ItemImportController');
+Route::controller('/member/item/import', 'Member\ImportController');
+/* End */
+/* CUSTOMER IMPORT*/
+Route::controller('/member/customer/import', 'Member\ImportController');
+/* End */
+/* CHART OF ACCOUNTS IMPORT*/
+Route::controller('/member/accounting/import', 'Member\ImportController');
 /* End */
 /* ECOMMERCE COUPON CODE*/
 Route::controller('/member/ecommerce/coupon', 'Member\CouponVoucherController');

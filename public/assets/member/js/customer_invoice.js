@@ -29,11 +29,41 @@ function customer_invoice(){
 	function event_remove_tr()
 	{
 		$(document).on("click", ".remove-tr", function(e){
-			if($(".tbody-item .remove-tr").length > 1){
-				$(this).parent().remove();
+			var len = $(".tbody-item .remove-tr").length;
+			if($(".tbody-item .remove-tr").length > 1)
+			{
+				if($(this).attr("tr_id") != 0 && $(this).attr("tr_id") != null)
+				{					
+					var id = $(this).attr("tr_id");
+					console.log($(this).attr("linked_in"));
+					if($(this).attr("linked_in") != 'no')
+					{						
+						$(".tr-id-"+id).remove();
+					}
+					else
+					{
+						$(".estimate-tbl").load("/member/customer/estimate_remove/"+id, function()
+						{
+							// console.log("success-removing");
+							iniatilize_select();
+							$(".tbody-item .select-um").globalDropList("enabled");
+							$(".est-"+id).removeClass("hidden");
+							$(".drawer-toggle").trigger("click");
+						});
+
+					}
+				}
+				else
+				{
+					$(this).parent().remove();
+				}
 				action_reassign_number();
 				action_compute();
-			}			
+			}
+			else
+			{
+				console.log("success");
+			}
 		});
 		$(document).on("click", ".remove-tr", function(e){
 			if($(".tbody-item-cm .remove-tr").length > 1){
@@ -62,7 +92,15 @@ function customer_invoice(){
 	{
 		action_lastclick_row();
 	}
+	this.iniatilize_select = function()
+	{
+		iniatilize_select();
+	}
 
+	this.action_compute = function()
+	{
+		action_compute();
+	}
 	function action_lastclick_row()
 	{
 		$(document).on("click", "tbody.draggable tr:last td:not(.remove-tr)", function(){
@@ -448,6 +486,13 @@ function customer_invoice(){
 	}
                              
 	/* Make select input into a drop down list plugin */
+	function load_all_estimate(customer_id)
+	{
+		$(".estimate-container").load("/member/customer/load_estimate_so/"+customer_id , function()
+		{
+			$(".drawer-toggle").trigger("click");
+		});
+	}
 	function iniatilize_select()
 	{
 		$('.droplist-customer').globalDropList(
@@ -456,6 +501,7 @@ function customer_invoice(){
 			onChangeValue: function()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
+				load_all_estimate($(this).val());
 			}
 		});
 	    $('.droplist-item').globalDropList(
@@ -596,7 +642,36 @@ function customer_invoice(){
 	}
 
 }	
+function add_est_to_inv(est_id)
+{
 
+	$(".estimate-tbl").load('/member/customer/load_added_item/'+est_id, function()
+	{
+		console.log("success");
+		customer_invoice.action_compute();
+		customer_invoice.iniatilize_select();
+		$(".tbody-item .select-um").globalDropList("enabled");
+
+		$(".est-"+est_id).addClass("hidden");
+	});
+	// $.ajax({
+	// 	url : "/member/customer/load_est_so_item",
+	// 	data : {est_id: est_id},
+	// 	dataType : "json",
+	// 	type : "get",
+	// 	success : function(data)
+	// 	{
+          
+
+ //             customer_invoice.action_compute();
+ //             customer_invoice.action_reassign_number();
+	// 	},
+	// 	error : function()
+	// 	{
+	// 		alert("Something wen't wrong.");
+	// 	}
+	// });
+}
 
 /* AFTER DRAGGING A TABLE ROW */
 function dragging_done()
@@ -611,9 +686,8 @@ function submit_done_customer(result)
     $(".droplist-customer").load("/member/customer/load_customer", function()
     {                
          $(".droplist-customer").globalDropList("reload");
-         $(".droplist-customer").val(data.id).change();          
+         $(".droplist-customer").val(result.id).change();          
     });
-    data.element.modal("hide");
 }
 
 /* AFTER ADDING AN  ITEM */

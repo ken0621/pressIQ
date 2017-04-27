@@ -15,6 +15,11 @@ class ShopContactController extends Shop
         return view("contact", $data);
     }
 
+    public function contact_submit()
+    {
+    	dd("Under Development");
+    }
+
     public function find_store()
     {
     	// Get parameters from URL

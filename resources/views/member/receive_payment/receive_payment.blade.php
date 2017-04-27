@@ -15,6 +15,21 @@
                 </h1>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save</button>
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
+                @if(isset($rcvpayment))
+                <div class="pull-right">
+                    <div class="dropdown">
+                        <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <!-- <li class="dropdown-header">Dropdown header 1</li> -->
+                            <li><a href="/member/accounting/journal/entry/receive-payment/{{$rcvpayment->rp_id}}">Transaction Journal</a></li>
+                            <!-- <li class="divider"></li> -->
+                            <!-- <li class="dropdown-header">Dropdown header 2</li> -->
+                            <li><a href="#">Void</a></li>
+                        </ul>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -56,7 +71,7 @@
                         </div>
                         <div class="col-sm-3">
                             <label>Deposit to</label>
-                            <select class="drop-down-coa" name="rp_ar_account">
+                            <select class="drop-down-coa" name="rp_ar_account" required>
                                 @include("member.load_ajax_data.load_chart_account", ['add_search' => "", "account_id" => isset($rcvpayment) ? $rcvpayment->rp_ar_account : ''])
                             </select>
                         </div>

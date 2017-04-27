@@ -219,7 +219,7 @@
 		<div class="title">What Professionals Say</div>
 		<div class="row clearfix">
 			<div class="col-md-4">
-				<div class="holder">
+				<div class="holder match-height">
 					<div class="icon"><img src="/themes/{{ $shop_theme }}/img/black-quote.png"></div>
 					<div class="text">If you really want to learn how to be rich, you must begin to know and understand the power found in networks. The Richest People in the world Build Networks</div>
 					<div class="author">
@@ -240,19 +240,19 @@
 				</div>
 			</div>
 			<div class="col-md-4">
-				<div class="holder">
+				<div class="holder match-height">
 					<div class="icon"><img src="/themes/{{ $shop_theme }}/img/black-quote.png"></div>
-					<div class="text">If you really want to learn how to be rich, you must begin to know and understand the power found in networks. The Richest People in the world Build Networks</div>
+					<div class="text">If I lost everything and had to start again, I would find myself a great network marketing company and get to work!</div>
 					<div class="author">
 						<table>
 							<tbody>
 								<tr>
 									<td class="author-img">
-										<img src="/themes/{{ $shop_theme }}/img/author-1.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/author-2.jpg">
 									</td>
 									<td class="author-text">
-										<div class="name">Robert Kiyosaki</div>
-										<div class="did">Best Selling Author of Rich Poor Dad and many other internationally acclaimed titles.</div>
+										<div class="name">Donald Trump</div>
+										<div class="did">Globally renowned property mogul and a multi billionaire.</div>
 									</td>
 								</tr>
 							</tbody>
@@ -261,24 +261,53 @@
 				</div>
 			</div>
 			<div class="col-md-4">
-				<div class="holder">
+				<div class="holder match-height">
 					<div class="icon"><img src="/themes/{{ $shop_theme }}/img/black-quote.png"></div>
-					<div class="text">If you really want to learn how to be rich, you must begin to know and understand the power found in networks. The Richest People in the world Build Networks</div>
+					<div class="text">The Best Investment I ever made… Owns 51 businesses today, 3 of which are Network Marketing Companies.</div>
 					<div class="author">
 						<table>
 							<tbody>
 								<tr>
 									<td class="author-img">
-										<img src="/themes/{{ $shop_theme }}/img/author-1.jpg">
+										<img src="/themes/{{ $shop_theme }}/img/author-3.jpg">
 									</td>
 									<td class="author-text">
-										<div class="name">Robert Kiyosaki</div>
-										<div class="did">Best Selling Author of Rich Poor Dad and many other internationally acclaimed titles.</div>
+										<div class="name">Warren Buffet</div>
+										<div class="did">Billionaire Investor and the richest person</div>
 									</td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="address" style="background-image: url('/themes/{{ $shop_theme }}/img/bottom-bg.jpg')">
+	<div class="container">
+		<div class="col-md-6 match-height holder">
+			<div class="absolute">
+				<div class="name">Global Headquarters</div>
+				<div class="line"></div>
+			</div>
+		</div>
+		<div class="col-md-6 match-height">
+			<div class="logo"><img src="/themes/{{ $shop_theme }}/img/white-logo.png"></div>
+			<div class="from">Address:  8/F Wong Hing Building 74-78 Stanley Street, Central Hong Kong</div>
+			<div class="contact">Tel No. (+852) 9472 6184 / (+852) 9145 7698</div>
+		</div>
+	</div>
+</div>
+<div class="join">
+	<div class="container">
+		<div class="holder">
+			<div class="row clearfix">
+				<div class="col-md-8">
+					<div class="text">We offer one of the Strongest Compensations plans in the Industry with Multiple Ways to Earn Weekly and Monthly Income!</div>
+				</div>
+				<div class="col-md-4 text-center">
+					<button class="btn">Join us today</button>
 				</div>
 			</div>
 		</div>

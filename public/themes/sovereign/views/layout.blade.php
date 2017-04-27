@@ -11,7 +11,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
-        <link href="https://fonts.googleapis.com/css?family=Poppins:400,600|Source+Sans+Pro:400,700" rel="stylesheet"> 
+        <link href="https://fonts.googleapis.com/css?family=Poppins:400,600|Source+Sans+Pro:400,600,700" rel="stylesheet"> 
         <!-- BOOTSTRAP -->
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
@@ -42,10 +42,83 @@
     	<div class="header-nav-top">
     		<div class="container clearfix">
                 <div class="pull-left">
-                    <div class="nav-holder active"><a href="javascript:">HOME</a></div>
-                    <div class="nav-holder"><a href="javascript:">PRODUCTS</a></div>
-                    <div class="nav-holder"><a href="javascript:">COMPANY</a></div>
-                    <div class="nav-holder"><a href="javascript:">CONTACT US</a></div>
+                    <div class="nav-holder {{ Request::segment(1) == "" ? "active" : "" }}"><a href="javascript:">HOME</a></div>
+                    <div class="nav-holder">
+                        <a class="show-product" href="javascript:">PRODUCTS</a>
+                        <div class="product-container">
+                            <div class="title">A Real Product Need</div>
+                            <div class="list-product">
+                                <div>
+                                    <div class="holder">
+                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
+                                        <div class="name">Barley Grass Capsule</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="holder">
+                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
+                                        <div class="name">Barley Grass Capsule</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="holder">
+                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
+                                        <div class="name">Barley Grass Capsule</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="holder">
+                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
+                                        <div class="name">Barley Grass Capsule</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="holder">
+                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
+                                        <div class="name">Barley Grass Capsule</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="holder">
+                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
+                                        <div class="name">Barley Grass Capsule</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="holder">
+                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
+                                        <div class="name">Barley Grass Capsule</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="holder">
+                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
+                                        <div class="name">Barley Grass Capsule</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="holder">
+                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
+                                        <div class="name">Barley Grass Capsule</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="holder">
+                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
+                                        <div class="name">Barley Grass Capsule</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="holder">
+                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
+                                        <div class="name">Barley Grass Capsule</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-holder {{ Request::segment(1) == "about" ? "active" : "" }}"><a href="/about">COMPANY</a></div>
+                    <div class="nav-holder {{ Request::segment(1) == "contact" ? "active" : "" }}"><a href="javascript:">CONTACT US</a></div>
                 </div>      
                 <div class="pull-right">
                     <div class="color-overlay"></div>
@@ -96,8 +169,55 @@
 
     <!-- FOOTER -->
   	<footer>
-
+        <div class="container">
+            <div class="col-md-4">
+                <h2>INFORMATION</h2>
+                <ul>
+                    <li><a href="javascript:">HOME</a></li>
+                    <li><a href="javascript:">PRODUCTS</a></li>
+                    <li><a href="javascript:">MARKETING PLAN</a></li>
+                    <li><a href="javascript:">ABOUT US</a></li>
+                    <li><a href="javascript:">CONTACT US</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h2>CONTACT US</h2>
+                <ul>
+                    <li>Tel No. (+852) 9472 6184 (+852) 9145 7698</li>
+                    <li>EMAIL: youremailhere@company.com</li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <h2 class="text-center">FOLLOW US ON</h2>
+                <div class="social-icon">
+                    <div class="holder">
+                        <i class="fa fa-facebook" aria-hidden="true"></i>
+                    </div>
+                    <div class="holder">
+                        <i class="fa fa-twitter" aria-hidden="true"></i>
+                    </div>
+                    <div class="holder">
+                        <i class="fa fa-pinterest-p" aria-hidden="true"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
  	</footer>
+    <div class="sub-footer">
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-md-6">
+                    <div class="nav">Terms & Condition</div>
+                    <div class="nav">API Use Policy</div>
+                    <div class="nav">Privacy Policy</div>
+                    <div class="nav">Cookies</div>
+                </div>
+                <div class="col-md-6">
+                    <div class="copyright">© 2015 - 2016 Sovereign World Corporation. All Rights Reserved</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal -->
     <div id="shopping_cart" class="modal fade global-modal shopping-cart-modal" role="dialog">

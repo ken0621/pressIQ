@@ -174,76 +174,96 @@ class Accounting
 		}
 
 		$line_data["item_id"]				= '';
-		$line_data["jline_name_reference"] 	= Accounting::checkTransactionName($entry["reference_module"]);
+		$line_data["jline_name_reference"] 	= Accounting::checkTransaction($entry["reference_module"])['name'];
 		$line_data["jline_name_id"]			= $entry["name_id"];
 
 		/* RECIVABLE OR PAYABLE */
 		if(Accounting::checkReceivable($entry["reference_module"]))
 		{
+			$journalType = 	Accounting::checkTransaction($entry["reference_module"])['journal'];	 
 			$line_data["entry_amount"]	= $entry["total"];
-			$line_data["entry_type"] 	= Accounting::normalBalance($account_receivable);
+			$line_data["entry_type"] 	= Accounting::$journalType($account_receivable);
 			$line_data["account_id"] 	= $account_receivable;
 			Accounting::insertJournalLine($line_data);
 
 			/* DISCOUNT AS WHOLE */
+			if(isset($entry["discount"]))
+			{
 			if($entry["discount"] > 0)
 			{
 				$line_data["entry_amount"]	= $entry["discount"];
-				$line_data["entry_type"] 	= Accounting::normalBalance(Accounting::getDiscountSale());
+				$line_data["entry_type"] 	= Accounting::$journalType(Accounting::getDiscountSale());
 				$line_data["account_id"] 	= Accounting::getDiscountSale();
 				Accounting::insertJournalLine($line_data);
 			}
+			}
 
 			/* VATABLE AS WHOLE */
+			if(isset($entry["vatable"]))
+			{
 			if($entry["vatable"] > 0)
 			{
 				$line_data["entry_amount"]	= $entry["vatable"];
-				$line_data["entry_type"] 	= Accounting::normalBalance(Accounting::getOutputVatPayable());
+				$line_data["entry_type"] 	= Accounting::$journalType(Accounting::getOutputVatPayable());
 				$line_data["account_id"] 	= Accounting::getOutputVatPayable();
 				Accounting::insertJournalLine($line_data);
 			}
+			}
 
 			/* EWT AS WHOLE */
+			if(isset($entry["ewt"]))
+			{
 			if($entry["ewt"] > 0)
 			{
 				$line_data["entry_amount"]	= $entry["ewt"];
-				$line_data["entry_type"] 	= Accounting::normalBalance(Accounting::getWitholdingTax());
+				$line_data["entry_type"] 	= Accounting::$journalType(Accounting::getWitholdingTax());
 				$line_data["account_id"] 	= Accounting::getWitholdingTax();
 				Accounting::insertJournalLine($line_data);
+			}
 			}
 		}
 		else
 		{
+			$journalType = 	Accounting::checkTransaction($entry["reference_module"])['journal'];
 			$line_data["entry_amount"]	= $entry["total"];
-			$line_data["entry_type"] 	= Accounting::normalBalance($account_payable);
+			$line_data["entry_type"] 	= Accounting::$journalType($account_payable);
 			$line_data["account_id"] 	= $account_payable;
 			Accounting::insertJournalLine($line_data);
 
 			/* DISCOUNT AS WHOLE */
+			if(isset($entry["discount"]))
+			{
 			if($entry["discount"] > 0)
 			{
 				$line_data["entry_amount"]	= $entry["discount"];
-				$line_data["entry_type"] 	= Accounting::contraAccount(Accounting::getDiscountPurchase());
+				$line_data["entry_type"] 	= Accounting::$journalType(Accounting::getDiscountPurchase());
 				$line_data["account_id"] 	= Accounting::getDiscountPurchase();
 				Accounting::insertJournalLine($line_data);
 			}
+			}
 
 			/* VATABLE AS WHOLE */
+			if(isset($entry["vatable"]))
+			{
 			if($entry["vatable"] > 0)
 			{
 				$line_data["entry_amount"]	= $entry["vatable"];
-				$line_data["entry_type"] 	= Accounting::contraAccount(Accounting::getOutputVatPayable());
+				$line_data["entry_type"] 	= Accounting::$journalType(Accounting::getOutputVatPayable());
 				$line_data["account_id"] 	= Accounting::getOutputVatPayable();
 				Accounting::insertJournalLine($line_data);
 			}
+			}
 
 			/* EWT AS WHOLE */
+			if(isset($entry["ewt"]))
+			{
 			if($entry["ewt"] > 0)
 			{
 				$line_data["entry_amount"]	= $entry["ewt"];
-				$line_data["entry_type"] 	= Accounting::contraAccount(Accounting::getWitholdingTax());
+				$line_data["entry_type"] 	= Accounting::$journalType(Accounting::getWitholdingTax());
 				$line_data["account_id"] 	= Accounting::getWitholdingTax();
 				Accounting::insertJournalLine($line_data);
+			}
 			}
 		}
 
@@ -288,6 +308,11 @@ class Accounting
 				case "sales-receipt":
 					break;
 				case "receive-payment":
+					/* CASH ACCOUNT - BANK */
+					$line_data["entry_amount"]	= $entry_line["entry_amount"];
+					$line_data["entry_type"] 	= Accounting::normalBalance($account_income);
+					$line_data["account_id"] 	= $account_income;
+					Accounting::insertJournalLine($line_data);
 					break;
 				case "purchase-order":
 					break;
@@ -448,40 +473,56 @@ class Accounting
 	 * Check transaction whether it is customer or vendor type
 	 *
 	 * @param 	string  	$type 		Type of a transaction
-	 * @return 	string 		customer or vendor
+	 * @return 	array		
 	 */
-	public static function checkTransactionName($type)
+	public static function checkTransaction($type)
 	{
-		$customer 	= 'customer';
-		$vendor 	= 'vendor';
 		switch($type)
 		{
 			case 'estimate':
-				return $customer;
+				$data["name"] 	= 'customer';
+				$data["journal"] = 'normalBalance';
+				return $data;
 				break;
 			case 'sales-order':
-				return $customer;
+				$data["name"] 	= 'customer';
+				$data["journal"] = 'normalBalance';
+				return $data;
 				break;
 			case 'invoice':
-				return $customer;
+				$data["name"] 	= 'customer';
+				$data["journal"] = 'normalBalance';
+				return $data;
 				break;
 			case 'credit-memo':
-				return $customer;
+				$data["name"] 	= 'customer';
+				$data["journal"] = 'contraAccount';
+				return $data;
 				break;
 			case 'sales-receipt':
-				return $customer;
+				$data["name"] 	= 'customer';
+				$data["journal"] = 'normalBalance';
+				return $data;
 				break;
 			case 'receive-payment':
-				return $customer;
+				$data["name"] 	= 'customer';
+				$data["journal"] = 'contraAccount';
+				return $data;
 				break;
 			case 'purchase-order':
-				return $vendor;
+				$data["name"] 	= 'vendor';
+				$data["journal"] = 'normalBalance';
+				return $data;
 				break;
 			case 'bill':
-				return $vendor;
+				$data["name"] 	= 'vendor';
+				$data["journal"] = 'normalBalance';
+				return $data;
 				break;
 			case 'bill-payment':
-				return $vendor;
+				$data["name"] 	= 'vendor';
+				$data["journal"] = 'contraAccount';
+				return $data;
 				break;
 			default:
 				$data = null;
@@ -571,7 +612,7 @@ class Accounting
         if(!$exist_account)
         {
             $insert["account_shop_id"]          = Accounting::getShopId();
-            $insert["account_type_id"]          = 4;
+            $insert["account_type_id"]          = 11;
             $insert["account_number"]           = "00000";
             $insert["account_name"]             = "Discount";
             $insert["account_description"]      = "";

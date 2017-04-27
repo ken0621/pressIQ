@@ -30,7 +30,6 @@ class Customer
         $order['customer_id'] = $id;
         $order['isTaxExempt'] = $tax_exempt;
         $data['order_id'] = $order_id;
-        dd();
         return $data;
 	}
 	

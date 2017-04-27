@@ -16,6 +16,7 @@ use App\Models\Tbl_payroll_group_rest_day;
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_period;
+use App\Models\Tbl_payroll_holiday_company;
 
 use App\Globals\Payroll;
 
@@ -36,7 +37,7 @@ class PayrollTimeSheetController extends Member
 		$data["default_time_in"] = Carbon::parse($data["employee_info"]->payroll_group_start)->format("h:i A");
 		$data["default_time_out"] = Carbon::parse($data["employee_info"]->payroll_group_end)->format("h:i A");
 		$data['_company'] = Payroll::company_heirarchy($this->user_info->shop_id);
-		dd($data);
+		// dd($data);
 		return view('member.payroll.employee_timesheet', $data);
 	}
 
@@ -114,14 +115,36 @@ class PayrollTimeSheetController extends Member
 		$data["default_time_out"] = $default_time_out =Carbon::parse($payroll_group_end)->format("h:i A");
 		$data["default_working_hours"] = $default_working_hours = "08:00";
 
-		/* CREATE ARRAY TIMESHEET */
+		/* CREATE ARRAY */
 		while($from <= $to)
 		{
 			/* INITITAL DATA */
+
+			$day 				= Carbon::parse($from)->format("D");
+			$day_number 		= Carbon::parse($from)->format("d");
+			$symbol 			= '<i class="table-check fa fa-unlock-alt hidden"></i>';
+			$holiday_class 		= '';
+			$virtural_holiday 	= '';
+
+			/* check if holiday */
+			$holiday = Tbl_payroll_holiday_company::getholiday($data["employee_info"]->payroll_employee_company_id, Carbon::parse($from)->format("Y-m-d"))->get();
+
+			if($holiday->count() > 0)
+			{
+				$holiday_class = ' color-red';
+				$day 		= '<span class="color-red">'.$day.'</span>';
+				$day_number = '<span class="color-red">'.$day_number.'</span>';
+				$symbol 	= '<a href="#" class="popup" size="sm" link="/member/payroll/employee_timesheet/show_holiday/'.$data["employee_info"]->payroll_employee_company_id.'/'.Carbon::parse($from)->format("Y-m-d").'"><i class="table-check fa fa-calendar hidden color-red"></i></a>';
+				$virtural_holiday 	= '08:00';
+			}
+
 			$data["_timesheet"][$from] = new stdClass();
 			$data["_timesheet"][$from]->date = Carbon::parse($from)->format("Y-m-d");
-			$data["_timesheet"][$from]->day_number = Carbon::parse($from)->format("d");
-			$data["_timesheet"][$from]->day_word = Carbon::parse($from)->format("D");
+			$data["_timesheet"][$from]->day_number = $day_number;
+			$data["_timesheet"][$from]->day_word = $day;
+			$data['_timesheet'][$from]->symbol = $symbol;
+			$data['_timesheet'][$from]->holiday_class = $holiday_class;
+			$data['_timesheet'][$from]->virtural_holiday = $virtural_holiday;
 
 			/* GET DATA FOR SPECIFIC DATE */
 			$data["timesheet_info"] = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($from)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
@@ -224,6 +247,10 @@ class PayrollTimeSheetController extends Member
 		$regular_holiday_count			= 0;
 		$total_working_days				= 0;
 
+		$leave_with_pay					= 0;
+		$leave_wo_pay					= 0;
+		$absent 						= 0;
+
 		$data = array();
 		$array = array();
 		while($from <= $to)
@@ -241,6 +268,19 @@ class PayrollTimeSheetController extends Member
 				$extra_day_count   += divide(Payroll::time_float($approved_timesheet->extra_day_hours) , $param_hour);
 				$special_holiday_count += divide(Payroll::time_float($approved_timesheet->special_holiday_hours) , $param_hour);
 				$regular_holiday_count += divide(Payroll::time_float($approved_timesheet->regular_holiday_hours) , $param_hour);
+			}
+
+			if($approved_timesheet->absent)
+			{
+				$absent++;
+			}
+			if($approved_timesheet->leave == 'without_pay')
+			{
+				$leave_wo_pay++;
+			}
+			if($approved_timesheet->leave == 'with_pay')
+			{
+				$leave_with_pay++;
 			}
 
 			$total_time_spent = Payroll::sum_time($total_time_spent, $approved_timesheet->time_spent);
@@ -281,11 +321,12 @@ class PayrollTimeSheetController extends Member
 		$data['special_holiday_count'] 	= Payroll::if_zero($special_holiday_count);
 		$data['regular_holiday_count'] 	= Payroll::if_zero($regular_holiday_count);
 		$data['total_working_days'] 	= Payroll::if_zero($total_working_days);
+		$data['absent']					= Payroll::if_zero($absent);
+		$data['leave_wo_pay']			= Payroll::if_zero($leave_wo_pay);
+		$data['leave_with_pay']			= Payroll::if_zero($leave_with_pay);
 		// dd($data);
 		return $data;
 	}
-
-
 
 	public function json_process_time()
 	{
@@ -317,18 +358,33 @@ class PayrollTimeSheetController extends Member
 
 			if($payroll_time_sheet_approved == 0) //overwrite timesheet record only if not yet approved
 			{
+
+				/*  get origin [to avoid duplicate] */
+				$reference = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $payroll_time_sheet_id)
+													   ->where('payroll_time_sheet_origin','!=','Payroll Time Sheet')
+													   ->first();
+				$origin = 'Payroll Time Sheet';
+				$payroll_company_id = 0;
+
+				if(isset($reference->payroll_time_sheet_origin))
+				{
+					$origin = $reference->payroll_time_sheet_origin;
+					$payroll_company_id = $reference->payroll_company_id;
+				}
+
 				Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $payroll_time_sheet_id)->delete();
 				$_insert_time_record = null;
 
 				foreach(Request::input('date')[$key] as $i => $time)
 				{
 					$_insert_time_record[$i]["payroll_time_sheet_id"] = $payroll_time_sheet_id;
-					$_insert_time_record[$i]["payroll_company_id"] = 0;
+					$_insert_time_record[$i]["payroll_company_id"] = $payroll_company_id;
 
 					if(Request::input("time_in")[$key][$i] == "")
 					{
 						$_insert_time_record[$i]["payroll_time_sheet_in"] = "";
 						$_insert_time_record[$i]["payroll_time_sheet_out"] = "";
+						// $_insert_time_record[$i]["payroll_time_sheet_origin"] = "Payroll Time Sheet";
 					}
 					else
 					{				
@@ -337,7 +393,7 @@ class PayrollTimeSheetController extends Member
 					}
 
 					$_insert_time_record[$i]["payroll_time_shee_activity"] = "";
-					$_insert_time_record[$i]["payroll_time_sheet_origin"] = "Payroll Time Sheet";
+					$_insert_time_record[$i]["payroll_time_sheet_origin"] = $origin;
 					$_insert_time_record[$i]["payroll_time_sheet_status"] = "pending";
 				}
 
@@ -500,6 +556,13 @@ class PayrollTimeSheetController extends Member
 		$employee_id = Request::input("employee_id");
 		Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->update($update);
 		echo json_encode("success");
+	}
+
+	/* show availabel holidays */
+	public function show_holiday($payroll_company_id, $date)
+	{
+		$data['_holiday'] = Tbl_payroll_holiday_company::getholiday($payroll_company_id, $date)->get();
+		return view('member.payroll.modal.modal_show_holiday', $data);
 	}
 
 }

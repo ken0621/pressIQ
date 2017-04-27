@@ -60,6 +60,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_timesheet/json_process_time_single/{date}/{employee_id}','Member\PayrollTimeSheetController@json_process_time_single');
 	Route::any('/employee_timesheet/adjustment_form','Member\PayrollTimeSheetController@adjustment_form');
 	Route::post('/employee_timesheet/adjustment_form_approve','Member\PayrollTimeSheetController@adjustment_form_approve');
+	Route::any('/employee_timesheet/show_holiday/{id}/{date}','Member\PayrollTimeSheetController@show_holiday');
 
 
 	Route::any('/timesheet/mark_ready_company','Member\PayrollController@mark_ready_company');

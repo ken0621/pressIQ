@@ -162,6 +162,16 @@ class Customer_ReceivePaymentController extends Member
             }
         }
 
+        $entry["reference_module"]      = "receive-payment";
+        $entry["reference_id"]          = $rcvpayment_id;
+        $entry["name_id"]               = $update["rp_customer_id"];
+        $entry["total"]                 = $update["rp_total_amount"];
+        $entry_data[0]['account_id']    = $update["rp_ar_account"];
+        $entry_data[0]['vatable']       = 0;
+        $entry_data[0]['discount']      = 0;
+        $entry_data[0]['entry_amount']  = $update["rp_total_amount"];
+        $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
+
         $new_data = AuditTrail::get_table_data("tbl_receive_payment","rp_id",$rcvpayment_id);
         AuditTrail::record_logs("Updated","receive_payment",$rcvpayment_id,serialize($old_data),serialize($new_data));
 

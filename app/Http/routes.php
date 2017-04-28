@@ -551,13 +551,15 @@ Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrde
 Route::any('/member/vendor/purchase_order/view_pdf/{id}','Member\Vendor_PurchaseOrderController@view_po_pdf');
 Route::any('/member/vendor/purchase_order/pdf/{id}','Member\Vendor_PurchaseOrderController@po_pdf');
 
+Route::any('/member/vendor/load_added_item/{po_id}','Member\Vendor_PurchaseOrderController@add_item');
+
 Route::get('/member/vendor/bill_list','Member\Vendor_CreateBillController@index');
 Route::get('/member/vendor/create_bill','Member\Vendor_CreateBillController@create_bill');
 Route::any('/member/vendor/load_purchase_order/{id}','Member\Vendor_CreateBillController@load_purchase_order');
 Route::any('/member/vendor/create_bill/add','Member\Vendor_CreateBillController@add_bill');
 Route::any('/member/vendor/create_bill/update','Member\Vendor_CreateBillController@update_bill');
 Route::any('/member/vendor/load_po_item','Member\Vendor_CreateBillController@load_po_item');
-
+Route::any('/member/vendor/po_remove/{id}','Member\Vendor_PurchaseOrderController@remove_items');
 
 Route::any('/member/vendor/receive_inventory/list','Member\Vendor_ReceiveInventoryController@index');
 Route::any('/member/vendor/receive_inventory','Member\Vendor_ReceiveInventoryController@receive_inventory');

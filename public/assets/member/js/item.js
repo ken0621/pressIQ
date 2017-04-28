@@ -19,6 +19,7 @@ function item()
         event_back_menu_click();
         event_image_change();
 
+        event_txt_onchange();
         // event_click_show_purchase();
 
         /* For Multiple Table */
@@ -27,6 +28,13 @@ function item()
 
         var option = $('option:selected', $(".measure_container")).attr('abbrev');
         $(".abbreviation").text(option);
+    }
+    function event_txt_onchange()
+    {
+        $(".item-name").keyup(function()
+        {
+            $(".item-sku").val($(this).val());
+        });
     }
     function initialize_select()
     {

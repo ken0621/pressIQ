@@ -164,8 +164,8 @@ class ItemController extends Member
 	}
 
 	public function add_submit()
-	{	
-		$price= "";
+	{	  
+		$price = "";
 
 		$item_name	 					= Request::input("item_name");
 		$item_sku						= Request::input("item_sku");
@@ -686,10 +686,13 @@ class ItemController extends Member
 			$item_measurement_id = Session::get("um_id");
 		}
 
-		if(Request::input("item_type") == "inventory")
+		$item_name = Request::input("item_name");
+		$item_sku = Request::input("item_sku");
+
+		if(Request::input("item_type") == "inventory")			
 		{
-			$insert["item_name"]				      = Request::input("item_name");
-			$insert["item_sku"]					      = Request::input("item_sku");
+			$insert["item_name"]				      = $item_name;
+			$insert["item_sku"]					      = $item_sku;
 			$insert["item_category_id"]			      = Request::input("item_category_id");
 			$insert["item_img"]					      = Request::input("item_img") ? Request::input("item_img") : "";
 			$insert["item_type_id"]				      = 1; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service)
@@ -756,8 +759,8 @@ class ItemController extends Member
 		}
 		else if(Request::input("item_type") == "noninventory")
 		{
-			$insert["item_name"]				      = Request::input("item_name");
-			$insert["item_sku"]					      = Request::input("item_sku");
+			$insert["item_name"]				      = $item_name;
+			$insert["item_sku"]					      = $item_sku;
 			$insert["item_category_id"]			      = Request::input("item_category_id");
 			$insert["item_img"]					      = Request::input("item_img") ? Request::input("item_img") : "";
 			$insert["item_type_id"]				      = 2; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service)
@@ -809,8 +812,8 @@ class ItemController extends Member
 		}
 		else if(Request::input("item_type") == "service")
 		{
-			$insert["item_name"]				      = Request::input("item_name");
-			$insert["item_sku"]					      = Request::input("item_sku");
+			$insert["item_name"]				      = $item_name;
+			$insert["item_sku"]					      = $item_sku;
 			$insert["item_category_id"]			      = Request::input("item_category_id");
 			$insert["item_img"]					      = Request::input("item_img") ? Request::input("item_img") : "";
 			$insert["item_type_id"]				      = 3; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service)
@@ -860,8 +863,8 @@ class ItemController extends Member
 		}
 		else if(Request::input("item_type") == "bundle")
 		{
-			$insert["item_name"]				= Request::input("item_name");
-			$insert["item_sku"]					= Request::input("item_sku");
+			$insert["item_name"]				= $item_name;
+			$insert["item_sku"]					= $item_sku;
 			$insert["item_img"]					= Request::input("item_img");
 			$insert["item_category_id"]			= Request::input("item_category_id");
 			$insert["item_sales_information"] 	= Request::input("item_sales_information");
@@ -984,8 +987,8 @@ class ItemController extends Member
 		$data								 = null;
 		$data["type_of_item"]           	 = Request::input("type_of_item");
 		$data["item_id"]					 = Request::input("item_id");
-		$data["item_name"]					 = Request::input("item_name");
-		$data["item_sku"]					 = Request::input("item_sku");
+		$data["item_name"]					 = Request::input("item_name")."/".Request::input("item_sku");
+		$data["item_sku"]					 = Request::input("item_name")."/".Request::input("item_sku");
 		$data["item_sales_information"]		 = Request::input("item_sales_information");
 		$data["item_purchasing_information"] = Request::input("item_purchasing_information");
 		$data["item_img"]					 = Request::input("item_img");

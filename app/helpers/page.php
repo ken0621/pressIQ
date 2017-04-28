@@ -538,7 +538,7 @@ function page_list()
 
     /* -- CUSTOMERS => CREATE SALES ORDER  */
     $code = "customer-sales-order";
-    $nav[$page]['submenu'][$code]['label'] = "Create Sales Order";
+    $nav[$page]['submenu'][$code]['label'] = "Sales Order";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sales_order_list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -565,7 +565,7 @@ function page_list()
     
     /* -- CUSTOMERS => CUSTOMER RECEIVE PAYMENT  */
     $code = "customer-sales-receipt";
-    $nav[$page]['submenu'][$code]['label'] = "Create Sales Receipt";
+    $nav[$page]['submenu'][$code]['label'] = "Sales Receipt";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sales_receipt/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];

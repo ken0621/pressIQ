@@ -48,7 +48,8 @@ function dateFormat($string)
 {
     return date_format(date_create($string),"m/d/Y");
 }
-function deleteDir($dirPath) {
+function deleteDir($dirPath) 
+{
     if (! is_dir($dirPath)) {
         throw new InvalidArgumentException("$dirPath must be a directory");
     }

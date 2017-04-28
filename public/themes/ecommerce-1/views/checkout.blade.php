@@ -72,7 +72,7 @@
 														<td class="ray"><input name="payment_method_id" value="{{ $payment_method->method_id }}" type="radio"></td>
 														<td>
 															<div class="name">{{ $payment_method->other_name }}</div>
-															<div class="description">{{ $payment_method->other_description }}</div>
+															<div class="description" style="white-space: pre-wrap;">{{ $payment_method->other_description }}</div>
 														</td>
 													</tr>
 												@else
@@ -155,8 +155,7 @@
 									<tr>
 										<td></td>
 										<td class="text-right"><b>Subtotal</b></td>
-										<td style="word-break: break-all;">P {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</td>
-										<td></td>
+										<td colspan="2" style="word-break: break-all;">P {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</td>
 									</tr>
 									@if($get_cart["sale_information"]["total_overall_price"] > $get_cart["sale_information"]["minimum_purchase"])
 									<!-- <tr>
@@ -174,7 +173,7 @@
 									<tr>
 										<td></td>
 										<td class="text-right"><b>Total</b></td>
-										<td class="total" style="word-break: break-all;">P {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</td>
+										<td colspan="2" class="total" style="word-break: break-all;">P {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</td>
 									</tr>
 								</tbody>
 							</table>

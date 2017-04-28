@@ -378,8 +378,8 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
     /* PURCHASING INVENTORY SYSTEM */
-    $page = "pis_tablet";
-    $nav[$page]['name'] = "Agent Tablet";
+    $page = "pis_agent";
+    $nav[$page]['name'] = "Sales Agent";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "tablet";
 
@@ -389,6 +389,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = "/tablet";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','create-invoice'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+     /* -- PIS => SIR */
+    $code = "agent-collectiong";
+    $nav[$page]['submenu'][$code]['label'] = "Collection";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/collection";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
@@ -538,7 +547,7 @@ function page_list()
 
     /* -- CUSTOMERS => CREATE SALES ORDER  */
     $code = "customer-sales-order";
-    $nav[$page]['submenu'][$code]['label'] = "Create Sales Order";
+    $nav[$page]['submenu'][$code]['label'] = "Sales Order";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sales_order_list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -565,7 +574,7 @@ function page_list()
     
     /* -- CUSTOMERS => CUSTOMER RECEIVE PAYMENT  */
     $code = "customer-sales-receipt";
-    $nav[$page]['submenu'][$code]['label'] = "Create Sales Receipt";
+    $nav[$page]['submenu'][$code]['label'] = "Sales Receipt";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sales_receipt/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -742,7 +751,7 @@ function page_list()
     
     /* -- VENDORS => PAY BILLS  */
     $code = "vendor-bill";
-    $nav[$page]['submenu'][$code]['label'] = "Bill";
+    $nav[$page]['submenu'][$code]['label'] = "Receive Inventory w/ Bill";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/bill_list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -754,6 +763,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Pay Bills";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/paybill/list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    /* -- VENDORS => CHECK  */
+    $code = "vendor-check";
+    $nav[$page]['submenu'][$code]['label'] = "Check";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/write_check/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";

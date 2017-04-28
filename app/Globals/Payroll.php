@@ -1210,7 +1210,6 @@ class Payroll
 		$absent_count = 0;
 		$absent_deduction = 0;
 
-
 		/* salary */
 		$monthly_salary =0;
 
@@ -1728,12 +1727,14 @@ class Payroll
 
 		/* GET SSS CONTRIBUTION */
 		$sss_contribution	= Payroll::sss_contribution($shop_id, $data['salary_sss']);
+
 		if($group->payroll_group_sss == 'Every Period')
 		{
 			
 			$data['sss_contribution_ee'] = divide($sss_contribution['ee'], $period_category_arr['period_count']);
 			$data['sss_contribution_er'] = divide($sss_contribution['er'], $period_category_arr['period_count']);
 			$data['sss_contribution_ec'] = divide($sss_contribution['ec'], $period_category_arr['period_count']);
+			// dd($data['sss_contribution_ee']);
 		}
 		else if($group->payroll_group_sss == Payroll::return_ave($period_category))
 		{

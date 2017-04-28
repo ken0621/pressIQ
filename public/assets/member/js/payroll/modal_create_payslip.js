@@ -10,9 +10,23 @@ function modal_create_payslip()
 		include_header_action();
 		time_summary();
 		check_company_check();
+		combo_box();
 		// check_orientation($(".paper-orientation").val());
 		$(".payslip-container").css("width",$(".payslip-width").val()+"%");
 	}	
+
+
+
+	function combo_box()
+	{
+		$(".drop-down-paper-size").globalDropList(
+		{
+		    link: '/member/payroll/custom_payslip/modal_create_paper_size',
+		    link_size: 'md',
+		    width : '100%',
+		    placeholder: 'Category'
+		});
+	}
 
 	function payslip_action()
 	{

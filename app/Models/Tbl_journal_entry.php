@@ -16,17 +16,17 @@ class Tbl_journal_entry extends Model
 
     public function scopeTransaction($query, $reference)
     {
-    	if($reference == "invoice")
-    	{
-    		$query->selectRaw("*, concat('/member/customer/invoice?id=', inv_id) as txn_link")
-    			  ->join("tbl_customer_invoice","inv_id","=","je_reference_id")
-    			  ->join("tbl_customer","customer_id","=","inv_customer_id");
-    	}
-        elseif($reference)
-        {
-            $query->selectRaw("*, concat('/member/customer/receive_payment?id=', rp_id) as txn_link")
-                  ->join("tbl_receive_payment","rp_id","=","je_reference_id");
-        }
+        $query->selectRaw("*, (CASE je_reference_module
+                                WHEN 'invoice' THEN concat('/member/customer/invoice?id=', je_reference_id) 
+                                WHEN 'sales-receipt' THEN concat('/member/customer/sales_receipt?id=', je_reference_id)
+                                WHEN 'credit-memo' THEN concat('/member/customer/credit_memo?id=', je_reference_id)
+                                WHEN 'receive-payment' THEN concat('/member/customer/receive_payment?id=', je_reference_id)
+                                WHEN 'bill' THEN concat('/member/vendor/create_billt?id=', je_reference_id)
+                                WHEN 'debit-memo' THEN concat('/member/vendor/', je_reference_id)
+                                WHEN 'bill-payment' THEN concat('/member/vendor/paybill?id=', je_reference_id)
+                                END) as txn_link")
+                        ->where("je_reference_module", $reference);
+
         return $query;
     }
 }

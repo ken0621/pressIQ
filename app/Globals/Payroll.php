@@ -1084,7 +1084,7 @@ class Payroll
 
 	public static function compute_per_employee($employee_id, $start = '0000-00-00', $end = '0000-00-00', $shop_id = 0, $payroll_period_category = '', $payroll_period_company_id = 0)
 	{
-		$period_category_arr = Payroll::getperiodcount($shop_id, $end, $payroll_period_category);
+		$period_category_arr = Payroll::getperiodcount($shop_id, $end, $payroll_period_category, $start);
 
 		$period_category = $period_category_arr['period_category'];
 
@@ -1731,10 +1731,10 @@ class Payroll
 		if($group->payroll_group_sss == 'Every Period')
 		{
 			
-			$data['sss_contribution_ee'] = divide($sss_contribution['ee'], $period_category_arr['period_count']);
-			$data['sss_contribution_er'] = divide($sss_contribution['er'], $period_category_arr['period_count']);
-			$data['sss_contribution_ec'] = divide($sss_contribution['ec'], $period_category_arr['period_count']);
-			dd($data['sss_contribution_ee']);
+			$data['sss_contribution_ee'] = divide($sss_contribution['ee'], $period_category_arr['count_per_period']);
+			$data['sss_contribution_er'] = divide($sss_contribution['er'], $period_category_arr['count_per_period']);
+			$data['sss_contribution_ec'] = divide($sss_contribution['ec'], $period_category_arr['count_per_period']);
+			// dd($data['sss_contribution_ee']);
 		}
 		else if($group->payroll_group_sss == Payroll::return_ave($period_category))
 		{
@@ -1747,9 +1747,9 @@ class Payroll
 			}
 			else if(Payroll::return_ave($period_category) == '2nd Period')
 			{
-				$data['sss_contribution_ee'] = divide($sss_contribution['ee'], $period_category_arr['period_count']) * 2;
-				$data['sss_contribution_er'] = divide($sss_contribution['er'], $period_category_arr['period_count']) * 2;
-				$data['sss_contribution_ec'] = divide($sss_contribution['ec'], $period_category_arr['period_count']) * 2;
+				$data['sss_contribution_ee'] = divide($sss_contribution['ee'], $period_category_arr['count_per_period']) * 2;
+				$data['sss_contribution_er'] = divide($sss_contribution['er'], $period_category_arr['count_per_period']) * 2;
+				$data['sss_contribution_ec'] = divide($sss_contribution['ec'], $period_category_arr['count_per_period']) * 2;
 			}
 		}
 
@@ -1758,8 +1758,8 @@ class Payroll
 		if($group->payroll_group_philhealth == 'Every Period')
 		{
 			// philhealth_contribution
-			$data['philhealth_contribution_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['period_count']);
-			$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'] , $period_category_arr['period_count']);
+			$data['philhealth_contribution_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['count_per_period']);
+			$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'] , $period_category_arr['count_per_period']);
 			
 		}
 		else if($group->payroll_group_philhealth == Payroll::return_ave($period_category))
@@ -1771,8 +1771,8 @@ class Payroll
 			}
 			else if(Payroll::return_ave($period_category) == '2nd Period')
 			{
-				$data['philhealth_contribution_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['period_count']) * 2;
-				$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'], $period_category_arr['period_count']) * 2;
+				$data['philhealth_contribution_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['count_per_period']) * 2;
+				$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'], $period_category_arr['count_per_period']) * 2;
 			}
 		}
 
@@ -1782,7 +1782,7 @@ class Payroll
 		if($group->payroll_group_pagibig == 'Every Period')
 		{
 			// philhealth_contribution
-			$data['pagibig_contribution'] = divide($pagibig_contribution, $period_category_arr['period_count']);
+			$data['pagibig_contribution'] = divide($pagibig_contribution, $period_category_arr['count_per_period']);
 		}
 
 		else if($group->payroll_group_pagibig == Payroll::return_ave($period_category))
@@ -1794,7 +1794,7 @@ class Payroll
 			}
 			else if(Payroll::return_ave($period_category) == '2nd Period')
 			{
-				$data['pagibig_contribution'] = divide($philhealth_contribution, $period_category_arr['period_count']) * 2;
+				$data['pagibig_contribution'] = divide($philhealth_contribution, $period_category_arr['count_per_period']) * 2;
 			}
 		}
 
@@ -1816,10 +1816,10 @@ class Payroll
 					$salary_taxable = 0;
 				}
 
-				$data['tax_contribution'] = divide(Payroll::tax_contribution($shop_id, $salary_taxable, $data['tax_status'], $payroll_period_category), $period_category_arr['period_count']);
+				$data['tax_contribution'] = divide(Payroll::tax_contribution($shop_id, $salary_taxable, $data['tax_status'], $payroll_period_category), $period_category_arr['count_per_period']);
 				if($group->payroll_group_tax == 'Last Period')
 				{
-					$data['tax_contribution'] = $data['tax_contribution'] * $period_category_arr['period_count'];
+					$data['tax_contribution'] = $data['tax_contribution'] * $period_category_arr['count_per_period'];
 				}	
 			}
 			
@@ -1880,12 +1880,19 @@ class Payroll
 		return $data;
 	}
 
-	public static function getperiodcount($shop_id = 0, $date = '0000-00-00', $payroll_period_category = '')
+	public static function getperiodcount($shop_id = 0, $date = '0000-00-00', $payroll_period_category = '', $start = '0000-00-00')
 	{
 		$datearr[0] 	= date('Y-m-01', strtotime($date));
 		$datearr[1] 	= date('Y-m-t', strtotime($date));
+		$date_end_count = date('t', strtotime($date));
+		$date_day		= date('D',strtotime($date));
+		$date_month 	= date('m', strtotime($date));
+		$date_year 		= date('Y', strtotime($date));
+
+		// dd($date_end_count);
 
 		$period_category = 'None';
+		$count_per_period = 0;
 
 		$_period = Tbl_payroll_period::sel($shop_id, 0)
 									->where('payroll_period_category', $payroll_period_category)
@@ -1918,6 +1925,23 @@ class Payroll
 			{
 				$period_category = 'Last Period';
 			}
+
+			/* get total number of weeks per month */
+			for($i = 1; $i <= $date_end_count; $i++)
+			{
+
+				$istr = $i;
+				if($i <= 9)
+				{
+					$istr = '0'.$i;
+				}
+
+				if($date_day == date('D', strtotime($date_year.'-'.$date_month.'-'.$istr)))
+				{
+					$count_per_period++;
+				}
+			}
+
 		}
 		else if($payroll_period_category == 'Semi-monthly')
 		{
@@ -1929,14 +1953,18 @@ class Payroll
 			{
 				$period_category = 'Last Period';
 			}
+
+			$count_per_period = 2;
 		}
 		else if($payroll_period_category == 'Monthly')
 		{
 			$period_category = 'Last Period';
+			$count_per_period = 1;
 		}
 
-		$data['period_category'] = $period_category;
-		$data['period_count']	 = $period_count;
+		$data['period_category']  = $period_category;
+		$data['period_count']	  = $period_count;
+		$data['count_per_period'] = $count_per_period;
 
 		return $data;
 

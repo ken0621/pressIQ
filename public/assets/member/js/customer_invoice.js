@@ -669,7 +669,6 @@ function customer_invoice(){
 }	
 function add_est_to_inv(est_id)
 {
-
 	$(".estimate-tbl").load('/member/customer/load_added_item/'+est_id, function()
 	{
 		console.log("success");
@@ -679,23 +678,6 @@ function add_est_to_inv(est_id)
 
 		$(".est-"+est_id).addClass("hidden");
 	});
-	// $.ajax({
-	// 	url : "/member/customer/load_est_so_item",
-	// 	data : {est_id: est_id},
-	// 	dataType : "json",
-	// 	type : "get",
-	// 	success : function(data)
-	// 	{
-          
-
- //             customer_invoice.action_compute();
- //             customer_invoice.action_reassign_number();
-	// 	},
-	// 	error : function()
-	// 	{
-	// 		alert("Something wen't wrong.");
-	// 	}
-	// });
 }
 
 /* AFTER DRAGGING A TABLE ROW */

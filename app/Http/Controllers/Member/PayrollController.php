@@ -3706,6 +3706,21 @@ class PayrollController extends Member
           return view('member.payroll.modal.modal_create_paper_size', $data);
      }
 
+     public function modal_save_paper_size()
+     {
+          $insert['shop_id']            = Self::shop_id();
+          $insert['paper_size_name']    = Request::input('paper_size_name');
+          $insert['paper_size_width']   = Request::input('paper_size_width');
+          $insert['paper_size_height']  = Request::input('paper_size_height');
+
+          $id = Tbl_payroll_paper_sizes::insertGetId($insert);
+
+          $return['status']        = 'success';
+          $return['id']            = $id;
+          $return['function_name'] = 'payrollconfiguration.reload_paper_size_d';
+          return collect($return)->toJson();
+     }
+
      /* PAYROLL CUSTOM PAYSLIP END */
 
 

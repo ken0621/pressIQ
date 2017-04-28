@@ -193,7 +193,7 @@ class Category
 			$html .= view('member.manage_category.tr_row',$data)->render();
 			if($count != 0)
 			{	
-				$html .= Category::select_tr_html($shop_id, $archived, $cat->type_id, $margin_left + 30);
+				$html .= Category::select_tr_html($shop_id, $archived, $cat_type, $margin_left + 30);
 			}
 		}
 		return $html;
@@ -203,6 +203,7 @@ class Category
 		$html = "";
 		$_category = Tbl_category::where("archived",1)->get();
 
+		$cat_type = array("all","services","inventory","non-inventory","bundles");
 		foreach ($_category as $key => $value) 
 		{
 			$class = '';
@@ -216,7 +217,7 @@ class Category
 			$class .= $child;
 
 			$caret = '';
-			$count = Tbl_category::selecthierarchy(Category::getShopId(), $value->type_parent_id, $value->type_id, 1)->count();
+			$count = Tbl_category::selecthierarchy(Category::getShopId(), $value->type_parent_id, $cat_type, 1)->count();
 			if($count != 0)
 			{
 				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$value->type_id.'"></i>';

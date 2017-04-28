@@ -573,7 +573,10 @@ Route::get('/member/vendor/load_pb/{id}','Member\Vendor_PayBillController@load_v
 Route::any('/member/vendor/paybill/add','Member\Vendor_PayBillController@add_pay_bill');
 Route::any('/member/vendor/paybill/update/{id}','Member\Vendor_PayBillController@update_pay_bill');
 
-Route::get('/member/vendor/write_check','Member\Vendor_WriteCheckController@index');
+Route::any('/member/vendor/write_check','Member\Vendor_CheckController@write_check');
+Route::any('/member/vendor/write_check/list','Member\Vendor_CheckController@check_list');
+Route::any('/member/vendor/write_check/add','Member\Vendor_CheckController@add_check');
+Route::any('/member/vendor/write_check/update','Member\Vendor_CheckController@update_check');
 
 /*Manufacturer*/
 Route::any('/member/item/manufacturer','Member\ManufacturerController@manufacturer_list');

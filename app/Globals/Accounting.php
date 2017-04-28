@@ -400,27 +400,6 @@ class Accounting
 		Tbl_journal_entry_line::insert($journal_line);
 	}
 
-	/** 
-	 * Checking if the given $type is a receivable or payable type
-	 * @param 	string 		$type 			Reference module / type of transaction
-	 * @return 	boolean 					true if it is receivable and false if not - DD for invalid(For developer purpose)
-	*/
-	public static function checkReceivable($type)
-	{
-		if($type == "invoice")
-		{
-			return true;
-		}
-		elseif($type == "credit-memo" )
-		{
-			return false;
-		}
-		else
-		{
-			dd("Invalid Reference Module");
-		}
-	}
-
 	/**
 	 * Getting normal balance of the given account
 	 *
@@ -479,10 +458,10 @@ class Accounting
 	}
 
 	/**
-	 * Check transaction whether it is customer or vendor type
+	 * Check transaction whether it is customer or vendor type; normal balace or contra account; receivable or payable;
 	 *
 	 * @param 	string  	$type 		Type of a transaction
-	 * @return 	array		
+	 * @return 	array[3]	is_receivable | name | journal	
 	 */
 	public static function checkTransaction($type)
 	{

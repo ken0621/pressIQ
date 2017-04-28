@@ -45,7 +45,6 @@ class CustomerController extends Member
             {
                 return view('member.customer.customer_tbl', $data)->render();  
             }
-            // dd($data);
 
     		return view('member.customer.index',$data);
         }
@@ -62,11 +61,13 @@ class CustomerController extends Member
 
     	    $shop_id = $this->checkuser('user_shop');
     	    $paginate = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
-                                    ->select('tbl_customer.customer_id as customer_id1', 'tbl_customer.*', 'tbl_customer_other_info.*', 'tbl_customer_other_info.customer_id as cus_id')
+                                    ->balanceJournal()
+                                    ->selectRaw('tbl_customer.customer_id as customer_id1, tbl_customer.*, tbl_customer_other_info.*, tbl_customer_other_info.customer_id as cus_id')
                                     ->where('tbl_customer.shop_id',$shop_id)
                                     ->where('tbl_customer.archived',$archived)
                                     ->where('tbl_customer.IsWalkin',$IsWalkin)
     								->orderBy('tbl_customer.first_name');
+
     		if($filter_by_slot == 'w_slot')
             {
                 $paginate = $paginate->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner','=', 'tbl_customer.customer_id');
@@ -869,7 +870,7 @@ class CustomerController extends Member
 	
     public function view_customer_details($id)
     {
-        $data["customer"]       = Tbl_customer::info()->balanceJournal($id)->where("tbl_customer.customer_id", $id)->first();
+        $data["customer"]       = Tbl_customer::info()->balanceJournal()->where("tbl_customer.customer_id", $id)->first();
         $data["_transaction"]   = Tbl_customer::transaction($this->checkuser('user_shop'), $id)->get();
 
         return view('member.customer.customer_details', $data);

@@ -12,17 +12,41 @@ class Tbl_customer extends Model
     
     public function scopeTransaction($query, $shop_id, $customer_id = null)
     {
-        $invoice = DB::table("tbl_customer")->selectRaw("inv_date as date, 'Invoice' as type, inv_id as no, inv_due_date as due_date, inv_overall_price - inv_payment_applied as balance, inv_overall_price as total, 'status' as status, date_created, 'invoice' as reference_name ")
+        /* INVOICE */
+        $invoice = DB::table("tbl_customer")->selectRaw("inv_date as date, 'Invoice' as type, inv_id as no, inv_due_date as due_date, inv_overall_price - inv_payment_applied as balance, inv_overall_price as total, 'status' as status, date_created, 'customer/invoice' as reference_url")
                     ->join("tbl_customer_invoice","inv_customer_id","=","customer_id")
-                    ->where("inv_shop_id", $shop_id);
+                    ->where("inv_shop_id", $shop_id)
+                    ->where("is_sales_receipt", 0);
         if($customer_id) $invoice->where("inv_customer_id", $customer_id);
 
-        $receive_payment = DB::table("tbl_customer")->selectRaw("rp_date as date, 'Payment' as type, rp_id as no, rp_date as due_date, 0 as balance, rp_total_amount as total, 'status' as status, date_created, 'receive_payment' as reference_name")
+        /* CREDIT MEMO */
+        $credit_memo = DB::table("tbl_credit_memo")->selectRaw("cm_date as date, 'Credit Memo' as type, cm_id as no, cm_due_date as due_date, 0 as balance, cm_amount as total, 'status' as status, date_created, 'customer/credit_memo' as reference_url")
+                    ->join("tbl_credit_memo_line","cmline_cm_id","=","cm_id");
+        if($customer_id) $credit_memo->where("cm_customer_id", $customer_id);
+
+        /* SALES RECEIPT */
+        $sales_receipt = DB::table("tbl_customer")->selectRaw("inv_date as date, 'Sales Receipt' as type, inv_id as no, inv_due_date as due_date, 0 balance, inv_overall_price as total, 'status' as status, date_created, 'customer/sales_receipt' as reference_url")
+                    ->join("tbl_customer_invoice","inv_customer_id","=","customer_id")
+                    ->where("inv_shop_id", $shop_id)
+                    ->where("is_sales_receipt", 1);
+        if($customer_id) $invoice->where("inv_customer_id", $customer_id);
+
+        /* RECEIVE PAYMENT */
+        $receive_payment = DB::table("tbl_customer")->selectRaw("rp_date as date, 'Payment' as type, rp_id as no, rp_date as due_date, 0 as balance, rp_total_amount as total, 'status' as status, date_created, 'customer/receive_payment' as reference_url")
                     ->join("tbl_receive_payment","rp_customer_id","=","customer_id")
                     ->where("rp_shop_id", $shop_id);
         if($customer_id) $receive_payment->where("rp_customer_id", $customer_id);
+
+        /* JOURNAL ENTRY */
+        $journal_entry = DB::table("tbl_journal_entry")->selectRaw("je_entry_date as date, 'Journal' as type, je_id as no,'' as due_date, 0 as balance, jline_amount as total, 'status' as status, tbl_journal_entry.created_at as date_created, 'accounting/journal' as reference_url")
+                    ->leftJoin("tbl_journal_entry_line","jline_je_id","=","je_id")
+                    ->where("je_shop_id", $shop_id)
+                    ->where("je_reference_module","journal-entry");
+        if($customer_id) $journal_entry->where("jline_name_id", $customer_id)->where("jline_name_reference","customer");
+
         
-        return $query = $receive_payment->union($invoice)->orderBy("date_created","desc");
+        
+        return $query = $receive_payment->union($invoice)->union($journal_entry)->orderBy("date_created","desc");
     }
 
     public function scopeInfo($query)

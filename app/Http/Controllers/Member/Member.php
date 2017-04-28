@@ -162,6 +162,8 @@ class Member extends Controller
 		Payroll::generate_philhealth($this->user_info->shop_id);
 		/* INSERT PAGIBIG TABLE PER SHOP */
 		Payroll::generate_pagibig($this->user_info->shop_id);
+		/* INSERT PAPER SIZE FOR PAYSLIP [PAYROLL] */
+		Payroll::generate_paper_size($this->user_info->shop_id);
 		/* INSERT DEFAULT TERMS */
 		Seed_manual::put_default_tbl_terms($this->user_info->shop_id);
 

@@ -1734,7 +1734,7 @@ class Payroll
 			$data['sss_contribution_ee'] = divide($sss_contribution['ee'], $period_category_arr['period_count']);
 			$data['sss_contribution_er'] = divide($sss_contribution['er'], $period_category_arr['period_count']);
 			$data['sss_contribution_ec'] = divide($sss_contribution['ec'], $period_category_arr['period_count']);
-			dd($data['sss_contribution_ee']);
+			dd($period_category_arr['period_count']);
 		}
 		else if($group->payroll_group_sss == Payroll::return_ave($period_category))
 		{

@@ -42,7 +42,7 @@
     	<div class="header-nav-top">
     		<div class="container clearfix">
                 <div class="pull-left">
-                    <div class="nav-holder {{ Request::segment(1) == "" ? "active" : "" }}"><a href="javascript:">HOME</a></div>
+                    <div class="nav-holder {{ Request::segment(1) == "" ? "active" : "" }}"><a href="/">HOME</a></div>
                     <div class="nav-holder">
                         <a class="show-product" href="javascript:">PRODUCTS</a>
                         <div class="product-container">
@@ -118,13 +118,61 @@
                         </div>
                     </div>
                     <div class="nav-holder {{ Request::segment(1) == "about" ? "active" : "" }}"><a href="/about">COMPANY</a></div>
-                    <div class="nav-holder {{ Request::segment(1) == "contact" ? "active" : "" }}"><a href="javascript:">CONTACT US</a></div>
+                    <div class="nav-holder {{ Request::segment(1) == "contact" ? "active" : "" }}"><a href="/contact">CONTACT US</a></div>
                 </div>      
                 <div class="pull-right">
                     <div class="color-overlay"></div>
                     <div class="menu-container">
-                        <div class="menu-holder"><a href="javascript:">LOGIN</a></div>
-                        <div class="menu-holder"><a href="javascript:">JOIN US TODAY</a></div>
+                        <div class="menu-holder dropdown mega-dropdown">
+                            <a class="dropdown-toggle" href="javascript:"><img src="/themes/{{ $shop_theme }}/img/key.png"> LOGIN</a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <h2>Member Login</h2>
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="username" placeholder="User Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="password" name="password" placeholder="Password">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn">Login <span class="caret"></span></button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="menu-holder dropdown mega-dropdown">
+                            <a class="dropdown-toggle" href="javascript:"><img src="/themes/{{ $shop_theme }}/img/link.png"> JOIN US TODAY</a></a>
+                            <ul class="dropdown-menu dropdown-menu-right orange">
+                                <li>
+                                    <h2>New to Sovereign World Corporation?</h2>
+                                    <div class="title">JOIN US TODAY!</div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="username" placeholder="User Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="email" name="email" placeholder="Email Address">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="birthday" placeholder="Birthday">
+                                    </div>
+                                    <div class="form-group">
+                                        <textarea class="form-control" placeholder="Address" name="address"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="text" name="contact_number" placeholder="Contact No.">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="password" name="password" placeholder="Password">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" type="password" name="password_confirmation" placeholder="Repeat Password">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn">Create</button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

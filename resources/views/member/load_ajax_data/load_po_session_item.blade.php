@@ -1,6 +1,6 @@
 @if(count(Session::get('po_item')) > 0)
     @foreach(Session::get('po_item') as $items)
-    <tr class="tr-draggable tr-id-{{$items['poline_po_id']}}">
+    <tr class="trcount tr-draggable tr-id-{{$items['poline_po_id']}}">
         <td class="text-center cursor-move move">
             <i class="fa fa-th-large colo-mid-dark-gray"></i>
         </td>

@@ -1,5 +1,7 @@
 var modal_create_payslip = new modal_create_payslip();
 
+
+
 function modal_create_payslip()
 {
 	init();
@@ -27,6 +29,13 @@ function modal_create_payslip()
 		    placeholder: 'Category'
 		});
 	}
+
+	// $(".droplist-vendor").load("/member/vendor/load_vendor", function()
+	//     {                
+	//          $(".droplist-vendor").globalDropList("reload");
+	//          $(".droplist-vendor").val(data.vendor_id).change();          
+	//     });
+ //    	data.element.modal("hide");
 
 	function payslip_action()
 	{

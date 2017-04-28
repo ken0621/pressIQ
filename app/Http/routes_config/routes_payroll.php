@@ -239,6 +239,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/custom_payslip',"Member\PayrollController@custom_payslip");
 	Route::any('/custom_payslip/modal_create_payslip',"Member\PayrollController@modal_create_payslip");
 	Route::any('/custom_payslip/modal_create_paper_size',"Member\PayrollController@modal_create_paper_size");
+	Route::any('/custom_payslip/modal_save_paper_size',"Member\PayrollController@modal_save_paper_size");
 	
 	/* PAYROLL CUSTOM PAYSLIP END */
 

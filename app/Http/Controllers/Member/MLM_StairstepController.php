@@ -6,6 +6,7 @@ use App\Models\Tbl_stairstep_distribute_slot;
 use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_user;
 use App\Models\Tbl_tree_placement;
+use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_slot;
 use App\Globals\Mlm_slot_log;
@@ -160,14 +161,14 @@ class MLM_StairstepController extends Member
 	                                                               ->orderBy("stairstep_level","DESC")
 	                                                               ->first();
 
-			    $placement_tree  = Tbl_tree_placement::where("placement_tree_child_id",$slot_id)->orderBy("placement_tree_level","ASC")->get();
+			    $sponsor_tree    = Tbl_tree_sponsor::where("sponsor_tree_child_id",$slot_id)->orderBy("sponsor_tree_level","ASC")->get();
 		        $percentage      = null;
 		        $check_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->first();
 		        $slot_pv         = $converted_pv;
 
 		        if($check_stairstep)
 		        {
-		            foreach($placement_tree as $placement)
+		            foreach($sponsor_tree as $placement)
 		            {
 		                $reduced_percent = 0;
 		                $computed_points = 0;
@@ -215,9 +216,9 @@ class MLM_StairstepController extends Member
 		                if($computed_points > 0)
 		                {             
 		                    $log                                    = "You earned ".$reduced_percent."% of ".$converted_pv."(".$computed_points.") from slot #".$slot_info->slot_id."(Current Rank:".$slot_stairstep->stairstep_name.").";
-		                    $arry_log['wallet_log_slot']            = $placement->placement_tree_parent_id;
+		                    $arry_log['wallet_log_slot']            = $placement->sponsor_tree_parent_id;
 		                    $arry_log['shop_id']                    = $slot_info->shop_id;
-		                    $arry_log['wallet_log_slot_sponsor']    = $placement->placement_tree_parent_id;
+		                    $arry_log['wallet_log_slot_sponsor']    = $placement->sponsor_tree_parent_id;
 		                    $arry_log['wallet_log_details']         = $log;
 		                    $arry_log['wallet_log_amount']          = $computed_points;
 		                    $arry_log['wallet_log_plan']            = "STAIRSTEP";

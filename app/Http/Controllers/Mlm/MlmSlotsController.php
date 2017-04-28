@@ -5,8 +5,14 @@ use Crypt;
 use Redirect;
 use Request;
 use View;
+use Carbon\Carbon;
+
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_membership_code;
+use App\Models\Tbl_membership;
+
+use App\Globals\Mlm_compute;
 class MlmSlotsController extends Mlm
 {
     public function index()
@@ -14,7 +20,7 @@ class MlmSlotsController extends Mlm
     	if(Self::$slot_id != null)
     	{
     		$data = [];
-            $data['all_slots_p'] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->paginate(20);
+            $data['all_slots_p'] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->paginate(20);
             $data['active'] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_defaul', 1)->first();
     		// dd($data);
     		return view('mlm.slots.index', $data);
@@ -88,4 +94,82 @@ class MlmSlotsController extends Mlm
         }
         return json_encode($data);
     }
+    public function upgrade_slot($id)
+    {
+        $data["id"] = $id;
+        $slot       = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where("slot_id",$id)->first();
+        if(!$slot)
+        {
+            dd("Wrong owner.");
+        }
+
+        $current_membership = Tbl_membership::where("membership_id",$slot->slot_membership)->first();
+        $higher_membership  = Tbl_membership::where("shop_id",Self::$shop_id)->where("membership_price",">",$current_membership->membership_price)->lists("membership_id");
+        
+        $data["membership_code"]       = Tbl_membership_code::package()
+                                                            ->whereIn("membership_id",$higher_membership)
+                                                            ->where("used",0)->where("blocked",0)
+                                                            ->where("archived",0)
+                                                            ->get();
+
+        $data["membership_code_count"] = Tbl_membership_code::package()
+                                                            ->whereIn("membership_id",$higher_membership)
+                                                            ->where("used",0)->where("blocked",0)
+                                                            ->where("archived",0)
+                                                            ->count();
+
+        return view('mlm.slots.upgrade_slot',$data);
+    }
+
+    public function upgrade_slot_post($id)
+    {
+        $error      = null;
+        $slot       = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where("slot_id",$id)->first();
+        if(!$slot)
+        {
+            $message["message"] = "Wrong owner.";
+        }
+
+        $membership_code_id = Request::input("membership_code_id");
+        $current_membership = Tbl_membership::where("membership_id",$slot->slot_membership)->first();
+        $higher_membership  = Tbl_membership::where("shop_id",Self::$shop_id)->where("membership_price",">",$current_membership->membership_price)->lists("membership_id");
+        
+        $membership_code    = Tbl_membership_code::package()
+                                                 ->where("tbl_membership_code.used",0)
+                                                 ->where("tbl_membership_code.blocked",0)
+                                                 ->where("tbl_membership_code.archived",0)
+                                                 ->whereIn("membership_id",$higher_membership)
+                                                 ->where("membership_code_id",$membership_code_id)
+                                                 ->where("customer_id",Self::$customer_id)
+                                                 ->first();
+
+        if(!$membership_code)
+        {
+            $message["message"] = "This code is not available.";
+        }
+
+        if($error == null)
+        {
+            $membership                = Tbl_membership::where("membership_id",$membership_code->membership_id)->first();
+
+            $update["used"]            = 1;
+            $update["date_used"]       = Carbon::now();
+            $update["used_on_upgrade"] = 1;
+            $update["upgrade_slot"]    = $id;
+            $update["slot_id"]         = $id;
+            Tbl_membership_code::where("membership_code_id",$membership_code_id)->update($update);
+
+            $update_slot["upgraded"]   = 1;
+            $update_slot["upgrade_from_membership"] = $slot->slot_membership;
+            $update_slot["slot_membership"] = $membership->membership_id;
+            Tbl_mlm_slot::where("slot_id",$id)->update($update_slot);
+            Mlm_compute::entry($id,1);
+
+            $message["status"]           = "success-upgrade";
+            $message["message"]          = "Sucessfully upgraded";
+            $message["membership_name"]  = $membership->membership_name;
+            $message["slot_id"]          = $id;
+        }
+        return json_encode($message);
+    } 
 }

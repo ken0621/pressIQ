@@ -21,7 +21,7 @@ class Tbl_membership extends Model
     }
     public function scopeMembership_points($query)
     {
-        $query->selectRaw('tbl_membership_points.membership_points_repurchase, tbl_membership_points.membership_points_direct_not_bonus, tbl_membership_points.membership_points_leadership, tbl_membership_points.membership_points_binary, tbl_membership_points.membership_points_executive, tbl_membership_points.membership_points_binary_max_pair, tbl_membership_points.membership_points_direct, tbl_membership_points.membership_points_initial_points, tbl_membership_points.membership_points_repurchase_cashback' )
+        $query->selectRaw('tbl_membership_points.membership_direct_income_limit, tbl_membership_points.membership_points_repurchase, tbl_membership_points.membership_points_direct_not_bonus, tbl_membership_points.membership_points_leadership, tbl_membership_points.membership_points_binary, tbl_membership_points.membership_points_executive, tbl_membership_points.membership_points_binary_max_pair, tbl_membership_points.membership_points_direct, tbl_membership_points.membership_points_initial_points, tbl_membership_points.membership_points_repurchase_cashback' )
         ->leftjoin('tbl_membership_points', 'tbl_membership_points.membership_id', '=', 'tbl_membership.membership_id');
         return $query;
     }

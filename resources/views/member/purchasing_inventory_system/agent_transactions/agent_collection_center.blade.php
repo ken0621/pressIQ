@@ -18,7 +18,7 @@
 
 <!-- NO PRODUCT YET -->
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
-    <div class="form-group tab-content panel-body sir_container">
+    <div class="form-group tab-content panel-body collection-container">
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
@@ -27,8 +27,8 @@
                         <tr>
                             <th>SIR No</th>
                             <th>Agent Name</th>
-                            <th>Total</th>
-                            <th>Total Collection (On Hand)</th>
+                            <th>Total Collectibles</th>
+                            <th>Total Collection</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -38,15 +38,15 @@
                             <tr>
                                 <td>{{sprintf("%'.04d\n", $sir->sir_id)}}</td>
                                 <td>{{$sir->first_name." ".$sir->middle_name." ".$sir->last_name}}</td>
+                                <td>{{$sir->total_collectibles}}</td>
                                 <td>{{$sir->total_collection}}</td>
-                                <td></td>
                                 <td class="text-center">
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
-                                        <li><a></a></li>
+                                        <li><a link="/member/pis_agent/collection_update/{{$sir->sir_id}}" size="md" class="popup">Update Collection</a></li>
                                       </ul>
                                     </div>
                                 </td>
@@ -59,4 +59,24 @@
         </div>
     </div>
 </div>
+@endsection
+@section("script")
+
+<script type="text/javascript">   
+function submit_done(data)
+{
+    if(data.status == "success")
+    {
+        toastr.success("Success");
+        $('#global_modal').modal('toggle');
+        $(".collection-container").load("/member/pis_agent/collection .collection-container");
+        data.element.modal("hide");
+    }
+    else if(data.status == "error")
+    {
+        toastr.warning(data.status_message);
+        $(data.target).html(data.view);
+    }
+}
+</script>
 @endsection

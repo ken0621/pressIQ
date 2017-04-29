@@ -50,7 +50,11 @@
             <div class="tab-pane fade in active">
                 <div class="form-group order-tags">
                     <div class="col-md-12 text-center">
-                      @if($sir != '')
+                      @if(isset($no_sir))
+                        <div class="form-group">
+                          <h2>Waiting for Warehouse to OPEN SIR #{{Session::get("sir_id")}}.</h2>
+                        </div>
+                      @elseif($sir != '')
                         <div class="form-group">
                             <div class="col-md-12">
                                 <h3>Load Out Form No: <strong>{{sprintf("%'.05d\n", Session::get("sir_id"))}}</strong></h3>

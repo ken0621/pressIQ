@@ -148,7 +148,8 @@ class TabletPISController extends Member
                 }
                 else
                 {
-                    $data["sir"] = null;
+                    $data["no_sir"] = "no_sir";
+                    Session::put("sir_id",$sir_id);
                     return view("tablet.index",$data);                    
                 }
             }

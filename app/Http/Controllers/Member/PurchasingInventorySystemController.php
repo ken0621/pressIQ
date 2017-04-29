@@ -197,6 +197,7 @@ class PurchasingInventorySystemController extends Member
         elseif($data["item"]->item_measurement_id != null)
         {
            $um_base_info = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",1)->first();
+           $um_issued_info = UnitMeasurement::um_info($item_issued_um);
            $um_qty = 1;
            if($um_issued_info)
            {

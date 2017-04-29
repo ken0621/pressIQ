@@ -43,7 +43,8 @@ class Customer_EstimateController extends Member
 
     public function load_all($customer_id)
     {
-        $data["_estimate"] = Tbl_customer_estimate::where("est_customer_id",$customer_id)->where("est_status",'accepted')->get();
+        $data["_estimate"] = Tbl_customer_estimate::where("est_customer_id",$customer_id)->where("est_status",'accepted')->where("is_sales_order",0)->get();
+        $data["_so"] = Tbl_customer_estimate::where("est_customer_id",$customer_id)->where("est_status",'accepted')->where("is_sales_order",1)->get();
 
         return view("member.load_ajax_data.load_estimate_so",$data);
     }

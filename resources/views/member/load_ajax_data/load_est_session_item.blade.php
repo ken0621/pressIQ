@@ -1,6 +1,6 @@
 @if(count(Session::get('est_item')) > 0)
     @foreach(Session::get('est_item') as $items)
-    <tr class="tr-draggable session-item tr-id-{{$items['estline_est_id']}}">
+    <tr class="trcount tr-draggable session-item tr-id-{{$items['estline_est_id']}}">
     <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
     <td><input type="text" class="for-datepicker" name="invline_service_date[]" value="{{$items['estline_service_date']}}" /></td>
     <td class="invoice-number-td text-right">

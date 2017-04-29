@@ -63,6 +63,7 @@ use App\Models\Tbl_payroll_journal_tag_entity;
 use App\Models\Tbl_payroll_journal_tag_employee;
 use App\Models\Tbl_payroll_leave_schedule;
 use App\Models\Tbl_payroll_paper_sizes;
+use App\Models\Tbl_payroll_payslip;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -3691,7 +3692,14 @@ class PayrollController extends Member
 
      public function custom_payslip()
      {
-          return view('member.payroll.side_container.custom_payslip');
+          $data['_payslip'] = Tbl_payroll_payslip::getpayslip(Self::shop_id())->orderBy('payslip_code')->get();
+          return view('member.payroll.side_container.custom_payslip', $data);
+     }
+
+     public function custom_payslip_show($id)
+     {
+          $data['payslip'] = Tbl_payroll_payslip::where('payroll_payslip_id', $id)->first();
+          return view('member.payroll.reload.payslip_show', $data);
      }
 
      public function modal_create_payslip()
@@ -3718,6 +3726,46 @@ class PayrollController extends Member
           $return['status']        = 'success';
           $return['id']            = $id;
           $return['function_name'] = 'payrollconfiguration.reload_paper_size_d';
+          return collect($return)->toJson();
+     }
+
+     public function save_custom_payslip()
+     {
+          $insert['shop_id']                      = Self::shop_id();
+          $insert['payslip_code']                 = Request::input("payslip_code");
+          $insert['payroll_paper_sizes_id']       = Request::input('payroll_paper_sizes_id');
+          $insert['payslip_width']                = Request::input('payslip_width');
+          $insert['payslip_copy']                 = Request::input('payslip_copy');
+          $insert['include_company_logo']         = Request::input('include_company_logo');
+
+          $include_department                     = 0;
+          $include_job_title                      = 0;
+          $include_time_summary                   = 0;
+
+          if(Request::has('include_department'))
+          {
+               $include_department = Request::input('include_department');
+          }
+
+          if(Request::has('include_job_title'))
+          {
+               $include_job_title = Request::input('include_job_title');
+          }
+
+          if(Request::has('include_time_summary'))
+          {
+               $include_time_summary = Request::input('include_time_summary');
+          }
+
+          $insert['include_department']           = $include_department;
+          $insert['include_job_title']            = $include_job_title;
+          $insert['include_time_summary']         = $include_time_summary;
+          $insert['company_position']             = Request::input('company_position');
+          $id = Tbl_payroll_payslip::insertGetId($insert);
+
+          $return['status']   = 'success';
+          $return['id']       = $id;
+
           return collect($return)->toJson();
      }
 

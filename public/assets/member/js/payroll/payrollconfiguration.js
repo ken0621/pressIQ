@@ -12,6 +12,7 @@ function payrollconfiguration()
 		// load_configuration('/member/payroll/departmentlist', "POST",".configuration-div", formdata);
 		$(".a-navigation-configuration").first().addClass('active');
 		load_configuration($(".a-navigation-configuration").first().attr("href"),"POST",".configuration-div", formdata);
+		
 	}
 
 	function a_navigation_configuration_event()
@@ -26,6 +27,8 @@ function payrollconfiguration()
 			reload_configuration(link);
 		});
 	}
+
+	
 
 	function reload_configuration(link = "")
 	{

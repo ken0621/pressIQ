@@ -26,7 +26,7 @@ function modal_create_payslip()
 		    link: '/member/payroll/custom_payslip/modal_create_paper_size',
 		    link_size: 'md',
 		    width : '100%',
-		    placeholder: 'Category'
+		    placeholder: 'Paper Sizes'
 		});
 	}
 

@@ -61,10 +61,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_timesheet/adjustment_form','Member\PayrollTimeSheetController@adjustment_form');
 	Route::post('/employee_timesheet/adjustment_form_approve','Member\PayrollTimeSheetController@adjustment_form_approve');
 	Route::any('/employee_timesheet/show_holiday/{id}/{date}','Member\PayrollTimeSheetController@show_holiday');
-
-
 	Route::any('/timesheet/mark_ready_company','Member\PayrollController@mark_ready_company');
-	/* TIMESHEET START */
+	Route::any('/timesheet/show_summary/{summary}/{period_id}','Member\PayrollTimeSheetController@show_summary');
+	/* TIMESHEET END */
 
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');
@@ -240,6 +239,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/custom_payslip/modal_create_payslip',"Member\PayrollController@modal_create_payslip");
 	Route::any('/custom_payslip/modal_create_paper_size',"Member\PayrollController@modal_create_paper_size");
 	Route::any('/custom_payslip/modal_save_paper_size',"Member\PayrollController@modal_save_paper_size");
+	Route::any('/custom_payslip/save_custom_payslip',"Member\PayrollController@save_custom_payslip");
+	Route::any('/custom_payslip/custom_payslip_show/{id}',"Member\PayrollController@custom_payslip_show");
 	
 	/* PAYROLL CUSTOM PAYSLIP END */
 

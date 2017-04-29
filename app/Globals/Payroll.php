@@ -540,6 +540,7 @@ class Payroll
 
 		return $return;
 	}
+	
 	public static function process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours)
 	{
 		$data["break"] = $break = c_time_to_int($break);

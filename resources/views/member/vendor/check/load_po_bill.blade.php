@@ -1,7 +1,7 @@
 @if(isset($_po))
 	<div style="margin-top: 50px" >
 	@foreach($_po as $po)
-		<div class="form-group po-style po-{{$po->po_id}}">
+		<div class="po-bill-count form-group po-style po-{{$po->po_id}}">
 			<div>
 				<strong>Purchase Order #{{$po->po_id}}</strong>
 			</div>
@@ -26,7 +26,7 @@
 @if(isset($_bill))
 	<div style="margin-top: 50px" class="bill-data">
 	@foreach($_bill as $bill)
-		<div class="form-group po-style po-{{$bill['bill_id']}}">
+		<div class="po-bill-count-bill form-group po-style po-{{$bill['bill_id']}}">
 			<div>
 				<strong>Bill #{{$bill['bill_id']}}</strong>
 			</div>

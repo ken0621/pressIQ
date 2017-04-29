@@ -472,9 +472,12 @@ function write_check()
 	{
 		$(".purchase-order-and-bill-container").load("/member/vendor/load_po_bill/"+vendor_id , function()
 			{
-				$(".purchase-order").removeClass("hidden");
-				// $(".drawer").drawer({openClass: "drawer-open"});
-				$(".drawer-toggle").trigger("click");
+				if($(".po-bill-count").length > 0 || $(".po-bill-count-bill").length > 0)
+				{
+					$(".purchase-order").removeClass("hidden");
+					// $(".drawer").drawer({openClass: "drawer-open"});
+					$(".drawer-toggle").trigger("click");					
+				}
 			});
 	}
 	function action_load_item_info($this)

@@ -1249,6 +1249,7 @@ class TabletPISController extends Member
         $data["page"]       = "Customer Sales Receipt";
         $data["pis"]        = Purchasing_inventory_system::check();
         $data["_customer"]  = Customer::getAllCustomer();
+        $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
         $data['_item']      = Item::get_all_item_sir($sir_id);
         $data['_cm_item']   = Item::get_all_category_item([1,4]);
         $data['_um']        = UnitMeasurement::load_um_multi();

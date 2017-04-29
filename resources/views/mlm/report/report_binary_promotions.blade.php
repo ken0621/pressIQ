@@ -18,7 +18,7 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th>Item</th>
+                                    <th>Product Name</th>
                                     <th>Required Binary <br> Points Left</th>
                                     <th>Current Left</th>
                                     <th>Required Binary <br> Points Right</th>
@@ -32,7 +32,7 @@
                             <tbody>
                                 @foreach($promotions as $key => $value)
                                 <tr>
-                                    <tr></tr>
+                                    <td><img src="{{ $value->item_img ? $value->item_img : "/assets/front/img/default.jpg" }}"></td>
                                     <td>{{$value->item_name}}</td>
                                     <td>{{$value->binary_promotions_required_left}}</td>
                                     <td>{{$current_l[$key]}}</td>
@@ -42,10 +42,15 @@
                                     <td>{{$value->binary_promotions_no_of_units_used}}</td>
                                     <td>{{$value->binary_promotions_start_date}}</td>
                                     <td>
+                                    
                                             @if($value->binary_promotions_no_of_units > $value->binary_promotions_no_of_units_used)
                                                 @if($current_l[$key] >= $value->binary_promotions_required_left)
                                                     @if($current_r[$key] >= $value->binary_promotions_required_right)
-                                                        <button class="btn btn-primary">Request</button>
+                                                        @if($req_count[$key] == 0)
+                                                        <button class="btn btn-primary" form="form_{{$value->binary_promotions_id}}">Request</button>
+                                                        @else
+                                                        Already Claimed this promotion.
+                                                        @endif
                                                     @else
                                                         Insufficient Points
                                                     @endif
@@ -55,11 +60,37 @@
                                             @else
                                                 All Stock Taken
                                             @endif
+                                    </form>          
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
+                        <div class="hide">
+                        @foreach($promotions as $key => $value)    
+                            @if($value->binary_promotions_no_of_units > $value->binary_promotions_no_of_units_used)
+                                @if($current_l[$key] >= $value->binary_promotions_required_left)
+                                    @if($current_r[$key] >= $value->binary_promotions_required_right)
+                                        @if($req_count[$key] == 0)
+                                        <form  id="form_{{$value->binary_promotions_id}}" method="post" action="/mlm/report/binary_promotions/request" class="global-submit">
+                                            {!! csrf_field() !!}
+                                            <input type="hidden" name="binary_promotions_id" value="{{$value->binary_promotions_id}}">
+                                        </form>
+                                        @else
+                                        Already Claimed this promotion.
+                                        @endif
+                                    @else
+                                        Insufficient Points
+                                    @endif
+                                @else
+                                    Insufficient Points
+                                @endif
+                            @else
+                                All Stock Taken
+                            @endif
+                        @endforeach    
+                        </div>
+                        </div>
                         </div>
                     </div>
                 </div>              
@@ -72,4 +103,16 @@
     </div>
     </div>
 </div>
+@endsection
+
+@section('js')
+<script type="text/javascript">
+    @if(isset($s))
+        @if($s == 'error')
+            toastr.error('{{$m}}');
+        @else
+            toastr.success('{{$m}}');
+        @endif
+    @endif
+</script>
 @endsection

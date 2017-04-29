@@ -216,12 +216,17 @@ class TabletPISController extends Member
             else
             {
                 $data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);
+                Session::put("sir_id",$data["sir"]->sir_id);
                 if($data['sir'])
                 {
-                    Session::put("sir_id",$data["sir"]->sir_id);
                     $data["_sir_item"] = Purchasing_inventory_system::get_sir_item($data["sir"]->sir_id);
-                }       
+                }
+                else
+                {
+                    $data["no_sir"] = "no_sir";
+                }
                 return view("tablet.index",$data);         
+                }
             }
         }
 

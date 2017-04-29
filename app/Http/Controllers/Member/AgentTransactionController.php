@@ -341,9 +341,9 @@ class AgentTransactionController extends Member
                 }
                 $_transaction[$inv_key]['customer_name'] = $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
                 $_transaction[$inv_key]['no'] = $inv_value->inv_id;
-                $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;
+                $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied);
                 $_transaction[$inv_key]['due_date'] = $inv_value->inv_due_date;
-                $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price;
+                $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price - $cm_amt;
                 $_transaction[$inv_key]['status'] = $inv_value->inv_is_paid;
                 $_transaction[$inv_key]['date_created'] = $inv_value->manual_invoice_date;
 
@@ -401,6 +401,10 @@ class AgentTransactionController extends Member
             if($value2['reference_name'] == "receive_payment" || $value2['reference_name'] == "sales_receipt")
             {
                 $data['total'] += $value2['total'];
+            }
+            elseif($value2['reference_name'] == "receive_payment")
+            {
+
             }
         }
         $data["total"] = currency("Php",$data['total']);

@@ -803,7 +803,7 @@ class PurchasingInventorySystemController extends Member
             {
                 $qty = UnitMeasurement::um_qty($related_um_type[$key]);
                 $items[$key]['id'] = $value;
-                $items[$key]['quantity'] = $item_qty[$key] * $qty;
+                $items[$key]['quantity'] = str_replace(",","",$item_qty[$key]) * $qty;
             }
 
         }
@@ -923,7 +923,11 @@ class PurchasingInventorySystemController extends Member
                     {
                         $count_on_hand = 0;   
                     }
-                    if($inventory_consume_product[$key]["quantity"] < 0 && $count_on_hand < 0 && $count_on_hand < $inventory_consume_product[$key]["quantity"])
+                    if($value['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value['quantity'])
+                    {
+
+                    }
+                    else
                     {
                         $item_name = Tbl_item::where("item_id",$value["id"])->pluck("item_name");
 
@@ -1152,7 +1156,11 @@ class PurchasingInventorySystemController extends Member
                 {
                     $count_on_hand = 0;   
                 }
-                if($inventory_update_item[$key]["quantity"] < 0 && $count_on_hand < 0 && $count_on_hand < $inventory_update_item[$key]["quantity"])
+                 if($value['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value['quantity'])
+                {
+
+                }
+                else
                 {
                      $item_name = Tbl_item::where("item_id",$value["id"])->pluck("item_name");
 

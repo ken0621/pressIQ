@@ -58,7 +58,7 @@ class TabletPISController extends Member
 	{		
         $sir_id = Request::input("sir_id");
         $data["status"] = Purchasing_inventory_system::close_sir($sir_id);
-
+        Session::forget("sir_id");
         return json_encode($data);
 	}
     public function sir_reload($sir_id)

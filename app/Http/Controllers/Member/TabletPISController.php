@@ -530,6 +530,7 @@ class TabletPISController extends Member
         
 		$data["_customer"]  = Customer::getAllCustomer();
         $data['_um']        = UnitMeasurement::load_um_multi();
+        $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
 		$data['_item']      = Item::get_all_item_sir($sir_id);
         $data['_cm_item']   = Item::get_all_category_item([1,4]);
         $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id"); 
@@ -560,6 +561,7 @@ class TabletPISController extends Member
 		$data["c_id"] = Request::input("customer_id");
 	    $data["_customer"]      = Customer::getAllCustomer();
         $data['_account']       = Accounting::getAllAccount();
+        $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
         $data['action']         = "/tablet/receive_payment/add_submit";
         $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"]);

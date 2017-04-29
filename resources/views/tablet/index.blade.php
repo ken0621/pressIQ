@@ -21,7 +21,6 @@
             <div class="col-sm-4 pull-right">
                 <form class="select-sir" method="get">
                     <select class="choose-sir form-control" name="sir_id">
-                        <option>all</option>
                         @foreach($_sirs as $sir)
                             <option {{Session::get("sir_id") == $sir->sir_id ? 'selected' : '' }} value="{{$sir->sir_id}}">SIR #{{$sir->sir_id}}</option>
                         @endforeach

@@ -49,7 +49,7 @@ class TabletPISController extends Member
 	public function confirm_submission()
 	{
 		$data["action"] = "close";
-        $data["sir_id"] = Session::get("sir");
+        $data["sir_id"] = Session::get("sir_id");
 
 		return view("tablet.agent.confirm_sync",$data);
 	}

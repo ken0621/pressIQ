@@ -226,40 +226,8 @@ class TabletPISController extends Member
                     $data["no_sir"] = "no_sir";
                 }
                 return view("tablet.index",$data);         
-                }
             }
         }
-
-
-
-  //       $data["_sirs"] = Tbl_sir::where("sales_agent_id",$this->get_user()->employee_id)->where("lof_status",1)->where("sir_status",0)->get();
-
-		// $data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);
-
-  //       $data['_category']  = Category::getAllCategory(["inventory","all"]);
-  //       if(Request::input("sir_id"))
-  //       {
-  //           Session::put("sir_id",Request::input("sir_id"));
-  //           $data["_sir_item"] = Purchasing_inventory_system::get_sir_item(Request::input("sir_id"));
-  //       }
-  //       elseif($data["sir"])
-  //       {
-  //           Session::put("sir_id",$data["sir"]->sir_id);
-  //           $data["_sir_item"] = Purchasing_inventory_system::get_sir_item($data["sir"]->sir_id);
-  //       }
-		// $data["open_sir"] = Tbl_sir::truck()->saleagent()->where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->get();
-  //       if(count($data["open_sir"]) > 0)
-  //       {
-  //           $data["_sirs"] = Tbl_sir::where("sales_agent_id",$this->get_user()->employee_id)->where("lof_status",2)->where("sir_status",1)->get();
-
-  //           Session::put("sir_id",$data["open_sir"]->sir_id);
-      
-			
-		// }
-		// else
-		// {
-		// 	return view("tablet.index",$data);
-		// }
 	}  
 	public function selected_sir()
 	{

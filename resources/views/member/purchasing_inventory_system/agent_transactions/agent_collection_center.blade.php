@@ -40,8 +40,6 @@
                                 <td>{{$sir->first_name." ".$sir->middle_name." ".$sir->last_name}}</td>
                                 <td>{{$sir->total_collection}}</td>
                                 <td></td>
-                                <td>                                   
-                                </td>
                                 <td class="text-center">
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -72,7 +72,10 @@ class Vendor_CheckController extends Member
     }
     public function check_list()
     {
+        $data["_check"] = Tbl_write_check::vendor()->where("wc_shop_id",$this->user_info->shop_id)->get();
+        
 
+        return view("member.vendor.check.check_list",$data);
     }
 
     public function add_check()

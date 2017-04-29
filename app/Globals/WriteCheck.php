@@ -65,10 +65,10 @@ class WriteCheck
             }            
         }
     }
-
-    public static function update_applied_payment($paybill_id)
+    public static function delete_bill_in_check($paybill_id)
     {
-
+        $wc_data = Tbl_write_check::where("wc_ref_name","paybill")->where("wc_ref_id",$paybill_id)->first();
+        Tbl_write_check_line::where("wcline_wc_id",$wc_data->wc_id)->delete();
     }
     public static function update_check_from_paybill($paybill_id)
     {
@@ -77,21 +77,25 @@ class WriteCheck
 
         if($pb_data)
         {
-            $insert['wc_shop_id']             = WriteCheck::getShopId();    
-            $insert['wc_cash_account']        = 0;    
-            $insert['wc_vendor_id']           = $pb_data->paybill_vendor_id;
-            $insert['wc_vendor_email']        = Tbl_vendor::where("vendor_id",$pb_data->paybill_vendor_id)->pluck("vendor_email");        
-            $insert['wc_mailing_address']     = "";
+            $wc_data = Tbl_write_check::where("wc_ref_name","paybill")->where("wc_ref_id",$paybill_id)->first();
+            if($wc_data)
+            {
+                $update['wc_cash_account']        = 0;    
+                $update['wc_vendor_id']           = $pb_data->paybill_vendor_id;
+                $update['wc_vendor_email']        = Tbl_vendor::where("vendor_id",$pb_data->paybill_vendor_id)->pluck("vendor_email");        
+                $update['wc_mailing_address']     = "";
 
-            $insert['wc_payment_date']        =  $pb_data->paybill_date;
+                $update['wc_payment_date']        =  $pb_data->paybill_date;
 
-            $insert['wc_memo']                = $pb_data->paybill_memo;
-            $insert['wc_total_amount']        = $pb_data->paybill_total_amount;
-            $insert['wc_applied_payment']     = $pb_data->paybill_total_amount;
-            $insert['wc_ref_name']            = "paybill";
-            $insert['wc_ref_id']              = $pb_data->paybill_id;
+                $update['wc_memo']                = $pb_data->paybill_memo;
+                $update['wc_total_amount']        = $pb_data->paybill_total_amount;
+                $update['wc_applied_payment']     = $pb_data->paybill_total_amount;
+                $update['wc_ref_name']            = "paybill";
+                $update['wc_ref_id']              = $pb_data->paybill_id;
 
-            $wc_id = Tbl_write_check::insertGetId($insert);
+                Tbl_write_check::where("wc_id",$wc_data->wc_id)->update($update);
+                $wc_id = $wc_data->wc_id;
+            }
 
             $item_info = null;
             foreach ($pbline_data as $key => $value) 
@@ -99,6 +103,7 @@ class WriteCheck
                 if($value->pbline_reference_name == "bill")
                 {
                     $bill_line_data = Tbl_bill_item_line::where("itemline_bill_id",$value->pbline_reference_id)->get();
+
                     foreach ($bill_line_data as $key1 => $value1)
                     {
                         $item_info["itemline_item_id"] = $value1->itemline_item_id;
@@ -139,6 +144,8 @@ class WriteCheck
             $insert['wc_memo']                = $pb_data->paybill_memo;
             $insert['wc_total_amount']        = $pb_data->paybill_total_amount;
             $insert['wc_applied_payment']     = $pb_data->paybill_total_amount;
+            $insert['wc_ref_name']            = "paybill";
+            $insert['wc_ref_id']              = $pb_data->paybill_id;
 
             $wc_id = Tbl_write_check::insertGetId($insert);
 

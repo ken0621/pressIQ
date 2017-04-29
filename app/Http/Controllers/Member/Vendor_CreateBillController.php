@@ -88,6 +88,14 @@ class Vendor_CreateBillController extends Member
 
         return view("member.load_ajax_data.load_purchase_order",$data);
     }
+    public function load_po_bill($vendor_id)
+    {
+        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$vendor_id)->where("po_is_billed",0)->get();
+
+        $data["_bill"]          = Billing::getAllBillByVendor($vendor_id);
+
+        return view("member.vendor.check.load_po_bill",$data);
+    }
     public function load_po_item()
     {
         $po_id = Request::input("po_id");

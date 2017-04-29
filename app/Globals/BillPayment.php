@@ -52,6 +52,8 @@ class BillPayment
         
         Tbl_pay_bill_line::where("pbline_pb_id",$paybill_id)->delete();
 
+        WriteCheck::delete_bill_in_check($paybill_id);
+
         BillPayment::insert_paybill_line($paybill_id, $pbline_data);
 
         WriteCheck::update_check_from_paybill($paybill_id);

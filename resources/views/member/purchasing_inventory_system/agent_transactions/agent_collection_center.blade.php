@@ -7,12 +7,11 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Vendor Check &raquo; List </span>
+                <span class="page-title">Agent Collection Center </span>
                 <small>
-                    List of Check
+                    Agent Collection List
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/write_check" >Write Check</a>
         </div>
     </div>
 </div>

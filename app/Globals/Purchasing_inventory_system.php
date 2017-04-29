@@ -1049,7 +1049,7 @@ class Purchasing_inventory_system
             }
         }
 
-        $data = "success";
+        $data = "success-close";
         return $data;        
     }
 

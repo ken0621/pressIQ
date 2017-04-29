@@ -50,7 +50,7 @@
             <div class="tab-pane fade in active">
                 <div class="form-group order-tags">
                     <div class="col-md-12 text-center">
-                      @if($sir != null)
+                      @if($sir != '')
                         <div class="form-group">
                             <div class="col-md-12">
                                 <h3>Load Out Form No: <strong>{{sprintf("%'.05d\n", Session::get("sir_id"))}}</strong></h3>

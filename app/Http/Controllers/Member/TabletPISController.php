@@ -1466,7 +1466,7 @@ class TabletPISController extends Member
                 $update['is_sales_receipt']           = 1;  
                 Tbl_customer_invoice::where("inv_id",$invoice_id)->update($update);
 
-                $rcv_payment_id = Invoice::postSales_receipt_payment($customer_info,$invoice_info,$overall_price,$invoice_id);
+                // $rcv_payment_id = Invoice::postSales_receipt_payment($customer_info,$invoice_info,$overall_price,$invoice_id);
 
                 if($cm_customer_info != null && $cm_item_info != null)
                 {
@@ -1489,12 +1489,12 @@ class TabletPISController extends Member
 
                     Tbl_manual_invoice::insert($insert_manual_invoice);
 
-                    $insert_manual_rcv_payment["agent_id"] = $this->get_user()->employee_id;
-                    $insert_manual_rcv_payment["rp_id"] = $rcv_payment_id;
-                    $insert_manual_rcv_payment["sir_id"] = $sir_id;
-                    $insert_manual_rcv_payment["rp_date"] = Carbon::now();
+                    // $insert_manual_rcv_payment["agent_id"] = $this->get_user()->employee_id;
+                    // $insert_manual_rcv_payment["rp_id"] = $rcv_payment_id;
+                    // $insert_manual_rcv_payment["sir_id"] = $sir_id;
+                    // $insert_manual_rcv_payment["rp_date"] = Carbon::now();
 
-                    Tbl_manual_receive_payment::insert($insert_manual_rcv_payment);
+                    // Tbl_manual_receive_payment::insert($insert_manual_rcv_payment);
 
                     foreach($_itemline as $keys => $item_line)
                     {
@@ -1711,7 +1711,7 @@ class TabletPISController extends Member
                 $update['inv_payment_applied']        = $overall_price;
                 Tbl_customer_invoice::where("inv_id",$invoice_id)->update($update);
 
-                Invoice::update_rcv_payment("invoice",$invoice_id,$overall_price);
+                // Invoice::update_rcv_payment("invoice",$invoice_id,$overall_price);
 
                 Tbl_sir_inventory::where("sir_inventory_ref_name","invoice")->where("sir_inventory_ref_id",$invoice_id)->delete();
                 foreach($_itemline as $key => $item_line)

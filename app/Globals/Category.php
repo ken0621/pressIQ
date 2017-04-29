@@ -72,7 +72,7 @@ class Category
         {
             $data .= '<a href="javascript:" category_type="'.$cat->type_category.'" style="padding-left:'.$padding.'px" class="list-group-item category-list" data-content="'.$cat->type_id.'">'.$cat->type_name.'</a>';
             $count =  Tbl_category::selecthierarchy($shop_id, $cat->type_parent_id)->count();
-            
+            dd($count);
             if($count != 0)
             {
                 $data  .= '<div class="list-group">'.Category::re_select_html($shop_id, $cat->type_id, $padding).'</div>';
@@ -193,7 +193,7 @@ class Category
 			$html .= view('member.manage_category.tr_row',$data)->render();
 			if($count != 0)
 			{	
-				$html .= Category::select_tr_html($shop_id, $archived, $cat_type, $margin_left + 30);
+				$html .= Category::select_tr_html($shop_id, $archived, $cat->type_id, $margin_left + 30);
 			}
 		}
 		return $html;

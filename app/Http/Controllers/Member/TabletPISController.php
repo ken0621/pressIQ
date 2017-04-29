@@ -16,6 +16,7 @@ use App\Globals\Pdf_global;
 use App\Globals\Category;
 use App\Globals\CreditMemo;
 
+use App\Models\Tbl_terms;
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_manual_credit_memo;
 use App\Models\Tbl_employee;

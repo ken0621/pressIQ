@@ -210,7 +210,7 @@ class AgentTransactionController extends Member
         $data["total"] = 0;
         foreach ($data['tr'] as $key2 => $value2)
         {
-            if($value2['reference_name'] == "receive_payment")
+            if($value2['reference_name'] == "receive_payment" || $value2['reference_name'] == "sales_receipt")
             {
                 $data['total'] += $value2['total'];
             }

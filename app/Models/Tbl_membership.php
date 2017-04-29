@@ -34,7 +34,7 @@ class Tbl_membership extends Model
         COUNT(CASE WHEN tbl_membership_package.membership_package_archive = 0 THEN 1 END) package_count, 
         COUNT(CASE WHEN tbl_membership_package.membership_package_archive = 1  THEN 1 END) package_count_archive')
         ->where('tbl_membership.shop_id', $shop_id)
-        ->where('membership_type', 0)
+        ->where('membership_type_a', 0)
         ->orderby('membership_price', 'ASC');
         return $query;
     }

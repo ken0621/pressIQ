@@ -20,6 +20,9 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_matching;
 use App\Models\Tbl_mlm_triangle_repurchase_slot;
 use App\Models\Tbl_item_code_invoice;
+use App\Models\Tbl_mlm_plan_binary_promotions;
+use App\Models\Tbl_mlm_binary_report;
+use Carbon\Carbon;
 
 class MlmReportController extends Mlm
 {
@@ -320,5 +323,26 @@ class MlmReportController extends Mlm
         // dd($data['invoice']);
         return view("mlm.report.report_triangle_repurchase", $data);
 
+    }
+    public function binary_promotions()
+    {
+        $data['plan']       = Mlm_member_report::get_plan('BINARY_PROMOTIONS', Self::$shop_id); 
+        $data['header']     = Mlm_member_report::header($data['plan']);
+        $data["page"]       = "Report - Stairstep";
+        $data['promotions'] =    Tbl_mlm_plan_binary_promotions::where('binary_promotions_archive', 0)
+        ->where('binary_promotions_membership_id', Self::$slot_now->slot_membership)
+        ->join('tbl_item', 'tbl_item.item_id', '=', 'tbl_mlm_plan_binary_promotions.binary_promotions_item_id')
+        ->get();
+        foreach($data['promotions'] as $key => $value)
+        {
+            $date = Carbon::parse($value->binary_promotions_start_date)->format('Y-m-d');
+            $data['current_l'][$key] = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
+            ->where('binary_report_date', '>=',  $date)
+            ->sum('binary_report_s_points_l'); 
+            $data['current_r'][$key] = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
+            ->where('binary_report_date', '>=',  $date)
+            ->sum('binary_report_s_points_r');
+        }
+        return view("mlm.report.report_binary_promotions", $data);
     }
 }

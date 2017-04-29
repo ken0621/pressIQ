@@ -24,8 +24,10 @@ use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_membership_points;
+use App\Models\Tbl_mlm_binary_report;
 use App\Globals\Mlm_gc;
 use App\Models\Tbl_mlm_gc;
+use App\Models\Tbl_mlm_binary_pairing_log;
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
 
@@ -246,7 +248,9 @@ class Mlm_complan_manager
                 $binary["left"] = $tree->slot_binary_left;
                 $binary["right"] = $tree->slot_binary_right; 
                 // END
-
+                
+                $binary_report['binary_report_s_left'] =  $tree->slot_binary_left;
+                $binary_report['binary_report_s_right'] =  $tree->slot_binary_right; 
                 // GET BINARY POINTS OF MEMBERSHIP
                 $binary['points'] = $slot_info->membership_points_binary;
                 // Set Limit
@@ -269,11 +273,21 @@ class Mlm_complan_manager
                     // ADD OLD BINARY POINTS + NEW BINARY POINTS
 
                     $binary[$tree->placement_tree_position] = $binary[$tree->placement_tree_position] + $binary['points']; 
-
+                    $binary_report['binary_report_s_points_l'] = $binary["left"] - $binary_report['binary_report_s_left'];
+                    $binary_report['binary_report_s_points_r'] = $binary["right"]- $binary_report['binary_report_s_right']; 
                     // End
                     $update['slot_binary_left'] =   $binary["left"];
                     $update['slot_binary_right'] =  $binary["right"];
                     Tbl_mlm_slot::where('slot_id', $tree->placement_tree_parent_id)->update($update);
+
+                    $binary_report['binary_report_e_left'] =  $binary["left"];
+                    $binary_report['binary_report_e_right'] =   $binary["right"];
+                    $binary_report['binary_report_tree_level'] = $tree->placement_tree_level;
+                    $binary_report['binary_report_slot'] = $tree->placement_tree_parent_id;
+                    $binary_report['binary_report_slot_g'] = $slot_info->slot_id;
+                    $binary_report['binary_report_date'] = Carbon::now();
+                    $binary_report['binary_report_s_points'] = $binary['points'];
+                    Tbl_mlm_binary_report::insert($binary_report);
                 }
             }
             // END
@@ -464,7 +478,10 @@ class Mlm_complan_manager
                                     // 1 = instant; 2 = dailay; 3 = weekly; 4 = monthly
 
                                     $binary["left"]         = $binary["left"] - $value2->pairing_point_left;
-                                    $binary["right"]        = $binary["right"] - $value2->pairing_point_left;
+                                    $binary["right"]        = $binary["right"] - $value2->pairing_point_right;
+
+                                    $binary_pairing_log['pairing_point_l'] = $value2->pairing_point_left;
+                                    $binary_pairing_log['pairing_point_r'] = $value2->pairing_point_right;
 
                                     $pair_this_pairing      = $pair_this_pairing + 1;
 
@@ -739,6 +756,12 @@ class Mlm_complan_manager
                                     $slot_zxc = Mlm_compute::get_slot_info($slot->slot_id);
                                     Mlm_complan_manager::binary_single_line($slot_zxc); 
                                     
+                                    $binary_pairing_log['pairing_income'] = $earning;
+                                    $binary_pairing_log['pairing_slot'] = $slot->slot_id;
+                                    $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
+                                    $binary_pairing_log['pairing_date'] = Carbon::now();
+                                    Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
+                                    
                                 }
                                 // add flush
                                 if($flush != 0)
@@ -755,6 +778,15 @@ class Mlm_complan_manager
                                     Mlm_slot_log::slot_array($arry_log);  
                                     //check if strong leg  retention
                                     // binary_settings_strong_leg /strong_leg /no_strong_leg
+
+                                    $binary_pairing_log['pairing_income'] = $flush;
+                                    $binary_pairing_log['pairing_slot'] = $slot->slot_id;
+                                    $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
+                                    $binary_pairing_log['pairing_type'] = 'flush';
+                                    $binary_pairing_log['pairing_date'] = Carbon::now();
+                                    Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
+
+
                                     if($binary_advance_pairing->binary_settings_strong_leg == 'no_strong_leg')
                                     {
                                         $update_slot['slot_binary_left']    = 0;
@@ -777,6 +809,13 @@ class Mlm_complan_manager
                                         $arry_log['wallet_log_status']          = "n_ready";   
                                         $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot->shop_id); 
                                         Mlm_slot_log::slot_array($arry_log);  
+
+                                        $binary_pairing_log['pairing_income'] = $binary_advance_pairing->binary_settings_gc_amount;
+                                        $binary_pairing_log['pairing_slot'] = $slot->slot_id;
+                                        $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
+                                        $binary_pairing_log['pairing_date'] = Carbon::now();
+                                        $binary_pairing_log['pairing_type'] = 'GC';
+                                        Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
                                     }
                                 }
                                 // update slot
@@ -1747,5 +1786,8 @@ class Mlm_complan_manager
         echo '<script src="/assets/member/scripts/e1d08589.bootstrap.min.js"></script>';
     }
     // END OTHER FUNCTIONS
+    public static function binary_promotions($slot_info)
+    {
 
+    }
 }

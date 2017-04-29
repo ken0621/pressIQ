@@ -8,24 +8,24 @@
                @foreach($binary_promotions as $key => $value)
                <tr>
                   <td colspan="6">
-                    <form class="global-submit" action="/member/mlm/plan/binary_promotions/save" method="post"> 
+                    <form class="global-submit" action="/member/mlm/plan/binary_promotions/edit" method="post"> 
                     {!! csrf_field() !!}
                       <div class="col-md-2">
                           <label>Membership</label>
                           <select class="form-control" name="binary_promotions_membership_id">
-                              @foreach($membership as $key => $value)
-                                <option value="{{$value->membership_id}}" @if($value->binary_promotions_membership_id == $key) selected @endif >{{$value->membership_name}}</option>
+                              @foreach($membership as $key2 => $value2)
+                                <option value="{{$value2->membership_id}}" @if($value->binary_promotions_membership_id == $key2) selected @endif >{{$value2->membership_name}}</option>
                               @endforeach
                           </select>
                       </div>
                       <div class="col-md-3">
                             <label>Item</label>
-                            <select class="drop-down-item" name="item_id" name="binary_promotions_item_id">
-                                @include("member.load_ajax_data.load_item_category", ['add_search' => $value->binary_promotions_item_id])
+                            <select class="drop-down-item" name="item_id">
+                                @include("member.load_ajax_data.load_item_category", ['add_search' => $value->binary_promotions_item_id, 'item_id' => $value->binary_promotions_item_id])
                             </select>
                       </div>
                       <div class="col-md-2">
-                          <label>Required Left</label>
+                          <label>Required Left </label>
                           <input type="number" class="form-control" value="{{$value->binary_promotions_required_left}}" name="binary_promotions_required_left">
                       </div>
                       <div class="col-md-2">
@@ -38,7 +38,9 @@
                       </div>
                       <div class="col-md-1">
                         <label>Submit</label><br>
-                        <button class="btn btn-primary">Save</button>
+                        <input type="hidden" class="submit_type" name="submit_type" value="0">
+                        <button class="btn btn-primary" name="archive" value="0" onClick="$('.submit_type').val(0)">Edit</button>
+                        <button class="btn btn-primary" name="archive" value="1" onClick="$('.submit_type').val(1)">Archive</button>
                       </div>
                       <div class="col-md-12">
                           
@@ -49,7 +51,7 @@
                @endforeach
                <tr>
                   <td colspan="6">
-                    <form class="global-submit" action="/member/mlm/plan/binary_promotions/save" method="post"> 
+                    <form class="global-submit" id="form_a" action="/member/mlm/plan/binary_promotions/save" method="post"> 
                     {!! csrf_field() !!}
                       <div class="col-md-2">
                           <label>Membership</label>
@@ -61,7 +63,7 @@
                       </div>
                       <div class="col-md-3">
                             <label>Item</label>
-                            <select class="drop-down-item" name="item_id" name="binary_promotions_item_id">
+                            <select class="drop-down-item" name="item_id">
                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                             </select>
                       </div>
@@ -79,7 +81,7 @@
                       </div>
                       <div class="col-md-1">
                         <label>Submit</label><br>
-                        <button class="btn btn-primary">Save</button>
+                        <button class="btn btn-primary" onclick="">Save</button>
                       </div>
                       <div class="col-md-12">
                           
@@ -92,3 +94,14 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(".drop-down-item").globalDropList(
+    {
+    link: '/member/item/add',
+    link_size: 'lg',
+    maxHeight: "309px",
+    width: '100%',
+    placeholder: 'Item'
+});
+</script>

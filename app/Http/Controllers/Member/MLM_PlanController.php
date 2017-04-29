@@ -2237,20 +2237,61 @@ class MLM_PlanController extends Member
         $insert['binary_promotions_no_of_units'] = Request::input('binary_promotions_no_of_units');
         $insert['binary_promotions_required_left'] = Request::input('binary_promotions_required_left');
         $insert['binary_promotions_required_right'] = Request::input('binary_promotions_required_right');
-        $insert['binary_promotions_item_id'] = Request::input('binary_promotions_item_id');
+        $insert['binary_promotions_item_id'] = Request::input('item_id');
+        $insert['binary_promotions_start_date'] = Carbon::now();
+        $count_rewards = Tbl_mlm_plan_binary_promotions::where('binary_promotions_membership_id', $insert['binary_promotions_membership_id'])
+        ->where('binary_promotions_item_id', $insert['binary_promotions_item_id'])
+        ->count();
+        if($count_rewards == 0)
+        {
+            
+            Tbl_mlm_plan_binary_promotions::insert($insert);
 
-        Tbl_mlm_plan_binary_promotions::insert($insert);
-
-        $data['response_status'] = 'successd';
-        $data['message'] = 'Settings Edited';
+            $data['response_status'] = 'successd';
+            $data['message'] = 'Settings Edited';
+        }
+        else
+        {
+            $data['response_status'] = "warning";
+            $data['warning_validator'][0] = 'Item already is used on same membership'; 
+        }
+        
 
         return json_encode($data);
     }
     public function binary_promotions_get()
     {
         $shop_id = $this->user_info->shop_id;
-        $data['binary_promotions'] = Tbl_mlm_plan_binary_promotions::get();
+        $data['binary_promotions'] = Tbl_mlm_plan_binary_promotions::where('binary_promotions_archive', 0)->get();
         $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get()->keyBy('membership_id');
+        $data['_item']  = Item::get_all_category_item();
         return view('member.mlm_plan.configure.binary_promotions_get', $data);
+    }
+    public function binary_promotions_edit()
+    {
+        $insert['binary_promotions_membership_id'] = Request::input('binary_promotions_membership_id');
+        $insert['binary_promotions_no_of_units'] = Request::input('binary_promotions_no_of_units');
+        $insert['binary_promotions_required_left'] = Request::input('binary_promotions_required_left');
+        $insert['binary_promotions_required_right'] = Request::input('binary_promotions_required_right');
+        $insert['binary_promotions_item_id'] = Request::input('item_id');
+        $insert['binary_promotions_start_date'] = Carbon::now();
+        $insert['binary_promotions_archive'] = Request::input('submit_type');
+        $count = Tbl_mlm_plan_binary_promotions::where('binary_promotions_membership_id', $insert['binary_promotions_membership_id'])
+        ->where('binary_promotions_item_id', $insert['binary_promotions_item_id'])
+        ->count();
+
+        if($count == 1)
+        {
+            Tbl_mlm_plan_binary_promotions::where('binary_promotions_membership_id', $insert['binary_promotions_membership_id'])
+            ->where('binary_promotions_item_id', $insert['binary_promotions_item_id'])
+            ->update($insert);
+            $data['response_status'] = 'successd';
+            $data['message'] = 'Settings Edited';
+            return json_encode($data);
+        }
+        else
+        {
+            return $this->binary_promotions_save();
+        }
     }
 }

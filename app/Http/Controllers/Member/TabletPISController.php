@@ -146,6 +146,11 @@ class TabletPISController extends Member
                     return view("tablet.agent.agent_dashboard",$data);
 
                 }
+                else
+                {
+                    $data["sir"] = null;
+                    return view("tablet.index",$data);                    
+                }
             }
         }
         else

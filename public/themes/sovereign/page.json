@@ -258,14 +258,14 @@
 			"label":"Product Title",
 			"type":"textbox",
 			"default":"A Real Product Need",
-			"size":"6"
+			"size":"4"
 		},
 		"home_product_description" :
 		{
 			"label":"Product Description",
 			"type":"textbox",
 			"default":"Wellness Products are a real need in the marketplace. People may have the money to buy anything, but they can not buy their time on earth. With rising economies and changing lifestyles of people worldwide, people are getting health issues and financial defeat, everybody is looking to save money on hospitalizations.",
-			"size":"6"
+			"size":"4"
 		},
 		"home_network_title" :
 		{
@@ -385,6 +385,221 @@
 			"type":"textbox",
 			"default":"Network Marketing:  the industry for people who want to change their lives",
 			"size":"6"
+		},
+		"home_professional_title" :
+		{
+			"label":"Professional Title",
+			"type":"textbox",
+			"default":"What Professionals Say",
+			"size":"12"
+		},
+		"home_professional_maintenance" :
+		{
+			"label":"Professional Maintenance",
+			"type":"maintenance",
+			"default":"",
+			"field":[
+				{"name":"quote", "type":"textbox"},
+				{"name":"author_image", "type":"image"},
+				{"name":"author_name", "type":"text"},
+				{"name":"author_description", "type":"textbox"}
+			],
+			"size":"12"
+		},
+		"home_ending_title" :
+		{
+			"label":"Ending Title",
+			"type":"textbox",
+			"default":"Global Headquarters",
+			"size":"12"
+		},
+		"home_ending_address" :
+		{
+			"label":"Ending Address",
+			"type":"textbox",
+			"default":"8/F Wong Hing Building 74-78 Stanley Street, Central Hong Kong",
+			"size":"12"
+		},
+		"home_ending_telephone" :
+		{
+			"label":"Ending Telephone",
+			"type":"textbox",
+			"default":"(+852) 9472 6184 / (+852) 9145 7698",
+			"size":"12"
+		},
+		"home_join_text" :
+		{
+			"label":"Join Text",
+			"type":"textbox",
+			"default":"We offer one of the Strongest Compensations plans in the Industry with Multiple Ways to Earn Weekly and Monthly Income!",
+			"size":"12"
+		},
+		"home_join_button_text" :
+		{
+			"label":"Join Button Text",
+			"type":"textbox",
+			"default":"Join us today",
+			"size":"12"
+		}
+	},
+	"company":
+	{
+		"company_intro_text_1" : 
+		{
+			"label":"Intro First Text",
+			"type":"textbox",
+			"default":"LIVE",
+			"size":"4"
+		},
+		"company_intro_text_2" : 
+		{
+			"label":"Intro Second Text",
+			"type":"textbox",
+			"default":"WITHOUT",
+			"size":"4"
+		},
+		"company_intro_text_3" : 
+		{
+			"label":"Intro Third Text",
+			"type":"textbox",
+			"default":"LIMITS",
+			"size":"4"
+		},
+		"company_about_title" : 
+		{
+			"label":"About Title",
+			"type":"textbox",
+			"default":"About Us",
+			"size":"6"
+		},
+		"company_about_description" : 
+		{
+			"label":"About Title",
+			"type":"textbox",
+			"default":"We are an International direct advertising company from multiple sources of business enterprise formed to create partners all across the world. Companies in the Network Marketing Industry today are creating vast opportunities in line with wellness products for people to form a concrete Global Business Opportunity. We believe that financial education will improve the quality of life for people in the world, and we strive in becoming a global knowledge enterprise. Developing high quality health & wealth creation products, and to shift common paradigms through education, research and service.",
+			"size":"6"
+		},
+		"company_question_title" : 
+		{
+			"label":"Question Title",
+			"type":"textbox",
+			"default":"How do you earn money?",
+			"size":"6"
+		},
+		"company_question_description" : 
+		{
+			"label":"Question Description",
+			"type":"textbox",
+			"default":"We offer one of the Strongest Compensations plans in the Industry with Multiple Ways to Earn Weekly and Monthly Income!",
+			"size":"6"
+		},
+		"company_initiative_title" : 
+		{
+			"label":"Initiative Title",
+			"type":"textbox",
+			"default":"Company Initiatives",
+			"size":"6"
+		},
+		"company_initiative_image" : 
+		{
+			"label":"Initiative Title",
+			"type":"image",
+			"default":"/themes/sovereign/img/car.jpg",
+			"size":"6"
+		},
+		"company_contact_title" : 
+		{
+			"label":"Contact Title",
+			"type":"textbox",
+			"default":"Contact Information",
+			"size":"12"
+		},
+		"company_contact_address" : 
+		{
+			"label":"Contact Address",
+			"type":"textbox",
+			"default":"8/F Wong Hing Building 74-78 Stanley Street, Central Hong Kong",
+			"size":"3"
+		},
+		"company_contact_email" : 
+		{
+			"label":"Contact Email",
+			"type":"textbox",
+			"default":"info@youremail.com",
+			"size":"3"
+		},
+		"company_contact_phone" : 
+		{
+			"label":"Contact Phone",
+			"type":"textbox",
+			"default":"(+852) 9472 6184 / (+852) 9145 7698",
+			"size":"3"
+		},
+		"company_contact_mobile" : 
+		{
+			"label":"Contact Mobile",
+			"type":"textbox",
+			"default":"+63997 000 0000",
+			"size":"3"
+		}
+	},
+	"contact":
+	{
+		"contact_title" : 
+		{
+			"label":"Contact Title",
+			"type":"textbox",
+			"default":"Contact Us",
+			"size":"12"
+		},
+		"contact_form_title" : 
+		{
+			"label":"Form Title",
+			"type":"textbox",
+			"default":"Get Intouch With Us",
+			"size":"12"
+		},
+		"contact_location_title" : 
+		{
+			"label":"Location Title",
+			"type":"textbox",
+			"default":"Location",
+			"size":"12"
+		},
+		"contact_location_address" : 
+		{
+			"label":"Location Address",
+			"type":"textbox",
+			"default":"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+			"size":"4"
+		},
+		"contact_location_mobile" : 
+		{
+			"label":"Location Mobile",
+			"type":"textbox",
+			"default":"+44 870 888 88 88",
+			"size":"4"
+		},
+		"contact_location_email" : 
+		{
+			"label":"Location Email",
+			"type":"textbox",
+			"default":"youremailhere@company.com",
+			"size":"4"
+		},
+		"contact_business_title" : 
+		{
+			"label":"Business Title",
+			"type":"textbox",
+			"default":"Business Hours",
+			"size":"12"
+		},
+		"contact_business_hours" : 
+		{
+			"label":"Business Hours",
+			"type":"textbox",
+			"default":"Monday - Friday at 9:00am - 6:00pm",
+			"size":"12"
 		}
 	}
 }

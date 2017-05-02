@@ -715,6 +715,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
+    /* PAYROLL REPORTS */
+    $code = "payroll-reports";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Reports";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_reports";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
 
     /* VENDORS */
     $page = "vendor";  

@@ -16,7 +16,7 @@ class CreateTblPayrollPayslip extends Migration
             $table->increments('payroll_payslip_id');
             $table->integer('shop_id')->unsigned();
             $table->foreign('shop_id')->references('shop_id')->on('tbl_shop')->onDelete('cascade');
-            $table->strin('payslip_code');
+            $table->string('payslip_code');
             $table->integer('payroll_paper_sizes_id')->unsigned();
             $table->foreign('payroll_paper_sizes_id')->references('payroll_paper_sizes_id')->on('tbl_payroll_paper_sizes')->onDelete('cascade');
             $table->double('payslip_width');

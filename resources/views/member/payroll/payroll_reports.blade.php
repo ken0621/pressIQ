@@ -27,6 +27,10 @@
 			<div class="tab-content">
 				<div id="report-list" class="tab-pane fade in active">
 					<ul class="list-group">
+						<li class="list-group-item">
+							<span>Payroll Journal Entry</span>
+							<a href="/member/payroll/journal_entry" class="btn btn-xs btn-custom-white pull-right">View Journal</a>
+						</li>
 						@foreach($_active as $active)
 						<li class="list-group-item">
 							{{$active->payroll_reports_name}}

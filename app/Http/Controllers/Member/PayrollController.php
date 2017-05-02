@@ -3738,11 +3738,17 @@ class PayrollController extends Member
           $insert['payroll_paper_sizes_id']       = Request::input('payroll_paper_sizes_id');
           $insert['payslip_width']                = Request::input('payslip_width');
           $insert['payslip_copy']                 = Request::input('payslip_copy');
-          $insert['include_company_logo']         = Request::input('include_company_logo');
+          
 
           $include_department                     = 0;
           $include_job_title                      = 0;
           $include_time_summary                   = 0;
+          $include_company_logo                   = 0;
+
+          if(Request::has('include_company_logo'))
+          {
+               $include_company_logo = Request::input('include_company_logo');
+          }
 
           if(Request::has('include_department'))
           {
@@ -3762,7 +3768,9 @@ class PayrollController extends Member
           $insert['include_department']           = $include_department;
           $insert['include_job_title']            = $include_job_title;
           $insert['include_time_summary']         = $include_time_summary;
+          $insert['include_company_logo']         = $include_company_logo;
           $insert['company_position']             = Request::input('company_position');
+
           $id = Tbl_payroll_payslip::insertGetId($insert);
 
           $return['status']   = 'success';
@@ -4896,7 +4904,7 @@ class PayrollController extends Member
      /* PAYROLL PROCESS END */
 
 
-     public function payroll_summary()
+     public function journal_entry()
      {
           // dd(Request::input());
           $data['date_start'] = date('m/d/Y', strtotime('first day of this month'));

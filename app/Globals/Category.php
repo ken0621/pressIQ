@@ -72,7 +72,6 @@ class Category
         {
             $data .= '<a href="javascript:" category_type="'.$cat->type_category.'" style="padding-left:'.$padding.'px" class="list-group-item category-list" data-content="'.$cat->type_id.'">'.$cat->type_name.'</a>';
             $count =  Tbl_category::selecthierarchy($shop_id, $cat->type_parent_id)->count();
-            
             if($count != 0)
             {
                 $data  .= '<div class="list-group">'.Category::re_select_html($shop_id, $cat->type_id, $padding).'</div>';
@@ -117,7 +116,6 @@ class Category
 
 		$_category = Tbl_category::search($search, $type_category, $shop_id)->orderBy('type_name','asc')->get();;
 		
-		// dd($_category);
 		$data['html'] = '';
 
 		foreach($_category as $key => $cat)
@@ -203,6 +201,7 @@ class Category
 		$html = "";
 		$_category = Tbl_category::where("archived",1)->get();
 
+		$cat_type = array("all","services","inventory","non-inventory","bundles");
 		foreach ($_category as $key => $value) 
 		{
 			$class = '';
@@ -216,7 +215,7 @@ class Category
 			$class .= $child;
 
 			$caret = '';
-			$count = Tbl_category::selecthierarchy(Category::getShopId(), $value->type_parent_id, $value->type_id, 1)->count();
+			$count = Tbl_category::selecthierarchy(Category::getShopId(), $value->type_parent_id, $cat_type, 1)->count();
 			if($count != 0)
 			{
 				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$value->type_id.'"></i>';

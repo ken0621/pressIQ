@@ -332,12 +332,7 @@ class Warehouse
         Tbl_warehouse_inventory::where("inventory_slip_id",$inventory_slip->inventory_slip_id)->delete();
 
         foreach($transaction_item_inventory as $key2 => $value2)
-        {            
-            // $count = Tbl_warehouse_inventory::check_inventory_single($inventory_slip->warehouse_id, $value2['product_id'])->pluck('inventory_count');
-            // $count_on_hand = $count + $value2["quantity"];
-
-            // if($value2['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value2['quantity'])
-            // {     
+        {     
                 $insert["inventory_item_id"] = $value2["product_id"];
                 $insert["inventory_count"] = $value2["quantity"];
                 $insert["inventory_created"] = Carbon::now();
@@ -346,12 +341,6 @@ class Warehouse
 
                 Tbl_warehouse_inventory::insert($insert);
                 $data["status"] = "success";
-            // }
-            // else
-            // {
-            //     $data["status"] = "error";
-            //     $data["status_message"] = "The quantity is not enough";
-            // }
         }
 
 

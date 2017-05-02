@@ -478,11 +478,13 @@ function bill()
 	function load_purchase_order_vendor(vendor_id)
 	{
 		$(".purchase-order-container").load("/member/vendor/load_purchase_order/"+vendor_id , function()
+		{
+			if($(".po-counter").length > 0)
 			{
 				$(".purchase-order").removeClass("hidden");
-				// $(".drawer").drawer({openClass: "drawer-open"});
 				$(".drawer-toggle").trigger("click");
-			});
+			}
+		});
 	}
 	function action_load_item_info($this)
 	{

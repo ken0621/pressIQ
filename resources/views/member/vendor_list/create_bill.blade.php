@@ -259,11 +259,11 @@
        <tr class="tr-draggable">
             <td class="text-center cursor-move move">
                 <i class="fa fa-th-large colo-mid-dark-gray"></i>
-                <input type="text" class="hidden poline_id" name="poline_id[]">
-                <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]">
             </td>
             <td class="invoice-number-td text-right">1</td>
             <td>
+                <input type="hidden" class="poline_id" name="itemline_ref_name[]">
+                <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
                 <select class="1111 form-control select-item input-sm pull-left" name="itemline_item_id[]" >
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                 </select>

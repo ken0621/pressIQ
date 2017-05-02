@@ -40,6 +40,7 @@ class Vendor_PurchaseOrderController extends Member
         {
             Session::push('po_item',collect($value)->toArray());
         }
+        $data["ctr_item"] = count(Session::get("po_item"));
 
         $data['_item']      = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();

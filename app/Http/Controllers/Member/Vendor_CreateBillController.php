@@ -88,6 +88,14 @@ class Vendor_CreateBillController extends Member
 
         return view("member.load_ajax_data.load_purchase_order",$data);
     }
+    public function load_po_bill($vendor_id)
+    {
+        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$vendor_id)->where("po_is_billed",0)->get();
+
+        $data["_bill"]          = Billing::getAllBillByVendor($vendor_id);
+
+        return view("member.vendor.check.load_po_bill",$data);
+    }
     public function load_po_item()
     {
         $po_id = Request::input("po_id");
@@ -121,6 +129,7 @@ class Vendor_CreateBillController extends Member
         $_itemline                          = Request::input('itemline_item_id');
 
         $ctr_items = 0;
+        $item_refill = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -136,13 +145,16 @@ class Vendor_CreateBillController extends Member
                 $item_info[$key]['itemline_rate']         = str_replace(",","", Request::input('itemline_rate')[$key]);
                 $item_info[$key]['itemline_amount']       = str_replace(",","", Request::input('itemline_amount')[$key]);
             
-                $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
-                $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
-                $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];   
+                $item_type = Tbl_item::where("item_id",Request::input('itemline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+                    $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
+                    $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
+                    $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];   
+                }
             }
         }
 
-        $item_refill = [];
         // --> for bundles
         foreach ($_itemline as $keyitem => $value_item) 
         {

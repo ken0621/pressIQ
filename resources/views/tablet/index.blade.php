@@ -21,7 +21,6 @@
             <div class="col-sm-4 pull-right">
                 <form class="select-sir" method="get">
                     <select class="choose-sir form-control" name="sir_id">
-                        <option>all</option>
                         @foreach($_sirs as $sir)
                             <option {{Session::get("sir_id") == $sir->sir_id ? 'selected' : '' }} value="{{$sir->sir_id}}">SIR #{{$sir->sir_id}}</option>
                         @endforeach
@@ -51,7 +50,11 @@
             <div class="tab-pane fade in active">
                 <div class="form-group order-tags">
                     <div class="col-md-12 text-center">
-                      @if($sir != null)
+                      @if(isset($no_sir))
+                        <div class="form-group">
+                          <h2>Waiting for Warehouse to OPEN SIR #{{Session::get("sir_id")}}.</h2>
+                        </div>
+                      @elseif($sir != '')
                         <div class="form-group">
                             <div class="col-md-12">
                                 <h3>Load Out Form No: <strong>{{sprintf("%'.05d\n", Session::get("sir_id"))}}</strong></h3>

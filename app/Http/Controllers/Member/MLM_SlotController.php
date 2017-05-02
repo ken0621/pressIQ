@@ -115,8 +115,8 @@ class MLM_SlotController extends Member
     }
     public function index()
     {
-        // $slot = Mlm_compute::get_slot_info(368);
-        // return Mlm_complan_manager::binary_single_line($slot);
+        // $slot = Mlm_compute::get_slot_info(393);
+        // return Mlm_complan_manager::binary_pairing($slot);
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {

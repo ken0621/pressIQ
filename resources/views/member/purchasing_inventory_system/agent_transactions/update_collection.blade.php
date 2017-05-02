@@ -6,12 +6,16 @@
 </div>
 <div class="modal-body add_new_package_modal_body clearfix">
     <div class="col-md-12">
+        <h3>SIR #{{sprintf("%'.04d\n", $sir_id)}}</h3>
+        <h4>Agent Name: <strong>{{ucfirst($collection_data->first_name." ".$collection_data->middle_name." ".$collection_data->last_name)}}</strong></h4>
+    </div>
+    <div class="col-md-12">
         <label>Amount Remitted</label>
-        <input type="text" class="form-control" required name="agent_collection">
+        <input type="text" class="form-control number-input" required value="{{$collection_data->agent_collection or ''}}" name="agent_collection">
     </div>
     <div class="col-md-12">
         <label>Collection Remarks</label>
-        <textarea class="form-control textarea-expand" required name="agent_remarks"></textarea>
+        <textarea class="form-control textarea-expand" required  name="agent_remarks">{{$collection_data->agent_collection_remarks or ''}}</textarea>
     </div>
     <input type="hidden" name="sir_id" value="{{$sir_id}}">
 </div>
@@ -21,3 +25,56 @@
 </div>	
 </form>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
+<script type="text/javascript">
+$(document).on("keypress",".number-input", function(event)
+    {
+        if(event.which < 46 || event.which > 59) {
+            event.preventDefault();
+        } // prevent if not number/dot
+
+        if(event.which == 46 && $(this).val().indexOf('.') != -1) {
+            event.preventDefault();
+        } // prevent if already dot
+
+    });
+
+$(document).on("change",".number-input", function()
+{
+    $(this).val(function(index, value) {         
+        var ret = '';
+        value = action_return_to_number(value);
+        if(!$(this).hasClass("txt-qty")){
+            value = parseFloat(value);
+            value = value.toFixed(2);
+        }
+        if(value != '' && !isNaN(value)){
+            value = parseFloat(value);
+            ret = action_add_comma(value).toLocaleString();
+        }
+
+        return ret;
+      });
+});
+
+    function action_add_comma(number)
+    {
+        number += '';
+        if(number == ''){
+            return '';
+        }
+
+        else{
+            return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    }
+    function action_return_to_number(number = '')
+    {
+        number += '';
+        number = number.replace(/,/g, "");
+        if(number == "" || number == null || isNaN(number)){
+            number = 0;
+        }
+        
+        return parseFloat(number);
+    }
+</script>

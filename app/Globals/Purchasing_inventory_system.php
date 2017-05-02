@@ -425,7 +425,7 @@ class Purchasing_inventory_system
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" style="text-decoration: line-through;">5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click <a class="popup" link="/member/pis_agent/collection_update/'.$sir_id.' size="md">here</a> to update Remittance)</div>
+            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click <a class="popup" link="/member/pis_agent/collection_update/'.$sir_id.'" size="md">here</a> to update Remittance)</div>
             <div class="col-md-12" >7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click <a href="/member/pis/ilr/'.$sir_id.'"> here </a> to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)

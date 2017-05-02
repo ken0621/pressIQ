@@ -50,7 +50,7 @@ class AgentCollectionController extends Member
             {
                 $data["_sir"][$key]->total_collectibles = currency("Php",Purchasing_inventory_system::get_sir_total_amount($value->sir_id));
                 $data["_sir"][$key]->total_collection = currency("Php",$value->agent_collection);
-                $data["_sir"][$key]->loss_over = Purchasing_inventory_system::get_sir_total_amount($value->sir_id) - $value->agent_collection;
+                $data["_sir"][$key]->loss_over = $value->agent_collection - Purchasing_inventory_system::get_sir_total_amount($value->sir_id);
             }
         }
         else
@@ -60,7 +60,7 @@ class AgentCollectionController extends Member
             {
                 $data["_sir"][$key]->total_collectibles = currency("Php",Purchasing_inventory_system::get_sir_total_amount($value->sir_id));
                 $data["_sir"][$key]->total_collection = currency("Php",$value->agent_collection);
-                $data["_sir"][$key]->loss_over = Purchasing_inventory_system::get_sir_total_amount($value->sir_id) - $value->agent_collection;
+                $data["_sir"][$key]->loss_over = $value->agent_collection - Purchasing_inventory_system::get_sir_total_amount($value->sir_id);
             } 
         }        
 

@@ -85,7 +85,8 @@ class Mlm_compute
                         // auto placement
                         if($tbl_mlm_binary_setttings->binary_settings_auto_placement == 'left_to_right')
                         {
-                            $a =  Mlm_tree::auto_place_slot_binary_left_to_right($slot_info);
+                            $a =  Mlm_tree::auto_place_slot_binary_left_to_right_v2($slot_info);
+                            // $a =  Mlm_tree::auto_place_slot_binary_left_to_right($slot_info);
                         }
                         else if($tbl_mlm_binary_setttings->binary_settings_auto_placement == "auto_balance")
                         {
@@ -379,5 +380,20 @@ class Mlm_compute
     public static function set_slot_nick_name($slot_info)
     {
 
+    }
+    public static function get_label_plan($plan, $shop_id)
+    {
+        $plan = Tbl_mlm_plan::where('shop_id', $shop_id)->where('marketing_plan_code', $plan)->first();
+
+        if($plan)
+        {
+                $label = $plan->marketing_plan_label;
+                return $label;
+        }
+        else
+        {
+            $label = 'Earnings';
+            return  $label;
+        }
     }
 }

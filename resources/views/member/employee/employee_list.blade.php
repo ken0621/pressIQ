@@ -59,8 +59,16 @@
                                 <td >{{$employee->position_name}}</td>
                                 <td>{{date('F d, Y', strtotime($employee->created_at))}}</td>
                                 <td class="text-center">
-                                    <a link="/member/pis/agent/edit/{{$employee->employee_id}}" size="md" class="popup">Edit</a> |
-                                    <a link="/member/pis/agent/archived/{{$employee->employee_id}}/archived" size="md" class="popup">Archived</a> 
+                                    <div class="btn-group">
+                                      <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Action <span class="caret"></span>
+                                      </button>
+                                      <ul class="dropdown-menu dropdown-menu-custom">
+                                        <li><a href="/member/pis/agent/transaction/{{$employee->employee_id}}" >Agents Transaction</a> </li>
+                                        <li><a link="/member/pis/agent/edit/{{$employee->employee_id}}" size="md" class="popup">Edit</a></li>
+                                        <li><a link="/member/pis/agent/archived/{{$employee->employee_id}}/archived" size="md" class="popup">Archived</a> </li>
+                                      </ul>
+                                    </div>
                                 </td>
                             </tr>
                             @endforeach

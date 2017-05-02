@@ -3,7 +3,7 @@
 <input type="hidden" name="_token" value="{{csrf_token()}}">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
-        <div class="col-md-8 col-xs-6">
+        <div class="col-md-6 col-xs-6">
             <i class="fa fa-tablet"></i>
             <h1>
                 <span class="page-title">Tablet</span>
@@ -12,12 +12,21 @@
                 </small>
             </h1>
         </div>
-        <div class="col-md-4 col-xs-6 text-right">
-            <div class="col-md-12 text-left">
+        <div class="col-md-6 col-xs-6 text-right">
+            <div class="col-md-12 ">
                 <label>{{$employee_name}}</label><br>
                 <label>{{$employee_position}}</label><br>
                 <a href="/tablet/logout">Logout</a>
             </div>  
+            <div class="col-sm-4 pull-right">
+                <form class="select-sir" method="get">
+                    <select class="choose-sir form-control" name="sir_id">
+                        @foreach($_sirs as $sir)
+                            <option {{Session::get("sir_id") == $sir->sir_id ? 'selected' : '' }} value="{{$sir->sir_id}}">SIR #{{$sir->sir_id}}</option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -35,7 +44,7 @@
         </div>
         <div class="col-md-6 col-xs-6">
             <h3>
-           <a link="/tablet/sir_inventory/{{Session::get('selected_sir')}}" size="lg" class="form-control btn btn-primary popup">View Inventory</a>
+           <a link="/tablet/sir_inventory/{{Session::get('sir_id')}}" size="lg" class="form-control btn btn-primary popup">View Inventory</a>
            </h3>
         </div>
     </div>
@@ -44,13 +53,21 @@
           <a class="btn btn-primary form-control" href="/tablet/invoice"><i class="fa fa-list-alt"></i> Invoice ({{$total_invoice_amount}})</a>
         </div>
         <div class="col-md-6 col-xs-6">
-            <a class="btn btn-primary form-control" href="/tablet/customer"><i class="fa fa-users"></i> Customer ({{$total_customer}})</a>          
-        </div>        
+          <a class="btn btn-primary form-control" href="/tablet/sales_receipt/list"><i class="fa fa-line-chart"></i> Sales Receipt ({{$total_sales_receipt}})</a>
+        </div>      
     </div>
     <div class="form-group">
         <div class="col-md-6 col-xs-6">
             <a class="btn btn-primary form-control" href="/tablet/receive_payment"><i class="fa fa-money"></i> Receive Payment ({{$total_receive_payment}})</a>
         </div>
+        <div class="col-md-6 col-xs-6">
+            <a class="btn btn-primary form-control" href="/tablet/credit_memo"><i class="fa fa-credit-card"></i> Credit Memo ({{$total_cm}})</a>          
+        </div>        
+    </div>
+    <div class="form-group">
+        <div class="col-md-6 col-xs-6">
+            <a class="btn btn-primary form-control" href="/tablet/customer"><i class="fa fa-users"></i> Customer ({{$total_customer}})</a>          
+        </div>  
         <div class="col-md-6 col-xs-6">
             <a class="popup btn btn-primary form-control" link="/member/pis/agent/edit/{{$employee_id}}" ><i class="fa fa-gears"></i> Account Setting </button></a>
         </div>
@@ -60,6 +77,10 @@
 @endsection
 @section("script")
 <script type="text/javascript">
+$('body').on("change", ".choose-sir", function()
+{
+   $('.select-sir').submit();
+}); 
     function submit_done_customer(data)
     {
         if(data.message == "success")

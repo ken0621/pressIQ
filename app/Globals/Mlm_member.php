@@ -288,6 +288,8 @@ class Mlm_member
         $insertSearch['body'] = $insert['title_name'].' '.$insert['first_name'].' '.$insert['middle_name'].' '.$insert['last_name'].' '.$insert['suffix_name'].' '.$insert['email'].' '.$insert['company'];
         Tbl_customer_search::insert($insertSearch);
 
+        $insertInfo['customer_phone'] = $info['customer_phone'];
+        $insertInfo['customer_mobile'] = $info['customer_mobile'];
         $insertInfo['customer_id'] = $customer_id;
         Tbl_customer_other_info::insert($insertInfo);
 

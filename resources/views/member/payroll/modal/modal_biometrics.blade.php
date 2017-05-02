@@ -10,9 +10,11 @@
 		</div>
 		<div class="col-md-6">
 			<select class="form-control" id="biometric_name" name="biometric_name">
+				<option value="Manual Template">Manual Template</option>
 				<option value="ZKTime 5.0">ZKTime 5.0</option>
 				<option value="Digital Persona">Digital Persona</option>
-				<option value="C7">C7</option>
+				<option value="Mustard Seed">Mustard Seed</option>
+				<!-- <option value="C7">C7</option> -->
 			</select>
 		</div>
 	</form>

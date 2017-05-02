@@ -28,16 +28,38 @@ use Carbon\carbon;
 class Billing
 {
 
-
-    public static function count_ap()
+    public static function count_ap($start_date, $end_date)
     {
-         $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())->where("bill_is_paid",0)->count();
+         $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())->whereBetween("date_created",array($start_date,$end_date))->where("bill_is_paid",0)->count();
          return $bill;
     }
-    public static function get_ap_amount()
+    public static function count_paid_bills($start_date, $end_date)
+    {
+         $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())->whereBetween("date_created",array($start_date,$end_date))->where("bill_is_paid",1)->count();
+         return $bill;
+    }
+    public static function get_ap_amount($start_date, $end_date)
     {
         $price = 0;
-        $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())->where("bill_is_paid",0)->get();
+        $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())
+                                ->whereBetween("date_created",array($start_date,$end_date))
+                                ->where("bill_is_paid",0)->get();
+        if(isset($bill))
+        {
+            foreach ($bill as $key => $value) 
+            {
+               $price += $value->bill_total_amount;
+            }            
+        }
+
+        return $price;
+    }
+    public static function get_paid_bills_amount($start_date, $end_date)
+    {
+        $price = 0;
+        $bill = Tbl_bill::where("bill_shop_id",Billing::getShopId())
+                                ->whereBetween("date_created",array($start_date,$end_date))
+                                ->where("bill_is_paid",1)->get();
         if(isset($bill))
         {
             foreach ($bill as $key => $value) 
@@ -99,41 +121,67 @@ class Billing
         $insert['inventory_only']           = $bill_info['inventory_only'];
 
         $insert['bill_memo']                = $bill_other_info['bill_memo'];
-        $insert['bill_total_amount']        = $total_info['bill_total_amount'];
+        $insert['bill_total_amount']        = collect($item_info)->sum('itemline_amount');
         $insert['bill_payment_method']      = 0;
         $insert['date_created']             = Carbon::now();
         
 
         $bill_id = Tbl_bill::insertGetId($insert);
 
-        // $bill_data = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
-        // AuditTrail::record_logs("Added","bill",$bill_id,"",serialize($bill_data));
+        $bill_data = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
+        AuditTrail::record_logs("Added","bill",$bill_id,"",serialize($bill_data));
 
         Billing::insert_bill_line($bill_id, $item_info);
 
         return $bill_id;
 
     }
-    public static function insertPotoBill($bill_id = null, $_po_id = array())
+    public static function insertPotoBill($bill_id = null, $po_data = array())
     {
-        if($bill_id != null && $_po_id != null)
+        if($bill_id != null)
         {
-            $ins["billed_id"] = $bill_id;
-            foreach ($_po_id as $key => $value) 
-            {
-                if($value != "")
-                {
-                    $ins["purchase_order_id"] = $value;
+            Tbl_bill_po::where("billed_id",$bill_id)->delete();
 
+            foreach ($po_data as $key => $value) 
+            {
+                $chk = Tbl_bill_po::where("billed_id",$bill_id)->where("purchase_order_id",$value["poline_po_id"])->first();
+                if($chk == null)
+                {
+                    $ins["billed_id"] = $bill_id;
+                    $ins["purchase_order_id"] = $value["poline_po_id"];
+                    
                     Tbl_bill_po::insert($ins);
 
                     $up_po["po_is_billed"] = $bill_id;
-                    Tbl_purchase_order::where("po_id",$value)->update($up_po);                    
+                    Tbl_purchase_order::where("po_id",$value["poline_po_id"])->update($up_po);  
                 }
-            }
-
+            }            
         }
-        
+    }
+    public static function updatePotoBill($bill_id = null, $po_id = array())
+    {
+        if($bill_id != null)
+        {
+            Tbl_bill_po::where("billed_id",$bill_id)->delete();
+
+            foreach ($po_id as $key => $value) 
+            {
+                $chk = Tbl_bill_po::where("billed_id",$bill_id)->where("purchase_order_id",$value)->first();
+                if($chk == null)
+                {
+                    if($value)
+                    {
+                        $ins["billed_id"] = $bill_id;
+                        $ins["purchase_order_id"] = $value;
+                        
+                        Tbl_bill_po::insert($ins);
+
+                        $up_po["po_is_billed"] = $bill_id;
+                        Tbl_purchase_order::where("po_id",$value)->update($up_po);                        
+                    }
+                }
+            }            
+        }
     }
     public static function updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info)
     {
@@ -147,7 +195,7 @@ class Billing
         $update['bill_date']                = $bill_info['bill_date'];
         $update['bill_due_date']            = $bill_info['bill_due_date'];
         $update['bill_memo']                = $bill_other_info['bill_memo'];
-        $update['bill_total_amount']        = $total_info['bill_total_amount'];
+        $update['bill_total_amount']        = collect($item_info)->sum('itemline_amount');
         $update['bill_payment_method']      = 0;
 
         Tbl_bill::where("bill_id", $bill_id)->update($update);
@@ -172,12 +220,12 @@ class Billing
                 // {
                 //     $discount = substr($discount, 0, strpos($discount, '%')) / 100;
                 // }
-                $insert_line['itemline_poline_id']     = $item_line['itemline_poline_id'] ;
-                $insert_line['itemline_po_id']         = $item_line['itemline_po_id'] ;
+                // $insert_line['itemline_poline_id']     = $item_line['itemline_poline_id'] ;
+                // $insert_line['itemline_po_id']         = $item_line['itemline_po_id'] ;
                 $insert_line['itemline_bill_id']       = $bill_id;
                 $insert_line['itemline_item_id']       = $item_line['itemline_item_id'];
-                $insert_line['itemline_poline_id']     = 0;
-                $insert_line['itemline_po_id']         = 0;
+                $insert_line['itemline_ref_name']      = $item_line['itemline_ref_name'] ;
+                $insert_line['itemline_ref_id']        = $item_line['itemline_ref_id'] ;
                 $insert_line['itemline_description']   = $item_line['itemline_description'];
                 $insert_line['itemline_um']            = $item_line['itemline_um'];
                 $insert_line['itemline_qty']           = $item_line['itemline_qty'];

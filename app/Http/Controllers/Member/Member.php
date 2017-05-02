@@ -8,7 +8,7 @@ use App\Models\Tbl_warehouse;
 
 use App\Globals\Account;
 use App\Globals\Warehouse;
-use App\Globals\Seed;
+use App\Globals\Seed_manual;
 use App\Globals\Utilities;
 use App\Globals\Payroll;
 use App\Globals\Settings;
@@ -25,7 +25,6 @@ class Member extends Controller
 	public $current_warehouse; 
 	function __construct()
 	{
-
 		/* IF SESSION FOR EMAIL OR PASSWORD DOESN'T EXIST - REDIRECT TO FRONTPAGE */
 		if(!session('user_email') || !session('user_password'))
 		{
@@ -132,7 +131,7 @@ class Member extends Controller
 		View::share("_page", Utilities::filterPageList());
 		
 		/* Seeding */
-		Seed::auto_seed();
+		Seed_manual::auto_seed();
 
 		/* Set Email Configuration */
 		Settings::set_mail_setting($this->user_info->shop_id);
@@ -162,10 +161,14 @@ class Member extends Controller
 		Payroll::generate_philhealth($this->user_info->shop_id);
 		/* INSERT PAGIBIG TABLE PER SHOP */
 		Payroll::generate_pagibig($this->user_info->shop_id);
+		/* INSERT PAPER SIZE FOR PAYSLIP [PAYROLL] */
+		Payroll::generate_paper_size($this->user_info->shop_id);
+		/* INSERT DEFAULT TERMS */
+		Seed_manual::put_default_tbl_terms($this->user_info->shop_id);
 
 		/* INSERT MAIN WAREHOUSE */
 		Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);
-
+		// dd($this->user_info);
 	}
 	public function show_no_access()
 	{

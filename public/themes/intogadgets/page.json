@@ -363,7 +363,8 @@
 				{"name":"link", "type":"text"},
 				{"name":"address", "type":"hidden"},
 				{"name":"latitude", "type":"hidden"},
-				{"name":"longitude", "type":"hidden"}
+				{"name":"longitude", "type":"hidden"},
+				{"name":"map", "type":"map"}
 			],
 			"size":"12"
 		}
@@ -644,28 +645,28 @@
 		},
 		"dakasi_image" :
 		{
-			"label":"Dakasi Logo Image",
+			"label":"Partner Logo 1 Image",
 			"type":"image",
 			"default":"/themes/intogadgets/resources/assets/frontend/img/dakasi-logo.png",
 			"size":"6"
 		},
 		"dakasi_link" :
 		{
-			"label":"Dakasi Logo Link",
+			"label":"Partner Logo 1 Link",
 			"type":"textbox",
 			"default":"https://www.facebook.com/DakasiPH/",
 			"size":"6"
 		},
 		"primia_image" :
 		{
-			"label":"Primia Logo Image",
+			"label":"Partner Logo 2 Image",
 			"type":"image",
 			"default":"/themes/intogadgets/resources/assets/frontend/img/primia-logo.png",
 			"size":"6"
 		},
 		"primia_link" :
 		{
-			"label":"Primia Logo Link",
+			"label":"Partner Logo 2 Link",
 			"type":"textbox",
 			"default":"http://primiaworks.com",
 			"size":"6"

@@ -48,12 +48,13 @@
             @if($key == 0) <!--MAIN -->
             <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $timesheet->date }}">
             <td class="text-center table-loading">
-                <i class="table-check fa fa-unlock-alt hidden"></i>
+                <!-- <i class="table-check fa fa-unlock-alt hidden"></i> -->
+                {!!$timesheet->symbol!!}
                 <i class="table-loader fa fa-spinner fa-pulse fa-fw"></i>
             </td>
-            <td class="text-center edit-data day-number">{{ $timesheet->day_number }}</td>
-            <td class="text-center edit-data day-word">{{ $timesheet->day_word }}</td>
-            <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}"></td>
+            <td class="text-center edit-data day-number">{!! $timesheet->day_number !!}</td>
+            <td class="text-center edit-data day-word">{!! $timesheet->day_word !!}</td>
+            <td class="text-center editable "><input placeholder="NO TIME" class="text-table time-entry time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}"></td>
             <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}"></td>
             <td class="text-center editable approved-in">__:__ __</td>
             <td class="text-center editable approved-out">__:__ __</td>
@@ -71,7 +72,7 @@
             <td class="text-center edit-data zerotogray extra-day-hours">__:__</td>
             <td class="text-center edit-data zerotogray night-differential">__:__</td>
             <td class="text-center edit-data zerotogray special-holiday-hours">__:__</td>
-            <td class="text-center edit-data zerotogray regular-holiday-hours">__:__</td>
+            <td class="text-center edit-data zerotogray regular-holiday-hours {{$timesheet->holiday_class}}">__:__</td>
             <td class="text-center"><span class="button create-sub-time"><i class="fa fa-plus"></i></span></td>
             @else
             <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $timesheet->date }}">
@@ -92,7 +93,7 @@
             <td class="text-center edit-data"></td>
             <td class="text-center edit-data"></td>
             <td class="text-center edit-data"></td>
-            <td class="text-center edit-data"></td>
+            <td class="text-center edit-data color-red"></td>
             <td class="text-center"><span class="button delete-sub-time"><i class="fa fa-close"></i></span></td>
             @endif
         </tr>
@@ -127,114 +128,135 @@
 </table>
 <hr>
 <div class="col-md-4 div-table-summary">
-    <table class="table table-bordered table-condensed">
-        <tr>
-            <td>Total Regular Hours</td>
-            <td class="text-right">
-                {{$summary['regular_hours']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Late</td>
-            <td class="text-right">
-                {{$summary['late_hours']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Under Time</td>
-            <td class="text-right">
-                {{$summary['under_time']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Reg OverTime</td>
-            <td class="text-right">
-                {{$summary['late_overtime']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Early OverTime</td>
-            <td class="text-right">
-                {{$summary['early_overtime']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Night Differentials</td>
-            <td class="text-right">
-                {{$summary['night_differential']}}
-            </td>
-        </tr>
-        
-        <tr>
-            <td>Total Extra Day Hours</td>
-            <td class="text-right">
-                {{$summary['extra_day_hours']}}
-            </td>
-        </tr>
-        
-        <tr>
-            <td>Total Rest Day Hour</td>
-            <td class="text-right">
-                {{$summary['rest_day_hours']}}
-            </td>
-        </tr>
-        
-        <tr>
-            <td>Total Special Holiday Hour</td>
-            <td class="text-right">
-                {{$summary['special_holiday_hours']}}
-            </td>
-        </tr>
-        
-        <tr>
-            <td>Total Regular Holiday Hour</td>
-            <td class="text-right">
-                {{$summary['regular_holiday_hours']}}
-            </td>
-        </tr>
-        <tr>
-            <td><b>Total Working Hours</b></td>
-            <td class="text-right">
-                <b>{{$summary['time_spent']}}</b>
-            </td>
-        </tr>
-        <tr>
-            <td width="50%">Total Regular Days</td>
-            <td class="text-right">
-                {{$summary['regular_day_count']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Extra Days</td>
-            <td class="text-right">
-                {{$summary['extra_day_count']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Rest Day</td>
-            <td class="text-right">
-                {{$summary['rest_day_count']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Special Holiday</td>
-            <td class="text-right">
-                {{$summary['special_holiday_count']}}
-            </td>
-        </tr>
-        <tr>
-            <td>Total Regular Holiday</td>
-            <td class="text-right">
-                {{$summary['regular_holiday_count']}}
-            </td>
-        </tr>
-        <tr>
-            <td><b>Total Working Days</b></td>
-            <td class="text-right">
-                <b>{{$summary['total_working_days']}}</b>
-            </td>
-        </tr>
-    </table>
+    <div class="div-summary-table">
+        <table class="table table-bordered table-condensed">
+            <tr>
+                <td>Total Regular Hours</td>
+                <td class="text-right">
+                    {{$summary['regular_hours']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Late</td>
+                <td class="text-right">
+                    {{$summary['late_hours']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Under Time</td>
+                <td class="text-right">
+                    {{$summary['under_time']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Reg OverTime</td>
+                <td class="text-right">
+                    {{$summary['late_overtime']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Early OverTime</td>
+                <td class="text-right">
+                    {{$summary['early_overtime']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Night Differentials</td>
+                <td class="text-right">
+                    {{$summary['night_differential']}}
+                </td>
+            </tr>
+            
+            <tr>
+                <td>Total Extra Day Hours</td>
+                <td class="text-right">
+                    {{$summary['extra_day_hours']}}
+                </td>
+            </tr>
+            
+            <tr>
+                <td>Total Rest Day Hour</td>
+                <td class="text-right">
+                    {{$summary['rest_day_hours']}}
+                </td>
+            </tr>
+            
+            <tr>
+                <td>Total Special Holiday Hour</td>
+                <td class="text-right">
+                    {{$summary['special_holiday_hours']}}
+                </td>
+            </tr>
+            
+            <tr>
+                <td>Total Regular Holiday Hour</td>
+                <td class="text-right">
+                    {{$summary['regular_holiday_hours']}}
+                </td>
+            </tr>
+            <tr>
+                <td><b>Total Working Hours</b></td>
+                <td class="text-right">
+                    <b>{{$summary['time_spent']}}</b>
+                </td>
+            </tr>
+            <tr>
+                <td width="50%">Total Regular Days</td>
+                <td class="text-right">
+                    {{$summary['regular_day_count']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Extra Days</td>
+                <td class="text-right">
+                    {{$summary['extra_day_count']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Rest Day</td>
+                <td class="text-right">
+                    {{$summary['rest_day_count']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Special Holiday</td>
+                <td class="text-right">
+                    {{$summary['special_holiday_count']}}
+                </td>
+            </tr>
+            <tr>
+                <td>Total Regular Holiday</td>
+                <td class="text-right">
+                    {{$summary['regular_holiday_count']}}
+                </td>
+            </tr>
+            <tr>
+                <td width="50%">Total Absents</td>
+                <td class="text-right">
+                    {{$summary['absent']}}
+                </td>
+            </tr>
+
+            <tr>
+                <td><b>Total Working Days</b></td>
+                <td class="text-right">
+                    <b>{{$summary['total_working_days']}}</b>
+                </td>
+            </tr>
+            <tr>
+                <td width="50%">Total Leave with Pay</td>
+                <td class="text-right">
+                    {{$summary['leave_with_pay']}}
+                </td>
+            </tr>
+            <tr>
+                <td width="50%">Total Leave without Pay</td>
+                <td class="text-right">
+                    {{$summary['leave_wo_pay']}}
+                </td>
+            </tr>
+        </table>
+    </div>
 </div>
 <div class="col-md-4 pull-right form-horizontal">
     <div class="form-group">
@@ -261,3 +283,7 @@
     </div>
 </div>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
+<script type="text/javascript">
+    default_time_in = '{{ $default_time_in }}';
+    default_time_out = '{{ $default_time_out }}';
+</script>

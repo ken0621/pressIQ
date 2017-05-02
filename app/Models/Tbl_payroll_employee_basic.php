@@ -98,4 +98,14 @@ class Tbl_payroll_employee_basic extends Model
 
 	}
 
+	public function scopecheckexist($query, $_data = array())
+	{
+		foreach($_data as $key => $data)
+		{
+			$query->where($key, $data);
+		}
+
+		return $query;
+	}
+
 }

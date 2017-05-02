@@ -79,6 +79,7 @@
                                                       @elseif($sir->ilr_status == 1)                                          
                                                         <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/sir" class="popup">View SIR</a></li>
                                                         <li><a href="/member/pis/ilr/{{$sir->sir_id}}">Processed ILR</a></li>
+                                                        <li><a size="lg" link="/member/pis/ilr/view/{{$sir->sir_id}}" class="popup">View ILR</a></li>
                                                       @elseif($sir->ilr_status == 2)                                         
                                                         <li><a size="lg" link="/member/pis/ilr/view/{{$sir->sir_id}}" class="popup">View ILR</a></li>
                                                       @endif

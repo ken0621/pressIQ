@@ -799,4 +799,4 @@ class Seed
 // $pikachu = new PokemonPikachu();
 // $charimander = new PokemonCharimander();
 // $ash->iChooseYou($charimander);
-?>
+// ?>

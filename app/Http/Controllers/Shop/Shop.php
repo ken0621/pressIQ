@@ -9,6 +9,7 @@ use App\Models\Tbl_shop;
 use App\Models\Tbl_content;
 use App\Models\Tbl_ec_product;
 use App\Models\Tbl_country;
+use App\Models\Tbl_customer;
 use App\Globals\Ecom_Product;
 use App\Globals\Cart;
 use App\Globals\Settings;
@@ -24,9 +25,12 @@ class Shop extends Controller
     public static $customer_info;
     public static $slot_now;
 
+    public static $lead;
+
     public function __construct()
     {
     	$domain = get_domain();
+        
     	$check_domain = Tbl_shop::where("shop_domain", $domain)->first();
         // dd(Session::get('mlm_member'));
         if(Session::get('mlm_member') != null)
@@ -44,7 +48,6 @@ class Shop extends Controller
             Self::$customer_info = null;
             Self::$slot_now = null;
         }
-
         if(hasSubdomain())
         {
 			$url = $_SERVER['HTTP_HOST'];
@@ -55,7 +58,18 @@ class Shop extends Controller
 
             if(!$this->shop_info)
             {
-                die("Page not found.");
+                $check_domain = Tbl_customer::where('mlm_username', $subdomain)->first();
+                $lead_e = $check_domain;
+                if($lead_e)
+                {
+                    $shop_id = $lead_e->shop_id;    
+                    $this->shop_info = $shop_info = Tbl_shop::where("shop_id", $shop_id)->first();
+                    Self::$lead = $lead_e;
+                }
+                else
+                {
+                    die("Page not found.");
+                }
             }
         }
         elseif($check_domain)

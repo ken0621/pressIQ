@@ -31,6 +31,11 @@ function submit_done(data)
         $(".sir-class").removeClass("active");
         data.element.modal("hide");
     }
+    else if(data.status == "success-close")
+    {
+        toastr.success("Success");
+        location.href = "/tablet/dashboard";
+    }
     else if(data.status == "error")
     {
         toastr.warning(data.status_message);

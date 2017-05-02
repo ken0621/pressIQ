@@ -28,11 +28,12 @@ function submit_done(data)
     if(data.status == "success")
     {
         toastr.success("Success");
-        $('#global_modal').modal('toggle');
-        $(".sir_container").load("/tablet/dashboard .sir_container");
-        $(".all-sir").addClass("active");
-        $(".sir-class").removeClass("active");
-        data.element.modal("hide");
+        location.href = "/tablet/dashboard";
+    }
+    else if(data.status == "success-close")
+    {
+        toastr.success("Success");
+        location.href = "/tablet/dashboard";
     }
     else if(data.status == "error")
     {

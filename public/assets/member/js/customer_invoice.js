@@ -48,6 +48,11 @@ function customer_invoice(){
 							iniatilize_select();
 							$(".tbody-item .select-um").globalDropList("enabled");
 							$(".est-"+id).removeClass("hidden");
+							if($(".tbody-item .trcount").length == 0)
+							{
+								$(".so-count").removeClass("hidden");
+								$(".est-count").removeClass("hidden");
+							}
 							$(".drawer-toggle").trigger("click");
 						});
 
@@ -490,7 +495,10 @@ function customer_invoice(){
 	{
 		$(".estimate-container").load("/member/customer/load_estimate_so/"+customer_id , function()
 		{
-			$(".drawer-toggle").trigger("click");
+			if($(".est-count").length > 0 || $(".so-count").length > 0)
+			{
+				$(".drawer-toggle").trigger("click");				
+			}
 		});
 	}
 	function iniatilize_select()
@@ -667,7 +675,7 @@ function customer_invoice(){
 	}
 
 }	
-function add_est_to_inv(est_id)
+function add_est_to_inv(est_id, type)
 {
 	$(".estimate-tbl").load('/member/customer/load_added_item/'+est_id, function()
 	{
@@ -677,6 +685,14 @@ function add_est_to_inv(est_id)
 		$(".tbody-item .select-um").globalDropList("enabled");
 
 		$(".est-"+est_id).addClass("hidden");
+		if(type == 'est')
+		{
+			$(".so-count").addClass("hidden");
+		}
+		else
+		{
+			$(".est-count").addClass("hidden");
+		}
 	});
 }
 

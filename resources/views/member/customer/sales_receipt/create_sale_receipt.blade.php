@@ -25,7 +25,7 @@
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <!-- <li class="dropdown-header">Dropdown header 1</li> -->
-                            <li><a href="/member/accounting/journal/entry/invoice/{{$inv->inv_id}}">Transaction Journal</a></li>
+                            <li><a href="/member/accounting/journal/entry/sales-receipt/{{$inv->inv_id}}">Transaction Journal</a></li>
                             <!-- <li class="divider"></li> -->
                             <!-- <li class="dropdown-header">Dropdown header 2</li> -->
                             <li><a href="#">Void</a></li>

@@ -286,10 +286,6 @@ class ShopCheckoutController extends Shop
                        return Redirect::back()->with('fail', 'Image upload failed. Please try again.');
                     }
                 }
-                else 
-                {
-                   return Redirect::back()->with('fail', 'Image upload failed. Please try again.');
-                }
             }
             // Payment Method with Payment Facility (Temporary)
             elseif ($cart["payment_method_id"] == 1 || $cart["payment_method_id"] == 2) 

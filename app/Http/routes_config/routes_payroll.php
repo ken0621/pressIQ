@@ -238,6 +238,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* PAYROLL CUSTOM PAYSLIP START */
 	Route::any('/custom_payslip',"Member\PayrollController@custom_payslip");
 	Route::any('/custom_payslip/modal_create_payslip',"Member\PayrollController@modal_create_payslip");
+	Route::any('/custom_payslip/modal_create_paper_size',"Member\PayrollController@modal_create_paper_size");
 	
 	/* PAYROLL CUSTOM PAYSLIP END */
 
@@ -341,4 +342,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_approved_view/payroll_approved_company/{id}','Member\PayrollController@payroll_approved_company');
 	Route::any('/payroll_approved_view/payroll_record_by_id/{id}','Member\PayrollController@payroll_record_by_id');
 	/* PAYROLLL APPROVED END */
+
+	/* PAYROLL NOTES  START*/
+	Route::any('/modal_payroll_notes/{id}','Member\PayrollController@modal_payroll_notes');
+	/* PAYROLL NOTES END */
 });	 

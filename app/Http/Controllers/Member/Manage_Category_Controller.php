@@ -23,8 +23,8 @@ class Manage_Category_Controller extends Member
         {
             $shop_id = $this->user_info->user_shop;
             $data['category'] = Category::select_tr_html($shop_id, 0);
+            // dd($data['category']);
             $data['archived_category'] = Category::select_category_archived();
-            // dd($data['archived_category']); 
             return view('member.manage_category.manage_category_list', $data);
         }
         else

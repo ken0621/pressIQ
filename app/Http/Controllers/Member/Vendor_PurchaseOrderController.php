@@ -31,6 +31,42 @@ use Redirect;
 use PDF;
 class Vendor_PurchaseOrderController extends Member
 {
+
+    public function add_item($po_id)
+    {
+        $po_data = Tbl_purchase_order_line::um()->where("poline_po_id",$po_id)->get();
+
+        foreach ($po_data as $key => $value) 
+        {
+            Session::push('po_item',collect($value)->toArray());
+        }
+        $data["ctr_item"] = count(Session::get("po_item"));
+
+        $data['_item']      = Item::get_all_category_item();
+        $data['_um']        = UnitMeasurement::load_um_multi();
+
+        return view('member.load_ajax_data.load_po_session_item',$data);
+
+    }
+    public function remove_items($po_id)
+    {
+        $items = Session::get("po_item");
+
+        foreach($items as $key => $value) 
+        {
+            if($value["poline_po_id"] == $po_id)
+            {
+                unset($items[$key]);
+            }
+        }
+
+        Session::put("po_item",$items);
+
+        $data['_item']      = Item::get_all_category_item();
+        $data['_um']        = UnitMeasurement::load_um_multi();
+
+        return view('member.load_ajax_data.load_po_session_item',$data);
+    }
     public function index()
     {
         $data["page"]       = "Purchase order";

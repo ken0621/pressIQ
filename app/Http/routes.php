@@ -551,13 +551,17 @@ Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrde
 Route::any('/member/vendor/purchase_order/view_pdf/{id}','Member\Vendor_PurchaseOrderController@view_po_pdf');
 Route::any('/member/vendor/purchase_order/pdf/{id}','Member\Vendor_PurchaseOrderController@po_pdf');
 
+Route::any('/member/vendor/load_added_item/{po_id}','Member\Vendor_PurchaseOrderController@add_item');
+
 Route::get('/member/vendor/bill_list','Member\Vendor_CreateBillController@index');
 Route::get('/member/vendor/create_bill','Member\Vendor_CreateBillController@create_bill');
 Route::any('/member/vendor/load_purchase_order/{id}','Member\Vendor_CreateBillController@load_purchase_order');
 Route::any('/member/vendor/create_bill/add','Member\Vendor_CreateBillController@add_bill');
 Route::any('/member/vendor/create_bill/update','Member\Vendor_CreateBillController@update_bill');
 Route::any('/member/vendor/load_po_item','Member\Vendor_CreateBillController@load_po_item');
+Route::any('/member/vendor/po_remove/{id}','Member\Vendor_PurchaseOrderController@remove_items');
 
+Route::any('/member/vendor/load_po_bill/{id}','Member\Vendor_CreateBillController@load_po_bill');
 
 Route::any('/member/vendor/receive_inventory/list','Member\Vendor_ReceiveInventoryController@index');
 Route::any('/member/vendor/receive_inventory','Member\Vendor_ReceiveInventoryController@receive_inventory');
@@ -571,7 +575,10 @@ Route::get('/member/vendor/load_pb/{id}','Member\Vendor_PayBillController@load_v
 Route::any('/member/vendor/paybill/add','Member\Vendor_PayBillController@add_pay_bill');
 Route::any('/member/vendor/paybill/update/{id}','Member\Vendor_PayBillController@update_pay_bill');
 
-Route::get('/member/vendor/write_check','Member\Vendor_WriteCheckController@index');
+Route::any('/member/vendor/write_check','Member\Vendor_CheckController@write_check');
+Route::any('/member/vendor/write_check/list','Member\Vendor_CheckController@check_list');
+Route::any('/member/vendor/write_check/add','Member\Vendor_CheckController@add_check');
+Route::any('/member/vendor/write_check/update','Member\Vendor_CheckController@update_check');
 
 /*Manufacturer*/
 Route::any('/member/item/manufacturer','Member\ManufacturerController@manufacturer_list');

@@ -41,3 +41,23 @@
 <div class="modal-footer" >
     <button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
 </div>
+
+<script type="text/javascript">   
+function submit_done(data)
+{
+    if(data.status == "success")
+    {
+        toastr.success("Success");
+        $('#global_modal').modal('toggle');
+        $(".sir_container").load("/member/pis/lof .sir_container");
+        data.element.modal("hide");
+        $(".all-sir").addClass("active");
+        $(".sir-class").removeClass("active");
+    }
+    else if(data.status == "error")
+    {
+        toastr.warning(data.status_message);
+        $(data.target).html(data.view);
+    }
+}
+</script>

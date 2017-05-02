@@ -49,11 +49,11 @@
                                 <td>{{$sir->total_collectibles}}</td>
                                 <td>{{$sir->total_collection}}</td>
                                 <td>
-                                    <span style="color: {{$sir->loss_over <= -1 ? 'red': 'green'}}">
+                                    <span style="color: {{$sir->loss_over < 0 ? 'red': 'green'}}">
                                         @if($sir->agent_collection_remarks == "")
                                             Not Updated
                                         @else
-                                            @if($sir->loss_over <= -1)
+                                            @if($sir->loss_over < 0)
                                                Loss
                                             @elseif($sir->loss_over == 0)
                                                Complete
@@ -64,7 +64,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <span style="color: {{$sir->loss_over <= -1 ? 'red': 'green'}}">
+                                    <span style="color: {{$sir->loss_over < 0 ? 'red': 'green'}}">
                                         {{currency("Php" , $sir->loss_over)}}
                                     </span>
                                 </td>

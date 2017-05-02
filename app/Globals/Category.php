@@ -72,7 +72,6 @@ class Category
         {
             $data .= '<a href="javascript:" category_type="'.$cat->type_category.'" style="padding-left:'.$padding.'px" class="list-group-item category-list" data-content="'.$cat->type_id.'">'.$cat->type_name.'</a>';
             $count =  Tbl_category::selecthierarchy($shop_id, $cat->type_parent_id)->count();
-            dd($count);
             if($count != 0)
             {
                 $data  .= '<div class="list-group">'.Category::re_select_html($shop_id, $cat->type_id, $padding).'</div>';

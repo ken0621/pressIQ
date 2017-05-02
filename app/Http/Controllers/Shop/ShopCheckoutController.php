@@ -24,6 +24,10 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_ec_order_item;
 // use App\Globals\Mlm_slot_log;    
+
+/*4/29/17 this will import the data/class needed by ipay88 payment mode by:brain*/
+use App\Models\Tbl_online_pymnt_api;
+
 class ShopCheckoutController extends Shop
 {
     public function index()
@@ -288,9 +292,47 @@ class ShopCheckoutController extends Shop
                 }
             }
             // Payment Method with Payment Facility (Temporary)
-            elseif ($cart["payment_method_id"] == 1 || $cart["payment_method_id"] == 2) 
+
+            /* Credit Card */
+            elseif ($cart["payment_method_id"] == 1) 
             {
                 $cart["payment_status"] = 1;
+            }
+            /* Paypal */
+            elseif ($cart["payment_method_id"] == 2)
+            {
+
+            }
+            /* iPay88 */
+            elseif ($cart["payment_method_id"] == 3)
+            {
+                $shop_id= $this->shop_info->shop_id;
+                $online_payment_api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)
+                                        ->where('api_gateway_id', "6")
+                                        ->first();
+                $full_name          = Request::input("customer_first_name").' '
+                                        .Request::input("customer_middle_name").' '
+                                        .Request::input("customer_last_name");
+
+                $requestpayment = new RequestPayment($this->_merchantKey);
+                $this->_data = array(
+                    'merchantCode'  => $requestpayment->setMerchantCode()->$online_payment_api->api_client_id),
+                    'paymentId'     => $requestpayment->setPaymentId(1), //Optional value 1=credit card 5=bancnet
+                    'refNo'         => $requestpayment->setRefNo($request->RefNo),
+                    'amount'        => $requestpayment->setAmount($request->Amount),
+                    'currency'      => $requestpayment->setCurrency("PHP"),
+                    'prodDesc'      => $requestpayment->setProdDesc($request->ProdDesc),
+                    'userName'      => $requestpayment->setUserName($full_name),
+                    'userEmail'     => $requestpayment->setUserEmail(Request::input("customer_email")),
+                    'userContact'   => $requestpayment->setUserContact(Request::input("customer_mobile")),
+                    'remark'        => $requestpayment->setRemark('Some Remarks Here!'),
+                    'lang'          => $requestpayment->setLang('UTF-8'),
+                    'signature'     => $requestpayment->getSignature(),
+                    'responseUrl'   => $requestpayment->setResponseUrl(URL::to($this->_responseURL)),
+                    'backendUrl'    => $requestpayment->setBackendUrl(URL::to($this->_backendURL))
+                    );
+
+                RequestPayment::make($online_payment_api->api_secret_id, $this->_data);       
             }
 
             /* -------------------------------------------------------------------------- */

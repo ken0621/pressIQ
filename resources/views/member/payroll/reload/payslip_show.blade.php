@@ -1,7 +1,14 @@
 <div class="form-horizontal">
 	<div class="form-group">
 		<div class="col-md-12">
-			<button class="btn btn-custom-primary pull-right">In use</button>
+			<!-- <button class="btn btn-custom-primary pull-right">In use</button> -->
+			<!-- <label class="switch">
+				<input type="checkbox" name="" >
+				<div class="slider round"></div>
+			</label> -->
+			<div class="checkbox">
+				<label><input type="checkbox" data-target="{{$payslip->payroll_payslip_id}}" value="1">Use as template</label>
+			</div>
 		</div>
 	</div>
 	<div class="form-group">

@@ -348,4 +348,15 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* PAYROLL NOTES  START*/
 	Route::any('/modal_payroll_notes/{id}','Member\PayrollController@modal_payroll_notes');
 	/* PAYROLL NOTES END */
+
+	/* PAYROLL REPORTS START */
+	Route::any('/payroll_reports','Member\PayrollController@payroll_reports');
+	Route::any('/payroll_reports/modal_create_reports','Member\PayrollController@modal_create_reports');
+	Route::any('/payroll_reports/save_custom_reports','Member\PayrollController@save_custom_reports');
+	Route::any('/payroll_reports/modal_archive_reports/{archived}/{id}','Member\PayrollController@modal_archive_reports');
+	Route::any('/payroll_reports/archive_report','Member\PayrollController@archive_report');
+	Route::any('/payroll_reports/modal_edit_reports/{id}','Member\PayrollController@modal_edit_payroll_reports');
+	Route::any('/payroll_reports/update_payroll_reports','Member\PayrollController@update_payroll_reports');
+	Route::any('/payroll_reports/view_report/{id}','Member\PayrollController@view_report');
+	/* PAYROLL REPORTS END */
 });	 

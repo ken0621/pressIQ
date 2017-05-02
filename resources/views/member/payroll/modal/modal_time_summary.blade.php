@@ -10,11 +10,11 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<div class="col-md-12 no-more-tables over-flow">
+			<div class="col-md-12 no-more-tables over-flow height-30-em">
 				<table class="table table-bordered table-condensed c">
 					<thead class="cf">
 						<tr>
-							<th width="20%">Employee Name</th>
+							<th width="50">Employee Name</th>
 							@foreach($_date as $date)
 							<th class="text-center">
 								<p>{{date('D', strtotime($date))}}</p>

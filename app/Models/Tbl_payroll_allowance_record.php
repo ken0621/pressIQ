@@ -16,4 +16,10 @@ class Tbl_payroll_allowance_record extends Model
 	// payroll_employee_id
 	// payroll_employee_allowance_id
 	// payroll_record_allowance_amount
+
+	public function scopegetbyrecord($query, $payroll_record_id = array())
+	{
+		$query->whereIn('payroll_record_id', $payroll_record_id);
+		return $query;
+	}
 }

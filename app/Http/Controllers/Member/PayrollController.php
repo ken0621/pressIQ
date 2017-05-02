@@ -64,6 +64,8 @@ use App\Models\Tbl_payroll_journal_tag_employee;
 use App\Models\Tbl_payroll_leave_schedule;
 use App\Models\Tbl_payroll_paper_sizes;
 use App\Models\Tbl_payroll_payslip;
+use App\Models\Tbl_payroll_reports;
+use App\Models\Tbl_payroll_reports_column;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -3539,7 +3541,7 @@ class PayrollController extends Member
 
           $data['_expense'] = Tbl_chart_of_account::getbytype(Self::shop_id(), $account_type_id)->orderBy('account_name')->get();
 
-          $data['_entity']  = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+          $data['_entity']  = Self::setentity();;
           
           return view('member.payroll.modal.modal_create_journal_tag', $data);
      }
@@ -4435,6 +4437,7 @@ class PayrollController extends Member
           }   
 
           $temp = '';
+
           $total_allowance = $process['adjustment']['total_allowance'] + $process['total_allowance'];
 
           if($total_allowance > 0)
@@ -5183,5 +5186,659 @@ class PayrollController extends Member
           
           return view('member.payroll.modal.modal_payroll_notes');
      }
+
+
+     /* PAYROLL REPORTS START */
+     public function payroll_reports()
+     {
+          $data['_active'] = Tbl_payroll_reports::getdata(Self::shop_id())->orderBy('payroll_reports_name')->get();
+          $data['_archived'] = Tbl_payroll_reports::getdata(Self::shop_id(), 1)->orderBy('payroll_reports_name')->get();
+          return view('member.payroll.payroll_reports', $data);
+     }
+
+     public function modal_create_reports()
+     {
+          $data['_entity']  = Self::setentity();
+          return view('member.payroll.modal.modal_create_reports', $data);
+     }
+
+     public function save_custom_reports()
+     {
+          $insert['shop_id']              = Self::shop_id();
+          $insert['payroll_reports_name'] = Request::input("payroll_reports_name");
+
+          $is_by_company                = 0;
+          $is_by_department             = 0;
+          $is_by_employee               = 0;
+
+          if(Request::has('is_by_company'))
+          {
+               $is_by_company = Request::input('is_by_company');
+          }
+
+          if(Request::has('is_by_department'))
+          {
+               $is_by_department = Request::input('is_by_department');
+          }
+
+          if(Request::has('is_by_employee'))
+          {
+               $is_by_employee = Request::input('is_by_employee');
+          }
+
+          $insert['is_by_company']      = $is_by_company;
+          $insert['is_by_department']   = $is_by_department;
+          $insert['is_by_employee']     = $is_by_employee;
+
+          $payroll_reports_id =  Tbl_payroll_reports::insertGetId($insert);
+
+
+          $_entity = array();
+          $_sub_entity = array();
+
+          if(Request::has('entity'))
+          {
+               $_entity = Request::input('entity');
+          }
+          if(Request::has('sub_entity'))
+          {
+               $_sub_entity = Request::input('sub_entity');
+          }
+
+          $insert_column = array();
+
+          /* for default entity tag */
+          foreach($_entity as $entity)
+          {
+               $temp['payroll_reports_id']   = $payroll_reports_id;
+               $temp['column_entity_id']     = $entity;
+               $temp['column_origin']        = 'payroll entity';
+               array_push($insert_column, $temp);
+          }    
+
+          /* for dynamic loan */
+          foreach($_sub_entity as $entity)
+          {
+               $temp['payroll_reports_id']   = $payroll_reports_id;
+               $temp['column_entity_id']     = $entity;
+               $temp['column_origin']        = 'loan';
+               array_push($insert_column, $temp);
+          }    
+
+
+          if(!empty($insert_column))
+          {
+               Tbl_payroll_reports_column::insert($insert_column);
+          }
+
+
+          $return['status'] = 'success';
+          $return['function_name'] = 'payroll_reports.reload_data';
+
+          return collect($return)->toJson();
+     }
+
+
+     public function modal_archive_reports($archived, $id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+
+          $payroll_reports_name = Tbl_payroll_reports::where('payroll_reports_id', $id)->pluck('payroll_reports_name');
+
+          $data['title']      = 'Do you really want to '.$statement.' '.$payroll_reports_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/payroll_reports/archive_report';
+          $data['id']         = $id;
+          $data['archived']   = $archived;
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+     public function archive_report()
+     {
+          $id = Request::input('id');
+          $update['payroll_reports_archived'] = Request::input('archived');
+          Tbl_payroll_reports::where('payroll_reports_id', $id)->update($update);
+
+          $return['status'] = 'success';
+          $return['function_name'] = 'payroll_reports.reload_data';
+
+          return collect($return)->toJson();
+     }
+
+     public function modal_edit_payroll_reports($id)
+     {
+
+          $data['_entity'] = array();
+          $data['report'] = Tbl_payroll_reports::where('payroll_reports_id', $id)->first();
+          $_entity  = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+
+
+          foreach($_entity as $key => $data_entity)
+          {
+               $data['_entity'][$key] = array();
+               foreach($data_entity as $entity)
+               {
+                    $temp = $entity;
+                    $temp['status'] = '';
+
+                    $count_entity = Tbl_payroll_reports_column::getcolumn($id, $entity['payroll_entity_id'])->count();
+
+                    if($count_entity == 1)
+                    {
+                         $temp['status'] = 'checked="checked"';
+                    }
+
+                    $temp['sub'] = array();
+
+                    if($entity['entity_name'] == 'Loans')
+                    {
+                         $_sub = Tbl_payroll_deduction_type::seltype(Self::shop_id(), 'Loans')->get()->toArray();
+                         foreach($_sub as $sub)
+                         {
+                              $temp_column = $sub;
+                              $temp_column['status'] = '';
+
+                              $count_column = Tbl_payroll_reports_column::getcolumn($id, $sub['payroll_deduction_type_id'], 'loan')->count();
+
+                              if($count_column == 1)
+                              {
+                                   $temp_column['status'] = 'checked="checked"';
+                              }
+
+                              array_push($temp['sub'], $temp_column);
+                         }
+                    }
+
+                    array_push($data['_entity'][$key], $temp);
+               }
+          }
+
+          // dd($data);
+          return view('member.payroll.modal.modal_edit_payroll_reports', $data);
+     }
+
+     public function update_payroll_reports()
+     {
+
+          $is_by_company      = 0;
+          $is_by_department   = 0;
+          $is_by_employee     = 0;
+
+          if(Request::has('is_by_company'))
+          {
+               $is_by_company      = Request::input('is_by_company');
+          }
+
+          if(Request::has('is_by_department'))
+          {
+               $is_by_department   = Request::input('is_by_department');
+          }
+
+          if(Request::has('is_by_employee'))
+          {
+               $is_by_employee     = Request::input('is_by_employee');
+          }
+
+          $payroll_reports_id = Request::input('payroll_reports_id');
+
+          $update['payroll_reports_name'] = Request::input('payroll_reports_name');
+          $update['is_by_company'] = $is_by_company;
+          $update['is_by_department'] = $is_by_department;
+          $update['is_by_employee'] = $is_by_employee;
+
+          Tbl_payroll_reports::where('payroll_reports_id', $payroll_reports_id)->update($update);
+          Tbl_payroll_reports_column::where('payroll_reports_id', $payroll_reports_id)->delete();
+
+          $_entity = array();
+          $_sub_entity = array();
+
+          if(Request::has('entity'))
+          {
+               $_entity = Request::input('entity');
+          }
+          if(Request::has('sub_entity'))
+          {
+               $_sub_entity = Request::input('sub_entity');
+          }
+
+          $insert_column = array();
+
+          /* for default entity tag */
+          foreach($_entity as $entity)
+          {
+               $temp['payroll_reports_id']   = $payroll_reports_id;
+               $temp['column_entity_id']     = $entity;
+               $temp['column_origin']        = 'payroll entity';
+               array_push($insert_column, $temp);
+          }    
+
+          /* for dynamic loan */
+          foreach($_sub_entity as $entity)
+          {
+               $temp['payroll_reports_id']   = $payroll_reports_id;
+               $temp['column_entity_id']     = $entity;
+               $temp['column_origin']        = 'loan';
+               array_push($insert_column, $temp);
+          }    
+
+
+          if(!empty($insert_column))
+          {
+               Tbl_payroll_reports_column::insert($insert_column);
+          }
+
+
+          $return['status'] = 'success';
+          $return['function_name'] = 'payroll_reports.reload_data';
+
+          return collect($return)->toJson();
+     }
+
+     public function view_report($id)
+     {
+          $report             = Tbl_payroll_reports::where('payroll_reports_id', $id)->first();
+          $data['report']     = $report;
+          $columns            = array();
+          $items              = array();
+
+          $is_by_employee     = $report->is_by_employee;
+          $is_by_department   = $report->is_by_department;
+          $is_by_company      = $report->is_by_company;
+
+          $_entity = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+
+
+          /* for column start */
+          foreach($_entity as $key => $data_entity)
+          {
+               
+               foreach($data_entity as $entity)
+               {
+
+                    $count_entity = Tbl_payroll_reports_column::getcolumn($id, $entity['payroll_entity_id'])->count();
+
+                    if($count_entity == 1)
+                    {
+                         array_push($columns, $entity['entity_name']);
+                    }
+
+
+                    if($entity['entity_name'] == 'Loans')
+                    {
+                         $_sub = Tbl_payroll_deduction_type::seltype(Self::shop_id(), 'Loans')->get()->toArray();
+                         foreach($_sub as $sub)
+                         {
+
+                              $count_column = Tbl_payroll_reports_column::getcolumn($id, $sub['payroll_deduction_type_id'], 'loan')->count();
+
+                              if($count_column == 1)
+                              {
+                                   array_push($columns, $sub['payroll_deduction_type_name']);
+                              }
+                         }
+                    }
+
+               }
+          }
+
+          /* for column end */
+
+          
+          $date[0] = date_create(date('Y-m-d'));
+          $date[1] = date('Y-m-d');
+
+          date_sub($date[0],date_interval_create_from_date_string("40 days"));
+
+          $date[0] = date_format($date[0],'Y-m-d');
+
+          $data['start'] = date('m/d/Y', strtotime($date[0]));
+          $data['end']   = date('m/d/Y', strtotime($date[1]));
+
+          $data['_emp']  = array();
+
+          /* for item start */
+          // $data['items'] = Self::getrecord_report($_entity)
+          /* for item end */
+          $_emp = Tbl_payroll_employee_basic::where('shop_id', Self::shop_id())->get()->toArray();
+
+          $_total = array();
+
+          foreach($_emp as $emp)
+          {
+               $emp['_record'] = Self::getrecord_report($id, $_entity, $emp['payroll_employee_id'], $date);
+               array_push($data['_emp'], $emp);
+
+               if(empty($_total))
+               {
+                    $_total = $emp['_record'];
+               }
+               else
+               {
+                    foreach($emp['_record'] as $key => $total)
+                    {
+                         $_total[$key] += $total;
+                    }
+               }
+          }
+
+
+          $data['_total']     = $_total;
+          $data['_columns']   = $columns;
+
+          // dd($data);
+
+          return view('member.payroll.payroll_view_report', $data);
+     }
+
+     public function getrecord_report($id = 0,$_entity = array(), $employee_id = 0, $date = ['0000-00-00', '0000-00-00'])
+     {
+
+          $data = array();
+
+          foreach($_entity as $key => $data_entity)
+          {
+               
+               foreach($data_entity as $entity)
+               {
+
+                    $count_entity = Tbl_payroll_reports_column::getcolumn($id, $entity['payroll_entity_id'])->count();
+
+                    $query = Tbl_payroll_record::getdate(Self::shop_id(), $date)->where('tbl_payroll_record.payroll_employee_id', $employee_id);
+
+
+                    $temp_query = $query;
+                    $payroll_record_id_list = $temp_query->lists('payroll_record_id');
+                    $temp_query = $query;
+                    $payroll_period_company_id_list = $temp_query->select('tbl_payroll_record.payroll_period_company_id as company_record_id')->lists('company_record_id');
+                    
+                    // dd($payroll_period_company_id_list);
+
+                    if($count_entity == 1)
+                    {
+                         
+                         if($entity['entity_name'] == '13 Month Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('13_month')->sum('13_month');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Basic Salary Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('regular_salary')->sum('regular_salary');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Early Over Time Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('regular_early_overtime')->sum('regular_early_overtime');
+                              $amount += $temp_query->select('extra_early_overtime')->sum('extra_early_overtime');
+                              $amount += $temp_query->select('rest_day_rh_early_overtime')->sum('rest_day_rh_early_overtime');
+                              $amount += $temp_query->select('sh_early_overtime')->sum('rest_day_sh_early_overtime');
+                              $amount += $temp_query->select('rh_early_overtime')->sum('rh_early_overtime');
+                              $amount += $temp_query->select('sh_early_overtime')->sum('sh_early_overtime');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Extra Day Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('extra_salary')->sum('extra_salary');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Leave With Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('leave_amount')->sum('leave_amount');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Night Differential Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('regular_night_diff')->sum('regular_night_diff');
+                              $amount += $temp_query->select('extra_night_diff')->sum('extra_night_diff');
+                              $amount += $temp_query->select('rest_day_night_diff')->sum('rest_day_night_diff');
+                              $amount += $temp_query->select('rest_day_sh_night_diff')->sum('rest_day_sh_night_diff');
+                              $amount += $temp_query->select('rest_day_rh_night_diff')->sum('rest_day_rh_night_diff');
+                              $amount += $temp_query->select('sh_night_diff')->sum('sh_night_diff');
+                              $amount += $temp_query->select('rh_early_overtime')->sum('rh_early_overtime');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Regular Holiday Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('rh_salary')->sum('rh_salary');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Regular Over Time Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('regular_reg_overtime')->sum('regular_reg_overtime');
+                              $amount += $temp_query->select('extra_reg_overtime')->sum('extra_reg_overtime');
+                              $amount += $temp_query->select('rest_day_reg_overtime')->sum('rest_day_reg_overtime');
+                              $amount += $temp_query->select('rest_day_sh_reg_overtime')->sum('rest_day_sh_reg_overtime');
+                              $amount += $temp_query->select('rest_day_rh_reg_overtime')->sum('rest_day_rh_reg_overtime');
+                              $amount += $temp_query->select('rh_reg_overtime')->sum('rh_reg_overtime');
+                              $amount += $temp_query->select('sh_reg_overtime')->sum('sh_reg_overtime');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Rest Day Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('rest_day_salary')->sum('rest_day_salary');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'COLA')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('payroll_cola')->sum('payroll_cola');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Special Holiday Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('sh_salary')->sum('sh_salary');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Allowance Pay')
+                         {
+                              $amount = Tbl_payroll_allowance_record::getbyrecord($payroll_record_id_list)->select('payroll_record_allowance_amount')->sum('payroll_record_allowance_amount');
+
+                              $amount += Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Allowance')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Bonus Pay')
+                         {
+                              $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Bonus')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Commission Pay')
+                         {
+                              $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Commissions')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Incentive Pay')
+                         {
+                              $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Incentives')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+
+
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Pagibig')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('pagibig_contribution')->sum('pagibig_contribution');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Philhealth EE')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('philhealth_contribution_ee')->sum('philhealth_contribution_ee');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Philhealth ER')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('philhealth_contribution_er')->sum('philhealth_contribution_er');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'SSS EC')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('sss_contribution_ec')->sum('sss_contribution_ec');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'SSS EE')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('sss_contribution_ee')->sum('sss_contribution_ee');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'SSS ER')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('sss_contribution_er')->sum('sss_contribution_er');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Tax')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('tax_contribution')->sum('tax_contribution');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Cash Advance')
+                         {
+                              $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Cash Advance')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Cash Bond')
+                         {
+                              $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Cash Bond')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Loans')
+                         {
+                              $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Loans')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Other Deduction')
+                         {
+                              $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Deductions')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+
+                              $amount += Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Other Deduction')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Late')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('late_deduction')->sum('late_deduction');
+                              array_push($data, $amount);
+                         }
+                         if($entity['entity_name'] == 'Absent')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('absent_deduction')->sum('absent_deduction');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Under Time')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('under_time')->sum('under_time');
+                              array_push($data, $amount);
+                         }
+
+
+                    }
+
+
+                    if($entity['entity_name'] == 'Loans')
+                    {
+                         $_sub = Tbl_payroll_deduction_type::seltype(Self::shop_id(), 'Loans')->get()->toArray();
+                         foreach($_sub as $sub)
+                         {
+
+                              $count_column = Tbl_payroll_reports_column::getcolumn($id, $sub['payroll_deduction_type_id'], 'loan')->count();
+
+                              if($count_column == 1)
+                              {
+
+                                   $payroll_deduction_type_id = $sub['payroll_deduction_type_id'];
+                                   $amount = Tbl_payroll_deduction_payment::getpayment($employee_id, $payroll_record_id_list, $payroll_deduction_type_id)->select('payroll_payment_amount')->sum('payroll_payment_amount');
+
+                                   array_push($data, $amount);
+                              }
+                         }
+                    }
+
+               }
+          }
+
+
+          return $data;
+     }
+
+     public function setentity()
+     {
+          $_entity  = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+
+          $data = array();
+
+          foreach($_entity as $key => $data_entity)
+          {
+               $data[$key] = array();
+               foreach($data_entity as $entity)
+               {
+                    $temp = $entity;
+                    $temp['sub'] = array();
+
+                    if($entity['entity_name'] == 'Loans')
+                    {
+                         $temp['sub'] = Tbl_payroll_deduction_type::seltype(Self::shop_id(), 'Loans')->get()->toArray();
+                    }
+
+                    array_push($data[$key], $temp);
+               }
+          }
+
+          return $data;
+     }
+
+     /* PAYROLL REPORTS END */
 
 }

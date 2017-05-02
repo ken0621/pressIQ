@@ -34,4 +34,13 @@ class Tbl_payroll_deduction_payment extends Model
 			  ->whereIn('payroll_record_id',$payroll_record_id);
 		return $query;
 	}
+
+	public function scopegetrecord($query, $payroll_record_id = array(), $payroll_deduction_category = '')
+	{
+		$query->join('tbl_payroll_deduction','tbl_payroll_deduction.payroll_deduction_id','=','tbl_payroll_deduction_payment.payroll_deduction_id')
+			 ->whereIn('tbl_payroll_deduction_payment.payroll_record_id', $payroll_record_id)
+			 ->where('tbl_payroll_deduction.payroll_deduction_category', $payroll_deduction_category);
+
+		return $query;
+	}
 }

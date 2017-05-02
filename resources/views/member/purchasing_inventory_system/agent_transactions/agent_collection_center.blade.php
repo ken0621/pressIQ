@@ -18,6 +18,12 @@
 
 <!-- NO PRODUCT YET -->
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
+    <ul class="nav nav-tabs">
+        <li class="active cursor-pointer all-sir"><a class="cursor-pointer" onclick="select('all')" data-toggle="tab" ><i class="fa fa-star"></i> All</a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(1)" data-toggle="tab" ><i class="fa fa-refresh"></i> Open SIR</a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(2)" data-toggle="tab" ><i class="fa fa-window-close"></i> Closed SIR</a></li>
+    </ul>
+
     <div class="form-group tab-content panel-body collection-container">
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
@@ -29,6 +35,8 @@
                             <th>Agent Name</th>
                             <th>Total Collectibles</th>
                             <th>Total Collection</th>
+                            <th>Status</th>
+                            <th>Loss/Over</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -40,6 +48,26 @@
                                 <td>{{$sir->first_name." ".$sir->middle_name." ".$sir->last_name}}</td>
                                 <td>{{$sir->total_collectibles}}</td>
                                 <td>{{$sir->total_collection}}</td>
+                                <td>
+                                    <span style="color: {{$sir->loss_over <= -1 ? 'red': 'green'}}">
+                                        @if($sir->agent_collection_remarks == "")
+                                            Not Updated
+                                        @else
+                                            @if($sir->loss_over <= -1)
+                                               Loss
+                                            @elseif($sir->loss_over == 0)
+                                               Complete
+                                            @else
+                                               Over
+                                            @endif
+                                        @endif
+                                    </span>
+                                </td>
+                                <td>
+                                    <span style="color: {{$sir->loss_over <= -1 ? 'red': 'green'}}">
+                                        {{currency("Php" , $sir->loss_over)}}
+                                    </span>
+                                </td>
                                 <td class="text-center">
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -77,6 +105,10 @@ function submit_done(data)
         toastr.warning(data.status_message);
         $(data.target).html(data.view);
     }
+}
+function select(status)
+{
+    $(".collection-container").load("/member/pis_agent/collection?status="+status+ " .collection-container");
 }
 </script>
 @endsection

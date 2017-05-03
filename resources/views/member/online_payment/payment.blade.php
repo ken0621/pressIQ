@@ -109,7 +109,6 @@
 						            		<input type="hidden" name="gateway_code_name" class="form-control input-sm" value="{{$gateway->gateway_code_name}}">
 						            		<input type="hidden" name="api_gateway_id" class="form-control input-sm" value="{{$gateway->gateway_id}}">
 						            		@if($gateway->gateway_code_name != 'other')
-<<<<<<< HEAD
 						            			
 						            			@if($gateway->gateway_code_name == 'ipay88')
 
@@ -134,20 +133,7 @@
 									                </div>
 
 						            			@endif            				
-						            		
-=======
-
 												
-												<div class="form-group col-md-12">
-								                    <label>Client ID</label>
-								                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->client_id or ''}}">
-								                </div>
-								                <div class="form-group col-md-12">
-								                    <label>Secret ID</label>
-								                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->secret_id or ''}}">
-								                </div>			            		
->>>>>>> mod_payment_integrationv2
-							            		
 								                <div class="col-md-12">
 								            		<button type="submit" class="panel-buttons btn btn-custom-primary pull-right">save</button>
 								            	</div>

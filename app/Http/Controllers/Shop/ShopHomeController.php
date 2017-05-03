@@ -17,7 +17,8 @@ class ShopHomeController extends Shop
     public function index()
     {
         $data["page"]      = "Home";
-
+        $data["_product"] = Ecom_Product::getAllProduct($this->shop_info->shop_id);
+     
         return view("home", $data);
     }
 }

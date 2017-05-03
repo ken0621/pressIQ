@@ -9,6 +9,8 @@ use File;
 use Input;
 use Validator;
 use Carbon\Carbon;
+use URL;
+use Session;
 
 use App\Globals\Mlm_slot_log;
 use App\Globals\Item_code;
@@ -24,13 +26,18 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_ec_order_item;
 // use App\Globals\Mlm_slot_log;    
+
+/*4/29/17 this will import the data/class needed by ipay88 payment mode by:brain*/
+use App\IPay88\RequestPayment;
+use App\Models\Tbl_online_pymnt_api;
+
 class ShopCheckoutController extends Shop
 {
     public function index()
     {
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
- 
+
         if (!isset($data["get_cart"]['cart'])) 
         {
             return Redirect::to('/');
@@ -53,7 +60,7 @@ class ShopCheckoutController extends Shop
                                                           ->where("tbl_online_pymnt_link.link_shop_id", $this->shop_info->shop_id)
                                                           ->where("tbl_online_pymnt_link.link_is_enabled", 1)
                                                           ->get();
- 
+
         if(Self::$customer_info != null)
         {
             $customer_info = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_info->customer_id)->info()->first();
@@ -189,6 +196,7 @@ class ShopCheckoutController extends Shop
             $cart["payment_status"] = 0;
             $cart["payment_upload"] = "";
 
+
             if(isset(Self::$customer_info->customer_id))
             {
                 $cart["customer_id"] = Self::$customer_info->customer_id;
@@ -196,6 +204,15 @@ class ShopCheckoutController extends Shop
             else
             {
                 $cart["customer_id"] = null;
+            }
+
+            /* -------------------------------------------------------------------------- */
+
+            // Check Stocks
+            $stock = Cart::check_product_stock($get_cart);
+            if ($stock["status"] == "fail") 
+            {
+                return Redirect::back()->with('fail', $stock["error"]);
             }
 
             /* -------------------------------------------------------------------------- */
@@ -253,7 +270,7 @@ class ShopCheckoutController extends Shop
                 }
             }
             // Payment Method With Proof of Payment
-            elseif($cart["payment_method_id"] != 1 && $cart["payment_method_id"] != 2)
+            elseif($cart["payment_method_id"] != 1 && $cart["payment_method_id"] != 2 && $cart["payment_method_id"] != 8)
             {
                 $shop_id    = $this->shop_info->shop_id;
                 $shop_key   = $this->shop_info->shop_key;
@@ -288,21 +305,55 @@ class ShopCheckoutController extends Shop
                 }
             }
             // Payment Method with Payment Facility (Temporary)
-            elseif ($cart["payment_method_id"] == 1 || $cart["payment_method_id"] == 2) 
+
+            /* Credit Card */
+            elseif ($cart["payment_method_id"] == 1) 
             {
                 $cart["payment_status"] = 1;
             }
-
-            /* -------------------------------------------------------------------------- */
-
-            // Check Stocks
-            $stock = Cart::check_product_stock($get_cart);
-            if ($stock["status"] == "fail") 
+            /* Paypal */
+            elseif ($cart["payment_method_id"] == 2)
             {
-                return Redirect::back()->with('fail', $stock["error"]);
+
+                            
+            }
+            /* iPay88 */
+            elseif ($cart["payment_method_id"] == 8)
+            {
+                $prodDesc = '';
+                //dd(Request::input("payment_method_id"));
+                $shop_id= $this->shop_info->shop_id;
+                $online_payment_api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)
+                                        ->where('api_gateway_id', "6")
+                                        ->first();
+                $full_name          = Request::input("customer_first_name").' '
+                                        .Request::input("customer_middle_name").' '
+                                        .Request::input("customer_last_name");
+                
+
+                $data = array(
+                    'merchantKey'  => $online_payment_api->api_secret_id,
+                    'merchantCode'  => $online_payment_api->api_client_id,
+                    'paymentId'     => 1, //Optional value 1=credit card 5=bancnet
+                    'refNo'         => 'ref1234',
+                    'amount'        => '15.00',
+                    'currency'      => "PHP",
+                    'prodDesc'      => $cart["invline_item_id"][0],
+                    'userName'      => $full_name,
+                    'userEmail'     => Request::input("customer_email"),
+                    'userContact'   => Request::input("customer_mobile"),
+                    'remark'        => 'Some Remarks Here!',
+                    'lang'          => 'UTF-8',
+                    'responseUrl'   => URL::to('/ipay88_response'),
+                    'backendUrl'    => URL::to('/ipay88_response')
+                    );
+
+                return redirect('/postPaymentWithIPay88')->with('data', $data);                  
+
             }
 
             /* -------------------------------------------------------------------------- */
+
 
             // Create Order
             $result = Ec_order::create_ec_order_automatic($cart);
@@ -341,8 +392,6 @@ class ShopCheckoutController extends Shop
             /* -------------------------------------------------------------------------- */
 
             // Redirect
-            $result["page"] = "Order Placed";
-
             return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
         }
     }
@@ -371,8 +420,8 @@ class ShopCheckoutController extends Shop
             $rel_insert[$key]["item_code_pin"]                 = $code_pin;
             $rel_insert[$key]["item_code_price"]               = $value['cart_product_information']['product_price'];
             $rel_insert[$key]["item_code_price_total"]         = $value['cart_product_information']['product_current_price'];
-            $rel_insert[$key]["ec_order_id"] = $order_id;
-            $rel_insert[$key]["slot_id"] = $slot_info->slot_id;
+            $rel_insert[$key]["ec_order_id"]                   = $order_id;
+            $rel_insert[$key]["slot_id"]                       = $slot_info->slot_id;
         }
 
         Tbl_item_code::insert($rel_insert);
@@ -442,4 +491,46 @@ class ShopCheckoutController extends Shop
         $data["page"] = "Checkout - Add to Cart";
         return view("addto_cart", $data);
     }
+
+
+    /*Ipay88 Function*/
+    public function postPaymentWithIPay88()
+    {
+        $data = Session::get('data');
+        
+        $requestpayment = new RequestPayment( $data["merchantKey"]);
+        $this->_data = array(
+            'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
+            'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
+            'refNo'         => $requestpayment->setRefNo($data["refNo"]),
+            'amount'        => $requestpayment->setAmount($data["amount"]),
+            'currency'      => $requestpayment->setCurrency($data["currency"]),
+            'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
+            'userName'      => $requestpayment->setUserName($data["userName"]),
+            'userEmail'     => $requestpayment->setUserEmail($data["userEmail"]),
+            'userContact'   => $requestpayment->setUserContact($data["userContact"]),
+            'remark'        => $requestpayment->setRemark($data["remark"]),
+            'lang'          => $requestpayment->setLang($data["lang"]),
+            'signature'     => $requestpayment->getSignature(),
+            'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
+            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
+            );
+        /*dd($this->_data);*/
+        RequestPayment::make($data["merchantKey"], $this->_data);     
+    }
+
+    public function ipay88_response()
+    {
+        $request = Request::all();
+        /*dd($request['Status']);*/
+        if($request['Status'] == 0)
+        {
+            return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');    
+        } else {
+
+            dd('Success!');       
+        }
+        
+    }
+    /*End Ipay88*/
 }

@@ -150,8 +150,8 @@
                             <th>
                                 <div class="col-md-3">BINARY POINTS</div>
                                 <div class="col-md-3">BINARY POINTS LIMIT</div>
-                                <div class="col-md-3">BINARY SINGLE LINE INCOME</div>
-                                <div class="col-md-3">BINARY SINGLE LINE INCOME LIMIT</div>
+                                <div class="col-md-3 hide">BINARY SINGLE LINE INCOME</div>
+                                <div class="col-md-3 hide">BINARY SINGLE LINE INCOME LIMIT</div>
                             </th>
                             <th></th>
                         </tr>
@@ -174,10 +174,10 @@
                                             <div class="col-md-3">
                                                 <span class="membership_binary_limit_points{{$mem->membership_id}}">{{$mem->membership_points_binary_limit  != null ? $mem->membership_points_binary_limit  : 0 }}</span>
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-3 hide">
                                                 <input type="number" class="form-control" name="membership_points_binary_single_line" value="{{$mem->membership_points_binary_single_line}}">
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-3 hide">
                                                 <input type="number" class="form-control" name="membership_points_binary_single_line_limit" value="{{$mem->membership_points_binary_single_line_limit}}">
                                             </div>
                                             </form> 

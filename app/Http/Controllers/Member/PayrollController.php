@@ -373,9 +373,9 @@ class PayrollController extends Member
                     $boidata_yesno_cell->setErrorTitle('Input error');
                     $boidata_yesno_cell->setError('Value is not in list.');
                     $boidata_yesno_cell->setFormula1('relotionship');
-                }
+               }
 
-               });
+          });
 
             /* DATA VALIDATION (REFERENCE FOR DROPDOWN LIST) */
             $excel->sheet('reference', function($sheet) {
@@ -693,35 +693,47 @@ class PayrollController extends Member
 		switch ($str_param) {
 			case 'country':
 				$id = Tbl_country::where('country_name', $str_name)->pluck('country_id');
-				return $id;
+				// return $id;
+                    if($id == null)
+                    {
+                         $id = 420;
+                    }
 				break;
 
 			case 'company':
 				$id = Tbl_payroll_company::where('payroll_company_name', $str_name)->where('shop_id', Self::shop_id())->pluck('payroll_company_id');
-				return $id;
+				// return $id;/
 
 				break;
 
 			case 'department':
 				$id = Tbl_payroll_department::where('payroll_department_name', $str_name)->where('shop_id', Self::shop_id())->pluck('payroll_department_id');
-				return $id;
+				// return $id;
 				break;
 
 			case 'jobtitle':
 				$id = Tbl_payroll_jobtitle::where('payroll_jobtitle_name', $str_name)->where('shop_id', Self::shop_id())->pluck('payroll_jobtitle_id');
-				return $id;
+				// return $id;
 				break;
 
 			case 'employment_status':
 				$id = Tbl_payroll_employment_status::where('employment_status', $str_name)->pluck('payroll_employment_status_id');
-				return $id;
+				// return $id;
 				break;
 			
 			default:
 				$id = 0;
-				return $id;
+				// return $id;
 				break;
+
 		}
+
+          if($id == null)
+          {    
+               $id = 0;
+          }
+
+          return $id;
 	}
 
      public function checkemployee_exist($data = array())
@@ -5449,17 +5461,48 @@ class PayrollController extends Member
 
      public function view_report($id)
      {
+          
+          $date[0] = date('Y-m-d');
+          $date[1] = date('Y-m-d');
+
+          $data = Self::generate_custom_report($id, $date);
+          return view('member.payroll.payroll_view_report', $data);
+     }
+
+     public function download_excel_report()
+     {
+          $payroll_reports_id = Request::input('payroll_reports_id');
+          $date[0]            = Request::input('start');
+          $date[1]            = Request::input('end');
+
+          $data     = Self::generate_custom_report($id, $date);
+          $title    = Tbl_payroll_reports::where('payroll_reports_id', $id)->pluck('payroll_reports_name');
+
+          return Excel::create($title, function($excel) use ($data) {
+
+               $date = 'reports';
+               $excel->setTitle('Payroll');
+               $excel->setCreator('Laravel')->setCompany('DIGIMA');
+               $excel->setDescription('payroll file');
+
+               $excel->sheet($date, function($sheet) use ($data) {
+                    $sheet->fromArray($data, null, 'A1', false, false);
+               });
+
+          })->download('xlsx');
+
+     }
+
+     public function generate_custom_report($id, $date = array())
+     {
           $report             = Tbl_payroll_reports::where('payroll_reports_id', $id)->first();
           $data['report']     = $report;
           $columns            = array();
           $items              = array();
-
-          $is_by_employee     = $report->is_by_employee;
-          $is_by_department   = $report->is_by_department;
-          $is_by_company      = $report->is_by_company;
+          $column_space       = array();
+          
 
           $_entity = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
-
 
           /* for column start */
           foreach($_entity as $key => $data_entity)
@@ -5473,6 +5516,7 @@ class PayrollController extends Member
                     if($count_entity == 1)
                     {
                          array_push($columns, $entity['entity_name']);
+                         array_push($column_space, '');
                     }
 
 
@@ -5487,6 +5531,7 @@ class PayrollController extends Member
                               if($count_column == 1)
                               {
                                    array_push($columns, $sub['payroll_deduction_type_name']);
+                                   array_push($column_space, '');
                               }
                          }
                     }
@@ -5496,9 +5541,8 @@ class PayrollController extends Member
 
           /* for column end */
 
-          
-          $date[0] = date_create(date('Y-m-d'));
-          $date[1] = date('Y-m-d');
+          $date[0] = date_create($date[0]);
+          // $date[1] = date('Y-m-d');
 
           date_sub($date[0],date_interval_create_from_date_string("40 days"));
 
@@ -5508,39 +5552,342 @@ class PayrollController extends Member
           $data['end']   = date('m/d/Y', strtotime($date[1]));
 
           $data['_emp']  = array();
+          $emp_array     = array();
 
           /* for item start */
-          // $data['items'] = Self::getrecord_report($_entity)
-          /* for item end */
-          $_emp = Tbl_payroll_employee_basic::where('shop_id', Self::shop_id())->get()->toArray();
+          $_emp = Tbl_payroll_employee_contract::employeefilter(0,0,0,$date[0], Self::shop_id())->get()->toArray();
+          // dd($_emp);
 
           $_total = array();
 
+
           foreach($_emp as $emp)
           {
-               $emp['_record'] = Self::getrecord_report($id, $_entity, $emp['payroll_employee_id'], $date);
-               array_push($data['_emp'], $emp);
+               $_record = Self::getrecord_report($id, $_entity, $emp['payroll_employee_id'], $date);
+
+               $temp_emp['name'] = $emp['payroll_employee_title_name'].' '.$emp['payroll_employee_first_name'].' '.$emp['payroll_employee_middle_name'].' '.$emp['payroll_employee_last_name'].' '.$emp['payroll_employee_suffix_name'];
+               $temp_emp['raw_name'] = $emp['payroll_employee_title_name'].' '.$emp['payroll_employee_first_name'].' '.$emp['payroll_employee_middle_name'].' '.$emp['payroll_employee_last_name'].' '.$emp['payroll_employee_suffix_name'];
+
+               $temp_emp['payroll_department_name'] = $emp['payroll_department_name'];
+               $temp_emp['payroll_company_name']    = $emp['payroll_company_name'];
+
+               $temp_emp['_record'] = array();
+               $temp_emp['_raw']    = $_record;
 
                if(empty($_total))
                {
-                    $_total = $emp['_record'];
+                    $_total = $_record;
                }
                else
                {
-                    foreach($emp['_record'] as $key => $total)
+                    foreach($_record as $key => $total)
                     {
                          $_total[$key] += $total;
                     }
                }
+
+               foreach($_record as $record)
+               {
+                    array_push($temp_emp['_record'], number_format($record, 2));
+
+               }
+
+               array_push($emp_array, $temp_emp);
+          }   
+
+          $is_by_employee     = $report->is_by_employee;
+          $is_by_department   = $report->is_by_department;
+          $is_by_company      = $report->is_by_company;
+
+          // $column_space
+          if($is_by_employee == 1 && $is_by_department == 1 && $is_by_company == 1)
+          {
+               $_comp_array   = collect($emp_array)->groupBy('payroll_company_name');
+               $temp_data     = array();
+               $temp_item     = array();
+
+               foreach($_comp_array as $key => $comp)
+               {
+                    $temp_item['name'] = '<b>'.$key.'</b>';
+                    $temp_item['raw_name'] = $key;
+                    $temp_item['payroll_department_name'] = '';
+                    $temp_item['payroll_company_name']    = '';
+                    $temp_item['_record'] = $column_space;
+                    $temp_item['_raw']    = $column_space;
+
+                    array_push($temp_data, $temp_item);
+
+                    $_department = collect($comp)->groupBy('payroll_department_name');
+                    foreach($_department as $kd => $_dep)
+                    {
+                         $temp_item['name'] = '<b>'.$kd.'</b>';
+                         $temp_item['raw_name'] = $kd;
+                         $temp_item['payroll_department_name'] = '';
+                         $temp_item['payroll_company_name']    = '';
+                         $temp_item['_record'] = $column_space;
+                         $temp_item['_raw']    = $column_space;
+                         array_push($temp_data, $temp_item);
+                         foreach($_dep as $department)
+                         {
+                              array_push($temp_data, $department);
+                              
+                         }
+                         // dd(Self::getsubtotal_report($_dep));
+                         // array_push($temp_data, Self::getsubtotal_report($_dep));
+                    }
+                    
+               }
+
+               $data['_emp'] = $temp_data;
           }
 
+          if($is_by_employee == 0 && $is_by_department == 1 && $is_by_company == 1)
+          {
+
+               $_comp_array   = collect($emp_array)->groupBy('payroll_company_name');
+               $temp_data     = array();
+               $temp_item     = array();
+
+               foreach($_comp_array as $key => $comp)
+               {
+                    $temp_item['name'] = '<b>'.$key.'</b>';
+                    $temp_item['raw_name'] = $key;
+                    $temp_item['payroll_department_name'] = '';
+                    $temp_item['payroll_company_name']    = '';
+                    $temp_item['_record'] = $column_space;
+                    $temp_item['_raw']    = $column_space;
+
+                    array_push($temp_data, $temp_item);
+
+                    $_department = collect($comp)->groupBy('payroll_department_name');
+                    foreach($_department as $kd => $_dep)
+                    {
+                         $temp_item['name'] = $kd;
+                         $temp_item['raw_name'] = $kd;
+                         $temp_item['payroll_department_name'] = '';
+                         $temp_item['payroll_company_name']    = '';
+                         $temp_item['_record'] = array();
+                         $temp_item['_raw']    = array();
+                         
+                         foreach($_dep as $department)
+                         {
+                             if(empty($temp_item['_raw']))
+                             {
+                                   $temp_item['_raw'] = $department['_raw'];
+                             }
+                             else
+                             {
+                                   foreach($department['_raw'] as $key => $raw)
+                                   {
+                                        $temp_item['_raw'][$key] += $raw;
+                                   }
+                             }
+                         }
+
+                         foreach($temp_item['_raw'] as $key => $raw)
+                         {
+                              array_push($temp_item['_record'], number_format($raw, 2));
+                         }
+
+                         array_push($temp_data, $temp_item);
+                    }
+               }
+
+               $data['_emp'] = $temp_data;
+          }
+
+          if($is_by_employee == 0 && $is_by_department == 1 && $is_by_company == 0)
+          {
+               $_department = collect($emp_array)->groupBy('payroll_department_name');
+               $temp_data   = array();
+               foreach($_department as $kd => $_dep)
+               {
+                    $temp_item['name'] = $kd;
+                    $temp_item['raw_name'] = $kd;
+                    $temp_item['payroll_department_name'] = '';
+                    $temp_item['payroll_company_name']    = '';
+                    $temp_item['_record'] = array();
+                    $temp_item['_raw']    = array();
+                    
+                    foreach($_dep as $department)
+                    {
+                        if(empty($temp_item['_raw']))
+                        {
+                              $temp_item['_raw'] = $department['_raw'];
+                        }
+                        else
+                        {
+                              foreach($department['_raw'] as $key => $raw)
+                              {
+                                   $temp_item['_raw'][$key] += $raw;
+                              }
+                        }
+                    }
+
+                    foreach($temp_item['_raw'] as $key => $raw)
+                    {
+                         array_push($temp_item['_record'], number_format($raw, 2));
+                    }
+
+                    array_push($temp_data, $temp_item);
+               }
+               $data['_emp'] = $temp_data;
+          }
+
+          if($is_by_employee == 0 && $is_by_department == 0 && $is_by_company == 1)
+          {
+               $_department = collect($emp_array)->groupBy('payroll_company_name');
+               $temp_data   = array();
+               foreach($_department as $kd => $_dep)
+               {
+                    $temp_item['name'] = $kd;
+                    $temp_item['raw_name'] = $kd;
+                    $temp_item['payroll_department_name'] = '';
+                    $temp_item['payroll_company_name']    = '';
+                    $temp_item['_record'] = array();
+                    $temp_item['_raw']    = array();
+                    
+                    foreach($_dep as $department)
+                    {
+                        if(empty($temp_item['_raw']))
+                        {
+                              $temp_item['_raw'] = $department['_raw'];
+                        }
+                        else
+                        {
+                              foreach($department['_raw'] as $key => $raw)
+                              {
+                                   $temp_item['_raw'][$key] += $raw;
+                              }
+                        }
+                    }
+
+                    foreach($temp_item['_raw'] as $key => $raw)
+                    {
+                         array_push($temp_item['_record'], number_format($raw, 2));
+                    }
+
+                    array_push($temp_data, $temp_item);
+               }
+               $data['_emp'] = $temp_data;
+          }
+
+
+          if($is_by_employee == 1 && $is_by_department == 1 && $is_by_company == 0)
+          {
+
+               $_department   = collect($emp_array)->groupBy('payroll_department_name');
+
+               $temp_data     = array();
+
+               foreach($_department as $kd => $_dep)
+               {
+                    $temp_item['name'] = '<b>'.$kd.'</b>';
+                    $temp_item['raw_name'] = $kd;
+                    $temp_item['payroll_department_name'] = '';
+                    $temp_item['payroll_company_name']    = '';
+                    $temp_item['_record'] = $column_space;
+                    $temp_item['_raw']    = $column_space;
+                    array_push($temp_data, $temp_item);
+                    foreach($_dep as $department)
+                    {
+                         array_push($temp_data, $department);
+                         
+                    }
+                    // dd(Self::getsubtotal_report($_dep));
+                    // array_push($temp_data, Self::getsubtotal_report($_dep));
+               }
+                    
+
+               $data['_emp'] = $temp_data;
+          }
+
+          if($is_by_employee == 1 && $is_by_department == 0 && $is_by_company == 1)
+          {
+               $_department   = collect($emp_array)->groupBy('payroll_company_name');
+
+               $temp_data     = array();
+
+               foreach($_department as $kd => $_dep)
+               {
+                    $temp_item['name'] = '<b>'.$kd.'</b>';
+                    $temp_item['raw_name'] = $kd;
+                    $temp_item['payroll_department_name'] = '';
+                    $temp_item['payroll_company_name']    = '';
+                    $temp_item['_record'] = $column_space;
+                    $temp_item['_raw']    = $column_space;
+                    array_push($temp_data, $temp_item);
+                    foreach($_dep as $department)
+                    {
+                         array_push($temp_data, $department);
+                         
+                    }
+                    // dd(Self::getsubtotal_report($_dep));
+                    // array_push($temp_data, Self::getsubtotal_report($_dep));
+               }
+                    
+
+               $data['_emp'] = $temp_data;
+          }
+
+          if($is_by_employee == 1 && $is_by_department == 0 && $is_by_company == 0)
+          {
+               $data['_emp'] = $emp_array;
+          }
+
+          // dd($data['_emp']);
+
+          /* for item end */
 
           $data['_total']     = $_total;
           $data['_columns']   = $columns;
 
-          // dd($data);
 
-          return view('member.payroll.payroll_view_report', $data);
+          return $data;
+     }
+
+     public function getsubtotal_report($_item = array())
+     {
+
+          $data['name']                      = '<b>sub total</b>';
+          $data['raw_name']                  = 'sub total';
+          $data['payroll_department_name']   = '';
+          $data['payroll_company_name']      = '';
+          $data['_record']    = array();
+          $data['_raw']       = array();
+
+          $temp_array         = array();
+          $temp_record        = array();
+
+          // dd($_item);
+
+          foreach($_item as $data_item)
+          {    
+
+               if(empty($temp_array))
+               {
+                    $temp_array = $data_item['_raw'];
+               }
+               else
+               {
+                    // dd($data_item);
+                    foreach($temp_array as $key => $amount)
+                    {
+                         $temp_array[$key] += $amount;
+                    }
+               }
+          }
+
+          foreach($temp_array as $key => $arr)
+          {
+               array_push($temp_record, '<b>'.number_format($arr, 2).'</b>');
+          }
+
+          $data['_record'] = $temp_record;
+          $data['_raw']    = $temp_array;
+
+
+          return $data;
      }
 
      public function getrecord_report($id = 0,$_entity = array(), $employee_id = 0, $date = ['0000-00-00', '0000-00-00'])
@@ -5790,7 +6137,6 @@ class PayrollController extends Member
                               $amount = $temp_query->select('under_time')->sum('under_time');
                               array_push($data, $amount);
                          }
-
 
                     }
 

@@ -76,7 +76,7 @@ class AgentCollectionController extends Member
     {
         $data["sir_id"] = $sir_id;
         $data["collection_data"] = Tbl_sir::saleagent()->where("sir_id",$sir_id)->first();
-
+        $data["collectibles"] = currency("Php",Purchasing_inventory_system::get_sir_total_amount($sir_id));
         return view("member.purchasing_inventory_system.agent_transactions.update_collection",$data);   
     }
     public function update_collection_submit()

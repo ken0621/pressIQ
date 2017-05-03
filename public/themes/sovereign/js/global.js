@@ -54,13 +54,16 @@ function global()
 			slidesToShow: 7,
 			slidesToScroll: 1,
 			prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/sovereign/img/carousel-left.png'>",
-      		nextArrow:"<img class='a-right control-c next slick-next' src='/themes/sovereign/img/carousel-right.png'>"
+      		nextArrow:"<img class='a-right control-c next slick-next' src='/themes/sovereign/img/carousel-right.png'>",
+      		autoplay: true,
+			autoplaySpeed: 4000,
 		})
 	}
 	function event_nav_dropdown()
 	{
 		$('.dropdown.mega-dropdown a').on('click', function (event) 
 		{
+			$('.dropdown.mega-dropdown').removeClass('open');
 		    $(this).parent().toggleClass('open');
 		});
 

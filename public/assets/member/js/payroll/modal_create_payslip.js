@@ -1,5 +1,7 @@
 var modal_create_payslip = new modal_create_payslip();
 
+
+
 function modal_create_payslip()
 {
 	init();
@@ -24,9 +26,16 @@ function modal_create_payslip()
 		    link: '/member/payroll/custom_payslip/modal_create_paper_size',
 		    link_size: 'md',
 		    width : '100%',
-		    placeholder: 'Category'
+		    placeholder: 'Paper Sizes'
 		});
 	}
+
+	// $(".droplist-vendor").load("/member/vendor/load_vendor", function()
+	//     {                
+	//          $(".droplist-vendor").globalDropList("reload");
+	//          $(".droplist-vendor").val(data.vendor_id).change();          
+	//     });
+ //    	data.element.modal("hide");
 
 	function payslip_action()
 	{

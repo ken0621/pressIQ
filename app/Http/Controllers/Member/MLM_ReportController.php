@@ -177,8 +177,23 @@ class MLM_ReportController extends Member
         $invoice_f = Tbl_item_code_invoice::where('shop_id', $shop_id)->orderBy('item_code_invoice_id', 'ASC')->get()->keyBy('item_code_invoice_id')->first();
         $invoice_t = Tbl_item_code_invoice::where('shop_id', $shop_id)->orderBy('item_code_invoice_id', 'DESC')->get()->keyBy('item_code_invoice_id')->first();
         $data['report_list']['product_sales_report'] = 'Product Sales Report';
-        $data['report_list_d']['product_sales_report']['from'] =  $invoice_f->item_code_date_created;
-        $data['report_list_d']['product_sales_report']['to'] =  $invoice_t->item_code_date_created;
+        if($invoice_f)
+        {
+            $data['report_list_d']['product_sales_report']['from'] =  $invoice_f->item_code_date_created;
+        }
+        else
+        {
+            $data['report_list_d']['product_sales_report']['from'] = Carbon::now();
+        }
+
+        if($invoice_t)
+        {
+            $data['report_list_d']['product_sales_report']['to'] = $invoice_t->item_code_date_created;
+        }
+        else
+        {
+            $data['report_list_d']['product_sales_report']['to'] = Carbon::now();
+        }
         $data['report_list_d']['product_sales_report']['count'] = $invoice;
         // -----------------------------------------------------------------
 

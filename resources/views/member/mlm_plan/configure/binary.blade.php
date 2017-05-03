@@ -15,9 +15,12 @@
         </div>
     </div>
 </div>
+
 <div class="bsettings">
     {!! $basic_settings !!}  
 </div>
+<!-- Notes -->
+@include('member.mlm_plan.notes.binary')
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">

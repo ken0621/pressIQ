@@ -37,7 +37,8 @@ class Invoice
         $price = 0;
         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
                                 ->whereBetween("date_created",array($start_date,$end_date))
-                                ->where("inv_is_paid",0)->get();
+                                ->where("inv_is_paid",0)
+                                ->where("is_sales_receipt",0)->get();
         if(isset($ar))
         {
             foreach ($ar as $key => $value) 
@@ -53,7 +54,7 @@ class Invoice
         $price = 0;
         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
                                 ->whereBetween("date_created",array($start_date,$end_date))
-                                ->where("inv_is_paid",1)->get();
+                                ->get();
         if(isset($ar))
         {
             foreach ($ar as $key => $value) 

@@ -18,11 +18,16 @@
                               @endforeach
                           </select>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                             <label>Item</label>
                             <select class="drop-down-item" name="item_id">
                                 @include("member.load_ajax_data.load_item_category", ['add_search' => $value->binary_promotions_item_id, 'item_id' => $value->binary_promotions_item_id])
                             </select>
+                      </div>
+                      <div class="col-md-1">
+                        <label>Promo Start Date:</label>
+                        <input type="text" class="form-control" value="{{$value->binary_promotions_start_date}}" readonly>
+
                       </div>
                       <div class="col-md-2">
                           <label>Required Left </label>

@@ -26,6 +26,7 @@ use App\Models\Tbl_customer_search;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_matching_log;
+use App\Models\Tbl_mlm_binary_pairing;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
 use App\Globals\Mlm_plan;
@@ -115,8 +116,14 @@ class MLM_SlotController extends Member
     }
     public function index()
     {
-        // $slot = Mlm_compute::get_slot_info(393);
-        // return Mlm_complan_manager::binary_pairing($slot);
+        // $slot = Mlm_compute::get_slot_info(397);
+        // $settings = Tbl_mlm_binary_pairing::orderBy("pairing_point_left", "desc")
+            // ->where('pairing_point_left', '!=', 0)
+            // ->where('pairing_point_right', '!=', 0)
+            // ->where('pairing_bonus', '!=', 0)
+            // ->where('pairing_archive', 0)
+            // ->where('membership_id', $slot->slot_membership)->first(); 
+        // return Mlm_complan_manager::binary_single_line_richard($slot, $settings, 500);
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {

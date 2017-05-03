@@ -359,7 +359,7 @@ class MlmReportController extends Mlm
             $data['s'] = $status;
             $data['m'] = Session::get('message');
         }
-        // dd($data);
+        
         return view("mlm.report.report_binary_promotions", $data);
     }
     public function request_binary_promotions()

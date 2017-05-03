@@ -401,10 +401,11 @@ class Mlm_complan_manager
     }
     public static function binary_single_line_richard($slot_info, $settings, $earnings)
     {
+        // dd($settings);
         $slot_tree = Tbl_tree_sponsor::child($slot_info->slot_id)->orderby("sponsor_tree_level", "desc")
         ->distinct_level()
         ->parentslot()->membership()
-        ->take('pairing_point_single_line_bonus_level')
+        ->take($settings->pairing_point_single_line_bonus_level)
         ->get();
         if($earnings != 0)
         {
@@ -421,17 +422,18 @@ class Mlm_complan_manager
                     {
                         $bonus = $settings->pairing_point_single_line_bonus;
                     }
-                    foreach ($slot_tree as $key => $value) {
+                    foreach ($slot_tree as $key => $slot) 
+                    {
                         # code...
-                        $log = "You have Earned " . $bonus . ". Binary Single Line Bonus" ;
+                        $log = "You have Earned " . $bonus . ". from Binary Single Line Bonus. Sponsor: " . $slot_info->slot_no;
                         $arry_log['wallet_log_slot']            = $slot->slot_id;
                         $arry_log['shop_id']                    = $slot->shop_id;
                         $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
                         $arry_log['wallet_log_details']         = $log;
                         $arry_log['wallet_log_amount']          = $bonus;
                         $arry_log['wallet_log_plan']            = "BINARY_SINGLE_LINE";
-                        $arry_log['wallet_log_status']          = "n_ready";   
-                        $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot->shop_id); 
+                        $arry_log['wallet_log_status']          = "released";   
+                        $arry_log['wallet_log_claimbale_on']    = Carbon::now(); 
                         Mlm_slot_log::slot_array($arry_log);  
                     }
                 }
@@ -868,6 +870,7 @@ class Mlm_complan_manager
                                             $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot->shop_id); 
                                             Mlm_slot_log::slot_array($arry_log); 
 
+                                            Mlm_complan_manager::binary_single_line_richard($slot, $value2, $earning);
                                             // $slot_zxc = Mlm_compute::get_slot_info($slot->slot_id);
                                             // Mlm_complan_manager::binary_single_line($slot_zxc); 
                                             
@@ -913,6 +916,7 @@ class Mlm_complan_manager
                                             $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot->shop_id); 
                                             Mlm_slot_log::slot_array($arry_log); 
 
+                                            Mlm_complan_manager::binary_single_line_richard($slot, $value2, $earning);
                                             // $slot_zxc = Mlm_compute::get_slot_info($slot->slot_id);
                                             // Mlm_complan_manager::binary_single_line($slot_zxc); 
                                             

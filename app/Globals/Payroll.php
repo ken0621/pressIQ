@@ -540,6 +540,7 @@ class Payroll
 
 		return $return;
 	}
+	
 	public static function process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours)
 	{
 		$data["break"] = $break = c_time_to_int($break);
@@ -2338,6 +2339,10 @@ class Payroll
 			array_push($data['deduction'], $temp_deduction);
 		}
 
+		$adjustment_allowance = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Allowance')->get();
+
+		$adjustment_allowance_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Allowance')->sum('payroll_adjustment_amount');
+
 		$adjustment_bonus = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Bonus')->get();
 
 		$adjustment_bonus_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Bonus')->sum('payroll_adjustment_amount');
@@ -2359,6 +2364,10 @@ class Payroll
 
 
 
+
+		$data['adjustment']['allowance'] 			= $adjustment_allowance;
+		$data['adjustment']['total_allowance'] 		= $adjustment_allowance_total;
+
 		$data['adjustment']['bonus'] 				= $adjustment_bonus;
 		$data['adjustment']['total_bonus'] 			= $adjustment_bonus_total;
 
@@ -2370,6 +2379,7 @@ class Payroll
 
 		$data['adjustment']['deductions'] 			= $adjustment_deductions;
 		$data['adjustment']['total_deductions'] 	= $adjustment_deductions_total;
+
 		// $total_contribution 				= $data['']
 		$data['total_gross'] = 0;
 		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total);

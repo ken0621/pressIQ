@@ -136,8 +136,18 @@
 	<div class="container">
 		<div class="row clearfix">
 			<div class="col-md-6">
-				<div class="image">
-					<img src="/themes/sovereign/img/product-sample.jpg">
+				<div class="image product-image-carousel">
+					@if(count($_product) > 0)
+						<div>
+							<img src="/themes/sovereign/img/product-sample.jpg">
+						</div>
+					@else
+						@foreach($_product as $product)
+							<div>
+								<img src="{{ get_product_first_image($product) }}">
+							</div>
+						@endforeach
+					@endif
 				</div>
 			</div>
 			<div class="col-md-6">
@@ -454,5 +464,5 @@
 @endsection
 
 @section("js")
-
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/home.js"></script>
 @endsection

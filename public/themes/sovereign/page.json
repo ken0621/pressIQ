@@ -82,7 +82,7 @@
 		{
 			"label":"Vision Image",
 			"type":"image",
-			"default":"/themes/sovereign/img/vision-side.jpg",
+			"default":"/themes/sovereign/img/vision-side.png",
 			"size":"4"
 		},
 		"home_vision_title" : 

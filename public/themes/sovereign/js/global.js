@@ -13,7 +13,6 @@ function global()
 		{
 			action_match_height();
 			action_product_carousel();
-			action_says_carousel();
 			event_show_product();
 			event_nav_dropdown();
 		});
@@ -53,18 +52,6 @@ function global()
 		$('.product-container .list-product').slick({
 			infinite: true,
 			slidesToShow: 7,
-			slidesToScroll: 1,
-			prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/sovereign/img/carousel-left.png'>",
-      		nextArrow:"<img class='a-right control-c next slick-next' src='/themes/sovereign/img/carousel-right.png'>",
-      		autoplay: true,
-			autoplaySpeed: 4000,
-		})
-	}
-	function action_says_carousel()
-	{
-		$('.says-container').slick({
-			infinite: true,
-			slidesToShow: 3,
 			slidesToScroll: 1,
 			prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/sovereign/img/carousel-left.png'>",
       		nextArrow:"<img class='a-right control-c next slick-next' src='/themes/sovereign/img/carousel-right.png'>",

@@ -220,6 +220,8 @@ class MlmRegisterController extends MlmLoginController
     		$data['message'] = "Password didn't match.";
     	}
 
+        $data['from'] = "register";
+
     	return json_encode($data);
 
 	    

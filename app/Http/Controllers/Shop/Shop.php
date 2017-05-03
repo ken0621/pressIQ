@@ -30,7 +30,9 @@ class Shop extends Controller
     public function __construct()
     {
     	$domain = get_domain();
-        
+        $data['lead'] = null;
+        $data['lead_code'] = null;
+        $data['customer_info'] = null;
     	$check_domain = Tbl_shop::where("shop_domain", $domain)->first();
         // dd(Session::get('mlm_member'));
         if(Session::get('mlm_member') != null)
@@ -65,6 +67,17 @@ class Shop extends Controller
                     $shop_id = $lead_e->shop_id;    
                     $this->shop_info = $shop_info = Tbl_shop::where("shop_id", $shop_id)->first();
                     Self::$lead = $lead_e;
+
+                    $data['lead'] = Self::$lead;
+                    if($data['lead'] != null)
+                    {
+                        $data['lead_code'] = Tbl_membership_code::where('tbl_membership_code.customer_id', $data['lead']->customer_id)
+                        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_membership_code.slot_id')
+                        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+                        ->whereNotNull('tbl_membership_code.slot_id')
+                        ->get();
+                        $data['customer_info'] = Mlm_member::get_customer_info($data['lead']->customer_id);
+                    } 
                 }
                 else
                 {
@@ -108,6 +121,8 @@ class Shop extends Controller
 
         /* Set Email Configuration */
         Settings::set_mail_setting($this->shop_info->shop_id);
+
+
         
         View::share("slot_now", Self::$slot_now);
         View::share("customer_info", Self::$customer_info);
@@ -121,6 +136,9 @@ class Shop extends Controller
         View::share("_categories", $product_category);
         View::share("global_cart", $global_cart);
         View::share("country", $country);
+        View::share("lead", $data['lead']);
+        View::share("customer_info", $data['customer_info']);
+        View::share("lead_code", $data['lead_code']);
     }
     public function file($theme, $type, $filename)
     {

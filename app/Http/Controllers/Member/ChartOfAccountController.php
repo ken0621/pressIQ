@@ -61,8 +61,6 @@ class ChartOfAccountController extends Member
             $data['account_open_balance']       = Request::input('account_open_balance');
             $data['account_open_balance_date']  = date_format(date_create(Request::input('account_open_balance_date')) ,"Y/m/d");
             
-            $rules['account_open_balance']      = "required";
-            $rules['account_open_balance_date'] = "required";
         }
         
         $rules['account_type_id']           = "required";
@@ -93,6 +91,23 @@ class ChartOfAccountController extends Member
         }
         
         $account_id = Tbl_chart_of_account::insertGetId($data);
+
+        /* JOURNAL ENTRY FOR OPENING BALANCE */
+        if(Tbl_chart_account_type::where("chart_type_id", Request::input('account_type_id'))->pluck("has_open_balance") == 1)
+        {
+            if($data['account_open_balance'] > 0)
+            {
+                $entry["reference_module"]      = "deposit";
+                $entry["reference_id"]          = $account_id;
+                $entry["name_id"]               = "";
+                $entry["total"]                 = $data['account_open_balance'];
+                $entry_data[0]['account_id']    = 0;
+                $entry_data[0]['vatable']       = 0;
+                $entry_data[0]['discount']      = 0;
+                $entry_data[0]['entry_amount']  = $data['account_open_balance'];
+                $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
+            }
+        }
         
         Request::session()->flash('success', 'Account Successfully added');
         
@@ -120,16 +135,6 @@ class ChartOfAccountController extends Member
             $sub_level                      = Tbl_chart_of_account::where("account_id", $parent_id)->pluck("account_sublevel");
             $data['account_parent_id']      = $parent_id;
             $data['account_sublevel']       = $sub_level + 1;
-        }
-        
-        /* IF THE ACCOUNT TYPE HAS OPEN BALANCE FIELD */
-        if(Tbl_chart_account_type::where("chart_type_id", Request::input('account_type_id'))->pluck("has_open_balance") == 1)
-        {
-            $data['account_open_balance']       = Request::input('account_open_balance');
-            $data['account_open_balance_date']  = date_format(date_create(Request::input('account_open_balance_date')) ,"Y/m/d");
-            
-            $rules['account_open_balance']      = "required";
-            $rules['account_open_balance_date'] = "required";
         }
         
         $rules['account_type_id']           = "required";
@@ -173,6 +178,7 @@ class ChartOfAccountController extends Member
     {
         $data['_account_type']  = Tbl_chart_account_type::get();
         $data['_account']       = Tbl_chart_of_account::accountInfo($this->user_info->shop_id)->get();
+        $data['_mode']          = "add";
         return view('/member/accounting/modal/account_add', $data);
     }
     
@@ -181,6 +187,7 @@ class ChartOfAccountController extends Member
         $data['account_info']   = Tbl_chart_of_account::accountInfo($this->user_info->shop_id)->where("account_id", $id)->first();
         $data['_account_type']  = Tbl_chart_account_type::get();
         $data['_account']       = Tbl_chart_of_account::accountInfo($this->user_info->shop_id)->get();
+        $data['mode']           = "update";
         return view('/member/accounting/modal/account_update', $data);
     }
 

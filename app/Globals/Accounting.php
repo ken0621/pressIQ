@@ -370,6 +370,15 @@ class Accounting
 					break;
 				case "debit-memo":
 					break;
+				case "deposit":
+					/* OPENING BALANCE EQUITY */
+					$account ? $account : $account = Accounting::getOpenBalanceEquity();
+
+					$line_data["entry_amount"]	= $entry_line["entry_amount"];
+					$line_data["entry_type"] 	= Accounting::normalBalance($account);
+					$line_data["account_id"] 	= $account;
+					Accounting::insertJournalLine($line_data);
+					break;
 				// SO ON
 			}
 		}
@@ -541,6 +550,20 @@ class Accounting
 				$data["newContraJournal"] 	= 'normalBalance';
 				return $data;
 				break;
+			case 'deposit':
+				$data["main_account"]		= 'cash';
+				$data["name"] 				= '';
+				$data["newNormalJournal"] 	= 'normalBalance';
+				$data["newContraJournal"] 	= 'contraAccount';
+				return $data;
+				break;
+			case '':
+				$data["main_account"]		= 'cash';
+				$data["name"] 				= '';
+				$data["newNormalJournal"] 	= 'normalBalance';
+				$data["newContraJournal"] 	= 'contraAccount';
+				return $data;
+				break;
 			default:
 				$data = null;
 		}
@@ -692,94 +715,34 @@ class Accounting
         return $exist_account->account_id;
 	}
 
+	/**
+	 * Get Chart of Account - For All Opening Balance Equity
+	 *
+	 * @return 	int 	ID
+	 */
+	public static function getOpenBalanceEquity()
+	{
+		$exist_account = Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_code", "accounting-open-balance-equity")->first();
+        if(!$exist_account)
+        {
+            $insert["account_shop_id"]          = Accounting::getShopId();
+            $insert["account_type_id"]          = 10;
+            $insert["account_number"]           = "00000";
+            $insert["account_name"]             = "Opening Balance Equity";
+            $insert["account_description"]      = "Opening Balance";
+            $insert["account_protected"]        = 1;
+            $insert["account_code"]             = "accounting-open-balance-equity";
+            
+            return Tbl_chart_of_account::insertGetId($insert);
+        }
+
+        return $exist_account->account_id;
+	}
+
 	/* REFERENCE OF THE NAMING OF THE CHART OF ACCOUNT TABLE */
 
 	// Output Vat Payable 						= tax-output-vat-payable
 	// Creditable Withholding Tax - 1%			= tax-credit-tax-1
 	// Discount									= discount-sale
 	// Discount									= discount-purchase
-
-
-	public static function getJournalById($reference_module, $reference_id)
-	{
-		// $journal = Tbl_journal_entry::where("je_reference_id", $reference_id)->where("je_reference_module", $reference_module)->first();
-
-		// $result["status"] 			= 'success';
-		// $result["status_message"]	= null;
-
-		// if(count($journal) > 0) 
-		// {
-		// 	$journal_line = Tbl_journal_entry_line::account()->where("jline_je_id", $journal->je_id)->get(['account_id','jline_type', 'jline_amount','jline_description'])->toArray();
-
-		//   	$result["entry_data"] = $journal_line;
-		// }
-		// else 
-		// {
-		// 	$result["entry_data"] = null;
-		// }
-		$shop = Accounting::getShopId();
-
-		$_journal_entry = Tbl_journal_entry::selectRaw("je_id as je_id, je_entry_date as entry_date, je_remarks as remarks")
-											->where("je_shop_id", $shop)->where("je_reference_id", $reference_id)->where("je_reference_module", $reference_module)->first();
-
-        if(count($_journal_entry) > 0)
-		{
-	        $result['tbl_journal_entry'] = [];
-
-	        $result 					= $_journal_entry->toArray();
-	        $result['status'] 			= 'success';
-	        $result['status_message'] 	= '';
-	        $_journal_line = Tbl_journal_entry_line::selectedLimit()->where("jline_je_id", $_journal_entry['je_id'])->get()->toArray();
-	        $result['entry_data'] = $_journal_line;
-    	}
-
-		dd($result);
-		if(count($_journal_entry) > 0)	    return $result;
-		else 								return 'No Result Found!';
-	}
-
-	public static function getJournalByDate($reference_module, $start_date, $end_date)
-	{
-		$shop = Accounting::getShopId();
-
-		$_journal_entry = Tbl_journal_entry::selectRaw("je_id as je_id, je_reference_module as reference_module, je_reference_id as reference_id, je_entry_date as entry_date, je_remarks as remarks")
-											->where("je_shop_id", $shop)->where("je_reference_module", $reference_module)
-											->where("je_entry_date",">=", $start_date)->where("je_entry_date","<=", $end_date)
-											->first();
-
-		if(count($_journal_entry) > 0)
-		{
-	        $result['tbl_journal_entry'] = [];
-
-	        $result 					= $_journal_entry->toArray();
-	        $result['status'] 			= 'success';
-	        $result['status_message'] 	= '';
-	        $_journal_line = Tbl_journal_entry_line::selectedLimit()->where("jline_je_id", $_journal_entry['je_id'])->get()->toArray();
-	        $result['entry_data'] = $_journal_line;
-    	}
-
-		dd($result);
-		if(count($_journal_entry) > 0)	    return $result;
-		else 								return 'No Result Found!';
-	}
-
-	public static function getJounalAll()
-	{
-		$shop = Accounting::getShopId();
-
-		$_journal_entry = Tbl_journal_entry::where("je_shop_id", $shop)->get()->toArray();
-
-        $data['tbl_journal_entry'] = [];
-
-        foreach($_journal_entry as $key => $journal)
-        {
-            $data['tbl_journal_entry'][$key] = $journal;
-            $_journal_line = Tbl_journal_entry_line::account()->item()->where("jline_je_id", $journal['je_id'])->get();
-            $data['tbl_journal_entry'][$key]['debit'] 	= $_journal_line->where("jline_type", 'debit')->sum('jline_amount');
-            $data['tbl_journal_entry'][$key]['credit'] 	= $_journal_line->where("jline_type", 'credit')->sum('jline_amount');
-            $data['tbl_journal_entry'][$key]['journal_line'] = $_journal_line->toArray();
-        }
-        // dd($data['tbl_journal_entry']);
-        return $data['tbl_journal_entry'];
-	}
 }

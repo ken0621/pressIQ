@@ -16,9 +16,9 @@
                 <button class="btn btn-custom-danger dropdown-toggle " type="button" data-toggle="dropdown"><i class="fa fa-file-pdf-o"></i>&nbsp;Summary
                 <span class="caret"></span></button>
                 <ul class="dropdown-menu dropdown-menu-custom">
-                    <li><a href="#">Late Summary</a></li>
-                    <li><a href="#">Under Time Summary</a></li>
-                    <li><a href="#">Over Time Summary</a></li>
+                    <li><a href="#" class="popup" link="/member/payroll/timesheet/show_summary/late/{{$company->payroll_period_company_id}}" size="lg">Late Summary</a></li>
+                    <li><a href="#" class="popup" link="/member/payroll/timesheet/show_summary/under_time/{{$company->payroll_period_company_id}}" size="lg">Under Time Summary</a></li>
+                    <li><a href="#" class="popup" link="/member/payroll/timesheet/show_summary/over_time/{{$company->payroll_period_company_id}}" size="lg">Over Time Summary</a></li>
                 </ul>
             </div>
             <button class="btn btn-custom-primary pull-right margin-right-20 btn-mark-ready" data-content="{{$payroll_period_company_id}}" type="button" {{$company->payroll_period_status != 'pending' ? 'disabled' : ''}}>{{$company->payroll_period_status != 'pending' ? 'Ready' : 'Mark as Ready'}}</button>

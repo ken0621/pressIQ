@@ -116,7 +116,6 @@ class Category
 
 		$_category = Tbl_category::search($search, $type_category, $shop_id)->orderBy('type_name','asc')->get();;
 		
-		// dd($_category);
 		$data['html'] = '';
 
 		foreach($_category as $key => $cat)

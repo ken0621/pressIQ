@@ -61,10 +61,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_timesheet/adjustment_form','Member\PayrollTimeSheetController@adjustment_form');
 	Route::post('/employee_timesheet/adjustment_form_approve','Member\PayrollTimeSheetController@adjustment_form_approve');
 	Route::any('/employee_timesheet/show_holiday/{id}/{date}','Member\PayrollTimeSheetController@show_holiday');
-
-
 	Route::any('/timesheet/mark_ready_company','Member\PayrollController@mark_ready_company');
-	/* TIMESHEET START */
+	Route::any('/timesheet/show_summary/{summary}/{period_id}','Member\PayrollTimeSheetController@show_summary');
+	/* TIMESHEET END */
 
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');
@@ -239,6 +238,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/custom_payslip',"Member\PayrollController@custom_payslip");
 	Route::any('/custom_payslip/modal_create_payslip',"Member\PayrollController@modal_create_payslip");
 	Route::any('/custom_payslip/modal_create_paper_size',"Member\PayrollController@modal_create_paper_size");
+	Route::any('/custom_payslip/modal_save_paper_size',"Member\PayrollController@modal_save_paper_size");
+	Route::any('/custom_payslip/save_custom_payslip',"Member\PayrollController@save_custom_payslip");
+	Route::any('/custom_payslip/custom_payslip_show/{id}',"Member\PayrollController@custom_payslip_show");
 	
 	/* PAYROLL CUSTOM PAYSLIP END */
 
@@ -322,7 +324,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 
 	/* PAYROLL SUMMARY JOURNAL ENTRIES */
-	Route::get('/payroll_summary','Member\PayrollController@payroll_summary');
+	Route::get('/journal_entry','Member\PayrollController@journal_entry');
 
 	/* END */
 
@@ -346,4 +348,15 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* PAYROLL NOTES  START*/
 	Route::any('/modal_payroll_notes/{id}','Member\PayrollController@modal_payroll_notes');
 	/* PAYROLL NOTES END */
+
+	/* PAYROLL REPORTS START */
+	Route::any('/payroll_reports','Member\PayrollController@payroll_reports');
+	Route::any('/payroll_reports/modal_create_reports','Member\PayrollController@modal_create_reports');
+	Route::any('/payroll_reports/save_custom_reports','Member\PayrollController@save_custom_reports');
+	Route::any('/payroll_reports/modal_archive_reports/{archived}/{id}','Member\PayrollController@modal_archive_reports');
+	Route::any('/payroll_reports/archive_report','Member\PayrollController@archive_report');
+	Route::any('/payroll_reports/modal_edit_reports/{id}','Member\PayrollController@modal_edit_payroll_reports');
+	Route::any('/payroll_reports/update_payroll_reports','Member\PayrollController@update_payroll_reports');
+	Route::any('/payroll_reports/view_report/{id}','Member\PayrollController@view_report');
+	/* PAYROLL REPORTS END */
 });	 

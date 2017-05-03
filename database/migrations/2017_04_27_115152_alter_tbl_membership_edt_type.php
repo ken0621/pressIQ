@@ -19,6 +19,10 @@ class AlterTblMembershipEdtType extends Migration
             {
                 $table->renameColumn('membership_type', 'membership_type_a');
             }
+            else
+            {
+                $table->integer("membership_type_a")->default(0);
+            }
         });
     }
 

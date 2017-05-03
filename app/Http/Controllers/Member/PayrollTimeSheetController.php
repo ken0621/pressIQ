@@ -53,11 +53,11 @@ class PayrollTimeSheetController extends Member
 		}
 		$data['payroll_period_company_id'] = $id;
 		$data['company'] = Tbl_payroll_period_company::sel($id)->select('tbl_payroll_company.*','tbl_payroll_period.*','tbl_payroll_period_company.*')->first();
-		$data['_employee'] = Tbl_payroll_employee_contract::employeefilter($data['company']->payroll_company_id, 0, 0, date('Y-m-d'), $this->user_info->shop_id)
+		$data['_employee'] = Tbl_payroll_employee_contract::employeefilter($data['company']->payroll_company_id, 0, 0, $data['company']->payroll_period_end, $this->user_info->shop_id)
 							->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 							->where('tbl_payroll_group.payroll_group_period', $data['company']->payroll_period_category)
 							->get();
-		
+		// dd($data['company']);
 		$payroll_employee_id = 0;
 		if(isset($data['_employee'][0]))
 		{
@@ -565,4 +565,86 @@ class PayrollTimeSheetController extends Member
 		return view('member.payroll.modal.modal_show_holiday', $data);
 	}
 
+
+	/* generate timesheet summary */
+	public function show_summary($summary, $period_id)
+	{
+		$data['header'] = Self::ru($summary).'Summary';
+
+		$period = Tbl_payroll_period_company::sel($period_id)->first();	
+
+		$_employee = Tbl_payroll_employee_contract::employeefilter($period->payroll_company_id, 0, 0, $period->payroll_period_end, $this->user_info->shop_id)
+							->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
+							->where('tbl_payroll_group.payroll_group_period', $period->payroll_period_category)
+							->get();
+
+		$start = $period->payroll_period_start;
+
+		$end = $period->payroll_period_end;
+		$data['period'] = date('F d, Y', strtotime($start)).' to '.date('F d, Y', strtotime($end));
+		$data['_employee'] = array();
+
+		foreach($_employee as $employee)
+		{
+			$temp_employee['employee'] = $employee;
+			$temp_employee['time'] = array();
+
+			$start 		= $period->payroll_period_start;
+			$total_time = '00:00';
+
+			while($start <= $end)
+			{
+				$date = Carbon::parse($start)->format("Y-m-d"); 
+
+				$time_arr = Payroll::process_time($employee->payroll_employee_id, $date);
+
+				$time = '00:00';
+
+				if($summary == 'late'){
+					$time = $time_arr->approved_timesheet->late_hours;
+				}
+
+				if($summary == 'under_time'){
+					$time = $time_arr->approved_timesheet->under_time;
+				}
+
+				if($summary == 'over_time'){
+					$time = $time_arr->approved_timesheet->late_overtime;
+				}
+				$total_time = Payroll::sum_time($total_time, $time);
+				array_push($temp_employee['time'], $time);
+				$start = Carbon::parse($start)->addDay()->format("Y-m-d");
+			}
+
+			$temp_employee['total_time'] = $total_time;
+
+			array_push($data['_employee'], $temp_employee);
+		}
+
+		$start = $period->payroll_period_start;
+
+		$data['_date'] = array();
+		while($start <= $end)
+		{
+			$date = Carbon::parse($start)->format("Y-m-d"); 
+			array_push($data['_date'], $start);
+			$start = Carbon::parse($start)->addDay()->format("Y-m-d");
+		}
+
+		// dd($data);
+
+		return view('member.payroll.modal.modal_time_summary', $data);
+	}
+
+	public function ru($str = '')
+	{
+		$nstr = '';
+		$_split = explode('_', $str);
+		// dd($_split);
+		foreach($_split as $split)
+		{
+			$nstr .= ucfirst($split).' ';
+		}
+		return $nstr;
+	}
 }

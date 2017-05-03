@@ -16,6 +16,7 @@ use App\Models\Tbl_payroll_time_sheet;
 use App\Models\Tbl_payroll_time_sheet_record;
 use App\Models\Tbl_payroll_holiday_company;
 use App\Models\Tbl_payroll_employee_contract;
+use App\Models\Tbl_payroll_company;
 
 
 class Payroll_BioImportController extends Member
@@ -147,6 +148,11 @@ class Payroll_BioImportController extends Member
 		{
 			return Self::import_manual($file);
 		}
+
+		if($biometric == 'Mustard Seed')
+		{
+			return Self::import_mustard_seed($file);
+		}
 	}
 
     /* BIO METRICS START */
@@ -188,7 +194,7 @@ class Payroll_BioImportController extends Member
 		    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
 		    			$temp_array['payroll_time_sheet_in'] 		= $start['time'];
 		    			$temp_array['payroll_time_sheet_out'] 		= $end['time'];
-		    			$temp_array['payroll_time_sheet_origin'] 	= 'Biometrics';
+		    			$temp_array['payroll_time_sheet_origin'] 	= 'ZKTime 5.0';
 		    			$temp_array['payroll_company_id']			= Self::getemployeeId($start['employee_number'],'payroll_employee_company_id');
 
 		    			$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
@@ -275,7 +281,7 @@ class Payroll_BioImportController extends Member
 		    				$insert_record['payroll_time_sheet_in'] 	= date('H:i:s', strtotime($date_key[0]['time_in']));
 		    				$insert_record['payroll_time_sheet_id'] 	= $payroll_time_sheet_id;
 		    				$insert_record['payroll_company_id']		= Self::getemployeeId($key,'payroll_employee_company_id');
-		    				$insert_record['payroll_time_sheet_origin'] = 'Biometrics';
+		    				$insert_record['payroll_time_sheet_origin'] = 'Digital Persona';
 		    				foreach($date_key as $final_date)
 			    			{
 			    				if(strtotime($final_date['time_out']) != '')
@@ -372,6 +378,94 @@ class Payroll_BioImportController extends Member
     	return $message;
     }
 
+    public function import_mustard_seed($file)
+    {
+    	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
+    	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('company_code','employee_no','date','in_1','out_1','in_2','out_2','in_3','out_3','in_4','out_4','in_5','out_5','in_6','out_6'));
+    	// dd($_time);
+    	if(isset($_time[0]['company_code']) && isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['in_1']) && isset($_time[0]['out_1']) && isset($_time[0]['in_2']) && isset($_time[0]['out_2']) && isset($_time[0]['in_3']) && isset($_time[0]['out_3']))
+    	{
+    		
+    		$insert_time_record = array();
+
+    		foreach($_time as $key => $time)
+    		{
+    			
+    			// dd($time_param);
+    			if(Self::check_employee_number($time['employee_no']))
+    			{
+
+    				$time_in = Self::findfirstlast_mustard($time);
+    				$time_out = Self::findfirstlast_mustard($time,'last');
+
+    				$company_id = Self::getemployeeId($time['employee_no'],'payroll_employee_company_id');
+
+    				if($time['company_code'] != null)
+    				{
+    					$company_temp_id =  Tbl_payroll_company::selbycode(Self::shop_id(), $time['company_code'])->pluck('payroll_company_id');
+    					if($company_temp_id != null)
+    					{	
+    						$company_id = $company_temp_id;
+    					}
+    				}
+
+
+	    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($time['employee_no']), date('Y-m-d', strtotime($time['date'])));
+
+	    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
+	    			$temp_array['payroll_time_sheet_in'] 		= date('H:i:s', strtotime($time_in));
+	    			$temp_array['payroll_time_sheet_out'] 		= date('H:i:s', strtotime($time_out));
+	    			$temp_array['payroll_time_sheet_origin'] 	= 'Mustard Seed';
+	    			$temp_array['payroll_company_id']			= $company_id;
+
+	    			Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $payroll_time_sheet_id)->where('payroll_time_sheet_in', '00:00:00')->where('payroll_time_sheet_out','00:00:00')->delete();
+
+	    			$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
+	    			
+	    			if($count_record == 0)
+	    			{
+	    				array_push($insert_time_record, $temp_array);
+	    			}
+    			}
+    		}
+
+    		$message = '<center><span class="color-gray">Nothing to insert</span></center>';
+
+	    	if(!empty($insert_time_record))
+	    	{
+	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
+	    		$count_inserted = count($insert_time_record);
+	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
+	    	}
+    	}
+
+
+    	return $message;
+
+    }
+
+
+    public function findfirstlast_mustard($_time = array(), $find = 'first')
+    {
+    	$time = '00:00:00';
+    	$_param = ['in_1','out_1','in_2','out_2','in_3','out_3','in_4','out_4','in_5','out_5','in_6','out_6'];
+
+    	if($find == 'last')
+    	{
+    		$_param = ['in_6','out_6','in_5','out_5','in_4','out_4','in_3','out_3','in_2','out_2','in_1','out_1'];
+    	}
+  
+    	foreach($_param as $param)
+    	{
+    		if($_time[$param] != null)
+    		{
+    			$time = date('H:i:s', strtotime($_time[$param]));
+    			break;
+    		}
+    	}
+    	return $time;
+    }
+
     /* TEMPLATE START */
     public function template_global()
     {
@@ -388,6 +482,11 @@ class Payroll_BioImportController extends Member
     	if($biometric_name == 'Manual Template')
     	{
     		Self::manual_template();
+    	}
+
+    	if($biometric_name == 'Mustard Seed')
+    	{
+    		Self::mustard_seed_template();
     	}
     }
 
@@ -437,6 +536,28 @@ class Payroll_BioImportController extends Member
         $excels['data'][1] = ['','', '','',''];
 
         return Excel::create('Timesheet Template (Digital Persona)', function($excel) use ($excels) {
+
+            $data = $excels['data'];
+            $date = 'template';
+            $excel->setTitle('Payroll');
+            $excel->setCreator('Laravel')->setCompany('DIGIMA');
+            $excel->setDescription('payroll file');
+
+            $excel->sheet($date, function($sheet) use ($data) {
+                $sheet->fromArray($data, null, 'A1', false, false);
+            });
+
+        })->download('xlsx');
+    }
+
+    public function mustard_seed_template()
+    {
+
+    	$excels['data'][0] = ['Company Code','Employee No.', 'Employee Name','Date','In 1','Out 1','In 2','Out 2','In 3','Out 3','In 4','Out 4','In 5','Out 5','In 6','Out 6','Hrs Required','Tot Hrs Break','Hrs Worked'];
+
+        $excels['data'][1] = ['','', '','','','','','','','','','','','','','','','',''];
+
+        return Excel::create('Timesheet Template (Mustard Seed)', function($excel) use ($excels) {
 
             $data = $excels['data'];
             $date = 'template';

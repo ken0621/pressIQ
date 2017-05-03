@@ -67,6 +67,7 @@ Route::get('/mlm/report/{complan}', 'Mlm\MlmReportController@index');
 Route::get('/mlm/report/discount_card/use', 'Mlm\MlmDiscountCardController@use_discount'); 
 Route::get('/mlm/report/discount_card/use/get/customer/{id}', 'Mlm\MlmDiscountCardController@get_customer_info'); 
 Route::post('/mlm/report/discount_add/use/submit', 'Mlm\MlmDiscountCardController@submit_use_discount_card'); 
+Route::post('/mlm/report/binary_promotions/request', 'Mlm\MlmReportController@request_binary_promotions'); 
 /* End MLM MEMBER REPORTS */
 
 /* MLM SLOTs */

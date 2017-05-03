@@ -110,14 +110,29 @@
 						            		<input type="hidden" name="api_gateway_id" class="form-control input-sm" value="{{$gateway->gateway_id}}">
 						            		@if($gateway->gateway_code_name != 'other')
 						            			
-					            				<div class="form-group col-md-12">
-								                    <label>Client ID</label>
-								                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->client_id or ''}}">
-								                </div>
-								                <div class="form-group col-md-12">
-								                    <label>Secret ID</label>
-								                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->secret_id or ''}}">
-								                </div>
+						            			@if($gateway->gateway_code_name == 'ipay88')
+
+						            				<div class="form-group col-md-12">
+									                    <label>Merchant Code</label>
+									                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->client_id or ''}}">
+									                </div>
+									                <div class="form-group col-md-12">
+									                    <label>Merchant Key</label>
+									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->secret_id or ''}}">
+									                </div>
+
+						            			@else
+
+						            				<div class="form-group col-md-12">
+									                    <label>Client ID</label>
+									                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->client_id or ''}}">
+									                </div>
+									                <div class="form-group col-md-12">
+									                    <label>Secret ID</label>
+									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->secret_id or ''}}">
+									                </div>
+
+						            			@endif            				
 						            		
 							            		
 								                <div class="col-md-12">

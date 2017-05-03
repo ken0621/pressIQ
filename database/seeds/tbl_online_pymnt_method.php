@@ -19,7 +19,8 @@ class tbl_online_pymnt_method extends Seeder
             (4, 'BDO', 'bdo', '1,2,3,4,5'),
             (5, 'BPI', 'bpi', '1,2,3,4,5'),
             (6, 'E-Wallet', 'e-wallet', ''),
-            (7, 'Ipay88', 'ipay88', '6')
+            (7, 'Remittance', 'remittance', '1,2,3,4,5'),
+            (8, 'Ipay88', 'ipay88', '6')
             ";
 
         DB::statement($statement);

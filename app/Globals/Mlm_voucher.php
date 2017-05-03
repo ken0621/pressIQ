@@ -173,4 +173,22 @@ class Mlm_voucher
 			}
 		}
 	}
+	public static function give_voucher_binary_promotions($item, $customer_id, $slot_id)
+	{
+		$insert['voucher_code'] = Membership_code::random_code_generator(6);
+		$insert['voucher_code_type'] = 0;
+		$insert['voucher_customer'] = $customer_id;
+		$insert['voucher_claim_status'] = 0;
+
+		$id = Tbl_voucher::insertGetId($insert);
+
+		$insert_item['voucher_id'] = $id;
+		$insert_item['item_id'] = $item->item_id;
+		$insert_item['voucher_item_quantity'] = 1;
+		$insert_item['voucher_is_bundle'] = 0;
+		$insert_item['item_price'] = $item->item_price;
+		$insert_item['item_quantity'] = 1;
+		$insert_item['item_name'] = $item->item_name;
+		Tbl_voucher_item::insert($insert_item);
+	}
 }

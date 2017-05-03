@@ -54,7 +54,7 @@ class Invoice
         $price = 0;
         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
                                 ->whereBetween("date_created",array($start_date,$end_date))
-                                ->get();
+                                ->where("inv_is_paid",1)->get();
         if(isset($ar))
         {
             foreach ($ar as $key => $value) 

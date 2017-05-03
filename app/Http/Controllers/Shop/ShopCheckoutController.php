@@ -528,7 +528,7 @@ class ShopCheckoutController extends Shop
             return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');    
         } else {
 
-            dd('Success!');       
+            dd('Success!');
         }
         
     }

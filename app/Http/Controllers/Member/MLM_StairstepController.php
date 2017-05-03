@@ -166,18 +166,18 @@ class MLM_StairstepController extends Member
 		        $check_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->first();
 		        $slot_pv         = $converted_pv;
 
+                if($slot_stairstep)
+                {   
+                	$update_slot["stairstep_rank"] = $slot_stairstep->stairstep_id;
+                	Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
+                }
+
 		        if($check_stairstep)
 		        {
 		            foreach($sponsor_tree as $placement)
 		            {
 		                $reduced_percent = 0;
 		                $computed_points = 0;
-
-		                if($slot_stairstep)
-		                {   
-		                	$update_slot["stairstep_rank"] = $slot_stairstep->stairstep_id;
-		                	Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
-		                }	  
 
 	        	    	$slot_info      = Tbl_mlm_slot::where("slot_id",$slot_id)->first();
 	        	    	$slot_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$slot_info->stairstep_rank)->first();
@@ -226,18 +226,18 @@ class MLM_StairstepController extends Member
 		                    $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('STAIRSTEP', $slot_info->shop_id); 
 		                    Mlm_slot_log::slot_array($arry_log);    
 		                }
-
-	                    $update_points["points_log_converted"] 		= 1;
-	                    $update_points["points_log_converted_date"] = Carbon::now();
-
-	                    Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
-    							   							->whereBetween('points_log_date_claimed', array($start, $end))
-    							   							->where("points_log_complan","STAIRSTEP")
-    							   							->where("points_log_type","RPV")
-    							   							->where("points_log_converted","0")
-    							   							->update($update_points); 
 		            }
 		        }
+
+                $update_points["points_log_converted"] 		= 1;
+                $update_points["points_log_converted_date"] = Carbon::now();
+
+                Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
+						   							->whereBetween('points_log_date_claimed', array($start, $end))
+						   							->where("points_log_complan","STAIRSTEP")
+						   							->where("points_log_type","RPV")
+						   							->where("points_log_converted","0")
+						   							->update($update_points); 
 
 		        $insert_distri["stairstep_distribute_id"] = $distribute_id;
 		        $insert_distri["slot_id"] 				  = $slot_id;

@@ -1,5 +1,7 @@
 var modal_create_payslip = new modal_create_payslip();
 
+
+
 function modal_create_payslip()
 {
 	init();
@@ -9,9 +11,31 @@ function modal_create_payslip()
 		payslip_action();
 		include_header_action();
 		time_summary();
+		check_company_check();
+		combo_box();
 		// check_orientation($(".paper-orientation").val());
 		$(".payslip-container").css("width",$(".payslip-width").val()+"%");
 	}	
+
+
+
+	function combo_box()
+	{
+		$(".drop-down-paper-size").globalDropList(
+		{
+		    link: '/member/payroll/custom_payslip/modal_create_paper_size',
+		    link_size: 'md',
+		    width : '100%',
+		    placeholder: 'Paper Sizes'
+		});
+	}
+
+	// $(".droplist-vendor").load("/member/vendor/load_vendor", function()
+	//     {                
+	//          $(".droplist-vendor").globalDropList("reload");
+	//          $(".droplist-vendor").val(data.vendor_id).change();          
+	//     });
+ //    	data.element.modal("hide");
 
 	function payslip_action()
 	{
@@ -35,6 +59,7 @@ function modal_create_payslip()
 			var target = $(this).data("target");
 			$(".company-logo").addClass("display-none");
 			$(target).removeClass("display-none");
+			$("#company-position").val(target);
 			$(".company-position").removeClass("active");
 			$(this).addClass("active");
 		});
@@ -51,8 +76,35 @@ function modal_create_payslip()
 		{
 			time_summary();
 		});
+
+		$(".company-name-logo").unbind("change");
+		$(".company-name-logo").bind("change", function()
+		{
+			check_company_check();
+		})
 	}
 
+
+	function check_company_check()
+	{
+		if($(".company-name-logo").is(':checked'))
+		{
+			if($('.include-company-logo').hasClass('display-none'))
+			{
+				$('.include-company-logo').removeClass('display-none');
+			}
+
+			if($(".company-logo-container").hasClass('display-none'))
+			{
+				$(".company-logo-container").removeClass('display-none');
+			}
+		}
+		else
+		{
+			$('.include-company-logo').addClass('display-none');
+			$(".company-logo-container").addClass('display-none');
+		}
+	}
 
 	function check_orientation(orientation)
 	{

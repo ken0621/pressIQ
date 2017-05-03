@@ -129,6 +129,11 @@
     }
     function submit_done(data)
     {
+        if(typeof load_settings == 'function')
+        {
+            load_settings();
+        }
+
     	if(data.response_status == "warning")
     	{
     		var erross = data.warning_validator;

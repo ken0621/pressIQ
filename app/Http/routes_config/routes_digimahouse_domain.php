@@ -37,4 +37,10 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/addto_cart', 'Shop\ShopCheckoutController@addtocart');
 	Route::get('/admin', 'Shop\Shop@admin');
 	Route::get('/file/{theme}/{type}/{filename}', 'Shop\Shop@file');
+
+	/*Payment Integration with iPay88*/
+	Route::any("/postPaymentWithIPay88","Shop\ShopCheckoutController@postPaymentWithIPay88"); //Brain
+	Route::any("/ipay88_response","Shop\ShopCheckoutController@ipay88_response"); //Brain
+
+	/*End ipay88*/
 }

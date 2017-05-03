@@ -9,7 +9,6 @@ function customer_estimate(){
 	function init()
 	{
 		iniatilize_select();
-		draggable_row.dragtable();
 
 		event_remove_tr();
 		event_accept_number_only();
@@ -467,19 +466,19 @@ function submit_done_customer(result)
     $(".droplist-customer").load("/member/customer/load_customer", function()
     {                
          $(".droplist-customer").globalDropList("reload");
-         $(".droplist-customer").val(data.id).change();          
+         $(".droplist-customer").val(result.id).change();          
     });
-    data.element.modal("hide");
 }
+
 
 /* AFTER ADDING AN  ITEM */
 function submit_done_item(data)
 {
 	toastr.success("Success");
     $(".tbody-item .select-item").load("/member/item/load_item_category", function()
-    {                
-         $(".tbody-item .select-item").globalDropList("reload"); 
-         item_selected.val(data.item_id).change();          
+    {
+        $(".tbody-item .select-item").globalDropList("reload");
+		item_selected.val(data.item_id).change();
     });
     data.element.modal("hide");
 }
@@ -506,6 +505,10 @@ function submit_done(data)
 	{
     	data.element.modal("hide");
 	    location.reload();
+	}
+	else if(data.status == 'promt-estimate')
+	{
+		action_load_link_to_modal('/member/customer/prompt_update_status/'+data.id+"/"+data.action);
 	}
     else if(data.status == "error")
     {

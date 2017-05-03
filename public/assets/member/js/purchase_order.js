@@ -32,6 +32,8 @@ function purchase_order(){
 	{
 		$(document).on("click", ".remove-tr", function(e){
 			if($(".tbody-item .remove-tr").length > 1){
+
+				console.log($(".tbody-item .remove-tr").length);
 				$(this).parent().remove();
 				action_reassign_number();
 				action_compute();
@@ -341,6 +343,19 @@ function purchase_order(){
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
 			}
 		});
+		$('.droplist-terms').globalDropList(
+        {
+            link : "/member/maintenance/terms/terms",
+            link_size : "sm",
+            width : "100%",
+            onChangeValue: function()
+            {
+            	var start_date 		= $(".datepicker[name='po_date']").val();
+            	var days 			= $(this).find("option:selected").attr("days");
+            	var new_due_date 	= AddDaysToDate(start_date, days, "/");
+            	$(".datepicker[name='po_due_date']").val(new_due_date);
+            }
+        });
 	    $('.droplist-item').globalDropList(
         {
             link : "/member/item/add",
@@ -368,6 +383,17 @@ function purchase_order(){
         $('.droplist-um:not(.has-value)').globalDropList("disabled");
 	}
 
+	function AddDaysToDate(sDate, iAddDays, sSeperator) {
+    //Purpose: Add the specified number of dates to a given date.
+	    var date = new Date(sDate);
+	    date.setDate(date.getDate() + parseInt(iAddDays));
+	    var sEndDate = LPad(date.getMonth() + 1, 2) + sSeperator + LPad(date.getDate(), 2) + sSeperator + date.getFullYear();
+	    return sEndDate;
+	}
+	function LPad(sValue, iPadBy) {
+	    sValue = sValue.toString();
+	    return sValue.length < iPadBy ? LPad("0" + sValue, iPadBy) : sValue;
+	}
 
 	function action_load_item_info($this)
 	{
@@ -399,7 +425,7 @@ function purchase_order(){
 		}
 		else
 		{
-			// $parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+			$parent.find(".select-um").html('<option class="hidden" qty="1" value=""></option>').globalDropList("reload").globalDropList("disabled");
 		}
 	}
 
@@ -408,7 +434,8 @@ function purchase_order(){
 		$parent = $this.closest(".tr-draggable");
 		$item   = $this.closest(".tr-draggable").find(".select-item");
 
-		$um_qty = parseFloat($this.find("option:selected").attr("qty"));
+		$um_qty = parseFloat($this.find("option:selected").attr("qty") || 1 );
+		console.log($um_qty);
 		$sales  = parseFloat($item.find("option:selected").attr("cost"));
 		$qty    = parseFloat($parent.find(".txt-qty").val());
 		console.log($um_qty +"|" + $sales +"|" +$qty);
@@ -502,7 +529,17 @@ function submit_done_item(data)
 
 function submit_done(data)
 {
-	if(data.status == 'success-po')
+	if(data.type == 'vendor')
+	{		
+       toastr.success("Success");
+	    $(".droplist-vendor").load("/member/vendor/load_vendor", function()
+	    {                
+	         $(".droplist-vendor").globalDropList("reload");
+	         $(".droplist-vendor").val(data.vendor_id).change();          
+	    });
+    	data.element.modal("hide");
+	}
+	else if(data.status == 'success-po')
 	{		
         toastr.success("Success");
        	location.href = data.redirect_to;

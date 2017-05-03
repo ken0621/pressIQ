@@ -41,10 +41,51 @@ class Customer_EstimateController extends Member
      * @return \Illuminate\Http\Response
      */
 
+    public function load_all($customer_id)
+    {
+        $data["_estimate"] = Tbl_customer_estimate::where("est_customer_id",$customer_id)->where("est_status",'accepted')->where("is_sales_order",0)->get();
+        $data["_so"] = Tbl_customer_estimate::where("est_customer_id",$customer_id)->where("est_status",'accepted')->where("is_sales_order",1)->get();
+
+        return view("member.load_ajax_data.load_estimate_so",$data);
+    }
+    public function add_item($est_id)
+    {
+        // Session::forget('est_item');
+        $est_data = Tbl_customer_estimate_line::estimate()->um()->where("estline_est_id",$est_id)->get();
+        foreach ($est_data as $key => $value) 
+        {
+            Session::push('est_item',collect($value)->toArray());
+        }
+
+        $data['_item']      = Item::get_all_category_item();
+        $data['_um']        = UnitMeasurement::load_um_multi();
+
+        return view('member.load_ajax_data.load_est_session_item',$data);
+        
+    }
+    public function remove_items($est_id)
+    {
+        $items = Session::get("est_item");
+
+        foreach($items as $key => $value) 
+        {
+            if($value["estline_est_id"] == $est_id)
+            {
+                unset($items[$key]);
+            }
+        }
+
+        Session::put("est_item",$items);
+
+        $data['_item']      = Item::get_all_category_item();
+        $data['_um']        = UnitMeasurement::load_um_multi();
+
+        return view('member.load_ajax_data.load_est_session_item',$data);
+    }
     public function index()
     {
 
-        $data["_estimates"] = Tbl_customer_estimate::customer()->where("est_shop_id",$this->user_info->shop_id)->get();
+        $data["_estimates"] = Tbl_customer_estimate::customer()->where("est_shop_id",$this->user_info->shop_id)->where("is_sales_order",0)->get();
 
         return view("member.customer.estimate.estimate_list",$data);
     }
@@ -81,16 +122,68 @@ class Customer_EstimateController extends Member
     }
     public function update_status_submit()
     {
-        $update["est_status"] = Request::input("status");
+        $est_id = Request::input("estimate_id");
+        $status = Request::input("status");
+        $old_estimate = Tbl_customer_estimate::where("est_id",$est_id)->first();
+
+        if($old_estimate->copy_to_inv_id != 0 && $status != 'closed')
+        {
+            $data['action'] = $status;
+            $data['id'] = $est_id;
+
+            $data["status"] = "promt-estimate";
+        }
+        else
+        {
+            $update["est_status"] = $status;
+            $update["est_accepted_by"] = Request::input("accepted_by");
+            $update["est_accepted_date"] = date('Y:m:d h:i:s',strtotime(Request::input("accepted_date")));
+            Tbl_customer_estimate::where("est_id",$est_id)->update($update);
+
+            $data["status"] = "success-update";
+
+            Request::session()->flash('success', 'Success');            
+        }
+
+        return json_encode($data);
+    }
+    public function continue_update($est_id, $action)
+    {
+        $data["estimate_id"] = $est_id;
+        $data["action"] = $action;
+
+        return view("member.customer.estimate.prompt_update_estimate",$data);
+    }
+    public function continue_update_submit()
+    {
+        $est_id = Request::input("estimate_id");
+        $status = Request::input("action_status");
+
+        $inv = Tbl_customer_invoice_line::where("invline_ref_id",$est_id)->whereIn("invline_ref_name",['estimate','sales_order'])->get();
+
+        //update(unlinked) invoice
+        if($inv)
+        {
+            foreach ($inv as $key => $value) 
+            {
+                $upd_inv["invline_ref_id"] = 0;
+                $upd_inv["invline_ref_name"] = "";
+
+                Tbl_customer_invoice_line::where("invline_id",$value->invline_id)->update($upd_inv);
+            }            
+        }
+
+        $update["est_status"] = $status;
         $update["est_accepted_by"] = Request::input("accepted_by");
         $update["est_accepted_date"] = date('Y:m:d h:i:s',strtotime(Request::input("accepted_date")));
-        Tbl_customer_estimate::where("est_id",Request::input("estimate_id"))->update($update);
+        Tbl_customer_estimate::where("est_id",$est_id)->update($update);
 
         $data["status"] = "success-update";
 
-        Request::session()->flash('success', 'Success');
+        Request::session()->flash('success', 'Success');  
 
-        return json_encode($data);
+        return json_encode($data);  
+
     }
     public function estimate()
     {

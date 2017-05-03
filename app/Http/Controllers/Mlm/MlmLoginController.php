@@ -242,6 +242,9 @@ class MlmLoginController extends Controller
 			$data['type'] = 'error';
 			$data['message'] = 'Invalid Username/Password';
 		}
+
+        $data['from'] = "login";
+        
     	return json_encode($data);
     }
     public function membership_active_code($pin)

@@ -139,6 +139,12 @@ Route::any('/member/mlm/plan/direct_promotions/save', 'Member\MLM_PlanController
 Route::any('/member/mlm/plan/triangle_repurchase/save', 'Member\MLM_PlanController@save_triangle_repurchase');//luke
 /* end triangle repurchase  Plan */
 
+/* start triangle repurchase */
+Route::any('/member/mlm/plan/binary_promotions/save', 'Member\MLM_PlanController@binary_promotions_save');//luke
+Route::any('/member/mlm/plan/binary_promotions/get', 'Member\MLM_PlanController@binary_promotions_get');//luke
+Route::any('/member/mlm/plan/binary_promotions/edit', 'Member\MLM_PlanController@binary_promotions_edit');//luke
+/* end triangle repurchase  Plan */
+
 /* end MLM Plan */
 
 /* start MLM Product */
@@ -225,3 +231,6 @@ Route::any('member/mlm/stairstep_compute', 'Member\MLM_StairstepController@index
 Route::any('member/mlm/stairstep_compute/start', 'Member\MLM_StairstepController@start'); 
 Route::any('member/mlm/stairstep_compute/start/compute', 'Member\MLM_StairstepController@compute'); 
 
+
+Route::any('member/mlm/complan_setup', 'Member\Mlm_ComplanSetupController@index'); 
+Route::any('member/mlm/complan_setup/binary_pro', 'Member\Mlm_ComplanSetupController@binary_promotions'); 

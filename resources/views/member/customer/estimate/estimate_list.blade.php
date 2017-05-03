@@ -63,6 +63,7 @@
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
+                                          <li><a href="/member/customer/estimate?id={{$estimate->est_id}}">Edit</a></li>
                                           <li ><a target="_blank" href="/member/customer/customer_estimate_view/{{$estimate->est_id}}">Print</a></li>
                                           <li ><a class="popup" size="md" link="/member/customer/update_status/{{$estimate->est_id}}">Update Status</a></li>
                                       </ul>

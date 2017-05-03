@@ -10,22 +10,40 @@
 			<div class="col-md-7">
 				<div id="get-intouch" class="content-title">Get Intouch With Us</div>
 				<!-- INPUTS -->
-				<div class="inputs">
-					<div class="col-md-6">
-						<input type="text" class="form-control" placeholder="First Name*">
-						<input type="text" class="form-control" placeholder="Phone Number*">
-						<input type="text" class="form-control" placeholder="Subject">
+				<form method="post">
+				<input type="hidden" name="_token" value="{{ csrf_token() }}">
+					<div class="inputs">
+						<div class="col-md-6">
+							<input type="text" name="first_name" class="form-control" placeholder="First Name*">
+						</div>
+						<div class="col-md-6">
+							<input type="text" name="last_name" class="form-control" placeholder="Last Name*">
+						</div>
+						<div class="col-md-6">
+							<input type="text" name="phone_number" class="form-control" placeholder="Phone Number*">
+						</div>
+						<div class="col-md-6">
+							<input type="text" name="email_address" class="form-control" placeholder="Email Address*">
+						</div>
+						<div class="col-md-6">
+							<input type="text" name="subject" class="form-control" placeholder="Subject">
+						</div>
+						<div class="col-md-12">
+							<textarea class="form-control" name="message" placeholder="Message" style="height: 180px;"></textarea>
+							<!-- SEND BUTTON -->
+							@if(Request::input("success"))
+								<div class="alert alert-success">
+								  <strong>{{ Request::input("success") }}</strong>
+								</div>
+							@elseif(Request::input("fail"))
+								<div class="alert alert-danger">
+								  <strong>{{ Request::input("fail") }}</strong>
+								</div>
+							@endif
+							<button type="submit">SEND</button>
+						</div>
 					</div>
-					<div class="col-md-6">
-						<input type="text" class="form-control" placeholder="Last Name*">
-						<input type="text" class="form-control" placeholder="Email Address*">
-					</div>
-					<div class="col-md-12">
-						<textarea class="form-control" placeholder="Message" style="height: 180px;"></textarea>
-						<!-- SEND BUTTON -->
-						<button>SEND</button>
-					</div>
-				</div>
+				</form>
 			</div>
 			<div class="col-md-5">
 				<div id="location" class="content-title">Location</div>

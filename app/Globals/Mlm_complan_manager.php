@@ -24,8 +24,10 @@ use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_discount_card_settings;
 use App\Models\Tbl_membership_points;
+use App\Models\Tbl_mlm_binary_report;
 use App\Globals\Mlm_gc;
 use App\Models\Tbl_mlm_gc;
+use App\Models\Tbl_mlm_binary_pairing_log;
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
 
@@ -246,7 +248,9 @@ class Mlm_complan_manager
                 $binary["left"] = $tree->slot_binary_left;
                 $binary["right"] = $tree->slot_binary_right; 
                 // END
-
+                
+                $binary_report['binary_report_s_left'] =  $tree->slot_binary_left;
+                $binary_report['binary_report_s_right'] =  $tree->slot_binary_right; 
                 // GET BINARY POINTS OF MEMBERSHIP
                 $binary['points'] = $slot_info->membership_points_binary;
                 // Set Limit
@@ -269,11 +273,21 @@ class Mlm_complan_manager
                     // ADD OLD BINARY POINTS + NEW BINARY POINTS
 
                     $binary[$tree->placement_tree_position] = $binary[$tree->placement_tree_position] + $binary['points']; 
-
+                    $binary_report['binary_report_s_points_l'] = $binary["left"] - $binary_report['binary_report_s_left'];
+                    $binary_report['binary_report_s_points_r'] = $binary["right"]- $binary_report['binary_report_s_right']; 
                     // End
                     $update['slot_binary_left'] =   $binary["left"];
                     $update['slot_binary_right'] =  $binary["right"];
                     Tbl_mlm_slot::where('slot_id', $tree->placement_tree_parent_id)->update($update);
+
+                    $binary_report['binary_report_e_left'] =  $binary["left"];
+                    $binary_report['binary_report_e_right'] =   $binary["right"];
+                    $binary_report['binary_report_tree_level'] = $tree->placement_tree_level;
+                    $binary_report['binary_report_slot'] = $tree->placement_tree_parent_id;
+                    $binary_report['binary_report_slot_g'] = $slot_info->slot_id;
+                    $binary_report['binary_report_date'] = Carbon::now();
+                    $binary_report['binary_report_s_points'] = $binary['points'];
+                    Tbl_mlm_binary_report::insert($binary_report);
                 }
             }
             // END
@@ -385,6 +399,48 @@ class Mlm_complan_manager
             
         }
     }
+    public static function binary_single_line_richard($slot_info, $settings, $earnings)
+    {
+        // dd($settings);
+        $slot_tree = Tbl_tree_sponsor::child($slot_info->slot_id)->orderby("sponsor_tree_level", "desc")
+        ->distinct_level()
+        ->parentslot()->membership()
+        ->take($settings->pairing_point_single_line_bonus_level)
+        ->get();
+        if($earnings != 0)
+        {
+            if($settings)
+            {
+                if($slot_tree)
+                {
+                    $bonus = 0;
+                    if($settings->pairing_point_single_line_bonus_percentage == 1)
+                    {
+                        $bonus = $earnings * ($settings->pairing_point_single_line_bonus/100);
+                    }
+                    else
+                    {
+                        $bonus = $settings->pairing_point_single_line_bonus;
+                    }
+                    foreach ($slot_tree as $key => $slot) 
+                    {
+                        # code...
+                        $log = "You have Earned " . $bonus . ". from Binary Single Line Bonus. Sponsor: " . $slot_info->slot_no;
+                        $arry_log['wallet_log_slot']            = $slot->slot_id;
+                        $arry_log['shop_id']                    = $slot->shop_id;
+                        $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
+                        $arry_log['wallet_log_details']         = $log;
+                        $arry_log['wallet_log_amount']          = $bonus;
+                        $arry_log['wallet_log_plan']            = "BINARY_SINGLE_LINE";
+                        $arry_log['wallet_log_status']          = "released";   
+                        $arry_log['wallet_log_claimbale_on']    = Carbon::now(); 
+                        Mlm_slot_log::slot_array($arry_log);  
+                    }
+                }
+            }
+        }
+        
+    }
     public static function binary_pairing($slot_info)
     {
         $shop_id = $slot_info->shop_id;
@@ -464,7 +520,10 @@ class Mlm_complan_manager
                                     // 1 = instant; 2 = dailay; 3 = weekly; 4 = monthly
 
                                     $binary["left"]         = $binary["left"] - $value2->pairing_point_left;
-                                    $binary["right"]        = $binary["right"] - $value2->pairing_point_left;
+                                    $binary["right"]        = $binary["right"] - $value2->pairing_point_right;
+
+                                    $binary_pairing_log['pairing_point_l'] = $value2->pairing_point_left;
+                                    $binary_pairing_log['pairing_point_r'] = $value2->pairing_point_right;
 
                                     $pair_this_pairing      = $pair_this_pairing + 1;
 
@@ -634,7 +693,7 @@ class Mlm_complan_manager
                                             else if($current_hour >= 12)
                                             {
                                                 // cycle 2
-                                                $current_pairs_per_date_hour           = Carbon::parse($$current_pairs_per_date)->format('G');
+                                                $current_pairs_per_date_hour           = Carbon::parse($current_pairs_per_date)->format('G');
                                                 if($current_pairs_per_date_hour >= 12)
                                                 {
                                                     // continue pairing
@@ -722,23 +781,155 @@ class Mlm_complan_manager
                                 }
                                 $update_slot['slot_binary_left']            = $binary["left"];
                                 $update_slot['slot_binary_right']           = $binary["right"];
-
                                 // add income
                                 if($earning != 0)
                                 {
-                                    $log = "Congratulations! You Paired ".$pair_this_pairing." From Slot " .$slot->slot_no ." Earned " . $earning . " By Binary Pairing Bonus and flushed " . $flush;
-                                    $arry_log['wallet_log_slot']            = $slot->slot_id;
-                                    $arry_log['shop_id']                    = $slot->shop_id;
-                                    $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
-                                    $arry_log['wallet_log_details']         = $log;
-                                    $arry_log['wallet_log_amount']          = $earning;
-                                    $arry_log['wallet_log_plan']            = "BINARY";
-                                    $arry_log['wallet_log_status']          = "n_ready";   
-                                    $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot->shop_id); 
-                                    Mlm_slot_log::slot_array($arry_log); 
-                                    $slot_zxc = Mlm_compute::get_slot_info($slot->slot_id);
-                                    Mlm_complan_manager::binary_single_line($slot_zxc); 
-                                    
+                                    $earning_2 = 0;
+                                    $earning_3 = 0;
+                                    $current_income = 0;
+                                    if($setting_cycle_no == 1)
+                                    {
+                                        $d_1 = Carbon::parse($current_pairs_per_date)->setTime(0, 0, 0);
+
+                                        $current_income = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot->slot_id)
+                                        ->where('wallet_log_date_created', '>=', $d_1)
+                                        ->where('wallet_log_plan', 'BINARY')
+                                        ->sum('wallet_log_amount');
+                                    }
+                                    if($setting_cycle_no == 2)
+                                    {
+                                        if($current_hour < 12)
+                                        {
+                                            $d_1 = Carbon::parse($current_pairs_per_date)->setTime(0, 0, 0);
+
+                                            $current_income = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot->slot_id)
+                                            ->where('wallet_log_date_created', '>=', $d_1)
+                                            ->where('wallet_log_plan', 'BINARY')
+                                            ->sum('wallet_log_amount');
+
+                                        }
+                                        else
+                                        {
+                                            $d_1 = Carbon::parse($current_pairs_per_date)->setTime(12, 0, 0);
+
+                                            $current_income = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', $slot->slot_id)
+                                            ->where('wallet_log_date_created', '>=', $d_1)
+                                            ->where('wallet_log_plan', 'BINARY')
+                                            ->sum('wallet_log_amount');
+                                        }
+                                    }
+
+                                    if($current_income >= $slot->membership_points_binary_max_income)
+                                    {
+                                        $earning_2 = 0;
+                                    }
+                                    else
+                                    {
+                                        $current_income_a = $current_income + $earning;
+                                        if($slot->membership_points_binary_max_income < $current_income_a)
+                                        {
+                                            $earning_2 = $slot->membership_points_binary_max_income - $current_income;
+                                        }
+                                        else
+                                        {
+                                            $earning_2 = $earning;
+                                        }
+                                    }
+                                    if($earning_2 == 0)
+                                    {
+                                        $log = "You have reached your binary max income, " . $earning . " will not be added.";
+                                        $arry_log['wallet_log_slot']            = $slot->slot_id;
+                                        $arry_log['shop_id']                    = $slot->shop_id;
+                                        $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
+                                        $arry_log['wallet_log_details']         = $log;
+                                        $arry_log['wallet_log_amount']          = 0;
+                                        $arry_log['wallet_log_plan']            = "BINARY_MAX_INCOME";
+                                        $arry_log['wallet_log_status']          = "n_ready";   
+                                        $arry_log['wallet_log_claimbale_on']    = Carbon::now(); 
+                                        Mlm_slot_log::slot_array($arry_log); 
+                                        
+                                        $binary_pairing_log['pairing_income'] = $earning;
+                                        $binary_pairing_log['pairing_slot'] = $slot->slot_id;
+                                        $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
+                                        $binary_pairing_log['pairing_type'] = 'BINARY_MAX_INCOME';
+                                        $binary_pairing_log['pairing_date'] = Carbon::now();
+                                        Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
+                                    }
+                                    else
+                                    {
+                                        if($earning_2 >= $earning)
+                                        {
+                                            $log = "Congratulations! You Paired ".$pair_this_pairing." From Slot " .$slot->slot_no ." Earned " . $earning . " By Binary Pairing Bonus and flushed " . $flush;
+                                            $arry_log['wallet_log_slot']            = $slot->slot_id;
+                                            $arry_log['shop_id']                    = $slot->shop_id;
+                                            $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
+                                            $arry_log['wallet_log_details']         = $log;
+                                            $arry_log['wallet_log_amount']          = $earning;
+                                            $arry_log['wallet_log_plan']            = "BINARY";
+                                            $arry_log['wallet_log_status']          = "n_ready";   
+                                            $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot->shop_id); 
+                                            Mlm_slot_log::slot_array($arry_log); 
+
+                                            Mlm_complan_manager::binary_single_line_richard($slot, $value2, $earning);
+                                            // $slot_zxc = Mlm_compute::get_slot_info($slot->slot_id);
+                                            // Mlm_complan_manager::binary_single_line($slot_zxc); 
+                                            
+                                            $binary_pairing_log['pairing_income'] = $earning;
+                                            $binary_pairing_log['pairing_slot'] = $slot->slot_id;
+                                            $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
+                                            $binary_pairing_log['pairing_date'] = Carbon::now();
+                                            Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
+                                        }
+                                        else
+                                        {
+                                            $max_income_a = $earning - $earning_2;
+
+                                            $log = "You have reached your binary max income, " . $max_income_a . " will not be added.";
+                                            $arry_log['wallet_log_slot']            = $slot->slot_id;
+                                            $arry_log['shop_id']                    = $slot->shop_id;
+                                            $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
+                                            $arry_log['wallet_log_details']         = $log;
+                                            $arry_log['wallet_log_amount']          = 0;
+                                            $arry_log['wallet_log_plan']            = "BINARY_MAX_INCOME";
+                                            $arry_log['wallet_log_status']          = "n_ready";   
+                                            $arry_log['wallet_log_claimbale_on']    = Carbon::now(); 
+                                            Mlm_slot_log::slot_array($arry_log); 
+                                            
+                                            $binary_pairing_log['pairing_income'] = $earning;
+                                            $binary_pairing_log['pairing_slot'] = $slot->slot_id;
+                                            $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
+                                            $binary_pairing_log['pairing_type'] = 'BINARY_MAX_INCOME';
+                                            $binary_pairing_log['pairing_date'] = Carbon::now();
+                                            Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
+
+
+
+                                            
+                                            $log = "Congratulations! You Paired ".$pair_this_pairing." From Slot " .$slot->slot_no ." Earned " . $earning . " By Binary Pairing Bonus and flushed " . $flush;
+                                            $arry_log['wallet_log_slot']            = $slot->slot_id;
+                                            $arry_log['shop_id']                    = $slot->shop_id;
+                                            $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
+                                            $arry_log['wallet_log_details']         = $log;
+                                            $arry_log['wallet_log_amount']          = $earning;
+                                            $arry_log['wallet_log_plan']            = "BINARY";
+                                            $arry_log['wallet_log_status']          = "n_ready";   
+                                            $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot->shop_id); 
+                                            Mlm_slot_log::slot_array($arry_log); 
+
+                                            Mlm_complan_manager::binary_single_line_richard($slot, $value2, $earning);
+                                            // $slot_zxc = Mlm_compute::get_slot_info($slot->slot_id);
+                                            // Mlm_complan_manager::binary_single_line($slot_zxc); 
+                                            
+                                            $binary_pairing_log['pairing_income'] = $earning;
+                                            $binary_pairing_log['pairing_slot'] = $slot->slot_id;
+                                            $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
+                                            $binary_pairing_log['pairing_date'] = Carbon::now();
+                                            Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
+
+
+                                        }
+                                        
+                                    }
                                 }
                                 // add flush
                                 if($flush != 0)
@@ -755,6 +946,15 @@ class Mlm_complan_manager
                                     Mlm_slot_log::slot_array($arry_log);  
                                     //check if strong leg  retention
                                     // binary_settings_strong_leg /strong_leg /no_strong_leg
+
+                                    $binary_pairing_log['pairing_income'] = $flush;
+                                    $binary_pairing_log['pairing_slot'] = $slot->slot_id;
+                                    $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
+                                    $binary_pairing_log['pairing_type'] = 'flush';
+                                    $binary_pairing_log['pairing_date'] = Carbon::now();
+                                    Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
+
+
                                     if($binary_advance_pairing->binary_settings_strong_leg == 'no_strong_leg')
                                     {
                                         $update_slot['slot_binary_left']    = 0;
@@ -777,6 +977,13 @@ class Mlm_complan_manager
                                         $arry_log['wallet_log_status']          = "n_ready";   
                                         $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot->shop_id); 
                                         Mlm_slot_log::slot_array($arry_log);  
+
+                                        $binary_pairing_log['pairing_income'] = $binary_advance_pairing->binary_settings_gc_amount;
+                                        $binary_pairing_log['pairing_slot'] = $slot->slot_id;
+                                        $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
+                                        $binary_pairing_log['pairing_date'] = Carbon::now();
+                                        $binary_pairing_log['pairing_type'] = 'GC';
+                                        Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
                                     }
                                 }
                                 // update slot
@@ -1747,5 +1954,8 @@ class Mlm_complan_manager
         echo '<script src="/assets/member/scripts/e1d08589.bootstrap.min.js"></script>';
     }
     // END OTHER FUNCTIONS
+    public static function binary_promotions($slot_info)
+    {
 
+    }
 }

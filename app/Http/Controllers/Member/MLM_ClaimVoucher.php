@@ -83,7 +83,6 @@ class MLM_ClaimVoucher extends Member
 			    		$data['_voucher_product'][$key]->item_bundle = Item::get_item_bundle($value->item_id);
 			    		$data['item_bundle'][$key] =Item::get_item_bundle($value->item_id);
 			    	}
-			    	
 			    }
 			}
 		}
@@ -156,8 +155,13 @@ class MLM_ClaimVoucher extends Member
             $update_v['voucher_claim_status'] = 1;
 			Tbl_voucher::where('voucher_id', $voucher_id)->lockForUpdate()->update($update_v);
 
-		    $claim_data = Tbl_voucher::invoice()->where("voucher_id",$voucher_id)->first()->toArray();
-		    AuditTrail::record_logs("claim","voucher",$voucher_id,"",serialize($claim_data));
+			$count = Tbl_voucher::invoice()->where("voucher_id",$voucher_id)->count();
+			if($count >= 1)
+			{
+				$claim_data = Tbl_voucher::invoice()->where("voucher_id",$voucher_id)->first()->toArray();
+		    	AuditTrail::record_logs("claim","voucher",$voucher_id,"",serialize($claim_data));
+			}
+		    
 		}
 
 		return $data;

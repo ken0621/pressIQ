@@ -890,3 +890,5 @@ Route::any("/member/load_position","Member\EmployeePositionController@load_posit
 include_once('routes_config/routes_payroll.php');
 
 /* PAYROLL END */
+
+

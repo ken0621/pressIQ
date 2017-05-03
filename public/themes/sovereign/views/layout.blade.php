@@ -20,6 +20,8 @@
         <!-- SLICK CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick.css">
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/assets/slick/slick-theme.css">
+        <!-- TOASTR CSS -->
+        <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
         <!-- GLOBAL CSS -->
         <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/global.css">
         <link rel="stylesheet" type="text/css" href="/assets/front/css/loader.css">
@@ -128,15 +130,18 @@
                             <ul class="dropdown-menu dropdown-menu-right">
                                 <li>
                                     <h2>Member Login</h2>
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" name="username" placeholder="User Name">
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="password" name="password" placeholder="Password">
-                                    </div>
-                                    <div class="form-group">
-                                        <button class="btn">Login <span class="caret"></span></button>
-                                    </div>
+                                    <form method="post" action="/mlm/login" class="global-submit" autocomplete="on">
+                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" name="user" placeholder="User Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control" type="password" name="pass" placeholder="Password">
+                                        </div>
+                                        <div class="form-group">
+                                            <button class="btn" type="submit">Login <span class="caret"></span></button>
+                                        </div>
+                                    </form>
                                 </li>
                             </ul>
                         </div>
@@ -146,30 +151,78 @@
                                 <li>
                                     <h2>New to Sovereign World Corporation?</h2>
                                     <div class="title">JOIN US TODAY!</div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" name="username" placeholder="User Name">
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="email" name="email" placeholder="Email Address">
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" name="birthday" placeholder="Birthday">
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea class="form-control" placeholder="Address" name="address"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" name="contact_number" placeholder="Contact No.">
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="password" name="password" placeholder="Password">
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="form-control" type="password" name="password_confirmation" placeholder="Repeat Password">
-                                    </div>
-                                    <div class="form-group">
-                                        <button class="btn">Create</button>
-                                    </div>
+                                    <form method="post" action="/mlm/register" class="global-submit" autocomplete="on"> 
+                                    <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}">
+                                        <div class="form-group">
+                                            <input required class="form-control" type="text" name="first_name" placeholder="Your First Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required class="form-control" type="text" name="last_name" placeholder="Your Last Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control" type="text" name="company" placeholder="Company (Optional)">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required class="form-control" type="email" name="email" placeholder="Your Email">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required class="form-control" type="text" name="customer_mobile" value="639">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required class="form-control" type="text" name="tinnumber" placeholder="Your TIN">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required class="form-control" type="text" name="username" placeholder="Your Username">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required class="form-control" type="password" name="pass" placeholder="Password">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required class="form-control" type="password" name="pass2" placeholder="Confirm Password">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required class="form-control" type="text" name="customer_street" placeholder="Street">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required class="form-control" type="text" name="customer_city" placeholder="City">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required class="form-control" type="text" name="customer_state" placeholder="Province">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required class="form-control" type="number" name="customer_zipcode" placeholder="Zip Code">
+                                        </div>
+                                        <div class="form-group">
+                                            <select required class="form-control select_country" name="country" style="">
+                                                @foreach($country as $value)
+                                                    <option value="{{$value->country_id}}" @if($value->country_id == 420) selected @endif >{{$value->country_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @if($lead == null)
+                                        <div class="form-group">
+                                            <input class="form-control" id="username" name="membership_code" onchange="get_sponsor_info_via_membership_code(this)"  type="text" placeholder="Membership Code of Sponsor (Optional) "/>
+                                        </div>
+                                        <div class="sponsor-info form-group" id="sponsor_info_get">
+                                            
+                                        </div>
+                                        @else
+                                        <div class="form-group">
+                                            <center>Sponsor</center>
+                                            <select required class="form-control select_country" name="membership_code" style="">
+                                                @foreach($lead_code as $value)
+                                                    <option value="{{$value->membership_activation_code}}" >{{$value->membership_activation_code}} (Slot {{$value->slot_no}})</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="sponsor-info form-group" id="sponsor_info_get" >
+                                            @if(isset($customer_info)){!! $customer_info !!}@endif
+                                        </div>
+                                        @endif
+                                        <div class="form-group">
+                                            <button type="submit" class="btn">Create</button>
+                                        </div>
+                                    </form>
                                 </li>
                             </ul>
                         </div>
@@ -286,6 +339,55 @@
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/assets/front/js/global.js"></script>
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
+    <script type="text/javascript" src="/assets/member/global.js"></script>
+    <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
+    <script type="text/javascript">
+    function submit_done(data)
+    {
+        if (data.from == "login") 
+        {
+            if(data.type == 'error')
+            {
+                toastr.error(data.message);
+            }
+            else
+            {
+                toastr.success(data.message);
+                location.href = '/mlm';
+            }
+        }
+        else
+        {
+            $('.butonn_register').prop("disabled", false);
+            if(data.type == 'error')
+            {
+                toastr.error(data.message);
+                $('.butonn_register').attr("disabled", false);
+                $('.butonn_register').removeAttr("disabled");
+            }
+            else
+            {
+                $('.butonn_register').attr("disabled", true);
+                toastr.success(data.message);
+                location.href = '/mlm';
+            }
+        }
+    }
+    function click_submit_button(ito)
+    {
+        $('.global-submit').submit();
+        $('.butonn_register').attr("disabled", true);
+    }
+    function get_sponsor_info_via_membership_code(ito)
+    {
+        var membership_code = $(ito).val();
+        get_customer_view(membership_code);
+    }
+    function get_customer_view(membership_code)
+    {
+        $('#sponsor_info_get').load('/mlm/register/get/membership_code/' + membership_code);
+    }
+    </script>
     @yield("js")
     </body>
 </html>

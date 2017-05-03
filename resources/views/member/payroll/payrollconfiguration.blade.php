@@ -23,31 +23,10 @@
 				<div class="panel-body background-white">
 					<div class="list-group">
 
-					  <a href="/member/payroll/departmentlist" class="list-group-item  a-navigation-configuration">Department</a>
 
-					  <a href="/member/payroll/jobtitlelist" class="list-group-item a-navigation-configuration">Job Title</a>
-
-					  <a href="/member/payroll/holiday" class="list-group-item a-navigation-configuration">Holiday</a>
-
-					  <a href="/member/payroll/allowance" class="list-group-item a-navigation-configuration">Allowances</a>
-
-					  <a href="/member/payroll/deduction" class="list-group-item a-navigation-configuration">Deductions</a>
-
-					  <a href="/member/payroll/leave" class="list-group-item a-navigation-configuration">Leave</a>
-
-					  <a href="/member/payroll/payroll_group" class="list-group-item a-navigation-configuration">Payroll Group</a>
-
-					  <a href="/member/payroll/payroll_jouarnal" class="list-group-item a-navigation-configuration">Journal Tags</a>
-
-					  <a href="/member/payroll/tax_period" class="list-group-item a-navigation-configuration">Tax Period</a>
-
-					  <a href="/member/payroll/tax_table_list" class="list-group-item a-navigation-configuration">Tax Table</a>
-
-					  <a href="/member/payroll/sss_table_list" class="list-group-item a-navigation-configuration">SSS Table</a>
-
-					  <a href="/member/payroll/philhealth_table_list" class="list-group-item a-navigation-configuration">Philhealth Table</a>
-
-					  <a href="/member/payroll/pagibig_formula" class="list-group-item a-navigation-configuration">Pagibig/HDMF</a>
+						@foreach($_link as $link)
+							<a href="{{$link['link']}}" class="list-group-item  a-navigation-configuration">{{$link['access_name']}}</a>
+						@endforeach
 
 					</div>
 					

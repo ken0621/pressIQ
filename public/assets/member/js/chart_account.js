@@ -27,6 +27,7 @@ function chart_account()
 	
 	function event_checkbox_sub_account_change()
 	{
+		console.log("111");
 		$(document).on("change",'#is_sub_account', function()
 		{
 			trigger_check_sub_account();

@@ -25,7 +25,7 @@
                         <span class="caret"></span></button>
                         <ul class="dropdown-menu">
                             <!-- <li class="dropdown-header">Dropdown header 1</li> -->
-                            <li><a href="/member/accounting/journal/entry/invoice/{{$inv->inv_id}}">Transaction Journal</a></li>
+                            <li><a href="/member/accounting/journal/entry/sales-receipt/{{$inv->inv_id}}">Transaction Journal</a></li>
                             <!-- <li class="divider"></li> -->
                             <!-- <li class="dropdown-header">Dropdown header 2</li> -->
                             <li><a href="#">Void</a></li>
@@ -73,9 +73,8 @@
                             </div>
                             <div class="col-sm-2">  
                                 <label>Terms</label>
-                                <select class="form-control input-sm" name="inv_terms_id">
-                                    <option value="1" {{isset($inv) ? $inv->inv_terms_id == 1 ? 'selected' : '' : ''}}>Net 10</option>
-                                    <option value="2" {{isset($inv) ? $inv->inv_terms_id == 2 ? 'selected' : '' : ''}}>Net 30</option>
+                                <select class="form-control input-sm droplist-terms" name="inv_terms_id">
+                                    @include("member.load_ajax_data.load_terms")
                                 </select>
                             </div>
                             <div class="col-sm-2">
@@ -119,6 +118,8 @@
 
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
+                                                            <input type="hidden" name="invline_ref_name[]" value="{{$invline->invline_ref_name}}">
+                                                            <input type="hidden" name="invline_ref_id[]" value="{{$invline->invline_ref_id}}">
                                                             <select class="form-control select-item droplist-item input-sm pull-left {{$invline->invline_item_id}}" name="invline_item_id[]" required>
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $invline->invline_item_id])
                                                             </select>
@@ -153,6 +154,8 @@
 
                                                     <td class="invoice-number-td text-right">1</td>
                                                     <td>
+                                                        <input type="hidden" name="invline_ref_name[]" value="">
+                                                        <input type="hidden" name="invline_ref_id[]" value="">
                                                         <select class="1111 form-control select-item droplist-item input-sm pull-left" name="invline_item_id[]" >
                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             <option class="hidden" value="" />
@@ -177,6 +180,8 @@
                                                     <td><input type="text" class="datepicker" name="invline_service_date[]"/></td>
                                                     <td class="invoice-number-td text-right">2</td>
                                                     <td>
+                                                        <input type="hidden" name="invline_ref_name[]" value="">
+                                                        <input type="hidden" name="invline_ref_id[]" value="">
                                                         <select class="22222 form-control select-item droplist-item input-sm pull-left" name="invline_item_id[]" >
                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             <option class="hidden" value="" />
@@ -473,6 +478,8 @@
             <td><input type="text" class="for-datepicker"  name="invline_service_date[]"/></td>
             <td class="invoice-number-td text-right">2</td>
             <td>
+                <input type="hidden" name="invline_ref_name[]" value="">
+                <input type="hidden" name="invline_ref_id[]" value="">
                 <select class="form-control select-item input-sm pull-left" name="invline_item_id[]">
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                     <option class="hidden" value="" />

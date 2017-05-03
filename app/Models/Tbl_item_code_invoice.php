@@ -13,7 +13,7 @@ class Tbl_item_code_invoice extends Model
 
     public function scopeCustomer($query)
     {
-        $query->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_item_code_invoice.customer_id');
+        $query->leftjoin('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_item_code_invoice.customer_id');
 	  
 	  
 	    return $query;

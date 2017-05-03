@@ -37,6 +37,32 @@ class Mail_global
                     $m->to('lukeglennjordan2@gmail.com', $data['mail_username'])->subject($data['mail_subject']);
                 });
     }
+    public static function contact_mail($data, $shop_id)
+    {
+        Settings::set_mail_setting($shop_id);
+        $data['mail_username'] = Config::get('mail.username');
+        // Mail::send('emails.contact', $data, function ($m) use ($data) 
+        // {
+        //     $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+        //     $m->to($data['mail_to'], $data['mail_username'])->subject($data['mail_subject']);
+        // });
+        try 
+        {
+            Mail::send('emails.contact', $data, function ($m) use ($data) 
+            {
+                $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                $m->to("edwardguevarra2003@gmail.com", $data['mail_username'])->subject($data['mail_subject']);
+            });
+
+            $result = 1;
+        } 
+        catch (\Exception $e) 
+        {
+            $result = 0;
+        }
+
+        return $result;
+    }
     public static function mail_discount_card($discount_card_log_id)
     {
     	$data = [];

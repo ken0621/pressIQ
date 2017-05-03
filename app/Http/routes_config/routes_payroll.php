@@ -60,10 +60,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_timesheet/json_process_time_single/{date}/{employee_id}','Member\PayrollTimeSheetController@json_process_time_single');
 	Route::any('/employee_timesheet/adjustment_form','Member\PayrollTimeSheetController@adjustment_form');
 	Route::post('/employee_timesheet/adjustment_form_approve','Member\PayrollTimeSheetController@adjustment_form_approve');
-
-
-	Route::post('/company_timesheet/mark_ready_company','Member\PayrollController@mark_ready_company');
-	/* TIMESHEET START */
+	Route::any('/employee_timesheet/show_holiday/{id}/{date}','Member\PayrollTimeSheetController@show_holiday');
+	Route::any('/timesheet/mark_ready_company','Member\PayrollController@mark_ready_company');
+	Route::any('/timesheet/show_summary/{summary}/{period_id}','Member\PayrollTimeSheetController@show_summary');
+	/* TIMESHEET END */
 
 	/* DEPARTMENT START */
 	Route::any('/departmentlist','Member\PayrollController@department_list');
@@ -225,7 +225,24 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* PAYROLL JOURNAL SETTINGS START */
 	Route::any('/payroll_jouarnal',"Member\PayrollController@payroll_jouarnal");
 	Route::any('/payroll_jouarnal/modal_create_journal_tag',"Member\PayrollController@modal_create_journal_tag");
+	Route::any('/payroll_jouarnal/create_journal_tag',"Member\PayrollController@create_journal_tag");
+	Route::any('/payroll_jouarnal/modal_edit_journal_tag/{id}',"Member\PayrollController@modal_edit_journal_tag");
+	Route::any('/payroll_jouarnal/modal_confimr_del_journal_tag/{id}',"Member\PayrollController@modal_confimr_del_journal_tag");
+	Route::any('/payroll_jouarnal/update_payroll_journal_tag',"Member\PayrollController@update_payroll_journal_tag");
+	Route::any('/payroll_jouarnal/del_journal_tag',"Member\PayrollController@del_journal_tag");
+	Route::any('/payroll_jouarnal/relaod_payroll_journal_sel',"Member\PayrollController@relaod_payroll_journal_sel");
 	/* PAYROLL JOURNAL SETTINGS END */
+
+
+	/* PAYROLL CUSTOM PAYSLIP START */
+	Route::any('/custom_payslip',"Member\PayrollController@custom_payslip");
+	Route::any('/custom_payslip/modal_create_payslip',"Member\PayrollController@modal_create_payslip");
+	Route::any('/custom_payslip/modal_create_paper_size',"Member\PayrollController@modal_create_paper_size");
+	Route::any('/custom_payslip/modal_save_paper_size',"Member\PayrollController@modal_save_paper_size");
+	Route::any('/custom_payslip/save_custom_payslip',"Member\PayrollController@save_custom_payslip");
+	Route::any('/custom_payslip/custom_payslip_show/{id}',"Member\PayrollController@custom_payslip_show");
+	
+	/* PAYROLL CUSTOM PAYSLIP END */
 
 	/* PAYROLL PERIOD START */
 	Route::any('/payroll_period_list','Member\PayrollController@payroll_period_list');
@@ -257,6 +274,23 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* dmsph end */
 
 	/* BIO METRICS IMPORT END */
+
+	/* CALENDAR LEAVE START */
+	Route::any('/leave_schedule','Member\PayrollController@leave_schedule');	
+	Route::any('/leave_schedule/modal_create_leave_schedule','Member\PayrollController@modal_create_leave_schedule');	
+	Route::any('/leave_schedule/leave_schedule_tag_employee/{id}','Member\PayrollController@leave_schedule_tag_employee');
+	Route::any('/leave_schedule/ajax_shecdule_leave_tag_employee','Member\PayrollController@ajax_shecdule_leave_tag_employee');	
+	Route::any('/leave_schedule/session_tag_leave','Member\PayrollController@session_tag_leave');	
+	Route::any('/leave_schedule/get_session_leave_tag','Member\PayrollController@get_session_leave_tag');
+	Route::any('/leave_schedule/unset_session_leave_tag','Member\PayrollController@unset_session_leave_tag')
+	;
+	Route::any('/leave_schedule/save_schedule_leave_tag','Member\PayrollController@save_schedule_leave_tag')
+	;
+	Route::any('/leave_schedule/delete_confirm_schedule_leave/{id}','Member\PayrollController@delete_confirm_schedule_leave')
+	;
+	Route::any('/leave_schedule/delete_schedule_leave','Member\PayrollController@delete_schedule_leave')
+	;
+	/* CALDENDAR LEAVE END */
 
 
 	/* PAYORLL TIME KEEPING START */
@@ -290,7 +324,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 
 	/* PAYROLL SUMMARY JOURNAL ENTRIES */
-	Route::get('/payroll_summary','Member\PayrollController@payroll_summary');
+	Route::get('/journal_entry','Member\PayrollController@journal_entry');
 
 	/* END */
 
@@ -310,4 +344,19 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_approved_view/payroll_approved_company/{id}','Member\PayrollController@payroll_approved_company');
 	Route::any('/payroll_approved_view/payroll_record_by_id/{id}','Member\PayrollController@payroll_record_by_id');
 	/* PAYROLLL APPROVED END */
+
+	/* PAYROLL NOTES  START*/
+	Route::any('/modal_payroll_notes/{id}','Member\PayrollController@modal_payroll_notes');
+	/* PAYROLL NOTES END */
+
+	/* PAYROLL REPORTS START */
+	Route::any('/payroll_reports','Member\PayrollController@payroll_reports');
+	Route::any('/payroll_reports/modal_create_reports','Member\PayrollController@modal_create_reports');
+	Route::any('/payroll_reports/save_custom_reports','Member\PayrollController@save_custom_reports');
+	Route::any('/payroll_reports/modal_archive_reports/{archived}/{id}','Member\PayrollController@modal_archive_reports');
+	Route::any('/payroll_reports/archive_report','Member\PayrollController@archive_report');
+	Route::any('/payroll_reports/modal_edit_reports/{id}','Member\PayrollController@modal_edit_payroll_reports');
+	Route::any('/payroll_reports/update_payroll_reports','Member\PayrollController@update_payroll_reports');
+	Route::any('/payroll_reports/view_report/{id}','Member\PayrollController@view_report');
+	/* PAYROLL REPORTS END */
 });	 

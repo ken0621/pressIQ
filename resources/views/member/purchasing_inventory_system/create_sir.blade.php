@@ -15,7 +15,7 @@
                 </h1>
                 
             <div class="text-right">
-            <a class="btn btn-custom-white panel-buttons" href="/member/pis/sir">Cancel</a>
+            <a class="btn btn-custom-white panel-buttons" href="/member/pis/lof">Cancel</a>
             <button type="submit" class="btn btn-primary">Save</button>
             </div>
             </div>
@@ -29,7 +29,7 @@
                     <label>DATE :</label>
                 </div>
                 <div class="col-md-4">
-                    <input type="text" class="datepicker form-control" name="sir_date">
+                    <input type="text" class="datepicker form-control" name="sir_date" value="{{date('m/d/Y')}}">
                 </div>
             </div>
             <div class="form-group">
@@ -166,6 +166,7 @@
 
 @section('script')
 <script type="text/javascript">
+// alert($('#server_name').val());
     $(".select-truck").globalDropList(
     { 
       hasPopup                : "true",      

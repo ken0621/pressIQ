@@ -99,7 +99,14 @@ class ShopCartController extends Shop
         $variant_id = Request::input("variation_id");
         $result = Cart::delete_product($variant_id, $this->shop_info->shop_id);
 
-        echo json_encode($result);
+        if (Request::input("redirect")) 
+        {
+            return Redirect::back();
+        }
+        else
+        {
+            echo json_encode($result);
+        }
     }
 
     public function update_cart()

@@ -16,6 +16,17 @@ function cart()
 		event_qty_control();
 		event_remove_cart();
 	}
+	function get_total_price()
+	{
+		total_price = 0;
+
+		$('.upc span').each(function(index, el) 
+		{
+			total_price += parseFloat($(el).attr("raw-price")) * parseFloat($('.qty-control[variation-id="'+$(el).attr('key')+'"]').val());
+		});
+
+		$('.subtotal-value span').html(parseFloat(total_price).toFixed(2));
+	}
 	function event_qty_control()
 	{
 		$('.qty-control-add').unbind("click");
@@ -89,14 +100,7 @@ function cart()
 
 		$('.ttl span[key="'+key+'"]').html((price * quantity).toFixed(2));
 
-		total_price = 0;
-
-		$('.upc span').each(function(index, el) 
-		{
-			total_price += parseFloat($(el).attr("raw-price")) * parseFloat($('.qty-control[variation-id="'+$(el).attr('key')+'"]').val());
-		});
-
-		$('.subtotal-value span').html(parseFloat(total_price).toFixed(2));
+		get_total_price();
 
 		ajax_quantity.abort();
 
@@ -125,10 +129,12 @@ function cart()
 		$('.remove-cart').unbind('click');
 		$('.remove-cart').bind('click', function(event) 
 		{
-			event.preventDefault();
-			$(event.currentTarget).closest("tr").remove();
-			
 			var variation_id = $(event.currentTarget).attr("variation-id");
+
+			event.preventDefault();
+			
+			$('tr[variation-id="'+variation_id+'"]').remove();
+			$('tr.membership-row[variation-id="'+variation_id+'"]').remove();
 
 			action_disable_checkout_button();
 
@@ -138,9 +144,11 @@ function cart()
 				dataType: 'json',
 				data: {variation_id: variation_id},
 			})
-			.done(function() {
+			.done(function() 
+			{
 				ready_load_mini_ecom_cart();
 				action_enable_checkout_button();
+				get_total_price();
 			})
 			.fail(function() {
 				console.log("error");

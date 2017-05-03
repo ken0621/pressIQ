@@ -32,9 +32,10 @@ use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code_invoice;
 use App\Models\Tbl_voucher_item;
+use App\Models\Tbl_warehouse;
 class Mlm_report
 {   
-    public static function general($shop_id)
+    public static function general($shop_id, $filter)
     {
     	$data['membership'] = Tbl_membership::archive(0)->where('shop_id', $shop_id)->get();
         $data['count_all_slot_active'] = Tbl_mlm_slot::where('shop_id', $shop_id)->where('slot_active', 0)->count();
@@ -78,7 +79,7 @@ class Mlm_report
         // return $data;
         return view('member.mlm_report.report.general', $data);
     }
-    public static function cashflow($shop_id)
+    public static function cashflow($shop_id, $filter)
     {
 
     	$complan_per_day =Tbl_mlm_slot_wallet_log::slot()
@@ -90,8 +91,12 @@ class Mlm_report
         ->select(DB::raw('wallet_log_date_created as wallet_log_date_created'), DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
         ->groupBy(DB::raw('wallet_log_plan') )
         ->groupBy('wallet_log_date_created')
-
-
+        // -----------------------------------Filter
+        ->where('wallet_log_date_created', '>=', $filter['from'])
+        ->where('wallet_log_date_created', '<=', $filter['to'])
+        ->skip($filter['skip'])
+        ->take($filter['take'])
+        // -----------------------------------End
     	->get();
 
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
@@ -157,22 +162,41 @@ class Mlm_report
         }
     	
     }
-    public static function e_wallet($shop_id)
+    public static function e_wallet($shop_id, $filter)
     {
+        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
+
+        // -----------------------------------Filter
+        ->skip($filter['skip'])
+        ->take($filter['take'])
+        // -----------------------------------End
+
+        ->customer()->get()->keyBy('slot_id');
+        $wherein = [];
+        foreach($slot as $key => $value)
+        {
+            $wherein[$key] = $key;
+        }
+
+
     	$complan_per_day =Tbl_mlm_slot_wallet_log::slot()
     	->customer()
     	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
     	->orderBy('wallet_log_slot', 'ASC')
-        ->where('wallet_log_amount', '!=', 0)
+        // ->where('wallet_log_amount', '!=', 0)
         ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
         ->groupBy(DB::raw('wallet_log_plan') )
         ->groupBy('wallet_log_slot')
-        // ->paginate(100);
+
+        ->whereIn('wallet_log_slot', $wherein)
+
+
     	->get();
+        // dd($complan_per_day);
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
         ->where('marketing_plan_enable', 1)
         ->get()->keyBy('marketing_plan_code');
-        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get()->keyBy('slot_id');
+        
         $per_complan = [];
         $plan = [];
         foreach($complan_per_day as $key => $value)
@@ -202,15 +226,29 @@ class Mlm_report
 
         return view('member.mlm_report.report.e_wallet', $data);
     }
-    public static function slot_count($shop_id)
+    public static function slot_count($shop_id, $filter)
     {
-    	$slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get()->keyBy('slot_id');
+    	$slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
+        // -----------------------------------Filter
+        ->skip($filter['skip'])
+        ->take($filter['take'])
+        // -----------------------------------End
+        ->customer()->get()->keyBy('slot_id');
+
+        $wherein = [];
+        foreach($slot as $key => $value)
+        {
+            $wherein[$key] = $key;
+        }
+
+
     	$tree = Tbl_tree_sponsor::where('shop_id', $shop_id)->orderBy('sponsor_tree_level', 'ASC')
 
         ->select(DB::raw('count(sponsor_tree_level) as count_slot'), DB::raw('tbl_tree_sponsor.*'))
         ->groupBy(DB::raw('sponsor_tree_level') )
         ->groupBy('sponsor_tree_parent_id')
 
+        ->whereIn('sponsor_tree_parent_id', $wherein)
         ->get();
 
     	$tree_count = [];
@@ -238,9 +276,20 @@ class Mlm_report
         }
     	return view('member.mlm_report.report.slot_count', $data);
     }
-    public static function binary_slot_count($shop_id)
+    public static function binary_slot_count($shop_id, $filter)
     {
-        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get()->keyBy('slot_id');
+        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)
+        // -----------------------------------Filter
+        ->skip($filter['skip'])
+        ->take($filter['take'])
+        // -----------------------------------End
+        ->customer()->get()->keyBy('slot_id');
+
+        $wherein = [];
+        foreach($slot as $key => $value)
+        {
+            $wherein[$key] = $key;
+        }
 
 
 
@@ -252,6 +301,7 @@ class Mlm_report
         ->groupBy(DB::raw('placement_tree_level') )
         ->groupBy('placement_tree_parent_id')
 
+        ->whereIn('placement_tree_parent_id', $wherein)
 
         ->orderBy('placement_tree_level', 'ASC')->get();
         $tree_count = [];
@@ -276,8 +326,7 @@ class Mlm_report
         ->select(DB::raw('count(placement_tree_level ) as count_slot'), DB::raw('tbl_tree_placement.*'))
         ->groupBy(DB::raw('placement_tree_level') )
         ->groupBy('placement_tree_parent_id')
-
-
+        ->whereIn('placement_tree_parent_id', $wherein)
         ->orderBy('placement_tree_level', 'ASC')->get();
 
         $tree_count_r = [];
@@ -311,15 +360,12 @@ class Mlm_report
 
         return view('member.mlm_report.report.binary_slot_count', $data);
     }
-    public static function top_earners($shop_id)
+    public static function top_earners($shop_id, $filters)
     {
-
     	$income =Tbl_mlm_slot_wallet_log::slot()
     	->customer()
     	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
-    	// ->orderBy('wallet_log_date_created', 'DESC')
         ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
-        ->groupBy(DB::raw('wallet_log_plan') )
         ->groupBy('wallet_log_slot')
         ->orderBy('wallet_log_amount', 'DESC');
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
@@ -333,8 +379,12 @@ class Mlm_report
         {
         	$filter[$key] = $value->marketing_plan_code;
         }
-        $income = $income->whereIn('wallet_log_plan', $filter)->take(100)->get();
-        // dd($income[1]);
+        $income = $income->whereIn('wallet_log_plan', $filter)
+        // -------------filter
+        ->skip($filters['skip'])
+        ->take($filters['take'])->get();
+        //--------------end
+
         $income_top = [];
         foreach($income as $key => $value)
         {
@@ -362,12 +412,20 @@ class Mlm_report
         return view('member.mlm_report.report.top_earners', $data);
 
     }
-    public static function new_register($shop_id)
+    public static function new_register($shop_id, $filters)
     {
     	$customer = Tbl_customer::where('tbl_customer.shop_id', $shop_id)->whereNotNull('mlm_username')
         ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')
         ->select(DB::raw('count(slot_owner ) as count_slot'), 'tbl_customer.*')
         ->groupBy(DB::raw('tbl_customer.customer_id') )
+
+        // -----------------------------------Filter
+        ->where('created_date', '>=', $filters['from'])
+        ->where('created_date', '<=', $filters['to'])
+        ->skip($filters['skip'])
+        ->take($filters['take'])
+        // -----------------------------------End
+        ->orderBy('created_date', 'ASC')
     	->get()->keyBy('customer_id');
     	$customer_per_day = [];
 
@@ -395,9 +453,20 @@ class Mlm_report
     	return view('member.mlm_report.report.new_accounts', $data);
 
     }
-    public static function encashment_rep($shop_id)
+    public static function encashment_rep($shop_id, $filters)
     {
-    	$slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get()->keyBy('slot_id');
+    	$slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()
+        // -----------------------------------Filter
+        ->skip($filters['skip'])
+        ->take($filters['take'])
+        // -----------------------------------End
+        ->get()->keyBy('slot_id');
+
+        $wherein = [];
+        foreach($slot as $key => $value)
+        {
+            $wherein[$key] = $key;
+        }
 
     	$complan_per_day =Tbl_mlm_slot_wallet_log::slot()
     	->customer()
@@ -407,6 +476,8 @@ class Mlm_report
         ->groupBy(DB::raw('wallet_log_plan') )
         
         ->groupBy('wallet_log_slot')
+
+        ->whereIn('wallet_log_slot', $wherein)
 
         ->orderBy('wallet_log_amount', 'DESC')
     	->get();
@@ -460,8 +531,22 @@ class Mlm_report
         }
     	return view('member.mlm_report.report.encashment', $data);
     }
-    public static function encashment_rep_req($shop_id, $select= null)
+    public static function encashment_rep_req($shop_id, $filters, $select= null)
     {
+        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()
+        // -----------------------------------Filter
+        ->skip($filters['skip'])
+        ->take($filters['take'])
+        // -----------------------------------End
+        ->get()->keyBy('slot_id');
+
+        $wherein = [];
+        foreach($slot as $key => $value)
+        {
+            $wherein[$key] = $key;
+        }
+
+
         $encashment_req =Tbl_mlm_slot_wallet_log::slot()
         ->customer()
         ->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
@@ -470,6 +555,9 @@ class Mlm_report
         ->where('wallet_log_plan', 'ENCASHMENT')
         ->where('encashment_process_type', 0)
         ->orderBy('wallet_log_id', 'DESC')
+
+        ->whereIn('wallet_log_slot', $wherein)
+
         ->orderBy('bank_name', 'DESC');
 
         if($select == null)
@@ -503,8 +591,21 @@ class Mlm_report
 
         return view('member.mlm_report.report.encashment_requested', $data);
     }
-    public static function encashment_rep_pro($shop_id)
+    public static function encashment_rep_pro($shop_id, $filters)
     {
+        $slot = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()
+        // -----------------------------------Filter
+        ->skip($filters['skip'])
+        ->take($filters['take'])
+        // -----------------------------------End
+        ->get()->keyBy('slot_id');
+
+        $wherein = [];
+        foreach($slot as $key => $value)
+        {
+            $wherein[$key] = $key;
+        }
+
         $encashment_req =Tbl_mlm_slot_wallet_log::slot()
         ->customer()
         ->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
@@ -514,6 +615,9 @@ class Mlm_report
         ->where('encashment_process_type', 1)
         ->orderBy('wallet_log_id', 'DESC')
         ->orderBy('bank_name', 'DESC')
+
+        ->whereIn('wallet_log_slot', $wherein)
+
         ->get()->keyBy('wallet_log_id');
         $request_by_day = [];
         $request_by_month = [];
@@ -538,10 +642,35 @@ class Mlm_report
         return view('member.mlm_report.report.encashment_processed', $data);
     }
 
-    public static function product_sales_report($shop_id)
+    public static function product_sales_report($shop_id, $filters)
     {
-        $invoice = Tbl_item_code_invoice::where('shop_id', $shop_id)->get()->keyBy('item_code_invoice_id');
+        $data['filteru'] = $filters;
+        $user_id = Request::input('user_id');
+        $warehouse_id = Request::input('warehouse_id');
+        $invoice = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
 
+        ->skip($filters['skip'])
+        ->take($filters['take'])
+        ->where('item_code_date_created', '>=', $filters['from'])
+        ->where('item_code_date_created', '<=', $filters['to'])
+
+        ->customer()
+        ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_item_code_invoice.slot_id')
+        ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership');
+        
+        if($user_id != null)
+        {
+           $invoice = $invoice->where('user_id', $user_id); 
+           $data['user_a'] = Tbl_user::where('user_id', $user_id)->first();
+        }
+        if($warehouse_id != null)
+        {
+            $invoice = $invoice->where('warehouse_id', $warehouse_id);
+            $data['warehouse'] = Tbl_warehouse::where('warehouse_id', $warehouse_id)->first();
+        }
+
+
+        $invoice = $invoice->get()->keyBy('item_code_invoice_id');
         // $item_code_item = Tbl_item_code_item::
         $where_in = [];
         foreach ($invoice as $key => $value) {
@@ -551,6 +680,9 @@ class Mlm_report
         $items = Tbl_item_code_item::whereIn('item_code_invoice_id', $where_in)->get();
         $inventory = [];
         $filter = [];
+        $items_unfiltered = [];
+        $data['payment'] = [];
+
         foreach($items as $key => $value)
         {
             if(isset($inventory[$value->item_name]['Price']))
@@ -568,7 +700,34 @@ class Mlm_report
                 $inventory[$value->item_name]['Membership Discount'] = $value->item_membership_discount * $value->item_quantity;
                 $inventory[$value->item_name]['Membership Discounted'] = $value->item_membership_discounted * $value->item_quantity;
             }
+            $items_unfiltered[$value->item_code_invoice_id][$key] = $value;
             
+
+            switch ($value->item_code_payment_type) 
+            {
+                case 1:
+                    $payment_a = 'CASH';
+                    break;
+                case 2:
+                    $payment_a =  'GC';
+                    break;
+                case 3:
+                    $payment_a =  'Wallet';
+                    break;
+                
+                default:
+                    $payment_a =  'CASH';
+                    break;
+            }
+            if(isset($data['payment'][$payment_a]))
+            {
+                $data['payment'][$payment_a] += $value->item_membership_discounted * $value->item_quantity;
+            }
+            else
+            {
+                $data['payment'][$payment_a] = $value->item_membership_discounted * $value->item_quantity;
+            }
+
         }
 
         $filter['Quantity'] = 'Quantity';
@@ -580,8 +739,8 @@ class Mlm_report
         $data['items'] = $items;
         $data['invoice'] = $invoice;
         $data['filter'] = $filter;
-
         $data['page'] = 'inventory';
+        $data['items_unfiltered'] = $items_unfiltered;
         if(Request::input('pdf') == 'excel')
         {
             return $data;
@@ -590,11 +749,25 @@ class Mlm_report
 
         return view('member.mlm_report.report.inventory', $data);
     }
-    public static function membership_code_sales_report($shop_id)
+    public static function membership_code_sales_report($shop_id, $filters)
     {
-        $invoice = Tbl_membership_code_invoice::where('shop_id', $shop_id)->get();
+        $invoice = Tbl_membership_code_invoice::where('shop_id', $shop_id)
 
-        $membership_code = Tbl_membership_code::where('shop_id', $shop_id)->get();
+        ->skip($filters['skip'])
+        ->take($filters['take'])
+        ->where('membership_code_date_created', '>=', $filters['from'])
+        ->where('membership_code_date_created', '<=', $filters['to'])
+
+        ->get();
+
+        $membership_code = Tbl_membership_code::where('tbl_membership_code.shop_id', $shop_id)
+        ->join('tbl_membership_code_invoice', 'tbl_membership_code_invoice.membership_code_invoice_id', '=', 'tbl_membership_code.membership_code_invoice_id')
+        
+        ->skip($filters['skip'])
+        ->take($filters['take'])
+        ->where('membership_code_date_created', '>=', $filters['from'])
+        ->where('membership_code_date_created', '<=', $filters['to'])
+        ->get();
 
         $package = Tbl_membership_package::get()->keyBy('membership_package_id');
         $by_membership = [];
@@ -732,5 +905,149 @@ class Mlm_report
         }
         
         // dd($plan_settings);
+    }
+
+    public static function product_sales_report_warehouse($shop_id, $filters)
+    {
+        $warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get()->keyBy('warehouse_id');
+
+        $data['filteru'] = $filters;
+        $invoice = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
+        // ->skip($filters['skip'])
+        // ->take($filters['take'])
+        ->where('item_code_date_created', '>=', $filters['from'])
+        ->where('item_code_date_created', '<=', $filters['to'])
+        ->customer()
+        ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_item_code_invoice.slot_id')
+        ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership');
+
+        $invoice = $invoice->get()->keyBy('item_code_invoice_id');
+        // $item_code_item = Tbl_item_code_item::
+        $where_in = [];
+        $warehouse_per_invoice = [];
+        $items_unfiltered = [];
+        foreach ($invoice as $key => $value)
+        {
+            $warehouse_per_invoice[$value->warehouse_id][$key] = $value;
+            $where_in[$key] = $key;
+        }
+        $items = Tbl_item_code_item::whereIn('item_code_invoice_id', $where_in)->get();
+        foreach($items as $key => $value)
+        {
+            $items_unfiltered[$value->item_code_invoice_id][$key] = $value;
+            $invoice_s = $invoice[$value->item_code_invoice_id];
+            switch ($value->item_code_payment_type) 
+            {
+                case 1:
+                    $payment_a = 'CASH';
+                    break;
+                case 2:
+                    $payment_a =  'GC';
+                    break;
+                case 3:
+                    $payment_a =  'Wallet';
+                    break;
+                
+                default:
+                    $payment_a =  'CASH';
+                    break;
+            }
+            if(isset($data['payment'][$invoice_s->warehouse_id][$payment_a]))
+            {
+                $data['payment'][$invoice_s->warehouse_id][$payment_a] += $value->item_membership_discounted * $value->item_quantity;
+            }
+            else
+            {
+                $data['payment'][$invoice_s->warehouse_id][$payment_a] = $value->item_membership_discounted * $value->item_quantity;
+            }
+
+            if(isset($data['payment_all'][$payment_a]))
+            {
+                $data['payment_all'][$payment_a] += $value->item_membership_discounted * $value->item_quantity;
+            }
+            else
+            {
+                $data['payment_all'][$payment_a] = $value->item_membership_discounted * $value->item_quantity;
+            }
+        }
+
+        $data['warehouse_per_invoice'] = $warehouse_per_invoice;
+        $data['warehouse_a'] = $warehouse;
+        $data['page'] = 'inventory_warehouse';
+        $data['items_unfiltered'] = $items_unfiltered;
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        return view('member.mlm_report.report.inventory_warehouse', $data);
+    }
+    public static function product_sales_report_consolidated($shop_id, $filters)
+    {
+
+        $invoice = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
+        // ->skip($filters['skip'])
+        // ->take($filters['take'])
+        ->where('item_code_date_created', '>=', $filters['from'])
+        ->where('item_code_date_created', '<=', $filters['to'])
+        ->customer()
+        ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_item_code_invoice.slot_id')
+        ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership');
+
+        $invoice = $invoice->get()->keyBy('item_code_invoice_id');
+
+        $where_in = [];
+        foreach ($invoice as $key => $value) {
+            # code...
+            $where_in[$key] = $key;
+        }
+        $items = Tbl_item_code_item::whereIn('item_code_invoice_id', $where_in)->get();
+        $data['total'] = 0;
+        $data['item_sold'] = 0;
+        foreach($items as $key => $value)
+        {
+            if(isset($inventory[$value->item_name]['Price']))
+            {
+                $inventory[$value->item_name]['Quantity'] += $value->item_quantity;
+                $inventory[$value->item_name]['Price'] += ($value->item_price * $value->item_quantity);
+                $inventory[$value->item_name]['Membership Discount'] += $value->item_membership_discount * $value->item_quantity;
+                $inventory[$value->item_name]['Membership Discounted'] += $value->item_membership_discounted * $value->item_quantity;
+                // $inventory[$value->item_name]['Membership Discounted'] .= $value->item_membership_discounted * $value->item_quantity;
+            }
+            else
+            {
+                $inventory[$value->item_name]['Quantity'] = $value->item_quantity;
+                $inventory[$value->item_name]['Price'] = $value->item_price * $value->item_quantity;
+                $inventory[$value->item_name]['Membership Discount'] = $value->item_membership_discount * $value->item_quantity;
+                $inventory[$value->item_name]['Membership Discounted'] = $value->item_membership_discounted * $value->item_quantity;
+            }
+            $data['total'] += $value->item_membership_discounted * $value->item_quantity;
+            $data['item_sold'] += $value->item_quantity;
+        }
+        $data['info'] = [];
+        $data['per_membership'] = [];
+        foreach($invoice as $key => $value)
+        {
+            $data['info'][name_format_from_customer_info($value)] = $value; 
+            if(isset($data['per_membership'][$value->membership_name]))
+            {
+                $data['per_membership'][$value->membership_name] += 1;
+            }
+            else
+            {
+                $data['per_membership'][$value->membership_name] = 1;
+            }
+        }
+        $data['filter']['Quantity'] = 'Quantity';
+        $data['filter']['Price'] = 'Price';
+        $data['filter']['Membership Discount'] = 'Membership Discount';
+        $data['filter']['Membership Discounted'] = 'Membership Discounted';
+        $data['page'] = 'inventory_consilidated';
+        $data['inventory'] = $inventory;
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        return view('member.mlm_report.report.inventory_consilidated', $data);
+
     }
 }

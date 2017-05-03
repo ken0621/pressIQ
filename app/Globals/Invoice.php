@@ -25,15 +25,17 @@ use Carbon\carbon;
 
 class Invoice
 {
-    public static function count_ar()
+    public static function count_ar($start_date, $end_date)
     {
-         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->where("inv_is_paid",0)->count();
+         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->whereBetween("date_created",array($start_date,$end_date))->where("inv_is_paid",0)->count();
          return $ar;
     }
-    public static function get_ar_amount()
+    public static function get_ar_amount($start_date, $end_date)
     {
         $price = 0;
-        $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->where("inv_is_paid",0)->get();
+        $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
+                                ->whereBetween("date_created",array($start_date,$end_date))
+                                ->where("inv_is_paid",0)->get();
         if(isset($ar))
         {
             foreach ($ar as $key => $value) 
@@ -44,10 +46,12 @@ class Invoice
 
         return $price;
     }
-    public static function get_sales_amount()
+    public static function get_sales_amount($start_date, $end_date)
     {
         $price = 0;
-        $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->where("inv_is_paid",1)->get();
+        $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
+                                ->whereBetween("date_created",array($start_date,$end_date))
+                                ->where("inv_is_paid",1)->get();
         if(isset($ar))
         {
             foreach ($ar as $key => $value) 
@@ -114,16 +118,19 @@ class Invoice
         {
             $insert['inv_payment_applied']        = $overall_price;
             $insert['is_sales_receipt']           = 1;
+            $transaction_type = "sales-receipt";
+        }
+        else
+        {
+            $transaction_type = "invoice";
         }
         $invoice_id = Tbl_customer_invoice::insertGetId($insert);
+        
 
-        if($is_sales_receipt != '')
-        {
-            Invoice::postSales_receipt_payment($customer_info,$invoice_info,$overall_price,$invoice_id);
-        } 
         /* Transaction Journal */
-        $entry["reference_module"]  = "invoice";
+        $entry["reference_module"]  = $transaction_type;
         $entry["reference_id"]      = $invoice_id;
+        $entry["name_id"]           = $customer_info['customer_id'];
         $entry["total"]             = $overall_price;
         $entry["vatable"]           = $tax;
         $entry["discount"]          = $discount;
@@ -160,6 +167,8 @@ class Invoice
         {
             Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
         }
+
+        return $rcvpayment_id;
     }
 
     public static function updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, $is_sales_receipt = '')
@@ -201,9 +210,11 @@ class Invoice
         if($is_sales_receipt != '')
         {
             $update["inv_payment_applied"] = $overall_price;
+
+            Invoice::update_rcv_payment("invoice",$invoice_id,$overall_price);
         }
         Tbl_customer_invoice::where("inv_id", $invoice_id)->update($update);
-
+        
 
         $new = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
         AuditTrail::record_logs("Edited","invoice",$invoice_id,serialize($old),serialize($new));
@@ -212,6 +223,7 @@ class Invoice
         /* Transaction Journal */
         $entry["reference_module"]  = "invoice";
         $entry["reference_id"]      = $invoice_id;
+        $entry["name_id"]           = $customer_info['customer_id'];
         $entry["total"]             = $overall_price;
         $entry["vatable"]           = $tax;
         $entry["discount"]          = $discount;
@@ -223,6 +235,21 @@ class Invoice
         return $invoice_id;
     }
 
+    public static function update_rcv_payment($ref_name = '', $ref_id = 0, $amount = 0)
+    {   
+        $data = Tbl_receive_payment_line::where("rpline_reference_name",$ref_name)->where("rpline_reference_id",$ref_id)->first();
+
+        if($data)
+        {
+            $rcv_data = Tbl_receive_payment::where("rp_id",$data->rpline_rp_id)->first();
+            $up["rp_total_amount"] = ($rcv_data->rp_total_amount - $data->rpline_amount) + $amount;
+            Tbl_receive_payment::where("rp_id",$rcv_data->rp_id)->update($up);
+
+            $up_rcv["rpline_amount"] = $amount;
+            Tbl_receive_payment_line::where("rpline_reference_name",$ref_name)->where("rpline_reference_id",$ref_id)->update($up_rcv);
+        }
+
+    }
     public static function insert_invoice_line($invoice_id, $item_info, $entry)
     {        
         foreach($item_info as $key => $item_line)
@@ -252,6 +279,8 @@ class Invoice
                 $insert_line['invline_discount_type']   = $discount_type;
                 $insert_line['invline_discount_remark'] = $item_line['discount_remark'];
                 $insert_line['taxable']                 = $item_line['taxable'];
+                $insert_line['invline_ref_name']        = $item_line['ref_name'];
+                $insert_line['invline_ref_id']          = $item_line['ref_id'];
                 $insert_line['invline_amount']          = $amount;
                 $insert_line['date_created']            = Carbon::now();
 
@@ -262,6 +291,7 @@ class Invoice
                 $entry_data[$key]['vatable']       = 0;
                 $entry_data[$key]['discount']      = $discount;
                 $entry_data[$key]['entry_amount']  = $amount;
+                
             }
         }
 

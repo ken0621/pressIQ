@@ -28,7 +28,7 @@ class OnlinePaymentMethodController extends Member
 		$data["_method"] 	= Tbl_online_pymnt_method::link($this->getShopId())->get();
 		foreach($data["_method"] as $key=>$method)
 		{
-			$data["_method"][$key] = $method;
+			$data["_method"][$key] 			= $method;
 			$data["_method"][$key]->gateway = $this->filterPaymentGateway($method->method_id);
 		}
 		// dd($data["_method"] );
@@ -135,7 +135,9 @@ class OnlinePaymentMethodController extends Member
 		$method 	= Tbl_online_pymnt_method::where("method_id",$id)->pluck("method_gateway_accepted");
 		$_method	= explode(",",$method);
 
-		$_gateway		= Tbl_online_pymnt_gateway::unionGateway($this->getShopId())->wherein("gateway_id", $_method)->get();
+		$_gateway		= Tbl_online_pymnt_gateway::unionGateway($this->getShopId(), $_method)->get();
+
+		// DD($_method);
 		// dd($_gateway);
 		return $_gateway;
 	}
@@ -146,6 +148,7 @@ class OnlinePaymentMethodController extends Member
 
 		$link_id = Tbl_online_pymnt_link::where("link_method_id", Request::input('link_method_id'))->where("link_shop_id", $this->getShopId())->first();
 
+		// dd(Request::input());
 		$data["link_shop_id"] 			= $this->getShopId();
 		$data["link_method_id"] 		= Request::input('link_method_id');
 		$data["link_reference_name"] 	= Request::input('link_reference_name');
@@ -155,7 +158,7 @@ class OnlinePaymentMethodController extends Member
 
 		if($link_id != null)
 		{
-			Tbl_online_pymnt_link::where("link_id", $link_id)->update($data);
+			Tbl_online_pymnt_link::where("link_id", $link_id->link_id)->update($data);
 		}
 		else
 		{

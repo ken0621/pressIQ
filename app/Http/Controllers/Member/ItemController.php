@@ -21,6 +21,7 @@ use App\Globals\Category;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 use App\Globals\DigimaTable;
+use App\Globals\Warehouse;
 use App\Globals\Item;
 use App\Globals\Vendor;
 use App\Globals\UnitMeasurement;
@@ -46,7 +47,7 @@ class ItemController extends Member
         {
 			$shop_id        		   = $this->user_info->shop_id;
 			$warehouse_id 			   = Tbl_warehouse::where("main_warehouse", 1)->where("warehouse_shop_id", $this->user_info->shop_id)->pluck("warehouse_id");
-	        $item 		    		   = Tbl_item::um_multi()->inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
+	        $item 		    		   = Tbl_item::inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
 	        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)->where("shop_id",$shop_id)->type()->category();
 	        $item_type				   = Request::input("item_type");
 	        $search_name			   = Request::input("search_name");
@@ -64,21 +65,25 @@ class ItemController extends Member
 	        }
 	        
 			$data["_item"]			   = $item->get();
+			// dd($data["_item"]);
 			//item_convertion with unit measurement
 			foreach ($data["_item"] as $key => $value) 
 			{
-				$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
-
-				$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
-				$data["_item"][$key]->inventory_count_um_view = "";
-				$data["_item"][$key]->item_whole_price = 0;
-				$data["_item"][$key]->um_whole = "";
-				if($um)
+				if($value->item_type_id == 1)
 				{
-					$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+					$data["_item"][$key]->inventory_count_um_view = "";
+					$data["_item"][$key]->item_whole_price = 0;
+					$data["_item"][$key]->um_whole = "";
+					$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
 
-					$data["_item"][$key]->item_whole_price = $um->unit_qty * $value->item_price;
-					$data["_item"][$key]->um_whole = $um->multi_abbrev;
+					$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
+					if($um)
+					{
+						$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+
+						$data["_item"][$key]->item_whole_price = $um->unit_qty * $value->item_price;
+						$data["_item"][$key]->um_whole = $um->multi_abbrev;
+					}
 				}
 
 				if($value->item_type_id == 4)
@@ -87,8 +92,7 @@ class ItemController extends Member
 				}
 			}
 			$data["_item_archived"]	   = $item_archived->get();
-			      
-	        
+
 		    return view('member.item.list',$data);
         }
         else
@@ -131,18 +135,25 @@ class ItemController extends Member
         $access = Utilities::checkAccess('item-list', 'access_page');
         if($access == 1)
         {
+
+			// $data['_category']  		= Category::getAllCategory();
+
+			$data['_service']  		    = Category::getAllCategory(['services']);
+			$data['_inventory']  		= Category::getAllCategory(['inventory']);
+			$data['_noninventory']  	= Category::getAllCategory(['non-inventory']);
+			$data['_bundle']        	= Category::getAllCategory(['bundles']);
+
 			$shop_id          = $this->user_info->shop_id;
 			$data["data"]	  = Session::get("item_temporary_data");
 			
 			$data["_income"] 	= Accounting::getAllAccount('all',null,['Income','Other Income']);
 			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
 			$data["_expense"] 	= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
-
-			$data['_category']  = Category::getAllCategory();
-			$data['_item']  	= Item::get_all_category_item();
+			$data['_item']  			= Item::get_all_category_item();
 			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
-			$data["_um"] 		= UnitMeasurement::load_um();
-            $data["_vendor"]    = Vendor::getAllVendor('active');
+			$data["_um"] 				= UnitMeasurement::load_um();
+			$data["_um_multi"]  		= UnitMeasurement::load_um_multi();
+            $data["_vendor"]    		= Vendor::getAllVendor('active');
 
 		    return view('member.item.add',$data);
         }
@@ -153,8 +164,8 @@ class ItemController extends Member
 	}
 
 	public function add_submit()
-	{	
-		$price= "";
+	{	  
+		$price = "";
 
 		$item_name	 					= Request::input("item_name");
 		$item_sku						= Request::input("item_sku");
@@ -163,7 +174,7 @@ class ItemController extends Member
 		$item_price 					= Request::input("item_price");
 		$item_sales_information 		= Request::input("item_sales_information");
 		$item_asset_account_id 			= Request::input("item_asset_account_id");
-		$item_quantity 					= Request::input("item_quantity");
+		$item_quantity 					= Request::input("item_quantity") * (Request::input("initial_qty") != 0 ? Request::input("initial_qty") : 1 );
 		$item_date_tracked 				= date("Y-m-d g:i:s",strtotime(Request::input("item_date_tracked")));
 		$item_reorder_point 			= Request::input("item_reorder_point");
 		$item_income_account_id 		= Request::input("item_income_account_id");
@@ -184,7 +195,6 @@ class ItemController extends Member
 		$end_promo_date 		= Request::input("end_promo_date");
 
 		$shop_id = $this->user_info->shop_id;
-
 			
 			$insert["item_date_created"]	    	  = Carbon::now();
 			$insert["shop_id"]	    				  = $shop_id;
@@ -210,8 +220,8 @@ class ItemController extends Member
 			$insert["item_income_account_id"] 	      = $item_income_account_id ;
 			$insert["item_purchasing_information"]    = $item_purchasing_information ;
 			$insert["item_cost"]				      = $item_cost ;
-			$insert["item_barcode"]				      = $item_barcode ;
 			$insert["item_expense_account_id"]	      = $item_expense_account_id ;
+			$insert["item_barcode"]				      = $item_barcode ;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id ;
 			$insert["item_manufacturer_id"]	      	  = $item_manufacturer_id ;
 			$insert["packing_size"]				      = $packing_size;
@@ -346,6 +356,7 @@ class ItemController extends Member
 
 					$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
 				}
+				Warehouse::insert_item_to_all_warehouse($item_id, $item_reorder_point);
 
 				$for_serial_item[$item_id]["quantity"] = $item_quantity;
                 $for_serial_item[$item_id]["product_id"] = $item_id;
@@ -394,6 +405,9 @@ class ItemController extends Member
 			$insert["item_date_tracked"]	    	  = $item_date_tracked;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
+			$insert["item_purchasing_information"]    = $item_purchasing_information ;
+			$insert["item_cost"]				      = $item_cost ;
+			$insert["item_expense_account_id"]	      = $item_expense_account_id ;
 			
 			$rules["item_name"]					      = 'required';
 			$rules["item_price"]				      = 'required|numeric';
@@ -442,6 +456,9 @@ class ItemController extends Member
 			$insert["item_purchase_from_supplier"]	  = $item_purchase_from_supplier;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
+			$insert["item_purchasing_information"]    = $item_purchasing_information ;
+			$insert["item_cost"]				      = $item_cost ;
+			$insert["item_expense_account_id"]	      = $item_expense_account_id ;
 			
 			$rules["item_name"]					      = 'required';
 			$rules["item_sku"]					      = 'required';
@@ -519,7 +536,7 @@ class ItemController extends Member
 					{
 						$insert_bundle["bundle_bundle_id"] 	= $item_id;
 						$insert_bundle["bundle_item_id"] 	= $item;
-						$insert_bundle["bundle_um_id"]		= $_um[$key];
+						$insert_bundle["bundle_um_id"]		= isset($_um[$key]) ? $_um[$key] : 0;
 						$insert_bundle["bundle_qty"]		= $_qty[$key];
 						Tbl_item_bundle::insert($insert_bundle);
 					}
@@ -601,7 +618,13 @@ class ItemController extends Member
 			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
 			$data["_expense"] 	= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
 
-			$data['_category']  = Category::getAllCategory();
+			// $data['_category']  = Category::getAllCategory();
+
+			$data['_service']  		    = Category::getAllCategory(['services']);
+			$data['_inventory']  		= Category::getAllCategory(['inventory']);
+			$data['_noninventory']  	= Category::getAllCategory(['non-inventory']);
+			$data['_bundle']        	= Category::getAllCategory(['bundles']);
+			
 			$data["_manufacturer"] = Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 	  	= UnitMeasurement::load_um();
 			$data["_um_multi"] 	= UnitMeasurement::load_um_multi();
@@ -663,10 +686,13 @@ class ItemController extends Member
 			$item_measurement_id = Session::get("um_id");
 		}
 
-		if(Request::input("item_type") == "inventory")
+		$item_name = Request::input("item_name");
+		$item_sku = Request::input("item_sku");
+
+		if(Request::input("item_type") == "inventory")			
 		{
-			$insert["item_name"]				      = Request::input("item_name");
-			$insert["item_sku"]					      = Request::input("item_sku");
+			$insert["item_name"]				      = $item_name;
+			$insert["item_sku"]					      = $item_sku;
 			$insert["item_category_id"]			      = Request::input("item_category_id");
 			$insert["item_img"]					      = Request::input("item_img") ? Request::input("item_img") : "";
 			$insert["item_type_id"]				      = 1; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service)
@@ -733,8 +759,8 @@ class ItemController extends Member
 		}
 		else if(Request::input("item_type") == "noninventory")
 		{
-			$insert["item_name"]				      = Request::input("item_name");
-			$insert["item_sku"]					      = Request::input("item_sku");
+			$insert["item_name"]				      = $item_name;
+			$insert["item_sku"]					      = $item_sku;
 			$insert["item_category_id"]			      = Request::input("item_category_id");
 			$insert["item_img"]					      = Request::input("item_img") ? Request::input("item_img") : "";
 			$insert["item_type_id"]				      = 2; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service)
@@ -748,6 +774,9 @@ class ItemController extends Member
 			$insert["shop_id"]	    				  = $shop_id;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
+			$insert["item_purchasing_information"]    = Request::input("item_purchasing_information") ? Request::input("item_purchasing_information") : "";
+			$insert["item_cost"]				      = Request::input("item_cost");
+			$insert["item_expense_account_id"]	      = Request::input("item_expense_account_id");
 
 			$rules["item_name"]					      = 'required';
 			$rules["item_sku"]					      = 'required';
@@ -783,8 +812,8 @@ class ItemController extends Member
 		}
 		else if(Request::input("item_type") == "service")
 		{
-			$insert["item_name"]				      = Request::input("item_name");
-			$insert["item_sku"]					      = Request::input("item_sku");
+			$insert["item_name"]				      = $item_name;
+			$insert["item_sku"]					      = $item_sku;
 			$insert["item_category_id"]			      = Request::input("item_category_id");
 			$insert["item_img"]					      = Request::input("item_img") ? Request::input("item_img") : "";
 			$insert["item_type_id"]				      = 3; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service)
@@ -797,6 +826,9 @@ class ItemController extends Member
 			$insert["shop_id"]	    				  = $shop_id;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
+			$insert["item_purchasing_information"]    = Request::input("item_purchasing_information") ? Request::input("item_purchasing_information") : "";
+			$insert["item_cost"]				      = Request::input("item_cost");
+			$insert["item_expense_account_id"]	      = Request::input("item_expense_account_id");
 			
 			$rules["item_name"]					      = 'required';
 			$rules["item_sku"]					      = 'required';
@@ -831,8 +863,8 @@ class ItemController extends Member
 		}
 		else if(Request::input("item_type") == "bundle")
 		{
-			$insert["item_name"]				= Request::input("item_name");
-			$insert["item_sku"]					= Request::input("item_sku");
+			$insert["item_name"]				= $item_name;
+			$insert["item_sku"]					= $item_sku;
 			$insert["item_img"]					= Request::input("item_img");
 			$insert["item_category_id"]			= Request::input("item_category_id");
 			$insert["item_sales_information"] 	= Request::input("item_sales_information");
@@ -955,8 +987,8 @@ class ItemController extends Member
 		$data								 = null;
 		$data["type_of_item"]           	 = Request::input("type_of_item");
 		$data["item_id"]					 = Request::input("item_id");
-		$data["item_name"]					 = Request::input("item_name");
-		$data["item_sku"]					 = Request::input("item_sku");
+		$data["item_name"]					 = Request::input("item_name")."/".Request::input("item_sku");
+		$data["item_sku"]					 = Request::input("item_name")."/".Request::input("item_sku");
 		$data["item_sales_information"]		 = Request::input("item_sales_information");
 		$data["item_purchasing_information"] = Request::input("item_purchasing_information");
 		$data["item_img"]					 = Request::input("item_img");

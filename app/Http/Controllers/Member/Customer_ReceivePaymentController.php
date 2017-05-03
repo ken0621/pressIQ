@@ -35,7 +35,8 @@ class Customer_ReceivePaymentController extends Member
     }
 
     public function index()
-    {        
+    {    
+
         $data["c_id"] = Request::input("customer_id");
         $data["_customer"]      = Customer::getAllCustomer();
         $data['_account']       = Accounting::getAllAccount();
@@ -87,6 +88,7 @@ class Customer_ReceivePaymentController extends Member
                 $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
 
                 Tbl_receive_payment_line::insert($insert_line);
+
                 if($insert_line["rpline_reference_name"] == 'invoice')
                 {
                     Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
@@ -94,6 +96,16 @@ class Customer_ReceivePaymentController extends Member
             }
         }
 
+        $entry["reference_module"]      = "receive-payment";
+        $entry["reference_id"]          = $rcvpayment_id;
+        $entry["name_id"]               = $insert["rp_customer_id"];
+        $entry["total"]                 = $insert["rp_total_amount"];
+        $entry_data[0]['account_id']    = $insert["rp_ar_account"];
+        $entry_data[0]['vatable']       = 0;
+        $entry_data[0]['discount']      = 0;
+        $entry_data[0]['entry_amount']  = $insert["rp_total_amount"];
+        $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
+        
         $rcv_data = AuditTrail::get_table_data("tbl_receive_payment","rp_id",$rcvpayment_id);
         AuditTrail::record_logs("Added","receive_payment",$rcvpayment_id,"",serialize($rcv_data));
 
@@ -102,7 +114,7 @@ class Customer_ReceivePaymentController extends Member
         $json["status"]         = "success";
         $json["rcvpayment_id"]  = $rcvpayment_id;
         $json["message"]        = "Successfully received payment";
-        $json["redirect"]            = "/member/customer/receive_payment";
+        $json["redirect"]       = "/member/customer/receive_payment";
 
         if($button_action == "save-and-edit")
         {
@@ -149,6 +161,16 @@ class Customer_ReceivePaymentController extends Member
                 Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
             }
         }
+
+        $entry["reference_module"]      = "receive-payment";
+        $entry["reference_id"]          = $rcvpayment_id;
+        $entry["name_id"]               = $update["rp_customer_id"];
+        $entry["total"]                 = $update["rp_total_amount"];
+        $entry_data[0]['account_id']    = $update["rp_ar_account"];
+        $entry_data[0]['vatable']       = 0;
+        $entry_data[0]['discount']      = 0;
+        $entry_data[0]['entry_amount']  = $update["rp_total_amount"];
+        $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
 
         $new_data = AuditTrail::get_table_data("tbl_receive_payment","rp_id",$rcvpayment_id);
         AuditTrail::record_logs("Updated","receive_payment",$rcvpayment_id,serialize($old_data),serialize($new_data));

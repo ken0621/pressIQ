@@ -270,7 +270,7 @@ class ShopCheckoutController extends Shop
                 }
             }
             // Payment Method With Proof of Payment
-            elseif($cart["payment_method_id"] != 1 && $cart["payment_method_id"] != 2 && $cart["payment_method_id"] != 7)
+            elseif($cart["payment_method_id"] != 1 && $cart["payment_method_id"] != 2 && $cart["payment_method_id"] != 8)
             {
                 $shop_id    = $this->shop_info->shop_id;
                 $shop_key   = $this->shop_info->shop_key;
@@ -317,7 +317,7 @@ class ShopCheckoutController extends Shop
                 
             }
             /* iPay88 */
-            elseif ($cart["payment_method_id"] == 7)
+            elseif ($cart["payment_method_id"] == 8)
             {
                 $prodDesc = '';
                 //dd(Request::input("payment_method_id"));

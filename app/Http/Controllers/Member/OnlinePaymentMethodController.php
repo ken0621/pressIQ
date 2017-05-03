@@ -50,10 +50,10 @@ class OnlinePaymentMethodController extends Member
 			else
 			{
 				$_gateway[$key]->client_id = $gateway->api_client_id;
-				$_gateway[$key]->secret_id = $gateway->api_secret_id;
+				$_gateway[$key]->secret_id = $gateway->api_secret_ids;
 			}
 		}
-		// dd($_gateway);
+		 //dd($_gateway);
 		return $_gateway;
 	}
 

@@ -324,7 +324,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 
 	/* PAYROLL SUMMARY JOURNAL ENTRIES */
-	Route::get('/payroll_summary','Member\PayrollController@payroll_summary');
+	Route::get('/journal_entry','Member\PayrollController@journal_entry');
 
 	/* END */
 

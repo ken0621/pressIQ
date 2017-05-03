@@ -118,16 +118,19 @@ class Invoice
         {
             $insert['inv_payment_applied']        = $overall_price;
             $insert['is_sales_receipt']           = 1;
+            $transaction_type = "sales-receipt";
+        }
+        else
+        {
+            $transaction_type = "invoice";
         }
         $invoice_id = Tbl_customer_invoice::insertGetId($insert);
+        
 
-        if($is_sales_receipt != '')
-        {
-            Invoice::postSales_receipt_payment($customer_info,$invoice_info,$overall_price,$invoice_id);
-        } 
         /* Transaction Journal */
-        $entry["reference_module"]  = "invoice";
+        $entry["reference_module"]  = $transaction_type;
         $entry["reference_id"]      = $invoice_id;
+        $entry["name_id"]           = $customer_info['customer_id'];
         $entry["total"]             = $overall_price;
         $entry["vatable"]           = $tax;
         $entry["discount"]          = $discount;
@@ -220,6 +223,7 @@ class Invoice
         /* Transaction Journal */
         $entry["reference_module"]  = "invoice";
         $entry["reference_id"]      = $invoice_id;
+        $entry["name_id"]           = $customer_info['customer_id'];
         $entry["total"]             = $overall_price;
         $entry["vatable"]           = $tax;
         $entry["discount"]          = $discount;
@@ -275,6 +279,8 @@ class Invoice
                 $insert_line['invline_discount_type']   = $discount_type;
                 $insert_line['invline_discount_remark'] = $item_line['discount_remark'];
                 $insert_line['taxable']                 = $item_line['taxable'];
+                $insert_line['invline_ref_name']        = $item_line['ref_name'];
+                $insert_line['invline_ref_id']          = $item_line['ref_id'];
                 $insert_line['invline_amount']          = $amount;
                 $insert_line['date_created']            = Carbon::now();
 
@@ -285,6 +291,7 @@ class Invoice
                 $entry_data[$key]['vatable']       = 0;
                 $entry_data[$key]['discount']      = $discount;
                 $entry_data[$key]['entry_amount']  = $amount;
+                
             }
         }
 

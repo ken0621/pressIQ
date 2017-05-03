@@ -24,7 +24,7 @@
          </thead>
          <tbody>
             @foreach($get_cart['cart'] as $cart)
-            <tr>
+            <tr variation-id="{{ $cart['product_id'] }}">
                <td class="text-left">
                   <div class="img">
                      <img src="{{ $cart['cart_product_information']['image_path'] }}">
@@ -44,7 +44,7 @@
             </tr>
 
                @if(isset($cart['cart_product_information']['membership_points']))
-                  <tr>
+                  <tr class="membership-row" variation-id="{{ $cart['product_id'] }}">
                      <td colspan="40">
                         <table class="table table-bordered">
                            <tr>
@@ -55,7 +55,6 @@
                         </table>
                      </td>
                   </tr>
-                  
                @endif
             @endforeach
          </tbody>
@@ -68,6 +67,7 @@
       </div>
       <div style="margin-top: 10px;">
          <span class="cart-loader hide"><img style="height: 37px; margin-right: 7.5px;" src="/assets/front/img/loader.gif"></span>
+         <button type="button" class="btn btn-primary" data-dismiss="modal">CONTINUE SHOPPING</button>
          <button type="button" class="checkout-modal-button btn btn-primary" onClick="location.href='/checkout'">CHECK OUT</button>
       </div>
    </div>

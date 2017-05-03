@@ -24,6 +24,7 @@
 				<small>Category</small>
 				<select class="form-control" name="payroll_adjustment_category" required>
 					<option value="">Select Category</option>
+					<option value="Allowance">Allowance</option>
 					<option value="Bonus">Bonus</option>
 					<option value="Commissions">Commissions</option>
 					<option value="Incentives">Incentives</option>

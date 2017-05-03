@@ -24,6 +24,8 @@ function global()
 
         action_global_search();
         action_money_format();
+        action_int_format();
+        action_float_format();
 
         $('[data-toggle="tooltip"]').tooltip({container: 'body'}); 
     }
@@ -189,16 +191,44 @@ function global()
         });
     }
 
+    function action_float_format() // Bryan Kier
+    {
+        $(document).on("change",".float-format", function()
+        {
+            $(this).val(formatFloat($(this).val()));
+        });
+    }
+
+
+    function action_int_format() // Bryan Kier
+    {
+        $(document).on("change",".int-format", function()
+        {
+            $(this).val(formatInt($(this).val()));
+        });
+    }
+
     function formatFloat($this) // Bryan Kier
     {
         return Number($this.toString().replace(/[^0-9\.]+/g,""));
+    }
+
+    function formatInt($this)
+    {
+        if (/^\d+$/.test($this)) 
+        {
+            return $this;
+        } 
+        else 
+        {
+            return '';
+        }
     }
 
     function formatMoney($this) // Bryan Kier
     {
         if($this != '')
         {
-            console.log("hi");
             var n = formatFloat($this), 
             c = isNaN(c = Math.abs(c)) ? 2 : c, 
             d = d == undefined ? "." : d, 

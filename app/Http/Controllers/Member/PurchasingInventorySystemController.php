@@ -197,7 +197,9 @@ class PurchasingInventorySystemController extends Member
         elseif($data["item"]->item_measurement_id != null)
         {
            $um_base_info = Tbl_unit_measurement_multi::where("multi_um_id",$data["item"]->item_measurement_id)->where("is_base",1)->first();
+           $um_issued_info = UnitMeasurement::um_info($item_issued_um);
            $um_qty = 1;
+           $base_qty = $data["item"]->sc_item_qty;
            if($um_issued_info)
            {
                $um_qty = $um_base_info->unit_qty;
@@ -803,7 +805,7 @@ class PurchasingInventorySystemController extends Member
             {
                 $qty = UnitMeasurement::um_qty($related_um_type[$key]);
                 $items[$key]['id'] = $value;
-                $items[$key]['quantity'] = $item_qty[$key] * $qty;
+                $items[$key]['quantity'] = str_replace(",","",$item_qty[$key]) * $qty;
             }
 
         }
@@ -923,7 +925,11 @@ class PurchasingInventorySystemController extends Member
                     {
                         $count_on_hand = 0;   
                     }
-                    if($inventory_consume_product[$key]["quantity"] < 0 && $count_on_hand < 0 && $count_on_hand < $inventory_consume_product[$key]["quantity"])
+                    if($value['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value['quantity'])
+                    {
+
+                    }
+                    else
                     {
                         $item_name = Tbl_item::where("item_id",$value["id"])->pluck("item_name");
 
@@ -1152,7 +1158,11 @@ class PurchasingInventorySystemController extends Member
                 {
                     $count_on_hand = 0;   
                 }
-                if($inventory_update_item[$key]["quantity"] < 0 && $count_on_hand < 0 && $count_on_hand < $inventory_update_item[$key]["quantity"])
+                 if($value['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value['quantity'])
+                {
+
+                }
+                else
                 {
                      $item_name = Tbl_item::where("item_id",$value["id"])->pluck("item_name");
 
@@ -1218,6 +1228,7 @@ class PurchasingInventorySystemController extends Member
                     }
                 }
                 $data["status"] = "success-lof";
+                $data["sir_id"] = $sir_id;
 
                 $new_sir_data = Purchasing_inventory_system::get_sir_data($sir_id);
                 AuditTrail::record_logs("Edited","pis_load_out_form",$sir_id,serialize($old_sir_data),serialize($new_sir_data));

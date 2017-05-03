@@ -166,11 +166,12 @@ class VendorController extends Member
         return view('member.vendor.load_vendor_tbl', $data)->render();  
     }
 
+   
     public function load_vendor()
-    {
-        // $data["_vendor"] = Tbl_vendor::whwhere("archived", 0)->get();
-        
-        return view('member.load_ajax_data.load_vendor', $data);
+    {        
+        $data["_vendor"]    = Vendor::getAllVendor('active');
+
+        return view("member.load_ajax_data.load_vendor",$data);
     }
 
     public function getAdd()
@@ -246,7 +247,6 @@ class VendorController extends Member
 
         return json_encode($json);
     }
-
     public function getEdit($vendor_id)
     {
         if($this->hasAccess("vendor-list","edit"))

@@ -16,7 +16,7 @@
 			<thead>
 				<tr>
 					@foreach(reset($_content) as $keys => $header)
-					<th>{{ ucwords(str_replace(' ', '_', $keys)) }}</th>
+					<th>{{ ucwords(str_replace('_', ' ', $keys)) }}</th>
 					@endforeach
 					<th></th>
 				</tr>

@@ -212,6 +212,7 @@ function manual_journal()
         event_compute_class_change();
         event_debit_credit_change_only_one_accept();
         event_button_action_click();
+        event_droplist_input_change();
 
         action_initialize_select();
         action_lastclick_row();
@@ -229,6 +230,10 @@ function manual_journal()
             onCreateNew : function()
             {
                 account_selected = $(this);
+            },
+            onChangeValue: function()
+            {
+                $(this).find("tr").find(".select-name").change();
             }
         });
 
@@ -237,11 +242,40 @@ function manual_journal()
             width       : '100%',
             hasPopup    : 'false',
             placeholder : 'Customers or Vendor',
-            onChangeValue: function()
+            onChangeValue: function(e)
             {
+                /* SET REFERENCE TYPE (CUSTOMER OR VENDOR) */
                 $(this).parents("td").find(".reference_name").val($(this).find("option:selected").attr("reference"));
+
             }
         });
+    }
+
+    function event_droplist_input_change()
+    {
+        $(document).on("change", "input", function()
+        {
+            if($(this).parents(".droplist").find("select").hasClass("select-name"))
+            {
+                $name_reference     = $(this).parents("tr").find(".select-name").find("option:selected").attr("reference");
+                $account_reference  = $(this).parents("tr").find(".select-coa").find("option:selected").attr("reference");
+
+                if($name_reference != '' && $name_reference != $account_reference)
+                {
+                    this.setCustomValidity("Invaid name type for account type");
+                    return false;
+                }
+                else
+                {   
+                    this.setCustomValidity("");
+                    return true;
+                }
+            }
+            else if($(this).parents(".droplist").find("select").hasClass("select-coa"))
+            {
+                
+            }
+        })
     }
 
     function event_remove_tr()

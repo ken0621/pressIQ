@@ -11,7 +11,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- GOOGLE FONT -->
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Fjalla+One" rel="stylesheet"> 
         <!-- BOOTSTRAP -->
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap.min.css">
         <link rel="stylesheet" href="/themes/{{ $shop_theme }}/assets/initializr/css/bootstrap-theme.min.css">
@@ -54,142 +55,100 @@
     <div class="loader">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
-        <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
 
     <!-- HEADER -->
-    <div class="header-nav">
-    	<div class="header-nav-top">
-    		<div class="container">
-                @if($customer_info == null)
-                <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
-                @else
-                <div class="holder"><a href="/mlm"><i class="fa fa-user" aria-hidden="true"></i> Member's Area
-                    @if($slot_now != null)
-                        (Membership Code # {{$slot_now->slot_no}})
-                    @endif
-                    </a>
-                </div>    
-                @endif
-                <div class="holder"><div class="linya"></div></div>
-                <div class="holder"><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> My Cart</a></div>
-                <div class="holder"><div class="linya"></div></div>
-    			<div class="holder"><a href="/checkout"><i class="fa fa-check" aria-hidden="true"></i> Checkout</a></div>
-	    		<div class="holder"><div class="linya"></div></div>
-	    		<div class="holder"><a href="/about">About Us</a></div>
-	    		<div class="holder"><div class="linya"></div></div>
-	    		<div class="holder"><a href="/contact">Contact Us</a></div>
-    		</div>
-    	</div>
-    	<div class="header-nav-middle">
-    		<div class="container">
-    			<div class="row clearfix">
-	    			<div class="col-md-3">
-                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech-official-logo.png">            
-                    </div>
-	    			<div class="col-md-6">
-	    				<div class="search-bar">
-	    					<div class="input-group input-group-lg">
-							  <!-- <span class="input-group-addon search-category" id="sizing-addon1">Categories <span class="caret"></span></span> -->
-							  <input type="text" class="form-control search-input" aria-describedby="sizing-addon1">
-							  <span class="input-group-addon search-button" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
-							</div>
-	    				</div>
-	    			</div>
-	    			<div class="col-md-3 woaw">
-	    				<div class="shopping-cart-container">
-	    					<div class="shopping-cart"><i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="badge mini-cart-quantity">{{ $global_cart['sale_information']['total_quantity'] }}</span> <span>CART PHP.</span> <span class="mini-cart-total-price">{{ number_format($global_cart['sale_information']['total_product_price'], 2) }}</span></div>
-	    				    <div class="container-cart mini-cart">
-                                <div class="text-center"><span class="cart-loader text-center"><img style="height: 50px; margin: auto;" src="/assets/front/img/loader.gif"></span></div>
-                            </div>
-                        </div>
-	    			</div>
-	    		</div>
-    		</div>
-    	</div>
+    <div class="header-container">
         <div class="container">
-            <marquee style="color: #fff; font-size: 18px;">Empowering consumers to experience the VIP Life... Convenience. Benefits. Rewards. Unlimited Income.</marquee>
+            <div class="row clearfix">
+                <div class="col-md-2">
+                    <div class="image-logo-holder">
+                        <img src="/themes/{{ $shop_theme }}/img/company-logo.png">                       
+                    </div>
+                </div>
+                <div class="col-md-10">
+                <!-- NAVIGATION -->
+                    <nav>
+                        <a href="/" class="head-button link-nav">HOME</a>
+                        <a href="/about" class="head-button link-nav">COMPANY PROFILE</a>
+                        <a href="/runruno" class="head-button link-nav">RUNRUNO</a>
+                        <a href="/news" class="head-button link-nav">NEWS</a>
+                        <a href="/contactus" class="head-button link-nav">CONTACT US</a>
+                    </nav>
+                </div>
+                
+            </div>
         </div>
+
     </div>
-    <!-- NAVIGATION -->
-    <nav class="navbar navbar-default">
-	  <div class="container">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-	        <span class="sr-only">Toggle navigation</span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-	    </div>
-
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      <ul class="nav navbar-nav">
-	        <li class="nav-border {{ Request::segment(1) == '' ? 'active' : '' }}"><a href="/">HOME <span class="sr-only">(current)</span></a></li>
-	        @if(isset($_categories))
-                @foreach($_categories as $category)     
-                <li class="nav-border {{ Request::input('type') == $category['type_id'] ? 'active' : '' }}"><a href="/product?type={{ $category['type_id'] }}" style="text-transform: uppercase;">{{ $category['type_name'] }}</a></li>
-    	        @endforeach
-            @endif
-          </ul>
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
-
+    <!-- NEWS DROPDOWN -->
+<!--     <div class="news-dropdown">
+        <div class="row clearfix">
+            <div class="col-md-3">
+                <div class="news-per-container">
+                    <div class="dropdown-img-container"><img src="/themes/{{ $shop_theme }}/img/d1.png"></div>
+                    <div class="news-title-container">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="news-per-container">
+                    <div class="dropdown-img-container"><img src="/themes/{{ $shop_theme }}/img/d2.png"></div>
+                    <div class="news-title-container">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="news-per-container">
+                    <div class="dropdown-img-container"><img src="/themes/{{ $shop_theme }}/img/d3.png"></div>
+                    <div class="news-title-container">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="news-per-container">
+                    <div class="dropdown-img-container"><img src="/themes/{{ $shop_theme }}/img/d4.png"></div>
+                    <div class="news-title-container">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </div>
+                </div>
+            </div>
+        </div>
+    </div>     -->
+    <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
 	   @yield("content")
     </div>
 
     <!-- FOOTER -->
   	<footer>
-   	    <div class="container ftr">
+        <div class="container">
             <div class="row clearfix">
-                <div class="col-md-4 col-sm-6">
-                    <div class="btm-title">SHOP</div>
-                    <div class="row clearfix btm-link">
-                        @if(isset($_categories))
-                            @foreach($_categories as $category)     
-                            <div class="btm-sub-title col-xs-6"><a href="/product?type={{ $category['type_id'] }}">{{ $category['type_name'] }}</a></div>
-                            @endforeach
-                        @endif
+                <div class="col-md-6">
+                    <div class="footer-img-container">
+                        <img src="/themes/{{ $shop_theme }}/img/footer-img.png">
                     </div>
-                </div> 
-                <div class="col-md-3 col-sm-6">
-                    <div class="btm-title">CONTACT US</div>
-                    <table style="table-layout: fixed; width: 100%;">
-                        <tr>
-                            <td style="width: 35px;"><i class="fa fa-map-marker" aria-hidden="true"></i></td>
-                            <td class="contact-title">{{ isset($company_info['company_address']) ? $company_info['company_address']->value : '' }}</td>
-                        </tr>
-                        <tr>
-                            <td style="width: 35px;"><i class="fa fa-mobile" aria-hidden="true"></i></td>
-                            <td class="contact-title">{{ isset($company_info['company_mobile']) ? $company_info['company_mobile']->value : '' }}</td>
-                        </tr>
-                        <tr>
-                            <td style="width: 35px;"><i class="fa fa-envelope-o" aria-hidden="true"></i></td>
-                            <td class="contact-title">{{ isset($company_info['company_email']) ? $company_info['company_email']->value : '' }}</td>
-                        </tr>
-                    </table>
                 </div>
-                <div class="col-md-3 col-sm-6">
-                    <div class="btm-title">COMPANY</div>
-                    <div class="btm-sub-title">{{ substr(get_content($shop_theme_info, "about", "about_content"), 0, 200) }}... &nbsp;<a style="color: #fff;" href="/about">See More</a></div>
+                <div class="col-md-3">
+                    <div class="navigation-container">
+                        <div class="navigation-title-container">
+                            NAVIGATION
+                        </div>
+                        <div class="navigation-btn-container">
+                            <p><span>HOME</span></p>
+                            <p><span>COMPANY PROFILE</span></p>
+                            <p><span>RUNRUNO</span></p>
+                            <p><span>NEWS</span></p>
+                            <p><span>CONTACT US</span></p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-2 col-sm-6">
-                    <div class="btm-title">FOLLOW US ON</div>
-                    <div>
-                        @if(get_content($shop_theme_info, "info", "facebook_link"))
-                        <a href="{{ get_content($shop_theme_info, "info", "facebook_link") }}"><i class="fa fa-facebook site-icon" aria-hidden="true"></i></a>
-                        @endif
-                        @if(get_content($shop_theme_info, "info", "twitter_link"))
-                        <a href="{{ get_content($shop_theme_info, "info", "twitter_link") }}"><i class="fa fa-twitter site-icon" aria-hidden="true"></i></a>
-                        @endif
-                        @if(get_content($shop_theme_info, "info", "pinterest_link"))
-                        <a href="{{ get_content($shop_theme_info, "info", "pinterest_link") }}"><i class="fa fa-pinterest-p site-icon" aria-hidden="true"></i></i></a>
-                        @endif
+                <div class="col-md-3">
+                    <div class="navigation-container">
+                        <div class="navigation-title-container">
+                            CONTACT INFORMATION
+                        </div>
+                        <div class="ftr-contact-container">
+                            <p>Address: 22nd Floor, Salcedo Towers, 169 H.V. Dela Costa Street, Salcedo Village, Makati City, Metro Manila, Philippines<br><br>
+    
+Phone: +63 (0) 2 659 5662<br> 
+Fax: +63 (0) 2 846 8507
+</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -200,28 +159,12 @@
         <div class="container bottom">
             <div class="row clearfix">
                 <div class="col-md-12">                            
-                    <div class="ftr-title">© {{ isset($company_info['company_name']) ? $company_info['company_name']->value : 'Your Name' }} {{ date('Y') }}</div>
-                    <div class="image-logo">
-                    <img src="/themes/{{ $shop_theme }}/img/ftr-image1.jpg">
-                    <img src="/themes/{{ $shop_theme }}/img/ftr-image2.jpg">
-                    <img src="/themes/{{ $shop_theme }}/img/ftr-image3.jpg">
-                    <img src="/themes/{{ $shop_theme }}/img/ftr-image4.jpg">
-                    <img src="/themes/{{ $shop_theme }}/img/ftr-image5.jpg">
-                    </div>
+                    <div class="ftr-title">Copyright 2017 FCF Minerals | Powered By : DIGIMA Web Solutions, Inc.</div>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Modal -->
-    <div id="shopping_cart" class="modal fade global-modal shopping-cart-modal" role="dialog">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          
-        </div>
-      </div>
-    </div>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>

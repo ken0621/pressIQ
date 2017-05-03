@@ -1,370 +1,236 @@
 @extends("layout")
 @section("content")
 <div class="content">
-	<div class="container">
 	<!-- TOP CONTENT -->
-		<div class="row clearfix">
-			<div class="col-md-3">
-				<div class="left-bar-categories">
-					<div class="left-bar-title">
-						<img src="/themes/{{ $shop_theme }}/img/menu.png">
-						<span>CATEGORIES</span>
-					</div>
-					@if(isset($_categories))
-						@foreach($_categories as $category)
-						<div class="button-shop">
-							<div class="text">
-								<!-- <img src="/themes/{{ $shop_theme }}/img/electronics.png"> -->
-								{{ $category['type_name'] }}
-							</div>
-							@if($category['subcategory'])
-							<div class="hover">
-								<div class="hover-holder">
+	<div class="top-container">
+		<div class="container">
+			<div class="row clearfix">
+				<!-- HOME SLIDESHOW -->
+				<div class="col-md-8">
+					<div class="slider-container">
+						<div>
+							<div class="slider">
+								<img class="image" src="/themes/{{ $shop_theme }}/img/slider1.png">
+								<div class="slider-details-bg"></div>
+								<div class="slider-title-container" style="background-image: url('/themes/{{ $shop_theme }}/img/slider-details-bg.png');">
 									<div class="row clearfix">
-										<ul class="col-md-12">
-											@foreach($category['subcategory'] as $subcategory)
-											<li><a href="/product?type={{ $subcategory['type_id'] }}">{{ $subcategory['type_name'] }}</a></li>
-												@foreach($subcategory['subcategory'] as $subcategory1)
-												<li><a href="/product?type={{ $subcategory1['type_id'] }}">{{ $subcategory1['type_name'] }}></a></li>
-													@foreach($subcategory1['subcategory'] as $subcategory2)
-													<li><a href="/product?type={{ $subcategory2['type_id'] }}">{{ $subcategory2['type_name'] }}></a></li>
-													@endforeach
-												@endforeach
-											@endforeach
-										</ul>
-									</div>
-									<div class="banner-holder">
-										<img src="/themes/{{ $shop_theme }}/img/big-discount.jpg">
-									</div>
-								</div>
-							</div>
-							@endif
-						</div>
-						@endforeach
-					@endif
-				</div>
-			</div>
-			<div class="col-md-9">
-				<div class="add-slider">
-					<div class="add-top">
-						@if(is_serialized(get_content($shop_theme_info, "home", "home_slider")))
-							@foreach(unserialize(get_content($shop_theme_info, "home", "home_slider")) as $slider)
-							<div>
-								<div class="slider-holder">
-									<img class="home_adds1" src="{{ $slider }}">
-								</div>
-							</div>
-							@endforeach
-						@else
-							<div>
-								<div>
-									<img class="home_adds1" data-lazy="/themes/{{ $shop_theme }}/img/home_adds1.jpg">
-								</div>
-							</div>
-						@endif
-					</div>
-					<div class="adds-bottom">
-					<div class="clearfix row">
-						<div class="col-md-4">
-							<div class="top-text">{{ get_content($shop_theme_info, "home", "home_intro_title_1", "MONEY BACK") }}</div>
-							<div class="bottom-text">{{ get_content($shop_theme_info, "home", "home_intro_sub_1", "15 Days Money Back Guarantee") }}</div>
-						</div>
-						<div class="col-md-4">
-							<div class="top-text">{{ get_content($shop_theme_info, "home", "home_intro_title_2", "FREE SHIPPING") }}</div>
-							<div class="bottom-text">{{ get_content($shop_theme_info, "home", "home_intro_sub_2", "Shipping on orders over PHP 1000.00") }}</div>
-						</div>
-						<div class="col-md-4">
-							<div class="top-text">{{ get_content($shop_theme_info, "home", "home_intro_title_3", "SPECIAL DISCOUNT") }}</div>
-							<div class="bottom-text">{{ get_content($shop_theme_info, "home", "home_intro_sub_3", "Extra 5% off on all items") }}</div>
-						</div>
-					</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- BOTTOM CONTENT -->
-		<div class="row clearfix">
-			<div class="col-md-3">
-				<div class="hot-deals-container">
-					<div class="left-container-title">
-						<span>DAILY HOT DEALS</span>
-						<span class="scroll-button"><a class="left" href="#"><img src="/themes/{{ $shop_theme }}/img/left-button-scroll.png"></a><a class="right" href="#"><img src="/themes/{{ $shop_theme }}/img/right-button-scroll.png"></a></span>
-					</div>
-					<div class="daily-container">
-						@foreach(get_collection(get_content($shop_theme_info, "home", "daily_hot_deals"), $shop_id) as $collection)
-							<div class="holder">
-								<div class="hot-deals-item-container">
-									<img class="4-3-ratio" src="{{ get_collection_first_image($collection) }}">
-									<div class="item-details">
-										<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ get_collection_first_name($collection) }}</div></a>
-										<div class="item-price">{{ get_collection_first_price($collection) }}</div>
-									</div>
-									<button type="button" onCLick="location.href='/product/view/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn" style="margin-top: 25px;">
-										<table>
-											<tbody>
-												<tr>
-													<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-													<td class="text">View More</td>
-												</tr>
-											</tbody>
-										</table>
-									</button>
-								</div>
-							</div>
-						@endforeach
-					</div>
-				</div>
-				<div class="special-offers-container">
-					<div class="left-container-title">
-						<span>SPECIAL OFFERS</span>
-					</div>
-					<div class="item-container">
-						@foreach(get_collection(get_content($shop_theme_info, "home", "special_offers"), $shop_id) as $collection)
-						<div class="row-no-padding clearfix per-item">
-							<div class="col-xs-4"><img class="item-img 4-3-ratio" src="{{ get_collection_first_image($collection) }}"></div>
-							<div class="col-xs-8">
-								<div class=" item-details-container">
-									<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
-									<div class="item-price">{{ get_collection_first_price($collection) }}</div>
-								</div>
-							</div>
-						</div>
-						@endforeach
-					</div>
-				</div>
-			</div>
-			
-			<div class="col-md-9">
-			<!-- FEATURED TODAY -->
-				<div class="featured-container">
-					<div class="left-container-title">FEATURED TODAY</div>
-					<div class="featured-item-container row clearfix">	
-						@foreach(get_collection(get_content($shop_theme_info, "home", "featured_today"), $shop_id) as $collection)
-						<div class="col-md-3">
-							<div class="per-item-container">
-								<div class="image-content-1">
-									<img class="item-image-large 4-3-ratio" src="{{ get_collection_first_image($collection) }}">
-									<button type="button" onCLick="location.href='/product/view/{{ $collection['product']['eprod_id'] }}'" class="new-add-to-cart-button btn">
-										<table>
-											<tbody>
-												<tr>
-													<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-													<td class="text">View More</td>
-												</tr>
-											</tbody>
-										</table>
-									</button>
-								</div>
-								<div class="item-details">
-									<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
-									<div class="rating">
-										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-									</div>
-									<div class="item-price">{{ get_collection_first_price($collection) }}</div>
-								</div>
-								@if(count($collection['product']['variant'][0]['mlm_discount']) > 0)
-	                            <div style="margin-top: 15px;">
-	                                <table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 10px;">
-	                                    <thead>
-	                                        <tr>
-	                                            <th>Membership</th>
-	                                            <th>Price</th>
-	                                        </tr>
-	                                    </thead>
-	                                    <tbody>
-	                                        @foreach($collection['product']['variant'][0]['mlm_discount'] as $key => $mlm_discount)
-	                                        <tr>
-	                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
-	                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
-	                                        </tr>
-	                                        @endforeach
-	                                    </tbody>
-	                                </table>
-	                            </div>
-	                            @endif
-							</div>
-						</div>
-						@endforeach
-					</div>
-				</div>
-				<div class="best-seller-container">
-					<div class="left-container-title">BEST SELLER</div>
-					<div class="best-item-container row clearfix">	
-						@foreach(get_collection(get_content($shop_theme_info, "home", "best_seller"), $shop_id) as $collection)
-						<div class="col-md-4">
-							<div class="per-item-container">
-								<div class="row clearfix">
-									<div class="col-md-6 col-sm-12">
-										<a href="#"><img class="item-image-small 4-3-ratio" style="width: 100%;" src="{{ get_collection_first_image($collection) }}"></a>
-									</div>
-									<div class="col-md-6 col-sm-12">
-										<div class="item-details" style="padding-top: 0;">
-											<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
-											<div class="rating">
-												<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-												<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-												<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-												<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-												<img src="/themes/{{ $shop_theme }}/img/star-active.png">
+										<div class="col-md-9">
+											<div class="slider-details">
+												<div class="slider-title">THE PROJECT</div>
+												<div class="slider-title-details">FCF will develop a project as a surface mine with a processing plant to produce gold (dore)...
+												</div>
 											</div>
-											<div class="item-price">{{ get_collection_first_price($collection) }}</div>
+										</div>
+										<div class="col-md-3">
+											<div class="btn-container"><button class="read-more-btn">READ MORE</button></div>
 										</div>
 									</div>
-									<div class="col-md-12">
-										@if(count($collection['product']['variant'][0]['mlm_discount']) > 0)
-			                            <div style="margin-top: 15px;">
-			                                <table class="table table-bordered table-striped table-hover table-condensed" style="font-size: 12px;">
-			                                    <thead>
-			                                        <tr>
-			                                            <th>Membership</th>
-			                                            <th>Price</th>
-			                                        </tr>
-			                                    </thead>
-			                                    <tbody>
-			                                        @foreach($collection['product']['variant'][0]['mlm_discount'] as $key => $mlm_discount)
-			                                        <tr>
-			                                            <td>{{ $mlm_discount['discount_name'] }}</td>   
-			                                            <td>PHP. {{ number_format($mlm_discount['discounted_amount'], 2) }}</td>
-			                                        </tr>
-			                                        @endforeach
-			                                    </tbody>
-			                                </table>
-			                            </div>
-			                            @endif
+								</div>
+							</div>
+						</div>
+						<div>
+							<div class="slider">
+								<img class="image" src="/themes/{{ $shop_theme }}/img/slider2.png">
+								<div class="slider-details-bg"></div>
+								<div class="slider-title-container" style="background-image: url('/themes/{{ $shop_theme }}/img/slider-details-bg.png');">
+									<div class="row clearfix">
+										<div class="col-md-9">
+											<div class="slider-details">
+												<div class="slider-title">THE FEASIBILITY STUDY</div>
+												<div class="slider-title-details">FCF Minerals Corporation (FCF) was incorporated in the Philippines and was duly registered with the Philippines...
+												</div>
+											</div>
+										</div>
+										<div class="col-md-3">
+											<div class="btn-container"><button class="read-more-btn">READ MORE</button></div>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-						@endforeach
 					</div>
 				</div>
-				<div class="row clearfix">
-					<div class="col-md-6">
-						<div class="home-big-image">
-							@if($shop_theme_info->home->home_ads_1->default)
-							<img class="match-height" style="object-fit: cover;" src="{{ $shop_theme_info->home->home_ads_1->default }}">
-							@else
-							<img src="/themes/{{ $shop_theme }}/img/layer1.jpg">
-							@endif
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="home-big-image">
-							@if($shop_theme_info->home->home_ads_2->default)
-							<img class="match-height" style="object-fit: cover;" src="{{ $shop_theme_info->home->home_ads_2->default }}">
-							@else
-							<img src="/themes/{{ $shop_theme }}/img/layer2.jpg">
-							@endif
-						</div>
-					</div>
-				</div>
-				<div class="featured-container">
-					<div class="left-container-title new-arrivals">NEW ARRIVALS</div>
-					<div class="featured-item-container row clearfix">	
-						@foreach(get_collection(get_content($shop_theme_info, "home", "new_arrivals"), $shop_id) as $collection)
-						<div class="col-md-3 col-sm-6">
-							<div class="per-item-container">
-								<img class="item-image-large 4-3-ratio" src="{{ get_collection_first_image($collection) }}">
-								<div class="item-details">
-									<a href="/product/view/{{ $collection['product']['eprod_id'] }}"><div class="item-title">{{ $collection['product']['eprod_name'] }}</div></a>
-									<div class="rating">
-										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-										<img src="/themes/{{ $shop_theme }}/img/star-active.png">
-									</div>
-									<div class="item-price">{{ get_collection_first_price($collection) }}</div>
+				<!-- LATEST NEWS -->
+				<div class="col-md-4">
+					<div class="top-left-container-title">OUR LATEST NEWS</div>
+					<div class="latest-news-container">
+					<!-- NEWS PER CONTAINER -->
+						<div class="latest-news-per-container row-no-padding clearfix">
+							<div class="col-md-4">
+								<div class="news-img"><img src="/themes/{{ $shop_theme }}/img/news1.png"></div>
+							</div>
+							<div class="col-md-8">
+								<div class="news-details">
+									<div class="news-title">FCF Scholars Graduate With Honors</div>
+									<div class="news-content">FCF Minerals’ first baccalaureate scholars finally marched to receive their respective diplomas and medals last March 2013. Both finished their geo-sciences courses from Adamson University in Manila. </div>
+									<div class="read-more">READ MORE</div>
 								</div>
 							</div>
+							
 						</div>
-						@endforeach
+						<div class="latest-news-per-container row-no-padding clearfix">
+							<div class="col-md-4">
+								<div class="news-img"><img src="/themes/{{ $shop_theme }}/img/news2.png"></div>
+							</div>
+							<div class="col-md-8">
+								<div class="news-details">
+									<div class="news-title">Modernized Water System To Bring
+Potable Water To Runruno Community</div>
+									<div class="news-content">Amid company’s need for potable water supply, the Runruno residents stand to benefit from the water supply system project that FCF Minerals has begun constructing in September. </div>
+									<div class="read-more">READ MORE</div>
+								</div>
+							</div>
+							
+						</div>
+						<div class="latest-news-per-container row-no-padding clearfix">
+							<div class="col-md-4">
+								<div class="news-img"><img src="/themes/{{ $shop_theme }}/img/news3.png"></div>
+							</div>
+							<div class="col-md-8">
+								<div class="news-details">
+									<div class="news-title">Lorem ipsum dolor sit amet consect
+etuer adipiscing elit. </div>
+									<div class="news-content">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. </div>
+									<div class="read-more">READ MORE</div>
+								</div>
+							</div>
+							
+						</div>
+						<div class="latest-news-per-container row-no-padding clearfix">
+							<div class="col-md-4">
+								<div class="news-img"><img src="/themes/{{ $shop_theme }}/img/news4.png"></div>
+							</div>
+							<div class="col-md-8">
+								<div class="news-details">
+									<div class="news-title">Etiam ultricies nisi vel augue</div>
+									<div class="news-content">Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. </div>
+									<div class="read-more">READ MORE</div>
+								</div>
+							</div>
+							
+						</div>
+						
 					</div>
 				</div>
-				<div class="brand-container">
-					<div>
-						<div id="brand-title">OUR BRANDS :</div>
-						<div id="brand-logo" class="multiple-item">
-						@if(is_serialized(get_content($shop_theme_info, "home", "home_brand")))
-							@foreach(unserialize(get_content($shop_theme_info, "home", "home_brand")) as $brand)
-							<div>
-								<img class="item-image-small brand-image" src="{{ $brand }}">
-							</div>
-							@endforeach
-						@else
-						<div>
-							<img class="item-image-small brand-image" src="/themes/{{ $shop_theme }}/img/brand1.png">
-						</div>
-						<div>
-							<img class="item-image-small brand-image" src="/themes/{{ $shop_theme }}/img/brand2.png">
-						</div>
-						<div>
-							<img class="item-image-small brand-image" src="/themes/{{ $shop_theme }}/img/brand3.png">
-						</div>
-						<div>
-							<img class="item-image-small brand-image" src="/themes/{{ $shop_theme }}/img/brand4.png">
-						</div>
-						<div>
-							<img class="item-image-small brand-image" src="/themes/{{ $shop_theme }}/img/brand1.png">
-						</div>
-						<div>
-							<img class="item-image-small brand-image" src="/themes/{{ $shop_theme }}/img/brand2.png">
-						</div>
-						<div>
-							<img class="item-image-small brand-image" src="/themes/{{ $shop_theme }}/img/brand3.png">
-						</div>
-						<div>
-							<img class="item-image-small brand-image" src="/themes/{{ $shop_theme }}/img/brand4.png">
-						</div>
-						@endif
-						</div>
+			</div>
+		</div>
+	</div>
+	<!-- BOTTOM CONTAINER -->
+	<div class="bottom-container">
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-9">
+					<div class="bottom-container-txt">
+						<div class="bottom-container-title">WE ARE A <span class="highlight">RESPONSILBE</span> MINING COMPANY</div>
+						<div class="bottom-container-details">This drives innovative solutions for our clients and improves our understanding of the world in which we work</div>
 					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="btn-container"><button class="learn-more-btn">LEARN MORE</button></div>
 				</div>
 			</div>
 			
-
-			<div class="col-md-9">
-			<!-- BEST SELLER -->
-				
+		</div>
+	</div>
+	<!-- GALLERY -->
+	<div class="gallery-container">
+		<div class="container">
+			<div class="container-title">
+				GALLERY
+			</div>
+			<div class="row-no-padding clearfix">
+				<div class="col-md-2">
+					<div class="gallery-img-container"><img src="/themes/{{ $shop_theme }}/img/img1.png"></div>
+					<div class="gallery-img-container"><img src="/themes/{{ $shop_theme }}/img/img2.png"></div>
+				</div>
+				<div class="col-md-2">
+					<div class="gallery-img-container"><img src="/themes/{{ $shop_theme }}/img/img3.png"></div>
+					<div class="gallery-img-container"><img src="/themes/{{ $shop_theme }}/img/img4.png"></div>
+				</div>
+				<div class="col-md-2">
+					<div class="gallery-img-container"><img src="/themes/{{ $shop_theme }}/img/img5.png"></div>
+					<div class="gallery-img-container"><img src="/themes/{{ $shop_theme }}/img/img6.png"></div>
+				</div>
+				<div class="col-md-2">
+					<div class="gallery-img-container"><img src="/themes/{{ $shop_theme }}/img/img7.png"></div>
+					<div class="gallery-img-container"><img src="/themes/{{ $shop_theme }}/img/img8.png"></div>
+				</div>
+				<div class="col-md-2">
+					<div class="gallery-img-container"><img src="/themes/{{ $shop_theme }}/img/img9.png"></div>
+					<div class="gallery-img-container"><img src="/themes/{{ $shop_theme }}/img/img10.png"></div>
+				</div>
+				<div class="col-md-2">
+					<div class="gallery-img-container"><img src="/themes/{{ $shop_theme }}/img/img11.png"></div>
+					<div class="gallery-img-container"><img src="/themes/{{ $shop_theme }}/img/img12.png"></div>
+				</div>
 			</div>
 		</div>
-	</div>	
+	</div>
+	<!-- WHO WE ARE -->
+	<div class="mid-container">
+		<div class="container">
+			<div class="row clearfix">
+				<div class="col-md-9">
+					<div class="bottom-container-txt">
+						<div class="bottom-container-title">WHO WE ARE</div>
+						<div class="bottom-container-details">FCF Minerals Corporation (FCF) was incorporated in the Philippines and was duly registered with the Philippine SEC on December 3, 2001 to engage in continuing exploration, development and commercial operation of mineral claims with full power and authority to do any and all acts, things, business and activities which are related, incidental or conducive directly or indirectly to the attainment of the foregoing objectives as a mining company.</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="btn-container"><button class="learn-more-btn">LEARN MORE</button></div>
+				</div>
+			</div>
+		</div>		
+	</div>
+	<!-- KEY COMPONENTS -->
+	<div class="key-components-container">
+		<div class="container">
+		<div class="container-title">KEY COMPONENTS</div>
+			<div class="row clearfix element-container">
+				<div class="col-md-3">
+					<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/technology.png"></div>
+					<div class="element-title">TECHNOLOGY</div>
+					<div class="element-description">A surface mine and Run of Mine (ROM) pad.</div>
+				</div>
+				<div class="col-md-3">
+					<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/performance.png"></div>
+					<div class="element-title">PERFORMANCE</div>
+					<div class="element-description">Process plant facility of grinding, flotation, BIOX ®, Carbon-in-Leach (CIL) and recovery.</div>
+				</div>
+				<div class="col-md-3">
+					<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/innovation.png"></div>
+					<div class="element-title">INNOVATION</div>
+					<div class="element-description">Residual Storage Impoundment (RSI) to ensure waste materials are properly managed and to maximize reclaim of water for the operation.</div>
+				</div>
+				<div class="col-md-3">
+					<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/infrastructure.png"></div>
+					<div class="element-title">INFRASTRUCTURE</div>
+					<div class="element-description">Associated infrastructure including upgrade of the access road, power line, accomodation camp and 
+ancilliary buildings.</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
 </div>
 @endsection
 
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/home.css">
-<style type="text/css">
-.slick-initialized .slick-slide {
-    float: none;
-    display: inline-block;
-    vertical-align: middle;
-}
-</style>
 @endsection
 
 @section("js")
 <script type="text/javascript">
 $(document).ready(function()
 {
-	$('.multiple-item').slick({
-	  infinite: true,
-	  slidesToShow: 4,
-	  slidesToScroll: 1,
-	  autoplay: true,
-  	  autoplaySpeed: 2000,
-	});
-
-	$('.add-slider .add-top').slick({
-	  lazyLoad: 'ondemand',
-	  prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/arrow-left.png'>",
-      nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right.png'>",
-      autoplay: true,
-  	  autoplaySpeed: 2000,
+	$('.slider-container').slick({
+		prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/arrow-left.png'>",
+      	nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right.png'>",
+      	dots: false,
+      	autoplay: true,
+  		autoplaySpeed: 2000,
 	});
 });
 </script>

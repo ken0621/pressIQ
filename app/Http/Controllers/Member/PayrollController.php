@@ -3716,6 +3716,12 @@ class PayrollController extends Member
           return view('member.payroll.reload.payslip_show', $data);
      }
 
+     public function modal_edit_payslip($id)
+     {
+          $data['_paper'] = Tbl_payroll_paper_sizes::getpaper(Self::shop_id())->orderBy('paper_size_name')->get();
+          return view('member.payroll.modal.modal_create_payslip', $data);
+     }
+
      public function modal_create_payslip()
      {
           $data['_paper'] = Tbl_payroll_paper_sizes::getpaper(Self::shop_id())->orderBy('paper_size_name')->get();
@@ -5469,14 +5475,80 @@ class PayrollController extends Member
           return view('member.payroll.payroll_view_report', $data);
      }
 
+
+     public function date_change_report()
+     {
+          $date[0]            = datepicker_input(Request::input('start'));
+          $date[1]            = datepicker_input(Request::input('end'));
+          $payroll_reports_id = Request::input('payroll_reports_id');
+
+          $data = Self::generate_custom_report($payroll_reports_id, $date);
+
+          return view('member.payroll.reload.reload_report_table', $data);
+     }
+
      public function download_excel_report()
      {
           $payroll_reports_id = Request::input('payroll_reports_id');
-          $date[0]            = Request::input('start');
-          $date[1]            = Request::input('end');
+          $date[0]            = datepicker_input(Request::input('start'));
+          $date[1]            = datepicker_input(Request::input('end'));
 
-          $data     = Self::generate_custom_report($id, $date);
-          $title    = Tbl_payroll_reports::where('payroll_reports_id', $id)->pluck('payroll_reports_name');
+          $record     = Self::generate_custom_report($payroll_reports_id, $date);
+
+          $emp = $record['_emp'];
+          $columns = $record['_columns'];
+
+          // dd($record);
+          $data = array();
+
+          $columnn_array = array();
+          array_push($columnn_array, '');
+          foreach($columns as $column)
+          {
+               array_push($columnn_array, $column);
+          }
+
+          array_push($data, $columnn_array);
+
+          foreach($record['_emp'] as $emp)
+          {
+               $temp = array();
+               array_push($temp, $emp['raw_name']);
+
+               foreach($emp['_raw'] as $raw)
+               {
+                    $raw = n2z($raw);
+                    if(!is_string($raw))
+                    {
+                         $raw = round($raw, 2);
+                         // if($raw == 0)
+                         // {
+                         //      $raw = number_format($raw, 2);
+                         // }
+                    }
+
+                    array_push($temp, $raw);
+               }
+               array_push($data, $temp);
+          }
+
+          $total_array = array();
+          array_push($total_array, 'Total');
+
+          foreach($record['_total'] as $total)
+          {
+               $total = round(n2z($total), 2);
+               // if($total == 0)
+               // {
+               //      $total = number_format(n2z($total), 2);
+               // }
+               array_push($total_array, round(n2z($total), 2));
+          }
+          array_push($data, $total_array);
+
+          // dd($data);
+
+          $title    = Tbl_payroll_reports::where('payroll_reports_id', $payroll_reports_id)->pluck('payroll_reports_name');
 
           return Excel::create($title, function($excel) use ($data) {
 
@@ -5486,7 +5558,10 @@ class PayrollController extends Member
                $excel->setDescription('payroll file');
 
                $excel->sheet($date, function($sheet) use ($data) {
-                    $sheet->fromArray($data, null, 'A1', false, false);
+                    $sheet->fromArray($data, null, 'A1', true, true);
+                    $sheet->setColumnFormat(array(
+                         'B:BZ' => '0.00'
+                         ));
                });
 
           })->download('xlsx');

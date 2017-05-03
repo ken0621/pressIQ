@@ -694,6 +694,10 @@ class PayrollController extends Member
 			case 'country':
 				$id = Tbl_country::where('country_name', $str_name)->pluck('country_id');
 				// return $id;
+                    if($id == null)
+                    {
+                         $id = 420;
+                    }
 				break;
 
 			case 'company':

@@ -10,6 +10,10 @@
         <h4>Agent Name: <strong>{{ucfirst($collection_data->first_name." ".$collection_data->middle_name." ".$collection_data->last_name)}}</strong></h4>
     </div>
     <div class="col-md-12">
+        <h3>Total Collection</h3>
+        <h4>{{$collectibles}}</h4>
+    </div>
+    <div class="col-md-12">
         <label>Amount Remitted</label>
         <input type="text" class="form-control number-input" required value="{{$collection_data->agent_collection or ''}}" name="agent_collection">
     </div>

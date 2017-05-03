@@ -1228,6 +1228,7 @@ class PurchasingInventorySystemController extends Member
                     }
                 }
                 $data["status"] = "success-lof";
+                $data["sir_id"] = $sir_id;
 
                 $new_sir_data = Purchasing_inventory_system::get_sir_data($sir_id);
                 AuditTrail::record_logs("Edited","pis_load_out_form",$sir_id,serialize($old_sir_data),serialize($new_sir_data));

@@ -10,7 +10,7 @@
 
     @yield('meta')
 
-    <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page }}</title>
+    <title>{{ ucfirst($shop_info->shop_key) }} | {{ (isset($page)) ? $page : '' }}</title>
 
     <link rel="icon" type="image/png" href="/resources/assets/frontend/img/favicon.png">
 

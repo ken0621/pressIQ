@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterTblMembershipEdtType extends Migration
+class AlterTblMembershipAddMembershipTypeA extends Migration
 {
     /**
      * Run the migrations.
@@ -14,14 +14,13 @@ class AlterTblMembershipEdtType extends Migration
     {
         Schema::table('tbl_membership', function (Blueprint $table) {
             //
-            // $table->renameColumn('membership_type', 'membership_type_a');
             if(schema::hasColumn('tbl_membership','membership_type'))
             {
                 $table->renameColumn('membership_type', 'membership_type_a');
             }
-            else
+            if(!schema::hasColumn('tbl_membership','membership_type_a'))
             {
-                $table->integer("membership_type_a")->default(0);
+                 $table->integer("membership_type_a")->default(0);
             }
         });
     }

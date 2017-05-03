@@ -42,7 +42,9 @@ $data['icon'] = 'icon-sitemap';
             <th>Current Wallet</th>
             <th>Membership</th>
             <th></th>
+            @if($enabled_upgrade_slot == 1)
             <th></th>
+            @endif
         </thead>
         <tbody>
             @if(count($all_slots_p) >= 1)
@@ -58,7 +60,9 @@ $data['icon'] = 'icon-sitemap';
                         <button class="btn btn-primary">Use Slot</button>
                       </form>
                   </td>
+                  @if($enabled_upgrade_slot == 1)
                   <td><button class="btn btn-primary popup" link="/mlm/slots/upgrade_slot/{{$value->slot_id}}" type="button" size="lg" data-toggle="modal" data-target="#global_modal">Upgrade Slot</button></td>
+                  @endif
                 </tr>
               @endforeach
             @else

@@ -11,6 +11,7 @@ use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_membership;
+use App\Models\Tbl_mlm_plan_setting;
 
 use App\Globals\Mlm_compute;
 class MlmSlotsController extends Mlm
@@ -20,6 +21,15 @@ class MlmSlotsController extends Mlm
     	if(Self::$slot_id != null)
     	{
     		$data = [];
+            $check_if_enabled = Tbl_mlm_plan_setting::where("shop_id",Self::$shop_id)->where("plan_settings_upgrade_slot",1)->first();
+            if($check_if_enabled)
+            {   
+                $data["enabled_upgrade_slot"] = 1;
+            }
+            else
+            {
+                $data["enabled_upgrade_slot"] = 0;
+            }
             $data['all_slots_p'] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->paginate(20);
             $data['active'] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_defaul', 1)->first();
     		// dd($data);
@@ -96,29 +106,37 @@ class MlmSlotsController extends Mlm
     }
     public function upgrade_slot($id)
     {
-        $data["id"] = $id;
-        $slot       = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where("slot_id",$id)->first();
-        if(!$slot)
-        {
-            dd("Wrong owner.");
+        $check_if_enabled = Tbl_mlm_plan_setting::where("shop_id",Self::$shop_id)->where("plan_settings_upgrade_slot",1)->first();
+        if($check_if_enabled)
+        {   
+            $data["id"] = $id;
+            $slot       = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where("slot_id",$id)->first();
+            if(!$slot)
+            {
+                dd("Wrong owner.");
+            }
+
+            $current_membership = Tbl_membership::where("membership_id",$slot->slot_membership)->first();
+            $higher_membership  = Tbl_membership::where("shop_id",Self::$shop_id)->where("membership_price",">",$current_membership->membership_price)->lists("membership_id");
+            
+            $data["membership_code"]       = Tbl_membership_code::package()
+                                                                ->whereIn("membership_id",$higher_membership)
+                                                                ->where("used",0)->where("blocked",0)
+                                                                ->where("archived",0)
+                                                                ->get();
+
+            $data["membership_code_count"] = Tbl_membership_code::package()
+                                                                ->whereIn("membership_id",$higher_membership)
+                                                                ->where("used",0)->where("blocked",0)
+                                                                ->where("archived",0)
+                                                                ->count();
+
+            return view('mlm.slots.upgrade_slot',$data);
         }
-
-        $current_membership = Tbl_membership::where("membership_id",$slot->slot_membership)->first();
-        $higher_membership  = Tbl_membership::where("shop_id",Self::$shop_id)->where("membership_price",">",$current_membership->membership_price)->lists("membership_id");
-        
-        $data["membership_code"]       = Tbl_membership_code::package()
-                                                            ->whereIn("membership_id",$higher_membership)
-                                                            ->where("used",0)->where("blocked",0)
-                                                            ->where("archived",0)
-                                                            ->get();
-
-        $data["membership_code_count"] = Tbl_membership_code::package()
-                                                            ->whereIn("membership_id",$higher_membership)
-                                                            ->where("used",0)->where("blocked",0)
-                                                            ->where("archived",0)
-                                                            ->count();
-
-        return view('mlm.slots.upgrade_slot',$data);
+        else
+        {
+            dd("Upgrade slot settings is disabled");
+        }
     }
 
     public function upgrade_slot_post($id)

@@ -24,7 +24,7 @@
             @foreach($warehouse_a as $k => $warehouse)
             <div style="overflow-x:auto;" class="table-responsive Container Flipped">
                 
-                <table class="table table-condensed table-bordered Content" width="100%">
+                <table class="table table-condensed table-bordered Content" style="width: 100%">
                     <thead>
                         <thead>
                             @if(isset($warehouse))

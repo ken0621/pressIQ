@@ -120,6 +120,7 @@
 									                    <label>Merchant Key</label>
 									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->secret_id or ''}}">
 									                </div>
+									                
 
 						            			@else
 

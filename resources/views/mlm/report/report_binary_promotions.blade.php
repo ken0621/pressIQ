@@ -32,7 +32,7 @@
                             <tbody>
                                 @foreach($promotions as $key => $value)
                                 <tr>
-                                    <td><img src="{{ $value->item_img ? $value->item_img : "/assets/front/img/default.jpg" }}"></td>
+                                    <td><img src="{{ $value->item_img ? $value->item_img : "/assets/front/img/default.jpg" }}" style="width: 100%"></td>
                                     <td>{{$value->item_name}}</td>
                                     <td>{{$value->binary_promotions_required_left}}</td>
                                     <td>{{$current_l[$key]}}</td>

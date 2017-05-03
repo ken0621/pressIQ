@@ -544,7 +544,7 @@ class Purchasing_inventory_system
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;;
                 }
                 else
                 {
@@ -578,7 +578,7 @@ class Purchasing_inventory_system
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;;
                 }
                 else
                 {
@@ -611,7 +611,7 @@ class Purchasing_inventory_system
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;;
                 }
                 else
                 {
@@ -645,7 +645,7 @@ class Purchasing_inventory_system
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;;
                 }
                 else
                 {
@@ -697,7 +697,7 @@ class Purchasing_inventory_system
                $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;
                 }
                 else
                 {

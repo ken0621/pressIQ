@@ -109,7 +109,6 @@
 						            		<input type="hidden" name="gateway_code_name" class="form-control input-sm" value="{{$gateway->gateway_code_name}}">
 						            		<input type="hidden" name="api_gateway_id" class="form-control input-sm" value="{{$gateway->gateway_id}}">
 						            		@if($gateway->gateway_code_name != 'other')
-
 												
 												<div class="form-group col-md-12">
 								                    <label>Client ID</label>

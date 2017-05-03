@@ -314,7 +314,8 @@ class ShopCheckoutController extends Shop
             /* Paypal */
             elseif ($cart["payment_method_id"] == 2)
             {
-                
+
+                            
             }
             /* iPay88 */
             elseif ($cart["payment_method_id"] == 8)

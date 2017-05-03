@@ -39,7 +39,7 @@ class OnlinePaymentMethodController extends Member
 
 	public function gatewayInfo()
 	{
-		$_gateway = Tbl_online_pymnt_gateway::gatewayApi($this->getShopId())->orderBy('gateway_id')->get();
+		$_gateway = Tbl_online_pymnt_gateway::gatewayApi($this->getShopId())->get();
 		foreach($_gateway as $key=>$gateway)
 		{
 			$_gateway[$key] = $gateway;

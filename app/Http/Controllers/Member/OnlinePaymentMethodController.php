@@ -39,7 +39,7 @@ class OnlinePaymentMethodController extends Member
 
 	public function gatewayInfo()
 	{
-		$_gateway = Tbl_online_pymnt_gateway::gatewayApi($this->getShopId())->get();
+		$_gateway = Tbl_online_pymnt_gateway::gatewayApi($this->getShopId())->orderBy('gateway_id')->get();
 		foreach($_gateway as $key=>$gateway)
 		{
 			$_gateway[$key] = $gateway;
@@ -50,10 +50,10 @@ class OnlinePaymentMethodController extends Member
 			else
 			{
 				$_gateway[$key]->client_id = $gateway->api_client_id;
-				$_gateway[$key]->secret_id = $gateway->api_secret_id;
+				$_gateway[$key]->secret_id = $gateway->api_secret_ids;
 			}
 		}
-		// dd($_gateway);
+		 //dd($_gateway);
 		return $_gateway;
 	}
 

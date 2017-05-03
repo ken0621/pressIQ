@@ -58,14 +58,45 @@ $data['icon'] = 'fa fa-shopping-cart';
             </div>
         </div>
         <div class="text-right">
-            <button class="btn btn-default clear-cart">Clear</button>
-            <button class="btn btn-primary checkout-button">Checkout</button>
+            <form class="global-submit" method="post" action="/mlm/repurchase/checkout/submit">
+            {!! csrf_field() !!}
+            
+            <button class="btn btn-primary checkout-button pull-right">Checkout</button>
+            <a href="javascript:" class="btn btn-default clear-cart pull-right">Clear</a>
+            <div class="col-md-3 pull-right">
+                <select class="form-control" name="payment_type">
+                    <option value="3">Wallet</option>
+                </select>
+            </div>
+            </form>
         </div>
     </div>
 </div>
 @endsection
 @section('js')
 <script type="text/javascript" src="/assets/mlm/js/repurchase.js"></script>
+<script type="text/javascript">
+    function submit_done(data) {
+        // body...
+        if(data.response_status == 'warning')
+        {
+            var validtor = data.warning_validator;
+            validtor.forEach(function (item) {
+              toastr.warning(item);
+            })
+        }
+        else if(data.response_status == 'success')
+        {
+            toastr.success('Success');
+        }
+
+        else if(data.response_status == 'success_process')
+        {
+            toastr.success('Success, you can now claim your purchased product, just get the pin and voucher code at the voucher tab and show it to cashier.');
+            window.location = '/mlm/vouchers';
+        }
+    }
+</script>
 @endsection
 @section("css")
 <link rel="stylesheet" type="text/css" href="/assets/mlm/css/repurchase.css">

@@ -11,6 +11,7 @@ function modal_create_employee()
 		select_change_action();
 		select_change_event();
 		autoname();
+		$(".datepicker").datepicker();
 	}
 
 	function autoname()

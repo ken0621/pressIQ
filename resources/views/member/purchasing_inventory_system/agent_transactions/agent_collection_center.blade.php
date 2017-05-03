@@ -7,19 +7,24 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Vendor Check &raquo; List </span>
+                <span class="page-title">Agent Collection Center </span>
                 <small>
-                    List of Check
+                    Agent Collection List
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/write_check" >Write Check</a>
         </div>
     </div>
 </div>
 
 <!-- NO PRODUCT YET -->
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
-    <div class="form-group tab-content panel-body sir_container">
+    <ul class="nav nav-tabs">
+        <li class="active cursor-pointer all-sir"><a class="cursor-pointer" onclick="select('all')" data-toggle="tab" ><i class="fa fa-star"></i> All</a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(1)" data-toggle="tab" ><i class="fa fa-refresh"></i> Open SIR</a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(2)" data-toggle="tab" ><i class="fa fa-window-close"></i> Closed SIR</a></li>
+    </ul>
+
+    <div class="form-group tab-content panel-body collection-container">
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
@@ -28,8 +33,10 @@
                         <tr>
                             <th>SIR No</th>
                             <th>Agent Name</th>
-                            <th>Total</th>
-                            <th>Total Collection (On Hand)</th>
+                            <th>Total Collectibles</th>
+                            <th>Total Collection</th>
+                            <th>Status</th>
+                            <th>Loss/Over</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -37,11 +44,29 @@
                     @if($_sir)
                         @foreach($_sir as $sir)
                             <tr>
-                                <td>{{$sir->sir_id}}</td>
+                                <td>{{sprintf("%'.04d\n", $sir->sir_id)}}</td>
                                 <td>{{$sir->first_name." ".$sir->middle_name." ".$sir->last_name}}</td>
+                                <td>{{$sir->total_collectibles}}</td>
                                 <td>{{$sir->total_collection}}</td>
-                                <td></td>
-                                <td>                                   
+                                <td>
+                                    <span style="color: {{$sir->loss_over < 0 ? 'red': 'green'}}">
+                                        @if($sir->agent_collection_remarks == "")
+                                            Not Updated
+                                        @else
+                                            @if($sir->loss_over < 0)
+                                               Loss
+                                            @elseif($sir->loss_over == 0)
+                                               Complete
+                                            @else
+                                               Over
+                                            @endif
+                                        @endif
+                                    </span>
+                                </td>
+                                <td>
+                                    <span style="color: {{$sir->loss_over < 0 ? 'red': 'green'}}">
+                                        {{currency("Php" , $sir->loss_over)}}
+                                    </span>
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group">
@@ -49,7 +74,7 @@
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
-                                        <li><a></a></li>
+                                        <li><a link="/member/pis_agent/collection_update/{{$sir->sir_id}}" size="md" class="popup">Update Collection</a></li>
                                       </ul>
                                     </div>
                                 </td>
@@ -62,4 +87,28 @@
         </div>
     </div>
 </div>
+@endsection
+@section("script")
+
+<script type="text/javascript">   
+function submit_done(data)
+{
+    if(data.status == "success")
+    {
+        toastr.success("Success");
+        $('#global_modal').modal('toggle');
+        $(".collection-container").load("/member/pis_agent/collection .collection-container");
+        data.element.modal("hide");
+    }
+    else if(data.status == "error")
+    {
+        toastr.warning(data.status_message);
+        $(data.target).html(data.view);
+    }
+}
+function select(status)
+{
+    $(".collection-container").load("/member/pis_agent/collection?status="+status+ " .collection-container");
+}
+</script>
 @endsection

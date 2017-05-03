@@ -334,10 +334,10 @@ function submit_done(data)
     else if(data.type == "base-um")
     {        
         data.element.modal("hide");
-        $(".select-um").load("/member/item/load_one_um_multi/"+ data.id, function()
+        $(".droplist-um").load("/member/item/load_one_um_multi/"+ data.id, function()
         {                
-             $(".select-um").globalDropList("reload").globalDropList("enabled") ; 
-             $(".select-um").val($(".select-um").find("option:first").val()).change();              
+             $(".droplist-um").globalDropList("reload").globalDropList("enabled") ; 
+             $(".droplist-um").val($(".droplist-um").find("option:first").val()).change();              
         });
     }
     else if(data.type == "unit-measurement")

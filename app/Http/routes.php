@@ -285,6 +285,9 @@ Route::any('/member/pis/agent/transaction/{id}','Member\AgentTransactionControll
 Route::any('/member/pis/agent_transaction/print/{id}','Member\AgentTransactionController@print_transaction');
 
 Route::any('/member/pis_agent/collection','Member\AgentCollectionController@index');
+Route::any('/member/pis_agent/collection_update/{id}','Member\AgentCollectionController@update_collection');
+Route::any('/member/pis_agent/collection_update_submit','Member\AgentCollectionController@update_collection_submit');
+
 /* START U/M TYPES ARCY*/
 Route::any('/member/item/um_type','Member\UnitMeasurementTypeController@index');
 Route::any('/member/item/um_type/add','Member\UnitMeasurementTypeController@add');

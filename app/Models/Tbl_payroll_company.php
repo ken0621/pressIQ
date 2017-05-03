@@ -39,6 +39,12 @@ class Tbl_payroll_company extends Model
         return $query;
     }
 
+    public function scopeselbycode($query, $shop_id = 0, $payroll_company_code = '')
+    {
+        $query->where('shop_id', $shop_id)->where('payroll_company_code', $payroll_company_code);
+        return $query;
+    }
+
     public function scopesellost($query, $shop_id = 0, $archived = 0)
     {
         $lost = 0;

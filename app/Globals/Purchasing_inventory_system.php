@@ -143,12 +143,12 @@ class Purchasing_inventory_system
         $data["total"] = 0;
         foreach ($data['tr'] as $key2 => $value2)
         {
-            if($value2['reference_name'] == "receive_payment")
+            if($value2['reference_name'] == "receive_payment" || $value2['reference_name'] == "sales_receipt")
             {
                 $data['total'] += $value2['total'];
             }
         }
-        $data["total"] = currency("Php",$data['total']);
+        // $data["total"] = currency("Php",$data['total']);
 
         return $data["total"];
 
@@ -415,8 +415,8 @@ class Purchasing_inventory_system
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" style="text-decoration: line-through;">5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12" style="text-decoration: line-through;">6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
-            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 1 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
         {
@@ -425,8 +425,8 @@ class Purchasing_inventory_system
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" style="text-decoration: line-through;">5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click <a href="/member/pis/ilr/'.$sir_id.'"> here </a> to close the I.L.R)</div>
-            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click <a class="popup" link="/member/pis_agent/collection_update/'.$sir_id.'" size="md">here</a> to update Remittance)</div>
+            <div class="col-md-12" >7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click <a href="/member/pis/ilr/'.$sir_id.'"> here </a> to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
         {
@@ -435,8 +435,8 @@ class Purchasing_inventory_system
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" >5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
-            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
+            <div class="col-md-12">7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 0)
         {
@@ -445,8 +445,8 @@ class Purchasing_inventory_system
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" >5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
-            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
+            <div class="col-md-12">7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 0 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 0)
         {
@@ -455,8 +455,8 @@ class Purchasing_inventory_system
             <div class="col-md-12" >3. Convert LoadOutForm to SIR (Click <a size="md" link="/member/pis/sir/open/'.$sir_id.'/open" class="popup">here</a> to convert to SIR)</div>
             <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" >5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
-            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
+            <div class="col-md-12">7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 0 && $sir_data["sir"]->lof_status == 1 && $sir_data["sir"]->is_sync == 0)
         {
@@ -465,8 +465,8 @@ class Purchasing_inventory_system
             <div class="col-md-12" >3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" >5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
-            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
+            <div class="col-md-12">7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>';
         }
 
         $sir_data["sir"]->gen_status = $return;

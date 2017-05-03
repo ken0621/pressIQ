@@ -42,11 +42,27 @@ class AgentCollectionController extends Member
      */
     public function index()
     {
-        $data["_sir"] = Tbl_sir::saleagent()->where("tbl_sir.shop_id",$this->user_info->shop_id)->whereIn("ilr_status",[1,2])->get();
-        foreach ($data["_sir"] as $key => $value) 
+        $status = Request::input("status");
+        if($status == 'all' || $status == "")
         {
-            $data["_sir"][$key]->total_collection = Purchasing_inventory_system::get_sir_total_amount($value->sir_id);
+            $data["_sir"] = Tbl_sir::saleagent()->where("tbl_sir.shop_id",$this->user_info->shop_id)->whereIn("ilr_status",[1,2])->get();
+            foreach ($data["_sir"] as $key => $value) 
+            {
+                $data["_sir"][$key]->total_collectibles = currency("Php",Purchasing_inventory_system::get_sir_total_amount($value->sir_id));
+                $data["_sir"][$key]->total_collection = currency("Php",$value->agent_collection);
+                $data["_sir"][$key]->loss_over = $value->agent_collection - Purchasing_inventory_system::get_sir_total_amount($value->sir_id);
+            }
         }
+        else
+        {
+           $data["_sir"] = Tbl_sir::saleagent()->where("tbl_sir.shop_id",$this->user_info->shop_id)->where("ilr_status",$status)->get();
+            foreach ($data["_sir"] as $key => $value) 
+            {
+                $data["_sir"][$key]->total_collectibles = currency("Php",Purchasing_inventory_system::get_sir_total_amount($value->sir_id));
+                $data["_sir"][$key]->total_collection = currency("Php",$value->agent_collection);
+                $data["_sir"][$key]->loss_over = $value->agent_collection - Purchasing_inventory_system::get_sir_total_amount($value->sir_id);
+            } 
+        }        
 
         return view("member.purchasing_inventory_system.agent_transactions.agent_collection_center",$data);
     }
@@ -56,9 +72,28 @@ class AgentCollectionController extends Member
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function update_collection($sir_id)
     {
-        //
+        $data["sir_id"] = $sir_id;
+        $data["collection_data"] = Tbl_sir::saleagent()->where("sir_id",$sir_id)->first();
+
+        return view("member.purchasing_inventory_system.agent_transactions.update_collection",$data);   
+    }
+    public function update_collection_submit()
+    {
+        $sir_id = Request::input("sir_id");
+
+        $amount = str_replace(",","",Request::input("agent_collection"));
+        $amount_remarks = Request::input("agent_remarks");
+
+        $update["agent_collection"] = $amount;
+        $update["agent_collection_remarks"] = $amount_remarks;
+
+        Tbl_sir::where("sir_id",$sir_id)->update($update);
+
+        $data["status"] = "success";
+
+        return json_encode($data);
     }
 
     /**

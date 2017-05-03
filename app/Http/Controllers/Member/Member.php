@@ -25,7 +25,6 @@ class Member extends Controller
 	public $current_warehouse; 
 	function __construct()
 	{
-
 		/* IF SESSION FOR EMAIL OR PASSWORD DOESN'T EXIST - REDIRECT TO FRONTPAGE */
 		if(!session('user_email') || !session('user_password'))
 		{

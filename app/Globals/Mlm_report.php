@@ -666,7 +666,7 @@ class Mlm_report
         if($warehouse_id != null)
         {
             $invoice = $invoice->where('warehouse_id', $warehouse_id);
-            $data['warehouse'] = Tbl_warehouse::where('warehouse_id', $warehouse_id)->first();
+            $data['warehouse'] = Tbl_warehouse::where('warehouse_id', $warehouse_id)->where('archived', 0)->first();
         }
 
 
@@ -1042,7 +1042,15 @@ class Mlm_report
         $data['filter']['Membership Discount'] = 'Membership Discount';
         $data['filter']['Membership Discounted'] = 'Membership Discounted';
         $data['page'] = 'inventory_consilidated';
-        $data['inventory'] = $inventory;
+        if(isset($inventory))
+        {
+            $data['inventory'] = $inventory;
+        }
+        else
+        {
+            $data['inventory'] = [];
+        }
+        
         if(Request::input('pdf') == 'excel')
         {
             return $data;

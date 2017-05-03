@@ -144,7 +144,6 @@ function receive_payment()
 	{
 		$(document).on("change",".amount-payment", function(e)
 		{
-			console.log($(".amount-payment").length);
 			$(this).val(formatFloat($(this).val()) == 0 ? '' : formatMoney($(this).val()));
 
 			!is_amount_receive_modified ? $(".amount-received").val(action_total_amount_apply()).change() : $(".amount-received").change();

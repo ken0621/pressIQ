@@ -17,7 +17,7 @@ use Carbon\carbon;
 /**
  * Accounting Module - all accounting related module -accounts
  *
- * @author Bryan Kier Aradanas
+ * @author Bryan Kier Aradanas - cc
  */
 class Accounting
 {
@@ -309,24 +309,27 @@ class Accounting
 				case "sales-receipt":
 				case "invoice":
 					/* INCOME ACCOUNT */
-					$line_data["entry_amount"]	= $entry_line["entry_amount"];
-					$line_data["entry_type"] 	= Accounting::normalBalance($account_income);
-					$line_data["account_id"] 	= $account_income;
-					Accounting::insertJournalLine($line_data);
-
-					if($item->item_type_id == 1)
+					if($item->item_type_id != 4)
 					{
-						/* EXPENSE ACCOUNT */
-						$line_data["entry_amount"]	= $item->item_cost;
-						$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
-						$line_data["account_id"] 	= $account_expense;
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::normalBalance($account_income);
+						$line_data["account_id"] 	= $account_income;
 						Accounting::insertJournalLine($line_data);
 
-						/* ASSET ACCOUNT */
-						$line_data["entry_amount"]	= $item->item_cost;
-						$line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
-						$line_data["account_id"] 	= $account_asset;
-						Accounting::insertJournalLine($line_data);
+						if($item->item_type_id == 1)
+						{
+							/* EXPENSE ACCOUNT */
+							$line_data["entry_amount"]	= $item->item_cost;
+							$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
+							$line_data["account_id"] 	= $account_expense;
+							Accounting::insertJournalLine($line_data);
+
+							/* ASSET ACCOUNT */
+							$line_data["entry_amount"]	= $item->item_cost;
+							$line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
+							$line_data["account_id"] 	= $account_asset;
+							Accounting::insertJournalLine($line_data);
+						}
 					}
 					break;
 				case "receive-payment":
@@ -405,7 +408,6 @@ class Accounting
 
 		foreach($entry_data as $line)
 		{
-			
 			$line_data["jline_name_id"]			= $line["name_id"];
 			$line_data["jline_name_reference"]	= $line["name_reference"];
 			$line_data["item_id"]				= 0;

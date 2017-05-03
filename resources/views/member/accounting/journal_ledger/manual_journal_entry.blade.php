@@ -229,6 +229,10 @@ function manual_journal()
             onCreateNew : function()
             {
                 account_selected = $(this);
+            },
+            onChangeValue: function()
+            {
+                $(this).find("tr").find(".select-name").change();
             }
         });
 
@@ -237,11 +241,45 @@ function manual_journal()
             width       : '100%',
             hasPopup    : 'false',
             placeholder : 'Customers or Vendor',
-            onChangeValue: function()
+            onChangeValue: function(e)
             {
+                /* SET REFERENCE TYPE (CUSTOMER OR VENDOR) */
                 $(this).parents("td").find(".reference_name").val($(this).find("option:selected").attr("reference"));
+
+                // $name_reference     = $(this).find("option:selected").attr("reference");
+                // $account_reference  = $(this).parents("tr").find(".select-coa").find("option:selected").attr("reference");
+                // if($name_reference != '' && $name_reference != $account_reference)
+                // {
+                //     $(this).parents(".droplist").find("input")
+                //     console.log(this.parents(".droplist").find("input"));
+                //     this.parents(".droplist").find("input").setCustomValidity("Error kopkipokp");
+                //     return false;
+                // }
+                // else
+                // {   
+                //     this.parents(".droplist").find("input").setCustomValidity("");
+                //     return true;
+                // }
             }
         });
+
+        $(document).on("change", $(".select-name").parents("div").find("input") , function()
+        {
+            $name_reference     = $(this).parents("tr").find(".select-name").find("option:selected").attr("reference");
+            $account_reference  = $(this).parents("tr").find(".select-coa").find("option:selected").attr("reference");
+
+            if($name_reference != '' && $name_reference != $account_reference)
+            {
+                console.log(this);
+                this.setCustomValidity("Error kopkipokp");
+                return false;
+            }
+            else
+            {   
+                this.setCustomValidity("");
+                return true;
+            }
+        })
     }
 
     function event_remove_tr()

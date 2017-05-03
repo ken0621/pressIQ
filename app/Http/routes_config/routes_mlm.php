@@ -35,6 +35,7 @@ Route::get('/mlm/repurchase/add_cart', 'Mlm\MlmRepurchaseController@add_cart');
 Route::get('/mlm/repurchase/remove_item', 'Mlm\MlmRepurchaseController@remove_item'); 
 Route::get('/mlm/repurchase/clear_cart', 'Mlm\MlmRepurchaseController@clear_cart'); 
 Route::get('/mlm/repurchase/checkout', 'Mlm\MlmRepurchaseController@checkout'); 
+Route::post('/mlm/repurchase/checkout/submit', 'Mlm\MlmRepurchaseController@checkout_submit'); 
 
 Route::get('/mlm/vouchers', 'Mlm\MlmVouchersController@index'); 
 Route::get('/mlm/cheque', 'Mlm\MlmChequeController@index'); 

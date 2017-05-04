@@ -51,9 +51,8 @@ class Mlm_compute
         DB::table('tbl_mlm_slot_wallet_log_transfer')->delete();
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
     }
-	public static function entry($slot_id)
+	public static function entry($slot_id, $type = 0)
 	{
-
         $slot_info = Mlm_compute::get_slot_info($slot_id);
         
         // slot_info must have membership info and membership_points;
@@ -61,43 +60,48 @@ class Mlm_compute
 
 	    // Sponsor Tree
         // not redundant, needed two slot_info for retainment of loop
-        
-        Mlm_tree::insert_tree_sponsor($slot_info, $slot_info, 1); /* TREE RECORD FOR SPONSORSHIP GENEALOGY TREE */    
+        /* CHECK IF IT IS A SLOT CREATION OR USED FOR UPGRADING SLOT */
+        /* 0 = NEW SLOT , 1 = UPGRADE SLOT */
+        if($type == 0)
+        {
+            Mlm_tree::insert_tree_sponsor($slot_info, $slot_info, 1); /* TREE RECORD FOR SPONSORSHIP GENEALOGY TREE */    
 
-        // check if binart is active 
-            $plan_settings_count = Tbl_mlm_plan::where('shop_id', $slot_info->shop_id)
-            ->where('marketing_plan_code', 'BINARY')
-            ->where('marketing_plan_enable', 1)
-            ->where('marketing_plan_trigger', 'Slot Creation')
-            ->count();
-            if($plan_settings_count != 0)
-            {
-                $tbl_mlm_binary_setttings = Tbl_mlm_binary_setttings::where('shop_id', $slot_info->shop_id)->first();
-                if($tbl_mlm_binary_setttings)
+            // check if binart is active 
+                $plan_settings_count = Tbl_mlm_plan::where('shop_id', $slot_info->shop_id)
+                ->where('marketing_plan_code', 'BINARY')
+                ->where('marketing_plan_enable', 1)
+                ->where('marketing_plan_trigger', 'Slot Creation')
+                ->count();
+                if($plan_settings_count != 0)
                 {
-                    if($tbl_mlm_binary_setttings->binary_settings_placement == 0)
+                    $tbl_mlm_binary_setttings = Tbl_mlm_binary_setttings::where('shop_id', $slot_info->shop_id)->first();
+                    if($tbl_mlm_binary_setttings)
                     {
-                        // manual placement
-                        Mlm_tree::insert_tree_placement($slot_info, $slot_info, 1); /* TREE RECORD FOR BINARY GENEALOGY TREE */
-                    }
-                    else
-                    {
-                        // auto placement
-                        if($tbl_mlm_binary_setttings->binary_settings_auto_placement == 'left_to_right')
+                        if($tbl_mlm_binary_setttings->binary_settings_placement == 0)
                         {
-                            $a =  Mlm_tree::auto_place_slot_binary_left_to_right_v2($slot_info);
-                            // $a =  Mlm_tree::auto_place_slot_binary_left_to_right($slot_info);
+                            // manual placement
+                            Mlm_tree::insert_tree_placement($slot_info, $slot_info, 1); /* TREE RECORD FOR BINARY GENEALOGY TREE */
                         }
-                        else if($tbl_mlm_binary_setttings->binary_settings_auto_placement == "auto_balance")
+                        else
                         {
-                            // $a = Mlm_tree::auto_place_slot_binary_auto_balance($slot_info);
-                                $a = Mlm_tree::auto_place_slot_binary_auto_balance_revised($slot_info);
+                            // auto placement
+                            if($tbl_mlm_binary_setttings->binary_settings_auto_placement == 'left_to_right')
+                            {
+                                $a =  Mlm_tree::auto_place_slot_binary_left_to_right_v2($slot_info);
+                                // $a =  Mlm_tree::auto_place_slot_binary_left_to_right($slot_info);
                             }
+                            else if($tbl_mlm_binary_setttings->binary_settings_auto_placement == "auto_balance")
+                            {
+                                // $a = Mlm_tree::auto_place_slot_binary_auto_balance($slot_info);
+                                    $a = Mlm_tree::auto_place_slot_binary_auto_balance_revised($slot_info);
+                                }
+                        }
                     }
                 }
-            }
-        // end Tree
+            // end Tree
+        }
         
+
         // Mlm Computation Plan
             $plan_settings = Tbl_mlm_plan::where('shop_id', $slot_info->shop_id)
             ->where('marketing_plan_enable', 1)

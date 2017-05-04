@@ -785,13 +785,13 @@ class Seed_manual
             $insert[0]['payment_name']  = "Cash";  
             $insert[0]['isDefault']     = "1"; 
 
-            $insert[1]['shop_id']       = $shop_id; 
+            $insert[1]['shop_id']       = $shop_id;     
             $insert[1]['payment_name']  = "Cheque";  
             $insert[1]['isDefault']     = "0"; 
 
             $insert[2]['shop_id']       = $shop_id; 
             $insert[2]['payment_name']  = "A.D.A";  
-            $insert[2]['isDefault']     = "1"; 
+            $insert[2]['isDefault']     = "0"; 
 
             DB::table('tbl_payment_method')->insert($insert);
         }

@@ -27,6 +27,7 @@
                         <tr>
                             <th>MEMEBERSHIP NAME</th>
                             <th>DIRECT SPONSOR BONUS</th>
+                            <th>DIRECT INCOME LIMIT</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -36,16 +37,21 @@
                                 @foreach($membership as $key => $mem)
                                     <tr>
                                         <td>{{$mem->membership_name}}</td>
-                                        <td>
                                             <form id='form{{$mem->membership_id}}' action='/member/mlm/plan/binary/edit/membership/points' method='post' class='global-submit'>
-                                            {!! csrf_field() !!}
-                                            <input type="hidden" name="membership_id" value="{{$mem->membership_id}}">
-                                            <span class="membership_points_direct{{$mem->membership_id}}">{{$mem->membership_points_direct == "" ? 0 : $mem->membership_points_direct }}</span>
+                                                {!! csrf_field() !!}
+                                                <input type="hidden" name="membership_id" value="{{$mem->membership_id}}">
+                                                <input type='hidden' class='form-control membership_points_direct_container' name='membership_points_direct' value=''>
+                                                <input type='hidden' class='form-control membership_direct_income_limit_container' name='membership_direct_income_limit' value=''>
                                             </form>
+                                            <td>
+                                                <span class="membership_points_direct{{$mem->membership_id}}">{{$mem->membership_points_direct == "" ? 0 : $mem->membership_points_direct }}</span>
+                                            </td>                                      
+                                            <td>
+                                                <span class="membership_points_direct_limit{{$mem->membership_id}}">{{$mem->membership_direct_income_limit == "" ? 0 : $mem->membership_direct_income_limit }}</span>
                                             </td>
                                         <td>
                                             <span class="membership_points_direct_edit{{$mem->membership_id}}">
-                                                <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('{{$mem->membership_id}}','{{$mem->membership_points_direct}}')">Edit</a>
+                                                <a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('{{$mem->membership_id}}','{{$mem->membership_points_direct}}', '{{$mem->membership_direct_income_limit}}')">Edit</a>
                                             </span>
                                         </td>
                                     </tr>
@@ -68,6 +74,11 @@
 <script type="text/javascript">
 function save_direct_points_membership(membershipid)
 {
+    var directpoints      = $('.membership_points_directinput' + membershipid).val();
+    var directlimitpoints = $('.membership_points_direct_limitinput' + membershipid).val();
+    $(".membership_points_direct_container").val(directpoints);
+    $(".membership_direct_income_limit_container").val(directlimitpoints);
+
     console.log($('#form' + membershipid));
     $('#form' + membershipid).submit();
     cancel(membershipid);
@@ -75,19 +86,29 @@ function save_direct_points_membership(membershipid)
 function cancel(membershipid)
 {
     var directpoints = $('.membership_points_directinput' + membershipid).val();
+    var directlimitpoints = $('.membership_points_direct_limitinput' + membershipid).val();
     directpoints = parseInt(directpoints);
+    directlimitpoints = parseInt(directlimitpoints);
+
     console.log(Number.isInteger(directpoints));
-    if(Number.isInteger(directpoints) == true)
+    console.log(Number.isInteger(directlimitpoints));
+
+    if(Number.isInteger(directpoints) == true && Number.isInteger(directlimitpoints) == true)
     {
         console.log(directpoints);
+        console.log(directlimitpoints);
         $('.membership_points_direct' + membershipid).html(directpoints);
+        $('.membership_points_direct_limit' + membershipid).html(directlimitpoints);
+        
         var edit = '<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_direct_points('+membershipid+', '+directpoints+')">Edit</a>';
         $('.membership_points_direct_edit' + membershipid).html(edit)
     }
 }
-function edit_direct_points(membershipid,  directpoints)
+function edit_direct_points(membershipid,  directpoints,  income_limit)
 {
     $('.membership_points_direct' + membershipid).html("<input type='number' class='form-control membership_points_directinput"+ membershipid +"' name='membership_points_direct' value='"+directpoints+"'>");
+    $('.membership_points_direct_limit' + membershipid).html("<input type='number' class='form-control membership_points_direct_limitinput"+ membershipid +"' name='membership_direct_income_limit' value='"+income_limit+"'>");
+
     $('.membership_points_direct_edit' + membershipid).html('<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="#" onClick="save_direct_points_membership(' + membershipid +')">Save</a>');
 }
 </script>

@@ -6,6 +6,7 @@ use App\Models\Tbl_stairstep_distribute_slot;
 use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_user;
 use App\Models\Tbl_tree_placement;
+use App\Models\Tbl_tree_sponsor;
 use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_slot;
 use App\Globals\Mlm_slot_log;
@@ -160,23 +161,23 @@ class MLM_StairstepController extends Member
 	                                                               ->orderBy("stairstep_level","DESC")
 	                                                               ->first();
 
-			    $placement_tree  = Tbl_tree_placement::where("placement_tree_child_id",$slot_id)->orderBy("placement_tree_level","ASC")->get();
+			    $sponsor_tree    = Tbl_tree_sponsor::where("sponsor_tree_child_id",$slot_id)->orderBy("sponsor_tree_level","ASC")->get();
 		        $percentage      = null;
 		        $check_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->first();
 		        $slot_pv         = $converted_pv;
 
+                if($slot_stairstep)
+                {   
+                	$update_slot["stairstep_rank"] = $slot_stairstep->stairstep_id;
+                	Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
+                }
+
 		        if($check_stairstep)
 		        {
-		            foreach($placement_tree as $placement)
+		            foreach($sponsor_tree as $placement)
 		            {
 		                $reduced_percent = 0;
 		                $computed_points = 0;
-
-		                if($slot_stairstep)
-		                {   
-		                	$update_slot["stairstep_rank"] = $slot_stairstep->stairstep_id;
-		                	Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
-		                }	  
 
 	        	    	$slot_info      = Tbl_mlm_slot::where("slot_id",$slot_id)->first();
 	        	    	$slot_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$slot_info->stairstep_rank)->first();
@@ -186,7 +187,7 @@ class MLM_StairstepController extends Member
 			                if(!$percentage)
 			                {
 
-
+			                	$append_info = " (Rebates)";
 			                    if($slot_stairstep->stairstep_bonus != 0)
 			                    {
 			                        $computed_points = ($slot_stairstep->stairstep_bonus/100) * $slot_pv;
@@ -196,7 +197,8 @@ class MLM_StairstepController extends Member
 			                    $reduced_percent = $slot_stairstep->stairstep_bonus;
 			                }
 			                else
-			                {                                       
+			                {           
+			                    $append_info = " (Over-ride)";                            
 			                    if($slot_stairstep->stairstep_bonus > $percentage)
 			                    { 
 			                        if($slot_stairstep->stairstep_bonus != 0)
@@ -215,28 +217,28 @@ class MLM_StairstepController extends Member
 		                if($computed_points > 0)
 		                {             
 		                    $log                                    = "You earned ".$reduced_percent."% of ".$converted_pv."(".$computed_points.") from slot #".$slot_info->slot_id."(Current Rank:".$slot_stairstep->stairstep_name.").";
-		                    $arry_log['wallet_log_slot']            = $placement->placement_tree_parent_id;
+		                    $arry_log['wallet_log_slot']            = $placement->sponsor_tree_parent_id;
 		                    $arry_log['shop_id']                    = $slot_info->shop_id;
-		                    $arry_log['wallet_log_slot_sponsor']    = $placement->placement_tree_parent_id;
+		                    $arry_log['wallet_log_slot_sponsor']    = $placement->sponsor_tree_parent_id;
 		                    $arry_log['wallet_log_details']         = $log;
 		                    $arry_log['wallet_log_amount']          = $computed_points;
-		                    $arry_log['wallet_log_plan']            = "STAIRSTEP";
+		                    $arry_log['wallet_log_plan']            = "STAIRSTEP".$append_info;
 		                    $arry_log['wallet_log_status']          = "n_ready";   
 		                    $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('STAIRSTEP', $slot_info->shop_id); 
 		                    Mlm_slot_log::slot_array($arry_log);    
 		                }
-
-	                    $update_points["points_log_converted"] 		= 1;
-	                    $update_points["points_log_converted_date"] = Carbon::now();
-
-	                    Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
-    							   							->whereBetween('points_log_date_claimed', array($start, $end))
-    							   							->where("points_log_complan","STAIRSTEP")
-    							   							->where("points_log_type","RPV")
-    							   							->where("points_log_converted","0")
-    							   							->update($update_points); 
 		            }
 		        }
+
+                $update_points["points_log_converted"] 		= 1;
+                $update_points["points_log_converted_date"] = Carbon::now();
+
+                Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
+						   							->whereBetween('points_log_date_claimed', array($start, $end))
+						   							->where("points_log_complan","STAIRSTEP")
+						   							->where("points_log_type","RPV")
+						   							->where("points_log_converted","0")
+						   							->update($update_points); 
 
 		        $insert_distri["stairstep_distribute_id"] = $distribute_id;
 		        $insert_distri["slot_id"] 				  = $slot_id;

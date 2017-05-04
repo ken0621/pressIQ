@@ -92,6 +92,13 @@
                                         </select>
                                     </td>
                                     <td>
+                                        <label>Upgrade slot using membership code</label>
+                                        <select name="plan_settings_upgrade_slot" class="form-control">
+                                            <option value="0" {{$plan_settings->plan_settings_upgrade_slot == 0 ? 'selected' : ''}}>Disable</option>
+                                            <option value="1" {{$plan_settings->plan_settings_upgrade_slot == 1 ? 'selected' : ''}}>Enable</option>
+                                        </select>
+                                    </td>
+                                    <td>
 
                                     </td>
                                 </tr>

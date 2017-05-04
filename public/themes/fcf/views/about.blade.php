@@ -2,7 +2,7 @@
 @section("content")
 <!-- OUR VALUES -->
 <div class="content">
-	<div class="container">
+	<div class="container-fluid">
 		<div class="top-bg-container">
 			<img src="/themes/{{ $shop_theme }}/img/about-bg.png">
 			<div class="top-bg-detail-container"><span class="title-highlight">ABOUT</span> OUR COMPANY</div>

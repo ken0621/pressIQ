@@ -29,21 +29,26 @@ class Mlm_tree
             $old_level   = $level;
             $upline_info = Tbl_mlm_slot::id($slot_info->slot_placement)->first();
 
-            if($upline_info)
-            {
-                $insert['shop_id'] = $slot_info->shop_id;
-                $insert["placement_tree_parent_id"] = $upline_info->slot_id;
-                $insert["placement_tree_child_id"] = $new_slot->slot_id;
-                $insert["placement_tree_position"] = $slot_info->slot_position;
-                $insert["placement_tree_level"] = $level;
-                Tbl_tree_placement::insert($insert);
-                $level++;
-                Mlm_tree::insert_tree_placement($upline_info, $new_slot, $level);  
-            }  
+            /*CHECK IF TREE IS ALREADY EXIST*/
+            $check_if_exist = Tbl_tree_placement::where("placement_tree_child_id",$new_slot->slot_id)->first();
+            if(!$check_if_exist)
+            {  
+                if($upline_info)
+                {
+                    $insert['shop_id'] = $slot_info->shop_id;
+                    $insert["placement_tree_parent_id"] = $upline_info->slot_id;
+                    $insert["placement_tree_child_id"] = $new_slot->slot_id;
+                    $insert["placement_tree_position"] = $slot_info->slot_position;
+                    $insert["placement_tree_level"] = $level;
+                    Tbl_tree_placement::insert($insert);
+                    $level++;
+                    Mlm_tree::insert_tree_placement($upline_info, $new_slot, $level);  
+                }  
 
-            if($old_level == 1)
-            {
-                MLM_tree::update_auto_balance_position($new_slot,$old_level);
+                if($old_level == 1)
+                {
+                    MLM_tree::update_auto_balance_position($new_slot,$old_level);
+                }
             }
         }
     }
@@ -90,15 +95,20 @@ class Mlm_tree
         {
             $upline_info = Tbl_mlm_slot::id($slot_info->slot_sponsor)->first();
 
-            if($upline_info)
+            /*CHECK IF TREE IS ALREADY EXIST*/
+            $check_if_exist = Tbl_tree_sponsor::where("sponsor_tree_child_id",$new_slot->slot_id)->first();
+            if(!$check_if_exist)
             {
-                $insert['shop_id'] = $new_slot->shop_id;
-                $insert["sponsor_tree_parent_id"] = $upline_info->slot_id;
-                $insert["sponsor_tree_child_id"] = $new_slot->slot_id;
-                $insert["sponsor_tree_level"] = $level;
-                Tbl_tree_sponsor::insert($insert);
-                $level++;
-                Mlm_tree::insert_tree_sponsor($upline_info, $new_slot, $level);  
+                if($upline_info)
+                {
+                    $insert['shop_id'] = $new_slot->shop_id;
+                    $insert["sponsor_tree_parent_id"] = $upline_info->slot_id;
+                    $insert["sponsor_tree_child_id"] = $new_slot->slot_id;
+                    $insert["sponsor_tree_level"] = $level;
+                    Tbl_tree_sponsor::insert($insert);
+                    $level++;
+                    Mlm_tree::insert_tree_sponsor($upline_info, $new_slot, $level);  
+                }
             }
         }
     }

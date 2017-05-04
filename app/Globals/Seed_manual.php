@@ -250,6 +250,7 @@ class Seed_manual
        $insert[3]['account_tax_code_id']        = "";
        $insert[3]['default_for_code']           = "accounting-inventory-asset";
 
+
        $insert[4]['default_id']                 = 4; 
        $insert[4]['default_type_id']            = "4";      
        $insert[4]['default_number']             = "17000";
@@ -264,6 +265,7 @@ class Seed_manual
        $insert[4]['account_tax_code_id']        = "";
        $insert[4]['default_for_code']           = "";
        
+
        $insert[5]['default_id']                 = 5; 
        $insert[5]['default_type_id']            = "4";      
        $insert[5]['default_number']             = "15000";
@@ -306,6 +308,7 @@ class Seed_manual
        $insert[7]['account_tax_code_id']        = "";
        $insert[7]['default_for_code']           = "";
        
+
        $insert[8]['default_id']                 = 8; 
        $insert[8]['default_type_id']            = "10";     
        $insert[8]['default_number']             = "80100";
@@ -333,7 +336,7 @@ class Seed_manual
        $insert[9]['is_tax_account']             = "";
        $insert[9]['account_tax_code_id']        = "";
        $insert[9]['default_for_code']           = "";
-       
+
        $insert[10]['default_id']                 = 10; 
        $insert[10]['default_type_id']            = "10";    
        $insert[10]['default_number']             = "30000";
@@ -389,7 +392,7 @@ class Seed_manual
        $insert[13]['is_tax_account']             = "";
        $insert[13]['account_tax_code_id']        = "";
        $insert[13]['default_for_code']           = "";
-       
+
        $insert[14]['default_id']                 = 14; 
        $insert[14]['default_type_id']            = "12";    
        $insert[14]['default_number']             = "51800";
@@ -432,6 +435,7 @@ class Seed_manual
        $insert[16]['account_tax_code_id']        = "";
        $insert[16]['default_for_code']           = "";
        
+
        $insert[17]['default_id']                 = 17; 
        $insert[17]['default_type_id']            = "13";    
        $insert[17]['default_number']             = "60000";
@@ -446,6 +450,7 @@ class Seed_manual
        $insert[17]['account_tax_code_id']        = "";
        $insert[17]['default_for_code']           = "";
        
+
        $insert[18]['default_id']                 = 18; 
        $insert[18]['default_type_id']            = "13";    
        $insert[18]['default_number']             = "60200";
@@ -459,7 +464,7 @@ class Seed_manual
        $insert[18]['is_tax_account']             = "";
        $insert[18]['account_tax_code_id']        = "";
        $insert[18]['default_for_code']           = "";
-       
+
        $insert[19]['default_id']                 = 19; 
        $insert[19]['default_type_id']            = "13";    
        $insert[19]['default_number']             = "60400";
@@ -488,6 +493,7 @@ class Seed_manual
        $insert[20]['account_tax_code_id']        = "";
        $insert[20]['default_for_code']           = "";
        
+
        $insert[21]['default_id']                 = 21; 
        $insert[21]['default_type_id']            = "13";    
        $insert[21]['default_number']             = "62400";
@@ -571,7 +577,7 @@ class Seed_manual
        $insert[26]['is_tax_account']             = "";
        $insert[26]['account_tax_code_id']        = "";
        $insert[26]['default_for_code']           = "";
-       
+
        $insert[27]['default_id']                 = 27; 
        $insert[27]['default_type_id']            = "13";    
        $insert[27]['default_number']             = "66000";
@@ -613,7 +619,7 @@ class Seed_manual
        $insert[29]['is_tax_account']             = "";
        $insert[29]['account_tax_code_id']        = "";
        $insert[29]['default_for_code']           = "";
-       
+
        $insert[30]['default_id']                 = 30; 
        $insert[30]['default_type_id']            = "13";    
        $insert[30]['default_number']             = "67100";

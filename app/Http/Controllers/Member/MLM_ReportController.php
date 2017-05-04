@@ -234,6 +234,14 @@ class MLM_ReportController extends Member
         {
             $data['report_list_d'][$key]['from'] = Carbon::parse($value['from'])->format('Y-m-d');
             $data['report_list_d'][$key]['to'] = Carbon::parse($value['to'])->format('Y-m-d');
+            $data['report_list_d'][$key]['cashiers'] = 'hide';
+            $data['report_list_d'][$key]['warehouse'] = 'hide';
+
+            if($key == 'product_sales_report_warehouse' || $key == 'product_sales_report')
+            {
+                $data['report_list_d'][$key]['cashiers'] = 'show';
+                $data['report_list_d'][$key]['warehouse'] = 'show';
+            }
         }
         $report_get = Request::input('report_choose');
         if($report_get != null)

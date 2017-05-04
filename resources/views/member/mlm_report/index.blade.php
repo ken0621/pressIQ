@@ -26,7 +26,7 @@
               <div class="col-md-3">
                 <select name="report_choose" class="form-control report_choose" onChange="filter_update(this)">
                   @foreach($report_list as $key => $value)
-                  <option value="{{$key}}" from="{{$report_list_d[$key]['from']}}" to="{{$report_list_d[$key]['to']}}" count="{{$report_list_d[$key]['count']}}" >{{$value}}</option>
+                  <option value="{{$key}}" from="{{$report_list_d[$key]['from']}}" to="{{$report_list_d[$key]['to']}}" count="{{$report_list_d[$key]['count']}}" cashier="{{$report_list_d[$key]['cashiers']}}" warehouse="{{$report_list_d[$key]['warehouse']}}" >{{$value}}</option>
                   @endforeach
                 </select>
               </div>
@@ -55,18 +55,18 @@
                     <label><small>To:</small></label>
                     <input type="date" class="form-control to_in" name="to">
                 </div>  
-                <div class="col-md-3">
+                <div class="col-md-3 cashiers_c hide">
                   <label><small>Cashiers</small></label>
-                  <select class="form-control" name="user_id">
+                  <select class="form-control user_id" name="user_id">
                     <option value="0">All</option>
                     @foreach($users as $key => $value)
                       <option value={{$value->user_id}}>{{$value->user_first_name}} {{$value->user_last_name}}</option>
                     @endforeach
                   </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 warehouse_c hide">
                   <label><small>Warehouse</small></label>
-                    <select class="form-control" name="warehouse_id">
+                    <select class="form-control warehouse_id" name="warehouse_id">
                     <option value="0">All</option>
                     @foreach($warehouse as $key => $value)
                       <option value="{{$value->warehouse_id}}">{{$value->warehouse_name}}</option>
@@ -112,16 +112,28 @@
   }
   function filter_update(ito)
   {
-    // alert($(ito).find('option:selected').attr('from'));
     var from = $(ito).find('option:selected').attr('from');
     var to = $(ito).find('option:selected').attr('to');
     var count = $(ito).find('option:selected').attr('count');
-    // var from = $('.report_choose').options[$('.report_choose').selectedIndex].getAttribute('from');
-    // console.log(from);
+    var cashier = $(ito).find('option:selected').attr('cashier');
+    var warehouse = $(ito).find('option:selected').attr('warehouse');
+
     $('.from_in').val(from);
     $('.to_in').val(to);
     $('.count_in').val(count);
     $('.take_in').val(count);
+
+    if(warehouse == 'show')
+    {
+      $('.cashiers_c').removeClass('hide');
+      $('.warehouse_c').removeClass('hide');
+    }
+    else
+    {
+      $('.cashiers_c').addClass('hide');
+      $('.warehouse_c').addClass('hide');
+    }
+    
   }
   function print_excel()
   {
@@ -130,8 +142,9 @@
     var to = $('.to_in').val();
     var skip = $('.skip_in').val();
     var take = $('.take_in').val();
-
-    window.open('/member/mlm/report/get?report_choose=' + choose + '&pdf=excel&from=' + from +'&to=' + to + '&skip=' +skip +'&take=' + take, '_blank');
+    var user_id = $('.user_id').val();
+    var warehouse_id = $('.warehouse_id').val();
+    window.open('/member/mlm/report/get?report_choose=' + choose + '&pdf=excel&from=' + from +'&to=' + to + '&skip=' +skip +'&take=' + take + '&user_id=' + user_id + '&warehouse_id=' + warehouse_id , '_blank');
   }
   function print_pdf()
   {
@@ -141,9 +154,10 @@
     var to = $('.to_in').val();
     var skip = $('.skip_in').val();
     var take = $('.take_in').val();
+    var user_id = $('.user_id').val();
+    var warehouse_id = $('.warehouse_id').val();
 
-
-    window.open('/member/mlm/report/get?report_choose=' + choose + '&pdf=true&from=' + from +'&to=' + to + '&skip=' +skip +'&take=' + take, '_blank');
+    window.open('/member/mlm/report/get?report_choose=' + choose + '&pdf=true&from=' + from +'&to=' + to + '&skip=' +skip +'&take=' + take + '&user_id=' + user_id + '&warehouse_id=' + warehouse_id , '_blank');
   }
 </script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>

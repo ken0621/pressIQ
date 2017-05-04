@@ -663,7 +663,7 @@ class Mlm_report
             if($user_id != 0)
             {
                 $invoice = $invoice->where('user_id', $user_id); 
-                $data['user_a'] = Tbl_user::where('user_id', $user_id)->get();
+                $data['userss'] = Tbl_user::where('user_id', $user_id)->get();
             }
             else
             {
@@ -696,6 +696,11 @@ class Mlm_report
                  $invoice = $invoice->whereIn('warehouse_id', $where_in);
             }
             
+        }
+        else
+        {
+            $invoice = $invoice->leftjoin('tbl_warehouse', 'tbl_warehouse.warehouse_id', '=', 'tbl_item_code_invoice.warehouse_id')
+            ->where('tbl_warehouse.archived', 0);
         }
 
 
@@ -938,7 +943,7 @@ class Mlm_report
 
     public static function product_sales_report_warehouse($shop_id, $filters)
     {
-        $warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get()->keyBy('warehouse_id');
+        $warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get()->keyBy('warehouse_id');
         $user_id = Request::input('user_id');
         $warehouse_id = Request::input('warehouse_id');
 
@@ -948,7 +953,6 @@ class Mlm_report
             {
                 $warehouse = Tbl_warehouse::where('warehouse_id', $warehouse_id)->where('archived', 0)->take(1)->get();
             }
-            
         }
 
         $data['filteru'] = $filters;
@@ -969,6 +973,7 @@ class Mlm_report
             }
            
         }
+
         $invoice = $invoice->get()->keyBy('item_code_invoice_id');
         // $item_code_item = Tbl_item_code_item::
         $where_in = [];

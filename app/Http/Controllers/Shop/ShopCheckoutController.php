@@ -440,7 +440,6 @@ class ShopCheckoutController extends Shop
         } 
         else 
         {
-
             dd('Success!');       
         }
         

@@ -74,5 +74,7 @@ Route::post('/mlm/report/binary_promotions/request', 'Mlm\MlmReportController@re
 /* MLM SLOTs */
 Route::get('/mlm/slots', 'Mlm\MlmSlotsController@index'); 
 Route::post('/mlm/slots/set_nickname', 'Mlm\MlmSlotsController@set_nickname'); 
+Route::get('/mlm/slots/upgrade_slot/{id}', 'Mlm\MlmSlotsController@upgrade_slot'); 
+Route::post('/mlm/slots/upgrade_slot_post/{id}', 'Mlm\MlmSlotsController@upgrade_slot_post'); 
 
 /* MLM SLOTs REPORTS */

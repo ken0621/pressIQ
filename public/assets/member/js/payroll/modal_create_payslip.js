@@ -13,6 +13,8 @@ function modal_create_payslip()
 		time_summary();
 		check_company_check();
 		combo_box();
+
+		check_position();
 		// check_orientation($(".paper-orientation").val());
 		$(".payslip-container").css("width",$(".payslip-width").val()+"%");
 	}	
@@ -30,12 +32,19 @@ function modal_create_payslip()
 		});
 	}
 
-	// $(".droplist-vendor").load("/member/vendor/load_vendor", function()
-	//     {                
-	//          $(".droplist-vendor").globalDropList("reload");
-	//          $(".droplist-vendor").val(data.vendor_id).change();          
-	//     });
- //    	data.element.modal("hide");
+	function check_position()
+	{
+		$(".company-position").each(function()
+		{
+			if($(this).hasClass('active'))
+			{
+				var target = $(this).data("target");
+				$(".company-logo").addClass("display-none");
+				$(target).removeClass("display-none");
+				$("#company-position").val(target);
+			}
+		});
+	}
 
 	function payslip_action()
 	{

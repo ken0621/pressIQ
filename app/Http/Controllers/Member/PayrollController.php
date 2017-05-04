@@ -3707,6 +3707,9 @@ class PayrollController extends Member
      public function custom_payslip()
      {
           $data['_payslip'] = Tbl_payroll_payslip::getpayslip(Self::shop_id())->orderBy('payslip_code')->get();
+
+          $data['_archived'] = Tbl_payroll_payslip::getpayslip(Self::shop_id(), 1)->orderBy('payslip_code')->get();
+
           return view('member.payroll.side_container.custom_payslip', $data);
      }
 
@@ -3719,7 +3722,8 @@ class PayrollController extends Member
      public function modal_edit_payslip($id)
      {
           $data['_paper'] = Tbl_payroll_paper_sizes::getpaper(Self::shop_id())->orderBy('paper_size_name')->get();
-          return view('member.payroll.modal.modal_create_payslip', $data);
+          $data['payslip'] = Tbl_payroll_payslip::where('payroll_payslip_id', $id)->first();
+          return view('member.payroll.modal.modal_edit_payslip', $data);
      }
 
      public function modal_create_payslip()
@@ -3793,8 +3797,102 @@ class PayrollController extends Member
 
           $return['status']   = 'success';
           $return['id']       = $id;
+          $return['function_name'] = 'payrollconfiguration.reload_custom_payslip';
 
           return collect($return)->toJson();
+     }
+
+     public function modal_archive_payslip($archived, $id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $file_name          = Tbl_payroll_payslip::where('payroll_payslip_id',$id)->pluck('payslip_code');
+          $data['title']      = 'Do you really want to '.$statement.' Payslip '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/custom_payslip/archive_payslip';
+          $data['id']         = $id;
+          $data['archived']   = $archived;
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+
+     public function modal_update_payslip()
+     {
+          $payroll_payslip_id                     = Request::input('payroll_payslip_id');
+
+          $update['payslip_code']                 = Request::input("payslip_code");
+          $update['payroll_paper_sizes_id']       = Request::input('payroll_paper_sizes_id');
+          $update['payslip_width']                = Request::input('payslip_width');
+          $update['payslip_copy']                 = Request::input('payslip_copy');
+          
+
+          $include_department                     = 0;
+          $include_job_title                      = 0;
+          $include_time_summary                   = 0;
+          $include_company_logo                   = 0;
+
+          if(Request::has('include_company_logo'))
+          {
+               $include_company_logo = Request::input('include_company_logo');
+          }
+
+          if(Request::has('include_department'))
+          {
+               $include_department = Request::input('include_department');
+          }
+
+          if(Request::has('include_job_title'))
+          {
+               $include_job_title = Request::input('include_job_title');
+          }
+
+          if(Request::has('include_time_summary'))
+          {
+               $include_time_summary = Request::input('include_time_summary');
+          }
+
+          $update['include_department']           = $include_department;
+          $update['include_job_title']            = $include_job_title;
+          $update['include_time_summary']         = $include_time_summary;
+          $update['include_company_logo']         = $include_company_logo;
+          $update['company_position']             = Request::input('company_position');
+
+          Tbl_payroll_payslip::where('payroll_payslip_id', $payroll_payslip_id)->update($update);
+
+          $return['status']        = 'success';
+          $return['id']            = $payroll_payslip_id;
+          $return['function_name'] = 'payrollconfiguration.reload_custom_payslip';
+
+          return collect($return)->toJson();
+     }
+
+     public function archive_payslip()
+     {
+          $id = Request::input('id');
+          $udpate['payroll_payslip_archived'] = Request::input('archived');
+
+          Tbl_payroll_payslip::where('payroll_payslip_id',$id)->update($update);
+
+          $return['status']   = 'success';
+          $return['id']       = $id;
+          $return['function_name'] = 'payrollconfiguration.reload_custom_payslip';
+
+          return collect($return)->toJson();
+     }
+
+     public function payslip_use_change()
+     {
+          $update['payslip_is_use'] = Request::input('is_checked');
+          $id = Request::input('id');
+
+          $update_second['payslip_is_use'] = 0;
+          Tbl_payroll_payslip::where('shop_id', Self::shop_id())->update($update_second);
+
+          Tbl_payroll_payslip::where('payroll_payslip_id', $id)->update($update);
      }
 
      /* PAYROLL CUSTOM PAYSLIP END */
@@ -6269,5 +6367,13 @@ class PayrollController extends Member
      }
 
      /* PAYROLL REPORTS END */
+
+     /* BANKING START */
+     public function generate_bank($id)
+     {
+
+     }
+
+     /* BANKING END */
 
 }

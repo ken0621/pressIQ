@@ -12,6 +12,7 @@ use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_mlm;
 use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_post;
+use App\Models\Tbl_mlm_stairstep_settings;
 use App\Models\Tbl_mlm_binary_setttings;
 use App\Models\Tbl_mlm_lead;
 use App\Models\Tbl_mlm_slot;
@@ -98,7 +99,7 @@ class MlmDashboardController extends Mlm
             // dd($data);
         }
         $data['news'] = Self::news();
-        
+
         return view("mlm.dashboard", $data);
     }
     public function tree_view()
@@ -199,6 +200,25 @@ class MlmDashboardController extends Mlm
         $data['right'] = Self::$slot_now->slot_binary_right;
         // dd($binary);
         // dd($data);
+        $stairstep_plan = Tbl_mlm_plan::where("marketing_plan_code","STAIRSTEP")->where("shop_id",Self::$shop_id)->where("marketing_plan_enable",1)->first();
+
+        if($stairstep_plan)
+        {
+            $stairstep_rank         = Tbl_mlm_slot::where("slot_id",Self::$slot_id)->first();
+            $stairstep_rank         = Tbl_mlm_stairstep_settings::where("stairstep_id",$stairstep_rank->stairstep_rank)->first();
+            if($stairstep_rank)
+            {
+                $data["slot_stairstep"] = $stairstep_rank->stairstep_name;
+            }
+            else
+            {
+                $data["slot_stairstep"] = "None";
+            }
+        }
+        else
+        {
+            $data["slot_stairstep"] = null;
+        }
     	return view('mlm.dashboard.income', $data);
     }
     public static function no_slot($shop_id)

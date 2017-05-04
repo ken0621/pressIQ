@@ -15,6 +15,9 @@
     <div class="box-footer no-padding">
       <ul class="nav nav-stacked">
         <li><a href="javascript:">Slot No <span class="pull-right badge ">@if(isset($slot_now->slot_no)) {{$slot_now->slot_no}} @else No Slot @endif</span></a></li>
+        @if(isset($slot_stairstep))
+          <li><a href="javascript:">Stairstep Rank <span class="pull-right badge ">{{$slot_stairstep}}</span></a></li>
+        @endif
         <li><a href="javascript:"><hr></li>
         <li><a href="javascript:">Income Summary</li>
         @if(isset($slot_now))

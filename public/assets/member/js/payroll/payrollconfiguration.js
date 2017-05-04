@@ -282,6 +282,11 @@ function payrollconfiguration()
 		});
 	}
 
+	this.reload_custom_payslip = function()
+	{
+		reload_configuration("/member/payroll/custom_payslip");
+	}
+
 	/*this.reload_holiday_default = function()
 	{
 		reload_configuration("/member/payroll/holiday_default");

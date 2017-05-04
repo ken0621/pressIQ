@@ -177,8 +177,23 @@ class MLM_ReportController extends Member
         $invoice_f = Tbl_item_code_invoice::where('shop_id', $shop_id)->orderBy('item_code_invoice_id', 'ASC')->get()->keyBy('item_code_invoice_id')->first();
         $invoice_t = Tbl_item_code_invoice::where('shop_id', $shop_id)->orderBy('item_code_invoice_id', 'DESC')->get()->keyBy('item_code_invoice_id')->first();
         $data['report_list']['product_sales_report'] = 'Product Sales Report';
-        $data['report_list_d']['product_sales_report']['from'] =  $invoice_f->item_code_date_created;
-        $data['report_list_d']['product_sales_report']['to'] =  $invoice_t->item_code_date_created;
+        if($invoice_f)
+        {
+            $data['report_list_d']['product_sales_report']['from'] =  $invoice_f->item_code_date_created;
+        }
+        else
+        {
+            $data['report_list_d']['product_sales_report']['from'] = Carbon::now();
+        }
+
+        if($invoice_t)
+        {
+            $data['report_list_d']['product_sales_report']['to'] = $invoice_t->item_code_date_created;
+        }
+        else
+        {
+            $data['report_list_d']['product_sales_report']['to'] = Carbon::now();
+        }
         $data['report_list_d']['product_sales_report']['count'] = $invoice;
         // -----------------------------------------------------------------
 
@@ -186,11 +201,34 @@ class MLM_ReportController extends Member
         $invoice_m_f = Tbl_membership_code_invoice::where('shop_id', $shop_id)->orderBy('membership_code_invoice_id', 'ASC')->get()->first();
         $invoice_m_t = Tbl_membership_code_invoice::where('shop_id', $shop_id)->orderBy('membership_code_invoice_id', 'DESC')->get()->first();
         $data['report_list']['membership_code_sales_report'] = 'Membership Sales Report';
-        $data['report_list_d']['membership_code_sales_report']['from'] =  $invoice_m_f->membership_code_date_created;
-        $data['report_list_d']['membership_code_sales_report']['to'] =  $invoice_m_t->membership_code_date_created;
-        $data['report_list_d']['membership_code_sales_report']['count'] = $invoice_m;
+        if($invoice_m)
+        {
+            $data['report_list_d']['membership_code_sales_report']['from'] =  $invoice_m_f->membership_code_date_created;
+            $data['report_list_d']['membership_code_sales_report']['to'] =  $invoice_m_t->membership_code_date_created;
+            $data['report_list_d']['membership_code_sales_report']['count'] = $invoice_m;
+        }
+        else
+        {
+            $data['report_list_d']['membership_code_sales_report']['from'] =  Carbon::now();
+            $data['report_list_d']['membership_code_sales_report']['to'] =  Carbon::now();
+            $data['report_list_d']['membership_code_sales_report']['count'] = 0;
+        }
+        
+
         // yyyy-MM-dd
         // createFromFormat
+
+       
+        $data['report_list']['product_sales_report_warehouse'] = 'Product Sales Report (Ware house)';
+        $data['report_list_d']['product_sales_report_warehouse']['from'] = Carbon::now();
+        $data['report_list_d']['product_sales_report_warehouse']['to'] = Carbon::now();
+        $data['report_list_d']['product_sales_report_warehouse']['count'] = 0;
+
+        $data['report_list']['product_sales_report_consolidated'] = 'Product Sales Report (Consiladated)';
+        $data['report_list_d']['product_sales_report_consolidated']['from'] = Carbon::now();
+        $data['report_list_d']['product_sales_report_consolidated']['to'] = Carbon::now();
+        $data['report_list_d']['product_sales_report_consolidated']['count'] = 0;
+
         foreach($data['report_list_d'] as $key => $value)
         {
             $data['report_list_d'][$key]['from'] = Carbon::parse($value['from'])->format('Y-m-d');

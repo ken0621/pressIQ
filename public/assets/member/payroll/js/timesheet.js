@@ -425,13 +425,21 @@ function timesheet()
 					}
 				});
 
-
+				action_reload_summary();
 
 			},
 			error: function()
 			{
 			}
 		});
+	}
+
+	function action_reload_summary()
+	{
+		var selected_employee = $(".choose-employee").val();
+		var payroll_period_id = $("#payroll_period_id").val();
+		var url = '/member/payroll/employee_timesheet/timesheet/' + selected_employee + '/' + payroll_period_id;
+		$(".div-summary-table").load(url + ' .div-summary-table', function(){});
 	}
 
 	function update_time_record_on_table(val)

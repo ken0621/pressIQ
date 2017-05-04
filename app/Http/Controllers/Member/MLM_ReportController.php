@@ -45,6 +45,7 @@ use App\Globals\Mlm_report;
 use App\Globals\Pdf_global;
 use App\Models\Tbl_membership_code_invoice;
 use App\Models\Tbl_item_code_invoice;
+use App\Models\Tbl_warehouse;
 use Crypt;
 class MLM_ReportController extends Member
 {
@@ -239,6 +240,9 @@ class MLM_ReportController extends Member
         {
             return $this->get_report();
         }
+
+        $data['users'] = Tbl_user::where('user_shop', $shop_id)->where('archived', 0)->get();
+        $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get();
         return view('member.mlm_report.index', $data);
     }
     public function get_report()

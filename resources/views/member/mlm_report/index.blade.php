@@ -55,6 +55,24 @@
                     <label><small>To:</small></label>
                     <input type="date" class="form-control to_in" name="to">
                 </div>  
+                <div class="col-md-3">
+                  <label><small>Cashiers</small></label>
+                  <select class="form-control" name="user_id">
+                    <option value="0">All</option>
+                    @foreach($users as $key => $value)
+                      <option value={{$value->user_id}}>{{$value->user_first_name}} {{$value->user_last_name}}</option>
+                    @endforeach
+                  </select>
+                </div>
+                <div class="col-md-3">
+                  <label><small>Warehouse</small></label>
+                    <select class="form-control" name="warehouse_id">
+                    <option value="0">All</option>
+                    @foreach($warehouse as $key => $value)
+                      <option value="{{$value->warehouse_id}}">{{$value->warehouse_name}}</option>
+                    @endforeach
+                    </select>
+                </div>
             </div>
             <div class="col-md-12 hide">
                 <hr>
@@ -73,6 +91,7 @@
                     <label><small>Take</small></label>
                     <input type="number" class="form-control take_in" value="50" name="take">
                 </div>
+
             </div>
         </form>  
         </div>  

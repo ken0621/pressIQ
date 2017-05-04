@@ -3,6 +3,7 @@ namespace App\Globals;
 
 use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership;
+use App\Models\Tbl_membership_points;
 use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_item_code;
 use App\Models\Tbl_mlm_slot;
@@ -23,7 +24,6 @@ use App\Models\Tbl_mlm_leadership_settings;
 use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_discount_card_settings;
-use App\Models\Tbl_membership_points;
 use App\Models\Tbl_mlm_binary_report;
 use App\Globals\Mlm_gc;
 use App\Models\Tbl_mlm_gc;
@@ -52,7 +52,34 @@ class Mlm_complan_manager
         {
             if($slot_info->membership_points_direct != null || $slot_info->membership_points_direct != 0)
             {
-                $log_array['earning'] = $slot_info->membership_points_direct;
+
+                /* DIRECT INCOME LIMIT */
+                $check_points = Tbl_membership_points::where("membership_id",$slot_sponsor->slot_membership)->first();
+                if($check_points)
+                {
+                    if($check_points->membership_direct_income_limit != 0)
+                    {
+                        if($slot_info->membership_points_direct > $check_points->membership_direct_income_limit)
+                        {
+                            $direct_points_given = $check_points->membership_direct_income_limit;
+                        }
+                        else
+                        {
+                            $direct_points_given = $slot_info->membership_points_direct;
+                        }
+                    }
+                    else
+                    {
+                        $direct_points_given = $slot_info->membership_points_direct;
+                    }
+                }
+                else
+                {
+                    $direct_points_given = $slot_info->membership_points_direct;
+                }
+
+
+                $log_array['earning'] = $direct_points_given;
                 $log_array['level'] = 1;
                 $log_array['level_tree'] = 'Sponsor Tree';
                 $log_array['complan'] = 'DIRECT';
@@ -63,7 +90,7 @@ class Mlm_complan_manager
                 $arry_log['shop_id'] = $slot_info->shop_id;
                 $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
                 $arry_log['wallet_log_details'] = $log;
-                $arry_log['wallet_log_amount'] = $slot_info->membership_points_direct;
+                $arry_log['wallet_log_amount'] = $direct_points_given;
                 $arry_log['wallet_log_plan'] = "DIRECT";
                 $arry_log['wallet_log_status'] = "n_ready";   
                 $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('DIRECT', $slot_info->shop_id); 

@@ -11,7 +11,11 @@
 		<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="{{$slot->slot_id}}">
 		@else
 			@if(isset($slot_info))
+				@if(isset($slot_info->slot_id))
+				<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="{{$slot_info->slot_id}}">
+				@else
 				<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="">
+				@endif
 			@else
 				@if(isset($discount_card))
 				<input type="hidden" class="chosen-slot_id slot_id" name="slot_id" value="">

@@ -141,7 +141,7 @@ class Billing
         if($bill_id != null)
         {
             Tbl_bill_po::where("billed_id",$bill_id)->delete();
-
+            // dd($po_data);
             foreach ($po_data as $key => $value) 
             {
                 $chk = Tbl_bill_po::where("billed_id",$bill_id)->where("purchase_order_id",$value["poline_po_id"])->first();

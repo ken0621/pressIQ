@@ -18,7 +18,7 @@ use Redirect;
 use Request;
 use View;
 use Session;
-
+use App\Globals\Mlm_seed;
 class Member extends Controller
 {
 	public $user_info;
@@ -55,7 +55,9 @@ class Member extends Controller
 
 					/* INSERT DEFAULT WAREHOUSE */
 					Warehouse::put_default_warehouse($this->user_info->shop_id);
-
+					/* Seed MLM Email */
+					Mlm_seed::seed_mlm($this->user_info->shop_id);
+					
 					$shop_id_used    = $user_info->shop_id;
 					$check_if_dev    = Tbl_user_position::where("position_id",$this->user_info->user_level)->first();
 					$is_dev          = 0;

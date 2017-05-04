@@ -337,8 +337,7 @@ class Invoice
     public static function updateAmountApplied($inv_id)
     {
         $payment_applied = Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->where("inv_id",$inv_id)->pluck("amount_applied");
-        $cm_amount = CreditMemo::cm_amount($inv_id);
-        $data["inv_payment_applied"] = $payment_applied - $cm_amount;
+        $data["inv_payment_applied"] = $payment_applied
 
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
 

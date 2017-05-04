@@ -152,12 +152,8 @@ class Customer_ReceivePaymentController extends Member
                 $insert_line["rpline_rp_id"]            = $rcvpayment_id;
                 $insert_line["rpline_reference_name"]   = Request::input('rpline_txn_type')[$key];
                 $insert_line["rpline_reference_id"]     = Request::input('rpline_txn_id')[$key];
-                $check_inv_if_have_cm = Tbl_customer_invoice::c_m()->where("inv_id",Request::input('rpline_txn_id')[$key])->first();
-                $cm_amount = 0;
-                if($check_inv_if_have_cm != null)
-                {
-                    $cm_amount = $check_inv_if_have_cm->cm_amount;
-                }
+           
+                    $cm_amount = CreditMemo::cm_amount(Request::input('rpline_txn_id')[$key]);
                 $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]) + $cm_amount;
 
                 Tbl_receive_payment_line::insert($insert_line);
@@ -168,7 +164,7 @@ class Customer_ReceivePaymentController extends Member
             }
             else
             {
-                Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                Invoice::updateAmountApplied(Request::input('rpline_txn_id')[$key]);
             }
         }
 

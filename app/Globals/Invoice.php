@@ -262,7 +262,8 @@ class Invoice
 
     }
     public static function insert_invoice_line($invoice_id, $item_info, $entry)
-    {        
+    {    
+        $total_discount = 0;
         foreach($item_info as $key => $item_line)
         {
             if($item_line)
@@ -305,8 +306,11 @@ class Invoice
                 $entry_data[$key]['entry_amount']       = $amount;
                 $entry_data[$key]['entry_description']  = $item_line['item_description'];
                 
+                $total_discount +=$discount; 
             }
         }
+
+        $entry['discount'] += $total_discount;
 
         $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
 

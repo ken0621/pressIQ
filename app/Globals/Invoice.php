@@ -60,6 +60,7 @@ class Invoice
             foreach ($ar as $key => $value) 
             {
                $price += $value->inv_overall_price - CreditMemo::cm_amount($value->inv_id);
+               Invoice::updateIsPaid($value->inv_id);
             }            
         }
 

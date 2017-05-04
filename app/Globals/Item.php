@@ -14,6 +14,7 @@ use App\Models\Tbl_item_discount;
 
 use App\Globals\Item;
 use Session;
+use Carbon\carbon;
 
 class Item
 {
@@ -553,5 +554,39 @@ class Item
         }
         
         return $item_session;
+    }
+
+    public static function getOtherChargeItem()
+    {
+        $exist_item = Tbl_item::where("shop_id", Item::getShopId())->where("item_code", "other-charge")->first();
+        if(!$exist_item)
+        {
+            $insert["shop_id"]                  = Item::getShopId();
+            $insert["item_type_id"]             = 3;
+            $insert["item_category_id"]         = Item::getServiceCategory();
+            $insert["item_name"]                = "Other Charge";
+            $insert["item_income_account_id"]   = Accounting::getOpenBalanceEquity();
+            $insert["item_code"]                = "other-charge";
+            
+            return Tbl_item::insertGetId($insert);
+        }
+
+        return $exist_item->item_id;
+    }
+
+    public static function getServiceCategory()
+    {
+        $exist_type = Tbl_category::where("type_shop", Item::getShopId())->where("type_name", "Service")->first();
+        if(!$exist_type)
+        {
+            $insert["type_shop"]                = Item::getShopId();
+            $insert["type_category"]            = "service";
+            $insert["type_name"]                = "Service";
+            $insert["type_date_created"]        = Carbon::now();  
+            
+            return Tbl_category::insertGetId($insert);
+        }
+
+        return $exist_type->type_id;
     }
 }

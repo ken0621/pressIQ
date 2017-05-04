@@ -14,7 +14,7 @@ class Tbl_journal_entry extends Model
     	return $query->leftjoin("tbl_journal_entry_line","jline_je_id","=","je_id");
     }
 
-    public function scopeTransaction($query, $reference)
+    public function scopeTransaction($query, $reference = null)
     {
         $query->selectRaw("*, (CASE je_reference_module
                                 WHEN 'invoice' THEN concat('/member/customer/invoice?id=', je_reference_id) 
@@ -24,9 +24,13 @@ class Tbl_journal_entry extends Model
                                 WHEN 'bill' THEN concat('/member/vendor/create_billt?id=', je_reference_id)
                                 WHEN 'debit-memo' THEN concat('/member/vendor/', je_reference_id)
                                 WHEN 'bill-payment' THEN concat('/member/vendor/paybill?id=', je_reference_id)
-                                END) as txn_link")
-                        ->where("je_reference_module", $reference);
-
+                                WHEN 'journal-entry' THEN concat('/member/accounting/journal?id=', je_id)
+                                END) as txn_link");
+        if($reference)
+        {
+            $query->where("je_reference_module", $reference);
+        }
+        
         return $query;
     }
 }

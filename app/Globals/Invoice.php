@@ -286,11 +286,13 @@ class Invoice
 
                 Tbl_customer_invoice_line::insert($insert_line);
 
-                $entry_data[$key]['item_id']       = $item_line['item_id'];
-                $entry_data[$key]['entry_qty']     = $item_line['quantity'];
-                $entry_data[$key]['vatable']       = 0;
-                $entry_data[$key]['discount']      = $discount;
-                $entry_data[$key]['entry_amount']  = $amount;
+                /* TRANSACTION JOURNAL */   
+                $entry_data[$key]['item_id']            = $item_line['item_id'];
+                $entry_data[$key]['entry_qty']          = $item_line['quantity'];
+                $entry_data[$key]['vatable']            = 0;
+                $entry_data[$key]['discount']           = $discount;
+                $entry_data[$key]['entry_amount']       = $amount;
+                $entry_data[$key]['entry_description']  = $item_line['item_description'];
                 
             }
         }

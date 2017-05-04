@@ -54,7 +54,7 @@ class Accounting
 	}
 	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type)
 	{
-		$query = Tbl_chart_of_account::accountInfo($shop)->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel);
+		$query = Tbl_chart_of_account::accountInfo($shop)->balance()->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel);
 
 		switch($filter)
 		{
@@ -78,6 +78,7 @@ class Accounting
 			$result[$key]["account_type"] 			= $item->chart_type_name;
 			$result[$key]["account_description"] 	= $item->account_description;
 			$result[$key]["account_sublevel"] 		= $item->account_sublevel;
+			$result[$key]["account_balance"] 		= $item->balance;
 			$sub_query = Tbl_chart_of_account::where("account_parent_id", $item->account_id)->first();
 			
 			if($sub_query)
@@ -129,7 +130,7 @@ class Accounting
 	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["name_id"], $entry["total"] , 
 	 *									$entry["vatable"] , $entry["discount"] , $entry["ewt"], $entry["account_id"]
 	 * @param array  	$entry_data     $entry_data[0]['item_id'], $entry_data[0]['vatable']
-	 *									$entry_data[0]['discount'] , $entry_data[0]['entry_amount']
+	 *									$entry_data[0]['discount'] , $entry_data[0]['entry_amount'] , $entry_data[0]['entry_desription']
 	 * @param boolean  	$remarks   		Description of the journal entry	
 	 */
 	public static function postJournalEntry($entry, $entry_data, $remarks = '')
@@ -203,37 +204,37 @@ class Accounting
 			/* DISCOUNT AS WHOLE */
 			if(isset($entry["discount"]))
 			{
-			if($entry["discount"] > 0)
-			{
-				$line_data["entry_amount"]	= $entry["discount"];
-				$line_data["entry_type"] 	= Accounting::$newContraBalance(Accounting::getDiscountSale());
-				$line_data["account_id"] 	= Accounting::getDiscountSale();
-				Accounting::insertJournalLine($line_data);
-			}
+				if($entry["discount"] > 0)
+				{
+					$line_data["entry_amount"]	= $entry["discount"];
+					$line_data["entry_type"] 	= Accounting::$newContraBalance(Accounting::getDiscountSale());
+					$line_data["account_id"] 	= Accounting::getDiscountSale();
+					Accounting::insertJournalLine($line_data);
+				}
 			}
 
 			/* VATABLE AS WHOLE */
 			if(isset($entry["vatable"]))
 			{
-			if($entry["vatable"] > 0)
-			{
-				$line_data["entry_amount"]	= $entry["vatable"];
-				$line_data["entry_type"] 	= Accounting::$newNormalBalance(Accounting::getOutputVatPayable());
-				$line_data["account_id"] 	= Accounting::getOutputVatPayable();
-				Accounting::insertJournalLine($line_data);
-			}
+				if($entry["vatable"] > 0)
+				{
+					$line_data["entry_amount"]	= $entry["vatable"];
+					$line_data["entry_type"] 	= Accounting::$newNormalBalance(Accounting::getOutputVatPayable());
+					$line_data["account_id"] 	= Accounting::getOutputVatPayable();
+					Accounting::insertJournalLine($line_data);
+				}
 			}
 
 			/* EWT AS WHOLE */
 			if(isset($entry["ewt"]))
 			{
-			if($entry["ewt"] > 0)
-			{
-				$line_data["entry_amount"]	= $entry["ewt"];
-				$line_data["entry_type"] 	= Accounting::$newNormalBalance(Accounting::getWitholdingTax());
-				$line_data["account_id"] 	= Accounting::getWitholdingTax();
-				Accounting::insertJournalLine($line_data);
-			}
+				if($entry["ewt"] > 0)
+				{
+					$line_data["entry_amount"]	= $entry["ewt"];
+					$line_data["entry_type"] 	= Accounting::$newNormalBalance(Accounting::getWitholdingTax());
+					$line_data["account_id"] 	= Accounting::getWitholdingTax();
+					Accounting::insertJournalLine($line_data);
+				}
 			}
 		}
 		elseif($main_account == 'payable')
@@ -247,37 +248,37 @@ class Accounting
 			/* DISCOUNT AS WHOLE */
 			if(isset($entry["discount"]))
 			{
-			if($entry["discount"] > 0)
-			{
-				$line_data["entry_amount"]	= $entry["discount"];
-				$line_data["entry_type"] 	= Accounting::$newContraBalance(Accounting::getDiscountPurchase());
-				$line_data["account_id"] 	= Accounting::getDiscountPurchase();
-				Accounting::insertJournalLine($line_data);
-			}
+				if($entry["discount"] > 0)
+				{
+					$line_data["entry_amount"]	= $entry["discount"];
+					$line_data["entry_type"] 	= Accounting::$newContraBalance(Accounting::getDiscountPurchase());
+					$line_data["account_id"] 	= Accounting::getDiscountPurchase();
+					Accounting::insertJournalLine($line_data);
+				}
 			}
 
 			/* VATABLE AS WHOLE */
 			if(isset($entry["vatable"]))
 			{
-			if($entry["vatable"] > 0)
-			{
-				$line_data["entry_amount"]	= $entry["vatable"];
-				$line_data["entry_type"] 	= Accounting::$newNormalBalance(Accounting::getOutputVatPayable());
-				$line_data["account_id"] 	= Accounting::getOutputVatPayable();
-				Accounting::insertJournalLine($line_data);
-			}
+				if($entry["vatable"] > 0)
+				{
+					$line_data["entry_amount"]	= $entry["vatable"];
+					$line_data["entry_type"] 	= Accounting::$newNormalBalance(Accounting::getOutputVatPayable());
+					$line_data["account_id"] 	= Accounting::getOutputVatPayable();
+					Accounting::insertJournalLine($line_data);
+				}
 			}
 
 			/* EWT AS WHOLE */
 			if(isset($entry["ewt"]))
 			{
-			if($entry["ewt"] > 0)
-			{
-				$line_data["entry_amount"]	= $entry["ewt"];
-				$line_data["entry_type"] 	= Accounting::$newNormalBalance(Accounting::getWitholdingTax());
-				$line_data["account_id"] 	= Accounting::getWitholdingTax();
-				Accounting::insertJournalLine($line_data);
-			}
+				if($entry["ewt"] > 0)
+				{
+					$line_data["entry_amount"]	= $entry["ewt"];
+					$line_data["entry_type"] 	= Accounting::$newNormalBalance(Accounting::getWitholdingTax());
+					$line_data["account_id"] 	= Accounting::getWitholdingTax();
+					Accounting::insertJournalLine($line_data);
+				}
 			}
 		}
 
@@ -299,6 +300,7 @@ class Accounting
 				$account = Tbl_chart_of_account::type()->where("account_id", $entry_line["account_id"])->first();
 			}
 
+			$line_data["entry_description"] = isset($entry_line["entry_description"]) ? $entry_line["entry_description"] : '';
 
 			switch($entry["reference_module"])
 			{
@@ -407,6 +409,7 @@ class Accounting
 		if(!$entry['je_id'])
 		{
 			$line_data["je_id"] 	= Tbl_journal_entry::insertGetId($journal_entry);
+			Tbl_journal_entry::where("je_id", $line_data["je_id"])->update(['je_reference_id'=>$line_data["je_id"]]);
 		}
 		else
 		{

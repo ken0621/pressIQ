@@ -69,7 +69,7 @@ class JournalEntryController extends Member
 
 	public function getAllList()
 	{
-		$data['_journal']	= Tbl_journal_entry::where("je_shop_id", $this->getShopId())->get();
+		$data['_journal']	= Tbl_journal_entry::transaction()->where("je_shop_id", $this->getShopId())->get();
 		foreach($data['_journal'] as $key=>$journal)
 		{
 			$data['_journal'][$key]->total = Tbl_journal_entry_line::where("jline_je_id", $journal->je_id)->where("jline_type", 'Debit')->sum("jline_amount");

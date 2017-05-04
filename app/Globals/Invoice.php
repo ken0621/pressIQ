@@ -8,7 +8,9 @@ use App\Models\Tbl_receive_payment;
 use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
+use App\Models\Tbl_credit_memo;
 use App\Globals\AuditTrail;
+use App\Globals\CreditMemo;
 use DB;
 use Log;
 use Request;
@@ -35,7 +37,8 @@ class Invoice
         $price = 0;
         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
                                 ->whereBetween("date_created",array($start_date,$end_date))
-                                ->where("inv_is_paid",0)->get();
+                                ->where("inv_is_paid",0)
+                                ->where("is_sales_receipt",0)->get();
         if(isset($ar))
         {
             foreach ($ar as $key => $value) 
@@ -56,7 +59,7 @@ class Invoice
         {
             foreach ($ar as $key => $value) 
             {
-               $price += $value->inv_overall_price;
+               $price += $value->inv_overall_price - CreditMemo::cm_amount($value->inv_id);
             }            
         }
 
@@ -302,7 +305,15 @@ class Invoice
 
     public static function getAllInvoiceByCustomer($customer_id)
     {
-        return  Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)->where("inv_is_paid", 0)->get()->toArray();
+        $data = Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)->where("inv_is_paid", 0)->where("is_sales_receipt",0)->get()->toArray();
+        foreach ($data as $key => $value) 
+        {
+            if($value['credit_memo_id'] != 0)
+            {
+                $data[$key]['inv_overall_price'] = $value['inv_overall_price'] - CreditMemo::cm_amount($value['inv_id']);
+            }
+        }
+        return $data;
     }
 
     public static function getAllInvoiceByCustomerWithRcvPymnt($customer_id, $rcvpayment_id)
@@ -310,15 +321,24 @@ class Invoice
         $inv_in_rcvpayment = Tbl_receive_payment_line::select("rpline_reference_id")->where("rpline_reference_name", 'invoice')
                             ->where("rpline_rp_id", $rcvpayment_id)->get()->toArray();
 
-        return  Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)
-                ->rcvPayment($rcvpayment_id, $inv_in_rcvpayment)->orderBy("inv_id")->get()->toArray();
+        $data = Tbl_customer_invoice::c_m()->appliedPayment(Invoice::getShopId())->byCustomer(Invoice::getShopId(), $customer_id)
+                ->rcvPayment($rcvpayment_id, $inv_in_rcvpayment)->orderBy("inv_id")->where("is_sales_receipt",0)->get()->toArray();
+
+        foreach ($data as $key => $value) 
+        {
+            if($value['credit_memo_id'] != 0)
+            {
+                $data[$key]['inv_overall_price'] = $value['inv_overall_price'] - CreditMemo::cm_amount($value['inv_id']);
+            }
+        }
+        return $data;
     }
 
     public static function updateAmountApplied($inv_id)
     {
         $payment_applied = Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->where("inv_id",$inv_id)->pluck("amount_applied");
-        
         $data["inv_payment_applied"] = $payment_applied;
+
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
 
         Invoice::updateIsPaid($inv_id);

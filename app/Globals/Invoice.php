@@ -37,7 +37,8 @@ class Invoice
         $price = 0;
         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
                                 ->whereBetween("date_created",array($start_date,$end_date))
-                                ->where("inv_is_paid",0)->get();
+                                ->where("inv_is_paid",0)
+                                ->where("is_sales_receipt",0)->get();
         if(isset($ar))
         {
             foreach ($ar as $key => $value) 
@@ -58,7 +59,7 @@ class Invoice
         {
             foreach ($ar as $key => $value) 
             {
-               $price += $value->inv_overall_price;
+               $price += $value->inv_overall_price - CreditMemo::cm_amount($value->inv_id);
             }            
         }
 
@@ -336,8 +337,7 @@ class Invoice
     public static function updateAmountApplied($inv_id)
     {
         $payment_applied = Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->where("inv_id",$inv_id)->pluck("amount_applied");
-        $cm_amount = CreditMemo::cm_amount($inv_id);
-        $data["inv_payment_applied"] = $payment_applied - $cm_amount;
+        $data["inv_payment_applied"] = $payment_applied;
 
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
 

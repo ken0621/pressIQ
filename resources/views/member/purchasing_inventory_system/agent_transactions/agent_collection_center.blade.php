@@ -70,7 +70,7 @@
                                 </td>
                                 <td class="text-center">
                                     @if($sir->ilr_status == 2)
-                                    <a class="btn btn-default form-control">Open</a>
+                                    <a class="btn btn-default form-control">CLOSED</a>
                                     @else
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

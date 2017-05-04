@@ -45,6 +45,7 @@ use App\Globals\Mlm_report;
 use App\Globals\Pdf_global;
 use App\Models\Tbl_membership_code_invoice;
 use App\Models\Tbl_item_code_invoice;
+use App\Models\Tbl_warehouse;
 use Crypt;
 class MLM_ReportController extends Member
 {
@@ -233,12 +234,23 @@ class MLM_ReportController extends Member
         {
             $data['report_list_d'][$key]['from'] = Carbon::parse($value['from'])->format('Y-m-d');
             $data['report_list_d'][$key]['to'] = Carbon::parse($value['to'])->format('Y-m-d');
+            $data['report_list_d'][$key]['cashiers'] = 'hide';
+            $data['report_list_d'][$key]['warehouse'] = 'hide';
+
+            if($key == 'product_sales_report_warehouse' || $key == 'product_sales_report')
+            {
+                $data['report_list_d'][$key]['cashiers'] = 'show';
+                $data['report_list_d'][$key]['warehouse'] = 'show';
+            }
         }
         $report_get = Request::input('report_choose');
         if($report_get != null)
         {
             return $this->get_report();
         }
+
+        $data['users'] = Tbl_user::where('user_shop', $shop_id)->where('archived', 0)->get();
+        $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get();
         return view('member.mlm_report.index', $data);
     }
     public function get_report()

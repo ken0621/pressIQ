@@ -16,33 +16,69 @@
 
                         <table class="table table-condensed table-bordered">
                             <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Product Name</th>
-                                    <th>Required Binary <br> Points Left</th>
-                                    <th>Current Left</th>
-                                    <th>Required Binary <br> Points Right</th>
-                                    <th>Current Right</th>
-                                    <th>No. of units to be given</th>
-                                    <th>No. of units taken</th>
-                                    <td>Promo Start Date</td>
-                                    <th></th>
-                                </tr>
                             </thead>
                             <tbody>
                                 @foreach($promotions as $key => $value)
                                 <tr>
                                     <td><img src="{{ $value->item_img ? $value->item_img : "/assets/front/img/default.jpg" }}" style="width: 100%"></td>
-                                    <td>{{$value->item_name}}</td>
-                                    <td>{{$value->binary_promotions_required_left}}</td>
-                                    <td>{{$current_l[$key]}}</td>
-                                    <td>{{$value->binary_promotions_required_right}}</td>
-                                    <td>{{$current_r[$key]}}</td>
-                                    <td>{{$value->binary_promotions_no_of_units}}</td>
-                                    <td>{{$value->binary_promotions_no_of_units_used}}</td>
-                                    <td>{{$value->binary_promotions_start_date}}</td>
                                     <td>
-                                    
+                                        <!-- l -->
+                                        <div class="col-md-6">
+                                            <div class="col-md-6">
+                                                Product Name:
+                                            </div>
+                                            <div class="col-md-6">{{$value->item_name}}</div>
+                                        </div>
+                                        <!-- r -->
+                                        <div class="col-md-6">
+                                            <div class="col-md-6">
+                                                Required Binary Points Left:
+                                            </div>
+                                            <div class="col-md-6">{{$value->binary_promotions_required_left}}</div>
+                                        </div>
+                                        <!-- l -->
+                                        <div class="col-md-6">
+                                            <div class="col-md-6">
+                                                No. of units to be given
+                                            </div>
+                                            <div class="col-md-6">{{$value->binary_promotions_no_of_units}}</div>
+                                        </div>
+                                        <!-- r -->
+                                        <div class="col-md-6">
+                                            <div class="col-md-6">
+                                                Current Left:
+                                            </div>
+                                            <div class="col-md-6">{{$current_l[$key]}}</div>
+                                        </div>
+                                        <!-- l -->
+                                        <div class="col-md-6">
+                                            <div class="col-md-6">
+                                                No. of units taken
+                                            </div>
+                                            <div class="col-md-6">{{$value->binary_promotions_no_of_units_used}}</div>
+                                        </div>
+                                        <!-- r -->
+                                        <div class="col-md-6">
+                                            <div class="col-md-6">
+                                                Required Binary Points Right:
+                                            </div>
+                                            <div class="col-md-6">{{$value->binary_promotions_required_right}}</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="col-md-6">
+                                                Promo Start Date:
+                                            </div>
+                                            <div class="col-md-6">{{$value->binary_promotions_start_date}}</div>
+                                        </div>
+                                        <!-- r -->
+                                        <div class="col-md-6">
+                                            <div class="col-md-6">
+                                                Current Right:
+                                            </div>
+                                            <div class="col-md-6">{{$current_r[$key]}}</div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <span class="pull-right">
                                             @if($value->binary_promotions_no_of_units > $value->binary_promotions_no_of_units_used)
                                                 @if($current_l[$key] >= $value->binary_promotions_required_left)
                                                     @if($current_r[$key] >= $value->binary_promotions_required_right)
@@ -60,7 +96,8 @@
                                             @else
                                                 All Stock Taken
                                             @endif
-                                    </form>          
+                                            </span>
+                                        </div>
                                     </td>
                                 </tr>
                                 @endforeach

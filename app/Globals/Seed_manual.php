@@ -572,6 +572,7 @@ class Seed_manual
        $insert[26]['account_tax_code_id']        = "";
        $insert[26]['default_for_code']           = "";
 
+
        $insert[27]['default_id']                 = 27; 
        $insert[27]['default_type_id']            = "13";    
        $insert[27]['default_number']             = "66000";

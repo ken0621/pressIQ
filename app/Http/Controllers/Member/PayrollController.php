@@ -4413,6 +4413,23 @@ class PayrollController extends Member
           $data['period'] = date('F d, Y', strtotime($period->payroll_period_start)).' to '.date('F d, Y', strtotime($period->payroll_period_end));
           $data['_details'] = $process['_details'];
 
+          $collect = collect($process['_details']);
+          
+          $data['total_regular_salary']      = $collect->sum('regular_salary');
+          $data['total_late_deduction']      = $collect->sum('late_deduction');
+          $data['total_under_time']          = $collect->sum('under_time');
+          $data['total_absent_deduction']    = $collect->sum('absent_deduction');
+          $data['total_early_ot']            = $collect->sum('total_early_ot');
+          $data['total_reg_ot']              = $collect->sum('total_reg_ot');
+          $data['total_rest_days']           = $collect->sum('total_rest_days');
+          $data['total_extra_salary']        = $collect->sum('extra_salary');
+          $data['total_night_differential']  = $collect->sum('total_night_differential');
+          $data['total_sh_salary']           = $collect->sum('sh_salary');
+          $data['total_rh_salary']           = $collect->sum('rh_salary');
+          $data['total_cola']                = $collect->sum('cola');
+          $data['total_leave']               = $collect->sum('leave');
+
+
           return view('member.payroll.modal.modal_view_computation_details', $data);
      }
 

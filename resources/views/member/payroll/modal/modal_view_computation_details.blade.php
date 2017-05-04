@@ -6,8 +6,8 @@
 	<div class="modal-body form-horizontal">
 		<div class="break-down-div">
 			<div class="form-group">
-				<div class="col-md-12">
-					<table class="table table-condensed table-bordered">
+				<div class="col-md-12 over-flow">
+					<table class="table table-condensed table-bordered column-fit">
 						<thead>
 							<tr>
 								<th>Date</th>
@@ -73,6 +73,50 @@
 								</td>
 							</tr>
 							@endforeach
+							<tr>
+								<td>
+									<b>Total</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_regular_salary, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_late_deduction, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_under_time, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_absent_deduction, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_early_ot, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_reg_ot, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_rest_days, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_extra_salary, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_night_differential, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_sh_salary, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_rh_salary, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_cola, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_leave, 2)}}</b>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 				</div>

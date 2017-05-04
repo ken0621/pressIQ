@@ -27,10 +27,18 @@
                 @endif
                 @foreach($plan_settings as $key => $value)
                 <li><a href="javascript:">{{$value->marketing_plan_label}} <span class="pull-right badge bg-aqua">{{currency('PHP', $earning[$key])}}</span></a></li>
-                @endforeach 
+                @endforeach
+                @if(isset($slot_stairstep)) 
+                <li><a href="javascript:">Rebates Bonus<span class="pull-right badge bg-aqua">{{currency('PHP', $rebates)}}</span></a></li>
+                <li><a href="javascript:">Over-ride Bonus<span class="pull-right badge bg-aqua">{{currency('PHP', $override)}}</span></a></li>
+                <li>
+                  <a href="javascript:" class="clearfix"><h4>Total<span class="pull-right badge bg-aqua" style="font-size: 15px">{{currency('PHP', array_sum($earning) + $rebates + $override)}}</h4></span></a>
+                </li>
+                @else
                 <li>
                   <a href="javascript:" class="clearfix"><h4>Total<span class="pull-right badge bg-aqua" style="font-size: 15px">{{currency('PHP', array_sum($earning))}}</h4></span></a>
                 </li>
+                @endif
             @else
                 <li><a href="javascript:" class="pull-right badge bg-blue">No Active Income yet.</a></li>
             @endif

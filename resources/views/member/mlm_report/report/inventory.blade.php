@@ -181,7 +181,6 @@
                                     </td>
                                     <td>{{$value->item_code_date_created}}</td>
                                 </tr>
-
                             @endforeach
                             <tr>
                                 <td colspan="8">Total Sales</td>

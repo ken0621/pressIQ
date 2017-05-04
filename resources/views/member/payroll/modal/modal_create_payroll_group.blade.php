@@ -34,7 +34,10 @@
 											<label><input type="radio" name="payroll_group_salary_computation" value="Flat Rate">Flat Rate</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_salary_computation" value="Daily" checked>Daily</label>
+											<label><input type="radio" name="payroll_group_salary_computation" value="Daily Rate" checked>Daily Rate</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_salary_computation" value="Monthly Rate" >Monthly Rate</label>
 										</div>
 									</div>
 								</div>
@@ -82,6 +85,20 @@
 										</div>
 									</div>
 								</div> -->
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div class="form-horizontal">
+											<div class="form-group">
+												<div class="col-md-12">
+													<div class="checkbox">
+														<label><input type="checkbox" name="payroll_group_before_tax" value="1">Deduct Tax after SSS, PhilHealth, & Pagibig</label>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+								</div>
 								<div class="panel panel-default">
 									<div class="panel-body form-horizontal">
 										<div class="form-group">

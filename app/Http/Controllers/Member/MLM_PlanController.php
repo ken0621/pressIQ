@@ -10,6 +10,7 @@ use DB;
 use Validator;
 use App\Globals\Mlm_plan;
 use App\Globals\AuditTrail;
+use App\Globals\Item;
 
 use App\Models\Tbl_mlm_indirect_setting;
 use App\Models\Tbl_mlm_stairstep_settings;
@@ -30,6 +31,8 @@ use App\Models\Tbl_mlm_leadership_settings;
 use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_unilevel_points_settings;
 use App\Models\Tbl_mlm_discount_card_settings;
+use App\Models\Tbl_item;
+use App\Models\Tbl_mlm_plan_binary_promotions;
 
 use App\Http\Controllers\Member\MLM_ProductController;
 use App\Http\Controllers\Member\MLM_PlanController;
@@ -501,6 +504,19 @@ class MLM_PlanController extends Member
             Tbl_mlm_plan::insert($insert);
         }
 
+        if($count == 19)
+        {
+            $insert['shop_id'] = $shop_id;
+            $insert['marketing_plan_code'] = "BINARY_PROMOTIONS";
+            $insert['marketing_plan_name'] = "Binary Promotions";
+            $insert['marketing_plan_trigger'] = "Slot Creation";
+            $insert['marketing_plan_label'] = "Binary Promotions";
+            $insert['marketing_plan_enable'] = 0;
+            $insert['marketing_plan_release_schedule'] = 1;
+            $insert['marketing_plan_release_schedule_date'] = Carbon::now();
+            Tbl_mlm_plan::insert($insert);
+        }
+
         // end basic complan
         
         
@@ -757,11 +773,17 @@ class MLM_PlanController extends Member
 	    	// validate
 	        $validate['membership_id'] = Request::input("membership_id");
             $validate['membership_points_binary'] = Request::input("membership_points_binary");
+            $validate['membership_points_binary_limit'] = Request::input('membership_points_binary_limit');
+            $validate['membership_points_binary_single_line'] = Request::input('membership_points_binary_single_line');
+            $validate['membership_points_binary_single_line_limit'] = Request::input('membership_points_binary_single_line_limit');
             // end
             
             //rules for validation
-            $rules['membership_id']   = "required";
+            $rules['membership_points_binary_limit'] = 'required';
+            $rules['membership_id'] = "required";
             $rules['membership_points_binary']    = "required";
+            $rules['membership_points_binary_single_line'] = 'required';
+            $rules['membership_points_binary_single_line_limit'] =  'required';
             // end
     	    
     	    // validate
@@ -780,6 +802,9 @@ class MLM_PlanController extends Member
         	    	// insert
         	        $insert['membership_id'] = $validate['membership_id'];
             	    $insert['membership_points_binary'] = $validate['membership_points_binary'];
+                    $insert['membership_points_binary_limit'] = $validate['membership_points_binary_limit'];
+                    $insert['membership_points_binary_single_line'] = $validate['membership_points_binary_single_line'];
+                    $insert['membership_points_binary_single_line_limit'] = $validate['membership_points_binary_single_line_limit'];
             	    Tbl_membership_points::insert($insert);
             	    // end
         	    }
@@ -788,6 +813,9 @@ class MLM_PlanController extends Member
         	    {
         	    	// update
         	        $update['membership_points_binary'] = $validate['membership_points_binary'];
+                    $update['membership_points_binary_limit'] = $validate['membership_points_binary_limit'];
+                    $update['membership_points_binary_single_line'] = $validate['membership_points_binary_single_line'];
+                    $update['membership_points_binary_single_line_limit'] = $validate['membership_points_binary_single_line_limit'];
             	    Tbl_membership_points::where('membership_id', $validate['membership_id'])->update($update);
             	    // end
         	    }
@@ -849,7 +877,9 @@ class MLM_PlanController extends Member
 		$validate['pairing_point_left'] = Request::input('pairing_point_left');
 		$validate['pairing_point_right'] = Request::input('pairing_point_right');
 		$validate['pairing_id'] = Request::input('pairing_id');
-		
+        $validate['pairing_point_single_line_bonus'] = Request::input('pairing_point_single_line_bonus');
+        $validate['pairing_point_single_line_bonus_percentage'] = Request::input('pairing_point_single_line_bonus_percentage');
+        $validate['pairing_point_single_line_bonus_level'] = Request::input('pairing_point_single_line_bonus_level');
 		$rules['membership_id'] = 'required';
 		$rules['membership_pairing_count'] = 'required';
 		$rules['max_pair_cycle'] = 'required';
@@ -870,25 +900,28 @@ class MLM_PlanController extends Member
     		{
     			$insert_max_pair['membership_points_binary_max_pair'] = $validate['max_pair_cycle'];
     			$insert_max_pair['membership_id'] = $membership_id;
+                $insert_max_pair['membership_points_binary_max_income'] = Request::input('membership_points_binary_max_income');
     			Tbl_membership_points::insert($insert_max_pair);
     		}
     		else
     		{
+                $update_max['membership_points_binary_max_income'] = Request::input('membership_points_binary_max_income');
     			$update_max['membership_points_binary_max_pair'] = $validate['max_pair_cycle'];
     			Tbl_membership_points::where('membership_id', $membership_id)->update($update_max);
     		}
     		// end update
-    		
     		$membership_pairing_count_old = Tbl_mlm_binary_pairing::where('membership_id', $membership_id)->count();
     		if($membership_pairing_count_old == 0)
     		{
-    			
     			foreach($validate['pairing_point_left'] as $key => $value)
 	    		{
 					$insert['pairing_bonus'] = $validate['pairing_bonus'][$key];
 					$insert['pairing_point_left'] = $value;
 					$insert['pairing_point_right'] = $validate['pairing_point_right'][$key];
 					$insert['membership_id'] = $membership_id;
+                    $insert['pairing_point_single_line_bonus'] = $validate['pairing_point_single_line_bonus'][$key];
+                    $insert['pairing_point_single_line_bonus_percentage'] = $validate['pairing_point_single_line_bonus_percentage'][$key];
+                    $insert['pairing_point_single_line_bonus_level'] = $validate['pairing_point_single_line_bonus_level'][$key];
 					Tbl_mlm_binary_pairing::insert($insert);
 	    		}	
     		}
@@ -901,6 +934,9 @@ class MLM_PlanController extends Member
 					$update['pairing_point_left'] = $validate['pairing_point_left'][$key];
 					$update['pairing_point_right'] = $validate['pairing_point_right'][$key];
 					$update['membership_id'] = $membership_id;
+                    $update['pairing_point_single_line_bonus'] = $validate['pairing_point_single_line_bonus'][$key];
+                    $update['pairing_point_single_line_bonus_percentage'] = $validate['pairing_point_single_line_bonus_percentage'][$key];
+                    $update['pairing_point_single_line_bonus_level'] = $validate['pairing_point_single_line_bonus_level'][$key];
 					Tbl_mlm_binary_pairing::where('pairing_id', $value->pairing_id)->update($update);	
 	    		}
 			}
@@ -918,6 +954,9 @@ class MLM_PlanController extends Member
 						$update['pairing_point_right'] = $validate['pairing_point_right'][$key];
 						$update['membership_id'] = $membership_id;
 						$update['pairing_archive'] = 0;
+                        $update['pairing_point_single_line_bonus'] = $validate['pairing_point_single_line_bonus'][$key];
+                        $update['pairing_point_single_line_bonus_percentage'] = $validate['pairing_point_single_line_bonus_percentage'][$key];
+                        $update['pairing_point_single_line_bonus_level'] = $validate['pairing_point_single_line_bonus_level'][$key];
 						Tbl_mlm_binary_pairing::where('pairing_id', $value->pairing_id)->update($update);
 	    			}
 	    			else
@@ -928,6 +967,9 @@ class MLM_PlanController extends Member
 						$insert['pairing_point_right'] = $validate['pairing_point_right'][$key];
 						$insert['membership_id'] = $membership_id;
 						$insert['pairing_archive'] = 0;
+                        $insert['pairing_point_single_line_bonus'] =$validate['pairing_point_single_line_bonus'][$key];
+                        $insert['pairing_point_single_line_bonus_percentage'] = $validate['pairing_point_single_line_bonus_percentage'][$key];
+                        $insert['pairing_point_single_line_bonus_level'] = $validate['pairing_point_single_line_bonus_level'][$key];
 						Tbl_mlm_binary_pairing::insert($insert);
 	    			}
     					
@@ -946,6 +988,9 @@ class MLM_PlanController extends Member
 						$update['pairing_point_right'] = $validate['pairing_point_right'][$key];
 						$update['membership_id'] = $membership_id;
 						$update['pairing_archive'] = 0;
+                        $update['pairing_point_single_line_bonus'] = $validate['pairing_point_single_line_bonus'][$key];
+                        $update['pairing_point_single_line_bonus_percentage'] = $validate['pairing_point_single_line_bonus_percentage'][$key];
+                        $update['pairing_point_single_line_bonus_level'] = $validate['pairing_point_single_line_bonus_level'][$key];
 						Tbl_mlm_binary_pairing::where('pairing_id', $value->pairing_id)->update($update);
 	    			}
 	    			else
@@ -2198,5 +2243,79 @@ class MLM_PlanController extends Member
 
         return json_encode($data);
     }
+    public function binary_promotions($shop_id)
+    {
+        $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['basic_settings'] = MLM_PlanController::basic_settings('BINARY_PROMOTIONS');
+        $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get();
+        $data['item'] = Tbl_item::where("shop_id", $shop_id)->where("archived", 0)
+        ->get();
+        $data['_item']  = Item::get_all_category_item();
+        return view('member.mlm_plan.configure.binary_promotions', $data);
+    }
+    public function binary_promotions_save()
+    {
+        // return $_POST;
 
+        $insert['binary_promotions_membership_id'] = Request::input('binary_promotions_membership_id');
+        $insert['binary_promotions_no_of_units'] = Request::input('binary_promotions_no_of_units');
+        $insert['binary_promotions_required_left'] = Request::input('binary_promotions_required_left');
+        $insert['binary_promotions_required_right'] = Request::input('binary_promotions_required_right');
+        $insert['binary_promotions_item_id'] = Request::input('item_id');
+        $insert['binary_promotions_start_date'] = Carbon::now();
+        $count_rewards = Tbl_mlm_plan_binary_promotions::where('binary_promotions_membership_id', $insert['binary_promotions_membership_id'])
+        ->where('binary_promotions_item_id', $insert['binary_promotions_item_id'])
+        ->count();
+        if($count_rewards == 0)
+        {
+            
+            Tbl_mlm_plan_binary_promotions::insert($insert);
+
+            $data['response_status'] = 'successd';
+            $data['message'] = 'Settings Edited';
+        }
+        else
+        {
+            $data['response_status'] = "warning";
+            $data['warning_validator'][0] = 'Item already is used on same membership'; 
+        }
+        
+
+        return json_encode($data);
+    }
+    public function binary_promotions_get()
+    {
+        $shop_id = $this->user_info->shop_id;
+        $data['binary_promotions'] = Tbl_mlm_plan_binary_promotions::where('binary_promotions_archive', 0)->get();
+        $data['membership'] = Tbl_membership::getactive(0, $shop_id)->membership_points()->get()->keyBy('membership_id');
+        $data['_item']  = Item::get_all_category_item();
+        return view('member.mlm_plan.configure.binary_promotions_get', $data);
+    }
+    public function binary_promotions_edit()
+    {
+        $insert['binary_promotions_membership_id'] = Request::input('binary_promotions_membership_id');
+        $insert['binary_promotions_no_of_units'] = Request::input('binary_promotions_no_of_units');
+        $insert['binary_promotions_required_left'] = Request::input('binary_promotions_required_left');
+        $insert['binary_promotions_required_right'] = Request::input('binary_promotions_required_right');
+        $insert['binary_promotions_item_id'] = Request::input('item_id');
+        $insert['binary_promotions_start_date'] = Carbon::now();
+        $insert['binary_promotions_archive'] = Request::input('submit_type');
+        $count = Tbl_mlm_plan_binary_promotions::where('binary_promotions_membership_id', $insert['binary_promotions_membership_id'])
+        ->where('binary_promotions_item_id', $insert['binary_promotions_item_id'])
+        ->count();
+
+        if($count == 1)
+        {
+            Tbl_mlm_plan_binary_promotions::where('binary_promotions_membership_id', $insert['binary_promotions_membership_id'])
+            ->where('binary_promotions_item_id', $insert['binary_promotions_item_id'])
+            ->update($insert);
+            $data['response_status'] = 'successd';
+            $data['message'] = 'Settings Edited';
+            return json_encode($data);
+        }
+        else
+        {
+            return $this->binary_promotions_save();
+        }
+    }
 }

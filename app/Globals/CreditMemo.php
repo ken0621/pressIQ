@@ -16,6 +16,16 @@ use Carbon\Carbon;
 
 class CreditMemo
 {
+	public static function cm_amount($inv_id)
+	{
+		$inv_data = Tbl_customer_invoice::c_m()->where("inv_id",$inv_id)->first();
+		$cm_amount = 0;
+		if($inv_data != null)
+        {
+            $cm_amount = $inv_data->cm_amount;
+        }
+        return $cm_amount;
+	}
 	public static function postCM($customer_info, $item_info, $inv_id = 0)
 	{
 		$insert_cm["cm_customer_id"] = $customer_info["cm_customer_id"];

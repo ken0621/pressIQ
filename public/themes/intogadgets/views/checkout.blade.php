@@ -290,7 +290,7 @@
 <script type="text/javascript">
 $(document).ready(function()
 {
-	if ( $('.payment-method-select').val() != 1 && $('.payment-method-select').val() != 2 ) 
+	if ( $('.payment-method-select').val() != 1 && $('.payment-method-select').val() != 2 && $('.payment-method-select').val() != 8 ) 
 	{
 		$('.payment-upload').removeClass("hide");
 	}	
@@ -301,7 +301,7 @@ $(document).ready(function()
 
 	$('.payment-method-select').change(function(event) 
 	{
-		if ( $(event.currentTarget).val() != 1 && $(event.currentTarget).val() != 2 ) 
+		if ( $(event.currentTarget).val() != 1 && $(event.currentTarget).val() != 2 && $(event.currentTarget).val() != 8 ) 
 		{
 			$('.payment-upload').removeClass("hide");
 		}	

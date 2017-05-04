@@ -6,6 +6,10 @@ use Redirect;
 use Request;
 use View;
 use DOMDocument;
+use Config;
+use App\Globals\Mail_global;
+use App\Models\Tbl_user;
+use App\Models\Tbl_email_template;
 
 class ShopContactController extends Shop
 {
@@ -13,6 +17,32 @@ class ShopContactController extends Shop
     {
         $data["page"] = "Contact";
         return view("contact", $data);
+    }
+
+    public function contact_submit()
+    {
+    	$owner_email = Tbl_user::where("user_shop", $this->shop_info->shop_id)->where("archived", 0)->first();
+
+    	$data["template"] = Tbl_email_template::where("shop_id", $this->shop_info->shop_id)->first();
+    	$data['mail_to'] = $owner_email->user_email;
+    	$data['mail_username'] = Config::get('mail.username');
+    	$data['mail_first_name'] = Request::input("first_name");
+        $data['mail_last_name'] = Request::input("last_name");
+        $data['mail_phone_number'] = Request::input("phone_number");
+        $data['mail_email_address'] = Request::input("email_address");
+        $data['mail_subject'] = Request::input("subject");
+        $data['mail_message'] = Request::input("message");
+
+    	$result = Mail_global::contact_mail($data, $this->shop_info->shop_id);
+
+    	if ($result == 1) 
+    	{
+    		return Redirect::to('/contact?success=Successfully sent!');
+    	}
+    	else
+    	{
+    		return Redirect::to('/contact?fail=Some error occurred. Please try again later.');
+    	}
     }
 
     public function find_store()

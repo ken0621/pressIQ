@@ -1,4 +1,4 @@
-<form id="modal-category-form" method="POST" action="/member/item/category/update_category">
+<form class="global-submit" method="POST" action="/member/item/category/update_category">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
     <h4 class="modal-title layout-modallarge-title">Create new category</h4>
@@ -8,23 +8,9 @@
     <input type="hidden" name="type_id" value="{{$category->type_id}}">
     <div class="form-group">
       <div class="col-md-12">
-        <label>Category Type</label>
-        <select class="form-control type_category" name="type_category" required>
-            <option value="">Select category type</option>
-            <option value="all" {{$category->type_category == "all" ? 'selected="selected"':''}}>All type</option>
-            <option value="inventory" {{$category->type_category == "inventory" ? 'selected="selected"':''}}>Inventory</option>
-            <option value="non-inventory" {{$category->type_category == "non-inventory" ? 'selected="selected"':''}}>Non-inventory</option>  
-            <option value="services" {{$category->type_category == "services" ? 'selected="selected"':''}}>Services</option>
-            <option value="bundles" {{$category->type_category == "bundles" ? 'selected="selected"':''}}>Bundles</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group">
-      <div class="col-md-12">
         <label>Category Name</label>
         <input type="text" name="type_name" class="form-control" value="{{$category->type_name}}" placeholder="" required>
-      </div>
-      
+      </div>      
     </div>
     <div class="form-group">
       <div class="col-md-12">
@@ -44,6 +30,18 @@
 
       </div>
       
+    </div>
+
+    <div class="form-group">
+      <div class="col-md-12">
+        <label>Category Type</label>
+        <select class="form-control type_category" name="type_category" required>
+            <option value="inventory" {{$category->type_category == "inventory" ? 'selected="selected"':''}}>Inventory</option>
+            <option value="non-inventory" {{$category->type_category == "non-inventory" ? 'selected="selected"':''}}>Non-inventory</option>  
+            <option value="services" {{$category->type_category == "services" ? 'selected="selected"':''}}>Services</option>
+            <option value="bundles" {{$category->type_category == "bundles" ? 'selected="selected"':''}}>Bundles</option>
+        </select>
+      </div>
     </div>
 
   </div>

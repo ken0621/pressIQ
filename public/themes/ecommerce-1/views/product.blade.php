@@ -118,7 +118,7 @@
 						</div>
 							<div class="featured-item-container row clearfix">	
 								@foreach($_product as $product)
-								<div class="col-md-3">
+								<div class="col-md-3 match-height">
 									<div class="per-item-container">
 										<div class="image-content-1">
 											<div class="item-image-large" style="background-image: url({{ get_product_first_image($product) }})"></div>

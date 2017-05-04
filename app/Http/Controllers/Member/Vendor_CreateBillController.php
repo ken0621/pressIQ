@@ -14,6 +14,8 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
+use App\Models\Tbl_terms;
+
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
@@ -22,12 +24,14 @@ use App\Globals\Billing;
 use App\Globals\Item;
 use App\Globals\Warehouse;
 use App\Globals\UnitMeasurement;
+
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
 use App\Models\Tbl_bill;
 use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_bill_item_line;
 use Carbon\Carbon;
+use Session;
 
 class Vendor_CreateBillController extends Member
 {
@@ -54,7 +58,9 @@ class Vendor_CreateBillController extends Member
     }    
     public function create_bill()
     {
+        Session::forget("po_item");
         $data["_vendor"]    = Vendor::getAllVendor('active');
+        $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
         $data['_item']      = Item::get_all_category_item();
         $data['_account']   = Accounting::getAllAccount();
         $data['_um']        = UnitMeasurement::load_um_multi();
@@ -67,6 +73,7 @@ class Vendor_CreateBillController extends Member
         if($id)
         {
            $data["bill"] = Tbl_bill::where("bill_id",$id)->first();
+           $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["bill"]->bill_vendor_id)->where("po_is_billed",0)->get();
            $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
            $data['_item']      = Item::get_all_category_item();
            $data['_account']   = Accounting::getAllAccount();
@@ -80,6 +87,14 @@ class Vendor_CreateBillController extends Member
         $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$vendor_id)->where("po_is_billed",0)->get();
 
         return view("member.load_ajax_data.load_purchase_order",$data);
+    }
+    public function load_po_bill($vendor_id)
+    {
+        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$vendor_id)->where("po_is_billed",0)->get();
+
+        $data["_bill"]          = Billing::getAllBillByVendor($vendor_id);
+
+        return view("member.vendor.check.load_po_bill",$data);
     }
     public function load_po_item()
     {
@@ -113,12 +128,15 @@ class Vendor_CreateBillController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('itemline_item_id');
 
+        $ctr_items = 0;
+        $item_refill = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
             {
-                $item_info[$key]['itemline_poline_id']  = Request::input('poline_id')[$key];
-                $item_info[$key]['itemline_po_id']      = Request::input('itemline_po_id')[$key];
+                $ctr_items++;
+                $item_info[$key]['itemline_ref_name']     = Request::input('itemline_ref_name')[$key];
+                $item_info[$key]['itemline_ref_id']       = Request::input('itemline_ref_id')[$key];
                 
                 $item_info[$key]['itemline_description']  = Request::input('itemline_description')[$key];
                 $item_info[$key]['itemline_um']           = Request::input('itemline_um')[$key];
@@ -127,9 +145,13 @@ class Vendor_CreateBillController extends Member
                 $item_info[$key]['itemline_rate']         = str_replace(",","", Request::input('itemline_rate')[$key]);
                 $item_info[$key]['itemline_amount']       = str_replace(",","", Request::input('itemline_amount')[$key]);
             
-                $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
-                $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
-                $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];   
+                $item_type = Tbl_item::where("item_id",Request::input('itemline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+                    $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
+                    $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
+                    $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];   
+                }
             }
         }
 
@@ -154,7 +176,7 @@ class Vendor_CreateBillController extends Member
                 }                 
             }
         }
-        if($item_refill != null)
+        if(count($item_refill) > 0)
         {
             foreach ($item_refill as $key_items => $value_items) 
             {
@@ -177,26 +199,36 @@ class Vendor_CreateBillController extends Member
             }
         }
         // <-- end bundle
-        $bill_id = Billing::postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
-        Billing::insertPotoBill($bill_id, Request::input("po_id"));
-
-        $remarks            = "Refill Items with Bill # ". $bill_id;
-        $warehouse_id       = $this->current_warehouse->warehouse_id;
-        $transaction_type   = "bill";
-        $transaction_id     = $bill_id;
-        $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
-
-        $json["status"]         = "success-bill";
-        if($button_action == "save-and-edit")
+        if($ctr_items != 0)
         {
-            $json["redirect"]    = "/member/vendor/bill_list";
-        }
-        elseif($button_action == "save-and-new")
-        {
-            $json["redirect"]   = '/member/vendor/create_bill';
-        }
-        Request::session()->flash('success', 'Successfully Created');
+            $bill_id = Billing::postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
+            if(count(Session::get("po_item")) > 0)
+            {
+                Billing::insertPotoBill($bill_id, Session::get("po_item"));
+            }
 
+            $remarks            = "Refill Items with Bill # ". $bill_id;
+            $warehouse_id       = $this->current_warehouse->warehouse_id;
+            $transaction_type   = "bill";
+            $transaction_id     = $bill_id;
+            $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
+
+            $json["status"]         = "success-bill";
+            if($button_action == "save-and-edit")
+            {
+                $json["redirect"]    = "/member/vendor/bill_list";
+            }
+            elseif($button_action == "save-and-new")
+            {
+                $json["redirect"]   = '/member/vendor/create_bill';
+            }
+            Request::session()->flash('success', 'Successfully Created');
+        }
+        else
+        {
+            $json["status"] = "error";
+            $json["status_message"] = "Please insert Item.";
+        }
 
         return json_encode($json);
 
@@ -227,12 +259,15 @@ class Vendor_CreateBillController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('itemline_item_id');
 
+        $ctr_items = 0;
+        $item_refill = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
             {
-                $item_info[$key]['itemline_poline_id']  = Request::input('poline_id')[$key];
-                $item_info[$key]['itemline_po_id']      = Request::input('itemline_po_id')[$key];
+                $ctr_items++;
+                $item_info[$key]['itemline_ref_name']     = Request::input('itemline_ref_name')[$key];
+                $item_info[$key]['itemline_ref_id']       = Request::input('itemline_ref_id')[$key];
 
                 $item_info[$key]['itemline_description']  = Request::input('itemline_description')[$key];
                 $item_info[$key]['itemline_um']           = Request::input('itemline_um')[$key];
@@ -241,9 +276,13 @@ class Vendor_CreateBillController extends Member
                 $item_info[$key]['itemline_rate']         = str_replace(",","", Request::input('itemline_rate')[$key]);
                 $item_info[$key]['itemline_amount']       = str_replace(",","", Request::input('itemline_amount')[$key]);
 
-                $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
-                $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
-                $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];
+                $item_type = Tbl_item::where("item_id",Request::input('itemline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+                    $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
+                    $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
+                    $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];
+                }
             }
         }
           // --> for bundles
@@ -267,7 +306,7 @@ class Vendor_CreateBillController extends Member
                 }                 
             }
         }
-        if($item_refill != null)
+        if(count($item_refill) > 0)
         {
             foreach ($item_refill as $key_items => $value_items) 
             {
@@ -291,22 +330,35 @@ class Vendor_CreateBillController extends Member
         }
         // <-- end bundle
 
-        $bill_id = Billing::updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
-
-        $transaction_id = $bill_id;
-        $transaction_type = "bill";
-        $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
-
-        $json["status"]         = "success-bill";
-        if($button_action == "save-and-edit")
+        if($ctr_items != 0)
         {
-            $json["redirect"]    = "/member/vendor/bill_list";
+            $bill_id = Billing::updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
+
+            if(count(Request::input("itemline_ref_id")) > 0)
+            {
+                Billing::updatePotoBill($bill_id, Request::input("itemline_ref_id"));
+            }
+
+            $transaction_id = $bill_id;
+            $transaction_type = "bill";
+            $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
+
+            $json["status"]         = "success-bill";
+            if($button_action == "save-and-edit")
+            {
+                $json["redirect"]    = "/member/vendor/bill_list";
+            }
+            elseif($button_action == "save-and-new")
+            {
+                $json["redirect"]   = '/member/vendor/create_bill';
+            }
+            Request::session()->flash('success', 'Successfully Created');
         }
-        elseif($button_action == "save-and-new")
+        else
         {
-            $json["redirect"]   = '/member/vendor/create_bill';
+            $json["status"] = "error";
+            $json["status_message"] = "Please insert Item.";            
         }
-        Request::session()->flash('success', 'Successfully Created');
 
         return json_encode($json);
 

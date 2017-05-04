@@ -1,4 +1,5 @@
 var payrollconfiguration = new payrollconfiguration();
+var _data = [];
 
 function payrollconfiguration()
 {
@@ -8,7 +9,10 @@ function payrollconfiguration()
 	{
 		a_navigation_configuration_event();
 		var formdata = {_token:misc('_token')};
-		load_configuration('/member/payroll/departmentlist', "POST",".configuration-div", formdata);
+		// load_configuration('/member/payroll/departmentlist', "POST",".configuration-div", formdata);
+		$(".a-navigation-configuration").first().addClass('active');
+		load_configuration($(".a-navigation-configuration").first().attr("href"),"POST",".configuration-div", formdata);
+		
 	}
 
 	function a_navigation_configuration_event()
@@ -18,9 +22,13 @@ function payrollconfiguration()
 		{
 			e.preventDefault();
 			var link 		= $(this).attr("href");
+			$(".a-navigation-configuration").removeClass('active');
+			$(this).addClass('active');
 			reload_configuration(link);
 		});
 	}
+
+	
 
 	function reload_configuration(link = "")
 	{
@@ -265,6 +273,15 @@ function payrollconfiguration()
 		});
 	}
 
+	this.reload_paper_size_d = function()
+	{
+		$(".drop-down-paper-size").load("/member/payroll/custom_payslip/modal_create_payslip .drop-down-paper-size", function()
+		{
+			$(".drop-down-paper-size").globalDropList("reload");
+	        $(".drop-down-paper-size").val(_data.id).change();  
+		});
+	}
+
 	/*this.reload_holiday_default = function()
 	{
 		reload_configuration("/member/payroll/holiday_default");
@@ -294,6 +311,8 @@ function submit_done(data)
 	{
 
 	}
+
+	_data = data;
 
 	data.element.modal("toggle");
 

@@ -61,9 +61,15 @@ use App\Models\Tbl_payroll_entity;
 use App\Models\Tbl_payroll_journal_tag;
 use App\Models\Tbl_payroll_journal_tag_entity;
 use App\Models\Tbl_payroll_journal_tag_employee;
+use App\Models\Tbl_payroll_leave_schedule;
+use App\Models\Tbl_payroll_paper_sizes;
+use App\Models\Tbl_payroll_payslip;
+use App\Models\Tbl_payroll_reports;
+use App\Models\Tbl_payroll_reports_column;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
+use App\Globals\Utilities;
 
 class PayrollController extends Member
 {
@@ -367,9 +373,9 @@ class PayrollController extends Member
                     $boidata_yesno_cell->setErrorTitle('Input error');
                     $boidata_yesno_cell->setError('Value is not in list.');
                     $boidata_yesno_cell->setFormula1('relotionship');
-                }
+               }
 
-               });
+          });
 
             /* DATA VALIDATION (REFERENCE FOR DROPDOWN LIST) */
             $excel->sheet('reference', function($sheet) {
@@ -556,98 +562,105 @@ class PayrollController extends Member
 				if($count_employee == 0)
 				{
 					/* EMPLOYEE BASIC INSERT START */
-					$insert['shop_id'] 							= Self::shop_id();
-					$insert['payroll_employee_company_id'] 		= Self::getid($data['company'], 'company');
-					$insert['payroll_employee_title_name'] 		= Self::nullableToString($data['title_name']);
-					$insert['payroll_employee_first_name'] 		= Self::nullableToString($data['first_name']);
-					$insert['payroll_employee_middle_name'] 	= Self::nullableToString($data['middle_name']);
-					$insert['payroll_employee_last_name'] 		= Self::nullableToString($data['last_name']);
-					$insert['payroll_employee_suffix_name'] 	= Self::nullableToString($data['suffix_name']);
-					$insert['payroll_employee_display_name'] 	= Self::nullableToString($data['title_name']).' '.Self::nullableToString($data['first_name']).' '.Self::nullableToString($data['middle_name']).' '.Self::nullableToString($data['last_name']).' '.Self::nullableToString($data['suffix_name']);
+                         $insert['shop_id']                                = Self::shop_id();
+                         $insert['payroll_employee_company_id']       = Self::getid($data['company'], 'company');
+                         $insert['payroll_employee_title_name']       = Self::nullableToString($data['title_name']);
+                         $insert['payroll_employee_first_name']       = Self::nullableToString($data['first_name']);
+                         $insert['payroll_employee_middle_name']      = Self::nullableToString($data['middle_name']);
+                         $insert['payroll_employee_last_name']        = Self::nullableToString($data['last_name']);
+                         $insert['payroll_employee_suffix_name']      = Self::nullableToString($data['suffix_name']);
+                         $insert['payroll_employee_display_name']     = Self::nullableToString($data['title_name']).' '.Self::nullableToString($data['first_name']).' '.Self::nullableToString($data['middle_name']).' '.Self::nullableToString($data['last_name']).' '.Self::nullableToString($data['suffix_name']);
 
-					$insert['payroll_employee_contact'] 		= Self::nullableToString($data['contact']);
-					$insert['payroll_employee_email'] 			= Self::nullableToString($data['email_address']);
-					$insert['payroll_employee_birthdate'] 		= Self::nullableToString($data['birthdate']);
-					$insert['payroll_employee_gender'] 			= Self::nullableToString($data['gender_mf']);
-					$insert['payroll_employee_number'] 			= Self::nullableToString($data['employee_number']);
-					$insert['payroll_employee_atm_number'] 		= Self::nullableToString($data['atmaccount_number']);
-					$insert['payroll_employee_street'] 			= Self::nullableToString($data['street']);
-					$insert['payroll_employee_city'] 			= Self::nullableToString($data['citytown']);
-					$insert['payroll_employee_state'] 			= Self::nullableToString($data['stateprovince']);
-					$insert['payroll_employee_zipcode'] 		= Self::nullableToString($data['zip_code']);
-					$insert['payroll_employee_country'] 		= Self::getid($data['country'], 'country');
-					$insert['payroll_employee_tax_status'] 		= Self::nullableToString($data['tax_status']);
-					$insert['payroll_employee_tin'] 			= Self::nullableToString($data['tin']);
-					$insert['payroll_employee_sss'] 			= Self::nullableToString($data['sss_number']);
-					$insert['payroll_employee_pagibig'] 		= Self::nullableToString($data['pagibig_number']);
-					$insert['payroll_employee_philhealth'] 		= Self::nullableToString($data['philhealth_number']);
-					$insert['payroll_employee_remarks'] 		= Self::nullableToString($data['remarks']);
-					// dd($insert);
-
-					$payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
-					/* EMPLOYEE BASIC INSERT END */
-
-					/* 	EMPLOYEE CONTRACT START */
-					$insert_contract['payroll_employee_id'] 					= $payroll_employee_id;
-					$insert_contract['payroll_department_id'] 					= Self::getid($data['department'],'department');
-					$insert_contract['payroll_jobtitle_id'] 					= Self::getid($data['position'],'jobtitle');
-					$insert_contract['payroll_employee_contract_date_hired'] 	= Self::nullableToString($data['start_date']);
-					$insert_contract['payroll_employee_contract_status'] 		= Self::getid($data['employment_status'],'employment_status');
-
-					Tbl_payroll_employee_contract::insert($insert_contract);
-
-					/* 	EMPLOYEE CONTRACT END */
+                         $insert['payroll_employee_contact']          = Self::nullableToString($data['contact']);
+                         $insert['payroll_employee_email']            = Self::nullableToString($data['email_address']);
+                         $insert['payroll_employee_birthdate']        = Self::nullableToString($data['birthdate']);
+                         $insert['payroll_employee_gender']                = Self::nullableToString($data['gender_mf']);
+                         $insert['payroll_employee_number']                = Self::nullableToString($data['employee_number']);
+                         $insert['payroll_employee_atm_number']       = Self::nullableToString($data['atmaccount_number']);
+                         $insert['payroll_employee_street']                = Self::nullableToString($data['street']);
+                         $insert['payroll_employee_city']             = Self::nullableToString($data['citytown']);
+                         $insert['payroll_employee_state']            = Self::nullableToString($data['stateprovince']);
+                         $insert['payroll_employee_zipcode']          = Self::nullableToString($data['zip_code']);
+                         $insert['payroll_employee_country']          = Self::getid($data['country'], 'country');
+                         $insert['payroll_employee_tax_status']       = Self::nullableToString($data['tax_status']);
+                         $insert['payroll_employee_tin']              = Self::nullableToString($data['tin']);
+                         $insert['payroll_employee_sss']              = Self::nullableToString($data['sss_number']);
+                         $insert['payroll_employee_pagibig']          = Self::nullableToString($data['pagibig_number']);
+                         $insert['payroll_employee_philhealth']       = Self::nullableToString($data['philhealth_number']);
+                         $insert['payroll_employee_remarks']          = Self::nullableToString($data['remarks']);
 
 
-					/* EMPLOYEE SALARY START */
-					$insert_salary['payroll_employee_id'] 						= $payroll_employee_id;
-					$insert_salary['payroll_employee_salary_effective_date'] 	= Self::nullableToString($data['start_date']);
-					$insert_salary['payroll_employee_salary_minimum_wage'] 		= Self::yesNotoInt($data['minimum_wage_yn']);
-					$insert_salary['payroll_employee_salary_monthly'] 			= Self::nullableToString($data['monthly_salary'],'int');
-					$insert_salary['payroll_employee_salary_daily'] 			= Self::nullableToString($data['daily_rate'],'int');
-					$insert_salary['payroll_employee_salary_taxable'] 			= Self::nullableToString($data['taxable_salary'],'int');
-					$insert_salary['payroll_employee_salary_sss'] 				= Self::nullableToString($data['sss_salary'],'int');
-					$insert_salary['payroll_employee_salary_pagibig'] 			= Self::nullableToString($data['hdmf_salary'],'int');
-					$insert_salary['payroll_employee_salary_philhealth'] 		= Self::nullableToString($data['phic_salary'],'int');
+                         if(Self::getid($data['company'], 'company') != null && Self::checkemployee_exist($insert) == 0)
+                         {
+                              
+                              // dd($insert);
 
-					Tbl_payroll_employee_salary::insert($insert_salary);
-					/* EMPLOYEE SALARY END */
+                              $payroll_employee_id = Tbl_payroll_employee_basic::insertGetId($insert);
+                              /* EMPLOYEE BASIC INSERT END */
 
-					/* EMPLOYEE  REQUIREMENTS START*/
-		
-					$insert_requirement['payroll_employee_id'] 		= $payroll_employee_id;
-					$insert_requirement['has_resume'] 				= Self::yesNotoInt($data['biodataresumeyn'],'int');
-					$insert_requirement['has_police_clearance'] 	= Self::yesNotoInt($data['police_clearanceyn'],'int');
-					$insert_requirement['has_nbi'] 					= Self::yesNotoInt($data['nbiyn'],'int');
-					$insert_requirement['has_health_certificate'] 	= Self::yesNotoInt($data['health_certificateyn'],'int');
-					$insert_requirement['has_school_credentials'] 	= Self::yesNotoInt($data['school_credentialsyn'],'int');
-					$insert_requirement['has_valid_id'] 			= Self::yesNotoInt($data['valid_idyn'],'int');
+                              /*   EMPLOYEE CONTRACT START */
+                              $insert_contract['payroll_employee_id']                          = $payroll_employee_id;
+                              $insert_contract['payroll_department_id']                        = Self::getid($data['department'],'department');
+                              $insert_contract['payroll_jobtitle_id']                          = Self::getid($data['position'],'jobtitle');
+                              $insert_contract['payroll_employee_contract_date_hired']    = Self::nullableToString($data['start_date']);
+                              $insert_contract['payroll_employee_contract_status']        = Self::getid($data['employment_status'],'employment_status');
 
-					Tbl_payroll_employee_requirements::insert($insert_requirement);
-					/* EMPLOYEE  REQUIREMENTS END*/
+                              Tbl_payroll_employee_contract::insert($insert_contract);
+
+                              /*   EMPLOYEE CONTRACT END */
 
 
-					/* EMPLOYEE DEPENDENT START */
-					$insert_dependent = array();
-					$temp = '';
-					for($i = 1; $i <= 4; $i++)
-					{
-						if($data['dependent_full_name'.$i] != null || $data['dependent_full_name'.$i] != "")
-						{
-							$temp['payroll_employee_id'] 			= $payroll_employee_id;
-							$temp['payroll_dependent_name'] 		= Self::nullableToString($data['dependent_full_name'.$i]);
-							$temp['payroll_dependent_relationship'] = Self::nullableToString($data['dependent_relationship'.$i]);
-							$temp['payroll_dependent_birthdate'] 	= Self::nullableToString($data['dependent_birthdate'.$i]);
-							array_push($insert_dependent, $temp);
-						}
-					}
+                              /* EMPLOYEE SALARY START */
+                              $insert_salary['payroll_employee_id']                            = $payroll_employee_id;
+                              $insert_salary['payroll_employee_salary_effective_date']    = Self::nullableToString($data['start_date']);
+                              $insert_salary['payroll_employee_salary_minimum_wage']           = Self::yesNotoInt($data['minimum_wage_yn']);
+                              $insert_salary['payroll_employee_salary_monthly']                = Self::nullableToString($data['monthly_salary'],'int');
+                              $insert_salary['payroll_employee_salary_daily']             = Self::nullableToString($data['daily_rate'],'int');
+                              $insert_salary['payroll_employee_salary_taxable']                = Self::nullableToString($data['taxable_salary'],'int');
+                              $insert_salary['payroll_employee_salary_sss']                    = Self::nullableToString($data['sss_salary'],'int');
+                              $insert_salary['payroll_employee_salary_pagibig']                = Self::nullableToString($data['hdmf_salary'],'int');
+                              $insert_salary['payroll_employee_salary_philhealth']        = Self::nullableToString($data['phic_salary'],'int');
+
+                              Tbl_payroll_employee_salary::insert($insert_salary);
+                              /* EMPLOYEE SALARY END */
+
+                              /* EMPLOYEE  REQUIREMENTS START*/
+               
+                              $insert_requirement['payroll_employee_id']        = $payroll_employee_id;
+                              $insert_requirement['has_resume']                 = Self::yesNotoInt($data['biodataresumeyn'],'int');
+                              $insert_requirement['has_police_clearance']  = Self::yesNotoInt($data['police_clearanceyn'],'int');
+                              $insert_requirement['has_nbi']                         = Self::yesNotoInt($data['nbiyn'],'int');
+                              $insert_requirement['has_health_certificate']     = Self::yesNotoInt($data['health_certificateyn'],'int');
+                              $insert_requirement['has_school_credentials']     = Self::yesNotoInt($data['school_credentialsyn'],'int');
+                              $insert_requirement['has_valid_id']               = Self::yesNotoInt($data['valid_idyn'],'int');
+
+                              Tbl_payroll_employee_requirements::insert($insert_requirement);
+                              /* EMPLOYEE  REQUIREMENTS END*/
+
+
+                              /* EMPLOYEE DEPENDENT START */
+                              $insert_dependent = array();
+                              $temp = '';
+                              for($i = 1; $i <= 4; $i++)
+                              {
+                                   if($data['dependent_full_name'.$i] != null || $data['dependent_full_name'.$i] != "")
+                                   {
+                                        $temp['payroll_employee_id']            = $payroll_employee_id;
+                                        $temp['payroll_dependent_name']         = Self::nullableToString($data['dependent_full_name'.$i]);
+                                        $temp['payroll_dependent_relationship'] = Self::nullableToString($data['dependent_relationship'.$i]);
+                                        $temp['payroll_dependent_birthdate']    = Self::nullableToString($data['dependent_birthdate'.$i]);
+                                        array_push($insert_dependent, $temp);
+                                   }
+                              }
+                              
+                              if(!empty($insert_dependent))
+                              {
+                                   Tbl_payroll_employee_dependent::insert($insert_dependent);
+                              }
+                              
+                              $count++;
+                         }
 					
-					if(!empty($insert_dependent))
-					{
-						Tbl_payroll_employee_dependent::insert($insert_dependent);
-					}
-					
-					$count++;
 					/* EMPLOYEE DEPENDENT END */
 				}
 				
@@ -663,13 +676,13 @@ class PayrollController extends Member
 			$return['message'] = $message;
 
 
-			return json_encode($return);
+			return $return;
 		}
 		else
 		{
 			$return['status'] 	= 'error';
 			$return['message'] 	= '<center><b><span class="color-red">Wrong file Format</span></b></center>';
-			return json_encode($return);
+			return $return;
 		}
 	}
 
@@ -680,36 +693,61 @@ class PayrollController extends Member
 		switch ($str_param) {
 			case 'country':
 				$id = Tbl_country::where('country_name', $str_name)->pluck('country_id');
-				return $id;
+				// return $id;
+                    if($id == null)
+                    {
+                         $id = 420;
+                    }
 				break;
 
 			case 'company':
 				$id = Tbl_payroll_company::where('payroll_company_name', $str_name)->where('shop_id', Self::shop_id())->pluck('payroll_company_id');
-				return $id;
+				// return $id;/
 
 				break;
 
 			case 'department':
 				$id = Tbl_payroll_department::where('payroll_department_name', $str_name)->where('shop_id', Self::shop_id())->pluck('payroll_department_id');
-				return $id;
+				// return $id;
 				break;
 
 			case 'jobtitle':
 				$id = Tbl_payroll_jobtitle::where('payroll_jobtitle_name', $str_name)->where('shop_id', Self::shop_id())->pluck('payroll_jobtitle_id');
-				return $id;
+				// return $id;
 				break;
 
 			case 'employment_status':
 				$id = Tbl_payroll_employment_status::where('employment_status', $str_name)->pluck('payroll_employment_status_id');
-				return $id;
+				// return $id;
 				break;
 			
 			default:
 				$id = 0;
-				return $id;
+				// return $id;
 				break;
+
 		}
+
+          if($id == null)
+          {    
+               $id = 0;
+          }
+
+          return $id;
 	}
+
+     public function checkemployee_exist($data = array())
+     {
+          $check['payroll_employee_company_id'] = $data['payroll_employee_company_id'];
+          $check['payroll_employee_title_name'] = $data['payroll_employee_title_name'];
+          $check['payroll_employee_first_name'] = $data['payroll_employee_first_name'];
+          $check['payroll_employee_middle_name'] = $data['payroll_employee_middle_name'];
+          $check['payroll_employee_last_name'] = $data['payroll_employee_last_name'];
+          $check['payroll_employee_suffix_name'] = $data['payroll_employee_suffix_name'];
+          $check['payroll_employee_number'] = $data['payroll_employee_number'];
+          
+          return Tbl_payroll_employee_basic::checkexist($check)->count();
+     }
 
 	public function nullableToString($data = null, $output = 'string')
 	{
@@ -1514,8 +1552,71 @@ class PayrollController extends Member
 
 	public function payroll_configuration()
 	{
-		return view('member.payroll.payrollconfiguration');
+
+          $_access = Self::payroll_configuration_page();
+
+          $link = array();
+
+          foreach($_access as $access)
+          {
+               if(Utilities::checkAccess('payroll-configuration',$access['access_name']) == 1)
+               {
+                    array_push($link, $access);
+               }
+          }
+
+          $data['_link'] = $link;
+		return view('member.payroll.payrollconfiguration', $data);
 	}
+
+     /* payroll configuration access page */
+     public function payroll_configuration_page()
+     {
+
+          $data[0]['access_name'] = 'Department';
+          $data[0]['link']        = '/member/payroll/departmentlist';
+
+          $data[1]['access_name'] = 'Job Title';
+          $data[1]['link']        = '/member/payroll/jobtitlelist';
+
+          $data[2]['access_name'] = 'Holiday';
+          $data[2]['link']        = '/member/payroll/holiday';
+
+          $data[3]['access_name'] = 'Allowances';
+          $data[3]['link']        = '/member/payroll/allowance';
+
+          $data[4]['access_name'] = 'Deductions';
+          $data[4]['link']        = '/member/payroll/deduction';
+
+          $data[5]['access_name'] = 'Leave';
+          $data[5]['link']        = '/member/payroll/leave';
+
+          $data[6]['access_name'] = 'Payroll Group';
+          $data[6]['link']        = '/member/payroll/payroll_group';
+
+          $data[7]['access_name'] = 'Journal Tags';
+          $data[7]['link']        = '/member/payroll/payroll_jouarnal';
+
+          $data[8]['access_name'] = 'Payslip';
+          $data[8]['link']        = '/member/payroll/custom_payslip';
+
+          $data[9]['access_name'] = 'Tax Period';
+          $data[9]['link']        = '/member/payroll/tax_period';
+
+          $data[10]['access_name'] = 'Tax Table';
+          $data[10]['link']        = '/member/payroll/tax_table_list';
+
+          $data[11]['access_name'] = 'SSS Table';
+          $data[11]['link']        = '/member/payroll/sss_table_list';
+
+          $data[12]['access_name'] = 'Philhealth Table';
+          $data[12]['link']        = '/member/payroll/philhealth_table_list';
+
+          $data[13]['access_name'] = 'Pagibig/HDMF';
+          $data[13]['link']        = '/member/payroll/pagibig_formula';
+
+          return $data;
+     }
 
 
 	/* COMPANY START */
@@ -3114,7 +3215,14 @@ class PayrollController extends Member
 		{
 			$insert['payroll_group_deduct_before_absences'] = Request::input('payroll_group_deduct_before_absences');
 		}
+
+          $payroll_group_before_tax                         = 0;
+          if(Request::has("payroll_group_before_tax"))
+          {
+               $payroll_group_before_tax = Request::input('payroll_group_before_tax');
+          }
 		
+          $insert['payroll_group_before_tax']               = $payroll_group_before_tax;
 		$insert['payroll_group_tax'] 					= Request::input('payroll_group_tax');
 		$insert['payroll_group_sss'] 					= Request::input('payroll_group_sss');
 		$insert['payroll_group_philhealth'] 			= Request::input('payroll_group_philhealth');
@@ -3270,7 +3378,14 @@ class PayrollController extends Member
 			$payroll_group_deduct_before_absences		= Request::input('payroll_group_deduct_before_absences');
 		}
 
-		$update['payroll_group_deduct_before_absences'] = $payroll_group_deduct_before_absences;
+          $payroll_group_before_tax                         = 0;
+          if(Request::has('payroll_group_before_tax'))
+          {
+               $payroll_group_before_tax = Request::has('payroll_group_before_tax');
+          }
+
+          $update['payroll_group_before_tax']               = $payroll_group_before_tax;
+		$update['payroll_group_deduct_before_absences']   = $payroll_group_deduct_before_absences;
 		$update['payroll_group_tax'] 					= Request::input('payroll_group_tax');
 		$update['payroll_group_sss'] 					= Request::input('payroll_group_sss');
 		$update['payroll_group_philhealth'] 			= Request::input('payroll_group_philhealth');
@@ -3438,7 +3553,7 @@ class PayrollController extends Member
 
           $data['_expense'] = Tbl_chart_of_account::getbytype(Self::shop_id(), $account_type_id)->orderBy('account_name')->get();
 
-          $data['_entity']  = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+          $data['_entity']  = Self::setentity();;
           
           return view('member.payroll.modal.modal_create_journal_tag', $data);
      }
@@ -3591,13 +3706,95 @@ class PayrollController extends Member
 
      public function custom_payslip()
      {
-          return view('member.payroll.side_container.custom_payslip');
+          $data['_payslip'] = Tbl_payroll_payslip::getpayslip(Self::shop_id())->orderBy('payslip_code')->get();
+          return view('member.payroll.side_container.custom_payslip', $data);
+     }
+
+     public function custom_payslip_show($id)
+     {
+          $data['payslip'] = Tbl_payroll_payslip::where('payroll_payslip_id', $id)->first();
+          return view('member.payroll.reload.payslip_show', $data);
+     }
+
+     public function modal_edit_payslip($id)
+     {
+          $data['_paper'] = Tbl_payroll_paper_sizes::getpaper(Self::shop_id())->orderBy('paper_size_name')->get();
+          return view('member.payroll.modal.modal_create_payslip', $data);
      }
 
      public function modal_create_payslip()
      {
-          Payroll::record_by_date(Self::shop_id(), '2017-01-26','2017-02-10');
-          return view('member.payroll.modal.modal_create_payslip');
+          $data['_paper'] = Tbl_payroll_paper_sizes::getpaper(Self::shop_id())->orderBy('paper_size_name')->get();
+          return view('member.payroll.modal.modal_create_payslip', $data);
+     }
+
+     public function modal_create_paper_size()
+     {
+          $data['_paper'] = Tbl_payroll_paper_sizes::getpaper(Self::shop_id())->orderBy('paper_size_name')->get();
+          return view('member.payroll.modal.modal_create_paper_size', $data);
+     }
+
+     public function modal_save_paper_size()
+     {
+          $insert['shop_id']            = Self::shop_id();
+          $insert['paper_size_name']    = Request::input('paper_size_name');
+          $insert['paper_size_width']   = Request::input('paper_size_width');
+          $insert['paper_size_height']  = Request::input('paper_size_height');
+
+          $id = Tbl_payroll_paper_sizes::insertGetId($insert);
+
+          $return['status']        = 'success';
+          $return['id']            = $id;
+          $return['function_name'] = 'payrollconfiguration.reload_paper_size_d';
+          return collect($return)->toJson();
+     }
+
+     public function save_custom_payslip()
+     {
+          $insert['shop_id']                      = Self::shop_id();
+          $insert['payslip_code']                 = Request::input("payslip_code");
+          $insert['payroll_paper_sizes_id']       = Request::input('payroll_paper_sizes_id');
+          $insert['payslip_width']                = Request::input('payslip_width');
+          $insert['payslip_copy']                 = Request::input('payslip_copy');
+          
+
+          $include_department                     = 0;
+          $include_job_title                      = 0;
+          $include_time_summary                   = 0;
+          $include_company_logo                   = 0;
+
+          if(Request::has('include_company_logo'))
+          {
+               $include_company_logo = Request::input('include_company_logo');
+          }
+
+          if(Request::has('include_department'))
+          {
+               $include_department = Request::input('include_department');
+          }
+
+          if(Request::has('include_job_title'))
+          {
+               $include_job_title = Request::input('include_job_title');
+          }
+
+          if(Request::has('include_time_summary'))
+          {
+               $include_time_summary = Request::input('include_time_summary');
+          }
+
+          $insert['include_department']           = $include_department;
+          $insert['include_job_title']            = $include_job_title;
+          $insert['include_time_summary']         = $include_time_summary;
+          $insert['include_company_logo']         = $include_company_logo;
+          $insert['company_position']             = Request::input('company_position');
+
+          $id = Tbl_payroll_payslip::insertGetId($insert);
+
+          $return['status']   = 'success';
+          $return['id']       = $id;
+
+          return collect($return)->toJson();
      }
 
      /* PAYROLL CUSTOM PAYSLIP END */
@@ -3777,6 +3974,168 @@ class PayrollController extends Member
 	/*HOLIDAY DEFAULT END*/
 
 
+     /* CALENDAR LEAVE START */
+     public function leave_schedule()
+     {
+          $data['_upcoming'] = Self::leave_schedule_break();
+
+          $data['_used'] = Self::leave_schedule_break('<');
+
+          return view('member.payroll.leave_schedule', $data);
+     }
+
+     public function leave_schedule_break($param = '>=')
+     {
+          $_leave = collect(Tbl_payroll_leave_schedule::getlist(Self::shop_id(), date('Y-m-d'), $param)->orderBy('payroll_schedule_leave','desc')->get()->toArray())->groupBy('payroll_schedule_leave');
+          return $_leave;
+     }
+
+     public function modal_create_leave_schedule()
+     {
+          $data['_leave'] = Tbl_payroll_leave_temp::sel(self::shop_id())->orderBy('payroll_leave_temp_name')->get();
+          // dd($data);
+          return view('member.payroll.modal.modal_create_leave_schedule', $data);
+     }
+
+     public function leave_schedule_tag_employee($id)
+     {
+          $data['_company']        = Tbl_payroll_company::selcompany(Self::shop_id())->orderBy('tbl_payroll_company.payroll_company_name')->get();
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+          $data['leave_id']        =    $id;
+          $data['action']          =    '/member/payroll/leave_schedule/session_tag_leave';
+
+          Session::put('employee_leave_tag', array());
+
+          return view('member.payroll.modal.modal_schedule_employee_leave', $data);
+     }
+
+     public function ajax_shecdule_leave_tag_employee()
+     {
+          $company       = Request::input('company');
+          $department    = Request::input('department');
+          $jobtitle      = Request::input('jobtitle');
+          $leave_id      = Request::input("leave_id");
+
+          // dd($leave_id);
+          $emp = Tbl_payroll_employee_contract::employeefilter($company, $department, $jobtitle, date('Y-m-d'), Self::shop_id())
+                    ->join('tbl_payroll_leave_employee','tbl_payroll_leave_employee.payroll_employee_id','=','tbl_payroll_employee_contract.payroll_employee_id')
+                    ->join('tbl_payroll_leave_temp','tbl_payroll_leave_temp.payroll_leave_temp_id','=','tbl_payroll_leave_employee.payroll_leave_temp_id')
+                    ->leftjoin('tbl_payroll_leave_schedule','tbl_payroll_leave_schedule.payroll_leave_employee_id','=','tbl_payroll_leave_employee.payroll_leave_employee_id')
+                    ->where('tbl_payroll_leave_employee.payroll_leave_temp_id',$leave_id)
+                    ->where('tbl_payroll_leave_employee.payroll_leave_employee_is_archived', 0)
+
+                    ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
+                    ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
+                    ->select(DB::raw('*, tbl_payroll_leave_employee.payroll_leave_employee_id as leave_employee_id, (tbl_payroll_leave_temp.payroll_leave_temp_days_cap - (select count(tbl_payroll_leave_schedule.payroll_leave_employee_id) from tbl_payroll_leave_schedule where (tbl_payroll_leave_schedule.payroll_schedule_leave  BETWEEN "'.date('Y').'-01-01" and "'.date('Y').'-12-31") and tbl_payroll_leave_schedule.payroll_leave_employee_id = leave_employee_id)) as available_count, tbl_payroll_leave_employee.payroll_leave_employee_id as payroll_leave_employee_id_2'))
+                    ->get();
+
+          return json_encode($emp);
+     }
+
+     public function session_tag_leave()
+     {
+          // Tbl_payroll_leave_schedule
+          $employee_tag = array();
+
+          if(Session::has('employee_leave_tag'))
+          {
+               $employee_tag = Session::get('employee_leave_tag');
+          }
+
+          foreach(Request::input('employee_tag') as $tag)
+          {
+               if(!in_array($tag, $employee_tag))
+               {
+                    array_push($employee_tag, $tag);
+               }
+          }
+          Session::put('employee_leave_tag', $employee_tag);
+
+          $data['status'] = 'success';
+          $data['function_name'] = 'employee_tag_schedule_leave.load_tagged_employee';
+
+          return collect($data)->toJson();
+     }
+
+
+     public function get_session_leave_tag()
+     {
+          $employee = [0 => 0];
+          if(Session::has('employee_leave_tag'))
+          {
+               $employee = Session::get('employee_leave_tag');
+          }
+
+          $emp = Tbl_payroll_employee_basic::whereIn('payroll_employee_id',$employee)->get();
+          $data['new_record'] = $emp;
+
+          return json_encode($data);
+     }
+
+
+     public function save_schedule_leave_tag()
+     {
+          // Tbl_payroll_leave_schedule
+          $payroll_schedule_leave = Request::input('payroll_schedule_leave');
+          if(Request::has('employee_tag'))
+          {
+               $insert = array();
+
+               foreach(Request::input('employee_tag') as $tag)
+               {
+                    $temp['payroll_leave_employee_id']    = $tag;
+                    $temp['payroll_schedule_leave']       = datepicker_input($payroll_schedule_leave);
+                    $temp['shop_id']                      = Self::shop_id();
+
+                    array_push($insert, $temp);
+               }
+               if(!empty($insert))
+               {
+                    Tbl_payroll_leave_schedule::insert($insert);
+               }
+          }    
+
+          $data['stataus']         = 'success';
+          $data['function_name']   = '';
+
+          return collect($data)->toJson();
+     }
+
+     public function delete_confirm_schedule_leave($id)
+     {
+          // $leave              = Tbl_payroll_leave_schedule::specific($id)->first();
+          $data['title']      = 'Do you really want to remove this schedule';
+          $data['action']     = '/member/payroll/leave_schedule/delete_schedule_leave';
+          $data['id']         = $id;
+          $data['html']       = '';
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+     public function delete_schedule_leave()
+     {
+          $id = Request::input('id');
+          Tbl_payroll_leave_schedule::where('payroll_leave_schedule_id', $id)->delete();
+
+          $data['status'] = 'success';
+          $data['function_name'] = '';
+
+          return collect($data)->toJson();
+     }
+
+     public function unset_session_leave_tag()
+     {
+          $content = Request::input('content');
+          $array     = Session::get('employee_leave_tag');
+          if(($key = array_search($content, $array)) !== false) {
+              unset($array[$key]);
+          }
+          Session::put('employee_leave_tag', $array);
+     }
+
+     /* CALDENDAR LEAVE END */
+
+
      /* PAYROLL TIME KEEPING START */
      public function time_keeping()
      {
@@ -3818,9 +4177,9 @@ class PayrollController extends Member
           {
                return Redirect::to('/member/payroll/time_keeping')->send();
           }
-          $data['_company'] = Self::company_badge($id);
-          $data['period'] = Tbl_payroll_period::where('payroll_period_id', $id)->first();
-          // dd($id);
+          $data['_company']   = Self::company_badge($id);
+          $data['period']     = Tbl_payroll_period::where('payroll_period_id', $id)->first();
+
           return view('member.payroll.payroll_timekeeping_company',$data);
      }
 
@@ -3876,6 +4235,7 @@ class PayrollController extends Member
      public function payroll_process()
      {
           $data['_period'] = Payroll::process_compute(Self::shop_id(), 'processed');
+          // dd($data);
           return view('member.payroll.payroll_process', $data);
      }
 
@@ -3956,9 +4316,29 @@ class PayrollController extends Member
           $government    = array();
           $deduction     = array();
 
+          
+          /* RATE DECLARATION */
+          $temp = '';
+          $temp['name']       = '<b>Rate</b>';
+          $temp['amount']     = '';
+          $temp['sub']        = array();
+          array_push($salary, $temp);
 
+          $temp = '';
+          $temp['name']       = 'Monthly Rate';
+          $temp['amount']     = number_format($process['salary_monthly'], 2);
+          $temp['sub']        = array();
+          array_push($salary, $temp);
+
+          $temp = '';
+          $temp['name']       = 'Daily Rate';
+          $temp['amount']     = number_format($process['salary_daily'], 2);
+          $temp['sub']        = array();
+          array_push($salary, $temp);
+          
           /* ALL POSITIVE */
-           $temp = '';
+
+          $temp = '';
           if($process['total_gross'] > 0)
           {    
                $temp['name']       = '<b>Salary</b>';
@@ -4083,7 +4463,10 @@ class PayrollController extends Member
           }   
 
           $temp = '';
-          if($process['total_allowance'] > 0)
+
+          $total_allowance = $process['adjustment']['total_allowance'] + $process['total_allowance'];
+
+          if($total_allowance > 0)
           {    
                $temp['name']       = '<b>Allowance</b>';
                $temp['amount']     = '';
@@ -4094,6 +4477,18 @@ class PayrollController extends Member
                     $temp_sub['amount'] = number_format($allowance['payroll_allowance_amount'], 2);
                     array_push($temp['sub'], $temp_sub);
                }
+
+               foreach($process['adjustment']['allowance'] as $allowances)
+               {
+                    $temp_sub['name'] = $allowances->payroll_adjustment_name;
+                    if($status == 'processed')
+                    {
+                         $temp_sub['name'].=Self::btn_adjustment($allowances->payroll_adjustment_id);
+                    }
+                    $temp_sub['amount'] = number_format($allowances->payroll_adjustment_amount, 2);
+                    array_push($temp['sub'], $temp_sub);
+               }
+
                array_push($salary, $temp);
           }  
 
@@ -4389,22 +4784,22 @@ class PayrollController extends Member
 
           /* DAY */
           $temp = '';
-          $temp['name']     = 'Regular Days';
+          $temp['name']    = 'Regular Days';
           $temp['day']     = Payroll::if_zero($process['total_regular_days']);
           array_push($day, $temp);
 
           $temp = '';
-          $temp['name']     = 'Rest Days';
+          $temp['name']    = 'Rest Days';
           $temp['day']     = Payroll::if_zero($process['total_rest_days']);
           array_push($day, $temp);
 
           $temp = '';
-          $temp['name']     = 'Extra Days';
+          $temp['name']    = 'Extra Days';
           $temp['day']     = Payroll::if_zero($process['total_extra_days']);
           array_push($day, $temp);
 
           $temp = '';
-          $temp['name']     = 'Special Holidays';
+          $temp['name']    = 'Special Holidays';
           $temp['day']     = Payroll::if_zero($process['total_sh']);
           array_push($day, $temp);
 
@@ -4527,7 +4922,7 @@ class PayrollController extends Member
      /* PAYROLL PROCESS END */
 
 
-     public function payroll_summary()
+     public function journal_entry()
      {
           // dd(Request::input());
           $data['date_start'] = date('m/d/Y', strtotime('first day of this month'));
@@ -4812,6 +5207,1067 @@ class PayrollController extends Member
      }
      /* PAYRLL APPROVED END */
 
+     public function modal_payroll_notes($payroll_period_company_id)
+     {
+          
+          return view('member.payroll.modal.modal_payroll_notes');
+     }
 
+
+     /* PAYROLL REPORTS START */
+     public function payroll_reports()
+     {
+          $data['_active'] = Tbl_payroll_reports::getdata(Self::shop_id())->orderBy('payroll_reports_name')->get();
+          $data['_archived'] = Tbl_payroll_reports::getdata(Self::shop_id(), 1)->orderBy('payroll_reports_name')->get();
+          return view('member.payroll.payroll_reports', $data);
+     }
+
+     public function modal_create_reports()
+     {
+          $data['_entity']  = Self::setentity();
+          return view('member.payroll.modal.modal_create_reports', $data);
+     }
+
+     public function save_custom_reports()
+     {
+          $insert['shop_id']              = Self::shop_id();
+          $insert['payroll_reports_name'] = Request::input("payroll_reports_name");
+
+          $is_by_company                = 0;
+          $is_by_department             = 0;
+          $is_by_employee               = 0;
+
+          if(Request::has('is_by_company'))
+          {
+               $is_by_company = Request::input('is_by_company');
+          }
+
+          if(Request::has('is_by_department'))
+          {
+               $is_by_department = Request::input('is_by_department');
+          }
+
+          if(Request::has('is_by_employee'))
+          {
+               $is_by_employee = Request::input('is_by_employee');
+          }
+
+          $insert['is_by_company']      = $is_by_company;
+          $insert['is_by_department']   = $is_by_department;
+          $insert['is_by_employee']     = $is_by_employee;
+
+          $payroll_reports_id =  Tbl_payroll_reports::insertGetId($insert);
+
+
+          $_entity = array();
+          $_sub_entity = array();
+
+          if(Request::has('entity'))
+          {
+               $_entity = Request::input('entity');
+          }
+          if(Request::has('sub_entity'))
+          {
+               $_sub_entity = Request::input('sub_entity');
+          }
+
+          $insert_column = array();
+
+          /* for default entity tag */
+          foreach($_entity as $entity)
+          {
+               $temp['payroll_reports_id']   = $payroll_reports_id;
+               $temp['column_entity_id']     = $entity;
+               $temp['column_origin']        = 'payroll entity';
+               array_push($insert_column, $temp);
+          }    
+
+          /* for dynamic loan */
+          foreach($_sub_entity as $entity)
+          {
+               $temp['payroll_reports_id']   = $payroll_reports_id;
+               $temp['column_entity_id']     = $entity;
+               $temp['column_origin']        = 'loan';
+               array_push($insert_column, $temp);
+          }    
+
+
+          if(!empty($insert_column))
+          {
+               Tbl_payroll_reports_column::insert($insert_column);
+          }
+
+
+          $return['status'] = 'success';
+          $return['function_name'] = 'payroll_reports.reload_data';
+
+          return collect($return)->toJson();
+     }
+
+
+     public function modal_archive_reports($archived, $id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+
+          $payroll_reports_name = Tbl_payroll_reports::where('payroll_reports_id', $id)->pluck('payroll_reports_name');
+
+          $data['title']      = 'Do you really want to '.$statement.' '.$payroll_reports_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/payroll_reports/archive_report';
+          $data['id']         = $id;
+          $data['archived']   = $archived;
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+     public function archive_report()
+     {
+          $id = Request::input('id');
+          $update['payroll_reports_archived'] = Request::input('archived');
+          Tbl_payroll_reports::where('payroll_reports_id', $id)->update($update);
+
+          $return['status'] = 'success';
+          $return['function_name'] = 'payroll_reports.reload_data';
+
+          return collect($return)->toJson();
+     }
+
+     public function modal_edit_payroll_reports($id)
+     {
+
+          $data['_entity'] = array();
+          $data['report'] = Tbl_payroll_reports::where('payroll_reports_id', $id)->first();
+          $_entity  = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+
+
+          foreach($_entity as $key => $data_entity)
+          {
+               $data['_entity'][$key] = array();
+               foreach($data_entity as $entity)
+               {
+                    $temp = $entity;
+                    $temp['status'] = '';
+
+                    $count_entity = Tbl_payroll_reports_column::getcolumn($id, $entity['payroll_entity_id'])->count();
+
+                    if($count_entity == 1)
+                    {
+                         $temp['status'] = 'checked="checked"';
+                    }
+
+                    $temp['sub'] = array();
+
+                    if($entity['entity_name'] == 'Loans')
+                    {
+                         $_sub = Tbl_payroll_deduction_type::seltype(Self::shop_id(), 'Loans')->get()->toArray();
+                         foreach($_sub as $sub)
+                         {
+                              $temp_column = $sub;
+                              $temp_column['status'] = '';
+
+                              $count_column = Tbl_payroll_reports_column::getcolumn($id, $sub['payroll_deduction_type_id'], 'loan')->count();
+
+                              if($count_column == 1)
+                              {
+                                   $temp_column['status'] = 'checked="checked"';
+                              }
+
+                              array_push($temp['sub'], $temp_column);
+                         }
+                    }
+
+                    array_push($data['_entity'][$key], $temp);
+               }
+          }
+
+          // dd($data);
+          return view('member.payroll.modal.modal_edit_payroll_reports', $data);
+     }
+
+     public function update_payroll_reports()
+     {
+
+          $is_by_company      = 0;
+          $is_by_department   = 0;
+          $is_by_employee     = 0;
+
+          if(Request::has('is_by_company'))
+          {
+               $is_by_company      = Request::input('is_by_company');
+          }
+
+          if(Request::has('is_by_department'))
+          {
+               $is_by_department   = Request::input('is_by_department');
+          }
+
+          if(Request::has('is_by_employee'))
+          {
+               $is_by_employee     = Request::input('is_by_employee');
+          }
+
+          $payroll_reports_id = Request::input('payroll_reports_id');
+
+          $update['payroll_reports_name'] = Request::input('payroll_reports_name');
+          $update['is_by_company'] = $is_by_company;
+          $update['is_by_department'] = $is_by_department;
+          $update['is_by_employee'] = $is_by_employee;
+
+          Tbl_payroll_reports::where('payroll_reports_id', $payroll_reports_id)->update($update);
+          Tbl_payroll_reports_column::where('payroll_reports_id', $payroll_reports_id)->delete();
+
+          $_entity = array();
+          $_sub_entity = array();
+
+          if(Request::has('entity'))
+          {
+               $_entity = Request::input('entity');
+          }
+          if(Request::has('sub_entity'))
+          {
+               $_sub_entity = Request::input('sub_entity');
+          }
+
+          $insert_column = array();
+
+          /* for default entity tag */
+          foreach($_entity as $entity)
+          {
+               $temp['payroll_reports_id']   = $payroll_reports_id;
+               $temp['column_entity_id']     = $entity;
+               $temp['column_origin']        = 'payroll entity';
+               array_push($insert_column, $temp);
+          }    
+
+          /* for dynamic loan */
+          foreach($_sub_entity as $entity)
+          {
+               $temp['payroll_reports_id']   = $payroll_reports_id;
+               $temp['column_entity_id']     = $entity;
+               $temp['column_origin']        = 'loan';
+               array_push($insert_column, $temp);
+          }    
+
+
+          if(!empty($insert_column))
+          {
+               Tbl_payroll_reports_column::insert($insert_column);
+          }
+
+
+          $return['status'] = 'success';
+          $return['function_name'] = 'payroll_reports.reload_data';
+
+          return collect($return)->toJson();
+     }
+
+     public function view_report($id)
+     {
+          
+          $date[0] = date('Y-m-d');
+          $date[1] = date('Y-m-d');
+
+          $data = Self::generate_custom_report($id, $date);
+          return view('member.payroll.payroll_view_report', $data);
+     }
+
+
+     public function date_change_report()
+     {
+          $date[0]            = datepicker_input(Request::input('start'));
+          $date[1]            = datepicker_input(Request::input('end'));
+          $payroll_reports_id = Request::input('payroll_reports_id');
+
+          $data = Self::generate_custom_report($payroll_reports_id, $date);
+
+          return view('member.payroll.reload.reload_report_table', $data);
+     }
+
+     public function download_excel_report()
+     {
+          $payroll_reports_id = Request::input('payroll_reports_id');
+          $date[0]            = datepicker_input(Request::input('start'));
+          $date[1]            = datepicker_input(Request::input('end'));
+
+          $record     = Self::generate_custom_report($payroll_reports_id, $date);
+
+          $emp = $record['_emp'];
+          $columns = $record['_columns'];
+
+          // dd($record);
+          $data = array();
+
+          $columnn_array = array();
+          array_push($columnn_array, '');
+          foreach($columns as $column)
+          {
+               array_push($columnn_array, $column);
+          }
+
+          array_push($data, $columnn_array);
+
+          foreach($record['_emp'] as $emp)
+          {
+               $temp = array();
+               array_push($temp, $emp['raw_name']);
+
+               foreach($emp['_raw'] as $raw)
+               {
+                    $raw = n2z($raw);
+                    if(!is_string($raw))
+                    {
+                         $raw = round($raw, 2);
+                         // if($raw == 0)
+                         // {
+                         //      $raw = number_format($raw, 2);
+                         // }
+                    }
+
+                    array_push($temp, $raw);
+               }
+               array_push($data, $temp);
+          }
+
+          $total_array = array();
+          array_push($total_array, 'Total');
+
+          foreach($record['_total'] as $total)
+          {
+               $total = round(n2z($total), 2);
+               // if($total == 0)
+               // {
+               //      $total = number_format(n2z($total), 2);
+               // }
+               array_push($total_array, round(n2z($total), 2));
+          }
+          array_push($data, $total_array);
+
+          // dd($data);
+
+          $title    = Tbl_payroll_reports::where('payroll_reports_id', $payroll_reports_id)->pluck('payroll_reports_name');
+
+          return Excel::create($title, function($excel) use ($data) {
+
+               $date = 'reports';
+               $excel->setTitle('Payroll');
+               $excel->setCreator('Laravel')->setCompany('DIGIMA');
+               $excel->setDescription('payroll file');
+
+               $excel->sheet($date, function($sheet) use ($data) {
+                    $sheet->fromArray($data, null, 'A1', true, true);
+                    $sheet->setColumnFormat(array(
+                         'B:BZ' => '0.00'
+                         ));
+               });
+
+          })->download('xlsx');
+
+     }
+
+     public function generate_custom_report($id, $date = array())
+     {
+          $report             = Tbl_payroll_reports::where('payroll_reports_id', $id)->first();
+          $data['report']     = $report;
+          $columns            = array();
+          $items              = array();
+          $column_space       = array();
+          
+
+          $_entity = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+
+          /* for column start */
+          foreach($_entity as $key => $data_entity)
+          {
+               
+               foreach($data_entity as $entity)
+               {
+
+                    $count_entity = Tbl_payroll_reports_column::getcolumn($id, $entity['payroll_entity_id'])->count();
+
+                    if($count_entity == 1)
+                    {
+                         array_push($columns, $entity['entity_name']);
+                         array_push($column_space, '');
+                    }
+
+
+                    if($entity['entity_name'] == 'Loans')
+                    {
+                         $_sub = Tbl_payroll_deduction_type::seltype(Self::shop_id(), 'Loans')->get()->toArray();
+                         foreach($_sub as $sub)
+                         {
+
+                              $count_column = Tbl_payroll_reports_column::getcolumn($id, $sub['payroll_deduction_type_id'], 'loan')->count();
+
+                              if($count_column == 1)
+                              {
+                                   array_push($columns, $sub['payroll_deduction_type_name']);
+                                   array_push($column_space, '');
+                              }
+                         }
+                    }
+
+               }
+          }
+
+          /* for column end */
+
+          $date[0] = date_create($date[0]);
+          // $date[1] = date('Y-m-d');
+
+          date_sub($date[0],date_interval_create_from_date_string("40 days"));
+
+          $date[0] = date_format($date[0],'Y-m-d');
+
+          $data['start'] = date('m/d/Y', strtotime($date[0]));
+          $data['end']   = date('m/d/Y', strtotime($date[1]));
+
+          $data['_emp']  = array();
+          $emp_array     = array();
+
+          /* for item start */
+          $_emp = Tbl_payroll_employee_contract::employeefilter(0,0,0,$date[0], Self::shop_id())->get()->toArray();
+          // dd($_emp);
+
+          $_total = array();
+
+
+          foreach($_emp as $emp)
+          {
+               $_record = Self::getrecord_report($id, $_entity, $emp['payroll_employee_id'], $date);
+
+               $temp_emp['name'] = $emp['payroll_employee_title_name'].' '.$emp['payroll_employee_first_name'].' '.$emp['payroll_employee_middle_name'].' '.$emp['payroll_employee_last_name'].' '.$emp['payroll_employee_suffix_name'];
+               $temp_emp['raw_name'] = $emp['payroll_employee_title_name'].' '.$emp['payroll_employee_first_name'].' '.$emp['payroll_employee_middle_name'].' '.$emp['payroll_employee_last_name'].' '.$emp['payroll_employee_suffix_name'];
+
+               $temp_emp['payroll_department_name'] = $emp['payroll_department_name'];
+               $temp_emp['payroll_company_name']    = $emp['payroll_company_name'];
+
+               $temp_emp['_record'] = array();
+               $temp_emp['_raw']    = $_record;
+
+               if(empty($_total))
+               {
+                    $_total = $_record;
+               }
+               else
+               {
+                    foreach($_record as $key => $total)
+                    {
+                         $_total[$key] += $total;
+                    }
+               }
+
+               foreach($_record as $record)
+               {
+                    array_push($temp_emp['_record'], number_format($record, 2));
+
+               }
+
+               array_push($emp_array, $temp_emp);
+          }   
+
+          $is_by_employee     = $report->is_by_employee;
+          $is_by_department   = $report->is_by_department;
+          $is_by_company      = $report->is_by_company;
+
+          // $column_space
+          if($is_by_employee == 1 && $is_by_department == 1 && $is_by_company == 1)
+          {
+               $_comp_array   = collect($emp_array)->groupBy('payroll_company_name');
+               $temp_data     = array();
+               $temp_item     = array();
+
+               foreach($_comp_array as $key => $comp)
+               {
+                    $temp_item['name'] = '<b>'.$key.'</b>';
+                    $temp_item['raw_name'] = $key;
+                    $temp_item['payroll_department_name'] = '';
+                    $temp_item['payroll_company_name']    = '';
+                    $temp_item['_record'] = $column_space;
+                    $temp_item['_raw']    = $column_space;
+
+                    array_push($temp_data, $temp_item);
+
+                    $_department = collect($comp)->groupBy('payroll_department_name');
+                    foreach($_department as $kd => $_dep)
+                    {
+                         $temp_item['name'] = '<b>'.$kd.'</b>';
+                         $temp_item['raw_name'] = $kd;
+                         $temp_item['payroll_department_name'] = '';
+                         $temp_item['payroll_company_name']    = '';
+                         $temp_item['_record'] = $column_space;
+                         $temp_item['_raw']    = $column_space;
+                         array_push($temp_data, $temp_item);
+                         foreach($_dep as $department)
+                         {
+                              array_push($temp_data, $department);
+                              
+                         }
+                         // dd(Self::getsubtotal_report($_dep));
+                         // array_push($temp_data, Self::getsubtotal_report($_dep));
+                    }
+                    
+               }
+
+               $data['_emp'] = $temp_data;
+          }
+
+          if($is_by_employee == 0 && $is_by_department == 1 && $is_by_company == 1)
+          {
+
+               $_comp_array   = collect($emp_array)->groupBy('payroll_company_name');
+               $temp_data     = array();
+               $temp_item     = array();
+
+               foreach($_comp_array as $key => $comp)
+               {
+                    $temp_item['name'] = '<b>'.$key.'</b>';
+                    $temp_item['raw_name'] = $key;
+                    $temp_item['payroll_department_name'] = '';
+                    $temp_item['payroll_company_name']    = '';
+                    $temp_item['_record'] = $column_space;
+                    $temp_item['_raw']    = $column_space;
+
+                    array_push($temp_data, $temp_item);
+
+                    $_department = collect($comp)->groupBy('payroll_department_name');
+                    foreach($_department as $kd => $_dep)
+                    {
+                         $temp_item['name'] = $kd;
+                         $temp_item['raw_name'] = $kd;
+                         $temp_item['payroll_department_name'] = '';
+                         $temp_item['payroll_company_name']    = '';
+                         $temp_item['_record'] = array();
+                         $temp_item['_raw']    = array();
+                         
+                         foreach($_dep as $department)
+                         {
+                             if(empty($temp_item['_raw']))
+                             {
+                                   $temp_item['_raw'] = $department['_raw'];
+                             }
+                             else
+                             {
+                                   foreach($department['_raw'] as $key => $raw)
+                                   {
+                                        $temp_item['_raw'][$key] += $raw;
+                                   }
+                             }
+                         }
+
+                         foreach($temp_item['_raw'] as $key => $raw)
+                         {
+                              array_push($temp_item['_record'], number_format($raw, 2));
+                         }
+
+                         array_push($temp_data, $temp_item);
+                    }
+               }
+
+               $data['_emp'] = $temp_data;
+          }
+
+          if($is_by_employee == 0 && $is_by_department == 1 && $is_by_company == 0)
+          {
+               $_department = collect($emp_array)->groupBy('payroll_department_name');
+               $temp_data   = array();
+               foreach($_department as $kd => $_dep)
+               {
+                    $temp_item['name'] = $kd;
+                    $temp_item['raw_name'] = $kd;
+                    $temp_item['payroll_department_name'] = '';
+                    $temp_item['payroll_company_name']    = '';
+                    $temp_item['_record'] = array();
+                    $temp_item['_raw']    = array();
+                    
+                    foreach($_dep as $department)
+                    {
+                        if(empty($temp_item['_raw']))
+                        {
+                              $temp_item['_raw'] = $department['_raw'];
+                        }
+                        else
+                        {
+                              foreach($department['_raw'] as $key => $raw)
+                              {
+                                   $temp_item['_raw'][$key] += $raw;
+                              }
+                        }
+                    }
+
+                    foreach($temp_item['_raw'] as $key => $raw)
+                    {
+                         array_push($temp_item['_record'], number_format($raw, 2));
+                    }
+
+                    array_push($temp_data, $temp_item);
+               }
+               $data['_emp'] = $temp_data;
+          }
+
+          if($is_by_employee == 0 && $is_by_department == 0 && $is_by_company == 1)
+          {
+               $_department = collect($emp_array)->groupBy('payroll_company_name');
+               $temp_data   = array();
+               foreach($_department as $kd => $_dep)
+               {
+                    $temp_item['name'] = $kd;
+                    $temp_item['raw_name'] = $kd;
+                    $temp_item['payroll_department_name'] = '';
+                    $temp_item['payroll_company_name']    = '';
+                    $temp_item['_record'] = array();
+                    $temp_item['_raw']    = array();
+                    
+                    foreach($_dep as $department)
+                    {
+                        if(empty($temp_item['_raw']))
+                        {
+                              $temp_item['_raw'] = $department['_raw'];
+                        }
+                        else
+                        {
+                              foreach($department['_raw'] as $key => $raw)
+                              {
+                                   $temp_item['_raw'][$key] += $raw;
+                              }
+                        }
+                    }
+
+                    foreach($temp_item['_raw'] as $key => $raw)
+                    {
+                         array_push($temp_item['_record'], number_format($raw, 2));
+                    }
+
+                    array_push($temp_data, $temp_item);
+               }
+               $data['_emp'] = $temp_data;
+          }
+
+
+          if($is_by_employee == 1 && $is_by_department == 1 && $is_by_company == 0)
+          {
+
+               $_department   = collect($emp_array)->groupBy('payroll_department_name');
+
+               $temp_data     = array();
+
+               foreach($_department as $kd => $_dep)
+               {
+                    $temp_item['name'] = '<b>'.$kd.'</b>';
+                    $temp_item['raw_name'] = $kd;
+                    $temp_item['payroll_department_name'] = '';
+                    $temp_item['payroll_company_name']    = '';
+                    $temp_item['_record'] = $column_space;
+                    $temp_item['_raw']    = $column_space;
+                    array_push($temp_data, $temp_item);
+                    foreach($_dep as $department)
+                    {
+                         array_push($temp_data, $department);
+                         
+                    }
+                    // dd(Self::getsubtotal_report($_dep));
+                    // array_push($temp_data, Self::getsubtotal_report($_dep));
+               }
+                    
+
+               $data['_emp'] = $temp_data;
+          }
+
+          if($is_by_employee == 1 && $is_by_department == 0 && $is_by_company == 1)
+          {
+               $_department   = collect($emp_array)->groupBy('payroll_company_name');
+
+               $temp_data     = array();
+
+               foreach($_department as $kd => $_dep)
+               {
+                    $temp_item['name'] = '<b>'.$kd.'</b>';
+                    $temp_item['raw_name'] = $kd;
+                    $temp_item['payroll_department_name'] = '';
+                    $temp_item['payroll_company_name']    = '';
+                    $temp_item['_record'] = $column_space;
+                    $temp_item['_raw']    = $column_space;
+                    array_push($temp_data, $temp_item);
+                    foreach($_dep as $department)
+                    {
+                         array_push($temp_data, $department);
+                         
+                    }
+                    // dd(Self::getsubtotal_report($_dep));
+                    // array_push($temp_data, Self::getsubtotal_report($_dep));
+               }
+                    
+
+               $data['_emp'] = $temp_data;
+          }
+
+          if($is_by_employee == 1 && $is_by_department == 0 && $is_by_company == 0)
+          {
+               $data['_emp'] = $emp_array;
+          }
+
+          // dd($data['_emp']);
+
+          /* for item end */
+
+          $data['_total']     = $_total;
+          $data['_columns']   = $columns;
+
+
+          return $data;
+     }
+
+     public function getsubtotal_report($_item = array())
+     {
+
+          $data['name']                      = '<b>sub total</b>';
+          $data['raw_name']                  = 'sub total';
+          $data['payroll_department_name']   = '';
+          $data['payroll_company_name']      = '';
+          $data['_record']    = array();
+          $data['_raw']       = array();
+
+          $temp_array         = array();
+          $temp_record        = array();
+
+          // dd($_item);
+
+          foreach($_item as $data_item)
+          {    
+
+               if(empty($temp_array))
+               {
+                    $temp_array = $data_item['_raw'];
+               }
+               else
+               {
+                    // dd($data_item);
+                    foreach($temp_array as $key => $amount)
+                    {
+                         $temp_array[$key] += $amount;
+                    }
+               }
+          }
+
+          foreach($temp_array as $key => $arr)
+          {
+               array_push($temp_record, '<b>'.number_format($arr, 2).'</b>');
+          }
+
+          $data['_record'] = $temp_record;
+          $data['_raw']    = $temp_array;
+
+
+          return $data;
+     }
+
+     public function getrecord_report($id = 0,$_entity = array(), $employee_id = 0, $date = ['0000-00-00', '0000-00-00'])
+     {
+
+          $data = array();
+
+          foreach($_entity as $key => $data_entity)
+          {
+               
+               foreach($data_entity as $entity)
+               {
+
+                    $count_entity = Tbl_payroll_reports_column::getcolumn($id, $entity['payroll_entity_id'])->count();
+
+                    $query = Tbl_payroll_record::getdate(Self::shop_id(), $date)->where('tbl_payroll_record.payroll_employee_id', $employee_id);
+
+
+                    $temp_query = $query;
+                    $payroll_record_id_list = $temp_query->lists('payroll_record_id');
+                    $temp_query = $query;
+                    $payroll_period_company_id_list = $temp_query->select('tbl_payroll_record.payroll_period_company_id as company_record_id')->lists('company_record_id');
+                    
+                    // dd($payroll_period_company_id_list);
+
+                    if($count_entity == 1)
+                    {
+                         
+                         if($entity['entity_name'] == '13 Month Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('13_month')->sum('13_month');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Basic Salary Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('regular_salary')->sum('regular_salary');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Early Over Time Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('regular_early_overtime')->sum('regular_early_overtime');
+                              $amount += $temp_query->select('extra_early_overtime')->sum('extra_early_overtime');
+                              $amount += $temp_query->select('rest_day_rh_early_overtime')->sum('rest_day_rh_early_overtime');
+                              $amount += $temp_query->select('sh_early_overtime')->sum('rest_day_sh_early_overtime');
+                              $amount += $temp_query->select('rh_early_overtime')->sum('rh_early_overtime');
+                              $amount += $temp_query->select('sh_early_overtime')->sum('sh_early_overtime');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Extra Day Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('extra_salary')->sum('extra_salary');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Leave With Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('leave_amount')->sum('leave_amount');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Night Differential Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('regular_night_diff')->sum('regular_night_diff');
+                              $amount += $temp_query->select('extra_night_diff')->sum('extra_night_diff');
+                              $amount += $temp_query->select('rest_day_night_diff')->sum('rest_day_night_diff');
+                              $amount += $temp_query->select('rest_day_sh_night_diff')->sum('rest_day_sh_night_diff');
+                              $amount += $temp_query->select('rest_day_rh_night_diff')->sum('rest_day_rh_night_diff');
+                              $amount += $temp_query->select('sh_night_diff')->sum('sh_night_diff');
+                              $amount += $temp_query->select('rh_early_overtime')->sum('rh_early_overtime');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Regular Holiday Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('rh_salary')->sum('rh_salary');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Regular Over Time Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('regular_reg_overtime')->sum('regular_reg_overtime');
+                              $amount += $temp_query->select('extra_reg_overtime')->sum('extra_reg_overtime');
+                              $amount += $temp_query->select('rest_day_reg_overtime')->sum('rest_day_reg_overtime');
+                              $amount += $temp_query->select('rest_day_sh_reg_overtime')->sum('rest_day_sh_reg_overtime');
+                              $amount += $temp_query->select('rest_day_rh_reg_overtime')->sum('rest_day_rh_reg_overtime');
+                              $amount += $temp_query->select('rh_reg_overtime')->sum('rh_reg_overtime');
+                              $amount += $temp_query->select('sh_reg_overtime')->sum('sh_reg_overtime');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Rest Day Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('rest_day_salary')->sum('rest_day_salary');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'COLA')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('payroll_cola')->sum('payroll_cola');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Special Holiday Pay')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('sh_salary')->sum('sh_salary');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Allowance Pay')
+                         {
+                              $amount = Tbl_payroll_allowance_record::getbyrecord($payroll_record_id_list)->select('payroll_record_allowance_amount')->sum('payroll_record_allowance_amount');
+
+                              $amount += Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Allowance')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Bonus Pay')
+                         {
+                              $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Bonus')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Commission Pay')
+                         {
+                              $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Commissions')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Incentive Pay')
+                         {
+                              $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Incentives')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+
+
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Pagibig')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('pagibig_contribution')->sum('pagibig_contribution');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Philhealth EE')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('philhealth_contribution_ee')->sum('philhealth_contribution_ee');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Philhealth ER')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('philhealth_contribution_er')->sum('philhealth_contribution_er');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'SSS EC')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('sss_contribution_ec')->sum('sss_contribution_ec');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'SSS EE')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('sss_contribution_ee')->sum('sss_contribution_ee');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'SSS ER')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('sss_contribution_er')->sum('sss_contribution_er');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Tax')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('tax_contribution')->sum('tax_contribution');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Cash Advance')
+                         {
+                              $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Cash Advance')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Cash Bond')
+                         {
+                              $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Cash Bond')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Loans')
+                         {
+                              $amount = Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Loans')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Other Deduction')
+                         {
+                              $amount = Tbl_payroll_adjustment::getrecord($employee_id, $payroll_period_company_id_list, 'Deductions')->select('payroll_adjustment_amount')->sum('payroll_adjustment_amount');
+
+                              $amount += Tbl_payroll_deduction_payment::getrecord($payroll_record_id_list , 'Other Deduction')->select('tbl_payroll_deduction_payment.payroll_payment_amount')->sum('tbl_payroll_deduction_payment.payroll_payment_amount');
+
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Late')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('late_deduction')->sum('late_deduction');
+                              array_push($data, $amount);
+                         }
+                         if($entity['entity_name'] == 'Absent')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('absent_deduction')->sum('absent_deduction');
+                              array_push($data, $amount);
+                         }
+
+                         if($entity['entity_name'] == 'Under Time')
+                         {
+                              $temp_query = $query;
+                              $amount = $temp_query->select('under_time')->sum('under_time');
+                              array_push($data, $amount);
+                         }
+
+                    }
+
+
+                    if($entity['entity_name'] == 'Loans')
+                    {
+                         $_sub = Tbl_payroll_deduction_type::seltype(Self::shop_id(), 'Loans')->get()->toArray();
+                         foreach($_sub as $sub)
+                         {
+
+                              $count_column = Tbl_payroll_reports_column::getcolumn($id, $sub['payroll_deduction_type_id'], 'loan')->count();
+
+                              if($count_column == 1)
+                              {
+
+                                   $payroll_deduction_type_id = $sub['payroll_deduction_type_id'];
+                                   $amount = Tbl_payroll_deduction_payment::getpayment($employee_id, $payroll_record_id_list, $payroll_deduction_type_id)->select('payroll_payment_amount')->sum('payroll_payment_amount');
+
+                                   array_push($data, $amount);
+                              }
+                         }
+                    }
+
+               }
+          }
+
+
+          return $data;
+     }
+
+     public function setentity()
+     {
+          $_entity  = collect(Tbl_payroll_entity::orderBy('entity_name')->get()->toArray())->groupBy('entity_category');
+
+          $data = array();
+
+          foreach($_entity as $key => $data_entity)
+          {
+               $data[$key] = array();
+               foreach($data_entity as $entity)
+               {
+                    $temp = $entity;
+                    $temp['sub'] = array();
+
+                    if($entity['entity_name'] == 'Loans')
+                    {
+                         $temp['sub'] = Tbl_payroll_deduction_type::seltype(Self::shop_id(), 'Loans')->get()->toArray();
+                    }
+
+                    array_push($data[$key], $temp);
+               }
+          }
+
+          return $data;
+     }
+
+     /* PAYROLL REPORTS END */
 
 }

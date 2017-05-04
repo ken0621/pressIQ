@@ -16,6 +16,7 @@
     </div>
 </div>
 {!! $basic_settings !!} 
+@include('member.mlm_plan.notes.direct')
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">

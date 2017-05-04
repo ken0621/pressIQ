@@ -12,7 +12,7 @@
                     List of Coupon
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right popup" size="sm" link="/member/ecommerce/coupon/generate-code" >Generate Coupon Code</a>
+            <a class="panel-buttons btn btn-custom-primary pull-right popup" size="md" link="/member/ecommerce/coupon/generate-code" >Generate Coupon Code</a>
         </div>
     </div>
 </div>

@@ -187,7 +187,7 @@ class MLM_StairstepController extends Member
 			                if(!$percentage)
 			                {
 
-
+			                	$append_info = " (Rebates)";
 			                    if($slot_stairstep->stairstep_bonus != 0)
 			                    {
 			                        $computed_points = ($slot_stairstep->stairstep_bonus/100) * $slot_pv;
@@ -197,7 +197,8 @@ class MLM_StairstepController extends Member
 			                    $reduced_percent = $slot_stairstep->stairstep_bonus;
 			                }
 			                else
-			                {                                       
+			                {           
+			                    $append_info = " (Over-ride)";                            
 			                    if($slot_stairstep->stairstep_bonus > $percentage)
 			                    { 
 			                        if($slot_stairstep->stairstep_bonus != 0)
@@ -221,7 +222,7 @@ class MLM_StairstepController extends Member
 		                    $arry_log['wallet_log_slot_sponsor']    = $placement->sponsor_tree_parent_id;
 		                    $arry_log['wallet_log_details']         = $log;
 		                    $arry_log['wallet_log_amount']          = $computed_points;
-		                    $arry_log['wallet_log_plan']            = "STAIRSTEP";
+		                    $arry_log['wallet_log_plan']            = "STAIRSTEP".$append_info;
 		                    $arry_log['wallet_log_status']          = "n_ready";   
 		                    $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('STAIRSTEP', $slot_info->shop_id); 
 		                    Mlm_slot_log::slot_array($arry_log);    

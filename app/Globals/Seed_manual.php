@@ -250,7 +250,6 @@ class Seed_manual
        $insert[3]['account_tax_code_id']        = "";
        $insert[3]['default_for_code']           = "accounting-inventory-asset";
 
-
        $insert[4]['default_id']                 = 4; 
        $insert[4]['default_type_id']            = "4";      
        $insert[4]['default_number']             = "17000";
@@ -336,7 +335,7 @@ class Seed_manual
        $insert[9]['is_tax_account']             = "";
        $insert[9]['account_tax_code_id']        = "";
        $insert[9]['default_for_code']           = "";
-
+       
        $insert[10]['default_id']                 = 10; 
        $insert[10]['default_type_id']            = "10";    
        $insert[10]['default_number']             = "30000";
@@ -577,7 +576,7 @@ class Seed_manual
        $insert[26]['is_tax_account']             = "";
        $insert[26]['account_tax_code_id']        = "";
        $insert[26]['default_for_code']           = "";
-
+       
        $insert[27]['default_id']                 = 27; 
        $insert[27]['default_type_id']            = "13";    
        $insert[27]['default_number']             = "66000";

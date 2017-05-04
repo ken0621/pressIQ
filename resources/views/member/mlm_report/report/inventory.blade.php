@@ -64,6 +64,8 @@
 <br>
 <br>
 <br> -->
+@foreach($warehouse as $warehouse_key => $warehouse)
+@foreach($userss as $user_key => $user_a)
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -88,7 +90,7 @@
             </style>
             <div style="overflow-x:auto;" class="table-responsive Container Flipped">
 
-                <table class="table table-condensed table-bordered Content">
+                <table class="table table-condensed table-bordered Content" style="font-size: 8px;">
                     <thead>
                         <thead>
                             <tr>
@@ -124,6 +126,8 @@
                         <tbody>
                             <?php $t_niggs = 0; ?>
                             @foreach($invoice as $key => $value)
+                            @if($value->warehouse_id == $warehouse->warehouse_id)
+                            @if($value->user_id == $user_a->user_id)
                                 <tr>
                                     <td>{{name_format_from_customer_info($value)}}</td>
                                     <td>{{$value->membership_name}}</td>
@@ -181,6 +185,8 @@
                                     </td>
                                     <td>{{$value->item_code_date_created}}</td>
                                 </tr>
+                            @endif
+                            @endif    
                             @endforeach
                             <tr>
                                 <td colspan="8">Total Sales</td>
@@ -198,7 +204,7 @@
 
             <div style="overflow-x:auto;" class="table-responsive">
 
-                <table class="table table-condensed table-bordered">
+                <table class="table table-condensed table-bordered" style="font-size: 8px;">
                 <tbody>
                     <tr>
                         <td colspan="2">Breakdown of Payment</td>
@@ -227,3 +233,5 @@
         </div>
     </div>
 </div>    
+@endforeach
+@endforeach

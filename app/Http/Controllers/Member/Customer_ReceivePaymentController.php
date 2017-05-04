@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Globals\Customer;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
+use App\Globals\CreditMemo;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;

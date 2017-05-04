@@ -776,6 +776,26 @@ class Seed_manual
             DB::table('tbl_terms')->insert($insert);
         }
     }
+
+    public static function put_default_tbl_payment_method($shop_id)
+    {
+        if(!DB::table('tbl_payment_method')->where("shop_id", $shop_id)->first())
+        {
+            $insert[0]['shop_id']       = $shop_id; 
+            $insert[0]['payment_name']  = "Cash";  
+            $insert[0]['isDefault']     = "1"; 
+
+            $insert[1]['shop_id']       = $shop_id; 
+            $insert[1]['payment_name']  = "Cheque";  
+            $insert[1]['isDefault']     = "0"; 
+
+            $insert[2]['shop_id']       = $shop_id; 
+            $insert[2]['payment_name']  = "A.D.A";  
+            $insert[2]['isDefault']     = "1"; 
+
+            DB::table('tbl_payment_method')->insert($insert);
+        }
+    }
 }
 
 

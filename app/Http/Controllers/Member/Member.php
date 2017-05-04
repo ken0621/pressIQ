@@ -167,6 +167,8 @@ class Member extends Controller
 		Payroll::generate_paper_size($this->user_info->shop_id);
 		/* INSERT DEFAULT TERMS */
 		Seed_manual::put_default_tbl_terms($this->user_info->shop_id);
+		/* INSERT DEFAULT PAYMENT METHOD */
+		Seed_manual::put_default_tbl_payment_method($this->user_info->shop_id);
 
 		/* INSERT MAIN WAREHOUSE */
 		Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);

@@ -701,4 +701,18 @@ class Item_code
         Tbl_item_code::where('item_code_id', $item_code->item_code_id)->update($update);
         $a = Mlm_compute::repurchase($slot_info, $item_code->item_code_id);
     }
+    public static function use_item_code_all_ec_order($order_id)
+    {
+        $item_code = Tbl_item_code::where('ec_order_id', $order_id)->get();
+        if($item_code)
+        {
+            foreach ($item_code as $key => $code) {
+                $slot = Mlm_compute::get_slot_info($code->slot_id);
+                if($slot)
+                {
+                    Item_code::use_item_code_single($code, $slot);
+                }
+            }
+        }
+    }
 }

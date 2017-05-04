@@ -2,6 +2,7 @@
 @section('css')
 @endsection
 @section('content')
+<form action="" method="POST">
 <div class="panel panel-default panel-block panel-title-block" id="top">
 	<div class="panel-heading">
 		<div>
@@ -12,8 +13,8 @@
 			Manage Payroll Reports
 			</small>
 			</h1>
-			<button class="btn btn-custom-danger pull-right"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;Download as PDF</button>
-
+			<button class="btn btm-custom-green pull-right" type="submit"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;Download as Excel</button>
+			<input type="hidden" name="payroll_reports_id" value="{{$report->payroll_reports_id}}">
 		</div>
 	</div>
 </div>
@@ -23,11 +24,11 @@
 			<div class="col-md-4 pull-right">
 				<div class="col-md-6">
 					<small>From</small>
-					<input type="text" name="" value="{{$start}}" class="form-control datepicker">
+					<input type="text" name="start" value="{{$start}}" class="form-control datepicker">
 				</div>
 				<div class="col-md-6">
 					<small>To</small>
-					<input type="text" name="" value="{{$end}}" class="form-control datepicker">
+					<input type="text" name="end" value="{{$end}}" class="form-control datepicker">
 				</div>
 			</div>
 		</div>
@@ -45,10 +46,10 @@
 					<tbody>
 						@foreach($_emp as $emp)
 						<tr>
-							<td>{{$emp['payroll_employee_title_name'].' '.$emp['payroll_employee_first_name'].' '.$emp['payroll_employee_middle_name'].' '.$emp['payroll_employee_last_name'].' '.$emp['payroll_employee_suffix_name']}}</td>
+							<td>{!!$emp['name']!!}</td>
 							@foreach($emp['_record'] as $record)
 							<td class="text-right">
-								{{number_format($record, 2)}}
+								{!!$record!!}
 							</td>
 							@endforeach
 						</tr>
@@ -68,6 +69,7 @@
 		</div>
 	</div>
 </div>
+</form>
 @endsection
 @section('script')
 @endsection

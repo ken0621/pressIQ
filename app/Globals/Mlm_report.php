@@ -668,6 +668,11 @@ class Mlm_report
             $invoice = $invoice->where('warehouse_id', $warehouse_id);
             $data['warehouse'] = Tbl_warehouse::where('warehouse_id', $warehouse_id)->where('archived', 0)->first();
         }
+        else
+        {
+            $invoice = $invoice->leftjoin('tbl_warehouse', 'tbl_warehouse.warehouse_id', '=', 'tbl_item_code_invoice.warehouse_id')
+            ->where('tbl_warehouse.archived', 0);
+        }
 
 
         $invoice = $invoice->get()->keyBy('item_code_invoice_id');
@@ -909,7 +914,7 @@ class Mlm_report
 
     public static function product_sales_report_warehouse($shop_id, $filters)
     {
-        $warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->get()->keyBy('warehouse_id');
+        $warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get()->keyBy('warehouse_id');
 
         $data['filteru'] = $filters;
         $invoice = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)

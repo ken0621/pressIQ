@@ -10,6 +10,7 @@ use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_unit_measurement_type;
 use App\Models\Tbl_item;
 use App\Models\Tbl_settings;
+use App\Models\Tbl_um;
 use App\Globals\UnitMeasurement;
 use App\Globals\Utilities;
 use Carbon\Carbon;
@@ -27,7 +28,58 @@ class UnitOfMeasurementController extends Member
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
+    public function add_um()
+    {
+        $data['um_type'] = Request::input("um_type");
+        $data['action'] = '/member/pis/um_add_submit';
+        if(Request::input("id"))
+        {
+            $data['action'] = '/member/pis/um_update_submit';
+        }
 
+        return view("member.unit_of_measurement.pis_um.um",$data);
+    }
+    public function add_um_submit()
+    {
+        $type = Request::input("um_type");
+        $um_name = Request::input("um_name");
+        $um_abbrev = Request::input("um_abbrev");
+
+        $type_1 = 0;
+        if($type == 'base') $type_1 = 1;
+        else                $type_1 = 0;
+
+        $check = Tbl_um::where("um_shop_id",UnitMeasurement::getShopId())->where("is_based",$type_1)->where("um_name",$um_name)->first();
+
+        if($check == null)
+        {
+            $ins['um_name'] = $um_name;
+            $ins['um_abbrev'] = $um_abbrev;  
+            $ins['is_based'] = $type_1;            
+            $ins['um_shop_id'] = UnitMeasurement::getShopId();
+
+            $um_id = Tbl_um::insertGetId($ins);
+            $data['id'] = $um_id;
+            $data['type'] = 'pis-um'; 
+            $data['um_type'] = $type."-um";   
+        }
+        else
+        {
+            $data['status'] = 'error';
+            $data['status_message'] = 'U/M is already used';
+        }
+
+        return json_encode($data);
+    }
+    public function load_pis_um($type = '')
+    {
+        $type_1 = 0;
+        if($type == 'notbase-um') $type_1 = 0;
+        else                      $type_1 = 1;
+        $data["_um"] = Tbl_um::where("is_based",$type_1)->get();
+
+        return view("member.load_ajax_data.load_pis_um",$data);
+    }
     public function check()
     {
         $um_id = Request::input("id");

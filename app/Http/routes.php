@@ -236,6 +236,13 @@ Route::any('/member/item/unit_of_measurement/{id}/{action}','Member\UnitOfMeasur
 Route::any('/member/item/unit_of_measurement/archived_submit','Member\UnitOfMeasurementController@archived_submit');
 /* END U/M ARCY*/
 
+/*PIS UM*/
+Route::any('/member/pis/um_add','Member\UnitOfMeasurementController@add_um');
+Route::any('/member/pis/um_add_submit','Member\UnitOfMeasurementController@add_um_submit');
+Route::any('/member/pis/load_pis_um/{type}','Member\UnitOfMeasurementController@load_pis_um');
+/*END PIS UM*/
+
+
 /*PIS*/
 Route::any('/member/item/um/',"Member\UnitOfMeasurementController@check");
 Route::any('/member/item/um/add_base/{id}/{item_id}',"Member\UnitOfMeasurementController@add_base");

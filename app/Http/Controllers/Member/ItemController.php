@@ -16,6 +16,7 @@ use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_item_multiple_price;
 use App\Models\Tbl_inventory_slip;
+use App\Models\Tbl_um;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
@@ -135,9 +136,6 @@ class ItemController extends Member
         $access = Utilities::checkAccess('item-list', 'access_page');
         if($access == 1)
         {
-
-			// $data['_category']  		= Category::getAllCategory();
-
 			$data['_service']  		    = Category::getAllCategory(['services']);
 			$data['_inventory']  		= Category::getAllCategory(['inventory']);
 			$data['_noninventory']  	= Category::getAllCategory(['non-inventory']);
@@ -162,7 +160,19 @@ class ItemController extends Member
 			$data["_um_multi"]  		= UnitMeasurement::load_um_multi();
             $data["_vendor"]    		= Vendor::getAllVendor('active');
 
-		    return view('member.item.add',$data);
+
+        	//check if_for PIS
+        	$pis_check = Purchasing_inventory_system::check();
+        	if($pis_check != 0)
+        	{
+        		$data['_um_n'] = Tbl_um::where("um_shop_id",$shop_id)->where("is_based",0)->get();
+        		$data['_um_b'] = Tbl_um::where("um_shop_id",$shop_id)->where("is_based",1)->get();
+		    	return view('member.item.pis.add_item',$data);        		
+        	}
+        	else
+        	{
+		    	return view('member.item.add',$data);
+        	}
         }
         else
         {

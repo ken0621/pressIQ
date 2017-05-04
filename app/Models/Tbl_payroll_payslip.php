@@ -23,6 +23,7 @@ class Tbl_payroll_payslip extends Model
 	// [TINY INTEGER] 	include_time_summary
 	// [VARCHAR] 		company_position
 	// [TINY INTEGER] 	payroll_payslip_archived
+	// [TINY INTEGER]	payslip_is_use
 
 
 	public function scopegetpayslip($query, $shop_id = 0, $payroll_payslip_archived = 0)

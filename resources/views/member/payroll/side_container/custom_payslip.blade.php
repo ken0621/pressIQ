@@ -33,6 +33,27 @@
 			</div>
 		</div>
 		<div id="archived-payslip" class="tab-pane fade">
+			<div class="form-group">
+				<div class="col-md-4">
+					<div class="panel panel-default background-white">
+						<div class="panel-body">
+							<div class="list-group">
+								@foreach($_archived as $archived)
+								<a href="#" link="/member/payroll/custom_payslip/custom_payslip_show/{{$archived->payroll_payslip_id}}" class="list-group-item payslip-list-nav">{{$archived->payslip_code}}</a>
+								@endforeach
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="panel panel-default background-white">
+						<div class="panel-body panel-payslip-show">
+							
+							
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	

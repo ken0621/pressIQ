@@ -2,7 +2,7 @@
 @section("content")
 <!-- OUR VALUES -->
 <div class="content">
-	<div class="container">
+	<div class="container-fluid">
 		<div class="row clearfix">
 			<!-- NEWS CONTENT -->
 			<div class="col-md-8">

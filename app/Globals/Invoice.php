@@ -29,7 +29,7 @@ class Invoice
 {
     public static function count_ar($start_date, $end_date)
     {
-         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->whereBetween("date_created",array($start_date,$end_date))->where("inv_is_paid",0)->count();
+         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->whereBetween("date_created",array($start_date,$end_date))->where("inv_is_paid",0)->where("is_sales_receipt",0)->count();
          return $ar;
     }
     public static function get_ar_amount($start_date, $end_date)
@@ -43,7 +43,7 @@ class Invoice
         {
             foreach ($ar as $key => $value) 
             {
-               $price += $value->inv_overall_price;
+               $price += $value->inv_overall_price - CreditMemo::cm_amount($value->inv_id);
             }            
         }
 
@@ -51,6 +51,14 @@ class Invoice
     }
     public static function get_sales_amount($start_date, $end_date)
     {
+        $sr = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
+                                ->where("inv_is_paid",0)
+                                ->get();
+        foreach ($sr as $key1 => $value1)
+        {
+          Invoice::updateIsPaid($value1->inv_id);            
+        }
+
         $price = 0;
         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
                                 ->whereBetween("date_created",array($start_date,$end_date))

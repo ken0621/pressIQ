@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<form  action="/member/item/add_submit?item_type=inventory" class="global-submit form_one" id="modal_form_large"  enctype="multipart/form-data" method="post" type_of_item="inventory_type">
+<form  action="/member/item/add_submit?item_type=inventory" class="global-submit form_two" id="modal_form_large"  enctype="multipart/form-data" method="post" type_of_item="inventory_type">
   <div class="clearfix modal-body modallarge-body-layout background-white inventory_type" style="display:none;"> 
      <!-- INVENTORY -->
     <div class="form-horizontal">
@@ -120,7 +120,7 @@
                         </div>                 
                         <div class="col-md-6">
                             <label>Income Account *</label>
-                            <select name="item_income_account_id" class="drop-down-coa form-control" id="item_income_account_id" required>                                
+                            <select name="item_income_account_id" class="drop-down-coaster form-control" id="item_income_account_id" required>   
                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income, 'account_id' => $default_income])
                             </select>
                         </div>

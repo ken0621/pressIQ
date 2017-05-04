@@ -112,7 +112,7 @@
                         </div>                 
                         <div class="col-md-6">
                             <label>Income Account *</label>
-                            <select name="item_income_account_id" class="drop-down-coa form-control" id="item_income_account_id" required>                                
+                            <select name="item_income_account_id" class="drop-down-coa form-control" id="item_income_account_id" required>
                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income,'account_id' => $data['item_income_account_id']])
                             </select>
                         </div>

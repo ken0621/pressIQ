@@ -113,6 +113,18 @@ function item()
             }
         });
 
+        $(".drop-down-coaster").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/accounting/chart_of_account/popup/add',
+            link_size   : 'md',
+            placeholder : 'Chart of Account',
+            onCreateNew : function()
+            {
+                account_selected = $(this);
+            }
+        });
+
         $(".drop-down-coa").globalDropList(
         {
             width       : '100%',
@@ -232,7 +244,7 @@ function item()
             if(item_type != name)
             {
                 $("#item_type_container").val(name);
-                $(".form_one").find("input[type=text], textarea,input[type=number]").val("");
+                // $(".form_one").find("input[type=text], textarea,input[type=number]").val("");
             }
             $(".item_title").text(display);
             $(".menu_container").slideUp();

@@ -101,8 +101,8 @@
                         </div>
                         <div class="col-md-6">
                             <label>Inventory Asset Account *</label>
-                            <select name="item_asset_account_id" class="drop-down-coa form-control" required id="item_asset_account_id">
-                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_asset])
+                            <select name="item_asset_account_id" class="drop-down-coa form-control" id="item_asset_account_id" required>
+                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_asset, 'account_id' => $default_asset])
                             </select>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                         <div class="col-md-6">
                             <label>Income Account *</label>
                             <select name="item_income_account_id" class="drop-down-coa form-control" id="item_income_account_id" required>                                
-                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income])
+                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income, 'account_id' => $default_income])
                             </select>
                         </div>
                     </div>
@@ -163,7 +163,7 @@
                         <div class="col-md-6">
                             <label>Expense Account *</label>
                             <select name="item_expense_account_id" class="drop-down-coa form-control" id="item_expense_account_id" required>                                                           
-                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense])
+                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $default_expense])
                             </select>
                         </div>
                     </div>
@@ -242,7 +242,7 @@
                     <div class="col-md-6">
                         <label>Income Account *</label>
                             <select name="item_income_account_id" class="drop-down-coa form-control" id="item_income_account_id" required>                                
-                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income])
+                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income, 'account_id' => $default_income])
                             </select>
                     </div>
                 </div>
@@ -288,7 +288,7 @@
                     <div class="col-md-6">
                         <label>Expense Account *</label>
                         <select name="item_expense_account_id" class="drop-down-coa form-control" id="item_expense_account_id">                                                           
-                           @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense])
+                           @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $default_expense])
                         </select>
                     </div>
                 </div>
@@ -367,7 +367,7 @@
                     <div class="col-md-6">
                         <label>Income Account *</label>
                         <select name="item_income_account_id" class="drop-down-coa form-control" id="item_income_account_id" required>                                
-                           @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income])
+                           @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income, 'account_id' => $default_income])
                         </select>
                     </div>
                 </div>
@@ -413,7 +413,7 @@
                     <div class="col-md-6">
                         <label>Expense Account *</label>
                         <select name="item_expense_account_id" class="drop-down-coa form-control" id="item_expense_account_id">                                                           
-                           @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense])
+                           @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $default_expense] )
                         </select>
                     </div>
                 </div>

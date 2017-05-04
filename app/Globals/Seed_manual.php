@@ -234,7 +234,7 @@ class Seed_manual
        $insert[2]['default_open_balance_date']  = "";
        $insert[2]['is_tax_account']             = "";
        $insert[2]['account_tax_code_id']        = "";
-       $insert[2]['default_for_code']           = "accounting-endeposit-funds";
+       $insert[2]['default_for_code']           = "accounting-undeposit-funds";
 
        $insert[3]['default_id']                 = 3; 
        $insert[3]['default_type_id']            = "3";    
@@ -268,7 +268,7 @@ class Seed_manual
        $insert[5]['default_type_id']            = "4";      
        $insert[5]['default_number']             = "15000";
        $insert[5]['default_name']               = "Furniture and Equipment";
-       $insert[5]['default_description']        = "Furniture and equipment with useful life exceeding one year";            
+       $insert[5]['default_description']        = "Furniture and equipment with useful life exceeding one year";
        $insert[5]['default_parent_id']          = "";               
        $insert[5]['default_sublevel']           = "";   
        $insert[5]['default_balance']            = "";

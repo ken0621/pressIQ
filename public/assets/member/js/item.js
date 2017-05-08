@@ -56,6 +56,19 @@ function item()
             link        : '/member/item/category/modal_create_category/services',
             link_size   : 'md'
         });
+
+        $(".drop-down-pis-um.notbase-um").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/pis/um_add?um_type=notbase',
+            link_size   : 'xs'
+        });
+        $(".drop-down-pis-um.base-um").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/pis/um_add?um_type=base',
+            link_size   : 'xs'
+        });
         $(".drop-down-category.bundles").globalDropList(
         {
             width       : '100%',
@@ -330,6 +343,17 @@ function submit_done(data)
         {                
              $(".drop-down-coa").globalDropList("reload"); 
              account_selected.val(data.id).change();              
+        });
+        data.element.modal("hide");
+    }
+    else if(data.type == "pis-um")
+    {
+        toastr.success("Success");
+        console.log(data.um_type);
+        $(".drop-down-pis-um."+data.um_type).load("/member/pis/load_pis_um/"+data.um_type, function()
+        {                
+             $(".drop-down-pis-um."+data.um_type).globalDropList("reload");
+             $(".drop-down-pis-um."+data.um_type).val(data.id).change();              
         });
         data.element.modal("hide");
     }

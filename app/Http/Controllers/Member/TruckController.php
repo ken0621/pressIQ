@@ -85,7 +85,7 @@ class TruckController extends Member
 
         if($validator->fails())
         {
-             $data["status"] = "error";
+            $data["status"] = "error";
             foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
             {
                 $data["status_message"] .= $message;

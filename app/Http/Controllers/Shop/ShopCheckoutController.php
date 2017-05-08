@@ -373,13 +373,6 @@ class ShopCheckoutController extends Shop
                             'responseUrl'   => URL::to('/ipay88_response'),
                             'backendUrl'    => URL::to('/ipay88_response')
                             );
-
-                        $ipay88_logs["log_reference_number"] = $ipay88['refNo'];
-                        $ipay88_logs["log_amount"] = $ipay88['amount'];
-                        $ipay88_logs["log_description"] = $ipay88['prodDesc'];
-                        $ipay88_logs["shop_id"] = $this->shop_info->shop_id;
-
-                        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
                         
                         Session::put('ipay88', $ipay88);
                         Session::put('ipay88_data', Request::input());
@@ -472,7 +465,23 @@ class ShopCheckoutController extends Shop
     {
         $request = Request::all();
         $ipay88_data = Session::get("ipay88_data");
-        /*dd($request['Status']);*/
+
+        // LOGS
+        $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
+        $ipay88_logs["log_payment_id"] = $request['PaymentId'];
+        $ipay88_logs["log_reference_number"] = $request['RefNo'];
+        $ipay88_logs["log_amount"] = $request['Amount'];
+        $ipay88_logs["log_currency"] = $request['Currency'];
+        $ipay88_logs["log_remarks"] = $request['Remark'];
+        $ipay88_logs["log_trans_id"] = $request['TransId'];
+        $ipay88_logs["log_auth_code"] = $request['AuthCode'];
+        $ipay88_logs["log_status"] = $request['Status'];
+        $ipay88_logs["log_error_desc"] = $request['ErrDesc'];
+        $ipay88_logs["log_signature"] = $request['Signature'];
+        $ipay88_logs["shop_id"] = $this->shop_info->shop_id;
+
+        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+
         if($request['Status'] == 0)
         {
             return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');    

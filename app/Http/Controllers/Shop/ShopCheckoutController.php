@@ -422,8 +422,8 @@ class ShopCheckoutController extends Shop
                 'userContact'   => Request::input("customer_mobile"),
                 'remark'        => 'Some Remarks Here!',
                 'lang'          => 'UTF-8',
-                'responseUrl'   => URL::to('/ipay88_response?id=' . $result["order_id"]),
-                'backendUrl'    => URL::to('/ipay88_response?id=' . $result["order_id"])
+                'responseUrl'   => URL::to('/ipay88_response'),
+                'backendUrl'    => URL::to('/ipay88_response')
                 );
             
             Session::put('ipay88', $ipay88);
@@ -452,7 +452,7 @@ class ShopCheckoutController extends Shop
     {
         $request = Request::all();
         $result = Session::get('ipay88_order');
-        $order_id = Request::input("id");
+        $order_id = $result["order_id"];
 
         Session::forget('ipay88_order');
 

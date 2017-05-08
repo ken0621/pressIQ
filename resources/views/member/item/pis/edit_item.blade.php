@@ -2,32 +2,26 @@
   <!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <h4 class="modal-title layout-modallarge-title item_title">Item Type (PIS)</h4> 
-    <input type="hidden" id="item_type_container" value="{{isset($data['type_of_item']) ? $data['type_of_item'] : ''}}">
-</div>
-
-<div class="clearfix modal-body max-450 modallarge-body-layout background-white form-horizontal menu_container">
-    <div class="col-md-3">
-        <buton type="button" class="form-control btn btn-custom-primary" id="inventory_type">Inventory</buton>
-    </div>
-    <div class="col-md-3">
-        <buton type="button" class="form-control btn btn-custom-primary" id="noninventory_type">Non-Inventory</buton>
-    </div>
-    <div class="col-md-3">
-        <buton type="button" class="form-control btn btn-custom-primary" id="service_type">Service</buton>
-    </div>
-    <div class="col-md-3">
-        <buton type="button" class="form-control btn btn-custom-primary" id="bundle_type">Bundle</buton>
-    </div>
+    @if($data['type_of_item'] == "inventory_type")
+        <h4 class="modal-title layout-modallarge-title item_title">Inventory</h4>
+    @elseif($data['type_of_item'] == "noninventory_type")
+        <h4 class="modal-title layout-modallarge-title item_title">Non-Inventory</h4>
+    @elseif($data['type_of_item'] == "service_type")
+        <h4 class="modal-title layout-modallarge-title item_title">Service</h4>
+    @else
+        <h4 class="modal-title layout-modallarge-title item_title">Item Type</h4>
+    @endif
+     <input type="hidden" id="item_type_container" value="{{isset($data['type_of_item']) ? $data['type_of_item'] : ''}}">
 </div>
 
 <form  action="{{$action}}?item_type=inventory" class="global-submit form_two" id="modal_form_large"  enctype="multipart/form-data" method="post" type_of_item="inventory_type">
-  <div class="clearfix modal-body modallarge-body-layout background-white inventory_type" style="display:none;"> 
+  <div class="clearfix modal-body modallarge-body-layout background-white inventory_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'inventory_type' ? '' : 'display:none;') : 'display:none;'}}"> 
      <!-- INVENTORY -->
     <div class="form-horizontal">
             <div class="col-md-12">
             <!-- class="global-submit form_one" -->
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                     <div class="form-group">
                         <div class="col-md-8">
                             <label>Name *</label>
@@ -54,7 +48,7 @@
                         <div class="col-md-4">
                             <label>Category *</label>
                             <select name="item_category_id" cat_type="inventory" class="form-control drop-down-category inventory" id="item_category_id" required>
-                             @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_inventory])
+                             @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_inventory,'type_id' => $data["item_category_id"]])
                             </select>
                         </div>
                     </div>
@@ -62,7 +56,7 @@
                         <div class="col-md-4">
                             <label>Unit of Measure</label>
                             <select class="form-control input-sm measure_container drop-down-pis-um notbase-um" name="unit_n_based">
-                            @include("member.load_ajax_data.load_pis_um",['_um' => $_um_n, 'id' => isset($um_n_id)])
+                            @include("member.load_ajax_data.load_pis_um",['_um' => $_um_n, 'id_um' => $um_n_id])
                             </select>
                         </div>
                         <div class="col-md-1 text-center">
@@ -71,15 +65,15 @@
                         <div class="col-md-3">
                             <label>.</label>
                             <select class="form-control input-sm measure_container drop-down-pis-um base-um" name="unit_based">
-                            @include("member.load_ajax_data.load_pis_um",['_um' => $_um_b, 'id' => isset($um_n_b_id)])
+                            @include("member.load_ajax_data.load_pis_um",['_um' => $_um_b, 'id_um' => $um_n_b_id])
                             </select>
                         </div>
                         <div class="col-md-4">
                             <label>Quantity</label>
-                            <input type="text" class="form-control input-sm" name="quantity" value="{{isset($data['quantity']) or 1}}">
+                            <input type="text" class="form-control input-sm" name="quantity" value="{{$quantity or 1}}">
                         </div>
                     </div>
-                    <div class="form-group">     
+               <!--      <div class="form-group">     
                         <div class="col-md-4">    
                             <label>Initial quantity on hand *</label>        
                             <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" required>
@@ -92,7 +86,7 @@
                             <label>As of date</label>
                             <input type="text" class="form-control input-sm datepicker" id="item_date_tracked" name="item_date_tracked" value="{{date('m/d/y')}}" >
                         </div>
-                    </div>
+                    </div> -->
                     <div class="form-group">               
                         <div class="col-md-6">
                             <label>Packing Size</label>
@@ -140,11 +134,12 @@
 </form>
 
 <form action="{{$action}}?item_type=noninventory" class="global-submit form_two"  enctype="multipart/form-data"  method="post" type_of_item="noninventory_type">
-   <div class="clearfix modal-body modallarge-body-layout background-white noninventory_type" style="display:none;">  
+   <div class="clearfix modal-body modallarge-body-layout background-white noninventory_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'noninventory_type' ? '' : 'display:none;') : 'display:none;'}}">  
     <!-- NON INVENTORY -->
     <div class="form-horizontal">
         <div class="col-md-12">
             <input type="hidden" name="_token" value="{{csrf_token()}}">
+            <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
              <div class="form-group">
                     <div class="col-md-8">
                         <label>Name *</label>
@@ -165,7 +160,7 @@
                 <div class="col-md-6">
                     <label>Category *</label>
                     <select name="item_category_id" cat_type="noninventory" class="form-control drop-down-category non-inventory" id="item_category_id" required>
-                        @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_noninventory])
+                        @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_noninventory,'type_id' => $data["item_category_id"]])
                     </select>
                 </div>
             </div>
@@ -175,7 +170,7 @@
                 <div class="col-md-4">
                     <label>Unit of Measure</label>
                     <select class="form-control input-sm measure_container drop-down-pis-um notbase-um" name="unit_n_based">
-                    @include("member.load_ajax_data.load_pis_um",['_um' => $_um_n])
+                        @include("member.load_ajax_data.load_pis_um",['_um' => $_um_n, 'id_um' => $um_n_id])
                     </select>
                 </div>
                 <div class="col-md-1 text-center">
@@ -184,12 +179,12 @@
                 <div class="col-md-3">
                     <label>.</label>
                     <select class="form-control input-sm measure_container drop-down-pis-um base-um" name="unit_based">
-                    @include("member.load_ajax_data.load_pis_um",['_um' => $_um_b])
+                        @include("member.load_ajax_data.load_pis_um",['_um' => $_um_b, 'id_um' => $um_n_b_id])
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label>Quantity</label>
-                    <input type="text" class="form-control input-sm" name="quantity" value="{{isset($data['quantity']) or 1}}">
+                    <input type="text" class="form-control input-sm" name="quantity" value="{{$quantity}}">
                 </div>
             </div>
             <div class="form-group">   
@@ -247,12 +242,13 @@
 </form>
 
 <form action="{{$action}}?item_type=service" class="global-submit form_three" method="post" type_of_item="service_type">
-   <div class="clearfix modal-body modallarge-body-layout background-white service_type" style="display:none;"> 
+   <div class="clearfix modal-body modallarge-body-layout background-white service_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'service_type' ? '' : 'display:none;') : 'display:none;'}}"> 
    
     <!-- SERVICE -->
     <div class="form-horizontal">
             <div class="col-md-12">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
+                <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                  <div class="form-group">
                         <div class="col-md-8">
                             <label>Name *</label>
@@ -273,7 +269,7 @@
                     <div class="col-md-6">
                         <label>Category *</label>
                         <select name="item_category_id" cat_type="service" class="form-control drop-down-category services" id="item_category_id" required>
-                         @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_service])
+                         @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_service,'type_id' => $data["item_category_id"]])
                         </select>
                     </div>
                 </div>
@@ -282,7 +278,7 @@
                     <div class="col-md-4">
                         <label>Unit of Measure</label>
                         <select class="form-control input-sm measure_container drop-down-pis-um notbase-um" name="unit_n_based">
-                        @include("member.load_ajax_data.load_pis_um",['_um' => $_um_n])
+                            @include("member.load_ajax_data.load_pis_um",['_um' => $_um_n, 'id_um' => $um_n_id])
                         </select>
                     </div>
                     <div class="col-md-1 text-center">
@@ -291,12 +287,12 @@
                     <div class="col-md-3">
                         <label>.</label>
                         <select class="form-control input-sm measure_container drop-down-pis-um base-um" name="unit_based">
-                        @include("member.load_ajax_data.load_pis_um",['_um' => $_um_b])
+                            @include("member.load_ajax_data.load_pis_um",['_um' => $_um_b, 'id_um' => $um_n_b_id])
                         </select>
                     </div>
                     <div class="col-md-4">
                         <label>Quantity</label>
-                        <input type="text" class="form-control input-sm" name="quantity" value="{{isset($data['quantity']) or 1}}">
+                        <input type="text" class="form-control input-sm" name="quantity" value="{{$quantity}}">
                     </div>
                 </div>
 
@@ -355,8 +351,9 @@
 </form>
 
 <form action="{{$action}}?item_type=bundle" class="global-submit form_four" method="post" type_of_item="bundle_type">
-    <div class="clearfix modal-body modallarge-body-layout background-white bundle_type" style="display:none;">
+    <div class="clearfix modal-body modallarge-body-layout background-white bundle_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'bundle_type' ? '' : 'display:none;') : 'display:none;'}}">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
         <!-- BUNDLE -->
         <div class="form-horizontal">
             <div class="clearfix col-md-12">
@@ -376,7 +373,7 @@
                         <div class="col-md-6">
                             <label>Category *</label>
                             <select name="item_category_id" cat_type="bundle" class="form-control drop-down-category bundles" id="item_category_id" required>
-                             @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_bundle])
+                             @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_bundle,'type_id' => $data["item_category_id"]])
                             </select>
                         </div>
                     </div>
@@ -425,21 +422,29 @@
                             </tr>
                         </thead>
                         <tbody class="tbody-item">
-                            <tr>
-                                <td class="text-center add-tr cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
-                                <td>
-                                    <select class="form-control drop-down-item select-item input-sm pull-left" name="bundle_item_id[]" required>
-                                        @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                    </select>
-                                </td>
-                                <td>
-                                    <select class="form-control drop-down-um-one select-um-one input-sm pull-left" name="bundle_um_id[]">
-                                        <option value=""></option> 
-                                    </select>
-                                </td>   
-                                <td><input class="text-center form-control input-sm" type="text" name="bundle_qty[]"/></td>
-                                <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                            </tr>
+                            @if(isset($data["bundle"]))
+                            @foreach($data["bundle"] as $bundle)
+                                <tr>
+                                    <td class="text-center add-tr cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
+                                    <td>
+                                        <select class="form-control drop-down-item select-item input-sm pull-left" name="bundle_item_id[]" required>
+                                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $bundle["bundle_item_id"]])
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control drop-down-um droplist-um input-sm pull-left" name="bundle_um_id[]">
+                                            @if($bundle['bundle_um_id'])
+                                                @include("member.load_ajax_data.load_one_unit_measure", ['_um' => $_um_multi, 'item_um_id' => $bundle['multi_um_id'], 'selected_um_id' => $bundle['bundle_um_id']])
+                                            @else
+                                                <option class="hidden" value="" />
+                                            @endif
+                                        </select>
+                                    </td>   
+                                    <td><input class="text-center form-control input-sm" type="text" name="bundle_qty[]" value="{{ $bundle['bundle_qty'] }}" /></td>
+                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                </tr>
+                            @endforeach
+                            @endif
                         </tbody>
                     </table>
                 </div>

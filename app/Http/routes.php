@@ -205,6 +205,12 @@ Route::get('/member/item/mulitple_price_modal/{id}', 'Member\ItemController@get_
 Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_multiple_price_modal'); /* B */
 Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_item_new_price'); /* B */
 
+//*ITEM FOR PIS ARCY*/
+Route::any('/member/item/add_submit_pis','Member\ItemController@add_submit_pis');
+Route::any('/member/item/edit_submit_pis','Member\ItemController@edit_submit_pis');
+/*END ITEM FOR PIS*/
+
+
 Route::any("/member/item/view_serials/{id}","Member\ItemSerialController@index");
 Route::any("/member/item/serial_number/{id}",'Member\ItemSerialController@view_serial');
 Route::any("/member/item/save_serial",'Member\ItemSerialController@save_serial');

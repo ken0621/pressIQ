@@ -247,9 +247,15 @@ class ShopCheckoutController extends Shop
 
             /* -------------------------------------------------------------------------- */
 
-            $if_ipay88 = Request::input("ipay88");
             // Check Ipay88 desu~~ </3
-            if (!$if_ipay88) 
+            $if_ipay88 = Request::input("ipay88");
+            dd($if_ipay88);
+            if($if_ipay88 == 1)
+            {
+                Session::forget("ipay88_data");
+                $cart["payment_status"] = 1;
+            }
+            else
             {
                 // Payment Method using E-Wallet
                 if($cart["payment_method_id"] == 6)
@@ -380,11 +386,6 @@ class ShopCheckoutController extends Shop
                         return redirect('/postPaymentWithIPay88');     
                     }             
                 }
-            }
-            elseif($if_ipay88 == 1)
-            {
-                Session::forget("ipay88_data");
-                $cart["payment_status"] = 1;
             }
 
             /* -------------------------------------------------------------------------- */

@@ -32,12 +32,19 @@ class UnitOfMeasurementController extends Member
     {
         $data['um_type'] = Request::input("um_type");
         $data['action'] = '/member/pis/um_add_submit';
-        if(Request::input("id"))
-        {
-            $data['action'] = '/member/pis/um_update_submit';
-        }
 
         return view("member.unit_of_measurement.pis_um.um",$data);
+    }
+    public function edit_um_submit()
+    {
+        $id = Request::input("um_id");
+        $up["um_name"] = Request::input("um_name");
+        $up["um_abbrev"] = Request::input("um_abbrev");
+
+        Tbl_um::where("id",$id)->update($up);
+
+        $data["type"] = "pis-um";
+        return json_encode($data);
     }
     public function add_um_submit()
     {
@@ -71,6 +78,13 @@ class UnitOfMeasurementController extends Member
 
         return json_encode($data);
     }
+    public function um_list_pis()
+    {
+        $data['_um_n'] = Tbl_um::where("um_shop_id",$this->user_info->shop_id)->where("is_based",0)->get();
+        $data['_um_n_b'] = Tbl_um::where("um_shop_id",$this->user_info->shop_id)->where("is_based",1)->get();
+
+        return view("member.unit_of_measurement.pis_um.um_list",$data);
+    }
     public function load_pis_um($type = '')
     {
         $type_1 = 0;
@@ -79,6 +93,14 @@ class UnitOfMeasurementController extends Member
         $data["_um"] = Tbl_um::where("is_based",$type_1)->get();
 
         return view("member.load_ajax_data.load_pis_um",$data);
+    }
+    public function edit_um($id)
+    {
+        $data['id'] = $id;
+        $data['um'] = Tbl_um::where("id",$id)->first();
+        $data['action'] = '/member/pis/um_edit_submit';
+
+        return view("member.unit_of_measurement.pis_um.um",$data);
     }
     public function check()
     {

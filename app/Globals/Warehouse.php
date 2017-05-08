@@ -49,6 +49,103 @@ class Warehouse
             }            
         }
     }
+    public static function insert_item_to_warehouse($warehouse, $item_id, $item_quantity, $item_reorder_point)
+    {        
+        $shop_id = Warehouse::getShopId();
+        $slip_id = 0 ;
+        $inventory_id = 0;
+        if($warehouse == null)
+        {
+            $warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->first();
+            if($warehouse == null)
+            {
+                //MAKE MAIN WAREHOUSE
+                $ins_warehouse["warehouse_name"] = "Main Warehouse";
+                $ins_warehouse["warehouse_shop_id"] = $shop_id;
+                $ins_warehouse["warehouse_created"] = Carbon::now();
+                $ins_warehouse["main_warehouse"] = 1;
+
+                $warehouse_id = Tbl_warehouse::insertGetId($ins_warehouse);
+
+                $ins["warehouse_id"] = $warehouse_id;
+                $ins["item_id"] = $item_id;
+                $ins["item_reorder_point"] = $item_reorder_point;
+
+                Tbl_sub_warehouse::insert($ins);
+
+                $ins_slip["inventory_reason"] = "insert_item";
+                $ins_slip["warehouse_id"] = $warehouse_id;
+                $ins_slip["inventory_remarks"] = "Insert Item";
+                $ins_slip["inventory_slip_date"] = Carbon::now();
+                $ins_slip["inventory_slip_shop_id"] = $shop_id;
+                $ins_slip["inventroy_source_reason"] = "item";
+                $ins_slip["inventory_source_id"] = $item_id;
+
+                $slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
+
+                $ins_inven["inventory_item_id"] = $item_id;
+                $ins_inven["warehouse_id"] = $warehouse_id;
+                $ins_inven["inventory_created"] = Carbon::now();
+                $ins_inven["inventory_count"] = $item_quantity;
+
+                $inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);                       
+            }
+            else
+            {
+                $insert_sub["warehouse_id"] = $warehouse->warehouse_id;
+                $insert_sub["item_id"] = $item_id;
+                $insert_sub["item_reorder_point"] = $item_reorder_point;
+
+                Tbl_sub_warehouse::insert($insert_sub);
+
+                $ins_slip["inventory_reason"] = "insert_item";
+                $ins_slip["warehouse_id"] = $warehouse->warehouse_id;
+                $ins_slip["inventory_remarks"] = "Insert Item";
+                $ins_slip["inventory_slip_date"] = Carbon::now();
+                $ins_slip["inventory_slip_shop_id"] = $shop_id;
+                $ins_slip["inventroy_source_reason"] = "item";
+                $ins_slip["inventory_source_id"] = $item_id;
+
+                $slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
+
+                $ins_inven["inventory_item_id"] = $item_id;
+                $ins_inven["warehouse_id"] =  $warehouse->warehouse_id;
+                $ins_inven["inventory_created"] = Carbon::now();
+                $ins_inven["inventory_count"] = $item_quantity;
+                $ins_inven["inventory_slip_id"] = $slip_id;
+
+                $inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
+            }
+        }
+        else
+        {
+            //
+            $insert_sub["warehouse_id"] = $warehouse->warehouse_id;
+            $insert_sub["item_id"] = $item_id;
+            $insert_sub["item_reorder_point"] = $item_reorder_point;
+
+            Tbl_sub_warehouse::insert($insert_sub);
+
+            $ins_slip["inventory_reason"] = "insert_item";
+            $ins_slip["warehouse_id"] = $warehouse->warehouse_id;
+            $ins_slip["inventory_remarks"] = "Insert Item";
+            $ins_slip["inventory_slip_date"] = Carbon::now();
+            $ins_slip["inventory_slip_shop_id"] = $shop_id;
+            $ins_slip["inventroy_source_reason"] = "item";
+            $ins_slip["inventory_source_id"] = $item_id;
+
+            $slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
+
+            $ins_inven["inventory_item_id"] = $item_id;
+            $ins_inven["warehouse_id"] =  $warehouse->warehouse_id;
+            $ins_inven["inventory_created"] = Carbon::now();
+            $ins_inven["inventory_count"] = $item_quantity;
+            $ins_inven["inventory_slip_id"] = $slip_id;
+
+            $inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
+        }
+        return $inventory_id;
+    }
     public static function insert_access($warehouse_id)
     {
         $ins_access["user_id"] = Warehouse::getUserid();

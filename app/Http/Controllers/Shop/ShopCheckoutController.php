@@ -389,6 +389,7 @@ class ShopCheckoutController extends Shop
     public function submit_using_ipay88($product_summary, $cart)
     {
         // Create Order
+        $cart["order_status"] = "Failed";
         $result = Ec_order::create_ec_order_automatic($cart);
 
         $shop_id= $this->shop_info->shop_id;

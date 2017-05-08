@@ -33,4 +33,13 @@ class Tbl_payroll_payslip extends Model
 
 		return $query;
 	}
+
+	public function scopepayslip($query,$shop_id = 0, $payslip_is_use = 1)
+	{
+		$query->join('tbl_payroll_paper_sizes','tbl_payroll_paper_sizes.payroll_paper_sizes_id','=','tbl_payroll_payslip.payroll_paper_sizes_id')
+			  ->where('tbl_payroll_payslip.shop_id',$shop_id)
+			  ->where('tbl_payroll_payslip.payslip_is_use', $payslip_is_use);
+
+		return $query;
+	}
 }

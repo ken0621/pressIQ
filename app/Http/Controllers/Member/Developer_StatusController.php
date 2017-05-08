@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
 use DB;
 use Request;
+use App\Globals\Item_code;
 class Developer_StatusController extends Member
 {
 	public function index()
@@ -69,5 +70,16 @@ class Developer_StatusController extends Member
 			die('Wrong Password');
 		}
 		die('Success');
+	}
+	public function give_points_ec_order()
+	{
+		$password = Request::input('password');
+		if($password == 'water123')
+		{
+			$id = Request::input('id');
+			Item_code::use_item_code_all_ec_order($id);
+			die('success');
+		}
+		die('wrong password');
 	}
 }

@@ -13,6 +13,7 @@
                 </small>
             </h1>
             <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/accounting/journal" >Create Journal Entry</a>
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/accounting/journal/all-list" >All Journal Entry</a>
         </div>
     </div>
 </div>

@@ -88,6 +88,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
+		<button class="btn btn-custom-primary popup" link="/member/payroll/payroll_process/payroll_explain_computation/{{$emp->payroll_employee_id}}/{{$payroll_period_company_id}}" size="lg" type="button">Computation Details</button>
 		@if($status == 'process')
 		<button class="btn btn-custom-primary popup" link="/member/payroll/payroll_process/modal_create_payroll_adjustment/{{$emp->payroll_employee_id}}/{{$payroll_period_company_id}}" size="sm" type="button">Make Adjustment</button>
 		@endif

@@ -2,7 +2,7 @@
 @section("content")
 <!-- OUR VALUES -->
 <div class="content">
-	<div class="container">
+	<div class="container-fluid">
 		<div class="top-bg-container">
 			<img src="/themes/{{ $shop_theme }}/img/contactus-bg.png">
 			<div class="top-bg-detail-container"><span style="color: #ffc10e;">Contact</span> Us</div>
@@ -81,7 +81,7 @@
 </div>
 <!-- GOOGLE MAP -->
 <div class="map-title-container">
-	<div class="container">
+	<div class="container-fluid">
 		Find Us on Map
 	</div>	
 </div>

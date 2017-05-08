@@ -241,6 +241,11 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/custom_payslip/modal_save_paper_size',"Member\PayrollController@modal_save_paper_size");
 	Route::any('/custom_payslip/save_custom_payslip',"Member\PayrollController@save_custom_payslip");
 	Route::any('/custom_payslip/custom_payslip_show/{id}',"Member\PayrollController@custom_payslip_show");
+	Route::any('/custom_payslip/modal_edit_payslip/{id}',"Member\PayrollController@modal_edit_payslip");
+	Route::any('/custom_payslip/modal_archive_payslip/{archived}/{id}',"Member\PayrollController@modal_archive_payslip");
+	Route::any('/custom_payslip/archive_payslip',"Member\PayrollController@archive_payslip");
+	Route::any('/custom_payslip/modal_update_payslip',"Member\PayrollController@modal_update_payslip");
+	Route::any('/custom_payslip/payslip_use_change',"Member\PayrollController@payslip_use_change");
 	
 	/* PAYROLL CUSTOM PAYSLIP END */
 
@@ -313,6 +318,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_process/ajax_payroll_company_period','Member\PayrollController@ajax_payroll_company_period');
 	Route::any('/payroll_process/process_payroll','Member\PayrollController@process_payroll');
 	Route::any('/payroll_process/payroll_compute_brk_unsaved/{employee_id}/{period_company_id}','Member\PayrollController@payroll_compute_brk_unsaved');
+
+	Route::any('/payroll_process/payroll_explain_computation/{employee_id}/{period_company_id}','Member\PayrollController@payroll_explain_computation');
+	
 	Route::any('/payroll_process/modal_create_payroll_adjustment/{payroll_employee_id}/{payroll_period_company_id}','Member\PayrollController@modal_create_payroll_adjustment');
 	Route::any('/payroll_process/create_payroll_adjustment','Member\PayrollController@create_payroll_adjustment');
 	Route::any('/payroll_process/confirm_remove_adjustment/{id}','Member\PayrollController@confirm_remove_adjustment');
@@ -358,5 +366,13 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_reports/modal_edit_reports/{id}','Member\PayrollController@modal_edit_payroll_reports');
 	Route::any('/payroll_reports/update_payroll_reports','Member\PayrollController@update_payroll_reports');
 	Route::any('/payroll_reports/view_report/{id}','Member\PayrollController@view_report');
+	Route::any('/payroll_reports/download_excel_report','Member\PayrollController@download_excel_report');
+	Route::any('/payroll_reports/date_change_report','Member\PayrollController@date_change_report');
 	/* PAYROLL REPORTS END */
+
+
+	/* GENERATE BANK UPLOAD START */
+	Route::any('/generate_bank','Member\PayrollController@generate_bank');
+	Route::any('/modal_generate_bank/{id}','Member\PayrollController@modal_generate_bank');
+	/* GENERATE BANK UPLOAD END */
 });	 

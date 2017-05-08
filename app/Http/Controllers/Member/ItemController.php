@@ -146,9 +146,16 @@ class ItemController extends Member
 			$shop_id          = $this->user_info->shop_id;
 			$data["data"]	  = Session::get("item_temporary_data");
 			
-			$data["_income"] 	= Accounting::getAllAccount('all',null,['Income','Other Income']);
-			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
-			$data["_expense"] 	= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
+			$data["_income"] 		= Accounting::getAllAccount('all',null,['Income','Other Income']);
+			$data["default_income"] = Tbl_chart_of_account::where("account_code", "accounting-sales")
+									->where("account_shop_id", $shop_id)->pluck("account_id");
+			$data["_asset"] 		= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
+			$data["default_asset"] 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")
+									->where("account_shop_id", $shop_id)->pluck("account_id");
+			$data["_expense"] 		= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
+			$data["default_expense"] = Tbl_chart_of_account::where("account_code", "accounting-expense")
+									->where("account_shop_id", $shop_id)->pluck("account_id");
+
 			$data['_item']  			= Item::get_all_category_item();
 			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 				= UnitMeasurement::load_um();

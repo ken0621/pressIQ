@@ -3,7 +3,7 @@
 <div class="content">
 	<!-- TOP CONTENT -->
 	<div class="top-container">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row clearfix">
 				<!-- HOME SLIDESHOW -->
 				<div class="col-md-8">
@@ -117,7 +117,7 @@ etuer adipiscing elit. </div>
 	</div>
 	<!-- BOTTOM CONTAINER -->
 	<div class="bottom-container">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row clearfix">
 				<div class="col-md-9">
 					<div class="bottom-container-txt">
@@ -134,7 +134,7 @@ etuer adipiscing elit. </div>
 	</div>
 	<!-- GALLERY -->
 	<div class="gallery-container">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="container-title">
 				GALLERY
 			</div>
@@ -168,7 +168,7 @@ etuer adipiscing elit. </div>
 	</div>
 	<!-- WHO WE ARE -->
 	<div class="mid-container">
-		<div class="container">
+		<div class="container-fluid">
 			<div class="row clearfix">
 				<div class="col-md-9">
 					<div class="bottom-container-txt">
@@ -184,7 +184,7 @@ etuer adipiscing elit. </div>
 	</div>
 	<!-- KEY COMPONENTS -->
 	<div class="key-components-container">
-		<div class="container">
+		<div class="container-fluid">
 		<div class="container-title">KEY COMPONENTS</div>
 			<div class="row clearfix element-container">
 				<div class="col-md-3">

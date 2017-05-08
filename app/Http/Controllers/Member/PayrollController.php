@@ -1651,9 +1651,10 @@ class PayrollController extends Member
             $filename = str_random(10). date('ymdhis') . '.' . $file->getClientOriginalExtension();
             return strtolower($filename);
         });
-        $path = '/assets/payroll/company_logo';
+        $path = 'assets/payroll/company_logo';
         if (!file_exists($path)) {
-		    mkdir($path, 0777, true);
+               File::makeDirectory(public_path($path), 0775, true, true);
+		    // mkdir($path, 0777, true);
 		}
         $file->move(public_path($path), $ImagName);
 
@@ -5157,12 +5158,40 @@ class PayrollController extends Member
                                                             ->get();
                array_push($data['_period'], $temp);
           }
-
-          // dd($data);
           
           return view('member.payroll.payroll_approved', $data);
      }
 
+
+     /* payslip start */
+     public function genereate_payslip($id)
+     {
+          $payslip  = Tbl_payroll_payslip::payslip(Self::shop_id())->first();
+          if(empty($payslip))
+          {
+               $payslip  = Tbl_payroll_payslip::payslip(Self::shop_id(), 0)->first();
+          }
+
+
+          $data['payslip']    = $payslip;
+
+          $data['_breakdown']    = array();
+
+          $_record = Tbl_payroll_record::getcompanyrecord($id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
+          foreach($_record as $record)
+          {
+               $compute = Payroll::getrecord_breakdown($record);
+               // $data['_breakdown'] = Self::breakdown_uncompute($compute,'approved');
+               array_push($data['_breakdown'], Self::breakdown_uncompute($compute,'approved'));
+          }
+
+          // dd($data);
+
+          return view('member.payroll.payroll_payslip', $data);
+     }
+
+
+     /* payslip end */
      public function approve_payroll()
      {
           $id       = Request::input('id');

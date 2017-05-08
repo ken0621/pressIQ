@@ -1279,7 +1279,10 @@ class MLM_PlanController extends Member
 	}
 	public function get_basicsettings($marketing_plan_code)
 	{
-	    $data['plan'] = Tbl_mlm_plan::where('marketing_plan_code', $marketing_plan_code)->first();
+        $shop_id = $this->user_info->shop_id;
+	    $data['plan'] = Tbl_mlm_plan::where('marketing_plan_code', $marketing_plan_code)
+        ->where('shop_id', $shop_id)
+        ->first();
 	    return view('member.mlm_plan.mlm_plan_basic', $data);
 	}
 	public static function basic_settings($marketing_plan_code)
@@ -2262,7 +2265,8 @@ class MLM_PlanController extends Member
         $insert['binary_promotions_required_left'] = Request::input('binary_promotions_required_left');
         $insert['binary_promotions_required_right'] = Request::input('binary_promotions_required_right');
         $insert['binary_promotions_item_id'] = Request::input('item_id');
-        $insert['binary_promotions_start_date'] = Carbon::now();
+        $insert['binary_promotions_start_date'] = Request::input('binary_promotions_start_date');
+        $insert['binary_promotions_end_date'] = Request::input('binary_promotions_end_date');
         $count_rewards = Tbl_mlm_plan_binary_promotions::where('binary_promotions_membership_id', $insert['binary_promotions_membership_id'])
         ->where('binary_promotions_item_id', $insert['binary_promotions_item_id'])
         ->count();
@@ -2298,8 +2302,11 @@ class MLM_PlanController extends Member
         $insert['binary_promotions_required_left'] = Request::input('binary_promotions_required_left');
         $insert['binary_promotions_required_right'] = Request::input('binary_promotions_required_right');
         $insert['binary_promotions_item_id'] = Request::input('item_id');
-        $insert['binary_promotions_start_date'] = Carbon::now();
+        // $insert['binary_promotions_start_date'] = Carbon::now();
         $insert['binary_promotions_archive'] = Request::input('submit_type');
+        $insert['binary_promotions_start_date'] = Request::input('binary_promotions_start_date');
+        $insert['binary_promotions_end_date'] = Request::input('binary_promotions_end_date');
+        
         $count = Tbl_mlm_plan_binary_promotions::where('binary_promotions_membership_id', $insert['binary_promotions_membership_id'])
         ->where('binary_promotions_item_id', $insert['binary_promotions_item_id'])
         ->count();

@@ -1,6 +1,5 @@
 @extends('member.layout')
 @section('content')
-
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
@@ -9,11 +8,9 @@
             <h1>
                 <span class="page-title">Journal Entry &raquo; List </span>
                 <small>
-                    List of Journal Entry
+                    List of All Journal Entry
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/accounting/journal" >Create Journal Entry</a>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/accounting/journal/all-list" >All Journal Entry</a>
         </div>
     </div>
 </div>
@@ -28,6 +25,7 @@
                     <thead style="text-transform: uppercase">
                         <tr>
                             <th>Journal No</th>
+                            <th>Transaction Type</th>
                             <th>Date</th>
                             <th>Total</th>
                             <th>Action</th>
@@ -38,11 +36,14 @@
                         @foreach($_journal as $journal)
                             <tr>
                                 <td>{{$journal->je_id}}</td>
+                                <td>
+                                    <a href="{{$journal->txn_link}}">{{$journal->je_reference_module}}</a>
+                                </td>
                                 <td>{{dateFormat($journal->je_entry_date)}}</td>
                                 <td>{{currency("PHP",$journal->total)}}</td>
                                 <td class="text-center">
                                     <div class="btn-group">
-                                        <a class="btn btn-primary btn-grp-primary" href="/member/accounting/journal?id={{$journal->je_id}}">Edit</a>
+                                        <a class="btn btn-primary btn-grp-primary" href="/member/accounting/journal/entry/{{$journal->je_reference_module}}/{{$journal->je_reference_id}}">View</a>
                                     </div>
                                 </td>
                             </tr>
@@ -53,7 +54,5 @@
             </div>
         </div>
     </div>
-    
-    
 </div>
 @endsection

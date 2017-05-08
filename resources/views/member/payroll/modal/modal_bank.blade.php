@@ -24,7 +24,7 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Upload Date</small>
-				<input type="text" name="upload_date" class="form-control datepicker" required>
+				<input type="text" name="upload_date" value="{{date('m/d/Y')}}" class="form-control datepicker" required>
 			</div>
 			<div class="col-md-6">
 				<small>Batch No.</small>

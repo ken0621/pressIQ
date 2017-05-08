@@ -286,7 +286,7 @@ class ShopCheckoutController extends Shop
                         return Redirect::back()->withErrors($send)->withInput();
                     }
                 break;
-                case 8: submit_using_ipay88(); break;
+                case 8: $this->submit_using_ipay88(); break;
                 default:
                 break;
             }

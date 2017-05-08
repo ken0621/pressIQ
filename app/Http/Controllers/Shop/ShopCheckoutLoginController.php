@@ -10,7 +10,7 @@ class ShopCheckoutLoginController extends Shop
 {
     public function index()
     {
-        $data["page"] = "Career";
-        return view("career", $data);
+        $data["page"] = "Checkout - Login";
+        return view("checkout_login", $data);
     }
 }

@@ -18,6 +18,7 @@ use Redirect;
 use Request;
 use View;
 use Session;
+use Carbon\Carbon;
 use App\Globals\Mlm_seed;
 class Member extends Controller
 {
@@ -35,6 +36,7 @@ class Member extends Controller
 
 			/* CHECK IF USERNAME DOESN'T EXIST IN DB - REDIRECT TO FRONTPAGE */
 			$user_info = Tbl_user::where("user_email", session('user_email'))->shop()->first();
+			// dd($user_info);
 			if(!$user_info)
 			{
 				return Redirect::to('/')->send();
@@ -131,7 +133,7 @@ class Member extends Controller
 		}
 
 		View::share("_page", Utilities::filterPageList());
-		
+		View::share('carbon_now', Carbon::now()->format('Y-m-d'));
 		/* Seeding */
 		Seed_manual::auto_seed();
 

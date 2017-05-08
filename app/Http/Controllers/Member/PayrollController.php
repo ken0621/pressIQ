@@ -1664,7 +1664,7 @@ class PayrollController extends Member
         	$session_logo = 'company_logo_update';
         }
 
-        Session::put($session_logo,$path.'/'.$ImagName);
+        Session::put($session_logo,'/'.$path.'/'.$ImagName);
 
         return '/'.$path.'/'.$ImagName;
 	}

@@ -11,6 +11,7 @@ use Validator;
 use Carbon\Carbon;
 use URL;
 use Session;
+use DB;
 
 use App\Globals\Mlm_slot_log;
 use App\Globals\Item_code;
@@ -147,8 +148,23 @@ class ShopCheckoutController extends Shop
 
             // Get sum
             $sum = 0;
+
+            $i = 0;
+            $len = count($get_cart['cart']);
+
             foreach ($get_cart['cart'] as $key => $value) 
             {
+                if ($i == $len - 1) 
+                {
+                    $product_summary = $value["cart_product_information"]["product_name"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["cart_product_information"]["product_current_price"]) . "";
+                }
+                else
+                {
+                    $product_summary = $value["cart_product_information"]["product_name"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["cart_product_information"]["product_current_price"]) . ", ";
+                }
+
+                $i++;
+
                 array_push($invline_item_id, $value["product_id"]);
                 array_push($invline_discount, $value["cart_product_information"]["product_discounted_value"]);
                 array_push($invline_rate, $value["cart_product_information"]["product_price"]);
@@ -156,7 +172,7 @@ class ShopCheckoutController extends Shop
                 array_push($invline_discount_remark, "");
                 array_push($invline_description, "");
                 array_push($invline_service_date, date('Y-m-d H:i:s'));
-                $add_sum = ($value["cart_product_information"]["product_price"]- $value["cart_product_information"]["product_discounted_value"]) * $value["quantity"];
+                $add_sum = ($value["cart_product_information"]["product_price"] - $value["cart_product_information"]["product_discounted_value"]) * $value["quantity"];
                 $sum += $add_sum;
             }
 
@@ -323,36 +339,51 @@ class ShopCheckoutController extends Shop
                 /* iPay88 */
                 elseif ($cart["payment_method_id"] == 8)
                 {
-                    $prodDesc = '';
-                    //dd(Request::input("payment_method_id"));
                     $shop_id= $this->shop_info->shop_id;
                     $online_payment_api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)
-                                            ->where('api_gateway_id', "6")
-                                            ->first();
-                    $full_name          = Request::input("customer_first_name").' '
-                                            .Request::input("customer_middle_name").' '
-                                            .Request::input("customer_last_name");
-                    
+                                                              ->where('api_gateway_id', "6")
+                                                              ->first();
 
-                    $data = array(
-                        'merchantKey'  => $online_payment_api->api_secret_id,
-                        'merchantCode'  => $online_payment_api->api_client_id,
-                        'paymentId'     => 1, //Optional value 1=credit card 5=bancnet
-                        'refNo'         => 'ref1234',
-                        'amount'        => '15.00',
-                        'currency'      => "PHP",
-                        'prodDesc'      => $cart["invline_item_id"][0],
-                        'userName'      => $full_name,
-                        'userEmail'     => Request::input("customer_email"),
-                        'userContact'   => Request::input("customer_mobile"),
-                        'remark'        => 'Some Remarks Here!',
-                        'lang'          => 'UTF-8',
-                        'responseUrl'   => URL::to('/ipay88_response'),
-                        'backendUrl'    => URL::to('/ipay88_response')
-                        );
+                    $full_name          = Request::input("customer_first_name") . ' '
+                                            . Request::input("customer_middle_name") . ' '
+                                            . Request::input("customer_last_name");
 
-                    Session::put('ipay88', $data);
-                    return redirect('/postPaymentWithIPay88');                  
+                    $reference_number = $this->shop_info->shop_id . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9);
+                    $exist_reference  = DB::table("tbl_ipay88_logs")->where("shop_id", $this->shop_info->shop_id)->where("log_reference_number", $reference_number)->first();
+
+                    if ($exist_reference) 
+                    {
+                        return Redirect::back()->with('fail', 'Some error occurred. Please try again.');
+                    }
+                    else
+                    {
+                        $ipay88 = array(
+                            'merchantKey'   => $online_payment_api->api_secret_id,
+                            'merchantCode'  => $online_payment_api->api_client_id,
+                            'paymentId'     => 1, //Optional value 1=credit card 5=bancnet
+                            'refNo'         => $reference_number,
+                            'amount'        => '15.00',
+                            'currency'      => "PHP",
+                            'prodDesc'      => $product_summary,
+                            'userName'      => $full_name,
+                            'userEmail'     => Request::input("customer_email"),
+                            'userContact'   => Request::input("customer_mobile"),
+                            'remark'        => 'Some Remarks Here!',
+                            'lang'          => 'UTF-8',
+                            'responseUrl'   => URL::to('/ipay88_response'),
+                            'backendUrl'    => URL::to('/ipay88_response')
+                            );
+
+                        $ipay88_logs["log_reference_number"] = $ipay88['refNo'];
+                        $ipay88_logs["log_amount"] = $ipay88['amount'];
+                        $ipay88_logs["log_description"] = $ipay88['prodDesc'];
+                        $ipay88_logs["shop_id"] = $this->shop_info->shop_id;
+
+                        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+                        
+                        Session::put('ipay88', $ipay88);
+                        return redirect('/postPaymentWithIPay88');     
+                    }             
                 }
             }
             else
@@ -407,9 +438,12 @@ class ShopCheckoutController extends Shop
     /*Ipay88 Function*/
     public function postPaymentWithIPay88()
     {
+        echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
+
         $data = Session::get('ipay88');
         
-        $requestpayment = new RequestPayment( $data["merchantKey"]);
+        $requestpayment = new RequestPayment($data["merchantKey"]);
+
         $this->_data = array(
             'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
             'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
@@ -426,7 +460,9 @@ class ShopCheckoutController extends Shop
             'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
             'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
             );
-        /*dd($this->_data);*/
+        
+        Session::forget('ipay88');
+
         RequestPayment::make($data["merchantKey"], $this->_data);     
     }
 

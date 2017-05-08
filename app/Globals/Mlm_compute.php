@@ -92,9 +92,9 @@ class Mlm_compute
                             }
                             else if($tbl_mlm_binary_setttings->binary_settings_auto_placement == "auto_balance")
                             {
-                                // $a = Mlm_tree::auto_place_slot_binary_auto_balance($slot_info);
-                                    $a = Mlm_tree::auto_place_slot_binary_auto_balance_revised($slot_info);
-                                }
+                            // $a = Mlm_tree::auto_place_slot_binary_auto_balance($slot_info);
+                                $a = Mlm_tree::auto_place_slot_binary_auto_balance_revised($slot_info);
+                            }
                         }
                     }
                 }
@@ -125,9 +125,13 @@ class Mlm_compute
                 // no income for fs.
             }
 
+
+
             // check if there are cd graduate
             $b = Mlm_complan_manager_cd::graduate_check($slot_info);
             // $c = Mlm_gc::slot_gc($slot_id);
+
+            Mlm_compute::set_slot_nick_name_2($slot_info);
         // End Computation Plan
 	}
     public static function get_slot_info($slot_id)
@@ -374,11 +378,20 @@ class Mlm_compute
     }
     public static function set_slot_nick_name_2($slot_info)
     {
-        $count_customer = Tbl_mlm_slot::where('slot_owner', $slot_info->slot_owner)-count();
+        $count_customer = Tbl_mlm_slot::where('slot_owner', $slot_info->slot_owner)
+        ->where('slot_defaul', 1)
+        ->count();
         if($count_customer == 0)
         {
             $update['slot_defaul'] = 1;
-            // $update['slot_nick_name'] = 
+
+            $last_name = strtolower(substr($slot_info->last_name, 0, 6));
+            $first_name = strtolower(substr($slot_info->first_name, 0, 3));
+
+            $nickname = $last_name . '.' . $first_name;
+            $update['slot_nick_name'] = $nickname;
+
+            Tbl_mlm_slot::where('slot_id', $slot_info->slot_id)->update($update);
         }
     }
     public static function set_slot_nick_name($slot_info)

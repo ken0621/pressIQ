@@ -75,6 +75,10 @@ Route::post('/member/developer/auto_entry/instant_add_slot', 'Member\Developer_A
 
 Route::any('/member/developer/simulate', 'Member\Developer_RematrixController@simulate'); //EVERYONE
 Route::any('/member/developer/simulate/submit', 'Member\Developer_RematrixController@simulate_submit'); //EVERYONE
+
+Route::any('/member/developer/reset_slot', 'Member\Developer_StatusController@reset_slot'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit', 'Member\Developer_StatusController@reset_slot_submit'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/give', 'Member\Developer_StatusController@give_points_ec_order'); //GUILLERMO TABLIGAN
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */
@@ -202,6 +206,12 @@ Route::get('/member/item/mulitple_price_modal/{id}', 'Member\ItemController@get_
 Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_multiple_price_modal'); /* B */
 Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_item_new_price'); /* B */
 
+//*ITEM FOR PIS ARCY*/
+Route::any('/member/item/add_submit_pis','Member\ItemController@add_submit_pis');
+Route::any('/member/item/edit_submit_pis','Member\ItemController@edit_submit_pis');
+/*END ITEM FOR PIS*/
+
+
 Route::any("/member/item/view_serials/{id}","Member\ItemSerialController@index");
 Route::any("/member/item/serial_number/{id}",'Member\ItemSerialController@view_serial');
 Route::any("/member/item/save_serial",'Member\ItemSerialController@save_serial');
@@ -232,6 +242,13 @@ Route::any('/member/item/um/select_type','Member\UnitOfMeasurementController@sel
 Route::any('/member/item/unit_of_measurement/{id}/{action}','Member\UnitOfMeasurementController@archived');
 Route::any('/member/item/unit_of_measurement/archived_submit','Member\UnitOfMeasurementController@archived_submit');
 /* END U/M ARCY*/
+
+/*PIS UM*/
+Route::any('/member/pis/um_add','Member\UnitOfMeasurementController@add_um');
+Route::any('/member/pis/um_add_submit','Member\UnitOfMeasurementController@add_um_submit');
+Route::any('/member/pis/load_pis_um/{type}','Member\UnitOfMeasurementController@load_pis_um');
+/*END PIS UM*/
+
 
 /*PIS*/
 Route::any('/member/item/um/',"Member\UnitOfMeasurementController@check");
@@ -887,3 +904,5 @@ Route::any("/member/load_position","Member\EmployeePositionController@load_posit
 include_once('routes_config/routes_payroll.php');
 
 /* PAYROLL END */
+
+

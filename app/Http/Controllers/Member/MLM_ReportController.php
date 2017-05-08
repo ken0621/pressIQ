@@ -45,6 +45,7 @@ use App\Globals\Mlm_report;
 use App\Globals\Pdf_global;
 use App\Models\Tbl_membership_code_invoice;
 use App\Models\Tbl_item_code_invoice;
+use App\Models\Tbl_warehouse;
 use Crypt;
 class MLM_ReportController extends Member
 {
@@ -201,9 +202,20 @@ class MLM_ReportController extends Member
         $invoice_m_f = Tbl_membership_code_invoice::where('shop_id', $shop_id)->orderBy('membership_code_invoice_id', 'ASC')->get()->first();
         $invoice_m_t = Tbl_membership_code_invoice::where('shop_id', $shop_id)->orderBy('membership_code_invoice_id', 'DESC')->get()->first();
         $data['report_list']['membership_code_sales_report'] = 'Membership Sales Report';
-        $data['report_list_d']['membership_code_sales_report']['from'] =  $invoice_m_f->membership_code_date_created;
-        $data['report_list_d']['membership_code_sales_report']['to'] =  $invoice_m_t->membership_code_date_created;
-        $data['report_list_d']['membership_code_sales_report']['count'] = $invoice_m;
+        if($invoice_m)
+        {
+            $data['report_list_d']['membership_code_sales_report']['from'] =  $invoice_m_f->membership_code_date_created;
+            $data['report_list_d']['membership_code_sales_report']['to'] =  $invoice_m_t->membership_code_date_created;
+            $data['report_list_d']['membership_code_sales_report']['count'] = $invoice_m;
+        }
+        else
+        {
+            $data['report_list_d']['membership_code_sales_report']['from'] =  Carbon::now();
+            $data['report_list_d']['membership_code_sales_report']['to'] =  Carbon::now();
+            $data['report_list_d']['membership_code_sales_report']['count'] = 0;
+        }
+        
+
         // yyyy-MM-dd
         // createFromFormat
 
@@ -222,12 +234,23 @@ class MLM_ReportController extends Member
         {
             $data['report_list_d'][$key]['from'] = Carbon::parse($value['from'])->format('Y-m-d');
             $data['report_list_d'][$key]['to'] = Carbon::parse($value['to'])->format('Y-m-d');
+            $data['report_list_d'][$key]['cashiers'] = 'hide';
+            $data['report_list_d'][$key]['warehouse'] = 'hide';
+
+            if($key == 'product_sales_report_warehouse' || $key == 'product_sales_report')
+            {
+                $data['report_list_d'][$key]['cashiers'] = 'show';
+                $data['report_list_d'][$key]['warehouse'] = 'show';
+            }
         }
         $report_get = Request::input('report_choose');
         if($report_get != null)
         {
             return $this->get_report();
         }
+
+        $data['users'] = Tbl_user::where('user_shop', $shop_id)->where('archived', 0)->get();
+        $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get();
         return view('member.mlm_report.index', $data);
     }
     public function get_report()

@@ -61,7 +61,7 @@
                                                 <label>{{$sir_item->item_name}}</label>
                                             </td>                                            
                                             <td>
-                                                <label>{{$sir_item->item_qty}} {{$sir_item->um_abbrev}} </label>
+                                                <label>{{$sir_item->item_qty}} {{$sir_item->um_abbrev or 'PC'}} </label>
                                             </td>
                                             <td>
                                                 <label>{{$sir_item->sold_qty}}</label>

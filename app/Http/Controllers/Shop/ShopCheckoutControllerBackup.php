@@ -152,8 +152,6 @@ class ShopCheckoutController extends Shop
             $i = 0;
             $len = count($get_cart['cart']);
 
-
-            /* REASTRUCTURE */
             foreach ($get_cart['cart'] as $key => $value) 
             {
                 if ($i == $len - 1) 
@@ -249,52 +247,43 @@ class ShopCheckoutController extends Shop
 
             /* -------------------------------------------------------------------------- */
 
-
-            switch ($cart["payment_method_id"])
-            {
-                case 6: 
-                    if(Self::$slot_now != null)
-                    {
-                        $check_wallet = $this->check_wallet(Self::$slot_now);
-                        if($check_wallet >= $sum )
-                        {
-                            // return $check_wallet;
-                            $log = 'Thank you for purchasing. ' .$sum. ' is deducted to your wallet';
-                            $arry_log['wallet_log_slot'] = Self::$slot_now->slot_id;
-                            $arry_log['shop_id'] = Self::$slot_now->shop_id;
-                            $arry_log['wallet_log_slot_sponsor'] = Self::$slot_now->slot_id;
-                            $arry_log['wallet_log_details'] = $log;
-                            $arry_log['wallet_log_amount'] = $sum * (-1);
-                            $arry_log['wallet_log_plan'] = "REPURCHASE";
-                            $arry_log['wallet_log_status'] = "released";   
-                            $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
-                            
-
-                            $cart["order_status"] = "Processing";
-                        }
-                        else
-                        {
-                            $send['errors'][0] = "Your wallet only have, " . number_format($check_wallet) . ' where the needed amount is ' . number_format($sum) ;
-                            return Redirect::back()
-                                ->withErrors($send)
-                                ->withInput();
-                        }
-                    }
-                    else
-                    {
-                        $send['errors'][0] = "Only members with slot can use the wallet option.";
-                        return Redirect::back()->withErrors($send)->withInput();
-                    }
-                break;
-                case 8: submit_using_ipay88(); break;
-                default:
-                break;
-            }
-
             // Payment Method using E-Wallet
             if($cart["payment_method_id"] == 6)
             {
+                if(Self::$slot_now != null)
+                {
+                    $check_wallet = $this->check_wallet(Self::$slot_now);
+                    if($check_wallet >= $sum )
+                    {
+                        // return $check_wallet;
+                        $log = 'Thank you for purchasing. ' .$sum. ' is deducted to your wallet';
+                        $arry_log['wallet_log_slot'] = Self::$slot_now->slot_id;
+                        $arry_log['shop_id'] = Self::$slot_now->shop_id;
+                        $arry_log['wallet_log_slot_sponsor'] = Self::$slot_now->slot_id;
+                        $arry_log['wallet_log_details'] = $log;
+                        $arry_log['wallet_log_amount'] = $sum * (-1);
+                        $arry_log['wallet_log_plan'] = "REPURCHASE";
+                        $arry_log['wallet_log_status'] = "released";   
+                        $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                        
 
+                        $cart["order_status"] = "Processing";
+                    }
+                    else
+                    {
+                        $send['errors'][0] = "Your wallet only have, " . number_format($check_wallet) . ' where the needed amount is ' . number_format($sum) ;
+                        return Redirect::back()
+                            ->withErrors($send)
+                            ->withInput();
+                    }
+                }
+                else
+                {
+                    $send['errors'][0] = "Only members with slot can use the wallet option.";
+                    return Redirect::back()
+                        ->withErrors($send)
+                        ->withInput();
+                }
             }
             // Payment Method With Proof of Payment
             elseif($cart["payment_method_id"] != 1 && $cart["payment_method_id"] != 2 && $cart["payment_method_id"] != 8)
@@ -342,6 +331,50 @@ class ShopCheckoutController extends Shop
             {
                 dd("Under Maintenance");           
             }
+            /* iPay88 */
+            elseif ($cart["payment_method_id"] == 8)
+            {
+                $shop_id= $this->shop_info->shop_id;
+                $online_payment_api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)
+                                                          ->where('api_gateway_id', "6")
+                                                          ->first();
+
+                $full_name          = Request::input("customer_first_name") . ' '
+                                        . Request::input("customer_middle_name") . ' '
+                                        . Request::input("customer_last_name");
+
+                $reference_number = $this->shop_info->shop_id . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9);
+                $exist_reference  = DB::table("tbl_ipay88_logs")->where("shop_id", $this->shop_info->shop_id)->where("log_reference_number", $reference_number)->first();
+
+                if ($exist_reference) 
+                {
+                    return Redirect::back()->with('fail', 'Some error occurred. Please try again.');
+                }
+                else
+                {
+                    $ipay88 = array(
+                        'merchantKey'   => $online_payment_api->api_secret_id,
+                        'merchantCode'  => $online_payment_api->api_client_id,
+                        'paymentId'     => 1, //Optional value 1=credit card 5=bancnet
+                        'refNo'         => $reference_number,
+                        'amount'        => '15.00',
+                        'currency'      => "PHP",
+                        'prodDesc'      => $product_summary,
+                        'userName'      => $full_name,
+                        'userEmail'     => Request::input("customer_email"),
+                        'userContact'   => Request::input("customer_mobile"),
+                        'remark'        => 'Some Remarks Here!',
+                        'lang'          => 'UTF-8',
+                        'responseUrl'   => URL::to('/ipay88_response'),
+                        'backendUrl'    => URL::to('/ipay88_response')
+                        );
+                    
+                    Session::put('ipay88', $ipay88);
+                    Session::put('ipay88_data', Request::input());
+
+                    return redirect('/postPaymentWithIPay88');     
+                }             
+            }
             
             /* -------------------------------------------------------------------------- */
 
@@ -385,49 +418,6 @@ class ShopCheckoutController extends Shop
             // Redirect
             return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
         }
-    }
-    public function submit_using_ipay88()
-    {
-        $shop_id= $this->shop_info->shop_id;
-        $online_payment_api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)
-                                                  ->where('api_gateway_id', "6")
-                                                  ->first();
-
-        $full_name          = Request::input("customer_first_name") . ' '
-                                . Request::input("customer_middle_name") . ' '
-                                . Request::input("customer_last_name");
-
-        $reference_number = $this->shop_info->shop_id . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9);
-        $exist_reference  = DB::table("tbl_ipay88_logs")->where("shop_id", $this->shop_info->shop_id)->where("log_reference_number", $reference_number)->first();
-
-        if ($exist_reference) 
-        {
-            return Redirect::back()->with('fail', 'Some error occurred. Please try again.');
-        }
-        else
-        {
-            $ipay88 = array(
-                'merchantKey'   => $online_payment_api->api_secret_id,
-                'merchantCode'  => $online_payment_api->api_client_id,
-                'paymentId'     => 1, //Optional value 1=credit card 5=bancnet
-                'refNo'         => $reference_number,
-                'amount'        => '15.00',
-                'currency'      => "PHP",
-                'prodDesc'      => $product_summary,
-                'userName'      => $full_name,
-                'userEmail'     => Request::input("customer_email"),
-                'userContact'   => Request::input("customer_mobile"),
-                'remark'        => 'Some Remarks Here!',
-                'lang'          => 'UTF-8',
-                'responseUrl'   => URL::to('/ipay88_response'),
-                'backendUrl'    => URL::to('/ipay88_response')
-                );
-            
-            Session::put('ipay88', $ipay88);
-            Session::put('ipay88_data', Request::input());
-
-            return redirect('/postPaymentWithIPay88');     
-        }  
     }
     /*Ipay88 Function*/
     public function postPaymentWithIPay88()

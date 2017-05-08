@@ -308,6 +308,7 @@ class Accounting
 					break;
 				case "sales-order":
 					break;
+				case "mlm-product-repurchase":
 				case "sales-receipt":
 				case "invoice":
 					/* INCOME ACCOUNT */
@@ -380,7 +381,7 @@ class Accounting
 					$line_data["entry_type"] 	= Accounting::normalBalance($account);
 					$line_data["account_id"] 	= $account;
 					Accounting::insertJournalLine($line_data);
-					break;
+					break;	
 				// SO ON
 			}
 		}
@@ -560,6 +561,13 @@ class Accounting
 				$data["newContraJournal"] 	= 'contraAccount';
 				return $data;
 				break;
+			case 'mlm-product-repurchase':
+				$data["main_account"]		= 'cash';
+				$data["name"] 				= 'customer';
+				$data["newNormalJournal"] 	= 'normalBalance';
+				$data["newContraJournal"] 	= 'contraAccount';
+				return $data;
+				break;	
 			case '':
 				$data["main_account"]		= 'cash';
 				$data["name"] 				= '';

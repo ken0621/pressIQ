@@ -286,7 +286,7 @@ class ShopCheckoutController extends Shop
                         return Redirect::back()->withErrors($send)->withInput();
                     }
                 break;
-                case 8: $this->submit_using_ipay88(); break;
+                case 8: $this->submit_using_ipay88($product_summary); break;
                 default:
                 break;
             }
@@ -386,7 +386,7 @@ class ShopCheckoutController extends Shop
             return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
         }
     }
-    public function submit_using_ipay88()
+    public function submit_using_ipay88($product_summary)
     {
         $shop_id= $this->shop_info->shop_id;
         $online_payment_api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)

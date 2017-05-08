@@ -249,7 +249,7 @@ class ShopCheckoutController extends Shop
 
             /* -------------------------------------------------------------------------- */
 
-
+  
             switch ($cart["payment_method_id"])
             {
                 case 6: 
@@ -388,6 +388,7 @@ class ShopCheckoutController extends Shop
     }
     public function submit_using_ipay88($product_summary)
     {
+
         $shop_id= $this->shop_info->shop_id;
         $online_payment_api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)
                                                   ->where('api_gateway_id', "6")

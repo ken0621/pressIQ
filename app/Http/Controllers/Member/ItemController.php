@@ -891,6 +891,7 @@ class ItemController extends Member
 		$shop_id = $this->user_info->shop_id;
 
 		$item_id = Request::input("item_id");
+		$price = 0;
 
 		$old = Tbl_item::where("item_id",$item_id)->first()->toArray();
 
@@ -928,7 +929,6 @@ class ItemController extends Member
 		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->pluck("account_id");
 		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->pluck("account_id");
 
-		$item_id = 0;
 		if($item_type == "inventory")
 		{			
 			$update["item_type_id"]				    = 1; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
@@ -1107,7 +1107,6 @@ class ItemController extends Member
 			$_um 	= Request::input('bundle_um_id');
 			$_qty 	= Request::input('bundle_qty');
 
-			$item_id = "";
 			$message   = [];
 			$validator = Validator::make($update, $rules, $message);
 			if($validator->fails())

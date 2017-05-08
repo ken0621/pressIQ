@@ -249,7 +249,6 @@ class ShopCheckoutController extends Shop
 
             // Check Ipay88 desu~~ </3
             $if_ipay88 = Request::input("ipay88");
-            dd($if_ipay88);
             if($if_ipay88 == 1)
             {
                 Session::forget("ipay88_data");

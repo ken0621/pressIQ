@@ -129,7 +129,6 @@ class Payroll_BioImportController extends Member
 		$file 		= Request::file('file');
 		$biometric 	= Request::input('biometric');
 
-		
 
 		if($biometric == 'ZKTime 5.0')
 		{
@@ -329,8 +328,9 @@ class Payroll_BioImportController extends Member
     public function import_manual($file)
     {
     	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
+
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','date','time_in','time_out'));
-    	// dd($_time);
+    	
     	if(isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['time_in']) && isset($_time[0]['time_out']))
     	{
 

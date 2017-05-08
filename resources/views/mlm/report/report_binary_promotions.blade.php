@@ -3,7 +3,6 @@
 <div class="row">
     <div class="col-md-12">
         {!! $header !!}
-        <form method="POST">
         <div class="panel panel-default panel-block">
             <div class="list-group">
                 <div class="list-group-item" id="responsive-bordered-table">
@@ -77,24 +76,42 @@
                                             </div>
                                             <div class="col-md-6">{{$current_r[$key]}}</div>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="col-md-6">
+                                                Promo End Date:
+                                            </div>
+                                            <div class="col-md-6">{{$value->binary_promotions_end_date}}</div>
+                                        </div>
                                         <div class="col-md-12">
                                             <span class="pull-right">
-                                            @if($value->binary_promotions_no_of_units > $value->binary_promotions_no_of_units_used)
-                                                @if($current_l[$key] >= $value->binary_promotions_required_left)
-                                                    @if($current_r[$key] >= $value->binary_promotions_required_right)
-                                                        @if($req_count[$key] == 0)
-                                                        <button class="btn btn-primary" form="form_{{$value->binary_promotions_id}}">Request</button>
+                                            @if($now >= $value->binary_promotions_start_date)
+                                            @if($value->binary_promotions_end_date >=  $now)
+                                                @if($value->binary_promotions_no_of_units > $value->binary_promotions_no_of_units_used)
+                                                    @if($current_l[$key] >= $value->binary_promotions_required_left)
+                                                        @if($current_r[$key] >= $value->binary_promotions_required_right)
+                                                        @if($claim_count_account[$key] === 0)
+                                                            @if($req_count[$key] == 0)
+                                                            <button class="btn btn-primary" form="form_{{$value->binary_promotions_id}}" onClick="$(this).addClass('hide')">Request</button>
+                                                            @else
+                                                            Already Claimed this promotion.
+                                                            @endif
                                                         @else
-                                                        Already Claimed this promotion.
+                                                            Already Claimed this promotion, in this account.
+                                                        @endif
+                                                        @else
+                                                            Insufficient Points.
                                                         @endif
                                                     @else
                                                         Insufficient Points
                                                     @endif
                                                 @else
-                                                    Insufficient Points
+                                                    All Stock Taken
                                                 @endif
                                             @else
-                                                All Stock Taken
+                                                    Promotion Already Expired
+                                            @endif            
+                                            @else
+                                                    Date Not Reached
                                             @endif
                                             </span>
                                         </div>
@@ -104,18 +121,25 @@
                             </tbody>
                         </table>
                         <div class="hide">
+
                         @foreach($promotions as $key => $value)    
+                        @if($now >= $value->binary_promotions_start_date)
+                        @if($value->binary_promotions_end_date >=  $now)
                             @if($value->binary_promotions_no_of_units > $value->binary_promotions_no_of_units_used)
                                 @if($current_l[$key] >= $value->binary_promotions_required_left)
                                     @if($current_r[$key] >= $value->binary_promotions_required_right)
-                                        @if($req_count[$key] == 0)
-                                        <form  id="form_{{$value->binary_promotions_id}}" method="post" action="/mlm/report/binary_promotions/request" class="global-submit">
-                                            {!! csrf_field() !!}
-                                            <input type="hidden" name="binary_promotions_id" value="{{$value->binary_promotions_id}}">
-                                        </form>
+                                        @if($claim_count_account[$key] == 0)
+                                            @if($req_count[$key] == 0)
+                                            <form  id="form_{{$value->binary_promotions_id}}" method="post" action="/mlm/report/binary_promotions/request">
+                                                {!! csrf_field() !!}
+                                                <input type="hidden" name="binary_promotions_id" value="{{$value->binary_promotions_id}}">
+                                            </form>
+                                            @else
+                                            Already Claimed this promotion.
+                                            @endif
                                         @else
-                                        Already Claimed this promotion.
-                                        @endif
+                                            Already Claimed this promotion in this account
+                                        @endif    
                                     @else
                                         Insufficient Points
                                     @endif
@@ -125,6 +149,12 @@
                             @else
                                 All Stock Taken
                             @endif
+                        @else
+                                Promotion Already Expired
+                        @endif            
+                        @else
+                                Date Not Reached
+                        @endif
                         @endforeach    
                         </div>
                         </div>
@@ -133,8 +163,6 @@
                 </div>              
             </div>
         </div> 
-        
-        </form> 
         <div>
 
     </div>

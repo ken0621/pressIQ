@@ -2262,7 +2262,8 @@ class MLM_PlanController extends Member
         $insert['binary_promotions_required_left'] = Request::input('binary_promotions_required_left');
         $insert['binary_promotions_required_right'] = Request::input('binary_promotions_required_right');
         $insert['binary_promotions_item_id'] = Request::input('item_id');
-        $insert['binary_promotions_start_date'] = Carbon::now();
+        $insert['binary_promotions_start_date'] = Request::input('binary_promotions_start_date');
+        $insert['binary_promotions_end_date'] = Request::input('binary_promotions_end_date');
         $count_rewards = Tbl_mlm_plan_binary_promotions::where('binary_promotions_membership_id', $insert['binary_promotions_membership_id'])
         ->where('binary_promotions_item_id', $insert['binary_promotions_item_id'])
         ->count();
@@ -2298,8 +2299,11 @@ class MLM_PlanController extends Member
         $insert['binary_promotions_required_left'] = Request::input('binary_promotions_required_left');
         $insert['binary_promotions_required_right'] = Request::input('binary_promotions_required_right');
         $insert['binary_promotions_item_id'] = Request::input('item_id');
-        $insert['binary_promotions_start_date'] = Carbon::now();
+        // $insert['binary_promotions_start_date'] = Carbon::now();
         $insert['binary_promotions_archive'] = Request::input('submit_type');
+        $insert['binary_promotions_start_date'] = Request::input('binary_promotions_start_date');
+        $insert['binary_promotions_end_date'] = Request::input('binary_promotions_end_date');
+        
         $count = Tbl_mlm_plan_binary_promotions::where('binary_promotions_membership_id', $insert['binary_promotions_membership_id'])
         ->where('binary_promotions_item_id', $insert['binary_promotions_item_id'])
         ->count();

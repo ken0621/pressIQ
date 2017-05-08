@@ -116,14 +116,8 @@ class MLM_SlotController extends Member
     }
     public function index()
     {
-        // $slot = Mlm_compute::get_slot_info(397);
-        // $settings = Tbl_mlm_binary_pairing::orderBy("pairing_point_left", "desc")
-            // ->where('pairing_point_left', '!=', 0)
-            // ->where('pairing_point_right', '!=', 0)
-            // ->where('pairing_bonus', '!=', 0)
-            // ->where('pairing_archive', 0)
-            // ->where('membership_id', $slot->slot_membership)->first(); 
-        // return Mlm_complan_manager::binary_single_line_richard($slot, $settings, 500);
+        // $slot = Mlm_compute::get_slot_info(410);
+        // return Mlm_complan_manager::binary_pairing($slot);
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {

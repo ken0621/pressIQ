@@ -1184,8 +1184,9 @@ class Payroll
 		$data['total_rh']					= 0;
 		$data['total_sh']					= 0;
 		$data['total_worked_days']			= 0;
-
 		$data['adjustment']					= array();
+
+		$data['_details']					= array();
 
 
 		$tax_status 	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_tax_status');
@@ -1309,10 +1310,13 @@ class Payroll
 
 			$data['daily_rate'] = $daily_rate;
 
+
+			$absent_deduction = 0;
 			/* compute absent */
 			if($approved->absent)
 			{
 				$data['absent_deduction'] += $daily_rate;
+				$absent_deduction	  	  = $daily_rate;
 				$data['absent_count']++;
 			}
 
@@ -1547,11 +1551,114 @@ class Payroll
 				$late_deduction = $late_hours * $hourly_rate;
 			}
 
-			$data['under_time'] = $under_time * $daily_rate;
+			$data['under_time'] += $under_time * $daily_rate;
 
 			$data['late_deduction']	+= round($late_deduction, 2);
 
 			// array_push($dd_array, $late_deduction);
+
+
+			$details['date'] 						= $start;
+			$details['extra_salary'] 				= $extra_day['regular'];
+			$details['extra_early_overtime'] 		= $extra_day['early_overtime'];
+			$details['extra_reg_overtime'] 			= $extra_day['late_overtime'];
+			$details['extra_night_diff'] 			= $extra_day['night_differential'];
+			$details['regular_salary'] 				= $regular_day['regular'];
+			$details['regular_early_overtime'] 		= $regular_day['early_overtime'];
+			$details['regular_reg_overtime'] 		= $regular_day['late_overtime'];
+			$details['regular_night_diff'] 			= $regular_day['night_differential'];
+			$details['rest_day_salary'] 			= $regular_day_rest['regular'];
+			$details['rest_day_early_overtime'] 	= $regular_day_rest['early_overtime'];
+			$details['rest_day_reg_overtime'] 		= $regular_day_rest['late_overtime'];
+			$details['rest_day_night_diff'] 		= $regular_day_rest['night_differential'];
+			$details['rest_day_sh'] 				= $special_holiday_rest['regular'];
+			$details['rest_day_sh_early_overtime'] 	= $special_holiday_rest['early_overtime'];
+			$details['rest_day_sh_reg_overtime'] 	= $special_holiday_rest['late_overtime'];
+			$details['rest_day_sh_night_diff'] 		= $special_holiday_rest['night_differential'];
+			$details['rest_day_rh'] 				= $legal_holiday_rest['regular'];
+			$details['rest_day_rh_early_overtime'] 	= $legal_holiday_rest['early_overtime'];
+			$details['rest_day_rh_reg_overtime'] 	= $legal_holiday_rest['late_overtime'];
+			$details['rest_day_rh_night_diff'] 		= $legal_holiday_rest['night_differential'];
+			$details['rh_salary'] 					= $legal_holiday['regular'];
+			$details['rh_early_overtime'] 			= $legal_holiday['early_overtime'];
+			$details['rh_reg_overtime'] 			= $legal_holiday['late_overtime'];
+			$details['rh_night_diff'] 				= $legal_holiday['night_differential'];
+			$details['sh_salary'] 					= $special_holiday['regular'];
+			$details['sh_early_overtime'] 			= $special_holiday['early_overtime'];
+			$details['sh_reg_overtime'] 			= $special_holiday['late_overtime'];
+			$details['sh_night_diff'] 				= $special_holiday['night_differential'];
+			$details['cola'] 						= $temp_cola;
+			$details['late_deduction']				= round($late_deduction, 2);
+			$details['under_time']					= round(($under_time * $daily_rate), 2);
+			$details['absent_deduction']			= round($absent_deduction, 2);
+			$details['leave']						= 0;
+
+			$details['total_early_ot']				= $extra_day['early_overtime'] + $regular_day['early_overtime'] + $regular_day_rest['early_overtime'] + $special_holiday_rest['early_overtime'] + $legal_holiday_rest['early_overtime'] + $legal_holiday['early_overtime'] + $special_holiday['early_overtime'];
+
+			$details['total_reg_ot']				= $extra_day['late_overtime'] + $regular_day['late_overtime'] + $regular_day_rest['late_overtime'] + $special_holiday_rest['late_overtime'] + $legal_holiday_rest['late_overtime'] + $legal_holiday['late_overtime'] + $special_holiday['late_overtime'];
+
+			$details['total_rest_days']				= $regular_day_rest['regular'] + $special_holiday_rest['regular'] + $legal_holiday_rest['regular'];
+
+			$details['total_night_differential']	= $extra_day['night_differential'] + $regular_day['night_differential'] + $regular_day_rest['night_differential'] + $special_holiday_rest['night_differential'] + $legal_holiday_rest['night_differential'] + $legal_holiday['night_differential'] + $special_holiday['night_differential'];
+
+
+
+			if($group->payroll_group_salary_computation == 'Flat Rate')
+			{
+				$details['date'] 						= $start;
+				$details['extra_salary'] 				= 0;
+				$details['extra_early_overtime'] 		= 0;
+				$details['extra_reg_overtime'] 			= 0;
+				$details['extra_night_diff'] 			= 0;
+				$details['regular_salary'] 				= 0;
+				$details['regular_early_overtime'] 		= 0;
+				$details['regular_reg_overtime'] 		= 0;
+				$details['regular_night_diff'] 			= 0;
+				$details['rest_day_salary'] 			= 0;
+				$details['rest_day_early_overtime'] 	= 0;
+				$details['rest_day_reg_overtime'] 		= 0;
+				$details['rest_day_night_diff'] 		= 0;
+				$details['rest_day_sh'] 				= 0;
+				$details['rest_day_sh_early_overtime'] 	= 0;
+				$details['rest_day_sh_reg_overtime'] 	= 0;
+				$details['rest_day_sh_night_diff'] 		= 0;
+				$details['rest_day_rh'] 				= 0;
+				$details['rest_day_rh_early_overtime'] 	= 0;
+				$details['rest_day_rh_reg_overtime'] 	= 0;
+				$details['rest_day_rh_night_diff'] 		= 0;
+				$details['rh_salary'] 					= 0;
+				$details['rh_early_overtime'] 			= 0;
+				$details['rh_reg_overtime'] 			= 0;
+				$details['rh_night_diff'] 				= 0;
+				$details['sh_salary'] 					= 0;
+				$details['sh_early_overtime'] 			= 0;
+				$details['sh_reg_overtime'] 			= 0;
+				$details['sh_night_diff'] 				= 0;
+				$details['cola'] 						= 0;
+				$details['late_deduction']				= 0;
+				$details['under_time']					= 0;
+				$details['absent_deduction']			= 0;
+				$details['leave']						= 0;
+				$details['total_early_ot']				= 0;
+				$details['total_reg_ot']				= 0;
+				$details['total_rest_days']				= 0;
+				$details['total_night_differential']	= 0;
+			}
+
+			if($group->payroll_group_salary_computation == 'Monthly Rate')
+			{
+
+			}
+
+			if($group->payroll_group_salary_computation == 'Daily Rate')
+			{
+
+			}
+
+
+
+			array_push($data['_details'], $details);
+
 
 			$start = Carbon::parse($start)->addDay()->format("Y-m-d");
 
@@ -1559,6 +1666,7 @@ class Payroll
 
 		// dd($dd_array);
 		$payroll_group_salary_computation = $group->payroll_group_salary_computation;
+		$data['payroll_group_salary_computation'] = $payroll_group_salary_computation;
 		// dd($data);
 
 		$monthly_salary = $data['salary_monthly'];

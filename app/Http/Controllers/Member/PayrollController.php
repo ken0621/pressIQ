@@ -9,6 +9,7 @@ use Redirect;
 use Session;
 use Excel;
 use DB;
+use Response;
 
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_rdo;
@@ -4401,6 +4402,44 @@ class PayrollController extends Member
 
      }
 
+
+     public function payroll_explain_computation($employee_id, $payroll_period_company_id)
+     {
+          $period = Tbl_payroll_period_company::sel($payroll_period_company_id)->first();
+
+          $process = Payroll::compute_per_employee($employee_id, $period->payroll_period_start, $period->payroll_period_end, Self::shop_id(), $period->payroll_period_category, $payroll_period_company_id);
+
+          $data['emp'] = Tbl_payroll_employee_basic::where('payroll_employee_id',$employee_id)->first();
+          $data['period'] = date('F d, Y', strtotime($period->payroll_period_start)).' to '.date('F d, Y', strtotime($period->payroll_period_end));
+          $data['_details'] = $process['_details'];
+
+          $collect = collect($process['_details']);
+          
+          $data['total_regular_salary']      = $collect->sum('regular_salary');
+          $data['total_late_deduction']      = $collect->sum('late_deduction');
+          $data['total_under_time']          = $collect->sum('under_time');
+          $data['total_absent_deduction']    = $collect->sum('absent_deduction');
+          $data['total_early_ot']            = $collect->sum('total_early_ot');
+          $data['total_reg_ot']              = $collect->sum('total_reg_ot');
+          $data['total_rest_days']           = $collect->sum('total_rest_days');
+          $data['total_extra_salary']        = $collect->sum('extra_salary');
+          $data['total_night_differential']  = $collect->sum('total_night_differential');
+          $data['total_sh_salary']           = $collect->sum('sh_salary');
+          $data['total_rh_salary']           = $collect->sum('rh_salary');
+          $data['total_cola']                = $collect->sum('cola');
+          $data['total_leave']               = $collect->sum('leave');
+
+
+          return view('member.payroll.modal.modal_view_computation_details', $data);
+     }
+
+
+     public function computation_details($details = array())
+     {
+          $data = array();
+     }
+
+
      public function breakdown_uncompute($process = array(), $status = 'processed')
      {
           // dd($process);
@@ -6369,9 +6408,27 @@ class PayrollController extends Member
      /* PAYROLL REPORTS END */
 
      /* BANKING START */
-     public function generate_bank($id)
+
+     public function modal_generate_bank($id)
+     {
+          $data['_bank'] = Tbl_payroll_bank_convertion::orderBy('bank_name')->get();
+          $data['id']    = $id;
+          return view('member.payroll.modal.modal_bank', $data);
+     }
+
+     public function generate_bank()
      {
 
+          $company_period_id = Request::input('company_period_id');
+          $bank_name = Request::input('bank_name');
+          $upload_date = Request::input('upload_date');
+          $batch_no = Request::input('batch_no');
+
+
+          $fileText = "This is some text\tThis test belongs to my file download\r\nBooyah";
+          $myName = "ThisDownload.txt";
+          $headers = ['Content-type'=>'text/plain', 'test'=>'YoYo', 'Content-Disposition'=>sprintf('attachment; filename="%s"', $myName),'X-BooYAH'=>'WorkyWorky','Content-Length'=>sizeof($fileText)];
+          return Response::make($fileText, 200, $headers);
      }
 
      /* BANKING END */

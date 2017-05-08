@@ -24,11 +24,6 @@
                                 @include("member.load_ajax_data.load_item_category", ['add_search' => $value->binary_promotions_item_id, 'item_id' => $value->binary_promotions_item_id])
                             </select>
                       </div>
-                      <div class="col-md-1">
-                        <label>Promo Start Date:</label>
-                        <input type="text" class="form-control" value="{{$value->binary_promotions_start_date}}" readonly>
-
-                      </div>
                       <div class="col-md-2">
                           <label>Required Left </label>
                           <input type="number" class="form-control" value="{{$value->binary_promotions_required_left}}" name="binary_promotions_required_left">
@@ -41,15 +36,22 @@
                           <label>No. Of Units</label>
                           <input type="number" class="form-control" value="{{$value->binary_promotions_no_of_units}}" name="binary_promotions_no_of_units">
                       </div>
-                      <div class="col-md-1">
+                      <div class="col-md-2">
                         <label>Submit</label><br>
                         <input type="hidden" class="submit_type" name="submit_type" value="0">
                         <button class="btn btn-primary" name="archive" value="0" onClick="$('.submit_type').val(0)">Edit</button>
                         <button class="btn btn-primary" name="archive" value="1" onClick="$('.submit_type').val(1)">Archive</button>
                       </div>
                       <div class="col-md-12">
-                          
                       </div>
+                          <div class="col-md-2">
+                            <label>Promotion Start Date</label>
+                            <input type="date" class="form-control" name="binary_promotions_start_date" value="{{Carbon\Carbon::parse($value->binary_promotions_start_date)->format('Y-m-d')}}">
+                          </div>
+                          <div class="col-md-2">
+                            <label>Promotion End Date</label>
+                            <input type="date" class="form-control" name="binary_promotions_end_date" value="{{Carbon\Carbon::parse($value->binary_promotions_end_date)->format('Y-m-d')}}">
+                          </div>
                       </form>
                   </td> 
                </tr>
@@ -66,7 +68,7 @@
                               @endforeach
                           </select>
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                             <label>Item</label>
                             <select class="drop-down-item" name="item_id">
                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
@@ -84,13 +86,20 @@
                           <label>No. Of Units</label>
                           <input type="number" class="form-control" value="0" name="binary_promotions_no_of_units">
                       </div>
-                      <div class="col-md-1">
+                      <div class="col-md-2">
                         <label>Submit</label><br>
                         <button class="btn btn-primary" onclick="">Save</button>
                       </div>
                       <div class="col-md-12">
-                          
                       </div>
+                          <div class="col-md-2">
+                            <label>Promotion Start Date</label>
+                            <input type="date" class="form-control" name="binary_promotions_start_date" value="{{$carbon_now}}">
+                          </div>
+                          <div class="col-md-2">
+                            <label>Promotion End Date</label>
+                            <input type="date" class="form-control" name="binary_promotions_end_date" value="{{$carbon_now}}">
+                          </div>
                       </form>
                   </td> 
                </tr>

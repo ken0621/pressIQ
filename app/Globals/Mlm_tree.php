@@ -24,13 +24,27 @@ class Mlm_tree
 {   
     public static function insert_tree_placement($slot_info, $new_slot, $level)
     {
+        
         if($slot_info != null)
         {
             $old_level   = $level;
             $upline_info = Tbl_mlm_slot::id($slot_info->slot_placement)->first();
-
+            
             /*CHECK IF TREE IS ALREADY EXIST*/
-            $check_if_exist = Tbl_tree_placement::where("placement_tree_child_id",$new_slot->slot_id)->first();
+            if($upline_info)
+            {
+                $check_if_exist = Tbl_tree_placement::where("placement_tree_child_id",$new_slot->slot_id)
+                ->where('placement_tree_level', '=', $level)
+                ->where('placement_tree_parent_id', '=', $upline_info->slot_id)
+                ->first();
+            }
+            else
+            {
+                $check_if_exist = Tbl_tree_placement::where("placement_tree_child_id",$new_slot->slot_id)
+                ->where('placement_tree_level', '=', $level)
+                ->first();
+            }
+            
             if(!$check_if_exist)
             {  
                 if($upline_info)
@@ -44,7 +58,6 @@ class Mlm_tree
                     $level++;
                     Mlm_tree::insert_tree_placement($upline_info, $new_slot, $level);  
                 }  
-
                 if($old_level == 1)
                 {
                     MLM_tree::update_auto_balance_position($new_slot,$old_level);

@@ -1666,7 +1666,7 @@ class PayrollController extends Member
 
         Session::put($session_logo,$path.'/'.$ImagName);
 
-        return $path.'/'.$ImagName;
+        return '/'.$path.'/'.$ImagName;
 	}
 
 	public function modal_save_company()

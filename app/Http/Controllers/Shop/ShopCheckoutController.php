@@ -570,7 +570,6 @@ class ShopCheckoutController extends Shop
         Tbl_item_code_item::insert($insert_item_per);
 
         Item_code::use_item_code_all_ec_order($order_id);
-
     }
     public function check_wallet($slot_now)
     {

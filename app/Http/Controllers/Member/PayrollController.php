@@ -6413,20 +6413,37 @@ class PayrollController extends Member
      {
           $data['_bank'] = Tbl_payroll_bank_convertion::orderBy('bank_name')->get();
           $data['id']    = $id;
+          $data['company'] = Tbl_payroll_company::getbyperiod($id)->first();
           return view('member.payroll.modal.modal_bank', $data);
      }
 
      public function generate_bank()
      {
 
-          $company_period_id = Request::input('company_period_id');
-          $bank_name = Request::input('bank_name');
-          $upload_date = Request::input('upload_date');
-          $batch_no = Request::input('batch_no');
+          $company_period_id  = Request::input('company_period_id');
+          $bank_name          = Request::input('bank_name');
+          $upload_date        = date('mdy',strtotime(Request::input('upload_date')));
+          $batch_no           = Request::input('batch_no');
+          $company_code       = Request::input('company_code');
 
+          if($batch_no <= 9)
+          {
+               $batch_no = '0'.$batch_no;
+          }
 
-          $fileText = "This is some text\tThis test belongs to my file download\r\nBooyah";
-          $myName = "ThisDownload.txt";
+          $_record = Tbl_payroll_record::getcompanyrecord($company_period_id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
+
+          $fileText = '';
+
+          foreach($_record as $record)
+          {
+               $compute = Payroll::getrecord_breakdown($record);
+               $compute['payroll_employee_atm_number'];
+               $compute['total_net'];
+               $fileText .= $compute['payroll_employee_atm_number']."\t".number_format($compute['total_net'], 2,'.','')."\r\n";
+          }
+
+          $myName = $company_code.$upload_date.$batch_no.".txt";
           $headers = ['Content-type'=>'text/plain', 'test'=>'YoYo', 'Content-Disposition'=>sprintf('attachment; filename="%s"', $myName),'X-BooYAH'=>'WorkyWorky','Content-Length'=>sizeof($fileText)];
           return Response::make($fileText, 200, $headers);
      }

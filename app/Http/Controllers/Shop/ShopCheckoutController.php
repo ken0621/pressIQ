@@ -11,6 +11,7 @@ use Validator;
 use Carbon\Carbon;
 use URL;
 use Session;
+use DB;
 
 use App\Globals\Mlm_slot_log;
 use App\Globals\Item_code;
@@ -147,8 +148,23 @@ class ShopCheckoutController extends Shop
 
             // Get sum
             $sum = 0;
+
+            $i = 0;
+            $len = count($get_cart['cart']);
+
             foreach ($get_cart['cart'] as $key => $value) 
             {
+                if ($i == $len - 1) 
+                {
+                    $product_summary = $value["cart_product_information"]["product_name"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["cart_product_information"]["product_current_price"]) . "";
+                }
+                else
+                {
+                    $product_summary = $value["cart_product_information"]["product_name"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["cart_product_information"]["product_current_price"]) . ", ";
+                }
+
+                $i++;
+
                 array_push($invline_item_id, $value["product_id"]);
                 array_push($invline_discount, $value["cart_product_information"]["product_discounted_value"]);
                 array_push($invline_rate, $value["cart_product_information"]["product_price"]);
@@ -156,7 +172,7 @@ class ShopCheckoutController extends Shop
                 array_push($invline_discount_remark, "");
                 array_push($invline_description, "");
                 array_push($invline_service_date, date('Y-m-d H:i:s'));
-                $add_sum = ($value["cart_product_information"]["product_price"]- $value["cart_product_information"]["product_discounted_value"]) * $value["quantity"];
+                $add_sum = ($value["cart_product_information"]["product_price"] - $value["cart_product_information"]["product_discounted_value"]) * $value["quantity"];
                 $sum += $add_sum;
             }
 
@@ -230,126 +246,150 @@ class ShopCheckoutController extends Shop
             }
 
             /* -------------------------------------------------------------------------- */
-            
-            // Payment Method using E-Wallet
-            if($cart["payment_method_id"] == 6)
-            {
-                if(Self::$slot_now != null)
-                {
-                    $check_wallet = $this->check_wallet(Self::$slot_now);
-                    if($check_wallet >= $sum )
-                    {
-                        // return $check_wallet;
-                        $log = 'Thank you for purchasing. ' .$sum. ' is deducted to your wallet';
-                        $arry_log['wallet_log_slot'] = Self::$slot_now->slot_id;
-                        $arry_log['shop_id'] = Self::$slot_now->shop_id;
-                        $arry_log['wallet_log_slot_sponsor'] = Self::$slot_now->slot_id;
-                        $arry_log['wallet_log_details'] = $log;
-                        $arry_log['wallet_log_amount'] = $sum * (-1);
-                        $arry_log['wallet_log_plan'] = "REPURCHASE";
-                        $arry_log['wallet_log_status'] = "released";   
-                        $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
-                        
 
-                        $cart["order_status"] = "Processing";
+            $ipay88 = Session::get("ipay88");
+            // Check Ipay88 desu~~ </3
+            if (!$ipay88) 
+            {
+                // Payment Method using E-Wallet
+                if($cart["payment_method_id"] == 6)
+                {
+                    if(Self::$slot_now != null)
+                    {
+                        $check_wallet = $this->check_wallet(Self::$slot_now);
+                        if($check_wallet >= $sum )
+                        {
+                            // return $check_wallet;
+                            $log = 'Thank you for purchasing. ' .$sum. ' is deducted to your wallet';
+                            $arry_log['wallet_log_slot'] = Self::$slot_now->slot_id;
+                            $arry_log['shop_id'] = Self::$slot_now->shop_id;
+                            $arry_log['wallet_log_slot_sponsor'] = Self::$slot_now->slot_id;
+                            $arry_log['wallet_log_details'] = $log;
+                            $arry_log['wallet_log_amount'] = $sum * (-1);
+                            $arry_log['wallet_log_plan'] = "REPURCHASE";
+                            $arry_log['wallet_log_status'] = "released";   
+                            $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                            
+
+                            $cart["order_status"] = "Processing";
+                        }
+                        else
+                        {
+                            $send['errors'][0] = "Your wallet only have, " . number_format($check_wallet) . ' where the needed amount is ' . number_format($sum) ;
+                            return Redirect::back()
+                                ->withErrors($send)
+                                ->withInput();
+                        }
                     }
                     else
                     {
-                        $send['errors'][0] = "Your wallet only have, " . number_format($check_wallet) . ' where the needed amount is ' . number_format($sum) ;
+                        $send['errors'][0] = "Only members with slot can use the wallet option.";
                         return Redirect::back()
                             ->withErrors($send)
                             ->withInput();
                     }
                 }
-                else
+                // Payment Method With Proof of Payment
+                elseif($cart["payment_method_id"] != 1 && $cart["payment_method_id"] != 2 && $cart["payment_method_id"] != 8)
                 {
-                    $send['errors'][0] = "Only members with slot can use the wallet option.";
-                    return Redirect::back()
-                        ->withErrors($send)
-                        ->withInput();
-                }
-            }
-            // Payment Method With Proof of Payment
-            elseif($cart["payment_method_id"] != 1 && $cart["payment_method_id"] != 2 && $cart["payment_method_id"] != 8)
-            {
-                $shop_id    = $this->shop_info->shop_id;
-                $shop_key   = $this->shop_info->shop_key;
+                    $shop_id    = $this->shop_info->shop_id;
+                    $shop_key   = $this->shop_info->shop_key;
 
-                /* SAVE THE IMAGE IN THE FOLDER */
-                $file               = Input::file('payment_upload');
+                    /* SAVE THE IMAGE IN THE FOLDER */
+                    $file               = Input::file('payment_upload');
 
-                if ($file) 
-                {
-                    $extension          = $file->getClientOriginalExtension();
-                    $filename           = str_random(15).".".$extension;
-                    $destinationPath    = 'uploads/'.$shop_key."-".$shop_id.'/ecommerce-upload';
-
-                    if(!File::exists($destinationPath)) 
+                    if ($file) 
                     {
-                        $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
-                    }
+                        $extension          = $file->getClientOriginalExtension();
+                        $filename           = str_random(15).".".$extension;
+                        $destinationPath    = 'uploads/'.$shop_key."-".$shop_id.'/ecommerce-upload';
 
-                    $upload_success    = Input::file('payment_upload')->move($destinationPath, $filename);
+                        if(!File::exists($destinationPath)) 
+                        {
+                            $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+                        }
 
-                    /* SAVE THE IMAGE PATH IN THE DATABASE */
-                    $image_path = $destinationPath."/".$filename;
+                        $upload_success    = Input::file('payment_upload')->move($destinationPath, $filename);
 
-                    if( $upload_success ) 
-                    {
-                       $cart['payment_upload'] = "/" . $image_path;
-                    } 
-                    else 
-                    {
-                       return Redirect::back()->with('fail', 'Image upload failed. Please try again.');
+                        /* SAVE THE IMAGE PATH IN THE DATABASE */
+                        $image_path = $destinationPath."/".$filename;
+
+                        if( $upload_success ) 
+                        {
+                           $cart['payment_upload'] = "/" . $image_path;
+                        } 
+                        else 
+                        {
+                           return Redirect::back()->with('fail', 'Image upload failed. Please try again.');
+                        }
                     }
                 }
-            }
-            // Payment Method with Payment Facility (Temporary)
+                // Payment Method with Payment Facility (Temporary)
 
-            /* Credit Card */
-            elseif ($cart["payment_method_id"] == 1) 
+                /* Credit Card */
+                elseif ($cart["payment_method_id"] == 1) 
+                {
+                    dd("Under Maintenance");
+                }
+                /* Paypal */
+                elseif ($cart["payment_method_id"] == 2)
+                {
+                    dd("Under Maintenance");           
+                }
+                /* iPay88 */
+                elseif ($cart["payment_method_id"] == 8)
+                {
+                    $shop_id= $this->shop_info->shop_id;
+                    $online_payment_api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)
+                                                              ->where('api_gateway_id', "6")
+                                                              ->first();
+
+                    $full_name          = Request::input("customer_first_name") . ' '
+                                            . Request::input("customer_middle_name") . ' '
+                                            . Request::input("customer_last_name");
+
+                    $reference_number = $this->shop_info->shop_id . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9) . rand(1, 9);
+                    $exist_reference  = DB::table("tbl_ipay88_logs")->where("shop_id", $this->shop_info->shop_id)->where("log_reference_number", $reference_number)->first();
+
+                    if ($exist_reference) 
+                    {
+                        return Redirect::back()->with('fail', 'Some error occurred. Please try again.');
+                    }
+                    else
+                    {
+                        $ipay88 = array(
+                            'merchantKey'   => $online_payment_api->api_secret_id,
+                            'merchantCode'  => $online_payment_api->api_client_id,
+                            'paymentId'     => 1, //Optional value 1=credit card 5=bancnet
+                            'refNo'         => $reference_number,
+                            'amount'        => '15.00',
+                            'currency'      => "PHP",
+                            'prodDesc'      => $product_summary,
+                            'userName'      => $full_name,
+                            'userEmail'     => Request::input("customer_email"),
+                            'userContact'   => Request::input("customer_mobile"),
+                            'remark'        => 'Some Remarks Here!',
+                            'lang'          => 'UTF-8',
+                            'responseUrl'   => URL::to('/ipay88_response'),
+                            'backendUrl'    => URL::to('/ipay88_response')
+                            );
+
+                        $ipay88_logs["log_reference_number"] = $ipay88['refNo'];
+                        $ipay88_logs["log_amount"] = $ipay88['amount'];
+                        $ipay88_logs["log_description"] = $ipay88['prodDesc'];
+                        $ipay88_logs["shop_id"] = $this->shop_info->shop_id;
+
+                        DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+                        
+                        Session::put('ipay88', $ipay88);
+                        return redirect('/postPaymentWithIPay88');     
+                    }             
+                }
+            }
+            else
             {
+                Session::forget("ipay88");
                 $cart["payment_status"] = 1;
-            }
-            /* Paypal */
-            elseif ($cart["payment_method_id"] == 2)
-            {
-
-                            
-            }
-            /* iPay88 */
-            elseif ($cart["payment_method_id"] == 8)
-            {
-                $prodDesc = '';
-                //dd(Request::input("payment_method_id"));
-                $shop_id= $this->shop_info->shop_id;
-                $online_payment_api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)
-                                        ->where('api_gateway_id', "6")
-                                        ->first();
-                $full_name          = Request::input("customer_first_name").' '
-                                        .Request::input("customer_middle_name").' '
-                                        .Request::input("customer_last_name");
-                
-
-                $data = array(
-                    'merchantKey'  => $online_payment_api->api_secret_id,
-                    'merchantCode'  => $online_payment_api->api_client_id,
-                    'paymentId'     => 1, //Optional value 1=credit card 5=bancnet
-                    'refNo'         => 'ref1234',
-                    'amount'        => '15.00',
-                    'currency'      => "PHP",
-                    'prodDesc'      => $cart["invline_item_id"][0],
-                    'userName'      => $full_name,
-                    'userEmail'     => Request::input("customer_email"),
-                    'userContact'   => Request::input("customer_mobile"),
-                    'remark'        => 'Some Remarks Here!',
-                    'lang'          => 'UTF-8',
-                    'responseUrl'   => URL::to('/ipay88_response'),
-                    'backendUrl'    => URL::to('/ipay88_response')
-                    );
-
-                return redirect('/postPaymentWithIPay88')->with('data', $data);                  
-
             }
 
             /* -------------------------------------------------------------------------- */
@@ -395,6 +435,52 @@ class ShopCheckoutController extends Shop
             return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
         }
     }
+    /*Ipay88 Function*/
+    public function postPaymentWithIPay88()
+    {
+        echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
+
+        $data = Session::get('ipay88');
+        
+        $requestpayment = new RequestPayment($data["merchantKey"]);
+
+        $this->_data = array(
+            'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
+            'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
+            'refNo'         => $requestpayment->setRefNo($data["refNo"]),
+            'amount'        => $requestpayment->setAmount($data["amount"]),
+            'currency'      => $requestpayment->setCurrency($data["currency"]),
+            'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
+            'userName'      => $requestpayment->setUserName($data["userName"]),
+            'userEmail'     => $requestpayment->setUserEmail($data["userEmail"]),
+            'userContact'   => $requestpayment->setUserContact($data["userContact"]),
+            'remark'        => $requestpayment->setRemark($data["remark"]),
+            'lang'          => $requestpayment->setLang($data["lang"]),
+            'signature'     => $requestpayment->getSignature(),
+            'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
+            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
+            );
+        
+        Session::forget('ipay88');
+
+        RequestPayment::make($data["merchantKey"], $this->_data);     
+    }
+
+    public function ipay88_response()
+    {
+        $request = Request::all();
+        /*dd($request['Status']);*/
+        if($request['Status'] == 0)
+        {
+            return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');    
+        } 
+        else 
+        {
+            dd('Success!');       
+        }
+        
+    }
+    /*End Ipay88*/
     public function give_product_code($cart, $slot_info, $order_id)
     {
         // $ec_order = Tbl_ec_order::
@@ -491,46 +577,4 @@ class ShopCheckoutController extends Shop
         $data["page"] = "Checkout - Add to Cart";
         return view("addto_cart", $data);
     }
-
-
-    /*Ipay88 Function*/
-    public function postPaymentWithIPay88()
-    {
-        $data = Session::get('data');
-        
-        $requestpayment = new RequestPayment( $data["merchantKey"]);
-        $this->_data = array(
-            'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
-            'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
-            'refNo'         => $requestpayment->setRefNo($data["refNo"]),
-            'amount'        => $requestpayment->setAmount($data["amount"]),
-            'currency'      => $requestpayment->setCurrency($data["currency"]),
-            'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
-            'userName'      => $requestpayment->setUserName($data["userName"]),
-            'userEmail'     => $requestpayment->setUserEmail($data["userEmail"]),
-            'userContact'   => $requestpayment->setUserContact($data["userContact"]),
-            'remark'        => $requestpayment->setRemark($data["remark"]),
-            'lang'          => $requestpayment->setLang($data["lang"]),
-            'signature'     => $requestpayment->getSignature(),
-            'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
-            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
-            );
-        /*dd($this->_data);*/
-        RequestPayment::make($data["merchantKey"], $this->_data);     
-    }
-
-    public function ipay88_response()
-    {
-        $request = Request::all();
-        /*dd($request['Status']);*/
-        if($request['Status'] == 0)
-        {
-            return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');    
-        } else {
-
-            dd('Success!');       
-        }
-        
-    }
-    /*End Ipay88*/
 }

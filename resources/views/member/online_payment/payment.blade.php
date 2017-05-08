@@ -109,21 +109,17 @@
 						            		<input type="hidden" name="gateway_code_name" class="form-control input-sm" value="{{$gateway->gateway_code_name}}">
 						            		<input type="hidden" name="api_gateway_id" class="form-control input-sm" value="{{$gateway->gateway_id}}">
 						            		@if($gateway->gateway_code_name != 'other')
-						            			
-						            			@if($gateway->gateway_code_name == 6)
-
-						            				<div class="form-group col-md-12">
+						            			@if($gateway->gateway_code_name == "ipay-88")
+					            					<div class="form-group col-md-12">
 									                    <label>Merchant Code</label>
 									                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->client_id or ''}}">
 									                </div>
 									                <div class="form-group col-md-12">
 									                    <label>Merchant Key</label>
 									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->secret_id or ''}}">
-									                </div>								                
-
-						            			@else
-
-						            				<div class="form-group col-md-12">
+									                </div>
+								                @else
+									                <div class="form-group col-md-12">
 									                    <label>Client ID</label>
 									                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->client_id or ''}}">
 									                </div>
@@ -131,13 +127,10 @@
 									                    <label>Secret ID</label>
 									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->secret_id or ''}}">
 									                </div>
-
-						            			@endif            				
-												
+								                @endif
 								                <div class="col-md-12">
 								            		<button type="submit" class="panel-buttons btn btn-custom-primary pull-right">save</button>
 								            	</div>
-
 							                @else
 							                	<div class="other-load-data">
 							                		<div class="other-load">

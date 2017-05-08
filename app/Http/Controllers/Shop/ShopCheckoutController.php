@@ -382,13 +382,15 @@ class ShopCheckoutController extends Shop
                         DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
                         
                         Session::put('ipay88', $ipay88);
+                        Session::put('ipay88_data', Request::input());
+
                         return redirect('/postPaymentWithIPay88');     
                     }             
                 }
             }
             else
             {
-                Session::forget("ipay88");
+                Session::forget("ipay88_data");
                 $cart["payment_status"] = 1;
             }
 
@@ -469,6 +471,7 @@ class ShopCheckoutController extends Shop
     public function ipay88_response()
     {
         $request = Request::all();
+        $ipay88_data = Session::get("ipay88_data");
         /*dd($request['Status']);*/
         if($request['Status'] == 0)
         {
@@ -476,7 +479,25 @@ class ShopCheckoutController extends Shop
         } 
         else 
         {
-            dd('Success!');       
+            echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
+            echo "<form id='autosubmit' action='/checkout' method='post'>";
+            echo "<input type='hidden' name='_token' value='" . csrf_token() . "'>"
+            if (is_array($ipay88_data) || is_object($ipay88_data))
+            {
+                foreach ($ipay88_data as $key => $val) {
+                    echo "<input type='hidden' name='".ucfirst($key)."' value='".htmlspecialchars($val)."'>";
+                }
+            }
+            echo "</form>";
+            echo "
+            <script type='text/javascript'>
+                function submitForm() {
+                    document.getElementById('autosubmit').submit();
+                }
+                window.onload = submitForm;
+            </script>
+
+            ";      
         }
         
     }

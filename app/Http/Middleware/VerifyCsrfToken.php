@@ -13,7 +13,7 @@ class VerifyCsrfToken extends BaseVerifier
      */
     protected $except = [
         'api/*',
-        '/ipay88_response/{id}',
+        '/ipay88_response/*',
         '/checkout'   
     ];
 }

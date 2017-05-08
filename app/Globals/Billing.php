@@ -1,7 +1,6 @@
 <?php
 namespace App\Globals;
 
-use App\Globals\Accounting;
 use App\Models\Tbl_bill;
 use App\Models\Tbl_bill_po;
 use App\Models\Tbl_bill_item_line;
@@ -11,6 +10,7 @@ use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Globals\AuditTrail;
+use App\Globals\Accounting;
 use DB;
 use Log;
 use Request;
@@ -128,10 +128,19 @@ class Billing
 
         $bill_id = Tbl_bill::insertGetId($insert);
 
+        /* Transaction Journal */
+        $entry["reference_module"]  = "bill";
+        $entry["reference_id"]      = $bill_id;
+        $entry["name_id"]           = $vendor_info['bill_vendor_id'];
+        $entry["total"]             = collect($item_info)->sum('itemline_amount');
+        $entry["vatable"]           = '';
+        $entry["discount"]          = '';
+        $entry["ewt"]               = '';
+
         $bill_data = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
         AuditTrail::record_logs("Added","bill",$bill_id,"",serialize($bill_data));
 
-        Billing::insert_bill_line($bill_id, $item_info);
+        Billing::insert_bill_line($bill_id, $item_info, $entry);
 
         return $bill_id;
 
@@ -200,16 +209,24 @@ class Billing
 
         Tbl_bill::where("bill_id", $bill_id)->update($update);
 
+        /* Transaction Journal */
+        $entry["reference_module"]  = "bill";
+        $entry["reference_id"]      = $bill_id;
+        $entry["name_id"]           = $vendor_info['bill_vendor_id'];
+        $entry["total"]             = collect($item_info)->sum('itemline_amount');
+        $entry["vatable"]           = '';
+        $entry["discount"]          = '';
+        $entry["ewt"]               = '';
 
         // $new = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
         // AuditTrail::record_logs("Edited","bill",$bill_id,serialize($old),serialize($new));
 
         Tbl_bill_item_line::where("itemline_bill_id", $bill_id)->delete();
-        Billing::insert_bill_line($bill_id, $item_info);
+        Billing::insert_bill_line($bill_id, $item_info, $entry);
 
         return $bill_id;
     }
-    public static function insert_bill_line($bill_id, $item_info)
+    public static function insert_bill_line($bill_id, $item_info, $entry)
     {
         foreach($item_info as $key => $item_line)
         {
@@ -233,7 +250,17 @@ class Billing
                 $insert_line['itemline_amount']        = $item_line['itemline_amount'];
 
                 Tbl_bill_item_line::insert($insert_line);
+
+                /* TRANSACTION JOURNAL */   
+                $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
+                $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
+                $entry_data[$key]['vatable']            = 0;
+                $entry_data[$key]['discount']           = 0;
+                $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
+                $entry_data[$key]['entry_description']  = $item_line['itemline_description'];
             }
         }
+
+        $bill_journal = Accounting::postJournalEntry($entry, $entry_data);
     }
 }

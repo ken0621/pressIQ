@@ -20,7 +20,7 @@ class Tbl_customer extends Model
         if($customer_id) $invoice->where("inv_customer_id", $customer_id);
 
         /* CREDIT MEMO */
-        $credit_memo = DB::table("tbl_credit_memo")->selectRaw("cm_date as date, 'Credit Memo' as type, cm_id as no, cm_due_date as due_date, 0 as balance, cm_amount as total, 'status' as status, date_created, 'customer/credit_memo' as reference_url")
+        $credit_memo = DB::table("tbl_credit_memo")->selectRaw("cm_date as date, 'Credit Memo' as type, cm_id as no, cm_due_date as due_date, 0 as balance, cm_amount as total, 'status' as status, date_created, 'cu,stomer/credit_memo' as reference_url")
                     ->join("tbl_credit_memo_line","cmline_cm_id","=","cm_id");
         if($customer_id) $credit_memo->where("cm_customer_id", $customer_id);
 

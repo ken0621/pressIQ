@@ -100,6 +100,7 @@ class Customer_ReceivePaymentController extends Member
             }
         }
 
+        /* Transaction Journal */
         $entry["reference_module"]      = "receive-payment";
         $entry["reference_id"]          = $rcvpayment_id;
         $entry["name_id"]               = $insert["rp_customer_id"];
@@ -168,6 +169,7 @@ class Customer_ReceivePaymentController extends Member
             }
         }
 
+        /* Transaction Journal */
         $entry["reference_module"]      = "receive-payment";
         $entry["reference_id"]          = $rcvpayment_id;
         $entry["name_id"]               = $update["rp_customer_id"];

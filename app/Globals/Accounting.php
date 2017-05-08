@@ -129,9 +129,9 @@ class Accounting
 	 *
 	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["name_id"], $entry["total"] , 
 	 *									$entry["vatable"] , $entry["discount"] , $entry["ewt"], $entry["account_id"]
-	 * @param array  	$entry_data     $entry_data[0]['item_id'], $entry_data[0]['vatable']
+	 * @param array  	$entry_data     $entry_data[0]['item_id'] or $entry[0]['account_id'], $entry_data[0]['vatable']
 	 *									$entry_data[0]['discount'] , $entry_data[0]['entry_amount'] , $entry_data[0]['entry_desription']
-	 * @param boolean  	$remarks   		Description of the journal entry	
+	 * @param boolean  	$remarks   		Description of the journal entry
 	 */
 	public static function postJournalEntry($entry, $entry_data, $remarks = '')
 	{
@@ -191,10 +191,10 @@ class Accounting
 		$newNormalBalance 	= Accounting::checkTransaction($entry["reference_module"])['newNormalJournal'];
 		$newContraBalance 	= Accounting::checkTransaction($entry["reference_module"])['newContraJournal'];
 
-		if($main_account == 'receivable' || $main_account == 'cash')
+		if($main_account == 'receivable' || $main_account == 'cash-r')
 		{
 			if($main_account == 'receivable') $main_account_id = $account_receivable;
-			elseif($main_account == 'cash')	  $main_account_id = $account_cash;
+			elseif($main_account == 'cash-r') $main_account_id = $account_cash;
 
 			$line_data["entry_amount"]	= $entry["total"];
 			$line_data["entry_type"] 	= Accounting::$newNormalBalance($main_account_id);
@@ -237,9 +237,11 @@ class Accounting
 				}
 			}
 		}
-		elseif($main_account == 'payable')
+		elseif($main_account == 'payable' || $main_account == 'cash-p')
 		{
-			$main_account_id = $account_payable;
+			if($main_account == 'payable') $main_account_id = $account_payable;
+			elseif($main_account == 'cash-p') $main_account_id = $account_cash;
+
 			$line_data["entry_amount"]	= $entry["total"];
 			$line_data["entry_type"] 	= Accounting::$newNormalBalance($main_account_id);
 			$line_data["account_id"] 	= $main_account_id;
@@ -300,25 +302,26 @@ class Accounting
 				$account = Tbl_chart_of_account::type()->where("account_id", $entry_line["account_id"])->first();
 			}
 
+			/* ENTRY DESCRIPTION */ 
 			$line_data["entry_description"] = isset($entry_line["entry_description"]) ? $entry_line["entry_description"] : '';
 
 			switch($entry["reference_module"])
 			{
-				case "estimate":
+				case "estimate": // NON-POSTING
 					break;
-				case "sales-order":
+				case "sales-order": // NON-POSTING
 					break;
 				case "sales-receipt":
 				case "invoice":
 					/* INCOME ACCOUNT */
-					if($item->item_type_id != 4)
+					if($item->item_type_id != 4) // ITEM IS NOT A BUNDLE
 					{
 						$line_data["entry_amount"]	= $entry_line["entry_amount"];
 						$line_data["entry_type"] 	= Accounting::normalBalance($account_income);
-						$line_data["account_id"] 	= $account_income;
+						$line_data["account_id"]	= $account_income;
 						Accounting::insertJournalLine($line_data);
 
-						if($item->item_type_id == 1)
+						if($item->item_type_id == 1) // INVENTORY TYPE
 						{
 							/* EXPENSE ACCOUNT */
 							$line_data["entry_amount"]	= $item->item_cost;
@@ -335,18 +338,33 @@ class Accounting
 					}
 					break;
 				case "receive-payment":
+				case "bill-payment":
 					/* CASH ACCOUNT - BANK */
 					$line_data["entry_amount"]	= $entry_line["entry_amount"];
 					$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
 					$line_data["account_id"] 	= $account->account_id;
 					Accounting::insertJournalLine($line_data);
 					break;
-				case "purchase-order":
-					break;
-				case "bill":
+				case "purchase-order": // NON-POSTING
 					break;
 				case "write-check":
-				case "bills-payment":
+				case "bill":
+					if($item->item_type_id == 1) // INVENTORY TYPE
+					{
+						/* ASSET ACCOUNT */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::normalBalance($account_asset);
+						$line_data["account_id"] 	= $account_asset;
+						Accounting::insertJournalLine($line_data);
+					}
+					else
+					{
+						/* EXPENSE ACCOUNT */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
+						$line_data["account_id"] 	= $account_expense;
+						Accounting::insertJournalLine($line_data);
+					}
 					break;
 				case "credit-memo":
 					/* INCOME ACCOUNT */
@@ -448,38 +466,6 @@ class Accounting
 		$jline_id = Tbl_journal_entry_line::insertGetId($journal_line);
 	}
 
-
-	/**
-	 * Check what table reference and type ( CURRENTLY FUNCTION NOT IN USE! )
-	 *
-	 * @param 	string  	$type 		Type of a transaction
-	 * @return 	array[2] 	$table_name | id_name
-	 */
-	public static function checkReferenceId($type)
-	{
-		switch($type)
-		{
-			case 'invoice':
-				$data["table_txn_reference"] 	= 'Tbl_customer_invoice';
-				$data["txn_id"]					= 'je_id';			
-				$data["table_name_reference"]	= 'Tbl_customer';
-				$data["name_id"]				= 'customer_id';
-				break;
-			case 'purchase_order':
-				$data["table_txn_reference"] 	= 'Tbl_purchase_order';
-				$data["txn_id"]					= 'je_id';			
-				$data["table_name_reference"]	= 'Tbl_vendor';
-				$data["name_id"]				= 'vendor_id';
-				break;
-			case 'receive-payment':
-				break;
-			default:
-				$data = null;
-		}
-
-		return $data;
-	}
-
 	/**
 	 * Check transaction whether it is customer or vendor type; normal balace or contra account; receivable or payable;
 	 *
@@ -553,15 +539,15 @@ class Accounting
 				$data["newContraJournal"] 	= 'normalBalance';
 				return $data;
 				break;
-			case 'deposit':
-				$data["main_account"]		= 'cash';
-				$data["name"] 				= '';
+			case 'write-check':
+				$data["main_account"]		= 'payable';
+				$data["name"] 				= 'vendor';
 				$data["newNormalJournal"] 	= 'normalBalance';
 				$data["newContraJournal"] 	= 'contraAccount';
 				return $data;
 				break;
-			case '':
-				$data["main_account"]		= 'cash';
+			case 'deposit':
+				$data["main_account"]		= 'cash-r'; //CASH - RECEIVABLE
 				$data["name"] 				= '';
 				$data["newNormalJournal"] 	= 'normalBalance';
 				$data["newContraJournal"] 	= 'contraAccount';
@@ -596,6 +582,37 @@ class Accounting
 		$balance = Tbl_chart_of_account::type()->where("account_id", $account_id)->pluck("normal_balance");
 		if($balance == "credit") 	return 'Debit';
 		elseif($balance == "debit") return 'Credit';
+	}
+
+	/**
+	 * Check what table reference and type ( !!! CURRENTLY FUNCTION NOT IN USE !!! )
+	 *
+	 * @param 	string  	$type 		Type of a transaction
+	 * @return 	array[2] 	$table_name | id_name
+	 */
+	public static function checkReferenceId($type)
+	{
+		switch($type)
+		{
+			case 'invoice':
+				$data["table_txn_reference"] 	= 'Tbl_customer_invoice';
+				$data["txn_id"]					= 'je_id';			
+				$data["table_name_reference"]	= 'Tbl_customer';
+				$data["name_id"]				= 'customer_id';
+				break;
+			case 'purchase_order':
+				$data["table_txn_reference"] 	= 'Tbl_purchase_order';
+				$data["txn_id"]					= 'je_id';			
+				$data["table_name_reference"]	= 'Tbl_vendor';
+				$data["name_id"]				= 'vendor_id';
+				break;
+			case 'receive-payment':
+				break;
+			default:
+				$data = null;
+		}
+
+		return $data;
 	}
 
 	/**

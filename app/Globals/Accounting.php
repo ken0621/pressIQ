@@ -312,6 +312,7 @@ class Accounting
 				case "sales-order": // NON-POSTING
 					break;
 				case "mlm-product-repurchase":
+				case "product-order":
 				case "sales-receipt":
 				case "invoice":
 					/* INCOME ACCOUNT */
@@ -342,7 +343,7 @@ class Accounting
 				case "bill-payment":
 					/* CASH ACCOUNT - BANK */
 					$line_data["entry_amount"]	= $entry_line["entry_amount"];
-					$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
+					$line_data["entry_type"] 	= Accounting::contraAccount($account->account_id);
 					$line_data["account_id"] 	= $account->account_id;
 					Accounting::insertJournalLine($line_data);
 					break;
@@ -496,7 +497,8 @@ class Accounting
 				break;
 			case 'mlm-product-repurchase':
 			case 'sales-receipt':
-				$data["main_account"]		= 'cash';
+			case 'product-order':
+				$data["main_account"]		= 'cash-r';
 				$data["name"] 				= 'customer';
 				$data["newNormalJournal"] 	= 'normalBalance';
 				$data["newContraJournal"] 	= 'contraAccount';

@@ -422,8 +422,8 @@ class ShopCheckoutController extends Shop
                 'userContact'   => Request::input("customer_mobile"),
                 'remark'        => 'Some Remarks Here!',
                 'lang'          => 'UTF-8',
-                'responseUrl'   => URL::to('/ipay88_response/' . $result["order_id"]),
-                'backendUrl'    => URL::to('/ipay88_response/' . $result["order_id"])
+                'responseUrl'   => URL::to('/ipay88_response?id=' . $result["order_id"]),
+                'backendUrl'    => URL::to('/ipay88_response?id=' . $result["order_id"])
                 );
             
             Session::put('ipay88', $ipay88);
@@ -448,10 +448,11 @@ class ShopCheckoutController extends Shop
         RequestPayment::make($data["merchantKey"], $this->_data);     
     }
 
-    public function ipay88_response($order_id)
+    public function ipay88_response()
     {
         $request = Request::all();
         $result = Session::get('ipay88_order');
+        $order_id = Request::input("id");
 
         Session::forget('ipay88_order');
 
@@ -481,8 +482,9 @@ class ShopCheckoutController extends Shop
             {
                 $update["payment_status"] = 1;
                 $update["order_status"] = "Processing";
+                $update["ec_order_id"] = $order_id;
                 Ec_order::update_ec_order($update);   
-                
+
                 // Redirect
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
             }

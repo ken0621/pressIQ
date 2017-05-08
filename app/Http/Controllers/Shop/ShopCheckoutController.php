@@ -383,6 +383,7 @@ class ShopCheckoutController extends Shop
             }
             else
             {
+                dd(123);
                 Session::forget("ipay88_data");
                 $cart["payment_status"] = 1;
             }

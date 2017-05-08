@@ -40,7 +40,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 	/*Payment Integration with iPay88*/
 	Route::any("/postPaymentWithIPay88","Shop\ShopCheckoutController@postPaymentWithIPay88"); //Brain
-	Route::any("/ipay88_response/{id}","Shop\ShopCheckoutController@ipay88_response"); //Brain
+	Route::any("/ipay88_response","Shop\ShopCheckoutController@ipay88_response"); //Brain
 
 	/*End ipay88*/
 }

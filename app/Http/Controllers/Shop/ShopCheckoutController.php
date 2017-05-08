@@ -468,6 +468,7 @@ class ShopCheckoutController extends Shop
         $ipay88_data = Session::get("ipay88_data");
         if ($request) 
         {
+            dd($request);
             // LOGS
             $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
             $ipay88_logs["log_payment_id"] = $request['PaymentId'];

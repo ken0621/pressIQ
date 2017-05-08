@@ -286,7 +286,7 @@ class ShopCheckoutController extends Shop
                         return Redirect::back()->withErrors($send)->withInput();
                     }
                 break;
-                case 8: $this->submit_using_ipay88($product_summary); break;
+                case 8: $this->submit_using_ipay88($product_summary, $cart); break;
                 default:
                 break;
             }
@@ -386,8 +386,10 @@ class ShopCheckoutController extends Shop
             return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
         }
     }
-    public function submit_using_ipay88($product_summary)
+    public function submit_using_ipay88($product_summary, $cart)
     {
+        // Create Order
+        $result = Ec_order::create_ec_order_automatic($cart);
 
         $shop_id= $this->shop_info->shop_id;
         $online_payment_api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)
@@ -420,12 +422,12 @@ class ShopCheckoutController extends Shop
                 'userContact'   => Request::input("customer_mobile"),
                 'remark'        => 'Some Remarks Here!',
                 'lang'          => 'UTF-8',
-                'responseUrl'   => URL::to('/ipay88_response'),
-                'backendUrl'    => URL::to('/ipay88_response')
+                'responseUrl'   => URL::to('/ipay88_response/' . $result["order_id"]),
+                'backendUrl'    => URL::to('/ipay88_response/' . $result["order_id"])
                 );
             
             Session::put('ipay88', $ipay88);
-            Session::put('ipay88_data', Request::input());
+            Session::put('ipay88_order', $result);
 
             return redirect('/postPaymentWithIPay88')->send();    
         }  
@@ -439,32 +441,20 @@ class ShopCheckoutController extends Shop
         
         $requestpayment = new RequestPayment($data["merchantKey"]);
 
-        $this->_data = array(
-            'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
-            'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
-            'refNo'         => $requestpayment->setRefNo($data["refNo"]),
-            'amount'        => $requestpayment->setAmount($data["amount"]),
-            'currency'      => $requestpayment->setCurrency($data["currency"]),
-            'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
-            'userName'      => $requestpayment->setUserName($data["userName"]),
-            'userEmail'     => $requestpayment->setUserEmail($data["userEmail"]),
-            'userContact'   => $requestpayment->setUserContact($data["userContact"]),
-            'remark'        => $requestpayment->setRemark($data["remark"]),
-            'lang'          => $requestpayment->setLang($data["lang"]),
-            'signature'     => $requestpayment->getSignature(),
-            'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
-            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
-            );
+        $this->_data = $data;
         
         Session::forget('ipay88');
 
         RequestPayment::make($data["merchantKey"], $this->_data);     
     }
 
-    public function ipay88_response()
+    public function ipay88_response($order_id)
     {
         $request = Request::all();
-        $ipay88_data = Session::get("ipay88_data");
+        $result = Session::get('ipay88_order');
+
+        Session::forget('ipay88_order');
+
         if ($request) 
         {
             // LOGS
@@ -489,37 +479,12 @@ class ShopCheckoutController extends Shop
             } 
             else 
             {
-                echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
-                echo "<form id='autosubmit' action='/checkout' method='post'>";
-                echo "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
-                echo "<input type='hidden' name='ipay88' value='1'>";
-                if (is_array($ipay88_data) || is_object($ipay88_data))
-                {
-                    foreach ($ipay88_data as $key => $val) 
-                    {
-                        if (is_array($val)) 
-                        {
-                            foreach ($val as $key0 => $val0) 
-                            {
-                                echo "<input type='hidden' name='" . ucfirst($key) . "[" . $key0 . "]" . "' value='" . htmlspecialchars($val0) . "'>";
-                            }
-                        }
-                        else
-                        {
-                            echo "<input type='hidden' name='".ucfirst($key)."' value='".htmlspecialchars($val)."'>";
-                        }
-                    }
-                }
-                echo "</form>";
-                echo "
-                <script type='text/javascript'>
-                    function submitForm() {
-                        document.getElementById('autosubmit').submit();
-                    }
-                    window.onload = submitForm;
-                </script>
-
-                ";      
+                $update["payment_status"] = 1;
+                $update["order_status"] = "Processing";
+                Ec_order::update_ec_order($update);   
+                
+                // Redirect
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
             }
         }
         else

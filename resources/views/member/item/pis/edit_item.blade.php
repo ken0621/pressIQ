@@ -126,7 +126,7 @@
     </div> 
 
   </div> 
-  <div class="modal-footer inventory_type" style="display:none;">
+  <div class="modal-footer inventory_type"  style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'inventory_type' ? '' : 'display:none;') : 'display:none;'}}">
     <button type="button" class="btn btn-custom-white back_to_menu">Back</button>
     <!--<button type="button" class="btn btn-custom-red-white btn-del-modallarge" data-url="" data-value="">Delete</button>-->
     <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Submit</button>
@@ -234,7 +234,7 @@
 -->     </div>
     </div>
    </div>
-     <div class="modal-footer noninventory_type" style="display:none;">
+     <div class="modal-footer noninventory_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'noninventory_type' ? '' : 'display:none;') : 'display:none;'}}">
     <button type="button" class="btn btn-custom-white back_to_menu" >Back</button>
     <!--<button type="button" class="btn btn-custom-red-white btn-del-modallarge" data-url="" data-value="">Delete</button>-->
     <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Submit</button>
@@ -343,7 +343,7 @@
                 </div> -->
             </div>
     </div> 
-   </div>  <div class="modal-footer service_type" style="display:none;">
+   </div>  <div class="modal-footer service_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'service_type' ? '' : 'display:none;') : 'display:none;'}}">
     <button type="button" class="btn btn-custom-white back_to_menu" >Back</button>
     <!--<button type="button" class="btn btn-custom-red-white btn-del-modallarge" data-url="" data-value="">Delete</button>-->
     <button class="btn btn-custom-primary btn-save-modallarge" >Submit</button>
@@ -451,7 +451,7 @@
             </div>
         </div>
     </div>
-    <div class="modal-footer bundle_type" style="display:none;">
+    <div class="modal-footer bundle_type"  style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'bundle_type' ? '' : 'display:none;') : 'display:none;'}}">
         <button type="button" class="btn btn-custom-white back_to_menu">Back</button>
         <button class="btn btn-custom-primary btn-save-modallarge">Submit</button>
     </div>

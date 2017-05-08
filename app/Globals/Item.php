@@ -594,7 +594,7 @@ class Item
         if(!$exist_type)
         {
             $insert["type_shop"]                = Item::getShopId();
-            $insert["type_category"]            = "service";
+            $insert["type_category"]            = "services";
             $insert["type_name"]                = "Service";
             $insert["type_date_created"]        = Carbon::now();  
             

@@ -8,6 +8,7 @@ use App\Models\Tbl_pay_bill_line;
 use App\Models\Tbl_pay_bill;
  
 use App\Globals\WriteCheck;
+use App\Globals\Accouting;
 use Carbon\carbon;
 use DB;
 
@@ -35,6 +36,17 @@ class BillPayment
         BillPayment::insert_paybill_line($paybill_id, $pbline_data);
 
         WriteCheck::create_check_from_paybill($paybill_id);
+
+        /* Transaction Journal */
+        $entry["reference_module"]      = "bill-payment";
+        $entry["reference_id"]          = $paybill_id;
+        $entry["name_id"]               = $pb_data["paybill_vendor_id"];
+        $entry["total"]                 = $pb_data["paybill_total_amount"];
+        $entry_data[0]['account_id']    = $pb_data["paybill_ap_id"];
+        $entry_data[0]['vatable']       = 0;
+        $entry_data[0]['discount']      = 0;
+        $entry_data[0]['entry_amount']  = $pb_data["paybill_total_amount"];
+        $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
         
         return $paybill_id;
 	}

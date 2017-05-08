@@ -345,11 +345,11 @@ class ShopCheckoutController extends Shop
 
         switch ($cart["payment_method_id"])
         {
-            case 1: $this->submit_using_credit_card() break;
-            case 2: $this->submit_using_paypal() break;
-            case 3: $this->submit_using_proofofpayment($file, $cart) break;
-            case 4: $this->submit_using_proofofpayment($file, $cart) break;
-            case 5: $this->submit_using_proofofpayment($file, $cart) break;
+            case 1: $this->submit_using_credit_card(); break;
+            case 2: $this->submit_using_paypal(); break;
+            case 3: $this->submit_using_proofofpayment($file, $cart); break;
+            case 4: $this->submit_using_proofofpayment($file, $cart); break;
+            case 5: $this->submit_using_proofofpayment($file, $cart); break;
             case 6: 
                 if(Self::$slot_now != null)
                 {
@@ -410,13 +410,13 @@ class ShopCheckoutController extends Shop
 
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
             break;
-            case 7: $this->submit_using_proofofpayment($file, $cart) break;
-            case 8: $this->submit_using_ipay88($cart) break;
-            case 9: $this->submit_using_proofofpayment($file, $cart) break;
-            case 10: $this->submit_using_proofofpayment($file, $cart) break;
-            case 11: $this->submit_using_proofofpayment($file, $cart) break;
-            case 12: $this->submit_using_proofofpayment($file, $cart) break;
-            case 13: $this->submit_using_proofofpayment($file, $cart) break;
+            case 7: $this->submit_using_proofofpayment($file, $cart); break;
+            case 8: $this->submit_using_ipay88($cart); break;
+            case 9: $this->submit_using_proofofpayment($file, $cart); break;
+            case 10: $this->submit_using_proofofpayment($file, $cart); break;
+            case 11: $this->submit_using_proofofpayment($file, $cart); break;
+            case 12: $this->submit_using_proofofpayment($file, $cart); break;
+            case 13: $this->submit_using_proofofpayment($file, $cart); break;
             default:
             break;
         }

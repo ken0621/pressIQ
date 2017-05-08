@@ -422,8 +422,8 @@ class ShopCheckoutController extends Shop
                 'userContact'   => Request::input("customer_mobile"),
                 'remark'        => 'Some Remarks Here!',
                 'lang'          => 'UTF-8',
-                'responseUrl'   => URL::to('/ipay88_response?id=' . $result["order_id"]),
-                'backendUrl'    => URL::to('/ipay88_response?id=' . $result["order_id"])
+                'responseUrl'   => URL::to('/ipay88_response'),
+                'backendUrl'    => URL::to('/ipay88_response')
                 );
             
             Session::put('ipay88', $ipay88);
@@ -436,14 +436,28 @@ class ShopCheckoutController extends Shop
     public function postPaymentWithIPay88()
     {
         echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
-
         $data = Session::get('ipay88');
-        
+
+        Session::forget('ipay88');
+
         $requestpayment = new RequestPayment($data["merchantKey"]);
 
-        $this->_data = $data;
-        
-        Session::forget('ipay88');
+        $this->_data = array(
+            'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
+            'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
+            'refNo'         => $requestpayment->setRefNo($data["refNo"]),
+            'amount'        => $requestpayment->setAmount($data["amount"]),
+            'currency'      => $requestpayment->setCurrency($data["currency"]),
+            'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
+            'userName'      => $requestpayment->setUserName($data["userName"]),
+            'userEmail'     => $requestpayment->setUserEmail($data["userEmail"]),
+            'userContact'   => $requestpayment->setUserContact($data["userContact"]),
+            'remark'        => $requestpayment->setRemark($data["remark"]),
+            'lang'          => $requestpayment->setLang($data["lang"]),
+            'signature'     => $requestpayment->getSignature(),
+            'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
+            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
+        );
 
         RequestPayment::make($data["merchantKey"], $this->_data);     
     }
@@ -452,7 +466,7 @@ class ShopCheckoutController extends Shop
     {
         $request = Request::all();
         $result = Session::get('ipay88_order');
-        $order_id = Request::input("id");
+        $order_id = $result["order_id"];
 
         Session::forget('ipay88_order');
 
@@ -486,12 +500,12 @@ class ShopCheckoutController extends Shop
                 Ec_order::update_ec_order($update);   
 
                 // Redirect
-                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
             }
         }
         else
         {
-            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.');
+            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->s;
         }
     }
     /*End Ipay88*/

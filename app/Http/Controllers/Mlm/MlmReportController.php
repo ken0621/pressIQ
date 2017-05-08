@@ -369,7 +369,6 @@ class MlmReportController extends Mlm
         }
         $data['now'] = Carbon::now();
         $data['direct_count'] = Tbl_mlm_slot::where('slot_sponsor', Self::$slot_id)->count();
-        dd($data);
         return view("mlm.report.report_binary_promotions", $data);
     }
     public function request_binary_promotions()

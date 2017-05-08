@@ -93,300 +93,15 @@ class ShopCheckoutController extends Shop
 
         return view("checkout", $data);
     }
-    public function submit()
+    public function submit_using_credit_card()
     {
-        // Validate Customer Info
-        $rules["customer_first_name"]   = 'required';
-        $rules["customer_middle_name"]  = 'required';
-        $rules["customer_last_name"]    = 'required';
-        $rules["customer_email"]        = 'required';
-        $rules["customer_birthdate"]    = 'required';
-        $rules["customer_mobile"]       = 'required';
-        $rules["customer_state_province"] = 'required';
-        $rules["customer_city"]         = 'required';
-        $rules["customer_address"]      = 'required';
-        $rules["payment_method_id"]     = 'required';
-        $rules["taxable"]               = 'required';
-
-        $ec_order_load = Request::input('ec_order_load');
-        if($ec_order_load == 1)
-        {
-            $rules['ec_order_load_number'] = 'required';
-        }
-
-        $validator = Validator::make(Request::input(), $rules);
-
-        if ($validator->fails()) 
-        {
-            return Redirect::back()
-                        ->withErrors($validator)
-                        ->withInput();
-        }
-        else
-        {
-            // Get Cart
-            $get_cart = Cart::get_cart($this->shop_info->shop_id);
-            // Get Country ID (Philippines)
-            $get_country = Tbl_country::where("country_name", "Philippines")->first();
-            // Explode Birthday
-            $get_birthday = Request::input("customer_birthdate")[0] . " " . Request::input("customer_birthdate")[1] . ", " . Request::input("customer_birthdate")[2];
-            // Variant ID (Array)
-            $invline_item_id = [];
-            // Discounted Price (Array)
-            $invline_discount = [];
-            // Original Price (Array)
-            $invline_rate = [];
-            // Qty (Array)
-            $invline_qty = [];
-            // Discount Remark (Array)
-            $invline_discount_remark = [];
-            // Description (Array)
-            $invline_description = [];
-            // Date (Array)
-            $invline_service_date = [];
-            // Restructure Cart
-
-            // Get sum
-            $sum = 0;
-
-            $i = 0;
-            $len = count($get_cart['cart']);
-
-
-            /* REASTRUCTURE */
-            foreach ($get_cart['cart'] as $key => $value) 
-            {
-                if ($i == $len - 1) 
-                {
-                    $product_summary = $value["cart_product_information"]["product_name"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["cart_product_information"]["product_current_price"]) . "";
-                }
-                else
-                {
-                    $product_summary = $value["cart_product_information"]["product_name"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["cart_product_information"]["product_current_price"]) . ", ";
-                }
-
-                $i++;
-
-                array_push($invline_item_id, $value["product_id"]);
-                array_push($invline_discount, $value["cart_product_information"]["product_discounted_value"]);
-                array_push($invline_rate, $value["cart_product_information"]["product_price"]);
-                array_push($invline_qty, $value["quantity"]);
-                array_push($invline_discount_remark, "");
-                array_push($invline_description, "");
-                array_push($invline_service_date, date('Y-m-d H:i:s'));
-                $add_sum = ($value["cart_product_information"]["product_price"] - $value["cart_product_information"]["product_discounted_value"]) * $value["quantity"];
-                $sum += $add_sum;
-            }
-
-            $cart['ec_order_load'] = Request::input('ec_order_load');
-            if($cart['ec_order_load'] == 1)
-            {
-                $cart['ec_order_load_number'] = Request::input('ec_order_load_number');
-            }
-            else
-            {
-                $cart['ec_order_load_number'] = null;
-                $cart['ec_order_load'] = 0;
-            }
-            
-            $cart["invline_item_id"] = $invline_item_id;
-            $cart["invline_discount"] = $invline_discount;
-            $cart["invline_rate"] = $invline_rate;
-            $cart["invline_qty"] = $invline_qty;
-            $cart["invline_discount_remark"] = $invline_discount_remark;
-            $cart["invline_service_date"] = $invline_service_date;
-            $cart["invline_description"] = $invline_description;
-            $cart["customer"] = null;
-            $cart["customer"]["customer_first_name"] = Request::input("customer_first_name");
-            $cart["customer"]["customer_middle_name"] = Request::input("customer_middle_name");
-            $cart["customer"]["customer_last_name"] = Request::input("customer_last_name");
-            $cart["customer"]["customer_email"] = Request::input("customer_email");
-            $cart["customer"]["customer_birthdate"] = $get_birthday;
-            $cart["customer"]["customer_mobile"] = Request::input("customer_mobile");
-            $cart["customer"]["customer_country_id"] = $get_country ? $get_country->country_id : '420';
-            $cart["customer"]["customer_state_province"] = Request::input("customer_state_province");
-            $cart["customer"]["customer_city"] = Request::input("customer_city");
-            $cart["customer"]["customer_address"] = Request::input("customer_address");
-            $cart["payment_method_id"] = Request::input("payment_method_id");
-            $cart["taxable"] = Request::input("taxable");
-            $cart["order_status"] = "Pending"; // Processing
-            $cart["shop_id"] = $this->shop_info->shop_id;
-            $cart["payment_status"] = 0;
-            $cart["payment_upload"] = "";
-
-
-            if(isset(Self::$customer_info->customer_id))
-            {
-                $cart["customer_id"] = Self::$customer_info->customer_id;
-            }
-            else
-            {
-                $cart["customer_id"] = null;
-            }
-
-            /* -------------------------------------------------------------------------- */
-
-            // Check Stocks
-            $stock = Cart::check_product_stock($get_cart);
-            if ($stock["status"] == "fail") 
-            {
-                return Redirect::back()->with('fail', $stock["error"]);
-            }
-
-            /* -------------------------------------------------------------------------- */
-
-            // Check Payment Method if enabled
-            $payment_method = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
-                                                      ->where("tbl_online_pymnt_method.method_id", $cart["payment_method_id"])
-                                                      ->where("tbl_online_pymnt_link.link_shop_id", $this->shop_info->shop_id)
-                                                      ->where("tbl_online_pymnt_link.link_is_enabled", 1)
-                                                      ->first();
-
-            if (!$payment_method) 
-            {
-                return Redirect::back()->with('fail', 'Invalid payment method. Please try again.');
-            }
-
-            /* -------------------------------------------------------------------------- */
-
-  
-            switch ($cart["payment_method_id"])
-            {
-                case 6: 
-                    if(Self::$slot_now != null)
-                    {
-                        $check_wallet = $this->check_wallet(Self::$slot_now);
-                        if($check_wallet >= $sum )
-                        {
-                            // return $check_wallet;
-                            $log = 'Thank you for purchasing. ' .$sum. ' is deducted to your wallet';
-                            $arry_log['wallet_log_slot'] = Self::$slot_now->slot_id;
-                            $arry_log['shop_id'] = Self::$slot_now->shop_id;
-                            $arry_log['wallet_log_slot_sponsor'] = Self::$slot_now->slot_id;
-                            $arry_log['wallet_log_details'] = $log;
-                            $arry_log['wallet_log_amount'] = $sum * (-1);
-                            $arry_log['wallet_log_plan'] = "REPURCHASE";
-                            $arry_log['wallet_log_status'] = "released";   
-                            $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
-                            
-
-                            $cart["order_status"] = "Processing";
-                        }
-                        else
-                        {
-                            $send['errors'][0] = "Your wallet only have, " . number_format($check_wallet) . ' where the needed amount is ' . number_format($sum) ;
-                            return Redirect::back()
-                                ->withErrors($send)
-                                ->withInput();
-                        }
-                    }
-                    else
-                    {
-                        $send['errors'][0] = "Only members with slot can use the wallet option.";
-                        return Redirect::back()->withErrors($send)->withInput();
-                    }
-                break;
-                case 8: $this->submit_using_ipay88($product_summary, $cart); break;
-                default:
-                break;
-            }
-
-            // Payment Method using E-Wallet
-            if($cart["payment_method_id"] == 6)
-            {
-
-            }
-            // Payment Method With Proof of Payment
-            elseif($cart["payment_method_id"] != 1 && $cart["payment_method_id"] != 2 && $cart["payment_method_id"] != 8)
-            {
-                $shop_id    = $this->shop_info->shop_id;
-                $shop_key   = $this->shop_info->shop_key;
-
-                /* SAVE THE IMAGE IN THE FOLDER */
-                $file               = Input::file('payment_upload');
-
-                if ($file) 
-                {
-                    $extension          = $file->getClientOriginalExtension();
-                    $filename           = str_random(15).".".$extension;
-                    $destinationPath    = 'uploads/'.$shop_key."-".$shop_id.'/ecommerce-upload';
-
-                    if(!File::exists($destinationPath)) 
-                    {
-                        $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
-                    }
-
-                    $upload_success    = Input::file('payment_upload')->move($destinationPath, $filename);
-
-                    /* SAVE THE IMAGE PATH IN THE DATABASE */
-                    $image_path = $destinationPath."/".$filename;
-
-                    if( $upload_success ) 
-                    {
-                       $cart['payment_upload'] = "/" . $image_path;
-                    } 
-                    else 
-                    {
-                       return Redirect::back()->with('fail', 'Image upload failed. Please try again.');
-                    }
-                }
-            }
-            // Payment Method with Payment Facility (Temporary)
-            /* Credit Card */
-            if ($cart["payment_method_id"] == 1) 
-            {
-                dd("Under Maintenance");
-            }
-            /* Paypal */
-            elseif ($cart["payment_method_id"] == 2)
-            {
-                dd("Under Maintenance");           
-            }
-            
-            /* -------------------------------------------------------------------------- */
-
-
-            // Create Order
-            $result = Ec_order::create_ec_order_automatic($cart);
-            if(isset($result['order_id']['status']))
-            {
-                  return Redirect::back()
-                     ->withErrors($result['order_id']['status_message'])
-                     ->withInput();
-            }
-
-            /* -------------------------------------------------------------------------- */
-
-            // Luke's Process with E-Wallet
-            if($cart["payment_method_id"] == 6)
-            {
-                if(Self::$slot_now != null)
-                {
-                    if(isset($result['order_id']))
-                    {
-                        Mlm_slot_log::slot_array($arry_log);
-                        $this->give_product_code($get_cart['cart'], Self::$slot_now, $result['order_id']);
-
-                        /* SMS Notification */
-                        // $txt[0]["txt_to_be_replace"]    = "[name]";
-                        // $txt[0]["txt_to_replace"]       = $invoice['first_name'];
-                        // $result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
-                    }
-                }
-            }
-
-            /* -------------------------------------------------------------------------- */
-
-            // Clear Cart
-            Cart::clear_all($this->shop_info->shop_id);
-
-            /* -------------------------------------------------------------------------- */
-
-            // Redirect
-            return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
-        }
+        dd("Under Maintenance");
     }
-    public function submit_using_ipay88($product_summary, $cart)
+    public function submit_using_paypal()
+    {
+        dd("Under Maintenance");
+    }
+    public function submit_using_ipay88($cart)
     {
         // Create Order
         $cart["order_status"] = "Failed";
@@ -417,7 +132,7 @@ class ShopCheckoutController extends Shop
                 'refNo'         => $reference_number,
                 'amount'        => '15.00',
                 'currency'      => "PHP",
-                'prodDesc'      => $product_summary,
+                'prodDesc'      => $cart['product_summary'],
                 'userName'      => $full_name,
                 'userEmail'     => Request::input("customer_email"),
                 'userContact'   => Request::input("customer_mobile"),
@@ -432,6 +147,297 @@ class ShopCheckoutController extends Shop
 
             return redirect('/postPaymentWithIPay88')->send();    
         }  
+    }
+    public function submit_using_proofofpayment($file, $cart)
+    {
+        $shop_id    = $this->shop_info->shop_id;
+        $shop_key   = $this->shop_info->shop_key;
+
+        /* SAVE THE IMAGE IN THE FOLDER */
+        if ($file) 
+        {
+            $extension          = $file->getClientOriginalExtension();
+            $filename           = str_random(15).".".$extension;
+            $destinationPath    = 'uploads/'.$shop_key."-".$shop_id.'/ecommerce-upload';
+
+            if(!File::exists($destinationPath)) 
+            {
+                $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+            }
+
+            $upload_success    = Input::file('payment_upload')->move($destinationPath, $filename);
+
+            /* SAVE THE IMAGE PATH IN THE DATABASE */
+            $image_path = $destinationPath."/".$filename;
+
+            if( $upload_success ) 
+            {
+               $cart['payment_upload'] = "/" . $image_path;
+            } 
+            else 
+            {
+               return Redirect::back()->with('fail', 'Image upload failed. Please try again.')->send();
+            }
+        }
+
+        $result = Ec_order::create_ec_order_automatic($cart);
+        if(isset($result['order_id']['status']))
+        {
+              return Redirect::back()
+                 ->withErrors($result['order_id']['status_message'])
+                 ->withInput();
+        }
+
+        Cart::clear_all($this->shop_info->shop_id);
+
+        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
+    }
+    public function validate_submit()
+    {
+        // Validate Customer Info
+        $rules["customer_first_name"]   = 'required';
+        $rules["customer_middle_name"]  = 'required';
+        $rules["customer_last_name"]    = 'required';
+        $rules["customer_email"]        = 'required';
+        $rules["customer_birthdate"]    = 'required';
+        $rules["customer_mobile"]       = 'required';
+        $rules["customer_state_province"] = 'required';
+        $rules["customer_city"]         = 'required';
+        $rules["customer_address"]      = 'required';
+        $rules["payment_method_id"]     = 'required';
+        $rules["taxable"]               = 'required';
+
+        $ec_order_load = Request::input('ec_order_load');
+        if($ec_order_load == 1)
+        {
+            $rules['ec_order_load_number'] = 'required';
+        }
+
+        return $validator = Validator::make(Request::input(), $rules);
+    }
+    public function restructure_cart()
+    {
+        // Get Cart
+        $get_cart = Cart::get_cart($this->shop_info->shop_id);
+        // Get Country ID (Philippines)
+        $get_country = Tbl_country::where("country_name", "Philippines")->first();
+        // Explode Birthday
+        $get_birthday = Request::input("customer_birthdate")[0] . " " . Request::input("customer_birthdate")[1] . ", " . Request::input("customer_birthdate")[2];
+        // Variant ID (Array)
+        $invline_item_id = [];
+        // Discounted Price (Array)
+        $invline_discount = [];
+        // Original Price (Array)
+        $invline_rate = [];
+        // Qty (Array)
+        $invline_qty = [];
+        // Discount Remark (Array)
+        $invline_discount_remark = [];
+        // Description (Array)
+        $invline_description = [];
+        // Date (Array)
+        $invline_service_date = [];
+        // Restructure Cart
+
+        // Get sum
+        $sum = 0;
+
+        $i = 0;
+        $len = count($get_cart['cart']);
+
+        /* REASTRUCTURE */
+        foreach ($get_cart['cart'] as $key => $value) 
+        {
+            if ($i == $len - 1) 
+            {
+                $product_summary = $value["cart_product_information"]["product_name"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["cart_product_information"]["product_current_price"]) . "";
+            }
+            else
+            {
+                $product_summary = $value["cart_product_information"]["product_name"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["cart_product_information"]["product_current_price"]) . ", ";
+            }
+
+            $i++;
+
+            array_push($invline_item_id, $value["product_id"]);
+            array_push($invline_discount, $value["cart_product_information"]["product_discounted_value"]);
+            array_push($invline_rate, $value["cart_product_information"]["product_price"]);
+            array_push($invline_qty, $value["quantity"]);
+            array_push($invline_discount_remark, "");
+            array_push($invline_description, "");
+            array_push($invline_service_date, date('Y-m-d H:i:s'));
+            $add_sum = ($value["cart_product_information"]["product_price"] - $value["cart_product_information"]["product_discounted_value"]) * $value["quantity"];
+            $sum += $add_sum;
+        }
+
+        $cart['ec_order_load'] = Request::input('ec_order_load');
+        if($cart['ec_order_load'] == 1)
+        {
+            $cart['ec_order_load_number'] = Request::input('ec_order_load_number');
+        }
+        else
+        {
+            $cart['ec_order_load_number'] = null;
+            $cart['ec_order_load'] = 0;
+        }
+        
+        $cart["invline_item_id"] = $invline_item_id;
+        $cart["invline_discount"] = $invline_discount;
+        $cart["invline_rate"] = $invline_rate;
+        $cart["invline_qty"] = $invline_qty;
+        $cart["invline_discount_remark"] = $invline_discount_remark;
+        $cart["invline_service_date"] = $invline_service_date;
+        $cart["invline_description"] = $invline_description;
+        $cart["customer"] = null;
+        $cart["customer"]["customer_first_name"] = Request::input("customer_first_name");
+        $cart["customer"]["customer_middle_name"] = Request::input("customer_middle_name");
+        $cart["customer"]["customer_last_name"] = Request::input("customer_last_name");
+        $cart["customer"]["customer_email"] = Request::input("customer_email");
+        $cart["customer"]["customer_birthdate"] = $get_birthday;
+        $cart["customer"]["customer_mobile"] = Request::input("customer_mobile");
+        $cart["customer"]["customer_country_id"] = $get_country ? $get_country->country_id : '420';
+        $cart["customer"]["customer_state_province"] = Request::input("customer_state_province");
+        $cart["customer"]["customer_city"] = Request::input("customer_city");
+        $cart["customer"]["customer_address"] = Request::input("customer_address");
+        $cart["payment_method_id"] = Request::input("payment_method_id");
+        $cart["taxable"] = Request::input("taxable");
+        $cart["order_status"] = "Pending"; // Processing
+        $cart["shop_id"] = $this->shop_info->shop_id;
+        $cart["payment_status"] = 0;
+        $cart["payment_upload"] = "";
+        $cart["product_summary"] = $product_summary;
+
+        if(isset(Self::$customer_info->customer_id))
+        {
+            $cart["customer_id"] = Self::$customer_info->customer_id;
+        }
+        else
+        {
+            $cart["customer_id"] = null;
+        }
+
+        return $cart;
+    }
+    public function check_stocks()
+    {
+        $stock = Cart::check_product_stock(Cart::get_cart($this->shop_info->shop_id));
+        if ($stock["status"] == "fail") 
+        {
+            return Redirect::back()->with('fail', $stock["error"]);
+        }
+    }
+    public function check_payment_method_enabled($cart)
+    {
+        $payment_method = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
+                                                  ->where("tbl_online_pymnt_method.method_id", $cart["payment_method_id"])
+                                                  ->where("tbl_online_pymnt_link.link_shop_id", $this->shop_info->shop_id)
+                                                  ->where("tbl_online_pymnt_link.link_is_enabled", 1)
+                                                  ->first();
+
+        if (!$payment_method) 
+        {
+            return Redirect::back()->with('fail', 'Invalid payment method. Please try again.');
+        }
+    }
+    public function check_payment_method($cart)
+    {
+        $file = Input::file('payment_upload');
+
+        switch ($cart["payment_method_id"])
+        {
+            case 1: $this->submit_using_credit_card() break;
+            case 2: $this->submit_using_paypal() break;
+            case 3: $this->submit_using_proofofpayment($file, $cart) break;
+            case 4: $this->submit_using_proofofpayment($file, $cart) break;
+            case 5: $this->submit_using_proofofpayment($file, $cart) break;
+            case 6: 
+                if(Self::$slot_now != null)
+                {
+                    $check_wallet = $this->check_wallet(Self::$slot_now);
+                    if($check_wallet >= $sum )
+                    {
+                        // return $check_wallet;
+                        $log = 'Thank you for purchasing. ' .$sum. ' is deducted to your wallet';
+                        $arry_log['wallet_log_slot'] = Self::$slot_now->slot_id;
+                        $arry_log['shop_id'] = Self::$slot_now->shop_id;
+                        $arry_log['wallet_log_slot_sponsor'] = Self::$slot_now->slot_id;
+                        $arry_log['wallet_log_details'] = $log;
+                        $arry_log['wallet_log_amount'] = $sum * (-1);
+                        $arry_log['wallet_log_plan'] = "REPURCHASE";
+                        $arry_log['wallet_log_status'] = "released";   
+                        $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                        
+
+                        $cart["order_status"] = "Processing";
+                    }
+                    else
+                    {
+                        $send['errors'][0] = "Your wallet only have, " . number_format($check_wallet) . ' where the needed amount is ' . number_format($sum) ;
+                        return Redirect::back()
+                            ->withErrors($send)
+                            ->withInput();
+                    }
+                }
+                else
+                {
+                    $send['errors'][0] = "Only members with slot can use the wallet option.";
+                    return Redirect::back()->withErrors($send)->withInput();
+                }
+
+                $result = Ec_order::create_ec_order_automatic($cart);
+                if(isset($result['order_id']['status']))
+                {
+                      return Redirect::back()
+                         ->withErrors($result['order_id']['status_message'])
+                         ->withInput();
+                }
+
+                if(Self::$slot_now != null)
+                {
+                    if(isset($result['order_id']))
+                    {
+                        Mlm_slot_log::slot_array($arry_log);
+                        $this->give_product_code($get_cart['cart'], Self::$slot_now, $result['order_id']);
+
+                        /* SMS Notification */
+                        // $txt[0]["txt_to_be_replace"]    = "[name]";
+                        // $txt[0]["txt_to_replace"]       = $invoice['first_name'];
+                        // $result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
+                    }
+                }
+             
+                Cart::clear_all($this->shop_info->shop_id);
+
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
+            break;
+            case 7: $this->submit_using_proofofpayment($file, $cart) break;
+            case 8: $this->submit_using_ipay88($cart) break;
+            case 9: $this->submit_using_proofofpayment($file, $cart) break;
+            case 10: $this->submit_using_proofofpayment($file, $cart) break;
+            case 11: $this->submit_using_proofofpayment($file, $cart) break;
+            case 12: $this->submit_using_proofofpayment($file, $cart) break;
+            case 13: $this->submit_using_proofofpayment($file, $cart) break;
+            default:
+            break;
+        }
+    }
+    public function submit()
+    {
+        $validator = $this->validate_submit();
+
+        if ($validator->fails()) 
+        {
+            return Redirect::back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        else
+        {
+            $cart = $this->restructure_cart();
+            $this->check_stocks();
+            $this->check_payment_method_enabled($cart);
+            $this->check_payment_method($cart);
+        }
     }
     /*Ipay88 Function*/
     public function postPaymentWithIPay88()
@@ -462,7 +468,6 @@ class ShopCheckoutController extends Shop
 
         RequestPayment::make($data["merchantKey"], $this->_data);     
     }
-
     public function ipay88_response()
     {
         $request = Request::all();
@@ -499,6 +504,7 @@ class ShopCheckoutController extends Shop
                 $update["order_status"] = "Processing";
                 $update["ec_order_id"] = $order_id;
                 Ec_order::update_ec_order($update);   
+                Cart::clear_all($this->shop_info->shop_id);
 
                 // Redirect
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();

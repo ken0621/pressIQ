@@ -464,7 +464,6 @@ class ShopCheckoutController extends Shop
     public function ipay88_response()
     {
         $request = Request::all();
-        dd($request);
         $ipay88_data = Session::get("ipay88_data");
         if ($request) 
         {

@@ -27,4 +27,21 @@
     </div>
 </div>
 
+<div class="panel panel-default panel-block panel-title-block" id="top">
+    <div class="panel-heading">
+        <div>
+            <form method="post" action="/member/developer/reset_slot/submit/give">
+            <div class="col-md-4">
+                <input type="password" class="form-control" name="password" placeholder="password">
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="id" placeholder="Ec order id">
+            </div>
+            {!! csrf_field() !!}
+            <button class="btn btn-primary">Give Product Points Ec order</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection

@@ -465,8 +465,8 @@ class ShopCheckoutController extends Shop
     {
         $request = Request::all();
         $ipay88_data = Session::get("ipay88_data");
-        if ($request) 
-        {
+        // if ($request) 
+        // {
             // LOGS
             $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
             $ipay88_logs["log_payment_id"] = $request['PaymentId'];
@@ -520,11 +520,11 @@ class ShopCheckoutController extends Shop
 
                 ";      
             }
-        }
-        else
-        {
-            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.');
-        }
+        // }
+        // else
+        // {
+        //     return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.');
+        // }
     }
     /*End Ipay88*/
     public function give_product_code($cart, $slot_info, $order_id)

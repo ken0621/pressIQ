@@ -493,8 +493,19 @@ class ShopCheckoutController extends Shop
             echo "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
             if (is_array($ipay88_data) || is_object($ipay88_data))
             {
-                foreach ($ipay88_data as $key => $val) {
-                    echo "<input type='hidden' name='".ucfirst($key)."' value='".htmlspecialchars($val)."'>";
+                foreach ($ipay88_data as $key => $val) 
+                {
+                    if (is_array($val)) 
+                    {
+                        foreach ($val as $key0 => $val0) 
+                        {
+                            echo "<input type='hidden' name='" . ucfirst($key) . "[" . $key0 . "]" . "' value='" . htmlspecialchars($val0) . "'>";
+                        }
+                    }
+                    else
+                    {
+                        echo "<input type='hidden' name='".ucfirst($key)."' value='".htmlspecialchars($val)."'>";
+                    }
                 }
             }
             echo "</form>";

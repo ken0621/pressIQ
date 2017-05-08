@@ -1833,7 +1833,7 @@ class PayrollController extends Member
 
 		$return['view']				= $view;
 		$return['status'] 			= 'success';
-		$return['data']	   			= '';
+		$return['data']	   		= '';
 		$return['function_name'] 	= 'payrollconfiguration.relaod_tbl_department';
 		return json_encode($return);
 	}

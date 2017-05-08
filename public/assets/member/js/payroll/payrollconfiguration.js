@@ -189,14 +189,16 @@ function payrollconfiguration()
 
 	this.relaod_tbl_department = function()
 	{
-		department_archived();
-		department_archived(1);
+		// department_archived();
+		// department_archived(1);
+		reload_configuration("/member/payroll/departmentlist");
 	}
 
 	this.reload_tbl_jobtitle = function()
 	{
-		jobtitle_archived();
-		jobtitle_archived(1);
+		// jobtitle_archived();
+		// jobtitle_archived(1);
+		reload_configuration("/member/payroll/jobtitlelist");
 	} 
 	
 

@@ -420,7 +420,7 @@ class ShopCheckoutController extends Shop
         }
     }
     /*Ipay88 Function*/
-    public function postPaymentWithIPay88()
+    public function postPaymentWithIPay88($order_id)
     {
         echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
 

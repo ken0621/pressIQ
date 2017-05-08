@@ -247,9 +247,9 @@ class ShopCheckoutController extends Shop
 
             /* -------------------------------------------------------------------------- */
 
-            $ipay88 = Session::get("ipay88");
+            $if_ipay88 = Request::input("ipay88");
             // Check Ipay88 desu~~ </3
-            if (!$ipay88) 
+            if (!$if_ipay88) 
             {
                 // Payment Method using E-Wallet
                 if($cart["payment_method_id"] == 6)
@@ -492,6 +492,7 @@ class ShopCheckoutController extends Shop
                 echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
                 echo "<form id='autosubmit' action='/checkout' method='post'>";
                 echo "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
+                echo "<input type='hidden' name='ipay88' value='1'>";
                 if (is_array($ipay88_data) || is_object($ipay88_data))
                 {
                     foreach ($ipay88_data as $key => $val) 

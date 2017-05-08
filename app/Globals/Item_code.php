@@ -27,6 +27,7 @@ use App\Globals\EmailContent;
 use App\Globals\Mlm_plan;
 use App\Models\Tbl_mlm_item_points;
 use Mail;
+use App\Globals\Accounting;
 class Item_code
 {
 	public static function add_code($data,$shop_id, $user_id, $warehouse_id)
@@ -581,6 +582,7 @@ class Item_code
                         $send["response_status"] = "success_process";    
                         $send['invoice_id'] = $invoice_id;
 
+                        Item_code::add_journal_entry($invoice_id);
                         //audit trail here
                         $item_code_invoice = Tbl_item_code_invoice::where("item_code_invoice_id",$invoice_id)->first()->toArray();
                         AuditTrail::record_logs("Added","mlm_item_code_invoice",$invoice_id,"",serialize($item_code_invoice));
@@ -610,6 +612,30 @@ class Item_code
 
         return $send;
 	}
+    public static function add_journal_entry($invoice_id)
+    {
+        $invoice = Tbl_item_code_invoice::where('item_code_invoice_id', $invoice_id)->first();
+        if($invoice)
+        {
+
+            $entry["reference_module"] = 'mlm-product-repurchase';
+            $entry["reference_id"] = $invoice_id;
+            $entry["name_id"] = $invoice->customer_id;
+            $entry["total"] = $invoice->item_total;
+            $entry["discount"] = $invoice->item_discount;
+
+            $items = Tbl_item_code_item::where('item_code_invoice_id', $invoice_id)->get();
+            foreach ($items as $key => $value) 
+            {
+                # code...
+                $entry_data[$key]['item_id'] = $value->item_id;
+                $entry_data[$key]['discount'] = $value->item_membership_discount;
+                $entry_data[$key]['entry_amount'] = $value->item_price;
+            }
+            Accounting::postJournalEntry($entry, $entry_data);
+        }
+        
+    }
 	public static function set_up_email($invoice_id, $shop_id)
     {
         $plan_settings = Tbl_mlm_plan_setting::where('shop_id', $shop_id)->first();

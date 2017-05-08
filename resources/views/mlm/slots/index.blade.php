@@ -20,7 +20,7 @@ $data['icon'] = 'icon-sitemap';
     	<input type="text" class="form-control" name="active_slot" value="{{ isset($active->slot_no) ? $active->slot_no : ''}}">
 
       <label>Slot Nickname</label>
-      <input type="text" class="form-control" name="slot_nickname" value="{{ isset($active->slot_nick_name) ? $active->slot_nick_name : ''}}">
+      <input type="text" class="form-control" name="slot_nickname" value="{{ isset($active->slot_nick_name) ? $active->slot_nick_name : ''}}" readonly>
 
       <hr>
       <button class="btn btn-primary pull-right">Set Default</button>

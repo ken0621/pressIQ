@@ -9,14 +9,14 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Company Code</small>
-				<input type="text" name="company_code" class="form-control" required>
+				<input type="text" name="company_code" class="form-control" required value="{{$company->payroll_company_code}}">
 			</div>
 			<div class="col-md-6">
 				<small>Bank</small>
 				<select class="form-control" required name="bank_name">
 					<option value="">Select Bank</option>
 					@foreach($_bank as $bank)
-					<option value="{{$bank->payroll_bank_convertion_id}}">{{$bank->bank_name}}</option>
+					<option value="{{$bank->payroll_bank_convertion_id}}" {{$company->payroll_company_bank == $bank->payroll_bank_convertion_id ? 'selected="selected"':''}}>{{$bank->bank_name}}</option>
 					@endforeach
 				</select>
 			</div>

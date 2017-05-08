@@ -95,10 +95,6 @@ class ShopCheckoutController extends Shop
     }
     public function submit()
     {
-        if (Request::input("ipay88")) 
-        {
-            dd(Request::input("ipay88"));
-        }
         // Validate Customer Info
         $rules["customer_first_name"]   = 'required';
         $rules["customer_middle_name"]  = 'required';
@@ -385,9 +381,8 @@ class ShopCheckoutController extends Shop
                     }             
                 }
             }
-            else
+            elseif($if_ipay88 == 1)
             {
-                dd($if_ipay88);
                 Session::forget("ipay88_data");
                 $cart["payment_status"] = 1;
             }

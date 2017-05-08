@@ -426,8 +426,8 @@ class ShopCheckoutController extends Shop
             
             Session::put('ipay88', $ipay88);
             Session::put('ipay88_data', Request::input());
-            dd("???");
-            return redirect('/postPaymentWithIPay88');     
+
+            return redirect('/postPaymentWithIPay88')->send();    
         }  
     }
     /*Ipay88 Function*/

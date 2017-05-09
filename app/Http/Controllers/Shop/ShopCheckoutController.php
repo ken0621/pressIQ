@@ -543,10 +543,10 @@ class ShopCheckoutController extends Shop
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
             }
         }
-        else
-        {
-            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
-        }
+        // else
+        // {
+        //     return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
+        // }
     }
     /*End Ipay88*/
     public function give_product_code($cart, $slot_info, $order_id)

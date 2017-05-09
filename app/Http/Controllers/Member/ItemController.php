@@ -212,7 +212,7 @@ class ItemController extends Member
 
 		$unit_n_based 					= Request::input("unit_n_based");
 		$unit_based 					= Request::input("unit_based");
-		$qty 					        = Request::input("quantity") or 1;
+		$qty 					        = Request::input("quantity") <= 0 ? 1 : Request::input("quantity");
 
 		$item_price 					= str_replace(',','',Request::input("item_price"));
 		$item_cost 						= str_replace(',','',Request::input("item_cost"));

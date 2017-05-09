@@ -64,7 +64,7 @@ class UnitMeasurement
 
             Tbl_unit_measurement_multi::insert($ins_base);
         }
-        elseif($um_base_id == 0)
+        elseif($um_base_id == 0 && $um_n_based_id != 0)
         {
             $related_unit_data = Tbl_um::where("id",$um_n_based_id)->first();
 

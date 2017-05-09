@@ -532,7 +532,7 @@ class Ecom_Product
 				->get()
 				->toArray();
 		
-		dd($_product);
+	
 		foreach($_product as $key=>$product)
 		{
 			$_product[$key]	 = Ecom_Product::getProduct($product["eprod_id"], $shop_id);

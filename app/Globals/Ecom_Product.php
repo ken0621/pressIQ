@@ -517,6 +517,7 @@ class Ecom_Product
 		return $product;
 	}
 
+
 	public static function searchProName($keywords, $shop_id)
 	{
 		if(!$shop_id)
@@ -524,7 +525,9 @@ class Ecom_Product
 			$shop_id = Ecom_Product::getShopId();
 		}
 		
-		$_product = Tbl_ec_product::where("eprod_name", 'like', "%{$keywords}%")->where('archived', '0')->where('eprod_shop_id', $shop_id)->get()->toArray();
+		$_product = Tbl_ec_product::where("eprod_name", 'like', "%{$keywords}%")
+				->where('tbl_ec_product.archived', '0')
+				->where('eprod_shop_id', $shop_id)->get()->toArray();
 		
 		foreach($_product as $key=>$product)
 		{

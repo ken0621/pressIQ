@@ -309,7 +309,7 @@ class Invoice
                 $entry_data[$key]['entry_qty']          = $item_line['quantity'];
                 $entry_data[$key]['vatable']            = 0;
                 $entry_data[$key]['discount']           = $discount;
-                $entry_data[$key]['entry_amount']       = $amount;
+                $entry_data[$key]['entry_amount']       = $amount+$discount;
                 $entry_data[$key]['entry_description']  = $item_line['item_description'];
                 
                 $total_discount +=$discount; 

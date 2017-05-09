@@ -38,10 +38,10 @@ class Tbl_vendor extends Model
     public function scopeTransaction($query, $shop_id, $vendor_id = null)
     {
         /* PURCHASE ORDER */
-        $bill = DB::table("tbl_vendor")->selectRaw("po_date as date, 'Bill' as type, po_id as no, po_due_date as due_date, 0 as balance, po_overall_price as total, 'status' as status, date_created, 'vendor/purchase_order' as reference_url")
+        $purchase_order = DB::table("tbl_vendor")->selectRaw("po_date as date, 'Purchase Order' as type, po_id as no, po_due_date as due_date, 0 as balance, po_overall_price as total, 'status' as status, date_created, 'vendor/purchase_order' as reference_url")
                     ->join("tbl_purchase_order","po_vendor_id","=","vendor_id")
                     ->where("po_shop_id", $shop_id);
-        if($vendor_id) $bill->where("po_vendor_id", $vendor_id);
+        if($vendor_id) $purchase_order->where("po_vendor_id", $vendor_id);
 
         /* BILL */
         $bill = DB::table("tbl_vendor")->selectRaw("bill_date as date, 'Bill' as type, bill_id as no, bill_due_date as due_date, bill_total_amount - bill_applied_payment as balance, bill_total_amount as total, 'status' as status, date_created, 'vendor/create_bill' as reference_url")
@@ -55,6 +55,13 @@ class Tbl_vendor extends Model
                     ->where("paybill_shop_id", $shop_id);
         if($vendor_id) $pay_bill->where("paybill_vendor_id", $vendor_id);
 
+        /* WRITE CHECKS */
+        $write_check = DB::table("tbl_vendor")->selectRaw("wc_payment_date as date, 'Check' as type, wc_id as no, '' as due_date, 0 as balance, wc_total_amount as total, 'status' as status, date_created, 'vendor/write_check' as reference_url")
+                    ->join("tbl_write_check","wc_vendor_id","=","vendor_id")
+                    ->where("wc_shop_id", $shop_id)
+                    ->where("wc_ref_name","");
+        if($vendor_id) $write_check->where("wc_vendor_id", $vendor_id);
+
         /* JOURNAL ENTRY */
         $journal_entry = DB::table("tbl_journal_entry")->selectRaw("je_entry_date as date, 'Journal' as type, je_id as no,'' as due_date, 0 as balance, jline_amount as total, 'status' as status, tbl_journal_entry.created_at as date_created, 'accounting/journal' as reference_url")
                     ->leftJoin("tbl_journal_entry_line","jline_je_id","=","je_id")
@@ -62,6 +69,6 @@ class Tbl_vendor extends Model
                     ->where("je_reference_module","journal-entry");
         if($vendor_id) $journal_entry->where("jline_name_id", $vendor_id)->where("jline_name_reference","vendor");
         
-        return $query = $receive_payment->union($invoice)->union($journal_entry)->orderBy("date_created","desc");
+        return $query = $purchase_order->union($bill)->union($pay_bill)->union($write_check)->union($journal_entry)->orderBy("date_created","desc");
     }
 }

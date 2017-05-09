@@ -8,6 +8,7 @@ use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
 use App\Models\Tbl_journal_entry_line;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_vendor;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_ec_product;
@@ -53,7 +54,7 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        dd(Tbl_vendor::transaction($this->getShopId(), $id)->get());
+        dd(Tbl_vendor::transaction($this->getShopId(), 13)->get());
     }
 
     public function getJournal()

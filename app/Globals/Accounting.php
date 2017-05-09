@@ -371,6 +371,7 @@ class Accounting
 						Accounting::insertJournalLine($line_data);
 					}
 					break;
+				case "debit-memo":
 				case "credit-memo":
 					/* INCOME ACCOUNT */
 					$line_data["entry_amount"]	= $entry_line["entry_amount"];
@@ -392,8 +393,6 @@ class Accounting
 						$line_data["account_id"] 	= $account_asset;
 						Accounting::insertJournalLine($line_data);
 					}
-					break;
-				case "debit-memo":
 					break;
 				case "deposit":
 					/* OPENING BALANCE EQUITY */
@@ -516,6 +515,7 @@ class Accounting
 				$data["newContraJournal"] 	= 'contraAccount';
 				return $data;
 				break;
+			case 'debit-memo':
 			case 'bill-payment':
 				$data["main_account"]		= 'payable';
 				$data["name"] 				= 'vendor';

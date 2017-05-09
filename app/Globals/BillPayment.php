@@ -73,7 +73,7 @@ class BillPayment
         /* Transaction Journal */
         $entry["reference_module"]      = "bill-payment";
         $entry["reference_id"]          = $paybill_id;
-        $entry["name_id"]               = $pb_data["paybill_vendor_id"];
+        $entry["name_id"]               = $pb_dsata["paybill_vendor_id"];
         $entry["total"]                 = $pb_data["paybill_total_amount"];
         $entry_data[0]['account_id']    = $pb_data["paybill_ap_id"];
         $entry_data[0]['vatable']       = 0;

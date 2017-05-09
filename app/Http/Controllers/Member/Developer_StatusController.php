@@ -4,6 +4,9 @@ use App\Http\Controllers\Controller;
 use DB;
 use Request;
 use App\Globals\Item_code;
+use App\Models\Tbl_item_code_invoice;
+use App\Models\Tbl_journal_entry_line;
+use App\Models\Tbl_journal_entry;
 class Developer_StatusController extends Member
 {
 	public function index()
@@ -81,5 +84,26 @@ class Developer_StatusController extends Member
 			die('success');
 		}
 		die('wrong password');
+	}
+	public function retro_product_sales()
+	{
+		$shop_id = $this->user_info->shop_id;
+		$sales = Tbl_item_code_invoice::where('shop_id', $shop_id)->get();
+		$password = Request::input('password');
+		if($password == 'water123')
+		{
+			foreach($sales as $key => $value)
+			{
+				$count = Tbl_journal_entry::where('je_reference_module','=', 'mlm-product-repurchase')
+				->where('je_reference_id', $value->item_code_invoice_id)
+				->count();
+				if($count == 0)
+				{
+					Item_code::add_journal_entry($value->item_code_invoice_id);
+				}
+			}
+			return 'Success';
+		}
+
 	}
 }

@@ -104,7 +104,7 @@ class MlmReportController extends Mlm
         	$slot_per_level[$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
         	->where('sponsor_tree_level', '>=', $value['matching_settings_start'])
         	->where('sponsor_tree_level', '<=', $value['matching_settings_end'])
-        	->join('tbl_mlm_slot', 'Tbl_mlm_slot.slot_id', '=', 'tbl_tree_sponsor.sponsor_tree_child_id')
+        	->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_tree_sponsor.sponsor_tree_child_id')
         	->where('slot_matched_membership', 0)
         	->get()->keyBy('slot_id');
         	$data['matched_list'][$key] = [];

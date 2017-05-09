@@ -76,6 +76,7 @@ class ItemController extends Member
 					$data["_item"][$key]->item_whole_price = 0;
 					$data["_item"][$key]->um_whole = "";
 					$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
+					// dd($data["_item"][$key]->inventory_count_um);
 
 					$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
 					if($um)
@@ -86,7 +87,14 @@ class ItemController extends Member
 						$data["_item"][$key]->um_whole = $um->multi_abbrev;
 					}
 				}
-
+				if($value->item_type_id != 4)
+				{
+					$um_base = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",1)->first();
+					if($um_base)
+					{
+						$data["_item"][$key]->multi_abbrev = $um_base->multi_abbrev;
+					}
+				}
 				if($value->item_type_id == 4)
 				{
 					$data["_item"][$key]->item_price = Item::get_item_bundle_price($value->item_id);
@@ -204,7 +212,7 @@ class ItemController extends Member
 
 		$unit_n_based 					= Request::input("unit_n_based");
 		$unit_based 					= Request::input("unit_based");
-		$qty 					        = Request::input("quantity") or 1;
+		$qty 					        = Request::input("quantity") <= 0 ? 1 : Request::input("quantity");
 
 		$item_price 					= str_replace(',','',Request::input("item_price"));
 		$item_cost 						= str_replace(',','',Request::input("item_cost"));

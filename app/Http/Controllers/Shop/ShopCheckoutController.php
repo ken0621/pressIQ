@@ -93,6 +93,8 @@ class ShopCheckoutController extends Shop
 
         return view("checkout", $data);
     }
+    
+    /* PAYMENT GATEWAY */
     public function submit_using_credit_card()
     {
         dd("Under Maintenance");
@@ -106,6 +108,14 @@ class ShopCheckoutController extends Shop
         // Create Order
         $cart["order_status"] = "Failed";
         $result = Ec_order::create_ec_order_automatic($cart);
+
+        if(isset($result['order_id']['status']))
+        {
+              return Redirect::back()
+                 ->withErrors($result['order_id']['status_message'])
+                 ->withInput()
+                 ->send();
+        }
 
         $shop_id= $this->shop_info->shop_id;
         $online_payment_api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)
@@ -121,7 +131,7 @@ class ShopCheckoutController extends Shop
 
         if ($exist_reference) 
         {
-            return Redirect::back()->with('fail', 'Some error occurred. Please try again.');
+            return Redirect::back()->with('fail', 'Some error occurred. Please try again.')->send();
         }
         else
         {
@@ -185,13 +195,94 @@ class ShopCheckoutController extends Shop
         {
               return Redirect::back()
                  ->withErrors($result['order_id']['status_message'])
-                 ->withInput();
+                 ->withInput()
+                 ->send();
         }
 
         Cart::clear_all($this->shop_info->shop_id);
 
         return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
     }
+    public function submit_using_paymaya()
+    {
+        dd("Under Maintenance");
+    }
+    public function submit_using_paynamics()
+    {
+        dd("Under Maintenance");
+    }
+    public function submit_using_dragonpay()
+    {
+        dd("Under Maintenance");
+    }
+    public function submit_using_ewallet($cart)
+    {
+        $sum = $cart["sum"];
+        $get_cart = Cart::get_cart($this->shop_info->shop_id);
+
+        if(Self::$slot_now != null)
+        {
+            $check_wallet = $this->check_wallet(Self::$slot_now);
+            if($check_wallet >= $sum )
+            {
+                // return $check_wallet;
+                $log = 'Thank you for purchasing. ' .$sum. ' is deducted to your wallet';
+                $arry_log['wallet_log_slot'] = Self::$slot_now->slot_id;
+                $arry_log['shop_id'] = Self::$slot_now->shop_id;
+                $arry_log['wallet_log_slot_sponsor'] = Self::$slot_now->slot_id;
+                $arry_log['wallet_log_details'] = $log;
+                $arry_log['wallet_log_amount'] = $sum * (-1);
+                $arry_log['wallet_log_plan'] = "REPURCHASE";
+                $arry_log['wallet_log_status'] = "released";   
+                $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                
+
+                $cart["order_status"] = "Processing";
+            }
+            else
+            {
+                $send['errors'][0] = "Your wallet only have, " . number_format($check_wallet) . ' where the needed amount is ' . number_format($sum) ;
+                return Redirect::back()
+                    ->withErrors($send)
+                    ->withInput()
+                    ->send();
+            }
+        }
+        else
+        {
+            $send['errors'][0] = "Only members with slot can use the wallet option.";
+            return Redirect::back()->withErrors($send)->withInput()->send();
+        }
+
+        $result = Ec_order::create_ec_order_automatic($cart);
+        if(isset($result['order_id']['status']))
+        {
+              return Redirect::back()
+                 ->withErrors($result['order_id']['status_message'])
+                 ->withInput()
+                 ->send();
+        }
+
+        if(Self::$slot_now != null)
+        {
+            if(isset($result['order_id']))
+            {
+                Mlm_slot_log::slot_array($arry_log);
+                $this->give_product_code($get_cart['cart'], Self::$slot_now, $result['order_id']);
+
+                /* SMS Notification */
+                // $txt[0]["txt_to_be_replace"]    = "[name]";
+                // $txt[0]["txt_to_replace"]       = $invoice['first_name'];
+                // $result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
+            }
+        }
+     
+        Cart::clear_all($this->shop_info->shop_id);
+
+        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
+    }
+    /* END PAYMENT GATEWAY */
+
     public function validate_submit()
     {
         // Validate Customer Info
@@ -306,6 +397,7 @@ class ShopCheckoutController extends Shop
         $cart["payment_status"] = 0;
         $cart["payment_upload"] = "";
         $cart["product_summary"] = $product_summary;
+        $cart["sum"] = $sum;
 
         if(isset(Self::$customer_info->customer_id))
         {
@@ -323,7 +415,7 @@ class ShopCheckoutController extends Shop
         $stock = Cart::check_product_stock(Cart::get_cart($this->shop_info->shop_id));
         if ($stock["status"] == "fail") 
         {
-            return Redirect::back()->with('fail', $stock["error"]);
+            return Redirect::back()->with('fail', $stock["error"])->send();
         }
     }
     public function check_payment_method_enabled($cart)
@@ -336,89 +428,40 @@ class ShopCheckoutController extends Shop
 
         if (!$payment_method) 
         {
-            return Redirect::back()->with('fail', 'Invalid payment method. Please try again.');
+            return Redirect::back()->with('fail', 'Invalid payment method. Please try again.')->send();
         }
     }
     public function check_payment_method($cart)
     {
         $file = Input::file('payment_upload');
 
-        switch ($cart["payment_method_id"])
+        $payment_method = DB::table("tbl_online_pymnt_link")->where("link_method_id", $cart["payment_method_id"])->first();
+
+        if ($payment_method->link_reference_name == "other") 
         {
-            case 1: $this->submit_using_credit_card(); break;
-            case 2: $this->submit_using_paypal(); break;
-            case 3: $this->submit_using_proofofpayment($file, $cart); break;
-            case 4: $this->submit_using_proofofpayment($file, $cart); break;
-            case 5: $this->submit_using_proofofpayment($file, $cart); break;
-            case 6: 
-                if(Self::$slot_now != null)
-                {
-                    $check_wallet = $this->check_wallet(Self::$slot_now);
-                    if($check_wallet >= $sum )
-                    {
-                        // return $check_wallet;
-                        $log = 'Thank you for purchasing. ' .$sum. ' is deducted to your wallet';
-                        $arry_log['wallet_log_slot'] = Self::$slot_now->slot_id;
-                        $arry_log['shop_id'] = Self::$slot_now->shop_id;
-                        $arry_log['wallet_log_slot_sponsor'] = Self::$slot_now->slot_id;
-                        $arry_log['wallet_log_details'] = $log;
-                        $arry_log['wallet_log_amount'] = $sum * (-1);
-                        $arry_log['wallet_log_plan'] = "REPURCHASE";
-                        $arry_log['wallet_log_status'] = "released";   
-                        $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
-                        
+            $use_payment_method = DB::table("tbl_online_pymnt_method")->where("method_id", $payment_method->link_method_id)->first();
 
-                        $cart["order_status"] = "Processing";
-                    }
-                    else
-                    {
-                        $send['errors'][0] = "Your wallet only have, " . number_format($check_wallet) . ' where the needed amount is ' . number_format($sum) ;
-                        return Redirect::back()
-                            ->withErrors($send)
-                            ->withInput();
-                    }
-                }
-                else
-                {
-                    $send['errors'][0] = "Only members with slot can use the wallet option.";
-                    return Redirect::back()->withErrors($send)->withInput();
-                }
+            switch ($use_payment_method->method_code_name) 
+            {
+                case 'e-wallet': return $this->submit_using_ewallet($cart); break;
+                default: return $this->submit_using_proofofpayment($file, $cart); break;
+            }
+        }
+        else
+        {
+            $use_payment_method = DB::table("tbl_online_pymnt_api")->where("api_id", $payment_method->link_reference_id)->first();
+            $use_gateway        = DB::table("tbl_online_pymnt_gateway")->where("gateway_id", $use_payment_method->api_gateway_id)->first();
 
-                $result = Ec_order::create_ec_order_automatic($cart);
-                if(isset($result['order_id']['status']))
-                {
-                      return Redirect::back()
-                         ->withErrors($result['order_id']['status_message'])
-                         ->withInput();
-                }
-
-                if(Self::$slot_now != null)
-                {
-                    if(isset($result['order_id']))
-                    {
-                        Mlm_slot_log::slot_array($arry_log);
-                        $this->give_product_code($get_cart['cart'], Self::$slot_now, $result['order_id']);
-
-                        /* SMS Notification */
-                        // $txt[0]["txt_to_be_replace"]    = "[name]";
-                        // $txt[0]["txt_to_replace"]       = $invoice['first_name'];
-                        // $result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
-                    }
-                }
-             
-                Cart::clear_all($this->shop_info->shop_id);
-
-                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
-            break;
-            case 7: $this->submit_using_proofofpayment($file, $cart); break;
-            case 8: $this->submit_using_ipay88($cart); break;
-            case 9: $this->submit_using_proofofpayment($file, $cart); break;
-            case 10: $this->submit_using_proofofpayment($file, $cart); break;
-            case 11: $this->submit_using_proofofpayment($file, $cart); break;
-            case 12: $this->submit_using_proofofpayment($file, $cart); break;
-            case 13: $this->submit_using_proofofpayment($file, $cart); break;
-            default:
-            break;
+            switch ($use_gateway->gateway_code_name) 
+            {
+                case 'paypal2': return $this->submit_using_paypal(); break;
+                case 'paymaya': return $this->submit_using_paymaya(); break;
+                case 'paynamics': return $this->submit_using_paynamics(); break;
+                case 'dragonpay': return $this->submit_using_dragonpay(); break;
+                case 'other': return $this->submit_using_proofofpayment($file, $cart); break;
+                case 'ipay-88': return $this->submit_using_ipay88($cart); break;
+                default: dd("Some error occurred"); break;
+            }
         }
     }
     public function submit()
@@ -496,7 +539,7 @@ class ShopCheckoutController extends Shop
 
             if($request['Status'] == 0)
             {
-                return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');    
+                return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.')->send();    
             } 
             else 
             {
@@ -513,7 +556,7 @@ class ShopCheckoutController extends Shop
         }
         else
         {
-            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->s;
+            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
         }
     }
     /*End Ipay88*/
@@ -571,7 +614,6 @@ class ShopCheckoutController extends Shop
         Tbl_item_code_item::insert($insert_item_per);
 
         Item_code::use_item_code_all_ec_order($order_id);
-
     }
     public function check_wallet($slot_now)
     {

@@ -497,7 +497,7 @@ class Accounting
 				break;
 			case 'mlm-product-repurchase':
 			case 'sales-receipt':
-				$data["main_account"]		= 'cash';
+				$data["main_account"]		= 'cash-r';
 				$data["name"] 				= 'customer';
 				$data["newNormalJournal"] 	= 'normalBalance';
 				$data["newContraJournal"] 	= 'contraAccount';

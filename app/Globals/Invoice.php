@@ -223,7 +223,13 @@ class Invoice
             $update["inv_payment_applied"] = $overall_price;
 
             Invoice::update_rcv_payment("invoice",$invoice_id,$overall_price);
+            $transaction_type = "sales-receipt";
         }
+        else
+        {
+            $transaction_type = "invoice";
+        }
+
         Tbl_customer_invoice::where("inv_id", $invoice_id)->update($update);
         
 
@@ -232,7 +238,7 @@ class Invoice
 
         
         /* Transaction Journal */
-        $entry["reference_module"]  = "invoice";
+        $entry["reference_module"]  = $transaction_type;
         $entry["reference_id"]      = $invoice_id;
         $entry["name_id"]           = $customer_info['customer_id'];
         $entry["total"]             = $overall_price;
@@ -303,7 +309,7 @@ class Invoice
                 $entry_data[$key]['entry_qty']          = $item_line['quantity'];
                 $entry_data[$key]['vatable']            = 0;
                 $entry_data[$key]['discount']           = $discount;
-                $entry_data[$key]['entry_amount']       = $amount;
+                $entry_data[$key]['entry_amount']       = $amount+$discount;
                 $entry_data[$key]['entry_description']  = $item_line['item_description'];
                 
                 $total_discount +=$discount; 

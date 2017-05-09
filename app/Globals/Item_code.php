@@ -623,8 +623,8 @@ class Item_code
             $entry["name_id"] = $invoice->customer_id;
             $entry["total"] = $invoice->item_total;
             $entry["discount"] = $invoice->item_discount;
-
             $items = Tbl_item_code_item::where('item_code_invoice_id', $invoice_id)->get();
+            $entry_data = [];
             foreach ($items as $key => $value) 
             {
                 # code...

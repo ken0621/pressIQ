@@ -216,6 +216,7 @@ class ShopCheckoutController extends Shop
     public function submit_using_ewallet($cart)
     {
         $sum = $cart["sum"];
+        $get_cart = Cart::get_cart($this->shop_info->shop_id);
 
         if(Self::$slot_now != null)
         {

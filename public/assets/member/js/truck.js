@@ -3,7 +3,7 @@ function submit_done(data)
 	if(data.status == "success")
     {
         toastr.success("Success");
-        $(".truck-container").load("/member/pis/truck_list .truck-container"); 
+        $(".truck-container").load("/member/utilities/truck_list .truck-container"); 
         $(data.target).html(data.view);
         $('#global_modal').modal('toggle');
         $("#all-list").addClass("active");

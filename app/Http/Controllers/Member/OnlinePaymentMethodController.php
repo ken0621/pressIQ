@@ -33,7 +33,7 @@ class OnlinePaymentMethodController extends Member
 		}
 		// dd($data["_method"] );
 		$data["_gateway"] 	= $this->gatewayInfo();
-		// dd($data);
+		// dd($data["_gateway"]);
 		return view('member.online_payment.payment', $data);
 	}
 
@@ -54,7 +54,7 @@ class OnlinePaymentMethodController extends Member
 				$_gateway[$key]->secret_id = $gateway->api_secret_ids;
 			}
 		}
-		 //dd($_gateway);
+
 		return $_gateway;
 	}
 

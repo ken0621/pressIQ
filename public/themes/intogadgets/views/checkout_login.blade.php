@@ -6,26 +6,25 @@
 			<div class="form-holder">
 				<div class="form-header">Login or Checkout as guest</div>
 				<div class="form-content">
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Enter your email address" name="username">
-					</div>
-					<div class="form-group">
-						<div class="radio">
-						  <label><input type="radio" name="optradio" checked> Continue without password</label>
+					<form class="form-login" method="get" action="/checkout">
+						<div class="form-group">
+							<input type="text" class="the-email form-control" placeholder="Enter your email address" name="email">
 						</div>
-						<div class="radio">
-						  <label><input type="radio" name="optradio"> I already have an account</label>
+						<div class="form-group">
+							<div class="radio">
+							  <label><input class="radio-continue" type="radio" name="continue" checked yes="1"> Continue without password</label>
+							</div>
+							<div class="radio">
+							  <label><input class="radio-continue" type="radio" name="continue" yes="0"> I already have an account</label>
+							</div>
 						</div>
-					</div>
-					<div class="form-group">
-						<input disabled type="text" class="form-control" placeholder="Enter your password" name="password">
-					</div>
-					<div class="form-group text-right">
-						<a href="javascript:">Lost your password?</a>
-					</div>
-					<div class="form-group">
-						<button class="btn btn-primary">CONTINUE</button>
-					</div>
+						<div class="form-group">
+							<input disabled type="text" class="the-password form-control" placeholder="Enter your password" name="password">
+						</div>
+						<div class="form-group">
+							<button class="btn btn-primary">CONTINUE</button>
+						</div>
+					</form>
 				</div>
 			</div>
 		</div>

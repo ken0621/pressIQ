@@ -17,7 +17,7 @@
 						<a href="#" class="popup" link="/member/payroll/custom_payslip/modal_edit_payslip/{{$payslip->payroll_payslip_id}}" size="lg"></i><i class="fa fa-pencil"></i>&nbsp;Edit</a>
 					</li>
 					<li>
-						<a href="#" class="popup" link="/member/payroll/custom_payslip/modal_archive_payslip/1/{{$payslip->payroll_payslip_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
+						<a href="#" class="popup" link="/member/payroll/custom_payslip/modal_archive_payslip/0/{{$payslip->payroll_payslip_id}}" size="sm"><i class="fa fa-recycle"></i>&nbsp;Restore</a>
 					</li>
 				</ul>
 			</div>

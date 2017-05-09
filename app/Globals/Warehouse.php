@@ -249,7 +249,7 @@ class Warehouse
 
     public static function getUserid()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id') or 0;
     }
     public static function check_inventory_on_warehouse($warehouse_id = 0, $item_id = 0, $return = 'array')
     {

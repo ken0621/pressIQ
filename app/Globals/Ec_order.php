@@ -305,6 +305,7 @@ class Ec_order
         $update['order_status']  = $data["order_status"];
         $update['payment_status'] = $data["payment_status"];
         $order_status            = $data["order_status"];
+        $shop_id                 = isset($data["shop_id"]) ? $data["shop_id"] : null ;
         $order                   = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
         $response                = "nothing";
 
@@ -312,34 +313,34 @@ class Ec_order
         {
             if($order_status == "Processing")
             {
-                $response = Ec_order::update_inventory("deduct",$ec_order_id);
+                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
             }
             else if($order_status == "Completed")
             {
-                $response = Ec_order::update_inventory("deduct",$ec_order_id);   
+                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);   
             }
             else if($order_status == "Shipped")
             {
-                $response = Ec_order::update_inventory("deduct",$ec_order_id);   
+                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);   
             }
             else if($order_status == "On-hold")
             {
-                $response = Ec_order::update_inventory("deduct",$ec_order_id);
+                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
             }
         }
         else if($order->order_status == "Processing" || $order->order_status == "Completed" || $order->order_status == "On-hold" || $order->order_status == "Shipped")
         {
             if($order_status == "Pending")
             {
-                $response = Ec_order::update_inventory("add",$ec_order_id);
+                $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);
             }
             else if($order_status == "Failed")
             {
-                $response = Ec_order::update_inventory("add",$ec_order_id);   
+                $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);   
             }
             else if($order_status == "Cancelled")
             {
-                $response = Ec_order::update_inventory("add",$ec_order_id);
+                $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);
             }
         }
 
@@ -376,12 +377,12 @@ class Ec_order
         }
 	}
 
-    public static function update_inventory($type,$ec_order_id)
+    public static function update_inventory($type,$ec_order_id, $shop_id)
     {
         $ec_order     = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
+        $warehouse_id = Ecom_Product::getWarehouseId($shop_id);
         if($type == "deduct")
         {
-            $warehouse_id = Ecom_Product::getWarehouseId();
             $ec_order_item = Tbl_ec_order_item::where("ec_order_id",$ec_order_id)->get();
             $ctr = 0;
             foreach($ec_order_item as $ordered)
@@ -409,7 +410,6 @@ class Ec_order
         }
         else if($type == "add")
         {
-            $warehouse_id  = Ecom_Product::getWarehouseId();
             $ec_order_item = Tbl_ec_order_item::where("ec_order_id",$ec_order_id)->get();
             $ctr = 0;
             foreach($ec_order_item as $ordered)

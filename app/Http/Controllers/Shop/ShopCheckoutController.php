@@ -502,7 +502,8 @@ class ShopCheckoutController extends Shop
             {
                 $update["payment_status"] = 1;
                 $update["order_status"] = "Processing";
-                $update["ec_order_id"] = $order_id;
+                $update["ec_order_id"]  = $order_id;
+                $update["shop_id"]      = $this->shop_info->shop_id;
                 Ec_order::update_ec_order($update);   
                 Cart::clear_all($this->shop_info->shop_id);
 

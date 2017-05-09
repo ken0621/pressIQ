@@ -53,7 +53,7 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-            dd(Accounting::getTotalAccount()["accounts_receivable"]);
+        dd(Tbl_vendor::transaction($this->getShopId(), $id)->get());
     }
 
     public function getJournal()

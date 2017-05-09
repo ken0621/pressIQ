@@ -415,7 +415,7 @@ class Purchasing_inventory_system
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" style="text-decoration: line-through;">5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
             <div class="col-md-12" style="text-decoration: line-through;">7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 1 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
@@ -544,7 +544,7 @@ class Purchasing_inventory_system
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;;
                 }
                 else
                 {
@@ -578,7 +578,7 @@ class Purchasing_inventory_system
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;;
                 }
                 else
                 {
@@ -611,7 +611,7 @@ class Purchasing_inventory_system
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;;
                 }
                 else
                 {
@@ -645,7 +645,7 @@ class Purchasing_inventory_system
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;;
                 }
                 else
                 {
@@ -697,7 +697,7 @@ class Purchasing_inventory_system
                $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;
                 }
                 else
                 {
@@ -733,35 +733,59 @@ class Purchasing_inventory_system
         $data["sir"] = Tbl_sir::truck()->saleagent()->where("sir_id",$sir_id)->where("sir_status",1)->where("tbl_sir.archived",0)->first();
         $data["_sir_item"] = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->get();
         // dd($data["_sir_item"]);
-        if($data["_sir_item"] != null)
+        if(count($data["_sir_item"]) > 0)
         {
             foreach($data["_sir_item"] as $key => $value) 
-            {                    
-                $rem_qty = Purchasing_inventory_system::count_rem_qty($sir_id, $value->item_id);
-                $sold_qty = Purchasing_inventory_system::count_sold_qty($sir_id, $value->item_id);
-
-
-                $um = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
-
-                $data["_sir_item"][$key]->um_name = isset($um->multi_name) ? $um->multi_name : "";
-                $data["_sir_item"][$key]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
-                $qty = UnitMeasurement::um_qty($value->related_um_type);
-
-                $issued_qty = $value->item_qty * $qty;
-                $remaining_qty = $rem_qty;
-                $total_sold_qty = $sold_qty;
-                
+            {  
                 $rem = "";
                 $sold = "";
                 $physical_count = "";
-                $rem = UnitMeasurement::um_view($remaining_qty, $value->item_measurement_id, $value->related_um_type);
-                $sold = UnitMeasurement::um_view($total_sold_qty, $value->item_measurement_id, $value->related_um_type);
-                $physical_count = UnitMeasurement::um_view($value->physical_count, $value->item_measurement_id,$value->related_um_type);
-            
+                if($value->item_type_id != 4)
+                {
+                    $rem_qty = Purchasing_inventory_system::count_rem_qty($sir_id, $value->item_id);
+                    $sold_qty = Purchasing_inventory_system::count_sold_qty($sir_id, $value->item_id);
+
+
+                    $um = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
+
+                    $data["_sir_item"][$key]->um_name = isset($um->multi_name) ? $um->multi_name : "";
+                    $data["_sir_item"][$key]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
+                    $qty = UnitMeasurement::um_qty($value->related_um_type);
+
+                    $issued_qty = $value->item_qty * $qty;
+                    $remaining_qty = $rem_qty;
+                    $total_sold_qty = $sold_qty;
+                    
+                    $rem = UnitMeasurement::um_view($remaining_qty, $value->item_measurement_id, $value->related_um_type);
+                    $sold = UnitMeasurement::um_view($total_sold_qty, $value->item_measurement_id, $value->related_um_type);
+                    $physical_count = UnitMeasurement::um_view($value->physical_count, $value->item_measurement_id,$value->related_um_type);
+                }   
+                else
+                {
+                    $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$value->item_id)->get();
+
+                    $total_bundle_qty = 0;
+                    $total_sold_bundle_qty = 0;
+                    $qty = [];
+                    $qtys = [];
+                    foreach ($bundle_item as $key_bundle => $value_bundle)
+                    {
+                       $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
+
+                       $issued_bundle_qty_item = (UnitMeasurement::um_qty($value->related_um_type) * $value->item_qty) * $bundle_qty;
+
+                       $total_sold_bundle_qty = Tbl_sir_inventory::where("sir_item_id",$value_bundle->bundle_item_id)->where("inventory_sir_id",$sir_id)->where("sir_inventory_count","<",0)->sum("sir_inventory_count");
+                       $rem_bundle_qty = ($issued_bundle_qty_item - abs($total_sold_bundle_qty)) / $bundle_qty;
+                       $sold_bundle_qty = $value->item_qty - $rem_bundle_qty;
+                    }
+                    $rem = UnitMeasurement::um_view(round($rem_bundle_qty), $value->item_measurement_id, $value->related_um_type);
+                    $sold = UnitMeasurement::um_view(round($sold_bundle_qty), $value->item_measurement_id, $value->related_um_type);
+                    $physical_count = UnitMeasurement::um_view($value->physical_count, $value->item_measurement_id,$value->related_um_type);
+                }
+
                 $data["_sir_item"][$key]->remaining_qty = $rem;
                 $data["_sir_item"][$key]->sold_qty = $sold;
                 $data["_sir_item"][$key]->physical_count = $physical_count;
-
             }
         }
         return $data;

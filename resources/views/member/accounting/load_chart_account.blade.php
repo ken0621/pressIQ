@@ -4,16 +4,12 @@
 		
 	    <td class="indent" indent="{{$account['account_sublevel']}}" style="font-weight: bold;">{{$account['account_number']}} • {{$account['account_name']}}</td>
 	    <td>{{$account['account_type']}}</td>
-	    <td>0</td>
+	    <td>{{$account['account_balance']}}</td>
 	    <td>
 	    	<!-- ACTION BUTTON -->
-            <div class="btn-group">
-				<button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-				Action <span class="caret"></span>
-				</button>
-				<ul class="dropdown-menu dropdown-menu-custom">
-					<li><a href="javascript:" class="popup btn-edit-account" link="/member/accounting/chart_of_account/popup/update/{{$account['account_id']}}" >Edit Chart of Accounts</a></li>
-				</ul>
+	    	<div class="btn-group">
+                <a class="btn btn-primary btn-grp-primary popup btn-edit-account" href="javascript:" link="/member/accounting/chart_of_account/popup/update/{{$account['account_id']}}">Edit</a>
+                <!-- <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="" size="md"><span class="fa fa-trash"></span></a> -->
             </div>
 	    </td>
 	</tr>

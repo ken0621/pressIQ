@@ -38,7 +38,6 @@ class Shop extends Controller
         if(Session::get('mlm_member') != null)
         {
             $session = Session::get('mlm_member');
-
             Self::$customer_info = $session['customer_info'];
             if($session['slot_now'])
             {
@@ -118,14 +117,9 @@ class Shop extends Controller
         $product_category = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         $global_cart = Cart::get_cart($this->shop_info->shop_id);
         $country = Tbl_country::get();
-
-        /* Set Email Configuration */
-        Settings::set_mail_setting($this->shop_info->shop_id);
-
-
         
         View::share("slot_now", Self::$slot_now);
-        View::share("customer_info", Self::$customer_info);
+        View::share("customer_info_a", Self::$customer_info);
         View::addLocation(base_path() . '/public/themes/' . $this->shop_theme . '/views/');
         View::share("shop_info", $this->shop_info);
         View::share("shop_theme", $this->shop_info->shop_theme);

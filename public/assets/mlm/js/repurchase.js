@@ -123,7 +123,7 @@ function repurchase()
 		$('.checkout-button').unbind("click");
 		$('.checkout-button').bind("click", function()
 		{
-			alert("Under Development");
+			// alert("Under Development");
 		});
 	}
 }

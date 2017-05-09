@@ -7,14 +7,26 @@
 				<div class="slider round"></div>
 			</label> -->
 			<div class="checkbox">
-				<label><input type="checkbox" data-target="{{$payslip->payroll_payslip_id}}" value="1">Use as template</label>
+				<label><input type="checkbox" value="{{$payslip->payroll_payslip_id}}" class="checkbox-use-payslip" {{$payslip->payslip_is_use == 1 ? 'checked="checked"':''}}>Use as template</label>
+			</div>
+			<div class="dropdown pull-right" style="margin-top:-28px">
+				<button class="btn btn-custom-white dropdown-toggle btn-xs" type="button" data-toggle="dropdown">Action
+				<span class="caret"></span></button>
+				<ul class="dropdown-menu dropdown-menu-custom">
+					<li>
+						<a href="#" class="popup" link="/member/payroll/custom_payslip/modal_edit_payslip/{{$payslip->payroll_payslip_id}}" size="lg"></i><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+					</li>
+					<li>
+						<a href="#" class="popup" link="/payroll/member/custom_payslip/modal_archive_payslip/1/{{$payslip->payroll_payslip_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archived</a>
+					</li>
+				</ul>
 			</div>
 		</div>
 	</div>
 	<div class="form-group">
 		<div class="col-md-12">
 			<div class="payslip-div paper-portrait">
-				<div class="payslip-gray-dotted payslip-container" style="height:auto;display: inline-block;width:{{$payslip->payslip_width}}%;">
+				<div class="payslip-gray-dotted" style="height:auto;display: inline-block;width:{{$payslip->payslip_width}}%;">
 					<div class="col-md-12 padding-5">
 						@if($payslip->include_company_logo == 1)
 						<div class="payslip-div padding-5 company-logo-container">
@@ -76,3 +88,34 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/javascript">
+	$(".checkbox-use-payslip").unbind("change");
+	$(".checkbox-use-payslip").bind("change", function()
+	{
+		var is_checked = 1;
+		if(!$(this).is(':checked'))
+		{
+			is_checked = 0;
+		}
+		var id = $(this).val();
+
+		$.ajax({
+			url 	: 	'/member/payroll/custom_payslip/payslip_use_change',
+			type 	: 	'POST',
+			data 	: 	{
+				_token:$("#_token").val(),
+				is_checked:is_checked,
+				id:id
+			},
+			success	: 	function(result)
+			{
+				toastr.success('Payslip template has changed usage.');
+			},
+			error 	: 	function(err)
+			{
+				toastr.error("Error, something went wrong.");
+			}
+		});
+	});
+</script>

@@ -5258,7 +5258,9 @@ class PayrollController extends Member
                                                             ->get();
                array_push($data['_period'], $temp);
           }
-          
+
+
+          // dd(Self::shop_id());
           return view('member.payroll.payroll_approved', $data);
      }
 

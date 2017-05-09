@@ -629,8 +629,8 @@ class Item_code
             {
                 # code...
                 $entry_data[$key]['item_id'] = $value->item_id;
-                $entry_data[$key]['discount'] = $value->item_membership_discount;
-                $entry_data[$key]['entry_amount'] = $value->item_price;
+                $entry_data[$key]['discount'] = $value->item_membership_discount * $value->item_quantity;
+                $entry_data[$key]['entry_amount'] = $value->item_price * $value->item_quantity;
             }
             Accounting::postJournalEntry($entry, $entry_data);
         }

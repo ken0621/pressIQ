@@ -19,6 +19,8 @@ class Tbl_journal_entry_line extends Model
     public function scopeItem($query)
     {
     	return $query->leftjoin("tbl_item", "item_id", "=", "jline_item_id");
+        
+        // {{$um->multi_name}} ({{$um->multi_abbrev}}
     }
 
     public function scopeCustomerOrVendor($query, $type = null)
@@ -55,13 +57,18 @@ class Tbl_journal_entry_line extends Model
     }
     public function scopeJoinReciept($query)
     {
-         // $query->raw("left Join (select item_code_invoice_id as id from tbl_item_code_invoice) as code_invoice on je_reference_id = code_invoice.id and je_reference_module = 'mlm-product-repurchase'");
-        // $query->leftjoin('tbl_item_code_invoice as code_invoice', 'code_invoice.item_code_invoice_id', '=', 'je_reference_id');
-        // $query->leftJoin(DB::raw("(tbl_item_code_invoice.item_code_invoice_id as id) AS code_invoice"), 'code_invoice.id', '=', 'je_reference_id');
-        $query->leftJoin('tbl_item_code_invoice as code_invoice', function($join){
+        $query->leftJoin('tbl_item_code_invoice.item_code_invoice_id as code_invoice, tbl_item_code_invoice.', function($join){
             $join->on('code_invoice.item_code_invoice_id', '=', 'je_reference_id');
-            $join->on('je_reference_module', '=', DB::raw('mlm-product-repurchase'));
+            $join->where('je_reference_module', '=', DB::raw('mlm-product-repurchase'));
         });
         return $query; 
+    }
+    public function scopeConcatUm($query)
+    {
+        $query->leftjoin('tbl_unit_measurement', 'tbl_unit_measurement.um_id','=', 'tbl_item.item_measurement_id')
+        ->leftjoin("tbl_unit_measurement_multi","multi_um_id","=","um_id")
+        ->selectRaw("concat(multi_name, ':', multi_abbrev) as 'z_um'");
+        
+        return $query;
     }
 }

@@ -18,6 +18,7 @@ class Tbl_payroll_employee_search extends Model
 
 	public function scopesearch($query, $body = '', $status = 'active' ,$date = '0000-00-00', $shop_id = 0)
 	{
+		// dd($shop_id);
 		if($date == '0000-00-00')
 		{
 			$date = date('Y-m-d');

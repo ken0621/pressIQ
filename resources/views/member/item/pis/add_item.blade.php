@@ -76,7 +76,7 @@
                         </div>
                         <div class="col-md-4">
                             <label>Quantity</label>
-                            <input type="text" class="form-control input-sm" name="quantity" value="{{isset($data['quantity']) or 1}}">
+                            <input type="number" class="form-control input-sm" min="1" name="quantity" value="{{isset($data['quantity']) or 1}}">
                         </div>
                     </div>
                     <div class="form-group">     

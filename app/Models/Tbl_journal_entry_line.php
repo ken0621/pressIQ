@@ -39,4 +39,9 @@ class Tbl_journal_entry_line extends Model
     {
         return $query->select("jline_item_id","jline_account_id","jline_type","jline_amount","jline_description");
     }
+
+    public function scopeJournal()
+    {
+        return $query->join("tbl_journal_entry","je_id","=","jline_je_id");
+    }
 }

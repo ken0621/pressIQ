@@ -5,6 +5,8 @@
                 <th class="text-left">Company Name</th>
                 <th class="text-left">Contact Person</th>
                 <th class="text-left">Contact Details</th>
+                <th class="text-center">Balance Total</th>
+
                 <th></th>
             </tr>
         </thead>
@@ -19,6 +21,7 @@
                     Fax : {{$vendor->ven_info_fax != "" ? $vendor->ven_info_fax : "---"}}<br>
                     Email Address : <a target="_blank" {{$vendor->vendor_email != "" ? 'href=https://mail.google.com/mail/?view=cm&fs=1&to='.$vendor->vendor_email : '' }}>{{$vendor->vendor_email != "" ? $vendor->vendor_email : "---" }}</a>
                 </td>
+                <td class="col-md-3 text-left">{{currency("PHP",$vendor->balance)}}</td>
                 <td class="col-md-2 text-center">
                     <!-- ACTION BUTTON -->
                     @if($vendor->archived == 0)

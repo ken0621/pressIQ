@@ -24,6 +24,7 @@ class Tbl_journal_entry extends Model
                                 WHEN 'bill' THEN concat('/member/vendor/create_billt?id=', je_reference_id)
                                 WHEN 'debit-memo' THEN concat('/member/vendor/', je_reference_id)
                                 WHEN 'bill-payment' THEN concat('/member/vendor/paybill?id=', je_reference_id)
+                                WHEN 'mlm-product-repurchase' THEN concat('/member/mlm/product_code/receipt?invoice_id=', je_reference_id)
                                 WHEN 'journal-entry' THEN concat('/member/accounting/journal?id=', je_id)
                                 END) as txn_link");
         if($reference)

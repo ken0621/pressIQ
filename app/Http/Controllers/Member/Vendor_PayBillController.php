@@ -38,7 +38,7 @@ class Vendor_PayBillController extends Member
         $data["v_id"]           = Request::input("vendor_id");
         $data["bill_id"]           = Request::input("bill_id");
         $data["_vendor"]        = Vendor::getAllVendor('active');
-        $data['_account']       = Accounting::getAllAccount();
+        $data['_account']       = Accounting::getAllAccount('all',null,['Bank']);
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
         $data['action']         = "/member/vendor/paybill/add";
         $data["_bill"]          = Billing::getAllBillByVendor($data["v_id"]);
@@ -69,7 +69,6 @@ class Vendor_PayBillController extends Member
 
     public function add_pay_bill()
     {
-        // dd(Request::input());
         $pb_data["paybill_vendor_id"]         = Request::input('paybill_vendor_id');
         $pb_data["paybill_ap_id"]             = Request::input('paybill_ap_id') != "" ? Request::input('paybill_ap_id') : 0;
         $pb_data["paybill_date"]              = datepicker_input(Request::input('paybill_date'));

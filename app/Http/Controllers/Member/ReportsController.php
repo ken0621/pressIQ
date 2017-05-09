@@ -287,11 +287,13 @@ class ReportsController extends Member
         {
             $data['sales_by_customer'][$value->jline_name_id][$value->jline_id] = $value ;
             $data['customer_info'][$value->jline_name_id] = $value->full_name;
+
         }
         $data['report_field'] = Tbl_report_field::where('report_field_shop', '=', $shop_id)
         ->where('report_field_archive', '=', 0)
         ->get()->keyBy('report_field_module');
         // dd($data['sales_by_customer'][197]);
+
         return view('member.reports.output.sale', $data);
     }
 }

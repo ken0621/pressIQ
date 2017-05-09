@@ -83,6 +83,21 @@
                             <td class="text-right  {{$customer->customer_opening_balance > 0? 'color-red': ''}}"><span class="pull-left"></span>{{currency('PHP',$customer->balance)}}</td>
                             <td class="text-center">
                                 <!-- ACTION BUTTON -->
+                                <!-- <div class="dropdown">
+                                    <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
+                                    <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-header">Create Transaction</li>
+                                        <li><a href="/member/customer/receive_payment?customer_id={{$customer->customer_id1}}">Receive Payment</a></li>
+                                        <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id1}}">Invoice</a></li>
+                                        <li><a href="/member/customer/sales_receipt">Sales Receipt</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="/member/customer/details/{{$customer->customer_id1}}">View Customer Details</a></li>
+                                        <li><a class="popup" link="/member/customer/customeredit/{{$customer->customer_id1}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
+                                        <li class="divider"></li>
+                                        <li><li><a class="active-toggle" data-content="{{$customer->customer_id1}}" data-target="#tr-customer-{{$customer->customer_id1}}" data-value="0" data-html="inactive">Make Inactive</a></li></li>
+                                    </ul>
+                                </div> -->
                                 <div class="btn-group">
                                   <button type="button" class="btn btn-sm btn-custom-white btn-action-{{$customer->customer_id1}} dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Action <span class="caret"></span>
@@ -91,9 +106,9 @@
                                     <li><a href="/member/customer/receive_payment?customer_id={{$customer->customer_id1}}">Receive Payment</a></li>
                                     <li><a href="/member/customer/invoice?customer_id={{$customer->customer_id1}}">Create Invoice</a></li>
                                     <li><a href="/member/customer/sales_receipt">Create Sales Receipt</a></li>
-                                    <li><a href="/member/customer/transaction_list">Transaction List</a></li>
+                                    <!-- <li><a href="/member/customer/transaction_list">Transaction List</a></li> -->
+                                    <li><a href="/member/customer/estimate">Create Estimate</li>
                                     <li><a href="/member/customer/details/{{$customer->customer_id1}}">View Customer Details</a></li>
-                                    <!-- <li><a href="/member/customer/estimate">Create Estimate</li> -->
                                     <li><a class="popup" link="/member/customer/customeredit/{{$customer->customer_id1}}" size="lg" data-toggle="modal" data-target="#global_modal">Edit Customer Info</a></li>
                                     <li><a class="active-toggle" data-content="{{$customer->customer_id1}}" data-target="#tr-customer-{{$customer->customer_id1}}" data-value="0" data-html="inactive">Make Inactive</a></li>
                                   </ul>

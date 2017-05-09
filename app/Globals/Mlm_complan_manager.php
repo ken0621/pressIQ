@@ -1342,6 +1342,7 @@ class Mlm_complan_manager
                         		$slot_aaa = Tbl_mlm_slot::where('slot_id', $matching_log_slot_1)->customer()->first();
 		                        $slot_bbb = Tbl_mlm_slot::where('slot_id', $matching_log_slot_2)->customer()->first();
 		                        $log = "Congratulations Your Slot. Earned " . $matching_log_earning . " From Membership Matching. Slot " . $slot_aaa->slot_no . "(level ". $matching_log_level_1 .") (".name_format_from_customer_info($slot_aaa).") and Slot " . $slot_bbb->slot_no . "(level ". $matching_log_level_2 .") (".name_format_from_customer_info($slot_bbb).") Matched.";
+
 		                        $arry_log['wallet_log_slot'] = $matching_log_earner;
 		                        $arry_log['shop_id'] = $slot_info->shop_id;
 		                        $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
@@ -1358,6 +1359,7 @@ class Mlm_complan_manager
                         	$slot_aaa = Tbl_mlm_slot::where('slot_id', $matching_log_slot_1)->customer()->first();
 	                        $slot_bbb = Tbl_mlm_slot::where('slot_id', $matching_log_slot_2)->customer()->first();
 	                        $log = "Congratulations Your Slot. Earned " . $matching_log_earning . " From Membership Matching. Slot " . $slot_aaa->slot_no . "(level ". $matching_log_level_1 .")(".name_format_from_customer_info($slot_aaa).") and Slot " . $slot_bbb->slot_no . "(level ". $matching_log_level_2 .") (".name_format_from_customer_info($slot_bbb).") Matched.";
+
 	                        $arry_log['wallet_log_slot'] = $matching_log_earner;
 	                        $arry_log['shop_id'] = $slot_info->shop_id;
 	                        $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;

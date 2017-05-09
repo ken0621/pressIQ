@@ -8,7 +8,6 @@ class Report
 {
 	public static function sales_report()
 	{
-		// tbl_journal_entry
 		// $data['full_name'] = 'Name';
 		// $data['jline_amount'] = 'Amount';
 

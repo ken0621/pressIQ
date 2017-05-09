@@ -13,16 +13,20 @@ class CreateTblReportFieldA extends Migration
     public function up()
     {
         //
-        Schema::create('tbl_report_field', function (Blueprint $table) 
+        if (!Schema::hasTable('tbl_report_field')) 
         {
+            Schema::create('tbl_report_field', function (Blueprint $table) 
+            {
 
-            $table->increments('report_field_id');
-            $table->integer('report_field_shop')->default(0);
-            $table->string('report_field_module')->default(0);
-            $table->string('report_field_label')->default(0);
-            $table->string('report_field_type')->default(0);
-            $table->string('report_field_archive')->default(0);
-        });
+                $table->increments('report_field_id');
+                $table->integer('report_field_shop')->default(0);
+                $table->string('report_field_module')->default(0);
+                $table->string('report_field_label')->default(0);
+                $table->string('report_field_type')->default(0);
+                $table->string('report_field_archive')->default(0);
+            });
+        }
+        
     }
 
     /**

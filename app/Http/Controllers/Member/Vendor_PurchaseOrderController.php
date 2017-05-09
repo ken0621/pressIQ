@@ -69,30 +69,46 @@ class Vendor_PurchaseOrderController extends Member
     }
     public function index()
     {
-        $data["page"]       = "Purchase order";
-        $data["_vendor"]    = Vendor::getAllVendor('active');
-        $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Purchase_Order::getShopId())->get();
-        $data['_item']      = Item::get_all_category_item();
-        $data['_um']        = UnitMeasurement::load_um_multi();
-        $data["action"]     = "/member/vendor/purchase_order/create_po";
-        $data["v_id"]       = Request::input("vendor_id");
-        $id = Request::input('id');
+        $access = Utilities::checkAccess('vendor-purchase-order', 'access_page');
+        if($access == 1)
+        { 
+            $data["page"]       = "Purchase order";
+            $data["_vendor"]    = Vendor::getAllVendor('active');
+            $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Purchase_Order::getShopId())->get();
+            $data['_item']      = Item::get_all_category_item();
+            $data['_um']        = UnitMeasurement::load_um_multi();
+            $data["action"]     = "/member/vendor/purchase_order/create_po";
+            $data["v_id"]       = Request::input("vendor_id");
+            $id = Request::input('id');
 
-        if($id)
-        {
-            $data["po"]            = Tbl_purchase_order::where("po_id", $id)->first();
-            $data["_poline"]       = Tbl_purchase_order_line::um()->where("poline_po_id", $id)->get();
-            $data["action"]         = "/member/vendor/purchase_order/update_po";
+            if($id)
+            {
+                $data["po"]            = Tbl_purchase_order::where("po_id", $id)->first();
+                $data["_poline"]       = Tbl_purchase_order_line::um()->where("poline_po_id", $id)->get();
+                $data["action"]         = "/member/vendor/purchase_order/update_po";
+            }
+            // dd($data);
+
+            return view('member.purchase_order.purchase_order',$data);
         }
-        // dd($data);
-
-        return view('member.purchase_order.purchase_order',$data);
+        else
+        {
+             return $this->show_no_access();
+        }
     }
     public function po_list()
     {
-        $data["_po"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->where("po_shop_id",Purchase_Order::getShopId())->get();
+        $access = Utilities::checkAccess('vendor-purchase-order', 'access_page');
+        if($access == 1)
+        { 
+            $data["_po"] = Tbl_purchase_order::vendor()->orderBy("po_id","DESC")->where("po_shop_id",Purchase_Order::getShopId())->get();
 
-        return view("member.purchase_order.purchase_order_list",$data);
+            return view("member.purchase_order.purchase_order_list",$data);
+        }
+        else
+        {
+             return $this->show_no_access();            
+        }
     }
 
     public function view_po_pdf($po_id)
@@ -104,17 +120,25 @@ class Vendor_PurchaseOrderController extends Member
     }
     public function po_pdf($po_id)
     {
-        $data["po"] = Tbl_purchase_order::vendor()->where("po_id",$po_id)->first();
-        $data["_poline"] = Tbl_purchase_order_line::um()->item()->where("poline_po_id",$po_id)->get();
-        foreach($data["_poline"] as $key => $value) 
-        {
-            $qty = UnitMeasurement::um_qty($value->poline_um);
+        $access = Utilities::checkAccess('vendor-purchase-order', 'access_page');
+        if($access == 1)
+        { 
+            $data["po"] = Tbl_purchase_order::vendor()->where("po_id",$po_id)->first();
+            $data["_poline"] = Tbl_purchase_order_line::um()->item()->where("poline_po_id",$po_id)->get();
+            foreach($data["_poline"] as $key => $value) 
+            {
+                $qty = UnitMeasurement::um_qty($value->poline_um);
 
-            $total_qty = $value->poline_qty * $qty;
-            $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
+                $total_qty = $value->poline_qty * $qty;
+                $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
+            }
+            $pdf = view("member.vendor_list.po_pdf",$data);
+            return Pdf_global::show_pdf($pdf);
         }
-        $pdf = view("member.vendor_list.po_pdf",$data);
-        return Pdf_global::show_pdf($pdf);
+        else
+        {
+             return $this->show_no_access();            
+        }
     }
     public function create_po()
     {

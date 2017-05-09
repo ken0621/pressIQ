@@ -23,22 +23,29 @@ class DebitMemoController extends Member
      */
     public function index()
     {
-        
-        $data["page"]       = "Credit Memo";
-        $data["_vendor"]    = Vendor::getAllVendor('active');
-        $data['_item']      = Item::get_all_category_item();
-        $data['_um']        = UnitMeasurement::load_um_multi();
-        $data["action"]     = "/member/vendor/debit_memo/create_submit";
+        $access = Utilities::checkAccess('vendor-debit-memo', 'access_page');
+        if($access == 1)
+        { 
+            $data["page"]       = "Credit Memo";
+            $data["_vendor"]    = Vendor::getAllVendor('active');
+            $data['_item']      = Item::get_all_category_item();
+            $data['_um']        = UnitMeasurement::load_um_multi();
+            $data["action"]     = "/member/vendor/debit_memo/create_submit";
 
-        $id = Request::input('id');
-        if($id)
-        {
-            $data["db"]            = Tbl_debit_memo::where("db_id", $id)->first();
-            $data["_dbline"]       = Tbl_debit_memo_line::um()->where("dbline_db_id", $id)->get();
-            $data["action"]         = "/member/vendor/debit_memo/update";
+            $id = Request::input('id');
+            if($id)
+            {
+                $data["db"]            = Tbl_debit_memo::where("db_id", $id)->first();
+                $data["_dbline"]       = Tbl_debit_memo_line::um()->where("dbline_db_id", $id)->get();
+                $data["action"]         = "/member/vendor/debit_memo/update";
+            }
+
+            return view("member.vendor.debit_memo.debit_memo_add",$data);
         }
-
-        return view("member.vendor.debit_memo.debit_memo_add",$data);
+        else
+        {
+            return $this->show_no_access();
+        }
     }
     public function create_submit()
     {
@@ -118,10 +125,18 @@ class DebitMemoController extends Member
         return json_encode($data);
     }
     public function db_list()
-    {
-        $data["_db"] = Tbl_debit_memo::vendor()->orderBy("tbl_debit_memo.db_id","DESC")->get();
+    {        
+        $access = Utilities::checkAccess('vendor-debit-memo', 'access_page');
+        if($access == 1)
+        { 
+            $data["_db"] = Tbl_debit_memo::vendor()->orderBy("tbl_debit_memo.db_id","DESC")->get();
 
-        return view("member.vendor.debit_memo.db_list",$data);
+            return view("member.vendor.debit_memo.db_list",$data);
+        }
+        else
+        {
+            return $this->show_no_access();
+        }        
     }
     /**
      * Show the form for creating a new resource.

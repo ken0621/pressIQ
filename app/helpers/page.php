@@ -783,7 +783,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
     
     /* -- VENDORS => BAD ORDERS  */
-    $code = "vendor-bad-order";
+    $code = "vendor-debit-memo";
     $nav[$page]['submenu'][$code]['label'] = "Debit Memo";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/debit_memo/list";

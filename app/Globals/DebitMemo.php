@@ -29,7 +29,6 @@ class DebitMemo
 
 		$db_id = Tbl_debit_memo::insertGetId($insert_db);
 
-
 		DebitMemo::insert_dbline($db_id, $item_info);
 
 		return $db_id;

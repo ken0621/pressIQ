@@ -655,4 +655,49 @@ class ShopCheckoutController extends Shop
         $data["page"] = "Checkout - Add to Cart";
         return view("addto_cart", $data);
     }
+<<<<<<< HEAD
+
+
+    /*Ipay88 Function*/
+    public function postPaymentWithIPay88()
+    {
+        $data = Session::get('data');
+        
+        $requestpayment = new RequestPayment( $data["merchantKey"]);
+        $this->_data = array(
+            'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
+            'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
+            'refNo'         => $requestpayment->setRefNo($data["refNo"]),
+            'amount'        => $requestpayment->setAmount($data["amount"]),
+            'currency'      => $requestpayment->setCurrency($data["currency"]),
+            'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
+            'userName'      => $requestpayment->setUserName($data["userName"]),
+            'userEmail'     => $requestpayment->setUserEmail($data["userEmail"]),
+            'userContact'   => $requestpayment->setUserContact($data["userContact"]),
+            'remark'        => $requestpayment->setRemark($data["remark"]),
+            'lang'          => $requestpayment->setLang($data["lang"]),
+            'signature'     => $requestpayment->getSignature(),
+            'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
+            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
+            );
+        /*dd($this->_data);*/
+        RequestPayment::make($data["merchantKey"], $this->_data);     
+    }
+
+    public function ipay88_response()
+    {
+        $request = Request::all();
+        /*dd($request['Status']);*/
+        if($request['Status'] == 0)
+        {
+            return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');    
+        } else {
+
+            dd('Success!');
+        }
+        
+    }
+    /*End Ipay88*/
+=======
+>>>>>>> 58fce8a06a64fab3e26b6a34740bd29a6b858be0
 }

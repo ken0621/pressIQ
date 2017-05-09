@@ -16,7 +16,7 @@ class CreateTblDebitMemo extends Migration
             $table->increments('db_id');
             $table->integer('db_vendor_id');
             $table->integer('db_ap_acccount');
-            $table->string('db_vendor  _email');
+            $table->string('db_vendor_email');
             $table->date('db_date');
             $table->string('db_message');
             $table->string('db_memo');

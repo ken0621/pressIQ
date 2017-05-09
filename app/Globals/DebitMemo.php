@@ -50,7 +50,7 @@ class DebitMemo
 
 
 		Tbl_debit_memo_line::where("dbline_db_id",$db_id)->delete();
-		DebitMemo::insert_dbline($db_id, $item_info, $entry);
+		DebitMemo::insert_dbline($db_id, $item_info);
 
 	}
 	public static function insert_dbline($db_id, $item_info)

@@ -11,6 +11,7 @@ use App\Globals\UnitMeasurement;
 use App\Globals\Customer;
 use App\Globals\Vendor;
 use App\Globals\DebitMemo;
+use App\Globals\Utilities;
 use App\Http\Controllers\Controller;
 use Request;
 

@@ -567,6 +567,11 @@ Route::any('/member/customer/credit_memo/create_submit','Member\CreditMemoContro
 Route::any('/member/customer/credit_memo/update',"Member\CreditMemoController@update_submit");
 
 
+/* Vendor Debit MEMO*/
+Route::any('/member/vendor/debit_memo','Member\DebitMemoController@index');
+Route::any('/member/vendor/debit_memo/list',"Member\DebitMemoController@db_list");
+Route::any('/member/vendor/debit_memo/create_submit','Member\DebitMemoController@create_submit');
+Route::any('/member/vendor/debit_memo/update',"Member\DebitMemoController@update_submit");
 
 /* Vendor - Purchase Order */
 Route::get('/member/vendor/purchase_order','Member\Vendor_PurchaseOrderController@index');

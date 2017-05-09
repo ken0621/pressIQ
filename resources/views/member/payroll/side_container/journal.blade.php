@@ -1,4 +1,4 @@
-<h4>Payroll Jouarnal Tags<button class="btn btn-custom-primary pull-right popup" link="/member/payroll/payroll_jouarnal/modal_create_journal_tag">Create Journal Tags</button></h4>
+<h4>Payroll Journal Tags<button class="btn btn-custom-primary pull-right popup" link="/member/payroll/payroll_jouarnal/modal_create_journal_tag">Create Journal Tags</button></h4>
 <br>
 <div class="form-group">
 	<div class="col-md-12">

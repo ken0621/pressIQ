@@ -80,6 +80,9 @@ Route::any('/member/developer/reset_slot', 'Member\Developer_StatusController@re
 Route::any('/member/developer/reset_slot/submit', 'Member\Developer_StatusController@reset_slot_submit'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/give', 'Member\Developer_StatusController@give_points_ec_order'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/retro_product_sales', 'Member\Developer_StatusController@retro_product_sales'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/re_tree', 'Member\Developer_StatusController@re_tree'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Developer_StatusController@re_com_phil_lost'); //GUILLERMO TABLIGAN
+
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */
@@ -567,6 +570,11 @@ Route::any('/member/customer/credit_memo/create_submit','Member\CreditMemoContro
 Route::any('/member/customer/credit_memo/update',"Member\CreditMemoController@update_submit");
 
 
+/* Vendor Debit MEMO*/
+Route::any('/member/vendor/debit_memo','Member\DebitMemoController@index');
+Route::any('/member/vendor/debit_memo/list',"Member\DebitMemoController@db_list");
+Route::any('/member/vendor/debit_memo/create_submit','Member\DebitMemoController@create_submit');
+Route::any('/member/vendor/debit_memo/update',"Member\DebitMemoController@update_submit");
 
 /* Vendor - Purchase Order */
 Route::get('/member/vendor/purchase_order','Member\Vendor_PurchaseOrderController@index');

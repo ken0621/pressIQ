@@ -107,13 +107,17 @@ class Mlm_tree
         if($slot_info != null)
         {
             $upline_info = Tbl_mlm_slot::id($slot_info->slot_sponsor)->first();
-
             /*CHECK IF TREE IS ALREADY EXIST*/
             $check_if_exist = null;
-            if($level == 2)
+            if($upline_info)
             {
                 $check_if_exist = Tbl_tree_sponsor::where("sponsor_tree_child_id",$new_slot->slot_id)
                 ->where('sponsor_tree_parent_id', '=', $upline_info->slot_id )
+                ->first();
+            }
+            else
+            {
+                $check_if_exist = Tbl_tree_placement::where("placement_tree_child_id",$new_slot->slot_id)
                 ->first();
             }
             if($upline_info)

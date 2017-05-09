@@ -50,28 +50,41 @@ class CreditMemoController extends Member
 
         $item_info[] = null;
         $_items = Request::input("cmline_item_id");
+        $ctr_items = 0;
         foreach ($_items as $key => $value) 
-        {           
-            $item_info[$key]['item_service_date']  = datepicker_input(Request::input('cmline_service_date')[$key]);
-            $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
-            $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
-            $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
-            $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
-            $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
-            $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
+        {   
+            if($value)
+            {
+                $ctr_items++;
+                $item_info[$key]['item_service_date']  = datepicker_input(Request::input('cmline_service_date')[$key]);
+                $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
+                $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
+                $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
+                $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
+                $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
+                $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
+            }        
         }
 
-        $cm_id = CreditMemo::postCM($customer_info, $item_info);
+        if($ctr_items != 0)
+        {
+            $cm_id = CreditMemo::postCM($customer_info, $item_info);
 
-        $data["status"] = "success-credit-memo";
-        $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
-
+            $data["status"] = "success-credit-memo";
+            $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
+        }
+        else
+        {
+            $data["status"] = "error";
+            $data["status_message"] = "Please Insert Item";
+        }
         return json_encode($data);
     }
     public function update_submit()
     {
         $cm_id = Request::input("credit_memo_id");
 
+        $ctr_items = 0;
         $customer_info[] = null;
         $customer_info["cm_customer_id"] = Request::input("cm_customer_id");
         $customer_info["cm_customer_email"] = Request::input("cm_customer_email");
@@ -83,20 +96,32 @@ class CreditMemoController extends Member
         $item_info[] = null;
         $_items = Request::input("cmline_item_id");
         foreach ($_items as $key => $value) 
-        {           
-            $item_info[$key]['item_service_date']  = datepicker_input(Request::input('cmline_service_date')[$key]);
-            $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
-            $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
-            $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
-            $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
-            $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
-            $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
+        {  
+            if($value)
+            {
+                $ctr_items++;
+                $item_info[$key]['item_service_date']  = datepicker_input(Request::input('cmline_service_date')[$key]);
+                $item_info[$key]['item_id']            = Request::input('cmline_item_id')[$key];
+                $item_info[$key]['item_description']   = Request::input('cmline_description')[$key];
+                $item_info[$key]['um']                 = Request::input('cmline_um')[$key];
+                $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
+                $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
+                $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
+            }
         }
 
-        CreditMemo::updateCM($cm_id, $customer_info, $item_info);
+        if($ctr_items != 0)
+        {
+            CreditMemo::updateCM($cm_id, $customer_info, $item_info);
 
-        $data["status"] = "success-credit-memo";
-        $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
+            $data["status"] = "success-credit-memo";
+            $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
+        }
+        else
+        {
+            $data["status"] = "error";
+            $data["status_message"] = "Please Insert Item";
+        }
 
         return json_encode($data);
     }

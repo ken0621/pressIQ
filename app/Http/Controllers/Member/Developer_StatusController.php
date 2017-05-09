@@ -7,6 +7,10 @@ use App\Globals\Item_code;
 use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_journal_entry_line;
 use App\Models\Tbl_journal_entry;
+use App\Models\Tbl_tree_sponsor;
+use App\Globals\Mlm_compute;
+use App\Globals\Mlm_tree;
+use App\Globals\Mlm_complan_manager;
 class Developer_StatusController extends Member
 {
 	public function index()
@@ -105,5 +109,27 @@ class Developer_StatusController extends Member
 			return 'Success';
 		}
 
+	}
+	public function re_tree()
+	{
+
+		$slot_id = Request::input('id');
+		$slot_info = Mlm_compute::get_slot_info($slot_id);
+		if($slot_info)
+		{
+			Tbl_tree_sponsor::where('sponsor_tree_child_id', $slot_id)->delete();
+			return Mlm_tree::insert_tree_sponsor($slot_info, $slot_info, 1);
+		}
+	}
+	public function re_com_phil_lost()
+	{
+		$slot_id = Request::input('id');
+		$slot_info = Mlm_compute::get_slot_info($slot_id);
+		if($slot_info)
+		{
+			Mlm_complan_manager::indirect($slot_info);
+			Mlm_complan_manager::membership_matching($slot_info);
+			Mlm_complan_manager::indirect_points($slot_info);
+		}
 	}
 }

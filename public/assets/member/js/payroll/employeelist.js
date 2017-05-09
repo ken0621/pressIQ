@@ -233,6 +233,7 @@ function submit_done(data)
 
 	}
 	
+
 	data.element.modal("toggle");
 	if(data.function_name == 'payrollconfiguration.reload_tbl_jobtitle')
 	{
@@ -240,12 +241,18 @@ function submit_done(data)
 	}
 	if(data.function_name == 'payrollconfiguration.relaod_tbl_department')
 	{
-		modal_create_employee.reload_option(data.view, '.department-select');
+		modal_create_employee.reload_department(data.selected);
 	}	
 	if(data.function_name == 'payrollconfiguration.reload_payroll_group')
 	{
 		modal_create_employee.reload_option(data.view, '.payroll-group-select');
 	}
+
+	if(data.function_name == 'payrollconfiguration.reload_jobtitlelist')
+	{
+		modal_create_employee.reload_jobtitle(data.data, data.department_id);
+	}
+
 	else
 	{
 		executeFunctionByName(data.function_name, window);

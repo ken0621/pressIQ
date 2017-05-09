@@ -101,68 +101,6 @@
 					</div>
 				</div>
 
-				@if(!isset($customer))
-				<!-- <div class="fieldset">
-					<label class="col-md-4">Gender</label>
-					<div class="field col-md-8">
-						<select name="g" class="form-control">
-							<option>Male</option>
-							<option>Female</option>
-						</select>
-					</div>
-					<div class="error-message text-right col-md-12">{{ isset($err) ? $err->first('customer_gender') : '' }}</div>
-				</div>
-			
-				<div class="fieldset">
-					<label class="col-md-4">Password</label>
-					<div class="field col-md-8">
-						<input autocomplete="off"  class="form-control" type="password" name="pw" value="">
-					</div>
-					<div class="error-message text-right col-md-12"></div>
-				</div>
-				<div class="fieldset">
-					<label class="col-md-4">Confirm Password</label>
-					<div class="field col-md-8">
-						<input autocomplete="off"  class="form-control" type="password" name="cpw" value="">
-					</div>
-					<div class="error-message text-right col-md-12"></div>
-				</div> -->
-				@endif
-				<!-- <div class="fieldset">
-					<label class="col-md-4">Province</label>
-					<div class="field col-md-8">
-						<select name="p_id" class="form-control province load-child-location" target=".municipality">
-							<option value=""></option>
-						</select>
-					</div>
-					<div class="error-message text-right col-md-12">{{ isset($err) ? $err->first('customer_province_id') : '' }}</div>
-				</div>
-				<div class="fieldset">
-					<label class="col-md-4">City / Municipality</label>
-					<div class="field col-md-8">
-						<select name="m_id" class="form-control municipality load-child-location" target=".barangay">
-							<option value=""></option>
-						</select>
-					</div>
-					<div class="error-message text-right col-md-12">{{ isset($err) ? $err->first('customer_city_id') : '' }}</div>
-				</div>
-				<div class="fieldset">
-					<label class="col-md-4">Barangay</label>
-					<div class="field col-md-8">
-						<select name="b_id" class="form-control barangay">
-							<option value=""></option>
-						</select>
-					</div>
-					<div class="error-message text-right col-md-12">{{ isset($err) ? $err->first('customer_barangay_id') : '' }}</div>
-				</div>
-				<div class="fieldset">
-					<label class="col-md-4">Complete Address</label>
-					<div class="field col-md-8">
-						<textarea spellcheck="false" class="form-control" name="ca"></textarea>
-					</div>
-					<div class="error-message text-right col-md-12">{{ isset($err) ? $err->first('customer_address') : '' }}</div>
-				</div> -->
-
 				<div class="fieldset">
 					<label class="col-md-4">Province</label>
 					<div class="field col-md-8">
@@ -181,6 +119,7 @@
 						<textarea spellcheck="false" class="form-control" name="customer_address">{{ Request::old('customer_address') }}</textarea>
 					</div>
 				</div>
+
 				<div class="fieldset">
 					<label class="col-md-4">Payment Method</label>
 					<div class="field col-md-8">

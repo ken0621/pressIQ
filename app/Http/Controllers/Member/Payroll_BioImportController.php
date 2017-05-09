@@ -134,6 +134,12 @@ class Payroll_BioImportController extends Member
 		{
 			return Self::import_ZKTime_5_0($file);
 		}
+
+		if($biometric == 'ZKTeco TX628')
+		{
+			return Self::import_zkteco_TX628($file);
+		}
+
 		if($biometric == 'Digital Persona')
 		{
 			return Self::import_Digital_Persona($file);
@@ -155,6 +161,79 @@ class Payroll_BioImportController extends Member
 	}
 
     /* BIO METRICS START */
+
+    public function import_zkteco_TX628($file)
+    {
+    	$_test = file($file, FILE_IGNORE_NEW_LINES);
+
+    	$temp = preg_split("/[\t]/", $_test[0]);
+    	
+    	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
+
+    	if(isset($temp[0]) && isset($temp[1]) && isset($temp[2]) && isset($temp[3]) && isset($temp[4]) && isset($temp[5]))
+    	{
+
+    		$success_count = 0;
+	    	$temp_date = '';
+	    	$insert_time_record = array();
+	    	$time_sheet = array();
+
+
+    		foreach($_test as $key => $test)
+			{
+				$extest 	= preg_split("/[\t]/", $test);
+				$emp_no 	= $extest[0];
+				$date_time 	= $extest[1];
+
+				$temp_record['employee_number'] = $emp_no;
+	    		$temp_record['time']			= date('H:i:s', strtotime($date_time));
+	    		$temp_record['date']			= date('Y-m-d', strtotime($date_time));
+	    		array_push($time_sheet, $temp_record);
+			}
+
+			$_date_collect = collect($time_sheet)->groupBy('employee_number','date');
+
+			foreach($_date_collect as $key => $date_collect)
+	    	{
+	    		$_date = collect($date_collect)->groupBy('date');
+	    		$temp = '';
+	    		foreach($_date as $date)
+	    		{
+	    			$start 	= $date[0];
+	    			$end 	= $date[count($date) - 1];
+	    			if(Self::check_employee_number($start['employee_number']))
+	    			{
+	    				
+		    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($start['employee_number']), $start['date']);
+
+		    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
+		    			$temp_array['payroll_time_sheet_in'] 		= $start['time'];
+		    			$temp_array['payroll_time_sheet_out'] 		= $end['time'];
+		    			$temp_array['payroll_time_sheet_origin'] 	= 'ZKTeco TX628';
+		    			$temp_array['payroll_company_id']			= Self::getemployeeId($start['employee_number'],'payroll_employee_company_id');
+
+		    			$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
+		    			if($count_record == 0)
+		    			{
+		    				array_push($insert_time_record, $temp_array);
+		    			}
+	    			}
+	    			
+	    		}
+	    		
+	    	}
+	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
+	    	if(!empty($insert_time_record))
+	    	{
+	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
+	    		$count_inserted = count($insert_time_record);
+	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
+	    	}
+
+    	}
+
+    	return $message;
+    }
 
     public function import_ZKTime_5_0($file)
     {

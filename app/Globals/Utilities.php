@@ -82,20 +82,7 @@ class Utilities
                        {
                             $page_code         = $submenu['code'];
                             $setting_counter   = $array_count;
-                            if($submenu["code"] == "mlm-stairstep-compute")
-                            {
-                                $check_shop         = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
-                                if($check_shop)
-                                {
-                                    $check_stairstep = Tbl_mlm_plan::where("marketing_plan_code","STAIRSTEP")->where("shop_id",$check_shop)->where("marketing_plan_enable","1")->first();
-                                    if(!$check_stairstep)
-                                    {
-                                        unset($_page_list[$key]['submenu'][$key2]);
-                                    }
-                                    // dd();
-                                }
-                            }
-
+                           
                             if(isset($_page_list[$key]['submenu'][$key2]))
                             {
                                 foreach($submenu['user_settings'] as $key3=>$access_name)
@@ -119,6 +106,19 @@ class Utilities
                                 {
                                     array_forget($_page_list, $key.'.submenu.'.$key2);
                                     $submenu_counter--;
+                                }
+                            }
+                            if($page_code == "mlm-stairstep-compute")
+                            {
+                                $check_shop         = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+                                if($check_shop)
+                                {
+                                    $check_stairstep = Tbl_mlm_plan::where("marketing_plan_code","STAIRSTEP")->where("shop_id",$check_shop)->where("marketing_plan_enable","1")->first();
+                                    if(!$check_stairstep)
+                                    {
+                                        unset($_page_list[$key]['submenu'][$key2]);
+                                    }
+                                    // dd();
                                 }
                             }
                        }

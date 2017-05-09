@@ -241,6 +241,7 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/custom_payslip/modal_save_paper_size',"Member\PayrollController@modal_save_paper_size");
 	Route::any('/custom_payslip/save_custom_payslip',"Member\PayrollController@save_custom_payslip");
 	Route::any('/custom_payslip/custom_payslip_show/{id}',"Member\PayrollController@custom_payslip_show");
+	Route::any('/custom_payslip/custom_payslip_show_archived/{id}',"Member\PayrollController@custom_payslip_show_archived");
 	Route::any('/custom_payslip/modal_edit_payslip/{id}',"Member\PayrollController@modal_edit_payslip");
 	Route::any('/custom_payslip/modal_archive_payslip/{archived}/{id}',"Member\PayrollController@modal_archive_payslip");
 	Route::any('/custom_payslip/archive_payslip',"Member\PayrollController@archive_payslip");

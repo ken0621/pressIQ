@@ -74,4 +74,21 @@
         </div>
     </div>
 </div>
+
+<div class="panel panel-default panel-block panel-title-block" id="top">
+    <div class="panel-heading">
+        <div>
+            <form method="post" action="/member/developer/reset_slot/submit/re_com_phil_lost">
+            <div class="col-md-4">
+                <input type="password" class="form-control" name="password" placeholder="password">
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control" name="id" placeholder="Slot ID">
+            </div>
+            {!! csrf_field() !!}
+            <button class="btn btn-primary">Re compute 5/9/2017 - lost indirect </button>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection

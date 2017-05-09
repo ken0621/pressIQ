@@ -63,7 +63,7 @@
 											<tbody>
 												<tr>
 													<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-													<td class="text">Add to cart</td>
+													<td class="text">View More</td>
 												</tr>
 											</tbody>
 										</table>
@@ -102,7 +102,7 @@
 							<input type="hidden" name="type" value="{{ Request::input('type') }}">
 								<div class="sortby">Sort By: 
 									<select name="sort" onChange="$('.sort-by').submit();">
-										<option value="" {{ Request::input('sort') == '' ? 'selected' : '' }}>Relevance</option>
+										<!-- <option value="" {{ Request::input('sort') == '' ? 'selected' : '' }}>Relevance</option> -->
 										<option value="name_asc" {{ Request::input('sort') == 'name_asc' ? 'selected' : '' }}>Brand: A - Z</option>
 										<option value="name_desc" {{ Request::input('sort') == 'name_desc' ? 'selected' : '' }}>Brand: Z - A</option>
 										<option value="price_desc" {{ Request::input('sort') == 'price_desc' ? 'selected' : '' }}>Price: Low - High</option>
@@ -118,7 +118,7 @@
 						</div>
 							<div class="featured-item-container row clearfix">	
 								@foreach($_product as $product)
-								<div class="col-md-3">
+								<div class="col-md-3 match-height">
 									<div class="per-item-container">
 										<div class="image-content-1">
 											<div class="item-image-large" style="background-image: url({{ get_product_first_image($product) }})"></div>
@@ -127,7 +127,7 @@
 												<tbody>
 													<tr>
 														<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-														<td class="text">Add to cart</td>
+														<td class="text">View More</td>
 													</tr>
 												</tbody>
 											</table>

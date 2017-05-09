@@ -58,7 +58,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <script type="text/javascript" src="/resources/assets/external/jquery.min.js"></script>
   <script src="/resources/assets/distributor/scripts/vendor/modernizr.js"></script>
   <script src="/resources/assets/distributor/scripts/vendor/jquery.cookie.js"></script>
-   <link rel="stylesheet" type="text/css" href="/assets/mlm/pace.css">
+  <link rel="stylesheet" type="text/css" href="/assets/mlm/pace.css">
   <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
     <script>
     (function () {
@@ -308,12 +308,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <span class="nav-text">Profile</span>
                     </a>
                 </li>
-                <!-- <li class="{{Request::segment(2) == 'repurchase' ? 'active' : '' }}">
-                    <a href="/mlm/repurchase">
+                <li class="{{Request::segment(2) == 'repurchase' ? 'active' : '' }}">
+                    <a href="/">
                         <i class="icon-shopping-cart nav-icon"></i>
                         <span class="nav-text">Repurchase</span>
                     </a>
-                </li> -->
+                </li>
                 @if($discount_card_log != null)
                 <li class="treeview" class="{{Request::segment(3) == 'report' ? 'active' : '' }}">
                   <a href="javascript:">
@@ -522,7 +522,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <h3 class="control-sidebar-heading">Change Slot</h3>
         <div class="col-md-12 btn btn-primary" style="color:white;" disabled>
           @if(isset($slot_now->slot_id))
-            <span class="text-info" style="color: white;">SLOT #{{ $slot_now->slot_no }} ({{$slot_now->membership_name}})</span>
+            <span class="text-info" style="color: white;">SLOT #{{ $slot_now->slot_no }} <br>({{$slot_now->membership_name}})</span>
           @else 
             <span class="text-info" style="color: white;">No Slot</span>
           @endif
@@ -533,7 +533,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   @foreach($slot as $slots)
 
                         <div class="col-md-12 btn btn-primary" slotid='{{$slots->slot_id}}' href="javascript:" onclick="change_slot({{$slots->slot_id}})">
-                         <a class="forslotchanging" slotid='{{$slots->slot_id}}' href="javascript:" onclick="change_slot({{$slots->slot_id}})" style="color: white;">SLOT {{$slots->slot_no}}({{$slots->membership_name}}) </a></li> 
+                         <a class="forslotchanging" slotid='{{$slots->slot_id}}' href="javascript:" onclick="change_slot({{$slots->slot_id}})" style="color: white;">SLOT #{{$slots->slot_no}} <br>({{$slots->membership_name}}) </a></li> 
                          <form id="slot_change_id_{{$slots->slot_id}}" class="" action="/mlm/changeslot" method="post">
                             {!! csrf_field() !!}
                             <input type="hidden" name="slot_id" value="{{$slots->slot_id}}">

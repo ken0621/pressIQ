@@ -1,9 +1,9 @@
 <table style="table-layout: fixed;" class="table table-hover table-condensed table-bordered table-sale-month">
     <thead>
         <tr>
-            <th class="text-left">Name</th>
-            <th class="text-left">Phone/Mobile</th>
-            <th class="text-left">Email</th>
+            <th class="text-left">Company Name</th>
+            <th class="text-left">Contact Person</th>
+            <th class="text-left">Contact Details</th>
             <th class="text-center">Balance Total</th>
             <th></th>
         </tr>
@@ -11,9 +11,17 @@
     <tbody>
         @foreach($_customer as $customer)
          <tr class="cursor-pointer" id="tr-customer-{{$customer->customer_id}}" style="color: {{$customer->approved == 1? '#000' : '#ff3333' }};">
-            <td class="text-left">{{$customer->title_name.' '.$customer->first_name.' '.$customer->middle_name.' '.$customer->last_name.' '.$customer->suffix_name}}</td>
-            <td class="text-left">{{$customer->customer_phone != null ? $customer->customer_phone : 'No Phone Number' }} / {{$customer->customer_mobile != null ? $customer->customer_mobile : 'No Mobile Number'}} </td>
-            <td class="text-left">{{$customer->email}}</td>
+            <td class="text-left">
+                {{$customer->company}}
+            </td>
+            <td class="text-left">
+                {{$customer->title_name.' '.$customer->first_name.' '.$customer->middle_name.' '.$customer->last_name.' '.$customer->suffix_name}}
+            </td>
+            <td class="text-left">
+                Tel No: {{$customer->customer_phone != null ? $customer->customer_phone : 'No Phone Number' }}<br> 
+                Mobile: {{$customer->customer_mobile != null ? $customer->customer_mobile : 'No Mobile Number'}} <br>
+                Email Address : <a target="_blank" {{$customer->email != "" ? 'href=https://mail.google.com/mail/?view=cm&fs=1&to='.$customer->email : '' }}>{{$customer->email != "" ? $customer->email : "---" }}
+            </td>
             <td class="text-right  {{$customer->customer_opening_balance > 0? 'color-red': ''}}"><span class="pull-left">PHP</span>{{number_format($customer->customer_opening_balance,2)}}</td>
             <td class="text-center">
                 <!-- ACTION BUTTON -->
@@ -36,5 +44,5 @@
     </tbody>
 </table>
 <div class="padding-10 text-center">
-    {!!$_customer->render()!!}
+    {!!$_customer->appends(Request::capture()->except('page'))->render()!!}
 </div>

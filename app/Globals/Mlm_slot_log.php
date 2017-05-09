@@ -60,6 +60,14 @@ class Mlm_slot_log
 		{
 			$insert['encashment_process_taxed'] = $arry_log['encashment_process_taxed'];
 		}
+		if(isset($arry_log['wallet_log_membership_filter']))
+		{
+			$insert['wallet_log_membership_filter'] = $arry_log['wallet_log_membership_filter'];
+		}
+		if(isset($arry_log['wallet_log_matrix_triangle']))
+		{
+			$insert['wallet_log_matrix_triangle'] = $arry_log['wallet_log_matrix_triangle'];
+		}
 
 		$wallet_log_id = Tbl_mlm_slot_wallet_log::insertGetId($insert);
 		// $wallet_log_data = AuditTrail::get_table_data("tbl_mlm_slot_wallet_log","wallet_log_id",$wallet_log_id);
@@ -120,6 +128,7 @@ class Mlm_slot_log
 		$message .= " in level " . $log_array['level'];
 		$message .= " of " . $log_array['level_tree'];
 		$message .= ". Sponsor : " . $sponsor->slot_no;
+		$message .= "(" .name_format_from_customer_info($sponsor). ")";
 
 		return $message;
 	}
@@ -328,8 +337,8 @@ class Mlm_slot_log
 			$update_sum['encashment_process_sum'] = $sum;
 			Tbl_mlm_encashment_process::where('encashment_process', $encashment_process)->update($update_sum);
 
-			$encash_data = AuditTrail::get_table_data("tbl_mlm_encashment_process","encashment_process",$encashment_process);
-			AuditTrail::record_logs("Added","mlm_encash",$encashment_process,"",serialize($encash_data));
+			// $encash_data = AuditTrail::get_table_data("tbl_mlm_encashment_process","encashment_process",$encashment_process);
+			// AuditTrail::record_logs("Added","mlm_encash",$encashment_process,"",serialize($encash_data));
 		}
 	}
 	public static function get_sum_wallet($slot_id)

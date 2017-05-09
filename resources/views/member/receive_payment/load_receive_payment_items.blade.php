@@ -7,11 +7,11 @@
 		    	<input type="hidden" class="line-is-checked" name="line_is_checked[]" value="" >
 		    	<input type="checkbox" class="line-checked">
 		    </td>
-		    <td>Invoice # {{$invoice["inv_id"]}} ( {{dateFormat($invoice["inv_date"])}} )</td>
+		    <td>Invoice # {{$invoice["new_inv_id"]}} ( {{dateFormat($invoice["inv_date"])}} )</td>
 		    <td class="text-right">{{dateFormat($invoice["inv_due_date"])}}</td>
 		    <td><input type="text" class="text-right original-amount" value="{{currency('',$invoice['inv_overall_price'])}}" disabled /></td>
 		    <td><input type="text" class="text-right balance-due" value="{{currency('', $invoice['inv_overall_price'] - $invoice['amount_applied'] + (isset($invoice['rpline_amount']) ? $invoice['rpline_amount'] : 0 ))}}" disabled /></td>
-		    <td><input type="text" class="text-right amount-payment" name="rpline_amount[]" value="{{$invoice['rpline_amount'] or ''}}" data="{{$invoice['rpline_amount'] or 0}}"/></td>
+		    <td><input type="text" class="text-right amount-payment" name="rpline_amount[]" value="{{(isset($invoice['rpline_amount']) ? $invoice['rpline_amount'] : 0 ) - (isset($invoice['cm_amount']) ? $invoice['cm_amount'] : 0)}}" data="{{(isset($invoice['rpline_amount']) ? $invoice['rpline_amount'] : 0 ) - (isset($invoice['cm_amount']) ? $invoice['cm_amount'] : 0)}}"/></td>
 		</tr>
 	@endforeach
 @else

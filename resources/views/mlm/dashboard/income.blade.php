@@ -15,6 +15,9 @@
     <div class="box-footer no-padding">
       <ul class="nav nav-stacked">
         <li><a href="javascript:">Slot No <span class="pull-right badge ">@if(isset($slot_now->slot_no)) {{$slot_now->slot_no}} @else No Slot @endif</span></a></li>
+        @if(isset($slot_stairstep))
+          <li><a href="javascript:">Stairstep Rank <span class="pull-right badge ">{{$slot_stairstep}}</span></a></li>
+        @endif
         <li><a href="javascript:"><hr></li>
         <li><a href="javascript:">Income Summary</li>
         @if(isset($slot_now))
@@ -24,15 +27,29 @@
                 @endif
                 @foreach($plan_settings as $key => $value)
                 <li><a href="javascript:">{{$value->marketing_plan_label}} <span class="pull-right badge bg-aqua">{{currency('PHP', $earning[$key])}}</span></a></li>
-                @endforeach 
+                @endforeach
+                @if(isset($slot_stairstep)) 
+                <li><a href="javascript:">Rebates Bonus<span class="pull-right badge bg-aqua">{{currency('PHP', $rebates)}}</span></a></li>
+                <li><a href="javascript:">Over-ride Bonus<span class="pull-right badge bg-aqua">{{currency('PHP', $override)}}</span></a></li>
+                <li>
+                  <a href="javascript:" class="clearfix"><h4>Total<span class="pull-right badge bg-aqua" style="font-size: 15px">{{currency('PHP', array_sum($earning) + $rebates + $override)}}</h4></span></a>
+                </li>
+                @else
                 <li>
                   <a href="javascript:" class="clearfix"><h4>Total<span class="pull-right badge bg-aqua" style="font-size: 15px">{{currency('PHP', array_sum($earning))}}</h4></span></a>
                 </li>
+                @endif
             @else
                 <li><a href="javascript:" class="pull-right badge bg-blue">No Active Income yet.</a></li>
             @endif
         @else
         <li><a href="javascript:" class="pull-right badge bg-blue">No Active Income yet.</a></li>
+        @endif
+        @if($repurchase_cash != null)
+        <li><hr></li>
+        <li>
+           <li><a href="javascript:">WALLET REPURCHASE <span class="pull-right badge bg-aqua">{{currency('PHP', $repurchase_cash)}}</span></a></li>
+        </li>
         @endif
         <li><hr></li>
         <li><a href="javascript:">Points Summary</li>
@@ -44,7 +61,7 @@
                 @foreach($plan_settings_2 as $key => $value)
                 <li><a href="javascript:">{{$value->marketing_plan_label}} <span class="pull-right badge bg-aqua">{{$earning_2[$key]}}</span></a></li>
                 @endforeach 
-                <li class="hide">
+                <li class="">
                 <?php if(!isset($earning_2)) $earning_2[0] = 0; ?>
                   <a href="javascript:" class="clearfix"><h4>Total<span class="pull-right badge bg-aqua" style="font-size: 15px">{{array_sum($earning_2)}}</h4></span></a>
                 </li>

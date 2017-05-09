@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page }}</title>
+        <title>{{ ucfirst($shop_info->shop_key) }} |  {{ isset($page) ? $page : 'Home' }}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -27,7 +27,27 @@
         <link href="/themes/{{ $shop_theme }}/css/{{ $shop_theme_color }}.css" rel="stylesheet" type="text/css">
         <!-- OTHER CSS -->
         @yield("css")
-
+        <style type="text/css">
+        body
+        {
+            background-image: url('/themes/{{ $shop_theme  }}/img/final.jpg'); 
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed;
+        }
+        .content
+        {
+            background-color: transparent;
+        }
+        .navbar.sticky
+        {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+        </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
@@ -42,10 +62,15 @@
     <div class="header-nav">
     	<div class="header-nav-top">
     		<div class="container">
-                @if($customer_info == null)
+                @if($customer_info_a == null)
                 <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
                 @else
-                <div class="holder"><a href="/mlm"><i class="fa fa-user" aria-hidden="true"></i> Member's Area</a></div>
+                <div class="holder"><a href="/mlm"><i class="fa fa-user" aria-hidden="true"></i> Member's Area
+                    @if($slot_now != null)
+                        (Membership Code # {{$slot_now->slot_no}})
+                    @endif
+                    </a>
+                </div>    
                 @endif
                 <div class="holder"><div class="linya"></div></div>
                 <div class="holder"><a href="#"><i class="fa fa-shopping-cart" aria-hidden="true"></i> My Cart</a></div>
@@ -64,13 +89,23 @@
                         <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech-official-logo.png">            
                     </div>
 	    			<div class="col-md-6">
-	    				<div class="search-bar">
-	    					<div class="input-group input-group-lg">
-							  <!-- <span class="input-group-addon search-category" id="sizing-addon1">Categories <span class="caret"></span></span> -->
-							  <input type="text" class="form-control search-input" aria-describedby="sizing-addon1">
-							  <span class="input-group-addon search-button" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
-							</div>
+
+                        {{-- Search Bar --}}                          
+        				<div class="search-bar">
+                            <form action="/product_search" method="get" id="form-search">
+    	    					<div class="input-group input-group-lg">
+    							     <!-- <span class="input-group-addon search-category" id="sizing-addon1">Categories <span class="caret"></span></span> -->
+    							     <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1">
+    							     <span class="input-group-addon search-button" id="sizing-addon1">
+                                        <a href="" onclick="onSearch();" id="submit_link">
+                                            <i class="fa fa-search" aria-hidden="true" id="submit_link"></i>
+                                        </a>                                 
+                                     </span>
+    							</div>
+                            </form>
 	    				</div>
+                        {{-- End Search Bar --}}
+
 	    			</div>
 	    			<div class="col-md-3 woaw">
 	    				<div class="shopping-cart-container">
@@ -114,8 +149,10 @@
 	  </div><!-- /.container-fluid -->
 	</nav>
 
-	@yield("content")
-   
+    <div id="scroll-to" class="clearfix">
+	   @yield("content")
+    </div>
+
     <!-- FOOTER -->
   	<footer>
    	    <div class="container ftr">
@@ -154,9 +191,15 @@
                 <div class="col-md-2 col-sm-6">
                     <div class="btm-title">FOLLOW US ON</div>
                     <div>
-                        <a href="#"><i class="fa fa-facebook site-icon" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-twitter site-icon" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-pinterest-p site-icon" aria-hidden="true"></i></i></a>
+                        @if(get_content($shop_theme_info, "info", "facebook_link"))
+                        <a href="{{ get_content($shop_theme_info, "info", "facebook_link") }}"><i class="fa fa-facebook site-icon" aria-hidden="true"></i></a>
+                        @endif
+                        @if(get_content($shop_theme_info, "info", "twitter_link"))
+                        <a href="{{ get_content($shop_theme_info, "info", "twitter_link") }}"><i class="fa fa-twitter site-icon" aria-hidden="true"></i></a>
+                        @endif
+                        @if(get_content($shop_theme_info, "info", "pinterest_link"))
+                        <a href="{{ get_content($shop_theme_info, "info", "pinterest_link") }}"><i class="fa fa-pinterest-p site-icon" aria-hidden="true"></i></i></a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -201,4 +244,15 @@
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
     @yield("js")
     </body>
+
+<script type="text/javascript">
+    
+    function onSearch()
+    {
+        var keyword = $('#keyword').val();
+        $("#submit_link").attr("href", "/product_search?keyword="+$('#keyword').val());
+    }
+
+</script>
+    
 </html>

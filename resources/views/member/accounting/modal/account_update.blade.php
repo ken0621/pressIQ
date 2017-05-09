@@ -49,20 +49,6 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="row balance-container" style="">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="account_open_balance">Balance</label>
-                            <input type="number" class="form-control" name="account_open_balance" id="account_open_balance" value="{{$account_info->account_open_balance}}" >
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="account_open_balance_date">As of</label>
-                            <input type="text" class="datepicker form-control input-sm" name="account_open_balance_date" id="account_open_balance_date" value="{{$account_info->account_open_balance_date}}" required>
-                        </div> 
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -71,3 +57,4 @@
         <button class="btn btn-primary btn-edit-account" type="submit">Update account</button>
     </div>
 </form>
+<script type="text/javascript" src="/assets/member/js/chart_account.js"></script>

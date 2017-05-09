@@ -16,7 +16,18 @@
         <div class="col-md-4">
           <div class="holder">
             <div class="img">
-              <img src="/assets/mlm/img/placeholder.jpg">
+              @if($package[$key]->first())
+                 <?php $pack = $package[$key]->first(); ?>
+
+                  @if($pack->membership_package_imgage != null)
+                  <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->membership_id}}" src="{{$pack->membership_package_imgage}}">
+                  @else 
+                  <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->membership_id}}" src="/assets/mlm/img/placeholder.jpg">
+                  @endif
+              @else
+                <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->membership_id}}" src="/assets/mlm/img/placeholder.jpg">
+              @endif
+              
             </div>
             <div class="text-holder">
               <div class="name">
@@ -28,10 +39,10 @@
               <div class="membership-price">{{currency('PHP', $value->membership_price)}}</div>
               <div class="info">Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.</div>
               <div class="type">
-                <select class="form-control input-lg" name="package[{{$value->membership_id}}]">
+                <select class="form-control input-lg" name="package[{{$value->membership_id}}]" onChange="change_picture_a(this)">
                   @if($package[$key]->first())
                     @foreach($package[$key] as $key2 => $value2)
-                    <option value="{{$value2->membership_package_id}}">{{$value2->membership_package_name}}</option>
+                    <option value="{{$value2->membership_package_id}}" membership_id="{{$value->membership_id}}" image="{{$value2->membership_package_imgage}}">{{$value2->membership_package_name}}</option>
                     @endforeach
                   @else
                     <option>NO PACKAGE AVAILABLE</option>
@@ -56,6 +67,13 @@
 @endsection
 @section('script')
 <script type="text/javascript">
+function change_picture_a(ito)
+{
+  var img = $(ito).find('option:selected').attr('image');
+  var membership_id = $(ito).find('option:selected').attr('membership_id');
+  console.log(img);
+  $(".img_header_" + membership_id).attr("src", img);
+}
   $(document).on("submit", ".register-submit", function(e)
         {
             var data = $(e.currentTarget).serialize();

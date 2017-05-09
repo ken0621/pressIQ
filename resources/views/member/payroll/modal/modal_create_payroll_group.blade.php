@@ -34,7 +34,10 @@
 											<label><input type="radio" name="payroll_group_salary_computation" value="Flat Rate">Flat Rate</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_salary_computation" value="Daily" checked>Daily</label>
+											<label><input type="radio" name="payroll_group_salary_computation" value="Daily Rate" checked>Daily Rate</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_salary_computation" value="Monthly Rate" >Monthly Rate</label>
 										</div>
 									</div>
 								</div>
@@ -43,15 +46,12 @@
 								<small>Payroll Period</small>
 								<div class="panel panel-default">
 									<div class="panel-body">
+										@foreach($_period as $period)
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_period" value="Weekly">Weekly</label>
+											<label><input type="radio" name="payroll_group_period" value="{{$period->payroll_tax_period}}">{{$period->payroll_tax_period}}</label>
 										</div>
-										<div class="radio">
-											<label><input type="radio" name="payroll_group_period" value="Semi-Monthly" checked>Semi-Monthly</label>
-										</div>
-										<div class="radio">
-											<label><input type="radio" name="payroll_group_period" value="Monthly">Monthly</label>
-										</div>
+										@endforeach
+										
 									</div>
 								</div>
 							</div>
@@ -76,13 +76,27 @@
 					</div>
 					<div id="deduction-basis" class="tab-pane fade form-horizontal">
 						<div class="form-group">
-							<div class="col-md-8">
+							<div class="col-md-8"><!-- 
 								<div class="panel panel-default">
 									<div class="panel-body">
 										<label>Periods of Basic Deduction</label>
 										<div class="checkbox">
 											<label><input type="checkbox" name="payroll_group_deduct_before_absences" value="1">Deduct before absences and lates is deducted.</label>
 										</div>
+									</div>
+								</div> -->
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div class="form-horizontal">
+											<div class="form-group">
+												<div class="col-md-12">
+													<div class="checkbox">
+														<label><input type="checkbox" name="payroll_group_before_tax" value="1">Deduct Tax after SSS, PhilHealth, & Pagibig</label>
+													</div>
+												</div>
+											</div>
+										</div>
+										
 									</div>
 								</div>
 								<div class="panel panel-default">
@@ -234,6 +248,9 @@
 										</div>
 										<div class="radio">
 											<label><input type="radio" name="payroll_group_agency" value="2nd Period">2nd Period</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_agency" value="Last Period" checked>Last Period</label>
 										</div>
 										<div class="radio">
 											<label><input type="radio" name="payroll_group_agency" value="Every Period" checked>Every Period</label>

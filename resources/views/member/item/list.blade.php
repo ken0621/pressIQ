@@ -1,7 +1,7 @@
 @extends('member.layout')
 @section('content')
 
-<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
@@ -43,7 +43,7 @@
         <div id="all" class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
-                <table class="table table-condensed">
+                <table class="table table-hover table-bordered table-striped table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
                             <th>Item ID</th>
@@ -52,7 +52,7 @@
                             <th>Item Category</th>
                             <th>Item Type</th>
                             <th>Inventory</th>
-                            <th>Item Price</th>
+                            <th class="text-center">Item Price</th>
                             <!-- <th>Item Date Created</th> -->
                             <th>Action</th>
                         </tr>
@@ -65,8 +65,18 @@
                             <!-- <td>{{$item->item_sku}}</td> -->
                             <td>{{$item->type_name}}</td>
                             <td>{{$item->item_type_name}}</td>
-                            <td>{{$item->inventory_count}}</td>
-                            <td>{{currency("PHP", $item->item_price)}}</td>
+                            <td>
+                                <span class="pull-left">{{$item->inventory_count_um}}</span> 
+                                <span class="pull-right">{{$item->inventory_count_um_view}}</span>
+                            </td>
+                            <td>
+                                <span class="pull-left">{{currency("PHP", $item->item_price)}}/ {{$item->multi_abbrev or 'pc'}}</span> 
+                                <span class="pull-right">
+                                    @if($item->um_whole != "")
+                                    {{currency("PHP", $item->item_whole_price)}} / {{$item->um_whole or 'pc'}}
+                                    @endif
+                                </span>
+                            </td>
                             <!-- <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td> -->
                             <td>
                                 <div class="btn-group">
@@ -83,7 +93,7 @@
         <div id="archived" class="tab-pane fade in">
             <div class="form-group order-tags"></div>
             <div class="table-responsive">
-                <table class="table table-condensed">
+                <table class="table table-hover table-bordered table-striped table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
                             <th>Item ID</th>
@@ -106,7 +116,11 @@
                             <td>{{$item->item_type_name}}</td>
                             <td>{{currency("PHP", $item->item_price)}}</td>
                             <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td>
-                            <td><a link="/member/item/restore/{{$item->item_id}}" href="javascript:" class="popup">Restore</a></td>
+                            <td>
+                                <div class="btn-group">
+                                    <a link="/member/item/restore/{{$item->item_id}}" href="javascript:" class="btn btn-primary btn-grp-primary popup">Restore</a>
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

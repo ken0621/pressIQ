@@ -36,21 +36,23 @@ $data['icon'] = 'fa fa-money';
               @if($value->enchasment_process_tax_type == 1)
               <td>{{$value->enchasment_process_tax}}%</td>
               @else
-              <td>{{$value->enchasment_process_tax}}</td>
+              <td>{{currency('PHP', $value->enchasment_process_tax)}}</td>
               @endif
               @if($value->enchasment_process_p_fee_type == 1)
               <td>{{$value->enchasment_process_p_fee}}%</td>
               @else
-              <td>{{$value->enchasment_process_p_fee}}</td>
+              <td>{{currency('PHP',$value->enchasment_process_p_fee)}}</td>
               @endif
 
-              <td>{{$value->encashment_process_taxed}}</td>
-              <td>{{$value->wallet_log_amount * -1}}</td>
+              <td>{{currency('PHP',$value->encashment_process_taxed)}}</td>
+              <td>{{currency('PHP',$value->wallet_log_amount * -1)}}</td>
 
               @if($value->encashment_process_type == 0)
               <td class="alert alert-warning">Pending</td>
-              @else
+              @elseif($value->encashment_process_type  == 1)
               <td class="alert alert-success">Processed</td>
+              @else
+              <td class="alert alert-danger">Denied ({{currency('PHP', $value->wallet_log_denied_amount)}})</td>
               @endif
 
               <td><button class="btn btn-primary" onclick="show_breakdown({{$value->encashment_process}}, {{$value->slot_id}})">Breakdown</button></td>
@@ -100,7 +102,7 @@ $data['icon'] = 'fa fa-money';
 <div class="col-md-8">
   <div class="box">
     <div class="box-header with-border">
-      <h3 class="box-title">Request Enchantment</h3>
+      <h3 class="box-title">Request Encashment</h3>
       <span class="pull-right">
         
       </span>
@@ -118,9 +120,15 @@ $data['icon'] = 'fa fa-money';
         @if(count($unprocessed) >= 1)
           @foreach($unprocessed as $key => $value)
             <tr>
-              <td><input type="checkbox" class="check_box_single" value="{{$value['wallet_log_amount']}}" name="wallet_log_id[{{$value['wallet_log_id']}}]"></td>
+              <td>
+                @if($value['wallet_log_amount'] <= 0 )
+                <input type="checkbox" class="check_box_auto" value="{{$value['wallet_log_amount']}}" name="wallet_log_id[{{$value['wallet_log_id']}}]" onclick="return false;" checked>
+                @else
+                <input type="checkbox" class="check_box_single" value="{{$value['wallet_log_amount']}}" name="wallet_log_id[{{$value['wallet_log_id']}}]">
+                @endif
+              </td>
               <td>{{$value['wallet_log_date_created']}}</td>
-              <td>{{$value['wallet_log_amount']}}</td>
+              <td>{{currency('PHP', $value['wallet_log_amount'])}}</td>
               <td>{{$value['wallet_log_plan']}}</td>
             </tr>
           @endforeach
@@ -167,6 +175,20 @@ $data['icon'] = 'fa fa-money';
 
 @section('js')
 <script type="text/javascript">
+
+function inititalize()
+{
+ $('.check_box_auto').each(function(){
+    if($(this).is(':checked'))
+    {
+      var amount = $(this).val();
+      add_amount(amount);
+    }
+  });
+}
+
+
+
 $('.bind').on('click', function(){
   // $('#form_ecnash').submit();
   $(this).addClass('hide');
@@ -184,6 +206,7 @@ var tax_p = 0;
 var fee = 0;
 var fee_p = 0;
 @endif
+inititalize();
   // function 
   function add_amount(amount_to_add)
   {

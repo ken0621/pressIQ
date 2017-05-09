@@ -2,18 +2,26 @@
     <table class="table table-hover table-condensed table-bordered">
         <thead>
             <tr>
-                <th class="text-left">Name</th>
-                <th class="text-left">Phone</th>
-                <th class="text-left">Email</th>
+                <th class="text-left">Company Name</th>
+                <th class="text-left">Contact Person</th>
+                <th class="text-left">Contact Details</th>
+                <th class="text-center">Balance Total</th>
+
                 <th></th>
             </tr>
         </thead>
         <tbody>
             @foreach($_vendor as $vendor)
              <tr class="cursor-pointer" id="tr-vendor-{{$vendor->vendor_id_s}}">
-                <td class="col-md-5 text-left">{{$vendor->vendor_title_name.' '.$vendor->vendor_first_name.' '.$vendor->vendor_middle_name.' '.$vendor->vendor_last_name.' '.$vendor->vendor_suffix_name}}</td>
-                <td class="col-md-2 text-left">{{$vendor->ven_info_phone}}</td>
-                <td class="col-md-3 text-left">{{$vendor->vendor_email}}</td>
+                <td class="col-md-5 text-left">{{$vendor->vendor_company}}</td>
+                <td class="col-md-2 text-left">{{$vendor->vendor_title_name.' '.$vendor->vendor_first_name.' '.$vendor->vendor_middle_name.' '.$vendor->vendor_last_name.' '.$vendor->vendor_suffix_name}}</td>
+                <td class="col-md-3 text-left">
+                    Tel No : {{$vendor->ven_info_phone != "" ? $vendor->ven_info_phone : "---"}}<br>
+                    Mobile : {{$vendor->ven_info_mobile != "" ? $vendor->ven_info_mobile : "---" }}<br>
+                    Fax : {{$vendor->ven_info_fax != "" ? $vendor->ven_info_fax : "---"}}<br>
+                    Email Address : <a target="_blank" {{$vendor->vendor_email != "" ? 'href=https://mail.google.com/mail/?view=cm&fs=1&to='.$vendor->vendor_email : '' }}>{{$vendor->vendor_email != "" ? $vendor->vendor_email : "---" }}</a>
+                </td>
+                <td class="col-md-3 text-left">{{currency("PHP",$vendor->balance)}}</td>
                 <td class="col-md-2 text-center">
                     <!-- ACTION BUTTON -->
                     @if($vendor->archived == 0)
@@ -22,11 +30,14 @@
                         Action <span class="caret"></span>
                       </button>
                       <ul class="dropdown-menu dropdown-menu-custom">
-                        <li><a href="/member/vendor/purchase_order?vendor_id={{$vendor->vendor_id}}">Create Purchase Order</a></li>
+                        <li><a href="/member/vendor/purchase_order?vendor_id={{$vendor->vendor_id}}">Purchase Order</a></li>
+                        <li><a href="/member/vendor/create_bill?vendor_id={{$vendor->vendor_id}}">Create Bill</a></li>
                         <!-- <li><a href="/member/vendor/estimate">Create Estimate</li> -->
                         <li><a href="javascript:" class="popup" link="/member/vendor/archived/{{$vendor->vendor_id}}/inactive" size="md">Make Inactive</a></li>
                         <!-- <li><a href="javascript:" data-html="inactive">Make Inactive</a></li> -->
                         <li><a href="javascript:" class="popup" link="/member/vendor/edit/{{$vendor->vendor_id}}" size="lg">Edit vendor Info</a></li>
+                        <li><a href="/member/vendor/vendor-details/{{$vendor->vendor_id}}">Vendor Details</a></li>
+                        <li ><a class="popup" link="/member/vendor/tag/{{$vendor->vendor_id}}" size="lg">Tag Item </a></li>
                       </ul>
                     </div>
                     @else

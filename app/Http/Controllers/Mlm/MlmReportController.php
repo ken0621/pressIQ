@@ -5,7 +5,7 @@ use Crypt;
 use Redirect;
 use Request;
 use View;
-
+use DB;
 use App\Globals\Mlm_member_report;
 
 use App\Models\Tbl_mlm_slot;
@@ -16,11 +16,32 @@ use App\Models\Tbl_mlm_matching_log;
 use App\Models\Tbl_mlm_slot_points_log;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_leadership_settings;
+use App\Models\Tbl_membership;
+use App\Models\Tbl_mlm_matching;
+use App\Models\Tbl_mlm_triangle_repurchase_slot;
+use App\Models\Tbl_item_code_invoice;
+use App\Models\Tbl_mlm_plan_binary_promotions;
+use App\Models\Tbl_mlm_plan_binary_promotions_log;
+use App\Models\Tbl_mlm_binary_report;
+use App\Models\Tbl_warehouse;
+use App\Models\Tbl_warehouse_inventory;
+use App\Globals\Warehouse;
+use App\Globals\Mlm_voucher;
+use Carbon\Carbon;
+use Session;
+
 class MlmReportController extends Mlm
 {
     public function index($complan)
     {
-        return $this->$complan();
+    	if(Self::$slot_id != null)
+        {
+        	return $this->$complan();
+        }
+        else
+        {
+            return Self::show_no_access();
+        }
     }
     public static function direct()
     {
@@ -68,11 +89,49 @@ class MlmReportController extends Mlm
             $data['slot_1'][$key] = Tbl_mlm_slot::where('slot_id', $value->matching_log_slot_1)->customer()->first();
             $data['slot_2'][$key] = Tbl_mlm_slot::where('slot_id', $value->matching_log_slot_2)->customer()->first();
         }
-        // $unmatch_1 = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)->join('tbl_mlm_matching_log', 'tbl_mlm_matching_log.matching_log_earner', '=', 'tbl_tree_sponsor.sponsor_tree_parent_id' )->get();
-        // dd($unmatch_1);
         $data['matching_count'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->count();
         $data['count'] = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)->get();
-        // dd($data['report_matching']);
+
+
+        $settings = 
+        Tbl_mlm_matching::where('tbl_mlm_matching.shop_id', Self::$shop_id)
+        // ->where('membership_id', Self::$slot_now->slot_membership)
+        ->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_matching.membership_id')
+        ->get()
+        ->toArray();
+        foreach($settings as $key => $value)
+        {
+        	$slot_per_level[$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
+        	->where('sponsor_tree_level', '>=', $value['matching_settings_start'])
+        	->where('sponsor_tree_level', '<=', $value['matching_settings_end'])
+        	->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_tree_sponsor.sponsor_tree_child_id')
+        	->where('slot_matched_membership', 0)
+        	->get()->keyBy('slot_id');
+        	$data['matched_list'][$key] = [];
+        	$data['un_matched_list'][$key] = [];
+        	foreach($slot_per_level[$key] as $key2 => $value2)
+        	{
+        		$matched = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)
+        		->where('matching_log_slot_1', $key2)
+        		// ->orWhere('matching_log_slot_2', $key2)
+        		->count();
+        		$matched_2 = Tbl_mlm_matching_log::where('matching_log_earner', Self::$slot_id)
+        		->where('matching_log_slot_2', $key2)
+        		// ->orWhere('matching_log_slot_2', $key2)
+        		->count();
+        		if($matched >= 1 || $matched_2 >= 1)
+        		{
+        			$data['matched_list'][$key][$key2] = $value2;
+        		}
+        		else
+        		{
+        			$data['un_matched_list'][$key][$key2] = $value2;
+        		}
+        	}
+        }
+        $data['settings_a'] = $settings;
+        // dd($data);
+
         return view("mlm.report.report_membership_matching", $data);
     }
     public static function executive_bonus()
@@ -211,5 +270,213 @@ class MlmReportController extends Mlm
         ->membership()->get();
         // dd($data);
         return view("mlm.report.report_discount_card", $data);
+    }
+    public function direct_promotions()
+    {
+        // $data['report']     = Mlm_member_report::get_wallet('DIRECT_PROMOTIONS', Self::$slot_id); 
+        $data['plan']       = Mlm_member_report::get_plan('DIRECT_PROMOTIONS', Self::$shop_id); 
+        $data['header'] = Mlm_member_report::header($data['plan']);
+        $data['membership'] = Tbl_membership::where('shop_id', Self::$shop_id) 
+        ->where('membership_id', '!=', 1)
+        ->where('membership_archive', 0)->get();
+
+        foreach($data['membership'] as $key => $value)
+        {
+            $data['direct_promotion'][$key] =   DB::table('tbl_mlm_plan_settings_direct_promotions')->where('shop_id', Self::$shop_id)->where('membership_id', $value->membership_id)->first();
+            $data['count_direct'][$key] = Tbl_mlm_slot::where('slot_sponsor', Self::$shop_id)
+                    ->where('slot_membership', $value->membership_id)
+                    ->where('slot_matched_membership', 0)
+                    ->count();
+            $data['count_matched'][$key] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)->where('wallet_log_plan', 'DIRECT_PROMOTIONS')
+                        ->where('wallet_log_membership_filter', $value->membership_id)
+                        ->count();
+        }
+        // dd($data);
+        return view("mlm.report.report_direct_promotion", $data);
+    }
+
+    public function stairstep()
+    {
+        $data['report']     = Mlm_member_report::get_wallet('STAIRSTEP', Self::$slot_id); 
+        $data['plan']       = Mlm_member_report::get_plan('STAIRSTEP', Self::$shop_id); 
+        $data['header']     = Mlm_member_report::header($data['plan']);
+        $data["page"]       = "Report - Stairstep";
+
+
+        return view("mlm.report.report_stairstep", $data);
+    }
+    public function binary_repurchase()
+    {
+        return $this->show_maintenance();
+    }
+    public function triangle_repurchase()
+    {
+        $data['plan']       = Mlm_member_report::get_plan('TRIANGLE_REPURCHASE', Self::$shop_id); 
+        $data['header']     = Mlm_member_report::header($data['plan']);
+        $data["page"]       = "Report - Stairstep";
+        $data['slots_tri'] = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_slot_id', Self::$slot_id)
+        ->join('tbl_item_code_invoice', 'tbl_item_code_invoice.item_code_invoice_id', '=', 'tbl_mlm_triangle_repurchase_slot.repurchase_slot_invoice_id')
+        ->get();
+        $data['invoice'] = Tbl_item_code_invoice::where('slot_id', Self::$slot_id)->get()->keyBy('item_code_invoice_id');
+        foreach($data['invoice'] as $key => $value)
+        {
+            $data['repurchase'][$key] = Tbl_mlm_triangle_repurchase_slot::where('repurchase_slot_invoice_id', $key)
+        ->join('tbl_item_code_invoice', 'tbl_item_code_invoice.item_code_invoice_id', '=', 'tbl_mlm_triangle_repurchase_slot.repurchase_slot_invoice_id')
+        ->get();
+
+            $data['invoice'][$key]->count = count( $data['repurchase'][$key]);
+        }
+        // dd($data['invoice']);
+        return view("mlm.report.report_triangle_repurchase", $data);
+
+    }
+    public function binary_promotions()
+    {
+        $data['plan']       = Mlm_member_report::get_plan('BINARY_PROMOTIONS', Self::$shop_id); 
+        $data['header']     = Mlm_member_report::header($data['plan']);
+        $data["page"]       = "Report - Stairstep";
+        $data['promotions'] =    Tbl_mlm_plan_binary_promotions::where('binary_promotions_archive', 0)
+        ->where('binary_promotions_membership_id', Self::$slot_now->slot_membership)
+        ->join('tbl_item', 'tbl_item.item_id', '=', 'tbl_mlm_plan_binary_promotions.binary_promotions_item_id')
+        ->get();
+        foreach($data['promotions'] as $key => $value)
+        {
+            $date = Carbon::parse($value->binary_promotions_start_date)->format('Y-m-d');
+            $data['current_l'][$key] = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
+            ->where('binary_report_date', '>=',  $date)
+            ->sum('binary_report_s_points_l'); 
+            $data['current_r'][$key] = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
+            ->where('binary_report_date', '>=',  $date)
+            ->sum('binary_report_s_points_r');
+
+            $data['req_count'][$key] = Tbl_mlm_plan_binary_promotions_log::where('promotions_request_slot', Self::$slot_id)
+                    ->where('promotions_request_binary_promotions_id', $value->binary_promotions_id)
+                    ->count();
+
+
+            $data['claim_count_account'][$key] =  Tbl_mlm_plan_binary_promotions_log::join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_plan_binary_promotions_log.promotions_request_slot')
+            ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+            ->where('customer_id', Self::$customer_id)
+            ->count(); 
+        }
+
+        // dd($data);
+        $status = Session::get('status');
+        if($status != null)
+        {
+            $data['s'] = $status;
+            $data['m'] = Session::get('message');
+        }
+        $data['now'] = Carbon::now();
+        $data['direct_count'] = Tbl_mlm_slot::where('slot_sponsor', Self::$slot_id)->count();
+        return view("mlm.report.report_binary_promotions", $data);
+    }
+    public function request_binary_promotions()
+    {
+        $binary_promotions_id = Request::input('binary_promotions_id');
+
+        $request_item = Tbl_mlm_plan_binary_promotions::where('binary_promotions_id', $binary_promotions_id)->join('tbl_item', 'tbl_item.item_id', '=', 'tbl_mlm_plan_binary_promotions.binary_promotions_item_id')->first();
+        if($request_item)
+        {
+            // check inventory
+            $warehouse = Tbl_warehouse::where('warehouse_shop_id', Self::$shop_id)->where('main_warehouse', 1)->first();
+            if($warehouse)
+            {
+                $count_inv = Tbl_warehouse_inventory::check_inventory_single($warehouse->warehouse_id, $request_item->item_id)->pluck('inventory_count');
+                if($count_inv >= 1)
+                {
+                    // check if already requested
+                    $req_count = Tbl_mlm_plan_binary_promotions_log::where('promotions_request_slot', Self::$slot_id)
+                    ->where('promotions_request_binary_promotions_id', $binary_promotions_id)
+                    ->count();
+                    if($req_count == 0)
+                    {
+                        // check points
+                        $date = Carbon::parse($request_item->binary_promotions_start_date)->format('Y-m-d');
+                        $points_l = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
+                        ->where('binary_report_date', '>=',  $date)
+                        ->sum('binary_report_s_points_l'); 
+                        $points_r = Tbl_mlm_binary_report::where('binary_report_slot', Self::$slot_id)
+                        ->where('binary_report_date', '>=',  $date)
+                        ->sum('binary_report_s_points_r'); 
+                        if($points_l >= $request_item->binary_promotions_required_left)
+                        {
+                            if($points_r >= $request_item->binary_promotions_required_right)
+                            {
+                                // consume inventory
+                                $a = Warehouse::inventory_consume($warehouse->warehouse_id, 'Used for consuming of inventory in binary promotions', $request_item,Self::$customer_id, 'Used for consuming of inventory in binary promotions', 'array');
+                                if($a['status'] == 'error')
+                                {
+                                     $send['response_status']      = "warning";
+                                     $send['warning_validator'][0] = $a['status_message'];
+                                     $data['status'] = 'Error';
+                                     $data['message'] = $a['status_message'];
+                                }
+                                else
+                                {
+                                    // give voucher
+                                    Mlm_voucher::give_voucher_binary_promotions($request_item, Self::$customer_id, Self::$slot_id);
+                                    $data['status'] = 'success';
+                                    $data['message'] = 'Success, you can now claim your item, just get the voucher code and pin in the voucher tab.';
+
+                                    $update['binary_promotions_no_of_units_used'] = $request_item->binary_promotions_no_of_units_used + 1;
+                                    Tbl_mlm_plan_binary_promotions::where('binary_promotions_id', $request_item->binary_promotions_id)->update($update);
+                                    
+                                    $insert['promotions_request_slot'] = Self::$slot_id;
+                                    $insert['promotions_request_binary_promotions_id'] = $binary_promotions_id; 
+                                    $insert['promotions_request_item_name'] = $request_item->item_name;
+                                    $insert['promotions_request_date'] = Carbon::now();
+                                    $insert['promotions_request_consume_l'] = $request_item->binary_promotions_required_left;
+                                    $insert['promotions_request_consume_r'] = $request_item->binary_promotions_required_right;
+                                    Tbl_mlm_plan_binary_promotions_log::insert($insert);
+
+                                    $insert_report['binary_report_s_points_l'] = $request_item->binary_promotions_required_left * (-1);
+                                    $insert_report['binary_report_s_points_r'] = $request_item->binary_promotions_required_right * (-1); 
+                                    $insert_report['binary_report_reason'] = 'Binary Promotions';
+                                    $insert_report['binary_report_date'] = Carbon::now();
+                                    $insert_report['binary_report_slot'] = Self::$slot_id;
+                                    $insert_report['binary_report_slot_g'] = Self::$slot_id;
+                                    Tbl_mlm_binary_report::insert($insert_report);
+                                }
+                            }
+                            else
+                            {
+                                $data['status'] = 'error';
+                                $data['message'] = 'Insuficient right points';
+                            }
+                        }
+                        else
+                        {
+                            $data['status'] = 'error';
+                            $data['message'] = 'Insuficient left points';
+                        }
+                    }
+                    else
+                    {
+                        $data['status'] = 'error';
+                        $data['message'] = 'Sorry, you already claimed this promotions';
+                    }
+                }
+                else
+                {
+                    $data['status'] = 'error';
+                    $data['message'] = $request_item->item_name . ' has 0 inventory, please contact the administrator';
+                }
+            }
+            else
+            {
+                $data['status'] = 'error';
+                $data['message'] = 'Invalid warehouse, please contact the administrator';
+            }
+            // end transaction
+
+        }
+        else
+        {
+            $data['status'] = 'error';
+            $data['message'] = 'Invalid Request';
+        }
+        return Redirect::back()->with($data);
+        return $data;
     }
 }

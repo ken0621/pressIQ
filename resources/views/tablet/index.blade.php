@@ -3,7 +3,7 @@
 <input type="hidden" name="_token" value="{{csrf_token()}}">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
-        <div>
+        <div class="col-md-6 col-xs-6">
             <i class="fa fa-tablet"></i>
             <h1>
                 <span class="page-title">Tablet</span>
@@ -12,11 +12,20 @@
                 </small>
             </h1>
         </div>
-        <div class="pull-right">
+        <div class="col-md-6 col-xs-6 text-right">
             <div class="col-md-12">
                 <label>{{$employee_name}}</label><br>
                 <label>{{$employee_position}}</label><br>
                 <a href="/tablet/logout">Logout</a>
+            </div>
+            <div class="col-sm-4 pull-right">
+                <form class="select-sir" method="get">
+                    <select class="choose-sir form-control" name="sir_id">
+                        @foreach($_sirs as $sir)
+                            <option {{Session::get("sir_id") == $sir->sir_id ? 'selected' : '' }} value="{{$sir->sir_id}}">SIR #{{$sir->sir_id}}</option>
+                        @endforeach
+                    </select>
+                </form>
             </div>
         </div>
     </div>
@@ -41,10 +50,14 @@
             <div class="tab-pane fade in active">
                 <div class="form-group order-tags">
                     <div class="col-md-12 text-center">
-                      @if($sir != null)
+                      @if(isset($no_sir))
+                        <div class="form-group">
+                          <h2>Waiting for Warehouse to OPEN SIR #{{Session::get("sir_id")}}.</h2>
+                        </div>
+                      @elseif($sir != '')
                         <div class="form-group">
                             <div class="col-md-12">
-                                <h3>Load Out Form No: <strong>{{sprintf("%'.05d\n", $sir->sir_id)}}</strong></h3>
+                                <h3>Load Out Form No: <strong>{{sprintf("%'.05d\n", Session::get("sir_id"))}}</strong></h3>
                                 <ul class="nav nav-tabs">
                                   <li id="all-list" class="active">
                                     <a data-toggle="tab" onclick="select_list('all')"><i class="fa fa-star" aria-hidden="true"></i>&nbsp;All List</a>
@@ -104,10 +117,10 @@
                         </div>
                         <div class="form-group">
                             <div class="col-md-6 col-xs-6">
-                                <a link="/tablet/pis/sir/{{$sir->sir_id}}/confirm" size="md" class="popup btn btn-primary form-control">Confirm</a>
+                                <a link="/tablet/pis/sir/{{Session::get('sir_id')}}/confirm" size="md" class="popup btn btn-primary form-control">Confirm</a>
                             </div>
                             <div class="col-md-6 col-xs-6">
-                                <a link="/tablet/pis/sir/{{$sir->sir_id}}/reject" size="md" class="popup btn btn-primary form-control">Reject</a>
+                                <a link="/tablet/pis/sir/{{Session::get('sir_id')}}/reject" size="md" class="popup btn btn-primary form-control">Reject</a>
                             </div>
                         </div>
                       @else
@@ -123,6 +136,11 @@
 @section("script")
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 <script type="text/javascript">
+
+$('body').on("change", ".choose-sir", function()
+{
+   $('.select-sir').submit();
+}); 
     function submit_done(data)
     {
         if(data.status == "success")

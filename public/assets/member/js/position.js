@@ -3,7 +3,7 @@ function submit_done(data)
     if(data.status == "success")
     {
         toastr.success("Success");
-        $(".position-container").load("/member/employee/position .position-container"); 
+        $(".position-container").load("/member/utilities/agent_position .position-container"); 
         $(data.target).html(data.view);
         $('#global_modal').modal('toggle');
         $("#all-list").addClass("active");

@@ -59,20 +59,32 @@ class Mlm_member
 		
 		Session::put('mlm_member', $data);
 	}
-	public static function get_customer_info($customer_id)
+	public static function get_customer_info($customer_id, $discount_card_log_id = null)
 	{
 		$data = [];
 		$data['customer_data'] = Tbl_customer::where('customer_id', $customer_id)->first();
-		$data['discount_card'] = Tbl_mlm_discount_card_log::where('discount_card_customer_holder', $customer_id)->first();
+        if($discount_card_log_id == null)
+        {
+            $data['discount_card'] = Tbl_mlm_discount_card_log::where('discount_card_customer_holder', $customer_id)->first();
+        }
+        else
+        {
+            $data['discount_card'] = Tbl_mlm_discount_card_log::where('discount_card_log_id', $discount_card_log_id)->first();
+        }
+		// dd($data);
         if(isset($data['discount_card']->discount_card_log_is_expired))
         {
-            $now = Carbon::now();
-            if($now >= $data['discount_card']->discount_card_log_date_expired)
+            if($data['discount_card']->discount_card_log_date_expired != null)
             {
-                $update['discount_card_log_is_expired'] = 1;
-                Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card']->discount_card_log_id)->update($update);
-                $data['discount_card'] = Tbl_mlm_discount_card_log::where('discount_card_customer_holder', $customer_id)->first();
+                $now = Carbon::now();
+                if($now >= $data['discount_card']->discount_card_log_date_expired)
+                {
+                    $update['discount_card_log_is_expired'] = 1;
+                    Tbl_mlm_discount_card_log::where('discount_card_log_id', $data['discount_card']->discount_card_log_id)->update($update);
+                    $data['discount_card'] = Tbl_mlm_discount_card_log::where('discount_card_customer_holder', $customer_id)->first();
+                }
             }
+            
         }
         return view('mlm.pre.view_customer', $data);
         // \assets\mlm\barcode
@@ -82,8 +94,15 @@ class Mlm_member
 		$data = [];
 		$data['customer_data'] = Tbl_customer::where('customer_id', $customer_id)->first();
 		$data['slot'] = Tbl_mlm_slot::where('tbl_mlm_slot.slot_id', $slot_id)
-		->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id')
+		->leftjoin('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id')
 		->first();
+        if($data['slot']->slot_id == null)
+        {
+            $data['slot'] = Tbl_mlm_slot::where('tbl_mlm_slot.slot_id', $slot_id)
+            ->first();
+        }
+        $data['slot_info'] = Tbl_mlm_slot::where('tbl_mlm_slot.slot_id', $slot_id)->first();
+        // dd($data);
         return view('mlm.pre.view_customer', $data);
 	}
 	public static function breakdown_wallet($slot_id)
@@ -158,7 +177,7 @@ class Mlm_member
 
                         $count_tree_if_exist = Tbl_tree_placement::where('placement_tree_position', $validate['slot_position'])
                         ->where('placement_tree_parent_id', $validate['slot_placement'])
-                        ->where('shop_id', $this->user_info->shop_id)
+                        ->where('shop_id', $shop_id)
                         ->count();
                     } 
                 }
@@ -274,6 +293,8 @@ class Mlm_member
         $insertSearch['body'] = $insert['title_name'].' '.$insert['first_name'].' '.$insert['middle_name'].' '.$insert['last_name'].' '.$insert['suffix_name'].' '.$insert['email'].' '.$insert['company'];
         Tbl_customer_search::insert($insertSearch);
 
+        $insertInfo['customer_phone'] = $info['customer_phone'];
+        $insertInfo['customer_mobile'] = $info['customer_mobile'];
         $insertInfo['customer_id'] = $customer_id;
         Tbl_customer_other_info::insert($insertInfo);
 

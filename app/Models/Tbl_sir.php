@@ -11,7 +11,7 @@ class Tbl_sir extends Model
 
     public function scopeTruck($query)
     {
-    	return $query->join("tbl_truck","tbl_truck.truck_id","=","tbl_sir.truck_id");
+    	return $query->leftjoin("tbl_truck","tbl_truck.truck_id","=","tbl_sir.truck_id");
     }
     public function scopeSaleagent($query)
     {
@@ -19,9 +19,9 @@ class Tbl_sir extends Model
     }
     public function scopeSir_item($query)
     {
-    	return $query->join("tbl_sir_item","tbl_sir_item.sir_id","=","tbl_sir.sir_id")
-    				 ->selectRaw("*, count(tbl_sir_item.sir_id) as total_item, tbl_sir.created_at as sir_created, tbl_sir.archived as sir_archived")
-    				 ->groupBy("tbl_sir_item.sir_id");
+    	return $query->leftjoin("tbl_sir_item","tbl_sir_item.sir_id","=","tbl_sir.sir_id")
+    				 ->selectRaw("*, count(tbl_sir_item.sir_id) as total_item, tbl_sir.created_at as sir_created,tbl_sir.sir_id as sir_id, tbl_sir.archived as sir_archived")
+    				 ->groupBy("tbl_sir.sir_id");
     }
     public function scopeSelect_sir_item($query)
     {

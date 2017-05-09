@@ -43,6 +43,7 @@
                             <th>Invoice No</th>
                             <th>Customer Name</th>
                             <th>Total</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -53,6 +54,13 @@
                                 <td>{{$invoice->inv_id}}</td>
                                 <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
+                                <td>
+                                    @if($invoice->inv_is_paid == 0)
+                                    <a class="btn btn-warning form-control">Open</a>
+                                    @else
+                                    <a class="btn form-control" style="background-color: #78C500;color: #fff">Paid</a>
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

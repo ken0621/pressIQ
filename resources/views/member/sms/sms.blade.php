@@ -11,20 +11,21 @@
                     List of Sms Content.
                 </small>
             </h1>
-            <div class="text-right row">
-                <div class="col-md-4 pull-right">
-                    @if($user->user_level == 1)
-                    <form class="global-submit" action="/member/maintenance/sms/authorization-key">
-                        <input type="hidden" name="_token" value="{{csrf_token()}}">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="sms_authorization_key" placeholder="Authorization Key" value="{{$sms_key->sms_authorization_key or ''}}">
-                            <span class="input-group-btn">
-                                <button class="btn btn-custom-primary pane" type="submit" size="md">Save SMS Key</button>
-                            </span>
-                        </div>  
-                    </form>
-                    @endif
-                </div>                            
+            <h4 class="pull-right {{isset($sms_balance->balance) ? $sms_balance->balance > 50 ? 'green' : 'red' : 'red'}}"> BALANCE : {{$sms_balance->currency or ''}} {{$sms_balance->balance or '0'}} </h4>
+            <div class="col-md-4 pull-right">
+                <a class="btn btn-custom-white pull-right" href="/member/maintenance/sms/logs">SMS Logs</a>
+                @if($user->user_level == 1)
+                <form class="global-submit" action="/member/maintenance/sms/authorization-key">
+                    <input type="hidden" name="_token" value="{{csrf_token()}}">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="sms_authorization_key" placeholder="Authorization Key" value="{{$sms_key->sms_authorization_key or ''}}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-custom-primary pane" type="submit" size="md">Save SMS Key</button>
+                        </span>
+                    </div>  
+                </form>
+                @endif
+            </div>                            
             </div>
         </div>
     </div>
@@ -32,7 +33,6 @@
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-body form-horizontal load-data">
         @if(isset($sms_key->sms_authorization_key))
-        <button class="btn btn-custom-white">SMS Logs</button>
         <div class="form-group tab-content panel-body sms-content-container">
             <div class="table-responsive">
                 <table class="table table-bordered table-condensed">
@@ -62,13 +62,11 @@
             </div>
         </div>
         @else
-        <div class="row vcenter" style="margin-top: 20%;">
-            <div class="col-md-12">
-                <div class="error-template">
-                    <h2 class="message">Create Authorization Key First</h2>
-                    <div class="error-details">
-                        Sorry, please contact your administrator.
-                    </div>
+        <div class="col-md-12">
+            <div class="error-template">
+                <h2 class="message">Create Authorization Key First</h2>
+                <div class="error-details">
+                    Sorry, please contact your administrator.
                 </div>
             </div>
         </div>

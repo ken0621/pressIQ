@@ -17,6 +17,7 @@ use App\Models\Tbl_mlm_slot;
 use App\Globals\Pdf_global;
 use Input;
 use File;
+use App\Globals\Mlm_repurchase_member;
 class MlmProfileController extends Mlm
 {
     public function index()
@@ -170,6 +171,7 @@ class MlmProfileController extends Mlm
 				$update['customer_city'] = $customer_city;
 				$update['customer_zipcode'] = $customer_zipcode;
 				$update['customer_street'] = $customer_street;
+				$update['purpose'] = 'billing';
 				DB::table('tbl_customer_address')->where('customer_id', $customer_id)->update($update);
 	    	}
 	    	else
@@ -180,6 +182,7 @@ class MlmProfileController extends Mlm
 				$update['customer_city'] = $customer_city;
 				$update['customer_zipcode'] = $customer_zipcode;
 				$update['customer_street'] = $customer_street;
+				$update['purpose'] = 'billing';
 				DB::table('tbl_customer_address')->insert($update);
 	    	}
 	    	
@@ -238,13 +241,13 @@ class MlmProfileController extends Mlm
         $rules = array(
           'image' => 'mimes:jpeg,jpg,png,gif|required|max:1000' // max 10000kb
         );
-        // $validator = Validator::make($fileArray, $rules);
-        // if ($validator->fails())
-        // {
-        //     $data['status'] = 'warning';
-        //     $data['message'] = 'file size exceeded';
-        //     return $this->refill($data);
-        // }
+        $validator = Validator::make($fileArray, $rules);
+        if ($validator->fails())
+        {
+            $data['status'] = 'warning';
+            $data['message'] = 'file size exceeded';
+            return Redirect::back();
+        }
         // else
         // {
         // 	dd($validator->messages());

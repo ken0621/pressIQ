@@ -12,7 +12,7 @@
     <h4 class="modal-title layout-modallarge-title item_title">Warehouse Inventory Refill</h4>
 </div>
 <div class="modal-body modallarge-body-layout background-white form-horizontal menu_container">
-    <input type="hidden" name="warehouse_id" value="{{$warehouse->warehouse_id}}">
+    <input type="hidden" name="warehouse_id" id="warehouse_id" value="{{$warehouse->warehouse_id}}">
     <div class="panel-body form-horizontal">
         <div class="form-group">
             <div class="col-md-6">            
@@ -35,7 +35,7 @@
             </div>
         </div>
         <div class="form-group"> 
-        <div class="col-md-1">
+      <!--   <div class="col-md-1">
             <label>Filter</label>
         </div>
         <div class="col-md-3">
@@ -47,18 +47,18 @@
                     @endforeach
                 @endif
             </select>
-        </div>
+        </div> -->
         <div class="col-md-6" > 
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="search" name="" class="form-control" placeholder="Start typing item">
+                <input type="search" id="search_txt" name="" class="form-control" placeholder="Start typing item">
             </div>
         </div>
         </div>
         <div class="row clearfix draggable-container warehouse-refill-container">
             <div class="table-responsive">
                 <div class="col-sm-12">
-                    <table class="digima-table">
+                    <table class="digima-table" id="item_table">
                         <thead >
                             <tr>
                                 <th style="width: 10px">#</th>
@@ -118,7 +118,42 @@
 $('.droplist-vendor').globalDropList(
 { 
     width : "100%",
-    link : "/member/vendor/add"
+    link : "/member/vendor/add",
+    onChangeValue : function ()
+    {
+        var vendor_id = $(this).val();
+        if(vendor_id != "other")
+        {
+            var warehouse_id = $("#warehouse_id").val();
+            $(".warehouse-refill-container").load("/item/warehouse/refill/by_vendor/"+warehouse_id+"/"+vendor_id +" .warehouse-refill-container") 
+        }
+    }
 });
+$('#search_txt').keyup(function()
+{
+    searchTable($(this).val());
+});
+ function searchTable(inputVal)
+    {
+        var table = $('#item_table');
+        table.find('tr').each(function(index, row)
+        {
+            var allCells = $(row).find('td');
+            if(allCells.length > 0)
+            {
+                var found = false;
+                allCells.each(function(index, td)
+                {
+                    var regExp = new RegExp(inputVal, 'i');
+                    if(regExp.test($(td).text()))
+                    {
+                        found = true;
+                        return false;
+                    }
+                });
+                if(found == true)$(row).show();else $(row).hide();
+            }
+        });
+    }
 </script>
 <script type="text/javascript" src="/assets/member/js/warehouse.js"></script>

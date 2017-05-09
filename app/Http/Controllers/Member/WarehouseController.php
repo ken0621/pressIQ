@@ -17,6 +17,7 @@ use Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Models\Tbl_category;
+use App\Models\Tbl_user;
 use App\Models\Tbl_inventory_serial_number;
 use Session;
 use App\Globals\Item;
@@ -30,9 +31,20 @@ class WarehouseController extends Member
      */
     public function stock_input($slip_id = 0)
     {
+        $data["current_user"] = Tbl_user::where("user_id",$this->user_info->user_id)->first();
         $data["slip"] = Warehouse::inventory_input_report($slip_id);
         $data["slip_item"] = Warehouse::inventory_input_report_item($slip_id);
-
+        if($data["slip"])
+        {
+            if($data["slip"]->inventory_reason == "refill" || $data["slip"]->inventory_reason == "insert_item" || $data["slip"]->inventory_reason == "destination")
+            {
+                $data["report_title"] = "STOCK INPUT";
+            }
+            else
+            {
+                $data["report_title"] = strtoupper($data["slip"]->inventory_reason);
+            }
+        }
         $pdf = view("member.warehouse.stock_input_pdf",$data);
         return Pdf_global::show_pdf($pdf);
     }
@@ -50,7 +62,6 @@ class WarehouseController extends Member
     public function index()
     {
         $this->item();
-
         $access = Utilities::checkAccess('item-warehouse', 'access_page');
         if($access == 1)
         { 
@@ -61,7 +72,7 @@ class WarehouseController extends Member
             }
 
             $data["_warehouse_archived"] = Tbl_warehouse::inventory()->select_info($this->user_info->shop_id, 1)->groupBy("tbl_warehouse.warehouse_id")->get();
-
+            
             $all_item = null;
             foreach($data["_warehouse"] as $key => $value)
             {
@@ -80,15 +91,14 @@ class WarehouseController extends Member
 
                     foreach ($all_item as $key2 => $value2) 
                     {
-                        $qty = Tbl_warehouse_inventory::where("inventory_item_id",$value2->item_id)
-                                                            ->where("warehouse_id",$value->warehouse_id)
-                                                            ->sum("inventory_count");
+                        $qty = Tbl_warehouse_inventory::where("warehouse_id",$value2->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("tbl_item.archived",0)->sum("inventory_count");
 
                         $selling_price += $value2->item_price * $qty;
                         $cost_price += $value2->item_cost * $qty;
                     }
                     $data["_warehouse"][$key]->total_selling_price = $selling_price;
                     $data["_warehouse"][$key]->total_cost_price = $cost_price;
+                    $data["_warehouse"][$key]->total_qty = $qty;
 
 
                     $data["_warehouse"][$key]->count_no_serial = count(Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->where("tbl_item.shop_id",$this->user_info->shop_id)->where("tbl_warehouse.warehouse_id",$value->warehouse_id)->whereNull("serial_id")->get()->toArray());
@@ -112,21 +122,17 @@ class WarehouseController extends Member
 
                     foreach ($archive_item as $key4 => $value4) 
                     {
-                        $qty = Tbl_warehouse_inventory::where("inventory_item_id",$value4->item_id)
-                                                            ->where("warehouse_id",$value3->warehouse_id)
-                                                            ->sum("inventory_count");
+                        $qty = Tbl_warehouse_inventory::where("warehouse_id",$value4->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("tbl_item.archived",0)->sum("inventory_count");
 
                         $selling_price_a += $value4->item_price * $qty;
                         $cost_price_a += $value4->item_cost * $qty;
                     }
                     $data["_warehouse_archived"][$key3]->total_selling_price = $selling_price_a;
                     $data["_warehouse_archived"][$key3]->total_cost_price = $cost_price_a;
+                    $data["_warehouse_archived"][$key3]->total_qty = $qty;
                 }
             }
             $data["enable_serial"] = Tbl_settings::where("shop_id",$this->user_info->shop_id)->where("settings_key","item_serial")->pluck("settings_value");
-
-            $this->create_main();
-
 
             return view("member.warehouse.warehouse_list",$data);
         }
@@ -226,7 +232,7 @@ class WarehouseController extends Member
     }
     public function add_serial_number()
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
+        $access = Utilities::checkAccess('item-warehouse', 'add-serial');
         if($access == 1)
         {             
             $items = Session::get("item");
@@ -254,7 +260,7 @@ class WarehouseController extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public function add_serial_number_submit()
@@ -368,8 +374,8 @@ class WarehouseController extends Member
                 return $this->show_no_access_modal();
             }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
-            $data["warehouse_item"] = Warehouse::select_item_warehouse_single($id,'array');
-            // dd($data["warehouse_item"]);
+            $data["warehouse_item"] = Warehouse::select_item_warehouse_single_w_page($id,'array');
+            // dd(collect($data["warehouse_item"])->toArray());
 
             return view("member.warehouse.warehouse_view",$data);
         }
@@ -380,7 +386,7 @@ class WarehouseController extends Member
     }
     public function refill()
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
+        $access = Utilities::checkAccess('item-warehouse', 'refill');
         if($access == 1)
         { 
             $id = Request::input("warehouse_id");
@@ -404,9 +410,19 @@ class WarehouseController extends Member
             return $this->show_no_access_modal();
         }
     }
+    public function refill_item_vendor($warehouse_id,$vendor_id)
+    {        
+            $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)
+                                                                            ->where("type_shop",$this->user_info->shop_id)
+                                                                            ->get();
+        $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$warehouse_id)->first();
+        $data["_vendor"]    = Vendor::getAllVendor('active');
+        $data["warehouse_item"] = Warehouse::select_item_warehouse_single_vendor($warehouse_id,'array',$vendor_id);
+        return view("member.warehouse.warehouse_refill",$data);
+    }
     public function adjust($id)
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
+        $access = Utilities::checkAccess('item-warehouse', 'adjust');
         if($access == 1)
         { 
             // $id = Request::input("warehouse_id");
@@ -530,7 +546,7 @@ class WarehouseController extends Member
      */
     public function add()
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
+        $access = Utilities::checkAccess('item-warehouse', 'add');
         if($access == 1)
         { 
            $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->where("shop_id",$this->user_info->shop_id)->get();
@@ -539,7 +555,7 @@ class WarehouseController extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public function load_item()
@@ -574,7 +590,7 @@ class WarehouseController extends Member
     }
     public function archived($warehouse_id)
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
+        $access = Utilities::checkAccess('item-warehouse', 'archived');
         if($access == 1)
         { 
             $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$warehouse_id)->first();
@@ -617,7 +633,7 @@ class WarehouseController extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
 
@@ -682,7 +698,7 @@ class WarehouseController extends Member
     }
     public function restore($warehouse_id)
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
+        $access = Utilities::checkAccess('item-warehouse', 'restore');
         if($access == 1)
         { 
             $shop_id               = $this->user_info->shop_id;
@@ -725,67 +741,51 @@ class WarehouseController extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public function refill_submit()
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
-        if($access == 1)
-        { 
-            $warehouse_id = Request::input("warehouse_id");
-            $remarks = Request::input("remarks");
-            $reason_refill = Request::input("reason_refill") == "other" ? "other" : "vendor";
-            $refill_source = Request::input("reason_refill") == "other" ? 0 : Request::input("reason_refill");
+        $warehouse_id = Request::input("warehouse_id");
+        $remarks = Request::input("remarks");
+        $reason_refill = Request::input("reason_refill") == "other" ? "other" : "vendor";
+        $refill_source = Request::input("reason_refill") == "other" ? 0 : Request::input("reason_refill");
 
-            $quantity_product = Request::input("quantity");
+        $quantity_product = Request::input("quantity");
 
-            $warehouse_refill_product = null;
-            foreach ($quantity_product as $key => $value) 
-            {
-                if($value != 0)
-                {
-                    $warehouse_refill_product[$key]['product_id'] = $key;
-                    $warehouse_refill_product[$key]['quantity'] = str_replace(",","",$value);                
-                }
-            }
-
-            $data = Warehouse::inventory_refill($warehouse_id, $reason_refill, $refill_source, $remarks, $warehouse_refill_product,'json');
-
-            return $data;
-        }
-        else
+        $warehouse_refill_product = null;
+        foreach ($quantity_product as $key => $value) 
         {
-            return $this->show_no_access();
+            if($value != 0)
+            {
+                $warehouse_refill_product[$key]['product_id'] = $key;
+                $warehouse_refill_product[$key]['quantity'] = str_replace(",","",$value);                
+            }
         }
+        // dd($warehouse_refill_product);/
+        $data = Warehouse::inventory_refill($warehouse_id, $reason_refill, $refill_source, $remarks, $warehouse_refill_product,'json');
+
+        return $data;
     }
     public function restore_submit()
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
-        if($access == 1)
-        { 
-            $shop_id    = $this->user_info->shop_id;
-            $id         = Request::input("warehouse_id");
-            $warehouse  = Tbl_warehouse::where("warehouse_id",$id)->where("warehouse_shop_id",$shop_id)->first();
-            if($warehouse)
-            {
-                   $update["archived"] = 0;
-                   Tbl_warehouse::where("warehouse_id",$id)->update($update);
-                   $return["error"][0]  = "Successfully restore";
-                   $return["status"]   = "Sucess-restore";
-            }
-            else
-            {
-                $return["error"][0]  = "Please try again";
-                $return["status"]   = "Failed";
-            }
-
-            return json_encode($return);
+        $shop_id    = $this->user_info->shop_id;
+        $id         = Request::input("warehouse_id");
+        $warehouse  = Tbl_warehouse::where("warehouse_id",$id)->where("warehouse_shop_id",$shop_id)->first();
+        if($warehouse)
+        {
+               $update["archived"] = 0;
+               Tbl_warehouse::where("warehouse_id",$id)->update($update);
+               $return["error"][0]  = "Successfully restore";
+               $return["status"]   = "Sucess-restore";
         }
         else
         {
-            return $this->show_no_access();
+            $return["error"][0]  = "Please try again";
+            $return["status"]   = "Failed";
         }
+
+        return json_encode($return);
     }
     public function select_item()
     {
@@ -821,9 +821,6 @@ class WarehouseController extends Member
     }
     public function add_submit()
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
-        if($access == 1)
-        { 
             $for_serial_item = null;
             //INSERT TO tbl_warehouse
             $ins_warehouse["warehouse_name"] = Request::input("warehouse_name");
@@ -888,15 +885,10 @@ class WarehouseController extends Member
             }
 
              return json_encode($data);
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
     }
     public function edit($id)
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
+        $access = Utilities::checkAccess('item-warehouse', 'edit');
         if($access == 1)
         { 
             $check_if_owned = Tbl_user_warehouse_access::where("user_id",$this->user_info->user_id)->where("warehouse_id",$id)->first();
@@ -924,14 +916,11 @@ class WarehouseController extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public function edit_submit()
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
-        if($access == 1)
-        { 
             $up_warehouse["warehouse_name"] = Request::input("warehouse_name");
             $up_warehouse["warehouse_address"] = Request::input("warehouse_address");
             $up_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
@@ -986,15 +975,10 @@ class WarehouseController extends Member
              $data['status'] = 'success';
 
              return json_encode($data);
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
     }
     public function transferinventory()
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
+        $access = Utilities::checkAccess('item-warehouse', 'transfer');
         if($access == 1)
         { 
            // $data = Tbl_user_warehouse_access::join("tbl_warehouse","tbl_warehouse.warehouse_id","=","tbl_user_warehouse_access.warehouse_id")->where("user_id",$this->user_info->user_id)->where("archived",0)->get();
@@ -1018,7 +1002,7 @@ class WarehouseController extends Member
     }
     public function transferinventory_submit()
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
+        $access = Utilities::checkAccess('item-warehouse', 'transfer');
         if($access == 1)
         { 
             $from = Request::input("inventory_from");
@@ -1061,68 +1045,61 @@ class WarehouseController extends Member
     }
     public function transfer_submit()
     {
-        $access = Utilities::checkAccess('item-warehouse', 'access_page');
-        if($access == 1)
-        { 
-            $from = Request::input("warehouse_from");
-            $to = Request::input("warehouse_to");
+        $from = Request::input("warehouse_from");
+        $to = Request::input("warehouse_to");
 
-            $remarks = Request::input("remarks");
-            $quantity_product = Request::input("quantity");
-            $selected_item_id = Request::input("selected_item_id");
+        $remarks = Request::input("remarks");
+        $quantity_product = Request::input("quantity");
+        $selected_item_id = Request::input("selected_item_id");
 
-            $data['message'] = "";
-            $err_msg = "";
+        $data['message'] = "";
+        $err_msg = "";
 
-            $data['status']             = '';
-            $data['response_status']    = '';
+        $data['status']             = '';
+        $data['response_status']    = '';
 
-            $ctr = 0;
-            foreach ($selected_item_id as $key => $value) 
+        $ctr = 0;
+        foreach ($selected_item_id as $key => $value) 
+        {
+            if($value != "")
             {
-                if($value != "")
+                $value2 = $quantity_product[$key];
+                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($from, $value)->pluck('inventory_count');
+                if($value2 != 0)
                 {
-                    $value2 = $quantity_product[$key];
-                    $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($from, $value)->pluck('inventory_count');
-                    if($value2 != 0)
+                    if($count_on_hand > 0 && $count_on_hand >= $value2) 
                     {
-                        if($count_on_hand > 0 && $count_on_hand >= $value2) 
-                        {
-                            $info[$value]['product_id'] = $value;
-                            $info[$value]['quantity'] = str_replace(",","",$value2);
-                        }
-                        else
-                        {
-                            $item_name = Item::get_item_details($value);
-
-                            $data['status']             = 'error';
-                            $data['response_status']    = 'error';
-                            $data['error']              = $err_msg;
-                            $data['message'] .= "The quantity of ".$item_name->item_name." is not enough for your transfer.<br>";
-                        }      
-                        $ctr++;              
+                        $info[$value]['product_id'] = $value;
+                        $info[$value]['quantity'] = str_replace(",","",$value2);
                     }
+                    else
+                    {
+                        $item_name = Item::get_item_details($value);
+
+                        $data['status']             = 'error';
+                        $data['response_status']    = 'error';
+                        $data['error']              = $err_msg;
+                        $data['message'] .= "The quantity of ".$item_name->item_name." is not enough for your transfer.<br>";
+                    }      
+                    $ctr++;              
                 }
             }
-            if($ctr == 0)
-            {
-                $data['status']             = 'error';
-                $data['response_status']    = 'error';
-                $data['error']              = $err_msg;
-                $data['message'] = "Please insert atleast 1 item and quantity to transfer.";                
-            }
-
-            if($data["status"] == null && $ctr != 0)
-            {
-                $data = Warehouse::inventory_transfer_bulk($from, $to, $info, $remarks, 'json');
-            }
-            
-            return json_encode($data);
         }
-        else
+        if($ctr == 0)
         {
-            return $this->show_no_access();
+            $data['status']             = 'error';
+            $data['response_status']    = 'error';
+            $data['error']              = $err_msg;
+            $data['message'] = "Please insert atleast 1 item and quantity to transfer.";                
         }
+
+        if($data["status"] == null && $ctr != 0)
+        {
+            $data = Warehouse::inventory_transfer_bulk($from, $to, $info, $remarks, 'json');
+        }
+        
+        return json_encode($data);
+        
     }
 
     /**

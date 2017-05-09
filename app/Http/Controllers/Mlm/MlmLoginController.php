@@ -9,6 +9,8 @@ use Route;
 use Session;
 use Validator;
 use Mail;
+use Config;
+use App\Globals\Settings;
 use App\Globals\Mlm_member;
 use App\Globals\EmailContent;
 use App\Models\Tbl_shop;
@@ -93,8 +95,9 @@ class MlmLoginController extends Controller
                 }
             }
         }
-
-    	
+   
+        /* Set Email Configuration */
+        Settings::set_mail_setting(Self::$shop_id);
     }
     public function index()
     {
@@ -239,6 +242,9 @@ class MlmLoginController extends Controller
 			$data['type'] = 'error';
 			$data['message'] = 'Invalid Username/Password';
 		}
+
+        $data['from'] = "login";
+        
     	return json_encode($data);
     }
     public function membership_active_code($pin)

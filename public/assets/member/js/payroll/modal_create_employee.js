@@ -1,5 +1,7 @@
 var modal_create_employee = new modal_create_employee();
 
+var department_id = 0;
+
 function modal_create_employee()
 {
 	init()
@@ -11,6 +13,7 @@ function modal_create_employee()
 		select_change_action();
 		select_change_event();
 		autoname();
+		$(".datepicker").datepicker();
 	}
 
 	function autoname()
@@ -199,8 +202,8 @@ function modal_create_employee()
 			width 		: '100%',
 			onChangeValue : function()
 			{
-				select_change_action($(this).val());
-				console.log('/member/payroll/jobtitlelist/modal_create_jobtitle?selected='+$(this).val());
+				department_id = $(this).val();
+				select_change_action(department_id);
 				$(".jobtitle-select").globalDropList("reload");
 				$(".jobtitle-select").globalDropList({
 					link 		: '/member/payroll/jobtitlelist/modal_create_jobtitle?selected='+$(this).val(),
@@ -225,7 +228,7 @@ function modal_create_employee()
 		});
 	}
 
-	function select_change_action(payroll_department_id = 0)
+	function select_change_action(payroll_department_id = 0, selected = 0)
 	{
 		// var payroll_department_id = $(".department-select").val();
 		var pre_data = '<option value="">...loading job title</option>';
@@ -257,11 +260,12 @@ function modal_create_employee()
 						width 		: '100%'
 					});
 					$(".jobtitle-select").globalDropList("reload");
+					$(".jobtitle-select").val(selected).change();
 					
 				},
 				error 	: 	function(err)
 				{
-					error_function();
+					error_function(selected).change();
 				}
 			});
 	}
@@ -273,6 +277,22 @@ function modal_create_employee()
 		$(target).globalDropList("reload");
 		parent = $(target).parents(".droplist");
 		parent.find("input[type=text]").val($(target).find(":selected").text());
+	}
+
+	this.reload_department = function(selected = 0)
+	{
+		$(".department-select").load("/member/payroll/employee_list/modal_create_employee .department-select", function()
+		{
+			
+			$(".department-select").globalDropList("reload");
+			$(".department-select").val(selected).change();
+
+		});
+	}
+
+	this.reload_jobtitle = function (selected = 0, department_id = 0)
+	{
+		select_change_action(department_id, selected);
 	}
 
 	function remove_requirements()

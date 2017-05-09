@@ -147,6 +147,7 @@ class Cart
                 $item_discounted_remark = "";
 
                 $item = Ecom_Product::getVariantInfo($info["product_id"]);
+                // dd($item);
                 $data["cart"][$key]["cart_product_information"]                                   = null;
                 $data["cart"][$key]["cart_product_information"]["variant_id"]                     = $item->evariant_id;
                 $data["cart"][$key]["cart_product_information"]["item_id"]                        = $item->item_id;
@@ -156,7 +157,7 @@ class Cart
                 $data["cart"][$key]["cart_product_information"]["product_sku"]                    = $item->item_sku;
                 $data["cart"][$key]["cart_product_information"]["product_price"]                  = $item->evariant_price;
                 $data["cart"][$key]["cart_product_information"]["image_path"]                     = $item->image_path;
-
+                $data["cart"][$key]["cart_product_information"]["item_category_id"]               = $item->item_category_id;
                 /* CHECK IF DISCOUNT EXISTS */
                 $check_discount = Tbl_item_discount::where("discount_item_id",$item->item_id)->first();
                 if($check_discount)
@@ -201,13 +202,23 @@ class Cart
                             $item_discounted_value =   $discount_a *   ($discount_membership['value']/100); 
                         }
                         $active_plan_product_repurchase = Mlm_plan::get_all_active_plan_repurchase($session['slot_now']->shop_id);
-                        $item_points = Tbl_mlm_item_points::where('item_id', $item->item_id)->where('membership_id', $session['slot_now']->slot_membership)->first();
+                        $item_points = Tbl_mlm_item_points::where('item_id', $item->item_id)->where('membership_id', $session['slot_now']->slot_membership)
+                        ->first();
                         if($item_points)
                         {
                            foreach($active_plan_product_repurchase as $key2 => $value2)
                             {
                                 $code = $value2->marketing_plan_code;
-                                $data["cart"][$key]["cart_product_information"]["membership_points"][$value2->marketing_plan_label] = $item_points->$code * $info['quantity'];
+                                if($code == 'DISCOUNT_CARD_REPURCHASE' || $code == 'UNILEVEL_REPURCHASE_POINTS' || $code == 'UNILEVEL')
+                                {
+                                    
+                                    
+                                }
+                                else
+                                {
+                                    // dd($code);
+                                    $data["cart"][$key]["cart_product_information"]["membership_points"][$value2->marketing_plan_label] = $item_points->$code * $info['quantity'];
+                                }
                             } 
                         }
                     }
@@ -259,7 +270,6 @@ class Cart
         /* SET OTHER PRICE INFO  */
         $data["sale_information"]["total_coupon_discount"]             = $total_coupon_discount; 
         $data["sale_information"]["total_overall_price"]               = $total_overall_price; 
-
         return $data;
     }
 
@@ -307,15 +317,15 @@ class Cart
         {
             foreach($_cart["cart"] as $key => $cart)
             {
-                if($key == $product_id)
+                if($cart["product_id"] == $product_id)
                 {
                     $condition = true;
 
-                    Tbl_cart::where("date_added",$_cart["cart"][$key]["date_added"])
-                            ->where("shop_id",$_cart["cart"][$key]['shop_id'])
-                            ->where("product_id",$_cart["cart"][$key]['product_id'])
-                            ->where("unique_id_per_pc",$_cart["cart"][$key]['unique_id_per_pc'])
-                            ->delete($_cart["cart"][$key]);
+                    Tbl_cart::where("date_added",$cart["date_added"])
+                            ->where("shop_id",$cart['shop_id'])
+                            ->where("product_id",$cart['product_id'])
+                            ->where("unique_id_per_pc",$cart['unique_id_per_pc'])
+                            ->delete();
 
                     unset($_cart["cart"][$key]);
                 }
@@ -328,7 +338,8 @@ class Cart
             }
             else
             {
-                 Session::put($unique_id,$_cart["cart"]);
+                 Session::put($unique_id,$_cart);
+
                  $message["status"]         = "success";
                  $message["status_message"] = "Successfully removed.";
             }
@@ -496,11 +507,10 @@ class Cart
         return $data;
     }
 
-    public static function generate_coupon_code($word_limit,$price,$type="fixed")
+    public static function generate_coupon_code($word_limit, $price, $minimum_quantity = 0, $type="fixed", $coupon_product_id = null)
     {
         //get_shop_info
-        $shop_info = Cart::get_shop_info();
-        $shop_id = $shop_info->shop_id;
+        $shop_id = Cart::get_shop_info();
 
         if($type != "fixed" && $type != "percentage")
         {
@@ -540,16 +550,20 @@ class Cart
             }
 
             $insert["id_per_coupon"]           =  $id_per_coupon;                
-            $insert["coupon_code"]             =  $generated_word;              
+            $insert["coupon_code"]             =  $generated_word;  
+            $insert["coupon_product_id"]       =  isset($coupon_product_id) ? $coupon_product_id : null;              
             $insert["coupon_code_amount"]      =  $price;                     
             $insert["coupon_discounted"]       =  $type;                     
-            $insert["shop_id"]                 =  $shop_id;          
+            $insert["shop_id"]                 =  $shop_id;
+            $insert["coupon_minimum_quantity"] =  $minimum_quantity;         
             $insert["date_created"]            =  Carbon::now();  
             Tbl_coupon_code::insert($insert);
 
             $message["status"]         = "success";
             $message["status_message"] = "Successfully generate a coupon code.";
-        }                                
+        }  
+
+        return $message;                              
     }
 
     public static function use_coupon_code($coupon_code)
@@ -602,5 +616,27 @@ class Cart
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
         return $randomString;
+    }
+
+    public static function check_product_stock($cart)
+    {
+        $message["status"] = "success";
+        
+        foreach ($cart["cart"] as $key => $value) 
+        {
+            $item = Ecom_Product::getVariantInfo($value["product_id"]);
+            
+            if ($item["item_type_id"] != 2) 
+            {
+                if ($value["quantity"] > $item->inventory_count) 
+                {
+                    $message["status"]       = "fail";
+                    $message["error"][$key]  = $item->eprod_name . " exceeds the current stock (" . $item->inventory_count . ")";
+                }
+            }
+            
+        }
+        
+        return $message;
     }
 }

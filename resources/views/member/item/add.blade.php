@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<form  action="/member/item/add_submit?item_type=inventory" class="global-submit form_one" id="modal_form_large"  enctype="multipart/form-data" method="post" type_of_item="inventory_type">
+<form  action="/member/item/add_submit?item_type=inventory" class="global-submit form_two" id="modal_form_large"  enctype="multipart/form-data" method="post" type_of_item="inventory_type">
   <div class="clearfix modal-body modallarge-body-layout background-white inventory_type" style="display:none;"> 
      <!-- INVENTORY -->
     <div class="form-horizontal">
@@ -32,7 +32,9 @@
                         <div class="col-md-8">
                             <label>Name *</label>
                             <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
-                            <textarea required class="form-control input-sm" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                            <textarea required class="form-control input-sm item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea><br>
+                            <label>Sales information</label>
+                            <textarea class="form-control input-sm" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>
                         </div>
                         <div class="col-md-4 text-center">
                             <input type="hidden" name="item_img" class="image-value" key="1" required>
@@ -43,7 +45,7 @@
                     <div class="form-group">       
                         <div class="col-md-4">
                             <label>SKU</label>
-                            <input type="text" class="form-control input-sm" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku" required>
+                            <input type="text" class="form-control input-sm item-sku" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku" >
                         </div>
                         <div class="col-md-4">
                             <label>Barcode</label>
@@ -51,35 +53,43 @@
                         </div>
                         <div class="col-md-4">
                             <label>Category *</label>
-                            <select name="item_category_id" class="form-control drop-down-category" id="item_category_id" required>
-                             @include("member.load_ajax_data.load_category", ['add_search' => ""])
+                            <select name="item_category_id" cat_type="inventory" class="form-control drop-down-category inventory" id="item_category_id" required>
+                             @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_inventory])
                             </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-4">
-                            <label>Initial quantity on hand *</label>
-                            <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" required>
-                        </div>                     
-                        <div class="col-md-4">
-                            <label>Reorder Point </label>
-                            <input type="text" class="form-control input-sm" id="item_reorder_point" value="{{isset($data['item_reorder_point']) ? $data['item_reorder_point'] : ''}}" name="item_reorder_point" >
-                        </div> 
-                        <div class="col-md-4">
-                            <label>As of date</label>
-                            <input type="text" class="form-control input-sm datepicker" id="item_date_tracked" name="item_date_tracked" value="{{isset($data['item_date_tracked']) ? $data['item_date_tracked'] : ''}}" >
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Unit of Measure</label>
-                            <select class="form-control input-sm measure_container drop-down-um" name="item_measurement_id">
+                            <select class="form-control input-sm measure_container drop-down-um" add="add" name="item_measurement_id">
                                 @include("member.load_ajax_data.load_unit_measurement")
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label>Packing Size</label>
                             <input type="text" name="packing_size" class="form-control input-sm">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">    
+                            <label>Initial quantity on hand *</label>                    
+                            <div class="col-md-6">
+                                <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" required>
+                            </div>              
+                            <div class="col-md-6">
+                                <input type="hidden" name="initial_qty" value="1" class="unit-qty">
+                                <select class="droplist-um form-control">
+                                     @include("member.load_ajax_data.load_um_multi")
+                                </select>
+                            </div>   
+                        </div>                  
+                        <div class="col-md-4">
+                            <label>Reorder Point </label>
+                            <input type="text" class="form-control input-sm" id="item_reorder_point" value="{{isset($data['item_reorder_point']) ? $data['item_reorder_point'] : ''}}" name="item_reorder_point" >
+                        </div> 
+                        <div class="col-md-4">
+                            <label>As of date</label>
+                            <input type="text" class="form-control input-sm datepicker" id="item_date_tracked" name="item_date_tracked" value="{{date('m/d/y')}}" >
                         </div>
                     </div>
                     <div class="form-group">
@@ -91,16 +101,10 @@
                         </div>
                         <div class="col-md-6">
                             <label>Inventory Asset Account *</label>
-                            <select name="item_asset_account_id" class="drop-down-coa form-control" required id="item_asset_account_id">
-                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_asset])
+                            <select name="item_asset_account_id" class="drop-down-coa form-control" id="item_asset_account_id" required>
+                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_asset, 'account_id' => $default_asset])
                             </select>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label>Sales information</label>
-                            <textarea class="form-control input-sm" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>
-                        </div> 
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
@@ -112,13 +116,12 @@
                                 <div class="col-md-1">
                                     per <span class="abbreviation"></span>
                                 </div>
-                                
                             </div>
                         </div>                 
                         <div class="col-md-6">
                             <label>Income Account *</label>
-                            <select name="item_income_account_id" class="drop-down-coa form-control" id="item_income_account_id" required>                                
-                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income])
+                            <select name="item_income_account_id" class="drop-down-coaster form-control" id="item_income_account_id" required>   
+                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income, 'account_id' => $default_income])
                             </select>
                         </div>
                     </div>
@@ -149,7 +152,7 @@
                             <div class="row">
                                 <div>
                                     <div class="col-md-8">    
-                                       <input type="text" class="form-control input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
+                                       <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
                                     </div>
                                     <div class="col-md-4">
                                         per <span class="abbreviation"></span>
@@ -160,7 +163,7 @@
                         <div class="col-md-6">
                             <label>Expense Account *</label>
                             <select name="item_expense_account_id" class="drop-down-coa form-control" id="item_expense_account_id" required>                                                           
-                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense])
+                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $default_expense])
                             </select>
                         </div>
                     </div>
@@ -189,7 +192,7 @@
                         <div class="col-md-8">
                             <label>Name *</label>
                             <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
-                            <textarea required class="form-control" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                            <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea><br>
                         </div>
                         <div class="col-md-4 text-center">
                             <input type="hidden" name="item_img" class="image-value" key="2" required>
@@ -200,7 +203,7 @@
                 <div class="form-group">                        
                     <div class="col-md-4">
                         <label>SKU</label>
-                        <input type="text" class="form-control" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku" required>
+                        <input type="text" class="form-control item-sku" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku" >
                     </div>
                     <div class="col-md-4">
                         <label>Unit of Measure</label>
@@ -210,8 +213,8 @@
                     </div>
                     <div class="col-md-4">
                         <label>Category *</label>
-                        <select name="item_category_id" class="form-control drop-down-category" id="item_category_id" required>
-                            @include("member.load_ajax_data.load_category", ['add_search' => ""])
+                        <select name="item_category_id" cat_type="noninventory" class="form-control drop-down-category non-inventory" id="item_category_id" required>
+                            @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_noninventory])
                         </select>
                     </div>
                 </div>
@@ -239,7 +242,7 @@
                     <div class="col-md-6">
                         <label>Income Account *</label>
                             <select name="item_income_account_id" class="drop-down-coa form-control" id="item_income_account_id" required>                                
-                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income])
+                               @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income, 'account_id' => $default_income])
                             </select>
                     </div>
                 </div>
@@ -260,8 +263,34 @@
                 <!--<div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div>-->
                 <div class="form-group">
                     <div class="col-md-12">
-                        <input type="checkbox" {{isset($data['item_purchase_from_supplier']) ? 'checked' : ''}} id="item_purchase_from_supplier" name="item_purchase_from_supplier"> I purchase this product/service from a supplier.
+                        <input type="checkbox" onclick="toggle_po('.noninventory-po', this)" {{isset($data['item_purchase_from_supplier']) ? 'checked' : ''}} id="item_purchase_from_supplier" name="item_purchase_from_supplier"> I purchase this product/service from a supplier.
                     </div>                
+                </div>
+
+                <div class="form-group noninventory-po" style="display: none">
+                    <div class="col-md-12">
+                        <label>Purchasing information</label>
+                        <textarea class="form-control input-sm" id="item_purchasing_information" name="item_purchasing_information" placeholder="Description on purchase forms" >{{isset($data['item_purchasing_information']) ? $data['item_purchasing_information'] : ''}}</textarea>
+                    </div>                     
+                    <div class="col-md-6">  
+                        <label>Cost *</label>
+                        <div class="row">
+                            <div>
+                                <div class="col-md-8">    
+                                   <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost">
+                                </div>
+                                <div class="col-md-4">
+                                    per <span class="abbreviation"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>               
+                    <div class="col-md-6">
+                        <label>Expense Account *</label>
+                        <select name="item_expense_account_id" class="drop-down-coa form-control" id="item_expense_account_id">                                                           
+                           @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $default_expense])
+                        </select>
+                    </div>
                 </div>
                <!--  <div class="col-md-12 text-right" style="padding-top:50px">
                     <button type="button" class="btn btn-custom-white back_to_menu">Back</button>
@@ -288,7 +317,7 @@
                         <div class="col-md-8">
                             <label>Name *</label>
                             <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
-                            <textarea required class="form-control" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                            <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
                         </div>
                         <div class="col-md-4 text-center">
                             <input type="hidden" name="item_img" class="image-value" key="3" required>
@@ -299,18 +328,18 @@
                 <div class="form-group">                        
                     <div class="col-md-4">
                         <label>SKU</label>
-                        <input type="text" class="form-control" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku" required>
+                        <input type="text" class="form-control item-sku" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku">
                     </div>
                     <div class="col-md-4">
                         <label>Unit of Measure</label>
-                            <select class="form-control input-sm measure_container3 drop-down-um" name="item_measurement_id">
+                            <select class="form-control input-sm measure_container3 drop-down-um"name="item_measurement_id">
                                 @include("member.load_ajax_data.load_unit_measurement")
                             </select>
                     </div>
                     <div class="col-md-4">
                         <label>Category *</label>
-                        <select name="item_category_id" class="form-control drop-down-category" id="item_category_id" required>
-                         @include("member.load_ajax_data.load_category", ['add_search' => ""])
+                        <select name="item_category_id" cat_type="service" class="form-control drop-down-category services" id="item_category_id" required>
+                         @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_service])
                         </select>
                     </div>
                 </div>
@@ -338,7 +367,7 @@
                     <div class="col-md-6">
                         <label>Income Account *</label>
                         <select name="item_income_account_id" class="drop-down-coa form-control" id="item_income_account_id" required>                                
-                           @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income])
+                           @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income, 'account_id' => $default_income])
                         </select>
                     </div>
                 </div>
@@ -358,8 +387,35 @@
                         </div>
                     </div>
                 <!-- <div class="col-md-12" style="border-bottom: solid 1px #ACACAC; padding-top:20px;margin-bottom: 5px"></div> -->
-                <div class="col-md-12">
-                    <input type="checkbox" id="item_purchase_from_supplier" name="item_purchase_from_supplier"> I purchase this product/service from a supplier.
+                <div class="form-group">
+                    <div class="col-md-12">
+                        <input type="checkbox" onclick="toggle_po('.service-po', this)" id="item_purchase_from_supplier" name="item_purchase_from_supplier"> I purchase this product/service from a supplier.
+                    </div>
+                </div>
+                 <div class="form-group service-po" style="display: none">
+                    <div class="col-md-12">
+                        <label>Purchasing information</label>
+                        <textarea class="form-control input-sm" id="item_purchasing_information" name="item_purchasing_information" placeholder="Description on purchase forms" >{{isset($data['item_purchasing_information']) ? $data['item_purchasing_information'] : ''}}</textarea>
+                    </div>                     
+                    <div class="col-md-6">  
+                        <label>Cost *</label>
+                        <div class="row">
+                            <div>
+                                <div class="col-md-8">    
+                                   <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost">
+                                </div>
+                                <div class="col-md-4">
+                                    per <span class="abbreviation"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>               
+                    <div class="col-md-6">
+                        <label>Expense Account *</label>
+                        <select name="item_expense_account_id" class="drop-down-coa form-control" id="item_expense_account_id">                                                           
+                           @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_expense, 'account_id' => $default_expense] )
+                        </select>
+                    </div>
                 </div>
                 <!-- <div class="col-md-12 text-right" style="padding-top:50px">
                     <button type="button" class="btn btn-custom-white back_to_menu">Back</button>
@@ -385,18 +441,18 @@
                         <div class="row col-md-12">
                             <label>Name *</label>
                             <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
-                            <textarea required class="form-control" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                            <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="row col-md-6">
                             <label>SKU</label>
-                            <input type="text" class="form-control" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku" required>
+                            <input type="text" class="form-control item-sku" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku">
                         </div>
                         <div class="col-md-6">
                             <label>Category *</label>
-                            <select name="item_category_id" class="form-control drop-down-category" id="item_category_id" required>
-                             @include("member.load_ajax_data.load_category", ['add_search' => ""])
+                            <select name="item_category_id" cat_type="bundle" class="form-control drop-down-category bundles" id="item_category_id" required>
+                             @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_bundle])
                             </select>
                         </div>
                     </div>
@@ -453,7 +509,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <select class="form-control drop-down-um select-um input-sm pull-left" name="bundle_um_id[]">
+                                    <select class="form-control drop-down-um-one select-um-one input-sm pull-left" name="bundle_um_id[]">
                                         <option value=""></option> 
                                     </select>
                                 </td>   
@@ -482,7 +538,7 @@
                 </select>
             </td>
             <td>
-                <select class="form-control select-um input-sm pull-left" name="bundle_um_id[]">
+                <select class="form-control select-um-one input-sm pull-left" name="bundle_um_id[]">
                     <option value=""></option> 
                 </select>
             </td>   

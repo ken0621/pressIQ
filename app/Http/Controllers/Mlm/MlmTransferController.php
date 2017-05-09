@@ -88,36 +88,50 @@ class MlmTransferController extends Mlm
                 return $this->refill($data);
             }
         }
-
+        $password = Request::input('password');
+        $password_l = Crypt::decrypt(Self::$customer_info->password);
+        if($password != $password_l)
+        {
+            $data['status'] = 'warning';
+            $data['message'] = 'Invalid Password';
+            return $this->refill($data);
+        }
         $shop_id = Self::$shop_id;
         $shop_key = Self::$shop_info->shop_key;
 
         $file               = Input::file('wallet_log_refill_attachment');
 
-        $fileArray = array('image' => $file);
-        $rules = array(
-          'image' => 'mimes:jpeg,jpg,png,gif|required|max:10000' // max 10000kb
-        );
-        $validator = Validator::make($fileArray, $rules);
-        if ($validator->fails())
+        if($file)
         {
-            $data['status'] = 'warning';
-            $data['message'] = 'file size exceeded';
-            return $this->refill($data);
-        }
-        $extension          = $file->getClientOriginalExtension();
-        $filename           = str_random(15).".".$extension;
-        $destinationPath    = 'uploads/refill/attachment/'.$shop_key."-".$shop_id;
+            $fileArray = array('image' => $file);
+            $rules = array(
+              'image' => 'mimes:jpeg,jpg,png,gif|required|max:10000' // max 10000kb
+            );
+            $validator = Validator::make($fileArray, $rules);
+            if ($validator->fails())
+            {
+                $data['status'] = 'warning';
+                $data['message'] = 'file size exceeded';
+                return $this->refill($data);
+            }
+            $extension          = $file->getClientOriginalExtension();
+            $filename           = str_random(15).".".$extension;
+            $destinationPath    = 'uploads/refill/attachment/'.$shop_key."-".$shop_id;
 
-        if(!File::exists($destinationPath)) 
+            if(!File::exists($destinationPath)) 
+            {
+                $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+            }
+
+            $upload_success    = Input::file('wallet_log_refill_attachment')->move($destinationPath, $filename);
+
+            /* SAVE THE IMAGE PATH IN THE DATABASE */
+            $image_path = $destinationPath."/".$filename;
+        }
+        else
         {
-            $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+            $image_path = null;
         }
-
-        $upload_success    = Input::file('wallet_log_refill_attachment')->move($destinationPath, $filename);
-
-        /* SAVE THE IMAGE PATH IN THE DATABASE */
-        $image_path = $destinationPath."/".$filename;
 
         $data['settings'] = Tbl_mlm_slot_wallet_log_refill_settings::where('shop_id', $shop_id)->first();
 
@@ -134,7 +148,8 @@ class MlmTransferController extends Mlm
         Tbl_mlm_slot_wallet_log_refill::insert($insert);
         $data['status'] = 'success';
         $data['message'] = 'Wallet Request is Sent';
-        return $this->refill($data);
+        return Redirect::to('/mlm/refill');
+        // $this->refill($data);
 
     }
     public function transfer()
@@ -314,7 +329,8 @@ class MlmTransferController extends Mlm
 
             $data['unprocessed'] = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)
             ->where('wallet_log_status', 'released')
-            ->whereNull('encashment_process')   
+            ->whereNull('encashment_process')
+            // ->where('wallet_log_amount', '>=',  1)   
             ->get()->toArray();
 
             $data['bank'] = DB::table('tbl_encashment_bank_deposit')->where('shop_id', Self::$shop_id)->where('encashment_bank_deposit_archive', 0)->get();

@@ -13,11 +13,17 @@ use App\Models\Tbl_membership_code;
 use App\Models\Tbl_mlm_lead;
 use App\Globals\Mlm_member;
 use App\Globals\Sms;
-
+use App\Models\Tbl_email_template;
+use App\Globals\EmailContent;
+use App\Globals\Settings;
+use Mail;
+use App\Globals\Mail_global;
+use Config;
 class MlmRegisterController extends MlmLoginController
 {
     public function index()
     {
+        // return $this->mail_customer_success_register(1, 310);
         $data["page"] = "register";
         $data['lead'] = Self::$lead;
         if($data['lead'] != null)
@@ -165,15 +171,17 @@ class MlmRegisterController extends MlmLoginController
 			                			$insert_lead['lead_customer_id_lead'] = $cus_id;
 			                			Tbl_mlm_lead::insert($insert_lead);
 			                		}
-
+                                    // $data['type']   = "success";
+                                    // $data['message'] = "Success! you will be redirected";
+                                    // return $data;
+                                    $this->mail_customer_success_register(Self::$shop_id, $cus_id);
+                                    /* Sms Notification */
                                     $txt[0]["txt_to_be_replace"]    = "[name]";
                                     $txt[0]["txt_to_replace"]       = $insert['first_name'];
-                                    /* Sms Notification */
                                     $result  = Sms::SendSms($insert_other['customer_mobile'], "success_register", $txt, Self::$shop_id);
 
 			                		$data['type']   = "success";
 		    						$data['message'] = "Success! you will be redirected";
-
     							}
     							else
     							{
@@ -212,6 +220,8 @@ class MlmRegisterController extends MlmLoginController
     		$data['message'] = "Password didn't match.";
     	}
 
+        $data['from'] = "register";
+
     	return json_encode($data);
 
 	    
@@ -222,6 +232,52 @@ class MlmRegisterController extends MlmLoginController
         // $data['type']   = "Error";
     	// $data['message'] = "warning";
         // echo json_encode($data);
+    }
+    public function mail_customer_success_register($shop_id, $customer_id)
+    {
+                $data["template"] = Tbl_email_template::where("shop_id",$shop_id)->first();
+                // $change_content[0]['membership_name'] = null;
+                // $change_content[0]['membership_code'] = null;
+                $data['customer'] = Tbl_customer::where('customer_id', $customer_id)->first();
+                $change_content[0]["txt_to_be_replace"] = "[name_of_registrant]";
+                $change_content[0]["txt_to_replace"] = name_format_from_customer_info($data['customer']);
+
+
+                $change_content[1]["txt_to_be_replace"] = "[tin_of_registrant]";
+                $change_content[1]["txt_to_replace"] = $data['customer']->tin_number;
+
+                $change_content[2]["txt_to_be_replace"] = "[user_name]";
+                $change_content[2]["txt_to_replace"] = $data['customer']->mlm_username;
+
+                // dd($change_content);
+                $content_key = 'success_register';
+                $data['body'] = EmailContent::email_txt_replace($content_key, $change_content);
+
+                $data['company']['email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->pluck('value');
+
+                // ----------------------------------------------------------
+                $data['mail_to'] = $data['customer']->email;
+                $data['mail_username'] = Config::get('mail.username');
+                $data['mail_subject'] = 'SUCCESS REGISTRATION';
+                // $data['mail_']
+                // MAIL_DRIVER
+                // MAIL_HOST
+                // MAIL_PORT
+                // MAIL_USERNAME
+                // MAIL_PASSWORD
+                // MAIL_ENCRYPTION
+                // ----------------------------------------------------------
+                // Mail::send('emails.full_body', $data, function ($m) use ($data) {
+                //     $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+
+                //     $m->to($data['customer']->email, $data['mail_username'])->subject('SUCCESS REGISTRATION');
+                // });
+                Mail_global::mail($data, $shop_id);
+                // Mail::send('emails.full_body', $data, function ($m) use ($data) {
+                //     $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+
+                //     $m->to('lukeglennjordan2@gmail.com', $data['mail_username'])->subject('SUCCESS REGISTRATION');
+                // });
     }
     public static function view_customer_info_via_mem_code($membership_activation_code)
     {

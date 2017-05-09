@@ -8,6 +8,7 @@ use App\Models\Tbl_inventory_serial_number;
 use App\Models\Tbl_warehouse_inventory;
 use App\Globals\ItemSerial;
 use App\Models\Tbl_item;
+use Validator;
 class ItemSerialController extends Member
 {
     /**
@@ -23,6 +24,52 @@ class ItemSerialController extends Member
             $data["_item_serial"][$key]->inventory_count = Tbl_warehouse_inventory::check_inventory_single($warehouse_id,$value->item_id)->pluck('inventory_count');
         }
         return view("member.item_serial.item_serial",$data);
+    }
+    public function save_serial()
+    {
+        $data["status_message"] = "";
+        $id = Request::input("id");
+        $serial = Request::input("serial");
+        $chck = Tbl_inventory_serial_number::where("serial_id",$id)->first();
+        $data["status"] = "";
+        if($chck)
+        {
+            if($chck->item_consumed == 0 && $chck->sold == 0)
+            {
+                $up["serial_number"] = $serial;
+
+                $rule["serial_number"] = "required|unique:tbl_inventory_serial_number,serial_number,".$id.",serial_id";
+
+                $validator = Validator::make($up, $rule);
+
+                if($validator->fails())
+                {
+                    $data["status"] = "error";
+                    foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+                    {
+                        $data["status_message"] .= $message;
+                    }
+                }
+                else
+                {
+                    Tbl_inventory_serial_number::where("serial_id",$id)->update($up);
+                    $data["status"] = "success";                    
+                }
+            }
+            else
+            {                
+                $data["status"] = "error";
+                $data["status_message"] = "This serial has been consumed";
+            }
+        }
+        else
+        {                
+            $data["status"] = "error";
+            $data["status_message"] = "Serial ID not found";
+        }
+
+        return json_encode($data);
+
     }
     public function view_serial($item_id)
     {

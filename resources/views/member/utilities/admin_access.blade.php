@@ -43,7 +43,7 @@
         <small>
         </small>
       </h1>
-      <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save and Send</button>
+      <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save Access</button>
     </div>
   </div>
 </div>

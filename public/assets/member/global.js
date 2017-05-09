@@ -21,6 +21,13 @@ function global()
         add_event_overlay_fix();
         select_current_warehouse();
         add_event_global_submit_for_page();
+
+        action_global_search();
+        action_money_format();
+        action_int_format();
+        action_float_format();
+
+        $('[data-toggle="tooltip"]').tooltip({container: 'body'}); 
     }
     function add_event_global_popup()
     {
@@ -161,6 +168,77 @@ function global()
         })
     }
     //end arcy
+
+
+    function action_global_search() // Bryan Kier
+    {
+        $(document).on("change", ".global-search", function(e)
+        {
+            e.preventDefault();
+            var url     = $(this).attr("url");
+            var value   = $(this).val().replace(/ /g, "%20");
+            $load_content =  $(".tab-pane.active").find(".load-data").attr("target");
+
+            $(".tab-pane.active .load-data").load(url+"?search="+value+" #"+$load_content);
+        })
+    }
+
+    function action_money_format() // Bryan Kier
+    {
+        $(document).on("change",".money-format", function()
+        {
+            $(this).val(formatMoney($(this).val()));
+        });
+    }
+
+    function action_float_format() // Bryan Kier
+    {
+        $(document).on("change",".float-format", function()
+        {
+            $(this).val(formatFloat($(this).val()));
+        });
+    }
+
+
+    function action_int_format() // Bryan Kier
+    {
+        $(document).on("change",".int-format", function()
+        {
+            $(this).val(formatInt($(this).val()));
+        });
+    }
+
+    function formatFloat($this) // Bryan Kier
+    {
+        return Number($this.toString().replace(/[^0-9\.]+/g,""));
+    }
+
+    function formatInt($this)
+    {
+        if (/^\d+$/.test($this)) 
+        {
+            return $this;
+        } 
+        else 
+        {
+            return '';
+        }
+    }
+
+    function formatMoney($this) // Bryan Kier
+    {
+        if($this != '')
+        {
+            var n = formatFloat($this), 
+            c = isNaN(c = Math.abs(c)) ? 2 : c, 
+            d = d == undefined ? "." : d, 
+            t = t == undefined ? "," : t, 
+            s = n < 0 ? "-" : "", 
+            i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+            j = (j = i.length) > 3 ? j % 3 : 0;
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        }
+    }
 }
 
 function error_popup(title, message)

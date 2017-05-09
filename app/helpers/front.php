@@ -1,5 +1,6 @@
 <?php
 use App\Globals\Ecom_Product;
+use App\Globals\Mlm_report;
 
 function get_post($shop_id, $key)
 {
@@ -29,7 +30,16 @@ function get_content($data, $tab, $content, $default = "")
 
 function get_collection($collection_id, $shop_id = null)
 {
-    return Ecom_Product::getProductCollection($collection_id, $shop_id);
+    $collection = Ecom_Product::getProductCollection($collection_id, $shop_id);
+    foreach ($collection as $key => $value) 
+    {
+        if (!isset($value["product"]["variant"][0])) 
+        {
+            unset($collection[$key]);
+        }
+    }
+
+    return $collection;
 }
 
 function get_collection_first_name($data)

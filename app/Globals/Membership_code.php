@@ -11,6 +11,7 @@ use App\Models\Tbl_membership_package_has;
 use App\Models\Tbl_warehouse_inventory;
 use App\Models\Tbl_item;
 use App\Models\Tbl_email_template;
+use App\Models\Tbl_mlm_plan_setting;
 
 use App\Globals\Mlm_voucher;
 use App\Globals\Membership_code;
@@ -22,6 +23,8 @@ use Validator;
 use Crypt;
 use App\Globals\Item;
 use App\Globals\EmailContent;
+use App\Globals\Mail_global;
+use Config;
 class Membership_code
 {
 	public static function add_code($data, $shop_id, $warehouse_id)
@@ -285,8 +288,15 @@ class Membership_code
     public static function set_up_mail($membership_code_invoice_id, $shop_id)
     {
         // return 1;
+        $plan_settings = Tbl_mlm_plan_setting::where('shop_id', $shop_id)->first();
+        if($plan_settings->plan_settings_email_membership_code == 0)
+        {
+            return 1;
+        }
+
         $invoice = Tbl_membership_code_invoice::where('membership_code_invoice_id', $membership_code_invoice_id)
-        ->join('tbl_customer', 'tbl_customer.customer_id','=', 'tbl_membership_code_invoice.customer_id')
+        ->leftjoin('tbl_customer', 'tbl_customer.customer_id','=', 'tbl_membership_code_invoice.customer_id')
+        ->leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
         ->first();
         if(isset($invoice->membership_code_invoice_id))
         {
@@ -312,26 +322,39 @@ class Membership_code
                 foreach($data['membership_code_invoice_id'] as $key => $value)
                 {
                     $change_content[0]["txt_to_replace"] += 1;
-                    $change_content[1]["txt_to_replace"] .= '<p> '. $value->membership_name .' with a package of '. $value->membership_package_name .'. Your membership code is '. $value->membership_activation_code .' and membership pin '. $value->membership_code_id .'. </p><a href="'. $_SERVER['SERVER_NAME'] .'/mlm/membership_active_code/'.Crypt::encrypt($value->membership_code_id).'">Click here to activate the code.</a><br>';
+                    $change_content[1]["txt_to_replace"] .= '<p> '. $value->membership_name .' with a package of '. $value->membership_package_name .'. Your membership code is '. $value->membership_activation_code .' and membership pin '. $value->membership_code_id .'. </p><a rel="nofollow" href="'. $_SERVER['SERVER_NAME'] .'/mlm/membership_active_code/'.Crypt::encrypt($value->membership_code_id).'">Click here to activate the code.</a><br> If you cant click the link, please copy and paste this in the url <span><b>'. $_SERVER['SERVER_NAME'] .'/mlm/membership_active_code/'.Crypt::encrypt($value->membership_code_id).'</b></span>';
+
+
+                    /* Sms Notification */
+                    $txt[0]["txt_to_be_replace"]    = "[name]";
+                    $txt[0]["txt_to_replace"]       = $invoice['first_name'];
+                    $txt[1]["txt_to_be_replace"]    = "[membership_name]";
+                    $txt[1]["txt_to_replace"]       = $value->membership_name;
+                    //$result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
+                    $result  = Sms::SendSms($invoice['customer_mobile'], "membership_code_purchase", $txt, $shop_id);
                 } 
                 // dd($change_content);
                 $content_key = 'membership_code_purchase';
                 $data['body'] = EmailContent::email_txt_replace($content_key, $change_content);
                 $data['company']['email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->pluck('value');
-                // return $data['invoice']->membership_code_customer_email;
-                // return view('emails.full_body', $data);
-                Mail::send('emails.full_body', $data, function ($m) use ($data) {
-                    $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
 
-                    $m->to($data['invoice']->membership_code_customer_email, env('MAIL_USERNAME'))->subject('Membership Code Purchase');
-                });
+                // ---------------------------------------------
+                $data['mail_to'] = $data['invoice']->membership_code_customer_email;
+                $data['mail_subject'] = 'Membership Code Purchase';
+                // ---------------------------------------------
 
+                Mail_global::mail($data, $shop_id);
+                // Mail::send('emails.full_body', $data, function ($m) use ($data) {
+                //     $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
 
-               // Mail::send('member.mlm_code.mail.membership_code', $data, function ($m) use ($data) {
-               //      $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
+                //     $m->to($data['invoice']->membership_code_customer_email, env('MAIL_USERNAME'))->subject('Membership Code Purchase');
+                // });
 
-               //      $m->to($data['invoice']->membership_code_customer_email, env('MAIL_USERNAME'))->subject('Membership Code');
-               //  });
+                // Mail::send('emails.full_body', $data, function ($m) use ($data) {
+                //     $m->from(env('MAIL_USERNAME'), $_SERVER['SERVER_NAME']);
+
+                //     $m->to('lukeglennjordan2@gmail.com', env('MAIL_USERNAME'))->subject('Membership Code Purchase');
+                // });
             }
             else
             {
@@ -344,5 +367,6 @@ class Membership_code
             $data['status'] = 'success';
             $data['message'] = 'Invalid, invoice id';
         }
+
     }
 }

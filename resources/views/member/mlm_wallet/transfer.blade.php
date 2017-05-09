@@ -39,7 +39,7 @@
 <div class="col-md-12">
   <div class="box">
     <div class="box-header with-border">
-      <h3 class="box-title">Refill Logs</h3>
+      <h3 class="box-title">Transfer Logs</h3>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -48,8 +48,8 @@
             <th>Date</th>
             <th>Amount</th>
             <th>Fee</th>
-            <th>Transferer</th>
             <th>Reciever</th>
+            <th>Transferer</th>
         </thead>
         <tbody>
         @foreach($logs_transfer as $key => $value)

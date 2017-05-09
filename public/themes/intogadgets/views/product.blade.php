@@ -1,10 +1,10 @@
 @extends('layout')
 @section('content')
 
-@if(isset($image))
+@if(get_content($shop_theme_info, 'product', 'product_banner') && get_content($shop_theme_info, 'product', 'product_banner_link'))
 <div class="aadd">
-    <a href="{{$image->ads_link}}" target="_blank">
-        <img src="{{$image->url}}" style="" >
+    <a href="{{ get_content($shop_theme_info, 'product', 'product_banner') }}" target="_blank">
+        <img src="{{ get_content($shop_theme_info, 'product', 'product_banner_link') }}" style="" >
     </a>
 </div>
 @endif
@@ -80,7 +80,7 @@
         </div>
         <div class="holder sshide">
             <div class="title text-left">Most Viewed</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
+            @foreach(get_collection(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['eprod_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">
@@ -91,6 +91,20 @@
                     </div>
                 </a>    
             @endforeach 
+        </div>
+        <div class="holder sshide">
+            <div class="title text-left">Most Searched Products</div>
+            @foreach($_most_searched as $most_searched)
+                <a href="/product/view/{{ $most_searched['eprod_id'] }}" class="text">
+                    <div class="product-top">
+                        <div class="text">
+                            <div class="name">{{ get_product_first_name($most_searched) }}</div>
+                            <div class="price">{{ get_product_first_price($most_searched) }}</div>
+                        </div>
+                        <div class="img"><img class="4-3-ratio" src="{{ get_product_first_image($most_searched) }}"></div>
+                    </div>
+                </a>    
+            @endforeach
         </div>
     </form>
 </div>
@@ -116,20 +130,18 @@
         <div class="grid-view">
         	@foreach($_product as $product)
         		@if(count($product['variant']) > 0)
-                <a href="/product/view/1">
-                    <div class="holder">
-                        <div class="border">
-                            <div class="img"><img class="4-3-ratio" src="{{ get_product_first_image($product) }}"></div>
-                            <div class="name">{{ get_product_first_name($product) }}</div>
-                            <!-- <div class="price-left">P34,000</div> -->
-                            <div class="price-right">{{ get_product_first_price($product) }}</div>
-                            <div class="hover">
-                                <a href="/product/view/{{ $product['eprod_id'] }}" class="text">ADD TO CART</a>
-                                <a href="/product/view/{{ $product['eprod_id'] }}" class="text">VIEW MORE</a>
-                            </div>
+                <div class="holder">
+                    <div class="border">
+                        <div class="img"><img class="4-3-ratio" src="{{ get_product_first_image($product) }}"></div>
+                        <div class="name">{{ get_product_first_name($product) }}</div>
+                        <!-- <div class="price-left">P34,000</div> -->
+                        <div class="price-right">{{ get_product_first_price($product) }}</div>
+                        <div class="hover">
+                            <a product-id="{{ $product['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
+                            <a style="display: block; margin-top: 50px;" href="/product/view/{{ $product['eprod_id'] }}" class="text">VIEW MORE</a>
                         </div>
                     </div>
-                </a>
+                </div>
                 @endif
             @endforeach
         </div>
@@ -144,8 +156,8 @@
                         <div class="description">{!! get_product_first_description($product) !!}</div>
                     </div>
                     <div class="cart">
-                        <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div>
-                        <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div>
+                        <!-- <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div> -->
+                        <!-- <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div> -->
                         <button class="button" onclick="location.href='product/'">View Info</button>
                     </div>
                 </div>
@@ -175,7 +187,7 @@
         </div>
         <div class="holder">
             <div class="title text-left">Most Viewed</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
+            @foreach(get_collection(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['eprod_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">
@@ -188,6 +200,22 @@
             @endforeach
         </div>
     </form>
+</div>
+<div id="quick-add-cart" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add to Cart</h4>
+      </div>
+      <div class="quick-cart-content">
+          
+      </div>
+    </div>
+
+  </div>
 </div>
 
     <script type="text/javascript">

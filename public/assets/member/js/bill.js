@@ -1,5 +1,6 @@
 var bill = new bill();
 var global_tr_html = $(".div-script tbody").html();
+var po_id_list = $(".div-script-po").html();
 var item_selected = ''; 
 
 function bill()
@@ -27,10 +28,35 @@ function bill()
 	{
 		//cycy
 		$(document).on("click", ".remove-tr", function(e){
-			if($(".tbody-item .remove-tr").length > 1){
-				// var remove = $(this).attr("tr-id");
-				// $(remove).remove();
-				$(this).parent().remove();
+			if($(".tbody-item .remove-tr").length > 1)
+			{
+				if($(this).attr("tr_id") != 0 && $(this).attr("tr_id") != null)
+				{					
+					var id = $(this).attr("tr_id");
+					console.log($(this).attr("linked_in"));
+					if($(this).attr("linked_in") != 'no')
+					{						
+						$(".tr-id-"+id).remove();
+					}
+					else
+					{
+						$(".po-tbl").load("/member/vendor/po_remove/"+id, function()
+						{
+							// console.log("success-removing");
+							iniatilize_select();
+							$(".tbody-item .select-um").globalDropList("enabled");
+							$(".po-"+id).removeClass("hidden");
+							$(".drawer-toggle").trigger("click");
+							action_reassign_number();
+							action_compute();
+						});
+					}
+				}
+				else
+				{
+					$(this).parent().remove();
+				}
+
 				action_reassign_number();
 				action_compute();
 			}			
@@ -299,6 +325,29 @@ function bill()
 		}
 	}
 
+
+	function action_trigger_select_plugin_not_last()
+	{
+		$(".draggable .tr-draggable:first td select.select-item").globalDropList(
+        {
+            link : "/member/item/add",
+            width : "100%",
+            onCreateNew : function()
+            {
+            	item_selected = $(this);
+            },
+            onChangeValue : function()
+            {
+            	action_load_item_info($(this));
+            }
+        });
+        $(".draggable .tr-draggable:first td select.select-um").globalDropList(
+        {
+        	hasPopup: "false",
+    		width : "100%",
+    		placeholder : "um.."
+        });
+	}	
 	function action_trigger_select_plugin()
 	{
 		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
@@ -317,9 +366,9 @@ function bill()
         $(".draggable .tr-draggable:last td select.select-um").globalDropList(
         {
         	hasPopup: "false",
-    		width : "110px",
+    		width : "100%",
     		placeholder : "um.."
-        }).globalDropList('disabled');
+        });
 	}
 	function event_button_action_click()
 	{
@@ -359,7 +408,19 @@ function bill()
 		    	})
 		    }
 		});
-
+		$('.droplist-terms').globalDropList(
+        {
+            link : "/member/maintenance/terms/terms",
+            link_size : "sm",
+            width : "100%",
+            onChangeValue: function()
+            {
+            	var start_date 		= $(".datepicker[name='bill_date']").val();
+            	var days 			= $(this).find("option:selected").attr("days");
+            	var new_due_date 	= AddDaysToDate(start_date, days, "/");
+            	$(".datepicker[name='bill_due_date']").val(new_due_date);
+            }
+        });
 	    $('.droplist-item').globalDropList(
         {
             link : "/member/item/add",
@@ -376,7 +437,7 @@ function bill()
         $('.droplist-um').globalDropList(
     	{
     		hasPopup: "false",
-    		width : "110px",
+    		width : "100%",
     		placeholder : "um..",
     		onChangeValue: function()
     		{
@@ -384,7 +445,7 @@ function bill()
     		}
 
     	});
-        $('.droplist-um:not(.has-value)').globalDropList("disabled");
+        // $('.droplist-um:not(.has-value)').globalDropList("disabled");
 		$(".drop-down-payment").globalDropList(
 		{
 		    link 		: '/member/maintenance/payment_method/add',
@@ -402,13 +463,28 @@ function bill()
 		});
 	}
 
+	function AddDaysToDate(sDate, iAddDays, sSeperator) {
+    //Purpose: Add the specified number of dates to a given date.
+	    var date = new Date(sDate);
+	    date.setDate(date.getDate() + parseInt(iAddDays));
+	    var sEndDate = LPad(date.getMonth() + 1, 2) + sSeperator + LPad(date.getDate(), 2) + sSeperator + date.getFullYear();
+	    return sEndDate;
+	}
+	function LPad(sValue, iPadBy) {
+	    sValue = sValue.toString();
+	    return sValue.length < iPadBy ? LPad("0" + sValue, iPadBy) : sValue;
+	}
+
 	function load_purchase_order_vendor(vendor_id)
 	{
 		$(".purchase-order-container").load("/member/vendor/load_purchase_order/"+vendor_id , function()
+		{
+			if($(".po-counter").length > 0)
 			{
-				// alert(vendor_id);
 				$(".purchase-order").removeClass("hidden");
-			});
+				$(".drawer-toggle").trigger("click");
+			}
+		});
 	}
 	function action_load_item_info($this)
 	{
@@ -440,7 +516,7 @@ function bill()
 		}
 		else
 		{
-			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
+			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("clear");
 		}
 	}
 
@@ -449,8 +525,8 @@ function bill()
 		$parent = $this.closest(".tr-draggable");
 		$item   = $this.closest(".tr-draggable").find(".select-item");
 
-		$um_qty = parseFloat($this.find("option:selected").attr("qty"));
-		$sales  = parseFloat($item.find("option:selected").attr("price"));
+		$um_qty = parseFloat($this.find("option:selected").attr("qty") || 1);
+		$sales  = parseFloat($item.find("option:selected").attr("cost"));
 		$qty    = parseFloat($parent.find(".txt-qty").val());
 		console.log($um_qty +"|" + $sales +"|" +$qty);
 		$parent.find(".txt-rate").val( $um_qty * $sales * $qty ).change();
@@ -525,6 +601,10 @@ function bill()
 	{
 		action_trigger_select_plugin();
 	}
+	this.action_trigger_select_plugin_not_last = function()
+	{
+		action_trigger_select_plugin_not_last();
+	}
 
 }	
 
@@ -539,51 +619,86 @@ function dragging_done()
 /* AFTER ADDING A CUSTOMER */
 function submit_done_customer(result)
 {
-	bill.action_reload_customer(result['customer_info']['customer_id']);
+	toastr.success("Success");
+    $(".droplist-customer").load("/member/customer/load_customer", function()
+    {                
+         $(".droplist-customer").globalDropList("reload");
+         $(".droplist-customer").val(result.id).change();          
+    });
 }
 
 /* AFTER ADDING AN  ITEM */
-// function submit_done(data)
-// {
-// 	bill.action_reload_item(data.item_id);
-// 	$("#global_modal").modal("toggle");
-// }
+function submit_done_item(data)
+{
+	toastr.success("Success");
+    $(".tbody-item .select-item").load("/member/item/load_item_category", function()
+    {                
+         $(".tbody-item .select-item").globalDropList("reload"); 
+         item_selected.val(data.item_id).change();  
+    });
+    data.element.modal("hide");
+}
 function add_po_to_bill(po_id)
 {
-	$.ajax({
-		url : "/member/vendor/load_po_item",
-		data : {po_id: po_id},
-		type : "get",
-		success : function(data)
-		{
-			var item = $.parseJSON(data);
-			// console.log(item);
-			var html = "";
-             $(item).each(function (a, b)
-             {				
-	             $("tbody.draggable").append(global_tr_html);
-	             $container = $("tbody.draggable .tr-draggable:last");
-	             // $this.closest(".tr-draggable");
-	             bill.action_trigger_select_plugin();
+	// $(".modal-loader").removeClass("hidden");
+	// $.ajax({
+	// 	url : "/member/vendor/load_po_item",
+	// 	data : {po_id: po_id},
+	// 	dataType : "json",
+	// 	type : "get",
+	// 	success : function(data)
+	// 	{
+ //             $(data).each(function (a, b)
+ //             {		
+	//              var $container = "";
+	//              var con = $("tbody.draggable").prepend(global_tr_html);
+	//              bill.action_trigger_select_plugin_not_last();
+	//              $container = $("tbody.draggable .tr-draggable:first");
+	//              // $this.closest(".tr-draggable");
 
-	             $container.find(".select-item").val(b.poline_item_id).change();
-	             $container.find(".txt-desc").val(b.poline_description);
-	             $container.find(".select-um").load('/member/item/load_one_um/'+b.poline_um);
+	//             $container.addClass("tr-"+b.poline_po_id);
+	//             $container.find(".select-item").val(b.poline_item_id).change();
+	//             $container.find(".txt-desc").val(b.poline_description);
+	//             $container.find(".select-um").load('/member/item/load_one_um/'+b.multi_um_id, function()
+ //             	{
+ //             		$container.find(".select-um").globalDropList("reload");
+ //             		$container.find(".select-um").val(b.poline_um).change();
+ //             	});
+	// 			$container.find(".poline_id").val(b.poline_id);
+	// 			$container.find(".itemline_po_id").val(po_id);
+	//             $container.find(".txt-qty").val(b.poline_qty);
+	//             $container.find(".txt-rate").val(b.poline_rate);
+	//             $container.find(".txt-amount").val(b.poline_amount);
+	//             $container.find(".remove-tr").addClass("remove-tr"+b.poline_po_id);
+	//             $container.find(".remove-tr").attr("tr_id", b.poline_po_id);
+ //             });
 
-	             
-	             $container.find(".txt-qty").val(b.poline_qty);
-	             $container.find(".txt-rate").val(b.poline_rate);
-	             $container.find(".txt-amount").val(b.poline_amount);
-             });
-             // $(html).insertBefore(".tbody-item tr:first");
-             // bill.iniatilize_select();
-             // bill.action_reassign_number();
-             // bill.action_compute();
-		},
-		error : function()
-		{
-			alert("Something wen't wrong.");
-		}
+	//          $(".po-listing").prepend(po_id_list);
+	//          var $po_id = $(".po-listing .po_id:first");
+	//          $(".po-listing .po_id:first").addClass("div_po_id"+po_id);
+	//          $po_id.find(".po-id-input").val(po_id).change();
+
+	//         $(".po-"+po_id).addClass("hidden");
+	// 		// $(".modal-loader").addClass("hidden");
+
+ //             bill.action_compute();
+ //             bill.action_reassign_number();
+	// 	},
+	// 	error : function()
+	// 	{
+	// 		alert("Something wen't wrong.");
+	// 	}
+	// });
+
+
+	$(".po-tbl").load('/member/vendor/load_added_item/'+po_id, function()
+	{
+		console.log("success");
+		bill.action_compute();
+		bill.iniatilize_select();
+		$(".tbody-item .select-um").globalDropList("enabled");
+
+		$(".po-"+po_id).addClass("hidden");
 	});
 }
 function iniatilize(id)
@@ -596,10 +711,25 @@ function iniatilize(id)
 }
 function submit_done(data)
 {
-	if(data.status == 'success-bill')
+	if(data.type == 'vendor')
+	{		
+       toastr.success("Success");
+	    $(".droplist-vendor").load("/member/vendor/load_vendor", function()
+	    {                
+	         $(".droplist-vendor").globalDropList("reload");
+	         $(".droplist-vendor").val(data.vendor_id).change();          
+	    });
+    	data.element.modal("hide");
+	}
+	else if(data.status == 'success-bill')
 	{		
         toastr.success("Success");
        	location.href = data.redirect;
+	}
+	else if(data.status == 'success-receive-inventory')
+	{
+        toastr.success("Success");
+       	location.href = data.redirect;		
 	}
     else if(data.status == "error")
     {

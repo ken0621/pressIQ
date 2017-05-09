@@ -35,7 +35,10 @@
 											<label><input type="radio" name="payroll_group_salary_computation" value="Flat Rate" {{$group->payroll_group_salary_computation == 'Flat Rate' ? 'checked':''}}>Flat Rate</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_salary_computation" value="Daily"  {{$group->payroll_group_salary_computation == 'Daily' ? 'checked':''}}>Daily</label>
+											<label><input type="radio" name="payroll_group_salary_computation" value="Daily Rate" {{$group->payroll_group_salary_computation == 'Daily Rate' ? 'checked':''}}>Daily Rate</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_salary_computation" value="Monthly Rate" {{$group->payroll_group_salary_computation == 'Monthly Rate' ? 'checked':''}}>Monthly Rate</label>
 										</div>
 									</div>
 								</div>
@@ -44,15 +47,12 @@
 								<small>Payroll Period</small>
 								<div class="panel panel-default">
 									<div class="panel-body">
+										@foreach($_period as $period)
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_period" value="Weekly" {{$group->payroll_group_period == 'Weekly' ? 'checked':''}}>Weekly</label>
+											<label><input type="radio" name="payroll_group_period" value="{{$period->payroll_tax_period}}" {{$group->payroll_group_period == $period->payroll_tax_period ? 'checked':''}}>{{$period->payroll_tax_period}}</label>
 										</div>
-										<div class="radio">
-											<label><input type="radio" name="payroll_group_period" value="Semi-Monthly" {{$group->payroll_group_period == 'Semi-Monthly' ? 'checked':''}}>Semi-Monthly</label>
-										</div>
-										<div class="radio">
-											<label><input type="radio" name="payroll_group_period" value="Monthly" {{$group->payroll_group_period == 'Monthly' ? 'checked':''}}>Monthly</label>
-										</div>
+										@endforeach
+										
 									</div>
 								</div>
 							</div>
@@ -78,12 +78,26 @@
 					<div id="deduction-basis" class="tab-pane fade form-horizontal">
 						<div class="form-group">
 							<div class="col-md-8">
-								<div class="panel panel-default">
+								<!-- <div class="panel panel-default">
 									<div class="panel-body">
 										<label>Periods of Basic Deduction</label>
 										<div class="checkbox">
 											<label><input type="checkbox" name="payroll_group_deduct_before_absences" value="1" {{$group->payroll_group_deduct_before_absences == '1' ? 'checked':''}}>Deduct before absences and lates is deducted.</label>
 										</div>
+									</div>
+								</div> -->
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div class="form-horizontal">
+											<div class="form-group">
+												<div class="col-md-12">
+													<div class="checkbox">
+														<label><input type="checkbox" name="payroll_group_before_tax" value="1" {{$group->payroll_group_before_tax == 1 ? 'checked="checked"':''}}>Deduct Tax after SSS, PhilHealth, & Pagibig</label>
+													</div>
+												</div>
+											</div>
+										</div>
+										
 									</div>
 								</div>
 								<div class="panel panel-default">
@@ -237,6 +251,9 @@
 											<label><input type="radio" name="payroll_group_agency" value="2nd Period" {{$group->payroll_group_agency == '2nd Period' ? 'checked':''}}>2nd Period</label>
 										</div>
 										<div class="radio">
+											<label><input type="radio" name="payroll_group_agency" value="Last Period" {{$group->payroll_group_agency == 'Last Period' ? 'checked':''}}>Last Period</label>
+										</div>
+										<div class="radio">
 											<label><input type="radio" name="payroll_group_agency" value="Every Period" {{$group->payroll_group_agency == 'Every Period' ? 'checked':''}}>Every Period</label>
 										</div>
 										<div class="radio">
@@ -367,7 +384,7 @@
 										</div>
 										<div class="col-md-6 {{$group->payroll_group_is_flexi_break == 0 ? 'display-none':''}} flexi-break-container">
 											<small>Flexi Break (minutes)</small>
-											<input type="number" name="payroll_group_flexi_break" class="form-control text-center">
+											<input type="number" name="payroll_group_flexi_break" class="form-control text-center" value="{{$group->payroll_group_flexi_break}}">
 										</div>
 									</div>
 									<div class="form-group">

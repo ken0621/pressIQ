@@ -9,15 +9,11 @@
     <button class="drawer-toggle" type="button"> <i class="fa fa-angle-double-left"></i></button>
 
     <div class="drawer drawer-default">
+        <div class="drawer-brand">Purchase Order</div>
         <nav class="drawer-nav">
-            <div class="drawer-brand">jQuery Drawer </div>
-            <div class="form-group">
-                <div class="col-md-12">
-                    <div class="clearfix purchase-order-container">
-                            @include('member.load_ajax_data.load_purchase_order')
-                    </div>   
-                </div>
-            </div>
+            <div class="clearfix purchase-order-container">
+                @include('member.load_ajax_data.load_purchase_order')
+            </div>   
         </nav>
     </div>
 
@@ -44,6 +40,21 @@
                 </h1>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right" data-action="save-and-edit">Save</button>
                 <button type="submit" class="panel-buttons btn btn-custom-white pull-right" data-action="save-and-new">Save and New</button>
+                @if(isset($bill))
+                <div class="pull-right">
+                    <div class="dropdown">
+                        <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <!-- <li class="dropdown-header">Dropdown header 1</li> -->
+                            <li><a href="/member/accounting/journal/entry/bill/{{$bill->bill_id}}">Transaction Journal</a></li>
+                            <!-- <li class="divider"></li> -->
+                            <!-- <li class="dropdown-header">Dropdown header 2</li> -->
+                            <li><a href="#">Void</a></li>
+                        </ul>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
     </div>
@@ -59,7 +70,7 @@
                                     <div class="row clearfix">
                                         <div class="col-sm-3">
                                             <select class="form-control droplist-vendor input-sm pull-left" name="bill_vendor_id">
-                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : '']);
+                                                 @include('member.load_ajax_data.load_vendor', ['vendor_id' => isset($bill->bill_vendor_id) ? $bill->bill_vendor_id : (isset($vendor_id) ? $vendor_id : '')]);
                                             </select>
                                         </div>
                                         <div class="col-sm-4">
@@ -75,19 +86,18 @@
                                             <textarea class="form-control input-sm textarea-expand" name="bill_mailing_address" placeholder="">{{isset($bill) ? $bill->bill_mailing_address : ''}}</textarea>
                                         </div>              
                                         <div class="col-sm-2">
-                                        <label>Terms</label>
-                                            <select class="form-control" name="bill_terms_id">
-                                                <option value="1" {{isset($bill) ? $bill->bill_terms_id == 1 ? 'selected' : '' : ''}}>Net 10</option>
-                                                <option value="2" {{isset($bill) ? $bill->bill_terms_id == 2 ? 'selected' : '' : ''}}>Net 30</option>
+                                            <label>Terms</label>
+                                            <select class="form-control input-sm droplist-terms" name="bill_terms_id">
+                                                @include("member.load_ajax_data.load_terms")
                                             </select>
                                         </div>
                                         <div class="col-sm-2">
                                             <label>Billing Date</label>
-                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_date : ''}}" name="bill_date">
+                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_date : date('m/d/y')}}" name="bill_date">
                                         </div>
                                         <div class="col-sm-2">
                                             <label>Due Date</label>
-                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_due_date : ''}}" name="bill_due_date">
+                                            <input type="text" class="form-control input-sm datepicker" value="{{isset($bill) ? $bill->bill_due_date : date('m/d/y')}}" name="bill_due_date">
                                         </div>
                                     </div>
                                 </div>
@@ -160,13 +170,20 @@
                                                         <th style="width: 15px;"></th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="draggable tbody-item">
+                                                <tbody class="tbody-item">
                                                     @if(isset($bill))
                                                         @foreach($_bill_item_line as $item)
-                                                        <tr  class="tr-draggable">
-                                                            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+                                                        <tr class="tr-draggable tr-id-{{$item->itemline_ref_id}}">
+                                                            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i>                
+                                                                <input type="text" class="hidden poline_id" name="poline_id[]" value="{{$item->itemline_poline_id}}">
+                                                                <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]" value="{{$item->itemline_po_id}}">
+                                                            </td>
                                                             <td class="invoice-number-td text-right">1</td>
                                                             <td>
+
+                                                                <input type="hidden" class="poline_id" name="itemline_ref_name[]" value="{{$item->itemline_ref_name}}">
+                                                                <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]" value="{{$item->itemline_ref_id}}">
+
                                                                 <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
                                                                     @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $item->itemline_item_id])
                                                                 </select>
@@ -184,29 +201,23 @@
                                                             <td><input class="text-center number-input txt-qty compute" type="text" value="{{$item->itemline_qty}}" name="itemline_qty[]"/></td>
                                                             <td><input class="text-right number-input txt-rate compute" type="text" value="{{$item->itemline_rate}}" name="itemline_rate[]"/></td>
                                                             <td><input class="text-right number-input txt-amount" type="text" value="{{$item->itemline_amount}}" name="itemline_amount[]"/></td>
-                                                            <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                                            <td  tr_id="{{$item->itemline_ref_id}}" linked_in="{{$item->itemline_ref_name}}" class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
                                                         </tr>
                                                         @endforeach
                                                     @endif
+
+                                                <tbody class="draggable tbody-item po-tbl">
+                                                    @include("member.load_ajax_data.load_po_session_item")  
                                                     <tr class="tr-draggable">
-                                                         <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+                                                         <td class="text-center cursor-move move">
+                                                            <i class="fa fa-th-large colo-mid-dark-gray"></i>         
+                                                            <input type="text" class="hidden poline_id" name="poline_id[]">
+                                                            <input type="text" class="hidden itemline_po_id" name="itemline_po_id[]">
+                                                         </td>
                                                         <td class="invoice-number-td text-right">1</td>
                                                         <td>
-                                                            <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
-                                                                @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                                                            </select>
-                                                        </td>
-                                                        <td><textarea class="textarea-expand txt-desc" name="itemline_description[]"></textarea></td>
-                                                        <td><select class="2222 droplist-um select-um" name="itemline_um[]"><option class="hidden" value="" /></select></td>
-                                                        <td><input class="text-center number-input txt-qty compute" type="text" name="itemline_qty[]"/></td>
-                                                        <td><input class="text-right number-input txt-rate compute" type="text" name="itemline_rate[]"/></td>
-                                                        <td><input class="text-right number-input txt-amount" type="text" name="itemline_amount[]"/></td>
-                                                        <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
-                                                    </tr>
-                                                    <tr class="tr-draggable">
-                                                         <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
-                                                        <td class="invoice-number-td text-right">1</td>
-                                                        <td>
+                                                        <input type="hidden" class="poline_id" name="itemline_ref_name[]">
+                                                        <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
                                                             <select class="1111 form-control select-item droplist-item input-sm pull-left" name="itemline_item_id[]" >
                                                                 @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                                                             </select>
@@ -250,13 +261,24 @@
         </div>
     </div>
 </div>
+<div class="po-listing hide">
+</div>
 </form>
+<div class="div-script-po hide">
+    <div class="po_id">
+        <input type="text" class="po-id-input" name="po_id[]">    
+    </div>
+</div>
 <div class="div-script">
     <table class="div-item-row-script hide">
        <tr class="tr-draggable">
-            <td class="text-center cursor-move move"><i class="fa fa-th-large colo-mid-dark-gray"></i></td>
+            <td class="text-center cursor-move move">
+                <i class="fa fa-th-large colo-mid-dark-gray"></i>
+            </td>
             <td class="invoice-number-td text-right">1</td>
             <td>
+                <input type="hidden" class="poline_id" name="itemline_ref_name[]">
+                <input type="hidden" class="itemline_po_id" name="itemline_ref_id[]">
                 <select class="1111 form-control select-item input-sm pull-left" name="itemline_item_id[]" >
                     @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
                 </select>
@@ -272,20 +294,13 @@
 </div>
 @endsection
 
-
 @section('script')
-<style type="text/css">
-    .po-style
-    {
-        padding: 10px;
-        background-color: #fff;
-    }
-</style>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
 <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
-<script type="text/javascript" src="/assets/member/js/bill.js"></script>
 <script type="text/javascript" src="/assets/member/bootstrap_drawer/cooker.drawer.js"></script>
-<link rel="stylesheet" type="text/css" href="/assets/member/bootstrap_drawer/cooker.drawer.css">
+
+<script type="text/javascript" src="/assets/member/js/bill.js"></script>
+
 <script type="text/javascript">
 
     $("#acct-a").click(function()
@@ -305,4 +320,68 @@ $(document).ready(function() {
 });
 </script>
 
+@endsection
+
+@section('css')
+<link rel="stylesheet" type="text/css" href="/assets/member/bootstrap_drawer/cooker.drawer.css">
+<style type="text/css">
+.po-style
+{
+    padding: 10px;
+    background-color: #fff;
+}
+.drawer-toggle
+{
+    background-color: #76B6EC;
+    color: #fff;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 0;
+}
+.drawer-toggle:hover
+{
+    background-color: #76B6EC;
+    color: #fff;
+}
+
+.drawer-default
+{
+    -webkit-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
+    -moz-box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
+    box-shadow: -1px 0px 10px 0px rgba(184,184,184,1);
+    -webkit-transition: all 0.4s ease;
+       -o-transition: all 0.4s ease;
+          transition: all 0.4s ease;
+    z-index: 2;
+}
+.drawer-toggle
+{
+    -webkit-transition: all 0.4s ease;
+       -o-transition: all 0.4s ease;
+          transition: all 0.4s ease;
+}
+.drawer-default + .drawer-overlay
+{
+    background-color: transparent !important;
+    -webkit-transition: all 0.4s ease;
+       -o-transition: all 0.4s ease;
+          transition: all 0.4s ease;
+}
+.drawer-open .drawer-overlay
+{
+    padding-right: 30px;
+}
+.drawer-close .drawer.drawer-default
+{
+    right: -280px;
+}
+.drawer-open .drawer.drawer-default
+{
+    right: 0;
+}
+nav.user-menu
+{
+    background-color: #F5F5F5;
+}
+</style>
 @endsection

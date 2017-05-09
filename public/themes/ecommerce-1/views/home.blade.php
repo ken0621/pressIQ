@@ -104,7 +104,7 @@
 											<tbody>
 												<tr>
 													<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-													<td class="text">Add to cart</td>
+													<td class="text">View More</td>
 												</tr>
 											</tbody>
 										</table>
@@ -149,7 +149,7 @@
 											<tbody>
 												<tr>
 													<td class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></td>
-													<td class="text">Add to cart</td>
+													<td class="text">View More</td>
 												</tr>
 											</tbody>
 										</table>
@@ -362,7 +362,9 @@ $(document).ready(function()
 	$('.add-slider .add-top').slick({
 	  lazyLoad: 'ondemand',
 	  prevArrow:"<img class='a-left control-c prev slick-prev' src='/themes/{{ $shop_theme }}/img/arrow-left.png'>",
-      nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right.png'>"
+      nextArrow:"<img class='a-right control-c next slick-next' src='/themes/{{ $shop_theme }}/img/arrow-right.png'>",
+      autoplay: true,
+  	  autoplaySpeed: 2000,
 	});
 });
 </script>

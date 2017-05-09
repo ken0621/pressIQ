@@ -63,6 +63,7 @@ class EcommerceProductController extends Member
 		if($this->hasAccess("product-list","access_page"))
         {	
         	$warehouse_id = Ecom_Product::getWarehouseId();
+        	
         	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0);
 			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1);
 

@@ -19,7 +19,6 @@ class Tbl_unit_measurement extends Model
                           ->orWhere("shop_key", $shop);
               });
     }
-    
     public function scopeMulti($query)
     {
         return $query->leftjoin("tbl_unit_measurement_multi","multi_um_id","=","um_id");

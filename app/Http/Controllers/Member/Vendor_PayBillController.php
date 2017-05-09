@@ -8,6 +8,8 @@ use App\Globals\Vendor;
 use App\Globals\Billing;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
+use App\Globals\WriteCheck;
+use App\Globals\BillPayment;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
@@ -34,11 +36,12 @@ class Vendor_PayBillController extends Member
     public function index()
     {        
         $data["v_id"]           = Request::input("vendor_id");
+        $data["bill_id"]           = Request::input("bill_id");
         $data["_vendor"]        = Vendor::getAllVendor('active');
-        $data['_account']       = Accounting::getAllAccount();
+        $data['_account']       = Accounting::getAllAccount('all',null,['Bank']);
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
         $data['action']         = "/member/vendor/paybill/add";
-        $data["_bill"]       = Billing::getAllBillByVendor($data["v_id"]);
+        $data["_bill"]          = Billing::getAllBillByVendor($data["v_id"]);
 
         $id = Request::input('id');
         if($id)
@@ -52,7 +55,12 @@ class Vendor_PayBillController extends Member
 
         return view("member.pay_bill.pay_bill", $data);
     }
+    public function paybill_list()
+    {
+        $data["_paybill"] = Tbl_pay_bill::vendor()->where("paybill_shop_id",$this->getShopId())->get();
 
+        return view("member.pay_bill.pay_bill_list",$data);
+    }
     public function load_vendor_pb($vendor_id)
     {
         $data["_bill"] = Billing::getAllBillByVendor($vendor_id);
@@ -61,50 +69,55 @@ class Vendor_PayBillController extends Member
 
     public function add_pay_bill()
     {
-        // dd(Request::input());
-        $insert["paybill_shop_id"]           = $this->getShopId();
-        $insert["paybill_vendor_id"]         = Request::input('paybill_vendor_id');
-        $insert["paybill_ap_id"]           = Request::input('paybill_ap_id') != "" ? Request::input('paybill_ap_id') : 0;
-        $insert["paybill_date"]              = datepicker_input(Request::input('paybill_date'));
-        $insert["paybill_total_amount"]      = convertToNumber(Request::input('paybill_total_amount'));
-        $insert["paybill_payment_method"]    = Request::input('paybill_payment_method');
-        $insert["paybill_memo"]              = Request::input('paybill_memo');
-        $insert["paybill_date_created"]      = Carbon::now();
+        $pb_data["paybill_vendor_id"]         = Request::input('paybill_vendor_id');
+        $pb_data["paybill_ap_id"]             = Request::input('paybill_ap_id') != "" ? Request::input('paybill_ap_id') : 0;
+        $pb_data["paybill_date"]              = datepicker_input(Request::input('paybill_date'));
+        $pb_data["paybill_total_amount"]      = convertToNumber(Request::input('paybill_total_amount'));
+        $pb_data["paybill_payment_method"]    = Request::input('paybill_payment_method');
+        $pb_data["paybill_memo"]              = Request::input('paybill_memo');
+        $pb_data["paybill_date_created"]      = Carbon::now();
 
-        $paybill_id  = Tbl_pay_bill::insertGetId($insert);
 
         $txn_line = Request::input('line_is_checked');
-        foreach($txn_line as $key=>$txn)
+        $pbline_data = [];
+        $ctr_bill = 0;
+        foreach($txn_line as $key => $txn)
         {
-            if($txn == 1)
+            if($txn)
             {
-                $insert_line["pbline_pb_id"]            = $paybill_id;
-                $insert_line["pbline_reference_name"]   = Request::input('pbline_txn_type')[$key];
-                $insert_line["pbline_reference_id"]     = Request::input('pbline_bill_id')[$key];
-                $insert_line["pbline_amount"]           = convertToNumber(Request::input('pbline_amount')[$key]);
-
-                Tbl_pay_bill_line::insert($insert_line);
-                if($insert_line["pbline_reference_name"] == 'bill')
-                {
-                    //bill
-                    Billing::updateAmountApplied($insert_line["pbline_reference_id"]);
-                }
+                $ctr_bill++;
             }
+
+            $pbline_data[$key]["line_is_checked"]         = Request::input('line_is_checked')[$key];
+
+            $pbline_data[$key]["pbline_reference_name"]   = Request::input('pbline_txn_type')[$key];
+            $pbline_data[$key]["pbline_reference_id"]     = Request::input('pbline_bill_id')[$key];
+            $pbline_data[$key]["pbline_amount"]           = convertToNumber(Request::input('pbline_amount')[$key]);
+
         }
-
-        $bill_data = AuditTrail::get_table_data("tbl_bill","bill_id",$paybill_id);
-        AuditTrail::record_logs("Added","bill",$paybill_id,"",serialize($bill_data));
-
-        $button_action = Request::input('button_action');
-
-        $json["status"]         = "success";
-        $json["rcvpayment_id"]  = $paybill_id;
-        $json["message"]        = "Successfully Pay Bill";
-        $json["redirect"]            = "/member/vendor/paybill";
-
-        if($button_action == "save-and-edit")
+        if($ctr_bill != 0)
         {
-            $json["redirect"]    = "/member/vendor/paybill?id=".$paybill_id;
+            $paybill_id  = BillPayment::postPaybill($pb_data, $pbline_data);
+
+            $paybill_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
+            AuditTrail::record_logs("Added","pay_bill",$paybill_id,"",serialize($paybill_data));
+
+            $button_action = Request::input('button_action');
+
+            $json["status"]         = "success";
+            $json["rcvpayment_id"]  = $paybill_id;
+            $json["message"]        = "Successfully Pay Bill";
+            $json["redirect"]            = "/member/vendor/paybill";
+
+            if($button_action == "save-and-edit")
+            {
+                $json["redirect"]    = "/member/vendor/paybill?id=".$paybill_id;
+            }            
+        }
+        else
+        {
+            $json["status"]         = "error";
+            $json["message"]        = "Please Select a Bill";
         }
 
         return json_encode($json);
@@ -115,56 +128,53 @@ class Vendor_PayBillController extends Member
 
         $old_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
 
-        $update["paybill_shop_id"]           = $this->getShopId();
-        $update["paybill_vendor_id"]         = Request::input('paybill_vendor_id');
-        $update["paybill_ap_id"]             = Request::input('paybill_ap_id') != "" ? Request::input('paybill_ap_id') : 0;
-        $update["paybill_date"]              = datepicker_input(Request::input('paybill_date'));
-        $update["paybill_total_amount"]      = convertToNumber(Request::input('paybill_total_amount'));
-        $update["paybill_payment_method"]    = Request::input('paybill_payment_method');
-        $update["paybill_memo"]              = Request::input('paybill_memo');
-        $update["paybill_date_created"]      = Carbon::now();
-
-        Tbl_pay_bill::where("paybill_id", $paybill_id)->update($update);
-        Tbl_pay_bill_line::where("pbline_pb_id", $paybill_id)->delete();
+        $pb_data["paybill_vendor_id"]         = Request::input('paybill_vendor_id');
+        $pb_data["paybill_ap_id"]             = Request::input('paybill_ap_id') != "" ? Request::input('paybill_ap_id') : 0;
+        $pb_data["paybill_date"]              = datepicker_input(Request::input('paybill_date'));
+        $pb_data["paybill_total_amount"]      = convertToNumber(Request::input('paybill_total_amount'));
+        $pb_data["paybill_payment_method"]    = Request::input('paybill_payment_method');
+        $pb_data["paybill_memo"]              = Request::input('paybill_memo');
 
         $txn_line = Request::input('line_is_checked');
-        foreach($txn_line as $key=>$txn)
-        {
-            if($txn == 1)
-            {
-                $insert_line["pbline_pb_id"]            = $paybill_id;
-                $insert_line["pbline_reference_name"]   = Request::input('pbline_txn_type')[$key];
-                $insert_line["pbline_reference_id"]     = Request::input('pbline_bill_id')[$key];
-                $insert_line["pbline_amount"]           = convertToNumber(Request::input('pbline_amount')[$key]);
-
-                Tbl_pay_bill_line::insert($insert_line);
-                if($insert_line["pbline_reference_name"] == 'bill')
+        $ctr_bill = 0;
+        foreach($txn_line as $key => $txn)
+        {   
+                if($txn)
                 {
-                    //bill
-                    Billing::updateAmountApplied($insert_line["pbline_reference_id"]);
+                    $ctr_bill++;
                 }
-            }
-            else
-            {
-                Billing::updateAmountApplied(Request::input('pbline_bill_id')[$key]);
-            }
+                $pbline_data[$key]["pbline_pb_id"]            = $paybill_id;
+                $pbline_data[$key]["line_is_checked"]         = Request::input('line_is_checked')[$key];
+                $pbline_data[$key]["pbline_reference_name"]   = Request::input('pbline_txn_type')[$key];
+                $pbline_data[$key]["pbline_reference_id"]     = Request::input('pbline_bill_id')[$key];
+                $pbline_data[$key]["pbline_amount"]           = convertToNumber(Request::input('pbline_amount')[$key]);
         }
 
-        $new_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
-        AuditTrail::record_logs("Updated","bill",$paybill_id,serialize($old_data),serialize($new_data));
-
-
-        $button_action = Request::input('button_action');
-
-        $json["status"]         = "success";
-        $json["bill_id"]        = $paybill_id;
-        $json["message"]        = "Successfully updated Pay Bills";
-        $json["redirect"]            = "/member/vendor/paybill?id=".$paybill_id;
-        
-        if($button_action == "save-and-new")
+        if($ctr_bill != 0)
         {
-            $json["redirect"]   = '/member/vendor/paybill';
+            BillPayment::updatePaybill($paybill_id, $pb_data, $pbline_data);
+
+            $new_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
+            AuditTrail::record_logs("Updated","bill",$paybill_id,serialize($old_data),serialize($new_data));
+
+
+            $button_action = Request::input('button_action');
+
+            $json["status"]         = "success";
+            $json["bill_id"]        = $paybill_id;
+            $json["message"]        = "Successfully updated Pay Bills";
+            $json["redirect"]            = "/member/vendor/paybill?id=".$paybill_id;
+            
+            if($button_action == "save-and-new")
+            {
+                $json["redirect"]   = '/member/vendor/paybill';
+            }
         }
+        else
+        {
+            $json["status"]         = "error";
+            $json["message"]        = "Please Select a Bill";
+        }       
 
         return json_encode($json);
     }

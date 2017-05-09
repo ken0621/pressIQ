@@ -61,7 +61,7 @@
 			</div>
 			<div class="col-md-6">
 				<small>Company Date Started</small>
-				<input type="text" name="payroll_company_date_started" placeholder="Company Date Started" class="form-control datepicker view-form" value="{{date('m/d/Y',strtotime($company->payroll_company_date_started))}}" {{$action == 'view' ? 'disabled':''}}>
+				<input type="text" name="payroll_company_date_started" placeholder="Company Date Started" class="form-control datepicker view-form" value="{{$company->payroll_company_date_started != '0000-00-00' ? date('m/d/Y',strtotime($company->payroll_company_date_started)):''}}" {{$action == 'view' ? 'disabled':''}}>
 			</div>
 		</div>
 		<div class="form-group">

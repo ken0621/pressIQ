@@ -10,6 +10,7 @@ use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_unit_measurement_type;
 use App\Models\Tbl_item;
 use App\Models\Tbl_settings;
+use App\Models\Tbl_um;
 use App\Globals\UnitMeasurement;
 use App\Globals\Utilities;
 use Carbon\Carbon;
@@ -27,7 +28,80 @@ class UnitOfMeasurementController extends Member
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
+    public function add_um()
+    {
+        $data['um_type'] = Request::input("um_type");
+        $data['action'] = '/member/pis/um_add_submit';
 
+        return view("member.unit_of_measurement.pis_um.um",$data);
+    }
+    public function edit_um_submit()
+    {
+        $id = Request::input("um_id");
+        $up["um_name"] = Request::input("um_name");
+        $up["um_abbrev"] = Request::input("um_abbrev");
+
+        Tbl_um::where("id",$id)->update($up);
+
+        $data["type"] = "pis-um";
+        return json_encode($data);
+    }
+    public function add_um_submit()
+    {
+        $type = Request::input("um_type");
+        $um_name = Request::input("um_name");
+        $um_abbrev = Request::input("um_abbrev");
+
+        $type_1 = 0;
+        if($type == 'base') $type_1 = 1;
+        else                $type_1 = 0;
+
+        $check = Tbl_um::where("um_shop_id",UnitMeasurement::getShopId())->where("is_based",$type_1)->where("um_name",$um_name)->first();
+
+        if($check == null)
+        {
+            $ins['um_name'] = $um_name;
+            $ins['um_abbrev'] = $um_abbrev;  
+            $ins['is_based'] = $type_1;            
+            $ins['um_shop_id'] = UnitMeasurement::getShopId();
+
+            $um_id = Tbl_um::insertGetId($ins);
+            $data['id'] = $um_id;
+            $data['type'] = 'pis-um'; 
+            $data['um_type'] = $type."-um";   
+        }
+        else
+        {
+            $data['status'] = 'error';
+            $data['status_message'] = 'U/M is already used';
+        }
+
+        return json_encode($data);
+    }
+    public function um_list_pis()
+    {
+        $data['_um_n'] = Tbl_um::where("um_shop_id",$this->user_info->shop_id)->where("is_based",0)->get();
+        $data['_um_n_b'] = Tbl_um::where("um_shop_id",$this->user_info->shop_id)->where("is_based",1)->get();
+
+        return view("member.unit_of_measurement.pis_um.um_list",$data);
+    }
+    public function load_pis_um($type = '')
+    {
+        $type_1 = 0;
+        if($type == 'notbase-um') $type_1 = 0;
+        else                      $type_1 = 1;
+        $data["_um"] = Tbl_um::where("is_based",$type_1)->get();
+
+        return view("member.load_ajax_data.load_pis_um",$data);
+    }
+    public function edit_um($id)
+    {
+        $data['id'] = $id;
+        $data['um'] = Tbl_um::where("id",$id)->first();
+        $data['action'] = '/member/pis/um_edit_submit';
+
+        return view("member.unit_of_measurement.pis_um.um",$data);
+    }
     public function check()
     {
         $um_id = Request::input("id");
@@ -50,6 +124,7 @@ class UnitOfMeasurementController extends Member
     }
     public function add_base($id,$item_id)
     {
+        $data["um_id"] = $id;
         $ctr = Tbl_unit_measurement::where("um_item_id",$item_id)->where("parent_basis_um",$id)->first();
         if($ctr == null)
         {
@@ -90,6 +165,7 @@ class UnitOfMeasurementController extends Member
     }
     public function add_base_submit()
     {
+        $id = Request::input("um_id_2");
         $um_id = Request::input("um_id");
         $sub_multi_id = Request::input("sub_multi_id");
 
@@ -100,6 +176,7 @@ class UnitOfMeasurementController extends Member
         Session::put("um_id",$um_id);
 
         $data["type"] = "base-um";
+        $data["id"] = $id;
         return json_encode($data);
     }
     public function archived($id, $action)
@@ -198,51 +275,32 @@ class UnitOfMeasurementController extends Member
     }
     public function select_um()
     {
-        $access = Utilities::checkAccess('item-unit-measurement', 'access_page');
-        if($access == 1)
-        {
-            $unit_id = Request::input("unit_id");
+        $unit_id = Request::input("unit_id");
 
-            $data = UnitMeasurement::select_um($unit_id,'json');
+        $data = UnitMeasurement::select_um($unit_id,'json');
 
-            return $data;
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
+        return $data;
     }
 
     public function load_um()     
     {
-        $access = Utilities::checkAccess('item-unit-measurement', 'access_page');
-        if($access == 1)
-        {
-            $data["_um"] = UnitMeasurement::load_um();
+        $data["_um"] = UnitMeasurement::load_um();
 
-            return view('member.load_ajax_data.load_unit_measurement', $data);
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
+        return view('member.load_ajax_data.load_unit_measurement', $data);
     }
 
     public function load_one_um($um_id)     
     {
-        $access = Utilities::checkAccess('item-unit-measurement', 'access_page');
-        if($access == 1)
-        {
-            $data["_um"] = UnitMeasurement::load_one_um($um_id);
+        $data["_um"] = UnitMeasurement::load_one_um($um_id);
 
-            return view('member.load_ajax_data.load_one_unit_measure', $data);
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
+        return view('member.load_ajax_data.load_one_unit_measure', $data);
     }
-
+ public function load_one_um_multi($um_id)     
+    {
+        $data["_um_multi"] = UnitMeasurement::load_one_um($um_id);
+        // dd($data["_um_multi"]);
+        return view('member.load_ajax_data.load_um_multi', $data);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -259,7 +317,7 @@ class UnitOfMeasurementController extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public function add_submit()
@@ -308,7 +366,7 @@ class UnitOfMeasurementController extends Member
                     }                
                 }
             }
-            $ctr = Tbl_unit_measurement::where("um_name",$set_name)->count();
+            $ctr = Tbl_unit_measurement::where("um_name",$set_name)->where("um_shop",UnitMeasurement::getShopId())->count();
             if($ctr >= 1)
             {
                 $data["status"] = "error";

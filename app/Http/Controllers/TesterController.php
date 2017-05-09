@@ -8,6 +8,7 @@ use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
 use App\Models\Tbl_journal_entry_line;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_vendor;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_ec_product;
@@ -20,6 +21,8 @@ use App\Globals\Item;
 use App\Globals\Customer;
 use App\Globals\Ecom_Product;
 use App\Globals\Sms;
+use App\Globals\PayrollJournalEntries;
+use App\Globals\Payroll;
 
 use Request;
 use Carbon\Carbon;
@@ -51,9 +54,7 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        // Account::put_default_account_payroll($this->getShopId());
-        // Accounting::postJournalEntry();
-        dd(Tbl_journal_entry::where("je_id", 12)->transaction("invoice")->get()->toArray());
+        dd(Tbl_vendor::transaction($this->getShopId(), 13)->get());
     }
 
     public function getJournal()

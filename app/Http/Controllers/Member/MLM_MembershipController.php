@@ -516,5 +516,14 @@ class MLM_MembershipController extends Member
         
         echo json_encode($data); 
     }
+    public function change_picture_package()
+    {
+        $update['membership_package_imgage'] = $_POST['membership_package_imgage'];
+        Tbl_membership_package::where('membership_package_id', $_POST['membership_package_id'])->update($update);
+
+        $data['message'] = 'success';
+        $data['status'] = 'Success';
+        return json_encode($data);
+    }
     
 }

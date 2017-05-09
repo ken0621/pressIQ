@@ -48,7 +48,7 @@
 								{{$key2 == 0 ? $journal->je_reference_id : ''}}
 							</a>
 						</td>
-						<td>{{$key2 == 0 ? $journal->first_name.' '.$journal->last_name : ''}}</td>
+						<td>{{$key2 == 0 ? $entry->first_name.' '.$entry->last_name : ''}}</td>
 						<td>{{$entry->item_name or ''}}</td>
 						<td>{{$entry->account_name}}</td>
 						<td>{{$entry->chart_type_name}}</td>
@@ -57,7 +57,7 @@
 					</tr>
 					@endforeach
 					<tr>
-						<td colspan="6"></td>
+						<td colspan="7"></td>
 						<td>{{currency('PHP', collect($journal->entries)->where("jline_type", 'Debit')->sum('jline_amount'))}}</td>
 						<td>{{currency('PHP', collect($journal->entries)->where("jline_type", 'Credit')->sum('jline_amount'))}}</td>
 					</tr>

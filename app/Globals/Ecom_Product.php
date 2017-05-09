@@ -358,6 +358,15 @@ class Ecom_Product
 		return $_category;
 	}
 
+	public static function getVariantFullName($variant_id)
+	{
+		$_product = Tbl_ec_product::variant()->first()->toArray();
+
+		$_product["product_new_name"] = $product["eprod_name"] . ($product["variant_name"] ? ' : '.$product["variant_name"] : '');
+
+		return $_product["product_new_name"];
+	}
+
 	/**
 	 * Getting all Product w/ a specific category name regardless of the level, thus product with the same category name
 	 *
@@ -507,4 +516,21 @@ class Ecom_Product
 
 		return $product;
 	}
+
+	public static function searchProName($keywords, $shop_id)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+		
+		$_product = Tbl_ec_product::where("eprod_name", 'like', "%{$keywords}%")->where('eprod_shop_id', $shop_id)->get()->toArray();
+		
+		foreach($_product as $key=>$product)
+		{
+			$_product[$key]			 	= Ecom_Product::getProduct($product["eprod_id"], $shop_id);
+		}
+		
+		return $_product;	}
+
 }

@@ -15,9 +15,12 @@
         </div>
     </div>
 </div>
+
 <div class="bsettings">
     {!! $basic_settings !!}  
 </div>
+<!-- Notes -->
+@include('member.mlm_plan.notes.binary')
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">
@@ -147,7 +150,12 @@
                         <tr><th colspan="3"><center>MEMBERSHIP POINTS PER ENTRY</center></th></tr>
                         <tr>
                             <th>MEMEBERSHIP NAME</th>
-                            <th>BINARY POINTS</th>
+                            <th>
+                                <div class="col-md-3">BINARY POINTS</div>
+                                <div class="col-md-3">BINARY POINTS LIMIT</div>
+                                <div class="col-md-3 hide">BINARY SINGLE LINE INCOME</div>
+                                <div class="col-md-3 hide">BINARY SINGLE LINE INCOME LIMIT</div>
+                            </th>
                             <th></th>
                         </tr>
                     </thead>
@@ -162,10 +170,22 @@
                                             <form id='form{{$mem->membership_id}}' action='/member/mlm/plan/binary/edit/membership/points' method='post' class='global-submit'>
                                             {!! csrf_field() !!}
                                             <input type="hidden" name="membership_id" value="{{$mem->membership_id}}">
-                                            <span class="membership_binary_points{{$mem->membership_id}}">{{$mem->membership_points_binary != null ? $mem->membership_points_binary : 0 }}</span>
+                                            
+                                            <div class="col-md-3">
+                                                <span class="membership_binary_points{{$mem->membership_id}}">{{$mem->membership_points_binary != null ? $mem->membership_points_binary : 0 }}</span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="membership_binary_limit_points{{$mem->membership_id}}">{{$mem->membership_points_binary_limit  != null ? $mem->membership_points_binary_limit  : 0 }}</span>
+                                            </div>
+                                            <div class="col-md-3 hide">
+                                                <input type="number" class="form-control" name="membership_points_binary_single_line" value="{{$mem->membership_points_binary_single_line}}">
+                                            </div>
+                                            <div class="col-md-3 hide">
+                                                <input type="number" class="form-control" name="membership_points_binary_single_line_limit" value="{{$mem->membership_points_binary_single_line_limit}}">
+                                            </div>
                                             </form> 
                                         </td>
-                                        <td><span class="membership_binary_points_edit{{$mem->membership_id}}"><a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_binary_points('{{$mem->membership_id}}', '{{$mem->membership_name}}', '{{$mem->membership_points_binary}}')">Edit</a></span></td>
+                                        <td><span class="membership_binary_points_edit{{$mem->membership_id}}"><a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_binary_points('{{$mem->membership_id}}', '{{$mem->membership_name}}', '{{$mem->membership_points_binary}}', '{{$mem->membership_points_binary_limit}}')">Edit</a></span></td>
                                     </tr>
                                 @endforeach
                             @else
@@ -256,14 +276,17 @@ function save_binary_points_membership(membershipid)
 }
 function cancel(membershipid)
 {
-    var binarypoints = $('.membership_points_binaryinput' + membershipid).val();
-    $('.membership_binary_points' + membershipid).html(binarypoints);
-    var edit = '<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_binary_points('+membershipid+',membership_name, '+binarypoints+')">Edit</a>';
-    $('.membership_binary_points_edit' + membershipid).html(edit);
+    // var binarypoints = $('.membership_points_binaryinput' + membershipid).val();
+    // var binarypoints_limit = $('.membership_binary_limit_pointsinput' + membershipid).val();
+    // $('.membership_binary_points' + membershipid).html(binarypoints);
+    // $('.membership_binary_points_limit' + membershipid).html(binarypoints);
+    // var edit = '<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="javascript:" onClick="edit_binary_points('+membershipid+',membership_name, '+binarypoints+')">Edit</a>';
+    // $('.membership_binary_points_edit' + membershipid).html(edit);
 }
-function edit_binary_points(membershipid, membership_name, binarypoints)
+function edit_binary_points(membershipid, membership_name, binarypoints, binarypoints_limit)
 {
     $('.membership_binary_points' + membershipid).html("<input type='number' class='form-control membership_points_binaryinput"+ membershipid +"' name='membership_points_binary' value='"+binarypoints+"'>");
+    $('.membership_binary_limit_points' + membershipid).html("<input type='number' class='form-control membership_binary_limit_pointsinput"+ membershipid +"' name='membership_points_binary_limit' value='"+binarypoints_limit+"'>");
     $('.membership_binary_points_edit' + membershipid).html('<a data-toggle="tooltip" data-placement="left" title="Tooltip on left" href="#" onClick="save_binary_points_membership(' + membershipid +')">Save</a>');
 }
 function binary_settings_placement_change(ito)

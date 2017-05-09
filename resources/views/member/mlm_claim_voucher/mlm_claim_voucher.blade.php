@@ -98,7 +98,7 @@
                             @if($_voucher_product)
                                 <?php $total = 0; ?>
                                 @foreach ($_voucher_product as $key=> $voucher_product)
-                                    <tr class="hide">
+                                    <tr class="{{$voucher_product->voucher_is_bundle == 0 ? '' : 'hide'}}">
                                         <td>{{$voucher_product->item_id}}</td>
                                         <td>{{$voucher_product->item_name}}</td>
                                         <td>{{$voucher_product->item_price}}</td>
@@ -127,10 +127,12 @@
                 </div>
                 <div id="ajax-message" class="col-md-12 form-group">
                 </div>
+                @if($voucher->voucher_claim_status == 0)
                 <div class="col-md-12 form-group">
                       <a type="submit" href="#" class="col-md-offset-4 col-md-4 btn btn-default void-voucher" voucher-id= "{{$voucher->voucher_id}}">Void</a>
                        <button type="submit" class="col-md-4 btn btn-default submit-claim" voucher-id= "{{$voucher->voucher_id}}">Process Claim</button>
                 </div>
+                @endif
                 </form>
                 @endif
             </div>

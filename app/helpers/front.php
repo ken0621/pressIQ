@@ -1,5 +1,6 @@
 <?php
 use App\Globals\Ecom_Product;
+use App\Globals\Mlm_report;
 
 function get_post($shop_id, $key)
 {

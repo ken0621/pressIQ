@@ -10,12 +10,23 @@ use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_credit_memo;
+use App\Globals\Accounting;
 use DB;
 use Session;
 use Carbon\Carbon;
 
 class CreditMemo
 {
+	public static function cm_amount($inv_id)
+	{
+		$inv_data = Tbl_customer_invoice::c_m()->where("inv_id",$inv_id)->first();
+		$cm_amount = 0;
+		if($inv_data != null)
+        {
+            $cm_amount = $inv_data->cm_amount;
+        }
+        return $cm_amount;
+	}
 	public static function postCM($customer_info, $item_info, $inv_id = 0)
 	{
 		$insert_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
@@ -28,7 +39,16 @@ class CreditMemo
 
 		$cm_id = Tbl_credit_memo::insertGetId($insert_cm);
 
-		CreditMemo::insert_cmline($cm_id, $item_info);
+		/* Transaction Journal */
+        $entry["reference_module"]  = "credit-memo";
+        $entry["reference_id"]      = $cm_id;
+        $entry["name_id"]           = $customer_info["cm_customer_id"];
+        $entry["total"]             = $customer_info["cm_amount"];
+        $entry["vatable"]           = '';
+        $entry["discount"]          = '';
+        $entry["ewt"]               = '';
+
+		CreditMemo::insert_cmline($cm_id, $item_info, $entry);
 
 		if($inv_id != 0)
 		{
@@ -51,11 +71,20 @@ class CreditMemo
 
 		Tbl_credit_memo::where("cm_id",$cm_id)->update($update_cm);
 
+		/* Transaction Journal */
+        $entry["reference_module"]  = "credit-memo";
+        $entry["reference_id"]      = $cm_id;
+        $entry["name_id"]           = $customer_info["cm_customer_id"];
+        $entry["total"]             = $customer_info["cm_amount"];
+        $entry["vatable"]           = '';
+        $entry["discount"]          = '';
+        $entry["ewt"]               = '';
+
 		Tbl_credit_memo_line::where("cmline_cm_id",$cm_id)->delete();
-		CreditMemo::insert_cmline($cm_id, $item_info);
+		CreditMemo::insert_cmline($cm_id, $item_info, $entry);
 
 	}
-	public static function insert_cmline($cm_id, $item_info)
+	public static function insert_cmline($cm_id, $item_info, $entry)
 	{
 		foreach ($item_info as $key => $value) 
 		{
@@ -69,6 +98,16 @@ class CreditMemo
 			$insert_cmline["cmline_amount"] = $value["amount"];
 
 			Tbl_credit_memo_line::insert($insert_cmline);
+
+			/* TRANSACTION JOURNAL */   
+            $entry_data[$key]['item_id']            = $value["item_id"];
+            $entry_data[$key]['entry_qty']          = $value["quantity"];
+            $entry_data[$key]['vatable']            = 0;
+            $entry_data[$key]['discount']           = 0;
+            $entry_data[$key]['entry_amount']       = $value["amount"];
+            $entry_data[$key]['entry_description']  = $value["item_description"];
 		}
+
+		$cm_journal = Accounting::postJournalEntry($entry, $entry_data);
 	}
 }

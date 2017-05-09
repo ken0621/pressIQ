@@ -81,7 +81,7 @@ class VendorController extends Member
 	{
         if($this->hasAccess("vendor-list","access_page"))
         {
-            $data['_vendor'] = Tbl_vendor::info()->where('vendor_shop_id', $this->getShopId())
+            $data['_vendor'] = Tbl_vendor::info()->balanceJournal()->where('vendor_shop_id', $this->getShopId())
                                         ->orderBy('vendor_first_name')
                                         ->where("tbl_vendor.archived",0)
                                         ->paginate(5);
@@ -166,11 +166,12 @@ class VendorController extends Member
         return view('member.vendor.load_vendor_tbl', $data)->render();  
     }
 
+   
     public function load_vendor()
-    {
-        // $data["_vendor"] = Tbl_vendor::whwhere("archived", 0)->get();
-        
-        return view('member.load_ajax_data.load_vendor', $data);
+    {        
+        $data["_vendor"]    = Vendor::getAllVendor('active');
+
+        return view("member.load_ajax_data.load_vendor",$data);
     }
 
     public function getAdd()
@@ -246,7 +247,6 @@ class VendorController extends Member
 
         return json_encode($json);
     }
-
     public function getEdit($vendor_id)
     {
         if($this->hasAccess("vendor-list","edit"))
@@ -320,6 +320,14 @@ class VendorController extends Member
         AuditTrail::record_logs("Edited","vendor",$vendor_id,serialize($old_vendor_data),serialize($new_vendor_data));
 
         return json_encode($json);
+    }
+
+    public function getVendorDetails($id)
+    {
+        $data["vendor"]       = Tbl_vendor::info()->balanceJournal()->where("vendor_id", $id)->first();
+        $data["_transaction"] = Tbl_vendor::transaction($this->getShopId(), $id)->get();
+
+        return view('member.vendor.vendor_details', $data);
     }
 
     public function getTest()

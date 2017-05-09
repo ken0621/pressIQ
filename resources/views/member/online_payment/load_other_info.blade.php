@@ -4,13 +4,13 @@
 	<label> Other Information </label>
 	<div class="col-md-12 form-group">
 		<div class="">
-		    <label>Other Name</label>
+		    <label>Name</label>
 		    <input type="text" name="other_name" class="form-control input-sm" value="{{$other->other_name or ''}}" required>
 		</div>
 	</div>
 	<div class="col-md-12 form-group">
 		<div class="">
-		    <label>Other Account Name</label>
+		    <label>Details</label>
 		    <textarea type="text" name="other_description" class="form-control input-sm" value="{{$other->other_account_name or ''}}" required> </textarea>
 		</div>
 	</div>

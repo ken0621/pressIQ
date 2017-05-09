@@ -48,7 +48,8 @@ function dateFormat($string)
 {
     return date_format(date_create($string),"m/d/Y");
 }
-function deleteDir($dirPath) {
+function deleteDir($dirPath) 
+{
     if (! is_dir($dirPath)) {
         throw new InvalidArgumentException("$dirPath must be a directory");
     }
@@ -533,4 +534,14 @@ function limit_char($x, $length)
         $y=substr($x,0,$length) . '...';
         echo $y;
     }
+}
+
+/* return null value to zero */
+function n2z($value)
+{
+    if(is_null($value))
+    {
+        $value = 0;
+    }
+    return $value;
 }

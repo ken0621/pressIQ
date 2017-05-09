@@ -5,6 +5,8 @@ use App\Globals\Ec_order;
 use App\Globals\Ecom_Product;
 use App\Globals\Warehouse;
 use App\Globals\Customer;
+use App\Globals\Accounting;
+
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
@@ -37,6 +39,10 @@ class Ec_order
         {
             $customer_id = Customer::createCustomer($order_info['shop_id'] ,$order_info['customer']);
         }
+        else
+        {
+            $customer_id = $order_info['customer_id'];
+        }
 
         $data['shop_id']           = $order_info['shop_id'];
         $data['inv_customer_id']   = $customer_id;;
@@ -46,6 +52,7 @@ class Ec_order
         $data['inv_date']      = '';
         $data['inv_due_date']  = '';
         $data['inv_customer_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province'];
+
         $data['inv_message']          = '';
         $data['inv_memo']             = '';
         $data['ewt']                  = 0;
@@ -61,12 +68,16 @@ class Ec_order
         $data['payment_method_id']    = $order_info['payment_method_id'];
         $data['coupon_code']          = 0;
 
-        $data['ec_order_load']              = $order_info["ec_order_load"];
-        $data['ec_order_load_number']       = $order_info["ec_order_load_number"];
+        $data['ec_order_load']        = $order_info["ec_order_load"];
+        $data['ec_order_load_number'] = $order_info["ec_order_load_number"];
         $data['taxable']              = $order_info['taxable'];
         $data['order_status']         = $order_info['order_status'];
+        $data['payment_status']       = isset($order_info['payment_status']) ? $order_info['payment_status'] : 0;
 
         $order_id = Ec_order::create_ec_order($data);
+
+        $update["payment_upload"] = isset($order_info['payment_upload']) ? $order_info['payment_upload'] : '';
+        $image_id = Tbl_ec_order::where("ec_order_id", $order_id)->update($update);
         
         $return["status"]           = "success";
         $return["order_id"]         = $order_id;
@@ -204,8 +215,6 @@ class Ec_order
             $ec_order['ec_order_load_number']           = $data["ec_order_load_number"];
         }
 
-
-        $ec_order['payment_method_id']              = $data["payment_method_id"];
         $ec_order['customer_id']                    = $data["inv_customer_id"];
         $ec_order['customer_email']                 = $data["inv_customer_email"];
         $ec_order['billing_address']                = $data["inv_customer_billing_address"];
@@ -213,6 +222,8 @@ class Ec_order
         $ec_order['due_date']                       = $data["inv_due_date"];
         $ec_order['invoice_message']                = $data["inv_message"];
         $ec_order['order_status']                   = $data["order_status"];
+        $ec_order['payment_method_id']              = $data["payment_method_id"];
+        $ec_order['payment_status']                 = $data["payment_status"];
         $ec_order['statement_memo']                 = $data["inv_memo"];
         $ec_order['subtotal']                       = $prod_total;
         $ec_order['ewt']                            = $data["ewt"];
@@ -224,7 +235,7 @@ class Ec_order
         $ec_order['total']                          = $ec_total;
         $ec_order['tax']                            = $data["taxable"];
         $ec_order['coupon_id']                      = $coupon_id;
-        $ec_order['term_id']                        = $data["inv_terms_id"];
+        $ec_order['term_id']                        = isset($data["inv_terms_id"]) ? $data["inv_terms_id"] : '';
         $ec_order['shop_id']                        = isset($data["shop_id"]) ? $data["shop_id"] : Ec_order::getShopId();
         $ec_order['created_date']                   = Carbon::now();
         $ec_order['archived']                       = 0;
@@ -266,7 +277,6 @@ class Ec_order
 
        	Ec_order::create_ec_order_item($ec_order_id,$ec_order_item);
 
-
        	return $ec_order_id;
 	}
 
@@ -294,7 +304,9 @@ class Ec_order
 	{
         $ec_order_id             = $data["ec_order_id"];
         $update['order_status']  = $data["order_status"];
+        $update['payment_status'] = $data["payment_status"];
         $order_status            = $data["order_status"];
+        $shop_id                 = isset($data["shop_id"]) ? $data["shop_id"] : null ;
         $order                   = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
         $response                = "nothing";
 
@@ -302,30 +314,45 @@ class Ec_order
         {
             if($order_status == "Processing")
             {
-                $response = Ec_order::update_inventory("deduct",$ec_order_id);
+                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
             }
             else if($order_status == "Completed")
             {
-                $response = Ec_order::update_inventory("deduct",$ec_order_id);   
+                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);   
+            }
+            else if($order_status == "Shipped")
+            {
+                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);   
             }
             else if($order_status == "On-hold")
             {
-                $response = Ec_order::update_inventory("deduct",$ec_order_id);
+                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);
             }
         }
-        else if($order->order_status == "Processing" || $order->order_status == "Completed" || $order->order_status == "On-hold")
+        else if($order->order_status == "Processing" || $order->order_status == "Completed" || $order->order_status == "On-hold" || $order->order_status == "Shipped")
         {
             if($order_status == "Pending")
             {
-                $response = Ec_order::update_inventory("add",$ec_order_id);
+                $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);
             }
             else if($order_status == "Failed")
             {
-                $response = Ec_order::update_inventory("add",$ec_order_id);   
+                $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);   
             }
             else if($order_status == "Cancelled")
             {
-                $response = Ec_order::update_inventory("add",$ec_order_id);
+                $response = Ec_order::update_inventory("add",$ec_order_id,$shop_id);
+            }
+        }
+
+        if($order_status == "Completed")
+        {
+            if($update['payment_status'] == 0)
+            {
+                $response                    = null;
+                $response['status']          = "error";
+                $response['status_message']  = "Cannot Complete Order with unpaid status";
+                return $response;
             }
         }
 
@@ -344,19 +371,45 @@ class Ec_order
         }
         else
         {
+            if($order_status == "Completed")
+            {
+                $_order = Tbl_ec_order::where("ec_order_id", $ec_order_id)->first();
+                /* TRANSACTION JOURNAL */  
+                $entry["reference_module"]  = "product-order";
+                $entry["reference_id"]      = $ec_order_id;
+                $entry["name_id"]           = $_order->customer_id;
+                $entry["total"]             = $_order->total;
+
+                $_order_item = Tbl_ec_order_item::where("ec_order_id", $ec_order_id)->get();
+
+                foreach($_order_item as $key=>$item)
+                {
+                    $entry_data[$key]['item_id']            = $item->item_id;
+                    $entry_data[$key]['entry_qty']          = $item->quantity;
+                    $entry_data[$key]['vatable']            = 0;
+                    $entry_data[$key]['discount']           = $item->discount_amount;
+                    $entry_data[$key]['entry_amount']       = $item->total;
+                    $entry_data[$key]['entry_description']  = $item->description;
+                }
+
+                $product_order_journal = Accounting::postJournalEntry($entry, $entry_data);
+            }
+
             Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
             $response           = null;
             $response["status"] = "success";
             return $response;
         }
+
+
 	}
 
-    public static function update_inventory($type,$ec_order_id)
+    public static function update_inventory($type,$ec_order_id, $shop_id)
     {
         $ec_order     = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
+        $warehouse_id = Ecom_Product::getWarehouseId($shop_id);
         if($type == "deduct")
         {
-            $warehouse_id = Ecom_Product::getWarehouseId();
             $ec_order_item = Tbl_ec_order_item::where("ec_order_id",$ec_order_id)->get();
             $ctr = 0;
             foreach($ec_order_item as $ordered)
@@ -384,7 +437,6 @@ class Ec_order
         }
         else if($type == "add")
         {
-            $warehouse_id  = Ecom_Product::getWarehouseId();
             $ec_order_item = Tbl_ec_order_item::where("ec_order_id",$ec_order_id)->get();
             $ctr = 0;
             foreach($ec_order_item as $ordered)

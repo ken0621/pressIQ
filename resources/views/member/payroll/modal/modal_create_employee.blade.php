@@ -567,6 +567,11 @@
                   @endforeach
                 </div>
                 <div id="jouarnal" class="tab-pane fade">
+                  @foreach($_journal_tag as $tag)
+                  <div class="checkbox">
+                    <label><input type="checkbox" name="journal_tag[]" value="{{$tag->payroll_journal_tag_id}}">{{$tag->account_number.' • '.$tag->account_name}}</label>
+                  </div>
+                  @endforeach
                 </div>
               </div>
             </div>

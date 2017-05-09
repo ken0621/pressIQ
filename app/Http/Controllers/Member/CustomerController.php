@@ -10,7 +10,7 @@ use Redirect;
 use File;
 use Crypt;
 use URL;
-use App\Globals\AuditTrail;
+
 use App\Models\Tbl_country;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_customer_address;
@@ -20,10 +20,15 @@ use App\Models\Tbl_customer_search;
 use App\Models\Tbl_user;
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_term;
+use App\Models\Tbl_item;
 use App\Models\Tbl_delivery_method;
 use Session;
 use App\Globals\Customer;
 use App\Globals\Utilities;
+use App\Globals\AuditTrail;
+use App\Globals\Accounting;
+use App\Globals\Invoice;
+use App\Globals\Item;
 
 class CustomerController extends Member
 {
@@ -45,7 +50,6 @@ class CustomerController extends Member
             {
                 return view('member.customer.customer_tbl', $data)->render();  
             }
-            // dd($data);
 
     		return view('member.customer.index',$data);
         }
@@ -62,11 +66,13 @@ class CustomerController extends Member
 
     	    $shop_id = $this->checkuser('user_shop');
     	    $paginate = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')
-                                    ->select('tbl_customer.customer_id as customer_id1', 'tbl_customer.*', 'tbl_customer_other_info.*', 'tbl_customer_other_info.customer_id as cus_id')
+                                    ->balanceJournal()
+                                    ->selectRaw('tbl_customer.customer_id as customer_id1, tbl_customer.*, tbl_customer_other_info.*, tbl_customer_other_info.customer_id as cus_id')
                                     ->where('tbl_customer.shop_id',$shop_id)
                                     ->where('tbl_customer.archived',$archived)
                                     ->where('tbl_customer.IsWalkin',$IsWalkin)
     								->orderBy('tbl_customer.first_name');
+
     		if($filter_by_slot == 'w_slot')
             {
                 $paginate = $paginate->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner','=', 'tbl_customer.customer_id');
@@ -515,8 +521,16 @@ class CustomerController extends Member
             $data['customer_info'] = Tbl_customer::leftjoin('tbl_customer_other_info','tbl_customer_other_info.customer_id','=','tbl_customer.customer_id')->where('tbl_customer.customer_id',$customer_id)->first();
             $data['customer_address'] = Tbl_customer_address::where('customer_id',$customer_id)->get();
             $data['message'] = 'success';
+            $data['id'] = $customer_id;
 
             $customer_data = Tbl_customer::where("customer_id",$customer_id)->first()->toArray();
+
+            /* TRANSACTION JOURNAL FOR OPENING BALANCE */
+            if($opening_balance > 0)
+            {
+                $this->create_opening_balance($customer_id, $opening_balance);
+            }
+
             AuditTrail::record_logs("Added","customer",$customer_id,"",serialize($customer_data));
 
         }
@@ -868,9 +882,51 @@ class CustomerController extends Member
 	
     public function view_customer_details($id)
     {
-        $data["customer"]       = Tbl_customer::info()->balance($this->checkuser('user_shop'), $id)->where("tbl_customer.customer_id", $id)->first();
+        $data["customer"]       = Tbl_customer::info()->balanceJournal()->where("tbl_customer.customer_id", $id)->first();
         $data["_transaction"]   = Tbl_customer::transaction($this->checkuser('user_shop'), $id)->get();
 
         return view('member.customer.customer_details', $data);
     }
+
+    public function create_opening_balance($customer_id, $amount)
+    {
+        $customer = Tbl_customer::where("customer_id", $customer_id)->first();
+        $customer_info                      = [];
+        $customer_info['customer_id']       = $customer->customer_id;
+        $customer_info['customer_email']    = $customer->email;
+
+        $invoice_info                       = [];
+        $invoice_info['invoice_terms_id']   = '';
+        $invoice_info['new_inv_id']         = '';
+        $invoice_info['invoice_date']       = datepicker_input(Carbon::now());
+        $invoice_info['invoice_due']        = datepicker_input(Carbon::now());
+        $invoice_info['billing_address']    = '';
+
+        $invoice_other_info                 = [];
+        $invoice_other_info['invoice_msg']  = '';
+        $invoice_other_info['invoice_memo'] = 'Opening Balance';
+
+        $total_info                         = [];
+        $total_info['ewt']                  = '';
+        $total_info['total_discount_type']  = '';
+        $total_info['total_discount_value'] = '';
+        $total_info['taxable']              = '';
+
+        $item_info                          = [];
+        $item_info[0]['item_service_date']  = '';
+        $item_info[0]['item_id']            = Item::getOtherChargeItem();
+        $item_info[0]['item_description']   = 'Opening Balance';
+        $item_info[0]['um']                 = '';
+        $item_info[0]['quantity']           = 1;
+        $item_info[0]['rate']               = $amount;
+        $item_info[0]['discount']           = '';
+        $item_info[0]['discount_remark']    = '';
+        $item_info[0]['amount']             = $amount;
+        $item_info[0]['taxable']            = '';
+        $item_info[0]['ref_name']           = '';
+        $item_info[0]['ref_id']             = '';
+
+        $inv_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+    }
+
 }

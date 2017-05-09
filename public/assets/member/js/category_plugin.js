@@ -12,10 +12,19 @@ function category_plugin()
 		is_sub_category_check_event();
 		select_parent_event();
 		outside_click_event();
-		submit_event();
 		search_keypress_event();
-	}
 
+		iniatilize_select();
+	}
+	function iniatilize_select()
+	{
+		$('.type_category').globalDropList(
+		{ 
+    		placeholder : "Select category type..",
+			width : '100%',
+    		hasPopup: "false",
+		});
+	}
 	/* TOGGLE ENABLE OF PARENT CATEGORY */
 	function is_sub_category_check_event()
 	{
@@ -33,7 +42,9 @@ function category_plugin()
 			else
 			{
 				// $(".parent_category").removeAttr("readonly");
+				$('.type_category').globalDropList("enabled");
 				$(".parent_category").attr("disabled",true);
+				$(".parent_category").val("");
 				$(".parent_category").removeAttr("required");
 			}
 		});
@@ -58,12 +69,18 @@ function category_plugin()
 			$(".parent_category-list").slideUp("fast");
 			var html = $(this).html();
 			var content = $(this).data("content");
+			var category_type = $(this).attr("category_type");
+			console.log(category_type);
+			event_change_category_type(category_type);
 
 			$(".parent_category").val(html);
 			$(".hidden_parent_category").val(content);
 		});
 	}
-
+	function event_change_category_type(category_type)
+	{
+		$('.type_category').val(category_type).change().globalDropList("disabled");
+	}
 	function search_keypress_event()
 	{
 		$(".parent_category").unbind("keyup");
@@ -77,7 +94,7 @@ function category_plugin()
 		$(".type_category").unbind("change");
 		$(".type_category").bind("change", function()
 		{
-			search_action($(".parent_category").val(), $(this).val());
+			// search_action($(".parent_category").val(), $(this).val());
 		});
 	}
 
@@ -93,38 +110,38 @@ function category_plugin()
 		});
 	}
 
-	function submit_event()
-	{
-		$("#modal-category-form").one("submit", function(e)
-		{
-			e.preventDefault();
-			var action = $(this).attr("action");
-			var method = $(this).attr("method");
-			var btn_html = $(".btn-save-submit").html();
-			$(".btn-save-submit").html(misc('spinner'));
+	// function submit_event()
+	// {
+	// 	$("#modal-category-form").one("submit", function(e)
+	// 	{
+	// 		e.preventDefault();
+	// 		var action = $(this).attr("action");
+	// 		var method = $(this).attr("method");
+	// 		var btn_html = $(".btn-save-submit").html();
+	// 		$(".btn-save-submit").html(misc('spinner'));
 
-			$.ajax({
-				url 	: 	action,
-				type 	: 	method,
-				data 	: 	$(this).serialize(),
-				success : 	function(result)
-				{
-        			// $("#global_modal").modal("hide");
-        			// $('.multiple_global_modal').modal('hide');
-					$(".btn-save-submit").html(btn_html);
-					if (typeof category_submit_done == 'function')
-		            {
-		                category_submit_done(result);
-		            }
-				},
-				error 	: 	function(error)
-				{	
-					$(".btn-save-submit").html(btn_html);
-					toastr.error("Error, something went wrong.");
-				}
-			});
-		});
-	}
+	// 		$.ajax({
+	// 			url 	: 	action,
+	// 			type 	: 	method,
+	// 			data 	: 	$(this).serialize(),
+	// 			success : 	function(result)
+	// 			{
+ //        			// $("#global_modal").modal("hide");
+ //        			// $('.multiple_global_modal').modal('hide');
+	// 				$(".btn-save-submit").html(btn_html);
+	// 				if (typeof category_submit_done == 'function')
+	// 	            {
+	// 	                category_submit_done(result);
+	// 	            }
+	// 			},
+	// 			error 	: 	function(error)
+	// 			{	
+	// 				$(".btn-save-submit").html(btn_html);
+	// 				toastr.error("Error, something went wrong.");
+	// 			}
+	// 		});
+	// 	});
+	// }
 
 
 	function search_action(search = '', type_category = '')

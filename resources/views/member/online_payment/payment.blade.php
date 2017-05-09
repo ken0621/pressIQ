@@ -42,8 +42,8 @@
 		    </div>
 		    <div class="tab-pane fade in active" id="method">
 		        <!-- FORM. GROUP -->
-		        <div class="form-box-divider">
-		            <div class="row clearfix">
+		        <div class="form-box-divider method-load-data">
+		            <div class="row clearfix method-data">
 		            	<div class="row col-md-2">
 			                <ul class="nav nav-tabs nav-stacked box-light">
 			                	@foreach($_method as $key=>$method)
@@ -72,7 +72,7 @@
 					                        <div class="col-md-8 text-center select-container ">
 					                        	<input type="hidden" class="link-reference-name" name="link_reference_name" value="{{$method->link_reference_name}}" required/>
 					                        	<div class="form-group">
-						                        	<select name="link_reference_id" class="form-control select-gateway" required>
+						                        	<select name="link_reference_id" class="form-control select-gateway" required>							                        		
 						                        		@include('member.load_ajax_data.load_payment_gateway', ['_gateway' => $method->gateway, 'reference_id' => $method->link_reference_id, 'reference_name' => $method->link_reference_name])
 						                        	</select>
 						                        </div>
@@ -109,14 +109,36 @@
 						            		<input type="hidden" name="gateway_code_name" class="form-control input-sm" value="{{$gateway->gateway_code_name}}">
 						            		<input type="hidden" name="api_gateway_id" class="form-control input-sm" value="{{$gateway->gateway_id}}">
 						            		@if($gateway->gateway_code_name != 'other')
-							            		<div class="form-group col-md-12">
-								                    <label>Client ID</label>
-								                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->client_id or ''}}">
-								                </div>
-								                <div class="form-group col-md-12">
-								                    <label>Secret ID</label>
-								                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->secret_id or ''}}">
-								                </div>
+<<<<<<< HEAD
+<<<<<<< HEAD
+						            			
+						            			@if($gateway->gateway_id == 6)
+
+						            				<div class="form-group col-md-12">
+=======
+						            			@if($gateway->gateway_code_name == "ipay-88")
+=======
+						            			@if($gateway->gateway_code_name == "ipay88")
+>>>>>>> 2a100b520f7baa7150171bb7a37ff657305734b2
+					            					<div class="form-group col-md-12">
+>>>>>>> 58fce8a06a64fab3e26b6a34740bd29a6b858be0
+									                    <label>Merchant Code</label>
+									                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->client_id or ''}}">
+									                </div>
+									                <div class="form-group col-md-12">
+									                    <label>Merchant Key</label>
+									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->secret_id or ''}}">
+									                </div>
+								                @else
+									                <div class="form-group col-md-12">
+									                    <label>Client ID</label>
+									                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->client_id or ''}}">
+									                </div>
+									                <div class="form-group col-md-12">
+									                    <label>Secret ID</label>
+									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->secret_id or ''}}">
+									                </div>
+								                @endif
 								                <div class="col-md-12">
 								            		<button type="submit" class="panel-buttons btn btn-custom-primary pull-right">save</button>
 								            	</div>

@@ -96,6 +96,11 @@ class Mlm_member
 		$data['slot'] = Tbl_mlm_slot::where('tbl_mlm_slot.slot_id', $slot_id)
 		->leftjoin('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id')
 		->first();
+        if($data['slot']->slot_id == null)
+        {
+            $data['slot'] = Tbl_mlm_slot::where('tbl_mlm_slot.slot_id', $slot_id)
+            ->first();
+        }
         $data['slot_info'] = Tbl_mlm_slot::where('tbl_mlm_slot.slot_id', $slot_id)->first();
         // dd($data);
         return view('mlm.pre.view_customer', $data);
@@ -288,6 +293,8 @@ class Mlm_member
         $insertSearch['body'] = $insert['title_name'].' '.$insert['first_name'].' '.$insert['middle_name'].' '.$insert['last_name'].' '.$insert['suffix_name'].' '.$insert['email'].' '.$insert['company'];
         Tbl_customer_search::insert($insertSearch);
 
+        $insertInfo['customer_phone'] = $info['customer_phone'];
+        $insertInfo['customer_mobile'] = $info['customer_mobile'];
         $insertInfo['customer_id'] = $customer_id;
         Tbl_customer_other_info::insert($insertInfo);
 

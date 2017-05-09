@@ -1,7 +1,8 @@
 @extends('member.layout')
 @section('content')
 <form class="global-submit form-to-submit-transfer" role="form" action="{{$action}}" method="POST" >
-    <input type="hidden" name="_token" value="{{csrf_token()}}" >
+    <input type="hidden" name="_token" value="{{csrf_token()}}">
+    <input type="hidden" name="sir_id" value="{{$sir_id or ''}}">
     <input type="hidden" name="credit_memo_id" value="{{Request::input('id')}}" >
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
@@ -15,6 +16,21 @@
                 </h1>
                 <a href="/member/customer/credit_memo/list" class="panel-buttons btn btn-custom-white pull-right">Cancel</a>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
+                @if(isset($cm))
+                <div class="pull-right">
+                    <div class="dropdown">
+                        <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <!-- <li class="dropdown-header">Dropdown header 1</li> -->
+                            <li><a href="/member/accounting/journal/entry/credit-memo/{{$cm->cm_id}}">Transaction Journal</a></li>
+                            <!-- <li class="divider"></li> -->
+                            <!-- <li class="dropdown-header">Dropdown header 2</li> -->
+                            <li><a href="#">Void</a></li>
+                        </ul>
+                    </div>
+                </div>
+                @endif 
             </div>
         </div>
     </div>
@@ -44,7 +60,7 @@
                     <div class="row clearfix">
                         <div class="col-sm-2">
                             <label>Date</label>
-                            <input type="text" class="datepicker form-control input-sm" name="cm_date" value="{{isset($cm->cm_date) ? $cm->cm_date : ''}}"/>
+                            <input type="text" class="datepicker form-control input-sm" name="cm_date" value="{{isset($cm->cm_date) ? $cm->cm_date : date('m/d/y')}}"/>
                         </div>
                     </div>
                     

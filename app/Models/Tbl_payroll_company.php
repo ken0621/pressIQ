@@ -39,6 +39,12 @@ class Tbl_payroll_company extends Model
         return $query;
     }
 
+    public function scopeselbycode($query, $shop_id = 0, $payroll_company_code = '')
+    {
+        $query->where('shop_id', $shop_id)->where('payroll_company_code', $payroll_company_code);
+        return $query;
+    }
+
     public function scopesellost($query, $shop_id = 0, $archived = 0)
     {
         $lost = 0;
@@ -52,6 +58,15 @@ class Tbl_payroll_company extends Model
              ->where('tbl_payroll_company.payroll_company_archived',$archived)
              ->where('parent.payroll_company_archived',$lost)
              ->select('tbl_payroll_company.*','parent.payroll_company_archived as parent_archived');
+
+        return $query;
+    }
+
+
+    public function scopegetbyperiod($query, $payroll_period_company_id = 0)
+    {
+        $query->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_company_id','=','tbl_payroll_company.payroll_company_id')
+              ->where('tbl_payroll_period_company.payroll_period_company_id', $payroll_period_company_id);
 
         return $query;
     }

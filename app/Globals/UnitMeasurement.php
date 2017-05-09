@@ -139,13 +139,11 @@ class UnitMeasurement
     public static function um_convert($qty, $um_base_id = "")
     {
         $um_base = Tbl_unit_measurement_multi::where("multi_um_id",$um_base_id)->where("is_base",1)->first();
-        if($um_base != null)
+        // dd($um_base);
+        $return = $qty." PC";
+        if($um_base)
         {
             $return = $qty." ".$um_base->multi_abbrev;
-        }
-        else
-        {
-            $return = $qty." PC";
         }
 
         return $return;

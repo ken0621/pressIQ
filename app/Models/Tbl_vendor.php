@@ -62,6 +62,12 @@ class Tbl_vendor extends Model
                     ->where("wc_ref_name","");
         if($vendor_id) $write_check->where("wc_vendor_id", $vendor_id);
 
+        /* DEBIT MEMO */
+        $debit_memo = DB::table("tbl_vendor")->selectRaw("db_date as date, 'Debit Memo' as type, db_id as no, '' as due_date, 0 as balance, db_amount as total, 'status' as status, date_created, 'vendor/debit_memo' as reference_url")
+                    ->join("tbl_debit_memo","db_vendor_id","=","vendor_id")
+                    ->where("db_shop_id", $shop_id);
+        if($vendor_id) $debit_memo->where("db_vendor_id", $vendor_id);
+
         /* JOURNAL ENTRY */
         $journal_entry = DB::table("tbl_journal_entry")->selectRaw("je_entry_date as date, 'Journal' as type, je_id as no,'' as due_date, 0 as balance, jline_amount as total, 'status' as status, tbl_journal_entry.created_at as date_created, 'accounting/journal' as reference_url")
                     ->leftJoin("tbl_journal_entry_line","jline_je_id","=","je_id")

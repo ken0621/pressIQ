@@ -1589,7 +1589,7 @@ class PayrollController extends Member
 	{
 		$trigger 			= Request::input('trigger');
 		$employee_search 	= Request::input('employee_search');
-		$data['_active'] = Tbl_payroll_employee_search::search($employee_search, $trigger)
+		$data['_active']    = Tbl_payroll_employee_search::search($employee_search, $trigger)
 											 ->orderBy("tbl_payroll_employee_basic.payroll_employee_first_name")
 											 ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
 											 ->get();
@@ -5280,12 +5280,17 @@ class PayrollController extends Member
                                         ->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
                                         ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
                                         ->get();
+          // dd($_record);
 
           foreach($_record as $record)
           {
 
                $compute = Payroll::getrecord_breakdown($record);
                $temp['break'] = Self::breakdown_uncompute($compute,'approved');
+               $temp['display_name'] = $record->payroll_employee_display_name;
+               $temp['company_name'] = $record->payroll_company_name;
+               $temp['company_address'] = $record->payroll_company_address;
+               $temp['company_logo'] = $record->payroll_company_logo;
                $temp['emp']   = Tbl_payroll_employee_contract::selemployee($record->payroll_employee_id, $period->payroll_period_start)
                                                             ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
                                                             ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
@@ -5293,7 +5298,7 @@ class PayrollController extends Member
                array_push($data['_record'], $temp);
           }
 
-          dd($data);
+          // dd($data);
           return view('member.payroll.payroll_payslip', $data);
      }
 

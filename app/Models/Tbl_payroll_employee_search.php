@@ -24,6 +24,9 @@ class Tbl_payroll_employee_search extends Model
 		}
 		$query->join('tbl_payroll_employee_basic','tbl_payroll_employee_basic.payroll_employee_id','=','tbl_payroll_employee_search.payroll_search_employee_id')
 			  ->join('tbl_payroll_employee_contract','tbl_payroll_employee_contract.payroll_employee_id','=','tbl_payroll_employee_search.payroll_search_employee_id')
+			  ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
+			  ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
+			  ->leftjoin('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
 			  ->whereRaw("MATCH(tbl_payroll_employee_search.body) AGAINST('*".$body."*' IN BOOLEAN MODE)")
 			  ->where(function($query1) use ($date, $status)
 			  {

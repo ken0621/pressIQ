@@ -31,7 +31,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 
 	Route::get('/blog', 'Shop\ShopBlogController@index');
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index');
-	Route::get('/checkout/login', 'Shop\ShopCheckoutLoginController@login');
+	Route::get('/checkout/login', 'Shop\ShopCheckoutLoginController@index');
 	Route::get('/checkout', 'Shop\ShopCheckoutController@index');
 	Route::post('/checkout', 'Shop\ShopCheckoutController@submit');
 	Route::get('/payment', 'Shop\ShopPaymentController@index');

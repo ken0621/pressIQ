@@ -5,6 +5,7 @@
                 <th class="text-left">Company Name</th>
                 <th class="text-left">Contact Person</th>
                 <th class="text-left">Contact Details</th>
+                <th class="text-center">Balance Total</th>
                 <th></th>
             </tr>
         </thead>

@@ -117,11 +117,6 @@ class Shop extends Controller
         $product_category = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         $global_cart = Cart::get_cart($this->shop_info->shop_id);
         $country = Tbl_country::get();
-
-        /* Set Email Configuration */
-        Settings::set_mail_setting($this->shop_info->shop_id);
-
-
         
         View::share("slot_now", Self::$slot_now);
         View::share("customer_info_a", Self::$customer_info);

@@ -7,7 +7,7 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Tablet &raquo; Credit Memo</span>
+                <span class="page-title">Credit Memo</span>
                 <small>
                     List of Customer CM
                 </small>

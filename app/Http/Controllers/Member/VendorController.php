@@ -322,6 +322,14 @@ class VendorController extends Member
         return json_encode($json);
     }
 
+    public function getVendorDetails($id)
+    {
+        $data["vendor"]       = Tbl_vendor::info()->balanceJournal()->where("vendor_id", $id)->first();
+        $data["_transaction"] = Tbl_vendor::transaction($this->getShopId(), $id)->get();
+
+        return view('member.vendor.vendor_details', $data);
+    }
+
     public function getTest()
     {
         dd(Vendor::getAllProduct());

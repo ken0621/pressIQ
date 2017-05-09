@@ -113,7 +113,8 @@ class ShopCheckoutController extends Shop
         {
               return Redirect::back()
                  ->withErrors($result['order_id']['status_message'])
-                 ->withInput();
+                 ->withInput()
+                 ->send();
         }
 
         $shop_id= $this->shop_info->shop_id;
@@ -130,7 +131,7 @@ class ShopCheckoutController extends Shop
 
         if ($exist_reference) 
         {
-            return Redirect::back()->with('fail', 'Some error occurred. Please try again.');
+            return Redirect::back()->with('fail', 'Some error occurred. Please try again.')->send();
         }
         else
         {
@@ -154,7 +155,7 @@ class ShopCheckoutController extends Shop
             Session::put('ipay88', $ipay88);
             Session::put('ipay88_order', $result);
 
-            return redirect('/postPaymentWithIPay88');    
+            return redirect('/postPaymentWithIPay88')->send();    
         }  
     }
     public function submit_using_proofofpayment($file, $cart)
@@ -185,7 +186,7 @@ class ShopCheckoutController extends Shop
             } 
             else 
             {
-               return Redirect::back()->with('fail', 'Image upload failed. Please try again.');
+               return Redirect::back()->with('fail', 'Image upload failed. Please try again.')->send();
             }
         }
 
@@ -194,12 +195,13 @@ class ShopCheckoutController extends Shop
         {
               return Redirect::back()
                  ->withErrors($result['order_id']['status_message'])
-                 ->withInput();
+                 ->withInput()
+                 ->send();
         }
 
         Cart::clear_all($this->shop_info->shop_id);
 
-        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
+        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
     }
     public function submit_using_paymaya()
     {
@@ -216,6 +218,7 @@ class ShopCheckoutController extends Shop
     public function submit_using_ewallet($cart)
     {
         $sum = $cart["sum"];
+        $get_cart = Cart::get_cart($this->shop_info->shop_id);
 
         if(Self::$slot_now != null)
         {
@@ -241,13 +244,14 @@ class ShopCheckoutController extends Shop
                 $send['errors'][0] = "Your wallet only have, " . number_format($check_wallet) . ' where the needed amount is ' . number_format($sum) ;
                 return Redirect::back()
                     ->withErrors($send)
-                    ->withInput();
+                    ->withInput()
+                    ->send();
             }
         }
         else
         {
             $send['errors'][0] = "Only members with slot can use the wallet option.";
-            return Redirect::back()->withErrors($send)->withInput();
+            return Redirect::back()->withErrors($send)->withInput()->send();
         }
 
         $result = Ec_order::create_ec_order_automatic($cart);
@@ -255,7 +259,8 @@ class ShopCheckoutController extends Shop
         {
               return Redirect::back()
                  ->withErrors($result['order_id']['status_message'])
-                 ->withInput();
+                 ->withInput()
+                 ->send();
         }
 
         if(Self::$slot_now != null)
@@ -274,7 +279,7 @@ class ShopCheckoutController extends Shop
      
         Cart::clear_all($this->shop_info->shop_id);
 
-        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
+        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
     }
     /* END PAYMENT GATEWAY */
 
@@ -410,7 +415,7 @@ class ShopCheckoutController extends Shop
         $stock = Cart::check_product_stock(Cart::get_cart($this->shop_info->shop_id));
         if ($stock["status"] == "fail") 
         {
-            return Redirect::back()->with('fail', $stock["error"]);
+            return Redirect::back()->with('fail', $stock["error"])->send();
         }
     }
     public function check_payment_method_enabled($cart)
@@ -423,7 +428,7 @@ class ShopCheckoutController extends Shop
 
         if (!$payment_method) 
         {
-            return Redirect::back()->with('fail', 'Invalid payment method. Please try again.');
+            return Redirect::back()->with('fail', 'Invalid payment method. Please try again.')->send();
         }
     }
     public function check_payment_method($cart)
@@ -650,4 +655,49 @@ class ShopCheckoutController extends Shop
         $data["page"] = "Checkout - Add to Cart";
         return view("addto_cart", $data);
     }
+<<<<<<< HEAD
+
+
+    /*Ipay88 Function*/
+    public function postPaymentWithIPay88()
+    {
+        $data = Session::get('data');
+        
+        $requestpayment = new RequestPayment( $data["merchantKey"]);
+        $this->_data = array(
+            'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
+            'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
+            'refNo'         => $requestpayment->setRefNo($data["refNo"]),
+            'amount'        => $requestpayment->setAmount($data["amount"]),
+            'currency'      => $requestpayment->setCurrency($data["currency"]),
+            'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
+            'userName'      => $requestpayment->setUserName($data["userName"]),
+            'userEmail'     => $requestpayment->setUserEmail($data["userEmail"]),
+            'userContact'   => $requestpayment->setUserContact($data["userContact"]),
+            'remark'        => $requestpayment->setRemark($data["remark"]),
+            'lang'          => $requestpayment->setLang($data["lang"]),
+            'signature'     => $requestpayment->getSignature(),
+            'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
+            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
+            );
+        /*dd($this->_data);*/
+        RequestPayment::make($data["merchantKey"], $this->_data);     
+    }
+
+    public function ipay88_response()
+    {
+        $request = Request::all();
+        /*dd($request['Status']);*/
+        if($request['Status'] == 0)
+        {
+            return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');    
+        } else {
+
+            dd('Success!');
+        }
+        
+    }
+    /*End Ipay88*/
+=======
+>>>>>>> 58fce8a06a64fab3e26b6a34740bd29a6b858be0
 }

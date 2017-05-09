@@ -1570,7 +1570,7 @@ class PayrollController extends Member
 		$query = Request::input('query');
 		$status = Request::input("status");
 		// dd($status);
-		$_return = Tbl_payroll_employee_search::search($query, $status)
+		$_return = Tbl_payroll_employee_search::search($query, $status, Self::shop_id())
 											 ->select('tbl_payroll_employee_basic.payroll_employee_display_name as employee')
 											 ->orderBy("tbl_payroll_employee_basic.payroll_employee_first_name")
 											 ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
@@ -1589,7 +1589,7 @@ class PayrollController extends Member
 	{
 		$trigger 			= Request::input('trigger');
 		$employee_search 	= Request::input('employee_search');
-		$data['_active']    = Tbl_payroll_employee_search::search($employee_search, $trigger)
+		$data['_active']    = Tbl_payroll_employee_search::search($employee_search, $trigger, Self::shop_id())
 											 ->orderBy("tbl_payroll_employee_basic.payroll_employee_first_name")
 											 ->groupBy('tbl_payroll_employee_basic.payroll_employee_id')
 											 ->get();

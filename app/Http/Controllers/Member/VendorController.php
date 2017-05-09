@@ -81,7 +81,7 @@ class VendorController extends Member
 	{
         if($this->hasAccess("vendor-list","access_page"))
         {
-            $data['_vendor'] = Tbl_vendor::info()->where('vendor_shop_id', $this->getShopId())
+            $data['_vendor'] = Tbl_vendor::info()->balanceJournal()->where('vendor_shop_id', $this->getShopId())
                                         ->orderBy('vendor_first_name')
                                         ->where("tbl_vendor.archived",0)
                                         ->paginate(5);

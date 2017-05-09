@@ -32,24 +32,33 @@
         <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab"><i class="fa fa-star"></i> Active Accounts</a></li>
         <!-- <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab"><i class="fa fa-trash"></i> Inactive Accounts</a></li> -->
     </ul>
-    
+    <div class="search-filter-box">
+            <div class="col-md-4 col-md-offset-8" style="padding: 10px">
+                <div class="input-group">
+                    <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
+                    <input type="text" class="form-control global-search" url="/member/accounting/chart_of_account" data-value="1" placeholder="Search" aria-describedby="basic-addon1">
+                </div>
+            </div>
+        </div>
     <div class="tab-content">
         <div class="tab-pane fade in active">
             <div class="form-group order-tags"></div>
-            <div class="table-responsive">
-                <table class="table table-hover table-compress;">
-                    <thead style="text-transform: uppercase">
-                        <tr>
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Balance Total</th>
-                            <th class="text-center"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                            @include('member.accounting.load_chart_account')
-                    </tbody>
-                </table>
+            <div class="table-responsive load-data" target="coa_data">
+                <div id="coa_data">
+                    <table class="table table-hover table-compress;">
+                        <thead style="text-transform: uppercase">
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Balance Total</th>
+                                <th class="text-center"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                @include('member.accounting.load_chart_account')
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

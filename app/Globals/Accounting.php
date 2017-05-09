@@ -32,9 +32,9 @@ class Accounting
 	 * @param string  	$filter 	(all, active, inactive)
 	 * @param integer  	$parent_id  Id of the Chart of Accoutn where will it start
 	 * @param array  	$type      	Filter of type of Chart of Account (eg: Accounts Payable)
-	 * @param boolean  	$balance    If it will show total balance of each account (true, false) (CURRENTLY NOT WORKING)
+	 * @param boolean  	$balance    If it will show total balance of each account (true, false) (always true)
 	 */
-	public static function getAllAccount($filter = 'all', $parent_id = null, $type = null, $balance = false)
+	public static function getAllAccount($filter = 'all', $parent_id = null, $type = null, $search = null, $balance = false)
 	{
 		$shop = Accounting::getShopId();
 
@@ -48,11 +48,11 @@ class Accounting
 			$parent_id 	= null;
 		}
 
-		$result = Accounting::checkAccount($shop, $parent_id, $sublevel, $filter, $type);
-		//dd($result);
+		$result = Accounting::checkAccount($shop, $parent_id, $sublevel, $filter, $type, $search);
+
 		return $result;
 	}
-	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type)
+	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type, $search)
 	{
 		$query = Tbl_chart_of_account::accountInfo($shop)->balance()->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel);
 
@@ -67,7 +67,8 @@ class Accounting
 		}
 
 		if($type != null) $query->whereIn("chart_type_name", $type);
-		
+		if($search != null) $query->where("account_name","like","%".$search."%");
+
 		$query = $query->get();
 
 		foreach($query as $key => $item)
@@ -83,7 +84,7 @@ class Accounting
 			
 			if($sub_query)
 			{
-				$result[$key]["sub_account"] = Accounting::checkAccount($shop, $item->account_id, $sublevel + 1, $filter, $type);
+				$result[$key]["sub_account"] = Accounting::checkAccount($shop, $item->account_id, $sublevel + 1, $filter, $type, $search);
 			}
 			else
 			{

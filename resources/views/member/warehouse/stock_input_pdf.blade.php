@@ -5,7 +5,7 @@
 </div>
 <br>
 <div class="text-center">
-	<h3>STOCK INPUT</h3>
+	<h3>{{$report_title}}</h3>
 </div>
 
 <div class="form-group">
@@ -18,7 +18,7 @@
 </div>
 <br>
 <div>
-	<div>Supplier: {{$slip->vendor_company != null ? strtoupper($slip->vendor_company) : strtoupper($slip->vendor_first_name." ".$slip->vendor_middle_name." ".$slip->vendor_last_name)}}</div>
+	<div class="{{isset($slip->vendor_id)? '' : '' }}">{{$slip->vendor_id == '' ? '' : 'Supplier:' }} {{$slip->vendor_company != null ? strtoupper($slip->vendor_company) : strtoupper($slip->vendor_first_name." ".$slip->vendor_middle_name." ".$slip->vendor_last_name)}}</div>
 	<div>Date: {{dateFormat($slip->inventory_slip_date)}}</div>
 </div>
 <br>
@@ -83,18 +83,30 @@
 			<tr>
 				<td style="padding: 20px" colspan="2">
 					<div>Prepared By:</div><br><br>
+					@if($slip->user_first_name != "")
 					<div style="border-bottom: 1px solid #000;width: 50%">{{$slip->user_first_name." ".$slip->user_last_name}}</div>
+					@else
+					<div style="border-bottom: 1px solid #000;width: 50%;color: #fff">_______________</div>
+					@endif
 				</td>
-				<td style="padding: 20px" colspan="4">
+				<td style="padding: 20px" colspan="2">
 					<div>Checked By:</div><br><br>
-					<div style="border-bottom: 1px solid #000;width: 50%;color: #fff">INVISIBLE NAME</div>
+					<div style="border-bottom: 1px solid #000;width: 50%;color: #fff">_______________</div>
+				</td>
+				<td style="padding: 20px" colspan="2">
+					<div>Printed By:</div><br><br>
+					<div style="border-bottom: 1px solid #000;width: 50%">{{$current_user->user_first_name." ".$current_user->user_last_name}}</div>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="4" class="text-right">
+				</td>
+				<td style="padding-left: 20px" colspan="2">
+					{{date("F d, Y")}}
 				</td>
 			</tr>
 		</tbody>
 	</table>
-</div>
-<div>
-	
 </div>
 
 

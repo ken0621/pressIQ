@@ -1,5 +1,44 @@
-@extends('member.layout')
+    @extends('member.layout')
 @section('content')
+
+@if(isset($pis) && $pis != 0)
+<div class="row">
+   <div class="form-group">
+        <div class="col-md-12 text-center">
+            <h2>{{$shop_name or ''}}</h2>
+        </div>
+    </div>
+</div>
+<div class="reports-class">
+    <div class="row cleafix">
+        <div class="col-md-3">
+            <a href="/member/vendor/purchase_order/list" class="btn-class po-class"> 
+                <span><strong>{{$po_amount or 0}}</strong></span><br>
+                <span>{{$count_po or 0}} Purchase Orders</span>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a href="/member/customer/invoice_list" class="btn-class ar-class">
+                <span><strong>{{$ar_amount or 0}}</strong></span><br>
+                <span>{{$count_ar or 0}} Account Receivable</span>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <div class="btn-class ap-class">
+                <span><strong>{{$ap_amount or 0}}</strong></span><br>
+                <span>{{$count_ap or 0}} Account Payables</span>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="btn-class sales-class">
+                <span><strong>{{$sales_amount or 0}}</strong></span><br>
+                <span>Total Sales</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@else
 <div class="row">
     <div class="col-md-12 text-center">
         <h3>Welcome to Digima House</h3>
@@ -80,9 +119,11 @@
     </div> -->
 </div>
 
+@endif
 
 @endsection
 @section('css')
+<link rel="stylesheet" type="text/css" href="/assets/member/css/btn_dashboard.css">
 <link rel="stylesheet" type="text/css" href="/assets/member/css/dashboard.css">
 @endsection
 @section('script')
@@ -94,5 +135,6 @@
         toastr.error('{{Session::get('error')}}');
     @endif
 
+    $('.btn-class').matchHeight();
 </script>
 @endsection

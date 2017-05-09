@@ -139,6 +139,14 @@
 
               </a>
 
+              <a href="/events" class="nabigation">
+
+                <div class="nabigation-hover"></div>
+
+                <div class="nabigation-text">EVENTS</div>
+
+              </a>
+
             </div>
 
 
@@ -350,7 +358,7 @@
 
                   <div class="form-group">
 
-                    <input type="text" name="search-pokus" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
+                    <input type="text" name="search" autocomplete="off" id="search-pokus" class="form-control search-input" placeholder="Search...">
 
                   </div>
 
@@ -390,23 +398,21 @@
           <span><img src="/resources/assets/frontend/img/loader.gif"></span>
         </div>
 
-        <div class="content">
+        <div class="content clearfix">
 
             @yield('content')
 
         </div>
 
-        @if(isset($ads))
-
-          @if($ads->ads_active == 1 && $ads->ads_position == 1)
+        @if(get_content($shop_theme_info, 'info', 'footer_ads'))
 
             <div class="footer-add">
 
               <div class="footer-add-wrapper">
 
-                <a href="{{$ads->ads_link}}" target="_blank">
+                <a href="{{ get_content($shop_theme_info, 'info', 'footer_ads_link') }}" target="_blank">
 
-                  <img src="{{$ads_image}}"></img>
+                  <img src="{{ get_content($shop_theme_info, 'info', 'footer_ads') }}">
 
                 </a>
 
@@ -415,8 +421,6 @@
               </div>
 
             </div>
-
-          @endif
 
         @endif
 

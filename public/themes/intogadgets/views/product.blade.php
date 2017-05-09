@@ -1,10 +1,10 @@
 @extends('layout')
 @section('content')
 
-@if(isset($image))
+@if(get_content($shop_theme_info, 'product', 'product_banner') && get_content($shop_theme_info, 'product', 'product_banner_link'))
 <div class="aadd">
-    <a href="{{$image->ads_link}}" target="_blank">
-        <img src="{{$image->url}}" style="" >
+    <a href="{{ get_content($shop_theme_info, 'product', 'product_banner') }}" target="_blank">
+        <img src="{{ get_content($shop_theme_info, 'product', 'product_banner_link') }}" style="" >
     </a>
 </div>
 @endif
@@ -80,7 +80,7 @@
         </div>
         <div class="holder sshide">
             <div class="title text-left">Most Viewed</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
+            @foreach(get_collection(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['eprod_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">
@@ -91,6 +91,20 @@
                     </div>
                 </a>    
             @endforeach 
+        </div>
+        <div class="holder sshide">
+            <div class="title text-left">Most Searched Products</div>
+            @foreach($_most_searched as $most_searched)
+                <a href="/product/view/{{ $most_searched['eprod_id'] }}" class="text">
+                    <div class="product-top">
+                        <div class="text">
+                            <div class="name">{{ get_product_first_name($most_searched) }}</div>
+                            <div class="price">{{ get_product_first_price($most_searched) }}</div>
+                        </div>
+                        <div class="img"><img class="4-3-ratio" src="{{ get_product_first_image($most_searched) }}"></div>
+                    </div>
+                </a>    
+            @endforeach
         </div>
     </form>
 </div>
@@ -142,8 +156,8 @@
                         <div class="description">{!! get_product_first_description($product) !!}</div>
                     </div>
                     <div class="cart">
-                        <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div>
-                        <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div>
+                        <!-- <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div> -->
+                        <!-- <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div> -->
                         <button class="button" onclick="location.href='product/'">View Info</button>
                     </div>
                 </div>
@@ -173,7 +187,7 @@
         </div>
         <div class="holder">
             <div class="title text-left">Most Viewed</div>
-            @foreach(get_collection(get_content($shop_theme_info, "product", "top_rated_products"), $shop_id) as $collection)
+            @foreach(get_collection(get_content($shop_theme_info, "product", "most_viewed"), $shop_id) as $collection)
                 <a href="/product/view/{{ $collection['eprod_id'] }}" class="text">
                     <div class="product-top">
                         <div class="text">

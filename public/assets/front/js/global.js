@@ -36,10 +36,21 @@ function global()
     }
     function window_load()
     {
-        $('.loader').fadeOut();
+        $('.loader').fadeOut('400', function() 
+        {
+            if (typeof action_after_load == 'function') 
+            {
+                action_after_load();    
+            }
+        });
+
         image_crop(".4-3-ratio", 4, 3);
         image_crop(".ratio-fix img", 396, 241);
-        image_crop(".category-ratio img", 500, 342.5);
+        image_crop(".category-ratio .1", 100, 51.5);
+        image_crop(".category-ratio .2", 100, 77.5);
+        image_crop(".category-ratio .3", 100, 89.5);
+        image_crop(".category-ratio .4", 100, 89.5);
+        image_crop(".category-ratio .5", 100, 89.5);
         image_crop(".brand img", 200, 125);
     }
 }
@@ -161,33 +172,33 @@ function add_search_events()
                             var price = data[index]['min_price'] + ' - ' + data[index]['max_price'];
                         }
 
-                        $append += '<div class="search-popup-holder">' +
+                        $append += 
+                                    '<div class="search-popup-holder">' +
                                         '<a href="/product/view/'+data[index]['eprod_id']+'">'+
-                                        '<div class="search-popup-img">'+
-                                          '<img src="">' +
-                                        '</div>'+
-                                        '<div class="search-popup-text">' +
-                                          '<div class="search-popup-name">' +
-                                           data[index]['eprod_name'] +
-                                         '</div>'+
-                                         '<div class="search-popup-description">'+
-                                          '<div class="price">'+
-                                              price
-                                          '</div>' +
-                                          '<div class="search-popup-rate">' +
-                                            '' +
-                                          '</div>' +
-                                         '</div>'+
-                                        '</div>'+
-                                        '</div>'+
+                                            '<div class="search-popup-img">'+
+                                                '<img style="width: 100%; object-fit: cover; height: 80px;" src="'+data[index]['variant'][0]['item_img']+'">' +
+                                            '</div>'+
+                                            '<div class="search-popup-text">' +
+                                                '<div class="search-popup-name">' +
+                                                    data[index]['eprod_name'] +
+                                                '</div>'+
+                                                '<div class="search-popup-description">'+
+                                                    '<div class="price">'+
+                                                       '&#8369 ' + parseFloat(price).toFixed(2) +
+                                                    '</div>' +
+                                                    '<div class="search-popup-rate">' +
+                                                        '' +
+                                                    '</div>' +
+                                                '</div>' +
+                                            '</div>' +
                                         '</a>'+
-                                      '</div>';
+                                    '</div>';
 
                         if(ctr==3)
                         {
                             $append += '<div class="search-popup-holder">' +
                                         '<div class="see-all-results">'+
-                                            '<a href="/product?search-pokus='+$(".search-input").val()+'">View more results</a>'+
+                                            '<a href="/product?search='+$(".search-input").val()+'">View more results</a>'+
                                         '</div>'+
                                    '</div>';
                             

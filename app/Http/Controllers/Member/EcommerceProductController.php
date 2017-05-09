@@ -74,7 +74,7 @@ class EcommerceProductController extends Member
 			}
 
 			$active_product 	= $active_product->paginate(10);
-			$inactive_product 	= $inactive_product->paginate(1);
+			$inactive_product 	= $inactive_product->paginate(10);
 
 	        $data["_product"]			= $active_product;
 	        $data["_product_archived"]	= $inactive_product;
@@ -671,9 +671,16 @@ class EcommerceProductController extends Member
 		}
 		$exist_variant 	= Tbl_ec_product::Variant(" • ")->where("eprod_id", $product_id)->where("evariant_id","<>",$variant_id)->where("eprod_shop_id", $this->getShopId())->first();
 
-		if(strtolower($exist_variant->variant_name) == strtolower($option_value))
+		if($exist_variant)
 		{
-			return $option_value;
+			if(strtolower($exist_variant->variant_name) == strtolower($option_value))
+			{
+				return $option_value;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		else
 		{
@@ -809,12 +816,21 @@ class EcommerceProductController extends Member
 
 	public function getBulkEditPrice()
 	{
-		$data["_product"] = Tbl_ec_product::variant()->where("tbl_ec_product.archived",0)->get()->toArray();
+		$data["_product"] = Tbl_ec_product::variant()->item()->itemDiscount()->where("tbl_ec_product.archived",0)->where("eprod_shop_id", $this->getShopId());
+
+		$search = Request::input('search');
+		if($search)
+		{
+			$data["_product"] = $data["_product"]->havingRaw("concat(eprod_name, IFNULL(variant_name, '')) like '%$search%'");
+		}
+
+		$data["_product"] = $data["_product"]->get()->toArray();
 		
 		foreach($data["_product"] as $key1=>$product)
 		{
 			$data["_product"][$key1]["product_new_name"] = $product["eprod_name"] . ($product["variant_name"] ? ' : '.$product["variant_name"] : '');
 		}
+
 		return view('member.ecommerce_product.ecom_bulk_edit_price', $data);
 	}
 
@@ -822,10 +838,33 @@ class EcommerceProductController extends Member
 	{
 		$evariant_new_price = Request::input('evariant_new_price');
 		$evariant_id 		= Request::input('evariant_id');
+		$promo_price 		= Request::input('item_promo_price');
+		$start_date 		= Request::input('item_start_date');
+		$end_date 			= Request::input('item_end_date');
 
-		foreach($evariant_new_price as $new_price)
+		foreach($evariant_new_price as $key=>$new_price)
 		{
+			if($new_price > 0)
+			{
+				Tbl_ec_variant::where("evariant_id", $evariant_id[$key])->update(['evariant_price' => $new_price]);
+			}
 
+			if($promo_price[$key] != ''	)
+			{
+				$item_id = Tbl_ec_variant::item()->where("evariant_id", $evariant_id[$key])->pluck("item_id");
+
+				$item_info['item_id']					= $item_id;
+				$item_info['item_discount_value']		= $promo_price[$key];
+				$item_info['item_discount_date_start']	= $start_date[$key];
+				$item_info['item_discount_date_end']	= $end_date[$key];
+				Item::insert_item_discount($item_info);
+			}
 		}
+
+		Request::session()->flash('success', 'Product Price Successfully updated');
+
+		$json["status"] 	= "success";
+		$json["message"]	= "Product Price Successfully updated";
+		return json_encode($json);
 	}
 }

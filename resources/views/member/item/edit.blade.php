@@ -18,7 +18,7 @@
             <div class="col-md-12">
                 
                     <input type="hidden" name="_token" value="{{csrf_token()}}">
-                    <input type="hidden" name="item_id" value="{{$item_id}}">
+                    <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                     <div class="form-group">
                         <div class="col-md-8">
                             <label>Name *</label>
@@ -66,7 +66,7 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Unit of Measure</label>
-                            <select class="form-control input-sm measure_container drop-down-um" name="item_measurement_id">
+                            <select class="form-control input-sm measure_container drop-down-um" add="add" name="item_measurement_id">
                                 @include("member.load_ajax_data.load_unit_measurement", ['um_id' => $data["item_measurement_id"]])
                             </select>
                         </div>
@@ -76,19 +76,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label>Manufacturer</label>
                             <select class="form-control input-sm drop-down-manufacturer" name="item_manufacturer_id">
                                 @include("member.load_ajax_data.load_manufacturer", ['manufacturer_id' => $data["item_manufacturer_id"]])
                             </select>
                         </div>
-                        <div class="col-md-4">
-                            <label>Vendor</label>
-                            <select class="form-control input-sm drop-down-vendor" name="item_vendor_id">
-                                @include('member.load_ajax_data.load_vendor', ['vendor_id' => $data["item_vendor_id"]] )
-                            </select>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label>Inventory Asset Account *</label>
                             <select name="item_asset_account_id" class="drop-down-coa form-control" id="item_asset_account_id" required>
                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_asset, 'account_id' => $data['item_asset_account_id']])
@@ -151,7 +145,7 @@
                             <label>Cost *</label>
                             <div class="row">
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
+                                    <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
                                 </div>
                                 <div class="col-md-4">
                                     per <span class="abbreviation"></span>
@@ -183,7 +177,7 @@
     <div class="modal-body clearfix modallarge-body-layout background-white form-horizontal noninventory_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'noninventory_type' ? '' : 'display:none;') : 'display:none;'}}">
             <div class="col-md-12">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
-                <input type="hidden" name="item_id" value="{{$item_id}}">
+                <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                 <div class="form-group">
                         <div class="col-md-8">
                             <label>Name *</label>
@@ -287,7 +281,7 @@
     <div class="modal-body clearfix modallarge-body-layout background-white form-horizontal service_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'service_type' ? '' : 'display:none;') : 'display:none;'}}">
             <div class="col-md-12">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
-                <input type="hidden" name="item_id" value="{{$item_id}}">
+                <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                  <div class="form-group">
                         <div class="col-md-8">
                             <label>Name *</label>
@@ -386,7 +380,7 @@
 <form action="/member/item/edit_submit?item_type=bundle" class="global-submit form_four" method="post" type_of_item="bundle_type">
     <div class="clearfix modal-body modallarge-body-layout background-white bundle_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'bundle_type' ? '' : 'display:none;') : 'display:none;'}}">
         <input type="hidden" name="_token" value="{{csrf_token()}}">
-        <input type="hidden" name="item_id" value="{{$item_id}}">
+        <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
         <!-- BUNDLE -->
         <div class="form-horizontal">
             <div class="clearfix col-md-12">
@@ -465,7 +459,11 @@
                                     </td>
                                     <td>
                                         <select class="form-control drop-down-um select-um input-sm pull-left" name="bundle_um_id[]">
-                                            <option value=""></option> 
+                                            @if($bundle['bundle_um_id'])
+                                                @include("member.load_ajax_data.load_one_unit_measure", ['_um' => $_um_multi, 'item_um_id' => $bundle['multi_um_id'], 'selected_um_id' => $bundle['bundle_um_id']])
+                                            @else
+                                                <option class="hidden" value="" />
+                                            @endif
                                         </select>
                                     </td>   
                                     <td><input class="text-center form-control input-sm" type="text" name="bundle_qty[]" value="{{ $bundle['bundle_qty'] }}" /></td>
@@ -495,7 +493,7 @@
                 </select>
             </td>
             <td>
-                <select class="form-control select-um input-sm pull-left" name="bundle_um_id[]">
+                <select class="form-control select-um-one input-sm pull-left" name="bundle_um_id[]">
                     <option value=""></option> 
                 </select>
             </td>   

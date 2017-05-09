@@ -36,12 +36,14 @@ class MLM_CardController extends Member
         $ret = null;
         if($membership_id == 1)
         {
+        	$slot_card_printed = Request::input('card_status');
             $card_info = Tbl_mlm_discount_card_log::membership()
-            ->whereNotNull('tbl_mlm_discount_card_log.discount_card_customer_holder')
-            ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
-            ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
-            ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
-            ->where('tbl_customer_address.purpose', 'billing')
+            // ->whereNotNull('tbl_mlm_discount_card_log.discount_card_customer_holder')
+            ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_sponsor')
+            // ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+            // ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+            // ->where('tbl_customer_address.purpose', 'billing')
+            ->where('discount_card_log_issued', $slot_card_printed)
             ->get();
             foreach ($card_info as $key => $value) {
                 # code...
@@ -117,4 +119,43 @@ class MLM_CardController extends Member
 
         return json_encode($data);
     }
+    public function done_discount()
+    {
+    	$discount_card_log_id = Request::input('discount_card_log_id');
+        $update['discount_card_log_issued'] = 1;
+        $update['discount_card_log_issued_date'] = Carbon::now();
+        Tbl_mlm_discount_card_log::where('discount_card_log_id', $discount_card_log_id)->update($update);
+
+        $data['status'] = 'success_done';
+
+        return json_encode($data);
+    }
+	public function pending_discount()
+	{
+		$discount_card_log_id = Request::input('discount_card_log_id');
+        $update['discount_card_log_issued'] = 0;
+        $update['discount_card_log_issued_date'] = Carbon::now();
+        Tbl_mlm_discount_card_log::where('discount_card_log_id', $discount_card_log_id)->update($update);
+
+        $data['status'] = 'success_done';
+
+        return json_encode($data);
+	}
+	public function generate_discount($discount_card_log_id)
+	{
+		$shop_id = $this->getShop_Id();
+
+		$card = Tbl_mlm_discount_card_log::membership()
+            // ->whereNotNull('tbl_mlm_discount_card_log.discount_card_customer_holder')
+            // ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+            // ->leftjoin('tbl_customer_other_info', 'tbl_customer_other_info.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+            // ->leftjoin('tbl_customer_address', 'tbl_customer_address.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_holder')
+            // ->where('tbl_customer_address.purpose', 'billing')
+            ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_discount_card_log.discount_card_customer_sponsor')
+            ->where('discount_card_log_id', $discount_card_log_id)
+            ->first();
+        $card = Cards::discount_card($card);
+        //return $card;
+        return Pdf_global::show_image($card);
+	}
 }

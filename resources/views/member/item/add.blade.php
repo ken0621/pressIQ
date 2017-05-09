@@ -32,7 +32,9 @@
                         <div class="col-md-8">
                             <label>Name *</label>
                             <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
-                            <textarea required class="form-control input-sm" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                            <textarea required class="form-control input-sm" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea><br>
+                            <label>Sales information</label>
+                            <textarea class="form-control input-sm" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>
                         </div>
                         <div class="col-md-4 text-center">
                             <input type="hidden" name="item_img" class="image-value" key="1" required>
@@ -57,23 +59,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-md-4">
-                            <label>Initial quantity on hand *</label>
-                            <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" required>
-                        </div>                     
-                        <div class="col-md-4">
-                            <label>Reorder Point </label>
-                            <input type="text" class="form-control input-sm" id="item_reorder_point" value="{{isset($data['item_reorder_point']) ? $data['item_reorder_point'] : ''}}" name="item_reorder_point" >
-                        </div> 
-                        <div class="col-md-4">
-                            <label>As of date</label>
-                            <input type="text" class="form-control input-sm datepicker" id="item_date_tracked" name="item_date_tracked" value="{{isset($data['item_date_tracked']) ? $data['item_date_tracked'] : ''}}" >
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <div class="col-md-6">
                             <label>Unit of Measure</label>
-                            <select class="form-control input-sm measure_container drop-down-um" name="item_measurement_id">
+                            <select class="form-control input-sm measure_container drop-down-um" add="add" name="item_measurement_id">
                                 @include("member.load_ajax_data.load_unit_measurement")
                             </select>
                         </div>
@@ -84,29 +72,31 @@
                     </div>
                     <div class="form-group">
                         <div class="col-md-4">
+                            <label>Initial quantity on hand *</label>
+                            <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" required>
+                        </div>                     
+                        <div class="col-md-4">
+                            <label>Reorder Point </label>
+                            <input type="text" class="form-control input-sm" id="item_reorder_point" value="{{isset($data['item_reorder_point']) ? $data['item_reorder_point'] : ''}}" name="item_reorder_point" >
+                        </div> 
+                        <div class="col-md-4">
+                            <label>As of date</label>
+                            <input type="text" class="form-control input-sm datepicker" id="item_date_tracked" name="item_date_tracked" value="{{date('m/d/y')}}" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
                             <label>Manufacturer</label>
                             <select class="form-control input-sm drop-down-manufacturer" name="item_manufacturer_id">
                                 @include("member.load_ajax_data.load_manufacturer")
                             </select>
                         </div>
-                        <div class="col-md-4">
-                            <label>Vendor</label>
-                            <select class="form-control input-sm drop-down-vendor" name="item_vendor_id">
-                                @include('member.load_ajax_data.load_vendor')
-                            </select>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <label>Inventory Asset Account *</label>
                             <select name="item_asset_account_id" class="drop-down-coa form-control" required id="item_asset_account_id">
                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_asset])
                             </select>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-12">
-                            <label>Sales information</label>
-                            <textarea class="form-control input-sm" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>
-                        </div> 
                     </div>
                     <div class="form-group">
                         <div class="col-md-6">
@@ -155,7 +145,7 @@
                             <div class="row">
                                 <div>
                                     <div class="col-md-8">    
-                                       <input type="text" class="form-control input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
+                                       <input type="text" class="form-control number-input input-sm" id="item_cost" value="{{isset($data['item_cost']) ? $data['item_cost'] : ''}}" name="item_cost" required>
                                     </div>
                                     <div class="col-md-4">
                                         per <span class="abbreviation"></span>
@@ -195,7 +185,7 @@
                         <div class="col-md-8">
                             <label>Name *</label>
                             <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
-                            <textarea required class="form-control" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                            <textarea required class="form-control" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea><br>
                         </div>
                         <div class="col-md-4 text-center">
                             <input type="hidden" name="item_img" class="image-value" key="2" required>
@@ -309,7 +299,7 @@
                     </div>
                     <div class="col-md-4">
                         <label>Unit of Measure</label>
-                            <select class="form-control input-sm measure_container3 drop-down-um" name="item_measurement_id">
+                            <select class="form-control input-sm measure_container3 drop-down-um"name="item_measurement_id">
                                 @include("member.load_ajax_data.load_unit_measurement")
                             </select>
                     </div>
@@ -459,7 +449,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <select class="form-control drop-down-um select-um input-sm pull-left" name="bundle_um_id[]">
+                                    <select class="form-control drop-down-um-one select-um-one input-sm pull-left" name="bundle_um_id[]">
                                         <option value=""></option> 
                                     </select>
                                 </td>   
@@ -488,7 +478,7 @@
                 </select>
             </td>
             <td>
-                <select class="form-control select-um input-sm pull-left" name="bundle_um_id[]">
+                <select class="form-control select-um-one input-sm pull-left" name="bundle_um_id[]">
                     <option value=""></option> 
                 </select>
             </td>   

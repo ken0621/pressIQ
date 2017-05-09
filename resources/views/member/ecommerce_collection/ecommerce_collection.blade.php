@@ -100,6 +100,7 @@
     <button type="button" class="btn btn-custom-white" data-dismiss="modal">Cancel</button>
     <button class="btn btn-custom-primary btn-save-modallarge" type="submit" data-url="">Save Collection</button>
 </div>
+</form>
 <div class="div-script">
     <table class="div-item-row-script hide">
         <tr class="tr-draggable">
@@ -116,6 +117,5 @@
         </tr>
     </table>
 </div>
-</form>
 <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 <script type="text/javascript" src="/assets/member/js/e_commerce/collection.js"></script>

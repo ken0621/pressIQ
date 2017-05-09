@@ -31,6 +31,7 @@
                                         <tr>
                                             <th style="width: 30px;"> # </th>
                                             <th style="width: 15px;" class="text-center">Serial Number</th>
+                                            <th style="width: 15px;" class="text-center"></th>
                                             <th style="width: 15px;" class="text-center">Sold</th>
                                         </tr>
                                     </thead>
@@ -38,7 +39,14 @@
                                     @foreach($_item_serial as $serial)
                                         <tr>
                                             <td>{{$serial->serial_id}}</td>
-                                            <td class="text-center">{{$serial->serial_number}}</td>
+                                            <td class="text-center">
+                                                <span class="lbl-serial-{{$serial->serial_id}}">{{$serial->serial_number}} </span>
+                                                <input type="text" class="form-control txt-serial-{{$serial->serial_id}} hidden" value="{{$serial->serial_number}}" name="serial_edit">
+                                            </td>
+                                            <td class="text-center">
+                                                <i class="fa fa-edit fa-2x btn-edit-{{$serial->serial_id}}" onclick="view_edit({{$serial->serial_id}})"></i>
+                                                <i class="fa fa-floppy-o fa-2x btn-save-{{$serial->serial_id}} hidden" onclick="save_edit({{$serial->serial_id}})"></i>
+                                            </td>
                                             <td class="text-center"><input type="checkbox" name="sold_serial"></td>
                                         </tr>
                                     @endforeach
@@ -57,6 +65,43 @@
     <button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
 </div>
 <script type="text/javascript">
+    function view_edit(id)
+    {
+        $(".lbl-serial-"+id).addClass("hidden");
+        $(".txt-serial-"+id).removeClass("hidden");
+        $(".btn-save-"+id).removeClass("hidden");
+        $(".btn-edit-"+id).addClass("hidden");
+    }
+    function save_edit(id)
+    {
+        $(".modal-loader").removeClass("hidden");
+        var serial = $(".txt-serial-"+id).val();
+        $.ajax({
+            url : "/member/item/save_serial",
+            type : "get",
+            data : {id : id , serial : $(".txt-serial-"+id).val()},
+            success : function(data)
+            {
+                data = $.parseJSON(data);
+                if(data.status == "success")
+                {
+                    toastr.success("Success");
+                    $(".lbl-serial-"+id).html(serial);
+                    $(".lbl-serial-"+id).removeClass("hidden");
+                    $(".btn-edit-"+id).removeClass("hidden");
+                    $(".btn-save-"+id).addClass("hidden");
+                    $(".txt-serial-"+id).addClass("hidden");
+                    $(".modal-loader").addClass("hidden");
+                }
+                else if(data.status == "error")
+                {
+                    toastr.warning(data.status_message);
+                    $(".modal-loader").addClass("hidden");
+                }
+            }
+        })
+    }
+
     $('#search_txt').keyup(function()
     {
         searchTable($(this).val());

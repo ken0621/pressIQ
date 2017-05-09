@@ -142,6 +142,7 @@ Route::any('/member/mlm/wallet/adjust/submit', 'Member\Mlm_WalletController@adju
 Route::any('/member/mlm/wallet/breakdown/{slot_id}', 'Member\Mlm_WalletController@breakdown_wallet');//luke
 Route::any('/member/mlm/wallet/refill', 'Member\Mlm_WalletController@refill');//luke
 Route::any('/member/mlm/wallet/refill/{id}', 'Member\Mlm_WalletController@refill_id');//luke
+Route::any('/member/mlm/wallet/refill/change/attachment', 'Member\Mlm_WalletController@refill_change');//luke
 Route::any('/member/mlm/wallet/refill/process/submit', 'Member\Mlm_WalletController@refill_process');//luke
 Route::any('/member/mlm/wallet/refill/change/settings', 'Member\Mlm_WalletController@refill_settings');//luke
 Route::any('/member/mlm/wallet/transfer', 'Member\Mlm_WalletController@transfer');
@@ -161,6 +162,12 @@ Route::any('/member/mlm/encashment/view/type/cheque/edit', 'Member\Mlm_Encashmen
 Route::any('/member/mlm/encashment/view/type/bank/add', 'Member\Mlm_EncashmentController@bank_add');//luke
 Route::any('/member/mlm/encashment/view/type/bank/archive', 'Member\Mlm_EncashmentController@bank_archive');//luke
 Route::any('/member/mlm/encashment/view/type/bank/edit/name', 'Member\Mlm_EncashmentController@bank_edit_name');//luke
+
+Route::any('/member/mlm/encashment/add/to/list', 'Member\Mlm_EncashmentController@add_to_list');//luke
+Route::any('/member/mlm/encashment/add/to/list/date', 'Member\Mlm_EncashmentController@add_to_list_date');//luke
+Route::any('/member/mlm/encashment/view/all/selected', 'Member\Mlm_EncashmentController@view_all_selected');//luke
+Route::any('/member/mlm/encashment/request/all/selected', 'Member\Mlm_EncashmentController@request_all_selected');//luke
+Route::any('/member/mlm/encashment/deny/all/selected', 'Member\Mlm_EncashmentController@deny_all_selected');//luke
 /* end MLM Product */
 
 /* start MLM Product */
@@ -179,6 +186,7 @@ Route::any('/member/mlm/product/set/all/points', 'Member\MLM_ProductController@s
 Route::any('/member/mlm/product_code', 'Member\MLM_ProductCodeController@index');//ewen
 Route::any('/member/mlm/product_code/sell', 'Member\MLM_ProductCodeController@sell');//ewen
 Route::any('/member/mlm/product_code/sell/add_line', 'Member\MLM_ProductCodeController@add_line'); //ewen
+Route::any('/member/mlm/product_code/sell/add_line/product_barcode/submit', 'Member\MLM_ProductCodeController@add_line_barcode_product'); //ewen
 Route::any('/member/mlm/product_code/sell/add_line/submit', 'Member\MLM_ProductCodeController@add_line_submit'); //ewen
 Route::any('/member/mlm/product_code/sell/add_line/view', 'Member\MLM_ProductCodeController@view_all_lines'); //ewen
 Route::any('/member/mlm/product_code/sell/compute', 'Member\MLM_ProductCodeController@compute'); //ewen
@@ -194,9 +202,14 @@ Route::any('/member/mlm/product_code/receipt/view/{id}', 'Member\MLM_ProductCode
 Route::get('member/mlm/card', 'Member\MLM_CardController@all_slot');
 Route::post('member/mlm/card/filter', 'Member\MLM_CardController@filter');
 Route::get('member/mlm/card/image/{slot}', 'Member\MLM_CardController@generate');
+Route::get('member/mlm/card/image/discount/{id}', 'Member\MLM_CardController@generate_discount');
 Route::get('member/mlm/card/all', 'Member\MLM_CardController@all_slot');
 Route::post('member/mlm/card/done', 'Member\MLM_CardController@done');
+Route::post('member/mlm/card/done/discount', 'Member\MLM_CardController@done_discount');
 Route::post('member/mlm/card/pending', 'Member\MLM_CardController@pending');
+Route::post('member/mlm/card/pending/discount', 'Member\MLM_CardController@pending_discount');
 
 
 Route::get('/member/mlm/report', 'Member\MLM_ReportController@index');
+Route::any('/member/mlm/report/get', 'Member\MLM_ReportController@get_report');
+

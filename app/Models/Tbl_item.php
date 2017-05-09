@@ -21,6 +21,11 @@ class Tbl_item extends Model
         $query->join('tbl_category','type_id','=','item_category_id');
         return $query;
     }
+    public function scopeUm_multi($query)
+    {
+        return $query->leftjoin('tbl_unit_measurement_multi','multi_um_id','=','item_measurement_id')->where("is_base",1);
+         
+    }
 
     public function scopeselitem($query, $item_id)
     {
@@ -83,6 +88,19 @@ class Tbl_item extends Model
     {
         return $query->select("multiprice_qty","multiprice_price")
                      ->join("tbl_item_multiple_price","multiprice_item_id","=","item_id");
+    }
+    public function scopeUm($query)
+    {
+        return $query->leftjoin("tbl_unit_measurement","item_measurement_id","=","um_id");
+    }
+
+    public function scopeProduct($query, $archived = null)
+    {
+        $query->join("tbl_ec_variant","item_id","=","evariant_item_id")
+              ->join("tbl_ec_product","evariant_prod_id","=","eprod_id");
+        if($archived != null) $query->where("tbl_ec_product.archived",$archived);
+
+        return $query;
     }
 
     // public function scope

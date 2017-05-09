@@ -134,7 +134,15 @@ class MLM_ProductRepurchaseController extends Member
             if($count_discount_card != 0)
             {
                 $count_discount_card = Tbl_mlm_discount_card_log::where('discount_card_log_code', $membership_code)->first();
-                return Mlm_member::get_customer_info($count_discount_card->discount_card_customer_holder);
+                if($count_discount_card->discount_card_customer_holder == null)
+                {
+                    $update['discount_card_customer_holder'] = $count_discount_card->discount_card_customer_sponsor;
+                    // $update['discount_card_log_date_expired'] = Carbon::now()->addYear(1);
+                    // $update['discount_card_log_issued_date'] = Carbon::now();
+                    Tbl_mlm_discount_card_log::where('discount_card_log_code', $membership_code)->update($update);
+                    $count_discount_card = Tbl_mlm_discount_card_log::where('discount_card_log_code', $membership_code)->first();
+                }
+                return Mlm_member::get_customer_info($count_discount_card->discount_card_customer_holder, $count_discount_card->discount_card_log_id);
             }   
             else
             {

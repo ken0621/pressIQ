@@ -42,16 +42,19 @@ class ShopProductContentController extends Shop
                 $data["product"]["variant"][$keys]["discounted"] = true;
                 $data["product"]["variant"][$keys]["discounted_price"] = $values["item_discount_value"];
 
-                foreach ($data["product"]["variant"][$keys]["mlm_discount"] as $key0 => $value0) 
+                if (isset($data["product"]["variant"][$keys]["mlm_discount"])) 
                 {
-                    if ($value0["discount_type"] == 0) 
+                    foreach ($data["product"]["variant"][$keys]["mlm_discount"] as $key0 => $value0) 
                     {
-                        $data["product"]["variant"][$keys]["mlm_discount"][$key0]["discounted_amount"] = $values["item_discount_value"] - $value0['discount_value'];
+                        if ($value0["discount_type"] == 0) 
+                        {
+                            $data["product"]["variant"][$keys]["mlm_discount"][$key0]["discounted_amount"] = $values["item_discount_value"] - $value0['discount_value'];
+                        }
+                        else
+                        {
+                           $data["product"]["variant"][$keys]["mlm_discount"][$key0]["discounted_amount"] = $values["item_discount_value"] - ($value0['discount_value'] / 100) * $values["item_discount_value"];
+                        }                    
                     }
-                    else
-                    {
-                       $data["product"]["variant"][$keys]["mlm_discount"][$key0]["discounted_amount"] = $values["item_discount_value"] - ($value0['discount_value'] / 100) * $values["item_discount_value"];
-                    }                    
                 }
             }
             else
@@ -85,8 +88,8 @@ class ShopProductContentController extends Shop
 
     public function search()
     {
-        $search = Ecom_Product::searchProduct(Request::input("search-pokus"), $this->shop_info->shop_id);
-
+        $search = Ecom_Product::searchProduct(Request::input("search"), $this->shop_info->shop_id);
+   
         return json_encode($search);
     }
 }

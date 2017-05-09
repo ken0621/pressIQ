@@ -34,6 +34,12 @@
         @else
         <li><a href="javascript:" class="pull-right badge bg-blue">No Active Income yet.</a></li>
         @endif
+        @if($repurchase_cash != null)
+        <li><hr></li>
+        <li>
+           <li><a href="javascript:">WALLET REPURCHASE <span class="pull-right badge bg-aqua">{{currency('PHP', $repurchase_cash)}}</span></a></li>
+        </li>
+        @endif
         <li><hr></li>
         <li><a href="javascript:">Points Summary</li>
         @if(isset($slot_now))

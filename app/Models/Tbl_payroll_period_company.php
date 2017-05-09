@@ -48,4 +48,32 @@ class Tbl_payroll_period_company extends Model
 
 		return $query;
 	}
+
+	public function scopegetperiod($query, $shop_id = 0, $payroll_period_category = '', $payroll_period_status = 'ready')
+	{
+		$query->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+			 ->where('tbl_payroll_period.shop_id', $shop_id)
+			 ->where('tbl_payroll_period_company.payroll_period_status', $payroll_period_status)
+			 ->where('tbl_payroll_period.payroll_period_archived', 0)
+			 ->where('tbl_payroll_period.payroll_period_category', $payroll_period_category)
+			 ->groupBy('tbl_payroll_period.payroll_period_id');
+		return $query;
+	}
+
+	public function scopeperiod($query, $shop_id = 0, $payroll_period_status = 'processed')
+	{
+		$query->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+			 	->where('tbl_payroll_period_company.payroll_period_status', $payroll_period_status);
+
+		return $query;
+	}
+
+	public function scopegetcompanyperiod($query, $payroll_period_company_id = 0)
+	{
+		$query->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+			 	->where('tbl_payroll_period_company.payroll_period_company_id', $payroll_period_company_id);
+
+		return $query;
+	}
+
 }

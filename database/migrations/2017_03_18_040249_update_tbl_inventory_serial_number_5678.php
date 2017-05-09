@@ -13,6 +13,7 @@ class UpdateTblInventorySerialNumber5678 extends Migration
     public function up()
     {
         Schema::table('tbl_inventory_serial_number', function (Blueprint $table) {
+            $table->dropForeign("tbl_inventory_serial_number_inventory_id_foreign");
             $table->renameColumn("inventory_id", "serial_inventory_id");
         });
     }

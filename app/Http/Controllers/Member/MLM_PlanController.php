@@ -670,6 +670,8 @@ class MLM_PlanController extends Member
         $validate['binary_settings_max_tree_level'] = Request::input('binary_settings_max_tree_level');
         $validate['binary_settings_placement'] = Request::input('binary_settings_placement');
         $validate['binary_settings_auto_placement'] = Request::input('binary_settings_auto_placement');
+        $validate['binary_settings_type'] = Request::input('binary_settings_type');
+        $validate['binary_settings_matrix_income'] = Request::input('binary_settings_matrix_income');
         $validate['hours'] = Request::input('hours');
 
         $rules['binary_settings_gc_enable'] = 'required';
@@ -681,6 +683,7 @@ class MLM_PlanController extends Member
         $rules['binary_settings_max_tree_level'] = 'required';
         $rules['binary_settings_placement'] = 'required';
         $rules['binary_settings_auto_placement'] = 'required';
+        $rules['binary_settings_type'] = 'required';
         $rules['hours'] = 'required';
 
         $validator = Validator::make($validate,$rules);
@@ -697,6 +700,8 @@ class MLM_PlanController extends Member
             $insert['binary_settings_max_tree_level'] = $validate['binary_settings_max_tree_level'];
             $insert['binary_settings_placement'] = $validate['binary_settings_placement'];
             $insert['binary_settings_auto_placement'] = $validate['binary_settings_auto_placement'];
+            $insert['binary_settings_type'] = $validate['binary_settings_type'];
+            $insert['binary_settings_matrix_income'] = $validate['binary_settings_matrix_income'];
             Tbl_mlm_binary_setttings::where('shop_id', $this->user_info->shop_id)->update($insert);
         }
         else
@@ -1357,6 +1362,8 @@ class MLM_PlanController extends Member
         $earn = Request::input('earn');
         $start = Request::input('start');
         $end = Request::input('end');
+        $gc_count = Request::input('gc_count');
+		$gc_amount = Request::input('gc_amount');
         $shop_id = $this->user_info->shop_id;
         $insertion = [];
 
@@ -1368,6 +1375,8 @@ class MLM_PlanController extends Member
             $insertion[$key]['matching_settings_end']    = $end[$key];
             $insertion[$key]['matching_settings_earnings'] = $earn[$key];
             $insertion[$key]['shop_id'] = $shop_id;
+            $insertion[$key]['matching_settings_gc_count'] = $gc_count[$key];
+			$insertion[$key]['matching_settings_gc_amount'] = $gc_amount[$key];
         }
         Tbl_mlm_matching::insert($insertion);
 

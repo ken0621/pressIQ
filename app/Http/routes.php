@@ -1,5 +1,8 @@
 <?php
 
+Route::get('/member/mail_setting', 'Member\MailSettingController@index');
+Route::post('/member/mail_setting', 'Member\MailSettingController@submit');
+
 Route::any('/member/instant_add_slot', 'Member\MLM_SlotController@instant_add_slot');
 
 Route::any('/member/raymond', 'Member\RaymondController@index'); //RAYMOND
@@ -21,7 +24,8 @@ Route::post('member/register/package/submit', 'MemberController@package_post');
 Route::get('member/register/payment', 'MemberController@payment');
 Route::post('member/register/payment/submit', 'MemberController@payment_post');
 
-
+Route::get('member/register/shipping', 'MemberController@shipping');
+Route::post('member/register/shipping/submit', 'MemberController@shipping_post');
 Route::get('member/card', 'Member\MLM_CardController@card');
 Route::get('member/card/all', 'Member\MLM_CardController@all_slot');
 
@@ -199,6 +203,7 @@ Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_i
 
 Route::any("/member/item/view_serials/{id}","Member\ItemSerialController@index");
 Route::any("/member/item/serial_number/{id}",'Member\ItemSerialController@view_serial');
+Route::any("/member/item/save_serial",'Member\ItemSerialController@save_serial');
 
 Route::any('/member/functiontester', 'Member\FunctionTesterController@index'); /* ERWIN */
 Route::any('/member/functiontester/clear_all', 'Member\FunctionTesterController@clear_all'); /* ERWIN */
@@ -223,8 +228,14 @@ Route::any('/member/item/unit_of_measurement/add_submit','Member\UnitOfMeasureme
 Route::any('/member/item/unit_of_measurement/edit/{id}','Member\UnitOfMeasurementController@edit');
 Route::any('/member/item/unit_of_measurement/edit_submit','Member\UnitOfMeasurementController@edit_submit');
 Route::any('/member/item/um/select_type','Member\UnitOfMeasurementController@select_type');
+Route::any('/member/item/unit_of_measurement/{id}/{action}','Member\UnitOfMeasurementController@archived');
+Route::any('/member/item/unit_of_measurement/archived_submit','Member\UnitOfMeasurementController@archived_submit');
 /* END U/M ARCY*/
 
+/*PIS*/
+Route::any('/member/item/um/',"Member\UnitOfMeasurementController@check");
+Route::any('/member/item/um/add_base/{id}/{item_id}',"Member\UnitOfMeasurementController@add_base");
+Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController@add_base_submit');
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
 /* END AUDIT TRAIL*/
@@ -318,7 +329,9 @@ Route::any('/member/item/warehouse/refill_log/{id}','Member\WarehouseController@
 Route::any('/member/item/warehouse/view_pdf/{id}','Member\WarehouseController@view_pdf');
 Route::any('/member/item/warehouse/stock_input_report/{id}','Member\WarehouseController@stock_input');
 /* END WAREHOUSE ARCY*/
-
+/* INVENTORY LOG*/
+Route::any('/member/item/inventory_log','Member\InventoryLogController@index');
+/*END INVENTORY LOG*/
 /* START PIS ARCY*/
 Route::any('/member/pis/sir/view_status/{id}','Member\PurchasingInventorySystemController@view_status');
 
@@ -376,6 +389,8 @@ Route::any('/tablet/sync_import',"Member\TabletPISController@sync_import");
 Route::any('/tablet/sync_export','Member\TabletPISController@sync_export');
 Route::any('/tablet/logout','Member\TabletPISController@logout');
 Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_sir');
+Route::any('/tablet/sir_reload/{id}','Member\TabletPISController@sir_reload');
+
 
 Route::any('/tablet/customer',"Member\TabletPISController@customer");
 Route::any('/tablet/customer_details/{id}',"Member\TabletPISController@customer_details");
@@ -448,6 +463,13 @@ Route::post('/member/customer/invoice/update','Member\Customer_InvoiceController
 Route::any('/member/customer/customer_invoice_view/{id}','Member\Customer_InvoiceController@invoice_view');
 Route::any('/member/customer/customer_invoice_pdf/{id}','Member\Customer_InvoiceController@invoice_view_pdf');
 
+//sales receipt
+Route::get('/member/customer/sales_receipt','Member\Customer_SaleReceiptController@index');
+Route::get('/member/customer/sales_receipt/list','Member\Customer_SaleReceiptController@sales_receipt_list');
+Route::any('/member/customer/sales_receipt/create','Member\Customer_SaleReceiptController@create_sales_receipt');
+Route::any('/member/customer/sales_receipt/update','Member\Customer_SaleReceiptController@update_sales_receipt');
+
+
 Route::get('/member/customer/product_repurchase','Member\MLM_ProductRepurchaseController@index');//ERWIN
 Route::post('/member/customer/product_repurchase/submit','Member\MLM_ProductRepurchaseController@submit');//ERWIN
 Route::get('/member/customer/product_repurchase/get_product_code/{id}','Member\MLM_ProductRepurchaseController@get_code');//ERWIN
@@ -462,8 +484,6 @@ Route::post('/member/about/update','Member\StoreInfoController@update');
 Route::get('/member/about/remove/{id}','Member\StoreInfoController@remove');
 
 //arcy
-//-sales-receipt start
-Route::get('/member/customer/sales_receipt','Member\Customer_SaleReceiptController@index');
 Route::get('/member/customer/estimate','Member\Customer_EstimateController@index');
 Route::any('/member/customer/credit_memo','Member\CreditMemoController@index');
 
@@ -486,13 +506,29 @@ Route::any('/member/customer/credit_memo/update',"Member\CreditMemoController@up
 Route::get('/member/vendor/purchase_order','Member\Vendor_PurchaseOrderController@index');
 Route::get('/member/vendor/purchase_order/list','Member\Vendor_PurchaseOrderController@po_list');
 Route::any('/member/vendor/purchase_order/create_po','Member\Vendor_PurchaseOrderController@create_po');
-Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrderController@upate_po');
+Route::any('/member/vendor/purchase_order/update_po','Member\Vendor_PurchaseOrderController@update_po');
+Route::any('/member/vendor/purchase_order/view_pdf/{id}','Member\Vendor_PurchaseOrderController@view_po_pdf');
+Route::any('/member/vendor/purchase_order/pdf/{id}','Member\Vendor_PurchaseOrderController@po_pdf');
 
-Route::get('/member/vendor/create_bill','Member\Vendor_CreateBillController@index');
+Route::get('/member/vendor/bill_list','Member\Vendor_CreateBillController@index');
+Route::get('/member/vendor/create_bill','Member\Vendor_CreateBillController@create_bill');
 Route::any('/member/vendor/load_purchase_order/{id}','Member\Vendor_CreateBillController@load_purchase_order');
 Route::any('/member/vendor/create_bill/add','Member\Vendor_CreateBillController@add_bill');
 Route::any('/member/vendor/create_bill/update','Member\Vendor_CreateBillController@update_bill');
 Route::any('/member/vendor/load_po_item','Member\Vendor_CreateBillController@load_po_item');
+
+
+Route::any('/member/vendor/receive_inventory/list','Member\Vendor_ReceiveInventoryController@index');
+Route::any('/member/vendor/receive_inventory','Member\Vendor_ReceiveInventoryController@receive_inventory');
+Route::any('/member/vendor/receive_inventory/add','Member\Vendor_ReceiveInventoryController@add_receive_inventory');
+Route::any('/member/vendor/receive_inventory/update','Member\Vendor_ReceiveInventoryController@update_receive_inventory');
+
+// VENDOR PAYBILLS
+Route::any('/member/vendor/paybill','Member\Vendor_PayBillController@index');
+Route::any('/member/vendor/paybill/list','Member\Vendor_PayBillController@paybill_list');
+Route::get('/member/vendor/load_pb/{id}','Member\Vendor_PayBillController@load_vendor_pb');
+Route::any('/member/vendor/paybill/add','Member\Vendor_PayBillController@add_pay_bill');
+Route::any('/member/vendor/paybill/update/{id}','Member\Vendor_PayBillController@update_pay_bill');
 
 Route::get('/member/vendor/write_check','Member\Vendor_WriteCheckController@index');
 
@@ -713,7 +749,12 @@ Route::controller('/member/maintenance/online_payment', 'Member\OnlinePaymentMet
 /* ONLINE PAYMENT METHOD */
 Route::controller('/member/maintenance/sms', 'Member\SmsController');
 /* End */
-
+/* ITEM IMPORT*/
+Route::controller('/member/item/import', 'Member\ItemImportController');
+/* End */
+/* ITEM IMPORT*/
+Route::controller('/member/accounting/journal', 'Member\JournalEntryController');
+/* End */
 
 Route::controller('/tester','TesterController');
 
@@ -762,7 +803,7 @@ Route::any("/member/load_position","Member\EmployeePositionController@load_posit
 // 	Route::any('/departmentlist/modal_update_department','Member\PayrollController@modal_update_department');
 // 	/* DEPARTMENT END */
 
-// 	/* JOB TITLE START */
+// 	/* JOB TITLE START */ 
 // 	Route::any("/jobtitlelist","Member\PayrollController@jobtitle_list");
 // 	Route::any("/jobtitlelist/modal_create_jobtitle","Member\PayrollController@modal_create_jobtitle");
 // 	Route::any("/jobtitlelist/modal_save_jobtitle","Member\PayrollController@modal_save_jobtitle");

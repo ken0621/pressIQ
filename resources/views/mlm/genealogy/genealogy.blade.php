@@ -22,9 +22,15 @@
                         <li class="width-reference">
                             <span class="downline parent parent-reference PS" x="{{ $slot->slot_id }}">   
                                 <div id="info">
+                                    @if($slot->profile == null)
                                     <div id="photo">
                                         <img src="/assets/slot_genealogy/member/img/default-image.jpg">
                                     </div>
+                                    @else
+                                    <div id="photo">
+                                        <img src="{{$slot->profile}}">
+                                    </div>
+                                    @endif
                                     <div id="cont">
                                         <div>{{ strtoupper($slot->first_name) }}</div>
                                         <b>{{ $slot->membership_name }}</b>
@@ -36,7 +42,7 @@
                                         <div>L:{{$l}} R:{{$r}}</div>
                                     @endif
                                 </div>
-                                <div class="id">{{ $slot->slot_no }}</div>
+                                <div class="id" >{{ $slot->slot_no }}</div>
                             </span> 
                             <i class="downline-container">
                                 {!! $downline !!}

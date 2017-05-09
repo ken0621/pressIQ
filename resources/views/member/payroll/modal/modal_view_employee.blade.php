@@ -47,8 +47,12 @@
           <select class="form-control" name="payroll_employee_company_id" required>
             <option value="">Select Company</option>
             @foreach($_company as $company)
-            <option value="{{$company->payroll_company_id}}" {{$company->payroll_company_id == $employee->payroll_employee_company_id ? 'selected="selected"':''}} >{{$company->payroll_company_name}}</option>
+            <option value="{{$company['company']->payroll_company_id}}" {{$company['company']->payroll_company_id == $employee->payroll_employee_company_id ? 'selected="selected"':''}}>{{$company['company']->payroll_company_name}}</option> 
+              @foreach($company['branch'] as $branch)
+              <option value="{{$branch->payroll_company_id}}" {{$branch->payroll_company_id == $employee->payroll_employee_company_id ? 'selected="selected"':''}}>&nbsp;&nbsp;• {{$branch->payroll_company_name}}</option>
+              @endforeach
             @endforeach
+           
           </select>
         </div>
         <div class="col-md-6">
@@ -93,11 +97,12 @@
           <ul class="nav nav-tabs nav-tabs-custom">
             <li class="active"><a data-toggle="tab" href="#address">Address</a></li>
             <li><a data-toggle="tab" href="#company-details">Company Details</a></li>
-            <li><a data-toggle="tab" href="#government-contribution">Government Contribution</a></li>
+            <li><a data-toggle="tab" href="#government-contribution">Government</a></li>
             <li><a data-toggle="tab" href="#salary-details">Salary Details</a></li>
             <li><a data-toggle="tab" href="#requirements">Requirements</a></li>
             <li><a data-toggle="tab" href="#dependents">Dependents</a></li>
             <li><a data-toggle="tab" href="#remarks">Remarks</a></li>
+            <li><a data-toggle="tab" href="#other">Other</a></li>
           </ul>
           
           <div class="tab-content tab-content-custom">
@@ -283,7 +288,7 @@
                     </div>
                     <div class="form-group">
                       <div class="col-md-12">
-                        <small>COLA (monthly)</small>
+                        <small>COLA (Daily)</small>
                         <input type="number" step="any" name="payroll_employee_salary_cola" class="form-control text-right" value="{{$salary->payroll_employee_salary_cola}}" readonly>
                       </div>
                     </div>
@@ -553,6 +558,39 @@
                     <label for=""><b>Remarks</b></label>
                     <textarea class="form-control textarea-expand"  name="payroll_employee_remarks">{{$employee->payroll_employee_remarks}}</textarea>
                   </div>
+                </div>
+              </div>
+            </div>
+            <div id="other" class="tab-pane fade">
+              <ul class="nav nav-tabs nav-tabs-custom">
+                <li class="active"><a data-toggle="tab" href="#allowance">Allowance</a></li>
+                <li><a data-toggle="tab" href="#leave">Leave</a></li>
+                <li><a data-toggle="tab" href="#deduction">Deduction</a></li>
+                <li><a data-toggle="tab" href="#jouarnal">Journal</a></li>
+              </ul>
+              <div class="tab-content tab-content-custom">
+                <div id="allowance" class="tab-pane fade in active">
+                  @foreach($_allowance as $allowance)
+                  <div class="checkbox">
+                    <label><input type="checkbox" name="allowance[]" value="{{$allowance['payroll_allowance_id']}}" {{$allowance['status_checked']}}>{{$allowance['payroll_allowance_name']}}</label>
+                  </div>
+                  @endforeach
+                </div>
+                <div id="leave" class="tab-pane fade">
+                  @foreach($_leave as $leave)
+                  <div class="checkbox">
+                    <label><input type="checkbox" name="leave[]" value="{{$leave['payroll_leave_temp_id']}}" {{$leave['status_checked']}}>{{$leave['payroll_leave_temp_name']}}</label>
+                  </div>
+                  @endforeach
+                </div>
+                <div id="deduction" class="tab-pane fade">
+                  @foreach($_deduction as $deduction)
+                  <div class="checkbox">
+                    <label><input type="checkbox" name="deduction[]" value="{{$deduction['payroll_deduction_id']}}" {{$deduction['status_checked']}}>{{$deduction['payroll_deduction_name']}}</label>
+                  </div>
+                  @endforeach
+                </div>
+                <div id="jouarnal" class="tab-pane fade">
                 </div>
               </div>
             </div>

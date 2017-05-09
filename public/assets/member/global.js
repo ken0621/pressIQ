@@ -168,10 +168,11 @@ function global()
 
     function action_global_search() // Bryan Kier
     {
-        $(document).on("change", ".global-search", function()
+        $(document).on("change", ".global-search", function(e)
         {
+            e.preventDefault();
             var url     = $(this).attr("url");
-            var value   = $(this).val();
+            var value   = $(this).val().replace(/ /g, "%20");
             $load_content =  $(".tab-pane.active").find(".load-data").attr("target");
 
             $(".tab-pane.active .load-data").load(url+"?search="+value+" #"+$load_content);
@@ -193,14 +194,18 @@ function global()
 
     function formatMoney($this) // Bryan Kier
     {
-        var n = formatFloat($this), 
-        c = isNaN(c = Math.abs(c)) ? 2 : c, 
-        d = d == undefined ? "." : d, 
-        t = t == undefined ? "," : t, 
-        s = n < 0 ? "-" : "", 
-        i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
-        j = (j = i.length) > 3 ? j % 3 : 0;
-       return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        if($this != '')
+        {
+            console.log("hi");
+            var n = formatFloat($this), 
+            c = isNaN(c = Math.abs(c)) ? 2 : c, 
+            d = d == undefined ? "." : d, 
+            t = t == undefined ? "," : t, 
+            s = n < 0 ? "-" : "", 
+            i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))), 
+            j = (j = i.length) > 3 ? j % 3 : 0;
+            return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+        }
     }
 }
 

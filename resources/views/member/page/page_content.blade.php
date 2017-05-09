@@ -48,7 +48,7 @@
                                                 @foreach(unserialize($info->default) as $value)
                                                 <div>
                                                     <div class="img-holder">
-                                                        <img class="img-responsive" src="{{ $value }}">
+                                                        <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $value }}">
                                                     </div>
                                                 </div>
                                                 @endforeach
@@ -61,7 +61,7 @@
                                                 @foreach(unserialize($info->default) as $value)
                                                 <div>
                                                     <div class="img-holder">
-                                                        <img class="img-responsive" src="{{ $value }}">
+                                                        <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $value }}">
                                                     </div>
                                                 </div>
                                                 @endforeach
@@ -77,7 +77,7 @@
                                             @if($info->default)
                                             <div>
                                                 <div class="img-holder">
-                                                    <img class="img-responsive" src="{{ $info->default }}">
+                                                    <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $info->default }}">
                                                 </div>
                                             </div>
                                             @else
@@ -100,6 +100,43 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    @elseif($info->type == "maintenance")
+                                    <div class="match-height">
+                                        <!-- <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}"> -->
+                                        <!-- <input type="hidden" class="form-control maintenance-holder" key="{{ $keys }}" name="info[{{ $keys }}][value]"> -->
+                                        <button class="btn btn-primary popup" size="lg" type="button" link="/member/page/content/maintenance?field={{ serialize($info->field) }}&key={{ $keys }}">Manage {{ $info->label }}</button>
+                                        <div style="display: inline-block; margin-left: 5px;">This maintenance currently has <span class="maintenance-count" key="{{ $keys }}">{{ is_serialized($info->default) ? count(unserialize($info->default)) : 0 }}</span> data.</div>
+                                    </div>
+                                    @elseif($info->type == "brand")
+                                        @if(count($_brand) > 0)
+                                        <div class="match-height">
+                                            <div class="row clearfix" style="margin-top: 15px; margin-bottom: 15px;">
+                                            <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
+                                                @foreach($_brand as $key_brand => $brand)
+                                                    <?php $brand_image = is_serialized($info->default) ? unserialize($info->default)[$brand['type_name']]["image"] : ''; ?>
+                                                    <?php $brand_link = is_serialized($info->default) ? unserialize($info->default)[$brand['type_name']]["link"] : ''; ?>
+                                                    <div class="col-md-3">
+                                                        <div style="margin-bottom: 7.5px; font-weight: 700;">{{ $brand['type_name'] }}</div>
+                                                        <input class="image-value" key="{{ $keys }}-{{ $key_brand }}" type="hidden" name="info[{{ $keys }}][value][{{ $brand['type_name'] }}][image]" value="{{ $brand_image }}">
+                                                        <div class="gallery-list image-gallery image-gallery-single" key="{{ $keys }}-{{ $key_brand }}">
+                                                            @if($info->default)
+                                                            <div>
+                                                                <div class="img-holder">
+                                                                    <img style="object-fit: contain; object-position: center;" class="img-responsive" src="{{ $brand_image }}">
+                                                                </div>
+                                                            </div>
+                                                            @else
+                                                            <div class="empty-notify"><i class="fa fa-image"></i> No Image Yet</div>
+                                                            @endif
+                                                        </div>
+                                                        <div style="display: none;">
+                                                            <input class="form-control" type="hidden" name="info[{{ $keys }}][value][{{ $brand['type_name'] }}][link]" placeholder="Brand Link" value="{{ $brand['type_name'] }}">
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        @endif
                                     @else
                                     <div class="match-height">
                                         <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">

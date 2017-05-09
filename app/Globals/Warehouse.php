@@ -627,7 +627,7 @@ class Warehouse
         $insert_slip['inventory_slip_consume_refill'] = 'consume';
         $insert_slip['inventory_slip_consumer_id']    =  $consumer_id;
         $insert_slip['inventory_slip_consume_cause']  =  $consume_cause;
-        $insert_slip['slip_user_id']= Warehouse::getUserid();
+        $insert_slip['slip_user_id']= Warehouse::getUserid() or 0;
 
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);

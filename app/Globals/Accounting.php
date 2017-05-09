@@ -7,6 +7,8 @@ use App\Models\Tbl_journal_entry;
 use App\Models\Tbl_journal_entry_line;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_vendor;
 use Log;
 use Request;
 use Session;
@@ -740,4 +742,12 @@ class Accounting
 	// Creditable Withholding Tax - 1%			= tax-credit-tax-1
 	// Discount									= discount-sale
 	// Discount									= discount-purchase
+
+	public static function getTotalAccount()
+	{
+		$data["accounts_receivable"] = collect(Tbl_customer::balanceJournal()->get())->sum("balance");
+		$data["accoutns_payable"]	 = collect(Tbl_vendor::balanceJournal()->get())->sum("balance");		
+
+		return $data;
+	}
 }

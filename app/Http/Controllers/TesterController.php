@@ -53,12 +53,7 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        // dd(PayrollJournalEntries::payroll_summary(0,0));
-        // dd(collect(Payroll::record_by_date($this->getShopId(), "01-26-2017", "02-10-2017"))->toArray());
-        // dd(collect(PayrollJournalEntries::check_payroll_entity_account_id())->toArray());
-
-        dd(Accounting::checkTransaction("invoice")['name']);
-
+            dd(Accounting::getTotalAccount()["accounts_receivable"]);
     }
 
     public function getJournal()

@@ -694,7 +694,6 @@ function submit_done(data)
 		$("#global_modal").modal("hide");
 	}
 }
-
 function  misc(str) {
     switch (str) {
         case '_token':

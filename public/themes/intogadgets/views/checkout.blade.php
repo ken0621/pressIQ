@@ -29,28 +29,28 @@
 				<div class="fieldset">
 					<label class="col-md-4">First Name</label>
 					<div class="field col-md-8">
-						<input  class="form-control" type="text" name="customer_first_name" value="{{ Request::old('customer_first_name') }}">
+						<input  class="form-control" type="text" name="customer_first_name" value="{{ $customer_first_name ? $customer_first_name : Request::old('customer_first_name') }}">
 					</div>
 				</div>
 
 				<div class="fieldset">
 					<label class="col-md-4">Middle Name</label>
 					<div class="field col-md-8">
-						<input  class="form-control" type="text" name="customer_middle_name" value="{{ Request::old('customer_middle_name') }}">
+						<input  class="form-control" type="text" name="customer_middle_name" value="{{ $customer_middle_name ? $customer_middle_name : Request::old('customer_middle_name') }}">
 					</div>
 				</div>
 
 				<div class="fieldset">
 					<label class="col-md-4">Last Name</label>
 					<div class="field col-md-8">
-						<input  class="form-control" type="text" name="customer_last_name" value="{{ Request::old('customer_last_name') }}">
+						<input  class="form-control" type="text" name="customer_last_name" value="{{ $customer_last_name ? $customer_last_name : Request::old('customer_last_name') }}">
 					</div>
 				</div>
 
 				<div class="fieldset">
 					<label class="col-md-4">Email</label>
 					<div class="field col-md-8">
-						<input autocomplete="off"  class="form-control" type="email" name="customer_email" value="{{ Request::old('customer_email') }}">
+						<input autocomplete="off"  class="form-control" type="email" name="customer_email" value="{{ $customer_email ? $customer_email : Request::old('customer_email') }}">
 					</div>
 				</div>
 
@@ -97,26 +97,26 @@
 				<div class="fieldset">
 					<label class="col-md-4">Contact Number</label>
 					<div class="field col-md-8">
-						<input  maxlength="11" class="form-control" type="text" name="customer_mobile" value="{{ Request::input('customer_mobile') }}">
+						<input  maxlength="11" class="form-control" type="text" name="customer_mobile" value="{{ $customer_mobile ? $customer_mobile : Request::input('customer_mobile') }}">
 					</div>
 				</div>
 
 				<div class="fieldset">
 					<label class="col-md-4">Province</label>
 					<div class="field col-md-8">
-						<input class="form-control" type="text" name="customer_state_province" value="{{ Request::old('customer_state_province') }}">
+						<input class="form-control" type="text" name="customer_state_province" value="{{ $customer_state_province ? $customer_state_province : Request::old('customer_state_province') }}">
 					</div>
 				</div>
 				<div class="fieldset">
 					<label class="col-md-4">City / Municipality</label>
 					<div class="field col-md-8">
-						<input class="form-control" type="text" name="customer_city" value="{{ Request::old('customer_city') }}">
+						<input class="form-control" type="text" name="customer_city" value="{{ $customer_city ? $customer_city : Request::old('customer_city') }}">
 					</div>
 				</div>
 				<div class="fieldset">
 					<label class="col-md-4">Complete Address</label>
 					<div class="field col-md-8">
-						<textarea spellcheck="false" class="form-control" name="customer_address">{{ Request::old('customer_address') }}</textarea>
+						<textarea spellcheck="false" class="form-control" name="customer_address">{{ $customer_address ? $customer_address : Request::old('customer_address') }}</textarea>
 					</div>
 				</div>
 

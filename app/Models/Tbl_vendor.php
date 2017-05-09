@@ -75,6 +75,6 @@ class Tbl_vendor extends Model
                     ->where("je_reference_module","journal-entry");
         if($vendor_id) $journal_entry->where("jline_name_id", $vendor_id)->where("jline_name_reference","vendor");
         
-        return $query = $purchase_order->union($bill)->union($pay_bill)->union($write_check)->union($journal_entry)->orderBy("date_created","desc");
+        return $query = $purchase_order->union($bill)->union($pay_bill)->union($write_check)->union($debit_memo)->union($journal_entry)->orderBy("date_created","desc");
     }
 }

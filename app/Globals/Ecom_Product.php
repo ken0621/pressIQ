@@ -524,13 +524,14 @@ class Ecom_Product
 			$shop_id = Ecom_Product::getShopId();
 		}
 		
-		$_product = Tbl_ec_product::where("eprod_name", 'like', "%{$keywords}%")->where('eprod_shop_id', $shop_id)->get()->toArray();
+		$_product = Tbl_ec_product::where("eprod_name", 'like', "%{$keywords}%")->where('archived', '0')->where('eprod_shop_id', $shop_id)->get()->toArray();
 		
 		foreach($_product as $key=>$product)
 		{
-			$_product[$key]			 	= Ecom_Product::getProduct($product["eprod_id"], $shop_id);
+			$_product[$key]	 = Ecom_Product::getProduct($product["eprod_id"], $shop_id);
 		}
-		
-		return $_product;	}
+		return $_product;	
+	}
+	
 
 }

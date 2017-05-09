@@ -1,7 +1,7 @@
 <form class="global-submit" role="form" action="/member/payroll/employee_list/modal_employee_update" method="POST">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">&times;</button>
-    <h4 class="modal-title layout-modallarge-title">Create new employee</h4>
+    <h4 class="modal-title layout-modallarge-title">Employee details</h4>
     <input type="hidden" name="payroll_employee_id" class="payroll_employee_id" value="{{$employee->payroll_employee_id}}">
   </div>
   <div class="modal-body modallarge-body-layout background-white modal-body-employee-details">
@@ -166,7 +166,7 @@
                     <div class="form-group">
                       <div class="col-md-12">
                         <small>Job Title</small>
-                        <select class="form-control jobtitle-select" required name="payroll_jobtitle_id" disabled>
+                        <select class="form-control" required name="payroll_jobtitle_id" disabled>
                           <option value="">Select Job Title</option>
                           @foreach($_jobtitle as $jobtitle)
                           <option value="{{$jobtitle->payroll_jobtitle_id}}" {{$jobtitle->payroll_jobtitle_id == $contract->payroll_jobtitle_id ? 'selected="selected"':''}}>{{$jobtitle->payroll_jobtitle_name}}</option>

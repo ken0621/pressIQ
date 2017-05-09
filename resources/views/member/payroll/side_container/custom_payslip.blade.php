@@ -39,7 +39,7 @@
 						<div class="panel-body">
 							<div class="list-group">
 								@foreach($_archived as $archived)
-								<a href="#" link="/member/payroll/custom_payslip/custom_payslip_show/{{$archived->payroll_payslip_id}}" class="list-group-item payslip-list-nav">{{$archived->payslip_code}}</a>
+								<a href="#" link="/member/payroll/custom_payslip/custom_payslip_show_archived/{{$archived->payroll_payslip_id}}" class="list-group-item payslip-list-nav">{{$archived->payslip_code}}</a>
 								@endforeach
 							</div>
 						</div>

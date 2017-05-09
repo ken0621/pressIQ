@@ -213,7 +213,7 @@ function item()
             console.log($this.find("option:selected").attr("has-um")); 
             $parent.find(".select-um-one").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
             {
-                // $(this).globalDropList("reload").globalDropList("enabled");
+                $(this).globalDropList("reload").globalDropList("enabled");
                 $(this).val($(this).find("option:first").val()).change();
             });
         }

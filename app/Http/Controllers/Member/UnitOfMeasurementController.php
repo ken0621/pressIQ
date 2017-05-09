@@ -275,49 +275,25 @@ class UnitOfMeasurementController extends Member
     }
     public function select_um()
     {
-        $access = Utilities::checkAccess('item-unit-measurement', 'access_page');
-        if($access == 1)
-        {
-            $unit_id = Request::input("unit_id");
+        $unit_id = Request::input("unit_id");
 
-            $data = UnitMeasurement::select_um($unit_id,'json');
+        $data = UnitMeasurement::select_um($unit_id,'json');
 
-            return $data;
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
+        return $data;
     }
 
     public function load_um()     
     {
-        $access = Utilities::checkAccess('item-unit-measurement', 'access_page');
-        if($access == 1)
-        {
-            $data["_um"] = UnitMeasurement::load_um();
+        $data["_um"] = UnitMeasurement::load_um();
 
-            return view('member.load_ajax_data.load_unit_measurement', $data);
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
+        return view('member.load_ajax_data.load_unit_measurement', $data);
     }
 
     public function load_one_um($um_id)     
     {
-        $access = Utilities::checkAccess('item-unit-measurement', 'access_page');
-        if($access == 1)
-        {
-            $data["_um"] = UnitMeasurement::load_one_um($um_id);
+        $data["_um"] = UnitMeasurement::load_one_um($um_id);
 
-            return view('member.load_ajax_data.load_one_unit_measure', $data);
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
+        return view('member.load_ajax_data.load_one_unit_measure', $data);
     }
  public function load_one_um_multi($um_id)     
     {
@@ -341,7 +317,7 @@ class UnitOfMeasurementController extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public function add_submit()

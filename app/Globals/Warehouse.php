@@ -200,7 +200,7 @@ class Warehouse
     	$data = Tbl_warehouse::Warehouseitem()
                              ->select_inventory($warehouse_id)
 				    		 ->orderBy('product_name','asc')
-    						 ->get();
+    						 ->paginate(10);
                              
     	if($return == 'json')
     	{

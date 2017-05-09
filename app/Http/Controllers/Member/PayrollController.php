@@ -5272,21 +5272,25 @@ class PayrollController extends Member
                $payslip  = Tbl_payroll_payslip::payslip(Self::shop_id(), 0)->first();
           }
 
-
           $data['payslip']     = $payslip;
-          $data['_breakdown']  = array();
+          $data['_record']  = array();
+          $period = Tbl_payroll_period_company::getcompanyperiod($id)->first();
 
           $_record = Tbl_payroll_record::getcompanyrecord($id)
                                         ->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
                                         ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
                                         ->get();
 
-          dd($_record);
           foreach($_record as $record)
           {
 
                $compute = Payroll::getrecord_breakdown($record);
-               array_push($data['_breakdown'], Self::breakdown_uncompute($compute,'approved'));
+               $temp['break'] = Self::breakdown_uncompute($compute,'approved');
+               $temp['emp']   = Tbl_payroll_employee_contract::selemployee($record->payroll_employee_id, $period->payroll_period_start)
+                                                            ->leftjoin('tbl_payroll_department','tbl_payroll_department.payroll_department_id','=','tbl_payroll_employee_contract.payroll_department_id')
+                                                            ->leftjoin('tbl_payroll_jobtitle','tbl_payroll_jobtitle.payroll_jobtitle_id','=','tbl_payroll_employee_contract.payroll_jobtitle_id')
+                                                            ->first();
+               array_push($data['_record'], $temp);
           }
 
           dd($data);

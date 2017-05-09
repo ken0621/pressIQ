@@ -526,9 +526,13 @@ class Ecom_Product
 		}
 		
 		$_product = Tbl_ec_product::where("eprod_name", 'like', "%{$keywords}%")
-				->where('tbl_ec_product.archived', '0')
-				->where('eprod_shop_id', $shop_id)->get()->toArray();
+				->where('tbl_ec_product.archived', 0)
+				->where('eprod_id', "!=", "")
+				->where('eprod_shop_id', $shop_id)
+				->get()
+				->toArray();
 		
+		dd($_product);
 		foreach($_product as $key=>$product)
 		{
 			$_product[$key]	 = Ecom_Product::getProduct($product["eprod_id"], $shop_id);

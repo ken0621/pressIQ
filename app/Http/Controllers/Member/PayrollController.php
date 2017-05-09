@@ -5259,8 +5259,6 @@ class PayrollController extends Member
                array_push($data['_period'], $temp);
           }
 
-
-          // dd(Self::shop_id());
           return view('member.payroll.payroll_approved', $data);
      }
 
@@ -5275,20 +5273,23 @@ class PayrollController extends Member
           }
 
 
-          $data['payslip']    = $payslip;
+          $data['payslip']     = $payslip;
+          $data['_breakdown']  = array();
 
-          $data['_breakdown']    = array();
+          $_record = Tbl_payroll_record::getcompanyrecord($id)
+                                        ->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
+                                        ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
+                                        ->get();
 
-          $_record = Tbl_payroll_record::getcompanyrecord($id)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
+          dd($_record);
           foreach($_record as $record)
           {
+
                $compute = Payroll::getrecord_breakdown($record);
-               // $data['_breakdown'] = Self::breakdown_uncompute($compute,'approved');
                array_push($data['_breakdown'], Self::breakdown_uncompute($compute,'approved'));
           }
 
-          // dd($data);
-
+          dd($data);
           return view('member.payroll.payroll_payslip', $data);
      }
 
@@ -6542,9 +6543,9 @@ class PayrollController extends Member
 
      public function modal_generate_bank($id)
      {
-          $data['_bank'] = Tbl_payroll_bank_convertion::orderBy('bank_name')->get();
-          $data['id']    = $id;
-          $data['company'] = Tbl_payroll_company::getbyperiod($id)->first();
+          $data['_bank']      = Tbl_payroll_bank_convertion::orderBy('bank_name')->get();
+          $data['id']         = $id;
+          $data['company']    = Tbl_payroll_company::getbyperiod($id)->first();
           return view('member.payroll.modal.modal_bank', $data);
      }
 
@@ -6569,13 +6570,14 @@ class PayrollController extends Member
           foreach($_record as $record)
           {
                $compute = Payroll::getrecord_breakdown($record);
-               $compute['payroll_employee_atm_number'];
-               $compute['total_net'];
+               
                $fileText .= $compute['payroll_employee_atm_number']."\t".number_format($compute['total_net'], 2,'.','')."\r\n";
           }
 
           $myName = $company_code.$upload_date.$batch_no.".txt";
+
           $headers = ['Content-type'=>'text/plain', 'test'=>'YoYo', 'Content-Disposition'=>sprintf('attachment; filename="%s"', $myName),'X-BooYAH'=>'WorkyWorky','Content-Length'=>sizeof($fileText)];
+
           return Response::make($fileText, 200, $headers);
      }
 

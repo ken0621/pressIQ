@@ -23,7 +23,7 @@
 	</form>
 	<div class="form-group">
 		<div class="col-md-12">
-			<label class="btn btm-custom-green"><input type="file" name="" id="bio-file" class="hide" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, *.dat">Choose File</label>
+			<label class="btn btm-custom-green"><input type="file" name="" id="bio-file" class="hide" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, text/plain, .dat">Choose File</label>
 		</div>
 		<div class="col-md-12">
 			<i><span class="file-name"></span></i>

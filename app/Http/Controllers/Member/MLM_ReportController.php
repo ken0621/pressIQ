@@ -46,11 +46,14 @@ use App\Globals\Pdf_global;
 use App\Models\Tbl_membership_code_invoice;
 use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_warehouse;
+use App\Models\Tbl_journal_entry_line;
+use App\Globals\Category;
 use Crypt;
 class MLM_ReportController extends Member
 {
     public function index()
     {
+        // return $this->sales_chart_account();
         $shop_id = $this->user_info->shop_id; 
         # code...
         $data = [];
@@ -306,9 +309,17 @@ class MLM_ReportController extends Member
             $data['view'] = $view->render();
             return json_encode($data);
         }
-        
     }
-
+    public function sales_chart_account()
+    {
+        $entries = Tbl_journal_entry_line::account()
+        ->item()
+        ->journal()
+        ->selectsales()
+        ->get();
+        dd($entries);
+        $category = Category::re_select_raw($this->user_info->shop_id, 70, array("all","services","inventory","non-inventory","bundles"));
+    }
 
 
 }

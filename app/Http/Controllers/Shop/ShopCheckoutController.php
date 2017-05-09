@@ -454,7 +454,7 @@ class ShopCheckoutController extends Shop
                 case 'paynamics': return $this->submit_using_paynamics(); break;
                 case 'dragonpay': return $this->submit_using_dragonpay(); break;
                 case 'other': return $this->submit_using_proofofpayment($file, $cart); break;
-                case 'ipay-88': return $this->submit_using_ipay88($cart); break;
+                case 'ipay88': return $this->submit_using_ipay88($cart); break;
                 default: dd("Some error occurred"); break;
             }
         }
@@ -618,7 +618,7 @@ class ShopCheckoutController extends Shop
     }
     public function order_placed()
     {
-    	$data["page"] = "Checkout - Order Placed";
+        $data["page"] = "Checkout - Order Placed";
         $order = Request::input('order');
         if (!$order) 
         {
@@ -643,7 +643,7 @@ class ShopCheckoutController extends Shop
         
         $data['summary']['subtotal'] = $subtotal;
 
-    	return view("order_placed", $data);
+        return view("order_placed", $data);
     }
     public function addtocart()
     {

@@ -110,12 +110,16 @@
 						            		<input type="hidden" name="api_gateway_id" class="form-control input-sm" value="{{$gateway->gateway_id}}">
 						            		@if($gateway->gateway_code_name != 'other')
 <<<<<<< HEAD
+<<<<<<< HEAD
 						            			
 						            			@if($gateway->gateway_id == 6)
 
 						            				<div class="form-group col-md-12">
 =======
 						            			@if($gateway->gateway_code_name == "ipay-88")
+=======
+						            			@if($gateway->gateway_code_name == "ipay88")
+>>>>>>> 2a100b520f7baa7150171bb7a37ff657305734b2
 					            					<div class="form-group col-md-12">
 >>>>>>> 58fce8a06a64fab3e26b6a34740bd29a6b858be0
 									                    <label>Merchant Code</label>

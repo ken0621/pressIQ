@@ -116,6 +116,8 @@ class MLM_SlotController extends Member
     }
     public function index()
     {        
+        // $slot = Mlm_compute::get_slot_info(421);
+        // return Mlm_tree::insert_tree_sponsor($slot, $slot, 1);
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {

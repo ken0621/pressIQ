@@ -37,6 +37,7 @@ class DebitMemo
 
 		DebitMemo::insert_dbline($db_id, $item_info, $entry);
 
+
 		return $db_id;
 	}
 

@@ -374,7 +374,7 @@ class WarehouseController extends Member
                 return $this->show_no_access_modal();
             }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
-            $data["warehouse_item"] = Warehouse::select_item_warehouse_single($id,'array');
+            $data["warehouse_item"] = Warehouse::select_item_warehouse_single_w_page($id,'array');
             // dd(collect($data["warehouse_item"])->toArray());
 
             return view("member.warehouse.warehouse_view",$data);

@@ -258,7 +258,6 @@ function page_list()
     $nav[$page]['name'] = "Accounting";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "money";
-
    
     /* -- ACCOUNTING => SALES */
     $code = "accounting-sales";

@@ -4,7 +4,7 @@
       <base href="{{ URL::to('/themes/'.$shop_theme.'') }}/">
       <meta charset="utf-8">
       @yield('meta')
-      <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page }}</title>
+      <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page or '' }}</title>
       <link rel="icon" type="image/png" href="/resources/assets/frontend/img/favicon.png">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'> -->

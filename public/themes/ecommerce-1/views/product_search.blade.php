@@ -102,10 +102,6 @@
 							<div class="sortby">
 								Search Result for: 
 								<strong>"{{ Request::input('keyword') }}"</strong>
-								<div class="text-left">
-						            Item/s Found:
-						            <strong>{{ count($_product) }}</strong>
-						        </div>
 							</div>
 							<form class="sort-by" method="get">
 							<input type="hidden" name="keyword" value="{{ Request::input('keyword') }}">

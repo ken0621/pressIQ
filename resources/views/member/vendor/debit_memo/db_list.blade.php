@@ -7,12 +7,12 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Credit Memo</span>
+                <span class="page-title">Debit Memo</span>
                 <small>
-                    List of Customer CM
+                    List of Vendor Debit Memo
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/customer/credit_memo" >Create CM</a>
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/debit_memo" >Create Debit Memo</a>
         </div>
     </div>
 </div>
@@ -29,7 +29,7 @@
         <div class="col-md-4" style="padding: 10px">
             <div class="input-group">
                 <span style="background-color: #fff; cursor: pointer;" class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i></span>
-                <input type="text" class="form-control search_name" placeholder="Search by CM Number" aria-describedby="basic-addon1">
+                <input type="text" class="form-control search_name" placeholder="Search by db Number" aria-describedby="basic-addon1">
             </div>
         </div>  
     </div>
@@ -40,29 +40,26 @@
                 <table class="table table-bordered table-condensed">
                     <thead style="text-transform: uppercase">
                         <tr>
-                            <th>CM No</th>
-                            <th>Customer Name</th>
+                            <th>Debit Memo No</th>
+                            <th>Vendor Name</th>
                             <th>Total</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                    @if($_cm)
-                        @foreach($_cm as $cm)
+                    @if($_db)
+                        @foreach($_db as $db)
                             <tr>
-                                <td>{{$cm->cm_id}}</td>
-                                <td>{{$cm->title_name." ".$cm->first_name." ".$cm->middle_name." ".$cm->last_name." ".$cm->suffix_name}}</td>
-                                <td>{{currency("PHP",$cm->cm_amount)}}</td>
+                                <td>{{$db->db_id}}</td>
+                                <td>{{$db->vendor_title_name." ".$db->vendor_first_name." ".$db->vendor_middle_name." ".$db->vendor_last_name." ".$db->vendor_suffix_name}}</td>
+                                <td>{{currency("PHP",$db->db_amount)}}</td>
                                 <td class="text-center">
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
-                                          <!-- <li ><a class="popup" link="/member/customer/view_cm/{{$cm->cm_id}}" size="lg">View CM</a></li> -->
-                                        @if($cm->manual_cm_id== null)
-                                          <li ><a href="/member/customer/credit_memo?id={{$cm->cm_id}}">Edit CM</a></li>
-                                        @endif
+                                          <!-- <li ><a class="popup" link="/member/customer/view_db/{{$db->db_id}}" size="lg">View db</a></li> -->
                                       </ul>
                                     </div>
                                 </td>

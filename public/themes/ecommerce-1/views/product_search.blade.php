@@ -103,8 +103,8 @@
 								Search Result for: 
 								<strong>"{{ Request::input('keyword') }}"</strong>
 								<div class="text-left">
-						            Items Found:
-						            <strong>"{{ count($_product) }}"</strong>
+						            Item/s Found:
+						            <strong>{{ count($_product) }}</strong>
 						        </div>
 							</div>
 							<form class="sort-by" method="get">

@@ -370,7 +370,7 @@ function debit_memo(){
 	{
 		$parent = $this.closest(".tr-draggable");
 		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
-		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
+		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-qty").val(1).change();
 
 		if($this.find("option:selected").attr("has-um") != '')

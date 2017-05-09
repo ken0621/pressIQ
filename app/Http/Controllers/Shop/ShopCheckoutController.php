@@ -481,7 +481,7 @@ class ShopCheckoutController extends Shop
         {
             echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
             echo "<form id='autosubmit' action='/checkout' method='post'>";
-            echo "<input type='hidden' name='_token' value='" . csrf_token() . "'>"
+            echo "<input type='hidden' name='_token' value='" . csrf_token() . "'>";
             if (is_array($ipay88_data) || is_object($ipay88_data))
             {
                 foreach ($ipay88_data as $key => $val) {

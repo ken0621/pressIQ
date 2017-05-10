@@ -356,6 +356,12 @@ class Accounting
 
 						break;
 					case "receive-payment":
+						/* CASH ACCOUNT - BANK */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
+						$line_data["account_id"] 	= $account->account_id;
+						Accounting::insertJournalLine($line_data);
+						break;
 					case "bill-payment":
 						/* CASH ACCOUNT - BANK */
 						$line_data["entry_amount"]	= $entry_line["entry_amount"];

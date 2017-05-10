@@ -81,14 +81,14 @@ class ShopCheckoutController extends Shop
         
         else
         {
-            $data['customer_first_name'] = '';
-            $data['customer_middle_name'] = '';
-            $data['customer_last_name'] = '';
-            $data['customer_email'] = '';
-            $data['customer_mobile'] = '';
-            $data['customer_state_province'] = '';
-            $data['customer_city'] = '';
-            $data['customer_address'] = '';
+            $data['customer_first_name'] = null;
+            $data['customer_middle_name'] = null;
+            $data['customer_last_name'] = null;
+            $data['customer_email'] = null;
+            $data['customer_mobile'] = null;
+            $data['customer_state_province'] = null;
+            $data['customer_city'] = null;
+            $data['customer_address'] = null;
         }
 
         $data["customer_email"] = Request::input("email") ? Request::input("email") : $data["customer_email"];
@@ -287,6 +287,16 @@ class ShopCheckoutController extends Shop
 
     public function validate_submit()
     {
+        if(!isset(Self::$customer_info->customer_id))
+        {
+            $check_email = Tbl_customer::where('shop_id', $this->shop_info->shop_id)->where('email', Request::input("email"))->where("password", "!=", "")->count();
+
+            if ($check_email)
+            {
+                return Redirect::to('/checkout/login')->with('fail', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
+            }
+        }
+
         // Validate Customer Info
         $rules["customer_first_name"]   = 'required';
         $rules["customer_middle_name"]  = 'required';
@@ -386,10 +396,6 @@ class ShopCheckoutController extends Shop
         $cart["customer"]["customer_middle_name"] = Request::input("customer_middle_name");
         $cart["customer"]["customer_last_name"] = Request::input("customer_last_name");
         $cart["customer"]["customer_email"] = Request::input("customer_email");
-        if (Request::input("customer_password")) 
-        {
-            $cart["customer"]["customer_password"] = Request::input("customer_password");
-        }
         $cart["customer"]["customer_birthdate"] = $get_birthday;
         $cart["customer"]["customer_mobile"] = Request::input("customer_mobile");
         $cart["customer"]["customer_country_id"] = $get_country ? $get_country->country_id : '420';

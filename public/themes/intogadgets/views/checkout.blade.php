@@ -180,12 +180,12 @@
 					    	@if(is_array(session('fail')))
 					    		<ul>
 						        @foreach(session('fail') as $fail)
-					        		<li>{{ $fail }}</li>
+					        		<li style="display: block;">{{ $fail }}</li>
 						        @endforeach
 						        </ul>
 						    @else
 						    	<ul style="padding: 0; margin: 0;">
-						    		<li>{{ session('fail') }}</li>
+						    		<li style="display: block;">{{ session('fail') }}</li>
 						    	</ul>
 					        @endif
 					    </div>

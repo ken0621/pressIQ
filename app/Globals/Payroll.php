@@ -1501,14 +1501,17 @@ class Payroll
 			// dd($legal_holiday);
 
 			/* ALLOWANCE DAILY START */
-			$total_hours_render += $regular_hours + $rest_day_hours + $extra_day_hours + $special_holiday_hours + $regular_holiday_hours;
 
-			if(($regular_hours + $rest_day_hours + $extra_day_hours + $special_holiday_hours + $regular_holiday_hours) > 0)
+			$one_day_render = $regular_hours + $rest_day_hours + $extra_day_hours + $special_holiday_hours + $regular_holiday_hours;
+
+			$total_hours_render += $one_day_render;
+
+			if($one_day_render > 0)
 			{
 				// dd($_allowance_daily);
 				foreach($_allowance_daily as $key => $daily_allowance)
 				{
-					$data['allowance'] = Payroll::push_allowance($data['allowance'], $daily_allowance, $payroll_period_category, $period_category);
+					$data['allowance'] = Payroll::push_allowance($data['allowance'], $daily_allowance, $payroll_period_category, $period_category, ($one_day_render / $target_hour));
 
 					// dd($daily_allowance);
 				}
@@ -2193,11 +2196,16 @@ class Payroll
 	}
 
 	/* PUSH TO ARRAY ALLOWANCES */
-	public static function push_allowance($allowance_data = array(), $allowance = array(), $payroll_period_category = '', $period_category = '')
+	public static function push_allowance($allowance_data = array(), $allowance = array(), $payroll_period_category = '', $period_category = '', $day_count = 1)
 	{
 		$temp_allowance['payroll_allowance_id']		= $allowance->payroll_allowance_id;
 		$temp_allowance['payroll_allowance_name'] 	= $allowance->payroll_allowance_name;
 		$temp_allowance['payroll_allowance_amount'] = $allowance->payroll_allowance_amount;
+
+		if($allowance->payroll_allowance_category == 'daily')
+		{
+			$temp_allowance['payroll_allowance_amount'] = $allowance->payroll_allowance_amount * $day_count;
+		}
 
 		// dd($allowance->payroll_allowance_add_period);
 

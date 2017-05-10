@@ -27,6 +27,25 @@ class Item
     {
         return Tbl_item::category()->where("item_id",$item_id)->first();
     }
+
+    public static function get_item_in_bundle($item_id = 0)
+    {
+        $items = array();
+        if($item_id != 0)
+        {
+            $items = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+        }
+        return $items;
+    }    
+    public static function get_item_type($item_id = 0)
+    {
+        $type = null;
+        if($item_id != 0)
+        {
+            $type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        }
+        return $type;
+    }
 	public static function breakdown($_item='')
 	{
 		$data = '';

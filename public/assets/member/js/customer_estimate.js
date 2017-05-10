@@ -400,6 +400,14 @@ function customer_estimate(){
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
 
+		console.log($this.find("option:selected").attr("item-type"));
+		$parent.find(".txt-rate").attr("disabled",false);
+		$parent.find(".txt-discount").attr("disabled",false);
+		if($this.find("option:selected").attr("item-type") == 4)
+		{
+			$parent.find(".txt-rate").attr("disabled","disabled");
+			$parent.find(".txt-discount").attr("disabled","disabled");
+		}
 		if($this.find("option:selected").attr("has-um") != '')
 		{			
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()

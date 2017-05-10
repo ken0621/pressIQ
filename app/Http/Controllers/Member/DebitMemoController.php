@@ -64,6 +64,7 @@ class DebitMemoController extends Member
 
         $item_info[] = null;
         $ctr_items = 0;
+        $product_consume = [];
         $_items = Request::input("dbline_item_id");
         foreach ($_items as $key => $value) 
         {   
@@ -195,6 +196,7 @@ class DebitMemoController extends Member
         $vendor_info["db_amount"] = Request::input("overall_price");
 
         $item_info[] = null;
+        $product_consume = [];
         $_items = Request::input("dbline_item_id");
         $ctr_items = 0;
         foreach ($_items as $key => $value) 

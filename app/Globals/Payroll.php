@@ -1214,6 +1214,7 @@ class Payroll
 														->select('tbl_payroll_allowance.*')
 														->get();
 
+
 		$dd_array = array();
 
 
@@ -1504,9 +1505,12 @@ class Payroll
 
 			if(($regular_hours + $rest_day_hours + $extra_day_hours + $special_holiday_hours + $regular_holiday_hours) > 0)
 			{
+				// dd($_allowance_daily);
 				foreach($_allowance_daily as $key => $daily_allowance)
 				{
 					$data['allowance'] = Payroll::push_allowance($data['allowance'], $daily_allowance, $payroll_period_category, $period_category);
+
+					// dd($daily_allowance);
 				}
 			}
 
@@ -2065,7 +2069,7 @@ class Payroll
 		$data['total_sh']					= round($data['total_sh'], 2);
 
 		$data['total_worked_days'] = $data['total_regular_days'] + $data['total_rest_days'] + $data['total_extra_days'] + $data['total_rh'] + $data['total_sh'];
-		dd($data['allowance']);
+		// dd($data['allowance']);
 		// dd($data);
 		return $data;
 	}
@@ -2195,9 +2199,16 @@ class Payroll
 		$temp_allowance['payroll_allowance_name'] 	= $allowance->payroll_allowance_name;
 		$temp_allowance['payroll_allowance_amount'] = $allowance->payroll_allowance_amount;
 
+		// dd($allowance->payroll_allowance_add_period);
+
 		if($payroll_period_category == 'Weekly')
 		{
 			if($period_category == $allowance->payroll_allowance_add_period)
+			{
+				array_push($allowance_data, $temp_allowance);
+			}
+
+			if($allowance->payroll_allowance_add_period == 'Every Period')
 			{
 				array_push($allowance_data, $temp_allowance);
 			}
@@ -2212,6 +2223,11 @@ class Payroll
 			{
 				array_push($allowance_data, $temp_allowance);
 			}	
+
+			else if($allowance->payroll_allowance_add_period == 'Every Period')
+			{
+				array_push($allowance_data, $temp_allowance);
+			}
 		}
 
 		else if($payroll_period_category == 'Monthly')
@@ -2222,6 +2238,8 @@ class Payroll
 			}
 		}
 
+
+		// dd($allowance_data);
 		return $allowance_data;
 
 	}

@@ -80,16 +80,20 @@ class Accounting
 			$result[$key]["account_name"]			= $item->account_name;
 			$result[$key]["account_type"] 			= $item->chart_type_name;
 			$result[$key]["account_description"] 	= $item->account_description;
+			$result[$key]["account_parent_id"] 		= $item->account_parent_id;
 			$result[$key]["account_sublevel"] 		= $item->account_sublevel;
 			$result[$key]["account_balance"] 		= $item->balance;
 			$sub_query = Tbl_chart_of_account::where("account_parent_id", $item->account_id)->first();
 			
 			if($sub_query)
 			{
+				$result[$key]["is_sub_count"] = 1;
 				$result[$key]["sub_account"] = Accounting::checkAccount($shop, $item->account_id, $sublevel + 1, $filter, $type, $search);
+
 			}
 			else
 			{
+				$result[$key]["is_sub_count"] = 0;
 				$result[$key]["sub_account"] = null;
 			}
 		}

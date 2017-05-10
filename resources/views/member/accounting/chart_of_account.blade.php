@@ -1,13 +1,9 @@
 @extends('member.layout')
 @section('css')
 <style>
-    .indent
-    {
-        padding-left: attr(indent);
-    }
-    tr>td
-    {
-        padding: 10px!important;
+
+    .hiddenRow {
+        padding: 0 !important;
     }
 </style>
 @endsection
@@ -45,7 +41,7 @@
             <div class="form-group order-tags"></div>
             <div class="table-responsive load-data" target="coa_data">
                 <div id="coa_data">
-                    <table class="table table-hover table-compress;">
+                    <table class="table table-hover table-condensed">
                         <thead style="text-transform: uppercase">
                             <tr>
                                 <th>Name</th>
@@ -78,6 +74,29 @@
             {
                 window.location.href = data.redirect_to;
             }
+        }
+    }
+
+    var coa_list = new coa_list();
+
+    function coa_list()
+    {
+        init();
+
+        function init()
+        {
+            document_ready();
+        }
+
+        function document_ready() {     event_toggle_caret(); }
+
+        function event_toggle_caret()
+        {
+            $(document).on("click", ".toggle-caret", function()
+            {
+                // $('#display_advance').toggle('1000');
+                $(this).toggleClass("fa-caret-right fa-caret-down");
+            })
         }
     }
 </script>

@@ -96,7 +96,7 @@ class JournalEntryController extends Member
 
 	public function getAllEntry()
 	{
-		$data['_journal'] = Tbl_journal_entry::transaction()->get();
+		$data['_journal'] = Tbl_journal_entry::transaction()->where("je_shop_id", $this->getShopId())->get();
 		foreach($data['_journal'] as $key=>$journal)
 		{
 			$customer_vendor = Accounting::checkTransaction($journal->je_reference_module)['name'];

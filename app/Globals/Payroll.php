@@ -2019,12 +2019,11 @@ class Payroll
 			}
 			
 		}
+
 		if($group->payroll_group_agency == Payroll::return_ave($period_category))
 		{
 			$data['agency_deduction'] = $group->payroll_group_agency_fee;
 		}
-
-
 
 		$data['total_deduction']	+= $data['tax_contribution'];
 		$data['total_deduction']	+= $data['sss_contribution_ee'];
@@ -2053,14 +2052,10 @@ class Payroll
 			$data['late_deduction'] 			= 0;
 			$data['under_time'] 				= 0;
 			$data['agency_deduction'] 			= 0;
-			$data['agency_deduction'] 			= 0;
-			$data['agency_deduction'] 			= 0;
 		}
 
 		$data['absent_count']				= $absent_count;
 		$data['absent_deduction']			= $absent_deduction;
-
-
 		$data['total_net'] 					= $data['total_gross'] - $data['total_deduction'];
 
 		$data['total_regular_days']			= round($data['total_regular_days'], 2);
@@ -2070,7 +2065,7 @@ class Payroll
 		$data['total_sh']					= round($data['total_sh'], 2);
 
 		$data['total_worked_days'] = $data['total_regular_days'] + $data['total_rest_days'] + $data['total_extra_days'] + $data['total_rh'] + $data['total_sh'];
-		// dd($data['allowance']);
+		dd($data['allowance']);
 		// dd($data);
 		return $data;
 	}

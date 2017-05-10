@@ -312,8 +312,9 @@ class Accounting
 			/* ENTRY DESCRIPTION */ 
 			$line_data["entry_description"] = isset($entry_line["entry_description"]) ? $entry_line["entry_description"] : '';
 
-			if($item->item_type_id != 4) // ITEM IS NOT A BUNDLE
-			{
+			
+			// if($item->item_type_id != 4) // ITEM IS NOT A BUNDLE
+			// {
 				switch($entry["reference_module"])
 				{
 					case "estimate": // NON-POSTING
@@ -435,7 +436,7 @@ class Accounting
 						break;	
 					// SO ON
 				}
-			}
+			// }
 		}
 
 		return $line_data["je_id"];

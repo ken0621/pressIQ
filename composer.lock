@@ -1282,7 +1282,11 @@
                 "thumbnail",
                 "watermark"
             ],
+<<<<<<< HEAD
+            "time": "2017-02-04 10:37:19"
+=======
             "time": "2017-04-23 18:45:36"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -1704,8 +1708,11 @@
                 "sftp",
                 "storage"
             ],
-
-            "time": "2017-04-28T10:15:08+00:00"
+<<<<<<< HEAD
+            "time": "2017-03-22 15:43:14"
+=======
+            "time": "2017-04-28 10:15:08"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "league/fractal",
@@ -2806,7 +2813,11 @@
                 "mail",
                 "mailer"
             ],
+<<<<<<< HEAD
+            "time": "2017-02-13 07:52:53"
+=======
             "time": "2017-04-20 17:32:18"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "symfony/console",
@@ -2866,7 +2877,11 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+            "time": "2017-03-31 14:33:09"
+=======
             "time": "2017-04-25 14:03:21"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "symfony/css-selector",
@@ -2919,7 +2934,11 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+            "time": "2017-02-21 08:33:48"
+=======
             "time": "2017-05-01 14:31:55"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "symfony/debug",
@@ -2976,7 +2995,11 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+            "time": "2017-02-18 18:28:08"
+=======
             "time": "2017-04-13 20:03:51"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "symfony/dom-crawler",
@@ -3031,7 +3054,11 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+            "time": "2017-02-21 08:32:25"
+=======
             "time": "2017-04-12 07:39:27"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "symfony/event-dispatcher",
@@ -3091,7 +3118,11 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+            "time": "2017-04-03 20:37:06"
+=======
             "time": "2017-04-26 16:56:54"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "symfony/finder",
@@ -3140,7 +3171,11 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+            "time": "2017-03-14 11:32:10"
+=======
             "time": "2017-04-12 07:39:27"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "symfony/http-foundation",
@@ -3196,7 +3231,11 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+            "time": "2017-03-24 22:51:36"
+=======
             "time": "2017-04-29 15:58:46"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "symfony/http-kernel",
@@ -3278,7 +3317,11 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+            "time": "2017-04-04 04:31:58"
+=======
             "time": "2017-05-01 16:01:24"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -3494,7 +3537,11 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+            "time": "2017-03-03 16:35:37"
+=======
             "time": "2017-04-12 07:39:27"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "symfony/routing",
@@ -3568,7 +3615,11 @@
                 "uri",
                 "url"
             ],
+<<<<<<< HEAD
+            "time": "2017-03-02 14:51:26"
+=======
             "time": "2017-04-12 07:39:27"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "symfony/translation",
@@ -3631,7 +3682,11 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+            "time": "2017-03-20 15:03:41"
+=======
             "time": "2017-04-12 07:39:27"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "symfony/var-dumper",
@@ -3693,7 +3748,11 @@
                 "debug",
                 "dump"
             ],
+<<<<<<< HEAD
+            "time": "2017-03-12 16:00:52"
+=======
             "time": "2017-04-12 07:39:27"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -3992,12 +4051,12 @@
             "version": "0.9.9",
             "source": {
                 "type": "git",
-                "url": "https://github.com/padraic/mockery.git",
+                "url": "https://github.com/mockery/mockery.git",
                 "reference": "6fdb61243844dc924071d3404bb23994ea0b6856"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/6fdb61243844dc924071d3404bb23994ea0b6856",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/6fdb61243844dc924071d3404bb23994ea0b6856",
                 "reference": "6fdb61243844dc924071d3404bb23994ea0b6856",
                 "shasum": ""
             },
@@ -4162,7 +4221,11 @@
                 "testing",
                 "tests"
             ],
+<<<<<<< HEAD
+            "time": "2016-12-04 21:03:31"
+=======
             "time": "2017-04-27 12:15:45"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         },
         {
             "name": "phpspec/prophecy",
@@ -5028,7 +5091,11 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
+            "time": "2017-03-20 09:45:15"
+=======
             "time": "2017-05-01 14:55:58"
+>>>>>>> a9fc7c5b64e24d65c9532275f839d26043f95a50
         }
     ],
     "aliases": [],

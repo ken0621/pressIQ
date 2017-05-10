@@ -258,7 +258,6 @@ function page_list()
     $nav[$page]['name'] = "Accounting";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "money";
-
    
     /* -- ACCOUNTING => SALES */
     $code = "accounting-sales";
@@ -316,7 +315,7 @@ function page_list()
     
     /* PURCHASING INVENTORY SYSTEM */
     $page = "pis";
-    $nav[$page]['name'] = "Truck & Delivery";
+    $nav[$page]['name'] = "Sales & Delivery";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "truck";
 
@@ -357,37 +356,9 @@ function page_list()
     // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
-   
-    $code = "pis-agent";
-    $nav[$page]['submenu'][$code]['label'] = "Agent List";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/agent_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-
-    /* -- EMPLOYEE POSITION=> LIST  */
-    $code = "pis-agent-position";
-    $nav[$page]['submenu'][$code]['label'] = "Agent Position";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/agent_position";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-    
-
-     /* -- PIS => TRUCK */
-    $code = "pis-truck";
-    $nav[$page]['submenu'][$code]['label'] = "Truck List";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/truck_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-
     /* PURCHASING INVENTORY SYSTEM */
     $page = "pis_agent";
-    $nav[$page]['name'] = "Sales Agent";
+    $nav[$page]['name'] = "Sales Agent Transaction";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "tablet";
 
@@ -407,6 +378,14 @@ function page_list()
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/collection";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    $code = "pis-agent";
+    $nav[$page]['submenu'][$code]['label'] = "Agent List";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/agent_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
     /* PRODUCT */
@@ -471,6 +450,16 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Category";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/category";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Still developing";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+
+     /* -- ITEM => UNIT OF MEASUREMENTS  */
+    $code = "item-pis-unit-measurement";
+    $nav[$page]['submenu'][$code]['label'] = "Unit of Measurements (P.I.S)";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/pis_unit_of_measurement";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
@@ -794,10 +783,10 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
     
     /* -- VENDORS => BAD ORDERS  */
-    $code = "vendor-bad-order";
-    $nav[$page]['submenu'][$code]['label'] = "Bad Orders";
+    $code = "vendor-debit-memo";
+    $nav[$page]['submenu'][$code]['label'] = "Debit Memo";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/";
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/debit_memo/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
@@ -884,6 +873,27 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add/edit'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+
+    
+   
+    /* -- EMPLOYEE POSITION=> LIST  */
+    $code = "pis-agent-position";
+    $nav[$page]['submenu'][$code]['label'] = "Agent Position";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/agent_position";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    
+
+     /* -- PIS => TRUCK */
+    $code = "pis-truck";
+    $nav[$page]['submenu'][$code]['label'] = "Truck List";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/truck_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
     
     /* -- UTILITIES => AUDIT TRAIL */
     $code = "utilities-audit";
@@ -1049,6 +1059,16 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Product Variant Sales Report";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sale/product_variant";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
+
+    /* -- Accounting => Sales Report  */
+    $code = "report-sales-account";
+    $nav[$page]['submenu'][$code]['label'] = "Sales Report (Accounting)";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/sale";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";

@@ -1869,18 +1869,7 @@ class Payroll
 
 		/* GET SSS CONTRIBUTION */
 
-	// is_deduct_tax_default
-	// deduct_tax_custom
-	// is_deduct_sss_default
-	// deduct_sss_custom
-	// is_deduct_philhealth_default
-	// deduct_philhealth_custom
-	// is_deduct_pagibig_default
-	// deduct_pagibig_custom
 
-		// start
-		// end
-		// payroll_period_category
 
 		$date_period[0] = date('Y-m-01', strtotime($end));
 		$date_period[1] = date('Y-m-t', strtotime($end));

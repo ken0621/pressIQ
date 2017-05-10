@@ -1293,6 +1293,8 @@ class Payroll
 
 			$target_hour = $group->payroll_group_target_hour;
 
+			$under_time = $under_time / $target_hour;
+
 			if($group->payroll_group_is_flexi_time == 1 && $group->payroll_group_target_hour_parameter == 'Per Period')
 			{
 				$target_hour = $group->payroll_group_target_hour / $group->payroll_group_working_day_month;

@@ -372,6 +372,24 @@ class Accounting
 					}
 					break;
 				case "debit-memo":
+					if($item->item_type_id == 1) // INVENTORY TYPE
+					{
+						/* ASSET ACCOUNT */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
+						$line_data["account_id"] 	= $account_asset;
+						Accounting::insertJournalLine($line_data);
+					}
+					else
+					{
+						/* EXPENSE ACCOUNT */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::contraAccount($account_expense);
+						$line_data["account_id"] 	= $account_expense;
+						Accounting::insertJournalLine($line_data);
+					}
+					break;
+					break;
 				case "credit-memo":
 					/* INCOME ACCOUNT */
 					$line_data["entry_amount"]	= $entry_line["entry_amount"];

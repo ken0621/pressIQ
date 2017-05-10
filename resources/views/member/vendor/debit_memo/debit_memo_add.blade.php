@@ -15,6 +15,21 @@
                 </h1>
                 <a href="/member/vendor/debit_memo/list" class="panel-buttons btn btn-custom-white pull-right">Cancel</a>
                 <button type="submit" class="panel-buttons btn btn-custom-primary pull-right">Save</button>
+                @if(isset($db))
+                <div class="pull-right">
+                    <div class="dropdown">
+                        <button class="btn btn-custom-white dropdown-toggle" type="button" data-toggle="dropdown">More
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <!-- <li class="dropdown-header">Dropdown header 1</li> -->
+                            <li><a href="/member/accounting/journal/entry/debit-memo/{{$db->db_id}}">Transaction Journal</a></li>
+                            <!-- <li class="divider"></li> -->
+                            <!-- <li class="dropdown-header">Dropdown header 2</li> -->
+                            <li><a href="#">Void</a></li>
+                        </ul>
+                    </div>
+                </div>
+                @endif 
             </div>
         </div>
     </div>

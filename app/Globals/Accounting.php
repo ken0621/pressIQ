@@ -7,6 +7,8 @@ use App\Models\Tbl_journal_entry;
 use App\Models\Tbl_journal_entry_line;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_vendor;
 use Log;
 use Request;
 use Session;
@@ -32,9 +34,9 @@ class Accounting
 	 * @param string  	$filter 	(all, active, inactive)
 	 * @param integer  	$parent_id  Id of the Chart of Accoutn where will it start
 	 * @param array  	$type      	Filter of type of Chart of Account (eg: Accounts Payable)
-	 * @param boolean  	$balance    If it will show total balance of each account (true, false) (CURRENTLY NOT WORKING)
+	 * @param boolean  	$balance    If it will show total balance of each account (true, false) (always true)
 	 */
-	public static function getAllAccount($filter = 'all', $parent_id = null, $type = null, $balance = false)
+	public static function getAllAccount($filter = 'all', $parent_id = null, $type = null, $search = null, $balance = false)
 	{
 		$shop = Accounting::getShopId();
 
@@ -48,11 +50,11 @@ class Accounting
 			$parent_id 	= null;
 		}
 
-		$result = Accounting::checkAccount($shop, $parent_id, $sublevel, $filter, $type);
-		//dd($result);
+		$result = Accounting::checkAccount($shop, $parent_id, $sublevel, $filter, $type, $search);
+
 		return $result;
 	}
-	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type)
+	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type, $search)
 	{
 		$query = Tbl_chart_of_account::accountInfo($shop)->balance()->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel);
 
@@ -67,7 +69,8 @@ class Accounting
 		}
 
 		if($type != null) $query->whereIn("chart_type_name", $type);
-		
+		if($search != null) $query->where("account_name","like","%".$search."%");
+
 		$query = $query->get();
 
 		foreach($query as $key => $item)
@@ -83,7 +86,7 @@ class Accounting
 			
 			if($sub_query)
 			{
-				$result[$key]["sub_account"] = Accounting::checkAccount($shop, $item->account_id, $sublevel + 1, $filter, $type);
+				$result[$key]["sub_account"] = Accounting::checkAccount($shop, $item->account_id, $sublevel + 1, $filter, $type, $search);
 			}
 			else
 			{
@@ -312,6 +315,7 @@ class Accounting
 				case "sales-order": // NON-POSTING
 					break;
 				case "mlm-product-repurchase":
+				case "product-order":
 				case "sales-receipt":
 				case "invoice":
 					/* INCOME ACCOUNT */
@@ -342,7 +346,7 @@ class Accounting
 				case "bill-payment":
 					/* CASH ACCOUNT - BANK */
 					$line_data["entry_amount"]	= $entry_line["entry_amount"];
-					$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
+					$line_data["entry_type"] 	= Accounting::contraAccount($account->account_id);
 					$line_data["account_id"] 	= $account->account_id;
 					Accounting::insertJournalLine($line_data);
 					break;
@@ -367,6 +371,25 @@ class Accounting
 						Accounting::insertJournalLine($line_data);
 					}
 					break;
+				case "debit-memo":
+					if($item->item_type_id == 1) // INVENTORY TYPE
+					{
+						/* ASSET ACCOUNT */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
+						$line_data["account_id"] 	= $account_asset;
+						Accounting::insertJournalLine($line_data);
+					}
+					else
+					{
+						/* EXPENSE ACCOUNT */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::contraAccount($account_expense);
+						$line_data["account_id"] 	= $account_expense;
+						Accounting::insertJournalLine($line_data);
+					}
+					break;
+					break;
 				case "credit-memo":
 					/* INCOME ACCOUNT */
 					$line_data["entry_amount"]	= $entry_line["entry_amount"];
@@ -388,8 +411,6 @@ class Accounting
 						$line_data["account_id"] 	= $account_asset;
 						Accounting::insertJournalLine($line_data);
 					}
-					break;
-				case "debit-memo":
 					break;
 				case "deposit":
 					/* OPENING BALANCE EQUITY */
@@ -496,7 +517,8 @@ class Accounting
 				break;
 			case 'mlm-product-repurchase':
 			case 'sales-receipt':
-				$data["main_account"]		= 'cash';
+			case 'product-order':
+				$data["main_account"]		= 'cash-r';
 				$data["name"] 				= 'customer';
 				$data["newNormalJournal"] 	= 'normalBalance';
 				$data["newContraJournal"] 	= 'contraAccount';
@@ -511,6 +533,7 @@ class Accounting
 				$data["newContraJournal"] 	= 'contraAccount';
 				return $data;
 				break;
+			case 'debit-memo':
 			case 'bill-payment':
 				$data["main_account"]		= 'payable';
 				$data["name"] 				= 'vendor';
@@ -737,4 +760,12 @@ class Accounting
 	// Creditable Withholding Tax - 1%			= tax-credit-tax-1
 	// Discount									= discount-sale
 	// Discount									= discount-purchase
+
+	public static function getTotalAccount()
+	{
+		$data["accounts_receivable"] = collect(Tbl_customer::balanceJournal()->get())->sum("balance");
+		$data["accoutns_payable"]	 = collect(Tbl_vendor::balanceJournal()->get())->sum("balance");		
+
+		return $data;
+	}
 }

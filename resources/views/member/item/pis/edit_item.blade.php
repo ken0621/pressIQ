@@ -31,8 +31,8 @@
                             <textarea class="form-control input-sm" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>
                         </div>
                         <div class="col-md-4 text-center">
-                            <input type="hidden" name="item_img" class="image-value" key="1" required>
-                            <img class="img-responsive img-src" key="1" style="width: 100%; object-fit: contain;" src="/assets/front/img/default.jpg">
+                            <input type="hidden" name="item_img" class="image-value" key="1" value="{{$data['item_img'] ? $data['item_img'] : '/assets/front/img/default.jpg' }}">
+                            <img class="img-responsive img-src" key="1" style="width: 100%; object-fit: contain;" src="{{$data['item_img'] ? $data['item_img'] : '/assets/front/img/default.jpg' }}">
                             <button type="button" class="btn btn-primary image-gallery image-gallery-single" key="1" style="margin-top: 15px;">Upload Image</button>
                         </div>
                     </div>

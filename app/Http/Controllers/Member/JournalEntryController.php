@@ -83,7 +83,6 @@ class JournalEntryController extends Member
 	 *
 	 * @parameter
 	 */
-
 	public function getEntry($module, $id)
 	{
 		$data['_journal'] = Tbl_journal_entry::transaction($module)->where("je_reference_id", $id)->get();

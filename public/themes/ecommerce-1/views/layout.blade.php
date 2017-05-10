@@ -89,13 +89,23 @@
                         <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech-official-logo.png">            
                     </div>
 	    			<div class="col-md-6">
-	    				<div class="search-bar">
-	    					<div class="input-group input-group-lg">
-							  <!-- <span class="input-group-addon search-category" id="sizing-addon1">Categories <span class="caret"></span></span> -->
-							  <input type="text" class="form-control search-input" aria-describedby="sizing-addon1">
-							  <span class="input-group-addon search-button" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
-							</div>
+
+                        {{-- Search Bar --}}                          
+        				<div class="search-bar">
+                            <form action="/product_search" method="get" id="form-search">
+    	    					<div class="input-group input-group-lg">
+    							     <!-- <span class="input-group-addon search-category" id="sizing-addon1">Categories <span class="caret"></span></span> -->
+    							     <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1">
+    							     <span class="input-group-addon search-button" id="sizing-addon1">
+                                        <a href="" onclick="onSearch();" id="submit_link">
+                                            <i class="fa fa-search" aria-hidden="true" id="submit_link"></i>
+                                        </a>                                 
+                                     </span>
+    							</div>
+                            </form>
 	    				</div>
+                        {{-- End Search Bar --}}
+
 	    			</div>
 	    			<div class="col-md-3 woaw">
 	    				<div class="shopping-cart-container">
@@ -134,6 +144,7 @@
                 <li class="nav-border {{ Request::input('type') == $category['type_id'] ? 'active' : '' }}"><a href="/product?type={{ $category['type_id'] }}" style="text-transform: uppercase;">{{ $category['type_name'] }}</a></li>
     	        @endforeach
             @endif
+            <li class="nav-border"><a href="http://tour.philtechglobalinc.com">TRAVEL AND TOURS</a></li>
           </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
@@ -234,4 +245,15 @@
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
     @yield("js")
     </body>
+
+<script type="text/javascript">
+    
+    function onSearch()
+    {
+        var keyword = $('#keyword').val();
+        $("#submit_link").attr("href", "/product_search?keyword="+$('#keyword').val());
+    }
+
+</script>
+    
 </html>

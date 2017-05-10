@@ -17,7 +17,8 @@ class Tbl_warehouse extends Model
     public function scopeWarehouseitem($query)
     {
     	 return $query->leftjoin('tbl_sub_warehouse', 'tbl_sub_warehouse.warehouse_id', '=', 'tbl_warehouse.warehouse_id')
-                     ->leftjoin('tbl_item','tbl_item.item_id','=','tbl_sub_warehouse.item_id');
+                     ->leftjoin('tbl_item','tbl_item.item_id','=','tbl_sub_warehouse.item_id')
+                    ->where("tbl_item.archived",0);
 
     }
     public function scopeWarehouseitem_vendor($query,$vendor_id = 0)
@@ -42,6 +43,7 @@ class Tbl_warehouse extends Model
         if($item_id != 0)
         {
             $query->where('tbl_item.item_id',$item_id);
+            dd($item_id);
         }
             $query->where('tbl_item.archived',$archived)             
                  ->groupBy('tbl_warehouse_inventory.inventory_item_id')

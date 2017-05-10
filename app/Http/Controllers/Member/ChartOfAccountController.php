@@ -21,9 +21,13 @@ class ChartOfAccountController extends Member
     {
         $data['_account_type']  = Tbl_chart_account_type::get();
         $data['_account']       = Accounting::getAllAccount();
-        
         // dd($data['_account']);
-        // $data['_account_view']  = view('member.');
+        $search = Request::input('search');
+        if($search)
+        {
+            $data['_account']       = Accounting::getAllAccount('all','','',$search);
+        }
+
         return view('member/accounting/chart_of_account', $data);
     }
 

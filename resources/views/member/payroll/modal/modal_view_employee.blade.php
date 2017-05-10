@@ -335,26 +335,16 @@
                       <label>Mode of Deduction</label>
                     </div>
                   </div>
-                  <div class="form-group">
-                    <div class="col-md-6">
-                      <div class="checkbox">
-                        <label><input type="checkbox" name="is_deduct_tax_default" disabled {{$salary->is_deduct_tax_default == 1 ? 'checked="checked"':''}}>Compute TAX base on period</label>
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <small>TAX contribution per default</small>
-                      <input type="number" name="deduct_tax_custom" class="form-control text-right" placeholder="0.00" step="any" id="tax-deduction-period" value="{{$salary->deduct_tax_custom}}" disabled>
-                    </div>
-                  </div>
+                  
 
                   <div class="form-group">
                     <div class="col-md-6">
                       <div class="checkbox">
-                        <label><input type="checkbox" name="is_deduct_sss_default" disabled {{$salary->is_deduct_sss_default == 1 ? 'checked="checked"':''}}>Compute SSS base on period</label>
+                        <label><input type="checkbox" name="is_deduct_sss_default" disabled {{$salary->is_deduct_sss_default == 1 ? 'checked="checked"':''}}>Compute SSS base on default</label>
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <small>SSS contribution per default</small>
+                      <small>SSS contribution period</small>
                       <input type="number" name="deduct_sss_custom" class="form-control text-right" placeholder="0.00" step="any" id="sss-deduction-period" value="{{$salary->deduct_sss_custom}}" disabled>
                     </div>
                   </div>
@@ -362,11 +352,11 @@
                   <div class="form-group">
                     <div class="col-md-6">
                       <div class="checkbox">
-                        <label><input type="checkbox" name="is_deduct_philhealth_default"   disabled {{$salary->is_deduct_philhealth_default == 1 ? 'checked="checked"':''}}>Compute PHILHEALTH base on period</label>
+                        <label><input type="checkbox" name="is_deduct_philhealth_default"   disabled {{$salary->is_deduct_philhealth_default == 1 ? 'checked="checked"':''}}>Compute PHILHEALTH base on default</label>
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <small>PHILHEALTH contribution per default</small>
+                      <small>PHILHEALTH contribution per period</small>
                       <input type="number" name="deduct_philhealth_custom" class="form-control text-right" placeholder="0.00" step="any" id="philhealth-deduction-period" value="{{$salary->deduct_philhealth_custom}}" disabled>
                     </div>
                   </div>
@@ -374,11 +364,11 @@
                   <div class="form-group">
                     <div class="col-md-6">
                       <div class="checkbox">
-                        <label><input type="checkbox" name="is_deduct_pagibig_default" disabled {{$salary->is_deduct_pagibig_default == 1 ? 'checked="checked"':''}}>Compute PAGIBIG base on period</label>
+                        <label><input type="checkbox" name="is_deduct_pagibig_default" disabled {{$salary->is_deduct_pagibig_default == 1 ? 'checked="checked"':''}}>Compute PAGIBIG base on default</label>
                       </div>
                     </div>
                     <div class="col-md-6">
-                      <small>PAGIBIG contribution per default</small>
+                      <small>PAGIBIG contribution per period</small>
                       <input type="number" name="deduct_pagibig_custom" class="form-control text-right" placeholder="0.00" step="any" id="pagibig-deduction-period" value="{{$salary->deduct_pagibig_custom}}" disabled>
                     </div>
                   </div>

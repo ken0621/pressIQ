@@ -27,6 +27,7 @@ use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_mlm_encashment_process;
 use App\Models\Tbl_sir_item;
+use App\Models\Tbl_employee;
 use App\Models\Tbl_sir;
 use DB;
 use Carbon\Carbon;
@@ -496,6 +497,44 @@ class AuditTrail
                     $transaction_amount = currency("PHP",$amount);                    
                 }
             }
+            else if($value->source == "agent_collection")
+            {
+                $transaction = Tbl_sir::where("sir_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($value->created_at));
+                    $transaction_client = "";
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->agent_collection;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["agent_collection"];
+                        $transaction_new_id = $old[$key]["sir_id"];
+                        $transaction_client = $old[$key]["agent_collection_remarks"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "agent")
+            {
+                $transaction = Tbl_employee::where("employee_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->created_at));
+                    $transaction_client = $transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["employee_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+
 
 
             $audit_trail[$key]->user = $value->user_first_name." ".$value->user_last_name;

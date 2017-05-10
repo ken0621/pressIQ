@@ -163,6 +163,7 @@ class ItemController extends Member
 									->where("account_shop_id", $shop_id)->pluck("account_id");
 
 			$data['_item']  			= Item::get_all_category_item();
+			$data['_item_to_bundle']	= Item::get_all_category_item([1,2,3]);
 			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 				= UnitMeasurement::load_um();
 			$data["_um_multi"]  		= UnitMeasurement::load_um_multi();
@@ -855,6 +856,7 @@ class ItemController extends Member
 			$data["_um"] 	  	= UnitMeasurement::load_um();
 			$data["_um_multi"] 	= UnitMeasurement::load_um_multi();
 			$data['_item']  	= Item::get_all_category_item();
+			$data['_item_to_bundle']	= Item::get_all_category_item([1,2,3]);
             $data["_vendor"]    = Vendor::getAllVendor('active');
 
 			// dd($data);

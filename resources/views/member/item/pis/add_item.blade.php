@@ -429,7 +429,7 @@
                                 <td class="text-center add-tr cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
                                 <td>
                                     <select class="form-control drop-down-item select-item input-sm pull-left" name="bundle_item_id[]" required>
-                                        @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                                        @include("member.load_ajax_data.load_item_category", ['add_search' => "", '_item' => $_item_to_bundle])
                                     </select>
                                 </td>
                                 <td>
@@ -458,7 +458,7 @@
             <td class="text-center add-tr cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
             <td>
                 <select class="form-control select-item input-sm pull-left" name="bundle_item_id[]" required>
-                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                    @include("member.load_ajax_data.load_item_category", ['add_search' => "", '_item' => $_item_to_bundle])
                 </select>
             </td>
             <td>

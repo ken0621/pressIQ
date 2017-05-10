@@ -64,6 +64,7 @@ class DebitMemoController extends Member
 
         $item_info[] = null;
         $ctr_items = 0;
+        $product_consume = [];
         $_items = Request::input("dbline_item_id");
         foreach ($_items as $key => $value) 
         {   
@@ -130,7 +131,7 @@ class DebitMemoController extends Member
         $data["status_message"] = null;
 
         $warehouse_id       = $this->current_warehouse->warehouse_id;
-        if($product_consume)
+        if(count($product_consume) > 0)
         {
             foreach ($product_consume as $key => $value) 
             {
@@ -195,6 +196,7 @@ class DebitMemoController extends Member
         $vendor_info["db_amount"] = Request::input("overall_price");
 
         $item_info[] = null;
+        $product_consume = [];
         $_items = Request::input("dbline_item_id");
         $ctr_items = 0;
         foreach ($_items as $key => $value) 
@@ -265,7 +267,7 @@ class DebitMemoController extends Member
         $transaction_id = $db_id;
         $transaction_type = "debit_memo";
         $warehouse_id       = Warehouse::getWarehouseIdFromSlip($transaction_id, $transaction_type);
-        if($product_consume)
+        if(count($product_consume) > 0)
         {
             foreach ($product_consume as $key => $value) 
             {

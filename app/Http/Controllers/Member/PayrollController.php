@@ -5273,7 +5273,40 @@ class PayrollController extends Member
                $payslip  = Tbl_payroll_payslip::payslip(Self::shop_id(), 0)->first();
           }
 
-          $data['payslip']     = $payslip;
+          $data['logo_position']   = '';
+          $data['logo']            = false;
+          $data['colspan']         = 1;
+
+          if($payslip->company_position == '.company-logo-center' || $payslip->company_position == '.company-center')
+          {
+               $data['logo_position'] = 'text-center';
+          }
+
+          if($payslip->company_position == '.company-logo-left' || $payslip->company_position == '.company-left')
+          {
+               $data['logo_position'] = 'text-left';
+          }
+
+          if($payslip->company_position == '.company-logo-right' || $payslip->company_position == '.company-right')
+          {
+               $data['logo_position'] = 'text-right';
+          }
+
+          if($payslip->company_position == '.company-logo-center' || $payslip->company_position == '.company-logo-left' || $payslip->company_position == '.company-logo-right')
+          {
+               $data['logo']          = true;
+          }
+
+          
+
+          if($payslip->include_time_summary == 1)
+          {
+               $data['colspan']         = 2;
+          }
+
+          
+
+          $data['payslip']  = $payslip;
           $data['_record']  = array();
           $period = Tbl_payroll_period_company::getcompanyperiod($id)->first();
 

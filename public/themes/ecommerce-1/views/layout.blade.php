@@ -144,6 +144,7 @@
                 <li class="nav-border {{ Request::input('type') == $category['type_id'] ? 'active' : '' }}"><a href="/product?type={{ $category['type_id'] }}" style="text-transform: uppercase;">{{ $category['type_name'] }}</a></li>
     	        @endforeach
             @endif
+            <li class="nav-border"><a href="http://tour.philtechglobalinc.com">TRAVEL AND TOURS</a></li>
           </ul>
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->

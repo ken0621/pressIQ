@@ -610,6 +610,11 @@ function submit_done(data)
 		// action_load_link_to_modal('/member/pis/sir/view/'+data.sir_id+'/lof','lg');
     	// location.href = "/member/pis/lof";
     }
+    else if(data.status == "success")
+    {
+        toastr.success("Success");
+        location.reload();
+    }
     else if(data.status == "success-serial")
     {    
         toastr.success("Success");

@@ -309,6 +309,60 @@
                     </div>
                   </div>
                 </div>
+                <hr>
+                <div class="form-group">
+                  <div class="col-md-12">
+                    <label>Mode of Deduction</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="is_deduct_tax_default" class="deduction-check-period" data-target="#tax-deduction-period" checked="true" value="1">Compute TAX base on period</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <small>TAX contribution per default</small>
+                    <input type="number" name="deduct_tax_custom" class="form-control text-right" placeholder="0.00" step="any" id="tax-deduction-period">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="is_deduct_sss_default" class="deduction-check-period" data-target="#sss-deduction-period" checked="true" value="1">Compute SSS base on period</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <small>SSS contribution per default</small>
+                    <input type="number" name="deduct_sss_custom" class="form-control text-right" placeholder="0.00" step="any" id="sss-deduction-period">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="is_deduct_philhealth_default" class="deduction-check-period" data-target="#philhealth-deduction-period" checked="true" value="1">Compute PHILHEALTH base on period</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <small>PHILHEALTH contribution per default</small>
+                    <input type="number" name="deduct_philhealth_custom" class="form-control text-right" placeholder="0.00" step="any" id="philhealth-deduction-period">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="col-md-6">
+                    <div class="checkbox">
+                      <label><input type="checkbox" name="is_deduct_pagibig_default" class="deduction-check-period" data-target="#pagibig-deduction-period" checked="true" value="1">Compute PAGIBIG base on period</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <small>PAGIBIG contribution per default</small>
+                    <input type="number" name="deduct_pagibig_custom" class="form-control text-right" placeholder="0.00" step="any" id="pagibig-deduction-period">
+                  </div>
+                </div>
+
               </div>
             </div>
             <div id="requirements" class="tab-pane fade">
@@ -543,6 +597,7 @@
                 <li><a data-toggle="tab" href="#leave">Leave</a></li>
                 <li><a data-toggle="tab" href="#deduction">Deduction</a></li>
                 <li><a data-toggle="tab" href="#jouarnal">Journal</a></li>
+                
               </ul>
               <div class="tab-content tab-content-custom">
                 <div id="allowance" class="tab-pane fade in active">

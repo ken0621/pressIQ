@@ -1,7 +1,7 @@
 <form class="global-submit" role="form" action="/member/payroll/employee_list/modal_update_salary" method="POST">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
-		<h4 class="modal-title">Create New Salary</h4>
+		<h4 class="modal-title">Salary Details</h4>
 		<input type="hidden" name="_token" value="{{csrf_token()}}">
 		<input type="hidden" name="payroll_employee_salary_id" value="{{$salary->payroll_employee_salary_id}}">
 
@@ -57,6 +57,61 @@
 				</div>
 			</div>
 		</div>
+		<hr>
+        <div class="form-group">
+          <div class="col-md-12">
+            <label>Mode of Deduction</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-6">
+            <div class="checkbox">
+              <label><input type="checkbox" name="is_deduct_tax_default" class="deduction-check-period-new" data-target="#tax-deduction-period-new" value="1" {{$salary->is_deduct_tax_default == 1 ? 'checked="checked"':''}}>Compute TAX base on period</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <small>TAX contribution per default</small>
+            <input type="number" name="deduct_tax_custom" class="form-control text-right" placeholder="0.00" step="any" id="tax-deduction-period-new" value="{{$salary->deduct_tax_custom}}">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <div class="checkbox">
+              <label><input type="checkbox" name="is_deduct_sss_default" class="deduction-check-period-new" data-target="#sss-deduction-period-new" value="1" {{$salary->is_deduct_sss_default == 1 ? 'checked="checked"':''}}>Compute SSS base on period</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <small>SSS contribution per default</small>
+            <input type="number" name="deduct_sss_custom" class="form-control text-right" placeholder="0.00" step="any" id="sss-deduction-period-new" value="{{$salary->deduct_sss_custom}}">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <div class="checkbox">
+              <label><input type="checkbox" name="is_deduct_philhealth_default" class="deduction-check-period-new" data-target="#philhealth-deduction-period-new" value="1" {{$salary->is_deduct_philhealth_default == 1 ? 'checked="checked"':''}}>Compute PHILHEALTH base on period</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <small>PHILHEALTH contribution per default</small>
+            <input type="number" name="deduct_philhealth_custom" class="form-control text-right" placeholder="0.00" step="any" id="philhealth-deduction-period-new" value="{{$salary->deduct_philhealth_custom}}">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-6">
+            <div class="checkbox">
+              <label><input type="checkbox" name="is_deduct_pagibig_default" class="deduction-check-period-new" data-target="#pagibig-deduction-period-new" value="1" {{$salary->is_deduct_pagibig_default == 1 ? 'checked="checked"':''}}>Compute PAGIBIG base on period</label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <small>PAGIBIG contribution per default</small>
+            <input type="number" name="deduct_pagibig_custom" class="form-control text-right" placeholder="0.00" step="any" id="pagibig-deduction-period-new" value="{{$salary->deduct_pagibig_custom}}">
+          </div>
+        </div>
+
+
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-custom-white" data-dismiss="modal">Close</button>
@@ -64,12 +119,35 @@
 	</div>
 </form>
 <script type="text/javascript">
+	check_deduction_contribution_new_action();
 	function submit_done(data)
 	{
-		
-		// console.log(data.element);
 		data.element.modal("toggle");
 		executeFunctionByName(data.function_name, window);
-		
+	}
+
+	$(".deduction-check-period-new").unbind("change");
+	$(".deduction-check-period-new").bind("change", function()
+	{
+		check_deduction_contribution_new_action();
+	});
+
+	function check_deduction_contribution_new_action()
+	{
+		$(".deduction-check-period-new").each(function()
+		{
+
+			var target = $(this).data("target");
+			if($(this).is(":checked"))
+			{	
+				$(target).attr("readonly",true);
+				$(target).removeAttr("required");
+			}
+			else
+			{
+				$(target).removeAttr("readonly");
+				$(target).attr("required",true);
+			}
+		});
 	}
 </script>

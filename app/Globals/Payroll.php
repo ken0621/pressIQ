@@ -1715,7 +1715,10 @@ class Payroll
 			$monthly_salary  = $monthly_salary / $group->payroll_group_working_day_month;
 		}
 
-
+		if($payroll_group_salary_computation == 'Daily Rate')
+		{
+			$data['under_time']					= 0;
+		}
 
 		if($payroll_group_salary_computation == 'Flat Rate')
 		{

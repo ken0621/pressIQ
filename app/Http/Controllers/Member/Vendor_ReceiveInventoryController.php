@@ -21,6 +21,7 @@ use App\Globals\Purchase_Order;
 use App\Globals\Billing;
 use App\Globals\Item;
 use App\Globals\Warehouse;
+use App\Globals\Utilities;
 use App\Globals\UnitMeasurement;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;

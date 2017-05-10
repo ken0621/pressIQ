@@ -14,6 +14,8 @@ function modal_create_employee()
 		select_change_event();
 		autoname();
 		$(".datepicker").datepicker();
+		check_deduction_contribution_action();
+		check_deduction_contribution();
 	}
 
 	function autoname()
@@ -268,6 +270,35 @@ function modal_create_employee()
 					error_function(selected).change();
 				}
 			});
+	}
+
+
+	function check_deduction_contribution()
+	{
+		$(".deduction-check-period").unbind("change");
+		$(".deduction-check-period").bind("change", function()
+		{
+			check_deduction_contribution_action();
+		});
+	}
+
+	function check_deduction_contribution_action()
+	{
+		$(".deduction-check-period").each(function()
+		{
+
+			var target = $(this).data("target");
+			if($(this).is(":checked"))
+			{	
+				$(target).attr("readonly",true);
+				$(target).removeAttr("required");
+			}
+			else
+			{
+				$(target).removeAttr("readonly");
+				$(target).attr("required",true);
+			}
+		});
 	}
 
 

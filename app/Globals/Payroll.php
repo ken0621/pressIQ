@@ -2094,7 +2094,7 @@ class Payroll
 		$date_month 	= date('m', $strtotime);
 		$date_year 		= date('Y', $strtotime);
 
-		$current_month 	= date('m', $date);
+		$current_month 	= date('m', $strtotime);
 
 		$current_count 	= 0;
 

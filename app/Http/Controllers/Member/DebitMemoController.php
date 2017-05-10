@@ -131,7 +131,7 @@ class DebitMemoController extends Member
         $data["status_message"] = null;
 
         $warehouse_id       = $this->current_warehouse->warehouse_id;
-        if($product_consume)
+        if(count($product_consume) > 0)
         {
             foreach ($product_consume as $key => $value) 
             {
@@ -267,7 +267,7 @@ class DebitMemoController extends Member
         $transaction_id = $db_id;
         $transaction_type = "debit_memo";
         $warehouse_id       = Warehouse::getWarehouseIdFromSlip($transaction_id, $transaction_type);
-        if($product_consume)
+        if(count($product_consume) > 0)
         {
             foreach ($product_consume as $key => $value) 
             {

@@ -101,7 +101,7 @@ class CreditMemoController extends Member
                     }                 
                 }
             }
-            if($item_returns != null)
+            if(count($item_returns) > 0)
             {
                 foreach ($item_returns as $key_items_cm => $value_items_cm) 
                 {
@@ -208,7 +208,7 @@ class CreditMemoController extends Member
                     }                 
                 }
             }
-            if($item_returns != null)
+            if(count($item_returns) > 0)
             {
                 foreach ($item_returns as $key_items_cm => $value_items_cm) 
                 {

@@ -91,6 +91,8 @@ class ShopCheckoutController extends Shop
             $data['customer_address'] = '';
         }
 
+        $data["customer_email"] = Request::input("email") ? Request::input("email") : $data["customer_email"];
+
         return view("checkout", $data);
     }
     
@@ -379,6 +381,10 @@ class ShopCheckoutController extends Shop
         $cart["customer"]["customer_middle_name"] = Request::input("customer_middle_name");
         $cart["customer"]["customer_last_name"] = Request::input("customer_last_name");
         $cart["customer"]["customer_email"] = Request::input("customer_email");
+        if (Request::input("customer_password")) 
+        {
+            $cart["customer"]["customer_password"] = Request::input("customer_password");
+        }
         $cart["customer"]["customer_birthdate"] = $get_birthday;
         $cart["customer"]["customer_mobile"] = Request::input("customer_mobile");
         $cart["customer"]["customer_country_id"] = $get_country ? $get_country->country_id : '420';

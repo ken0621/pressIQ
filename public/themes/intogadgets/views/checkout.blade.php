@@ -55,6 +55,15 @@
 						</div>
 					</div>
 
+					@if(Request::input("continue"))
+						<div class="fieldset">
+							<label class="col-md-4">Password</label>
+							<div class="field col-md-8">
+								<input autocomplete="off" class="form-control" type="password" name="customer_password">
+							</div>
+						</div>
+					@endif
+
 					<div class="fieldset">
 						<label class="col-md-4">Birthday</label>
 						<div class="field col-md-8 birthday">

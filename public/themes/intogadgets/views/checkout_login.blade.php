@@ -12,14 +12,14 @@
 						</div>
 						<div class="form-group">
 							<div class="radio">
-							  <label><input class="radio-continue" type="radio" name="continue" checked yes="1"> Continue without password</label>
+							  <label><input name="continue" class="radio-continue" type="radio" checked yes="1"> Continue without password</label>
 							</div>
 							<div class="radio">
-							  <label><input class="radio-continue" type="radio" name="continue" yes="0"> I already have an account</label>
+							  <label><input name="continue" class="radio-continue" type="radio" yes="0"> I already have an account</label>
 							</div>
 						</div>
 						<div class="form-group">
-							<input disabled type="text" class="the-password form-control" placeholder="Enter your password" name="password">
+							<input disabled type="password" class="the-password form-control" placeholder="Enter your password" name="password">
 						</div>
 						<div class="form-group">
 							<button class="btn btn-primary">CONTINUE</button>

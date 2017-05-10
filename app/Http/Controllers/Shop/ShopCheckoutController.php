@@ -293,7 +293,7 @@ class ShopCheckoutController extends Shop
 
             if ($check_email)
             {
-                return Redirect::to('/checkout/login')->with('fail', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
+                return Redirect::to('/checkout/login')->with('warning', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
             }
         }
 

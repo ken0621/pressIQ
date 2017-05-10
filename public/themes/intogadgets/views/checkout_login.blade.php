@@ -6,6 +6,13 @@
 			<div class="form-holder">
 				<div class="form-header">Login or Checkout as guest</div>
 				<div class="form-content">
+					@if (session('warning'))
+					    <div class="alert alert-warning">
+					    	<ul style="padding: 0; margin: 0;">
+					    		<li style="display: block;">{{ session('warning') }}</li>
+					    	</ul>
+					    </div>
+					@endif
 					<form class="form-login" method="get" action="/checkout">
 						<div class="form-group">
 							<input type="text" class="the-email form-control" placeholder="Enter your email address" name="email">

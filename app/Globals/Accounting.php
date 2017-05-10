@@ -7,6 +7,8 @@ use App\Models\Tbl_journal_entry;
 use App\Models\Tbl_journal_entry_line;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_vendor;
 use Log;
 use Request;
 use Session;
@@ -313,6 +315,7 @@ class Accounting
 				case "sales-order": // NON-POSTING
 					break;
 				case "mlm-product-repurchase":
+				case "product-order":
 				case "sales-receipt":
 				case "invoice":
 					/* INCOME ACCOUNT */
@@ -343,7 +346,7 @@ class Accounting
 				case "bill-payment":
 					/* CASH ACCOUNT - BANK */
 					$line_data["entry_amount"]	= $entry_line["entry_amount"];
-					$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
+					$line_data["entry_type"] 	= Accounting::contraAccount($account->account_id);
 					$line_data["account_id"] 	= $account->account_id;
 					Accounting::insertJournalLine($line_data);
 					break;
@@ -368,6 +371,25 @@ class Accounting
 						Accounting::insertJournalLine($line_data);
 					}
 					break;
+				case "debit-memo":
+					if($item->item_type_id == 1) // INVENTORY TYPE
+					{
+						/* ASSET ACCOUNT */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
+						$line_data["account_id"] 	= $account_asset;
+						Accounting::insertJournalLine($line_data);
+					}
+					else
+					{
+						/* EXPENSE ACCOUNT */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::contraAccount($account_expense);
+						$line_data["account_id"] 	= $account_expense;
+						Accounting::insertJournalLine($line_data);
+					}
+					break;
+					break;
 				case "credit-memo":
 					/* INCOME ACCOUNT */
 					$line_data["entry_amount"]	= $entry_line["entry_amount"];
@@ -389,8 +411,6 @@ class Accounting
 						$line_data["account_id"] 	= $account_asset;
 						Accounting::insertJournalLine($line_data);
 					}
-					break;
-				case "debit-memo":
 					break;
 				case "deposit":
 					/* OPENING BALANCE EQUITY */
@@ -497,6 +517,7 @@ class Accounting
 				break;
 			case 'mlm-product-repurchase':
 			case 'sales-receipt':
+			case 'product-order':
 				$data["main_account"]		= 'cash-r';
 				$data["name"] 				= 'customer';
 				$data["newNormalJournal"] 	= 'normalBalance';
@@ -512,6 +533,7 @@ class Accounting
 				$data["newContraJournal"] 	= 'contraAccount';
 				return $data;
 				break;
+			case 'debit-memo':
 			case 'bill-payment':
 				$data["main_account"]		= 'payable';
 				$data["name"] 				= 'vendor';
@@ -738,4 +760,12 @@ class Accounting
 	// Creditable Withholding Tax - 1%			= tax-credit-tax-1
 	// Discount									= discount-sale
 	// Discount									= discount-purchase
+
+	public static function getTotalAccount()
+	{
+		$data["accounts_receivable"] = collect(Tbl_customer::balanceJournal()->get())->sum("balance");
+		$data["accoutns_payable"]	 = collect(Tbl_vendor::balanceJournal()->get())->sum("balance");		
+
+		return $data;
+	}
 }

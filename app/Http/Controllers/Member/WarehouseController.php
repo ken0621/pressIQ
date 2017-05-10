@@ -140,11 +140,6 @@ class WarehouseController extends Member
         {
             return $this->show_no_access();
         }
-        // $data['warehouse'] = Warehouse::get_transfer_warehouse_information(225, 226);
-        // dd($data);
-        // $count_on_hand = Tbl_warehouse_inventory::check_inventory_single(1, 28)->pluck('inventory_count');
-        // dd($count_on_hand);
-
     }
     public function inventory_log($warehouse_id)
     {

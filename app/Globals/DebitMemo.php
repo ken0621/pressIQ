@@ -29,8 +29,14 @@ class DebitMemo
 
 		$db_id = Tbl_debit_memo::insertGetId($insert_db);
 
+		/* Transaction Journal */
+        $entry["reference_module"]  = "debit-memo";
+        $entry["reference_id"]      = $db_id;
+        $entry["name_id"]           = $vendor_info["db_vendor_id"];
+        $entry["total"]             = $vendor_info["db_amount"];
 
-		DebitMemo::insert_dbline($db_id, $item_info);
+		DebitMemo::insert_dbline($db_id, $item_info, $entry);
+
 
 		return $db_id;
 	}
@@ -50,10 +56,18 @@ class DebitMemo
 
 
 		Tbl_debit_memo_line::where("dbline_db_id",$db_id)->delete();
-		DebitMemo::insert_dbline($db_id, $item_info);
+
+		/* Transaction Journal */
+        $entry["reference_module"]  = "debit-memo";
+        $entry["reference_id"]      = $db_id;
+        $entry["name_id"]           = $vendor_info["db_vendor_id"];
+        $entry["total"]             = $vendor_info["db_amount"];
+
+		DebitMemo::insert_dbline($db_id, $item_info, $entry);
+
 
 	}
-	public static function insert_dbline($db_id, $item_info)
+	public static function insert_dbline($db_id, $item_info, $entry)
 	{
 		foreach ($item_info as $key => $value) 
 		{
@@ -68,7 +82,17 @@ class DebitMemo
 
 			Tbl_debit_memo_line::insert($insert_dbline);
 
+			/* TRANSACTION JOURNAL */   
+            $entry_data[$key]['item_id']            = $value["item_id"];
+            $entry_data[$key]['entry_qty']          = $value["quantity"];
+            $entry_data[$key]['vatable']            = 0;
+            $entry_data[$key]['discount']           = 0;
+            $entry_data[$key]['entry_amount']       = $value["amount"];
+            $entry_data[$key]['entry_description']  = $value["item_description"];
+
 		}
+
+		$debit_memo_journal = Accounting::postJournalEntry($entry, $entry_data);
 
 	}
 }

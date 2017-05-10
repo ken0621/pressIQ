@@ -141,6 +141,7 @@ class Item
                 if($item_list['item_type_id'] == 4)
                 {
                    $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
+                   $_category[$key]['item_list'][$key1]['item_cost'] = Item::get_item_bundle_cost($item_list['item_id']); 
                 }
                 $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
             }
@@ -160,6 +161,7 @@ class Item
                 if($item_list['item_type_id'] == 4)
                 {
                    $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
+                   $_category[$key]['item_list'][$key1]['item_cost'] = Item::get_item_bundle_cost($item_list['item_id']); 
                 }
                 $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
             }
@@ -229,6 +231,23 @@ class Item
             }
         }
         return $price;
+    }   
+    public static function get_item_bundle_cost($item_id = null)
+    {
+        $cost = 0;
+        $item_type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        if($item_id != null && $item_type == 4)
+        {
+            $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+            foreach ($bundle_item as $key => $value) 
+            {
+                $item_cost =  Purchasing_inventory_system::get_item_cost($value->bundle_item_id);
+                $um_qty = UnitMeasurement::um_qty($value->bundle_um_id);
+
+                $cost += $item_cost * ($um_qty * $value->bundle_qty);
+            }
+        }
+        return $cost;
     }    
     public static function get_bundle_item_qty($item_id = null)
     {

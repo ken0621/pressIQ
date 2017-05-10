@@ -51,7 +51,7 @@
                         @foreach($_db as $db)
                             <tr>
                                 <td>{{$db->db_id}}</td>
-                                <td>{{$db->vendor_title_name." ".$db->vendor_first_name." ".$db->vendor_middle_name." ".$db->vendor_last_name." ".$db->vendor_suffix_name}}</td>
+                                <td>{{$db->vendor_company or $db->vendor_title_name." ".$db->vendor_first_name." ".$db->vendor_middle_name." ".$db->vendor_last_name." ".$db->vendor_suffix_name}}</td>
                                 <td>{{currency("PHP",$db->db_amount)}}</td>
                                 <td class="text-center">
                                     <div class="btn-group">
@@ -59,7 +59,7 @@
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
-                                          <!-- <li ><a class="popup" link="/member/customer/view_db/{{$db->db_id}}" size="lg">View db</a></li> -->
+                                          <li ><a href="/member/vendor/debit_memo?id={{$db->db_id}}">Edit Debit Memo</a></li>
                                       </ul>
                                     </div>
                                 </td>

@@ -11,6 +11,7 @@ use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_credit_memo;
 use App\Globals\Accounting;
+use App\Globals\Warehouse;
 use DB;
 use Session;
 use Carbon\Carbon;
@@ -42,7 +43,7 @@ class CreditMemo
 		/* Transaction Journal */
         $entry["reference_module"]  = "credit-memo";
         $entry["reference_id"]      = $cm_id;
-        $entry["name_id"]           = $customer_info['customer_id'];
+        $entry["name_id"]           = $customer_info['cm_customer_id'];
         $entry["total"]             = $customer_info["cm_amount"];
         $entry["vatable"]           = '';
         $entry["discount"]          = '';
@@ -74,7 +75,7 @@ class CreditMemo
 		/* Transaction Journal */
         $entry["reference_module"]  = "credit-memo";
         $entry["reference_id"]      = $cm_id;
-        $entry["name_id"]           = $customer_info['customer_id'];
+        $entry["name_id"]           = $customer_info['cm_customer_id'];
         $entry["total"]             = $customer_info["cm_amount"];
         $entry["vatable"]           = '';
         $entry["discount"]          = '';

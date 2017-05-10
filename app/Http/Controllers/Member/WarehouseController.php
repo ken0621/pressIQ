@@ -91,15 +91,14 @@ class WarehouseController extends Member
 
                     foreach ($all_item as $key2 => $value2) 
                     {
-                        $qty = Tbl_warehouse_inventory::where("inventory_item_id",$value2->item_id)
-                                                            ->where("warehouse_id",$value->warehouse_id)
-                                                            ->sum("inventory_count");
+                        $qty = Tbl_warehouse_inventory::where("warehouse_id",$value2->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("tbl_item.archived",0)->sum("inventory_count");
 
                         $selling_price += $value2->item_price * $qty;
                         $cost_price += $value2->item_cost * $qty;
                     }
                     $data["_warehouse"][$key]->total_selling_price = $selling_price;
                     $data["_warehouse"][$key]->total_cost_price = $cost_price;
+                    $data["_warehouse"][$key]->total_qty = $qty;
 
 
                     $data["_warehouse"][$key]->count_no_serial = count(Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->where("tbl_item.shop_id",$this->user_info->shop_id)->where("tbl_warehouse.warehouse_id",$value->warehouse_id)->whereNull("serial_id")->get()->toArray());
@@ -123,15 +122,14 @@ class WarehouseController extends Member
 
                     foreach ($archive_item as $key4 => $value4) 
                     {
-                        $qty = Tbl_warehouse_inventory::where("inventory_item_id",$value4->item_id)
-                                                            ->where("warehouse_id",$value3->warehouse_id)
-                                                            ->sum("inventory_count");
+                        $qty = Tbl_warehouse_inventory::where("warehouse_id",$value4->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("tbl_item.archived",0)->sum("inventory_count");
 
                         $selling_price_a += $value4->item_price * $qty;
                         $cost_price_a += $value4->item_cost * $qty;
                     }
                     $data["_warehouse_archived"][$key3]->total_selling_price = $selling_price_a;
                     $data["_warehouse_archived"][$key3]->total_cost_price = $cost_price_a;
+                    $data["_warehouse_archived"][$key3]->total_qty = $qty;
                 }
             }
             $data["enable_serial"] = Tbl_settings::where("shop_id",$this->user_info->shop_id)->where("settings_key","item_serial")->pluck("settings_value");
@@ -376,7 +374,7 @@ class WarehouseController extends Member
                 return $this->show_no_access_modal();
             }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
-            $data["warehouse_item"] = Warehouse::select_item_warehouse_single($id,'array');
+            $data["warehouse_item"] = Warehouse::select_item_warehouse_single_w_page($id,'array');
             // dd(collect($data["warehouse_item"])->toArray());
 
             return view("member.warehouse.warehouse_view",$data);

@@ -725,6 +725,17 @@ class Purchasing_inventory_system
         }
         return $return_price;
     }
+    public static function get_item_cost($item_id)
+    {
+        $if_bundle = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+
+        $return_price = Tbl_item::where("item_id",$item_id)->pluck("item_cost");
+        if($if_bundle == 4)
+        {
+            $return_price = Item::get_item_bundle_cost($item_id);
+        }
+        return $return_price;
+    }
     public static function create_manual_invoice()
     {     
     } 

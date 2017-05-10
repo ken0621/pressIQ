@@ -195,18 +195,31 @@ class Warehouse
         }
         return $data;
     }
-    public static function select_item_warehouse_single($warehouse_id = 0, $return = 'array')
+    public static function select_item_warehouse_single_w_page($warehouse_id = 0, $return = 'array')
     {
     	$data = Tbl_warehouse::Warehouseitem()
                              ->select_inventory($warehouse_id)
 				    		 ->orderBy('product_name','asc')
-    						 ->get();
+    						 ->paginate(10);
                              
     	if($return == 'json')
     	{
     		$data = json_encode($data);
     	}
     	return $data; 
+    }  
+    public static function select_item_warehouse_single($warehouse_id = 0, $return = 'array')
+    {
+        $data = Tbl_warehouse::Warehouseitem()
+                             ->select_inventory($warehouse_id)
+                             ->orderBy('product_name','asc')
+                             ->get();
+                             
+        if($return == 'json')
+        {
+            $data = json_encode($data);
+        }
+        return $data; 
     }  
 
     public static function select_item_warehouse_single_vendor($warehouse_id = 0, $return = 'array',$vendor_id)
@@ -236,7 +249,7 @@ class Warehouse
 
     public static function getUserid()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id') or 0;
     }
     public static function check_inventory_on_warehouse($warehouse_id = 0, $item_id = 0, $return = 'array')
     {
@@ -628,7 +641,6 @@ class Warehouse
         $insert_slip['inventory_slip_consumer_id']    =  $consumer_id;
         $insert_slip['inventory_slip_consume_cause']  =  $consume_cause;
         $insert_slip['slip_user_id']= Warehouse::getUserid() or 0;
-
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 

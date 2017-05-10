@@ -115,7 +115,8 @@ class ShopCheckoutController extends Shop
         {
               return Redirect::back()
                  ->withErrors($result['order_id']['status_message'])
-                 ->withInput();
+                 ->withInput()
+                 ->send();
         }
 
         $shop_id= $this->shop_info->shop_id;
@@ -132,7 +133,7 @@ class ShopCheckoutController extends Shop
 
         if ($exist_reference) 
         {
-            return Redirect::back()->with('fail', 'Some error occurred. Please try again.');
+            return Redirect::back()->with('fail', 'Some error occurred. Please try again.')->send();
         }
         else
         {
@@ -156,7 +157,7 @@ class ShopCheckoutController extends Shop
             Session::put('ipay88', $ipay88);
             Session::put('ipay88_order', $result);
 
-            return redirect('/postPaymentWithIPay88');    
+            return redirect('/postPaymentWithIPay88')->send();    
         }  
     }
     public function submit_using_proofofpayment($file, $cart)
@@ -187,7 +188,7 @@ class ShopCheckoutController extends Shop
             } 
             else 
             {
-               return Redirect::back()->with('fail', 'Image upload failed. Please try again.');
+               return Redirect::back()->with('fail', 'Image upload failed. Please try again.')->send();
             }
         }
 
@@ -196,12 +197,13 @@ class ShopCheckoutController extends Shop
         {
               return Redirect::back()
                  ->withErrors($result['order_id']['status_message'])
-                 ->withInput();
+                 ->withInput()
+                 ->send();
         }
 
         Cart::clear_all($this->shop_info->shop_id);
 
-        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
+        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
     }
     public function submit_using_paymaya()
     {
@@ -218,6 +220,7 @@ class ShopCheckoutController extends Shop
     public function submit_using_ewallet($cart)
     {
         $sum = $cart["sum"];
+        $get_cart = Cart::get_cart($this->shop_info->shop_id);
 
         if(Self::$slot_now != null)
         {
@@ -243,13 +246,14 @@ class ShopCheckoutController extends Shop
                 $send['errors'][0] = "Your wallet only have, " . number_format($check_wallet) . ' where the needed amount is ' . number_format($sum) ;
                 return Redirect::back()
                     ->withErrors($send)
-                    ->withInput();
+                    ->withInput()
+                    ->send();
             }
         }
         else
         {
             $send['errors'][0] = "Only members with slot can use the wallet option.";
-            return Redirect::back()->withErrors($send)->withInput();
+            return Redirect::back()->withErrors($send)->withInput()->send();
         }
 
         $result = Ec_order::create_ec_order_automatic($cart);
@@ -257,7 +261,8 @@ class ShopCheckoutController extends Shop
         {
               return Redirect::back()
                  ->withErrors($result['order_id']['status_message'])
-                 ->withInput();
+                 ->withInput()
+                 ->send();
         }
 
         if(Self::$slot_now != null)
@@ -276,7 +281,7 @@ class ShopCheckoutController extends Shop
      
         Cart::clear_all($this->shop_info->shop_id);
 
-        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
+        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
     }
     /* END PAYMENT GATEWAY */
 
@@ -416,7 +421,7 @@ class ShopCheckoutController extends Shop
         $stock = Cart::check_product_stock(Cart::get_cart($this->shop_info->shop_id));
         if ($stock["status"] == "fail") 
         {
-            return Redirect::back()->with('fail', $stock["error"]);
+            return Redirect::back()->with('fail', $stock["error"])->send();
         }
     }
     public function check_payment_method_enabled($cart)
@@ -429,7 +434,7 @@ class ShopCheckoutController extends Shop
 
         if (!$payment_method) 
         {
-            return Redirect::back()->with('fail', 'Invalid payment method. Please try again.');
+            return Redirect::back()->with('fail', 'Invalid payment method. Please try again.')->send();
         }
     }
     public function check_payment_method($cart)
@@ -460,7 +465,7 @@ class ShopCheckoutController extends Shop
                 case 'paynamics': return $this->submit_using_paynamics(); break;
                 case 'dragonpay': return $this->submit_using_dragonpay(); break;
                 case 'other': return $this->submit_using_proofofpayment($file, $cart); break;
-                case 'ipay-88': return $this->submit_using_ipay88($cart); break;
+                case 'ipay88': return $this->submit_using_ipay88($cart); break;
                 default: dd("Some error occurred"); break;
             }
         }
@@ -624,7 +629,7 @@ class ShopCheckoutController extends Shop
     }
     public function order_placed()
     {
-    	$data["page"] = "Checkout - Order Placed";
+        $data["page"] = "Checkout - Order Placed";
         $order = Request::input('order');
         if (!$order) 
         {
@@ -649,7 +654,7 @@ class ShopCheckoutController extends Shop
         
         $data['summary']['subtotal'] = $subtotal;
 
-    	return view("order_placed", $data);
+        return view("order_placed", $data);
     }
     public function addtocart()
     {

@@ -258,7 +258,6 @@ function page_list()
     $nav[$page]['name'] = "Accounting";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "money";
-
    
     /* -- ACCOUNTING => SALES */
     $code = "accounting-sales";
@@ -784,10 +783,10 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
     
     /* -- VENDORS => BAD ORDERS  */
-    $code = "vendor-bad-order";
-    $nav[$page]['submenu'][$code]['label'] = "Bad Orders";
+    $code = "vendor-debit-memo";
+    $nav[$page]['submenu'][$code]['label'] = "Debit Memo";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/";
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/debit_memo/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
@@ -1060,6 +1059,16 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Product Variant Sales Report";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sale/product_variant";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
+
+    /* -- Accounting => Sales Report  */
+    $code = "report-sales-account";
+    $nav[$page]['submenu'][$code]['label'] = "Sales Report (Accounting)";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/sale";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";

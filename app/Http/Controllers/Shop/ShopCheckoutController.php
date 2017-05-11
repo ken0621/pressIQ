@@ -355,6 +355,10 @@ class ShopCheckoutController extends Shop
             {
                 return Redirect::to('/checkout/login')->with('warning', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
             }
+            else
+            {
+                return "notloggedin";
+            }
         }
         elseif ( !Request::input("payment_method_id") ) 
         {
@@ -562,7 +566,8 @@ class ShopCheckoutController extends Shop
         }
         else
         {
-            if (!$this->validate_payment()) 
+            $validate_payment = $this->validate_payment();
+            if (!$validate_payment) 
             {
                 $cart = $this->restructure_cart();
                 $this->check_stocks();

@@ -179,11 +179,13 @@ class Accounting
 
 		if(!$exist_journal)
 		{
-			$line_data["je_id"] 	= Tbl_journal_entry::insertGetId($journal_entry);
+			$journal_entry['created_at']	= carbon::now();
+			$line_data["je_id"] 			= Tbl_journal_entry::insertGetId($journal_entry);
 		}
 		else
 		{
 			unset($journal_entry['je_entry_date']);
+			$journal_entry['updated_at']	= carbon::now();
 			Tbl_journal_entry_line::where("jline_je_id", $exist_journal->je_id)->delete();
 			Tbl_journal_entry::where("je_id", $exist_journal->je_id)->update($journal_entry);
 			$line_data["je_id"] = $exist_journal->je_id;

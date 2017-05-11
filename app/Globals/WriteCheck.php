@@ -260,7 +260,7 @@ class WriteCheck
                 /* TRANSACTION JOURNAL */  
                 if($item_type != 4)
                 {
-                    $entry_data[$key]['item_id']            = $item_line['item_id'];
+                    $entry_data[$key]['item_id']            = $item_line['itemline_id'];
                     $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
                     $entry_data[$key]['vatable']            = 0;
                     $entry_data[$key]['discount']           = $discount;

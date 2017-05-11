@@ -345,15 +345,16 @@ class ShopCheckoutController extends Shop
     }
     /* END PAYMENT GATEWAY */
 
-    public function validate_submit()
+    public function validate_payment()
     {
         if ( !Request::input("payment_method_id") ) 
         {
             Session::put("checkout_input", Request::input());
 
             return Redirect::to("/checkout/payment")->send();
+            die();
+            exit;
         }
-
         if(!isset(Self::$customer_info->customer_id))
         {
             $check_email = Tbl_customer::where('shop_id', $this->shop_info->shop_id)->where('email', Request::input("email"))->where("password", "!=", "")->count();
@@ -363,10 +364,12 @@ class ShopCheckoutController extends Shop
                 return Redirect::to('/checkout/login')->with('warning', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
             }
         }
-
+    }
+    public function validate_submit()
+    {
         // Validate Customer Info
         $rules["customer_first_name"]   = 'required';
-        $rules["customer_middle_name"]  = 'required';
+        $rules["customer_middle_name"]  = '';
         $rules["customer_last_name"]    = 'required';
         $rules["customer_email"]        = 'required';
         $rules["customer_birthdate"]    = 'required';
@@ -374,7 +377,7 @@ class ShopCheckoutController extends Shop
         $rules["customer_state_province"] = 'required';
         $rules["customer_city"]         = 'required';
         $rules["customer_address"]      = 'required';
-        $rules["payment_method_id"]     = 'required';
+        $rules["payment_method_id"]     = '';
         $rules["taxable"]               = 'required';
 
         $ec_order_load = Request::input('ec_order_load');
@@ -557,6 +560,7 @@ class ShopCheckoutController extends Shop
         }
         else
         {
+            $this->validate_payment();
             $cart = $this->restructure_cart();
             $this->check_stocks();
             $this->check_payment_method_enabled($cart);
@@ -620,7 +624,7 @@ class ShopCheckoutController extends Shop
 
             if($request['Status'] == 0)
             {
-                return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');    
+                return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.')->send();    
             } 
             else 
             {
@@ -632,12 +636,12 @@ class ShopCheckoutController extends Shop
                 Cart::clear_all($this->shop_info->shop_id);
 
                 // Redirect
-                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
             }
         }
         else
         {
-            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->s;
+            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
         }
     }
     /*End Ipay88*/

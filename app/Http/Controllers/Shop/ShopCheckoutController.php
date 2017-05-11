@@ -349,21 +349,28 @@ class ShopCheckoutController extends Shop
     {
         if(!isset(Self::$customer_info->customer_id))
         {
+            dd(1);
             $check_email = Tbl_customer::where('shop_id', $this->shop_info->shop_id)->where('email', Request::input("email"))->where("password", "!=", "")->count();
 
             if ($check_email)
             {
                 return Redirect::to('/checkout/login')->with('warning', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
             }
+            else
+            {
+                return "notloggedin";
+            }
         }
         elseif ( !Request::input("payment_method_id") ) 
         {
+            dd(2);
             Session::put("checkout_input", Request::input());
 
             return Redirect::to("/checkout/payment")->send();
         }
         else
         {
+            dd(3);
             return false;
         }
     }
@@ -562,7 +569,8 @@ class ShopCheckoutController extends Shop
         }
         else
         {
-            if (!$this->validate_payment()) 
+            $validate_payment = $this->validate_payment();
+            if (!$validate_payment) 
             {
                 $cart = $this->restructure_cart();
                 $this->check_stocks();

@@ -40,7 +40,7 @@ class Customer_ReceivePaymentController extends Member
 
         $data["c_id"] = Request::input("customer_id");
         $data["_customer"]      = Customer::getAllCustomer();
-        $data['_account']       = Accounting::getAllAccount();
+        $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
         $data['action']         = "/member/customer/receive_payment/add";
         $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"]);
@@ -131,8 +131,6 @@ class Customer_ReceivePaymentController extends Member
 
     public function update_receive_payment($rcvpayment_id)
     {
-        // dd(Request::input());
-
         $old_data = AuditTrail::get_table_data("tbl_receive_payment","rp_id",$rcvpayment_id);
 
         $update["rp_customer_id"]       = Request::input('rp_customer_id');

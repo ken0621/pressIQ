@@ -486,7 +486,13 @@ function write_check()
 		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("cost")).change();
 		$parent.find(".txt-qty").val(1).change();
-
+		$parent.find(".txt-rate").attr("disabled",false);
+		$parent.find(".txt-discount").attr("disabled",false);
+		if($this.find("option:selected").attr("item-type") == 4)
+		{
+			$parent.find(".txt-rate").attr("disabled","disabled");
+			$parent.find(".txt-discount").attr("disabled","disabled");
+		}
 		if($this.find("option:selected").attr("has-um") != '')
 		{
 			$.ajax(

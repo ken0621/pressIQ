@@ -239,7 +239,7 @@
                                 <th>Name</th>
                                 <th>Type</th>
                                 <th>Balance Total</th>
-                                <th class="text-center"></th>
+                                <th class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>

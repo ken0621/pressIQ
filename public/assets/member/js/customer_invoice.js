@@ -775,6 +775,19 @@ function submit_done(data)
         toastr.warning(data.status_message);
         $(data.target).html(data.view);
     }
+
+    if(data.status == "success")
+    {
+    	if(data.type == "terms")
+    	{
+    		$(".droplist-terms").load("/member/maintenance/terms/load-terms", function()
+			{
+				$(this).globalDropList("reload");
+				$(this).val(data.terms_id).change();
+			});
+			data.element.modal("toggle");
+    	}
+    }
 }
 
 function submit_this_form()

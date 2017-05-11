@@ -1951,7 +1951,7 @@ class Payroll
 		$sss_contribution		= Payroll::sss_contribution($shop_id, $data['salary_sss']);
 		$sss_contribution_ee 	= $sss_contribution['ee'];
 
-
+		
 		if($group->payroll_group_sss == 'Every Period')
 		{
 			
@@ -1971,7 +1971,7 @@ class Payroll
 
 		}
 
-		else if($group->payroll_group_sss == Payroll::return_ave($period_category))
+		else if($group->payroll_group_sss == $period_category)
 		{
 
 			if(Payroll::return_ave($period_category) == '1st Period')
@@ -1990,6 +1990,9 @@ class Payroll
 
 		/* GET PHILHEALTH CONTRIBUTION */
 		$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $data['salary_philhealth']);
+
+		// dd($group->payroll_group_philhealth);
+
 		if($group->payroll_group_philhealth == 'Every Period')
 		{
 			// philhealth_contribution
@@ -2009,7 +2012,7 @@ class Payroll
 
 			
 		}
-		else if($group->payroll_group_philhealth == Payroll::return_ave($period_category))
+		else if($group->payroll_group_philhealth == $period_category)
 		{
 			if(Payroll::return_ave($period_category) == '1st Period')
 			{
@@ -2043,7 +2046,7 @@ class Payroll
 
 		}
 
-		else if($group->payroll_group_pagibig == Payroll::return_ave($period_category))
+		else if($group->payroll_group_pagibig == $period_category)
 		{
 			if(Payroll::return_ave($period_category) == '1st Period')
 			{
@@ -2211,12 +2214,15 @@ class Payroll
 		{
 			$next_month 	= date('m', strtotime("+15 day", $strtotime));
 
+			// dd($next_month);
+
 			if($index_count == 1)
 			{
 				$period_category = 'First Period';
 			}
-			else if($next_month != $current_month)
+			if($next_month != $current_month)
 			{
+				// dd($current_month);
 				$period_category = 'Last Period';
 			}
 
@@ -2374,7 +2380,7 @@ class Payroll
 
 		$data['regular']			= round(($regular + ( $hours['regular'] * $rate )), 2);
 		$data['late_overtime']		= round(($temp_overtime + ($temp_overtime * $late_overtime)), 2);
-		$data['early_overtime']		= round(($early_overtime + ($early_overtime * $early_overtime)), 2);
+		$data['early_overtime']		= round(($temp_earlyOT + ($temp_earlyOT * $early_overtime)), 2);
 		$data['night_differential']	= round(($night_differential + ($temp_night * $night_differential)), 2);
 
 		$tota = 0;

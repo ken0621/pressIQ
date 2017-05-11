@@ -329,6 +329,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_process/confirm_action_payroll/{action}/{id}','Member\PayrollController@confirm_action_payroll');
 	Route::any('/payroll_process/action_payroll','Member\PayrollController@action_payroll');
 	Route::any('/payroll_process/confirm_cancel_payroll/{action}/{id}','Member\PayrollController@confirm_cancel_payroll');
+
+	Route::any('/payroll_process/modal_13_month/{id}/{period_id}','Member\PayrollController@modal_13_month');
+	Route::any('/payroll_process/modal_unused_leave/{id}/{period_id}','Member\PayrollController@modal_unused_leave');
 	/* PAYROLL PROCESS END */
 
 

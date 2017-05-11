@@ -335,7 +335,9 @@
 										</div>
 										<div class="col-md-6">
 											<small>Target Hours</small>
-											<div class="input-group">
+											<input type="number" name="payroll_group_target_hour" class="form-control text-right">
+											<input type="hidden" name="payroll_group_target_hour_parameter" value="Daily">
+											<<!-- div class="input-group">
 												<span class="input-group-btn width-120px">
 													<select class="form-control select-target-hours" disabled name="payroll_group_target_hour_parameter">
 														<option value="Daily">Daily</option>
@@ -343,7 +345,7 @@
 													</select>
 												</span>
 												<input type="number" name="payroll_group_target_hour" class="form-control text-right">
-											</div>
+											</div> -->
 										</div>
 									</div>
 									<div class="form-group">

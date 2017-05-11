@@ -250,13 +250,14 @@ class Payroll_BioImportController extends Member
 	    	$time_sheet = array();
 	    	foreach($_time as $key => $time)
 	    	{
-	    		$temp_record['employee_number'] = $time['no'];
+	    		$temp_record['employee_number'] = (string)$time['no'];
 	    		$temp_record['time']			= date('H:i:s', strtotime($time['datetime']));
 	    		$temp_record['date']			= date('Y-m-d', strtotime($time['datetime']));
 	    		array_push($time_sheet, $temp_record);
 	    	}
 
 	    	$_date_collect = collect($time_sheet)->groupBy('employee_number','date');
+
 	    	foreach($_date_collect as $key => $date_collect)
 	    	{
 	    		$_date = collect($date_collect)->groupBy('date');

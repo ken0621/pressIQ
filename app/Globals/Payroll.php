@@ -515,18 +515,28 @@ class Payroll
 
 		$return = new stdClass();
 		/* GET OTHER DETAILS BASED ON RECORD */
-		switch($data["time_rule"])
-		{
-			case "flexitime": 
-				//$return = Payroll::process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
-			break;
-			case "regulartime":
-				$data["compute_approved"] = 0;
-				$return->pending_timesheet = Payroll::process_time_regulartime($data, $date);
-				$data["compute_approved"] = 1;
-				$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
-			break;
-		}
+		// switch($data["time_rule"])
+		// {
+		// 	case "flexitime": 
+		// 		//$return = Payroll::process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
+		// 		$data["compute_approved"] = 0;
+		// 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date);
+		// 		$data["compute_approved"] = 1;
+		// 		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
+		// 	break;
+
+		// 	case "regulartime":
+		// 		$data["compute_approved"] = 0;
+		// 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date);
+		// 		$data["compute_approved"] = 1;
+		// 		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
+		// 	break;
+		// }
+
+		$data["compute_approved"] = 0;
+		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date, $data["time_rule"]);
+		$data["compute_approved"] = 1;
+		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date, $data["time_rule"]);
 
 		$payroll_time_date = '0000-00-00';
 		if(isset($time_sheet_info->payroll_time_date))
@@ -537,6 +547,8 @@ class Payroll
 		$return->payroll_time_sheet_id = $payroll_time_sheet_id;
 		$return->date = $payroll_time_date;
 		$return->payroll_time_sheet_approved = $payroll_time_sheet_approved;
+
+		// dd($return);
 
 		return $return;
 	}
@@ -607,8 +619,10 @@ class Payroll
 		return $return;
 	}
 
-	public static function process_time_regulartime($data, $date = '0000-00-00')
+	public static function process_time_regulartime($data, $date = '0000-00-00', $category = 'regulartime')
 	{
+		dd($data);
+
 		$time_rule 				= $data["time_rule"];
 		$default_time_in 		= $data["default_time_in"];
 		$default_time_out 		= $data["default_time_out"];
@@ -617,6 +631,10 @@ class Payroll
 		$late_grace_time 		= $data["employee_information"]->payroll_group_grace_time * 60;
 		$compute_approved 		= $data["compute_approved"];
 		$holiday 				= $data['holiday'];
+
+		/* for flexi time */
+		$target_hour_param 		= $data['employee_information']->payroll_group_target_hour_parameter;
+		$target_hour 			= $data['employee_information']->payroll_group_target_hour;
 
 		$return = new stdClass();
 		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
@@ -1508,12 +1526,9 @@ class Payroll
 
 			if($one_day_render > 0)
 			{
-				// dd($_allowance_daily);
 				foreach($_allowance_daily as $key => $daily_allowance)
 				{
 					$data['allowance'] = Payroll::push_allowance($data['allowance'], $daily_allowance, $payroll_period_category, $period_category, ($one_day_render / $target_hour));
-
-					// dd($daily_allowance);
 				}
 			}
 

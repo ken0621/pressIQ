@@ -366,6 +366,31 @@ class Ec_order
             else
             {
                 Tbl_ec_order::where("ec_order_id",$ec_order_id)->update($update);
+
+                if($order_status == "Completed")
+                {
+                    $_order = Tbl_ec_order::where("ec_order_id", $ec_order_id)->first();
+                    /* TRANSACTION JOURNAL */  
+                    $entry["reference_module"]  = "product-order";
+                    $entry["reference_id"]      = $ec_order_id;
+                    $entry["name_id"]           = $_order->customer_id;
+                    $entry["total"]             = $_order->total;
+
+                    $_order_item = Tbl_ec_order_item::where("ec_order_id", $ec_order_id)->get();
+
+                    foreach($_order_item as $key=>$item)
+                    {
+                        $entry_data[$key]['item_id']            = $item->item_id;
+                        $entry_data[$key]['entry_qty']          = $item->quantity;
+                        $entry_data[$key]['vatable']            = 0;
+                        $entry_data[$key]['discount']           = $item->discount_amount;
+                        $entry_data[$key]['entry_amount']       = $item->total;
+                        $entry_data[$key]['entry_description']  = $item->description;
+                    }
+
+                    $product_order_journal = Accounting::postJournalEntry($entry, $entry_data);
+                }
+                
                 return $response; 
             }
         }

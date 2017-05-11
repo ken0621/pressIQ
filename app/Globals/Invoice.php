@@ -316,7 +316,7 @@ class Invoice
             }
         }
 
-        $entry['discount'] += $total_discount;
+        // $entry['discount'] += $total_discount;
 
         $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
 

@@ -18,14 +18,14 @@ use Redirect;
 use Request;
 use View;
 use Session;
-
+use Carbon\Carbon;
+use App\Globals\Mlm_seed;
 class Member extends Controller
 {
 	public $user_info;
 	public $current_warehouse; 
 	function __construct()
 	{
-
 		/* IF SESSION FOR EMAIL OR PASSWORD DOESN'T EXIST - REDIRECT TO FRONTPAGE */
 		if(!session('user_email') || !session('user_password'))
 		{
@@ -36,6 +36,7 @@ class Member extends Controller
 
 			/* CHECK IF USERNAME DOESN'T EXIST IN DB - REDIRECT TO FRONTPAGE */
 			$user_info = Tbl_user::where("user_email", session('user_email'))->shop()->first();
+			// dd($user_info);
 			if(!$user_info)
 			{
 				return Redirect::to('/')->send();
@@ -56,7 +57,9 @@ class Member extends Controller
 
 					/* INSERT DEFAULT WAREHOUSE */
 					Warehouse::put_default_warehouse($this->user_info->shop_id);
-
+					/* Seed MLM Email */
+					Mlm_seed::seed_mlm($this->user_info->shop_id);
+					
 					$shop_id_used    = $user_info->shop_id;
 					$check_if_dev    = Tbl_user_position::where("position_id",$this->user_info->user_level)->first();
 					$is_dev          = 0;
@@ -130,7 +133,7 @@ class Member extends Controller
 		}
 
 		View::share("_page", Utilities::filterPageList());
-		
+		View::share('carbon_now', Carbon::now()->format('Y-m-d'));
 		/* Seeding */
 		Seed_manual::auto_seed();
 
@@ -162,6 +165,12 @@ class Member extends Controller
 		Payroll::generate_philhealth($this->user_info->shop_id);
 		/* INSERT PAGIBIG TABLE PER SHOP */
 		Payroll::generate_pagibig($this->user_info->shop_id);
+		/* INSERT PAPER SIZE FOR PAYSLIP [PAYROLL] */
+		Payroll::generate_paper_size($this->user_info->shop_id);
+		/* INSERT DEFAULT TERMS */
+		Seed_manual::put_default_tbl_terms($this->user_info->shop_id);
+		/* INSERT DEFAULT PAYMENT METHOD */
+		Seed_manual::put_default_tbl_payment_method($this->user_info->shop_id);
 
 		/* INSERT MAIN WAREHOUSE */
 		Warehouse::mainwarehouse_for_developer($this->user_info->user_id, $this->user_info->shop_id);

@@ -168,6 +168,10 @@
 .margin-l-0{
     margin-left: 0px !important;
 }
+.margin-nl-19
+{
+    margin-left: -19px;
+}
 .margin-right-10{
     margin-right:10px;
 }
@@ -661,6 +665,11 @@
     text-align:left;
 }
 
+.no-list-style
+{
+    list-style: none;
+}
+
 .list-flex{
     display: flex;
 }
@@ -910,7 +919,10 @@
     overflow-x: hidden;
 }
 
-
+.over-flow
+{
+    overflow:auto;
+}
 
 .box > .icon { text-align: center; position: relative; }
 .box > .icon > .image { position: relative; z-index: 2; margin: auto; width: 88px; height: 88px; border: 8px solid white; line-height: 88px; border-radius: 50%; background: #63B76C; vertical-align: middle; }
@@ -1096,4 +1108,124 @@
 {
     height: 100%;
 }
+.height-30-em
+{
+    max-height: 30em;
+}
 /* height end */
+
+
+
+@media only screen and (max-width: 800px) {
+/* Force table to not be like tables anymore */
+.no-more-tables table,
+.no-more-tables thead,
+.no-more-tables tbody,
+.no-more-tables th,
+.no-more-tables td,
+.no-more-tables tr {
+display: block;
+}
+ 
+/* Hide table headers (but not display: none;, for accessibility) */
+.no-more-tables thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+ 
+.no-more-tables tr { border: 1px solid #ccc; }
+  
+.no-more-tables td {
+    /* Behave like a "row" */
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    white-space: normal;
+    text-align:left;
+}
+ 
+.no-more-tables td:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 6px;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align:left;
+    font-weight: bold;
+}
+ 
+/*
+Label the data
+*/
+.no-more-tables td:before { content: attr(data-title); }
+}
+
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 53px;
+  height: 18px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(35px);
+  -ms-transform: translateX(35px);
+  transform: translateX(35px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.column-fit, .column-fit td, .column-fit th
+{
+    white-space: nowrap;
+}

@@ -2,6 +2,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class Tbl_chart_of_account extends Model
 {
@@ -37,4 +38,16 @@ class Tbl_chart_of_account extends Model
     {
       return $query->join('tbl_chart_account_type','chart_type_id','=','account_type_id');
     } 
+
+    public function scopeBalance($query)
+    {
+      $balance = DB::table("tbl_journal_entry_line")->join("tbl_chart_of_account as coa", "account_id", "=", "jline_account_id")
+                                           ->join("tbl_chart_account_type","chart_type_id", "=", "account_type_id")
+                                           ->whereRaw("tbl_chart_of_account.account_id = jline_account_id")
+                                           ->whereRaw("account_shop_id = account_shop_id")
+                                           ->selectRaw("SUM( CASE jline_type WHEN normal_balance then jline_amount ELSE -jline_amount END)")
+                                           ->toSql();
+
+      return $query->selectRaw("*, IFNULL(($balance), 0) as balance");
+    }
 }

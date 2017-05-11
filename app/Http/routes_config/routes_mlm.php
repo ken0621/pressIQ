@@ -35,6 +35,7 @@ Route::get('/mlm/repurchase/add_cart', 'Mlm\MlmRepurchaseController@add_cart');
 Route::get('/mlm/repurchase/remove_item', 'Mlm\MlmRepurchaseController@remove_item'); 
 Route::get('/mlm/repurchase/clear_cart', 'Mlm\MlmRepurchaseController@clear_cart'); 
 Route::get('/mlm/repurchase/checkout', 'Mlm\MlmRepurchaseController@checkout'); 
+Route::post('/mlm/repurchase/checkout/submit', 'Mlm\MlmRepurchaseController@checkout_submit'); 
 
 Route::get('/mlm/vouchers', 'Mlm\MlmVouchersController@index'); 
 Route::get('/mlm/cheque', 'Mlm\MlmChequeController@index'); 
@@ -67,10 +68,13 @@ Route::get('/mlm/report/{complan}', 'Mlm\MlmReportController@index');
 Route::get('/mlm/report/discount_card/use', 'Mlm\MlmDiscountCardController@use_discount'); 
 Route::get('/mlm/report/discount_card/use/get/customer/{id}', 'Mlm\MlmDiscountCardController@get_customer_info'); 
 Route::post('/mlm/report/discount_add/use/submit', 'Mlm\MlmDiscountCardController@submit_use_discount_card'); 
+Route::post('/mlm/report/binary_promotions/request', 'Mlm\MlmReportController@request_binary_promotions'); 
 /* End MLM MEMBER REPORTS */
 
 /* MLM SLOTs */
 Route::get('/mlm/slots', 'Mlm\MlmSlotsController@index'); 
 Route::post('/mlm/slots/set_nickname', 'Mlm\MlmSlotsController@set_nickname'); 
+Route::get('/mlm/slots/upgrade_slot/{id}', 'Mlm\MlmSlotsController@upgrade_slot'); 
+Route::post('/mlm/slots/upgrade_slot_post/{id}', 'Mlm\MlmSlotsController@upgrade_slot_post'); 
 
 /* MLM SLOTs REPORTS */

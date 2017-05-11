@@ -7,7 +7,7 @@
         <div>
             <i class="fa fa-tags"></i>
             <h1>
-                <span class="page-title">Tablet &raquo; Credit Memo</span>
+                <span class="page-title">Credit Memo</span>
                 <small>
                     List of Customer CM
                 </small>
@@ -60,7 +60,7 @@
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
                                           <!-- <li ><a class="popup" link="/member/customer/view_cm/{{$cm->cm_id}}" size="lg">View CM</a></li> -->
-                                        @if($cm->manual_cm_id== null)
+                                        @if($cm->manual_cm_id == null)
                                           <li ><a href="/member/customer/credit_memo?id={{$cm->cm_id}}">Edit CM</a></li>
                                         @endif
                                       </ul>

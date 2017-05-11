@@ -1,5 +1,7 @@
 var modal_create_payslip = new modal_create_payslip();
 
+
+
 function modal_create_payslip()
 {
 	init();
@@ -10,9 +12,39 @@ function modal_create_payslip()
 		include_header_action();
 		time_summary();
 		check_company_check();
+		combo_box();
+
+		check_position();
 		// check_orientation($(".paper-orientation").val());
 		$(".payslip-container").css("width",$(".payslip-width").val()+"%");
 	}	
+
+
+
+	function combo_box()
+	{
+		$(".drop-down-paper-size").globalDropList(
+		{
+		    link: '/member/payroll/custom_payslip/modal_create_paper_size',
+		    link_size: 'md',
+		    width : '100%',
+		    placeholder: 'Paper Sizes'
+		});
+	}
+
+	function check_position()
+	{
+		$(".company-position").each(function()
+		{
+			if($(this).hasClass('active'))
+			{
+				var target = $(this).data("target");
+				$(".company-logo").addClass("display-none");
+				$(target).removeClass("display-none");
+				$("#company-position").val(target);
+			}
+		});
+	}
 
 	function payslip_action()
 	{

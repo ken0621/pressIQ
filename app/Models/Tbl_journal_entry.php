@@ -14,13 +14,25 @@ class Tbl_journal_entry extends Model
     	return $query->leftjoin("tbl_journal_entry_line","jline_je_id","=","je_id");
     }
 
-    public function scopeTransaction($query, $reference)
+    public function scopeTransaction($query, $reference = null)
     {
-    	if($reference == "invoice")
-    	{
-    		$query->selectRaw("*, concat('/member/customer/invoice?id=', inv_id) as txn_link")
-    			  ->join("tbl_customer_invoice","inv_id","=","je_reference_id")
-    			  ->join("tbl_customer","customer_id","=","inv_customer_id");
-    	}
+        $query->selectRaw("*, (CASE je_reference_module
+                                WHEN 'invoice' THEN concat('/member/customer/invoice?id=', je_reference_id) 
+                                WHEN 'sales-receipt' THEN concat('/member/customer/sales_receipt?id=', je_reference_id)
+                                WHEN 'credit-memo' THEN concat('/member/customer/credit_memo?id=', je_reference_id)
+                                WHEN 'receive-payment' THEN concat('/member/customer/receive_payment?id=', je_reference_id)
+                                WHEN 'bill' THEN concat('/member/vendor/create_billt?id=', je_reference_id)
+                                WHEN 'debit-memo' THEN concat('/member/vendor/debit_memo?id=', je_reference_id)
+                                WHEN 'bill-payment' THEN concat('/member/vendor/paybill?id=', je_reference_id)
+                                WHEN 'mlm-product-repurchase' THEN concat('/member/mlm/product_code/receipt?invoice_id=', je_reference_id)
+                                WHEN 'product-order' THEN concat('/member/ecommerce/product_order/create_order?id=', je_reference_id)
+                                WHEN 'journal-entry' THEN concat('/member/accounting/journal?id=', je_id)
+                                END) as txn_link");
+        if($reference)
+        {
+            $query->where("je_reference_module", $reference);
+        }
+        
+        return $query;
     }
 }

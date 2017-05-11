@@ -19,7 +19,7 @@
                 <input type="hidden" name="warehouse_id" value="{{$warehouse_a}}">
 
                 <input type="hidden" name="report_choose" value="product_sales_report">
-                <input type="hidden" name="pdf" value="excel">
+                <input type="hidden" name="pdf" value="excel" class="pdf_input">
                 <div class="col-md-3">
                     <span><small style="color:gray">From</small></span>
                     <input type="date" class="form-control" name="from" value="{{Carbon\Carbon::now()->format('Y-m-d')}}">
@@ -29,8 +29,9 @@
                     <input type="date" class="form-control" name="to" value="{{Carbon\Carbon::now()->format('Y-m-d')}}">
                 </div>
                 <div class="col-md-3">
-                    <span><small style="color:gray">CASHIER'S END SESSION REPORT</small></span>
-                    <button class="btn btn-custom-green-white btn-pdf"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                    <span><small style="color:gray">CASHIER'S END SESSION REPORT</small></span><br>
+                    <button class="btn btn-custom-green-white btn-pdf" onclick="$('.pdf_input').val('excel');"><i class="fa fa-file-excel-o"></i> Export to Excel</button>
+                    <button class="btn btn-custom-red-white btn-pdf" onclick="$('.pdf_input').val('true');"><i class="fa fa-file-pdf-o"></i> Export to PDF</button>
                 </div>
                 </form>
                 <div class="col-md-3">

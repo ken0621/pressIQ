@@ -193,3 +193,25 @@ Done
 -- ok
 2.Pending - Wallet
 3.Member's area number format
+
+
+4/27/2017
+
+
+
+/ •	The admin can upload item claimable by earning accumulative binary points.
+/ •	The admin can set duration for the item to be claimed
+•	The item can only be claimed by requiring at least (1) direct referral to avoid points coming from spill overs only.
+•	The item can only be claimed during span of time.
+/ •	There will be different claim voucher for items redeemed using promotional module.
+/ •	The points that will be used will only be coming from "BINARY POINTS".
+/ •	There will be requirement from both "LEFT" & "RIGHT".
+/ •	One (1) username claiming policy.
+/ o	A username with different slots can only claim an item using 1 slot only.
+o	The member will need to choose which slot can claim the promotional bonus.
+• 1 item = 1 unit
+
+
+
+
+a:14:{s:22:"marketing_plan_code_id";i:88;s:19:"marketing_plan_code";s:6:"BINARY";s:19:"marketing_plan_name";s:6:"Binary";s:22:"marketing_plan_trigger";s:13:"Slot Creation";s:20:"marketing_plan_label";s:14:"Matching Bonus";s:21:"marketing_plan_enable";i:1;s:31:"marketing_plan_release_schedule";i:1;s:30:"marketing_plan_release_monthly";i:0;s:29:"marketing_plan_release_weekly";s:0:"";s:27:"marketing_plan_release_time";s:8:"00:00:00";s:36:"marketing_plan_release_schedule_date";s:19:"2017-04-10 17:02:31";s:7:"shop_id";i:14;s:28:"marketing_plan_enable_encash";i:0;s:40:"marketing_plan_enable_product_repurchase";i:0;}

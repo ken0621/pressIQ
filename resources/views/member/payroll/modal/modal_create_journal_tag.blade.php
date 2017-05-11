@@ -22,12 +22,25 @@
 				<div class="panel panel-primary">
 					<div class="panel-heading">{{ucfirst($key)}}</div>
 				<div class="panel-body padding-0">
-						<ul class="list-group">
+						<ul class="no-list-style margin-nl-19">
 						  @foreach($entity_data as $entity)
-						  <li class="list-group-item padding-tb-0">
+						  <li>
 						  	<div class="checkbox">
 						  		<label><input type="checkbox" name="entity[]" value="{{$entity['payroll_entity_id']}}}">{{$entity['entity_name']}}</label>
 						  	</div>
+						  	@if(!empty($entity['sub']))
+						  	<li >
+							  	<ul class="no-list-style">
+							  		@foreach($entity['sub'] as $sub)
+							  		<li>
+							  			<div class="checkbox">
+							  				<label><input type="checkbox" name="sub_entity[]" value="{{$sub['payroll_deduction_type_id']}}}">{{$sub['payroll_deduction_type_name']}}</label>
+							  			</div>
+							  		</li>
+							  		@endforeach
+							  	</ul>
+						  	</li>
+						  	@endif
 						  </li>
 						  @endforeach
 						</ul>

@@ -25,6 +25,7 @@ use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_user;
+use App\Models\Tbl_terms;
 
 use Request;
 use Carbon\Carbon;
@@ -45,6 +46,7 @@ class Customer_InvoiceController extends Member
         $data["page"]       = "Customer Invoice";
         $data["pis"]        = Purchasing_inventory_system::check();
         $data["_customer"]  = Customer::getAllCustomer();
+        $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
         $data['_item']      = Item::get_all_category_item();
         $data['_cm_item']   = Item::get_all_category_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
@@ -366,9 +368,13 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['ref_name']           = Request::input('invline_ref_name')[$key];
                 $item_info[$key]['ref_id']             = Request::input('invline_ref_id')[$key];
 
-                $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
-                $product_consume[$key]["quantity"] = $qty * $item_info[$key]['quantity'];
-                $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
+                $item_type = Tbl_item::where("item_id",Request::input('invline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+                    $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
+                    $product_consume[$key]["quantity"] = $qty * $item_info[$key]['quantity'];
+                    $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
+                }
             }
         }
 
@@ -437,9 +443,13 @@ class Customer_InvoiceController extends Member
                     $cm_item_info[$keys]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$keys]);
                     $cm_item_info[$keys]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$keys]);
                    
-                    $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
-                    $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];
-                    $item_returns[$keys]["product_id"] = Request::input('cmline_item_id')[$keys];
+                    $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$key])->pluck("item_type_id");
+                    if($item_type == 4 || $item_type == 1)
+                    {
+                        $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
+                        $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];
+                        $item_returns[$keys]["product_id"] = Request::input('cmline_item_id')[$keys];
+                    }
                 }   
             }            
         }

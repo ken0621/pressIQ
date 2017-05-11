@@ -8,6 +8,7 @@ use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
 use App\Models\Tbl_journal_entry_line;
 use App\Models\Tbl_customer;
+use App\Models\Tbl_vendor;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_ec_product;
@@ -53,17 +54,12 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        dd(PayrollJournalEntries::payroll_summary(0,0));
-        dd(collect(Payroll::record_by_date($this->getShopId(), "01-26-2017", "02-10-2017"))->toArray());
-        dd(collect(PayrollJournalEntries::check_payroll_entity_account_id())->toArray());
+
     }
 
     public function getJournal()
     {
         $data['tbl_journal_entry'] = Accounting::getJounalAll();
-
-        // dd($data['tbl_journal_entry']);
-        // dd($data['tbl_journal_entry']);
 
         return view('member.tester_journal', $data);
     }

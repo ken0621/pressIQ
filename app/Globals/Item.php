@@ -14,6 +14,7 @@ use App\Models\Tbl_item_discount;
 
 use App\Globals\Item;
 use Session;
+use Carbon\carbon;
 
 class Item
 {
@@ -25,6 +26,25 @@ class Item
     public static function get_item_details($item_id = 0)
     {
         return Tbl_item::category()->where("item_id",$item_id)->first();
+    }
+
+    public static function get_item_in_bundle($item_id = 0)
+    {
+        $items = array();
+        if($item_id != 0)
+        {
+            $items = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+        }
+        return $items;
+    }    
+    public static function get_item_type($item_id = 0)
+    {
+        $type = null;
+        if($item_id != 0)
+        {
+            $type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        }
+        return $type;
     }
 	public static function breakdown($_item='')
 	{
@@ -140,6 +160,7 @@ class Item
                 if($item_list['item_type_id'] == 4)
                 {
                    $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
+                   $_category[$key]['item_list'][$key1]['item_cost'] = Item::get_item_bundle_cost($item_list['item_id']); 
                 }
                 $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
             }
@@ -159,6 +180,7 @@ class Item
                 if($item_list['item_type_id'] == 4)
                 {
                    $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
+                   $_category[$key]['item_list'][$key1]['item_cost'] = Item::get_item_bundle_cost($item_list['item_id']); 
                 }
                 $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
             }
@@ -175,13 +197,19 @@ class Item
         $item = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->groupBy("tbl_item.item_category_id")->get();
         foreach ($item as $key1 => $value) 
         {         
-            $_category[$key1] = Tbl_category::where("type_shop",$shop_id)->where("archived",0)->where("type_id",$value->item_category_id)->first();  
+            $_category[$key1] = collect(Tbl_category::where("type_shop",$shop_id)->where("archived",0)->where("type_id",$value->item_category_id)->first())->toArray();  
         }
         foreach($_category as $key => $category)
         {
-            $_category[$key]->item_list   = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->where("item_category_id",$category->type_id)->groupBy("tbl_sir_item.item_id")->get()->toArray();
-            // dd($_category[$key]->item_list);
-            $_category[$key]->subcategory = Item::get_item_per_sub_sir($category->type_id,$sir_id);        
+            $_category[$key]['item_list']   = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->where("item_category_id",$category['type_id'])->groupBy("tbl_sir_item.item_id")->get()->toArray();
+            foreach($_category[$key]['item_list'] as $key3 => $item_list)
+            {
+                if($item_list['item_type_id'] == 4)
+                {
+                   $_category[$key]['item_list'][$key3]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
+                }
+            }
+            $_category[$key]['subcategory'] = Item::get_item_per_sub_sir($category['type_id'],$sir_id);        
         }
 
         return collect($_category)->toArray();
@@ -189,11 +217,19 @@ class Item
 
     public static function get_item_per_sub_sir($category_id, $sir_id)
     {
-        $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get();
+        $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get()->toArray();
         foreach($_category as $key =>$category)
         {
-            $_category[$key]->item_list   = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->where("item_category_id",$category->type_id)->groupBy("tbl_sir_item.item_id")->get()->toArray();
-            $_category[$key]->subcategory = Item::get_item_per_sub_sir($category->type_id,$sir_id);
+            $_category[$key]['item_list']   = Tbl_sir_item::select_sir_item()->where("tbl_sir_item.sir_id",$sir_id)->where("item_category_id",$category['type_id'])->groupBy("tbl_sir_item.item_id")->get()->toArray();
+
+            foreach ($_category[$key]['item_list'] as $key3 => $value3)
+            {               
+               if($value3['item_type_id'] == 4)
+                {
+                   $_category[$key]['item_list'][$key3]['item_price'] = Item::get_item_bundle_price($value3['item_id']); 
+                }
+            }
+            $_category[$key]['subcategory'] = Item::get_item_per_sub_sir($category['type_id'],$sir_id);
         }
 
         return collect($_category)->toArray();
@@ -214,6 +250,23 @@ class Item
             }
         }
         return $price;
+    }   
+    public static function get_item_bundle_cost($item_id = null)
+    {
+        $cost = 0;
+        $item_type = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+        if($item_id != null && $item_type == 4)
+        {
+            $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+            foreach ($bundle_item as $key => $value) 
+            {
+                $item_cost =  Purchasing_inventory_system::get_item_cost($value->bundle_item_id);
+                $um_qty = UnitMeasurement::um_qty($value->bundle_um_id);
+
+                $cost += $item_cost * ($um_qty * $value->bundle_qty);
+            }
+        }
+        return $cost;
     }    
     public static function get_bundle_item_qty($item_id = null)
     {
@@ -553,5 +606,39 @@ class Item
         }
         
         return $item_session;
+    }
+
+    public static function getOtherChargeItem()
+    {
+        $exist_item = Tbl_item::where("shop_id", Item::getShopId())->where("item_code", "other-charge")->first();
+        if(!$exist_item)
+        {
+            $insert["shop_id"]                  = Item::getShopId();
+            $insert["item_type_id"]             = 3;
+            $insert["item_category_id"]         = Item::getServiceCategory();
+            $insert["item_name"]                = "Other Charge";
+            $insert["item_income_account_id"]   = Accounting::getOpenBalanceEquity();
+            $insert["item_code"]                = "other-charge";
+            
+            return Tbl_item::insertGetId($insert);
+        }
+
+        return $exist_item->item_id;
+    }
+
+    public static function getServiceCategory()
+    {
+        $exist_type = Tbl_category::where("type_shop", Item::getShopId())->where("type_name", "Service")->first();
+        if(!$exist_type)
+        {
+            $insert["type_shop"]                = Item::getShopId();
+            $insert["type_category"]            = "services";
+            $insert["type_name"]                = "Service";
+            $insert["type_date_created"]        = Carbon::now();  
+            
+            return Tbl_category::insertGetId($insert);
+        }
+
+        return $exist_type->type_id;
     }
 }

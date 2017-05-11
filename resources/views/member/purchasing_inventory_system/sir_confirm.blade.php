@@ -20,7 +20,7 @@
     <div class="col-md-6 col-xs-6"><button data-dismiss="modal" class="btn btn-def-white btn-custom-white form-control">No</button></div>
 </div>  	
 </form>
-<script type="text/javascript">   
+<!-- <script type="text/javascript">   
 function submit_done(data)
 {
     if(data.status == "success")
@@ -38,4 +38,4 @@ function submit_done(data)
         $(data.target).html(data.view);
     }
 }
-</script>
+</script> -->

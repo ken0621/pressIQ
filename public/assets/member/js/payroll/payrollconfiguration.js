@@ -1,4 +1,5 @@
 var payrollconfiguration = new payrollconfiguration();
+var _data = [];
 
 function payrollconfiguration()
 {
@@ -11,6 +12,7 @@ function payrollconfiguration()
 		// load_configuration('/member/payroll/departmentlist', "POST",".configuration-div", formdata);
 		$(".a-navigation-configuration").first().addClass('active');
 		load_configuration($(".a-navigation-configuration").first().attr("href"),"POST",".configuration-div", formdata);
+		
 	}
 
 	function a_navigation_configuration_event()
@@ -25,6 +27,8 @@ function payrollconfiguration()
 			reload_configuration(link);
 		});
 	}
+
+	
 
 	function reload_configuration(link = "")
 	{
@@ -185,14 +189,16 @@ function payrollconfiguration()
 
 	this.relaod_tbl_department = function()
 	{
-		department_archived();
-		department_archived(1);
+		// department_archived();
+		// department_archived(1);
+		reload_configuration("/member/payroll/departmentlist");
 	}
 
 	this.reload_tbl_jobtitle = function()
 	{
-		jobtitle_archived();
-		jobtitle_archived(1);
+		// jobtitle_archived();
+		// jobtitle_archived(1);
+		reload_configuration("/member/payroll/jobtitlelist");
 	} 
 	
 
@@ -269,6 +275,20 @@ function payrollconfiguration()
 		});
 	}
 
+	this.reload_paper_size_d = function()
+	{
+		$(".drop-down-paper-size").load("/member/payroll/custom_payslip/modal_create_payslip .drop-down-paper-size", function()
+		{
+			$(".drop-down-paper-size").globalDropList("reload");
+	        $(".drop-down-paper-size").val(_data.id).change();  
+		});
+	}
+
+	this.reload_custom_payslip = function()
+	{
+		reload_configuration("/member/payroll/custom_payslip");
+	}
+
 	/*this.reload_holiday_default = function()
 	{
 		reload_configuration("/member/payroll/holiday_default");
@@ -298,6 +318,8 @@ function submit_done(data)
 	{
 
 	}
+
+	_data = data;
 
 	data.element.modal("toggle");
 

@@ -21,6 +21,10 @@
                         <label for="membership_name">Max Pair Per Cycle</label>
                         <input type="text" class="form-control"  name="max_pair_cycle" value="{{$membership->membership_points_binary_max_pair == null ? 0 : $membership->membership_points_binary_max_pair }}">
                     </td>
+                    <td>
+                        <label for="membership_name">Max Income Per Cycle</label>
+                        <input type="text" class="form-control"  name="membership_points_binary_max_income" value="{{$membership->membership_points_binary_max_income}}">
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -32,6 +36,9 @@
                     <th>Point (LEFT)</th>
                     <th>Point (RIGHT)</th>
                     <th>Bonus</th>
+                    <th>Single Line Binary</th>
+                    <th>Level to distribute</th>
+                    <th>Fix/%</th>
                 </tr>
             </thead>
             <tbody class="pairing_body">
@@ -42,6 +49,14 @@
                         <td><input type="text" class="form-control"  name="pairing_point_left[]" value="{{$value->pairing_point_left}}" ></td>
                         <td><input type="text" class="form-control"  name="pairing_point_right[]" value="{{$value->pairing_point_right}}" ></td>
                         <td><input type="text" class="form-control"  name="pairing_bonus[]" value="{{$value->pairing_bonus}}" ></td>
+                        <td><input type="text" class="form-control"  name="pairing_point_single_line_bonus[]" value="{{$value->pairing_point_single_line_bonus}}" ></td>
+                        <td><input type="text" class="form-control"  name="pairing_point_single_line_bonus_level[]" value="{{$value->pairing_point_single_line_bonus_level}}" ></td>
+                        <td>
+                            <select class="form-control" name="pairing_point_single_line_bonus_percentage[]">
+                                <option value="0" {{$value->pairing_point_single_line_bonus_percentage == 0 ? 'selected' : ''}}>Fix</option>
+                                <option value="1" {{$value->pairing_point_single_line_bonus_percentage == 1 ? 'selected' : ''}}>Percentage</option>
+                            </select>
+                        </td>
                     </tr>
                     @endforeach
                 @else
@@ -78,6 +93,20 @@
             html += '<td>';
             html += '   <input type="text" class="form-control"  name="pairing_bonus[]" value="0" >';
             html += '</td>';
+
+            html += '<td>';
+            html += '   <input type="text" class="form-control"  name="pairing_point_single_line_bonus[]" value="0" >';
+            html += '</td>';
+
+            html += '<td>';
+            html += '   <input type="text" class="form-control"  name="pairing_point_single_line_bonus_level[]" value="1" >';
+            html += '</td>';
+
+            html += '<td>';
+            html += '   <select class="form-control" name="pairing_point_single_line_bonus_percentage[]"> <option value="0">Fix</option><option value="1">Percentage</option></select>';
+            html += '</td>';
+
+
             html += "</tr>";
         }
         $('.pairing_body').html(html);

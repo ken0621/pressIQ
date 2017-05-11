@@ -33,13 +33,14 @@ class OnlinePaymentMethodController extends Member
 		}
 		// dd($data["_method"] );
 		$data["_gateway"] 	= $this->gatewayInfo();
-		// dd($data);
+		// dd($data["_gateway"]);
 		return view('member.online_payment.payment', $data);
 	}
 
 	public function gatewayInfo()
 	{
-		$_gateway = Tbl_online_pymnt_gateway::gatewayApi($this->getShopId())->get();
+		$_gateway = Tbl_online_pymnt_gateway::gatewayApi($this->getShopId())
+						->get();
 		foreach($_gateway as $key=>$gateway)
 		{
 			$_gateway[$key] = $gateway;
@@ -50,10 +51,10 @@ class OnlinePaymentMethodController extends Member
 			else
 			{
 				$_gateway[$key]->client_id = $gateway->api_client_id;
-				$_gateway[$key]->secret_id = $gateway->api_secret_id;
+				$_gateway[$key]->secret_id = $gateway->api_secret_ids;
 			}
 		}
-		// dd($_gateway);
+
 		return $_gateway;
 	}
 
@@ -152,7 +153,7 @@ class OnlinePaymentMethodController extends Member
 		$data["link_shop_id"] 			= $this->getShopId();
 		$data["link_method_id"] 		= Request::input('link_method_id');
 		$data["link_reference_name"] 	= Request::input('link_reference_name');
-		$data["link_reference_id"] 		= Request::input('link_reference_id');
+		$data["link_reference_id"] 		= str_replace("-","",strstr(Request::input('link_reference_id'), "-"));
 		$data["link_img_id"] 			= Request::input('link_img_id');
 		$data["link_is_enabled"] 		= Request::input('link_is_enabled') == 'on' ? 1 : 0;
 

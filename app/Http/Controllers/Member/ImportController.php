@@ -99,6 +99,7 @@ class ImportController extends Member
 		    				'Purchase From Supplier',
 		    				'Purchasing Information',
 		    				'Purchase Cost',
+		    				'Expense Account',
 		    				'Barcode',
 		    				'Qty on Hand',
 		    				'Reorder Point',

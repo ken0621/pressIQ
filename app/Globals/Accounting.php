@@ -80,16 +80,20 @@ class Accounting
 			$result[$key]["account_name"]			= $item->account_name;
 			$result[$key]["account_type"] 			= $item->chart_type_name;
 			$result[$key]["account_description"] 	= $item->account_description;
+			$result[$key]["account_parent_id"] 		= $item->account_parent_id;
 			$result[$key]["account_sublevel"] 		= $item->account_sublevel;
 			$result[$key]["account_balance"] 		= $item->balance;
 			$sub_query = Tbl_chart_of_account::where("account_parent_id", $item->account_id)->first();
 			
 			if($sub_query)
 			{
+				$result[$key]["is_sub_count"] = 1;
 				$result[$key]["sub_account"] = Accounting::checkAccount($shop, $item->account_id, $sublevel + 1, $filter, $type, $search);
+
 			}
 			else
 			{
+				$result[$key]["is_sub_count"] = 0;
 				$result[$key]["sub_account"] = null;
 			}
 		}
@@ -307,20 +311,20 @@ class Accounting
 
 			/* ENTRY DESCRIPTION */ 
 			$line_data["entry_description"] = isset($entry_line["entry_description"]) ? $entry_line["entry_description"] : '';
-
-			switch($entry["reference_module"])
-			{
-				case "estimate": // NON-POSTING
-					break;
-				case "sales-order": // NON-POSTING
-					break;
-				case "mlm-product-repurchase":
-				case "product-order":
-				case "sales-receipt":
-				case "invoice":
-					/* INCOME ACCOUNT */
-					if($item->item_type_id != 4) // ITEM IS NOT A BUNDLE
-					{
+			
+			// if($item->item_type_id != 4) // ITEM IS NOT A BUNDLE
+			// {
+				switch($entry["reference_module"])
+				{
+					case "estimate": // NON-POSTING
+						break;
+					case "sales-order": // NON-POSTING
+						break;
+					case "mlm-product-repurchase":
+					case "product-order":
+					case "sales-receipt":
+					case "invoice":
+						/* INCOME ACCOUNT */
 						$line_data["entry_amount"]	= $entry_line["entry_amount"];
 						$line_data["entry_type"] 	= Accounting::normalBalance($account_income);
 						$line_data["account_id"]	= $account_income;
@@ -340,89 +344,104 @@ class Accounting
 							$line_data["account_id"] 	= $account_asset;
 							Accounting::insertJournalLine($line_data);
 						}
-					}
-					break;
-				case "receive-payment":
-				case "bill-payment":
-					/* CASH ACCOUNT - BANK */
-					$line_data["entry_amount"]	= $entry_line["entry_amount"];
-					$line_data["entry_type"] 	= Accounting::contraAccount($account->account_id);
-					$line_data["account_id"] 	= $account->account_id;
-					Accounting::insertJournalLine($line_data);
-					break;
-				case "purchase-order": // NON-POSTING
-					break;
-				case "write-check":
-				case "bill":
-					if($item->item_type_id == 1) // INVENTORY TYPE
-					{
-						/* ASSET ACCOUNT */
-						$line_data["entry_amount"]	= $entry_line["entry_amount"];
-						$line_data["entry_type"] 	= Accounting::normalBalance($account_asset);
-						$line_data["account_id"] 	= $account_asset;
-						Accounting::insertJournalLine($line_data);
-					}
-					else
-					{
-						/* EXPENSE ACCOUNT */
-						$line_data["entry_amount"]	= $entry_line["entry_amount"];
-						$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
-						$line_data["account_id"] 	= $account_expense;
-						Accounting::insertJournalLine($line_data);
-					}
-					break;
-				case "debit-memo":
-					if($item->item_type_id == 1) // INVENTORY TYPE
-					{
-						/* ASSET ACCOUNT */
-						$line_data["entry_amount"]	= $entry_line["entry_amount"];
-						$line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
-						$line_data["account_id"] 	= $account_asset;
-						Accounting::insertJournalLine($line_data);
-					}
-					else
-					{
-						/* EXPENSE ACCOUNT */
-						$line_data["entry_amount"]	= $entry_line["entry_amount"];
-						$line_data["entry_type"] 	= Accounting::contraAccount($account_expense);
-						$line_data["account_id"] 	= $account_expense;
-						Accounting::insertJournalLine($line_data);
-					}
-					break;
-					break;
-				case "credit-memo":
-					/* INCOME ACCOUNT */
-					$line_data["entry_amount"]	= $entry_line["entry_amount"];
-					$line_data["entry_type"] 	= Accounting::contraAccount($account_income);
-					$line_data["account_id"] 	= $account_income;
-					Accounting::insertJournalLine($line_data);
 
-					if($item->item_type_id == 1)
-					{
-						/* EXPENSE ACCOUNT */
-						$line_data["entry_amount"]	= $item->item_cost;
-						$line_data["entry_type"] 	= Accounting::contraAccount($account_expense);
-						$line_data["account_id"] 	= $account_expense;
+						if($entry["discount"] > 0)
+						{
+							$line_data["entry_amount"]	= $entry_line["discount"];
+							$line_data["entry_type"] 	= Accounting::contraAccount(Accounting::getDiscountSale());
+							$line_data["account_id"] 	= Accounting::getDiscountSale();
+							Accounting::insertJournalLine($line_data);
+						}
+
+						break;
+					case "receive-payment":
+						/* CASH ACCOUNT - BANK */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::normalBalance($account->account_id);
+						$line_data["account_id"] 	= $account->account_id;
+						Accounting::insertJournalLine($line_data);
+						break;
+					case "bill-payment":
+						/* CASH ACCOUNT - BANK */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::contraAccount($account->account_id);
+						$line_data["account_id"] 	= $account->account_id;
+						Accounting::insertJournalLine($line_data);
+						break;
+					case "purchase-order": // NON-POSTING
+						break;
+					case "write-check":
+					case "bill":
+						if($item->item_type_id == 1) // INVENTORY TYPE
+						{
+							/* ASSET ACCOUNT */
+							$line_data["entry_amount"]	= $entry_line["entry_amount"];
+							$line_data["entry_type"] 	= Accounting::normalBalance($account_asset);
+							$line_data["account_id"] 	= $account_asset;
+							Accounting::insertJournalLine($line_data);
+						}
+						else
+						{
+							/* EXPENSE ACCOUNT */
+							$line_data["entry_amount"]	= $entry_line["entry_amount"];
+							$line_data["entry_type"] 	= Accounting::normalBalance($account_expense);
+							$line_data["account_id"] 	= $account_expense;
+							Accounting::insertJournalLine($line_data);
+						}
+						break;
+					case "debit-memo":
+						if($item->item_type_id == 1) // INVENTORY TYPE
+						{
+							/* ASSET ACCOUNT */
+							$line_data["entry_amount"]	= $entry_line["entry_amount"];
+							$line_data["entry_type"] 	= Accounting::contraAccount($account_asset);
+							$line_data["account_id"] 	= $account_asset;
+							Accounting::insertJournalLine($line_data);
+						}
+						else
+						{
+							/* EXPENSE ACCOUNT */
+							$line_data["entry_amount"]	= $entry_line["entry_amount"];
+							$line_data["entry_type"] 	= Accounting::contraAccount($account_expense);
+							$line_data["account_id"] 	= $account_expense;
+							Accounting::insertJournalLine($line_data);
+						}
+						break;
+						break;
+					case "credit-memo":
+						/* INCOME ACCOUNT */
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::contraAccount($account_income);
+						$line_data["account_id"] 	= $account_income;
 						Accounting::insertJournalLine($line_data);
 
-						/* ASSET ACCOUNT */
-						$line_data["entry_amount"]	= $item->item_cost;
-						$line_data["entry_type"] 	= Accounting::normalBalance($account_asset);
-						$line_data["account_id"] 	= $account_asset;
-						Accounting::insertJournalLine($line_data);
-					}
-					break;
-				case "deposit":
-					/* OPENING BALANCE EQUITY */
-					$account ? $account : $account = Accounting::getOpenBalanceEquity();
+						if($item->item_type_id == 1)
+						{
+							/* EXPENSE ACCOUNT */
+							$line_data["entry_amount"]	= $item->item_cost;
+							$line_data["entry_type"] 	= Accounting::contraAccount($account_expense);
+							$line_data["account_id"] 	= $account_expense;
+							Accounting::insertJournalLine($line_data);
 
-					$line_data["entry_amount"]	= $entry_line["entry_amount"];
-					$line_data["entry_type"] 	= Accounting::normalBalance($account);
-					$line_data["account_id"] 	= $account;
-					Accounting::insertJournalLine($line_data);
-					break;	
-				// SO ON
-			}
+							/* ASSET ACCOUNT */
+							$line_data["entry_amount"]	= $item->item_cost;
+							$line_data["entry_type"] 	= Accounting::normalBalance($account_asset);
+							$line_data["account_id"] 	= $account_asset;
+							Accounting::insertJournalLine($line_data);
+						}
+						break;
+					case "deposit":
+						/* OPENING BALANCE EQUITY */
+						$account ? $account : $account = Accounting::getOpenBalanceEquity();
+
+						$line_data["entry_amount"]	= $entry_line["entry_amount"];
+						$line_data["entry_type"] 	= Accounting::normalBalance($account);
+						$line_data["account_id"] 	= $account;
+						Accounting::insertJournalLine($line_data);
+						break;	
+					// SO ON
+				}
+			// }
 		}
 
 		return $line_data["je_id"];

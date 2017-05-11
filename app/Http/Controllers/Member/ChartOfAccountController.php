@@ -43,7 +43,7 @@ class ChartOfAccountController extends Member
     {
         $data['account_shop_id']            = $this->user_info->shop_id;
         $data['account_type_id']            = Request::input('account_type_id');
-        $data['account_number']             = Request::input('account_number');
+        $data['account_number']             = Request::input('account_number') ? Request::input('account_number') : rand(1000, 9999);
         $data['account_name']               = Request::input('account_name');
         $data['account_description']        = Request::input('account_description');
         $data['account_parent_id']          = Request::input('account_parent_id');
@@ -163,8 +163,8 @@ class ChartOfAccountController extends Member
                 $json['message']    = 'Duplicate Name "'.$account_name.'"';
             }
             foreach($validator->errors()->all() as $validate)
-            {                dd($valida);
-                $json['message']    = $json['message'] ."</br>" .$validate;
+            {             
+                $json['message']    = $json['message'] .$validate;
             }
             
             return json_encode($json);

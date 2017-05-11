@@ -18,6 +18,9 @@ use App\Models\Tbl_pay_bill;
 use App\Models\Tbl_vendor;
 use App\Models\Tbl_pay_bill_line;
 use App\Models\Tbl_bill_item_line;
+use App\Globals\UnitMeasurement;
+use App\Globals\Item;
+use App\Globals\Accounting;
 use DB;
 use Session;
 use Carbon\Carbon;
@@ -46,10 +49,20 @@ class WriteCheck
         
         $wc_id = Tbl_write_check::insertGetId($insert);
 
+        /* Transaction Journal */
+        $entry["reference_module"]  = "write-check";
+        $entry["reference_id"]      = $wc_id;
+        $entry["name_id"]           = $vendor_info['wc_vendor_id'];
+        $entry["total"]             = collect($item_info)->sum('itemline_amount');
+        $entry["vatable"]           = '';
+        $entry["discount"]          = '';
+        $entry["ewt"]               = '';
+
+
         $wc_data = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
         AuditTrail::record_logs("Added","write_check",$wc_id,"",serialize($wc_data));
 
-        WriteCheck::insert_wc_line($wc_id, $item_info);
+        WriteCheck::insert_wc_line($wc_id, $item_info, $entry);
 
         return $wc_id;
 
@@ -190,6 +203,15 @@ class WriteCheck
 
         Tbl_write_check::where("wc_id", $wc_id)->update($update);
 
+        /* Transaction Journal */
+        $entry["reference_module"]  = "write-check";
+        $entry["reference_id"]      = $wc_id;
+        $entry["name_id"]           = $vendor_info['wc_vendor_id'];
+        $entry["total"]             = collect($item_info)->sum('itemline_amount');
+        $entry["vatable"]           = '';
+        $entry["discount"]          = '';
+        $entry["ewt"]               = '';
+
         $new = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
         AuditTrail::record_logs("Edited","write_check",$wc_id,serialize($old),serialize($new));
 
@@ -216,7 +238,7 @@ class WriteCheck
         }
 
     }
-    public static function insert_wc_line($wc_id, $item_info)
+    public static function insert_wc_line($wc_id, $item_info, $entry)
     {
     	foreach($item_info as $key => $item_line)
         {
@@ -233,7 +255,39 @@ class WriteCheck
                 $insert_line['wcline_amount']        = $item_line['itemline_amount'];
 
                 Tbl_write_check_line::insert($insert_line);
+
+                $item_type = Item::get_item_type($item_line['itemline_item_id']);
+                /* TRANSACTION JOURNAL */  
+                if($item_type != 4)
+                {
+                    $entry_data[$key]['item_id']            = $item_line['item_id'];
+                    $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
+                    $entry_data[$key]['vatable']            = 0;
+                    $entry_data[$key]['discount']           = $discount;
+                    $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
+                    $entry_data[$key]['entry_description']  = $item_line['item_description'];  
+                }
+                else
+                {
+                    $item_bundle = Item::get_item_in_bundle($item_line['itemline_item_id']);
+                    if(count($item_bundle) > 0)
+                    {
+                        foreach ($item_bundle as $key_bundle => $value_bundle) 
+                        {
+                            $item_data = Item::get_item_details($value_bundle->bundle_item_id);
+                            $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
+                            $entry_data['b'.$key.$key_bundle]['entry_qty']          = $item_line['itemline_qty'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
+                            $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
+                            $entry_data['b'.$key.$key_bundle]['discount']           = 0;
+                            $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
+                            $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                        }
+                    }
+                }
             }
+
+
+            $wc_journal = Accounting::postJournalEntry($entry, $entry_data);  
         }
 
     }

@@ -70,7 +70,7 @@
 					                            <button type="button" class="btn btn-primary image-gallery image-gallery-single" key="{{$key}}" style="margin-top: 15px;">Upload Image</button>
 					                        </div>
 					                        <div class="col-md-8 text-center select-container ">
-					                        	<input type="hidden" class="link-reference-name" name="link_reference_name" value="{{$method->link_reference_name}}" required/>
+					                        	<input type="hidden" class="link-reference-name" name="link_reference_name" value="{{$method->link_reference_name or ''}}" required/>
 					                        	<div class="form-group">
 						                        	<select name="link_reference_id" class="form-control select-gateway" required>							                        		
 						                        		@include('member.load_ajax_data.load_payment_gateway', ['_gateway' => $method->gateway, 'reference_id' => $method->link_reference_id, 'reference_name' => $method->link_reference_name])
@@ -112,20 +112,20 @@
 						            			@if($gateway->gateway_code_name == "ipay88")
 					            					<div class="form-group col-md-12">
 									                    <label>Merchant Code</label>
-									                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->client_id or ''}}">
+									                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->api_client_id or ''}}">
 									                </div>
 									                <div class="form-group col-md-12">
 									                    <label>Merchant Key</label>
-									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->secret_id or ''}}">
+									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->api_secret_id or ''}}">
 									                </div>
 								                @else
 									                <div class="form-group col-md-12">
 									                    <label>Client ID</label>
-									                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->client_id or ''}}">
+									                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->api_client_id or ''}}">
 									                </div>
 									                <div class="form-group col-md-12">
 									                    <label>Secret ID</label>
-									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->secret_id or ''}}">
+									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->api_secret_id or ''}}">
 									                </div>
 								                @endif
 								                <div class="col-md-12">

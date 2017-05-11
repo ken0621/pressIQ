@@ -54,7 +54,10 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        dd(Tbl_vendor::transaction($this->getShopId(), 13)->get());
+        dd(str_replace("-","",strstr("fsdfgsdform-2", "-")));
+
+        dd( $value );
+
     }
 
     public function getJournal()

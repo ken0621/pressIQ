@@ -158,7 +158,7 @@ class ShopCheckoutController extends Shop
             $ipay88 = array(
                 'merchantKey'   => $online_payment_api->api_secret_id,
                 'merchantCode'  => $online_payment_api->api_client_id,
-                'paymentId'     => $payment_id, //Optional value 1=credit card 5=bancnet
+                'paymentId'     => 5, //Optional value 1=credit card 5=bancnet
                 'refNo'         => $reference_number,
                 'amount'        => '15.00',
                 'currency'      => "PHP",

@@ -32,6 +32,12 @@ use App\Models\Tbl_sir;
 use App\Models\Tbl_um;
 use App\Models\Tbl_category;
 use App\Models\Tbl_inventory_slip;
+use App\Models\Tbl_warehouse;
+use App\Models\Tbl_manufacturer;
+use App\Models\Tbl_position;
+use App\Models\Tbl_truck;
+use App\Models\Tbl_debit_memo;
+use App\Models\Tbl_credit_memo;
 
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
@@ -122,6 +128,42 @@ class AuditTrail
                     {
                         $amount = $old[$key]["rp_total_amount"];
                         $transaction_new_id = $old[$key]["rp_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "credit_memo")
+            {
+                $transaction = Tbl_credit_memo::customer()->where("cm_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->cm_date));
+                    $transaction_client = $transaction->company != null ? $transaction->company : $transaction->title_name." ".$transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name." ".$transaction->suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->cm_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["cm_amount"];
+                        $transaction_new_id = $old[$key]["cm_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "debit_memo")
+            {
+                $transaction = Tbl_debit_memo::vendor()->where("db_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->date_created));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->db_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["db_amount"];
+                        $transaction_new_id = $old[$key]["db_id"];
                     }
                     $transaction_amount = currency("PHP",$amount);                    
                 }
@@ -595,6 +637,114 @@ class AuditTrail
                     {
                         $amount = '';
                         $transaction_new_id = $old[$key]["inventory_slip_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "warehouse")
+            {
+                $transaction = Tbl_warehouse::where("warehouse_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->warehouse_created));
+                    $transaction_client = $transaction->warehouse_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["warehouse_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "manufacturer")
+            {
+                $transaction = Tbl_manufacturer::where("manufacturer_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->date_created));
+                    $transaction_client = $transaction->manufacturer_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["manufacturer_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "store_information")
+            {
+                $transaction = Tbl_shop::where("shop_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($value->created_at));
+                    $transaction_client = $transaction->shop_key;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["shop_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "user")
+            {
+                $transaction = Tbl_user::where("user_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($value->created_at));
+                    $transaction_client = $transaction->user_first_name." ".$transaction->user_last_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["user_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "agent_position")
+            {
+                $transaction = Tbl_position::where("position_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->position_created));
+                    $transaction_client = $transaction->position_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["position_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "truck")
+            {
+                $transaction = Tbl_truck::where("truck_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->created_at));
+                    $transaction_client = $transaction->plate_number;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["truck_id"];
                     }
                     $transaction_amount = '';                    
                 }

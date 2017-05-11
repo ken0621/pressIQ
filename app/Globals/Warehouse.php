@@ -370,6 +370,22 @@ class Warehouse
             Tbl_warehouse_inventory::insert($insertdestination);
             $data['inventory_slip_id_source']       = $inventory_slip_id_source;
             $data['inventory_slip_id_destination']  = $inventory_slip_id_destination;
+
+            $inventory_slip_source = Tbl_inventory_slip::warehouse()->where("inventory_slip_id",$inventory_slip_id_source)->first();
+            $inventory_slip_destination = Tbl_inventory_slip::warehouse()->where("inventory_slip_id",$inventory_slip_id_destination)->first();
+
+            $wh_src_name ="";
+            $wh_src_dest = "";
+            if($inventory_slip_source != null && $inventory_slip_destination != null)
+            {
+                $wh_src_name = $inventory_slip_source->warehouse_name;
+                $wh_src_dest =  $inventory_slip_destination->warehouse_name;
+            }
+            $wh_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id_source);
+            AuditTrail::record_logs("Transfer from ".$wh_src_name,"warehouse_inventory",$inventory_slip_id_source,"",serialize($wh_data));
+
+            $whs_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id_destination);
+            AuditTrail::record_logs("Transfer to ".$wh_src_dest,"warehouse_inventory",$inventory_slip_id_destination,"",serialize($whs_data));            
         }
         else
         {
@@ -474,6 +490,12 @@ class Warehouse
 
                 Tbl_warehouse_inventory::insert($insert);
                 $data["status"] = "success";
+        }
+
+        if($data["status"] != "error" && $inventory_slip != null)
+        {
+            $wh_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip->inventory_slip_id);
+            AuditTrail::record_logs("Update","warehouse_inventory",$inventory_slip->inventory_slip_id,serialize($wh_data),serialize($wh_data));            
         }
 
 

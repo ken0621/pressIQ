@@ -106,7 +106,6 @@ class ShopCheckoutController extends Shop
     public function submit_using_ipay88($cart, $payment_method_id)
     {
         $payment_method = DB::table("tbl_online_pymnt_method")->where("method_id", $payment_method_id)->first();
-        dd($payment_method);
         switch ($payment_method->method_code_name) 
         {
             case 'bdo':

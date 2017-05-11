@@ -298,9 +298,10 @@ class DebitMemoController extends Member
             if($data["status"] == null)
             {
                 DebitMemo::updatedb($db_id, $vendor_info, $item_info);
-
-                $data = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array');
-
+                if(count($product_consume) > 0)
+                {
+                    $data = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array');
+                }
                 $data["status"] = "success-debit-memo";
                 $data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;
             }

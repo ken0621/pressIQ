@@ -635,6 +635,7 @@ class Payroll
 		/* for flexi time */
 		$target_hour_param 		= $data['employee_information']->payroll_group_target_hour_parameter;
 		$target_hour 			= $data['employee_information']->payroll_group_target_hour;
+		// flexitime
 
 		$return = new stdClass();
 		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
@@ -737,6 +738,11 @@ class Payroll
 			{
 				$earliest_time_in = $time_in;
 			}
+			// if($category == 'regulartime')
+			// {
+
+			// }
+			
 
 			/* GET LATEST TIME OUT - USE FOR UNDER TIME */
 			if($latest_time_out < $time_out)
@@ -755,6 +761,8 @@ class Payroll
 			}
 
 			$regular_hours = $time_spent;
+
+			/* if regular time */
 
 			/* CHECK IF EARLY OVERTIME */
 			if($time_in < $default_time_in && $time_out != 0)

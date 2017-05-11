@@ -665,6 +665,8 @@ class Payroll
 		$night_differential_pm = c_time_to_int("11:00 PM");
 		$night_differential_am = c_time_to_int("6:00 AM");
 
+		$target_hour = $data["employee_information"]->payroll_group_target_hour;
+
 		/* BREAK COMPUTATION */
 		if($data["employee_information"]->payroll_group_is_flexi_break == 1)
 		{
@@ -763,37 +765,53 @@ class Payroll
 			$regular_hours = $time_spent;
 
 			/* if regular time */
-
-			/* CHECK IF EARLY OVERTIME */
-			if($time_in < $default_time_in && $time_out != 0)
+			if($category == 'regulartime')
 			{
-				if($time_out < $default_time_in)
+				/* CHECK IF EARLY OVERTIME */
+				if($time_in < $default_time_in && $time_out != 0)
 				{
-					$early_overtime = $time_out - $time_in;
-					$regular_hours = 0;
+					if($time_out < $default_time_in)
+					{
+						$early_overtime = $time_out - $time_in;
+						$regular_hours = 0;
+					}
+					else
+					{
+						$early_overtime = $default_time_in - $time_in;
+						$regular_hours = $regular_hours - $early_overtime;
+					}
 				}
-				else
+
+				/* CHECK IF LATE OVERTIME */
+				if($time_out > $default_time_out && $time_out != 0)
 				{
-					$early_overtime = $default_time_in - $time_in;
-					$regular_hours = $regular_hours - $early_overtime;
+					if($time_in > $default_time_out)
+					{
+						$late_overtime = $time_out - $time_in;
+						$regular_hours = 0;
+					}
+					else
+					{
+						$late_overtime = $time_out - $default_time_out;
+						$regular_hours = $regular_hours - $late_overtime;
+					}
+				}
+
+			}
+
+			if($category == 'flexitime')
+			{
+				
+
+				$late_overtime = $time_spent - $target_hour;
+
+				if($late_overtime < 0)
+				{
+					$late_overtime = 0;
 				}
 			}
 
-			/* CHECK IF LATE OVERTIME */
-			if($time_out > $default_time_out && $time_out != 0)
-			{
-				if($time_in > $default_time_out)
-				{
-					$late_overtime = $time_out - $time_in;
-					$regular_hours = 0;
-				}
-				else
-				{
-					$late_overtime = $time_out - $default_time_out;
-					$regular_hours = $regular_hours - $late_overtime;
-				}
-			}
-
+			
 			/* CHECK IF NIGHT DIFFERENTIAL SCENARIO 1 (Later than 11:00 PM) */
 			if($time_out > $night_differential_pm)
 			{
@@ -853,31 +871,46 @@ class Payroll
 			}
 		}
 
-		/* COMPUTE LATE BASED ON EARLIEST TIME IN */
-		if($default_time_in < $earliest_time_in)
+		/* if regular time */
+		if($category == 'regulartime')
 		{
-			$total_late_hours = $earliest_time_in - $default_time_in;
-
-			if($total_late_hours <= $late_grace_time)
+			/* COMPUTE LATE BASED ON EARLIEST TIME IN */
+			if($default_time_in < $earliest_time_in)
 			{
-				$total_regular_hours = $total_regular_hours + $total_late_hours;
+				$total_late_hours = $earliest_time_in - $default_time_in;
+
+				if($total_late_hours <= $late_grace_time)
+				{
+					$total_regular_hours = $total_regular_hours + $total_late_hours;
+					$total_late_hours = 0;
+				}
+			}
+			else
+			{
 				$total_late_hours = 0;
 			}
-		}
-		else
-		{
-			$total_late_hours = 0;
+			/* COMPUTE UNDER TIME BASED ON OLDEST TIME */
+			if($default_time_out > $latest_time_out && $latest_time_out != 0)
+			{
+				$total_under_time = $default_time_out - $latest_time_out;
+			}
+			else
+			{
+				$total_under_time = 0;
+			}
 		}
 
-		/* COMPUTE UNDER TIME BASED ON OLDEST TIME */
-		if($default_time_out > $latest_time_out && $latest_time_out != 0)
+		if($category == 'flexitime')
 		{
-			$total_under_time = $default_time_out - $latest_time_out;
+			/* get under time */
+			$total_under_time = $target_hour - $total_time_spent;
+			if($total_under_time < 0)
+			{
+				$total_under_time = 0;
+			}
 		}
-		else
-		{
-			$total_under_time = 0;
-		}
+
+		
 
 		$total_hours = $total_regular_hours + $total_early_overtime + $total_early_overtime;
 

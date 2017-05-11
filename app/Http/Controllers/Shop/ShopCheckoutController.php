@@ -349,7 +349,6 @@ class ShopCheckoutController extends Shop
     {
         if(!isset(Self::$customer_info->customer_id))
         {
-            dd(1);
             $check_email = Tbl_customer::where('shop_id', $this->shop_info->shop_id)->where('email', Request::input("email"))->where("password", "!=", "")->count();
 
             if ($check_email)
@@ -363,14 +362,12 @@ class ShopCheckoutController extends Shop
         }
         elseif ( !Request::input("payment_method_id") ) 
         {
-            dd(2);
             Session::put("checkout_input", Request::input());
 
             return Redirect::to("/checkout/payment")->send();
         }
         else
         {
-            dd(3);
             return false;
         }
     }

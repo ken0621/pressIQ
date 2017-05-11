@@ -44,6 +44,19 @@ class ShopCheckoutController extends Shop
             return Redirect::to('/');
         }
 
+        if (Request::input("email")) 
+        {
+            if(!isset(Self::$customer_info->customer_id))
+            {
+                $check_email = Tbl_customer::where('shop_id', $this->shop_info->shop_id)->where('email', Request::input("email"))->where("password", "!=", "")->count();
+
+                if ($check_email)
+                {
+                    return Redirect::to('/checkout/login?email=' . Request::input("email"))->with('warning', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
+                }
+            }
+        }
+
         $data['ec_order_load'] = 0;
         foreach($data['get_cart'] as $value)
         {
@@ -56,11 +69,7 @@ class ShopCheckoutController extends Shop
             }           
         }
 
-        $data["_payment_method"] = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
-                                                          ->leftJoin('tbl_online_pymnt_other', 'tbl_online_pymnt_link.link_reference_id', '=', 'tbl_online_pymnt_other.other_id')
-                                                          ->where("tbl_online_pymnt_link.link_shop_id", $this->shop_info->shop_id)
-                                                          ->where("tbl_online_pymnt_link.link_is_enabled", 1)
-                                                          ->get();
+        $data["_payment_method"] = $this->get_payment_method();
 
         if(Self::$customer_info != null)
         {
@@ -81,17 +90,50 @@ class ShopCheckoutController extends Shop
         
         else
         {
-            $data['customer_first_name'] = '';
-            $data['customer_middle_name'] = '';
-            $data['customer_last_name'] = '';
-            $data['customer_email'] = '';
-            $data['customer_mobile'] = '';
-            $data['customer_state_province'] = '';
-            $data['customer_city'] = '';
-            $data['customer_address'] = '';
+            $data['customer_first_name'] = null;
+            $data['customer_middle_name'] = null;
+            $data['customer_last_name'] = null;
+            $data['customer_email'] = null;
+            $data['customer_mobile'] = null;
+            $data['customer_state_province'] = null;
+            $data['customer_city'] = null;
+            $data['customer_address'] = null;
         }
 
+        $data["customer_email"] = Request::input("email") ? Request::input("email") : $data["customer_email"];
+
         return view("checkout", $data);
+    }
+    public function payment()
+    {
+        $checkout_input = Session::get("checkout_input");
+        if (!$checkout_input) 
+        {
+            return Redirect::to("/checkout");
+        }
+
+        $data["page"]            = "Checkout Payment";
+        $data["_input"]          = $checkout_input;
+        $data["_payment_method"] = $this->get_payment_method();
+        $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
+        if (!isset($data["get_cart"]['cart'])) 
+        {
+            return Redirect::to('/');
+        }
+
+        return view("checkout_payment", $data);
+    }
+
+    public function get_payment_method()
+    {
+        $payment_method = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
+                                                          ->leftJoin('tbl_online_pymnt_other', 'tbl_online_pymnt_link.link_reference_id', '=', 'tbl_online_pymnt_other.other_id')
+                                                          ->leftJoin('tbl_image', 'tbl_online_pymnt_link.link_img_id', '=', 'tbl_image.image_id')
+                                                          ->where("tbl_online_pymnt_link.link_shop_id", $this->shop_info->shop_id)
+                                                          ->where("tbl_online_pymnt_link.link_is_enabled", 1)
+                                                          ->get();
+
+        return $payment_method;
     }
     
     /* PAYMENT GATEWAY */
@@ -213,7 +255,7 @@ class ShopCheckoutController extends Shop
         $result = Ec_order::create_ec_order_automatic($cart);
         if(isset($result['order_id']['status']))
         {
-              return Redirect::back()
+              return Redirect::to("/checkout")
                  ->withErrors($result['order_id']['status_message'])
                  ->withInput()
                  ->send();
@@ -303,11 +345,37 @@ class ShopCheckoutController extends Shop
     }
     /* END PAYMENT GATEWAY */
 
+    public function validate_payment()
+    {
+        if(!isset(Self::$customer_info->customer_id))
+        {
+            $check_email = Tbl_customer::where('shop_id', $this->shop_info->shop_id)->where('email', Request::input("email"))->where("password", "!=", "")->count();
+
+            if ($check_email)
+            {
+                return Redirect::to('/checkout/login')->with('warning', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
+            }
+            else
+            {
+                return "notloggedin";
+            }
+        }
+        elseif ( !Request::input("payment_method_id") ) 
+        {
+            Session::put("checkout_input", Request::input());
+
+            return Redirect::to("/checkout/payment")->send();
+        }
+        else
+        {
+            return false;
+        }
+    }
     public function validate_submit()
     {
         // Validate Customer Info
         $rules["customer_first_name"]   = 'required';
-        $rules["customer_middle_name"]  = 'required';
+        $rules["customer_middle_name"]  = '';
         $rules["customer_last_name"]    = 'required';
         $rules["customer_email"]        = 'required';
         $rules["customer_birthdate"]    = 'required';
@@ -315,7 +383,7 @@ class ShopCheckoutController extends Shop
         $rules["customer_state_province"] = 'required';
         $rules["customer_city"]         = 'required';
         $rules["customer_address"]      = 'required';
-        $rules["payment_method_id"]     = 'required';
+        $rules["payment_method_id"]     = '';
         $rules["taxable"]               = 'required';
 
         $ec_order_load = Request::input('ec_order_load');
@@ -454,9 +522,9 @@ class ShopCheckoutController extends Shop
     public function check_payment_method($cart)
     {
         $file = Input::file('payment_upload');
-
         $payment_method = DB::table("tbl_online_pymnt_link")->where("link_method_id", $cart["payment_method_id"])
-                                                            ->where("tbl_online_pymnt_link.link_is_enabled", 1)
+                                                            ->where("link_is_enabled", 1)
+                                                            ->where("link_shop_id", $this->shop_info->shop_id)
                                                             ->first();
 
         if ($payment_method->link_reference_name == "other") 
@@ -498,10 +566,14 @@ class ShopCheckoutController extends Shop
         }
         else
         {
-            $cart = $this->restructure_cart();
-            $this->check_stocks();
-            $this->check_payment_method_enabled($cart);
-            $this->check_payment_method($cart);
+            $validate_payment = $this->validate_payment();
+            if (!$validate_payment) 
+            {
+                $cart = $this->restructure_cart();
+                $this->check_stocks();
+                $this->check_payment_method_enabled($cart);
+                $this->check_payment_method($cart);
+            }
         }
     }
     /*Ipay88 Function*/
@@ -561,7 +633,7 @@ class ShopCheckoutController extends Shop
 
             if($request['Status'] == 0)
             {
-                return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');    
+                return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.')->send();    
             } 
             else 
             {
@@ -573,12 +645,12 @@ class ShopCheckoutController extends Shop
                 Cart::clear_all($this->shop_info->shop_id);
 
                 // Redirect
-                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)));
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
             }
         }
         else
         {
-            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->s;
+            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
         }
     }
     /*End Ipay88*/

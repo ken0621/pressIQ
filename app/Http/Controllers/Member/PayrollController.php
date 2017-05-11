@@ -920,7 +920,7 @@ class PayrollController extends Member
 		$insert_salary['payroll_employee_salary_cola']			= Request::input('payroll_employee_salary_cola');
 
           $is_deduct_tax_default        = 0;
-          $deduct_tax_custom            = Request::input('deduct_tax_custom');
+          $deduct_tax_custom            = 0;
           $is_deduct_sss_default        = 0;
           $deduct_sss_custom            = Request::input('deduct_sss_custom');
           $is_deduct_philhealth_default = 0;
@@ -1374,7 +1374,7 @@ class PayrollController extends Member
 		$update['payroll_employee_salary_effective_date'] = $payroll_employee_salary_effective_date;
 
           $is_deduct_tax_default = 0;
-          $deduct_tax_custom = Request::input('deduct_tax_custom');
+          $deduct_tax_custom = 0;
           $is_deduct_sss_default = 0;
           $deduct_sss_custom = Request::input('deduct_sss_custom');
           $is_deduct_philhealth_default = 0;
@@ -1471,7 +1471,7 @@ class PayrollController extends Member
 
 
           $is_deduct_tax_default        = 0;
-          $deduct_tax_custom            = Request::input('deduct_tax_custom');
+          $deduct_tax_custom            = 0;
           $is_deduct_sss_default        = 0;
           $deduct_sss_custom            = Request::input('deduct_sss_custom');
           $is_deduct_philhealth_default = 0;

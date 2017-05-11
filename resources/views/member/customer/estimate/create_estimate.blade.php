@@ -192,7 +192,7 @@
                                         PHP&nbsp;<span class="sub-total">0.00</span>
                                     </div>
                                 </div> 
-                                <div class="row">
+                                <div class="row hidden">
                                     <div class="col-md-7 text-right digima-table-label">
                                         <div class="row">
                                             <div class="col-sm-6 col-sm-offset-3  padding-lr-1">
@@ -211,8 +211,8 @@
                                     <div class="col-md-5 text-right digima-table-value">
                                         PHP&nbsp;<span class="ewt-total">0.00</span>
                                     </div>
-                                </div>
-                                <div class="row">
+                                </div> 
+                                <div class="row hidden">
                                     <div class="col-md-7 text-right digima-table-label">
                                         <div class="row">
                                             <div class="col-sm-6 col-sm-offset-4  padding-lr-1">
@@ -230,7 +230,7 @@
                                         PHP&nbsp;<span class="discount-total">0.00</span>
                                     </div>
                                 </div> 
-                                <div class="row">
+                                <div class="row hidden">
                                     <div class="col-md-7 text-right digima-table-label">
                                         <div class="row">
                                             <div class="col-sm-4 col-sm-offset-8  padding-lr-1">

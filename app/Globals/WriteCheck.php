@@ -216,7 +216,7 @@ class WriteCheck
         AuditTrail::record_logs("Edited","write_check",$wc_id,serialize($old),serialize($new));
 
         Tbl_write_check_line::where("wcline_wc_id", $wc_id)->delete();
-        WriteCheck::insert_wc_line($wc_id, $item_info);
+        WriteCheck::insert_wc_line($wc_id, $item_info, $entry);
 
         return $wc_id;
     }

@@ -40,7 +40,7 @@ class CreditMemoController extends Member
         $id = Request::input('id');
         if($id)
         {
-            $data["cm"]            = Tbl_credit_memo::where("cm_id", $id)->where("cm_shop_id", $this->getShopId())->first();
+            $data["cm"]            = Tbl_credit_memo::where("cm_id", $id)->first();
             $data["_cmline"]       = Tbl_credit_memo_line::um()->where("cmline_cm_id", $id)->get();
             $data["action"]         = "/member/customer/credit_memo/update";
         }
@@ -260,7 +260,7 @@ class CreditMemoController extends Member
     }
     public function cm_list()
     {
-        $data["_cm"] = Tbl_credit_memo::manual_cm()->customer()->orderBy("tbl_credit_memo.cm_id","DESC")->get();
+        $data["_cm"] = Tbl_credit_memo::manual_cm()->customer()->orderBy("tbl_credit_memo.cm_id","DESC")->where("cm_shop_id", $this->getShopId())->get();
 
         return view("member.customer.credit_memo.cm_list",$data);
     }

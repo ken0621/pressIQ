@@ -27,13 +27,9 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/runruno', 'Shop\ShopAboutController@runruno'); //EDWARD GUEVARRA
 	Route::get('/news', 'Shop\ShopAboutController@news'); //EDWARD GUEVARRA
 	Route::get('/contactus', 'Shop\ShopAboutController@contactus'); //EDWARD GUEVARRA
-	Route::get('/account', 'Shop\ShopAccountController@index');
 
 	Route::get('/blog', 'Shop\ShopBlogController@index');
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index');
-	Route::get('/checkout/login', 'Shop\ShopCheckoutLoginController@index');
-	Route::get('/checkout', 'Shop\ShopCheckoutController@index');
-	Route::post('/checkout', 'Shop\ShopCheckoutController@submit');
 	Route::get('/payment', 'Shop\ShopPaymentController@index');
 	Route::get('/order_placed', 'Shop\ShopCheckoutController@order_placed');
 	Route::get('/addto_cart', 'Shop\ShopCheckoutController@addtocart');
@@ -49,4 +45,16 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/product_search', 'Shop\ShopSearchController@index');
 	/*End Product search*/
 
+	/* Checkout */
+	Route::get('/checkout/login', 'Shop\ShopCheckoutLoginController@index');
+	Route::get('/checkout', 'Shop\ShopCheckoutController@index');
+	Route::get('/checkout/payment', 'Shop\ShopCheckoutController@payment');
+	Route::post('/checkout', 'Shop\ShopCheckoutController@submit');
+	/* End Checkout */
+
+	/* Login E-commerce */
+	Route::get('/account', 'Shop\ShopAccountController@index');
+	Route::get('/account/order', 'Shop\ShopAccountController@order');
+	Route::get('/account/logout', 'Shop\ShopAccountController@logout');
+	Route::post('/account/login', 'Shop\ShopLoginController@submit');
 }

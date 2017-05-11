@@ -70,7 +70,7 @@
 					                            <button type="button" class="btn btn-primary image-gallery image-gallery-single" key="{{$key}}" style="margin-top: 15px;">Upload Image</button>
 					                        </div>
 					                        <div class="col-md-8 text-center select-container ">
-					                        	<input type="hidden" class="link-reference-name" name="link_reference_name" value="{{$method->link_reference_name}}" required/>
+					                        	<input type="hidden" class="link-reference-name" name="link_reference_name" value="{{$method->link_reference_name or ''}}" required/>
 					                        	<div class="form-group">
 						                        	<select name="link_reference_id" class="form-control select-gateway" required>							                        		
 						                        		@include('member.load_ajax_data.load_payment_gateway', ['_gateway' => $method->gateway, 'reference_id' => $method->link_reference_id, 'reference_name' => $method->link_reference_name])

@@ -103,8 +103,28 @@ class ShopCheckoutController extends Shop
     {
         dd("Under Maintenance");
     }
-    public function submit_using_ipay88($cart)
+    public function submit_using_ipay88($cart, $payment_method_id)
     {
+        $payment_method = DB::table("tbl_online_pymnt_method")->where("method_id", $payment_method_id)->first();
+        switch ($payment_method->method_code_name) 
+        {
+            case 'bdo':
+                $payment_id = 5;
+            break;
+
+            case 'bpi':
+                $payment_id = 5;
+            break;
+
+            case 'metrobank':
+                $payment_id = 5;
+            break;
+            
+            default:
+                $payment_id = 1;
+            break;
+        }
+        
         // Create Order
         $cart["order_status"] = "Failed";
         $result = Ec_order::create_ec_order_automatic($cart);
@@ -138,7 +158,7 @@ class ShopCheckoutController extends Shop
             $ipay88 = array(
                 'merchantKey'   => $online_payment_api->api_secret_id,
                 'merchantCode'  => $online_payment_api->api_client_id,
-                'paymentId'     => 1, //Optional value 1=credit card 5=bancnet
+                'paymentId'     => 5, //Optional value 1=credit card 5=bancnet
                 'refNo'         => $reference_number,
                 'amount'        => '15.00',
                 'currency'      => "PHP",
@@ -459,7 +479,7 @@ class ShopCheckoutController extends Shop
                 case 'paynamics': return $this->submit_using_paynamics(); break;
                 case 'dragonpay': return $this->submit_using_dragonpay(); break;
                 case 'other': return $this->submit_using_proofofpayment($file, $cart); break;
-                case 'ipay88': return $this->submit_using_ipay88($cart); break;
+                case 'ipay88': return $this->submit_using_ipay88($cart, $cart["payment_method_id"]); break;
                 default: dd("Some error occurred"); break;
             }
         }

@@ -456,7 +456,9 @@ class ShopCheckoutController extends Shop
     {
         $file = Input::file('payment_upload');
 
-        $payment_method = DB::table("tbl_online_pymnt_link")->where("link_method_id", $cart["payment_method_id"])->first();
+        $payment_method = DB::table("tbl_online_pymnt_link")->where("link_method_id", $cart["payment_method_id"])
+                                                            ->where("tbl_online_pymnt_link.link_is_enabled", 1)
+                                                            ->first();
 
         if ($payment_method->link_reference_name == "other") 
         {

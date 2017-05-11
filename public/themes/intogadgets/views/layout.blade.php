@@ -82,8 +82,13 @@
             </div>
             <div class="header-nav account-nav text-right">
                <!-- Account Header -->
-               <a data-remodal-target="login" href="#" class="text">LOGIN</a>
-               <a href="/register" class="text">REGISTER</a>
+               @if($customer_info_a)
+                  <a href="/account/order" class="text">MY ORDERS</a>
+                  <a href="/account/logout" class="text">LOGOUT</a>
+               @else
+                  <a data-remodal-target="login" href="#" class="text">LOGIN</a>
+                  <a href="/register" class="text">REGISTER</a>
+               @endif
             </div>
             <div class="col-md-8">
                <!-- HEADER SPACE -->
@@ -357,20 +362,20 @@
    <!-- LOGIN -->
    <div class="remodal login" data-remodal-id="login">
       <div class="font">
-         <div class="remodal-login-form">
-            <form method="post" action="/mlm/login" class="global-submit" autocomplete="on">
-               <input type="hidden" class="token" name="_token" value="{{ csrf_token() }}" />
+         <div class="">
+            <form method="post" action="/account/login" class="global-submit" autocomplete="on">
+               <input type="hidden" name="_token" value="{{ csrf_token() }}">
+               <input type="hidden" name="global" value="1">
                <div class="login-header-bg"></div>
                <div class="login-header"><img src="/resources/assets/frontend/img/intogadgets-logo.png"></div>
                <div class="message">The account you entered didn't match any of our record</div>
                <div class="login-input">
-                  <div class="login-user input"><input name="user" type="email" autocomplete="off"></div>
-                  <div class="login-pass input"><input name="pass" type="password" autocomplete="off"></div>
+                  <div class="login-user input"><input name="email" type="email" autocomplete="off"></div>
+                  <div class="login-pass input"><input name="password" type="password" autocomplete="off"></div>
                </div>
                <div class="login-register">Need an account?&nbsp;&nbsp;&nbsp;<a href="/register">Sign up</a></div>
                <div class="btn-container">
-                  <button class="login-button btn btn-primary">Log-in</button>
-                  <img class="loading" src="/resources/assets/img/small-loading.GIF">
+                  <button type="submit" class="login-button btn btn-primary">Log-in</button>
                </div>
             </form>
          </div>
@@ -413,7 +418,7 @@
       </div>
    </div>
    <!-- PRODUCT QUICK VIEW -->
-   <div class="remodal quicky" data-remodal-id="quick">
+   {{-- <div class="remodal quicky" data-remodal-id="quick">
       <div class="quick-view-container">
          <div class="col-md-6">
             <div class="image-container">
@@ -459,7 +464,7 @@
             </div>
          </div>
       </div>
-   </div>
+   </div> --}}
    <!-- CART MODAL -->
    <div class="remodal cart-remodal" data-remodal-id="cart">
    </div>
@@ -509,7 +514,7 @@
     <script type="text/javascript">
     function submit_done(data)
     {
-        if (data.from == "login") 
+        if (data.from == "global_login") 
         {
             if(data.type == 'error')
             {
@@ -518,7 +523,19 @@
             else
             {
                 toastr.success(data.message);
-                location.href = '/mlm';
+                location.href = '/account';
+            }
+        }
+        else if (data.from == "account_login") 
+        {
+            if(data.type == 'error')
+            {
+               toastr.error(data.message);
+            }
+            else
+            {
+               toastr.success(data.message);
+               location.href = '/checkout';
             }
         }
         else

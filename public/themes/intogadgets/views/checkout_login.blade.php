@@ -14,15 +14,16 @@
 					    </div>
 					@endif
 					<form class="form-login" method="get" action="/checkout">
+						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="form-group">
-							<input type="text" class="the-email form-control" placeholder="Enter your email address" name="email">
+							<input value="{{ Request::input("email") }}" type="email" class="the-email form-control" placeholder="Enter your email address" name="email">
 						</div>
 						<div class="form-group">
 							<div class="radio">
-							  <label><input name="continue" class="radio-continue" type="radio" checked yes="1"> Continue without password</label>
+							  <label><input name="continue" class="radio-continue" type="radio" {{ session('warning') ? '' : 'checked' }} yes="1"> Continue without password</label>
 							</div>
 							<div class="radio">
-							  <label><input name="continue" class="radio-continue" type="radio" yes="0"> I already have an account</label>
+							  <label><input name="continue" class="radio-continue" type="radio" {{ session('warning') ? 'checked' : '' }} yes="0"> I already have an account</label>
 							</div>
 						</div>
 						<div class="form-group">

@@ -54,7 +54,7 @@ function checkout_login()
 	}
 	function action_continue_no(yes, email, password, form)
 	{
-		form.attr('action', '/mlm/login');
+		form.attr('action', '/account/login');
 		form.attr('method', 'post');
 		form.addClass('global-submit');
 

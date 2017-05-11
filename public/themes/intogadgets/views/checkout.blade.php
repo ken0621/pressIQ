@@ -121,7 +121,7 @@
 						</div>
 					</div>
 
-					<div class="fieldset">
+					{{-- <div class="fieldset">
 						<label class="col-md-4">Payment Method</label>
 						<div class="field col-md-8">
 							<select class="form-control payment-method-select" name="payment_method_id">
@@ -140,7 +140,7 @@
 						<div class="field col-md-8">
 							<input type="file" name="payment_upload">
 						</div>
-					</div>
+					</div> --}}
 					<div class="fieldset">
 						<label class="col-md-4">Tax</label>
 						<div class="field col-md-8">

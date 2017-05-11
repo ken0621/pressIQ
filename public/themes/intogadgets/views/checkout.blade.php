@@ -1,6 +1,5 @@
 @extends('layout')
 @section('content')
-<span class="hide">{{ $page }}</span>
 <div class="container checkout">
 	<div class="row clearfix">
 		<div class="col-md-12 text-center">

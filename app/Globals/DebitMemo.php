@@ -37,6 +37,7 @@ class DebitMemo
 
 		DebitMemo::insert_dbline($db_id, $item_info, $entry);
 
+
 		return $db_id;
 	}
 
@@ -63,6 +64,7 @@ class DebitMemo
         $entry["total"]             = $vendor_info["db_amount"];
 
 		DebitMemo::insert_dbline($db_id, $item_info, $entry);
+
 
 	}
 	public static function insert_dbline($db_id, $item_info, $entry)

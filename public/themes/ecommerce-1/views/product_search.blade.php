@@ -104,7 +104,7 @@
 								<strong>"{{ Request::input('keyword') }}"</strong>
 								<div class="text-left">
 						            Item/s Found:
-						            <strong>{{ count($_product) }}</strong>
+						            <strong>{{ $current_count }}</strong>
 						        </div>
 							</div>
 							<form class="sort-by" method="get">

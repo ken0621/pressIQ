@@ -5,10 +5,13 @@ namespace App\Http\Controllers\Member;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_credit_memo_line;
+use App\Models\Tbl_item;
+use App\Models\Tbl_item_bundle;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Customer;
 use App\Globals\CreditMemo;
+use App\Globals\Warehouse;
 use App\Http\Controllers\Controller;
 use Request;
 
@@ -49,6 +52,7 @@ class CreditMemoController extends Member
         $customer_info["cm_amount"] = Request::input("overall_price");
 
         $item_info[] = null;
+        $item_returns = [];
         $_items = Request::input("cmline_item_id");
         $ctr_items = 0;
         foreach ($_items as $key => $value) 
@@ -63,12 +67,75 @@ class CreditMemoController extends Member
                 $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
                 $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
+
+                $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+                    $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$key]);
+                    $item_returns[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
+                    $item_returns[$key]["product_id"] = Request::input('cmline_item_id')[$key];
+                }
             }        
         }
+
+        if($_items != null)
+        {
+             // --> for bundles
+            foreach ($_items as $keyitem_cm => $value_item) 
+            {
+                if($value_item != null)
+                {
+                    $item_bundle_info = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitem_cm])->where("item_type_id",4)->first();
+                    if($item_bundle_info)
+                    {
+                        $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("cmline_item_id")[$keyitem_cm])->get();
+                        foreach ($bundle as $key_bundle_cm => $value_bundle_cm) 
+                        {
+                            $qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keyitem_cm]);
+                            $bundle_qty = UnitMeasurement::um_qty($value_bundle_cm->bundle_um_id);
+                            $_bundle[$key_bundle_cm]['product_id'] = $value_bundle_cm->bundle_item_id;
+                            $_bundle[$key_bundle_cm]['quantity'] = (Request::input('cmline_qty')[$keyitem_cm] * $qty) * ($value_bundle_cm->bundle_qty * $bundle_qty);
+
+                            array_push($item_returns, $_bundle[$key_bundle_cm]);
+                        }
+                    }                 
+                }
+            }
+            if(count($item_returns) > 0)
+            {
+                foreach ($item_returns as $key_items_cm => $value_items_cm) 
+                {
+                     $i = null;
+                     foreach ($_items as $keyitemline_cm => $valueitemline)
+                     {
+                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                        if($type == 4)
+                        {
+                            if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['product_id'])
+                            {
+                                $i = "true";
+                            }                    
+                        }
+                     }
+                    if($i != null)
+                    {
+                        unset($item_returns[$key_items_cm]);
+                    }           
+                }            
+            }
+            // <-- end bundle            
+        }
+        // END CM/RETURNS 
 
         if($ctr_items != 0)
         {
             $cm_id = CreditMemo::postCM($customer_info, $item_info);
+
+            $cm_remarks            = "Credit Memo # ". $cm_id;
+            $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
+            $cm_transaction_type   = "credit_memo";
+            $cm_transaction_id     = $cm_id;
+            $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
 
             $data["status"] = "success-credit-memo";
             $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
@@ -94,6 +161,7 @@ class CreditMemoController extends Member
         $customer_info["cm_amount"] = Request::input("overall_price");
 
         $item_info[] = null;
+        $item_returns = [];
         $_items = Request::input("cmline_item_id");
         foreach ($_items as $key => $value) 
         {  
@@ -107,12 +175,71 @@ class CreditMemoController extends Member
                 $item_info[$key]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$key]);
                 $item_info[$key]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$key]);
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$key]);
+
+                $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+                    $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$key]);
+                    $item_returns[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
+                    $item_returns[$key]["product_id"] = Request::input('cmline_item_id')[$key];
+                }
             }
+        }
+         if($_items != null)
+        {
+             // --> for bundles
+            foreach ($_items as $keyitem_cm => $value_item) 
+            {
+                if($value_item != null)
+                {
+                    $item_bundle_info = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitem_cm])->where("item_type_id",4)->first();
+                    if($item_bundle_info)
+                    {
+                        $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("cmline_item_id")[$keyitem_cm])->get();
+                        foreach ($bundle as $key_bundle_cm => $value_bundle_cm) 
+                        {
+                            $qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keyitem_cm]);
+                            $bundle_qty = UnitMeasurement::um_qty($value_bundle_cm->bundle_um_id);
+                            $_bundle[$key_bundle_cm]['product_id'] = $value_bundle_cm->bundle_item_id;
+                            $_bundle[$key_bundle_cm]['quantity'] = (Request::input('cmline_qty')[$keyitem_cm] * $qty) * ($value_bundle_cm->bundle_qty * $bundle_qty);
+
+                            array_push($item_returns, $_bundle[$key_bundle_cm]);
+                        }
+                    }                 
+                }
+            }
+            if(count($item_returns) > 0)
+            {
+                foreach ($item_returns as $key_items_cm => $value_items_cm) 
+                {
+                     $i = null;
+                     foreach ($_items as $keyitemline_cm => $valueitemline)
+                     {
+                        $type = Tbl_item::where("item_id",Request::input("cmline_item_id")[$keyitemline_cm])->pluck("item_type_id");
+                        if($type == 4)
+                        {
+                            if(Request::input("cmline_item_id")[$keyitemline_cm] == $value_items_cm['product_id'])
+                            {
+                                $i = "true";
+                            }                    
+                        }
+                     }
+                    if($i != null)
+                    {
+                        unset($item_returns[$key_items_cm]);
+                    }           
+                }            
+            }
+            // <-- end bundle            
         }
 
         if($ctr_items != 0)
         {
             CreditMemo::updateCM($cm_id, $customer_info, $item_info);
+
+            $transaction_id = $cm_id;
+            $transaction_type = "credit_memo";
+            $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_returns, $return = 'array');
 
             $data["status"] = "success-credit-memo";
             $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;

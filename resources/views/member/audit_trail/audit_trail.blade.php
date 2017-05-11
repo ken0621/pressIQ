@@ -23,11 +23,11 @@
 	    		<div class="col-md-12 filter-div">
 	    			<div class="col-md-2 padding-lr-1">
 		        		<small>Date From:</small>
-	        			<input type="date" name="date_from" class="form-control perdictive perdictive-active width-100" value="{{ ($date_from != "") ? $date_from : '' }}" >	
+	        			<input type="date" name="date_from" class="form-control perdictive perdictive-active width-100" value="{{ isset($date_from) ? $date_from : '' }}" >	
 		        	</div>	
 		        	<div class="col-md-2 padding-lr-1">
 		        		<small>Date To:</small>
-	        			<input type="date" name="date_to" class="form-control perdictive perdictive-active width-100" value="{{ ($date_to != "") ? $date_to : '' }}" 	>	
+	        			<input type="date" name="date_to" class="form-control perdictive perdictive-active width-100" value="{{ isset($date_to) ? $date_to : '' }}" 	>	
 		        	</div>	
 	        	</div>
 		        <div class="col-md-12 filter-div">
@@ -37,7 +37,7 @@
 		            <select class="form-control filter-change filter-change-col" name="col" data-target="#active-employee" >
 		             {{--  <option value="0">Select Column</option> --}}
 		              @foreach($_column as $key => $value)
-		              	<option value="{{ $key }}" {{ ($key==$col) ? 'selected' : '' }} >{{ $value }}</option>
+		              	<option value="{{ $key }}" {{ isset($col) ? ($key==$col) ? 'selected' : '' : '' }} >{{ $value }}</option>
 		              @endforeach
 		            </select>
 		          </div>

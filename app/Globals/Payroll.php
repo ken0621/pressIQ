@@ -1986,6 +1986,14 @@ class Payroll
 				$data['sss_contribution_er'] = divide($sss_contribution['er'], $period_category_arr['count_per_period']) * 2;
 				$data['sss_contribution_ec'] = divide($sss_contribution['ec'], $period_category_arr['count_per_period']) * 2;
 			}
+
+			else if(Payroll::return_ave($period_category) == 'Last Period')
+			{
+				$data['sss_contribution_ee'] = $sss_contribution['ee'];
+				$data['sss_contribution_er'] = $sss_contribution['er'];
+				$data['sss_contribution_ec'] = $sss_contribution['ec'];
+
+			}
 		}
 
 		/* GET PHILHEALTH CONTRIBUTION */
@@ -2024,6 +2032,12 @@ class Payroll
 				$data['philhealth_contribution_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['count_per_period']) * 2;
 				$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'], $period_category_arr['count_per_period']) * 2;
 			}
+
+			else if(Payroll::return_ave($period_category) == 'Last Period')
+			{
+				$data['philhealth_contribution_ee'] = $philhealth_contribution['ee'];
+				$data['philhealth_contribution_er'] = $philhealth_contribution['er'];
+			}
 		}
 
 
@@ -2046,8 +2060,11 @@ class Payroll
 
 		}
 
+
+
 		else if($group->payroll_group_pagibig == $period_category)
 		{
+
 			if(Payroll::return_ave($period_category) == '1st Period')
 			{
 				$data['pagibig_contribution'] = $pagibig_contribution;
@@ -2055,7 +2072,12 @@ class Payroll
 			}
 			else if(Payroll::return_ave($period_category) == '2nd Period')
 			{
-				$data['pagibig_contribution'] = divide($philhealth_contribution, $period_category_arr['count_per_period']) * 2;
+				$data['pagibig_contribution'] = divide($pagibig_contribution, $period_category_arr['count_per_period']) * 2;
+			}
+
+			else if(Payroll::return_ave($period_category) == 'Last Period')
+			{
+				$data['pagibig_contribution'] = $pagibig_contribution;
 			}
 		}
 
@@ -2377,6 +2399,8 @@ class Payroll
 		$temp_overtime = $hours['late_overtime'] * $rate;
 		$temp_earlyOT = $hours['early_overtime'] * $rate;
 		$temp_night	= $hours['night_differential'] * $rate;
+
+		// dd($rate);
 
 		$data['regular']			= round(($regular + ( $hours['regular'] * $rate )), 2);
 		$data['late_overtime']		= round(($temp_overtime + ($temp_overtime * $late_overtime)), 2);

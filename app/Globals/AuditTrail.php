@@ -29,6 +29,12 @@ use App\Models\Tbl_mlm_encashment_process;
 use App\Models\Tbl_sir_item;
 use App\Models\Tbl_employee;
 use App\Models\Tbl_sir;
+use App\Models\Tbl_um;
+use App\Models\Tbl_category;
+use App\Models\Tbl_inventory_slip;
+
+use App\Globals\UnitMeasurement;
+use App\Globals\Purchasing_inventory_system;
 use DB;
 use Carbon\Carbon;
 class AuditTrail
@@ -121,17 +127,22 @@ class AuditTrail
                 }
             }
             else if($value->source == "item")
-            {
+            {                
                 $transaction = Tbl_item::where("item_id",$value->source_id)->first();
                 if($transaction != null)
                 {
+                    $item_qty = 1;
+                    if(Purchasing_inventory_system::check() != 0)
+                    {
+                        $item_qty = UnitMeasurement::getQty($transaction->item_measurement_id);
+                    }
                     $transaction_date = date("m/d/y", strtotime($transaction->item_date_created));
 
                     $old[$key] = unserialize($value->new_data);
-                    $amount = $transaction->item_price;
+                    $amount = $transaction->item_price * $item_qty;
                     if(isset($old))
                     {
-                        $amount = $old[$key]["item_price"];
+                        $amount = $old[$key]["item_price"] * $item_qty;
                         $transaction_new_id = $old[$key]["item_id"];
                     }
                     $transaction_amount = currency("PHP",$amount);                    
@@ -530,6 +541,60 @@ class AuditTrail
                     {
                         $amount = '';
                         $transaction_new_id = $old[$key]["employee_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "pis_um")
+            {
+                $transaction = Tbl_um::where("id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($value->created_at));
+                    $transaction_client = "";
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "category")
+            {
+                $transaction = Tbl_category::where("type_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->type_date_created));
+                    $transaction_client = "";
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["type_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "warehouse_inventory")
+            {
+                $transaction = Tbl_inventory_slip::warehouse()->where("inventory_slip_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->inventory_slip_date));
+                    $transaction_client = $transaction->inventory_remarks." in <strong>".$transaction->warehouse_name."</strong>";
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["inventory_slip_id"];
                     }
                     $transaction_amount = '';                    
                 }

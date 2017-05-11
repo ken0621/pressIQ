@@ -283,14 +283,14 @@ class Customer_InvoiceController extends Member
             {
                 $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $inv_id);
 
-                $cm_remarks            = "Returns Items with Invoice # ". $inv_id;
+                $cm_remarks            = "Returns Items with Invoice # ". Request::input('new_invoice_id');
                 $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
                 $cm_transaction_type   = "credit_memo";
                 $cm_transaction_id     = $cm_id;
                 $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
             }
             
-            $remarks            = "Invoice";
+            $remarks            = "Consume by Invoice #".Request::input('new_invoice_id');
             $warehouse_id       = $this->current_warehouse->warehouse_id;
             $transaction_type   = "invoice";
             $transaction_id     = $inv_id;
@@ -528,7 +528,7 @@ class Customer_InvoiceController extends Member
                     //
                     $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $inv_id);
 
-                    $cm_remarks            = "Returns Items with Invoice # ". $inv_id;
+                    $cm_remarks            = "Returns Items with Invoice # ". Request::input('new_invoice_id');
                     $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
                     $cm_transaction_type   = "credit_memo";
                     $cm_transaction_id     = $cm_id;

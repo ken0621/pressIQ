@@ -24,6 +24,17 @@ class UnitMeasurement
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
+    public static function getQty($um_id)
+    {
+        $qty = 1;
+        $um_data = Tbl_unit_measurement_multi::where("multi_um_id",$um_id)->orderBy("multi_id","DESC")->first();
+        if($um_data)
+        {
+            $qty = $um_data->unit_qty;
+        }
+
+        return $qty;
+    }
     public static function load_one_um($um_id)
     {
         return Tbl_unit_measurement::multi()->where("um_shop", UnitMeasurement::getShopId())

@@ -13,6 +13,8 @@ use App\Models\Tbl_settings;
 use App\Models\Tbl_user;
 use App\Models\Tbl_user_warehouse_access ;
 use App\Globals\Item;
+
+use App\Globals\AuditTrail;
 use App\Models\Tbl_unit_measurement_multi;
 use DB;
 use Carbon\Carbon;
@@ -441,6 +443,11 @@ class Warehouse
             }
         }
 
+        if($data["status"] != "error" && $inventory_slip != null)
+        {
+            $wh_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip->inventory_slip_id);
+            AuditTrail::record_logs("Update","warehouse_inventory",$inventory_slip->inventory_slip_id,serialize($wh_data),serialize($wh_data));            
+        }
 
         if($return == 'json')
         {
@@ -524,25 +531,12 @@ class Warehouse
                 $for_serial_item[$key]["product_id"] = $refill_product['product_id'];
                 $for_serial_item[$key]["inventory_id"] = $inventory_id;
             }
-             $data['status'] = '';
-            
-
-            // $serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$shop_id)->first();
-
-            // if($is_return == null)
-            // {
-            //     if($serial != null)
-            //     {
-            //         $data['status'] = 'success-serial';
-
-            //         $items["item_id"] = "";
-            //         $items["item_list"] = $for_serial_item;
-            //         Session::put("item", $items);
-            //     }                
-            // }
 
             $data['status'] = 'success'; 
             $data['inventory_slip_id'] = $inventory_slip_id;
+
+            $slip_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id);
+            AuditTrail::record_logs("Adjust","warehouse_inventory",$inventory_slip_id,"",serialize($slip_data));
 
         }
         else
@@ -625,6 +619,9 @@ class Warehouse
             }
  
             $data['inventory_slip_id'] = $inventory_slip_id;
+
+            $slip_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id);
+            AuditTrail::record_logs("Refill","warehouse_inventory",$inventory_slip_id,"",serialize($slip_data));
 
         }
         else
@@ -723,7 +720,10 @@ class Warehouse
             {
                 Tbl_warehouse_inventory::insert($insert_consume);
                 $data['status'] = 'success';
-                $data['inventory_slip_id'] = $inventory_slip_id;                
+                $data['inventory_slip_id'] = $inventory_slip_id;     
+
+                $slip_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id);
+                AuditTrail::record_logs("Consume","warehouse_inventory",$inventory_slip_id,"",serialize($slip_data));           
             }
         }
         else

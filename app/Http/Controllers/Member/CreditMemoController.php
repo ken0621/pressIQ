@@ -7,6 +7,7 @@ use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
+use App\Models\Tbl_user;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Customer;
@@ -17,6 +18,11 @@ use Request;
 
 class CreditMemoController extends Member
 {
+    public function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +40,7 @@ class CreditMemoController extends Member
         $id = Request::input('id');
         if($id)
         {
-            $data["cm"]            = Tbl_credit_memo::where("cm_id", $id)->first();
+            $data["cm"]            = Tbl_credit_memo::where("cm_id", $id)->where("cm_shop_id", $this->getShopId())->first();
             $data["_cmline"]       = Tbl_credit_memo_line::um()->where("cmline_cm_id", $id)->get();
             $data["action"]         = "/member/customer/credit_memo/update";
         }

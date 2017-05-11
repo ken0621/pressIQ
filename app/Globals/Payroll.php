@@ -621,7 +621,7 @@ class Payroll
 
 	public static function process_time_regulartime($data, $date = '0000-00-00', $category = 'regulartime')
 	{
-		dd($data);
+		// dd($data);
 
 		$time_rule 				= $data["time_rule"];
 		$default_time_in 		= $data["default_time_in"];

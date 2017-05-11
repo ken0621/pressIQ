@@ -185,7 +185,7 @@ class Payroll_BioImportController extends Member
 				$emp_no 	= $extest[0];
 				$date_time 	= $extest[1];
 
-				$temp_record['employee_number'] = $emp_no;
+				$temp_record['employee_number'] = (string)$emp_no;
 	    		$temp_record['time']			= date('H:i:s', strtotime($date_time));
 	    		$temp_record['date']			= date('Y-m-d', strtotime($date_time));
 	    		array_push($time_sheet, $temp_record);
@@ -316,7 +316,7 @@ class Payroll_BioImportController extends Member
     	{
     		foreach($_time as $time)
 	    	{
-	    		$time['id_no'] 		= trim($time['id_no'],' ');
+	    		$time['id_no'] 		= trim((string)$time['id_no'],' ');
 	    		$time['date'] 		= trim((string)$time['date'], ' ');
 	    		$time['time_in'] 	= trim((string)$time['time_in'], ' ');
 	    		$time['time_out'] 	= trim((string)$time['time_out'], ' ');

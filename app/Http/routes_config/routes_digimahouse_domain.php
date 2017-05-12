@@ -55,6 +55,9 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	/* Login E-commerce */
 	Route::get('/account', 'Shop\ShopAccountController@index');
 	Route::get('/account/order', 'Shop\ShopAccountController@order');
+	Route::get('/account/wishlist', 'Shop\ShopAccountController@wishlist');
+	Route::get('/account/settings', 'Shop\ShopAccountController@settings');
+	Route::get('/account/security', 'Shop\ShopAccountController@security');
 	Route::get('/account/logout', 'Shop\ShopAccountController@logout');
 	Route::post('/account/login', 'Shop\ShopLoginController@submit');
 }

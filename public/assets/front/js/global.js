@@ -145,7 +145,7 @@ function add_search_events()
         }
 
         var $search_input = $('.navbar-form.search-container').serialize();
-        alert($search_input);
+ 
         request = $.ajax(
         {
      

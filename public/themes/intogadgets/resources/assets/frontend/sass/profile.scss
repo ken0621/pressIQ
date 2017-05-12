@@ -622,3 +622,56 @@
 {
     z-index: 4 !important;
 }
+
+// WISHLIST
+.wishlist
+{
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    padding: 15px 10px;
+    overflow: auto;
+    .holder
+    {
+        text-align: center;
+        border: 1px solid #ddd;
+        padding: 7.5px;
+        margin-top: 15px;
+        .image
+        {
+            position: relative;
+            height: 0;
+            padding-bottom: 75%;
+            img
+            {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+            }
+        }
+        .name
+        {
+            font-weight: 700;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+    }
+    .title
+    {
+        color: #434343;
+        font-size: 20.83px;
+        font-weight: 700;
+        background-image: none !important;
+        padding: 0 15px;
+        span
+        {
+            color: #2b628b;
+            font-weight: 800;
+        }
+    }
+}

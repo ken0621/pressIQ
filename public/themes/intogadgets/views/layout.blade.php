@@ -128,71 +128,6 @@
                         </a>
                      </li>
                      @endforeach
-                     <!-- <li class="notsub">
-                        <a href="javascript:">
-                        
-                            <div class="nav-text">
-                        
-                                <div onclick="location.href='/product?type=3'" class="nav-text-holder">SMART PHONE</div>
-                        
-                                <div onclick="location.href='/product?type=3'" class="nav-text-hover">SMART PHONE</div>
-                        
-                            </div>
-                        
-                            <div class="nav-text-more">
-                        
-                              <div onclick="location.href='/product?type=3&brand='" class="menu">Test</div>
-                        
-                            </div>
-                        
-                        </a>
-                        
-                        </li>
-                        
-                        <li class="notsub">
-                        
-                        <a href="javascript:">
-                        
-                            <div class="nav-text">
-                        
-                                <div onclick="location.href='/product?type=4'" class="nav-text-holder">TABLET</div>
-                        
-                                <div onclick="location.href='/product?type=4'" class="nav-text-hover">TABLET</div>
-                        
-                            </div>
-                        
-                            <div class="nav-text-more">
-                        
-                        
-                              <div onclick="location.href='/product?type=4&brand='" class="menu">Test</div>
-                        
-                            </div>
-                        
-                        </a>
-                        
-                        </li>
-                        
-                        <li class="notsub">
-                        
-                        <a href="javascript:">
-                        
-                            <div class="nav-text">
-                        
-                                <div onclick="location.href='/product?type=5'" class="nav-text-holder">MOBILE PHONE</div>
-                        
-                                <div onclick="location.href='/product?type=5'" class="nav-text-hover">MOBILE PHONE</div>
-                        
-                            </div>
-                        
-                            <div class="nav-text-more">
-                        
-                              <div onclick="location.href='/product?type=5&brand='" class="menu">Test</div>
-                        
-                            </div>
-                        
-                        </a>
-                        
-                        </li> -->
                      <li class="sub-menu">
                         <a href="#menupos1"  style="background-color: #085D9A !important; border: 0 !important; font-size: 12px !important;" class="list-group-item" data-toggle="collapse" data-parent="#mainmenu">ACCESSORIES <span class="menu-ico-collapse"><i class="glyphicon glyphicon-chevron-down"></i></span></a>
                         <div class="collapse pos-absolute" id="menupos1">
@@ -351,6 +286,13 @@
                      </div>
                   </div>
                </div>
+               <div class="col-md-12">
+                  <div class="popular-tags">
+                     @foreach($_popular_tags as $popular_tags)
+                     <a href="/product?search={{ $popular_tags->keyword }}">#{{ $popular_tags->keyword }}</a>
+                     @endforeach
+                  </div>
+               </div>
             </div>
          </div>
          <div class="footer-sub">
@@ -489,13 +431,8 @@
    </div>
    <script type="text/javascript">
       var currency = "{{ Config::get('app.currency') }}";
-      
-       var image_server = '{{ Config::get("app.image_server") }}';
-      
-       var source = '{{ $_SERVER["SERVER_NAME"] }}';
-      
-      
-      
+      var image_server = '{{ Config::get("app.image_server") }}';
+      var source = '{{ $_SERVER["SERVER_NAME"] }}';
    </script>
    <script src="resources/assets/external/jquery.min.js"></script> 
    <script src="resources/assets/external/bootstrap.min.js"></script>

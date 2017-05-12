@@ -48,7 +48,7 @@ class Tbl_vendor extends Model
                     ->join("tbl_bill","bill_vendor_id","=","vendor_id")
                     ->where("bill_shop_id", $shop_id)
                     ->where("inventory_only", 1);
-        if($vendor_id) $bill->where("bill_vendor_id", $vendor_id);
+        if($vendor_id) $item_receipt->where("bill_vendor_id", $vendor_id);
 
         /* BILL */
         $bill = DB::table("tbl_vendor")->selectRaw("bill_date as date, 'Bill' as type, bill_id as no, bill_due_date as due_date, bill_total_amount - bill_applied_payment as balance, bill_total_amount as total, 'status' as status, date_created, 'vendor/create_bill' as reference_url")

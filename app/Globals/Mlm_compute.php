@@ -53,12 +53,6 @@ class Mlm_compute
     }
 	public static function entry($slot_id, $type = 0)
 	{
-        ignore_user_abort(true);
-        set_time_limit(0);
-
-        flush();
-        ob_flush();
-        session_write_close();
 
         $slot_info = Mlm_compute::get_slot_info($slot_id);
         
@@ -140,9 +134,6 @@ class Mlm_compute
 
             Mlm_compute::set_slot_nick_name_2($slot_info);
             // End Computation Plan
-
-            sleep(2); 
-            exit;
 	}
     public static function get_slot_info($slot_id)
     {
@@ -152,12 +143,6 @@ class Mlm_compute
 
     public static function repurchase($slot_info,$item_code_id)
     {
-        ignore_user_abort(true);
-        set_time_limit(0);
-
-        flush();
-        ob_flush();
-        session_write_close();
 
         $plan_settings = Tbl_mlm_plan::where('shop_id', $slot_info->shop_id)
         ->where('marketing_plan_enable', 1)
@@ -169,9 +154,6 @@ class Mlm_compute
             $plan = strtolower($value->marketing_plan_code);
             Mlm_complan_manager_repurchase::$plan($slot_info,$item_code_id);
         }
-
-        sleep(1); 
-        exit;
     }
     public static function give_voucher_v2($membership_code_id)
     {

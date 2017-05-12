@@ -39,7 +39,6 @@ class Item_code
         flush();
         ob_flush();
         session_write_close();
-
         /// CODE HERE
 
 
@@ -88,7 +87,6 @@ class Item_code
 
             }
         }
-
         if(!isset($data["customer_id"]))
         {
             if(!isset($data["slot_id"]))
@@ -461,8 +459,6 @@ class Item_code
                             }
                         }
 
-                        
-
                         $insert["item_discount_percentage"] = (1 - ($insert["item_total"]  / $insert["item_subtotal"])) * 100;
 
                         $insert['item_code_payment_type'] = $data['payment_type_choose'];
@@ -479,7 +475,6 @@ class Item_code
                         }
         	            /* INSERTING AREA */
         	            $invoice_id = Tbl_item_code_invoice::insertGetId($insert);
-        	            
 
         	            /* SETUP THE INVOICE ID */
         	            foreach($rel_insert as $key => $item_code_invoice_id)
@@ -576,12 +571,12 @@ class Item_code
                             $arry_log['wallet_log_claimbale_on'] = Carbon::now();
                             Mlm_slot_log::slot_array($arry_log);
                         }
-
                         if(isset($data['use_item_code_auto']))
                         {
                             if($data['use_item_code_auto'] == 1)
                             {
                                 Item_code::use_item_code_all_invoice($invoice_id);
+                                
                                 Item_code::set_up_email($invoice_id, $shop_id);
                             }
                             else
@@ -620,8 +615,7 @@ class Item_code
     	    $send['response_status']   = "warning";
     	    $send['warning_validator'] = $validator->errors()->all();
     	}
-        
-        sleep(2);        
+        // sleep(2);        
         return $send;
         exit;
 
@@ -720,10 +714,14 @@ class Item_code
 	}
     public static function use_item_code_all_invoice($invoice_id)
     {
+
         $invoice = Tbl_item_code_invoice::where('item_code_invoice_id', $invoice_id)->first();
+
         if($invoice)
         {
+
             $item_code = Tbl_item_code::where('item_code_invoice_id', $invoice_id)->get();
+
             foreach($item_code as $key => $value)
             {
                 $slot_info = Mlm_compute::get_slot_info($invoice->slot_id);
@@ -733,6 +731,7 @@ class Item_code
                 }
             }
         } 
+        
     }
     public static function use_item_code_single($item_code, $slot_info)
     {

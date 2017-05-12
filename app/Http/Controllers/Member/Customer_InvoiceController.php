@@ -123,7 +123,7 @@ class Customer_InvoiceController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('invline_item_id');
 
-        $product_consume = null;
+        $product_consume = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -297,11 +297,14 @@ class Customer_InvoiceController extends Member
                 $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
             }
             
-            $remarks            = "Consume by Invoice #".Request::input('new_invoice_id');
-            $warehouse_id       = $this->current_warehouse->warehouse_id;
-            $transaction_type   = "invoice";
-            $transaction_id     = $inv_id;
-            $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id,true);                
+            if(count($product_consume) > 0)
+            {
+                $remarks            = "Consume by Invoice #".Request::input('new_invoice_id');
+                $warehouse_id       = $this->current_warehouse->warehouse_id;
+                $transaction_type   = "invoice";
+                $transaction_id     = $inv_id;
+                $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id,true);
+            }
 
             $json["status"]         = "success-invoice";
             if($button_action == "save-and-edit")
@@ -357,7 +360,7 @@ class Customer_InvoiceController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('invline_item_id');
 
-        $product_consume = null;
+        $product_consume = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -543,10 +546,12 @@ class Customer_InvoiceController extends Member
 
                 }
             }
-
-            $transaction_id = $inv_id;
-            $transaction_type = "invoice";
-            $json = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array',true);
+            if(count($product_consume) > 0)
+            {
+                $transaction_id = $inv_id;
+                $transaction_type = "invoice";
+                $json = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array',true);
+            }
 
             if($json["status"] == "success")
             {

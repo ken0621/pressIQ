@@ -13,13 +13,13 @@
 	    	</span>
 	    </td>
 	    <td><span class="coa-{{$account['account_parent_id']}} collapse in accordion-body">{{$account['account_type']}}</span></td>
-	    <td><span class="coa-{{$account['account_parent_id']}} collapse in accordion-body">{{$account['account_balance']}}</span></td>
-	    <td>
+	    <td><span class="coa-{{$account['account_parent_id']}} collapse in accordion-body">{{currency('PHP', $account['account_balance'])}}</span></td>
+	    <td class="text-center">
 	    	<span class="coa-{{$account['account_parent_id']}} collapse in accordion-body">
 		    	<!-- ACTION BUTTON -->
 		    	<div class="btn-group">
 	                <a class="btn btn-primary btn-grp-primary popup btn-edit-account" href="javascript:" link="/member/accounting/chart_of_account/popup/update/{{$account['account_id']}}">Edit</a>
-	                <!-- <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="" size="md"><span class="fa fa-trash"></span></a> -->
+	                <a class="btn btn-primary btn-grp-primary" href="/member/accounting/journal/all-entry-by-account/{{$account['account_id']}}">Quick Report</a>
 	            </div>
             </span>
 	    </td>

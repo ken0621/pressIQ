@@ -9,6 +9,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_debit_memo_line;
 use App\Models\Tbl_warehouse_inventory;
+use App\Models\Tbl_user;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Customer;
@@ -21,6 +22,11 @@ use Request;
 
 class DebitMemoController extends Member
 {
+    public function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -298,9 +304,10 @@ class DebitMemoController extends Member
             if($data["status"] == null)
             {
                 DebitMemo::updatedb($db_id, $vendor_info, $item_info);
-
-                $data = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array');
-
+                if(count($product_consume) > 0)
+                {
+                    $data = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array');
+                }
                 $data["status"] = "success-debit-memo";
                 $data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;
             }
@@ -318,7 +325,7 @@ class DebitMemoController extends Member
         $access = Utilities::checkAccess('vendor-debit-memo', 'access_page');
         if($access == 1)
         { 
-            $data["_db"] = Tbl_debit_memo::vendor()->orderBy("tbl_debit_memo.db_id","DESC")->get();
+            $data["_db"] = Tbl_debit_memo::vendor()->where("vendor_shop_id", $this->getShopId())->orderBy("tbl_debit_memo.db_id","DESC")->get();
 
             return view("member.vendor.debit_memo.db_list",$data);
         }

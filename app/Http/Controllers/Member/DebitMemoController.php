@@ -9,6 +9,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_debit_memo_line;
 use App\Models\Tbl_warehouse_inventory;
+use App\Models\Tbl_user;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Customer;
@@ -21,6 +22,11 @@ use Request;
 
 class DebitMemoController extends Member
 {
+    public function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -319,7 +325,7 @@ class DebitMemoController extends Member
         $access = Utilities::checkAccess('vendor-debit-memo', 'access_page');
         if($access == 1)
         { 
-            $data["_db"] = Tbl_debit_memo::vendor()->orderBy("tbl_debit_memo.db_id","DESC")->get();
+            $data["_db"] = Tbl_debit_memo::vendor()->where("vendor_shop_id", $this->getShopId())->orderBy("tbl_debit_memo.db_id","DESC")->get();
 
             return view("member.vendor.debit_memo.db_list",$data);
         }

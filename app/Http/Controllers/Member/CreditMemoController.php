@@ -260,7 +260,7 @@ class CreditMemoController extends Member
     }
     public function cm_list()
     {
-        $data["_cm"] = Tbl_credit_memo::manual_cm()->customer()->orderBy("tbl_credit_memo.cm_id","DESC")->get();
+        $data["_cm"] = Tbl_credit_memo::manual_cm()->customer()->orderBy("tbl_credit_memo.cm_id","DESC")->where("tbl_customer.shop_id", $this->getShopId())->get();
 
         return view("member.customer.credit_memo.cm_list",$data);
     }

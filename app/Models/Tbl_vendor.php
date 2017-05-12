@@ -65,7 +65,6 @@ class Tbl_vendor extends Model
         /* DEBIT MEMO */
         $debit_memo = DB::table("tbl_vendor")->selectRaw("db_date as date, 'Debit Memo' as type, db_id as no, '' as due_date, 0 as balance, db_amount as total, 'status' as status, date_created, 'vendor/debit_memo' as reference_url")
                     ->join("tbl_debit_memo","db_vendor_id","=","vendor_id")
-                    ->where("db_shop_id", $shop_id);
         if($vendor_id) $debit_memo->where("db_vendor_id", $vendor_id);
 
         /* JOURNAL ENTRY */

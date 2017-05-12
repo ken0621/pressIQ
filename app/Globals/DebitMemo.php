@@ -45,7 +45,6 @@ class DebitMemo
 
 	public static function updateDB($db_id, $vendor_info, $item_info)
 	{
-
 		$update_db["db_vendor_id"] = $vendor_info["db_vendor_id"];
 		$update_db["db_vendor_email"] = $vendor_info["db_vendor_email"];
 		$update_db["db_date"] = $vendor_info["db_date"];
@@ -56,7 +55,6 @@ class DebitMemo
 
 		Tbl_debit_memo::where("db_id",$db_id)->update($update_db);
 
-
 		Tbl_debit_memo_line::where("dbline_db_id",$db_id)->delete();
 
 		/* Transaction Journal */
@@ -66,9 +64,8 @@ class DebitMemo
         $entry["total"]             = $vendor_info["db_amount"];
 
 		DebitMemo::insert_dbline($db_id, $item_info, $entry);
-
-
 	}
+
 	public static function insert_dbline($db_id, $item_info, $entry)
 	{
 		foreach ($item_info as $key => $value) 
@@ -117,6 +114,5 @@ class DebitMemo
 		}
 
 		$debit_memo_journal = Accounting::postJournalEntry($entry, $entry_data);
-
 	}
 }

@@ -358,8 +358,8 @@ class PayrollTimeSheetController extends Member
 				$payroll_time_sheet_id = $check_time_sheet->payroll_time_sheet_id;
 			}
 
-			// if($payroll_time_sheet_approved == 0) //overwrite timesheet record only if not yet approved
-			// {
+			if($payroll_time_sheet_approved == 0) //overwrite timesheet record only if not yet approved
+			{
 
 				/*  get origin [to avoid duplicate] */
 				$reference = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $payroll_time_sheet_id)
@@ -400,7 +400,7 @@ class PayrollTimeSheetController extends Member
 				}
 
 				Tbl_payroll_time_sheet_record::insert($_insert_time_record);
-			// }
+			}
 		}
 
 		/* COMPUTE TIME FOR EACH DATE */

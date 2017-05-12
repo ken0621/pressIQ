@@ -44,7 +44,7 @@ class Tbl_vendor extends Model
         if($vendor_id) $purchase_order->where("po_vendor_id", $vendor_id);
 
         /* ITEM RECEIPT */
-        $bill = DB::table("tbl_vendor")->selectRaw("bill_date as date, 'Item Receipt' as type, bill_id as no, bill_due_date as due_date, bill_total_amount - bill_applied_payment as balance, bill_total_amount as total, 'status' as status, date_created, 'vendor/create_bill' as reference_url")
+        $item_receipt = DB::table("tbl_vendor")->selectRaw("bill_date as date, 'Item Receipt' as type, bill_id as no, bill_due_date as due_date, bill_total_amount - bill_applied_payment as balance, bill_total_amount as total, 'status' as status, date_created, 'vendor/create_bill' as reference_url")
                     ->join("tbl_bill","bill_vendor_id","=","vendor_id")
                     ->where("bill_shop_id", $shop_id)
                     ->where("inventory_only", 1);
@@ -82,6 +82,6 @@ class Tbl_vendor extends Model
                     ->where("je_reference_module","journal-entry");
         if($vendor_id) $journal_entry->where("jline_name_id", $vendor_id)->where("jline_name_reference","vendor");
         
-        return $query = $purchase_order->union($bill)->union($pay_bill)->union($write_check)->union($debit_memo)->union($journal_entry)->orderBy("date_created","desc");
+        return $query = $purchase_order->union($item_receipt)->union($bill)->union($pay_bill)->union($write_check)->union($debit_memo)->union($journal_entry)->orderBy("date_created","desc");
     }
 }

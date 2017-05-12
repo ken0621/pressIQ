@@ -52,6 +52,10 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::post('/checkout', 'Shop\ShopCheckoutController@submit');
 	/* End Checkout */
 
+	/* Wishlist */
+	Route::get('/wishlist/add/{id}', 'Shop\ShopWishlistController@add');
+	Route::get('/wishlist/remove/{id}', 'Shop\ShopWishlistController@remove');
+
 	/* Login E-commerce */
 	Route::get('/account', 'Shop\ShopAccountController@index');
 	Route::get('/account/order', 'Shop\ShopAccountController@order');

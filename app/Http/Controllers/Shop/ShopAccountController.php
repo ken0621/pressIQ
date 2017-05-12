@@ -20,6 +20,7 @@ use App\Models\Tbl_ec_order;
 use App\Globals\Mlm_member;
 use App\Globals\Settings;
 use App\Globals\Ecom_Product;
+use App\Globals\Ec_wishlist;
 class ShopAccountController extends Shop
 {
     public static $customer_id;
@@ -165,7 +166,11 @@ class ShopAccountController extends Shop
     }
     public function wishlist()
     {
-        $data["page"] = "Order";
+        $this->checkif_login();
+        
+        $data["page"] = "Wishlist";
+        $data["_wishlist"] = Ec_wishlist::getProduct(Self::$customer_id, $this->shop_info->shop_id);
+
         return view("account_wishlist", $data);
     }
     public function settings()

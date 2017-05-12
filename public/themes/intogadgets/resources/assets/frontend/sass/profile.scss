@@ -635,13 +635,15 @@
     {
         text-align: center;
         border: 1px solid #ddd;
-        padding: 7.5px;
+        padding: 15px;
         margin-top: 15px;
+        border-top: 5px solid #1f76b5;
         .image
         {
             position: relative;
             height: 0;
             padding-bottom: 75%;
+            margin-top: 25px;
             img
             {
                 position: absolute;
@@ -654,14 +656,41 @@
                 bottom: 0;
             }
         }
-        .name
+        .text
         {
-            font-weight: 700;
-            font-size: 14px;
-            margin-top: 15px;
+            text-align: left;
+            .name
+            {
+                font-weight: 400;
+                font-size: 16px;
+                color: #1f76b5;
+            }
+            .desc
+            {
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+        }
+        .price
+        {
+            float: left;
+            padding: 5px 0;
+            strong
+            {
+                display: inline-block;
+                margin-left: 1px;
+                vertical-align: middle;
+            }
+        }
+        .action
+        {
+            @media screen and (min-width: 991px)
+            {
+                float: right;
+            }
         }
     }
-    .title
+    .title-main
     {
         color: #434343;
         font-size: 20.83px;

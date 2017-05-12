@@ -29,38 +29,13 @@ class AuditTrailController extends Member
     {
          $data["_column"] = array(
                 ' '                     => "*", 
-                //'fullname'              => "Full Name", 
-                'fname'                 => "User First Name",
-                'lname'                 => "User Last Name", 
+                'fullname'              => "User Full Name", 
                 'remarks'               => "Transaction", 
-                /*'transaction_client'    => "Desription", */
             );
 
         if($this->hasAccess("utilities-audit","access_page"))
         {   
-           /* $data["_audit"] = AuditTrail::getAudit_data();
-        
-            if (Request::isMethod('post'))
-            {
-                
-                $data["date_from"]  = Request::input('date_from');
-                $data["date_to"]    = Request::input('date_to');
-                $data["col"]        = Request::input('col');
-                $data['keyword']    = Request::input('keyword');
-                //dd($data['keyword']);
-
-                if ($data["date_from"] != '' && $data["date_from"] != '')
-                {
-                    $data["_audit"] = AuditTrail::getSearchAuditData($data["col"], $data['keyword'], $data["date_from"], $data["date_to"]);
-                }
-                    else
-                {
-                    $data["_audit"] = AuditTrail::getSearchAuditData($data["col"], $data['keyword']);    
-                }
-                                    
-            }
-
-            //dd(Session::get('date_from'));*/
+          
             return view("member.audit_trail.audit_trail",$data);
         }
         else

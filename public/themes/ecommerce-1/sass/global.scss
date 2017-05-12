@@ -80,7 +80,14 @@ body
 	.header-nav-top
 	{
 		text-align: right;
-
+		@media screen and (max-width: 991px)
+		{
+			.header-nav .header-nav-top
+			{
+				text-align: center;
+				margin-bottom: 15px;
+			}
+		}
 		.holder
 		{
 			

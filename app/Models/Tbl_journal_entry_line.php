@@ -44,6 +44,28 @@ class Tbl_journal_entry_line extends Model
     {
         return $query->join("tbl_journal_entry","je_id","=","jline_je_id");
     }
+    public function scopeTransaction($query, $reference = null)
+    {
+        $query->selectRaw("*, (CASE je_reference_module
+                                WHEN 'invoice' THEN concat('/member/customer/invoice?id=', je_reference_id) 
+                                WHEN 'sales-receipt' THEN concat('/member/customer/sales_receipt?id=', je_reference_id)
+                                WHEN 'credit-memo' THEN concat('/member/customer/credit_memo?id=', je_reference_id)
+                                WHEN 'receive-payment' THEN concat('/member/customer/receive_payment?id=', je_reference_id)
+                                WHEN 'bill' THEN concat('/member/vendor/create_billt?id=', je_reference_id)
+                                WHEN 'debit-memo' THEN concat('/member/vendor/debit_memo?id=', je_reference_id)
+                                WHEN 'bill-payment' THEN concat('/member/vendor/paybill?id=', je_reference_id)
+                                WHEN 'mlm-product-repurchase' THEN concat('/member/mlm/product_code/receipt?invoice_id=', je_reference_id)
+                                WHEN 'product-order' THEN concat('/member/ecommerce/product_order/create_order?id=', je_reference_id)
+                                WHEN 'journal-entry' THEN concat('/member/accounting/journal?id=', je_id)
+                                END) as txn_link");
+        if($reference)
+        {
+            $query->where("je_reference_module", $reference);
+        }
+        
+        return $query;
+    }
+    
     public function scopeSelectSales($query)
     {
         $sales_account[0] = 'Income';

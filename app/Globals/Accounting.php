@@ -341,7 +341,7 @@ class Accounting
 							Accounting::insertJournalLine($line_data);
 						}
 
-						if($entry["discount"] > 0)
+						if($entry_line["discount"] > 0)
 						{
 							$line_data["entry_amount"]	= $entry_line["discount"];
 							$line_data["entry_type"] 	= Accounting::contraAccount(Accounting::getDiscountSale());

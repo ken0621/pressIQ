@@ -21,7 +21,11 @@ use App;
 use PDF;
 use View;
 use DB;
+use Excel;
 use App\Models\Tbl_report_field;
+use App\Models\Tbl_category;
+use App\Models\Tbl_chart_account_type;
+use App\Globals\Pdf_global;
 class ReportsController extends Member
 {
 	public function checkuser($str = '')
@@ -183,14 +187,14 @@ class ReportsController extends Member
     {
         $data =[];
 
-        $data['field_checker'] = $this->report_field_checker_seed();
+        $data['field_checker'] = $this->report_field_checker_seed('accounting_sales_report');
         $data['head_title'] = 'Sales Report';
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = 'Account Sales Report';
         $data['head'] = $this->report_header($data);
         $data['filter'] = $this->report_filter('basic');
         $data['table_header'] = Report::sales_report();
-        $data['sales_report_by_customer'] = $this->accounting_sale_report_view();
+        // $data['sales_report_by_customer'] = $this->accounting_sale_report_view();
 
         return view('member.reports.accounting.sales', $data);
     }
@@ -207,20 +211,27 @@ class ReportsController extends Member
             case 'basic':
                 return view('member.reports.filter.basic', $data);
                 break;
-            
+            case 'profit_loss' :
+                return view('member.reports.filter.profit_loss', $data);
+                break;    
+            case 'items':
+                return view('member.reports.filter.items', $data);
+                break;
+            case 'general_ledger' :
+                return view('member.reports.filter.general_ledger', $data);    
             default:
                 return view('member.reports.filter.basic', $data);
                 break;
         }
     }
-    public function report_field_checker_seed()
+    public function report_field_checker_seed($filter = 'accounting_sales_report')
     {
         $shop_id = $this->user_info->shop_id; 
-        $table_header = Report::sales_report();
+        $table_header = Report::sales_report($filter);
         foreach ($table_header as $key => $value) 
         {
             $count = DB::table('tbl_report_field')->where('report_field_shop', $shop_id)
-            ->where('report_field_type', '=', 'accounting_sales_report')
+            ->where('report_field_type', '=', $filter)
             ->where('report_field_module', '=', $key)
             ->count();
             if($count == 0)
@@ -228,21 +239,27 @@ class ReportsController extends Member
                 $insert['report_field_shop'] = $shop_id;
                 $insert['report_field_module'] = $key;
                 $insert['report_field_label'] = $value;
-                $insert['report_field_type'] = 'accounting_sales_report';
+                $insert['report_field_type'] = $filter;
                 DB::table('tbl_report_field')->insert($insert);
             }
         }
 
         $data['report_field'] = Tbl_report_field::where('report_field_shop', '=', $shop_id)
+        ->orderBy('report_field_position', 'ASC')
         ->where('report_field_archive', '=', 0)
-        ->get()->keyBy('report_field_module');
-        $data['report_field_default'] = Report::sales_report();
+        ->where('report_field_type', $filter)
+        ->get()
+        ->keyBy('report_field_module');
+        $data['filter'] = $filter;
+        $data['report_field_default'] = Report::sales_report($filter);
         return view('member.reports.field.check', $data);
     }
     public function accounting_sale_filter_edit()
     {
         $shop_id = $this->user_info->shop_id; 
         $report_field_module = Request::input('report_field_module');
+        $report_field_position = Request::input('report_field_position');
+        $report_field_type = Request::input('report_field_type');
         if($report_field_module)
         {
             $table_header = Report::sales_report();
@@ -251,15 +268,19 @@ class ReportsController extends Member
                 if(!isset($report_field_module[$key]))
                 {
                     $update['report_field_archive'] = 1;
+                    $update['report_field_position'] = $report_field_position[$key];
                     Tbl_report_field::where('report_field_shop', $shop_id)
                     ->where('report_field_module', $key)
+                    ->where('report_field_type', $report_field_type)
                     ->update($update);
                 }
                 else
                 {
                     $update['report_field_archive'] = 0;
+                    $update['report_field_position'] = $report_field_position[$key];
                     Tbl_report_field::where('report_field_shop', $shop_id)
                     ->where('report_field_module', $key)
+                    ->where('report_field_type', $report_field_type)
                     ->update($update);
                 }
             }
@@ -271,8 +292,16 @@ class ReportsController extends Member
     }
     public function accounting_sale_report_view()
     {
+        $from = Request::input('from');
+        $to = Request::input('to');
+        $from = Carbon::parse($from);
+        $to = Carbon::parse($to)->addDay(1);
+        $report_type = Request::input('report_type');
+        $report_field_type = Request::input('report_field_type');
         $data = [];
+        $data['report_type'] = $report_type;
         $shop_id = $this->user_info->shop_id; 
+
         $data['sales'] = Tbl_journal_entry_line::account()
         ->item()
         ->journal()
@@ -280,20 +309,237 @@ class ReportsController extends Member
         ->where('je_shop_id', $shop_id)
         ->customerorvendor('customer')
         // ->joinreciept()
+        ->where('je_entry_date', '>=', $from)
+        ->where('je_entry_date', '<=', $to)
         ->concatum()
-        ->get()->keyBy('jline_id');
+        ->get()
+        ->keyBy('jline_id');
+
         $data['sales_by_customer'] = [];
         foreach($data['sales'] as $key => $value)
         {
             $data['sales_by_customer'][$value->jline_name_id][$value->jline_id] = $value ;
             $data['customer_info'][$value->jline_name_id] = $value->full_name;
+        }
+
+        $data['sales_by_item'] = [];
+        $data['category'] = [];
+        $data['category_w'] = [];
+        foreach($data['sales'] as $key => $value)
+        {
+            $data['sales_by_item'][$value->jline_item_id][$value->jline_id] = $value;
+            $data['item_info'][$value->jline_item_id] = $value->item_name;
+            $data['category'][$value->item_category_id][$value->jline_item_id][$value->jline_id] = $value;
+            $data['category_w'][$value->item_category_id] = $value->item_category_id;
+        }
+        $data['category_data'] = Tbl_category::whereIn('type_id', $data['category_w'])
+        ->get()
+        ->keyBy('type_id');
+
+        $data['report_field'] = Tbl_report_field::where('report_field_shop', '=', $shop_id)
+        ->orderBy('report_field_position', 'ASC')
+        ->where('report_field_archive', '=', 0)
+        ->where('report_field_type', '=', $report_field_type)
+        ->get()
+        ->keyBy('report_field_module');
+
+        if($report_field_type == 'accounting_sales_report')
+        {
+            $view =  view('member.reports.output.sale', $data);
+            $data['view'] = 'sale';
+        }
+        else if($report_field_type == 'accounting_sales_report_item')
+        {
+            $view =  view('member.reports.output.item', $data);
+            $data['view'] = 'item';
+        }
+
+        switch ($report_type) {
+            case 'plain':
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $view->render();
+                    return json_encode($return);
+                break;
+            case 'pdf':
+                    $data['view'] = $view->render();
+                    return Pdf_global::show_pdf($data['view'], 'landscape');
+                break;
+            case 'excel':
+                    Excel::create('New file', function($excel) use($data) {
+
+                        $excel->sheet('New sheet', function($sheet) use($data) {
+
+                            $sheet->loadView('member.reports.output.' . $data['view'], $data);
+
+                        });
+
+                    })->export('xls');    
+            default:
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $view->render();
+                    return json_encode($return);
+                break;
+        }
+    }
+
+    public function accounting_sale_items()
+    {
+        $data =[];
+
+        $data['field_checker'] = $this->report_field_checker_seed('accounting_sales_report_item');
+        $data['head_title'] = 'Sales Report - Item ';
+        $data['head_icon'] = 'fa fa-area-chart';
+        $data['head_discription'] = 'Account Sales Report';
+        $data['head'] = $this->report_header($data);
+        $data['filter'] = $this->report_filter('items');
+        $data['table_header'] = Report::sales_report('accounting_sales_report_item');
+
+        return view('member.reports.accounting.sales', $data);
+    }
+    public function profit_loss()
+    {
+        $data = [];
+
+        $data['head_title'] = 'Profit and Loss Report';
+        $data['head_icon'] = 'fa fa-area-chart';
+        $data['head_discription'] = '';
+        $data['head'] = $this->report_header($data);
+        $data['filter'] = $this->report_filter('profit_loss');
+        $shop_id = $this->user_info->shop_id; 
+
+        return view('member.reports.accounting.profit', $data);
+
+    }
+    public function profit_loss_get()
+    {
+        $from = Request::input('from');
+        $to = Request::input('to');
+        $from = Carbon::parse($from);
+        $to = Carbon::parse($to)->addDay(1);
+        $report_type = Request::input('report_type');
+        $report_field_type = Request::input('report_field_type');
+        $shop_id = $this->user_info->shop_id; 
+
+        $filter[11] = 'Income';
+        $filter[12] = 'Cost of Goods Sold';
+        $filter[13] = 'Expense';
+        $filter[14] = 'Other Expense';
+        $filter[15] = 'Other Income';
+
+        $data['account_income'] = Tbl_chart_account_type::whereIn('chart_type_name', $filter)
+        ->get()->keyBy('chart_type_id');
+        foreach($data['account_income'] as $key => $value)
+        {
+
+            $data['sum'][$key] = Tbl_journal_entry_line::account()
+            ->where('chart_type_id', $value->chart_type_id)
+        
+            ->select(DB::raw('*, sum(jline_amount ) as sum'))
+            ->groupBy('jline_type')
+            ->groupBy('jline_account_id')
+            ->where('account_shop_id', $shop_id)
+            ->get();
 
         }
-        $data['report_field'] = Tbl_report_field::where('report_field_shop', '=', $shop_id)
-        ->where('report_field_archive', '=', 0)
-        ->get()->keyBy('report_field_module');
-        // dd($data['sales_by_customer'][197]);
+        $view = view('member.reports.output.profit_loss', $data);
 
-        return view('member.reports.output.sale', $data);
+        switch ($report_type) {
+            case 'plain':
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $view->render();
+                    return json_encode($return);
+                break;
+            case 'pdf':
+                    $data['view'] = $view->render();
+                    return Pdf_global::show_pdf($data['view'], 'landscape');
+                break;
+            case 'excel':
+                    Excel::create('New file', function($excel) use($data) {
+
+                        $excel->sheet('New sheet', function($sheet) use($data) {
+
+                            $sheet->loadView('member.reports.output.profit_loss', $data);
+
+                        });
+
+                    })->export('xls');    
+            default:
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $view->render();
+                    return json_encode($return);
+                break;
+        }
+
+
+        return view('member.reports.output.profit_loss', $data);
+    }
+
+    public function general_ledger()
+    {
+
+        $data = [];
+
+        $data['head_title'] = 'General Ledger';
+        $data['head_icon'] = 'fa fa-area-chart';
+        $data['head_discription'] = '';
+        $data['head'] = $this->report_header($data);
+        $data['filter'] = $this->report_filter('general_ledger');
+        $shop_id = $this->user_info->shop_id; 
+        
+        return view('member.reports.accounting.general_ledger', $data);
+    }
+    public function general_ledger_get()
+    {
+        $from = Request::input('from');
+        $to = Request::input('to');
+        $from = Carbon::parse($from);
+        $to = Carbon::parse($to)->addDay(1);
+        $report_type = Request::input('report_type');
+        $report_field_type = Request::input('report_field_type');
+        $shop_id = $this->user_info->shop_id; 
+
+        $data['entry_line'] = Tbl_journal_entry_line::account()
+            ->where('account_shop_id', $shop_id)
+            ->customerorvendorv2()
+            ->groupBy('jline_account_id')
+            ->groupBy('jline_je_id')
+            ->journal()
+            ->get();
+        $data['chart_of_account'] = [];
+
+        foreach($data['entry_line'] as $key => $value)
+        {
+            $data['chart_of_account'][$value->chart_type_id] = $value->account_name; 
+            $data['chart_of_account_data'][$value->chart_type_id][$value->jline_id] = $value;
+        }
+
+        $view =  view('member.reports.output.general_ledger', $data); 
+
+        switch ($report_type) {
+            case 'plain':
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $view->render();
+                    return json_encode($return);
+                break;
+            case 'pdf':
+                    $data['view'] = $view->render();
+                    return Pdf_global::show_pdf($data['view'], 'landscape');
+                break;
+            case 'excel':
+                    Excel::create('New file', function($excel) use($data) {
+
+                        $excel->sheet('New sheet', function($sheet) use($data) {
+
+                            $sheet->loadView('member.reports.output.general_ledger', $data);
+
+                        });
+
+                    })->export('xls');    
+            default:
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $view->render();
+                    return json_encode($return);
+                break;
+        }
     }
 }

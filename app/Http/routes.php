@@ -731,6 +731,18 @@ Route::group(array('prefix' => '/member/report'), function()
 	/* Accounting Sales */
 	Route::get('/accounting/sale','Member\ReportsController@accounting_sale');
 	Route::post('/accounting/sale/edit/filter','Member\ReportsController@accounting_sale_filter_edit');
+	Route::any('/accounting/sale/get/report','Member\ReportsController@accounting_sale_report_view');
+
+	/* Accounting Sales - per item */
+	Route::get('/accounting/sale/item','Member\ReportsController@accounting_sale_items');
+
+	/* Accounting Profit and loss */
+	Route::get('/accounting/profit/loss','Member\ReportsController@profit_loss');
+	Route::any('/accounting/profit/loss/get','Member\ReportsController@profit_loss_get');
+
+	/* Accounting general ledger */
+	Route::get('/accounting/general/ledger','Member\ReportsController@general_ledger');
+	Route::any('/accounting/general/ledger/get','Member\ReportsController@general_ledger_get');
 });
 //reports end
 

@@ -34,9 +34,15 @@ class Tbl_journal_entry_line extends Model
         {
             return $query->selectRaw("*, concat('vendor_first_name', 'vendor_middle_name', 'vendor_last_name') as 'full_name'")
                         ->leftJoin("tbl_vendor", "vendor_id", "=", "jline_name_id");
+
         }
     }
-
+    public function scopeCustomerOrVendorv2($query)
+    {
+        return $query->selectRaw("*, concat(vendor_first_name,' ', vendor_middle_name, ' ',  vendor_last_name) as 'v_full_name', concat(first_name, ' ', middle_name,' ', last_name) as 'c_full_name', tbl_journal_entry_line.created_at as 'date_a'")
+                        ->leftJoin("tbl_vendor", "vendor_id", "=", "jline_name_id")
+                        ->leftJoin("tbl_customer", "customer_id", "=", "jline_name_id");
+    }
     public function scopeSelectedLimit($query)
     {
         return $query->select("jline_item_id","jline_account_id","jline_type","jline_amount","jline_description");
@@ -57,8 +63,8 @@ class Tbl_journal_entry_line extends Model
     }
     public function scopeJoinReciept($query)
     {
-        $query->leftJoin('tbl_item_code_invoice.item_code_invoice_id as code_invoice, tbl_item_code_invoice.', function($join){
-            $join->on('code_invoice.item_code_invoice_id', '=', 'je_reference_id');
+        $query->leftJoin('tbl_item_code_invoice', function($join){
+            $join->on('item_code_invoice_id', '=', 'je_reference_id');
             $join->where('je_reference_module', '=', DB::raw('mlm-product-repurchase'));
         });
         return $query; 

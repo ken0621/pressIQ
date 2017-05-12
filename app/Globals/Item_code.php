@@ -32,7 +32,19 @@ class Item_code
 {
 	public static function add_code($data,$shop_id, $user_id, $warehouse_id)
 	{ 
-	   // $shop_id                                                 = $this->user_info->shop_id;
+
+        ignore_user_abort(true);
+        set_time_limit(0);
+
+        flush();
+        ob_flush();
+        session_write_close();
+
+        /// CODE HERE
+
+
+        
+
         $go_serial = 0;
         if(isset($data['item_serial_enable']))
         {
@@ -609,8 +621,10 @@ class Item_code
     	    $send['warning_validator'] = $validator->errors()->all();
     	}
         
-
+        sleep(2);        
         return $send;
+        exit;
+
 	}
     public static function add_journal_entry($invoice_id)
     {
@@ -622,7 +636,8 @@ class Item_code
             $entry["reference_id"] = $invoice_id;
             $entry["name_id"] = $invoice->customer_id;
             $entry["total"] = $invoice->item_total;
-            $entry["discount"] = $invoice->item_discount;
+            // $entry["discount"] = $invoice->item_discount;
+            $entry["discount"] = 0;
             $items = Tbl_item_code_item::where('item_code_invoice_id', $invoice_id)->get();
             $entry_data = [];
             foreach ($items as $key => $value) 

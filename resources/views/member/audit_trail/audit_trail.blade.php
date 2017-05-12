@@ -45,7 +45,7 @@
 		            <input type="hidden" id="col" value="">
 		            <small>Search Keyword</small>
 		            <div class="input-group">
-		              <input type="search" name="keyword" id="keyword" class="form-control perdictive perdictive-active width-100" placeholder="Search  here" value="" onkeyup="ajaxLoad('/member/utilities/audit/get_list')">
+		              <input type="search" name="keyword" id="keyword" class="form-control perdictive perdictive-active width-100" placeholder="Search  here" value="" onkeydown="ajaxLoad('/member/utilities/audit/get_list')">
 		              <span class="input-group-btn">
 		                <button class="btn btn-custom-primary" type="submit" onclick="ajaxLoad('/member/utilities/audit/get_list')"><i class="fa fa-search"></i></button>
 		              </span>

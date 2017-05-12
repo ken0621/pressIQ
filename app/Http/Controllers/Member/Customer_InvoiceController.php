@@ -140,11 +140,14 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
                 $item_info[$key]['ref_name']           = Request::input('invline_ref_name')[$key];
                 $item_info[$key]['ref_id']             = Request::input('invline_ref_id')[$key];
-
-
-                $um_qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
-                $product_consume[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
-                $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
+                
+                $item_type = Tbl_item::where("item_id",Request::input('invline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+                    $um_qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
+                    $product_consume[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
+                    $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
+                }
             }
         }
         //START if bundle inventory_consume arcy
@@ -215,9 +218,13 @@ class Customer_InvoiceController extends Member
                         $cm_item_info[$keys]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$keys]);
                         $cm_item_info[$keys]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$keys]);
                 
-                        $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
-                        $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];
-                        $item_returns[$keys]["product_id"] = Request::input('cmline_item_id')[$keys];                    
+                        $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$keys])->pluck("item_type_id");
+                        if($item_type == 4 || $item_type == 1)
+                        {
+                            $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
+                            $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];
+                            $item_returns[$keys]["product_id"] = Request::input('cmline_item_id')[$keys];                    
+                        }
                     }          
                 } 
                 // --> for bundles

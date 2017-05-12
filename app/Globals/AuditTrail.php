@@ -38,6 +38,9 @@ use App\Models\Tbl_position;
 use App\Models\Tbl_truck;
 use App\Models\Tbl_debit_memo;
 use App\Models\Tbl_credit_memo;
+use App\Models\Tbl_bill;
+use App\Models\Tbl_pay_bill;
+use App\Models\Tbl_write_check;
 
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
@@ -97,6 +100,96 @@ class AuditTrail
                     $transaction_amount = currency("PHP",$amount);                    
                 }
             }
+            else if($value->source == "sales_receipt")
+            {
+                $transaction = Tbl_customer_invoice::customer()->where("inv_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->inv_date));
+                    $transaction_client = $transaction->company != null ? $transaction->company : $transaction->title_name." ".$transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name." ".$transaction->suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->inv_overall_price;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["inv_overall_price"];
+                        $transaction_new_id = $old[$key]["new_inv_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "bill")
+            {
+                $transaction = Tbl_bill::vendor()->where("bill_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->bill_date));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->bill_total_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["bill_total_amount"];
+                        $transaction_new_id = $old[$key]["bill_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "write_check")
+            {
+                $transaction = Tbl_write_check::vendor()->where("wc_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->wc_payment_date));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->wc_total_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["wc_total_amount"];
+                        $transaction_new_id = $old[$key]["wc_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "bill_payment_check")
+            {
+                $transaction = Tbl_write_check::vendor()->where("wc_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->wc_payment_date));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->wc_total_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["wc_total_amount"];
+                        $transaction_new_id = $old[$key]["wc_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "receive_inventory")
+            {
+                $transaction = Tbl_bill::vendor()->where("bill_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->bill_date));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->bill_total_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["bill_total_amount"];
+                        $transaction_new_id = $old[$key]["bill_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
             else if($value->source == "purchase_order")
             {
                 $transaction = Tbl_purchase_order::vendor()->where("po_id",$value->source_id)->first();
@@ -128,6 +221,24 @@ class AuditTrail
                     {
                         $amount = $old[$key]["rp_total_amount"];
                         $transaction_new_id = $old[$key]["rp_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "bill_payment")
+            {
+                $transaction = Tbl_pay_bill::vendor()->where("paybill_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->paybill_date));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->paybill_total_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["paybill_total_amount"];
+                        $transaction_new_id = $old[$key]["paybill_id"];
                     }
                     $transaction_amount = currency("PHP",$amount);                    
                 }

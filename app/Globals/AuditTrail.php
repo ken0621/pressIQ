@@ -99,10 +99,10 @@ class AuditTrail
             //dd($to);
             $audit_trail = $query
                         ->whereBetween("created_at", [$from, $to])
-                        ->paginate(10);
+                        ->paginate(15);
             //dd($query);
         } else {
-            $audit_trail = $query->paginate(10);  
+            $audit_trail = $query->paginate(15);  
         }
         //dd($audit_trail);
 
@@ -582,7 +582,7 @@ class AuditTrail
 
     public static function getAudit_data()
     {        
-        $audit_trail = Tbl_audit_trail::user()->orderBy("created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(10);
+        $audit_trail = Tbl_audit_trail::user()->orderBy("created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(15);
 
         foreach ($audit_trail as $key => $value) 
         {            

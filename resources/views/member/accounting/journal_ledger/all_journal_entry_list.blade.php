@@ -10,8 +10,8 @@
                 <small>
                     List of All Journal Entry
                 </small>
-                <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/accounting/journal/all-entry" >List Journal Entry</a>
             </h1>
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/accounting/journal/all-entry" >List Journal Entry</a>
         </div>
     </div>
 </div>

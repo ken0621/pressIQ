@@ -19,7 +19,7 @@
 
     	<div class="form-group">
     		{{-- <form data-target="#active-employee" method="POST" action="/member/utilities/audit"> --}}
-	            <input type="hidden" name="_token" value="{{csrf_token()}}">
+	            <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
 	    		<div class="col-md-12 filter-div">
 	    			<div class="col-md-2 padding-lr-1">
 		        		<small>Date From:</small>
@@ -107,12 +107,13 @@
 	
 	 function ajaxLoad(filename, content) {
 
+	 	//var _token 		= $('#_token').val(); 
 	 	var date_from 	= $('#date_from').val();
 	 	var date_to 	= $('#date_to').val();
 	 	var col 		= $('#col').val();
 	 	var keyword 	= $('#keyword').val();
 
-	 	filename = filename+'?date_from='+date_from+'&date_to='+date_to+'&col='+col+'&keyword='+keyword;
+	 	//filename = filename+'?date_from='+date_from+'&date_to='+date_to+'&col='+col+'&keyword='+keyword;
 	 	//alert(filename);
 
         content = typeof content !== 'undefined' ? content : 'content';
@@ -121,6 +122,13 @@
             type: "GET",
             url: filename,
             contentType: false,
+            data: {
+					//_token:misc('_token'),
+					date_from:date_from,
+					date_to:date_to,
+					col:col,
+					keyword:keyword
+				},            
             success: function (data) {
                 $("#" + content).html(data);
                 $('.loading').hide();

@@ -665,6 +665,9 @@ class Payroll
 		$night_differential_pm = c_time_to_int("11:00 PM");
 		$night_differential_am = c_time_to_int("6:00 AM");
 
+		$time_in = 0;
+		$time_out = 0;
+
 		$target_hour = $data["employee_information"]->payroll_group_target_hour;
 
 		/* BREAK COMPUTATION */

@@ -7,7 +7,6 @@
 @section('content')
 {!! $head !!}
 {!! $filter !!}
-{!! $field_checker !!}
 <div class="append_report_a"></div>
 
 @endsection
@@ -15,8 +14,7 @@
 @section('script')
 <script type="text/javascript" src="/assets/mlm/jquery.aCollapTable.min.js"></script>  		
 <script type="text/javascript">
-var link = '/member/report/accounting/sale/get/report';
-
+var link = '/member/report/accounting/general/ledger/get';
 function submit_done (data) {
 	// body...
 	switch(data.status)
@@ -26,10 +24,9 @@ function submit_done (data) {
 		$('.collaptable').aCollapTable({ 
 		    startCollapsed: true,
 		    addColumn: false, 
-		    plusButton: '<span class="i" style="color: white;">[Expand] </span>', 
-		    minusButton: '<span class="i" style="color: white;">[Contract] </span>' 
-		});
-
+		    plusButton: '<span class="i">[Expand] </span>', 
+		    minusButton: '<span class="i">[Contract] </span>' 
+		  });
 		break
 	}
 		

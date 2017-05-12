@@ -57,55 +57,34 @@ class AuditTrail
 
 		return $id;
     }
-    public static function getSearchAuditData($col, $key, $from = null, $to = null)
+    public static function getSearchAuditData($col, $key, $from=null, $to=null)
     {      
         $query = Tbl_audit_trail::user()->orderBy("created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId());   
 
-        switch ($col) {
-            case 'fname':
-               $query = $query
-                        ->where("Tbl_user.user_first_name", "LIKE", '%' .$key. '%');
-
-                //dd($audit_trail);
-                break;
-            case 'lname':
-               $query = $query
-                        ->where("Tbl_user.user_last_name", "LIKE", '%' .$key. '%');
-                break;
+        switch ($col) {            
             case 'remarks':
                $query = $query
                         ->where("remarks", "LIKE", '%' .$key. '%');
-                break;
-            
+                break;            
             case 'fullname':
                $query = $query
-                        //->where(DB::raw(), "LIKE", '%' .$key. '%');
-                        //->where(DB::raw("CONCAT(`Tbl_user.user_first_name`, ' ', `Tbl_user.user_last_name`)"), 'LIKE', "%" .$key. "%")->first()
-                        ->where(DB::raw("CONCAT('Tbl_user.user_first_name', ' ', 'Tbl_user.user_last_name')"), "LIKE", "%" .$key. "%");
-
+                        ->where(DB::raw("concat(user_first_name, ' ', user_last_name)"), "LIKE", "%" .$key. "%");
                 break;
-
-            default:
-                //$audit_trail = $query;
+            default:            
                 break;
         }
 
-        //dd($audit_trail);
         if ($from != null && $to != null)
         {
-            //dd("pasok");
             $from   = date($from . ' 00:00:00', time());
             $to     = date($to . ' 23:59:00', time());
-            //dd($to);
+
             $audit_trail = $query
                         ->whereBetween("created_at", [$from, $to])
-                        ->get();
-            //dd($query);
+                        ->paginate(15);        
         } else {
-            $audit_trail = $query->get();  
+            $audit_trail = $query->paginate(15);  
         }
-        //dd($audit_trail);
-
         
 
         foreach ($audit_trail as $key => $value) 
@@ -582,7 +561,7 @@ class AuditTrail
 
     public static function getAudit_data()
     {        
-        $audit_trail = Tbl_audit_trail::user()->orderBy("created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->get();
+        $audit_trail = Tbl_audit_trail::user()->orderBy("created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(15);
 
         foreach ($audit_trail as $key => $value) 
         {            

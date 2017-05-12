@@ -29,42 +29,13 @@ class AuditTrailController extends Member
     {
          $data["_column"] = array(
                 ' '                     => "*", 
-                //'fullname'              => "Full Name", 
-                'fname'                 => "User First Name",
-                'lname'                 => "User Last Name", 
+                'fullname'              => "User Full Name", 
                 'remarks'               => "Transaction", 
-                /*'transaction_client'    => "Desription", */
             );
 
-        /* $sample = Tbl_audit_trail::join('tbl_user', 'tbl_user.user_id', '=', 'tbl_audit_trail.user_id')
-                    ->where(DB::raw("CONCAT('tbl_user.user_first_name', ' ', 'tbl_user.user_last_name')"), "LIKE", "%Sample%")->get();
-         dd($sample);
-*/
         if($this->hasAccess("utilities-audit","access_page"))
         {   
-            $data["_audit"] = AuditTrail::getAudit_data();
-        
-            if (Request::isMethod('post'))
-            {
-                
-                $data["date_from"]  = Request::input('date_from');
-                $data["date_to"]    = Request::input('date_to');
-                $data["col"]        = Request::input('col');
-                $data['keyword']    = Request::input('keyword');
-                //dd($data['keyword']);
-
-                if ($data["date_from"] != '' && $data["date_from"] != '')
-                {
-                    $data["_audit"] = AuditTrail::getSearchAuditData($data["col"], $data['keyword'], $data["date_from"], $data["date_to"]);
-                }
-                    else
-                {
-                    $data["_audit"] = AuditTrail::getSearchAuditData($data["col"], $data['keyword']);    
-                }
-                                    
-            }
-
-            //dd(Session::get('date_from'));
+          
             return view("member.audit_trail.audit_trail",$data);
         }
         else
@@ -72,6 +43,35 @@ class AuditTrailController extends Member
             return $this->show_no_access();
         }
 
+    }
+
+
+    public function get_list()
+    {
+        $date_from  = Request::input('date_from');
+        $date_to    = Request::input('date_to');
+        $col        = Request::input('col');
+        $keyword    = Request::input('keyword');
+        //dd($date_to);
+        if ($keyword == '')
+        {
+            $data["_audit"] = AuditTrail::getAudit_data();    
+        } 
+        else
+        {
+            if ($date_from != '' && $date_to != '')
+            {
+                $data["_audit"] = AuditTrail::getSearchAuditData($col, $keyword, $date_from, $date_to);
+                //dd('sample');
+            }
+                else
+            {                 
+                $data["_audit"] = AuditTrail::getSearchAuditData($col, $keyword);    
+                //dd('pasok');
+            }
+        }
+
+        return view("member.audit_trail.audit_list", $data);
     }
 
     /**

@@ -4616,6 +4616,17 @@ class PayrollController extends Member
           
      }
 
+     public function modal_13_month($payroll_employee_id, $payroll_period_company_id)
+     {
+          return view('member.payroll.modal.modal_13_month');
+     }
+
+     public function modal_unused_leave($payroll_employee_id, $payroll_period_company_id)
+     {
+
+          return view('member.payroll.modal.modal_unused_leave');
+     }
+
      /* PAYROLL COMPUTATION BREAKDOWN */
      public function payroll_compute_brk_unsaved($employee_id, $payroll_period_company_id)
      {

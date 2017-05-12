@@ -1504,6 +1504,7 @@ class Payroll
 				
 				$temp_hour								= $rest_day_hours;
 			}
+
 			
 			/* LEGAL HOLIDAY */
 			if($regular_hours <= 0 && $rest_day_hours <= 0 && $special_holiday_hours > 0 && $regular_holiday_hours <= 0)
@@ -1530,6 +1531,8 @@ class Payroll
 				$temp_hour								= $rest_day_hours;
 			}
 			
+
+
 			if($regular_hours <= 0 && $rest_day_hours <= 0 && $special_holiday_hours <= 0 && $regular_holiday_hours > 0)
 			{
 				$rh_hour['regular'] 					= divide($regular_holiday_hours, $target_hour);
@@ -1579,13 +1582,6 @@ class Payroll
 				{
 					$data['allowance'] = Payroll::push_allowance($data['allowance'], $daily_allowance, $payroll_period_category, $period_category, ($one_day_render / $target_hour));
 				}
-			}
-
-
-			if($start == '2017-04-29')
-			{
-				// dd($extra_day);
-
 			}
 
 			/* ALLOWANCE DAILY END */
@@ -2392,11 +2388,10 @@ class Payroll
 			$early_overtime 	= $param->payroll_overtime_rest_overtime;
 			$night_differential = $param->payroll_overtime_rest_night;
 			$cola_var			= $regular;
-			
 		}
 
 		$cola_var 			= $cola_var * $cola;
-		$regular 			= $regular * $rate;
+		// $regular 			= $regular * $rate;
 		
 
 		if($hours['regular'] <= 0)
@@ -2419,9 +2414,9 @@ class Payroll
 		$temp_overtime 	= $hours['late_overtime'] * $rate;
 		$temp_earlyOT 	= $hours['early_overtime'] * $rate;
 		$temp_night		= $hours['night_differential'] * $rate;
+		$temp_regular	= $hours['regular'] * $rate;
 
-
-		$data['regular']			= round(($regular + ( $hours['regular'] * $rate )), 2);
+		$data['regular']			= round(($temp_regular + ( $temp_regular * $regular )), 2);
 		$data['late_overtime']		= round(($temp_overtime + ($temp_overtime * $late_overtime)), 2);
 		$data['early_overtime']		= round(($temp_earlyOT + ($temp_earlyOT * $early_overtime)), 2);
 		$data['night_differential']	= round(($night_differential + ($temp_night * $night_differential)), 2);

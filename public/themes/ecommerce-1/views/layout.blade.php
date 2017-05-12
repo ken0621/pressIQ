@@ -47,6 +47,17 @@
             right: 0;
             z-index: 100;
         }
+        @media screen and (max-width: 991px)
+        {
+            .navbar.sticky
+            {
+                position: static;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+            }
+        }
         </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
@@ -57,7 +68,6 @@
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
     <!-- HEADER -->
     <div class="header-nav">
     	<div class="header-nav-top">
@@ -80,6 +90,8 @@
 	    		<div class="holder"><a href="/about">About Us</a></div>
 	    		<div class="holder"><div class="linya"></div></div>
 	    		<div class="holder"><a href="/contact">Contact Us</a></div>
+                <div class="holder"><div class="linya"></div></div>
+                <div class="holder"><a href="http://tour.philtechglobalinc.com">Travel and Tours</a></div>
     		</div>
     	</div>
     	<div class="header-nav-middle">

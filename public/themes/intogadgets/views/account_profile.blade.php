@@ -96,8 +96,6 @@
 </div>
 @endsection
 
-
-
 @section('css')
 <link rel="stylesheet" href="resources/assets/frontend/css/profile.css">
 @endsection

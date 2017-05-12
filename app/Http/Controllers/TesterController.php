@@ -54,15 +54,12 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        dd(Tbl_vendor::transaction($this->getShopId(), 13)->get());
+
     }
 
     public function getJournal()
     {
         $data['tbl_journal_entry'] = Accounting::getJounalAll();
-
-        // dd($data['tbl_journal_entry']);
-        // dd($data['tbl_journal_entry']);
 
         return view('member.tester_journal', $data);
     }

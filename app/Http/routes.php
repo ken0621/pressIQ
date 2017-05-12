@@ -81,6 +81,8 @@ Route::any('/member/developer/reset_slot/submit', 'Member\Developer_StatusContro
 Route::any('/member/developer/reset_slot/submit/give', 'Member\Developer_StatusController@give_points_ec_order'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/retro_product_sales', 'Member\Developer_StatusController@retro_product_sales'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_tree', 'Member\Developer_StatusController@re_tree'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Developer_StatusController@re_com_phil_lost'); //GUILLERMO TABLIGAN
+
 
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
@@ -262,6 +264,7 @@ Route::any('/member/item/um/add_base/{id}/{item_id}',"Member\UnitOfMeasurementCo
 Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController@add_base_submit');
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
+Route::any('/member/utilities/audit/get_list','Member\AuditTrailController@get_list');
 /* END AUDIT TRAIL*/
 
 /* START CLIENT INFO*/

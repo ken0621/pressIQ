@@ -249,7 +249,23 @@ class Warehouse
 
     public static function getUserid()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id') or 0;
+        $user_id = 0;
+        $user_data = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+        if($user_data)
+        {
+            $user_id = $user_data;
+        }
+        return $user_id;
+    }
+    public static function getWarehouseIdFromSlip($transaction_id = 0, $transaction_type = null)
+    {
+        $slip_data = Tbl_inventory_slip::where("inventroy_source_reason",$transaction_type)->where("inventory_source_id",$transaction_id)->first();
+        $warehouse_id = 0;
+        if($slip_data)
+        {
+            $warehouse_id = $slip_data->warehouse_id;
+        }
+        return $warehouse_id;
     }
     public static function check_inventory_on_warehouse($warehouse_id = 0, $item_id = 0, $return = 'array')
     {

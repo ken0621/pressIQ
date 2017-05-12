@@ -11,6 +11,8 @@ use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_debit_memo_line;
 use App\Models\Tbl_debit_memo;
 use App\Globals\Accounting;
+use App\Globals\Item;
+use App\Globals\UnitMeasurement;
 use DB;
 use Session;
 use Carbon\Carbon;
@@ -29,7 +31,14 @@ class DebitMemo
 
 		$db_id = Tbl_debit_memo::insertGetId($insert_db);
 
-		DebitMemo::insert_dbline($db_id, $item_info);
+		/* Transaction Journal */
+        $entry["reference_module"]  = "debit-memo";
+        $entry["reference_id"]      = $db_id;
+        $entry["name_id"]           = $vendor_info["db_vendor_id"];
+        $entry["total"]             = $vendor_info["db_amount"];
+
+		DebitMemo::insert_dbline($db_id, $item_info, $entry);
+
 
 		return $db_id;
 	}
@@ -49,10 +58,18 @@ class DebitMemo
 
 
 		Tbl_debit_memo_line::where("dbline_db_id",$db_id)->delete();
-		DebitMemo::insert_dbline($db_id, $item_info);
+
+		/* Transaction Journal */
+        $entry["reference_module"]  = "debit-memo";
+        $entry["reference_id"]      = $db_id;
+        $entry["name_id"]           = $vendor_info["db_vendor_id"];
+        $entry["total"]             = $vendor_info["db_amount"];
+
+		DebitMemo::insert_dbline($db_id, $item_info, $entry);
+
 
 	}
-	public static function insert_dbline($db_id, $item_info)
+	public static function insert_dbline($db_id, $item_info, $entry)
 	{
 		foreach ($item_info as $key => $value) 
 		{
@@ -67,7 +84,39 @@ class DebitMemo
 
 			Tbl_debit_memo_line::insert($insert_dbline);
 
+		 	$item_type = Item::get_item_type($value['item_id']);
+            /* TRANSACTION JOURNAL */  
+            if($item_type != 4)
+            {
+				/* TRANSACTION JOURNAL */   
+	            $entry_data[$key]['item_id']            = $value["item_id"];
+	            $entry_data[$key]['entry_qty']          = $value["quantity"];
+	            $entry_data[$key]['vatable']            = 0;
+	            $entry_data[$key]['discount']           = 0;
+	            $entry_data[$key]['entry_amount']       = $value["amount"];
+	            $entry_data[$key]['entry_description']  = $value["item_description"];
+	        }
+	        else
+	        {
+	        	$item_bundle = Item::get_item_in_bundle($value['item_id']);
+                if(count($item_bundle) > 0)
+                {
+                    foreach ($item_bundle as $key_bundle => $value_bundle) 
+                    {
+                        $item_data = Item::get_item_details($value_bundle->bundle_item_id);
+                        $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
+                        $entry_data['b'.$key.$key_bundle]['entry_qty']          = $value['quantity'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
+                        $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
+                        $entry_data['b'.$key.$key_bundle]['discount']           = 0;
+                        $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
+                        $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                    }
+                }
+	        }
+
 		}
+
+		$debit_memo_journal = Accounting::postJournalEntry($entry, $entry_data);
 
 	}
 }

@@ -6,20 +6,28 @@
 			<div class="form-holder">
 				<div class="form-header">Login or Checkout as guest</div>
 				<div class="form-content">
+					@if (session('warning'))
+					    <div class="alert alert-warning">
+					    	<ul style="padding: 0; margin: 0;">
+					    		<li style="display: block;">{{ session('warning') }}</li>
+					    	</ul>
+					    </div>
+					@endif
 					<form class="form-login" method="get" action="/checkout">
+						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="form-group">
-							<input type="text" class="the-email form-control" placeholder="Enter your email address" name="email">
+							<input value="{{ Request::input("email") }}" type="email" class="the-email form-control" placeholder="Enter your email address" name="email">
 						</div>
 						<div class="form-group">
 							<div class="radio">
-							  <label><input class="radio-continue" type="radio" name="continue" checked yes="1"> Continue without password</label>
+							  <label><input name="continue" class="radio-continue" type="radio" {{ session('warning') ? '' : 'checked' }} yes="1"> Continue without password</label>
 							</div>
 							<div class="radio">
-							  <label><input class="radio-continue" type="radio" name="continue" yes="0"> I already have an account</label>
+							  <label><input name="continue" class="radio-continue" type="radio" {{ session('warning') ? 'checked' : '' }} yes="0"> I already have an account</label>
 							</div>
 						</div>
 						<div class="form-group">
-							<input disabled type="text" class="the-password form-control" placeholder="Enter your password" name="password">
+							<input disabled type="password" class="the-password form-control" placeholder="Enter your password" name="password">
 						</div>
 						<div class="form-group">
 							<button class="btn btn-primary">CONTINUE</button>
@@ -37,12 +45,12 @@
 					    	@if(is_array(session('fail')))
 					    		<ul>
 						        @foreach(session('fail') as $fail)
-					        		<li>{{ $fail }}</li>
+					        		<li style="display: block;">{{ $fail }}</li>
 						        @endforeach
 						        </ul>
 						    @else
 						    	<ul style="padding: 0; margin: 0;">
-						    		<li>{{ session('fail') }}</li>
+						    		<li style="display: block;">{{ session('fail') }}</li>
 						    	</ul>
 					        @endif
 					    </div>

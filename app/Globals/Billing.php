@@ -11,6 +11,8 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
+use App\Globals\Item;
+use App\Globals\UnitMeasurement;
 use DB;
 use Log;
 use Request;
@@ -128,14 +130,18 @@ class Billing
 
         $bill_id = Tbl_bill::insertGetId($insert);
 
-        /* Transaction Journal */
-        $entry["reference_module"]  = "bill";
-        $entry["reference_id"]      = $bill_id;
-        $entry["name_id"]           = $vendor_info['bill_vendor_id'];
-        $entry["total"]             = collect($item_info)->sum('itemline_amount');
-        $entry["vatable"]           = '';
-        $entry["discount"]          = '';
-        $entry["ewt"]               = '';
+        $entry = null;
+        if($bill_info['inventory_only'] == 0)
+        {
+            /* Transaction Journal */
+            $entry["reference_module"]  = "bill";
+            $entry["reference_id"]      = $bill_id;
+            $entry["name_id"]           = $vendor_info['bill_vendor_id'];
+            $entry["total"]             = collect($item_info)->sum('itemline_amount');
+            $entry["vatable"]           = '';
+            $entry["discount"]          = '';
+            $entry["ewt"]               = '';            
+        }
 
         $bill_data = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
         AuditTrail::record_logs("Added","bill",$bill_id,"",serialize($bill_data));
@@ -232,13 +238,6 @@ class Billing
         {
             if($item_line)
             {
-                // $discount = $item_line['discount'];
-                // if(strpos($discount, '%'))
-                // {
-                //     $discount = substr($discount, 0, strpos($discount, '%')) / 100;
-                // }
-                // $insert_line['itemline_poline_id']     = $item_line['itemline_poline_id'] ;
-                // $insert_line['itemline_po_id']         = $item_line['itemline_po_id'] ;
                 $insert_line['itemline_bill_id']       = $bill_id;
                 $insert_line['itemline_item_id']       = $item_line['itemline_item_id'];
                 $insert_line['itemline_ref_name']      = $item_line['itemline_ref_name'] ;
@@ -251,16 +250,39 @@ class Billing
 
                 Tbl_bill_item_line::insert($insert_line);
 
-                /* TRANSACTION JOURNAL */   
-                $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
-                $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
-                $entry_data[$key]['vatable']            = 0;
-                $entry_data[$key]['discount']           = 0;
-                $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
-                $entry_data[$key]['entry_description']  = $item_line['itemline_description'];
+                $item_type = Item::get_item_type($item_line['itemline_item_id']);
+                /* TRANSACTION JOURNAL */  
+                if($item_type != 4)
+                { 
+                    $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
+                    $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
+                    $entry_data[$key]['vatable']            = 0;
+                    $entry_data[$key]['discount']           = 0;
+                    $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
+                    $entry_data[$key]['entry_description']  = $item_line['itemline_description'];
+                }
+                else
+                {
+                    $item_bundle = Item::get_item_in_bundle($item_line['itemline_item_id']);
+                    if(count($item_bundle) > 0)
+                    {
+                        foreach ($item_bundle as $key_bundle => $value_bundle) 
+                        {
+                            $item_data = Item::get_item_details($value_bundle->bundle_item_id);
+                            $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
+                            $entry_data['b'.$key.$key_bundle]['entry_qty']          = $item_line['itemline_qty'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
+                            $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
+                            $entry_data['b'.$key.$key_bundle]['discount']           = 0;
+                            $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
+                            $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                        }
+                    }
+                }
             }
         }
-
-        $bill_journal = Accounting::postJournalEntry($entry, $entry_data);
+        if($entry != null)
+        {
+            $bill_journal = Accounting::postJournalEntry($entry, $entry_data);            
+        }
     }
 }

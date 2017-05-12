@@ -79,9 +79,11 @@ class JournalEntryController extends Member
 	}
 
 	/**
-	 * Global Journal Entries
+	 * Global Journal Entries for every journal entry module
 	 *
-	 * @parameter
+	 * @param 	$module
+	 * @param 	$id
+	 * @return  query results     - Always one result only
 	 */
 	public function getEntry($module, $id)
 	{
@@ -91,7 +93,101 @@ class JournalEntryController extends Member
 			$customer_vendor = Accounting::checkTransaction($journal->je_reference_module)['name'];
 			$data['_journal'][$key]->entries = Tbl_journal_entry_line::account()->item()->customerOrVendor($customer_vendor)->where("jline_je_id", $journal->je_id)->orderBy("jline_type","desc")->orderBy("account_name")->get();
 		}
+
 		return view('member.accounting.journal_ledger.journal_entry', $data);
+	}
+
+	/**
+	 * Global Journal Entries for all journal entries
+	 *
+	 * @return  query results
+	 */
+	public function getAllEntry()
+	{
+		$date_period = Request::input('period_date') ? Request::input('period_date') : 'all'; 
+		$start_date  = Request::input('start_date');
+		$end_date    = Request::input('end_date');
+
+		$data['start_date']  = $this->checkDatePeriod($date_period, $start_date, $end_date )['start_date'];
+		$data['new_end_date']= $this->checkDatePeriod($date_period, $start_date, $end_date )['end_date'];
+		// dd($new_end_date	);
+		$data['_journal'] = Tbl_journal_entry::transaction()->where("je_shop_id", $this->getShopId())
+							->where(DB::raw("date(je_entry_date)"),">=",$data['start_date'])
+							->where(DB::raw("date(je_entry_date)"),"<=",$data['new_end_date'])
+							->get();
+
+		foreach($data['_journal'] as $key=>$journal)
+		{
+			$customer_vendor = Accounting::checkTransaction($journal->je_reference_module)['name'];
+			$data['_journal'][$key]->entries = Tbl_journal_entry_line::account()->item()->customerOrVendor($customer_vendor)->where("jline_je_id", $journal->je_id)->orderBy("jline_type","desc")->orderBy("account_name")->get();
+		}
+
+		$data["date_period"] = 1;
+
+		return view('member.accounting.journal_ledger.journal_entry', $data);
+	}
+
+	public function getAllEntryByAccount($account_id)
+	{
+		$data["account"]	= Tbl_chart_of_account::where("account_id", $account_id)->first();
+		$date_period = Request::input('period_date') ? Request::input('period_date') : 'all'; 
+		$start_date  = Request::input('start_date');
+		$end_date    = Request::input('end_date');
+
+		$new_start_date  = $this->checkDatePeriod($date_period, $start_date, $end_date )['start_date'];
+		$new_end_date  	 = $this->checkDatePeriod($date_period, $start_date, $end_date )['end_date'];
+		// dd($new_end_date	);
+		$data['_journal'] = Tbl_journal_entry_line::account()->journal()->transaction()
+							->where("je_shop_id", $this->getShopId())
+							->where("jline_account_id", $account_id)
+							->where(DB::raw("date(je_entry_date)"),">=",$new_start_date)
+							->where(DB::raw("date(je_entry_date)"),"<=",$new_end_date)
+							->orderBy("je_entry_date")
+							->get();
+
+		// dd($data['_journal']);
+
+		return view('member.accounting.journal_ledger.general_ledger', $data);
+	}
+
+	public function checkDatePeriod($period, $start_date, $end_date)
+	{
+		switch($period)
+		{
+			case 'all':
+				$data["start_date"] = "1000-01-01";
+				$data["end_date"]	= "9000-01-01";
+				break;
+			case 'custom':
+				$data["start_date"] = datepicker_input($start_date);
+				$data["end_date"]	= datepicker_input($end_date);
+				break;
+			case 'today':
+				$data["start_date"] = datepicker_input("today");
+				$data["end_date"]	= datepicker_input("today");
+				break;
+			case 'this_week':
+				$data["start_date"] = datepicker_input("previous sunday");
+				$data["end_date"]	= datepicker_input("next saturday");
+				break;
+			case 'this_week_to_date':
+				$data["start_date"] = datepicker_input("previous sunday");
+				$data["end_date"]	= datepicker_input("today");
+				break;
+			case 'this_month':
+				$data["start_date"] = datepicker_input("first day of this month");
+				$data["end_date"]	= datepicker_input("last day of this month");
+				break;
+			case 'this_month_to_date':
+				$data["start_date"] = datepicker_input("first day of this month");
+				$data["end_date"]	= datepicker_input("today");
+				break;
+			case 'this_year':
+				$data["start_date"] = datepicker_input("first day of January");
+				$data["end_date"]	= datepicker_input("last day of December");
+				break;
+		}
+		return $data;
 	}
 
 	public function postManualJournalEntry()

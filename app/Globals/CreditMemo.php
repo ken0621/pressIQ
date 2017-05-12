@@ -11,6 +11,9 @@ use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_credit_memo;
 use App\Globals\Accounting;
+use App\Globals\Warehouse;
+use App\Globals\Item;
+use App\Globals\UnitMeasurement;     
 use DB;
 use Session;
 use Carbon\Carbon;
@@ -42,7 +45,7 @@ class CreditMemo
 		/* Transaction Journal */
         $entry["reference_module"]  = "credit-memo";
         $entry["reference_id"]      = $cm_id;
-        $entry["name_id"]           = $customer_info['customer_id'];
+        $entry["name_id"]           = $customer_info['cm_customer_id'];
         $entry["total"]             = $customer_info["cm_amount"];
         $entry["vatable"]           = '';
         $entry["discount"]          = '';
@@ -74,7 +77,7 @@ class CreditMemo
 		/* Transaction Journal */
         $entry["reference_module"]  = "credit-memo";
         $entry["reference_id"]      = $cm_id;
-        $entry["name_id"]           = $customer_info['customer_id'];
+        $entry["name_id"]           = $customer_info['cm_customer_id'];
         $entry["total"]             = $customer_info["cm_amount"];
         $entry["vatable"]           = '';
         $entry["discount"]          = '';
@@ -99,15 +102,36 @@ class CreditMemo
 
 			Tbl_credit_memo_line::insert($insert_cmline);
 
-			/* TRANSACTION JOURNAL */   
-            $entry_data[$key]['item_id']            = $value["item_id"];
-            $entry_data[$key]['entry_qty']          = $value["quantity"];
-            $entry_data[$key]['vatable']            = 0;
-            $entry_data[$key]['discount']           = 0;
-            $entry_data[$key]['entry_amount']       = $value["amount"];
-            $entry_data[$key]['entry_description']  = $value["item_description"];
+			$item_type = Item::get_item_type($value['item_id']);
+            /* TRANSACTION JOURNAL */  
+            if($item_type != 4)
+            { 
+	            $entry_data[$key]['item_id']            = $value["item_id"];
+	            $entry_data[$key]['entry_qty']          = $value["quantity"];
+	            $entry_data[$key]['vatable']            = 0;
+	            $entry_data[$key]['discount']           = 0;
+	            $entry_data[$key]['entry_amount']       = $value["amount"];
+	            $entry_data[$key]['entry_description']  = $value["item_description"];
+            }
+	        else
+	        {
+	        	$item_bundle = Item::get_item_in_bundle($value['item_id']);
+                if(count($item_bundle) > 0)
+                {
+                    foreach ($item_bundle as $key_bundle => $value_bundle) 
+                    {
+                        $item_data = Item::get_item_details($value_bundle->bundle_item_id);
+                        $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
+                        $entry_data['b'.$key.$key_bundle]['entry_qty']          = $value['quantity'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
+                        $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
+                        $entry_data['b'.$key.$key_bundle]['discount']           = 0;
+                        $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
+                        $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                    }
+                }
+	        }
 		}
-
+		
 		$cm_journal = Accounting::postJournalEntry($entry, $entry_data);
 	}
 }

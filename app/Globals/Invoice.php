@@ -304,20 +304,40 @@ class Invoice
 
                 Tbl_customer_invoice_line::insert($insert_line);
 
-                /* TRANSACTION JOURNAL */   
-                $entry_data[$key]['item_id']            = $item_line['item_id'];
-                $entry_data[$key]['entry_qty']          = $item_line['quantity'];
-                $entry_data[$key]['vatable']            = 0;
-                $entry_data[$key]['discount']           = $discount;
-                $entry_data[$key]['entry_amount']       = $amount+$discount;
-                $entry_data[$key]['entry_description']  = $item_line['item_description'];
+                $item_type = Item::get_item_type($item_line['item_id']);
+                /* TRANSACTION JOURNAL */  
+                if($item_type != 4)
+                {
+                    $entry_data[$key]['item_id']            = $item_line['item_id'];
+                    $entry_data[$key]['entry_qty']          = $item_line['quantity'];
+                    $entry_data[$key]['vatable']            = 0;
+                    $entry_data[$key]['discount']           = $discount;
+                    $entry_data[$key]['entry_amount']       = $amount+$discount;
+                    $entry_data[$key]['entry_description']  = $item_line['item_description'];                    
+                }
+                else
+                {
+                    $item_bundle = Item::get_item_in_bundle($item_line['item_id']);
+                    if(count($item_bundle) > 0)
+                    {
+                        foreach ($item_bundle as $key_bundle => $value_bundle) 
+                        {
+                            $item_data = Item::get_item_details($value_bundle->bundle_item_id);
+                            $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
+                            $entry_data['b'.$key.$key_bundle]['entry_qty']          = $item_line['quantity'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
+                            $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
+                            $entry_data['b'.$key.$key_bundle]['discount']           = 0;
+                            $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
+                            $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                        }
+                    }
+                }
                 
                 $total_discount +=$discount; 
             }
         }
 
-        $entry['discount'] += $total_discount;
-
+        // $entry['discount'] += $total_discount;
         $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
 
         return $insert_line;

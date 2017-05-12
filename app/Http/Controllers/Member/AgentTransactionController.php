@@ -385,6 +385,9 @@ class AgentTransactionController extends Member
                 array_push($data['__transaction'], $_transaction);
             }
 
+            $sir_data = Tbl_sir::where("sir_id",$sir_id)->first();
+            $data["rem_amount"] = $sir_data->agent_collection;
+            $data["rem_remarks"] = $sir_data->agent_collection_remarks;
         }
         $data["tr"] = [];
         foreach ($data['__transaction'] as $key => $value) 

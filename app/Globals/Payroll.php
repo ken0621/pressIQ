@@ -873,7 +873,7 @@ class Payroll
 		if($category == 'regulartime')
 		{
 			/* COMPUTE LATE BASED ON EARLIEST TIME IN */
-			
+
 			// if(convert_seconds_to_hours_minutes("H:i", $time_in) == "09:01")
 			// {
 			// 	$array['default_time_in'] = $default_time_in;
@@ -1304,7 +1304,6 @@ class Payroll
 													->count();
 
 			$approved = $time->approved_timesheet;
-
 			// array_push($dd_array, $approved);
 
 			$temp_hour 					= 0;
@@ -1466,8 +1465,9 @@ class Payroll
 				$rh_hour['regular'] = $count_rh;
 			}
 
+		
 			/* EXTRA DAYS */
-			if($extra_day_hours > 0 && $regular_hour <= 0 && $special_holiday_hours <= 0 && $regular_holiday_hours <= 0)
+			if($extra_day_hours > 0 && $regular_hour['regular'] <= 0 && $special_holiday_hours <= 0 && $regular_holiday_hours <= 0)
 			{
 				$temp_hour								= $extra_day_hours;
 				$extra_hour['regular'] 					= divide($extra_day_hours, $target_hour);
@@ -1579,6 +1579,13 @@ class Payroll
 				{
 					$data['allowance'] = Payroll::push_allowance($data['allowance'], $daily_allowance, $payroll_period_category, $period_category, ($one_day_render / $target_hour));
 				}
+			}
+
+
+			if($start == '2017-04-29')
+			{
+				// dd($extra_day);
+
 			}
 
 			/* ALLOWANCE DAILY END */
@@ -2379,11 +2386,7 @@ class Payroll
 		}
 
 		$cola_var 			= $cola_var * $cola;
-
 		$regular 			= $regular * $rate;
-		// $late_overtime 		= $late_overtime * $rate;
-		// $early_overtime 	= $early_overtime * $rate;
-		// $night_differential = $night_differential * $rate;
 		
 
 		if($hours['regular'] <= 0)
@@ -2403,11 +2406,10 @@ class Payroll
 			$night_differential = 0;
 		}	
 
-		$temp_overtime = $hours['late_overtime'] * $rate;
-		$temp_earlyOT = $hours['early_overtime'] * $rate;
-		$temp_night	= $hours['night_differential'] * $rate;
+		$temp_overtime 	= $hours['late_overtime'] * $rate;
+		$temp_earlyOT 	= $hours['early_overtime'] * $rate;
+		$temp_night		= $hours['night_differential'] * $rate;
 
-		// dd($rate);
 
 		$data['regular']			= round(($regular + ( $hours['regular'] * $rate )), 2);
 		$data['late_overtime']		= round(($temp_overtime + ($temp_overtime * $late_overtime)), 2);
@@ -2420,14 +2422,12 @@ class Payroll
 
 		$data['cola'] 				= round(($cola_var + ($cola * $hours['regular'])), 2);
 
-
-		// dd($total);
 		if($total <= 0)
 		{
 			
 			$data['cola'] = 0;
 		}
-		// dd($data);
+
 		return $data;
 		
 	}

@@ -21,6 +21,7 @@ use App\Models\Tbl_bill_item_line;
 use App\Globals\UnitMeasurement;
 use App\Globals\Item;
 use App\Globals\Accounting;
+use App\Globals\AuditTrail;
 use DB;
 use Session;
 use Carbon\Carbon;
@@ -134,7 +135,7 @@ class WriteCheck
             }
 
             $wc_data = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
-            AuditTrail::record_logs("Edited","write_check",$wc_id,"",serialize($wc_data));
+            AuditTrail::record_logs("Edited","bill_payment_check",$wc_id,"",serialize($wc_data));
 
         }
 
@@ -185,7 +186,7 @@ class WriteCheck
             }
 
             $wc_data = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
-            AuditTrail::record_logs("Added","write_check",$wc_id,"",serialize($wc_data));
+            AuditTrail::record_logs("Added","bill_payment_check",$wc_id,"",serialize($wc_data));
 
         }
     }
@@ -212,11 +213,12 @@ class WriteCheck
         $entry["discount"]          = '';
         $entry["ewt"]               = '';
 
-        $new = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
-        AuditTrail::record_logs("Edited","write_check",$wc_id,serialize($old),serialize($new));
-
         Tbl_write_check_line::where("wcline_wc_id", $wc_id)->delete();
-        WriteCheck::insert_wc_line($wc_id, $item_info, $entry);
+        WriteCheck::insert_wc_line($wc_id, $item_info);
+
+        
+        $new = AuditTrail::get_table_data("tbl_write_check","wc_id",$wc_id);
+        AuditTrail::record_logs("Edited","write_check_bill",$wc_id,serialize($old),serialize($new));
 
         return $wc_id;
     }
@@ -260,12 +262,12 @@ class WriteCheck
                 /* TRANSACTION JOURNAL */  
                 if($item_type != 4)
                 {
-                    $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
+                    $entry_data[$key]['item_id']            = $item_line['item_id'];
                     $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
                     $entry_data[$key]['vatable']            = 0;
-                    $entry_data[$key]['discount']           = 0;
+                    $entry_data[$key]['discount']           = $discount;
                     $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
-                    $entry_data[$key]['entry_description']  = $item_line['itemline_description'];
+                    $entry_data[$key]['entry_description']  = $item_line['item_description'];  
                 }
                 else
                 {

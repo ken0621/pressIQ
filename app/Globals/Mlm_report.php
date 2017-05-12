@@ -187,10 +187,7 @@ class Mlm_report
         ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
         ->groupBy(DB::raw('wallet_log_plan') )
         ->groupBy('wallet_log_slot')
-
         ->whereIn('wallet_log_slot', $wherein)
-
-
     	->get();
         // dd($complan_per_day);
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)

@@ -194,7 +194,6 @@ class ReportsController extends Member
         $data['head'] = $this->report_header($data);
         $data['filter'] = $this->report_filter('basic');
         $data['table_header'] = Report::sales_report();
-        // $data['sales_report_by_customer'] = $this->accounting_sale_report_view();
 
         return view('member.reports.accounting.sales', $data);
     }
@@ -438,6 +437,8 @@ class ReportsController extends Member
             ->groupBy('jline_type')
             ->groupBy('jline_account_id')
             ->where('account_shop_id', $shop_id)
+            ->where('tbl_journal_entry_line.created_at', '>=', $from)
+            ->where('tbl_journal_entry_line.created_at', '<=', $to)
             ->get();
 
         }
@@ -504,9 +505,11 @@ class ReportsController extends Member
             ->groupBy('jline_account_id')
             ->groupBy('jline_je_id')
             ->journal()
+            ->where('tbl_journal_entry_line.created_at', '>=', $from)
+            ->where('tbl_journal_entry_line.created_at', '<=', $to)
             ->get();
         $data['chart_of_account'] = [];
-
+        $data['chart_of_account_data'] = [];
         foreach($data['entry_line'] as $key => $value)
         {
             $data['chart_of_account'][$value->chart_type_id] = $value->account_name; 

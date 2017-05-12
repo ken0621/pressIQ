@@ -1793,9 +1793,12 @@ class Payroll
 			$monthly_salary  = $monthly_salary / $group->payroll_group_working_day_month;
 		}
 
+		// dd($payroll_group_salary_computation);
+
 		if($payroll_group_salary_computation == 'Daily Rate')
 		{
 			$data['under_time']					= 0;
+			$data['late_deduction'] 			= 0;
 		}
 
 		if($payroll_group_salary_computation == 'Flat Rate')

@@ -35,7 +35,7 @@
                     </tbody>
                     </table>
                 </div>
-              {!! $_audit->render() !!}   
+              {!! str_replace('/?','?',$_audit->render()) !!}   
             </div>
         </div>
 	</div>

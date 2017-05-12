@@ -29,13 +29,7 @@ class DebitMemo
 
 		$db_id = Tbl_debit_memo::insertGetId($insert_db);
 
-		/* Transaction Journal */
-        $entry["reference_module"]  = "debit-memo";
-        $entry["reference_id"]      = $db_id;
-        $entry["name_id"]           = $vendor_info["db_vendor_id"];
-        $entry["total"]             = $vendor_info["db_amount"];
-
-		DebitMemo::insert_dbline($db_id, $item_info, $entry);
+		DebitMemo::insert_dbline($db_id, $item_info);
 
 		return $db_id;
 	}

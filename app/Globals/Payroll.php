@@ -1333,7 +1333,7 @@ class Payroll
 			$data['regular_holiday_hours']		+= $regular_holiday_hours;
 
 			/* EMPLOYEE SALARY */
-			$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->where('payroll_employee_salary_archived',0)->first();
+			$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->where('payroll_employee_salary_archived',0)->orderBy('payroll_employee_salary_effective_date','desc')->first();
 
 			$data['minimum_wage'] 			= 0;
 			$data['salary_monthly'] 		= 0;
@@ -1659,6 +1659,13 @@ class Payroll
 				$late_deduction = $late_hours * $hourly_rate;
 			}
 
+
+			/* under time deduction */
+			if($group->payroll_group_salary_computation == 'Daily Rate')
+			{
+				$under_time = 0;
+			}
+
 			$data['under_time'] += $under_time * $daily_rate;
 
 			$data['late_deduction']	+= round($late_deduction, 2);
@@ -1795,11 +1802,11 @@ class Payroll
 
 		// dd($payroll_group_salary_computation);
 
-		if($payroll_group_salary_computation == 'Daily Rate')
-		{
-			$data['under_time']					= 0;
-			$data['late_deduction'] 			= 0;
-		}
+		// if($payroll_group_salary_computation == 'Daily Rate')
+		// {
+		// 	$data['under_time']					= 0;
+		// 	// $data['late_deduction'] 			= 0;
+		// }
 
 		if($payroll_group_salary_computation == 'Flat Rate')
 		{

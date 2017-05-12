@@ -1066,9 +1066,34 @@ function page_list()
 
     /* -- Accounting => Sales Report  */
     $code = "report-sales-account";
-    $nav[$page]['submenu'][$code]['label'] = "Sales Report (Accounting)";
+    $nav[$page]['submenu'][$code]['label'] = "Sales By Customer Details (Accounting)";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/sale";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
+    $code = "report-sales-item-account";
+    $nav[$page]['submenu'][$code]['label'] = "Sales By Item Details (Accounting)";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/sale/item";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
+    $code = "report-profit-and-loss-account";
+    $nav[$page]['submenu'][$code]['label'] = "Profit and Loss (Accounting)";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/profit/loss";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+
+
+    $code = "report-general-ledger-account";
+    $nav[$page]['submenu'][$code]['label'] = "General Ledger (Accounting)";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/general/ledger";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";

@@ -1,15 +1,9 @@
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-heading">
-    	<form class="global-submit" method="post" 
-		@if(isset($action))
-    		action="{{$action}}"
-		@else
-			action="/member/report/accounting/sale/get/report"
-		@endif
-    	>
+    	<form class="global-submit" method="post" action="/member/report/accounting/general/ledger/get" >
     	{!! csrf_field() !!}
     	<input type="hidden" name="report_type" value="plain" class="report_type_i">
-    	<input type="hidden" name="report_field_type" class="report_field_type" value="accounting_sales_report">
+        <input type="hidden" name="report_field_type" class="report_field_type" value="profit_loss">
         <div>
             <div class="col-md-3"><input type="date" class="form-control from_report_a" name="from" class=""></div>
             <div class="col-md-3"><input type="date" class="form-control form_report_b" name="to" class=""></div>

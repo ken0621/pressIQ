@@ -801,8 +801,6 @@ class Payroll
 
 			if($category == 'flexitime')
 			{
-				
-
 				$late_overtime = $time_spent - $target_hour;
 
 				if($late_overtime < 0)
@@ -875,16 +873,26 @@ class Payroll
 		if($category == 'regulartime')
 		{
 			/* COMPUTE LATE BASED ON EARLIEST TIME IN */
-			if($default_time_in < $earliest_time_in)
+			
+			// if(convert_seconds_to_hours_minutes("H:i", $time_in) == "09:01")
+			// {
+			// 	$array['default_time_in'] = $default_time_in;
+			// 	$array['earliest_time_in'] = $earliest_time_in;
+			// 	dd($array);
+			// }
+
+			if($default_time_in < $time_in)
 			{
-				$total_late_hours = $earliest_time_in - $default_time_in;
+				$total_late_hours = $time_in - $default_time_in;
 
 				if($total_late_hours <= $late_grace_time)
 				{
 					$total_regular_hours = $total_regular_hours + $total_late_hours;
 					$total_late_hours = 0;
 				}
+				
 			}
+
 			else
 			{
 				$total_late_hours = 0;
@@ -2017,9 +2025,8 @@ class Payroll
 					$data['philhealth_contribution_ee'] = $philhealth_contribution_ee - $previous_philhealth;
 				}
 			}
-
-			
 		}
+
 		else if($group->payroll_group_philhealth == $period_category)
 		{
 			if(Payroll::return_ave($period_category) == '1st Period')

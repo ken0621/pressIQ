@@ -57,7 +57,7 @@ class AuditTrail
 
 		return $id;
     }
-    public static function getSearchAuditData($col, $key, $from = null, $to = null)
+    public static function getSearchAuditData($col, $key, $from=null, $to=null)
     {      
         $query = Tbl_audit_trail::user()->orderBy("created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId());   
 
@@ -99,10 +99,10 @@ class AuditTrail
             //dd($to);
             $audit_trail = $query
                         ->whereBetween("created_at", [$from, $to])
-                        ->get();
+                        ->paginate(10);
             //dd($query);
         } else {
-            $audit_trail = $query->get();  
+            $audit_trail = $query->paginate(10);  
         }
         //dd($audit_trail);
 
@@ -582,7 +582,7 @@ class AuditTrail
 
     public static function getAudit_data()
     {        
-        $audit_trail = Tbl_audit_trail::user()->orderBy("created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->get();
+        $audit_trail = Tbl_audit_trail::user()->orderBy("created_at","DESC")->where("audit_shop_id",AuditTrail::getShopId())->paginate(10);
 
         foreach ($audit_trail as $key => $value) 
         {            

@@ -264,7 +264,7 @@ Route::any('/member/item/um/add_base/{id}/{item_id}',"Member\UnitOfMeasurementCo
 Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController@add_base_submit');
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
-Route::any('/member/utilities/audit/table','Member\AuditTrailController@table');
+Route::any('/member/utilities/audit/get_list','Member\AuditTrailController@get_list');
 /* END AUDIT TRAIL*/
 
 /* START CLIENT INFO*/

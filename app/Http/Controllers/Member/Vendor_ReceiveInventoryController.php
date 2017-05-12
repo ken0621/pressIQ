@@ -14,6 +14,8 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
+use App\Models\Tbl_terms;
+
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;

@@ -103,7 +103,8 @@ class ChartOfAccountController extends Member
             if($data['account_open_balance'] > 0)
             {
                 $entry["reference_module"]      = "deposit";
-                $entry["reference_id"]          = $account_id;
+                $entry["reference_id"]          = 0;
+                $entry["account_id"]            = $account_id;
                 $entry["name_id"]               = "";
                 $entry["total"]                 = $data['account_open_balance'];
                 $entry_data[0]['account_id']    = 0;

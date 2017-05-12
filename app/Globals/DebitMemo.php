@@ -60,7 +60,6 @@ class DebitMemo
 
 		Tbl_debit_memo::where("db_id",$db_id)->update($update_db);
 
-
 		Tbl_debit_memo_line::where("dbline_db_id",$db_id)->delete();
 
 		/* Transaction Journal */
@@ -75,6 +74,7 @@ class DebitMemo
         AuditTrail::record_logs("Edited","debit_memo",$db_id,serialize($old_data),serialize($db_data));
 
 	}
+
 	public static function insert_dbline($db_id, $item_info, $entry)
 	{
 		foreach ($item_info as $key => $value) 
@@ -123,6 +123,5 @@ class DebitMemo
 		}
 
 		$debit_memo_journal = Accounting::postJournalEntry($entry, $entry_data);
-
 	}
 }

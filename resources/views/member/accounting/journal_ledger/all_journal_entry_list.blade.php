@@ -11,6 +11,7 @@
                     List of All Journal Entry
                 </small>
             </h1>
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/accounting/journal/all-entry" >List Journal Entry</a>
         </div>
     </div>
 </div>
@@ -50,7 +51,7 @@
                         @endforeach
                     @endif
                     </tbody>
-                </table>
+                </table>                                    
             </div>
         </div>
     </div>

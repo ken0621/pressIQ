@@ -6,11 +6,30 @@ use Redirect;
 use Request;
 use View;
 use Session;
+use DB;
 
+use App\Models\Tbl_customer;
+use App\Models\Tbl_shop;
+use App\Models\Tbl_mlm_slot;
+use App\Models\Tbl_mlm_plan;
+use App\Models\Tbl_mlm_slot_wallet_log;
+use App\Models\Tbl_membership_code;
+use App\Models\Tbl_mlm_encashment_settings;
+
+use App\Globals\Mlm_member;
+use App\Globals\Settings;
 class ShopAccountController extends Shop
 {
-	public function __construct()
-    {	
+    public static $customer_id;
+    public static $customer_info;
+    public static $shop_id;
+    public static $shop_infos;
+    public static $slot_now;
+    public static $slot_id;
+    public static $discount_card_log_id;
+    public static $discount_card_log;
+	public function checkif_login()
+    {
         if(Session::get('mlm_member') != null)
         {
             $session = Session::get('mlm_member');
@@ -18,7 +37,7 @@ class ShopAccountController extends Shop
             Self::$customer_info = $session['customer_info'];
 
             Self::$shop_id = $session['shop_info']->shop_id;
-            Self::$shop_info = $session['shop_info'];
+            Self::$shop_infos = $session['shop_info'];
 
             if($session['slot_now'])
             {
@@ -41,8 +60,6 @@ class ShopAccountController extends Shop
             }
             if(isset($session['discount_card']))
             {
-                // Self::$discount_card_log_id = $session['discount_card']->discount_card_log_id;
-                // Self::$discount_card_log =  $session['discount_card'];
                 Self::$discount_card_log_id = null;
                 Self::$discount_card_log = null;
             }
@@ -77,7 +94,6 @@ class ShopAccountController extends Shop
 
             $noti_count = Tbl_mlm_slot_wallet_log::where('wallet_log_slot', Self::$slot_id)
             ->where('wallet_log_notified', 0)->count();
-            // dd(Self::$customer_info);
             $content = DB::table('tbl_content')->where('shop_id', Self::$shop_id)->get();
             $content_a = [];
             foreach($content as $c => $value)
@@ -86,15 +102,13 @@ class ShopAccountController extends Shop
             }
             $customer = Tbl_customer::where('customer_id', Self::$customer_id)->first();
             $customer->profile != null ? $profile = $customer->profile :  $profile = '/assets/mlm/default-pic.png';
-            // dd($profile);
-            $this->seed();
 
             View::share("profile", $profile);
             View::share("content", $content_a);
             View::share("complan", $plan_settings);
             View::share("complan_repurchase", $plan_settings_repurchase);
             View::share("customer_info", Self::$customer_info);
-            View::share("shop_info", Self::$shop_info);
+            View::share("shop_info", Self::$shop_infos);
             View::share("slot_now", Self::$slot_now);
             View::share("slot", $all_slot);
             View::share("notification", $notification_s);
@@ -108,7 +122,22 @@ class ShopAccountController extends Shop
     }
     public function index()
     {
+        $this->checkif_login();
+
         $data["page"] = "Account";
-        return view("profile", $data);
+        return view("account_profile", $data);
+    }
+    public function order()
+    {
+        $this->checkif_login();
+
+        $data["page"] = "Order";
+        return view("account_order", $data);
+    }
+    public function logout()
+    {
+        Session::forget('mlm_member');
+
+        return Redirect::to("/");
     }
 }

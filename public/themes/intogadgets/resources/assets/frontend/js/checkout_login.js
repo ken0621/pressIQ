@@ -21,6 +21,8 @@ function checkout_login()
 		{
 			action_radio_continue(e.currentTarget);
 		});
+
+		action_radio_continue($('.radio-continue:checked'));
 	}
 	function action_radio_continue(x)
 	{
@@ -40,7 +42,7 @@ function checkout_login()
 	}
 	function action_continue_yes(yes, email, password, form)
 	{
-		form.attr('action', '/checkout/login');
+		form.attr('action', '/checkout');
 		form.attr('method', 'get');
 		form.removeClass('global-submit');
 
@@ -52,7 +54,7 @@ function checkout_login()
 	}
 	function action_continue_no(yes, email, password, form)
 	{
-		form.attr('action', '/mlm/login');
+		form.attr('action', '/account/login');
 		form.attr('method', 'post');
 		form.addClass('global-submit');
 

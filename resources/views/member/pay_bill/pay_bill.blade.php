@@ -57,7 +57,7 @@
                      <div class="row clearfix">
                       <div class="col-sm-2">
                                 <label>Payment Date</label>
-                                <input type="text" name="paybill_date" class="datepicker form-control input-sm" value="{{$paybill_date or date('m/d/y')}}" />
+                                <input type="text" name="paybill_date" class="datepicker form-control input-sm" value="{{$paybill->paybill_date or date('m/d/y')}}" />
                             </div>
                         <div class="col-sm-3">
                             <label>Payment Method</label>

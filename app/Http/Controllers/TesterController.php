@@ -54,45 +54,12 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        $key = 0;
-        $entry_data[$key]['item_id']            = '';
-        $entry_data[$key]['entry_qty']          = '';
-        $entry_data[$key]['vatable']            = '';
-        $entry_data[$key]['discount']           = '';
-        $entry_data[$key]['entry_amount']       = '';
-        $entry_data[$key]['entry_description']  = '';
-
-        $entry_data['a-'.$key]['item_id']            = '';
-        $entry_data['a-'.$key]['entry_qty']          = '';
-        $entry_data['a-'.$key]['vatable']            = '';
-        $entry_data['a-'.$key]['discount']           = '';
-        $entry_data['a-'.$key]['entry_amount']       = '';
-        $entry_data['a-'.$key]['entry_description']  = '';
-
-        $entry_data[1]['item_id']            = '';
-        $entry_data[1]['entry_qty']          = '';
-        $entry_data[1]['vatable']            = '';
-        $entry_data[1]['discount']           = '';
-        $entry_data[1]['entry_amount']       = '';
-        $entry_data[1]['entry_description']  = '';
-
-
-        $value = '';
-        foreach($entry_data as $key=>$data)
-        {
-            $value .= "|".$key; 
-        }
-
-        dd( $value );
 
     }
 
     public function getJournal()
     {
         $data['tbl_journal_entry'] = Accounting::getJounalAll();
-
-        // dd($data['tbl_journal_entry']);
-        // dd($data['tbl_journal_entry']);
 
         return view('member.tester_journal', $data);
     }

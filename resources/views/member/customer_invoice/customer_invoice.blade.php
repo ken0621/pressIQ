@@ -1,4 +1,4 @@
-@extends('member.layout')
+\@extends('member.layout')
 @section('content')
 <form class="global-submit form-to-submit-transfer" id="invoice_form" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" class="token" name="_token" value="{{csrf_token()}}" >
@@ -87,16 +87,16 @@
                             <div class="col-sm-2">  
                                 <label>Terms</label>
                                 <select class="form-control input-sm droplist-terms" name="inv_terms_id">
-                                    @include("member.load_ajax_data.load_terms")
+                                    @include("member.load_ajax_data.load_terms", ['terms_id' => isset($inv) ? $inv->inv_terms_id : ''])
                                 </select>
                             </div>
                             <div class="col-sm-2">
                                 <label>Invoice Date</label>
-                                <input type="text" class="datepicker form-control input-sm" name="inv_date" value="{{$inv->inv_date or date('m/d/y')}}"/>
+                                <input type="text" class="datepicker form-control input-sm" name="inv_date" value="{{isset($inv) ? dateFormat($inv->inv_date) : date('m/d/y')}}"/>
                             </div>
                             <div class="col-sm-2">
                                 <label>Due Date</label>
-                                <input type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{$inv->inv_due_date or date('m/d/y')}}" />
+                                <input type="text" class="datepicker form-control input-sm" name="inv_due_date" value="{{isset($inv) ? dateFormat($inv->inv_due_date) : date('m/d/y')}}" />
                             </div>
                         </div>
                         

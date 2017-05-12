@@ -68,6 +68,14 @@ class TermsOfPaymentController extends Member
         return view('member.terms.modal_create_terms', $data);
     }
 
+    public function getLoadTerms()
+    {
+        $data['_terms'] = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get(); 
+
+        return view('member.load_ajax_data.load_terms', $data);
+    }
+
+
     public function postTerms()
     {
         $data["terms_name"]         = Request::input("terms_name");
@@ -104,6 +112,7 @@ class TermsOfPaymentController extends Member
             }
 
             $json["status"]     = "success";
+            $json["type"]       = "terms";
             $json["message"]    = "Success";
             $json["terms_id"]   = $terms_id;
         }

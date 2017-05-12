@@ -72,9 +72,8 @@
                                         </div>              
                                         <div class="col-sm-2">
                                         <label>Terms</label>
-                                            <select class="form-control" name="bill_terms_id">
-                                                <option value="1" {{isset($bill) ? $bill->bill_terms_id == 1 ? 'selected' : '' : ''}}>Net 10</option>
-                                                <option value="2" {{isset($bill) ? $bill->bill_terms_id == 2 ? 'selected' : '' : ''}}>Net 30</option>
+                                            <select class="form-control input-sm droplist-terms" name="bill_terms_id">
+                                                @include("member.load_ajax_data.load_terms")
                                             </select>
                                         </div>
                                         <div class="col-sm-2">

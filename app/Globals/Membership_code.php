@@ -30,6 +30,7 @@ class Membership_code
 	public static function add_code($data, $shop_id, $warehouse_id)
 	{
         $data['warehouse_id'] =  $warehouse_id;
+        // dd($data);
         $insert['customer_id']                                   = $data["customer_id"];
         $insert['membership_code_customer_email']                = $data["membership_code_customer_email"];
         $insert['membership_code_paid']                          = $data["membership_code_paid"];
@@ -58,7 +59,6 @@ class Membership_code
         $messages['membership_code_invoice_f_name.required'] = "First Name Is Required";
         // $messages['membership_code_invoice_m_name'] = "Middle Name Is Required";
         $messages['membership_code_invoice_l_name.required'] = "Last Name Is Required"; 
-
         $membership_subtotal            = 0;
         $membership_total               = 0;
         $membership_discount            = 0;
@@ -99,11 +99,11 @@ class Membership_code
                             {
                                 $package_has = Tbl_membership_package_has::where('membership_package_id', $membership->membership_package_id)->get();
                                 
-                                foreach($package_has as $key => $value)
+                                foreach($package_has as $key0 => $value0)
                                 {
-                                    foreach($package_has as $key => $value)
+                                    foreach($package_has as $key0 => $value0)
                                     {
-                                        $bundle = Item::get_item_bundle($value->item_id);
+                                        $bundle = Item::get_item_bundle($value0->item_id);
                                         foreach($bundle['bundle'] as $key2 => $value2)
                                         {
                                             if(isset($count_on_hand[$value2['item_id']]))
@@ -137,7 +137,7 @@ class Membership_code
         	                }
         	                
         	                
-        	                $code_pin                                                = Tbl_membership_code::where("membership_code_pin",$shop_id)->count() + 1; 
+        	                $code_pin = Tbl_membership_code::where("membership_code_pin",$shop_id)->count() + 1; 
         	                
             	            
 
@@ -148,7 +148,6 @@ class Membership_code
             	            }
             	            else
             	            {
-                                
                                 $membership_subtotal                                     = $membership_subtotal + $membership->membership_price;
                 	            $rel_insert[$ctr]["membership_activation_code"]          = $activation_code;
                 	            $rel_insert[$ctr]["customer_id"]                         = $data["customer_id"];

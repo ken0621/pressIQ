@@ -12,7 +12,7 @@ class Tbl_credit_memo extends Model
 
     public function scopeCustomer($query)
     {
-    	return $query->join("tbl_customer","tbl_customer.customer_id","=","tbl_credit_memo.cm_customer_id");
+    	return $query->leftjoin("tbl_customer","tbl_customer.customer_id","=","tbl_credit_memo.cm_customer_id");
     }
     public function scopeManual_cm($query)
     {

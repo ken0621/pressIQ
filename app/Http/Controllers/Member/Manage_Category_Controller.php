@@ -7,6 +7,7 @@ use App\Models\Tbl_item;
 use Carbon\Carbon;
 use App\Globals\Category;
 use App\Globals\Utilities;
+use App\Globals\AuditTrail;
 
 
 class Manage_Category_Controller extends Member
@@ -63,6 +64,7 @@ class Manage_Category_Controller extends Member
 
         $data["cat"] = Tbl_category::where("type_id",$id)->first();
 
+
         return view("member.manage_category.category_confirm",$data);
     }
     public function archived_submit()
@@ -95,7 +97,13 @@ class Manage_Category_Controller extends Member
                 Tbl_category::where("type_id",$value->type_id)->update($update);
             }            
         }
+
         Tbl_category::where("type_id",$id)->update($update);
+        if($data["status"] != "error")
+        {
+            $cat_data = AuditTrail::get_table_data("tbl_category","type_id",$id);
+            AuditTrail::record_logs($action,"category",$id,"",serialize($cat_data));            
+        }
 
         return json_encode($data);
     }
@@ -121,7 +129,7 @@ class Manage_Category_Controller extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
 
@@ -155,6 +163,9 @@ class Manage_Category_Controller extends Member
         $data["cat_type"] = $type_category;
         $data["id"] = $category_id;
 
+        $cat_data = AuditTrail::get_table_data("tbl_category","type_id",$category_id);
+        AuditTrail::record_logs("Added","category",$category_id,"",serialize($cat_data));
+
         return json_encode($data);
     }
 
@@ -178,7 +189,7 @@ class Manage_Category_Controller extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
 
@@ -186,8 +197,11 @@ class Manage_Category_Controller extends Member
     {
         $access = Utilities::checkAccess('item-categories', 'access_page');
         if($access == 1)
-        {
+        {    
             $type_id = Request::input('type_id');
+
+            $old_data = AuditTrail::get_table_data("tbl_category","type_id",$type_id);
+
             $type_category = Request::input('type_category');
             $type_name = Request::input('type_name');
             $type_parent_id = 0;
@@ -217,6 +231,10 @@ class Manage_Category_Controller extends Member
 
             $data["status"] = "success-category";
             $data["id"] = $type_id;
+
+
+            $new_data = AuditTrail::get_table_data("tbl_category","type_id",$type_id);
+            AuditTrail::record_logs("Edited","category",$type_id,serialize($old_data),serialize($new_data));
 
             return json_encode($data);
         }

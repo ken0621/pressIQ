@@ -13,7 +13,8 @@ use App\Models\Tbl_credit_memo;
 use App\Globals\Accounting;
 use App\Globals\Warehouse;
 use App\Globals\Item;
-use App\Globals\UnitMeasurement;     
+use App\Globals\UnitMeasurement;  
+use App\Globals\AuditTrail;   
 use DB;
 use Session;
 use Carbon\Carbon;
@@ -58,11 +59,17 @@ class CreditMemo
 			$up["credit_memo_id"] = $cm_id;
 			Tbl_customer_invoice::where("inv_id",$inv_id)->update($up);
 		}
+
+
+        $cm_data = AuditTrail::get_table_data("tbl_credit_memo","cm_id",$cm_id);
+        AuditTrail::record_logs("Added","credit_memo",$cm_id,"",serialize($cm_data));
+
 		return $cm_id;
 	}
 
 	public static function updateCM($cm_id, $customer_info, $item_info)
 	{
+        $old_data = AuditTrail::get_table_data("tbl_credit_memo","cm_id",$cm_id);
 
 		$update_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$update_cm["cm_customer_email"] = $customer_info["cm_customer_email"];
@@ -85,6 +92,10 @@ class CreditMemo
 
 		Tbl_credit_memo_line::where("cmline_cm_id",$cm_id)->delete();
 		CreditMemo::insert_cmline($cm_id, $item_info, $entry);
+
+
+        $cm_data = AuditTrail::get_table_data("tbl_credit_memo","cm_id",$cm_id);
+        AuditTrail::record_logs("Edited","credit_memo",$cm_id,serialize($old_data),serialize($cm_data));
 
 	}
 	public static function insert_cmline($cm_id, $item_info, $entry)

@@ -85,9 +85,9 @@
                                 <td class="text-center"><input type="checkbox" class="serial-chk" disabled {{$w_item->has_serial_number == 1 ? 'checked' : ''}}></td>  
                                 <td class="text-center">
                                     @if($w_item->product_warehouse_stocks <= $w_item->product_reorder_point)
-                                    <label style="color: red">{{$w_item->product_warehouse_stocks}}</label>
+                                    <label style="color: red">{{$w_item->product_qty_um}}</label>
                                     @else
-                                    <label >{{$w_item->product_warehouse_stocks}}</label>
+                                    <label >{{$w_item->product_qty_um}}</label>
                                     @endif
                                 </td>
                                 <td> 

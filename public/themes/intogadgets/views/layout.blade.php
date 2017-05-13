@@ -289,7 +289,7 @@
                <div class="col-md-12">
                   <div class="popular-tags">
                      @foreach($_popular_tags as $popular_tags)
-                     <a href="/product?search={{ $popular_tags->keyword }}">#{{ $popular_tags->keyword }}</a>
+                     <a href="/product?search={{ $popular_tags->keyword }}"><span>#{{ $popular_tags->keyword }}</span></a>
                      @endforeach
                   </div>
                </div>

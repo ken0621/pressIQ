@@ -61,9 +61,9 @@
                                         <td><label class="sku-txt sku-txt{{$key+1}}">{{$w_item->product_sku}}</label></td>
                                         <td class="text-center"> 
                                             @if($w_item->product_warehouse_stocks <= $w_item->product_reorder_point)
-                                            <label style="color: red">{{$w_item->product_warehouse_stocks}}</label>
+                                            <label style="color: red">{{$w_item->product_qty_um}}</label>
                                             @else
-                                            <label >{{$w_item->product_warehouse_stocks}}</label>
+                                            <label >{{$w_item->product_qty_um}}</label>
                                             @endif
                                         </td>
                                     </tr>

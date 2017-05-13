@@ -35,6 +35,28 @@ class UnitMeasurement
 
         return $qty;
     }
+    public static function um_convertion($item_id = 0)
+    {
+        $return = '';
+        if($item_id != 0)
+        {
+            $item_data = Item::get_item_details($item_id);
+            if($item_data)
+            {
+                $um = Tbl_unit_measurement_multi::where("multi_um_id",$item_data->item_measurement_id)->where("is_base",0)->first();
+                if($um)
+                {
+                    $return = "1 ".$um->multi_abbrev." = ".$um->unit_qty." ".$item_data->multi_abbrev;
+                }
+                else
+                {
+                    $return = "1 ".$item_data->multi_abbrev;
+                }
+                
+            }
+        }
+        return $return; 
+    }
     public static function load_one_um($um_id)
     {
         return Tbl_unit_measurement::multi()->where("um_shop", UnitMeasurement::getShopId())

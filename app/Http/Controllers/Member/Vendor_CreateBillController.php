@@ -24,6 +24,7 @@ use App\Globals\Billing;
 use App\Globals\Item;
 use App\Globals\Warehouse;
 use App\Globals\UnitMeasurement;
+use App\Globals\Utilities;
 
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
@@ -42,45 +43,61 @@ class Vendor_CreateBillController extends Member
      */
     public function index()
     {
-        $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderBy("bill_id","DESC")->get();
+        $access = Utilities::checkAccess('vendor-bill', 'access_page');
+        if($access == 1)
+        { 
+            $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderBy("bill_id","DESC")->get();
 
-        foreach ($data["_bill_list"] as $key => $value) 
-        {
-           $price = 0;
-           $item = Tbl_bill_item_line::where("itemline_bill_id",$value->bill_id)->get();
-           foreach ($item as $key_item => $value_item) 
-           {
-                $price += (UnitMeasurement::um_qty($value_item->itemline_um) * $value_item->itemline_qty) * $value_item->itemline_rate;
-           }
-           $data["_bill_list"][$key]->bill_price = $price;
+            foreach ($data["_bill_list"] as $key => $value) 
+            {
+               $price = 0;
+               $item = Tbl_bill_item_line::where("itemline_bill_id",$value->bill_id)->get();
+               foreach ($item as $key_item => $value_item) 
+               {
+                    $price += (UnitMeasurement::um_qty($value_item->itemline_um) * $value_item->itemline_qty) * $value_item->itemline_rate;
+               }
+               $data["_bill_list"][$key]->bill_price = $price;
+            }
+            return view("member.vendor_list.bill_list",$data);
         }
-        return view("member.vendor_list.bill_list",$data);
+        else
+        {   
+            return $this->show_no_access();  
+        }
     }    
     public function create_bill()
     {
-        Session::forget("po_item");
-        $data["_vendor"]    = Vendor::getAllVendor('active');
-        $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
-        $data['_item']      = Item::get_all_category_item();
-        $data['_account']   = Accounting::getAllAccount();
-        $data['_um']        = UnitMeasurement::load_um_multi();
-        $data['action']     = "/member/vendor/create_bill/add";
-        $data['vendor_id']     = Request::input("vendor_id");
-        
-        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_billed",0)->get();
+        $access = Utilities::checkAccess('vendor-bill', 'access_page');
+        if($access == 1)
+        { 
+            Session::forget("po_item");
+            $data["_vendor"]    = Vendor::getAllVendor('active');
+            $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
+            $data['_item']      = Item::get_all_category_item();
+            $data['_account']   = Accounting::getAllAccount();
+            $data['_um']        = UnitMeasurement::load_um_multi();
+            $data['action']     = "/member/vendor/create_bill/add";
+            $data['vendor_id']     = Request::input("vendor_id");
+            
+            $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_billed",0)->get();
 
-        $id = Request::input("id");
-        if($id)
-        {
-           $data["bill"] = Tbl_bill::where("bill_id",$id)->first();
-           $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["bill"]->bill_vendor_id)->where("po_is_billed",0)->get();
-           $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
-           $data['_item']      = Item::get_all_category_item();
-           $data['_account']   = Accounting::getAllAccount();
-           $data['action']     = "/member/vendor/create_bill/update";
+            $id = Request::input("id");
+            if($id)
+            {
+               $data["bill"] = Tbl_bill::where("bill_id",$id)->first();
+               $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["bill"]->bill_vendor_id)->where("po_is_billed",0)->get();
+               $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
+               $data['_item']      = Item::get_all_category_item();
+               $data['_account']   = Accounting::getAllAccount();
+               $data['action']     = "/member/vendor/create_bill/update";
+            }
+            
+           return view("member.vendor_list.create_bill",$data);
         }
-        
-       return view("member.vendor_list.create_bill",$data);
+        else
+        {   
+            return $this->show_no_access();  
+        }
     }
     public function load_purchase_order($vendor_id)
     {
@@ -237,6 +254,7 @@ class Vendor_CreateBillController extends Member
     {
         $bill_id = Request::input("bill_id");
         $button_action = Request::input('button_action');
+        $bill_data = Tbl_bill::where("bill_id",$bill_id)->first();
 
         $vendor_info                         = [];
         $vendor_info['bill_vendor_id']       = Request::input('bill_vendor_id');
@@ -338,9 +356,18 @@ class Vendor_CreateBillController extends Member
             {
                 Billing::updatePotoBill($bill_id, Request::input("itemline_ref_id"));
             }
-
-            $transaction_id = $bill_id;
+            
+            
             $transaction_type = "bill";
+            if($bill_data)
+            {
+                if($bill_data->inventory_only != 0)
+                {
+                    $transaction_type = "receive_inventory";
+                }
+            }
+    
+            $transaction_id = $bill_id;
             $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
 
             $json["status"]         = "success-bill";

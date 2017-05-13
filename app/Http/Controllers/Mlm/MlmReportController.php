@@ -104,7 +104,7 @@ class MlmReportController extends Mlm
         	$slot_per_level[$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)
         	->where('sponsor_tree_level', '>=', $value['matching_settings_start'])
         	->where('sponsor_tree_level', '<=', $value['matching_settings_end'])
-        	->join('tbl_mlm_slot', 'Tbl_mlm_slot.slot_id', '=', 'tbl_tree_sponsor.sponsor_tree_child_id')
+        	->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_tree_sponsor.sponsor_tree_child_id')
         	->where('slot_matched_membership', 0)
         	->get()->keyBy('slot_id');
         	$data['matched_list'][$key] = [];
@@ -352,14 +352,23 @@ class MlmReportController extends Mlm
             $data['req_count'][$key] = Tbl_mlm_plan_binary_promotions_log::where('promotions_request_slot', Self::$slot_id)
                     ->where('promotions_request_binary_promotions_id', $value->binary_promotions_id)
                     ->count();
+
+
+            $data['claim_count_account'][$key] =  Tbl_mlm_plan_binary_promotions_log::join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_plan_binary_promotions_log.promotions_request_slot')
+            ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+            ->where('customer_id', Self::$customer_id)
+            ->count(); 
         }
+
+        // dd($data);
         $status = Session::get('status');
         if($status != null)
         {
             $data['s'] = $status;
             $data['m'] = Session::get('message');
         }
-        
+        $data['now'] = Carbon::now();
+        $data['direct_count'] = Tbl_mlm_slot::where('slot_sponsor', Self::$slot_id)->count();
         return view("mlm.report.report_binary_promotions", $data);
     }
     public function request_binary_promotions()

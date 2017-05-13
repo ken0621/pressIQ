@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Globals\Customer;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
+use App\Globals\CreditMemo;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
@@ -39,7 +40,7 @@ class Customer_ReceivePaymentController extends Member
 
         $data["c_id"] = Request::input("customer_id");
         $data["_customer"]      = Customer::getAllCustomer();
-        $data['_account']       = Accounting::getAllAccount();
+        $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
         $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
         $data['action']         = "/member/customer/receive_payment/add";
         $data["_invoice"] = Invoice::getAllInvoiceByCustomer($data["c_id"]);
@@ -85,7 +86,10 @@ class Customer_ReceivePaymentController extends Member
                 $insert_line["rpline_rp_id"]            = $rcvpayment_id;
                 $insert_line["rpline_reference_name"]   = Request::input('rpline_txn_type')[$key];
                 $insert_line["rpline_reference_id"]     = Request::input('rpline_txn_id')[$key];
-                $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
+
+                $cm_amount = CreditMemo::cm_amount( Request::input('rpline_txn_id')[$key]);
+                
+                $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]) + $cm_amount;
 
                 Tbl_receive_payment_line::insert($insert_line);
 
@@ -96,6 +100,7 @@ class Customer_ReceivePaymentController extends Member
             }
         }
 
+        /* Transaction Journal */
         $entry["reference_module"]      = "receive-payment";
         $entry["reference_id"]          = $rcvpayment_id;
         $entry["name_id"]               = $insert["rp_customer_id"];
@@ -126,8 +131,6 @@ class Customer_ReceivePaymentController extends Member
 
     public function update_receive_payment($rcvpayment_id)
     {
-        // dd(Request::input());
-
         $old_data = AuditTrail::get_table_data("tbl_receive_payment","rp_id",$rcvpayment_id);
 
         $update["rp_customer_id"]       = Request::input('rp_customer_id');
@@ -148,7 +151,9 @@ class Customer_ReceivePaymentController extends Member
                 $insert_line["rpline_rp_id"]            = $rcvpayment_id;
                 $insert_line["rpline_reference_name"]   = Request::input('rpline_txn_type')[$key];
                 $insert_line["rpline_reference_id"]     = Request::input('rpline_txn_id')[$key];
-                $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
+           
+                    $cm_amount = CreditMemo::cm_amount(Request::input('rpline_txn_id')[$key]);
+                $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]) + $cm_amount;
 
                 Tbl_receive_payment_line::insert($insert_line);
                 if($insert_line["rpline_reference_name"] == 'invoice')
@@ -158,10 +163,11 @@ class Customer_ReceivePaymentController extends Member
             }
             else
             {
-                Invoice::updateAmountApplied($insert_line["rpline_reference_id"]);
+                Invoice::updateAmountApplied(Request::input('rpline_txn_id')[$key]);
             }
         }
 
+        /* Transaction Journal */
         $entry["reference_module"]      = "receive-payment";
         $entry["reference_id"]          = $rcvpayment_id;
         $entry["name_id"]               = $update["rp_customer_id"];

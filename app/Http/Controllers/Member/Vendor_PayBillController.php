@@ -10,6 +10,7 @@ use App\Globals\Accounting;
 use App\Globals\Invoice;
 use App\Globals\WriteCheck;
 use App\Globals\BillPayment;
+use App\Globals\Utilities;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
@@ -34,32 +35,51 @@ class Vendor_PayBillController extends Member
     }
 
     public function index()
-    {        
-        $data["v_id"]           = Request::input("vendor_id");
-        $data["bill_id"]           = Request::input("bill_id");
-        $data["_vendor"]        = Vendor::getAllVendor('active');
-        $data['_account']       = Accounting::getAllAccount();
-        $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
-        $data['action']         = "/member/vendor/paybill/add";
-        $data["_bill"]          = Billing::getAllBillByVendor($data["v_id"]);
+    {   
+        $access = Utilities::checkAccess('vendor-pay-bills', 'access_page');
+        if($access == 1)
+        { 
+            $data["v_id"]           = Request::input("vendor_id");
+            $data["bill_id"]           = Request::input("bill_id");
+            $data["_vendor"]        = Vendor::getAllVendor('active');
+            $data['_account']       = Accounting::getAllAccount('all',null,['Bank']);
+            $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
+            $data['action']         = "/member/vendor/paybill/add";
+            $data["_bill"]          = Billing::getAllBillByVendor($data["v_id"]);
 
-        $id = Request::input('id');
-        if($id)
-        {
-            $data["paybill"]         = Tbl_pay_bill::where("paybill_id", $id)->first();
-            $data["_paybill_line"]   = Tbl_pay_bill_line::where("pbline_pb_id", $id)->get();
-            $data["_bill"]           = Billing::getAllBillByVendorWithPaybill($data["paybill"]->paybill_vendor_id, $data["paybill"]->paybill_id);
-            // dd($data["_invoice"]);
-            $data['action']             = "/member/vendor/paybill/update/".$data["paybill"]->paybill_id;
+            $id = Request::input('id');
+            if($id)
+            {
+                $data["paybill"]         = Tbl_pay_bill::where("paybill_id", $id)->first();
+                $data["_paybill_line"]   = Tbl_pay_bill_line::where("pbline_pb_id", $id)->get();
+                $data["_bill"]           = Billing::getAllBillByVendorWithPaybill($data["paybill"]->paybill_vendor_id, $data["paybill"]->paybill_id);
+                // dd($data["_invoice"]);
+                $data['action']             = "/member/vendor/paybill/update/".$data["paybill"]->paybill_id;
+            }
+
+            return view("member.pay_bill.pay_bill", $data);
+
         }
-
-        return view("member.pay_bill.pay_bill", $data);
+        else
+        {   
+            return $this->show_no_access();  
+        }
     }
     public function paybill_list()
     {
-        $data["_paybill"] = Tbl_pay_bill::vendor()->where("paybill_shop_id",$this->getShopId())->get();
 
-        return view("member.pay_bill.pay_bill_list",$data);
+        $access = Utilities::checkAccess('vendor-pay-bills', 'access_page');
+        if($access == 1)
+        { 
+            $data["_paybill"] = Tbl_pay_bill::vendor()->where("paybill_shop_id",$this->getShopId())->get();
+
+            return view("member.pay_bill.pay_bill_list",$data);
+        }
+        else
+        {   
+            return $this->show_no_access();  
+        }
+        
     }
     public function load_vendor_pb($vendor_id)
     {
@@ -69,7 +89,6 @@ class Vendor_PayBillController extends Member
 
     public function add_pay_bill()
     {
-        // dd(Request::input());
         $pb_data["paybill_vendor_id"]         = Request::input('paybill_vendor_id');
         $pb_data["paybill_ap_id"]             = Request::input('paybill_ap_id') != "" ? Request::input('paybill_ap_id') : 0;
         $pb_data["paybill_date"]              = datepicker_input(Request::input('paybill_date'));
@@ -101,7 +120,7 @@ class Vendor_PayBillController extends Member
             $paybill_id  = BillPayment::postPaybill($pb_data, $pbline_data);
 
             $paybill_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
-            AuditTrail::record_logs("Added","pay_bill",$paybill_id,"",serialize($paybill_data));
+            AuditTrail::record_logs("Added","bill_payment",$paybill_id,"",serialize($paybill_data));
 
             $button_action = Request::input('button_action');
 
@@ -156,7 +175,7 @@ class Vendor_PayBillController extends Member
             BillPayment::updatePaybill($paybill_id, $pb_data, $pbline_data);
 
             $new_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
-            AuditTrail::record_logs("Updated","bill",$paybill_id,serialize($old_data),serialize($new_data));
+            AuditTrail::record_logs("Edited","bill_payment",$paybill_id,serialize($old_data),serialize($new_data));
 
 
             $button_action = Request::input('button_action');

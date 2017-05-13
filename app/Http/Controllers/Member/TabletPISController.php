@@ -67,33 +67,106 @@ class TabletPISController extends Member
     }
 	public function index()
 	{
-        $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
-        $data["employee_position"] = $this->get_user()->position_name;
-        $data["employee_id"] = $this->get_user()->employee_id;
-        $data['_category']  = Category::getAllCategory(["inventory","all"]);
-
-        $sir_id = Request::input("sir_id");
-        $data["_sir_item"] = array();
-
-        $data["_sirs"] = Tbl_sir::where("sales_agent_id",$this->get_user()->employee_id)->whereIn("lof_status",[1,2])->whereIn("sir_status",[0,1])->get();
-        if($sir_id != null)
+        if($this->get_user())
         {
-            $sir_data = Tbl_sir::where("sir_id",$sir_id)->first();
-            if($sir_data)
+            $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
+            $data["employee_position"] = $this->get_user()->position_name;
+            $data["employee_id"] = $this->get_user()->employee_id;
+            $data['_category']  = Category::getAllCategory(["inventory","all"]);
+
+            $sir_id = Request::input("sir_id");
+            $data["_sir_item"] = array();
+
+            $data["_sirs"] = Tbl_sir::where("sales_agent_id",$this->get_user()->employee_id)->whereIn("lof_status",[1,2])->whereIn("sir_status",[0,1])->get();
+            if($sir_id != null)
             {
-                if($sir_data->lof_status == 1)
-                {                    
-                    Session::put("sir_id",$sir_id);
-                    $data["_sir_item"] = Purchasing_inventory_system::get_sir_item($sir_id);
-
-                    return view("tablet.index",$data);
-                }
-                elseif($sir_data->sir_status == 1)
+                $sir_data = Tbl_sir::where("sir_id",$sir_id)->first();
+                if($sir_data)
                 {
+                    if($sir_data->lof_status == 1)
+                    {                    
+                        Session::put("sir_id",$sir_id);
+                        $data["_sir_item"] = Purchasing_inventory_system::get_sir_item($sir_id);
 
-                    Session::put("sir_id",$sir_id);
-                    $data["open_sir"] = Tbl_sir::truck()->saleagent()->where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->where("sir_id",$sir_id)->first();
+                        return view("tablet.index",$data);
+                    }
+                    elseif($sir_data->sir_status == 1)
+                    {
 
+                        Session::put("sir_id",$sir_id);
+                        $data["open_sir"] = Tbl_sir::truck()->saleagent()->where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->where("sir_id",$sir_id)->first();
+
+                        $data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",0)->where("inv_is_paid",0)->get();
+
+                        $data["_sales_receipt"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",1)->get();
+                        $data["total_sales_receipt"] = 0;
+                        foreach ($data["_sales_receipt"] as $key => $value) 
+                        {
+                            $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
+                            $cm_amt = 0 ;
+                            if($cm != null)
+                            {
+                              $cm_amt = $cm->cm_amount;  
+                            }
+                            $data["total_sales_receipt"] += $value->inv_overall_price - $cm_amt;
+                        }
+
+                        $data["total_invoice_amount"] = 0;
+                        foreach ($data["_invoices"] as $key => $value) 
+                        {
+                            $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
+                            $cm_amt = 0 ;
+                            if($cm != null)
+                            {
+                              $cm_amt = $cm->cm_amount;  
+                            }
+                            $data["total_invoice_amount"] += $value->inv_overall_price - $cm_amt;
+                        }
+
+                        $data["_receive_payment"] = Tbl_manual_receive_payment::sir()->customer_receive_payment()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_receive_payment.rp_id","DESC")->get();
+                        $data["total_receive_payment"] = 0;
+                        foreach ($data["_receive_payment"] as $key => $value) 
+                        {
+                            $data["total_receive_payment"] += $value->rp_total_amount;
+                        }
+
+                        $data["_cm"] = Tbl_manual_credit_memo::sir()->customer_cm()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_credit_memo.cm_id","DESC")->get();
+                        $data["total_cm"] = 0;
+                        foreach ($data["_cm"] as $key => $value) 
+                        {
+                            $data["total_cm"] += $value->cm_amount;
+                        }
+
+                        $data["total_receive_payment"] = currency("Php", $data["total_receive_payment"]);
+                        $data["total_invoice_amount"] = currency("Php", $data["total_invoice_amount"]);
+                        $data["total_sales_receipt"] = currency("Php", $data["total_sales_receipt"]);
+                        $data["total_cm"] = currency("Php", $data["total_cm"]);
+                        $data["total_customer"] = Customer::countAllCustomer();
+
+                        $data["_customer"] = Customer::getAllCustomer();
+
+
+                        return view("tablet.agent.agent_dashboard",$data);
+
+                    }
+                    else
+                    { 
+                        Session::put("sir_id",$sir_id);
+                        $data["no_sir"] = "no_sir";                                
+                        if($sir_data->ilr_status == 1)
+                        {
+                            $data["no_sir"] = "close_sir";
+                        }
+                        return view("tablet.index",$data);                    
+                    }
+                }
+            }
+            else
+            {
+                $data["open_sir"] = Tbl_sir::truck()->saleagent()->where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->first();
+                if($data["open_sir"])
+                {
+                    Session::put("sir_id",$data["open_sir"]->sir_id);
                     $data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",0)->where("inv_is_paid",0)->get();
 
                     $data["_sales_receipt"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",1)->get();
@@ -149,91 +222,34 @@ class TabletPISController extends Member
                 }
                 else
                 {
-                    $data["no_sir"] = "no_sir";
-                    Session::put("sir_id",$sir_id);
-                    return view("tablet.index",$data);                    
+                    $data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);
+                    if($data['sir'])
+                    {
+                        Session::put("sir_id",$data["sir"]->sir_id);
+                        $data["_sir_item"] = Purchasing_inventory_system::get_sir_item($data["sir"]->sir_id);
+                    }
+                    else
+                    {
+                        $data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',2,null,$this->get_user()->employee_id);
+                        if($data["sir"])
+                        {
+                            Session::put("sir_id",$data["sir"]->sir_id);
+                            $data["no_sir"] = "no_sir";                                
+                            if($data["sir"]->ilr_status == 1)
+                            {
+                                $data["no_sir"] = "close_sir";
+                            }
+                        }
+                    }
+                    return view("tablet.index",$data);         
                 }
-            }
+            }           
         }
         else
         {
-            $data["open_sir"] = Tbl_sir::truck()->saleagent()->where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->first();
-            if($data["open_sir"])
-            {
-                Session::put("sir_id",$data["open_sir"]->sir_id);
-                $data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",0)->where("inv_is_paid",0)->get();
-
-                $data["_sales_receipt"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",1)->get();
-                $data["total_sales_receipt"] = 0;
-                foreach ($data["_sales_receipt"] as $key => $value) 
-                {
-                    $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
-                    $cm_amt = 0 ;
-                    if($cm != null)
-                    {
-                      $cm_amt = $cm->cm_amount;  
-                    }
-                    $data["total_sales_receipt"] += $value->inv_overall_price - $cm_amt;
-                }
-
-                $data["total_invoice_amount"] = 0;
-                foreach ($data["_invoices"] as $key => $value) 
-                {
-                    $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
-                    $cm_amt = 0 ;
-                    if($cm != null)
-                    {
-                      $cm_amt = $cm->cm_amount;  
-                    }
-                    $data["total_invoice_amount"] += $value->inv_overall_price - $cm_amt;
-                }
-
-                $data["_receive_payment"] = Tbl_manual_receive_payment::sir()->customer_receive_payment()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_receive_payment.rp_id","DESC")->get();
-                $data["total_receive_payment"] = 0;
-                foreach ($data["_receive_payment"] as $key => $value) 
-                {
-                    $data["total_receive_payment"] += $value->rp_total_amount;
-                }
-
-                $data["_cm"] = Tbl_manual_credit_memo::sir()->customer_cm()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_credit_memo.cm_id","DESC")->get();
-                $data["total_cm"] = 0;
-                foreach ($data["_cm"] as $key => $value) 
-                {
-                    $data["total_cm"] += $value->cm_amount;
-                }
-
-                $data["total_receive_payment"] = currency("Php", $data["total_receive_payment"]);
-                $data["total_invoice_amount"] = currency("Php", $data["total_invoice_amount"]);
-                $data["total_sales_receipt"] = currency("Php", $data["total_sales_receipt"]);
-                $data["total_cm"] = currency("Php", $data["total_cm"]);
-                $data["total_customer"] = Customer::countAllCustomer();
-
-                $data["_customer"] = Customer::getAllCustomer();
-
-
-                return view("tablet.agent.agent_dashboard",$data);
-
-            }
-            else
-            {
-                $data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',1,null,$this->get_user()->employee_id);
-                if($data['sir'])
-                {
-                    Session::put("sir_id",$data["sir"]->sir_id);
-                    $data["_sir_item"] = Purchasing_inventory_system::get_sir_item($data["sir"]->sir_id);
-                }
-                else
-                {
-                    $data["sir"] = Purchasing_inventory_system::tablet_lof_per_sales_agent($this->user_info->shop_id,'array',2,null,$this->get_user()->employee_id);
-                    if($data["sir"])
-                    {
-                        Session::put("sir_id",$data["sir"]->sir_id);
-                        $data["no_sir"] = "no_sir";
-                    }
-                }
-                return view("tablet.index",$data);         
-            }
+            return redirect("/tablet");
         }
+
 	}  
 	public function selected_sir()
 	{
@@ -465,6 +481,7 @@ class TabletPISController extends Member
         if($action == "confirm")
         {
         	$update["lof_status"] = 2;
+        	$update["sir_status"] = 1;
         }
         else if($action == "reject")
         {
@@ -601,7 +618,13 @@ class TabletPISController extends Member
                 $insert_line["rpline_rp_id"]            = $rcvpayment_id;
                 $insert_line["rpline_reference_name"]   = Request::input('rpline_txn_type')[$key];
                 $insert_line["rpline_reference_id"]     = Request::input('rpline_txn_id')[$key];
-                $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
+                $check_inv_if_have_cm = Tbl_customer_invoice::c_m()->where("inv_id",Request::input('rpline_txn_id')[$key])->first();
+                $cm_amount = 0;
+                if($check_inv_if_have_cm != null)
+                {
+                    $cm_amount = $check_inv_if_have_cm->cm_amount;
+                }
+                $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]) + $cm_amount;
 
                 Tbl_receive_payment_line::insert($insert_line);
                 if($insert_line["rpline_reference_name"] == 'invoice')
@@ -654,7 +677,8 @@ class TabletPISController extends Member
                 $insert_line["rpline_rp_id"]            = $rcvpayment_id;
                 $insert_line["rpline_reference_name"]   = Request::input('rpline_txn_type')[$key];
                 $insert_line["rpline_reference_id"]     = Request::input('rpline_txn_id')[$key];
-                $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]);
+                    $cm_amount = CreditMemo::cm_amount(Request::input('rpline_txn_id')[$key]);
+                $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]) + $cm_amount;
 
                 Tbl_receive_payment_line::insert($insert_line);
                 if($insert_line["rpline_reference_name"] == 'invoice')

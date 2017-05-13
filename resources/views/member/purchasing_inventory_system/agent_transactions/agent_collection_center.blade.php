@@ -69,6 +69,9 @@
                                     </span>
                                 </td>
                                 <td class="text-center">
+                                    @if($sir->ilr_status == 2)
+                                    <a class="btn btn-default form-control">CLOSED</a>
+                                    @else
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Action <span class="caret"></span>
@@ -77,6 +80,7 @@
                                         <li><a link="/member/pis_agent/collection_update/{{$sir->sir_id}}" size="md" class="popup">Update Collection</a></li>
                                       </ul>
                                     </div>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

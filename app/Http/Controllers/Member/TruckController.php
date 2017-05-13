@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tbl_truck;
 use App\Models\Tbl_warehouse;
 use App\Globals\Utilities;
+use App\Globals\AuditTrail;
 use Validator;
 use Carbon\Carbon;
 class TruckController extends Member
@@ -85,7 +86,7 @@ class TruckController extends Member
 
         if($validator->fails())
         {
-             $data["status"] = "error";
+            $data["status"] = "error";
             foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
             {
                 $data["status_message"] .= $message;
@@ -96,6 +97,9 @@ class TruckController extends Member
             $data["status"] = "success";
             $data["id"] = Tbl_truck::insertGetId($insert);
             $data["type"] = "truck";
+
+            $truck = AuditTrail::get_table_data("tbl_truck","truck_id", $data["id"]);
+            AuditTrail::record_logs("Added","truck", $data["id"],"",serialize($truck));
         }
 
         return json_encode($data);
@@ -120,6 +124,8 @@ class TruckController extends Member
     public function edit_submit()
     {
         $id = Request::input("truck_id");
+
+        $old_data = AuditTrail::get_table_data("tbl_truck","truck_id", $id);
 
         $data["status"] = null;
         $data["status_message"] = null;
@@ -153,6 +159,9 @@ class TruckController extends Member
         {
             $data["status"] = "success";
             Tbl_truck::where("truck_id",$id)->update($update);
+
+            $truck = AuditTrail::get_table_data("tbl_truck","truck_id", $id);
+            AuditTrail::record_logs("Edited","truck", $id,serialize($old_data),serialize($truck));
         }
 
         return json_encode($data);
@@ -185,6 +194,9 @@ class TruckController extends Member
         }
 
         Tbl_truck::where("truck_id",$id)->update($update);
+
+        $truck = AuditTrail::get_table_data("tbl_truck","truck_id", $id);
+        AuditTrail::record_logs($action,"truck", $id,"",serialize($truck));
 
         $data["status"] = "success";
 

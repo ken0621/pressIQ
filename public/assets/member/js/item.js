@@ -56,6 +56,19 @@ function item()
             link        : '/member/item/category/modal_create_category/services',
             link_size   : 'md'
         });
+
+        $(".drop-down-pis-um.notbase-um").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/pis/um_add?um_type=notbase',
+            link_size   : 'xs'
+        });
+        $(".drop-down-pis-um.base-um").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/pis/um_add?um_type=base',
+            link_size   : 'xs'
+        });
         $(".drop-down-category.bundles").globalDropList(
         {
             width       : '100%',
@@ -110,6 +123,18 @@ function item()
                         }
                     });                    
                 }
+            }
+        });
+
+        $(".drop-down-coaster").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/accounting/chart_of_account/popup/add',
+            link_size   : 'md',
+            placeholder : 'Chart of Account',
+            onCreateNew : function()
+            {
+                account_selected = $(this);
             }
         });
 
@@ -185,12 +210,12 @@ function item()
         if($this.find("option:selected").attr("has-um") != '')
         {          
             $parent = $this.closest("tr");
-            console.log("true"); 
+            console.log($this.find("option:selected").attr("has-um")); 
             $parent.find(".select-um-one").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
             {
                 $(this).globalDropList("reload").globalDropList("enabled");
                 $(this).val($(this).find("option:first").val()).change();
-            })
+            });
         }
         else
         {
@@ -232,7 +257,7 @@ function item()
             if(item_type != name)
             {
                 $("#item_type_container").val(name);
-                $(".form_one").find("input[type=text], textarea,input[type=number]").val("");
+                // $(".form_one").find("input[type=text], textarea,input[type=number]").val("");
             }
             $(".item_title").text(display);
             $(".menu_container").slideUp();
@@ -318,6 +343,17 @@ function submit_done(data)
         {                
              $(".drop-down-coa").globalDropList("reload"); 
              account_selected.val(data.id).change();              
+        });
+        data.element.modal("hide");
+    }
+    else if(data.type == "pis-um")
+    {
+        toastr.success("Success");
+        console.log(data.um_type);
+        $(".drop-down-pis-um."+data.um_type).load("/member/pis/load_pis_um/"+data.um_type, function()
+        {                
+             $(".drop-down-pis-um."+data.um_type).globalDropList("reload");
+             $(".drop-down-pis-um."+data.um_type).val(data.id).change();              
         });
         data.element.modal("hide");
     }

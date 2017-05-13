@@ -189,14 +189,16 @@ function payrollconfiguration()
 
 	this.relaod_tbl_department = function()
 	{
-		department_archived();
-		department_archived(1);
+		// department_archived();
+		// department_archived(1);
+		reload_configuration("/member/payroll/departmentlist");
 	}
 
 	this.reload_tbl_jobtitle = function()
 	{
-		jobtitle_archived();
-		jobtitle_archived(1);
+		// jobtitle_archived();
+		// jobtitle_archived(1);
+		reload_configuration("/member/payroll/jobtitlelist");
 	} 
 	
 
@@ -280,6 +282,11 @@ function payrollconfiguration()
 			$(".drop-down-paper-size").globalDropList("reload");
 	        $(".drop-down-paper-size").val(_data.id).change();  
 		});
+	}
+
+	this.reload_custom_payslip = function()
+	{
+		reload_configuration("/member/payroll/custom_payslip");
 	}
 
 	/*this.reload_holiday_default = function()

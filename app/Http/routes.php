@@ -78,6 +78,12 @@ Route::any('/member/developer/simulate/submit', 'Member\Developer_RematrixContro
 
 Route::any('/member/developer/reset_slot', 'Member\Developer_StatusController@reset_slot'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit', 'Member\Developer_StatusController@reset_slot_submit'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/give', 'Member\Developer_StatusController@give_points_ec_order'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/retro_product_sales', 'Member\Developer_StatusController@retro_product_sales'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/re_tree', 'Member\Developer_StatusController@re_tree'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Developer_StatusController@re_com_phil_lost'); //GUILLERMO TABLIGAN
+
+
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
 /* MEMBER - ACCOUNTING - CHART OF ACCOUNTS */
@@ -205,6 +211,12 @@ Route::get('/member/item/mulitple_price_modal/{id}', 'Member\ItemController@get_
 Route::post('/member/item/mulitple_price_modal', 'Member\ItemController@update_multiple_price_modal'); /* B */
 Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_item_new_price'); /* B */
 
+//*ITEM FOR PIS ARCY*/
+Route::any('/member/item/add_submit_pis','Member\ItemController@add_submit_pis');
+Route::any('/member/item/edit_submit_pis','Member\ItemController@edit_submit_pis');
+/*END ITEM FOR PIS*/
+
+
 Route::any("/member/item/view_serials/{id}","Member\ItemSerialController@index");
 Route::any("/member/item/serial_number/{id}",'Member\ItemSerialController@view_serial');
 Route::any("/member/item/save_serial",'Member\ItemSerialController@save_serial');
@@ -236,12 +248,23 @@ Route::any('/member/item/unit_of_measurement/{id}/{action}','Member\UnitOfMeasur
 Route::any('/member/item/unit_of_measurement/archived_submit','Member\UnitOfMeasurementController@archived_submit');
 /* END U/M ARCY*/
 
+/*PIS UM*/
+Route::any('/member/pis/um_add','Member\UnitOfMeasurementController@add_um');
+Route::any('/member/pis/um_add_submit','Member\UnitOfMeasurementController@add_um_submit');
+Route::any('/member/pis/load_pis_um/{type}','Member\UnitOfMeasurementController@load_pis_um');
+Route::any('/member/item/pis_unit_of_measurement','Member\UnitOfMeasurementController@um_list_pis');
+Route::any('/member/pis/um_edit/{id}','Member\UnitOfMeasurementController@edit_um');
+Route::any('/member/pis/um_edit_submit','Member\UnitOfMeasurementController@edit_um_submit');
+/*END PIS UM*/
+
+
 /*PIS*/
 Route::any('/member/item/um/',"Member\UnitOfMeasurementController@check");
 Route::any('/member/item/um/add_base/{id}/{item_id}',"Member\UnitOfMeasurementController@add_base");
 Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController@add_base_submit');
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
+Route::any('/member/utilities/audit/get_list','Member\AuditTrailController@get_list');
 /* END AUDIT TRAIL*/
 
 /* START CLIENT INFO*/
@@ -252,7 +275,7 @@ Route::any('/member/utilities/client/update_submit','Member\UtilitiesClientContr
 
 
 /* START TRUCK ARCY*/
-Route::any('/member/pis/truck_list','Member\TruckController@index');
+Route::any('/member/utilities/truck_list','Member\TruckController@index');
 Route::any('/member/pis/truck_list/add','Member\TruckController@add');
 Route::any('/member/pis/truck_list/add_submit','Member\TruckController@add_submit');
 Route::any('/member/pis/truck_list/edit/{id}','Member\TruckController@edit');
@@ -263,7 +286,7 @@ Route::any('/member/pis/truck_list/archived_submit','Member\TruckController@arch
 
 
 /* START EMPLOYEE POSITION*/
-Route::any('/member/pis/agent_position','Member\AgentPositionController@index');
+Route::any('/member/utilities/agent_position','Member\AgentPositionController@index');
 Route::any('/member/pis/agent/position/add','Member\AgentPositionController@add');
 Route::any('/member/pis/agent/position/add_submit','Member\AgentPositionController@add_submit');
 Route::any('/member/pis/agent/position/edit/{id}','Member\AgentPositionController@edit');
@@ -274,7 +297,7 @@ Route::any('/member/pis/agent/position/archived_submit','Member\AgentPositionCon
 
 
 /* START AGENT*/
-Route::any('/member/pis/agent_list','Member\AgentController@index');
+Route::any('/member/pis_agent/agent_list','Member\AgentController@index');
 Route::any('/member/pis/agent/add','Member\AgentController@add');
 Route::any('/member/pis/agent/add_submit','Member\AgentController@add_submit');
 Route::any('/member/pis/agent/edit/{id}','Member\AgentController@edit');
@@ -549,6 +572,11 @@ Route::any('/member/customer/credit_memo/create_submit','Member\CreditMemoContro
 Route::any('/member/customer/credit_memo/update',"Member\CreditMemoController@update_submit");
 
 
+/* Vendor Debit MEMO*/
+Route::any('/member/vendor/debit_memo','Member\DebitMemoController@index');
+Route::any('/member/vendor/debit_memo/list',"Member\DebitMemoController@db_list");
+Route::any('/member/vendor/debit_memo/create_submit','Member\DebitMemoController@create_submit');
+Route::any('/member/vendor/debit_memo/update',"Member\DebitMemoController@update_submit");
 
 /* Vendor - Purchase Order */
 Route::get('/member/vendor/purchase_order','Member\Vendor_PurchaseOrderController@index');
@@ -700,6 +728,22 @@ Route::group(array('prefix' => '/member/report'), function()
 	Route::post('/sale/ajax/by/{name}','Member\ReportsController@saleByAjax');
 	Route::post('/sale/customerOverTime/ajax','Member\ReportsController@customerOTajax');
 	Route::get('/sale/pdf/{name}/{start}/{end}','Member\ReportsController@pdfreport');
+
+	/* Accounting Sales */
+	Route::get('/accounting/sale','Member\ReportsController@accounting_sale');
+	Route::post('/accounting/sale/edit/filter','Member\ReportsController@accounting_sale_filter_edit');
+	Route::any('/accounting/sale/get/report','Member\ReportsController@accounting_sale_report_view');
+
+	/* Accounting Sales - per item */
+	Route::get('/accounting/sale/item','Member\ReportsController@accounting_sale_items');
+
+	/* Accounting Profit and loss */
+	Route::get('/accounting/profit/loss','Member\ReportsController@profit_loss');
+	Route::any('/accounting/profit/loss/get','Member\ReportsController@profit_loss_get');
+
+	/* Accounting general ledger */
+	Route::get('/accounting/general/ledger','Member\ReportsController@general_ledger');
+	Route::any('/accounting/general/ledger/get','Member\ReportsController@general_ledger_get');
 });
 //reports end
 

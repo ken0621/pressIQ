@@ -13,39 +13,39 @@ use Illuminate\Pagination\Paginator;
 
 class ShopProductController extends Shop
 {
-    public function index()
+    public function get_product($type, $brand, $search)
     {
-        $data["page"] = "Product";
-        $type = Request::input("type");
-        $brand = Request::input("brand");
-        if ($type) 
+        if ($search) 
+        {
+            // Get Product Searched
+            $data["get_product"] = Ecom_Product::getAllProductSearch($search, $this->shop_info->shop_id);
+            // Get Breadcrumbs
+            $data["breadcrumbs"] = [];
+        }
+        elseif ($type) 
         {
             // Get Product by Category
-            $product = Ecom_Product::getAllProductByCategory($type, $this->shop_info->shop_id);
+            $data["get_product"] = Ecom_Product::getAllProductByCategory($type, $this->shop_info->shop_id);
             // Get Breadcrumbs
             $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($type, $this->shop_info->shop_id);
         }
         elseif($brand)
         {
-            $product = Ecom_product::getProductByCategoryName($brand, $this->shop_info->shop_id);
+            $data["get_product"] = Ecom_product::getProductByCategoryName($brand, $this->shop_info->shop_id);
             $data["breadcrumbs"][0]["type_name"] = $brand;
         }
         else
         {
-            // Get Product by Category
-            $product = Ecom_Product::getAllProduct($this->shop_info->shop_id);
+            // Get Product
+            $data["get_product"] = Ecom_Product::getAllProduct($this->shop_info->shop_id);
             // Get Breadcrumbs
             $data["breadcrumbs"] = [];
         }
-        // Get Most Searched
-        $data["_most_searched"] = Ecom_Product::getMostSearched(5, $this->shop_info->shop_id);
-        // Get Category
-        $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
-        // Count total product
-        $data["total_product"] = count($product);
-        // Filter Price
-        $min = Request::input("min");
-        $max = Request::input("max");
+
+        return $data;
+    }
+    public function filter_price($product)
+    {
         if ($product) 
         {
             $max_price = array_column($product, 'max_price');
@@ -58,6 +58,32 @@ class ShopProductController extends Shop
             $data['max_price'] = 0;
             $data['min_price'] = 0;
         }
+
+        return $data;
+    }
+    public function index()
+    {
+        $data["page"] = "Product";
+        // Get Parameters
+        $type   = Request::input("type");
+        $brand  = Request::input("brand");
+        $search = Request::input("search");
+        $min = Request::input("min");
+        $max = Request::input("max");
+        // Get Most Searched
+        $data["_most_searched"] = Ecom_Product::getMostSearched(5, $this->shop_info->shop_id);
+        // Get Category
+        $data["_category"] = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+        // Get Product
+        $get_product = $this->get_product($type, $brand, $search);
+        $data["breadcrumbs"] = $get_product["breadcrumbs"];
+        $product             = $get_product["get_product"];
+        // Count total product
+        $data["total_product"] = count($product);
+        // Filter Price
+        $filter_price = $this->filter_price($product, $min, $max);
+        $data["max_price"] = $filter_price["max_price"];
+        $data["min_price"] = $filter_price["min_price"];
         if ($min && $max) 
         {
             foreach ($product as $key => $value) 
@@ -79,42 +105,114 @@ class ShopProductController extends Shop
             case 'name_asc':
                 usort($product, function($a, $b) 
                 {
-                    return $a['eprod_name'] <=> $b['eprod_name'];
+                    if ($a['eprod_name'] == $b['eprod_name'])
+                    {
+                        return 0;
+                    }
+                     if ($a['eprod_name'] < $b['eprod_name'])
+                    {
+                        return -1;
+                    }
+                     if ($a['eprod_name'] > $b['eprod_name'])
+                    {
+                        return 1;
+                    }
+                    // return $a['eprod_name'] <=> $b['eprod_name'];
                 });
             break;
 
             case 'name_desc':
                 usort($product, function($a, $b) 
                 {
-                    return $b['eprod_name'] <=> $a['eprod_name'];
+                    if ($b['eprod_name'] == $a['eprod_name'])
+                    {
+                        return 0;
+                    }
+                     if ($b['eprod_name'] < $a['eprod_name'])
+                    {
+                        return -1;
+                    }
+                     if ($b['eprod_name'] > $a['eprod_name'])
+                    {
+                        return 1;
+                    }
+                    // return $b['eprod_name'] <=> $a['eprod_name'];
                 });
             break;
 
             case 'price_asc':
                 usort($product, function($a, $b) 
                 {
-                    return $a['max_price'] <=> $b['max_price'];
+                    if ($a['max_price'] == $b['max_price'])
+                    {
+                        return 0;
+                    }
+                     if ($a['max_price'] < $b['max_price'])
+                    {
+                        return -1;
+                    }
+                     if ($a['max_price'] > $b['max_price'])
+                    {
+                        return 1;
+                    }
+                    // return $a['max_price'] <=> $b['max_price'];
                 });
             break;
 
             case 'price_desc':
                 usort($product, function($a, $b) 
                 {
-                    return $b['min_price'] <=> $a['min_price'];
+                    if ($b['min_price'] == $a['min_price'])
+                    {
+                        return 0;
+                    }
+                     if ($b['min_price'] < $a['min_price'])
+                    {
+                        return -1;
+                    }
+                     if ($b['min_price'] > $a['min_price'])
+                    {
+                        return 1;
+                    }
+                    // return $b['min_price'] <=> $a['min_price'];
                 });
             break;
 
             case 'newest':
                 usort($product, function($a, $b) 
                 {
-                    return $b['date_created'] <=> $a['date_created'];
+                    if ($b['date_created'] == $a['date_created'])
+                    {
+                        return 0;
+                    }
+                     if ($b['date_created'] < $a['date_created'])
+                    {
+                        return -1;
+                    }
+                     if ($b['date_created'] > $a['date_created'])
+                    {
+                        return 1;
+                    }
+                    // return $b['date_created'] <=> $a['date_created'];
                 });
             break;
             
             default:
                 usort($product, function($a, $b) 
                 {
-                    return $a['eprod_name'] <=> $b['eprod_name'];
+                    if ($a['eprod_name'] == $b['eprod_name'])
+                    {
+                        return 0;
+                    }
+                     if ($a['eprod_name'] < $b['eprod_name'])
+                    {
+                        return -1;
+                    }
+                     if ($a['eprod_name'] > $b['eprod_name'])
+                    {
+                        return 1;
+                    }
+                    // return $a['eprod_name'] <=> $b['eprod_name'];
                 });
             break;
         }

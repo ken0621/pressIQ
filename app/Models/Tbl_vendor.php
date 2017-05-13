@@ -43,10 +43,18 @@ class Tbl_vendor extends Model
                     ->where("po_shop_id", $shop_id);
         if($vendor_id) $purchase_order->where("po_vendor_id", $vendor_id);
 
+        /* ITEM RECEIPT */
+        $item_receipt = DB::table("tbl_vendor")->selectRaw("bill_date as date, 'Item Receipt' as type, bill_id as no, bill_due_date as due_date, bill_total_amount - bill_applied_payment as balance, bill_total_amount as total, 'status' as status, date_created, 'vendor/receive_inventory' as reference_url")
+                    ->join("tbl_bill","bill_vendor_id","=","vendor_id")
+                    ->where("bill_shop_id", $shop_id)
+                    ->where("inventory_only", 1);
+        if($vendor_id) $item_receipt->where("bill_vendor_id", $vendor_id);
+
         /* BILL */
         $bill = DB::table("tbl_vendor")->selectRaw("bill_date as date, 'Bill' as type, bill_id as no, bill_due_date as due_date, bill_total_amount - bill_applied_payment as balance, bill_total_amount as total, 'status' as status, date_created, 'vendor/create_bill' as reference_url")
                     ->join("tbl_bill","bill_vendor_id","=","vendor_id")
-                    ->where("bill_shop_id", $shop_id);
+                    ->where("bill_shop_id", $shop_id)
+                    ->where("inventory_only", 0);
         if($vendor_id) $bill->where("bill_vendor_id", $vendor_id);
 
         /* PAY BILL */
@@ -64,8 +72,7 @@ class Tbl_vendor extends Model
 
         /* DEBIT MEMO */
         $debit_memo = DB::table("tbl_vendor")->selectRaw("db_date as date, 'Debit Memo' as type, db_id as no, '' as due_date, 0 as balance, db_amount as total, 'status' as status, date_created, 'vendor/debit_memo' as reference_url")
-                    ->join("tbl_debit_memo","db_vendor_id","=","vendor_id")
-                    ->where("db_shop_id", $shop_id);
+                    ->join("tbl_debit_memo","db_vendor_id","=","vendor_id");
         if($vendor_id) $debit_memo->where("db_vendor_id", $vendor_id);
 
         /* JOURNAL ENTRY */
@@ -75,6 +82,6 @@ class Tbl_vendor extends Model
                     ->where("je_reference_module","journal-entry");
         if($vendor_id) $journal_entry->where("jline_name_id", $vendor_id)->where("jline_name_reference","vendor");
         
-        return $query = $purchase_order->union($bill)->union($pay_bill)->union($write_check)->union($debit_memo)->union($journal_entry)->orderBy("date_created","desc");
+        return $query = $purchase_order->union($item_receipt)->union($bill)->union($pay_bill)->union($write_check)->union($debit_memo)->union($journal_entry)->orderBy("date_created","desc");
     }
 }

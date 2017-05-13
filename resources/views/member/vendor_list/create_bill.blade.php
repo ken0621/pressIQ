@@ -88,7 +88,7 @@
                                         <div class="col-sm-2">
                                             <label>Terms</label>
                                             <select class="form-control input-sm droplist-terms" name="bill_terms_id">
-                                                @include("member.load_ajax_data.load_terms")
+                                                @include("member.load_ajax_data.load_terms", ['terms_id' => isset($bill) ? $bill->bill_terms_id : ''])
                                             </select>
                                         </div>
                                         <div class="col-sm-2">

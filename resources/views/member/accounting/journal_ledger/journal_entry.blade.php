@@ -78,7 +78,7 @@
 								{{$key2 == 0 ? $journal->je_reference_id : ''}}
 							</a>
 						</td>
-						<td>{{$key2 == 0 ? $entry->first_name.' '.$entry->last_name : ''}}</td>
+						<td>{{$key2 == 0 ? $entry->full_name : ''}}</td>
 						<td>{{$entry->item_name or ''}}</td>
 						<td>{{$entry->account_name}}</td>
 						<td>{{$entry->chart_type_name}}</td>

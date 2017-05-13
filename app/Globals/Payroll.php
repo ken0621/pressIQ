@@ -665,6 +665,9 @@ class Payroll
 		$night_differential_pm = c_time_to_int("11:00 PM");
 		$night_differential_am = c_time_to_int("6:00 AM");
 
+		$time_in = 0;
+		$time_out = 0;
+
 		$target_hour = $data["employee_information"]->payroll_group_target_hour;
 
 		/* BREAK COMPUTATION */
@@ -801,8 +804,6 @@ class Payroll
 
 			if($category == 'flexitime')
 			{
-				
-
 				$late_overtime = $time_spent - $target_hour;
 
 				if($late_overtime < 0)
@@ -875,16 +876,26 @@ class Payroll
 		if($category == 'regulartime')
 		{
 			/* COMPUTE LATE BASED ON EARLIEST TIME IN */
-			if($default_time_in < $earliest_time_in)
+
+			// if(convert_seconds_to_hours_minutes("H:i", $time_in) == "09:01")
+			// {
+			// 	$array['default_time_in'] = $default_time_in;
+			// 	$array['earliest_time_in'] = $earliest_time_in;
+			// 	dd($array);
+			// }
+
+			if($default_time_in < $time_in)
 			{
-				$total_late_hours = $earliest_time_in - $default_time_in;
+				$total_late_hours = $time_in - $default_time_in;
 
 				if($total_late_hours <= $late_grace_time)
 				{
 					$total_regular_hours = $total_regular_hours + $total_late_hours;
 					$total_late_hours = 0;
 				}
+				
 			}
+
 			else
 			{
 				$total_late_hours = 0;
@@ -1296,7 +1307,6 @@ class Payroll
 													->count();
 
 			$approved = $time->approved_timesheet;
-
 			// array_push($dd_array, $approved);
 
 			$temp_hour 					= 0;
@@ -1326,7 +1336,7 @@ class Payroll
 			$data['regular_holiday_hours']		+= $regular_holiday_hours;
 
 			/* EMPLOYEE SALARY */
-			$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->where('payroll_employee_salary_archived',0)->first();
+			$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->where('payroll_employee_salary_archived',0)->orderBy('payroll_employee_salary_effective_date','desc')->first();
 
 			$data['minimum_wage'] 			= 0;
 			$data['salary_monthly'] 		= 0;
@@ -1458,8 +1468,9 @@ class Payroll
 				$rh_hour['regular'] = $count_rh;
 			}
 
+		
 			/* EXTRA DAYS */
-			if($extra_day_hours > 0 && $regular_hour <= 0 && $special_holiday_hours <= 0 && $regular_holiday_hours <= 0)
+			if($extra_day_hours > 0 && $regular_hour['regular'] <= 0 && $special_holiday_hours <= 0 && $regular_holiday_hours <= 0)
 			{
 				$temp_hour								= $extra_day_hours;
 				$extra_hour['regular'] 					= divide($extra_day_hours, $target_hour);
@@ -1496,6 +1507,7 @@ class Payroll
 				
 				$temp_hour								= $rest_day_hours;
 			}
+
 			
 			/* LEGAL HOLIDAY */
 			if($regular_hours <= 0 && $rest_day_hours <= 0 && $special_holiday_hours > 0 && $regular_holiday_hours <= 0)
@@ -1522,6 +1534,8 @@ class Payroll
 				$temp_hour								= $rest_day_hours;
 			}
 			
+
+
 			if($regular_hours <= 0 && $rest_day_hours <= 0 && $special_holiday_hours <= 0 && $regular_holiday_hours > 0)
 			{
 				$rh_hour['regular'] 					= divide($regular_holiday_hours, $target_hour);
@@ -1642,6 +1656,13 @@ class Payroll
 			else if($group->payroll_late_category == 'Base on Salary')
 			{
 				$late_deduction = $late_hours * $hourly_rate;
+			}
+
+
+			/* under time deduction */
+			if($group->payroll_group_salary_computation == 'Daily Rate')
+			{
+				$under_time = 0;
 			}
 
 			$data['under_time'] += $under_time * $daily_rate;
@@ -1778,10 +1799,13 @@ class Payroll
 			$monthly_salary  = $monthly_salary / $group->payroll_group_working_day_month;
 		}
 
-		if($payroll_group_salary_computation == 'Daily Rate')
-		{
-			$data['under_time']					= 0;
-		}
+		// dd($payroll_group_salary_computation);
+
+		// if($payroll_group_salary_computation == 'Daily Rate')
+		// {
+		// 	$data['under_time']					= 0;
+		// 	// $data['late_deduction'] 			= 0;
+		// }
 
 		if($payroll_group_salary_computation == 'Flat Rate')
 		{
@@ -2017,9 +2041,8 @@ class Payroll
 					$data['philhealth_contribution_ee'] = $philhealth_contribution_ee - $previous_philhealth;
 				}
 			}
-
-			
 		}
+
 		else if($group->payroll_group_philhealth == $period_category)
 		{
 			if(Payroll::return_ave($period_category) == '1st Period')
@@ -2368,15 +2391,10 @@ class Payroll
 			$early_overtime 	= $param->payroll_overtime_rest_overtime;
 			$night_differential = $param->payroll_overtime_rest_night;
 			$cola_var			= $regular;
-			
 		}
 
 		$cola_var 			= $cola_var * $cola;
-
-		$regular 			= $regular * $rate;
-		// $late_overtime 		= $late_overtime * $rate;
-		// $early_overtime 	= $early_overtime * $rate;
-		// $night_differential = $night_differential * $rate;
+		// $regular 			= $regular * $rate;
 		
 
 		if($hours['regular'] <= 0)
@@ -2396,13 +2414,12 @@ class Payroll
 			$night_differential = 0;
 		}	
 
-		$temp_overtime = $hours['late_overtime'] * $rate;
-		$temp_earlyOT = $hours['early_overtime'] * $rate;
-		$temp_night	= $hours['night_differential'] * $rate;
+		$temp_overtime 	= $hours['late_overtime'] * $rate;
+		$temp_earlyOT 	= $hours['early_overtime'] * $rate;
+		$temp_night		= $hours['night_differential'] * $rate;
+		$temp_regular	= $hours['regular'] * $rate;
 
-		// dd($rate);
-
-		$data['regular']			= round(($regular + ( $hours['regular'] * $rate )), 2);
+		$data['regular']			= round(($temp_regular + ( $temp_regular * $regular )), 2);
 		$data['late_overtime']		= round(($temp_overtime + ($temp_overtime * $late_overtime)), 2);
 		$data['early_overtime']		= round(($temp_earlyOT + ($temp_earlyOT * $early_overtime)), 2);
 		$data['night_differential']	= round(($night_differential + ($temp_night * $night_differential)), 2);
@@ -2413,14 +2430,12 @@ class Payroll
 
 		$data['cola'] 				= round(($cola_var + ($cola * $hours['regular'])), 2);
 
-
-		// dd($total);
 		if($total <= 0)
 		{
 			
 			$data['cola'] = 0;
 		}
-		// dd($data);
+
 		return $data;
 		
 	}

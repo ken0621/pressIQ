@@ -494,8 +494,10 @@ function timesheet()
 			/* MARK GREEN IF PAYROLL TIMSHEET WAS APPROVED */
 			if(val.payroll_time_sheet_approved == 1)
 			{
-				$(this).find(".approved-in").css("color", "green").removeClass("load-overtime-form");
-				$(this).find(".approved-out").css("color", "green").removeClass("load-overtime-form");
+				// $(this).find(".approved-in").css("color", "green").removeClass("load-overtime-form");
+				// $(this).find(".approved-out").css("color", "green").removeClass("load-overtime-form");
+				$(this).find(".approved-in").css("color", "green").addClass("load-overtime-form");
+				$(this).find(".approved-out").css("color", "green").addClass("load-overtime-form");
 				$(this).find(".time-entry.time-in").timeEntry("disable");
 				$(this).find(".time-entry.time-out").timeEntry("disable");
 				$(this).find(".table-check").removeClass("fa-unlock-alt").addClass("fa-lock").css("color", "black");

@@ -216,7 +216,7 @@ class WriteCheck
         AuditTrail::record_logs("Edited","write_check",$wc_id,serialize($old),serialize($new));
 
         Tbl_write_check_line::where("wcline_wc_id", $wc_id)->delete();
-        WriteCheck::insert_wc_line($wc_id, $item_info);
+        WriteCheck::insert_wc_line($wc_id, $item_info, $entry);
 
         return $wc_id;
     }
@@ -260,12 +260,12 @@ class WriteCheck
                 /* TRANSACTION JOURNAL */  
                 if($item_type != 4)
                 {
-                    $entry_data[$key]['item_id']            = $item_line['item_id'];
+                    $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
                     $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
                     $entry_data[$key]['vatable']            = 0;
-                    $entry_data[$key]['discount']           = $discount;
+                    $entry_data[$key]['discount']           = 0;
                     $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
-                    $entry_data[$key]['entry_description']  = $item_line['item_description'];  
+                    $entry_data[$key]['entry_description']  = $item_line['itemline_description'];
                 }
                 else
                 {

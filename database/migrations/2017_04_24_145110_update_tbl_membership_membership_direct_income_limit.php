@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblMlmStairstepPointsSettings extends Migration
+class UpdateTblMembershipMembershipDirectIncomeLimit extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +12,10 @@ class CreateTblMlmStairstepPointsSettings extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('tbl_membership_points', function (Blueprint $table) 
+        {
+             $table->double('membership_direct_income_limit')->default(0);
+        });
     }
 
     /**

@@ -32,12 +32,13 @@
 								<input type="number" name="payslip_width" class="form-control text-right payslip-width" placeholder="0" min="1" max="100" value="50" step="any" required>
 							</div>
 						</div>
-						<div class="form-group">
+						<!-- <div class="form-group">
 							<div class="col-md-12">
 								<small>Copy per page</small>
-								<input type="number" name="payslip_copy" value="1" min="1" class="form-control text-right copy-per-page" placeholder="0" required>
+								<input type="hidden" name="payslip_copy" value="1" min="1" class="form-control text-right copy-per-page" placeholder="0" required>
 							</div>
-						</div>
+						</div> -->
+						<input type="hidden" name="payslip_copy" value="1" min="1" class="form-control text-right copy-per-page" placeholder="0" required>
 						<div class="form-group">
 							<div class="col-md-12">
 								

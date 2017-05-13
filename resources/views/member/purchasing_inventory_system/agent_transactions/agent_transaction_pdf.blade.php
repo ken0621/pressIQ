@@ -94,6 +94,15 @@
 <div class="pull-right">
 	<h4><strong>Receive Payment :</strong> {{$total}}</h4>
 </div>
+<br>
+<div>
+	@if(isset($rem_amount))
+	<h4>Agent Remittance</h4>
+	<span>{{currency("Php",$rem_amount)}}</span>
+	<h4>Remittance Remarks</h4>
+	<span>{!! $rem_remarks !!}</span>
+	@endif
+</div>
 </body>
 <style type="text/css">
 	table

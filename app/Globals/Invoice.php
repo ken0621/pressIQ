@@ -29,7 +29,7 @@ class Invoice
 {
     public static function count_ar($start_date, $end_date)
     {
-         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->whereBetween("date_created",array($start_date,$end_date))->where("inv_is_paid",0)->count();
+         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())->whereBetween("date_created",array($start_date,$end_date))->where("inv_is_paid",0)->where("is_sales_receipt",0)->count();
          return $ar;
     }
     public static function get_ar_amount($start_date, $end_date)
@@ -37,12 +37,13 @@ class Invoice
         $price = 0;
         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
                                 ->whereBetween("date_created",array($start_date,$end_date))
-                                ->where("inv_is_paid",0)->get();
+                                ->where("inv_is_paid",0)
+                                ->where("is_sales_receipt",0)->get();
         if(isset($ar))
         {
             foreach ($ar as $key => $value) 
             {
-               $price += $value->inv_overall_price;
+               $price += $value->inv_overall_price - CreditMemo::cm_amount($value->inv_id);
             }            
         }
 
@@ -50,6 +51,14 @@ class Invoice
     }
     public static function get_sales_amount($start_date, $end_date)
     {
+        $sr = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
+                                ->where("inv_is_paid",0)
+                                ->get();
+        foreach ($sr as $key1 => $value1)
+        {
+          Invoice::updateIsPaid($value1->inv_id);            
+        }
+
         $price = 0;
         $ar = Tbl_customer_invoice::where("inv_shop_id",Invoice::getShopId())
                                 ->whereBetween("date_created",array($start_date,$end_date))
@@ -58,7 +67,7 @@ class Invoice
         {
             foreach ($ar as $key => $value) 
             {
-               $price += $value->inv_overall_price;
+               $price += $value->inv_overall_price - CreditMemo::cm_amount($value->inv_id);
             }            
         }
 
@@ -214,7 +223,13 @@ class Invoice
             $update["inv_payment_applied"] = $overall_price;
 
             Invoice::update_rcv_payment("invoice",$invoice_id,$overall_price);
+            $transaction_type = "sales-receipt";
         }
+        else
+        {
+            $transaction_type = "invoice";
+        }
+
         Tbl_customer_invoice::where("inv_id", $invoice_id)->update($update);
         
 
@@ -223,7 +238,7 @@ class Invoice
 
         
         /* Transaction Journal */
-        $entry["reference_module"]  = "invoice";
+        $entry["reference_module"]  = $transaction_type;
         $entry["reference_id"]      = $invoice_id;
         $entry["name_id"]           = $customer_info['customer_id'];
         $entry["total"]             = $overall_price;
@@ -253,7 +268,8 @@ class Invoice
 
     }
     public static function insert_invoice_line($invoice_id, $item_info, $entry)
-    {        
+    {    
+        $total_discount = 0;
         foreach($item_info as $key => $item_line)
         {
             if($item_line)
@@ -288,15 +304,40 @@ class Invoice
 
                 Tbl_customer_invoice_line::insert($insert_line);
 
-                $entry_data[$key]['item_id']       = $item_line['item_id'];
-                $entry_data[$key]['entry_qty']     = $item_line['quantity'];
-                $entry_data[$key]['vatable']       = 0;
-                $entry_data[$key]['discount']      = $discount;
-                $entry_data[$key]['entry_amount']  = $amount;
+                $item_type = Item::get_item_type($item_line['item_id']);
+                /* TRANSACTION JOURNAL */  
+                if($item_type != 4)
+                {
+                    $entry_data[$key]['item_id']            = $item_line['item_id'];
+                    $entry_data[$key]['entry_qty']          = $item_line['quantity'];
+                    $entry_data[$key]['vatable']            = 0;
+                    $entry_data[$key]['discount']           = $discount;
+                    $entry_data[$key]['entry_amount']       = $amount+$discount;
+                    $entry_data[$key]['entry_description']  = $item_line['item_description'];                    
+                }
+                else
+                {
+                    $item_bundle = Item::get_item_in_bundle($item_line['item_id']);
+                    if(count($item_bundle) > 0)
+                    {
+                        foreach ($item_bundle as $key_bundle => $value_bundle) 
+                        {
+                            $item_data = Item::get_item_details($value_bundle->bundle_item_id);
+                            $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
+                            $entry_data['b'.$key.$key_bundle]['entry_qty']          = $item_line['quantity'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
+                            $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
+                            $entry_data['b'.$key.$key_bundle]['discount']           = 0;
+                            $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
+                            $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                        }
+                    }
+                }
                 
+                $total_discount +=$discount; 
             }
         }
 
+        // $entry['discount'] += $total_discount;
         $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
 
         return $insert_line;
@@ -336,8 +377,7 @@ class Invoice
     public static function updateAmountApplied($inv_id)
     {
         $payment_applied = Tbl_customer_invoice::appliedPayment(Invoice::getShopId())->where("inv_id",$inv_id)->pluck("amount_applied");
-        $cm_amount = CreditMemo::cm_amount($inv_id);
-        $data["inv_payment_applied"] = $payment_applied - $cm_amount;
+        $data["inv_payment_applied"] = $payment_applied;
 
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
 

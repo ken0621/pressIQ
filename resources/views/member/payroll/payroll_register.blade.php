@@ -22,7 +22,7 @@
       @foreach($_period as $period)
       <div class="custom-panel">
         <div class="custom-panel-header cursor-pointer">
-          {{date('M d, Y',strtotime($period['period']->payroll_period_start))}} to {{date('M d, Y',strtotime($period['period']->payroll_period_end))}} ({{$period['period']->payroll_period_category}})
+          {{date('M d, Y',strtotime($period['period']->payroll_period_start))}} to {{date('M d, Y',strtotime($period['period']->payroll_period_end))}} ({{$period['period']->payroll_period_category}}) - {{$period['period']->payroll_company_name}}
           <button class="btn btn-custom-white pull-right btn-xs popup" link="/member/payroll/payroll_process/confirm_action_payroll/posted/{{$period['period']->payroll_period_company_id}}" size="sm">Post</button>
           <button class="btn btn-custom-red-white pull-right btn-xs margin-right-10 popup" link="/member/payroll/payroll_process/confirm_action_payroll/unregister/{{$period['period']->payroll_period_company_id}}" size="sm">Unregister</button>
           <button class="btn btn-custom-white-gray pull-right btn-xs margin-right-10 popup" link="" size="sm"><i class="fa fa-comments" aria-hidden="true"></i></button>

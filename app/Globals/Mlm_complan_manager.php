@@ -3,6 +3,7 @@ namespace App\Globals;
 
 use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership;
+use App\Models\Tbl_membership_points;
 use App\Models\Tbl_mlm_plan;
 use App\Models\Tbl_item_code;
 use App\Models\Tbl_mlm_slot;
@@ -23,7 +24,6 @@ use App\Models\Tbl_mlm_leadership_settings;
 use App\Models\Tbl_mlm_indirect_points_settings;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_discount_card_settings;
-use App\Models\Tbl_membership_points;
 use App\Models\Tbl_mlm_binary_report;
 use App\Globals\Mlm_gc;
 use App\Models\Tbl_mlm_gc;
@@ -52,7 +52,34 @@ class Mlm_complan_manager
         {
             if($slot_info->membership_points_direct != null || $slot_info->membership_points_direct != 0)
             {
-                $log_array['earning'] = $slot_info->membership_points_direct;
+
+                /* DIRECT INCOME LIMIT */
+                $check_points = Tbl_membership_points::where("membership_id",$slot_sponsor->slot_membership)->first();
+                if($check_points)
+                {
+                    if($check_points->membership_direct_income_limit != 0)
+                    {
+                        if($slot_info->membership_points_direct > $check_points->membership_direct_income_limit)
+                        {
+                            $direct_points_given = $check_points->membership_direct_income_limit;
+                        }
+                        else
+                        {
+                            $direct_points_given = $slot_info->membership_points_direct;
+                        }
+                    }
+                    else
+                    {
+                        $direct_points_given = $slot_info->membership_points_direct;
+                    }
+                }
+                else
+                {
+                    $direct_points_given = $slot_info->membership_points_direct;
+                }
+
+
+                $log_array['earning'] = $direct_points_given;
                 $log_array['level'] = 1;
                 $log_array['level_tree'] = 'Sponsor Tree';
                 $log_array['complan'] = 'DIRECT';
@@ -63,7 +90,7 @@ class Mlm_complan_manager
                 $arry_log['shop_id'] = $slot_info->shop_id;
                 $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
                 $arry_log['wallet_log_details'] = $log;
-                $arry_log['wallet_log_amount'] = $slot_info->membership_points_direct;
+                $arry_log['wallet_log_amount'] = $direct_points_given;
                 $arry_log['wallet_log_plan'] = "DIRECT";
                 $arry_log['wallet_log_status'] = "n_ready";   
                 $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('DIRECT', $slot_info->shop_id); 
@@ -468,7 +495,7 @@ class Mlm_complan_manager
         ->where('tbl_mlm_slot.slot_binary_left', '!=', 0)
         ->where('tbl_mlm_slot.slot_binary_right', '!=', 0)
         ->get();
-
+        // dd($slots);
         // Get Complan Setting
         $plan = Tbl_mlm_plan::where('shop_id', $shop_id)
         ->where('marketing_plan_code', 'BINARY')
@@ -784,6 +811,7 @@ class Mlm_complan_manager
                                 // add income
                                 if($earning != 0)
                                 {
+
                                     $earning_2 = 0;
                                     $earning_3 = 0;
                                     $current_income = 0;
@@ -823,6 +851,7 @@ class Mlm_complan_manager
                                     {
                                         $earning_2 = 0;
                                     }
+
                                     else
                                     {
                                         $current_income_a = $current_income + $earning;
@@ -857,6 +886,7 @@ class Mlm_complan_manager
                                     }
                                     else
                                     {
+                                        
                                         if($earning_2 >= $earning)
                                         {
                                             $log = "Congratulations! You Paired ".$pair_this_pairing." From Slot " .$slot->slot_no ." Earned " . $earning . " By Binary Pairing Bonus and flushed " . $flush;
@@ -870,9 +900,7 @@ class Mlm_complan_manager
                                             $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot->shop_id); 
                                             Mlm_slot_log::slot_array($arry_log); 
 
-                                            Mlm_complan_manager::binary_single_line_richard($slot, $value2, $earning);
-                                            // $slot_zxc = Mlm_compute::get_slot_info($slot->slot_id);
-                                            // Mlm_complan_manager::binary_single_line($slot_zxc); 
+                                            Mlm_complan_manager::binary_single_line_richard($slot, $value2, $earning); 
                                             
                                             $binary_pairing_log['pairing_income'] = $earning;
                                             $binary_pairing_log['pairing_slot'] = $slot->slot_id;
@@ -882,8 +910,8 @@ class Mlm_complan_manager
                                         }
                                         else
                                         {
-                                            $max_income_a = $earning - $earning_2;
 
+                                            $max_income_a = $earning - $earning_2;
                                             $log = "You have reached your binary max income, " . $max_income_a . " will not be added.";
                                             $arry_log['wallet_log_slot']            = $slot->slot_id;
                                             $arry_log['shop_id']                    = $slot->shop_id;
@@ -904,23 +932,21 @@ class Mlm_complan_manager
 
 
 
-                                            
-                                            $log = "Congratulations! You Paired ".$pair_this_pairing." From Slot " .$slot->slot_no ." Earned " . $earning . " By Binary Pairing Bonus and flushed " . $flush;
+                                            $earning_less_max = $earning - $max_income_a;
+                                            $log = "Congratulations! You Paired ".$pair_this_pairing." From Slot " .$slot->slot_no ." Earned " . $earning_less_max . " By Binary Pairing Bonus and flushed " . $flush;
                                             $arry_log['wallet_log_slot']            = $slot->slot_id;
                                             $arry_log['shop_id']                    = $slot->shop_id;
                                             $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
                                             $arry_log['wallet_log_details']         = $log;
-                                            $arry_log['wallet_log_amount']          = $earning;
+                                            $arry_log['wallet_log_amount']          = $earning_less_max;
                                             $arry_log['wallet_log_plan']            = "BINARY";
                                             $arry_log['wallet_log_status']          = "n_ready";   
                                             $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot->shop_id); 
                                             Mlm_slot_log::slot_array($arry_log); 
 
-                                            Mlm_complan_manager::binary_single_line_richard($slot, $value2, $earning);
-                                            // $slot_zxc = Mlm_compute::get_slot_info($slot->slot_id);
-                                            // Mlm_complan_manager::binary_single_line($slot_zxc); 
+                                            Mlm_complan_manager::binary_single_line_richard($slot, $value2, $earning_less_max);
                                             
-                                            $binary_pairing_log['pairing_income'] = $earning;
+                                            $binary_pairing_log['pairing_income'] = $earning_less_max;
                                             $binary_pairing_log['pairing_slot'] = $slot->slot_id;
                                             $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
                                             $binary_pairing_log['pairing_date'] = Carbon::now();
@@ -1313,9 +1339,11 @@ class Mlm_complan_manager
                         	}
                         	else
                         	{
-                        		$slot_aaa = Tbl_mlm_slot::where('slot_id', $matching_log_slot_1)->first();
-		                        $slot_bbb = Tbl_mlm_slot::where('slot_id', $matching_log_slot_2)->first();
-		                        $log = "Congratulations Your Slot " . $matching_log_earner . " Earned " . $matching_log_earning . " From Membership Matching. Slot " . $slot_aaa->slot_no . "(level ". $matching_log_level_1 .") and Slot " . $slot_bbb->slot_no . "(level ". $matching_log_level_2 .") Matched.";
+                        		$slot_aaa = Tbl_mlm_slot::where('slot_id', $matching_log_slot_1)->customer()->first();
+		                        $slot_bbb = Tbl_mlm_slot::where('slot_id', $matching_log_slot_2)->customer()->first();
+
+		                        $log = "Congratulations Your Slot. Earned " . $matching_log_earning . " From Membership Matching. Slot " . $slot_aaa->slot_no . "(level ". $matching_log_level_1 .") (".name_format_from_customer_info($slot_aaa).") and Slot " . $slot_bbb->slot_no . "(level ". $matching_log_level_2 .") (".name_format_from_customer_info($slot_bbb).") Matched.";
+
 		                        $arry_log['wallet_log_slot'] = $matching_log_earner;
 		                        $arry_log['shop_id'] = $slot_info->shop_id;
 		                        $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
@@ -1329,9 +1357,10 @@ class Mlm_complan_manager
                         }
                         else
                         {
-                        	$slot_aaa = Tbl_mlm_slot::where('slot_id', $matching_log_slot_1)->first();
-	                        $slot_bbb = Tbl_mlm_slot::where('slot_id', $matching_log_slot_2)->first();
-	                        $log = "Congratulations Your Slot " . $matching_log_earner . " Earned " . $matching_log_earning . " From Membership Matching. Slot " . $slot_aaa->slot_no . "(level ". $matching_log_level_1 .") and Slot " . $slot_bbb->slot_no . "(level ". $matching_log_level_2 .") Matched.";
+                        	$slot_aaa = Tbl_mlm_slot::where('slot_id', $matching_log_slot_1)->customer()->first();
+	                        $slot_bbb = Tbl_mlm_slot::where('slot_id', $matching_log_slot_2)->customer()->first();
+	                        $log = "Congratulations Your Slot. Earned " . $matching_log_earning . " From Membership Matching. Slot " . $slot_aaa->slot_no . "(level ". $matching_log_level_1 .")(".name_format_from_customer_info($slot_aaa).") and Slot " . $slot_bbb->slot_no . "(level ". $matching_log_level_2 .") (".name_format_from_customer_info($slot_bbb).") Matched.";
+
 	                        $arry_log['wallet_log_slot'] = $matching_log_earner;
 	                        $arry_log['shop_id'] = $slot_info->shop_id;
 	                        $arry_log['wallet_log_slot_sponsor'] = $slot_info->slot_id;
@@ -1631,7 +1660,7 @@ class Mlm_complan_manager
             foreach($slot_tree as $key => $tree)
             {
                 /* COMPUTE FOR BONUS */
-                if(isset($indirect_level[$tree->membership_id][$tree->sponsor_tree_level]))
+                if(isset($indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level]))
                 {
                     $indirect_bonus = $indirect_level[$slot_info->membership_id][$tree->sponsor_tree_level];    
                 }

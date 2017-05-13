@@ -94,6 +94,7 @@ class MlmRepurchaseController extends Mlm
         $input['payment_type_choose'] = 3;
         $warehouse = Tbl_warehouse::where('main_warehouse', 1)->where('warehouse_shop_id', Self::$shop_id)->first();
         $input['warehouse_id'] = $warehouse->warehouse_id;
+        $data['use_item_code_auto'] = 1;
         $user = Tbl_user::where('user_shop', Self::$shop_id)->first();
         
         $data    = Item_code::add_code($input,Self::$shop_id, $user->user_id, $warehouse->warehouse_id);

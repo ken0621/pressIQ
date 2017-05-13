@@ -12,6 +12,20 @@ class Tbl_customer extends Model
     
     public function scopeTransaction($query, $shop_id, $customer_id = null)
     {
+        /* ESTIMATE */
+        $estimate = DB::table("tbl_customer")->selectRaw("est_date as date, 'Estimate' as type, est_id as no, est_exp_date as due_date, 0 as balance, est_overall_price as total, 'status' as status, date_created, 'customer/estimate' as reference_url")
+                    ->join("tbl_customer_estimate","est_customer_id","=","customer_id")
+                    ->where("est_shop_id", $shop_id)
+                    ->where("is_sales_order", 0);
+        if($customer_id) $estimate->where("est_customer_id", $customer_id);
+
+        /* SALES ORDER */
+        $sales_order = DB::table("tbl_customer")->selectRaw("est_date as date, 'Sales Order' as type, est_id as no, est_exp_date as due_date, 0 as balance, est_overall_price as total, 'status' as status, date_created, 'customer/sales_order' as reference_url")
+                    ->join("tbl_customer_estimate","est_customer_id","=","customer_id")
+                    ->where("est_shop_id", $shop_id)
+                    ->where("is_sales_order", 1);
+        if($customer_id) $sales_order->where("est_customer_id", $customer_id);
+
         /* INVOICE */
         $invoice = DB::table("tbl_customer")->selectRaw("inv_date as date, 'Invoice' as type, inv_id as no, inv_due_date as due_date, inv_overall_price - inv_payment_applied as balance, inv_overall_price as total, 'status' as status, date_created, 'customer/invoice' as reference_url")
                     ->join("tbl_customer_invoice","inv_customer_id","=","customer_id")
@@ -20,7 +34,7 @@ class Tbl_customer extends Model
         if($customer_id) $invoice->where("inv_customer_id", $customer_id);
 
         /* CREDIT MEMO */
-        $credit_memo = DB::table("tbl_credit_memo")->selectRaw("cm_date as date, 'Credit Memo' as type, cm_id as no, cm_due_date as due_date, 0 as balance, cm_amount as total, 'status' as status, date_created, 'customer/credit_memo' as reference_url")
+        $credit_memo = DB::table("tbl_credit_memo")->selectRaw("cm_date as date, 'Credit Memo' as type, cm_id as no, '' as due_date, 0 as balance, cm_amount as total, 'status' as status, date_created, 'cu,stomer/credit_memo' as reference_url")
                     ->join("tbl_credit_memo_line","cmline_cm_id","=","cm_id");
         if($customer_id) $credit_memo->where("cm_customer_id", $customer_id);
 
@@ -46,7 +60,7 @@ class Tbl_customer extends Model
 
         
         
-        return $query = $receive_payment->union($invoice)->union($journal_entry)->orderBy("date_created","desc");
+        return $query = $sales_order->union($estimate)->union($invoice)->union($credit_memo)->union($sales_receipt)->union($receive_payment)->union($journal_entry)->orderBy("date_created","desc");
     }
 
     public function scopeInfo($query)
@@ -91,6 +105,7 @@ class Tbl_customer extends Model
                                            ->whereRaw("chart_type_name = 'Accounts Receivable'")
                                            ->whereRaw("jline_name_reference = 'customer'")
                                            ->whereRaw("jline_name_id = tbl_customer.customer_id")
+                                           ->whereRaw("account_shop_id = shop_id")
                                            ->selectRaw("sum( CASE jline_type WHEN 'credit' then -jline_amount WHEN 'debit' then jline_amount END)")
                                            ->toSql();
         

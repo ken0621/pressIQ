@@ -20,7 +20,7 @@ $data['icon'] = 'icon-sitemap';
     	<input type="text" class="form-control" name="active_slot" value="{{ isset($active->slot_no) ? $active->slot_no : ''}}">
 
       <label>Slot Nickname</label>
-      <input type="text" class="form-control" name="slot_nickname" value="{{ isset($active->slot_nick_name) ? $active->slot_nick_name : ''}}">
+      <input type="text" class="form-control" name="slot_nickname" value="{{ isset($active->slot_nick_name) ? $active->slot_nick_name : ''}}" readonly>
 
       <hr>
       <button class="btn btn-primary pull-right">Set Default</button>
@@ -40,7 +40,11 @@ $data['icon'] = 'icon-sitemap';
             <th>Slot</th>
             <th>Date Created</th>
             <th>Current Wallet</th>
+            <th>Membership</th>
             <th></th>
+            @if($enabled_upgrade_slot == 1)
+            <th></th>
+            @endif
         </thead>
         <tbody>
             @if(count($all_slots_p) >= 1)
@@ -49,12 +53,16 @@ $data['icon'] = 'icon-sitemap';
                   <td>{{$value->slot_no}}</td>
                   <td>{{$value->slot_created_date}}</td>
                   <td>{{$value->slot_wallet_current}}</td>
+                  <td class="membership_{{$value->slot_id}}">{{$value->membership_name}}</td>
                   <td><form class="global_submit" action="/mlm/changeslot" method="post">
                         {!! csrf_field() !!}
                         <input type="hidden" name="slot_id" value="{{$value->slot_id}}">
                         <button class="btn btn-primary">Use Slot</button>
                       </form>
                   </td>
+                  @if($enabled_upgrade_slot == 1)
+                  <td><button class="btn btn-primary popup" link="/mlm/slots/upgrade_slot/{{$value->slot_id}}" type="button" size="lg" data-toggle="modal" data-target="#global_modal">Upgrade Slot</button></td>
+                  @endif
                 </tr>
               @endforeach
             @else
@@ -84,6 +92,12 @@ function submit_done(data)
   if(data.status == 'success')
   {
     toastr.success(data.message);
+  }  
+  else if(data.status == 'success-upgrade')
+  {
+    toastr.success(data.message);
+    $('#global_modal').modal('toggle');
+    $('.membership_'+data.slot_id).text(data.membership_name);
   }
   else
   {

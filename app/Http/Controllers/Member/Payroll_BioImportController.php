@@ -129,12 +129,17 @@ class Payroll_BioImportController extends Member
 		$file 		= Request::file('file');
 		$biometric 	= Request::input('biometric');
 
-		
 
 		if($biometric == 'ZKTime 5.0')
 		{
 			return Self::import_ZKTime_5_0($file);
 		}
+
+		if($biometric == 'ZKTeco TX628')
+		{
+			return Self::import_zkteco_TX628($file);
+		}
+
 		if($biometric == 'Digital Persona')
 		{
 			return Self::import_Digital_Persona($file);
@@ -157,9 +162,83 @@ class Payroll_BioImportController extends Member
 
     /* BIO METRICS START */
 
+    public function import_zkteco_TX628($file)
+    {
+    	$_test = file($file, FILE_IGNORE_NEW_LINES);
+
+    	$temp = preg_split("/[\t]/", $_test[0]);
+    	
+    	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
+
+    	if(isset($temp[0]) && isset($temp[1]) && isset($temp[2]) && isset($temp[3]) && isset($temp[4]) && isset($temp[5]))
+    	{
+
+    		$success_count = 0;
+	    	$temp_date = '';
+	    	$insert_time_record = array();
+	    	$time_sheet = array();
+
+
+    		foreach($_test as $key => $test)
+			{
+				$extest 	= preg_split("/[\t]/", $test);
+				$emp_no 	= $extest[0];
+				$date_time 	= $extest[1];
+
+				$temp_record['employee_number'] = (string)$emp_no;
+	    		$temp_record['time']			= date('H:i:s', strtotime($date_time));
+	    		$temp_record['date']			= date('Y-m-d', strtotime($date_time));
+	    		array_push($time_sheet, $temp_record);
+			}
+
+			$_date_collect = collect($time_sheet)->groupBy('employee_number','date');
+
+			foreach($_date_collect as $key => $date_collect)
+	    	{
+	    		$_date = collect($date_collect)->groupBy('date');
+	    		$temp = '';
+	    		foreach($_date as $date)
+	    		{
+	    			$start 	= $date[0];
+	    			$end 	= $date[count($date) - 1];
+	    			if(Self::check_employee_number($start['employee_number']))
+	    			{
+	    				
+		    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($start['employee_number']), $start['date']);
+
+		    			$temp_array['payroll_time_sheet_id'] 		= $payroll_time_sheet_id;
+		    			$temp_array['payroll_time_sheet_in'] 		= $start['time'];
+		    			$temp_array['payroll_time_sheet_out'] 		= $end['time'];
+		    			$temp_array['payroll_time_sheet_origin'] 	= 'ZKTeco TX628';
+		    			$temp_array['payroll_company_id']			= Self::getemployeeId($start['employee_number'],'payroll_employee_company_id');
+
+		    			$count_record = Tbl_payroll_time_sheet_record::wherearray($temp_array)->count();
+		    			if($count_record == 0)
+		    			{
+		    				array_push($insert_time_record, $temp_array);
+		    			}
+	    			}
+	    			
+	    		}
+	    		
+	    	}
+	    	$message = '<center><span class="color-gray">Nothing to insert</span></center>';
+	    	if(!empty($insert_time_record))
+	    	{
+	    		Tbl_payroll_time_sheet_record::insert($insert_time_record);
+	    		$count_inserted = count($insert_time_record);
+	    		$message = '<center><span class="color-green">'.$count_inserted.' new record/s inserted.</span></center>';
+	    	}
+
+    	}
+
+    	return $message;
+    }
+
     public function import_ZKTime_5_0($file)
     {
     	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
+
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('no','datetime'));
     	if(isset($_time[0]['no']) && isset($_time[0]['datetime']))
     	{
@@ -171,13 +250,14 @@ class Payroll_BioImportController extends Member
 	    	$time_sheet = array();
 	    	foreach($_time as $key => $time)
 	    	{
-	    		$temp_record['employee_number'] = $time['no'];
+	    		$temp_record['employee_number'] = (string)$time['no'];
 	    		$temp_record['time']			= date('H:i:s', strtotime($time['datetime']));
 	    		$temp_record['date']			= date('Y-m-d', strtotime($time['datetime']));
 	    		array_push($time_sheet, $temp_record);
 	    	}
 
 	    	$_date_collect = collect($time_sheet)->groupBy('employee_number','date');
+
 	    	foreach($_date_collect as $key => $date_collect)
 	    	{
 	    		$_date = collect($date_collect)->groupBy('date');
@@ -236,7 +316,7 @@ class Payroll_BioImportController extends Member
     	{
     		foreach($_time as $time)
 	    	{
-	    		$time['id_no'] 		= trim($time['id_no'],' ');
+	    		$time['id_no'] 		= trim((string)$time['id_no'],' ');
 	    		$time['date'] 		= trim((string)$time['date'], ' ');
 	    		$time['time_in'] 	= trim((string)$time['time_in'], ' ');
 	    		$time['time_out'] 	= trim((string)$time['time_out'], ' ');
@@ -328,8 +408,9 @@ class Payroll_BioImportController extends Member
     public function import_manual($file)
     {
     	$message = '<center><i><span class="color-red"><b>Invalid File Format</b></span></i></center>';
+
     	$_time = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->get(array('employee_no','date','time_in','time_out'));
-    	// dd($_time);
+    	
     	if(isset($_time[0]['employee_no']) && isset($_time[0]['date']) && isset($_time[0]['time_in']) && isset($_time[0]['time_out']))
     	{
 

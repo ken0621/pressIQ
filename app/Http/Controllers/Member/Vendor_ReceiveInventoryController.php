@@ -14,6 +14,8 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_bill_po;
 use App\Models\Tbl_vendor;
+use App\Models\Tbl_terms;
+
 use App\Globals\Vendor;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
@@ -21,6 +23,7 @@ use App\Globals\Purchase_Order;
 use App\Globals\Billing;
 use App\Globals\Item;
 use App\Globals\Warehouse;
+use App\Globals\Utilities;
 use App\Globals\UnitMeasurement;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
@@ -39,45 +42,62 @@ class Vendor_ReceiveInventoryController extends Member
      */
     public function index()
     {
-        $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderby("bill_id","DESC")->where("inventory_only",1)->get();
+        $access = Utilities::checkAccess('vendor-receive-inventory', 'access_page');
+        if($access == 1)
+        { 
+            $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderby("bill_id","DESC")->where("inventory_only",1)->get();
 
-        foreach ($data["_bill_list"] as $key => $value) 
-        {
-           $price = 0;
-           $item = Tbl_bill_item_line::where("itemline_bill_id",$value->bill_id)->get();
-           foreach ($item as $key_item => $value_item) 
-           {
-                $price += (UnitMeasurement::um_qty($value_item->itemline_um) * $value_item->itemline_qty) * $value_item->itemline_rate;
-           }
-           $data["_bill_list"][$key]->bill_price = $price;
+            foreach ($data["_bill_list"] as $key => $value) 
+            {
+               $price = 0;
+               $item = Tbl_bill_item_line::where("itemline_bill_id",$value->bill_id)->get();
+               foreach ($item as $key_item => $value_item) 
+               {
+                    $price += (UnitMeasurement::um_qty($value_item->itemline_um) * $value_item->itemline_qty) * $value_item->itemline_rate;
+               }
+               $data["_bill_list"][$key]->bill_price = $price;
+            }
+            return view("member.receive_inventory.receive_inventory_list",$data);
         }
-        return view("member.receive_inventory.receive_inventory_list",$data);
+        else
+        {            
+            return $this->show_no_access();
+        }
     }    
     public function receive_inventory()
     {
-        // dd(Session::get("po_item"));
-        Session::forget("po_item");
-        $data["_vendor"]    = Vendor::getAllVendor('active');
-        $data['_item']      = Item::get_all_category_item();
-        $data['_account']   = Accounting::getAllAccount();
-        $data['_um']        = UnitMeasurement::load_um_multi();
-        $data['action']     = "/member/vendor/receive_inventory/add";
-        $data['vendor_id']     = Request::input("vendor_id");
-        
-        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_billed",0)->get();
+        $access = Utilities::checkAccess('vendor-receive-inventory', 'access_page');
+        if($access == 1)
+        { 
+            // dd(Session::get("po_item"));
+            Session::forget("po_item");
+            $data["_vendor"]    = Vendor::getAllVendor('active');
+            $data['_item']      = Item::get_all_category_item();
+            $data['_account']   = Accounting::getAllAccount();
+            $data['_um']        = UnitMeasurement::load_um_multi();
+            $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", Billing::getShopId())->get();
+            $data['action']     = "/member/vendor/receive_inventory/add";
+            $data['vendor_id']     = Request::input("vendor_id");
+            
+            $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_billed",0)->get();
 
-        $id = Request::input("id");
-        if($id)
-        {
-           $data["bill"] = Tbl_bill::where("bill_id",$id)->first();
-           $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["bill"]->bill_vendor_id)->where("po_is_billed",0)->get();
-           $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
-           $data['_item']      = Item::get_all_category_item();
-           $data['_account']   = Accounting::getAllAccount();
-           $data['action']     = "/member/vendor/receive_inventory/update";
+            $id = Request::input("id");
+            if($id)
+            {
+               $data["bill"] = Tbl_bill::where("bill_id",$id)->first();
+               $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["bill"]->bill_vendor_id)->where("po_is_billed",0)->get();
+               $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
+               $data['_item']      = Item::get_all_category_item();
+               $data['_account']   = Accounting::getAllAccount();
+               $data['action']     = "/member/vendor/receive_inventory/update";
+            }
+            
+            return view("member.receive_inventory.receive_inventory",$data);
         }
-        
-        return view("member.receive_inventory.receive_inventory",$data);
+        else
+        {
+            return $this->show_no_access();            
+        }
     }
     public function load_purchase_order($vendor_id)
     {

@@ -96,6 +96,11 @@ class Mlm_member
 		$data['slot'] = Tbl_mlm_slot::where('tbl_mlm_slot.slot_id', $slot_id)
 		->leftjoin('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_mlm_slot.slot_id')
 		->first();
+        if($data['slot']->slot_id == null)
+        {
+            $data['slot'] = Tbl_mlm_slot::where('tbl_mlm_slot.slot_id', $slot_id)
+            ->first();
+        }
         $data['slot_info'] = Tbl_mlm_slot::where('tbl_mlm_slot.slot_id', $slot_id)->first();
         // dd($data);
         return view('mlm.pre.view_customer', $data);

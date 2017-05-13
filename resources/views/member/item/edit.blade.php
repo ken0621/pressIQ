@@ -112,7 +112,7 @@
                         </div>                 
                         <div class="col-md-6">
                             <label>Income Account *</label>
-                            <select name="item_income_account_id" class="drop-down-coa form-control" id="item_income_account_id" required>                                
+                            <select name="item_income_account_id" class="drop-down-coa form-control" id="item_income_account_id" required>
                                @include("member.load_ajax_data.load_chart_account", ['add_search' => "", '_account' => $_income,'account_id' => $data['item_income_account_id']])
                             </select>
                         </div>
@@ -507,7 +507,7 @@
                                     <td class="text-center add-tr cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
                                     <td>
                                         <select class="form-control drop-down-item select-item input-sm pull-left" name="bundle_item_id[]" required>
-                                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $bundle["bundle_item_id"]])
+                                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", '_item' => $_item_to_bundle, 'item_id' => $bundle["bundle_item_id"]])
                                         </select>
                                     </td>
                                     <td>
@@ -542,7 +542,7 @@
             <td class="text-center add-tr cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
             <td>
                 <select class="form-control select-item input-sm pull-left" name="bundle_item_id[]" required>
-                    @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => null])
+                 @include("member.load_ajax_data.load_item_category", ['add_search' => "", '_item' => $_item_to_bundle])
                 </select>
             </td>
             <td>

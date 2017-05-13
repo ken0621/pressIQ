@@ -415,7 +415,7 @@ class Purchasing_inventory_system
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" style="text-decoration: line-through;">5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
             <div class="col-md-12" style="text-decoration: line-through;">7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 1 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
@@ -722,6 +722,17 @@ class Purchasing_inventory_system
         if($if_bundle == 4)
         {
             $return_price = Item::get_item_bundle_price($item_id);
+        }
+        return $return_price;
+    }
+    public static function get_item_cost($item_id)
+    {
+        $if_bundle = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+
+        $return_price = Tbl_item::where("item_id",$item_id)->pluck("item_cost");
+        if($if_bundle == 4)
+        {
+            $return_price = Item::get_item_bundle_cost($item_id);
         }
         return $return_price;
     }

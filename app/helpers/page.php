@@ -239,7 +239,7 @@ function page_list()
 
 
     $code = "mlm-complan-setup";
-    $nav[$page]['submenu'][$code]['label'] = "Complan Setup";
+    $nav[$page]['submenu'][$code]['label'] = "Other Settings";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/complan_setup";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];

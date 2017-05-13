@@ -176,16 +176,20 @@ class Mlm extends Controller
         $count = DB::table('tbl_customer_payout')->where('customer_id', $customer_id)->count();
         if($count == 0)
         {
-            $insert['shop_id'] = $shop_id;
-            $insert['customer_id'] = $customer_id;
-            $insert['customer_payout_type'] = $encashment_settings->enchasment_settings_type;
-            $insert['customer_payout_name_on_cheque'] = name_format_from_customer_info(Self::$customer_info);
-            $insert['encashment_bank_deposit_id'] = '';
-            $insert['customer_payout_bank_branch'] = '';
-            $insert['customer_payout_bank_account_number'] = '';
-            $insert['customer_payout_bank_account_name'] = name_format_from_customer_info(Self::$customer_info);
+            if($encashment_settings)
+            {
+                $insert['shop_id'] = $shop_id;
+                $insert['customer_id'] = $customer_id;
+                $insert['customer_payout_type'] = $encashment_settings->enchasment_settings_type;
+                $insert['customer_payout_name_on_cheque'] = name_format_from_customer_info(Self::$customer_info);
+                $insert['encashment_bank_deposit_id'] = '';
+                $insert['customer_payout_bank_branch'] = '';
+                $insert['customer_payout_bank_account_number'] = '';
+                $insert['customer_payout_bank_account_name'] = name_format_from_customer_info(Self::$customer_info);
 
-            DB::table('tbl_customer_payout')->insert($insert);
+                DB::table('tbl_customer_payout')->insert($insert);
+            }
+            
         }
         else
         {

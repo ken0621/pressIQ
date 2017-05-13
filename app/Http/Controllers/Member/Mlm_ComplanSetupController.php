@@ -35,11 +35,29 @@ class Mlm_ComplanSetupController extends Member
 			$data['links'][0]['label'] = 'Binary Promotions Setup';
 			$data['links'][0]['link'] = '/member/mlm/complan_setup/binary_pro';
 		}		
+		$merchant_school = $this->merchant_school($this->user_info->shop_key);
+		if($merchant_school == 1)
+		{
+			$data['links'][1]['label'] = 'School Merchant';
+			$data['links'][1]['link'] = '/member/mlm/merchant_school';
+		}
 		return view('member.mlm_complan_setup.index', $data);
 	}
 	public function binary_promotions()
 	{
 		$data = [];
 		return view('member.mlm_complan_setup.binary_complan', $data);
+	}
+	public function merchant_school($shop_key)
+	{
+		$data['PhilTECH'] = 'PhilTECH';
+		if(isset($data[$shop_key]))
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		}
 	}
 }

@@ -127,4 +127,14 @@ class Tbl_payroll_record extends Model
 			  });
 		return $query;
 	}
+
+	public function scopeget13month($query, $payroll_employee_id = 0)
+	{	
+		$query->join('tbl_payroll_period_company','tbl_payroll_period_company.payroll_period_company_id','=','tbl_payroll_record.payroll_period_company_id')
+			  ->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
+			  ->where('tbl_payroll_record.payroll_employee_id', $payroll_employee_id)
+			  ->where('tbl_payroll_record.13_month_computed', 0);
+
+		return $query;
+	}
 }

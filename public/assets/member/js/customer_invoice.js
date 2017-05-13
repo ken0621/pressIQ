@@ -737,13 +737,16 @@ function submit_done(data)
 {
 	if(data.status == "success-invoice")
 	{
+		console.log("succes-invoice");
         if(data.redirect)
         {
+        	console.log("redirect");
         	toastr.success("Success");
         	location.href = data.redirect;
     	}
     	else
     	{
+    		console.log("not redirect");
     		$(".load-data:last").load(data.link+" .load-data .data-container", function()
     		{
     			customer_invoice.action_initialized();

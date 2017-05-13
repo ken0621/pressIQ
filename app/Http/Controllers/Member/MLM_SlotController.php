@@ -763,7 +763,7 @@ class MLM_SlotController extends Member
            // dd(1);
             // dd(public_path().'\assets\mlm\philteccustomer.xlsx');
             
-            Excel::load(public_path().'/assets/mlm/philteccustomer.xlsx', function($reader) 
+            Excel::load(public_path().'/assets/mlm/soveriegn.xlsx', function($reader) 
             {
                 $results = $reader->get()->toArray();
                 // DB::table('tbl_customer_address')->delete();
@@ -772,40 +772,54 @@ class MLM_SlotController extends Member
                 // DB::table('tbl_customer')->delete();
                 foreach($results[0] as $key => $value)
                 {
-                    dd($value);
-                    $shop_id = 1;
-                    // $email = $value['email'];
-                    $insert['shop_id'] = $shop_id;
-                    $insert['country_id'] = 420;
-                    $insert['title_name'] = '';
-                    $insert['first_name'] =  $value['first_name'];
-                    $insert['middle_name'] = $value['middle_name'];
-                    $insert['last_name'] = $value['last_name'];
-                    $insert['suffix_name'] = '';
-                    $insert['email'] =  $value['email'];
-                    $insert['ismlm'] = 1;
-                    $insert['mlm_username'] = $value['username'];
-                    $insert['password'] = Crypt::encrypt('password');
-                    $insert['tin_number'] = $value['tin'];
-                    $insert['company'] = 'philtechglobalinc';
-                    $customer_id = Tbl_customer::insertGetId($insert);
+                    if($key == 265)
+                    {
+                        die('end_import');
+                    }
+                    $shop_id = $this->user_info->shop_id;
+                    $count_first_last = Tbl_customer::where('shop_id', $shop_id)
+                    ->where('first_name', $value['first_name'])
+                    ->where('last_name', $value['last_name'])
+                    ->count();
 
-                    $insertSearch['customer_id'] = $customer_id;
-                    $insertSearch['body'] = $insert['title_name'].' '.$insert['first_name'].' '.$insert['middle_name'].' '.$insert['last_name'].' '.$insert['suffix_name'].' '.$insert['email'].' '.$insert['company'];
+                    if($count_first_last == 0)
+                    {
+                        $insert['shop_id'] = $shop_id;
+                        $insert['country_id'] = 420;
+                        $insert['title_name'] = '';
+                        $insert['first_name'] =  $value['first_name'];
+                        $insert['middle_name'] = '';
+                        $insert['last_name'] = $value['last_name'];
+                        $insert['suffix_name'] = '';
+                        $insert['email'] =  'soveriegn_defaultemail' . $key. '@gmail.com';
+                        $insert['ismlm'] = 1;
+                        $insert['mlm_username'] = $value['username'];
+                        $insert['password'] = Crypt::encrypt('password');
+                        $insert['tin_number'] = 0;
+                        $insert['company'] = 'soveriegn';
+                        $insert['created_date'] = Carbon::now();
+                        $customer_id = Tbl_customer::insertGetId($insert);
 
-                    Tbl_customer_search::insert($insertSearch);
+                        $insertSearch['customer_id'] = $customer_id;
+                        $insertSearch['body'] = $insert['title_name'].' '.$insert['first_name'].' '.$insert['middle_name'].' '.$insert['last_name'].' '.$insert['suffix_name'].' '.$insert['email'].' '.$insert['company'];
 
-                    $insertInfo['customer_id'] = $customer_id;
-                    $insertInfo['customer_mobile'] = $value['contact'];
-                    Tbl_customer_other_info::insert($insertInfo);
+                        Tbl_customer_search::insert($insertSearch);
 
-                    $insertAddress[0]['customer_id'] = $customer_id;
-                    $insertAddress[0]['country_id'] = 420;
-                    $insertAddress[0]['purpose'] = 'billing';
-                    $insertAddress[1]['customer_id'] = $customer_id;
-                    $insertAddress[1]['country_id'] = 420;
-                    $insertAddress[1]['purpose'] = 'shipping';
-                    Tbl_customer_address::insert($insertAddress);
+                        $insertInfo['customer_id'] = $customer_id;
+                        $insertInfo['customer_mobile'] = '';
+                        Tbl_customer_other_info::insert($insertInfo);
+
+                        $insertAddress[0]['customer_id'] = $customer_id;
+                        $insertAddress[0]['country_id'] = 420;
+                        $insertAddress[0]['purpose'] = 'billing';
+                        $insertAddress[0]['customer_street'] = $value['address'];
+                        
+                        $insertAddress[1]['customer_id'] = $customer_id;
+                        $insertAddress[1]['country_id'] = 420;
+                        $insertAddress[1]['purpose'] = 'shipping';
+                        $insertAddress[1]['customer_street'] = $value['address'];
+                        Tbl_customer_address::insert($insertAddress);
+                    }
                 }
             });
         }

@@ -7,33 +7,33 @@
 			<img src="/themes/{{ $shop_theme }}/img/runruno-bg.png">
 			<div class="top-bg-detail-container">RUNRUNO</div>
 		</div>
-		<div class="row clearfix content">
+		<div class="row clearfix content scroll-to">
 			<!-- LEFT NAVIGATION -->
 			<div class="col-md-3">
 				<div class="nav-left-container">
 					<div class="nav-left">
-						<div class="nav-per-button">
+						<div class="nav-per-button active" id="runruno">
 							RUNRUNO
 						</div>
-						<div class="nav-per-button">
+						<div class="nav-per-button" id="gold-molybdenum">
 							RUNRUNO GOLD-MOLYBDENUM PROJECT
 						</div>
-						<div class="nav-per-button">
+						<div class="nav-per-button" id="keypoints">
 							KEYPOINTS
 						</div>
-						<div class="nav-per-button">
+						<div class="nav-per-button" id="geology">
 							GEOLOGY
 						</div>
-						<div class="nav-per-button">
+						<div class="nav-per-button" id="feasibility-study">
 							FEASIBILITY STUDY
 						</div>
 					</div>
 				</div>
 			</div>
 			<!-- CONTENT -->
-			<div class="col-md-9">
+			<div class="col-md-9 body-content">
 			<!-- RUNRUNO -->
-				<div class="content">
+				<div class="content body-height runruno active">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
 						RUNRUNO
@@ -41,16 +41,16 @@
 					<p>
 						FCF Minerals Corporation (FCF) was incorporated in the Philippines and was duly registered with the Philippine SEC on December 3, 2001 to engage in continuing exploration, development and commercial operation of mineral claims with full power and authority to do any and all acts, things, business and activities which are related, incidental or conducive directly or indirectly to the attainment of the foregoing objectives as a mining company.<br><br>
 
-In 2009, the Company converted its exploration permit into a Financial or Technical Assistance Agreement (FTAA) with the Philippine Government. This agreement covers an initial terms of twenty five (25) years and renewable for another twenty five (25) years thereafter. Under the FTAA, the Company was granted the exclusive rights to explore, mine, utilize, process, refine, market, transport, export and dispose of minerals and mineral products and by-products that may be derived or produced from the contract area containing 3,093 hectares located in Barangay Runruno, Quezon, Nueva Vizcaya, Philippines. The FTAA was registered with the Mines and Geosciences Bureau (MGB) on October 28, 2009.<br><br>
+						In 2009, the Company converted its exploration permit into a Financial or Technical Assistance Agreement (FTAA) with the Philippine Government. This agreement covers an initial terms of twenty five (25) years and renewable for another twenty five (25) years thereafter. Under the FTAA, the Company was granted the exclusive rights to explore, mine, utilize, process, refine, market, transport, export and dispose of minerals and mineral products and by-products that may be derived or produced from the contract area containing 3,093 hectares located in Barangay Runruno, Quezon, Nueva Vizcaya, Philippines. The FTAA was registered with the Mines and Geosciences Bureau (MGB) on October 28, 2009.<br><br>
 
-In March 2010, the company received the Environmental Compliance Certificate (ECC) for its Runruno Gold-Molybdenum Project, which was issued after satisfactory evaluation of the project’s Environmental Impact Statement by the Philippine Environmental Management Bureau.
-In 2011, the Company acquired the final permit to proceed to development and construction phase of its Runruno Gold-Molybdenum Project after the DENR approved its Declaration of Mining Project Feasibility (DMPF).<br><br>
+						In March 2010, the company received the Environmental Compliance Certificate (ECC) for its Runruno Gold-Molybdenum Project, which was issued after satisfactory evaluation of the project’s Environmental Impact Statement by the Philippine Environmental Management Bureau.
+						In 2011, the Company acquired the final permit to proceed to development and construction phase of its Runruno Gold-Molybdenum Project after the DENR approved its Declaration of Mining Project Feasibility (DMPF).<br><br>
 
-Metals Exploration Plc, a company registered in the United Kingdom, owns 100% of FCF Minerals Corporation and the Runruno Gold-Molybdenum Project.
+						Metals Exploration Plc, a company registered in the United Kingdom, owns 100% of FCF Minerals Corporation and the Runruno Gold-Molybdenum Project.
 					</p>
 				</div>
 				<!-- Molybdenum-Project -->
-				<div class="content">
+				<div class="content body-height gold-molybdenum" style="display: none">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
 						RUNRUNO GOLD-MOLYBDENUM PROJECT
@@ -72,24 +72,24 @@ Metals Exploration Plc, a company registered in the United Kingdom, owns 100% of
 					</div>
 					<p>
 						Our target is to develop a world class mining and mineral processing project by conducting work in a safe and environmentally responsible manner to 
-industry best practices. This will provide a brighter future and make a positive difference to the community.<br><br>
+						industry best practices. This will provide a brighter future and make a positive difference to the community.<br><br>
 
-<p style="font-weight: 700;">THE PROJECT</p>
-FCF will develop the Project as a surface mine with a processing plant to produce gold (dorè) as the primary product and Molybdenum as a secondary 
-product. The Project will occupy an area of approximately 400 hectares located within Barangay Runruno, Quezon, Nueva Vizcaya, Philippines.<br><br>
+						<p style="font-weight: 700;">THE PROJECT</p>
+						FCF will develop the Project as a surface mine with a processing plant to produce gold (dorè) as the primary product and Molybdenum as a secondary 
+						product. The Project will occupy an area of approximately 400 hectares located within Barangay Runruno, Quezon, Nueva Vizcaya, Philippines.<br><br>
 
-<p style="font-weight: 700;">The key components are:</p>
+						<p style="font-weight: 700;">The key components are:</p>
 
-A surface mine and Run of Mine (ROM) pad.<br>
-Process plant facility of grinding, flotation, BIOX ®, Carbon-in-Leach (CIL) and recovery.<br><br>
+						A surface mine and Run of Mine (ROM) pad.<br>
+						Process plant facility of grinding, flotation, BIOX ®, Carbon-in-Leach (CIL) and recovery.<br><br>
 
-Residual Storage Impoundment (RSI) to ensure waste materials are properly managed and to maximize reclaim of water for the operation.<br>
+						Residual Storage Impoundment (RSI) to ensure waste materials are properly managed and to maximize reclaim of water for the operation.<br>
 
-Associated infrastructure including upgrade of the access road, power line, accommodation camp and ancillary buildings.<br>
+						Associated infrastructure including upgrade of the access road, power line, accommodation camp and ancillary buildings.<br>
 					</p>
 				</div>
 				<!-- KEYPOINTS -->
-				<div class="content">
+				<div class="content body-height keypoints" style="display: none">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
 						KEYPOINTS
@@ -116,7 +116,7 @@ Associated infrastructure including upgrade of the access road, power line, acco
 					</ul>
 				</div>
 				<!-- GEOLOGY -->
-				<div class="content">
+				<div class="content body-height geology" style="display: none">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
 						GEOLOGY
@@ -124,13 +124,13 @@ Associated infrastructure including upgrade of the access road, power line, acco
 					<p>
 						The Runruno deposit is located at the intersection of the margins of two district-scale calderas, major NE and NW fault lines and several late, small volume, composite volcanic centres.<br><br>
 
-Significant local uplift, intensive alteration and mineralisation demonstrate the presence of a large gold system with the geological potential to provide a significant resource of both gold and molybdenum.<br><br>
+						Significant local uplift, intensive alteration and mineralisation demonstrate the presence of a large gold system with the geological potential to provide a significant resource of both gold and molybdenum.<br><br>
 
-Evidence from previous studies indicate the potential for significant further exploration beyond the exiting Runruno resource area. Evidence has been amassed via drilling, test pit Au+Mo+As anomalies and PDX sampling and mapping. This was supported further in March 2008 following a site visit by Dr Eric Jensen, an expert on alkaline intrusive gold mineralisation, where the potential for further mineralisation within the immediate area was highlighted.<br><br>
+						Evidence from previous studies indicate the potential for significant further exploration beyond the exiting Runruno resource area. Evidence has been amassed via drilling, test pit Au+Mo+As anomalies and PDX sampling and mapping. This was supported further in March 2008 following a site visit by Dr Eric Jensen, an expert on alkaline intrusive gold mineralisation, where the potential for further mineralisation within the immediate area was highlighted.<br><br>
 
-Exploration currently focuses on a volcanic centre measuring ~3km in diameter. Geological features in this area include a syentic-monzonite intruded into a coeval trachytic, volcanoclastic and tuffaceous volcanics. The area is extensively argillised and argillic with alteration caps N to NE and trending zones of intense sulphide-phyllic alteration around the western and southern rim of the centre. Linear phyllic zones are exposed over a 1000-m x 200-m area within the argillic alteration at Cobocbocan Creek (~750-m ASL.) A broad (2600-m X 800-m) E – W moderate phyllic zone is located on the northern margin of the volcanic centre. The argillic cap is present from ~750-m ASL to the Cobocbocan Peak (970-m ASL.) Mineralisation appears constrained between 500-m to 750-m ASL.<br><br>
+						Exploration currently focuses on a volcanic centre measuring ~3km in diameter. Geological features in this area include a syentic-monzonite intruded into a coeval trachytic, volcanoclastic and tuffaceous volcanics. The area is extensively argillised and argillic with alteration caps N to NE and trending zones of intense sulphide-phyllic alteration around the western and southern rim of the centre. Linear phyllic zones are exposed over a 1000-m x 200-m area within the argillic alteration at Cobocbocan Creek (~750-m ASL.) A broad (2600-m X 800-m) E – W moderate phyllic zone is located on the northern margin of the volcanic centre. The argillic cap is present from ~750-m ASL to the Cobocbocan Peak (970-m ASL.) Mineralisation appears constrained between 500-m to 750-m ASL.<br><br>
 
-Past sampling and drilling have established economic grade intercepts within these intense phyllic zones and further exploration and evaluation has demonstrated large untested extensions to the E and SE that may continue under and be obscured by the argillic alteration cap.<br><br>
+						Past sampling and drilling have established economic grade intercepts within these intense phyllic zones and further exploration and evaluation has demonstrated large untested extensions to the E and SE that may continue under and be obscured by the argillic alteration cap.<br><br>
 					</p>
 					<!-- BOTTOM IMAGES -->
 					<div class="content-img-container row clearfix">
@@ -149,7 +149,7 @@ Past sampling and drilling have established economic grade intercepts within the
 					</div>
 				</div>
 				<!-- FEASIBILITY STUDY -->
-				<div class="content">
+				<div class="content body-height feasibility-study" style="display: none">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
 						FEASIBILITY STUDY
@@ -157,23 +157,23 @@ Past sampling and drilling have established economic grade intercepts within the
 					<p>
 						The Definitive Feasibility Study (DFS) on the Runruno project was launched on the 1st February 2009, and reported approximately a year later in early May 2010. The DFS was preceded by both an initial Concept Study, examining the outline economics and methods applicable to Runruno, and by the more detailed Scoping Study which was completed in November 2008.<br><br>
 
-The DFS built on the results of the Scoping Study released last year, and is a comprehensive forward analysis of the Runruno project economics to be used by financial institutions to assess credit-worthiness for project financing. The DFS includes drilling and design of the mine, process plant, tailings storage facility and associated infrastructure.<br><br>
+						The DFS built on the results of the Scoping Study released last year, and is a comprehensive forward analysis of the Runruno project economics to be used by financial institutions to assess credit-worthiness for project financing. The DFS includes drilling and design of the mine, process plant, tailings storage facility and associated infrastructure.<br><br>
 
-FCF Minerals Corporation (FCF), the manager of the Runruno project, formed an experienced team to manage the study. This team is under the direction of the Project Director, Ian Holzberger, who is accountable for the overall performance of the budget and work program. The DFS team is responsible for all phases of the study which will be complied in-house using inputs from specialist external consultants.<br><br>
+						FCF Minerals Corporation (FCF), the manager of the Runruno project, formed an experienced team to manage the study. This team is under the direction of the Project Director, Ian Holzberger, who is accountable for the overall performance of the budget and work program. The DFS team is responsible for all phases of the study which will be complied in-house using inputs from specialist external consultants.<br><br>
 
-Throughout the process the company has ensured there is continual consultation and communication with the local community and landowners, as well as liaison with the Philippines National and Provincial Governments and other interested or affected parties.<br><br>
+						Throughout the process the company has ensured there is continual consultation and communication with the local community and landowners, as well as liaison with the Philippines National and Provincial Governments and other interested or affected parties.<br><br>
 
-<p>Definitive Feasibility Study Results</p>
+						<p>Definitive Feasibility Study Results</p>
 
-The Study confirmed the viability of the Runruno project, forecasting average production of 96,700os of gold per annum over a mine life of 10.4 years, with a forecast operating cost $477/oz gold before any molybdenum credits. The capital cost forecast is to be US$149.3 million – giving payback within 3.5 years at US$1,000/oz gold.<br><br>
+						The Study confirmed the viability of the Runruno project, forecasting average production of 96,700os of gold per annum over a mine life of 10.4 years, with a forecast operating cost $477/oz gold before any molybdenum credits. The capital cost forecast is to be US$149.3 million – giving payback within 3.5 years at US$1,000/oz gold.<br><br>
 
-The Feasibility Study was project managed by the Company, with all material components undertaken by independent external consultants including Mining Associates (Resource and Mining), Goldfields and SGS (Metallurgical and Testwork), Lycopodium (Process Engineering), Leighton (Constructability and Capital Cost Review), GHD (Tailings Storage Facility, Detailed Pit Design, Mine Schedule), Aboitiz (Power Supply), AECOM (Roads, Environment and Permitting) and SGV (Taxation).<br><br>
+						The Feasibility Study was project managed by the Company, with all material components undertaken by independent external consultants including Mining Associates (Resource and Mining), Goldfields and SGS (Metallurgical and Testwork), Lycopodium (Process Engineering), Leighton (Constructability and Capital Cost Review), GHD (Tailings Storage Facility, Detailed Pit Design, Mine Schedule), Aboitiz (Power Supply), AECOM (Roads, Environment and Permitting) and SGV (Taxation).<br><br>
 
-The study has been based on a mineable reserve prepared by Mining Associates with an open pit mining operation and biological leaching using the proven BIOX® process combined with conventional carbon in leach treatment to recover gold to doré bullion and molybdenum to a saleable molybdenum product.<br><br>
+						The study has been based on a mineable reserve prepared by Mining Associates with an open pit mining operation and biological leaching using the proven BIOX® process combined with conventional carbon in leach treatment to recover gold to doré bullion and molybdenum to a saleable molybdenum product.<br><br>
 
-<p style="font-weight: 700;">Key Project Fundamentals</p>
+						<p style="font-weight: 700;">Key Project Fundamentals</p>
 
-<p style="font-weight: 700;">A summary of the key project fundamentals is presented below:</p>
+						<p style="font-weight: 700;">A summary of the key project fundamentals is presented below:</p>
 					</p>
 					<!-- TABLE -->
 					<table>
@@ -272,5 +272,25 @@ The study has been based on a mineable reserve prepared by Mining Associates wit
 
 @section("css")
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/runruno.css">
+@endsection
+
+@section("js")
+<script type="text/javascript">
+$(document).on("click", '.nav-per-button', function()
+{
+	var id = $(this).attr("id");
+
+	$(".nav-per-button").removeClass("active");
+	$(".body-content .content").removeClass("active");
+	$(".body-content .content").fadeOut();
+
+	$(this).addClass("active");
+	$(".body-content .content."+id).addClass("active");
+	$(".body-content .content."+id).fadeIn();
+
+
+});
+</script>
+<script type="text/javascript" src="/themes/{{ $shop_theme }}/js/sticky_side.js"></script>
 @endsection
 

@@ -12,6 +12,6 @@ class Tbl_debit_memo extends Model
 
     public function scopeVendor($query)
     {
-    	return $query->join("tbl_vendor","tbl_vendor.vendor_id","=","tbl_debit_memo.db_vendor_id");
+    	return $query->leftjoin("tbl_vendor","tbl_vendor.vendor_id","=","tbl_debit_memo.db_vendor_id");
     }
 }

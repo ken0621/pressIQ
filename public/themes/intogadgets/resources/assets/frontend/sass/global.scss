@@ -2520,3 +2520,22 @@ div[style="position: fixed; bottom: 5px; right: 5px; opacity: 1; cursor: pointer
     right: auto !important;
     left: 5px !important;
 }
+
+.popular-tags
+{
+    padding-bottom: 15px;
+    a
+    {
+        display: inline-block;
+        vertical-align: top;
+        color: #fff;
+        font-weight: 700;
+        font-size: 16px;
+        margin: 0 2.5px;
+        transition: 0.3s all ease;
+        &:hover
+        {
+            color: #2076B5;
+        }
+    }
+}

@@ -32,7 +32,7 @@ class Tbl_journal_entry_line extends Model
         }
         elseif($type == 'vendor')
         {
-            return $query->selectRaw("*, concat('vendor_first_name', 'vendor_middle_name', 'vendor_last_name') as 'full_name'")
+            return $query->selectRaw("*, concat(vendor_first_name,' ', vendor_middle_name,' ', vendor_last_name) as 'full_name'")
                         ->leftJoin("tbl_vendor", "vendor_id", "=", "jline_name_id");
 
         }

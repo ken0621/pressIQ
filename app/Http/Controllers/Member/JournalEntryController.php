@@ -93,7 +93,7 @@ class JournalEntryController extends Member
 			$customer_vendor = Accounting::checkTransaction($journal->je_reference_module)['name'];
 			$data['_journal'][$key]->entries = Tbl_journal_entry_line::account()->item()->customerOrVendor($customer_vendor)->where("jline_je_id", $journal->je_id)->orderBy("jline_type","desc")->orderBy("account_name")->get();
 		}
-
+		
 		return view('member.accounting.journal_ledger.journal_entry', $data);
 	}
 

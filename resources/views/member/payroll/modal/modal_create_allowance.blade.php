@@ -15,7 +15,7 @@
 		<div class="form-group">
 			<div class="col-md-6">
 				<small>Amount</small>
-				<input type="number" name="payroll_allowance_amount" class="form-control text-right" required>
+				<input type="number" name="payroll_allowance_amount" class="form-control text-right" required step="any">
 			</div>
 			<div class="col-md-6">
 				<small>Category</small>

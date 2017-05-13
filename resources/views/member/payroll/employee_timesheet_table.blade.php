@@ -54,8 +54,12 @@
             </td>
             <td class="text-center edit-data day-number">{!! $timesheet->day_number !!}</td>
             <td class="text-center edit-data day-word">{!! $timesheet->day_word !!}</td>
-            <td class="text-center editable "><input placeholder="NO TIME" class="text-table time-entry time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}"></td>
-            <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}"></td>
+            <td class="text-center editable ">
+                <input placeholder="NO TIME" class="text-table time-entry time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}">
+            </td>
+            <td class="text-center editable">
+                <input placeholder="NO TIME" class="text-table time-entry time-out"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}">
+            </td>
             <td class="text-center editable approved-in">__:__ __</td>
             <td class="text-center editable approved-out">__:__ __</td>
             <td class="text-center edit-data zerotogray break">__:__</td>

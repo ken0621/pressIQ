@@ -15,7 +15,7 @@
                 </small>
             </h1>
             
-            <a href="javascript:" class="panel-buttons btn btn-custom-primary pull-right popup" link="/member/item/category/modal_create_category" >Add Category</a>
+            <a href="javascript:" class="panel-buttons btn btn-custom-primary pull-right popup" link="/member/item/category/modal_create_category/inventory" >Add Category</a>
         </div>
     </div>
 </div>

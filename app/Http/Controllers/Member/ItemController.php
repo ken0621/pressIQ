@@ -988,7 +988,7 @@ class ItemController extends Member
 
 			if($data['status'] == null)
 			{
-				$item_id = Tbl_item::where("item_id",$item_id)->update($update);
+				Tbl_item::where("item_id",$item_id)->update($update);
 
                 $data['status'] 	= 'success';
                 $data['message'] 	= 'Success';

@@ -88,10 +88,12 @@ class Estimate
         $insert['est_memo']                     = $estimate_other_info['estimate_memo'];
         $insert['date_created']                 = Carbon::now();    
 
+        $transaction = "estimate";
         if($is_sales_order == true)
         {
             $insert['is_sales_order'] = 1;    
-            $insert['est_status'] = 'accepted';    
+            $insert['est_status'] = 'accepted';   
+            $transaction = "sales_order"; 
         }
        
         $estimate_id = Tbl_customer_estimate::insertGetId($insert);
@@ -99,7 +101,7 @@ class Estimate
         Estimate::insert_estimate_line($estimate_id, $item_info);
 
         $est_data = AuditTrail::get_table_data("tbl_customer_estimate","est_id",$estimate_id);
-        AuditTrail::record_logs("Added","estimate",$estimate_id,"",serialize($est_data));
+        AuditTrail::record_logs("Added",$transaction,$estimate_id,"",serialize($est_data));
 
         return $estimate_id;
 	}
@@ -140,20 +142,22 @@ class Estimate
         $update['est_memo']                     = $estimate_other_info['estimate_memo'];   
 
         
+        $transaction = "estimate";
         if($is_sales_order == true)
         {
             $update['is_sales_order'] = 1;    
-            $update['est_status'] = 'accepted';    
+            $update['est_status'] = 'accepted';
+            $transaction = "sales_order";
         }
 
         Tbl_customer_estimate::where("est_id", $estimate_id)->update($update);
-        
-
-        $new = AuditTrail::get_table_data("tbl_customer_estimate","est_id",$estimate_id);
-        AuditTrail::record_logs("Edited","estimate",$estimate_id,serialize($old),serialize($new));
 
         Tbl_customer_estimate_line::where("estline_est_id", $estimate_id)->delete();
         Estimate::insert_estimate_line($estimate_id, $item_info);
+        
+        
+        $new = AuditTrail::get_table_data("tbl_customer_estimate","est_id",$estimate_id);
+        AuditTrail::record_logs("Edited",$transaction,$estimate_id,serialize($old),serialize($new));
 
         return $estimate_id;
     }

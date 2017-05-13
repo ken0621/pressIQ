@@ -1951,7 +1951,7 @@ class Payroll
 		$sss_contribution		= Payroll::sss_contribution($shop_id, $data['salary_sss']);
 		$sss_contribution_ee 	= $sss_contribution['ee'];
 
-
+		
 		if($group->payroll_group_sss == 'Every Period')
 		{
 			
@@ -1971,7 +1971,7 @@ class Payroll
 
 		}
 
-		else if($group->payroll_group_sss == Payroll::return_ave($period_category))
+		else if($group->payroll_group_sss == $period_category)
 		{
 
 			if(Payroll::return_ave($period_category) == '1st Period')
@@ -1986,10 +1986,21 @@ class Payroll
 				$data['sss_contribution_er'] = divide($sss_contribution['er'], $period_category_arr['count_per_period']) * 2;
 				$data['sss_contribution_ec'] = divide($sss_contribution['ec'], $period_category_arr['count_per_period']) * 2;
 			}
+
+			else if(Payroll::return_ave($period_category) == 'Last Period')
+			{
+				$data['sss_contribution_ee'] = $sss_contribution['ee'];
+				$data['sss_contribution_er'] = $sss_contribution['er'];
+				$data['sss_contribution_ec'] = $sss_contribution['ec'];
+
+			}
 		}
 
 		/* GET PHILHEALTH CONTRIBUTION */
 		$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $data['salary_philhealth']);
+
+		// dd($group->payroll_group_philhealth);
+
 		if($group->payroll_group_philhealth == 'Every Period')
 		{
 			// philhealth_contribution
@@ -2009,7 +2020,7 @@ class Payroll
 
 			
 		}
-		else if($group->payroll_group_philhealth == Payroll::return_ave($period_category))
+		else if($group->payroll_group_philhealth == $period_category)
 		{
 			if(Payroll::return_ave($period_category) == '1st Period')
 			{
@@ -2020,6 +2031,12 @@ class Payroll
 			{
 				$data['philhealth_contribution_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['count_per_period']) * 2;
 				$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'], $period_category_arr['count_per_period']) * 2;
+			}
+
+			else if(Payroll::return_ave($period_category) == 'Last Period')
+			{
+				$data['philhealth_contribution_ee'] = $philhealth_contribution['ee'];
+				$data['philhealth_contribution_er'] = $philhealth_contribution['er'];
 			}
 		}
 
@@ -2043,8 +2060,11 @@ class Payroll
 
 		}
 
-		else if($group->payroll_group_pagibig == Payroll::return_ave($period_category))
+
+
+		else if($group->payroll_group_pagibig == $period_category)
 		{
+
 			if(Payroll::return_ave($period_category) == '1st Period')
 			{
 				$data['pagibig_contribution'] = $pagibig_contribution;
@@ -2052,7 +2072,12 @@ class Payroll
 			}
 			else if(Payroll::return_ave($period_category) == '2nd Period')
 			{
-				$data['pagibig_contribution'] = divide($philhealth_contribution, $period_category_arr['count_per_period']) * 2;
+				$data['pagibig_contribution'] = divide($pagibig_contribution, $period_category_arr['count_per_period']) * 2;
+			}
+
+			else if(Payroll::return_ave($period_category) == 'Last Period')
+			{
+				$data['pagibig_contribution'] = $pagibig_contribution;
 			}
 		}
 
@@ -2211,12 +2236,15 @@ class Payroll
 		{
 			$next_month 	= date('m', strtotime("+15 day", $strtotime));
 
+			// dd($next_month);
+
 			if($index_count == 1)
 			{
 				$period_category = 'First Period';
 			}
-			else if($next_month != $current_month)
+			if($next_month != $current_month)
 			{
+				// dd($current_month);
 				$period_category = 'Last Period';
 			}
 
@@ -2372,9 +2400,11 @@ class Payroll
 		$temp_earlyOT = $hours['early_overtime'] * $rate;
 		$temp_night	= $hours['night_differential'] * $rate;
 
+		// dd($rate);
+
 		$data['regular']			= round(($regular + ( $hours['regular'] * $rate )), 2);
 		$data['late_overtime']		= round(($temp_overtime + ($temp_overtime * $late_overtime)), 2);
-		$data['early_overtime']		= round(($early_overtime + ($early_overtime * $early_overtime)), 2);
+		$data['early_overtime']		= round(($temp_earlyOT + ($temp_earlyOT * $early_overtime)), 2);
 		$data['night_differential']	= round(($night_differential + ($temp_night * $night_differential)), 2);
 
 		$tota = 0;

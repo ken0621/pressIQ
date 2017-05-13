@@ -9,6 +9,7 @@ use Validator;
 use Carbon\Carbon;
 use App\Globals\Invoice;
 use App\Globals\Utilities;
+use App\Globals\AuditTrail;
 class AgentPositionController extends Member
 {
     /**
@@ -66,6 +67,8 @@ class AgentPositionController extends Member
     {
         $id = Request::input("position_id");
 
+        $old_data = AuditTrail::get_table_data("tbl_position","position_id",$id);
+
         $data["status"] = null;
         $data["status_message"] = null;
 
@@ -88,6 +91,9 @@ class AgentPositionController extends Member
         {
             $data["status"] = "success";
             Tbl_position::where("position_id",$id)->update($update);
+
+            $position = AuditTrail::get_table_data("tbl_position","position_id",$id);
+            AuditTrail::record_logs("Edited","agent_position",$id,serialize($old_data),serialize($position));
         }
 
         return json_encode($data);
@@ -121,6 +127,9 @@ class AgentPositionController extends Member
         }
 
         Tbl_position::where("position_id",$id)->update($update);
+
+        $position = AuditTrail::get_table_data("tbl_position","position_id",$id);
+        AuditTrail::record_logs($action,"agent_position",$id,"",serialize($position));
 
         $data["status"] = "success";
 
@@ -157,6 +166,9 @@ class AgentPositionController extends Member
             $data["id"] = Tbl_position::insertGetId($insert);
             $data["status"] = "success";
             $data["type"] = "position";
+
+            $position = AuditTrail::get_table_data("tbl_position","position_id",$data["id"]);
+            AuditTrail::record_logs("Added","agent_position",$data["id"],"",serialize($position));
         }
 
         return json_encode($data);

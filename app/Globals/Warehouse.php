@@ -13,6 +13,7 @@ use App\Models\Tbl_settings;
 use App\Models\Tbl_user;
 use App\Models\Tbl_user_warehouse_access ;
 use App\Globals\Item;
+use App\Globals\UnitMeasurement;
 
 use App\Globals\AuditTrail;
 use App\Models\Tbl_unit_measurement_multi;
@@ -203,7 +204,12 @@ class Warehouse
                              ->select_inventory($warehouse_id)
 				    		 ->orderBy('product_name','asc')
     						 ->paginate(10);
-                             
+        foreach($data as $key => $value)
+        {   //cycy
+            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->pluck("multi_id");
+            $data[$key]->product_qty_um = UnitMeasurement::um_view($value->product_current_qty,$value->product_um,$um_issued);
+            $data[$key]->product_reorderqty_um = UnitMeasurement::um_view($value->product_reorder_point,$value->product_um,$um_issued);
+        }  
     	if($return == 'json')
     	{
     		$data = json_encode($data);
@@ -217,6 +223,12 @@ class Warehouse
                              ->orderBy('product_name','asc')
                              ->get();
                              
+        foreach($data as $key => $value)
+        {   //cycy
+            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->pluck("multi_id");
+            $data[$key]->product_qty_um = UnitMeasurement::um_view($value->product_current_qty,$value->product_um,$um_issued);
+            $data[$key]->product_reorderqty_um = UnitMeasurement::um_view($value->product_reorder_point,$value->product_um,$um_issued);
+        }           
         if($return == 'json')
         {
             $data = json_encode($data);

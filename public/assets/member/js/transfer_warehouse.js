@@ -376,7 +376,7 @@ function transfer_warehouse(){
         $parent = $this.closest(".tr-draggable");
         $parent.find(".product_sku").html($this.find("option:selected").attr("product-sku")).change();
         $parent.find(".product_source_qty").html($this.find("option:selected").attr("source-qty")).change();
-        $parent.find(".product_current_qty").html($this.find("option:selected").attr("current-qty")).change();
+        $parent.find(".product_current_qty").html($this.find("option:selected").attr("show-current-qty")).change();
         // $parent.find(".input-qty").attr("name","quantity["+$this.find("option:selected").attr("product-id")+"]");
 
         if($this.find("option:selected").attr("current-qty") <= $this.find("option:selected").attr("reorder-point"))

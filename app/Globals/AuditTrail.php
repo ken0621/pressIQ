@@ -41,6 +41,7 @@ use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_bill;
 use App\Models\Tbl_pay_bill;
 use App\Models\Tbl_write_check;
+use App\Models\Tbl_customer_estimate;
 
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
@@ -275,6 +276,42 @@ class AuditTrail
                     {
                         $amount = $old[$key]["cm_amount"];
                         $transaction_new_id = $old[$key]["cm_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "estimate")
+            {
+                $transaction = Tbl_customer_estimate::customer()->where("est_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->est_date));
+                    $transaction_client = $transaction->company != null ? $transaction->company : $transaction->title_name." ".$transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name." ".$transaction->suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->est_overall_price;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["est_overall_price"];
+                        $transaction_new_id = $old[$key]["est_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "sales_order")
+            {
+                $transaction = Tbl_customer_estimate::customer()->where("est_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->est_date));
+                    $transaction_client = $transaction->company != null ? $transaction->company : $transaction->title_name." ".$transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name." ".$transaction->suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->est_overall_price;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["est_overall_price"];
+                        $transaction_new_id = $old[$key]["est_id"];
                     }
                     $transaction_amount = currency("PHP",$amount);                    
                 }

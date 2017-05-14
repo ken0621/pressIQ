@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
+use App\Models\Tbl_customer;
 use Crypt;
 use Redirect;
 use Request;
@@ -33,12 +34,32 @@ class ShopCheckoutLoginController extends Shop
     }
     public function index()
     {
-        $data["page"] 	  = "Checkout - Login";
-        $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
+        if(Request::isMethod("post"))
+        {
+            /*  CHECK IF AN E-MAIL ALREADY EXIST */
+            if (Request::input("email")) 
+            {
+                $check_email = Tbl_customer::where('shop_id', $this->shop_info->shop_id)->where('email', Request::input("email"))->count();
 
-        $this->cart_exist($data);
-        $this->if_loggedin();
+                if($check_email)
+                {
+                    return Redirect::to('/checkout/login?email=' . Request::input("email"))->with('warning', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
+                }
+                else //IF E-MAIL DOESN'T EXIST CONTINUE TO FORM
+                {
+                    return Redirect::to("/checkout");
+                }
+            }
+        }
+        else
+        {
+            $data["page"]     = "Checkout - Login";
+            $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
+            $this->cart_exist($data);
+            $this->if_loggedin();
+            return view("checkout_login", $data);
+        }
 
-        return view("checkout_login", $data);
+        
     }
 }

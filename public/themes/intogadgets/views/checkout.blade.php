@@ -7,7 +7,7 @@
 		</div>
 		<div class="col-md-8">
 			<div class="checkout-form">
-				<form id="check-out" method="post" enctype="multipart/form-data">
+				<form id="check-out" method="post">
 					<input type="hidden" name="_token" value="{{{ csrf_token() }}}" />
 					<div class="fieldset">
 						@if(!isset($customer))
@@ -17,139 +17,48 @@
 						@endif
 					</div>
 
-					@if (count($errors) > 0)
+					@if(session("error"))
 					    <div class="alert alert-danger">
 					        <ul>
-					            @foreach ($errors->all() as $error)
-					                <li>{{ $error }}</li>
-					            @endforeach
+
+					                <li>{{ session("error") }}</li>
 					        </ul>
 					    </div>
 					@endif
 
 					<div class="fieldset">
-						<label class="col-md-4">First Name</label>
+						<label class="col-md-4">First and Last Name</label>
 						<div class="field col-md-8">
-							<input  class="form-control" type="text" name="customer_first_name" value="{{ $customer_first_name ? $customer_first_name : Request::old('customer_first_name') }}">
-						</div>
-					</div>
-
-					<div class="fieldset">
-						<label class="col-md-4">Middle Name</label>
-						<div class="field col-md-8">
-							<input  class="form-control" type="text" name="customer_middle_name" value="{{ $customer_middle_name ? $customer_middle_name : Request::old('customer_middle_name') }}">
-						</div>
-					</div>
-
-					<div class="fieldset">
-						<label class="col-md-4">Last Name</label>
-						<div class="field col-md-8">
-							<input  class="form-control" type="text" name="customer_last_name" value="{{ $customer_last_name ? $customer_last_name : Request::old('customer_last_name') }}">
-						</div>
-					</div>
-
-					<div class="fieldset">
-						<label class="col-md-4">Email</label>
-						<div class="field col-md-8">
-							<input autocomplete="off"  class="form-control" type="email" name="customer_email" value="{{ $customer_email ? $customer_email : Request::old('customer_email') }}">
-						</div>
-					</div>
-
-					<div class="fieldset">
-						<label class="col-md-4">Birthday</label>
-						<div class="field col-md-8 birthday">
-							<div class="bdivider month">
-								<select name="customer_birthdate[]" class="form-control">
-									<option >January</option>
-									<option >February</option>
-									<option >March</option>
-									<option >April</option>
-									<option >May</option>
-									<option >June</option>
-									<option >July</option>
-									<option >August</option>
-									<option >September</option>
-									<option >October</option>
-									<option >November</option>
-									<option >December</option>
-								</select>
-							</div>
-							<div class="bdivider day">
-								<select name="customer_birthdate[]" class="form-control">
-									@for($ctr=1;$ctr<=31;$ctr++)
-										<option>
-											{{ $ctr }}
-										</option>
-									@endfor		
-								</select>
-							</div>
-							<div class="bdivider year">
-								<select name="customer_birthdate[]" class="form-control">
-									@for($ctr=(date("Y")-120);$ctr<=date("Y");$ctr++)
-										<option {{ (date("Y")-18) == $ctr ? 'selected' : '' }}>
-											{{ $ctr }}
-										</option>
-									@endfor
-								</select>
-							</div>
-						</div>
-					</div>
-
-					<div class="fieldset">
-						<label class="col-md-4">Contact Number</label>
-						<div class="field col-md-8">
-							<input  maxlength="11" class="form-control" type="text" name="customer_mobile" value="{{ $customer_mobile ? $customer_mobile : Request::input('customer_mobile') }}">
+							<input  class="form-control" type="text" name="full_name" value="{{ old('full_name') }}">
 						</div>
 					</div>
 
 					<div class="fieldset">
 						<label class="col-md-4">Province</label>
 						<div class="field col-md-8">
-							<input class="form-control" type="text" name="customer_state_province" value="{{ $customer_state_province ? $customer_state_province : Request::old('customer_state_province') }}">
+							<input class="form-control" type="text" name="customer_state_province" value="{{ old('customer_state_province') }}">
 						</div>
 					</div>
 					<div class="fieldset">
 						<label class="col-md-4">City / Municipality</label>
 						<div class="field col-md-8">
-							<input class="form-control" type="text" name="customer_city" value="{{ $customer_city ? $customer_city : Request::old('customer_city') }}">
+							<input class="form-control" type="text" name="customer_city" value="{{ old('customer_city') }}">
 						</div>
 					</div>
 					<div class="fieldset">
 						<label class="col-md-4">Complete Address</label>
 						<div class="field col-md-8">
-							<textarea spellcheck="false" class="form-control" name="customer_address">{{ $customer_address ? $customer_address : Request::old('customer_address') }}</textarea>
+							<textarea spellcheck="false" class="form-control" name="customer_address">{{ Request::old('customer_address') }}</textarea>
 						</div>
 					</div>
 
-					{{-- <div class="fieldset">
-						<label class="col-md-4">Payment Method</label>
-						<div class="field col-md-8">
-							<select class="form-control payment-method-select" name="payment_method_id">
-								@if(count($_payment_method) != 0)
-									@foreach($_payment_method as $payment_method)
-									<option value="{{ $payment_method->method_id }}" {{ Request::old('payment_method_id') == $payment_method->method_id ? 'selected' : '' }}>{{ $payment_method->method_name }}</option>
-									@endforeach	
-								@else
-									<option disabled selected>No Payment Method Available</option>
-								@endif
-							</select>
-						</div>
-					</div>
-					<div class="fieldset payment-upload hide">
-						<label class="col-md-4">Upload Proof of Payment</label>	
-						<div class="field col-md-8">
-							<input type="file" name="payment_upload">
-						</div>
-					</div> --}}
 					<div class="fieldset">
-						<label class="col-md-4">Tax</label>
+						<label class="col-md-4">Contact Number</label>
 						<div class="field col-md-8">
-							<select name="taxable" class="form-control">
-								<option value="1" {{ Request::old('taxable') == 1 ? "selected" : "" }}>With tax</option>
-								<option value="0" {{ Request::old('taxable') == 0 ? "selected" : "" }}>Without tax</option>
-							</select>
+							<input  maxlength="11" class="form-control" type="text" name="customer_mobile" value="{{ Request::input('customer_mobile') }}">
 						</div>
 					</div>
+
 					<div class="fieldset text-right btn-container">
 						<div class="col-md-12">
 							@if(!isset($customer))

@@ -45,29 +45,55 @@ class ShopCheckoutController extends Shop
             return Redirect::to('/');
         }
 
-        return view("checkout", $data);
-    }
-    public function submit()
-    {
-        /* SPLIT NAME TO FIRST NAME AND LAST NAME */
-        $full_name = Request::input("full_name");
-        $_name = $this->split_name($full_name);
-        $customer_name["first_name"] = $_name[0];
-        $customer_name["last_name"] = $_name[1];
 
-        $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_name);
 
-        if($customer_set_info_response["status"] == "error")
-        { 
-            return Redirect::back()->with('error', $customer_set_info_response["status_message"])->withInput();
+        $data['ec_order_load'] = 0;
+        foreach($data['get_cart'] as $value)
+        {
+            foreach($value as $key2=>$value2)
+            {
+                if($value2['cart_product_information']['item_category_id'] == 17)
+                {
+                    $data['ec_order_load'] = 1;
+                }
+            }           
         }
+
+        $data["_payment_method"] = $this->get_payment_method();
+
+        if(Self::$customer_info != null)
+        {
+            $customer_info = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_info->customer_id)->info()->first();
+        }
+
+        if(isset($customer_info))
+        {
+            $data['customer_first_name'] = $customer_info->first_name;
+            $data['customer_middle_name'] = $customer_info->middle_name;
+            $data['customer_last_name'] = $customer_info->last_name;
+            $data['customer_email'] = $customer_info->email;
+            $data['customer_mobile'] = $customer_info->customer_mobile;
+            $data['customer_state_province'] = $customer_info->customer_state;
+            $data['customer_city'] = $customer_info->customer_city;
+            $data['customer_address'] = $customer_info->customer_street . ' ' .  $customer_info->customer_state . ' ' . $customer_info->customer_city;
+        }
+        
         else
         {
-            dd(Cart::customer_get_settings($this->shop_info->shop_id));
+            $data['customer_first_name'] = null;
+            $data['customer_middle_name'] = null;
+            $data['customer_last_name'] = null;
+            $data['customer_email'] = null;
+            $data['customer_mobile'] = null;
+            $data['customer_state_province'] = null;
+            $data['customer_city'] = null;
+            $data['customer_address'] = null;
         }
+
+        $data["customer_email"] = Request::input("email") ? Request::input("email") : $data["customer_email"];
+
+        return view("checkout", $data);
     }
-
-
     public function payment()
     {
         $checkout_input = Session::get("checkout_input");
@@ -518,7 +544,28 @@ class ShopCheckoutController extends Shop
             }
         }
     }
+    public function submit()
+    {
+        $validator = $this->validate_submit();
 
+        if ($validator->fails()) 
+        {
+            return Redirect::back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+        else
+        {
+            $validate_payment = $this->validate_payment();
+            if (!$validate_payment) 
+            {
+                $cart = $this->restructure_cart();
+                $this->check_stocks();
+                $this->check_payment_method_enabled($cart);
+                $this->check_payment_method($cart);
+            }
+        }
+    }
     /*Ipay88 Function*/
     public function postPaymentWithIPay88()
     {
@@ -691,13 +738,5 @@ class ShopCheckoutController extends Shop
     {
         $data["page"] = "Checkout - Add to Cart";
         return view("addto_cart", $data);
-    }
-
-    function split_name($name)
-    {
-        $name = trim($name);
-        $last_name = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
-        $first_name = trim( preg_replace('#'.$last_name.'#', '', $name ) );
-        return array($first_name, $last_name);
     }
 }

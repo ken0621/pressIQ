@@ -18,10 +18,17 @@ use App\Models\Tbl_mlm_item_points;
 use App\Globals\Mlm_plan;
 class Cart
 {
+    public static function get_unique_id($shop_id)
+    {
+        return "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+    }
+    public static function get_unique_id_customer($shop_id)
+    {
+        return "cart_customer:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+    }
     public static function get_shop_info()
     {
         $shop_info = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
-
         return $shop_info;
     }
     public static function add_to_cart($product_id,$quantity,$shop_id = null)
@@ -32,7 +39,7 @@ class Cart
             $shop_id = Cart::get_shop_info();
         }
         
-        $unique_id = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id = Cart::get_unique_id($shop_id);
         $check     = Tbl_ec_variant::where("evariant_id",$product_id)->first();
         if(number_format($quantity) <= 0)
         {
@@ -108,7 +115,7 @@ class Cart
 
         /* INITIALIZE */
         $date_now              = Carbon::now();
-        $unique_id             = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id             = Cart::get_unique_id($shop_id);
         $data                  = Session::get($unique_id);
         $customer_setings      = Cart::customer_get_settings($shop_id);
 
@@ -282,7 +289,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id               = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id               = Cart::get_unique_id($shop_id);
         $insert                  = Session::get($unique_id);
         foreach ($insert['cart'] as $key => $value) 
         {
@@ -309,7 +316,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id  = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id  =  Cart::get_unique_id($shop_id);
         $_cart      = Session::get($unique_id);
         $condition  = false;
 
@@ -362,7 +369,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id =  Cart::get_unique_id($shop_id);
         $_cart     = Session::get($unique_id);
 
         if(isset($_cart["cart"]))
@@ -399,7 +406,8 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id = "customer_settings:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id =  Cart::get_unique_id_customer($shop_id);
+
         if($customer_id && $customer_id != 0)
         {
             $data["customer_id"] = $customer_id;
@@ -488,6 +496,40 @@ class Cart
         return $message;
     }
 
+    public static function customer_set_email($email)
+    {
+    }
+
+    /* @arr customer_information (first_name, last_name, email, password) */
+    public static function customer_set_info($shop_id, $customer_information)
+    {
+        $unique_id = Cart::get_unique_id_customer($shop_id);
+
+        /* READY INFORMATION FOR SESSION */
+        $data["tbl_customer"]['first_name']     = isset($customer_information["first_name"]) ? $customer_information["first_name"] : null;
+        $data["tbl_customer"]['last_name']      = isset($customer_information["last_name"]) ? $customer_information["last_name"] : null;
+        $data["tbl_customer"]['middle_name']    = isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : null;
+        $data["tbl_customer"]['email']          = isset($customer_information["email"]) ? $customer_information["email"] : null;
+        $data["tbl_customer"]['password']       = isset($customer_information["password"]) ? $customer_information["password"] : null;
+        $data["tbl_customer"]['shop_id']        = $shop_id;
+        $data["tbl_customer"]['country_id']     = 420;
+        
+        /* CHECK IF FIRST NAME LAST NAME IS EMPTY */
+        if(trim($data["tbl_customer"]['first_name']) == "" || $data["tbl_customer"]['last_name'] == "")
+        {
+            $message["status"]         = "error";
+            $message["status_message"] = "Kindly fill up First Name and Last Name";
+        }
+        else
+        {
+            Session::put($unique_id, $data);
+            $message["status"]         = "success";
+            $message["status_message"] = "Customer Information Successfully Updated";
+        }
+
+        return $message;
+    }
+
     public static function customer_get_settings($shop_id = null)
     {
         //get_shop_info
@@ -497,7 +539,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id = "customer_settings:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id = Cart::get_unique_id_customer($shop_id);
         $data      = Session::get($unique_id);
         if(!$data)
         {
@@ -587,7 +629,7 @@ class Cart
             }
             else
             {
-                $unique_id                  = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+                $unique_id                  = Cart::get_unique_id($shop_id);
                 $_cart                      = Session::get($unique_id);
                 $_cart["applied_coupon_id"] = $check->coupon_code_id;
                 Session::put($unique_id,$_cart); 

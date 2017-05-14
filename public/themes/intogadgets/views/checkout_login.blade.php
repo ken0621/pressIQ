@@ -13,7 +13,7 @@
 					    	</ul>
 					    </div>
 					@endif
-					<form class="form-login" method="get" action="/checkout">
+					<form method="post">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="form-group">
 							<input value="{{ Request::input("email") }}" type="email" class="the-email form-control" placeholder="Enter your email address" name="email">

@@ -122,7 +122,7 @@ class Customer_SaleReceiptController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('invline_item_id');
 
-        $product_consume = null;
+        $product_consume = [];
         $ctr_item = 0;
         foreach($_itemline as $key => $item_line)
         {
@@ -141,11 +141,15 @@ class Customer_SaleReceiptController extends Member
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
                 $item_info[$key]['ref_name']           = "";
                 $item_info[$key]['ref_id']             = 0;
-
-
-                $um_qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
-                $product_consume[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
-                $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
+    
+                $item_type = Tbl_item::where("item_id",Request::input('invline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+    
+                    $um_qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
+                    $product_consume[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
+                    $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
+                }
             }
         }
         //START if bundle inventory_consume arcy
@@ -218,10 +222,14 @@ class Customer_SaleReceiptController extends Member
                         $cm_item_info[$keys]['quantity']           = str_replace(',', "",Request::input('cmline_qty')[$keys]);
                         $cm_item_info[$keys]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$keys]);
                         $cm_item_info[$keys]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$keys]);
-                
-                        $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
-                        $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];
-                        $item_returns[$keys]["product_id"] = Request::input('cmline_item_id')[$keys];                    
+                        
+                        $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$keys])->pluck("item_type_id");
+                        if($item_type == 4 || $item_type == 1)
+                        {
+                            $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
+                            $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];
+                            $item_returns[$keys]["product_id"] = Request::input('cmline_item_id')[$keys];                    
+                        }
                     }          
                 } 
                 // --> for bundles
@@ -294,11 +302,14 @@ class Customer_SaleReceiptController extends Member
                         $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
                     }
 
-                    $remarks            = "Invoice";
-                    $warehouse_id       = $this->current_warehouse->warehouse_id;
-                    $transaction_type   = "invoice";
-                    $transaction_id     = $inv_id;
-                    $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id);                
+                    if(count($product_consume) > 0)
+                    {
+                        $remarks            = "Invoice";
+                        $warehouse_id       = $this->current_warehouse->warehouse_id;
+                        $transaction_type   = "invoice";
+                        $transaction_id     = $inv_id;
+                        $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id);                
+                    }
 
                     $json["status"]         = "success-invoice";
                     if($button_action == "save-and-edit")
@@ -371,7 +382,7 @@ class Customer_SaleReceiptController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('invline_item_id');
 
-        $product_consume = null;
+        $product_consume = [];
         $ctr_item = 0;
         foreach($_itemline as $key => $item_line)
         {
@@ -391,9 +402,13 @@ class Customer_SaleReceiptController extends Member
                 $item_info[$key]['ref_name']           = "";
                 $item_info[$key]['ref_id']             = 0;
 
-                $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
-                $product_consume[$key]["quantity"] = $qty * $item_info[$key]['quantity'];
-                $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
+                $item_type = Tbl_item::where("item_id",Request::input('invline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+                    $qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
+                    $product_consume[$key]["quantity"] = $qty * $item_info[$key]['quantity'];
+                    $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
+                }
             }
         }
 
@@ -465,9 +480,13 @@ class Customer_SaleReceiptController extends Member
                     $cm_item_info[$keys]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$keys]);
                     $cm_item_info[$keys]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$keys]); 
                    
-                    $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
-                    $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];
-                    $item_returns[$keys]["product_id"] = Request::input('cmline_item_id')[$keys];
+                    $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$keys])->pluck("item_type_id");
+                    if($item_type == 4 || $item_type == 1)
+                    {
+                        $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
+                        $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];
+                        $item_returns[$keys]["product_id"] = Request::input('cmline_item_id')[$keys];
+                    }
                 }   
             }            
         }

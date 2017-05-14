@@ -11,7 +11,6 @@ use App\Models\Tbl_tree_sponsor;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
-
 class Developer_StatusController extends Member
 {
 	public function index()
@@ -122,7 +121,6 @@ class Developer_StatusController extends Member
 			return Mlm_tree::insert_tree_sponsor($slot_info, $slot_info, 1);
 		}
 	}
-
 	public function re_com_phil_lost()
 	{
 		$slot_id = Request::input('id');
@@ -134,5 +132,4 @@ class Developer_StatusController extends Member
 			Mlm_complan_manager::indirect_points($slot_info);
 		}
 	}
-
 }

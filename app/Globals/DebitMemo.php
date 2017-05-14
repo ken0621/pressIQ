@@ -13,6 +13,7 @@ use App\Models\Tbl_debit_memo;
 use App\Globals\Accounting;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
+use App\Globals\AuditTrail;
 use DB;
 use Session;
 use Carbon\Carbon;
@@ -30,7 +31,6 @@ class DebitMemo
 		$insert_db["date_created"] = Carbon::now();
 
 		$db_id = Tbl_debit_memo::insertGetId($insert_db);
-
 		/* Transaction Journal */
         $entry["reference_module"]  = "debit-memo";
         $entry["reference_id"]      = $db_id;
@@ -39,12 +39,16 @@ class DebitMemo
 
 		DebitMemo::insert_dbline($db_id, $item_info, $entry);
 
+        $db_data = AuditTrail::get_table_data("tbl_debit_memo","db_id",$db_id);
+        AuditTrail::record_logs("Added","debit_memo",$db_id,"",serialize($db_data));
+
 
 		return $db_id;
 	}
 
 	public static function updateDB($db_id, $vendor_info, $item_info)
 	{
+        $old_data = AuditTrail::get_table_data("tbl_debit_memo","db_id",$db_id);
 
 		$update_db["db_vendor_id"] = $vendor_info["db_vendor_id"];
 		$update_db["db_vendor_email"] = $vendor_info["db_vendor_email"];
@@ -56,7 +60,6 @@ class DebitMemo
 
 		Tbl_debit_memo::where("db_id",$db_id)->update($update_db);
 
-
 		Tbl_debit_memo_line::where("dbline_db_id",$db_id)->delete();
 
 		/* Transaction Journal */
@@ -67,8 +70,11 @@ class DebitMemo
 
 		DebitMemo::insert_dbline($db_id, $item_info, $entry);
 
+        $db_data = AuditTrail::get_table_data("tbl_debit_memo","db_id",$db_id);
+        AuditTrail::record_logs("Edited","debit_memo",$db_id,serialize($old_data),serialize($db_data));
 
 	}
+
 	public static function insert_dbline($db_id, $item_info, $entry)
 	{
 		foreach ($item_info as $key => $value) 
@@ -117,6 +123,5 @@ class DebitMemo
 		}
 
 		$debit_memo_journal = Accounting::postJournalEntry($entry, $entry_data);
-
 	}
 }

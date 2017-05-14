@@ -10,6 +10,7 @@ use Crypt;
 use Carbon\Carbon;
 use Validator;
 use App\Globals\Utilities;
+use App\Globals\AuditTrail;
 
 class UtilitiesClientController extends Member
 {
@@ -60,7 +61,7 @@ class UtilitiesClientController extends Member
         $new_password = Request::input("new_password");
         $confirm_password = Request::input("confirm_password");
 
-      
+        $old_data = AuditTrail::get_table_data("tbl_user","user_id",$user_id);
         if($user_id != null) 
         { 
             $shop_data = Tbl_shop::getUser()->where("shop_id",$shop_id)->where("user_id",$user_id)->first();
@@ -162,6 +163,11 @@ class UtilitiesClientController extends Member
                 $data["status"] = "error";
                 $data["status_message"] = "Password not match.";
             }
+        }
+        if($data["status"] == "success")
+        {            
+            $user_data = AuditTrail::get_table_data("tbl_user","user_id",$user_id);
+            AuditTrail::record_logs("Edited","user",$user_id,serialize($old_data),serialize($user_data));
         }
 
 

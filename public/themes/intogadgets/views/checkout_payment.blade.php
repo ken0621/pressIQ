@@ -17,26 +17,33 @@
 		<div class="payment-container">
 			<div class="row clearfix">
 				<div class="col-md-8">
-					@if(count($_payment_method) != 0)
-						@foreach($_payment_method as $payment_method)
-							<div class="holder">
-								<div class="image">
-									<img src="{{ $payment_method->image_path ? $payment_method->image_path : '/assets/front/img/default.jpg' }}">
+					<div class="holder-holder">
+						@if(count($_payment_method) != 0)
+							@foreach($_payment_method as $payment_method)
+								<div class="holder">
+									<div class="match-height" style="line-height: 12.5px;">{{ $payment_method->method_name }}</div>
+									<div class="image" style="margin-top: 7.5px;">
+										<img src="{{ $payment_method->image_path ? $payment_method->image_path : '/assets/front/img/default.jpg' }}">
+									</div>
+									<div class="radio" style="margin-bottom: 0;">
+									  <label><input type="radio" name="payment_method_id" value="{{ $payment_method->method_id }}"></label>
+									</div>
 								</div>
-								<div class="radio">
-								  <label><input type="radio" name="payment_method_id" value="{{ $payment_method->method_id }}">{{ $payment_method->method_name }}</label>
-								</div>
-							</div>
-						@endforeach	
-					@else
-						<div class="text-center"><h3>No Payment Method Available</h3></div>
-					@endif
-					<div class="details">
+							@endforeach	
+						@else
+							<div class="text-center"><h3>No Payment Method Available</h3></div>
+						@endif
+					</div>
+					<div class="details clearfix">
 						<div class="detail-holder">
-							<div class="details-title">Upload Proof of Payment</div>
+							{{-- <div class="details-title">Upload Proof of Payment</div>
 							<button class="btn btn-primary" id="upload-button" type="button" onClick="$('.payment-upload-file').trigger('click');">UPLOAD</button>
 							<input onChange="$('.upload-name').text($(this).val().split('\\').pop());" class="hide payment-upload-file" type="file" name="payment_upload">
-							<div class="upload-name"></div>
+							<div class="upload-name"></div> --}}
+							<div class="details-text">You can pay in cash to our courier when you receive the goods at your doorstep.</div>
+							<div class="details-order">
+								<button class="btn btn-primary">PLACE YOUR ORDER</button>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -98,9 +105,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="button">
-						<button class="btn btn-primary" type="submit">PLACE YOUR ORDER</button>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -109,29 +113,11 @@
 @endsection
 
 @section('script')
+<script type="text/javascript" src="js/match-height.js"></script>
 <script type="text/javascript">
 $(document).ready(function()
 {
-	if ( $('.payment-method-select').val() != 1 && $('.payment-method-select').val() != 2 && $('.payment-method-select').val() != 8 ) 
-	{
-		$('.payment-upload').removeClass("hide");
-	}	
-	else
-	{
-		$('.payment-upload').addClass("hide");
-	}
-
-	$('.payment-method-select').change(function(event) 
-	{
-		if ( $(event.currentTarget).val() != 1 && $(event.currentTarget).val() != 2 && $(event.currentTarget).val() != 8 ) 
-		{
-			$('.payment-upload').removeClass("hide");
-		}	
-		else
-		{
-			$('.payment-upload').addClass("hide");
-		}
-	});
+	$('.match-height').matchHeight();
 });
 </script>
 @endsection

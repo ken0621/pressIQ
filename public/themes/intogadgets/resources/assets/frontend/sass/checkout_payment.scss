@@ -1,14 +1,25 @@
 .payment-container
 {
 	margin-top: 40px;
+    .holder-holder
+    {
+        border: 1px solid #dde2e4;
+    }
 	.holder
 	{
 		width: 100px;
-		padding: 0 15px;
+		padding: 15px 15px;
 		text-align: center;
 		margin-bottom: 25px;
 		display: inline-block;
 		vertical-align: top;
+        border: 1px solid #dde2e4;
+        margin: -1px;
+        border-right: 0;
+        &:last-child
+        {
+            border-right: 1px solid #dde2e4 !important;
+        }
 		.image
 		{
 			height: 0;
@@ -33,6 +44,18 @@
 	}
 	.details
 	{
+        border: 1px solid #dde2e4;
+        border-top: 0;
+        padding: 25px;
+        .details-text
+        {
+            margin: 25px 0;
+            margin-top: 0;
+        }
+        .details-order
+        {
+
+        }
 		.details-title
 		{
 			margin-bottom: 10px;

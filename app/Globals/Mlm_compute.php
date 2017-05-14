@@ -53,6 +53,7 @@ class Mlm_compute
     }
 	public static function entry($slot_id, $type = 0)
 	{
+
         $slot_info = Mlm_compute::get_slot_info($slot_id);
         
         // slot_info must have membership info and membership_points;
@@ -132,7 +133,7 @@ class Mlm_compute
             // $c = Mlm_gc::slot_gc($slot_id);
 
             Mlm_compute::set_slot_nick_name_2($slot_info);
-        // End Computation Plan
+            // End Computation Plan
 	}
     public static function get_slot_info($slot_id)
     {
@@ -142,6 +143,7 @@ class Mlm_compute
 
     public static function repurchase($slot_info,$item_code_id)
     {
+
         $plan_settings = Tbl_mlm_plan::where('shop_id', $slot_info->shop_id)
         ->where('marketing_plan_enable', 1)
         ->where('marketing_plan_trigger', 'Product Repurchase')

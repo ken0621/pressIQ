@@ -65,7 +65,7 @@
                                       <ul class="dropdown-menu dropdown-menu-custom">
                                           <li><a href="/member/customer/sales_order?id={{$estimate->est_id}}">Edit</a></li>
                                           <li ><a target="_blank" href="/member/customer/customer_sales_order_view/{{$estimate->est_id}}">Print</a></li>
-                                          <li ><a >Create Invoice</a></li>
+                                          <!--<li ><a >Create Invoice</a></li>-->
                                       </ul>
                                     </div>
                                 </td>

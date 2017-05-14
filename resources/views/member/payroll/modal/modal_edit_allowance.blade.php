@@ -9,7 +9,7 @@
 		<div class="form-group">
 			<div class="col-md-12">
 				<small>Allowance Name</small>
-				<input type="text" name="payroll_allowance_name" class="form-control" required value="{{$allowance->payroll_allowance_name}}">
+				<input type="text" name="payroll_allowance_name" step="any" class="form-control" required value="{{$allowance->payroll_allowance_name}}">
 			</div>
 			
 		</div>

@@ -545,3 +545,15 @@ function n2z($value)
     }
     return $value;
 }
+
+function debit_credit($type, $amount)
+{
+    if($type == 'Debit' || $type == 'debit')
+    {
+        return 1 * $amount;
+    }
+    else
+    {
+        return -1 * $amount;
+    }
+}

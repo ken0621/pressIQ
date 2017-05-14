@@ -82,7 +82,7 @@ class ItemController extends Member
 					if($um)
 					{
 						$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
-
+						
 						$data["_item"][$key]->item_whole_price = $um->unit_qty * $value->item_price;
 						$data["_item"][$key]->um_whole = $um->multi_abbrev;
 					}
@@ -94,6 +94,7 @@ class ItemController extends Member
 					{
 						$data["_item"][$key]->multi_abbrev = $um_base->multi_abbrev;
 					}
+					$data["_item"][$key]->conversion = UnitMeasurement::um_convertion($value->item_id);
 				}
 				if($value->item_type_id == 4)
 				{
@@ -988,7 +989,7 @@ class ItemController extends Member
 
 			if($data['status'] == null)
 			{
-				$item_id = Tbl_item::where("item_id",$item_id)->update($update);
+				Tbl_item::where("item_id",$item_id)->update($update);
 
                 $data['status'] 	= 'success';
                 $data['message'] 	= 'Success';

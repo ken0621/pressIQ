@@ -12,10 +12,12 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_um;
 use App\Globals\UnitMeasurement;
+use App\Globals\AuditTrail;
 use App\Globals\Utilities;
 use Carbon\Carbon;
 use Validator;
 use Session;
+
 class UnitOfMeasurementController extends Member
 {
     /**
@@ -38,10 +40,15 @@ class UnitOfMeasurementController extends Member
     public function edit_um_submit()
     {
         $id = Request::input("um_id");
+
+        $old_um_data = AuditTrail::get_table_data("tbl_um","id",$id);
         $up["um_name"] = Request::input("um_name");
         $up["um_abbrev"] = Request::input("um_abbrev");
 
         Tbl_um::where("id",$id)->update($up);
+
+        $um_data = AuditTrail::get_table_data("tbl_um","id",$id);
+        AuditTrail::record_logs("Edited","pis_um",$id,serialize($old_um_data),serialize($um_data));
 
         $data["type"] = "pis-um";
         return json_encode($data);
@@ -66,9 +73,13 @@ class UnitOfMeasurementController extends Member
             $ins['um_shop_id'] = UnitMeasurement::getShopId();
 
             $um_id = Tbl_um::insertGetId($ins);
+
             $data['id'] = $um_id;
             $data['type'] = 'pis-um'; 
             $data['um_type'] = $type."-um";   
+
+            $um_data = AuditTrail::get_table_data("tbl_um","id",$um_id);
+            AuditTrail::record_logs("Added","pis_um",$um_id,"",serialize($um_data));
         }
         else
         {

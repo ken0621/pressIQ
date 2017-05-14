@@ -4616,6 +4616,39 @@ class PayrollController extends Member
           
      }
 
+     public function modal_13_month($payroll_employee_id, $payroll_period_company_id)
+     {
+          $data['_13_month'] = Tbl_payroll_record::get13month($payroll_employee_id)->get();
+          return view('member.payroll.modal.modal_13_month', $data);
+     }
+
+     public function modal_unused_leave($payroll_employee_id, $payroll_period_company_id)
+     {
+          $date = Tbl_payroll_period_company::sel($payroll_period_company_id)->pluck('payroll_period_end');
+          // $_leave = Tbl_payroll_leave_schedule::getremaining($payroll_employee_id, $date)->orderBy('tbl_payroll_leave_temp.payroll_leave_temp_name')->get();
+
+          $payable_leave = array();
+
+          $_leave = Tbl_payroll_leave_employee::getpayable_leave($payroll_employee_id)->orderBy('tbl_payroll_leave_temp.payroll_leave_temp_name')->get();
+
+          foreach($_leave as $leave)
+          {
+               /* count used leave this current year */
+               $count_use = Tbl_payroll_leave_schedule::getyearly($leave->payroll_leave_employee_id)->count();
+
+               $temp['payroll_leave_employee_id']      = $leave->payroll_leave_employee_id;
+               $temp['payroll_leave_temp_name']        = $leave->payroll_leave_temp_name;
+               $temp['payroll_leave_temp_days_cap']    = $leave->payroll_leave_temp_days_cap;
+               $temp['remaining']                      = $leave->payroll_leave_temp_days_cap - $count_use;
+
+               array_push($payable_leave, $temp);
+          }
+
+          $data['payable_leave'] = $payable_leave;
+
+          return view('member.payroll.modal.modal_unused_leave', $data);
+     }
+
      /* PAYROLL COMPUTATION BREAKDOWN */
      public function payroll_compute_brk_unsaved($employee_id, $payroll_period_company_id)
      {

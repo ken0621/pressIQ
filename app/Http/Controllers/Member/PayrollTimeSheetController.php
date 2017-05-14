@@ -258,6 +258,8 @@ class PayrollTimeSheetController extends Member
 			
 			$date = Carbon::parse($from)->format("Y-m-d");
 			$record = Payroll::process_time($employee_id, $date);
+
+			// dd($record);
 			$approved_timesheet = $record->approved_timesheet;
 			
 			if($param_target == 'Daily')

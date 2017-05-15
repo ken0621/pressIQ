@@ -89,7 +89,7 @@ class Shop extends Controller
         $company_info = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->get())->keyBy('key');
         $product_category = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         $global_cart = Cart::get_cart($this->shop_info->shop_id);
-
+      
         /* Set Email Configuration */
         Settings::set_mail_setting($this->shop_info->shop_id);
         

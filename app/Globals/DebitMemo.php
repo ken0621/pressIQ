@@ -49,6 +49,8 @@ class DebitMemo
 
 	public static function updateDB($db_id, $vendor_info, $item_info)
 	{
+		$update_db["db_shop_id"] = DebitMemo::getShopId();
+
 		$update_db["db_vendor_id"] = $vendor_info["db_vendor_id"];
 		$update_db["db_vendor_email"] = $vendor_info["db_vendor_email"];
 		$update_db["db_date"] = $vendor_info["db_date"];

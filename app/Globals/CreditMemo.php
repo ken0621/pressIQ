@@ -36,7 +36,7 @@ class CreditMemo
     }
 	public static function postCM($customer_info, $item_info, $inv_id = 0)
 	{
-		$insert_db["cm_shop_id"] = CreditMemo::getShopId();
+		$insert_cm["cm_shop_id"] = CreditMemo::getShopId();
 
 		$insert_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$insert_cm["cm_customer_email"] = $customer_info["cm_customer_email"];
@@ -69,6 +69,7 @@ class CreditMemo
 
 	public static function updateCM($cm_id, $customer_info, $item_info)
 	{
+		$update_cm["cm_shop_id"] = CreditMemo::getShopId();
 
 		$update_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$update_cm["cm_customer_email"] = $customer_info["cm_customer_email"];

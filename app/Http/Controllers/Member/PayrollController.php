@@ -124,7 +124,7 @@ class PayrollController extends Member
 	{
           $excels['number_of_rows'] = Request::input('number_of_rows');
 
-          $excels['data'] = ['Company','Employee Number','Title Name','First Name','Middle Name','Last Name','Suffix Name','ATM/Account Number','Gender (M/F)','Birthdate','Civil Status','Street','City/Town','State/Province','Country','Zip Code', 'Contact','Email Address','Tax Status','Monthly Salary','Daily Rate' ,'Taxable Salary','SSS Salary','HDMF Salary','PHIC Salary','Minimum Wage (Y/N)','Department','Position','Start Date','Employment Status','SSS Number','Philhealth Number','Pagibig Number','TIN','BioData/Resume(Y/N)','Police Clearance(Y/N)','NBI(Y/N)','Health Certificate(Y/N)','School Credentials(Y/N)','Valid ID(Y/N)','Dependent Full Name(1)','Dependent Relationship(1)','Dependent Birthdate(1)','Dependent Full Name(2)','Dependent Relationship(2)','Dependent Birthdate(2)','Dependent Full Name(3)','Dependent Relationship(3)','Dependent Birthdate(3)','Dependent Full Name(4)','Dependent Relationship(4)','Dependent Birthdate(4)','Remarks'];
+          $excels['data'] = ['Company*','Employee Number*','Title Name','First Name*','Middle Name*','Last Name*','Suffix Name*','ATM/Account Number','Gender (M/F)*','Birthdate','Civil Status*','Street*','City/Town*','State/Province','Country*','Zip Code', 'Contact','Email Address','Tax Status','Monthly Salary*','Daily Rate' ,'Taxable Salary','SSS Salary','HDMF Salary','PHIC Salary','Minimum Wage (Y/N)*','Department*','Position*','Start Date*','Employment Status*','SSS Number','Philhealth Number','Pagibig Number','TIN','BioData/Resume(Y/N)','Police Clearance(Y/N)','NBI(Y/N)','Health Certificate(Y/N)','School Credentials(Y/N)','Valid ID(Y/N)','Dependent Full Name(1)','Dependent Relationship(1)','Dependent Birthdate(1)','Dependent Full Name(2)','Dependent Relationship(2)','Dependent Birthdate(2)','Dependent Full Name(3)','Dependent Relationship(3)','Dependent Birthdate(3)','Dependent Full Name(4)','Dependent Relationship(4)','Dependent Birthdate(4)','Remarks'];
 
           Excel::create('201 Template', function($excel) use ($excels) {
 
@@ -546,7 +546,7 @@ class PayrollController extends Member
 		$file = Request::file('file');
 		$_data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
 		$first = $_data[0]; 
-          // dd($_data);
+         
 		/* check index exist */
 		
 		if(isset($first['company']) && isset($first['first_name']) && isset($first['department']) && isset($first['start_date']))

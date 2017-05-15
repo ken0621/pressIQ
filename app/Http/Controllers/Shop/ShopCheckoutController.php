@@ -26,6 +26,7 @@ use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_ec_order_item;
+use App\Models\Tbl_merchant_school;
 // use App\Globals\Mlm_slot_log;    
 
 /*4/29/17 this will import the data/class needed by ipay88 payment mode by:brain*/
@@ -58,6 +59,8 @@ class ShopCheckoutController extends Shop
         }
 
         $data['ec_order_load'] = 0;
+        $data['ec_order_merchant_school'] = 0;
+        $tbl_merchant_school = Tbl_merchant_school::where('merchant_school_shop', $this->shop_info->shop_id)->get()->keyBy('merchant_item_id');
         foreach($data['get_cart'] as $value)
         {
             foreach($value as $key2=>$value2)
@@ -66,8 +69,13 @@ class ShopCheckoutController extends Shop
                 {
                     $data['ec_order_load'] = 1;
                 }
+                if(isset($tbl_merchant_school[$value2['cart_product_information']['item_id']]))
+                {
+                    $data['ec_order_merchant_school'] += $value2['quantity'];
+                }
             }           
         }
+        // dd($data['ec_order_merchant_school']);
 
         $data["_payment_method"] = $this->get_payment_method();
 

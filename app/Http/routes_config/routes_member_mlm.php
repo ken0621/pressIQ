@@ -237,3 +237,7 @@ Route::any('member/mlm/complan_setup/binary_pro', 'Member\Mlm_ComplanSetupContro
 
 
 Route::any('member/mlm/merchant_school', 'Member\BeneficiaryController@index'); 
+Route::any('member/mlm/merchant_school/create', 'Member\BeneficiaryController@create'); 
+Route::any('member/mlm/merchant_school/get', 'Member\BeneficiaryController@get'); 
+Route::any('member/mlm/merchant_school/destroy', 'Member\BeneficiaryController@destroy'); 
+

@@ -1,4 +1,4 @@
-@extends('member.layout')
+    @extends('member.layout')
 @section('content')
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <div class="panel panel-default panel-block panel-title-block" id="top">
@@ -84,4 +84,5 @@ function submit_done(data)
     }
 }
 </script>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 @endsection

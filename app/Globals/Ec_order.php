@@ -224,8 +224,8 @@ class Ec_order
         $ec_order['customer_id']                    = $data["inv_customer_id"];
         $ec_order['customer_email']                 = $data["inv_customer_email"];
         $ec_order['billing_address']                = $data["inv_customer_billing_address"];
-        $ec_order['invoice_date']                   = $data["inv_date"];
-        $ec_order['due_date']                       = $data["inv_due_date"];
+        $ec_order['invoice_date']                   = datepicker_input($data["inv_date"]);
+        $ec_order['due_date']                       = datepicker_input($data["inv_due_date"]);
         $ec_order['invoice_message']                = $data["inv_message"];
         $ec_order['order_status']                   = $data["order_status"];
         $ec_order['payment_method_id']              = $data["payment_method_id"];

@@ -45,7 +45,7 @@ class CouponVoucherController extends Member
 
     public function getList()
     {
-        $unused_coupon  = Tbl_coupon_code::where("used", 0)->product()->where("tbl_coupon_code.shop_id", $this->getShopId()); 
+        $unused_coupon  = Tbl_coupon_code::where("used", 0)->product()->variantName()->where("tbl_coupon_code.shop_id", $this->getShopId()); 
         $used_coupon    = Tbl_coupon_code::where("used", 1)->product()->order()->where("tbl_coupon_code.shop_id", $this->getShopId());
 
         /* Filter Coupon By Search */
@@ -84,18 +84,25 @@ class CouponVoucherController extends Member
         $coupon_amount              = Request::input('coupon_amount');
         $coupon_type                = Request::input('coupon_amount_type');
         $coupon_minimum_quantity    = Request::input('coupon_minimum_quantity');
+        $generate_count             = Request::input('generate_count') > 0 ? Request::input('generate_count') : 1;
 
-        if(!$coupon_code_id)
+        while($generate_count != 0)
         {
-            $coupon =  Cart::generate_coupon_code(8, $coupon_amount, $coupon_minimum_quantity, $coupon_type, $coupon_product_id);
-            return json_encode($coupon);
+            if(!$coupon_code_id)    
+            {
+                $coupon =  Cart::generate_coupon_code(8, $coupon_amount, $coupon_minimum_quantity, $coupon_type, $coupon_product_id);
+            }
+            else
+            {
+                dd("No Edit Code");
+            }
+            $generate_count--;
         }
-        else
-        {
-            dd("No Edit Code");
-        }
+
+        return json_encode($coupon);
     }
 
+    //Ewen
     public function submit_coupon()
     {
         $return["message"] = "";

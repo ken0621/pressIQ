@@ -558,13 +558,11 @@ class Mlm_complan_manager_repurchase
     {
         $slot_info     = Tbl_mlm_slot::where("slot_id", $slot_info->slot_id)->customer()->membership()->first();
         $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 
-
         if($item_code)
         {
             $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)
             ->where('membership_id', $slot_info->membership_id)
             ->first();
-
             if($mlm_item_points)
             {
                 $unilevel_pts = $mlm_item_points->UNILEVEL_REPURCHASE_POINTS;

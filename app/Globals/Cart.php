@@ -606,9 +606,9 @@ class Cart
 
     public static function random_code_generator($word_limit)
     {
-        // $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         // $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $characters = '0123456789';
+        // $characters = '0123456789';
         $charactersLength = strlen($characters);
         $randomString = '';
         for ($i = 0; $i < $word_limit; $i++) 

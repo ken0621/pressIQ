@@ -144,7 +144,7 @@
 											<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
 											<td>{{ $cart["quantity"] }}</td>
 											<td>P {{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</td>
-											<td style="padding-left: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&variation_id={{ $cart["product_id"] }}"><i class="fa fa-close"></i></a></td>
+											<td style="padding-left: 0px; padding-right: 0px; width: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&variation_id={{ $cart["product_id"] }}"><i class="fa fa-close"></i></a></td>
 										</tr>
 										@endforeach
 									@endif

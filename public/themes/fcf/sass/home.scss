@@ -189,6 +189,96 @@ body{
 		color: #fff;
 		padding: 0px 0px 10px 20px;
 	}
+
+
+	.gallery-slide-holder{
+		min-height: 20px;
+		padding: 19px;
+		margin-bottom: 20px;
+		background-color: #333333;
+
+		.carousel{
+			position: relative;
+			box-sizing: border-box;
+
+			.carousel-inner{
+				position: relative;
+				width: 100%;
+				overflow: hidden;
+
+				.gallery-img-holder{
+					
+					padding-bottom: 32px;
+
+					img{
+						width: 100%;
+						border: 3px solid #fff;
+
+						&:hover{
+							cursor: pointer;
+							transition: 0.3s all ease;
+							-moz-box-shadow:1px 1px 16px rgba(0,0,0,1);
+							-webkit-box-shadow:1px 1px 16px rgba(0,0,0,1);
+							box-shadow:1px 1px 16px rgba(0,0,0,1);
+						}
+					}
+					&:last-child
+					{
+						padding-bottom: 0;
+					}
+				}
+			}
+			.carousel-control{
+				padding-top: 14.7%;
+				width: 3%;
+
+				position: absolute;
+				top: 0px;
+				bottom: 0px;
+				left: 0px;
+				font-size: 20px;
+				color: #fff;
+				text-align: center;
+				text-shadow: 0 1px 2px rgba(0,0,0,.6);
+				opacity: 4.5;
+				z-index: 90;
+
+				&:hover{
+					cursor: pointer;
+				}
+			}
+			.carousel-control.left{
+				background-image: linear-gradient(to right,rgba(0,0,0,.5) 20%,rgba(0,0,0,.0001) 100%);
+				background-repeat: repeat-x;
+				img{
+					position: relative;
+					left: -5px;
+				}
+				&:hover{
+					background-image: linear-gradient(to right,rgba(0,0,0,.5) 40%,rgba(0,0,0,.0001) 100%);
+				}
+			}
+			.carousel-control.right{
+				right: 0px;
+				left: auto;
+				background-image: linear-gradient(to right,rgba(0,0,0,.0001) 20%,rgba(0,0,0,.5) 100%);
+				background-repeat: repeat-x;
+				img{
+					position: relative;
+					right: -5px;
+				}
+				&:hover{
+					background-image: linear-gradient(to left,rgba(0,0,0,.5) 40%,rgba(0,0,0,.0001) 100%);
+				}
+			}
+			a{
+				background-color: transparent;
+			}
+		}
+
+	}
+
+
 }
 /* WHO WE ARE */
 .mid-container{
@@ -245,6 +335,7 @@ body{
 
 	.element-container{
 		padding-top: 10px;
+		padding-bottom: 50px;
 
 		.image-holder{
 			text-align: center;
@@ -262,4 +353,5 @@ body{
 		}
 	}
 }
+
 

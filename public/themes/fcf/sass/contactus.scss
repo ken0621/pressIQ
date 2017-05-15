@@ -12,12 +12,17 @@ body{
 	}
 
 	.top-bg-detail-container{
-		position: absolute;
+		position: relative;
 		font-family: 'Fjalla One', sans-serif;
 		color: #fff;
 		font-size: 26px;
-		top: 220px;
-		margin-left: 20px;
+		bottom: 50px;
+		padding-left: 20px;
+		@media screen and (max-width: 350px)
+		{
+				font-size: 16px;
+				bottom: 25px;
+		}
 
 		.title-highlight{
 			color: #ffc10e;

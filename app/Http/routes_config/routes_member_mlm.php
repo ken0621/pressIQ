@@ -234,3 +234,5 @@ Route::any('member/mlm/stairstep_compute/start/compute', 'Member\MLM_StairstepCo
 
 Route::any('member/mlm/complan_setup', 'Member\Mlm_ComplanSetupController@index'); 
 Route::any('member/mlm/complan_setup/binary_pro', 'Member\Mlm_ComplanSetupController@binary_promotions'); 
+
+

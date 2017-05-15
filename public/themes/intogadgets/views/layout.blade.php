@@ -87,7 +87,7 @@
                   <a href="/account/logout" class="text">LOGOUT</a>
                @else
                   <a data-remodal-target="login" href="#" class="text">LOGIN</a>
-                  <a href="/register" class="text">REGISTER</a>
+                  <a href="/account/register_ecomm" class="text">REGISTER</a>
                @endif
             </div>
             <div class="col-md-8">
@@ -301,6 +301,7 @@
          </div>
       </div>
    </body>
+
    <!-- LOGIN -->
    <div class="remodal login" data-remodal-id="login">
       <div class="font">
@@ -323,6 +324,7 @@
          </div>
       </div>
    </div>
+   
    <!-- LIVE CHAT -->
    <div class="live-chat-holder">
       <div class="live-chat">

@@ -22,6 +22,7 @@ use App\Globals\Settings;
 use App\Globals\Ecom_Product;
 use App\Globals\Ec_wishlist;
 class ShopAccountController extends Shop
+
 {
     public static $customer_id;
     public static $customer_info;
@@ -192,5 +193,11 @@ class ShopAccountController extends Shop
         Session::forget('mlm_member');
 
         return Redirect::to("/");
+    }
+
+    public function account_register()
+    {
+        $data['error_message'] = null;
+        return view('/ec_register', $data);
     }
 }

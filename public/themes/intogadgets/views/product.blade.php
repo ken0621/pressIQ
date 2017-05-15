@@ -127,42 +127,53 @@
     </div>
     <div class="product-sub text-left"></div>
     <div class="product-contentie">
-        <div class="grid-view">
-        	@foreach($_product as $product)
-        		@if(count($product['variant']) > 0)
-                <div class="holder">
-                    <div class="border">
-                        <div class="img"><img class="4-3-ratio" src="{{ get_product_first_image($product) }}"></div>
-                        <div class="name">{{ get_product_first_name($product) }}</div>
-                        <!-- <div class="price-left">P34,000</div> -->
-                        <div class="price-right">{{ get_product_first_price($product) }}</div>
-                        <div class="hover">
-                            <a product-id="{{ $product['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
-                            <a style="display: block; margin-top: 50px;" href="/product/view/{{ $product['eprod_id'] }}" class="text">VIEW MORE</a>
+        @if(count($_product) > 0)
+            <div class="grid-view">
+            	@foreach($_product as $product)
+            		@if(count($product['variant']) > 0)
+                    <div class="holder">
+                        <div class="border">
+                            <div class="img">
+                                @if($product["eprod_detail_image"])
+                                    <img class="detail" src="{{ $product["eprod_detail_image"] }}">
+                                @endif
+                                <img class="4-3-ratio" src="{{ get_product_first_image($product) }}">
+                            </div>
+                            <div class="name">{{ get_product_first_name($product) }}</div>
+                            <!-- <div class="price-left">P34,000</div> -->
+                            <div class="price-right">{{ get_product_first_price($product) }}</div>
+                            <div class="hover">
+                                <a product-id="{{ $product['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
+                                <a style="display: block; margin-top: 50px;" href="/product/view/{{ $product['eprod_id'] }}" class="text">VIEW MORE</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                @endif
-            @endforeach
-        </div>
-        <div class="list-view hide">
-            @foreach($_product as $product)
-                <div class="holder">
-                    <div class="img"><img src="{{ get_product_first_image($product) }}"></div>
-                    <div class="text">
-                        <div class="name">{{ get_product_first_name($product) }}</div>
-                        <!--<div class="sprice">from: <span>P34,990</span></div>-->
-                        <div class="price">{{ get_product_first_price($product) }}</div>
-                        <div class="description">{!! get_product_first_description($product) !!}</div>
+                    @endif
+                @endforeach
+            </div>
+            <div class="list-view hide">
+                @foreach($_product as $product)
+                    <div class="holder">
+                        <div class="img">
+                            <img src="{{ get_product_first_image($product) }}">
+                        </div>
+                        <div class="text">
+                            <div class="name">{{ get_product_first_name($product) }}</div>
+                            <!--<div class="sprice">from: <span>P34,990</span></div>-->
+                            <div class="price">{{ get_product_first_price($product) }}</div>
+                            <div class="description">{!! get_product_first_description($product) !!}</div>
+                        </div>
+                        <div class="cart">
+                            <!-- <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div> -->
+                            <!-- <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div> -->
+                            <button class="button" onclick="location.href='product/'">View Info</button>
+                        </div>
                     </div>
-                    <div class="cart">
-                        <!-- <div class="info"><span>Delivery:</span>&nbsp;1 - 5 Business Days</div> -->
-                        <!-- <div class="info"><span>Shipping Fee:</span>&nbsp;123.00</div> -->
-                        <button class="button" onclick="location.href='product/'">View Info</button>
-                    </div>
-                </div>
-            @endforeach
-        </div>
+                @endforeach
+            </div>
+        @else
+            <h2 class="text-center" style="margin-top: 50px;">No Results</h2>
+        @endif
     </div>
     <div>
         {!! $_product->appends(Request::input())->render() !!}

@@ -5,6 +5,8 @@ use Crypt;
 use Redirect;
 use Request;
 use View;
+use Session;
+use DB;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_content;
 use App\Models\Tbl_ec_product;
@@ -13,7 +15,6 @@ use App\Models\Tbl_customer;
 use App\Globals\Ecom_Product;
 use App\Globals\Cart;
 use App\Globals\Settings;
-use Session;
 
 class Shop extends Controller
 {
@@ -81,16 +82,15 @@ class Shop extends Controller
         	die("Page not found.");
         }
 
-        $shop_theme_info = $this->get_shop_theme_info();
-
-        $this->shop_theme = $this->shop_info->shop_theme;
+        $shop_theme_info        = $this->get_shop_theme_info();
+        $this->shop_theme       = $this->shop_info->shop_theme;
         $this->shop_theme_color = $this->shop_info->shop_theme_color;
-        $this->shop_theme_info = $shop_theme_info;
-      
-        $company_info = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->get())->keyBy('key');
-        $product_category = Ecom_Product::getAllCategory($this->shop_info->shop_id);
-        $global_cart = Cart::get_cart($this->shop_info->shop_id);
-        $country = Tbl_country::get();
+        $this->shop_theme_info  = $shop_theme_info;
+        $company_info           = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->get())->keyBy('key');
+        $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
+        $global_cart            = Cart::get_cart($this->shop_info->shop_id);
+        $country                = Tbl_country::get();
+        $popular_tags           = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->shop_info->shop_id)->orderBy("count", "DESC")->limit(10)->get();
 
         View::share("slot_now", Self::$slot_now);
         View::share("customer_info_a", Self::$customer_info);
@@ -107,6 +107,7 @@ class Shop extends Controller
         View::share("lead", $data['lead']);
         View::share("customer_info", $data['customer_info']);
         View::share("lead_code", $data['lead_code']);
+        View::share("_popular_tags", $popular_tags);
     }
     public function file($theme, $type, $filename)
     {

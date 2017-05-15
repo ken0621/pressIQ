@@ -52,6 +52,18 @@ class Purchasing_inventory_system
         return $check;
     }
 
+    public static function get_sir_stocks($warehouse_id, $item_id)
+    {
+        $sir = Tbl_sir::where("sir_warehouse_id",$warehouse_id)->where("is_sync",1)->get();
+
+        $qty = 0;
+        foreach ($sir as $key => $value) 
+        {
+            $qty += Tbl_sir_inventory::where("sir_item_id",$item_id)->where("inventory_sir_id",$value->sir_id)->sum("sir_inventory_count");
+        }
+
+        return $qty;
+    }
     public static function get_sir_total_amount($sir_id)
     {
 
@@ -498,7 +510,7 @@ class Purchasing_inventory_system
     }
     public static function get_sir_data($sir_id)
     {        
-        $price = "";
+        $price = 0;
         $data["sir"] = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.sir_id",$sir_id)->first();
 
         $item = Tbl_sir_item::where("sir_id",$sir_id)->get();
@@ -514,7 +526,7 @@ class Purchasing_inventory_system
     }
     public static function get_ilr_data($sir_id)
     {        
-        $price = "";
+        $price = 0;
         $data["ilr"] = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.sir_id",$sir_id)->first();
 
         $item = Tbl_sir_item::where("sir_id",$sir_id)->get();
@@ -570,9 +582,9 @@ class Purchasing_inventory_system
                                 
         foreach ($data as $key => $value) 
         {              
-            $data[$key]->total_amount = "";
+            $data[$key]->total_amount = 0;
             $item = Tbl_sir_item::item()->where("sir_id",$value->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {   
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
@@ -691,7 +703,7 @@ class Purchasing_inventory_system
         {              
             $data[$key]->total_amount = "";
             $item = Tbl_sir_item::item()->where("sir_id",$value->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {   
                $qty = UnitMeasurement::um_qty($value2->related_um_type);
@@ -818,7 +830,7 @@ class Purchasing_inventory_system
         {              
             $data[$key]->total_amount = "";
             $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {                  
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
@@ -849,7 +861,7 @@ class Purchasing_inventory_system
         if($data["sir"])
         {
             $item = Tbl_sir_item::where("sir_id",$data["sir"]->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {   
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);

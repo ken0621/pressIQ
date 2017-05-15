@@ -209,7 +209,15 @@ class Warehouse
             $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->pluck("multi_id");
             $data[$key]->product_qty_um = UnitMeasurement::um_view($value->product_current_qty,$value->product_um,$um_issued);
             $data[$key]->product_reorderqty_um = UnitMeasurement::um_view($value->product_reorder_point,$value->product_um,$um_issued);
-        }  
+
+            //sir
+            $sir["pis"] = Purchasing_inventory_system::check();
+            if($sir["pis"] != 0)
+            {
+                $qty = Purchasing_inventory_system::get_sir_stocks($warehouse_id, $value->product_id);
+                $data[$key]->total_stock_sir = UnitMeasurement::um_view($qty,$value->product_um,$um_issued);
+            }
+        }
     	if($return == 'json')
     	{
     		$data = json_encode($data);

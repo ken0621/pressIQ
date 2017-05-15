@@ -341,6 +341,9 @@ Route::any('/member/item/warehouse/refill','Member\WarehouseController@refill');
 Route::any('/member/item/warehouse/refill_submit','Member\WarehouseController@refill_submit');
 Route::any('/item/warehouse/refill/by_vendor/{warehouse_id}/{id}','Member\WarehouseController@refill_item_vendor');
 
+//cycy
+Route::any('/warehouse/sir/{warehouse_id}/{item_id}','Member\WarehouseController@inventory_break_down');
+
 //adjust inventory
 Route::any('/member/item/warehouse/adjust/{id}','Member\WarehouseController@adjust');
 Route::any('/member/item/warehouse/adjust_submit','Member\WarehouseController@adjust_submit');

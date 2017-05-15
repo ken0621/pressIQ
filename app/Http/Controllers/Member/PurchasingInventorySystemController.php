@@ -62,7 +62,6 @@ class PurchasingInventorySystemController extends Member
         $sold_qty = Purchasing_inventory_system::count_sold_qty($sir_id, $item_id);
 
         $um = Tbl_unit_measurement_multi::where("multi_id",$data["sir_item"]->related_um_type)->first();
-
        
         $data["sir_item"]->um_name = isset($um->multi_name) ? $um->multi_name : "";
         $data["sir_item"]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";

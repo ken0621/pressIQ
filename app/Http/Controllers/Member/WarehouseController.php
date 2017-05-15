@@ -13,6 +13,11 @@ use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_settings;
+use App\Models\Tbl_sir;
+use App\Models\Tbl_sir_inventory;
+use App\Models\Tbl_unit_measurement_multi;
+use App\Globals\UnitMeasurement;
+use App\Globals\Purchasing_inventory_system;
 use Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -372,13 +377,27 @@ class WarehouseController extends Member
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
             $data["warehouse_item"] = Warehouse::select_item_warehouse_single_w_page($id,'array');
             // dd(collect($data["warehouse_item"])->toArray());
-
+            $data["pis"] = Purchasing_inventory_system::check();
             return view("member.warehouse.warehouse_view",$data);
         }
         else
         {
             return $this->show_no_access();
         }
+    }
+    public function inventory_break_down($warehouse_id, $item_id)
+    {
+        $data["_sir"] = Tbl_sir::saleagent()->where("sir_warehouse_id",$warehouse_id)->where("is_sync",1)->get();
+
+        $qty = null;
+        foreach ($data["_sir"] as $key => $value) 
+        {            
+            // $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+            $qty[$key] = Tbl_sir_inventory::where("sir_item_id",$item_id)->where("inventory_sir_id",$value->sir_id)->sum("sir_inventory_count");
+            // $data["_sir"][$key]->per_agent_qty = UnitMeasurement::um_view($qty,$value->item_measurement_id,$um_issued);
+        }
+        dd($qty);
+
     }
     public function refill()
     {

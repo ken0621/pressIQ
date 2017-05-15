@@ -482,6 +482,7 @@ class TabletPISController extends Member
         {
         	$update["lof_status"] = 2;
         	$update["sir_status"] = 1;
+            $update["is_sync"] = 1;
         }
         else if($action == "reject")
         {

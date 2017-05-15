@@ -67,6 +67,8 @@ use App\Models\Tbl_payroll_paper_sizes;
 use App\Models\Tbl_payroll_payslip;
 use App\Models\Tbl_payroll_reports;
 use App\Models\Tbl_payroll_reports_column;
+use App\Models\Tbl_payroll_13_month_compute;
+use App\Models\Tbl_payroll_13_month_virtual;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -4618,8 +4620,95 @@ class PayrollController extends Member
 
      public function modal_13_month($payroll_employee_id, $payroll_period_company_id)
      {
-          $data['_13_month'] = Tbl_payroll_record::get13month($payroll_employee_id)->get();
+          $_13_month   = Tbl_payroll_record::get13month($payroll_employee_id)->get();
+
+          $v_13_month  = Tbl_payroll_13_month_virtual::getperiod($payroll_employee_id, $payroll_period_company_id)->count();
+
+          $period = Tbl_payroll_period_company::getcompanyperiod($payroll_period_company_id)->first();
+
+          $compute = Payroll::compute_per_employee($payroll_employee_id, $period->payroll_period_start, $period->payroll_period_end, Self::shop_id(), $period->payroll_period_category, $payroll_period_company_id);
+          
+          $data['_13_month'] = array();
+
+          foreach($_13_month as $m13)
+          {
+               $count = Tbl_payroll_13_month_compute::where('payroll_employee_id', $payroll_employee_id)->where('payroll_record_id', $m13->payroll_record_id)->count();
+               $temp['status'] = '';
+
+               if($count == 1)
+               {
+                    $temp['status'] = 'checked="checked"';
+               }
+               $temp['regular_salary']       = $m13->regular_salary;
+               $temp['payroll_period_start'] = $m13->payroll_period_start;
+               $temp['payroll_period_end']   = $m13->payroll_period_end;
+               $temp['payroll_record_id']    = $m13->payroll_record_id;
+
+               array_push($data['_13_month'], $temp);
+          }
+
+
+          $data['v_13_month_period_start']   = $period->payroll_period_start;
+          $data['v_13_month_period_end']     = $period->payroll_period_end;
+          $data['v_status']                  = '';
+          $data['v_regular_salary']          = $compute['regular_salary'];
+          if($v_13_month == 1)
+          {
+               $data['v_status']   = 'checked="checked"';
+          }
+
+          $data['payroll_employee_id']       = $payroll_employee_id;
+          $data['payroll_period_company_id'] = $payroll_period_company_id;
           return view('member.payroll.modal.modal_13_month', $data);
+     }
+
+     public function modal_submit_13_month()
+     {
+          // 
+          $payroll_employee_id          = Request::input('payroll_employee_id');
+          $payroll_period_company_id    = Request::input('payroll_period_company_id');
+          $payroll_record_id            = array();
+
+          Tbl_payroll_13_month_compute::where('payroll_employee_id', $payroll_employee_id)->where('payroll_period_company_id', $payroll_period_company_id)->delete();
+
+          Tbl_payroll_13_month_virtual::getperiod($payroll_employee_id, $payroll_period_company_id)->delete();
+
+          if(Request::has('payroll_record_id'))
+          {
+               $payroll_record_id  = Request::input('payroll_record_id');
+               $insert             = array();
+               foreach($payroll_record_id as $id)
+               {
+                    $temp['shop_id']                   = Self::shop_id();
+                    $temp['payroll_employee_id']       = $payroll_employee_id;
+                    $temp['payroll_period_company_id'] = $payroll_period_company_id;
+                    $temp['payroll_record_id']         = $id;
+
+                    array_push($insert, $temp);
+               }
+
+
+
+               if(!empty($insert))
+               {
+                    Tbl_payroll_13_month_compute::insert($insert);
+               }
+
+          }
+
+          if(Request::has('payroll_period_company_id_v_13'))
+          {
+               $insert_v['payroll_employee_id'] = $payroll_employee_id;
+               $insert_v['payroll_period_company_id'] = $payroll_period_company_id;
+               Tbl_payroll_13_month_virtual::insert($insert_v);
+          }    
+
+          $data['status']                         = 'success';
+          $data['payroll_employee_id']            = $payroll_employee_id;
+          $data['payroll_period_company_id']      = $payroll_period_company_id;
+          $data['function_name']                  = 'reload_break_down';
+
+          return json_encode($data);
      }
 
      public function modal_unused_leave($payroll_employee_id, $payroll_period_company_id)
@@ -5629,6 +5718,11 @@ class PayrollController extends Member
           $temp['total_sh']                       = $data['total_sh'];
           $temp['total_worked_days']              = $data['total_worked_days'];
 
+          if(!empty($data['13_month_id']))
+          {
+               $update_13['13_month_computed'] = 1;
+               Tbl_payroll_record::whereIn('payroll_record_id', $data['13_month_id'])->update($update_13);
+          }
 
           return $temp;
      }

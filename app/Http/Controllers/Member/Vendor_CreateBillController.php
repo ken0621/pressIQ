@@ -254,6 +254,7 @@ class Vendor_CreateBillController extends Member
     {
         $bill_id = Request::input("bill_id");
         $button_action = Request::input('button_action');
+        $bill_data = Tbl_bill::where("bill_id",$bill_id)->first();
 
         $vendor_info                         = [];
         $vendor_info['bill_vendor_id']       = Request::input('bill_vendor_id');
@@ -355,9 +356,18 @@ class Vendor_CreateBillController extends Member
             {
                 Billing::updatePotoBill($bill_id, Request::input("itemline_ref_id"));
             }
-
-            $transaction_id = $bill_id;
+            
+            
             $transaction_type = "bill";
+            if($bill_data)
+            {
+                if($bill_data->inventory_only != 0)
+                {
+                    $transaction_type = "receive_inventory";
+                }
+            }
+    
+            $transaction_id = $bill_id;
             $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
 
             $json["status"]         = "success-bill";

@@ -125,15 +125,18 @@ class Invoice
         $insert['inv_memo']                     = $invoice_other_info['invoice_memo'];
         $insert['date_created']                 = Carbon::now();    
 
+        $transaction='';
         if($is_sales_receipt != '')
         {
             $insert['inv_payment_applied']        = $overall_price;
             $insert['is_sales_receipt']           = 1;
             $transaction_type = "sales-receipt";
+            $transaction = "sales_receipt";
         }
         else
         {
             $transaction_type = "invoice";
+            $transaction = "invoice";
         }
         $invoice_id = Tbl_customer_invoice::insertGetId($insert);
         
@@ -150,7 +153,7 @@ class Invoice
         Invoice::insert_invoice_line($invoice_id, $item_info, $entry);
 
         $inv_data = AuditTrail::get_table_data("tbl_customer_invoice","inv_id",$invoice_id);
-        AuditTrail::record_logs("Added","invoice",$invoice_id,"",serialize($inv_data));
+        AuditTrail::record_logs("Added",$transaction,$invoice_id,"",serialize($inv_data));
 
         return $invoice_id;
 	}
@@ -217,17 +220,20 @@ class Invoice
         $update['inv_overall_price']            = $overall_price;
         $update['inv_message']                  = $invoice_other_info['invoice_msg'];
         $update['inv_memo']                     = $invoice_other_info['invoice_memo'];   
-
+        
+        $transaction = "";
         if($is_sales_receipt != '')
         {
             $update["inv_payment_applied"] = $overall_price;
 
             Invoice::update_rcv_payment("invoice",$invoice_id,$overall_price);
             $transaction_type = "sales-receipt";
+            $transaction = "sales_receipt";
         }
         else
         {
             $transaction_type = "invoice";
+            $transaction = "invoice";
         }
 
         Tbl_customer_invoice::where("inv_id", $invoice_id)->update($update);

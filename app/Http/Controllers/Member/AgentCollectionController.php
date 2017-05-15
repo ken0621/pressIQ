@@ -62,7 +62,7 @@ class AgentCollectionController extends Member
                 $data["_sir"][$key]->total_collection = currency("Php",$value->agent_collection);
                 $data["_sir"][$key]->loss_over = $value->agent_collection - Purchasing_inventory_system::get_sir_total_amount($value->sir_id);
             } 
-        }        
+        }  
 
         return view("member.purchasing_inventory_system.agent_transactions.agent_collection_center",$data);
     }
@@ -90,6 +90,10 @@ class AgentCollectionController extends Member
         $update["agent_collection_remarks"] = $amount_remarks;
 
         Tbl_sir::where("sir_id",$sir_id)->update($update);
+
+
+        $sir_data = AuditTrail::get_table_data("tbl_sir","sir_id",$sir_id);
+        AuditTrail::record_logs("Update","agent_collection",$sir_id,"",serialize($sir_data));
 
         $data["status"] = "success";
 

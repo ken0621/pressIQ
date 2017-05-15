@@ -5,7 +5,7 @@
 	<div class="container-fluid">
 		<div class="top-bg-container">
 			<img src="/themes/{{ $shop_theme }}/img/contactus-bg.png">
-			<div class="top-bg-detail-container"><span style="color: #ffc10e;">Contact</span> Us</div>
+			<div class="top-bg-detail-container"><span style="color: #ffc10e;">CONTACT</span> US</div>
 		</div>
 		<div class="row clearfix content">
 		<!-- CONTENT -->

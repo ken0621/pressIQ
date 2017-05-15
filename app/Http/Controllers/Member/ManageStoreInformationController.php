@@ -6,6 +6,7 @@ use Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_country;
 use App\Models\Tbl_shop;
+use App\Globals\AuditTrail;
 use Validator;
 
 class ManageStoreInformationController extends Member
@@ -31,6 +32,8 @@ class ManageStoreInformationController extends Member
     {
         $data["status"] = "";
         $data["status_message"] = "";
+
+        $old_data = AuditTrail::get_table_data("tbl_shop","shop_id",$this->user_info->shop_id);
 
         $store_name = Request::input("store_name");
         $country = Request::input("country");
@@ -67,6 +70,9 @@ class ManageStoreInformationController extends Member
         {
             Tbl_shop::where("shop_id",$this->user_info->shop_id)->update($update);
             $data["status"] = "success";
+
+            $shop_data = AuditTrail::get_table_data("tbl_shop","shop_id",$this->user_info->shop_id);
+            AuditTrail::record_logs("Edited","store_information",$this->user_info->shop_id,serialize($old_data),serialize($shop_data));
         }
 
         return json_encode($data);

@@ -23,6 +23,7 @@ use App\Globals\Ecom_Product;
 use App\Globals\Sms;
 use App\Globals\PayrollJournalEntries;
 use App\Globals\Payroll;
+use App\Globals\Report;
 
 use Request;
 use Carbon\Carbon;
@@ -54,7 +55,7 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-
+        dd(Report::checkDatePeriod('days_ago',['days' => 65]));
     }
 
     public function getJournal()

@@ -78,3 +78,7 @@ Route::get('/mlm/slots/upgrade_slot/{id}', 'Mlm\MlmSlotsController@upgrade_slot'
 Route::post('/mlm/slots/upgrade_slot_post/{id}', 'Mlm\MlmSlotsController@upgrade_slot_post'); 
 
 /* MLM SLOTs REPORTS */
+
+
+/* MLM WALLET ABS */
+Route::get('/mlm/wallet/tours', 'Mlm\MlmWalletAbsController@index'); 

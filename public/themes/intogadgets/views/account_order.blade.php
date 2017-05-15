@@ -27,16 +27,24 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td data-title="No." class="">ORD1</td>
-						<td data-title="Order Date">December 25, 2015</td>
-						<td data-title="Amount">P 25.00</td>
-						<td data-title="Shipping Status">Shipped</td>
-						<td data-title="Payment Status">Paid</td>
-						<td data-title="Proof Image"><a order-id="1" class="add-proof">Add</a></td>
-						<td><a href="receipt?id=1&type=invoice" target="_blank">Invoice</a></td>
-						<td><a href="account/order?cancel_id=1">Cancel</a></td>
-					</tr>
+                    @if(count($_order) > 0)
+    					@foreach($_order as $order)
+                        <tr>
+                            <td data-title="No." class="">ORD{{ $order->ec_order_id }}</td>
+                            <td data-title="Order Date">{{ date("m/d/y", strtotime($order->created_date)) }}</td>
+                            <td data-title="Amount">P {{ number_format($order->total, 2) }}</td>
+                            <td data-title="Shipping Status">{{ $order->order_status }}</td>
+                            <td data-title="Payment Status">{{ $order->payment_status == 1 ? "Paid" : "Unpaid" }}</td>
+                            <td data-title="Proof Image"><a order-id="1" class="add-proof">Add</a></td>
+                            <td><a href="/receipt?id=1&type=invoice" target="_blank">Invoice</a></td>
+                            <td><a href="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a></td>
+                        </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td colspan="8">No Orders</td>
+                        </tr>
+                    @endif
 				</tbody>
 			</table>
 		</div>

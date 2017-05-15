@@ -142,11 +142,16 @@ class Billing
             $entry["discount"]          = '';
             $entry["ewt"]               = '';            
         }
-
-        $bill_data = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
-        AuditTrail::record_logs("Added","bill",$bill_id,"",serialize($bill_data));
+        $transaction_bill = "bill";
+        if($bill_info['inventory_only'] != 0)
+        {
+            $transaction_bill = "receive_inventory";
+        }
 
         Billing::insert_bill_line($bill_id, $item_info, $entry);
+
+        $bill_data = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
+        AuditTrail::record_logs("Added",$transaction_bill,$bill_id,"",serialize($bill_data));
 
         return $bill_id;
 
@@ -209,6 +214,9 @@ class Billing
         $update['bill_terms_id']            = $bill_info['bill_terms_id'];
         $update['bill_date']                = $bill_info['bill_date'];
         $update['bill_due_date']            = $bill_info['bill_due_date'];
+
+        $update['inventory_only']           = $bill_info['inventory_only'];
+
         $update['bill_memo']                = $bill_other_info['bill_memo'];
         $update['bill_total_amount']        = collect($item_info)->sum('itemline_amount');
         $update['bill_payment_method']      = 0;
@@ -224,8 +232,14 @@ class Billing
         $entry["discount"]          = '';
         $entry["ewt"]               = '';
 
-        // $new = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
-        // AuditTrail::record_logs("Edited","bill",$bill_id,serialize($old),serialize($new));
+
+        $transaction_bill = "bill";
+        if($bill_info['inventory_only'] != 0)
+        {
+            $transaction_bill = "receive_inventory";
+        }
+        $new = AuditTrail::get_table_data("tbl_bill","bill_id",$bill_id);
+        AuditTrail::record_logs("Edited",$transaction_bill,$bill_id,serialize($old),serialize($new));
 
         Tbl_bill_item_line::where("itemline_bill_id", $bill_id)->delete();
         Billing::insert_bill_line($bill_id, $item_info, $entry);

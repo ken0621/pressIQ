@@ -120,7 +120,7 @@ class Vendor_PayBillController extends Member
             $paybill_id  = BillPayment::postPaybill($pb_data, $pbline_data);
 
             $paybill_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
-            AuditTrail::record_logs("Added","pay_bill",$paybill_id,"",serialize($paybill_data));
+            AuditTrail::record_logs("Added","bill_payment",$paybill_id,"",serialize($paybill_data));
 
             $button_action = Request::input('button_action');
 
@@ -175,7 +175,7 @@ class Vendor_PayBillController extends Member
             BillPayment::updatePaybill($paybill_id, $pb_data, $pbline_data);
 
             $new_data = AuditTrail::get_table_data("tbl_pay_bill","paybill_id",$paybill_id);
-            AuditTrail::record_logs("Updated","bill",$paybill_id,serialize($old_data),serialize($new_data));
+            AuditTrail::record_logs("Edited","bill_payment",$paybill_id,serialize($old_data),serialize($new_data));
 
 
             $button_action = Request::input('button_action');

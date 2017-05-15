@@ -138,6 +138,7 @@ class Vendor_ReceiveInventoryController extends Member
         $_itemline                          = Request::input('itemline_item_id');
 
         $ctr_items = 0;
+        $item_refill = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -216,12 +217,15 @@ class Vendor_ReceiveInventoryController extends Member
             {
                 Billing::insertPotoBill($bill_id, Session::get("po_item"));
             }
-
-            $remarks            = "Refill Items with RECEIVE INVENTORY #". $bill_id;
-            $warehouse_id       = $this->current_warehouse->warehouse_id;
-            $transaction_type   = "bill";
-            $transaction_id     = $bill_id;
-            $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
+            
+            if(count($item_refill) > 0)
+            {
+                $remarks            = "Refill Items with RECEIVE INVENTORY #". $bill_id;
+                $warehouse_id       = $this->current_warehouse->warehouse_id;
+                $transaction_type   = "receive_inventory";
+                $transaction_id     = $bill_id;
+                $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
+            }
 
             $json["status"]         = "success-receive-inventory";
             if($button_action == "save-and-edit")
@@ -287,9 +291,13 @@ class Vendor_ReceiveInventoryController extends Member
                 $item_info[$key]['itemline_rate']         = str_replace(",","", Request::input('itemline_rate')[$key]);
                 $item_info[$key]['itemline_amount']       = str_replace(",","", Request::input('itemline_amount')[$key]);
 
-                $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
-                $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
-                $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];
+                $item_type = Tbl_item::where("item_id",Request::input('itemline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+                    $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
+                    $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
+                    $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];
+                }
             }
         }
           // --> for bundles
@@ -346,10 +354,12 @@ class Vendor_ReceiveInventoryController extends Member
             {
                 Billing::updatePotoBill($bill_id, Request::input("itemline_ref_id"));
             }
-
-            $transaction_id = $bill_id;
-            $transaction_type = "bill";
-            $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
+            if(count($item_refill) > 0)
+            {
+                $transaction_id = $bill_id;
+                $transaction_type = "receive_inventory";
+                $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
+            }
 
             $json["status"]         = "success-receive-inventory";
             if($button_action == "save-and-edit")

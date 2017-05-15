@@ -449,6 +449,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <a href="/mlm/encashment" class="subnav-text">
                                 Wallet Encashment
                             </a> 
+                            @if($shop_info->shop_wallet_tours == 1)
+                              <a href="/mlm/wallet/tours" class="subnav-text">
+                                  Tour Wallet
+                              </a> 
+                            @endif
                         </li>
                     </ul> 
                 </li>

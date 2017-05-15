@@ -58,57 +58,101 @@
 
     <!-- HEADER -->
     <div class="header-container">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row clearfix">
                 <div class="col-md-2">
                     <div class="image-logo-holder">
-                        <img src="/themes/{{ $shop_theme }}/img/company-logo.png">                       
+                        <a class="clearfix" href="/"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></a>    
+                        <div class="menu-nav">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>                   
                     </div>
                 </div>
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
-                    <nav>
-                        <a href="/" class="head-button link-nav">HOME</a>
-                        <a href="/about" class="head-button link-nav">COMPANY PROFILE</a>
-                        <a href="/runruno" class="head-button link-nav">RUNRUNO</a>
-                        <a href="/news" class="head-button link-nav">NEWS</a>
-                        <a href="/contactus" class="head-button link-nav">CONTACT US</a>
+                    <nav class="navirino">
+                        <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a>
+                        <a href="/about" class="head-button link-nav {{ Request::segment(1) == 'about' ? 'active' : '' }}" id="company-profile">COMPANY PROFILE</a>
+                        <a href="/runruno" class="head-button link-nav {{ Request::segment(1) == 'runruno' ? 'active' : '' }}" id="runruno">RUNRUNO</a>
+                        <a href="javascript:" class="head-button link-nav" id="news">NEWS</a>
+                        <a href="/contactus" class="head-button link-nav {{ Request::segment(1) == 'contactus' ? 'active' : '' }}" id="contact-us">CONTACT US</a>
                     </nav>
                 </div>
                 
             </div>
         </div>
+        <!-- LIGHTBOX -->
+        <div class="lightbox-target" id="goofy">
+           <img src="/themes/{{ $shop_theme }}/img/img1.png">
+           <a class="lightbox-close" href="#work"></a>
+        </div>
 
-    </div>
-    <!-- NEWS DROPDOWN -->
-<!--     <div class="news-dropdown">
-        <div class="row clearfix">
-            <div class="col-md-3">
-                <div class="news-per-container">
-                    <div class="dropdown-img-container"><img src="/themes/{{ $shop_theme }}/img/d1.png"></div>
-                    <div class="news-title-container">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </div>
-                </div>
+        <!-- NEWS DROPDOWN3 -->
+        <div class="slider3-wrapper" style="display: none;">
+            <div class="slider3-button-container">
+                <button id="gotoleft">&laquo;</button> 
+                <button id="gotoright">&raquo;</button>
             </div>
-            <div class="col-md-3">
-                <div class="news-per-container">
-                    <div class="dropdown-img-container"><img src="/themes/{{ $shop_theme }}/img/d2.png"></div>
-                    <div class="news-title-container">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </div>
-                </div>
+            <div class="slider3-title">
+                Latest News
             </div>
-            <div class="col-md-3">
-                <div class="news-per-container">
-                    <div class="dropdown-img-container"><img src="/themes/{{ $shop_theme }}/img/d3.png"></div>
-                    <div class="news-title-container">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="news-per-container">
-                    <div class="dropdown-img-container"><img src="/themes/{{ $shop_theme }}/img/d4.png"></div>
-                    <div class="news-title-container">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. </div>
+            <div class="slider3">
+                <div style="position: absolute; top: 18px; left: 0px; width: 2000px;">
+                    <div class="slider3-per-container">
+                        <a href="/news">
+                            <div class="per-container-wrapper">
+                                <img src="/themes/{{ $shop_theme }}/img/d1.png">
+                                <div class="slider3-title-container">Lorem ipsum dolor sit amet</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="slider3-per-container">
+                        <a href="/news">
+                            <div class="per-container-wrapper">
+                                <img src="/themes/{{ $shop_theme }}/img/d2.png">
+                                <div class="slider3-title-container">Lorem ipsum dolor sit amet consectetuer</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="slider3-per-container">
+                        <a href="/news">
+                            <div class="per-container-wrapper">
+                                <img src="/themes/{{ $shop_theme }}/img/d3.png">
+                                <div class="slider3-title-container">Lorem ipsum dolor</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="slider3-per-container">
+                        <a href="/news">
+                            <div class="per-container-wrapper">
+                                <img src="/themes/{{ $shop_theme }}/img/d4.png">
+                                <div class="slider3-title-container">Lorem ipsum dolor</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="slider3-per-container">
+                        <a href="/news">
+                            <div class="per-container-wrapper">
+                                <img src="/themes/{{ $shop_theme }}/img/d1.png">
+                                <div class="slider3-title-container">Lorem ipsum dolor sit amet consectetuer</div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="slider3-per-container">
+                        <a href="/news">
+                            <div class="per-container-wrapper">
+                                <img src="/themes/{{ $shop_theme }}/img/d2.png">
+                                <div class="slider3-title-container">Lorem ipsum dolor</div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>     -->
+    </div>
+    
     <!-- CONTENT -->
     <div id="scroll-to" class="clearfix">
 	   @yield("content")
@@ -116,7 +160,7 @@
 
     <!-- FOOTER -->
   	<footer>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row clearfix">
                 <div class="col-md-6">
                     <div class="footer-img-container">
@@ -129,11 +173,11 @@
                             NAVIGATION
                         </div>
                         <div class="navigation-btn-container">
-                            <p><span>HOME</span></p>
-                            <p><span>COMPANY PROFILE</span></p>
-                            <p><span>RUNRUNO</span></p>
-                            <p><span>NEWS</span></p>
-                            <p><span>CONTACT US</span></p>
+                            <a href="/home"><p><span>HOME</span></p></a>
+                            <a href="/about"><p><span>COMPANY PROFILE</span></p></a>
+                            <a href="/runruno"><p><span>RUNRUNO</span></p></a>
+                            <a href="/news"><p><span>NEWS</span></p></a>
+                            <a href="/contactus"><p><span>CONTACT US</span></p></a>
                         </div>
                     </div>
                 </div>
@@ -145,9 +189,9 @@
                         <div class="ftr-contact-container">
                             <p>Address: 22nd Floor, Salcedo Towers, 169 H.V. Dela Costa Street, Salcedo Village, Makati City, Metro Manila, Philippines<br><br>
     
-Phone: +63 (0) 2 659 5662<br> 
-Fax: +63 (0) 2 846 8507
-</p>
+                            Phone: +63 (0) 2 659 5662<br> 
+                            Fax: +63 (0) 2 846 8507
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -175,6 +219,108 @@ Fax: +63 (0) 2 846 8507
     <script type="text/javascript" src="/assets/front/js/jquery.keep-ratio.min.js"></script>
     <script type="text/javascript" src="/assets/front/js/global.js"></script>
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
+    <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/diyslider.min.js"></script>
+    <script type="text/javascript">
+        var news_dropdown = new news_dropdown();
+
+        function news_dropdown()
+        {
+            init();
+
+            function init()
+            {
+                event_news_click();
+                event_news_click_outside();
+                event_toggle_nav();
+            }
+
+            function event_toggle_nav()
+            {
+                $(".menu-nav").click(function(){
+                    action_toggle_nav();
+                });
+            }
+
+            function action_toggle_nav()
+            {
+                $(".navirino").slideToggle();
+            }
+
+            function event_news_click()
+            {
+                $(document).on("click", "#news", function(e)
+                {
+                    e.preventDefault();
+                    if(!$(this).hasClass("active"))
+                    {
+                        $(this).addClass("active");
+                        $(".slider3-wrapper").fadeIn(200);
+                        e.stopPropagation();
+                    }
+                    else
+                    {
+                        $(this).removeClass("active");
+                        $(".slider3-wrapper").fadeOut(200);
+                    }
+                })
+            }
+
+            function event_news_click_outside()
+            {
+                $(document).on("click", "body", function(e)
+                {
+                    $(".slider3-wrapper").fadeOut(200);
+                    $("#news").removeClass("active");
+                });
+
+                $(document).on("click", ".slider3-wrapper", function(e)
+                {
+                    e.stopPropagation();
+                });
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        $window = $(window);
+        $window.scroll(function() {
+          $scroll_position = $window.scrollTop();
+            if ($scroll_position > 100) { 
+                $('.header-container').addClass('header-fixed');
+
+
+                header_height = $('.your-header').innerHeight();
+                $('body').css('padding-top' , header_height);
+            } else {
+                $('body').css('padding-top' , '0');
+                $('.header-container').removeClass('header-fixed');
+            }
+         });
+
+    </script>
+
+    <script type="text/javascript">
+            
+            $('.slider3').diyslider({
+                width: "463px", // width of the slider
+                height: "115px", // height of the slider
+                display: 4, // number of slides you want it to display at once
+                loop: false // disable looping on slides
+                }); // this is all you need!
+
+        // use buttons to change slide
+        $('#gotoleft').bind("click", function(){
+            // Go to the previous slide
+            $('.slider3').diyslider("move", "back");
+        });
+        $('#gotoright').unbind("click")
+        $('#gotoright').bind("click", function(){
+            // Go to the previous slide
+            $('.slider3').diyslider("move", "forth");
+        });
+
+    </script>
+
     @yield("js")
     </body>
 </html>

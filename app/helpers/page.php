@@ -1047,7 +1047,7 @@ function page_list()
 
     /* -- REPORT => PRODUCTS  */
     $code = "report-product-sales";
-    $nav[$page]['submenu'][$code]['label'] = "Product Sales Report";
+    $nav[$page]['submenu'][$code]['label'] = "Product Sales";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sale/product";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -1056,7 +1056,7 @@ function page_list()
 
     /* -- REPORT => MONTHLY PRODUCT  */
     $code = "report-product-sales-monthly";
-    $nav[$page]['submenu'][$code]['label'] = "Product Sales Monthly Report";
+    $nav[$page]['submenu'][$code]['label'] = "Product Sales Monthly";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sale/month";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -1065,7 +1065,7 @@ function page_list()
 
     /* -- REPORT => PRODUCTS VARIANT  */
     $code = "report-product-variant-sales";
-    $nav[$page]['submenu'][$code]['label'] = "Product Variant Sales Report";
+    $nav[$page]['submenu'][$code]['label'] = "Product Variant Sales";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sale/product_variant";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -1075,7 +1075,7 @@ function page_list()
 
     /* -- Accounting => Sales Report  */
     $code = "report-sales-account";
-    $nav[$page]['submenu'][$code]['label'] = "Sales By Customer Details (Accounting)";
+    $nav[$page]['submenu'][$code]['label'] = "Sales By Customer";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/sale";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -1083,7 +1083,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";
 
     $code = "report-sales-item-account";
-    $nav[$page]['submenu'][$code]['label'] = "Sales By Item Details (Accounting)";
+    $nav[$page]['submenu'][$code]['label'] = "Sales By Item";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/sale/item";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -1091,7 +1091,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";
 
     $code = "report-profit-and-loss-account";
-    $nav[$page]['submenu'][$code]['label'] = "Profit and Loss (Accounting)";
+    $nav[$page]['submenu'][$code]['label'] = "Profit and Loss";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/profit/loss";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -1100,7 +1100,7 @@ function page_list()
 
 
     $code = "report-general-ledger-account";
-    $nav[$page]['submenu'][$code]['label'] = "General Ledger (Accounting)";
+    $nav[$page]['submenu'][$code]['label'] = "General Ledger";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/general/ledger";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];

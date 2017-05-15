@@ -10,12 +10,18 @@ body{
 		width: 100%;
 	}
 	.top-bg-detail-container{
-		position: absolute;
+		position: relative;
 		font-family: 'Fjalla One', sans-serif;
 		color: #fff;
 		font-size: 26px;
-		top: 220px;
-		margin-left: 20px;
+		bottom: 50px;
+		padding-left: 20px;
+		
+		@media screen and (max-width: 350px)
+		{
+				font-size: 16px;
+				bottom: 25px;
+		}
 
 		.title-highlight{
 			color: #ffc10e;
@@ -24,13 +30,16 @@ body{
 }
 
 .nav-left-container{
-
 	padding-right: 15px;
 	.nav-left{
 		background: none repeat scroll 0 0 #bd8606;
 		font-family: 'Fjalla One', sans-serif;
 		color: #fff;
 		font-size: 14px;
+		.active{
+			border-left: 8px solid #151515;
+			color: #151515;
+		}
 
 		.nav-per-button{
 			padding: 14px 0px 14px 25px;
@@ -80,5 +89,12 @@ body{
 			opacity: 0.8;
 			transition: 0.3s all ease;
 		}
+	}
+}
+
+.body-content{
+
+	.content{
+		padding-bottom: 50px;
 	}
 }

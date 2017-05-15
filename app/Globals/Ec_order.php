@@ -33,6 +33,12 @@ class Ec_order
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
+    /**
+     * Collecting all the details of order from the ecommerce front and pass it on create_ec_order
+     *
+     * @param  array    $order_info
+     * @return array
+     */
     public static function create_ec_order_automatic($order_info)
     {
         if($order_info['customer_id'] == null)
@@ -218,8 +224,8 @@ class Ec_order
         $ec_order['customer_id']                    = $data["inv_customer_id"];
         $ec_order['customer_email']                 = $data["inv_customer_email"];
         $ec_order['billing_address']                = $data["inv_customer_billing_address"];
-        $ec_order['invoice_date']                   = $data["inv_date"];
-        $ec_order['due_date']                       = $data["inv_due_date"];
+        $ec_order['invoice_date']                   = datepicker_input($data["inv_date"]);
+        $ec_order['due_date']                       = datepicker_input($data["inv_due_date"]);
         $ec_order['invoice_message']                = $data["inv_message"];
         $ec_order['order_status']                   = $data["order_status"];
         $ec_order['payment_method_id']              = $data["payment_method_id"];
@@ -425,8 +431,6 @@ class Ec_order
             $response["status"] = "success";
             return $response;
         }
-
-
 	}
 
     public static function update_inventory($type,$ec_order_id, $shop_id)
@@ -491,5 +495,10 @@ class Ec_order
             } 
 
         }
+    }
+
+    public static function check_coupon()
+    {
+        
     }
 }

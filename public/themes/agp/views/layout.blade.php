@@ -118,7 +118,7 @@
                     <div class="span12">
                         <!-- Logo -->
                         <div id="logo" class="">
-                            <a href='/'><img style="max-height: 100%; max-width: 100%;" src='assets/front/img/small-logo.png' alt='' /></a>
+                            <a href='/'><img style="max-height: 100%; max-width: 100%; object-fit: contain;" src='{{ $company_info["company_logo"]->value ? $company_info["company_logo"]->value : 'assets/front/img/small-logo.png' }}' alt='' /></a>
                         </div>
                         <!-- #logo END -->
                         <div class="after_logo">

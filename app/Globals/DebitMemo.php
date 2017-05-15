@@ -6,6 +6,7 @@ use App\Models\Tbl_shop;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_cart;
+use App\Models\Tbl_user;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_debit_memo_line;
@@ -19,8 +20,14 @@ use Carbon\Carbon;
 
 class DebitMemo
 {
+    public static function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
 	public static function postDB($vendor_info, $item_info, $inv_id = 0)
 	{
+		$insert_db["db_shop_id"] = DebitMemo::getShopId();
+
 		$insert_db["db_vendor_id"] = $vendor_info["db_vendor_id"];
 		$insert_db["db_vendor_email"] = $vendor_info["db_vendor_email"];
 		$insert_db["db_date"] = $vendor_info["db_date"];
@@ -43,6 +50,8 @@ class DebitMemo
 
 	public static function updateDB($db_id, $vendor_info, $item_info)
 	{
+		$update_db["db_shop_id"] = DebitMemo::getShopId();
+
 		$update_db["db_vendor_id"] = $vendor_info["db_vendor_id"];
 		$update_db["db_vendor_email"] = $vendor_info["db_vendor_email"];
 		$update_db["db_date"] = $vendor_info["db_date"];

@@ -11,6 +11,7 @@ use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_debit_memo_line;
 use App\Models\Tbl_debit_memo;
 use App\Globals\Accounting;
+use App\Models\Tbl_user;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\AuditTrail;
@@ -20,8 +21,14 @@ use Carbon\Carbon;
 
 class DebitMemo
 {
+    public static function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
 	public static function postDB($vendor_info, $item_info, $inv_id = 0)
 	{
+		$insert_db["db_shop_id"] = DebitMemo::getShopId();
+
 		$insert_db["db_vendor_id"] = $vendor_info["db_vendor_id"];
 		$insert_db["db_vendor_email"] = $vendor_info["db_vendor_email"];
 		$insert_db["db_date"] = $vendor_info["db_date"];
@@ -49,6 +56,9 @@ class DebitMemo
 	public static function updateDB($db_id, $vendor_info, $item_info)
 	{
         $old_data = AuditTrail::get_table_data("tbl_debit_memo","db_id",$db_id);
+
+		$update_db["db_shop_id"] = DebitMemo::getShopId();
+
 
 		$update_db["db_vendor_id"] = $vendor_info["db_vendor_id"];
 		$update_db["db_vendor_email"] = $vendor_info["db_vendor_email"];

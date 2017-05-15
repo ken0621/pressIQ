@@ -30,7 +30,6 @@ class DebitMemo
 		$insert_db["date_created"] = Carbon::now();
 
 		$db_id = Tbl_debit_memo::insertGetId($insert_db);
-
 		/* Transaction Journal */
         $entry["reference_module"]  = "debit-memo";
         $entry["reference_id"]      = $db_id;
@@ -38,7 +37,6 @@ class DebitMemo
         $entry["total"]             = $vendor_info["db_amount"];
 
 		DebitMemo::insert_dbline($db_id, $item_info, $entry);
-
 
 		return $db_id;
 	}

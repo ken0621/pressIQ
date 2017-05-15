@@ -82,6 +82,7 @@ Route::any('/member/developer/reset_slot/submit/give', 'Member\Developer_StatusC
 Route::any('/member/developer/reset_slot/submit/retro_product_sales', 'Member\Developer_StatusController@retro_product_sales'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_tree', 'Member\Developer_StatusController@re_tree'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Developer_StatusController@re_com_phil_lost'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
 
 
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
@@ -264,7 +265,7 @@ Route::any('/member/item/um/add_base/{id}/{item_id}',"Member\UnitOfMeasurementCo
 Route::any('/member/item/um/add_base_submit','Member\UnitOfMeasurementController@add_base_submit');
 /* START AUDIT TRAIL*/
 Route::any('/member/utilities/audit','Member\AuditTrailController@index');
-Route::any('/member/utilities/audit/table','Member\AuditTrailController@table');
+Route::any('/member/utilities/audit/get_list','Member\AuditTrailController@get_list');
 /* END AUDIT TRAIL*/
 
 /* START CLIENT INFO*/
@@ -732,6 +733,18 @@ Route::group(array('prefix' => '/member/report'), function()
 	/* Accounting Sales */
 	Route::get('/accounting/sale','Member\ReportsController@accounting_sale');
 	Route::post('/accounting/sale/edit/filter','Member\ReportsController@accounting_sale_filter_edit');
+	Route::any('/accounting/sale/get/report','Member\ReportsController@accounting_sale_report_view');
+
+	/* Accounting Sales - per item */
+	Route::get('/accounting/sale/item','Member\ReportsController@accounting_sale_items');
+
+	/* Accounting Profit and loss */
+	Route::get('/accounting/profit/loss','Member\ReportsController@profit_loss');
+	Route::any('/accounting/profit/loss/get','Member\ReportsController@profit_loss_get');
+
+	/* Accounting general ledger */
+	Route::get('/accounting/general/ledger','Member\ReportsController@general_ledger');
+	Route::any('/accounting/general/ledger/get','Member\ReportsController@general_ledger_get');
 });
 //reports end
 

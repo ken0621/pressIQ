@@ -11,7 +11,8 @@ use App\Models\Tbl_tree_sponsor;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_tree;
 use App\Globals\Mlm_complan_manager;
-
+use App\Models\Tbl_item_code;
+use App\Globals\Mlm_complan_manager_repurchase;
 class Developer_StatusController extends Member
 {
 	public function index()
@@ -122,7 +123,6 @@ class Developer_StatusController extends Member
 			return Mlm_tree::insert_tree_sponsor($slot_info, $slot_info, 1);
 		}
 	}
-
 	public function re_com_phil_lost()
 	{
 		$slot_id = Request::input('id');
@@ -134,5 +134,23 @@ class Developer_StatusController extends Member
 			Mlm_complan_manager::indirect_points($slot_info);
 		}
 	}
-
+	public function re_com_phil_uni()
+	{
+		$member_ship = 2;
+		$invoice = Tbl_item_code_invoice::customer()
+		->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')
+		->where('slot_membership', 2)
+		->get();
+		foreach($invoice as $key => $value)
+		{
+			$slot_info = Mlm_compute::get_slot_info($value->slot_id);
+			$item_code = Tbl_item_code::where("item_code_invoice_id",$value->item_code_invoice_id)->get(); 
+			foreach($item_code as $key2 => $value2)
+			{
+				Mlm_complan_manager_repurchase::unilevel_repurchase_points($slot_info, $value2->item_code_id);
+			}
+			
+		}
+		dd($invoice);
+	}
 }

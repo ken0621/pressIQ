@@ -21,6 +21,7 @@ use App\Globals\Purchase_Order;
 use App\Globals\Billing;
 use App\Globals\Item;
 use App\Globals\Warehouse;
+use App\Globals\Utilities;
 use App\Globals\UnitMeasurement;
 use App\Models\Tbl_purchase_order;
 use App\Models\Tbl_purchase_order_line;
@@ -28,6 +29,7 @@ use App\Models\Tbl_bill;
 use App\Models\Tbl_bill_account_line;
 use App\Models\Tbl_bill_item_line;
 use Carbon\Carbon;
+use Session;
 
 class Vendor_ReceiveInventoryController extends Member
 {
@@ -36,44 +38,63 @@ class Vendor_ReceiveInventoryController extends Member
      *
      * @return \Illuminate\Http\Response
      */
-      public function index()
+    public function index()
     {
-        $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderby("bill_id","DESC")->where("inventory_only",1)->get();
+        $access = Utilities::checkAccess('vendor-receive-inventory', 'access_page');
+        if($access == 1)
+        { 
+            $data["_bill_list"] = Tbl_bill::vendor()->where("bill_shop_id",Billing::getShopId())->orderby("bill_id","DESC")->where("inventory_only",1)->get();
 
-        foreach ($data["_bill_list"] as $key => $value) 
-        {
-           $price = 0;
-           $item = Tbl_bill_item_line::where("itemline_bill_id",$value->bill_id)->get();
-           foreach ($item as $key_item => $value_item) 
-           {
-                $price += (UnitMeasurement::um_qty($value_item->itemline_um) * $value_item->itemline_qty) * $value_item->itemline_rate;
-           }
-           $data["_bill_list"][$key]->bill_price = $price;
+            foreach ($data["_bill_list"] as $key => $value) 
+            {
+               $price = 0;
+               $item = Tbl_bill_item_line::where("itemline_bill_id",$value->bill_id)->get();
+               foreach ($item as $key_item => $value_item) 
+               {
+                    $price += (UnitMeasurement::um_qty($value_item->itemline_um) * $value_item->itemline_qty) * $value_item->itemline_rate;
+               }
+               $data["_bill_list"][$key]->bill_price = $price;
+            }
+            return view("member.receive_inventory.receive_inventory_list",$data);
         }
-        return view("member.receive_inventory.receive_inventory_list",$data);
+        else
+        {            
+            return $this->show_no_access();
+        }
     }    
     public function receive_inventory()
     {
-        $data["_vendor"]    = Vendor::getAllVendor('active');
-        $data['_item']      = Item::get_all_category_item();
-        $data['_account']   = Accounting::getAllAccount();
-        $data['_um']        = UnitMeasurement::load_um_multi();
-        $data['action']     = "/member/vendor/receive_inventory/add";
-        $data['vendor_id']     = Request::input("vendor_id");
-        
-        $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_billed",0)->get();
+        $access = Utilities::checkAccess('vendor-receive-inventory', 'access_page');
+        if($access == 1)
+        { 
+            // dd(Session::get("po_item"));
+            Session::forget("po_item");
+            $data["_vendor"]    = Vendor::getAllVendor('active');
+            $data['_item']      = Item::get_all_category_item();
+            $data['_account']   = Accounting::getAllAccount();
+            $data['_um']        = UnitMeasurement::load_um_multi();
+            $data['action']     = "/member/vendor/receive_inventory/add";
+            $data['vendor_id']     = Request::input("vendor_id");
+            
+            $data["_po"] = Tbl_purchase_order::where("po_vendor_id",Request::input("vendor_id"))->where("po_is_billed",0)->get();
 
-        $id = Request::input("id");
-        if($id)
-        {
-           $data["bill"] = Tbl_bill::where("bill_id",$id)->first();
-           $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
-           $data['_item']      = Item::get_all_category_item();
-           $data['_account']   = Accounting::getAllAccount();
-           $data['action']     = "/member/vendor/receive_inventory/update";
+            $id = Request::input("id");
+            if($id)
+            {
+               $data["bill"] = Tbl_bill::where("bill_id",$id)->first();
+               $data["_po"] = Tbl_purchase_order::where("po_vendor_id",$data["bill"]->bill_vendor_id)->where("po_is_billed",0)->get();
+               $data["_bill_item_line"] = Tbl_bill_item_line::um()->where("itemline_bill_id",$id)->get();
+               $data['_item']      = Item::get_all_category_item();
+               $data['_account']   = Accounting::getAllAccount();
+               $data['action']     = "/member/vendor/receive_inventory/update";
+            }
+            
+            return view("member.receive_inventory.receive_inventory",$data);
         }
-        
-        return view("member.receive_inventory.receive_inventory",$data);
+        else
+        {
+            return $this->show_no_access();            
+        }
     }
     public function load_purchase_order($vendor_id)
     {
@@ -113,12 +134,15 @@ class Vendor_ReceiveInventoryController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('itemline_item_id');
 
+        $ctr_items = 0;
+        $item_refill = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
             {
-                $item_info[$key]['itemline_poline_id']  = Request::input('poline_id')[$key];
-                $item_info[$key]['itemline_po_id']      = Request::input('itemline_po_id')[$key];
+                $ctr_items++;
+                $item_info[$key]['itemline_ref_name']     = Request::input('itemline_ref_name')[$key];
+                $item_info[$key]['itemline_ref_id']       = Request::input('itemline_ref_id')[$key];
                 
                 $item_info[$key]['itemline_description']  = Request::input('itemline_description')[$key];
                 $item_info[$key]['itemline_um']           = Request::input('itemline_um')[$key];
@@ -127,9 +151,13 @@ class Vendor_ReceiveInventoryController extends Member
                 $item_info[$key]['itemline_rate']         = str_replace(",","", Request::input('itemline_rate')[$key]);
                 $item_info[$key]['itemline_amount']       = str_replace(",","", Request::input('itemline_amount')[$key]);
             
-                $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
-                $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
-                $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];   
+                $item_type = Tbl_item::where("item_id",Request::input('itemline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+                    $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
+                    $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
+                    $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];                       
+                }
             }
         }
 
@@ -177,25 +205,41 @@ class Vendor_ReceiveInventoryController extends Member
             }
         }
         // <-- end bundle
-        $bill_id = Billing::postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
-        Billing::insertPotoBill($bill_id, Request::input("po_id"));
 
-        $remarks            = "Refill Items with RECEIVE INVENTORY #". $bill_id;
-        $warehouse_id       = $this->current_warehouse->warehouse_id;
-        $transaction_type   = "bill";
-        $transaction_id     = $bill_id;
-        $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
+        if($ctr_items != 0)
+        {
+            $bill_id = Billing::postBill($vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
 
-        $json["status"]         = "success-receive-inventory";
-        if($button_action == "save-and-edit")
-        {
-            $json["redirect"]    = "/member/vendor/receive_inventory/list";
+            if(count(Session::get("po_item")) > 0)
+            {
+                Billing::insertPotoBill($bill_id, Session::get("po_item"));
+            }
+            
+            if(count($item_refill) > 0)
+            {
+                $remarks            = "Refill Items with RECEIVE INVENTORY #". $bill_id;
+                $warehouse_id       = $this->current_warehouse->warehouse_id;
+                $transaction_type   = "receive_inventory";
+                $transaction_id     = $bill_id;
+                $data               = Warehouse::inventory_refill($warehouse_id, $transaction_type, $transaction_id, $remarks, $item_refill, 'array');
+            }
+
+            $json["status"]         = "success-receive-inventory";
+            if($button_action == "save-and-edit")
+            {
+                $json["redirect"]    = "/member/vendor/receive_inventory/list";
+            }
+            elseif($button_action == "save-and-new")
+            {
+                $json["redirect"]   = '/member/vendor/receive_inventory';
+            }
+            Request::session()->flash('success', 'Successfully Created');
         }
-        elseif($button_action == "save-and-new")
+        else
         {
-            $json["redirect"]   = '/member/vendor/receive_inventory';
+            $json["status"] = "error";
+            $json["status_message"] = "Please insert Item.";
         }
-        Request::session()->flash('success', 'Successfully Created');
 
 
         return json_encode($json);
@@ -227,12 +271,15 @@ class Vendor_ReceiveInventoryController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('itemline_item_id');
 
+        $ctr_items = 0;
+        $item_refill = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
             {
-                $item_info[$key]['itemline_poline_id']  = Request::input('poline_id')[$key];
-                $item_info[$key]['itemline_po_id']      = Request::input('itemline_po_id')[$key];
+                $ctr_items++;
+                $item_info[$key]['itemline_ref_name']     = Request::input('itemline_ref_name')[$key];
+                $item_info[$key]['itemline_ref_id']       = Request::input('itemline_ref_id')[$key];
 
                 $item_info[$key]['itemline_description']  = Request::input('itemline_description')[$key];
                 $item_info[$key]['itemline_um']           = Request::input('itemline_um')[$key];
@@ -241,9 +288,13 @@ class Vendor_ReceiveInventoryController extends Member
                 $item_info[$key]['itemline_rate']         = str_replace(",","", Request::input('itemline_rate')[$key]);
                 $item_info[$key]['itemline_amount']       = str_replace(",","", Request::input('itemline_amount')[$key]);
 
-                $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
-                $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
-                $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];
+                $item_type = Tbl_item::where("item_id",Request::input('itemline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+                    $um_qty = UnitMeasurement::um_qty(Request::input("itemline_um")[$key]);
+                    $item_refill[$key]["quantity"] = $um_qty * $item_info[$key]['itemline_qty'];
+                    $item_refill[$key]["product_id"] = Request::input('itemline_item_id')[$key];
+                }
             }
         }
           // --> for bundles
@@ -267,7 +318,8 @@ class Vendor_ReceiveInventoryController extends Member
                 }                 
             }
         }
-        if($item_refill != null)
+
+        if(count($item_refill) > 0)
         {
             foreach ($item_refill as $key_items => $value_items) 
             {
@@ -291,22 +343,37 @@ class Vendor_ReceiveInventoryController extends Member
         }
         // <-- end bundle
 
-        $bill_id = Billing::updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
-
-        $transaction_id = $bill_id;
-        $transaction_type = "bill";
-        $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
-
-        $json["status"]         = "success-bill";
-        if($button_action == "save-and-edit")
+        if($ctr_items != 0)
         {
-            $json["redirect"]    = "/member/vendor/receive_inventory/list";
+            $bill_id = Billing::updateBill($bill_id, $vendor_info, $bill_info, $bill_other_info, $item_info, $total_info);
+
+            if(count(Request::input("itemline_ref_id")) > 0)
+            {
+                Billing::updatePotoBill($bill_id, Request::input("itemline_ref_id"));
+            }
+            if(count($item_refill) > 0)
+            {
+                $transaction_id = $bill_id;
+                $transaction_type = "receive_inventory";
+                $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_refill, $return = 'array');
+            }
+
+            $json["status"]         = "success-receive-inventory";
+            if($button_action == "save-and-edit")
+            {
+                $json["redirect"]    = "/member/vendor/receive_inventory/list";
+            }
+            elseif($button_action == "save-and-new")
+            {
+                $json["redirect"]   = '/member/vendor/receive_inventory';
+            }
+            Request::session()->flash('success', 'Successfully Created');
         }
-        elseif($button_action == "save-and-new")
+        else
         {
-            $json["redirect"]   = '/member/vendor/receive_inventory';
+            $json["status"] = "error";
+            $json["status_message"] = "Please insert Item.";
         }
-        Request::session()->flash('success', 'Successfully Created');
 
         return json_encode($json);
 

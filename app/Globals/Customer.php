@@ -11,6 +11,7 @@ use App\Models\Tbl_customer_other_info;
 use DB;
 use Carbon\Carbon;
 use Request;
+use Crypt;
 class Customer
 {
 
@@ -30,7 +31,6 @@ class Customer
         $order['customer_id'] = $id;
         $order['isTaxExempt'] = $tax_exempt;
         $data['order_id'] = $order_id;
-        dd();
         return $data;
 	}
 	
@@ -80,7 +80,7 @@ class Customer
 		$insert["email"]        = isset($customer_info['customer_email'])
 									  ? $customer_info['customer_email'] : '';
 		$insert["password"]     = isset($customer_info['customer_password'])
-									  ? $customer_info['customer_password'] : '';
+									  ? Crypt::encrypt($customer_info['customer_password']) : '';
 		$insert["company"]      = isset($customer_info['customer_company'])
 									  ? $customer_info['customer_company'] : '';
 		$insert["b_day"]        = isset($customer_info['customer_birthdate'])

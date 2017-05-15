@@ -63,8 +63,9 @@ class Tbl_payroll_period_company extends Model
 	public function scopeperiod($query, $shop_id = 0, $payroll_period_status = 'processed')
 	{
 		$query->join('tbl_payroll_period','tbl_payroll_period.payroll_period_id','=','tbl_payroll_period_company.payroll_period_id')
-			 	->where('tbl_payroll_period_company.payroll_period_status', $payroll_period_status);
-
+				->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_period_company.payroll_company_id')
+			 	->where('tbl_payroll_period_company.payroll_period_status', $payroll_period_status)
+			 	->where('tbl_payroll_period.shop_id', $shop_id);
 		return $query;
 	}
 

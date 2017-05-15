@@ -26,6 +26,7 @@ use App\Models\Tbl_customer_search;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_matching_log;
+use App\Models\Tbl_mlm_binary_pairing;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
 use App\Globals\Mlm_plan;
@@ -114,29 +115,9 @@ class MLM_SlotController extends Member
 
     }
     public function index()
-    {
-        // $slot = Mlm_compute::get_slot_info(1);
-        // return Mlm_complan_manager_repurchase::triangle_repurchase_graduate(178, 1);
-        // return 1;
-        // $shop_id = $this->user_info->shop_id;
-        // $slot = Mlm_compute::get_slot_info(336);
-        // return Mlm_complan_manager::binary_triangle_matrix($slot, 999, 500);
-        // $plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
-        //     ->where('marketing_plan_enable', 1)
-        //     ->where('marketing_plan_trigger', 'Slot Creation')
-        //     ->get();
-        // $slots = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->membership()->membership_points()->customer()->get();
-        // // dd($slots);
-        // foreach($slots as $key => $value)
-        // {
-        //     $b = Mlm_complan_manager::binary($value);
-        //     $a = Mlm_complan_manager::direct($value);
-        // }
-        
-        // return 1;
-
-
-
+    {        
+        // $slot = Mlm_compute::get_slot_info(421);
+        // return Mlm_tree::insert_tree_sponsor($slot, $slot, 1);
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {

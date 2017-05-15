@@ -7,9 +7,9 @@
     <div class="modal-body clearfix">
         <div class="row">
             <div class="col-md-3 pull-right">
-                <input type="text" class="form-control" name="account_number" id="account_number" value="" required>
+                <input type="text" class="form-control" name="account_number" id="account_number" value="" >
             </div>
-            <label  class="pull-right" for="account_number" required>#</label>
+            <label  class="pull-right" for="account_number" >#</label>
         </div>
         <div class="row inside-content">
             <div class="col-md-6">
@@ -53,13 +53,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="account_open_balance">Balance</label>
-                            <input type="number" class="form-control" name="account_open_balance" id="account_open_balance" required>
+                            <input type="number" value="0" class="form-control" name="account_open_balance" id="account_open_balance">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="account_open_balance_date">As of</label>
-                            <input type="text" class="datepicker form-control input-sm" name="account_open_balance_date" id="account_open_balance_date" required >
+                            <input type="text" class="datepicker form-control input-sm" name="account_open_balance_date" id="account_open_balance_date">
                         </div> 
                     </div>
                 </div>

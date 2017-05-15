@@ -48,11 +48,9 @@
                         <tr>
                             <th>Item ID</th>
                             <th>Item Name</th>
-                            <!-- <th>Item SKU</th> -->
-                            <th>Item Category</th>
-                            <th>Item Type</th>
                             <th>Inventory</th>
-                            <th class="text-center">Item Price</th>
+                            <th class="text-center">Sale Price</th>
+                            <th>Item Details</th>
                             <!-- <th>Item Date Created</th> -->
                             <th>Action</th>
                         </tr>
@@ -63,19 +61,26 @@
                             <td>{{$item->item_id}}</td>
                             <td>{{$item->item_name}}</td>
                             <!-- <td>{{$item->item_sku}}</td> -->
-                            <td>{{$item->type_name}}</td>
-                            <td>{{$item->item_type_name}}</td>
                             <td>
-                                <span class="pull-left">{{$item->inventory_count_um}}</span> 
-                                <span class="pull-right">{{$item->inventory_count_um_view}}</span>
+                                {{$item->inventory_count_um}}<br>
+                                {{$item->inventory_count_um_view}}
                             </td>
                             <td>
-                                <span class="pull-left">{{currency("PHP", $item->item_price)}}/ {{$item->multi_abbrev or 'pc'}}</span> 
-                                <span class="pull-right">
+                                <span>Unit Price : {{currency("PHP", $item->item_price)}}/ {{$item->multi_abbrev or 'pc'}}</span> 
+                                <span>
+                                    <br>
                                     @if($item->um_whole != "")
-                                    {{currency("PHP", $item->item_whole_price)}} / {{$item->um_whole or 'pc'}}
+                                    Whole Price : {{currency("PHP", $item->item_whole_price)}} / {{$item->um_whole or 'pc'}}
                                     @endif
                                 </span>
+                            </td>
+                            <td>
+                                <small>
+                                @if($item->conversion)
+                                U/M : {{$item->conversion}}<br>
+                                @endif
+                                Category : {{$item->type_name}}<br>
+                                Item Type :{{$item->item_type_name}}</small>
                             </td>
                             <!-- <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td> -->
                             <td>

@@ -16,11 +16,13 @@ use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_item_multiple_price;
 use App\Models\Tbl_inventory_slip;
+use App\Models\Tbl_um;
 
 use App\Globals\Category;
 use App\Globals\AuditTrail;
 use App\Globals\Accounting;
 use App\Globals\DigimaTable;
+use App\Globals\Warehouse;
 use App\Globals\Item;
 use App\Globals\Vendor;
 use App\Globals\UnitMeasurement;
@@ -46,7 +48,7 @@ class ItemController extends Member
         {
 			$shop_id        		   = $this->user_info->shop_id;
 			$warehouse_id 			   = Tbl_warehouse::where("main_warehouse", 1)->where("warehouse_shop_id", $this->user_info->shop_id)->pluck("warehouse_id");
-	        $item 		    		   = Tbl_item::um_multi()->inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
+	        $item 		    		   = Tbl_item::inventory()->where("tbl_item.archived",0)->where("shop_id",$shop_id)->type()->category();
 	        $item_archived  		   = Tbl_item::where("tbl_item.archived",1)->where("shop_id",$shop_id)->type()->category();
 	        $item_type				   = Request::input("item_type");
 	        $search_name			   = Request::input("search_name");
@@ -64,31 +66,43 @@ class ItemController extends Member
 	        }
 	        
 			$data["_item"]			   = $item->get();
+			// dd($data["_item"]);
 			//item_convertion with unit measurement
 			foreach ($data["_item"] as $key => $value) 
 			{
-				$data["_item"][$key]->inventory_count_um_view = "";
-				$data["_item"][$key]->item_whole_price = 0;
-				$data["_item"][$key]->um_whole = "";
-				$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
-
-				$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
-				if($um)
+				if($value->item_type_id == 1)
 				{
-					$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+					$data["_item"][$key]->inventory_count_um_view = "";
+					$data["_item"][$key]->item_whole_price = 0;
+					$data["_item"][$key]->um_whole = "";
+					$data["_item"][$key]->inventory_count_um = UnitMeasurement::um_convert($value->inventory_count, $value->item_measurement_id);
+					// dd($data["_item"][$key]->inventory_count_um);
 
-					$data["_item"][$key]->item_whole_price = $um->unit_qty * $value->item_price;
-					$data["_item"][$key]->um_whole = $um->multi_abbrev;
+					$um = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->first();
+					if($um)
+					{
+						$data["_item"][$key]->inventory_count_um_view = UnitMeasurement::um_view($value->inventory_count,$value->item_measurement_id,$um->multi_id);
+						
+						$data["_item"][$key]->item_whole_price = $um->unit_qty * $value->item_price;
+						$data["_item"][$key]->um_whole = $um->multi_abbrev;
+					}
 				}
-
+				if($value->item_type_id != 4)
+				{
+					$um_base = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",1)->first();
+					if($um_base)
+					{
+						$data["_item"][$key]->multi_abbrev = $um_base->multi_abbrev;
+					}
+					$data["_item"][$key]->conversion = UnitMeasurement::um_convertion($value->item_id);
+				}
 				if($value->item_type_id == 4)
 				{
 					$data["_item"][$key]->item_price = Item::get_item_bundle_price($value->item_id);
 				}
 			}
 			$data["_item_archived"]	   = $item_archived->get();
-			      
-	        
+
 		    return view('member.item.list',$data);
         }
         else
@@ -131,31 +145,344 @@ class ItemController extends Member
         $access = Utilities::checkAccess('item-list', 'access_page');
         if($access == 1)
         {
+			$data['_service']  		    = Category::getAllCategory(['services']);
+			$data['_inventory']  		= Category::getAllCategory(['inventory']);
+			$data['_noninventory']  	= Category::getAllCategory(['non-inventory']);
+			$data['_bundle']        	= Category::getAllCategory(['bundles']);
+
 			$shop_id          = $this->user_info->shop_id;
 			$data["data"]	  = Session::get("item_temporary_data");
 			
-			$data["_income"] 	= Accounting::getAllAccount('all',null,['Income','Other Income']);
-			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
-			$data["_expense"] 	= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
+			$data["_income"] 		= Accounting::getAllAccount('all',null,['Income','Other Income']);
+			$data["default_income"] = Tbl_chart_of_account::where("account_code", "accounting-sales")
+									->where("account_shop_id", $shop_id)->pluck("account_id");
+			$data["_asset"] 		= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
+			$data["default_asset"] 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")
+									->where("account_shop_id", $shop_id)->pluck("account_id");
+			$data["_expense"] 		= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
+			$data["default_expense"] = Tbl_chart_of_account::where("account_code", "accounting-expense")
+									->where("account_shop_id", $shop_id)->pluck("account_id");
 
-			$data['_category']  = Category::getAllCategory();
-			$data['_item']  	= Item::get_all_category_item();
+			$data['_item']  			= Item::get_all_category_item();
+			$data['_item_to_bundle']	= Item::get_all_category_item([1,2,3]);
 			$data["_manufacturer"]    	= Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
-			$data["_um"] 		= UnitMeasurement::load_um();
-			$data["_um_multi"]  = UnitMeasurement::load_um_multi();
-            $data["_vendor"]    = Vendor::getAllVendor('active');
+			$data["_um"] 				= UnitMeasurement::load_um();
+			$data["_um_multi"]  		= UnitMeasurement::load_um_multi();
+            $data["_vendor"]    		= Vendor::getAllVendor('active');
 
-		    return view('member.item.add',$data);
+
+        	//check if_for PIS
+        	$pis_check = Purchasing_inventory_system::check();
+        	if($pis_check != 0)
+        	{
+        		$data['_um_n'] = Tbl_um::where("um_shop_id",$shop_id)->where("is_based",0)->get();
+        		$data['_um_b'] = Tbl_um::where("um_shop_id",$shop_id)->where("is_based",1)->get();
+
+        		$data['action'] = "/member/item/add_submit_pis";
+		    	return view('member.item.pis.add_item',$data);        		
+        	}
+        	else
+        	{
+		    	return view('member.item.add',$data);
+        	}
         }
         else
         {
             return $this->show_no_access();
         }
 	}
+	public function add_submit_pis()
+	{
+		$item_type = Request::input("item_type");
+		$shop_id = $this->user_info->shop_id;
+
+		$data['status'] = '';
+
+		$item_name	 					= Request::input("item_name");
+		$item_sku						= Request::input("item_sku");
+		$item_category_id				= Request::input("item_category_id");
+		$item_img 						= Request::input("item_img");
+		$item_sales_information 		= Request::input("item_sales_information");
+		$item_date_tracked 				= date("Y-m-d g:i:s",strtotime(Request::input("item_date_tracked")));
+		// $item_purchasing_information 	= Request::input("item_purchasing_information");
+		$item_barcode 					= Request::input("item_barcode");
+		$item_manufacturer_id 			= Request::input("item_manufacturer_id");
+		$packing_size 					= Request::input("packing_size");
+
+		$item_sale_to_customer 			= Request::input("item_sale_to_customer") ? 1 : 0; 
+		$item_purchase_from_supplier    = Request::input("item_purchase_from_supplier") ? 1 : 0;
+
+		$unit_n_based 					= Request::input("unit_n_based");
+		$unit_based 					= Request::input("unit_based");
+		$qty 					        = Request::input("quantity") <= 0 ? 1 : Request::input("quantity");
+
+		$item_price 					= str_replace(',','',Request::input("item_price"));
+		$item_cost 						= str_replace(',','',Request::input("item_cost"));
+		$item_reorder_point 			= Request::input("item_reorder_point");
+		$item_quantity 					= Request::input("item_quantity");
+
+		if($item_type != "bundle")
+		{
+			$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
+			$item_measurement_id 			= $unit_id;			
+		}
+			
+		//Accounting part //DEFAULT VALUE
+		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->pluck("account_id");
+		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->pluck("account_id");
+		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->pluck("account_id");
+
+		$insert["item_date_created"]	    	  = Carbon::now();
+		$insert["shop_id"]	    				  = $shop_id;
+
+		$item_id = 0;
+		if($item_type == "inventory")
+		{			
+			$insert["item_type_id"]				    = 1; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
+
+			$insert["item_name"]	    	  		= $item_name;
+			$insert["item_sku"]	    				= $item_sku;
+			$insert["item_category_id"]	    	 	= $item_category_id;
+			$insert["item_img"]	    				= $item_img;
+			$insert["item_sales_information"]	    = $item_sales_information;
+			$insert["item_date_tracked"]	    	= $item_date_tracked;
+			$insert["item_barcode"]	    	  		= $item_barcode;
+			$insert["item_manufacturer_id"]	    	= $item_manufacturer_id;
+			$insert["packing_size"]	    	  		= $packing_size;
+			$insert["item_sale_to_customer"]	    = $item_sale_to_customer;
+			$insert["item_purchase_from_supplier"]	= $item_purchase_from_supplier;
+
+			$insert["item_expense_account_id"]	    = $item_expense_account_id;
+			$insert["item_income_account_id"]		= $item_income_account_id;
+			$insert["item_asset_account_id"]		= $item_asset_account_id;
+
+			$insert["item_price"]	    			= $item_price / $qty;
+			$insert["item_cost"]	    	  		= $item_cost / $qty;
+			$insert["item_reorder_point"]	 	    = $item_reorder_point * $qty;
+			$insert["item_quantity"]				= $item_quantity * $qty;
+
+			$insert["item_measurement_id"]			= $item_measurement_id;
+
+			$rules["item_name"]	    	  			= 'required';
+			$rules["item_sku"]	    				= 'required';
+			$rules["item_category_id"]	    	 	= 'required';
+			$rules["item_barcode"]	    	  		= 'required';
+			$rules["item_price"]	    			= 'required';
+			$rules["item_cost"]	    	  			= 'required';
+
+			$validator = Validator::make($insert, $rules);
+
+			$data["status_message"] = '';
+			$data["status"] = '' ;
+			if($validator->fails())
+			{
+				$data["status"] = "error";
+	            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+	            {
+	                $data["status_message"] .= $message;
+	            }
+			}
+
+			if($data['status'] == null)
+			{
+				$item_id = Tbl_item::insertGetId($insert);
+
+				$warehouse = Tbl_warehouse::where("warehouse_id",$this->current_warehouse->warehouse_id)->first();
+
+				Warehouse::insert_item_to_warehouse($warehouse, $item_id, $item_quantity * $qty, $item_reorder_point * $qty);
+				Warehouse::insert_item_to_all_warehouse($item_id, $item_reorder_point * $qty);
+
+
+                $data['status'] 	= 'success';
+                $data['message'] 	= 'Success';
+                $data["type"]		= "item";
+	            $data['item_id'] 	= $item_id;
+			}
+		}
+		elseif($item_type == "noninventory")
+		{
+			$insert["item_type_id"]				      = 2; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
+
+			$insert["item_name"]	    	  		= $item_name;
+			$insert["item_sku"]	    				= $item_sku;
+			$insert["item_category_id"]	    	 	= $item_category_id;
+			$insert["item_img"]	    				= $item_img;
+			$insert["item_sales_information"]	    = $item_sales_information;
+			$insert["item_date_tracked"]	    	= $item_date_tracked;
+			$insert["item_sale_to_customer"]	    = $item_sale_to_customer;
+			$insert["item_purchase_from_supplier"]	= $item_purchase_from_supplier;
+
+			$insert["item_expense_account_id"]	    = $item_expense_account_id;
+			$insert["item_income_account_id"]		= $item_income_account_id;
+
+			$insert["item_price"]	    			= $item_price / $qty;
+			$insert["item_cost"]	    	  		= $item_cost / $qty;
+			$insert["item_reorder_point"]	 	    = $item_reorder_point * $qty;
+			$insert["item_quantity"]				= $item_quantity * $qty;
+
+			$insert["item_measurement_id"]			= $item_measurement_id;
+
+			$rules["item_name"]	    	  			= 'required';
+			$rules["item_sku"]	    				= 'required';
+			$rules["item_category_id"]	    	 	= 'required';
+			$rules["item_price"]	    			= 'required';
+
+			$validator = Validator::make($insert, $rules);
+
+			$data["status_message"] = '';
+			$data["status"] = '' ;
+			if($validator->fails())
+			{
+				$data["status"] = "error";
+	            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+	            {
+	                $data["status_message"] .= $message;
+	            }
+			}
+
+			if($data['status'] == null)
+			{
+				$item_id = Tbl_item::insertGetId($insert);
+
+                $data['status'] 	= 'success';
+                $data['message'] 	= 'Success';
+                $data["type"]		= "item";
+	            $data['item_id'] 	= $item_id;
+			}
+
+		}
+		elseif($item_type == "service")
+		{
+			$insert["item_type_id"]				      = 3; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
+
+			$insert["item_name"]	    	  		= $item_name;
+			$insert["item_sku"]	    				= $item_sku;
+			$insert["item_category_id"]	    	 	= $item_category_id;
+			$insert["item_img"]	    				= $item_img;
+			$insert["item_sales_information"]	    = $item_sales_information;
+			$insert["item_date_tracked"]	    	= $item_date_tracked;
+			$insert["item_sale_to_customer"]	    = $item_sale_to_customer;
+			$insert["item_purchase_from_supplier"]	= $item_purchase_from_supplier;
+			
+			$insert["item_expense_account_id"]	    = $item_expense_account_id;
+			$insert["item_income_account_id"]		= $item_income_account_id;
+
+			$insert["item_price"]	    			= $item_price / $qty;
+			$insert["item_cost"]	    	  		= $item_cost / $qty;
+			$insert["item_reorder_point"]	 	    = $item_reorder_point * $qty;
+			$insert["item_quantity"]				= $item_quantity * $qty;
+
+			$insert["item_measurement_id"]			= $item_measurement_id;
+
+			$rules["item_name"]	    	  			= 'required';
+			$rules["item_sku"]	    				= 'required';
+			$rules["item_category_id"]	    	 	= 'required';
+			$rules["item_price"]	    			= 'required';
+
+			$validator = Validator::make($insert, $rules);
+
+			$data["status_message"] = '';
+			$data["status"] = '' ;
+			if($validator->fails())
+			{
+				$data["status"] = "error";
+	            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+	            {
+	                $data["status_message"] .= $message;
+	            }
+			}
+
+			if($data['status'] == null)
+			{
+				$item_id = Tbl_item::insertGetId($insert);
+
+                $data['status'] 	= 'success';
+                $data['message'] 	= 'Success';
+                $data["type"]		= "item";
+	            $data['item_id'] 	= $item_id;
+			}
+		
+		}
+		elseif($item_type == "bundle")
+		{
+			$insert["item_type_id"]				      = 4; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
+			
+			$insert["item_name"]				= $item_name;
+			$insert["item_sku"]					= $item_sku;
+			$insert["item_category_id"]			= $item_category_id;
+			$insert["item_img"]					= $item_img;
+			$insert["item_sales_information"] 	= $item_sales_information;
+
+			$rules["item_name"]					= "required";
+			$rules["item_sku"] 					= "required";
+
+			$_item 	= Request::input('bundle_item_id');
+			$_um 	= Request::input('bundle_um_id');
+			$_qty 	= Request::input('bundle_qty');
+
+			$item_id = "";
+			$message   = [];
+			$validator = Validator::make($insert, $rules, $message);
+			if($validator->fails())
+			{
+				$data["status"] = "error";
+	            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+	            {
+	                $data["status_message"] .= $message;
+	            }
+			}
+			else
+			{
+				$item_id 			= Tbl_item::insertGetId($insert);
+
+				foreach($_item as $key=>$item)
+				{
+					if($item != '')
+					{
+						$insert_bundle["bundle_bundle_id"] 	= $item_id;
+						$insert_bundle["bundle_item_id"] 	= $item;
+						$insert_bundle["bundle_um_id"]		= isset($_um[$key]) ? $_um[$key] : 0;
+						$insert_bundle["bundle_qty"]		= $_qty[$key];
+						Tbl_item_bundle::insert($insert_bundle);
+					}
+				}
+				
+				$data["item_id"] 	= $item_id;
+				$data["message"] 	= "Success";
+				$data["type"]		= "item";
+
+				$bundle_price = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+				$price = 0;
+				foreach ($bundle_price as $key => $value) 
+				{
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+                	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
+
+					$qt = 1;
+	                if($um != null)
+	                {
+	                    $qt = $um->unit_qty;
+	                }
+                	$issued_qty = $value->bundle_qty * $qt;
+
+                	$price += $issued_qty * $item_price;
+				}
+
+				$insert["item_price"] = $price;
+
+			}
+		}
+		if($data['status'] == 'success')
+		{
+			$insert['item_id'] = $item_id;
+	        AuditTrail::record_logs("Added","item",$item_id,"",serialize($insert));
+		}
+		return json_encode($data);
+	}
 
 	public function add_submit()
-	{	
-		$price= "";
+	{	  
+		$price = "";
 
 		$item_name	 					= Request::input("item_name");
 		$item_sku						= Request::input("item_sku");
@@ -189,6 +516,7 @@ class ItemController extends Member
 			$insert["item_date_created"]	    	  = Carbon::now();
 			$insert["shop_id"]	    				  = $shop_id;
 
+		$item_id = 0;
 		if(Session::get("um_id") != null)
 		{
 			$item_measurement_id = Session::get("um_id");
@@ -210,8 +538,8 @@ class ItemController extends Member
 			$insert["item_income_account_id"] 	      = $item_income_account_id ;
 			$insert["item_purchasing_information"]    = $item_purchasing_information ;
 			$insert["item_cost"]				      = $item_cost ;
-			$insert["item_barcode"]				      = $item_barcode ;
 			$insert["item_expense_account_id"]	      = $item_expense_account_id ;
+			$insert["item_barcode"]				      = $item_barcode ;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id ;
 			$insert["item_manufacturer_id"]	      	  = $item_manufacturer_id ;
 			$insert["packing_size"]				      = $packing_size;
@@ -255,97 +583,8 @@ class ItemController extends Member
 
 				$warehouse = Tbl_warehouse::where("warehouse_id",$this->current_warehouse->warehouse_id)->first();
 
-				$slip_id = 0 ;
-				if($warehouse == null)
-				{
-					$warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->first();
-					if($warehouse == null)
-					{
-						//MAKE MAIN WAREHOUSE
-						$ins_warehouse["warehouse_name"] = "Main Warehouse";
-						$ins_warehouse["warehouse_shop_id"] = $shop_id;
-						$ins_warehouse["warehouse_created"] = Carbon::now();
-						$ins_warehouse["main_warehouse"] = 1;
-
-						$warehouse_id = Tbl_warehouse::insertGetId($ins_warehouse);
-
-						$ins["warehouse_id"] = $warehouse_id;
-						$ins["item_id"] = $item_id;
-						$ins["item_reorder_point"] = $item_reorder_point;
-
-						Tbl_sub_warehouse::insert($ins);
-
-						$ins_slip["inventory_reason"] = "insert_item";
-						$ins_slip["warehouse_id"] = $warehouse_id;
-						$ins_slip["inventory_remarks"] = "Insert Item";
-						$ins_slip["inventory_slip_date"] = Carbon::now();
-						$ins_slip["inventory_slip_shop_id"] = $this->user_info->user_shop;
-						$ins_slip["inventroy_source_reason"] = "item";
-						$ins_slip["inventory_source_id"] = $item_id;
-
-						$slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
-
-						$ins_inven["inventory_item_id"] = $item_id;
-						$ins_inven["warehouse_id"] = $warehouse_id;
-						$ins_inven["inventory_created"] = Carbon::now();
-						$ins_inven["inventory_count"] = $item_quantity;
-
-						$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);						
-					}
-					else
-					{
-						$insert_sub["warehouse_id"] = $warehouse->warehouse_id;
-						$insert_sub["item_id"] = $item_id;
-						$insert_sub["item_reorder_point"] = $item_reorder_point;
-
-						Tbl_sub_warehouse::insert($insert_sub);
-
-						$ins_slip["inventory_reason"] = "insert_item";
-						$ins_slip["warehouse_id"] = $warehouse->warehouse_id;
-						$ins_slip["inventory_remarks"] = "Insert Item";
-						$ins_slip["inventory_slip_date"] = Carbon::now();
-						$ins_slip["inventory_slip_shop_id"] = $this->user_info->user_shop;
-						$ins_slip["inventroy_source_reason"] = "item";
-						$ins_slip["inventory_source_id"] = $item_id;
-
-						$slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
-
-						$ins_inven["inventory_item_id"] = $item_id;
-						$ins_inven["warehouse_id"] =  $warehouse->warehouse_id;
-						$ins_inven["inventory_created"] = Carbon::now();
-						$ins_inven["inventory_count"] = $item_quantity;
-						$ins_inven["inventory_slip_id"] = $slip_id;
-
-						$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
-					}
-				}
-				else
-				{
-					//
-					$insert_sub["warehouse_id"] = $warehouse->warehouse_id;
-					$insert_sub["item_id"] = $item_id;
-					$insert_sub["item_reorder_point"] = $item_reorder_point;
-
-					Tbl_sub_warehouse::insert($insert_sub);
-
-					$ins_slip["inventory_reason"] = "insert_item";
-					$ins_slip["warehouse_id"] = $warehouse->warehouse_id;
-					$ins_slip["inventory_remarks"] = "Insert Item";
-					$ins_slip["inventory_slip_date"] = Carbon::now();
-					$ins_slip["inventory_slip_shop_id"] = $this->user_info->user_shop;
-					$ins_slip["inventroy_source_reason"] = "item";
-					$ins_slip["inventory_source_id"] = $item_id;
-
-					$slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
-
-					$ins_inven["inventory_item_id"] = $item_id;
-					$ins_inven["warehouse_id"] =  $warehouse->warehouse_id;
-					$ins_inven["inventory_created"] = Carbon::now();
-					$ins_inven["inventory_count"] = $item_quantity;
-					$ins_inven["inventory_slip_id"] = $slip_id;
-
-					$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
-				}
+				$inventory_id = Warehouse::insert_item_to_warehouse($warehouse, $item_id, $item_quantity, $item_reorder_point);
+				Warehouse::insert_item_to_all_warehouse($item_id, $item_reorder_point);
 
 				$for_serial_item[$item_id]["quantity"] = $item_quantity;
                 $for_serial_item[$item_id]["product_id"] = $item_id;
@@ -394,6 +633,9 @@ class ItemController extends Member
 			$insert["item_date_tracked"]	    	  = $item_date_tracked;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
+			$insert["item_purchasing_information"]    = $item_purchasing_information ;
+			$insert["item_cost"]				      = $item_cost ;
+			$insert["item_expense_account_id"]	      = $item_expense_account_id ;
 			
 			$rules["item_name"]					      = 'required';
 			$rules["item_price"]				      = 'required|numeric';
@@ -442,6 +684,9 @@ class ItemController extends Member
 			$insert["item_purchase_from_supplier"]	  = $item_purchase_from_supplier;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
+			$insert["item_purchasing_information"]    = $item_purchasing_information ;
+			$insert["item_cost"]				      = $item_cost ;
+			$insert["item_expense_account_id"]	      = $item_expense_account_id ;
 			
 			$rules["item_name"]					      = 'required';
 			$rules["item_sku"]					      = 'required';
@@ -601,20 +846,338 @@ class ItemController extends Member
 			$data["_asset"] 	= Accounting::getAllAccount('all', null, ['Other Current Asset','Fixed Asset','Other Asset']);
 			$data["_expense"] 	= Accounting::getAllAccount('all',null,['Expense','Other Expense','Cost of Goods Sold']);
 
-			$data['_category']  = Category::getAllCategory();
+			// $data['_category']  = Category::getAllCategory();
+
+			$data['_service']  		    = Category::getAllCategory(['services']);
+			$data['_inventory']  		= Category::getAllCategory(['inventory']);
+			$data['_noninventory']  	= Category::getAllCategory(['non-inventory']);
+			$data['_bundle']        	= Category::getAllCategory(['bundles']);
+			
 			$data["_manufacturer"] = Tbl_manufacturer::where("manufacturer_shop_id",$shop_id)->get();
 			$data["_um"] 	  	= UnitMeasurement::load_um();
 			$data["_um_multi"] 	= UnitMeasurement::load_um_multi();
 			$data['_item']  	= Item::get_all_category_item();
+			$data['_item_to_bundle']	= Item::get_all_category_item([1,2,3]);
             $data["_vendor"]    = Vendor::getAllVendor('active');
 
 			// dd($data);
-		    return view('member.item.edit',$data);
+		    //check if_for PIS
+        	$pis_check = Purchasing_inventory_system::check();
+        	if($pis_check != 0)
+        	{
+        		$data['_um_n'] = Tbl_um::where("um_shop_id",$shop_id)->where("is_based",0)->get();
+        		$data['_um_b'] = Tbl_um::where("um_shop_id",$shop_id)->where("is_based",1)->get();
+
+        		$um_info = Tbl_unit_measurement::where("um_id",$data["data"]["item_measurement_id"])->first();
+        		$multi_info = Tbl_unit_measurement_multi::where("multi_um_id",$data["data"]["item_measurement_id"])->where("is_base",0)->first();
+        			$data['um_n_id'] = '';
+        			$data['um_n_b_id'] = '';
+        			$data['quantity'] = 1;
+        		if($um_info)
+        		{
+        			$data['um_n_id'] = $um_info->um_n_base;
+        			$data['um_n_b_id'] = $um_info->um_base;
+        			$qty =  isset($multi_info->unit_qty) ? $multi_info->unit_qty : 1;
+	        		$data['quantity'] = $qty;
+
+        			$data['data']['item_price'] = round($qty * $data['data']['item_price'],2);
+        			$data['data']['item_cost'] = round($qty * $data['data']['item_cost'],2);
+        		}
+        		$data['action'] = "/member/item/edit_submit_pis";
+		    	return view('member.item.pis.edit_item',$data);        		
+        	}
+        	else
+        	{
+		    		return view('member.item.edit',$data);
+        	}
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }  
+	}
+	public function edit_submit_pis()
+	{
+		$item_type = Request::input("item_type");
+		$shop_id = $this->user_info->shop_id;
+
+		$item_id = Request::input("item_id");
+		$price = 0;
+
+		$old = Tbl_item::where("item_id",$item_id)->first()->toArray();
+
+		$item_name	 					= Request::input("item_name");
+		$item_sku						= Request::input("item_sku");
+		$item_category_id				= Request::input("item_category_id");
+		$item_img 						= Request::input("item_img");
+		$item_sales_information 		= Request::input("item_sales_information");
+		$item_date_tracked 				= date("Y-m-d g:i:s",strtotime(Request::input("item_date_tracked")));
+		// $item_purchasing_information 	= Request::input("item_purchasing_information");
+		$item_barcode 					= Request::input("item_barcode");
+		$item_manufacturer_id 			= Request::input("item_manufacturer_id");
+		$packing_size 					= Request::input("packing_size");
+
+		$item_sale_to_customer 			= Request::input("item_sale_to_customer") ? 1 : 0; 
+		$item_purchase_from_supplier    = Request::input("item_purchase_from_supplier") ? 1 : 0;
+
+		$unit_n_based 					= Request::input("unit_n_based");
+		$unit_based 					= Request::input("unit_based");
+		$qty 					        = Request::input("quantity") or 1;
+
+		$item_price 					= str_replace(',','',Request::input("item_price"));
+		$item_cost 						= str_replace(',','',Request::input("item_cost"));
+		$item_reorder_point 			= Request::input("item_reorder_point");
+		$item_quantity 					= Request::input("item_quantity");
+
+		if($item_type != "bundle")
+		{
+			$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
+			$item_measurement_id 			= $unit_id;			
+		}
+			
+		//Accounting part //DEFAULT VALUE
+		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->pluck("account_id");
+		$item_income_account_id = Tbl_chart_of_account::where("account_code", "accounting-sales")->where("account_shop_id", $shop_id)->pluck("account_id");
+		$item_asset_account_id 	= Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")->where("account_shop_id", $shop_id)->pluck("account_id");
+
+		if($item_type == "inventory")
+		{			
+			$update["item_type_id"]				    = 1; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
+
+			$update["item_name"]	    	  		= $item_name;
+			$update["item_sku"]	    				= $item_sku;
+			$update["item_category_id"]	    	 	= $item_category_id;
+			$update["item_img"]	    				= $item_img;
+			$update["item_sales_information"]	    = $item_sales_information;
+			$update["item_date_tracked"]	    	= $item_date_tracked;
+			$update["item_barcode"]	    	  		= $item_barcode;
+			$update["item_manufacturer_id"]	    	= $item_manufacturer_id;
+			$update["packing_size"]	    	  		= $packing_size;
+			$update["item_sale_to_customer"]	    = $item_sale_to_customer;
+			$update["item_purchase_from_supplier"]	= $item_purchase_from_supplier;
+
+			$update["item_expense_account_id"]	    = $item_expense_account_id;
+			$update["item_income_account_id"]		= $item_income_account_id;
+			$update["item_asset_account_id"]		= $item_asset_account_id;
+
+			$update["item_price"]	    			= $item_price / $qty;
+			$update["item_cost"]	    	  		= $item_cost / $qty;
+			$update["item_reorder_point"]	 	    = $item_reorder_point * $qty;
+			$update["item_quantity"]				= $item_quantity * $qty;
+
+			$update["item_measurement_id"]			= $item_measurement_id;
+
+			$rules["item_name"]	    	  			= 'required';
+			$rules["item_sku"]	    				= 'required';
+			$rules["item_category_id"]	    	 	= 'required';
+			$rules["item_barcode"]	    	  		= 'required';
+			$rules["item_price"]	    			= 'required';
+			$rules["item_cost"]	    	  			= 'required';
+
+			$validator = Validator::make($update, $rules);
+
+			$data["status_message"] = '';
+			$data["status"] = '' ;
+			if($validator->fails())
+			{
+				$data["status"] = "error";
+	            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+	            {
+	                $data["status_message"] .= $message;
+	            }
+			}
+
+			if($data['status'] == null)
+			{
+				Tbl_item::where("item_id",$item_id)->update($update);
+
+                $data['status'] 	= 'success';
+                $data['message'] 	= 'Success';
+                $data["type"]		= "item";
+	            $data['item_id'] 	= $item_id;
+			}
+		}
+		elseif($item_type == "noninventory")
+		{
+			$update["item_type_id"]				      = 2; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
+
+			$update["item_name"]	    	  		= $item_name;
+			$update["item_sku"]	    				= $item_sku;
+			$update["item_category_id"]	    	 	= $item_category_id;
+			$update["item_img"]	    				= $item_img;
+			$update["item_sales_information"]	    = $item_sales_information;
+			$update["item_date_tracked"]	    	= $item_date_tracked;
+			$update["item_sale_to_customer"]	    = $item_sale_to_customer;
+			$update["item_purchase_from_supplier"]	= $item_purchase_from_supplier;
+
+			$update["item_expense_account_id"]	    = $item_expense_account_id;
+			$update["item_income_account_id"]		= $item_income_account_id;
+
+			$update["item_price"]	    			= $item_price / $qty;
+			$update["item_cost"]	    	  		= $item_cost / $qty;
+			$update["item_reorder_point"]	 	    = $item_reorder_point * $qty;
+			$update["item_quantity"]				= $item_quantity * $qty;
+
+			$update["item_measurement_id"]			= $item_measurement_id;
+
+			$rules["item_name"]	    	  			= 'required';
+			$rules["item_sku"]	    				= 'required';
+			$rules["item_category_id"]	    	 	= 'required';
+			$rules["item_price"]	    			= 'required';
+
+			$validator = Validator::make($update, $rules);
+
+			$data["status_message"] = '';
+			$data["status"] = '' ;
+			if($validator->fails())
+			{
+				$data["status"] = "error";
+	            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+	            {
+	                $data["status_message"] .= $message;
+	            }
+			}
+
+			if($data['status'] == null)
+			{
+				$item_id = Tbl_item::where("item_id",$item_id)->update($update);
+
+                $data['status'] 	= 'success';
+                $data['message'] 	= 'Success';
+                $data["type"]		= "item";
+	            $data['item_id'] 	= $item_id;
+			}
+
+		}
+		elseif($item_type == "service")
+		{
+			$update["item_type_id"]				      = 3; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
+
+			$update["item_name"]	    	  		= $item_name;
+			$update["item_sku"]	    				= $item_sku;
+			$update["item_category_id"]	    	 	= $item_category_id;
+			$update["item_img"]	    				= $item_img;
+			$update["item_sales_information"]	    = $item_sales_information;
+			$update["item_date_tracked"]	    	= $item_date_tracked;
+			$update["item_sale_to_customer"]	    = $item_sale_to_customer;
+			$update["item_purchase_from_supplier"]	= $item_purchase_from_supplier;
+			
+			$update["item_expense_account_id"]	    = $item_expense_account_id;
+			$update["item_income_account_id"]		= $item_income_account_id;
+
+			$update["item_price"]	    			= $item_price / $qty;
+			$update["item_cost"]	    	  		= $item_cost / $qty;
+			$update["item_reorder_point"]	 	    = $item_reorder_point * $qty;
+			$update["item_quantity"]				= $item_quantity * $qty;
+
+			$update["item_measurement_id"]			= $item_measurement_id;
+
+			$rules["item_name"]	    	  			= 'required';
+			$rules["item_sku"]	    				= 'required';
+			$rules["item_category_id"]	    	 	= 'required';
+			$rules["item_price"]	    			= 'required';
+
+			$validator = Validator::make($update, $rules);
+
+			$data["status_message"] = '';
+			$data["status"] = '' ;
+			if($validator->fails())
+			{
+				$data["status"] = "error";
+	            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+	            {
+	                $data["status_message"] .= $message;
+	            }
+			}
+
+			if($data['status'] == null)
+			{
+				Tbl_item::where("item_id",$item_id)->update($update);
+
+                $data['status'] 	= 'success';
+                $data['message'] 	= 'Success';
+                $data["type"]		= "item";
+	            $data['item_id'] 	= $item_id;
+			}
+		
+		}
+		elseif($item_type == "bundle")
+		{
+			$update["item_type_id"]				      = 4; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
+			
+			$update["item_name"]				= $item_name;
+			$update["item_sku"]					= $item_sku;
+			$update["item_category_id"]			= $item_category_id;
+			$update["item_img"]					= $item_img;
+			$update["item_sales_information"] 	= $item_sales_information;
+
+			$rules["item_name"]					= "required";
+			$rules["item_sku"] 					= "required";
+
+			$_item 	= Request::input('bundle_item_id');
+			$_um 	= Request::input('bundle_um_id');
+			$_qty 	= Request::input('bundle_qty');
+
+			$message   = [];
+			$validator = Validator::make($update, $rules, $message);
+			if($validator->fails())
+			{
+				$data["status"] = "error";
+	            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+	            {
+	                $data["status_message"] .= $message;
+	            }
+			}
+			else
+			{
+				Tbl_item::where("item_id",$item_id)->update($update);
+
+				Tbl_item_bundle::where("bundle_bundle_id",$item_id)->delete();
+
+				foreach($_item as $key=>$item)
+				{
+					if($item != '')
+					{
+						$insert_bundle["bundle_bundle_id"] 	= $item_id;
+						$insert_bundle["bundle_item_id"] 	= $item;
+						$insert_bundle["bundle_um_id"]		= isset($_um[$key]) ? $_um[$key] : 0;
+						$insert_bundle["bundle_qty"]		= $_qty[$key];
+						Tbl_item_bundle::insert($insert_bundle);
+					}
+				}
+				
+				$data["item_id"] 	= $item_id;
+				$data["message"] 	= "Success";
+				$data["status"] 	= "success";
+				$data["type"]		= "item";
+
+				$bundle_price = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+				foreach ($bundle_price as $key => $value) 
+				{
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+                	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
+
+					$qt = 1;
+	                if($um != null)
+	                {
+	                    $qt = $um->unit_qty;
+	                }
+                	$issued_qty = $value->bundle_qty * $qt;
+
+                	$price += $issued_qty * $item_price;
+				}
+
+				$update["item_price"] = $price;
+
+			}
+		}
+		if($data['status'] == 'success')
+		{
+			$update["item_id"] = $item_id;
+	        AuditTrail::record_logs("Edited","item",$item_id,serialize($old),serialize($update));
+		}
+		return json_encode($data);
+
 	}	
 	public function edit_submit()
 	{	
@@ -663,10 +1226,13 @@ class ItemController extends Member
 			$item_measurement_id = Session::get("um_id");
 		}
 
-		if(Request::input("item_type") == "inventory")
+		$item_name = Request::input("item_name");
+		$item_sku = Request::input("item_sku");
+
+		if(Request::input("item_type") == "inventory")			
 		{
-			$insert["item_name"]				      = Request::input("item_name");
-			$insert["item_sku"]					      = Request::input("item_sku");
+			$insert["item_name"]				      = $item_name;
+			$insert["item_sku"]					      = $item_sku;
 			$insert["item_category_id"]			      = Request::input("item_category_id");
 			$insert["item_img"]					      = Request::input("item_img") ? Request::input("item_img") : "";
 			$insert["item_type_id"]				      = 1; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service)
@@ -733,8 +1299,8 @@ class ItemController extends Member
 		}
 		else if(Request::input("item_type") == "noninventory")
 		{
-			$insert["item_name"]				      = Request::input("item_name");
-			$insert["item_sku"]					      = Request::input("item_sku");
+			$insert["item_name"]				      = $item_name;
+			$insert["item_sku"]					      = $item_sku;
 			$insert["item_category_id"]			      = Request::input("item_category_id");
 			$insert["item_img"]					      = Request::input("item_img") ? Request::input("item_img") : "";
 			$insert["item_type_id"]				      = 2; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service)
@@ -748,6 +1314,9 @@ class ItemController extends Member
 			$insert["shop_id"]	    				  = $shop_id;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
+			$insert["item_purchasing_information"]    = Request::input("item_purchasing_information") ? Request::input("item_purchasing_information") : "";
+			$insert["item_cost"]				      = Request::input("item_cost");
+			$insert["item_expense_account_id"]	      = Request::input("item_expense_account_id");
 
 			$rules["item_name"]					      = 'required';
 			$rules["item_sku"]					      = 'required';
@@ -783,8 +1352,8 @@ class ItemController extends Member
 		}
 		else if(Request::input("item_type") == "service")
 		{
-			$insert["item_name"]				      = Request::input("item_name");
-			$insert["item_sku"]					      = Request::input("item_sku");
+			$insert["item_name"]				      = $item_name;
+			$insert["item_sku"]					      = $item_sku;
 			$insert["item_category_id"]			      = Request::input("item_category_id");
 			$insert["item_img"]					      = Request::input("item_img") ? Request::input("item_img") : "";
 			$insert["item_type_id"]				      = 3; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service)
@@ -797,6 +1366,9 @@ class ItemController extends Member
 			$insert["shop_id"]	    				  = $shop_id;
 			$insert["item_measurement_id"]	      	  = $item_measurement_id;
 			$insert["item_income_account_id"] 		  = Request::input("item_income_account_id");
+			$insert["item_purchasing_information"]    = Request::input("item_purchasing_information") ? Request::input("item_purchasing_information") : "";
+			$insert["item_cost"]				      = Request::input("item_cost");
+			$insert["item_expense_account_id"]	      = Request::input("item_expense_account_id");
 			
 			$rules["item_name"]					      = 'required';
 			$rules["item_sku"]					      = 'required';
@@ -831,8 +1403,8 @@ class ItemController extends Member
 		}
 		else if(Request::input("item_type") == "bundle")
 		{
-			$insert["item_name"]				= Request::input("item_name");
-			$insert["item_sku"]					= Request::input("item_sku");
+			$insert["item_name"]				= $item_name;
+			$insert["item_sku"]					= $item_sku;
 			$insert["item_img"]					= Request::input("item_img");
 			$insert["item_category_id"]			= Request::input("item_category_id");
 			$insert["item_sales_information"] 	= Request::input("item_sales_information");
@@ -955,8 +1527,8 @@ class ItemController extends Member
 		$data								 = null;
 		$data["type_of_item"]           	 = Request::input("type_of_item");
 		$data["item_id"]					 = Request::input("item_id");
-		$data["item_name"]					 = Request::input("item_name");
-		$data["item_sku"]					 = Request::input("item_sku");
+		$data["item_name"]					 = Request::input("item_name")."/".Request::input("item_sku");
+		$data["item_sku"]					 = Request::input("item_name")."/".Request::input("item_sku");
 		$data["item_sales_information"]		 = Request::input("item_sales_information");
 		$data["item_purchasing_information"] = Request::input("item_purchasing_information");
 		$data["item_img"]					 = Request::input("item_img");

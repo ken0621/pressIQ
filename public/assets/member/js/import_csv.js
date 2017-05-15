@@ -5,6 +5,7 @@ var ctr         = 0;
 var data_value  = '';
 var data_length = '';
 var error_data  = [];
+var ctr_success = 0;    
 var token       = $(".token").val();
 
 function import_csv()
@@ -104,7 +105,7 @@ function import_csv()
         {
             $.ajax(
             {
-                url:'/member/item/import/read-file',
+                url: url_link,
                 dataType:'json',
                 type:'post',
                 data:{
@@ -122,7 +123,6 @@ function import_csv()
                         // counter and percentage loading
                         ctr++;
                         var percent     = parseInt((ctr*100)/data_length);
-                        var ctr_success = 0; 
 
                         if(data.status == "success") ctr_success++;
                         else                         error_data.push(data.value_data);

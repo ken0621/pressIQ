@@ -10,11 +10,14 @@ use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_unit_measurement_type;
 use App\Models\Tbl_item;
 use App\Models\Tbl_settings;
+use App\Models\Tbl_um;
 use App\Globals\UnitMeasurement;
+use App\Globals\AuditTrail;
 use App\Globals\Utilities;
 use Carbon\Carbon;
 use Validator;
 use Session;
+
 class UnitOfMeasurementController extends Member
 {
     /**
@@ -27,7 +30,89 @@ class UnitOfMeasurementController extends Member
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
+    public function add_um()
+    {
+        $data['um_type'] = Request::input("um_type");
+        $data['action'] = '/member/pis/um_add_submit';
 
+        return view("member.unit_of_measurement.pis_um.um",$data);
+    }
+    public function edit_um_submit()
+    {
+        $id = Request::input("um_id");
+
+        $old_um_data = AuditTrail::get_table_data("tbl_um","id",$id);
+        $up["um_name"] = Request::input("um_name");
+        $up["um_abbrev"] = Request::input("um_abbrev");
+
+        Tbl_um::where("id",$id)->update($up);
+
+        $um_data = AuditTrail::get_table_data("tbl_um","id",$id);
+        AuditTrail::record_logs("Edited","pis_um",$id,serialize($old_um_data),serialize($um_data));
+
+        $data["type"] = "pis-um";
+        return json_encode($data);
+    }
+    public function add_um_submit()
+    {
+        $type = Request::input("um_type");
+        $um_name = Request::input("um_name");
+        $um_abbrev = Request::input("um_abbrev");
+
+        $type_1 = 0;
+        if($type == 'base') $type_1 = 1;
+        else                $type_1 = 0;
+
+        $check = Tbl_um::where("um_shop_id",UnitMeasurement::getShopId())->where("is_based",$type_1)->where("um_name",$um_name)->first();
+
+        if($check == null)
+        {
+            $ins['um_name'] = $um_name;
+            $ins['um_abbrev'] = $um_abbrev;  
+            $ins['is_based'] = $type_1;            
+            $ins['um_shop_id'] = UnitMeasurement::getShopId();
+
+            $um_id = Tbl_um::insertGetId($ins);
+
+            $data['id'] = $um_id;
+            $data['type'] = 'pis-um'; 
+            $data['um_type'] = $type."-um";   
+
+            $um_data = AuditTrail::get_table_data("tbl_um","id",$um_id);
+            AuditTrail::record_logs("Added","pis_um",$um_id,"",serialize($um_data));
+        }
+        else
+        {
+            $data['status'] = 'error';
+            $data['status_message'] = 'U/M is already used';
+        }
+
+        return json_encode($data);
+    }
+    public function um_list_pis()
+    {
+        $data['_um_n'] = Tbl_um::where("um_shop_id",$this->user_info->shop_id)->where("is_based",0)->get();
+        $data['_um_n_b'] = Tbl_um::where("um_shop_id",$this->user_info->shop_id)->where("is_based",1)->get();
+
+        return view("member.unit_of_measurement.pis_um.um_list",$data);
+    }
+    public function load_pis_um($type = '')
+    {
+        $type_1 = 0;
+        if($type == 'notbase-um') $type_1 = 0;
+        else                      $type_1 = 1;
+        $data["_um"] = Tbl_um::where("is_based",$type_1)->get();
+
+        return view("member.load_ajax_data.load_pis_um",$data);
+    }
+    public function edit_um($id)
+    {
+        $data['id'] = $id;
+        $data['um'] = Tbl_um::where("id",$id)->first();
+        $data['action'] = '/member/pis/um_edit_submit';
+
+        return view("member.unit_of_measurement.pis_um.um",$data);
+    }
     public function check()
     {
         $um_id = Request::input("id");
@@ -201,49 +286,25 @@ class UnitOfMeasurementController extends Member
     }
     public function select_um()
     {
-        $access = Utilities::checkAccess('item-unit-measurement', 'access_page');
-        if($access == 1)
-        {
-            $unit_id = Request::input("unit_id");
+        $unit_id = Request::input("unit_id");
 
-            $data = UnitMeasurement::select_um($unit_id,'json');
+        $data = UnitMeasurement::select_um($unit_id,'json');
 
-            return $data;
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
+        return $data;
     }
 
     public function load_um()     
     {
-        $access = Utilities::checkAccess('item-unit-measurement', 'access_page');
-        if($access == 1)
-        {
-            $data["_um"] = UnitMeasurement::load_um();
+        $data["_um"] = UnitMeasurement::load_um();
 
-            return view('member.load_ajax_data.load_unit_measurement', $data);
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
+        return view('member.load_ajax_data.load_unit_measurement', $data);
     }
 
     public function load_one_um($um_id)     
     {
-        $access = Utilities::checkAccess('item-unit-measurement', 'access_page');
-        if($access == 1)
-        {
-            $data["_um"] = UnitMeasurement::load_one_um($um_id);
+        $data["_um"] = UnitMeasurement::load_one_um($um_id);
 
-            return view('member.load_ajax_data.load_one_unit_measure', $data);
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
+        return view('member.load_ajax_data.load_one_unit_measure', $data);
     }
  public function load_one_um_multi($um_id)     
     {
@@ -267,7 +328,7 @@ class UnitOfMeasurementController extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public function add_submit()

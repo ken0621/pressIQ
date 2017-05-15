@@ -372,6 +372,13 @@ function credit_memo(){
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
 
+		$parent.find(".txt-rate").attr("disabled",false);
+		$parent.find(".txt-discount").attr("disabled",false);
+		if($this.find("option:selected").attr("item-type") == 4)
+		{
+			$parent.find(".txt-rate").attr("disabled","disabled");
+			$parent.find(".txt-discount").attr("disabled","disabled");
+		}
 		if($this.find("option:selected").attr("has-um") != '')
 		{			
 			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
@@ -391,7 +398,7 @@ function credit_memo(){
 		$parent = $this.closest(".tr-draggable");
 		$item   = $this.closest(".tr-draggable").find(".select-item");
 
-		$um_qty = parseFloat($this.find("option:selected").attr("qty"));
+		$um_qty = parseFloat($this.find("option:selected").attr("qty") || 1);
 		$sales  = parseFloat($item.find("option:selected").attr("price"));
 		$qty    = parseFloat($parent.find(".txt-qty").val());
 		console.log($um_qty +"|" + $sales +"|" +$qty);
@@ -468,14 +475,24 @@ function dragging_done()
 /* AFTER ADDING A CUSTOMER */
 function submit_done_customer(result)
 {
-	credit_memo.action_reload_customer(result['customer_info']['customer_id']);
+	toastr.success("Success");
+    $(".droplist-customer").load("/member/customer/load_customer", function()
+    {                
+         $(".droplist-customer").globalDropList("reload");
+         $(".droplist-customer").val(result.id).change();          
+    });
 }
 
 /* AFTER ADDING AN  ITEM */
 function submit_done_item(data)
 {
-	credit_memo.action_reload_item(data.item_id);
-	$("#global_modal").modal("toggle");
+	toastr.success("Success");
+    $(".tbody-item .select-item").load("/member/item/load_item_category", function()
+    {                
+         $(".tbody-item .select-item").globalDropList("reload"); 
+         item_selected.val(data.item_id).change();  
+    });
+    data.element.modal("hide");
 }
 
 function submit_done(data)

@@ -7,6 +7,7 @@ use App\Models\Tbl_item;
 use Carbon\Carbon;
 use App\Globals\Category;
 use App\Globals\Utilities;
+use App\Globals\AuditTrail;
 
 
 class Manage_Category_Controller extends Member
@@ -23,8 +24,8 @@ class Manage_Category_Controller extends Member
         {
             $shop_id = $this->user_info->user_shop;
             $data['category'] = Category::select_tr_html($shop_id, 0);
+            // dd($data['category']);
             $data['archived_category'] = Category::select_category_archived();
-            // dd($data['archived_category']); 
             return view('member.manage_category.manage_category_list', $data);
         }
         else
@@ -33,12 +34,20 @@ class Manage_Category_Controller extends Member
         }
     }
 
-    public function load_category()
+    public function load_category($category_type = '')
     {
+        if($category_type == '')
+        {
+            $cat_type = array("all","services","inventory","non-inventory","bundles");
+        }
+        else
+        {
+            $cat_type[0] = $category_type;
+        }
         $access = Utilities::checkAccess('item-categories', 'access_page');
         if($access == 1)
         {
-            $data['_category'] = Category::getAllCategory();
+            $data['_category'] = Category::getAllCategory($cat_type);
             $data['add_search'] = '';
 
             return view('member.load_ajax_data.load_category', $data);
@@ -54,6 +63,7 @@ class Manage_Category_Controller extends Member
         $data["action"] = $action;
 
         $data["cat"] = Tbl_category::where("type_id",$id)->first();
+
 
         return view("member.manage_category.category_confirm",$data);
     }
@@ -87,26 +97,39 @@ class Manage_Category_Controller extends Member
                 Tbl_category::where("type_id",$value->type_id)->update($update);
             }            
         }
+
         Tbl_category::where("type_id",$id)->update($update);
+        if($data["status"] != "error")
+        {
+            $cat_data = AuditTrail::get_table_data("tbl_category","type_id",$id);
+            AuditTrail::record_logs($action,"category",$id,"",serialize($cat_data));            
+        }
 
         return json_encode($data);
     }
-    public function modal_create_category()
+    public function modal_create_category($cat_type = "")
     {
         $access = Utilities::checkAccess('item-categories', 'access_page');
         if($access == 1)
         {
+            $cat[0] = "inventory";
+            $cat[1] = "non-inventory";
+            $cat[2] = "services";
+            $cat[3] = "bundles";
+
+            $data["cat"] = $cat;
+
+            $data["selected_category"] = $cat_type;
             $shop_id = $this->user_info->user_shop;
-
-            // $data['_level_category'] = $this->recursive_select_category($shop_id);
             $data['_category'] = Category::breakdown($shop_id);
-
+            // $data['_level_category'] = $this->recursive_select_category($shop_id);
+            // dd($data['_category']);
             // $data['_category'] = Tbl_category::where('type_shop', $shop_id)->where('archived',0)->get();
             return view('member.modal.create_category_modal', $data);
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
 
@@ -137,7 +160,11 @@ class Manage_Category_Controller extends Member
 
         $data["status"] = "success-category";
         $data["type"] = "category";
+        $data["cat_type"] = $type_category;
         $data["id"] = $category_id;
+
+        $cat_data = AuditTrail::get_table_data("tbl_category","type_id",$category_id);
+        AuditTrail::record_logs("Added","category",$category_id,"",serialize($cat_data));
 
         return json_encode($data);
     }
@@ -162,7 +189,7 @@ class Manage_Category_Controller extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
 
@@ -170,20 +197,46 @@ class Manage_Category_Controller extends Member
     {
         $access = Utilities::checkAccess('item-categories', 'access_page');
         if($access == 1)
-        {
+        {    
             $type_id = Request::input('type_id');
+
+            $old_data = AuditTrail::get_table_data("tbl_category","type_id",$type_id);
+
             $type_category = Request::input('type_category');
             $type_name = Request::input('type_name');
             $type_parent_id = 0;
+            $parent_data = null;
 
-            if(Request::input('is_sub_category')){
+            if(Request::input('is_sub_category'))
+            {
                 $type_parent_id = Request::input('hidden_parent_category');
+                $parent_data = Tbl_category::where("type_id",$type_parent_id)->first();
+                $type_category = $parent_data->type_category;
+            }
+
+            $category_data = Tbl_category::where("type_parent_id",$type_id)->get();
+            if(count($category_data) > 0)
+            {
+                foreach ($category_data as $key => $value) 
+                {
+                    $up_child["type_category"] = $type_category;
+                    Tbl_category::where('type_id', $value->type_id)->update($up_child);
+                }
             }
             
             $update['type_name']            = $type_name;
             $update['type_category']        = $type_category;
             $update['type_parent_id']       = $type_parent_id;
             Tbl_category::where('type_id', $type_id)->update($update);
+
+            $data["status"] = "success-category";
+            $data["id"] = $type_id;
+
+
+            $new_data = AuditTrail::get_table_data("tbl_category","type_id",$type_id);
+            AuditTrail::record_logs("Edited","category",$type_id,serialize($old_data),serialize($new_data));
+
+            return json_encode($data);
         }
         else
         {

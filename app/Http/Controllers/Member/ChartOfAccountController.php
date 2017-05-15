@@ -22,7 +22,12 @@ class ChartOfAccountController extends Member
         $data['_account_type']  = Tbl_chart_account_type::get();
         $data['_account']       = Accounting::getAllAccount();
         // dd($data['_account']);
-        // $data['_account_view']  = view('member.');
+        $search = Request::input('search');
+        if($search)
+        {
+            $data['_account']       = Accounting::getAllAccount('all','','',$search);
+        }
+
         return view('member/accounting/chart_of_account', $data);
     }
 
@@ -38,7 +43,7 @@ class ChartOfAccountController extends Member
     {
         $data['account_shop_id']            = $this->user_info->shop_id;
         $data['account_type_id']            = Request::input('account_type_id');
-        $data['account_number']             = Request::input('account_number');
+        $data['account_number']             = Request::input('account_number') ? Request::input('account_number') : rand(1000, 9999);
         $data['account_name']               = Request::input('account_name');
         $data['account_description']        = Request::input('account_description');
         $data['account_parent_id']          = Request::input('account_parent_id');
@@ -61,8 +66,6 @@ class ChartOfAccountController extends Member
             $data['account_open_balance']       = Request::input('account_open_balance');
             $data['account_open_balance_date']  = date_format(date_create(Request::input('account_open_balance_date')) ,"Y/m/d");
             
-            $rules['account_open_balance']      = "required";
-            $rules['account_open_balance_date'] = "required";
         }
         
         $rules['account_type_id']           = "required";
@@ -93,6 +96,24 @@ class ChartOfAccountController extends Member
         }
         
         $account_id = Tbl_chart_of_account::insertGetId($data);
+
+        /* JOURNAL ENTRY FOR OPENING BALANCE */
+        if(Tbl_chart_account_type::where("chart_type_id", Request::input('account_type_id'))->pluck("has_open_balance") == 1)
+        {
+            if($data['account_open_balance'] > 0)
+            {
+                $entry["reference_module"]      = "deposit";
+                $entry["reference_id"]          = 0;
+                $entry["account_id"]            = $account_id;
+                $entry["name_id"]               = "";
+                $entry["total"]                 = $data['account_open_balance'];
+                $entry_data[0]['account_id']    = 0;
+                $entry_data[0]['vatable']       = 0;
+                $entry_data[0]['discount']      = 0;
+                $entry_data[0]['entry_amount']  = $data['account_open_balance'];
+                $inv_journal = Accounting::postJournalEntry($entry, $entry_data);
+            }
+        }
         
         Request::session()->flash('success', 'Account Successfully added');
         
@@ -122,16 +143,6 @@ class ChartOfAccountController extends Member
             $data['account_sublevel']       = $sub_level + 1;
         }
         
-        /* IF THE ACCOUNT TYPE HAS OPEN BALANCE FIELD */
-        if(Tbl_chart_account_type::where("chart_type_id", Request::input('account_type_id'))->pluck("has_open_balance") == 1)
-        {
-            $data['account_open_balance']       = Request::input('account_open_balance');
-            $data['account_open_balance_date']  = date_format(date_create(Request::input('account_open_balance_date')) ,"Y/m/d");
-            
-            $rules['account_open_balance']      = "required";
-            $rules['account_open_balance_date'] = "required";
-        }
-        
         $rules['account_type_id']           = "required";
         $rules['account_number']            = "required";
         $rules['account_name']              = "required";
@@ -153,8 +164,8 @@ class ChartOfAccountController extends Member
                 $json['message']    = 'Duplicate Name "'.$account_name.'"';
             }
             foreach($validator->errors()->all() as $validate)
-            {                dd($valida);
-                $json['message']    = $json['message'] ."</br>" .$validate;
+            {             
+                $json['message']    = $json['message'] .$validate;
             }
             
             return json_encode($json);
@@ -173,6 +184,7 @@ class ChartOfAccountController extends Member
     {
         $data['_account_type']  = Tbl_chart_account_type::get();
         $data['_account']       = Tbl_chart_of_account::accountInfo($this->user_info->shop_id)->get();
+        $data['_mode']          = "add";
         return view('/member/accounting/modal/account_add', $data);
     }
     
@@ -181,6 +193,7 @@ class ChartOfAccountController extends Member
         $data['account_info']   = Tbl_chart_of_account::accountInfo($this->user_info->shop_id)->where("account_id", $id)->first();
         $data['_account_type']  = Tbl_chart_account_type::get();
         $data['_account']       = Tbl_chart_of_account::accountInfo($this->user_info->shop_id)->get();
+        $data['mode']           = "update";
         return view('/member/accounting/modal/account_update', $data);
     }
 

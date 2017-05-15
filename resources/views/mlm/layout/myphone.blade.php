@@ -26,6 +26,8 @@
       <!-- Custom Theme Style -->
       <link href="/assets/member-theme/myphone/build/css/custom.min.css" rel="stylesheet">
 
+      <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
+      <link rel="stylesheet" href="/assets/member/css/member.css" type="text/css"/>
       <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
       <style>
          .navbar, .left_col { background-color: #5c3424; }
@@ -103,7 +105,42 @@
         {
           background-color: #5C3424 !important;
         }
+
+        .timeline::before
+        {
+          left: 3.5px;
+        }
+
+        .content 
+        {
+            min-height: 250px;
+            padding: 0px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        .info-box
+        {
+          border: 1px solid #D9DEE4;
+        }
+
+        .info-box-icon
+        {
+          height: 88px;
+        }
+
+        .info-box-text h2
+        {
+          font-weight: 700;
+          margin-bottom: 5px;
+        }
+
+        .info-box-content
+        {
+          margin-top: 5px;
+        }
       </style>
+      @yield("css")
    </head>
    <body class="nav-md">
       <div class="container body">
@@ -134,7 +171,7 @@
                            <li><a href="/mlm"> Home <span class="fa fa-chevron-down"></span></a></li>
                            <li><a href="/mlm/profile"> Profile <span class="fa fa-chevron-down"></span></a></li>
                            <li><a href="/mlm/notification"> Notification <span class="fa fa-chevron-down"></span></a></li>
-                           <!-- <li><a href="/mlm/repurchase"> Repurchase <span class="fa fa-chevron-down"></span></a></li> -->
+                           <li><a href="/mlm/repurchase"> Repurchase <span class="fa fa-chevron-down"></span></a></li>
                            <li>
                             <a> Genealogy <span class="fa fa-chevron-down"></span></a>
                             <ul style="display: none;">
@@ -317,6 +354,37 @@
             <!-- /footer content -->
          </div>
       </div>
+      <div id="global_modal" class="modal fade" role="dialog" >
+          <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+                  
+              </div>
+          </div>
+      </div>
+
+      <div class="modal-loader hidden"></div>
+        <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+                <div class="modal-dialog">
+
+                <!-- Modal content-->
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Modal Header</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>Some text in the modal.</p>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+      </div>
       <!-- jQuery -->
       <script src="/assets/member-theme/myphone/vendors/jquery/dist/jquery.min.js"></script>
       <!-- Bootstrap -->
@@ -367,6 +435,7 @@
       user experience. Slimscroll is required when using the
       fixed layout. -->
       <!-- // <script src="/resources/assets/distributor/scripts/e1d08589.bootstrap.min.js"></script> -->
+      <script src="/resources/assets/distributor/scripts/vendor/modernizr.js"></script>
       <script src="/resources/assets/distributor/scripts/9f7a46ed.proton.js"></script>
 
 

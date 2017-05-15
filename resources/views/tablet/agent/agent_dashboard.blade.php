@@ -3,7 +3,7 @@
 <input type="hidden" name="_token" value="{{csrf_token()}}">
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
-        <div class="col-md-8 col-xs-6">
+        <div class="col-md-6 col-xs-6">
             <i class="fa fa-tablet"></i>
             <h1>
                 <span class="page-title">Tablet</span>
@@ -12,12 +12,21 @@
                 </small>
             </h1>
         </div>
-        <div class="col-md-4 col-xs-6 text-right">
-            <div class="col-md-12 text-left">
+        <div class="col-md-6 col-xs-6 text-right">
+            <div class="col-md-12 ">
                 <label>{{$employee_name}}</label><br>
                 <label>{{$employee_position}}</label><br>
                 <a href="/tablet/logout">Logout</a>
             </div>  
+            <div class="col-sm-4 pull-right">
+                <form class="select-sir" method="get">
+                    <select class="choose-sir form-control" name="sir_id">
+                        @foreach($_sirs as $sir)
+                            <option {{Session::get("sir_id") == $sir->sir_id ? 'selected' : '' }} value="{{$sir->sir_id}}">SIR #{{$sir->sir_id}}</option>
+                        @endforeach
+                    </select>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -35,7 +44,7 @@
         </div>
         <div class="col-md-6 col-xs-6">
             <h3>
-           <a link="/tablet/sir_inventory/{{Session::get('selected_sir')}}" size="lg" class="form-control btn btn-primary popup">View Inventory</a>
+           <a link="/tablet/sir_inventory/{{Session::get('sir_id')}}" size="lg" class="form-control btn btn-primary popup">View Inventory</a>
            </h3>
         </div>
     </div>
@@ -68,6 +77,10 @@
 @endsection
 @section("script")
 <script type="text/javascript">
+$('body').on("change", ".choose-sir", function()
+{
+   $('.select-sir').submit();
+}); 
     function submit_done_customer(data)
     {
         if(data.message == "success")

@@ -128,6 +128,7 @@ class Mlm_slot_log
 		$message .= " in level " . $log_array['level'];
 		$message .= " of " . $log_array['level_tree'];
 		$message .= ". Sponsor : " . $sponsor->slot_no;
+		$message .= "(" .name_format_from_customer_info($sponsor). ")";
 
 		return $message;
 	}

@@ -35,7 +35,10 @@
 											<label><input type="radio" name="payroll_group_salary_computation" value="Flat Rate" {{$group->payroll_group_salary_computation == 'Flat Rate' ? 'checked':''}}>Flat Rate</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="payroll_group_salary_computation" value="Daily"  {{$group->payroll_group_salary_computation == 'Daily' ? 'checked':''}}>Daily</label>
+											<label><input type="radio" name="payroll_group_salary_computation" value="Daily Rate" {{$group->payroll_group_salary_computation == 'Daily Rate' ? 'checked':''}}>Daily Rate</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="payroll_group_salary_computation" value="Monthly Rate" {{$group->payroll_group_salary_computation == 'Monthly Rate' ? 'checked':''}}>Monthly Rate</label>
 										</div>
 									</div>
 								</div>
@@ -83,6 +86,20 @@
 										</div>
 									</div>
 								</div> -->
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<div class="form-horizontal">
+											<div class="form-group">
+												<div class="col-md-12">
+													<div class="checkbox">
+														<label><input type="checkbox" name="payroll_group_before_tax" value="1" {{$group->payroll_group_before_tax == 1 ? 'checked="checked"':''}}>Deduct Tax after SSS, PhilHealth, & Pagibig</label>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+								</div>
 								<div class="panel panel-default">
 									<div class="panel-body form-horizontal">
 										<div class="form-group">
@@ -320,15 +337,9 @@
 										</div>
 										<div class="col-md-6">
 											<small>Target Hours</small>
-											<div class="input-group">
-												<span class="input-group-btn width-120px">
-													<select class="form-control select-target-hours" disabled name="payroll_group_target_hour_parameter">
-														<option value="Daily" {{$group->payroll_group_target_hour_parameter == 'Daily' ? 'selected="selected"':''}}>Daily</option>
-														<option value="Per Period" {{$group->payroll_group_target_hour_parameter == 'Per Period' ? 'selected="selected"':''}}>Per Period</option>
-													</select>
-												</span>
-												<input type="number" name="payroll_group_target_hour" class="form-control text-right" value="{{$group->payroll_group_target_hour}}">
-											</div>
+											<input type="number" name="payroll_group_target_hour" class="form-control text-right" value="{{$group->payroll_group_target_hour}}">
+											<input type="hidden" name="payroll_group_target_hour_parameter" value="{{$group->payroll_group_target_hour_parameter}}">
+										
 										</div>
 									</div>
 									<div class="form-group">

@@ -3,7 +3,7 @@ var account_selected = '';
 var item_selected; 
 var item_type = null;
 var global_tr_html = $(".div-script tbody").html();
-
+var cat_type = '';
 function item()
 {
     init();
@@ -11,13 +11,16 @@ function item()
     function init()
     {
         initialize_select();
-        saved_input();
+        // saved_input();
         $(".datepicker").datepicker();
         
         // event_accept_number_only();
         event_item_type_click();
         event_back_menu_click();
         event_image_change();
+
+        event_txt_onchange();
+        // event_click_show_purchase();
 
         /* For Multiple Table */
         event_remove_tr();
@@ -26,69 +29,50 @@ function item()
         var option = $('option:selected', $(".measure_container")).attr('abbrev');
         $(".abbreviation").text(option);
     }
-
-    function event_accept_number_only()
+    function event_txt_onchange()
     {
-        $(document).on("keypress",".number-input", function(event){
-            if(event.which < 46 || event.which > 59) {
-                event.preventDefault();
-            } // prevent if not number/dot
-
-            if(event.which == 46 && $(this).val().indexOf('.') != -1) {
-                event.preventDefault();
-            } // prevent if already dot
-
-        });
-
-        $(document).on("change",".number-input", function(){
-            $(this).val(function(index, value) {         
-                var ret = '';
-                value = action_return_to_number(value);
-                if(!$(this).hasClass("txt-qty")){
-                    value = parseFloat(value);
-                    value = value.toFixed(2);
-                }
-                if(value != '' && !isNaN(value)){
-                    value = parseFloat(value);
-                    ret = action_add_comma(value).toLocaleString();
-                }
-                
-                if(ret == 0){
-                    ret = '';
-                }
-
-                return ret;
-              });
+        $(".item-name").keyup(function()
+        {
+            $(".item-sku").val($(this).val());
         });
     }
-    function action_add_comma(number)
-    {
-        number += '';
-        if(number == '0' || number == ''){
-            return '';
-        }
-
-        else{
-            return number.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-    }
-    function action_return_to_number(number = '')
-    {
-        number += '';
-        number = number.replace(/,/g, "");
-        if(number == "" || number == null || isNaN(number)){
-            number = 0;
-        }
-        
-        return parseFloat(number);
-    }
-
     function initialize_select()
     {
-        $(".drop-down-category").globalDropList(
+        $(".drop-down-category.inventory").globalDropList(
         {
             width       : '100%',
-            link        : '/member/item/category/modal_create_category',
+            link        : '/member/item/category/modal_create_category/inventory',
+            link_size   : 'md'
+        });
+        $(".drop-down-category.non-inventory").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/item/category/modal_create_category/non-inventory',
+            link_size   : 'md'
+        });
+        $(".drop-down-category.services").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/item/category/modal_create_category/services',
+            link_size   : 'md'
+        });
+
+        $(".drop-down-pis-um.notbase-um").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/pis/um_add?um_type=notbase',
+            link_size   : 'xs'
+        });
+        $(".drop-down-pis-um.base-um").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/pis/um_add?um_type=base',
+            link_size   : 'xs'
+        });
+        $(".drop-down-category.bundles").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/item/category/modal_create_category/bundles',
             link_size   : 'md'
         });
         $(".drop-down-manufacturer").globalDropList(
@@ -103,7 +87,7 @@ function item()
             link : "/member/vendor/add"
         });
 
-        $(".select-um").globalDropList(
+        $(".droplist-um").globalDropList(
         {
             hasPopup    : 'false',
             width       : '100%',
@@ -139,6 +123,18 @@ function item()
                         }
                     });                    
                 }
+            }
+        });
+
+        $(".drop-down-coaster").globalDropList(
+        {
+            width       : '100%',
+            link        : '/member/accounting/chart_of_account/popup/add',
+            link_size   : 'md',
+            placeholder : 'Chart of Account',
+            onCreateNew : function()
+            {
+                account_selected = $(this);
             }
         });
 
@@ -214,12 +210,12 @@ function item()
         if($this.find("option:selected").attr("has-um") != '')
         {          
             $parent = $this.closest("tr");
-            console.log("true"); 
+            console.log($this.find("option:selected").attr("has-um")); 
             $parent.find(".select-um-one").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
             {
                 $(this).globalDropList("reload").globalDropList("enabled");
                 $(this).val($(this).find("option:first").val()).change();
-            })
+            });
         }
         else
         {
@@ -261,7 +257,7 @@ function item()
             if(item_type != name)
             {
                 $("#item_type_container").val(name);
-                $(".form_one").find("input[type=text], textarea,input[type=number]").val("");
+                // $(".form_one").find("input[type=text], textarea,input[type=number]").val("");
             }
             $(".item_title").text(display);
             $(".menu_container").slideUp();
@@ -350,6 +346,17 @@ function submit_done(data)
         });
         data.element.modal("hide");
     }
+    else if(data.type == "pis-um")
+    {
+        toastr.success("Success");
+        console.log(data.um_type);
+        $(".drop-down-pis-um."+data.um_type).load("/member/pis/load_pis_um/"+data.um_type, function()
+        {                
+             $(".drop-down-pis-um."+data.um_type).globalDropList("reload");
+             $(".drop-down-pis-um."+data.um_type).val(data.id).change();              
+        });
+        data.element.modal("hide");
+    }
     else if(data.type == "manufacturer")
     {
         toastr.success("Success");
@@ -363,10 +370,10 @@ function submit_done(data)
     else if(data.type == "base-um")
     {        
         data.element.modal("hide");
-        $(".select-um").load("/member/item/load_one_um_multi/"+ data.id, function()
+        $(".droplist-um").load("/member/item/load_one_um_multi/"+ data.id, function()
         {                
-             $(".select-um").globalDropList("reload").globalDropList("enabled") ; 
-             $(".select-um").val($(".select-um").find("option:first").val()).change();              
+             $(".droplist-um").globalDropList("reload").globalDropList("enabled") ; 
+             $(".droplist-um").val($(".droplist-um").find("option:first").val()).change();              
         });
     }
     else if(data.type == "unit-measurement")
@@ -382,7 +389,8 @@ function submit_done(data)
     else if(data.type == "category")
     {
         toastr.success("Success");
-        $(".drop-down-category").load("/member/item/load_category", function()
+        console.log(data.cat_type);
+        $(".drop-down-category."+data.cat_type).load("/member/item/load_category/"+data.cat_type, function()
         {                
              $(".drop-down-category").globalDropList("reload");
              $(".drop-down-category").val(data.id).change();              
@@ -433,6 +441,12 @@ function submit_done(data)
           toastr.warning(data.error[index]);
         });
     }
+}
+function toggle_po(className, obj) 
+{
+    var $input = $(obj);
+    if ($input.prop('checked')) $(className).slideDown();
+    else $(className).slideUp();
 }
 
 function submit_selected_image_done(data) 

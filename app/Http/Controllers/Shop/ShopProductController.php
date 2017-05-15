@@ -79,50 +79,122 @@ class ShopProductController extends Shop
             case 'name_asc':
                 usort($product, function($a, $b) 
                 {
-                    return $a['eprod_name'] <=> $b['eprod_name'];
+                    if ($a['eprod_name'] == $b['eprod_name'])
+                    {
+                        return 0;
+                    }
+                     if ($a['eprod_name'] < $b['eprod_name'])
+                    {
+                        return -1;
+                    }
+                     if ($a['eprod_name'] > $b['eprod_name'])
+                    {
+                        return 1;
+                    }
+                    // return $a['eprod_name'] <=> $b['eprod_name'];
                 });
             break;
 
             case 'name_desc':
                 usort($product, function($a, $b) 
                 {
-                    return $b['eprod_name'] <=> $a['eprod_name'];
+                    if ($b['eprod_name'] == $a['eprod_name'])
+                    {
+                        return 0;
+                    }
+                     if ($b['eprod_name'] < $a['eprod_name'])
+                    {
+                        return -1;
+                    }
+                     if ($b['eprod_name'] > $a['eprod_name'])
+                    {
+                        return 1;
+                    }
+                    // return $b['eprod_name'] <=> $a['eprod_name'];
                 });
             break;
 
             case 'price_asc':
                 usort($product, function($a, $b) 
                 {
-                    return $a['max_price'] <=> $b['max_price'];
+                    if ($a['max_price'] == $b['max_price'])
+                    {
+                        return 0;
+                    }
+                     if ($a['max_price'] < $b['max_price'])
+                    {
+                        return -1;
+                    }
+                     if ($a['max_price'] > $b['max_price'])
+                    {
+                        return 1;
+                    }
+                    // return $a['max_price'] <=> $b['max_price'];
                 });
             break;
 
             case 'price_desc':
                 usort($product, function($a, $b) 
                 {
-                    return $b['min_price'] <=> $a['min_price'];
+                    if ($b['min_price'] == $a['min_price'])
+                    {
+                        return 0;
+                    }
+                     if ($b['min_price'] < $a['min_price'])
+                    {
+                        return -1;
+                    }
+                     if ($b['min_price'] > $a['min_price'])
+                    {
+                        return 1;
+                    }
+                    // return $b['min_price'] <=> $a['min_price'];
                 });
             break;
 
             case 'newest':
                 usort($product, function($a, $b) 
                 {
-                    return $b['date_created'] <=> $a['date_created'];
+                    if ($b['date_created'] == $a['date_created'])
+                    {
+                        return 0;
+                    }
+                     if ($b['date_created'] < $a['date_created'])
+                    {
+                        return -1;
+                    }
+                     if ($b['date_created'] > $a['date_created'])
+                    {
+                        return 1;
+                    }
+                    // return $b['date_created'] <=> $a['date_created'];
                 });
             break;
             
             default:
                 usort($product, function($a, $b) 
                 {
-                    return $a['eprod_name'] <=> $b['eprod_name'];
+                    if ($a['eprod_name'] == $b['eprod_name'])
+                    {
+                        return 0;
+                    }
+                     if ($a['eprod_name'] < $b['eprod_name'])
+                    {
+                        return -1;
+                    }
+                     if ($a['eprod_name'] > $b['eprod_name'])
+                    {
+                        return 1;
+                    }
+                    // return $a['eprod_name'] <=> $b['eprod_name'];
                 });
             break;
         }
-        Pagination
+        // Pagination
         $perPage = 12;
         $data["current_count"] = count($product);
         $data["_product"] = self::paginate($product, $perPage);
-
+     
         return view("product", $data);
     }
     public function paginate($items,$perPage)

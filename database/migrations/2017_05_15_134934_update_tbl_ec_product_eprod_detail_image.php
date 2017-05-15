@@ -12,7 +12,10 @@ class UpdateTblEcProductEprodDetailImage extends Migration
      */
     public function up()
     {
-        //
+        Schema::table('tbl_ec_product', function (Blueprint $table) 
+        {
+            $table->string('eprod_detail_image');
+        }); 
     }
 
     /**

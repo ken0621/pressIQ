@@ -133,7 +133,12 @@
             		@if(count($product['variant']) > 0)
                     <div class="holder">
                         <div class="border">
-                            <div class="img"><img class="4-3-ratio" src="{{ get_product_first_image($product) }}"></div>
+                            <div class="img">
+                                @if($product["eprod_detail_image"])
+                                    <img class="detail" src="{{ $product["eprod_detail_image"] }}">
+                                @endif
+                                <img class="4-3-ratio" src="{{ get_product_first_image($product) }}">
+                            </div>
                             <div class="name">{{ get_product_first_name($product) }}</div>
                             <!-- <div class="price-left">P34,000</div> -->
                             <div class="price-right">{{ get_product_first_price($product) }}</div>
@@ -149,7 +154,9 @@
             <div class="list-view hide">
                 @foreach($_product as $product)
                     <div class="holder">
-                        <div class="img"><img src="{{ get_product_first_image($product) }}"></div>
+                        <div class="img">
+                            <img src="{{ get_product_first_image($product) }}">
+                        </div>
                         <div class="text">
                             <div class="name">{{ get_product_first_name($product) }}</div>
                             <!--<div class="sprice">from: <span>P34,990</span></div>-->

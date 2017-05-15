@@ -96,6 +96,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
     /* -- PRODUCTS => PRODUCT CODE */
+    $code = "product-wishlist";
+    $nav[$page]['submenu'][$code]['label'] = "Wishlist";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/wishlist/list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "";
+    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Edward Guevarra</span>";
+
+    /* -- PRODUCTS => PRODUCT CODE */
     $code = "product-coupon";
     $nav[$page]['submenu'][$code]['label'] = "Coupon Code";
     $nav[$page]['submenu'][$code]['code'] = $code;

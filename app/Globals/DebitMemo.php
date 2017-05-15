@@ -6,6 +6,7 @@ use App\Models\Tbl_shop;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_discount;
 use App\Models\Tbl_cart;
+use App\Models\Tbl_user;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_debit_memo_line;

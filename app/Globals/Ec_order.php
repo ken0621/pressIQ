@@ -33,6 +33,12 @@ class Ec_order
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
+    /**
+     * Collecting all the details of order from the ecommerce front and pass it on create_ec_order
+     *
+     * @param  array    $order_info
+     * @return array
+     */
     public static function create_ec_order_automatic($order_info)
     {
         if($order_info['customer_id'] == null)
@@ -425,8 +431,6 @@ class Ec_order
             $response["status"] = "success";
             return $response;
         }
-
-
 	}
 
     public static function update_inventory($type,$ec_order_id, $shop_id)
@@ -491,5 +495,10 @@ class Ec_order
             } 
 
         }
+    }
+
+    public static function check_coupon()
+    {
+        
     }
 }

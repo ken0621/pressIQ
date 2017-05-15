@@ -10,6 +10,7 @@ use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_credit_memo;
+use App\Models\Tbl_user;
 use App\Globals\Accounting;
 use App\Globals\Warehouse;
 use App\Globals\Item;

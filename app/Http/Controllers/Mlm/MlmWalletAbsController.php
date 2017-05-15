@@ -22,67 +22,45 @@ class MlmWalletAbsController extends Mlm
     }
     public function transfer()
     {
-        $data['account_id'] = 'ABS-0019';
-        $data['amount'] = '100.00';
-        $headers = [];         
-        // $headers = json_encode($headers);
-        $api = AbsMain::$mainurl;
+        $headers = ['Connection'=> 'keep-alive', 
+                    'Content-Type' => 'application/x-www-form-urlencoded', 
+                    'Credentials' => 
+                        ['account_id' => 'ABS-0019', 
+                        'username' => 'philtech', 
+                        'password' => 'CxxApx6CsrK6r2yr']    
+                        
+                    ,'contents' => '', 'name' => ''];
+        
+        $contents = 
+        $headers = ['multipart' => ['name' => [ 'contents' => '', 'name' => '' ],'contents'=> [ 'contents' => '', 'name' => ''], 'headers' => $headers], 'headers' => $headers];
+        // dd($headers);
+        // $request = new Request('GET', 'http://staging.tripoption.tours');
 
         $client = new Client([
-            // Base URI is used with relative requests
-            'base_uri' => $api,
-            // You can set any number of default request options.
+            'base_uri' => 'http://staging.tripoption.tours',
             'timeout'  => 10.0,
-        ]); 
-        $credentials = [
-        'headers' => [
-            'Content-Type' => 'Content-Type: application/x-www-form-urlencoded',
-            'Credentials' => [ 
-                'account_id' => 'ABS-0019',
-                'username' => 'philtech',
-                'password' => 'CxxApx6CsrK6r2yr'
-                ]
-            ],
-        'requests' => []    
-        ];
-        $request_a = [];
-        try
+        ], $headers);
+
+        $response = $client->request('GET', '/api/wallet/ABS-0019', $headers);
+
+        try 
         {
-            $response = $client->request('GET', '/api/wallet/ABS-0019', 
-            [
-            'json' => '"headers": "Content-Type: application/x-www-form-urlencoded\nCredentials: {\"account_id\":\"ABS-0019\",\"username\":\"philtech\",\"password\":\"CxxApx6CsrK6r2yr\"}\n"'
-            ]);
-            dd($response);
+            // $request->send();
+            // dd(1);
+            // $client->setDefaultOption('headers', $headers);
+            // $client->getConfig('headers', $headers);
+            // $client->getConfig('headers/Connection', 'keep-alive');
+            // dd($client);
+            
+            dd(2);
+            $response = $request->send();
+            dd(1);
+            $request = new Request('GET', 'http://staging.tripoption.tours/api/wallet/ABS-0019');
+            $response = $client->send($request, ['headers' => $headers]);
         }
         catch (\Exception $e) 
         {
-            return $e->getMessage();
+            return 'Caught exception: ' .  $e->getMessage();
         }
-        dd(1);
-        try {
-            $request = new Request('GET', '/api/wallet');
-            $response = $client->request('GET', '/api/wallet/ABS-0019');
-            dd($response);
-            // $client->post('/api/wallet', $headers);
-            // $response = $client->send($request, ['timeout' => 10]);
-            $body = $response->getBody();
-        }
-        catch (\Exception $e) 
-        {
-            return $e->getMessage();
-        }
-
-        $request = new Request('POST', '/api/wallet', $headers);
-        $response = $client->send($request, ['timeout' => 10]);
-        $body = $response->getBody();
-        dd(1);
-        dd($body);
-
-
-        
-        $response = $client->request('POST', '/api/wallet', $data);
-
-        // $promise = $client->postAsync($api);
-        dd($response);
     }
 }

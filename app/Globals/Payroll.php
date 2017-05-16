@@ -2497,43 +2497,44 @@ class Payroll
 
 		
 
-		if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
+		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
+		if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
 		{
 			$tax_index = 'tax_first_range';
 		}
 
-		if($rate >= $tax->tax_second_range && $rate < $tax->tax_third_range)
+		if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
 		{
 			$tax_index = 'tax_second_range';
 		}
 
-		if($rate >= $tax->tax_second_range && $rate < $tax->tax_third_range)
+		if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
 		{
 			$tax_index = 'tax_second_range';
 		}
 
-		if($rate >= $tax->tax_third_range && $rate < $tax->tax_fourth_range)
+		if($tax->tax_third_range >= $rate && $tax->tax_fourth_range < $rate)
 		{
 			$tax_index = 'tax_third_range';
 		}
 
-		if($rate >= $tax->tax_fourth_range && $rate < $tax->tax_fifth_range)
+		if($tax->tax_fourth_range >= $rate && $tax->tax_fifth_range < $rate)
 		{
 			$tax_index = 'tax_fourth_range';
 		}
 
 		
-		if($rate >= $tax->tax_fifth_range && $rate < $tax->taxt_sixth_range)
+		if($tax->tax_fifth_range >= $rate && $tax->taxt_sixth_range < $rate)
 		{
 			$tax_index = 'tax_fifth_range';
 		}
 
-		if($rate >= $tax->taxt_sixth_range&&  $rate < $tax->tax_seventh_range)
+		if($tax->taxt_sixth_range >= $rate &&  $tax->tax_seventh_range < $rate)
 		{
 			$tax_index = 'taxt_sixth_range';
 		}
 
-		if($rate < $tax->tax_seventh_range)
+		if($tax->tax_seventh_range < $rate)
 		{
 			$tax_index = 'tax_seventh_range';
 		}

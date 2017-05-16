@@ -6,8 +6,17 @@ $(document).ready(function()
 	event_slick();
 	event_change_image();
 	event_add_to_cart();
+	action_text_fit();
 });
 
+function action_text_fit()
+{
+	jQuery(".item-and-description .item-title").fitText(0.8, 
+	{
+		maxFontSize: '29.17px',
+		minFontSize: '12px',
+	});
+}
 function event_change_image()
 {
 	$(".item-image-large").elevateZoom();
@@ -107,6 +116,8 @@ function action_select_variation(e)
 		
 			$(content_holder).addClass("hide");
 			$(content_holder_specific).removeClass("hide");
+
+			action_text_fit();
 
 			$('.4-3-ratio').keepRatio({ ratio: 4/3, calculate: 'height' });
 

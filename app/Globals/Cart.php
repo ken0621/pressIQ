@@ -12,6 +12,7 @@ use App\Models\Tbl_ec_variant;
 use App\Globals\Ecom_Product;
 use DB;
 use Session;
+use Request;
 use Carbon\Carbon;
 use App\Globals\Mlm_discount;
 use App\Models\Tbl_mlm_item_points;
@@ -32,7 +33,7 @@ class Cart
             $shop_id = Cart::get_shop_info();
         }
         
-        $unique_id = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id = "cart:".Request::ip()."_".$shop_id;
         $check     = Tbl_ec_variant::where("evariant_id",$product_id)->first();
         if(number_format($quantity) <= 0)
         {
@@ -108,7 +109,7 @@ class Cart
 
         /* INITIALIZE */
         $date_now              = Carbon::now();
-        $unique_id             = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id             = "cart:".Request::ip()."_".$shop_id;
         $data                  = Session::get($unique_id);
         $customer_setings      = Cart::customer_get_settings($shop_id);
 
@@ -282,7 +283,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id               = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id               = "cart:".Request::ip()."_".$shop_id;
         $insert                  = Session::get($unique_id);
         foreach ($insert['cart'] as $key => $value) 
         {
@@ -309,7 +310,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id  = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id  = "cart:".Request::ip()."_".$shop_id;
         $_cart      = Session::get($unique_id);
         $condition  = false;
 
@@ -362,7 +363,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id = "cart:".Request::ip()."_".$shop_id;
         $_cart     = Session::get($unique_id);
 
         if(isset($_cart["cart"]))
@@ -399,7 +400,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id = "customer_settings:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id = "customer_settings:".Request::ip()."_".$shop_id;
         if($customer_id && $customer_id != 0)
         {
             $data["customer_id"] = $customer_id;
@@ -497,7 +498,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id = "customer_settings:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id = "customer_settings:".Request::ip()."_".$shop_id;
         $data      = Session::get($unique_id);
         if(!$data)
         {
@@ -587,7 +588,7 @@ class Cart
             }
             else
             {
-                $unique_id                  = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+                $unique_id                  = "cart:".Request::ip()."_".$shop_id;
                 $_cart                      = Session::get($unique_id);
                 $_cart["applied_coupon_id"] = $check->coupon_code_id;
                 Session::put($unique_id,$_cart); 

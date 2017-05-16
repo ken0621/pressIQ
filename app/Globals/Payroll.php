@@ -2549,7 +2549,7 @@ class Payroll
 			$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
 		}
 
-		dd($tax_index);
+		dd($tax);
 
 		return round($tax_contribution, 2);
 	}

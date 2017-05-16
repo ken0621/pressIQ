@@ -58,12 +58,17 @@ body{
 		.slider-title{
 			font-family: 'Fjalla One', sans-serif;
 			font-size: 64px;
+			@media screen and (max-width: 600px)
+			{
+				font-size: 36px;
+				line-height: 38px;
+			}
 			@media screen and (max-width: 500px)
 			{
 				font-size: 30px;
 				line-height: 35px;
 			}
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 360px)
 			{
 				font-size: 26px;
 			}
@@ -138,6 +143,13 @@ body{
 			float: right;
 			margin-top: -142px;
 		}
+		@media screen and (max-width: 600px)
+		{
+
+			width: 80%;
+			float: right;
+			margin-top: -90px;
+		}
 		@media screen and (max-width: 500px)
 		{
 
@@ -163,6 +175,11 @@ body{
 		{
 
 			font-size: 25px;
+		}
+		@media screen and (max-width: 600px)
+		{
+
+			font-size: 16px;
 		}
 	}
 	.news-content{
@@ -299,6 +316,12 @@ body{
 				position: relative;
 				width: 100%;
 				overflow: hidden;
+				@media screen and (max-width: 600px)
+				{
+					col{
+						width: 100%;
+					}
+				}
 				@media screen and (max-width: 500px)
 				{
 					col{
@@ -309,6 +332,10 @@ body{
 				.gallery-img-holder{
 					
 					padding-bottom: 32px;
+					@media screen and (max-width: 600px)
+					{
+						padding-bottom: 0px;
+					}
 					@media screen and (max-width: 500px)
 					{
 						padding-bottom: 0px;
@@ -317,6 +344,11 @@ body{
 					img{
 						width: 100%;
 						border: 3px solid #fff;
+						@media screen and (max-width: 600px)
+						{
+							width: 50%;
+							float: left;
+						}
 						@media screen and (max-width: 500px)
 						{
 							width: 50%;
@@ -362,6 +394,11 @@ body{
 				img{
 					position: relative;
 					left: -5px;
+					@media screen and (max-width: 600px)
+					{
+						left: 435px;
+						top: -140px;
+					}
 					@media screen and (max-width: 500px)
 					{
 						left: 290px;
@@ -384,6 +421,11 @@ body{
 				img{
 					position: relative;
 					right: -5px;
+					@media screen and (max-width: 600px)
+					{
+						right: 0px;
+						top: -140px;
+					}
 					@media screen and (max-width: 500px)
 					{
 						right: 0px;

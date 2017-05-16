@@ -2143,7 +2143,7 @@ class Payroll
 
 				$data['tax_contribution'] = divide(Payroll::tax_contribution($shop_id, $salary_taxable, $data['tax_status'], $payroll_period_category), $period_category_arr['count_per_period']);
 
-				dd($salary_taxable);
+				// dd($salary_taxable);
 
 				if($group->payroll_group_tax == 'Last Period')
 				{
@@ -2495,7 +2495,7 @@ class Payroll
 
 		$tax_contribution = 0;
 
-		// dd($tax);
+		dd($tax);
 
 		if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
 		{

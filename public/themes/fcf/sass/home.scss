@@ -124,13 +124,17 @@ body{
 	img{
 		width: 100%;
 
+		@media screen and (max-width: 960px)
+		{
+			width: 20%;
+		}
 		@media screen and (max-width: 500px)
 		{
 			width: 40%;
 		}
-		@media screen and (max-width: 960px)
+		@media screen and (max-width: 360px)
 		{
-			width: 20%;
+			width: 40%;
 		}
 	}
 
@@ -230,11 +234,11 @@ body{
 	.btn-container{
 			padding: 15px;
 			float: right;
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 960px)
 			{
 				float: left;
 			}
-			@media screen and (max-width: 960px)
+			@media screen and (max-width: 500px)
 			{
 				float: left;
 			}
@@ -452,14 +456,13 @@ body{
 	.btn-container{
 			padding: 55px 15px 0px 0px;
 			float: right;
-
-			@media screen and (max-width: 500px)
+			@media screen and (max-width: 960px)
 			{
 				float: left;
 				padding-left: 20px;
 				margin-top: -36px;
 			}
-			@media screen and (max-width: 960px)
+			@media screen and (max-width: 500px)
 			{
 				float: left;
 				padding-left: 20px;

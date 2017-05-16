@@ -231,10 +231,10 @@ function customer_invoice(){
 			/* GET ALL DATA */
 			var qty 	= $(this).find(".txt-qty").val();
 			var rate 	= $(this).find(".txt-rate").val();
-			var discount= $(this).find(".txt-discount").val();
+			var discount= $(this).find(".txt-discount").val().toString();
 			var amount 	= $(this).find(".txt-amount");
 			var taxable = $(this).find(".taxable-check");
-			
+
 			/* CHECK IF QUANTITY IS EMPTY */
 			if(qty == "" || qty == null)
 			{
@@ -446,6 +446,7 @@ function customer_invoice(){
         {
             link : "/member/item/add",
             width : "100%",
+            maxHeight: "309px",
             onCreateNew : function()
             {
             	item_selected = $(this);
@@ -516,6 +517,7 @@ function customer_invoice(){
         {
             link : "/member/item/add",
             width : "100%",
+            maxHeight: "309px",
             onCreateNew : function()
             {
             	item_selected = $(this);
@@ -569,7 +571,6 @@ function customer_invoice(){
     		{
     			action_load_unit_measurement_cm($(this));
     		}
-
     	});
         $('.droplist-um-cm:not(.has-value)').globalDropList("disabled");
 	}
@@ -594,7 +595,6 @@ function customer_invoice(){
 		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
 		$parent.find(".txt-qty").val(1).change();
 
-		console.log($this.find("option:selected").attr("item-type"));
 		$parent.find(".txt-rate").attr("disabled",false);
 		$parent.find(".txt-discount").attr("disabled",false);
 		if($this.find("option:selected").attr("item-type") == 4)
@@ -713,22 +713,22 @@ function dragging_done()
 /* AFTER ADDING A CUSTOMER */
 function submit_done_customer(result)
 {
-	toastr.success("Success");
     $(".droplist-customer").load("/member/customer/load_customer", function()
     {                
          $(".droplist-customer").globalDropList("reload");
-         $(".droplist-customer").val(result.id).change();          
+         $(".droplist-customer").val(result.id).change();    
+         toastr.success("Success");      
     });
 }
 
 /* AFTER ADDING AN  ITEM */
 function submit_done_item(data)
 {
-	toastr.success("Success");
-    $(".tbody-item .select-item").load("/member/item/load_item_category", function()
+    item_selected.load("/member/item/load_item_category", function()
     {
-        $(".tbody-item .select-item").globalDropList("reload");
-		item_selected.val(data.item_id).change();
+        $(this).globalDropList("reload");
+		$(this).val(data.item_id).change();
+		toastr.success("Success");
     });
     data.element.modal("hide");
 }
@@ -740,13 +740,11 @@ function submit_done(data)
 		console.log("succes-invoice");
         if(data.redirect)
         {
-        	console.log("redirect");
-        	toastr.success("Success");
+        	toastr.success("Success inv");
         	location.href = data.redirect;
     	}
     	else
     	{
-    		console.log("not redirect");
     		$(".load-data:last").load(data.link+" .load-data .data-container", function()
     		{
     			customer_invoice.action_initialized();
@@ -760,7 +758,7 @@ function submit_done(data)
 	}
 	else if(data.status == 'success-sir')
 	{		
-        toastr.success("Success");
+        toastr.success("Success sir");
        	location.href = "/member/pis/manual_invoice";
 	}
 	else if(data.status == 'success-tablet')

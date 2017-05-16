@@ -21,4 +21,5 @@ class ShopHomeController extends Shop
      
         return view("home", $data);
     }
+
 }

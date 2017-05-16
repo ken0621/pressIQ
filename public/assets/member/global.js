@@ -81,6 +81,7 @@ function global()
 				}
 				else
 				{
+                    console.log("global js");
 				    $(".modal-loader").addClass("hidden");
                     
                     if(data.type == 'item')

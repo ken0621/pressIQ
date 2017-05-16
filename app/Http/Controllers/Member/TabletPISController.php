@@ -481,6 +481,7 @@ class TabletPISController extends Member
         if($action == "confirm")
         {
         	$update["lof_status"] = 2;
+        	$update["sir_status"] = 1;
         }
         else if($action == "reject")
         {

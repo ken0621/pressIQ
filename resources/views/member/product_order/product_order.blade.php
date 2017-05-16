@@ -10,7 +10,7 @@
                     List of orders
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="product_order/create_order" >Create Invoice</a>
+            <!-- <a class="panel-buttons btn btn-custom-primary pull-right" href="product_order/create_order" >Create Invoice</a> -->
 <!--             <a class="panel-buttons btn btn-default pull-right" href="product_order/create_order" >Sales by product (Report)</a>
             <a class="panel-buttons btn btn-default pull-right" href="product_order/create_order" >Sales by month (Report)</a>
             <a class="panel-buttons btn btn-default pull-right" href="product_order/create_order" >Sales by variant (Report)</a> -->

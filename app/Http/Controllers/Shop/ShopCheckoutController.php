@@ -566,14 +566,10 @@ class ShopCheckoutController extends Shop
         }
         else
         {
-            $validate_payment = $this->validate_payment();
-            if (!$validate_payment) 
-            {
-                $cart = $this->restructure_cart();
-                $this->check_stocks();
-                $this->check_payment_method_enabled($cart);
-                $this->check_payment_method($cart);
-            }
+            $cart = $this->restructure_cart();
+            $this->check_stocks();
+            $this->check_payment_method_enabled($cart);
+            $this->check_payment_method($cart);
         }
     }
     /*Ipay88 Function*/

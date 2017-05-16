@@ -121,7 +121,7 @@
 			<div class="row clearfix">
 				<div class="col-md-9">
 					<div class="bottom-container-txt">
-						<div class="bottom-container-title">WE ARE A <span class="highlight">RESPONSILBE</span> MINING COMPANY</div>
+						<div class="bottom-container-title">WE ARE A <span class="highlight">RESPONSIBLE</span> MINING COMPANY</div>
 						<div class="bottom-container-details">This drives innovative solutions for our clients and improves our understanding of the world in which we work</div>
 					</div>
 				</div>

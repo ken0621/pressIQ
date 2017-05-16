@@ -23,6 +23,18 @@ class Item
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
+    public static function generate_barcode($barcode = 0)
+    {
+        $return = $barcode;
+        $chk =  Tbl_item::where("item_barcode",$return)->get();
+        if(count($chk) > 1)
+        {
+            $num = '1234567890';
+            $return = str_shuffle($return);
+        }
+
+        return $return;
+    }
     public static function get_item_details($item_id = 0)
     {
         return Tbl_item::um_item()->category()->where("item_id",$item_id)->first();

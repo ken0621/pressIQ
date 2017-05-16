@@ -381,6 +381,18 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <div class="row col-md-6">
+                            <label>Unit of Measure</label>
+                            <select class="form-control input-sm measure_container drop-down-pis-um notbase-um" name="unit_n_based">
+                            @include("member.load_ajax_data.load_pis_um",['_um' => $_um_n, 'id' => isset($um_n_id)])
+                            </select>                            
+                        </div>
+                        <div class="col-md-6">
+                            <label>Barcode </label> <small>(<input type="checkbox" name="auto_generate_code" value="generate"> Auto Generate Code )</small>
+                            <input type="text" class="form-control item_barcode" id="item_barcode" value="{{isset($data['item_barcode']) ? $data['item_barcode'] : ''}}" name="item_barcode">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div class="row col-md-12">
                             <label>Sales Information</label>
                             <textarea class="form-control" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>

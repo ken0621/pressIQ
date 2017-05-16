@@ -66,8 +66,7 @@ class ItemController extends Member
 	        }
 	        
 			$data["_item"]			   = $item->get();
-			// dd($data["_item"]);
-			//item_convertion with unit measurement
+
 			foreach ($data["_item"] as $key => $value) 
 			{
 				if($value->item_type_id == 1)
@@ -87,15 +86,12 @@ class ItemController extends Member
 						$data["_item"][$key]->um_whole = $um->multi_abbrev;
 					}
 				}
-				if($value->item_type_id != 4)
+				$um_base = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",1)->first();
+				if($um_base)
 				{
-					$um_base = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",1)->first();
-					if($um_base)
-					{
-						$data["_item"][$key]->multi_abbrev = $um_base->multi_abbrev;
-					}
-					$data["_item"][$key]->conversion = UnitMeasurement::um_convertion($value->item_id);
+					$data["_item"][$key]->multi_abbrev = $um_base->multi_abbrev;
 				}
+				$data["_item"][$key]->conversion = UnitMeasurement::um_convertion($value->item_id);
 				if($value->item_type_id == 4)
 				{
 					$data["_item"][$key]->item_price = Item::get_item_bundle_price($value->item_id);
@@ -221,11 +217,11 @@ class ItemController extends Member
 		$item_reorder_point 			= Request::input("item_reorder_point");
 		$item_quantity 					= Request::input("item_quantity");
 
-		if($item_type != "bundle")
-		{
-			$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
-			$item_measurement_id 			= $unit_id;			
-		}
+		// if($item_type != "bundle")
+		// {
+		$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
+		$item_measurement_id 			= $unit_id;			
+		// }
 			
 		//Accounting part //DEFAULT VALUE
 		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->pluck("account_id");
@@ -407,11 +403,20 @@ class ItemController extends Member
 		{
 			$insert["item_type_id"]				      = 4; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
 			
+			if(Request::input("auto_generate_code") == "generate" || $item_barcode == "")
+			{
+				$num = str_shuffle("1234567890");
+				$item_barcode = Item::generate_barcode($num);
+			}
+
 			$insert["item_name"]				= $item_name;
 			$insert["item_sku"]					= $item_sku;
 			$insert["item_category_id"]			= $item_category_id;
 			$insert["item_img"]					= $item_img;
 			$insert["item_sales_information"] 	= $item_sales_information;
+
+			$insert["item_barcode"]			 	= $item_barcode;
+			$insert["item_measurement_id"] 		= $item_measurement_id;
 
 			$rules["item_name"]					= "required";
 			$rules["item_sku"] 					= "required";
@@ -929,11 +934,11 @@ class ItemController extends Member
 		$item_reorder_point 			= Request::input("item_reorder_point");
 		$item_quantity 					= Request::input("item_quantity");
 
-		if($item_type != "bundle")
-		{
-			$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
-			$item_measurement_id 			= $unit_id;			
-		}
+		// if($item_type != "bundle")
+		// {
+		$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
+		$item_measurement_id 			= $unit_id;			
+		// }
 			
 		//Accounting part //DEFAULT VALUE
 		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->pluck("account_id");
@@ -1105,11 +1110,20 @@ class ItemController extends Member
 		{
 			$update["item_type_id"]				      = 4; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
 			
+			if(Request::input("auto_generate_code") == "generate" || $item_barcode == "")
+			{
+				$num = str_shuffle("1234567890");
+				$item_barcode = Item::generate_barcode($num);
+			}
+			
 			$update["item_name"]				= $item_name;
 			$update["item_sku"]					= $item_sku;
 			$update["item_category_id"]			= $item_category_id;
 			$update["item_img"]					= $item_img;
 			$update["item_sales_information"] 	= $item_sales_information;
+
+			$update["item_barcode"]	    	  	= $item_barcode;
+			$update["item_measurement_id"]	   	= $item_measurement_id;
 
 			$rules["item_name"]					= "required";
 			$rules["item_sku"] 					= "required";

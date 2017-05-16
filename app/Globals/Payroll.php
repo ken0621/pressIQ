@@ -1303,6 +1303,15 @@ class Payroll
 		/* salary */
 		$monthly_salary =0;
 
+		/* daily cola */
+		$cola = 0;
+
+		/* daily late */
+		$daily_late = 0;
+
+		/* daily undertime */
+		$daily_undertime = 0;
+
 
 		while($start <= $end)
 		{
@@ -1385,6 +1394,8 @@ class Payroll
 				$data['deduct_philhealth_custom']	= $salary->deduct_philhealth_custom;
 				$data['is_deduct_pagibig_default']	= $salary->is_deduct_pagibig_default;
 				$data['deduct_pagibig_custom']		= $salary->deduct_pagibig_custom;
+
+
 			}
 
 			
@@ -1411,6 +1422,10 @@ class Payroll
 			$data['total_extra_days']			+= divide($extra_day_hours, $target_hour);
 			$data['total_rh']					+= divide($regular_holiday_hours, $target_hour);
 			$data['total_sh']					+= divide($special_holiday_hours, $target_hour);
+			/* daily late */
+			$daily_late 						+= divide($late_hours, $target_hour);
+			/* daily undertime */
+			$daily_undertime 					+= $under_time;
 
 			$daily_rate = divide($data['salary_monthly'] , $working_day_month);
 
@@ -1769,15 +1784,15 @@ class Payroll
 				$details['total_night_differential']	= 0;
 			}
 
-			if($group->payroll_group_salary_computation == 'Monthly Rate')
-			{
+			// if($group->payroll_group_salary_computation == 'Monthly Rate')
+			// {
 
-			}
+			// }
 
-			if($group->payroll_group_salary_computation == 'Daily Rate')
-			{
+			// if($group->payroll_group_salary_computation == 'Daily Rate')
+			// {
 
-			}
+			// }
 
 
 
@@ -1791,22 +1806,29 @@ class Payroll
 		// dd($dd_array);
 		$payroll_group_salary_computation = $group->payroll_group_salary_computation;
 		$data['payroll_group_salary_computation'] = $payroll_group_salary_computation;
-		// dd($data);
+
+
+		/* get monthly cola start */
+		$monthly_cola = $cola * $group->payroll_group_working_day_month;
+		/* get monthly cola end */
 
 		$monthly_salary = $data['salary_monthly'];
 		if($group->payroll_group_period == 'Semi-monthly')
 		{
 			$monthly_salary = $monthly_salary / 2;
+			$monthly_cola 	= $monthly_cola / 2;
 		}
 
 		if($group->payroll_group_period == 'Weekly')
 		{
 			$monthly_salary = $monthly_salary / 4;
+			$monthly_cola 	= $monthly_cola / 4;
 		}
 
 		if($group->payroll_group_period == 'Daily')
 		{
-			$monthly_salary  = $monthly_salary / $group->payroll_group_working_day_month;
+			$monthly_salary = $monthly_salary / $group->payroll_group_working_day_month;
+			$monthly_cola 	= $cola;
 		}
 
 		// dd($payroll_group_salary_computation);
@@ -1860,6 +1882,8 @@ class Payroll
 			$data['absent_deduction']			= 0;
 			$data['absent_count']				= 0;
 
+			$data['payroll_cola']				= $monthly_cola;
+
 		}
 
 		if($payroll_group_salary_computation == 'Monthly Rate')
@@ -1867,6 +1891,9 @@ class Payroll
 			$payroll_sss_monthly_salary = $monthly_salary - ($data['late_deduction'] + $data['under_time'] + $data['absent_deduction']);
 
 			$data['regular_salary'] 			= $monthly_salary;
+			
+			$less_cola = ($daily_late * $cola) + ($daily_undertime * $cola);
+			$data['payroll_cola']				= round(($monthly_cola - $less_cola), 2);
 		}
 
 

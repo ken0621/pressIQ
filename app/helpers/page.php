@@ -371,6 +371,11 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
+    $page = "cashier";
+    $nav[$page]['name'] = "Cashier";
+    $nav[$page]['segment'] = $page;
+    $nav[$page]['icon'] = "dollar";
+
      /* -- PIS => SIR */
     $code = "agent-collectiong";
     $nav[$page]['submenu'][$code]['label'] = "Collection";

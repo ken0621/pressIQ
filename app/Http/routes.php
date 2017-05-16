@@ -297,7 +297,7 @@ Route::any('/member/pis/agent/position/archived_submit','Member\AgentPositionCon
 
 
 /* START AGENT*/
-Route::any('/member/pis_agent/agent_list','Member\AgentController@index');
+Route::any('/member/cashier/agent_list','Member\AgentController@index');
 Route::any('/member/pis/agent/add','Member\AgentController@add');
 Route::any('/member/pis/agent/add_submit','Member\AgentController@add_submit');
 Route::any('/member/pis/agent/edit/{id}','Member\AgentController@edit');
@@ -310,7 +310,7 @@ Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_
 Route::any('/member/pis/agent/transaction/{id}','Member\AgentTransactionController@agents_transaction');
 Route::any('/member/pis/agent_transaction/print/{id}','Member\AgentTransactionController@print_transaction');
 
-Route::any('/member/pis_agent/collection','Member\AgentCollectionController@index');
+Route::any('/member/cashier/collection','Member\AgentCollectionController@index');
 Route::any('/member/pis_agent/collection_update/{id}','Member\AgentCollectionController@update_collection');
 Route::any('/member/pis_agent/collection_update_submit','Member\AgentCollectionController@update_collection_submit');
 

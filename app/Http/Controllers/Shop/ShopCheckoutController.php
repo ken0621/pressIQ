@@ -535,7 +535,7 @@ class ShopCheckoutController extends Shop
             $use_payment_method = DB::table("tbl_online_pymnt_api")->where("api_id", $payment_method->link_reference_id)->first();
             $use_gateway        = DB::table("tbl_online_pymnt_gateway")->where("gateway_id", $use_payment_method->api_gateway_id)->first();
 
-            if (isset($use_gateway->gateway_code_name)) 
+            if (isset($use_payment_method->api_gateway_id)) 
             {
                 switch ($use_gateway->gateway_code_name) 
                 {

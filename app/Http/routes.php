@@ -306,6 +306,9 @@ Route::any('/member/pis/agent/archived/{id}/{action}','Member\AgentController@ar
 Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_submit');
 /* END AGENT*/
 
+/*SALES LIQUIDATION*/
+Route::any('member/cashier/sales_liquidation','Member\PisSalesLiquidationController@index');
+
 /*AGENT TRANSACTION*/
 Route::any('/member/pis/agent/transaction/{id}','Member\AgentTransactionController@agents_transaction');
 Route::any('/member/pis/agent_transaction/print/{id}','Member\AgentTransactionController@print_transaction');

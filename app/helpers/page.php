@@ -393,6 +393,15 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 
+    $code = "pis-sales-liquidation";
+    $nav[$page]['submenu'][$code]['label'] = "Sales Liquidation";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sales_liquidation";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+
     /* PRODUCT */
     // $page = "product";  
     // $nav[$page]['name'] = "Products & Services";

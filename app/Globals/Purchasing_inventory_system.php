@@ -941,6 +941,9 @@ class Purchasing_inventory_system
             }
 
             $data[$key]->total_amount += $price;
+
+
+            $data[$key]->amount_to_collect = Purchasing_inventory_system::get_sir_total_amount($value->sir_id);
         }
 
          if($return == "json")

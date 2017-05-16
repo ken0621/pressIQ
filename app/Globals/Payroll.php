@@ -2149,8 +2149,6 @@ class Payroll
 				{
 					$data['tax_contribution'] = $data['tax_contribution'] * $period_category_arr['count_per_period'];
 				}	
-
-				// dd($data['tax_contribution']);
 			}
 			
 		}

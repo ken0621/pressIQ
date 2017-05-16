@@ -2130,6 +2130,7 @@ class Payroll
 				
 				$salary_taxable = $data['salary_taxable'];
 
+
 				if($group->payroll_group_before_tax == 1)
 				{
 					$salary_taxable = $data['salary_taxable'] - ($data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution']);
@@ -2141,10 +2142,15 @@ class Payroll
 				}
 
 				$data['tax_contribution'] = divide(Payroll::tax_contribution($shop_id, $salary_taxable, $data['tax_status'], $payroll_period_category), $period_category_arr['count_per_period']);
+
+				// dd($data['tax_contribution']);
+
 				if($group->payroll_group_tax == 'Last Period')
 				{
 					$data['tax_contribution'] = $data['tax_contribution'] * $period_category_arr['count_per_period'];
 				}	
+
+				// dd($data['tax_contribution']);
 			}
 			
 		}
@@ -2493,32 +2499,33 @@ class Payroll
 
 		// dd($tax);
 
-		if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
+		if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
 		{
 			$tax_index = 'tax_first_range';
 		}
 
-		if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+		if($rate >= $tax->tax_second_range && $rate < $tax->tax_third_range)
 		{
 			$tax_index = 'tax_second_range';
 		}
 
-		if($tax->tax_second_range >= $rate && $tax->tax_third_range < $rate)
+		if($rate >= $tax->tax_second_range && $rate < $tax->tax_third_range)
 		{
 			$tax_index = 'tax_second_range';
 		}
 
-		if($tax->tax_third_range >= $rate && $tax->tax_fourth_range < $rate)
+		if($rate >= $tax->tax_third_range && $rate < $tax->tax_fourth_range)
 		{
 			$tax_index = 'tax_third_range';
 		}
 
-		if($tax->tax_fourth_range >= $rate && $tax->tax_fifth_range < $rate)
+		if($rate >= $tax->tax_fourth_range && $rate < $tax->tax_fifth_range)
 		{
 			$tax_index = 'tax_fourth_range';
 		}
 
-		if($tax->tax_fifth_range >= $rate && $tax->taxt_sixth_range < $rate)
+		
+		if($rate >= $tax->tax_fifth_range && $rate < $tax->taxt_sixth_range)
 		{
 			$tax_index = 'tax_fifth_range';
 		}
@@ -2528,7 +2535,7 @@ class Payroll
 			$tax_index = 'taxt_sixth_range';
 		}
 
-		if($tax->tax_seventh_range < $rate)
+		if($rate < $tax->tax_seventh_range)
 		{
 			$tax_index = 'tax_seventh_range';
 		}
@@ -2542,6 +2549,9 @@ class Payroll
 
 			$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
 		}
+
+		// dd($tax_contribution);
+
 		return round($tax_contribution, 2);
 	}
 

@@ -11,7 +11,7 @@ use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_sir_item;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_item_discount;
-
+use DB;
 use App\Globals\Item;
 use Session;
 use Carbon\carbon;
@@ -22,7 +22,6 @@ class Item
     {
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
-
     public static function generate_barcode($barcode = 0)
     {
         $return = $barcode;
@@ -158,10 +157,27 @@ class Item
             }
         }
     }
+
+    public static function get_returnable_item()
+    {
+        $data = Tbl_item::category()->where("shop_id",Item::getShopId())
+                                    ->where("tbl_item.archived",0)
+                                    ->where("is_mts",1)
+                                    ->groupBy("tbl_item.item_id")
+                                    ->get();         
+ 
+        return $data;        
+    }
     public static function get_all_category_item($type = array(1,2,3,4))
     {
         $shop_id = Item::getShopId();
         $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get()->toArray();
+
+        // if(Purchasing_inventory_system::check() != 0)
+        // {
+        //     $_category->where("is_mts",1);
+        // }
+
 
         foreach($_category as $key =>$category)
         {

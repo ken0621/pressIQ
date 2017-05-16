@@ -41,14 +41,30 @@ body{
 	.slider-details{
 
 		padding-left: 25px;
+
+		@media screen and (max-width: 500px)
+		{
+			position: absolute;
+			bottom: -125px;
+			width: 50%;
+		}
 		
 		.slider-title{
 			font-family: 'Fjalla One', sans-serif;
 			font-size: 64px;
+			@media screen and (max-width: 500px)
+			{
+				font-size: 30px;
+				line-height: 35px;
+			}
 		}
 		.slider-title-details{
 			font-weight: 500;
 			margin-bottom: 10px;
+			@media screen and (max-width: 500px)
+			{
+				font-size: 12px;
+			}
 		}
 	}
 }
@@ -68,12 +84,18 @@ body{
 	font-size: 26px;
 	color: #151515;
 	padding: 0px 0px 15px 10px;
+	
+	@media screen and (max-width: 500px)
+	{
+		padding: 15px 0px 10px 5px;
+	}
 }
 /* OUR LATEST NEWS */
 
 .latest-news-container{
 	background-color: #fff;
 	padding-bottom: 10px;
+
 }
 
 .latest-news-per-container{
@@ -82,10 +104,26 @@ body{
 
 	img{
 		width: 100%;
+
+		@media screen and (max-width: 500px)
+		{
+			width: 40%;
+		}
 	}
 
 	.news-details{
 		padding-left: 10px;
+		@media screen and (max-width: 500px)
+		{
+
+			width: 60%;
+			float: right;
+			margin-top: -139px;
+		}
+		@media screen and (max-width: 420px)
+		{
+			margin-top: -120px;
+		}
 	}
 	.news-title{
 		color: #151515;
@@ -97,6 +135,13 @@ body{
 		font-family: 'Roboto', sans-serif;
 		font-size: 11px;
 		margin-top: 6px;
+
+		@media screen and (max-width: 420px)
+		{
+			white-space: nowrap;
+		  	overflow: hidden;
+		  	text-overflow: ellipsis;
+	  	}
 	}
 }
 .latest-news-per-container:hover{
@@ -127,6 +172,10 @@ body{
 	.btn-container{
 			padding: 15px;
 			float: right;
+			@media screen and (max-width: 500px)
+			{
+				float: left;
+			}
 
 			.learn-more-btn{
 				font-family: 'Fjalla One', sans-serif;
@@ -205,14 +254,29 @@ body{
 				position: relative;
 				width: 100%;
 				overflow: hidden;
+				@media screen and (max-width: 500px)
+				{
+					col{
+						width: 100%;
+					}
+				}
 
 				.gallery-img-holder{
 					
 					padding-bottom: 32px;
+					@media screen and (max-width: 500px)
+					{
+						padding-bottom: 0px;
+					}
 
 					img{
 						width: 100%;
 						border: 3px solid #fff;
+						@media screen and (max-width: 500px)
+						{
+							width: 50%;
+							float: left;
+						}
 
 						&:hover{
 							cursor: pointer;
@@ -253,6 +317,11 @@ body{
 				img{
 					position: relative;
 					left: -5px;
+					@media screen and (max-width: 500px)
+					{
+						left: 290px;
+						top: -114px;
+					}
 				}
 				&:hover{
 					background-image: linear-gradient(to right,rgba(0,0,0,.5) 40%,rgba(0,0,0,.0001) 100%);
@@ -266,6 +335,11 @@ body{
 				img{
 					position: relative;
 					right: -5px;
+					@media screen and (max-width: 500px)
+					{
+						right: 0px;
+						top: -114px;
+					}
 				}
 				&:hover{
 					background-image: linear-gradient(to left,rgba(0,0,0,.5) 40%,rgba(0,0,0,.0001) 100%);
@@ -287,6 +361,13 @@ body{
 	.btn-container{
 			padding: 55px 15px 0px 0px;
 			float: right;
+
+			@media screen and (max-width: 500px)
+			{
+				float: left;
+				padding-left: 20px;
+				margin-top: -36px;
+			}
 
 			.learn-more-btn{
 				font-family: 'Fjalla One', sans-serif;

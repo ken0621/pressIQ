@@ -79,14 +79,16 @@ body{
 
 .content-img-container{
 	padding: 12px 0px 12px 0px;
-	img{
-		width: 100%;
-	}
+
 	.image-holder{
 		padding-right: 175px;
 
 		.per-img-container{
 			padding: 5px;
+
+				img{
+					width: 100%;
+				}
 
 			&:hover{
 				cursor: pointer;

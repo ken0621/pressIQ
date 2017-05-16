@@ -62,7 +62,6 @@ class PurchasingInventorySystemController extends Member
         $sold_qty = Purchasing_inventory_system::count_sold_qty($sir_id, $item_id);
 
         $um = Tbl_unit_measurement_multi::where("multi_id",$data["sir_item"]->related_um_type)->first();
-
        
         $data["sir_item"]->um_name = isset($um->multi_name) ? $um->multi_name : "";
         $data["sir_item"]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
@@ -561,7 +560,6 @@ class PurchasingInventorySystemController extends Member
                 $data["_returns"][$key_return]->status = $status;        
             }
         }
-
         $html = view('member.purchasing_inventory_system.ilr.ilr_pdf', $data);
         return Pdf_global::show_pdf($html);
     }
@@ -720,13 +718,17 @@ class PurchasingInventorySystemController extends Member
     {     
         if(Request::input("status") != null)
         {
-            if(Request::input("status") != 'all')
+            if(Request::input("status") == 'all')
             {
-                $data["_sir"] = Purchasing_inventory_system::select_sir_status($this->user_info->shop_id,'array',Request::input("status"),0,Request::input("sir_id"),Request::input("is_sync"));
+                $data["_sir"] = Purchasing_inventory_system::select_sir($this->user_info->shop_id,'array',Request::input("sir_id"));
+            }
+            else if(Request::input("status") == "reload")
+            {
+                $data["_sir"] = Purchasing_inventory_system::select_sir($this->user_info->shop_id,'array',Request::input("sir_id"),1);
             }
             else
             {
-                $data["_sir"] = Purchasing_inventory_system::select_sir($this->user_info->shop_id,'array',Request::input("sir_id"));
+                $data["_sir"] = Purchasing_inventory_system::select_sir_status($this->user_info->shop_id,'array',Request::input("status"),0,Request::input("sir_id"),Request::input("is_sync"));
             }
         }
         else if(Request::input("archived") != null)
@@ -879,10 +881,7 @@ class PurchasingInventorySystemController extends Member
         $item_id = Request::input("item");
         $item_qty = Request::input("item_qty");
         $related_um_type = Request::input("related_um_type");
-        // $um_qty = Request::input("um_qty");
-        // dd($related_um_type);
-        //if related um_type == 0 then um_qty == 1
-        // if related um_type != 0 then um_qty
+        
         $insert_sir["shop_id"] = $shop_id;
         $insert_sir["sales_agent_id"] = $sales_agent_id;
         $insert_sir["truck_id"] = $truck_id;

@@ -189,12 +189,15 @@ class Warehouse
     public static function inventory_input_report_item($inventory_slip_id)
     {
         $data = Tbl_warehouse_inventory::inventoryslip()->item()->where("tbl_warehouse_inventory.inventory_slip_id",$inventory_slip_id)->groupBy("tbl_item.item_id")->get();
-
+        // dd($data);
         foreach ($data as $key => $value) 
         {
             $data[$key]->serial_number_list = Tbl_inventory_serial_number::where("serial_inventory_id",$value->inventory_id)->get();
-            $abbrev = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",1)->pluck("multi_abbrev");
-            $data[$key]->multi_abbrev = $abbrev != "" ? $data[$key]->multi_abbrev : '-';
+            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+            $qty = $value->inventory_count < 0 ? abs($value->inventory_count) : $value->inventory_count;
+            $sign = $value->inventory_count < 0 ? '- ' : '';
+            $data[$key]->qty_um = $sign . UnitMeasurement::um_view($qty,$value->item_measurement_id,$um_issued);
+            $data[$key]->conversion = UnitMeasurement::um_convertion($value->item_id);
         }
         return $data;
     }
@@ -209,7 +212,15 @@ class Warehouse
             $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->pluck("multi_id");
             $data[$key]->product_qty_um = UnitMeasurement::um_view($value->product_current_qty,$value->product_um,$um_issued);
             $data[$key]->product_reorderqty_um = UnitMeasurement::um_view($value->product_reorder_point,$value->product_um,$um_issued);
-        }  
+
+            //sir
+            $sir["pis"] = Purchasing_inventory_system::check();
+            if($sir["pis"] != 0)
+            {
+                $qty = Purchasing_inventory_system::get_sir_stocks($warehouse_id, $value->product_id);
+                $data[$key]->total_stock_sir = UnitMeasurement::um_view($qty,$value->product_um,$um_issued);
+            }
+        }
     	if($return == 'json')
     	{
     		$data = json_encode($data);

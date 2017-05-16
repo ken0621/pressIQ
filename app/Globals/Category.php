@@ -11,6 +11,20 @@ class Category
 	{
 		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
 	}
+	public static function for_mts_cat()
+	{
+		$up["is_mts"] = 1;
+
+        $word[0] = "empt";
+        $word[1] = "return";
+        $word[2] = "mts";
+
+        foreach ($word as $key => $value) 
+        {
+
+			Tbl_category::where("type_name","like","%".$value."%")->update($up);
+        }
+	}
 
 	/* BREAKDONW OF CATEGRORY */
 	public static function breakdown($shop_id = 0, $parent = 0, $category_type = '')

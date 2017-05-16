@@ -73,11 +73,11 @@
                 <div class="col-md-10">
                 <!-- NAVIGATION -->
                     <nav class="navirino">
-                        <a href="/" class="head-button link-nav active" id="home">HOME</a>
-                        <a href="/about" class="head-button link-nav" id="company-profile">COMPANY PROFILE</a>
-                        <a href="/runruno" class="head-button link-nav" id="runruno">RUNRUNO</a>
+                        <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a>
+                        <a href="/about" class="head-button link-nav {{ Request::segment(1) == 'about' ? 'active' : '' }}" id="company-profile">COMPANY PROFILE</a>
+                        <a href="/runruno" class="head-button link-nav {{ Request::segment(1) == 'runruno' ? 'active' : '' }}" id="runruno">RUNRUNO</a>
                         <a href="javascript:" class="head-button link-nav" id="news">NEWS</a>
-                        <a href="/contactus" class="head-button link-nav" id="contact-us">CONTACT US</a>
+                        <a href="/contactus" class="head-button link-nav {{ Request::segment(1) == 'contactus' ? 'active' : '' }}" id="contact-us">CONTACT US</a>
                     </nav>
                 </div>
                 

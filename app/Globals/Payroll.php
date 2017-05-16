@@ -37,6 +37,8 @@ use App\Models\Tbl_payroll_leave_schedule;
 use App\Models\Tbl_payroll_leave_temp;
 use App\Models\Tbl_payroll_leave_employee;
 use App\Models\Tbl_payroll_paper_sizes;
+use App\Models\Tbl_payroll_13_month_compute;
+use App\Models\Tbl_payroll_13_month_virtual;
 
 use Carbon\Carbon;
 use stdClass;
@@ -1228,7 +1230,8 @@ class Payroll
 		$data['sh_night_diff'] 				= 0;
 
 		$data['13_month']					= 0;
-		$data['13_month_computed'] 			= 1;
+		$data['13_month_computed'] 			= 0;
+		$data['13_month_id']				= array();
 		
 		$data['total_allowance']			= 0;
 		$data['allowance']					= array();
@@ -1860,6 +1863,7 @@ class Payroll
 		}
 
 
+
 		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff']);
 
 		$data['total_gross'] += $data['payroll_cola'];
@@ -1915,9 +1919,25 @@ class Payroll
 				$data['13_month'] = round(($data['regular_salary'] / 12), 2);
 				$data['13_month_computed'] = 1;
 			}
+
+			if($group->payroll_group_13month_basis == 'Custom Period')
+			{
+				$m13 = Payroll::compute_13_month($employee_id, $payroll_period_company_id);
+				$data['13_month'] += $m13['data_13m'];
+				$data['13_month_computed'] = 0;
+				$data['13_month_id'] = $m13['id'];
+
+				$count_v = Tbl_payroll_13_month_virtual::getperiod($employee_id, $payroll_period_company_id)->count();
+
+				if($count_v == 1)
+				{
+					$data['13_month'] += round(($data['regular_salary'] / 12), 2);
+					$data['13_month_computed'] = 1;
+				}
+			}
 		}
 
-		$data['total_gross'] += $data['13_month'];
+		// $data['total_gross'] += $data['13_month'];
 
 		if($total_hours_render > 0)
 		{	
@@ -1952,11 +1972,9 @@ class Payroll
 
 		$data['total_deminimis'] = $total_deminimis;
 
-		$data['total_gross'] += $total_deminimis;
+		// $data['total_gross'] += $total_deminimis;
 
 		/* GET SSS CONTRIBUTION */
-
-
 
 		$date_period[0] = date('Y-m-01', strtotime($end));
 		$date_period[1] = date('Y-m-t', strtotime($end));
@@ -2167,7 +2185,7 @@ class Payroll
 
 		$data['absent_count']				= $absent_count;
 		$data['absent_deduction']			= $absent_deduction;
-		$data['total_net'] 					= $data['total_gross'] - $data['total_deduction'];
+		$data['total_net'] 					= ($data['total_gross'] - $data['total_deduction']) + $total_deminimis + $data['13_month'];
 
 		$data['total_regular_days']			= round($data['total_regular_days'], 2);
 		$data['total_rest_days']			= round($data['total_rest_days'], 2);
@@ -2178,6 +2196,25 @@ class Payroll
 		$data['total_worked_days'] = $data['total_regular_days'] + $data['total_rest_days'] + $data['total_extra_days'] + $data['total_rh'] + $data['total_sh'];
 		// dd($data['allowance']);
 		// dd($data);
+		return $data;
+	}
+
+
+	public static function compute_13_month($employee_id = 0, $payroll_period_company_id = 0)
+	{
+		$data['id'] = array();
+		$_13m = Tbl_payroll_13_month_compute::get13m($employee_id, $payroll_period_company_id)->get()->toArray();
+
+		$data_13m = 0;
+		foreach($_13m as $m13)
+		{
+			$data_13m += ($m13['regular_salary'] / 12);
+			array_push($data['id'], $m13['payroll_record_id']);
+		}
+
+
+		$data['data_13m'] = $data_13m;
+
 		return $data;
 	}
 

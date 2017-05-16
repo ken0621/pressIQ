@@ -1,4 +1,4 @@
-p@extends('member.layout')
+@extends('member.layout')
 @section('content')
 <form class="global-submit form-to-submit-transfer" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" name="_token" value="{{csrf_token()}}" >

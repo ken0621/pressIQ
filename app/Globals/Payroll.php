@@ -1891,6 +1891,7 @@ class Payroll
 			$payroll_sss_monthly_salary = $monthly_salary - ($data['late_deduction'] + $data['under_time'] + $data['absent_deduction']);
 
 			$data['regular_salary'] 			= $monthly_salary;
+			
 			$less_cola = ($daily_late * $cola) + ($daily_undertime * $cola);
 			$data['payroll_cola']				= round(($monthly_cola - $less_cola), 2);
 		}

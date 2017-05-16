@@ -387,16 +387,28 @@ class WarehouseController extends Member
     }
     public function inventory_break_down($warehouse_id, $item_id)
     {
-        $data["_sir"] = Tbl_sir::saleagent()->where("sir_warehouse_id",$warehouse_id)->where("is_sync",1)->get();
+        if($item_id)
+        {
+            $data["_sir"] = Tbl_sir::truck()->saleagent()->where("sir_warehouse_id",$warehouse_id)->where("is_sync",1)->get();
 
-        $qty = null;
-        foreach ($data["_sir"] as $key => $value) 
-        {            
-            // $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->pluck("multi_id");
-            $qty[$key] = Tbl_sir_inventory::where("sir_item_id",$item_id)->where("inventory_sir_id",$value->sir_id)->sum("sir_inventory_count");
-            // $data["_sir"][$key]->per_agent_qty = UnitMeasurement::um_view($qty,$value->item_measurement_id,$um_issued);
+            $qty = 0;
+            $data["item_details"] = Item::get_item_details($item_id);
+            foreach ($data["_sir"] as $key => $value) 
+            {           
+                $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$data["item_details"]->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+                $qty = Tbl_sir_inventory::where("sir_item_id",$item_id)->where("inventory_sir_id",$value->sir_id)->sum("sir_inventory_count");
+                if($qty > 0)
+                {
+                    $data["_sir"][$key]->per_agent_qty = UnitMeasurement::um_view($qty,$data["item_details"]->item_measurement_id,$um_issued);
+                }
+                else
+                {
+                    unset($data["_sir"][$key]);
+                }
+            }
         }
-        dd($qty);
+
+        return view("member.warehouse.warehouse_sir",$data);
 
     }
     public function refill()

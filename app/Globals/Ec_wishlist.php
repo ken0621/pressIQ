@@ -2,6 +2,8 @@
 namespace App\Globals;
 use DB;
 use App\Models\Tbl_ec_wishlist;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_ec_product;
 
 use Log;
 use Request;
@@ -14,6 +16,38 @@ use App\Globals\Ecom_Product;
 
 class Ec_wishlist
 {
+    public static function getCustomerCount($shop_id)
+    {
+        $customer = Tbl_customer::select("*", DB::raw("COUNT(tbl_ec_wishlist.customer_id) as count"))
+                                ->where("tbl_customer.shop_id", $shop_id)
+                                ->leftJoin("tbl_ec_wishlist", "tbl_customer.customer_id", "=", "tbl_ec_wishlist.customer_id")
+                                ->groupBy("tbl_ec_wishlist.customer_id")
+                                ->orderBy("count", "DESC")
+                                ->get();
+
+        return $customer;
+    }
+    public static function getProductCount($shop_id)
+    {
+        $product = Tbl_ec_product::select("*", DB::raw("COUNT(tbl_ec_wishlist.product_id) as count"))
+                                ->where("tbl_ec_product.eprod_shop_id", $shop_id)
+                                ->leftJoin("tbl_ec_wishlist", "tbl_ec_product.eprod_id", "=", "tbl_ec_wishlist.product_id")
+                                ->groupBy("tbl_ec_wishlist.product_id")
+                                ->orderBy("count", "DESC")
+                                ->get();
+
+        return $product;
+    }
+    public static function getAllProduct($shop_id)
+    {
+        $wishlist = Tbl_ec_wishlist::where("shop_id", $shop_id)->where("archived", 0)->get();
+        foreach ($wishlist as $key => $value) 
+        {
+            $wishlist[$key]->product = Ecom_Product::getProduct($value->product_id);
+        }
+
+        return $wishlist;
+    }
     public static function getProduct($customer_id, $shop_id)
     {
         $wishlist = Tbl_ec_wishlist::where("customer_id", $customer_id)->where("shop_id", $shop_id)->where("archived", 0)->get();

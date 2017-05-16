@@ -149,7 +149,7 @@
                 </div>
               </div>
               <div id="company-details" class="tab-pane fade ">
-                <input type="hidden" name="payroll_employee_contract_id" value="{{$contract->payroll_employee_contract_id}}">
+                <input type="hidden" name="payroll_employee_contract_id" value="{{isset($contract->payroll_employee_contract_id) ? $contract->payroll_employee_contract_id : ''}}">
                 <div class="form-horizontal">
                   <div class="form-group">
                     <div class="col-md-6">
@@ -159,7 +159,7 @@
                           <select class="form-control" required name="payroll_department_id" disabled>
                             <option value="">Select Department</option>
                             @foreach($_department as $department)
-                            <option value="{{$department->payroll_department_id}}" {{$contract->payroll_department_id == $department->payroll_department_id ? 'selected="selected"':''}}>{{$department->payroll_department_name}}</option>
+                            <option value="{{$department->payroll_department_id}}" {{isset($contract->payroll_department_id)  ? ($contract->payroll_department_id == $department->payroll_department_id ? 'selected="selected"':'') : ''}}>{{$department->payroll_department_name}}</option>
                             @endforeach
                           </select>
                         </div>
@@ -170,7 +170,7 @@
                           <select class="form-control" required name="payroll_jobtitle_id" disabled>
                             <option value="">Select Job Title</option>
                             @foreach($_jobtitle as $jobtitle)
-                            <option value="{{$jobtitle->payroll_jobtitle_id}}" {{$jobtitle->payroll_jobtitle_id == $contract->payroll_jobtitle_id ? 'selected="selected"':''}}>{{$jobtitle->payroll_jobtitle_name}}</option>
+                            <option value="{{$jobtitle->payroll_jobtitle_id}}" {{isset($contract->payroll_jobtitle_id) ? ($jobtitle->payroll_jobtitle_id == $contract->payroll_jobtitle_id ? 'selected="selected"':'') : ''}}>{{$jobtitle->payroll_jobtitle_name}}</option>
                             @endforeach
                           </select>
                         </div>
@@ -180,12 +180,12 @@
                       <div class="form-group">
                         <div class="col-md-6 padding-r-1">
                           <small>Date Hired</small>
-                          <input type="text" name="payroll_employee_contract_date_hired" class="form-control indent-13 datepicker" value="{{$contract->payroll_employee_contract_date_hired != '0000-00-00' ?date('m/d/Y', strtotime($contract->payroll_employee_contract_date_hired)) : ''}}" disabled>
+                          <input type="text" name="payroll_employee_contract_date_hired" class="form-control indent-13 datepicker" value="{{isset($contract->payroll_employee_contract_date_hired) ? ($contract->payroll_employee_contract_date_hired != '0000-00-00' ?date('m/d/Y', strtotime($contract->payroll_employee_contract_date_hired)) : '') : ''}}" disabled>
                           <i class="fa fa-calendar pos-absolute top-30 margin-left-6 color-dark-gray" aria-hidden="true"></i>
                         </div>
                         <div class="col-md-6 padding-l-1">
                           <small>Date End</small>
-                          <input type="text" name="payroll_employee_contract_date_end" class="form-control indent-13 datepicker" value="{{$contract->payroll_employee_contract_date_end != '0000-00-00' ? date('m/d/Y', strtotime($contract->payroll_employee_contract_date_end)) : ''}}" disabled>
+                          <input type="text" name="payroll_employee_contract_date_end" class="form-control indent-13 datepicker" value="{{isset($contract->payroll_employee_contract_date_end) ? ($contract->payroll_employee_contract_date_end != '0000-00-00' ? date('m/d/Y', strtotime($contract->payroll_employee_contract_date_end)) : '') : ''}}" disabled>
                           <i class="fa fa-calendar pos-absolute top-30 margin-left-6 color-dark-gray" aria-hidden="true"></i>
                         </div>
                         
@@ -196,7 +196,7 @@
                           <select class="form-control" name="payroll_group_id" required disabled>
                             <option value="">Select Group</option>
                             @foreach($_group as $group)
-                            <option value="{{$group->payroll_group_id}}" {{$contract->payroll_group_id == $group->payroll_group_id ? 'selected="selected"':''}}>{{$group->payroll_group_code}}</option>
+                            <option value="{{$group->payroll_group_id}}" {{isset($contract->payroll_group_id) ? ($contract->payroll_group_id == $group->payroll_group_id ? 'selected="selected"':'') : ''}}>{{$group->payroll_group_code}}</option>
                             @endforeach
                           </select>
                         </div>
@@ -205,7 +205,7 @@
                           <select class="form-control" name="payroll_employee_contract_status" disabled>
                             <option value="">Select Status</option>
                             @foreach($employement_status as $employment)
-                            <option value="{{$employment->payroll_employment_status_id}}" {{$employment->payroll_employment_status_id == $contract->payroll_employee_contract_status ? 'selected="selected"':''}}>{{$employment->employment_status}}</option>
+                            <option value="{{$employment->payroll_employment_status_id}}" {{isset($contract->payroll_employee_contract_status) ? ($employment->payroll_employment_status_id == $contract->payroll_employee_contract_status ? 'selected="selected"':'') : ''}}>{{$employment->employment_status}}</option>
                             @endforeach
                           </select>
                         </div>

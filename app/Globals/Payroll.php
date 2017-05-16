@@ -2495,7 +2495,7 @@ class Payroll
 
 		$tax_contribution = 0;
 
-		dd($tax);
+		
 
 		if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
 		{
@@ -2548,7 +2548,7 @@ class Payroll
 			$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
 		}
 
-		// dd($tax_contribution);
+		dd($tax_index);
 
 		return round($tax_contribution, 2);
 	}

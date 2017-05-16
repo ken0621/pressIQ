@@ -6,7 +6,7 @@ use Request;
 use Session;
 use App\Http\Controllers\Controller;
 use DB;
-
+use App\Models\Tbl_category;
 class BeneficiaryController extends Member
 {
     /**
@@ -18,7 +18,8 @@ class BeneficiaryController extends Member
     {
         //
         $data = [];
-
+        $shop_id = $this->user_info->shop_id;
+        $data['category'] = Tbl_category::where('type_shop', $shop_id)->get();
         return view('member.merchant_school.index', $data);
     }
 

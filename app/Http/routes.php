@@ -82,6 +82,7 @@ Route::any('/member/developer/reset_slot/submit/give', 'Member\Developer_StatusC
 Route::any('/member/developer/reset_slot/submit/retro_product_sales', 'Member\Developer_StatusController@retro_product_sales'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_tree', 'Member\Developer_StatusController@re_tree'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Developer_StatusController@re_com_phil_lost'); //GUILLERMO TABLIGAN
+Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
 
 
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
@@ -193,6 +194,8 @@ Route::any("/member/ecommerce/product/collection/edit_submit","Member\Collection
 Route::any("/member/ecommerce/product/collection/set_active","Member\CollectionController@set_active");
 Route::any("/member/ecommerce/product/collection/archived/{id}/{action}","Member\CollectionController@archived");
 Route::any("/member/ecommerce/product/collection/archived_submit","Member\CollectionController@archived_submit");
+
+Route::get("/member/ecommerce/wishlist/list","Member\WishlistController@list");
 
 Route::any('/member/item', 'Member\ItemController@index'); /* ERWIN */  
 Route::any('/member/item/add', 'Member\ItemController@add'); /* ERWIN */

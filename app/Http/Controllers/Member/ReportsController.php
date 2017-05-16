@@ -26,6 +26,7 @@ use App\Models\Tbl_report_field;
 use App\Models\Tbl_category;
 use App\Models\Tbl_chart_account_type;
 use App\Globals\Pdf_global;
+
 class ReportsController extends Member
 {
 	public function checkuser($str = '')
@@ -306,7 +307,7 @@ class ReportsController extends Member
         ->journal()
         ->selectsales()
         ->where('je_shop_id', $shop_id)
-        ->customerorvendor('customer')
+        ->customerorvendor()
         // ->joinreciept()
         ->where('je_entry_date', '>=', $from)
         ->where('je_entry_date', '<=', $to)

@@ -19,7 +19,7 @@
                 <td class="text-center">{{ $coupon->coupon_code}}</td>
                 <td class="text-center">{{ $coupon->coupon_code_amount}}</td>
                 <td class="text-center">{{ $coupon->coupon_discounted}}</td>
-                <td class="text-center">{{ $coupon->evariant_item_label}}</td>
+                <td class="text-left">{{ $coupon->evariant_item_label." : ".$coupon->variant_name}}</td>
                 <td class="text-center">{{ $coupon->coupon_date_created }}</td>
                 <td class="text-center">
                     <!-- ACTION BUTTON -->

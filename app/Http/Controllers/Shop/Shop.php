@@ -85,12 +85,13 @@ class Shop extends Controller
         $shop_theme_info        = $this->get_shop_theme_info();
         $this->shop_theme       = $this->shop_info->shop_theme;
         $this->shop_theme_color = $this->shop_info->shop_theme_color;
+
         $this->shop_theme_info  = $shop_theme_info;
         $company_info           = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->get())->keyBy('key');
         $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         $global_cart            = Cart::get_cart($this->shop_info->shop_id);
         $country                = Tbl_country::get();
-        $popular_tags           = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->shop_info->shop_id)->orderBy("count", "DESC")->get();
+        $popular_tags           = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->shop_info->shop_id)->orderBy("count", "DESC")->limit(10)->get();
 
         View::share("slot_now", Self::$slot_now);
         View::share("customer_info_a", Self::$customer_info);

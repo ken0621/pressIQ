@@ -87,7 +87,7 @@
                   <a href="/account/logout" class="text">LOGOUT</a>
                @else
                   <a data-remodal-target="login" href="#" class="text">LOGIN</a>
-                  <a href="/register" class="text">REGISTER</a>
+                  <a href="/account/register_ecomm" class="text">REGISTER</a>
                @endif
             </div>
             <div class="col-md-8">
@@ -289,7 +289,7 @@
                <div class="col-md-12">
                   <div class="popular-tags">
                      @foreach($_popular_tags as $popular_tags)
-                     <a href="/product?search={{ $popular_tags->keyword }}">#{{ $popular_tags->keyword }}</a>
+                     <a href="/product?search={{ $popular_tags->keyword }}"><span>#{{ $popular_tags->keyword }}</span></a>
                      @endforeach
                   </div>
                </div>
@@ -301,6 +301,7 @@
          </div>
       </div>
    </body>
+
    <!-- LOGIN -->
    <div class="remodal login" data-remodal-id="login">
       <div class="font">
@@ -323,6 +324,7 @@
          </div>
       </div>
    </div>
+   
    <!-- LIVE CHAT -->
    <div class="live-chat-holder">
       <div class="live-chat">

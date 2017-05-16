@@ -48,6 +48,12 @@ body{
 			bottom: -125px;
 			width: 50%;
 		}
+		@media screen and (max-width: 960px)
+		{
+			position: absolute;
+			bottom: -125px;
+			width: 50%;
+		}
 		
 		.slider-title{
 			font-family: 'Fjalla One', sans-serif;
@@ -93,6 +99,10 @@ body{
 	{
 		padding: 15px 0px 10px 5px;
 	}
+	@media screen and (max-width: 960px)
+	{
+		padding: 15px 0px 10px 5px;
+	}
 }
 /* OUR LATEST NEWS */
 
@@ -113,10 +123,21 @@ body{
 		{
 			width: 40%;
 		}
+		@media screen and (max-width: 960px)
+		{
+			width: 20%;
+		}
 	}
 
 	.news-details{
 		padding-left: 10px;
+		@media screen and (max-width: 960px)
+		{
+
+			width: 80%;
+			float: right;
+			margin-top: -142px;
+		}
 		@media screen and (max-width: 500px)
 		{
 
@@ -137,12 +158,24 @@ body{
 		color: #151515;
 		font-family: 'Fjalla One', sans-serif;
 		font-size: 15px;
+
+		@media screen and (max-width: 960px)
+		{
+
+			font-size: 25px;
+		}
 	}
 	.news-content{
 		color: #606060;
 		font-family: 'Roboto', sans-serif;
 		font-size: 11px;
 		margin-top: 6px;
+
+		@media screen and (max-width: 960px)
+		{
+
+			font-size: 11px;
+		}
 
 		@media screen and (max-width: 420px)
 		{
@@ -181,6 +214,10 @@ body{
 			padding: 15px;
 			float: right;
 			@media screen and (max-width: 500px)
+			{
+				float: left;
+			}
+			@media screen and (max-width: 960px)
 			{
 				float: left;
 			}
@@ -375,6 +412,12 @@ body{
 			float: right;
 
 			@media screen and (max-width: 500px)
+			{
+				float: left;
+				padding-left: 20px;
+				margin-top: -36px;
+			}
+			@media screen and (max-width: 960px)
 			{
 				float: left;
 				padding-left: 20px;

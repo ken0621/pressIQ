@@ -43,7 +43,7 @@ class Ec_wishlist
         $wishlist = Tbl_ec_wishlist::where("shop_id", $shop_id)->where("archived", 0)->get();
         foreach ($wishlist as $key => $value) 
         {
-            $wishlist[$key]->product = Ecom_Product::getProduct($value->product_id);
+            $wishlist[$key]->product = Ecom_Product::getProduct($value->product_id, $shop_id);
         }
 
         return $wishlist;
@@ -53,7 +53,7 @@ class Ec_wishlist
         $wishlist = Tbl_ec_wishlist::where("customer_id", $customer_id)->where("shop_id", $shop_id)->where("archived", 0)->get();
         foreach ($wishlist as $key => $value) 
         {
-            $wishlist[$key]->product = Ecom_Product::getProduct($value->product_id);
+            $wishlist[$key]->product = Ecom_Product::getProduct($value->product_id, $shop_id);
         }
 
         return $wishlist;

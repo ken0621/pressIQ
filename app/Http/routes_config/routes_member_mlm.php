@@ -237,3 +237,6 @@ Route::any('member/mlm/complan_setup/binary_pro', 'Member\Mlm_ComplanSetupContro
 
 
 Route::any('member/mlm/merchant_school', 'Member\BeneficiaryController@index'); 
+
+Route::any('member/mlm/tours_wallet', 'Member\Mlm_ComplanSetupController@tours_wallet'); 
+

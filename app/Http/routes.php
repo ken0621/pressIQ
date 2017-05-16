@@ -381,6 +381,10 @@ Route::any('/member/pis/sir/view/{id}/{type}','Member\PurchasingInventorySystemC
 Route::any('/member/pis/sir/view_pdf/{id}/{type_code}','Member\PurchasingInventorySystemController@view_pdf');
 Route::any('/member/pis/sir/edit/{id}','Member\PurchasingInventorySystemController@edit_sir');
 Route::any('/member/pis/sir/edit_submit','Member\PurchasingInventorySystemController@edit_sir_submit');
+//reload sir
+Route::any('/member/pis/sir_reload/{id}','Member\PisReloadController@index');
+Route::any('/member/pis/sir/reload_submit','Member\PisReloadController@reload_submit');
+
 
 Route::any('/member/pis/ilr/update_count_submit','Member\PurchasingInventorySystemController@update_count_submit');
 Route::any('/member/pis/ilr/update_count/{sir_id}/{item_id}','Member\PurchasingInventorySystemController@update_count');
@@ -430,8 +434,9 @@ Route::any('/tablet/sync_import',"Member\TabletPISController@sync_import");
 Route::any('/tablet/sync_export','Member\TabletPISController@sync_export');
 Route::any('/tablet/logout','Member\TabletPISController@logout');
 Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_sir');
-Route::any('/tablet/sir_reload/{id}','Member\TabletPISController@sir_reload');
 
+//RELOAD
+Route::any('/tablet/sir_reload/{id}','Member\TabletPISController@sir_reload');
 
 Route::any('/tablet/customer',"Member\TabletPISController@customer");
 Route::any('/tablet/customer_details/{id}',"Member\TabletPISController@customer_details");

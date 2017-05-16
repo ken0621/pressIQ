@@ -61,7 +61,7 @@
         @if(!isset($manufacturer))
         <div class="form-group">
             <div class="col-md-12">            
-                <input type="checkbox" name="create_vendor" value="create_vendor"> <span>Create this Manufacturer as your Vendor</span>
+                <input type="checkbox" name="create_vendor" value="create_vendor"> <span>Create this Manufacturer as my Vendor</span>
             </div>
         </div>
         @endif

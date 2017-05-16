@@ -25,7 +25,7 @@ class Item
 
     public static function get_item_details($item_id = 0)
     {
-        return Tbl_item::category()->where("item_id",$item_id)->first();
+        return Tbl_item::um_item()->category()->where("item_id",$item_id)->first();
     }
 
     public static function get_item_in_bundle($item_id = 0)

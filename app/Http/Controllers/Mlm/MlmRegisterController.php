@@ -19,6 +19,8 @@ use App\Globals\Settings;
 use Mail;
 use App\Globals\Mail_global;
 use Config;
+use Session;
+//use App\Globals\Mlm_member;
 class MlmRegisterController extends MlmLoginController
 {
     public function index()
@@ -41,7 +43,8 @@ class MlmRegisterController extends MlmLoginController
         return view("mlm.register", $data);
     }
     public function post_register()
-    {
+    {   
+
     	$i['password'] = Request::input('pass');
     	$i['password_2'] = Request::input('pass2');
     	if($i['password'] == $i['password_2'])
@@ -54,16 +57,17 @@ class MlmRegisterController extends MlmLoginController
 	        $insert['password'] = $i['password'];
 	        $insert['company'] = Request::input('company');
 	        $insert['created_date'] = Carbon::now();
-	        $insert['IsWalkin'] = 0;
-	        $insert['ismlm'] = 1;
+	        $insert['IsWalkin'] = 0; 
 	        $insert['mlm_username'] = Request::input('username');
 	        $insert['country_id'] = Request::input('country');
 	        $insert['tin_number'] = Request::input('tinnumber');
-
 	        $insert_address['customer_state'] = Request::input('customer_state');
             $insert_address['customer_city'] = Request::input('customer_city');
             $insert_address['customer_zipcode'] = Request::input('customer_zipcode');
             $insert_address['customer_street'] = Request::input('customer_street');
+
+            $insert['ismlm'] = 1;
+
 
 	        $data['type']   = "Success";
     		$data['message'] = "Password Matched";
@@ -299,4 +303,86 @@ class MlmRegisterController extends MlmLoginController
     {
 
     }
+
+    /* Start of E-commerce registration --Brain*/
+    public function register_ecomm()
+    {
+        $i['password'] = Request::input('pass');
+        $i['password_2'] = Request::input('pass2');
+
+        if($i['password'] == $i['password_2'])
+        {
+            if(strlen($i['password']) >= 6)
+            {     
+                $check_email = Tbl_customer::where('shop_id',Self::$shop_id)->where('email', Request::input('email'))->count();  
+                //dd($check_email);
+                //$check_email = Tbl_customer::where('shop_id', Self::$shop_id)->where('email', Request::input('email')->count();
+            
+                if($check_email == 0)
+                {
+                    $insert_customer = array(
+                        'shop_id'       => Self::$shop_id,
+                        'first_name'    => Request::input('first_name'),
+                        'last_name'     => Request::input('last_name'),
+                        'email'         => Request::input('email'),
+                        'password'      => Crypt::encrypt($i['password']),
+
+                        'IsWalkin'      => 0,
+                        'ismlm'         => 2,
+                    );
+
+                    $cus_id = Tbl_customer::insertGetId($insert_customer);
+
+                    if ($cus_id)
+                    {
+                        $insert_address = array(  
+                            'customer_id'       => $cus_id,
+                            'country_id'        => 420, //default ph
+                            'customer_state'    => Request::input('customer_state'),
+                            'customer_city'     => Request::input('customer_city'),
+                            'customer_street'   => Request::input('customer_street'),
+                            'purpose'           => "billing",
+                            //'customer_mobile'   => Request::input('customer_mobile'),
+                        );
+
+                        DB::table('tbl_customer_address')->insert($insert_address);  
+
+                        $insert_other = array(  
+                            'customer_id'       => $cus_id,                                
+                            'customer_mobile'   => Request::input('customer_mobile'),
+                        );   
+
+                        DB::table('tbl_customer_other_info')->insert($insert_other); 
+                        
+                        Mlm_member::add_to_session(Self::$shop_id, $cus_id);     
+
+                        //echo "Registration successful! You will be redirect to your account page.";    
+                        return Redirect::to('/account');         
+
+                    }
+                    else
+                    {
+                        Session::flash('warning', 'Error! Please contact administrator(Err-Customer Model).');
+                        return Redirect::back()->withInput();   
+                    }                     
+                }
+                else
+                {
+                    Session::flash('warning', 'Email is already exist in the record.');
+                    return Redirect::back()->withInput();  
+                }      
+            }
+            else
+            {
+                Session::flash('warning', 'Password lenght is mainimum of 6 character.');
+                return Redirect::back()->withInput();
+            }                
+        }
+        else
+        {   
+            Session::flash('warning', 'Password do not match!');
+            return Redirect::back()->withInput();
+        }
+    }
+    /*End of E-commerce Registration*/
 }

@@ -136,12 +136,15 @@ class CreditMemoController extends Member
         if($ctr_items != 0)
         {
             $cm_id = CreditMemo::postCM($customer_info, $item_info);
-
-            $cm_remarks            = "Credit Memo # ". $cm_id;
-            $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
-            $cm_transaction_type   = "credit_memo";
-            $cm_transaction_id     = $cm_id;
-            $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
+            
+            if(count($item_returns) > 0)
+            {
+                $cm_remarks            = "Credit Memo # ". $cm_id;
+                $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
+                $cm_transaction_type   = "credit_memo";
+                $cm_transaction_id     = $cm_id;
+                $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
+            }
 
             $data["status"] = "success-credit-memo";
             $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;
@@ -242,10 +245,13 @@ class CreditMemoController extends Member
         if($ctr_items != 0)
         {
             CreditMemo::updateCM($cm_id, $customer_info, $item_info);
-
-            $transaction_id = $cm_id;
-            $transaction_type = "credit_memo";
-            $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_returns, $return = 'array');
+            
+            if(count($item_returns) > 0)
+            {
+                $transaction_id = $cm_id;
+                $transaction_type = "credit_memo";
+                $json = Warehouse::inventory_update_returns($transaction_id, $transaction_type, $item_returns, $return = 'array');
+            }
 
             $data["status"] = "success-credit-memo";
             $data["redirect_to"] = "/member/customer/credit_memo?id=".$cm_id;

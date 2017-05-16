@@ -51,11 +51,11 @@ function get_collection_first_image($data)
 {
     if(isset($data['product']['variant'][0]))
     {
-        return $data['product']['variant'][0]['image'] ? $data['product']['variant'][0]['image'][0]['image_path'] : '';
+        return $data['product']['variant'][0]['image'] ? $data['product']['variant'][0]['image'][0]['image_path'] : '/assets/front/img/placeholder.png';
     }
     else
     {
-        return '';
+        return '/assets/front/img/placeholder.png';
     }
 }
 
@@ -104,10 +104,10 @@ function get_product_first_image($data)
 {
     if (isset($data['variant'][0])) 
     {
-        return $data['variant'][0]['image'] ? $data['variant'][0]['image'][0]['image_path'] : '';
+        return $data['variant'][0]['image'] ? $data['variant'][0]['image'][0]['image_path'] : '/assets/front/img/placeholder.png';
     }
     else
     {
-        return '';
+        return '/assets/front/img/placeholder.png';
     }   
 }

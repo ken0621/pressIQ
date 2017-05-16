@@ -10,6 +10,7 @@ use App\Globals\Employee;
 use Validator;
 use Carbon\Carbon;
 use App\Globals\Utilities;
+use App\Globals\AuditTrail;
 use Crypt;
 class AgentController extends Member
 {
@@ -93,6 +94,9 @@ class AgentController extends Member
 
         Tbl_employee::where("employee_id",$id)->update($update);
 
+        $agent_data = AuditTrail::get_table_data("tbl_employee","employee_id",$id);
+        AuditTrail::record_logs($action,"agent",$id,"",serialize($agent_data));
+
         $data["status"] = "success";
 
         return json_encode($data);
@@ -103,6 +107,9 @@ class AgentController extends Member
         $data["status_message"] = null;
 
         $id = Request::input("employee_id");
+
+
+        $old_agent_data = AuditTrail::get_table_data("tbl_employee","employee_id",$id);
 
         $first_name= Request::input("first_name");
         $last_name = Request::input("last_name");
@@ -145,6 +152,9 @@ class AgentController extends Member
         {            
             $data["status"] = "success";
             Tbl_employee::where("employee_id",$id)->update($insert);
+
+            $new_agent_data = AuditTrail::get_table_data("tbl_employee","employee_id",$id);
+            AuditTrail::record_logs("Edited","agent",$id,serialize($old_agent_data),serialize($new_agent_data));
         }
 
     return json_encode($data);
@@ -194,7 +204,11 @@ class AgentController extends Member
         if($data["status"] == null)
         {            
             $data["status"] = "success";
-            Tbl_employee::insert($insert);
+            $agent_id = Tbl_employee::insertGetId($insert);
+
+
+            $agent_data = AuditTrail::get_table_data("tbl_employee","employee_id",$agent_id);
+            AuditTrail::record_logs("Added","agent",$agent_id,"",serialize($agent_data));
         }
 
     return json_encode($data);

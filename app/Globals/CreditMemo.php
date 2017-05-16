@@ -10,10 +10,12 @@ use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_credit_memo;
+use App\Models\Tbl_user;
 use App\Globals\Accounting;
 use App\Globals\Warehouse;
 use App\Globals\Item;
-use App\Globals\UnitMeasurement;     
+use App\Globals\UnitMeasurement;  
+use App\Globals\AuditTrail;   
 use DB;
 use Session;
 use Carbon\Carbon;
@@ -30,8 +32,14 @@ class CreditMemo
         }
         return $cm_amount;
 	}
+    public static function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
 	public static function postCM($customer_info, $item_info, $inv_id = 0)
 	{
+		$insert_cm["cm_shop_id"] = CreditMemo::getShopId();
+
 		$insert_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$insert_cm["cm_customer_email"] = $customer_info["cm_customer_email"];
 		$insert_cm["cm_date"] = $customer_info["cm_date"];
@@ -58,11 +66,20 @@ class CreditMemo
 			$up["credit_memo_id"] = $cm_id;
 			Tbl_customer_invoice::where("inv_id",$inv_id)->update($up);
 		}
+
+
+        $cm_data = AuditTrail::get_table_data("tbl_credit_memo","cm_id",$cm_id);
+        AuditTrail::record_logs("Added","credit_memo",$cm_id,"",serialize($cm_data));
+
 		return $cm_id;
 	}
 
 	public static function updateCM($cm_id, $customer_info, $item_info)
 	{
+        $old_data = AuditTrail::get_table_data("tbl_credit_memo","cm_id",$cm_id);
+
+		$update_cm["cm_shop_id"] = CreditMemo::getShopId();
+
 
 		$update_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$update_cm["cm_customer_email"] = $customer_info["cm_customer_email"];
@@ -85,6 +102,10 @@ class CreditMemo
 
 		Tbl_credit_memo_line::where("cmline_cm_id",$cm_id)->delete();
 		CreditMemo::insert_cmline($cm_id, $item_info, $entry);
+
+
+        $cm_data = AuditTrail::get_table_data("tbl_credit_memo","cm_id",$cm_id);
+        AuditTrail::record_logs("Edited","credit_memo",$cm_id,serialize($old_data),serialize($cm_data));
 
 	}
 	public static function insert_cmline($cm_id, $item_info, $entry)

@@ -325,7 +325,8 @@ class PisSalesLiquidationController extends Member
 
 
         $html = view("member.cashier.sales_liquidation.liquidation_report",$data);
-        return Pdf_global::show_pdf($html);
+        return $html;
+        // return Pdf_global::show_pdf($html);
     }
 
     /**

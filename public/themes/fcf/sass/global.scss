@@ -509,6 +509,12 @@ box-sizing: border-box;
 -moz-transition: .5s ease-in-out;
 -o-transition: .5s ease-in-out;
 transition: .5s ease-in-out;
+
+	@media screen and (max-width: 500px)
+	{
+		top: 50px;
+		max-height: 650px;
+	}
 }
 
 /* Styles the close link, adds the slide down transition */
@@ -580,4 +586,34 @@ max-width: 100%;
 
 .lightbox-target:target a.lightbox-close {
 top: 8px;
+}
+
+/* SCROLL TO TOP */
+.scroll-up {
+	padding: 15px 15px 18px 15px;
+    position: fixed;
+    bottom: 100px;
+    right: 20px;
+    display: none;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 50;
+    &:hover{
+    	cursor: pointer;
+    }
+    @media screen and (max-width: 900px)
+    {
+    	right: 0px;
+    	bottom: 58px;
+    }
+    @media screen and (max-width: 600px)
+    {
+    	right: 0px;
+    	bottom: 58px;
+    }
+    @media screen and (max-width: 360px)
+    {
+    	right: 0px;
+    	bottom: 58px;
+    }
+
 }

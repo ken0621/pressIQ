@@ -6,6 +6,7 @@ use App\Globals\Estimate;
 use App\Globals\Accounting;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
+use App\Globals\AuditTrail;
 use App\Globals\Warehouse;
 use App\Globals\Pdf_global;
 use App\Globals\CreditMemo;
@@ -141,6 +142,9 @@ class Customer_EstimateController extends Member
             Tbl_customer_estimate::where("est_id",$est_id)->update($update);
 
             $data["status"] = "success-update";
+            
+            $est_data = AuditTrail::get_table_data("tbl_customer_estimate","est_id",$est_id);
+            AuditTrail::record_logs("Update Status","estimate",$est_id,"",serialize($est_data));
 
             Request::session()->flash('success', 'Success');            
         }
@@ -180,6 +184,9 @@ class Customer_EstimateController extends Member
 
         $data["status"] = "success-update";
 
+        $est_data = AuditTrail::get_table_data("tbl_customer_estimate","est_id",$est_id);
+        AuditTrail::record_logs("Update Status","estimate",$est_id,"",serialize($est_data));
+            
         Request::session()->flash('success', 'Success');  
 
         return json_encode($data);  

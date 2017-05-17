@@ -41,6 +41,13 @@ class Mlm_ComplanSetupController extends Member
 			$data['links'][1]['label'] = 'School Merchant';
 			$data['links'][1]['link'] = '/member/mlm/merchant_school';
 		}
+
+		$tours_wallet = $this->user_info->shop_wallet_tours;
+		if($tours_wallet == 1)
+		{
+			$data['links'][2]['label'] = 'Tours Wallet';
+			$data['links'][2]['link'] = '/member/mlm/tours_wallet';
+		}
 		return view('member.mlm_complan_setup.index', $data);
 	}
 	public function binary_promotions()
@@ -59,5 +66,10 @@ class Mlm_ComplanSetupController extends Member
 		{
 			return 0;
 		}
+	}
+	public function tours_wallet()
+	{
+		$data = [];
+		return view('member.mlm_tours_wallet.index', $data);
 	}
 }

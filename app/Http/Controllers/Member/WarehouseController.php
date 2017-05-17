@@ -21,6 +21,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_inventory_serial_number;
 use Session;
 use App\Globals\Item;
+use App\Globals\AuditTrail;
 use Validator;
 class WarehouseController extends Member
 {
@@ -683,6 +684,12 @@ class WarehouseController extends Member
                 $return["status"]   = "Failed";                
             }
 
+            if($return['status'] == "Sucess-archived")
+            {
+                $wh_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$id);
+                AuditTrail::record_logs("Archived","warehouse",$id,"",serialize($wh_data));                
+            }
+
 
             return json_encode($return);
         }
@@ -778,6 +785,11 @@ class WarehouseController extends Member
         {
             $return["error"][0]  = "Please try again";
             $return["status"]   = "Failed";
+        }
+        if($return['status'] == "Sucess-restore")
+        {
+            $wh_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$id);
+            AuditTrail::record_logs("Restore","warehouse",$id,"",serialize($wh_data));                
         }
 
         return json_encode($return);
@@ -878,6 +890,11 @@ class WarehouseController extends Member
             {                
                 $data['status'] = 'success';
             }
+            if($data['status'] == 'success')
+            {
+                $w_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$id);
+                AuditTrail::record_logs("Added","warehouse",$id,"",serialize($w_data));
+            }
 
              return json_encode($data);
     }
@@ -916,44 +933,49 @@ class WarehouseController extends Member
     }
     public function edit_submit()
     {
-            $up_warehouse["warehouse_name"] = Request::input("warehouse_name");
-            $up_warehouse["warehouse_address"] = Request::input("warehouse_address");
-            $up_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
-            // $up_warehouse["warehouse_created"] = Carbon::now();
 
-            Tbl_warehouse::where("warehouse_id",Request::input("warehouse_id"))->update($up_warehouse);
+        $warehouse_id  = Request::input("warehouse_id");
 
-            //EDIT tbl_warehouse per item reorderpoint
-            $reorderpoint = Request::input("reoder_point");
-            $quantity = Request::input("quantity");
+        $old_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$warehouse_id);
 
-            // dd($reorderpoint);
-            if($reorderpoint != null)
+        $up_warehouse["warehouse_name"] = Request::input("warehouse_name");
+        $up_warehouse["warehouse_address"] = Request::input("warehouse_address");
+        $up_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
+        // $up_warehouse["warehouse_created"] = Carbon::now();
+
+        Tbl_warehouse::where("warehouse_id",Request::input("warehouse_id"))->update($up_warehouse);
+
+        //EDIT tbl_warehouse per item reorderpoint
+        $reorderpoint = Request::input("reoder_point");
+        $quantity = Request::input("quantity");
+
+        // dd($reorderpoint);
+        if($reorderpoint != null)
+        {
+            foreach ($reorderpoint as $key => $value) 
             {
-                foreach ($reorderpoint as $key => $value) 
+                $up_sub["warehouse_id"] = Request::input("warehouse_id");
+                $up_sub["item_id"] = $key;
+                $up_sub["item_reorder_point"] = str_replace(",","",$value);
+
+                $sub = Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",Request::input("warehouse_id"))->first();
+                if($sub)
                 {
-                    $up_sub["warehouse_id"] = Request::input("warehouse_id");
-                    $up_sub["item_id"] = $key;
-                    $up_sub["item_reorder_point"] = str_replace(",","",$value);
+                    Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",Request::input("warehouse_id"))->update($up_sub);                
+                }
+                else
+                {
+                    Tbl_sub_warehouse::insert($up_sub);
+                    
+                    $ins_inventory["inventory_item_id"] = $key;
+                    $ins_inventory["warehouse_id"] = Request::input("warehouse_id");
+                    $ins_inventory["inventory_created"] = Carbon::now();            
+                    $ins_inventory["inventory_count"] = $quantity[$key];
 
-                    $sub = Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",Request::input("warehouse_id"))->first();
-                    if($sub)
-                    {
-                        Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",Request::input("warehouse_id"))->update($up_sub);                
-                    }
-                    else
-                    {
-                        Tbl_sub_warehouse::insert($up_sub);
-                        
-                        $ins_inventory["inventory_item_id"] = $key;
-                        $ins_inventory["warehouse_id"] = Request::input("warehouse_id");
-                        $ins_inventory["inventory_created"] = Carbon::now();            
-                        $ins_inventory["inventory_count"] = $quantity[$key];
-
-                        Tbl_warehouse_inventory::insert($ins_inventory);
-                    }
+                    Tbl_warehouse_inventory::insert($ins_inventory);
                 }
             }
+        }
 
             //CREATE INVENTORY From warehouse 
             // foreach($quantity as $key => $value)
@@ -967,7 +989,14 @@ class WarehouseController extends Member
 
             // }
 
-             $data['status'] = 'success';
+        $data['status'] = 'success';
+
+
+        if($data['status'] == 'success')
+        {
+            $w_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$warehouse_id);
+            AuditTrail::record_logs("Edited","warehouse",$id,serialize($old_data),serialize($w_data));
+        }
 
              return json_encode($data);
     }

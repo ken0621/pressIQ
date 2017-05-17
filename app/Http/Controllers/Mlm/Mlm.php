@@ -42,7 +42,7 @@ class Mlm extends Controller
             Self::$customer_info = $session['customer_info'];
 
             Self::$shop_id = $session['shop_info']->shop_id;
-            Self::$shop_info = $session['shop_info'];
+            Self::$shop_info = $this->get_new_session_shop(Self::$shop_id);
 
             if($session['slot_now'])
             {
@@ -112,7 +112,6 @@ class Mlm extends Controller
             $customer->profile != null ? $profile = $customer->profile :  $profile = '/assets/mlm/default-pic.png';
             // dd($profile);
             $this->seed();
-
             View::share("profile", $profile);
             View::share("content", $content_a);
             View::share("complan", $plan_settings);
@@ -133,6 +132,12 @@ class Mlm extends Controller
     public static function show_maintenance()
     {
         return view('mlm.maintenance');
+    }
+    public function get_new_session_shop($shop_id)
+    {
+        $shop = Tbl_shop::where('shop_id', $shop_id)->first();
+
+        return $shop;
     }
     public static function no_access()
     {

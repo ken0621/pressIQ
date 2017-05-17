@@ -123,7 +123,7 @@ class Customer_InvoiceController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('invline_item_id');
 
-        $product_consume = null;
+        $product_consume = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -140,11 +140,14 @@ class Customer_InvoiceController extends Member
                 $item_info[$key]['taxable']            = Request::input('invline_taxable')[$key];
                 $item_info[$key]['ref_name']           = Request::input('invline_ref_name')[$key];
                 $item_info[$key]['ref_id']             = Request::input('invline_ref_id')[$key];
-
-
-                $um_qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
-                $product_consume[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
-                $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
+                
+                $item_type = Tbl_item::where("item_id",Request::input('invline_item_id')[$key])->pluck("item_type_id");
+                if($item_type == 4 || $item_type == 1)
+                {
+                    $um_qty = UnitMeasurement::um_qty(Request::input("invline_um")[$key]);
+                    $product_consume[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
+                    $product_consume[$key]["product_id"] = Request::input('invline_item_id')[$key];
+                }
             }
         }
         //START if bundle inventory_consume arcy
@@ -215,9 +218,13 @@ class Customer_InvoiceController extends Member
                         $cm_item_info[$keys]['rate']               = str_replace(',', "", Request::input('cmline_rate')[$keys]);
                         $cm_item_info[$keys]['amount']             = str_replace(',', "", Request::input('cmline_amount')[$keys]);
                 
-                        $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
-                        $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];
-                        $item_returns[$keys]["product_id"] = Request::input('cmline_item_id')[$keys];                    
+                        $item_type = Tbl_item::where("item_id",Request::input('cmline_item_id')[$keys])->pluck("item_type_id");
+                        if($item_type == 4 || $item_type == 1)
+                        {
+                            $um_qty = UnitMeasurement::um_qty(Request::input("cmline_um")[$keys]);
+                            $item_returns[$keys]["quantity"] = $um_qty * $cm_item_info[$keys]['quantity'];
+                            $item_returns[$keys]["product_id"] = Request::input('cmline_item_id')[$keys];                    
+                        }
                     }          
                 } 
                 // --> for bundles
@@ -283,18 +290,21 @@ class Customer_InvoiceController extends Member
             {
                 $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $inv_id);
 
-                $cm_remarks            = "Returns Items with Invoice # ". $inv_id;
+                $cm_remarks            = "Returns Items with Invoice # ". Request::input('new_invoice_id');
                 $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
                 $cm_transaction_type   = "credit_memo";
                 $cm_transaction_id     = $cm_id;
                 $cm_data               = Warehouse::inventory_refill($cm_warehouse_id, $cm_transaction_type, $cm_transaction_id, $cm_remarks, $item_returns, 'array' ,"returns");
             }
             
-            $remarks            = "Invoice";
-            $warehouse_id       = $this->current_warehouse->warehouse_id;
-            $transaction_type   = "invoice";
-            $transaction_id     = $inv_id;
-            $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id,true);                
+            if(count($product_consume) > 0)
+            {
+                $remarks            = "Consume by Invoice #".Request::input('new_invoice_id');
+                $warehouse_id       = $this->current_warehouse->warehouse_id;
+                $transaction_type   = "invoice";
+                $transaction_id     = $inv_id;
+                $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id,true);
+            }
 
             $json["status"]         = "success-invoice";
             if($button_action == "save-and-edit")
@@ -350,7 +360,7 @@ class Customer_InvoiceController extends Member
         $item_info                          = [];
         $_itemline                          = Request::input('invline_item_id');
 
-        $product_consume = null;
+        $product_consume = [];
         foreach($_itemline as $key => $item_line)
         {
             if($item_line)
@@ -528,7 +538,7 @@ class Customer_InvoiceController extends Member
                     //
                     $cm_id = CreditMemo::postCM($cm_customer_info, $cm_item_info, $inv_id);
 
-                    $cm_remarks            = "Returns Items with Invoice # ". $inv_id;
+                    $cm_remarks            = "Returns Items with Invoice # ". Request::input('new_invoice_id');
                     $cm_warehouse_id       = $this->current_warehouse->warehouse_id;
                     $cm_transaction_type   = "credit_memo";
                     $cm_transaction_id     = $cm_id;
@@ -536,10 +546,12 @@ class Customer_InvoiceController extends Member
 
                 }
             }
-
-            $transaction_id = $inv_id;
-            $transaction_type = "invoice";
-            $json = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array',true);
+            if(count($product_consume) > 0)
+            {
+                $transaction_id = $inv_id;
+                $transaction_type = "invoice";
+                $json = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array',true);
+            }
 
             if($json["status"] == "success")
             {

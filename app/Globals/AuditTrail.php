@@ -27,7 +27,24 @@ use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_mlm_encashment_process;
 use App\Models\Tbl_sir_item;
+use App\Models\Tbl_employee;
 use App\Models\Tbl_sir;
+use App\Models\Tbl_um;
+use App\Models\Tbl_category;
+use App\Models\Tbl_inventory_slip;
+use App\Models\Tbl_warehouse;
+use App\Models\Tbl_manufacturer;
+use App\Models\Tbl_position;
+use App\Models\Tbl_truck;
+use App\Models\Tbl_debit_memo;
+use App\Models\Tbl_credit_memo;
+use App\Models\Tbl_bill;
+use App\Models\Tbl_pay_bill;
+use App\Models\Tbl_write_check;
+use App\Models\Tbl_customer_estimate;
+
+use App\Globals\UnitMeasurement;
+use App\Globals\Purchasing_inventory_system;
 use DB;
 use Carbon\Carbon;
 use Session;
@@ -112,6 +129,114 @@ class AuditTrail
                     $transaction_amount = currency("PHP",$amount);                    
                 }
             }
+            else if($value->source == "sales_receipt")
+            {
+                $transaction = Tbl_customer_invoice::customer()->where("inv_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->inv_date));
+                    $transaction_client = $transaction->company != null ? $transaction->company : $transaction->title_name." ".$transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name." ".$transaction->suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->inv_overall_price;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["inv_overall_price"];
+                        $transaction_new_id = $old[$key]["new_inv_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "bill")
+            {
+                $transaction = Tbl_bill::vendor()->where("bill_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->bill_date));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->bill_total_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["bill_total_amount"];
+                        $transaction_new_id = $old[$key]["bill_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "write_check")
+            {
+                $transaction = Tbl_write_check::vendor()->where("wc_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->wc_payment_date));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->wc_total_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["wc_total_amount"];
+                        $transaction_new_id = $old[$key]["wc_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "write_check_bill")
+            {
+                $transaction = Tbl_write_check::vendor()->where("wc_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->wc_payment_date));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->wc_total_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["wc_total_amount"];
+                        $transaction_new_id = $old[$key]["wc_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "bill_payment_check")
+            {
+                $transaction = Tbl_write_check::vendor()->where("wc_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->wc_payment_date));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->wc_total_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["wc_total_amount"];
+                        $transaction_new_id = $old[$key]["wc_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "receive_inventory")
+            {
+                $transaction = Tbl_bill::vendor()->where("bill_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->bill_date));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->bill_total_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["bill_total_amount"];
+                        $transaction_new_id = $old[$key]["bill_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
             else if($value->source == "purchase_order")
             {
                 $transaction = Tbl_purchase_order::vendor()->where("po_id",$value->source_id)->first();
@@ -147,18 +272,113 @@ class AuditTrail
                     $transaction_amount = currency("PHP",$amount);                    
                 }
             }
-            else if($value->source == "item")
+            else if($value->source == "bill_payment")
             {
+                $transaction = Tbl_pay_bill::vendor()->where("paybill_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->paybill_date));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->paybill_total_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["paybill_total_amount"];
+                        $transaction_new_id = $old[$key]["paybill_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "credit_memo")
+            {
+                $transaction = Tbl_credit_memo::customer()->where("cm_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->cm_date));
+                    $transaction_client = $transaction->company != null ? $transaction->company : $transaction->title_name." ".$transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name." ".$transaction->suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->cm_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["cm_amount"];
+                        $transaction_new_id = $old[$key]["cm_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "estimate")
+            {
+                $transaction = Tbl_customer_estimate::customer()->where("est_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->est_date));
+                    $transaction_client = $transaction->company != null ? $transaction->company : $transaction->title_name." ".$transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name." ".$transaction->suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->est_overall_price;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["est_overall_price"];
+                        $transaction_new_id = $old[$key]["est_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "sales_order")
+            {
+                $transaction = Tbl_customer_estimate::customer()->where("est_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->est_date));
+                    $transaction_client = $transaction->company != null ? $transaction->company : $transaction->title_name." ".$transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name." ".$transaction->suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->est_overall_price;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["est_overall_price"];
+                        $transaction_new_id = $old[$key]["est_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "debit_memo")
+            {
+                $transaction = Tbl_debit_memo::vendor()->where("db_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->date_created));
+                    $transaction_client = $transaction->company != null ? $transaction->vendor_company : $transaction->vendor_title_name." ".$transaction->vendor_first_name." ".$transaction->vendor_middle_name." ".$transaction->vendor_last_name." ".$transaction->vendor_suffix_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->db_amount;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["db_amount"];
+                        $transaction_new_id = $old[$key]["db_id"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "item")
+            {                
                 $transaction = Tbl_item::where("item_id",$value->source_id)->first();
                 if($transaction != null)
                 {
+                    $item_qty = 1;
+                    if(Purchasing_inventory_system::check() != 0)
+                    {
+                        $item_qty = UnitMeasurement::getQty($transaction->item_measurement_id);
+                    }
                     $transaction_date = date("m/d/y", strtotime($transaction->item_date_created));
 
                     $old[$key] = unserialize($value->new_data);
-                    $amount = $transaction->item_price;
+                    $amount = $transaction->item_price * $item_qty;
                     if(isset($old))
                     {
-                        $amount = $old[$key]["item_price"];
+                        $amount = $old[$key]["item_price"] * $item_qty;
                         $transaction_new_id = $old[$key]["item_id"];
                     }
                     $transaction_amount = currency("PHP",$amount);                    
@@ -524,6 +744,206 @@ class AuditTrail
                     $transaction_amount = currency("PHP",$amount);                    
                 }
             }
+            else if($value->source == "agent_collection")
+            {
+                $transaction = Tbl_sir::where("sir_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($value->created_at));
+                    $transaction_client = "";
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = $transaction->agent_collection;
+                    if(isset($old))
+                    {
+                        $amount = $old[$key]["agent_collection"];
+                        $transaction_new_id = $old[$key]["sir_id"];
+                        $transaction_client = $old[$key]["agent_collection_remarks"];
+                    }
+                    $transaction_amount = currency("PHP",$amount);                    
+                }
+            }
+            else if($value->source == "agent")
+            {
+                $transaction = Tbl_employee::where("employee_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->created_at));
+                    $transaction_client = $transaction->first_name." ".$transaction->middle_name." ".$transaction->last_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["employee_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "pis_um")
+            {
+                $transaction = Tbl_um::where("id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($value->created_at));
+                    $transaction_client = "";
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "category")
+            {
+                $transaction = Tbl_category::where("type_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->type_date_created));
+                    $transaction_client = "";
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["type_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "warehouse_inventory")
+            {
+                $transaction = Tbl_inventory_slip::warehouse()->where("inventory_slip_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->inventory_slip_date));
+                    $transaction_client = $transaction->inventory_remarks." in <strong>".$transaction->warehouse_name."</strong>";
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["inventory_slip_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "warehouse")
+            {
+                $transaction = Tbl_warehouse::where("warehouse_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->warehouse_created));
+                    $transaction_client = $transaction->warehouse_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["warehouse_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "manufacturer")
+            {
+                $transaction = Tbl_manufacturer::where("manufacturer_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->date_created));
+                    $transaction_client = $transaction->manufacturer_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["manufacturer_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "store_information")
+            {
+                $transaction = Tbl_shop::where("shop_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($value->created_at));
+                    $transaction_client = $transaction->shop_key;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["shop_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "user")
+            {
+                $transaction = Tbl_user::where("user_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($value->created_at));
+                    $transaction_client = $transaction->user_first_name." ".$transaction->user_last_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["user_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "agent_position")
+            {
+                $transaction = Tbl_position::where("position_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->position_created));
+                    $transaction_client = $transaction->position_name;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["position_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+            else if($value->source == "truck")
+            {
+                $transaction = Tbl_truck::where("truck_id",$value->source_id)->first();
+                if($transaction != null)
+                {
+                    $transaction_date = date("m/d/y", strtotime($transaction->created_at));
+                    $transaction_client = $transaction->plate_number;
+
+                    $old[$key] = unserialize($value->new_data);
+                    $amount = '';
+                    if(isset($old))
+                    {
+                        $amount = '';
+                        $transaction_new_id = $old[$key]["truck_id"];
+                    }
+                    $transaction_amount = '';                    
+                }
+            }
+
 
 
             $audit_trail[$key]->user = $value->user_first_name." ".$value->user_last_name;

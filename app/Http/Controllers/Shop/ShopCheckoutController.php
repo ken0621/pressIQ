@@ -355,20 +355,13 @@ class ShopCheckoutController extends Shop
             {
                 return Redirect::to('/checkout/login')->with('warning', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
             }
-            else
-            {
-                return "notloggedin";
-            }
         }
-        elseif ( !Request::input("payment_method_id") ) 
+
+        if ( !Request::input("payment_method_id") ) 
         {
             Session::put("checkout_input", Request::input());
 
             return Redirect::to("/checkout/payment")->send();
-        }
-        else
-        {
-            return false;
         }
     }
     public function validate_submit()
@@ -540,17 +533,24 @@ class ShopCheckoutController extends Shop
         else
         {
             $use_payment_method = DB::table("tbl_online_pymnt_api")->where("api_id", $payment_method->link_reference_id)->first();
-            $use_gateway        = DB::table("tbl_online_pymnt_gateway")->where("gateway_id", $use_payment_method->api_gateway_id)->first();
-
-            switch ($use_gateway->gateway_code_name) 
+            if (isset($use_payment_method->api_gateway_id)) 
             {
-                case 'paypal2': return $this->submit_using_paypal(); break;
-                case 'paymaya': return $this->submit_using_paymaya(); break;
-                case 'paynamics': return $this->submit_using_paynamics(); break;
-                case 'dragonpay': return $this->submit_using_dragonpay(); break;
-                case 'other': return $this->submit_using_proofofpayment($file, $cart); break;
-                case 'ipay88': return $this->submit_using_ipay88($cart, $cart["payment_method_id"]); break;
-                default: dd("Some error occurred"); break;
+                $use_gateway        = DB::table("tbl_online_pymnt_gateway")->where("gateway_id", $use_payment_method->api_gateway_id)->first();
+                
+                switch ($use_gateway->gateway_code_name) 
+                {
+                    case 'paypal2': return $this->submit_using_paypal(); break;
+                    case 'paymaya': return $this->submit_using_paymaya(); break;
+                    case 'paynamics': return $this->submit_using_paynamics(); break;
+                    case 'dragonpay': return $this->submit_using_dragonpay(); break;
+                    case 'other': return $this->submit_using_proofofpayment($file, $cart); break;
+                    case 'ipay88': return $this->submit_using_ipay88($cart, $cart["payment_method_id"]); break;
+                    default: dd("Some error occurred"); break;
+                }
+            }
+            else
+            {
+                return $this->submit_using_proofofpayment($file, $cart);
             }
         }
     }
@@ -566,14 +566,11 @@ class ShopCheckoutController extends Shop
         }
         else
         {
-            $validate_payment = $this->validate_payment();
-            if (!$validate_payment) 
-            {
-                $cart = $this->restructure_cart();
-                $this->check_stocks();
-                $this->check_payment_method_enabled($cart);
-                $this->check_payment_method($cart);
-            }
+            $this->validate_payment();
+            $cart = $this->restructure_cart();
+            $this->check_stocks();
+            $this->check_payment_method_enabled($cart);
+            $this->check_payment_method($cart);
         }
     }
     /*Ipay88 Function*/

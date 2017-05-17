@@ -75,51 +75,6 @@ class BeneficiaryController extends Member
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -139,5 +94,65 @@ class BeneficiaryController extends Member
         $data['message'] = 'Item removed from list';
 
         return json_encode($data);
+    }
+    public function get_table()
+    {
+        $data['items_s'] = DB::table('tbl_merchant_school_item')
+        ->join('tbl_item', 'tbl_item.item_id', '=', 'tbl_merchant_school_item.merchant_item_item_id')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_merchant_school_item.merchant_item_customer_id');
+
+        $s_status = Request::input('s_status');
+        $s_search_by = Request::input('s_search_by');
+        $s_input = Request::input('s_input');
+        if($s_status != null)
+        {
+            if($s_status != 'all')
+            {
+                $data['items_s'] = $data['items_s']->where('merchant_item_status', $s_status);
+            }
+        }
+        if($s_search_by != null)
+        {
+            switch ($s_search_by) {
+                case 'all':
+                    break;
+                case 'customer_name':
+                    $data['items_s'] = $data['items_s']->where('first_name', 'like', '%' . $s_input . '%');
+                    $data['items_s'] = $data['items_s']->orWhere('last_name', 'like', '%' . $s_input . '%');
+                    break;  
+                case 'order':
+                    $data['items_s'] = $data['items_s']->where('merchant_item_ec_order_id', 'like', '%' . $s_input . '%');
+                    break;   
+                case 'code':
+                    $data['items_s'] = $data['items_s']->where('merchant_item_code', 'like', '%' . $s_input . '%');
+                    break;  
+                case 's_id':
+                    $data['items_s'] = $data['items_s']->where('merchant_school_s_id', 'like', '%' . $s_input . '%');
+                    break;  
+                case 's_name':
+                    $data['items_s'] = $data['items_s']->where('merchant_school_s_name', 'like', '%' . $s_input . '%');
+                    break;                 
+                default:
+                    break;
+            }
+        }
+        $data['s_status'] = $s_status;
+        $data['s_search_by'] = $s_search_by;
+        $data['s_input'] = $s_input;
+        $data['items_s'] = $data['items_s']->paginate(10);
+
+        return view('member.merchant_school.table', $data);
+    }
+    public function mark_used()
+    {
+        $merchant_school_item_id = Request::input('merchant_school_item_id');
+        $update['merchant_item_status'] = 2;
+
+         DB::table('tbl_merchant_school_item')->where('merchant_school_item_id', $merchant_school_item_id)->update($update);
+
+         $data['status'] = 'success'; 
+         $data['message'] = 'Mark as Used';
+
+         return json_encode($data);
     }
 }

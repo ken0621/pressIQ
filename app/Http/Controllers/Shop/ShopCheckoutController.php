@@ -60,6 +60,7 @@ class ShopCheckoutController extends Shop
 
         $data['ec_order_load'] = 0;
         $data['ec_order_merchant_school'] = 0;
+        $data['ec_order_merchant_school_item'] = [];
         $tbl_merchant_school = Tbl_merchant_school::where('merchant_school_shop', $this->shop_info->shop_id)->get()->keyBy('merchant_item_id');
         foreach($data['get_cart'] as $value)
         {
@@ -71,6 +72,7 @@ class ShopCheckoutController extends Shop
                 }
                 if(isset($tbl_merchant_school[$value2['cart_product_information']['item_id']]))
                 {
+                    $data['ec_order_merchant_school_item'][$data['ec_order_merchant_school']] = $value2['cart_product_information']['item_id'];
                     $data['ec_order_merchant_school'] += $value2['quantity'];
                 }
             }           
@@ -338,7 +340,8 @@ class ShopCheckoutController extends Shop
             if(isset($result['order_id']))
             {
                 Mlm_slot_log::slot_array($arry_log);
-                $this->give_product_code($get_cart['cart'], Self::$slot_now, $result['order_id']);
+                
+                // $this->give_product_code($get_cart['cart'], Self::$slot_now, $result['order_id']);
 
                 /* SMS Notification */
                 // $txt[0]["txt_to_be_replace"]    = "[name]";
@@ -381,6 +384,7 @@ class ShopCheckoutController extends Shop
     }
     public function validate_submit()
     {
+        $message = [];
         // Validate Customer Info
         $rules["customer_first_name"]   = 'required';
         $rules["customer_middle_name"]  = '';
@@ -399,8 +403,21 @@ class ShopCheckoutController extends Shop
         {
             $rules['ec_order_load_number'] = 'required';
         }
+        $ec_order_merchant_school = Request::input('ec_order_merchant_school');
 
-        return $validator = Validator::make(Request::input(), $rules);
+        if($ec_order_merchant_school >= 1)
+        {
+            $input['merchant_school_s_id'] = Request::input('merchant_school_s_id');
+            foreach($input['merchant_school_s_id'] as $key => $value)
+            {
+                $rules['merchant_school_s_id.' . $key] = 'required';
+                $rules['merchant_school_s_name.' . $key] = 'required';
+                $message['merchant_school_s_id.' . $key .'.required'] = 'All Student ID field is required';
+                $message['merchant_school_s_name.' . $key .'.required'] = 'All Student Name field is required';
+            }
+            
+        }
+        return $validator = Validator::make(Request::input(), $rules, $message);
     }
     public function restructure_cart()
     {
@@ -467,6 +484,14 @@ class ShopCheckoutController extends Shop
             $cart['ec_order_load_number'] = null;
             $cart['ec_order_load'] = 0;
         }
+        $cart['ec_order_merchant_school'] = Request::input('ec_order_merchant_school');
+        if($cart['ec_order_merchant_school'] >= 1)
+        {
+            $cart['merchant_school_i_id'] = Request::input('merchant_school_i_id'); 
+            $cart['merchant_school_s_id'] = Request::input('merchant_school_s_id'); 
+            $cart['merchant_school_s_name'] = Request::input('merchant_school_s_name'); 
+        }
+        
         
         $cart["invline_item_id"] = $invline_item_id;
         $cart["invline_discount"] = $invline_discount;
@@ -565,7 +590,6 @@ class ShopCheckoutController extends Shop
     public function submit()
     {
         $validator = $this->validate_submit();
-
         if ($validator->fails()) 
         {
             return Redirect::back()

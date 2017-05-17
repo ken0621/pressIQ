@@ -266,7 +266,10 @@
 									@endif
 									<input type="hidden" name="ec_order_merchant_school" value="{{$ec_order_merchant_school}}">
 									@if($ec_order_merchant_school >= 1)
-										@for($i = 0; $i < $ec_order_merchant_school; $i++ )
+										@for($i = 0; $i < $ec_order_merchant_school; $i++ )	
+											@if(isset($ec_order_merchant_school_item[$i]))
+												<input type="hidden" name="merchant_school_i_id[]" value="{{$ec_order_merchant_school_item[$i]}}">
+											@endif
 											<div class="form-group">
 												<label>Student id:</label>
 												<input type="text" class="form-control" name="merchant_school_s_id[]">

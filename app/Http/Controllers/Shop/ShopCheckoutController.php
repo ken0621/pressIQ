@@ -533,17 +533,24 @@ class ShopCheckoutController extends Shop
         else
         {
             $use_payment_method = DB::table("tbl_online_pymnt_api")->where("api_id", $payment_method->link_reference_id)->first();
-            $use_gateway        = DB::table("tbl_online_pymnt_gateway")->where("gateway_id", $use_payment_method->api_gateway_id)->first();
-
-            switch ($use_gateway->gateway_code_name) 
+            if (isset($use_payment_method->api_gateway_id)) 
             {
-                case 'paypal2': return $this->submit_using_paypal(); break;
-                case 'paymaya': return $this->submit_using_paymaya(); break;
-                case 'paynamics': return $this->submit_using_paynamics(); break;
-                case 'dragonpay': return $this->submit_using_dragonpay(); break;
-                case 'other': return $this->submit_using_proofofpayment($file, $cart); break;
-                case 'ipay88': return $this->submit_using_ipay88($cart, $cart["payment_method_id"]); break;
-                default: dd("Some error occurred"); break;
+                $use_gateway        = DB::table("tbl_online_pymnt_gateway")->where("gateway_id", $use_payment_method->api_gateway_id)->first();
+                
+                switch ($use_gateway->gateway_code_name) 
+                {
+                    case 'paypal2': return $this->submit_using_paypal(); break;
+                    case 'paymaya': return $this->submit_using_paymaya(); break;
+                    case 'paynamics': return $this->submit_using_paynamics(); break;
+                    case 'dragonpay': return $this->submit_using_dragonpay(); break;
+                    case 'other': return $this->submit_using_proofofpayment($file, $cart); break;
+                    case 'ipay88': return $this->submit_using_ipay88($cart, $cart["payment_method_id"]); break;
+                    default: dd("Some error occurred"); break;
+                }
+            }
+            else
+            {
+                return $this->submit_using_proofofpayment($file, $cart);
             }
         }
     }

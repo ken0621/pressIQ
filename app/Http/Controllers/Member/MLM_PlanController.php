@@ -1216,7 +1216,9 @@ class MLM_PlanController extends Member
         $validate['stairstep_required_gv'] = Request::input('stairstep_required_gv');
         $validate['stairstep_required_pv'] = Request::input('stairstep_required_pv');
         $validate['stairstep_bonus'] = Request::input('stairstep_bonus');
-       
+        $validate['stairstep_leg_id'] = Request::input('stairstep_leg_id');
+        $validate['stairstep_leg_count'] = Request::input('stairstep_leg_count');
+
         $rules['stairstep_id'] ="required";
         $rules['stairstep_level'] ="required";
         $rules['stairstep_name'] = "required";
@@ -1233,6 +1235,8 @@ class MLM_PlanController extends Member
             $update['stairstep_required_pv'] = Request::input('stairstep_required_pv');
             $update['stairstep_bonus'] = Request::input('stairstep_bonus');
             $update['shop_id'] = $this->user_info->shop_id;
+            $update['stairstep_leg_id'] = Request::input('stairstep_leg_id');
+            $update['stairstep_leg_count'] = Request::input('stairstep_leg_count');
             Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
             $data['response_status'] = "success_edit_stairstep";
         }

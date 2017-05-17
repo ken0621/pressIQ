@@ -120,15 +120,11 @@ class MLM_StairstepController extends Member
 		{		
 	    	if($distribute)
 	    	{
-
-
-
 	    		$rpv                   = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
 	    							   							->whereBetween('points_log_date_claimed', array($start, $end))
 	    							   							->where("points_log_complan","STAIRSTEP")
 	    							   							->where("points_log_type","RPV")
 	    							   							->sum("points_log_points");
-
 
 	    		$grpv                  = Tbl_mlm_slot_points_log::where("points_log_slot",$slot_id)
 	    							   							->whereBetween('points_log_date_claimed', array($start, $end))
@@ -282,11 +278,11 @@ class MLM_StairstepController extends Member
 
     	if(!$slot)
     	{	
-    		$returned_slot = Tbl_mlm_slot::where("shop_id",$shop_id)->orderBy("slot_id","ASC")->first();
+    		$returned_slot = Tbl_mlm_slot::where("shop_id",$shop_id)->orderBy("slot_id","DESC")->first();
     	}
     	else
     	{
-    		$returned_slot = Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id",">",$slot->slot_id)->orderBy("slot_id","ASC")->first();
+    		$returned_slot = Tbl_mlm_slot::where("shop_id",$shop_id)->where("slot_id","<",$slot->slot_id)->orderBy("slot_id","DESC")->first();
     	}
 
 		return $returned_slot;

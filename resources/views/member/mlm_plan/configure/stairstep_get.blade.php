@@ -40,7 +40,7 @@
             </div>
             <div class="col-md-1">
                 <label for="stairstep_leg_count">Leg Count</label>
-                <input type="number" class="form-control" name="stairstep_leg_count" value="0">
+                <input type="number" class="form-control" name="stairstep_leg_count" value="{{$value->stairstep_leg_count}}">
             </div>
             <div class="col-md-1">
                 <br>

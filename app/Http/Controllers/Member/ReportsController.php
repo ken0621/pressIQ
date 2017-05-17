@@ -196,7 +196,8 @@ class ReportsController extends Member
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = 'Account Sales Report';
         $data['head'] = $this->report_header($data);
-        $data['filter'] = $this->report_filter('basic');
+
+        $data['action'] = '/member/report/accounting/sale/get/report';
         $data['table_header'] = Report::sales_report();
 
         return view('member.reports.accounting.sales', $data);
@@ -205,29 +206,6 @@ class ReportsController extends Member
     public function report_header($data)
     {
         return view('member.reports.head', $data);
-    }
-
-    public function report_filter($filter = 'basic')
-    {
-        $data = [];
-
-        switch ($filter) 
-        {
-            case 'basic':
-                return view('member.reports.filter.basic', $data);
-                break;
-            case 'profit_loss' :
-                return view('member.reports.filter.profit_loss', $data);
-                break;    
-            case 'items':
-                return view('member.reports.filter.items', $data);
-                break;
-            case 'general_ledger' :
-                return view('member.reports.filter.general_ledger', $data);    
-            default:
-                return view('member.reports.filter.basic', $data);
-                break;
-        }
     }
 
     public function report_field_checker_seed($filter = 'accounting_sales_report')
@@ -295,8 +273,12 @@ class ReportsController extends Member
 
     public function accounting_sale_report_view()
     {
-        $from = Request::input('from');
-        $to = Request::input('to');
+        $period         = Request::input('report_period');
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
         $data = [];
@@ -365,7 +347,7 @@ class ReportsController extends Member
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = 'Account Sales Report';
         $data['head'] = $this->report_header($data);
-        $data['filter'] = $this->report_filter('items');
+        $data['action']     = '/member/report/accounting/sale/get/report';
         $data['table_header'] = Report::sales_report('accounting_sales_report_item');
 
         return view('member.reports.accounting.sales', $data);
@@ -379,7 +361,7 @@ class ReportsController extends Member
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = '';
         $data['head'] = $this->report_header($data);
-        $data['filter'] = $this->report_filter('profit_loss');
+        $data['action']     = '/member/report/accounting/profit/loss/get';
         $shop_id = $this->user_info->shop_id; 
 
         return view('member.reports.accounting.profit', $data);
@@ -388,8 +370,12 @@ class ReportsController extends Member
 
     public function profit_loss_get()
     {
-        $from = Request::input('from');
-        $to = Request::input('to');
+        $period         = Request::input('report_period');
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
         $shop_id = $this->user_info->shop_id; 
@@ -407,7 +393,7 @@ class ReportsController extends Member
 
             $data['sum'][$key] = Tbl_journal_entry_line::account()
             ->where('chart_type_id', $value->chart_type_id)
-        
+            ->journal()
             ->select(DB::raw('*, sum(jline_amount ) as sum'))
             ->groupBy('jline_type')
             ->groupBy('jline_account_id')
@@ -419,36 +405,37 @@ class ReportsController extends Member
         }
 
         $view = 'member.reports.output.profit_loss';
-        $this->check_report_type($report_type, $view, $data, 'Profit_and_Loss-'.Carbon::now()); 
-
-        return view('member.reports.output.profit_loss', $data);
+        return $this->check_report_type($report_type, $view, $data, 'Profit_and_Loss-'.Carbon::now()); 
     }
 
     public function general_ledger()
     {
-
         $data = [];
 
         $data['head_title'] = 'General Ledger';
-        $data['head_icon'] = 'fa fa-area-chart';
+        $data['head_icon']  = 'fa fa-area-chart';
         $data['head_discription'] = '';
-        $data['head'] = $this->report_header($data);
-        $data['filter'] = $this->report_filter('general_ledger');
-        $shop_id = $this->user_info->shop_id; 
+        $data['head']       = $this->report_header($data);
+        $data['action']     = '/member/report/accounting/general/ledger/get';
+        $shop_id            = $this->user_info->shop_id; 
         
         return view('member.reports.accounting.general_ledger', $data);
     }
-
+ 
     public function general_ledger_get()
     {
-        $from = Request::input('from');
-        $to = Request::input('to');
+        $period         = Request::input('report_period');
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
         $shop_id = $this->user_info->shop_id; 
 
         $data['entry_line'] = Tbl_journal_entry_line::account()
-            ->where('account_shop_i', $shop_id)
+            ->where('account_shop_id', $shop_id)
             ->customerorvendorv2()
             ->groupBy('jline_account_id')
             ->groupBy('jline_je_id')

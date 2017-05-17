@@ -389,7 +389,7 @@ class WarehouseController extends Member
     {
         if($item_id)
         {
-            $data["_sir"] = Tbl_sir::truck()->saleagent()->where("sir_warehouse_id",$warehouse_id)->where("is_sync",1)->get();
+            $data["_sir"] = Tbl_sir::truck()->saleagent()->where("sir_warehouse_id",$warehouse_id)->where("ilr_status","!=",2)->where("is_sync",1)->get();
 
             $qty = 0;
             $data["item_details"] = Item::get_item_details($item_id);

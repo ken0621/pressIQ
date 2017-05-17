@@ -397,8 +397,8 @@
 			</div>
 		</div>
 	</div>
-
-
+<!-- SCROLL TO TOP -->
+	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 
 </div>
 @endsection
@@ -432,6 +432,22 @@ $(document).ready(function()
 		var source = $(this).find(".full-image").attr("path");
 		$(".lightbox-target").find("img").attr("src", source);
 	})
+
+	/*scroll up*/
+	$(window).scroll(function () {
+        if ($(this).scrollTop() > 700) {
+            $('.scroll-up').fadeIn();
+        } else {
+            $('.scroll-up').fadeOut();
+        }
+    });
+
+    $('.scroll-up').click(function () {
+        $("html, body").animate({
+            scrollTop: 0
+        }, 700);
+        return false;
+    });
 });
 </script>
 @endsection

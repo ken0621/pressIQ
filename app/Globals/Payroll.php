@@ -2887,9 +2887,14 @@ class Payroll
 			
 		}
 
+		/* for leave */
+		// $data['leave_amount'] = 0;
+
+		/* for absents */
+		// $data['absent_deduction'] = 0;
 		// $total_deminimis	=  $data['_total_unused_leave'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total + $data['leave_amount'];
 
-		$total_deminimis	=  $data['_total_unused_leave'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total;
+		$total_deminimis	=  $data['_total_unused_leave'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total + $data['leave_amount'];
 
 
 		/* COMPUTE UNUSED LEAVE END */
@@ -2898,7 +2903,7 @@ class Payroll
 		$data['total_deminimis'] = $total_deminimis;
 
 
-		$total_deduction += $data['tax_contribution'] + $data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution'] + $data['late_deduction'] + $data['under_time'] + $data['agency_deduction'] + $data['adjustment']['total_deductions'];
+		$total_deduction += $data['tax_contribution'] + $data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution'] + $data['late_deduction'] + $data['under_time'] + $data['agency_deduction'] + $data['adjustment']['total_deductions'] + $data['absent_deduction'];
 
 
 		// dd($total_deminimis);

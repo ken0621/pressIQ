@@ -5820,6 +5820,9 @@ class PayrollController extends Member
           $temp['total_rh']                       = $data['total_rh'];
           $temp['total_sh']                       = $data['total_sh'];
           $temp['total_worked_days']              = $data['total_worked_days'];
+          $temp['leave_amount']                   = $data['leave_amount'];
+          $temp['absent_deduction']               = $data['absent_deduction'];
+          $temp['absent_count']                   = $data['absent_count'];
 
           if(!empty($data['13_month_id']))
           {

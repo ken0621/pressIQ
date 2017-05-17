@@ -64,12 +64,10 @@
                                             <td>{{currency("PHP",$sir->amount_to_collect)}}</td>
                                             <td>{{currency("PHP",$sir->agent_collection)}}</td>
                                             <td>
-                                                @if($sir->amount_to_collect > $sir->agent_collection)
-                                                <span style="color:red">LOSS {{currency("PHP",($sir->agent_collection - $sir->amount_to_collect))}}</span>
-                                                @elseif($sir->amount_to_collect < $sir->agent_collection)
-                                                <span style="color:red">OVER {{currency("PHP",($sir->agent_collection - $sir->amount_to_collect))}}</span>
+                                                @if($sir->status != 'complete')
+                                                <span style="color:red"> {{currency("PHP",($sir->status))}}</span>
                                                 @else
-                                                <span style="color:green">COMPLETED/OK</span>
+                                                <span style="color:green">COMPLETED/OK {{$sir->status}}</span>
                                                 @endif
                                             </td>
                                             <td class="text-center">

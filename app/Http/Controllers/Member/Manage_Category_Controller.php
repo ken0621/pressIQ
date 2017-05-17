@@ -22,6 +22,8 @@ class Manage_Category_Controller extends Member
         $access = Utilities::checkAccess('item-categories', 'access_page');
         if($access == 1)
         {
+
+            Category::for_mts_cat();
             $shop_id = $this->user_info->user_shop;
             $data['category'] = Category::select_tr_html($shop_id, 0);
             // dd($data['category']);
@@ -163,6 +165,9 @@ class Manage_Category_Controller extends Member
         $data["cat_type"] = $type_category;
         $data["id"] = $category_id;
 
+
+        Category::for_mts_cat();
+
         $cat_data = AuditTrail::get_table_data("tbl_category","type_id",$category_id);
         AuditTrail::record_logs("Added","category",$category_id,"",serialize($cat_data));
 
@@ -232,6 +237,8 @@ class Manage_Category_Controller extends Member
             $data["status"] = "success-category";
             $data["id"] = $type_id;
 
+
+            Category::for_mts_cat();
 
             $new_data = AuditTrail::get_table_data("tbl_category","type_id",$type_id);
             AuditTrail::record_logs("Edited","category",$type_id,serialize($old_data),serialize($new_data));

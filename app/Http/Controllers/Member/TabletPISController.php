@@ -55,15 +55,28 @@ class TabletPISController extends Member
 		return view("tablet.agent.confirm_sync",$data);
 	}
 	public function submit_transactions()
-	{		
+	{	
         $sir_id = Request::input("sir_id");
-        $data["status"] = Purchasing_inventory_system::close_sir($sir_id);
-        Session::forget("sir_id");
+        if(Request::input("action") == "close")
+        {
+            $data["status"] = Purchasing_inventory_system::close_sir($sir_id);
+            Session::forget("sir_id");
+
+        }	
+        else
+        {
+            $update["reload_sir"] = 1;
+            Tbl_sir::where("sir_id",$sir_id)->update($update);
+            $data["status"] = "success-close";
+        }
         return json_encode($data);
 	}
     public function sir_reload($sir_id)
     {
-        // $data[""]
+        $data["action"] = "reload";
+        $data["sir_id"] = $sir_id;
+
+        return view("tablet.agent.confirm_sync",$data);
     }
 	public function index()
 	{
@@ -166,58 +179,66 @@ class TabletPISController extends Member
                 $data["open_sir"] = Tbl_sir::truck()->saleagent()->where("sales_agent_id",$this->get_user()->employee_id)->where("sir_status",1)->first();
                 if($data["open_sir"])
                 {
-                    Session::put("sir_id",$data["open_sir"]->sir_id);
-                    $data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",0)->where("inv_is_paid",0)->get();
-
-                    $data["_sales_receipt"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",1)->get();
-                    $data["total_sales_receipt"] = 0;
-                    foreach ($data["_sales_receipt"] as $key => $value) 
+                    if($data["open_sir"]->reload_sir == 0)
                     {
-                        $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
-                        $cm_amt = 0 ;
-                        if($cm != null)
+                        Session::put("sir_id",$data["open_sir"]->sir_id);
+                        $data["_invoices"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",0)->where("inv_is_paid",0)->get();
+
+                        $data["_sales_receipt"] = Tbl_manual_invoice::sir()->customer_invoice()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_customer_invoice.inv_id","DESC")->where("is_sales_receipt",1)->get();
+                        $data["total_sales_receipt"] = 0;
+                        foreach ($data["_sales_receipt"] as $key => $value) 
                         {
-                          $cm_amt = $cm->cm_amount;  
+                            $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
+                            $cm_amt = 0 ;
+                            if($cm != null)
+                            {
+                              $cm_amt = $cm->cm_amount;  
+                            }
+                            $data["total_sales_receipt"] += $value->inv_overall_price - $cm_amt;
                         }
-                        $data["total_sales_receipt"] += $value->inv_overall_price - $cm_amt;
-                    }
 
-                    $data["total_invoice_amount"] = 0;
-                    foreach ($data["_invoices"] as $key => $value) 
-                    {
-                        $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
-                        $cm_amt = 0 ;
-                        if($cm != null)
+                        $data["total_invoice_amount"] = 0;
+                        foreach ($data["_invoices"] as $key => $value) 
                         {
-                          $cm_amt = $cm->cm_amount;  
+                            $cm = Tbl_credit_memo::where("cm_id",$value->credit_memo_id)->first();
+                            $cm_amt = 0 ;
+                            if($cm != null)
+                            {
+                              $cm_amt = $cm->cm_amount;  
+                            }
+                            $data["total_invoice_amount"] += $value->inv_overall_price - $cm_amt;
                         }
-                        $data["total_invoice_amount"] += $value->inv_overall_price - $cm_amt;
-                    }
 
-                    $data["_receive_payment"] = Tbl_manual_receive_payment::sir()->customer_receive_payment()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_receive_payment.rp_id","DESC")->get();
-                    $data["total_receive_payment"] = 0;
-                    foreach ($data["_receive_payment"] as $key => $value) 
+                        $data["_receive_payment"] = Tbl_manual_receive_payment::sir()->customer_receive_payment()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_receive_payment.rp_id","DESC")->get();
+                        $data["total_receive_payment"] = 0;
+                        foreach ($data["_receive_payment"] as $key => $value) 
+                        {
+                            $data["total_receive_payment"] += $value->rp_total_amount;
+                        }
+
+                        $data["_cm"] = Tbl_manual_credit_memo::sir()->customer_cm()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_credit_memo.cm_id","DESC")->get();
+                        $data["total_cm"] = 0;
+                        foreach ($data["_cm"] as $key => $value) 
+                        {
+                            $data["total_cm"] += $value->cm_amount;
+                        }
+
+                        $data["total_receive_payment"] = currency("Php", $data["total_receive_payment"]);
+                        $data["total_invoice_amount"] = currency("Php", $data["total_invoice_amount"]);
+                        $data["total_sales_receipt"] = currency("Php", $data["total_sales_receipt"]);
+                        $data["total_cm"] = currency("Php", $data["total_cm"]);
+                        $data["total_customer"] = Customer::countAllCustomer();
+
+                        $data["_customer"] = Customer::getAllCustomer();  
+                        return view("tablet.agent.agent_dashboard",$data);                      
+                    }
+                    else
                     {
-                        $data["total_receive_payment"] += $value->rp_total_amount;
+                        Session::put("sir_id",$data["open_sir"]->sir_id);
+                        $data["no_sir"] = "reload";   
+                        
+                        return view("tablet.index",$data);
                     }
-
-                    $data["_cm"] = Tbl_manual_credit_memo::sir()->customer_cm()->where("tbl_sir.sir_id",Session::get("sir_id"))->orderBy("tbl_credit_memo.cm_id","DESC")->get();
-                    $data["total_cm"] = 0;
-                    foreach ($data["_cm"] as $key => $value) 
-                    {
-                        $data["total_cm"] += $value->cm_amount;
-                    }
-
-                    $data["total_receive_payment"] = currency("Php", $data["total_receive_payment"]);
-                    $data["total_invoice_amount"] = currency("Php", $data["total_invoice_amount"]);
-                    $data["total_sales_receipt"] = currency("Php", $data["total_sales_receipt"]);
-                    $data["total_cm"] = currency("Php", $data["total_cm"]);
-                    $data["total_customer"] = Customer::countAllCustomer();
-
-                    $data["_customer"] = Customer::getAllCustomer();
-
-
-                    return view("tablet.agent.agent_dashboard",$data);
 
                 }
                 else
@@ -482,6 +503,7 @@ class TabletPISController extends Member
         {
         	$update["lof_status"] = 2;
         	$update["sir_status"] = 1;
+            $update["is_sync"] = 1;
         }
         else if($action == "reject")
         {

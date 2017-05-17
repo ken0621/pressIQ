@@ -34,6 +34,7 @@
 <div class="panel panel-default panel-block panel-title-block panel-gray ">
     <ul class="nav nav-tabs">
         <li class="active cursor-pointer all-sir"><a class="cursor-pointer" onclick="select('all')" data-toggle="tab" href="#all"><i class="fa fa-star"></i> All</a></li>
+        <li class="cursor-pointer sir-class"><a class="cursor-pointer" onclick="select('reload')" data-toggle="tab" href="#all"><i class="fa fa-upload"></i> Reload</a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(1,0,'',1)" data-toggle="tab" href="#sync"><i class="fa fa-refresh"></i> Currently Synced</a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer"  onclick="select(2,0,'',1)" data-toggle="tab" href="#closed"><i class="fa fa-window-close"></i> Closed SIR</a></li>
         <li class="cursor-pointer sir-class"><a class="cursor-pointer" onclick="select('',1,'',0)" data-toggle="tab" href="#archived"><i class="fa fa-trash"></i> Archived SIR</a></li>
@@ -84,7 +85,9 @@
                                                   @if($sir->sir_archived == 1)
                                                         <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/restore" class="popup">Restore SIR</a></li>
                                                   @else
-                                                      @if($sir->lof_status == 3)
+                                                      @if($sir->reload_sir == 1)
+                                                        <li><a href="/member/pis/sir_reload/{{$sir->sir_id}}" >Reload</a></li>
+                                                      @elseif($sir->lof_status == 3)
                                                         <li><a size="lg" link="/member/pis/sir/view/{{$sir->sir_id}}/lof" class="popup">View Load Out Form</a></li>
                                                         <li><a href="/member/pis/sir/edit/{{$sir->sir_id}}">Edit Load Out Form</a></li>
                                                         <li><a size="md" link="/member/pis/sir/{{$sir->sir_id}}/archived" class="popup">Archive L.O.F</a></li>

@@ -53,6 +53,7 @@
                             <tr>
                                 <td>{{$manufacturer->manufacturer_name}}</td>
                                 <td>
+                                    <div>{{$manufacturer->manufacturer_fname." ".$manufacturer->manufacturer_mname." ".$manufacturer->manufacturer_lname}}</div>
                                     <div>{{$manufacturer->phone_number}}</div>
                                     <div>{{$manufacturer->email_address}}</div>
                                     <div><a href="{{$manufacturer->website}}">{{$manufacturer->website}}</a></div>

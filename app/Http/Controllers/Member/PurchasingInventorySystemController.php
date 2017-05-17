@@ -560,7 +560,6 @@ class PurchasingInventorySystemController extends Member
                 $data["_returns"][$key_return]->status = $status;        
             }
         }
-
         $html = view('member.purchasing_inventory_system.ilr.ilr_pdf', $data);
         return Pdf_global::show_pdf($html);
     }

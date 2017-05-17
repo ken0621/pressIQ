@@ -46,8 +46,8 @@
                                     <th>Truck Plate No</th>
                                     <th>Sales Agent</th>
                                     <th>Total Amount Issued</th>
-                                    <th>Total Amount Sold</th>
-                                    <th>Collection</th>
+                                    <th>Total Amount Collected</th>
+                                    <th>Amount Remitted</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -69,7 +69,7 @@
                                                 @elseif($sir->amount_to_collect < $sir->agent_collection)
                                                 <span style="color:red">OVER {{currency("PHP",($sir->agent_collection - $sir->amount_to_collect))}}</span>
                                                 @else
-                                                <span style="color:green">COMPLETED</span>
+                                                <span style="color:green">COMPLETED/OK</span>
                                                 @endif
                                             </td>
                                             <td class="text-center">
@@ -78,8 +78,8 @@
                                                     Action <span class="caret"></span>
                                                   </button>
                                                     <ul class="dropdown-menu dropdown-menu-custom">
-                                                        <li><a>View Report</a></li>
-                                                    </ul>
+                                                        <li><a target="_blank" href="/member/cashier/report/{{$sir->sir_id}}">View Report</a></li>
+                                                    </ul> 
                                                 </div>
                                             </td>
                                         </tr>

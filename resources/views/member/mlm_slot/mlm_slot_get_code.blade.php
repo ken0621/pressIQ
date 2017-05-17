@@ -3,7 +3,7 @@
     <option value=""></option>
 	@if(count($membership_code) != 0)
 		@foreach($membership_code as $membership)
-			<option value="{{$membership->membership_code_id}}">{{$membership->membership_activation_code}} ({{$membership->membership_type}})</option>
+			<option value="{{$membership->membership_code_id}}">{{$membership->membership_activation_code}} ({{$membership->membership_type}}) ({{$membership->membership_name}})</option>
 		@endforeach
 	@endif
 </select>

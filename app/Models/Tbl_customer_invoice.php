@@ -18,6 +18,10 @@ class Tbl_customer_invoice extends Model
     {
         return $query->leftJoin("tbl_credit_memo","cm_id","=","tbl_customer_invoice.credit_memo_id");
     }
+    public static function scopeTerms($query)
+    {
+        return $query->leftJoin("tbl_terms","terms_id","=","tbl_customer_invoice.inv_terms_id");
+    }
     public static function scopeReturns_item($query)
     {
         return $query->join("tbl_credit_memo_line","tbl_credit_memo_line.cmline_cm_id","=","tbl_customer_invoice.credit_memo_id");

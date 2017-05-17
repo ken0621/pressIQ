@@ -14,6 +14,7 @@ use App\Globals\Customer;
 use App\Globals\Estimate;
 
 use App\Models\Tbl_customer;
+use App\Models\Tbl_shop;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_customer_estimate;
 use App\Models\Tbl_customer_invoice;
@@ -587,7 +588,8 @@ class Customer_InvoiceController extends Member
     }
     public function invoice_view_pdf($inv_id)
     {
-        $data["invoice"] = Tbl_customer_invoice::customer()->where("inv_id",$inv_id)->first();
+        $data["invoice"] = Tbl_customer_invoice::terms()->customer()->where("inv_id",$inv_id)->first();
+            $data["shop"] = Tbl_shop::where("shop_id",$this->user_info->shop_id)->first();
 
         $data["transaction_type"] = "INVOICE";
         if(Tbl_customer_invoice::where("inv_id",$inv_id)->pluck("is_sales_receipt") != 0)

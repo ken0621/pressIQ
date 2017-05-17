@@ -9,18 +9,35 @@
 			font-family: 'Titillium Web',sans-serif;
 		}
 	</style>
+
+	<div class="text-center">
+		<table style="width: 100%">
+			<tr>
+				<td style="width: 20%">
+					<img style="width: 250px;height: 250px;object-fit: contain;" src="http://{{$_SERVER['SERVER_NAME']}}/assets/member/img/pdf_template/sample-business.jpg">
+				</td>
+				<td style="width: 80%">
+					<div>
+						<h3>{{$shop->shop_key}}</h3>
+						<small>{{$shop->shop_street_address." ".$shop->shop_city}}</small><br>
+						<small>Tel : {{$shop->shop_contact}} </small>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
 </head>
 <body>
 	<div class="form-group">
 		<h2>Purchase Order</h2>		
 	</div>
 <div class="form-group" style="padding-bottom: 50px">
-	<div class="col-md-6 text-left" style="float: left; width: 50%">
+	<div class="col-md-6 text-left" style="float: left; width: 40%">
 		<strong>Vendor </strong><br>
 		<span>{{$po->vendor_company}}</span><br>
 		<span>{{$po->title_name." ".$po->first_name." ".$po->middle_name." ".$po->last_name." ".$po->suffix_name}}</span>
 	</div>
-	<div class="col-md-6 text-right" style="float: right; width: 50%">
+	<div class="col-md-6 text-right" style="float: right; width: 30%">
 		<div class="col-md-6 text-right" style="float: left; width: 50%">
 			<strong>P.O NO.</strong><br>
 			<strong>DATE.</strong><br>
@@ -29,6 +46,10 @@
 			<span>{{sprintf("%'.04d\n", $po->po_id)}}</span><br>
 			<span>{{date('m/d/Y',strtotime($po->po_date))}}</span><br>
 		</div>
+	</div>
+	<div class="col-md-6 text-right" style="float: right; width: 30%">
+		<strong>Ship To: </strong>
+		<span>{{$po->ven_shipping_street." ".$po->ven_shipping_city." ".$po->ven_shipping_state." ".$po->country_name.", ".$po->ven_shipping_zipcode}}</span><br>
 	</div>
 </div>
 

@@ -12,6 +12,8 @@ class Tbl_purchase_order extends Model
 
     public static function scopeVendor($query)
     {
-    	return $query->join("tbl_vendor","tbl_vendor.vendor_id","=","tbl_purchase_order.po_vendor_id");
+    	return $query->join("tbl_vendor","tbl_vendor.vendor_id","=","tbl_purchase_order.po_vendor_id")
+    				 ->leftjoin("tbl_vendor_address","ven_addr_vendor_id","=","vendor_id")
+    				 ->leftjoin("tbl_country","ven_shipping_country_id","=","country_id");
     }
 }

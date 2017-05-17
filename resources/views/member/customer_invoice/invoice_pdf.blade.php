@@ -9,6 +9,23 @@
 			font-family: 'Titillium Web',sans-serif;
 		}
 	</style>
+
+	<div class="text-center">
+		<table style="width: 100%">
+			<tr>
+				<td style="width: 20%">
+					<img style="width: 250px;height: 250px;object-fit: contain;" src="http://{{$_SERVER['SERVER_NAME']}}/assets/member/img/pdf_template/sample-business.jpg">
+				</td>
+				<td style="width: 80%">
+					<div>
+						<h3>{{$shop->shop_key}}</h3>
+						<small>{{$shop->shop_street_address." ".$shop->shop_city}}</small><br>
+						<small>Tel : {{$shop->shop_contact}} </small>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
 </head>
 <body>
 	<div class="form-group">
@@ -30,7 +47,7 @@
 			<span>{{sprintf("%'.04d\n", $invoice->inv_id)}}</span><br>
 			<span>{{date('m/d/Y',strtotime($invoice->inv_date))}}</span><br>
 			<span>{{date('m/d/Y',strtotime($invoice->inv_due_date))}}</span><br>
-			<span>TERMS</span><br>
+			<span>{{$invoice->terms_name}}</span><br>
 		</div>
 	</div>
 </div>
@@ -52,7 +69,7 @@
 				<td style="text-align: center;">{{$item->qty}}</td>
 				<td style="text-align: right;">{{currency("PHP",$item->invline_rate)}}</td>
 				<td style="text-align: right;">{{currency("PHP",$item->invline_amount)}}</td>
-				<td style="text-align: center;" {{$taxable_item += $item->taxable == 1 ? $item->invline_amount : 0}}>{{$item->taxable == 1 ? "&#10004;" : '' }}</td>
+				<td style="text-align: center;" {{$taxable_item += $item->taxable == 1 ? $item->invline_amount : 0}}><input type="checkbox" {{$item->taxable == 1 ? 'checked' : '' }}></td>
 			</tr>
 		@endforeach
 		<div class="{{$invoice->inv_is_paid == 1 ? 'watermark' : 'hidden'}}"> PAID </div>
@@ -72,7 +89,7 @@
 		@if($invoice->inv_discount_value != 0)
 		<tr>
 			<td colspan="2"></td>
-			<td colspan="2" style="text-align: left;font-weight: bold">Discount {{$invoice->inv_discount_type == 'percent' ? $invoice->inv_discount_type."%" : '' }}</td>
+			<td colspan="2" style="text-align: left;font-weight: bold">Discount {{$invoice->inv_discount_type == 'percent' ? $invoice->inv_discount_type." (%".$invoice->inv_discount_value.")" : '' }}</td>
 			<td style="text-align: right; font-weight: bold">{{$invoice->inv_discount_type == 'value' ? currency("PHP",$invoice->inv_discount_value) : currency("PHP",($invoice->inv_discount_value/100) * $invoice->inv_subtotal_price) }}</td>
 		</tr>
 		@endif
@@ -86,7 +103,7 @@
 		<tr class="{{$cm_total = 0}}">
 			<td colspan="2"></td>
 			<td colspan="2" style="text-align: left;font-weight: bold">INVOICE TOTAL</td>
-			<td style="text-align: right; font-weight: bold">{{currency("PHP",$invoice->inv_overall_price)}}</td>
+			<td class="text-right" style="font-weight: bold">{{currency("PHP",$invoice->inv_overall_price)}}</td>
 		</tr>
 
 		@if($cm != null)
@@ -109,14 +126,14 @@
 			<tr>
 				<td colspan="2"></td>
 				<td  colspan="2" style="text-align: left;font-weight: bold">RETURNS SUBTOTAL</td>
-				<td style="text-align: right; font-weight: bold">{{currency('PHP', $cm->cm_amount)}}</td>
+				<td class="text-right" style=" font-weight: bold">{{currency('PHP', $cm->cm_amount)}}</td>
 				<td></td>
 			</tr>
 		@endif
 
 	</tbody>
 </table>
-	<div class="row pull-right">
+	<div class="row text-right" style="margin-right: 5px">
 		<h3><strong>TOTAL</strong> {{currency('PHP',($invoice->inv_overall_price - $cm_total))}}</h3>
 	</div>
 </body>

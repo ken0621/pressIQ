@@ -93,10 +93,9 @@ class Invoice
 	{
         /* SUBTOTAL */
         $subtotal_price = collect($item_info)->sum('amount');
-
         /* DISCOUNT */
-        $discount = $total_info['total_discount_value'];
-        if($total_info['total_discount_type'] == 'percent') $discount = (convertToNumber($total_info['total_discount_value']) / 100) * $subtotal_price;
+        $discount = convertToNumber($total_info['total_discount_value'] == "" ? 0 : $total_info['total_discount_value']);
+        if($total_info['total_discount_type'] == 'percent') $discount = ($discount / 100) * $subtotal_price;
 
         /* TAX */
         $tax = (collect($item_info)->where('taxable', '1')->sum('amount')) * 0.12;
@@ -275,7 +274,7 @@ class Invoice
             if($item_line)
             {
                 /* DISCOUNT PER LINE */
-                $discount       = $item_line['discount'];
+                $discount       = $item_line['discount'] == "" ? 0 : $item_line['discount'];
                 $discount_type  = 'fixed';
                 if(strpos($discount, '%'))
                 {   

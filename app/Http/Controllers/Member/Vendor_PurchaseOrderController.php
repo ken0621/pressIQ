@@ -12,6 +12,7 @@ use App\Globals\Pdf_global;
 use App\Globals\Utilities;
 
 use App\Models\Tbl_customer;
+use App\Models\Tbl_shop;
 use App\Models\Tbl_warehousea;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_manual_invoice;
@@ -125,6 +126,7 @@ class Vendor_PurchaseOrderController extends Member
         if($access == 1)
         { 
             $data["po"] = Tbl_purchase_order::vendor()->where("po_id",$po_id)->first();
+            $data["shop"] = Tbl_shop::where("shop_id",$this->user_info->shop_id)->first();
             $data["_poline"] = Tbl_purchase_order_line::um()->item()->where("poline_po_id",$po_id)->get();
             foreach($data["_poline"] as $key => $value) 
             {
@@ -134,6 +136,8 @@ class Vendor_PurchaseOrderController extends Member
                 $data["_poline"][$key]->qty = UnitMeasurement::um_view($total_qty,$value->item_measurement_id,$value->poline_um);
             }
             $pdf = view("member.vendor_list.po_pdf",$data);
+
+
             return Pdf_global::show_pdf($pdf);
         }
         else

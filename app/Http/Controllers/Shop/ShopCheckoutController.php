@@ -26,6 +26,7 @@ use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_ec_order_item;
+use App\Models\Tbl_merchant_school;
 // use App\Globals\Mlm_slot_log;    
 
 /*4/29/17 this will import the data/class needed by ipay88 payment mode by:brain*/
@@ -58,6 +59,9 @@ class ShopCheckoutController extends Shop
         }
 
         $data['ec_order_load'] = 0;
+        $data['ec_order_merchant_school'] = 0;
+        $data['ec_order_merchant_school_item'] = [];
+        $tbl_merchant_school = Tbl_merchant_school::where('merchant_school_shop', $this->shop_info->shop_id)->get()->keyBy('merchant_item_id');
         foreach($data['get_cart'] as $value)
         {
             foreach($value as $key2=>$value2)
@@ -66,8 +70,14 @@ class ShopCheckoutController extends Shop
                 {
                     $data['ec_order_load'] = 1;
                 }
+                if(isset($tbl_merchant_school[$value2['cart_product_information']['item_id']]))
+                {
+                    $data['ec_order_merchant_school_item'][$data['ec_order_merchant_school']] = $value2['cart_product_information']['item_id'];
+                    $data['ec_order_merchant_school'] += $value2['quantity'];
+                }
             }           
         }
+        // dd($data['ec_order_merchant_school']);
 
         $data["_payment_method"] = $this->get_payment_method();
 
@@ -330,7 +340,8 @@ class ShopCheckoutController extends Shop
             if(isset($result['order_id']))
             {
                 Mlm_slot_log::slot_array($arry_log);
-                $this->give_product_code($get_cart['cart'], Self::$slot_now, $result['order_id']);
+                
+                // $this->give_product_code($get_cart['cart'], Self::$slot_now, $result['order_id']);
 
                 /* SMS Notification */
                 // $txt[0]["txt_to_be_replace"]    = "[name]";
@@ -366,6 +377,7 @@ class ShopCheckoutController extends Shop
     }
     public function validate_submit()
     {
+        $message = [];
         // Validate Customer Info
         $rules["customer_first_name"]   = 'required';
         $rules["customer_middle_name"]  = '';
@@ -384,8 +396,21 @@ class ShopCheckoutController extends Shop
         {
             $rules['ec_order_load_number'] = 'required';
         }
+        $ec_order_merchant_school = Request::input('ec_order_merchant_school');
 
-        return $validator = Validator::make(Request::input(), $rules);
+        if($ec_order_merchant_school >= 1)
+        {
+            $input['merchant_school_s_id'] = Request::input('merchant_school_s_id');
+            foreach($input['merchant_school_s_id'] as $key => $value)
+            {
+                $rules['merchant_school_s_id.' . $key] = 'required';
+                $rules['merchant_school_s_name.' . $key] = 'required';
+                $message['merchant_school_s_id.' . $key .'.required'] = 'All Student ID field is required';
+                $message['merchant_school_s_name.' . $key .'.required'] = 'All Student Name field is required';
+            }
+            
+        }
+        return $validator = Validator::make(Request::input(), $rules, $message);
     }
     public function restructure_cart()
     {
@@ -452,6 +477,14 @@ class ShopCheckoutController extends Shop
             $cart['ec_order_load_number'] = null;
             $cart['ec_order_load'] = 0;
         }
+        $cart['ec_order_merchant_school'] = Request::input('ec_order_merchant_school');
+        if($cart['ec_order_merchant_school'] >= 1)
+        {
+            $cart['merchant_school_i_id'] = Request::input('merchant_school_i_id'); 
+            $cart['merchant_school_s_id'] = Request::input('merchant_school_s_id'); 
+            $cart['merchant_school_s_name'] = Request::input('merchant_school_s_name'); 
+        }
+        
         
         $cart["invline_item_id"] = $invline_item_id;
         $cart["invline_discount"] = $invline_discount;
@@ -533,10 +566,10 @@ class ShopCheckoutController extends Shop
         else
         {
             $use_payment_method = DB::table("tbl_online_pymnt_api")->where("api_id", $payment_method->link_reference_id)->first();
-            $use_gateway        = DB::table("tbl_online_pymnt_gateway")->where("gateway_id", $use_payment_method->api_gateway_id)->first();
-
-            if (isset($use_gateway->gateway_code_name)) 
+            if (isset($use_payment_method->api_gateway_id)) 
             {
+                $use_gateway        = DB::table("tbl_online_pymnt_gateway")->where("gateway_id", $use_payment_method->api_gateway_id)->first();
+                
                 switch ($use_gateway->gateway_code_name) 
                 {
                     case 'paypal2': return $this->submit_using_paypal(); break;
@@ -557,7 +590,6 @@ class ShopCheckoutController extends Shop
     public function submit()
     {
         $validator = $this->validate_submit();
-
         if ($validator->fails()) 
         {
             return Redirect::back()

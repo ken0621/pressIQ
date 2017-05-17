@@ -31,7 +31,7 @@
             @if($total_discrepancy == 0)
             <span style="color: green;font-weight: bold"> CLOSED TRANSACTION</span>
             @else
-            <span style="color: green;font-weight: bold">{{currency('PHP',$total_dicrepancy)}}</span>
+            <span style="color: green;font-weight: bold">{{currency('PHP',$total_discrepancy)}}</span>
             @endif
         </h2>
         <span>STATUS</span>

@@ -54,7 +54,7 @@ class Purchasing_inventory_system
 
     public static function get_sir_stocks($warehouse_id, $item_id)
     {
-        $sir = Tbl_sir::where("sir_warehouse_id",$warehouse_id)->where("is_sync",1)->get();
+        $sir = Tbl_sir::where("sir_warehouse_id",$warehouse_id)->where("ilr_status","!=",2)->where("is_sync",1)->get();
 
         $qty = 0;
         foreach ($sir as $key => $value) 

@@ -616,13 +616,13 @@ class Warehouse
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
-        $inventory_success = '';
-        $inventory_err = '';
+        $inventory_success = [];
+        $inventory_err = [];
         $success = 0;
         $err = 0;
         $insert_refill = [];
 
-        $for_serial_item = '';
+        $for_serial_item = [];
         
         if($warehouse_refill_product)
         {

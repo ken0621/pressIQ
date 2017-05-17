@@ -54,6 +54,7 @@
 		<table class="table table-striped table-condensed table-hovered">
 			<thead>
 				<tr>
+					<th>ID</th>
 					<th>Date</th>
 					<th>Transaction Type</th>
 					<th>Num</th> 
@@ -71,6 +72,7 @@
 				@foreach($_journal as $key=>$journal)
 					@foreach($journal->entries as $key2=>$entry)
 					<tr>
+						<td>{{$entry->jline_id}}</td>
 						<td>{{$key2 == 0 ? dateFormat($journal->je_entry_date) : ''}}</td>
 						<td>{{$key2 == 0 ? $journal->je_reference_module : ''}}</td>
 						<td>

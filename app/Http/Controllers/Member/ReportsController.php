@@ -165,9 +165,7 @@ class ReportsController extends Member
     	$data['_sales'] = SalesReport::monthlysale($shop_id, $start, $end);
     	return view('member.reports.customer.customerOTTable',$data);
     }
-
-    public function pdfreport($name = '', $start = '00/00/0000', $end = '00/00/0000')
-    {
+    public function pdfreport($name = '', $start = '00/00/0000', $end = '00/00/0000'){
         $start = date('Y-m-d', strtotime($start));
         $end = date('Y-m-d', strtotime($end));
         $shop_id = $this->checkuser('user_shop');
@@ -180,12 +178,11 @@ class ReportsController extends Member
                 break;
         }
         $view = 'member.reports.'.$blade;
+        // dd($data);
         
         $pdf = PDF::loadView($view,$data);
         return $pdf->stream('Paycheque.pdf');
     }
-
-    /* -------------------------------------------------------------------------------------------------------- */
 
     public function accounting_sale()
     {
@@ -196,18 +193,37 @@ class ReportsController extends Member
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = 'Account Sales Report';
         $data['head'] = $this->report_header($data);
-
-        $data['action'] = '/member/report/accounting/sale/get/report';
+        $data['filter'] = $this->report_filter('basic');
         $data['table_header'] = Report::sales_report();
 
         return view('member.reports.accounting.sales', $data);
     }
-
     public function report_header($data)
     {
         return view('member.reports.head', $data);
     }
+    public function report_filter($filter = 'basic')
+    {
+        $data = [];
 
+        switch ($filter) 
+        {
+            case 'basic':
+                return view('member.reports.filter.basic', $data);
+                break;
+            case 'profit_loss' :
+                return view('member.reports.filter.profit_loss', $data);
+                break;    
+            case 'items':
+                return view('member.reports.filter.items', $data);
+                break;
+            case 'general_ledger' :
+                return view('member.reports.filter.general_ledger', $data);    
+            default:
+                return view('member.reports.filter.basic', $data);
+                break;
+        }
+    }
     public function report_field_checker_seed($filter = 'accounting_sales_report')
     {
         $shop_id = $this->user_info->shop_id; 
@@ -238,7 +254,6 @@ class ReportsController extends Member
         $data['report_field_default'] = Report::sales_report($filter);
         return view('member.reports.field.check', $data);
     }
-
     public function accounting_sale_filter_edit()
     {
         $shop_id = $this->user_info->shop_id; 
@@ -250,19 +265,24 @@ class ReportsController extends Member
             $table_header = Report::sales_report();
             foreach ($table_header as $key => $value) 
             {
-                if(!isset($report_field_module[$key])) 
+                if(!isset($report_field_module[$key]))
                 {
                     $update['report_field_archive'] = 1;
+                    $update['report_field_position'] = $report_field_position[$key];
+                    Tbl_report_field::where('report_field_shop', $shop_id)
+                    ->where('report_field_module', $key)
+                    ->where('report_field_type', $report_field_type)
+                    ->update($update);
                 }
                 else
                 {
                     $update['report_field_archive'] = 0;
-                }
-                $update['report_field_position'] = $report_field_position[$key];
-                Tbl_report_field::where('report_field_shop', $shop_id)
+                    $update['report_field_position'] = $report_field_position[$key];
+                    Tbl_report_field::where('report_field_shop', $shop_id)
                     ->where('report_field_module', $key)
                     ->where('report_field_type', $report_field_type)
                     ->update($update);
+                }
             }
         }
         $data['status'] = 'Success';
@@ -270,15 +290,12 @@ class ReportsController extends Member
 
         return json_encode($data);
     }
-
     public function accounting_sale_report_view()
     {
-        $period         = Request::input('report_period');
-        $date['start']  = Request::input('from');
-        $date['end']    = Request::input('to');
-        $from           = Report::checkDatePeriod($period, $date)['start_date'];
-        $to             = Report::checkDatePeriod($period, $date)['end_date'];
-
+        $from = Request::input('from');
+        $to = Request::input('to');
+        $from = Carbon::parse($from);
+        $to = Carbon::parse($to)->addDay(1);
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
         $data = [];
@@ -292,8 +309,8 @@ class ReportsController extends Member
         ->where('je_shop_id', $shop_id)
         ->customerorvendor()
         // ->joinreciept()
-        ->whereRaw("date(je_entry_date) >= '$from'")
-        ->whereRaw("date(je_entry_date) <= '$to'")
+        ->where('je_entry_date', '>=', $from)
+        ->where('je_entry_date', '<=', $to)
         ->concatum()
         ->get()
         ->keyBy('jline_id');
@@ -328,14 +345,41 @@ class ReportsController extends Member
 
         if($report_field_type == 'accounting_sales_report')
         {
-            $view =  'member.reports.output.sale';
+            $view =  view('member.reports.output.sale', $data);
+            $data['view'] = 'sale';
         }
         else if($report_field_type == 'accounting_sales_report_item')
         {
-            $view =  'member.reports.output.item';
+            $view =  view('member.reports.output.item', $data);
+            $data['view'] = 'item';
         }
 
-        return $this->check_report_type($report_type, $view, $data, 'Profit_and_Loss-'.Carbon::now()); 
+        switch ($report_type) {
+            case 'plain':
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $view->render();
+                    return json_encode($return);
+                break;
+            case 'pdf':
+                    $data['view'] = $view->render();
+                    return Pdf_global::show_pdf($data['view'], 'landscape');
+                break;
+            case 'excel':
+                    Excel::create('New file', function($excel) use($data) {
+
+                        $excel->sheet('New sheet', function($sheet) use($data) {
+
+                            $sheet->loadView('member.reports.output.' . $data['view'], $data);
+
+                        });
+
+                    })->export('xls');    
+            default:
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $view->render();
+                    return json_encode($return);
+                break;
+        }
     }
 
     public function accounting_sale_items()
@@ -347,12 +391,11 @@ class ReportsController extends Member
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = 'Account Sales Report';
         $data['head'] = $this->report_header($data);
-        $data['action']     = '/member/report/accounting/sale/get/report';
+        $data['filter'] = $this->report_filter('items');
         $data['table_header'] = Report::sales_report('accounting_sales_report_item');
 
         return view('member.reports.accounting.sales', $data);
     }
-
     public function profit_loss()
     {
         $data = [];
@@ -361,21 +404,18 @@ class ReportsController extends Member
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = '';
         $data['head'] = $this->report_header($data);
-        $data['action']     = '/member/report/accounting/profit/loss/get';
+        $data['filter'] = $this->report_filter('profit_loss');
         $shop_id = $this->user_info->shop_id; 
 
         return view('member.reports.accounting.profit', $data);
 
     }
-
     public function profit_loss_get()
     {
-        $period         = Request::input('report_period');
-        $date['start']  = Request::input('from');
-        $date['end']    = Request::input('to');
-        $from           = Report::checkDatePeriod($period, $date)['start_date'];
-        $to             = Report::checkDatePeriod($period, $date)['end_date'];
-
+        $from = Request::input('from');
+        $to = Request::input('to');
+        $from = Carbon::parse($from);
+        $to = Carbon::parse($to)->addDay(1);
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
         $shop_id = $this->user_info->shop_id; 
@@ -393,43 +433,69 @@ class ReportsController extends Member
 
             $data['sum'][$key] = Tbl_journal_entry_line::account()
             ->where('chart_type_id', $value->chart_type_id)
-            ->journal()
+        
             ->select(DB::raw('*, sum(jline_amount ) as sum'))
             ->groupBy('jline_type')
             ->groupBy('jline_account_id')
             ->where('account_shop_id', $shop_id)
-            ->whereRaw("date(je_entry_date) >= '$from'")
-            ->whereRaw("date(je_entry_date) <= '$to'")
+            ->where('tbl_journal_entry_line.created_at', '>=', $from)
+            ->where('tbl_journal_entry_line.created_at', '<=', $to)
             ->get();
 
         }
+        $view = view('member.reports.output.profit_loss', $data);
 
-        $view = 'member.reports.output.profit_loss';
-        return $this->check_report_type($report_type, $view, $data, 'Profit_and_Loss-'.Carbon::now()); 
+        switch ($report_type) {
+            case 'plain':
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $view->render();
+                    return json_encode($return);
+                break;
+            case 'pdf':
+                    $data['view'] = $view->render();
+                    return Pdf_global::show_pdf($data['view'], 'landscape');
+                break;
+            case 'excel':
+                    Excel::create('New file', function($excel) use($data) {
+
+                        $excel->sheet('New sheet', function($sheet) use($data) {
+
+                            $sheet->loadView('member.reports.output.profit_loss', $data);
+
+                        });
+
+                    })->export('xls');    
+            default:
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $view->render();
+                    return json_encode($return);
+                break;
+        }
+
+
+        return view('member.reports.output.profit_loss', $data);
     }
 
     public function general_ledger()
     {
+
         $data = [];
 
         $data['head_title'] = 'General Ledger';
-        $data['head_icon']  = 'fa fa-area-chart';
+        $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = '';
-        $data['head']       = $this->report_header($data);
-        $data['action']     = '/member/report/accounting/general/ledger/get';
-        $shop_id            = $this->user_info->shop_id; 
+        $data['head'] = $this->report_header($data);
+        $data['filter'] = $this->report_filter('general_ledger');
+        $shop_id = $this->user_info->shop_id; 
         
         return view('member.reports.accounting.general_ledger', $data);
     }
- 
     public function general_ledger_get()
     {
-        $period         = Request::input('report_period');
-        $date['start']  = Request::input('from');
-        $date['end']    = Request::input('to');
-        $from           = Report::checkDatePeriod($period, $date)['start_date'];
-        $to             = Report::checkDatePeriod($period, $date)['end_date'];
-
+        $from = Request::input('from');
+        $to = Request::input('to');
+        $from = Carbon::parse($from);
+        $to = Carbon::parse($to)->addDay(1);
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
         $shop_id = $this->user_info->shop_id; 
@@ -440,8 +506,8 @@ class ReportsController extends Member
             ->groupBy('jline_account_id')
             ->groupBy('jline_je_id')
             ->journal()
-            ->whereRaw("date(je_entry_date) >= '$from'")
-            ->whereRaw("date(je_entry_date) <= '$to'")
+            ->where('tbl_journal_entry_line.created_at', '>=', $from)
+            ->where('tbl_journal_entry_line.created_at', '<=', $to)
             ->get();
         $data['chart_of_account'] = [];
         $data['chart_of_account_data'] = [];
@@ -451,40 +517,33 @@ class ReportsController extends Member
             $data['chart_of_account_data'][$value->chart_type_id][$value->jline_id] = $value;
         }
 
-        $view = 'member.reports.output.general_ledger';
-        return $this->check_report_type($report_type, $view, $data, 'General_Ledger-'.Carbon::now()); 
-    }
+        $view =  view('member.reports.output.general_ledger', $data); 
 
-    /**
-     * check report type for specific reports
-     *
-     * @param string    $report_type    (plain, pdf, excel)
-     * @param string    $view           string of view
-     * @param array     $data           contains data of the report
-     * @param string    $name           name of the specific report | New File is the default value
-     */
-    public function check_report_type($report_type, $view, $data, $name = "New File")
-    {
-        $_view = view($view, $data);
-        switch ($report_type) 
-        {
+        switch ($report_type) {
+            case 'plain':
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $view->render();
+                    return json_encode($return);
+                break;
             case 'pdf':
-                    $data['view'] = $_view->render();
+                    $data['view'] = $view->render();
                     return Pdf_global::show_pdf($data['view'], 'landscape');
                 break;
             case 'excel':
-                    Excel::create($name, function($excel) use($data, $view) 
-                    {
-                        $excel->sheet('New sheet', function($sheet) use($data, $view) 
-                        {
-                            $sheet->loadView($view, $data);
+                    Excel::create('New file', function($excel) use($data) {
+
+                        $excel->sheet('New sheet', function($sheet) use($data) {
+
+                            $sheet->loadView('member.reports.output.general_ledger', $data);
+
                         });
 
                     })->export('xls');    
             default:
-                    $return['status']   = 'success_plain';
-                    $return['view']     = $_view->render();
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $view->render();
                     return json_encode($return);
+                break;
         }
     }
 }

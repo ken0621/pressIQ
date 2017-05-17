@@ -74,7 +74,7 @@
                         <div class="col-md-4">    
                             <label>Initial quantity on hand *</label>                    
                             <div class="col-md-6">
-                                <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : 0}}" name="item_quantity" required>
+                                <input type="number" class="form-control input-sm" id="item_quantity" value="{{isset($data['item_quantity']) ? $data['item_quantity'] : ''}}" name="item_quantity" required>
                             </div>              
                             <div class="col-md-6">
                                 <input type="hidden" name="initial_qty" value="1" class="unit-qty">

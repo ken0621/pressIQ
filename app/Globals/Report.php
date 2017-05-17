@@ -58,6 +58,7 @@ class Report
 		return $data;
 	}
 
+
 	/**
 	 * Get the range of report by selected period 
 	 *

@@ -39,6 +39,22 @@ body{
 	    border-radius: 20px;
 	    color: #979797;
 	    font-size: 12px;
+
+	    @media screen and (max-width: 900px)
+	    {
+	    	display: block;
+	    	margin-top: 10px;
+	    }
+	    @media screen and (max-width: 600px)
+	    {
+	    	display: block;
+	    	margin-top: 10px;
+	    }
+	    @media screen and (max-width: 360px)
+	    {
+	    	display: block;
+	    	margin-top: 10px;
+	    }
 	}
 
 	button 

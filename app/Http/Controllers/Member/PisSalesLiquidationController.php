@@ -59,6 +59,9 @@ class PisSalesLiquidationController extends Member
      */
     public function report($sir_id)
     {
+
+        $data["user"] = Tbl_user::where("user_id",$this->user_info->user_id)->first();
+
         // FOR ILR   
         $data["sir"] = Purchasing_inventory_system::select_single_sir($this->user_info->shop_id,$sir_id,'array');
         $agent_id = $data["sir"]->sales_agent_id;

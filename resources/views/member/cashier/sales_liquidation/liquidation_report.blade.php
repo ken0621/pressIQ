@@ -273,7 +273,7 @@
 <br>
 
     <div class="form-group text-center" {{$total_loss = $loss + $empties_loss}} {{$total_over = $over + $empties_over}}>
-        <table class="text-center" style="width: 50%;font-size: 15px;">
+        <table class="text-center" style="width: 50%;font-size: 12px;">
             <tr>
                 <td>{{currency('PHP', $agent_descrepancy)}}</td>
                 <td>{{currency('PHP', $total_loss)}}</td>
@@ -292,7 +292,7 @@
         </table>
     </div>
     <div class="form-group">
-        <table class="text-center" style="width: 100%;font-size: 25px;">
+        <table class="text-center" style="width: 100%;font-size: 20px;">
             <tr>
                 <td>{{currency('PHP',$total)}}</td>
                 <td>{{currency('PHP',$total_ar)}}</td>
@@ -307,6 +307,28 @@
                 <td>Total Sales</td>
                 <td>Total Receivable</td>
                 <td>Total Credit Memo</td>
+            </tr>
+        </table>
+    </div>
+    <br>
+    <br>
+    <br>
+    <div class="form-group">
+        <table class="text-center" style="width: 100%;font-size: 13px;">
+            <tr>
+                <td></td>
+                <td></td>
+                <td>{{strtoupper($user->user_first_name." ".$user->user_last_name)}}</td>
+            </tr>
+            <tr>
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+            </tr>
+            <tr>
+                <td>Approved By:</td>
+                <td>Checked By:</td>
+                <td>Printed By:</td>
             </tr>
         </table>
     </div>

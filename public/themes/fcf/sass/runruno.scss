@@ -102,6 +102,18 @@ body{
 table{
 	width: 75%;
 	margin-bottom: 25px;
+	@media screen and (max-width: 900px)
+	{
+		width: 100%;
+	}
+	@media screen and (max-width: 600px)
+	{
+		width: 100%;
+	}
+	@media screen and (max-width: 360px)
+	{
+		width: 100%;
+	}
 	thead{
 		height: 50px;
 		background-color: #2a2a2a;

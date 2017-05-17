@@ -49,6 +49,10 @@ class ShopProductContentController extends Shop
 
             return $result;
         }
+        else
+        {
+            return false;
+        }
     }
 
     public function index($id)

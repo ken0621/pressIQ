@@ -48,6 +48,10 @@ class ShopCartController extends Shop
 
             return $result;
         }
+        else
+        {
+            return false;
+        }
     }
 
     public function index()
@@ -70,7 +74,7 @@ class ShopCartController extends Shop
         $data["_variant"]    = Ecom_Product::getProductOption($id, ",");
         $data["_related"]    = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
         $data["wishlist"]    = $this->wishlist_exist($id);
-
+      
         foreach ($data["_related"] as $key => $value) 
         {
             if ($value["eprod_id"] == $data["product"]["eprod_id"]) 

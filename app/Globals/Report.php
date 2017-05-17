@@ -62,9 +62,9 @@ class Report
 	/**
 	 * Get the range of report by selected period 
 	 *
-	 * @param  string  	 		$period 	 ( Please see "case" below)
-	 * @param  date or string  	$date  		 $date["start_date"], $date["end_date"], $date["days"] | nullable
-	 * @return array    					 [start_date] , [end_date]; 
+	 * @param  string  	$period 	 ( Please see "case" below)
+	 * @param  string  	$date  		 $date["start_date"], $date["end_date"], $date["days"] | nullable depends on requirements
+	 * @return array    			 [start_date] , [end_date]; 
 	 * @author BKA	
 	 */
 	public static function checkDatePeriod($period, $date = nul)

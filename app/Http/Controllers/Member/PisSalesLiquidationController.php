@@ -68,7 +68,11 @@ class PisSalesLiquidationController extends Member
         $data["_returns"] = Tbl_sir_cm_item::item()->where("sc_sir_id",$sir_id)->get();
 
         $data["type"] = "I.L.R";
-
+        $loss = 0;
+        $over = 0;
+        $mts_loss = 0;
+        $mts_over = 0;
+        $agent_discerpancy = 0;
         if($data["_sir_item"] != null)
         {
             foreach($data["_sir_item"] as $key => $value) 
@@ -150,6 +154,10 @@ class PisSalesLiquidationController extends Member
                 $data["rem_total"][$key] = $remaining_qty." ".$physical_ctr;
                 $data["_sir_item"][$key]->status = $status;
 
+
+                $loss += $value->infos < 0 ? $value->infos : 0;
+                $over += $value->infos > 0 ? $value->infos : 0;
+
             }
         }
         $data["ctr_returns"] = count($data["_returns"]);
@@ -182,7 +190,11 @@ class PisSalesLiquidationController extends Member
                 }
 
                 $data["_returns"][$key_return]->sc_physical_count = UnitMeasurement::um_view($physical_qty,$value_return->item_measurement_id,$item_um); 
-                $data["_returns"][$key_return]->status = $status;        
+                $data["_returns"][$key_return]->status = $status;      
+
+
+                $mts_loss += $value_return->sc_infos < 0 ? $value_return->sc_infos : 0;
+                $mts_over += $value_return->sc_infos > 0 ? $value_return->sc_infos : 0;  
             }
         }
 
@@ -197,6 +209,8 @@ class PisSalesLiquidationController extends Member
 
         //union of invoice and receive payment
         $data['__transaction'] = array();
+        $data['total_ar'] = 0;
+        $data['total_cm'] = 0;
         foreach ($data["invoices"] as $inv_key => $inv_value) 
         {
             $_transaction = null;
@@ -225,6 +239,9 @@ class PisSalesLiquidationController extends Member
             $_transaction[$inv_key]['status'] = $inv_value->inv_is_paid;
             $_transaction[$inv_key]['date_created'] = $inv_value->manual_invoice_date;
 
+           
+            $data['total_ar'] += $inv_value->inv_overall_price - $inv_value->inv_payment_applied;
+           
             array_push($data['__transaction'], $_transaction);
         }
         
@@ -260,6 +277,9 @@ class PisSalesLiquidationController extends Member
             $_transaction[$cm_key]['status'] = 'status';
             $_transaction[$cm_key]['date_created'] = $cm_value->manual_cm_date;
 
+
+            $data['total_cm'] += $cm_value->cm_amount;
+
             array_push($data['__transaction'], $_transaction);
         }
 
@@ -284,7 +304,7 @@ class PisSalesLiquidationController extends Member
                 $data['total'] += $value2['total'];
             }
         }
-        $data["total"] = currency("Php",$data['total']);
+        // $data["total"] = currency("Php",$data['total']);
         usort($data['tr'], function($a, $b)
         {
             $t1 = strtotime($a['date_created']);
@@ -296,6 +316,10 @@ class PisSalesLiquidationController extends Member
 
         $data['ctr_tr'] = count($data['_transaction']);
         $data['sdate'] = date('m/d/Y');
+
+        $agent_discrepancy = ($data['total'] == $data["rem_amount"] ? 0 : $data["rem_amount"] - $data['total']);
+
+        $data["total_discrepancy"] = $agent_discrepancy + (($loss + $over) - ($mts_loss + $mts_over));
 
 
         $html = view("member.cashier.sales_liquidation.liquidation_report",$data);

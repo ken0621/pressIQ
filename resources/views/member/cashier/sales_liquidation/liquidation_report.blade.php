@@ -1,8 +1,46 @@
-<!DOCTYPE html>
+
+<div style="page-break-after: always;">
+    <div class="text-center" style="top: 450px">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <span style="font-size: 50px;font-weight: bold">SALES REPORT</span>
+        <br>
+        <span style="font-size: 25px;font-weight: bold">SIR# {{sprintf("%'.05d\n", $sir->sir_id)}}</span>
+        <br>
+        <br>
+        <br>
+        <h2>{{strtoupper($sir->first_name)}} {{strtoupper($sir->middle_name)}} {{strtoupper($sir->last_name)}}</h2>
+        <span>AGENT NAME</span>
+        <br>
+        <br>
+        <h2>{{$sir->plate_number}}</h2>
+        <span>Plate Number</span>
+        <br>
+        <br>
+        <h2>{{date('m/d/Y',strtotime($sir->sir_created))}}</h2>
+        <span>DATE</span>
+        <br>
+        <br>
+        <h2>
+            @if($total_discrepancy == 0)
+            <span style="color: green;font-weight: bold"> CLOSED TRANSACTION</span>
+            @else
+            <span style="color: green;font-weight: bold">{{currency('PHP',$total_dicrepancy)}}</span>
+            @endif
+        </h2>
+        <span>STATUS</span>
+
+    </div>
+</div>
+
 <html>
 <head>
-	<title></title>
-
 	<style type="text/css">
 		body
 		{
@@ -14,15 +52,8 @@
 <body>
 <table width="100%">
 	<tr>
-		<td width="60%" style="text-align: left"><span style="font-size: 50px;font-weight: bold">{{$type}}</span></td>
-		<td width="40%" ><span style="font-size: 25px;font-weight: bold">SIR NO : {{sprintf("%'.05d\n", $sir->sir_id)}}</span></td>
-	</tr>
-	<tr>
-		<td width="60%"><span style="font-size: 15px;">PLATE NUMBER : {{$sir->plate_number}} </span></td>
-		<td width="40%" ><span style="font-size: 15px;">DATE : {{date('m/d/Y',strtotime($sir->sir_created))}}</span></td>
-	</tr>
-	<tr>
-		<td><span style="font-size: 15px;">SALESMAN : {{strtoupper($sir->first_name)}} {{strtoupper($sir->middle_name)}} {{strtoupper($sir->last_name)}}</span></td>
+		<td width="60%" style="text-align: left">
+        <h2>Incoming Load Report</h2></td>
 	</tr>
 </table>
  <div class="form-group">
@@ -155,39 +186,10 @@
 </div>
 @endif
 
-
-<div class="form-group" {{$total_loss = $loss + $empties_loss}} {{$total_over = $over + $empties_over}}>
-    <div class="col-md-12 text-right" style="margin: 5px">
-        <h3>TOTAL LOSS {{currency('PHP', $total_loss)}}</h3>
-    </div>
-    <div class="col-md-12 text-right" style="margin: 5px">
-        <h3>TOTAL OVER {{currency('PHP', $total_over)}}</h3>
-    </div>
-</div>
-
 <div>
     <div class="form-group">
         <h2>Agent Transaction</h2>      
     </div>
-    <div class="form-group">
-        <h4>
-        <div class="col-md-6 text-left" style="float: left; width: 50%">
-            <strong>NAME : </strong><br>
-            <span>{{$agent->first_name." ".$agent->middle_name." ".$agent->last_name}}</span>
-        </div>
-        <div class="col-md-6 text-right" style="float: right; width: 50%">
-            <div class="col-md-6 text-right" style="float: left; width: 50%">
-                <strong>Source : </strong><br>
-                <strong>Date : </strong><br>
-            </div>
-            <div class="col-md-6 text-left" style="float: left; width: 50%">
-                <span>{{$sir_id == '' ? 'All SIR' : 'SIR #'.sprintf("%'.04d\n", $sir_id)}}</span><br>
-                <span>{{$sdate}}</span><br>
-            </div>
-        </div>
-        </h4>
-    </div>
-
     @if($ctr_tr > 0)
     <div>
         <table class="table table-hover table-bordered table-striped table-condensed">
@@ -246,22 +248,68 @@
         </div>
     </div>                                              
     @endif
-    <div class="pull-right">
-        <h4><strong>Receive Payment :</strong> {{$total}}</h4>
+
+    <div class="form-group">
+        <div class="pull-right">
+            <h4><strong>Sales :</strong> {{currency("Php",$total)}}</h4>
+        </div>
     </div>
     <br>
-    <div class="form-group">
+    <br>
+    <br>
+    <div class="form-group" {{$agent_descrepancy = $total == $rem_amount ? '0' : ($rem_amount - $total) }}>
         @if(isset($rem_amount))
-            <div class="col-md-12 text-right">
-                <h3>Agent Remittance {{currency("Php",$rem_amount)}}</h3>
-            </div>
-            <div class="col-md-12 text-right" style="margin: 5px">
-                <h4>Remittance Remarks</h4>
-                <span> {!! $rem_remarks !!}</span>
+            <div class="col-md-12">
+                <h3>Amount Remitted : {{currency("Php",$rem_amount)}}</h3>
+                <h4>Remittance Remarks :</h4>
+                <span style="padding: 20px">{!! $rem_remarks !!}</span>
             </div>
         @endif
     </div>
 </div>
+<br>
+<br>
+<br>
+<br>
+
+    <div class="form-group text-center" {{$total_loss = $loss + $empties_loss}} {{$total_over = $over + $empties_over}}>
+        <table class="text-center" style="width: 50%;font-size: 15px;">
+            <tr>
+                <td>{{currency('PHP', $agent_descrepancy)}}</td>
+                <td>{{currency('PHP', $total_loss)}}</td>
+                <td>{{currency('PHP', $total_over)}}</td>
+            </tr>
+            <tr>
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+            </tr>
+            <tr>
+                <td>Agent Discrepancy</td>
+                <td>TOTAL LOSS</td>
+                <td>TOTAL OVER</td>
+            </tr>
+        </table>
+    </div>
+    <div class="form-group">
+        <table class="text-center" style="width: 100%;font-size: 25px;">
+            <tr>
+                <td>{{currency('PHP',$total)}}</td>
+                <td>{{currency('PHP',$total_ar)}}</td>
+                <td>{{currency('PHP',$total_cm)}}</td>
+            </tr>
+            <tr>
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+            </tr>
+            <tr>
+                <td>Total Sales</td>
+                <td>Total Receivable</td>
+                <td>Total Credit Memo</td>
+            </tr>
+        </table>
+    </div>
 </body>
 <style type="text/css">
 	table

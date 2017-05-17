@@ -1175,7 +1175,9 @@ class MLM_PlanController extends Member
 	    $validate['stairstep_name'] = Request::input('stairstep_name');
 	    $validate['stairstep_required_gv'] = Request::input('stairstep_required_gv');
 	    $validate['stairstep_required_pv'] = Request::input('stairstep_required_pv');
-	    $validate['stairstep_bonus'] = Request::input('stairstep_bonus');
+        $validate['stairstep_bonus'] = Request::input('stairstep_bonus');
+        $validate['stairstep_leg_id'] = Request::input('stairstep_leg_id');
+	    $validate['stairstep_leg_count'] = Request::input('stairstep_leg_count');
 	   
 	    $rules['stairstep_level'] ="required";
 	    $rules['stairstep_name'] = "required";
@@ -1190,7 +1192,9 @@ class MLM_PlanController extends Member
     	    $insert['stairstep_name'] = Request::input('stairstep_name');
     	    $insert['stairstep_required_gv'] = Request::input('stairstep_required_gv');
     	    $insert['stairstep_required_pv'] = Request::input('stairstep_required_pv');
-    	    $insert['stairstep_bonus'] = Request::input('stairstep_bonus');
+            $insert['stairstep_bonus'] = Request::input('stairstep_bonus');
+            $insert['stairstep_leg_id'] = Request::input('stairstep_leg_id');
+    	    $insert['stairstep_leg_count'] = Request::input('stairstep_leg_count');
     	    $insert['shop_id'] = $this->user_info->shop_id;
     	    Tbl_mlm_stairstep_settings::insert($insert);
     	    $data['response_status'] = "success_add_stairstep";

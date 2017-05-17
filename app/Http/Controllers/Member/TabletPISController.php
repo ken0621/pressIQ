@@ -572,7 +572,7 @@ class TabletPISController extends Member
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
 		$data['_item']      = Item::get_all_item_sir($sir_id);
-        $data['_cm_item']   = Item::get_all_category_item([1,4]);
+        $data['_cm_item']   = Item::get_returnable_item();
         $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id"); 
 		$data["sir_id"] = $sir_id;
 		// dd($data["sir_id"]);
@@ -1297,7 +1297,7 @@ class TabletPISController extends Member
         $data["_customer"]  = Customer::getAllCustomer();
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
         $data['_item']      = Item::get_all_item_sir($sir_id);
-        $data['_cm_item']   = Item::get_all_category_item([1,4]);
+        $data['_cm_item']   = Item::get_returnable_item();
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["action"]     = "/tablet/sales_receipt/create_submit";
         $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id"); 

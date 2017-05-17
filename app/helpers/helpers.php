@@ -306,13 +306,29 @@ function mlm_plan_release_schedule_day_month($active = null)
     $html .= "</select>";
     return $html;
 }
-function mlm_slot_postion($position)
+function mlm_slot_postion($position, $active ='left')
 {
     // slot_position
     $html = "";
     $html .= '<select class="form-control chosen-slot_position" name="slot_position">';
-    $html .= '    <option value="left">left</option>';
-    $html .= '    <option value="right">right</option>';
+    if($active == 'left' || $active == 'Left')
+    {
+        $html .= '    <option value="left" selected>left</option>';
+    }
+    else
+    {
+        $html .= '    <option value="left">left</option>';
+    }
+
+    if($active == 'right' || $active == 'Right')
+    {
+        $html .= '    <option value="right" selected>right</option>';
+    }
+    else
+    {
+        $html .= '    <option value="right">right</option>';
+    }
+    
     $html .= '</select>';
     return $html;
 }

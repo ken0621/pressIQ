@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use App\Models\Tbl_product;
 use App\Globals\Ecom_Product;
 use App\Models\Tbl_ec_product;
+use App\Globals\Ec_wishlist;
 
 class ShopProductContentController extends Shop
 {
@@ -35,6 +36,25 @@ class ShopProductContentController extends Shop
             DB::table("tbl_ec_recently_viewed_products")->where("customer_id", $customer_id)->where("product_id", $product_id)->where("shop_id", $this->shop_info->shop_id)->insert($insert);
         }
     }
+
+    public function wishlist_exist($product_id)
+    {
+        if(Session::get('mlm_member') != null)
+        {
+            $session     = Session::get('mlm_member');
+            $customer_id = $session['customer_info']->customer_id;
+            $shop_id     = $this->shop_info->shop_id;
+
+            $result = Ec_wishlist::existProduct($product_id, $customer_id, $shop_id);
+
+            return $result;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public function index($id)
     {
         $this->viewed_product($id);
@@ -45,7 +65,8 @@ class ShopProductContentController extends Shop
         $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
         $data["_variant"]    = Ecom_Product::getProductOption($id, ",");
         $data["_related"]    = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
-    
+        $data["wishlist"]    = $this->wishlist_exist($id);
+        
         foreach ($data["_related"] as $key => $value) 
         {
             if ($value["eprod_id"] == $data["product"]["eprod_id"]) 

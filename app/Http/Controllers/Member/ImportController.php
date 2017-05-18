@@ -130,7 +130,7 @@ class ImportController extends Member
 
 		if($ctr != $data_length)
 		{
-			$type 					= isset($value["Type"]) 				? $value["Type"] : '';					  	//1,2,3
+			$type					= isset($value["Type"]) 				? strToUpper($value["Type"]) : '';			//1,2,3
 			$name 					= isset($value["Name"]) 				? $value["Name"] : '';					  	//1,2,3
 			$sku 					= isset($value["Sku"]) 					? $value["Sku"] : '';				      	//1,2,3
 			$um 					= isset($value["UM"]) 					? $value["UM"] : '';					  	//1,2,3
@@ -157,6 +157,7 @@ class ImportController extends Member
 			$auto_income_account	= isset($input["income_account"]) 	? $input["income_account"] : NULL;
 			$auto_expense_account	= isset($input["expense_account"]) 	? $input["expense_account"] : NULL;
 			$auto_asset_account		= isset($input["asset_account"]) 	? $input["asset_account"] : NULL;
+			$auto_manufacturer		= isset($input["manufacturer"]) 	? $input["manufacturer"] : NULL;
 
 			/* Validation */
 			$duplicate_item		= Tbl_item::where("shop_id", $this->getShopId())->where("item_name", $name)->first();
@@ -168,25 +169,31 @@ class ImportController extends Member
 			$has_Asset_Account 	= Tbl_chart_of_account::where("account_shop_id", $this->getShopId())
 								->where("account_name", $asset_account)->first();
 			$has_UM 			= Tbl_unit_measurement::where("um_shop", $this->getShopId())->where("um_name", $um)->first();
+			$has_Manufacturer 	= Tbl_manufacturer::where("manufacturer_shop_id", $this->getShopId())->where("manufacturer_name", $manufacturer)->first();
 
 			if(!$duplicate_item)
 			{
 				if($has_Category || $auto_category)
 				{
-					/* CHECK CATEGORY */
-					if(!$has_Category && $auto_category && $category != '')
+					if($has_Manufacturer || $auto_manufacturer || $manufacturer == '')
 					{
-						$category = $this->create_category($category);
-					}
-					else
-					{
-						$category = $has_Category->type_id;
-					}
+						/* CHECK CATEGORY */
+						if(!$has_Category && $auto_category && $category != '')
+						{
+							$category = $this->create_category($category);
+						}
+						else
+						{
+							$category = $has_Category->type_id;
+						}
 
-					if($has_Income_Account || $auto_income_account)
-					{
 						/* CHECK INCOME ACCOUNT */
-						if(!$has_Income_Account && $auto_income_account && $income_account != '')
+						if($income_account == '') // DEFAULT
+						{
+							$income_account = Tbl_chart_of_account::where("account_code", "accounting-sales")
+									->where("account_shop_id", $this->getShopId())->pluck("account_id");
+						}
+						elseif(!$has_Income_Account && $auto_income_account && $income_account != '')
 						{
 							$income_account = $this->create_income_account($income_account);
 						}
@@ -212,23 +219,43 @@ class ImportController extends Member
 							if($type == "INVENTORY")
 							{
 								/*  Check Expense Account */
-								if(!$has_Expense_Account && $auto_expense_account && $expense_account != '')
+								if($expense_account == '') // DEFAULT
+								{
+									$expense_account = Tbl_chart_of_account::where("account_code", "accounting-expense")
+									->where("account_shop_id", $this->getShopId())->pluck("account_id");
+								}
+								elseif(!$has_Expense_Account && $auto_expense_account && $expense_account != '')
 								{
 									$expense_account = $this->create_expense_account($expense_account);
 								}
-								elseif($has_Expense_Account)
+								else
 								{
 									$expense_account = $has_Expense_Account->account_id;
 								}
 
 								/* Check Asset Account */
-								if(!$has_Asset_Account && $auto_asset_account && $asset_account != '')
+								if($asset_account == '') // DEFAULT
+								{
+									$asset_account = Tbl_chart_of_account::where("account_code", "accounting-inventory-asset")
+									->where("account_shop_id", $this->getShopId())->pluck("account_id");
+								}
+								elseif(!$has_Asset_Account && $auto_asset_account && $asset_account != '')
 								{
 									$asset_account = $this->create_asset_account($asset_account);
 								}
 								elseif($has_Asset_Account)
 								{
 									$asset_account = $has_Asset_Account->account_id;
+								}
+
+								/* Check Manufacturer Account */
+								if(!$has_Manufacturer && $auto_manufacturer && $manufacturer != '')
+								{
+									$manufacturer = $this->create_manufacturer($manufacturer);
+								}
+								elseif($has_Manufacturer)
+								{
+									$manufacturer = $has_Asset_Account->account_id;
 								}
 
 								$insert["item_type_id"]				      = 1;
@@ -327,7 +354,7 @@ class ImportController extends Member
 					else
 					{
 						$json["status"]		= "error";
-						$json["message"]	= "Income Account Not Found";
+						$json["message"]	= "Manufacturer Not Found";
 					}
 				}
 				else
@@ -475,11 +502,18 @@ class ImportController extends Member
 		return Tbl_chart_of_account::insertGetId($insert);
 	}
 
+	public function create_manufacturer($name)
+	{
+		$insert["manufacturer_name"] 	= $name;
+		$insert["manufacturer_shop_id"] = $this->getShopId();
+		$insert["date_created"] 		= Carbon::now();
+		return Tbl_manufacturer::insertGetId($insert);
+	}
+
 	/**
 	 * Start of Customer Module
 	 * 
 	 */
-
 	public function getCustomer()
 	{
 		return view('member.import.customer_import');

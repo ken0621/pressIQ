@@ -1,4 +1,17 @@
 <?php
+    
+
+function randomPassword()
+{
+    $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    $pass = array(); //remember to declare $pass as an array
+    $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+    for ($i = 0; $i < 8; $i++) {
+        $n = rand(0, $alphaLength);
+        $pass[] = $alphabet[$n];
+    }
+    return implode($pass); //turn the array into a string
+}
 
 function c_time_to_int($time)
 {
@@ -306,13 +319,36 @@ function mlm_plan_release_schedule_day_month($active = null)
     $html .= "</select>";
     return $html;
 }
-function mlm_slot_postion($position)
+function mlm_slot_postion($position, $active = null)
 {
     // slot_position
     $html = "";
     $html .= '<select class="form-control chosen-slot_position" name="slot_position">';
-    $html .= '    <option value="left">left</option>';
-    $html .= '    <option value="right">right</option>';
+    if($active != null)
+    {
+        $html = '<input type="text" class="form-control input-v2" value="'.$active.'" disabled="disabled">';
+        $html .= '<input type="hidden" class="form-control input-v2" name="slot_position" value="'.strtolower($active).'">';
+        return $html;
+    }
+
+    if($active == 'left' || $active == 'Left')
+    {
+        $html .= '    <option value="left" selected>left</option>';
+    }
+    else
+    {
+        $html .= '    <option value="left">left</option>';
+    }
+
+    if($active == 'right' || $active == 'Right')
+    {
+        $html .= '    <option value="right" selected>right</option>';
+    }
+    else
+    {
+        $html .= '    <option value="right">right</option>';
+    }
+    
     $html .= '</select>';
     return $html;
 }

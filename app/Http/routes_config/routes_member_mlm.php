@@ -235,5 +235,14 @@ Route::any('member/mlm/stairstep_compute/start/compute', 'Member\MLM_StairstepCo
 Route::any('member/mlm/complan_setup', 'Member\Mlm_ComplanSetupController@index'); 
 Route::any('member/mlm/complan_setup/binary_pro', 'Member\Mlm_ComplanSetupController@binary_promotions'); 
 
-
 Route::any('member/mlm/merchant_school', 'Member\BeneficiaryController@index'); 
+
+Route::any('member/mlm/tours_wallet', 'Member\Mlm_ComplanSetupController@tours_wallet'); 
+
+Route::any('member/mlm/merchant_school/create', 'Member\BeneficiaryController@create'); 
+Route::any('member/mlm/merchant_school/get', 'Member\BeneficiaryController@get'); 
+Route::any('member/mlm/merchant_school/destroy', 'Member\BeneficiaryController@destroy'); 
+Route::any('member/mlm/merchant_school/get/table', 'Member\BeneficiaryController@get_table'); 
+Route::any('member/mlm/merchant_school/mark/used', 'Member\BeneficiaryController@mark_used'); 
+
+

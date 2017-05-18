@@ -89,7 +89,12 @@
            </a>
            <div class="border">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
-                 <div class="img"><img src="{{ get_collection_first_image($collection) }}"></div>
+                 <div class="img">
+                  @if($collection["product"]["eprod_detail_image"])
+                      <img class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
+                  @endif
+                  <img src="{{ get_collection_first_image($collection) }}">
+                 </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
                  <div class="price-right">₱ 13,990.00</div>
@@ -116,7 +121,12 @@
            </a>
            <div class="border">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
-                 <div class="img"><img src="{{ get_collection_first_image($collection) }}"></div>
+                 <div class="img">
+                  @if($collection["product"]["eprod_detail_image"])
+                      <img class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
+                  @endif
+                  <img src="{{ get_collection_first_image($collection) }}">
+                 </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
                  <div class="price-right">₱ 13,990.00</div>
@@ -143,7 +153,12 @@
            </a>
            <div class="border">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
-                 <div class="img"><img src="{{ get_collection_first_image($collection) }}"></div>
+                 <div class="img">
+                  @if($collection["product"]["eprod_detail_image"])
+                      <img class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
+                  @endif
+                  <img src="{{ get_collection_first_image($collection) }}">
+                 </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
                  <div class="price-right">₱ 13,990.00</div>

@@ -7,16 +7,16 @@
 				<div class="form-header">Login or Checkout as guest</div>
 				<div class="form-content">
 					@if (session('warning'))
-					    <div class="alert alert-warning">
+					    <div class="alert alert-warning text-center">
 					    	<ul style="padding: 0; margin: 0;">
-					    		<li style="display: block;">{{ session('warning') }}</li>
+					    		<li style="display: block;">{!! session('warning') !!}</li>
 					    	</ul>
 					    </div>
 					@endif
 					<form method="post">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="form-group">
-							<input value="{{ Request::input("email") }}" type="email" class="the-email form-control" placeholder="Enter your email address" name="email">
+							<input value="{{ old('email') }}" type="email" class="the-email form-control" placeholder="Enter your email address" name="email">
 						</div>
 						<div class="form-group">
 							<div class="radio">

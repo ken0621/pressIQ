@@ -1,5 +1,6 @@
 <?php
 namespace App\Globals;
+use App\Models\Tbl_customer;
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_default_chart_account;
 use App\Models\Tbl_shop;
@@ -14,8 +15,10 @@ use DB;
 use Session;
 use Carbon\Carbon;
 use App\Globals\Mlm_discount;
+use App\Globals\Mlm_member;
 use App\Models\Tbl_mlm_item_points;
 use App\Globals\Mlm_plan;
+use Crypt;
 
 class Cart
 {
@@ -404,7 +407,6 @@ class Cart
         }
 
         $unique_id =  Cart::get_unique_id($shop_id);
-
         if($customer_id && $customer_id != 0)
         {
             $data["customer_id"] = $customer_id;
@@ -611,9 +613,9 @@ class Cart
 
     public static function random_code_generator($word_limit)
     {
-        // $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         // $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $characters = '0123456789';
+        // $characters = '0123456789';
         $charactersLength = strlen($characters);
         $randomString = '';
         for ($i = 0; $i < $word_limit; $i++) 
@@ -644,6 +646,7 @@ class Cart
         
         return $message;
     }
+
 
     /* return content of SESSION */
     public static function get_info($shop_id)
@@ -677,7 +680,7 @@ class Cart
     }
 
     /* @arr customer_information (first_name, last_name, email, password) */
-    public static function customer_set_info($shop_id, $customer_information, $validate = false)
+    public static function customer_set_info($shop_id, $customer_information, $validation = null)
     {
         $unique_id = Cart::get_unique_id($shop_id);
         
@@ -708,21 +711,83 @@ class Cart
         $data["tbl_customer_address"]["billing"]["customer_zip_code"] = "";
         $data["tbl_customer_address"]["billing"]["customer_street"] = "";
         $data["tbl_customer_address"]["billing"]["purpose"] = "billing";
-        
 
-        /* CHECK IF FIRST NAME LAST NAME IS EMPTY */
-        // if(trim($data["tbl_customer"]['first_name']) == "" || $data["tbl_customer"]['last_name'] == "")
-        // {
-        //     $message["status"]         = "error";
-        //     $message["status_message"] = "Kindly fill up First Name and Last Name";
-        // }
-        // else
-        // {
+
+        /* VALIDATIONS */
+        $check_account = Cart::customer_set_info_check_account($shop_id, $data["new_account"], $data["tbl_customer"]['email'], $data["tbl_customer"]["password"]);
+       
+
+
+        /* VALIDATIONS RETURN MESSAGE */
+        if((in_array("check_account", $validation)) && $check_account != "success")
+        {
+            $message["status"] = "error";
+            $message["status_message"] = $check_account;
+        }
+        else
+        {
             Session::put($unique_id, $data);
             $message["status"]         = "success";
-            $message["status_message"] = "Customer Information Successfully Updated";
-        // }
+            $message["status_message"] = "Customer Information Successfully Updated"; 
+        }
 
         return $message;
+    }
+
+    public static function customer_set_info_check_account($shop_id, $new_account, $email, $password)
+    {
+        if($new_account == true) //NEW ACCOUNT VALIDATION
+        {
+            $check_exist = Tbl_customer::where("shop_id", $shop_id)->where("email", $email)->first();
+
+            if($check_exist)
+            {
+                return "You cannot use <b>" . $email . "</b> because this belongs to one of the existing users. If you are the owner of this account then continue with password.";
+            }
+            else
+            {
+                return "success";
+            }
+        }
+        else //ACCOUNT EXIST VALIDATION
+        {
+            $check_exist = Tbl_customer::where("shop_id", $shop_id)->where("email", $email)->first();
+
+            if(!$check_exist)
+            {
+                return "The e-mail and password you entered doesn't belong to any account.";
+            }
+            elseif(Crypt::decrypt($check_exist["password"]) != $password)
+            {
+                return "The e-mail and password you entered doesn't belong to any account.";
+            }
+            else
+            {
+                Mlm_member::add_to_session($shop_id, $check_exist->customer_id);
+                return "success";
+            }
+        }
+    }
+
+    public static function get_userip()
+    {
+        $client  = @$_SERVER['HTTP_CLIENT_IP'];
+        $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+        $remote  = $_SERVER['REMOTE_ADDR'];
+
+        if(filter_var($client, FILTER_VALIDATE_IP))
+        {
+            $ip = $client;
+        }
+        elseif(filter_var($forward, FILTER_VALIDATE_IP))
+        {
+            $ip = $forward;
+        }
+        else
+        {
+            $ip = $remote;
+        }
+
+        return $ip;
     }
 }

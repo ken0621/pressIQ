@@ -38,11 +38,12 @@ class ShopCheckoutLoginController extends Shop
         {
             $customer_info["email"] = trim(Request::input("email"));
             $customer_info["new_account"] = Request::input("continue") == "on" ? true : false;
-            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info);
+            $customer_info["password"]= (Request::input("password") != "" ? Request::input("password") : randomPassword());
+            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_account"));
 
             /* CHECK FOR ERROR RESPONSE */
             if($customer_set_info_response["status"] == "error")
-            { 
+            {
                 return Redirect::back()->with('warning', $customer_set_info_response["status_message"])->withInput();
             }
             else

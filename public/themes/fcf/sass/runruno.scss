@@ -12,12 +12,17 @@ body{
 	}
 
 	.top-bg-detail-container{
-		position: absolute;
+		position: relative;
 		font-family: 'Fjalla One', sans-serif;
 		color: #fff;
 		font-size: 26px;
-		top: 220px;
-		margin-left: 20px;
+		bottom: 50px;
+		padding-left: 20px;
+		@media screen and (max-width: 620px)
+		{
+				font-size: 16px;
+				bottom: 25px;
+		}
 
 		.title-highlight{
 			color: #ffc10e;
@@ -34,6 +39,10 @@ body{
 		font-family: 'Fjalla One', sans-serif;
 		color: #fff;
 		font-size: 14px;
+		.active{
+			border-left: 8px solid #151515;
+			color: #151515;
+		}
 
 		.nav-per-button{
 			padding: 14px 0px 14px 25px;
@@ -70,14 +79,16 @@ body{
 
 .content-img-container{
 	padding: 12px 0px 12px 0px;
-	img{
-		width: 100%;
-	}
+
 	.image-holder{
 		padding-right: 175px;
 
 		.per-img-container{
 			padding: 5px;
+
+				img{
+					width: 100%;
+				}
 
 			&:hover{
 				cursor: pointer;
@@ -91,6 +102,18 @@ body{
 table{
 	width: 75%;
 	margin-bottom: 25px;
+	@media screen and (max-width: 900px)
+	{
+		width: 100%;
+	}
+	@media screen and (max-width: 600px)
+	{
+		width: 100%;
+	}
+	@media screen and (max-width: 360px)
+	{
+		width: 100%;
+	}
 	thead{
 		height: 50px;
 		background-color: #2a2a2a;
@@ -107,5 +130,12 @@ table{
 		td{
 			padding: 10px 20px 10px 20px;
 		}
+	}
+}
+
+.body-content{
+
+	.content{
+		padding-bottom: 50px;
 	}
 }

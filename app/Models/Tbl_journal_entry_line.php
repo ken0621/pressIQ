@@ -19,23 +19,23 @@ class Tbl_journal_entry_line extends Model
     public function scopeItem($query)
     {
     	return $query->leftjoin("tbl_item", "item_id", "=", "jline_item_id");
-        
         // {{$um->multi_name}} ({{$um->multi_abbrev}}
     }
 
-    public function scopeCustomerOrVendor($query, $type = null)
+    //RETURNS THE NAME OF THE CUSTOMER OR VENDOR INSIDE THE TRANSACTION
+    public function scopeCustomerOrVendor($query)
     {
-        if($type == 'customer')
-        {
-            return $query->selectRaw("*, concat(first_name, ' ', middle_name,' ', last_name) as 'full_name'")
-                        ->leftJoin("tbl_customer", "customer_id", "=", "jline_name_id");
-        }
-        elseif($type == 'vendor')
-        {
-            return $query->selectRaw("*, concat(vendor_first_name,' ', vendor_middle_name,' ', vendor_last_name) as 'full_name'")
-                        ->leftJoin("tbl_vendor", "vendor_id", "=", "jline_name_id");
-
-        }
+        return $query->selectRaw("*, CONCAT(IFNULL(first_name,''),IFNULL(vendor_first_name,''), ' ', IFNULL(middle_name,''),IFNULL(vendor_middle_name,''),' ', IFNULL(last_name,''),IFNULL(vendor_last_name,'') ) as 'full_name'")
+                     ->leftJoin("tbl_customer", function($on)
+                        {
+                            $on->on("customer_id", "=", "jline_name_id");
+                            $on->on("jline_name_reference","=",DB::raw("'customer'"));
+                        })
+                      ->leftJoin("tbl_vendor", function($on)
+                        {
+                            $on->on("vendor_id", "=", "jline_name_id");
+                            $on->on("jline_name_reference","=",DB::raw("'vendor'"));
+                        });
     }
     public function scopeCustomerOrVendorv2($query)
     {

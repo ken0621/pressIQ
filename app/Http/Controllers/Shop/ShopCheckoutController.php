@@ -26,6 +26,7 @@ use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_item;
 use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_ec_order_item;
+use App\Models\Tbl_merchant_school;
 // use App\Globals\Mlm_slot_log;    
 
 /*4/29/17 this will import the data/class needed by ipay88 payment mode by:brain*/
@@ -39,6 +40,8 @@ class ShopCheckoutController extends Shop
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
 
+        //dd(Self::$customer_info);
+
         /* DO NOT ALLOW ON THIS PAGE IF THERE IS NOT CART */
         if (!isset($data["get_cart"]['cart'])) 
         {
@@ -47,6 +50,11 @@ class ShopCheckoutController extends Shop
 
         return view("checkout", $data);
     }
+    public function checkout_side()
+    {
+        $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
+        return view("checkout_side", $data);
+    }
     public function submit()
     {
         /* SPLIT NAME TO FIRST NAME AND LAST NAME */
@@ -54,6 +62,42 @@ class ShopCheckoutController extends Shop
         $_name = $this->split_name($full_name);
         $customer_info["first_name"] = $_name[0];
         $customer_info["last_name"] = $_name[1];
+
+
+
+        if (Request::input("email")) 
+        {
+            if(!isset(Self::$customer_info->customer_id))
+            {
+                $check_email = Tbl_customer::where('shop_id', $this->shop_info->shop_id)->where('email', Request::input("email"))->where("password", "!=", "")->count();
+
+                if ($check_email)
+                {
+                    return Redirect::to('/checkout/login?email=' . Request::input("email"))->with('warning', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
+                }
+            }
+        }
+
+        // $data['ec_order_load'] = 0;
+        // $data['ec_order_merchant_school'] = 0;
+        // $data['ec_order_merchant_school_item'] = [];
+        // $tbl_merchant_school = Tbl_merchant_school::where('merchant_school_shop', $this->shop_info->shop_id)->get()->keyBy('merchant_item_id');
+        // foreach($data['get_cart'] as $value)
+        // {
+        //     foreach($value as $key2=>$value2)
+        //     {
+        //         if($value2['cart_product_information']['item_category_id'] == 17)
+        //         {
+        //             $data['ec_order_load'] = 1;
+        //         }
+        //         if(isset($tbl_merchant_school[$value2['cart_product_information']['item_id']]))
+        //         {
+        //             $data['ec_order_merchant_school_item'][$data['ec_order_merchant_school']] = $value2['cart_product_information']['item_id'];
+        //             $data['ec_order_merchant_school'] += $value2['quantity'];
+        //         }
+        //     }           
+        // }
+        // dd($data['ec_order_merchant_school']);
 
         $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info);
 
@@ -294,7 +338,8 @@ class ShopCheckoutController extends Shop
             if(isset($result['order_id']))
             {
                 Mlm_slot_log::slot_array($arry_log);
-                $this->give_product_code($get_cart['cart'], Self::$slot_now, $result['order_id']);
+                
+                // $this->give_product_code($get_cart['cart'], Self::$slot_now, $result['order_id']);
 
                 /* SMS Notification */
                 // $txt[0]["txt_to_be_replace"]    = "[name]";
@@ -319,24 +364,18 @@ class ShopCheckoutController extends Shop
             {
                 return Redirect::to('/checkout/login')->with('warning', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
             }
-            else
-            {
-                return "notloggedin";
-            }
         }
-        elseif ( !Request::input("payment_method_id") ) 
+
+        if ( !Request::input("payment_method_id") ) 
         {
             Session::put("checkout_input", Request::input());
 
             return Redirect::to("/checkout/payment")->send();
         }
-        else
-        {
-            return false;
-        }
     }
     public function validate_submit()
     {
+        $message = [];
         // Validate Customer Info
         $rules["customer_first_name"]   = 'required';
         $rules["customer_middle_name"]  = '';
@@ -355,8 +394,21 @@ class ShopCheckoutController extends Shop
         {
             $rules['ec_order_load_number'] = 'required';
         }
+        $ec_order_merchant_school = Request::input('ec_order_merchant_school');
 
-        return $validator = Validator::make(Request::input(), $rules);
+        if($ec_order_merchant_school >= 1)
+        {
+            $input['merchant_school_s_id'] = Request::input('merchant_school_s_id');
+            foreach($input['merchant_school_s_id'] as $key => $value)
+            {
+                $rules['merchant_school_s_id.' . $key] = 'required';
+                $rules['merchant_school_s_name.' . $key] = 'required';
+                $message['merchant_school_s_id.' . $key .'.required'] = 'All Student ID field is required';
+                $message['merchant_school_s_name.' . $key .'.required'] = 'All Student Name field is required';
+            }
+            
+        }
+        return $validator = Validator::make(Request::input(), $rules, $message);
     }
     public function restructure_cart()
     {
@@ -423,6 +475,14 @@ class ShopCheckoutController extends Shop
             $cart['ec_order_load_number'] = null;
             $cart['ec_order_load'] = 0;
         }
+        $cart['ec_order_merchant_school'] = Request::input('ec_order_merchant_school');
+        if($cart['ec_order_merchant_school'] >= 1)
+        {
+            $cart['merchant_school_i_id'] = Request::input('merchant_school_i_id'); 
+            $cart['merchant_school_s_id'] = Request::input('merchant_school_s_id'); 
+            $cart['merchant_school_s_name'] = Request::input('merchant_school_s_name'); 
+        }
+        
         
         $cart["invline_item_id"] = $invline_item_id;
         $cart["invline_discount"] = $invline_discount;
@@ -504,20 +564,46 @@ class ShopCheckoutController extends Shop
         else
         {
             $use_payment_method = DB::table("tbl_online_pymnt_api")->where("api_id", $payment_method->link_reference_id)->first();
-            $use_gateway        = DB::table("tbl_online_pymnt_gateway")->where("gateway_id", $use_payment_method->api_gateway_id)->first();
-
-            switch ($use_gateway->gateway_code_name) 
+            if (isset($use_payment_method->api_gateway_id)) 
             {
-                case 'paypal2': return $this->submit_using_paypal(); break;
-                case 'paymaya': return $this->submit_using_paymaya(); break;
-                case 'paynamics': return $this->submit_using_paynamics(); break;
-                case 'dragonpay': return $this->submit_using_dragonpay(); break;
-                case 'other': return $this->submit_using_proofofpayment($file, $cart); break;
-                case 'ipay88': return $this->submit_using_ipay88($cart, $cart["payment_method_id"]); break;
-                default: dd("Some error occurred"); break;
+                $use_gateway        = DB::table("tbl_online_pymnt_gateway")->where("gateway_id", $use_payment_method->api_gateway_id)->first();
+                
+                switch ($use_gateway->gateway_code_name) 
+                {
+                    case 'paypal2': return $this->submit_using_paypal(); break;
+                    case 'paymaya': return $this->submit_using_paymaya(); break;
+                    case 'paynamics': return $this->submit_using_paynamics(); break;
+                    case 'dragonpay': return $this->submit_using_dragonpay(); break;
+                    case 'other': return $this->submit_using_proofofpayment($file, $cart); break;
+                    case 'ipay88': return $this->submit_using_ipay88($cart, $cart["payment_method_id"]); break;
+                    default: dd("Some error occurred"); break;
+                }
+            }
+            else
+            {
+                return $this->submit_using_proofofpayment($file, $cart);
             }
         }
     }
+
+    // public function submit()
+    // {
+    //     $validator = $this->validate_submit();
+    //     if ($validator->fails()) 
+    //     {
+    //         return Redirect::back()
+    //                     ->withErrors($validator)
+    //                     ->withInput();
+    //     }
+    //     else
+    //     {
+    //         $this->validate_payment();
+    //         $cart = $this->restructure_cart();
+    //         $this->check_stocks();
+    //         $this->check_payment_method_enabled($cart);
+    //         $this->check_payment_method($cart);
+    //     }
+    // }
 
     /*Ipay88 Function*/
     public function postPaymentWithIPay88()

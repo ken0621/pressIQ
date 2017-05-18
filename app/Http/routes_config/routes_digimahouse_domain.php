@@ -48,6 +48,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	/* Checkout */
 	Route::any('/checkout/login', 'Shop\ShopCheckoutLoginController@index');
 	Route::get('/checkout', 'Shop\ShopCheckoutController@index');
+	Route::get('/checkout/side', 'Shop\ShopCheckoutController@checkout_side');
 	Route::post('/checkout', 'Shop\ShopCheckoutController@submit');
 	Route::get('/checkout/payment', 'Shop\ShopCheckoutController@payment');
 	/* End Checkout */
@@ -64,4 +65,9 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/account/security', 'Shop\ShopAccountController@security');
 	Route::get('/account/logout', 'Shop\ShopAccountController@logout');
 	Route::post('/account/login', 'Shop\ShopLoginController@submit');
+
+	/*E-commerce registration*/
+	Route::get('/account/register_ecomm', 'Shop\ShopAccountController@account_register'); //Brain
+	Route::post('/account/register_ecomm', 'Mlm\MlmRegisterController@register_ecomm'); //Brain
+
 }

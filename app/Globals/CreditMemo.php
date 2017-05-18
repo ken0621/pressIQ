@@ -10,6 +10,7 @@ use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_credit_memo;
+use App\Models\Tbl_user;
 use App\Globals\Accounting;
 use App\Globals\Warehouse;
 use App\Globals\Item;
@@ -31,8 +32,14 @@ class CreditMemo
         }
         return $cm_amount;
 	}
+    public static function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
 	public static function postCM($customer_info, $item_info, $inv_id = 0)
 	{
+		$insert_cm["cm_shop_id"] = CreditMemo::getShopId();
+
 		$insert_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$insert_cm["cm_customer_email"] = $customer_info["cm_customer_email"];
 		$insert_cm["cm_date"] = $customer_info["cm_date"];
@@ -70,6 +77,9 @@ class CreditMemo
 	public static function updateCM($cm_id, $customer_info, $item_info)
 	{
         $old_data = AuditTrail::get_table_data("tbl_credit_memo","cm_id",$cm_id);
+
+		$update_cm["cm_shop_id"] = CreditMemo::getShopId();
+
 
 		$update_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$update_cm["cm_customer_email"] = $customer_info["cm_customer_email"];

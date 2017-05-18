@@ -18,13 +18,13 @@ use App\Models\Tbl_mlm_slot_wallet_log;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_ec_order;
+use App\Models\Tbl_ec_order_item;
 
 use App\Globals\Mlm_member;
 use App\Globals\Settings;
 use App\Globals\Ecom_Product;
 use App\Globals\Ec_wishlist;
 class ShopAccountController extends Shop
-
 {
     public static $customer_id;
     public static $customer_info;
@@ -266,16 +266,23 @@ class ShopAccountController extends Shop
             return Redirect::back()->with("fail", "Old password mismatched.");
         }
     }
+    public function invoice($id)
+    {
+        $data["page"] = "Invoice";
+        $data["order"] = Tbl_ec_order::where("tbl_ec_order.ec_order_id", $id)->customer()->first();
+        $data["_item"] = Tbl_ec_order_item::where("tbl_ec_order_item.ec_order_id", $id)->item()->get();
+        
+        return view("account_invoice", $data);
+    }
     public function logout()
     {
         Session::forget('mlm_member');
 
         return Redirect::to("/");
     }
-
     public function account_register()
     {
         $data['error_message'] = null;
-        return view('/ec_register', $data);
+        return view('register', $data);
     }
 }

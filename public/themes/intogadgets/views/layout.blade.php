@@ -33,7 +33,7 @@
          }
       </style>
    </head>
-   <body class="opa-hide">
+   <body>
       @yield('social-script')
       <!-- WRAPPER -->
       <div class="wrapper">
@@ -87,7 +87,7 @@
                   <a href="/account/logout" class="text">LOGOUT</a>
                @else
                   <a data-remodal-target="login" href="#" class="text">LOGIN</a>
-                  <a href="/account/register_ecomm" class="text">REGISTER</a>
+                  <a href="/account/register" class="text">REGISTER</a>
                @endif
             </div>
             <div class="col-md-8">
@@ -181,7 +181,7 @@
             </div>
             <!-- /.container-fluid -->
          </nav>
-         <div class="loader" style="z-index: 1051;">
+         <div class="loader" style="z-index: 1051; display: none;">
             <span><img src="/resources/assets/frontend/img/loader.gif"></span>
          </div>
          <div class="content clearfix">
@@ -316,7 +316,7 @@
                   <div class="login-user input"><input name="email" type="email" autocomplete="off"></div>
                   <div class="login-pass input"><input name="password" type="password" autocomplete="off"></div>
                </div>
-               <div class="login-register">Need an account?&nbsp;&nbsp;&nbsp;<a href="/register">Sign up</a></div>
+               <div class="login-register">Need an account?&nbsp;&nbsp;&nbsp;<a href="/account/register">Sign up</a></div>
                <div class="btn-container">
                   <button type="submit" class="login-button btn btn-primary">Log-in</button>
                </div>
@@ -525,11 +525,6 @@
             $(".footer-add").remove();
       
         });
-      });
-      
-      $(window).load(function() 
-      {
-        $('body').removeClass("opa-hide");
       });
       
       jQuery(document).ready( function($) {

@@ -76,6 +76,7 @@ class PisSalesLiquidationController extends Member
         $mts_loss = 0;
         $mts_over = 0;
         $agent_discerpancy = 0;
+        $status = '';
         if($data["_sir_item"] != null)
         {
             foreach($data["_sir_item"] as $key => $value) 
@@ -138,23 +139,21 @@ class PisSalesLiquidationController extends Member
                 $data["_sir_item"][$key]->sold_qty = $sold;
                 $data["_sir_item"][$key]->physical_count = $physical_count;
 
-                $status = "";
                 if($value->is_updated != 0)
                 {
                     if($remaining_qty == $physical_ctr)
                     {
-                        $status = "OK";
+                        $status = 'OK';
                     }
                     elseif($physical_ctr > $remaining_qty)
                     {
-                        $status = "OVER ".(UnitMeasurement::um_view($physical_ctr - $remaining_qty,$value->item_measurement_id,$value->related_um_type));   
+                        $status = 'OVER '.UnitMeasurement::um_view($physical_ctr - $remaining_qty,$value->item_measurement_id,$value->related_um_type);   
                     }
                     elseif($physical_ctr < $remaining_qty) 
                     {
-                        $status = "SHORT ".(UnitMeasurement::um_view($remaining_qty - $physical_ctr,$value->item_measurement_id,$value->related_um_type));
+                       $status = 'SHORT '.UnitMeasurement::um_view($remaining_qty - $physical_ctr,$value->item_measurement_id,$value->related_um_type);
                     }                    
                 }
-                $data["rem_total"][$key] = $remaining_qty." ".$physical_ctr;
                 $data["_sir_item"][$key]->status = $status;
 
 
@@ -175,7 +174,7 @@ class PisSalesLiquidationController extends Member
 
                 $original_qty = $value_return->sc_item_qty;
                 $physical_qty = $value_return->sc_physical_count;
-                $status = null;
+                $status = "";
                 if($value_return->sc_is_updated != 0)
                 {
                     if($original_qty == $physical_qty)

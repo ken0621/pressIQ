@@ -168,10 +168,59 @@ class Item
  
         return $data;        
     }
+
+    public static function pis_get_all_category_item_transaction($type = array(1,2,3,4))
+    {        $shop_id = Item::getShopId();
+        $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("is_mts",0)->where("archived",0)->get()->toArray();
+
+        // if(Purchasing_inventory_system::check() != 0)
+        // {
+        //     $_category->where("is_mts",1);
+        // }
+
+
+        foreach($_category as $key =>$category)
+        {
+            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->whereIn("item_type_id",$type)->where("archived",0)->get()->toArray();
+            foreach($_category[$key]['item_list'] as $key1=>$item_list)
+            {
+                //  //cycy
+                if($item_list['item_type_id'] == 4)
+                {
+                   $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
+                   $_category[$key]['item_list'][$key1]['item_cost'] = Item::get_item_bundle_cost($item_list['item_id']); 
+                }
+                $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
+            }
+            $_category[$key]['subcategory'] = Item::pis_get_item_per_sub($category['type_id'], $type);
+        }
+
+        return $_category;
+    }
+    public static function pis_get_item_per_sub($category_id, $type = array())
+    {
+        $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->where("is_mts",0)->get()->toArray();
+        foreach($_category as $key =>$category)
+        {
+            $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->where("archived",0)->whereIn("item_type_id",$type)->get()->toArray();
+            foreach($_category[$key]['item_list'] as $key1=>$item_list)
+            {
+                if($item_list['item_type_id'] == 4)
+                {
+                   $_category[$key]['item_list'][$key1]['item_price'] = Item::get_item_bundle_price($item_list['item_id']); 
+                   $_category[$key]['item_list'][$key1]['item_cost'] = Item::get_item_bundle_cost($item_list['item_id']); 
+                }
+                $_category[$key]['item_list'][$key1]['multi_price'] = Tbl_item::multiPrice()->where("item_id", $item_list['item_id'])->get()->toArray();
+            }
+            $_category[$key]['subcategory'] = Item::get_item_per_sub($category['type_id'], $type);
+        }
+
+        return $_category;
+    } 
     public static function get_all_category_item($type = array(1,2,3,4))
     {
         $shop_id = Item::getShopId();
-        $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->where("is_mts",0)->get()->toArray();
+        $_category = Tbl_category::where("type_shop",$shop_id)->where("type_parent_id",0)->where("archived",0)->get()->toArray();
 
         // if(Purchasing_inventory_system::check() != 0)
         // {
@@ -199,7 +248,7 @@ class Item
     }
     public static function get_item_per_sub($category_id, $type = array())
     {
-        $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->where("is_mts",0)->get()->toArray();
+        $_category  = Tbl_category::where("type_parent_id",$category_id)->where("archived",0)->get()->toArray();
         foreach($_category as $key =>$category)
         {
             $_category[$key]['item_list']   = Tbl_item::where("item_category_id",$category['type_id'])->where("archived",0)->whereIn("item_type_id",$type)->get()->toArray();

@@ -33,42 +33,42 @@
 					<div class="fieldset">
 						<label class="col-md-4">Province</label>
 						<div class="field col-md-8">
-							<input class="form-control" type="text" name="customer_state_province" value="{{ old('customer_state_province') }}">
+							<select firstload="true" default="{{ old('province') }}" class="form-control load-location" name="customer_state" level="1"></select>
 						</div>
 					</div>
 					<div class="fieldset">
 						<label class="col-md-4">City / Municipality</label>
 						<div class="field col-md-8">
-							<input class="form-control" type="text" name="customer_city" value="{{ old('customer_city') }}">
+							<select firstload="true" default="{{ old('municipality') }}" class="form-control load-location" name="customer_city" level="2">
+								<option></option>
+							</select>
 						</div>
 					</div>
 					<div class="fieldset">
 						<label class="col-md-4">Barangay</label>
 						<div class="field col-md-8">
-							<input class="form-control" type="text" name="customer_city" value="{{ old('customer_city') }}">
+							<select firstload="true" default="{{ old('barangay') }}" class="form-control load-location" name="customer_zipcode" level="3">
+								<option></option>
+							</select>
 						</div>
 					</div>
 					<div class="fieldset">
 						<label class="col-md-4">Complete Address</label>
 						<div class="field col-md-8">
-							<textarea spellcheck="false" class="form-control" name="customer_address">{{ Request::old('customer_address') }}</textarea>
+							<textarea spellcheck="false" class="form-control" name="shipping_address">{{ Request::old('customer_address') }}</textarea>
 						</div>
 					</div>
 
 					<div class="fieldset">
 						<label class="col-md-4">Contact Number</label>
 						<div class="field col-md-8">
-							<input  maxlength="11" class="form-control" type="text" name="customer_mobile" value="{{ Request::input('customer_mobile') }}">
+							<input  maxlength="11" class="form-control" type="text" name="contact_number" value="{{ Request::input('customer_mobile') }}">
 						</div>
 					</div>
 
 					<div class="fieldset text-right btn-container">
 						<div class="col-md-12">
-							@if(!isset($customer))
-							<button class="btn btn-primary">CREATE ACCOUNT THEN CONTINUE <i class="fa fa-angle-double-right"></i></button>
-							@else
 							<button class="btn btn-primary">NEXT <i class="fa fa-angle-double-right"></i></button>
-							@endif
 						</div>
 					</div>
 				</form>
@@ -87,10 +87,12 @@
 <script type="text/javascript">
 
 var checkout_form = new checkout_form();
-
+var ajax_load_location = null;
 function checkout_form()
 {
 	init();
+
+	action_load_location(1, 0);
 
 	function init()
 	{
@@ -102,12 +104,62 @@ function checkout_form()
 	function document_ready()
 	{
 		action_load_sidecart();
+		action_load_location();
+		event_load_location_change();
 	}
+
 	function action_load_sidecart()
 	{
 		$(".order-summary-container").load("/checkout/side");
 	}
+	function action_load_location(level, parent)
+	{
+		if(level < 4)
+		{
+			$(".load-location[level=" + level + "]").html("<option>LOADING LOCATION</option>");
 
+			var deflt;
+			var firstload = false;
+
+			/* GET DEFAULT ON FIRST LOAD */
+			if($(".load-location[level=" + level + "]").attr("firstload") == "true")
+			{
+				$(".load-location[level=" + level + "]").attr("firstload", "false");
+				firstload = true;
+				deflt = $(".load-location[level=" + level + "]").attr("default");
+			}
+
+			if(ajax_load_location)
+			{
+				ajax_load_location.abort();
+			}
+
+			ajax_load_location = 	$.ajax(
+									{
+						            	url: '/checkout/locale?parent=' + parent,
+						            	success: function(data)
+						            	{
+						            		$(".load-location[level=" + level + "]").html(data);
+
+						            		if(deflt != "" && firstload == true)
+						            		{
+						            			$(".load-location[level=" + level + "]").val(deflt);
+						            		}
+						            		
+						              		action_load_location(level+1, $(".load-location[level=" + (level) + "]").val());
+						            	}
+						          	});
+		}
+	}
+	function event_load_location_change()
+	{
+		$(".load-location").change(function(e)
+		{
+			parent = $(e.currentTarget).val();
+			level = parseInt($(e.currentTarget).attr("level")) + 1;
+			action_load_location(level, parent);
+		});
+	}
 }
 
 

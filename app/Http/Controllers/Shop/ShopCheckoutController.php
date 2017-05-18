@@ -27,6 +27,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_merchant_school;
+use App\Models\Tbl_locale;
 // use App\Globals\Mlm_slot_log;    
 
 /*4/29/17 this will import the data/class needed by ipay88 payment mode by:brain*/
@@ -40,15 +41,26 @@ class ShopCheckoutController extends Shop
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
 
-        //dd(Self::$customer_info);
-
         /* DO NOT ALLOW ON THIS PAGE IF THERE IS NOT CART */
         if (!isset($data["get_cart"]['cart'])) 
         {
-            return Redirect::to('/');
+            return Redirect::to('/')->send();
+        }
+        else
+        { 
+            return view("checkout", $data);
+        }
+    }
+    public function locale()
+    {
+        $parent = Request::input("parent");
+        $_locale = Tbl_locale::where("locale_parent", $parent)->orderBy("locale_name")->get();
+
+        foreach($_locale as $locale)
+        {
+            echo "<option value='" . $locale->locale_id . "'>" . $locale->locale_name . "</option>";
         }
 
-        return view("checkout", $data);
     }
     public function checkout_side()
     {
@@ -60,46 +72,13 @@ class ShopCheckoutController extends Shop
         /* SPLIT NAME TO FIRST NAME AND LAST NAME */
         $full_name = Request::input("full_name");
         $_name = $this->split_name($full_name);
+
+        /* SET FIRST NAME AND LAST NAME */
         $customer_info["first_name"] = $_name[0];
         $customer_info["last_name"] = $_name[1];
+        $customer_info["contact_number"] = Request::input("contact_number");
 
-
-
-        if (Request::input("email")) 
-        {
-            if(!isset(Self::$customer_info->customer_id))
-            {
-                $check_email = Tbl_customer::where('shop_id', $this->shop_info->shop_id)->where('email', Request::input("email"))->where("password", "!=", "")->count();
-
-                if ($check_email)
-                {
-                    return Redirect::to('/checkout/login?email=' . Request::input("email"))->with('warning', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
-                }
-            }
-        }
-
-        // $data['ec_order_load'] = 0;
-        // $data['ec_order_merchant_school'] = 0;
-        // $data['ec_order_merchant_school_item'] = [];
-        // $tbl_merchant_school = Tbl_merchant_school::where('merchant_school_shop', $this->shop_info->shop_id)->get()->keyBy('merchant_item_id');
-        // foreach($data['get_cart'] as $value)
-        // {
-        //     foreach($value as $key2=>$value2)
-        //     {
-        //         if($value2['cart_product_information']['item_category_id'] == 17)
-        //         {
-        //             $data['ec_order_load'] = 1;
-        //         }
-        //         if(isset($tbl_merchant_school[$value2['cart_product_information']['item_id']]))
-        //         {
-        //             $data['ec_order_merchant_school_item'][$data['ec_order_merchant_school']] = $value2['cart_product_information']['item_id'];
-        //             $data['ec_order_merchant_school'] += $value2['quantity'];
-        //         }
-        //     }           
-        // }
-        // dd($data['ec_order_merchant_school']);
-
-        $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info);
+        $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
 
         if($customer_set_info_response["status"] == "error")
         { 
@@ -107,6 +86,7 @@ class ShopCheckoutController extends Shop
         }
         else
         {
+
             dd(Cart::get_info($this->shop_info->shop_id));
         }
     }

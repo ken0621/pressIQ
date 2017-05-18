@@ -16,15 +16,12 @@ use Carbon\Carbon;
 use App\Globals\Mlm_discount;
 use App\Models\Tbl_mlm_item_points;
 use App\Globals\Mlm_plan;
+
 class Cart
 {
     public static function get_unique_id($shop_id)
     {
         return "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
-    }
-    public static function get_unique_id_customer($shop_id)
-    {
-        return "cart_customer:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
     }
     public static function get_shop_info()
     {
@@ -41,6 +38,7 @@ class Cart
         
         $unique_id = Cart::get_unique_id($shop_id);
         $check     = Tbl_ec_variant::where("evariant_id",$product_id)->first();
+
         if(number_format($quantity) <= 0)
         {
             $message["status"]         = "error";
@@ -59,6 +57,8 @@ class Cart
             $insert["cart"][$product_id]["shop_id"]           = $shop_id;
             $insert["cart"][$product_id]["unique_id_per_pc"]  = $unique_id;
             $insert["cart"][$product_id]["date_added"]        = Carbon::now();
+
+
             if($_cart && isset($_cart["cart"]))
             {
                 $condition = false;
@@ -101,6 +101,7 @@ class Cart
                 $message["status_message"] = "Added to cart.";
             }
         }
+
         return $message;
     }
 
@@ -140,10 +141,6 @@ class Cart
             }
         }
 
-        /* GET CUSTOMER SETTINGS*/
-        $data["customer_information"] = $customer_setings["customer_information"];         
-        $data["shipping_information"] = $customer_setings["customer_shipping_address"];         
-        $data["billing_information"]  = $customer_setings["customer_billing_address"]; 
         if(isset($data["cart"]))
         {     
             /* SET UP CART INFORMATION */
@@ -406,7 +403,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id =  Cart::get_unique_id_customer($shop_id);
+        $unique_id =  Cart::get_unique_id($shop_id);
 
         if($customer_id && $customer_id != 0)
         {
@@ -496,40 +493,6 @@ class Cart
         return $message;
     }
 
-    public static function customer_set_email($email)
-    {
-    }
-
-    /* @arr customer_information (first_name, last_name, email, password) */
-    public static function customer_set_info($shop_id, $customer_information)
-    {
-        $unique_id = Cart::get_unique_id_customer($shop_id);
-
-        /* READY INFORMATION FOR SESSION */
-        $data["tbl_customer"]['first_name']     = isset($customer_information["first_name"]) ? $customer_information["first_name"] : null;
-        $data["tbl_customer"]['last_name']      = isset($customer_information["last_name"]) ? $customer_information["last_name"] : null;
-        $data["tbl_customer"]['middle_name']    = isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : null;
-        $data["tbl_customer"]['email']          = isset($customer_information["email"]) ? $customer_information["email"] : null;
-        $data["tbl_customer"]['password']       = isset($customer_information["password"]) ? $customer_information["password"] : null;
-        $data["tbl_customer"]['shop_id']        = $shop_id;
-        $data["tbl_customer"]['country_id']     = 420;
-        
-        /* CHECK IF FIRST NAME LAST NAME IS EMPTY */
-        if(trim($data["tbl_customer"]['first_name']) == "" || $data["tbl_customer"]['last_name'] == "")
-        {
-            $message["status"]         = "error";
-            $message["status_message"] = "Kindly fill up First Name and Last Name";
-        }
-        else
-        {
-            Session::put($unique_id, $data);
-            $message["status"]         = "success";
-            $message["status_message"] = "Customer Information Successfully Updated";
-        }
-
-        return $message;
-    }
-
     public static function customer_get_settings($shop_id = null)
     {
         //get_shop_info
@@ -539,7 +502,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id = Cart::get_unique_id_customer($shop_id);
+        $unique_id = Cart::get_unique_id($shop_id);
         $data      = Session::get($unique_id);
         if(!$data)
         {
@@ -679,6 +642,87 @@ class Cart
             
         }
         
+        return $message;
+    }
+
+    /* return content of SESSION */
+    public static function get_info($shop_id)
+    {
+        $data = Session::get(Cart::get_unique_id($shop_id));
+        $data = Cart::initialize_tbl_ec_order($shop_id, $data);
+
+        return $data;
+    }
+    public static function initialize_tbl_ec_order($shop_id, $data)
+    {
+        $data["tbl_ec_order"]["customer_id"] = null;
+        $data["tbl_ec_order"]["customer_email"] = null;
+        $data["tbl_ec_order"]["billing_address"] = null;
+        
+        $data["tbl_ec_order"]["subtotal"] = null;
+        $data["tbl_ec_order"]["discount_coupon_amount"] = null;
+        $data["tbl_ec_order"]["discount_coupon_type"] = null;
+        $data["tbl_ec_order"]["shipping_fee"] = null;
+        $data["tbl_ec_order"]["service_fee"] = null;
+        $data["tbl_ec_order"]["total"] = null;
+
+        $data["tbl_ec_order"]["coupon_id"] = null;
+        $data["tbl_ec_order"]["shop_id"] = $shop_id;
+        $data["tbl_ec_order"]["created_date"] = time();
+        $data["tbl_ec_order"]["payment_method_id"] = null;
+        $data["tbl_ec_order"]["order_status"] = "Pending";
+        $data["tbl_ec_order"]["payment_status"] = 0;
+
+        return $data;
+    }
+
+    /* @arr customer_information (first_name, last_name, email, password) */
+    public static function customer_set_info($shop_id, $customer_information, $validate = false)
+    {
+        $unique_id = Cart::get_unique_id($shop_id);
+        
+        /* GET INITIAL CART DATA */
+        $data = Cart::get_info($shop_id);
+
+        /* READY INFORMATION FOR SESSION */
+        $data["new_account"] = (isset($customer_information["new_account"]) ? $customer_information["new_account"] : (isset($data["new_account"]) ? $data["new_account"] : null));;
+
+        $data["tbl_customer"]['first_name']     = (isset($customer_information["first_name"]) ? $customer_information["first_name"] : (isset($data["tbl_customer"]['first_name']) ? $data["tbl_customer"]['first_name'] : null));
+        $data["tbl_customer"]['last_name']      = (isset($customer_information["last_name"]) ? $customer_information["last_name"] : (isset($data["tbl_customer"]['last_name']) ? $data["tbl_customer"]['last_name'] : null));
+        $data["tbl_customer"]['middle_name']    = (isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : (isset($data["tbl_customer"]['middle_name']) ? $data["tbl_customer"]['middle_name'] : null));
+        $data["tbl_customer"]['email']          = (isset($customer_information["email"]) ? $customer_information["email"] : (isset($data["tbl_customer"]['email']) ? $data["tbl_customer"]['email'] : null));
+        $data["tbl_customer"]['password']       = isset($customer_information["password"]) ? $customer_information["password"] : null;
+        $data["tbl_customer"]['shop_id']        = $shop_id;
+        $data["tbl_customer"]['country_id']     = 420;
+
+        $data["tbl_customer_address"]["shipping"]["country_id"] = 420;
+        $data["tbl_customer_address"]["shipping"]["customer_state"] = "";
+        $data["tbl_customer_address"]["shipping"]["customer_city"] = "";
+        $data["tbl_customer_address"]["shipping"]["customer_zip_code"] = "";
+        $data["tbl_customer_address"]["shipping"]["customer_street"] = "";
+        $data["tbl_customer_address"]["shipping"]["purpose"] = "shipping";
+        
+        $data["tbl_customer_address"]["billing"]["country_id"] = 420;
+        $data["tbl_customer_address"]["billing"]["customer_state"] = "";
+        $data["tbl_customer_address"]["billing"]["customer_city"] = "";
+        $data["tbl_customer_address"]["billing"]["customer_zip_code"] = "";
+        $data["tbl_customer_address"]["billing"]["customer_street"] = "";
+        $data["tbl_customer_address"]["billing"]["purpose"] = "billing";
+        
+
+        /* CHECK IF FIRST NAME LAST NAME IS EMPTY */
+        // if(trim($data["tbl_customer"]['first_name']) == "" || $data["tbl_customer"]['last_name'] == "")
+        // {
+        //     $message["status"]         = "error";
+        //     $message["status_message"] = "Kindly fill up First Name and Last Name";
+        // }
+        // else
+        // {
+            Session::put($unique_id, $data);
+            $message["status"]         = "success";
+            $message["status_message"] = "Customer Information Successfully Updated";
+        // }
+
         return $message;
     }
 }

@@ -20,10 +20,10 @@
 						</div>
 						<div class="form-group">
 							<div class="radio">
-							  <label><input name="continue" class="radio-continue" type="radio" {{ session('warning') ? '' : 'checked' }} yes="1"> Continue without password</label>
+							  <label><input name="continue" class="radio-continue" type="radio" value="on" {{ session('warning') ? '' : 'checked' }} yes="1"> Continue without password</label>
 							</div>
 							<div class="radio">
-							  <label><input name="continue" class="radio-continue" type="radio" {{ session('warning') ? 'checked' : '' }} yes="0"> I already have an account</label>
+							  <label><input name="continue" class="radio-continue" type="radio" value="off" {{ session('warning') ? 'checked' : '' }} yes="0"> I already have an account</label>
 							</div>
 						</div>
 						<div class="form-group">

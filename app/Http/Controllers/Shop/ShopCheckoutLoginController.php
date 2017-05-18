@@ -36,19 +36,18 @@ class ShopCheckoutLoginController extends Shop
     {
         if(Request::isMethod("post"))
         {
-            /*  CHECK IF AN E-MAIL ALREADY EXIST */
-            if (Request::input("email")) 
-            {
-                $check_email = Tbl_customer::where('shop_id', $this->shop_info->shop_id)->where('email', Request::input("email"))->count();
+            $customer_info["email"] = trim(Request::input("email"));
+            $customer_info["new_account"] = Request::input("continue") == "on" ? true : false;
+            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info);
 
-                if($check_email)
-                {
-                    return Redirect::to('/checkout/login?email=' . Request::input("email"))->with('warning', 'An account already exists with the email "' . Request::input("email") . '". Please enter your password below to continue.')->send();
-                }
-                else //IF E-MAIL DOESN'T EXIST CONTINUE TO FORM
-                {
-                    return Redirect::to("/checkout");
-                }
+            /* CHECK FOR ERROR RESPONSE */
+            if($customer_set_info_response["status"] == "error")
+            { 
+                return Redirect::back()->with('warning', $customer_set_info_response["status_message"])->withInput();
+            }
+            else
+            {
+                return Redirect::to("/checkout");
             }
         }
         else

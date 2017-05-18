@@ -52,10 +52,10 @@ class ShopCheckoutController extends Shop
         /* SPLIT NAME TO FIRST NAME AND LAST NAME */
         $full_name = Request::input("full_name");
         $_name = $this->split_name($full_name);
-        $customer_name["first_name"] = $_name[0];
-        $customer_name["last_name"] = $_name[1];
+        $customer_info["first_name"] = $_name[0];
+        $customer_info["last_name"] = $_name[1];
 
-        $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_name);
+        $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info);
 
         if($customer_set_info_response["status"] == "error")
         { 
@@ -63,7 +63,7 @@ class ShopCheckoutController extends Shop
         }
         else
         {
-            dd(Cart::customer_get_settings($this->shop_info->shop_id));
+            dd(Cart::get_info($this->shop_info->shop_id));
         }
     }
 

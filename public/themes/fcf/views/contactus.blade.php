@@ -5,7 +5,7 @@
 	<div class="container-fluid">
 		<div class="top-bg-container">
 			<img src="/themes/{{ $shop_theme }}/img/contactus-bg.png">
-			<div class="top-bg-detail-container"><span style="color: #ffc10e;">Contact</span> Us</div>
+			<div class="top-bg-detail-container"><span style="color: #ffc10e;">CONTACT</span> US</div>
 		</div>
 		<div class="row clearfix content">
 		<!-- CONTENT -->
@@ -78,6 +78,9 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- SCROLL TO TOP -->
+	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
 <!-- GOOGLE MAP -->
 <div class="map-title-container">
@@ -89,6 +92,33 @@
 	<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.6574693261337!2d121.01562731520293!3d14.561569989827394!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c909a1ec69eb%3A0x25b39d0024fa6ae!2sFCF+Minerals+Corporation+%2F+Metal+Exploration+Public+Limied+Company!5e0!3m2!1sen!2sph!4v1475633906034" allowfullscreen></iframe>
 </div>
 
+@endsection
+
+@section("js")
+<script type="text/javascript">
+
+$(document).ready(function()
+{
+	/*scroll up*/
+	$(window).scroll(function () {
+        if ($(this).scrollTop() > 600) {
+            $('.scroll-up').fadeIn();
+        } else {
+            $('.scroll-up').fadeOut();
+        }
+    });
+
+    $('.scroll-up').click(function () {
+        $("html, body").animate({
+            scrollTop: 0
+        }, 600);
+        return false;
+    });
+
+
+});	
+
+</script>
 @endsection
 
 @section("css")

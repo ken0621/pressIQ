@@ -32,7 +32,7 @@ class Cart
             $shop_id = Cart::get_shop_info();
         }
         
-        $unique_id = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id = "cart:".Cart::get_userip()."_".$shop_id;
         $check     = Tbl_ec_variant::where("evariant_id",$product_id)->first();
         if(number_format($quantity) <= 0)
         {
@@ -108,7 +108,7 @@ class Cart
 
         /* INITIALIZE */
         $date_now              = Carbon::now();
-        $unique_id             = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id             = "cart:".Cart::get_userip()."_".$shop_id;
         $data                  = Session::get($unique_id);
         $customer_setings      = Cart::customer_get_settings($shop_id);
 
@@ -282,7 +282,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id               = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id               = "cart:".Cart::get_userip()."_".$shop_id;
         $insert                  = Session::get($unique_id);
         foreach ($insert['cart'] as $key => $value) 
         {
@@ -309,7 +309,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id  = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id  = "cart:".Cart::get_userip()."_".$shop_id;
         $_cart      = Session::get($unique_id);
         $condition  = false;
 
@@ -362,7 +362,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id = "cart:".Cart::get_userip()."_".$shop_id;
         $_cart     = Session::get($unique_id);
 
         if(isset($_cart["cart"]))
@@ -399,7 +399,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id = "customer_settings:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id = "customer_settings:".Cart::get_userip()."_".$shop_id;
         if($customer_id && $customer_id != 0)
         {
             $data["customer_id"] = $customer_id;
@@ -497,7 +497,7 @@ class Cart
             $shop_id = $shop_info->shop_id;
         }
 
-        $unique_id = "customer_settings:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+        $unique_id = "customer_settings:".Cart::get_userip()."_".$shop_id;
         $data      = Session::get($unique_id);
         if(!$data)
         {
@@ -587,7 +587,7 @@ class Cart
             }
             else
             {
-                $unique_id                  = "cart:".$_SERVER["REMOTE_ADDR"]."_".$shop_id;
+                $unique_id                  = "cart:".Cart::get_userip()."_".$shop_id;
                 $_cart                      = Session::get($unique_id);
                 $_cart["applied_coupon_id"] = $check->coupon_code_id;
                 Session::put($unique_id,$_cart); 
@@ -606,9 +606,9 @@ class Cart
 
     public static function random_code_generator($word_limit)
     {
-        // $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         // $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $characters = '0123456789';
+        // $characters = '0123456789';
         $charactersLength = strlen($characters);
         $randomString = '';
         for ($i = 0; $i < $word_limit; $i++) 
@@ -638,5 +638,27 @@ class Cart
         }
         
         return $message;
+    }
+
+    public static function get_userip()
+    {
+        $client  = @$_SERVER['HTTP_CLIENT_IP'];
+        $forward = @$_SERVER['HTTP_X_FORWARDED_FOR'];
+        $remote  = $_SERVER['REMOTE_ADDR'];
+
+        if(filter_var($client, FILTER_VALIDATE_IP))
+        {
+            $ip = $client;
+        }
+        elseif(filter_var($forward, FILTER_VALIDATE_IP))
+        {
+            $ip = $forward;
+        }
+        else
+        {
+            $ip = $remote;
+        }
+
+        return $ip;
     }
 }

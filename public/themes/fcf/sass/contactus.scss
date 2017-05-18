@@ -12,12 +12,17 @@ body{
 	}
 
 	.top-bg-detail-container{
-		position: absolute;
+		position: relative;
 		font-family: 'Fjalla One', sans-serif;
 		color: #fff;
 		font-size: 26px;
-		top: 220px;
-		margin-left: 20px;
+		bottom: 50px;
+		padding-left: 20px;
+		@media screen and (max-width: 620px)
+		{
+				font-size: 16px;
+				bottom: 25px;
+		}
 
 		.title-highlight{
 			color: #ffc10e;
@@ -34,6 +39,22 @@ body{
 	    border-radius: 20px;
 	    color: #979797;
 	    font-size: 12px;
+
+	    @media screen and (max-width: 900px)
+	    {
+	    	display: block;
+	    	margin-top: 10px;
+	    }
+	    @media screen and (max-width: 600px)
+	    {
+	    	display: block;
+	    	margin-top: 10px;
+	    }
+	    @media screen and (max-width: 360px)
+	    {
+	    	display: block;
+	    	margin-top: 10px;
+	    }
 	}
 
 	button 

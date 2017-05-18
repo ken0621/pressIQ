@@ -67,6 +67,9 @@ use App\Models\Tbl_payroll_paper_sizes;
 use App\Models\Tbl_payroll_payslip;
 use App\Models\Tbl_payroll_reports;
 use App\Models\Tbl_payroll_reports_column;
+use App\Models\Tbl_payroll_13_month_compute;
+use App\Models\Tbl_payroll_13_month_virtual;
+use App\Models\Tbl_payroll_process_leave;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -124,7 +127,7 @@ class PayrollController extends Member
 	{
           $excels['number_of_rows'] = Request::input('number_of_rows');
 
-          $excels['data'] = ['Company','Employee Number','Title Name','First Name','Middle Name','Last Name','Suffix Name','ATM/Account Number','Gender (M/F)','Birthdate','Civil Status','Street','City/Town','State/Province','Country','Zip Code', 'Contact','Email Address','Tax Status','Monthly Salary','Daily Rate' ,'Taxable Salary','SSS Salary','HDMF Salary','PHIC Salary','Minimum Wage (Y/N)','Department','Position','Start Date','Employment Status','SSS Number','Philhealth Number','Pagibig Number','TIN','BioData/Resume(Y/N)','Police Clearance(Y/N)','NBI(Y/N)','Health Certificate(Y/N)','School Credentials(Y/N)','Valid ID(Y/N)','Dependent Full Name(1)','Dependent Relationship(1)','Dependent Birthdate(1)','Dependent Full Name(2)','Dependent Relationship(2)','Dependent Birthdate(2)','Dependent Full Name(3)','Dependent Relationship(3)','Dependent Birthdate(3)','Dependent Full Name(4)','Dependent Relationship(4)','Dependent Birthdate(4)','Remarks'];
+          $excels['data'] = ['Company*','Employee Number*','Title Name','First Name*','Middle Name*','Last Name*','Suffix Name*','ATM/Account Number','Gender (M/F)*','Birthdate','Civil Status*','Street*','City/Town*','State/Province','Country*','Zip Code', 'Contact','Email Address','Tax Status','Monthly Salary*','Daily Rate' ,'Taxable Salary','SSS Salary','HDMF Salary','PHIC Salary','Minimum Wage (Y/N)*','Department*','Position*','Start Date*','Employment Status*','SSS Number','Philhealth Number','Pagibig Number','TIN','BioData/Resume(Y/N)','Police Clearance(Y/N)','NBI(Y/N)','Health Certificate(Y/N)','School Credentials(Y/N)','Valid ID(Y/N)','Dependent Full Name(1)','Dependent Relationship(1)','Dependent Birthdate(1)','Dependent Full Name(2)','Dependent Relationship(2)','Dependent Birthdate(2)','Dependent Full Name(3)','Dependent Relationship(3)','Dependent Birthdate(3)','Dependent Full Name(4)','Dependent Relationship(4)','Dependent Birthdate(4)','Remarks'];
 
           Excel::create('201 Template', function($excel) use ($excels) {
 
@@ -546,7 +549,7 @@ class PayrollController extends Member
 		$file = Request::file('file');
 		$_data = Excel::selectSheetsByIndex(0)->load($file, function($reader){})->all();
 		$first = $_data[0]; 
-          // dd($_data);
+         
 		/* check index exist */
 		
 		if(isset($first['company']) && isset($first['first_name']) && isset($first['department']) && isset($first['start_date']))
@@ -4618,8 +4621,95 @@ class PayrollController extends Member
 
      public function modal_13_month($payroll_employee_id, $payroll_period_company_id)
      {
-          $data['_13_month'] = Tbl_payroll_record::get13month($payroll_employee_id)->get();
+          $_13_month   = Tbl_payroll_record::get13month($payroll_employee_id)->get();
+
+          $v_13_month  = Tbl_payroll_13_month_virtual::getperiod($payroll_employee_id, $payroll_period_company_id)->count();
+
+          $period = Tbl_payroll_period_company::getcompanyperiod($payroll_period_company_id)->first();
+
+          $compute = Payroll::compute_per_employee($payroll_employee_id, $period->payroll_period_start, $period->payroll_period_end, Self::shop_id(), $period->payroll_period_category, $payroll_period_company_id);
+          
+          $data['_13_month'] = array();
+
+          foreach($_13_month as $m13)
+          {
+               $count = Tbl_payroll_13_month_compute::where('payroll_employee_id', $payroll_employee_id)->where('payroll_record_id', $m13->payroll_record_id)->count();
+               $temp['status'] = '';
+
+               if($count == 1)
+               {
+                    $temp['status'] = 'checked="checked"';
+               }
+               $temp['regular_salary']       = $m13->regular_salary;
+               $temp['payroll_period_start'] = $m13->payroll_period_start;
+               $temp['payroll_period_end']   = $m13->payroll_period_end;
+               $temp['payroll_record_id']    = $m13->payroll_record_id;
+
+               array_push($data['_13_month'], $temp);
+          }
+
+
+          $data['v_13_month_period_start']   = $period->payroll_period_start;
+          $data['v_13_month_period_end']     = $period->payroll_period_end;
+          $data['v_status']                  = '';
+          $data['v_regular_salary']          = $compute['regular_salary'];
+          if($v_13_month == 1)
+          {
+               $data['v_status']   = 'checked="checked"';
+          }
+
+          $data['payroll_employee_id']       = $payroll_employee_id;
+          $data['payroll_period_company_id'] = $payroll_period_company_id;
           return view('member.payroll.modal.modal_13_month', $data);
+     }
+
+     public function modal_submit_13_month()
+     {
+          // 
+          $payroll_employee_id          = Request::input('payroll_employee_id');
+          $payroll_period_company_id    = Request::input('payroll_period_company_id');
+          $payroll_record_id            = array();
+
+          Tbl_payroll_13_month_compute::where('payroll_employee_id', $payroll_employee_id)->where('payroll_period_company_id', $payroll_period_company_id)->delete();
+
+          Tbl_payroll_13_month_virtual::getperiod($payroll_employee_id, $payroll_period_company_id)->delete();
+
+          if(Request::has('payroll_record_id'))
+          {
+               $payroll_record_id  = Request::input('payroll_record_id');
+               $insert             = array();
+               foreach($payroll_record_id as $id)
+               {
+                    $temp['shop_id']                   = Self::shop_id();
+                    $temp['payroll_employee_id']       = $payroll_employee_id;
+                    $temp['payroll_period_company_id'] = $payroll_period_company_id;
+                    $temp['payroll_record_id']         = $id;
+
+                    array_push($insert, $temp);
+               }
+
+
+
+               if(!empty($insert))
+               {
+                    Tbl_payroll_13_month_compute::insert($insert);
+               }
+
+          }
+
+          if(Request::has('payroll_period_company_id_v_13'))
+          {
+               $insert_v['payroll_employee_id'] = $payroll_employee_id;
+               $insert_v['payroll_period_company_id'] = $payroll_period_company_id;
+               Tbl_payroll_13_month_virtual::insert($insert_v);
+          }    
+
+          $data['status']                         = 'success';
+          $data['payroll_employee_id']            = $payroll_employee_id;
+          $data['payroll_period_company_id']      = $payroll_period_company_id;
+          $data['function_name']                  = 'reload_break_down';
+
+          return json_encode($data);
      }
 
      public function modal_unused_leave($payroll_employee_id, $payroll_period_company_id)
@@ -4637,16 +4727,64 @@ class PayrollController extends Member
                $count_use = Tbl_payroll_leave_schedule::getyearly($leave->payroll_leave_employee_id)->count();
 
                $temp['payroll_leave_employee_id']      = $leave->payroll_leave_employee_id;
+               $temp['payroll_leave_temp_id']          = $leave->payroll_leave_temp_id;
                $temp['payroll_leave_temp_name']        = $leave->payroll_leave_temp_name;
                $temp['payroll_leave_temp_days_cap']    = $leave->payroll_leave_temp_days_cap;
                $temp['remaining']                      = $leave->payroll_leave_temp_days_cap - $count_use;
+               $temp['status']                         = '';
+               $temp['process_leave_quantity']         = 0;
+
+               $leave_data = Tbl_payroll_process_leave::getleave($payroll_employee_id, $payroll_period_company_id)->where('payroll_leave_temp_id', $leave->payroll_leave_temp_id)->first();
+
+               if($leave_data != null)
+               {
+                    $temp['status'] = 'checked="checked"';
+                    $temp['process_leave_quantity'] = $leave_data->process_leave_quantity;
+               }
 
                array_push($payable_leave, $temp);
           }
 
-          $data['payable_leave'] = $payable_leave;
+          $data['payable_leave']             = $payable_leave;
+          $data['payroll_employee_id']       = $payroll_employee_id;
+          $data['payroll_period_company_id'] = $payroll_period_company_id;
 
           return view('member.payroll.modal.modal_unused_leave', $data);
+     }
+
+     public function modal_save_process_leave()
+     {
+          $payroll_employee_id = Request::input('payroll_employee_id');
+          $payroll_period_company_id = Request::input('payroll_period_company_id');
+          Tbl_payroll_process_leave::getleave($payroll_employee_id, $payroll_period_company_id)->delete();
+          if(Request::has('payroll_leave_temp_id'))
+          {
+               $payroll_leave_temp_id   = Request::input('payroll_leave_temp_id');
+               $process_leave_quantity  = Request::input("process_leave_quantity");
+               $payroll_leave_temp_name = Request::input('payroll_leave_temp_name');
+               $insert = array();
+               foreach($payroll_leave_temp_id as $key => $id)
+               {
+                    $temp['payroll_employee_id']       = $payroll_employee_id;
+                    $temp['payroll_period_company_id'] = $payroll_period_company_id;
+                    $temp['payroll_leave_temp_id']     = $id;
+                    $temp['process_leave_quantity']    = $process_leave_quantity[$key];
+                    $temp['payroll_leave_temp_name']   = $payroll_leave_temp_name[$key];
+                    array_push($insert, $temp);
+               }
+
+               if(!empty($insert))
+               {
+                    Tbl_payroll_process_leave::insert($insert);
+               }
+          }
+
+          $data['status']                         = 'success';
+          $data['payroll_employee_id']            = $payroll_employee_id;
+          $data['payroll_period_company_id']      = $payroll_period_company_id;
+          $data['function_name']                  = 'reload_break_down';
+
+          return json_encode($data);
      }
 
      /* PAYROLL COMPUTATION BREAKDOWN */
@@ -4661,7 +4799,7 @@ class PayrollController extends Member
           $data['_breakdown'] = Self::breakdown_uncompute($process);
           $data['payroll_period_company_id'] = $payroll_period_company_id;
           $data['status'] = 'process';
-          // dd($data);
+
           return view('member.payroll.modal.modal_view_payroll_computation_unsaved',$data);
 
      }
@@ -4863,6 +5001,15 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }   
 
+          if($process['leave_amount'] > 0)
+          {
+               $temp = '';
+               $temp['name']       = 'Leave';
+               $temp['amount']     = number_format($process['leave_amount'], 2);
+               $temp['sub']        = array();
+               array_push($salary, $temp);
+          }
+
           $temp = '';
 
           $total_allowance = $process['adjustment']['total_allowance'] + $process['total_allowance'];
@@ -4950,8 +5097,27 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }  
 
+          
+          if($process['_total_unused_leave'] > 0)
+          {
+               $temp = '';
+               $temp['name']       = '<b>Leave to Cash</b>';
+               $temp['amount']     = '';
+               $temp['sub']        = array();
+               array_push($salary, $temp);
 
-           $temp = '';
+               foreach($process['_unused_leave'] as $leave)
+               {
+                    $temp = '';
+                    $temp['name']       = $leave['payroll_leave_temp_name'].' ('.$leave['process_leave_quantity'].')';
+                    $temp['amount']     = number_format($leave['process_leave_amount'], 2);
+                    $temp['sub']        = array();
+                    array_push($salary, $temp);
+               }
+          }
+
+
+          $temp = '';
           if($process['total_gross'] > 0)
           {    
                $temp['name']       = '<b>Gross</b>';
@@ -5024,7 +5190,7 @@ class PayrollController extends Member
 
           // deduction
           /* OTHER DEDUCTIONS */
-          $total_deduction = collect($process['deduction'])->sum('payroll_periodal_deduction') + $process['late_deduction'] + $process['adjustment']['total_deductions'];
+          $total_deduction = collect($process['deduction'])->sum('payroll_periodal_deduction') + $process['late_deduction'] + $process['adjustment']['total_deductions'] + $process['absent_deduction'] + $process['under_time'];
 
           $temp = '';
           if($total_deduction > 0)
@@ -5049,6 +5215,15 @@ class PayrollController extends Member
           {    
                $temp['name']       = 'Under Time';
                $temp['amount']     = number_format($process['under_time'], 2);
+               $temp['sub']        = array();
+               array_push($deduction, $temp);
+          }  
+
+          $temp = '';
+          if($process['absent_deduction'] > 0)
+          {    
+               $temp['name']       = 'Absents';
+               $temp['amount']     = number_format($process['absent_deduction'], 2);
                $temp['sub']        = array();
                array_push($deduction, $temp);
           }  
@@ -5125,6 +5300,8 @@ class PayrollController extends Member
           array_push($computation, $government);
           array_push($computation, $deduction);
           array_push($computation, $total_net);
+
+          // dd($process);
 
           /* TIME */
           $temp = '';
@@ -5205,8 +5382,23 @@ class PayrollController extends Member
           array_push($day, $temp);
 
           $temp = '';
-          $temp['name']     = 'Regular Holidays';
+          $temp['name']    = 'Regular Holidays';
           $temp['day']     = Payroll::if_zero($process['total_rh']);
+          array_push($day, $temp);
+
+          $temp = '';
+          $temp['name']     = 'Absents';
+          $temp['day']     = Payroll::if_zero($process['absent_count']);
+          array_push($day, $temp);
+
+          $temp = '';
+          $temp['name']     = 'Leave (w/ pay)';
+          $temp['day']     = Payroll::if_zero($process['leave_count_w_pay']);
+          array_push($day, $temp);
+
+          $temp = '';
+          $temp['name']     = 'Leave (w/o pay)';
+          $temp['day']     = Payroll::if_zero($process['leave_count_wo_pay']);
           array_push($day, $temp);
 
           $temp = '';
@@ -5410,7 +5602,7 @@ class PayrollController extends Member
      public function payroll_approved_view()
      {
           $data['_period'] = array();
-          $_period = Tbl_payroll_period_company::period(Self::shop_id(), 'approved')->select('tbl_payroll_period.*')->distinct('payroll_period_id')->get();
+          $_period = Tbl_payroll_period_company::period(Self::shop_id(), 'approved')->select('tbl_payroll_period.*')->distinct('payroll_period_id')->orderBy('payroll_period_start','desc')->get();
 
           foreach($_period as $period)
           {
@@ -5628,7 +5820,15 @@ class PayrollController extends Member
           $temp['total_rh']                       = $data['total_rh'];
           $temp['total_sh']                       = $data['total_sh'];
           $temp['total_worked_days']              = $data['total_worked_days'];
+          $temp['leave_amount']                   = $data['leave_amount'];
+          $temp['absent_deduction']               = $data['absent_deduction'];
+          $temp['absent_count']                   = $data['absent_count'];
 
+          if(!empty($data['13_month_id']))
+          {
+               $update_13['13_month_computed'] = 1;
+               Tbl_payroll_record::whereIn('payroll_record_id', $data['13_month_id'])->update($update_13);
+          }
 
           return $temp;
      }

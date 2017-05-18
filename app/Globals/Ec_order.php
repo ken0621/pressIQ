@@ -6,7 +6,8 @@ use App\Globals\Ecom_Product;
 use App\Globals\Warehouse;
 use App\Globals\Customer;
 use App\Globals\Accounting;
-
+use App\Globals\Item_code;
+use App\Globals\Membership_code;
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
@@ -18,7 +19,6 @@ use App\Models\Tbl_position;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_item;
-
 use Log;
 use Request;
 use Session;
@@ -33,8 +33,15 @@ class Ec_order
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
+    /**
+     * Collecting all the details of order from the ecommerce front and pass it on create_ec_order
+     *
+     * @param  array    $order_info
+     * @return array
+     */
     public static function create_ec_order_automatic($order_info)
     {
+        // dd($order_info);
         if($order_info['customer_id'] == null)
         {
             $customer_id = Customer::createCustomer($order_info['shop_id'] ,$order_info['customer']);
@@ -76,15 +83,50 @@ class Ec_order
 
         $order_id = Ec_order::create_ec_order($data);
 
+        $update['ec_order_slot_id'] = Ec_order::get_slot_id_session();
         $update["payment_upload"] = isset($order_info['payment_upload']) ? $order_info['payment_upload'] : '';
         $image_id = Tbl_ec_order::where("ec_order_id", $order_id)->update($update);
         
+        $order_info['customer_id'] = $customer_id;
+        Ec_order::create_merchant_school_item($order_info, $order_id);
+        
+
+
         $return["status"]           = "success";
         $return["order_id"]         = $order_id;
 
         return $return;
     }
+    public static function create_merchant_school_item($order_info, $order_id)
+    {
+        if($order_info['ec_order_merchant_school'] >= 1)
+        {
+            foreach($order_info['merchant_school_i_id'] as $key => $value)
+            {
+                // $insert['merchant_school_s_id'] = $order_info['merchant_school_s_id'][$key];
+                // $insert['merchant_school_s_name'] = $order_info['merchant_school_s_name'][$key];
+                $item = Tbl_item::where('item_id', $value)->first();
+                if($item)
+                {
+                    $insert['merchant_school_i_amount'] = $item->item_price;
+                }
+                
+                $insert['merchant_school_item_shop'] = $order_info['shop_id'];
+                $insert['merchant_item_item_id'] = $value;
+                $insert['merchant_item_ec_order_id'] = $order_id;
+                $insert['merchant_item_customer_id'] = $order_info['customer_id'];
 
+                // $insert['merchant_item_slot_id'] = ;
+                $insert['merchant_item_code'] = Membership_code::random_code_generator(8);;
+                $insert['merchant_item_pin'] = DB::table('tbl_merchant_school_item')->count() + 1;
+
+                $insert['merchant_item_date'] = Carbon::now();
+                $insert['merchant_item_status'] = 0;
+                // dd($insert);
+                DB::table('tbl_merchant_school_item')->insert($insert);
+            }
+        }
+    }
 	public static function create_ec_order($data)
 	{
         $_itemline                          = $data['invline_item_id'];
@@ -218,8 +260,8 @@ class Ec_order
         $ec_order['customer_id']                    = $data["inv_customer_id"];
         $ec_order['customer_email']                 = $data["inv_customer_email"];
         $ec_order['billing_address']                = $data["inv_customer_billing_address"];
-        $ec_order['invoice_date']                   = $data["inv_date"];
-        $ec_order['due_date']                       = $data["inv_due_date"];
+        $ec_order['invoice_date']                   = datepicker_input($data["inv_date"]);
+        $ec_order['due_date']                       = datepicker_input($data["inv_due_date"]);
         $ec_order['invoice_message']                = $data["inv_message"];
         $ec_order['order_status']                   = $data["order_status"];
         $ec_order['payment_method_id']              = $data["payment_method_id"];
@@ -318,7 +360,7 @@ class Ec_order
             }
             else if($order_status == "Completed")
             {
-                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);   
+                $response = Ec_order::update_inventory("deduct",$ec_order_id,$shop_id);  
             }
             else if($order_status == "Shipped")
             {
@@ -353,6 +395,9 @@ class Ec_order
                 $response['status']          = "error";
                 $response['status_message']  = "Cannot Complete Order with unpaid status";
                 return $response;
+            }
+            else{
+                Item_code::completed_order_action($ec_order_id);
             }
         }
 
@@ -425,8 +470,6 @@ class Ec_order
             $response["status"] = "success";
             return $response;
         }
-
-
 	}
 
     public static function update_inventory($type,$ec_order_id, $shop_id)
@@ -490,6 +533,18 @@ class Ec_order
                 return $data;
             } 
 
+        }
+    }
+
+    public static function get_slot_id_session()
+    {
+        if(Session::get('mlm_member') != null)
+        {
+            $session = Session::get('mlm_member');
+            if($session['slot_now'])
+            {
+                return $session['slot_now']->slot_id;
+            }
         }
     }
 }

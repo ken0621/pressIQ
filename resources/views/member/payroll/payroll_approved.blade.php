@@ -21,7 +21,7 @@
     @foreach($_period as $period)
     <div class="custom-panel">
       <div class="custom-panel-header cursor-pointer">
-        {{$period['period']->payroll_period_category}}&nbsp;({{date('F d, Y', strtotime($period['period']->payroll_period_start))}} to {{date('F d, Y', strtotime($period['period']->payroll_period_start))}})
+        {{$period['period']->payroll_period_category}}&nbsp;({{date('F d, Y', strtotime($period['period']->payroll_period_start))}} to {{date('F d, Y', strtotime($period['period']->payroll_period_end))}})
       </div>
       <div class="width-100 display-table">
         <div class="triangle-top-right"></div>

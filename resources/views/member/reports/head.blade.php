@@ -8,8 +8,6 @@
                 {{$head_discription}}
                 </small>
             </h1>
-            
-            <!--<a href="#" class="panel-buttons btn btn-custom-blue pull-right btn-create-modal" data-toggle="modal" data-target="#ShippingModal">Create Customer</a>-->
         </div>
     </div>
 </div>

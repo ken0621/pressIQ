@@ -143,8 +143,8 @@
 										<tr>
 											<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
 											<td>{{ $cart["quantity"] }}</td>
-											<td>P {{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</td>
-											<td style="padding-left: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&variation_id={{ $cart["product_id"] }}"><i class="fa fa-close"></i></a></td>
+											<td style="padding-left: 0; padding-right: 0;">P {{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</td>
+											<td style="padding-left: 0px; padding-right: 0px; width: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&variation_id={{ $cart["product_id"] }}"><i class="fa fa-close"></i></a></td>
 										</tr>
 										@endforeach
 									@endif
@@ -263,6 +263,23 @@
 										<label>LOAD TO: (Number)</label>
 										<input value="{{ Request::old('ec_order_load_number') }}" name="ec_order_load_number" type="text" class="form-control">
 									</div>
+									@endif
+									<input type="hidden" name="ec_order_merchant_school" value="{{$ec_order_merchant_school}}">
+									@if($ec_order_merchant_school >= 1)
+										@for($i = 0; $i < $ec_order_merchant_school; $i++ )	
+											@if(isset($ec_order_merchant_school_item[$i]))
+												<input type="hidden" name="merchant_school_i_id[]" value="{{$ec_order_merchant_school_item[$i]}}">
+											@endif
+											<!-- <div class="form-group">
+												<label>Student id:</label>
+												<input type="text" class="form-control" name="merchant_school_s_id[]">
+											</div>
+
+											<div class="form-group">
+												<label>Student Name:</label>
+												<input type="text" class="form-control" name="merchant_school_s_name[]">
+											</div> -->
+										@endfor
 									@endif
 								</div>
 								<div class="col-md-5">

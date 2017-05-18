@@ -29,21 +29,88 @@ body{
 
 	img{
 		width: 100%;
+
+		@media screen and (max-width: 960px)
+		{
+			width: 20%;
+		}
+		@media screen and (max-width: 500px)
+		{
+			width: 40%;
+		}
+		@media screen and (max-width: 360px)
+		{
+			width: 40%;
+		}
 	}
 
 	.news-details{
 		padding-left: 10px;
+
+		@media screen and (max-width: 960px)
+		{
+
+			width: 80%;
+			float: right;
+			margin-top: -142px;
+		}
+		@media screen and (max-width: 600px)
+		{
+
+			width: 80%;
+			float: right;
+			margin-top: -90px;
+		}
+		@media screen and (max-width: 500px)
+		{
+
+			width: 60%;
+			float: right;
+			margin-top: -139px;
+		}
+		@media screen and (max-width: 420px)
+		{
+			margin-top: -120px;
+		}
+		@media screen and (max-width: 360px)
+		{
+			margin-top: -105px;
+		}
 	}
 	.news-title{
 		color: #151515;
 		font-family: 'Fjalla One', sans-serif;
 		font-size: 15px;
+
+		@media screen and (max-width: 960px)
+		{
+
+			font-size: 25px;
+		}
+		@media screen and (max-width: 600px)
+		{
+
+			font-size: 16px;
+		}
 	}
 	.news-content{
 		color: #606060;
 		font-family: 'Roboto', sans-serif;
 		font-size: 11px;
 		margin-top: 6px;
+
+		@media screen and (max-width: 960px)
+		{
+
+			font-size: 11px;
+		}
+
+		@media screen and (max-width: 420px)
+		{
+			white-space: nowrap;
+		  	overflow: hidden;
+		  	text-overflow: ellipsis;
+	  	}
 	}
 }
 .latest-news-per-container:hover{

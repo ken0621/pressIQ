@@ -4,8 +4,10 @@
     <div class="panel-heading">
     @if(isset($links))
     @foreach($links as $key => $value)
-    <div class="col-md-6">
-        <span class="pull-right"><a href="{{$value['link']}}" target="_blank">{{$value['label']}}</a></span>
+    
+    <div class="col-md-12">
+        <span ><a href="{{$value['link']}}" target="_blank">{{$value['label']}}</a></span>
+        <hr>
     </div>
     @endforeach
     @endif

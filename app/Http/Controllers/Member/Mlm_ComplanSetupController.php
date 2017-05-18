@@ -35,7 +35,8 @@ class Mlm_ComplanSetupController extends Member
 			$data['links'][0]['label'] = 'Binary Promotions Setup';
 			$data['links'][0]['link'] = '/member/mlm/complan_setup/binary_pro';
 		}		
-		$merchant_school = $this->merchant_school($this->user_info->shop_key);
+		// $merchant_school = $this->merchant_school($this->user_info->shop_key);
+		$merchant_school = $this->user_info->shop_merchant_school;
 		if($merchant_school == 1)
 		{
 			$data['links'][1]['label'] = 'School Merchant';

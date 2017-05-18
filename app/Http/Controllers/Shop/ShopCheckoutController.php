@@ -77,7 +77,6 @@ class ShopCheckoutController extends Shop
                 }
             }           
         }
-        // dd($data['ec_order_merchant_school']);
 
         $data["_payment_method"] = $this->get_payment_method();
 

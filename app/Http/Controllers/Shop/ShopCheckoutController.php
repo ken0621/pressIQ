@@ -73,12 +73,18 @@ class ShopCheckoutController extends Shop
         $full_name = Request::input("full_name");
         $_name = $this->split_name($full_name);
 
-        /* SET FIRST NAME AND LAST NAME */
+        /* SET FIRST NAME, LAST NAME AND CONTACT */
         $customer_info["first_name"] = $_name[0];
         $customer_info["last_name"] = $_name[1];
         $customer_info["contact_number"] = Request::input("contact_number");
 
+        $customer_info["shipping_state"] = Self::locale_id_to_name(Request::input("customer_state"));
+        $customer_info["shipping_city"] = Self::locale_id_to_name(Request::input("customer_city"));
+        $customer_info["shipping_zip"] = Self::locale_id_to_name(Request::input("customer_zip"));
+        $customer_info["shipping_street"] = Request::input("customer_street");
+
         $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
+
 
         if($customer_set_info_response["status"] == "error")
         { 
@@ -86,12 +92,14 @@ class ShopCheckoutController extends Shop
         }
         else
         {
-
             dd(Cart::get_info($this->shop_info->shop_id));
         }
     }
 
-
+    public function locale_id_to_name($locale_id)
+    {
+        return Tbl_locale::where("locale_id", $locale_id)->pluck("locale_name");
+    }
     public function payment()
     {
         $checkout_input = Session::get("checkout_input");

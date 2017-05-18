@@ -10,6 +10,8 @@ use App\Models\Tbl_cart;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_user;
 use App\Models\Tbl_ec_variant;
+use App\Models\Tbl_ec_order;
+use App\Models\Tbl_ec_order_item;
 use App\Globals\Ecom_Product;
 use DB;
 use Session;
@@ -652,35 +654,41 @@ class Cart
     public static function get_info($shop_id)
     {
         $data = Session::get(Cart::get_unique_id($shop_id));
-        $data = Cart::initialize_tbl_ec_order($shop_id, $data);
-
-        return $data;
-    }
-    public static function initialize_tbl_ec_order($shop_id, $data)
-    {
-        $data["tbl_ec_order"]["customer_id"] = null;
-        $data["tbl_ec_order"]["customer_email"] = null;
-        $data["tbl_ec_order"]["billing_address"] = null;
-        
-        $data["tbl_ec_order"]["subtotal"] = null;
-        $data["tbl_ec_order"]["discount_coupon_amount"] = null;
-        $data["tbl_ec_order"]["discount_coupon_type"] = null;
-        $data["tbl_ec_order"]["shipping_fee"] = null;
-        $data["tbl_ec_order"]["service_fee"] = null;
-        $data["tbl_ec_order"]["total"] = null;
-
-        $data["tbl_ec_order"]["coupon_id"] = null;
-        $data["tbl_ec_order"]["shop_id"] = $shop_id;
-        $data["tbl_ec_order"]["created_date"] = time();
-        $data["tbl_ec_order"]["payment_method_id"] = null;
-        $data["tbl_ec_order"]["order_status"] = "Pending";
-        $data["tbl_ec_order"]["payment_status"] = 0;
-
         return $data;
     }
 
-    /* @arr customer_information (first_name, last_name, email, password) */
-    public static function customer_set_info($shop_id, $customer_information, $validation = null)
+
+
+    /*
+     * TITLE: CUSTOMER SET INFO
+     * 
+     * Allows us to set information for customer that will be processed later on
+     *
+     * @param
+     *    ~ $shop_id (int)
+     *    ~ $customer_information (array)
+     *      - first_name
+     *      - last_name, email, password, shipping_state, shipping_city, shipping_zip, shipping_street) 
+     *      - email
+     *      - password
+     *      - shipping_state
+     *      - shipping_city
+     *      - shipping_zip
+     *      - shipping_street
+     *    ~ $customer_validation (array)
+     *      - check_account
+     *      - check_name
+     *      - check_address
+     *      - check_contact
+     *
+     * @return (array)
+     *    ~ status (error, success)
+     *    ~ status_message (contains message if there is an error)
+     *
+     * @author (Guillermo Tabligan)
+     *
+     */
+    public static function customer_set_info($shop_id, $customer_information, $validation = array())
     {
         $unique_id = Cart::get_unique_id($shop_id);
         
@@ -689,37 +697,52 @@ class Cart
 
         /* READY INFORMATION FOR SESSION */
         $data["new_account"] = (isset($customer_information["new_account"]) ? $customer_information["new_account"] : (isset($data["new_account"]) ? $data["new_account"] : null));;
+        $data["billing_equals_shipping"] = (isset($customer_information["billing_equals_shipping"]) ? $customer_information["billing_equals_shipping"] : (isset($data["billing_equals_shipping"]) ? $data["billing_equals_shipping"] : true));;
 
+        /* SET BASIC INFORMATION */
+        $data["tbl_customer"]['customer_id']    = Tbl_customer::max("customer_id") + 1;
         $data["tbl_customer"]['first_name']     = (isset($customer_information["first_name"]) ? $customer_information["first_name"] : (isset($data["tbl_customer"]['first_name']) ? $data["tbl_customer"]['first_name'] : null));
         $data["tbl_customer"]['last_name']      = (isset($customer_information["last_name"]) ? $customer_information["last_name"] : (isset($data["tbl_customer"]['last_name']) ? $data["tbl_customer"]['last_name'] : null));
         $data["tbl_customer"]['middle_name']    = (isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : (isset($data["tbl_customer"]['middle_name']) ? $data["tbl_customer"]['middle_name'] : null));
         $data["tbl_customer"]['email']          = (isset($customer_information["email"]) ? $customer_information["email"] : (isset($data["tbl_customer"]['email']) ? $data["tbl_customer"]['email'] : null));
-        $data["tbl_customer"]['password']       = isset($customer_information["password"]) ? $customer_information["password"] : null;
+        $data["tbl_customer"]['password']       = isset($customer_information["password"]) ? $customer_information["password"] : randomPassword();
         $data["tbl_customer"]['shop_id']        = $shop_id;
         $data["tbl_customer"]['country_id']     = 420;
 
+        /* SET SHIPPINGING INFROMATION */
         $data["tbl_customer_address"]["shipping"]["country_id"] = 420;
-        $data["tbl_customer_address"]["shipping"]["customer_state"] = "";
-        $data["tbl_customer_address"]["shipping"]["customer_city"] = "";
-        $data["tbl_customer_address"]["shipping"]["customer_zip_code"] = "";
-        $data["tbl_customer_address"]["shipping"]["customer_street"] = "";
+        $data["tbl_customer_address"]["shipping"]["customer_state"] = (isset($customer_information["shipping_state"]) ? $customer_information["shipping_state"] : (isset($data["tbl_customer_address"]["shipping"]["customer_state"]) ? $data["tbl_customer_address"]["shipping"]["customer_state"] : null));
+        $data["tbl_customer_address"]["shipping"]["customer_city"] = (isset($customer_information["shipping_city"]) ? $customer_information["shipping_city"] : (isset($data["tbl_customer_address"]["shipping"]["customer_city"]) ? $data["tbl_customer_address"]["shipping"]["customer_city"] : null));;
+        $data["tbl_customer_address"]["shipping"]["customer_zip_code"] = (isset($customer_information["shipping_zip"]) ? $customer_information["shipping_zip"] : (isset($data["tbl_customer_address"]["shipping"]["customer_zip_code"]) ? $data["tbl_customer_address"]["shipping"]["customer_zip_code"] : null));;
+        $data["tbl_customer_address"]["shipping"]["customer_street"] = (isset($customer_information["shipping_street"]) ? $customer_information["shipping_street"] : (isset($data["tbl_customer_address"]["shipping"]["customer_street"]) ? $data["tbl_customer_address"]["shipping"]["customer_street"] : null));;
         $data["tbl_customer_address"]["shipping"]["purpose"] = "shipping";
         
-        $data["tbl_customer_address"]["billing"]["country_id"] = 420;
-        $data["tbl_customer_address"]["billing"]["customer_state"] = "";
-        $data["tbl_customer_address"]["billing"]["customer_city"] = "";
-        $data["tbl_customer_address"]["billing"]["customer_zip_code"] = "";
-        $data["tbl_customer_address"]["billing"]["customer_street"] = "";
-        $data["tbl_customer_address"]["billing"]["purpose"] = "billing";
+        /* SET  BILLING INFORMATION */
+        if($data["billing_equals_shipping"] == true)
+        {
+            $data["tbl_customer_address"]["billing"]["country_id"] = 420;
+            $data["tbl_customer_address"]["billing"]["customer_state"] = $data["tbl_customer_address"]["shipping"]["customer_state"];
+            $data["tbl_customer_address"]["billing"]["customer_city"] = $data["tbl_customer_address"]["shipping"]["customer_city"];
+            $data["tbl_customer_address"]["billing"]["customer_zip_code"] = $data["tbl_customer_address"]["shipping"]["customer_zip_code"];
+            $data["tbl_customer_address"]["billing"]["customer_street"] = $data["tbl_customer_address"]["shipping"]["customer_street"];
+            $data["tbl_customer_address"]["billing"]["purpose"] = "billing"; 
+        }
 
+        $data = Cart::customer_set_info_ec_order($shop_id, $data);
 
         /* VALIDATIONS */
         $check_account = Cart::customer_set_info_check_account($shop_id, $data["new_account"], $data["tbl_customer"]['email'], $data["tbl_customer"]["password"]);
-       
-
+        $check_name = "success";
+        $check_address = "success";
+        $check_contact = "success";
 
         /* VALIDATIONS RETURN MESSAGE */
         if((in_array("check_account", $validation)) && $check_account != "success")
+        {
+            $message["status"] = "error";
+            $message["status_message"] = $check_account;
+        }
+        elseif((in_array("check_name", $validation)) && $check_name != "success")
         {
             $message["status"] = "error";
             $message["status_message"] = $check_account;
@@ -734,6 +757,52 @@ class Cart
         return $message;
     }
 
+    public static function customer_set_info_ec_order($shop_id, $data)
+    { 
+        $data["tbl_ec_order"]["ec_order_id"] = Tbl_ec_order::max("ec_order_id") + 1;
+
+        
+        $subtotal = 0;
+        $shipping_fee = 0;
+        $service_fee = 0;
+
+        /* ITEM ON CART */
+        foreach($data["cart"] as $key => $cart)
+        {
+            $item_information = Tbl_ec_variant::where("evariant_id", $cart['product_id'])->item()->first();
+            $data["tbl_ec_order_item"][$key]["item_id"] = $item_information->item_id;
+            $data["tbl_ec_order_item"][$key]["price"] = $item_information->item_price;
+            $data["tbl_ec_order_item"][$key]["quantity"] = $cart["quantity"];
+            $data["tbl_ec_order_item"][$key]["subtotal"] = $item_information->item_price * $cart["quantity"];
+            $data["tbl_ec_order_item"][$key]["total"] = $item_information->item_price * $cart["quantity"];
+            $data["tbl_ec_order_item"][$key]["tax"] = 0;
+            $data["tbl_ec_order_item"][$key]["ec_order_id"] = $data["tbl_ec_order"]["ec_order_id"];
+
+            $subtotal += $data["tbl_ec_order_item"][$key]["total"];
+        }
+
+        $total = $subtotal + ($shipping_fee + $service_fee);
+
+        /* SUMMARY OF DATA FOR ORDER */
+        $data["tbl_ec_order"]["customer_id"] = $data["tbl_customer"]["customer_id"];
+        $data["tbl_ec_order"]["customer_email"] = $data["tbl_customer"]["email"];
+        $data["tbl_ec_order"]["billing_address"] = $data["tbl_customer_address"]["shipping"]["customer_street"] . ", " . $data["tbl_customer_address"]["shipping"]["customer_zip_code"] . ", " . $data["tbl_customer_address"]["shipping"]["customer_city"] . ", " . $data["tbl_customer_address"]["shipping"]["customer_state"];
+        $data["tbl_ec_order"]["discount_coupon_amount"] = null;
+        $data["tbl_ec_order"]["discount_coupon_type"] = null;
+        $data["tbl_ec_order"]["subtotal"] = $subtotal;
+        $data["tbl_ec_order"]["shipping_fee"] = $shipping_fee;
+        $data["tbl_ec_order"]["service_fee"] = $service_fee;
+        $data["tbl_ec_order"]["total"] = $total;
+        $data["tbl_ec_order"]["coupon_id"] = null;
+        $data["tbl_ec_order"]["shop_id"] = $shop_id;
+        $data["tbl_ec_order"]["created_date"] = Carbon::now();
+        $data["tbl_ec_order"]["payment_method_id"] = null;
+        $data["tbl_ec_order"]["order_status"] = "Pending";
+        $data["tbl_ec_order"]["payment_status"] = 0;
+        $data["tbl_ec_order"]["shipping_group"] = 0;
+
+        return $data;
+    }
     public static function customer_set_info_check_account($shop_id, $new_account, $email, $password)
     {
         if($new_account == true) //NEW ACCOUNT VALIDATION

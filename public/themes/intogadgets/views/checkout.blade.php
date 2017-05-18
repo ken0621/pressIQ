@@ -33,13 +33,13 @@
 					<div class="fieldset">
 						<label class="col-md-4">Province</label>
 						<div class="field col-md-8">
-							<select firstload="true" default="{{ old('province') }}" class="form-control load-location" name="customer_state" level="1"></select>
+							<select firstload="true" default="{{ old('customer_state') }}" class="form-control load-location" name="customer_state" level="1"></select>
 						</div>
 					</div>
 					<div class="fieldset">
 						<label class="col-md-4">City / Municipality</label>
 						<div class="field col-md-8">
-							<select firstload="true" default="{{ old('municipality') }}" class="form-control load-location" name="customer_city" level="2">
+							<select firstload="true" default="{{ old('customer_city') }}" class="form-control load-location" name="customer_city" level="2">
 								<option></option>
 							</select>
 						</div>
@@ -47,15 +47,15 @@
 					<div class="fieldset">
 						<label class="col-md-4">Barangay</label>
 						<div class="field col-md-8">
-							<select firstload="true" default="{{ old('barangay') }}" class="form-control load-location" name="customer_zipcode" level="3">
+							<select firstload="true" default="{{ old('customer_zip') }}" class="form-control load-location" name="customer_zip" level="3">
 								<option></option>
 							</select>
 						</div>
 					</div>
 					<div class="fieldset">
-						<label class="col-md-4">Complete Address</label>
+						<label class="col-md-4">Street</label>
 						<div class="field col-md-8">
-							<textarea spellcheck="false" class="form-control" name="shipping_address">{{ Request::old('customer_address') }}</textarea>
+							<textarea spellcheck="false" class="form-control" name="customer_street">{{ Request::old('customer_street') }}</textarea>
 						</div>
 					</div>
 

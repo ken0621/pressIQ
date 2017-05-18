@@ -270,7 +270,7 @@
 											@if(isset($ec_order_merchant_school_item[$i]))
 												<input type="hidden" name="merchant_school_i_id[]" value="{{$ec_order_merchant_school_item[$i]}}">
 											@endif
-											<div class="form-group">
+											<!-- <div class="form-group">
 												<label>Student id:</label>
 												<input type="text" class="form-control" name="merchant_school_s_id[]">
 											</div>
@@ -278,7 +278,7 @@
 											<div class="form-group">
 												<label>Student Name:</label>
 												<input type="text" class="form-control" name="merchant_school_s_name[]">
-											</div>
+											</div> -->
 										@endfor
 									@endif
 								</div>

@@ -67,7 +67,7 @@
                                                 @if($sir->status != 'complete')
                                                 <span style="color:red"> {{currency("PHP",($sir->status))}}</span>
                                                 @else
-                                                <span style="color:green">COMPLETED/OK {{$sir->status}}</span>
+                                                <span style="color:green">CLOSED TRANSACTION</span>
                                                 @endif
                                             </td>
                                             <td class="text-center">

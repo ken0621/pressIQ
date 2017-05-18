@@ -6,6 +6,7 @@ use App\Models\Tbl_vendor_address;
 use App\Models\Tbl_vendor_other_info;
 use App\Models\Tbl_user;
 use DB;
+use Carbon\Carbon;
 
 /**
  * Vendor Globals - all vendor related module
@@ -45,6 +46,27 @@ class Vendor
 		}
 
 		return $data->get()->toArray();
+	}
+	public static function ins_vendor($info)
+	{
+		$ins["vendor_shop_id"] = Vendor::getShopId();
+		$ins["vendor_first_name"] = $info["manufacturer_fname"];
+		$ins["vendor_middle_name"] = $info["manufacturer_mname"];
+		$ins["vendor_last_name"] = $info["manufacturer_lname"];
+		$ins["vendor_email"] = $info["email_address"];
+		$ins["vendor_company"] = $info["manufacturer_name"];
+		$ins["created_date"] = Carbon::now();
+
+		$vendor_id = Tbl_vendor::insertGetId($ins);
+
+		$ins_add["ven_addr_vendor_id"] = $vendor_id;
+
+		Tbl_vendor_address::insert($ins_add);
+
+		$ins_info["ven_info_vendor_id"] = $vendor_id;
+		$ins_info["ven_info_phone"] = $info["phone_number"];
+
+		Tbl_vendor_other_info::insert($ins_info);
 	}
 
 	// public static function 

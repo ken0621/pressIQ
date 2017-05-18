@@ -45,7 +45,7 @@ class ShopProductContentController extends Shop
             $customer_id = $session['customer_info']->customer_id;
             $shop_id     = $this->shop_info->shop_id;
 
-            $result = Ec_wishlist::existProduct($product_id, $customer_id, $shop_id);
+            $result = Ec_wishlist::notExistProduct($product_id, $customer_id, $shop_id);
 
             return $result;
         }
@@ -66,7 +66,7 @@ class ShopProductContentController extends Shop
         $data["_variant"]    = Ecom_Product::getProductOption($id, ",");
         $data["_related"]    = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
         $data["wishlist"]    = $this->wishlist_exist($id);
-        
+      
         foreach ($data["_related"] as $key => $value) 
         {
             if ($value["eprod_id"] == $data["product"]["eprod_id"]) 

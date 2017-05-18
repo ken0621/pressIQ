@@ -70,6 +70,9 @@ use App\Models\Tbl_payroll_reports_column;
 use App\Models\Tbl_payroll_13_month_compute;
 use App\Models\Tbl_payroll_13_month_virtual;
 use App\Models\Tbl_payroll_process_leave;
+use App\Models\Tbl_payroll_shift;
+use App\Models\Tbl_payroll_shift_template;
+use App\Models\Tbl_payroll_shift_code;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -81,9 +84,22 @@ class PayrollController extends Member
 	/*Set data per page for pagination*/
 	protected $paginate_count = 10;
 
-	public function shop_id()
+	public function shop_id($return = 'shop_id')
 	{
-		return $shop_id = $this->user_info->user_shop;
+          switch ($return) {
+               case 'shop_id':
+                    return $shop_id = $this->user_info->user_shop;
+                    break;
+
+               case 'user_id':
+                    return $shop_id = $this->user_info->user_id;
+                    break;
+               
+               default:
+                    # code...
+                    break;
+          }
+		
 	}
 
 	/* EMPLOYEE START */
@@ -1815,26 +1831,29 @@ class PayrollController extends Member
           $data[6]['access_name'] = 'Payroll Group';
           $data[6]['link']        = '/member/payroll/payroll_group';
 
-          $data[7]['access_name'] = 'Journal Tags';
-          $data[7]['link']        = '/member/payroll/payroll_jouarnal';
+          $data[7]['access_name'] = 'Shift Template';
+          $data[7]['link']        = '/member/payroll/shift_template';
 
-          $data[8]['access_name'] = 'Payslip';
-          $data[8]['link']        = '/member/payroll/custom_payslip';
+          $data[8]['access_name'] = 'Journal Tags';
+          $data[8]['link']        = '/member/payroll/payroll_jouarnal';
 
-          $data[9]['access_name'] = 'Tax Period';
-          $data[9]['link']        = '/member/payroll/tax_period';
+          $data[9]['access_name'] = 'Payslip';
+          $data[9]['link']        = '/member/payroll/custom_payslip';
 
-          $data[10]['access_name'] = 'Tax Table';
-          $data[10]['link']        = '/member/payroll/tax_table_list';
+          $data[10]['access_name'] = 'Tax Period';
+          $data[10]['link']        = '/member/payroll/tax_period';
 
-          $data[11]['access_name'] = 'SSS Table';
-          $data[11]['link']        = '/member/payroll/sss_table_list';
+          $data[11]['access_name'] = 'Tax Table';
+          $data[11]['link']        = '/member/payroll/tax_table_list';
 
-          $data[12]['access_name'] = 'Philhealth Table';
-          $data[12]['link']        = '/member/payroll/philhealth_table_list';
+          $data[12]['access_name'] = 'SSS Table';
+          $data[12]['link']        = '/member/payroll/sss_table_list';
 
-          $data[13]['access_name'] = 'Pagibig/HDMF';
-          $data[13]['link']        = '/member/payroll/pagibig_formula';
+          $data[13]['access_name'] = 'Philhealth Table';
+          $data[13]['link']        = '/member/payroll/philhealth_table_list';
+
+          $data[14]['access_name'] = 'Pagibig/HDMF';
+          $data[14]['link']        = '/member/payroll/pagibig_formula';
 
           return $data;
      }
@@ -3454,38 +3473,38 @@ class PayrollController extends Member
 		$insert['payroll_group_philhealth'] 			= Request::input('payroll_group_philhealth');
 		$insert['payroll_group_pagibig'] 				= Request::input('payroll_group_pagibig');
 		$insert['payroll_group_agency'] 				= Request::input('payroll_group_agency');
-		$insert['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
+		// $insert['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
 		$insert['payroll_group_grace_time'] 			= Request::input('payroll_group_grace_time');
 		$insert['payroll_group_agency_fee'] 			= Request::input('payroll_group_agency_fee');
 		$insert['payroll_late_category'] 				= Request::input('payroll_late_category');
 		$insert['payroll_late_interval'] 				= Request::input('payroll_late_interval');
 		$insert['payroll_late_parameter'] 				= Request::input('payroll_late_parameter');
 		$insert['payroll_late_deduction'] 				= Request::input('payroll_late_deduction');
-		if(Request::has('payroll_group_is_flexi_break'))
-		{
-			$insert['payroll_group_is_flexi_break'] 	= Request::input('payroll_group_is_flexi_break');
-		}
-		$insert['payroll_group_break_start'] 			= date('H:i:s',strtotime(Request::input('payroll_group_break_start')));
-		$insert['payroll_group_break_end'] 				= date('H:i:s',strtotime(Request::input('payroll_group_break_end')));
-		$insert['payroll_group_flexi_break'] 			= Request::input('payroll_group_flexi_break');
+		// if(Request::has('payroll_group_is_flexi_break'))
+		// {
+		// 	$insert['payroll_group_is_flexi_break'] 	= Request::input('payroll_group_is_flexi_break');
+		// }
+		// $insert['payroll_group_break_start'] 			= date('H:i:s',strtotime(Request::input('payroll_group_break_start')));
+		// $insert['payroll_group_break_end'] 				= date('H:i:s',strtotime(Request::input('payroll_group_break_end')));
+		// $insert['payroll_group_flexi_break'] 			= Request::input('payroll_group_flexi_break');
 		
-		if(Request::has('payroll_group_is_flexi_time'))
-		{
-			$insert['payroll_group_is_flexi_time'] 		= Request::input('payroll_group_is_flexi_time');
-		}
+		// if(Request::has('payroll_group_is_flexi_time'))
+		// {
+		// 	$insert['payroll_group_is_flexi_time'] 		= Request::input('payroll_group_is_flexi_time');
+		// }
 		
 		$insert['payroll_group_working_day_month'] 		= Request::input('payroll_group_working_day_month');
 
           $payroll_group_target_hour_parameter              = 'Daily';
 
-		if(Request::has('payroll_group_target_hour_parameter'))
-		{
-			$payroll_group_target_hour_parameter 	= Request::input('payroll_group_target_hour_parameter');
-		}
+		// if(Request::has('payroll_group_target_hour_parameter'))
+		// {
+		// 	$payroll_group_target_hour_parameter 	= Request::input('payroll_group_target_hour_parameter');
+		// }
           $insert['payroll_group_target_hour_parameter']    = $payroll_group_target_hour_parameter;
-		$insert['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
-		$insert['payroll_group_start'] 				= date('H:i:s',strtotime(Request::input('payroll_group_start')));
-		$insert['payroll_group_end'] 					= date('H:i:s',strtotime(Request::input('payroll_group_end')));
+		// $insert['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
+		// $insert['payroll_group_start'] 				= date('H:i:s',strtotime(Request::input('payroll_group_start')));
+		// $insert['payroll_group_end'] 					= date('H:i:s',strtotime(Request::input('payroll_group_end')));
 
 		// dd($insert);
 		/* INSERT PAYROLL GROUP AND GET ID */ 
@@ -3496,12 +3515,12 @@ class PayrollController extends Member
 		{
 			$temp['payroll_group_id']				= $group_id;
 			$temp['payroll_overtime_name'] 			= Request::input("payroll_overtime_name")[$key];
-			$temp['payroll_overtime_regular'] 		= Request::input("payroll_overtime_regular")[$key];
+			$temp['payroll_overtime_regular'] 		     = Request::input("payroll_overtime_regular")[$key];
 			$temp['payroll_overtime_overtime'] 		= Request::input("payroll_overtime_overtime")[$key];
-			$temp['payroll_overtime_nigth_diff'] 	= Request::input("payroll_overtime_nigth_diff")[$key];
+			$temp['payroll_overtime_nigth_diff'] 	     = Request::input("payroll_overtime_nigth_diff")[$key];
 			$temp['payroll_overtime_rest_day'] 		= Request::input("payroll_overtime_rest_day")[$key];
 			$temp['payroll_overtime_rest_overtime'] 	= Request::input("payroll_overtime_rest_overtime")[$key];
-			$temp['payroll_overtime_rest_night'] 	= Request::input("payroll_overtime_rest_night")[$key];
+			$temp['payroll_overtime_rest_night'] 	     = Request::input("payroll_overtime_rest_night")[$key];
 
 			array_push($insert_rate, $temp);
 		}
@@ -3510,51 +3529,93 @@ class PayrollController extends Member
 		/* INSERT PAYROLL OVERTIME NIGHT DIFFERENTIALS REST DAY HOLIDAY */
 		Tbl_payroll_overtime_rate::insert($insert_rate);
 
+          $insert_shift = array();
 
+          foreach(Request::input('day') as $key => $day)
+          {
 
-		$_restday 										= array();
-		$_extraday 										= array();
-		if(Request::has('restday'))
-		{
-			$_restday 									= Request::input('restday');
-		}
+               $temp_shift['payroll_group_id']    = $group_id;
+               $temp_shift['day']                 = $day;
+               $temp_shift['target_hours']        = Request::input('target_hours')[$key];
+               $temp_shift['work_start']          = date('H:i:s', strtotime(Request::input('work_start')[$key]));
+               $temp_shift['work_end']            = date('H:i:s', strtotime(Request::input('work_end')[$key]));
+               $temp_shift['break_start']         = date('H:i:s', strtotime(Request::input('break_start')[$key]));
+               $temp_shift['break_end']           = date('H:i:s', strtotime(Request::input('break_end')[$key]));
 
-		if(Request::has('extraday'))
-		{
-			$_extraday									= Request::input('extraday');
-		}	
+               $flexi         = 0;
+               $rest_day      = 0;
+               $extra_day     = 0;
+
+               if(Request::has('flexi_'.$key))
+               {
+                    $flexi = Request::input('flexi_'.$key);
+               }
+
+               if(Request::has('rest_day_'.$key))
+               {
+                    $rest_day = Request::input('rest_day_'.$key);
+               }
+
+               if(Request::has('extra_day_'.$key))
+               {
+                    $extra_day = Request::input('extra_day_'.$key);
+               }
+
+               $temp_shift['flexi']               = $flexi;
+               $temp_shift['rest_day']            = $rest_day;
+               $temp_shift['extra_day']           = $extra_day;
+
+               array_push($insert_shift, $temp_shift);
+          }
+
+          if(!empty($insert_shift))
+          {
+               Tbl_payroll_shift::insert($insert_shift);
+          }
+
+		// $_restday 										= array();
+		// $_extraday 										= array();
+		// if(Request::has('restday'))
+		// {
+		// 	$_restday 									= Request::input('restday');
+		// }
+
+		// if(Request::has('extraday'))
+		// {
+		// 	$_extraday									= Request::input('extraday');
+		// }	
 		
 		
-		$insert_rest_day = array();
-		$temp = "";
-		foreach($_restday as $restday)
-		{
-			$temp['payroll_group_id']					= $group_id;
-			$temp['payroll_group_rest_day']				= $restday;
-			$temp['payroll_group_rest_day_category']	= 'rest day';
+		// $insert_rest_day = array();
+		// $temp = "";
+		// foreach($_restday as $restday)
+		// {
+		// 	$temp['payroll_group_id']					= $group_id;
+		// 	$temp['payroll_group_rest_day']				= $restday;
+		// 	$temp['payroll_group_rest_day_category']	= 'rest day';
 
-			array_push($insert_rest_day, $temp);
-		}
+		// 	array_push($insert_rest_day, $temp);
+		// }
 
-		$insert_extra_day = array();
-		foreach($_extraday as $extra)
-		{
-			$temp['payroll_group_id']					= $group_id;
-			$temp['payroll_group_rest_day']				= $extra;
-			$temp['payroll_group_rest_day_category']	= 'extra day';
+		// $insert_extra_day = array();
+		// foreach($_extraday as $extra)
+		// {
+		// 	$temp['payroll_group_id']					= $group_id;
+		// 	$temp['payroll_group_rest_day']				= $extra;
+		// 	$temp['payroll_group_rest_day_category']	= 'extra day';
 
-			array_push($insert_extra_day, $temp);
-		}
+		// 	array_push($insert_extra_day, $temp);
+		// }
 
-		if(!empty($insert_rest_day))
-		{
-			Tbl_payroll_group_rest_day::insert($insert_rest_day);
-		}
+		// if(!empty($insert_rest_day))
+		// {
+		// 	Tbl_payroll_group_rest_day::insert($insert_rest_day);
+		// }
 
-		if(!empty($insert_extra_day))
-		{
-			Tbl_payroll_group_rest_day::insert($insert_extra_day);
-		}
+		// if(!empty($insert_extra_day))
+		// {
+		// 	Tbl_payroll_group_rest_day::insert($insert_extra_day);
+		// }
 
 
 		$data['_data'] 		= array();
@@ -3578,8 +3639,8 @@ class PayrollController extends Member
 
 	public function modal_edit_payroll_group($id)
 	{
-		$data['group'] 			= Tbl_payroll_group::where('payroll_group_id',$id)->first();
-		$data['_overtime_rate'] = Tbl_payroll_overtime_rate::where('payroll_group_id',$id)->get();
+		$data['group'] 	     = Tbl_payroll_group::where('payroll_group_id',$id)->first();
+		$data['_overtime_rate']  = Tbl_payroll_overtime_rate::where('payroll_group_id',$id)->get();
 		$data['_day'] 			= Payroll::restday_checked($id); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
 		return view('member.payroll.modal.modal_edit_payroll_group',$data);
@@ -3624,8 +3685,8 @@ class PayrollController extends Member
 		{
 			$payroll_group_is_flexi_break 				= Request::input('payroll_group_is_flexi_break');
 		}
-		$update['payroll_group_is_flexi_break'] 		= $payroll_group_is_flexi_break;
-		$update['payroll_group_flexi_break'] 			= Request::input('payroll_group_flexi_break');
+		// $update['payroll_group_is_flexi_break'] 		= $payroll_group_is_flexi_break;
+		// $update['payroll_group_flexi_break'] 			= Request::input('payroll_group_flexi_break');
 		$update['payroll_late_category'] 				= Request::input('payroll_late_category');
 		$update['payroll_late_interval'] 				= Request::input('payroll_late_interval');
 		$update['payroll_late_parameter'] 				= Request::input('payroll_late_parameter');
@@ -3637,7 +3698,7 @@ class PayrollController extends Member
 			$payroll_group_is_flexi_time				= Request::input('payroll_group_is_flexi_time');	
 		}
 
-		$update['payroll_group_is_flexi_time'] 			= $payroll_group_is_flexi_time;
+		// $update['payroll_group_is_flexi_time'] 			= $payroll_group_is_flexi_time;
 		$update['payroll_group_working_day_month'] 		= Request::input('payroll_group_working_day_month');
 
 		$payroll_group_is_flexi_break = 0;
@@ -3646,20 +3707,20 @@ class PayrollController extends Member
 			$payroll_group_is_flexi_break		= Request::input('payroll_group_is_flexi_break');
 
 		}
-		$update['payroll_group_break_start'] 			= date('H:i:s', strtotime(Request::input('payroll_group_break_start')));
-		$update['payroll_group_break_end'] 				= date('H:i:s', strtotime(Request::input('payroll_group_break_end')));
-		$update['payroll_group_flexi_break']			= Request::input('payroll_group_flexi_break');
-		$update['payroll_group_is_flexi_break']			= $payroll_group_is_flexi_break;
+		// $update['payroll_group_break_start'] 			= date('H:i:s', strtotime(Request::input('payroll_group_break_start')));
+		// $update['payroll_group_break_end'] 				= date('H:i:s', strtotime(Request::input('payroll_group_break_end')));
+		// $update['payroll_group_flexi_break']			= Request::input('payroll_group_flexi_break');
+		// $update['payroll_group_is_flexi_break']			= $payroll_group_is_flexi_break;
 
           $payroll_group_target_hour_parameter              = 'Daily';
           if(Request::has('payroll_group_target_hour_parameter'))
           {    
                $payroll_group_target_hour_parameter         = Request::input('payroll_group_target_hour_parameter');
           }
-		$update['payroll_group_target_hour_parameter'] 	= $payroll_group_target_hour_parameter;
-		$update['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
-		$update['payroll_group_start'] 					= date('H:i:s',strtotime(Request::input('payroll_group_start')));
-		$update['payroll_group_end'] 					= date('H:i:s',strtotime(Request::input('payroll_group_end')));
+		// $update['payroll_group_target_hour_parameter'] 	= $payroll_group_target_hour_parameter;
+		// $update['payroll_group_target_hour'] 			= Request::input('payroll_group_target_hour');
+		// $update['payroll_group_start'] 					= date('H:i:s',strtotime(Request::input('payroll_group_start')));
+		// $update['payroll_group_end'] 					= date('H:i:s',strtotime(Request::input('payroll_group_end')));
 
 		/* UPDATE PAYROLL GROUP*/ 
 		Tbl_payroll_group::where('payroll_group_id',$payroll_group_id)->update($update);
@@ -3682,49 +3743,95 @@ class PayrollController extends Member
 		/* INSERT PAYROLL OVERTIME NIGHT DIFFERENTIALS REST DAY HOLIDAY */
 		Tbl_payroll_overtime_rate::insert($insert_rate);
 
-		$_restday 										= array();
-		$_extraday 										= array();
-		if(Request::has('restday'))
-		{
-			$_restday 									= Request::input('restday');
-		}
+		// $_restday 										= array();
+		// $_extraday 										= array();
+		// if(Request::has('restday'))
+		// {
+		// 	$_restday 									= Request::input('restday');
+		// }
 
-		if(Request::has('extraday'))
-		{
-			$_extraday									= Request::input('extraday');
-		}	
+		// if(Request::has('extraday'))
+		// {
+		// 	$_extraday									= Request::input('extraday');
+		// }	
 		
-		Tbl_payroll_group_rest_day::where('payroll_group_id',$payroll_group_id)->delete();
-		$insert_rest_day = array();
-		$temp = "";
-		foreach($_restday as $restday)
-		{
-			$temp['payroll_group_id']					= $payroll_group_id;
-			$temp['payroll_group_rest_day']				= $restday;
-			$temp['payroll_group_rest_day_category']	= 'rest day';
+		// Tbl_payroll_group_rest_day::where('payroll_group_id',$payroll_group_id)->delete();
+		// $insert_rest_day = array();
+		// $temp = "";
+		// foreach($_restday as $restday)
+		// {
+		// 	$temp['payroll_group_id']					= $payroll_group_id;
+		// 	$temp['payroll_group_rest_day']				= $restday;
+		// 	$temp['payroll_group_rest_day_category']	= 'rest day';
 
-			array_push($insert_rest_day, $temp);
-		}
+		// 	array_push($insert_rest_day, $temp);
+		// }
 
-		$insert_extra_day = array();
-		foreach($_extraday as $extra)
-		{
-			$temp['payroll_group_id']					= $payroll_group_id;
-			$temp['payroll_group_rest_day']				= $extra;
-			$temp['payroll_group_rest_day_category']	= 'extra day';
+		// $insert_extra_day = array();
+		// foreach($_extraday as $extra)
+		// {
+		// 	$temp['payroll_group_id']					= $payroll_group_id;
+		// 	$temp['payroll_group_rest_day']				= $extra;
+		// 	$temp['payroll_group_rest_day_category']	= 'extra day';
 
-			array_push($insert_extra_day, $temp);
-		}
+		// 	array_push($insert_extra_day, $temp);
+		// }
 
-		if(!empty($insert_rest_day))
-		{
-			Tbl_payroll_group_rest_day::insert($insert_rest_day);
-		}
+		// if(!empty($insert_rest_day))
+		// {
+		// 	Tbl_payroll_group_rest_day::insert($insert_rest_day);
+		// }
 
-		if(!empty($insert_extra_day))
-		{
-			Tbl_payroll_group_rest_day::insert($insert_extra_day);
-		}
+		// if(!empty($insert_extra_day))
+		// {
+		// 	Tbl_payroll_group_rest_day::insert($insert_extra_day);
+		// }
+
+          Tbl_payroll_shift::where('payroll_group_id', $payroll_group_id)->delete();
+
+          $insert_shift = array();
+
+          foreach(Request::input('day') as $key => $day)
+          {
+
+               $temp_shift['payroll_group_id']    = $payroll_group_id;
+               $temp_shift['day']                 = $day;
+               $temp_shift['target_hours']        = Request::input('target_hours')[$key];
+               $temp_shift['work_start']          = date('H:i:s', strtotime(Request::input('work_start')[$key]));
+               $temp_shift['work_end']            = date('H:i:s', strtotime(Request::input('work_end')[$key]));
+               $temp_shift['break_start']         = date('H:i:s', strtotime(Request::input('break_start')[$key]));
+               $temp_shift['break_end']           = date('H:i:s', strtotime(Request::input('break_end')[$key]));
+
+               $flexi         = 0;
+               $rest_day      = 0;
+               $extra_day     = 0;
+
+               if(Request::has('flexi_'.$key))
+               {
+                    $flexi = Request::input('flexi_'.$key);
+               }
+
+               if(Request::has('rest_day_'.$key))
+               {
+                    $rest_day = Request::input('rest_day_'.$key);
+               }
+
+               if(Request::has('extra_day_'.$key))
+               {
+                    $extra_day = Request::input('extra_day_'.$key);
+               }
+
+               $temp_shift['flexi']               = $flexi;
+               $temp_shift['rest_day']            = $rest_day;
+               $temp_shift['extra_day']           = $extra_day;
+
+               array_push($insert_shift, $temp_shift);
+          }
+
+          if(!empty($insert_shift))
+          {
+               Tbl_payroll_shift::insert($insert_shift);
+          }
 
 
 		$return['status'] = 'success';
@@ -4302,6 +4409,167 @@ class PayrollController extends Member
 	}
 	
 	/*HOLIDAY DEFAULT END*/
+
+
+     /* SHIFT TEMPLATE START */
+     // Tbl_payroll_shift_template
+     // Tbl_payroll_shift_code
+     public function shift_template()
+     {
+          $data['_active'] = Tbl_payroll_shift_code::getshift(Self::shop_id())->orderBy('shift_code_name')->paginate(20);
+          $data['_archived'] = Tbl_payroll_shift_code::getshift(Self::shop_id(), 1)->orderBy('shift_code_name')->paginate(20);
+          return view('member.payroll.side_container.shift_template', $data);
+     }
+
+     public function modal_create_shift_template()
+     {
+          $data['_day'] = Payroll::restday_checked();
+          return view('member.payroll.modal.modal_create_shift_template', $data);
+     }
+
+     public function modal_save_shift_template()
+     {
+          // $shift_code_name = Request::input('shift_code_name');
+
+          $insert_code['shift_code_name']    = Request::input('shift_code_name');
+          $insert_code['shop_id']            = Self::shop_id();
+
+          $shift_code_id = Tbl_payroll_shift_code::insertGetId($insert_code);
+
+          $insert_shift = array();
+
+          foreach(Request::input('day') as $key => $day)
+          {
+
+               $temp['shift_code_id']   = $shift_code_id;
+               $temp['day']             = $day;
+               $temp['target_hours']    = Request::input('target_hours')[$key];
+               $temp['work_start']      = Request::input('work_start')[$key];
+               $temp['work_end']        = Request::input('work_end')[$key];
+               $temp['break_start']     = Request::input('break_start')[$key];
+               $temp['break_end']       = Request::input('break_end')[$key];
+               $temp['flexi']           = 0;
+               $temp['rest_day']        = 0;
+               $temp['extra_day']       = 0;
+
+               if(Request::has('flexi_'.$key))
+               {
+                    $temp['flexi']      = Request::input('flexi_'.$key);
+               }
+
+               if(Request::has('rest_day_'.$key))
+               {
+                    $temp['rest_day']   = Request::input('rest_day_'.$key);
+               }
+
+               if(Request::has('extra_day_'.$key))
+               {
+                    $temp['extra_day']   = Request::input('extra_day_'.$key);
+               }
+
+               array_push($insert_shift, $temp);
+          }
+
+          if(!empty($insert_shift))
+          {
+               Tbl_payroll_shift_template::insert($insert_shift);
+          }
+
+          $return['function_name'] = 'payrollconfiguration.reload_shift_template';
+          $return['status']        = 'success';
+          return collect($return)->toJson();
+     }
+
+     public function modal_view_shift_template($id)
+     {
+          $data['code'] = Tbl_payroll_shift_code::where('shift_code_id', $id)->first();
+          $data['_day'] = Payroll::restday_checked($id, 'shift_template');
+          return view('member.payroll.modal.modal_view_shift_template', $data);
+     }
+
+
+     public function modal_update_shift_template()
+     {
+          $shift_code_id                = Request::input('shift_code_id');
+          $update['shift_code_name']    = Request::input('shift_code_name');
+          Tbl_payroll_shift_code::where('shift_code_id', $shift_code_id)->update($update);
+
+          Tbl_payroll_shift_template::where('shift_code_id', $shift_code_id)->delete();
+
+          $insert_shift = array();
+
+          foreach(Request::input('day') as $key => $day)
+          {
+
+               $temp['shift_code_id']   = $shift_code_id;
+               $temp['day']             = $day;
+               $temp['target_hours']    = Request::input('target_hours')[$key];
+               $temp['work_start']      = Request::input('work_start')[$key];
+               $temp['work_end']        = Request::input('work_end')[$key];
+               $temp['break_start']     = Request::input('break_start')[$key];
+               $temp['break_end']       = Request::input('break_end')[$key];
+               $temp['flexi']           = 0;
+               $temp['rest_day']        = 0;
+               $temp['extra_day']       = 0;
+
+               if(Request::has('flexi_'.$key))
+               {
+                    $temp['flexi']      = Request::input('flexi_'.$key);
+               }
+
+               if(Request::has('rest_day_'.$key))
+               {
+                    $temp['rest_day']   = Request::input('rest_day_'.$key);
+               }
+
+               if(Request::has('extra_day_'.$key))
+               {
+                    $temp['extra_day']   = Request::input('extra_day_'.$key);
+               }
+
+               array_push($insert_shift, $temp);
+          }
+
+          if(!empty($insert_shift))
+          {
+               Tbl_payroll_shift_template::insert($insert_shift);
+          }
+
+          $return['function_name'] = 'payrollconfiguration.reload_shift_template';
+          $return['status']        = 'success';
+          return collect($return)->toJson();
+     }
+
+
+     public function modal_archive_shift_template($archived, $id)
+     {
+          $statement = 'archive';
+          if($archived == 0)
+          {
+               $statement = 'restore';
+          }
+          $file_name          = Tbl_payroll_shift_code::where('shift_code_id', $id)->pluck('shift_code_name');
+          $data['title']      = 'Do you really want to '.$statement.' Shift Template '.$file_name.'?';
+          $data['html']       = '';
+          $data['action']     = '/member/payroll/shift_template/archive_shift_template';
+          $data['id']         = $id;
+          $data['archived']   = $archived;
+
+          return view('member.modal.modal_confirm_archived', $data);
+     }
+
+     public function archive_shift_template()
+     {
+          $update['shift_archived'] = Request::input('archived');
+          $id = Request::input('id');
+
+          Tbl_payroll_shift_code::where('shift_code_id', $id)->update($update);
+
+          $return['function_name'] = 'payrollconfiguration.reload_shift_template';
+          $return['status']        = 'success';
+          return collect($return)->toJson();
+     }
+     /* SHIFT TEMPLATE END */
 
 
      /* CALENDAR LEAVE START */
@@ -6987,5 +7255,14 @@ class PayrollController extends Member
      }
 
      /* BANKING END */
+
+
+
+     /* SHIFT START */
+     public function shift_group()
+     {
+          return view('member.payroll.payroll_shift_group');
+     }
+     /* SHIFT END */
 
 }

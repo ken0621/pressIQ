@@ -104,6 +104,7 @@ class PayrollTimeSheetController extends Member
 
 		/* GET EMPLOYEE INFORMATION */
 		$data["employee_info"] = Tbl_payroll_employee_basic::where("payroll_employee_id", $employee_id)->first();
+
 		$data["employee_contract"] = Tbl_payroll_employee_contract::selemployee($employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
 
 		$payroll_group_start 	= $data["employee_contract"]->payroll_group_start;
@@ -111,8 +112,11 @@ class PayrollTimeSheetController extends Member
 
 		/* INITALIZE SETTINGS FOR EMPLOYEE */
 		$time_rule = $data["time_rule"] = "regulartime"; //flexitime, regulartime
+
 		$data["default_time_in"] = $default_time_in = Carbon::parse($payroll_group_start)->format("h:i A");
+
 		$data["default_time_out"] = $default_time_out =Carbon::parse($payroll_group_end)->format("h:i A");
+
 		$data["default_working_hours"] = $default_working_hours = "08:00";
 
 		/* CREATE ARRAY */
@@ -208,6 +212,11 @@ class PayrollTimeSheetController extends Member
 		// dd($data);
 		$data['summary'] = Self::timesheet_summary($employee_id, $payroll_period_id);
 
+		$payroll_period_company_id = Tbl_payroll_period_company::where('payroll_period_id', $payroll_period_id)->where('payroll_company_id', $data["employee_info"]->payroll_employee_company_id)->pluck('payroll_period_company_id');
+
+		$data['_remarks'] = Payroll::view_remarks($this->user_info->shop_id, $payroll_period_company_id);
+		$data['payroll_period_company_id'] = $payroll_period_company_id;
+
 		return view('member.payroll.employee_timesheet_table', $data);
 	}
 
@@ -299,10 +308,14 @@ class PayrollTimeSheetController extends Member
 			$total_special_holiday_hours = Payroll::sum_time($total_special_holiday_hours, $approved_timesheet->special_holiday_hours);
 			$total_regular_holiday_hours = Payroll::sum_time($total_regular_holiday_hours, $approved_timesheet->regular_holiday_hours);
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
-			array_push($array, $regular_holiday_count);
+
+			// $temp['total_late_hours'] = $total_late_hours;
+			// $temp['late_hours']	= $approved_timesheet->late_hours;
+			// $temp['date'] = $from;
+			// array_push($array, $temp);
 		}
 		// dd($array);
-		$total_working_days += (number_format($regular_day_count, 2) + number_format($rest_day_count, 2) + number_format($extra_day_count, 2) + number_format($special_holiday_count, 2) + number_format($regular_holiday_count, 2));
+		$total_working_days += (round($regular_day_count, 2) + round($rest_day_count, 2) + round($extra_day_count, 2) + round($special_holiday_count, 2) + round($regular_holiday_count, 2)) + round($leave_with_pay, 2);
 
 		$data['time_spent'] 			= Payroll::if_zero_time($total_time_spent);
 		$data['regular_hours'] 			= Payroll::if_zero_time($total_regular_hours);
@@ -648,5 +661,31 @@ class PayrollTimeSheetController extends Member
 			$nstr .= ucfirst($split).' ';
 		}
 		return $nstr;
+	}
+
+
+	/* send reminder timesheet */
+	public function send_reminder()
+	{
+		$payroll_remarks = Request::input('payroll_remarks');
+		$file_name = Request::input('file_name');
+
+		$insert['shop_id'] = $this->user_info->shop_id;
+		$insert['user_id'] = $this->user_info->user_id;
+		$insert['payroll_period_company_id'] = Request::input("payroll_period_company_id");
+		$insert['payroll_remarks_date'] = date('Y-m-d h:i:s');
+
+		if(Request::has('payroll_remarks') && Request::input('payroll_remarks') != '')
+		{
+			$insert['payroll_remarks'] 	= Request::input('payroll_remarks');
+			$insert['payroll_type'] 	= 'text';
+
+			Payroll::insert_remarks($insert);
+		}
+
+		if(Request::hasFile('file_name'))
+		{
+
+		}
 	}
 }

@@ -40,6 +40,9 @@ use App\Models\Tbl_payroll_paper_sizes;
 use App\Models\Tbl_payroll_13_month_compute;
 use App\Models\Tbl_payroll_13_month_virtual;
 use App\Models\Tbl_payroll_process_leave;
+use App\Models\Tbl_payroll_remarks;
+use App\Models\Tbl_payroll_shift;
+use App\Models\Tbl_payroll_shift_template;
 
 use Carbon\Carbon;
 use stdClass;
@@ -335,28 +338,61 @@ class Payroll
 	}
 
 	/* RETURN IF INPUT IS CHECKED [FROm REST DAY AND EXTRA DAY ONLY (PAYROLL GROUPD)] */
-	public static function restday_checked($payroll_group_id = 0)
+	public static function restday_checked($payroll_group_id = 0, $origin = 'payroll_group')
 	{
 		$data = array();
-		$_day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday'];
+		$_day = ['Sun', 'Mon', 'Tue', 'Wed','Thu','Fri','Sat'];
 		foreach($_day as $day)
 		{
-			$temp['rest_day'] = $day;
+			$temp['day'] = $day;
 			$rest_checked = '';
-			$rest_count = Tbl_payroll_group_rest_day::selcheck($payroll_group_id, $day)->count();
-			if($rest_count >= 1)
-			{
-				$rest_checked = 'checked';
-			}
+			// $rest_count = Tbl_payroll_group_rest_day::selcheck($payroll_group_id, $day)->count();
+			// if($rest_count >= 1)
+			// {
+			// 	$rest_checked = 'checked';
+			// }
 			$temp['rest_day_checked'] = $rest_checked;
 			$temp['extra_day'] = $day;
 			$extra_checked = '';
-			$extra_count = Tbl_payroll_group_rest_day::selcheck($payroll_group_id, $day,'extra day')->count();
-			if($extra_count >= 1)
+			// $extra_count = Tbl_payroll_group_rest_day::selcheck($payroll_group_id, $day,'extra day')->count();
+			// if($extra_count >= 1)
+			// {
+			// 	$extra_checked = 'checked';
+			// }
+			$temp['extra_day_checked'] 	= $extra_checked;
+			$temp['target_hours'] 		= 0;
+			$temp['work_start'] 		= '00:00:00';
+			$temp['work_end'] 			= '00:00:00';
+			$temp['break_start'] 		= '00:00:00';
+			$temp['break_end'] 			= '00:00:00';
+			$temp['flexi'] 				= 0;
+			$temp['rest_day'] 			= 0;
+			$temp['extra_day'] 			= 0;
+
+			$shift = null;
+
+			if($origin == 'payroll_group')
 			{
-				$extra_checked = 'checked';
+				$shift = Tbl_payroll_shift::getshift($payroll_group_id, $day)->first();
 			}
-			$temp['extra_day_checked'] = $extra_checked;
+
+			if($origin == 'shift_template')
+			{
+				$shift = Tbl_payroll_shift_template::getshift($payroll_group_id, $day)->first();
+			}
+			
+			if($shift != null)
+			{
+				$temp['target_hours'] 		= $shift->target_hours;
+				$temp['work_start'] 		= $shift->work_start;
+				$temp['work_end'] 			= $shift->work_end;
+				$temp['break_start'] 		= $shift->break_start;
+				$temp['break_end'] 			= $shift->break_end;
+				$temp['flexi'] 				= $shift->flexi;
+				$temp['rest_day'] 			= $shift->rest_day;
+				$temp['extra_day'] 			= $shift->extra_day;
+			}
+
 			array_push($data, $temp);
 		}
 		return $data;
@@ -1396,8 +1432,6 @@ class Payroll
 				$data['deduct_philhealth_custom']	= $salary->deduct_philhealth_custom;
 				$data['is_deduct_pagibig_default']	= $salary->is_deduct_pagibig_default;
 				$data['deduct_pagibig_custom']		= $salary->deduct_pagibig_custom;
-
-
 			}
 
 			
@@ -1465,8 +1499,6 @@ class Payroll
 					$data['leave_count_wo_pay']++;
 				}
 			}
-
-			
 
 			/* compute absent */
 			$daily_absent = 0;
@@ -3010,5 +3042,38 @@ class Payroll
 		}
 		return $data;
 	}	
+
+
+	public static function view_remarks($shop_id = 0, $payroll_period_company_id = 0)
+	{
+		$data = array();
+		$_remaks = Tbl_payroll_remarks::getremarks($shop_id, $payroll_period_company_id)->get();
+
+		foreach($_remaks as $remarks)
+		{
+			$message = $remarks->payroll_remarks;
+
+			if($remarks->payroll_type == 'file')
+			{
+				$message = '<a href="'.$remarks->payroll_remarks.'">'.$remarks->file_name.'</a>';
+			}
+
+			$temp['message'] = $message;
+			$temp['date']	 = $remarks->payroll_remarks_date;
+			$temp['user']	 = $remarks->user_first_name;
+
+			array_push($data, $temp);
+		}
+
+		return $data;
+	}
+
+	public static function insert_remarks($insert = array())
+	{
+		if(!empty($insert))
+		{
+			Tbl_payroll_remarks::insert($insert);
+		}
+	}
 
 }

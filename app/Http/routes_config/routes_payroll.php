@@ -63,6 +63,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/employee_timesheet/show_holiday/{id}/{date}','Member\PayrollTimeSheetController@show_holiday');
 	Route::any('/timesheet/mark_ready_company','Member\PayrollController@mark_ready_company');
 	Route::any('/timesheet/show_summary/{summary}/{period_id}','Member\PayrollTimeSheetController@show_summary');
+
+	Route::any('/timesheet/send_reminder','Member\PayrollTimeSheetController@send_reminder');
 	/* TIMESHEET END */
 
 	/* DEPARTMENT START */
@@ -270,6 +272,18 @@ Route::group(array('prefix' => '/member/payroll'), function()
 
 
 
+	/* SHIFT TEMPLATE START */
+     Route::any('/shift_template',"Member\PayrollController@shift_template");
+     Route::any('/shift_template/modal_create_shift_template',"Member\PayrollController@modal_create_shift_template");
+     Route::any('/shift_template/modal_save_shift_template',"Member\PayrollController@modal_save_shift_template");
+     Route::any('/shift_template/modal_view_shift_template/{id}',"Member\PayrollController@modal_view_shift_template");
+     Route::any('/shift_template/modal_update_shift_template',"Member\PayrollController@modal_update_shift_template");
+     Route::any('/shift_template/modal_archive_shift_template/{archived}/{id}',"Member\PayrollController@modal_archive_shift_template");
+     Route::any('/shift_template/archive_shift_template',"Member\PayrollController@archive_shift_template");
+     /* SHIFT TEMPLATE END */
+
+
+
 	/* BIO METRICS IMPORT START */
 	Route::any('/import_bio/modal_biometrics','Member\Payroll_BioImportController@modal_biometrics');
 
@@ -382,4 +396,9 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/generate_bank','Member\PayrollController@generate_bank');
 	Route::any('/modal_generate_bank/{id}','Member\PayrollController@modal_generate_bank');
 	/* GENERATE BANK UPLOAD END */
+
+
+	/* SHIFT START */
+	Route::any('/shift_group','Member\PayrollController@shift_group');
+	/* SHIFT END */
 });	 

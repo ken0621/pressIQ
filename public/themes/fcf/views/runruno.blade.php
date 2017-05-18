@@ -267,6 +267,8 @@
 			</div>
 		</div>
 	</div>
+	<!-- SCROLL TO TOP -->
+	<div class="scroll-up"><img src="/themes/{{ $shop_theme }}/img/scroll-up.png"></div>
 </div>
 @endsection
 
@@ -292,5 +294,30 @@ $(document).on("click", '.nav-per-button', function()
 });
 </script>
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/sticky_side.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function()
+{
+	/*scroll up*/
+	$(window).scroll(function () {
+        if ($(this).scrollTop() > 600) {
+            $('.scroll-up').fadeIn();
+        } else {
+            $('.scroll-up').fadeOut();
+        }
+    });
+
+    $('.scroll-up').click(function () {
+        $("html, body").animate({
+            scrollTop: 0
+        }, 600);
+        return false;
+    });
+
+
+});	
+
+</script>
 @endsection
 

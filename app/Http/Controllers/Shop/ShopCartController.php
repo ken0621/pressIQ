@@ -6,6 +6,7 @@ use Redirect;
 use Request;
 use View;
 use Session;
+use DB;
 use Carbon\Carbon;
 use App\Models\Tbl_product;
 use App\Globals\Ecom_Product;

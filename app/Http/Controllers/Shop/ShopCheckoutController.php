@@ -400,14 +400,14 @@ class ShopCheckoutController extends Shop
 
         if($ec_order_merchant_school >= 1)
         {
-            $input['merchant_school_s_id'] = Request::input('merchant_school_s_id');
-            foreach($input['merchant_school_s_id'] as $key => $value)
-            {
-                $rules['merchant_school_s_id.' . $key] = 'required';
-                $rules['merchant_school_s_name.' . $key] = 'required';
-                $message['merchant_school_s_id.' . $key .'.required'] = 'All Student ID field is required';
-                $message['merchant_school_s_name.' . $key .'.required'] = 'All Student Name field is required';
-            }
+            // $input['merchant_school_s_id'] = Request::input('merchant_school_s_id');
+            // foreach($input['merchant_school_s_id'] as $key => $value)
+            // {
+            //     $rules['merchant_school_s_id.' . $key] = 'required';
+            //     $rules['merchant_school_s_name.' . $key] = 'required';
+            //     $message['merchant_school_s_id.' . $key .'.required'] = 'All Student ID field is required';
+            //     $message['merchant_school_s_name.' . $key .'.required'] = 'All Student Name field is required';
+            // }
             
         }
         return $validator = Validator::make(Request::input(), $rules, $message);

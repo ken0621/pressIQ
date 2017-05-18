@@ -100,10 +100,11 @@ class Ec_order
     {
         if($order_info['ec_order_merchant_school'] >= 1)
         {
+            $tbl_merchant_school = Tbl_merchant_school::where('merchant_school_shop', $this->shop_info->shop_id)->get()->keyBy('merchant_item_id');
             foreach($order_info['merchant_school_i_id'] as $key => $value)
             {
-                $insert['merchant_school_s_id'] = $order_info['merchant_school_s_id'][$key];
-                $insert['merchant_school_s_name'] = $order_info['merchant_school_s_name'][$key];
+                // $insert['merchant_school_s_id'] = $order_info['merchant_school_s_id'][$key];
+                // $insert['merchant_school_s_name'] = $order_info['merchant_school_s_name'][$key];
 
                 $insert['merchant_school_item_shop'] = $order_info['shop_id'];
                 $insert['merchant_item_item_id'] = $value;

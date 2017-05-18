@@ -1,5 +1,6 @@
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-heading">
+       <h3 class="text-center">General Ledger</h3>
        <div class="table-reponsive">
        		<table class="table table-bordered table-condensed collaptable">
        		<tr>

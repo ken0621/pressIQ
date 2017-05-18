@@ -438,11 +438,11 @@
                 <div class="col-md-12">
                   <div class="col-md-6">
                     <label>Email</label>
-                    <input type="text" class="form-control mlm_username" value="{{$customer_info->email}}" name="mlm_email" @if($customer_info->ismlm == 0) readonly @endif >
+                    <input type="text" class="form-control mlm_email_e_commerce" value="{{$customer_info->email}}" name="mlm_email_e_commerce" @if($customer_info->ismlm == 0) readonly @endif >
                   </div>
                   <div class="col-md-6">
                     <label>Password</label>
-                    <input type="password" class="form-control mlm_password" value="@if($customer_info->password != null){{ Crypt::decrypt($customer_info->password)}}@endif" name="mlm_password" @if($customer_info->ismlm == 0) readonly @endif>
+                    <input type="password" class="form-control mlm_password_e_commerce" value="@if($customer_info->password != null){{ Crypt::decrypt($customer_info->password)}}@endif" name="mlm_password_e_commerce" @if($customer_info->ismlm == 0) readonly @endif>
                   </div>
                 </div>
               </div>

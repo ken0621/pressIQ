@@ -104,11 +104,10 @@ class PurchasingInventorySystemController extends Member
             //item base um
             $base_um = Tbl_unit_measurement_multi::where("multi_um_id",$data["sir_item"]->item_measurement_id)->where("is_base",1)->first();
 
-            $qt = isset($um->unit_qty) ? $um->unit_qty : 1;
             //for remaining
-            $total_qty_issued =  $data["sir_item"]->item_qty * $qt;
+            $total_qty_issued =  $data["sir_item"]->item_qty * $um->unit_qty;
             $rem_qty = $remaining_qty;
-            $issued_um_qty = $qt;
+            $issued_um_qty = $um->unit_qty;
             $issued_um = floor($rem_qty / $issued_um_qty);
             $each = (($rem_qty / $issued_um_qty) - floor($rem_qty / $issued_um_qty)) * $issued_um_qty;                
 

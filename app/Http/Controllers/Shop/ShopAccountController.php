@@ -7,8 +7,10 @@ use Request;
 use View;
 use Session;
 use DB;
+use Validator;
 
 use App\Models\Tbl_customer;
+use App\Models\Tbl_customer_address;
 use App\Models\Tbl_shop;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_mlm_plan;
@@ -179,7 +181,43 @@ class ShopAccountController extends Shop
         $this->checkif_login();
 
         $data["page"] = "Settings";
+        $data["customer"] = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_id)->info()->first();
         return view("account_settings", $data);
+    }
+    public function settings_submit()
+    {
+        $this->checkif_login();
+
+        $validator = Validator::make(Request::input(), [
+            'first_name' => 'required',
+            'middle_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email',
+            'customer_street' => 'required',
+            'customer_state' => 'required',
+            'customer_city' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/account/security')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $update['first_name'] = Request::input('first_name');
+        $update['middle_name'] = Request::input('middle_name');
+        $update['last_name'] = Request::input('last_name');
+        $update['email'] = Request::input('email');
+
+        Tbl_customer::where('customer_id', Self::$customer_id)->update($update);
+
+        $update_address['customer_street'] = Request::input('customer_street');
+        $update_address['customer_state'] = Request::input('customer_state');
+        $update_address['customer_city'] = Request::input('customer_city');
+
+        Tbl_customer_address::where('customer_id', Self::$customer_id)->update($update_address);
+
+        return Redirect::to("/account/security")->with("success", "Sucessfully updated.");
     }
     public function security()
     {
@@ -187,6 +225,46 @@ class ShopAccountController extends Shop
 
         $data["page"] = "Security";
         return view("account_security", $data);
+    }
+    public function security_submit()
+    {
+        $this->checkif_login();
+
+        $validator = Validator::make(Request::input(), [
+            'npass' => 'required|min:8'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/account/security')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        $new = Request::input("npass");
+        $confirm = Request::input("cpass");
+        $old = Request::input("opass");
+
+        $compare = Crypt::decrypt(Tbl_customer::where("customer_id", Self::$customer_id)->where("shop_id", $this->shop_info->shop_id)->first()->password);
+        
+        if ($compare == $old) 
+        {
+            if ($new == $confirm) 
+            {
+                $update["password"] = Crypt::encrypt($new);
+
+                Tbl_customer::where("customer_id", Self::$customer_id)->where("shop_id", $this->shop_info->shop_id)->update($update);
+
+                return Redirect::to("/account/security")->with("success", "Sucessfully updated.");
+            }
+            else
+            {
+                return Redirect::back()->with("fail", "New and confirm password mismatched.");
+            }
+        }
+        else
+        {
+            return Redirect::back()->with("fail", "Old password mismatched.");
+        }
     }
     public function logout()
     {

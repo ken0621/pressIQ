@@ -208,19 +208,22 @@ var fee_p = 0;
 @endif
 inititalize();
   // function 
+  var total_amount = 0;
   function add_amount(amount_to_add)
   {
     var amount = $('.b_amount').val();
-    amount = parseInt(amount)
-    amount_to_add = parseInt(amount_to_add);
+    amount = parseFloat(amount)
+    amount_to_add = parseFloat(amount_to_add);
     amount += amount_to_add; 
-    $('.b_amount').val(amount);
+    // total_amount += amount;
+    // console.log("total_amount", total_amount);
+    $('.b_amount').val(parseFloat(amount).toFixed(4));
     add_processing_fee();
   }
   function add_processing_fee()
   {
     var amount = $('.b_amount').val();
-    amount = parseInt(amount);
+    amount = parseFloat(amount);
 
     if(fee_p == 0)
     {
@@ -237,7 +240,7 @@ inititalize();
   function add_tax()
   {
     var amount = $('.b_amount').val();
-    amount = parseInt(amount);
+    amount = parseFloat(amount);
     var fee = $('.b_fee').val();
 
     var a = amount - fee;
@@ -257,13 +260,13 @@ inititalize();
   function total()
   {
     var amount = $('.b_amount').val();
-    amount = parseInt(amount);
+    amount = parseFloat(amount);
 
     var tax = $('.b_tax').val();
-    tax = parseInt(tax);
+    tax = parseFloat(tax);
 
     var fee = $('.b_fee').val();
-    fee = parseInt(fee);
+    fee = parseFloat(fee);
 
     var total = amount - tax - fee;
 
@@ -284,6 +287,7 @@ $('.select_all_logs').click(function(){
         $('.check_box_single').each(function(){
           if($(this).is(':checked'))
           {
+
             var amount = $(this).val();
             add_amount(-amount);
           }
@@ -291,7 +295,6 @@ $('.select_all_logs').click(function(){
 
         $(".check_box_single").prop("checked", true);
         $('.check_box_single').each(function(){
-          console.log();
           var amount = $(this).val();
           add_amount(amount);
         });

@@ -244,5 +244,7 @@ Route::any('member/mlm/merchant_school/get', 'Member\BeneficiaryController@get')
 Route::any('member/mlm/merchant_school/destroy', 'Member\BeneficiaryController@destroy'); 
 Route::any('member/mlm/merchant_school/get/table', 'Member\BeneficiaryController@get_table'); 
 Route::any('member/mlm/merchant_school/mark/used', 'Member\BeneficiaryController@mark_used'); 
+Route::any('member/mlm/merchant_school/get_customer/{id}', 'Member\BeneficiaryController@get_customer'); 
+Route::any('member/mlm/merchant_school/consume', 'Member\BeneficiaryController@consume'); 
 
 

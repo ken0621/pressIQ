@@ -138,6 +138,7 @@ class Mlm_member
 	}
 	public static function add_slot($shop_id, $customer_id)
 	{
+        $disabled_validation_code = Request::input('disabled_validation_code');
 		$validate['slot_owner'] = $customer_id;
         $validate['membership_code_id'] = Request::input('membership_code_id');
         $validate['membership_activation_code'] = Request::input('membership_activation_code');
@@ -145,7 +146,10 @@ class Mlm_member
         
         
         $rules['slot_owner'] = "required";
-        $rules['membership_activation_code'] = "required";
+        if($disabled_validation_code != 1)
+        {
+            $rules['membership_activation_code'] = "required";
+        }
         $rules['membership_code_id'] = "required";
         $rules['slot_sponsor'] = "required";
         
@@ -188,9 +192,20 @@ class Mlm_member
         $validator = Validator::make($validate,$rules);
         if ($validator->passes())
     	{
-    	    $membership = Tbl_membership_code::where('membership_code_id', $validate['membership_code_id'])
-    	    ->where('membership_activation_code', $validate['membership_activation_code'])
-    	    ->package()->membership()->first();
+    	    
+            if($disabled_validation_code == 1)
+            {
+                $membership = Tbl_membership_code::where('membership_code_id', $validate['membership_code_id'])
+                // ->where('membership_activation_code', $validate['membership_activation_code'])
+                ->package()->membership()->first();
+            }
+            else
+            {
+                $membership = Tbl_membership_code::where('membership_code_id', $validate['membership_code_id'])
+                ->where('membership_activation_code', $validate['membership_activation_code'])
+                ->package()->membership()->first();
+            }
+            
     	    
     	   // tbl_tree_placement
     	    if($membership)
@@ -346,7 +361,7 @@ class Mlm_member
             ->where('marketing_plan_trigger', 'Slot Creation')
             ->first();
         $data['binary_advance'] = Tbl_mlm_binary_setttings::where('shop_id', $shop_id)->first();
-        
+        $data['codes'] = Mlm_member::get_codes($customer_id);
         $data['lead'] = Tbl_mlm_lead::where('lead_customer_id_lead', $customer_id)
         ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=','tbl_mlm_lead.lead_slot_id_sponsor')
         ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
@@ -358,6 +373,16 @@ class Mlm_member
 
         $data['position'] = Request::input('position');
         $data['placement'] = Request::input('placement');
+        $data['sponsor_a'] = Request::input('slot_sponsor');
         return view('mlm.slot_add.index', $data);
+    }
+    public static function get_codes($customer_id)
+    {
+        $data["membership_code"]    =   Tbl_membership_code::where('customer_id', $customer_id)
+        ->leftjoin('tbl_membership_package', 'tbl_membership_package.membership_package_id', '=','tbl_membership_code.membership_package_id')
+        ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=','tbl_membership_package.membership_id')
+        ->where('used', 0)->where('blocked', 0)->get();
+        // dd($data);
+        return view('member.mlm_slot.mlm_slot_get_code', $data);
     }
 }

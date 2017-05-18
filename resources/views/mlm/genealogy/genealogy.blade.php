@@ -256,6 +256,7 @@
     <script>
         initialize_add_Slot(); 
         var placement_global = 0;
+        var slot_id_a = '{{$slot_id_a}}';
         function initialize_add_Slot()
         {
             // $("#add_slot_modal_open_Right").animatedModal({ color : '#F1F1F1'});
@@ -273,7 +274,7 @@
                 var placement = $(this).attr('placement');
                 console.log("placement", placement);
                 $('.modal_append_add_slot').html("<center><div><img src='/assets/slot_genealogy/member/img/485.gif'></div></center>");
-                $('.modal_append_add_slot').load('/mlm/slot/add?position=' + position + '&placement=' + placement);
+                $('.modal_append_add_slot').load('/mlm/slot/add?position=' + position + '&placement=' + placement + '&slot_sponsor=' + slot_id_a);
             });
 
             $('#add_slot_modal_open_Left').on('click', function(){
@@ -283,7 +284,7 @@
                 placement_global = placement;
                 console.log("placement", placement);
                 $('.modal_append_add_slot').html("<center><div><img src='/assets/slot_genealogy/member/img/485.gif'></div></center>");
-                $('.modal_append_add_slot').load('/mlm/slot/add?position=' + position + '&placement=' + placement);
+                $('.modal_append_add_slot').load('/mlm/slot/add?position=' + position + '&placement=' + placement + '&slot_sponsor=' + slot_id_a);
                 
             });
         }
@@ -345,7 +346,7 @@
                     var x = $(this).attr('x');
                     if(x == placement_global)
                     {
-                        $(this).click();
+                        $(this).click(); 
                     }
                  });
             }

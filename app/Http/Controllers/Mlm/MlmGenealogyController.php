@@ -60,7 +60,7 @@ class MlmGenealogyController extends Mlm
         $slot_id           = Request::input('id');
         $shop_id           = Self::$shop_id;
         // return Mlm_genealogy::tree($slot_id, $shop_id);
-        
+        $data['slot_id_a'] = $slot_id;
         $data["slot"]      = Tbl_mlm_slot::membership()->customer()->where("tbl_mlm_slot.shop_id",$shop_id)->where("slot_id",$slot_id)->first();
         $data['l']         = Tbl_tree_placement::where('placement_tree_parent_id',$slot_id)->where('placement_tree_position','left')->count();
         $data['r']         = Tbl_tree_placement::where('placement_tree_parent_id',$slot_id)->where('placement_tree_position','right')->count();

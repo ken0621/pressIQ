@@ -21,6 +21,7 @@ class CreateTblMerchantSchoolWallet extends Migration
             $table->datetime('merchant_school_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->integer('merchant_school_custmer_id')->integer(0);
             $table->integer('merchant_school_slot_id')->integer(0);
+            
         });
     }
 

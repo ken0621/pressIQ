@@ -766,7 +766,6 @@ class Item_code
         $update['merchant_item_status'] = 1;
 
         $merchant_school_item = DB::table('tbl_merchant_school_item')->where('merchant_item_ec_order_id', $order_id)->get();
-
         foreach($merchant_school_item as $key => $value)
         {
             $insert['merchant_school_amount'] = $value->merchant_school_i_amount;

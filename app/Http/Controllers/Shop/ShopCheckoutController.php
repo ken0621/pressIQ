@@ -72,12 +72,14 @@ class ShopCheckoutController extends Shop
                 }
                 if(isset($tbl_merchant_school[$value2['cart_product_information']['item_id']]))
                 {
-                    $data['ec_order_merchant_school_item'][$data['ec_order_merchant_school']] = $value2['cart_product_information']['item_id'];
-                    $data['ec_order_merchant_school'] += $value2['quantity'];
+                    for($i = 0; $i <  $value2['quantity']; $i++ )
+                    {
+                        $data['ec_order_merchant_school_item'][$data['ec_order_merchant_school']] = $value2['cart_product_information']['item_id'];
+                        $data['ec_order_merchant_school'] += 1;
+                    }
                 }
             }           
         }
-
         $data["_payment_method"] = $this->get_payment_method();
 
         if(Self::$customer_info != null)

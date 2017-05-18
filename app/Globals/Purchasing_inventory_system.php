@@ -913,7 +913,39 @@ class Purchasing_inventory_system
         }
         return $data;
     }
+    public static function get_loss_over($sir_id)
+    {        
+        $_sir_item = Purchasing_inventory_system::select_sir_item(Purchasing_inventory_system::getShopId(),$sir_id,'array');
 
+        $_returns = Tbl_sir_cm_item::item()->where("sc_sir_id",$sir_id)->get();
+
+        $loss = 0;
+        $over = 0;
+        foreach ($_sir_item as $key => $value) 
+        {            
+            $loss += $value->infos < 0 ? $value->infos : 0;
+            $over += $value->infos > 0 ? $value->infos : 0;
+        }
+
+        $mts_loss = 0;
+        $mts_over = 0;
+        foreach ($_returns as $key_return => $value_return)
+        {
+            $mts_loss += $value_return->sc_infos < 0 ? $value_return->sc_infos : 0;
+            $mts_over += $value_return->sc_infos > 0 ? $value_return->sc_infos : 0;  
+        }
+
+        $sir_data = Tbl_sir::where("sir_id",$sir_id)->first();
+        $rem_amount = $sir_data->agent_collection;
+        $rem_remarks = $sir_data->agent_collection_remarks;
+
+        $total = Purchasing_inventory_system::get_sir_total_amount($sir_id);
+        $agent_discrepancy = ($total == $rem_amount ? 0 : $rem_amount - $total);
+
+        $total_discrepancy = $agent_discrepancy + (($loss + $over) - ($mts_loss + $mts_over));
+
+        return $total_discrepancy;
+    }
     public static function select_ilr_status($shop_id = 0, $return = 'array',$status = 0, $srch_ilr = '')
     {
         $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
@@ -944,6 +976,7 @@ class Purchasing_inventory_system
 
 
             $data[$key]->amount_to_collect = Purchasing_inventory_system::get_sir_total_amount($value->sir_id);
+            $data[$key]->status = Purchasing_inventory_system::get_loss_over($value->sir_id) == 0 ? 'complete' : Purchasing_inventory_system::get_loss_over($value->sir_id);
         }
 
          if($return == "json")

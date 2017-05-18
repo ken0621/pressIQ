@@ -46,7 +46,7 @@ class ShopCartController extends Shop
             $customer_id = $session['customer_info']->customer_id;
             $shop_id     = $this->shop_info->shop_id;
 
-            $result = Ec_wishlist::existProduct($product_id, $customer_id, $shop_id);
+            $result = Ec_wishlist::notExistProduct($product_id, $customer_id, $shop_id);
 
             return $result;
         }

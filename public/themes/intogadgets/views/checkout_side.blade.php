@@ -1,3 +1,4 @@
+
 <div class="checkout-summary">
 	<div class="title">Order Summary</div>
 	<div class="order-summary">
@@ -37,18 +38,30 @@
 				@endforeach
 			</tbody>
 		</table>
+		@if($get_cart["tbl_ec_order"]["shipping_fee"] != 0 && $get_cart["tbl_ec_order"]["service_fee"] != 0)
 		<div class="text-right total">
 			<div class="total-price">&#8369; {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</div>
 			<div class="total-label">Subtotal</div>
 		</div>	
+		@endif
 		<!-- <div class="text-right total">
 			<div class="total-price"></div>
 			<div class="total-label">tax()</div>
 		</div> -->
+		@if($get_cart["tbl_ec_order"]["shipping_fee"] != 0)
 		<div class="text-right total">
-			<div class="total-price">&#8369; {{ number_format($get_cart["sale_information"]["total_shipping"], 2) }}</div>
+			<div class="total-price">&#8369; {{ number_format($get_cart["tbl_ec_order"]["shipping_fee"], 2) }}</div>
 			<div class="total-label">Shipping Fee</div>
 		</div>
+		@endif
+
+		@if($get_cart["tbl_ec_order"]["service_fee"] != 0)
+		<div class="text-right total">
+			<div class="total-price">&#8369; {{ number_format($get_cart["tbl_ec_order"]["service_fee"], 2) }}</div>
+			<div class="total-label">Service Fee</div>
+		</div>
+		@endif
+
 		<div class="text-right total ">
 			<div class="total-price supertotal">&#8369; {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</div>
 			<div class="total-label">Total</div>

@@ -92,7 +92,7 @@ function checkout_form()
 {
 	init();
 
-	action_load_location(1, 0);
+	
 
 	function init()
 	{
@@ -103,6 +103,7 @@ function checkout_form()
 	}
 	function document_ready()
 	{
+		action_load_location(1, 0);
 		action_load_sidecart();
 		action_load_location();
 		event_load_location_change();

@@ -761,20 +761,21 @@ class Cart
     { 
         $data["tbl_ec_order"]["ec_order_id"] = Tbl_ec_order::max("ec_order_id") + 1;
 
-        
+        /* INITIALIZE TOTALS */
         $subtotal = 0;
         $shipping_fee = 0;
         $service_fee = 0;
 
+        $_cart = Self::get_cart($shop_id)["cart"];
+
         /* ITEM ON CART */
-        foreach($data["cart"] as $key => $cart)
+        foreach($_cart as $key => $cart)
         {
-            $item_information = Tbl_ec_variant::where("evariant_id", $cart['product_id'])->item()->first();
-            $data["tbl_ec_order_item"][$key]["item_id"] = $item_information->item_id;
-            $data["tbl_ec_order_item"][$key]["price"] = $item_information->item_price;
+            $data["tbl_ec_order_item"][$key]["item_id"] = $cart["cart_product_information"]["item_id"];
+            $data["tbl_ec_order_item"][$key]["price"] = $cart["cart_product_information"]["product_price"];
             $data["tbl_ec_order_item"][$key]["quantity"] = $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["subtotal"] = $item_information->item_price * $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["total"] = $item_information->item_price * $cart["quantity"];
+            $data["tbl_ec_order_item"][$key]["subtotal"] = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
+            $data["tbl_ec_order_item"][$key]["total"] = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
             $data["tbl_ec_order_item"][$key]["tax"] = 0;
             $data["tbl_ec_order_item"][$key]["ec_order_id"] = $data["tbl_ec_order"]["ec_order_id"];
 

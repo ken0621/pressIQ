@@ -62,6 +62,10 @@ class ShopCheckoutController extends Shop
         }
 
     }
+    public function session()
+    {
+        dd(Cart::get_info($this->shop_info->shop_id));
+    }
     public function checkout_side()
     {
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
@@ -92,7 +96,7 @@ class ShopCheckoutController extends Shop
         }
         else
         {
-            dd(Cart::get_info($this->shop_info->shop_id));
+            return Redirect::to("/checkout/payment");
         }
     }
 
@@ -102,20 +106,9 @@ class ShopCheckoutController extends Shop
     }
     public function payment()
     {
-        $checkout_input = Session::get("checkout_input");
-        if (!$checkout_input) 
-        {
-            return Redirect::to("/checkout");
-        }
-
         $data["page"]            = "Checkout Payment";
-        $data["_input"]          = $checkout_input;
         $data["_payment_method"] = $this->get_payment_method();
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
-        if (!isset($data["get_cart"]['cart'])) 
-        {
-            return Redirect::to('/');
-        }
 
         return view("checkout_payment", $data);
     }

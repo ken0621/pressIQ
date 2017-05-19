@@ -92,7 +92,7 @@
                                                             @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $dbline->dbline_item_id])
                                                         </select>
                                                     </td>
-                                                    <td><textarea class="textarea-expand txt-desc" name="dbline_description[]" value="{{$dbline->dbline_service_date}}"></textarea></td>
+                                                    <td><textarea class="textarea-expand txt-desc" name="dbline_description[]">{{$dbline->dbline_description}}</textarea></td>
                                                     <td>
                                                         <select class="1111 droplist-um select-um {{isset($dbline->multi_id) ? 'has-value' : ''}}" name="dbline_um[]">
                                                             @if($dbline->dbline_um)

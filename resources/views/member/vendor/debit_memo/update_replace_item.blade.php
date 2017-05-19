@@ -16,7 +16,7 @@
         <div class="form-group">
             <div class="col-md-12">
                 <h4>{{$db_item->item_name}}</h4>
-                <input type="hidden" class="form-control" name="sir_id" value="{{$db_item->dbline_id}}">
+                <input type="hidden" class="form-control" name="dbline_id" value="{{$db_item->dbline_id}}">
             </div>
         </div>
         @if($issued_um_name)         
@@ -51,23 +51,3 @@
 <!-- <script type="text/javascript" src="/assets/member/js/truck.js"></script>
 <script type="text/javascript" src="/assets/member/js/warehouse.js"></script> -->
 <script type="text/javascript">
-function submit_done(data)
-{
-    if(data.status == "success")
-    {
-        toastr.success("Success");
-        location.href = "/member/pis/sir/";
-    }
-    else if(data.status == "success-ilr")
-    {       
-        toastr.success("Success");
-        $(".ilr-container").load("/member/pis/ilr/"+data.id+" .ilr-container");
-        $('#global_modal').modal('toggle');
-    }
-    else if(data.status == "error")
-    {
-        toastr.warning(data.status_message);
-        $(data.target).html(data.view);
-    }
-}
-</script>

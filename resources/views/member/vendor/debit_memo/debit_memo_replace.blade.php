@@ -1,8 +1,8 @@
 @extends('member.layout')
 @section('content')
-<form class="global-submit form-to-submit-transfer" role="form" action="" method="POST" >
+<form class="global-submit form-to-submit-transfer" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" name="_token" value="{{csrf_token()}}">
-    <input type="hidden" name="debit_memo_id" value="{{Request::input('id')}}" >
+    <input type="hidden" name="debit_memo_id" value="{{$debit_memo_id}}" >
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
             <div>
@@ -48,7 +48,7 @@
                         </div>
                     </div>
                     
-                    <div class="row clearfix draggable-container">
+                    <div class="row clearfix draggable-container db-replace-container">
                         <div class="table-responsive">
                             <div class="col-sm-12">
                                 <table class="digima-table">
@@ -78,11 +78,13 @@
                                                 <td><span>{{number_format($dbline->dbline_rate,2)}}</span></td>
                                                 <td><span>{{number_format($dbline->dbline_amount,2)}}</span></td>
                                                 <td><i size="sm" link="/member/vendor/debit_memo/replace_item/{{$dbline->dbline_id}}" class="popup btn btn-custom-white fa fa-upload"></i></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                                <td><span>{{$dbline->dbline_replace_qty_um}}</span></td>
+                                                <td><span>{{number_format($dbline->dbline_replace_rate,2)}}</span></td>
+                                                <td><span>{{number_format($dbline->dbline_replace_amount,2)}}</span></td>
+                                                <td>
+                                                <input type="hidden" name="" class="txt-amount" value="{{$dbline->dbline_amount - $dbline->dbline_replace_amount}}">
+                                                <span>{{number_format(($dbline->dbline_amount - $dbline->dbline_replace_amount),2)}}</span></td>
+                                                <td class="text-center"><input disabled type="checkbox" {{$dbline->dbline_replace_status == 1 ? 'checked' : '' }} name=""></td>
                                             </tr>
                                         @endforeach
                                     </tbody>

@@ -59,9 +59,16 @@
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
+                                        @if($db->db_memo_status != 1)
                                           <li><a href="/member/vendor/debit_memo?id={{$db->db_id}}">Edit Debit Memo</a></li>
                                           <li><a href="/member/vendor/debit_memo/replace/{{$db->db_id}}">Replace</a></li>
-                                          <li><a href="/member/vendor/debit_memo/condemned/{{$db->db_id}}">Condemned</a></li>
+                                          <li><a class="popup" size="md" link="/member/vendor/debit_memo/confirm_condemned/{{$db->db_id}}/Condemned">Condemned</a></li>
+                                        @else
+                                          <li>
+                                             <a href="#">CLOSED</a>
+                                          </li>
+                                          <li><a href="/member/vendor/debit_memo/replace/{{$db->db_id}}">Edit Condemned</a></li>
+                                        @endif
                                       </ul>
                                     </div>
                                 </td>

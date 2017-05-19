@@ -148,7 +148,7 @@ class OnlinePaymentMethodController extends Member
 		$data["link_reference_id"] 		= str_replace("-","",strstr(Request::input('link_reference_id'), "-"));
 		$data["link_description"]		= Request::input('link_description');
 		$data["link_discount_fixed"]	= Request::input('link_discount_fixed');
-		$data["link_discount_percentage"] = Request::input('link_description');
+		$data["link_discount_percentage"] = Request::input('link_discount_percentage');
 		$data["link_img_id"] 			= Request::input('link_img_id');
 		$data["link_is_enabled"] 		= Request::input('link_is_enabled') == 'on' ? 1 : 0;
 

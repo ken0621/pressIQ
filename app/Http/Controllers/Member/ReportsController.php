@@ -518,8 +518,12 @@ class ReportsController extends Member
         }
 
         $view =  view('member.reports.output.general_ledger', $data); 
+    }
 
-        switch ($report_type) {
+    public function check_report_type()
+    {
+         switch ($report_type) 
+         {
             case 'plain':
                     $return['status'] = 'success_plain';
                     $return['view'] = $view->render();

@@ -3,6 +3,18 @@ namespace App\Globals;
 
 
 use DB;
+use Session;
+use App;
+use PDF;
+use View;
+use DB;
+use Excel;
+use Request;
+use Image;
+use Validator;
+use Redirect;
+use File;
+use URL;
 use App\Globals\Report;
 class Report
 {
@@ -137,4 +149,32 @@ class Report
 		}
 		return $data;
 	}
+
+	public static function check_report_type($report_type, $view, $data, $name="File")
+    {   
+        $_view = view($view, $data); 
+
+         switch ($report_type) 
+         {
+            case 'pdf':
+                    $data['view'] = $_view->render();
+                    return Pdf_global::show_pdf($data['view'], 'landscape');
+                break;
+            case 'excel':
+                    Excel::create($name, function($excel) use($view, $data) {
+
+                        $excel->sheet('New sheet', function($sheet) use($view, $data) {
+
+                            $sheet->loadView($view, $data);
+
+                        });
+
+                    })->export('xls');    
+            default:
+                    $return['status'] = 'success_plain';
+                    $return['view'] = $_view->render();
+                    return json_encode($return);
+                break;
+        }
+    }
 }

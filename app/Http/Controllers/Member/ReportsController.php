@@ -485,17 +485,20 @@ class ReportsController extends Member
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = '';
         $data['head'] = $this->report_header($data);
-        $data['filter'] = $this->report_filter('general_ledger');
+        $data['action'] = '/accounting/general/ledger/get';
+        // $data['filter'] = $this->report_filter('general_ledger');
         $shop_id = $this->user_info->shop_id; 
         
         return view('member.reports.accounting.general_ledger', $data);
     }
     public function general_ledger_get()
     {
-        $from = Request::input('from');
-        $to = Request::input('to');
-        $from = Carbon::parse($from);
-        $to = Carbon::parse($to)->addDay(1);
+        $period              = Request::input('report_period');
+        $date['start_date']  = Request::input('from');
+        $date['end_date']    = Request::input('to');
+        $from                = Report::checkDatePeriod($period, $date)['start_date'];
+        $to                  = Report::checkDatePeriod($period, $date)['end_date'];
+        
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
         $shop_id = $this->user_info->shop_id; 
@@ -506,8 +509,8 @@ class ReportsController extends Member
             ->groupBy('jline_account_id')
             ->groupBy('jline_je_id')
             ->journal()
-            ->where('tbl_journal_entry_line.created_at', '>=', $from)
-            ->where('tbl_journal_entry_line.created_at', '<=', $to)
+            ->whereRaw("DATE(je_entry_date) >= '$from'")
+            ->whereRaw("DATE(je_entry_date) <= '$to'")
             ->get();
         $data['chart_of_account'] = [];
         $data['chart_of_account_data'] = [];
@@ -517,35 +520,9 @@ class ReportsController extends Member
             $data['chart_of_account_data'][$value->chart_type_id][$value->jline_id] = $value;
         }
 
-        $view =  view(, $data); 
-        return $this->check_report_type($report_type, 'member.reports.output.general_ledger', $data, 'General-Ledger'.Carbon::now());
+        $view =  'member.reports.output.general_ledger'; 
+        return Report::check_report_type($report_type, $view, $data, 'General-Ledger'.Carbon::now());
     }
 
-    public function check_report_type($report_type, $view, $data, $name="File")
-    {   
-        $_view = view($view, $data); 
-
-         switch ($report_type) 
-         {
-            case 'pdf':
-                    $data['view'] = $_view->render();
-                    return Pdf_global::show_pdf($data['view'], 'landscape');
-                break;
-            case 'excel':
-                    Excel::create($name, function($excel) use($view, $data) {
-
-                        $excel->sheet('New sheet', function($sheet) use($view, $data) {
-
-                            $sheet->loadView($view, $data);
-
-                        });
-
-                    })->export('xls');    
-            default:
-                    $return['status'] = 'success_plain';
-                    $return['view'] = $_view->render();
-                    return json_encode($return);
-                break;
-        }
-    }
+    
 }

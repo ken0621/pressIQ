@@ -4,7 +4,8 @@ var global_tr_html = $(".div-script tbody").html();
 var global_tr_html_cm = $(".div-script-cm tbody").html();
 var item_selected = ''; 
 
-function customer_invoice(){
+function customer_invoice()
+{
 	init();
 
 	function init()

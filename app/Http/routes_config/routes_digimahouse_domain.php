@@ -52,7 +52,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/checkout/locale', 'Shop\ShopCheckoutController@locale');
 	Route::get('/checkout/session', 'Shop\ShopCheckoutController@session');
 	Route::post('/checkout', 'Shop\ShopCheckoutController@submit');
-	Route::get('/checkout/payment', 'Shop\ShopCheckoutController@payment');
+	Route::any('/checkout/payment', 'Shop\ShopCheckoutController@payment');
 	Route::get('/checkout/method', 'Shop\ShopCheckoutController@update_method');
 	/* End Checkout */
 

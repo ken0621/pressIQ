@@ -12,9 +12,11 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_ec_order;
 use App\Models\Tbl_ec_order_item;
+use App\Models\Tbl_online_pymnt_method;
 use App\Globals\Ecom_Product;
 use DB;
 use Session;
+use Redirect;
 use Carbon\Carbon;
 use App\Globals\Mlm_discount;
 use App\Globals\Mlm_member;
@@ -35,7 +37,6 @@ class Cart
     }
     public static function add_to_cart($product_id,$quantity,$shop_id = null)
     {
-        //get_shop_info
         if (!$shop_id) 
         {
             $shop_id = Cart::get_shop_info();
@@ -175,16 +176,6 @@ class Cart
                     {
 
                         $current_price = $check_discount->item_discount_value;
-                        // if($check_discount->item_discount_type == "fixed")
-                        // {
-                        //     $item_discounted       = "fixed";
-                        //     $item_discounted_value = $check_discount->item_discount_value;
-                        // }
-                        // else if($check_discount->item_discount_type == "percentage")
-                        // {
-                        //     $item_discounted       = "percentage";
-                        //     $item_discounted_value = $item->item_price * ($check_discount->item_discount_value);
-                        // }
                         $item_discounted_remark    = $check_discount->item_discount_remark;
                     }
                 }
@@ -707,6 +698,7 @@ class Cart
         $data["tbl_customer"]['email']          = (isset($customer_information["email"]) ? $customer_information["email"] : (isset($data["tbl_customer"]['email']) ? $data["tbl_customer"]['email'] : null));
         $data["tbl_customer"]['password']       = isset($customer_information["password"]) ? $customer_information["password"] : randomPassword();
         $data["tbl_customer"]['shop_id']        = $shop_id;
+        $data["tbl_customer"]['customer_contact'] = (isset($customer_information["customer_contact"]) ? $customer_information["customer_contact"] : (isset($data["tbl_customer"]['customer_contact']) ? $data["tbl_customer"]['customer_contact'] : null));;
         $data["tbl_customer"]['country_id']     = 420;
 
         /* SET SHIPPINGING INFROMATION */
@@ -764,15 +756,7 @@ class Cart
         /* PAYMENT METHOD ID */
         $payment_method_id = (isset($customer_information["method_id"]) ? $customer_information["method_id"] : (isset($data["method_id"]) ? $data["method_id"] : null));;
 
-        /* COMPUTE SERICE FEE */
-        if($payment_method_id != null)
-        {
-            $service_fee = 15;
-        }
-        else
-        {
-            $service_fee = 0;
-        }
+
 
         /* INITIALIZE TOTALS */
         $subtotal = 0;
@@ -794,8 +778,7 @@ class Cart
             $subtotal += $data["tbl_ec_order_item"][$key]["total"];
         }
 
-        $total = $subtotal + ($shipping_fee + $service_fee);
-
+       
         /* SUMMARY OF DATA FOR ORDER */
         $data["tbl_ec_order"]["customer_id"] = $data["tbl_customer"]["customer_id"];
         $data["tbl_ec_order"]["customer_email"] = $data["tbl_customer"]["email"];
@@ -803,7 +786,31 @@ class Cart
         $data["tbl_ec_order"]["discount_coupon_amount"] = null;
         $data["tbl_ec_order"]["discount_coupon_type"] = null;
         $data["tbl_ec_order"]["subtotal"] = $subtotal;
-        $data["tbl_ec_order"]["shipping_fee"] = $shipping_fee;
+         $data["tbl_ec_order"]["shipping_fee"] = $shipping_fee;
+
+        /* COMPUTE SERVICE FEE */
+        if($payment_method_id != null)
+        {
+            $service_fee = 0;
+
+            $payment_method = Self::get_method_information($shop_id, $payment_method_id);
+
+            if($payment_method->link_discount_percentage != 0)
+            {
+                $service_fee += ($payment_method->link_discount_percentage / 100) * ($subtotal + $shipping_fee);
+            }
+
+            $service_fee += $payment_method->link_discount_fixed;
+        }
+        else
+        {
+            $service_fee = 0;
+        }
+
+         $total = $subtotal + ($shipping_fee + $service_fee);
+
+
+        /*  OTHER INFO WITH SERVICE FEE */
         $data["tbl_ec_order"]["service_fee"] = $service_fee;
         $data["tbl_ec_order"]["total"] = $total;
         $data["tbl_ec_order"]["coupon_id"] = null;
@@ -816,6 +823,16 @@ class Cart
         
 
         return $data;
+    }
+    public static function get_method_information($shop_id, $payment_method_id)
+    {
+        return Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
+                                                                      ->leftJoin('tbl_online_pymnt_other', 'tbl_online_pymnt_link.link_reference_id', '=', 'tbl_online_pymnt_other.other_id')
+                                                                      ->leftJoin('tbl_image', 'tbl_online_pymnt_link.link_img_id', '=', 'tbl_image.image_id')
+                                                                      ->where("tbl_online_pymnt_link.link_shop_id", $shop_id)
+                                                                      ->where("tbl_online_pymnt_link.link_is_enabled", 1)
+                                                                      ->where("tbl_online_pymnt_method.method_id", $payment_method_id)
+                                                                      ->first();
     }
     public static function customer_set_info_check_account($shop_id, $new_account, $email, $password)
     {
@@ -852,6 +869,19 @@ class Cart
         }
     }
 
+
+    public static function process_payment($shop_id)
+    {
+        $data = Self::get_info($shop_id);
+        $method_id = $data["tbl_ec_order"]["payment_method_id"];
+        $method_information = Self::get_method_information($shop_id, $method_id);
+        switch ($method_information->link_reference_name)
+        {
+            case 'ipay88': Redirect::to("/postPaymentWithIPay88")->send(); break;
+            case 'paypal2': die("UNDER DEVELOPMENT"); break;
+            default: break;
+        }
+    }
     public static function get_userip()
     {
         $client  = @$_SERVER['HTTP_CLIENT_IP'];

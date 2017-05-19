@@ -170,7 +170,9 @@ class MLM_StairstepController extends Member
                     if($slot_stairstep->stairstep_bonus != 0)
                     {
                         $computed_points = ($slot_stairstep->stairstep_bonus/100) * $slot_pv;
+	                    $percentage = $slot_stairstep->stairstep_bonus;
                     }  
+                    
 
 	                if($computed_points > 0)
 	                {         

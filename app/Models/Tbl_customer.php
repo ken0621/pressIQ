@@ -105,7 +105,7 @@ class Tbl_customer extends Model
                                            ->whereRaw("chart_type_name = 'Accounts Receivable'")
                                            ->whereRaw("jline_name_reference = 'customer'")
                                            ->whereRaw("jline_name_id = tbl_customer.customer_id")
-                                           ->whereRaw("account_shop_id = shop_id")
+                                           ->whereRaw("account_shop_id = tbl_customer.shop_id")
                                            ->selectRaw("sum( CASE jline_type WHEN 'credit' then -jline_amount WHEN 'debit' then jline_amount END)")
                                            ->toSql();
         

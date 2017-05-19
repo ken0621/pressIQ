@@ -10,10 +10,10 @@ s_input="{{$s_input}}">
                 	<th>Customer</th>
                 	<th>Pin</th>
                 	<th>Code</th>
-                	<th>Student ID</th>
-                	<th>Student Name</th>
+                	<!-- <th>Student ID</th> -->
+                	<!-- <th>Student Name</th> -->
+                	<th>Amount</th>
                 	<th>Status</th>
-                	<th></th>
                 </tr>
                 @if(count($items_s) == 0)
 				<tr>
@@ -28,31 +28,17 @@ s_input="{{$s_input}}">
 	                	<td>{{name_format_from_customer_info($value)}}</td>
 	                	<td>{{$value->merchant_item_pin}}</td>
 	                	<td>{{$value->merchant_item_code}}</td>
-	                	<td>{{$value->merchant_school_s_id}}</td>
-	                	<td>{{$value->merchant_school_s_name}}</td>
+	                	<!-- <td>{{$value->merchant_school_s_id}}</td> -->
+	                	<!-- <td>{{$value->merchant_school_s_name}}</td> -->
+	                	<td>{{$value->merchant_school_i_amount}}</td>
 	                	<td>
 							@if($value->merchant_item_status == 0)
 								Pending (E-commerce order not completed)
 							@elseif($value->merchant_item_status == 1)
-								Active
+								Converted
 							@elseif($value->merchant_item_status == 2)
-								Used
+								Converted
 							@endif
-	                	</td>
-	                	<td>
-	                		@if($value->merchant_item_status == 0)
-								-- Can't be use yet. 
-							@elseif($value->merchant_item_status == 1)
-								<form class="global-submit" method="post" action="/member/mlm/merchant_school/mark/used">
-								{!! csrf_field() !!}
-								<input type="hidden" name="merchant_school_item_id" value="{{$value->merchant_school_item_id}}">
-									<button class="btn btn-primary">Mark as used</button>
-								
-								</form>
-							@elseif($value->merchant_item_status == 2)
-								-- Used
-							@endif
-
 	                	</td>
 	                </tr>
                 @endforeach

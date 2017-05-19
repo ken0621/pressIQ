@@ -41,6 +41,7 @@ class Ec_order
      */
     public static function create_ec_order_automatic($order_info)
     {
+        // dd($order_info);
         if($order_info['customer_id'] == null)
         {
             $customer_id = Customer::createCustomer($order_info['shop_id'] ,$order_info['customer']);
@@ -102,9 +103,14 @@ class Ec_order
         {
             foreach($order_info['merchant_school_i_id'] as $key => $value)
             {
-                $insert['merchant_school_s_id'] = $order_info['merchant_school_s_id'][$key];
-                $insert['merchant_school_s_name'] = $order_info['merchant_school_s_name'][$key];
-
+                // $insert['merchant_school_s_id'] = $order_info['merchant_school_s_id'][$key];
+                // $insert['merchant_school_s_name'] = $order_info['merchant_school_s_name'][$key];
+                $item = Tbl_item::where('item_id', $value)->first();
+                if($item)
+                {
+                    $insert['merchant_school_i_amount'] = $item->item_price;
+                }
+                
                 $insert['merchant_school_item_shop'] = $order_info['shop_id'];
                 $insert['merchant_item_item_id'] = $value;
                 $insert['merchant_item_ec_order_id'] = $order_id;

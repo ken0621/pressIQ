@@ -7,7 +7,6 @@ use Session;
 use App;
 use PDF;
 use View;
-use DB;
 use Excel;
 use Request;
 use Image;
@@ -75,7 +74,7 @@ class Report
 	 * Get the range of report by selected period 
 	 *
 	 * @param  string  	$period 	 ( Please see "case" below)
-	 * @param  string  	$date  		 $date["start_date"], $date["end_date"], $date["days"] | nullable depends on requirements
+	 * @param  string  	$date  		 $date["start"], $date["end"], $date["days"] | nullable depends on requirements
 	 * @return array    			 [start_date] , [end_date]; 
 	 * @author BKA	
 	 */

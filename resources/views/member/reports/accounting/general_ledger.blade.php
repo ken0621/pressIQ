@@ -33,8 +33,8 @@ function submit_done (data) {
 }
 function report_file(type)
 {
-	var from = $('.from_report_a').val();
-    var to = $('.form_report_b').val();
+	var from 	= $('.from_report_a').val();
+    var to 		= $('.form_report_b').val();
     var report_field_type = $('.report_field_type').val();
 
 	window.open( link + '?report_type=' + type + '&from=' + from + '&to=' + to + '&report_field_type=' + report_field_type);

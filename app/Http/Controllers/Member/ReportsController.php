@@ -485,7 +485,7 @@ class ReportsController extends Member
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = '';
         $data['head'] = $this->report_header($data);
-        $data['action'] = '/accounting/general/ledger/get';
+        $data['action'] = '/member/report/accounting/general/ledger/get';
         // $data['filter'] = $this->report_filter('general_ledger');
         $shop_id = $this->user_info->shop_id; 
         
@@ -493,11 +493,12 @@ class ReportsController extends Member
     }
     public function general_ledger_get()
     {
-        $period              = Request::input('report_period');
-        $date['start_date']  = Request::input('from');
-        $date['end_date']    = Request::input('to');
-        $from                = Report::checkDatePeriod($period, $date)['start_date'];
-        $to                  = Report::checkDatePeriod($period, $date)['end_date'];
+        dd(Request::input());
+        $period         = Request::input('report_period');
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
         
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');

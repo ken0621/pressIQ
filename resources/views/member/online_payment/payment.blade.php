@@ -81,11 +81,11 @@
 							                        </div>
 							                        <div class="row form-group text-left">
 							                        	<div class="col-md-6">
-							                        		<label>Dicount Value</label>
+							                        		<label>Charge Value</label>
 							                        		<input type="text" class="form-control float-format" name="link_discount_fixed" value="{{$method->link_discount_fixed or 0}}">
 							                        	</div>
 							                        	<div class="col-md-6">
-							                        		<label>Dicount Percentage</label>
+							                        		<label>Charge Percentage</label>
 							                        		<input type="text" class="form-control int-format" name="link_discount_percentage" value="{{$method->link_discount_percentage or 0}}">
 							                        	</div>
 							                        </div>

@@ -517,35 +517,33 @@ class ReportsController extends Member
             $data['chart_of_account_data'][$value->chart_type_id][$value->jline_id] = $value;
         }
 
-        $view =  view('member.reports.output.general_ledger', $data); 
+        $view =  view(, $data); 
+        return $this->check_report_type($report_type, 'member.reports.output.general_ledger', $data, 'General-Ledger'.Carbon::now());
     }
 
-    public function check_report_type()
-    {
+    public function check_report_type($report_type, $view, $data, $name="File")
+    {   
+        $_view = view($view, $data); 
+
          switch ($report_type) 
          {
-            case 'plain':
-                    $return['status'] = 'success_plain';
-                    $return['view'] = $view->render();
-                    return json_encode($return);
-                break;
             case 'pdf':
-                    $data['view'] = $view->render();
+                    $data['view'] = $_view->render();
                     return Pdf_global::show_pdf($data['view'], 'landscape');
                 break;
             case 'excel':
-                    Excel::create('New file', function($excel) use($data) {
+                    Excel::create($name, function($excel) use($view, $data) {
 
-                        $excel->sheet('New sheet', function($sheet) use($data) {
+                        $excel->sheet('New sheet', function($sheet) use($view, $data) {
 
-                            $sheet->loadView('member.reports.output.general_ledger', $data);
+                            $sheet->loadView($view, $data);
 
                         });
 
                     })->export('xls');    
             default:
                     $return['status'] = 'success_plain';
-                    $return['view'] = $view->render();
+                    $return['view'] = $_view->render();
                     return json_encode($return);
                 break;
         }

@@ -7,23 +7,23 @@
 				<div class="form-header">Login or Checkout as guest</div>
 				<div class="form-content">
 					@if (session('warning'))
-					    <div class="alert alert-warning">
+					    <div class="alert alert-warning text-center">
 					    	<ul style="padding: 0; margin: 0;">
-					    		<li style="display: block;">{{ session('warning') }}</li>
+					    		<li style="display: block;">{!! session('warning') !!}</li>
 					    	</ul>
 					    </div>
 					@endif
-					<form class="form-login" method="get" action="/checkout">
+					<form method="post">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<div class="form-group">
-							<input value="{{ Request::input("email") }}" type="email" class="the-email form-control" placeholder="Enter your email address" name="email">
+							<input value="{{ old('email') }}" type="email" class="the-email form-control" placeholder="Enter your email address" name="email">
 						</div>
 						<div class="form-group">
 							<div class="radio">
-							  <label><input name="continue" class="radio-continue" type="radio" {{ session('warning') ? '' : 'checked' }} yes="1"> Continue without password</label>
+							  <label><input name="continue" class="radio-continue" type="radio" value="on" {{ session('warning') ? '' : 'checked' }} yes="1"> Continue without password</label>
 							</div>
 							<div class="radio">
-							  <label><input name="continue" class="radio-continue" type="radio" {{ session('warning') ? 'checked' : '' }} yes="0"> I already have an account</label>
+							  <label><input name="continue" class="radio-continue" type="radio" value="off" {{ session('warning') ? 'checked' : '' }} yes="0"> I already have an account</label>
 							</div>
 						</div>
 						<div class="form-group">

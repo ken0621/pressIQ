@@ -40,7 +40,7 @@ function online_payment()
 			}
 		})
 	}
-
+	
 	function event_add_other_click()
 	{
 		$(document).on("click", ".add-other", function()

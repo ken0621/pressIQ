@@ -99,6 +99,12 @@ class ShopCheckoutController extends Shop
             return Redirect::to("/checkout/payment");
         }
     }
+    public function update_method()
+    {
+        $customer_info["method_id"] = Request::input("method_id");
+        $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info);
+        echo json_encode("Success!"); 
+    }
 
     public function locale_id_to_name($locale_id)
     {

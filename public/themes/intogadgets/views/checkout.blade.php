@@ -146,6 +146,8 @@ function checkout_form()
 						            		{
 						            			$(".load-location[level=" + level + "]").val(deflt);
 						            		}
+
+
 						            		
 						              		action_load_location(level+1, $(".load-location[level=" + (level) + "]").val());
 						            	}
@@ -159,6 +161,13 @@ function checkout_form()
 			parent = $(e.currentTarget).val();
 			level = parseInt($(e.currentTarget).attr("level")) + 1;
 			action_load_location(level, parent);
+
+			if($(e.currentTarget).attr("level") == 3)
+			{
+				$(".checkout-summary .loader-here").removeClass("hidden");
+				action_load_sidecart();
+			}
+
 		});
 	}
 }

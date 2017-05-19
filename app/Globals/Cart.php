@@ -665,8 +665,8 @@ class Cart
      * Allows us to set information for customer that will be processed later on
      *
      * @param
-     *    ~ $shop_id (int)
-     *    ~ $customer_information (array)
+     *    $shop_id (int)
+     *    $customer_information (array)
      *      - first_name
      *      - last_name, email, password, shipping_state, shipping_city, shipping_zip, shipping_street) 
      *      - email
@@ -675,15 +675,15 @@ class Cart
      *      - shipping_city
      *      - shipping_zip
      *      - shipping_street
-     *    ~ $customer_validation (array)
+     *    $customer_validation (array) - If on of the string is in this array - It will trigger a validation.
      *      - check_account
      *      - check_name
      *      - check_address
      *      - check_contact
      *
      * @return (array)
-     *    ~ status (error, success)
-     *    ~ status_message (contains message if there is an error)
+     *    - status (error, success)
+     *    - status_message (contains message if there is an error)
      *
      * @author (Guillermo Tabligan)
      *
@@ -728,7 +728,7 @@ class Cart
             $data["tbl_customer_address"]["billing"]["purpose"] = "billing"; 
         }
 
-        $data = Cart::customer_set_info_ec_order($shop_id, $data);
+        $data = Cart::customer_set_info_ec_order($shop_id, $data, $customer_information);
 
         /* VALIDATIONS */
         $check_account = Cart::customer_set_info_check_account($shop_id, $data["new_account"], $data["tbl_customer"]['email'], $data["tbl_customer"]["password"]);
@@ -757,14 +757,26 @@ class Cart
         return $message;
     }
 
-    public static function customer_set_info_ec_order($shop_id, $data)
+    public static function customer_set_info_ec_order($shop_id, $data, $customer_information)
     { 
         $data["tbl_ec_order"]["ec_order_id"] = Tbl_ec_order::max("ec_order_id") + 1;
+
+        /* PAYMENT METHOD ID */
+        $payment_method_id = (isset($customer_information["method_id"]) ? $customer_information["method_id"] : (isset($data["method_id"]) ? $data["method_id"] : null));;
+
+        /* COMPUTE SERICE FEE */
+        if($payment_method_id != null)
+        {
+            $service_fee = 15;
+        }
+        else
+        {
+            $service_fee = 0;
+        }
 
         /* INITIALIZE TOTALS */
         $subtotal = 0;
         $shipping_fee = 0;
-        $service_fee = 0;
 
         $_cart = Self::get_cart($shop_id)["cart"];
 
@@ -797,10 +809,11 @@ class Cart
         $data["tbl_ec_order"]["coupon_id"] = null;
         $data["tbl_ec_order"]["shop_id"] = $shop_id;
         $data["tbl_ec_order"]["created_date"] = Carbon::now();
-        $data["tbl_ec_order"]["payment_method_id"] = null;
+        $data["tbl_ec_order"]["payment_method_id"] = $payment_method_id;
+        $data["tbl_ec_order"]["shipping_group"] = null;
         $data["tbl_ec_order"]["order_status"] = "Pending";
         $data["tbl_ec_order"]["payment_status"] = 0;
-        $data["tbl_ec_order"]["shipping_group"] = 0;
+        
 
         return $data;
     }

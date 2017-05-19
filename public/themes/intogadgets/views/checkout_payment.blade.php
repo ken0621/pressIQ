@@ -9,17 +9,17 @@
 					<div class="holder-holder">
 						@if(count($_payment_method) != 0)
 							@foreach($_payment_method as $payment_method)
-							<label class="choose-payment-method">
-								<div class="holder">
+								<div class="choose-payment-method holder" method_id="{{ $payment_method->method_id }}">
 									<div class="match-height" style="line-height: 12.5px;">{{ $payment_method->method_name }}</div>
 									<div class="image" style="margin-top: 7.5px;">
 										<img src="{{ $payment_method->image_path ? $payment_method->image_path : '/assets/front/img/default.jpg' }}">
 									</div>
 									<div class="radio" style="margin-bottom: 0;">
-									  <input type="radio" name="payment_method_id" value="{{ $payment_method->method_id }}">
+										<label >
+									  		<input class="radio" type="radio" name="payment_method_id" value="{{ $payment_method->method_id }}">
+										</label>
 									</div>
 								</div>
-							</label>
 							@endforeach	
 						@else
 							<div class="text-center"><h3>No Payment Method Available</h3></div>
@@ -38,7 +38,6 @@
 						</div>
 					</div>
 				</div>
-				<!-- CART HERE -->
 				<div class="col-md-4 order-summary-container">
 				</div>
 			</div>
@@ -52,13 +51,11 @@
 <script type="text/javascript">
 
 
-var checkout_form = new checkout_form();
-var ajax_load_location = null;
-function checkout_form()
+var checkout_form_payment = new checkout_form_payment();
+
+function checkout_form_payment()
 {
 	init();
-
-	action_load_location(1, 0);
 
 	function init()
 	{
@@ -69,8 +66,33 @@ function checkout_form()
 	}
 	function document_ready()
 	{
+		event_choose_payment_method();
 		action_load_sidecart();
 		action_match_height();
+
+	}
+	function event_choose_payment_method()
+	{
+		$(".choose-payment-method").unbind("click");
+		$(".choose-payment-method").bind("click", function(e)
+		{
+			$(".checkout-summary .loader-here").removeClass("hidden");
+			$(e.currentTarget).find(".radio").prop("checked", true);
+
+			var method_id = $(e.currentTarget).attr("method_id");
+			$.ajax(
+			{
+				url:"/checkout/method",
+				datatype:"json",
+				type:"get",
+				data:{method_id:method_id},
+				success: function(data)
+				{
+					action_load_sidecart();
+				}
+			});
+
+		});
 	}
 	function action_match_height()
 	{

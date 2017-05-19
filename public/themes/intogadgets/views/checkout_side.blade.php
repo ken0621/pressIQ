@@ -1,6 +1,10 @@
 
 <div class="checkout-summary">
 	<div class="title">Order Summary</div>
+	<div class="loader-here hidden" style="padding-top: 50px; position: absolute; text-align: center; width: 100%; top: 0; bottom: 0; background-color: rgba(255,255,255,0.7)">
+		<i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+		<span class="sr-only">Loading...</span>
+	</div>
 	<div class="order-summary">
 		@if (session('fail'))
 		    <div class="alert alert-danger">
@@ -38,9 +42,9 @@
 				@endforeach
 			</tbody>
 		</table>
-		@if($get_cart["tbl_ec_order"]["shipping_fee"] != 0 && $get_cart["tbl_ec_order"]["service_fee"] != 0)
+		@if($get_cart["tbl_ec_order"]["shipping_fee"] != 0 || $get_cart["tbl_ec_order"]["service_fee"] != 0)
 		<div class="text-right total">
-			<div class="total-price">&#8369; {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</div>
+			<div class="total-price">&#8369; {{ number_format($get_cart["tbl_ec_order"]["subtotal"], 2) }}</div>
 			<div class="total-label">Subtotal</div>
 		</div>	
 		@endif
@@ -58,12 +62,12 @@
 		@if($get_cart["tbl_ec_order"]["service_fee"] != 0)
 		<div class="text-right total">
 			<div class="total-price">&#8369; {{ number_format($get_cart["tbl_ec_order"]["service_fee"], 2) }}</div>
-			<div class="total-label">Service Fee</div>
+			<div class="total-label">Transaction Fee</div>
 		</div>
 		@endif
 
 		<div class="text-right total ">
-			<div class="total-price supertotal">&#8369; {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</div>
+			<div class="total-price supertotal">&#8369; {{ number_format($get_cart["tbl_ec_order"]["total"], 2) }}</div>
 			<div class="total-label">Total</div>
 		</div>
 	</div>

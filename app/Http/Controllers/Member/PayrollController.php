@@ -73,6 +73,7 @@ use App\Models\Tbl_payroll_process_leave;
 use App\Models\Tbl_payroll_shift;
 use App\Models\Tbl_payroll_shift_template;
 use App\Models\Tbl_payroll_shift_code;
+use App\Models\Tbl_payroll_employee_shift;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -4259,6 +4260,9 @@ class PayrollController extends Member
 
           $count = Tbl_payroll_period::check($insert)->count();
 
+          $id = 0;
+          $payroll_period_id = 0;
+
           if($count == 0)
           {
 
@@ -4282,10 +4286,25 @@ class PayrollController extends Member
 
           }
 		
-		$return['status'] = 'success';
-		$return['function_name'] = 'payroll_period_list.reload_list';
+          $return['id']               = $payroll_period_id;
+		$return['status']           = 'success';
+		$return['function_name']    = 'payroll_period_list.reload_list';
 		return json_encode($return);
 	}
+
+     public function modal_schedule_employee_shift()
+     {
+          $id = Request::input('id');
+
+          $data['period']          = Tbl_payroll_period::where('payroll_period_id', $id)->first();
+          $data['_company']        = Tbl_payroll_period_company::selperiod($id)->orderBy('tbl_payroll_company.payroll_company_name')->get();
+          $data['_department']     = tbl_payroll_department::sel(Self::shop_id())->orderBy('payroll_department_name')->get();
+          $data['_jobtitle']       = Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('tbl_payroll_jobtitle.payroll_jobtitle_name')->get();
+
+          $data['id']              = $id;
+
+          return view('member.payroll.modal.modal_schedule_employee_shift', $data);
+     }
 
 	public function modal_archive_period($archived, $payroll_period_id)
 	{

@@ -43,6 +43,7 @@ use App\Models\Tbl_payroll_process_leave;
 use App\Models\Tbl_payroll_remarks;
 use App\Models\Tbl_payroll_shift;
 use App\Models\Tbl_payroll_shift_template;
+use App\Models\Tbl_payroll_employee_shift;
 
 use Carbon\Carbon;
 use stdClass;
@@ -1959,8 +1960,9 @@ class Payroll
 
 			$data['regular_salary'] 			= $monthly_salary;
 			
-			$less_cola = ($daily_late * $cola) + ($daily_undertime * $cola);
-			$data['payroll_cola']				= round(($monthly_cola - $less_cola), 2);
+			$less_cola = ($daily_late * $cola) + ($daily_undertime * $cola) + ($absent_count * $cola);
+			// dd($less_cola);
+			$data['payroll_cola']				= round((($monthly_cola + ($data['leave_count_w_pay'] * $cola)) - $less_cola), 2);
 		}
 
 	

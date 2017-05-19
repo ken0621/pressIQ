@@ -17,6 +17,8 @@ use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_period_company;
 use App\Models\Tbl_payroll_period;
 use App\Models\Tbl_payroll_holiday_company;
+use App\Models\Tbl_payroll_employee_shift;
+
 
 use App\Globals\Payroll;
 

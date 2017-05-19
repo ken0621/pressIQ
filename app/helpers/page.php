@@ -649,13 +649,13 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
     /* -- PAYROLL PERIOD => LIST  */
-    $code = "payroll-shift-group";
-    $nav[$page]['submenu'][$code]['label'] = "Shifting Group";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/shift_group";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+    // $code = "payroll-shift-group";
+    // $nav[$page]['submenu'][$code]['label'] = "Shifting Group";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/shift_group";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
     /* PAYROLL CONFIGURATION [SETTTINGS] */
     $code = "payroll-configuration";

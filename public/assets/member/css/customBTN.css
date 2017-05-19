@@ -1239,3 +1239,8 @@ input:checked + .slider:before {
     border-radius: 5px;
     margin: 5px;
 }
+
+.border-1-gray
+{
+    border:1px solid #989797;
+}

@@ -50,6 +50,7 @@
 	</style>
 </head>
 <body>
+<div style="page-break-after: always;">
 <table width="100%">
 	<tr>
 		<td width="60%" style="text-align: left">
@@ -185,7 +186,7 @@
     </div>                
 </div>
 @endif
-
+</div>
 <div>
     <div class="form-group">
         <h2>Agent Transaction</h2>      

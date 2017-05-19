@@ -9,6 +9,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_debit_memo_line;
 use App\Models\Tbl_warehouse_inventory;
+use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_user;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
@@ -37,7 +38,7 @@ class DebitMemoController extends Member
         $access = Utilities::checkAccess('vendor-debit-memo', 'access_page');
         if($access == 1)
         { 
-            $data["page"]       = "Credit Memo";
+            $data["page"]       = "Debit Memo";
             $data["_vendor"]    = Vendor::getAllVendor('active');
             $data['_item']      = Item::get_all_category_item();
             $data['_um']        = UnitMeasurement::load_um_multi();
@@ -333,6 +334,74 @@ class DebitMemoController extends Member
         {
             return $this->show_no_access();
         }        
+    }
+    public function replace($debit_memo_id)
+    {
+        $data["_db_item"] = Tbl_debit_memo_line::replace_dbitem()->db_item()->where("dbline_db_id",$debit_memo_id)->get();
+
+        $data["_vendor"]    = Vendor::getAllVendor('active');
+        $data['_item']      = Item::get_all_category_item();
+        $data['_um']        = UnitMeasurement::load_um_multi();
+
+        $data["db"]            = Tbl_debit_memo::where("db_id", $debit_memo_id)->first();
+        $data["_dbline"]       = Tbl_debit_memo_line::um()->where("dbline_db_id", $debit_memo_id)->get();
+
+        foreach($data["_db_item"] as $key => $value) 
+        {
+            $um_qty = UnitMeasurement::um_qty($value->dbline_um);
+            $data["_db_item"][$key]->dbline_qty_um = UnitMeasurement::um_view($um_qty * $value->dbline_qty,$value->item_measurement_id,$value->dbline_um);
+        }
+        return view("member.vendor.debit_memo.debit_memo_replace",$data);
+    }
+    public function replace_item($dbline_id)
+    {
+        $data["db_item"] = Tbl_debit_memo_line::replace_dbitem()->db_item()->where("dbline_id",$dbline_id)->first();
+
+        $data["base_name"] = null;
+        $data["base_qty"] = null;
+        $data["base_um_id"] = null;
+
+        $data["issued_um_qty"] = null;
+        $data["issued_um_name"] = null;
+        $data["issued_um_id"] = null;
+
+        $um_info = UnitMeasurement::um_info($data["db_item"]->dbline_um);
+
+        if($um_info)
+        {
+            if($um_info->is_base != 0)
+            {
+                $data["base_name"] = $um_info->multi_name." (".$um_info->multi_abbrev.")";
+                $data["base_qty"] = $data["db_item"]->dbline_qty * UnitMeasurement::um_qty($data["db_item"]->item_measurement_id);
+                $data["base_um_id"] = $data["db_item"]->item_measurement_id;
+            }
+            else
+            {
+                $total_qty = UnitMeasurement::um_qty($data["db_item"]->dbline_um) * $data["db_item"]->dbline_qty;
+
+                $base_qty = round($total_qty / UnitMeasurement::um_qty($data["db_item"]->dbline_um));
+
+                $issued_qty = 0;
+
+                $data["base_name"] = $um_info->multi_name." (".$um_info->multi_abbrev.")";
+                $data["base_qty"] = $base_qty;
+                $data["base_um_id"] = $data["db_item"]->item_measurement_id;
+
+                $data["issued_um_qty"] = null;
+                $data["issued_um_name"] = null;
+                $data["issued_um_id"] = $data["db_item"]->dbline_um;
+
+            }
+        }
+        else
+        {
+           $data["base_qty"] = $data["db_item"]->dbline_qty;
+           $data["base_name"] = "Piece(s)";
+           $data["base_um_id"] = "";   
+        }
+
+
+        return view("member.vendor.debit_memo.update_replace_item",$data);
     }
     /**
      * Show the form for creating a new resource.

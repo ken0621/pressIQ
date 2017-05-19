@@ -12,7 +12,6 @@ use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_debit_memo_line;
 use App\Models\Tbl_debit_memo;
 use App\Globals\Accounting;
-use App\Models\Tbl_user;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\AuditTrail;

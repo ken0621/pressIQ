@@ -59,7 +59,9 @@
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
-                                          <li ><a href="/member/vendor/debit_memo?id={{$db->db_id}}">Edit Debit Memo</a></li>
+                                          <li><a href="/member/vendor/debit_memo?id={{$db->db_id}}">Edit Debit Memo</a></li>
+                                          <li><a href="/member/vendor/debit_memo/replace/{{$db->db_id}}">Replace</a></li>
+                                          <li><a href="/member/vendor/debit_memo/condemned/{{$db->db_id}}">Condemned</a></li>
                                       </ul>
                                     </div>
                                 </td>

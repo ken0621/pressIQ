@@ -75,21 +75,21 @@ class Ec_wishlist
     {
         Tbl_ec_wishlist::where("id", $wishlist_id)->where("shop_id", $shop_id)->update( [ "archived" => 1 ] );
     }
-    public static function existProduct($product_id, $customer_id, $shop_id)
+    public static function notExistProduct($product_id, $customer_id, $shop_id)
     {
         $result = Tbl_ec_wishlist::where("customer_id", $customer_id)
                                  ->where("product_id", $product_id)
                                  ->where("shop_id", $shop_id)
                                  ->where("archived", 0)
                                  ->first();
-
+   
         if ($result) 
         {
-            return true;
+            return false;
         }
         else
         {
-            return false;
+            return true;
         }
     }
 }

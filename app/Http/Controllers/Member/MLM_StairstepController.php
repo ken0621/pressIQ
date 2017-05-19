@@ -189,7 +189,7 @@ class MLM_StairstepController extends Member
 	                    Mlm_slot_log::slot_array($arry_log);    
 	                }
                 }
-	            
+
 	            $check_if_change = 0;
 	        	foreach($slot_stairstep_get as $slot_stairstep_new)
 	        	{
@@ -228,22 +228,22 @@ class MLM_StairstepController extends Member
 		                $reduced_percent = 0;
 		                $computed_points = 0;
 
-	        	    	// $slot_info      = Tbl_mlm_slot::where("slot_id",$slot_id)->first();
-	        	    	// $slot_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$slot_info->stairstep_rank)->first();
+	        	    	$slot_info      = Tbl_mlm_slot::where("slot_id",$placement->sponsor_tree_parent_id)->first();
+	        	    	$slot_stairstep = Tbl_mlm_stairstep_settings::where("shop_id",$shop_id)->where("stairstep_id",$slot_info->stairstep_rank)->first();
 	        	    	
 	        	    	if($slot_stairstep)
 	        	    	{
 			                if(!$percentage)
 			                {
 
-			                	$append_info = " (Over-ride)"; 
-			                    if($slot_stairstep->stairstep_bonus != 0)
-			                    {
-			                        $computed_points = ($slot_stairstep->stairstep_bonus/100) * $slot_pv;
-			                    }         
+			                	// $append_info = " (Over-ride)"; 
+			                 //    if($slot_stairstep->stairstep_bonus != 0)
+			                 //    {
+			                 //        $computed_points = ($slot_stairstep->stairstep_bonus/100) * $slot_pv;
+			                 //    }         
 
-			                    $percentage      = $slot_stairstep->stairstep_bonus;
-			                    $reduced_percent = $slot_stairstep->stairstep_bonus;
+			                 //    $percentage      = $slot_stairstep->stairstep_bonus;
+			                 //    $reduced_percent = $slot_stairstep->stairstep_bonus;
 			                }
 			                else
 			                {           
@@ -265,7 +265,7 @@ class MLM_StairstepController extends Member
 
 		                if($computed_points > 0)
 		                {             
-		                    $log                                    = "You earned ".$reduced_percent."% of ".$converted_pv."(".$computed_points.") from slot #".$slot_info->slot_id."(Current Rank:".$slot_stairstep->stairstep_name.").";
+		                    $log                                    = "You earned ".$reduced_percent."% of ".$converted_pv."(".$computed_points.") from slot #".$slot_id."(Current Rank:".$slot_stairstep->stairstep_name.").";
 		                    $arry_log['wallet_log_slot']            = $placement->sponsor_tree_parent_id;
 		                    $arry_log['shop_id']                    = $slot_info->shop_id;
 		                    $arry_log['wallet_log_slot_sponsor']    = $placement->sponsor_tree_parent_id;

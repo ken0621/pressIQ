@@ -598,6 +598,7 @@ Route::any('/member/vendor/debit_memo/replace_submit','Member\DebitMemoControlle
 Route::any('/member/vendor/debit_memo/save_replace_submit','Member\DebitMemoController@save_replace_submit');
 Route::any('/member/vendor/debit_memo/confirm_condemned/{id}/{action}','Member\DebitMemoController@confirm_condemned');
 Route::any('/member/vendor/debit_memo/confirm_submit/{id}','Member\DebitMemoController@confirm_submit');
+Route::any('/member/vendor/debit_memo/choose_type','Member\DebitMemoController@choose_type');
 
 /* Vendor - Purchase Order */
 Route::get('/member/vendor/purchase_order','Member\Vendor_PurchaseOrderController@index');

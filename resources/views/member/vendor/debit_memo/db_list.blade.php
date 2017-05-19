@@ -12,7 +12,7 @@
                     List of Vendor Debit Memo
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/debit_memo" >Create Debit Memo</a>
+            <a class="panel-buttons btn btn-custom-primary pull-right popup" size="md" link="/member/vendor/debit_memo/choose_type">Create Debit Memo</a>
         </div>
     </div>
 </div>
@@ -43,6 +43,7 @@
                             <th>Debit Memo No</th>
                             <th>Vendor Name</th>
                             <th>Total</th>
+                            <th>Type</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -53,6 +54,13 @@
                                 <td>{{$db->db_id}}</td>
                                 <td>{{$db->vendor_company or $db->vendor_title_name." ".$db->vendor_first_name." ".$db->vendor_middle_name." ".$db->vendor_last_name." ".$db->vendor_suffix_name}}</td>
                                 <td>{{currency("PHP",$db->db_amount)}}</td>
+                                <td>
+                                    @if($db->is_bad_order == 1)
+                                    Bad Order
+                                    @else
+                                    Debit Memo
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

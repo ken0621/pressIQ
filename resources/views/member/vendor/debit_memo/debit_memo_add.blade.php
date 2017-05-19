@@ -3,12 +3,13 @@
 <form class="global-submit form-to-submit-transfer" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" name="_token" value="{{csrf_token()}}">
     <input type="hidden" name="debit_memo_id" value="{{Request::input('id')}}" >
+    <input type="hidden" name="type" value="{{Request::input('type')}}" >
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
             <div>
                 <i class="fa fa-tags"></i>
                 <h1>
-                    <span class="page-title">Create Debit Memo</span>
+                    <span class="page-title">Create {{strtoupper(str_replace("_"," ",Request::input('type')))}}</span>
                     <small>
                     
                     </small>

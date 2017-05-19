@@ -35,6 +35,7 @@ class DebitMemo
 		$insert_db["db_message"] = $vendor_info["db_message"];
 		$insert_db["db_memo"] = $vendor_info["db_memo"];
 		$insert_db["db_amount"] = $vendor_info["db_amount"];
+		$insert_db["is_bad_order"] = $vendor_info["type"];
 		$insert_db["date_created"] = Carbon::now();
 
 		$db_id = Tbl_debit_memo::insertGetId($insert_db);

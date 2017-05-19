@@ -1,5 +1,6 @@
 <form class="global-submit form-to-submit-add" action="{{$action}}" method="post">
     <input type="hidden" name="_token" value="{{csrf_token()}}">
+    <input type="hidden" name="type" value="{{$type}}">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Confirm</h4>

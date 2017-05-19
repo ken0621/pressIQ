@@ -70,6 +70,12 @@ class DebitMemoController extends Member
         $vendor_info["db_memo"] = Request::input("db_memo");
         $vendor_info["db_amount"] = Request::input("overall_price");
 
+        $vendor_info["type"] = 0;
+        if(Request::input("type") == "bad_order")
+        {
+            $vendor_info["type"] = 1;
+        }
+
         $item_info[] = null;
         $ctr_items = 0;
         $product_consume = [];
@@ -324,13 +330,16 @@ class DebitMemoController extends Member
 
             foreach ($data["_db"] as $key => $value) 
             {
-                $replace_amount = 0;
-                $dbline = Tbl_debit_memo_line::replace_dbitem()->db_item()->where("dbline_db_id",$value->db_id)->get();
-                foreach ($dbline as $keydb => $valuedb) 
+                if($data["_db"][$key]->db_memo_status == 1)
                 {
-                    $replace_amount += $valuedb->dbline_replace_amount;
+                    $replace_amount = 0;
+                    $dbline = Tbl_debit_memo_line::replace_dbitem()->db_item()->where("dbline_db_id",$value->db_id)->get();
+                    foreach ($dbline as $keydb => $valuedb) 
+                    {
+                        $replace_amount += $valuedb->dbline_replace_amount;
+                    }
+                    $data["_db"][$key]->db_amount = $value->db_amount - $replace_amount;                    
                 }
-                $data["_db"][$key]->db_amount = $value->db_amount - $replace_amount;
             }
 
             return view("member.vendor.debit_memo.db_list",$data);
@@ -339,6 +348,10 @@ class DebitMemoController extends Member
         {
             return $this->show_no_access();
         }        
+    }
+    public function choose_type()
+    {
+        return view("member.vendor.debit_memo.debit_memo_type");
     }
     public function replace($debit_memo_id)
     {
@@ -525,7 +538,9 @@ class DebitMemoController extends Member
     
         $data["action"] = "/member/vendor/debit_memo/confirm_submit/".$db_id;
 
-        $data["message"] = "Do you really want to ".$action." these item?";
+        $data["type"] = $action;
+
+        $data["message"] = "Do you really want to ".$action." items?";
 
         return view("member.vendor.debit_memo.confirm_debit_memo",$data);
     }
@@ -544,7 +559,7 @@ class DebitMemoController extends Member
             }
         }
 
-         //START if bundle inventory_consume arcy
+        //START if bundle inventory_consume arcy
         foreach ($dbline_data as $keyitem => $value_item) 
         {
             $item_bundle_info = Tbl_item::where("item_id",$value_item->dbline_item_id)->where("item_type_id",4)->first();

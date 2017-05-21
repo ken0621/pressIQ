@@ -111,3 +111,27 @@ function get_product_first_image($data)
         return '/assets/front/img/placeholder.png';
     }   
 }
+
+function loop_content_condition($data, $tab, $content)
+{
+    if ( is_serialized( get_content($data, $tab, $content) ) )
+    {
+        if ( count( unserialize( get_content($data, $tab, $content) ) ) > 0 ) 
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+function loop_content_get($data, $tab, $content)
+{
+    return unserialize( get_content($data, $tab, $content) );
+}

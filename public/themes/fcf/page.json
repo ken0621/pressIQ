@@ -48,6 +48,13 @@
 			"default":"GALLERY",
 			"size":"12"
 		},
+		"home_gallery_images" :
+		{
+			"label":"Gallery Images",
+			"type":"gallery",
+			"default":"",
+			"size":"12"
+		},
 		"home_division1_title" :
 		{
 			"label":"Home Division 1 title",

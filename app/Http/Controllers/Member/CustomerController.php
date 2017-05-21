@@ -701,55 +701,68 @@ class CustomerController extends Member
         // luke add mlm username and password
         if(Request::input('ismlm') != null)
         {
-            $mlm_username = Request::input('mlm_username');
-            $mlm_password = Request::input('mlm_password');
-            if($mlm_username != null || $mlm_username != "")
-            {
-                if(strlen($mlm_username) >= 4)
-                {
-                    $count_username = Tbl_customer::where('mlm_username', $mlm_username)->where('customer_id', '!=', $client_id)->count();
-                    if($count_username == 0)
+            $ismlm = Request::input('ismlm');
+            switch ($ismlm) {
+                case 1:
+                    $mlm_username = Request::input('mlm_username');
+                    $mlm_password = Request::input('mlm_password');
+                    if($mlm_username != null || $mlm_username != "")
                     {
-                        if($mlm_password != null || $mlm_password != "")
+                        if(strlen($mlm_username) >= 4)
                         {
-                            if(strlen($mlm_password) >= 6)
+                            $count_username = Tbl_customer::where('mlm_username', $mlm_username)->where('customer_id', '!=', $client_id)->count();
+                            if($count_username == 0)
                             {
-                                $mlm_continue = 1;
+                                if($mlm_password != null || $mlm_password != "")
+                                {
+                                    if(strlen($mlm_password) >= 6)
+                                    {
+                                        $mlm_continue = 1;
+                                    }
+                                    else
+                                    {
+                                        $data['message'] = 'error';
+                                        $data['error'] = 'Password length must be over 6 characters.';
+                                        return json_encode($data); 
+                                    }
+                                }
+                                else
+                                {
+                                    $data['message'] = 'error';
+                                    $data['error'] = 'Invalid Password.';
+                                    return json_encode($data); 
+                                }
                             }
                             else
                             {
                                 $data['message'] = 'error';
-                                $data['error'] = 'Password length must be over 6 characters.';
-                                return json_encode($data); 
+                                $data['error'] = 'Username Already Taken.';
+                                return json_encode($data);
                             }
                         }
                         else
                         {
                             $data['message'] = 'error';
-                            $data['error'] = 'Invalid Password.';
-                            return json_encode($data); 
+                            $data['error'] = 'Username length must be over 6 characters.';
+                            return json_encode($data);
                         }
                     }
                     else
                     {
                         $data['message'] = 'error';
-                        $data['error'] = 'Username Already Taken.';
+                        $data['error'] = 'Invalid username.';
                         return json_encode($data);
                     }
-                }
-                else
-                {
-                    $data['message'] = 'error';
-                    $data['error'] = 'Username length must be over 6 characters.';
-                    return json_encode($data);
-                }
+                    break;
+                case 2:
+                    # code...
+                    $mlm_continue = 2;
+                    break;
+                default:
+                    # code...
+                    break;
             }
-            else
-            {
-                $data['message'] = 'error';
-                $data['error'] = 'Invalid username.';
-                return json_encode($data);
-            }
+            
         }
         // end luke
 
@@ -771,15 +784,19 @@ class CustomerController extends Member
             $updatecustomer['IsWalkin'] = 0;
             $updatecustomer['tin_number'] = $tin_number;
             
-            if($mlm_continue == 1)
-            {
-                $updatecustomer['ismlm'] = 1;
-                $updatecustomer['mlm_username'] = $mlm_username;
-                $updatecustomer['password'] = Crypt::encrypt($mlm_password);
-            }
-            else
-            {
-                $updatecustomer['ismlm'] = 0;
+
+            switch ($mlm_continue) {
+                case 1:
+                        $updatecustomer['ismlm'] = 1;
+                        $updatecustomer['mlm_username'] = $mlm_username;
+                        $updatecustomer['password'] = Crypt::encrypt($mlm_password);
+                    break;
+                case 2:
+                    # code...
+                    break;
+                default:
+                        $updatecustomer['ismlm'] = 0;
+                    break;
             }
 
             $old_customer_data = Tbl_customer::where("customer_id",$client_id)->first()->toArray();

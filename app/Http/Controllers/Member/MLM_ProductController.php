@@ -79,6 +79,12 @@ class MLM_ProductController extends Member
 	    {
     		$data['active'][$key]  = $value->marketing_plan_code;
             $data['active_label'][$key]  = $value->marketing_plan_label;
+
+            if($value->marketing_plan_code == "STAIRSTEP")
+            {
+                $data['active'][count($data)]        = "STAIRSTEP_GROUP";
+                $data['active_label'][count($data)]  = "Rank Group Bonus";    
+            }
 	    }
 
 	    $data['item'] 		 = $this->iteminventory($_inventory, $data['active']);
@@ -162,6 +168,7 @@ class MLM_ProductController extends Member
         $membership = Tbl_membership::getactive(0, $shop_id)->get();
 
         $points = Request::input('membership_points');
+
         foreach($membership as $key2 => $value2)
         {
             foreach($data['active_plan_product_repurchase'] as $key => $value)
@@ -170,6 +177,12 @@ class MLM_ProductController extends Member
     	            $tablename 			 = $value->marketing_plan_code;
                     
                     $update[$tablename] = $points[$tablename][$value2->membership_id];
+                    if($value->marketing_plan_code == "STAIRSTEP")
+                    {
+                        $update["STAIRSTEP_GROUP"] = $points["STAIRSTEP_GROUP"][$value2->membership_id];
+                    }
+
+
                     Tbl_mlm_item_points::where('item_id', Request::input('item_id'))
                     ->where('membership_id', $value2->membership_id)->update($update);
             }

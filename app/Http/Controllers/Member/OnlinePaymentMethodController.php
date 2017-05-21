@@ -25,13 +25,13 @@ class OnlinePaymentMethodController extends Member
 
 	public function getIndex()
 	{
-		$data["_method"] 	= Tbl_online_pymnt_method::link($this->getShopId())->get();
+		$data["_method"] 	= Tbl_online_pymnt_method::where("method_shop_id", $this->getShopId())->link($this->getShopId())->get();
 		foreach($data["_method"] as $key=>$method)
 		{
 			$data["_method"][$key] 			= $method;
 			$data["_method"][$key]->gateway = $this->filterPaymentGateway($method->method_id);
 		}
-		// dd($data["_method"] );
+
 		$data["_gateway"] 	= $this->gatewayInfo();
 		// dd($data["_gateway"]);
 		return view('member.online_payment.payment', $data);
@@ -133,27 +133,22 @@ class OnlinePaymentMethodController extends Member
 
 	public function filterPaymentGateway($id)
 	{
-		$method 	= Tbl_online_pymnt_method::where("method_id",$id)->pluck("method_gateway_accepted");
-		$_method	= explode(",",$method);
+		$_gateway		= Tbl_online_pymnt_gateway::unionGateway($this->getShopId())->get();
 
-		$_gateway		= Tbl_online_pymnt_gateway::unionGateway($this->getShopId(), $_method)->get();
-
-		// DD($_method);
-		// dd($_gateway);
 		return $_gateway;
 	}
 
 	public function postSavePaymentSetting()
 	{
-		// dd(Request::input());
-
 		$link_id = Tbl_online_pymnt_link::where("link_method_id", Request::input('link_method_id'))->where("link_shop_id", $this->getShopId())->first();
 
-		// dd(Request::input());
 		$data["link_shop_id"] 			= $this->getShopId();
 		$data["link_method_id"] 		= Request::input('link_method_id');
 		$data["link_reference_name"] 	= Request::input('link_reference_name');
 		$data["link_reference_id"] 		= str_replace("-","",strstr(Request::input('link_reference_id'), "-"));
+		$data["link_description"]		= Request::input('link_description');
+		$data["link_discount_fixed"]	= Request::input('link_discount_fixed');
+		$data["link_discount_percentage"] = Request::input('link_discount_percentage');
 		$data["link_img_id"] 			= Request::input('link_img_id');
 		$data["link_is_enabled"] 		= Request::input('link_is_enabled') == 'on' ? 1 : 0;
 
@@ -176,5 +171,74 @@ class OnlinePaymentMethodController extends Member
 	public function getShopId()
 	{
 		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+	}
+
+	public function getModalMethodList()
+	{
+		$data["name"] = '';
+
+		$method_id = Request::input('method_id');
+		if($method_id)
+		{
+			$data['method'] = Tbl_online_pymnt_method::where("method_id", $method_id)->first(); 
+		}
+
+		return view('member.online_payment.modal_method_list', $data);
+	}
+
+	public function postModalMethodList()
+	{
+		$data["method_name"] = Request::input('method_name');
+
+		$method_id = Request::input('method_id');
+		if($method_id)
+		{
+			Tbl_online_pymnt_method::where("method_id", $method_id)->update($data);
+		}
+		else
+		{
+			$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	        $charactersLength = strlen($characters);
+	        $randomString = '';
+	        for ($i = 0; $i < 10; $i++) 
+	        {
+	            $randomString .= $characters[rand(0, $charactersLength - 1)];
+	        }
+
+			$data['method_shop_id']		 = $this->getShopId();
+			$data['method_code_name']	 = $randomString;
+			$data['method_date_created'] = Carbon::now();
+			$method_id = Tbl_online_pymnt_method::insert($data);
+		}
+
+		$json["status"] 	= 'success';
+		$json["type"] 		= 'payment_method';
+		$json["message"]	= 'Success!';
+		$json["method_id"]	= $method_id;
+
+		return json_encode($json);
+	}
+
+	public function getDeleteMethodList()
+	{
+		$method_id = Request::input('method_id');
+		$data["method"] = Tbl_online_pymnt_method::where("method_id", $method_id)->first();
+
+		return view('member.online_payment.modal_confirm_delete', $data);
+	}
+
+	public function postDeleteMethodList()
+	{
+		$method_id = Request::input('method_id');
+
+		Tbl_online_pymnt_method::where("method_id", $method_id)->delete();
+		Tbl_online_pymnt_link::where("link_method_id", $method_id)->delete();
+
+		$json["status"] 	= 'success';
+		$json["type"] 		= 'payment_method';
+		$json["message"]	= 'Success!';
+		$json["method_id"]	= $method_id;
+
+		return json_encode($json);
 	}
 }

@@ -59,6 +59,9 @@
                         <div class="checkbox">
                             <label><input type="checkbox" name="asset_account">Asset Account</label>
                         </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="manufacturer">Manufacturer</label>
+                        </div>
                     </div>
                 </div>
             </div>

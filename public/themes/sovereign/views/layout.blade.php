@@ -32,7 +32,7 @@
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
-    <div class="loader">
+    <div class="loader hide">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
         <!--[if lt IE 8]>
@@ -50,72 +50,14 @@
                         <div class="product-container">
                             <div class="title">A Real Product Need</div>
                             <div class="list-product">
-                                <div>
+                                @foreach($global_product as $product)
+                                <div style="cursor: pointer;" onClick="location.href='/product/view/{{ $product['eprod_id'] }}'">
                                     <div class="holder">
-                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
-                                        <div class="name">Barley Grass Capsule</div>
+                                        <img class="img-responsive" src="{{ get_product_first_image($product) }}">
+                                        <div class="name">{{ get_product_first_name($product) }}</div>
                                     </div>
                                 </div>
-                                <div>
-                                    <div class="holder">
-                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
-                                        <div class="name">Barley Grass Capsule</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="holder">
-                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
-                                        <div class="name">Barley Grass Capsule</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="holder">
-                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
-                                        <div class="name">Barley Grass Capsule</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="holder">
-                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
-                                        <div class="name">Barley Grass Capsule</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="holder">
-                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
-                                        <div class="name">Barley Grass Capsule</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="holder">
-                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
-                                        <div class="name">Barley Grass Capsule</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="holder">
-                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
-                                        <div class="name">Barley Grass Capsule</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="holder">
-                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
-                                        <div class="name">Barley Grass Capsule</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="holder">
-                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
-                                        <div class="name">Barley Grass Capsule</div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="holder">
-                                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/sample-product-1.jpg">
-                                        <div class="name">Barley Grass Capsule</div>
-                                    </div>
-                                </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>

@@ -63,14 +63,33 @@ class Ec_wishlist
         $insert["customer_id"] = $customer_id;
         $insert["product_id"] = $product_id;
         $insert["shop_id"] = $shop_id;
-        $insert["date"] = Carbon::now();
-
-        $exist = Tbl_ec_wishlist::where("customer_id", $customer_id)->where("product_id", $product_id)->where("shop_id", $shop_id)->delete();
+        
+        $exist = Tbl_ec_wishlist::where("customer_id", $customer_id)
+                                ->where("product_id", $product_id)
+                                ->where("shop_id", $shop_id)
+                                ->delete();
 
         Tbl_ec_wishlist::insert($insert);
     }
     public static function removeProduct($wishlist_id, $shop_id)
     {
         Tbl_ec_wishlist::where("id", $wishlist_id)->where("shop_id", $shop_id)->update( [ "archived" => 1 ] );
+    }
+    public static function notExistProduct($product_id, $customer_id, $shop_id)
+    {
+        $result = Tbl_ec_wishlist::where("customer_id", $customer_id)
+                                 ->where("product_id", $product_id)
+                                 ->where("shop_id", $shop_id)
+                                 ->where("archived", 0)
+                                 ->first();
+   
+        if ($result) 
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 }

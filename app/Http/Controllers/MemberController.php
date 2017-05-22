@@ -22,7 +22,7 @@ use App\Globals\Item;
 use App\Globals\Mlm_plan;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_gc;
-use App\Globals\Dragonpay\RequestPayment;
+use App\Globals\dragonpay\RequestPayment;
 class MemberController extends Controller
 {
     public static $shop_id;

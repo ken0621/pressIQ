@@ -74,10 +74,12 @@ class PaymentController extends Controller
             $insert['slot_membership'] = $register_session_2['membership'];
             $insert['slot_status'] = 'PS';
             $insert['slot_sponsor'] = $slot_sponsor->slot_id;
-            
+            // $insert['slot_nick_name'] = 
             $id = Tbl_mlm_slot::insertGetId($insert);
             $a = Mlm_compute::entry($id);
             $c = Mlm_gc::slot_gc($id);
+            $slot_info = Mlm_compute::get_slot_info($id);
+            Mlm_compute::set_slot_nick_name_2($slot_info);
             $data['status'] = 'success';
             $data['message'][0] = 'Membership Code Already Used.';
             $data['link'] = '/mlm';

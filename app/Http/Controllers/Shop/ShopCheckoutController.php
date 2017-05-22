@@ -360,6 +360,7 @@ class ShopCheckoutController extends Shop
     {
         $data["page"] = "Checkout - Add to Cart";
         return view("addto_cart", $data);
+        //comment lng
     }
 }
 =======

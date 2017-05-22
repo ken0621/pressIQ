@@ -312,6 +312,8 @@ Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_
 /*SALES LIQUIDATION*/
 Route::any('member/cashier/sales_liquidation','Member\PisSalesLiquidationController@index');
 Route::any('/member/cashier/report/{id}','Member\PisSalesLiquidationController@report');
+Route::any('/member/cashier/report/footer/{id}','Member\PisSalesLiquidationController@footer');
+
 /*AGENT TRANSACTION*/
 Route::any('/member/pis/agent/transaction/{id}','Member\AgentTransactionController@agents_transaction');
 Route::any('/member/pis/agent_transaction/print/{id}','Member\AgentTransactionController@print_transaction');
@@ -591,6 +593,14 @@ Route::any('/member/vendor/debit_memo','Member\DebitMemoController@index');
 Route::any('/member/vendor/debit_memo/list',"Member\DebitMemoController@db_list");
 Route::any('/member/vendor/debit_memo/create_submit','Member\DebitMemoController@create_submit');
 Route::any('/member/vendor/debit_memo/update',"Member\DebitMemoController@update_submit");
+
+Route::any('/member/vendor/debit_memo/replace/{id}','Member\DebitMemoController@replace');
+Route::any('/member/vendor/debit_memo/replace_item/{id}','Member\DebitMemoController@replace_item');
+Route::any('/member/vendor/debit_memo/replace_submit','Member\DebitMemoController@replace_submit');
+Route::any('/member/vendor/debit_memo/save_replace_submit','Member\DebitMemoController@save_replace_submit');
+Route::any('/member/vendor/debit_memo/confirm_condemned/{id}/{action}','Member\DebitMemoController@confirm_condemned');
+Route::any('/member/vendor/debit_memo/confirm_submit/{id}','Member\DebitMemoController@confirm_submit');
+Route::any('/member/vendor/debit_memo/choose_type','Member\DebitMemoController@choose_type');
 
 /* Vendor - Purchase Order */
 Route::get('/member/vendor/purchase_order','Member\Vendor_PurchaseOrderController@index');

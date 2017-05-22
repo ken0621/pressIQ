@@ -71,6 +71,7 @@
 			                <th>Balance</th>
 			                <th>Total</th>
 			                <th>Status</th>
+			                <th>Transaction Code</th>
 			                <th>Action</th>
 			            </tr>
 			        </thead>
@@ -92,6 +93,9 @@
 				                	@elseif($transaction['reference_name'] == "invoice" && $transaction['status'] == 1)
                                     <a class="btn form-control" style="background-color: #78C500;color: #fff">Paid</a>
 				                	@endif
+				                </td>
+				                <td class="text-center">
+				               		<strong>{{$transaction["transaction_code"]}}</strong>
 				                </td>
 				                <td>
 				                    <!-- ACTION BUTTON -->

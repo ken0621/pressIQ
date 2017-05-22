@@ -490,7 +490,12 @@ class ReportsController extends Member
 
     public function customer_list()
     {
+        $data['_customer'] = Tbl_customer::where("shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
 
+        foreach($data['_customer'] as $key=>$customer)
+        {
+            
+        }
     }
 
     public function vendor_list()

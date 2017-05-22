@@ -40,7 +40,6 @@ class ShopCheckoutController extends Shop
     {
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
-
         /* DO NOT ALLOW ON THIS PAGE IF THERE IS NOT CART */
         if (!isset($data["get_cart"]['cart'])) 
         {

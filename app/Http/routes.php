@@ -950,3 +950,7 @@ include_once('routes_config/routes_payroll.php');
 /* PAYROLL END */
 
 
+Route::get('/payment/dragonpay', 'PaymentController@index');
+Route::post('/payment/dragonpay', 'PaymentController@onSubmitPayment');
+Route::get('/payment/dragonpay/postback_url', 'PaymentController@postback_url'); //confirmation upon payment
+Route::get('/payment/dragonpay/return_url', 'PaymentController@return_url'); //

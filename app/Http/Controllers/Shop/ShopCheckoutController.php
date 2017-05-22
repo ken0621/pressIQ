@@ -264,69 +264,6 @@ class ShopCheckoutController extends Shop
             return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
         }
     }
-<<<<<<< HEAD
-    /*End Ipay88*/
-    public function give_product_code($cart, $slot_info, $order_id)
-    {
-        // $ec_order = Tbl_ec_order::
-        $shop_id = $slot_info->shop_id;
-        foreach($cart as $key => $value)
-        {
-            /* FOR ACTIVATION KEY */
-            $condition = false;
-            while($condition == false)
-            {
-               $activation_code  = Item_code::random_code_generator(8);
-               $check_activation = Tbl_item_code::where("item_activation_code",$activation_code)->first();
-               $code_pin         = Tbl_item_code::where("item_code_pin",$shop_id)->count() + 1;
-               if(!$check_activation)
-               {
-                   $condition = true;
-               }
-            }
-            $rel_insert[$key]["item_activation_code"]          = $activation_code;
-            $rel_insert[$key]["customer_id"]                   = $slot_info->slot_owner;
-            $rel_insert[$key]["item_id"]                       = $value['cart_product_information']['item_id'];
-            $rel_insert[$key]["shop_id"]                       = $slot_info->shop_id;
-            $rel_insert[$key]["item_code_pin"]                 = $code_pin;
-            $rel_insert[$key]["item_code_price"]               = $value['cart_product_information']['product_price'];
-            $rel_insert[$key]["item_code_price_total"]         = $value['cart_product_information']['product_current_price'];
-            $rel_insert[$key]["ec_order_id"]                   = $order_id;
-            $rel_insert[$key]["slot_id"]                       = $slot_info->slot_id;
-        }
-
-        Tbl_item_code::insert($rel_insert);
-                        
-        $items = Tbl_item_code::where('ec_order_id', $order_id)->get();
-        foreach($items as $key => $value)
-        {
-            $insert_item_per[$value->item_id]['item_id'] =  $value->item_id;
-            $item = Tbl_item::where('item_id', $value->item_id)->first();
-            if($item)
-            {
-                $insert_item_per[$value->item_id]['item_name'] = $item->item_name;
-                $insert_item_per[$value->item_id]['item_price'] = $item->item_price;  
-                $insert_item_per[$value->item_id]['item_code_id'] = $value->item_code_id;
-                if(isset($insert_item_per[$value->item_id]['item_quantity']))
-                {
-                    $insert_item_per[$value->item_id]['item_quantity'] += 1;
-                }
-                else
-                {
-                    $insert_item_per[$value->item_id]['item_quantity'] = 1;
-                }
-            }
-        }
-        Tbl_item_code_item::insert($insert_item_per);
-
-        Item_code::use_item_code_all_ec_order($order_id);
-    }
-    public function check_wallet($slot_now)
-    {
-        $slot_id = $slot_now->slot_id;
-        $sum_wallet = Mlm_slot_log::get_sum_wallet($slot_id);
-        return $sum_wallet;
-    }
     public function order_placed()
     {
         $data["page"] = "Checkout - Order Placed";
@@ -337,7 +274,6 @@ class ShopCheckoutController extends Shop
         }
 
         $data = unserialize(Crypt::decrypt($order));
-
         $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $data["order_id"])
                                             ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
                                             ->get();
@@ -356,13 +292,4 @@ class ShopCheckoutController extends Shop
 
         return view("order_placed", $data);
     }
-    public function addtocart()
-    {
-        $data["page"] = "Checkout - Add to Cart";
-        return view("addto_cart", $data);
-        //comment lng
-    }
 }
-=======
-}
->>>>>>> 68b5bb535d3df2c172acc175357c295592d00c08

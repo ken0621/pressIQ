@@ -41,4 +41,14 @@ class PaymentController extends Controller
         RequestPayment::make($this->_merchantkey, $this->_data);   
     }
 
+    public function postback_url()
+    {
+        
+    }
+
+    public function return_url()
+    {
+        
+    }
+
 }

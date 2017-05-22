@@ -196,9 +196,9 @@ class Mlm_ComplanSetupController extends Member
 	                $log_array['level_tree'] = 'Sponsor Tree';
 	                $log_array['complan'] = 'UNILEVEL_REPURCHASE_POINTS';
 
-	                $log = Mlm_slot_log::log_constructor($slot_sponsor, $slot_info,  $log_array);
-
-	                $arry_log['wallet_log_slot'] = $slot_sponsor->slot_id;
+	                $log = Mlm_slot_log::log_constructor($g_value, $g_value,  $log_array);
+	                $log = 'Congratulations, you earned ' . currency('PHP', $earn) . ' from Unilevel this cutoff'; 
+	                $arry_log['wallet_log_slot'] = $g_value->slot_id;
 	                $arry_log['shop_id'] = $g_value->shop_id;
 	                $arry_log['wallet_log_slot_sponsor'] = $g_value->slot_id;
 	                $arry_log['wallet_log_details'] = $log;
@@ -210,6 +210,16 @@ class Mlm_ComplanSetupController extends Member
 	        	}
 	        }
 	        // dd($structured);
+
+	        $update_all['points_log_converted'] = 1;
+	       	$update_all['points_log_converted_date'] = Carbon::now(); 
+
+	       	Tbl_mlm_slot_points_log::where('shop_id', $shop_id)
+	       	->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_points_log.points_log_slot')
+	       	->where('points_log_converted_date', '>=', $from)
+	        ->where('points_log_converted_date', '<=', $to)
+	        ->whereIn('points_log_complan', $plan)
+	        ->update($update_all);
 	        $data_v['structured'] = $structured;	
 	        $data['response_status'] = 'success_e';
 	        $data['view_blade'] = view('member.mlm_complan_setup.unilevel.unilevel_simulate', $data_v)->render();

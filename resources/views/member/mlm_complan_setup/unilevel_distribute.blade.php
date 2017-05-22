@@ -47,14 +47,14 @@
                 <thead>
                     <th>
                         <label>From</label>
-                        <input type="date" class="form-control">
+                        <input type="date" class="form-control" name="from">
                     </th>
                     <th>
                         <label>TO</label>
-                        <input type="date" class="form-control">
+                        <input type="date" class="form-control" name="to">
                     </th>
                     <th>
-                        <button class="btn btn-primary">Simulate</button>
+                        <button class="btn btn-primary">Distribute</button>
                     </th>
                 </thead>
                 <tbody></tbody>

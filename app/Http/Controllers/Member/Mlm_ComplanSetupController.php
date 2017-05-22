@@ -122,24 +122,32 @@ class Mlm_ComplanSetupController extends Member
 	}
 	public function unilevel_distribute_simulate()
 	{
+		ignore_user_abort(true);
+        set_time_limit(0);
+        flush();
+        ob_flush();
+        session_write_close();
+
 		$shop_id = $this->user_info->shop_id;
 		$settings = DB::table('tbl_mlm_unilevel_distribute_settings')->where('u_r_shop_id', $shop_id)->first();
 		if($settings)
 		{
-			$from = Request::input('from');
-			$to = Request::input('to');
+			$from = Carbon::parse(Request::input('from'))->startOfDay();
+			$to = Carbon::parse(Request::input('to'))->endOfDay();
 
 			$plan[0] = 'UNILEVEL_REPURCHASE_POINTS';
 			$plan[1] = 'REPURCHASE_POINTS';
 	        $all_log_personal = Tbl_mlm_slot_points_log::where('shop_id', $shop_id)
 	        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_points_log.points_log_slot')
+	        ->where('points_log_converted_date', '>=', $from)
+	        ->where('points_log_converted_date', '<=', $to)
 	        // ->where('points_log_complan', 'UNILEVEL_REPURCHASE_POINTS')
 
 	        ->select(DB::raw('sum(points_log_points ) as sum_personal'), DB::raw('tbl_mlm_slot_points_log.*'), DB::raw('tbl_mlm_slot.*'))
 
 	        ->groupBy('points_log_complan')
 	        ->groupBy('points_log_slot')
-
+	        ->where('points_log_converted', 0)
 	        ->where('points_log_complan', 'REPURCHASE_POINTS')
 	        ->get()->keyBy('points_log_slot');
 	        $selected_slot = [];
@@ -158,7 +166,8 @@ class Mlm_ComplanSetupController extends Member
 	        $all_log_group = Tbl_mlm_slot_points_log::where('tbl_mlm_slot.shop_id', $shop_id)
 	        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_points_log.points_log_slot')
 	        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-	        // ->where('points_log_complan', 'UNILEVEL_REPURCHASE_POINTS')
+	        ->where('points_log_converted_date', '>=', $from)
+	        ->where('points_log_converted_date', '<=', $to)
 
 	        ->select(DB::raw('sum(points_log_points ) as sum_group'), DB::raw('tbl_mlm_slot_points_log.*'), DB::raw('tbl_mlm_slot.*'), DB::raw('tbl_customer.*'))
 
@@ -166,8 +175,8 @@ class Mlm_ComplanSetupController extends Member
 	        ->groupBy('points_log_slot')
 
 	        ->where('points_log_complan', 'UNILEVEL_REPURCHASE_POINTS')
-	        // ->where('sum_group', '>=', $settings->u_r_group)
 	        ->whereIn('points_log_slot', $selected_slot)
+	        ->where('points_log_converted', 0)
 	        ->get()->keyBy('points_log_slot');
 
 	        foreach ($all_log_group as $g_key => $g_value) 
@@ -176,11 +185,28 @@ class Mlm_ComplanSetupController extends Member
 	        	$u_r_group = $settings->u_r_group;
 	        	if( $g_value->sum_group >= $u_r_group )
 	        	{
-
+	        		$earn = $g_value->sum_group * $settings->u_r_convertion;
 	        		$structured[$g_value->points_log_slot]['group_points'] = $g_value->sum_group;
 	        		$structured[$g_value->points_log_slot]['personal_points'] = $personal_points[$g_value->points_log_slot];
 	        		$structured[$g_value->points_log_slot]['info'] = $g_value;
-	        		$structured[$g_value->points_log_slot]['income'] = $g_value->sum_group * $settings->u_r_convertion ;
+	        		$structured[$g_value->points_log_slot]['income'] = $earn;
+
+	        		$log_array['earning'] = $earn;
+	                $log_array['level'] = 1;
+	                $log_array['level_tree'] = 'Sponsor Tree';
+	                $log_array['complan'] = 'UNILEVEL_REPURCHASE_POINTS';
+
+	                $log = Mlm_slot_log::log_constructor($slot_sponsor, $slot_info,  $log_array);
+
+	                $arry_log['wallet_log_slot'] = $slot_sponsor->slot_id;
+	                $arry_log['shop_id'] = $g_value->shop_id;
+	                $arry_log['wallet_log_slot_sponsor'] = $g_value->slot_id;
+	                $arry_log['wallet_log_details'] = $log;
+	                $arry_log['wallet_log_amount'] = $earn;
+	                $arry_log['wallet_log_plan'] = "DIRECT";
+	                $arry_log['wallet_log_status'] = "released";   
+	                $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+	                Mlm_slot_log::slot_array($arry_log);
 	        	}
 	        }
 	        // dd($structured);
@@ -189,6 +215,7 @@ class Mlm_ComplanSetupController extends Member
 	        $data['view_blade'] = view('member.mlm_complan_setup.unilevel.unilevel_simulate', $data_v)->render();
 
 	        return json_encode($data);
+	        exit;
 		}
 	}
 }

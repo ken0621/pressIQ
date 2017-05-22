@@ -366,9 +366,6 @@ class MemberController extends Controller
         $shop_id = Self::$shop_id;
         Session::put('shop_id_session', $shop_id);
 
-        $shop_id =  Session::get('shop_id_session');
-
-        dd($shop_id);
         $requestpayment = new RequestPayment($this->_merchantkey);
 
         $this->_data = array(

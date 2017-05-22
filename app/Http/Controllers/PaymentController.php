@@ -59,6 +59,8 @@ class PaymentController extends Controller
         if ($status == "S") 
         {
             $shop_id =  Session::get('shop_id_session');
+
+            dd($shop_id);
             $register_session = Session::get('mlm_register_step_1');
             $customer_id = Mlm_member::register_slot_insert_customer($shop_id, $register_session);
             

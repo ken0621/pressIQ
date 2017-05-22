@@ -4,8 +4,8 @@
 <div class="content">
 	<div class="container-fluid">
 		<div class="top-bg-container">
-			<img src="/themes/{{ $shop_theme }}/img/about-bg.png">
-			<div class="top-bg-detail-container"><span class="title-highlight">ABOUT</span> OUR COMPANY</div>
+			<img src="{{ get_content($shop_theme_info, "about", "about_banner_img") }}">
+			<div class="top-bg-detail-container"><span class="title-highlight">{{ get_content($shop_theme_info, "about", "about_banner_title_first") }}</span> {{ get_content($shop_theme_info, "about", "about_banner_title_highlight") }}</div>
 		</div>
 		<div class="row clearfix content">
 			<!-- LEFT NAVIGATION -->
@@ -36,7 +36,7 @@
 				<div class="content body-height company-profile active">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
-						COMPANY PROFILE
+						{{ get_content($shop_theme_info, "about", "about_company_profile_title") }}
 					</div>
 					<div class="content-logo"><img src="/themes/{{ $shop_theme }}/img/company-logo.png"></div>
 					<p>
@@ -53,22 +53,22 @@
 					<div class="content-img-container row clearfix">
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/c1.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img1") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/c2.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img2") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/c3.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img3") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/c4.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img4") }}">
 							</div>
 						</div>
 					</div>
@@ -77,7 +77,7 @@
 				<div class="content body-height company-responsibility" style="display: none">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
-						COMPANY RESPONSIBILITY
+						{{ get_content($shop_theme_info, "about", "about_company_responsibility_title") }}
 					</div>
 					<p>
 						FCF works to add value the communities we operate within and believe that by being an excellent corporate citizen can optimise long-term prosperity of both local people our shareholders community relations activities are coordinated Runruno Livelihood Foundation a non-profit organisation jointly financed by FCF and the Philippine government and run by a dedicated team.<br><br>
@@ -94,22 +94,22 @@
 					<div class="content-img-container row clearfix">
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/r1.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_company_responsibility_context_img1") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/r2.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_company_responsibility_context_img2") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/r3.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_company_responsibility_context_img3") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/r4.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_company_responsibility_context_img4") }}">
 							</div>
 						</div>
 					</div>
@@ -118,7 +118,7 @@
 				<div class="content body-height environmental-management" style="display: none">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
-						ENVIRONMENTAL MANAGEMENT
+						{{ get_content($shop_theme_info, "about", "about_environmental_management_title") }}
 					</div>
 					<p>
 						FCF Minerals Corporation is committed to the effective stewardship, protection and enhancement of the environment in and around the areas where it operates, and conducts its business in a manner that does not harm people and the environment. This commitment is facilitated and demonstrated through:
@@ -150,22 +150,22 @@
 					<div class="content-img-container row clearfix">
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/m1.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_environmental_management_context_img1") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/m2.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_environmental_management_context_img2") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/m3.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_environmental_management_context_img3") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/m4.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_environmental_management_context_img4") }}">
 							</div>
 						</div>
 					</div>
@@ -174,7 +174,7 @@
 				<div class="content body-height livelyhood-foundation" style="display: none">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
-						RUNRUNO LIVELYHOOD FOUNDATION
+						{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_title") }}
 					</div>
 					<p>
 						The Runruno project has a very strong community development component with a continuing commitment to behave ethically and contribute to local economic development, while improving the quality of life of its stakeholders and the society at large.<br><br>
@@ -337,22 +337,22 @@
 					<div class="content-img-container row clearfix">
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/f1.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img1") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/f2.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img2") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/f3.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img3") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/f4.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img4") }}">
 							</div>
 						</div>
 					</div>
@@ -360,22 +360,22 @@
 					<div class="content-img-container row clearfix">
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/f5.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img5") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/f6.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img6") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/f7.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img7") }}">
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="/themes/{{ $shop_theme }}/img/f8.png">
+								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img8") }}">
 							</div>
 						</div>
 					</div>
@@ -384,7 +384,7 @@
 				<div class="content body-height awards" style="display: none">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
-						Awards
+						{{ get_content($shop_theme_info, "about", "about_awards_title") }}
 					</div>
 					<p>
 						

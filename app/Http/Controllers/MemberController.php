@@ -360,15 +360,18 @@ class MemberController extends Controller
     public function post_dragonpay()
     {
         $info = Session::get('mlm_register_step_1');
-        dd(Session::get('mlm_register_step_2'));
+        $package = Session::get('mlm_register_step_2');
+        $package_price = Tbl_membership::where('membership_id', $package['membership'])->first();
+        $package_price_a = $package_price->membership_price;
+
         $requestpayment = new RequestPayment($this->_merchantkey);
 
         $this->_data = array(
             'merchantid'    => $requestpayment->setMerchantId($this->_merchantid),
             'txnid'         => $requestpayment->setTxnId(Self::$shop_id . time()),
-            'amount'        => $requestpayment->setAmount(10),
+            'amount'        => $requestpayment->setAmount($package_price_a),
             'ccy'           => $requestpayment->setCcy('PHP'),
-            'description'   => $requestpayment->setDescription('Test'),
+            'description'   => $requestpayment->setDescription($package_price->membership_name . " Package"),
             'email'         => $requestpayment->setEmail($info['email']),
             'digest'        => $requestpayment->getdigest(),
         );

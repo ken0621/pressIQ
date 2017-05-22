@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 /*use Illuminate\Http\Request;*/
 
 use Request;
+use Redirect;
 use App\Http\Controllers\Controller;
 
 use App\Globals\Dragonpay\RequestPayment;

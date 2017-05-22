@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 /*use Illuminate\Http\Request;*/
 
 use Request;
+use Redirect;
 use App\Http\Controllers\Controller;
 
 use App\Globals\Dragonpay\RequestPayment;
@@ -48,7 +49,16 @@ class PaymentController extends Controller
 
     public function return_url()
     {
-        dd(Request::input());
+        $status = Request::input("status");
+
+        if ($status == "S") 
+        {
+            return Redirect::to("/mlm");
+        }
+        else
+        {
+            dd("Transaction failed. </br> Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.");
+        }
     }
 
 }

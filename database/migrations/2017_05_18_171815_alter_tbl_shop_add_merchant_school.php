@@ -14,7 +14,10 @@ class AlterTblShopAddMerchantSchool extends Migration
     {
         Schema::table('tbl_shop', function (Blueprint $table) {
             //
-            $table->integer('shop_merchant_school')->default(0);
+            if(!schema::hasColumn('tbl_shop','shop_merchant_school'))
+            {
+                $table->integer('shop_merchant_school')->default(0);
+            }
         });
     }
 

@@ -1,206 +1,139 @@
 <?php 
 
-namespace App\Globals\dragonpay;
+namespace App\Globals\Dragonpay;
 
-use App\IPay88\Signature;
-use App\IPay88\RequestForm;
+use App\Globals\Dragonpay\RequestForm;
 
 class RequestPayment
 {
-    public static $paymentUrl = 'https://sandbox.ipay88.com.ph/epayment/entry.asp';
+    public static $paymentUrl = 'http://test.dragonpay.ph/Pay.aspx';
 
-	private $merchantKey;
+	private $merchantkey;
 
-	public function __construct($merchantKey)
+	public function __construct($merchantkey)
     {
-    	$this->merchantKey = $merchantKey;
+    	$this->merchantkey = $merchantkey;
     }
 
-	private $merchantCode;
-	public function getMerchantCode()
+	private $merchantid;
+	public function getMerchantId()
 	{
-		return $this->merchantCode;
+		return $this->merchantid;
 	}
-	public function setMerchantCode($val)
+	public function setMerchantId($val)
 	{
-		$this->signature = null; //need new signature if this is changed
-		return $this->merchantCode = $val;
-	}
-
-	private $paymentId;
-	public function getPaymentId()
-	{
-		return $this->paymentId;
-	}
-	public function setPaymentId($val)
-	{
-		return $this->paymentId = $val;
+		$this->digest = null; //need new signature if this is changed
+		return $this->merchantid = $val;
 	}
 
-	private $refNo;
-	public function getRefNo()
+	private $txnid;
+	public function getTxnId()
 	{
-		return $this->refNo;
+		return $this->txnid;
 	}
-
-	public function setRefNo($val)
+	public function setTxnId($val)
 	{
-		$this->signature = null; //need new signature if this is changed
-		return $this->refNo = $val;
+		$this->digest = null; //need new signature if this is changed
+		return $this->txnid = $val;
 	}
 
 	private $amount;
 	public function getAmount()
 	{
+		$this->digest = null; //need new signature if this is changed
 		return $this->amount;
 	}
 
 	public function setAmount($val)
-	{
-		$this->signature = null; //need new signature if this is changed
-		return $this->amount = $val;
+	{		
+		return $this->amount = number_format($val, 2, '.', '');
 	}
 
-	private $currency;
-	public function getCurrency()
+	private $ccy;
+	public function getCcy()
 	{
-		return $this->currency;
+		return $this->ccy;
 	}
 
-	public function setCurrency($val)
+	public function setCcy($val)
 	{
-		$this->signature = null; //need new signature if this is changed
-		return $this->currency = $val;
+		return $this->ccy = $val;
 	}
 
-	private $prodDesc;
-	public function getProdDesc()
+	private $description;
+	public function getDescription()
 	{
-		return $this->prodDesc;
+		return $this->description;
 	}
-	public function setProdDesc($val)
+	public function setDescription($val)
 	{
-		return $this->prodDesc = $val;
-	}
-
-	private $userName;
-	public function getUserName()
-	{
-		return $this->userName;
-	}
-	public function setUserName($val)
-	{
-		return $this->userName = $val;
+		$this->digest = null; //need new signature if this is changed
+		return $this->description = $val;
 	}
 
-	private $userEmail;
-	public function getUserEmail()
+	private $email;
+	public function getEmail()
 	{
-		return $this->userEmail;
+		return $this->email;
 	}
-	public function setUserEmail($val)
+	public function setEmail($val)
 	{
-		return $this->userEmail = $val;
-	}
-
-	private $userContact;
-	public function getUserContact()
-	{
-		return $this->userContact;
+		$this->digest = null; //need new signature if this is changed
+		return $this->email = $val;
 	}
 
-	public function setUserContact($val)
+	private $digest;
+	public function getdigest($refresh = false)
 	{
-		return $this->userContact = $val;
-	}
 
-	private $remark;
-	public function getRemark()
-	{
-		return $this->remark;
-	}
-
-	public function setRemark($val)
-	{
-		return $this->remark = $val;
-	}
-
-	private $lang;
-	public function getLang()
-	{
-		return $this->lang;
-	}
-	public function setLang($val)
-	{
-		return $this->lang = $val;
-	}
-
-	private $signature;
-	public function getSignature($refresh = false)
-	{
-		//simple caching
-		if((!$this->signature) || $refresh)
+		if((!$this->digest) || $refresh)
 		{
-			$this->signature = Signature::generateSignature(
-				$this->merchantKey,
-				$this->getMerchantCode(),
-				$this->getRefNo(),
-				preg_replace('/[\.\,]/', '', $this->getAmount()), //clear ',' and '.'
-				$this->getCurrency()
+
+			$param = array(
+				'merchantid' 	=> $this->getMerchantId(), 
+				'txnid' 		=> $this->getTxnId(),
+				'amount' 		=> $this->getAmount(), 
+				'ccy' 			=> $this->getCcy(), 
+				'description' 	=> $this->getDescription(), 
+				'email' 		=> $this->getEmail(), 
+				'merchantkey' 	=> $this->merchantkey,  
 			);
+
+			$digest_string = implode(':', $param);
+			
+			$this->digest = sha1($digest_string);
 		}
-
-		return $this->signature;
-	}
-
-	private $responseUrl;
-	public function getResponseUrl()
-	{
-		return $this->responseUrl;
-	}
-	public function setResponseUrl($val)
-	{
-		return $this->responseUrl = $val;
-	}
-
-	private $backendUrl;
-	public function getBackendUrl()
-	{
-		return $this->backendUrl;
-	}
-	public function setBackendUrl($val)
-	{
-		return $this->backendUrl = $val;
+		return $this->digest;
 	}
 
 	protected static $fillable_fields = [
-		'merchantCode','paymentId','refNo','amount',
-		'currency','prodDesc','userName','userEmail',
-		'userContact','remark','lang','responseUrl','backendUrl'
+		'merchantid','txnid', 'amount',
+		'ccy','description','email',
+		'digest'
 	];
 
 	/**
 	* IPay88 Payment Request factory function
 	*
 	* @access public
-	* @param string $merchantKey The merchant key provided by ipay88
+	* @param string $merchantid The merchant key provided by ipay88
 	* @param hash $fieldValues Set of field value that is to be set as the properties
 	*  Override `$fillable_fields` to determine what value can be set during this factory method
 	* @example
-	*  $request = IPay88\Payment\Request::make($merchantKey, $fieldValues)
+	*  $request = IPay88\Payment\Request::make($merchantid, $fieldValues)
 	* 
 	*/
-	public static function make($merchantKey, $fieldValues)
+	public static function make($merchantid, $fieldValues)
 	{
-		$request = new RequestPayment($merchantKey);
+		$request = new RequestPayment($merchantid);
 		RequestForm::render($fieldValues, self::$paymentUrl);
 	}
 
     /**
     * @access public
-    * @param boolean $multiCurrency Set to true to get payments optinos for multi currency gateway
+    * @param boolean $multiccy Set to true to get payments optinos for multi ccy gateway
     */
-    public static function getPaymentOptions($multiCurrency = true)
+    public static function getPaymentOptions($multiccy = true)
     {
         $myrOnly = array(
         	2 => array('Credit Card','MYR'),
@@ -230,7 +163,7 @@ class RequestPayment
         	42=> array('Credit Card','HKD'),
         );
 
-        return $multiCurrency ? $nonMyr : $myrOnly;
+        return $multiccy ? $nonMyr : $myrOnly;
     }
 
     

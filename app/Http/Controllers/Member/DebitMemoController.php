@@ -19,6 +19,7 @@ use App\Globals\Vendor;
 use App\Globals\DebitMemo;
 use App\Globals\Warehouse;
 use App\Globals\Utilities;
+use App\Globals\Pdf_global;
 use App\Http\Controllers\Controller;
 use Request;
 
@@ -60,6 +61,48 @@ class DebitMemoController extends Member
             return $this->show_no_access();
         }
     }
+
+    public function db_view_pdf($db_id)
+    {
+        $data["action_load"] = "/member/vendor/debit_memo/db_pdf/".$db_id;
+        $data["db_id"] = $db_id;
+        $data["transaction_type"] = 'Debit Memo';
+        $db_data = Tbl_debit_memo::where("db_id",$db_id)->first();
+        if($db_data)
+        {
+            if($db_data->is_bad_order == 1)
+            {
+                $data["transaction_type"] = 'Bad Order';
+            }
+        }
+
+        return view('member.vendor.debit_memo.db_view',$data);
+    }
+    public function db_pdf($db_id)
+    {
+        $data["debit_memo_id"] = $db_id;
+        $data["db"] = Tbl_debit_memo::vendor()->where("db_id",$db_id)->first();
+        $data["_db_item"] = Tbl_debit_memo_line::replace_dbitem()->db_item()->where("dbline_db_id",$db_id)->get();
+
+        $data["type"] = "Debit Memo";
+        if($data["db"]->is_bad_order == 1)
+        {
+            $data["type"] = "Bad Order";
+        }
+
+        foreach($data["_db_item"] as $key => $value) 
+        {
+            $um_qty = UnitMeasurement::um_qty($value->dbline_um);
+            $data["_db_item"][$key]->dbline_qty_um = UnitMeasurement::um_view($um_qty * $value->dbline_qty,$value->item_measurement_id,$value->dbline_um);
+
+
+            $data["_db_item"][$key]->dbline_replace_qty_um = UnitMeasurement::um_view($value->dbline_replace_qty,$value->item_measurement_id,$value->dbline_um);
+
+        }
+
+      $pdf = view('member.vendor.debit_memo.debit_memo_pdf', $data);
+      return Pdf_global::show_pdf($pdf);
+    }
     public function create_submit()
     {
         $vendor_info[] = null;
@@ -95,83 +138,89 @@ class DebitMemoController extends Member
                 $item_info[$key]['rate']               = str_replace(',', "", Request::input('dbline_rate')[$key]);
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('dbline_amount')[$key]);
 
-                // $item_type = Tbl_item::where("item_id",Request::input('dbline_item_id')[$key])->pluck("item_type_id");
-                // if($item_type == 4 || $item_type == 1)
-                // {
-                //     $um_qty = UnitMeasurement::um_qty(Request::input("dbline_um")[$key]);
-                //     $product_consume[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
-                //     $product_consume[$key]["product_id"] = Request::input('dbline_item_id')[$key];
-                // }
+                if($vendor_info["type"] == 0)
+                {
+                    $item_type = Tbl_item::where("item_id",Request::input('dbline_item_id')[$key])->pluck("item_type_id");
+                    if($item_type == 4 || $item_type == 1)
+                    {
+                        $um_qty = UnitMeasurement::um_qty(Request::input("dbline_um")[$key]);
+                        $product_consume[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
+                        $product_consume[$key]["product_id"] = Request::input('dbline_item_id')[$key];
+                    }                    
+                }
             }
         }
 
+        if($vendor_info["type"] == 0)
+        {
         //START if bundle inventory_consume arcy
-        // foreach ($_items as $keyitem => $value_item) 
-        // {
-        //     $item_bundle_info = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitem])->where("item_type_id",4)->first();
-        //     if($item_bundle_info)
-        //     {
-        //         $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("dbline_item_id")[$keyitem])->get();
-        //         foreach ($bundle as $key_bundle => $value_bundle) 
-        //         {
-        //             $qty = UnitMeasurement::um_qty(Request::input("dbline_um")[$keyitem]);
-        //             $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
-        //             $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
-        //             $_bundle[$key_bundle]['quantity'] = (str_replace(',', "",Request::input('dbline_qty')[$keyitem]) * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
+            foreach ($_items as $keyitem => $value_item) 
+            {
+                $item_bundle_info = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitem])->where("item_type_id",4)->first();
+                if($item_bundle_info)
+                {
+                    $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("dbline_item_id")[$keyitem])->get();
+                    foreach ($bundle as $key_bundle => $value_bundle) 
+                    {
+                        $qty = UnitMeasurement::um_qty(Request::input("dbline_um")[$keyitem]);
+                        $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
+                        $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
+                        $_bundle[$key_bundle]['quantity'] = (str_replace(',', "",Request::input('dbline_qty')[$keyitem]) * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
 
-        //             array_push($product_consume, $_bundle[$key_bundle]);
-        //         }
-        //     } 
-        // }
-        // foreach ($product_consume as $key_items => $value_items) 
-        // {
-        //      $i = null;
-        //      foreach ($_items as $keyitemline => $valueitemline)
-        //      {
-        //         $type = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitemline])->pluck("item_type_id");
-        //         if($type == 4)
-        //         {
-        //             if(Request::input("dbline_item_id")[$keyitemline] == $value_items['product_id'])
-        //             {
-        //                 $i = "true";
-        //             }                    
-        //         }
-        //      }
-        //     if($i != null)
-        //     {
-        //         unset($product_consume[$key_items]);
-        //     }           
-        // }
+                        array_push($product_consume, $_bundle[$key_bundle]);
+                    }
+                } 
+            }
+            foreach ($product_consume as $key_items => $value_items) 
+            {
+                 $i = null;
+                 foreach ($_items as $keyitemline => $valueitemline)
+                 {
+                    $type = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitemline])->pluck("item_type_id");
+                    if($type == 4)
+                    {
+                        if(Request::input("dbline_item_id")[$keyitemline] == $value_items['product_id'])
+                        {
+                            $i = "true";
+                        }                    
+                    }
+                 }
+                if($i != null)
+                {
+                    unset($product_consume[$key_items]);
+                }           
+            }
 
-        // $data["status"] = null;
-        // $data["status_message"] = null;
+            $data["status"] = null;
+            $data["status_message"] = null;
 
-        // $warehouse_id       = $this->current_warehouse->warehouse_id;
-        // if(count($product_consume) > 0)
-        // {
-        //     foreach ($product_consume as $key => $value) 
-        //     {
-        //        $inventory_consume_product[$key]["product_id"] = $value["product_id"];
-        //        $inventory_consume_product[$key]["quantity"] = $value["quantity"];
+            $warehouse_id       = $this->current_warehouse->warehouse_id;
+            if(count($product_consume) > 0)
+            {
+                foreach ($product_consume as $key => $value) 
+                {
+                   $inventory_consume_product[$key]["product_id"] = $value["product_id"];
+                   $inventory_consume_product[$key]["quantity"] = $value["quantity"];
 
-        //        $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->pluck('inventory_count');
-        //         if($count_on_hand == null)
-        //         {
-        //             $count_on_hand = 0;   
-        //         }
-        //         if($value['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value['quantity'])
-        //         {
+                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->pluck('inventory_count');
+                    if($count_on_hand == null)
+                    {
+                        $count_on_hand = 0;   
+                    }
+                    if($value['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value['quantity'])
+                    {
 
-        //         }
-        //         else
-        //         {
-        //             $item_name = Tbl_item::where("item_id",$value["product_id"])->pluck("item_name");
+                    }
+                    else
+                    {
+                        $item_name = Tbl_item::where("item_id",$value["product_id"])->pluck("item_name");
 
-        //             $data["status"] = "error";
-        //             $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
-        //         }
-        //     }                
-        // }
+                        $data["status"] = "error";
+                        $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
+                    }
+                }                
+            }
+        }
 
 
         if($ctr_items != 0)
@@ -179,6 +228,18 @@ class DebitMemoController extends Member
             if($data["status"] == null)
             {
                 $db_id = DebitMemo::postdb($vendor_info, $item_info);
+
+                if(count($product_consume) > 0)
+                {
+                    if($vendor_info["type"] == 0)
+                    {
+                        $remarks            = "Consume by DEBIT MEMO #".$db_id;
+                        $warehouse_id       = $this->current_warehouse->warehouse_id;
+                        $transaction_type   = "debit_memo";
+                        $transaction_id     = $db_id;
+                        $data               = Warehouse::inventory_consume($warehouse_id, $remarks, $product_consume, 0, '' ,  'array', $transaction_type, $transaction_id);                        
+                    }
+                }
 
                 $data["status"] = "success-debit-memo";
                 $data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;
@@ -196,6 +257,8 @@ class DebitMemoController extends Member
     {
         $db_id = Request::input("debit_memo_id");
 
+        $db_data = Tbl_debit_memo::where("db_id",$db_id)->first();
+
         $vendor_info[] = null;
         $vendor_info["db_vendor_id"] = Request::input("db_vendor_id");
         $vendor_info["db_vendor_email"] = Request::input("db_vendor_email");
@@ -204,6 +267,9 @@ class DebitMemoController extends Member
         $vendor_info["db_memo"] = Request::input("db_memo");
         $vendor_info["db_amount"] = Request::input("overall_price");
 
+
+        $vendor_info["type"] = $db_data->is_bad_order;
+        
         $item_info[] = null;
         $product_consume = [];
         $_items = Request::input("dbline_item_id");
@@ -223,96 +289,107 @@ class DebitMemoController extends Member
                 $item_info[$key]['rate']               = str_replace(',', "", Request::input('dbline_rate')[$key]);
                 $item_info[$key]['amount']             = str_replace(',', "", Request::input('dbline_amount')[$key]);
 
-                // $item_type = Tbl_item::where("item_id",Request::input('dbline_item_id')[$key])->pluck("item_type_id");
-                // if($item_type == 4 || $item_type == 1)
-                // {
-                //     $um_qty = UnitMeasurement::um_qty(Request::input("dbline_um")[$key]);
-                //     $product_consume[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
-                //     $product_consume[$key]["product_id"] = Request::input('dbline_item_id')[$key];
-                // }
+                if($vendor_info["type"] == 0)
+                {
+                    $item_type = Tbl_item::where("item_id",Request::input('dbline_item_id')[$key])->pluck("item_type_id");
+                    if($item_type == 4 || $item_type == 1)
+                    {
+                        $um_qty = UnitMeasurement::um_qty(Request::input("dbline_um")[$key]);
+                        $product_consume[$key]["quantity"] = $um_qty * $item_info[$key]['quantity'];
+                        $product_consume[$key]["product_id"] = Request::input('dbline_item_id')[$key];
+                    }
+                }
             }     
         }
 
 
+        if($vendor_info["type"] == 0)
+        {
         //START if bundle inventory_consume arcy
-        // foreach ($_items as $keyitem => $value_item) 
-        // {
-        //     $item_bundle_info = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitem])->where("item_type_id",4)->first();
-        //     if($item_bundle_info)
-        //     {
-        //         $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("dbline_item_id")[$keyitem])->get();
-        //         foreach ($bundle as $key_bundle => $value_bundle) 
-        //         {
-        //             $qty = UnitMeasurement::um_qty(Request::input("dbline_um")[$keyitem]);
-        //             $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
-        //             $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
-        //             $_bundle[$key_bundle]['quantity'] = (str_replace(',', "",Request::input('dbline_qty')[$keyitem]) * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
+            foreach ($_items as $keyitem => $value_item) 
+            {
+                $item_bundle_info = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitem])->where("item_type_id",4)->first();
+                if($item_bundle_info)
+                {
+                    $bundle = Tbl_item_bundle::where("bundle_bundle_id",Request::input("dbline_item_id")[$keyitem])->get();
+                    foreach ($bundle as $key_bundle => $value_bundle) 
+                    {
+                        $qty = UnitMeasurement::um_qty(Request::input("dbline_um")[$keyitem]);
+                        $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id);
+                        $_bundle[$key_bundle]['product_id'] = $value_bundle->bundle_item_id;
+                        $_bundle[$key_bundle]['quantity'] = (str_replace(',', "",Request::input('dbline_qty')[$keyitem]) * $qty) * ($value_bundle->bundle_qty * $bundle_qty);
 
-        //             array_push($product_consume, $_bundle[$key_bundle]);
-        //         }
-        //     } 
-        // }
-        // foreach ($product_consume as $key_items => $value_items) 
-        // {
-        //      $i = null;
-        //      foreach ($_items as $keyitemline => $valueitemline)
-        //      {
-        //         $type = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitemline])->pluck("item_type_id");
-        //         if($type == 4)
-        //         {
-        //             if(Request::input("dbline_item_id")[$keyitemline] == $value_items['product_id'])
-        //             {
-        //                 $i = "true";
-        //             }                    
-        //         }
-        //      }
-        //     if($i != null)
-        //     {
-        //         unset($product_consume[$key_items]);
-        //     }           
-        // }
+                        array_push($product_consume, $_bundle[$key_bundle]);
+                    }
+                } 
+            }
+            foreach ($product_consume as $key_items => $value_items) 
+            {
+                 $i = null;
+                 foreach ($_items as $keyitemline => $valueitemline)
+                 {
+                    $type = Tbl_item::where("item_id",Request::input("dbline_item_id")[$keyitemline])->pluck("item_type_id");
+                    if($type == 4)
+                    {
+                        if(Request::input("dbline_item_id")[$keyitemline] == $value_items['product_id'])
+                        {
+                            $i = "true";
+                        }                    
+                    }
+                 }
+                if($i != null)
+                {
+                    unset($product_consume[$key_items]);
+                }           
+            }
 
-        // $data["status"] = null;
-        // $data["status_message"] = null;
+            $data["status"] = null;
+            $data["status_message"] = null;
 
-        // $transaction_id = $db_id;
-        // $transaction_type = "debit_memo";
-        // $warehouse_id       = Warehouse::getWarehouseIdFromSlip($transaction_id, $transaction_type);
-        // if(count($product_consume) > 0)
-        // {
-        //     foreach ($product_consume as $key => $value) 
-        //     {
-        //        $inventory_consume_product[$key]["product_id"] = $value["product_id"];
-        //        $inventory_consume_product[$key]["quantity"] = $value["quantity"];
+            $transaction_id = $db_id;
+            $transaction_type = "debit_memo";
+            $warehouse_id       = Warehouse::getWarehouseIdFromSlip($transaction_id, $transaction_type);
+            if(count($product_consume) > 0)
+            {
+                foreach ($product_consume as $key => $value) 
+                {
+                   $inventory_consume_product[$key]["product_id"] = $value["product_id"];
+                   $inventory_consume_product[$key]["quantity"] = $value["quantity"];
 
-        //        $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->pluck('inventory_count');
-        //         if($count_on_hand == null)
-        //         {
-        //             $count_on_hand = 0;   
-        //         }
-        //         if($value['quantity'] > 0 && $count_on_hand + $value['quantity'] > 0 && $count_on_hand + $value['quantity'] >= $value['quantity'])
-        //         {
+                   $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value["product_id"])->pluck('inventory_count');
+                    if($count_on_hand == null)
+                    {
+                        $count_on_hand = 0;   
+                    }
+                    if($value['quantity'] > 0 && $count_on_hand + $value['quantity'] > 0 && $count_on_hand + $value['quantity'] >= $value['quantity'])
+                    {
 
-        //         }
-        //         else
-        //         {
-        //             $item_name = Tbl_item::where("item_id",$value["product_id"])->pluck("item_name");
+                    }
+                    else
+                    {
+                        $item_name = Tbl_item::where("item_id",$value["product_id"])->pluck("item_name");
 
-        //             $data["status"] = "error";
-        //             $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
-        //         }
-        //     }                
-        // }
+                        $data["status"] = "error";
+                        $data["status_message"] .= "<li style='list-style:none'>The quantity of item ".$item_name." is not enough to consume </li>";
+                    }
+                }                
+            }
+        }
 
         if($ctr_items != 0)
         {
             if($data["status"] == null)
             {
                 DebitMemo::updatedb($db_id, $vendor_info, $item_info);
-                // if(count($product_consume) > 0)
-                // {
-                //     $data = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array');
-                // }
+                if(count($product_consume) > 0)
+                {
+                    if($vendor_info["type"] == 0)
+                    {
+                        $transaction_type = "debit_memo";
+                        $transaction_id = $db_id;
+                        $data = Warehouse::inventory_update($transaction_id, $transaction_type, $product_consume, $return = 'array');
+                    }               
+                }
                 $data["status"] = "success-debit-memo";
                 $data["redirect_to"] = "/member/vendor/debit_memo?id=".$db_id;
             }

@@ -1,8 +1,8 @@
 <?php 
 
-namespace App\Globals\Dragonpay;
+namespace App\Globals\dragonpay;
 
-use App\Globals\Dragonpay\RequestForm;
+use App\Globals\dragonpay\RequestForm;
 
 class RequestPayment
 {

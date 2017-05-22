@@ -48,7 +48,7 @@ class PaymentController extends Controller
 
     public function return_url()
     {
-        
+        dd(Request::input());
     }
 
 }

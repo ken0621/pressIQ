@@ -14,6 +14,7 @@ use App\Models\Tbl_mlm_slot;
 use App\Globals\Mlm_plan;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_gc;
+use Session;
 class PaymentController extends Controller
 {
 

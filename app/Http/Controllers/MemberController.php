@@ -365,6 +365,10 @@ class MemberController extends Controller
         $package_price_a = $package_price->membership_price;
         $shop_id = Self::$shop_id;
         Session::put('shop_id_session', $shop_id);
+
+        $shop_id =  Session::get('shop_id_session');
+
+        dd($shop_id);
         $requestpayment = new RequestPayment($this->_merchantkey);
 
         $this->_data = array(

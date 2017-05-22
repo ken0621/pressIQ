@@ -385,4 +385,12 @@ class Mlm_member
         // dd($data);
         return view('member.mlm_slot.mlm_slot_get_code', $data);
     }
+    public static function get_session_slot()
+    {
+        if(Session::get('mlm_member') != null)
+        {
+            $session = Session::get('mlm_member');
+            return $session['slot_now'];
+        }
+    }
 }

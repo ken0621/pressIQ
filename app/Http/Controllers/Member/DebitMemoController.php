@@ -80,6 +80,8 @@ class DebitMemoController extends Member
         $ctr_items = 0;
         $product_consume = [];
         $_items = Request::input("dbline_item_id");
+        $data["status"] = null;
+        $data["status_message"] = null;
         foreach ($_items as $key => $value) 
         {   
             if($value)
@@ -206,6 +208,8 @@ class DebitMemoController extends Member
         $product_consume = [];
         $_items = Request::input("dbline_item_id");
         $ctr_items = 0;
+        $data["status"] = null;
+        $data["status_message"] = null;
         foreach ($_items as $key => $value) 
         {
             if($value)

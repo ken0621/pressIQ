@@ -54,12 +54,8 @@
                                 <td>{{$db->db_id}}</td>
                                 <td>{{$db->vendor_company or $db->vendor_title_name." ".$db->vendor_first_name." ".$db->vendor_middle_name." ".$db->vendor_last_name." ".$db->vendor_suffix_name}}</td>
                                 <td>{{currency("PHP",$db->db_amount)}}</td>
-                                <td>
-                                    @if($db->is_bad_order == 1)
-                                    Bad Order
-                                    @else
-                                    Debit Memo
-                                    @endif
+                                <td class="{{$db->is_bad_order == 1 ? $type='Bad Order' : $type='Debit Memo'}}">
+                                    {{$type}}
                                 </td>
                                 <td class="text-center">
                                     <div class="btn-group">
@@ -67,15 +63,19 @@
                                         Action <span class="caret"></span>
                                       </button>
                                       <ul class="dropdown-menu dropdown-menu-custom">
-                                        @if($db->db_memo_status != 1)
-                                          <li><a href="/member/vendor/debit_memo?id={{$db->db_id}}">Edit Debit Memo</a></li>
-                                          <li><a href="/member/vendor/debit_memo/replace/{{$db->db_id}}">Replace</a></li>
-                                          <li><a class="popup" size="md" link="/member/vendor/debit_memo/confirm_condemned/{{$db->db_id}}/Condemned">Condemned</a></li>
+                                        @if($db->is_bad_order == 1)
+                                            @if($db->db_memo_status != 1)
+                                              <li><a href="/member/vendor/debit_memo?id={{$db->db_id}}">Edit {{$type}}</a></li>
+                                              <li><a href="/member/vendor/debit_memo/replace/{{$db->db_id}}">Replace</a></li>
+                                              <li><a class="popup" size="md" link="/member/vendor/debit_memo/confirm_condemned/{{$db->db_id}}/Condemned">Condemned</a></li>
+                                            @else
+                                              <li>
+                                                 <a href="#">CLOSED</a>
+                                              </li>
+                                              <li><a href="/member/vendor/debit_memo/replace/{{$db->db_id}}">Edit Condemned</a></li>
+                                            @endif
                                         @else
-                                          <li>
-                                             <a href="#">CLOSED</a>
-                                          </li>
-                                          <li><a href="/member/vendor/debit_memo/replace/{{$db->db_id}}">Edit Condemned</a></li>
+                                            <li><a href="/member/vendor/debit_memo?id={{$db->db_id}}">Edit {{$type}}</a></li>
                                         @endif
                                       </ul>
                                     </div>

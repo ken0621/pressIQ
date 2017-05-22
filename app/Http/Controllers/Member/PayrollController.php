@@ -74,6 +74,7 @@ use App\Models\Tbl_payroll_shift;
 use App\Models\Tbl_payroll_shift_template;
 use App\Models\Tbl_payroll_shift_code;
 use App\Models\Tbl_payroll_employee_shift;
+use App\Models\Tbl_payroll_employee_schedule;
 
 use App\Globals\Payroll;
 use App\Globals\PayrollJournalEntries;
@@ -4302,8 +4303,73 @@ class PayrollController extends Member
           $data['_jobtitle']       = Tbl_payroll_jobtitle::sel(Self::shop_id())->orderBy('tbl_payroll_jobtitle.payroll_jobtitle_name')->get();
 
           $data['id']              = $id;
+          $data['_employee']       = Tbl_payroll_employee_contract::employeefilter(0,0,0, $data['period']->payroll_period_start, Self::shop_id())->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
+                                   ->where('tbl_payroll_group.payroll_group_period', $data['period']->payroll_period_category)->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')->get();
 
+          $data['_shift']          = Tbl_payroll_shift_code::getshift(Self::shop_id())
+                                                            ->orderBy('shift_code_name')
+                                                            ->get();
           return view('member.payroll.modal.modal_schedule_employee_shift', $data);
+     }
+
+     public function shift_template_refence()
+     {
+          $payroll_period_id  = Request::input('payroll_period_id');
+          $employee_id        = Request::input('employee_id');
+          $group              = Request::input('group');
+
+          $period = Tbl_payroll_period::where('payroll_period_id', $payroll_period_id)->first();
+
+          $date_start = '0000-00-00';
+          $date_end   = '0000-00-00';
+
+          if($period != null)
+          {
+               $date_start = $period->payroll_period_start;
+               $date_end   = $period->payroll_period_end;
+          }
+
+
+          $data['_day'] = array();
+
+          while($date_start <= $date_end)
+          {
+               $day = date('D', strtotime($date_start));
+
+               /* shift from payroll group */
+               $group_shift = Tbl_payroll_shift::getshift($group, $day)->first();
+
+               /* shift in new schedule */
+               $new_schedule = Tbl_payroll_employee_schedule::getschedule($employee_id, $date_start)->first();
+
+               $shift = array();
+
+               if($new_schedule != null)
+               {
+                    $shift = $new_schedule;
+               }
+               else
+               {
+                    $shift = $group_shift;
+               }
+
+               // dd($shift);
+               $temp['date']                 = $date_start;
+               $temp['target_hours']         = $shift->target_hours;
+               $temp['work_start']           = $shift->work_start;
+               $temp['work_end']             = $shift->work_end;
+               $temp['break_start']          = $shift->break_start;
+               $temp['break_end']            = $shift->break_end;
+               $temp['flexi']                = $shift->flexi;
+               $temp['rest_day']             = $shift->rest_day;
+               $temp['extra_day']            = $shift->extra_day;
+
+               array_push($data['_day'], $temp);
+
+               $date_start = Carbon::parse($date_start)->addDay()->format("Y-m-d");
+          }
+
+          return view('member.payroll.misc.shift_template', $data);
      }
 
 	public function modal_archive_period($archived, $payroll_period_id)

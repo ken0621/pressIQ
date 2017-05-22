@@ -18,7 +18,7 @@
 				<div class="col-md-12">
 					<small>Select By Company</small>
 					<select class="form-control form-select">
-						<option value="">Select</option>
+						<option value="0">Select</option>
 						@foreach($_company as $company)
 						<option value="{{$company->payroll_company_id}}">{{$company->payroll_company_name}}</option>
 						@endforeach
@@ -29,7 +29,7 @@
 				<div class="col-md-6">
 					<small>Select By Department</small>
 					<select class="form-control department-select">
-						<option value="">Select Department</option>
+						<option value="0">Select Department</option>
 						@foreach($_department as $department)
 						<option value="{{$department->payroll_department_id}}">{{$department->payroll_department_name}}</option>
 						@endforeach
@@ -38,7 +38,7 @@
 				<div class="col-md-6">
 					<small>Select By Job Title</small>
 					<select class="form-control form-select jobtitle-select">
-						<option value="">Select By Job Title</option>
+						<option value="0">Select By Job Title</option>
 						@foreach($_jobtitle as $jobtitle)
 						<option value="{{$jobtitle->payroll_jobtitle_id}}">{{$jobtitle->payroll_jobtitle_name}}</option>
 						@endforeach
@@ -46,10 +46,22 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<div class="col-md-12">
+				<div class="col-md-6">
 					<small>Select By Employee</small>
-					<select class="form-control select-employee form-select">
+					<select class="select-employee">
 						<option value="">Select By Employee</option>
+						@foreach($_employee as $employee)
+						<option value="{{$employee->payroll_employee_id}}" data-group="{{$employee->payroll_group_id}}">{{$employee->payroll_employee_title_name.' '.$employee->payroll_employee_first_name.' '.$employee->payroll_employee_middle_name.' '.$employee->payroll_employee_last_name.' '.$employee->payroll_employee_suffix_name}}</option>
+						@endforeach
+					</select>
+				</div>
+				<div class="col-md-6">
+					<small>Shift Template</small>
+					<select class="form-control form-select">
+						<option value="">Select Template</option>
+						@foreach($_shift as $shift)
+						<option value="{{$shift->shift_code_id}}">{{$shift->shift_code_name}}</option>
+						@endforeach
 					</select>
 				</div>
 			</div>
@@ -94,6 +106,30 @@
 		},
 	});
 
+	$(".select-employee").globalDropList({
+		hasPopup                : "false",
+		link_size               : "lg",
+		width                   : "100%",
+		maxHeight				: "129px",
+		placeholder             : "Select Employee",
+		no_result_message       : "No result found!",
+		onChangeValue           : function(){
+			var employee_id = $(this).val();
+			var group = $('option:selected', this).attr('data-group');
+			var action = '/member/payroll/payroll_period_list/shift_template_refence';
+			var method = 'POST';
+
+			var formdata = {
+				payroll_period_id:$("#payroll_period_id").val(),
+				employee_id:employee_id,
+				_token:misc('_token'),
+				group:group
+			};
+			var target = '.div-schedule-tbl';
+			load_configuration(action, method, target, formdata);
+		},
+	});
+	
 	function select_change_action(payroll_department_id = 0, selected = 0)
 	{
 		// var payroll_department_id = $(".department-select").val();
@@ -111,7 +147,7 @@
 				{
 					var json = JSON.parse(result);
 
-					var html = '<option value="">Select Job Title</option>';
+					var html = '<option value="0">Select By Job Title</option>';
 
 					$(json).each(function(index, data)
 					{
@@ -169,4 +205,59 @@
 		}
 	}
 
+
+	function load_configuration(action = "", method = "POST", target = ".configuration-div", formdata = [], toaster_str = '')
+	{
+		$(target).html(misc('loader'));
+		$.ajax({
+			url 	: 	action,
+			type 	:  	method,
+			data 	: 	formdata,
+			success : 	function(result)
+			{
+				$(target).html(result);
+				if(toaster_str != '')
+				{
+					toastr.success(toaster_str);
+				}
+			},
+			error  	: 	function()
+			{
+				error_function();
+			}
+		});
+	}
+
+	function misc(str){
+		var spinner = '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
+		var plus = '<i class="fa fa-plus" aria-hidden="true"></i>';
+		var times = '<i class="fa fa-times" aria-hidden="true"></i>';
+		var pencil = '<i class="fa fa-pencil" aria-hidden="true"></i>';
+		var loader = '<div class="loader-16-gray"></div>'
+		var _token = $("#_token").val();
+
+		switch(str){
+			case "spinner":
+				return spinner
+				break;
+
+			case "plus":
+				return plus
+				break;
+
+			case "loader":
+				return loader
+				break;
+
+			case "_token":
+				return _token
+				break;
+			case "times":
+				return times
+				break;
+			case "pencil":
+				return pencil
+				break;
+		}
+	}
 </script>

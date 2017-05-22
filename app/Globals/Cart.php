@@ -888,6 +888,7 @@ class Cart
     {
         // $sum = $cart["sum"];
         $sum = $cart["tbl_ec_order"]['total'];
+        $result['order_id'] = $cart["tbl_ec_order"]['ec_order_id'];
         $get_cart = Cart::get_cart($shop_id);
         $slot_session = Mlm_member::get_session_slot();
         if($slot_session != null)
@@ -901,7 +902,7 @@ class Cart
                 $arry_log['shop_id'] = $slot_session->shop_id;
                 $arry_log['wallet_log_slot_sponsor'] = $slot_session->slot_id;
                 $arry_log['wallet_log_details'] = $log;
-                $arry_log['wallet_log_amount'] = -1;
+                $arry_log['wallet_log_amount'] = $sum * (-1);
                 // $sum * (-1)
                 $arry_log['wallet_log_plan'] = "REPURCHASE";
                 $arry_log['wallet_log_status'] = "released";   

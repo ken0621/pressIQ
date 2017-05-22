@@ -155,11 +155,12 @@ class Mlm_ComplanSetupController extends Member
 	        	}
 	        }
 
-	        $all_log_group = Tbl_mlm_slot_points_log::where('shop_id', $shop_id)
+	        $all_log_group = Tbl_mlm_slot_points_log::where('tbl_mlm_slot.shop_id', $shop_id)
 	        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_points_log.points_log_slot')
+	        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
 	        // ->where('points_log_complan', 'UNILEVEL_REPURCHASE_POINTS')
 
-	        ->select(DB::raw('sum(points_log_points ) as sum_group'), DB::raw('tbl_mlm_slot_points_log.*'), DB::raw('tbl_mlm_slot.*'))
+	        ->select(DB::raw('sum(points_log_points ) as sum_group'), DB::raw('tbl_mlm_slot_points_log.*'), DB::raw('tbl_mlm_slot.*'), DB::raw('tbl_customer.*'))
 
 	        ->groupBy('points_log_complan')
 	        ->groupBy('points_log_slot')
@@ -179,12 +180,15 @@ class Mlm_ComplanSetupController extends Member
 	        		$structured[$g_value->points_log_slot]['group_points'] = $g_value->sum_group;
 	        		$structured[$g_value->points_log_slot]['personal_points'] = $personal_points[$g_value->points_log_slot];
 	        		$structured[$g_value->points_log_slot]['info'] = $g_value;
+	        		$structured[$g_value->points_log_slot]['income'] = $g_value->sum_group * $settings->u_r_convertion ;
 	        	}
 	        }
-
+	        // dd($structured);
 	        $data_v['structured'] = $structured;	
 	        $data['response_status'] = 'success_e';
-	        $data['view_blade'] = view('member.mlm_complan_setup.unilevel.unilevel_simulate', $data_v);
+	        $data['view_blade'] = view('member.mlm_complan_setup.unilevel.unilevel_simulate', $data_v)->render();
+
+	        return json_encode($data);
 		}
 	}
 }

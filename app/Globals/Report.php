@@ -14,7 +14,10 @@ use Validator;
 use Redirect;
 use File;
 use URL;
+use Carbon\Carbon;
+use App\Globals\Pdf_global;
 use App\Globals\Report;
+
 class Report
 {
 	public static function sales_report($filter = 'accounting_sales_report')
@@ -87,8 +90,8 @@ class Report
 				$data["end_date"]	= "9999-12-30";
 				break;
 			case 'custom':
-				$data["start_date"] = datepicker_input($date["start"]);
-				$data["end_date"]	= datepicker_input($date["end"]);
+				$data["start_date"] = $date["start"] != '' ? datepicker_input($date["start"]) : datepicker_input("today");
+				$data["end_date"]	= $date["end"] != '' ? datepicker_input($date["end"]) : datepicker_input("today");
 				break;
 			case 'today':
 				$data["start_date"] = datepicker_input("today");
@@ -149,6 +152,16 @@ class Report
 		return $data;
 	}
 
+
+	/**
+	 * Perform the right action depending on the report type gives
+	 *
+	 * @param  string  	$report_type 	( plain, pdf, excel)
+	 * @param  string  	$view  		 	
+	 * @param  array    $data	
+	 * @param  string   $name			
+	 * @author BKA	
+	 */
 	public static function check_report_type($report_type, $view, $data, $name="File")
     {   
         $_view = view($view, $data); 
@@ -160,15 +173,13 @@ class Report
                     return Pdf_global::show_pdf($data['view'], 'landscape');
                 break;
             case 'excel':
-                    Excel::create($name, function($excel) use($view, $data) {
-
-                        $excel->sheet('New sheet', function($sheet) use($view, $data) {
-
+                    Excel::create($name, function($excel) use($view, $data) 
+                    {
+                        $excel->sheet('New sheet', function($sheet) use($view, $data) 
+                        {
                             $sheet->loadView($view, $data);
-
                         });
-
-                    })->export('xls');    
+                    })->export('xls');	
             default:
                     $return['status'] = 'success_plain';
                     $return['view'] = $_view->render();

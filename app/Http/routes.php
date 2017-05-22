@@ -738,7 +738,7 @@ Route::group(array('prefix' => '/member/report'), function()
 	Route::any('/accounting/sale/get/report','Member\ReportsController@accounting_sale_report_view');
 
 	/* Accounting Sales - per item */
-	Route::get('/accounting/sale/item','Member\ReportsController@accounting_sale_items');
+	Route::any('/accounting/sale/item','Member\ReportsController@accounting_sale_items');
 
 	/* Accounting Profit and loss */
 	Route::get('/accounting/profit/loss','Member\ReportsController@profit_loss');
@@ -747,6 +747,10 @@ Route::group(array('prefix' => '/member/report'), function()
 	/* Accounting general ledger */
 	Route::get('/accounting/general/ledger','Member\ReportsController@general_ledger');
 	Route::any('/accounting/general/ledger/get','Member\ReportsController@general_ledger_get');
+
+	/* Accounting Report List (Customer, Vendor, Item and Account) */
+
+	Route::any('/accounting/date_period','Member\ReportsController@get_date_period_covered');
 });
 //reports end
 

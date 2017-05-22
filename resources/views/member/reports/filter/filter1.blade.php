@@ -1,12 +1,12 @@
 <div class="panel panel-default panel-block panel-title-block">
     <div class="panel-heading">
-    	<form class="global-submit" method="post" action="{{$action}}" >
+    	<form class="global-submit filter" method="post" action="{{$action}}" >
     	{!! csrf_field() !!}
     	<input type="hidden" name="report_type" value="plain" class="report_type_i">
-    	<input type="hidden" name="report_field_type" class="report_field_type" value="accounting_sales_report">
+    	<input type="hidden" name="report_field_type" class="report_field_type" value="{{$report_code or ''}}">
         <div>
             <div class="col-md-2">
-                <select class="form-control input-sm" name="report_period">
+                <select class="form-control input-sm report_period" name="report_period">
                     <option value="all">All Dates</option>
                     <option value="custom">Custom</option>
                     <option value="today">Today</option>
@@ -19,12 +19,71 @@
                     <option value="this_year">This Year</option>
                 </select>
             </div>
-            <div class="col-md-2"><input type="date" class="form-control from_report_a" name="from" class=""></div>
-            <div class="col-md-2"><input type="date" class="form-control form_report_b" name="to" class=""></div>
-            <div class="col-md-3"><button class="btn btn-primary" onclick="$('.report_type_i').val('plain')" >View Report</button></div>
+            <div class="col-md-2"><input type="text" class="form-control from_report_a datepicker" name="from" class=""></div>
+            <div class="col-md-2"><input type="text" class="form-control form_report_b datepicker" name="to" class=""></div>
+            <div class="col-md-3"><button class="btn btn-primary run-report" onclick="$('.report_type_i').val('plain')" >Run Report</button></div>
             <button class="btn btn-custom-red-white margin-right-10 btn-pdf pull-right" onclick="report_file('pdf')"><i class="fa fa-file-pdf-o"></i>&nbsp;Export to PDF</button>
             <button class="btn btn-custom-green-white margin-right-10 btn-pdf pull-right" onclick="report_file('excel')"><i class="fa fa-file-excel-o"></i>&nbsp;Export to Excel</button>
         </div>
         </form>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    var new_report = new new_report();
+    var date_from  = $('.from_report_a').val();
+    var date_to    = $('.form_report_b').val();
+    var period     = $('.report_period').val();
+
+    function new_report()
+    {
+        init();
+
+        function init()
+        {
+            event_run_report_click();
+        }
+
+        function event_run_report_click()
+        {
+            $(document).on("click", ".run-report", function()
+            {
+                $.ajax({
+                url: '/member/report/accounting/date_period',
+                dataType: 'json',
+                data: $("form.filter").serialize(),
+                })
+                .done(function(data) {
+                    if(data.period != 'all')
+                    {
+                        $(".from_report_a").val(data.start_date);
+                        $(".form_report_b").val(data.end_date);
+                    }
+                    else
+                    {
+                        $(".from_report_a").val("");
+                        $(".form_report_b").val("");
+                    }
+                })
+                .fail(function() {
+                    console.log("error");
+                })
+            });
+        }
+    }
+
+    function report_file(type)
+    {
+        // var link = $("form.filter").attr("action");
+        // $("input[name='report_type']").val(type);
+        // var serialize = $("form.filter").serialize();
+        // window.open( link + '?' + serialize );
+
+        var link    = $("form.filter").attr("action");
+        
+        var report_field_type = $('.report_field_type').val();
+
+        window.open( link + '?report_type=' + type + '&from=' + from + '&to=' + to + '&report_field_type=' + report_field_type + '&report_period=' + period);
+    }
+</script>

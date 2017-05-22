@@ -490,14 +490,49 @@ class ReportsController extends Member
 
     public function customer_list()
     {
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'Customer List';
+        $data['head_icon']  = 'fa fa-area-chart';
+        $data['head_discription'] = '';
+        $data['head']       = $this->report_header($data);
+        $data['action']     = '/member/report/accounting/customer_list';
+
+        $report_type    = Request::input('report_type');
+        $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
+        $date['start']  = Request::input('from') ? Request::input('from') : '';
+        $date['end']    = Request::input('to') ? Request::input('from') : '';
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
         $data['_customer'] = Tbl_customer::balanceJournal()->where("shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
 
         foreach($data['_customer'] as $key=>$customer)
         {
-            $data['_customer'][$key]->customer_journal = Tbl_journal_entry_line::customerOrVendor()->customerOnly()->get();
+            $data['_customer'][$key]->customer_journal = Tbl_journal_entry_line::journal()->customerOrVendor()->account()->customerOnly()
+                                                        ->where("jline_name_id", $customer->customer_id)
+                                                        ->where("chart_type_name", 'Accounts Receivable')
+                                                        ->whereRaw("DATE(je_entry_date) >= '$from'")
+                                                        ->whereRaw("DATE(je_entry_date) <= '$to'")
+                                                        ->get();
         }   
 
-        dd($data);
+        if(Request::method() == "POST")
+        {
+            $json['status']  = "success";
+            $json['message'] = "Success";
+            
+            return json_encode($json);
+        }
+
+        if($report_type)
+        {
+            $view =  'member.reports.output.customer_list'; 
+            return Report::check_report_type($report_type, $view, $data, 'Customer_list'.Carbon::now());
+        }
+        else
+        {
+            return view('member.reports.accounting.customer_list', $data);
+        }
     }
 
     public function vendor_list()

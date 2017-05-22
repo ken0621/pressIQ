@@ -32,10 +32,6 @@
 <script type="text/javascript">
 
     var new_report = new new_report();
-    var date_from  = $('.from_report_a').val();
-    var date_to    = $('.form_report_b').val();
-    var period     = $('.report_period').val();
-
     function new_report()
     {
         init();
@@ -75,15 +71,22 @@
 
     function report_file(type)
     {
-        // var link = $("form.filter").attr("action");
-        // $("input[name='report_type']").val(type);
-        // var serialize = $("form.filter").serialize();
-        // window.open( link + '?' + serialize );
+        var link        = $("form.filter").attr("action");
+        var serialize   = $("form.filter").serialize();
+        var link        = link + '?' + serialize + '&report_type=' + type;
+        console.log(link);
+        window.open(link);
 
-        var link    = $("form.filter").attr("action");
-        
-        var report_field_type = $('.report_field_type').val();
+        // var date_from  = $('.from_report_a').val();
+        // var date_to    = $('.form_report_b').val();
+        // var period     = $('.report_period').val();
+        // var link       = $("form.filter").attr("action");
+        // var report_field_type = $('.report_field_type').val();
+        // var token      = $("input[name='_token']").val();
+        // var link       = link + '?_token='+token+'&report_type=' + type + '&report_field_type=' + report_field_type + '&report_period=' + period + '&from=' + date_from + '&to=' + date_to
 
-        window.open( link + '?report_type=' + type + '&from=' + from + '&to=' + to + '&report_field_type=' + report_field_type + '&report_period=' + period);
+        // console.log(link);
+        // // window.open( link + '?report_type=' + type + '&from=' + date_from + '&to=' + date_to + '&report_field_type=' + report_field_type + '&report_period=' + period);
+        // window.open(link);
     }
 </script>

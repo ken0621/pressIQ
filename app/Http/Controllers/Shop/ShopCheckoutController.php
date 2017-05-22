@@ -275,7 +275,7 @@ class ShopCheckoutController extends Shop
         }
 
         $data = unserialize(Crypt::decrypt($order));
-
+    
         $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $data["order_id"])
                                             ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
                                             ->get();

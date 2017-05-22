@@ -28,6 +28,7 @@ use App\Models\Tbl_unit_measurement;
 use App\Models\Tbl_manual_credit_memo;
 use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_unit_measurement_multi;
+use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_settings;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
@@ -225,13 +226,21 @@ class PisSalesLiquidationController extends Member
             $_transaction[$inv_key]['date'] = $inv_value->inv_date;
             if($inv_value->is_sales_receipt == 0)
             {
-                $_transaction[$inv_key]['type'] = 'Invoice';
-                $_transaction[$inv_key]['reference_name'] = 'invoice';                    
+                $_transaction[$inv_key]['type'] = 'Credit Sales';
+                $_transaction[$inv_key]['reference_name'] = 'invoice';  
+                $_transaction[$inv_key]['transaction_code'] = "AR";
+
+                $chk = Tbl_receive_payment_line::where("rpline_reference_name",'invoice')->where("rpline_reference_id",$inv_value->inv_id)->first();
+                if($chk)
+                {
+                    $_transaction[$inv_key]['transaction_code'] = "AR Payment #".$chk->rpline_rp_id;
+                }               
             }
             else
             {                
-                $_transaction[$inv_key]['type'] = 'Sales Receipt';
+                $_transaction[$inv_key]['type'] = 'Cash Sales';
                 $_transaction[$inv_key]['reference_name'] = 'sales_receipt';
+                $_transaction[$inv_key]['transaction_code'] = "Paid Cash";
             }
             $_transaction[$inv_key]['customer_name'] = $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
             $_transaction[$inv_key]['no'] = $inv_value->inv_id;
@@ -269,6 +278,7 @@ class PisSalesLiquidationController extends Member
         {
             $_transaction = null;
             $_transaction[$cm_key]['date'] = $cm_value->cm_date;
+            $_transaction[$cm_key]['transaction_code'] = "Credit Memo";
             $_transaction[$cm_key]['type'] = 'Credit Memo';
             $_transaction[$cm_key]['reference_name'] = 'credit_memo';
             $_transaction[$cm_key]['customer_name'] = $cm_value->title_name." ".$cm_value->first_name." ".$cm_value->last_name." ".$cm_value->suffix_name;
@@ -305,6 +315,10 @@ class PisSalesLiquidationController extends Member
             {
                 $data['total'] += $value2['total'];
             }
+            if($value2['reference_name'] == "receive_payment")
+            {
+                unset($data['tr'][$key2]);
+            }
         }
         // $data["total"] = currency("Php",$data['total']);
         usort($data['tr'], function($a, $b)
@@ -325,8 +339,8 @@ class PisSalesLiquidationController extends Member
 
 
         $html = view("member.cashier.sales_liquidation.liquidation_report",$data);
-        // return $html;
-        return Pdf_global::show_pdf($html);
+        $footer = 'REF#'.$sir_id;
+        return Pdf_global::show_pdf($html,'',$footer);
     }
 
     /**

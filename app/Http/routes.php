@@ -312,6 +312,8 @@ Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_
 /*SALES LIQUIDATION*/
 Route::any('member/cashier/sales_liquidation','Member\PisSalesLiquidationController@index');
 Route::any('/member/cashier/report/{id}','Member\PisSalesLiquidationController@report');
+Route::any('/member/cashier/report/footer/{id}','Member\PisSalesLiquidationController@footer');
+
 /*AGENT TRANSACTION*/
 Route::any('/member/pis/agent/transaction/{id}','Member\AgentTransactionController@agents_transaction');
 Route::any('/member/pis/agent_transaction/print/{id}','Member\AgentTransactionController@print_transaction');

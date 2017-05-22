@@ -204,7 +204,7 @@
                     <th>Due Date</th>
                     <th>Balance</th>
                     <th>Total</th>
-                    <!-- <th>Status</th> -->
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -217,6 +217,9 @@
                         <td>{{ $transaction['due_date'] }}</td>
                         <td class="text-right">{{ currency("PHP",$transaction['balance']) }}</td>
                         <td class="text-right">{{ currency("PHP", $transaction['total']) }}</td>
+                        <td class="text-center">
+                            <strong>{{$transaction["transaction_code"]}}</strong>
+                        </td>
                         <!-- <td>
                             @if($transaction['reference_name'] == "receive_payment")
                             <a class="btn btn-default form-control">Closed</a>

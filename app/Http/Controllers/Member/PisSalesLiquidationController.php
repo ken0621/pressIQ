@@ -17,6 +17,7 @@ use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_sir_inventory;
 use App\Models\Tbl_item;
 use App\Models\Tbl_credit_memo_line;
+use App\Models\Tbl_customer_invoice_line;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_sir_cm_item;
@@ -201,8 +202,63 @@ class PisSalesLiquidationController extends Member
             }
         }
 
+        //FOR DISCOUNT TABLE
+        $data["inv_discount"] = Tbl_manual_invoice::customer_invoice()->where("sir_id",$sir_id)->get();
+
+        $data["_inv_dsc"] = [];
+        foreach ($data["inv_discount"] as $key_dsc => $value_dsc)
+        {
+            $data["_inv_dsc"][$key_dsc]["customer"] =  $value_dsc->company != "" ? $value_dsc->company : $value_dsc->title_name." ".$value_dsc->first_name." ".$value_dsc->last_name." ".$value_dsc->suffix_name;
+            $data["_inv_dsc"][$key_dsc]["transaction_type"] = 'Credit Sales';
+            if($value_dsc->is_sales_receipt != 0)
+            {
+                $data["_inv_dsc"][$key_dsc]["transaction_type"] = 'Cash Sales';
+            }
+            $data["_inv_dsc"][$key_dsc]["transaction_id"] = $value_dsc->new_inv_id;
+
+            $whole_amount = $value_dsc->inv_discount_value;
+            if($value_dsc->inv_discount_type == 'percent')
+            {
+                $whole_amount = ($value_dsc->inv_discount_value / 100) * $value_dsc->inv_subtotal_price;
+            }
+
+            $per_item = Tbl_customer_invoice_line::where("invline_inv_id",$value_dsc->inv_id)->get();
+
+            $item_dsc = 0;
+            foreach ($per_item as $key_item => $value_item) 
+            {
+                $item_dsc = $value_item->invline_discount;
+                if($value_item->invline_discount_type == 'percent')
+                {
+                    $item_dsc = ($value_item->invline_discount / 100) * $value_item->invline_amount;
+                }
+            }
+            $data["_inv_dsc"][$key_dsc]["amount"] = $whole_amount + $item_dsc;
+
+            if($data["_inv_dsc"][$key_dsc]["amount"] == 0)
+            {
+                unset($data['_inv_dsc'][$key_dsc]);
+            }
+        }
+
 
         //FOR AGENT TRANSACTION
+
+        //TO COMPUTE TOTAL SALES (CASH SALES W/O EMPTIES + CREDIT SALES W/O EMPTIES)
+        $data["total_sales"] = 0;
+
+        //TOTAL EMPTIES
+        $data["total_empties"] = 0;
+
+        //TO COMPUTE TOTAL CASH ON HAND (RECEIVE PAYMENT/ AR COLLECTION + CASH SALES)
+        $data["total_cash"] = 0;
+
+        //TOTAL RECEIVABLE
+        $data['total_ar'] = 0;
+
+        //TOTAL CM
+        $data['total_cm'] = 0;
+
 
         $data["agent"] = Tbl_employee::position()->where("employee_id",$agent_id)->first();
         $start_date = '';
@@ -210,10 +266,10 @@ class PisSalesLiquidationController extends Member
         //for invoice
         $data["invoices"] = Tbl_manual_invoice::customer_invoice()->where("sir_id",$sir_id)->get(); 
 
+        $data['unset_key'] = [];
         //union of invoice and receive payment
         $data['__transaction'] = array();
-        $data['total_ar'] = 0;
-        $data['total_cm'] = 0;
+
         foreach ($data["invoices"] as $inv_key => $inv_value) 
         {
             $_transaction = null;
@@ -223,6 +279,10 @@ class PisSalesLiquidationController extends Member
             {
               $cm_amt = $cm->cm_amount;  
             }
+
+            $data["total_sales"] += $inv_value->inv_overall_price - $cm_amt;
+            $data["total_empties"] += $cm_amt;
+
             $_transaction[$inv_key]['date'] = $inv_value->inv_date;
             if($inv_value->is_sales_receipt == 0)
             {
@@ -234,24 +294,26 @@ class PisSalesLiquidationController extends Member
                 if($chk)
                 {
                     $_transaction[$inv_key]['transaction_code'] = "AR Payment #".$chk->rpline_rp_id;
-                }               
+                    $data['unset_key'][$inv_key] = $chk->rpline_rp_id;
+                }        
+
+                $data['total_ar'] += ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;     
             }
             else
             {                
                 $_transaction[$inv_key]['type'] = 'Cash Sales';
                 $_transaction[$inv_key]['reference_name'] = 'sales_receipt';
                 $_transaction[$inv_key]['transaction_code'] = "Paid Cash";
+
+                $data["total_cash"] += $inv_value->inv_payment_applied - $cm_amt;
             }
-            $_transaction[$inv_key]['customer_name'] = $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
+            $_transaction[$inv_key]['customer_name'] = $inv_value->company != "" ? $inv_value->company : $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
             $_transaction[$inv_key]['no'] = $inv_value->inv_id;
-            $_transaction[$inv_key]['balance'] = $inv_value->inv_overall_price - $inv_value->inv_payment_applied;
+            $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;
             $_transaction[$inv_key]['due_date'] = $inv_value->inv_due_date;
             $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price - $cm_amt;
             $_transaction[$inv_key]['status'] = $inv_value->inv_is_paid;
-            $_transaction[$inv_key]['date_created'] = $inv_value->manual_invoice_date;
-
-           
-            $data['total_ar'] += $inv_value->inv_overall_price - $inv_value->inv_payment_applied;
+            $_transaction[$inv_key]['date_created'] = $inv_value->manual_invoice_date;           
            
             array_push($data['__transaction'], $_transaction);
         }
@@ -261,9 +323,10 @@ class PisSalesLiquidationController extends Member
         {
             $_transaction = null;
             $_transaction[$rp_key]['date'] = $rp_value->rp_date;
+            $_transaction[$rp_key]['transaction_code'] = "Payment #".$rp_value->rp_id;
             $_transaction[$rp_key]['type'] = 'Payment';
             $_transaction[$rp_key]['reference_name'] = 'receive_payment';
-            $_transaction[$rp_key]['customer_name'] = $rp_value->title_name." ".$rp_value->first_name." ".$rp_value->last_name." ".$rp_value->suffix_name;
+            $_transaction[$rp_key]['customer_name'] =  $rp_value->company != "" ? $rp_value->company : $rp_value->title_name." ".$rp_value->first_name." ".$rp_value->last_name." ".$rp_value->suffix_name;
             $_transaction[$rp_key]['no'] = $rp_value->rp_id;
             $_transaction[$rp_key]['balance'] = 0;
             $_transaction[$rp_key]['due_date'] = $rp_value->rp_date;
@@ -271,8 +334,11 @@ class PisSalesLiquidationController extends Member
             $_transaction[$rp_key]['status'] = 'status';
             $_transaction[$rp_key]['date_created'] = $rp_value->manual_rp_date;
 
+            $data["total_cash"] += $rp_value->rp_total_amount;
+
             array_push($data['__transaction'], $_transaction);
         }
+
         $data["credit_memo"] = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->get();
         foreach ($data["credit_memo"] as $cm_key => $cm_value) 
         {
@@ -281,7 +347,7 @@ class PisSalesLiquidationController extends Member
             $_transaction[$cm_key]['transaction_code'] = "Credit Memo";
             $_transaction[$cm_key]['type'] = 'Credit Memo';
             $_transaction[$cm_key]['reference_name'] = 'credit_memo';
-            $_transaction[$cm_key]['customer_name'] = $cm_value->title_name." ".$cm_value->first_name." ".$cm_value->last_name." ".$cm_value->suffix_name;
+            $_transaction[$cm_key]['customer_name'] =  $cm_value->company != "" ? $cm_value->company : $cm_value->title_name." ".$cm_value->first_name." ".$cm_value->last_name." ".$cm_value->suffix_name;
             $_transaction[$cm_key]['no'] = $cm_value->cm_id;
             $_transaction[$cm_key]['balance'] = 0;
             $_transaction[$cm_key]['due_date'] = $cm_value->cm_date;
@@ -315,9 +381,15 @@ class PisSalesLiquidationController extends Member
             {
                 $data['total'] += $value2['total'];
             }
-            if($value2['reference_name'] == "receive_payment")
+            foreach ($data['unset_key'] as $key_unset => $value_unset)
             {
-                unset($data['tr'][$key2]);
+                if($value2['reference_name'] == "receive_payment")
+                {
+                    if($value_unset == $value2['no'])
+                    {
+                        unset($data['tr'][$key2]);
+                    }
+                }                
             }
         }
         // $data["total"] = currency("Php",$data['total']);
@@ -339,6 +411,7 @@ class PisSalesLiquidationController extends Member
 
 
         $html = view("member.cashier.sales_liquidation.liquidation_report",$data);
+        // return $html;
         $footer = 'REF#'.$sir_id;
         return Pdf_global::show_pdf($html,'',$footer);
     }

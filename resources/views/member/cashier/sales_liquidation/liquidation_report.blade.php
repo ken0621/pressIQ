@@ -186,7 +186,50 @@
     </div>                
 </div>
 @endif
+
+@if(count($_inv_dsc) > 0)
+<div>
+    <div class="form-group">
+        <h2>Discount Breakdown</h2>
+    </div>
+      <div class="col-md-12">
+        <div class="row clearfix draggable-container empties-container">
+            <div class="col-sm-12">
+                <table class="digima-table">
+                    <thead >
+                        <tr>
+                            <th style="width: 30px;" class="text-center">#</th>
+                            <th style="width: 200px;">Customer</th>
+                            <th style="width: 200px;">Transaction Type</th>
+                            <th style="width: 200px;">Transaction No</th>
+                            <th style="width: 200px;">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($_inv_dsc as $key => $inv_dsc)
+                        <tr>
+                            <td>{{$key + 1}}</td>
+                            <td>{{$inv_dsc['customer']}}</td>
+                            <td>{{$inv_dsc['transaction_type']}}</td>
+                            <td>{{$inv_dsc['transaction_id']}}</td>
+                            <td>{{currency('Php',$inv_dsc['amount'])}}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>                                   
+                </table>
+            </div>
+        </div>
+    </div>  
+
 </div>
+@else
+<div class="form-group">
+    <h3>NO DISCOUNT GIVEN</h3>
+</div>
+@endif
+</div>
+
+
 <div>
     <div class="form-group">
         <h2>Agent Transaction</h2>      
@@ -255,7 +298,14 @@
 
     <div class="form-group">
         <div class="pull-right">
-            <h4><strong>Sales :</strong> {{currency("Php",$total)}}</h4>
+            <h4><strong>Total Sales :</strong> {{currency("Php",$total_sales)}}</h4>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="form-group text-right">
+        <div >
+            <h4><strong>Total Cash On Hand :</strong> {{currency("Php",$total_cash)}}</h4>
         </div>
     </div>
     <br>
@@ -298,7 +348,8 @@
     <div class="form-group">
         <table class="text-center" style="width: 100%;font-size: 20px;">
             <tr>
-                <td>{{currency('PHP',$total)}}</td>
+                <td>{{currency('PHP',$total_sales)}}</td>
+                <td>{{currency('PHP',$total_empties)}}</td>
                 <td>{{currency('PHP',$total_ar)}}</td>
                 <td>{{currency('PHP',$total_cm)}}</td>
             </tr>
@@ -306,9 +357,11 @@
                 <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
                 <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
                 <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
             </tr>
             <tr>
                 <td>Total Sales</td>
+                <td>Total Empties</td>
                 <td>Total Receivable</td>
                 <td>Total Credit Memo</td>
             </tr>

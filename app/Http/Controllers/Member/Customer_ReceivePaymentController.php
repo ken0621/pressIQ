@@ -51,7 +51,6 @@ class Customer_ReceivePaymentController extends Member
             $data["rcvpayment"]         = Tbl_receive_payment::where("rp_id", $id)->first();
             $data["_rcvpayment_line"]   = Tbl_receive_payment_line::where("rpline_rp_id", $id)->get();
             $data["_invoice"]           = Invoice::getAllInvoiceByCustomerWithRcvPymnt($data["rcvpayment"]->rp_customer_id, $data["rcvpayment"]->rp_id);
-            // dd($data["_invoice"]);
             $data['action']             = "/member/customer/receive_payment/update/".$data["rcvpayment"]->rp_id;
         }
 
@@ -87,7 +86,7 @@ class Customer_ReceivePaymentController extends Member
                 $insert_line["rpline_reference_name"]   = Request::input('rpline_txn_type')[$key];
                 $insert_line["rpline_reference_id"]     = Request::input('rpline_txn_id')[$key];
 
-                $cm_amount = CreditMemo::cm_amount( Request::input('rpline_txn_id')[$key]);
+                $cm_amount = CreditMemo::cm_amount(Request::input('rpline_txn_id')[$key]);
                 
                 $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]) + $cm_amount;
 
@@ -99,7 +98,6 @@ class Customer_ReceivePaymentController extends Member
                 }
             }
         }
-
         /* Transaction Journal */
         $entry["reference_module"]      = "receive-payment";
         $entry["reference_id"]          = $rcvpayment_id;
@@ -152,7 +150,7 @@ class Customer_ReceivePaymentController extends Member
                 $insert_line["rpline_reference_name"]   = Request::input('rpline_txn_type')[$key];
                 $insert_line["rpline_reference_id"]     = Request::input('rpline_txn_id')[$key];
            
-                    $cm_amount = CreditMemo::cm_amount(Request::input('rpline_txn_id')[$key]);
+                $cm_amount = CreditMemo::cm_amount(Request::input('rpline_txn_id')[$key]);
                 $insert_line["rpline_amount"]           = convertToNumber(Request::input('rpline_amount')[$key]) + $cm_amount;
 
                 Tbl_receive_payment_line::insert($insert_line);

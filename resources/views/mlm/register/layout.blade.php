@@ -41,6 +41,7 @@
     <script>window.jQuery || document.write('<script src="/assets/initializr/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
     <script src="/assets/initializr/js/vendor/bootstrap.min.js"></script>
     <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
+    <script type="text/javascript" src="/assets/mlm/js/match-height.js"></script>
     @yield("script")
     </body>
 </html>

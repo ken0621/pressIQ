@@ -15,11 +15,16 @@ class Tbl_journal_entry_line extends Model
     	return $query->join("tbl_chart_of_account", "account_id", "=", "jline_account_id")
     				 ->join("tbl_chart_account_type", "chart_type_id", "=", "account_type_id");
     }
+    /* Dependent on Account() */
+    public function scopeCustomerOnly($query)
+    {
+        return $query->selectRaw("(CASE normal_balance WHEN jline_type THEN jline_amount ELSE -jline_amount) as 'amount'")
+                     ->where("jline_name_reference", DB::raw("'customer'"));
+    }
 
     public function scopeItem($query)
     {
     	return $query->leftjoin("tbl_item", "item_id", "=", "jline_item_id");
-        // {{$um->multi_name}} ({{$um->multi_abbrev}}
     }
 
     //RETURNS THE NAME OF THE CUSTOMER OR VENDOR INSIDE THE TRANSACTION
@@ -43,6 +48,7 @@ class Tbl_journal_entry_line extends Model
                         ->leftJoin("tbl_vendor", "vendor_id", "=", "jline_name_id")
                         ->leftJoin("tbl_customer", "customer_id", "=", "jline_name_id");
     }
+
     public function scopeSelectedLimit($query)
     {
         return $query->select("jline_item_id","jline_account_id","jline_type","jline_amount","jline_description");

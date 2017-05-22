@@ -169,7 +169,7 @@ class Item
         {
             if($value->item_type_id == 4)
             {
-               $data[$key]->item_price = Item::get_item_bundle_price($value->item_id); 
+               $data[$key]->item_price = Item::get_item_bundle_price($value->item_id);   
                $data[$key]->item_cost= Item::get_item_bundle_cost($value->item_id); 
             }
         }       

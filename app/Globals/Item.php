@@ -164,7 +164,15 @@ class Item
                                     ->where("tbl_item.archived",0)
                                     ->where("is_mts",1)
                                     ->groupBy("tbl_item.item_id")
-                                    ->get();         
+                                    ->get();  
+        foreach ($data as $key => $value) 
+        {
+            if($value->item_type_id == 4)
+            {
+               $data[$key]->item_price = Item::get_item_bundle_price($value->item_id);   
+               $data[$key]->item_cost= Item::get_item_bundle_cost($value->item_id); 
+            }
+        }       
  
         return $data;        
     }

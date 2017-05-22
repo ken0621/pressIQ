@@ -12,7 +12,6 @@ use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_debit_memo_line;
 use App\Models\Tbl_debit_memo;
 use App\Globals\Accounting;
-use App\Models\Tbl_user;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\AuditTrail;
@@ -36,6 +35,7 @@ class DebitMemo
 		$insert_db["db_message"] = $vendor_info["db_message"];
 		$insert_db["db_memo"] = $vendor_info["db_memo"];
 		$insert_db["db_amount"] = $vendor_info["db_amount"];
+		$insert_db["is_bad_order"] = $vendor_info["type"];
 		$insert_db["date_created"] = Carbon::now();
 
 		$db_id = Tbl_debit_memo::insertGetId($insert_db);

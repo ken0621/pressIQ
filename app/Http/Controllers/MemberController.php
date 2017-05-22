@@ -360,6 +360,7 @@ class MemberController extends Controller
     public function post_dragonpay()
     {
         $info = Session::get('mlm_register_step_1');
+        dd(Session::get('mlm_register_step_2'));
         $requestpayment = new RequestPayment($this->_merchantkey);
 
         $this->_data = array(

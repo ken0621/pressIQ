@@ -19,6 +19,7 @@ use App\Models\Tbl_customer_search;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_lead;
+use App\Models\Tbl_country;
 
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
@@ -369,9 +370,9 @@ class Mlm_member
         ->where('tbl_mlm_lead.lead_used', 0)
         ->first();
 
-        $data['_slots'] = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get();
-
-        $data['position'] = Request::input('position');
+        $data['_slots']    = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get();
+        $data['country']   = Tbl_country::get();
+        $data['position']  = Request::input('position');
         $data['placement'] = Request::input('placement');
         $data['sponsor_a'] = Request::input('slot_sponsor');
         return view('mlm.slot_add.index', $data);

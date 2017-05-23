@@ -16,14 +16,33 @@ $data['icon'] = 'icon-sitemap';
     <form class="global-submit" method="post" action="/mlm/slots/set_nickname">
     {!! csrf_field() !!}
     <div class="box-body">
-    	<label>Slot</label>
-    	<input type="text" class="form-control" name="active_slot" value="{{ isset($active->slot_no) ? $active->slot_no : ''}}">
+      <label>Slot</label>
+      <input type="text" class="form-control" name="active_slot" value="{{ isset($active->slot_no) ? $active->slot_no : ''}}">
 
       <label>Slot Nickname</label>
       <input type="text" class="form-control" name="slot_nickname" value="{{ isset($active->slot_nick_name) ? $active->slot_nick_name : ''}}" readonly>
 
       <hr>
       <button class="btn btn-primary pull-right">Set Default</button>
+    </div>
+    </form>
+  </div>
+  <div class="box clearfix" style="overflow: hidden !important;">
+    <div class="box-header with-border">
+      <h3 class="box-title">Membership Codes</h3>
+    </div>
+    <!-- /.box-header -->
+    <form class="global-submit" method="post" action="/mlm/slot/check_add">
+    {!! csrf_field() !!}
+    <div class="box-body">
+    	<label>Membership Code</label>
+    	<select name="membership_code_id" class="form-control">
+        @foreach($_code as $code)
+          <option value="{{$code->membership_code_id}}">{{$code->membership_activation_code}}</option>
+        @endforeach
+      </select>
+      <hr>
+      <button class="btn btn-primary pull-right">Use Code</button>
     </div>
     </form>
   </div>
@@ -84,6 +103,9 @@ $data['icon'] = 'icon-sitemap';
   </div>
   <!-- /.box -->
 </div>  
+<div class="hidden">
+  <button class="check_slot_button popup" link=""> 
+</div>
 @endsection
 @section('js')
 <script type="text/javascript">
@@ -93,6 +115,11 @@ function submit_done(data)
   {
     toastr.success(data.message);
   }  
+  else if(data.status == "sucess-slot")
+  { 
+    var link = "/mlm/membership_active_code/"+data.encrypted;
+    window.location.href = link;
+  }
   else if(data.status == 'success-upgrade')
   {
     toastr.success(data.message);

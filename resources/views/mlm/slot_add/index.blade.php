@@ -133,6 +133,15 @@
 	                @endif
 				</td>
 			</tr>
+<!-- 			<tr>
+				<td>
+					<div class="col-md-12">
+						<label>Choose Owner</label>
+						<label><input id="your_account" type="radio" class="col-md-6" name="choose_owner" checked>Your Account</label>
+						<label><input id="new_user" type="radio" class="col-md-6" name="choose_owner">New User</label>
+					</div>
+				</td>
+			</tr> -->
 			<tr>
 				<td>
 					<button class="btn btn-primary pull-right" id="rcorners3">SUBMIT</button>

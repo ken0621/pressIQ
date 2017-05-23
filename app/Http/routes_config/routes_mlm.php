@@ -86,3 +86,4 @@ Route::post('/mlm/wallet/tours/update', 'Mlm\MlmWalletAbsController@update_info'
 
 /* Modal Add Slot */
 Route::get('/mlm/slot/add', 'Mlm\MlmSlotsController@add_slot_modal');
+Route::any('/mlm/slot/check_add', 'Mlm\MlmSlotsController@check_add');

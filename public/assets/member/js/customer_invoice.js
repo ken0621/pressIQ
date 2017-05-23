@@ -638,19 +638,20 @@ function customer_invoice()
 	}
 	function event_item_qty_change()
 	{
-		$(document).on("change", ".txt-qty", function()
-		{
-			$parent 	= $(this).closest(".tr-draggable");
-			if($parent.find(".select-item").val() != '')
-			{
-				$item_id 	= $parent.find(".select-item option:selected").val();
-				$item_qty 	= $(this).val();
-				$.get('/member/item/get_new_price/'+$item_id +"/"+$item_qty, function(data)
-				{
-					if(data > 0) $parent.find(".txt-rate").val(data).change();
-				});
-			}
-		})
+		// $(document).on("change", ".txt-qty", function()
+		// {
+		// 	$parent 	= $(this).closest(".tr-draggable");
+		// 	if($parent.find(".select-item").val() != '')
+		// 	{
+		// 		$item_id 	= $parent.find(".select-item option:selected").val();
+		// 		$item_qty 	= $(this).val();
+		// 		// $.get('/member/item/get_new_price/'+$item_id +"/"+$item_qty, function(data)
+		// 		// {
+		// 		// 	console.log(data);
+		// 		// 	if(data > 0) $parent.find(".txt-rate").val(data).change();
+		// 		// });
+		// 	}
+		// })
 	}
 
 	function action_load_unit_measurement($this)

@@ -66,10 +66,13 @@ class ItemController extends Member
 	        }
 	        
 			$data["_item"]			   = $item->get();
-			// dd($data["_item"]);
-			//item_convertion with unit measurement
+
 			foreach ($data["_item"] as $key => $value) 
 			{
+				if($value->bundle_group == 1)
+				{
+					$data["_item"][$key]->item_type_name = "Group";
+				}
 				if($value->item_type_id == 1)
 				{
 					$data["_item"][$key]->inventory_count_um_view = "";
@@ -87,15 +90,12 @@ class ItemController extends Member
 						$data["_item"][$key]->um_whole = $um->multi_abbrev;
 					}
 				}
-				if($value->item_type_id != 4)
+				$um_base = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",1)->first();
+				if($um_base)
 				{
-					$um_base = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",1)->first();
-					if($um_base)
-					{
-						$data["_item"][$key]->multi_abbrev = $um_base->multi_abbrev;
-					}
-					$data["_item"][$key]->conversion = UnitMeasurement::um_convertion($value->item_id);
+					$data["_item"][$key]->multi_abbrev = $um_base->multi_abbrev;
 				}
+				$data["_item"][$key]->conversion = UnitMeasurement::um_convertion($value->item_id);
 				if($value->item_type_id == 4)
 				{
 					$data["_item"][$key]->item_price = Item::get_item_bundle_price($value->item_id);
@@ -221,11 +221,15 @@ class ItemController extends Member
 		$item_reorder_point 			= Request::input("item_reorder_point");
 		$item_quantity 					= Request::input("item_quantity");
 
-		if($item_type != "bundle")
-		{
-			$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
-			$item_measurement_id 			= $unit_id;			
-		}
+		$promo_price 					= Request::input("promo_price");
+		$start_promo_date 				= Request::input("start_promo_date");
+		$end_promo_date 				= Request::input("end_promo_date");
+
+		// if($item_type != "bundle")
+		// {
+		$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
+		$item_measurement_id 			= $unit_id;			
+		// }
 			
 		//Accounting part //DEFAULT VALUE
 		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->pluck("account_id");
@@ -407,11 +411,105 @@ class ItemController extends Member
 		{
 			$insert["item_type_id"]				      = 4; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
 			
+			if(Request::input("auto_generate_code") == "generate" || $item_barcode == "")
+			{
+				$num = str_shuffle("1234567890");
+				$item_barcode = Item::generate_barcode($num);
+			}
+
 			$insert["item_name"]				= $item_name;
 			$insert["item_sku"]					= $item_sku;
 			$insert["item_category_id"]			= $item_category_id;
 			$insert["item_img"]					= $item_img;
 			$insert["item_sales_information"] 	= $item_sales_information;
+
+			$insert["item_barcode"]			 	= $item_barcode;
+			$insert["item_measurement_id"] 		= $item_measurement_id;
+
+			$rules["item_name"]					= "required";
+			$rules["item_sku"] 					= "required";
+
+			$_item 	= Request::input('bundle_item_id');
+			$_um 	= Request::input('bundle_um_id');
+			$_qty 	= Request::input('bundle_qty');
+
+			$item_id = "";
+			$message   = [];
+			$validator = Validator::make($insert, $rules, $message);
+			if($validator->fails())
+			{
+				$data["status"] = "error";
+	            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+	            {
+	                $data["status_message"] .= $message;
+	            }
+			}
+			else
+			{
+				$item_id 			= Tbl_item::insertGetId($insert);
+
+				$insert_item_discount["item_id"] = $item_id;
+				$insert_item_discount["item_discount_value"] = $promo_price;
+				$insert_item_discount["item_discount_date_start"] = $start_promo_date;
+				$insert_item_discount["item_discount_date_end"]	 = $end_promo_date;	
+				Item::insert_item_discount($insert_item_discount);
+
+				foreach($_item as $key=>$item)
+				{
+					if($item != '')
+					{
+						$insert_bundle["bundle_bundle_id"] 	= $item_id;
+						$insert_bundle["bundle_item_id"] 	= $item;
+						$insert_bundle["bundle_um_id"]		= isset($_um[$key]) ? $_um[$key] : 0;
+						$insert_bundle["bundle_qty"]		= $_qty[$key];
+						Tbl_item_bundle::insert($insert_bundle);
+					}
+				}
+				
+				$data["item_id"] 	= $item_id;
+				$data["message"] 	= "Success";
+				$data["type"]		= "item";
+
+				$bundle_price = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+				$price = 0;
+				foreach ($bundle_price as $key => $value) 
+				{
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+                	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
+
+					$qt = 1;
+	                if($um != null)
+	                {
+	                    $qt = $um->unit_qty;
+	                }
+                	$issued_qty = $value->bundle_qty * $qt;
+
+                	$price += $issued_qty * $item_price;
+				}
+
+				$insert["item_price"] = $price;
+
+			}
+		}
+		elseif($item_type == "group")
+		{
+			$insert["item_type_id"]				      = 4; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
+			
+			if(Request::input("auto_generate_code") == "generate" || $item_barcode == "")
+			{
+				$num = str_shuffle("1234567890");
+				$item_barcode = Item::generate_barcode($num);
+			}
+
+			$insert["item_name"]				= $item_name;
+			$insert["item_sku"]					= $item_sku;
+			$insert["item_category_id"]			= $item_category_id;
+			$insert["item_img"]					= $item_img;
+			$insert["item_sales_information"] 	= $item_sales_information;
+			$insert["bundle_group"]  			= 1;
+
+			$insert["item_barcode"]			 	= $item_barcode;
+			$insert["item_measurement_id"] 		= $item_measurement_id;
 
 			$rules["item_name"]					= "required";
 			$rules["item_sku"] 					= "required";
@@ -830,6 +928,11 @@ class ItemController extends Member
 			{
 				$data["data"]["type_of_item"] = "service_type";
 			}
+			else if($data["data"]["item_type_id"] == 4 && $data["data"]["bundle_group"] == 1)
+			{
+				$data["data"]["type_of_item"] = "group_type";
+				$data["data"]["bundle"]		  = Tbl_item_bundle::item()->um()->where("bundle_bundle_id", $id)->get()->toArray();
+			}
 			else if($data["data"]["item_type_id"] == 4)
 			{
 				$data["data"]["type_of_item"] = "bundle_type";
@@ -929,11 +1032,11 @@ class ItemController extends Member
 		$item_reorder_point 			= Request::input("item_reorder_point");
 		$item_quantity 					= Request::input("item_quantity");
 
-		if($item_type != "bundle")
-		{
-			$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
-			$item_measurement_id 			= $unit_id;			
-		}
+		// if($item_type != "bundle")
+		// {
+		$unit_id = UnitMeasurement::create_um($unit_n_based, $unit_based, $qty);
+		$item_measurement_id 			= $unit_id;			
+		// }
 			
 		//Accounting part //DEFAULT VALUE
 		$item_expense_account_id= Tbl_chart_of_account::where("account_code", "accounting-expense")->where("account_shop_id", $shop_id)->pluck("account_id");
@@ -1105,11 +1208,99 @@ class ItemController extends Member
 		{
 			$update["item_type_id"]				      = 4; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
 			
+			if(Request::input("auto_generate_code") == "generate" || $item_barcode == "")
+			{
+				$num = str_shuffle("1234567890");
+				$item_barcode = Item::generate_barcode($num);
+			}
+			
 			$update["item_name"]				= $item_name;
 			$update["item_sku"]					= $item_sku;
 			$update["item_category_id"]			= $item_category_id;
 			$update["item_img"]					= $item_img;
 			$update["item_sales_information"] 	= $item_sales_information;
+
+			$update["item_barcode"]	    	  	= $item_barcode;
+			$update["item_measurement_id"]	   	= $item_measurement_id;
+
+			$rules["item_name"]					= "required";
+			$rules["item_sku"] 					= "required";
+
+			$_item 	= Request::input('bundle_item_id');
+			$_um 	= Request::input('bundle_um_id');
+			$_qty 	= Request::input('bundle_qty');
+
+			$message   = [];
+			$validator = Validator::make($update, $rules, $message);
+			if($validator->fails())
+			{
+				$data["status"] = "error";
+	            foreach ($validator->messages()->all('<li style="list-style:none">:message</li>') as $keys => $message)
+	            {
+	                $data["status_message"] .= $message;
+	            }
+			}
+			else
+			{
+				Tbl_item::where("item_id",$item_id)->update($update);
+
+				Tbl_item_bundle::where("bundle_bundle_id",$item_id)->delete();
+
+				foreach($_item as $key=>$item)
+				{
+					if($item != '')
+					{
+						$insert_bundle["bundle_bundle_id"] 	= $item_id;
+						$insert_bundle["bundle_item_id"] 	= $item;
+						$insert_bundle["bundle_um_id"]		= isset($_um[$key]) ? $_um[$key] : 0;
+						$insert_bundle["bundle_qty"]		= $_qty[$key];
+						Tbl_item_bundle::insert($insert_bundle);
+					}
+				}
+				
+				$data["item_id"] 	= $item_id;
+				$data["message"] 	= "Success";
+				$data["status"] 	= "success";
+				$data["type"]		= "item";
+
+				$bundle_price = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+				foreach ($bundle_price as $key => $value) 
+				{
+					$item_price = Tbl_item::where("item_id",$value->bundle_item_id)->pluck("item_price");
+                	$um = Tbl_unit_measurement_multi::where("multi_id",$value->bundle_um_id)->first();
+
+					$qt = 1;
+	                if($um != null)
+	                {
+	                    $qt = $um->unit_qty;
+	                }
+                	$issued_qty = $value->bundle_qty * $qt;
+
+                	$price += $issued_qty * $item_price;
+				}
+
+				$update["item_price"] = $price;
+
+			}
+		}
+		elseif($item_type == "group")
+		{
+			$update["item_type_id"]				      = 4; // TYPE (1 = Inventory , 2 = Non Inventory, 3 = Service, 4 = Bundle)
+			
+			if(Request::input("auto_generate_code") == "generate" || $item_barcode == "")
+			{
+				$num = str_shuffle("1234567890");
+				$item_barcode = Item::generate_barcode($num);
+			}
+			
+			$update["item_name"]				= $item_name;
+			$update["item_sku"]					= $item_sku;
+			$update["item_category_id"]			= $item_category_id;
+			$update["item_img"]					= $item_img;
+			$update["item_sales_information"] 	= $item_sales_information;
+
+			$update["item_barcode"]	    	  	= $item_barcode;
+			$update["item_measurement_id"]	   	= $item_measurement_id;
 
 			$rules["item_name"]					= "required";
 			$rules["item_sku"] 					= "required";

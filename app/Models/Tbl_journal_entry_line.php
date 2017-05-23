@@ -28,6 +28,12 @@ class Tbl_journal_entry_line extends Model
                      ->where("jline_name_reference", DB::raw("'vendor'"));
     }
 
+    /* Add a column - Amount of each jounal accounting according to their normal balance */
+    public function scopeAmount($query)
+    {
+        return $query->selectRaw("(CASE normal_balance WHEN jline_type THEN jline_amount ELSE -jline_amount END) as 'amount'");
+    }
+
     public function scopeItem($query)
     {
     	return $query->leftjoin("tbl_item", "item_id", "=", "jline_item_id");

@@ -5,13 +5,13 @@
          <div class="table-reponsive">
          		<table class="table table-condensed collaptable">
          		<tr>
-              <th>Customer</th>
-         			<th>Date</th>
-         			<th>Type</th>
-         			<th>Num</th>
-         			<th>Account</th>
-         			<th>Amount</th>
-         			<th>Balance</th>
+              <th class="text-center" class="text-center">Customer</th>
+         			<th class="text-center">Date</th>
+         			<th class="text-center">Type</th>
+         			<th class="text-center">Num</th>
+         			<th class="text-center">Account</th>
+         			<th class="text-center">Amount</th>
+         			<th class="text-center">Balance</th>
          		</tr>
          		<tbody>
          			
@@ -23,20 +23,20 @@
          			</tr>
          				<?php $balance = 0;?>
      					@foreach($customer->customer_journal as $key2=>$journal)
-  						<tr data-id="customer2-{{$key2}}" data-parent="customer-{{$key}}">
+  						<tr data-id="customer2-{{$key}}" data-parent="customer-{{$key}}">
                 <td nowrap></td>
   							<td nowrap>{{$journal->je_entry_date}}</td>
   							<td nowrap>{{$journal->je_reference_module}}</td>
   							<td nowrap>{{$journal->je_reference_id}}</td>
   							<td nowrap>{{$journal->account_name}}</td>
-  							<td nowrap>{{currency('PHP', $journal->amount)}}</td>
+  							<td class="text-right" nowrap>{{currency('PHP', $journal->amount)}}</td>
   							<?php $balance += $journal->amount; ?>
-  							<td nowrap>{{currency('PHP', $balance)}}</td>
+  							<td class="text-right" nowrap>{{currency('PHP', $balance)}}</td>
   						</tr>
     					@endforeach
       				<tr  data-id="customer2-{{$key}}" data-parent="customer-{{$key}}">
       					<td colspan="6"><b>Total {{$customer->first_name." ".$customer->last_name}}</b></td>
-      					<td>{{currency('PHP', $customer->balance)}}</td>
+      					<td class="text-right">{{currency('PHP', $customer->balance)}}</td>
       				</tr>	
      				@endforeach
          		</tbody>

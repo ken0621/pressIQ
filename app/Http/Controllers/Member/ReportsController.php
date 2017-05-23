@@ -324,6 +324,7 @@ class ReportsController extends Member
         $data['report_type'] = $report_type;
         $shop_id = $this->user_info->shop_id; 
 
+        $data['shop_name']  = $this->user_info->shop_key; 
         $data['sales'] = Tbl_journal_entry_line::account()
         ->item()
         ->journal()
@@ -334,6 +335,7 @@ class ReportsController extends Member
         ->whereRaw("DATE(je_entry_date) >= '$from'")
         ->whereRaw("DATE(je_entry_date) <= '$to'")
         ->concatum()
+        ->amount()
         ->get()
         ->keyBy('jline_id');
 
@@ -367,14 +369,18 @@ class ReportsController extends Member
 
         if($report_field_type == 'accounting_sales_report')
         {
+            $data['head_title'] = 'Sales Report By Customer Detail';
             $view =  'member.reports.output.sale';
             $type = 'Sale';
         }
         else if($report_field_type == 'accounting_sales_report_item')
         {
+            $data['head_title'] = 'Sales Report By Item Detail';
             $view =  'member.reports.output.item';
             $type = 'Item';
         }
+
+        // dd($data['sales_by_customer']);
 
         return Report::check_report_type($report_type, $view, $data, 'Sales_Report_By_'.$type.Carbon::now());
     }
@@ -426,6 +432,9 @@ class ReportsController extends Member
         $filter[14] = 'Other Expense';
         $filter[15] = 'Other Income';
 
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'Profit and Loss';
+
         $data['account_income'] = Tbl_chart_account_type::whereIn('chart_type_name', $filter)
         ->get()->keyBy('chart_type_id');
         foreach($data['account_income'] as $key => $value)
@@ -472,6 +481,9 @@ class ReportsController extends Member
         $from           = Report::checkDatePeriod($period, $date)['start_date'];
         $to             = Report::checkDatePeriod($period, $date)['end_date'];
         
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'General Ledger';
+
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
         $shop_id = $this->user_info->shop_id; 
@@ -479,6 +491,7 @@ class ReportsController extends Member
         $data['entry_line'] = Tbl_journal_entry_line::account()
             ->where('account_shop_id', $shop_id)
             ->customerorvendorv2()
+            ->amount()
             ->groupBy('jline_account_id')
             ->groupBy('jline_je_id')
             ->journal()

@@ -5,39 +5,39 @@
          <div class="table-reponsive">
          		<table class="table table-condensed collaptable">
          		<tr>
-              <th>Vendor</th>
-         			<th>Date</th>
-         			<th>Type</th>
-         			<th>Num</th>
-         			<th>Account</th>
-         			<th>Amount</th>
-         			<th>Balance</th>
+              <th class="text-center">Vendor</th>
+         			<th class="text-center">Date</th>
+         			<th class="text-center">Type</th>
+         			<th class="text-center">Num</th>
+         			<th class="text-center">Account</th>
+         			<th class="text-center">Amount</th>
+         			<th class="text-center">Balance</th>
          		</tr>
          		<tbody>
          			
      				@foreach($_vendor as $key=>$vendor)
-     				<tr data-id="" data-parent="" style="background-color: #e4e5e6;">
+     				<tr data-id="vendor-{{$key}}" data-parent="">
          				<td><b>{{$vendor->vendor_first_name." ".$vendor->vendor_last_name}}</b></td>
                 <td colspan="5"></td>
-                <td></td>
+                <td class="text-right">{{currency('PHP', $vendor->balance)}}</td>
          			</tr>
          				<?php $balance = 0;?>
      					@foreach($vendor->vendor_journal as $key2=>$journal)
-  						<tr data-id="" data-parent="">
+  						<tr data-id="vendor2-{{$key}}" data-parent="vendor-{{$key}}">
                 <td nowrap></td>
   							<td nowrap>{{$journal->je_entry_date}}</td>
   							<td nowrap>{{$journal->je_reference_module}}</td>
   							<td nowrap>{{$journal->je_reference_id}}</td>
   							<td nowrap>{{$journal->account_name}}</td>
-  							<td nowrap>{{currency('PHP', $journal->amount)}}</td>
+  							<td class="text-right" nowrap>{{currency('PHP', $journal->amount)}}</td>
   							<?php $balance += $journal->amount; ?>
-  							<td nowrap>{{currency('PHP', $balance)}}</td>
+  							<td class="text-right" nowrap>{{currency('PHP', $balance)}}</td>
   						</tr>
-  					@endforeach
-  				<tr>
-  					<td colspan="6"><b>Total {{$vendor->first_name." ".$vendor->last_name}}</b></td>
-  					<td>{{currency('PHP', $balance)}}</td>
-  				</tr>	
+  					  @endforeach
+      				<tr data-id="vendor2-{{$key}}" data-parent="vendor-{{$key}}">
+      					<td colspan="6"><b>Total {{$vendor->first_name." ".$vendor->last_name}}</b></td>
+      					<td class="text-right">{{currency('PHP', $vendor->balance)}}</td>
+      				</tr>	
      				@endforeach
          		</tbody>
          		</table>

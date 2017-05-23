@@ -1,24 +1,5 @@
 @extends('member.layout')
-@section('css')
-<style type="text/css">
-	.table
-	{
-		width: inherit;
-		margin: auto;
-	}
-	
-	.report-container
-	{
-		text-align: -webkit-center;
-	}
 
-	.panel-report
-	{
-		display: inline-block;
-	}
-</style>
-
-@endsection
 @section('content')
 {!! $head !!}
 @include('member.reports.filter.filter1');

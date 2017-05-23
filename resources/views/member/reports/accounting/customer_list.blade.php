@@ -1,24 +1,5 @@
 @extends('member.layout')
-@section('css')
-<style type="text/css">
-	.table
-	{
-		width: inherit;
-		margin: auto;
-	}
-	
-	.report-container
-	{
-		text-align: -webkit-center;
-	}
 
-	.panel-report
-	{
-		display: inline-block;
-	}
-</style>
-
-@endsection
 @section('content')
 {!! $head !!}
 @include('member.reports.filter.filter1');
@@ -37,7 +18,7 @@
 		function init()
 		{
 			event_run_report_click();
-			action_collaptible();
+			action_collaptible(true);
 		}
 	}
 
@@ -49,7 +30,7 @@
 			
 			$(".load-data").load("/member/report/accounting/customer_list?"+serialize_data+"&load_view=true .load-content", function()
 				{
-					action_collaptible();
+					action_collaptible(true);
 				});
 		});
 	}

@@ -380,7 +380,7 @@ class ReportsController extends Member
             $type = 'Item';
         }
 
-        // dd($data['sales_by_customer']);
+        // dd($data['sales_by_item']);
 
         return Report::check_report_type($report_type, $view, $data, 'Sales_Report_By_'.$type.Carbon::now());
     }

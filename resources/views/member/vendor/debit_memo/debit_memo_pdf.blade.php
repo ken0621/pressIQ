@@ -35,7 +35,7 @@
 		<div class="row clearfix draggable-container db-replace-container">
 			<div >
 				<div class="col-sm-12">
-					<table class="digima-table">
+					<table class="digima-table" style="width: 100%">
 						<thead >
 							<tr>
 								<th style="width: 180px;">Product/Service</th>

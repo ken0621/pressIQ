@@ -1,4 +1,4 @@
-<div class="panel panel-default panel-block panel-title-block">
+<div class="panel panel-default panel-block panel-title-block collapse" id="customize_column">
     <div class="panel-heading">
         <div class="col-md-6">
             <span class="color:gray;">

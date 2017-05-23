@@ -11,3 +11,17 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript" src="/assets/mlm/jquery.aCollapTable.min.js"></script>  
+<script type="text/javascript">
+    function action_collaptible()
+        {
+            $('.collaptable').aCollapTable(
+            { 
+                startCollapsed: true,
+                addColumn: false, 
+                plusButton: '<span class="fa fa-caret-right fa-1x"> </span> ', 
+                minusButton: '<span class="fa fa-caret-down fa-1x"> </span> ' 
+            });
+        }
+</script>

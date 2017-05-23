@@ -23,13 +23,7 @@ function submit_done (data) {
 	{
 		case 'success_plain' :
 		$('.append_report_a').html(data.view);
-		$('.collaptable').aCollapTable({ 
-		    startCollapsed: true,
-		    addColumn: false, 
-		    plusButton: '<span class="i" style="color: white;">[Expand] </span>', 
-		    minusButton: '<span class="i" style="color: white;">[Contract] </span>' 
-		});
-
+		action_collaptible();
 		break
 	}
 		

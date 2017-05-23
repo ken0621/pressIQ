@@ -1,6 +1,26 @@
 <?php
 namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
+
+use App\Globals\SalesReport;
+use App\Globals\Report;
+use App\Globals\Pdf_global;
+
+use App\Models\Tbl_shipping;
+use App\Models\Tbl_user;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_vendor;
+use App\Models\Tbl_item;
+use App\Models\Tbl_chart_of_account;
+use App\Models\Tbl_order;
+use App\Models\Tbl_order_item;
+use App\Models\Tbl_journal_entry_line;
+use App\Models\Tbl_report_field;
+use App\Models\Tbl_category;
+use App\Models\Tbl_chart_account_type;
+use App\Models\Tbl_warehouse_inventory;
+use App\Models\Tbl_warehouse;
+
 use Carbon\Carbon;
 use Request;
 use Image;
@@ -8,24 +28,13 @@ use Validator;
 use Redirect;
 use File;
 use URL;
-use App\Models\Tbl_shipping;
-use App\Models\Tbl_user;
-use App\Models\Tbl_customer;
-use App\Models\Tbl_order;
-use App\Models\Tbl_order_item;
-use App\Models\Tbl_journal_entry_line;
-use App\Globals\SalesReport;
-use App\Globals\Report;
 use Session;
 use App;
 use PDF;
 use View;
 use DB;
 use Excel;
-use App\Models\Tbl_report_field;
-use App\Models\Tbl_category;
-use App\Models\Tbl_chart_account_type;
-use App\Globals\Pdf_global;
+
 
 class ReportsController extends Member
 {
@@ -498,7 +507,7 @@ class ReportsController extends Member
         $data['action']     = '/member/report/accounting/customer_list';
 
         $report_type    = Request::input('report_type');
-        $load_content   = Request::input('load_content');
+        $load_view      = Request::input('load_view');
         $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
         $date['start']  = Request::input('from') ? Request::input('from') : '';
         $date['end']    = Request::input('to') ? Request::input('from') : '';
@@ -515,20 +524,14 @@ class ReportsController extends Member
                                                         ->whereRaw("DATE(je_entry_date) >= '$from'")
                                                         ->whereRaw("DATE(je_entry_date) <= '$to'")
                                                         ->get();
+            $data['_customer'][$key]->balance          = collect($data['_customer'][$key]->customer_journal)->sum('amount');
         }   
 
-        if(Request::method() == "POST")
-        {
-            $json['status']  = "success";
-            $json['message'] = "Success";
-            
-            return json_encode($json);
-        }
-
-        if($report_type && !$load_content)
+        /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
+        if($report_type && !$load_view)
         {
             $view =  'member.reports.output.customer_list'; 
-            return Report::check_report_type($report_type, $view, $data, 'Customer_list'.Carbon::now());
+            return Report::check_report_type($report_type, $view, $data, 'Customer_list-'.Carbon::now());
         }
         else
         {
@@ -538,17 +541,127 @@ class ReportsController extends Member
 
     public function vendor_list()
     {
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'Vendor List';
+        $data['head_icon']  = 'fa fa-area-chart';
+        $data['head_discription'] = '';
+        $data['head']       = $this->report_header($data);
+        $data['action']     = '/member/report/accounting/vendor_list';
 
+        $report_type    = Request::input('report_type');
+        $load_view      = Request::input('load_view');
+        $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
+        $date['start']  = Request::input('from') ? Request::input('from') : '';
+        $date['end']    = Request::input('to') ? Request::input('from') : '';
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
+        $data['_vendor'] = Tbl_vendor::balanceJournal()->where("vendor_shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
+
+        foreach($data['_vendor'] as $key=>$vendor)
+        {
+            $data['_vendor'][$key]->vendor_journal = Tbl_journal_entry_line::journal()->customerOrVendor()->account()->vendorOnly()
+                                                        ->where("jline_name_id", $vendor->vendor_id)
+                                                        ->where("chart_type_name", 'Accounts Payable')
+                                                        ->whereRaw("DATE(je_entry_date) >= '$from'")
+                                                        ->whereRaw("DATE(je_entry_date) <= '$to'")
+                                                        ->get();
+            $data['_vendor'][$key]->balance        = collect($data['_vendor'][$key]->vendor_journal)->sum('amount');
+        }   
+
+        /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
+        if($report_type && !$load_view)
+        {
+            $view =  'member.reports.output.vendor_list'; 
+            return Report::check_report_type($report_type, $view, $data, 'Vendor_list-'.Carbon::now());
+        }
+        else
+        {
+            return view('member.reports.accounting.vendor_list', $data);
+        }
     }
 
     public function item_list()
     {
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'Item/Service List';
+        $data['head_icon']  = 'fa fa-area-chart';
+        $data['head_discription'] = '';
+        $data['head']       = $this->report_header($data);
+        $data['action']     = '/member/report/accounting/item_list';
 
+        $report_type    = Request::input('report_type');
+        $load_view      = Request::input('load_view');
+        $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
+        $date['start']  = Request::input('from') ? Request::input('from') : '';
+        $date['end']    = Request::input('to') ? Request::input('from') : '';
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
+        $data['_warehouse'] = Tbl_warehouse::where("warehouse_shop_id", $this->user_info->shop_id)->get();
+        $data['_item'] = Tbl_item::type()->where("shop_id", $this->user_info->shop_id)->where("tbl_item.archived", 0)->get();
+
+        foreach($data['_item'] as $key=>$item)
+        {
+            $data['_item'][$key]->item_warehouse  = Tbl_item::warehouseInventory($item->shop_id, $item->item_id)
+                                                    ->where("item_id", $item->item_id)
+                                                    ->whereRaw("DATE(inventory_created) >= '$from'")
+                                                    ->whereRaw("DATE(inventory_created) <= '$to'")
+                                                    ->get();
+        }   
+        // dd($data['_item']);
+        /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
+        if($report_type && !$load_view)
+        {
+            $view =  'member.reports.output.item_list'; 
+            return Report::check_report_type($report_type, $view, $data, 'item_list-'.Carbon::now());
+        }
+        else
+        {
+            return view('member.reports.accounting.item_list', $data);
+        }
     }
 
     public function account_list()
     {
-        
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'Account List';
+        $data['head_icon']  = 'fa fa-area-chart';
+        $data['head_discription'] = '';
+        $data['head']       = $this->report_header($data);
+        $data['action']     = '/member/report/accounting/account_list';
+
+        $report_type    = Request::input('report_type');
+        $load_view      = Request::input('load_view');
+        $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
+        $date['start']  = Request::input('from') ? Request::input('from') : '';
+        $date['end']    = Request::input('to') ? Request::input('from') : '';
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
+        $data['_account'] = Tbl_chart_of_account::accountType()->where("account_shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
+
+        foreach($data['_account'] as $key=>$account)
+        {
+            $data['_account'][$key]->account_journal = Tbl_journal_entry_line::journal()->account()
+                                                        ->selectRaw("*, (CASE normal_balance WHEN jline_type THEN jline_amount ELSE -jline_amount END) as 'amount'")
+                                                        ->where("jline_account_id", $account->account_id)
+                                                        ->whereRaw("DATE(je_entry_date) >= '$from'")
+                                                        ->whereRaw("DATE(je_entry_date) <= '$to'")
+                                                        ->get();
+            $data['_account'][$key]->balance         = collect($data['_account'][$key]->account_journal)->sum('amount');
+        }   
+
+        /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
+        if($report_type && !$load_view)
+        {
+            $view =  'member.reports.output.account_list'; 
+            return Report::check_report_type($report_type, $view, $data, 'account_list-'.Carbon::now());
+        }
+        else
+        {
+            return view('member.reports.accounting.account_list', $data);
+        }
     }
 
 }

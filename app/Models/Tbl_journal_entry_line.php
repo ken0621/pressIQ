@@ -21,6 +21,12 @@ class Tbl_journal_entry_line extends Model
         return $query->selectRaw("(CASE normal_balance WHEN jline_type THEN jline_amount ELSE -jline_amount END) as 'amount'")
                      ->where("jline_name_reference", DB::raw("'customer'"));
     }
+    /* Dependent on Account() */
+    public function scopeVendorOnly($query)
+    {
+        return $query->selectRaw("(CASE normal_balance WHEN jline_type THEN jline_amount ELSE -jline_amount END) as 'amount'")
+                     ->where("jline_name_reference", DB::raw("'vendor'"));
+    }
 
     public function scopeItem($query)
     {

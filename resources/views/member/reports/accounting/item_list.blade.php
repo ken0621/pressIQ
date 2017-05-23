@@ -22,22 +22,21 @@
 @section('content')
 {!! $head !!}
 @include('member.reports.filter.filter1');
-@include('member.reports.output.customer_list');
+@include('member.reports.output.item_list');
 @endsection
 
 @section('script')
 <script type="text/javascript">
 
-	var customer_list_report = new customer_list_report();
+	var item_list_report = new item_list_report();
 
-	function customer_list_report()
+	function item_list_report()
 	{
 		init();
 
 		function init()
 		{
 			event_run_report_click();
-			action_collaptible();
 		}
 	}
 
@@ -47,10 +46,7 @@
 		{
 			var serialize_data = $("form.filter").serialize()
 			
-			$(".load-data").load("/member/report/accounting/customer_list?"+serialize_data+"&load_view=true .load-content", function()
-				{
-					action_collaptible();
-				});
+			$(".load-data").load("/member/report/accounting/item_list?"+serialize_data+"&load_view=true .load-content");
 		});
 	}
 

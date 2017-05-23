@@ -22,15 +22,15 @@
 @section('content')
 {!! $head !!}
 @include('member.reports.filter.filter1');
-@include('member.reports.output.customer_list');
+@include('member.reports.output.vendor_list');
 @endsection
 
 @section('script')
 <script type="text/javascript">
 
-	var customer_list_report = new customer_list_report();
+	var vendor_list_report = new vendor_list_report();
 
-	function customer_list_report()
+	function vendor_list_report()
 	{
 		init();
 
@@ -47,7 +47,7 @@
 		{
 			var serialize_data = $("form.filter").serialize()
 			
-			$(".load-data").load("/member/report/accounting/customer_list?"+serialize_data+"&load_view=true .load-content", function()
+			$(".load-data").load("/member/report/accounting/vendor_list?"+serialize_data+"&load_view=true .load-content", function()
 				{
 					action_collaptible();
 				});

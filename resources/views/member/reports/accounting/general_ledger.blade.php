@@ -11,8 +11,7 @@
 
 @endsection
 
-@section('script')
-<script type="text/javascript" src="/assets/mlm/jquery.aCollapTable.min.js"></script>  		
+@section('script')	
 <script type="text/javascript">
 function submit_done (data) {
 	// body...
@@ -20,12 +19,7 @@ function submit_done (data) {
 	{
 		case 'success_plain' :
 		$('.append_report_a').html(data.view);
-		$('.collaptable').aCollapTable({ 
-		    startCollapsed: true,
-		    addColumn: false, 
-		    plusButton: '<span class="i">[Expand] </span>', 
-		    minusButton: '<span class="i">[Contract] </span>' 
-		  });
+		action_collaptible();
 		break
 	}
 }

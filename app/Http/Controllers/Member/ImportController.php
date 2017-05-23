@@ -340,6 +340,8 @@ class ImportController extends Member
 								$ins_inven["inventory_slip_id"] = $slip_id;
 								$inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
 
+								Warehouse::insert_item_to_all_warehouse($item_id, $reorder_point);
+
 								$json["status"]		= "success";
 								$json["message"]	= "Success";
 								$json["item_id"]	= $item_id;

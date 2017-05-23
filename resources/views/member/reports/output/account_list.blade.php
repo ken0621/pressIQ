@@ -5,38 +5,40 @@
          <div class="table-reponsive">
          		<table class="table table-condensed collaptable">
          		<tr>
-              <th>Customer</th>
+              <th>Account</th>
          			<th>Date</th>
-         			<th>Type</th>
+         			<th>Module</th>
          			<th>Num</th>
-         			<th>Account</th>
+              <th>Type</th>
          			<th>Amount</th>
          			<th>Balance</th>
          		</tr>
          		<tbody>
          			
-     				@foreach($_customer as $key=>$customer)
-     				<tr data-id="customer-{{$key}}" data-parent="">
-         				<td><b>{{$customer->first_name." ".$customer->last_name}}</b></td>
-                <td colspan="5"></td>
-                <td class="text-right">{{currency('PHP', $customer->balance)}}</td>
+     				@foreach($_account as $key=>$account)
+     				  <tr data-id="{{'account-'.$key}}" data-parent="">
+         				<td ><b>{{$account->account_name}}</b></td>
+                <td colspan="3"></td>
+                <td >{{$account->chart_type_name}}</td>
+                <td ></td>
+                <td class="text-right">{{currency('PHP', $account->balance)}}</td>
          			</tr>
          				<?php $balance = 0;?>
-     					@foreach($customer->customer_journal as $key2=>$journal)
-  						<tr data-id="customer2-{{$key2}}" data-parent="customer-{{$key}}">
+     					@foreach($account->account_journal as $key2=>$journal)
+  						<tr data-id="{{'account2-'.$key2}}" data-parent="{{'account-'.$key}}">
                 <td nowrap></td>
   							<td nowrap>{{$journal->je_entry_date}}</td>
   							<td nowrap>{{$journal->je_reference_module}}</td>
   							<td nowrap>{{$journal->je_reference_id}}</td>
-  							<td nowrap>{{$journal->account_name}}</td>
+  							<td nowrap>{{$journal->chart_type_name}}</td>
   							<td nowrap>{{currency('PHP', $journal->amount)}}</td>
   							<?php $balance += $journal->amount; ?>
-  							<td nowrap>{{currency('PHP', $balance)}}</td>
+  							<td nowrap>{{$account->balance > 0 ? currency('PHP', $balance) : currency('PHP', 0)}}</td>
   						</tr>
     					@endforeach
-      				<tr  data-id="customer2-{{$key}}" data-parent="customer-{{$key}}">
-      					<td colspan="6"><b>Total {{$customer->first_name." ".$customer->last_name}}</b></td>
-      					<td>{{currency('PHP', $customer->balance)}}</td>
+      				<tr data-id="{{'account2-'.$key}}" data-parent="{{'account-'.$key}}">
+      					<td colspan="6"><b>Total {{$account->account_name}}</b></td>
+      					<td>{{currency('PHP', $account->balance)}}</td>
       				</tr>	
      				@endforeach
          		</tbody>

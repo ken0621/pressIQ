@@ -38,16 +38,16 @@
 					<table class="digima-table" style="width: 100%">
 						<thead >
 							<tr>
-								<th>Product/Service</th>
-								<th>QTY</th>
-								<th>Rate</th>
-								<th>Amount</th>
+								<th style="width: 180px;">Product/Service</th>
+								<th style="width: 120px;">QTY</th>
+								<th style="width: 100px;">Rate</th>
+								<th style="width: 100px;">Amount</th>
 								@if($db->is_bad_order == 1)
-								<th>Replace QTY</th>
-								<th>Rate</th>
-								<th>Amount</th>
-								<th>Total Amount</th>
-								<th>Condemned</th>
+								<th style="width: 120px;">Replace QTY</th>
+								<th style="width: 100px;">Rate</th>
+								<th style="width: 100px;">Amount</th>
+								<th style="width: 100px;">Total Amount</th>
+								<th style="width: 100px;">Condemned</th>
 								@endif
 							</tr>
 						</thead>

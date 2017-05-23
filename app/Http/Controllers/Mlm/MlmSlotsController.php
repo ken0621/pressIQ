@@ -196,6 +196,10 @@ class MlmSlotsController extends Mlm
     public function add_slot_modal()
     {
         return Mlm_member::add_slot_form(Self::$customer_id);
+    } 
+    public function manual_add_slot_modal()
+    {
+        return Mlm_member::manual_add_slot_form(Self::$customer_id,Request::input("membership_id"),Self::$shop_id);
     }
     public function check_add()
     {
@@ -216,5 +220,46 @@ class MlmSlotsController extends Mlm
         }
 
         return json_encode($data);
+    }
+
+    public function manual_add_slot()
+    {
+        
+        return view('mlm.slots.manual_add_slot');
+    }
+
+    public function manual_add_slot_post()
+    {
+        $check_membership  = Tbl_membership_code::where("membership_code_id",Request::input("membership_code_id"))
+                                                ->where("membership_activation_code",Request::input("membership_activation_code"))
+                                                ->where("shop_id",Self::$shop_id)
+                                                ->first();
+
+        if(!$check_membership)
+        {
+            $message["message"]          = "This code is not available.";
+        }
+        else
+        {
+            if($check_membership->used == 1)
+            {
+                $message["message"]          = "This code is already used.";
+            }
+            else if($check_membership->blocked == 1)
+            {
+                $message["message"]          = "This code is blocked.";
+            }
+            else if($check_membership->archived == 1)
+            {
+                $message["message"]          = "This code is not available.";
+            }
+            else
+            {
+                $message["status"]           = "success-manual";
+                $message["encrypted"]        = Crypt::encrypt(Request::input("membership_code_id"));
+            }
+        }
+
+        return json_encode($message);
     }
 }

@@ -40,7 +40,6 @@ class ShopCheckoutController extends Shop
     {
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
-
         /* DO NOT ALLOW ON THIS PAGE IF THERE IS NOT CART */
         if (!isset($data["get_cart"]['cart'])) 
         {
@@ -264,5 +263,33 @@ class ShopCheckoutController extends Shop
         {
             return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
         }
+    }
+    public function order_placed()
+    {
+        $data["page"] = "Checkout - Order Placed";
+        $order = Request::input('order');
+        if (!$order) 
+        {
+            return Redirect::to("/");
+        }
+
+        $data = unserialize(Crypt::decrypt($order));
+        $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $data["order_id"])
+                                            ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
+                                            ->get();
+
+        $data['summary'] = [];
+        $subtotal = 0;
+        $shipping = 0;
+        $total = 0;
+
+        foreach ($data['_order'] as $key => $value) 
+        {
+            $subtotal += $value->total;
+        }
+        
+        $data['summary']['subtotal'] = $subtotal;
+
+        return view("order_placed", $data);
     }
 }

@@ -23,6 +23,7 @@ use App\Globals\Mlm_member;
 use App\Models\Tbl_mlm_item_points;
 use App\Globals\Mlm_plan;
 use Crypt;
+use App\Globals\Mlm_slot_log;
 
 class Cart
 {
@@ -880,9 +881,56 @@ class Cart
         switch ($method_information->link_reference_name)
         {
             case 'ipay88': Redirect::to("/postPaymentWithIPay88")->send(); break;
+            case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
             case 'paypal2': die("UNDER DEVELOPMENT"); break;
             default: break;
         }
+    }
+    public static function submit_using_ewallet($cart, $shop_id)
+    {
+        // $sum = $cart["sum"];
+        $sum = $cart["tbl_ec_order"]['total'];
+        $result['order_id'] = $cart["tbl_ec_order"]['ec_order_id'];
+        $get_cart = Cart::get_cart($shop_id);
+        $slot_session = Mlm_member::get_session_slot();
+        if($slot_session != null)
+        {
+            $check_wallet = Mlm_slot_log::get_sum_wallet($slot_session->slot_id);
+            if($check_wallet >= $sum )
+            {
+                // return $check_wallet;
+                $log = 'Thank you for purchasing. ' .$sum. ' is deducted to your wallet';
+                $arry_log['wallet_log_slot'] = $slot_session->slot_id;
+                $arry_log['shop_id'] = $slot_session->shop_id;
+                $arry_log['wallet_log_slot_sponsor'] = $slot_session->slot_id;
+                $arry_log['wallet_log_details'] = $log;
+                $arry_log['wallet_log_amount'] = $sum * (-1);
+                // $sum * (-1)
+                $arry_log['wallet_log_plan'] = "REPURCHASE";
+                $arry_log['wallet_log_status'] = "released";   
+                $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+                
+                Mlm_slot_log::slot_array($arry_log);
+                $cart["order_status"] = "Processing";
+            }
+            else
+            {
+                $send['errors'][0] = "Your wallet only have, " . number_format($check_wallet) . ' where the needed amount is ' . number_format($sum) ;
+                return Redirect::back()
+                    ->withErrors($send)
+                    ->withInput()
+                    ->send();
+            }
+        }
+        else
+        {
+            $send['errors'][0] = "Only members with slot can use the wallet option.";
+            return Redirect::back()->withErrors($send)->withInput()->send();
+        }
+     
+        Cart::clear_all($shop_id);
+        $result['status'] = 'success';
+        return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
     }
     public static function get_userip()
     {

@@ -7,19 +7,19 @@
 </div>
 
 <div class="clearfix modal-body max-450 modallarge-body-layout background-white form-horizontal menu_container">
-    <div class="col-md-3">
+    <div class="col-md-2 col-md-offset-1">
         <buton type="button" class="form-control btn btn-custom-primary" id="inventory_type">Inventory</buton>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <buton type="button" class="form-control btn btn-custom-primary" id="noninventory_type">Non-Inventory</buton>
     </div>
-    <!-- <div class="col-md-2">
+    <div class="col-md-2">
         <buton type="button" class="form-control btn btn-custom-primary" id="service_type">Service</buton>
-    </div> -->
-    <div class="col-md-3">
+    </div>
+    <div class="col-md-2">
         <buton type="button" class="form-control btn btn-custom-primary" id="bundle_type">Bundle</buton>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
         <buton type="button" class="form-control btn btn-custom-primary" id="group_type">Group</buton>
     </div>
 </div>

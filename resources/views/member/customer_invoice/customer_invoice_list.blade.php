@@ -51,7 +51,7 @@
                     @if($_invoices)
                         @foreach($_invoices as $invoice)
                             <tr>
-                                <td>{{$invoice->inv_id}}</td>
+                                <td>{{$invoice->new_inv_id}}</td>
                                 <td>{{$invoice->title_name." ".$invoice->first_name." ".$invoice->middle_name." ".$invoice->last_name." ".$invoice->suffix_name}}</td>
                                 <td>{{currency("PHP",$invoice->inv_overall_price)}}</td>
                                 <td>

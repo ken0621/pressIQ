@@ -14,10 +14,9 @@
     </div>
 </div>
 
-<div class="panel panel-default panel-block panel-title-block col-md-4" id="top">
+<div class="panel panel-default panel-block panel-title-block col-md-3" id="top">
     <div class="panel-heading">
         <div>
-            <div class="col-md-12">
                 <form class="global-submit" method="post" action="/member/mlm/merchant_school/create">
                 {!! csrf_field() !!}
                 <label>Choose Items To Be Used.</label>
@@ -27,7 +26,6 @@
                 <hr>
                 <button class="btn btn-primary pull-right">Choose Items</button>
                 </form>
-            </div>
         </div>
     </div>
 </div>
@@ -45,6 +43,19 @@
     </div>
 </div>
 
+<div class="panel panel-default panel-block panel-title-block col-md-6" id="top">
+    <div class="panel-heading">
+        <div>
+            <label>Scan V.I.P Card</label>
+            <input type="text" class="form-control punch_slot" onChange="get_customer_info()">
+    
+            <div class="col-md-12">
+            <hr>
+            <div class="append_slot"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="panel panel-default panel-block panel-title-block col-md-12" id="top">
     <div class="panel-heading">
@@ -54,8 +65,7 @@
                 <select class="form-control s_status">
                     <option value="all">All</option>
                     <option value="0">Pending</option>
-                    <option value="1">Not Used</option>
-                    <option value="2">Used</option>
+                    <option value="1">Converted</option>
                 </select>
             </div>
             <div class="col-md-3">
@@ -103,18 +113,25 @@ function  submit_done (data) {
     {
         get_body();
         reaload_table();
+        // get_customer_info();
         toastr.success(data.message)
     }
+    else if(data.status == 'success_consume')
+    {
+        get_customer_info();
+        toastr.success(data.message);
+    } 
     else
     {
         get_body();
         reaload_table();
+        // get_customer_info();
         toastr.error(data.message);
     }
 }
 function get_body()
 {
-    $('.get_body').html('<tr><td>Loading Items...</td><td></td></tr>');
+    $('.get_body').html('<tr><td colspan="2"><div style="margin: 100px auto;" class="loader-16-gray"></div></td></tr>');
     $('.get_body').load('/member/mlm/merchant_school/get');
 }
 $('.s_input').on('change',  function (){
@@ -133,8 +150,14 @@ $('.s_status').on('change', function(){
 });
 function reaload_table()
 {
-    $('.tbl_append').html('<tr><td>Loading Items...</td><td></td></tr>');
+    $('.tbl_append').html('<center><div style="margin: 100px auto;" class="loader-16-gray"></center>');
     $('.tbl_append').load(link);
+}
+function get_customer_info()
+{
+    var id = $('.punch_slot').val();
+    $('.append_slot').html('<center><div style="margin: 100px auto;" class="loader-16-gray"></div></center>');
+    $('.append_slot').load('/member/mlm/merchant_school/get_customer/' + id);
 }
 </script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>

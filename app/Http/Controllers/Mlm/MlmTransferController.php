@@ -332,8 +332,20 @@ class MlmTransferController extends Mlm
             ->whereNull('encashment_process')
             // ->where('wallet_log_amount', '>=',  1)   
             ->get()->toArray();
-            
-            
+            // $per_plan = [];
+            // foreach($data['unprocessed'] as $key => $value)
+            // {
+            //     if(isset($per_plan[$value['wallet_log_plan']]))
+            //     {
+            //         $per_plan[$value['wallet_log_plan']] += $value['wallet_log_amount'];
+            //     }
+            //     else
+            //     {
+            //         $per_plan[$value['wallet_log_plan']] = $value['wallet_log_amount'];
+            //     }
+                
+            // }
+            // dd($per_plan);
             $data['bank'] = DB::table('tbl_encashment_bank_deposit')->where('shop_id', Self::$shop_id)->where('encashment_bank_deposit_archive', 0)->get();
             $data['customer_payout'] = DB::table('tbl_customer_payout')->where('customer_id', Self::$customer_id)->first();
             $data['encashment_settings'] = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();

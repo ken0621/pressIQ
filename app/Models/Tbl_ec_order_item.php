@@ -15,4 +15,11 @@ class Tbl_ec_order_item extends Model
     	if($status != null) $query->whereIn("order_status", $status);
     	return $query;
     }
+
+    public static function scopeItem($query)
+    {
+    	$query->join("tbl_ec_variant", "tbl_ec_variant.evariant_id", "=", "tbl_ec_order_item.item_id");
+
+    	return $query;
+    }
 }

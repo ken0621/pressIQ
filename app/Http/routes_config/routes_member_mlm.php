@@ -245,4 +245,10 @@ Route::any('member/mlm/merchant_school/destroy', 'Member\BeneficiaryController@d
 Route::any('member/mlm/merchant_school/get/table', 'Member\BeneficiaryController@get_table'); 
 Route::any('member/mlm/merchant_school/mark/used', 'Member\BeneficiaryController@mark_used'); 
 
+Route::any('member/mlm/merchant_school/get_customer/{id}', 'Member\BeneficiaryController@get_customer'); 
+Route::any('member/mlm/merchant_school/consume', 'Member\BeneficiaryController@consume'); 
 
+
+Route::any('member/mlm/complan_setup/unilevel/distribute', 'Member\Mlm_ComplanSetupController@unilevel_distribute'); 
+Route::any('member/mlm/complan_setup/unilevel/distribute/set/settings', 'Member\Mlm_ComplanSetupController@unilevel_distribute_set_settings'); 
+Route::any('member/mlm/complan_setup/unilevel/distribute/simulate', 'Member\Mlm_ComplanSetupController@unilevel_distribute_simulate'); 

@@ -374,7 +374,7 @@ class MlmRegisterController extends MlmLoginController
             }
             else
             {
-                Session::flash('warning', 'Password lenght is mainimum of 6 character.');
+                Session::flash('warning', 'Password length is mainimum of 6 character.');
                 return Redirect::back()->withInput();
             }                
         }

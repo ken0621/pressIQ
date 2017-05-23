@@ -58,10 +58,12 @@
 
 	<div class="profile-information">
 	<div class="header"><span>Account</span> Information</div>
+		@if($customer["b_day"] != "0000-00-00")
 		<div class="info">
 			<div class="labels">Birthday</div>
 			<div class="value">{{ date( "F d, Y", strtotime($customer["b_day"]) ) }}</div>
 		</div>
+		@endif
 		{{-- <div class="info">
 			<div class="labels">Gender</div>
 			<div class="value"></div>

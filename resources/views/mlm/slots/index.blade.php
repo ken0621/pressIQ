@@ -29,20 +29,26 @@ $data['icon'] = 'icon-sitemap';
   </div>
   <div class="box clearfix" style="overflow: hidden !important;">
     <div class="box-header with-border">
-      <h3 class="box-title">Membership Codes</h3>
+      <h3 class="box-title">Add new slot</h3>
     </div>
     <!-- /.box-header -->
     <form class="global-submit" method="post" action="/mlm/slot/check_add">
     {!! csrf_field() !!}
     <div class="box-body">
-    	<label>Membership Code</label>
+    	<label>Create Slot</label>
     	<select name="membership_code_id" class="form-control">
-        @foreach($_code as $code)
-          <option value="{{$code->membership_code_id}}">{{$code->membership_activation_code}}</option>
-        @endforeach
+        @if(count($_code) != 0)
+          @foreach($_code as $code)
+            <option value="{{$code->membership_code_id}}">{{$code->membership_activation_code}}</option>
+          @endforeach
+        @else
+            <option>NO MEMBERSHIP CODE</option>
+        @endif
       </select>
       <hr>
-      <button class="btn btn-primary pull-right">Use Code</button>
+      @if(count($_code) != 0)
+        <button class="btn btn-primary pull-right use_code_mem">Use Code</button>
+      @endif
     </div>
     </form>
   </div>
@@ -109,6 +115,12 @@ $data['icon'] = 'icon-sitemap';
 @endsection
 @section('js')
 <script type="text/javascript">
+
+$(".use_code_mem").click(function()
+{
+  $(this).disabled();
+});
+
 function submit_done(data)
 {
   if(data.status == 'success')

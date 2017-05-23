@@ -1,6 +1,26 @@
 <?php
 namespace App\Http\Controllers\Member;
 use App\Http\Controllers\Controller;
+
+use App\Globals\SalesReport;
+use App\Globals\Report;
+use App\Globals\Pdf_global;
+
+use App\Models\Tbl_shipping;
+use App\Models\Tbl_user;
+use App\Models\Tbl_customer;
+use App\Models\Tbl_vendor;
+use App\Models\Tbl_item;
+use App\Models\Tbl_chart_of_account;
+use App\Models\Tbl_order;
+use App\Models\Tbl_order_item;
+use App\Models\Tbl_journal_entry_line;
+use App\Models\Tbl_report_field;
+use App\Models\Tbl_category;
+use App\Models\Tbl_chart_account_type;
+use App\Models\Tbl_warehouse_inventory;
+use App\Models\Tbl_warehouse;
+
 use Carbon\Carbon;
 use Request;
 use Image;
@@ -8,24 +28,13 @@ use Validator;
 use Redirect;
 use File;
 use URL;
-use App\Models\Tbl_shipping;
-use App\Models\Tbl_user;
-use App\Models\Tbl_customer;
-use App\Models\Tbl_order;
-use App\Models\Tbl_order_item;
-use App\Models\Tbl_journal_entry_line;
-use App\Globals\SalesReport;
-use App\Globals\Report;
 use Session;
 use App;
 use PDF;
 use View;
 use DB;
 use Excel;
-use App\Models\Tbl_report_field;
-use App\Models\Tbl_category;
-use App\Models\Tbl_chart_account_type;
-use App\Globals\Pdf_global;
+
 
 class ReportsController extends Member
 {
@@ -70,6 +79,31 @@ class ReportsController extends Member
         
         return $start;
     }
+
+    /**
+     * Check Date Period fro showing the date range
+     *
+     * @return json  $data    data['start_date'], data['end_date'], date['period']     
+     * @author BKA  
+     */
+    public function get_date_period_covered()
+    {
+        $date['start']      = Request::input('from');
+        $date['end']        = Request::input('to');
+        $data['period']     = Request::input('report_period');
+        $data['start_date'] = dateFormat(Report::checkDatePeriod($data['period'], $date)['start_date']);
+        $data['end_date']   = dateFormat(Report::checkDatePeriod($data['period'], $date)['end_date']);
+        
+            
+        return json_encode($data);
+    }
+
+    /* 
+    *
+    *--------- PRODUCTS REPORTS --------------- 
+    *
+    *
+    */
 	
     public function monthlysale()
     {
@@ -184,16 +218,25 @@ class ReportsController extends Member
         return $pdf->stream('Paycheque.pdf');
     }
 
+    /* 
+    *
+    *--------- ACCOUNTING REPORTS --------------- 
+    *
+    *
+    */
+
     public function accounting_sale()
     {
         $data =[];
 
-        $data['field_checker'] = $this->report_field_checker_seed('accounting_sales_report');
+        $report_code = 'accounting_sales_report';
+        $data['field_checker'] = $this->report_field_checker_seed($report_code);
         $data['head_title'] = 'Sales Report';
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = 'Account Sales Report';
         $data['head'] = $this->report_header($data);
-        $data['filter'] = $this->report_filter('basic');
+        $data['action'] = '/member/report/accounting/sale/get/report';
+        $data['report_code'] = $report_code;
         $data['table_header'] = Report::sales_report();
 
         return view('member.reports.accounting.sales', $data);
@@ -202,28 +245,7 @@ class ReportsController extends Member
     {
         return view('member.reports.head', $data);
     }
-    public function report_filter($filter = 'basic')
-    {
-        $data = [];
 
-        switch ($filter) 
-        {
-            case 'basic':
-                return view('member.reports.filter.basic', $data);
-                break;
-            case 'profit_loss' :
-                return view('member.reports.filter.profit_loss', $data);
-                break;    
-            case 'items':
-                return view('member.reports.filter.items', $data);
-                break;
-            case 'general_ledger' :
-                return view('member.reports.filter.general_ledger', $data);    
-            default:
-                return view('member.reports.filter.basic', $data);
-                break;
-        }
-    }
     public function report_field_checker_seed($filter = 'accounting_sales_report')
     {
         $shop_id = $this->user_info->shop_id; 
@@ -254,6 +276,7 @@ class ReportsController extends Member
         $data['report_field_default'] = Report::sales_report($filter);
         return view('member.reports.field.check', $data);
     }
+
     public function accounting_sale_filter_edit()
     {
         $shop_id = $this->user_info->shop_id; 
@@ -268,21 +291,17 @@ class ReportsController extends Member
                 if(!isset($report_field_module[$key]))
                 {
                     $update['report_field_archive'] = 1;
-                    $update['report_field_position'] = $report_field_position[$key];
-                    Tbl_report_field::where('report_field_shop', $shop_id)
-                    ->where('report_field_module', $key)
-                    ->where('report_field_type', $report_field_type)
-                    ->update($update);
                 }
                 else
                 {
                     $update['report_field_archive'] = 0;
-                    $update['report_field_position'] = $report_field_position[$key];
-                    Tbl_report_field::where('report_field_shop', $shop_id)
-                    ->where('report_field_module', $key)
-                    ->where('report_field_type', $report_field_type)
-                    ->update($update);
                 }
+
+                $update['report_field_position'] = $report_field_position[$key];
+                Tbl_report_field::where('report_field_shop', $shop_id)
+                ->where('report_field_module', $key)
+                ->where('report_field_type', $report_field_type)
+                ->update($update);
             }
         }
         $data['status'] = 'Success';
@@ -290,18 +309,22 @@ class ReportsController extends Member
 
         return json_encode($data);
     }
+
     public function accounting_sale_report_view()
     {
-        $from = Request::input('from');
-        $to = Request::input('to');
-        $from = Carbon::parse($from);
-        $to = Carbon::parse($to)->addDay(1);
+        $period         = Request::input('report_period');
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
         $data = [];
         $data['report_type'] = $report_type;
         $shop_id = $this->user_info->shop_id; 
 
+        $data['shop_name']  = $this->user_info->shop_key; 
         $data['sales'] = Tbl_journal_entry_line::account()
         ->item()
         ->journal()
@@ -309,9 +332,10 @@ class ReportsController extends Member
         ->where('je_shop_id', $shop_id)
         ->customerorvendor()
         // ->joinreciept()
-        ->where('je_entry_date', '>=', $from)
-        ->where('je_entry_date', '<=', $to)
+        ->whereRaw("DATE(je_entry_date) >= '$from'")
+        ->whereRaw("DATE(je_entry_date) <= '$to'")
         ->concatum()
+        ->amount()
         ->get()
         ->keyBy('jline_id');
 
@@ -345,54 +369,34 @@ class ReportsController extends Member
 
         if($report_field_type == 'accounting_sales_report')
         {
-            $view =  view('member.reports.output.sale', $data);
-            $data['view'] = 'sale';
+            $data['head_title'] = 'Sales Report By Customer Detail';
+            $view =  'member.reports.output.sale';
+            $type = 'Sale';
         }
         else if($report_field_type == 'accounting_sales_report_item')
         {
-            $view =  view('member.reports.output.item', $data);
-            $data['view'] = 'item';
+            $data['head_title'] = 'Sales Report By Item Detail';
+            $view =  'member.reports.output.item';
+            $type = 'Item';
         }
 
-        switch ($report_type) {
-            case 'plain':
-                    $return['status'] = 'success_plain';
-                    $return['view'] = $view->render();
-                    return json_encode($return);
-                break;
-            case 'pdf':
-                    $data['view'] = $view->render();
-                    return Pdf_global::show_pdf($data['view'], 'landscape');
-                break;
-            case 'excel':
-                    Excel::create('New file', function($excel) use($data) {
+        // dd($data['sales_by_customer']);
 
-                        $excel->sheet('New sheet', function($sheet) use($data) {
-
-                            $sheet->loadView('member.reports.output.' . $data['view'], $data);
-
-                        });
-
-                    })->export('xls');    
-            default:
-                    $return['status'] = 'success_plain';
-                    $return['view'] = $view->render();
-                    return json_encode($return);
-                break;
-        }
+        return Report::check_report_type($report_type, $view, $data, 'Sales_Report_By_'.$type.Carbon::now());
     }
 
     public function accounting_sale_items()
     {
         $data =[];
-
-        $data['field_checker'] = $this->report_field_checker_seed('accounting_sales_report_item');
+        $report_code = 'accounting_sales_report_item';
+        $data['field_checker'] = $this->report_field_checker_seed($report_code );
         $data['head_title'] = 'Sales Report - Item ';
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = 'Account Sales Report';
         $data['head'] = $this->report_header($data);
-        $data['filter'] = $this->report_filter('items');
-        $data['table_header'] = Report::sales_report('accounting_sales_report_item');
+        $data['action'] = '/member/report/accounting/sale/get/report';
+        $data['report_code'] = $report_code;
+        $data['table_header'] = Report::sales_report($report_code );
 
         return view('member.reports.accounting.sales', $data);
     }
@@ -404,7 +408,7 @@ class ReportsController extends Member
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = '';
         $data['head'] = $this->report_header($data);
-        $data['filter'] = $this->report_filter('profit_loss');
+        $data['action'] = '/member/report/accounting/profit/loss/get';
         $shop_id = $this->user_info->shop_id; 
 
         return view('member.reports.accounting.profit', $data);
@@ -412,10 +416,12 @@ class ReportsController extends Member
     }
     public function profit_loss_get()
     {
-        $from = Request::input('from');
-        $to = Request::input('to');
-        $from = Carbon::parse($from);
-        $to = Carbon::parse($to)->addDay(1);
+        $period         = Request::input('report_period');
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
         $shop_id = $this->user_info->shop_id; 
@@ -426,6 +432,9 @@ class ReportsController extends Member
         $filter[14] = 'Other Expense';
         $filter[15] = 'Other Income';
 
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'Profit and Loss';
+
         $data['account_income'] = Tbl_chart_account_type::whereIn('chart_type_name', $filter)
         ->get()->keyBy('chart_type_id');
         foreach($data['account_income'] as $key => $value)
@@ -433,69 +442,48 @@ class ReportsController extends Member
 
             $data['sum'][$key] = Tbl_journal_entry_line::account()
             ->where('chart_type_id', $value->chart_type_id)
-        
+            ->journal()
             ->select(DB::raw('*, sum(jline_amount ) as sum'))
             ->groupBy('jline_type')
             ->groupBy('jline_account_id')
             ->where('account_shop_id', $shop_id)
-            ->where('tbl_journal_entry_line.created_at', '>=', $from)
-            ->where('tbl_journal_entry_line.created_at', '<=', $to)
+            ->whereRaw("DATE(je_entry_date) >= '$from'")
+            ->whereRaw("DATE(je_entry_date) <= '$to'")
             ->get();
 
         }
-        $view = view('member.reports.output.profit_loss', $data);
 
-        switch ($report_type) {
-            case 'plain':
-                    $return['status'] = 'success_plain';
-                    $return['view'] = $view->render();
-                    return json_encode($return);
-                break;
-            case 'pdf':
-                    $data['view'] = $view->render();
-                    return Pdf_global::show_pdf($data['view'], 'landscape');
-                break;
-            case 'excel':
-                    Excel::create('New file', function($excel) use($data) {
-
-                        $excel->sheet('New sheet', function($sheet) use($data) {
-
-                            $sheet->loadView('member.reports.output.profit_loss', $data);
-
-                        });
-
-                    })->export('xls');    
-            default:
-                    $return['status'] = 'success_plain';
-                    $return['view'] = $view->render();
-                    return json_encode($return);
-                break;
-        }
-
+        $view =  'member.reports.output.profit_loss'; 
+        return Report::check_report_type($report_type, $view, $data, 'Profit_and_Loss'.Carbon::now());
 
         return view('member.reports.output.profit_loss', $data);
     }
 
     public function general_ledger()
     {
-
         $data = [];
 
         $data['head_title'] = 'General Ledger';
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = '';
         $data['head'] = $this->report_header($data);
-        $data['filter'] = $this->report_filter('general_ledger');
+        $data['action'] = '/member/report/accounting/general/ledger/get';
         $shop_id = $this->user_info->shop_id; 
         
         return view('member.reports.accounting.general_ledger', $data);
     }
+
     public function general_ledger_get()
     {
-        $from = Request::input('from');
-        $to = Request::input('to');
-        $from = Carbon::parse($from);
-        $to = Carbon::parse($to)->addDay(1);
+        $period         = Request::input('report_period');
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+        
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'General Ledger';
+
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
         $shop_id = $this->user_info->shop_id; 
@@ -503,11 +491,12 @@ class ReportsController extends Member
         $data['entry_line'] = Tbl_journal_entry_line::account()
             ->where('account_shop_id', $shop_id)
             ->customerorvendorv2()
+            ->amount()
             ->groupBy('jline_account_id')
             ->groupBy('jline_je_id')
             ->journal()
-            ->where('tbl_journal_entry_line.created_at', '>=', $from)
-            ->where('tbl_journal_entry_line.created_at', '<=', $to)
+            ->whereRaw("DATE(je_entry_date) >= '$from'")
+            ->whereRaw("DATE(je_entry_date) <= '$to'")
             ->get();
         $data['chart_of_account'] = [];
         $data['chart_of_account_data'] = [];
@@ -517,33 +506,175 @@ class ReportsController extends Member
             $data['chart_of_account_data'][$value->chart_type_id][$value->jline_id] = $value;
         }
 
-        $view =  view('member.reports.output.general_ledger', $data); 
+        $view =  'member.reports.output.general_ledger'; 
+        return Report::check_report_type($report_type, $view, $data, 'General-Ledger'.Carbon::now());
+    }
 
-        switch ($report_type) {
-            case 'plain':
-                    $return['status'] = 'success_plain';
-                    $return['view'] = $view->render();
-                    return json_encode($return);
-                break;
-            case 'pdf':
-                    $data['view'] = $view->render();
-                    return Pdf_global::show_pdf($data['view'], 'landscape');
-                break;
-            case 'excel':
-                    Excel::create('New file', function($excel) use($data) {
+    public function customer_list()
+    {
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'Customer List';
+        $data['head_icon']  = 'fa fa-area-chart';
+        $data['head_discription'] = '';
+        $data['head']       = $this->report_header($data);
+        $data['action']     = '/member/report/accounting/customer_list';
 
-                        $excel->sheet('New sheet', function($sheet) use($data) {
+        $report_type    = Request::input('report_type');
+        $load_view      = Request::input('load_view');
+        $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
+        $date['start']  = Request::input('from') ? Request::input('from') : '';
+        $date['end']    = Request::input('to') ? Request::input('from') : '';
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
 
-                            $sheet->loadView('member.reports.output.general_ledger', $data);
+        $data['_customer'] = Tbl_customer::balanceJournal()->where("shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
 
-                        });
+        foreach($data['_customer'] as $key=>$customer)
+        {
+            $data['_customer'][$key]->customer_journal = Tbl_journal_entry_line::journal()->customerOrVendor()->account()->customerOnly()
+                                                        ->where("jline_name_id", $customer->customer_id)
+                                                        ->where("chart_type_name", 'Accounts Receivable')
+                                                        ->whereRaw("DATE(je_entry_date) >= '$from'")
+                                                        ->whereRaw("DATE(je_entry_date) <= '$to'")
+                                                        ->get();
+            $data['_customer'][$key]->balance          = collect($data['_customer'][$key]->customer_journal)->sum('amount');
+        }   
 
-                    })->export('xls');    
-            default:
-                    $return['status'] = 'success_plain';
-                    $return['view'] = $view->render();
-                    return json_encode($return);
-                break;
+        /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
+        if($report_type && !$load_view)
+        {
+            $view =  'member.reports.output.customer_list'; 
+            return Report::check_report_type($report_type, $view, $data, 'Customer_list-'.Carbon::now());
+        }
+        else
+        {
+            return view('member.reports.accounting.customer_list', $data);
         }
     }
+
+    public function vendor_list()
+    {
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'Vendor List';
+        $data['head_icon']  = 'fa fa-area-chart';
+        $data['head_discription'] = '';
+        $data['head']       = $this->report_header($data);
+        $data['action']     = '/member/report/accounting/vendor_list';
+
+        $report_type    = Request::input('report_type');
+        $load_view      = Request::input('load_view');
+        $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
+        $date['start']  = Request::input('from') ? Request::input('from') : '';
+        $date['end']    = Request::input('to') ? Request::input('from') : '';
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
+        $data['_vendor'] = Tbl_vendor::balanceJournal()->where("vendor_shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
+
+        foreach($data['_vendor'] as $key=>$vendor)
+        {
+            $data['_vendor'][$key]->vendor_journal = Tbl_journal_entry_line::journal()->customerOrVendor()->account()->vendorOnly()
+                                                        ->where("jline_name_id", $vendor->vendor_id)
+                                                        ->where("chart_type_name", 'Accounts Payable')
+                                                        ->whereRaw("DATE(je_entry_date) >= '$from'")
+                                                        ->whereRaw("DATE(je_entry_date) <= '$to'")
+                                                        ->get();
+            $data['_vendor'][$key]->balance        = collect($data['_vendor'][$key]->vendor_journal)->sum('amount');
+        }   
+
+        /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
+        if($report_type && !$load_view)
+        {
+            $view =  'member.reports.output.vendor_list'; 
+            return Report::check_report_type($report_type, $view, $data, 'Vendor_list-'.Carbon::now());
+        }
+        else
+        {
+            return view('member.reports.accounting.vendor_list', $data);
+        }
+    }
+
+    public function item_list()
+    {
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'Item/Service List';
+        $data['head_icon']  = 'fa fa-area-chart';
+        $data['head_discription'] = '';
+        $data['head']       = $this->report_header($data);
+        $data['action']     = '/member/report/accounting/item_list';
+
+        $report_type    = Request::input('report_type');
+        $load_view      = Request::input('load_view');
+        $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
+        $date['start']  = Request::input('from') ? Request::input('from') : '';
+        $date['end']    = Request::input('to') ? Request::input('from') : '';
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
+        $data['_warehouse'] = Tbl_warehouse::where("warehouse_shop_id", $this->user_info->shop_id)->get();
+        $data['_item'] = Tbl_item::type()->where("shop_id", $this->user_info->shop_id)->where("tbl_item.archived", 0)->get();
+
+        foreach($data['_item'] as $key=>$item)
+        {
+            $data['_item'][$key]->item_warehouse  = Tbl_item::warehouseInventory($item->shop_id, $item->item_id)
+                                                    ->where("item_id", $item->item_id)
+                                                    ->whereRaw("DATE(inventory_created) >= '$from'")
+                                                    ->whereRaw("DATE(inventory_created) <= '$to'")
+                                                    ->get();
+        }   
+        // dd($data['_item']);
+        /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
+        if($report_type && !$load_view)
+        {
+            $view =  'member.reports.output.item_list'; 
+            return Report::check_report_type($report_type, $view, $data, 'item_list-'.Carbon::now());
+        }
+        else
+        {
+            return view('member.reports.accounting.item_list', $data);
+        }
+    }
+
+    public function account_list()
+    {
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'Account List';
+        $data['head_icon']  = 'fa fa-area-chart';
+        $data['head_discription'] = '';
+        $data['head']       = $this->report_header($data);
+        $data['action']     = '/member/report/accounting/account_list';
+
+        $report_type    = Request::input('report_type');
+        $load_view      = Request::input('load_view');
+        $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
+        $date['start']  = Request::input('from') ? Request::input('from') : '';
+        $date['end']    = Request::input('to') ? Request::input('from') : '';
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
+        $data['_account'] = Tbl_chart_of_account::accountType()->where("account_shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
+
+        foreach($data['_account'] as $key=>$account)
+        {
+            $data['_account'][$key]->account_journal = Tbl_journal_entry_line::journal()->account()
+                                                        ->selectRaw("*, (CASE normal_balance WHEN jline_type THEN jline_amount ELSE -jline_amount END) as 'amount'")
+                                                        ->where("jline_account_id", $account->account_id)
+                                                        ->whereRaw("DATE(je_entry_date) >= '$from'")
+                                                        ->whereRaw("DATE(je_entry_date) <= '$to'")
+                                                        ->get();
+            $data['_account'][$key]->balance         = collect($data['_account'][$key]->account_journal)->sum('amount');
+        }   
+
+        /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
+        if($report_type && !$load_view)
+        {
+            $view =  'member.reports.output.account_list'; 
+            return Report::check_report_type($report_type, $view, $data, 'account_list-'.Carbon::now());
+        }
+        else
+        {
+            return view('member.reports.accounting.account_list', $data);
+        }
+    }
+
 }

@@ -30,7 +30,7 @@
   							<td nowrap>{{currency('PHP', $balance)}}</td>
   						</tr>
   					@endforeach
-  				<tr style="background-color: aliceblue;">
+  				<tr>
   					<td colspan="5"><b>Total {{$customer->first_name." ".$customer->last_name}}</b></td>
   					<td>{{currency('PHP', $balance)}}</td>
   				</tr>	

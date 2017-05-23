@@ -498,6 +498,7 @@ class ReportsController extends Member
         $data['action']     = '/member/report/accounting/customer_list';
 
         $report_type    = Request::input('report_type');
+        $load_content   = Request::input('load_content');
         $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
         $date['start']  = Request::input('from') ? Request::input('from') : '';
         $date['end']    = Request::input('to') ? Request::input('from') : '';
@@ -524,7 +525,7 @@ class ReportsController extends Member
             return json_encode($json);
         }
 
-        if($report_type)
+        if($report_type && !$load_content)
         {
             $view =  'member.reports.output.customer_list'; 
             return Report::check_report_type($report_type, $view, $data, 'Customer_list'.Carbon::now());

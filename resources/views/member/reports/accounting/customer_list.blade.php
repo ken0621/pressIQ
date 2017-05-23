@@ -46,8 +46,8 @@
 		{
 			var serialize_data = $("form.filter").serialize()
 			
-			$(".load-data").load("/member/report/accounting/customer_list?"+serialize_data+" .load-content");
-		})
+			$(".load-data").load("/member/report/accounting/customer_list?"+serialize_data+"&load_content=true .load-content");
+		});
 	}
 
 	function submit_done(data)

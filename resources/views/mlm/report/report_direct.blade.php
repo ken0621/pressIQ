@@ -2,7 +2,6 @@
 @section('content')
 {!! $header !!}
 
-
  <div class="box box-primary">
   <div class="box-body">
     <ul class="products-list product-list-in-box">
@@ -13,7 +12,7 @@
             </div>
             <div class="product-info">
               <a href="javascript:void(0)" class="product-title">Sponsor: {{name_format_from_customer_info($value)}}
-                <span class="label label-success pull-right">{{currency('PHP', $value->wallet_log_amount)}}</span></a>
+                <h4><span class="label label-success pull-right">{{currency('PHP', $value->wallet_log_amount)}}</span></h4></a>
                   <span class="product-description" style="color: black;">
                     Slot: {{$value->slot_no}}
                     <br>

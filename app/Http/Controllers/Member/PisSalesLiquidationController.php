@@ -297,19 +297,20 @@ class PisSalesLiquidationController extends Member
                     $data['unset_key'][$inv_key] = $chk->rpline_rp_id;
                 }        
 
-                $data['total_ar'] += ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;     
+                $data['total_ar'] += ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;    
+                $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied); 
             }
             else
             {                
                 $_transaction[$inv_key]['type'] = 'Cash Sales';
                 $_transaction[$inv_key]['reference_name'] = 'sales_receipt';
-                $_transaction[$inv_key]['transaction_code'] = "Paid Cash";
+                $_transaction[$inv_key]['transaction_code'] = "Paid";
 
                 $data["total_cash"] += $inv_value->inv_payment_applied - $cm_amt;
+                $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied);
             }
             $_transaction[$inv_key]['customer_name'] = $inv_value->company != "" ? $inv_value->company : $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
             $_transaction[$inv_key]['no'] = $inv_value->inv_id;
-            $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;
             $_transaction[$inv_key]['due_date'] = $inv_value->inv_due_date;
             $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price - $cm_amt;
             $_transaction[$inv_key]['status'] = $inv_value->inv_is_paid;
@@ -323,7 +324,17 @@ class PisSalesLiquidationController extends Member
         {
             $_transaction = null;
             $_transaction[$rp_key]['date'] = $rp_value->rp_date;
-            $_transaction[$rp_key]['transaction_code'] = "Payment #".$rp_value->rp_id;
+
+            $id = "";
+            $chk = Tbl_receive_payment_line::where("rpline_rp_id",$rp_value->rp_id)->get();
+            if($chk)
+            {
+                foreach ($chk as $key_rpline => $value_rpline) 
+                {
+                    $id .= $value_rpline->rpline_reference_id." ";
+                }
+            }
+            $_transaction[$rp_key]['transaction_code'] = "AR Payment for Credit Sales #".$id;
             $_transaction[$rp_key]['type'] = 'Collection';
             $_transaction[$rp_key]['reference_name'] = 'receive_payment';
             $_transaction[$rp_key]['customer_name'] =  $rp_value->company != "" ? $rp_value->company : $rp_value->title_name." ".$rp_value->first_name." ".$rp_value->last_name." ".$rp_value->suffix_name;

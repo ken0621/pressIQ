@@ -239,6 +239,71 @@
 										</div>
 									</div>
 								</div>
+								<div class="panel panel-default">
+									<div class="panel-body form-horizontal">
+										<div class="form-group">
+											<label class="col-md-12">Under Time Deduction</label>
+										</div>
+										<div class="form-group">
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="under-time-category-change" type="radio" value="Base on Salary" name="payroll_under_time_category" {{$group->payroll_under_time_category == 'Base on Salary' ? 'checked="checked"':''}}>Base on Salary</label>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="under-time-category-change" type="radio" value="Custom" name="payroll_under_time_category" {{$group->payroll_under_time_category == 'Custom' ? 'checked="checked"':''}}>Custom</label>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="under-time-category-change" type="radio" name="payroll_under_time_category" value="Not Deducted" {{$group->payroll_under_time_category == 'Not Deducted' ? 'checked="checked"':''}}>Not Deducted</label>
+												</div>
+											</div>
+										</div>
+										<div class="form-group {{$group->payroll_under_time_category == 'Custom' ? '':'display-none'}} under-time-custom-form">
+											<div class="col-md-6">
+												<small>Under Time parameter</small>
+												<div class="input-group">
+													<input type="number" name="payroll_under_time_interval" class="form-control late-param-change late-param-number text-right" value="{{$group->payroll_under_time_interval}}" step="any">
+													<span class="input-group-btn" style="width: 100px">
+														<select class="form-control late-param-change late-param-select" name="payroll_under_time_parameter">
+															<option value="Second" {{$group->payroll_under_time_parameter == 'Second' ? 'selected="selected"':''}}>Second</option>
+															<option value="Minute" {{$group->payroll_under_time_parameter == 'Minute' ? 'selected="selected"':''}}>Minute</option>
+															<option value="Hour" {{$group->payroll_under_time_parameter == 'Hour' ? 'selected="selected"':''}}>Hour</option>
+														</select>
+													</span>
+												</div>
+
+											</div>
+											<div class="col-md-6">
+												<small>Deduction for every (<span class="under-time-label-param">0</span>)</small>
+												<input type="number" name="payroll_under_time_deduction" step="any" value="{{$group->payroll_under_time_deduction}}" class="form-control text-right">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-body form-horizontal">
+										<div class="form-group">
+											<label class="col-md-12">Break Deduction</label>
+										</div>
+										<div class="form-group">
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="late-category-change" type="radio" value="Base on Salary" name="payroll_break_category" {{$group->payroll_break_category == 'Base on Salary' ? 'checked="checked"' : ''}}>Base on Salary</label>
+												</div>
+											</div>
+											
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="late-category-change" type="radio" name="payroll_break_category" value="Not Deducted" {{$group->payroll_break_category == 'Not Deducted' ? 'checked="checked"' : ''}}>Not Deducted</label>
+												</div>
+											</div>
+										</div>
+										
+									</div>
+								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="panel panel-default">
@@ -267,7 +332,7 @@
 										<div class="form-group">
 											<div class="col-md-12">
 												<small>Agency Fee</small>
-												<input type="number" name="payroll_group_agency_fee" class="form-control text-right" {{$group->payroll_group_agency_fee}}>
+												<input type="number" name="payroll_group_agency_fee" class="form-control text-right" step="any" {{$group->payroll_group_agency_fee}}>
 											</div>
 										</div>
 									</div>
@@ -297,7 +362,7 @@
 									<input type="text" name="payroll_overtime_name[]" value="{{$rate->payroll_overtime_name}}" class="width-100 border-none" readonly>
 								</td>
 								<td width="14.28571428571429%">
-									<input type="number" name="payroll_overtime_regular[]" value="{{$rate->payroll_overtime_regular}}" class="width-100 border-none text-right" {{$rate->payroll_overtime_name == 'Regular' ? 'readonly':''}}>
+									<input type="number" name="payroll_overtime_regular[]" value="{{$rate->payroll_overtime_regular}}" step="any" class="width-100 border-none text-right" {{$rate->payroll_overtime_name == 'Regular' ? 'readonly':''}}>
 								</td>
 								<td width="14.28571428571429%">
 									<input type="number" step="any" name="payroll_overtime_overtime[]" class="width-100 border-none text-right" value="{{$rate->payroll_overtime_overtime}}">
@@ -324,11 +389,11 @@
 							<div class="form-group">
 								<div class="col-md-6">
 									<small>Working Days(per month)</small>
-									<input type="number" name="payroll_group_working_day_month" class="form-control text-center" required value="{{$group->payroll_group_working_day_month}}">
+									<input type="number" name="payroll_group_working_day_month" class="form-control text-center" required value="{{$group->payroll_group_working_day_month}}" step="any">
 								</div>
 								<div class="col-md-6">
 									<small>Grace Time Period</small>
-									<input type="number" name="payroll_group_grace_time" class="form-control text-center" required value="{{$group->payroll_group_grace_time}}">
+									<input type="number" name="payroll_group_grace_time" class="form-control text-center" required value="{{$group->payroll_group_grace_time}}" step="any">
 								</div>
 							</div>
 							<div class="form-group">
@@ -442,6 +507,7 @@
 	$(".time-entry").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 	late_categoy_change_event();
 	late_param_change();
+	under_time_category_change_event();
 	function late_categoy_change_event()
 	{
 		$(".late-category-change").unbind("change");
@@ -485,6 +551,29 @@
 		});
 
 	}
+
+	function under_time_category_change_event()
+	{
+		$(".under-time-category-change").unbind("change");
+		$(".under-time-category-change").bind("change", function()
+		{
+			if($(this).val() == "Custom")
+			{
+				if($(".under-time-custom-form").hasClass('display-none'))
+				{
+					$(".under-time-custom-form").removeClass("display-none");
+				}
+			}
+			else
+			{
+				if(!$(".under-time-custom-form").hasClass('display-none'))
+				{
+					$(".under-time-custom-form").addClass("display-none");
+				}
+			}
+		});
+	}
+
 
 	function late_param_change()
 	{

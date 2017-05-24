@@ -23,4 +23,5 @@ class Tbl_payroll_shift_code extends Model
 
 		return $query;
 	}
+
 }

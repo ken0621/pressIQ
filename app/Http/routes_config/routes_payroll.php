@@ -258,6 +258,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/payroll_period_list/modal_save_payroll_period','Member\PayrollController@modal_save_payroll_period');
 
 	Route::any('/payroll_period_list/modal_schedule_employee_shift','Member\PayrollController@modal_schedule_employee_shift');
+	
+	Route::any('/payroll_period_list/shift_template_refence','Member\PayrollController@shift_template_refence');
+	Route::any('/payroll_period_list/ajax_employee_schedule','Member\PayrollController@ajax_employee_schedule');
+	Route::any('/payroll_period_list/save_shift_per_employee','Member\PayrollController@save_shift_per_employee');
 
 	Route::any('/payroll_period_list/modal_archive_period/{archived}/{id}','Member\PayrollController@modal_archive_period');
 	Route::any('/payroll_period_list/archive_period','Member\PayrollController@archive_period');

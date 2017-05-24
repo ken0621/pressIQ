@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTblPayrollEmployeeShift extends Migration
+class CreateTblPayrollEmployeeSchedule extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class CreateTblPayrollEmployeeShift extends Migration
      */
     public function up()
     {
-        Schema::create('tbl_payroll_employee_shift', function (Blueprint $table) {
-            $table->increments('employee_shift_id');
+        Schema::create('tbl_payroll_employee_schedule', function (Blueprint $table) {
+            $table->increments('employee_schedule_id');
             $table->integer('payroll_employee_id')->unsigned();
             $table->foreign('payroll_employee_id')->references('payroll_employee_id')->on('tbl_payroll_employee_basic')->onDelete('cascade');
             $table->date('schedule_date');
@@ -35,6 +35,6 @@ class CreateTblPayrollEmployeeShift extends Migration
      */
     public function down()
     {
-        Schema::drop('tbl_payroll_employee_shift');
+        Schema::drop('tbl_payroll_employee_schedule');
     }
 }

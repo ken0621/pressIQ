@@ -18,7 +18,7 @@ function payroll_period_list()
 			
 		});
 
-		$(".modal-content").html('<br><br>'+misc('loader')+'<br><br>');
+		$(".modal-content-global").html('<br><br>'+misc('loader')+'<br><br>');
 		$(".modal-dialog").addClass('modal-lg');
 		// $(".modal-content").load('/member/payroll/payroll_period_list/modal_schedule_employee_shift/' + id + ' .modal-content', function()
 		// {
@@ -34,7 +34,7 @@ function payroll_period_list()
 			},
 			success : function(data)
 			{
-				$(".modal-content").html(data);
+				$(".modal-content-global").html(data);
 			},
 			error 	: 	function(err)
 			{
@@ -97,7 +97,7 @@ function submit_done(data)
 	// console.log(data.function_name);
 	if(data.function_name == 'payroll_period_list.reload_list')
 	{
-		console.log(data.function_name);
+		// console.log(data.function_name);
 		payroll_period_list.reload_list(data.id);
 
 	}

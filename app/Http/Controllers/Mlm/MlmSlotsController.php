@@ -12,8 +12,10 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_plan_setting;
+use App\Models\Tbl_tree_placement;
 
 use App\Globals\Mlm_compute;
+use App\Globals\Mlm_member;
 class MlmSlotsController extends Mlm
 {
     public function index()
@@ -31,7 +33,8 @@ class MlmSlotsController extends Mlm
                 $data["enabled_upgrade_slot"] = 0;
             }
             $data['all_slots_p'] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->paginate(20);
-            $data['active'] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_defaul', 1)->first();
+            $data['active']      = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_defaul', 1)->first();
+            $data['_code']       = Tbl_membership_code::where('customer_id', Self::$customer_id)->where('used', 0)->get();
     		// dd($data);
     		return view('mlm.slots.index', $data);
     	}
@@ -190,4 +193,73 @@ class MlmSlotsController extends Mlm
         }
         return json_encode($message);
     } 
+    public function add_slot_modal()
+    {
+        return Mlm_member::add_slot_form(Self::$customer_id);
+    } 
+    public function manual_add_slot_modal()
+    {
+        return Mlm_member::manual_add_slot_form(Self::$customer_id,Request::input("membership_id"),Self::$shop_id);
+    }
+    public function check_add()
+    {
+        $check_membership  = Tbl_membership_code::where("membership_code_id",Request::input("membership_code_id"))
+                                                ->where("blocked",0)
+                                                ->where("archived",0)
+                                                ->where("used",0)
+                                                ->where("customer_id",Self::$customer_id)
+                                                ->first();
+        if($check_membership)
+        {
+            $data["status"]    = "sucess-slot";
+            $data["encrypted"] = Crypt::encrypt(Request::input("membership_code_id"));
+        }
+        else
+        {
+            $data["message"]   = "Membership code doesn't exists";
+        }
+
+        return json_encode($data);
+    }
+
+    public function manual_add_slot()
+    {
+        
+        return view('mlm.slots.manual_add_slot');
+    }
+
+    public function manual_add_slot_post()
+    {
+        $check_membership  = Tbl_membership_code::where("membership_code_id",Request::input("membership_code_id"))
+                                                ->where("membership_activation_code",Request::input("membership_activation_code"))
+                                                ->where("shop_id",Self::$shop_id)
+                                                ->first();
+
+        if(!$check_membership)
+        {
+            $message["message"]          = "This code is not available.";
+        }
+        else
+        {
+            if($check_membership->used == 1)
+            {
+                $message["message"]          = "This code is already used.";
+            }
+            else if($check_membership->blocked == 1)
+            {
+                $message["message"]          = "This code is blocked.";
+            }
+            else if($check_membership->archived == 1)
+            {
+                $message["message"]          = "This code is not available.";
+            }
+            else
+            {
+                $message["status"]           = "success-manual";
+                $message["encrypted"]        = Crypt::encrypt(Request::input("membership_code_id"));
+            }
+        }
+
+        return json_encode($message);
+    }
 }

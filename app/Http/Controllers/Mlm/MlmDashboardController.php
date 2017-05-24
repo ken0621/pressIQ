@@ -29,6 +29,7 @@ class MlmDashboardController extends Mlm
         // return $this->tree_view();
         // return Mlm_member::add_to_session_edit(5, 301, 1);
     	// return Self::show_maintenance();
+        // return $this->no_slot(Self::$shop_id);
         $data["page"] = "Dashboard";
         if(Self::$slot_id != null)
         {
@@ -215,36 +216,20 @@ class MlmDashboardController extends Mlm
                 $data["slot_stairstep"] = "None";
             }
             
-            $data["rebates"]        = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Rebates)")->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
-            $data["override"]       = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Over-ride)")->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
+            $data["rebates"]        = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Rebates)")->where("wallet_log_slot",Self::$slot_id)->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
+            $data["override"]       = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Over-ride)")->where("wallet_log_slot",Self::$slot_id)->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
         }
         else
         {
             $data["slot_stairstep"] = null;
-            $data["rebates"]        = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Rebates)")->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
-            $data["override"]       = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Over-ride)")->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
+            $data["rebates"]        = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Rebates)")->where("wallet_log_slot",Self::$slot_id)->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
+            $data["override"]       = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Over-ride)")->where("wallet_log_slot",Self::$slot_id)->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
         }
     	return view('mlm.dashboard.income', $data);
     }
     public static function no_slot($shop_id)
     {
-    	$data = [];
-        $data['binary_settings'] = Tbl_mlm_plan::where('shop_id', $shop_id)
-            ->where('marketing_plan_code', 'BINARY')
-            ->where('marketing_plan_enable', 1)
-            ->where('marketing_plan_trigger', 'Slot Creation')
-            ->first();
-        $data['binary_advance'] = Tbl_mlm_binary_setttings::where('shop_id', Self::$shop_id)->first();
-        
-        $data['lead'] = Tbl_mlm_lead::where('lead_customer_id_lead', Self::$customer_id)
-        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=','tbl_mlm_lead.lead_slot_id_sponsor')
-        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-        ->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_membership_code.slot_id')
-        ->where('tbl_mlm_lead.lead_used', 0)
-        ->first();
-
-        $data['_slots'] = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', Self::$shop_id)->customer()->get();
-        // dd($shop_id);
+        return Mlm_member::add_slot_form(Self::$customer_id);
     	return view('mlm.dashboard.no_slot_v2', $data);
     }
     public static function claim_slot()
@@ -257,8 +242,14 @@ class MlmDashboardController extends Mlm
         $validator = Validator::make($v,$r);
         if ($validator->passes())
         {
-
-            return Mlm_member::add_slot(Self::$shop_id, Self::$customer_id);
+            if(Request::input("type") == "manual")
+            {
+                return Mlm_member::manual_add_slot(Self::$shop_id, Self::$customer_id);
+            }
+            else
+            {
+                return Mlm_member::add_slot(Self::$shop_id, Self::$customer_id);
+            }
         }
         else
         {

@@ -76,6 +76,8 @@ Route::get('/mlm/slots', 'Mlm\MlmSlotsController@index');
 Route::post('/mlm/slots/set_nickname', 'Mlm\MlmSlotsController@set_nickname'); 
 Route::get('/mlm/slots/upgrade_slot/{id}', 'Mlm\MlmSlotsController@upgrade_slot'); 
 Route::post('/mlm/slots/upgrade_slot_post/{id}', 'Mlm\MlmSlotsController@upgrade_slot_post'); 
+Route::get('/mlm/slots/manual_add_slot', 'Mlm\MlmSlotsController@manual_add_slot'); 
+Route::post('/mlm/slots/manual_add_slot_post', 'Mlm\MlmSlotsController@manual_add_slot_post'); 
 
 /* MLM SLOTs REPORTS */
 
@@ -83,3 +85,11 @@ Route::post('/mlm/slots/upgrade_slot_post/{id}', 'Mlm\MlmSlotsController@upgrade
 /* MLM WALLET ABS */
 Route::get('/mlm/wallet/tours', 'Mlm\MlmWalletAbsController@index');
 Route::post('/mlm/wallet/tours/update', 'Mlm\MlmWalletAbsController@update_info');  
+
+/* Modal Add Slot */
+Route::get('/mlm/slot/add', 'Mlm\MlmSlotsController@add_slot_modal');
+Route::any('/mlm/slot/check_add', 'Mlm\MlmSlotsController@check_add');
+
+/* MANUAL ADD FOR SLOT AREA ON MLM (MEMBERSHIP ENTRY CODE) */
+Route::get('/mlm/slot/manual_add', 'Mlm\MlmSlotsController@manual_add_slot_modal');
+Route::post('/mlm/slot/manual_add_post', 'Mlm\MlmSlotsController@manual_add_slot');

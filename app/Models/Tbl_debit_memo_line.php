@@ -16,6 +16,10 @@ class Tbl_debit_memo_line extends Model
     }
     public function scopeDb_item($query)
     {
-    	return $query->join("tbl_item","tbl_item.item_id","=","dbline_item_id");
+    	return $query->leftjoin("tbl_item","tbl_item.item_id","=","dbline_item_id");
+    }
+    public function scopeReplace_dbitem($query)
+    {
+      return $query->leftjoin("tbl_debit_memo_replace_line","tbl_debit_memo_replace_line.dbline_replace_dbline_id","=","tbl_debit_memo_line.dbline_id");
     }
 }

@@ -144,8 +144,8 @@ class MlmRegisterController extends MlmLoginController
     						}
     						if($continue == 1)
     						{
-    							if($insert['tin_number'] != null)
-    							{
+    							// if($insert['tin_number'] != null)
+    							// {
     								$insert['password'] = Crypt::encrypt($i['password']);
 			                		$cus_id = Tbl_customer::insertGetId($insert);
 
@@ -186,12 +186,12 @@ class MlmRegisterController extends MlmLoginController
 
 			                		$data['type']   = "success";
 		    						$data['message'] = "Success! you will be redirected";
-    							}
-    							else
-    							{
-    								$data['type']   = "error";
-		    						$data['message'] = "Tin Number Is Required";
-    							}
+    							// }
+    							// else
+    							// {
+    							// 	$data['type']   = "error";
+		    					// 	$data['message'] = "Tin Number Is Required";
+    							// }
     						}
 	                	}
 	                	else
@@ -374,7 +374,7 @@ class MlmRegisterController extends MlmLoginController
             }
             else
             {
-                Session::flash('warning', 'Password lenght is mainimum of 6 character.');
+                Session::flash('warning', 'Password length is mainimum of 6 character.');
                 return Redirect::back()->withInput();
             }                
         }

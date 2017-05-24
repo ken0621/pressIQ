@@ -21,6 +21,20 @@
             </div>
         </div>
         <div class="form-group">
+            <div class="col-md-12">   
+                <label>Contact Person *</label>
+            </div>
+            <div class="col-md-4">            
+                <input type="text" class="form-control" placeholder="First Name" value="{{$manufacturer->manufacturer_fname or ''}}" name="manufacturer_fname">
+            </div>
+            <div class="col-md-4">            
+                <input type="text" class="form-control" placeholder="Middle Name" value="{{$manufacturer->manufacturer_mname or ''}}" name="manufacturer_mname">
+            </div>
+            <div class="col-md-4">            
+                <input type="text" class="form-control" placeholder="Last Name" value="{{$manufacturer->manufacturer_lname or ''}}" name="manufacturer_lname">
+            </div>
+        </div>
+        <div class="form-group">
             <div class="col-md-12">            
                 <label>Manufacturer Address </label>
                 <textarea type="text" class="form-control" name="manufacturer_address">{{$manufacturer->manufacturer_address or ''}}</textarea>
@@ -44,6 +58,13 @@
                 <input type="text" class="form-control" value="{{$manufacturer->website or ''}}" name="website">
             </div>
         </div>
+        @if(!isset($manufacturer))
+        <div class="form-group">
+            <div class="col-md-12">            
+                <input type="checkbox" name="create_vendor" value="create_vendor"> <span>Create this Manufacturer as my Vendor</span>
+            </div>
+        </div>
+        @endif
     </div>
 </div>
 <div class="modal-footer" >

@@ -13,7 +13,7 @@
 					    </div>
 					@endif
 
-					<form class="form-login" method="post" action="/account/register_ecomm">
+					<form class="form-login" method="post" action="/account/register">
 						<input type="hidden" name="_token" value="{{ csrf_token() }}">
 						<input type="hidden" name="IsEcomm" value="1">
 

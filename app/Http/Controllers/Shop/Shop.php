@@ -21,8 +21,7 @@ class Shop extends Controller
 	public $shop_info;
     public $shop_theme;
     public $shop_theme_color;
-
-
+    
     public static $customer_info;
     public static $slot_now;
 

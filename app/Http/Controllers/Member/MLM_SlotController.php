@@ -116,8 +116,6 @@ class MLM_SlotController extends Member
     }
     public function index()
     {        
-        // $slot = Mlm_compute::get_slot_info(421);
-        // return Mlm_tree::insert_tree_sponsor($slot, $slot, 1);
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {
@@ -399,7 +397,10 @@ class MLM_SlotController extends Member
     }
     public function get_member_code($customer_id)
     {
-        $data["membership_code"]    =   Tbl_membership_code::where('customer_id', $customer_id)->where('used', 0)->where('blocked', 0)->get();
+        $data["membership_code"]    =   Tbl_membership_code::where('customer_id', $customer_id)
+        ->leftjoin('tbl_membership_package', 'tbl_membership_package.membership_package_id', '=','tbl_membership_code.membership_package_id')
+        ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=','tbl_membership_package.membership_id')
+        ->where('used', 0)->where('blocked', 0)->get();
         // dd($data);
         return view('member.mlm_slot.mlm_slot_get_code', $data);
     }

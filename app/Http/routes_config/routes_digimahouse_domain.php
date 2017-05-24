@@ -46,10 +46,14 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	/*End Product search*/
 
 	/* Checkout */
-	Route::get('/checkout/login', 'Shop\ShopCheckoutLoginController@index');
+	Route::any('/checkout/login', 'Shop\ShopCheckoutLoginController@index');
 	Route::get('/checkout', 'Shop\ShopCheckoutController@index');
-	Route::get('/checkout/payment', 'Shop\ShopCheckoutController@payment');
+	Route::get('/checkout/side', 'Shop\ShopCheckoutController@checkout_side');
+	Route::get('/checkout/locale', 'Shop\ShopCheckoutController@locale');
+	Route::get('/checkout/session', 'Shop\ShopCheckoutController@session');
 	Route::post('/checkout', 'Shop\ShopCheckoutController@submit');
+	Route::any('/checkout/payment', 'Shop\ShopCheckoutController@payment');
+	Route::get('/checkout/method', 'Shop\ShopCheckoutController@update_method');
 	/* End Checkout */
 
 	/* Wishlist */
@@ -62,11 +66,13 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/account/wishlist', 'Shop\ShopAccountController@wishlist');
 	Route::get('/account/settings', 'Shop\ShopAccountController@settings');
 	Route::get('/account/security', 'Shop\ShopAccountController@security');
+	Route::post('/account/security', 'Shop\ShopAccountController@security_submit');
+	Route::get('/account/invoice/{id}', 'Shop\ShopAccountController@invoice');
 	Route::get('/account/logout', 'Shop\ShopAccountController@logout');
 	Route::post('/account/login', 'Shop\ShopLoginController@submit');
 
 	/*E-commerce registration*/
-	Route::get('/account/register_ecomm', 'Shop\ShopAccountController@account_register'); //Brain
-	Route::post('/account/register_ecomm', 'Mlm\MlmRegisterController@register_ecomm'); //Brain
+	Route::get('/account/register', 'Shop\ShopAccountController@account_register'); //Brain
+	Route::post('/account/register', 'Mlm\MlmRegisterController@register_ecomm'); //Brain
 
 }

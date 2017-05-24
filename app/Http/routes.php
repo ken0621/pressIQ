@@ -300,7 +300,7 @@ Route::any('/member/pis/agent/position/archived_submit','Member\AgentPositionCon
 
 
 /* START AGENT*/
-Route::any('/member/pis_agent/agent_list','Member\AgentController@index');
+Route::any('/member/cashier/agent_list','Member\AgentController@index');
 Route::any('/member/pis/agent/add','Member\AgentController@add');
 Route::any('/member/pis/agent/add_submit','Member\AgentController@add_submit');
 Route::any('/member/pis/agent/edit/{id}','Member\AgentController@edit');
@@ -309,11 +309,16 @@ Route::any('/member/pis/agent/archived/{id}/{action}','Member\AgentController@ar
 Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_submit');
 /* END AGENT*/
 
+/*SALES LIQUIDATION*/
+Route::any('member/cashier/sales_liquidation','Member\PisSalesLiquidationController@index');
+Route::any('/member/cashier/report/{id}','Member\PisSalesLiquidationController@report');
+Route::any('/member/cashier/report/footer/{id}','Member\PisSalesLiquidationController@footer');
+
 /*AGENT TRANSACTION*/
 Route::any('/member/pis/agent/transaction/{id}','Member\AgentTransactionController@agents_transaction');
 Route::any('/member/pis/agent_transaction/print/{id}','Member\AgentTransactionController@print_transaction');
 
-Route::any('/member/pis_agent/collection','Member\AgentCollectionController@index');
+Route::any('/member/cashier/collection','Member\AgentCollectionController@index');
 Route::any('/member/pis_agent/collection_update/{id}','Member\AgentCollectionController@update_collection');
 Route::any('/member/pis_agent/collection_update_submit','Member\AgentCollectionController@update_collection_submit');
 
@@ -343,6 +348,9 @@ Route::any('/member/item/warehouse/view/{id}','Member\WarehouseController@view')
 Route::any('/member/item/warehouse/refill','Member\WarehouseController@refill');
 Route::any('/member/item/warehouse/refill_submit','Member\WarehouseController@refill_submit');
 Route::any('/item/warehouse/refill/by_vendor/{warehouse_id}/{id}','Member\WarehouseController@refill_item_vendor');
+
+//cycy
+Route::any('/warehouse/sir/{warehouse_id}/{item_id}','Member\WarehouseController@inventory_break_down');
 
 //adjust inventory
 Route::any('/member/item/warehouse/adjust/{id}','Member\WarehouseController@adjust');
@@ -381,6 +389,10 @@ Route::any('/member/pis/sir/view/{id}/{type}','Member\PurchasingInventorySystemC
 Route::any('/member/pis/sir/view_pdf/{id}/{type_code}','Member\PurchasingInventorySystemController@view_pdf');
 Route::any('/member/pis/sir/edit/{id}','Member\PurchasingInventorySystemController@edit_sir');
 Route::any('/member/pis/sir/edit_submit','Member\PurchasingInventorySystemController@edit_sir_submit');
+//reload sir
+Route::any('/member/pis/sir_reload/{id}','Member\PisReloadController@index');
+Route::any('/member/pis/sir/reload_submit','Member\PisReloadController@reload_submit');
+
 
 Route::any('/member/pis/ilr/update_count_submit','Member\PurchasingInventorySystemController@update_count_submit');
 Route::any('/member/pis/ilr/update_count/{sir_id}/{item_id}','Member\PurchasingInventorySystemController@update_count');
@@ -430,8 +442,9 @@ Route::any('/tablet/sync_import',"Member\TabletPISController@sync_import");
 Route::any('/tablet/sync_export','Member\TabletPISController@sync_export');
 Route::any('/tablet/logout','Member\TabletPISController@logout');
 Route::any('/tablet/sir_inventory/{id}','Member\TabletPISController@inventory_sir');
-Route::any('/tablet/sir_reload/{id}','Member\TabletPISController@sir_reload');
 
+//RELOAD
+Route::any('/tablet/sir_reload/{id}','Member\TabletPISController@sir_reload');
 
 Route::any('/tablet/customer',"Member\TabletPISController@customer");
 Route::any('/tablet/customer_details/{id}',"Member\TabletPISController@customer_details");
@@ -580,6 +593,17 @@ Route::any('/member/vendor/debit_memo','Member\DebitMemoController@index');
 Route::any('/member/vendor/debit_memo/list',"Member\DebitMemoController@db_list");
 Route::any('/member/vendor/debit_memo/create_submit','Member\DebitMemoController@create_submit');
 Route::any('/member/vendor/debit_memo/update',"Member\DebitMemoController@update_submit");
+
+Route::any('/member/vendor/debit_memo/replace/{id}','Member\DebitMemoController@replace');
+Route::any('/member/vendor/debit_memo/replace_item/{id}','Member\DebitMemoController@replace_item');
+Route::any('/member/vendor/debit_memo/replace_submit','Member\DebitMemoController@replace_submit');
+Route::any('/member/vendor/debit_memo/save_replace_submit','Member\DebitMemoController@save_replace_submit');
+Route::any('/member/vendor/debit_memo/confirm_condemned/{id}/{action}','Member\DebitMemoController@confirm_condemned');
+Route::any('/member/vendor/debit_memo/confirm_submit/{id}','Member\DebitMemoController@confirm_submit');
+Route::any('/member/vendor/debit_memo/choose_type','Member\DebitMemoController@choose_type');
+
+Route::any('/member/vendor/debit_memo/db_view_pdf/{id}','Member\DebitMemoController@db_view_pdf');
+Route::any('/member/vendor/debit_memo/db_pdf/{id}','Member\DebitMemoController@db_pdf');
 
 /* Vendor - Purchase Order */
 Route::get('/member/vendor/purchase_order','Member\Vendor_PurchaseOrderController@index');
@@ -939,3 +963,7 @@ include_once('routes_config/routes_payroll.php');
 /* PAYROLL END */
 
 
+Route::get('/payment/dragonpay', 'PaymentController@index');
+Route::post('/payment/dragonpay', 'PaymentController@onSubmitPayment');
+Route::get('/payment/dragonpay/postback', 'PaymentController@postback_url'); //confirmation upon payment
+Route::get('/payment/dragonpay/return', 'PaymentController@return_url'); //

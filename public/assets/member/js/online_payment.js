@@ -19,10 +19,17 @@ function online_payment()
 		event_add_other_click();
 		event_other_container_hide();
 		event_view_other_click();
+		event_method_link_change()
+	}
+
+	this.initialize_select_plugin = function()
+	{
+		initialize_select_plugin();
 	}
 
 	function initialize_select_plugin()
 	{
+		console.log("hello");
 		$(".select-gateway").globalDropList(
 		{
 			hasPopup	: "false",
@@ -34,7 +41,7 @@ function online_payment()
 			}
 		})
 	}
-
+	
 	function event_add_other_click()
 	{
 		$(document).on("click", ".add-other", function()
@@ -70,6 +77,15 @@ function online_payment()
 	{
 		$(".other-container").slideUp();
 	}
+
+	function event_method_link_change()
+	{
+		$(document).on("click", ".method-link", function()
+		{
+			var href = $(".method-link.active").find("a").attr("href");
+			console.log(href);
+		})
+	}
 	
 }
 
@@ -88,8 +104,26 @@ function submit_done(data)
 			$(".other-load-data").load("/member/maintenance/online_payment .other-load");
 			
 		}
-		$(".method-load-data").load("/member/maintenance/online_payment .method-data");
-		toastr.success('Success');
+		else if(data.type == "payment_method")
+		{
+			data.element.modal("hide");
+			$(".method-list-load-data").load("/member/maintenance/online_payment .method-list-data");
+		}
+
+		// console.log(data.type);
+		if(data.type == 'link')
+		{
+			toastr.success('Changes Saved');
+		}
+		else
+		{
+			$(".method-load-data").load("/member/maintenance/online_payment .method-data", function()
+			{
+				online_payment.initialize_select_plugin();
+				toastr.success('Success');
+			});
+		}
+		
 	}
 }
 

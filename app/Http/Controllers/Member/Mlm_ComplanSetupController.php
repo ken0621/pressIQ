@@ -16,7 +16,7 @@ use Request;
 use Carbon\Carbon;
 use View;
 use App\Models\Tbl_mlm_plan;
-
+use DB;
 
 class Mlm_ComplanSetupController extends Member
 {
@@ -35,7 +35,8 @@ class Mlm_ComplanSetupController extends Member
 			$data['links'][0]['label'] = 'Binary Promotions Setup';
 			$data['links'][0]['link'] = '/member/mlm/complan_setup/binary_pro';
 		}		
-		$merchant_school = $this->merchant_school($this->user_info->shop_key);
+
+		$merchant_school = $this->user_info->shop_merchant_school;
 		if($merchant_school == 1)
 		{
 			$data['links'][1]['label'] = 'School Merchant';
@@ -48,6 +49,17 @@ class Mlm_ComplanSetupController extends Member
 			$data['links'][2]['label'] = 'Tours Wallet';
 			$data['links'][2]['link'] = '/member/mlm/tours_wallet';
 		}
+
+		$count = Tbl_mlm_plan::where('shop_id', $shop_id)->where('marketing_plan_code', 'UNILEVEL_REPURCHASE_POINTS')
+		->where('marketing_plan_enable', 1)
+		->count();
+		if($count >= 1)
+		{
+			$data['links'][0]['label'] = 'Unilevel Distribute';
+			$data['links'][0]['link'] = '/member/mlm/complan_setup/unilevel/distribute';
+		}		
+
+
 		return view('member.mlm_complan_setup.index', $data);
 	}
 	public function binary_promotions()
@@ -71,5 +83,149 @@ class Mlm_ComplanSetupController extends Member
 	{
 		$data = [];
 		return view('member.mlm_tours_wallet.index', $data);
+	}
+	public function unilevel_distribute()
+	{
+		$data = [];
+		$shop_id = $this->user_info->shop_id;
+		$data['settings_unilevel'] = DB::table('tbl_mlm_unilevel_distribute_settings')->where('u_r_shop_id', $shop_id)->first();
+		return view('member.mlm_complan_setup.unilevel_distribute', $data);
+	}
+	public function unilevel_distribute_set_settings()
+	{
+		// return $_POST;
+
+		$i['u_r_personal'] = Request::input('u_r_personal');
+		$i['u_r_group'] = Request::input('u_r_group');
+		$i['u_r_convertion'] = Request::input('u_r_convertion');
+		$i['u_r_shop_id'] = $shop_id = $this->user_info->shop_id;
+		$i['u_r_date'] = Carbon::now();
+
+		$count = DB::table('tbl_mlm_unilevel_distribute_settings')->where('u_r_shop_id', $i['u_r_shop_id'])->count();
+		if($count == 0)
+		{
+			DB::table('tbl_mlm_unilevel_distribute_settings')->insert($i);
+		}
+		else
+		{
+			$u['u_r_personal'] = $i['u_r_personal'];
+			$u['u_r_group'] = $i['u_r_group'];
+			$u['u_r_convertion'] = $i['u_r_convertion'];
+			$u['u_r_date'] = $i['u_r_date'];
+			DB::table('tbl_mlm_unilevel_distribute_settings')->where('u_r_shop_id', $i['u_r_shop_id'])->update($u);
+		}
+
+		$data['response_status'] = 'successd';
+		$data['message'] = 'Unilevel Distribute Settings Updated';
+
+		return json_encode($data);
+	}
+	public function unilevel_distribute_simulate()
+	{
+		ignore_user_abort(true);
+        set_time_limit(0);
+        flush();
+        ob_flush();
+        session_write_close();
+
+		$shop_id = $this->user_info->shop_id;
+		$settings = DB::table('tbl_mlm_unilevel_distribute_settings')->where('u_r_shop_id', $shop_id)->first();
+		if($settings)
+		{
+			$from = Carbon::parse(Request::input('from'))->startOfDay();
+			$to = Carbon::parse(Request::input('to'))->endOfDay();
+
+			$plan[0] = 'UNILEVEL_REPURCHASE_POINTS';
+			$plan[1] = 'REPURCHASE_POINTS';
+	        $all_log_personal = Tbl_mlm_slot_points_log::where('shop_id', $shop_id)
+	        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_points_log.points_log_slot')
+	        ->where('points_log_converted_date', '>=', $from)
+	        ->where('points_log_converted_date', '<=', $to)
+	        // ->where('points_log_complan', 'UNILEVEL_REPURCHASE_POINTS')
+
+	        ->select(DB::raw('sum(points_log_points ) as sum_personal'), DB::raw('tbl_mlm_slot_points_log.*'), DB::raw('tbl_mlm_slot.*'))
+
+	        ->groupBy('points_log_complan')
+	        ->groupBy('points_log_slot')
+	        ->where('points_log_converted', 0)
+	        ->where('points_log_complan', 'REPURCHASE_POINTS')
+	        ->get()->keyBy('points_log_slot');
+	        $selected_slot = [];
+	        $personal_points = [];
+	        $structured = [];
+	        foreach($all_log_personal as $p_key => $p_value)
+	        {
+	        	$u_r_personal = $settings->u_r_personal;
+	        	if( $p_value->sum_personal >= $u_r_personal)
+	        	{
+	        		$selected_slot[$p_value->points_log_slot] = $p_value->points_log_slot;
+	        		$personal_points[$p_value->points_log_slot] = $p_value->sum_personal;
+	        	}
+	        }
+
+	        $all_log_group = Tbl_mlm_slot_points_log::where('tbl_mlm_slot.shop_id', $shop_id)
+	        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_points_log.points_log_slot')
+	        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+	        ->where('points_log_converted_date', '>=', $from)
+	        ->where('points_log_converted_date', '<=', $to)
+
+	        ->select(DB::raw('sum(points_log_points ) as sum_group'), DB::raw('tbl_mlm_slot_points_log.*'), DB::raw('tbl_mlm_slot.*'), DB::raw('tbl_customer.*'))
+
+	        ->groupBy('points_log_complan')
+	        ->groupBy('points_log_slot')
+
+	        ->where('points_log_complan', 'UNILEVEL_REPURCHASE_POINTS')
+	        ->whereIn('points_log_slot', $selected_slot)
+	        ->where('points_log_converted', 0)
+	        ->get()->keyBy('points_log_slot');
+
+	        foreach ($all_log_group as $g_key => $g_value) 
+	        {
+	        	# code...
+	        	$u_r_group = $settings->u_r_group;
+	        	if( $g_value->sum_group >= $u_r_group )
+	        	{
+	        		$earn = $g_value->sum_group * $settings->u_r_convertion;
+	        		$structured[$g_value->points_log_slot]['group_points'] = $g_value->sum_group;
+	        		$structured[$g_value->points_log_slot]['personal_points'] = $personal_points[$g_value->points_log_slot];
+	        		$structured[$g_value->points_log_slot]['info'] = $g_value;
+	        		$structured[$g_value->points_log_slot]['income'] = $earn;
+
+	        		$log_array['earning'] = $earn;
+	                $log_array['level'] = 1;
+	                $log_array['level_tree'] = 'Sponsor Tree';
+	                $log_array['complan'] = 'UNILEVEL_REPURCHASE_POINTS';
+
+	                $log = Mlm_slot_log::log_constructor($g_value, $g_value,  $log_array);
+	                $log = 'Congratulations, you earned ' . currency('PHP', $earn) . ' from Unilevel this cutoff'; 
+	                $arry_log['wallet_log_slot'] = $g_value->slot_id;
+	                $arry_log['shop_id'] = $g_value->shop_id;
+	                $arry_log['wallet_log_slot_sponsor'] = $g_value->slot_id;
+	                $arry_log['wallet_log_details'] = $log;
+	                $arry_log['wallet_log_amount'] = $earn;
+	                $arry_log['wallet_log_plan'] = "DIRECT";
+	                $arry_log['wallet_log_status'] = "released";   
+	                $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
+	                Mlm_slot_log::slot_array($arry_log);
+	        	}
+	        }
+	        // dd($structured);
+
+	        $update_all['points_log_converted'] = 1;
+	       	$update_all['points_log_converted_date'] = Carbon::now(); 
+
+	       	Tbl_mlm_slot_points_log::where('shop_id', $shop_id)
+	       	->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_points_log.points_log_slot')
+	       	->where('points_log_converted_date', '>=', $from)
+	        ->where('points_log_converted_date', '<=', $to)
+	        ->whereIn('points_log_complan', $plan)
+	        ->update($update_all);
+	        $data_v['structured'] = $structured;	
+	        $data['response_status'] = 'success_e';
+	        $data['view_blade'] = view('member.mlm_complan_setup.unilevel.unilevel_simulate', $data_v)->render();
+
+	        return json_encode($data);
+	        exit;
+		}
 	}
 }

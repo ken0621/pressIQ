@@ -36,7 +36,7 @@
                             <td data-title="Shipping Status">{{ $order->order_status }}</td>
                             <td data-title="Payment Status">{{ $order->payment_status == 1 ? "Paid" : "Unpaid" }}</td>
                             <td data-title="Proof Image"><a order-id="1" class="add-proof">Add</a></td>
-                            <td><a href="/receipt?id=1&type=invoice" target="_blank">Invoice</a></td>
+                            <td><a href="/account/invoice/{{ $order->ec_order_id }}" target="_blank">Invoice</a></td>
                             <td><a href="/account/order?cancel_id={{ $order->ec_order_id }}">Cancel</a></td>
                         </tr>
                         @endforeach

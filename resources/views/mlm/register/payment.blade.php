@@ -10,7 +10,7 @@
       <div class="col-md-9">
         <div class="payment-container">
           <div class="row clearfix">
-            <div class="col-md-3">
+            {{-- <div class="col-md-3">
               <div class="holder">
                 <div class="img"><img src="/assets/mlm/img/payment/paypal.jpg"></div>
                 <div class="name">
@@ -31,10 +31,21 @@
                 </div>
                 <div class="desc">To: payment facility portal.</div>
               </div>
+            </div> --}}
+            <div class="col-md-3">
+              <div class="holder">
+                <div class="img match-height"><img style="width: 100%;" src="/assets/front/img/dragonpay.png"></div>
+                <div class="name">
+                  <div class="radio">
+                    <label><input type="radio" name="payment_type" value="dragonpay"> Dragon Pay</label>
+                  </div>
+                </div>
+                <div class="desc">To: payment facility portal.</div>
+              </div>
             </div>
             <div class="col-md-3">
               <div class="holder">
-                <div class="img"><img src="/assets/mlm/img/payment/bank-deposit.jpg"></div>
+                <div class="img match-height"><img src="/assets/mlm/img/payment/bank-deposit.jpg"></div>
                 <div class="name">
                   <div class="radio">
                     <label><input type="radio" name="payment_type" value="bank"> Bank Deposit</label>
@@ -265,6 +276,22 @@
             }
         })
     }
+    $('.match-height').matchHeight();
+    $('input[name="payment_type"]').removeProp("checked");
+    $('input[name="payment_type"]').removeAttr("checked");
+    $('input[name="payment_type"]').change(function(event) 
+    {
+      var payment_type = $(event.currentTarget).val();
+
+      if(payment_type == "dragonpay")
+      {
+        $('form').removeClass('register-submit');
+      }
+      else
+      {
+        $('form').addClass('register-submit');
+      }
+    });
 </script>
 @endsection
 @section("css")

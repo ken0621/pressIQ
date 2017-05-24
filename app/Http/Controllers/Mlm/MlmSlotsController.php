@@ -14,6 +14,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_plan_setting;
 
 use App\Globals\Mlm_compute;
+use App\Globals\Mlm_member;
 class MlmSlotsController extends Mlm
 {
     public function index()
@@ -190,4 +191,8 @@ class MlmSlotsController extends Mlm
         }
         return json_encode($message);
     } 
+    public function add_slot_modal()
+    {
+        return Mlm_member::add_slot_form(Self::$customer_id);
+    }
 }

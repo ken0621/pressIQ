@@ -101,7 +101,7 @@ function submit_done(data)
     {
         toastr.success("Success");
         $('#global_modal').modal('toggle');
-        $(".collection-container").load("/member/pis_agent/collection .collection-container");
+        $(".collection-container").load("/member/cashier/collection .collection-container");
         data.element.modal("hide");
     }
     else if(data.status == "error")

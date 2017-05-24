@@ -378,6 +378,18 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <div class="row col-md-6">
+                            <label>Unit of Measure</label>
+                            <select class="form-control input-sm measure_container drop-down-pis-um notbase-um" name="unit_n_based">
+                            @include("member.load_ajax_data.load_pis_um",['_um' => $_um_n, 'id_um' => $um_n_id])
+                            </select>                            
+                        </div>
+                        <div class="col-md-6">
+                            <label>Barcode </label> <small>(<input type="checkbox" name="auto_generate_code" value="generate"> Auto Generate Code )</small>
+                            <input type="text" class="form-control item_barcode" id="item_barcode" value="{{isset($data['item_barcode']) ? $data['item_barcode'] : ''}}" name="item_barcode">
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div class="row col-md-12">
                             <label>Sales Information</label>
                             <textarea class="form-control" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>
@@ -452,6 +464,112 @@
         </div>
     </div>
     <div class="modal-footer bundle_type"  style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'bundle_type' ? '' : 'display:none;') : 'display:none;'}}">
+        <button type="button" class="btn btn-custom-white back_to_menu">Back</button>
+        <button class="btn btn-custom-primary btn-save-modallarge">Submit</button>
+    </div>
+</form>
+
+
+<form action="{{$action}}?item_type=group" class="global-submit form_four" method="post" type_of_item="group_type">
+    <div class="clearfix modal-body modallarge-body-layout background-white group_type" style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'group_type' ? '' : 'display:none;') : 'display:none;'}}">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
+        <!-- BUNDLE -->
+        <div class="form-horizontal">
+            <div class="clearfix col-md-12">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <div class="row col-md-12">
+                            <label>Name *</label>
+                            <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
+                            <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-md-6">
+                            <label>SKU</label>
+                            <input type="text" class="form-control item-sku" id="item_sku" value="{{isset($data['item_sku']) ? $data['item_sku'] : ''}}" name="item_sku">
+                        </div>
+                        <div class="col-md-6">
+                            <label>Category *</label>
+                            <select name="item_category_id" cat_type="bundle" class="form-control drop-down-category bundles" id="item_category_id" required>
+                             @include("member.load_ajax_data.load_category", ['add_search' => "",'_category' => $_bundle,'type_id' => $data["item_category_id"]])
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-md-6">
+                            <label>Unit of Measure</label>
+                            <select class="form-control input-sm measure_container drop-down-pis-um notbase-um" name="unit_n_based">
+                            @include("member.load_ajax_data.load_pis_um",['_um' => $_um_n, 'id_um' => $um_n_id])
+                            </select>                            
+                        </div>
+                        <div class="col-md-6">
+                            <label>Barcode </label> <small>(<input type="checkbox" name="auto_generate_code" value="generate"> Auto Generate Code )</small>
+                            <input type="text" class="form-control item_barcode" id="item_barcode" value="{{isset($data['item_barcode']) ? $data['item_barcode'] : ''}}" name="item_barcode">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row col-md-12">
+                            <label>Sales Information</label>
+                            <textarea class="form-control" id="item_sales_information" name="item_sales_information" placeholder="Description on sales forms" >{{isset($data['item_sales_information']) ? $data['item_sales_information'] : ''}}</textarea>
+                        </div>
+                     </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="col-md-12 text-center">
+                        <div class="form-group">
+                            <input type="hidden" name="item_img" class="image-value" key="4" required>
+                            <img class="img-responsive img-src" key="4" style="width: 100%; object-fit: contain;" src="/assets/front/img/default.jpg">
+                            <button type="button" class="btn btn-primary image-gallery image-gallery-single" key="4" style="margin-top: 15px;">Upload Image</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix col-md-8">
+                <div class="table-responsive">
+                    <table class="digima-table">
+                        <thead >
+                            <tr>
+                                <th width="5%"></th>
+                                <th width="50%">Product / Service</th>
+                                <th width="25%">Unit of Measuerment</th>
+                                <th width="15%">Qty</th>
+                                <th width="5%"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody-item">
+                            @if(isset($data["bundle"]))
+                            @foreach($data["bundle"] as $bundle)
+                                <tr>
+                                    <td class="text-center add-tr cursor-pointer"><i class="fa fa-plus" aria-hidden="true"></i></td>
+                                    <td>
+                                        <select class="form-control drop-down-item select-item input-sm pull-left" name="bundle_item_id[]" required>
+                                            @include("member.load_ajax_data.load_item_category", ['add_search' => "", '_item' => $_item_to_bundle, 'item_id' => $bundle["bundle_item_id"]])
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control drop-down-um droplist-um input-sm pull-left" name="bundle_um_id[]">
+                                            @if($bundle['bundle_um_id'])
+                                                @include("member.load_ajax_data.load_one_unit_measure", ['_um' => $_um_multi, 'item_um_id' => $bundle['multi_um_id'], 'selected_um_id' => $bundle['bundle_um_id']])
+                                            @else
+                                                <option class="hidden" value="" />
+                                            @endif
+                                        </select>
+                                    </td>   
+                                    <td><input class="text-center form-control input-sm" type="text" name="bundle_qty[]" value="{{ $bundle['bundle_qty'] }}" /></td>
+                                    <td class="text-center remove-tr cursor-pointer"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                </tr>
+                            @endforeach
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer group_type"  style="{{isset($data['type_of_item']) ? ($data['type_of_item'] == 'group_type' ? '' : 'display:none;') : 'display:none;'}}">
         <button type="button" class="btn btn-custom-white back_to_menu">Back</button>
         <button class="btn btn-custom-primary btn-save-modallarge">Submit</button>
     </div>

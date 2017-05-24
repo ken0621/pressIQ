@@ -5,30 +5,79 @@ use Crypt;
 use Redirect;
 use Request;
 use View;
+use Session;
+use DB;
+use Carbon\Carbon;
 use App\Models\Tbl_product;
 use App\Globals\Ecom_Product;
 use App\Models\Tbl_ec_product;
 use App\Globals\Cart;
+use App\Globals\Ec_wishlist;
 
 class ShopCartController extends Shop
 {
+    public function viewed_product($product_id)
+    {
+        if(Session::get('mlm_member') != null)
+        {
+            $session = Session::get('mlm_member');
+            $customer_id = $session['customer_info']->customer_id;
+
+            $insert["customer_id"] = $customer_id;
+            $insert["product_id"]  = $product_id;
+            $insert["shop_id"]     = $this->shop_info->shop_id;
+            $insert["date"]        = Carbon::now();
+
+            $exist = DB::table("tbl_ec_recently_viewed_products")->where("customer_id", $customer_id)->where("product_id", $product_id)->where("shop_id", $this->shop_info->shop_id)->first();
+            if ($exist) 
+            {
+                DB::table("tbl_ec_recently_viewed_products")->where("customer_id", $customer_id)->where("product_id", $product_id)->where("shop_id", $this->shop_info->shop_id)->delete();
+            }
+
+            DB::table("tbl_ec_recently_viewed_products")->where("customer_id", $customer_id)->where("product_id", $product_id)->where("shop_id", $this->shop_info->shop_id)->insert($insert);
+        }
+    }
+
+    public function wishlist_exist($product_id)
+    {
+        if(Session::get('mlm_member') != null)
+        {
+            $session     = Session::get('mlm_member');
+            $customer_id = $session['customer_info']->customer_id;
+            $shop_id     = $this->shop_info->shop_id;
+
+            $result = Ec_wishlist::notExistProduct($product_id, $customer_id, $shop_id);
+
+            return $result;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public function index()
     {
         $data["page"]  = "Product Cart";
         $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
+     
         return view("cart_modal", $data);
     }
 
     public function quick_cart()
     {
         $id                  = Request::input("product_id");
+
+        $this->viewed_product($id);
+
         $data["page"]        = "Product Quick Cart";
         $data["product"]     = Ecom_Product::getProduct($id, $this->shop_info->shop_id);
         $data["category"]    = Tbl_ec_product::category()->where("eprod_category_id", $data["product"]["eprod_category_id"])->first();
         $data["breadcrumbs"] = Ecom_Product::getProductBreadcrumbs($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
         $data["_variant"]    = Ecom_Product::getProductOption($id, ",");
         $data["_related"]    = Ecom_Product::getAllProductByCategory($data["product"]["eprod_category_id"], $this->shop_info->shop_id);
-
+        $data["wishlist"]    = $this->wishlist_exist($id);
+      
         foreach ($data["_related"] as $key => $value) 
         {
             if ($value["eprod_id"] == $data["product"]["eprod_id"]) 

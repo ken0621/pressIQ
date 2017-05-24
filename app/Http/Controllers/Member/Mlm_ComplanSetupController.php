@@ -54,7 +54,8 @@ class Mlm_ComplanSetupController extends Member
 		->where('marketing_plan_enable', 1)
 		->count();
 
-		$restrict['PhilTECH'] = ['PhilTECH'];
+		// $restrict['PhilTECH'] = ['PhilTECH'];
+		// $restrict
 		if($count >= 1)
 		{
 			if(!isset($restrict[ $this->user_info->shop_key] ))
@@ -209,7 +210,7 @@ class Mlm_ComplanSetupController extends Member
 	                $arry_log['wallet_log_slot_sponsor'] = $g_value->slot_id;
 	                $arry_log['wallet_log_details'] = $log;
 	                $arry_log['wallet_log_amount'] = $earn;
-	                $arry_log['wallet_log_plan'] = "DIRECT";
+	                $arry_log['wallet_log_plan'] = "UNILEVEL_REPURCHASE_POINTS";
 	                $arry_log['wallet_log_status'] = "released";   
 	                $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
 	                Mlm_slot_log::slot_array($arry_log);

@@ -585,8 +585,6 @@ function mlm_profile($customer)
     if($customer)
     {
         $customer->profile != null ? $profile = $customer->profile :  $profile = '/assets/mlm/default-pic.png';
-
-
         return '<img src="'.$profile.'" class="img-responsive" style="height: 200px; width: 100%; object-fit: contain;">';
     }
 }

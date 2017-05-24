@@ -1,60 +1,34 @@
 @extends('mlm.layout')
 @section('content')
-<div class="row">
-    <div class="col-md-12">
-        {!! $header !!}
-        <form method="POST">
-        <div class="panel panel-default panel-block">
-            <div class="list-group">
-                @if(isset($report))
-                <div class="list-group-item" id="responsive-bordered-table">
-                    <div class="form-group">
-                        <h4 class="section-title">
-                        @if(isset($plan->marketing_plan_label)) {{$plan->marketing_plan_label}} @endif
-                        </h4>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-condensed">
-                                <thead>
-                                    <th></th>
-                                    <th>ID</th>
-                                    <th>DATE</th>
-                                    <th>SPONSOR</th>
-                                    <th>AMOUNT</th>
-                                    <th>NOTIFICATION</th>
-                                </thead>
-                                @if(count($report) >= 1)    
-                                @foreach($report as $key => $value)
-                                <tbody>
-                                    <tr>
-                                        <td>{!! mlm_profile($value) !!}</td>
-                                        <td>{{$value->wallet_log_id}}</td>
-                                        <td>{{$value->wallet_log_date_created}}</td>
-                                        <td>{{$value->slot_no}}</td>
-                                        <td>{{$value->wallet_log_amount}}</td>
-                                        <td>{{$value->wallet_log_details}}</td>
-                                    </tr>
-                                </tbody>    
-                                @endforeach
-                                @else
-                                <tr>
-                                    <td colspan="5"><center>No Active Report.</center></td>
-                                </tr>
-                                @endif
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                @else
-                    <center>No Active Report.</center>  
-                @endif   
-                <center>{!! $report->render() !!}</center>                      
-            </div>
-        </div> 
-        
-        </form> 
-        <div>
+{!! $header !!}
 
-    </div>
-    </div>
+
+ <div class="box box-primary">
+  <div class="box-body">
+    <ul class="products-list product-list-in-box">
+        @foreach($report as $key => $value)
+          <li class="item">
+            <div class="product-img">
+              {!! mlm_profile($value) !!}
+            </div>
+            <div class="product-info">
+              <a href="javascript:void(0)" class="product-title">Sponsor: {{name_format_from_customer_info($value)}}
+                <span class="label label-success pull-right">{{currency('PHP', $value->wallet_log_amount)}}</span></a>
+                  <span class="product-description" style="color: black;">
+                    {{$value->slot_no}}
+                    <hr>
+                    {{$value->wallet_log_details}}
+                  </span>
+            </div>
+          </li>
+        @endforeach  
+      <!-- /.item -->
+    </ul>
+  </div>
+  <!-- /.box-body -->
+  <div class="box-footer text-center">
+    <center>{!! $report->render() !!}</center> 
+  </div>
+  <!-- /.box-footer -->
 </div>
 @endsection

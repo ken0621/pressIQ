@@ -111,7 +111,6 @@ class ReportsController extends Member
         $start  = $this->startDate();
         $shop_id = $this->checkuser('user_shop');
         $data['_sales'] = SalesReport::monthreport($shop_id, $start, $end);
-        // dd($data);
     	return view('member.reports.sale.month',$data);
     }
     
@@ -121,7 +120,6 @@ class ReportsController extends Member
     	$end = date('Y-m-d', strtotime(Request::input("end")));
     	$shop_id = $this->checkuser('user_shop');
     	$data['_sales'] = SalesReport::SalesReportBy("month",$shop_id,$start, $end);
-    	
     	return view('member.reports.sale.month_table',$data);
     }
     
@@ -285,7 +283,7 @@ class ReportsController extends Member
         $report_field_type = Request::input('report_field_type');
         if($report_field_module)
         {
-            $table_header = Report::sales_report();
+            $table_header = Report::sales_report($report_field_type);
             foreach ($table_header as $key => $value) 
             {
                 if(!isset($report_field_module[$key]))
@@ -323,7 +321,8 @@ class ReportsController extends Member
         $data = [];
         $data['report_type'] = $report_type;
         $shop_id = $this->user_info->shop_id; 
-
+        $where_in[0] = 'customer';
+        $where_in[1] = 'vendor';
         $data['shop_name']  = $this->user_info->shop_key; 
         $data['sales'] = Tbl_journal_entry_line::account()
         ->item()
@@ -334,11 +333,12 @@ class ReportsController extends Member
         // ->joinreciept()
         ->whereRaw("DATE(je_entry_date) >= '$from'")
         ->whereRaw("DATE(je_entry_date) <= '$to'")
+        // ->whereNotNull('jline_name_reference')
         ->concatum()
         ->amount()
+        ->whereIn('jline_name_reference', $where_in)
         ->get()
         ->keyBy('jline_id');
-
         $data['sales_by_customer'] = [];
         foreach($data['sales'] as $key => $value)
         {
@@ -396,7 +396,7 @@ class ReportsController extends Member
         $data['head'] = $this->report_header($data);
         $data['action'] = '/member/report/accounting/sale/get/report';
         $data['report_code'] = $report_code;
-        $data['table_header'] = Report::sales_report($report_code );
+        $data['table_header'] = Report::sales_report($report_code);
 
         return view('member.reports.accounting.sales', $data);
     }
@@ -462,14 +462,15 @@ class ReportsController extends Member
     public function general_ledger()
     {
         $data = [];
-
+        $report_code = 'accounting_general_ledger';
+        $data['field_checker'] = $this->report_field_checker_seed($report_code);
         $data['head_title'] = 'General Ledger';
         $data['head_icon'] = 'fa fa-area-chart';
         $data['head_discription'] = '';
         $data['head'] = $this->report_header($data);
         $data['action'] = '/member/report/accounting/general/ledger/get';
         $shop_id = $this->user_info->shop_id; 
-        
+        $data['report_code'] = $report_code;
         return view('member.reports.accounting.general_ledger', $data);
     }
 
@@ -486,7 +487,15 @@ class ReportsController extends Member
 
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
+
         $shop_id = $this->user_info->shop_id; 
+
+        $data['report_field'] = Tbl_report_field::where('report_field_shop', '=', $shop_id)
+        ->orderBy('report_field_position', 'ASC')
+        ->where('report_field_archive', '=', 0)
+        ->where('report_field_type', '=', $report_field_type)
+        ->get()
+        ->keyBy('report_field_module');
 
         $data['entry_line'] = Tbl_journal_entry_line::account()
             ->where('account_shop_id', $shop_id)
@@ -505,7 +514,6 @@ class ReportsController extends Member
             $data['chart_of_account'][$value->chart_type_id] = $value->account_name; 
             $data['chart_of_account_data'][$value->chart_type_id][$value->jline_id] = $value;
         }
-
         $view =  'member.reports.output.general_ledger'; 
         return Report::check_report_type($report_type, $view, $data, 'General-Ledger'.Carbon::now());
     }

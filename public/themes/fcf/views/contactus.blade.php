@@ -4,15 +4,15 @@
 <div class="content">
 	<div class="container-fluid">
 		<div class="top-bg-container">
-			<img src="/themes/{{ $shop_theme }}/img/contactus-bg.png">
-			<div class="top-bg-detail-container"><span style="color: #ffc10e;">CONTACT</span> US</div>
+			<img src="{{ get_content($shop_theme_info, "contactus", "contactus_banner_img") }}">
+			<div class="top-bg-detail-container"><span style="color: #ffc10e;">{{ get_content($shop_theme_info, "contactus", "contactus_banner_title_first_word") }}</span>&nbsp;{{ get_content($shop_theme_info, "contactus", "contactus_banner_title_highlight") }}</div>
 		</div>
 		<div class="row clearfix content">
 		<!-- CONTENT -->
 			<div class="content">
 				<div class="col-md-6">
 					<div class="title-container">
-						Get Intouch With Us
+						{{ get_content($shop_theme_info, "contactus", "contactus_send_msg_title") }}
 					</div>
 					<!-- TEXT FIELD -->
 					<div class="textfield-container row clearfix">
@@ -45,32 +45,32 @@
 				</div>
 				<div class="col-md-6">
 					<div class="title-container">
-						Location
+						{{ get_content($shop_theme_info, "contactus", "contactus_location_title") }}
 					</div>
 					<table>
 						<tr>
 							<td class="icon"><i class="fa fa-map-marker" aria-hidden="true"></i></td>
-							<td class="par">22nd Floor, Salcedo Towers, 169 H.V. Dela Costa Street, Salcedo Village, Makati City, Metro Manila, Philippines</td>
+							<td class="par">{{ get_content($shop_theme_info, "contactus", "contactus_location") }}</td>
 						</tr>
 						<tr>
 							<td class="icon"><i class="fa fa-phone" aria-hidden="true"></i></td>
-							<td class="par">+63 (0) 2 659 5662</td>
+							<td class="par">{{ get_content($shop_theme_info, "contactus", "contactus_phone_number") }}</td>
 						</tr>
 						<tr>
 							<td class="icon"><i class="fa fa-envelope" aria-hidden="true"></td>
-							<td class="par">youremailhere@company.com</td>
+							<td class="par">{{ get_content($shop_theme_info, "contactus", "contactus_email") }}</td>
 						</tr>
 						<tr>
 							<td class="icon"><i class="fa fa-fax" aria-hidden="true"></td>
-							<td class="par">+63 (0) 2 846 8507</td>
+							<td class="par">{{ get_content($shop_theme_info, "contactus", "contactus_fax") }}</td>
 						</tr>
 					</table>
 					<div>
-						<div class="content-title business-hours">Business Hours</div>
+						<div class="content-title business-hours">{{ get_content($shop_theme_info, "contactus", "contactus_business_hours_title") }}</div>
 						<table>
 							<tr>
 								<td class="icon"><i class="fa fa-clock-o" aria-hidden="true"></i></td>
-								<td class="par">Monday - Friday at 9:00am - 6:00pm</td>
+								<td class="par">{{ get_content($shop_theme_info, "contactus", "contactus_business_hours") }}</td>
 							</tr>
 						</table>
 					</div>

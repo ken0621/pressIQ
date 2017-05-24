@@ -56,13 +56,24 @@
 					</tr>
 				</table>
 				<table class="table table-condensed">
-					<th>Amount</th>
-					<th>Remarks</th>
 					<tr>
-						<td><input type="number" class="form-control" name="merchant_school_amount"></td>
-						<td><input type="text" class="form-control" name="merchant_school_remarks"></td>
+						<td colspan="2">
+							<label>Amount</label>
+							<input type="number" class="form-control" name="merchant_school_amount">
+						</td>
 					</tr>
-
+					<tr>
+						<td colspan="2">
+							<label>Remarks</label>
+							<textarea class="form-control" name="merchant_school_remarks"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<label>Anouncement</label>
+							<textarea class="form-control" name="merchant_school_anouncement"></textarea>
+						</td>
+					</tr>
 					<tr>
 						<td colspan="2">
 							<button class="btn btn-primary col-md-12">Consume</button>

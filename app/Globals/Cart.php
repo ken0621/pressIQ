@@ -876,7 +876,6 @@ class Cart
         $data = Self::get_info($shop_id);
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
         $method_information = Self::get_method_information($shop_id, $method_id);
-
         
         switch ($method_information->link_reference_name)
         {

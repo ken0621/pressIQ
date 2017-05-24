@@ -80,7 +80,7 @@ class ShopCheckoutController extends Shop
         /* SET FIRST NAME, LAST NAME AND CONTACT */
         $customer_info["first_name"] = $_name[0];
         $customer_info["last_name"] = $_name[1];
-        $customer_info["customer_contact"] = Request::input("customer_contact");
+        $customer_info["customer_contact"] = Request::input("contact_number");
 
         $customer_info["shipping_state"] = Self::locale_id_to_name(Request::input("customer_state"));
         $customer_info["shipping_city"] = Self::locale_id_to_name(Request::input("customer_city"));
@@ -193,7 +193,7 @@ class ShopCheckoutController extends Shop
         $data["merchantKey"] = $api->api_secret_id;
         $data["merchantCode"] = $api->api_client_id;
         $requestpayment = new RequestPayment($api->api_secret_id);
-        dd($data["tbl_customer"]);
+
         $this->_data = array(
             'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
             'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),

@@ -55,6 +55,7 @@
 	            	</tbody>
 				</table>
 	        </div>
+	        <h5 class="text-center">---- {{$now or ''}} ----</h5>
 	    </div>
 	</div>
 </div>

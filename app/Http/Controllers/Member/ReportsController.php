@@ -322,7 +322,7 @@ class ReportsController extends Member
         $data['report_type'] = $report_type;
         $shop_id = $this->user_info->shop_id; 
         $where_in[0] = 'customer';
-        $where_in[1] = 'vendor';
+        // $where_in[1] = 'vendor';
         $data['shop_name']  = $this->user_info->shop_key; 
         $data['sales'] = Tbl_journal_entry_line::account()
         ->item()

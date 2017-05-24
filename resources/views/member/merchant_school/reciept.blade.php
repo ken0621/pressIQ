@@ -36,15 +36,17 @@ if($reciept->merchant_school_amount <= 0)
                         </td>
                         <td>
                             <div class="col-md-12" style="margin-left:21px;">
-                                <div class="col-md-6">
-                                    <img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/mlm/bongao.png'}} @else {{'/assets/mlm/bongao.png'}}@endif" class="bongao-logo">
-                                </div>
-                                <div class="col-md-6">
-                                    <center><h3>Merchant</h4></center>
-                                    <center style="color: red;"><h4>Bongoa Discovery School</h4></center>
-                                    <center>Datu Halum St., Poblacion, Bongao Tawi-tawi</center>
-                                    <center>Contact No.: 068-268-1531</center>
-                                </div>
+                                    <table class="table" style="background-color: white !important;">
+                                        <tr>
+                                            <td><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/mlm/bongao.png'}} @else {{'/assets/mlm/bongao.png'}}@endif" class="img-responsive"></td>
+                                            <td>
+                                                <center><h3>Merchant</h4></center>
+                                                <center style="color: red;"><h4>Bongoa Discovery School</h4></center>
+                                                <center>Datu Halum St., Poblacion, Bongao Tawi-tawi</center>
+                                                <center>Contact No.: 068-268-1531</center>
+                                            </td>
+                                        </tr>
+                                    </table>
                                     <span style="font-size: 40px; color:#f1c40f; font-weight: bold;">RECEIPT</span></div>
                                     <div class="col-md-12" style="margin-left:24px;">
                                         Date:

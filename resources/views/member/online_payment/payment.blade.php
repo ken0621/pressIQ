@@ -1,4 +1,4 @@
-@extends('member.layout')
+\@extends('member.layout')
 @section('content')
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
@@ -20,6 +20,7 @@
             <!-- <li class="active cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#settings"><i class="fa fa-circle-o"></i> Settings</a></li> -->
             <li class="active cursor-pointer other-hide"><a class="cursor-pointer" data-toggle="tab" href="#method"><i class="fa fa-circle-o"></i> Payment Method</a></li>
             <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#gateway"><i class="fa fa-circle-o"></i> Payment Gateway</a></li>
+            <li class="cursor-pointer"><a class="cursor-pointer" data-toggle="tab" href="#method-list"><i class="fa fa-circle-o"></i> Method List</a></li>
         </ul>
 
         <div class="tab-content">
@@ -64,22 +65,39 @@
 													<div class="slider round"></div>
 												</label>
 											</div>
-											<div class="col-md-4 text-center">	
-					                            <input type="hidden" name="link_img_id" class="image-value" key="{{$key}}" value="{{$method->link_img_id or ''}}" required>
-					                            <img class="img-responsive img-src" key="{{$key}}" style="width: 100%; height: 167px; object-fit: cover" src="{{$method->image_path or '/assets/front/img/default.jpg'}}">
-					                            <button type="button" class="btn btn-primary image-gallery image-gallery-single" key="{{$key}}" style="margin-top: 15px;">Upload Image</button>
-					                        </div>
-					                        <div class="col-md-8 text-center select-container ">
-					                        	<input type="hidden" class="link-reference-name" name="link_reference_name" value="{{$method->link_reference_name or ''}}" required/>
-					                        	<div class="form-group">
-						                        	<select name="link_reference_id" class="form-control select-gateway" required>							                        		
-						                        		@include('member.load_ajax_data.load_payment_gateway', ['_gateway' => $method->gateway, 'reference_id' => $method->link_reference_id, 'reference_name' => $method->link_reference_name])
-						                        	</select>
+											<div class="row col-md-12">
+												<div class="col-md-4 text-center">	
+						                            <input type="hidden" name="link_img_id" class="image-value" key="{{$key}}" value="{{$method->link_img_id or ''}}" required>
+						                            <img class="img-responsive img-src" key="{{$key}}" style="width: 100%; height: 167px; object-fit: cover" src="{{$method->image_path or '/assets/front/img/default.jpg'}}">
+						                            <button type="button" class="btn btn-primary image-gallery image-gallery-single" key="{{$key}}" style="margin-top: 15px;">Upload Image</button>
 						                        </div>
-						                        <div class="form-group ">
-						                        	<button class="panel-buttons btn btn-custom-primary pull-right" type="btn">Save</button>
+						                        <div class="col-md-8 text-center select-container ">
+						                        	<input type="hidden" class="link-reference-name" name="link_reference_name" value="{{$method->link_reference_name or ''}}" required/>
+						                        	<div class="row form-group text-left">
+						                        		<label>Gateway</label>
+							                        	<select name="link_reference_id" class="form-control select-gateway" required>					
+							                        		@include('member.load_ajax_data.load_payment_gateway', ['_gateway' => $method->gateway, 'reference_id' => $method->link_reference_id, 'reference_name' => $method->link_reference_name])
+							                        	</select>
+							                        </div>
+							                        <div class="row form-group text-left">
+							                        	<div class="col-md-6">
+							                        		<label>Dicount Value</label>
+							                        		<input type="text" class="form-control float-format" name="link_discount_fixed" value="{{$method->link_discount_fixed or 0}}">
+							                        	</div>
+							                        	<div class="col-md-6">
+							                        		<label>Dicount Percentage</label>
+							                        		<input type="text" class="form-control int-format" name="link_discount_percentage" value="{{$method->link_discount_percentage or 0}}">
+							                        	</div>
+							                        </div>
+							                        <div class="row form-group text-left">
+							                        	<label>Description</label>
+							                        	<textarea class="form-control" rows="2" name="link_description">{{$method->link_description or ''}}</textarea>
+							                        </div>
+							                        <div class="form-group">
+							                        	<button class="panel-buttons btn btn-custom-primary pull-right" type="btn">Save</button>
+							                        </div>
 						                        </div>
-					                        </div>
+						                    </div>
 										</form>
 						            </div>
 				            	@endforeach
@@ -109,25 +127,14 @@
 						            		<input type="hidden" name="gateway_code_name" class="form-control input-sm" value="{{$gateway->gateway_code_name}}">
 						            		<input type="hidden" name="api_gateway_id" class="form-control input-sm" value="{{$gateway->gateway_id}}">
 						            		@if($gateway->gateway_code_name != 'other')
-						            			@if($gateway->gateway_code_name == "ipay88")
-					            					<div class="form-group col-md-12">
-									                    <label>Merchant Code</label>
-									                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->api_client_id or ''}}">
-									                </div>
-									                <div class="form-group col-md-12">
-									                    <label>Merchant Key</label>
-									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->api_secret_id or ''}}">
-									                </div>
-								                @else
-									                <div class="form-group col-md-12">
-									                    <label>Client ID</label>
-									                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->api_client_id or ''}}">
-									                </div>
-									                <div class="form-group col-md-12">
-									                    <label>Secret ID</label>
-									                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->api_secret_id or ''}}">
-									                </div>
-								                @endif
+								                <div class="form-group col-md-12">
+								                    <label>{{ $gateway->gateway_code_name == "ipay88" ? 'Merchant Code' : 'Client ID'}}</label>
+								                    <input type="text" name="api_client_id" class="form-control input-sm" value="{{$gateway->api_client_id or ''}}">
+								                </div>
+								                <div class="form-group col-md-12">
+								                    <label>{{ $gateway->gateway_code_name == "ipay88" ? 'Merchant Key' : 'Secret ID'}}</label>
+								                    <input type="text" name="api_secret_id" class="form-control input-sm" value="{{$gateway->api_secret_id or ''}}">
+								                </div>
 								                <div class="col-md-12">
 								            		<button type="submit" class="panel-buttons btn btn-custom-primary pull-right">save</button>
 								            	</div>
@@ -152,6 +159,37 @@
 					        </div>
 			            </div>
 		            </div>
+		        </div>
+		    </div>
+		    <div class="tab-pane fade in" id="method-list">
+		        <!-- FORM. GROUP -->      
+		        <div class="form-box-divider method-list-load-data">
+		        	<div class="method-list-data">
+			        	<a class="btn btn-custom-primary pull-right popup" href="javascript:" link="/member/maintenance/online_payment/modal-method-list" size="sm">Create New</a>
+			        	<table class="table table-stripped table-condensed">
+			        		<thead>
+			        			<tr>
+				        			<th>ID</th>
+				        			<th>Name</th>
+				        			<th>Action</th>
+			        			</tr>
+			        		</thead>
+			        		<tbody>
+			        			@foreach($_method as $key=>$method_list)
+			        			<tr>
+			        				<td>{{$method_list->method_id}}</td>
+			        				<td>{{$method_list->method_name}}</td>
+			        				<td>
+			        					<div class="btn-group">
+				                            <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/maintenance/online_payment/modal-method-list?method_id={{$method_list->method_id}}" size="sm">Edit</a>
+				                            <a class="btn btn-primary btn-grp-primary popup" href="javascript:" link="/member/maintenance/online_payment/delete-method-list?method_id={{$method_list->method_id}}" size="sm">|<span class="fa fa-trash"></span></a>
+				                        </div>
+			        				</td>
+			        			</tr>	
+			        			@endforeach
+			        		</tbody>
+			        	</table>
+			        </div>
 		        </div>
 		    </div>
 	    </div>

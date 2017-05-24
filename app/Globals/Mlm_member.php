@@ -19,6 +19,7 @@ use App\Models\Tbl_customer_search;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_lead;
+use App\Models\Tbl_country;
 
 use App\Http\Controllers\Member\MLM_MembershipController;
 use App\Http\Controllers\Member\MLM_ProductController;
@@ -222,35 +223,61 @@ class Mlm_member
                         $insert['slot_status'] = $membership->membership_type;
                         $insert['slot_sponsor'] = $validate['slot_sponsor'];
                         
-                        $id = Tbl_mlm_slot::insertGetId($insert);
-                        $slot_info = Tbl_mlm_slot::where('slot_id', $id)->membership()->membership_points()->customer()->first();
-                        // compute mlm
-                            $a = Mlm_compute::entry($id);
-                        // end
-                        // Mlm_member::add_to_session_edit($shop_id,  $validate['slot_owner'], $id);
-                        $update['used'] = 1;
-                        $update['date_used'] = Carbon::now();
-                        $update['slot_id'] = $id;
-                        Tbl_membership_code::where('membership_code_id', $validate['membership_code_id'])->update($update);
-
-                        $insert['slot_id'] = $id;
-                        $data['slot_data'] = $insert;
-                        $data['response_status'] = "success_add_slot";
-
-                        if(isset($_POST['lead_id']))
-			            {
-			                $update_lead['lead_used_date']		= Carbon::now();
-			                $update_lead['lead_used']			= 1;
-			                $update_lead['lead_slot_id_lead'] 	= $id;
-			                DB::table('tbl_mlm_lead')->where('lead_id', $_POST['lead_id'])->update($update_lead);
-			            }
-                        $c = Mlm_gc::slot_gc($id);
-                        $disable_session = Request::input('disable_session');
-
-                        if($disable_session != 'true_a')
+                        $proceed = 1;
+                        $new     = 0;
+                        /* CHECK IF NEW CUSTOMER OR NOT >:) */
+                        if(Request::input("choose_owner") == "new")
                         {
-                            // dd($disable_session);
-                            Mlm_member::add_to_session_edit($shop_id, $customer_id, $id);
+                            $get_data = MLM_member::add_new_customer(Request::input(),$shop_id);
+
+                            if($get_data["type"] == "error")
+                            {
+                                $proceed = 0;
+                            }
+                            else
+                            {
+                                $insert['slot_owner'] = $get_data["customer_id"];
+                                $new                  = 1;
+                            }
+                        }
+
+                        if($proceed == 1)
+                        {
+                            $id = Tbl_mlm_slot::insertGetId($insert);
+                            $slot_info = Tbl_mlm_slot::where('slot_id', $id)->membership()->membership_points()->customer()->first();
+                            // compute mlm
+                            $a = Mlm_compute::entry($id);
+                            // end
+                            // Mlm_member::add_to_session_edit($shop_id,  $validate['slot_owner'], $id);
+                            $update['used'] = 1;
+                            $update['date_used'] = Carbon::now();
+                            $update['slot_id'] = $id;
+                            Tbl_membership_code::where('membership_code_id', $validate['membership_code_id'])->update($update);
+
+                            $insert['slot_id'] = $id;
+                            $data['slot_data'] = $insert;
+                            $data['response_status'] = "success_add_slot";
+
+                            if(isset($_POST['lead_id']))
+    			            {
+    			                $update_lead['lead_used_date']		= Carbon::now();
+    			                $update_lead['lead_used']			= 1;
+    			                $update_lead['lead_slot_id_lead'] 	= $id;
+    			                DB::table('tbl_mlm_lead')->where('lead_id', $_POST['lead_id'])->update($update_lead);
+    			            }
+                            $c = Mlm_gc::slot_gc($id);
+                            $disable_session = Request::input('disable_session');
+
+                            if($disable_session != 'true_a' && $new == 0)
+                            {
+                                // dd($disable_session);
+                                Mlm_member::add_to_session_edit($shop_id, $customer_id, $id);
+                            }
+                        }
+                        else
+                        {
+                            $data['response_status'] = "warning_2";
+                            $data['error']           = $get_data["message"];
                         }
                     }
                     else
@@ -278,6 +305,7 @@ class Mlm_member
     		$data['response_status'] = "warning";
     	    $data['warning_validator'] = $validator->messages();
     	}
+
     	return json_encode($data);
 	}
 
@@ -351,27 +379,29 @@ class Mlm_member
     {
         $customer = Tbl_customer::where('customer_id', $customer_id)->first();
 
-        $shop_id = $customer->shop_id;
-        $customer_id =$customer->customer_id;
+        $shop_id     = $customer->shop_id;
+        $customer_id = $customer->customer_id;
 
         $data = [];
+
         $data['binary_settings'] = Tbl_mlm_plan::where('shop_id', $shop_id)
-            ->where('marketing_plan_code', 'BINARY')
-            ->where('marketing_plan_enable', 1)
-            ->where('marketing_plan_trigger', 'Slot Creation')
-            ->first();
+                                               ->where('marketing_plan_code', 'BINARY')
+                                               ->where('marketing_plan_enable', 1)
+                                               ->where('marketing_plan_trigger', 'Slot Creation')
+                                               ->first();
+
         $data['binary_advance'] = Tbl_mlm_binary_setttings::where('shop_id', $shop_id)->first();
-        $data['codes'] = Mlm_member::get_codes($customer_id);
-        $data['lead'] = Tbl_mlm_lead::where('lead_customer_id_lead', $customer_id)
-        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=','tbl_mlm_lead.lead_slot_id_sponsor')
-        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
-        ->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_membership_code.slot_id')
-        ->where('tbl_mlm_lead.lead_used', 0)
-        ->first();
+        $data['codes']          = Mlm_member::get_codes($customer_id);
+        $data['lead']           = Tbl_mlm_lead::where('lead_customer_id_lead', $customer_id)
+                                              ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=','tbl_mlm_lead.lead_slot_id_sponsor')
+                                              ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+                                              ->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_membership_code.slot_id')
+                                              ->where('tbl_mlm_lead.lead_used', 0)
+                                              ->first();
 
-        $data['_slots'] = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get();
-
-        $data['position'] = Request::input('position');
+        $data['_slots']    = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get();
+        $data['country']   = Tbl_country::get();
+        $data['position']  = Request::input('position');
         $data['placement'] = Request::input('placement');
         $data['sponsor_a'] = Request::input('slot_sponsor');
         return view('mlm.slot_add.index', $data);
@@ -384,5 +414,277 @@ class Mlm_member
         ->where('used', 0)->where('blocked', 0)->get();
         // dd($data);
         return view('member.mlm_slot.mlm_slot_get_code', $data);
+    }
+    public static function add_new_customer($send,$shop_id)
+    {
+            $i['password']   = $send["password"];
+            $i['password_2'] = $send["c_password"];
+
+            if($i['password'] == $i['password_2'])
+            {
+                
+                $insert['shop_id']      = $shop_id;
+                $insert['first_name']   = $send['first_name'];
+                $insert['last_name']    = $send['last_name'];
+                $insert['email']        = $send['email'];
+                $insert['password']     = $i['password'];
+                $insert['created_date'] = Carbon::now();
+                $insert['IsWalkin']     = 0; 
+                $insert['mlm_username'] = $send['mlm_username'];
+                $insert['country_id']   = $send['country_id'];
+                $insert['tin_number']   = "";
+                $insert['company']      = "";
+                $insert['ismlm'] = 1;
+
+
+                $data['type']    = "Success";
+                $data['message'] = "Password Matched";
+
+                if(strlen($insert['mlm_username']) >= 6)
+                {
+                    $count_username = Tbl_customer::where('mlm_username', $insert['mlm_username'])->count();
+                    if($count_username == 0)
+                    {
+                        if(strlen($insert['password']) >= 6)
+                        {
+                            $check_email = Tbl_customer::where('shop_id',$shop_id)->where('email',$insert['email'])->count();
+                            if($check_email == 0)
+                            {
+                                $continue = 1;
+
+                                if($continue == 1)
+                                {
+                                        $insert['password'] = Crypt::encrypt($i['password']);
+                                        $cus_id = Tbl_customer::insertGetId($insert);
+
+                                        $updatetSearch['customer_id'] = $cus_id;
+                                        $updatetSearch['body']        = $insert['first_name'].' '.$insert['last_name'].' '.$insert['email'].' '.$insert['mlm_username'];
+                                        $updatetSearch['created_at']  = Carbon::now();
+                                        $updatetSearch['updated_at']  = Carbon::now();
+                                        DB::table('tbl_customer_search')->insert($updatetSearch);
+
+                                        $insert_address['customer_id']      = $cus_id;
+                                        $insert_address['customer_state']   = "";
+                                        $insert_address['customer_city']    = "";
+                                        $insert_address['customer_zipcode'] = "";
+                                        $insert_address['customer_street']  = "";
+                                        $insert_address['purpose']          = 'billing';
+                                        $insert_address['country_id']       = $insert['country_id'];
+                                        DB::table('tbl_customer_address')->insert($insert_address);
+
+                                        $data['type']        = "success";
+                                        $data['message']     = "Successfully created the account";
+                                        $data["customer_id"] = $cus_id;
+                                }
+                            }
+                            else
+                            {
+                                $data['type']    = "error";
+                                $data['message'] = "Email Already Taken";
+                            }
+                        }
+                        else
+                        {
+                            $data['type']    = "error";
+                            $data['message'] = "Password length is too short";
+                        }
+                    }
+                    else
+                    {
+                        $data['type']    = "error";
+                        $data['message'] = "Username Already Exist";
+                    }
+                }
+                else
+                {
+                    $data['type']    = "error";
+                    $data['message'] = "Username length is too short";
+                }
+            }
+            else
+            {
+                $data['type']    = "error";
+                $data['message'] = "Password didn't match.";
+            }
+
+            return $data;
+    }
+
+
+    public static function manual_add_slot_form($customer_id,$membership_id,$shop_id)
+    {
+        $membership_code_id = Crypt::decrypt($membership_id);
+        $membership_code    = Tbl_membership_code::where("membership_code_id",$membership_code_id)
+                                                 ->where("blocked",0)
+                                                 ->where("archived",0)
+                                                 ->where("used",0)
+                                                 ->where("shop_id",$shop_id)
+                                                 ->first();
+        if(!$membership_code)
+        {
+            dd("Error!");
+        }
+
+
+        $customer = Tbl_customer::where('customer_id', $customer_id)->first();
+
+        $shop_id     = $customer->shop_id;
+        $customer_id = $customer->customer_id;
+
+        $data = [];
+
+        $data['binary_settings'] = Tbl_mlm_plan::where('shop_id', $shop_id)
+                                               ->where('marketing_plan_code', 'BINARY')
+                                               ->where('marketing_plan_enable', 1)
+                                               ->where('marketing_plan_trigger', 'Slot Creation')
+                                               ->first();
+
+        $data['binary_advance'] = Tbl_mlm_binary_setttings::where('shop_id', $shop_id)->first();
+        $data['codes']          = $membership_code;
+        $data['lead']           = Tbl_mlm_lead::where('lead_customer_id_lead', $customer_id)
+                                              ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=','tbl_mlm_lead.lead_slot_id_sponsor')
+                                              ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+                                              ->join('tbl_membership_code', 'tbl_membership_code.slot_id', '=', 'tbl_membership_code.slot_id')
+                                              ->where('tbl_mlm_lead.lead_used', 0)
+                                              ->first();
+
+        $data['_slots']    = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->customer()->get();
+        $data['country']   = Tbl_country::get();
+        $data['position']  = Request::input('position');
+        $data['placement'] = Request::input('placement');
+        $data['sponsor_a'] = Request::input('slot_sponsor');
+        return view('mlm.slot_add.manual_index', $data);
+    }
+
+    public static function manual_add_slot($shop_id, $customer_id)
+    {
+        $disabled_validation_code               = Request::input('disabled_validation_code');
+        $validate['slot_owner']                 = $customer_id;
+        $validate['membership_code_id']         = Request::input('membership_code_id');
+        $validate['membership_activation_code'] = Request::input('membership_activation_code');
+        $validate['slot_sponsor']               = Request::input('slot_sponsor');
+        
+        
+        $rules['slot_owner']                    = "required";
+        $rules['membership_activation_code']    = "required";
+
+        $rules['membership_code_id'] = "required";
+        $rules['slot_sponsor']       = "required";
+        
+        $binary_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
+            ->where('marketing_plan_code', 'BINARY')
+            ->where('marketing_plan_enable', 1)
+            ->where('marketing_plan_trigger', 'Slot Creation')
+            ->first();
+
+        $binary_advance = Tbl_mlm_binary_setttings::where('shop_id', $shop_id)->first(); 
+
+        $count_tree_if_exist = 0;
+
+        if(isset($binary_settings->marketing_plan_enable))
+        {
+           if($binary_settings->marketing_plan_enable == 1)
+           {
+                if(isset($binary_advance->binary_settings_placement))
+                {
+                    if($binary_advance->binary_settings_placement == 0)
+                    {
+                        $validate['slot_placement'] = Request::input('slot_placement');
+                        $validate['slot_position']  = Request::input('slot_position');
+                        $rules['slot_placement']    = "required";
+                        $rules['slot_position']     = "required";
+
+
+                        $insert['slot_placement']   = $validate['slot_placement'];
+                        $insert['slot_position']    = $validate['slot_position'];
+
+                        $count_tree_if_exist        = Tbl_tree_placement::where('placement_tree_position', $validate['slot_position'])
+                                                                        ->where('placement_tree_parent_id', $validate['slot_placement'])
+                                                                        ->where('shop_id', $shop_id)
+                                                                        ->count();
+                    } 
+                }
+           }      
+        }
+
+        $validator = Validator::make($validate,$rules);
+        if ($validator->passes())
+        {
+            $membership = Tbl_membership_code::where('membership_code_id', $validate['membership_code_id'])
+                                             ->where('membership_activation_code', $validate['membership_activation_code'])
+                                             ->package()->membership()->first();
+
+            if($membership)
+            {
+                if($membership->used == 0)
+                {
+                    if($count_tree_if_exist == 0 )
+                    {
+                        $insert['slot_no'] = Mlm_plan::set_slot_no($shop_id, $validate['membership_code_id']);
+                        $insert['shop_id'] = $shop_id;
+                        $insert['slot_owner'] = $validate['slot_owner'];
+                        $insert['slot_created_date'] = Carbon::now();
+                        $insert['slot_membership'] = $membership->membership_id;
+                        $insert['slot_status'] = $membership->membership_type;
+                        $insert['slot_sponsor'] = $validate['slot_sponsor'];
+
+                        $id = Tbl_mlm_slot::insertGetId($insert);
+                        $slot_info = Tbl_mlm_slot::where('slot_id', $id)->membership()->membership_points()->customer()->first();
+                        // compute mlm
+                        $a = Mlm_compute::entry($id);
+                        // end
+                        // Mlm_member::add_to_session_edit($shop_id,  $validate['slot_owner'], $id);
+                        $update['used'] = 1;
+                        $update['date_used'] = Carbon::now();
+                        $update['slot_id'] = $id;
+                        Tbl_membership_code::where('membership_code_id', $validate['membership_code_id'])->update($update);
+
+                        $insert['slot_id'] = $id;
+                        $data['slot_data'] = $insert;
+                        $data['response_status'] = "success_add_slot";
+
+                        if(isset($_POST['lead_id']))
+                        {
+                            $update_lead['lead_used_date']      = Carbon::now();
+                            $update_lead['lead_used']           = 1;
+                            $update_lead['lead_slot_id_lead']   = $id;
+                            DB::table('tbl_mlm_lead')->where('lead_id', $_POST['lead_id'])->update($update_lead);
+                        }
+                        $c = Mlm_gc::slot_gc($id);
+                        $disable_session = Request::input('disable_session');
+
+                        if($disable_session != 'true_a')
+                        {
+                            // dd($disable_session);
+                            Mlm_member::add_to_session_edit($shop_id, $customer_id, $id);
+                        }
+                    }
+                    else
+                    {
+                        $data['response_status'] = "warning_2";
+                        $data['error'] = "Slot Placement Already Taken";
+                    }
+                }
+                else
+                {
+                    $data['response_status'] = "warning_2";
+                    $data['error'] = "Membership Code Already Used";
+                }
+            }
+            else
+            {
+                $data['response_status'] = "warning_2";
+                $data['error'] = "Invalid Membership code";
+            }
+            
+            
+        }
+        else
+        {
+            $data['response_status'] = "warning_1";
+            $data['warning_validator'] = $validator->messages();
+        }
+
+        return json_encode($data);
     }
 }

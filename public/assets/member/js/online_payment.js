@@ -21,8 +21,14 @@ function online_payment()
 		event_view_other_click();
 	}
 
+	this.initialize_select_plugin = function()
+	{
+		initialize_select_plugin();
+	}
+
 	function initialize_select_plugin()
 	{
+		console.log("hello");
 		$(".select-gateway").globalDropList(
 		{
 			hasPopup	: "false",
@@ -88,8 +94,18 @@ function submit_done(data)
 			$(".other-load-data").load("/member/maintenance/online_payment .other-load");
 			
 		}
-		$(".method-load-data").load("/member/maintenance/online_payment .method-data");
-		toastr.success('Success');
+		else if(data.type == "payment_method")
+		{
+			data.element.modal("hide");
+			$(".method-list-load-data").load("/member/maintenance/online_payment .method-list-data");
+		}
+
+		$(".method-load-data").load("/member/maintenance/online_payment .method-data", function()
+		{
+			online_payment.initialize_select_plugin();
+			toastr.success('Success');
+		});
+		
 	}
 }
 

@@ -39,12 +39,13 @@ class Tbl_chart_of_account extends Model
       return $query->join('tbl_chart_account_type','chart_type_id','=','account_type_id');
     } 
 
-    public function scopeBalance($query)
+    public function scopeBalance($query, $from = null, $to = null)
     {
       $balance = DB::table("tbl_journal_entry_line")->join("tbl_chart_of_account as coa", "account_id", "=", "jline_account_id")
                                            ->join("tbl_chart_account_type","chart_type_id", "=", "account_type_id")
                                            ->whereRaw("tbl_chart_of_account.account_id = jline_account_id")
                                            ->whereRaw("account_shop_id = account_shop_id")
+                                           ->whereRaw("chart_type_name NOT IN ('Income', 'Other Income', 'Expense', 'Other Expense', 'Cost of Goods Sold')")
                                            ->selectRaw("SUM( CASE jline_type WHEN normal_balance then jline_amount ELSE -jline_amount END)")
                                            ->toSql();
 

@@ -8,13 +8,13 @@
 			<div class="col-md-8">
 				<div class="news-container">
 					<div class="news-img-container">
-						<img src="/themes/{{ $shop_theme }}/img/n1.png">
+						<img src="{{ get_content($shop_theme_info, "news", "news_front_img") }}">
 					</div>
 					<div class="news-title">
-						FCF Scholars Graduate With Honors
+						{{ get_content($shop_theme_info, "news", "news_title") }}
 					</div>
 					<div class="news-details">
-						<span>By: &nbsp;</span><span style="font-weight: 500; color: #333333;">FCF Minerals</span>
+						<span>By: &nbsp;</span><span style="font-weight: 500; color: #333333;">{{ get_content($shop_theme_info, "news", "news_author") }}</span>
 					</div>
 					<div class="news-content">
 						<p>

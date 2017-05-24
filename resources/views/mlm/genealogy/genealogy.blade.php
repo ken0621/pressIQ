@@ -9,46 +9,10 @@
         <link rel="stylesheet" href="/assets/mlm/animate/css/animate.min.css">
         <!-- <link rel="stylesheet" href="/assets/mlm/animate/css/normalize.min.css"> -->
         <link rel="stylesheet" type="text/css" href="/assets/slot_genealogy/member/css/genealogy.css" />
-
+        <link rel="stylesheet" type="text/css" href="/assets/mlm/css/genealogy.css">
         <!-- <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css"> -->
         <!-- <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css"> -->
         <!-- <link rel="stylesheet" href="/assets/member/css/member.css" type="text/css"/> -->
-
-        <style type="text/css">
-        .boxclose{
-            float:right;
-            margin-top:-30px;
-            margin-right:-30px;
-            cursor:pointer;
-            color: #fff;
-            border: 1px solid #AEAEAE;
-            border-radius: 30px;
-            background: #605F61;
-            font-size: 31px;
-            font-weight: bold;
-            display: inline-block;
-            line-height: 0px;
-            padding: 11px 3px;       
-        }
-
-        .boxclose:before {
-            content: "×";
-        }
-        #rcorners2 {
-            border-radius: 25px;
-            border: 2px solid #00C0EF;
-            padding: 10px; 
-            width: 200px;
-            height: 150px; 
-        }
-        #rcorners3 {
-            border-radius: 7px;
-            border: 2px solid #00C0EF;
-            padding: 10px; 
-            width: 100%;
-            float: right;
-        }
-        </style>
         <title>Genealogy</title>
     </head>
     <body id="body" class="body" style="height: 100%;">
@@ -56,7 +20,7 @@
         <div class="overscroll" style="width: 100%; height: inherit; overflow: auto;">
 
             <!-- back up  style="width: 100%; height: inherit; overflow: auto;" -->
-            <div class="tree-container" style="width: 5000%; padding-left: 20px  ; height: 5000%;">
+            <div class="tree-container" style="width: 5000%; padding-left: 20px; height: 5000%;">
 
             <!-- back up style="width: 5000%; padding: 20px; height: 5000%;" -->
                 <div class="tree">
@@ -98,11 +62,7 @@
         <div id="animatedModal">
             <!--THIS IS IMPORTANT! to close the modal, the class name has to match the name given on the ID  class="close-animatedModal" -->
             <div class="close-animatedModal"> 
-                <br>
                 <center><span id="rcorners2">✖</span></center>
-                <br>
-                <br>
-                <hr>
             </div>
                 
             <div class="modal-content modal_append_add_slot">

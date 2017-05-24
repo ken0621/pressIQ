@@ -35,8 +35,8 @@ $data['icon'] = 'icon-sitemap';
     <form class="global-submit" method="post" action="/mlm/slot/check_add">
     {!! csrf_field() !!}
     <div class="box-body">
-    	<label>Create Slot</label>
-    	<select name="membership_code_id" class="form-control">
+      <label>Create Slot</label>
+      <select name="membership_code_id" class="form-control">
         @if(count($_code) != 0)
           @foreach($_code as $code)
             <option value="{{$code->membership_code_id}}">{{$code->membership_activation_code}} {{$code->membership_type}}</option>
@@ -49,6 +49,25 @@ $data['icon'] = 'icon-sitemap';
       @if(count($_code) != 0)
         <button class="btn btn-primary pull-right use_code_mem">Use Code</button>
       @endif
+    </div>
+    </form>
+  </div>
+  <div class="box clearfix" style="overflow: hidden !important;">
+    <div class="box-header with-border">
+      <h3 class="box-title">Slot Transfer</h3>
+    </div>
+    <!-- /.box-header -->
+    <form class="global-submit" method="POST" action="/mlm/slots/before_transfer_slot">
+    {!! csrf_field() !!}
+    <div class="box-body">
+        <label>Slot</label>
+        <select name="slot_id" class="form-control">
+            @foreach($all_slots_show as $slot_show)
+                <option value="{{$slot_show->slot_id}}">{{$slot_show->slot_no}}</option>
+            @endforeach
+        </select>
+      <hr>
+      <button class="btn btn-primary pull-right">Transfer</button>
     </div>
     </form>
   </div>
@@ -117,11 +136,6 @@ $data['icon'] = 'icon-sitemap';
 @section('js')
 <script type="text/javascript">
 
-$(".use_code_mem").click(function()
-{
-  $(this).disabled();
-});
-
 function submit_done(data)
 {
   if(data.status == 'success')
@@ -161,6 +175,16 @@ function submit_done(data)
   else if(data.response_status == 'success_add_slot')
   {
     toastr.success('Congratulations, Your slot is created.');
+    window.location = "/mlm";
+  }
+  else if(data.status == 'success_before_transfer_slot')
+  {
+    var link = "/mlm/slots/transfer_slot?slot_id="+data.encrypted;
+    action_load_main_modal(link,"");
+  }
+  else if(data.status == 'success_transfer_slot')
+  {
+    toastr.success('Transfer done.');
     window.location = "/mlm";
   }
   else

@@ -78,6 +78,9 @@ Route::get('/mlm/slots/upgrade_slot/{id}', 'Mlm\MlmSlotsController@upgrade_slot'
 Route::post('/mlm/slots/upgrade_slot_post/{id}', 'Mlm\MlmSlotsController@upgrade_slot_post'); 
 Route::get('/mlm/slots/manual_add_slot', 'Mlm\MlmSlotsController@manual_add_slot'); 
 Route::post('/mlm/slots/manual_add_slot_post', 'Mlm\MlmSlotsController@manual_add_slot_post'); 
+Route::post('/mlm/slots/before_transfer_slot', 'Mlm\MlmSlotsController@before_transfer_slot'); 
+Route::get('/mlm/slots/transfer_slot', 'Mlm\MlmSlotsController@transfer_slot'); 
+Route::post('/mlm/slots/transfer_slot_post', 'Mlm\MlmSlotsController@transfer_slot_post'); 
 
 /* MLM SLOTs REPORTS */
 

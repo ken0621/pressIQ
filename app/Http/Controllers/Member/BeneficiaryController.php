@@ -25,6 +25,10 @@ class BeneficiaryController extends Member
         $data = [];
         $shop_id = $this->user_info->shop_id;
         $data['_item'] = Item::get_all_category_item();
+        $data['reciept'] = DB::table('tbl_merchant_school_wallet')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_merchant_school_wallet.merchant_school_custmer_id')
+        ->where('shop_id', $shop_id)
+        ->paginate(10);
         return view('member.merchant_school.index', $data);
     }
     public function get()

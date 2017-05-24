@@ -103,6 +103,6 @@
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/checkout_login.css">
 @endsection
 
-@section('script')
+@section('js')
 <script type="text/javascript" src="/themes/{{ $shop_theme }}/js/checkout_login.js"></script>
 @endsection

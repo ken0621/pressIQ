@@ -313,17 +313,17 @@ class ReportsController extends Member
         $period         = Request::input('report_period');
         $date['start']  = Request::input('from');
         $date['end']    = Request::input('to');
-        $from           = Report::checkDatePeriod($period, $date)['start_date'];
-        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
-        $data = [];
         $data['report_type'] = $report_type;
         $shop_id = $this->user_info->shop_id; 
         $where_in[0] = 'customer';
         // $where_in[1] = 'vendor';
         $data['shop_name']  = $this->user_info->shop_key; 
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
         $data['sales'] = Tbl_journal_entry_line::account()
         ->item()
         ->journal()
@@ -419,8 +419,8 @@ class ReportsController extends Member
         $period         = Request::input('report_period');
         $date['start']  = Request::input('from');
         $date['end']    = Request::input('to');
-        $from           = Report::checkDatePeriod($period, $date)['start_date'];
-        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
@@ -434,6 +434,7 @@ class ReportsController extends Member
 
         $data['shop_name']  = $this->user_info->shop_key; 
         $data['head_title'] = 'Profit and Loss';
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
 
         $data['account_income'] = Tbl_chart_account_type::whereIn('chart_type_name', $filter)
         ->get()->keyBy('chart_type_id');
@@ -447,8 +448,8 @@ class ReportsController extends Member
             ->groupBy('jline_type')
             ->groupBy('jline_account_id')
             ->where('account_shop_id', $shop_id)
-            ->whereRaw("DATE(je_entry_date) >= '$from'")
-            ->whereRaw("DATE(je_entry_date) <= '$to'")
+            ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
+            ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
             ->get();
 
         }
@@ -479,11 +480,12 @@ class ReportsController extends Member
         $period         = Request::input('report_period');
         $date['start']  = Request::input('from');
         $date['end']    = Request::input('to');
-        $from           = Report::checkDatePeriod($period, $date)['start_date'];
-        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
         
         $data['shop_name']  = $this->user_info->shop_key; 
         $data['head_title'] = 'General Ledger';
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
 
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
@@ -504,8 +506,8 @@ class ReportsController extends Member
             ->groupBy('jline_account_id')
             ->groupBy('jline_je_id')
             ->journal()
-            ->whereRaw("DATE(je_entry_date) >= '$from'")
-            ->whereRaw("DATE(je_entry_date) <= '$to'")
+            ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
+            ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
             ->get();
         $data['chart_of_account'] = [];
         $data['chart_of_account_data'] = [];
@@ -526,14 +528,15 @@ class ReportsController extends Member
         $data['head_discription'] = '';
         $data['head']       = $this->report_header($data);
         $data['action']     = '/member/report/accounting/customer_list';
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
 
         $report_type    = Request::input('report_type');
         $load_view      = Request::input('load_view');
         $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
-        $date['start']  = Request::input('from') ? Request::input('from') : '';
-        $date['end']    = Request::input('to') ? Request::input('from') : '';
-        $from           = Report::checkDatePeriod($period, $date)['start_date'];
-        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
         $data['_customer'] = Tbl_customer::balanceJournal()->where("shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
 
@@ -542,8 +545,8 @@ class ReportsController extends Member
             $data['_customer'][$key]->customer_journal = Tbl_journal_entry_line::journal()->customerOrVendor()->account()->customerOnly()
                                                         ->where("jline_name_id", $customer->customer_id)
                                                         ->where("chart_type_name", 'Accounts Receivable')
-                                                        ->whereRaw("DATE(je_entry_date) >= '$from'")
-                                                        ->whereRaw("DATE(je_entry_date) <= '$to'")
+                                                        ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
+                                                        ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
                                                         ->get();
             $data['_customer'][$key]->balance          = collect($data['_customer'][$key]->customer_journal)->sum('amount');
         }   
@@ -568,14 +571,15 @@ class ReportsController extends Member
         $data['head_discription'] = '';
         $data['head']       = $this->report_header($data);
         $data['action']     = '/member/report/accounting/vendor_list';
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
 
         $report_type    = Request::input('report_type');
         $load_view      = Request::input('load_view');
         $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
-        $date['start']  = Request::input('from') ? Request::input('from') : '';
-        $date['end']    = Request::input('to') ? Request::input('from') : '';
-        $from           = Report::checkDatePeriod($period, $date)['start_date'];
-        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
         $data['_vendor'] = Tbl_vendor::balanceJournal()->where("vendor_shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
 
@@ -584,8 +588,8 @@ class ReportsController extends Member
             $data['_vendor'][$key]->vendor_journal = Tbl_journal_entry_line::journal()->customerOrVendor()->account()->vendorOnly()
                                                         ->where("jline_name_id", $vendor->vendor_id)
                                                         ->where("chart_type_name", 'Accounts Payable')
-                                                        ->whereRaw("DATE(je_entry_date) >= '$from'")
-                                                        ->whereRaw("DATE(je_entry_date) <= '$to'")
+                                                        ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
+                                                        ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
                                                         ->get();
             $data['_vendor'][$key]->balance        = collect($data['_vendor'][$key]->vendor_journal)->sum('amount');
         }   
@@ -610,14 +614,15 @@ class ReportsController extends Member
         $data['head_discription'] = '';
         $data['head']       = $this->report_header($data);
         $data['action']     = '/member/report/accounting/item_list';
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
 
         $report_type    = Request::input('report_type');
         $load_view      = Request::input('load_view');
         $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
-        $date['start']  = Request::input('from') ? Request::input('from') : '';
-        $date['end']    = Request::input('to') ? Request::input('from') : '';
-        $from           = Report::checkDatePeriod($period, $date)['start_date'];
-        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
         $data['_warehouse'] = Tbl_warehouse::where("warehouse_shop_id", $this->user_info->shop_id)->get();
         $data['_item'] = Tbl_item::type()->where("shop_id", $this->user_info->shop_id)->where("tbl_item.archived", 0)->get();
@@ -626,8 +631,8 @@ class ReportsController extends Member
         {
             $data['_item'][$key]->item_warehouse  = Tbl_item::warehouseInventory($item->shop_id, $item->item_id)
                                                     ->where("item_id", $item->item_id)
-                                                    ->whereRaw("DATE(inventory_created) >= '$from'")
-                                                    ->whereRaw("DATE(inventory_created) <= '$to'")
+                                                    ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
+                                                    ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
                                                     ->get();
         }   
         // dd($data['_item']);
@@ -651,14 +656,15 @@ class ReportsController extends Member
         $data['head_discription'] = '';
         $data['head']       = $this->report_header($data);
         $data['action']     = '/member/report/accounting/account_list';
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
 
         $report_type    = Request::input('report_type');
         $load_view      = Request::input('load_view');
         $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
-        $date['start']  = Request::input('from') ? Request::input('from') : '';
-        $date['end']    = Request::input('to') ? Request::input('from') : '';
-        $from           = Report::checkDatePeriod($period, $date)['start_date'];
-        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
         $data['_account'] = Tbl_chart_of_account::accountType()->where("account_shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
 
@@ -667,8 +673,8 @@ class ReportsController extends Member
             $data['_account'][$key]->account_journal = Tbl_journal_entry_line::journal()->account()
                                                         ->selectRaw("*, (CASE normal_balance WHEN jline_type THEN jline_amount ELSE -jline_amount END) as 'amount'")
                                                         ->where("jline_account_id", $account->account_id)
-                                                        ->whereRaw("DATE(je_entry_date) >= '$from'")
-                                                        ->whereRaw("DATE(je_entry_date) <= '$to'")
+                                                        ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
+                                                        ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
                                                         ->get();
             $data['_account'][$key]->balance         = collect($data['_account'][$key]->account_journal)->sum('amount');
         }   

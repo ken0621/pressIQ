@@ -19,8 +19,8 @@
                     <option value="this_year">This Year</option>
                 </select>
             </div>
-            <div class="col-md-2"><input type="text" class="form-control from_report_a datepicker" name="from" class=""></div>
-            <div class="col-md-2"><input type="text" class="form-control form_report_b datepicker" name="to" class=""></div>
+            <div class="col-md-2"><input type="text" class="form-control from_report_a datepicker" name="from" placeholder="Start Date"></div>
+            <div class="col-md-2"><input type="text" class="form-control form_report_b datepicker" name="to" placeholder="End Date"></div>
             <div class="col-md-1"><button class="btn btn-primary run-report" onclick="$('.report_type_i').val('plain')" >Run Report</button></div>
             <button class="btn btn-custom-red-white margin-right-10 btn-pdf pull-right" onclick="report_file('pdf')"><i class="fa fa-file-pdf-o"></i>&nbsp;Export to PDF</button>
             <button class="btn btn-custom-green-white margin-right-10 btn-pdf pull-right" onclick="report_file('excel')"><i class="fa fa-file-excel-o"></i>&nbsp;Export to Excel</button>

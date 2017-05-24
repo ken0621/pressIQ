@@ -56,7 +56,40 @@
         </div>
     </div>
 </div>
-
+<div class="panel panel-default panel-block panel-title-block col-md-12" id="top">
+    <div class="panel-heading">
+        <div>
+            <center>Reciept</center>
+             <div class="load-data" target="value-id-3">     
+                <div id="value-id-2">
+                    <table class="table table-condensed table-bordered">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($reciept as $key => $value)
+                                <tr>
+                                    <td>{{$value->merchant_school_id}}</td>
+                                    <td>{{name_format_from_customer_info($value)}}</td>
+                                    <td>{{$value->merchant_school_date}}</td>
+                                    <td>EDIT | PDF</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    <div class="col-md-12 text-center">
+                        {!!$reciept->render()!!}
+                    </div>
+                </div>
+            </div>        
+        </div>
+    </div>
+</div>        
 <div class="panel panel-default panel-block panel-title-block col-md-12" id="top">
     <div class="panel-heading">
         <div>

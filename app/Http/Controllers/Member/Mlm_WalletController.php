@@ -242,7 +242,7 @@ class MLM_WalletController extends Member
     public function adjust_submit()
     {
         // return $_POST;
-        $user = Tbl_user::where('user_shop', $this->user_info->shop_id)->first();
+        $user = Tbl_user::where('user_shop', $this->user_info->user_id)->first();
         $slot_id = Request::input('slot_id');
         $wallet_log_amount = Request::input('wallet_log_amount');
         $wallet_log_details = Request::input('wallet_log_details');

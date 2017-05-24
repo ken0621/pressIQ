@@ -4,8 +4,8 @@
 <div class="content">
 	<div class="container-fluid">
 		<div class="top-bg-container">
-			<img src="/themes/{{ $shop_theme }}/img/runruno-bg.png">
-			<div class="top-bg-detail-container">RUNRUNO</div>
+			<img src="{{ get_content($shop_theme_info, "runruno", "runruno_banner_img") }}">
+			<div class="top-bg-detail-container">{{ get_content($shop_theme_info, "runruno", "runruno_banner_title") }}</div>
 		</div>
 		<div class="row clearfix content scroll-to">
 			<!-- LEFT NAVIGATION -->
@@ -36,7 +36,7 @@
 				<div class="content body-height runruno active">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
-						RUNRUNO
+						{{ get_content($shop_theme_info, "runruno", "runruno_runruno_title") }}
 					</div>
 					<p>
 						FCF Minerals Corporation (FCF) was incorporated in the Philippines and was duly registered with the Philippine SEC on December 3, 2001 to engage in continuing exploration, development and commercial operation of mineral claims with full power and authority to do any and all acts, things, business and activities which are related, incidental or conducive directly or indirectly to the attainment of the foregoing objectives as a mining company.<br><br>
@@ -53,19 +53,19 @@
 				<div class="content body-height gold-molybdenum" style="display: none">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
-						RUNRUNO GOLD-MOLYBDENUM PROJECT
+						{{ get_content($shop_theme_info, "runruno", "runruno_gold_molybdenum_title") }}
 					</div>
 					<!-- BOTTOM IMAGES -->
 					<div class="content-img-container row clearfix">
 						<div class="image-holder">
 							<div class="col-md-6">
 								<div class="per-img-container">
-									<img src="/themes/{{ $shop_theme }}/img/rg1.png">
+									<img src="{{ get_content($shop_theme_info, "runruno", "runruno_gold_molybdenum_context_img1") }}">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="per-img-container">
-									<img src="/themes/{{ $shop_theme }}/img/rg2.png">
+									<img src="{{ get_content($shop_theme_info, "runruno", "runruno_gold_molybdenum_context_img2") }}">
 								</div>
 							</div>
 						</div>
@@ -92,7 +92,7 @@
 				<div class="content body-height keypoints" style="display: none">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
-						KEYPOINTS
+						{{ get_content($shop_theme_info, "runruno", "runruno_keypoints_title") }}
 					</div>
 					<ul>
 						<li>
@@ -119,7 +119,7 @@
 				<div class="content body-height geology" style="display: none">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
-						GEOLOGY
+						{{ get_content($shop_theme_info, "runruno", "runruno_geology_title") }}
 					</div>
 					<p>
 						The Runruno deposit is located at the intersection of the margins of two district-scale calderas, major NE and NW fault lines and several late, small volume, composite volcanic centres.<br><br>
@@ -137,12 +137,12 @@
 						<div class="image-holder">
 							<div class="col-md-6">
 								<div class="per-img-container">
-									<img src="/themes/{{ $shop_theme }}/img/g1.png">
+									<img src="{{ get_content($shop_theme_info, "runruno", "runruno_geology_context_img1") }}">
 								</div>
 							</div>
 							<div class="col-md-6">
 								<div class="per-img-container">
-									<img src="/themes/{{ $shop_theme }}/img/g2.png">
+									<img src="{{ get_content($shop_theme_info, "runruno", "runruno_geology_context_img2") }}">
 								</div>
 							</div>
 						</div>
@@ -152,7 +152,7 @@
 				<div class="content body-height feasibility-study" style="display: none">
 					<!-- CONTENT TITLE -->
 					<div class="content-title">
-						FEASIBILITY STUDY
+						{{ get_content($shop_theme_info, "runruno", "runruno_feasibility_study_title") }}
 					</div>
 					<p>
 						The Definitive Feasibility Study (DFS) on the Runruno project was launched on the 1st February 2009, and reported approximately a year later in early May 2010. The DFS was preceded by both an initial Concept Study, examining the outline economics and methods applicable to Runruno, and by the more detailed Scoping Study which was completed in November 2008.<br><br>

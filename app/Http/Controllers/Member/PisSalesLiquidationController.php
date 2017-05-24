@@ -324,7 +324,7 @@ class PisSalesLiquidationController extends Member
             $_transaction = null;
             $_transaction[$rp_key]['date'] = $rp_value->rp_date;
             $_transaction[$rp_key]['transaction_code'] = "Payment #".$rp_value->rp_id;
-            $_transaction[$rp_key]['type'] = 'Payment';
+            $_transaction[$rp_key]['type'] = 'Collection';
             $_transaction[$rp_key]['reference_name'] = 'receive_payment';
             $_transaction[$rp_key]['customer_name'] =  $rp_value->company != "" ? $rp_value->company : $rp_value->title_name." ".$rp_value->first_name." ".$rp_value->last_name." ".$rp_value->suffix_name;
             $_transaction[$rp_key]['no'] = $rp_value->rp_id;

@@ -62,7 +62,7 @@ class Report
 			$data['je_reference_id'] = 'Num';
 			$data['c_full_name'] = 'Name';
 			$data['jline_description'] = 'Memo/Discription';
-			$data['amount'] = 'Amount';
+			$data['amount2'] = 'Amount';
 
 			return $data;
 		}

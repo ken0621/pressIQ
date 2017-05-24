@@ -40,6 +40,9 @@
                       $value3->c_full_name = $value3->v_full_name;
                     ?>
                   @endif
+                  <?php 
+                    $value3->amount2 = currency('PHP', $value3->amount);
+                  ?>
                 @foreach($report_field as $key4 => $value4)
                   <td>
                       {{$value3->$key4}}
@@ -50,7 +53,7 @@
               </tr>
     					@endforeach
       				<tr>
-      					<td colspan="{{count($report_field) -1}}"><b>Total for {{$chart_of_account[$key2]}}</b></td>
+      					<td colspan="{{count($report_field) + 1}}"><b>Total for {{$chart_of_account[$key2]}}</b></td>
       					<td class="text-right">{{currency('PHP', $balance)}}</td>
       				</tr>	
        			@endforeach

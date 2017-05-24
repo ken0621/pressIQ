@@ -55,6 +55,17 @@ class Report
 			$data['jline_amount'] = 'Amount';
 			return $data;
 		}
+		else if($filter == 'accounting_general_ledger')
+		{
+			$data['date_a'] = 'Date';
+			$data['je_reference_module'] = 'Transaction Type';
+			$data['je_reference_id'] = 'Num';
+			$data['c_full_name'] = 'Name';
+			$data['jline_description'] = 'Memo/Discription';
+			$data['amount'] = 'Amount';
+
+			return $data;
+		}
 	}	
 	public static function sales_report_item()
 	{

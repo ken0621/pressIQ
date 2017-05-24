@@ -183,6 +183,7 @@
                     </div>
                 </div>
                 @endif
+                <div class="{{$total_disc = 0}}"></div>
                 @if(count($_inv_dsc) > 0)
                 <div>
                     <div class="form-group">
@@ -201,18 +202,21 @@
                                             <th style="width: 200px;">Amount</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody >
                                         @foreach($_inv_dsc as $key => $inv_dsc)
                                         <tr>
                                             <td>{{$key + 1}}</td>
                                             <td>{{$inv_dsc['customer']}}</td>
                                             <td>{{$inv_dsc['transaction_type']}}</td>
                                             <td>{{$inv_dsc['transaction_id']}}</td>
-                                            <td>{{currency('Php',$inv_dsc['amount'])}}</td>
+                                            <td class="{{$total_disc += $inv_dsc['amount']}}">{{currency('Php',$inv_dsc['amount'])}}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
+                            </div>
+                            <div class="col-sm-12 text-right">
+                                <h4><strong>Total </strong> {{currency('Php',$total_disc)}}</h4>
                             </div>
                         </div>
                     </div>
@@ -290,33 +294,66 @@
                 @endif
                 <div class="form-group">
                     <div class="pull-right">
-                        <h4><strong>Total Sales :</strong> {{currency("Php",$total_sales)}}</h4>
+                        <h4><strong>Cash Sales :</strong> {{currency("Php",$cash_sales)}}</h4>
                     </div>
                 </div>
                 <br>
                 <br>
                 <div class="form-group text-right">
                     <div >
-                        <h4><strong>Total Cash On Hand :</strong> {{currency("Php",$total_cash)}}</h4>
+                        <h4><strong>Credit Sales:</strong> {{currency("Php",$credit_sales)}}</h4>
+                    </div>
+                </div>
+                <div class="form-group text-right">
+                    <div class="pull-right" style="width: 125px;border: 1px solid #000;">
+                        
+                    </div>
+                </div>
+                <br>
+                <br>
+                <div class="form-group text-right">
+                    <div >
+                        <h4><strong>Total:</strong> <span style="border-bottom: double">{{currency("Php",$cash_sales + $credit_sales)}}</span></h4>
                     </div>
                 </div>
                 <br>
                 <br>
                 <br>
-                <div class="form-group" {{$agent_descrepancy = $total == $rem_amount ? '0' : ($rem_amount - $total) }}>
-                    @if(isset($rem_amount))
-                    <div class="col-md-12">
-                        <h3>Amount Remitted : {{currency("Php",$rem_amount)}}</h3>
-                        <h4>Remittance Remarks :</h4>
-                        <span style="padding: 20px">{!! $rem_remarks !!}</span>
-                    </div>
-                    @endif
-                </div>
             </div>
             <br>
             <br>
             <br>
             <br>
+            <div class="form-group text-center">
+                <table class="text-center" style="width: 100%;font-size: 12px;">
+                    <tr>
+                        <td>{{currency('PHP', $total_sold - $total_disc)}}</td>
+                        <td>{{currency('PHP', $total_empties)}}</td>
+                        <td>{{currency('PHP', $credit_sales)}}</td>
+                    </tr>
+                    <tr>
+                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                    </tr>
+                    <tr>
+                        <td>TOTAL SALES</td>
+                        <td>TOTAL EMPTIES</td>
+                        <td>ACCOUNTS RECEIVABLE</td>
+                    </tr>
+                </table>
+            </div>
+
+
+            <div class="form-group" {{$agent_descrepancy = $total == $rem_amount ? '0' : ($rem_amount - $total) }}>
+                @if(isset($rem_amount))
+                <div class="col-md-12">
+                    <h3>Amount Remitted : {{currency("Php",$rem_amount)}}</h3>
+                    <h4>Remittance Remarks :</h4>
+                    <span style="padding: 20px">{!! $rem_remarks !!}</span>
+                </div>
+                @endif
+            </div>
             <div class="form-group text-center" {{$total_loss = $loss + $empties_loss}} {{$total_over = $over + $empties_over}}>
                 <table class="text-center" style="width: 50%;font-size: 12px;">
                     <tr>
@@ -336,6 +373,7 @@
                     </tr>
                 </table>
             </div>
+
             <div class="form-group">
                 <table class="text-center" style="width: 100%;font-size: 20px;">
                     <tr>

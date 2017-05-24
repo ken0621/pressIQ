@@ -259,6 +259,9 @@ class PisSalesLiquidationController extends Member
         //TOTAL CM
         $data['total_cm'] = 0;
 
+        $data["cash_sales"] = 0;
+        $data["credit_sales"] = 0;
+
 
         $data["agent"] = Tbl_employee::position()->where("employee_id",$agent_id)->first();
         $start_date = '';
@@ -297,7 +300,8 @@ class PisSalesLiquidationController extends Member
                     $data['unset_key'][$inv_key] = $chk->rpline_rp_id;
                 }        
 
-                $data['total_ar'] += ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;    
+                $data['total_ar'] += ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;   
+                $data["credit_sales"] += $inv_value->inv_payment_applied - $cm_amt; 
                 $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied); 
             }
             else
@@ -307,6 +311,7 @@ class PisSalesLiquidationController extends Member
                 $_transaction[$inv_key]['transaction_code'] = "Paid";
 
                 $data["total_cash"] += $inv_value->inv_payment_applied - $cm_amt;
+                $data["cash_sales"] += $inv_value->inv_payment_applied - $cm_amt;
                 $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied);
             }
             $_transaction[$inv_key]['customer_name'] = $inv_value->company != "" ? $inv_value->company : $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;

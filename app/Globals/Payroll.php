@@ -43,7 +43,7 @@ use App\Models\Tbl_payroll_process_leave;
 use App\Models\Tbl_payroll_remarks;
 use App\Models\Tbl_payroll_shift;
 use App\Models\Tbl_payroll_shift_template;
-use App\Models\Tbl_payroll_employee_shift;
+use App\Models\Tbl_payroll_employee_schedule;
 
 use Carbon\Carbon;
 use stdClass;
@@ -552,6 +552,7 @@ class Payroll
 
 		$data["_time_record"] = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $payroll_time_sheet_id)->get();
 		
+		// dd($data["_time_record"]);
 
 		$return = new stdClass();
 		/* GET OTHER DETAILS BASED ON RECORD */
@@ -663,9 +664,19 @@ class Payroll
 	{
 		// dd($data);
 
+		$schedule = Tbl_payroll_employee_schedule::getschedule($data["employee_information"]->payroll_employee_id, $date)->first();
+
+		if($schedule == null)
+		{
+			$schedule = Tbl_payroll_shift::getshift($data["employee_information"]->payroll_group_id, date('D', strtotime($date)))->first();
+		}
+
+		$default_time_in = $schedule->work_start;
+		$default_time_out = $schedule->work_end;
+
 		$time_rule 				= $data["time_rule"];
-		$default_time_in 		= $data["default_time_in"];
-		$default_time_out 		= $data["default_time_out"];
+		// $default_time_in 		= $data["default_time_in"];
+		// $default_time_out 		= $data["default_time_out"];
 		$_time_record 			= $data["_time_record"];
 		$default_working_hours 	= $data["default_working_hours"];
 		$late_grace_time 		= $data["employee_information"]->payroll_group_grace_time * 60;
@@ -691,18 +702,20 @@ class Payroll
 		$latest_time_out 			= 0;
 		$special_holiday_hours 		= 0;
 		$regular_holiday_hours 		= 0;
-		$break 						= 0;
+		
 		$total_under_time 			= 0;
 		$absent						= false;
 		$leave 						= Payroll::check_if_employee_leave($data["employee_information"]->payroll_employee_id, $date);
-		
 
+		$break 						= Payroll::time_diff(date('H:s', strtotime($schedule->break_start)), date('H:i', strtotime($schedule->break_end)));
+
+	
 		$default_time_in 	= c_time_to_int($default_time_in);
 		$default_time_out 	= c_time_to_int($default_time_out);
 		$time_rec = null;
 
 
-		$night_differential_pm = c_time_to_int("11:00 PM");
+		$night_differential_pm = c_time_to_int("10:00 PM");
 		$night_differential_am = c_time_to_int("6:00 AM");
 
 		$time_in = 0;
@@ -711,10 +724,15 @@ class Payroll
 		$target_hour = $data["employee_information"]->payroll_group_target_hour;
 
 		/* BREAK COMPUTATION */
-		if($data["employee_information"]->payroll_group_is_flexi_break == 1)
-		{
-			$break = $data["employee_information"]->payroll_group_flexi_break * 60;
-		}
+		// if($data["employee_information"]->payroll_group_is_flexi_break == 1)
+		// {
+		// 	$break = $data["employee_information"]->payroll_group_flexi_break * 60;
+		// }
+
+		// Tbl_payroll_shift
+		// Tbl_payroll_employee_schedule
+
+
 
 		/* CHECK EACH TIME */
 		foreach($_time_record as $key => $time_record)
@@ -750,28 +768,28 @@ class Payroll
 
 
 			/* BREAK COMPUTATION - IF BREAK IS IN STRICT MODE */
-			if($data["employee_information"]->payroll_group_is_flexi_break == 0) //IF BREAK IS STRICT 
-			{
-				$start_break = c_time_to_int($data["employee_information"]->payroll_group_break_start);
-				$end_break = c_time_to_int($data["employee_information"]->payroll_group_break_end);
+			// if($data["employee_information"]->payroll_group_is_flexi_break == 0) //IF BREAK IS STRICT 
+			// {
+			// 	$start_break = c_time_to_int($schedule->break_start);
+			// 	$end_break = c_time_to_int($schedule->break_end);
 
-				/* CHECK IF BREAK IS WITHIN TIME RANGE */
-				if(($time_in <= $start_break) && ($start_break <= $time_out))
-				{
-					if(($time_in <= $end_break) && ($end_break <= $time_out)) //BOTH TIME IN AND TIME OUT IS WITHIN RANGE
-					{
-						$break += $end_break - $start_break;
-					}
-					else
-					{
-						$break += $time_out - $start_break;
-					}
-				}
-				elseif(($time_in <= $end_break) && ($end_break <= $time_out)) //CHECK IF BREAK OUT IS WITHIN TIME RANGE
-				{
-					$break += $end_break - $time_in;
-				}
-			}
+			// 	/* CHECK IF BREAK IS WITHIN TIME RANGE */
+			// 	if(($time_in <= $start_break) && ($start_break <= $time_out))
+			// 	{
+			// 		if(($time_in <= $end_break) && ($end_break <= $time_out)) //BOTH TIME IN AND TIME OUT IS WITHIN RANGE
+			// 		{
+			// 			$break += $end_break - $start_break;
+			// 		}
+			// 		else
+			// 		{
+			// 			$break += $time_out - $start_break;
+			// 		}
+			// 	}
+			// 	elseif(($time_in <= $end_break) && ($end_break <= $time_out)) //CHECK IF BREAK OUT IS WITHIN TIME RANGE
+			// 	{
+			// 		$break += $end_break - $time_in;
+			// 	}
+			// }
 
 
 			$early_overtime = 0;
@@ -783,12 +801,7 @@ class Payroll
 			{
 				$earliest_time_in = $time_in;
 			}
-			// if($category == 'regulartime')
-			// {
-
-			// }
-			
-
+		
 			/* GET LATEST TIME OUT - USE FOR UNDER TIME */
 			if($latest_time_out < $time_out)
 			{
@@ -808,7 +821,8 @@ class Payroll
 			$regular_hours = $time_spent;
 
 			/* if regular time */
-			if($category == 'regulartime')
+			// if($category == 'regulartime')
+			if($schedule->flexi == 0)
 			{
 				/* CHECK IF EARLY OVERTIME */
 				if($time_in < $default_time_in && $time_out != 0)
@@ -842,7 +856,7 @@ class Payroll
 
 			}
 
-			if($category == 'flexitime')
+			if($schedule->flexi == 1)
 			{
 				$late_overtime = $time_spent - $target_hour;
 
@@ -902,18 +916,19 @@ class Payroll
 		else
 		{
 			//IF BREAK IS GREATER THAN REGULAR HOURS - SET REGULAR HOURS TO ZERO
-			if($break > $total_regular_hours)
-			{
-				$total_regular_hours = 0;
-			}
-			else
-			{
-				$total_regular_hours = $total_regular_hours - $break;
-			}
+			// if($break > $total_regular_hours)
+			// {
+			// 	$total_regular_hours = 0;
+			// }
+			// else
+			// {
+			// 	$total_regular_hours = $total_regular_hours - $break;
+			// }
 		}
 
 		/* if regular time */
-		if($category == 'regulartime')
+		// if($category == 'regulartime')
+		if($schedule->flexi == 0)
 		{
 			/* COMPUTE LATE BASED ON EARLIEST TIME IN */
 
@@ -951,7 +966,7 @@ class Payroll
 			}
 		}
 
-		if($category == 'flexitime')
+		if($schedule->flexi == 1)
 		{
 			/* get under time */
 			$total_under_time = $target_hour - $total_time_spent;
@@ -979,23 +994,36 @@ class Payroll
 			$date = $data["time_sheet_info"]->payroll_time_date;
 		}
 
-		foreach($_rest_day as $rest_day)
-		{
-			if($rest_day->payroll_group_rest_day == Carbon::parse($date)->format("l"))
-			{
-				if($rest_day->payroll_group_rest_day_category == "rest day")
-				{
-					$total_rest_day_hours = $total_hours;
-					$rest_day_today = true;
-				}
-				else
-				{
-					$total_extra_day_hours = $total_hours;
-					$extra_day_today = true;
-				}
+		// foreach($_rest_day as $rest_day)
+		// {
+		// 	if($rest_day->payroll_group_rest_day == Carbon::parse($date)->format("l"))
+		// 	{
+		// 		if($rest_day->payroll_group_rest_day_category == "rest day")
+		// 		{
+		// 			$total_rest_day_hours = $total_hours;
+		// 			$rest_day_today = true;
+		// 		}
+		// 		else
+		// 		{
+		// 			$total_extra_day_hours = $total_hours;
+		// 			$extra_day_today = true;
+		// 		}
 
-				$total_regular_hours = 0;
-			}
+		// 		$total_regular_hours = 0;
+		// 	}
+		// }
+
+
+		if($schedule->rest_day == 1)
+		{
+			$total_rest_day_hours = $total_hours;
+			$rest_day_today = true;
+		}
+
+		if($schedule->extra_day == 1)
+		{
+			$total_extra_day_hours = $total_hours;
+			$extra_day_today = true;
 		}
 
 		if($holiday != null || !empty($holiday))
@@ -1037,7 +1065,23 @@ class Payroll
 		$return->night_differential = convert_seconds_to_hours_minutes("H:i", $total_night_differential);
 		$return->special_holiday_hours = convert_seconds_to_hours_minutes("H:i", $special_holiday_hours);
 		$return->regular_holiday_hours = convert_seconds_to_hours_minutes("H:i", $regular_holiday_hours);
-		$return->break 				= convert_seconds_to_hours_minutes("H:i", $break);
+		$return->break 				= $break;
+
+
+		
+
+		$time_record = collect($data['time_sheet_info'])->toArray();
+		if($time_record['payroll_time_sheet_break'] != '00:00:00')
+		{
+			$return->break = date('H:i', strtotime($time_record['payroll_time_sheet_break']));
+		}
+
+		if($return->total_hours == '00:00')
+		{
+			$return->break = '00:00';
+
+		}	
+
 		$return->time_record 		= $time_rec;
 		$return->absent 			= $absent;
 		$return->leave 				= $leave;
@@ -1067,6 +1111,12 @@ class Payroll
 		{	
 			$min = $min - 60;
 			$hour++;
+		}
+
+		if($min < 0)
+		{
+			$min += 60;
+			$hour--;
 		}
 
 		if($min <= 9)
@@ -1101,6 +1151,29 @@ class Payroll
 			$value = number_format($value,2);
 		}
 		return $value;
+	}
+
+	/* accept 24 hour format only */
+	public static function time_diff($start = '00:00', $end = '00:00')
+	{
+		/* check if time2 is greater than time1 */
+		$f_start= Payroll::time_float($start);
+		$f_end = Payroll::time_float($end);
+		if($f_start > $f_end)
+		{
+			$end = Payroll::sum_time($end, '24:00');
+		}
+
+		$ex_start = explode(':', $start);
+		$ex_end = explode(':', $end);
+
+		$hour = $ex_end[0] - $ex_start[0];
+		$min = 0;
+		if(isset($ex_end[1]) && isset($ex_start[1]))
+		{
+			$min = $ex_end[1] - $ex_start[1];
+		}
+		return Payroll::return_time($hour, $min);
 	}
 
 	public static function time_float($time = '00:00')

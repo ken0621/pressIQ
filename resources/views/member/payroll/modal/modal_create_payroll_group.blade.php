@@ -220,7 +220,7 @@
 											<div class="col-md-6">
 												<small>Late parameter</small>
 												<div class="input-group">
-													<input type="number" name="payroll_late_interval" class="form-control late-param-change late-param-number text-right">
+													<input type="number" name="payroll_late_interval" class="form-control late-param-change late-param-number text-right" step="any">
 													<span class="input-group-btn" style="width: 100px">
 														<select class="form-control late-param-change late-param-select" name="payroll_late_parameter">
 															<option value="Second">Second</option>
@@ -233,9 +233,74 @@
 											</div>
 											<div class="col-md-6">
 												<small>Deduction for every (<span class="late-label-param">0</span>)</small>
-												<input type="number" name="payroll_late_deduction" class="form-control text-right">
+												<input type="number" name="payroll_late_deduction" class="form-control text-right" step="any">
 											</div>
 										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-body form-horizontal">
+										<div class="form-group">
+											<label class="col-md-12">Under Time Deduction</label>
+										</div>
+										<div class="form-group">
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="under-time-category-change" type="radio" value="Base on Salary" name="payroll_under_time_category">Base on Salary</label>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="under-time-category-change" type="radio" value="Custom" name="payroll_under_time_category">Custom</label>
+												</div>
+											</div>
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="under-time-category-change" type="radio" name="payroll_under_time_category" value="Not Deducted" checked>Not Deducted</label>
+												</div>
+											</div>
+										</div>
+										<div class="form-group display-none under-time-custom-form">
+											<div class="col-md-6">
+												<small>Under Time parameter</small>
+												<div class="input-group">
+													<input type="number" name="payroll_under_time_interval" class="form-control late-param-change late-param-number text-right" step="any">
+													<span class="input-group-btn" style="width: 100px">
+														<select class="form-control late-param-change late-param-select" name="payroll_under_time_parameter">
+															<option value="Second">Second</option>
+															<option value="Minute">Minute</option>
+															<option value="Hour">Hour</option>
+														</select>
+													</span>
+												</div>
+
+											</div>
+											<div class="col-md-6">
+												<small>Deduction for every (<span class="under-time-label-param">0</span>)</small>
+												<input type="number" name="payroll_under_time_deduction" class="form-control text-right" step="any">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="panel panel-default">
+									<div class="panel-body form-horizontal">
+										<div class="form-group">
+											<label class="col-md-12">Break Deduction</label>
+										</div>
+										<div class="form-group">
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="late-category-change" type="radio" value="Base on Salary" name="payroll_break_category">Base on Salary</label>
+												</div>
+											</div>
+											
+											<div class="col-md-4">
+												<div class="radio">
+													<label><input class="late-category-change" type="radio" name="payroll_break_category" value="Not Deducted" checked>Not Deducted</label>
+												</div>
+											</div>
+										</div>
+										
 									</div>
 								</div>
 							</div>
@@ -266,7 +331,7 @@
 										<div class="form-group">
 											<div class="col-md-12">
 												<small>Agency Fee</small>
-												<input type="number" name="payroll_group_agency_fee" class="form-control text-right">
+												<input type="number" name="payroll_group_agency_fee" class="form-control text-right" step="any">
 											</div>
 										</div>
 									</div>
@@ -296,7 +361,7 @@
 									<input type="text" name="payroll_overtime_name[]" value="{{$rate->payroll_overtime_name}}" class="width-100 border-none" readonly>
 								</td>
 								<td width="14.28571428571429%">
-									<input type="number" name="payroll_overtime_regular[]" value="{{$rate->payroll_overtime_regular}}" class="width-100 border-none text-right" {{$rate->payroll_overtime_name == 'Regular' ? 'readonly':''}}>
+									<input type="number" name="payroll_overtime_regular[]" value="{{$rate->payroll_overtime_regular}}" class="width-100 border-none text-right" step="any" {{$rate->payroll_overtime_name == 'Regular' ? 'readonly':''}}>
 								</td>
 								<td width="14.28571428571429%">
 									<input type="number" step="any" name="payroll_overtime_overtime[]" class="width-100 border-none text-right" value="{{$rate->payroll_overtime_overtime}}">
@@ -319,120 +384,15 @@
 					</div>
 					<div id="shifting" class="tab-pane fade">
 						<div class="form-horizontal">
-							<!-- <div class="form-group">
-								<div class="col-md-8 form-horizontal">
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="checkbox">
-												<label><input type="checkbox" name="payroll_group_is_flexi_time" class="check-flexi" value="1">Flexi Time</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-6">
-											<small>Working Days(per month)</small>
-											<input type="number" name="payroll_group_working_day_month" class="form-control text-right">
-										</div>
-										<div class="col-md-6">
-											<small>Target Hours</small>
-											<input type="number" name="payroll_group_target_hour" class="form-control text-right">
-											<input type="hidden" name="payroll_group_target_hour_parameter" value="Daily">
-									
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<div class="checkbox">
-												<label><input type="checkbox" name="payroll_group_is_flexi_break" class="payroll_group_is_flexi_break" value="1">Flexible Break</label>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<table class="table table-bordered table-condensed timesheet tbl-schedule-break">
-												<tr>
-													<td colspan="2" class="text-center">Break Schedule</td>
-												</tr>
-												<tr>
-													<td class="text-center" width="50%">Break Start</td>
-													<td class="text-center" width="50%">Break End</td>
-												</tr>
-												<tr class="editable">
-													<td class="text-center editable">
-														<input type="text" name="payroll_group_break_start" class="text-table time-entry" >
-
-													</td>
-													<td class="text-center editable">
-														<input type="text" name="payroll_group_break_end" class="text-table time-entry">
-													</td>
-												</tr>
-											</table>
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-6">
-											<small>Grace Time Period (minutes)</small>
-											<input type="number" name="payroll_group_grace_time" class="form-control text-center">
-										</div>
-										<div class="col-md-6 display-none flexi-break-container">
-											<small>Flexi Break (minutes)</small>
-											<input type="number" name="payroll_group_flexi_break" class="form-control text-center">
-										</div>
-									</div>
-									<div class="form-group">
-										<div class="col-md-12">
-											<table class="table table-bordered table-condensed timesheet">
-												<tr>
-													<td colspan="2" class="text-center">Work Schedule</td>
-												</tr>
-												<tr>
-													<td class="text-center" width="50%">Work Start</td>
-													<td class="text-center" width="50%">Work End</td>
-												</tr>
-												<tr class="editable">
-													<td class="text-center editable">
-														<input type="text" name="payroll_group_start" class="text-table time-entry" >
-
-													</td>
-													<td class="text-center editable">
-														<input type="text" name="payroll_group_end" class="text-table time-entry">
-													</td>
-												</tr>
-											</table>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-4">
-									<table class="table table-bordered table-condensed padding-tb-2">
-										<tr>
-											<td>Rest Day</td>
-											<td>Extra Day</td>
-										</tr>
-										@foreach($_day as $day)
-										<tr>
-											<td>
-												<div class="checkbox">
-													<label><input type="checkbox" class="restday-check" name="restday[]" value="{{$day['rest_day']}}" {{$day['rest_day_checked']}}>{{$day['rest_day']}}</label>
-												</div>
-											</td>
-											<td>
-												<div class="checkbox">
-													<label><input type="checkbox" class="extraday-check" name="extraday[]"" value="{{$day['extra_day']}}" {{$day['extra_day_checked']}}>{{$day['extra_day']}}</label>
-												</div>
-											</td>
-										</tr>
-										@endforeach
-									</table>
-								</div>
-							</div> -->
+							
 							<div class="form-group">
 								<div class="col-md-6">
 									<small>Working Days(per month)</small>
-									<input type="number" name="payroll_group_working_day_month" class="form-control text-center" required>
+									<input type="number" name="payroll_group_working_day_month" class="form-control text-center" step="any" required>
 								</div>
 								<div class="col-md-6">
 									<small>Grace Time Period</small>
-									<input type="number" name="payroll_group_grace_time" class="form-control text-center" required>
+									<input type="number" name="payroll_group_grace_time" class="form-control text-center" step="any" required>
 								</div>
 							</div>
 							<div class="form-group">
@@ -543,6 +503,7 @@
 	$(".time-entry").timeEntry({ampmPrefix: ' ', defaultTime: new Date(0, 0, 0, 0, 0, 0)});
 	late_categoy_change_event();
 	late_param_change();
+	under_time_category_change_event();
 	function late_categoy_change_event()
 	{
 		$(".late-category-change").unbind("change");
@@ -585,6 +546,29 @@
 			late_param_change();
 		});
 
+	}
+
+
+	function under_time_category_change_event()
+	{
+		$(".under-time-category-change").unbind("change");
+		$(".under-time-category-change").bind("change", function()
+		{
+			if($(this).val() == "Custom")
+			{
+				if($(".under-time-custom-form").hasClass('display-none'))
+				{
+					$(".under-time-custom-form").removeClass("display-none");
+				}
+			}
+			else
+			{
+				if(!$(".under-time-custom-form").hasClass('display-none'))
+				{
+					$(".under-time-custom-form").addClass("display-none");
+				}
+			}
+		});
 	}
 
 	function late_param_change()

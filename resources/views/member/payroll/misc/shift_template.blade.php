@@ -23,11 +23,11 @@
 		@foreach($_day as $key => $day)
 		<tr class="editable">
 			<td>
-				{{date('D', strtotime($day['date'])}}
+				{{date('D', strtotime($day['date']))}}
 				<input type="hidden" name="day[]" value="{{$day['date']}}">
 			</td>
 			<td>
-				{{date('d', strtotime($day['date'])}}
+				{{date('d', strtotime($day['date']))}}
 			</td>
 			<td>
 				<input type="number" name="target_hours[]" class="form-control text-center" step="any" value="{{$day['target_hours']}}">
@@ -57,7 +57,11 @@
 		@endforeach
 	</tbody>
 </table>
-
+<div class="form-group">
+	<div class="col-md-12">
+		<button class="btn btn-custom-primary pull-right submit-schedule-btn" type="submit">Save</button>
+	</div>
+</div>
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.plugin.min.js"></script>
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 <script type="text/javascript">
@@ -69,7 +73,6 @@
 		{
 			parent.prop("checked", false);
 		}
-
 	});
 
 	$(".extraday-check").unbind("change");

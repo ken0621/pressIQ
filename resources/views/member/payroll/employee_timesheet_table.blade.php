@@ -62,7 +62,9 @@
             </td>
             <td class="text-center editable approved-in">__:__ __</td>
             <td class="text-center editable approved-out">__:__ __</td>
-            <td class="text-center edit-data zerotogray break">__:__</td>
+            <td class="text-center edit-data zerotogray ">
+                <input type="text" placeholder="00:00" name="break[{{ $timesheet->date}}][{{ $key }}]" class="form-control break time-entry break-time time-entry-24">
+            </td>
             <td class="text-center edit-data zerotogray normal-hours">__:__</td>
             <td class="text-center edit-data zerotogray late-hours">__:__</td>
             <td class="text-center edit-data zerotogray under-time">__:__</td>

@@ -71,6 +71,27 @@ $data['icon'] = 'icon-sitemap';
     </div>
     </form>
   </div>
+  @if(count($_item_code) >= 1)
+    <div class="box clearfix" style="overflow: hidden !important;">
+      <div class="box-header with-border">
+        <h3 class="box-title">Product Codes</h3>
+      </div>
+      <!-- /.box-header -->
+      <form class="global-submit" method="POST" action="/mlm/slots/check_item_code">
+      {!! csrf_field() !!}
+      <div class="box-body">
+          <label>Code</label>
+          <select name="item_code_id" class="form-control">
+              @foreach($_item_code as $item_code)
+                  <option value="{{$item_code->item_code_id}}">{{$item_code->item_activation_code}}</option>
+              @endforeach
+          </select>
+        <hr>
+        <button class="btn btn-primary pull-right">Use code</button>
+      </div>
+      </form>
+    </div>
+  @endif
 </div>  
 <div class="col-md-6">
   <div class="box">
@@ -186,6 +207,16 @@ function submit_done(data)
   {
     toastr.success('Transfer done.');
     window.location = "/mlm";
+  }
+  else if(data.status == 'success-check-prod-code')
+  {
+    var link = "/mlm/slots/item_code?item_code_id="+data.item_code_id;
+    action_load_main_modal(link,"");
+  }
+  else if(data.status == 'success-prod-code')
+  {
+    toastr.success('Done.');
+    window.location = "/mlm/slots";
   }
   else
   {

@@ -57,9 +57,13 @@
 				</table>
 				<table class="table table-condensed">
 					<tr>
-						<td colspan="2">
-							<label>Amount</label>
+						<td>
+							<label>Wallet Amount</label>
 							<input type="number" class="form-control" name="merchant_school_amount">
+						</td>
+						<td>
+							<label>Additional Cash</label>
+							<input type="number" class="form-control" name="merchant_school_cash">
 						</td>
 					</tr>
 					<tr>

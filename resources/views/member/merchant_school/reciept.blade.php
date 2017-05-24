@@ -1,5 +1,8 @@
 <?php 
-$reciept->merchant_school_amount = $reciept->merchant_school_amount * (-1);
+if($reciept->merchant_school_amount <= 0)
+{
+    $reciept->merchant_school_amount = $reciept->merchant_school_amount * (-1);
+}
 ?>
     <div class="clearfix">
         <div>
@@ -134,11 +137,11 @@ $reciept->merchant_school_amount = $reciept->merchant_school_amount * (-1);
                                 </tr>
                                 <tr>
                                     <td>Cash Payment</td>
-                                    <td>0</td>
+                                    <td>{{$reciept->merchant_school_cash}}</td>
                                 </tr>
                                 <tr>
                                     <td>Total Payment</td>
-                                    <td>0</td>
+                                    <td>{{$reciept->merchant_school_total_cash}}</td>
                                 </tr>
                                 <tr>
                                     <td>Remaining School Wallet Balance</td>

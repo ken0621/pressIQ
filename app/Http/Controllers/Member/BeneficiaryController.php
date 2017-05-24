@@ -193,7 +193,7 @@ class BeneficiaryController extends Member
         $insert['merchant_school_custmer_id'] = Request::input('customer_id');
         $insert['merchant_school_date'] = Carbon::now();
         $insert['merchant_school_anouncement'] = Request::input('merchant_school_anouncement');
-
+        $insert['merchant_school_cash'] = Request::input('merchant_school_cash');
         $customer_id = Request::input('customer_id');
         $all_wallet = DB::table('tbl_merchant_school_wallet')->where('merchant_school_custmer_id', $customer_id)->sum('merchant_school_amount');
         
@@ -203,7 +203,9 @@ class BeneficiaryController extends Member
         {
             $insert['merchant_school_amount_old'] = $all_wallet;
             $insert['merchant_school_amount_new'] = $all_wallet - $insert['merchant_school_amount'];
+            $insert['merchant_school_total_cash'] = $insert['merchant_school_amount'] +  $insert['merchant_school_cash'];
             $insert['merchant_school_amount'] = $insert['merchant_school_amount'] * (-1);
+
             if($insert['merchant_school_amount'] <= 1)
             {
                 DB::table('tbl_merchant_school_wallet')->insert($insert);

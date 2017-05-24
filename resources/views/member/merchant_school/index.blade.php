@@ -207,7 +207,8 @@ function show_repciept(merchant_school_id, type)
     }
     else
     {
-
+        console.log(1);
+        var link = '/member/mlm/merchant_school/get/receipt?merchant_school_id=' + merchant_school_id;
         $('.reciept_append').html('<center><div style="margin: 100px auto;" class="loader-16-gray"></div></center>');
         $('.reciept_append').load(link);
     }

@@ -974,6 +974,13 @@ class Payroll
 			{
 				$total_under_time = 0;
 			}
+
+			/* get late overtime */
+			$total_late_overtime = $total_time_spent - $target_hour;
+			if($total_late_overtime < 0)
+			{
+				$total_late_overtime = 0;
+			}
 		}
 
 		
@@ -1154,12 +1161,12 @@ class Payroll
 	}
 
 	/* accept 24 hour format only */
-	public static function time_diff($start = '00:00', $end = '00:00')
+	public static function time_diff($start = '00:00', $end = '00:00', $is_night = true)
 	{
 		/* check if time2 is greater than time1 */
 		$f_start= Payroll::time_float($start);
 		$f_end = Payroll::time_float($end);
-		if($f_start > $f_end)
+		if($f_start > $f_end && $is_night)
 		{
 			$end = Payroll::sum_time($end, '24:00');
 		}
@@ -1388,6 +1395,8 @@ class Payroll
 		$data['leave_count_wo_pay']			= 0;
 		$data['leave_count_w_pay']			= 0;
 		$data['leave_amount']				= 0;
+		$data['break_deduction']			= 0;
+		$data['break_time']					= 0;
 
 
 		$tax_status 	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_tax_status');
@@ -1438,6 +1447,7 @@ class Payroll
 			$approved = $time->approved_timesheet;
 			// array_push($dd_array, $approved);
 
+
 			$temp_hour 					= 0;
 
 			$regular_hours 				= Payroll::time_float($approved->regular_hours);
@@ -1451,6 +1461,7 @@ class Payroll
 			$night_differential 		= Payroll::time_float($approved->night_differential);
 			$special_holiday_hours 		= Payroll::time_float($approved->special_holiday_hours);
 			$regular_holiday_hours 		= Payroll::time_float($approved->regular_holiday_hours);
+			$break_hours 				= Payroll::time_float($approved->break);
 
 			$data['regular_hours']				+= $regular_hours;
 			$data['late_overtime']				+= $late_overtime;
@@ -1463,6 +1474,7 @@ class Payroll
 			$data['night_differential']			+= $night_differential;
 			$data['special_holiday_hours']		+= $special_holiday_hours;
 			$data['regular_holiday_hours']		+= $regular_holiday_hours;
+			$data['break_time']					+= $break_hours;
 
 			/* EMPLOYEE SALARY */
 			$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->where('payroll_employee_salary_archived',0)->orderBy('payroll_employee_salary_effective_date','desc')->first();
@@ -1518,15 +1530,20 @@ class Payroll
 
 			$working_day_month = $group->payroll_group_working_day_month;
 
-			$target_hour = $group->payroll_group_target_hour;
+			$target_hour = 0;
+			/* default shift */
+			$default_shift = Tbl_payroll_shift::getshift($group->payroll_group_id, date('D', strtotime($start)))->first();
+			$target_hour = $default_shift->target_hours;
+			/* custom shift */
+			$custom_shift = Tbl_payroll_employee_schedule::getschedule($employee_id, $start)->first();
 
-			$under_time = divide($under_time, $target_hour);
-
-			if($group->payroll_group_is_flexi_time == 1 && $group->payroll_group_target_hour_parameter == 'Per Period')
+			if($custom_shift != null)
 			{
-				$target_hour = $group->payroll_group_target_hour / $group->payroll_group_working_day_month;
+				$target_hour = $custom_shift->target_hours;
 			}
 
+
+			$under_time = divide($under_time, $target_hour);
 			$data['total_regular_days']			+= divide($regular_hours, $target_hour);
 			$data['total_rest_days']			+= divide($rest_day_hours, $target_hour);
 			$data['total_extra_days']			+= divide($extra_day_hours, $target_hour);
@@ -1797,7 +1814,8 @@ class Payroll
 			array_push($dd_array, $regular_day['late_overtime']);
 			/* LATE COMPUTATION START */
 
-			$late_deduction = 0;
+			$late_deduction 		= 0;
+			$undertime_deduction 	= 0;
 
 			if($group->payroll_late_category == 'Custom')
 			{	
@@ -1825,15 +1843,42 @@ class Payroll
 
 
 			/* under time deduction */
-			if($group->payroll_group_salary_computation == 'Daily Rate')
+			if($group->payroll_under_time_category == 'Base on Salary')
 			{
-				$under_time = 0;
+				$undertime_deduction = $under_time * $hourly_rate;
+			}
+			if($group->payroll_under_time_category == 'Custom')
+			{	
+				$ut_interval 					= $group->payroll_under_time_interval;
+				$ut_parameter 					= $group->payroll_under_time_parameter;
+				$payroll_under_time_deduction 	= $group->payroll_under_time_deduction;
+
+				if($ut_parameter == 'Second')
+				{
+					$under_time = ($under_time * 60) * 60;
+				}
+				else if($ut_parameter == 'Minute')
+				{
+					$under_time = $under_time * 60;
+				}
+
+				$ut_interval = intval(divide($under_time, $ut_interval));
+
+				$undertime_deduction = $ut_interval * $payroll_under_time_deduction;
 			}
 
-			$data['under_time'] += $under_time * $daily_rate;
+			/* break duduction */
+			$break_deduction = 0;
+			if($group->payroll_break_category == 'Base on Salary')
+			{
+				$break_deduction = $break_hours * $hourly_rate;
+			}
+ 
 
 			$data['late_deduction']	+= round($late_deduction, 2);
-
+			$data['under_time'] += round($undertime_deduction, 2);
+			$data['break_deduction'] += $break_deduction;
+			
 			// array_push($dd_array, $late_deduction);
 
 
@@ -1868,9 +1913,10 @@ class Payroll
 			$details['sh_night_diff'] 				= $special_holiday['night_differential'];
 			$details['cola'] 						= $temp_cola;
 			$details['late_deduction']				= round($late_deduction, 2);
-			$details['under_time']					= round(($under_time * $daily_rate), 2);
+			$details['under_time']					= round($undertime_deduction, 2);
 			$details['absent_deduction']			= round($daily_absent, 2);
 			$details['leave']						= round($daily_leave_amount, 2);
+			$details['break']						= round($break_deduction, 2);
 
 
 			$details['total_early_ot']				= $extra_day['early_overtime'] + $regular_day['early_overtime'] + $regular_day_rest['early_overtime'] + $special_holiday_rest['early_overtime'] + $legal_holiday_rest['early_overtime'] + $legal_holiday['early_overtime'] + $special_holiday['early_overtime'];
@@ -1924,16 +1970,6 @@ class Payroll
 				$details['total_rest_days']				= 0;
 				$details['total_night_differential']	= 0;
 			}
-
-			// if($group->payroll_group_salary_computation == 'Monthly Rate')
-			// {
-
-			// }
-
-			// if($group->payroll_group_salary_computation == 'Daily Rate')
-			// {
-
-			// }
 
 			array_push($data['_details'], $details);
 			$start = Carbon::parse($start)->addDay()->format("Y-m-d");
@@ -2371,6 +2407,7 @@ class Payroll
 		$data['total_deduction']	+= $data['late_deduction'];
 		$data['total_deduction']	+= $data['under_time'];
 		$data['total_deduction']	+= $data['agency_deduction'];
+		$data['total_deduction']	+= $data['break_deduction'];
 
 		// DEDUCTION START [LOANS, CASH ADVANCE, CASH BOND AND OTHER DEDUCTION]
 		$deduction = Payroll::getdeduction($employee_id, $date,$period_category, $payroll_period_category, $shop_id);
@@ -3010,12 +3047,12 @@ class Payroll
 		$data['total_deminimis'] = $total_deminimis;
 
 
-		$total_deduction += $data['tax_contribution'] + $data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution'] + $data['late_deduction'] + $data['under_time'] + $data['agency_deduction'] + $data['adjustment']['total_deductions'] + $data['absent_deduction'];
+		$total_deduction += $data['tax_contribution'] + $data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution'] + $data['late_deduction'] + $data['under_time'] + $data['agency_deduction'] + $data['adjustment']['total_deductions'] + $data['absent_deduction'] + $data['payroll_under_time_deduction'];
 
 
 		// dd($total_deminimis);
 
-		$data['total_net']					= ($data['total_gross'] + $total_deminimis)- $total_deduction;
+		$data['total_net']					= ($data['total_gross'] + $total_deminimis) - $total_deduction;
 		$data['total_gross']				+= $data['total_deminimis'];
 		$data['total_deduction']			= $total_deduction;
 		$data['total_allowance']			= $total_allowance;

@@ -251,6 +251,7 @@ class PayrollTimeSheetController extends Member
 		$total_night_differential 		= '00:00';
 		$total_special_holiday_hours 	= '00:00';
 		$total_regular_holiday_hours 	= '00:00';
+		$total_break_hours				= '00:00';
 
 		$regular_day_count 				= 0;
 		$rest_day_count 				= 0;
@@ -310,6 +311,9 @@ class PayrollTimeSheetController extends Member
 			$total_night_differential = Payroll::sum_time($total_night_differential, $approved_timesheet->night_differential);
 			$total_special_holiday_hours = Payroll::sum_time($total_special_holiday_hours, $approved_timesheet->special_holiday_hours);
 			$total_regular_holiday_hours = Payroll::sum_time($total_regular_holiday_hours, $approved_timesheet->regular_holiday_hours);
+
+			$total_break_hours = Payroll::sum_time($total_break_hours, $approved_timesheet->break);
+
 			$from = Carbon::parse($from)->addDay()->format("Y-m-d");
 
 			// $temp['total_late_hours'] = $total_late_hours;
@@ -322,6 +326,7 @@ class PayrollTimeSheetController extends Member
 
 		$data['time_spent'] 			= Payroll::if_zero_time($total_time_spent);
 		$data['regular_hours'] 			= Payroll::if_zero_time($total_regular_hours);
+		$data['break_hours']			= Payroll::if_zero_time($total_break_hours);
 		$data['late_overtime'] 			= Payroll::if_zero_time($total_late_overtime);
 		$data['early_overtime'] 		= Payroll::if_zero_time($total_early_overtime);
 		$data['late_hours'] 			= Payroll::if_zero_time($total_late_hours);
@@ -379,6 +384,13 @@ class PayrollTimeSheetController extends Member
 
 			$payroll_time_sheet_break = Tbl_payroll_time_sheet::where("payroll_time_sheet_id", $payroll_time_sheet_id)->pluck('payroll_time_sheet_break');
 
+			$update_break['payroll_time_sheet_break'] = Request::input("break")[$key][0];
+			if(Request::input("break")[$key][0] != '')
+			{
+				Tbl_payroll_time_sheet::where('payroll_time_sheet_id', $payroll_time_sheet_id)->update($update_break);
+			}
+			// array_push($arr, $payroll_time_sheet_id);
+
 			if($payroll_time_sheet_approved == 0) //overwrite timesheet record only if not yet approved
 			{
 
@@ -410,7 +422,7 @@ class PayrollTimeSheetController extends Member
 					{
 						$_insert_time_record[$i]["payroll_time_sheet_in"] 	= "";
 						$_insert_time_record[$i]["payroll_time_sheet_out"] 	= "";
-						// $_insert_time_record[$i]["payroll_time_sheet_origin"] = "Payroll Time Sheet";
+						$_insert_time_record[$i]["payroll_time_sheet_origin"] = "Payroll Time Sheet";
 					}
 
 					else
@@ -420,13 +432,11 @@ class PayrollTimeSheetController extends Member
 						// $_insert_time_record[$i]["payroll_time_sheet_out"] = Carbon::parse(Request::input("break")[$key][$i])->format("H:i");
 						// $_insert_time_record[$i]["payroll_time_sheet_break"] = Request::input("break")[$key][$i];
 
-						$update_break['payroll_time_sheet_break'] = Request::input("break")[$key][$i];
 
-						if(Request::input("break")[$key][$i] != '')
-						{
-							Tbl_payroll_time_sheet::where('payroll_time_sheet_id', $payroll_time_sheet_id)->update($update_break);
-						}
 					}
+
+
+					
 
 					$_insert_time_record[$i]["payroll_time_shee_activity"] 	= "";
 					$_insert_time_record[$i]["payroll_time_sheet_origin"] 	= $origin;
@@ -437,11 +447,10 @@ class PayrollTimeSheetController extends Member
 
 				Tbl_payroll_time_sheet_record::insert($_insert_time_record);
 
-				// array_push($arr, $_insert_time_record);
+				// array_push($arr, $payroll_time_sheet_id);
 			}
 		}
 
-		// dd($arr);
 
 		/* COMPUTE TIME FOR EACH DATE */
 		foreach(Request::input('date') as $key => $_time)

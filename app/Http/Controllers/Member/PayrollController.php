@@ -1798,7 +1798,8 @@ class PayrollController extends Member
 
           foreach($_access as $access)
           {
-               if(Utilities::checkAccess('payroll-configuration',$access['access_name']) == 1)
+
+               if(Utilities::checkAccess('payroll-configuration',str_replace(' ', '_', $access['access_name'])) == 1)
                {
                     array_push($link, $access);
                }
@@ -5265,6 +5266,7 @@ class PayrollController extends Member
           $data['total_rh_salary']           = $collect->sum('rh_salary');
           $data['total_cola']                = $collect->sum('cola');
           $data['total_leave']               = $collect->sum('leave');
+          $data['total_break']               = $collect->sum('break');
 
 
           return view('member.payroll.modal.modal_view_computation_details', $data);
@@ -5358,7 +5360,7 @@ class PayrollController extends Member
           $temp = '';
           if($night_differentials > 0)
           {    
-               $temp['name']       = 'Early OT';
+               $temp['name']       = 'Night Diff.';
                $temp['amount']     = number_format($night_differentials, 2);
                $temp['sub']        = array();
                array_push($salary, $temp);
@@ -5637,6 +5639,15 @@ class PayrollController extends Member
           }  
 
           $temp = '';
+          if($process['break_deduction'] > 0)
+          {    
+               $temp['name']       = 'Break Deduction';
+               $temp['amount']     = number_format($process['break_deduction'], 2);
+               $temp['sub']        = array();
+               array_push($deduction, $temp);
+          }  
+
+          $temp = '';
           if($process['late_deduction'] > 0)
           {    
                $temp['name']       = 'Late';
@@ -5775,10 +5786,19 @@ class PayrollController extends Member
           $temp['name']     = '';
           $temp['time']     = '';
           array_push($time, $temp);
+
+          $temp = '';
+          $temp['name']     = 'Total Break';
+          $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['break_time']));
+          array_push($time, $temp);
+
           $temp = '';
           $temp['name']     = 'Total Late';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['late_hours']));
           array_push($time, $temp);
+
+          
+
           $temp = '';
           $temp['name']     = 'Total Under Time';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['under_time_hours']));
@@ -6258,6 +6278,8 @@ class PayrollController extends Member
           $temp['leave_amount']                   = $data['leave_amount'];
           $temp['absent_deduction']               = $data['absent_deduction'];
           $temp['absent_count']                   = $data['absent_count'];
+          $temp['break_deduction']                = $data['break_deduction'];
+          $temp['break_time']                     = $data['break_time'];
 
           if(!empty($data['13_month_id']))
           {
@@ -7302,12 +7324,7 @@ class PayrollController extends Member
                               array_push($data, $amount);
                          }
 
-                         if($entity['entity_name'] == 'Late')
-                         {
-                              $temp_query = $query;
-                              $amount = $temp_query->select('late_deduction')->sum('late_deduction');
-                              array_push($data, $amount);
-                         }
+                         
                          if($entity['entity_name'] == 'Absent')
                          {
                               $temp_query = $query;

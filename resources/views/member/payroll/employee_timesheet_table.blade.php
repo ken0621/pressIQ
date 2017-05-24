@@ -142,6 +142,12 @@
                     {{$summary['regular_hours']}}
                 </td>
             </tr>
+             <tr>
+                <td>Total Break</td>
+                <td class="text-right">
+                    {{$summary['break_hours']}}
+                </td>
+            </tr>
             <tr>
                 <td>Total Late</td>
                 <td class="text-right">

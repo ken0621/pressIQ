@@ -46,6 +46,9 @@ class Tbl_payroll_group extends Model
 	// [VARCHAR] 		payroll_under_time_parameter
 	// [DOUBLE] 		payroll_under_time_deduction
 	// [VARCHAR] 		payroll_break_category
+	// [DOUBLE]			break_deduction
+	// [VARCHAR]		break_time
+	// [DOUBLE]			taxable_salary
 
 	public function scopesel($query, $shop_id = 0, $payroll_group_archived = 0)
 	{

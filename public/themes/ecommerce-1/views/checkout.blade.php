@@ -1,7 +1,7 @@
 @extends("layout")
 @section("content")
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 	<div class="container" style="background-color: #fff; margin-bottom: 50px;">
 		<div class="header">
@@ -67,6 +67,14 @@
 														</td>
 													</tr>
 													@endif
+												@elseif($payment_method->link_reference_name == "other")
+													<tr>
+														<td class="ray"><input name="payment_method_id" value="{{ $payment_method->method_id }}" type="radio"></td>
+														<td>
+															<div class="name">{{ $payment_method->other_name }}</div>
+															<div class="description" style="white-space: pre-wrap;">{{ $payment_method->other_description }}</div>
+														</td>
+													</tr>
 												@else
 													<tr>
 														<td class="ray"><input name="payment_method_id" value="{{ $payment_method->method_id }}" type="radio"></td>
@@ -82,13 +90,17 @@
 							</div>
 						</div>
 
-						<div class="upload-container">
+						<div class="upload-container hide">
 							<div class="row clearfix">
 								<div class="col-md-8">
 									<div id="upload-proof">UPLOAD PROOF OF PAYMENT</div>
 								</div>
 								<div class="col-md-4">
-								<div><button id="upload-button">UPLOAD</button></div>
+								<div>
+									<button id="upload-button" type="button" onClick="$('.payment-upload-file').trigger('click');">UPLOAD</button>
+									<input onChange="$('.upload-name').text($(this).val().split('\\').pop());" class="hide payment-upload-file" type="file" name="payment_upload">
+									<div class="upload-name"></div>
+								</div>
 								</div>
 							</div>
 						</div>
@@ -102,11 +114,17 @@
 					<div class="hold-content match-height">
 						@if (session('fail'))
 						    <div class="alert alert-danger" style="margin-top: -25px; margin-left: -25px; margin-right: -25px;">
-							    <ul>
+						    	@if(is_array(session('fail')))
+						    		<ul>
 							        @foreach(session('fail') as $fail)
 						        		<li>{{ $fail }}</li>
 							        @endforeach
-							    </ul>
+							        </ul>
+							    @else
+							    	<ul style="padding: 0; margin: 0;">
+							    		<li>{{ session('fail') }}</li>
+							    	</ul>
+						        @endif
 						    </div>
 						@endif
 						<div class="cart-summary">
@@ -125,8 +143,8 @@
 										<tr>
 											<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
 											<td>{{ $cart["quantity"] }}</td>
-											<td>P {{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</td>
-											<td style="padding-left: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&variation_id={{ $cart["product_id"] }}"><i class="fa fa-close"></i></a></td>
+											<td style="padding-left: 0; padding-right: 0;">P {{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</td>
+											<td style="padding-left: 0px; padding-right: 0px; width: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&variation_id={{ $cart["product_id"] }}"><i class="fa fa-close"></i></a></td>
 										</tr>
 										@endforeach
 									@endif
@@ -137,8 +155,7 @@
 									<tr>
 										<td></td>
 										<td class="text-right"><b>Subtotal</b></td>
-										<td>P {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</td>
-										<td></td>
+										<td colspan="2" style="word-break: break-all;">P {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</td>
 									</tr>
 									@if($get_cart["sale_information"]["total_overall_price"] > $get_cart["sale_information"]["minimum_purchase"])
 									<!-- <tr>
@@ -156,7 +173,7 @@
 									<tr>
 										<td></td>
 										<td class="text-right"><b>Total</b></td>
-										<td class="total">P {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</td>
+										<td colspan="2" class="total" style="word-break: break-all;">P {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</td>
 									</tr>
 								</tbody>
 							</table>
@@ -247,6 +264,23 @@
 										<input value="{{ Request::old('ec_order_load_number') }}" name="ec_order_load_number" type="text" class="form-control">
 									</div>
 									@endif
+									<input type="hidden" name="ec_order_merchant_school" value="{{$ec_order_merchant_school}}">
+									@if($ec_order_merchant_school >= 1)
+										@for($i = 0; $i < $ec_order_merchant_school; $i++ )	
+											@if(isset($ec_order_merchant_school_item[$i]))
+												<input type="hidden" name="merchant_school_i_id[]" value="{{$ec_order_merchant_school_item[$i]}}">
+											@endif
+											<!-- <div class="form-group">
+												<label>Student id:</label>
+												<input type="text" class="form-control" name="merchant_school_s_id[]">
+											</div>
+
+											<div class="form-group">
+												<label>Student Name:</label>
+												<input type="text" class="form-control" name="merchant_school_s_name[]">
+											</div> -->
+										@endfor
+									@endif
 								</div>
 								<div class="col-md-5">
 									<div class="form-group">
@@ -274,7 +308,7 @@
 					</div>
 				</div>
 				<div class="text-right">
-					<button id="placeorder-button" type="submit">PLACE ORDER</button>
+					<button id="placeorder-button" type="submit">BUY NOW</button>
 				</div>
 			</div>
 		</div>
@@ -287,3 +321,32 @@
 <link rel="stylesheet" type="text/css" href="/themes/{{ $shop_theme }}/css/checkout.css">
 @endsection
 
+@section("js")
+<script type="text/javascript">
+$(document).ready(function()
+{
+	var payment_method = $('input[name="payment_method_id"]');
+
+	if ( payment_method.val() != 1 && payment_method.val() != 2 ) 
+	{
+		$('.upload-container').removeClass("hide");
+	}	
+	else
+	{
+		$('.upload-container').addClass("hide");
+	}
+
+	payment_method.change(function(event) 
+	{
+		if ( $(event.currentTarget).val() != 1 && $(event.currentTarget).val() != 2 ) 
+		{
+			$('.upload-container').removeClass("hide");
+		}	
+		else
+		{
+			$('.upload-container').addClass("hide");
+		}
+	});
+});
+</script>
+@endsection

@@ -187,10 +187,7 @@ class Mlm_report
         ->select(DB::raw('wallet_log_plan as wallet_log_plan'), DB::raw('sum(wallet_log_amount ) as wallet_log_amount'), DB::raw('wallet_log_slot as wallet_log_slot'))
         ->groupBy(DB::raw('wallet_log_plan') )
         ->groupBy('wallet_log_slot')
-
         ->whereIn('wallet_log_slot', $wherein)
-
-
     	->get();
         // dd($complan_per_day);
     	$plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
@@ -362,7 +359,6 @@ class Mlm_report
     }
     public static function top_earners($shop_id, $filters)
     {
-
     	$income =Tbl_mlm_slot_wallet_log::slot()
     	->customer()
     	->where('tbl_mlm_slot_wallet_log.shop_id', $shop_id)
@@ -654,20 +650,56 @@ class Mlm_report
         ->take($filters['take'])
         ->where('item_code_date_created', '>=', $filters['from'])
         ->where('item_code_date_created', '<=', $filters['to'])
+
         ->customer()
         ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_item_code_invoice.slot_id')
         ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership');
         
         if($user_id != null)
         {
-           $invoice = $invoice->where('user_id', $user_id); 
-           $data['user_a'] = Tbl_user::where('user_id', $user_id)->first();
+            if($user_id != 0)
+            {
+                $invoice = $invoice->where('user_id', $user_id); 
+                $data['userss'] = Tbl_user::where('user_id', $user_id)->get();
+            }
+            else
+            {
+                $data['userss'] = Tbl_user::where('user_shop', $shop_id)->where('archived', 0)->get()->keyBy('user_id');
+                $where_in = [];
+                foreach($data['userss'] as $key => $value)
+                {
+                    $where_in[$key] = $key;
+                }
+                $invoice = $invoice->whereIn('user_id', $where_in);
+            }
+           
         }
         if($warehouse_id != null)
         {
-            $invoice = $invoice->where('warehouse_id', $warehouse_id);
-            $data['warehouse'] = Tbl_warehouse::where('warehouse_id', $warehouse_id)->first();
+            if($warehouse_id != 0)
+            {
+                $invoice = $invoice->where('warehouse_id', $warehouse_id);
+                $data['warehouse'] = Tbl_warehouse::where('warehouse_id', $warehouse_id)->where('archived', 0)->get();
+            }
+            else
+            {
+                $data['warehouse'] = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get()->keyBy('warehouse_id');
+                $where_in = [];
+                foreach($data['warehouse'] as $key => $value)
+                {
+                    $where_in[$key] = $key;
+                }
+
+                 $invoice = $invoice->whereIn('warehouse_id', $where_in);
+            }
+            
         }
+        else
+        {
+            $invoice = $invoice->leftjoin('tbl_warehouse', 'tbl_warehouse.warehouse_id', '=', 'tbl_item_code_invoice.warehouse_id')
+            ->where('tbl_warehouse.archived', 0);
+        }
+
 
         $invoice = $invoice->get()->keyBy('item_code_invoice_id');
         // $item_code_item = Tbl_item_code_item::
@@ -681,6 +713,7 @@ class Mlm_report
         $filter = [];
         $items_unfiltered = [];
         $data['payment'] = [];
+
         foreach($items as $key => $value)
         {
             if(isset($inventory[$value->item_name]['Price']))
@@ -725,7 +758,6 @@ class Mlm_report
             {
                 $data['payment'][$payment_a] = $value->item_membership_discounted * $value->item_quantity;
             }
-            
 
         }
 
@@ -766,7 +798,6 @@ class Mlm_report
         ->take($filters['take'])
         ->where('membership_code_date_created', '>=', $filters['from'])
         ->where('membership_code_date_created', '<=', $filters['to'])
-
         ->get();
 
         $package = Tbl_membership_package::get()->keyBy('membership_package_id');
@@ -905,5 +936,176 @@ class Mlm_report
         }
         
         // dd($plan_settings);
+    }
+
+    public static function product_sales_report_warehouse($shop_id, $filters)
+    {
+        $warehouse = Tbl_warehouse::where('warehouse_shop_id', $shop_id)->where('archived', 0)->get()->keyBy('warehouse_id');
+        $user_id = Request::input('user_id');
+        $warehouse_id = Request::input('warehouse_id');
+
+        if($warehouse_id != null)
+        {
+            if($warehouse_id != 0)
+            {
+                $warehouse = Tbl_warehouse::where('warehouse_id', $warehouse_id)->where('archived', 0)->take(1)->get();
+            }
+        }
+
+        $data['filteru'] = $filters;
+        $invoice = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
+        // ->skip($filters['skip'])
+        // ->take($filters['take'])
+        ->where('item_code_date_created', '>=', $filters['from'])
+        ->where('item_code_date_created', '<=', $filters['to'])
+        ->customer()
+        ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_item_code_invoice.slot_id')
+        ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership');
+
+        if($user_id != null)
+        {
+            if($user_id != 0)
+            {
+                $invoice = $invoice->where('user_id', $user_id);
+            }
+           
+        }
+
+        $invoice = $invoice->get()->keyBy('item_code_invoice_id');
+        // $item_code_item = Tbl_item_code_item::
+        $where_in = [];
+        $warehouse_per_invoice = [];
+        $items_unfiltered = [];
+        foreach ($invoice as $key => $value)
+        {
+            $warehouse_per_invoice[$value->warehouse_id][$key] = $value;
+            $where_in[$key] = $key;
+        }
+        $items = Tbl_item_code_item::whereIn('item_code_invoice_id', $where_in)->get();
+        foreach($items as $key => $value)
+        {
+            $items_unfiltered[$value->item_code_invoice_id][$key] = $value;
+            $invoice_s = $invoice[$value->item_code_invoice_id];
+            switch ($value->item_code_payment_type) 
+            {
+                case 1:
+                    $payment_a = 'CASH';
+                    break;
+                case 2:
+                    $payment_a =  'GC';
+                    break;
+                case 3:
+                    $payment_a =  'Wallet';
+                    break;
+                
+                default:
+                    $payment_a =  'CASH';
+                    break;
+            }
+            if(isset($data['payment'][$invoice_s->warehouse_id][$payment_a]))
+            {
+                $data['payment'][$invoice_s->warehouse_id][$payment_a] += $value->item_membership_discounted * $value->item_quantity;
+            }
+            else
+            {
+                $data['payment'][$invoice_s->warehouse_id][$payment_a] = $value->item_membership_discounted * $value->item_quantity;
+            }
+
+            if(isset($data['payment_all'][$payment_a]))
+            {
+                $data['payment_all'][$payment_a] += $value->item_membership_discounted * $value->item_quantity;
+            }
+            else
+            {
+                $data['payment_all'][$payment_a] = $value->item_membership_discounted * $value->item_quantity;
+            }
+        }
+
+        $data['warehouse_per_invoice'] = $warehouse_per_invoice;
+        $data['warehouse_a'] = $warehouse;
+        $data['page'] = 'inventory_warehouse';
+        $data['items_unfiltered'] = $items_unfiltered;
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        return view('member.mlm_report.report.inventory_warehouse', $data);
+    }
+    public static function product_sales_report_consolidated($shop_id, $filters)
+    {
+
+        $invoice = Tbl_item_code_invoice::where('tbl_item_code_invoice.shop_id', $shop_id)
+        // ->skip($filters['skip'])
+        // ->take($filters['take'])
+        ->where('item_code_date_created', '>=', $filters['from'])
+        ->where('item_code_date_created', '<=', $filters['to'])
+        ->customer()
+        ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_item_code_invoice.slot_id')
+        ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_mlm_slot.slot_membership');
+
+        $invoice = $invoice->get()->keyBy('item_code_invoice_id');
+
+        $where_in = [];
+        foreach ($invoice as $key => $value) {
+            # code...
+            $where_in[$key] = $key;
+        }
+        $items = Tbl_item_code_item::whereIn('item_code_invoice_id', $where_in)->get();
+        $data['total'] = 0;
+        $data['item_sold'] = 0;
+        foreach($items as $key => $value)
+        {
+            if(isset($inventory[$value->item_name]['Price']))
+            {
+                $inventory[$value->item_name]['Quantity'] += $value->item_quantity;
+                $inventory[$value->item_name]['Price'] += ($value->item_price * $value->item_quantity);
+                $inventory[$value->item_name]['Membership Discount'] += $value->item_membership_discount * $value->item_quantity;
+                $inventory[$value->item_name]['Membership Discounted'] += $value->item_membership_discounted * $value->item_quantity;
+                // $inventory[$value->item_name]['Membership Discounted'] .= $value->item_membership_discounted * $value->item_quantity;
+            }
+            else
+            {
+                $inventory[$value->item_name]['Quantity'] = $value->item_quantity;
+                $inventory[$value->item_name]['Price'] = $value->item_price * $value->item_quantity;
+                $inventory[$value->item_name]['Membership Discount'] = $value->item_membership_discount * $value->item_quantity;
+                $inventory[$value->item_name]['Membership Discounted'] = $value->item_membership_discounted * $value->item_quantity;
+            }
+            $data['total'] += $value->item_membership_discounted * $value->item_quantity;
+            $data['item_sold'] += $value->item_quantity;
+        }
+        $data['info'] = [];
+        $data['per_membership'] = [];
+        foreach($invoice as $key => $value)
+        {
+            $data['info'][name_format_from_customer_info($value)] = $value; 
+            if(isset($data['per_membership'][$value->membership_name]))
+            {
+                $data['per_membership'][$value->membership_name] += 1;
+            }
+            else
+            {
+                $data['per_membership'][$value->membership_name] = 1;
+            }
+        }
+        $data['filter']['Quantity'] = 'Quantity';
+        $data['filter']['Price'] = 'Price';
+        $data['filter']['Membership Discount'] = 'Membership Discount';
+        $data['filter']['Membership Discounted'] = 'Membership Discounted';
+        $data['page'] = 'inventory_consilidated';
+        if(isset($inventory))
+        {
+            $data['inventory'] = $inventory;
+        }
+        else
+        {
+            $data['inventory'] = [];
+        }
+        
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        return view('member.mlm_report.report.inventory_consilidated', $data);
+
     }
 }

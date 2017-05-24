@@ -10,14 +10,36 @@ use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_credit_memo;
+use App\Models\Tbl_user;
+use App\Globals\Accounting;
+use App\Globals\Warehouse;
+use App\Globals\Item;
+use App\Globals\UnitMeasurement;  
+use App\Globals\AuditTrail;   
 use DB;
 use Session;
 use Carbon\Carbon;
 
 class CreditMemo
 {
+	public static function cm_amount($inv_id)
+	{
+		$inv_data = Tbl_customer_invoice::c_m()->where("inv_id",$inv_id)->first();
+		$cm_amount = 0;
+		if($inv_data != null)
+        {
+            $cm_amount = $inv_data->cm_amount;
+        }
+        return $cm_amount;
+	}
+    public static function getShopId()
+    {
+        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
+    }
 	public static function postCM($customer_info, $item_info, $inv_id = 0)
 	{
+		$insert_cm["cm_shop_id"] = CreditMemo::getShopId();
+
 		$insert_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$insert_cm["cm_customer_email"] = $customer_info["cm_customer_email"];
 		$insert_cm["cm_date"] = $customer_info["cm_date"];
@@ -28,18 +50,36 @@ class CreditMemo
 
 		$cm_id = Tbl_credit_memo::insertGetId($insert_cm);
 
-		CreditMemo::insert_cmline($cm_id, $item_info);
+		/* Transaction Journal */
+        $entry["reference_module"]  = "credit-memo";
+        $entry["reference_id"]      = $cm_id;
+        $entry["name_id"]           = $customer_info['cm_customer_id'];
+        $entry["total"]             = $customer_info["cm_amount"];
+        $entry["vatable"]           = '';
+        $entry["discount"]          = '';
+        $entry["ewt"]               = '';
+
+		CreditMemo::insert_cmline($cm_id, $item_info, $entry);
 
 		if($inv_id != 0)
 		{
 			$up["credit_memo_id"] = $cm_id;
 			Tbl_customer_invoice::where("inv_id",$inv_id)->update($up);
 		}
+
+
+        $cm_data = AuditTrail::get_table_data("tbl_credit_memo","cm_id",$cm_id);
+        AuditTrail::record_logs("Added","credit_memo",$cm_id,"",serialize($cm_data));
+
 		return $cm_id;
 	}
 
 	public static function updateCM($cm_id, $customer_info, $item_info)
 	{
+        $old_data = AuditTrail::get_table_data("tbl_credit_memo","cm_id",$cm_id);
+
+		$update_cm["cm_shop_id"] = CreditMemo::getShopId();
+
 
 		$update_cm["cm_customer_id"] = $customer_info["cm_customer_id"];
 		$update_cm["cm_customer_email"] = $customer_info["cm_customer_email"];
@@ -51,11 +91,24 @@ class CreditMemo
 
 		Tbl_credit_memo::where("cm_id",$cm_id)->update($update_cm);
 
+		/* Transaction Journal */
+        $entry["reference_module"]  = "credit-memo";
+        $entry["reference_id"]      = $cm_id;
+        $entry["name_id"]           = $customer_info['cm_customer_id'];
+        $entry["total"]             = $customer_info["cm_amount"];
+        $entry["vatable"]           = '';
+        $entry["discount"]          = '';
+        $entry["ewt"]               = '';
+
 		Tbl_credit_memo_line::where("cmline_cm_id",$cm_id)->delete();
-		CreditMemo::insert_cmline($cm_id, $item_info);
+		CreditMemo::insert_cmline($cm_id, $item_info, $entry);
+
+
+        $cm_data = AuditTrail::get_table_data("tbl_credit_memo","cm_id",$cm_id);
+        AuditTrail::record_logs("Edited","credit_memo",$cm_id,serialize($old_data),serialize($cm_data));
 
 	}
-	public static function insert_cmline($cm_id, $item_info)
+	public static function insert_cmline($cm_id, $item_info, $entry)
 	{
 		foreach ($item_info as $key => $value) 
 		{
@@ -69,6 +122,37 @@ class CreditMemo
 			$insert_cmline["cmline_amount"] = $value["amount"];
 
 			Tbl_credit_memo_line::insert($insert_cmline);
+
+			$item_type = Item::get_item_type($value['item_id']);
+            /* TRANSACTION JOURNAL */  
+            if($item_type != 4)
+            { 
+	            $entry_data[$key]['item_id']            = $value["item_id"];
+	            $entry_data[$key]['entry_qty']          = $value["quantity"];
+	            $entry_data[$key]['vatable']            = 0;
+	            $entry_data[$key]['discount']           = 0;
+	            $entry_data[$key]['entry_amount']       = $value["amount"];
+	            $entry_data[$key]['entry_description']  = $value["item_description"];
+            }
+	        else
+	        {
+	        	$item_bundle = Item::get_item_in_bundle($value['item_id']);
+                if(count($item_bundle) > 0)
+                {
+                    foreach ($item_bundle as $key_bundle => $value_bundle) 
+                    {
+                        $item_data = Item::get_item_details($value_bundle->bundle_item_id);
+                        $entry_data['b'.$key.$key_bundle]['item_id']            = $value_bundle->bundle_item_id;
+                        $entry_data['b'.$key.$key_bundle]['entry_qty']          = $value['quantity'] * (UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty);
+                        $entry_data['b'.$key.$key_bundle]['vatable']            = 0;
+                        $entry_data['b'.$key.$key_bundle]['discount']           = 0;
+                        $entry_data['b'.$key.$key_bundle]['entry_amount']       = $item_data->item_price * $entry_data['b'.$key.$key_bundle]['entry_qty'];
+                        $entry_data['b'.$key.$key_bundle]['entry_description']  = $item_data->item_sales_information; 
+                    }
+                }
+	        }
 		}
+		
+		$cm_journal = Accounting::postJournalEntry($entry, $entry_data);
 	}
 }

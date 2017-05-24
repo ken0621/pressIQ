@@ -40,8 +40,10 @@
     </div>
     <div class="cart-content-items">
       <a class="cart-content-back"><img src="/resources/assets/rutsen/img/arrow-left.png">Continue Shopping</a>
-      <button onclick="location.href='/checkout'; return false;" class="cart-content-go text-center">Checkout</button>
-      
+      @if($customer_info_a)
+      <button style="margin-right: 10px;" onclick="location.href='/account/wishlist'; return false;" class="cart-content-go text-center">Wishlist</button>
+      @endif
+      <button onclick="location.href='/checkout/login'; return false;" class="cart-content-go text-center">Checkout</button>
       <div class="super-holder">
         <span>Total</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <span class="cart-content-price text-right">&#8369;&nbsp;

@@ -1,5 +1,4 @@
-
-@extends('member.layout')
+    @extends('member.layout')
 @section('content')
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <div class="panel panel-default panel-block panel-title-block" id="top">
@@ -12,7 +11,7 @@
                     List of Coupon
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right popup" size="sm" link="/member/ecommerce/coupon/generate-code" >Generate Coupon Code</a>
+            <a class="panel-buttons btn btn-custom-primary pull-right popup" size="md" link="/member/ecommerce/coupon/generate-code" >Generate Coupon Code</a>
         </div>
     </div>
 </div>
@@ -85,4 +84,5 @@ function submit_done(data)
     }
 }
 </script>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 @endsection

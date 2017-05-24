@@ -48,7 +48,8 @@ function dateFormat($string)
 {
     return date_format(date_create($string),"m/d/Y");
 }
-function deleteDir($dirPath) {
+function deleteDir($dirPath) 
+{
     if (! is_dir($dirPath)) {
         throw new InvalidArgumentException("$dirPath must be a directory");
     }
@@ -305,13 +306,36 @@ function mlm_plan_release_schedule_day_month($active = null)
     $html .= "</select>";
     return $html;
 }
-function mlm_slot_postion($position)
+function mlm_slot_postion($position, $active = null)
 {
     // slot_position
     $html = "";
     $html .= '<select class="form-control chosen-slot_position" name="slot_position">';
-    $html .= '    <option value="left">left</option>';
-    $html .= '    <option value="right">right</option>';
+    if($active != null)
+    {
+        $html = '<input type="text" class="form-control input-v2" value="'.$active.'" disabled="disabled">';
+        $html .= '<input type="hidden" class="form-control input-v2" name="slot_position" value="'.strtolower($active).'">';
+        return $html;
+    }
+
+    if($active == 'left' || $active == 'Left')
+    {
+        $html .= '    <option value="left" selected>left</option>';
+    }
+    else
+    {
+        $html .= '    <option value="left">left</option>';
+    }
+
+    if($active == 'right' || $active == 'Right')
+    {
+        $html .= '    <option value="right" selected>right</option>';
+    }
+    else
+    {
+        $html .= '    <option value="right">right</option>';
+    }
+    
     $html .= '</select>';
     return $html;
 }
@@ -543,4 +567,16 @@ function n2z($value)
         $value = 0;
     }
     return $value;
+}
+
+function debit_credit($type, $amount)
+{
+    if($type == 'Debit' || $type == 'debit')
+    {
+        return 1 * $amount;
+    }
+    else
+    {
+        return -1 * $amount;
+    }
 }

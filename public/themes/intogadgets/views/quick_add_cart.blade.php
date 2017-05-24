@@ -78,6 +78,9 @@
 		               </div>
 		            </div>
 		            <button type="button" class="single-order-button add-to-cart {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }}" variant-id="{{ $product_variant['evariant_id'] }}" {{ isset($product['variant'][1]) ? 'disabled' : ($product_variant['item_type_id'] != 2 ? ($product_variant['inventory_status'] == 'out of stock' ? 'disabled' : '') : '') }}>ADD TO CART</button>
+		            @if($wishlist)
+		              <button type="button" class="single-order-button" onClick="location.href='/wishlist/add/{{ $product["eprod_id"] }}'">ADD TO WISHLIST</button>
+		            @endif
 		            <div class="divider" style="margin: 35px 0; opacity: 0;"></div>
 		         </div>
 		      </div>

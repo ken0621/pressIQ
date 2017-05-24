@@ -8,6 +8,7 @@ use View;
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_tree_placement;
 use App\Globals\Mlm_genealogy;
+
 use App\Globals\Mlm_complan_manager_repurchase;
 use App\Models\Tbl_mlm_triangle_repurchase_slot;
 use App\Models\Tbl_mlm_triangle_repurchase_tree;
@@ -59,7 +60,7 @@ class MlmGenealogyController extends Mlm
         $slot_id           = Request::input('id');
         $shop_id           = Self::$shop_id;
         // return Mlm_genealogy::tree($slot_id, $shop_id);
-        
+        $data['slot_id_a'] = $slot_id;
         $data["slot"]      = Tbl_mlm_slot::membership()->customer()->where("tbl_mlm_slot.shop_id",$shop_id)->where("slot_id",$slot_id)->first();
         $data['l']         = Tbl_tree_placement::where('placement_tree_parent_id',$slot_id)->where('placement_tree_position','left')->count();
         $data['r']         = Tbl_tree_placement::where('placement_tree_parent_id',$slot_id)->where('placement_tree_position','right')->count();
@@ -460,9 +461,12 @@ class MlmGenealogyController extends Mlm
             $slot_info = Tbl_mlm_slot::where('slot_id',$placement)->customer()->first();
 
             return  '   <li class="width-reference">
-                            <span class="positioning parent parent-reference VC" position="'.$position.'" placement="'.$placement.'" y="'.$slot_info->first_name.'">
-                                <div class="id">+</div>
-                            </span>
+                            <a id="add_slot_modal_open_'.$position.'" href="#animatedModal" color="#EFEFEF" onClick="return false;" style="text-decoration:none"  position="'.$position.'" placement="'.$placement.'" >
+                                <span class="positioning parent parent-reference VC add_slot_membership_code" position="'.$position.'" placement="'.$placement.'" y="'.$slot_info->first_name.'">
+                                    <div class="id">+</div>
+                                </span>
+                            </a>
+                            <script>initialize_add_Slot();</script>
                         </li>';
         }
         else

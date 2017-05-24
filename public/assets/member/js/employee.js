@@ -20,7 +20,7 @@ function submit_done(data)
 	else if(data.status == "success")
     {
         toastr.success("Success");
-        $(".employee-container").load("/member/pis/agent_list .employee-container"); 
+        $(".employee-container").load("/member/cashier/agent_list .employee-container"); 
         $(data.target).html(data.view);
         $('#global_modal').modal('toggle');
         $("#all-list").addClass("active");

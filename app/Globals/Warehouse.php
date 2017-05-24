@@ -13,6 +13,9 @@ use App\Models\Tbl_settings;
 use App\Models\Tbl_user;
 use App\Models\Tbl_user_warehouse_access ;
 use App\Globals\Item;
+use App\Globals\UnitMeasurement;
+
+use App\Globals\AuditTrail;
 use App\Models\Tbl_unit_measurement_multi;
 use DB;
 use Carbon\Carbon;
@@ -48,6 +51,103 @@ class Warehouse
                 }
             }            
         }
+    }
+    public static function insert_item_to_warehouse($warehouse, $item_id, $item_quantity, $item_reorder_point)
+    {        
+        $shop_id = Warehouse::getShopId();
+        $slip_id = 0 ;
+        $inventory_id = 0;
+        if($warehouse == null)
+        {
+            $warehouse = Tbl_warehouse::where("warehouse_shop_id",$shop_id)->where("main_warehouse",1)->first();
+            if($warehouse == null)
+            {
+                //MAKE MAIN WAREHOUSE
+                $ins_warehouse["warehouse_name"] = "Main Warehouse";
+                $ins_warehouse["warehouse_shop_id"] = $shop_id;
+                $ins_warehouse["warehouse_created"] = Carbon::now();
+                $ins_warehouse["main_warehouse"] = 1;
+
+                $warehouse_id = Tbl_warehouse::insertGetId($ins_warehouse);
+
+                $ins["warehouse_id"] = $warehouse_id;
+                $ins["item_id"] = $item_id;
+                $ins["item_reorder_point"] = $item_reorder_point;
+
+                Tbl_sub_warehouse::insert($ins);
+
+                $ins_slip["inventory_reason"] = "insert_item";
+                $ins_slip["warehouse_id"] = $warehouse_id;
+                $ins_slip["inventory_remarks"] = "Insert Item";
+                $ins_slip["inventory_slip_date"] = Carbon::now();
+                $ins_slip["inventory_slip_shop_id"] = $shop_id;
+                $ins_slip["inventroy_source_reason"] = "item";
+                $ins_slip["inventory_source_id"] = $item_id;
+
+                $slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
+
+                $ins_inven["inventory_item_id"] = $item_id;
+                $ins_inven["warehouse_id"] = $warehouse_id;
+                $ins_inven["inventory_created"] = Carbon::now();
+                $ins_inven["inventory_count"] = $item_quantity;
+
+                $inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);                       
+            }
+            else
+            {
+                $insert_sub["warehouse_id"] = $warehouse->warehouse_id;
+                $insert_sub["item_id"] = $item_id;
+                $insert_sub["item_reorder_point"] = $item_reorder_point;
+
+                Tbl_sub_warehouse::insert($insert_sub);
+
+                $ins_slip["inventory_reason"] = "insert_item";
+                $ins_slip["warehouse_id"] = $warehouse->warehouse_id;
+                $ins_slip["inventory_remarks"] = "Insert Item";
+                $ins_slip["inventory_slip_date"] = Carbon::now();
+                $ins_slip["inventory_slip_shop_id"] = $shop_id;
+                $ins_slip["inventroy_source_reason"] = "item";
+                $ins_slip["inventory_source_id"] = $item_id;
+
+                $slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
+
+                $ins_inven["inventory_item_id"] = $item_id;
+                $ins_inven["warehouse_id"] =  $warehouse->warehouse_id;
+                $ins_inven["inventory_created"] = Carbon::now();
+                $ins_inven["inventory_count"] = $item_quantity;
+                $ins_inven["inventory_slip_id"] = $slip_id;
+
+                $inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
+            }
+        }
+        else
+        {
+            //
+            $insert_sub["warehouse_id"] = $warehouse->warehouse_id;
+            $insert_sub["item_id"] = $item_id;
+            $insert_sub["item_reorder_point"] = $item_reorder_point;
+
+            Tbl_sub_warehouse::insert($insert_sub);
+
+            $ins_slip["inventory_reason"] = "insert_item";
+            $ins_slip["warehouse_id"] = $warehouse->warehouse_id;
+            $ins_slip["inventory_remarks"] = "Insert Item";
+            $ins_slip["inventory_slip_date"] = Carbon::now();
+            $ins_slip["inventory_slip_shop_id"] = $shop_id;
+            $ins_slip["inventroy_source_reason"] = "item";
+            $ins_slip["inventory_source_id"] = $item_id;
+
+            $slip_id = Tbl_inventory_slip::insertGetId($ins_slip);
+
+            $ins_inven["inventory_item_id"] = $item_id;
+            $ins_inven["warehouse_id"] =  $warehouse->warehouse_id;
+            $ins_inven["inventory_created"] = Carbon::now();
+            $ins_inven["inventory_count"] = $item_quantity;
+            $ins_inven["inventory_slip_id"] = $slip_id;
+
+            $inventory_id = Tbl_warehouse_inventory::insertGetId($ins_inven);
+        }
+        return $inventory_id;
     }
     public static function insert_access($warehouse_id)
     {
@@ -89,27 +189,62 @@ class Warehouse
     public static function inventory_input_report_item($inventory_slip_id)
     {
         $data = Tbl_warehouse_inventory::inventoryslip()->item()->where("tbl_warehouse_inventory.inventory_slip_id",$inventory_slip_id)->groupBy("tbl_item.item_id")->get();
-
+        // dd($data);
         foreach ($data as $key => $value) 
         {
             $data[$key]->serial_number_list = Tbl_inventory_serial_number::where("serial_inventory_id",$value->inventory_id)->get();
-            $abbrev = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",1)->pluck("multi_abbrev");
-            $data[$key]->multi_abbrev = $abbrev != "" ? $data[$key]->multi_abbrev : '-';
+            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+            $qty = $value->inventory_count < 0 ? abs($value->inventory_count) : $value->inventory_count;
+            $sign = $value->inventory_count < 0 ? '- ' : '';
+            $data[$key]->qty_um = $sign . UnitMeasurement::um_view($qty,$value->item_measurement_id,$um_issued);
+            $data[$key]->conversion = UnitMeasurement::um_convertion($value->item_id);
         }
         return $data;
     }
-    public static function select_item_warehouse_single($warehouse_id = 0, $return = 'array')
+    public static function select_item_warehouse_single_w_page($warehouse_id = 0, $return = 'array')
     {
     	$data = Tbl_warehouse::Warehouseitem()
                              ->select_inventory($warehouse_id)
 				    		 ->orderBy('product_name','asc')
-    						 ->get();
-                             
+    						 ->paginate(10);
+        foreach($data as $key => $value)
+        {   //cycy
+            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->pluck("multi_id");
+            $data[$key]->product_qty_um = UnitMeasurement::um_view($value->product_current_qty,$value->product_um,$um_issued);
+            $data[$key]->product_reorderqty_um = UnitMeasurement::um_view($value->product_reorder_point,$value->product_um,$um_issued);
+
+            //sir
+            $sir["pis"] = Purchasing_inventory_system::check();
+            if($sir["pis"] != 0)
+            {
+                $qty = Purchasing_inventory_system::get_sir_stocks($warehouse_id, $value->product_id);
+                $data[$key]->total_stock_sir = UnitMeasurement::um_view($qty,$value->product_um,$um_issued);
+            }
+        }
     	if($return == 'json')
     	{
     		$data = json_encode($data);
     	}
     	return $data; 
+    }  
+    public static function select_item_warehouse_single($warehouse_id = 0, $return = 'array')
+    {
+        $data = Tbl_warehouse::Warehouseitem()
+                             ->select_inventory($warehouse_id)
+                             ->orderBy('product_name','asc')
+                             ->get();
+                             
+        foreach($data as $key => $value)
+        {   //cycy
+            $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$value->product_um)->where("is_base",0)->pluck("multi_id");
+            $data[$key]->product_qty_um = UnitMeasurement::um_view($value->product_current_qty,$value->product_um,$um_issued);
+            $data[$key]->product_reorderqty_um = UnitMeasurement::um_view($value->product_reorder_point,$value->product_um,$um_issued);
+        }           
+        if($return == 'json')
+        {
+            $data = json_encode($data);
+        }
+        return $data; 
     }  
 
     public static function select_item_warehouse_single_vendor($warehouse_id = 0, $return = 'array',$vendor_id)
@@ -139,7 +274,23 @@ class Warehouse
 
     public static function getUserid()
     {
-        return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+        $user_id = 0;
+        $user_data = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_id');
+        if($user_data)
+        {
+            $user_id = $user_data;
+        }
+        return $user_id;
+    }
+    public static function getWarehouseIdFromSlip($transaction_id = 0, $transaction_type = null)
+    {
+        $slip_data = Tbl_inventory_slip::where("inventroy_source_reason",$transaction_type)->where("inventory_source_id",$transaction_id)->first();
+        $warehouse_id = 0;
+        if($slip_data)
+        {
+            $warehouse_id = $slip_data->warehouse_id;
+        }
+        return $warehouse_id;
     }
     public static function check_inventory_on_warehouse($warehouse_id = 0, $item_id = 0, $return = 'array')
     {
@@ -242,6 +393,22 @@ class Warehouse
             Tbl_warehouse_inventory::insert($insertdestination);
             $data['inventory_slip_id_source']       = $inventory_slip_id_source;
             $data['inventory_slip_id_destination']  = $inventory_slip_id_destination;
+
+            $inventory_slip_source = Tbl_inventory_slip::warehouse()->where("inventory_slip_id",$inventory_slip_id_source)->first();
+            $inventory_slip_destination = Tbl_inventory_slip::warehouse()->where("inventory_slip_id",$inventory_slip_id_destination)->first();
+
+            $wh_src_name ="";
+            $wh_src_dest = "";
+            if($inventory_slip_source != null && $inventory_slip_destination != null)
+            {
+                $wh_src_name = $inventory_slip_source->warehouse_name;
+                $wh_src_dest =  $inventory_slip_destination->warehouse_name;
+            }
+            $wh_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id_source);
+            AuditTrail::record_logs("Transfer from ".$wh_src_name,"warehouse_inventory",$inventory_slip_id_source,"",serialize($wh_data));
+
+            $whs_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id_destination);
+            AuditTrail::record_logs("Transfer to ".$wh_src_dest,"warehouse_inventory",$inventory_slip_id_destination,"",serialize($whs_data));            
         }
         else
         {
@@ -268,7 +435,7 @@ class Warehouse
     * vendor
     * other
     */
-    public static function inventory_update($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array' )
+    public static function inventory_update($transaction_id = 0, $transaction_type = '', $transaction_item_inventory = array(), $return = 'array', $allow_out_of_stock = false)
     {
         //inventory source reason = $transaction_type
         //inventory source id = $transaction_id
@@ -281,8 +448,9 @@ class Warehouse
             $count = Tbl_warehouse_inventory::check_inventory_single($inventory_slip->warehouse_id, $value2['product_id'])->pluck('inventory_count');
             $count_on_hand = $count + $value2["quantity"];
 
-            if($value2['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value2['quantity'])
-            {     
+            if($allow_out_of_stock == true)
+            {
+
                 $insert["inventory_item_id"] = $value2["product_id"];
                 $insert["inventory_count"] = $value2["quantity"] * -1;
                 $insert["inventory_created"] = Carbon::now();
@@ -291,14 +459,34 @@ class Warehouse
 
                 Tbl_warehouse_inventory::insert($insert);
                 $data["status"] = "success";
+
             }
             else
             {
-                $data["status"] = "error";
-                $data["status_message"] = "The quantity is not enough";
+                if($value2['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value2['quantity'])
+                {     
+                    $insert["inventory_item_id"] = $value2["product_id"];
+                    $insert["inventory_count"] = $value2["quantity"] * -1;
+                    $insert["inventory_created"] = Carbon::now();
+                    $insert["warehouse_id"] = $inventory_slip->warehouse_id;
+                    $insert["inventory_slip_id"] = $inventory_slip->inventory_slip_id;
+
+                    Tbl_warehouse_inventory::insert($insert);
+                    $data["status"] = "success";
+                }
+                else
+                {
+                    $data["status"] = "error";
+                    $data["status_message"] = "The quantity is not enough";
+                }
             }
         }
 
+        if($data["status"] != "error" && $inventory_slip != null)
+        {
+            $wh_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip->inventory_slip_id);
+            AuditTrail::record_logs("Update","warehouse_inventory",$inventory_slip->inventory_slip_id,serialize($wh_data),serialize($wh_data));            
+        }
 
         if($return == 'json')
         {
@@ -316,12 +504,7 @@ class Warehouse
         Tbl_warehouse_inventory::where("inventory_slip_id",$inventory_slip->inventory_slip_id)->delete();
 
         foreach($transaction_item_inventory as $key2 => $value2)
-        {            
-            // $count = Tbl_warehouse_inventory::check_inventory_single($inventory_slip->warehouse_id, $value2['product_id'])->pluck('inventory_count');
-            // $count_on_hand = $count + $value2["quantity"];
-
-            // if($value2['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $value2['quantity'])
-            // {     
+        {     
                 $insert["inventory_item_id"] = $value2["product_id"];
                 $insert["inventory_count"] = $value2["quantity"];
                 $insert["inventory_created"] = Carbon::now();
@@ -330,12 +513,12 @@ class Warehouse
 
                 Tbl_warehouse_inventory::insert($insert);
                 $data["status"] = "success";
-            // }
-            // else
-            // {
-            //     $data["status"] = "error";
-            //     $data["status_message"] = "The quantity is not enough";
-            // }
+        }
+
+        if($data["status"] != "error" && $inventory_slip != null)
+        {
+            $wh_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip->inventory_slip_id);
+            AuditTrail::record_logs("Update","warehouse_inventory",$inventory_slip->inventory_slip_id,serialize($wh_data),serialize($wh_data));            
         }
 
 
@@ -393,25 +576,12 @@ class Warehouse
                 $for_serial_item[$key]["product_id"] = $refill_product['product_id'];
                 $for_serial_item[$key]["inventory_id"] = $inventory_id;
             }
-             $data['status'] = '';
-            
-
-            // $serial = Tbl_settings::where("settings_key","item_serial")->where("settings_value","enable")->where("shop_id",$shop_id)->first();
-
-            // if($is_return == null)
-            // {
-            //     if($serial != null)
-            //     {
-            //         $data['status'] = 'success-serial';
-
-            //         $items["item_id"] = "";
-            //         $items["item_list"] = $for_serial_item;
-            //         Session::put("item", $items);
-            //     }                
-            // }
 
             $data['status'] = 'success'; 
             $data['inventory_slip_id'] = $inventory_slip_id;
+
+            $slip_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id);
+            AuditTrail::record_logs("Adjust","warehouse_inventory",$inventory_slip_id,"",serialize($slip_data));
 
         }
         else
@@ -446,13 +616,13 @@ class Warehouse
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
-        $inventory_success = '';
-        $inventory_err = '';
+        $inventory_success = [];
+        $inventory_err = [];
         $success = 0;
         $err = 0;
         $insert_refill = [];
 
-        $for_serial_item = '';
+        $for_serial_item = [];
         
         if($warehouse_refill_product)
         {
@@ -495,6 +665,9 @@ class Warehouse
  
             $data['inventory_slip_id'] = $inventory_slip_id;
 
+            $slip_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id);
+            AuditTrail::record_logs("Refill","warehouse_inventory",$inventory_slip_id,"",serialize($slip_data));
+
         }
         else
         {
@@ -510,7 +683,7 @@ class Warehouse
         }
         return $data;
     }
-    public static function inventory_consume($warehouse_id = 0, $remarks = '', $consume_product ,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type = '', $transaction_id = 0)
+    public static function inventory_consume($warehouse_id = 0, $remarks = '', $consume_product ,$consumer_id = 0, $consume_cause = '', $return = 'array', $transaction_type = '', $transaction_id = 0,$allow_out_of_stock = false)
     {
         $shop_id = Warehouse::get_shop_id($warehouse_id);
         $insert_slip['inventory_slip_id_sibling']     = 0;
@@ -525,53 +698,78 @@ class Warehouse
         $insert_slip['inventory_slip_consume_refill'] = 'consume';
         $insert_slip['inventory_slip_consumer_id']    =  $consumer_id;
         $insert_slip['inventory_slip_consume_cause']  =  $consume_cause;
-        $insert_slip['slip_user_id']= Warehouse::getUserid();
-
+        $insert_slip['slip_user_id']= Warehouse::getUserid() or 0;
 
         $inventory_slip_id = Tbl_inventory_slip::insertGetId($insert_slip);
 
-        $insert_consume = '';
+        $insert_consume = null;
 
-        $inventory_success = '';
-        $inventory_err = '';
+        $inventory_success = null;
+        $inventory_err = null;
         $success = 0;
         $err = 0;
         $data['status_message'] = "";
         $err_msg = "";
         foreach($consume_product as $key => $product)
         {
-            $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $product['product_id'])->pluck('inventory_count');
-            if($count_on_hand == null)
+            $item_type = Tbl_item::where("item_id",$product['product_id'])->pluck("item_type_id");
+            if($item_type == 1) //inventory
             {
-                $count_on_hand = 0;   
-            }
+                $count_on_hand = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $product['product_id'])->pluck('inventory_count');
+                if($count_on_hand == null)
+                {
+                    $count_on_hand = 0;   
+                }
 
-            if($product['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $product['quantity'])
-            {
-                $insert_consume[$key]['inventory_item_id']        = $product['product_id'];
-                $insert_consume[$key]['warehouse_id']             = $warehouse_id;
-                $insert_consume[$key]['inventory_created']        = Carbon::now();
-                $insert_consume[$key]['inventory_count']          = $product['quantity'] * -1;
-                $insert_consume[$key]['inventory_slip_id']        = $inventory_slip_id;
+                
+                if($allow_out_of_stock == true)
+                {
+                    $insert_consume[$key]['inventory_item_id']        = $product['product_id'];
+                    $insert_consume[$key]['warehouse_id']             = $warehouse_id;
+                    $insert_consume[$key]['inventory_created']        = Carbon::now();
+                    $insert_consume[$key]['inventory_count']          = $product['quantity'] * -1;
+                    $insert_consume[$key]['inventory_slip_id']        = $inventory_slip_id;
 
-                $inventory_success[$success] = Warehouse::array_tansfer('success', $product['product_id']);
-                $success++;
-            }
-            else
-            {
-                $item_name = Item::get_item_details($product['product_id']);
-                $err_msg[$key] = "The quantity of ".$item_name->item_name." is not enough for you to transfer.<br>";
-                $inventory_err[$err] = Warehouse::array_tansfer('error', $product['product_id']);
-                $err++;
+                    $inventory_success[$success] = Warehouse::array_tansfer('success', $product['product_id']);
+                    $success++;
+                }
+                else
+                {
+                    if($product['quantity'] > 0 && $count_on_hand > 0 && $count_on_hand >= $product['quantity'])
+                    {
+                        $insert_consume[$key]['inventory_item_id']        = $product['product_id'];
+                        $insert_consume[$key]['warehouse_id']             = $warehouse_id;
+                        $insert_consume[$key]['inventory_created']        = Carbon::now();
+                        $insert_consume[$key]['inventory_count']          = $product['quantity'] * -1;
+                        $insert_consume[$key]['inventory_slip_id']        = $inventory_slip_id;
+
+                        $inventory_success[$success] = Warehouse::array_tansfer('success', $product['product_id']);
+                        $success++;
+                    }
+                    else
+                    {
+                        $item_name = Item::get_item_details($product['product_id']);
+                        $err_msg[$key] = "The quantity of ".$item_name->item_name." is not enough for you to transfer.<br>";
+                        $inventory_err[$err] = Warehouse::array_tansfer('error', $product['product_id']);
+                        $err++;
+                    }
+
+                }                
             }
         }
 
         $data['status'] = '';
-        if($inventory_err == '')
+        if($inventory_err == null)
         {
-            Tbl_warehouse_inventory::insert($insert_consume);
-            $data['status'] = 'success';
-            $data['inventory_slip_id'] = $inventory_slip_id;
+            if($insert_consume != null)
+            {
+                Tbl_warehouse_inventory::insert($insert_consume);
+                $data['status'] = 'success';
+                $data['inventory_slip_id'] = $inventory_slip_id;     
+
+                $slip_data = AuditTrail::get_table_data("tbl_inventory_slip","inventory_slip_id",$inventory_slip_id);
+                AuditTrail::record_logs("Consume","warehouse_inventory",$inventory_slip_id,"",serialize($slip_data));           
+            }
         }
         else
         {

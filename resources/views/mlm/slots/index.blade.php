@@ -16,14 +16,39 @@ $data['icon'] = 'icon-sitemap';
     <form class="global-submit" method="post" action="/mlm/slots/set_nickname">
     {!! csrf_field() !!}
     <div class="box-body">
-    	<label>Slot</label>
-    	<input type="text" class="form-control" name="active_slot" value="{{ isset($active->slot_no) ? $active->slot_no : ''}}">
+      <label>Slot</label>
+      <input type="text" class="form-control" name="active_slot" value="{{ isset($active->slot_no) ? $active->slot_no : ''}}">
 
       <label>Slot Nickname</label>
-      <input type="text" class="form-control" name="slot_nickname" value="{{ isset($active->slot_nick_name) ? $active->slot_nick_name : ''}}">
+      <input type="text" class="form-control" name="slot_nickname" value="{{ isset($active->slot_nick_name) ? $active->slot_nick_name : ''}}" readonly>
 
       <hr>
       <button class="btn btn-primary pull-right">Set Default</button>
+    </div>
+    </form>
+  </div>
+  <div class="box clearfix" style="overflow: hidden !important;">
+    <div class="box-header with-border">
+      <h3 class="box-title">Code Vault</h3>
+    </div>
+    <!-- /.box-header -->
+    <form class="global-submit" method="post" action="/mlm/slot/check_add">
+    {!! csrf_field() !!}
+    <div class="box-body">
+    	<label>Create Slot</label>
+    	<select name="membership_code_id" class="form-control">
+        @if(count($_code) != 0)
+          @foreach($_code as $code)
+            <option value="{{$code->membership_code_id}}">{{$code->membership_activation_code}} {{$code->membership_type}}</option>
+          @endforeach
+        @else
+            <option>NO MEMBERSHIP CODE</option>
+        @endif
+      </select>
+      <hr>
+      @if(count($_code) != 0)
+        <button class="btn btn-primary pull-right use_code_mem">Use Code</button>
+      @endif
     </div>
     </form>
   </div>
@@ -31,7 +56,8 @@ $data['icon'] = 'icon-sitemap';
 <div class="col-md-6">
   <div class="box">
     <div class="box-header with-border">
-      <h3 class="box-title">SLOT LIST</h3>
+      <h3 class="box-title">SLOT LIST </h3>
+      <button class="btn btn-primary pull-right popup" link="/mlm/slots/manual_add_slot">Add new slot</button>
     </div>
     <!-- /.box-header -->
     <div class="box-body">
@@ -40,7 +66,11 @@ $data['icon'] = 'icon-sitemap';
             <th>Slot</th>
             <th>Date Created</th>
             <th>Current Wallet</th>
+            <th>Membership</th>
             <th></th>
+            @if($enabled_upgrade_slot == 1)
+            <th></th>
+            @endif
         </thead>
         <tbody>
             @if(count($all_slots_p) >= 1)
@@ -49,12 +79,16 @@ $data['icon'] = 'icon-sitemap';
                   <td>{{$value->slot_no}}</td>
                   <td>{{$value->slot_created_date}}</td>
                   <td>{{$value->slot_wallet_current}}</td>
+                  <td class="membership_{{$value->slot_id}}">{{$value->membership_name}}</td>
                   <td><form class="global_submit" action="/mlm/changeslot" method="post">
                         {!! csrf_field() !!}
                         <input type="hidden" name="slot_id" value="{{$value->slot_id}}">
                         <button class="btn btn-primary">Use Slot</button>
                       </form>
                   </td>
+                  @if($enabled_upgrade_slot == 1)
+                  <td><button class="btn btn-primary popup" link="/mlm/slots/upgrade_slot/{{$value->slot_id}}" type="button" size="lg" data-toggle="modal" data-target="#global_modal">Upgrade Slot</button></td>
+                  @endif
                 </tr>
               @endforeach
             @else
@@ -76,19 +110,64 @@ $data['icon'] = 'icon-sitemap';
   </div>
   <!-- /.box -->
 </div>  
+<div class="hidden">
+  <button class="check_slot_button popup" link=""> 
+</div>
 @endsection
 @section('js')
 <script type="text/javascript">
+
+$(".use_code_mem").click(function()
+{
+  $(this).disabled();
+});
+
 function submit_done(data)
 {
   if(data.status == 'success')
   {
     toastr.success(data.message);
+  }  
+  else if(data.status == "sucess-slot")
+  { 
+    var link = "/mlm/slot/manual_add?membership_id="+data.encrypted;
+    action_load_main_modal(link,"");
+    // var link = "/mlm/membership_active_code/"+data.encrypted;
+    // window.location.href = link;
+  }
+  else if(data.status == 'success-upgrade')
+  {
+    toastr.success(data.message);
+    $('#global_modal').modal('toggle');
+    $('.membership_'+data.slot_id).text(data.membership_name);
+  }
+  else if(data.status == 'success-manual')
+  {
+    var link = "/mlm/slot/manual_add?membership_id="+data.encrypted;
+    action_load_main_modal(link,"");
+  }
+  else if(data.response_status == "warning_1")
+  {
+    var erross = data.warning_validator;
+    $.each(erross, function(index, value) 
+    {
+        toastr.warning(value);
+    }); 
+  }
+  else if(data.response_status == 'warning_2')
+  {
+    toastr.warning(data.error);
+  }
+  else if(data.response_status == 'success_add_slot')
+  {
+    toastr.success('Congratulations, Your slot is created.');
+    window.location = "/mlm";
   }
   else
   {
     toastr.warning(data.message);
   }
 }
+
 </script>
 @endsection

@@ -21,7 +21,7 @@
     @foreach($_period as $period)
     <div class="custom-panel">
       <div class="custom-panel-header cursor-pointer">
-        {{$period['period']->payroll_period_category}}&nbsp;({{date('F d, Y', strtotime($period['period']->payroll_period_start))}} to {{date('F d, Y', strtotime($period['period']->payroll_period_start))}})
+        {{$period['period']->payroll_period_category}}&nbsp;({{date('F d, Y', strtotime($period['period']->payroll_period_start))}} to {{date('F d, Y', strtotime($period['period']->payroll_period_end))}})
       </div>
       <div class="width-100 display-table">
         <div class="triangle-top-right"></div>
@@ -32,8 +32,8 @@
               <li class="list-group-item">
                   {{$company->payroll_company_name}}
                   <a href="/member/payroll/payroll_approved_view/payroll_approved_company/{{$company->payroll_period_company_id}}" class="btn btn-custom-primary btn-sm pull-right"><i class="fa fa-search"></i>&nbsp;View</a>
-                  <button class="btn btn-custom-green-white btn-sm pull-right margin-right-10"><i class="fa fa-university""></i>&nbsp;Banking</button>
-                  <button class="btn btn-custom-red-white btn-sm pull-right margin-right-10"><i class="fa fa-file-pdf-o""></i>&nbsp;Payslip</button>
+                  <a href="#" class="btn btn-custom-green-white btn-sm pull-right margin-right-10 popup" link="/member/payroll/modal_generate_bank/{{$company->payroll_period_company_id}}"><i class="fa fa-university""></i>&nbsp;Banking</a>
+                  <a class="btn btn-custom-red-white btn-sm pull-right margin-right-10" href="/member/payroll/payroll_approved_view/genereate_payslip/{{$company->payroll_period_company_id}}"><i class="fa fa-file-pdf-o""></i>&nbsp;Payslip</a>
               </li>
               @endforeach
             </ul>

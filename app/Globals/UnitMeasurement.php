@@ -12,6 +12,7 @@ use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_unit_measurement;
 use App\Models\Tbl_unit_measurement_multi;
+use App\Models\Tbl_um;
 use DB;
 use Carbon\Carbon;
 use Session;
@@ -23,6 +24,39 @@ class UnitMeasurement
         return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
     }
 
+    public static function getQty($um_id)
+    {
+        $qty = 1;
+        $um_data = Tbl_unit_measurement_multi::where("multi_um_id",$um_id)->orderBy("multi_id","DESC")->first();
+        if($um_data)
+        {
+            $qty = $um_data->unit_qty;
+        }
+
+        return $qty;
+    }
+    public static function um_convertion($item_id = 0)
+    {
+        $return = '';
+        if($item_id != 0)
+        {
+            $item_data = Item::get_item_details($item_id);
+            if($item_data)
+            {
+                $um = Tbl_unit_measurement_multi::where("multi_um_id",$item_data->item_measurement_id)->where("is_base",0)->first();
+                if($um)
+                {
+                    $return = "1 ".$um->multi_abbrev." = ".$um->unit_qty." ".$item_data->multi_abbrev;
+                }
+                else
+                {
+                    $return = "1 ".$item_data->multi_abbrev;
+                }
+                
+            }
+        }
+        return $return; 
+    }
     public static function load_one_um($um_id)
     {
         return Tbl_unit_measurement::multi()->where("um_shop", UnitMeasurement::getShopId())
@@ -30,7 +64,61 @@ class UnitMeasurement
                                     ->where("um_archived",0)
                                     ->get();
     }
+    public static function create_um($um_n_based_id, $um_base_id, $qty)
+    {
+        $um_id = 0;
+        if($um_n_based_id != 0 && $um_base_id != 0)
+        {
+            $related_unit_data = Tbl_um::where("id",$um_n_based_id)->first();
+            $based_unit_data = Tbl_um::where("id",$um_base_id)->first();
 
+            $ins_um['um_shop'] = UnitMeasurement::getShopId();
+            $ins_um['um_name'] = $related_unit_data->um_name;
+            $ins_um['um_date_created'] = Carbon::now();
+            $ins_um['um_n_base'] = $um_n_based_id;
+            $ins_um['um_base'] = $um_base_id;
+
+            $um_id = Tbl_unit_measurement::insertGetId($ins_um);
+
+            $ins_base['multi_um_id'] = $um_id;
+            $ins_base['multi_name'] = $based_unit_data->um_name;
+            $ins_base['unit_qty'] = 1;
+            $ins_base['multi_abbrev'] = $based_unit_data->um_abbrev;
+            $ins_base['is_base'] = 1;
+
+            Tbl_unit_measurement_multi::insert($ins_base);
+
+            $ins_base = [];
+
+            $ins_base['multi_um_id'] = $um_id;
+            $ins_base['multi_name'] = $related_unit_data->um_name;
+            $ins_base['unit_qty'] = $qty;
+            $ins_base['multi_abbrev'] = $related_unit_data->um_abbrev;
+
+            Tbl_unit_measurement_multi::insert($ins_base);
+        }
+        elseif($um_base_id == 0 && $um_n_based_id != 0)
+        {
+            $related_unit_data = Tbl_um::where("id",$um_n_based_id)->first();
+
+            $ins_um['um_shop'] = UnitMeasurement::getShopId();
+            $ins_um['um_name'] = $related_unit_data->um_name;
+            $ins_um['um_date_created'] = Carbon::now();
+            $ins_um['um_n_base'] = $um_n_based_id;
+
+            $um_id = Tbl_unit_measurement::insertGetId($ins_um);
+
+            $ins_base['multi_um_id'] = $um_id;
+            $ins_base['multi_name'] = $related_unit_data->um_name;
+            $ins_base['unit_qty'] = 1;
+            $ins_base['multi_abbrev'] = $related_unit_data->um_abbrev;
+            $ins_base['is_base'] = 1;
+
+            Tbl_unit_measurement_multi::insert($ins_base);
+        }
+        return $um_id;
+
+    }
     public static function load_um_multi()
     {
         return Tbl_unit_measurement::multi()->where("um_shop", UnitMeasurement::getShopId())
@@ -84,13 +172,11 @@ class UnitMeasurement
     public static function um_convert($qty, $um_base_id = "")
     {
         $um_base = Tbl_unit_measurement_multi::where("multi_um_id",$um_base_id)->where("is_base",1)->first();
-        if($um_base != null)
+        // dd($um_base);
+        $return = $qty." PC";
+        if($um_base)
         {
             $return = $qty." ".$um_base->multi_abbrev;
-        }
-        else
-        {
-            $return = $qty." PC";
         }
 
         return $return;

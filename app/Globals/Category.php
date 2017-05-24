@@ -11,6 +11,20 @@ class Category
 	{
 		return Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
 	}
+	public static function for_mts_cat()
+	{
+		$up["is_mts"] = 1;
+
+        $word[0] = "empt";
+        $word[1] = "return";
+        $word[2] = "mts";
+
+        foreach ($word as $key => $value) 
+        {
+
+			Tbl_category::where("type_name","like","%".$value."%")->update($up);
+        }
+	}
 
 	/* BREAKDONW OF CATEGRORY */
 	public static function breakdown($shop_id = 0, $parent = 0, $category_type = '')
@@ -20,7 +34,7 @@ class Category
 		return $data;
 	}
 
-	public static function getAllCategory($cat_type = array("all","service","inventory","non-inventory"))
+	public static function getAllCategory($cat_type = array("all","services","inventory","non-inventory","bundles"))
 	{
 		$data = Category::re_select_raw(Category::getShopId(), 0, $cat_type);
 		return $data;
@@ -44,7 +58,7 @@ class Category
 	}
 
 	/* RECURSIVE SELECTION OF RAW DATA */ 
-	public static function re_select_raw($shop_id = 0, $parent = 0, $cat_type = array("all","service","inventory","non-inventory"))
+	public static function re_select_raw($shop_id = 0, $parent = 0, $cat_type = array("all","services","inventory","non-inventory","bundles"))
 	{
 		$data = array();
         $_category = Tbl_category::selecthierarchy($shop_id, $parent, $cat_type)->get();
@@ -53,7 +67,6 @@ class Category
         {
             $data[$key] = $category;
             $count =  Tbl_category::selecthierarchy($shop_id, $parent, $cat_type)->count();
-            
             if($count != 0)
             {
                 // dd($category->type_parent_id);
@@ -71,9 +84,8 @@ class Category
         $_category = Tbl_category::selecthierarchy($shop_id, $parent)->orderBy('type_name','asc')->get();
         foreach($_category as $key => $cat)
         {
-            $data .= '<a href="javascript:" style="padding-left:'.$padding.'px" class="list-group-item category-list" data-content="'.$cat->type_id.'">'.$cat->type_name.'</a>';
+            $data .= '<a href="javascript:" category_type="'.$cat->type_category.'" style="padding-left:'.$padding.'px" class="list-group-item category-list" data-content="'.$cat->type_id.'">'.$cat->type_name.'</a>';
             $count =  Tbl_category::selecthierarchy($shop_id, $cat->type_parent_id)->count();
-            
             if($count != 0)
             {
                 $data  .= '<div class="list-group">'.Category::re_select_html($shop_id, $cat->type_id, $padding).'</div>';
@@ -114,11 +126,10 @@ class Category
 	/* SEARCH CATEGORY WITH HTML*/
 	public static function search_category($search = '' , $type_category = '', $shop_id = 0)
 	{
-		$data = '';
+		$data = [];
 
 		$_category = Tbl_category::search($search, $type_category, $shop_id)->orderBy('type_name','asc')->get();;
 		
-		// dd($_category);
 		$data['html'] = '';
 
 		foreach($_category as $key => $cat)
@@ -152,7 +163,8 @@ class Category
             
             if($count != 0)
             {
-            	$data[$key]['sub'] = Category::re_select_raw($shop_id, $cat->type_id);
+            	 $cat_type = array("all","services","inventory","non-inventory","bundles");
+            	$data[$key]['sub'] = Category::re_select_raw($shop_id, $cat->type_id, $cat_type );
             }
         }
 
@@ -164,8 +176,8 @@ class Category
 	public static function select_tr_html($shop_id = 0, $archived = 0, $parent = 0, $margin_left = 0, $hierarchy = [])
 	{
 		$html = '';
-
-		$_category = Tbl_category::selecthierarchy($shop_id, $parent, array("all","service","inventory","non-inventory"), $archived)->orderBy('type_name','asc')->get();
+		$cat_type = array("all","services","inventory","non-inventory","bundles");
+		$_category = Tbl_category::selecthierarchy($shop_id, $parent, $cat_type , $archived)->orderBy('type_name','asc')->get();
 
 		foreach($_category as $key => $cat)
 		{
@@ -179,7 +191,7 @@ class Category
 			$class .= $child;
 
 			$caret = '';
-			$count = Tbl_category::selecthierarchy($shop_id, $parent, $cat->type_id, $archived)->count();
+			$count = Tbl_category::selecthierarchy($shop_id, $parent, $cat_type, $archived)->count();
 			if($count != 0)
 			{
 				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$cat->type_id.'"></i>';
@@ -203,6 +215,7 @@ class Category
 		$html = "";
 		$_category = Tbl_category::where("archived",1)->get();
 
+		$cat_type = array("all","services","inventory","non-inventory","bundles");
 		foreach ($_category as $key => $value) 
 		{
 			$class = '';
@@ -216,7 +229,7 @@ class Category
 			$class .= $child;
 
 			$caret = '';
-			$count = Tbl_category::selecthierarchy(Category::getShopId(), $value->type_parent_id, $value->type_id, 1)->count();
+			$count = Tbl_category::selecthierarchy(Category::getShopId(), $value->type_parent_id, $cat_type, 1)->count();
 			if($count != 0)
 			{
 				$caret = '<i class="fa fa-caret-down toggle-category margin-right-10 cursor-pointer" data-content="'.$value->type_id.'"></i>';

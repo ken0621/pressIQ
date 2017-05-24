@@ -89,12 +89,20 @@
            </a>
            <div class="border">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
-                 <div class="img"><img src="{{ get_collection_first_image($collection) }}"></div>
+                 <div class="img">
+                  @if($collection["product"]["eprod_detail_image"])
+                      <img class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
+                  @endif
+                  <img src="{{ get_collection_first_image($collection) }}">
+                 </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
                  <div class="price-right">₱ 13,990.00</div>
               </a>
-              <div class="hover"><a href="/product/view/{{ $collection['product']['eprod_id'] }}"></a><a href="/product/view/{{ $collection['product']['eprod_id'] }}" class="text">VIEW MORE</a></div>
+             <div class="hover">
+                  <a product-id="{{ $collection['product']['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
+                  <a style="display: block; margin-top: 50px;" href="/product/view/{{ $collection['product']['eprod_id'] }}" class="text">VIEW MORE</a>
+              </div>
            </div>
         </div>
         @endforeach
@@ -113,12 +121,20 @@
            </a>
            <div class="border">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
-                 <div class="img"><img src="{{ get_collection_first_image($collection) }}"></div>
+                 <div class="img">
+                  @if($collection["product"]["eprod_detail_image"])
+                      <img class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
+                  @endif
+                  <img src="{{ get_collection_first_image($collection) }}">
+                 </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
                  <div class="price-right">₱ 13,990.00</div>
               </a>
-              <div class="hover"><a href="/product/view/{{ $collection['product']['eprod_id'] }}"></a><a href="/product/view/{{ $collection['product']['eprod_id'] }}" class="text">VIEW MORE</a></div>
+             <div class="hover">
+                  <a product-id="{{ $collection['product']['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
+                  <a style="display: block; margin-top: 50px;" href="/product/view/{{ $collection['product']['eprod_id'] }}" class="text">VIEW MORE</a>
+              </div>
            </div>
         </div>
         @endforeach
@@ -137,16 +153,40 @@
            </a>
            <div class="border">
               <a href="/product/view/{{ $collection['product']['eprod_id'] }}">
-                 <div class="img"><img src="{{ get_collection_first_image($collection) }}"></div>
+                 <div class="img">
+                  @if($collection["product"]["eprod_detail_image"])
+                      <img class="detail" src="{{ $collection["product"]["eprod_detail_image"] }}">
+                  @endif
+                  <img src="{{ get_collection_first_image($collection) }}">
+                 </div>
                  <div class="name">{{ get_collection_first_name($collection) }}</div>
                  <div class="price-left">P {{ get_collection_first_price($collection) }}</div>
                  <div class="price-right">₱ 13,990.00</div>
               </a>
-              <div class="hover"><a href="/product/view/{{ $collection['product']['eprod_id'] }}"></a><a href="/product/view/{{ $collection['product']['eprod_id'] }}" class="text">VIEW MORE</a></div>
+             <div class="hover">
+                  <a product-id="{{ $collection['product']['eprod_id'] }}" style="display: block; margin-bottom: 50px;" href="javascript:" class="text quick-add-cart">ADD TO CART</a>
+                  <a style="display: block; margin-top: 50px;" href="/product/view/{{ $collection['product']['eprod_id'] }}" class="text">VIEW MORE</a>
+              </div>
            </div>
         </div>
         @endforeach
     </div>
+</div>
+<div id="quick-add-cart" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Add to Cart</h4>
+      </div>
+      <div class="quick-cart-content">
+          
+      </div>
+    </div>
+
+  </div>
 </div>
 @endsection
 

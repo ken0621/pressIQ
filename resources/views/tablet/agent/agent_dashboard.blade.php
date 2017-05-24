@@ -21,7 +21,6 @@
             <div class="col-sm-4 pull-right">
                 <form class="select-sir" method="get">
                     <select class="choose-sir form-control" name="sir_id">
-                        <option value="">Select SIR</option>
                         @foreach($_sirs as $sir)
                             <option {{Session::get("sir_id") == $sir->sir_id ? 'selected' : '' }} value="{{$sir->sir_id}}">SIR #{{$sir->sir_id}}</option>
                         @endforeach
@@ -43,9 +42,14 @@
         <div class="col-md-6 col-xs-6">
           <h3>SIR No: <strong>{{sprintf("%'.05d\n", $open_sir->sir_id)}}</strong></h3>
         </div>
-        <div class="col-md-6 col-xs-6">
+        <div class="col-md-3 col-xs-3">
             <h3>
            <a link="/tablet/sir_inventory/{{Session::get('sir_id')}}" size="lg" class="form-control btn btn-primary popup">View Inventory</a>
+           </h3>
+        </div>
+        <div class="col-md-3 col-xs-3">
+            <h3>
+           <a link="/tablet/sir_reload/{{Session::get('sir_id')}}" size="md" class="form-control btn btn-primary popup">Reload</a>
            </h3>
         </div>
     </div>

@@ -77,6 +77,9 @@
                                 @if(isset($active_label))
                                     @foreach($active_label as $key => $value)
                                         <th><small>{{$value}}</small></th>
+                                        @if($value == "STAIRSTEP")
+                                            <th><small>STAIRSTEP GROUP</small></th>
+                                        @endif
                                     @endforeach
                                 @endif
                                 <th>

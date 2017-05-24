@@ -26,6 +26,7 @@ use App\Models\Tbl_customer_search;
 use App\Models\Tbl_customer_other_info;
 use App\Models\Tbl_customer_address;
 use App\Models\Tbl_mlm_matching_log;
+use App\Models\Tbl_mlm_binary_pairing;
 use App\Globals\Item;
 use App\Globals\AuditTrail;
 use App\Globals\Mlm_plan;
@@ -114,29 +115,9 @@ class MLM_SlotController extends Member
 
     }
     public function index()
-    {
-        // $slot = Mlm_compute::get_slot_info(369);
-        // return Mlm_tree::auto_place_slot_binary_left_to_right_v2($slot);
-        // return 1;
-        // $shop_id = $this->user_info->shop_id;
-        // $slot = Mlm_compute::get_slot_info(336);
-        // return Mlm_complan_manager::binary_triangle_matrix($slot, 999, 500);
-        // $plan_settings = Tbl_mlm_plan::where('shop_id', $shop_id)
-        //     ->where('marketing_plan_enable', 1)
-        //     ->where('marketing_plan_trigger', 'Slot Creation')
-        //     ->get();
-        // $slots = Tbl_mlm_slot::where('tbl_mlm_slot.shop_id', $shop_id)->membership()->membership_points()->customer()->get();
-        // // dd($slots);
-        // foreach($slots as $key => $value)
-        // {
-        //     $b = Mlm_complan_manager::binary($value);
-        //     $a = Mlm_complan_manager::direct($value);
-        // }
-        
-        // return 1;
-
-
-
+    {        
+        // $slot = Mlm_compute::get_slot_info(421);
+        // return Mlm_tree::insert_tree_sponsor($slot, $slot, 1);
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {
@@ -418,7 +399,11 @@ class MLM_SlotController extends Member
     }
     public function get_member_code($customer_id)
     {
-        $data["membership_code"]    =   Tbl_membership_code::where('customer_id', $customer_id)->where('used', 0)->where('blocked', 0)->get();
+        $data["membership_code"]    =   Tbl_membership_code::where('customer_id', $customer_id)
+        ->leftjoin('tbl_membership_package', 'tbl_membership_package.membership_package_id', '=','tbl_membership_code.membership_package_id')
+        ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=','tbl_membership_package.membership_id')
+        ->where('used', 0)->where('blocked', 0)->get();
+
         // dd($data);
         return view('member.mlm_slot.mlm_slot_get_code', $data);
     }
@@ -782,7 +767,7 @@ class MLM_SlotController extends Member
            // dd(1);
             // dd(public_path().'\assets\mlm\philteccustomer.xlsx');
             
-            Excel::load(public_path().'/assets/mlm/philteccustomer.xlsx', function($reader) 
+            Excel::load(public_path().'/assets/mlm/soveriegn.xlsx', function($reader) 
             {
                 $results = $reader->get()->toArray();
                 // DB::table('tbl_customer_address')->delete();
@@ -791,40 +776,54 @@ class MLM_SlotController extends Member
                 // DB::table('tbl_customer')->delete();
                 foreach($results[0] as $key => $value)
                 {
-                    dd($value);
-                    $shop_id = 1;
-                    // $email = $value['email'];
-                    $insert['shop_id'] = $shop_id;
-                    $insert['country_id'] = 420;
-                    $insert['title_name'] = '';
-                    $insert['first_name'] =  $value['first_name'];
-                    $insert['middle_name'] = $value['middle_name'];
-                    $insert['last_name'] = $value['last_name'];
-                    $insert['suffix_name'] = '';
-                    $insert['email'] =  $value['email'];
-                    $insert['ismlm'] = 1;
-                    $insert['mlm_username'] = $value['username'];
-                    $insert['password'] = Crypt::encrypt('password');
-                    $insert['tin_number'] = $value['tin'];
-                    $insert['company'] = 'philtechglobalinc';
-                    $customer_id = Tbl_customer::insertGetId($insert);
+                    if($key == 265)
+                    {
+                        die('end_import');
+                    }
+                    $shop_id = $this->user_info->shop_id;
+                    $count_first_last = Tbl_customer::where('shop_id', $shop_id)
+                    ->where('first_name', $value['first_name'])
+                    ->where('last_name', $value['last_name'])
+                    ->count();
 
-                    $insertSearch['customer_id'] = $customer_id;
-                    $insertSearch['body'] = $insert['title_name'].' '.$insert['first_name'].' '.$insert['middle_name'].' '.$insert['last_name'].' '.$insert['suffix_name'].' '.$insert['email'].' '.$insert['company'];
+                    if($count_first_last == 0)
+                    {
+                        $insert['shop_id'] = $shop_id;
+                        $insert['country_id'] = 420;
+                        $insert['title_name'] = '';
+                        $insert['first_name'] =  $value['first_name'];
+                        $insert['middle_name'] = '';
+                        $insert['last_name'] = $value['last_name'];
+                        $insert['suffix_name'] = '';
+                        $insert['email'] =  'soveriegn_defaultemail' . $key. '@gmail.com';
+                        $insert['ismlm'] = 1;
+                        $insert['mlm_username'] = $value['username'];
+                        $insert['password'] = Crypt::encrypt('password');
+                        $insert['tin_number'] = 0;
+                        $insert['company'] = 'soveriegn';
+                        $insert['created_date'] = Carbon::now();
+                        $customer_id = Tbl_customer::insertGetId($insert);
 
-                    Tbl_customer_search::insert($insertSearch);
+                        $insertSearch['customer_id'] = $customer_id;
+                        $insertSearch['body'] = $insert['title_name'].' '.$insert['first_name'].' '.$insert['middle_name'].' '.$insert['last_name'].' '.$insert['suffix_name'].' '.$insert['email'].' '.$insert['company'];
 
-                    $insertInfo['customer_id'] = $customer_id;
-                    $insertInfo['customer_mobile'] = $value['contact'];
-                    Tbl_customer_other_info::insert($insertInfo);
+                        Tbl_customer_search::insert($insertSearch);
 
-                    $insertAddress[0]['customer_id'] = $customer_id;
-                    $insertAddress[0]['country_id'] = 420;
-                    $insertAddress[0]['purpose'] = 'billing';
-                    $insertAddress[1]['customer_id'] = $customer_id;
-                    $insertAddress[1]['country_id'] = 420;
-                    $insertAddress[1]['purpose'] = 'shipping';
-                    Tbl_customer_address::insert($insertAddress);
+                        $insertInfo['customer_id'] = $customer_id;
+                        $insertInfo['customer_mobile'] = '';
+                        Tbl_customer_other_info::insert($insertInfo);
+
+                        $insertAddress[0]['customer_id'] = $customer_id;
+                        $insertAddress[0]['country_id'] = 420;
+                        $insertAddress[0]['purpose'] = 'billing';
+                        $insertAddress[0]['customer_street'] = $value['address'];
+                        
+                        $insertAddress[1]['customer_id'] = $customer_id;
+                        $insertAddress[1]['country_id'] = 420;
+                        $insertAddress[1]['purpose'] = 'shipping';
+                        $insertAddress[1]['customer_street'] = $value['address'];
+                        Tbl_customer_address::insert($insertAddress);
+                    }
                 }
             });
         }

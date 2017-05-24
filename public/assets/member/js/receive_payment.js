@@ -29,6 +29,7 @@ function receive_payment()
 	function action_initialize_load()
 	{
 		initialize_select_plugin();
+		$(".datepicker").datepicker();
 		$(".amount-payment").change();
 	}
 
@@ -144,7 +145,6 @@ function receive_payment()
 	{
 		$(document).on("change",".amount-payment", function(e)
 		{
-			console.log($(".amount-payment").length);
 			$(this).val(formatFloat($(this).val()) == 0 ? '' : formatMoney($(this).val()));
 
 			!is_amount_receive_modified ? $(".amount-received").val(action_total_amount_apply()).change() : $(".amount-received").change();
@@ -213,7 +213,7 @@ function receive_payment()
 
 function submit_done(data)
 {
-	if(data.status == "success")
+	if(data.status == "success" || data.response_status == "success")
 	{
 		if(data.type == "payment_method")
 		{
@@ -221,6 +221,15 @@ function submit_done(data)
 			{
 				$(this).globalDropList("reload");
 				$(this).val(data.payment_method_id).change();
+			});
+			data.element.modal("toggle");
+		}
+		else if(data.type == "account")
+		{
+			$(".drop-down-coa").load("/member/accounting/load_coa?filter[]=Bank", function()
+			{
+				$(this).globalDropList("reload");
+				$(this).val(data.id).change();
 			});
 			data.element.modal("toggle");
 		}

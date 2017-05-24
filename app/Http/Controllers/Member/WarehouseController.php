@@ -13,6 +13,11 @@ use App\Models\Tbl_sub_warehouse;
 use App\Models\Tbl_user_warehouse_access;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_settings;
+use App\Models\Tbl_sir;
+use App\Models\Tbl_sir_inventory;
+use App\Models\Tbl_unit_measurement_multi;
+use App\Globals\UnitMeasurement;
+use App\Globals\Purchasing_inventory_system;
 use Request;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
@@ -21,6 +26,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_inventory_serial_number;
 use Session;
 use App\Globals\Item;
+use App\Globals\AuditTrail;
 use Validator;
 class WarehouseController extends Member
 {
@@ -91,15 +97,14 @@ class WarehouseController extends Member
 
                     foreach ($all_item as $key2 => $value2) 
                     {
-                        $qty = Tbl_warehouse_inventory::where("inventory_item_id",$value2->item_id)
-                                                            ->where("warehouse_id",$value->warehouse_id)
-                                                            ->sum("inventory_count");
+                        $qty = Tbl_warehouse_inventory::where("warehouse_id",$value2->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("tbl_item.archived",0)->sum("inventory_count");
 
                         $selling_price += $value2->item_price * $qty;
                         $cost_price += $value2->item_cost * $qty;
                     }
                     $data["_warehouse"][$key]->total_selling_price = $selling_price;
                     $data["_warehouse"][$key]->total_cost_price = $cost_price;
+                    $data["_warehouse"][$key]->total_qty = $qty;
 
 
                     $data["_warehouse"][$key]->count_no_serial = count(Tbl_warehouse_inventory::item()->warehouse()->inventoryslip()->serialnumber()->groupBy("tbl_warehouse_inventory.inventory_id")->where("inventory_count",">",0)->where("inventory_reason","refill")->where("tbl_item.shop_id",$this->user_info->shop_id)->where("tbl_warehouse.warehouse_id",$value->warehouse_id)->whereNull("serial_id")->get()->toArray());
@@ -123,15 +128,14 @@ class WarehouseController extends Member
 
                     foreach ($archive_item as $key4 => $value4) 
                     {
-                        $qty = Tbl_warehouse_inventory::where("inventory_item_id",$value4->item_id)
-                                                            ->where("warehouse_id",$value3->warehouse_id)
-                                                            ->sum("inventory_count");
+                        $qty = Tbl_warehouse_inventory::where("warehouse_id",$value4->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("tbl_item.archived",0)->sum("inventory_count");
 
                         $selling_price_a += $value4->item_price * $qty;
                         $cost_price_a += $value4->item_cost * $qty;
                     }
                     $data["_warehouse_archived"][$key3]->total_selling_price = $selling_price_a;
                     $data["_warehouse_archived"][$key3]->total_cost_price = $cost_price_a;
+                    $data["_warehouse_archived"][$key3]->total_qty = $qty;
                 }
             }
             $data["enable_serial"] = Tbl_settings::where("shop_id",$this->user_info->shop_id)->where("settings_key","item_serial")->pluck("settings_value");
@@ -142,11 +146,6 @@ class WarehouseController extends Member
         {
             return $this->show_no_access();
         }
-        // $data['warehouse'] = Warehouse::get_transfer_warehouse_information(225, 226);
-        // dd($data);
-        // $count_on_hand = Tbl_warehouse_inventory::check_inventory_single(1, 28)->pluck('inventory_count');
-        // dd($count_on_hand);
-
     }
     public function inventory_log($warehouse_id)
     {
@@ -376,15 +375,41 @@ class WarehouseController extends Member
                 return $this->show_no_access_modal();
             }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
-            $data["warehouse_item"] = Warehouse::select_item_warehouse_single($id,'array');
+            $data["warehouse_item"] = Warehouse::select_item_warehouse_single_w_page($id,'array');
             // dd(collect($data["warehouse_item"])->toArray());
-
+            $data["pis"] = Purchasing_inventory_system::check();
             return view("member.warehouse.warehouse_view",$data);
         }
         else
         {
             return $this->show_no_access();
         }
+    }
+    public function inventory_break_down($warehouse_id, $item_id)
+    {
+        if($item_id)
+        {
+            $data["_sir"] = Tbl_sir::truck()->saleagent()->where("sir_warehouse_id",$warehouse_id)->where("ilr_status","!=",2)->where("is_sync",1)->get();
+
+            $qty = 0;
+            $data["item_details"] = Item::get_item_details($item_id);
+            foreach ($data["_sir"] as $key => $value) 
+            {           
+                $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$data["item_details"]->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+                $qty = Tbl_sir_inventory::where("sir_item_id",$item_id)->where("inventory_sir_id",$value->sir_id)->sum("sir_inventory_count");
+                if($qty > 0)
+                {
+                    $data["_sir"][$key]->per_agent_qty = UnitMeasurement::um_view($qty,$data["item_details"]->item_measurement_id,$um_issued);
+                }
+                else
+                {
+                    unset($data["_sir"][$key]);
+                }
+            }
+        }
+
+        return view("member.warehouse.warehouse_sir",$data);
+
     }
     public function refill()
     {
@@ -690,6 +715,12 @@ class WarehouseController extends Member
                 $return["status"]   = "Failed";                
             }
 
+            if($return['status'] == "Sucess-archived")
+            {
+                $wh_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$id);
+                AuditTrail::record_logs("Archived","warehouse",$id,"",serialize($wh_data));                
+            }
+
 
             return json_encode($return);
         }
@@ -785,6 +816,11 @@ class WarehouseController extends Member
         {
             $return["error"][0]  = "Please try again";
             $return["status"]   = "Failed";
+        }
+        if($return['status'] == "Sucess-restore")
+        {
+            $wh_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$id);
+            AuditTrail::record_logs("Restore","warehouse",$id,"",serialize($wh_data));                
         }
 
         return json_encode($return);
@@ -885,6 +921,11 @@ class WarehouseController extends Member
             {                
                 $data['status'] = 'success';
             }
+            if($data['status'] == 'success')
+            {
+                $w_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$id);
+                AuditTrail::record_logs("Added","warehouse",$id,"",serialize($w_data));
+            }
 
              return json_encode($data);
     }
@@ -923,44 +964,49 @@ class WarehouseController extends Member
     }
     public function edit_submit()
     {
-            $up_warehouse["warehouse_name"] = Request::input("warehouse_name");
-            $up_warehouse["warehouse_address"] = Request::input("warehouse_address");
-            $up_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
-            // $up_warehouse["warehouse_created"] = Carbon::now();
 
-            Tbl_warehouse::where("warehouse_id",Request::input("warehouse_id"))->update($up_warehouse);
+        $warehouse_id  = Request::input("warehouse_id");
 
-            //EDIT tbl_warehouse per item reorderpoint
-            $reorderpoint = Request::input("reoder_point");
-            $quantity = Request::input("quantity");
+        $old_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$warehouse_id);
 
-            // dd($reorderpoint);
-            if($reorderpoint != null)
+        $up_warehouse["warehouse_name"] = Request::input("warehouse_name");
+        $up_warehouse["warehouse_address"] = Request::input("warehouse_address");
+        $up_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
+        // $up_warehouse["warehouse_created"] = Carbon::now();
+
+        Tbl_warehouse::where("warehouse_id",Request::input("warehouse_id"))->update($up_warehouse);
+
+        //EDIT tbl_warehouse per item reorderpoint
+        $reorderpoint = Request::input("reoder_point");
+        $quantity = Request::input("quantity");
+
+        // dd($reorderpoint);
+        if($reorderpoint != null)
+        {
+            foreach ($reorderpoint as $key => $value) 
             {
-                foreach ($reorderpoint as $key => $value) 
+                $up_sub["warehouse_id"] = Request::input("warehouse_id");
+                $up_sub["item_id"] = $key;
+                $up_sub["item_reorder_point"] = str_replace(",","",$value);
+
+                $sub = Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",Request::input("warehouse_id"))->first();
+                if($sub)
                 {
-                    $up_sub["warehouse_id"] = Request::input("warehouse_id");
-                    $up_sub["item_id"] = $key;
-                    $up_sub["item_reorder_point"] = str_replace(",","",$value);
+                    Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",Request::input("warehouse_id"))->update($up_sub);                
+                }
+                else
+                {
+                    Tbl_sub_warehouse::insert($up_sub);
+                    
+                    $ins_inventory["inventory_item_id"] = $key;
+                    $ins_inventory["warehouse_id"] = Request::input("warehouse_id");
+                    $ins_inventory["inventory_created"] = Carbon::now();            
+                    $ins_inventory["inventory_count"] = $quantity[$key];
 
-                    $sub = Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",Request::input("warehouse_id"))->first();
-                    if($sub)
-                    {
-                        Tbl_sub_warehouse::where("item_id",$key)->where("warehouse_id",Request::input("warehouse_id"))->update($up_sub);                
-                    }
-                    else
-                    {
-                        Tbl_sub_warehouse::insert($up_sub);
-                        
-                        $ins_inventory["inventory_item_id"] = $key;
-                        $ins_inventory["warehouse_id"] = Request::input("warehouse_id");
-                        $ins_inventory["inventory_created"] = Carbon::now();            
-                        $ins_inventory["inventory_count"] = $quantity[$key];
-
-                        Tbl_warehouse_inventory::insert($ins_inventory);
-                    }
+                    Tbl_warehouse_inventory::insert($ins_inventory);
                 }
             }
+        }
 
             //CREATE INVENTORY From warehouse 
             // foreach($quantity as $key => $value)
@@ -974,7 +1020,14 @@ class WarehouseController extends Member
 
             // }
 
-             $data['status'] = 'success';
+        $data['status'] = 'success';
+
+
+        if($data['status'] == 'success')
+        {
+            $w_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$warehouse_id);
+            AuditTrail::record_logs("Edited","warehouse",$id,serialize($old_data),serialize($w_data));
+        }
 
              return json_encode($data);
     }

@@ -425,13 +425,21 @@ function timesheet()
 					}
 				});
 
-
+				action_reload_summary();
 
 			},
 			error: function()
 			{
 			}
 		});
+	}
+
+	function action_reload_summary()
+	{
+		var selected_employee = $(".choose-employee").val();
+		var payroll_period_id = $("#payroll_period_id").val();
+		var url = '/member/payroll/employee_timesheet/timesheet/' + selected_employee + '/' + payroll_period_id;
+		$(".div-summary-table").load(url + ' .div-summary-table', function(){});
 	}
 
 	function update_time_record_on_table(val)
@@ -486,8 +494,10 @@ function timesheet()
 			/* MARK GREEN IF PAYROLL TIMSHEET WAS APPROVED */
 			if(val.payroll_time_sheet_approved == 1)
 			{
-				$(this).find(".approved-in").css("color", "green").removeClass("load-overtime-form");
-				$(this).find(".approved-out").css("color", "green").removeClass("load-overtime-form");
+				// $(this).find(".approved-in").css("color", "green").removeClass("load-overtime-form");
+				// $(this).find(".approved-out").css("color", "green").removeClass("load-overtime-form");
+				$(this).find(".approved-in").css("color", "green").addClass("load-overtime-form");
+				$(this).find(".approved-out").css("color", "green").addClass("load-overtime-form");
 				$(this).find(".time-entry.time-in").timeEntry("disable");
 				$(this).find(".time-entry.time-out").timeEntry("disable");
 				$(this).find(".table-check").removeClass("fa-unlock-alt").addClass("fa-lock").css("color", "black");

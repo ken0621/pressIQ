@@ -63,6 +63,7 @@ class EcommerceProductController extends Member
 		if($this->hasAccess("product-list","access_page"))
         {	
         	$warehouse_id = Ecom_Product::getWarehouseId();
+        	
         	$active_product 	= Tbl_ec_product::itemVariant()->inventory($warehouse_id)->where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 0);
 			$inactive_product	= Tbl_ec_product::where("eprod_shop_id", $this->getShopId())->where("tbl_ec_product.archived", 1);
 
@@ -438,6 +439,7 @@ class EcommerceProductController extends Member
 		$button_action = Request::input('button_action');
 
 		$update_product["eprod_name"] 			= Request::input('eprod_name');
+		$update_product["eprod_detail_image"]   = Request::input('eprod_detail_image');
 		$update_product["eprod_category_id"] 	= Request::input('eprod_category_id');
 
 		Tbl_ec_product::where("eprod_id", $product_id)->update($update_product);

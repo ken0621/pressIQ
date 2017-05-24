@@ -311,16 +311,19 @@ class Mlm_complan_manager_repurchase
 
             if($mlm_item_points)
             {
-                $stairstep_points = $mlm_item_points->STAIRSTEP;
+                $stairstep_points       = $mlm_item_points->STAIRSTEP;
+                $stairstep_group_points = $mlm_item_points->STAIRSTEP_GROUP;
             }
             else
             {
-                $stairstep_points = 0;
+                $stairstep_points       = 0;
+                $stairstep_group_points = 0;
             }
         }
         else
         {
-            $stairstep_points = 0;
+            $stairstep_points       = 0;
+            $stairstep_group_points = 0;
         }
 
         if($stairstep_points != 0)
@@ -365,7 +368,7 @@ class Mlm_complan_manager_repurchase
                 }
                 else
                 {
-                    $stairstep_bonus = ($stairstep_level[$tree->sponsor_tree_level]/100) * $stairstep_points;
+                    $stairstep_bonus = ($stairstep_level[$tree->sponsor_tree_level]/100) * $stairstep_group_points;
                 }
             }
             else
@@ -475,7 +478,6 @@ class Mlm_complan_manager_repurchase
         // }
     }
 
-
     public static function repurchase_points($slot_info,$item_code_id)
     {
         $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 
@@ -550,7 +552,7 @@ class Mlm_complan_manager_repurchase
             $arry_log['wallet_log_details'] = $log;
             $arry_log['wallet_log_amount'] = $membership_points_repurchase_cashback;
             $arry_log['wallet_log_plan'] = "REPURCHASE_CASHBACK";
-            $arry_log['wallet_log_status'] = "n_ready";   
+            $arry_log['wallet_log_status'] = "released";   
             $arry_log['wallet_log_claimbale_on'] = Mlm_complan_manager::cutoff_date_claimable('REPURCHASE_CASHBACK', $slot_info->shop_id); 
             Mlm_slot_log::slot_array($arry_log);
         }
@@ -559,13 +561,11 @@ class Mlm_complan_manager_repurchase
     {
         $slot_info     = Tbl_mlm_slot::where("slot_id", $slot_info->slot_id)->customer()->membership()->first();
         $item_code     = Tbl_item_code::where("item_code_id",$item_code_id)->first(); 
-
         if($item_code)
         {
             $mlm_item_points  = Tbl_mlm_item_points::where("item_id",$item_code->item_id)
             ->where('membership_id', $slot_info->membership_id)
             ->first();
-
             if($mlm_item_points)
             {
                 $unilevel_pts = $mlm_item_points->UNILEVEL_REPURCHASE_POINTS;

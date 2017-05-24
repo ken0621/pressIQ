@@ -11,7 +11,7 @@
                 </small>
             </h1>
             <a href="/member/item/import/item-template" class="btn btn-custom-white pull-right">Download Item Template</a>
-            <a href="/member/item/import/export-error" class="btn btn-custom-white pull-right import-error"></a>
+            <a href="/member/item/import/item-export-error" class="btn btn-custom-white pull-right import-error hidden"></a>
         </div>
     </div>
 </div>
@@ -59,11 +59,14 @@
                         <div class="checkbox">
                             <label><input type="checkbox" name="asset_account">Asset Account</label>
                         </div>
+                        <div class="checkbox">
+                            <label><input type="checkbox" name="manufacturer">Manufacturer</label>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                <button class="form-control btn btn-custom-primary btn-submit" disabled="disabled">Generate Accounts</button>
+                <button class="form-control btn btn-custom-primary btn-submit" disabled="disabled">Generate Import</button>
             </div>
         </form>
     </div>
@@ -140,5 +143,8 @@
 @endsection
 @section('script')
 <script type="text/javascript" src="/assets/member/plugin/jquery-csv-master/src/jquery.csv.js"></script>
+<script type="text/javascript">
+    var url_link = '/member/item/import/item-read-file';
+</script>
 <script type="text/javascript" src="/assets/member/js/import_csv.js"></script>
 @endsection

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Member;
 
 use Request;
+use Session;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_audit_trail;
+use App\Models\Tbl_user;
+use DB;
 
 use App\Globals\AuditTrail;
 use App\Globals\Utilities;
@@ -24,16 +27,51 @@ class AuditTrailController extends Member
      */
     public function index()
     {
+         $data["_column"] = array(
+                ' '                     => "*", 
+                'fullname'              => "User Full Name", 
+                'remarks'               => "Transaction", 
+            );
+
         if($this->hasAccess("utilities-audit","access_page"))
         {   
-            $data["_audit"] = AuditTrail::getAudit_data();
-
+          
             return view("member.audit_trail.audit_trail",$data);
         }
         else
         {
             return $this->show_no_access();
         }
+
+    }
+
+
+    public function get_list()
+    {
+        $date_from  = Request::input('date_from');
+        $date_to    = Request::input('date_to');
+        $col        = Request::input('col');
+        $keyword    = Request::input('keyword');
+        //dd($date_to);
+        if ($keyword == '')
+        {
+            $data["_audit"] = AuditTrail::getAudit_data();    
+        } 
+        else
+        {
+            if ($date_from != '' && $date_to != '')
+            {
+                $data["_audit"] = AuditTrail::getSearchAuditData($col, $keyword, $date_from, $date_to);
+                //dd('sample');
+            }
+                else
+            {                 
+                $data["_audit"] = AuditTrail::getSearchAuditData($col, $keyword);    
+                //dd('pasok');
+            }
+        }
+
+        return view("member.audit_trail.audit_list", $data);
     }
 
     /**

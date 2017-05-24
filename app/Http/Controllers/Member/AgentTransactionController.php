@@ -8,6 +8,7 @@ use App\Models\Tbl_employee;
 use App\Models\Tbl_position;
 use App\Models\Tbl_sir;
 use App\Models\Tbl_manual_receive_payment;
+use App\Models\Tbl_receive_payment_line;
 use App\Models\Tbl_manual_credit_memo;
 use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_manual_invoice;
@@ -66,21 +67,31 @@ class AgentTransactionController extends Member
                       $cm_amt = $cm->cm_amount;  
                     }
                     $_transaction[$inv_key]['date'] = $inv_value->inv_date;
+                    $_transaction[$inv_key]['transaction_code'] = '';
                     if($inv_value->is_sales_receipt == 0)
                     {
-                        $_transaction[$inv_key]['type'] = 'Invoice';
-                        $_transaction[$inv_key]['reference_name'] = 'invoice';                    
+                        $_transaction[$inv_key]['type'] = 'Credit Sales';
+                        $_transaction[$inv_key]['reference_name'] = 'invoice';
+                    $_transaction[$inv_key]['transaction_code'] = 'AR';
+
+                        $chk = Tbl_receive_payment_line::where("rpline_reference_name",'invoice')->where("rpline_reference_id",$inv_value->inv_id)->first();
+                        if($chk)
+                        {
+                            $_transaction[$inv_key]['transaction_code'] = "AR Payment #".$chk->rpline_rp_id;
+                        }
+
                     }
                     else
                     {                
-                        $_transaction[$inv_key]['type'] = 'Sales Receipt';
+                        $_transaction[$inv_key]['type'] = 'Cash Sales';
                         $_transaction[$inv_key]['reference_name'] = 'sales_receipt';
+                    $_transaction[$inv_key]['transaction_code'] = 'Paid Cash';
                     }
                     $_transaction[$inv_key]['customer_name'] = $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
                     $_transaction[$inv_key]['no'] = $inv_value->inv_id;
-                    $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;
+                    $_transaction[$inv_key]['balance'] = $inv_value->inv_overall_price - $inv_value->inv_payment_applied;
                     $_transaction[$inv_key]['due_date'] = $inv_value->inv_due_date;
-                    $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price;
+                    $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price - $cm_amt;
                     $_transaction[$inv_key]['status'] = $inv_value->inv_is_paid;
                     $_transaction[$inv_key]['date_created'] = $inv_value->manual_invoice_date;
 
@@ -108,6 +119,7 @@ class AgentTransactionController extends Member
                 foreach ($data["credit_memo"] as $cm_key => $cm_value) 
                 {
                     $_transaction = null;
+                    $_transaction[$cm_key]['transaction_code'] = 'Credit Memo';
                     $_transaction[$cm_key]['date'] = $cm_value->cm_date;
                     $_transaction[$cm_key]['type'] = 'Credit Memo';
                     $_transaction[$cm_key]['reference_name'] = 'credit_memo';
@@ -143,19 +155,27 @@ class AgentTransactionController extends Member
                 $_transaction[$inv_key]['date'] = $inv_value->inv_date;
                 if($inv_value->is_sales_receipt == 0)
                 {
-                    $_transaction[$inv_key]['type'] = 'Invoice';
-                    $_transaction[$inv_key]['reference_name'] = 'invoice';                    
+                    $_transaction[$inv_key]['type'] = 'Credit Sales';
+                    $_transaction[$inv_key]['reference_name'] = 'invoice';     
+                    $_transaction[$inv_key]['transaction_code'] = "AR";
+
+                    $chk = Tbl_receive_payment_line::where("rpline_reference_name",'invoice')->where("rpline_reference_id",$inv_value->inv_id)->first();
+                    if($chk)
+                    {
+                        $_transaction[$inv_key]['transaction_code'] = "AR Payment #".$chk->rpline_rp_id;
+                    }               
                 }
                 else
                 {                
-                    $_transaction[$inv_key]['type'] = 'Sales Receipt';
+                    $_transaction[$inv_key]['type'] = 'Cash Sales';
                     $_transaction[$inv_key]['reference_name'] = 'sales_receipt';
+                    $_transaction[$inv_key]['transaction_code'] = "Paid Cash";
                 }
                 $_transaction[$inv_key]['customer_name'] = $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
                 $_transaction[$inv_key]['no'] = $inv_value->inv_id;
-                $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;
+                $_transaction[$inv_key]['balance'] = $inv_value->inv_overall_price - $inv_value->inv_payment_applied;
                 $_transaction[$inv_key]['due_date'] = $inv_value->inv_due_date;
-                $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price;
+                $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price - $cm_amt;
                 $_transaction[$inv_key]['status'] = $inv_value->inv_is_paid;
                 $_transaction[$inv_key]['date_created'] = $inv_value->manual_invoice_date;
 
@@ -183,6 +203,7 @@ class AgentTransactionController extends Member
             foreach ($data["credit_memo"] as $cm_key => $cm_value) 
             {
                 $_transaction = null;
+                $_transaction[$cm_key]['transaction_code'] = 'Credit Memo';
                 $_transaction[$cm_key]['date'] = $cm_value->cm_date;
                 $_transaction[$cm_key]['type'] = 'Credit Memo';
                 $_transaction[$cm_key]['reference_name'] = 'credit_memo';
@@ -210,9 +231,13 @@ class AgentTransactionController extends Member
         $data["total"] = 0;
         foreach ($data['tr'] as $key2 => $value2)
         {
-            if($value2['reference_name'] == "receive_payment")
+            if($value2['reference_name'] == "receive_payment" || $value2['reference_name'] == "sales_receipt")
             {
                 $data['total'] += $value2['total'];
+            }
+            if($value2['reference_name'] == "receive_payment")
+            {
+                unset($data['tr'][$key2]);
             }
         }
         $data["total"] = currency("Php",$data['total']);
@@ -256,19 +281,27 @@ class AgentTransactionController extends Member
                     $_transaction[$inv_key]['date'] = $inv_value->inv_date;
                     if($inv_value->is_sales_receipt == 0)
                     {
-                        $_transaction[$inv_key]['type'] = 'Invoice';
-                        $_transaction[$inv_key]['reference_name'] = 'invoice';                    
+                        $_transaction[$inv_key]['type'] = 'Credit Sales';
+                        $_transaction[$inv_key]['reference_name'] = 'invoice';     
+                        $_transaction[$inv_key]['transaction_code'] = "AR";
+
+                        $chk = Tbl_receive_payment_line::where("rpline_reference_name",'invoice')->where("rpline_reference_id",$inv_value->inv_id)->first();
+                        if($chk)
+                        {
+                            $_transaction[$inv_key]['transaction_code'] = "AR Payment #".$chk->rpline_rp_id;
+                        }                   
                     }
                     else
                     {                
-                        $_transaction[$inv_key]['type'] = 'Sales Receipt';
+                        $_transaction[$inv_key]['type'] = 'Cash Sales';
                         $_transaction[$inv_key]['reference_name'] = 'sales_receipt';
+                        $_transaction[$inv_key]['transaction_code'] = "Paid Cash";
                     }
                     $_transaction[$inv_key]['customer_name'] = $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
                     $_transaction[$inv_key]['no'] = $inv_value->inv_id;
-                    $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;
+                    $_transaction[$inv_key]['balance'] = $inv_value->inv_overall_price - $inv_value->inv_payment_applied;
                     $_transaction[$inv_key]['due_date'] = $inv_value->inv_due_date;
-                    $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price;
+                    $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price - $cm_amt;
                     $_transaction[$inv_key]['status'] = $inv_value->inv_is_paid;
                     $_transaction[$inv_key]['date_created'] = $inv_value->manual_invoice_date;
 
@@ -296,6 +329,7 @@ class AgentTransactionController extends Member
                 foreach ($data["credit_memo"] as $cm_key => $cm_value) 
                 {
                     $_transaction = null;
+                    $_transaction[$cm_key]['transaction_code'] = "Credit Memo";
                     $_transaction[$cm_key]['date'] = $cm_value->cm_date;
                     $_transaction[$cm_key]['type'] = 'Credit Memo';
                     $_transaction[$cm_key]['reference_name'] = 'credit_memo';
@@ -331,19 +365,19 @@ class AgentTransactionController extends Member
                 $_transaction[$inv_key]['date'] = $inv_value->inv_date;
                 if($inv_value->is_sales_receipt == 0)
                 {
-                    $_transaction[$inv_key]['type'] = 'Invoice';
+                    $_transaction[$inv_key]['type'] = 'Creedit Sales';
                     $_transaction[$inv_key]['reference_name'] = 'invoice';                    
                 }
                 else
                 {                
-                    $_transaction[$inv_key]['type'] = 'Sales Receipt';
+                    $_transaction[$inv_key]['type'] = 'Cash Sales';
                     $_transaction[$inv_key]['reference_name'] = 'sales_receipt';
                 }
                 $_transaction[$inv_key]['customer_name'] = $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
                 $_transaction[$inv_key]['no'] = $inv_value->inv_id;
-                $_transaction[$inv_key]['balance'] = ($inv_value->inv_overall_price - $inv_value->inv_payment_applied) - $cm_amt;
+                $_transaction[$inv_key]['balance'] = $inv_value->inv_overall_price - $inv_value->inv_payment_applied;
                 $_transaction[$inv_key]['due_date'] = $inv_value->inv_due_date;
-                $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price;
+                $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price - $cm_amt;
                 $_transaction[$inv_key]['status'] = $inv_value->inv_is_paid;
                 $_transaction[$inv_key]['date_created'] = $inv_value->manual_invoice_date;
 
@@ -385,6 +419,9 @@ class AgentTransactionController extends Member
                 array_push($data['__transaction'], $_transaction);
             }
 
+            $sir_data = Tbl_sir::where("sir_id",$sir_id)->first();
+            $data["rem_amount"] = $sir_data->agent_collection;
+            $data["rem_remarks"] = $sir_data->agent_collection_remarks;
         }
         $data["tr"] = [];
         foreach ($data['__transaction'] as $key => $value) 
@@ -398,9 +435,13 @@ class AgentTransactionController extends Member
         $data["total"] = 0;
         foreach ($data['tr'] as $key2 => $value2)
         {
-            if($value2['reference_name'] == "receive_payment")
+            if($value2['reference_name'] == "receive_payment" || $value2['reference_name'] == "sales_receipt")
             {
                 $data['total'] += $value2['total'];
+            }
+            if($value2['reference_name'] == "receive_payment")
+            {
+                unset($data['tr'][$key2]);
             }
         }
         $data["total"] = currency("Php",$data['total']);

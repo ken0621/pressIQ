@@ -87,6 +87,7 @@
                     <thead>                   
                             <tr>
                                 <th>Item Name</th>
+                                <th>Code</th>
                                 <th>Unit Price</th>
                                 <th>Quantity</th>
                                 <th>Original <br>Price</th>
@@ -98,6 +99,7 @@
                         @foreach($item_list as $key => $value)
                         <tr>
                             <td>{{$value->item_name}}</td>
+                            <td>{{$value->item_activation_code}}</td>
                             <td>{{$value->item_price}}</td>
                             <td>{{$value->item_quantity}}</td>
                             <td>{{$value->item_price * $value->item_quantity}}</td>

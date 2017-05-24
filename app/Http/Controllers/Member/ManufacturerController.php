@@ -6,6 +6,8 @@ use Request;
 use App\Http\Controllers\Controller;
 use App\Models\Tbl_manufacturer;
 use App\Globals\Utilities;
+use App\Globals\AuditTrail;
+use App\Globals\Vendor;
 use Carbon\Carbon;
 use Validator;
 
@@ -48,22 +50,14 @@ class ManufacturerController extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public function load_manufacturer()
     {
-        $access = Utilities::checkAccess('item-manufacturer', 'access_page');
-        if($access == 1)
-        {
-            $data["_manufacturer"] = Tbl_manufacturer::where("manufacturer_shop_id",$this->user_info->shop_id)->get();
+        $data["_manufacturer"] = Tbl_manufacturer::where("manufacturer_shop_id",$this->user_info->shop_id)->get();
 
-            return view("member.load_ajax_data.load_manufacturer",$data);
-        }
-        else
-        {
-            return $this->show_no_access();
-        }
+        return view("member.load_ajax_data.load_manufacturer",$data);
     }
     /**
      * Show the form for creating a new resource.
@@ -83,16 +77,22 @@ class ManufacturerController extends Member
             $phone_number = Request::input("phone_number");
             $email_address = Request::input("email_address");
             $website = Request::input("website");
+            $manufacturer_fname = Request::input("manufacturer_fname");
+            $manufacturer_mname = Request::input("manufacturer_mname");
+            $manufacturer_lname = Request::input("manufacturer_lname");
 
             $insert["manufacturer_name"] = $manufacturer_name;
             $insert["manufacturer_address"] = $manufacturer_address;
             $insert["phone_number"] = $phone_number;
+            $insert["manufacturer_fname"] = $manufacturer_fname;
+            $insert["manufacturer_mname"] = $manufacturer_mname;
+            $insert["manufacturer_lname"] = $manufacturer_lname;
             $insert["email_address"] = $email_address;
             $insert["website"] = $website;
             $insert["manufacturer_shop_id"] = $this->user_info->shop_id;
             $insert["date_created"] = Carbon::now();
 
-            $rules["manufacturer_name"] = "required|unique:tbl_manufacturer,manufacturer_name";
+            $rules["manufacturer_name"] = "required";
             $rules["phone_number"] = "numeric";
             $rules["email_address"] = "email";
 
@@ -112,6 +112,15 @@ class ManufacturerController extends Member
                 $data["status"] = "success";
                 $data["type"] = "manufacturer";
                 $id = Tbl_manufacturer::insertGetId($insert);
+
+                if(Request::input("create_vendor") != "")
+                {
+                    Vendor::ins_vendor($insert);
+                }
+
+                $manu_data = AuditTrail::get_table_data("tbl_manufacturer","manufacturer_id",$id);
+                AuditTrail::record_logs("Added","manufacturer",$id,"",serialize($manu_data));
+
                 $data["id"] = $id;
             }
 
@@ -130,6 +139,8 @@ class ManufacturerController extends Member
         {
             $data["status"] = "";
             $data["status_message"] = "";
+
+            $old_data = AuditTrail::get_table_data("tbl_manufacturer","manufacturer_id",Request::input("manufacturer_id"));
 
             $manufacturer_name = Request::input("manufacturer_name");
             $manufacturer_address = Request::input("manufacturer_address");
@@ -163,6 +174,9 @@ class ManufacturerController extends Member
             {
                 $data["status"] = "success";
                 Tbl_manufacturer::where("manufacturer_id",Request::input("manufacturer_id"))->update($update);
+
+                $manu_data = AuditTrail::get_table_data("tbl_manufacturer","manufacturer_id",Request::input("manufacturer_id"));
+                AuditTrail::record_logs("Edited","manufacturer",Request::input("manufacturer_id"),serialize($old_data),serialize($manu_data));
             }
 
             return json_encode($data);
@@ -184,7 +198,7 @@ class ManufacturerController extends Member
         }
         else
         {
-            return $this->show_no_access();
+            return $this->show_no_access_modal();
         }
     }
     public function archived_submit()
@@ -202,6 +216,9 @@ class ManufacturerController extends Member
             }
 
             Tbl_manufacturer::where("manufacturer_id",$id)->update($update);
+             
+             $manu_data = AuditTrail::get_table_data("tbl_manufacturer","manufacturer_id",$id);
+             AuditTrail::record_logs($action,"manufacturer",$id,"",serialize($manu_data));
 
             $data["status"] = "success";
 

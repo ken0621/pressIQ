@@ -482,7 +482,7 @@ function receive_inventory()
 		$parent = $this.closest(".tr-draggable");
 		$item   = $this.closest(".tr-draggable").find(".select-item");
 
-		$um_qty = parseFloat($this.find("option:selected").attr("qty"));
+		$um_qty = parseFloat($this.find("option:selected").attr("qty") || 1);
 		$sales  = parseFloat($item.find("option:selected").attr("cost"));
 		$qty    = parseFloat($parent.find(".txt-qty").val());
 		console.log($um_qty +"|" + $sales +"|" +$qty);
@@ -578,13 +578,18 @@ function submit_done_customer(result)
 {
 	receive_inventory.action_reload_customer(result['customer_info']['customer_id']);
 }
-
 /* AFTER ADDING AN  ITEM */
-// function submit_done(data)
-// {
-// 	receive_inventory.action_reload_item(data.item_id);
-// 	$("#global_modal").modal("toggle");
-// }
+function submit_done_item(data)
+{
+	
+    item_selected.load("/member/item/load_item_category", function()
+    {                
+         $(this).globalDropList("reload"); 
+         $(this).val(data.item_id).change();  
+         toastr.success("Success");
+    });
+    data.element.modal("hide");
+}
 function add_po_to_receive_inventory(po_id)
 {
 	$(".modal-loader").removeClass("hidden");
@@ -645,7 +650,17 @@ function iniatilize(id)
 }
 function submit_done(data)
 {
-	if(data.status == 'success-bill')
+	if(data.type == 'vendor')
+	{		
+       toastr.success("Success");
+	    $(".droplist-vendor").load("/member/vendor/load_vendor", function()
+	    {                
+	         $(".droplist-vendor").globalDropList("reload");
+	         $(".droplist-vendor").val(data.vendor_id).change();          
+	    });
+    	data.element.modal("hide");
+	}
+	else if(data.status == 'success-bill')
 	{		
         toastr.success("Success");
        	location.href = data.redirect;

@@ -116,6 +116,9 @@
           <li><a data-toggle="tab" href="#payment-and-billing">Payment and billing</a></li>
           <li><a data-toggle="tab" href="#attachment">Attachment</a></li>
           <li><a data-toggle="tab" href="#mlm">MLM</a></li>
+          @if ($customer->ismlm == 2)
+          <li><a data-toggle="tab" href="#ecomm">E-commerce</a></li>
+          @endif
         </ul>
         
         <div class="tab-content">
@@ -417,6 +420,36 @@
               </div>
             </div>
           </div>
+  
+          <div id="ecomm" class="tab-pane fade">
+            <br>
+            <div class="form-horizontal">
+              <div class="form-group">
+                {{-- <div class="col-md-12">
+                  <div class="col-md-12">
+                    <div class="checkbox display-inline-block">
+                      <label for="">
+                        <input type="checkbox" name="ismlm" class="ismlm" value="1" @if($customer_info->ismlm == 1) checked @endif />Use In MLM
+                        
+                        </label>
+                      </div>
+                  </div>
+                </div> --}}
+                <div class="col-md-12">
+                  <div class="col-md-6">
+                    <label>Email</label>
+                    <input type="text" class="form-control mlm_email_e_commerce" value="{{$customer_info->email}}" name="mlm_email_e_commerce" @if($customer_info->ismlm == 0) readonly @endif >
+                  </div>
+                  <div class="col-md-6">
+                    <label>Password</label>
+                    <input type="password" class="form-control mlm_password_e_commerce" value="@if($customer_info->password != null){{ Crypt::decrypt($customer_info->password)}}@endif" name="mlm_password_e_commerce" @if($customer_info->ismlm == 0) readonly @endif>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
         </div>
       </div>
     </div>

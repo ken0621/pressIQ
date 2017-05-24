@@ -6,7 +6,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{{ ucfirst($shop_info->shop_key) }} | {{ $page }}</title>
+        <title>{{ ucfirst($shop_info->shop_key) }} |  {{ isset($page) ? $page : 'Home' }}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -47,22 +47,32 @@
             right: 0;
             z-index: 100;
         }
+        @media screen and (max-width: 991px)
+        {
+            .navbar.sticky
+            {
+                position: static;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 100;
+            }
+        }
         </style>
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
-    <div class="loader">
+    <div class="loader" style="display: none;">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-
     <!-- HEADER -->
     <div class="header-nav">
     	<div class="header-nav-top">
     		<div class="container">
-                @if($customer_info == null)
+                @if($customer_info_a == null)
                 <div class="holder"><a href="/mlm/login"><i class="fa fa-lock" aria-hidden="true"></i> Login</a></div>
                 @else
                 <div class="holder"><a href="/mlm"><i class="fa fa-user" aria-hidden="true"></i> Member's Area
@@ -80,6 +90,8 @@
 	    		<div class="holder"><a href="/about">About Us</a></div>
 	    		<div class="holder"><div class="linya"></div></div>
 	    		<div class="holder"><a href="/contact">Contact Us</a></div>
+                <div class="holder"><div class="linya"></div></div>
+                <div class="holder"><a href="http://tour.philtechglobalinc.com">Travel and Tours</a></div>
     		</div>
     	</div>
     	<div class="header-nav-middle">
@@ -89,13 +101,23 @@
                         <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech-official-logo.png">            
                     </div>
 	    			<div class="col-md-6">
-	    				<div class="search-bar">
-	    					<div class="input-group input-group-lg">
-							  <!-- <span class="input-group-addon search-category" id="sizing-addon1">Categories <span class="caret"></span></span> -->
-							  <input type="text" class="form-control search-input" aria-describedby="sizing-addon1">
-							  <span class="input-group-addon search-button" id="sizing-addon1"><i class="fa fa-search" aria-hidden="true"></i></span>
-							</div>
+
+                        {{-- Search Bar --}}                          
+        				<div class="search-bar">
+                            <form action="/product_search" method="get" id="form-search">
+    	    					<div class="input-group input-group-lg">
+    							     <!-- <span class="input-group-addon search-category" id="sizing-addon1">Categories <span class="caret"></span></span> -->
+    							     <input type="text" class="form-control" name="keyword" id="keyword" aria-describedby="sizing-addon1">
+    							     <span class="input-group-addon search-button" id="sizing-addon1">
+                                        <a href="" onclick="onSearch();" id="submit_link">
+                                            <i class="fa fa-search" aria-hidden="true" id="submit_link"></i>
+                                        </a>                                 
+                                     </span>
+    							</div>
+                            </form>
 	    				</div>
+                        {{-- End Search Bar --}}
+
 	    			</div>
 	    			<div class="col-md-3 woaw">
 	    				<div class="shopping-cart-container">
@@ -234,4 +256,15 @@
     <script src="/themes/{{ $shop_theme }}/js/global.js"></script>
     @yield("js")
     </body>
+
+<script type="text/javascript">
+    
+    function onSearch()
+    {
+        var keyword = $('#keyword').val();
+        $("#submit_link").attr("href", "/product_search?keyword="+$('#keyword').val());
+    }
+
+</script>
+    
 </html>

@@ -66,7 +66,7 @@ class Ecom_Product
 			$shop_id = Ecom_Product::getShopId();
 		}
 		
-		$_product = Tbl_ec_product::where("eprod_shop_id", $shop_id)->get()->toArray();
+		$_product = Tbl_ec_product::where("eprod_shop_id", $shop_id)->where("archived", 0)->get()->toArray();
 		
 		foreach($_product as $key=>$product)
 		{
@@ -83,6 +83,44 @@ class Ecom_Product
 			// 		$_product[$key]["variant"][$key2]["options"][$option_name['option_name']] = $variant_option_value["option_value"];
 			// 	}
 			// }
+		}
+		
+		return $_product;
+	}
+
+	/**
+	 * Getting all Product Searched w/ variants and options. If shop_id is null, the current shop id that logged on will be used.
+	 *
+	 * @param int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
+	 */
+	public static function getAllProductSearch($search, $shop_id = null)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+
+		$get_popular_tag = DB::table("tbl_ec_popular_tags")->where("keyword", $search)->where("shop_id", $shop_id)->first();
+		if ($get_popular_tag) 
+		{
+			$insert_tags["count"]   = $get_popular_tag->count + 1;
+
+			DB::table("tbl_ec_popular_tags")->where("keyword", $search)->where("shop_id", $shop_id)->update($insert_tags);
+		}
+		else
+		{
+			$insert_tags["count"] = 1;
+			$insert_tags["keyword"] = $search;
+			$insert_tags["shop_id"] = $shop_id;
+
+			DB::table("tbl_ec_popular_tags")->insert($insert_tags);
+		}
+		
+		$_product = Tbl_ec_product::where("eprod_shop_id", $shop_id)->where('eprod_name', 'like', "%{$search}%")->where("archived", 0)->get()->toArray();
+		
+		foreach($_product as $key=>$product)
+		{
+			$_product[$key]	= Ecom_Product::getProduct($product["eprod_id"], $shop_id);
 		}
 		
 		return $_product;
@@ -358,6 +396,15 @@ class Ecom_Product
 		return $_category;
 	}
 
+	public static function getVariantFullName($variant_id)
+	{
+		$_product = Tbl_ec_product::variant()->first()->toArray();
+
+		$_product["product_new_name"] = $product["eprod_name"] . ($product["variant_name"] ? ' : '.$product["variant_name"] : '');
+
+		return $_product["product_new_name"];
+	}
+
 	/**
 	 * Getting all Product w/ a specific category name regardless of the level, thus product with the same category name
 	 *
@@ -507,4 +554,29 @@ class Ecom_Product
 
 		return $product;
 	}
+
+
+	public static function searchProName($keywords, $shop_id)
+	{
+		if(!$shop_id)
+		{
+			$shop_id = Ecom_Product::getShopId();
+		}
+		
+		$_product = Tbl_ec_product::where("eprod_name", 'like', "%{$keywords}%")
+				->where('tbl_ec_product.archived', 0)
+				->where('eprod_id', "!=", "")
+				->where('eprod_shop_id', $shop_id)
+				->get()
+				->toArray();
+		
+	
+		foreach($_product as $key=>$product)
+		{
+			$_product[$key]	 = Ecom_Product::getProduct($product["eprod_id"], $shop_id);
+		}
+		return $_product;	
+	}
+	
+
 }

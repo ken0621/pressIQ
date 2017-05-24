@@ -22,8 +22,10 @@ use App\Models\Tbl_sir_cm_item;
 use App\Models\Tbl_temp_customer_invoice_line;
 use App\Models\Tbl_temp_customer_invoice;
 use App\Models\Tbl_manual_invoice;
+use App\Models\Tbl_manual_receive_payment;
 use App\Models\Tbl_unit_measurement;
 use App\Models\Tbl_manual_credit_memo;
+use App\Models\Tbl_credit_memo;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Models\Tbl_settings;
 use App\Globals\UnitMeasurement;
@@ -50,6 +52,119 @@ class Purchasing_inventory_system
         return $check;
     }
 
+    public static function get_sir_stocks($warehouse_id, $item_id)
+    {
+        $sir = Tbl_sir::where("sir_warehouse_id",$warehouse_id)->where("ilr_status","!=",2)->where("is_sync",1)->get();
+
+        $qty = 0;
+        foreach ($sir as $key => $value) 
+        {
+            $qty += Tbl_sir_inventory::where("sir_item_id",$item_id)->where("inventory_sir_id",$value->sir_id)->sum("sir_inventory_count");
+        }
+
+        return $qty;
+    }
+    public static function get_sir_total_amount($sir_id)
+    {
+
+        // $data["_sir"] = Tbl_sir::where("sales_agent_id",$agent_id)->whereIn("ilr_status",[1,2])->get();
+        $data['__transaction'] = array();
+        if($sir_id)
+        {
+            //for invoice
+            $data["invoices"] = Tbl_manual_invoice::customer_invoice()->where("sir_id",$sir_id)->get(); 
+
+            //union of invoice and receive payment
+            foreach ($data["invoices"] as $inv_key => $inv_value) 
+            {
+                $_transaction = null;
+                $cm = Tbl_credit_memo::where("cm_id",$inv_value->credit_memo_id)->first();
+                $cm_amt = 0;
+                if($cm != null)
+                {
+                  $cm_amt = $cm->cm_amount;  
+                }
+                $_transaction[$inv_key]['date'] = $inv_value->inv_date;
+                if($inv_value->is_sales_receipt == 0)
+                {
+                    $_transaction[$inv_key]['type'] = 'Invoice';
+                    $_transaction[$inv_key]['reference_name'] = 'invoice';                    
+                }
+                else
+                {                
+                    $_transaction[$inv_key]['type'] = 'Sales Receipt';
+                    $_transaction[$inv_key]['reference_name'] = 'sales_receipt';
+                }
+                $_transaction[$inv_key]['customer_name'] = $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
+                $_transaction[$inv_key]['no'] = $inv_value->inv_id;
+                $_transaction[$inv_key]['balance'] = $inv_value->inv_overall_price - $inv_value->inv_payment_applied;
+                $_transaction[$inv_key]['due_date'] = $inv_value->inv_due_date;
+                $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price - $cm_amt;
+                $_transaction[$inv_key]['status'] = $inv_value->inv_is_paid;
+                $_transaction[$inv_key]['date_created'] = $inv_value->manual_invoice_date;
+
+                array_push($data['__transaction'], $_transaction);
+            }
+            
+            $data["rcv_payment"] = Tbl_manual_receive_payment::customer_receive_payment()->selectRaw("*, tbl_manual_receive_payment.rp_date as manual_rp_date")->where("sir_id",$sir_id)->get();
+            foreach ($data["rcv_payment"] as $rp_key => $rp_value) 
+            {
+                $_transaction = null;
+                $_transaction[$rp_key]['date'] = $rp_value->rp_date;
+                $_transaction[$rp_key]['type'] = 'Payment';
+                $_transaction[$rp_key]['reference_name'] = 'receive_payment';
+                $_transaction[$rp_key]['customer_name'] = $rp_value->title_name." ".$rp_value->first_name." ".$rp_value->last_name." ".$rp_value->suffix_name;
+                $_transaction[$rp_key]['no'] = $rp_value->rp_id;
+                $_transaction[$rp_key]['balance'] = 0;
+                $_transaction[$rp_key]['due_date'] = $rp_value->rp_date;
+                $_transaction[$rp_key]['total'] = $rp_value->rp_total_amount;
+                $_transaction[$rp_key]['status'] = 'status';
+                $_transaction[$rp_key]['date_created'] = $rp_value->manual_rp_date;
+
+                array_push($data['__transaction'], $_transaction);
+            }
+            $data["credit_memo"] = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->get();
+            foreach ($data["credit_memo"] as $cm_key => $cm_value) 
+            {
+                $_transaction = null;
+                $_transaction[$cm_key]['date'] = $cm_value->cm_date;
+                $_transaction[$cm_key]['type'] = 'Credit Memo';
+                $_transaction[$cm_key]['reference_name'] = 'credit_memo';
+                $_transaction[$cm_key]['customer_name'] = $cm_value->title_name." ".$cm_value->first_name." ".$cm_value->last_name." ".$cm_value->suffix_name;
+                $_transaction[$cm_key]['no'] = $cm_value->cm_id;
+                $_transaction[$cm_key]['balance'] = 0;
+                $_transaction[$cm_key]['due_date'] = $cm_value->cm_date;
+                $_transaction[$cm_key]['total'] = $cm_value->cm_amount;
+                $_transaction[$cm_key]['status'] = 'status';
+                $_transaction[$cm_key]['date_created'] = $cm_value->manual_cm_date;
+
+                array_push($data['__transaction'], $_transaction);
+            }
+        }
+
+
+        $data["tr"] = [];
+        foreach ($data['__transaction'] as $key => $value) 
+        {
+            foreach ($value as $key1 => $value1) 
+            {
+                array_push($data['tr'], $value1);
+            }
+        
+        }
+        $data["total"] = 0;
+        foreach ($data['tr'] as $key2 => $value2)
+        {
+            if($value2['reference_name'] == "receive_payment" || $value2['reference_name'] == "sales_receipt")
+            {
+                $data['total'] += $value2['total'];
+            }
+        }
+        // $data["total"] = currency("Php",$data['total']);
+
+        return $data["total"];
+
+    }
     public static function insert_sir_inventory($sir_id, $item, $ref_name, $ref_id)
     {
         $item_info = Tbl_item::where("item_id",$item["item_id"])->first();
@@ -312,8 +427,8 @@ class Purchasing_inventory_system
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" style="text-decoration: line-through;">5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12" style="text-decoration: line-through;">6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
-            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+            <div class="col-md-12" style="text-decoration: line-through;">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
+            <div class="col-md-12" style="text-decoration: line-through;">7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 1 && $sir_data["sir"]->sir_status == 2 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
         {
@@ -322,8 +437,8 @@ class Purchasing_inventory_system
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" style="text-decoration: line-through;">5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click <a href="/member/pis/ilr/'.$sir_id.'"> here </a> to close the I.L.R)</div>
-            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click <a class="popup" link="/member/pis_agent/collection_update/'.$sir_id.'" size="md">here</a> to update Remittance)</div>
+            <div class="col-md-12" >7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click <a href="/member/pis/ilr/'.$sir_id.'"> here </a> to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 1)
         {
@@ -332,8 +447,8 @@ class Purchasing_inventory_system
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" style="text-decoration: line-through;">4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" >5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
-            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
+            <div class="col-md-12">7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 1 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 0)
         {
@@ -342,8 +457,8 @@ class Purchasing_inventory_system
             <div class="col-md-12" style="text-decoration: line-through;">3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" >5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
-            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
+            <div class="col-md-12">7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 0 && $sir_data["sir"]->lof_status == 2 && $sir_data["sir"]->is_sync == 0)
         {
@@ -352,8 +467,8 @@ class Purchasing_inventory_system
             <div class="col-md-12" >3. Convert LoadOutForm to SIR (Click <a size="md" link="/member/pis/sir/open/'.$sir_id.'/open" class="popup">here</a> to convert to SIR)</div>
             <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" >5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
-            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
+            <div class="col-md-12">7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>';
         }
         else if($sir_data["sir"]->ilr_status == 0 && $sir_data["sir"]->sir_status == 0 && $sir_data["sir"]->lof_status == 1 && $sir_data["sir"]->is_sync == 0)
         {
@@ -362,8 +477,8 @@ class Purchasing_inventory_system
             <div class="col-md-12" >3. Convert LoadOutForm to SIR (Click here to convert to SIR)</div>
             <div class="col-md-12" >4. Currently Synced (Waiting for Truck and Agent to Return)</div>
             <div class="col-md-12" >5. Waiting for Sales Agent to Submit all transaction (Open I.L.R will be generated)</div>
-            <div class="col-md-12" >6. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>
-            <div class="col-md-12">7. Accounting Department Confirmed Payment Remit by Agent</div>';
+            <div class="col-md-12">6. Accounting Department Confirmed Payment Remit by Agent (Click here to update Remittance)</div>
+            <div class="col-md-12">7. Warehose Supervisor Update Inventory and Closed the I.L.R (Click here to close the I.L.R)</div>';
         }
 
         $sir_data["sir"]->gen_status = $return;
@@ -395,7 +510,7 @@ class Purchasing_inventory_system
     }
     public static function get_sir_data($sir_id)
     {        
-        $price = "";
+        $price = 0;
         $data["sir"] = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.sir_id",$sir_id)->first();
 
         $item = Tbl_sir_item::where("sir_id",$sir_id)->get();
@@ -411,7 +526,7 @@ class Purchasing_inventory_system
     }
     public static function get_ilr_data($sir_id)
     {        
-        $price = "";
+        $price = 0;
         $data["ilr"] = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.sir_id",$sir_id)->first();
 
         $item = Tbl_sir_item::where("sir_id",$sir_id)->get();
@@ -424,24 +539,25 @@ class Purchasing_inventory_system
         $return = $data["ilr"];
         return $return->toArray();
     }
-    public static function select_sir($shop_id = 0, $return = 'array',$srch_sir = '')
+    public static function select_sir($shop_id = 0, $return = 'array',$srch_sir = '', $reload = 0)
     {
     	$data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
                                 ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
                                 ->where("lof_status",2)
+                                ->where("reload_sir",$reload)
                                 ->orderBy("tbl_sir.sir_id","DESC")->paginate(10);
 
         foreach ($data as $key => $value) 
         {              
-            $data[$key]->total_amount = "";
+            $data[$key]->total_amount = 0;
             $item = Tbl_sir_item::item()->where("sir_id",$value->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {   
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;;
                 }
                 else
                 {
@@ -463,19 +579,20 @@ class Purchasing_inventory_system
         $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
                                 ->where("tbl_sir.sir_status","!=",2)
                                 ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
+                                ->where("tbl_sir.reload_sir",0)
                                 ->orderBy("tbl_sir.sir_id","DESC")->paginate(10);
                                 
         foreach ($data as $key => $value) 
         {              
-            $data[$key]->total_amount = "";
+            $data[$key]->total_amount = 0;
             $item = Tbl_sir_item::item()->where("sir_id",$value->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {   
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;;
                 }
                 else
                 {
@@ -500,15 +617,15 @@ class Purchasing_inventory_system
 
         foreach ($data as $key => $value) 
         {              
-            $data[$key]->total_amount = "";
+            $data[$key]->total_amount = 0;
             $item = Tbl_sir_item::item()->where("sir_id",$value->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {   
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;;
                 }
                 else
                 {
@@ -534,15 +651,15 @@ class Purchasing_inventory_system
 
         foreach ($data as $key => $value) 
         {              
-            $data[$key]->total_amount = "";
+            $data[$key]->total_amount = 0;
             $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {   
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;;
                 }
                 else
                 {
@@ -583,18 +700,19 @@ class Purchasing_inventory_system
                         ->where("lof_status",$status)
                         ->where("tbl_sir.sir_status","!=",2)
                         ->where("tbl_sir.sir_id",'like','%'.$srch_sir.'%')
+                        ->where("tbl_sir.reload_sir",0)
                         ->orderBy("tbl_sir.sir_id","DESC")->paginate(10);
         foreach ($data as $key => $value) 
         {              
-            $data[$key]->total_amount = "";
+            $data[$key]->total_amount = 0;
             $item = Tbl_sir_item::item()->where("sir_id",$value->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {   
                $qty = UnitMeasurement::um_qty($value2->related_um_type);
                 if($value2->item_type_id == 4)
                 {
-                    $price += Item::get_item_bundle_price($value2->item_id);
+                    $price += Item::get_item_bundle_price($value2->item_id) * $value2->item_qty;
                 }
                 else
                 {
@@ -622,6 +740,17 @@ class Purchasing_inventory_system
         }
         return $return_price;
     }
+    public static function get_item_cost($item_id)
+    {
+        $if_bundle = Tbl_item::where("item_id",$item_id)->pluck("item_type_id");
+
+        $return_price = Tbl_item::where("item_id",$item_id)->pluck("item_cost");
+        if($if_bundle == 4)
+        {
+            $return_price = Item::get_item_bundle_cost($item_id);
+        }
+        return $return_price;
+    }
     public static function create_manual_invoice()
     {     
     } 
@@ -630,35 +759,59 @@ class Purchasing_inventory_system
         $data["sir"] = Tbl_sir::truck()->saleagent()->where("sir_id",$sir_id)->where("sir_status",1)->where("tbl_sir.archived",0)->first();
         $data["_sir_item"] = Tbl_sir_item::select_sir_item()->where("sir_id",$sir_id)->get();
         // dd($data["_sir_item"]);
-        if($data["_sir_item"] != null)
+        if(count($data["_sir_item"]) > 0)
         {
             foreach($data["_sir_item"] as $key => $value) 
-            {                    
-                $rem_qty = Purchasing_inventory_system::count_rem_qty($sir_id, $value->item_id);
-                $sold_qty = Purchasing_inventory_system::count_sold_qty($sir_id, $value->item_id);
-
-
-                $um = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
-
-                $data["_sir_item"][$key]->um_name = isset($um->multi_name) ? $um->multi_name : "";
-                $data["_sir_item"][$key]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
-                $qty = UnitMeasurement::um_qty($value->related_um_type);
-
-                $issued_qty = $value->item_qty * $qty;
-                $remaining_qty = $rem_qty;
-                $total_sold_qty = $sold_qty;
-                
+            {  
                 $rem = "";
                 $sold = "";
                 $physical_count = "";
-                $rem = UnitMeasurement::um_view($remaining_qty, $value->item_measurement_id, $value->related_um_type);
-                $sold = UnitMeasurement::um_view($total_sold_qty, $value->item_measurement_id, $value->related_um_type);
-                $physical_count = UnitMeasurement::um_view($value->physical_count, $value->item_measurement_id,$value->related_um_type);
-            
+                if($value->item_type_id != 4)
+                {
+                    $rem_qty = Purchasing_inventory_system::count_rem_qty($sir_id, $value->item_id);
+                    $sold_qty = Purchasing_inventory_system::count_sold_qty($sir_id, $value->item_id);
+
+
+                    $um = Tbl_unit_measurement_multi::where("multi_id",$value->related_um_type)->first();
+
+                    $data["_sir_item"][$key]->um_name = isset($um->multi_name) ? $um->multi_name : "";
+                    $data["_sir_item"][$key]->um_abbrev = isset($um->multi_abbrev) ? $um->multi_abbrev : "PC";
+                    $qty = UnitMeasurement::um_qty($value->related_um_type);
+
+                    $issued_qty = $value->item_qty * $qty;
+                    $remaining_qty = $rem_qty;
+                    $total_sold_qty = $sold_qty;
+                    
+                    $rem = UnitMeasurement::um_view($remaining_qty, $value->item_measurement_id, $value->related_um_type);
+                    $sold = UnitMeasurement::um_view($total_sold_qty, $value->item_measurement_id, $value->related_um_type);
+                    $physical_count = UnitMeasurement::um_view($value->physical_count, $value->item_measurement_id,$value->related_um_type);
+                }   
+                else
+                {
+                    $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$value->item_id)->get();
+
+                    $total_bundle_qty = 0;
+                    $total_sold_bundle_qty = 0;
+                    $qty = [];
+                    $qtys = [];
+                    foreach ($bundle_item as $key_bundle => $value_bundle)
+                    {
+                       $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
+
+                       $issued_bundle_qty_item = (UnitMeasurement::um_qty($value->related_um_type) * $value->item_qty) * $bundle_qty;
+
+                       $total_sold_bundle_qty = Tbl_sir_inventory::where("sir_item_id",$value_bundle->bundle_item_id)->where("inventory_sir_id",$sir_id)->where("sir_inventory_count","<",0)->sum("sir_inventory_count");
+                       $rem_bundle_qty = ($issued_bundle_qty_item - abs($total_sold_bundle_qty)) / $bundle_qty;
+                       $sold_bundle_qty = $value->item_qty - $rem_bundle_qty;
+                    }
+                    $rem = UnitMeasurement::um_view(round($rem_bundle_qty), $value->item_measurement_id, $value->related_um_type);
+                    $sold = UnitMeasurement::um_view(round($sold_bundle_qty), $value->item_measurement_id, $value->related_um_type);
+                    $physical_count = UnitMeasurement::um_view($value->physical_count, $value->item_measurement_id,$value->related_um_type);
+                }
+
                 $data["_sir_item"][$key]->remaining_qty = $rem;
                 $data["_sir_item"][$key]->sold_qty = $sold;
                 $data["_sir_item"][$key]->physical_count = $physical_count;
-
             }
         }
         return $data;
@@ -678,9 +831,9 @@ class Purchasing_inventory_system
         // dd($data);
         foreach ($data as $key => $value) 
         {              
-            $data[$key]->total_amount = "";
+            $data[$key]->total_amount = 0;
             $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {                  
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
@@ -711,7 +864,7 @@ class Purchasing_inventory_system
         if($data["sir"])
         {
             $item = Tbl_sir_item::where("sir_id",$data["sir"]->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {   
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
@@ -742,9 +895,9 @@ class Purchasing_inventory_system
         // dd($data);
         foreach ($data as $key => $value) 
         {              
-            $data[$key]->total_amount = "";
+            $data[$key]->total_amount = 0;
             $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {                   
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
@@ -760,7 +913,39 @@ class Purchasing_inventory_system
         }
         return $data;
     }
+    public static function get_loss_over($sir_id)
+    {        
+        $_sir_item = Purchasing_inventory_system::select_sir_item(Purchasing_inventory_system::getShopId(),$sir_id,'array');
 
+        $_returns = Tbl_sir_cm_item::item()->where("sc_sir_id",$sir_id)->get();
+
+        $loss = 0;
+        $over = 0;
+        foreach ($_sir_item as $key => $value) 
+        {            
+            $loss += $value->infos < 0 ? $value->infos : 0;
+            $over += $value->infos > 0 ? $value->infos : 0;
+        }
+
+        $mts_loss = 0;
+        $mts_over = 0;
+        foreach ($_returns as $key_return => $value_return)
+        {
+            $mts_loss += $value_return->sc_infos < 0 ? $value_return->sc_infos : 0;
+            $mts_over += $value_return->sc_infos > 0 ? $value_return->sc_infos : 0;  
+        }
+
+        $sir_data = Tbl_sir::where("sir_id",$sir_id)->first();
+        $rem_amount = $sir_data->agent_collection;
+        $rem_remarks = $sir_data->agent_collection_remarks;
+
+        $total = Purchasing_inventory_system::get_sir_total_amount($sir_id);
+        $agent_discrepancy = ($total == $rem_amount ? 0 : $rem_amount - $total);
+
+        $total_discrepancy = $agent_discrepancy + (($loss + $over) - ($mts_loss + $mts_over));
+
+        return $total_discrepancy;
+    }
     public static function select_ilr_status($shop_id = 0, $return = 'array',$status = 0, $srch_ilr = '')
     {
         $data = Tbl_sir::truck()->saleagent()->sir_item()->where("tbl_sir.shop_id",$shop_id)
@@ -771,9 +956,9 @@ class Purchasing_inventory_system
         // dd($data);
         foreach ($data as $key => $value) 
         {              
-            $data[$key]->total_amount = "";
+            $data[$key]->total_amount = 0;
             $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {   
                $qty = UnitMeasurement::um_qty($value2->related_um_type);
@@ -788,6 +973,10 @@ class Purchasing_inventory_system
             }
 
             $data[$key]->total_amount += $price;
+
+
+            $data[$key]->amount_to_collect = Purchasing_inventory_system::get_sir_total_amount($value->sir_id);
+            $data[$key]->status = Purchasing_inventory_system::get_loss_over($value->sir_id) == 0 ? 'complete' : Purchasing_inventory_system::get_loss_over($value->sir_id);
         }
 
          if($return == "json")
@@ -805,9 +994,9 @@ class Purchasing_inventory_system
 
         foreach ($data as $key => $value) 
         {              
-            $data[$key]->total_amount = "";
+            $data[$key]->total_amount = 0;
             $item = Tbl_sir_item::where("sir_id",$value->sir_id)->get();
-            $price = "";
+            $price = 0;
             foreach ($item as $key2 => $value2)
             {   
                 $qty = UnitMeasurement::um_qty($value2->related_um_type);
@@ -1049,7 +1238,7 @@ class Purchasing_inventory_system
             }
         }
 
-        $data = "success";
+        $data = "success-close";
         return $data;        
     }
 

@@ -84,6 +84,20 @@
 		{
 			max-width: 100%;
 		}
+
+		.image-holder:hover{
+
+			.item-details{
+				.item-title-hot-deals{
+					text-decoration: underline;
+				}
+			}
+
+			img{
+				cursor: pointer;
+				opacity: 0.9;
+			}
+		}
 	}
 
 	.scroll-button
@@ -142,6 +156,8 @@
 	padding: 5px 20px 20px 15px;
 	color: #fff;
 }
+
+
 /* ADD TO CART BUTTON */
 .cart-icon1
 {
@@ -185,6 +201,9 @@
     border: 0px;
     border-radius: 0px 2px 2px 0px;
     width: 70%;
+}
+.button-icon:hover{
+	opacity: 0.9;
 }
 
 .button-icon2
@@ -443,6 +462,9 @@
     	-moz-box-shadow: 0px 0px 0px rgba(0,0,0,0.5);
     	-webkit-box-shadow: 0px 0px 0px rgba(0,0,0,0.5);
     	box-shadow: 0px 0px 14px rgba(0,0,0,0.5);
+
+    	cursor: pointer;
+
     	
     	.image-content-1
     	{

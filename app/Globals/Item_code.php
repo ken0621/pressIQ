@@ -11,6 +11,8 @@ use App\Models\Tbl_mlm_gc;
 use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_inventory_serial_number;
 use App\Models\Tbl_mlm_plan_setting;
+use App\Models\Tbl_ec_order;
+use App\Models\Tbl_ec_order_item;
 use App\Globals\Mlm_voucher;
 use App\Globals\Item;
 use App\Globals\Item_code;
@@ -18,7 +20,7 @@ use App\Globals\Mlm_compute;
 use App\Globals\Mlm_gc;
 use App\Globals\AuditTrail;
 use App\Globals\Mlm_slot_log;
-
+use DB;
 use Session;
 use Carbon\Carbon;
 use Validator;
@@ -27,11 +29,18 @@ use App\Globals\EmailContent;
 use App\Globals\Mlm_plan;
 use App\Models\Tbl_mlm_item_points;
 use Mail;
+use App\Globals\Accounting;
 class Item_code
 {
 	public static function add_code($data,$shop_id, $user_id, $warehouse_id)
 	{ 
-	   // $shop_id                                                 = $this->user_info->shop_id;
+
+        ignore_user_abort(true);
+        set_time_limit(0);
+        flush();
+        ob_flush();
+        session_write_close();
+        /// CODE HERE
         $go_serial = 0;
         if(isset($data['item_serial_enable']))
         {
@@ -75,7 +84,6 @@ class Item_code
 
             }
         }
-
         if(!isset($data["customer_id"]))
         {
             if(!isset($data["slot_id"]))
@@ -448,8 +456,6 @@ class Item_code
                             }
                         }
 
-                        
-
                         $insert["item_discount_percentage"] = (1 - ($insert["item_total"]  / $insert["item_subtotal"])) * 100;
 
                         $insert['item_code_payment_type'] = $data['payment_type_choose'];
@@ -466,7 +472,6 @@ class Item_code
                         }
         	            /* INSERTING AREA */
         	            $invoice_id = Tbl_item_code_invoice::insertGetId($insert);
-        	            
 
         	            /* SETUP THE INVOICE ID */
         	            foreach($rel_insert as $key => $item_code_invoice_id)
@@ -563,12 +568,12 @@ class Item_code
                             $arry_log['wallet_log_claimbale_on'] = Carbon::now();
                             Mlm_slot_log::slot_array($arry_log);
                         }
-
                         if(isset($data['use_item_code_auto']))
                         {
                             if($data['use_item_code_auto'] == 1)
                             {
                                 Item_code::use_item_code_all_invoice($invoice_id);
+                                
                                 Item_code::set_up_email($invoice_id, $shop_id);
                             }
                             else
@@ -581,6 +586,7 @@ class Item_code
                         $send["response_status"] = "success_process";    
                         $send['invoice_id'] = $invoice_id;
 
+                        Item_code::add_journal_entry($invoice_id);
                         //audit trail here
                         $item_code_invoice = Tbl_item_code_invoice::where("item_code_invoice_id",$invoice_id)->first()->toArray();
                         AuditTrail::record_logs("Added","mlm_item_code_invoice",$invoice_id,"",serialize($item_code_invoice));
@@ -606,10 +612,36 @@ class Item_code
     	    $send['response_status']   = "warning";
     	    $send['warning_validator'] = $validator->errors()->all();
     	}
-        
-
+        // sleep(2);        
         return $send;
+        exit;
+
 	}
+    public static function add_journal_entry($invoice_id)
+    {
+        $invoice = Tbl_item_code_invoice::where('item_code_invoice_id', $invoice_id)->first();
+        if($invoice)
+        {
+
+            $entry["reference_module"] = 'mlm-product-repurchase';
+            $entry["reference_id"] = $invoice_id;
+            $entry["name_id"] = $invoice->customer_id;
+            $entry["total"] = $invoice->item_total;
+            // $entry["discount"] = $invoice->item_discount;
+            $entry["discount"] = 0;
+            $items = Tbl_item_code_item::where('item_code_invoice_id', $invoice_id)->get();
+            $entry_data = [];
+            foreach ($items as $key => $value) 
+            {
+                # code...
+                $entry_data[$key]['item_id'] = $value->item_id;
+                $entry_data[$key]['discount'] = $value->item_membership_discount * $value->item_quantity;
+                $entry_data[$key]['entry_amount'] = $value->item_price * $value->item_quantity;
+            }
+            Accounting::postJournalEntry($entry, $entry_data);
+        }
+        
+    }
 	public static function set_up_email($invoice_id, $shop_id)
     {
         $plan_settings = Tbl_mlm_plan_setting::where('shop_id', $shop_id)->first();
@@ -679,10 +711,14 @@ class Item_code
 	}
     public static function use_item_code_all_invoice($invoice_id)
     {
+
         $invoice = Tbl_item_code_invoice::where('item_code_invoice_id', $invoice_id)->first();
+
         if($invoice)
         {
+
             $item_code = Tbl_item_code::where('item_code_invoice_id', $invoice_id)->get();
+
             foreach($item_code as $key => $value)
             {
                 $slot_info = Mlm_compute::get_slot_info($invoice->slot_id);
@@ -692,6 +728,7 @@ class Item_code
                 }
             }
         } 
+        
     }
     public static function use_item_code_single($item_code, $slot_info)
     {
@@ -700,5 +737,127 @@ class Item_code
         $update["used_on_slot"]  = $slot_info->slot_id;
         Tbl_item_code::where('item_code_id', $item_code->item_code_id)->update($update);
         $a = Mlm_compute::repurchase($slot_info, $item_code->item_code_id);
+    }
+    public static function use_item_code_all_ec_order($order_id)
+    {
+        $item_code = Tbl_item_code::where('ec_order_id', $order_id)->get();
+        if($item_code)
+        {
+            foreach ($item_code as $key => $code) {
+                $slot = Mlm_compute::get_slot_info($code->slot_id);
+                if($slot)
+                {
+                    Item_code::use_item_code_single($code, $slot);
+                }
+            }
+        }
+    }
+    public static function completed_order_action($order_id)
+    {
+        Item_code::give_item_code_ec_order($order_id);
+        Item_code::merchant_school_active_codes($order_id);
+    }
+    public static function insert_product_merchant_school($order_id)
+    {
+
+    }
+    public static function merchant_school_active_codes($order_id)
+    {
+        $update['merchant_item_status'] = 1;
+
+        $merchant_school_item = DB::table('tbl_merchant_school_item')->where('merchant_item_ec_order_id', $order_id)->get();
+
+        foreach($merchant_school_item as $key => $value)
+        {
+            $insert['merchant_school_amount'] = $value->merchant_school_i_amount;
+            // $insert['merchant_school_s_id'] = 
+            // $insert['merchant_school_s_name'] = 
+            $insert['merchant_school_remarks'] = 'Top up from E-commerce order';
+            $insert['merchant_school_date'] = Carbon::now();
+            $insert['merchant_school_custmer_id'] = $value->merchant_item_customer_id;
+            // $insert['merchant_school_slot_id'] = 
+            DB::table('tbl_merchant_school_wallet')->insert($insert);
+        }
+        // tbl_merchant_school_wallet
+        DB::table('tbl_merchant_school_item')->where('merchant_item_ec_order_id', $order_id)->update($update);
+    }
+    public static function give_item_code_ec_order($ec_order_id)
+    {
+        ini_set('xdebug.max_nesting_level', 200);
+        $order  = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
+        $order_id = $ec_order_id;
+        if($order)
+        {
+            if($order->ec_order_slot_id != null)
+            {
+                $slot_info = Mlm_compute::get_slot_info($order->ec_order_slot_id);
+                $order_item = Tbl_ec_order_item::where('ec_order_id', $ec_order_id)
+                ->join('tbl_ec_variant', 'tbl_ec_variant.evariant_id', '=', 'tbl_ec_order_item.item_id')
+                ->get();
+                $count = Tbl_item_code::where('ec_order_id', $ec_order_id)->count();
+                $active_plan_product_repurchase = Mlm_plan::get_all_active_plan_repurchase($slot_info->shop_id);
+                if($count == 0)
+                {
+                    foreach($order_item as $key => $value)
+                    {
+                        $condition = false;
+                        while($condition == false)
+                        {
+                           $activation_code  = Item_code::random_code_generator(8);
+                           $check_activation = Tbl_item_code::where("item_activation_code",$activation_code)->first();
+                           $code_pin         = Tbl_item_code::where("item_code_pin",$slot_info->shop_id)->count() + 1;
+                           if(!$check_activation)
+                           {
+                               $condition = true;
+                           }
+                        }
+                        $item_points = Tbl_mlm_item_points::where('item_id', $value->evariant_item_id)->where('membership_id', $slot_info->slot_membership)->first();
+                        // dd($value->item_id);
+                        foreach($active_plan_product_repurchase as $key2 => $value2)
+                        {
+                            $code = $value2->marketing_plan_code;
+                            if(isset($item_points->$code))
+                            {
+                                $rel_insert[$key][$code] = $item_points->$code;
+                            }
+                        }
+                        $rel_insert[$key]["item_activation_code"]          = $activation_code;
+                        $rel_insert[$key]["customer_id"]                   = $slot_info->slot_owner;
+                        $rel_insert[$key]["item_id"]                       = $value->evariant_item_id;
+                        $rel_insert[$key]["shop_id"]                       = $slot_info->shop_id;
+                        $rel_insert[$key]["item_code_pin"]                 = $code_pin;
+                        $rel_insert[$key]["item_code_price"]               = $value->price;
+                        $rel_insert[$key]["item_code_price_total"]         = $value->total;
+                        $rel_insert[$key]["ec_order_id"]                   = $ec_order_id;
+                        $rel_insert[$key]["slot_id"]                       = $slot_info->slot_id;
+                    }
+                    Tbl_item_code::insert($rel_insert);
+
+                    $items = Tbl_item_code::where('ec_order_id', $ec_order_id)->get();
+                    foreach($items as $key => $value)
+                    {
+                        $insert_item_per[$value->item_id]['item_id'] =  $value->item_id;
+                        $item = Tbl_item::where('item_id', $value->item_id)->first();
+                        if($item)
+                        {
+                            $insert_item_per[$value->item_id]['item_name'] = $item->item_name;
+                            $insert_item_per[$value->item_id]['item_price'] = $item->item_price;  
+                            $insert_item_per[$value->item_id]['item_code_id'] = $value->item_code_id;
+                            if(isset($insert_item_per[$value->item_id]['item_quantity']))
+                            {
+                                $insert_item_per[$value->item_id]['item_quantity'] += 1;
+                            }
+                            else
+                            {
+                                $insert_item_per[$value->item_id]['item_quantity'] = 1;
+                            }
+                        }
+                    }
+                    Tbl_item_code_item::insert($insert_item_per);
+
+                    Item_code::use_item_code_all_ec_order($order_id);
+                }
+            }
+        }
     }
 }

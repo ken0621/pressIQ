@@ -49,7 +49,7 @@
 			        <thead>
 			            <tr>
 			                <!-- <td class="col-md-2"></td> -->
-			                <th>ID</th>
+			                <th>Date</th>
 			                <th>Type</th>
 			                <th>No</th>
 			                <th>Due Date</th>
@@ -61,11 +61,11 @@
 			        </thead>
 			        <tbody>
 			            @foreach($_transaction as $transaction)
-			            <tr class="cursor-pointer" onClick="window.location='/member/customer/{{$transaction->reference_name}}?id={{$transaction->no}}'">
-			                <td>{{ $transaction->date }}</td>
+			            <tr class="cursor-pointer" onClick="window.location='/member/{{$transaction->reference_url}}?id={{$transaction->no}}'">
+			                <td>{{ dateFormat($transaction->date) }}</td>
 			                <td>{{ $transaction->type }}</td>
 			                <td>{{ $transaction->no }}</td>
-			                <td>{{ $transaction->due_date }}</td>
+			                <td>{{ dateFormat($transaction->due_date) }}</td>
 			                <td>{{ currency("PHP",$transaction->balance) }}</td>
 			                <td>{{ currency("PHP", $transaction->total) }}</td>
 			                <td>{{ $transaction->status }}</td>

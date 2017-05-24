@@ -33,6 +33,13 @@ use App\Models\Tbl_payroll_adjustment;
 use App\Models\Tbl_payroll_allowance_record;
 use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_payroll_entity;
+use App\Models\Tbl_payroll_leave_schedule;
+use App\Models\Tbl_payroll_leave_temp;
+use App\Models\Tbl_payroll_leave_employee;
+use App\Models\Tbl_payroll_paper_sizes;
+use App\Models\Tbl_payroll_13_month_compute;
+use App\Models\Tbl_payroll_13_month_virtual;
+use App\Models\Tbl_payroll_process_leave;
 
 use Carbon\Carbon;
 use stdClass;
@@ -187,6 +194,50 @@ class Payroll
 
 			$insertlog['shop_id'] 					= $shop_id;
 			$insertlog['requirements_category']	 	= 'pagibig';
+			$insertlog['requirements_copy_date']	= Carbon::now();
+			Tbl_payroll_copy_log_requirements::insert($insertlog);
+		}
+	}
+
+
+	public static function generate_paper_size($shop_id = 0)
+	{
+		// Tbl_payroll_paper_sizes
+
+		// $count = Tbl_payroll_paper_sizes::where('shop_id')->count();
+		$count = Tbl_payroll_copy_log_requirements::where('shop_id',$shop_id)->where('requirements_category','paper size')->count();
+
+		if($count == 0)
+		{
+			$insert[0]['shop_id'] 			= $shop_id;
+			$insert[0]['paper_size_name']	= 'A0';
+			$insert[0]['paper_size_width']	= '84.1';
+			$insert[0]['paper_size_height']	= '118.9';
+
+			$insert[2]['shop_id'] 			= $shop_id;
+			$insert[2]['paper_size_name']	= 'A1';
+			$insert[2]['paper_size_width']	= '59.4';
+			$insert[2]['paper_size_height']	= '84.1';
+
+			$insert[3]['shop_id'] 			= $shop_id;
+			$insert[3]['paper_size_name']	= 'A2';
+			$insert[3]['paper_size_width']	= '42';
+			$insert[3]['paper_size_height']	= '59.4';
+
+			$insert[4]['shop_id'] 			= $shop_id;
+			$insert[4]['paper_size_name']	= 'A3';
+			$insert[4]['paper_size_width']	= '29.7';
+			$insert[4]['paper_size_height']	= '42';
+
+			$insert[5]['shop_id'] 			= $shop_id;
+			$insert[5]['paper_size_name']	= 'A4';
+			$insert[5]['paper_size_width']	= '14.8';
+			$insert[5]['paper_size_height']	= '21';
+
+			Tbl_payroll_paper_sizes::insert($insert);
+
+			$insertlog['shop_id'] 					= $shop_id;
+			$insertlog['requirements_category']	 	= 'paper size';
 			$insertlog['requirements_copy_date']	= Carbon::now();
 			Tbl_payroll_copy_log_requirements::insert($insertlog);
 		}
@@ -467,18 +518,28 @@ class Payroll
 
 		$return = new stdClass();
 		/* GET OTHER DETAILS BASED ON RECORD */
-		switch($data["time_rule"])
-		{
-			case "flexitime": 
-				//$return = Payroll::process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
-			break;
-			case "regulartime":
-				$data["compute_approved"] = 0;
-				$return->pending_timesheet = Payroll::process_time_regulartime($data, $date);
-				$data["compute_approved"] = 1;
-				$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
-			break;
-		}
+		// switch($data["time_rule"])
+		// {
+		// 	case "flexitime": 
+		// 		//$return = Payroll::process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours);
+		// 		$data["compute_approved"] = 0;
+		// 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date);
+		// 		$data["compute_approved"] = 1;
+		// 		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
+		// 	break;
+
+		// 	case "regulartime":
+		// 		$data["compute_approved"] = 0;
+		// 		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date);
+		// 		$data["compute_approved"] = 1;
+		// 		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date);
+		// 	break;
+		// }
+
+		$data["compute_approved"] = 0;
+		$return->pending_timesheet = Payroll::process_time_regulartime($data, $date, $data["time_rule"]);
+		$data["compute_approved"] = 1;
+		$return->approved_timesheet = Payroll::process_time_regulartime($data, $date, $data["time_rule"]);
 
 		$payroll_time_date = '0000-00-00';
 		if(isset($time_sheet_info->payroll_time_date))
@@ -490,8 +551,11 @@ class Payroll
 		$return->date = $payroll_time_date;
 		$return->payroll_time_sheet_approved = $payroll_time_sheet_approved;
 
+		// dd($return);
+
 		return $return;
 	}
+	
 	public static function process_time_flexitime($time_rule, $default_time_in, $default_time_out, $_time_record, $break, $default_working_hours)
 	{
 		$data["break"] = $break = c_time_to_int($break);
@@ -558,8 +622,10 @@ class Payroll
 		return $return;
 	}
 
-	public static function process_time_regulartime($data, $date = '0000-00-00')
+	public static function process_time_regulartime($data, $date = '0000-00-00', $category = 'regulartime')
 	{
+		// dd($data);
+
 		$time_rule 				= $data["time_rule"];
 		$default_time_in 		= $data["default_time_in"];
 		$default_time_out 		= $data["default_time_out"];
@@ -568,6 +634,11 @@ class Payroll
 		$late_grace_time 		= $data["employee_information"]->payroll_group_grace_time * 60;
 		$compute_approved 		= $data["compute_approved"];
 		$holiday 				= $data['holiday'];
+
+		/* for flexi time */
+		$target_hour_param 		= $data['employee_information']->payroll_group_target_hour_parameter;
+		$target_hour 			= $data['employee_information']->payroll_group_target_hour;
+		// flexitime
 
 		$return = new stdClass();
 		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);
@@ -586,6 +657,8 @@ class Payroll
 		$break 						= 0;
 		$total_under_time 			= 0;
 		$absent						= false;
+		$leave 						= Payroll::check_if_employee_leave($data["employee_information"]->payroll_employee_id, $date);
+		
 
 		$default_time_in 	= c_time_to_int($default_time_in);
 		$default_time_out 	= c_time_to_int($default_time_out);
@@ -594,6 +667,11 @@ class Payroll
 
 		$night_differential_pm = c_time_to_int("11:00 PM");
 		$night_differential_am = c_time_to_int("6:00 AM");
+
+		$time_in = 0;
+		$time_out = 0;
+
+		$target_hour = $data["employee_information"]->payroll_group_target_hour;
 
 		/* BREAK COMPUTATION */
 		if($data["employee_information"]->payroll_group_is_flexi_break == 1)
@@ -668,6 +746,11 @@ class Payroll
 			{
 				$earliest_time_in = $time_in;
 			}
+			// if($category == 'regulartime')
+			// {
+
+			// }
+			
 
 			/* GET LATEST TIME OUT - USE FOR UNDER TIME */
 			if($latest_time_out < $time_out)
@@ -687,36 +770,52 @@ class Payroll
 
 			$regular_hours = $time_spent;
 
-			/* CHECK IF EARLY OVERTIME */
-			if($time_in < $default_time_in && $time_out != 0)
+			/* if regular time */
+			if($category == 'regulartime')
 			{
-				if($time_out < $default_time_in)
+				/* CHECK IF EARLY OVERTIME */
+				if($time_in < $default_time_in && $time_out != 0)
 				{
-					$early_overtime = $time_out - $time_in;
-					$regular_hours = 0;
+					if($time_out < $default_time_in)
+					{
+						$early_overtime = $time_out - $time_in;
+						$regular_hours = 0;
+					}
+					else
+					{
+						$early_overtime = $default_time_in - $time_in;
+						$regular_hours = $regular_hours - $early_overtime;
+					}
 				}
-				else
+
+				/* CHECK IF LATE OVERTIME */
+				if($time_out > $default_time_out && $time_out != 0)
 				{
-					$early_overtime = $default_time_in - $time_in;
-					$regular_hours = $regular_hours - $early_overtime;
+					if($time_in > $default_time_out)
+					{
+						$late_overtime = $time_out - $time_in;
+						$regular_hours = 0;
+					}
+					else
+					{
+						$late_overtime = $time_out - $default_time_out;
+						$regular_hours = $regular_hours - $late_overtime;
+					}
+				}
+
+			}
+
+			if($category == 'flexitime')
+			{
+				$late_overtime = $time_spent - $target_hour;
+
+				if($late_overtime < 0)
+				{
+					$late_overtime = 0;
 				}
 			}
 
-			/* CHECK IF LATE OVERTIME */
-			if($time_out > $default_time_out && $time_out != 0)
-			{
-				if($time_in > $default_time_out)
-				{
-					$late_overtime = $time_out - $time_in;
-					$regular_hours = 0;
-				}
-				else
-				{
-					$late_overtime = $time_out - $default_time_out;
-					$regular_hours = $regular_hours - $late_overtime;
-				}
-			}
-
+			
 			/* CHECK IF NIGHT DIFFERENTIAL SCENARIO 1 (Later than 11:00 PM) */
 			if($time_out > $night_differential_pm)
 			{
@@ -776,31 +875,56 @@ class Payroll
 			}
 		}
 
-		/* COMPUTE LATE BASED ON EARLIEST TIME IN */
-		if($default_time_in < $earliest_time_in)
+		/* if regular time */
+		if($category == 'regulartime')
 		{
-			$total_late_hours = $earliest_time_in - $default_time_in;
+			/* COMPUTE LATE BASED ON EARLIEST TIME IN */
 
-			if($total_late_hours <= $late_grace_time)
+			// if(convert_seconds_to_hours_minutes("H:i", $time_in) == "09:01")
+			// {
+			// 	$array['default_time_in'] = $default_time_in;
+			// 	$array['earliest_time_in'] = $earliest_time_in;
+			// 	dd($array);
+			// }
+
+			if($default_time_in < $time_in)
 			{
-				$total_regular_hours = $total_regular_hours + $total_late_hours;
+				$total_late_hours = $time_in - $default_time_in;
+
+				if($total_late_hours <= $late_grace_time)
+				{
+					$total_regular_hours = $total_regular_hours + $total_late_hours;
+					$total_late_hours = 0;
+				}
+				
+			}
+
+			else
+			{
 				$total_late_hours = 0;
 			}
-		}
-		else
-		{
-			$total_late_hours = 0;
+			/* COMPUTE UNDER TIME BASED ON OLDEST TIME */
+			if($default_time_out > $latest_time_out && $latest_time_out != 0)
+			{
+				$total_under_time = $default_time_out - $latest_time_out;
+			}
+			else
+			{
+				$total_under_time = 0;
+			}
 		}
 
-		/* COMPUTE UNDER TIME BASED ON OLDEST TIME */
-		if($default_time_out > $latest_time_out && $latest_time_out != 0)
+		if($category == 'flexitime')
 		{
-			$total_under_time = $default_time_out - $latest_time_out;
+			/* get under time */
+			$total_under_time = $target_hour - $total_time_spent;
+			if($total_under_time < 0)
+			{
+				$total_under_time = 0;
+			}
 		}
-		else
-		{
-			$total_under_time = 0;
-		}
+
+		
 
 		$total_hours = $total_regular_hours + $total_early_overtime + $total_early_overtime;
 
@@ -879,6 +1003,7 @@ class Payroll
 		$return->break 				= convert_seconds_to_hours_minutes("H:i", $break);
 		$return->time_record 		= $time_rec;
 		$return->absent 			= $absent;
+		$return->leave 				= $leave;
 
 		return $return;
 	}
@@ -975,12 +1100,13 @@ class Payroll
                                                        ->orderBy('.tbl_payroll_period.payroll_period_category')
                                                        ->orderBy('tbl_payroll_period.payroll_period_start')
                                                        ->get();
+
         foreach($_period as $period)
         {
         	
 			array_push($data, Payroll::company_period($period, $shop_id));
         }
-
+        // dd($data);
         return $data;
 	}
 
@@ -992,7 +1118,11 @@ class Payroll
     	$_employee = Tbl_payroll_employee_contract::employeefilter($payroll_company_id, 0, 0, $period->payroll_period_end, $shop_id)
 						->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 						->where('tbl_payroll_group.payroll_group_period', $payroll_period_category)
+						->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
 						->get();
+
+		// dd($period);
+
 		$start 	= $period->payroll_period_start;
 		$end 	= $period->payroll_period_end;
 
@@ -1024,20 +1154,20 @@ class Payroll
 
 			array_push($temp_period['_list'], $temp);
 		}	
-
-
 		return $temp_period;
 	}
 
 	public static function compute_per_employee($employee_id, $start = '0000-00-00', $end = '0000-00-00', $shop_id = 0, $payroll_period_category = '', $payroll_period_company_id = 0)
 	{
-		$period_category_arr = Payroll::getperiodcount($shop_id, $end, $payroll_period_category);
+		$period_category_arr = Payroll::getperiodcount($shop_id, $end, $payroll_period_category, $start);
 
 		$period_category = $period_category_arr['period_category'];
 
 		$basic_employee  = Tbl_payroll_employee_basic::where('payroll_employee_id',$employee_id)->first();
 
 		$total_hours_render					= 0;
+
+		$data['daily_rate']					= 0;
 
 		$data['payroll_employee_id']		= $employee_id;
 		$data['payroll_period_company_id']	= $payroll_period_company_id;
@@ -1046,6 +1176,15 @@ class Payroll
 		$data['salary_sss'] 				= 0;
 		$data['salary_pagibig'] 			= 0;
 		$data['salary_philhealth'] 			= 0;
+
+		$data['is_deduct_tax_default']		= 0;
+		$data['deduct_tax_custom']			= 0;
+		$data['is_deduct_sss_default']		= 0;
+		$data['deduct_sss_custom']			= 0;
+		$data['is_deduct_philhealth_default']	= 0;
+		$data['deduct_philhealth_custom']	= 0;
+		$data['is_deduct_pagibig_default']	= 0;
+		$data['deduct_pagibig_custom']		= 0;
 
 		$data['tax_contribution']			= 0;
 		$data['sss_contribution_ee']		= 0;
@@ -1093,7 +1232,8 @@ class Payroll
 		$data['sh_night_diff'] 				= 0;
 
 		$data['13_month']					= 0;
-		$data['13_month_computed'] 			= 1;
+		$data['13_month_computed'] 			= 0;
+		$data['13_month_id']				= array();
 		
 		$data['total_allowance']			= 0;
 		$data['allowance']					= array();
@@ -1103,6 +1243,8 @@ class Payroll
 		$data['late_deduction'] 			= 0;
 		$data['under_time']					= 0;
 		$data['agency_deduction'] 			= 0;
+		$data['absent_deduction']			= 0;
+		$data['absent_count']				= 0;
 
 		$data['total_net']					= 0;
 		$data['total_gross']				= 0;
@@ -1126,8 +1268,16 @@ class Payroll
 		$data['total_rh']					= 0;
 		$data['total_sh']					= 0;
 		$data['total_worked_days']			= 0;
-
 		$data['adjustment']					= array();
+
+		$data['_details']					= array();
+
+		$data['_total_unused_leave']		= 0;
+		$data['_unused_leave']				= array();
+
+		$data['leave_count_wo_pay']			= 0;
+		$data['leave_count_w_pay']			= 0;
+		$data['leave_amount']				= 0;
 
 
 		$tax_status 	= Tbl_payroll_employee_basic::where('payroll_employee_id', $employee_id)->pluck('payroll_employee_tax_status');
@@ -1147,6 +1297,24 @@ class Payroll
 														->get();
 
 
+		$dd_array = array();
+		/* compute absent */
+		$absent_count = 0;
+		$absent_deduction = 0;
+
+		/* salary */
+		$monthly_salary =0;
+
+		/* daily cola */
+		$cola = 0;
+
+		/* daily late */
+		$daily_late = 0;
+
+		/* daily undertime */
+		$daily_undertime = 0;
+
+
 		while($start <= $end)
 		{
 			$date = Carbon::parse($start)->format("Y-m-d"); 
@@ -1158,6 +1326,7 @@ class Payroll
 													->count();
 
 			$approved = $time->approved_timesheet;
+			// array_push($dd_array, $approved);
 
 			$temp_hour 					= 0;
 
@@ -1173,7 +1342,6 @@ class Payroll
 			$special_holiday_hours 		= Payroll::time_float($approved->special_holiday_hours);
 			$regular_holiday_hours 		= Payroll::time_float($approved->regular_holiday_hours);
 
-
 			$data['regular_hours']				+= $regular_hours;
 			$data['late_overtime']				+= $late_overtime;
 			$data['early_overtime']				+= $early_overtime;
@@ -1186,10 +1354,8 @@ class Payroll
 			$data['special_holiday_hours']		+= $special_holiday_hours;
 			$data['regular_holiday_hours']		+= $regular_holiday_hours;
 
-
-
 			/* EMPLOYEE SALARY */
-			$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->where('payroll_employee_salary_archived',0)->first();
+			$salary = Tbl_payroll_employee_salary::selemployee($employee_id, $date)->where('payroll_employee_salary_archived',0)->orderBy('payroll_employee_salary_effective_date','desc')->first();
 
 			$data['minimum_wage'] 			= 0;
 			$data['salary_monthly'] 		= 0;
@@ -1199,18 +1365,39 @@ class Payroll
 			$data['salary_pagibig'] 		= 0;
 			$data['salary_philhealth'] 		= 0;
 
+
+			$data['is_deduct_tax_default'] 			= 0;
+			$data['deduct_tax_custom'] 				= 0;
+			$data['is_deduct_sss_default'] 			= 0;
+			$data['deduct_sss_custom'] 				= 0;
+			$data['is_deduct_philhealth_default'] 	= 0;
+			$data['deduct_philhealth_custom'] 		= 0;
+			$data['is_deduct_pagibig_default'] 		= 0;
+			$data['deduct_pagibig_custom'] 			= 0;
+
 			$cola 							= 0;
 
 			if(isset($salary->payroll_employee_salary_minimum_wage))
 			{
 				$data['minimum_wage'] 		= $salary->payroll_employee_salary_minimum_wage;
 				$data['salary_monthly'] 	= $salary->payroll_employee_salary_monthly;
-				$data['salary_daily'] 		= $salary->payroll_employee_salary_daily;
+				// $data['salary_daily'] 		= $salary->payroll_employee_salary_daily;
 				$data['salary_taxable'] 	= $salary->payroll_employee_salary_taxable;
 				$data['salary_sss'] 		= $salary->payroll_employee_salary_sss;
 				$data['salary_pagibig'] 	= $salary->payroll_employee_salary_pagibig;
 				$data['salary_philhealth'] 	= $salary->payroll_employee_salary_philhealth;
 				$cola 						= $salary->payroll_employee_salary_cola;
+
+				$data['is_deduct_tax_default']		= $salary->is_deduct_tax_default;
+				$data['deduct_tax_custom']			= $salary->deduct_tax_custom;
+				$data['is_deduct_sss_default']		= $salary->is_deduct_sss_default;
+				$data['deduct_sss_custom']			= $salary->deduct_sss_custom;
+				$data['is_deduct_philhealth_default']	= $salary->is_deduct_philhealth_default;
+				$data['deduct_philhealth_custom']	= $salary->deduct_philhealth_custom;
+				$data['is_deduct_pagibig_default']	= $salary->is_deduct_pagibig_default;
+				$data['deduct_pagibig_custom']		= $salary->deduct_pagibig_custom;
+
+
 			}
 
 			
@@ -1219,10 +1406,13 @@ class Payroll
 												   ->select('tbl_payroll_group.*')
 												   ->first();
 
+			// dd($group);
 
 			$working_day_month = $group->payroll_group_working_day_month;
 
 			$target_hour = $group->payroll_group_target_hour;
+
+			$under_time = divide($under_time, $target_hour);
 
 			if($group->payroll_group_is_flexi_time == 1 && $group->payroll_group_target_hour_parameter == 'Per Period')
 			{
@@ -1232,10 +1422,63 @@ class Payroll
 			$data['total_regular_days']			+= divide($regular_hours, $target_hour);
 			$data['total_rest_days']			+= divide($rest_day_hours, $target_hour);
 			$data['total_extra_days']			+= divide($extra_day_hours, $target_hour);
-			$data['total_rh']					+= divide($special_holiday_hours, $target_hour);
-			$data['total_sh']					+= divide($regular_holiday_hours, $target_hour);
+			$data['total_rh']					+= divide($regular_holiday_hours, $target_hour);
+			$data['total_sh']					+= divide($special_holiday_hours, $target_hour);
+			/* daily late */
+			$daily_late 						+= divide($late_hours, $target_hour);
+			/* daily undertime */
+			$daily_undertime 					+= $under_time;
 
-			$daily_rate = $data['salary_monthly'] / $working_day_month;
+			$daily_rate = divide($data['salary_monthly'] , $working_day_month);
+
+			// dd($working_day_month);
+
+			$hourly_rate = divide($daily_rate, $target_hour);
+
+			$data['daily_rate'] = $daily_rate;
+			
+			$data['salary_daily'] = $daily_rate;
+
+			/* compute leave */
+
+
+			/* check if has leave */
+			$get_leave = Tbl_payroll_leave_schedule::checkemployee($employee_id, $start)->first();
+			$has_leave = false;
+
+			$daily_leave = 0;
+			$daily_leave_amount = 0;
+
+			if($get_leave != null)
+			{
+				$has_leave = true;
+				
+				$daily_leave = 1;
+				if($get_leave->payroll_leave_temp_with_pay == 1)
+				{
+					$data['leave_amount'] += $daily_rate;
+					$daily_leave_amount = $daily_rate;
+					$data['leave_count_w_pay']++;
+				}
+				else
+				{
+					$data['leave_count_wo_pay']++;
+				}
+			}
+
+			
+
+			/* compute absent */
+			$daily_absent = 0;
+			if($approved->absent)
+			{
+				// if(!$has_leave)
+				// {
+					$absent_deduction += $daily_rate;
+					$daily_absent = $daily_rate;
+				// }
+				$absent_count++;
+			}
 
 			/* PAYROLL OVER TIME RATES */
 			$query_arr['payroll_group_id'] 				= $group->payroll_group_id;
@@ -1284,8 +1527,9 @@ class Payroll
 				$rh_hour['regular'] = $count_rh;
 			}
 
+		
 			/* EXTRA DAYS */
-			if($extra_day_hours > 0 && $regular_hour <= 0 && $special_holiday_hours <= 0 && $regular_holiday_hours <= 0)
+			if($extra_day_hours > 0 && $regular_hour['regular'] <= 0 && $special_holiday_hours <= 0 && $regular_holiday_hours <= 0)
 			{
 				$temp_hour								= $extra_day_hours;
 				$extra_hour['regular'] 					= divide($extra_day_hours, $target_hour);
@@ -1322,6 +1566,7 @@ class Payroll
 				
 				$temp_hour								= $rest_day_hours;
 			}
+
 			
 			/* LEGAL HOLIDAY */
 			if($regular_hours <= 0 && $rest_day_hours <= 0 && $special_holiday_hours > 0 && $regular_holiday_hours <= 0)
@@ -1348,6 +1593,8 @@ class Payroll
 				$temp_hour								= $rest_day_hours;
 			}
 			
+
+
 			if($regular_hours <= 0 && $rest_day_hours <= 0 && $special_holiday_hours <= 0 && $regular_holiday_hours > 0)
 			{
 				$rh_hour['regular'] 					= divide($regular_holiday_hours, $target_hour);
@@ -1372,7 +1619,7 @@ class Payroll
 				$temp_hour								= $rest_day_hours;
 
 			}
-			// dd($rh_hour);
+
 			$regular_day = Payroll::compute_overtime($query_arr, $regular_hour, $daily_rate, 'Regular', $cola);
 
 			$regular_day_rest = Payroll::compute_overtime($query_arr, $rest_reg_hour, $daily_rate, 'Rest Regular', $cola);
@@ -1386,13 +1633,16 @@ class Payroll
 			// dd($legal_holiday);
 
 			/* ALLOWANCE DAILY START */
-			$total_hours_render += $regular_hours + $rest_day_hours + $extra_day_hours + $special_holiday_hours + $regular_holiday_hours;
 
-			if(($regular_hours + $rest_day_hours + $extra_day_hours + $special_holiday_hours + $regular_holiday_hours) > 0)
+			$one_day_render = $regular_hours + $rest_day_hours + $extra_day_hours + $special_holiday_hours + $regular_holiday_hours;
+
+			$total_hours_render += $one_day_render;
+
+			if($one_day_render > 0)
 			{
 				foreach($_allowance_daily as $key => $daily_allowance)
 				{
-					$data['allowance'] = Payroll::push_allowance($data['allowance'], $daily_allowance, $payroll_period_category, $period_category);
+					$data['allowance'] = Payroll::push_allowance($data['allowance'], $daily_allowance, $payroll_period_category, $period_category, ($one_day_render / $target_hour));
 				}
 			}
 
@@ -1436,7 +1686,9 @@ class Payroll
 
 			$data['payroll_cola']				+= $extra_day['cola'] + $regular_day['cola'] + $regular_day_rest['cola'] + $special_holiday_rest['cola'] + $legal_holiday_rest['cola'] + $legal_holiday['cola'] + $special_holiday['cola'];
 
+			$temp_cola = $extra_day['cola'] + $regular_day['cola'] + $regular_day_rest['cola'] + $special_holiday_rest['cola'] + $legal_holiday_rest['cola'] + $legal_holiday['cola'] + $special_holiday['cola'];
 
+			array_push($dd_array, $regular_day['late_overtime']);
 			/* LATE COMPUTATION START */
 
 			$late_deduction = 0;
@@ -1462,23 +1714,235 @@ class Payroll
 			}
 			else if($group->payroll_late_category == 'Base on Salary')
 			{
-				$late_deduction = $late_hours * $daily_rate;
+				$late_deduction = $late_hours * $hourly_rate;
 			}
 
-			$data['under_time'] = $under_time * $daily_rate;
+
+			/* under time deduction */
+			if($group->payroll_group_salary_computation == 'Daily Rate')
+			{
+				$under_time = 0;
+			}
+
+			$data['under_time'] += $under_time * $daily_rate;
 
 			$data['late_deduction']	+= round($late_deduction, 2);
 
+			// array_push($dd_array, $late_deduction);
+
+
+			$details['date'] 						= $start;
+			$details['extra_salary'] 				= $extra_day['regular'];
+			$details['extra_early_overtime'] 		= $extra_day['early_overtime'];
+			$details['extra_reg_overtime'] 			= $extra_day['late_overtime'];
+			$details['extra_night_diff'] 			= $extra_day['night_differential'];
+			$details['regular_salary'] 				= $regular_day['regular'];
+			$details['regular_early_overtime'] 		= $regular_day['early_overtime'];
+			$details['regular_reg_overtime'] 		= $regular_day['late_overtime'];
+			$details['regular_night_diff'] 			= $regular_day['night_differential'];
+			$details['rest_day_salary'] 			= $regular_day_rest['regular'];
+			$details['rest_day_early_overtime'] 	= $regular_day_rest['early_overtime'];
+			$details['rest_day_reg_overtime'] 		= $regular_day_rest['late_overtime'];
+			$details['rest_day_night_diff'] 		= $regular_day_rest['night_differential'];
+			$details['rest_day_sh'] 				= $special_holiday_rest['regular'];
+			$details['rest_day_sh_early_overtime'] 	= $special_holiday_rest['early_overtime'];
+			$details['rest_day_sh_reg_overtime'] 	= $special_holiday_rest['late_overtime'];
+			$details['rest_day_sh_night_diff'] 		= $special_holiday_rest['night_differential'];
+			$details['rest_day_rh'] 				= $legal_holiday_rest['regular'];
+			$details['rest_day_rh_early_overtime'] 	= $legal_holiday_rest['early_overtime'];
+			$details['rest_day_rh_reg_overtime'] 	= $legal_holiday_rest['late_overtime'];
+			$details['rest_day_rh_night_diff'] 		= $legal_holiday_rest['night_differential'];
+			$details['rh_salary'] 					= $legal_holiday['regular'];
+			$details['rh_early_overtime'] 			= $legal_holiday['early_overtime'];
+			$details['rh_reg_overtime'] 			= $legal_holiday['late_overtime'];
+			$details['rh_night_diff'] 				= $legal_holiday['night_differential'];
+			$details['sh_salary'] 					= $special_holiday['regular'];
+			$details['sh_early_overtime'] 			= $special_holiday['early_overtime'];
+			$details['sh_reg_overtime'] 			= $special_holiday['late_overtime'];
+			$details['sh_night_diff'] 				= $special_holiday['night_differential'];
+			$details['cola'] 						= $temp_cola;
+			$details['late_deduction']				= round($late_deduction, 2);
+			$details['under_time']					= round(($under_time * $daily_rate), 2);
+			$details['absent_deduction']			= round($daily_absent, 2);
+			$details['leave']						= round($daily_leave_amount, 2);
+
+
+			$details['total_early_ot']				= $extra_day['early_overtime'] + $regular_day['early_overtime'] + $regular_day_rest['early_overtime'] + $special_holiday_rest['early_overtime'] + $legal_holiday_rest['early_overtime'] + $legal_holiday['early_overtime'] + $special_holiday['early_overtime'];
+
+			$details['total_reg_ot']				= $extra_day['late_overtime'] + $regular_day['late_overtime'] + $regular_day_rest['late_overtime'] + $special_holiday_rest['late_overtime'] + $legal_holiday_rest['late_overtime'] + $legal_holiday['late_overtime'] + $special_holiday['late_overtime'];
+
+			$details['total_rest_days']				= $regular_day_rest['regular'] + $special_holiday_rest['regular'] + $legal_holiday_rest['regular'];
+
+			$details['total_night_differential']	= $extra_day['night_differential'] + $regular_day['night_differential'] + $regular_day_rest['night_differential'] + $special_holiday_rest['night_differential'] + $legal_holiday_rest['night_differential'] + $legal_holiday['night_differential'] + $special_holiday['night_differential'];
+
+
+
+			if($group->payroll_group_salary_computation == 'Flat Rate')
+			{
+				$details['date'] 						= $start;
+				$details['extra_salary'] 				= 0;
+				$details['extra_early_overtime'] 		= 0;
+				$details['extra_reg_overtime'] 			= 0;
+				$details['extra_night_diff'] 			= 0;
+				$details['regular_salary'] 				= 0;
+				$details['regular_early_overtime'] 		= 0;
+				$details['regular_reg_overtime'] 		= 0;
+				$details['regular_night_diff'] 			= 0;
+				$details['rest_day_salary'] 			= 0;
+				$details['rest_day_early_overtime'] 	= 0;
+				$details['rest_day_reg_overtime'] 		= 0;
+				$details['rest_day_night_diff'] 		= 0;
+				$details['rest_day_sh'] 				= 0;
+				$details['rest_day_sh_early_overtime'] 	= 0;
+				$details['rest_day_sh_reg_overtime'] 	= 0;
+				$details['rest_day_sh_night_diff'] 		= 0;
+				$details['rest_day_rh'] 				= 0;
+				$details['rest_day_rh_early_overtime'] 	= 0;
+				$details['rest_day_rh_reg_overtime'] 	= 0;
+				$details['rest_day_rh_night_diff'] 		= 0;
+				$details['rh_salary'] 					= 0;
+				$details['rh_early_overtime'] 			= 0;
+				$details['rh_reg_overtime'] 			= 0;
+				$details['rh_night_diff'] 				= 0;
+				$details['sh_salary'] 					= 0;
+				$details['sh_early_overtime'] 			= 0;
+				$details['sh_reg_overtime'] 			= 0;
+				$details['sh_night_diff'] 				= 0;
+				$details['cola'] 						= 0;
+				$details['late_deduction']				= 0;
+				$details['under_time']					= 0;
+				$details['absent_deduction']			= 0;
+				$details['leave']						= 0;
+				$details['total_early_ot']				= 0;
+				$details['total_reg_ot']				= 0;
+				$details['total_rest_days']				= 0;
+				$details['total_night_differential']	= 0;
+			}
+
+			// if($group->payroll_group_salary_computation == 'Monthly Rate')
+			// {
+
+			// }
+
+			// if($group->payroll_group_salary_computation == 'Daily Rate')
+			// {
+
+			// }
+
+			array_push($data['_details'], $details);
 			$start = Carbon::parse($start)->addDay()->format("Y-m-d");
 
 		}
 
+		// dd($dd_array);
+		$payroll_group_salary_computation = $group->payroll_group_salary_computation;
+		$data['payroll_group_salary_computation'] = $payroll_group_salary_computation;
+
+
+		/* get monthly cola start */
+		$monthly_cola = $cola * $group->payroll_group_working_day_month;
+		/* get monthly cola end */
+
+		$monthly_salary = $data['salary_monthly'];
+		if($group->payroll_group_period == 'Semi-monthly')
+		{
+			$monthly_salary = $monthly_salary / 2;
+			$monthly_cola 	= $monthly_cola / 2;
+		}
+
+		if($group->payroll_group_period == 'Weekly')
+		{
+			$monthly_salary = $monthly_salary / 4;
+			$monthly_cola 	= $monthly_cola / 4;
+		}
+
+		if($group->payroll_group_period == 'Daily')
+		{
+			$monthly_salary = $monthly_salary / $group->payroll_group_working_day_month;
+			$monthly_cola 	= $cola;
+		}
+
+		// dd($payroll_group_salary_computation);
+
+		// if($payroll_group_salary_computation == 'Daily Rate')
+		// {
+		// 	$data['under_time']					= 0;
+		// 	// $data['late_deduction'] 			= 0;
+		// }
+
+		$data['absent_count']				= $absent_count;
+		$data['absent_deduction']			= $absent_deduction;
+
+
+		if($payroll_group_salary_computation == 'Flat Rate')
+		{
+			$data['extra_salary']				= 0;
+			$data['extra_early_overtime'] 		= 0;
+			$data['extra_reg_overtime'] 		= 0;
+			$data['extra_night_diff'] 			= 0;
+
+			$data['regular_salary'] 			= $monthly_salary;
+			$data['regular_early_overtime'] 	= 0;
+			$data['regular_reg_overtime'] 		= 0;
+			$data['regular_night_diff'] 		= 0;
+
+			$data['rest_day_salary'] 			= 0;
+			$data['rest_day_early_overtime']	= 0;
+			$data['rest_day_reg_overtime'] 		= 0;
+			$data['rest_day_night_diff'] 		= 0;
+
+			$data['rest_day_sh'] 				= 0;
+			$data['rest_day_sh_early_overtime'] = 0;
+			$data['rest_day_sh_reg_overtime'] 	= 0;
+			$data['rest_day_sh_night_diff'] 	= 0;
+
+			$data['rest_day_rh'] 				= 0;
+			$data['rest_day_rh_early_overtime'] = 0;
+			$data['rest_day_rh_reg_overtime'] 	= 0;
+			$data['rest_day_rh_night_diff'] 	= 0;
+
+			$data['rh_salary'] 					= 0;
+			$data['rh_early_overtime'] 			= 0;
+			$data['rh_reg_overtime'] 			= 0;
+			$data['rh_night_diff'] 				= 0;
+
+			$data['sh_salary'] 					= 0;
+			$data['sh_early_overtime'] 			= 0;
+			$data['sh_reg_overtime'] 			= 0;
+			$data['sh_night_diff'] 				= 0;
+
+			$data['late_deduction'] 			= 0;
+			$data['under_time']					= 0;
+
+			$data['absent_deduction']			= 0;
+			$data['absent_count']				= 0;
+
+			$data['payroll_cola']				= $monthly_cola;
+
+		}
+
+		if($payroll_group_salary_computation == 'Monthly Rate')
+		{
+			$payroll_sss_monthly_salary = $monthly_salary - ($data['late_deduction'] + $data['under_time'] + $data['absent_deduction']);
+
+			$data['regular_salary'] 			= $monthly_salary;
+			
+			$less_cola = ($daily_late * $cola) + ($daily_undertime * $cola);
+			$data['payroll_cola']				= round(($monthly_cola - $less_cola), 2);
+		}
+
+	
+
 		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff']);
 
 		$data['total_gross'] += $data['payroll_cola'];
-// 		employee_id
-// payroll_period_company_id
+
 		/* PAYROLL ADJUSTMEMT START */
+		/* allowances */
+		$adjustment_allowance = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Allowance')->get();
+
+		$adjustment_allowance_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Allowance')->sum('payroll_adjustment_amount');
+
 		/* bonus */
 		$adjustment_bonus = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Bonus')->get();
 
@@ -1499,6 +1963,9 @@ class Payroll
 
 		$adjustment_deductions_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Deductions')->sum('payroll_adjustment_amount');
 
+		$data['adjustment']['allowance'] 			= $adjustment_allowance;
+		$data['adjustment']['total_allowance'] 		= $adjustment_allowance_total;
+
 		$data['adjustment']['bonus'] 				= $adjustment_bonus;
 		$data['adjustment']['total_bonus'] 			= $adjustment_bonus_total;
 
@@ -1514,8 +1981,6 @@ class Payroll
 		/* PAYROLL ADJUSTMENT END */
 
 
-		
-
 		if(isset($group->payroll_group_13month_basis))
 		{
 			if($group->payroll_group_13month_basis == 'Periodically')
@@ -1523,17 +1988,34 @@ class Payroll
 				$data['13_month'] = round(($data['regular_salary'] / 12), 2);
 				$data['13_month_computed'] = 1;
 			}
+
+			if($group->payroll_group_13month_basis == 'Custom Period')
+			{
+				$m13 = Payroll::compute_13_month($employee_id, $payroll_period_company_id);
+				$data['13_month'] += $m13['data_13m'];
+				$data['13_month_computed'] = 0;
+				$data['13_month_id'] = $m13['id'];
+
+				$count_v = Tbl_payroll_13_month_virtual::getperiod($employee_id, $payroll_period_company_id)->count();
+
+				if($count_v == 1)
+				{
+					$data['13_month'] += round(($data['regular_salary'] / 12), 2);
+					$data['13_month_computed'] = 1;
+				}
+			}
 		}
 
-		$data['total_gross'] += $data['13_month'];
+		// $data['total_gross'] += $data['13_month'];
 
-		if($total_hours_render > 0)
+		if($total_hours_render > 0 || ($total_hours_render <= 0 && $payroll_group_salary_computation == 'Flat Rate'))
 		{	
 			foreach($_allowance_fixed as $key => $fixed_allowance)
 			{
 				$data['allowance'] = Payroll::push_allowance($data['allowance'], $fixed_allowance, $payroll_period_category, $period_category);
 			}
 		}
+
 
 		if(!empty($data['allowance']))
 		{
@@ -1555,23 +2037,77 @@ class Payroll
 		}
 
 
-		$total_deminimis = collect($data['allowance'])->sum('payroll_allowance_amount') + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total;
+		$total_deminimis = collect($data['allowance'])->sum('payroll_allowance_amount') + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total + $adjustment_allowance_total;
 
 
+		/* COMPUTE UNUSED LEAVE  START */
+		$data['_total_unused_leave']		= 0;
+		$data['_unused_leave']				= array();
+
+		$_leave_avail = Tbl_payroll_process_leave::getleave($employee_id, $payroll_period_company_id)->get();
+
+		foreach($_leave_avail as $avail)
+		{
+			$tmp_leave['payroll_leave_temp_name'] 	= $avail->payroll_leave_temp_name;
+			$tmp_leave['process_leave_quantity']  	= $avail->process_leave_quantity;
+			$tmp_leave['process_leave_amount']  	= $avail->process_leave_quantity * $data['daily_rate'];
+			// $tmp_leave['process_leave_amount']  	= $data['daily_rate'];
+
+			$data['_total_unused_leave'] += round($tmp_leave['process_leave_amount'], 2);
+
+			array_push($data['_unused_leave'], $tmp_leave);
+			
+		}
+
+		$total_deminimis	+=  $data['_total_unused_leave'] + $data['leave_amount'];
+
+		/* COMPUTE UNUSED LEAVE END */
 		$data['total_deminimis'] = $total_deminimis;
 
-		$data['total_gross'] += $total_deminimis;
+		// $data['total_gross'] += $total_deminimis;
 
 		/* GET SSS CONTRIBUTION */
-		$sss_contribution	= Payroll::sss_contribution($shop_id, $data['salary_sss']);
+
+		$date_period[0] = date('Y-m-01', strtotime($end));
+		$date_period[1] = date('Y-m-t', strtotime($end));
+
+		$pevious_record = Tbl_payroll_record::getdate($shop_id, $date_period)
+											->where('tbl_payroll_period.payroll_period_category', $payroll_period_category)
+											->get()
+											->toArray();
+
+		
+		$previous_tax 			= collect($pevious_record)->sum('tax_contribution');
+		$previous_sss 			= collect($pevious_record)->sum('sss_contribution_ee');
+		$previous_pagibig 		= collect($pevious_record)->sum('pagibig_contribution');
+		$previous_philhealth	= collect($pevious_record)->sum('philhealth_contribution_ee');
+
+		$sss_contribution		= Payroll::sss_contribution($shop_id, $data['salary_sss']);
+		$sss_contribution_ee 	= $sss_contribution['ee'];
+
+		// dd($sss_contribution);
+
 		if($group->payroll_group_sss == 'Every Period')
 		{
 			
-			$data['sss_contribution_ee'] = divide($sss_contribution['ee'], $period_category_arr['period_count']);
-			$data['sss_contribution_er'] = divide($sss_contribution['er'], $period_category_arr['period_count']);
-			$data['sss_contribution_ec'] = divide($sss_contribution['ec'], $period_category_arr['period_count']);
+			$data['sss_contribution_ee'] = divide($sss_contribution_ee, $period_category_arr['count_per_period']);
+			$data['sss_contribution_er'] = divide($sss_contribution_ee, $period_category_arr['count_per_period']);
+			$data['sss_contribution_ec'] = divide($sss_contribution_ee, $period_category_arr['count_per_period']);
+			// dd($data['sss_contribution_ee']);
+
+			if($data['is_deduct_sss_default'] == 0)
+			{	
+				$data['sss_contribution_ee'] = $data['deduct_sss_custom'];
+
+				if($period_category == 'Last Period')
+				{
+					$data['sss_contribution_ee'] = $sss_contribution_ee - $previous_sss;
+				}
+			}	
+
 		}
-		else if($group->payroll_group_sss == Payroll::return_ave($period_category))
+
+		else if($group->payroll_group_sss == $period_category)
 		{
 
 			if(Payroll::return_ave($period_category) == '1st Period')
@@ -1579,25 +2115,51 @@ class Payroll
 				$data['sss_contribution_ee'] = $sss_contribution['ee'];
 				$data['sss_contribution_er'] = $sss_contribution['er'];
 				$data['sss_contribution_ec'] = $sss_contribution['ec'];
+				// dd('1st Period');
 			}
 			else if(Payroll::return_ave($period_category) == '2nd Period')
 			{
-				$data['sss_contribution_ee'] = divide($sss_contribution['ee'], $period_category_arr['period_count']) * 2;
-				$data['sss_contribution_er'] = divide($sss_contribution['er'], $period_category_arr['period_count']) * 2;
-				$data['sss_contribution_ec'] = divide($sss_contribution['ec'], $period_category_arr['period_count']) * 2;
+				$data['sss_contribution_ee'] = divide($sss_contribution['ee'], $period_category_arr['count_per_period']) * 2;
+				$data['sss_contribution_er'] = divide($sss_contribution['er'], $period_category_arr['count_per_period']) * 2;
+				$data['sss_contribution_ec'] = divide($sss_contribution['ec'], $period_category_arr['count_per_period']) * 2;
+				// dd('2nd Period');
 			}
+
+			else if(Payroll::return_ave($period_category) == 'Last Period')
+			{
+				$data['sss_contribution_ee'] = $sss_contribution['ee'];
+				$data['sss_contribution_er'] = $sss_contribution['er'];
+				$data['sss_contribution_ec'] = $sss_contribution['ec'];
+				// dd('Last Period');
+			}	
 		}
 
+
+		// dd($data['sss_contribution_ee']);
 		/* GET PHILHEALTH CONTRIBUTION */
 		$philhealth_contribution = Payroll::philhealth_contribution($shop_id, $data['salary_philhealth']);
+
+		// dd($group->payroll_group_philhealth);
+
 		if($group->payroll_group_philhealth == 'Every Period')
 		{
 			// philhealth_contribution
-			$data['philhealth_contribution_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['period_count']);
-			$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'] , $period_category_arr['period_count']);
-			
+			$philhealth_contribution_ee = $philhealth_contribution['ee'];
+
+			$data['philhealth_contribution_ee'] = divide($philhealth_contribution_ee, $period_category_arr['count_per_period']);
+			$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'] , $period_category_arr['count_per_period']);
+
+			if($data['is_deduct_philhealth_default'] == 0)
+			{
+				$data['philhealth_contribution_ee'] = $data['deduct_philhealth_custom'];
+				if($period_category == 'Last Period')
+				{
+					$data['philhealth_contribution_ee'] = $philhealth_contribution_ee - $previous_philhealth;
+				}
+			}
 		}
-		else if($group->payroll_group_philhealth == Payroll::return_ave($period_category))
+
+		else if($group->payroll_group_philhealth == $period_category)
 		{
 			if(Payroll::return_ave($period_category) == '1st Period')
 			{
@@ -1606,8 +2168,14 @@ class Payroll
 			}
 			else if(Payroll::return_ave($period_category) == '2nd Period')
 			{
-				$data['philhealth_contribution_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['period_count']) * 2;
-				$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'], $period_category_arr['period_count']) * 2;
+				$data['philhealth_contribution_ee'] = divide($philhealth_contribution['ee'], $period_category_arr['count_per_period']) * 2;
+				$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'], $period_category_arr['count_per_period']) * 2;
+			}
+
+			else if(Payroll::return_ave($period_category) == 'Last Period')
+			{
+				$data['philhealth_contribution_ee'] = $philhealth_contribution['ee'];
+				$data['philhealth_contribution_er'] = $philhealth_contribution['er'];
 			}
 		}
 
@@ -1617,10 +2185,25 @@ class Payroll
 		if($group->payroll_group_pagibig == 'Every Period')
 		{
 			// philhealth_contribution
-			$data['pagibig_contribution'] = divide($pagibig_contribution, $period_category_arr['period_count']);
+			$data['pagibig_contribution'] = divide($pagibig_contribution, $period_category_arr['count_per_period']);
+
+			if($data['is_deduct_pagibig_default'] == 0)
+			{
+				$data['pagibig_contribution'] = $data['deduct_pagibig_custom'];
+
+				if($period_category == 'Last Period')
+				{
+					$data['pagibig_contribution'] = $pagibig_contribution - $previous_pagibig;
+				}
+			}
+
 		}
-		else if($group->payroll_group_pagibig == Payroll::return_ave($period_category))
+
+
+
+		else if($group->payroll_group_pagibig == $period_category)
 		{
+
 			if(Payroll::return_ave($period_category) == '1st Period')
 			{
 				$data['pagibig_contribution'] = $pagibig_contribution;
@@ -1628,29 +2211,46 @@ class Payroll
 			}
 			else if(Payroll::return_ave($period_category) == '2nd Period')
 			{
-				$data['pagibig_contribution'] = divide($philhealth_contribution, $period_category_arr['period_count']) * 2;
+				$data['pagibig_contribution'] = divide($pagibig_contribution, $period_category_arr['count_per_period']) * 2;
+			}
+
+			else if(Payroll::return_ave($period_category) == 'Last Period')
+			{
+				$data['pagibig_contribution'] = $pagibig_contribution;
 			}
 		}
 
 		/* GET TAX CONTRIBUTION */
-		if($data['minimum_wage'] == 1)
+		if($data['minimum_wage'] == 0)
 		{
 			if($group->payroll_group_tax == 'Every Period' || $group->payroll_group_tax == $period_category)
 			{
-				$salary_taxable = $data['salary_taxable'] - ($data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution']);
+				
+				$salary_taxable = $data['salary_taxable'];
+
+
+				if($group->payroll_group_before_tax == 1)
+				{
+					$salary_taxable = $data['salary_taxable'] - ($data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution']);
+				}
+				
 				if($salary_taxable <= 0)
 				{
 					$salary_taxable = 0;
 				}
 
-				$data['tax_contribution'] = divide(Payroll::tax_contribution($shop_id, $salary_taxable, $data['tax_status'], $payroll_period_category), $period_category_arr['period_count']);
+				$data['tax_contribution'] = divide(Payroll::tax_contribution($shop_id, $salary_taxable, $data['tax_status'], $payroll_period_category), $period_category_arr['count_per_period']);
+
+				// dd($salary_taxable);
+
 				if($group->payroll_group_tax == 'Last Period')
 				{
-					$data['tax_contribution'] = $data['tax_contribution'] * $period_category_arr['period_count'];
+					$data['tax_contribution'] = $data['tax_contribution'] * $period_category_arr['count_per_period'];
 				}	
 			}
 			
 		}
+
 		if($group->payroll_group_agency == Payroll::return_ave($period_category))
 		{
 			$data['agency_deduction'] = $group->payroll_group_agency_fee;
@@ -1660,10 +2260,9 @@ class Payroll
 		$data['total_deduction']	+= $data['sss_contribution_ee'];
 		$data['total_deduction']	+= $data['pagibig_contribution'];
 		$data['total_deduction']	+= $data['philhealth_contribution_ee'];
+		$data['total_deduction']	+= $data['absent_deduction'];
 		$data['total_deduction']	+= $data['late_deduction'];
 		$data['total_deduction']	+= $data['under_time'];
-		$data['total_deduction']	+= $data['agency_deduction'];
-		$data['total_deduction']	+= $data['agency_deduction'];
 		$data['total_deduction']	+= $data['agency_deduction'];
 
 		// DEDUCTION START [LOANS, CASH ADVANCE, CASH BOND AND OTHER DEDUCTION]
@@ -1683,10 +2282,12 @@ class Payroll
 			$data['late_deduction'] 			= 0;
 			$data['under_time'] 				= 0;
 			$data['agency_deduction'] 			= 0;
-			$data['agency_deduction'] 			= 0;
-			$data['agency_deduction'] 			= 0;
 		}
-		$data['total_net'] 			= $data['total_gross'] - $data['total_deduction'];
+
+		
+		$data['total_net'] 					= ($data['total_gross'] - $data['total_deduction']) + $total_deminimis + $data['13_month'];
+
+		$data['total_gross'] 				+=  $total_deminimis + $data['13_month'];
 
 		$data['total_regular_days']			= round($data['total_regular_days'], 2);
 		$data['total_rest_days']			= round($data['total_rest_days'], 2);
@@ -1694,18 +2295,53 @@ class Payroll
 		$data['total_rh']					= round($data['total_rh'], 2);
 		$data['total_sh']					= round($data['total_sh'], 2);
 
-		$data['total_worked_days'] = $data['total_regular_days'] + $data['total_rest_days'] + $data['total_extra_days'] + $data['total_rh'] + $data['total_sh'];
-		// dd($data['allowance']);
+		// leave_count_w_pay
+		// leave_count_wo_pay
+
+		$data['total_worked_days'] = $data['total_regular_days'] + $data['total_rest_days'] + $data['total_extra_days'] + $data['total_rh'] + $data['total_sh'] + $data['leave_count_w_pay'] + $data['leave_count_wo_pay'];
+
 		// dd($data);
 		return $data;
 	}
 
-	public static function getperiodcount($shop_id = 0, $date = '0000-00-00', $payroll_period_category = '')
+
+	public static function compute_13_month($employee_id = 0, $payroll_period_company_id = 0)
 	{
-		$datearr[0] 	= date('Y-m-01', strtotime($date));
-		$datearr[1] 	= date('Y-m-t', strtotime($date));
+		$data['id'] = array();
+		$_13m = Tbl_payroll_13_month_compute::get13m($employee_id, $payroll_period_company_id)->get()->toArray();
+
+		$data_13m = 0;
+		foreach($_13m as $m13)
+		{
+			$data_13m += ($m13['regular_salary'] / 12);
+			array_push($data['id'], $m13['payroll_record_id']);
+		}
+
+
+		$data['data_13m'] = $data_13m;
+
+		return $data;
+	}
+
+	public static function getperiodcount($shop_id = 0, $date = '0000-00-00', $payroll_period_category = '', $start = '0000-00-00')
+	{
+		$strtotime 		= strtotime($date);
+
+		$datearr[0] 	= date('Y-m-01', $strtotime);
+		$datearr[1] 	= date('Y-m-t', $strtotime);
+		$date_end_count = date('t', $strtotime);
+		$date_day		= date('D', $strtotime);
+		$date_month 	= date('m', $strtotime);
+		$date_year 		= date('Y', $strtotime);
+
+		$current_month 	= date('m', $strtotime);
+
+		$current_count 	= 0;
+
+		// dd($date_end_count);
 
 		$period_category = 'None';
+		$count_per_period = 0;
 
 		$_period = Tbl_payroll_period::sel($shop_id, 0)
 									->where('payroll_period_category', $payroll_period_category)
@@ -1713,8 +2349,10 @@ class Payroll
 									->orderBy('payroll_period_end')
 									->get()
 									->toArray();
+
 		$period_count = count($_period);
 		$index_count = 1;
+
 		foreach($_period as $period)
 		{
 			if($period['payroll_period_end'] == $date)
@@ -1726,6 +2364,9 @@ class Payroll
 
 		if($payroll_period_category == 'Weekly')
 		{
+			$next_month 	= date('m', strtotime("+7 day", $strtotime));
+
+
 			if($index_count  == 1)
 			{
 				$period_category = 'First Period';
@@ -1734,29 +2375,57 @@ class Payroll
 			{
 				$period_category = 'Second Period';
 			}
-			else if($index_count == $period_count)
+			else if($next_month != $current_month)
 			{
 				$period_category = 'Last Period';
 			}
+
+			/* get total number of weeks per month */
+			for($i = 1; $i <= $date_end_count; $i++)
+			{
+
+				$istr = $i;
+				if($i <= 9)
+				{
+					$istr = '0'.$i;
+				}
+
+				if($date_day == date('D', strtotime($date_year.'-'.$date_month.'-'.$istr)))
+				{
+					$count_per_period++;
+				}
+			}
+
 		}
 		else if($payroll_period_category == 'Semi-monthly')
 		{
+			$next_month 	= date('m', strtotime("+15 day", $strtotime));
+
+			// dd($next_month);
+
 			if($index_count == 1)
 			{
 				$period_category = 'First Period';
 			}
-			else if($index_count == $period_count || $index_count == 2)
+			if($next_month != $current_month)
 			{
+				// dd($current_month);
 				$period_category = 'Last Period';
 			}
+
+			$count_per_period = 2;
 		}
 		else if($payroll_period_category == 'Monthly')
 		{
-			$period_category = 'Last Period';
+			$period_category 	= 'Last Period';
+			$count_per_period 	= 1;
+			$current_count		= 1;
 		}
 
-		$data['period_category'] = $period_category;
-		$data['period_count']	 = $period_count;
+		$data['period_category']  	= $period_category;
+		$data['period_count']	  	= $period_count;
+		$data['count_per_period'] 	= $count_per_period;
+		$data['current_count']		= $current_count;
 
 		return $data;
 
@@ -1776,15 +2445,27 @@ class Payroll
 	}
 
 	/* PUSH TO ARRAY ALLOWANCES */
-	public static function push_allowance($allowance_data = array(), $allowance = array(), $payroll_period_category = '', $period_category = '')
+	public static function push_allowance($allowance_data = array(), $allowance = array(), $payroll_period_category = '', $period_category = '', $day_count = 1)
 	{
 		$temp_allowance['payroll_allowance_id']		= $allowance->payroll_allowance_id;
 		$temp_allowance['payroll_allowance_name'] 	= $allowance->payroll_allowance_name;
 		$temp_allowance['payroll_allowance_amount'] = $allowance->payroll_allowance_amount;
 
+		if($allowance->payroll_allowance_category == 'daily')
+		{
+			$temp_allowance['payroll_allowance_amount'] = $allowance->payroll_allowance_amount * $day_count;
+		}
+
+		// dd($allowance->payroll_allowance_add_period);
+
 		if($payroll_period_category == 'Weekly')
 		{
 			if($period_category == $allowance->payroll_allowance_add_period)
+			{
+				array_push($allowance_data, $temp_allowance);
+			}
+
+			if($allowance->payroll_allowance_add_period == 'Every Period')
 			{
 				array_push($allowance_data, $temp_allowance);
 			}
@@ -1799,6 +2480,11 @@ class Payroll
 			{
 				array_push($allowance_data, $temp_allowance);
 			}	
+
+			else if($allowance->payroll_allowance_add_period == 'Every Period')
+			{
+				array_push($allowance_data, $temp_allowance);
+			}
 		}
 
 		else if($payroll_period_category == 'Monthly')
@@ -1809,19 +2495,23 @@ class Payroll
 			}
 		}
 
+
+		// dd($allowance_data);
 		return $allowance_data;
 
 	}
 
-	public static function compute_overtime($query = array(), $hours = array(), $rate = 0, $day_type = 'Regular', $cola)
+	public static function compute_overtime($query = array(), $hours = array(), $rate = 0, $day_type = 'Regular', $cola = 0)
 	{
-		// dd($hours);
+		// dd($rate);
 		$param = Tbl_payroll_overtime_rate::getrate($query['payroll_group_id'], $query['payroll_overtime_name'])->first();
 
 		$regular 			= 0;
 		$late_overtime 		= 0;
 		$early_overtime 	= 0;
 		$night_differential = 0;
+		$cola_var 			= 0;
+
 
 		if($day_type == 'Regular' || $day_type == 'Extra' || $day_type == 'Legal Holiday' || $day_type == 'Special Holiday')
 		{
@@ -1829,6 +2519,11 @@ class Payroll
 			$late_overtime 		= $param->payroll_overtime_overtime;
 			$early_overtime 	= $param->payroll_overtime_overtime;
 			$night_differential = $param->payroll_overtime_nigth_diff;
+			$cola_var			= $regular;
+			// if($regular == 0)
+			// {
+			// 	$cola_var = 1;
+			// }
 		}
 
 		else if($day_type == 'Rest Regular' || $day_type == 'Rest Legal Holiday' || $day_type == 'Rest Special Holiday')
@@ -1837,14 +2532,11 @@ class Payroll
 			$late_overtime 		= $param->payroll_overtime_rest_overtime;
 			$early_overtime 	= $param->payroll_overtime_rest_overtime;
 			$night_differential = $param->payroll_overtime_rest_night;
+			$cola_var			= $regular;
 		}
 
-		$cola 				= $regular * $cola;
-
-		$regular 			= $regular * $rate;
-		$late_overtime 		= $late_overtime * $rate;
-		$early_overtime 	= $early_overtime * $rate;
-		$night_differential = $night_differential * $rate;
+		$cola_var 			= $cola_var * $cola;
+		// $regular 			= $regular * $rate;
 		
 
 		if($hours['regular'] <= 0)
@@ -1864,12 +2556,27 @@ class Payroll
 			$night_differential = 0;
 		}	
 
-		$data['regular']			= round(($regular + ( $hours['regular'] * $rate )), 2);
-		$data['late_overtime']		= round(($late_overtime + ( $hours['late_overtime'] * $rate )), 2);
-		$data['early_overtime']		= round(($early_overtime + ( $hours['early_overtime'] * $rate )), 2);
-		$data['night_differential']	= round(($night_differential + ( $hours['night_differential'] * $rate )), 2);
+		$temp_overtime 	= $hours['late_overtime'] * $rate;
+		$temp_earlyOT 	= $hours['early_overtime'] * $rate;
+		$temp_night		= $hours['night_differential'] * $rate;
+		$temp_regular	= $hours['regular'] * $rate;
 
-		$data['cola'] 				= round($cola, 2);
+		$data['regular']			= round(($temp_regular + ( $temp_regular * $regular )), 2);
+		$data['late_overtime']		= round(($temp_overtime + ($temp_overtime * $late_overtime)), 2);
+		$data['early_overtime']		= round(($temp_earlyOT + ($temp_earlyOT * $early_overtime)), 2);
+		$data['night_differential']	= round(($night_differential + ($temp_night * $night_differential)), 2);
+
+		$tota = 0;
+
+		$total = $data['regular'] + $data['late_overtime'] + $data['early_overtime'] + $data['night_differential'];
+
+		$data['cola'] 				= round(($cola_var + ($cola * $hours['regular'])), 2);
+
+		if($total <= 0)
+		{
+			
+			$data['cola'] = 0;
+		}
 
 		return $data;
 		
@@ -1889,8 +2596,9 @@ class Payroll
 
 		$tax_contribution = 0;
 
-		// dd($tax);
+		
 
+		// if($rate >= $tax->tax_first_range && $rate < $tax->tax_second_range)
 		if($tax->tax_first_range >= $rate && $tax->tax_second_range < $rate)
 		{
 			$tax_index = 'tax_first_range';
@@ -1916,17 +2624,20 @@ class Payroll
 			$tax_index = 'tax_fourth_range';
 		}
 
+		
 		if($tax->tax_fifth_range >= $rate && $tax->taxt_sixth_range < $rate)
 		{
 			$tax_index = 'tax_fifth_range';
 		}
 
-		if($rate >= $tax->taxt_sixth_range&&  $rate < $tax->tax_seventh_range)
+
+		if($rate >= $tax->taxt_sixth_range &&  $rate < $tax->tax_seventh_range)
 		{
 			$tax_index = 'taxt_sixth_range';
 		}
 
-		if($tax->tax_seventh_range < $rate)
+
+		if($rate <= $tax->tax_seventh_range && $rate > $tax->taxt_sixth_range)
 		{
 			$tax_index = 'tax_seventh_range';
 		}
@@ -1940,6 +2651,8 @@ class Payroll
 
 			$tax_contribution = (($rate - $tax->$tax_index) * ($status_num / 100)) + $exemption_num;
 		}
+
+
 		return round($tax_contribution, 2);
 	}
 
@@ -1950,25 +2663,30 @@ class Payroll
 		$data['er'] = 0;
 		$data['ec'] = 0;
 
-		$max_sss = Tbl_payroll_sss::where('shop_id', $shop_id)->orderBy('payroll_sss_min','desc')->first();
-		$sss = Tbl_payroll_sss::where('shop_id', $shop_id)->where('payroll_sss_min','<=',$rate)->where('payroll_sss_max','>=',$rate)->first();
+		if($rate > 0)
+		{
+			$max_sss = Tbl_payroll_sss::where('shop_id', $shop_id)->orderBy('payroll_sss_min','desc')->first();
+			$sss = Tbl_payroll_sss::where('shop_id', $shop_id)->where('payroll_sss_min','<=',$rate)->where('payroll_sss_max','>=',$rate)->first();
 
-		if($sss == null)
-		{	
-			if($max_sss->payroll_sss_min <= $rate)
+			if($sss == null)
+			{	
+				if($max_sss->payroll_sss_min <= $rate)
+				{
+					$data['ee'] = $max_sss->payroll_sss_ee;
+					$data['er'] = $max_sss->payroll_sss_er;
+					$data['ec'] = $max_sss->payroll_sss_eec;
+
+				}
+			}
+			else if($sss != null)
 			{
-				$data['ee'] = $max_sss->payroll_sss_ee;
-				$data['er'] = $max_sss->payroll_sss_er;
-				$data['ec'] = $max_sss->payroll_sss_eec;
-
+				$data['ee'] = $sss->payroll_sss_ee;
+				$data['er'] = $sss->payroll_sss_er;
+				$data['ec'] = $sss->payroll_sss_eec;
 			}
 		}
-		else if($sss != null)
-		{
-			$data['ee'] = $sss->payroll_sss_ee;
-			$data['er'] = $sss->payroll_sss_er;
-			$data['ec'] = $sss->payroll_sss_eec;
-		}
+
+		// dd($data);
 
 		return $data;
 	}
@@ -1978,26 +2696,29 @@ class Payroll
 	{
 		$data['ee'] = 0;
 		$data['er'] = 0;
-
-		$_philhealth_max = Tbl_payroll_philhealth::where('shop_id', $shop_id)->orderBy('payroll_philhealth_min','desc')->first();
-
-		$philhealth = Tbl_payroll_philhealth::where('shop_id', $shop_id)
-											->where('payroll_philhealth_min','<=', $rate)
-											->where('payroll_philhealth_max','>=', $rate)
-											->first();
-
-
-		if($philhealth != null)
+		if($rate > 0)
 		{
-			$data['ee'] = $philhealth->payroll_philhealth_ee_share;
-			$data['er'] = $philhealth->payroll_philhealth_er_share;
+			$_philhealth_max = Tbl_payroll_philhealth::where('shop_id', $shop_id)->orderBy('payroll_philhealth_min','desc')->first();
 
+			$philhealth = Tbl_payroll_philhealth::where('shop_id', $shop_id)
+												->where('payroll_philhealth_min','<=', $rate)
+												->where('payroll_philhealth_max','>=', $rate)
+												->first();
+
+
+			if($philhealth != null)
+			{
+				$data['ee'] = $philhealth->payroll_philhealth_ee_share;
+				$data['er'] = $philhealth->payroll_philhealth_er_share;
+
+			}
+			else if($_philhealth_max->payroll_philhealth_min >= $rate)
+			{	
+				$data['ee'] = $_philhealth_max->payroll_philhealth_ee_share;
+				$data['er'] = $_philhealth_max->payroll_philhealth_er_share;
+			}
 		}
-		else if($_philhealth_max->payroll_philhealth_min >= $rate)
-		{	
-			$data['ee'] = $_philhealth_max->payroll_philhealth_ee_share;
-			$data['er'] = $_philhealth_max->payroll_philhealth_er_share;
-		}
+		
 
 		return $data;
 	}
@@ -2074,6 +2795,9 @@ class Payroll
 		$data['allowance']					= array();
 		$data['deduction']					= array();
 
+		$data['_total_unused_leave']		= 0;
+		$data['_unused_leave']				= array();
+
 		$total_allowance = 0;
 		$total_deduction = 0;
 
@@ -2099,6 +2823,10 @@ class Payroll
 			array_push($data['deduction'], $temp_deduction);
 		}
 
+		$adjustment_allowance = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Allowance')->get();
+
+		$adjustment_allowance_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Allowance')->sum('payroll_adjustment_amount');
+
 		$adjustment_bonus = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id, 'Bonus')->get();
 
 		$adjustment_bonus_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Bonus')->sum('payroll_adjustment_amount');
@@ -2119,6 +2847,8 @@ class Payroll
 		$adjustment_deductions_total = Tbl_payroll_adjustment::getadjustment($employee_id, $payroll_period_company_id , 'Deductions')->sum('payroll_adjustment_amount');
 
 
+		$data['adjustment']['allowance'] 			= $adjustment_allowance;
+		$data['adjustment']['total_allowance'] 		= $adjustment_allowance_total;
 
 		$data['adjustment']['bonus'] 				= $adjustment_bonus;
 		$data['adjustment']['total_bonus'] 			= $adjustment_bonus_total;
@@ -2131,22 +2861,55 @@ class Payroll
 
 		$data['adjustment']['deductions'] 			= $adjustment_deductions;
 		$data['adjustment']['total_deductions'] 	= $adjustment_deductions_total;
+
 		// $total_contribution 				= $data['']
 		$data['total_gross'] = 0;
-		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total);
+		$data['total_gross'] += ($data['extra_salary'] + $data['extra_early_overtime'] + $data['extra_reg_overtime'] + $data['extra_night_diff'] + $data['regular_salary'] + $data['regular_early_overtime'] + $data['regular_reg_overtime'] + $data['regular_night_diff'] + $data['rest_day_salary'] + $data['rest_day_early_overtime'] + $data['rest_day_reg_overtime'] + $data['rest_day_night_diff'] + $data['rest_day_sh'] + $data['rest_day_sh_early_overtime'] + $data['rest_day_sh_reg_overtime'] + $data['rest_day_sh_night_diff'] + $data['rest_day_rh'] + $data['rest_day_rh_early_overtime'] + $data['rest_day_rh_reg_overtime'] + $data['rest_day_rh_night_diff'] + $data['rh_salary'] + $data['rh_early_overtime'] + $data['rh_reg_overtime'] + $data['rh_night_diff'] + $data['sh_salary'] + $data['sh_early_overtime'] + $data['sh_reg_overtime'] + $data['sh_night_diff']);
 
 
+		/* COMPUTE UNUSED LEAVE  START */
+		$data['_total_unused_leave']		= 0;
+		$data['_unused_leave']				= array();
+
+		$_leave_avail = Tbl_payroll_process_leave::getleave($employee_id, $payroll_period_company_id)->get();
+
+		// dd($payroll_period_company_id);
+
+		foreach($_leave_avail as $avail)
+		{
+			$tmp_leave['payroll_leave_temp_name'] 	= $avail->payroll_leave_temp_name;
+			$tmp_leave['process_leave_quantity']  	= $avail->process_leave_quantity;
+			$tmp_leave['process_leave_amount']  	= $avail->process_leave_quantity * $data['salary_daily'];
+
+			$data['_total_unused_leave'] += round($tmp_leave['process_leave_amount'], 2);
+
+			array_push($data['_unused_leave'], $tmp_leave);
+			
+		}
+
+		/* for leave */
+		// $data['leave_amount'] = 0;
+
+		/* for absents */
+		// $data['absent_deduction'] = 0;
+		// $total_deminimis	=  $data['_total_unused_leave'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total + $data['leave_amount'];
+
+		$total_deminimis	=  $data['_total_unused_leave'] + $data['payroll_cola'] + $data['13_month'] + $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total + $data['leave_amount'];
 
 
-		$data['total_deminimis'] = $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total;
+		/* COMPUTE UNUSED LEAVE END */
+
+		// $data['total_deminimis'] = $total_allowance + $adjustment_bonus_total + $adjustment_commission_total + $adjustment_incentives_total;
+		$data['total_deminimis'] = $total_deminimis;
 
 
-		$total_deduction += $data['tax_contribution'] + $data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution'] + $data['late_deduction'] + $data['under_time'] + $data['agency_deduction'] + $data['adjustment']['total_deductions'];
+		$total_deduction += $data['tax_contribution'] + $data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution'] + $data['late_deduction'] + $data['under_time'] + $data['agency_deduction'] + $data['adjustment']['total_deductions'] + $data['absent_deduction'];
 
 
-		// dd($total_deduction);
+		// dd($total_deminimis);
 
-		$data['total_net']					= $data['total_gross'] - $total_deduction;
+		$data['total_net']					= ($data['total_gross'] + $total_deminimis)- $total_deduction;
+		$data['total_gross']				+= $data['total_deminimis'];
 		$data['total_deduction']			= $total_deduction;
 		$data['total_allowance']			= $total_allowance;
 		return $data;
@@ -2226,5 +2989,26 @@ class Payroll
 		// dd(collect($data)->groupBy());
 		return $data;
 	}
+
+
+	/* check if employee has schedule leave */
+	public static function check_if_employee_leave($employee_id = 0, $date = '0000-00-00')
+	{
+		$data = 'no_leave';
+
+		$leave_count = Tbl_payroll_leave_schedule::checkemployee($employee_id, $date)->count();
+		if($leave_count > 0)
+		{
+			$leave = Tbl_payroll_leave_schedule::checkemployee($employee_id, $date)->first();
+
+			$data = 'without_pay';
+			
+			if($leave->payroll_leave_temp_with_pay == 1)
+			{
+				$data = 'with_pay';
+			}
+		}
+		return $data;
+	}	
 
 }

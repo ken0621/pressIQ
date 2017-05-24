@@ -15,9 +15,9 @@
               <a href="javascript:void(0)" class="product-title">Sponsor: {{name_format_from_customer_info($value)}}
                 <span class="label label-success pull-right">{{currency('PHP', $value->wallet_log_amount)}}</span></a>
                   <span class="product-description" style="color: black;">
-                    {{$value->slot_no}}
-                    <hr>
-                    {{$value->wallet_log_details}}
+                    Slot: {{$value->slot_no}}
+                    <br>
+                    Notification: {{$value->wallet_log_details}}
                   </span>
             </div>
           </li>

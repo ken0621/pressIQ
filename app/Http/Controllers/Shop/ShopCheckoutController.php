@@ -76,8 +76,8 @@ class ShopCheckoutController extends Shop
         $full_name = Request::input("full_name");
         $_name = $this->split_name($full_name);
 
-
         /* SET FIRST NAME, LAST NAME AND CONTACT */
+        $customer_info["current_user"] = Self::$customer_info;
         $customer_info["first_name"] = $_name[0];
         $customer_info["last_name"] = $_name[1];
         $customer_info["customer_contact"] = Request::input("contact_number");
@@ -180,13 +180,13 @@ class ShopCheckoutController extends Shop
             }
         }
 
-
+        dd($data["tbl_customer"]);
         $data["currency"] = "PHP";
         $data["prodDesc"] = $product_summary;
         $data["userName"] = $data["tbl_customer"]["first_name"] . " " . $data["tbl_customer"]["last_name"];
         $data["userEmail"] = $data["tbl_ec_order"]["customer_email"];
         $data["userContact"] = $data["tbl_customer"]["customer_contact"];
-        $data["remark"] = "";
+        $data["remark"] = "Remarks";
         $data["lang"] = "UTF-8";
         $data["responseUrl"] = URL::to('/ipay88_response');
         $data["backendUrl"] = URL::to('/ipay88_response');
@@ -210,7 +210,7 @@ class ShopCheckoutController extends Shop
             'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
             'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
         );
-
+        dd($this->_data);
         RequestPayment::make($data["merchantKey"], $this->_data);     
     }
 

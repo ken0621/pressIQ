@@ -883,7 +883,7 @@ class Cart
             case 'ipay88': Redirect::to("/postPaymentWithIPay88")->send(); break;
             case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
             case 'paypal2': die("UNDER DEVELOPMENT"); break;
-            default: break;
+            default: die("UNDER DEVELOPMENT"); break;
         }
     }
     public static function submit_using_ewallet($cart, $shop_id)

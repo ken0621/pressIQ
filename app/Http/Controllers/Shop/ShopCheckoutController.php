@@ -219,8 +219,9 @@ class ShopCheckoutController extends Shop
     public function ipay88_response()
     {
         $request = Request::all();
-        $result = Session::get('ipay88_order');
-        $order_id = $result["order_id"];
+        $shop_id = $this->shop_info->shop_id;
+        $result = Cart::get_info($shop_id);
+        $order_id = $result["tbl_ec_order"]["ec_order_id"];
 
         Session::forget('ipay88_order');
 
@@ -251,7 +252,7 @@ class ShopCheckoutController extends Shop
                 $update["payment_status"] = 1;
                 $update["order_status"] = "Processing";
                 $update["ec_order_id"]  = $order_id;
-                $update["shop_id"]      = $this->shop_info->shop_id;
+                $update["shop_id"]      = $shop_id;
                 Ec_order::update_ec_order($update);   
                 Cart::clear_all($this->shop_info->shop_id);
 
@@ -264,6 +265,7 @@ class ShopCheckoutController extends Shop
             return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
         }
     }
+
     public function order_placed()
     {
         $data["page"] = "Checkout - Order Placed";
@@ -274,6 +276,7 @@ class ShopCheckoutController extends Shop
         }
 
         $data = unserialize(Crypt::decrypt($order));
+    
         $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $data["order_id"])
                                             ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
                                             ->get();

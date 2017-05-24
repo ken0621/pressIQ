@@ -41,13 +41,13 @@ class ShopCheckoutController extends Shop
         $data["page"]            = "Checkout";
         $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
         /* DO NOT ALLOW ON THIS PAGE IF THERE IS NOT CART */
-        if (!isset($data["get_cart"]['cart'])) 
+        if (isset($data["get_cart"]['cart']) && isset($data["get_cart"]["tbl_customer"]) && isset($data["get_cart"]["tbl_customer_address"]) && isset($data["get_cart"]["tbl_ec_order"]) && isset($data["get_cart"]["tbl_ec_order_item"]) && isset($data["get_cart"]["sale_information"])) 
         {
-            return Redirect::to('/')->send();
+            return view("checkout", $data);
         }
         else
         { 
-            return view("checkout", $data);
+            return Redirect::to('/')->send();
         }
     }
     public function locale()

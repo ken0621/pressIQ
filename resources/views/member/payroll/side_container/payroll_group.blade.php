@@ -5,7 +5,7 @@
 		</div>
 	</div>
 	<ul class="nav nav-tabs">
-		<li class="active"><a data-toggle="tab" href="#active-payroll-group"><i class="fa fa-star"></i>&nbsp;Active Job Title</a></li>
+		<li class="active"><a data-toggle="tab" href="#active-payroll-group"><i class="fa fa-star"></i>&nbsp;Active Payroll Group</a></li>
 		<li><a data-toggle="tab" href="#archive-payroll-group"><i class="fa fa-trash-o"></i>&nbsp;Archived</a></li>
 	</ul>
 	<div class="tab-content padding-10">

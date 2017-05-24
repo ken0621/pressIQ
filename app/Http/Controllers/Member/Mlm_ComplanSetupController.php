@@ -54,7 +54,7 @@ class Mlm_ComplanSetupController extends Member
 		->where('marketing_plan_enable', 1)
 		->count();
 
-		// $restrict['PhilTECH'] = ['PhilTECH'];
+		$restrict['PhilTECH'] = ['PhilTECH'];
 		// $restrict
 		if($count >= 1)
 		{

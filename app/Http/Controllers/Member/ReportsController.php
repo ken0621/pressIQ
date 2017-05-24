@@ -320,7 +320,6 @@ class ReportsController extends Member
 
         $report_type = Request::input('report_type');
         $report_field_type = Request::input('report_field_type');
-        $data = [];
         $data['report_type'] = $report_type;
         $shop_id = $this->user_info->shop_id; 
 

@@ -38,7 +38,7 @@ if($reciept->merchant_school_amount <= 0)
                             <div class="col-md-12" style="margin-left:21px;">
                                     <table class="table" style="background-color: white !important;">
                                         <tr>
-                                            <td><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/mlm/bongao.png'}} @else {{'/assets/mlm/bongao.png'}}@endif" class="img-responsive"></td>
+                                            <td><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/mlm/bongao.png'}} @else {{'/assets/mlm/bongao.png'}}@endif"></td>
                                             <td>
                                                 <center><h3>Merchant</h4></center>
                                                 <center style="color: red;"><h4>Bongoa Discovery School</h4></center>

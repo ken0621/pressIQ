@@ -26,6 +26,7 @@ function customer_invoice()
 		action_date_picker();
 		action_reassign_number();
 
+		$('.droplist-customer').change();
 	}
 	function event_remove_tr()
 	{

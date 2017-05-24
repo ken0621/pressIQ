@@ -16,19 +16,21 @@
 					<tbody>
 						@foreach($category as $c_key => $c_value)
 							@if(isset($category_data[$c_key]))
-								<tr data-id="a_{{$c_key}}" data-parent="" >
-									<td @if($report_type != 'excel') style="background-color: #dedede;" @endif colspan="20">{{$category_data[$c_key]->type_name}}</td>
+								<tr data-id="a_{{$c_key}}" data-parent="" @if($report_type != 'excel') style="background-color: #dedede;" @endif >
+									<td colspan="{{count($report_field)}}">{{$category_data[$c_key]->type_name}}</td>
+									<td></td>
 								</tr>
 
 								@foreach($c_value as $c_v_key => $c_v_value)
 									@if(isset($item_info[$c_v_key]))
-										<tr>
-						            		<td @if($report_type != 'excel') style="background-color: #F5F5F5;" @endif ></td><td colspan="20" @if($report_type != 'excel') style="background-color: #F5F5F5;" @endif >{{$item_info[$c_v_key]}}</td>
+										<tr data-id="a_1_{{$c_v_key}}" data-parent="a_{{$c_key}}" @if($report_type != 'excel') style="background-color: #F5F5F5;" @endif >
+											<td colspan="{{count($report_field)}}" ><span style="margin-left: 20px">{{$item_info[$c_v_key]}}</span></td>
+											<td>{{currency('PHP', collect($sales_by_item[$c_v_key])->sum('amount'))}}</td>
 						            	</tr>
 						            	<?php $total = 0; ?>
 						            	@if(isset($sales_by_item[$c_v_key]))
 								            @foreach($sales_by_item[$c_v_key] as $key => $value2)
-								            	<tr data-id="b_{{$key}}" data-parent="a_{{$c_key}}">
+								            	<tr data-id="b_{{$key}}" data-parent="a_1_{{$c_v_key}}">
 									            	@foreach($report_field as $key3 => $value3) 
 														@if($key3  == 'jline_amount')
 															<td>{{currency('PHP', $value2->amount)}}</td>
@@ -37,16 +39,13 @@
 														@endif
 													@endforeach
 													<?php $total += $value2->amount; ?>
-													<td>{{currency('PHP', $value2->amount)}}</td>
+													<td>{{currency('PHP', $total)}}</td>
 												</tr>		
 								            @endforeach
-								            <tr>
+								            <tr data-id="b_{{$c_v_key}}" data-parent="a_1_{{$c_v_key}}">
 												<td colspan="{{count($report_field) - 1}}">Total : {{$item_info[$c_v_key]}} </td>
+												<td></td>
 												<td>{{currency('PHP', $total)}}</td>
-												<td>{{currency('PHP', $total)}}</td>
-											</tr>
-											<tr>
-												<td colspan="20"></td>
 											</tr>
 										@endif
 									@endif
@@ -56,6 +55,7 @@
 	            	</tbody>
 				</table>
 	        </div>
+	        <h5 class="text-center">---- {{$now or ''}} ----</h5>
 	    </div>
 	</div>
 </div>

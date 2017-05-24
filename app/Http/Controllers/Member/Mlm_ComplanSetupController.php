@@ -53,10 +53,16 @@ class Mlm_ComplanSetupController extends Member
 		$count = Tbl_mlm_plan::where('shop_id', $shop_id)->where('marketing_plan_code', 'UNILEVEL_REPURCHASE_POINTS')
 		->where('marketing_plan_enable', 1)
 		->count();
+
+		$restrict['PhilTECH'] = ['PhilTECH'];
 		if($count >= 1)
 		{
-			$data['links'][0]['label'] = 'Unilevel Distribute';
-			$data['links'][0]['link'] = '/member/mlm/complan_setup/unilevel/distribute';
+			if(!isset($restrict[ $this->user_info->shop_key] ))
+			{
+				$data['links'][0]['label'] = 'Unilevel Distribute';
+				$data['links'][0]['link'] = '/member/mlm/complan_setup/unilevel/distribute';
+			}
+			
 		}		
 
 

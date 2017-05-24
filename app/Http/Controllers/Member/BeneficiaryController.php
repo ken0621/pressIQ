@@ -12,6 +12,7 @@ use App\Models\Tbl_merchant_school;
 use App\Models\Tbl_mlm_slot;
 use App\Globals\Mlm_member;
 use Carbon\Carbon;
+use App\Globals\Pdf_global;
 class BeneficiaryController extends Member
 {
     /**
@@ -25,6 +26,10 @@ class BeneficiaryController extends Member
         $data = [];
         $shop_id = $this->user_info->shop_id;
         $data['_item'] = Item::get_all_category_item();
+        $data['reciept'] = DB::table('tbl_merchant_school_wallet')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_merchant_school_wallet.merchant_school_custmer_id')
+        ->where('shop_id', $shop_id)
+        ->paginate(10);
         return view('member.merchant_school.index', $data);
     }
     public function get()
@@ -187,7 +192,8 @@ class BeneficiaryController extends Member
         $insert['merchant_school_remarks'] = Request::input('merchant_school_remarks');
         $insert['merchant_school_custmer_id'] = Request::input('customer_id');
         $insert['merchant_school_date'] = Carbon::now();
-
+        $insert['merchant_school_anouncement'] = Request::input('merchant_school_anouncement');
+        $insert['merchant_school_cash'] = Request::input('merchant_school_cash');
         $customer_id = Request::input('customer_id');
         $all_wallet = DB::table('tbl_merchant_school_wallet')->where('merchant_school_custmer_id', $customer_id)->sum('merchant_school_amount');
         
@@ -195,7 +201,11 @@ class BeneficiaryController extends Member
         // dd($insert['merchant_school_amount']);
         if($all_wallet >= $insert['merchant_school_amount'])
         {
+            $insert['merchant_school_amount_old'] = $all_wallet;
+            $insert['merchant_school_amount_new'] = $all_wallet - $insert['merchant_school_amount'];
+            $insert['merchant_school_total_cash'] = $insert['merchant_school_amount'] +  $insert['merchant_school_cash'];
             $insert['merchant_school_amount'] = $insert['merchant_school_amount'] * (-1);
+
             if($insert['merchant_school_amount'] <= 1)
             {
                 DB::table('tbl_merchant_school_wallet')->insert($insert);
@@ -215,5 +225,33 @@ class BeneficiaryController extends Member
             $data['message'] = 'Not enough Consumable';
         }
         return json_encode($data);
+    }
+
+    public function receipt()
+    {
+        $id = Request::input('merchant_school_id');
+
+        $data['reciept'] = DB::table('tbl_merchant_school_wallet')
+        ->where('merchant_school_id', $id)
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_merchant_school_wallet.merchant_school_custmer_id')
+        ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')
+        ->first();
+        $shop_id = $this->user_info->shop_id;
+        $data["shop_address"]    = $this->user_info->shop_street_address;
+        $data["shop_contact"]    = $this->user_info->shop_contact;
+        $data['company_name']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
+        $data['company_email']   = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
+        $data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
+        if(Request::input('pdf') == 'true')
+        {
+            $view = view('member.merchant_school.reciept', $data);
+            return Pdf_global::show_pdf($view);
+        }
+        else
+        {
+            return view('member.merchant_school.reciept', $data);
+        }
+        
+        // 
     }
 }

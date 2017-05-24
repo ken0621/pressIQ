@@ -415,6 +415,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </li>
                             @endforeach
                         @endif
+
+                        <?php
+                          $active_school_wallet['PhilTECH'] = 'PhilTECH';
+                        ?>
+                        @if(isset($active_school_wallet[$shop_info->shop_key]))
+                            <li>
+                                <a href="/mlm/report/school_wallet" class="subnav-text">
+                                    School Wallet
+                                </a> 
+                            </li>
+                        @endif
                     </ul>
                 </li> 
                 <li  class="{{Request::segment(2) == 'vouchers' ? 'active' : '' }}">

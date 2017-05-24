@@ -311,16 +311,19 @@ class Mlm_complan_manager_repurchase
 
             if($mlm_item_points)
             {
-                $stairstep_points = $mlm_item_points->STAIRSTEP;
+                $stairstep_points       = $mlm_item_points->STAIRSTEP;
+                $stairstep_group_points = $mlm_item_points->STAIRSTEP_GROUP;
             }
             else
             {
-                $stairstep_points = 0;
+                $stairstep_points       = 0;
+                $stairstep_group_points = 0;
             }
         }
         else
         {
-            $stairstep_points = 0;
+            $stairstep_points       = 0;
+            $stairstep_group_points = 0;
         }
 
         if($stairstep_points != 0)
@@ -365,7 +368,7 @@ class Mlm_complan_manager_repurchase
                 }
                 else
                 {
-                    $stairstep_bonus = ($stairstep_level[$tree->sponsor_tree_level]/100) * $stairstep_points;
+                    $stairstep_bonus = ($stairstep_level[$tree->sponsor_tree_level]/100) * $stairstep_group_points;
                 }
             }
             else

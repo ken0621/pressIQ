@@ -40,22 +40,21 @@
                             <table class="digima-table">
                                 <thead >
                                     <tr>
-                                        <th style="width: 10px">#</th>
                                         <th class="text-center" style="width: 40px">Product ID</th>
                                         <th style="width: 150px;">Product Name</th>
                                         <th style="width: 100px;">Product SKU</th>
                                         <th style="width: 100px;">Current Stocks</th>
+                                        @if($pis != 0)
+                                        <th style="width: 100px;">SIR Stocks</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody class="draggable">
                                 @if($warehouse_item != null)
                                     @foreach($warehouse_item as $key => $w_item)
                                     <tr class="tr-draggable tr-draggable-html count_row">
-                                        <td class="invoice-number-td text-right">{{$key+1}}</td>
                                         <td class="text-center"> {{$w_item->product_id}}</td>
                                         <td class="">
-                                          <!--  <select class="form-control chosen-select select-item input-sm" id="select_item" name="invline_item_id[]" select_id="{{$key+1}}" data-placeholder="Select a Item">
-                                            </select> -->
                                            <label class="count-select">{{$w_item->product_name}}</label>
                                         </td>
                                         <td><label class="sku-txt sku-txt{{$key+1}}">{{$w_item->product_sku}}</label></td>
@@ -66,6 +65,9 @@
                                             <label >{{$w_item->product_qty_um}}</label>
                                             @endif
                                         </td>
+                                        @if($pis != 0)
+                                        <td class="text-center"><a class="popup" link="/warehouse/sir/{{$warehouse->warehouse_id}}/{{$w_item->product_id}}" size="md">{{$w_item->total_stock_sir}}</a></td>
+                                        @endif
                                     </tr>
                                     @endforeach
                                 @endif

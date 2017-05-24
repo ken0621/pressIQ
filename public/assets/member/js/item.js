@@ -239,6 +239,7 @@ function item()
          $(".noninventory_type").slideUp();
          $(".service_type").slideUp();
          $(".bundle_type").slideUp();
+         $(".group_type").slideUp();
     }
 
     function event_item_type_click()
@@ -247,6 +248,7 @@ function item()
         action_event_click_type("noninventory_type", "Non-Inventory");
         action_event_click_type("service_type", "Service");
         action_event_click_type("bundle_type", "Bundle");
+        action_event_click_type("group_type", "Group");
     }
 
     function action_event_click_type(name, display)

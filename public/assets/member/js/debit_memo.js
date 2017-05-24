@@ -439,6 +439,10 @@ function debit_memo(){
 	{
 		action_reload_item($id);
 	}
+	this.action_compute = function()
+	{
+		action_compute();
+	}
 
 	function action_reload_item($id)
 	{
@@ -503,6 +507,34 @@ function submit_done(data)
         toastr.success("Success");
         location.href = data.redirect_to;
 	}
+	else if(data.status == "msg-popup-condemned")
+	{
+		action_load_link_to_modal('/member/vendor/debit_memo/confirm_condemned/'+data.dbid+"/condemned");
+	}
+	else if(data.status == "msg-popup-replace")
+	{
+		action_load_link_to_modal('/member/vendor/debit_memo/confirm_condemned/'+data.dbid+"/replace");
+	}
+	else if(data.status == "success-condemned-all")
+	{
+        toastr.success("Success Condemned");
+		location.href = "/member/vendor/debit_memo/list";
+	}
+	else if(data.status == "success-replace-all")
+	{
+        toastr.success("Success Replace");
+		location.href = "/member/vendor/debit_memo/list";
+	}
+	else if(data.status == "success-db-replace")
+	{
+        toastr.success("Success");
+        $(".db-replace-container").load("/member/vendor/debit_memo/replace/"+data.id+" .db-replace-container" , function()
+    	{
+	        debit_memo.action_compute();
+    	});
+
+        $('#global_modal').modal('toggle');
+  	}
     else if(data.status == "error")
     {
         toastr.warning(data.status_message);

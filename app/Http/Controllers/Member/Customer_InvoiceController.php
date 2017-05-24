@@ -47,8 +47,10 @@ class Customer_InvoiceController extends Member
         $data["pis"]        = Purchasing_inventory_system::check();
         $data["_customer"]  = Customer::getAllCustomer();
         $data["_terms"]     = Tbl_terms::where("archived", 0)->where("terms_shop_id", $this->getShopId())->get();
+
         $data['_item']      = Item::get_all_category_item();
-        $data['_cm_item']   = Item::get_all_category_item();
+        $data['_cm_item']   = Item::get_returnable_item();
+
         $data['_um']        = UnitMeasurement::load_um_multi();
         $data["action"]     = "/member/customer/invoice/create";
         $data["new_inv_id"] = Transaction::get_last_number("tbl_customer_invoice","new_inv_id","inv_shop_id"); 

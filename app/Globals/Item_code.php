@@ -764,6 +764,25 @@ class Item_code
     public static function merchant_school_active_codes($order_id)
     {
         $update['merchant_item_status'] = 1;
+
+        $merchant_school_item = DB::table('tbl_merchant_school_item')->where('merchant_item_ec_order_id', $order_id)->get();
+        
+        foreach($merchant_school_item as $key => $value)
+        {
+            $all_wallet = DB::table('tbl_merchant_school_wallet')->where('merchant_school_custmer_id', $value->merchant_item_customer_id)->sum('merchant_school_amount');
+            $insert['merchant_school_amount'] = $value->merchant_school_i_amount;
+            // $insert['merchant_school_s_id'] = 
+            // $insert['merchant_school_s_name'] = 
+            $insert['merchant_school_remarks'] = 'Top up from E-commerce order';
+            $insert['merchant_school_date'] = Carbon::now();
+            $insert['merchant_school_custmer_id'] = $value->merchant_item_customer_id;
+            $insert['merchant_school_amount_old'] = $all_wallet;
+            $insert['merchant_school_amount_new'] = $all_wallet +  $value->merchant_school_i_amount;
+            $insert['merchant_school_total_cash'] = $value->merchant_school_i_amount;
+            // $insert['merchant_school_slot_id'] = 
+            DB::table('tbl_merchant_school_wallet')->insert($insert);
+        }
+        // tbl_merchant_school_wallet
         DB::table('tbl_merchant_school_item')->where('merchant_item_ec_order_id', $order_id)->update($update);
     }
     public static function give_item_code_ec_order($ec_order_id)

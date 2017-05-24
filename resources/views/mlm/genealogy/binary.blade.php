@@ -20,9 +20,9 @@ $data['icon'] = 'fa fa-link';
 @endsection
 @section('js')
 <script type="text/javascript">
-$('#foo').attr('width', screen.width);
+// $('#foo').attr('width', screen.width);
 $('#foo').attr('height', screen.height);
-$('#foo').css('width', screen.width);
+// $('#foo').css('width', screen.width);
 $('#foo').css('height', screen.height);
 $(document).ready(function() {
 	var src1 = '/mlm/slot/genealogy?id={{$slot_i}}&mode=binary';

@@ -6,7 +6,8 @@
 
 @section('content')
 {!! $head !!}
-@include('member.reports.filter.filter1');
+@include('member.reports.filter.filter2');
+{!! $field_checker !!}
 <div class="append_report_a"></div>
 
 @endsection

@@ -363,7 +363,9 @@ class MemberController extends Controller
         $package = Session::get('mlm_register_step_2');
         $package_price = Tbl_membership::where('membership_id', $package['membership'])->first();
         $package_price_a = $package_price->membership_price;
-
+        $shop_id = Self::$shop_id;
+        Session::put('shop_id_session', $shop_id);
+        
         $requestpayment = new RequestPayment($this->_merchantkey);
 
         $this->_data = array(

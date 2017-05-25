@@ -10,33 +10,33 @@
         <title>Member Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <base href="{{ URL::to('digima/public') }}">
-        <link rel="stylesheet" type="text/css" href="/resources/assets/login/css/demo.css" />
-        <link rel="stylesheet" type="text/css" href="/resources/assets/login/css/style2.css" />
-        <link rel="stylesheet" type="text/css" href="/resources/assets/login/css/animate-custom.css" />
+        <link rel="stylesheet" type="text/css" href="resources/assets/login/css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="resources/assets/login/css/style2.css" />
+        <link rel="stylesheet" type="text/css" href="resources/assets/login/css/animate-custom.css" />
         <!-- CUSTOM CSS -->
-        <link rel="stylesheet" href="/assets/external/jquery_css/jquery-ui.css">
-        <link rel="stylesheet" href="/assets/member/styles/92bc1fe4.bootstrap.css">
-        <link rel="stylesheet" href="/assets/member/styles/vendor/jquery.pnotify.default.css">
-        <link rel="stylesheet" href="/assets/member/styles/vendor/select2/select2.css">
-        <link rel="stylesheet" href="/assets/member/styles/vendor/datatables.css" media="screen"/> 
-        <link rel="stylesheet" href="/assets/member/styles/aaf5c053.proton.css">
-        <link rel="stylesheet" href="/assets/member/styles/vendor/animate.css">
-        <link rel="stylesheet" href="/assets/member/css/customBTN.css" type="text/css" />
-        <link rel="stylesheet" href="/assets/external/chosen/chosen/chosen.css" media="screen"/>
+        <link rel="stylesheet" href="assets/external/jquery_css/jquery-ui.css">
+        <link rel="stylesheet" href="assets/member/styles/92bc1fe4.bootstrap.css">
+        <link rel="stylesheet" href="assets/member/styles/vendor/jquery.pnotify.default.css">
+        <link rel="stylesheet" href="assets/member/styles/vendor/select2/select2.css">
+        <link rel="stylesheet" href="assets/member/styles/vendor/datatables.css" media="screen"/> 
+        <link rel="stylesheet" href="assets/member/styles/aaf5c053.proton.css">
+        <link rel="stylesheet" href="assets/member/styles/vendor/animate.css">
+        <link rel="stylesheet" href="assets/member/css/customBTN.css" type="text/css" />
+        <link rel="stylesheet" href="assets/external/chosen/chosen/chosen.css" media="screen"/>
 
 
-        <link rel="stylesheet" type="text/css" href="/resources/assets/new_front/css/login.css">
-        <link rel="stylesheet" type="text/css" href="/assets/font-awesome/css/font-awesome.min.css">
-        <link rel="stylesheet" href="/assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
-        <link rel="stylesheet" href="/assets/member/styles/40ff7bd7.font-titillium.css" type="text/css"/>
-        <link rel="stylesheet" href="/assets/member/css/member.css" type="text/css"/>
-        <link rel="stylesheet" type="text/css" href="/assets/member/plugin/toaster/toastr.css">
-        <link rel="stylesheet" type="text/css" href="/assets/member/css/notice.css">
-        <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
-        <link rel="stylesheet" type="text/css" href="/assets/member/css/windows8.css">
-        <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
-        <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/basic.css">
-        <link rel="stylesheet" type="text/css" href="/assets/custom_plugin/myDropList/css/myDropList.css">
+        <link rel="stylesheet" type="text/css" href="resources/assets/new_front/css/login.css">
+        <link rel="stylesheet" type="text/css" href="assets/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
+        <link rel="stylesheet" href="assets/member/styles/40ff7bd7.font-titillium.css" type="text/css"/>
+        <link rel="stylesheet" href="assets/member/css/member.css" type="text/css"/>
+        <link rel="stylesheet" type="text/css" href="assets/member/plugin/toaster/toastr.css">
+        <link rel="stylesheet" type="text/css" href="assets/member/css/notice.css">
+        <link rel="stylesheet" type="text/css" href="assets/member/css/loader.css">
+        <link rel="stylesheet" type="text/css" href="assets/member/css/windows8.css">
+        <link rel="stylesheet" type="text/css" href="assets/member/css/image_gallery.css">
+        <link rel="stylesheet" type="text/css" href="assets/member/plugin/dropzone/basic.css">
+        <link rel="stylesheet" type="text/css" href="assets/custom_plugin/myDropList/css/myDropList.css">
 
         <script>
         (function () {
@@ -50,7 +50,7 @@
         }());
         </script>
     </head>
-    <body style="background-image: url('/resources/assets/new_front/img/login-bg.jpg')">
+    <body style="background-image: url('resources/assets/new_front/img/login-bg.jpg')">
         <div class="modal-loader hidden"></div>
         <!-- Modal -->
             <div class="modal fade" id="myModal" role="dialog">
@@ -112,8 +112,8 @@
                 </div>  
             </section>
         </div>
-        <script type="text/javascript" src="/assets/member/global.js"></script>
-        <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
+        <script type="text/javascript" src="assets/member/global.js"></script>
+        <script type="text/javascript" src="assets/member/plugin/toaster/toastr.min.js"></script>
         <script type="text/javascript">
         function submit_done(data)
         {

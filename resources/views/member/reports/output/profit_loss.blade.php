@@ -20,7 +20,8 @@
                     ?>
                     @foreach($_account as $key=>$account)
                         <tr data-id="type-{{$account->chart_type_id}}" data-parent="">
-                            <td colspan="5" >{{strtoupper($account->chart_type_name)}}</td>
+                            <td colspan="2" >{{strtoupper($account->chart_type_name)}}</td>
+                            <td colspan="3"></td>
                             <td class="text-right"><text class="total-report">{{currency('PHP', collect($account->account_details)->sum('amount'))}}</text></td>
                         </tr>
                         @foreach($account->account_details as $key1=>$acc_details)

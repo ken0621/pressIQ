@@ -109,7 +109,7 @@ class Tbl_item extends Model
 
     public function scopeWarehouseInventory($query, $shop_id = null)
     {
-        return $query->selectRaw("warehouse_name, IFNULL(sum(inventory_count), 0) as qty_on_hand")
+        return $query->selectRaw("warehouse_name, IFNULL(IF(sum(inventory_count) > 0, sum(inventory_count), 0), 0) as qty_on_hand")
                      ->leftJoin("tbl_warehouse_inventory","inventory_item_id","=","item_id")
                      ->join("tbl_warehouse as w","w.warehouse_id","=","tbl_warehouse_inventory.warehouse_id")
                      ->groupBy("w.warehouse_id");

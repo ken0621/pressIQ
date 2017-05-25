@@ -944,7 +944,7 @@ class Payroll
 			// }
 			// else
 			// {
-			// 	$total_regular_hours = $total_regular_hours - $break;
+				$total_regular_hours = $total_regular_hours - c_time_to_int($break);
 			// }
 		}
 

@@ -921,10 +921,8 @@ class Payroll
 			if($time_in >= $night_differential_pm)
 			{
 
-				$less_time_out = (Payroll::time_float(date('H:s', strtotime($time_out_str))) + 24) - Payroll::time_float('30:00');
-				$less_time_in  = Payroll::time_float(date('H:i', strtotime($time_in_str))) - Payroll::time_float('22:00');
-
-				$temp_time_spent = Payroll::time_float(date('H:s', strtotime($time_out_str))) - Payroll::time_float(date('H:i', strtotime($time_in_str))) + 24;
+				$less_time_out = $time_out - $night_differential_am;
+				$less_time_in  = $time_in - $night_differential_pm;
 
 				if($less_time_out > 0)
 				{
@@ -935,10 +933,7 @@ class Payroll
 					$less_time_in = 0;
 				}
 
-				$night_differential_str = $temp_time_spent + ($less_time_out + $less_time_in);
-				// dd($less_time_out);
-
-				$night_differential = c_time_to_int($night_differential_str);
+				$night_differential = $time_spent + ($less_time_out + $less_time_in);
 			}
 
 

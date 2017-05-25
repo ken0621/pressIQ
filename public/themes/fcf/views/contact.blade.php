@@ -17,7 +17,7 @@
 					<!-- TEXT FIELD -->
 					<div class="textfield-container row clearfix">
 						<div class="col-md-6">
-								<input type="text" class="form-control" placeholder="First Name*">
+							<input type="text" class="form-control" placeholder="First Name*">
 						</div>
 						<div class="col-md-6">
 							<input type="text" class="form-control" placeholder="Last Name*">

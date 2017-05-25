@@ -686,8 +686,10 @@ class Payroll
 		$holiday 				= $data['holiday'];
 
 		/* for flexi time */
-		$target_hour_param 		= $data['employee_information']->payroll_group_target_hour_parameter;
-		$target_hour 			= $data['employee_information']->payroll_group_target_hour;
+		// $target_hour_param 		= $data['employee_information']->payroll_group_target_hour_parameter;
+		// $target_hour 			= $data['employee_information']->payroll_group_target_hour;
+		$target_hour_param 		= $schedule->target_hours;
+		$target_hour 			= $schedule->target_hours;
 		// flexitime
 
 		$return = new stdClass();
@@ -711,6 +713,19 @@ class Payroll
 
 		$break 						= Payroll::time_diff(date('H:s', strtotime($schedule->break_start)), date('H:i', strtotime($schedule->break_end)));
 
+
+		$time_record = collect($data['time_sheet_info'])->toArray();
+		// dd($time_record);
+		if(isset($time_record['payroll_time_sheet_break']))
+		{
+			if($time_record['payroll_time_sheet_break'] != '00:00:00')
+			{
+				$break = date('H:i', strtotime($time_record['payroll_time_sheet_break']));
+			}
+		}
+
+		
+
 	
 		$default_time_in 	= c_time_to_int($default_time_in);
 		$default_time_out 	= c_time_to_int($default_time_out);
@@ -723,7 +738,7 @@ class Payroll
 		$time_in = 0;
 		$time_out = 0;
 
-		$target_hour = $data["employee_information"]->payroll_group_target_hour;
+		// $target_hour = $data["employee_information"]->payroll_group_target_hour;
 
 		/* BREAK COMPUTATION */
 		// if($data["employee_information"]->payroll_group_is_flexi_break == 1)
@@ -810,15 +825,20 @@ class Payroll
 				$latest_time_out = $time_out;
 			}
 
+			$time_spent = 0;
+
 			/* IF TIMEOUT HAPPENS BEFORE TIME IN - SET TIME SPENT TO ZERO */
-			if($time_out > $time_in)
-			{
+			// if($time_out > $time_in)
+			// {
 				$time_spent = ($time_out - $time_in);
-			}
-			else
-			{
-				$time_spent = 0;
-			}
+
+				/* if logs happen in graveyard shift */
+				if($time_spent < 0)
+				{
+					$time_spent += c_time_to_int('24:00:00');
+				}
+			// }
+
 
 			$regular_hours = $time_spent;
 
@@ -950,7 +970,6 @@ class Payroll
 					$total_regular_hours = $total_regular_hours + $total_late_hours;
 					$total_late_hours = 0;
 				}
-				
 			}
 
 			else
@@ -987,7 +1006,13 @@ class Payroll
 
 		
 
-		$total_hours = $total_regular_hours + $total_early_overtime + $total_early_overtime;
+		$total_hours = ($total_regular_hours + $total_early_overtime + $total_early_overtime) - c_time_to_int($break);
+
+		if($total_hours == '00:00')
+		{
+			$return->break = '00:00';
+		}	
+
 
 		/* COMPUTE EXTRA DAY AND REST DAY */
 		$total_rest_day_hours = 0;
@@ -1077,21 +1102,7 @@ class Payroll
 		$return->break 				= $break;
 
 
-		$time_record = collect($data['time_sheet_info'])->toArray();
-		// dd($time_record);
-		if(isset($time_record['payroll_time_sheet_break']))
-		{
-			if($time_record['payroll_time_sheet_break'] != '00:00:00')
-			{
-				$return->break = date('H:i', strtotime($time_record['payroll_time_sheet_break']));
-			}
-		}
-
-		if($return->total_hours == '00:00')
-		{
-			$return->break = '00:00';
-
-		}	
+		
 
 		$return->time_record 		= $time_rec;
 		$return->absent 			= $absent;
@@ -3051,7 +3062,12 @@ class Payroll
 		$data['total_deminimis'] = $total_deminimis;
 
 
-		$total_deduction += $data['tax_contribution'] + $data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution'] + $data['late_deduction'] + $data['under_time'] + $data['agency_deduction'] + $data['adjustment']['total_deductions'] + $data['absent_deduction'] + $data['payroll_under_time_deduction'];
+		$total_deduction += $data['tax_contribution'] + $data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution'] + $data['late_deduction'] + $data['under_time'] + $data['agency_deduction'] + $data['adjustment']['total_deductions'] + $data['absent_deduction'];
+
+		if(isset($data['payroll_under_time_deduction']))
+		{
+			$total_deduction += $data['payroll_under_time_deduction'];
+		}
 
 
 		// dd($total_deminimis);

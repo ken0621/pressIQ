@@ -631,10 +631,10 @@ function submit_done_customer(result)
 function submit_done_item(data)
 {
 	toastr.success("Success");
-    $(".tbody-item .select-item").load("/member/item/load_item_category", function()
+    item_selected.load("/member/item/load_item_category", function()
     {                
-         $(".tbody-item .select-item").globalDropList("reload"); 
-         item_selected.val(data.item_id).change();  
+         $(this).globalDropList("reload"); 
+         $(this).val(data.item_id).change();  
     });
     data.element.modal("hide");
 }

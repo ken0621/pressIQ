@@ -703,7 +703,7 @@ class Cart
         $data["tbl_customer"]['country_id']     = 420;
 
         /* CURRENT LOGGED IN */
-        if ($customer_information["current_user"]) 
+        if (isset($customer_information["current_user"])) 
         {
             $current = $customer_information["current_user"];
             $other_info = DB::table("tbl_customer_other_info")->where("customer_id", $current->customer_id)->first();
@@ -805,7 +805,7 @@ class Cart
         $data["tbl_ec_order"]["discount_coupon_amount"] = null;
         $data["tbl_ec_order"]["discount_coupon_type"] = null;
         $data["tbl_ec_order"]["subtotal"] = $subtotal;
-         $data["tbl_ec_order"]["shipping_fee"] = $shipping_fee;
+        $data["tbl_ec_order"]["shipping_fee"] = $shipping_fee;
 
         /* COMPUTE SERVICE FEE */
         if($payment_method_id != null)
@@ -888,6 +888,32 @@ class Cart
         }
     }
 
+    /*
+     * TITLE: SUBMIT ORDER
+     * 
+     * Allows us to set information for customer that will be processed later on
+     *
+     * @param
+     *    $shop_id (int) - Current Shop ID (for validation)
+     *    $order_id (int) - Current Order ID (for updating)
+     *    $payment_status (int) - 0 = not paid, 1 = paid
+     *    $order_status (str) - Pending, Failed, Processing, Shipped, Completed, On-Hold, Cancelled
+     *
+     * @return (array)
+     *    - order data (query)
+     *
+     * @author (Edward Guevarra)
+     *
+     */
+    public static function submit_order($order_id, $shop_id, $payment_status, $order_status)
+    {
+        $update["ec_order_id"]    = $order_id;
+        $update["shop_id"]        = $shop_id;
+        $update["payment_status"] = $payment_status;
+        $update["order_status"]   = $order_status;
+
+        return Ec_order::update_ec_order($update);   
+    }
 
     public static function process_payment($shop_id)
     {
@@ -895,12 +921,19 @@ class Cart
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
         $method_information = Self::get_method_information($shop_id, $method_id);
         
-        switch ($method_information->link_reference_name)
+        if ( isset($method_id) && isset($method_information) )
         {
-            case 'ipay88': Redirect::to("/postPaymentWithIPay88")->send(); break;
-            case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
-            case 'paypal2': die("UNDER DEVELOPMENT"); break;
-            default: die("UNDER DEVELOPMENT"); break;
+            switch ($method_information->link_reference_name)
+            {
+                case 'ipay88': Redirect::to("/postPaymentWithIPay88")->send(); break;
+                case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                case 'paypal2': die("UNDER DEVELOPMENT"); break;
+                default: die("UNDER DEVELOPMENT"); break;
+            }
+        }
+        else
+        {
+            die("An error has occurred. Please try again later.");
         }
     }
     public static function submit_using_ewallet($cart, $shop_id)

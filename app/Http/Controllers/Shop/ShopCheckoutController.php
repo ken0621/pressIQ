@@ -114,6 +114,10 @@ class ShopCheckoutController extends Shop
     {
         if(Request::isMethod("post"))
         {
+            $current = Cart::get_info($this->shop_info->shop_id);
+            $current["payment_method_id"] = Request::input("payment_method_id");
+            Session::put(Cart::get_unique_id($this->shop_info->shop_id), $current);
+
             Cart::process_payment($this->shop_info->shop_id);
         }
         else
@@ -160,8 +164,6 @@ class ShopCheckoutController extends Shop
         $data = Cart::get_info($shop_id);
         $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "ipay88")->first();
 
- 
-
         $data["paymentId"] = 1; //BANCNET, CREDIT CARD, ETC
         $data["refNo"] = $this->shop_info->shop_id . time();
         $data["amount"] = $data["tbl_ec_order"]["total"];
@@ -180,7 +182,6 @@ class ShopCheckoutController extends Shop
             }
         }
 
-        dd($data["tbl_customer"]);
         $data["currency"] = "PHP";
         $data["prodDesc"] = $product_summary;
         $data["userName"] = $data["tbl_customer"]["first_name"] . " " . $data["tbl_customer"]["last_name"];
@@ -198,7 +199,8 @@ class ShopCheckoutController extends Shop
             'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
             'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
             'refNo'         => $requestpayment->setRefNo($data["refNo"]),
-            'amount'        => $requestpayment->setAmount($data["amount"]),
+            // 'amount'        => $requestpayment->setAmount($data["amount"]),
+            'amount'        => $requestpayment->setAmount(15),
             'currency'      => $requestpayment->setCurrency($data["currency"]),
             'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
             'userName'      => $requestpayment->setUserName($data["userName"]),
@@ -210,7 +212,7 @@ class ShopCheckoutController extends Shop
             'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
             'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
         );
-        dd($this->_data);
+        
         RequestPayment::make($data["merchantKey"], $this->_data);     
     }
 
@@ -220,8 +222,6 @@ class ShopCheckoutController extends Shop
         $shop_id = $this->shop_info->shop_id;
         $result = Cart::get_info($shop_id);
         $order_id = $result["tbl_ec_order"]["ec_order_id"];
-
-        Session::forget('ipay88_order');
 
         if ($request) 
         {
@@ -247,11 +247,7 @@ class ShopCheckoutController extends Shop
             } 
             else 
             {
-                $update["payment_status"] = 1;
-                $update["order_status"] = "Processing";
-                $update["ec_order_id"]  = $order_id;
-                $update["shop_id"]      = $shop_id;
-                Ec_order::update_ec_order($update);   
+                Cart::submit_order($order_id, $shop_id, 1, "Processing"); 
                 Cart::clear_all($this->shop_info->shop_id);
 
                 // Redirect

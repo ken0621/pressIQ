@@ -249,7 +249,8 @@ class ShopCheckoutController extends Shop
             } 
             else 
             {
-                Cart::submit_order($order_id, $shop_id, 1, "Processing"); 
+                dd("Under Maintenance");
+                // Cart::submit_order($shop_id, 1, "Processing"); 
                 Cart::clear_all($this->shop_info->shop_id);
 
                 // Redirect

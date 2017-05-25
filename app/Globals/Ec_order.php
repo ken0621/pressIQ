@@ -52,7 +52,7 @@ class Ec_order
         }
 
         $data['shop_id']           = $order_info['shop_id'];
-        $data['inv_customer_id']   = $customer_id;;
+        $data['inv_customer_id']   = $customer_id;
         $data['inv_customer_email']= $order_info['customer']['customer_email'];
 
         $data['inv_terms_id']  = '';

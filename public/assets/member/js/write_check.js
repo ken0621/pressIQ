@@ -669,6 +669,7 @@ function submit_done(data)
 	         $(".droplist-vendor").val(data.vendor_id).change();          
 	    });
     	data.element.modal("hide");
+    	console.log(data);
 	}
 	else if(data.status == 'success-write-check')
 	{		

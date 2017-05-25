@@ -21,7 +21,7 @@
                 <td colspan="3"></td>
                 <td >{{$account->chart_type_name}}</td>
                 <td ></td>
-                <td class="text-right">{{currency('PHP', $account->balance)}}</td>
+                <td class="text-right"><text class="total-report">{{is_numeric($account->balance) ? '' .currency('PHP', $account->balance) : ''}}</text></td>
          			</tr>
          				<?php $balance = 0;?>
      					@foreach($account->account_journal as $key2=>$journal)
@@ -33,12 +33,12 @@
   							<td nowrap>{{$journal->chart_type_name}}</td>
   							<td class="text-right" nowrap>{{currency('PHP', $journal->amount)}}</td>
   							<?php $balance += $journal->amount; ?>
-  							<td class="text-right" nowrap>{{$account->balance > 0 ? currency('PHP', $balance) : currency('PHP', 0)}}</td>
+  							<td class="text-right" nowrap>{{is_numeric($account->balance) ? currency('PHP', $balance) : ''}}</td>
   						</tr>
     					@endforeach
       				<tr data-id="account2-{{$key}}" data-parent="account-{{$key}}">
       					<td colspan="6"><b>Total {{$account->account_name}}</b></td>
-      					<td class="text-right">{{currency('PHP', $account->balance)}}</td>
+      					<td class="text-right">{{is_numeric($account->balance) ? currency('PHP', $balance) : ''}}</td>
       				</tr>	
      				@endforeach
          		</tbody>

@@ -56,7 +56,7 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        dd(date('n'));
+        dd(currency("php", 0));
     }
 
     public function getJournal()

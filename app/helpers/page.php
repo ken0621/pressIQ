@@ -269,22 +269,22 @@ function page_list()
     $nav[$page]['icon'] = "money";
    
     /* -- ACCOUNTING => SALES */
-    $code = "accounting-sales";
-    $nav[$page]['submenu'][$code]['label'] = "Sales";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/chart_of_account";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    // $code = "accounting-sales";
+    // $nav[$page]['submenu'][$code]['label'] = "Sales";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/chart_of_account";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
    
     /* -- ACCOUNTING => EXPENSES */
-    $code = "accounting-expenses";
-    $nav[$page]['submenu'][$code]['label'] = "Expenses";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/chart_of_account";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";   
+    // $code = "accounting-expenses";
+    // $nav[$page]['submenu'][$code]['label'] = "Expenses";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/chart_of_account";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";   
 
     /* -- ACCOUNTING => JOURNAL ENTRY */
     $code = "accounting-journal";
@@ -305,13 +305,13 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
     /* -- ACCOUNTING => SETTINGS */
-    $code = "accounting-chart-of-accounts";
-    $nav[$page]['submenu'][$code]['label'] = "Settings";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/settings";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yett";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+    // $code = "accounting-chart-of-accounts";
+    // $nav[$page]['submenu'][$code]['label'] = "Settings";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/settings";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yett";
+    // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
     /* -- ACCOUNTING => IMPORT */
     $code = "accounting-import-list";
@@ -321,94 +321,130 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Working";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
-    
-    /* PURCHASING INVENTORY SYSTEM */
-    $page = "pis";
-    $nav[$page]['name'] = "Sales & Delivery";
+
+    /* PAYROLL */
+    $page = "payroll";  
+    $nav[$page]['name'] = "Payroll";
     $nav[$page]['segment'] = $page;
-    $nav[$page]['icon'] = "truck";
+    $nav[$page]['icon'] = "calculator";
 
-     /* -- PIS => SIR */
-    $code = "pis-lof";
-    $nav[$page]['submenu'][$code]['label'] = "Load Out Form ";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/lof";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-
-     /* -- PIS => SIR */
-    $code = "pis-sir";
-    $nav[$page]['submenu'][$code]['label'] = "Stock Issuance Report";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sir";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-
-     /* -- PIS => ILR */
-    $code = "pis-ilr";
-    $nav[$page]['submenu'][$code]['label'] = "Incoming Load Report";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/ilr";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','processed-ilr'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-
-
-    // /* -- PIS => Manual Invoicing */
-    // $code = "pis-manual-invoicing";
-    // $nav[$page]['submenu'][$code]['label'] = "Manual Invoicing";
+    // /* PAYROLL SUMMARY */
+    // $code = "payroll-summary";
+    // $nav[$page]['submenu'][$code]['label'] = "Payroll Summary";
     // $nav[$page]['submenu'][$code]['code'] = $code;
-    // $nav[$page]['submenu'][$code]['url'] = $path . $page ."/manual_invoice";
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_summary";
     // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
-    /* PURCHASING INVENTORY SYSTEM */
-    $page = "pis_agent";
-    $nav[$page]['name'] = "Sales Agent Transaction";
-    $nav[$page]['segment'] = $page;
-    $nav[$page]['icon'] = "tablet";
-
-     /* -- PIS => SIR */
-    $code = "tablet-sir";
-    $nav[$page]['submenu'][$code]['label'] = "Login Tablet";
+    /* -- EMPLOYEE=> LIST  */
+    $code = "company-list";
+    $nav[$page]['submenu'][$code]['label'] = "Company List";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = "/tablet";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','create-invoice'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-
-    $page = "cashier";
-    $nav[$page]['name'] = "Cashier";
-    $nav[$page]['segment'] = $page;
-    $nav[$page]['icon'] = "dollar";
-
-     /* -- PIS => SIR */
-    $code = "agent-collectiong";
-    $nav[$page]['submenu'][$code]['label'] = "Collection";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/collection";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-
-    $code = "pis-agent";
-    $nav[$page]['submenu'][$code]['label'] = "Agent List";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/agent_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
-
-    $code = "pis-sales-liquidation";
-    $nav[$page]['submenu'][$code]['label'] = "Sales Liquidation";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sales_liquidation";
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/company_list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+    /* -- EMPLOYEE POSITION=> LIST  */
+    $code = "employee-list";
+    $nav[$page]['submenu'][$code]['label'] = "Employee List";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/employee_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+    /* -- PAYROLL PERIOD => LIST  */
+    $code = "payroll-period";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Period";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_period_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+    /* PAYROLL CONFIGURATION [SETTTINGS] */
+    $code = "payroll-configuration";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Configuration";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_configuration";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','Department','Job Title','Holiday','Allowances','Deductions','Leave','Payroll Group','Journal Tags','Payslip','Tax Period','Tax Table','SSS Table','Philhealth Table','Pagibig/HDMF'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+    
+    /* -- EMPLOYEE TIMESHEET=> LIST  */
+    // $code = "employee-timesheet";
+    // $nav[$page]['submenu'][$code]['label'] = "Employee Timesheet";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/employee_timesheet";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "Guillermo Tabligan";
+
+    /* PAYROLL CALENDAR LEAVE */
+    $code = "payroll-calendar-leave";
+    $nav[$page]['submenu'][$code]['label'] = "Leave Scheduling";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/leave_schedule";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+    /* PAYROLL TIME KEEPING */
+    $code = "payroll-timekeeping";
+    $nav[$page]['submenu'][$code]['label'] = "Time Keeping";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/time_keeping";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+    /* PAYROLL PROCESS */
+    $code = "payroll-process";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Process";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_process";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+    /* PAYROLL REGISTER */
+    $code = "payroll-register";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Register";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_register";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+    /* PAYROLL POST */
+    $code = "payroll-post";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Post";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_post";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+
+    /* PAYROLL APPROVED */
+    $code = "payroll-approved";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Approved";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_approved_view";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
+    /* PAYROLL REPORTS */
+    $code = "payroll-reports";
+    $nav[$page]['submenu'][$code]['label'] = "Payroll Reports";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_reports";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
 
 
     /* PRODUCT */
@@ -619,132 +655,6 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "";
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
-
-    /* PAYROLL */
-    $page = "payroll";  
-    $nav[$page]['name'] = "Payroll";
-    $nav[$page]['segment'] = $page;
-    $nav[$page]['icon'] = "calculator";
-
-    // /* PAYROLL SUMMARY */
-    // $code = "payroll-summary";
-    // $nav[$page]['submenu'][$code]['label'] = "Payroll Summary";
-    // $nav[$page]['submenu'][$code]['code'] = $code;
-    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_summary";
-    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
-
-    /* -- EMPLOYEE=> LIST  */
-    $code = "company-list";
-    $nav[$page]['submenu'][$code]['label'] = "Company List";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/company_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
-    /* -- EMPLOYEE POSITION=> LIST  */
-    $code = "employee-list";
-    $nav[$page]['submenu'][$code]['label'] = "Employee List";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/employee_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
-    /* -- PAYROLL PERIOD => LIST  */
-    $code = "payroll-period";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Period";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_period_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
-    /* PAYROLL CONFIGURATION [SETTTINGS] */
-    $code = "payroll-configuration";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Configuration";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_configuration";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','Department','Job Title','Holiday','Allowances','Deductions','Leave','Payroll Group','Journal Tags','Payslip','Tax Period','Tax Table','SSS Table','Philhealth Table','Pagibig/HDMF'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-    
-    /* -- EMPLOYEE TIMESHEET=> LIST  */
-    // $code = "employee-timesheet";
-    // $nav[$page]['submenu'][$code]['label'] = "Employee Timesheet";
-    // $nav[$page]['submenu'][$code]['code'] = $code;
-    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/employee_timesheet";
-    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    // $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    // $nav[$page]['submenu'][$code]['developer'] = "Guillermo Tabligan";
-
-    /* PAYROLL CALENDAR LEAVE */
-    $code = "payroll-calendar-leave";
-    $nav[$page]['submenu'][$code]['label'] = "Leave Scheduling";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/leave_schedule";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
-    /* PAYROLL TIME KEEPING */
-    $code = "payroll-timekeeping";
-    $nav[$page]['submenu'][$code]['label'] = "Time Keeping";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/time_keeping";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
-    /* PAYROLL PROCESS */
-    $code = "payroll-process";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Process";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_process";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
-    /* PAYROLL REGISTER */
-    $code = "payroll-register";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Register";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_register";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
-    /* PAYROLL POST */
-    $code = "payroll-post";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Post";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_post";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
-
-    /* PAYROLL APPROVED */
-    $code = "payroll-approved";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Approved";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_approved_view";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
-    /* PAYROLL REPORTS */
-    $code = "payroll-reports";
-    $nav[$page]['submenu'][$code]['label'] = "Payroll Reports";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/payroll_reports";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
-
-
     /* VENDORS */
     $page = "vendor";  
     $nav[$page]['name'] = "Vendors";
@@ -878,7 +788,7 @@ function page_list()
     $code = "report-profit-and-loss-account";
     $nav[$page]['submenu'][$code]['label'] = "Profit and Loss";
     $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/profit/loss";
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/profit_loss";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Everyone";
@@ -923,7 +833,94 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
-    
+
+    /* PURCHASING INVENTORY SYSTEM */
+    $page = "pis";
+    $nav[$page]['name'] = "Sales & Delivery";
+    $nav[$page]['segment'] = $page;
+    $nav[$page]['icon'] = "truck";
+
+     /* -- PIS => SIR */
+    $code = "pis-lof";
+    $nav[$page]['submenu'][$code]['label'] = "Load Out Form ";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/lof";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+     /* -- PIS => SIR */
+    $code = "pis-sir";
+    $nav[$page]['submenu'][$code]['label'] = "Stock Issuance Report";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sir";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+     /* -- PIS => ILR */
+    $code = "pis-ilr";
+    $nav[$page]['submenu'][$code]['label'] = "Incoming Load Report";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/ilr";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','processed-ilr'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+
+    // /* -- PIS => Manual Invoicing */
+    // $code = "pis-manual-invoicing";
+    // $nav[$page]['submenu'][$code]['label'] = "Manual Invoicing";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page ."/manual_invoice";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    /* PURCHASING INVENTORY SYSTEM */
+    $page = "pis_agent";
+    $nav[$page]['name'] = "Sales Agent Transaction";
+    $nav[$page]['segment'] = $page;
+    $nav[$page]['icon'] = "tablet";
+
+     /* -- PIS => SIR */
+    $code = "tablet-sir";
+    $nav[$page]['submenu'][$code]['label'] = "Login Tablet";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = "/tablet";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','create-invoice'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    $page = "cashier";
+    $nav[$page]['name'] = "Cashier";
+    $nav[$page]['segment'] = $page;
+    $nav[$page]['icon'] = "dollar";
+
+     /* -- PIS => SIR */
+    $code = "agent-collectiong";
+    $nav[$page]['submenu'][$code]['label'] = "Collection";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/collection";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    $code = "pis-agent";
+    $nav[$page]['submenu'][$code]['label'] = "Agent List";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/agent_list";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+
+    $code = "pis-sales-liquidation";
+    $nav[$page]['submenu'][$code]['label'] = "Sales Liquidation";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sales_liquidation";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
+    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
     
     /* MANAGE CONTENT  */
     $page = "page"; 

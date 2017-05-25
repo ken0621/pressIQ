@@ -18,6 +18,21 @@
                     @endforeach
                 </select>
         </div>
+        <div class="form-group">
+            @if($item->UNILEVEL != 0)
+                Unilevel: {{$item->UNILEVEL}}
+            @endif
+        </div>
+        <div class="form-group">
+            @if($item->STAIRSTEP != 0)
+                Stairstep: {{$item->STAIRSTEP}}
+            @endif
+        </div>
+        <div class="form-group">
+            @if($item->REPURCHASE_POINTS != 0)
+                 Repurchase Points: {{$item->REPURCHASE_POINTS}}
+            @endif
+        </div>
     </div>
     <div class="modal-footer">
         <div class="error-modal text-center"></div>

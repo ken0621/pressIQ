@@ -39,10 +39,9 @@
                     <br>
                     <br>
                     <h2>
-                    @if($total_discrepancy == 0)
-                    <span style="color: green;font-weight: bold"> CLOSED TRANSACTION</span>
-                    @else
-                    <span style="color: green;font-weight: bold">{{currency('PHP',$total_discrepancy)}}</span>
+                    <span style="color: green;font-weight: bold"> CLOSED TRANSACTION</span><br>
+                    @if($total_discrepancy != 0)
+                    <span style="color: red;font-weight: bold">{{currency('PHP',$total_discrepancy)}}</span>
                     @endif
                     </h2>
                     <span>STATUS</span>
@@ -192,7 +191,7 @@
                     <div class="col-md-12">
                         <div class="row clearfix draggable-container empties-container">
                             <div class="col-sm-12">
-                                <table class="digima-table">
+                                <table class="digima-table" style="width: 100%">
                                     <thead >
                                         <tr>
                                             <th style="width: 30px;" class="text-center">#</th>
@@ -209,14 +208,14 @@
                                             <td>{{$inv_dsc['customer']}}</td>
                                             <td>{{$inv_dsc['transaction_type']}}</td>
                                             <td>{{$inv_dsc['transaction_id']}}</td>
-                                            <td class="{{$total_disc += $inv_dsc['amount']}}">{{currency('Php',$inv_dsc['amount'])}}</td>
+                                            <td class="text-right {{$total_disc += $inv_dsc['amount']}}">{{currency('Php',$inv_dsc['amount'])}}</td>
                                         </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
                             <div class="col-sm-12 text-right">
-                                <h4><strong>Total </strong> {{currency('Php',$total_disc)}}</h4>
+                                <h4><strong>Total Discount</strong> {{currency('Php',$total_disc)}}</h4>
                             </div>
                         </div>
                     </div>
@@ -227,7 +226,7 @@
                 </div>
                 @endif
             </div>
-            <div>
+            <div style="page-break-after: always;">
                 <div class="form-group">
                     <h2>Agent Transaction</h2>
                 </div>
@@ -320,105 +319,184 @@
                 <br>
                 <br>
             </div>
-            <br>
-            <br>
-            <br>
-            <br>
-            <div class="form-group text-center">
-                <table class="text-center" style="width: 100%;font-size: 12px;">
-                    <tr>
-                        <td>{{currency('PHP', $total_sold - $total_disc)}}</td>
-                        <td>{{currency('PHP', $total_empties)}}</td>
-                        <td>{{currency('PHP', $credit_sales)}}</td>
-                    </tr>
-                    <tr>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                    </tr>
-                    <tr>
-                        <td>TOTAL SALES</td>
-                        <td>TOTAL EMPTIES</td>
-                        <td>ACCOUNTS RECEIVABLE</td>
-                    </tr>
-                </table>
-            </div>
 
-
-            <div class="form-group" {{$agent_descrepancy = $total == $rem_amount ? '0' : ($rem_amount - $total) }}>
-                @if(isset($rem_amount))
-                <div class="col-md-12">
-                    <h3>Amount Remitted : {{currency("Php",$rem_amount)}}</h3>
-                    <h4>Remittance Remarks :</h4>
-                    <span style="padding: 20px">{!! $rem_remarks !!}</span>
-                </div>
-                @endif
-            </div>
-            <div class="form-group text-center" {{$total_loss = $loss + $empties_loss}} {{$total_over = $over + $empties_over}}>
-                <table class="text-center" style="width: 50%;font-size: 12px;">
-                    <tr>
-                        <td>{{currency('PHP', $agent_descrepancy)}}</td>
-                        <td>{{currency('PHP', $total_loss)}}</td>
-                        <td>{{currency('PHP', $total_over)}}</td>
-                    </tr>
-                    <tr>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                    </tr>
-                    <tr>
-                        <td>Agent Discrepancy</td>
-                        <td>TOTAL LOSS</td>
-                        <td>TOTAL OVER</td>
-                    </tr>
-                </table>
-            </div>
-
-            <div class="form-group">
-                <table class="text-center" style="width: 100%;font-size: 20px;">
-                    <tr>
-                        <td>{{currency('PHP',$total_sales)}}</td>
-                        <td>{{currency('PHP',$total_empties)}}</td>
-                        <td>{{currency('PHP',$total_ar)}}</td>
-                        <td>{{currency('PHP',$total_cm)}}</td>
-                    </tr>
-                    <tr>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                    </tr>
-                    <tr>
-                        <td>Total Sales</td>
-                        <td>Total Empties</td>
-                        <td>Total Receivable</td>
-                        <td>Total Credit Memo</td>
-                    </tr>
-                </table>
-            </div>
-            <br>
-            <br>
-            <br>
-            <div class="form-group">
-                <table class="text-center" style="width: 100%;font-size: 13px;">
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td>{{strtoupper($user->user_first_name." ".$user->user_last_name)}}</td>
-                    </tr>
-                    <tr>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                        <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
-                    </tr>
-                    <tr>
-                        <td>Approved By:</td>
-                        <td>Checked By:</td>
-                        <td>Printed By:</td>
-                    </tr>
-                </table>
-            </div>
         </div>
+          <div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="form-group text-center">
+                    <table class="text-center" style="width: 100%;font-size: 12px;">
+                        <tr>
+                            <td style="width: 33%">{{currency('PHP', $total_sold - $total_disc)}}</td>
+                            <td style="width: 33%">{{currency('PHP', $total_empties)}}</td>
+                            <td style="width: 33%">{{currency('PHP', $total_ar)}}</td>
+                        </tr>
+                        <tr>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 33%">TOTAL SALES</td>
+                            <td style="width: 33%">TOTAL EMPTIES</td>
+                            <td style="width: 33%">ACCOUNTS RECEIVABLE</td>
+                        </tr>
+                    </table>
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="form-group text-center">
+                    <table class="text-center" style="width: 100%;font-size: 12px;">
+                        <tr>
+                            <td style="width: 33%">{{currency('PHP', $ar_collection)}}</td>
+                            <td style="width: 33%">{{currency('PHP', 0)}}</td>
+                            <td style="width: 33%">{{currency('PHP', $total_cm)}}</td>
+                        </tr>
+                        <tr>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 33%">TOTAL AR COLLECTION</td>
+                            <td style="width: 33%">TOTAL CREDIT MEMO APPLIED</td>
+                            <td style="width: 33%">CREDIT MEMO ISSUED</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <br>
+                <br>
+                <div class="form-group text-center">
+                    <table class="text-center" style="width: 33%;font-size: 12px;">
+                        <tr>
+                            <td style="width: 33%">{{currency('PHP', 0)}}</td>
+                        </tr>
+                        <tr>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 33%">CREDIT MEMO - OTHERS ISSUED</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="form-group">
+                    <div>
+
+                        <table class="text-center" style="width: 100%;font-size: 12px;" {{$cm_applied = 0}}>
+                            <tr>
+                                <td style="width: 40%"><h4><strong>AMOUNT TO BE REMITTED : </strong></h4></td>
+                                <td style="width: 60%" {{ $sales = $total_sold - $total_disc }}>
+                                    <div style="border-bottom: 1px solid #000;width: 100%" class="{{$total_amount_tobe_remitted = (((($sales - $total_empties) - $total_ar) - $cm_applied) +  $ar_collection) + 0 }}">
+                                        <h4>{{currency('PHP', $total_amount_tobe_remitted)}} </h4>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div>
+                        <table class="text-center" style="width: 100%;font-size: 12px;">
+                            <tr>
+                                <td style="width: 40%"><h4><strong>AMOUNT REMITTED : </strong></h4></td>
+                                <td style="width: 60%" >
+                                    <div style="border: 1px solid #000;width: 100%;padding: 20px">
+                                        <h4>{{currency('PHP', $rem_amount)}} </h4>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 40%"><h4><strong>COLLECTION REMARKS : </strong></h4></td>
+                                <td style="width: 60%" >
+                                    <div style="border-bottom: 1px solid #000;width: 100%;">
+                                        <h4>{!! $rem_remarks !!}</h4>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <br>
+                <br>
+                <div class="form-group text-center" {{$agent_descrepancy = ($rem_amount - $total_amount_tobe_remitted)}}>
+                    <table class="text-center {{$total_loss = $loss + $empties_loss}} {{$total_over = $over + $empties_over}}" style="width: 100%;font-size: 12px;">
+                        <tr>
+                            <td style="width: 33%">{{currency('PHP', round($agent_descrepancy))}}</td>
+                            <td style="width: 33%">{{currency('PHP', $total_loss)}}</td>
+                            <td style="width: 33%">{{currency('PHP', $total_over)}}</td>
+                        </tr>
+                        <tr>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 33%">AGENT DISCREPANCY</td>
+                            <td style="width: 33%">TOTAL LOSS</td>
+                            <td style="width: 33%">TOTAL OVER</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <br>
+                <br>
+                <br>
+                <div class="form-group">
+                    <table class="text-center" style="width: 100%;font-size: 13px;">
+                        <tr>
+                            <td style="width: 33%"></td>
+                            <td style="width: 33%"></td>
+                            <td style="width: 33%">{{strtoupper($user->user_first_name." ".$user->user_last_name)}}</td>
+                        </tr>
+                        <tr>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                            <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 33%">Approved By:</td>
+                            <td style="width: 33%">Checked By:</td>
+                            <td style="width: 33%">Printed By:</td>
+                        </tr>
+                    </table>
+                </div>
+                <br>
+                <br>
+                <br>
+                <br>
+                <div class="form-group">
+                    <table style="width: 100%;font-size: 13px;">
+                        <tr>
+                            <td style="width: 33%">Conforme :</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <br>
+                                <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><div style="border-bottom: 1px solid #000;width: 33%"></div></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 33%; font-style: italic;">
+                                <div>
+                                            I hereby attest to the truth of the transaction I made, I am liable
+                                    for all the losses that I incurred. In case the collection of all my losses
+                                    is made thru court. I will pay the owner 45% per annum interest plus attorney's
+                                    fees and reimbursed all incidental expenses incurred by the owner of the company
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
     </body>
     <style type="text/css">
         table

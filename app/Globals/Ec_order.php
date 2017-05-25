@@ -52,7 +52,7 @@ class Ec_order
         }
 
         $data['shop_id']           = $order_info['shop_id'];
-        $data['inv_customer_id']   = $customer_id;;
+        $data['inv_customer_id']   = $customer_id;
         $data['inv_customer_email']= $order_info['customer']['customer_email'];
 
         $data['inv_terms_id']  = '';
@@ -546,5 +546,10 @@ class Ec_order
                 return $session['slot_now']->slot_id;
             }
         }
+    }
+
+    public static function create_ec_order_from_cart($order_info)
+    {
+        dd($order_info);
     }
 }

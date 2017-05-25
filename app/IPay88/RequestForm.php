@@ -6,7 +6,7 @@ class RequestForm
 {
 	public static function render($fieldValues, $paymentUrl)
 	{
-		echo "<form id='autosubmit' action='".$paymentUrl."' method='get'>";
+		echo "<form id='autosubmit' action='".$paymentUrl."' method='post'>";
 		if (is_array($fieldValues) || is_object($fieldValues))
 		{
 			foreach ($fieldValues as $key => $val) {

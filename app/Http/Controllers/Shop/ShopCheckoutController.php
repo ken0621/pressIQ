@@ -193,7 +193,7 @@ class ShopCheckoutController extends Shop
         $data["backendUrl"] = URL::to('/ipay88_response');
         $data["merchantKey"] = $api->api_secret_id;
         $data["merchantCode"] = $api->api_client_id;
-        $requestpayment = new RequestPayment($api->api_secret_id);
+        $requestpayment = new RequestPayment($data["merchantKey"]);
 
         $this->_data = array(
             'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
@@ -212,7 +212,7 @@ class ShopCheckoutController extends Shop
             'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
             'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
         );
-        
+
         RequestPayment::make($data["merchantKey"], $this->_data);     
     }
 

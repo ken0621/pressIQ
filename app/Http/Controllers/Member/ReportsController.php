@@ -400,65 +400,6 @@ class ReportsController extends Member
 
         return view('member.reports.accounting.sales', $data);
     }
-    public function profit_loss()
-    {
-        $data = [];
-
-        $data['head_title'] = 'Profit and Loss Report';
-        $data['head_icon'] = 'fa fa-area-chart';
-        $data['head_discription'] = '';
-        $data['head'] = $this->report_header($data);
-        $data['action'] = '/member/report/accounting/profit/loss/get';
-        $shop_id = $this->user_info->shop_id; 
-
-        return view('member.reports.accounting.profit', $data);
-
-    }
-    public function profit_loss_get()
-    {
-        $period         = Request::input('report_period');
-        $date['start']  = Request::input('from');
-        $date['end']    = Request::input('to');
-        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
-        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
-
-        $report_type = Request::input('report_type');
-        $report_field_type = Request::input('report_field_type');
-        $shop_id = $this->user_info->shop_id; 
-
-        $filter[11] = 'Income';
-        $filter[12] = 'Cost of Goods Sold';
-        $filter[13] = 'Expense';
-        $filter[14] = 'Other Expense';
-        $filter[15] = 'Other Income';
-
-        $data['shop_name']  = $this->user_info->shop_key; 
-        $data['head_title'] = 'Profit and Loss';
-        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
-
-        $data['account_income'] = Tbl_chart_account_type::whereIn('chart_type_name', $filter)
-        ->get()->keyBy('chart_type_id');
-        foreach($data['account_income'] as $key => $value)
-        {
-
-            $data['sum'][$key] = Tbl_journal_entry_line::account()
-            ->where('chart_type_id', $value->chart_type_id)
-            ->journal()
-            ->select(DB::raw('*, sum(jline_amount ) as sum'))
-            ->groupBy('jline_type')
-            ->groupBy('jline_account_id')
-            ->where('account_shop_id', $shop_id)
-            ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
-            ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
-            ->get();
-
-        }
-
-        $view =  'member.reports.output.profit_loss'; 
-        return Report::check_report_type($report_type, $view, $data, 'Profit_and_Loss'.Carbon::now());
-
-        return view('member.reports.output.profit_loss', $data);
-    }
 
     public function general_ledger()
     {
@@ -520,6 +461,59 @@ class ReportsController extends Member
         return Report::check_report_type($report_type, $view, $data, 'General-Ledger'.Carbon::now());
     }
 
+    public function profit_loss()
+    {
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'Profit and Loss';
+        $data['head_icon']  = 'fa fa-area-chart';
+        $data['head_discription'] = '';
+        $data['head']       = $this->report_header($data);
+        $data['action']     = '/member/report/accounting/profit_loss';
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
+
+        $report_type    = Request::input('report_type');
+        $load_view      = Request::input('load_view');
+        $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
+
+        $filter[11] = 'Income';
+        $filter[12] = 'Cost of Goods Sold';
+        $filter[13] = 'Expense';
+        $filter[14] = 'Other Expense';
+        $filter[15] = 'Other Income';
+
+        $shop_id         = $this->user_info->shop_id; 
+        $data['_account'] = Tbl_chart_account_type::whereIn('chart_type_name', $filter)
+        ->get()->keyBy('chart_type_name');
+        foreach($data['_account'] as $key => $value)
+        {
+
+            $data['_account'][$key]->account_details = Tbl_journal_entry_line::account()
+                                                        ->journal()
+                                                        ->totalAmount()
+                                                        ->where('chart_type_id', $value->chart_type_id)
+                                                        ->where('account_shop_id', $shop_id)
+                                                        ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
+                                                        ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
+                                                        ->get();
+        }
+        // dd($data['_account']);
+        /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
+        if($report_type && !$load_view)
+        {
+            $view =  'member.reports.output.profit_loss'; 
+            return Report::check_report_type($report_type, $view, $data, 'Profit_and_Loss-'.Carbon::now(), 'portrait');
+        }
+        else
+        {
+            return view('member.reports.accounting.profit_loss', $data);
+        }
+        
+    }
+
     public function customer_list()
     {
         $data['shop_name']  = $this->user_info->shop_key; 
@@ -538,7 +532,7 @@ class ReportsController extends Member
         $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
-        $data['_customer'] = Tbl_customer::balanceJournal()->where("shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
+        $data['_customer'] = Tbl_customer::balanceJournal()->where("shop_id", $this->user_info->shop_id)->where("archived", 0)->orderBy('first_name', "ASC")->get();
 
         foreach($data['_customer'] as $key=>$customer)
         {
@@ -581,7 +575,7 @@ class ReportsController extends Member
         $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
-        $data['_vendor'] = Tbl_vendor::balanceJournal()->where("vendor_shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
+        $data['_vendor'] = Tbl_vendor::balanceJournal()->where("vendor_shop_id", $this->user_info->shop_id)->where("archived", 0)->orderBy('vendor_first_name', 'ASC')->get();
 
         foreach($data['_vendor'] as $key=>$vendor)
         {
@@ -631,8 +625,8 @@ class ReportsController extends Member
         {
             $data['_item'][$key]->item_warehouse  = Tbl_item::warehouseInventory($item->shop_id, $item->item_id)
                                                     ->where("item_id", $item->item_id)
-                                                    ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
-                                                    ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
+                                                    ->whereRaw("DATE(inventory_created) >= '".$data['from']."'")
+                                                    ->whereRaw("DATE(inventory_created) <= '".$data['to']."'")
                                                     ->get();
         }   
         // dd($data['_item']);
@@ -666,7 +660,8 @@ class ReportsController extends Member
         $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
         $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
 
-        $data['_account'] = Tbl_chart_of_account::accountType()->where("account_shop_id", $this->user_info->shop_id)->where("archived", 0)->get();
+        $account_no_balance  = array('Income', 'Expense', 'Cost of Goods Sold', 'Other Income', 'Other Expense');
+        $data['_account'] = Tbl_chart_of_account::accountType()->where("account_shop_id", $this->user_info->shop_id)->where("archived", 0)->orderBy("chart_type_id")->get();
 
         foreach($data['_account'] as $key=>$account)
         {
@@ -676,8 +671,18 @@ class ReportsController extends Member
                                                         ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
                                                         ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
                                                         ->get();
-            $data['_account'][$key]->balance         = collect($data['_account'][$key]->account_journal)->sum('amount');
+                                                        
+            if(in_array($account->chart_type_name, $account_no_balance))
+            {
+                $data['_account'][$key]->balance         = "none";
+            }  
+            else
+            {
+                $data['_account'][$key]->balance         = collect($data['_account'][$key]->account_journal)->sum('amount');
+            } 
         }   
+
+        // dd($data['_account']);
 
         /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
         if($report_type && !$load_view)
@@ -689,6 +694,25 @@ class ReportsController extends Member
         {
             return view('member.reports.accounting.account_list', $data);
         }
+    }
+
+    public function balance_sheet()
+    {
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title'] = 'Balance Sheet';
+        $data['head_icon']  = 'fa fa-area-chart';
+        $data['head_discription'] = '';
+        $data['head']       = $this->report_header($data);
+        $data['action']     = '/member/report/accounting/balance_sheet';
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
+
+        $report_type    = Request::input('report_type');
+        $load_view      = Request::input('load_view');
+        $period         = Request::input('report_period') ? Request::input('report_period') : 'all';
+        $date['start']  = Request::input('from');
+        $date['end']    = Request::input('to');
+        $data['from']   = Report::checkDatePeriod($period, $date)['start_date'];
+        $data['to']     = Report::checkDatePeriod($period, $date)['end_date'];
     }
 
 }

@@ -123,7 +123,7 @@ if($reciept->merchant_school_amount <= 0)
                 <table class="table table-condensed tadble">    
                     <tr>
                         <td style="vertical-align: top !important; padding: 0;" colspan="2">
-                            <center>Anouncement</center>
+                            <center>Announcement</center>
                             <textarea class="form-control" style="height:135px; resize: none;" disabled>{{$reciept->merchant_school_anouncement}}</textarea>
                         </td>
                         <td style="vertical-align: top !important; padding: 0; border: 0 !important;" colspan="2">

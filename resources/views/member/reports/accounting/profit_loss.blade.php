@@ -1,23 +1,28 @@
 @extends('member.layout')
 
+@section('css')
+<link rel="stylesheet" href="/assets/member/css/customBTN.css" type="text/css" />
+@endsection
+
 @section('content')
 {!! $head !!}
 @include('member.reports.filter.filter1');
-@include('member.reports.output.item_list');
+@include('member.reports.output.profit_loss');
 @endsection
 
 @section('script')
 <script type="text/javascript">
 
-	var item_list_report = new item_list_report();
+	var profit_loss_report = new profit_loss_report();
 
-	function item_list_report()
+	function profit_loss_report()
 	{
 		init();
 
 		function init()
 		{
 			event_run_report_click();
+			action_collaptible(false);
 		}
 	}
 
@@ -27,7 +32,10 @@
 		{
 			var serialize_data = $("form.filter").serialize()
 			
-			$(".load-data").load("/member/report/accounting/item_list?"+serialize_data+"&load_view=true .load-content");
+			$(".load-data").load("/member/report/accounting/profit_loss?"+serialize_data+"&load_view=true .load-content", function()
+				{
+					action_collaptible(false);
+				});
 		});
 	}
 

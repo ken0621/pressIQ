@@ -19,7 +19,7 @@
      				<tr data-id="vendor-{{$key}}" data-parent="">
          				<td><b>{{$vendor->vendor_first_name." ".$vendor->vendor_last_name}}</b></td>
                 <td colspan="5"></td>
-                <td class="text-right">{{currency('PHP', $vendor->balance)}}</td>
+                <td class="text-right"><text class="total-report">{{currency('PHP', $vendor->balance)}}</text></td>
          			</tr>
          				<?php $balance = 0;?>
      					@foreach($vendor->vendor_journal as $key2=>$journal)

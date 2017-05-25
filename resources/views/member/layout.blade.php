@@ -35,6 +35,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/member/css/notice.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/css/windows8.css">
+    <link rel="stylesheet" type="text/css" href="/assets/member/css/pis_ctr.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/basic.css">
     <link rel="stylesheet" type="text/css" href="/assets/custom_plugin/myDropList/css/myDropList.css">
@@ -50,7 +51,6 @@
     {
         cursor: pointer;
     }
-    
     </style>
     @yield('css')
     <script>
@@ -440,7 +440,17 @@
     </div>
     <div class="settings_checking hide" id="do_not_remove_please"></div>
     
+    <style type="text/css">
+    .blink-ctr
+    {
+        animation: blinker 1s linear infinite;
+    }
+    @keyframes blinker
+    {  
+      50% { opacity: 0; }
+    }
     
+    </style>
     <script type="text/javascript" src="/assets/member/global.js"></script>
 
     <!-- Testing only -->

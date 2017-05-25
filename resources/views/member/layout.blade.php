@@ -10,7 +10,8 @@
     <title>Digima House</title>
     <meta name="description" content="Page Description">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
+    <base href="{{ URL::to('digima') }}">
+
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/css/bootstrap-datetimepicker-standalone.min.css">
     <link rel="stylesheet" href="/assets/member/styles/92bc1fe4.bootstrap.css">
     <link rel="stylesheet" href="/assets/member/styles/vendor/jquery.pnotify.default.css">

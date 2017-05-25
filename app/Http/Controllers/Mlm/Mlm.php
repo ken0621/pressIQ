@@ -48,6 +48,25 @@ class Mlm extends Controller
             {
                 Self::$slot_id = $session['slot_now']->slot_id;
                 Self::$slot_now = $session['slot_now'];
+
+                $check_slot = Tbl_mlm_slot::where("slot_id",Self::$slot_id)->first();
+                if($check_slot)
+                {
+                    if($check_slot->slot_owner != Self::$customer_id)
+                    {
+                        $count_all_slot = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)
+                        ->membershipcode()->count();
+                        if($count_all_slot >= 1)
+                        {
+                            $count_all_slot = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)
+                            ->membershipcode()->first();
+                            $new_slot_id = $count_all_slot->slot_id;
+                            Mlm_member::add_to_session_edit(Self::$shop_id, Self::$customer_id, $new_slot_id);
+                        }
+                        Self::$slot_id = null;
+                        Self::$slot_now = null;
+                    }
+                }
             }
             else
             {

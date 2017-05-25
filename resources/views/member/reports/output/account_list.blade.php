@@ -21,7 +21,7 @@
                 <td colspan="3"></td>
                 <td >{{$account->chart_type_name}}</td>
                 <td ></td>
-                <td class="text-right">{{currency('PHP', $account->balance)}}</td>
+                <td class="text-right"><text class="total-report">{{currency('PHP', $account->balance)}}</text></td>
          			</tr>
          				<?php $balance = 0;?>
      					@foreach($account->account_journal as $key2=>$journal)

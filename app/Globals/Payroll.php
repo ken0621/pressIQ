@@ -420,13 +420,13 @@ class Payroll
 
 
 				/* IF TIME IN HAPPENS LATER AFTER TIME OUT - LOL - SET TO ZERO */
-				if(c_time_to_int($time_record->payroll_time_sheet_in) > c_time_to_int($time_record->payroll_time_sheet_out))
-				{
-					$payroll_time_sheet_approved_in = "00:00";
-					$payroll_time_sheet_approved_out = "00:00";
-					$payroll_time_sheet_in = "00:00";
-					$payroll_time_sheet_out = "00:00";
-				}
+				// if(c_time_to_int($time_record->payroll_time_sheet_in) > c_time_to_int($time_record->payroll_time_sheet_out))
+				// {
+				// 	$payroll_time_sheet_approved_in = "00:00";
+				// 	$payroll_time_sheet_approved_out = "00:00";
+				// 	$payroll_time_sheet_in = "00:00";
+				// 	$payroll_time_sheet_out = "00:00";
+				// }
 
 				if($employee_information->payroll_group_is_flexi_time == 0)
 				{
@@ -867,7 +867,7 @@ class Payroll
 			}
 
 			
-			/* CHECK IF NIGHT DIFFERENTIAL SCENARIO 1 (Later than 11:00 PM) */
+			/* CHECK IF NIGHT DIFFERENTIAL SCENARIO 1 (Later than 10:00 PM) */
 			if($time_out > $night_differential_pm)
 			{
 				
@@ -1074,8 +1074,6 @@ class Payroll
 		$return->regular_holiday_hours = convert_seconds_to_hours_minutes("H:i", $regular_holiday_hours);
 		$return->break 				= $break;
 
-
-		
 
 		$time_record = collect($data['time_sheet_info'])->toArray();
 		if($time_record['payroll_time_sheet_break'] != '00:00:00')

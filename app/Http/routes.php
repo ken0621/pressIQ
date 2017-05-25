@@ -216,6 +216,9 @@ Route::get('/member/item/get_new_price/{id}/{qty}', 'Member\ItemController@get_i
 
 
 //*ITEM FOR PIS ARCY*/
+Route::any('/member/pis_counter','Member\PurchasingInventorySystemController@pis_counter');
+
+
 Route::any('/member/item/view_item_history/{id}','Member\ItemController@view_item_history');
 Route::any('/member/item/add_submit_pis','Member\ItemController@add_submit_pis');
 Route::any('/member/item/edit_submit_pis','Member\ItemController@edit_submit_pis');

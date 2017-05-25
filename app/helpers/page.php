@@ -330,7 +330,7 @@ function page_list()
 
      /* -- PIS => SIR */
     $code = "pis-lof";
-    $nav[$page]['submenu'][$code]['label'] = "Load Out Form <span class='lof-count'></span>";
+    $nav[$page]['submenu'][$code]['label'] = "Load Out Form <span class='ctr-span lof-count pull-right'></span>";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/lof";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
@@ -339,7 +339,7 @@ function page_list()
 
      /* -- PIS => SIR */
     $code = "pis-sir";
-    $nav[$page]['submenu'][$code]['label'] = "Stock Issuance Report <span class='sir-count'></span>";
+    $nav[$page]['submenu'][$code]['label'] = "Stock Issuance Report <span class='ctr-span sir-count pull-right'></span>";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sir";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
@@ -348,7 +348,7 @@ function page_list()
 
      /* -- PIS => ILR */
     $code = "pis-ilr";
-    $nav[$page]['submenu'][$code]['label'] = "Incoming Load Report <span class='ilr-count'></span>";
+    $nav[$page]['submenu'][$code]['label'] = "Incoming Load Report <span class='ctr-span ilr-count pull-right'></span>";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/ilr";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','processed-ilr'];
@@ -387,7 +387,7 @@ function page_list()
 
      /* -- PIS => SIR */
     $code = "agent-collectiong";
-    $nav[$page]['submenu'][$code]['label'] = "Collection";
+    $nav[$page]['submenu'][$code]['label'] = "Collection <span class='ctr-span col-count pull-right'></span>";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/collection";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];

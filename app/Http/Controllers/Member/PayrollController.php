@@ -5294,19 +5294,19 @@ class PayrollController extends Member
 
           
           /* RATE DECLARATION */
-          $temp = '';
+          $temp = array();
           $temp['name']       = '<b>Rate</b>';
           $temp['amount']     = '';
           $temp['sub']        = array();
           array_push($salary, $temp);
 
-          $temp = '';
+          $temp = array();
           $temp['name']       = 'Monthly Rate';
           $temp['amount']     = number_format($process['salary_monthly'], 2);
           $temp['sub']        = array();
           array_push($salary, $temp);
 
-          $temp = '';
+          $temp = array();
           $temp['name']       = 'Daily Rate';
           $temp['amount']     = number_format($process['salary_daily'], 2);
           $temp['sub']        = array();
@@ -5314,7 +5314,7 @@ class PayrollController extends Member
           
           /* ALL POSITIVE */
 
-          $temp = '';
+          $temp = array();
           if($process['total_gross'] > 0)
           {    
                $temp['name']       = '<b>Salary</b>';
@@ -5323,7 +5323,7 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }    
 
-          $temp = '';
+          $temp = array();
           if($process['regular_salary'] > 0)
           {    
                $temp['name']       = 'Basic Salary';
@@ -5335,7 +5335,7 @@ class PayrollController extends Member
 
           $regular_overtime = $process['regular_reg_overtime'] + $process['extra_reg_overtime'] + $process['rest_day_reg_overtime'] + $process['rest_day_sh_reg_overtime'] + $process['rest_day_rh_reg_overtime'] + $process['rh_reg_overtime'] + $process['sh_reg_overtime'];
 
-          $temp = '';
+          $temp = array();
           if($regular_overtime > 0)
           {    
                $temp['name']       = 'Regular OT';
@@ -5346,7 +5346,7 @@ class PayrollController extends Member
 
           $early_overtime = $process['regular_early_overtime'] + $process['extra_early_overtime'] + $process['rest_day_early_overtime'] + $process['rest_day_sh_early_overtime'] + $process['rest_day_rh_early_overtime'] + $process['rh_early_overtime'] + $process['sh_early_overtime'];
 
-          $temp = '';
+          $temp = array();
           if($early_overtime > 0)
           {    
                $temp['name']       = 'Early OT';
@@ -5357,7 +5357,7 @@ class PayrollController extends Member
 
           $night_differentials = $process['regular_night_diff'] + $process['extra_night_diff'] + $process['rest_day_night_diff'] + $process['rest_day_sh_night_diff'] + $process['rest_day_rh_night_diff'] + $process['rh_night_diff'] + $process['sh_night_diff'];
 
-          $temp = '';
+          $temp = array();
           if($night_differentials > 0)
           {    
                $temp['name']       = 'Night Diff.';
@@ -5366,7 +5366,7 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }
 
-          $temp = '';
+          $temp = array();
           if($process['extra_salary'] > 0)
           {    
                $temp['name']       = 'Extra Day';
@@ -5375,7 +5375,7 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }   
 
-          $temp = '';
+          $temp = array();
           if($process['rest_day_salary'] > 0)
           {    
                $temp['name']       = 'Rest Day';
@@ -5384,7 +5384,7 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }   
 
-          $temp = '';
+          $temp = array();
           if($process['rest_day_sh'] > 0)
           {    
                $temp['name']       = 'Rest Day + Special Holiday';
@@ -5393,7 +5393,7 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }    
 
-          $temp = '';
+          $temp = array();
           if($process['rest_day_rh'] > 0)
           {    
                $temp['name']       = 'Rest Day + Regular Holiday';
@@ -5402,7 +5402,7 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }   
 
-          $temp = '';
+          $temp = array();
           if($process['rh_salary'] > 0)
           {    
                $temp['name']       = 'Regular Holiday';
@@ -5411,7 +5411,7 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }   
 
-          $temp = '';
+          $temp = array();
           if($process['sh_salary'] > 0)
           {    
                $temp['name']       = 'Special Holiday';
@@ -5420,7 +5420,7 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }    
 
-          $temp = '';
+          $temp = array();
           if($process['13_month'] > 0)
           {    
                $temp['name']       = '13 month Pay';
@@ -5429,7 +5429,7 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }   
 
-          $temp = '';
+          $temp = array();
           if($process['payroll_cola'] > 0)
           {    
                $temp['name']       = 'COLA';
@@ -5440,14 +5440,14 @@ class PayrollController extends Member
 
           if($process['leave_amount'] > 0)
           {
-               $temp = '';
+               $temp = array();
                $temp['name']       = 'Leave';
                $temp['amount']     = number_format($process['leave_amount'], 2);
                $temp['sub']        = array();
                array_push($salary, $temp);
           }
 
-          $temp = '';
+          $temp = array();
 
           $total_allowance = $process['adjustment']['total_allowance'] + $process['total_allowance'];
 
@@ -5477,7 +5477,7 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }  
 
-          $temp = '';
+          $temp = array();
           if($process['adjustment']['total_bonus'] > 0)
           {    
                $temp['name']       = '<b>Bonus</b>';
@@ -5496,7 +5496,7 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }  
 
-          $temp = '';
+          $temp = array();
           if($process['adjustment']['total_incentives'] > 0)
           {    
                $temp['name']       = '<b>Incentives</b>';
@@ -5515,7 +5515,7 @@ class PayrollController extends Member
                array_push($salary, $temp);
           }  
 
-          $temp = '';
+          $temp = array();
           if($process['adjustment']['total_commission'] > 0)
           {    
                $temp['name']       = '<b>Commission</b>';
@@ -5537,7 +5537,7 @@ class PayrollController extends Member
           
           if($process['_total_unused_leave'] > 0)
           {
-               $temp = '';
+               $temp = array();
                $temp['name']       = '<b>Leave to Cash</b>';
                $temp['amount']     = '';
                $temp['sub']        = array();
@@ -5554,7 +5554,7 @@ class PayrollController extends Member
           }
 
 
-          $temp = '';
+          $temp = array();
           if($process['total_gross'] > 0)
           {    
                $temp['name']       = '<b>Gross</b>';
@@ -5568,7 +5568,7 @@ class PayrollController extends Member
           /* ALL GOVERMENT */
           $total_contribution = $process['tax_contribution'] + $process['sss_contribution_ee'] + $process['pagibig_contribution'] + $process['philhealth_contribution_ee'];
 
-          $temp = '';
+          $temp = array();
           if($total_contribution > 0)
           {    
                $temp['name']       = '<b>Goverment Contribution</b>';
@@ -5577,7 +5577,7 @@ class PayrollController extends Member
                array_push($government, $temp);
           }  
 
-          $temp = '';
+          $temp = array();
           if($process['sss_contribution_ee'] > 0)
           {    
                $temp['name']       = 'SSS';
@@ -5587,7 +5587,7 @@ class PayrollController extends Member
           }  
 
 
-          $temp = '';
+          $temp = array();
           if($process['philhealth_contribution_ee'] > 0)
           {    
                $temp['name']       = 'Philhealth';
@@ -5596,7 +5596,7 @@ class PayrollController extends Member
                array_push($government, $temp);
           }  
 
-          $temp = '';
+          $temp = array();
           if($process['pagibig_contribution'] > 0)
           {    
                $temp['name']       = 'PAGIBIG';
@@ -5606,7 +5606,7 @@ class PayrollController extends Member
           }  
 
 
-          $temp = '';
+          $temp = array();
           if($process['tax_contribution'] > 0)
           {    
                $temp['name']       = 'Tax';
@@ -5615,7 +5615,7 @@ class PayrollController extends Member
                array_push($government, $temp);
           }  
 
-          $temp = '';
+          $temp = array();
           if($total_contribution > 0)
           {    
                $temp['name']       = '<b>Total Contribution</b>';
@@ -5629,7 +5629,7 @@ class PayrollController extends Member
           /* OTHER DEDUCTIONS */
           $total_deduction = collect($process['deduction'])->sum('payroll_periodal_deduction') + $process['late_deduction'] + $process['adjustment']['total_deductions'] + $process['absent_deduction'] + $process['under_time'];
 
-          $temp = '';
+          $temp = array();
           if($total_deduction > 0)
           {    
                $temp['name']       = '<b>Deduction</b>';
@@ -5638,7 +5638,7 @@ class PayrollController extends Member
                array_push($deduction, $temp);
           }  
 
-          $temp = '';
+          $temp = array();
           if($process['break_deduction'] > 0)
           {    
                $temp['name']       = 'Break Deduction';
@@ -5647,7 +5647,7 @@ class PayrollController extends Member
                array_push($deduction, $temp);
           }  
 
-          $temp = '';
+          $temp = array();
           if($process['late_deduction'] > 0)
           {    
                $temp['name']       = 'Late';
@@ -5656,7 +5656,7 @@ class PayrollController extends Member
                array_push($deduction, $temp);
           }  
 
-          $temp = '';
+          $temp = array();
           if($process['under_time'] > 0)
           {    
                $temp['name']       = 'Under Time';
@@ -5665,7 +5665,7 @@ class PayrollController extends Member
                array_push($deduction, $temp);
           }  
 
-          $temp = '';
+          $temp = array();
           if($process['absent_deduction'] > 0)
           {    
                $temp['name']       = 'Absents';
@@ -5674,7 +5674,7 @@ class PayrollController extends Member
                array_push($deduction, $temp);
           }  
 
-          $temp = '';
+          $temp = array();
           if($process['adjustment']['total_deductions'] > 0)
           {    
                foreach($process['adjustment']['deductions'] as $deductions) 
@@ -5693,7 +5693,7 @@ class PayrollController extends Member
                
           }  
 
-          $temp = '';
+          $temp = array();
           if(!empty($process['deduction']))
           {    
                $_collect = collect($process['deduction'])->groupBy('deduction_category');
@@ -5723,7 +5723,7 @@ class PayrollController extends Member
           
           // dd($total_deduction);
 
-          $temp = '';
+          $temp = array();
           if($total_deduction > 0)
           {    
                $temp['name']       = '<b>Total Deduction</b>';
@@ -5733,7 +5733,7 @@ class PayrollController extends Member
           }  
 
           $total_net = array();
-          $temp = '';
+          $temp = array();
           if($process['total_net'] > 0)
           {    
                $temp['name']       = '<b>Net Salary</b>';
@@ -5750,105 +5750,105 @@ class PayrollController extends Member
           // dd($process);
 
           /* TIME */
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Regular Hours';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['regular_hours']));
           array_push($time, $temp);
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Regular Overtime';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['late_overtime']));
           array_push($time, $temp);
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Early Overtime';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['early_overtime']));
           array_push($time, $temp);
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Night Differential Hour';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['night_differential']));
           array_push($time, $temp);
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Rest Day Hour';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['rest_day_hours']));
           array_push($time, $temp);
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Extra Day Hour';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['extra_day_hours']));
           array_push($time, $temp);
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Special Holiday Hour';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['special_holiday_hours']));
           array_push($time, $temp);
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Regular Holiday Hour';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['regular_holiday_hours']));
           array_push($time, $temp);
-          $temp = '';
+          $temp = array();
           $temp['name']     = '';
           $temp['time']     = '';
           array_push($time, $temp);
 
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Total Break';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['break_time']));
           array_push($time, $temp);
 
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Total Late';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['late_hours']));
           array_push($time, $temp);
 
           
 
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Total Under Time';
           $temp['time']     = Payroll::if_zero_time(Payroll::float_time($process['under_time_hours']));
           array_push($time, $temp);
 
-          $temp = '';
+          $temp = array();
           $temp['name']     = '';
           $temp['time']     = '';
           array_push($time, $temp);
 
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Total Hour';
           $temp['time']     = '<b>'.Payroll::if_zero_time(Payroll::float_time($process['total_hours'])).'</b>';
           array_push($time, $temp);
 
 
           /* DAY */
-          $temp = '';
+          $temp = array();
           $temp['name']    = 'Regular Days';
           $temp['day']     = Payroll::if_zero($process['total_regular_days']);
           array_push($day, $temp);
 
-          $temp = '';
+          $temp = array();
           $temp['name']    = 'Rest Days';
           $temp['day']     = Payroll::if_zero($process['total_rest_days']);
           array_push($day, $temp);
 
-          $temp = '';
+          $temp = array();
           $temp['name']    = 'Extra Days';
           $temp['day']     = Payroll::if_zero($process['total_extra_days']);
           array_push($day, $temp);
 
-          $temp = '';
+          $temp = array();
           $temp['name']    = 'Special Holidays';
           $temp['day']     = Payroll::if_zero($process['total_sh']);
           array_push($day, $temp);
 
-          $temp = '';
+          $temp = array();
           $temp['name']    = 'Regular Holidays';
           $temp['day']     = Payroll::if_zero($process['total_rh']);
           array_push($day, $temp);
 
-          $temp = '';
+          $temp = array();
           $temp['name']     = 'Absents';
           $temp['day']     = Payroll::if_zero($process['absent_count']);
           array_push($day, $temp);
 
           if(isset($process['leave_count_w_pay']))
           {
-               $temp = '';
+               $temp = array();
                $temp['name']     = 'Leave (w/ pay)';
                $temp['day']     = Payroll::if_zero($process['leave_count_w_pay']);
                array_push($day, $temp);
@@ -5857,14 +5857,14 @@ class PayrollController extends Member
 
           if(isset($process['leave_count_wo_pay']))
           {
-               $temp = '';
+               $temp = array();
                $temp['name']     = 'Leave (w/o pay)';
                $temp['day']     = Payroll::if_zero($process['leave_count_wo_pay']);
                array_push($day, $temp);
           }
           
 
-          $temp = '';
+          $temp = array();
           $temp['name']    = 'Total Working Days';
           $temp['day']     = '<b>'.Payroll::if_zero($process['total_worked_days']).'</b>';
           array_push($day, $temp);
@@ -6083,12 +6083,13 @@ class PayrollController extends Member
 
      /* payslip start */
      public function genereate_payslip($id)
-     {
+     {          
           $payslip  = Tbl_payroll_payslip::payslip(Self::shop_id())->first();
           if(empty($payslip))
           {
                $payslip  = Tbl_payroll_payslip::payslip(Self::shop_id(), 0)->first();
           }
+          //dd($payslip);
 
           $data['logo_position']   = '';
           $data['logo']            = false;
@@ -6131,7 +6132,7 @@ class PayrollController extends Member
                                         ->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
                                         ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
                                         ->get();
-          // dd($_record);
+          //dd($_record);
 
           foreach($_record as $record)
           {
@@ -6149,7 +6150,7 @@ class PayrollController extends Member
                array_push($data['_record'], $temp);
           }
 
-          // dd($data);
+          //dd($data['_record']);
           return view('member.payroll.payroll_payslip', $data);
      }
 

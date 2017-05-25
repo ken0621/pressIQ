@@ -75,7 +75,7 @@
                                               <li><a link="/member/vendor/debit_memo/db_view_pdf/{{$db->db_id}}" class="popup" size="lg">Print</a></li>
                                         @if($db->is_bad_order == 1)
                                             @if($db->db_memo_status != 1)
-                                              <li><a href="/member/vendor/debit_memo?id={{$db->db_id}}">Edit {{$type}}</a></li>
+                                              <li><a href="/member/vendor/debit_memo?id={{$db->db_id}}">Edit {{$type or 'Debit Memo'}}</a></li>
                                               <li><a href="/member/vendor/debit_memo/replace/{{$db->db_id}}">Replace</a></li>
                                               <li><a class="popup" size="md" link="/member/vendor/debit_memo/confirm_condemned/{{$db->db_id}}/Condemned">Condemned</a></li>
                                             @else

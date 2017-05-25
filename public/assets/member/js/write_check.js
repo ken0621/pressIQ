@@ -665,8 +665,8 @@ function submit_done(data)
        toastr.success("Success");
 	    $(".droplist-vendor").load("/member/vendor/load_vendor", function()
 	    {                
-	         $(".droplist-vendor").globalDropList("reload");
-	         $(".droplist-vendor").val(data.vendor_id).change();          
+	         $(this).globalDropList("reload");
+	         $(this).val(data.vendor_id).change();          
 	    });
     	data.element.modal("hide");
     	console.log(data);

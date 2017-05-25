@@ -269,22 +269,22 @@ function page_list()
     $nav[$page]['icon'] = "money";
    
     /* -- ACCOUNTING => SALES */
-    $code = "accounting-sales";
-    $nav[$page]['submenu'][$code]['label'] = "Sales";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/chart_of_account";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
+    // $code = "accounting-sales";
+    // $nav[$page]['submenu'][$code]['label'] = "Sales";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/chart_of_account";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
    
     /* -- ACCOUNTING => EXPENSES */
-    $code = "accounting-expenses";
-    $nav[$page]['submenu'][$code]['label'] = "Expenses";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/chart_of_account";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
-    $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";   
+    // $code = "accounting-expenses";
+    // $nav[$page]['submenu'][$code]['label'] = "Expenses";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/chart_of_account";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yet";
+    // $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";   
 
     /* -- ACCOUNTING => JOURNAL ENTRY */
     $code = "accounting-journal";
@@ -305,13 +305,13 @@ function page_list()
     $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
     /* -- ACCOUNTING => SETTINGS */
-    $code = "accounting-chart-of-accounts";
-    $nav[$page]['submenu'][$code]['label'] = "Settings";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/settings";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "No Progress Yett";
-    $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
+    // $code = "accounting-chart-of-accounts";
+    // $nav[$page]['submenu'][$code]['label'] = "Settings";
+    // $nav[$page]['submenu'][$code]['code'] = $code;
+    // $nav[$page]['submenu'][$code]['url'] = $path . $page . "/settings";
+    // $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    // $nav[$page]['submenu'][$code]['status'] = "No Progress Yett";
+    // $nav[$page]['submenu'][$code]['developer'] = "<span style='color: green'>Bryan Kier Aradanas</span>";
 
     /* -- ACCOUNTING => IMPORT */
     $code = "accounting-import-list";

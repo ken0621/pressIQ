@@ -6083,12 +6083,13 @@ class PayrollController extends Member
 
      /* payslip start */
      public function genereate_payslip($id)
-     {
+     {          
           $payslip  = Tbl_payroll_payslip::payslip(Self::shop_id())->first();
           if(empty($payslip))
           {
                $payslip  = Tbl_payroll_payslip::payslip(Self::shop_id(), 0)->first();
           }
+          //dd($payslip);
 
           $data['logo_position']   = '';
           $data['logo']            = false;
@@ -6131,7 +6132,7 @@ class PayrollController extends Member
                                         ->join('tbl_payroll_company','tbl_payroll_company.payroll_company_id','=','tbl_payroll_employee_basic.payroll_employee_company_id')
                                         ->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
                                         ->get();
-          // dd($_record);
+          //dd($_record);
 
           foreach($_record as $record)
           {
@@ -6149,7 +6150,7 @@ class PayrollController extends Member
                array_push($data['_record'], $temp);
           }
 
-          // dd($data);
+          //dd($data['_record']);
           return view('member.payroll.payroll_payslip', $data);
      }
 

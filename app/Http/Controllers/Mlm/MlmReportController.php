@@ -27,6 +27,7 @@ use App\Models\Tbl_warehouse;
 use App\Models\Tbl_warehouse_inventory;
 use App\Globals\Warehouse;
 use App\Globals\Mlm_voucher;
+use App\Globals\Pdf_global;
 use Carbon\Carbon;
 use Session;
 
@@ -478,5 +479,42 @@ class MlmReportController extends Mlm
         }
         return Redirect::back()->with($data);
         return $data;
+    }
+    public function school_wallet()
+    {
+        $data = [];
+        $customer_id = Self::$customer_id;
+        $data['reciept'] = DB::table('tbl_merchant_school_wallet')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_merchant_school_wallet.merchant_school_custmer_id')
+        ->where('merchant_school_custmer_id', $customer_id)
+        ->get();
+        $all_wallet = DB::table('tbl_merchant_school_wallet')->where('merchant_school_custmer_id', Self::$customer_id)->sum('merchant_school_amount');
+        $data['current_school_wallet'] = $all_wallet;
+        return view('mlm.report.report_school_wallet', $data);
+    }
+    public function merchant_school_get()
+    {
+        $id = Request::input('merchant_school_id');
+
+        $data['reciept'] = DB::table('tbl_merchant_school_wallet')
+        ->where('merchant_school_id', $id)
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_merchant_school_wallet.merchant_school_custmer_id')
+        ->leftjoin('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')
+        ->first();
+        $shop_id = Self::$shop_info->shop_id;
+        $data["shop_address"]    = Self::$shop_info->shop_street_address;
+        $data["shop_contact"]    = Self::$shop_info->shop_contact;
+        $data['company_name']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
+        $data['company_email']   = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
+        $data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
+        if(Request::input('pdf') == 'true')
+        {
+            $view = view('member.merchant_school.reciept', $data);
+            return Pdf_global::show_pdf($view);
+        }
+        else
+        {
+            return view('member.merchant_school.reciept', $data);
+        }
     }
 }

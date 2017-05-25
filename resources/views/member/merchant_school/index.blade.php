@@ -14,31 +14,32 @@
     </div>
 </div>
 
-<div class="panel panel-default panel-block panel-title-block col-md-3" id="top">
+<div class="panel panel-default panel-block panel-title-block col-md-6" id="top">
     <div class="panel-heading">
         <div>
+            <center>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseitem" aria-expanded="false" aria-controls="collapseitem">
+                    +
+                </button>
+            </center>
+            <div class="collapse" id="collapseitem">
                 <form class="global-submit" method="post" action="/member/mlm/merchant_school/create">
-                {!! csrf_field() !!}
-                <label>Choose Items To Be Used.</label>
-                <select class="drop-down-item" name="item_id">
-                    @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
-                </select>
-                <hr>
-                <button class="btn btn-primary pull-right">Choose Items</button>
+                    {!! csrf_field() !!}
+                    <label>Choose Items To Be Used.</label>
+                    <select class="drop-down-item" name="item_id">
+                        @include("member.load_ajax_data.load_item_category", ['add_search' => ""])
+                    </select>
+                    <br>
+                    <button class="btn btn-primary">Choose Items</button>
                 </form>
-        </div>
-    </div>
-</div>
+                <hr>
+                <table class="table table-bordered">
+                    <th>Item List</th>
+                    <th></th>
 
-<div class="panel panel-default panel-block panel-title-block col-md-3" id="top">
-    <div class="panel-heading">
-        <div>
-            <table class="table table-bordered">
-                <th>Item List</th>
-                <th></th>
-
-                <tbody class="get_body"></tbody>
-            </table>
+                    <tbody class="get_body"></tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -59,34 +60,39 @@
 <div class="panel panel-default panel-block panel-title-block col-md-12" id="top">
     <div class="panel-heading">
         <div>
-            <center>Reciept</center>
-             <div class="load-data" target="value-id-3">     
-                <div id="value-id-2">
-                    <table class="table table-condensed table-bordered">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Date</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($reciept as $key => $value)
+            <center>Receipt</center>
+             <div class="col-md-4">
+                 <div class="load-data" target="value-id-3">     
+                    <div id="value-id-3">
+                        <table class="table table-condensed table-bordered">
+                            <thead>
                                 <tr>
-                                    <td>{{$value->merchant_school_id}}</td>
-                                    <td>{{name_format_from_customer_info($value)}}</td>
-                                    <td>{{$value->merchant_school_date}}</td>
-                                    <td>EDIT | PDF</td>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th></th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    <div class="col-md-12 text-center">
-                        {!!$reciept->render()!!}
+                            </thead>
+                            <tbody>
+                                @foreach($reciept as $key => $value)
+                                    <tr>
+                                        <td>{{$value->merchant_school_id}}</td>
+                                        <td>{{name_format_from_customer_info($value)}}</td>
+                                        <td>{{$value->merchant_school_date}}</td>
+                                        <td><a href="javascript:" onClick="show_repciept('{{$value->merchant_school_id}}', 'view')" >VIEW</a> | <a href="javascript:" onClick="show_repciept('{{$value->merchant_school_id}}', 'pdf')">PDF</a></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <div class="col-md-12 text-center">
+                            {!!$reciept->render()!!}
+                        </div>
                     </div>
-                </div>
-            </div>        
+                </div> 
+             </div>       
+             <div class="col-md-8">
+                 <div class="reciept_append"></div>
+             </div>
         </div>
     </div>
 </div>        
@@ -191,6 +197,22 @@ function get_customer_info()
     var id = $('.punch_slot').val();
     $('.append_slot').html('<center><div style="margin: 100px auto;" class="loader-16-gray"></div></center>');
     $('.append_slot').load('/member/mlm/merchant_school/get_customer/' + id);
+}
+function show_repciept(merchant_school_id, type)
+{
+    if(type == 'pdf')
+    {
+        var link = '/member/mlm/merchant_school/get/receipt?merchant_school_id=' + merchant_school_id + "&pdf=true";
+        window.open(link);
+    }
+    else
+    {
+        console.log(1);
+        var link = '/member/mlm/merchant_school/get/receipt?merchant_school_id=' + merchant_school_id;
+        $('.reciept_append').html('<center><div style="margin: 100px auto;" class="loader-16-gray"></div></center>');
+        $('.reciept_append').load(link);
+    }
+    
 }
 </script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>

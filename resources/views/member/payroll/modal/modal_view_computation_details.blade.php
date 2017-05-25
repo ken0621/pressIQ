@@ -12,6 +12,7 @@
 							<tr>
 								<th>Date</th>
 								<th>REG</th>
+								<th>BRK</th>
 								<th>LATE</th>
 								<th>UT</th>
 								<th>AB</th>
@@ -35,6 +36,9 @@
 								<td class="text-right {{$details['regular_salary'] == 0 ? 'color-gray':''}}">
 									{{number_format($details['regular_salary'], 2)}}
 								</td>
+								<td class="text-right {{$details['break'] == 0 ? 'color-gray':''}}">
+									{{number_format($details['break'], 2)}}
+								</td> 
 								<td class="text-right {{$details['late_deduction'] == 0 ? 'color-gray':''}}">
 									{{number_format($details['late_deduction'], 2)}}
 								</td> 
@@ -79,6 +83,9 @@
 								</td>
 								<td class="text-right">
 									<b>{{number_format($total_regular_salary, 2)}}</b>
+								</td>
+								<td class="text-right">
+									<b>{{number_format($total_break, 2)}}</b>
 								</td>
 								<td class="text-right">
 									<b>{{number_format($total_late_deduction, 2)}}</b>

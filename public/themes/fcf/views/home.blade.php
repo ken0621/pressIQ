@@ -8,51 +8,78 @@
 				<!-- HOME SLIDESHOW -->
 				<div class="col-md-8">
 					<div class="slider-container">
-						<div>
-							<div class="slider">
-								<img class="image" src="/themes/{{ $shop_theme }}/img/slider1.png">
-								<div class="slider-details-bg"></div>
-								<div class="slider-title-container" style="background-image: url('/themes/{{ $shop_theme }}/img/slider-details-bg.png');">
-									<div class="row clearfix">
-										<div class="col-md-9">
-											<div class="slider-details">
-												<div class="slider-title">THE PROJECT</div>
-												<div class="slider-title-details">FCF will develop a project as a surface mine with a processing plant to produce gold (dore)...
+						@if( is_serialized( get_content($shop_theme_info, "home", "home_slider") ) )
+						<!-- DYNAMIC CMS -->
+							@foreach( unserialize( get_content($shop_theme_info, "home", "home_slider") ) as $slider )
+							<div>
+								<div class="slider">
+									<img class="image" src="{{ $slider['image'] }}">
+									<div class="slider-details-bg"></div>
+									<div class="slider-title-container" style="background-image: url('/themes/{{ $shop_theme }}/img/slider-details-bg.png');">
+										<div class="row clearfix">
+											<div class="col-md-9">
+												<div class="slider-details">
+													<div class="slider-title">{{ $slider['title'] }}</div>
+													<div class="slider-title-details">{{ $slider['subtitle'] }}
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="btn-container"><button class="read-more-btn">READ MORE</button></div>
+											<div class="col-md-3">
+												<div class="btn-container"><button class="read-more-btn">READ MORE</button></div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-						<div>
-							<div class="slider">
-								<img class="image" src="/themes/{{ $shop_theme }}/img/slider2.png">
-								<div class="slider-details-bg"></div>
-								<div class="slider-title-container" style="background-image: url('/themes/{{ $shop_theme }}/img/slider-details-bg.png');">
-									<div class="row clearfix">
-										<div class="col-md-9">
-											<div class="slider-details">
-												<div class="slider-title">THE FEASIBILITY STUDY</div>
-												<div class="slider-title-details">FCF Minerals Corporation (FCF) was incorporated in the Philippines and was duly registered with the Philippines...
+							@endforeach
+						@else
+						<!-- STATIC -->
+							<div>
+								<div class="slider">
+									<img class="image" src="/themes/{{ $shop_theme }}/img/slider1.png">
+									<div class="slider-details-bg"></div>
+									<div class="slider-title-container" style="background-image: url('/themes/{{ $shop_theme }}/img/slider-details-bg.png');">
+										<div class="row clearfix">
+											<div class="col-md-9">
+												<div class="slider-details">
+													<div class="slider-title">THE PROJECT</div>
+													<div class="slider-title-details">FCF will develop a project as a surface mine with a processing plant to produce gold (dore)...
+													</div>
 												</div>
 											</div>
-										</div>
-										<div class="col-md-3">
-											<div class="btn-container"><button class="read-more-btn">READ MORE</button></div>
+											<div class="col-md-3">
+												<div class="btn-container"><button class="read-more-btn">READ MORE</button></div>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+							<div>
+								<div class="slider">
+									<img class="image" src="/themes/{{ $shop_theme }}/img/slider2.png">
+									<div class="slider-details-bg"></div>
+									<div class="slider-title-container" style="background-image: url('/themes/{{ $shop_theme }}/img/slider-details-bg.png');">
+										<div class="row clearfix">
+											<div class="col-md-9">
+												<div class="slider-details">
+													<div class="slider-title">THE FEASIBILITY STUDY</div>
+													<div class="slider-title-details">FCF Minerals Corporation (FCF) was incorporated in the Philippines and was duly registered with the Philippines...
+													</div>
+												</div>
+											</div>
+											<div class="col-md-3">
+												<div class="btn-container"><button class="read-more-btn">READ MORE</button></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						@endif
 					</div>
 				</div>
 				<!-- LATEST NEWS -->
 				<div class="col-md-4">
-					<div class="top-left-container-title">OUR LATEST NEWS</div>
+					<div class="top-left-container-title">{{ get_content($shop_theme_info, "home", "home_news_title") }}</div>
 					<div class="latest-news-container">
 					<!-- NEWS PER CONTAINER -->
 						<a href="/news"><div class="latest-news-per-container row-no-padding clearfix">
@@ -121,7 +148,7 @@
 			<div class="row clearfix">
 				<div class="col-md-9">
 					<div class="bottom-container-txt">
-						<div class="bottom-container-title">WE ARE A <span class="highlight">RESPONSIBLE</span> MINING COMPANY</div>
+						<div class="bottom-container-title">{{ get_content($shop_theme_info, "home", "home_slogan_first") }} <span class="highlight">{{ get_content($shop_theme_info, "home", "home_slogan_highlight") }}</span> {{ get_content($shop_theme_info, "home", "home_slogan_last") }}</div>
 						<div class="bottom-container-details">This drives innovative solutions for our clients and improves our understanding of the world in which we work</div>
 					</div>
 				</div>
@@ -136,7 +163,7 @@
 	<div class="gallery-container">
 		<div class="container-fluid">
 			<div class="container-title">
-				GALLERY
+				{{ get_content($shop_theme_info, "home", "home_gallery_title") }}
 			</div>
 			<!-- <div class="row-no-padding clearfix">
 				<div class="col-md-2">
@@ -358,8 +385,8 @@
 			<div class="row clearfix">
 				<div class="col-md-9">
 					<div class="bottom-container-txt">
-						<div class="bottom-container-title">WHO WE ARE</div>
-						<div class="bottom-container-details">FCF Minerals Corporation (FCF) was incorporated in the Philippines and was duly registered with the Philippine SEC on December 3, 2001 to engage in continuing exploration, development and commercial operation of mineral claims with full power and authority to do any and all acts, things, business and activities which are related, incidental or conducive directly or indirectly to the attainment of the foregoing objectives as a mining company.</div>
+						<div class="bottom-container-title">{{ get_content($shop_theme_info, "home", "home_division1_title") }}</div>
+						<div class="bottom-container-details">{{ get_content($shop_theme_info, "home", "home_division1_context") }}</div>
 					</div>
 				</div>
 				<div class="col-md-3">
@@ -374,23 +401,23 @@
 		<div class="container-title">KEY COMPONENTS</div>
 			<div class="row clearfix element-container">
 				<div class="col-md-3">
-					<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/technology.png"></div>
-					<div class="element-title">TECHNOLOGY</div>
+					<div class="image-holder"><img src="{{ get_content($shop_theme_info, "home", "home_division2_img1") }}"></div>
+					<div class="element-title">{{ get_content($shop_theme_info, "home", "home_division2_img1_title") }}</div>
 					<div class="element-description">A surface mine and Run of Mine (ROM) pad.</div>
 				</div>
 				<div class="col-md-3">
-					<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/performance.png"></div>
-					<div class="element-title">PERFORMANCE</div>
+					<div class="image-holder"><img src="{{ get_content($shop_theme_info, "home", "home_division2_img2") }}"></div>
+					<div class="element-title">{{ get_content($shop_theme_info, "home", "home_division2_img2_title") }}</div>
 					<div class="element-description">Process plant facility of grinding, flotation, BIOX ®, Carbon-in-Leach (CIL) and recovery.</div>
 				</div>
 				<div class="col-md-3">
-					<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/innovation.png"></div>
-					<div class="element-title">INNOVATION</div>
+					<div class="image-holder"><img src="{{ get_content($shop_theme_info, "home", "home_division2_img3") }}"></div>
+					<div class="element-title">{{ get_content($shop_theme_info, "home", "home_division2_img3_title") }}</div>
 					<div class="element-description">Residual Storage Impoundment (RSI) to ensure waste materials are properly managed and to maximize reclaim of water for the operation.</div>
 				</div>
 				<div class="col-md-3">
-					<div class="image-holder"><img src="/themes/{{ $shop_theme }}/img/infrastructure.png"></div>
-					<div class="element-title">INFRASTRUCTURE</div>
+					<div class="image-holder"><img src="{{ get_content($shop_theme_info, "home", "home_division2_img4") }}"></div>
+					<div class="element-title">{{ get_content($shop_theme_info, "home", "home_division2_img4_title") }}</div>
 					<div class="element-description">Associated infrastructure including upgrade of the access road, power line, accomodation camp and 
 					ancilliary buildings.</div>
 				</div>

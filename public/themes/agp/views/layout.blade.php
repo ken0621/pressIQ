@@ -73,6 +73,7 @@
     <script type='text/javascript' src='resources/assets/ausart/assets/js/jquery.carouFredSel-6.1.0-packed.js'></script>
     <script type='text/javascript' src='resources/assets/ausart/assets/js/tooltip.js'></script>
     <!--[if IE 8]><link rel="stylesheet" type="text/css" href="http://newthemes.themeple.co/ausart/resources/assets/ausart/assets/plugins/js_composer/resources/assets/ausart/assets/css/vc-ie8.css" media="screen"><![endif]-->
+    <link rel="shortcut icon" href="/assets/front/img/agp.png" type="image/x-icon">
 </head>
 <!-- End of Header -->
 
@@ -82,14 +83,14 @@
     <div class="top_nav">
         <div class="container">
             <div class="row-fluid">
-                <div class="span6" id="ewan">
+                <div class="span9" id="ewan">
                     <div class="pull-left">
                         <div id="widget_topinfo-2" class="widget widget_topinfo">
                             <div class="topinfo">{{ get_content($shop_theme_info, "header", "header_call_label") }}: {{ get_content($shop_theme_info, "header", "header_call_number") }}</span><span class="email">{{ get_content($shop_theme_info, "header", "header_email_label") }}: {{ get_content($shop_theme_info, "header", "header_email_address") }}</span></div>
                         </div>
                     </div>
                 </div>
-                <div class="span6">
+                <div class="span3">
                     <div class="pull-right">
                         <div class="widget social_widget">
                             <div class="row-fluid social_row">

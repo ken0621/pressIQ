@@ -505,7 +505,7 @@ class ReportsController extends Member
         if($report_type && !$load_view)
         {
             $view =  'member.reports.output.profit_loss'; 
-            return Report::check_report_type($report_type, $view, $data, 'Profit_and_Loss-'.Carbon::now());
+            return Report::check_report_type($report_type, $view, $data, 'Profit_and_Loss-'.Carbon::now(), 'portrait');
         }
         else
         {

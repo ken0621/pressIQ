@@ -173,7 +173,7 @@ class Report
 	 * @param  string   $name			
 	 * @author BKA	
 	 */
-	public static function check_report_type($report_type, $view, $data, $name="File")
+	public static function check_report_type($report_type, $view, $data, $name="File", $pdf_format = "landscape")
     {   
         $_view = view($view, $data); 
 
@@ -181,7 +181,7 @@ class Report
          {
             case 'pdf':
                     $data['view'] = $_view->render();
-                    return Pdf_global::show_pdf($data['view'], 'landscape');
+                    return Pdf_global::show_pdf($data['view'], $pdf_format);
                 break;
             case 'excel':
                     Excel::create($name, function($excel) use($view, $data) 

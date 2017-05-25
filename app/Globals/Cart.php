@@ -905,14 +905,14 @@ class Cart
      * @author (Edward Guevarra)
      *
      */
-    public static function submit_order($order_id, $shop_id, $payment_status, $order_status)
+    public static function submit_order($shop_id, $payment_status, $order_status)
     {
-        $update["ec_order_id"]    = $order_id;
-        $update["shop_id"]        = $shop_id;
-        $update["payment_status"] = $payment_status;
-        $update["order_status"]   = $order_status;
-        dd($update);
-        return Ec_order::update_ec_order($update);   
+        $insert                   = Self::get_info();
+        $insert["shop_id"]        = $shop_id;
+        $insert["payment_status"] = $payment_status;
+        $insert["order_status"]   = $order_status;
+       
+        return Ec_order::create_ec_order_from_cart($insert);   
     }
 
     public static function process_payment($shop_id)

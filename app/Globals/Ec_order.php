@@ -550,6 +550,6 @@ class Ec_order
 
     public static function create_ec_order_from_cart($order_info)
     {
-        
+        dd($order_info);
     }
 }

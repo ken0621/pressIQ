@@ -21,7 +21,7 @@
                     @foreach($_account as $key=>$account)
                         <tr data-id="type-{{$account->chart_type_id}}" data-parent="">
                             <td colspan="5" >{{strtoupper($account->chart_type_name)}}</td>
-                            <td class="text-right"><text class="total-report hide">{{currency('PHP', collect($account->account_details)->sum('amount'))}}</text></td>
+                            <td class="text-right"><text class="total-report">{{currency('PHP', collect($account->account_details)->sum('amount'))}}</text></td>
                         </tr>
                         @foreach($account->account_details as $key1=>$acc_details)
                             <tr data-id="account-{{$key1}}" data-parent="type-{{$account->chart_type_id}}">
@@ -54,7 +54,7 @@
                                 <td colspan="5" >GROSS PROFIT</td>
                                 <td class="text-right">{{currency('PHP', $income - $cog)}}</td>
                             </tr>
-                        @elseif($account->chart_type_name == "Expenses")
+                        @elseif($account->chart_type_name == "Expense")
                             <?php $expense = collect($account->account_details)->sum('amount'); ?>
                             <tr>
                                 <td colspan="5" >NET OPERATING INCOME</td>

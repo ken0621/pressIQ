@@ -38,24 +38,32 @@
         { 
             startCollapsed: collapse,
             addColumn: false, 
-            plusButton: '<span class="collapse-report fa fa-caret-right fa-1x"> </span> ', 
-            minusButton: '<span class="collapse-report fa fa-caret-down fa-1x"> </span> ' 
+            plusButton: '&#9658; ', 
+            minusButton: '&#9660; '
         });
-    }
 
-    $(document).on("click", ".collapse-report", function()
-    {
-        $parent_tr = $(this).parents("tr");
-        console.log($(this));
-        console.log($parent_tr.find(".total-report").html());
-
-        if($parent_tr.find(".act-more").hasClass("act-expanded"))
+        if(collapse = false)
         {
-            $parent_tr.find(".total-report").hide();
+            $(".act-more").closest("tr").find(".total-report").addClass("hide");
         }
         else
         {
-            $parent_tr.find(".total-report").show();
+            $(".act-more").closest("tr").find(".total-report").removeClass("hide");
+        }
+
+    }
+
+    $(document).on("click", ".act-more", function()
+    {
+        $parent_tr = $(this).closest("tr");
+
+        if($parent_tr.hasClass("act-tr-expanded"))
+        {
+            $parent_tr.find(".total-report").addClass("hide");
+        }
+        else
+        {
+            $parent_tr.find(".total-report").removeClass("hide");
         }
     })
 </script>

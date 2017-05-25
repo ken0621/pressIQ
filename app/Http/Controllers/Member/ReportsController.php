@@ -625,8 +625,8 @@ class ReportsController extends Member
         {
             $data['_item'][$key]->item_warehouse  = Tbl_item::warehouseInventory($item->shop_id, $item->item_id)
                                                     ->where("item_id", $item->item_id)
-                                                    ->whereRaw("DATE(je_entry_date) >= '".$data['from']."'")
-                                                    ->whereRaw("DATE(je_entry_date) <= '".$data['to']."'")
+                                                    ->whereRaw("DATE(inventory_created) >= '".$data['from']."'")
+                                                    ->whereRaw("DATE(inventory_created) <= '".$data['to']."'")
                                                     ->get();
         }   
         // dd($data['_item']);

@@ -880,6 +880,16 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
 
+
+    /* -- REPORT => AGENT TRANSACTIONS */
+    $code = "report-agent-transaction";
+    $nav[$page]['submenu'][$code]['label'] = "Agent Profit & Loss";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/agent/profit_loss";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "ARCY";
+
     /* PURCHASING INVENTORY SYSTEM */
     $page = "pis";
     $nav[$page]['name'] = "Sales & Delivery";

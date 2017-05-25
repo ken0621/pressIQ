@@ -313,6 +313,7 @@ Route::any('/member/pis/agent/edit_submit','Member\AgentController@edit_submit')
 Route::any('/member/pis/agent/archived/{id}/{action}','Member\AgentController@archived');
 Route::any('/member/pis/agent/archived_submit','Member\AgentController@archived_submit');
 /* END AGENT*/
+Route::any('/member/report/agent/profit_loss','Member\ReportAgentProfitLossController@index');
 
 /*SALES LIQUIDATION*/
 Route::any('member/cashier/sales_liquidation','Member\PisSalesLiquidationController@index');

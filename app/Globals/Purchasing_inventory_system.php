@@ -53,6 +53,105 @@ class Purchasing_inventory_system
         $check = Tbl_settings::where("settings_key","pis-jamestiong")->where("settings_value","enable")->where("shop_id",Purchasing_inventory_system::getShopId())->pluck("settings_setup_done");
         return $check;
     }
+
+    public static function get_sales_loss_over($start_date, $end_date)
+    {
+        $data = [];
+        $shop_id = Purchasing_inventory_system::getShopId();
+        $all_agent = Tbl_employee::position()->where("shop_id",$shop_id)->get();
+        $date_today = Carbon::now();
+
+        foreach($all_agent as $key_agent => $value_agent)
+        {
+            $loss = 0;
+            $over = 0;
+            $mts_loss = 0;
+            $mts_over = 0;
+            $total_sold = 0;
+            $discount = 0;
+            $sir_data = Tbl_sir::where("sales_agent_id",$value_agent->employee_id)
+                                ->whereBetween("created_at",[$start_date, $end_date])
+                                ->where("ilr_status",2)
+                                ->get();
+
+            foreach($sir_data as $key => $value) 
+            {
+                $_sir_item = Purchasing_inventory_system::select_sir_item($shop_id,$value->sir_id,'array');
+
+                //ilr Loss and Over
+                foreach ($_sir_item as $key_sir_item => $value_sir_item)
+                {
+                    $loss += $value_sir_item->infos < 0 ? $value_sir_item->infos : 0;
+                    $over += $value_sir_item->infos > 0 ? $value_sir_item->infos : 0;
+
+                    //count for sold items
+                    if($value_sir_item->item_type_id != 4)
+                    {
+                        $sold_qty = Purchasing_inventory_system::count_sold_qty($value_sir_item->sir_id, $value_sir_item->item_id);
+                    }
+                    else
+                    {
+                        $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$value_sir_item->item_id)->get();
+                        $sold_bundle_qty = 0;
+                        foreach ($bundle_item as $key_bundle => $value_bundle)
+                        {
+                            $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
+
+                           $issued_bundle_qty_item = (UnitMeasurement::um_qty($value->related_um_type) * $value->item_qty) * $bundle_qty;
+
+                           $total_sold_bundle_qty = Tbl_sir_inventory::where("sir_item_id",$value_bundle->bundle_item_id)->where("inventory_sir_id",$value->sir_id)->where("sir_inventory_count","<",0)->sum("sir_inventory_count");
+                           $rem_bundle_qty = ($issued_bundle_qty_item - abs($total_sold_bundle_qty)) / $bundle_qty;
+                           $sold_bundle_qty = $value->item_qty - $rem_bundle_qty;                            
+                        }
+                        $sold_qty = $sold_bundle_qty;
+                    }
+
+                    $total_sold += $sold_qty * $value_sir_item->sir_item_price;
+                }
+                //Empties Loss and Over
+                $_returns = Tbl_sir_cm_item::item()->where("sc_sir_id",$value->sir_id)->get();
+
+                foreach ($_returns as $key_return => $value_return) 
+                {                
+                    $mts_loss += $value_return->sc_infos < 0 ? $value_return->sc_infos : 0;
+                    $mts_over += $value_return->sc_infos > 0 ? $value_return->sc_infos : 0;  
+                }
+
+                //discount
+                $inv_discount = Tbl_manual_invoice::customer_invoice()->where("sir_id",$value->sir_id)->get();
+                foreach ($inv_discount as $key_disc => $value_dsc) 
+                {
+                    $whole_amount = $value_dsc->inv_discount_value;
+                    if($value_dsc->inv_discount_type == 'percent')
+                    {
+                        $whole_amount = ($value_dsc->inv_discount_value / 100) * $value_dsc->inv_subtotal_price;
+                    }
+
+                    $per_item = Tbl_customer_invoice_line::where("invline_inv_id",$value_dsc->inv_id)->get();
+
+                    $item_dsc = 0;
+                    foreach ($per_item as $key_item => $value_item) 
+                    {
+                        $item_dsc = $value_item->invline_discount;
+                        if($value_item->invline_discount_type == 'percent')
+                        {
+                            $item_dsc = ($value_item->invline_discount / 100) * $value_item->invline_amount;
+                        }
+                    }
+                    $discount += $whole_amount + $item_dsc;
+                }
+            }
+
+            $data["agent"][$key_agent]["agent_name"] = $value_agent->first_name." ".$value_agent->middle_name." ".$value_agent->last_name;
+            $data["agent"][$key_agent]["total_sales"] = $total_sold - $discount;
+            $data["agent"][$key_agent]["discrepancy"] = $value->agent_collection - ($total_sold - $discount);
+            $data["agent"][$key_agent]["total_loss"] = $loss + $mts_loss;
+            $data["agent"][$key_agent]["total_over"] = $over + $mts_over;
+            $data["agent"][$key_agent]["total_discrepancy"] = ($data["agent"][$key_agent]["discrepancy"] + $data["agent"][$key_agent]["total_over"]) + $data["agent"][$key_agent]["total_loss"];
+        }
+
+        return $data;
+    }
     public static function get_report_data($sir_id)
     {
         $user_id = Purchasing_inventory_system::getUserId();

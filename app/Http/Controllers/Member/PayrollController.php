@@ -5846,15 +5846,23 @@ class PayrollController extends Member
           $temp['day']     = Payroll::if_zero($process['absent_count']);
           array_push($day, $temp);
 
-          $temp = '';
-          $temp['name']     = 'Leave (w/ pay)';
-          $temp['day']     = Payroll::if_zero($process['leave_count_w_pay']);
-          array_push($day, $temp);
+          if(isset($process['leave_count_w_pay']))
+          {
+               $temp = '';
+               $temp['name']     = 'Leave (w/ pay)';
+               $temp['day']     = Payroll::if_zero($process['leave_count_w_pay']);
+               array_push($day, $temp);
+          }
+          
 
-          $temp = '';
-          $temp['name']     = 'Leave (w/o pay)';
-          $temp['day']     = Payroll::if_zero($process['leave_count_wo_pay']);
-          array_push($day, $temp);
+          if(isset($process['leave_count_wo_pay']))
+          {
+               $temp = '';
+               $temp['name']     = 'Leave (w/o pay)';
+               $temp['day']     = Payroll::if_zero($process['leave_count_wo_pay']);
+               array_push($day, $temp);
+          }
+          
 
           $temp = '';
           $temp['name']    = 'Total Working Days';

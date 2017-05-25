@@ -16,8 +16,9 @@
 			            @foreach($sales_by_customer as $key => $value)
 			            	<?php $total = 0; ?>
 			            	<?php $amount = 0; ?>
-			            	<tr data-id="{{$key}}" data-parent="" >
-			            		<td colspan="20" @if($report_type != 'excel') style="background-color: #dedede;" @endif >{{$customer_info[$key]}}</td>
+			            	<tr data-id="{{$key}}" data-parent=""  style="background-color: #dedede;" >
+			            		<td colspan="{{count($report_field)}}" @if($report_type != 'excel')@endif >{{$customer_info[$key]}}</td>
+			            		<td class="text-right"><text class="total-report">{{currency('PHP', collect($value)->sum('amount'))}}</text></td>
 			            	</tr>
 			            	@foreach($value as $key2 => $value2)
 			            	<tr data-id="{{$key2}}" data-parent="{{$key}}">
@@ -33,9 +34,8 @@
 								<td>{{currency('PHP', $total)}}</td>
 							</tr>		
 							@endforeach
-							<tr>
-								<td colspan="{{count($report_field) - 1}}">Total : {{$customer_info[$key]}} </td>
-								<td>{{currency('PHP', $total)}}</td>
+							<tr data-id="total-{{$key2}}" data-parent="{{$key}}">
+								<td colspan="{{count($report_field) }}">Total : {{$customer_info[$key]}} </td>
 								<td>{{currency('PHP', $total)}}</td>
 							</tr>
 			            @endforeach

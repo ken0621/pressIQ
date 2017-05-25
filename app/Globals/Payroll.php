@@ -504,6 +504,8 @@ class Payroll
 		$data["time_sheet_info"] = array();
 		$time_sheet_info = Tbl_payroll_time_sheet::where("payroll_time_date", Carbon::parse($date)->format("Y-m-d"))->where("payroll_employee_id", $employee_id)->first();
 
+		// dd($time_sheet_info);
+
 		if(!empty($time_sheet_info))
 		{
 			$data["time_sheet_info"] = $time_sheet_info;
@@ -1076,9 +1078,13 @@ class Payroll
 
 
 		$time_record = collect($data['time_sheet_info'])->toArray();
-		if($time_record['payroll_time_sheet_break'] != '00:00:00')
+		// dd($time_record);
+		if(isset($time_record['payroll_time_sheet_break']))
 		{
-			$return->break = date('H:i', strtotime($time_record['payroll_time_sheet_break']));
+			if($time_record['payroll_time_sheet_break'] != '00:00:00')
+			{
+				$return->break = date('H:i', strtotime($time_record['payroll_time_sheet_break']));
+			}
 		}
 
 		if($return->total_hours == '00:00')

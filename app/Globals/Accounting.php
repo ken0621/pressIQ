@@ -56,7 +56,7 @@ class Accounting
 	}
 	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type, $search)
 	{
-		$query = Tbl_chart_of_account::accountInfo($shop)->balance()->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel);
+		$query = Tbl_chart_of_account::accountInfo($shop)->balance()->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel)->orderBy("chart_type_id");
 
 		switch($filter)
 		{

@@ -911,7 +911,7 @@ class Cart
         $update["shop_id"]        = $shop_id;
         $update["payment_status"] = $payment_status;
         $update["order_status"]   = $order_status;
-
+        dd($update);
         return Ec_order::update_ec_order($update);   
     }
 

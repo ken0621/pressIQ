@@ -257,96 +257,201 @@
 							</div>
 						</div> --}}
 						@if(loop_content_condition($shop_theme_info, "home", "home_gallery_images"))
-							@foreach(loop_content_get($shop_theme_info, "home", "gallery_images") as $key => $gallery)
-								<div class="item">
+							@foreach(loop_content_divide(loop_content_get($shop_theme_info, "home", "home_gallery_images"), 12) as $key => $gallery)
+								<div class="item {{ $key == 1 ? "active" : "" }}">
 									<div class="row clearfix">
-										<div class="col-sm-2">
-											<div class="gallery-img-holder">
-												<a class="lightbox" href="#goofy">
-													<img src="/themes/{{ $shop_theme }}/img/img13.png">
-													<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full13.jpg"></div>
-												</a>
+										@foreach(loop_content_divide($gallery, 2) as $key0 => $image_holder)
+											<div class="col-sm-2">
+												@foreach($image_holder as $key1 => $image)
+												<div class="gallery-img-holder">
+													<a class="lightbox" href="#goofy">
+														<img src="{{ $image }}">
+														<div class="full-image hidden" path="{{ $image }}"></div>
+													</a>
+												</div>
+												@endforeach
 											</div>
-											<div class="gallery-img-holder">
-												<a class="lightbox" href="#goofy">
-													<img src="/themes/{{ $shop_theme }}/img/img19.png">
-													<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full12.jpg"></div>
-												</a>
-											</div>
-										</div>
-										<div class="col-sm-2">
-											<div class="gallery-img-holder">
-												<a class="lightbox" href="#goofy">
-													<img src="/themes/{{ $shop_theme }}/img/img14.png">
-													<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full14.jpg"></div>
-												</a>
-											</div>
-											<div class="gallery-img-holder">
-												<a class="lightbox" href="#goofy">
-													<img src="/themes/{{ $shop_theme }}/img/img20.png">
-													<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full20.jpg"></div>
-												</a>
-											</div>
-										</div>
-										<div class="col-sm-2">
-											<div class="gallery-img-holder">
-												<a class="lightbox" href="#goofy">
-													<img src="/themes/{{ $shop_theme }}/img/img15.png">
-													<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full15.jpg"></div>
-												</a>
-											</div>
-											<div class="gallery-img-holder">
-												<a class="lightbox" href="#goofy">
-													<img src="/themes/{{ $shop_theme }}/img/img21.png">
-													<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full21.jpg"></div>
-												</a>
-											</div>
-										</div>
-										<div class="col-sm-2">
-											<div class="gallery-img-holder">
-												<a class="lightbox" href="#goofy">
-													<img src="/themes/{{ $shop_theme }}/img/img16.png">
-													<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full16.jpg"></div>
-												</a>
-											</div>
-											<div class="gallery-img-holder">
-												<a class="lightbox" href="#goofy">
-													<img src="/themes/{{ $shop_theme }}/img/img22.png">
-													<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full22.jpg"></div>
-												</a>
-											</div>
-										</div>
-										<div class="col-sm-2">
-											<div class="gallery-img-holder">
-												<a class="lightbox" href="#goofy">
-													<img src="/themes/{{ $shop_theme }}/img/img17.png">
-													<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full17.jpg"></div>
-												</a>
-											</div>
-											<div class="gallery-img-holder">
-												<a class="lightbox" href="#goofy">
-													<img src="/themes/{{ $shop_theme }}/img/img23.png">
-													<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full23.jpg"></div>
-												</a>
-											</div>
-										</div>
-										<div class="col-sm-2">
-											<div class="gallery-img-holder">
-												<a class="lightbox" href="#goofy">
-													<img src="/themes/{{ $shop_theme }}/img/img18.png">
-													<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full18.jpg"></div>
-												</a>
-											</div>
-											<div class="gallery-img-holder">
-												<a class="lightbox" href="#goofy">
-													<img src="/themes/{{ $shop_theme }}/img/img24.png">
-													<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full22.jpg"></div>
-												</a>
-											</div>
-										</div>
+										@endforeach
 									</div>
 								</div>
 							@endforeach
+						@else
+							<div class="item active">
+								<div class="row clearfix">
+									<div class="col-sm-2">
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img1.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full1.jpg"></div>
+											</a>
+										</div>
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img7.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full7.jpg"></div>
+											</a>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img2.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full2.jpg"></div>
+											</a>
+										</div>
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img8.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full8.jpg"></div>
+											</a>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img3.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full3.jpg"></div>
+											</a>
+										</div>
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img9.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full9.jpg"></div>
+											</a>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img4.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full4.jpg"></div>
+											</a>
+										</div>
+										<div class="gallery-img-holder">
+										<a class="lightbox" href="#goofy">
+											<img src="/themes/{{ $shop_theme }}/img/img10.png">
+											<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full10.jpg"></div>
+										</a>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img5.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full5.jpg"></div>
+											</a>
+										</div>
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img11.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full11.jpg"></div>
+											</a>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img6.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full6.jpg"></div>
+											</a>
+										</div>
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img12.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full12.jpg"></div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="item">
+								<div class="row clearfix">
+									<div class="col-sm-2">
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img1.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full1.jpg"></div>
+											</a>
+										</div>
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img7.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full7.jpg"></div>
+											</a>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img2.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full2.jpg"></div>
+											</a>
+										</div>
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img8.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full8.jpg"></div>
+											</a>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img3.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full3.jpg"></div>
+											</a>
+										</div>
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img9.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full9.jpg"></div>
+											</a>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img4.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full4.jpg"></div>
+											</a>
+										</div>
+										<div class="gallery-img-holder">
+										<a class="lightbox" href="#goofy">
+											<img src="/themes/{{ $shop_theme }}/img/img10.png">
+											<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full10.jpg"></div>
+										</a>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img5.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full5.jpg"></div>
+											</a>
+										</div>
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img11.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full11.jpg"></div>
+											</a>
+										</div>
+									</div>
+									<div class="col-sm-2">
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img6.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full6.jpg"></div>
+											</a>
+										</div>
+										<div class="gallery-img-holder">
+											<a class="lightbox" href="#goofy">
+												<img src="/themes/{{ $shop_theme }}/img/img12.png">
+												<div class="full-image hidden" path="/themes/{{ $shop_theme }}/img/full12.jpg"></div>
+											</a>
+										</div>
+									</div>
+								</div>
+							</div>
 						@endif
 					</div>
 					<a class="left carousel-control" href="#myCarousel" data-slide="prev"><img src="/themes/{{ $shop_theme }}/img/arrow-left1.png"></a>

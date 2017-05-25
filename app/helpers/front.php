@@ -135,3 +135,23 @@ function loop_content_get($data, $tab, $content)
 {
     return unserialize( get_content($data, $tab, $content) );
 }
+
+function loop_content_divide($data, $divide = 12)
+{
+    $current = [];
+    $current_array = 0;
+    $fix_data = array_values($data);
+    foreach ($fix_data as $key => $value) 
+    {
+        $i = $key + 1;
+
+        if ($i%$divide == 1) 
+        {
+            $current_array++;
+        }
+
+        $current[$current_array][$i] = $value;
+    }
+    
+    return $current;
+}

@@ -201,7 +201,7 @@
 		"about_company_profile_context" :
 		{
 			"label":"Company Profile Context",
-			"type":"textarea",
+			"type":"tinymce",
 			"default":"Insert Context Here",
 			"size":"4"
 		},
@@ -243,7 +243,7 @@
 		"about_company_responsibility_context" :
 		{
 			"label":"Company Responsibility context",
-			"type":"textarea",
+			"type":"tinymce",
 			"default":"Insert Context Here",
 			"size":"6"
 		},
@@ -285,7 +285,7 @@
 		"about_environmental_management_context" :
 		{
 			"label":"Environmental Management context",
-			"type":"textarea",
+			"type":"tinymce",
 			"default":"Insert Context Here",
 			"size":"6"
 		},
@@ -327,7 +327,7 @@
 		"about_livelihood_foundation_context" :
 		{
 			"label":"Runruno Livelihood Foundation context",
-			"type":"textarea",
+			"type":"tinymce",
 			"default":"Insert Context Here",
 			"size":"6"
 		},
@@ -397,7 +397,7 @@
 		"about_awards_context" :
 		{
 			"label":"Awards context",
-			"type":"textarea",
+			"type":"tinymce",
 			"default":"Insert Context Here",
 			"size":"6"
 		}

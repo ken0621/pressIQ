@@ -137,6 +137,11 @@
                                             </div>
                                         </div>
                                         @endif
+                                    @elseif($info->type == "tinymce")
+                                    <div class="match-height">
+                                        <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
+                                        <textarea name="info[{{ $keys }}][value]" class="tinymce">{{ $info->default }}</textarea>
+                                    </div>
                                     @else
                                     <div class="match-height">
                                         <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
@@ -269,10 +274,22 @@
 .slick-no-slide .slick-list {
     padding: 0;
 }
+
+.mce-notification-warning
+{
+    display: none;
+}
 </style>
 @endsection
 
 @section('script')
 <script type="text/javascript" src="/assets/slick/slick.js"></script>
 <script type="text/javascript" src="/assets/member/js/page_content.js"></script>
+<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+<script>tinymce.init({ 
+    selector:'.tinymce',
+    plugins: "lists",
+    menubar: false,
+    toolbar: "numlist bullist fontselect"
+ });</script>
 @endsection

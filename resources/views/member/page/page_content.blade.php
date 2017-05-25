@@ -290,6 +290,6 @@
     selector:'.tinymce',
     plugins: "lists",
     menubar: false,
-    toolbar: "numlist bullist fontselect"
+    toolbar: "numlist bullist bold italic underline strikethrough"
  });</script>
 @endsection

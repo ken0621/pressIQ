@@ -428,7 +428,7 @@
 		"runruno_context" :
 		{
 			"label":"Runruno Context",
-			"type":"textarea",
+			"type":"tinymce",
 			"default":"Insert Context Here",
 			"size":"6"
 		},
@@ -442,7 +442,7 @@
 		"runruno_gold_molybdenum_context" :
 		{
 			"label":"Gold Molybdenum Context",
-			"type":"textarea",
+			"type":"tinymce",
 			"default":"Insert Context Here",
 			"size":"6"
 		},
@@ -470,7 +470,7 @@
 		"runruno_keypoints_context" :
 		{
 			"label":"Keypoints Context",
-			"type":"textarea",
+			"type":"tinymce",
 			"default":"Insert Text Here",
 			"size":"6"
 		},
@@ -484,7 +484,7 @@
 		"runruno_geology_context" :
 		{
 			"label":"Geology Context",
-			"type":"textarea",
+			"type":"tinymce",
 			"default":"Insert Text Here",
 			"size":"6"
 		},
@@ -512,7 +512,7 @@
 		"runruno_feasibility_study_context" :
 		{
 			"label":"Feasibility Study Context",
-			"type":"textarea",
+			"type":"tinymce",
 			"default":"Insert Text Here",
 			"size":"6"
 		},

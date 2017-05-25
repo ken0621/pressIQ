@@ -77,7 +77,7 @@
                         <a href="/about" class="head-button link-nav {{ Request::segment(1) == 'about' ? 'active' : '' }}" id="company-profile">COMPANY PROFILE</a>
                         <a href="/runruno" class="head-button link-nav {{ Request::segment(1) == 'runruno' ? 'active' : '' }}" id="runruno">RUNRUNO</a>
                         <a href="javascript:" class="head-button link-nav" id="news">NEWS</a>
-                        <a href="/contactus" class="head-button link-nav {{ Request::segment(1) == 'contactus' ? 'active' : '' }}" id="contact-us">CONTACT US</a>
+                        <a href="/contact" class="head-button link-nav {{ Request::segment(1) == 'contactus' ? 'active' : '' }}" id="contact-us">CONTACT US</a>
                     </nav>
                 </div>
                 

@@ -62,7 +62,9 @@
             </td>
             <td class="text-center editable approved-in">__:__ __</td>
             <td class="text-center editable approved-out">__:__ __</td>
-            <td class="text-center edit-data zerotogray break">__:__</td>
+            <td class="text-center edit-data zerotogray ">
+                <input type="text" placeholder="00:00" name="break[{{ $timesheet->date}}][{{ $key }}]" class="form-control break time-entry break-time time-entry-24">
+            </td>
             <td class="text-center edit-data zerotogray normal-hours">__:__</td>
             <td class="text-center edit-data zerotogray late-hours">__:__</td>
             <td class="text-center edit-data zerotogray under-time">__:__</td>
@@ -138,6 +140,12 @@
                 <td>Total Regular Hours</td>
                 <td class="text-right">
                     {{$summary['regular_hours']}}
+                </td>
+            </tr>
+             <tr>
+                <td>Total Break</td>
+                <td class="text-right">
+                    {{$summary['break_hours']}}
                 </td>
             </tr>
             <tr>
@@ -242,12 +250,6 @@
             </tr>
 
             <tr>
-                <td><b>Total Working Days</b></td>
-                <td class="text-right">
-                    <b>{{$summary['total_working_days']}}</b>
-                </td>
-            </tr>
-            <tr>
                 <td width="50%">Total Leave with Pay</td>
                 <td class="text-right">
                     {{$summary['leave_with_pay']}}
@@ -259,6 +261,14 @@
                     {{$summary['leave_wo_pay']}}
                 </td>
             </tr>
+
+            <tr>
+                <td><b>Total Working Days</b></td>
+                <td class="text-right">
+                    <b>{{$summary['total_working_days']}}</b>
+                </td>
+            </tr>
+            
         </table>
     </div>
 </div>
@@ -266,27 +276,41 @@
     <div class="form-group">
         <div class="col-md-12">
             <small>Reminder Box</small>
-            <div class="message-box"></div>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-12">
-            <textarea class="form-control textarea-expand" placeholder="type here.."></textarea>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-md-8">
-            <div class="checkbox">
-                <label><input type="checkbox" name="">Can be view by employee</label>
+            <div class="message-box">
+                @foreach($_remarks as $remarks)
+                <div class="message-container">
+                    <p>{{$remarks['message']}}</p>
+                    <span class="date-message f-9"><i>{{date('F d, Y h:i:s', strtotime($remarks['date']))}}</i></span>
+                    <span class="pull-right user-message"><b>-{{$remarks['user']}}</b></span>
+                </div>
+                @endforeach
             </div>
         </div>
-        <div class="col-md-4">
-            <button class="btn btn-custom-primary pull-right" title="send message" type="button"><i class="fa fa-paper-plane-o"></i></button>
-            <label class="btn btn-custom-white pull-right margin-lr-5" title="upload file"><i class="fa fa-paperclip"></i><input type="file" name="" class="hide"></label>
+    </div>
+    <div class="form-message" action="/member/payroll/timesheet/send_reminder" method="POST" data-btn=".btn-send-message">
+        <input type="hidden" id="_token" name="payroll_period_company_id" value="{{$payroll_period_company_id}}">
+        <input type="hidden" name="_token" value="{{csrf_token()}}">
+        <div class="form-group">
+            <div class="col-md-12">
+                <textarea class="form-control textarea-expand" name="payroll_remarks" placeholder="type here.."></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-8">
+                <!-- <div class="checkbox">
+                    <label><input type="checkbox" name="">Can be view by employee</label>
+                </div> -->
+                <span class="file-name"></span>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-custom-primary pull-right btn-send-message" title="send message" type="button"><i class="fa fa-paper-plane-o"></i></button>
+                <label class="btn btn-custom-white pull-right margin-lr-5" title="upload file"><i class="fa fa-paperclip"></i><input type="file" name="file_name" class="hide file-input-message"></label>
+            </div>
         </div>
     </div>
 </div>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/send_message_timesheet.js"></script>
 <script type="text/javascript">
     default_time_in = '{{ $default_time_in }}';
     default_time_out = '{{ $default_time_out }}';

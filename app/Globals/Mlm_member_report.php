@@ -36,6 +36,7 @@ class Mlm_member_report
 		$report = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', $complan)
         ->where('wallet_log_slot', $slot)
         ->sponsorslot()
+        ->customer()
         ->paginate(10);
         foreach($report as $key => $value)
         {

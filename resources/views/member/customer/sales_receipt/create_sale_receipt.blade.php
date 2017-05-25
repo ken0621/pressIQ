@@ -357,7 +357,7 @@
                                                                 <td class="cm-number-td text-right">1</td>
                                                                 <td>
                                                                     <select class="form-control select-item droplist-item-cm input-sm pull-left {{$cmline->cmline_item_id}}" name="cmline_item_id[]" required>
-                                                                        @include("member.load_ajax_data.load_item_category", ['add_search' => "", 'item_id' => $cmline->cmline_item_id])
+                                                                        @include("member.load_ajax_data.load_item", ['add_search' => "", 'item_id' => $cmline->cmline_item_id])
                                                                     </select>
                                                                 </td>
                                                                 <td><textarea class="textarea-expand txt-desc" name="cmline_description[]" value="{{$cmline->cmline_service_date}}"></textarea></td>
@@ -389,7 +389,7 @@
                                                             <td class="cm-number-td text-right">1</td>
                                                             <td>
                                                                 <select class="1111 form-control select-item droplist-item-cm input-sm pull-left" name="cmline_item_id[]" >
-                                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => "", "_item" => $_cm_item])
+                                                                    @include("member.load_ajax_data.load_item", ['add_search' => "", "_item" => $_cm_item])
                                                                     <option class="hidden" value="" />
                                                                 </select>
                                                             </td>
@@ -412,7 +412,7 @@
                                                             <td class="cm-number-td text-right">2</td>
                                                             <td>
                                                                 <select class="22222 form-control select-item droplist-item-cm input-sm pull-left" name="cmline_item_id[]" >
-                                                                    @include("member.load_ajax_data.load_item_category", ['add_search' => "","_item" => $_cm_item])
+                                                                    @include("member.load_ajax_data.load_item", ['add_search' => "","_item" => $_cm_item])
                                                                     <option class="hidden" value="" />
                                                                 </select>
                                                             </td>
@@ -508,7 +508,7 @@
             <td class="cm-number-td text-right">2</td>
             <td>
                 <select class="22222 form-control select-item input-sm pull-left" name="cmline_item_id[]" >
-                    @include("member.load_ajax_data.load_item_category", ['add_search' => "","_item" => $_cm_item])
+                    @include("member.load_ajax_data.load_item", ['add_search' => "","_item" => $_cm_item])
                     <option class="hidden" value="" />
                 </select>
             </td>

@@ -39,8 +39,8 @@
 				<tr {{$total_price += $item->item_cost * $item->inventory_count}}>
 					<td>{{$item->item_id}}</td>
 					<td>{{$item->item_name}}</td>
-					<td>{{$item->inventory_count}}</td>
-					<td>{{$item->multi_abbrev}}</td>
+					<td>{{$item->qty_um}}</td>
+					<td>{{$item->conversion}}</td>
 					<td>{{currency("P",$item->item_cost)}}</td>
 					<td>{{currency("P",($item->item_cost * $item->inventory_count))}}</td>
 				</tr>

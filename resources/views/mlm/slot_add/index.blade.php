@@ -5,9 +5,14 @@
 		border-radius: 7px; width: 100%;
 		height: 30px;
 	}
+	.form_container
+	{
+		max-height: 500px;
+		overflow: scroll;
+	}
 </style>
 <center>
-<div>
+<div class="form_container">
 	<form class="global-submit" method="post" action="/mlm/claim/slot">
 	{!! csrf_field() !!}
 	<div>
@@ -135,6 +140,35 @@
 			</tr>
 			<tr>
 				<td>
+					<div class="col-md-12">
+						<label>Choose Owner</label>
+						<label><input id="your_account" type="radio" class="col-md-6" name="choose_owner" value="your" checked>Your Account</label>
+						<label><input id="new_user" type="radio" class="col-md-6" name="choose_owner" value="new">New User</label>
+					</div>
+					<div class="col-md-12 new_form" style="display:none">
+					    <label>First Name</label>
+						<input class="form-control new_input" type="text" value="" name="first_name" disabled>
+						<label>Last Name</label>
+						<input class="form-control new_input" type="text" value="" name="last_name" disabled>
+						<label>Email</label>
+						<input class="form-control new_input" type="email" value="" name="email" disabled>
+						<label>Username</label>
+						<input class="form-control new_input" type="text" value="" name="mlm_username" disabled>						
+						<label>Password</label>
+						<input class="form-control new_input" type="password" value="" name="password" disabled>				
+						<label>Confirm Password</label>
+						<input class="form-control new_input" type="password" value="" name="c_password" disabled>
+						<label>Country</label>
+						<select name="country_id" class="form-control new_input" disabled>
+							@foreach($country as $ctry)
+								<option value="{{$ctry->country_id}}">{{$ctry->country_name}}</option>
+							@endforeach
+						</select>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
 					<button class="btn btn-primary pull-right" id="rcorners3">SUBMIT</button>
 				</td>
 			</tr>
@@ -169,6 +203,25 @@
     		window.location = "/mlm/login";
     	}
 	}
+
+	$(document).ready(function() 
+	{
+	    $('input[type=radio][name=choose_owner]').change(function() 
+	    {
+	        if (this.value == 'your') 
+	        {
+	            $(".new_form").hide();
+	            $(".new_input").attr('disabled', true);
+	            $(".append_error").empty();
+	        }
+	        else if (this.value == 'new') 
+	        {
+	         	$(".new_form").show();
+	         	$(".new_input").attr('disabled', false);
+	         	$(".append_error").empty();
+	        }
+	    });
+	});
 
 </script>
 <script type="text/javascript">

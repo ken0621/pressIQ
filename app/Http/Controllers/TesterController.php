@@ -31,6 +31,7 @@ use Session;
 use Validator;
 use Redirect;
 use Crypt;
+use DB;
 
 class TesterController extends Controller
 {
@@ -55,7 +56,7 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        dd(Report::checkDatePeriod('days_ago',['days' => 65]));
+        dd(date('n'));
     }
 
     public function getJournal()

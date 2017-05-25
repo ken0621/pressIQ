@@ -389,13 +389,14 @@ class MLM_ProductCodeController extends Member
         $data["_code"]           = $_code;
         $data["shop_address"]    = $this->user_info->shop_street_address;
         $data["shop_contact"]    = $this->user_info->shop_contact;
-        $data['company_name'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
-        $data['company_email'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
-        $data['company_logo'] = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
-        $data['item_list'] = Tbl_item_code_item::where('item_code_invoice_id', $id)->get();    
+        $data['company_name']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_name')->pluck('value');
+        $data['company_email']   = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'company_email')->pluck('value');
+        $data['company_logo']    = DB::table('tbl_content')->where('shop_id', $shop_id)->where('key', 'receipt_logo')->pluck('value');
+        $data['item_list']       = Tbl_item_code_item::where('tbl_item_code_item.item_code_invoice_id', $id)->join("tbl_item_code","tbl_item_code.item_code_id","=","tbl_item_code_item.item_code_id")->get();    
         $subtotal                = Tbl_item_code::where("item_code_invoice_id",$invoice->item_code_invoice_id)->item()->sum("item_code_price");
         $discount_amount         = $invoice->item_discount;
         $total                   = $subtotal - $discount_amount;
+
         $data['slot'] = Tbl_mlm_slot::where('slot_id', $invoice->slot_id)->first();
         $data["subtotal"]        = $subtotal;
         $data["discount_amount"] = $discount_amount;

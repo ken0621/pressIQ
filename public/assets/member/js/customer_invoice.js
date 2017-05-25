@@ -4,7 +4,8 @@ var global_tr_html = $(".div-script tbody").html();
 var global_tr_html_cm = $(".div-script-cm tbody").html();
 var item_selected = ''; 
 
-function customer_invoice(){
+function customer_invoice()
+{
 	init();
 
 	function init()
@@ -25,6 +26,7 @@ function customer_invoice(){
 		action_date_picker();
 		action_reassign_number();
 
+		$('.droplist-customer').change();
 	}
 	function event_remove_tr()
 	{

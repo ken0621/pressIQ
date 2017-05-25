@@ -242,8 +242,14 @@ class MlmDashboardController extends Mlm
         $validator = Validator::make($v,$r);
         if ($validator->passes())
         {
-
-            return Mlm_member::add_slot(Self::$shop_id, Self::$customer_id);
+            if(Request::input("type") == "manual")
+            {
+                return Mlm_member::manual_add_slot(Self::$shop_id, Self::$customer_id);
+            }
+            else
+            {
+                return Mlm_member::add_slot(Self::$shop_id, Self::$customer_id);
+            }
         }
         else
         {

@@ -240,6 +240,7 @@ Route::any('member/mlm/merchant_school', 'Member\BeneficiaryController@index');
 Route::any('member/mlm/tours_wallet', 'Member\Mlm_ComplanSetupController@tours_wallet'); 
 
 Route::any('member/mlm/merchant_school/create', 'Member\BeneficiaryController@create'); 
+Route::any('member/mlm/merchant_school/get/receipt', 'Member\BeneficiaryController@receipt'); 
 Route::any('member/mlm/merchant_school/get', 'Member\BeneficiaryController@get'); 
 Route::any('member/mlm/merchant_school/destroy', 'Member\BeneficiaryController@destroy'); 
 Route::any('member/mlm/merchant_school/get/table', 'Member\BeneficiaryController@get_table'); 

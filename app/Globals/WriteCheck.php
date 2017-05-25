@@ -265,7 +265,7 @@ class WriteCheck
                     $entry_data[$key]['item_id']            = $item_line['itemline_item_id'];
                     $entry_data[$key]['entry_qty']          = $item_line['itemline_qty'];
                     $entry_data[$key]['vatable']            = 0;
-                    $entry_data[$key]['discount']           = $discount;
+                    $entry_data[$key]['discount']           = 0;
                     $entry_data[$key]['entry_amount']       = $item_line['itemline_amount'];
                     $entry_data[$key]['entry_description']  = $item_line['itemline_description'];  
                 }

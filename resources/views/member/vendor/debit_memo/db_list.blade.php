@@ -12,7 +12,12 @@
                     List of Vendor Debit Memo
                 </small>
             </h1>
-            <a class="panel-buttons btn btn-custom-primary pull-right popup" size="md" link="/member/vendor/debit_memo/choose_type">Create Debit Memo</a>
+            @if($pis != 0)
+            <a class="panel-buttons btn btn-custom-primary pull-right popup" size="md" 
+             link="/member/vendor/debit_memo/choose_type">Create Debit Memo</a>
+            @else
+            <a class="panel-buttons btn btn-custom-primary pull-right" href="/member/vendor/debit_memo">Create Debit Memo</a>            
+            @endif
         </div>
     </div>
 </div>
@@ -43,7 +48,9 @@
                             <th>Debit Memo No</th>
                             <th>Vendor Name</th>
                             <th>Total</th>
+                            @if($pis != 0)
                             <th>Type</th>
+                            @endif
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -54,9 +61,11 @@
                                 <td>{{$db->db_id}}</td>
                                 <td>{{$db->vendor_company or $db->vendor_title_name." ".$db->vendor_first_name." ".$db->vendor_middle_name." ".$db->vendor_last_name." ".$db->vendor_suffix_name}}</td>
                                 <td>{{currency("PHP",$db->db_amount)}}</td>
+                                @if($pis != 0)
                                 <td class="{{$db->is_bad_order == 1 ? $type='Bad Order' : $type='Debit Memo'}}">
-                                    {{$type}}
+                                    {{$type or ''}}
                                 </td>
+                                @endif
                                 <td class="text-center">
                                     <div class="btn-group">
                                       <button type="button" class="btn btn-sm btn-custom-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -76,7 +85,7 @@
                                               <li><a href="/member/vendor/debit_memo/replace/{{$db->db_id}}">Edit Condemned</a></li>
                                             @endif
                                         @else
-                                            <li><a href="/member/vendor/debit_memo?id={{$db->db_id}}">Edit {{$type}}</a></li>
+                                            <li><a href="/member/vendor/debit_memo?id={{$db->db_id}}">Edit {{$type or "Debit Memo"}}</a></li>
                                         @endif
                                       </ul>
                                     </div>

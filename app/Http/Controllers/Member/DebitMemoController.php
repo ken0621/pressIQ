@@ -20,6 +20,7 @@ use App\Globals\DebitMemo;
 use App\Globals\Warehouse;
 use App\Globals\Utilities;
 use App\Globals\Pdf_global;
+use App\Globals\Purchasing_inventory_system;
 use App\Http\Controllers\Controller;
 use Request;
 
@@ -40,6 +41,12 @@ class DebitMemoController extends Member
         $access = Utilities::checkAccess('vendor-debit-memo', 'access_page');
         if($access == 1)
         { 
+            $data["type"] = "Debit Memo";
+            if(Request::input("type") == "bad_order")
+            {
+                $data["type"] = "Bad Orders";
+            }
+
             $data["page"]       = "Debit Memo";
             $data["_vendor"]    = Vendor::getAllVendor('active');
             $data['_item']      = Item::get_all_category_item();
@@ -407,6 +414,8 @@ class DebitMemoController extends Member
         $access = Utilities::checkAccess('vendor-debit-memo', 'access_page');
         if($access == 1)
         { 
+            $data["pis"] = Purchasing_inventory_system::check();
+
             $data["_db"] = Tbl_debit_memo::vendor()->where("vendor_shop_id", $this->getShopId())->orderBy("tbl_debit_memo.db_id","DESC")->get();
 
             foreach ($data["_db"] as $key => $value) 

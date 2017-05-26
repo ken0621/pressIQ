@@ -77,7 +77,6 @@ class ShopCheckoutController extends Shop
         $_name = $this->split_name($full_name);
 
         /* SET FIRST NAME, LAST NAME AND CONTACT */
-        $customer_info["current_user"] = Self::$customer_info;
         $customer_info["first_name"] = $_name[0];
         $customer_info["last_name"] = $_name[1];
         $customer_info["customer_contact"] = Request::input("contact_number");
@@ -114,10 +113,6 @@ class ShopCheckoutController extends Shop
     {
         if(Request::isMethod("post"))
         {
-            $current = Cart::get_info($this->shop_info->shop_id);
-            $current["payment_method_id"] = Request::input("payment_method_id");
-            Session::put(Cart::get_unique_id($this->shop_info->shop_id), $current);
-
             Cart::process_payment($this->shop_info->shop_id);
         }
         else
@@ -163,7 +158,7 @@ class ShopCheckoutController extends Shop
         $payment_status = 1;
         $order_status   = "Processing";
 
-        Cart::submit_order($shop_id, $payment_status, $order_status);
+        Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info->customer_id);
         // echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
         // $shop_id = $this->shop_info->shop_id;
         // $data = Cart::get_info($shop_id);

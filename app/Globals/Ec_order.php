@@ -550,24 +550,72 @@ class Ec_order
 
     public static function create_ec_order_from_cart($order_info)
     {
-        $customer_id = $order_info["tbl_customer"]["customer_id"];
+        if($order_info["customer_id"])
+        {
+            $customer_id = $order_info["customer_id"];
+        }
+        else
+        {
+            $customer_id = $order_info["tbl_customer"]["customer_id"]; 
+        }
 
         /* Check if Customer Account Exist */
-        $customer = DB::table("tbl_customer")->where("customer_id", $customer_id)->first();
+        $customer_query = DB::table("tbl_customer")->where("customer_id", $customer_id);
+        $customer = $customer_query->first();
         if ($customer) 
         {
+            $customer_other_info = DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first();
+
             $order_info["tbl_customer"]["customer_id"] = $customer->customer_id;
             $order_info["tbl_customer"]["first_name"] = $customer->first_name;
             $order_info["tbl_customer"]["last_name"] = $customer->last_name;
             $order_info["tbl_customer"]["middle_name"] = $customer->middle_name;
             $order_info["tbl_customer"]["email"] = $customer->email;
             $order_info["tbl_customer"]["password"] = $customer->password;
-            $order_info["tbl_customer"]["customer_contact"] = $customer->customer_contact;
+            $order_info["tbl_customer"]["customer_mobile"] = $customer_other_info->customer_mobile;
+        }
+        else
+        {
+            unset($order_info["tbl_customer"]["customer_id"]);
+            $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
+            unset($order_info["tbl_customer"]["customer_contact"]);
+            $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);
+            $other_insert["customer_mobile"] = $customer_mobile;
+            DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->insert($other_insert);
         }
 
-        /* Check if Customer Address Exist */
-        // $customer_address = DB::table("tbl_customer_address")->where("customer_id", $customer_id)->where("purpose", "shipping")->first();
+        /* Check if Customer Address Exist to Update if not Insert */
+        foreach ($order_info["tbl_customer_address"] as $key => $value) 
+        {
+            $value["customer_id"]      = $customer_id;
+            $value["customer_zipcode"] = $value["customer_zip_code"];
+            $value["purpose"]          = $key;
+            unset($value["customer_zip_code"]);
+            $query = DB::table("tbl_customer_address")->where("customer_id", $customer_id)->where("purpose", $value["purpose"]);
+            $customer_address = $query->first();
+            
+            if ($customer_address) 
+            {
+                $query->update($value);
+            }
+            else
+            {
+                $query->insert($value);
+            }
+        }
 
-        
+        /* Insert Order */
+        unset($order_info["tbl_ec_order"]["ec_order_id"]);
+        dd($order_info);
+        $order_info["tbl_ec_order"]["ec_order_id"] = DB::table("tbl_ec_order")->insertGetId($order_info["tbl_ec_order"]);
+
+        /* Insert Order Item */
+        foreach ($order_info["tbl_ec_order_item"] as $key => $value) 
+        {
+            $order_info["tbl_ec_order_item"][$key]["ec_order_id"] = $order_info["tbl_ec_order"]["ec_order_id"];
+            DB::table("tbl_ec_order_item")->insert($value);
+        }
+
+        echo "Success";
     }
 }

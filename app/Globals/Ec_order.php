@@ -550,6 +550,24 @@ class Ec_order
 
     public static function create_ec_order_from_cart($order_info)
     {
-        dd($order_info);
+        $customer_id = $order_info["tbl_customer"]["customer_id"];
+
+        /* Check if Customer Account Exist */
+        $customer = DB::table("tbl_customer")->where("customer_id", $customer_id)->first();
+        if ($customer) 
+        {
+            $order_info["tbl_customer"]["customer_id"] = $customer->customer_id;
+            $order_info["tbl_customer"]["first_name"] = $customer->first_name;
+            $order_info["tbl_customer"]["last_name"] = $customer->last_name;
+            $order_info["tbl_customer"]["middle_name"] = $customer->middle_name;
+            $order_info["tbl_customer"]["email"] = $customer->email;
+            $order_info["tbl_customer"]["password"] = $customer->password;
+            $order_info["tbl_customer"]["customer_contact"] = $customer->customer_contact;
+        }
+
+        /* Check if Customer Address Exist */
+        // $customer_address = DB::table("tbl_customer_address")->where("customer_id", $customer_id)->where("purpose", "shipping")->first();
+
+        
     }
 }

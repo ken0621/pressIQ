@@ -895,7 +895,6 @@ class Cart
      *
      * @param
      *    $shop_id (int) - Current Shop ID (for validation)
-     *    $order_id (int) - Current Order ID (for updating)
      *    $payment_status (int) - 0 = not paid, 1 = paid
      *    $order_status (str) - Pending, Failed, Processing, Shipped, Completed, On-Hold, Cancelled
      *
@@ -907,12 +906,11 @@ class Cart
      */
     public static function submit_order($shop_id, $payment_status, $order_status)
     {
-        $insert                   = Self::get_info();
-        $insert["shop_id"]        = $shop_id;
-        $insert["payment_status"] = $payment_status;
-        $insert["order_status"]   = $order_status;
-       
-        return Ec_order::create_ec_order_from_cart($insert);   
+        $order                                   = Cart::get_info($shop_id);
+        $order["tbl_ec_order"]["payment_status"] = $payment_status;
+        $order["tbl_ec_order"]["order_status"]   = $order_status;
+        
+        return Ec_order::create_ec_order_from_cart($order);   
     }
 
     public static function process_payment($shop_id)

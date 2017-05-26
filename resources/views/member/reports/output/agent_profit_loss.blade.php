@@ -10,7 +10,7 @@
 							<th>#</th>
 							<th>Agent Name</th>
 							<th class="text-right">Sales</th>
-							<th class="text-right">Discrepancy</th>
+							<!-- <th class="text-right">Discrepancy</th> -->
 							<th class="text-right">ILR Losses</th>
 							<th class="text-right">ILR Over</th>
 							<th class="text-right">Total Discrepancy</th>
@@ -22,7 +22,7 @@
 								<td>{{$key+1}}</td>
 								<td>{{$agnt['agent_name']}}</td>
 								<td class="text-right">{{currency('PHP',$agnt['total_sales'])}}</td>
-								<td class="text-right">{{currency('PHP',$agnt['discrepancy'])}}</td>
+								<!-- <td class="text-right">currency('PHP',$agnt['discrepancy'])</td> -->
 								<td class="text-right">{{currency('PHP',$agnt['total_loss'])}}</td>
 								<td class="text-right">{{currency('PHP',$agnt['total_over'])}}</td>
 								<td class="text-right">{{currency('PHP',$agnt['total_discrepancy'])}}</td>

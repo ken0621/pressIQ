@@ -37,7 +37,7 @@
 				@if($counter==$payslip_num)
 					<tr></tr>
 				@endif
-				<td>
+				<td valign="top">
 					<div class="div-payslip">
 					<table cellpadding="5" cellspacing="0" class="border padding-5" width="100%">
 						@if($payslip->include_company_logo == 1)

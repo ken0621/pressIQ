@@ -31,7 +31,7 @@
 								<small>Payslip width (%)</small>
 								{{-- <input type="number" name="payslip_width" class="form-control text-right payslip-width" placeholder="0" min="1" max="100" value="50" step="any" required> --}}
 
-								<select class="form-control drop-down payslip-width" name="payslip_width">
+								<select class="form-control text-right payslip-width" name="payslip_width">
 									<option value="100">100%</option>
 									<option value="50" >50%</option>
 									<option value="25" >20%</option>

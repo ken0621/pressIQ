@@ -129,7 +129,7 @@
     </div>
 </div>  
 
-<div class="col-md-12 col-sm-6 col-xs-12">
+<!-- <div class="col-md-12 col-sm-6 col-xs-12">
   <div class="info-box">
     <span class="info-box-icon bg-primary"><i class="fa fa-cart-arrow-down"></i></span>
 
@@ -143,8 +143,8 @@
 <br>
 <br>
 <br>
-<br>
-<div class="panel panel-default panel-block panel-title-block" id="top">
+<br> -->
+<!-- <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
             <div style="overflow-x:auto;">
@@ -173,7 +173,7 @@
             </div>
         </div>
     </div>
-</div>   
+</div>  -->  
 <script type="text/javascript">
     show_currency();
 </script>

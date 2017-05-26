@@ -715,7 +715,7 @@ class Payroll
 
 
 		$time_record = collect($data['time_sheet_info'])->toArray();
-		// dd($time_record);
+
 		if(isset($time_record['payroll_time_sheet_break']))
 		{
 			if($time_record['payroll_time_sheet_break'] != '00:00:00')
@@ -724,9 +724,6 @@ class Payroll
 			}
 		}
 
-		
-
-	
 		$default_time_in 	= c_time_to_int($default_time_in);
 		$default_time_out 	= c_time_to_int($default_time_out);
 		$time_rec = null;
@@ -738,6 +735,9 @@ class Payroll
 		$time_in = 0;
 		$time_out = 0;
 
+		$time_in_str = '00:00';
+		$time_out_str = '00:00';
+
 		// $target_hour = $data["employee_information"]->payroll_group_target_hour;
 
 		/* BREAK COMPUTATION */
@@ -745,10 +745,6 @@ class Payroll
 		// {
 		// 	$break = $data["employee_information"]->payroll_group_flexi_break * 60;
 		// }
-
-		// Tbl_payroll_shift
-		// Tbl_payroll_employee_schedule
-
 
 
 		/* CHECK EACH TIME */
@@ -759,11 +755,17 @@ class Payroll
 			{
 				$time_in = c_time_to_int($time_record->payroll_time_sheet_approved_in);
 				$time_out = c_time_to_int($time_record->payroll_time_sheet_approved_out);
+
+				$time_in_str = $time_record->payroll_time_sheet_approved_in;
+				$time_out_str = $time_record->payroll_time_sheet_approved_out;
 			}
 			else
 			{
 				$time_in = c_time_to_int($time_record->payroll_time_sheet_in);
 				$time_out = c_time_to_int($time_record->payroll_time_sheet_out);
+
+				$time_in_str = $time_record->payroll_time_sheet_in;
+				$time_out_str = $time_record->payroll_time_sheet_out;
 			}
 
 
@@ -890,10 +892,10 @@ class Payroll
 
 			
 			/* CHECK IF NIGHT DIFFERENTIAL SCENARIO 1 (Later than 10:00 PM) */
-			if($time_out > $night_differential_pm)
+			if($time_out >= $night_differential_pm)
 			{
 				
-				if($time_in > $night_differential_pm)
+				if($time_in >= $night_differential_pm)
 				{
 					$night_differential = $time_out - $time_in;
 				}
@@ -904,9 +906,9 @@ class Payroll
 			}
 
 			/* CHECK IF NIGHT DIFFERENTIAL SCENARIO 1 (Earlier than 06:00 AM) */
-			if($time_in < $night_differential_am)
+			if($time_in <= $night_differential_am)
 			{
-				if($time_out < $night_differential_am)
+				if($time_out <= $night_differential_am)
 				{
 					$night_differential = $time_out - $time_in;
 				}
@@ -914,6 +916,24 @@ class Payroll
 				{
 					$night_differential = $night_differential_am - $time_in;
 				}
+			}
+
+			if($time_in >= $night_differential_pm)
+			{
+
+				$less_time_out = $time_out - $night_differential_am;
+				$less_time_in  = $time_in - $night_differential_pm;
+
+				if($less_time_out > 0)
+				{
+					$less_time_out = 0;
+				}
+				if($less_time_in > 0)
+				{
+					$less_time_in = 0;
+				}
+
+				$night_differential = $time_spent + ($less_time_out + $less_time_in);
 			}
 
 

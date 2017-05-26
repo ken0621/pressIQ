@@ -6156,7 +6156,7 @@ class PayrollController extends Member
           
           //return view('member.payroll.payroll_payslipv1', $data);
 
-          $view = 'member.payroll.payroll_payslipv2';             
+          $view = 'member.payroll.payroll_payslipv1';             
           $pdf = PDF::loadView($view, $data);
           return $pdf->stream('Paycheque.pdf');
 

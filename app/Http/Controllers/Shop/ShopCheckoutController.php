@@ -188,6 +188,14 @@ class ShopCheckoutController extends Shop
         $data["backendUrl"] = URL::to('/ipay88_response');
         $data["merchantKey"] = $api->api_secret_id;
         $data["merchantCode"] = $api->api_client_id;
+
+        if ($data['new_account'] == false) 
+        {
+            $info = DB::table('tbl_customer')->where("customer_id", $data["tbl_customer"]["customer_id"])->first();
+
+            $data["userName"] = $info->first_name . " " . $info->last_name;
+        }
+
         $requestpayment = new RequestPayment($data["merchantKey"]);
 
         $this->_data = array(

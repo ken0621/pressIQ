@@ -94,7 +94,7 @@ class WarehouseController extends Member
                     
                     $all_item = Tbl_sub_warehouse::select_item($value->warehouse_id)
                                                  ->get();
-
+                    $qty = 0;
                     foreach ($all_item as $key2 => $value2) 
                     {
                         $qty = Tbl_warehouse_inventory::where("warehouse_id",$value2->warehouse_id)->leftjoin("tbl_item","inventory_item_id","=","item_id")->where("tbl_item.archived",0)->sum("inventory_count");

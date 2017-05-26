@@ -36,7 +36,6 @@
                       <thead>
                           <tr>
                               <th>#</th>
-                              <th>Paid</th>
                               <th>Customer</th>
                               <th>Total Price</th>
                               <th></th>
@@ -46,7 +45,6 @@
                           @foreach($_invoices as $inv)
                           <tr style="color: {{$inv->inv_is_paid == 1? '#00b33c' : '#000' }};">
                             <td>{{$inv->inv_id}}</td>
-                            <td><input type="checkbox" name="paid" disabled {{$inv->inv_is_paid == 1? 'checked' : '' }} ></td>
                             <td>
                               @if($inv->company != null)
                               {{$inv->company}}
@@ -66,11 +64,7 @@
                                         @else
                                          <li><a size="lg" link="/tablet/view_invoice_view/{{$inv->inv_id}}" class="popup">View Receipt</a></li>
                                         @endif
-<<<<<<< HEAD
-                                        <li><a href="/tablet/sales_receipt?id={{$inv->inv_id}}&sir_id={{Session::get('selected_sir')}}">Edit Sales Receipt</a></li>                                        
-=======
-                                        <li><a href="/tablet/sales_receipt?id={{$inv->inv_id}}&sir_id={{Session::get('sir_id')}}">Edit Sales Receipt</a></li>                                        
->>>>>>> testing
+                                        <li><a href="/tablet/sales_receipt?id={{$inv->inv_id}}&sir_id={{Session::get('sir_id')}}">Edit Sales Receipt</a></li>
                                     </ul>
                                 </div>
                             </td>

@@ -21,10 +21,6 @@ class ShopLoginController extends Shop
     public function index()
     {
         $data["page"] = "Login";
-        if (isset($data["get_cart"]['cart']) && isset($data["get_cart"]["tbl_ec_order"]) && isset($data["get_cart"]["tbl_ec_order_item"]) && isset($data["get_cart"]["sale_information"])) 
-        {
-        	return Redirect::to("/");
-        }
         return view("login", $data);
     }
     public function submit()

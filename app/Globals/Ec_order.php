@@ -576,6 +576,14 @@ class Ec_order
             $order_info["tbl_customer"]["password"] = $customer->password;
             $order_info["tbl_customer"]["customer_mobile"] = $customer_other_info->customer_mobile;
             $order_info["tbl_ec_order"]["customer_id"] = $customer->customer_id;
+
+            if (!DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 
+            {
+                $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
+                $other_insert["customer_mobile"] = $customer_mobile;
+                $other_inesrt["customer_id"]     = $customer_id;
+                DB::table("tbl_customer_other_info")->insert($other_insert);
+            }
         }
         else
         {

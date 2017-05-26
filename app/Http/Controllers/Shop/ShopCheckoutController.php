@@ -77,6 +77,7 @@ class ShopCheckoutController extends Shop
         $_name = $this->split_name($full_name);
 
         /* SET FIRST NAME, LAST NAME AND CONTACT */
+        $customer_info["current_user"] = Self::$customer_info;
         $customer_info["first_name"] = $_name[0];
         $customer_info["last_name"] = $_name[1];
         $customer_info["customer_contact"] = Request::input("contact_number");

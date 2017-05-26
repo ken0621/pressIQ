@@ -168,9 +168,10 @@ class Report
 	 * Perform the right action depending on the report type gives
 	 *
 	 * @param  string  	$report_type 	( plain, pdf, excel)
-	 * @param  string  	$view  		 	
-	 * @param  array    $data	
-	 * @param  string   $name			
+	 * @param  string  	$view  		 	output view for the report	
+	 * @param  array    $data			all data for the repjort
+	 * @param  string   $name			name for the excel type
+	 * @param  string   $pdf_format		landscape or portrait : default is landscape	
 	 * @author BKA	
 	 */
 	public static function check_report_type($report_type, $view, $data, $name="File", $pdf_format = "landscape")

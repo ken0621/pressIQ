@@ -211,7 +211,7 @@ class ReportsController extends Member
         }
         $view = 'member.reports.'.$blade;
         // dd($data);
-        
+        //return view($view, $data);
         $pdf = PDF::loadView($view,$data);
         return $pdf->stream('Paycheque.pdf');
     }

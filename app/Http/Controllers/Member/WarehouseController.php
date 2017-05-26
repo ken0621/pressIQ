@@ -1026,7 +1026,7 @@ class WarehouseController extends Member
         if($data['status'] == 'success')
         {
             $w_data = AuditTrail::get_table_data("tbl_warehouse","warehouse_id",$warehouse_id);
-            AuditTrail::record_logs("Edited","warehouse",$id,serialize($old_data),serialize($w_data));
+            AuditTrail::record_logs("Edited","warehouse",$warehouse_id,serialize($old_data),serialize($w_data));
         }
 
              return json_encode($data);

@@ -189,16 +189,16 @@
             <div class="col-md-12">
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                  <div class="form-group">
-                        <div class="col-md-8">
-                            <label>Name *</label>
-                            <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
-                            <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea><br>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            <input type="hidden" name="item_img" class="image-value" key="2" required>
-                            <img class="img-responsive img-src" key="2" style="width: 100%; object-fit: contain;" src="/assets/front/img/default.jpg">
-                            <button type="button" class="btn btn-primary image-gallery image-gallery-single" key="2" style="margin-top: 15px;">Upload Image</button>
-                        </div>
+                    <div class="col-md-8">
+                        <label>Name *</label>
+                        <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
+                        <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea><br>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <input type="hidden" name="item_img" class="image-value" key="2" required>
+                        <img class="img-responsive img-src" key="2" style="width: 100%; object-fit: contain;" src="/assets/front/img/default.jpg">
+                        <button type="button" class="btn btn-primary image-gallery image-gallery-single" key="2" style="margin-top: 15px;">Upload Image</button>
+                    </div>
                  </div>
                 <div class="form-group">                        
                     <div class="col-md-4">

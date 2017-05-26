@@ -566,12 +566,12 @@ class Ec_order
 
         if ($customer) 
         {
-            dd($customer->customer_id);
             if (!DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 
             {
                 $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
                 $other_insert["customer_mobile"] = $customer_mobile;
                 $other_inesrt["customer_id"]     = $customer_id;
+                dd($other_insert);
                 DB::table("tbl_customer_other_info")->insert($other_insert);
             }
 

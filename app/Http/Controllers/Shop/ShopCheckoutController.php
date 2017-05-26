@@ -176,11 +176,10 @@ class ShopCheckoutController extends Shop
                 $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . ", ";
             }
         }
-
+        dd($data["tbl_customer"]);
         $data["currency"] = "PHP";
         $data["prodDesc"] = $product_summary;
         $data["userName"] = $data["tbl_customer"]["first_name"] . " " . $data["tbl_customer"]["last_name"];
-        dd($data["userName"]);
         $data["userEmail"] = $data["tbl_ec_order"]["customer_email"];
         $data["userContact"] = $data["tbl_customer"]["customer_contact"];
         $data["remark"] = "Remarks";

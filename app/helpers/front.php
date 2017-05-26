@@ -1,6 +1,7 @@
 <?php
 use App\Globals\Ecom_Product;
 use App\Globals\Mlm_report;
+use App\Models\Tbl_post;
 
 function get_post($shop_id, $key)
 {
@@ -154,4 +155,9 @@ function loop_content_divide($data, $divide = 12)
     }
     
     return $current;
+}
+
+function get_front_news($shop_id)
+{
+    return Tbl_post::where("shop_id", $shop_id)->where("archived", 0)->get();
 }

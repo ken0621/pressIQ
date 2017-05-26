@@ -89,6 +89,17 @@ button:hover{
 
 		.slider3-wrapper{
 			top: 40px;
+
+			.slider3{
+				a{
+					color: #151515;
+					&:hover
+					{
+						text-decoration: none;
+						color: #151515;
+					}
+				}
+			}
 		}
 
 		.image-logo-holder{
@@ -422,6 +433,9 @@ footer
 
 		.slider3-per-container{
 			float: left;
+			img{
+				width: 100%;
+			}
 
 			&:hover{
 				img{
@@ -434,6 +448,7 @@ footer
 				.slider3-title-container{
 					text-decoration: underline;
 					cursor: pointer;
+
 					
 				}
 			}
@@ -615,7 +630,7 @@ top: 8px;
     right: 20px;
     display: none;
     background-color: rgba(0, 0, 0, 0.6);
-    z-index: 50;
+    z-index: 99;
     &:hover{
     	cursor: pointer;
     }

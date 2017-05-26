@@ -89,7 +89,7 @@
 	</div>	
 </div>
 <div class="google-map">
-	<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.6574693261337!2d121.01562731520293!3d14.561569989827394!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c909a1ec69eb%3A0x25b39d0024fa6ae!2sFCF+Minerals+Corporation+%2F+Metal+Exploration+Public+Limied+Company!5e0!3m2!1sen!2sph!4v1475633906034" allowfullscreen></iframe>
+	<iframe src="{{ get_content($shop_theme_info, "contactus", "contactus_location_map") }}" allowfullscreen></iframe>
 </div>
 
 @endsection

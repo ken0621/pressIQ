@@ -100,13 +100,25 @@
             </div>
             <div class="slider3">
                 <div style="position: absolute; top: 18px; left: 0px; width: 2000px;">
+                @if(count(get_front_news($shop_id)) > 0)
+                    @foreach(get_front_news($shop_id) as $news)
+                    <div class="slider3-per-container">
+                        <a href="/news?id={{ $news->post_id }}">
+                            <div class="per-container-wrapper">
+                                <img class="4-3-ratio" src="{{ $news->post_image }}">
+                                <div class="slider3-title-container">{{ $news->post_title }}</div>
+                            </div>
+                        </a>                       
+                    </div>
+                    @endforeach 
+                @else
                     <div class="slider3-per-container">
                         <a href="/news">
                             <div class="per-container-wrapper">
                                 <img src="/themes/{{ $shop_theme }}/img/d1.png">
                                 <div class="slider3-title-container">Lorem ipsum dolor sit amet</div>
                             </div>
-                        </a>
+                        </a>                        
                     </div>
                     <div class="slider3-per-container">
                         <a href="/news">
@@ -148,6 +160,7 @@
                             </div>
                         </a>
                     </div>
+                @endif
                 </div>
             </div>
         </div>

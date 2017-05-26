@@ -566,7 +566,7 @@ class Ec_order
 
         if ($customer) 
         {
-            dd($customer_id);
+            dd($customer->customer_id);
             if (!DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 
             {
                 $customer_mobile = $order_info["tbl_customer"]["customer_contact"];

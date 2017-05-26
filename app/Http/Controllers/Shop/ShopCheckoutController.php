@@ -47,7 +47,7 @@ class ShopCheckoutController extends Shop
         }
         else
         { 
-            return Redirect::to('/checkout')->send();
+            return Redirect::to('/')->send();
         }
     }
     public function locale()

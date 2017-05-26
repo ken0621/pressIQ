@@ -12,9 +12,13 @@ use App\Models\Tbl_customer;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_plan_setting;
+use App\Models\Tbl_tree_placement;
+use App\Models\Tbl_mlm_transfer_slot_log;
+use App\Models\Tbl_item_code;
 
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_member;
+use App\Globals\Item_code;
 class MlmSlotsController extends Mlm
 {
     public function index()
@@ -31,9 +35,11 @@ class MlmSlotsController extends Mlm
             {
                 $data["enabled_upgrade_slot"] = 0;
             }
-            $data['all_slots_p'] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->paginate(20);
-            $data['active'] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_defaul', 1)->first();
-    		// dd($data);
+            $data['all_slots_p']    = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->paginate(20);
+            $data['active']         = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_defaul', 1)->first();
+            $data['_code']          = Tbl_membership_code::where('customer_id', Self::$customer_id)->where('used', 0)->get();
+            $data["all_slots_show"] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->get();
+    		$data["_item_code"]     = Tbl_item_code::where("customer_id",Self::$customer_id)->where("used",0)->where("blocked",0)->where("archived",0)->get();
     		return view('mlm.slots.index', $data);
     	}
         else
@@ -194,5 +200,272 @@ class MlmSlotsController extends Mlm
     public function add_slot_modal()
     {
         return Mlm_member::add_slot_form(Self::$customer_id);
+    } 
+    public function manual_add_slot_modal()
+    {
+        return Mlm_member::manual_add_slot_form(Self::$customer_id,Request::input("membership_id"),Self::$shop_id);
+    }
+    public function check_add()
+    {
+        $check_membership  = Tbl_membership_code::where("membership_code_id",Request::input("membership_code_id"))
+                                                ->where("blocked",0)
+                                                ->where("archived",0)
+                                                ->where("used",0)
+                                                ->where("customer_id",Self::$customer_id)
+                                                ->first();
+        if($check_membership)
+        {
+            $data["status"]    = "sucess-slot";
+            $data["encrypted"] = Crypt::encrypt(Request::input("membership_code_id"));
+        }
+        else
+        {
+            $data["message"]   = "Membership code doesn't exists";
+        }
+
+        return json_encode($data);
+    }
+
+    public function manual_add_slot()
+    {
+        
+        return view('mlm.slots.manual_add_slot');
+    }
+
+    public function manual_add_slot_post()
+    {
+        $check_membership  = Tbl_membership_code::where("membership_code_id",Request::input("membership_code_id"))
+                                                ->where("membership_activation_code",Request::input("membership_activation_code"))
+                                                ->where("shop_id",Self::$shop_id)
+                                                ->first();
+
+        if(!$check_membership)
+        {
+            $message["message"]          = "This code is not available.";
+        }
+        else
+        {
+            if($check_membership->used == 1)
+            {
+                $message["message"]          = "This code is already used.";
+            }
+            else if($check_membership->blocked == 1)
+            {
+                $message["message"]          = "This code is blocked.";
+            }
+            else if($check_membership->archived == 1)
+            {
+                $message["message"]          = "This code is not available.";
+            }
+            else
+            {
+                $message["status"]           = "success-manual";
+                $message["encrypted"]        = Crypt::encrypt(Request::input("membership_code_id"));
+            }
+        }
+
+        return json_encode($message);
+    }
+
+    public function before_transfer_slot()
+    {
+        $check_slot = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_id', Request::input("slot_id"))->first();
+        if($check_slot)
+        {
+            $data["encrypted"] = Crypt::encrypt(Request::input("slot_id"));
+            $data["status"]    = "success_before_transfer_slot"; 
+        }
+        else
+        {
+            $data["message"] = "Slot doesn't exists.";
+        }
+
+        return json_encode($data);
+    }
+
+    public function transfer_slot()
+    {
+        $slot_id            = Crypt::decrypt(Request::input("slot_id"));
+        $data["encrypted"]  = Request::input("slot_id");
+        $data["slot"]       = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where("slot_id",$slot_id)->first();
+        return view('mlm.slots.transfer_slot',$data);
+    }
+
+    public function transfer_slot_post()
+    {
+        $slot_id            = Crypt::decrypt(Request::input("slot_id"));
+        $check_slot         = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_id', $slot_id)->first();
+        if($check_slot)
+        {
+            $transfer_to_customer = Tbl_customer::where("shop_id",Self::$shop_id)->where("mlm_username",Request::input("mlm_username"))->first();
+            if($transfer_to_customer)
+            {
+                if($transfer_to_customer->customer_id != Self::$customer_id)
+                {
+                    $account        = Tbl_customer::where("customer_id",Self::$customer_id)->first();
+                    $password       = Crypt::decrypt($account->password);
+                    $check_pass     = Request::input("password");
+                    if($password == $check_pass)
+                    {
+                        $insert_log["slot_transfer_by"]   = Self::$customer_id;
+                        $insert_log["slot_transfer_to"]   = $transfer_to_customer->customer_id; 
+                        $insert_log["slot_id"]            = $slot_id; 
+                        $insert_log["transfer_slot_date"] = Carbon::now(); 
+                        Tbl_mlm_transfer_slot_log::insert($insert_log);
+
+
+                        $update_slot["slot_owner"] = $transfer_to_customer->customer_id;
+                        Tbl_mlm_slot::where("slot_id",$slot_id)->update($update_slot);
+                        $data["status"] = "success_transfer_slot";
+                    }
+                    else
+                    {
+                        $data["message"] = "Password mismatch";
+                    }
+                }
+                else
+                {
+                    $data["message"] = "Cannot transfer the slot to yourself.";
+                }
+            }
+            else
+            {
+                $data["message"] = "Customer doesn't exist";
+            }
+
+        }
+        else
+        {
+            $data["message"] = "Slot doesn't exists.";
+        }
+
+        return json_encode($data);
+    }
+
+    public function check_item_code()
+    {
+        $item_code_id   = Request::input("item_code_id");
+        $item           = Tbl_item_code::where("item_code_id",$item_code_id)->first();
+        if($item)
+        {
+            if($item->used == 1)
+            {
+                $data["message"] = "Code already used";
+            }
+            else if($item->blocked == 1)
+            {
+                $data["message"] = "Code is blocked";
+            }
+            else if($item->archived == 1)
+            {
+                $data["message"] = "Code does not exists";
+            }
+            else if($item->customer_id != Self::$customer_id)
+            {
+                $data["message"] = "Code not found.";
+            }
+            else
+            {
+                $data["status"]       = "success-check-prod-code";
+                $data["item_code_id"] = $item_code_id;
+            }
+        }
+        else
+        {
+            $data["message"] = "Code does not exists";
+        }
+
+        return json_encode($data);
+    }
+
+    public function item_code()
+    {
+        $item_code_id   = Request::input("item_code_id");
+        $item           = Tbl_item_code::where("item_code_id",$item_code_id)->first();
+        if($item)
+        {
+            if($item->used == 1)
+            {
+                $data["message"] = "Code already used";
+            }
+            else if($item->blocked == 1)
+            {
+                $data["message"] = "Code is blocked";
+            }
+            else if($item->archived == 1)
+            {
+                $data["message"] = "Code doesn't exists";
+            }
+            else if($item->customer_id != Self::$customer_id)
+            {
+                $data["message"] = "Code not found.";
+            }
+            else
+            {
+                $data["item"]  = $item;
+                $data["_slot"] = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->get();
+            }
+        }
+        else
+        {
+            $data["message"] = "Code does not exists";
+        }
+
+
+
+        if(isset($data["message"]))
+        {
+            return json_encode($data["message"]);
+        }
+        else
+        {
+            return view('mlm.slots.item_code',$data);
+        }
+    }
+
+    public function item_code_post()
+    {
+        $item_activation_code = Request::input("item_activation_code");
+        $slot_id              = Request::input("slot_id");
+
+        $slot                 = Tbl_mlm_slot::where("slot_id",$slot_id)->where("slot_owner",Self::$customer_id)->first();
+        $item                 = Tbl_item_code::where("item_activation_code",$item_activation_code)->first();
+        if($slot)
+        {
+            if($item)
+            {
+                if($item->used == 1)
+                {
+                    $data["message"] = "Code already used";
+                }
+                else if($item->blocked == 1)
+                {
+                    $data["message"] = "Code is blocked";
+                }
+                else if($item->archived == 1)
+                {
+                    $data["message"] = "Code doesn't exists";
+                }
+                else if($item->customer_id != Self::$customer_id)
+                {
+                    $data["message"] = "Code not found.";
+                }
+                else
+                {
+                    $data["status"] = "success-prod-code";
+                    Item_code::use_item_code_single($item, $slot);
+                }
+            }
+            else
+            {
+                $data["message"] = "Code does not exists";
+            }
+        }
+        else
+        {
+            $data["message"] = "Slot does not exists";
+        }
+
+        return json_encode($data);
     }
 }

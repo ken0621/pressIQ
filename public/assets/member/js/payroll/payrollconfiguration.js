@@ -289,6 +289,11 @@ function payrollconfiguration()
 		reload_configuration("/member/payroll/custom_payslip");
 	}
 
+	this.reload_shift_template = function()
+	{
+		reload_configuration("/member/payroll/shift_template");
+	}
+
 	/*this.reload_holiday_default = function()
 	{
 		reload_configuration("/member/payroll/holiday_default");

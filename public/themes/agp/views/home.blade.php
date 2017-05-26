@@ -137,7 +137,7 @@
                {{ get_content($shop_theme_info, "home", "home_start_quote") }}
             </div>
             <div class="vc_col-sm-3 wpb_column column_container">
-               <button class="btn btn-default" type="button" onClick="location.href='/member/register'">{{ get_content($shop_theme_info, "home", "home_start_button") }}</button>
+               <button class="btn btn-default" type="button" onClick="location.href='/mlm/register'">{{ get_content($shop_theme_info, "home", "home_start_button") }}</button>
             </div>
          </div>
       </div>

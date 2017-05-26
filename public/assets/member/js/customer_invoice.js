@@ -25,7 +25,6 @@ function customer_invoice()
 		action_convert_number();
 		action_date_picker();
 		action_reassign_number();
-
 	}
 	function event_remove_tr()
 	{

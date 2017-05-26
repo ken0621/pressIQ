@@ -69,7 +69,7 @@ class PisSalesLiquidationController extends Member
 
             // $up["report_data"] = serialize(Purchasing_inventory_system::get_report_data($sir_id));
             // Tbl_sir_sales_report::where("sir_id",$sir_id)->update($up);
-            // $return = serialize(Purchasing_inventory_system::get_report_data($sir_id));
+            $return = serialize(Purchasing_inventory_system::get_report_data($sir_id));
         }
         else
         {

@@ -305,8 +305,11 @@ class Purchasing_inventory_system
         $data["inv_discount"] = Tbl_manual_invoice::customer_invoice()->where("sir_id",$sir_id)->get();
 
         $data["_inv_dsc"] = [];
+        $data["amount_disc"] = [];
         foreach ($data["inv_discount"] as $key_dsc => $value_dsc)
         {
+            $whole_amount = 0;
+            $item_dsc = 0;
             $data["_inv_dsc"][$key_dsc]["customer"] =  $value_dsc->company != "" ? $value_dsc->company : $value_dsc->title_name." ".$value_dsc->first_name." ".$value_dsc->last_name." ".$value_dsc->suffix_name;
             $data["_inv_dsc"][$key_dsc]["transaction_type"] = 'Credit Sales';
             if($value_dsc->is_sales_receipt != 0)
@@ -319,14 +322,15 @@ class Purchasing_inventory_system
             if($value_dsc->inv_discount_type == 'percent')
             {
                 $whole_amount = ($value_dsc->inv_discount_value / 100) * $value_dsc->inv_subtotal_price;
+                $data["amount_disc"][$key_dsc]["disc"] = $value_dsc->inv_discount_value;
             }
 
             $per_item = Tbl_customer_invoice_line::where("invline_inv_id",$value_dsc->inv_id)->get();
 
-            $item_dsc = 0;
             foreach ($per_item as $key_item => $value_item) 
             {
                 $item_dsc = $value_item->invline_discount;
+
                 if($value_item->invline_discount_type == 'percent')
                 {
                     $item_dsc = ($value_item->invline_discount / 100) * $value_item->invline_amount;
@@ -339,7 +343,6 @@ class Purchasing_inventory_system
                 unset($data['_inv_dsc'][$key_dsc]);
             }
         }
-
 
         //FOR AGENT TRANSACTION
 
@@ -551,103 +554,84 @@ class Purchasing_inventory_system
     }
     public static function get_sir_total_amount($sir_id)
     {
+        $total_amount = 0;
+        $loss = 0;
+        $over = 0;
+        $mts_loss = 0;
+        $mts_over = 0;
+        $total_sold = 0;
+        $discount = 0;
+        $shop_id = Purchasing_inventory_system::getShopId();
 
-        // $data["_sir"] = Tbl_sir::where("sales_agent_id",$agent_id)->whereIn("ilr_status",[1,2])->get();
-        $data['__transaction'] = array();
-        if($sir_id)
+        $_sir_item = Purchasing_inventory_system::select_sir_item($shop_id,$sir_id,'array');
+
+        //ilr Loss and Over
+        foreach ($_sir_item as $key_sir_item => $value_sir_item)
         {
-            //for invoice
-            $data["invoices"] = Tbl_manual_invoice::customer_invoice()->where("sir_id",$sir_id)->get(); 
+            $loss += $value_sir_item->infos < 0 ? $value_sir_item->infos : 0;
+            $over += $value_sir_item->infos > 0 ? $value_sir_item->infos : 0;
 
-            //union of invoice and receive payment
-            foreach ($data["invoices"] as $inv_key => $inv_value) 
+            //count for sold items
+            if($value_sir_item->item_type_id != 4)
             {
-                $_transaction = null;
-                $cm = Tbl_credit_memo::where("cm_id",$inv_value->credit_memo_id)->first();
-                $cm_amt = 0;
-                if($cm != null)
+                $sold_qty = Purchasing_inventory_system::count_sold_qty($value_sir_item->sir_id, $value_sir_item->item_id);
+            }
+            else
+            {
+                $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$value_sir_item->item_id)->get();
+                $sold_bundle_qty = 0;
+                foreach ($bundle_item as $key_bundle => $value_bundle)
                 {
-                  $cm_amt = $cm->cm_amount;  
+                    $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
+
+                   $issued_bundle_qty_item = (UnitMeasurement::um_qty($value_sir_item->related_um_type) * $value_sir_item->item_qty) * $bundle_qty;
+
+                   $total_sold_bundle_qty = Tbl_sir_inventory::where("sir_item_id",$value_bundle->bundle_item_id)->where("inventory_sir_id",$value_sir_item->sir_id)->where("sir_inventory_count","<",0)->sum("sir_inventory_count");
+                   $rem_bundle_qty = ($issued_bundle_qty_item - abs($total_sold_bundle_qty)) / $bundle_qty;
+                   $sold_bundle_qty = $value_sir_item->item_qty - $rem_bundle_qty;                            
                 }
-                $_transaction[$inv_key]['date'] = $inv_value->inv_date;
-                if($inv_value->is_sales_receipt == 0)
+                $sold_qty = $sold_bundle_qty;
+            }
+
+            $total_sold += $sold_qty * $value_sir_item->sir_item_price;
+        }
+        //Empties Loss and Over
+        $_returns = Tbl_sir_cm_item::item()->where("sc_sir_id",$sir_id)->get();
+
+        foreach ($_returns as $key_return => $value_return) 
+        {                
+            $mts_loss += $value_return->sc_infos < 0 ? $value_return->sc_infos : 0;
+            $mts_over += $value_return->sc_infos > 0 ? $value_return->sc_infos : 0;  
+        }
+
+        //discount
+        $inv_discount = Tbl_manual_invoice::customer_invoice()->where("sir_id",$sir_id)->get();
+        foreach ($inv_discount as $key_disc => $value_dsc) 
+        {
+            $whole_amount = $value_dsc->inv_discount_value;
+            if($value_dsc->inv_discount_type == 'percent')
+            {
+                $whole_amount = ($value_dsc->inv_discount_value / 100) * $value_dsc->inv_subtotal_price;
+            }
+
+            $per_item = Tbl_customer_invoice_line::where("invline_inv_id",$value_dsc->inv_id)->get();
+
+            $item_dsc = 0;
+            foreach ($per_item as $key_item => $value_item) 
+            {
+                $item_dsc = $value_item->invline_discount;
+                if($value_item->invline_discount_type == 'percent')
                 {
-                    $_transaction[$inv_key]['type'] = 'Invoice';
-                    $_transaction[$inv_key]['reference_name'] = 'invoice';                    
+                    $item_dsc = ($value_item->invline_discount / 100) * $value_item->invline_amount;
                 }
-                else
-                {                
-                    $_transaction[$inv_key]['type'] = 'Sales Receipt';
-                    $_transaction[$inv_key]['reference_name'] = 'sales_receipt';
-                }
-                $_transaction[$inv_key]['customer_name'] = $inv_value->title_name." ".$inv_value->first_name." ".$inv_value->last_name." ".$inv_value->suffix_name;
-                $_transaction[$inv_key]['no'] = $inv_value->inv_id;
-                $_transaction[$inv_key]['balance'] = $inv_value->inv_overall_price - $inv_value->inv_payment_applied;
-                $_transaction[$inv_key]['due_date'] = $inv_value->inv_due_date;
-                $_transaction[$inv_key]['total'] = $inv_value->inv_overall_price - $cm_amt;
-                $_transaction[$inv_key]['status'] = $inv_value->inv_is_paid;
-                $_transaction[$inv_key]['date_created'] = $inv_value->manual_invoice_date;
-
-                array_push($data['__transaction'], $_transaction);
             }
-            
-            $data["rcv_payment"] = Tbl_manual_receive_payment::customer_receive_payment()->selectRaw("*, tbl_manual_receive_payment.rp_date as manual_rp_date")->where("sir_id",$sir_id)->get();
-            foreach ($data["rcv_payment"] as $rp_key => $rp_value) 
-            {
-                $_transaction = null;
-                $_transaction[$rp_key]['date'] = $rp_value->rp_date;
-                $_transaction[$rp_key]['type'] = 'Payment';
-                $_transaction[$rp_key]['reference_name'] = 'receive_payment';
-                $_transaction[$rp_key]['customer_name'] = $rp_value->title_name." ".$rp_value->first_name." ".$rp_value->last_name." ".$rp_value->suffix_name;
-                $_transaction[$rp_key]['no'] = $rp_value->rp_id;
-                $_transaction[$rp_key]['balance'] = 0;
-                $_transaction[$rp_key]['due_date'] = $rp_value->rp_date;
-                $_transaction[$rp_key]['total'] = $rp_value->rp_total_amount;
-                $_transaction[$rp_key]['status'] = 'status';
-                $_transaction[$rp_key]['date_created'] = $rp_value->manual_rp_date;
-
-                array_push($data['__transaction'], $_transaction);
-            }
-            $data["credit_memo"] = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->get();
-            foreach ($data["credit_memo"] as $cm_key => $cm_value) 
-            {
-                $_transaction = null;
-                $_transaction[$cm_key]['date'] = $cm_value->cm_date;
-                $_transaction[$cm_key]['type'] = 'Credit Memo';
-                $_transaction[$cm_key]['reference_name'] = 'credit_memo';
-                $_transaction[$cm_key]['customer_name'] = $cm_value->title_name." ".$cm_value->first_name." ".$cm_value->last_name." ".$cm_value->suffix_name;
-                $_transaction[$cm_key]['no'] = $cm_value->cm_id;
-                $_transaction[$cm_key]['balance'] = 0;
-                $_transaction[$cm_key]['due_date'] = $cm_value->cm_date;
-                $_transaction[$cm_key]['total'] = $cm_value->cm_amount;
-                $_transaction[$cm_key]['status'] = 'status';
-                $_transaction[$cm_key]['date_created'] = $cm_value->manual_cm_date;
-
-                array_push($data['__transaction'], $_transaction);
-            }
+            $discount += $whole_amount + $item_dsc;
         }
 
 
-        $data["tr"] = [];
-        foreach ($data['__transaction'] as $key => $value) 
-        {
-            foreach ($value as $key1 => $value1) 
-            {
-                array_push($data['tr'], $value1);
-            }
-        
-        }
-        $data["total"] = 0;
-        foreach ($data['tr'] as $key2 => $value2)
-        {
-            if($value2['reference_name'] == "receive_payment" || $value2['reference_name'] == "sales_receipt")
-            {
-                $data['total'] += $value2['total'];
-            }
-        }
-        // $data["total"] = currency("Php",$data['total']);
+        $total_amount = $total_sold - $discount;
 
-        return $data["total"];
+        return $total_amount;
 
     }
     public static function insert_sir_inventory($sir_id, $item, $ref_name, $ref_id)

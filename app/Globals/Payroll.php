@@ -930,7 +930,7 @@ class Payroll
 				}
 				if($less_time_in > 0)
 				{
-					$less_time_in = 0;
+					$less_time_in = 0 - $less_time_in;
 				}
 
 				$night_differential = $time_spent + ($less_time_out + $less_time_in);

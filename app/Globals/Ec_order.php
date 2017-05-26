@@ -582,9 +582,9 @@ class Ec_order
             unset($order_info["tbl_customer"]["customer_id"]);
             $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
             unset($order_info["tbl_customer"]["customer_contact"]);
+            $order_info["tbl_customer"]["middle_name"] = "";
             $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);
             $other_insert["customer_mobile"] = $customer_mobile;
-            $order_info["tbl_customer"]["middle_name"] = "";
             DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->insert($other_insert);
         }
 

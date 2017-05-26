@@ -882,7 +882,7 @@ class Cart
      *    $customer_id (int) - current logged in
      *
      * @return (array)
-     *    - order data (query)
+     *    - order_id
      *
      * @author (Edward Guevarra)
      *

@@ -154,74 +154,67 @@ class ShopCheckoutController extends Shop
 
     public function postPaymentWithIPay88()
     {
-        $shop_id        = $this->shop_info->shop_id;
-        $payment_status = 1;
-        $order_status   = "Processing";
+        echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
+        $shop_id = $this->shop_info->shop_id;
+        $data = Cart::get_info($shop_id);
+        $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "ipay88")->first();
 
-        Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info->customer_id);
-        // echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
-        // $shop_id = $this->shop_info->shop_id;
-        // $data = Cart::get_info($shop_id);
-        // $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "ipay88")->first();
+        $data["paymentId"] = 1; //BANCNET, CREDIT CARD, ETC
+        $data["refNo"] = $this->shop_info->shop_id . time();
+        $data["amount"] = $data["tbl_ec_order"]["total"];
 
-        // $data["paymentId"] = 1; //BANCNET, CREDIT CARD, ETC
-        // $data["refNo"] = $this->shop_info->shop_id . time();
-        // $data["amount"] = $data["tbl_ec_order"]["total"];
+        /* REASTRUCTURE */
+        $product_summary = array();
+        foreach ($data['tbl_ec_order_item'] as $key => $value) 
+        {
+            if ($key != count($data["cart"])) 
+            {
+                $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . "";
+            }
+            else
+            {
+                $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . ", ";
+            }
+        }
 
-        // /* REASTRUCTURE */
-        // $product_summary = array();
-        // foreach ($data['tbl_ec_order_item'] as $key => $value) 
-        // {
-        //     if ($key != count($data["cart"])) 
-        //     {
-        //         $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . "";
-        //     }
-        //     else
-        //     {
-        //         $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . ", ";
-        //     }
-        // }
+        $data["currency"] = "PHP";
+        $data["prodDesc"] = $product_summary;
+        $data["userName"] = $data["tbl_customer"]["first_name"] . " " . $data["tbl_customer"]["last_name"];
+        $data["userEmail"] = $data["tbl_ec_order"]["customer_email"];
+        $data["userContact"] = $data["tbl_customer"]["customer_contact"];
+        $data["remark"] = "Remarks";
+        $data["lang"] = "UTF-8";
+        $data["responseUrl"] = URL::to('/ipay88_response');
+        $data["backendUrl"] = URL::to('/ipay88_response');
+        $data["merchantKey"] = $api->api_secret_id;
+        $data["merchantCode"] = $api->api_client_id;
+        $requestpayment = new RequestPayment($data["merchantKey"]);
 
-        // $data["currency"] = "PHP";
-        // $data["prodDesc"] = $product_summary;
-        // $data["userName"] = $data["tbl_customer"]["first_name"] . " " . $data["tbl_customer"]["last_name"];
-        // $data["userEmail"] = $data["tbl_ec_order"]["customer_email"];
-        // $data["userContact"] = $data["tbl_customer"]["customer_contact"];
-        // $data["remark"] = "Remarks";
-        // $data["lang"] = "UTF-8";
-        // $data["responseUrl"] = URL::to('/ipay88_response');
-        // $data["backendUrl"] = URL::to('/ipay88_response');
-        // $data["merchantKey"] = $api->api_secret_id;
-        // $data["merchantCode"] = $api->api_client_id;
-        // $requestpayment = new RequestPayment($data["merchantKey"]);
+        $this->_data = array(
+            'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
+            'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
+            'refNo'         => $requestpayment->setRefNo($data["refNo"]),
+            'amount'        => $requestpayment->setAmount($data["amount"]),
+            // 'amount'        => $requestpayment->setAmount(15),
+            'currency'      => $requestpayment->setCurrency($data["currency"]),
+            'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
+            'userName'      => $requestpayment->setUserName($data["userName"]),
+            'userEmail'     => $requestpayment->setUserEmail($data["userEmail"]),
+            'userContact'   => $requestpayment->setUserContact($data["userContact"]),
+            'remark'        => $requestpayment->setRemark($data["remark"]),
+            'lang'          => $requestpayment->setLang($data["lang"]),
+            'signature'     => $requestpayment->getSignature(),
+            'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
+            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
+        );
 
-        // $this->_data = array(
-        //     'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
-        //     'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
-        //     'refNo'         => $requestpayment->setRefNo($data["refNo"]),
-        //     // 'amount'        => $requestpayment->setAmount($data["amount"]),
-        //     'amount'        => $requestpayment->setAmount(15),
-        //     'currency'      => $requestpayment->setCurrency($data["currency"]),
-        //     'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
-        //     'userName'      => $requestpayment->setUserName($data["userName"]),
-        //     'userEmail'     => $requestpayment->setUserEmail($data["userEmail"]),
-        //     'userContact'   => $requestpayment->setUserContact($data["userContact"]),
-        //     'remark'        => $requestpayment->setRemark($data["remark"]),
-        //     'lang'          => $requestpayment->setLang($data["lang"]),
-        //     'signature'     => $requestpayment->getSignature(),
-        //     'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
-        //     'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
-        // );
-
-        // RequestPayment::make($data["merchantKey"], $this->_data);     
+        RequestPayment::make($data["merchantKey"], $this->_data);     
     }
 
     public function ipay88_response()
     {
         $request = Request::all();
         $shop_id = $this->shop_info->shop_id;
-        $result = Cart::get_info($shop_id);
-        $order_id = $result["tbl_ec_order"]["ec_order_id"];
 
         if ($request) 
         {
@@ -247,11 +240,15 @@ class ShopCheckoutController extends Shop
             } 
             else 
             {
-                Cart::submit_order($order_id, $shop_id, 1, "Processing"); 
+                $shop_id        = $this->shop_info->shop_id;
+                $payment_status = 1;
+                $order_status   = "Processing";
+
+                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info->customer_id);
                 Cart::clear_all($this->shop_info->shop_id);
 
                 // Redirect
-                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
             }
         }
         else
@@ -269,11 +266,11 @@ class ShopCheckoutController extends Shop
             return Redirect::to("/");
         }
 
-        $data = unserialize(Crypt::decrypt($order));
+        $order_id = unserialize(Crypt::decrypt($order));
     
-        $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $data["order_id"])
-                                            ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
-                                            ->get();
+        $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
+                                           ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
+                                           ->get();
 
         $data['summary'] = [];
         $subtotal = 0;

@@ -562,6 +562,7 @@ class Ec_order
         /* Check if Customer Account Exist */
         $customer_query = DB::table("tbl_customer")->where("customer_id", $customer_id);
         $customer = $customer_query->first();
+
         if ($customer) 
         {
             $customer_other_info = DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first();
@@ -573,6 +574,8 @@ class Ec_order
             $order_info["tbl_customer"]["email"] = $customer->email;
             $order_info["tbl_customer"]["password"] = $customer->password;
             $order_info["tbl_customer"]["customer_mobile"] = $customer_other_info->customer_mobile;
+
+            $order_info["tbl_ec_order"]["customer_id"] = $customer->customer_id;
         }
         else
         {
@@ -606,7 +609,9 @@ class Ec_order
 
         /* Insert Order */
         unset($order_info["tbl_ec_order"]["ec_order_id"]);
-        dd($order_info);
+        $order_info["tbl_ec_order"]["customer_id"] = $customer_id;
+        $order_info["tbl_ec_order"]["discount_coupon_amount"] = $order_info["tbl_ec_order"]["discount_coupon_amount"] ? $order_info["tbl_ec_order"]["discount_coupon_amount"] : 0;
+        $order_info["tbl_ec_order"]["discount_coupon_type"] = $order_info["tbl_ec_order"]["discount_coupon_type"] ? $order_info["tbl_ec_order"]["discount_coupon_type"] : "fixed";
         $order_info["tbl_ec_order"]["ec_order_id"] = DB::table("tbl_ec_order")->insertGetId($order_info["tbl_ec_order"]);
 
         /* Insert Order Item */
@@ -616,6 +621,6 @@ class Ec_order
             DB::table("tbl_ec_order_item")->insert($value);
         }
 
-        echo "Success";
+        return $order_info["tbl_ec_order"]["ec_order_id"];
     }
 }

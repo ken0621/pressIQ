@@ -14,6 +14,8 @@ class UpdateTblEcOrderAddShippingFee extends Migration
     {
         Schema::table('tbl_ec_order', function (Blueprint $table) {
             $table->double('shipping_fee')->default(0);
+            $table->double('service_fee')->default(0);
+            $table->string('shipping_group')->nullable();
         });
     }
 

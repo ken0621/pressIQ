@@ -100,19 +100,19 @@
     <div class="col-md-4 col-md-offset-2">
         <div class="simple-advice clearfix">
             <div class="advice-word">Add an item to buy or sell</div>
-            <a class="btn btn-primary" href="/member/ecommerce/product/add">Add Item</a>
+            <a class="btn btn-primary" href="/member/item">Add Item</a>
         </div>
     </div>
     <div class="col-md-4">
         <div class="simple-advice clearfix">
             <div class="advice-word">Add a customer to do a transaction</div>
-            <a class="btn btn-primary" href="/member/ecommerce/product/add">Add Customer</a>
+            <a class="btn btn-primary" href="/member/customer/list">Add Customer</a>
         </div>
     </div>
     <div class="col-md-4 col-md-offset-2">
         <div class="simple-advice clearfix">
             <div class="advice-word">Add a vendor to do a transaction</div>
-            <a class="btn btn-primary" href="/member/ecommerce/product/add">Add Vendor</a>
+            <a class="btn btn-primary" href="/member/vendor/list">Add Vendor</a>
         </div>
     </div>
     <div class="col-md-4">

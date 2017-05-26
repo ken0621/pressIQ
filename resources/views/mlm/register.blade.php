@@ -120,7 +120,7 @@
                                     <input type='number' class="form-control" name="customer_mobile" value="639">
                                 </p>
                                 <p> 
-                                    <input id="tinnumber" name="tinnumber" required="required" type="number" placeholder="Your TIN"/>
+                                    <input id="tinnumber" name="tinnumber" type="number" placeholder="Your TIN (Optional)"/>
                                 </p>
                                 <p> 
                                     <input id="username" name="username" required="" type="text" placeholder="Your Username"/>

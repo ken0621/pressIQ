@@ -28,7 +28,7 @@
 	</div>
 	<div class="modal-footer">
 		<button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-		<button class="btn btn-primary btn-custom-primary" type="submit"">Submit</button>
+		<button class="btn btn-primary btn-custom-primary" type="submit">Next</button>
 	</div>
 </form>
 <script type="text/javascript">

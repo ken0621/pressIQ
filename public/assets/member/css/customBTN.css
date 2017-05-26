@@ -70,6 +70,7 @@
     border-color:#009933;
     color:#ffffff;
 }
+
 .btn-custom-red-white{
     border-color:#d46969 !important;
     color:#d46969 !important;
@@ -1228,4 +1229,19 @@ input:checked + .slider:before {
 .column-fit, .column-fit td, .column-fit th
 {
     white-space: nowrap;
+}
+
+
+.message-container 
+{
+    background-color: #e3e3e3;
+    border: 1px solid #ccc9c9;
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.border-1-gray
+{
+    border:1px solid #989797;
 }

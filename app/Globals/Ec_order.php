@@ -566,6 +566,7 @@ class Ec_order
 
         if ($customer) 
         {
+            dd($customer_id);
             if (!DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 
             {
                 $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
@@ -573,7 +574,7 @@ class Ec_order
                 $other_inesrt["customer_id"]     = $customer_id;
                 DB::table("tbl_customer_other_info")->insert($other_insert);
             }
-            
+
             $customer_other_info = DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first();
 
             $order_info["tbl_customer"]["customer_id"] = $customer->customer_id;

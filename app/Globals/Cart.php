@@ -719,7 +719,7 @@ class Cart
             $data["tbl_customer"]['customer_contact'] = $other_info->customer_mobile;
             $data["tbl_customer"]['country_id']       = 420;
         }
-        
+
         /* SET SHIPPINGING INFROMATION */
         $data["tbl_customer_address"]["shipping"]["country_id"] = 420;
         $data["tbl_customer_address"]["shipping"]["customer_state"] = (isset($customer_information["shipping_state"]) ? $customer_information["shipping_state"] : (isset($data["tbl_customer_address"]["shipping"]["customer_state"]) ? $data["tbl_customer_address"]["shipping"]["customer_state"] : null));
@@ -786,7 +786,7 @@ class Cart
         /* ITEM ON CART */
         foreach($_cart as $key => $cart)
         {
-            $data["tbl_ec_order_item"][$key]["item_id"] = $cart["cart_product_information"]["item_id"];
+            $data["tbl_ec_order_item"][$key]["item_id"] = $cart["cart_product_information"]["variant_id"];
             $data["tbl_ec_order_item"][$key]["price"] = $cart["cart_product_information"]["product_price"];
             $data["tbl_ec_order_item"][$key]["quantity"] = $cart["quantity"];
             $data["tbl_ec_order_item"][$key]["subtotal"] = $cart["cart_product_information"]["product_price"] * $cart["quantity"];

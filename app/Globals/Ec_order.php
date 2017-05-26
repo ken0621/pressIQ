@@ -570,8 +570,8 @@ class Ec_order
             {
                 $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
                 $other_insert["customer_mobile"] = $customer_mobile;
-                $other_inesrt["customer_id"]     = $customer_id;
-                dd($other_insert);
+                $other_insert["customer_id"]     = $customer_id;
+       
                 DB::table("tbl_customer_other_info")->insert($other_insert);
             }
 
@@ -594,10 +594,11 @@ class Ec_order
             $order_info["tbl_customer"]["middle_name"] = "";
             $order_info["tbl_customer"]["password"] = Crypt::encrypt($order_info["tbl_customer"]["password"]);
             $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);
+            
             if (!DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 
             {
                 $other_insert["customer_mobile"] = $customer_mobile;
-                $other_inesrt["customer_id"]     = $customer_id;
+                $other_insert["customer_id"]     = $customer_id;
                 DB::table("tbl_customer_other_info")->insert($other_insert);
             }
         }

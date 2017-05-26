@@ -176,7 +176,7 @@ class ShopCheckoutController extends Shop
                 $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . ", ";
             }
         }
-        
+
         $data["currency"] = "PHP";
         $data["prodDesc"] = $product_summary;
         $data["userName"] = $data["tbl_customer"]["first_name"] . " " . $data["tbl_customer"]["last_name"];
@@ -245,7 +245,7 @@ class ShopCheckoutController extends Shop
                 $payment_status = 1;
                 $order_status   = "Processing";
 
-                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info->customer_id);
+                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
                 Cart::clear_all($this->shop_info->shop_id);
 
                 // Redirect

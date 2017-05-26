@@ -26,6 +26,7 @@
                                 <th>Invoice ID</th>
                                 <th>Email</th>
                                 <th>Name</th>
+                                <th>Membership</th>
                                 <th>Date</th>  
                                 <th>Amount</th>
                             </tr>
@@ -36,6 +37,13 @@
                                 <td>{{$value->membership_code_invoice_id}}</td>
                                 <td>{{$value->membership_code_customer_email}}</td>
                                 <td>{{$value->membership_code_invoice_f_name}} {{$value->membership_code_invoice_m_name}} {{$value->membership_code_invoice_l_name}}</td>
+                                <td>
+                                    @if(isset($mem_code_inv[$value->membership_code_invoice_id]))
+                                        @foreach($mem_code_inv[$value->membership_code_invoice_id] as $key2 => $value2)
+                                            {{$value2->membership_name}} &nbsp
+                                        @endforeach
+                                    @endif
+                                </td>
                                 <td>{{$value->membership_code_date_created}}</td>
                                 <td>{{currency('PHP', $value->membership_total)}}</td>
                             </tr>
@@ -77,6 +85,7 @@
                         <thead>
                             <tr>
                                 <th>Package</th>
+                                <th>Quantity</th>
                                 <th>Amount</th>
                             </tr>
                         </thead>
@@ -91,11 +100,25 @@
                                     @endif
 
                                 </td>
+                                <td>
+                                    {{$by_mem_qty[$key]}}
+                                </td>
                                 <td class="change_currency">
                                     {{$value}}
                                 </td>
                             </tr>
                             @endforeach
+
+                            <tr>
+                                <td colspan="3">
+                                    Total Membership Package Sold: {{$by_mem_sum_qty}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3">
+                                    Total Amount: {{currency('PHP', $by_mem_sum_amount)}}
+                                </td>
+                            </tr>
                         </tbody>
                     </thead>
                     <tbody>
@@ -114,9 +137,7 @@
       <span class="info-box-text">Membership Sale Report / Package</span>
       <span class="info-box-number">Per Package Item</span>
     </div>
-    <!-- /.info-box-content -->
   </div>
-  <!-- /.info-box -->
 </div> 
 <br>
 <br>

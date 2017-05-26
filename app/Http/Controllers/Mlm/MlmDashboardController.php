@@ -196,6 +196,10 @@ class MlmDashboardController extends Mlm
         $data['repurchase_cash'] = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', 'REPURCHASE')
             ->where('wallet_log_slot', $slot_id)
             ->sum('wallet_log_amount');
+
+        $data['single_leg_income'] = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', 'BINARY_SINGLE_LINE')
+            ->where('wallet_log_slot', $slot_id)
+            ->sum('wallet_log_amount');    
         $data['binary'] = $binary;
         $data['left'] = Self::$slot_now->slot_binary_left;
         $data['right'] = Self::$slot_now->slot_binary_right;

@@ -443,10 +443,11 @@ class Mlm_complan_manager
     public static function binary_single_line_richard($slot_info, $settings, $earnings)
     {
         // dd($settings);
-        $slot_tree = Tbl_tree_sponsor::child($slot_info->slot_id)->orderby("sponsor_tree_level", "desc")
+        $slot_tree = Tbl_tree_sponsor::child($slot_info->slot_id)
         ->distinct_level()
         ->parentslot()->membership()
         ->take($settings->pairing_point_single_line_bonus_level)
+        ->orderby('sponsor_tree_level', 'ASC')
         ->get();
         if($earnings != 0)
         {

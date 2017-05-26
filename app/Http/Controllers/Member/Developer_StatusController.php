@@ -14,6 +14,7 @@ use App\Globals\Mlm_complan_manager;
 use App\Models\Tbl_item_code;
 use App\Globals\Mlm_complan_manager_repurchase;
 use App\Models\Tbl_mlm_slot;
+use Carbon\Carbon;
 class Developer_StatusController extends Member
 {
 	public function index()
@@ -140,7 +141,7 @@ class Developer_StatusController extends Member
 				$update['slot_binary_right'] = 0;
 				$update['slot_wallet_all'] = 0;
 				$update['slot_wallet_current'] = 0;
-
+				$update['slot_pairs_per_day_date'] = Carbon::now()->addDays(-2);
 				Tbl_mlm_slot::where('slot_id', $value->slot_id)->update($update);
 
 				Mlm_compute::entry($value->slot_id);

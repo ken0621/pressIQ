@@ -77,7 +77,6 @@ class ShopCheckoutController extends Shop
         $_name = $this->split_name($full_name);
 
         /* SET FIRST NAME, LAST NAME AND CONTACT */
-        $customer_info["current_user"] = Self::$customer_info;
         $customer_info["first_name"] = $_name[0];
         $customer_info["last_name"] = $_name[1];
         $customer_info["customer_contact"] = Request::input("contact_number");
@@ -114,10 +113,6 @@ class ShopCheckoutController extends Shop
     {
         if(Request::isMethod("post"))
         {
-            $current = Cart::get_info($this->shop_info->shop_id);
-            $current["payment_method_id"] = Request::input("payment_method_id");
-            Session::put(Cart::get_unique_id($this->shop_info->shop_id), $current);
-
             Cart::process_payment($this->shop_info->shop_id);
         }
         else
@@ -199,8 +194,8 @@ class ShopCheckoutController extends Shop
             'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
             'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
             'refNo'         => $requestpayment->setRefNo($data["refNo"]),
-            // 'amount'        => $requestpayment->setAmount($data["amount"]),
-            'amount'        => $requestpayment->setAmount(15),
+            'amount'        => $requestpayment->setAmount($data["amount"]),
+            // 'amount'        => $requestpayment->setAmount(15),
             'currency'      => $requestpayment->setCurrency($data["currency"]),
             'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
             'userName'      => $requestpayment->setUserName($data["userName"]),
@@ -220,8 +215,6 @@ class ShopCheckoutController extends Shop
     {
         $request = Request::all();
         $shop_id = $this->shop_info->shop_id;
-        $result = Cart::get_info($shop_id);
-        $order_id = $result["tbl_ec_order"]["ec_order_id"];
 
         if ($request) 
         {
@@ -247,11 +240,15 @@ class ShopCheckoutController extends Shop
             } 
             else 
             {
-                Cart::submit_order($order_id, $shop_id, 1, "Processing"); 
+                $shop_id        = $this->shop_info->shop_id;
+                $payment_status = 1;
+                $order_status   = "Processing";
+
+                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info->customer_id);
                 Cart::clear_all($this->shop_info->shop_id);
 
                 // Redirect
-                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
             }
         }
         else
@@ -269,11 +266,11 @@ class ShopCheckoutController extends Shop
             return Redirect::to("/");
         }
 
-        $data = unserialize(Crypt::decrypt($order));
+        $order_id = unserialize(Crypt::decrypt($order));
     
-        $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $data["order_id"])
-                                            ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
-                                            ->get();
+        $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
+                                           ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
+                                           ->get();
 
         $data['summary'] = [];
         $subtotal = 0;

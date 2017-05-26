@@ -13,28 +13,45 @@
 </div>
 
 @include('member.reports.filter.filter1');
+@include('member.reports.output.agent_profit_loss');
 
-<!-- NO PRODUCT YET -->
-<div class="panel panel-default panel-block panel-title-block panel-gray">
-    <div class="form-group tab-content panel-body sir_container">
-        <div id="all" class="tab-pane fade in active">
-            <div class="form-group order-tags"></div>
-            <div class="table-responsive">
-                <table class="table table-bordered table-condensed">
-                    <thead style="text-transform: uppercase">
-                        <tr>
-                            <th>#</th>
-                            <th>Agent Name</th>
-                            <th>Sales</th>
-                            <th>Discrepancy</th>
-                            <th>ILR Losses</th>
-                            <th>ILR Over</th>
-                            <th>Total Discrepancy</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+@endsection
+@section('script')
+<script type="text/javascript">
+
+    var agent_profit_loss = new agent_profit_loss();
+
+    function agent_profit_loss()
+    {
+        init();
+
+        function init()
+        {
+            event_run_report_click();
+            action_collaptible(true);
+        }
+    }
+
+    function event_run_report_click()
+    {
+        $(document).on("click", ".run-report", function()
+        {
+            var serialize_data = $("form.filter").serialize()
+            
+            $(".load-data").load("/member/report/agent/profit_loss?"+serialize_data+"&load_view=true .load-content", function()
+                {
+                    action_collaptible(true);
+                });
+        });
+    }
+
+    function submit_done(data)
+    {
+        if(data.status == 'success_plain')
+        {
+            toastr.success('Success');
+        }
+    }
+
+</script>
 @endsection

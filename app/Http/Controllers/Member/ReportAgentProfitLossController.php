@@ -53,9 +53,27 @@ class ReportAgentProfitLossController extends Member
         $date["from"] = Report::checkDatePeriod($period,$date)['start_date'];
         $date["to"] = Report::checkDatePeriod($period,$date)['end_date'];
         $data = Purchasing_inventory_system::get_sales_loss_over($date["from"],$date["to"]);
+        $data["from"] = Report::checkDatePeriod($period,$date)['start_date'];
+        $data["to"] = Report::checkDatePeriod($period,$date)['end_date'];   
         $data["action"] = "/member/report/agent/profit_loss";
+        $data['shop_name']  = $this->user_info->shop_key; 
+        $data['head_title']  = 'Agent Profit & Loss'; 
+        $data['now']        = Carbon::now()->format('l F j, Y h:i:s A');
 
-        return view("member.reports.agent_sales.agent_profit_loss",$data);
+        $report_type    = Request::input('report_type');
+        $load_view      = Request::input('load_view');
+        // dd($data);
+        /* IF REPORT TYPE IS EXIST AND NOT RETURNING VIEW */
+        if($report_type && !$load_view)
+        {
+            $view =  'member.reports.output.agent_profit_loss'; 
+            return Report::check_report_type($report_type, $view, $data, 'Agent_Profit_and_Loss-'.Carbon::now());
+        }
+        else
+        {
+            return view("member.reports.agent_sales.agent_profit_loss",$data);
+        }
+
     }
 
     /**

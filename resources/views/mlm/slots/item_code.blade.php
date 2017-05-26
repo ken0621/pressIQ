@@ -14,9 +14,24 @@
                 <label>Use to slot</label>
                 <select name="slot_id" class="form-control">
                     @foreach($_slot as $slot)
-                        <option value="{{$slot->slot_id}}">{{$slot->slot_no}}</option>
+                        <option value="{{$slot->slot_id}}">{{$slot->slot_no}} ({{$slot->membership_name}})</option>
                     @endforeach
                 </select>
+        </div>
+        <div class="form-group">
+            @if($item->UNILEVEL != 0)
+                Unilevel: {{$item->UNILEVEL}}
+            @endif
+        </div>
+        <div class="form-group">
+            @if($item->STAIRSTEP != 0)
+                Stairstep: {{$item->STAIRSTEP}}
+            @endif
+        </div>
+        <div class="form-group">
+            @if($item->REPURCHASE_POINTS != 0)
+                 Repurchase Points: {{$item->REPURCHASE_POINTS}}
+            @endif
         </div>
     </div>
     <div class="modal-footer">

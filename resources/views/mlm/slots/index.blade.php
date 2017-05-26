@@ -63,7 +63,7 @@ $data['icon'] = 'icon-sitemap';
         <label>Slot</label>
         <select name="slot_id" class="form-control">
             @foreach($all_slots_show as $slot_show)
-                <option value="{{$slot_show->slot_id}}">{{$slot_show->slot_no}}</option>
+                <option value="{{$slot_show->slot_id}}">{{$slot_show->slot_no}} ({{$slot_show->membership_name}})</option>
             @endforeach
         </select>
       <hr>

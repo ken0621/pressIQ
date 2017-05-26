@@ -486,7 +486,7 @@ class Accounting
 			$line_data["item_id"]				= 0;
 			$line_data["account_id"]			= $line["account_id"];
 			$line_data["entry_type"]			= $line["type"];
-			$line_data["entry_amount"]			= $line["entry_amount"];
+			$line_data["entry_amount"]			= convertToNumber($line["entry_amount"]);
 
 			Accounting::insertJournalLine($line_data);
 		}

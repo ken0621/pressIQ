@@ -422,7 +422,7 @@ class Mlm_member
             $session = Session::get('mlm_member');
             return $session['slot_now'];
         }
-    }
+    }    
     public static function add_new_customer($send,$shop_id)
     {
             $i['password']   = $send["password"];

@@ -702,6 +702,24 @@ class Cart
         $data["tbl_customer"]['customer_contact'] = (isset($customer_information["customer_contact"]) ? $customer_information["customer_contact"] : (isset($data["tbl_customer"]['customer_contact']) ? $data["tbl_customer"]['customer_contact'] : null));;
         $data["tbl_customer"]['country_id']     = 420;
 
+        /* CURRENT LOGGED IN */
+        if (isset($customer_information["current_user"])) 
+        {
+            $current = $customer_information["current_user"];
+            $other_info = DB::table("tbl_customer_other_info")->where("customer_id", $current->customer_id)->first();
+
+            /* SET IF LOGGED IN */
+            $data["tbl_customer"]['customer_id']      = $current->customer_id;
+            $data["tbl_customer"]['first_name']       = $current->first_name;
+            $data["tbl_customer"]['last_name']        = $current->last_name;
+            $data["tbl_customer"]['middle_name']      = $current->middle_name;
+            $data["tbl_customer"]['email']            = $current->email;
+            $data["tbl_customer"]['password']         = Crypt::decrypt($current->password);
+            $data["tbl_customer"]['shop_id']          = $shop_id;
+            $data["tbl_customer"]['customer_contact'] = $other_info->customer_mobile;
+            $data["tbl_customer"]['country_id']       = 420;
+        }
+
         /* SET SHIPPINGING INFROMATION */
         $data["tbl_customer_address"]["shipping"]["country_id"] = 420;
         $data["tbl_customer_address"]["shipping"]["customer_state"] = (isset($customer_information["shipping_state"]) ? $customer_information["shipping_state"] : (isset($data["tbl_customer_address"]["shipping"]["customer_state"]) ? $data["tbl_customer_address"]["shipping"]["customer_state"] : null));
@@ -768,7 +786,7 @@ class Cart
         /* ITEM ON CART */
         foreach($_cart as $key => $cart)
         {
-            $data["tbl_ec_order_item"][$key]["item_id"] = $cart["cart_product_information"]["item_id"];
+            $data["tbl_ec_order_item"][$key]["item_id"] = $cart["cart_product_information"]["variant_id"];
             $data["tbl_ec_order_item"][$key]["price"] = $cart["cart_product_information"]["product_price"];
             $data["tbl_ec_order_item"][$key]["quantity"] = $cart["quantity"];
             $data["tbl_ec_order_item"][$key]["subtotal"] = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
@@ -787,7 +805,7 @@ class Cart
         $data["tbl_ec_order"]["discount_coupon_amount"] = null;
         $data["tbl_ec_order"]["discount_coupon_type"] = null;
         $data["tbl_ec_order"]["subtotal"] = $subtotal;
-         $data["tbl_ec_order"]["shipping_fee"] = $shipping_fee;
+        $data["tbl_ec_order"]["shipping_fee"] = $shipping_fee;
 
         /* COMPUTE SERVICE FEE */
         if($payment_method_id != null)
@@ -870,20 +888,52 @@ class Cart
         }
     }
 
+    /*
+     * TITLE: SUBMIT ORDER
+     * 
+     * Allows us to set information for customer that will be processed later on
+     *
+     * @param
+     *    $shop_id (int) - Current Shop ID (for validation)
+     *    $payment_status (int) - 0 = not paid, 1 = paid
+     *    $order_status (str) - Pending, Failed, Processing, Shipped, Completed, On-Hold, Cancelled
+     *    $customer_id (int) - current logged in
+     *
+     * @return (array)
+     *    - order_id
+     *
+     * @author (Edward Guevarra)
+     *
+     */
+    public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null)
+    {
+        $order                                   = Cart::get_info($shop_id);
+        $order["tbl_ec_order"]["payment_status"] = $payment_status;
+        $order["tbl_ec_order"]["order_status"]   = $order_status;
+        $order["customer_id"]                    = $customer_id;
+        
+        return Ec_order::create_ec_order_from_cart($order);   
+    }
 
     public static function process_payment($shop_id)
     {
         $data = Self::get_info($shop_id);
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
         $method_information = Self::get_method_information($shop_id, $method_id);
-
         
-        switch ($method_information->link_reference_name)
+        if ( isset($method_id) && isset($method_information) )
         {
-            case 'ipay88': Redirect::to("/postPaymentWithIPay88")->send(); break;
-            case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
-            case 'paypal2': die("UNDER DEVELOPMENT"); break;
-            default: die("UNDER DEVELOPMENT"); break;
+            switch ($method_information->link_reference_name)
+            {
+                case 'ipay88': Redirect::to("/postPaymentWithIPay88")->send(); break;
+                case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                case 'paypal2': die("UNDER DEVELOPMENT"); break;
+                default: die("UNDER DEVELOPMENT"); break;
+            }
+        }
+        else
+        {
+            die("An error has occurred. Please try again later.");
         }
     }
     public static function submit_using_ewallet($cart, $shop_id)

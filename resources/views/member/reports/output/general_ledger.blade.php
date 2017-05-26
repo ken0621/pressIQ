@@ -29,7 +29,8 @@
               amount -->
      				@foreach($chart_of_account_data as $key2 => $value2)
      				  <tr data-id="{{$key2}}" data-parent="" >
-         				<td colspan="20"><b>{{$chart_of_account[$key2]}}</b></td>
+         				<td colspan="{{count($report_field)+1}}"><b>{{$chart_of_account[$key2]}}</b></td>
+                <td class="text-right"><text class="total-report">{{currency('PHP', collect($value2)->sum('amount'))}}</text></td>
          			</tr>
          				<?php $balance = 0;?>
      					@foreach($value2 as $key3 => $value3)
@@ -52,7 +53,7 @@
                 <td class="text-right">{{currency('PHP', $balance)}}</td>
               </tr>
     					@endforeach
-      				<tr>
+      				<tr data-id="total-{{$key2}}" data-parent="{{$key2}}">
       					<td colspan="{{count($report_field) + 1}}"><b>Total for {{$chart_of_account[$key2]}}</b></td>
       					<td class="text-right">{{currency('PHP', $balance)}}</td>
       				</tr>	

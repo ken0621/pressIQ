@@ -431,12 +431,7 @@ class PayrollTimeSheetController extends Member
 						$_insert_time_record[$i]["payroll_time_sheet_out"] 	= Carbon::parse(Request::input("time_out")[$key][$i])->format("H:i");
 						// $_insert_time_record[$i]["payroll_time_sheet_out"] = Carbon::parse(Request::input("break")[$key][$i])->format("H:i");
 						// $_insert_time_record[$i]["payroll_time_sheet_break"] = Request::input("break")[$key][$i];
-
-
 					}
-
-
-					
 
 					$_insert_time_record[$i]["payroll_time_shee_activity"] 	= "";
 					$_insert_time_record[$i]["payroll_time_sheet_origin"] 	= $origin;

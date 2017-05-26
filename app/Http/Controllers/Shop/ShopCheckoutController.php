@@ -76,11 +76,11 @@ class ShopCheckoutController extends Shop
         $full_name = Request::input("full_name");
         $_name = $this->split_name($full_name);
 
-
         /* SET FIRST NAME, LAST NAME AND CONTACT */
+        $customer_info["current_user"] = Self::$customer_info;
         $customer_info["first_name"] = $_name[0];
         $customer_info["last_name"] = $_name[1];
-        $customer_info["contact_number"] = Request::input("contact_number");
+        $customer_info["customer_contact"] = Request::input("contact_number");
 
         $customer_info["shipping_state"] = Self::locale_id_to_name(Request::input("customer_state"));
         $customer_info["shipping_city"] = Self::locale_id_to_name(Request::input("customer_city"));
@@ -160,8 +160,6 @@ class ShopCheckoutController extends Shop
         $data = Cart::get_info($shop_id);
         $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "ipay88")->first();
 
- 
-
         $data["paymentId"] = 1; //BANCNET, CREDIT CARD, ETC
         $data["refNo"] = $this->shop_info->shop_id . time();
         $data["amount"] = $data["tbl_ec_order"]["total"];
@@ -180,27 +178,25 @@ class ShopCheckoutController extends Shop
             }
         }
 
-
         $data["currency"] = "PHP";
         $data["prodDesc"] = $product_summary;
         $data["userName"] = $data["tbl_customer"]["first_name"] . " " . $data["tbl_customer"]["last_name"];
         $data["userEmail"] = $data["tbl_ec_order"]["customer_email"];
         $data["userContact"] = $data["tbl_customer"]["customer_contact"];
-        $data["remark"] = "";
+        $data["remark"] = "Remarks";
         $data["lang"] = "UTF-8";
         $data["responseUrl"] = URL::to('/ipay88_response');
         $data["backendUrl"] = URL::to('/ipay88_response');
         $data["merchantKey"] = $api->api_secret_id;
-
-        $requestpayment = new RequestPayment($api->api_secret_id);
-
-
+        $data["merchantCode"] = $api->api_client_id;
+        $requestpayment = new RequestPayment($data["merchantKey"]);
 
         $this->_data = array(
-            'merchantCode'  => $requestpayment->setMerchantCode($api->api_client_id),
+            'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
             'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
             'refNo'         => $requestpayment->setRefNo($data["refNo"]),
             'amount'        => $requestpayment->setAmount($data["amount"]),
+            // 'amount'        => $requestpayment->setAmount(15),
             'currency'      => $requestpayment->setCurrency($data["currency"]),
             'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
             'userName'      => $requestpayment->setUserName($data["userName"]),
@@ -220,10 +216,6 @@ class ShopCheckoutController extends Shop
     {
         $request = Request::all();
         $shop_id = $this->shop_info->shop_id;
-        $result = Cart::get_info($shop_id);
-        $order_id = $result["tbl_ec_order"]["ec_order_id"];
-
-        Session::forget('ipay88_order');
 
         if ($request) 
         {
@@ -245,19 +237,20 @@ class ShopCheckoutController extends Shop
 
             if($request['Status'] == 0)
             {
-                return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.')->send();    
+                dd($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');
+                // return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.')->send();    
             } 
             else 
             {
-                $update["payment_status"] = 1;
-                $update["order_status"] = "Processing";
-                $update["ec_order_id"]  = $order_id;
-                $update["shop_id"]      = $shop_id;
-                Ec_order::update_ec_order($update);   
+                $shop_id        = $this->shop_info->shop_id;
+                $payment_status = 1;
+                $order_status   = "Processing";
+
+                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
                 Cart::clear_all($this->shop_info->shop_id);
 
                 // Redirect
-                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
             }
         }
         else
@@ -275,11 +268,11 @@ class ShopCheckoutController extends Shop
             return Redirect::to("/");
         }
 
-        $data = unserialize(Crypt::decrypt($order));
+        $order_id = unserialize(Crypt::decrypt($order));
     
-        $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $data["order_id"])
-                                            ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
-                                            ->get();
+        $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $order_id)
+                                           ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
+                                           ->get();
 
         $data['summary'] = [];
         $subtotal = 0;
@@ -292,6 +285,7 @@ class ShopCheckoutController extends Shop
         }
         
         $data['summary']['subtotal'] = $subtotal;
+        $data['order_id'] = $order_id;
 
         return view("order_placed", $data);
     }

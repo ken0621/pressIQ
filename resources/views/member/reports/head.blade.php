@@ -33,13 +33,30 @@
 <script type="text/javascript" src="/assets/mlm/jquery.aCollapTable.min.js"></script>  
 <script type="text/javascript">
     function action_collaptible(collapse = false)
+    {
+        $('.collaptable').aCollapTable(
+        { 
+            startCollapsed: collapse,
+            addColumn: false, 
+            plusButton: '&#9658; ', 
+            minusButton: '&#9660; '
+        });
+
+        if(collapse)    $(".act-more").closest("tr").find(".total-report").removeClass("hide");
+        else            $(".act-more").closest("tr").find(".total-report").addClass("hide");
+    }
+
+    $(document).on("click", ".act-more", function()
+    {
+        $parent_tr = $(this).closest("tr");
+
+        if($parent_tr.hasClass("act-tr-expanded"))
         {
-            $('.collaptable').aCollapTable(
-            { 
-                startCollapsed: collapse,
-                addColumn: false, 
-                plusButton: '<span class="fa fa-caret-right fa-1x"> </span> ', 
-                minusButton: '<span class="fa fa-caret-down fa-1x"> </span> ' 
-            });
+            $parent_tr.find(".total-report").addClass("hide");
         }
+        else
+        {
+            $parent_tr.find(".total-report").removeClass("hide");
+        }
+    })
 </script>

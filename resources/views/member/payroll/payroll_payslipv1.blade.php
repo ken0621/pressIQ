@@ -1,4 +1,8 @@
 <style type="text/css">
+
+	@page { margin: 0px; }
+	body { margin: 0px; }
+
 	.border
 	{
 		border: 1px solid #000000;
@@ -37,7 +41,7 @@
 				@if($counter==$payslip_num)
 					<tr></tr>
 				@endif
-				<td>
+				<td valign="top">
 					<div class="div-payslip">
 					<table cellpadding="5" cellspacing="0" class="border padding-5" width="100%">
 						@if($payslip->include_company_logo == 1)

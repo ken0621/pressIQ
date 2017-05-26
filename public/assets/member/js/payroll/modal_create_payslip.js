@@ -31,12 +31,6 @@ function modal_create_payslip()
 		    placeholder: 'Paper Sizes'
 		});
 
-		$(".payslip-width").globalDropList(
-		{
-		    link_size: 'md',
-		    width : '100%',
-		    placeholder: 'Payslip Width'
-		});
 	}
 
 	function check_position()

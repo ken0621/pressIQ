@@ -32,7 +32,7 @@
 								<small>Payslip width (%)</small>
 								{{-- <input type="number" name="payslip_width" class="form-control text-right payslip-width" placeholder="0" min="1" max="100" value="{{$payslip->payslip_width}}" step="any" required> --}}
 
-								<select class="form-control drop-down payslip-width" name="payslip_width">
+								<select class="form-control text-right payslip-width" name="payslip_width">
 									<option value="100" {{ ($payslip->payslip_width=='100' ? 'selected' : '' ) }} >100%</option>
 									<option value="50"  {{ ($payslip->payslip_width=='50'  ? 'selected' : '' ) }}>50%</option>
 									<option value="25"  {{ ($payslip->payslip_width=='25'  ? 'selected' : '' ) }}>25%</option>

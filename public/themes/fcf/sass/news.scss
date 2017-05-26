@@ -47,19 +47,19 @@ body{
 	.news-details{
 		padding-left: 10px;
 
-		@media screen and (max-width: 960px)
+		@media screen and (max-width: 900px)
 		{
 
 			width: 80%;
 			float: right;
-			margin-top: -142px;
+			margin-top: -127px;
 		}
 		@media screen and (max-width: 600px)
 		{
 
 			width: 80%;
 			float: right;
-			margin-top: -90px;
+			margin-top: -84px;
 		}
 		@media screen and (max-width: 500px)
 		{
@@ -70,11 +70,11 @@ body{
 		}
 		@media screen and (max-width: 420px)
 		{
-			margin-top: -120px;
+			margin-top: -110px;
 		}
 		@media screen and (max-width: 360px)
 		{
-			margin-top: -105px;
+			margin-top: -91px;
 		}
 	}
 	.news-title{

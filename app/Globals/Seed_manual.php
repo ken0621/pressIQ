@@ -346,7 +346,7 @@ class Seed_manual
        $insert[10]['default_open_balance_date']  = "";
        $insert[10]['is_tax_account']             = "";
        $insert[10]['account_tax_code_id']        = "";
-       $insert[10]['default_for_code']           = "";
+       $insert[10]['default_for_code']           = "accounting-open-balance-equity";
        
        $insert[11]['default_id']                 = 11; 
        $insert[11]['default_type_id']            = "11";    

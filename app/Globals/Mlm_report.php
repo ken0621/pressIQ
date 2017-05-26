@@ -793,7 +793,8 @@ class Mlm_report
 
         $membership_code = Tbl_membership_code::where('tbl_membership_code.shop_id', $shop_id)
         ->join('tbl_membership_code_invoice', 'tbl_membership_code_invoice.membership_code_invoice_id', '=', 'tbl_membership_code.membership_code_invoice_id')
-        
+        ->join('tbl_membership_package', 'tbl_membership_package.membership_package_id', '=', 'tbl_membership_code.membership_package_id')
+        ->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_membership_package.membership_id')
         ->skip($filters['skip'])
         ->take($filters['take'])
         ->where('membership_code_date_created', '>=', $filters['from'])
@@ -802,8 +803,14 @@ class Mlm_report
 
         $package = Tbl_membership_package::get()->keyBy('membership_package_id');
         $by_membership = [];
+
+        $data['mem_code_inv'] = [];
+        $data['by_mem_qty'] = [];
+        $data['by_mem_sum_qty'] = 0;
+        $data['by_mem_sum_amount'] = 0;
         foreach($membership_code as $key => $value)
         {
+            $data['mem_code_inv'][$value->membership_code_invoice_id][$value->membership_code_id] = $value;
             if(isset($by_membership[$value->membership_package_id]))
             {
                 $by_membership[$value->membership_package_id] += $value->membership_code_price;
@@ -812,7 +819,18 @@ class Mlm_report
             {
                 $by_membership[$value->membership_package_id] = $value->membership_code_price;
             }
+
+            if(isset($data['by_mem_qty'][$value->membership_package_id]))
+            {
+                $data['by_mem_qty'][$value->membership_package_id] += 1;
+            }
+            else
+            {
+                 $data['by_mem_qty'][$value->membership_package_id] = 1;
+            }
             
+            $data['by_mem_sum_qty'] += 1;
+            $data['by_mem_sum_amount'] += $value->membership_code_price;
         }
         $per_package_item = Tbl_voucher_item::join('tbl_voucher', 'tbl_voucher.voucher_id', '=', 'tbl_voucher_item.voucher_id')
         ->join('tbl_membership_code_invoice', 'tbl_membership_code_invoice.membership_code_invoice_id', '=','tbl_voucher.voucher_invoice_membership_id')

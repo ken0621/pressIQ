@@ -15,7 +15,6 @@
         </small>
         </h1>
         <button class="btn btn-custom-primary panel-buttons pull-right popup" link="/member/payroll/payroll_period_list/modal_create_payroll_period">Create Period</button>
-      
         <input type="hidden" name="_token" value="{{csrf_token()}}" id="_token">
       </div>
     </div>

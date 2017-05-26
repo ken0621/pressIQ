@@ -83,7 +83,7 @@ Route::any('/member/developer/reset_slot/submit/retro_product_sales', 'Member\De
 Route::any('/member/developer/reset_slot/submit/re_tree', 'Member\Developer_StatusController@re_tree'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Developer_StatusController@re_com_phil_lost'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
-
+Route::any('/member/developer/reset_slot/submit/recompute', 'Member\Developer_StatusController@recompute'); //GUILLERMO TABLIGAN
 
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
@@ -764,13 +764,15 @@ Route::group(array('prefix' => '/member/report'), function()
 	/* Accounting Sales - per item */
 	Route::any('/accounting/sale/item','Member\ReportsController@accounting_sale_items');
 
-	/* Accounting Profit and loss */
-	Route::get('/accounting/profit/loss','Member\ReportsController@profit_loss');
-	Route::any('/accounting/profit/loss/get','Member\ReportsController@profit_loss_get');
-
 	/* Accounting general ledger */
 	Route::get('/accounting/general/ledger','Member\ReportsController@general_ledger');
 	Route::any('/accounting/general/ledger/get','Member\ReportsController@general_ledger_get');
+
+	/* Accounting Balance Sheet */
+	Route::any('/accounting/balance_sheet','Member\ReportsController@balance_sheet');
+
+	/* Accounting Profit and loss */
+	Route::any('/accounting/profit_loss','Member\ReportsController@profit_loss');
 
 	/* Accounting Report List (Customer, Vendor, Item and Account) */
 	Route::any('/accounting/customer_list','Member\ReportsController@customer_list');

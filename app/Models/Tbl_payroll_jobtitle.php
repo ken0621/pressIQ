@@ -26,4 +26,12 @@ class Tbl_payroll_jobtitle extends Model
     		 
     	return $query;
     }
+
+    public function scopeseljobtitle($query, $payroll_jobtitle_department_id = 0, $payroll_jobtitle_archived = 0)
+    {
+        $query->where('payroll_jobtitle_department_id', $payroll_jobtitle_department_id)
+              ->where('payroll_jobtitle_archived', $payroll_jobtitle_archived);
+
+        return $query;
+    }
 }

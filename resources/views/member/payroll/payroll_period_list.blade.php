@@ -55,7 +55,10 @@
                       <span class="caret"></span></button>
                       <ul class="dropdown-menu dropdown-menu-custom">
                         <li>
-                          <a href="#" class="popup" link="/member/payroll/payroll_period_list/modal_edit_period/{{$active->payroll_period_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                          <a href="#" class="popup" link="/member/payroll/payroll_period_list/modal_edit_period/{{$active->payroll_period_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit Period</a>
+                        </li>
+                        <li>
+                          <a href="#" class="popup" link="/member/payroll/payroll_period_list/modal_schedule_employee_shift?id={{$active->payroll_period_id}}" size="lg"><i class="fa fa-calendar"></i>&nbsp;Schedule</a>
                         </li>
                         <li>
                           <a href="#" class="popup" link="/member/payroll/payroll_period_list/modal_archive_period/1/{{$active->payroll_period_id}}" size="sm"><i class="fa fa-trash-o"></i>&nbsp;Archive</a>
@@ -101,8 +104,9 @@
                       <span class="caret"></span></button>
                       <ul class="dropdown-menu dropdown-menu-custom">
                         <li>
-                          <a href="#" class="popup" link="/member/payroll/payroll_period_list/modal_edit_period/{{$archived->payroll_period_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+                          <a href="#" class="popup" link="/member/payroll/payroll_period_list/modal_edit_period/{{$archived->payroll_period_id}}" ><i class="fa fa-pencil"></i>&nbsp;Edit Period</a>
                         </li>
+                        <a href="#" class="popup" link="/member/payroll/payroll_period_list/modal_schedule_employee_shift?id={{$archived->payroll_period_id}}" size="lg"><i class="fa fa-calendar" ></i>&nbsp;Schedule</a>
                         <li>
                           <a href="#" class="popup" link="/member/payroll/payroll_period_list/modal_archive_period/0/{{$archived->payroll_period_id}}" size="sm"><i class="fa fa-refresh"></i>&nbsp;Restore</a>
                         </li>

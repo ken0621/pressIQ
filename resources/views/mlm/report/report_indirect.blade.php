@@ -14,6 +14,7 @@
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped table-condensed">
                                 <thead>
+                                    <th></th>
                                     <th>ID</th>
                                     <th>DATE</th>
                                     <th>SPONSOR</th>
@@ -25,6 +26,7 @@
                                 @foreach($report as $key => $value)
                                 <tbody>
                                     <tr>
+                                        <td>{!! mlm_profile($value) !!}</td>
                                         <td>{{$value->wallet_log_id}}</td>
                                         <td>{{$value->wallet_log_date_created}}</td>
                                         <td>{{$value->slot_no}}</td>

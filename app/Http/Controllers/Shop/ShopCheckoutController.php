@@ -284,7 +284,8 @@ class ShopCheckoutController extends Shop
         }
         
         $data['summary']['subtotal'] = $subtotal;
-
+        $data['order_id'] = $order_id;
+        dd($data);
         return view("order_placed", $data);
     }
 }

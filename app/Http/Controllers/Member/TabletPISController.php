@@ -1511,7 +1511,7 @@ class TabletPISController extends Member
 
             if($inv == 0 || Request::input("keep_val") == "keep")
             {
-                $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+                $invoice_id = Invoice::postInvoice($customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info,"sales_receipt");
 
                 /* SUBTOTAL */
                 $subtotal_price = collect($item_info)->sum('amount');
@@ -1757,7 +1757,7 @@ class TabletPISController extends Member
                 //     Purchasing_inventory_system::return_qty($sir_id, $value->invline_item_id, $value->invline_um, $value->invline_qty); 
                 // }
 
-                $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info);
+                $inv_id = Invoice::updateInvoice($invoice_id, $customer_info, $invoice_info, $invoice_other_info, $item_info, $total_info, "sales_receipt");
 
                  /* SUBTOTAL */
                 $subtotal_price = collect($item_info)->sum('amount');

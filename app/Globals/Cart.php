@@ -702,24 +702,6 @@ class Cart
         $data["tbl_customer"]['customer_contact'] = (isset($customer_information["customer_contact"]) ? $customer_information["customer_contact"] : (isset($data["tbl_customer"]['customer_contact']) ? $data["tbl_customer"]['customer_contact'] : null));;
         $data["tbl_customer"]['country_id']     = 420;
 
-        /* CURRENT LOGGED IN */
-        if (isset($customer_information["current_user"])) 
-        {
-            $current = $customer_information["current_user"];
-            $other_info = DB::table("tbl_customer_other_info")->where("customer_id", $current->customer_id)->first();
-
-            /* SET IF LOGGED IN */
-            $data["tbl_customer"]['customer_id']      = $current->customer_id;
-            $data["tbl_customer"]['first_name']       = $current->first_name;
-            $data["tbl_customer"]['last_name']        = $current->last_name;
-            $data["tbl_customer"]['middle_name']      = $current->middle_name;
-            $data["tbl_customer"]['email']            = $current->email;
-            $data["tbl_customer"]['password']         = Crypt::decrypt($current->password);
-            $data["tbl_customer"]['shop_id']          = $shop_id;
-            $data["tbl_customer"]['customer_contact'] = $other_info->customer_mobile;
-            $data["tbl_customer"]['country_id']       = 420;
-        }
-
         /* SET SHIPPINGING INFROMATION */
         $data["tbl_customer_address"]["shipping"]["country_id"] = 420;
         $data["tbl_customer_address"]["shipping"]["customer_state"] = (isset($customer_information["shipping_state"]) ? $customer_information["shipping_state"] : (isset($data["tbl_customer_address"]["shipping"]["customer_state"]) ? $data["tbl_customer_address"]["shipping"]["customer_state"] : null));
@@ -895,24 +877,24 @@ class Cart
      *
      * @param
      *    $shop_id (int) - Current Shop ID (for validation)
-     *    $order_id (int) - Current Order ID (for updating)
      *    $payment_status (int) - 0 = not paid, 1 = paid
      *    $order_status (str) - Pending, Failed, Processing, Shipped, Completed, On-Hold, Cancelled
+     *    $customer_id (int) - current logged in
      *
      * @return (array)
-     *    - order data (query)
+     *    - order_id
      *
      * @author (Edward Guevarra)
      *
      */
-    public static function submit_order($shop_id, $payment_status, $order_status)
+    public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null)
     {
-        $insert                   = Self::get_info();
-        $insert["shop_id"]        = $shop_id;
-        $insert["payment_status"] = $payment_status;
-        $insert["order_status"]   = $order_status;
-       
-        return Ec_order::create_ec_order_from_cart($insert);   
+        $order                                   = Cart::get_info($shop_id);
+        $order["tbl_ec_order"]["payment_status"] = $payment_status;
+        $order["tbl_ec_order"]["order_status"]   = $order_status;
+        $order["customer_id"]                    = $customer_id;
+        
+        return Ec_order::create_ec_order_from_cart($order);   
     }
 
     public static function process_payment($shop_id)

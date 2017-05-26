@@ -99,14 +99,15 @@ body{
 	font-size: 26px;
 	color: #151515;
 	
-	@media screen and (max-width: 500px)
-	{
-		padding: 15px 0px 10px 5px;
-	}
 	@media screen and (max-width: 960px)
 	{
 		padding: 15px 0px 10px 5px;
 	}
+	@media screen and (max-width: 500px)
+	{
+		padding: 15px 0px 10px 5px;
+	}
+
 }
 /* OUR LATEST NEWS */
 

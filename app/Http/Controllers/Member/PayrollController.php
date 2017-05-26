@@ -6158,6 +6158,8 @@ class PayrollController extends Member
 
           $view = 'member.payroll.payroll_payslipv1';             
           $pdf = PDF::loadView($view, $data);
+               $pdf->setOption('margin-right',5);
+               $pdf->setOption('margin-left',5);
           return $pdf->stream('Paycheque.pdf');
 
 

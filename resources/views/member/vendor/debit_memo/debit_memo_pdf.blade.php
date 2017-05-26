@@ -36,7 +36,7 @@
                     <div class="row clearfix draggable-container db-replace-container">
                         <div >
                             <div class="col-sm-12">
-                                <table class="digima-table">
+                                <table class="digima-table" style="width:100%">
                                     <thead >
                                         <tr>
                                             <th style="width: 180px;">Product/Service</th>
@@ -57,8 +57,8 @@
                                             <tr class="tr-draggable">
                                                 <td><span>{{ $dbline->item_name}}</span></td>
                                                 <td><span>{{$dbline->dbline_qty_um}}</span></td>
-                                                <td><span>{{number_format($dbline->dbline_rate,2)}}</span></td>
-                                                <td><span {{$total += $dbline->dbline_amount - $dbline->dbline_replace_amount}}>{{number_format($dbline->dbline_amount,2)}}</span></td>
+                                                <td class="text-right"><span>{{number_format($dbline->dbline_rate,2)}}</span></td>
+                                                <td class="text-right"><span {{$total += $dbline->dbline_amount - $dbline->dbline_replace_amount}}>{{number_format($dbline->dbline_amount,2)}}</span></td>
 	                                            @if($db->is_bad_order == 1)
                                                 <td><span>{{$dbline->dbline_replace_qty_um}}</span></td>
                                                 <td><span>{{number_format($dbline->dbline_replace_rate,2)}}</span></td>

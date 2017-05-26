@@ -47,7 +47,7 @@ class ShopCheckoutController extends Shop
         }
         else
         { 
-            return Redirect::to('/')->send();
+            return Redirect::to('/checkout/login')->send();
         }
     }
     public function locale()
@@ -285,7 +285,7 @@ class ShopCheckoutController extends Shop
         
         $data['summary']['subtotal'] = $subtotal;
         $data['order_id'] = $order_id;
-        
+
         return view("order_placed", $data);
     }
 }

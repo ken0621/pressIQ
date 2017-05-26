@@ -584,9 +584,9 @@ class Ec_order
             unset($order_info["tbl_customer"]["customer_contact"]);
             $order_info["tbl_customer"]["middle_name"] = "";
             $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);
+            dd($customer_id);
             if (DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 
             {
-                dd($customer_id);
                 $other_insert["customer_mobile"] = $customer_mobile;
                 $other_inesrt["customer_id"]     = $customer_id;
                 DB::table("tbl_customer_other_info")->insert($other_insert);

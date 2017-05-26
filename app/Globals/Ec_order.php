@@ -24,6 +24,7 @@ use Request;
 use Session;
 use Validator;
 use Redirect;
+use Crypt;
 use Carbon\Carbon;
 
 class Ec_order

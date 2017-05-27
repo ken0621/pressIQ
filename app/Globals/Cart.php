@@ -13,6 +13,7 @@ use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_ec_order;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_online_pymnt_method;
+use App\Models\Tbl_email_template;
 use App\Globals\Ecom_Product;
 use DB;
 use Session;
@@ -23,6 +24,7 @@ use App\Globals\Mlm_member;
 use App\Models\Tbl_mlm_item_points;
 use App\Globals\Mlm_plan;
 use Crypt;
+use Config;
 use App\Globals\Mlm_slot_log;
 
 class Cart
@@ -896,7 +898,6 @@ class Cart
         
         return Ec_order::create_ec_order_from_cart($order);   
     }
-
     public static function process_payment($shop_id)
     {
         $data = Self::get_info($shop_id);
@@ -910,6 +911,7 @@ class Cart
                 case 'ipay88': Redirect::to("/postPaymentWithIPay88")->send(); break;
                 case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
                 case 'paypal2': die("UNDER DEVELOPMENT"); break;
+                case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
                 default: die("UNDER DEVELOPMENT"); break;
             }
         }
@@ -917,6 +919,34 @@ class Cart
         {
             die("An error has occurred. Please try again later.");
         }
+    }
+    public static function submit_using_proof_of_payment($shop_id, $method_information)
+    {
+        $payment_status = 0;
+        $order_status   = "Pending";
+        $customer       = Cart::get_customer();
+
+        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+        Cart::clear_all($shop_id);
+
+        $email = DB::table("tbl_ec_order")->where("tbl_ec_order.ec_order_id", $order_id)->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")->first()->email;
+
+        $owner_email = Tbl_user::where("user_shop", $shop_id)->where("archived", 0)->first();
+
+        $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
+        $data['mail_to'] = $owner_email->user_email;
+        $data['mail_username'] = Config::get('mail.username');
+        $data['mail_subject'] = "Verify Payment";
+        $data['payment_detail'] = $method_information->link_description;
+
+        $result = Mail_global::payment_mail($data, $shop_id);
+
+        if ($result == 0) 
+        {
+            dd("Some error occurred. Please contact the administrator.");
+        }
+
+        return Redirect::to("/email_payment?email=" . $email)->send();
     }
     public static function submit_using_ewallet($cart, $shop_id)
     {
@@ -963,6 +993,17 @@ class Cart
         Cart::clear_all($shop_id);
         $result['status'] = 'success';
         return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
+    }
+    public static function get_customer()
+    {
+        if(Session::get('mlm_member') != null)
+        {
+            return Session::get('mlm_member');
+        }
+        else
+        {
+            return null;
+        }
     }
     public static function get_userip()
     {

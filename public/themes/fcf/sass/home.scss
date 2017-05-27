@@ -165,6 +165,13 @@ body{
 			float: right;
 			margin-top: -84px;
 		}
+		@media screen and (max-width: 414px)
+		{
+
+			width: 60%;
+			float: right;
+			margin-top: -111px;
+		}
 		@media screen and (max-width: 375px)
 		{
 
@@ -420,6 +427,11 @@ body{
 						left: 482px;
 						top: -140px;
 					}
+					@media screen and (max-width: 414px)
+					{
+						left: 302px;
+						top: -114px;
+					}
 					@media screen and (max-width: 375px)
 					{
 						left: 267px;
@@ -455,6 +467,11 @@ body{
 					{
 						right: 0px;
 						top: -140px;
+					}
+					@media screen and (max-width: 414px)
+					{
+						right: 0px;
+						top: -114px;
 					}
 					@media screen and (max-width: 375px)
 					{

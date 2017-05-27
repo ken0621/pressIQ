@@ -1041,8 +1041,6 @@ class Payroll
 		}
 
 		
-
-
 		/* COMPUTE EXTRA DAY AND REST DAY */
 		$total_rest_day_hours = 0;
 		$total_extra_day_hours = 0;
@@ -1662,11 +1660,11 @@ class Payroll
 			$daily_absent = 0;
 			if($approved->absent)
 			{
-				// if(!$has_leave)
-				// {
+				if(!$has_leave && $group->payroll_group_salary_computation == 'Monthly Rate')
+				{
 					$absent_deduction += $daily_rate;
 					$daily_absent = $daily_rate;
-				// }
+				}
 				$absent_count++;
 			}
 
@@ -2283,8 +2281,11 @@ class Payroll
 
 		$pevious_record = Tbl_payroll_record::getdate($shop_id, $date_period)
 											->where('tbl_payroll_period.payroll_period_category', $payroll_period_category)
+											->where('payroll_employee_id',$employee_id)
 											->get()
 											->toArray();
+
+		// dd($pevious_record);
 
 		
 		$previous_tax 			= collect($pevious_record)->sum('tax_contribution');
@@ -2292,10 +2293,11 @@ class Payroll
 		$previous_pagibig 		= collect($pevious_record)->sum('pagibig_contribution');
 		$previous_philhealth	= collect($pevious_record)->sum('philhealth_contribution_ee');
 
+		// dd($previous_sss);
+
 		$sss_contribution		= Payroll::sss_contribution($shop_id, $data['salary_sss']);
 		$sss_contribution_ee 	= $sss_contribution['ee'];
 
-		// dd($sss_contribution);
 
 		if($group->payroll_group_sss == 'Every Period')
 		{
@@ -2439,7 +2441,7 @@ class Payroll
 				$salary_taxable = $data['salary_taxable'];
 
 
-				if($group->payroll_group_before_tax == 1)
+				if($group->payroll_group_before_tax == 0)
 				{
 					$salary_taxable = $data['salary_taxable'] - ($data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution']);
 				}

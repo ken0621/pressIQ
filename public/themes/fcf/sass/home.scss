@@ -408,6 +408,10 @@ body{
 			.carousel-control.left{
 				background-image: linear-gradient(to right,rgba(0,0,0,.5) 20%,rgba(0,0,0,.0001) 100%);
 				background-repeat: repeat-x;
+				@media screen and (max-width: 600px)
+				{
+					background-image: none;
+				}
 				img{
 					position: relative;
 					left: -5px;
@@ -440,6 +444,10 @@ body{
 				left: auto;
 				background-image: linear-gradient(to right,rgba(0,0,0,.0001) 20%,rgba(0,0,0,.5) 100%);
 				background-repeat: repeat-x;
+				@media screen and (max-width: 600px)
+				{
+					background-image: none;					
+				}
 				img{
 					position: relative;
 					right: -5px;

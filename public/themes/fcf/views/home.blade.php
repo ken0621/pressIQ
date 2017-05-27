@@ -25,7 +25,7 @@
 												</div>
 											</div>
 											<div class="col-md-3">
-												<div class="btn-container"><button class="read-more-btn">READ MORE</button></div>
+												<div class="btn-container"><a href="/runruno"><button class="read-more-btn">READ MORE</button></a></div>
 											</div>
 										</div>
 									</div>

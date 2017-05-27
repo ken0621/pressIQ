@@ -76,8 +76,8 @@
                         <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a>
                         <a href="/about" class="head-button link-nav {{ Request::segment(1) == 'about' ? 'active' : '' }}" id="company-profile">COMPANY PROFILE</a>
                         <a href="/runruno" class="head-button link-nav {{ Request::segment(1) == 'runruno' ? 'active' : '' }}" id="runruno">RUNRUNO</a>
-                        <a href="javascript:" class="head-button link-nav" id="news">NEWS</a>
-                        <a href="/contact" class="head-button link-nav {{ Request::segment(1) == 'contactus' ? 'active' : '' }}" id="contact-us">CONTACT US</a>
+                        <a href="javascript:" class="head-button link-nav {{ Request::segment(1) == 'news' ? 'active' : '' }}" id="news">NEWS</a>
+                        <a href="/contact" class="head-button link-nav {{ Request::segment(1) == 'contact' ? 'active' : '' }}" id="contact-us">CONTACT US</a>
                     </nav>
                 </div>
                 
@@ -186,11 +186,11 @@
                             NAVIGATION
                         </div>
                         <div class="navigation-btn-container">
-                            <a href="/home"><p><span>HOME</span></p></a>
+                            <a href="/"><p><span>HOME</span></p></a>
                             <a href="/about"><p><span>COMPANY PROFILE</span></p></a>
                             <a href="/runruno"><p><span>RUNRUNO</span></p></a>
-                            <a href="/news"><p><span>NEWS</span></p></a>
-                            <a href="/contactus"><p><span>CONTACT US</span></p></a>
+                            <a href="javascript:" class="head-button link-nav {{ Request::segment(1) == 'news' ? 'active' : '' }}" id="news"><p><span>NEWS</span></p></a>
+                            <a href="/contact"><p><span>CONTACT US</span></p></a>
                         </div>
                     </div>
                 </div>
@@ -249,14 +249,19 @@
 
             function event_toggle_nav()
             {
-                $(".menu-nav").click(function(){
+                $(".menu-nav").bind("click", function()
+                {
                     action_toggle_nav();
                 });
             }
 
             function action_toggle_nav()
             {
-                $(".navirino").slideToggle();
+                $(".menu-nav").unbind("click");
+                $(".navirino").slideToggle(400, function()
+                {
+                    event_toggle_nav();
+                });
             }
 
             function event_news_click()

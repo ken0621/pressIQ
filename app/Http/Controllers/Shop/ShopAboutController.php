@@ -5,6 +5,7 @@ use Crypt;
 use Redirect;
 use Request;
 use View;
+use DB;
 class ShopAboutController extends Shop
 {
     public function index()
@@ -22,6 +23,12 @@ class ShopAboutController extends Shop
     public function news()
     {
         $data["page"] = "news";
+        $id = Request::input("id");
+        $data["main_news"] = DB::table("tbl_post")->where("post_id", $id)->first();
+        if (!isset($data["main_news"])) 
+        {
+            return Redirect::to("/");
+        }
         return view("news", $data);
     }
 

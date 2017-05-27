@@ -105,7 +105,7 @@ class Purchasing_inventory_system
                 $data["agent"][$key_agent]["discrepancy"] = $value->agent_collection - ($total_sold - $total_disc);
                 $data["agent"][$key_agent]["total_loss"] = $loss + $mts_loss;
                 $data["agent"][$key_agent]["total_over"] = $over + $mts_over;
-                $data["agent"][$key_agent]["total_discrepancy"] = $data["agent"][$key_agent]["total_over"] + $data["agent"][$key_agent]["total_loss"];
+                $data["agent"][$key_agent]["total_discrepancy"] = $data["agent"][$key_agent]["total_loss"];
 
                 $data[$key_agent] = $total_sold." | ".$total_disc;
             }

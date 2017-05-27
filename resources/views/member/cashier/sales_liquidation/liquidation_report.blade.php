@@ -489,7 +489,7 @@
                                 <div>
                                             I hereby attest to the truth of the transaction I made, I am liable
                                     for all the losses that I incurred. In case the collection of all my losses
-                                    is made thru court. I will pay the owner 45% per annum interest plus attorney's
+                                    is made thru court. I will pay Jose L. Tiong - owner, 45% per annum interest plus attorney's
                                     fees and reimbursed all incidental expenses incurred by the owner of the company
                                 </div>
                             </td>

@@ -2281,6 +2281,7 @@ class Payroll
 
 		$pevious_record = Tbl_payroll_record::getdate($shop_id, $date_period)
 											->where('tbl_payroll_period.payroll_period_category', $payroll_period_category)
+											->where('payroll_employee_id',$employee_id)
 											->get()
 											->toArray();
 
@@ -2306,7 +2307,7 @@ class Payroll
 			$data['sss_contribution_ec'] = divide($sss_contribution_ee, $period_category_arr['count_per_period']);
 			// dd($data['sss_contribution_ee']);
 
-			if($data['is_deduct_sss_default'] == 1)
+			if($data['is_deduct_sss_default'] == 0)
 			{	
 				$data['sss_contribution_ee'] = $data['deduct_sss_custom'];
 
@@ -2360,7 +2361,7 @@ class Payroll
 			$data['philhealth_contribution_ee'] = divide($philhealth_contribution_ee, $period_category_arr['count_per_period']);
 			$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'] , $period_category_arr['count_per_period']);
 
-			if($data['is_deduct_philhealth_default'] == 1)
+			if($data['is_deduct_philhealth_default'] == 0)
 			{
 				$data['philhealth_contribution_ee'] = $data['deduct_philhealth_custom'];
 				if($period_category == 'Last Period')
@@ -2398,7 +2399,7 @@ class Payroll
 			// philhealth_contribution
 			$data['pagibig_contribution'] = divide($pagibig_contribution, $period_category_arr['count_per_period']);
 
-			if($data['is_deduct_pagibig_default'] == 1)
+			if($data['is_deduct_pagibig_default'] == 0)
 			{
 				$data['pagibig_contribution'] = $data['deduct_pagibig_custom'];
 
@@ -2440,7 +2441,7 @@ class Payroll
 				$salary_taxable = $data['salary_taxable'];
 
 
-				if($group->payroll_group_before_tax == 1)
+				if($group->payroll_group_before_tax == 0)
 				{
 					$salary_taxable = $data['salary_taxable'] - ($data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution']);
 				}

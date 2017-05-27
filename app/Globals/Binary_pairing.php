@@ -43,7 +43,7 @@ use App\Globals\Membership_code;
 use App\Globals\Binary_pairing;
 class Binary_pairing
 {   
-    public static function binary_gc($binary_advance_pairing)
+    public static function binary_gc($binary_advance_pairing,$current_pair)
     {
         if($binary_advance_pairing->binary_settings_gc_enable == 'enable')
         {

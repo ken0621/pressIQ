@@ -330,7 +330,7 @@
                     <table class="text-center" style="width: 100%;font-size: 12px;">
                         <tr>
                             <td style="width: 33%">{{currency('PHP', $total_sold - $total_disc)}}</td>
-                            <td style="width: 33%">{{currency('PHP', $total_empties)}}</td>
+                            <td style="width: 33%">{{currency('PHP', $total_return)}}</td>
                             <td style="width: 33%">{{currency('PHP', $total_ar)}}</td>
                         </tr>
                         <tr>
@@ -390,7 +390,7 @@
                             <tr>
                                 <td style="width: 40%"><h4><strong>AMOUNT TO BE REMITTED : </strong></h4></td>
                                 <td style="width: 60%" {{ $sales = $total_sold - $total_disc }}>
-                                    <div style="border-bottom: 1px solid #000;width: 100%" class="{{$total_amount_tobe_remitted = (((($sales - $total_empties) - $total_ar) - $cm_applied) +  $ar_collection) + 0 }}">
+                                    <div style="border-bottom: 1px solid #000;width: 100%" class="{{$total_amount_tobe_remitted = (((($sales - $total_return) - $total_ar) - $cm_applied) +  $ar_collection) + 0 }}">
                                         <h4>{{currency('PHP', $total_amount_tobe_remitted)}} </h4>
                                     </div>
                                 </td>

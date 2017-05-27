@@ -15,6 +15,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_customer_invoice;
 use App\Models\Tbl_sir_inventory;
 use App\Models\Tbl_item;
+use App\Models\Tbl_sir_sales_report;
 use App\Models\Tbl_credit_memo_line;
 use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_inventory_slip;
@@ -105,10 +106,11 @@ class Purchasing_inventory_system
                 $data["agent"][$key_agent]["total_loss"] = $loss + $mts_loss;
                 $data["agent"][$key_agent]["total_over"] = $over + $mts_over;
                 $data["agent"][$key_agent]["total_discrepancy"] = $data["agent"][$key_agent]["total_over"] + $data["agent"][$key_agent]["total_loss"];
+
+                $data[$key_agent] = $total_sold." | ".$total_disc;
             }
             
         }
-
         return $data;
     }
     public static function get_report_data($sir_id)
@@ -125,6 +127,7 @@ class Purchasing_inventory_system
 
         $data["_returns"] = Tbl_sir_cm_item::item()->where("sc_sir_id",$sir_id)->get();
 
+        $total_sold = 0;
         $data["type"] = "I.L.R";
         $loss = 0;
         $over = 0;
@@ -188,6 +191,9 @@ class Purchasing_inventory_system
                     $remaining_qty = $rem;
                     $physical_ctr = $value->physical_count;
                 }
+
+
+                $total_sold += $total_sold_qty * $value->sir_item_price;
             
                 $data["_sir_item"][$key]->quantity_sold = $total_sold_qty;
                 $data["_sir_item"][$key]->remaining_qty = $rem;
@@ -258,6 +264,8 @@ class Purchasing_inventory_system
         //FOR DISCOUNT TABLE
         $data["inv_discount"] = Tbl_manual_invoice::customer_invoice()->where("sir_id",$sir_id)->get();
 
+        $total_discount = 0;
+
         $data["_inv_dsc"] = [];
         $data["amount_disc"] = [];
         foreach ($data["inv_discount"] as $key_dsc => $value_dsc)
@@ -291,6 +299,8 @@ class Purchasing_inventory_system
                 }
             }
             $data["_inv_dsc"][$key_dsc]["amount"] = $whole_amount + $item_dsc;
+
+            $total_discount += $whole_amount + $item_dsc;
 
             if($data["_inv_dsc"][$key_dsc]["amount"] == 0)
             {
@@ -396,12 +406,12 @@ class Purchasing_inventory_system
             $_transaction[$rp_key]['date'] = $rp_value->rp_date;
 
             $id = "";
-            $chk = Tbl_receive_payment_line::where("rpline_rp_id",$rp_value->rp_id)->get();
+            $chk = Tbl_receive_payment_line::invoice()->where("rpline_rp_id",$rp_value->rp_id)->get();
             if($chk)
             {
                 foreach ($chk as $key_rpline => $value_rpline) 
                 {
-                    $id .= $value_rpline->rpline_reference_id." ";
+                    $id .= $value_rpline->new_inv_id." ";
                 }
             }
             $_transaction[$rp_key]['transaction_code'] = "AR Payment for Credit Sales #".$id;
@@ -487,8 +497,10 @@ class Purchasing_inventory_system
 
         $data['ctr_tr'] = count($data['_transaction']);
         $data['sdate'] = date('m/d/Y');
-
-        $agent_discrepancy = ($data['total'] == $data["rem_amount"] ? 0 : $data["rem_amount"] - $data['total']);
+        $sales = $total_sold - $total_discount;
+        $cm_applied = 0;
+        $data["t_sales"] = (((($sales - ($data["total_empties"] + $data["total_cm"])) - $data["total_ar"]) - $cm_applied) +  $data["ar_collection"]) + 0;
+        $agent_discrepancy = ($data['t_sales'] == $data["rem_amount"] ? 0 : $data["rem_amount"] - $data['t_sales']);
 
         $data["total_discrepancy"] = $agent_discrepancy + (($loss + $over) - ($mts_loss + $mts_over));
 
@@ -510,7 +522,15 @@ class Purchasing_inventory_system
     {
         $shop_id = Purchasing_inventory_system::getShopId();
 
-        $sir_data = Purchasing_inventory_system::get_report_data($sir_id);
+        $sir = Tbl_sir_sales_report::where("sir_id",$sir_id)->first();
+        if($sir)
+        {
+            $sir_data = unserialize($sir->report_data);
+        }   
+        else
+        {
+            $sir_data = Purchasing_inventory_system::get_report_data($sir_id);
+        }
 
         $total_sold = 0;
         $total_disc = 0;
@@ -531,7 +551,7 @@ class Purchasing_inventory_system
 
         $sales = $total_sold - $total_disc;
         $cm_applied = 0;
-        $total_amount = (((($sales - $sir_data['total_empties']) - $sir_data['total_ar']) - $cm_applied) +  $sir_data['ar_collection']) + 0 ;
+        $total_amount = (((($sales - ($sir_data['total_empties'] + $sir_data['total_cm'])) - $sir_data['total_ar']) - $cm_applied) +  $sir_data['ar_collection']) + 0 ;
         // dd($sales." | ".$total_empties." | ".$sir_data["total_ar"]." | ".$sir_data["ar_collection"]);
         return $total_amount;
 

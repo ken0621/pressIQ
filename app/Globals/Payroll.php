@@ -1041,8 +1041,6 @@ class Payroll
 		}
 
 		
-
-
 		/* COMPUTE EXTRA DAY AND REST DAY */
 		$total_rest_day_hours = 0;
 		$total_extra_day_hours = 0;
@@ -1662,11 +1660,11 @@ class Payroll
 			$daily_absent = 0;
 			if($approved->absent)
 			{
-				// if(!$has_leave)
-				// {
+				if(!$has_leave && $group->payroll_group_salary_computation == 'Monthly Rate')
+				{
 					$absent_deduction += $daily_rate;
 					$daily_absent = $daily_rate;
-				// }
+				}
 				$absent_count++;
 			}
 
@@ -2286,16 +2284,19 @@ class Payroll
 											->get()
 											->toArray();
 
+		// dd($pevious_record);
+
 		
 		$previous_tax 			= collect($pevious_record)->sum('tax_contribution');
 		$previous_sss 			= collect($pevious_record)->sum('sss_contribution_ee');
 		$previous_pagibig 		= collect($pevious_record)->sum('pagibig_contribution');
 		$previous_philhealth	= collect($pevious_record)->sum('philhealth_contribution_ee');
 
+		// dd($previous_sss);
+
 		$sss_contribution		= Payroll::sss_contribution($shop_id, $data['salary_sss']);
 		$sss_contribution_ee 	= $sss_contribution['ee'];
 
-		// dd($sss_contribution);
 
 		if($group->payroll_group_sss == 'Every Period')
 		{
@@ -2305,7 +2306,7 @@ class Payroll
 			$data['sss_contribution_ec'] = divide($sss_contribution_ee, $period_category_arr['count_per_period']);
 			// dd($data['sss_contribution_ee']);
 
-			if($data['is_deduct_sss_default'] == 0)
+			if($data['is_deduct_sss_default'] == 1)
 			{	
 				$data['sss_contribution_ee'] = $data['deduct_sss_custom'];
 
@@ -2359,7 +2360,7 @@ class Payroll
 			$data['philhealth_contribution_ee'] = divide($philhealth_contribution_ee, $period_category_arr['count_per_period']);
 			$data['philhealth_contribution_er'] = divide($philhealth_contribution['er'] , $period_category_arr['count_per_period']);
 
-			if($data['is_deduct_philhealth_default'] == 0)
+			if($data['is_deduct_philhealth_default'] == 1)
 			{
 				$data['philhealth_contribution_ee'] = $data['deduct_philhealth_custom'];
 				if($period_category == 'Last Period')
@@ -2397,7 +2398,7 @@ class Payroll
 			// philhealth_contribution
 			$data['pagibig_contribution'] = divide($pagibig_contribution, $period_category_arr['count_per_period']);
 
-			if($data['is_deduct_pagibig_default'] == 0)
+			if($data['is_deduct_pagibig_default'] == 1)
 			{
 				$data['pagibig_contribution'] = $data['deduct_pagibig_custom'];
 

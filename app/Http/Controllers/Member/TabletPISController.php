@@ -78,6 +78,12 @@ class TabletPISController extends Member
 
         return view("tablet.agent.confirm_sync",$data);
     }
+    public function cm_choose_type()
+    {
+        $data["for_tablet"] = "true";
+
+        return view("member.customer.credit_memo.cm_type");
+    }
 	public function index()
 	{
         if($this->get_user())
@@ -284,6 +290,8 @@ class TabletPISController extends Member
 	}
     public function credit_memo()
     {
+        $data["pis"] = Purchasing_inventory_system::check();
+
         $data["employee_name"] = $this->get_user()->first_name." ".$this->get_user()->middle_name." ".$this->get_user()->last_name;
         $data["employee_position"] = $this->get_user()->position_name;
         $data["employee_id"] = $this->get_user()->employee_id;

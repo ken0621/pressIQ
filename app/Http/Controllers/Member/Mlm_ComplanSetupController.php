@@ -32,6 +32,7 @@ class Mlm_ComplanSetupController extends Member
 		->count();
 		if($count >= 1)
 		{
+			dd(1);
 			$data['links'][0]['label'] = 'Binary Promotions Setup';
 			$data['links'][0]['link'] = '/member/mlm/complan_setup/binary_pro';
 		}		

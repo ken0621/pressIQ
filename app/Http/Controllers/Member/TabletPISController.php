@@ -82,7 +82,7 @@ class TabletPISController extends Member
     {
         $data["for_tablet"] = "true";
 
-        return view("member.customer.credit_memo.cm_type");
+        return view("member.customer.credit_memo.cm_type",$data);
     }
 	public function index()
 	{

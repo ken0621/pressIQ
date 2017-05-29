@@ -26,6 +26,7 @@ class OnlinePaymentMethodController extends Member
 	public function getIndex()
 	{
 		$data["_method"] 	= Tbl_online_pymnt_method::where("method_shop_id", $this->getShopId())->link($this->getShopId())->get();
+
 		foreach($data["_method"] as $key=>$method)
 		{
 			$data["_method"][$key] 			= $method;
@@ -148,8 +149,9 @@ class OnlinePaymentMethodController extends Member
 		$data["link_reference_id"] 		= str_replace("-","",strstr(Request::input('link_reference_id'), "-"));
 		$data["link_description"]		= Request::input('link_description');
 		$data["link_discount_fixed"]	= Request::input('link_discount_fixed');
-		$data["link_discount_percentage"] = Request::input('link_description');
+		$data["link_discount_percentage"] = Request::input('link_discount_percentage');
 		$data["link_img_id"] 			= Request::input('link_img_id');
+		$data["link_delimeter"] 		= Request::input('link_delimeter');
 		$data["link_is_enabled"] 		= Request::input('link_is_enabled') == 'on' ? 1 : 0;
 
 		if($link_id != null)

@@ -56,7 +56,7 @@ class Accounting
 	}
 	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type, $search)
 	{
-		$query = Tbl_chart_of_account::accountInfo($shop)->balance()->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel);
+		$query = Tbl_chart_of_account::accountInfo($shop)->balance()->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel)->orderBy("chart_type_id");
 
 		switch($filter)
 		{
@@ -486,7 +486,7 @@ class Accounting
 			$line_data["item_id"]				= 0;
 			$line_data["account_id"]			= $line["account_id"];
 			$line_data["entry_type"]			= $line["type"];
-			$line_data["entry_amount"]			= $line["entry_amount"];
+			$line_data["entry_amount"]			= convertToNumber($line["entry_amount"]);
 
 			Accounting::insertJournalLine($line_data);
 		}

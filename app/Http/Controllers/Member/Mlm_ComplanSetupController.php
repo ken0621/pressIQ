@@ -17,7 +17,8 @@ use Carbon\Carbon;
 use View;
 use App\Models\Tbl_mlm_plan;
 use DB;
-
+use App\Globals\abs\AbsMain;
+use App\Models\Tbl_tour_wallet;
 class Mlm_ComplanSetupController extends Member
 {
 	public function index()
@@ -89,6 +90,14 @@ class Mlm_ComplanSetupController extends Member
 	public function tours_wallet()
 	{
 		$data = [];
+		$data['shop_information'] = $this->user_info;
+		$data['account_tours'] = Tbl_tour_wallet::where('tour_wallet_shop', $this->user_info->shop_id)
+			->where('tour_wallet_main', 1)
+			->first();
+		$data['logs'] = DB::table('tbl_tour_wallet_logs')
+			->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_tour_wallet_logs.tour_wallet_logs_customer_id')
+			->where('shop_id', $this->user_info->shop_id)
+			->paginate(20);
 		return view('member.mlm_tours_wallet.index', $data);
 	}
 	public function unilevel_distribute()
@@ -234,5 +243,58 @@ class Mlm_ComplanSetupController extends Member
 	        return json_encode($data);
 	        exit;
 		}
+	}
+
+	public function set_tours_wallet_settings()
+	{
+		$tour_Wallet_a_account_id = Request::input('tour_Wallet_a_account_id');
+		$tour_wallet_a_username = Request::input('tour_wallet_a_username');
+		$tour_wallet_a_base_password = Request::input('tour_wallet_a_base_password');
+		$tour_wallet_convertion = Request::input('tour_wallet_convertion');
+		$base_uri = $this->user_info->shop_wallet_tours_uri;
+
+		$status = AbsMain::get_balance($base_uri, $tour_Wallet_a_account_id, $tour_wallet_a_username, $tour_wallet_a_base_password);
+
+		if($status['status'] == 1)
+		{
+			$count = Tbl_tour_wallet::where('tour_wallet_shop', $this->user_info->shop_id)
+			->where('tour_wallet_main', 1)
+			->count();
+
+			$insert['tour_wallet_shop'] = $this->user_info->shop_id; 
+			$insert['tour_wallet_customer_id'] = 0;
+			$insert['tour_wallet_user_id'] = $this->user_info->user_id;
+			$insert['tour_Wallet_a_account_id'] = $tour_Wallet_a_account_id;
+			$insert['tour_wallet_a_username'] = $tour_wallet_a_username;
+			$insert['tour_wallet_a_base_password'] = $tour_wallet_a_base_password;
+			$insert['tour_wallet_a_current_balance'] = $status['result'];
+			$insert['tour_wallet_convertion'] = floatval($tour_wallet_convertion);
+			$insert['tour_wallet_main'] = 1;
+			$insert['tour_wallet_block'] = 0; 
+			if($count == 0)
+			{
+				
+				Tbl_tour_wallet::insert($insert);
+			}
+			else
+			{
+				Tbl_tour_wallet::where('tour_wallet_shop', $this->user_info->shop_id)
+				->where('tour_wallet_main', 1)
+				->update($insert);
+			}
+			
+		}
+		return json_encode($status);
+
+	}
+
+	public function get_log()
+	{
+		$data['logs'] = DB::table('tbl_tour_wallet_logs')
+		->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_tour_wallet_logs.tour_wallet_logs_customer_id')
+		->where('shop_id', $this->user_info->shop_id)
+		->paginate(20);
+
+		return view('member.mlm_tours_wallet.logs', $data);
 	}
 }

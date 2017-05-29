@@ -32,7 +32,6 @@ class Mlm_ComplanSetupController extends Member
 		->count();
 		if($count >= 1)
 		{
-			dd(1);
 			$data['links'][0]['label'] = 'Binary Promotions Setup';
 			$data['links'][0]['link'] = '/member/mlm/complan_setup/binary_pro';
 		}		
@@ -61,8 +60,8 @@ class Mlm_ComplanSetupController extends Member
 		{
 			if(!isset($restrict[ $this->user_info->shop_key] ))
 			{
-				$data['links'][0]['label'] = 'Unilevel Distribute';
-				$data['links'][0]['link'] = '/member/mlm/complan_setup/unilevel/distribute';
+				$data['links'][3]['label'] = 'Unilevel Distribute';
+				$data['links'][3]['link'] = '/member/mlm/complan_setup/unilevel/distribute';
 			}
 			
 		}		

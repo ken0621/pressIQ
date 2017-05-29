@@ -2,7 +2,7 @@
 
 namespace App\Globals\dragonpay;
 
-use App\Globals\dragonpay\RequestForm;
+use App\Globals\Dragonpay\RequestForm;
 
 class RequestPayment
 {

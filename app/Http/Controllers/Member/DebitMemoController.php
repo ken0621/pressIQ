@@ -108,6 +108,7 @@ class DebitMemoController extends Member
         }
 
       $pdf = view('member.vendor.debit_memo.debit_memo_pdf', $data);
+      // return $pdf;
       return Pdf_global::show_pdf($pdf);
     }
     public function create_submit()

@@ -69,7 +69,7 @@
                             </tr>
                             <tr>
                                 <td colspan="5" >NET INCOME</td>
-                                <td class="text-right">{{currency('PHP', (($income - $cog) - $expense) - ($other_income - $other_expense))}}</td>
+                                <td class="text-right"><b>{{currency('PHP', (($income - $cog) - $expense) - ($other_income - $other_expense))}}<b></td>
                             </tr>
                         @endif
 

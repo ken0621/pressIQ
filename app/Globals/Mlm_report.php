@@ -33,6 +33,7 @@ use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code_invoice;
 use App\Models\Tbl_voucher_item;
 use App\Models\Tbl_warehouse;
+use App\Models\Tbl_mlm_slot_wallet_log_transfer;
 class Mlm_report
 {   
     public static function general($shop_id, $filter)
@@ -160,7 +161,6 @@ class Mlm_report
         {
             return view('member.mlm_report.report.cashflow', $data);
         }
-    	
     }
     public static function e_wallet($shop_id, $filter)
     {
@@ -222,6 +222,33 @@ class Mlm_report
         }
 
         return view('member.mlm_report.report.e_wallet', $data);
+    }
+    public static function e_wallet_transfer($shop_id, $filter)
+    {
+        $data['logs_transfer'] = Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id','=', 'tbl_mlm_slot_wallet_log_transfer.wallet_log_transfer_slot_recieve')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        ->where('wallet_log_transfer_date', '>=', $filter['from'])
+        ->where('wallet_log_transfer_date', '<=', $filter['to'])
+        ->skip($filter['skip'])
+        ->take($filter['take'])
+        ->get();
+
+        $data['logs_recieve'] = Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id','=', 'tbl_mlm_slot_wallet_log_transfer.wallet_log_transfer_slot_trans')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        ->where('wallet_log_transfer_date', '>=', $filter['from'])
+        ->where('wallet_log_transfer_date', '<=', $filter['to'])
+        ->skip($filter['skip'])
+        ->take($filter['take'])
+        ->get();
+        $data['page'] = 'e_wallet_transfer';
+
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        return view('member.mlm_report.report.e_wallet_transfer', $data);
     }
     public static function slot_count($shop_id, $filter)
     {
@@ -793,7 +820,8 @@ class Mlm_report
 
         $membership_code = Tbl_membership_code::where('tbl_membership_code.shop_id', $shop_id)
         ->join('tbl_membership_code_invoice', 'tbl_membership_code_invoice.membership_code_invoice_id', '=', 'tbl_membership_code.membership_code_invoice_id')
-        
+        ->join('tbl_membership_package', 'tbl_membership_package.membership_package_id', '=', 'tbl_membership_code.membership_package_id')
+        ->join('tbl_membership', 'tbl_membership.membership_id', '=', 'tbl_membership_package.membership_id')
         ->skip($filters['skip'])
         ->take($filters['take'])
         ->where('membership_code_date_created', '>=', $filters['from'])
@@ -802,8 +830,14 @@ class Mlm_report
 
         $package = Tbl_membership_package::get()->keyBy('membership_package_id');
         $by_membership = [];
+
+        $data['mem_code_inv'] = [];
+        $data['by_mem_qty'] = [];
+        $data['by_mem_sum_qty'] = 0;
+        $data['by_mem_sum_amount'] = 0;
         foreach($membership_code as $key => $value)
         {
+            $data['mem_code_inv'][$value->membership_code_invoice_id][$value->membership_code_id] = $value;
             if(isset($by_membership[$value->membership_package_id]))
             {
                 $by_membership[$value->membership_package_id] += $value->membership_code_price;
@@ -812,7 +846,18 @@ class Mlm_report
             {
                 $by_membership[$value->membership_package_id] = $value->membership_code_price;
             }
+
+            if(isset($data['by_mem_qty'][$value->membership_package_id]))
+            {
+                $data['by_mem_qty'][$value->membership_package_id] += 1;
+            }
+            else
+            {
+                 $data['by_mem_qty'][$value->membership_package_id] = 1;
+            }
             
+            $data['by_mem_sum_qty'] += 1;
+            $data['by_mem_sum_amount'] += $value->membership_code_price;
         }
         $per_package_item = Tbl_voucher_item::join('tbl_voucher', 'tbl_voucher.voucher_id', '=', 'tbl_voucher_item.voucher_id')
         ->join('tbl_membership_code_invoice', 'tbl_membership_code_invoice.membership_code_invoice_id', '=','tbl_voucher.voucher_invoice_membership_id')

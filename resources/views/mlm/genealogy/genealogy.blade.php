@@ -45,7 +45,8 @@
                                     @if($format == 'sponsor')
                                     
                                     @else
-                                        <div>L:{{$l}} R:{{$r}}</div>
+                                        <div>Count L:{{$l}} R:{{$r}}</div>
+                                        <div>Points - L: {{$slot->slot_binary_left}} R: {{$slot->slot_binary_right}}</div>
                                     @endif
                                 </div>
                                 <div class="id" >{{ $slot->slot_no }}</div>

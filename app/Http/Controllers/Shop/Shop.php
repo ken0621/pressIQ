@@ -85,21 +85,18 @@ class Shop extends Controller
         $this->shop_theme       = $this->shop_info->shop_theme;
         $this->shop_theme_color = $this->shop_info->shop_theme_color;
 
-        $this->shop_info  = $shop_theme_info;
+        $this->shop_theme_info  = $shop_theme_info;
 
         $company_column         = array('company_name', 'company_acronym', 'company_logo', 'receipt_logo', 'company_address', 'company_email', 'company_mobile', 'company_hour');
         $company_info           = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->whereIn('key', $company_column)->get())->keyBy('key');
         $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         $global_cart            = Cart::get_cart($this->shop_info->shop_id);
         $country                = Tbl_country::get();
+        $popular_tags           = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->shop_info->shop_id)->orderBy("count", "DESC")->limit(10)->get();
         
         if ($this->shop_theme == "sovereign") 
         {
             $products = Ecom_Product::getAllProduct($this->shop_info->shop_id);
-        }
-        elseif($this->shop_theme == "intogadgets")
-        {
-            $popular_tags           = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->shop_info->shop_id)->orderBy("count", "DESC")->limit(10)->get();
         }
         
         View::share("slot_now", Self::$slot_now);

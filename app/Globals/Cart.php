@@ -707,6 +707,24 @@ class Cart
         $data["tbl_customer"]['customer_contact'] = (isset($customer_information["customer_contact"]) ? $customer_information["customer_contact"] : (isset($data["tbl_customer"]['customer_contact']) ? $data["tbl_customer"]['customer_contact'] : null));;
         $data["tbl_customer"]['country_id']     = 420;
 
+        /* CURRENT LOGGED IN */
+        if (isset($customer_information["current_user"])) 
+        {
+            $current = $customer_information["current_user"];
+            $other_info = DB::table("tbl_customer_other_info")->where("customer_id", $current->customer_id)->first();
+
+            /* SET IF LOGGED IN */
+            $data["tbl_customer"]['customer_id']      = $current->customer_id;
+            $data["tbl_customer"]['first_name']       = $current->first_name;
+            $data["tbl_customer"]['last_name']        = $current->last_name;
+            $data["tbl_customer"]['middle_name']      = $current->middle_name;
+            $data["tbl_customer"]['email']            = $current->email;
+            $data["tbl_customer"]['password']         = Crypt::decrypt($current->password);
+            $data["tbl_customer"]['shop_id']          = $shop_id;
+            $data["tbl_customer"]['customer_contact'] = $other_info->customer_mobile;
+            $data["tbl_customer"]['country_id']       = 420;
+        }
+
         /* SET SHIPPINGING INFROMATION */
         $data["tbl_customer_address"]["shipping"]["country_id"] = 420;
         $data["tbl_customer_address"]["shipping"]["customer_state"] = (isset($customer_information["shipping_state"]) ? $customer_information["shipping_state"] : (isset($data["tbl_customer_address"]["shipping"]["customer_state"]) ? $data["tbl_customer_address"]["shipping"]["customer_state"] : null));
@@ -773,7 +791,7 @@ class Cart
         /* ITEM ON CART */
         foreach($_cart as $key => $cart)
         {
-            $data["tbl_ec_order_item"][$key]["item_id"] = $cart["cart_product_information"]["item_id"];
+            $data["tbl_ec_order_item"][$key]["item_id"] = $cart["cart_product_information"]["variant_id"];
             $data["tbl_ec_order_item"][$key]["price"] = $cart["cart_product_information"]["product_price"];
             $data["tbl_ec_order_item"][$key]["quantity"] = $cart["quantity"];
             $data["tbl_ec_order_item"][$key]["subtotal"] = $cart["cart_product_information"]["product_price"] * $cart["quantity"];

@@ -76,6 +76,7 @@ class ShopCheckoutController extends Shop
         $_name = $this->split_name($full_name);
 
         /* SET FIRST NAME, LAST NAME AND CONTACT */
+        $customer_info["current_user"] = Self::$customer_info;
         $customer_info["first_name"] = $_name[0];
         $customer_info["last_name"] = $_name[1];
         $customer_info["customer_contact"] = Request::input("contact_number");
@@ -261,7 +262,8 @@ class ShopCheckoutController extends Shop
 
             if($request['Status'] == 0)
             {
-                return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.')->send();    
+                dd($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');
+                // return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.')->send();    
             } 
             else 
             {
@@ -269,7 +271,7 @@ class ShopCheckoutController extends Shop
                 $payment_status = 1;
                 $order_status   = "Processing";
 
-                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info->customer_id);
+                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
                 Cart::clear_all($this->shop_info->shop_id);
 
                 // Redirect
@@ -308,6 +310,7 @@ class ShopCheckoutController extends Shop
         }
         
         $data['summary']['subtotal'] = $subtotal;
+        $data['order_id'] = $order_id;
 
         return view("order_placed", $data);
     }

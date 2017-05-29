@@ -99,7 +99,7 @@
                 <div class="form-box-divider">
                     <div class="clearfix">
                         <div class="title pull-left">Images</div>
-                        <a class="image-button pull-right image-gallery" href="javascript:"><i class="fa fa-hand-o-up"></i> Select Image</a>
+                        <a class="image-button pull-right image-gallery" href="javascript:" key="product-variant"><i class="fa fa-hand-o-up"></i> Select Image</a>
                         <input id="product-main-image" type="hidden" name="product_main_image" value="">
                     </div>
                     <div class="dividers half"></div>

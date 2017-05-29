@@ -363,25 +363,26 @@ class Ecom_Product
 	/**
 	 * Getting all Product w/ cateogory only. If shop_id is null, the current shop id that logged on will be used.
 	 *
-	 * @param  int    $shop_id 	Shop id of the products that you wnat to get. null if auto get
+	 * @param  int    $shop_id 		Shop id of the products that you want to get. null if auto get
+	 * @param  array  $archived 	product status of the item. Default is not archived
 	 * @return array  [Product name : variation (if any)] -> "Product 1 : blue • small" or "Product 1"
 	 */
-	public static function getProductList($shop_id = null)
+	public static function getProductList($shop_id = null, $archived = [0])
 	{
 		if(!$shop_id)
 		{
 			$shop_id = Ecom_Product::getShopId();
 		}
 
-		return Ecom_Product::getProductPerSub($shop_id, 0);
+		return Ecom_Product::getProductPerSub($shop_id, 0, $archived);
 	}
-	public static function getProductPerSub($shop_id, $category_id)
+	public static function getProductPerSub($shop_id, $category_id, $archived)
 	{
-		$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived",0)->get()->toArray();
+		$_category = Tbl_category::product()->where("type_shop", $shop_id)->where("type_parent_id", $category_id)->where("tbl_category.archived", 0)->get()->toArray();
 
 		foreach($_category as $key0=>$category)
 		{
-			$_product = Tbl_ec_product::variant()->where("eprod_category_id", $category["type_id"])->where("tbl_ec_product.archived",0)->get()->toArray();
+			$_product = Tbl_ec_product::variant()->where("eprod_category_id", $category["type_id"])->whereIn("tbl_ec_product.archived", $archived)->get()->toArray();
 		
 			foreach($_product as $key1=>$product)
 			{
@@ -390,7 +391,7 @@ class Ecom_Product
 
 			$_category[$key0]["Product"]		= $_product;
 			
-			$_category[$key0]["subcategory"]	= Ecom_Product::getProductPerSub($shop_id, $category["type_id"]);
+			$_category[$key0]["subcategory"]	= Ecom_Product::getProductPerSub($shop_id, $category["type_id"], $archived);
 		}
 
 		return $_category;

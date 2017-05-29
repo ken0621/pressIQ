@@ -24,6 +24,7 @@ use Request;
 use Session;
 use Validator;
 use Redirect;
+use Crypt;
 use Carbon\Carbon;
 
 class Ec_order
@@ -566,6 +567,15 @@ class Ec_order
 
         if ($customer) 
         {
+            if (!DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 
+            {
+                $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
+                $other_insert["customer_mobile"] = $customer_mobile;
+                $other_insert["customer_id"]     = $customer_id;
+       
+                DB::table("tbl_customer_other_info")->insert($other_insert);
+            }
+
             $customer_other_info = DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first();
 
             $order_info["tbl_customer"]["customer_id"] = $customer->customer_id;
@@ -575,7 +585,6 @@ class Ec_order
             $order_info["tbl_customer"]["email"] = $customer->email;
             $order_info["tbl_customer"]["password"] = $customer->password;
             $order_info["tbl_customer"]["customer_mobile"] = $customer_other_info->customer_mobile;
-
             $order_info["tbl_ec_order"]["customer_id"] = $customer->customer_id;
         }
         else
@@ -583,9 +592,16 @@ class Ec_order
             unset($order_info["tbl_customer"]["customer_id"]);
             $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
             unset($order_info["tbl_customer"]["customer_contact"]);
+            $order_info["tbl_customer"]["middle_name"] = "";
+            $order_info["tbl_customer"]["password"] = Crypt::encrypt($order_info["tbl_customer"]["password"]);
             $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);
-            $other_insert["customer_mobile"] = $customer_mobile;
-            DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->insert($other_insert);
+            
+            if (!DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 
+            {
+                $other_insert["customer_mobile"] = $customer_mobile;
+                $other_insert["customer_id"]     = $customer_id;
+                DB::table("tbl_customer_other_info")->insert($other_insert);
+            }
         }
 
         /* Check if Customer Address Exist to Update if not Insert */

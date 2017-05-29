@@ -1,56 +1,58 @@
 @extends('mlm.layout')
 @section('content')
-<div class="row">
-    <div class="col-md-12">
-        {!! $header !!}
-        <form method="POST">
-        <div class="panel panel-default panel-block">
-            <div class="list-group">
-                @if(isset($report))
-                <div class="list-group-item" id="responsive-bordered-table">
-                    <div class="form-group">
-                        <h4 class="section-title">
-                        @if(isset($plan->marketing_plan_label)) {{$plan->marketing_plan_label}} @endif
-                        </h4>
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-condensed">
-                                <thead>
-                                    <th>ID</th>
-                                    <th>DATE</th>
-                                    <th>AMOUNT</th>
-                                    <th>NOTIFICATION</th>
-                                </thead>
-                                @if(count($report) >= 1)    
-                                @foreach($report as $key => $value)
-                                <tbody>
-                                    <tr>
-                                        <td>{{$value->wallet_log_id}}</td>
-                                        <td>{{$value->wallet_log_date_created}}</td>
-                                        <td>{{$value->wallet_log_amount}}</td>
-                                        <td>{{$value->wallet_log_details}}</td>
-                                    </tr>
-                                </tbody>    
-                                @endforeach
-                                @else
-                                <tr>
-                                    <td colspan="5"><center>No Active Report.</center></td>
-                                </tr>
-                                @endif
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                @else
-                    <center>No Active Report.</center>  
-                @endif   
-                <center>{!! $report->render() !!}</center>                      
-            </div>
-        </div> 
-        
-        </form> 
-        <div>
+{!! $header !!}
+@include('mlm.report.global')
 
-    </div>
-    </div>
+ <div class="box box-primary">
+  <div class="box-body">
+  	<center>Points Entry Log</center>
+    <ul class="products-list product-list-in-box">
+      @if(isset($points_report))
+        @foreach($points_report as $key => $value)
+          <li class="item">
+            <div class="product-img">
+              {!! mlm_profile($value) !!}
+            </div>
+            <div class="product-info">
+              <a href="javascript:void(0)" class="product-title">Sponsor: {{name_format_from_customer_info($value)}}
+                  <span class="product-description" style="color: black;">
+					Slot : {{$value->slot_no}}
+					<table class="table table-condensed table-bordered">
+						<thead>
+							<th>Membership Points</th>
+							<th>Points Limit</th>
+							<th>Points Flushed</th>
+							<th>Start Left</th>
+							<th>Start Right</th>
+							<th>Earned Left</th>
+							<th>Earned Right</th>
+							<th>End Left</th>
+							<th>End Right</th>
+
+
+							<tr>
+								<td>{{$value->binary_report_point_membership}}</td>
+								<td>{{$value->binary_report_point_limit}}</td>
+								<td>{{$value->binary_report_point_deduction }}</td>
+								<td>{{$value->binary_report_s_left}}</td>
+								<td>{{$value->binary_report_s_right}}</td>
+								<td>{{$value->binary_report_s_points_l}}</td>
+								<td>{{$value->binary_report_s_points_r}}</td>
+								<td>{{$value->binary_report_e_left}}</td>
+								<td>{{$value->binary_report_e_right}}</td>
+							</tr>
+						</thead>
+					</table>
+                  </span>
+            </div>
+          </li>
+        @endforeach  
+    @endif    
+    </ul>
+  </div>
+  <div class="box-footer text-center">
+  </div>
 </div>
+
+
 @endsection

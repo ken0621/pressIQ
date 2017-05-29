@@ -10,6 +10,7 @@ use Session;
 use Excel;
 use DB;
 use Response;
+use PDF;
 
 use App\Models\Tbl_payroll_company;
 use App\Models\Tbl_payroll_rdo;
@@ -6151,7 +6152,20 @@ class PayrollController extends Member
           }
 
           //dd($data['_record']);
-          return view('member.payroll.payroll_payslip', $data);
+          //return view('member.payroll.payroll_payslip', $data);
+          
+          //return view('member.payroll.payroll_payslipv1', $data);
+
+          $view = 'member.payroll.payroll_payslipv1';             
+          $pdf = PDF::loadView($view, $data);
+               $pdf->setOption('margin-right',5);
+               $pdf->setOption('margin-left',5);
+          return $pdf->stream('Paycheque.pdf');
+
+
+         /* $view = 'member.reports.'.$blade;             
+          $pdf = PDF::loadView($view,$data);
+          return $pdf->stream('Paycheque.pdf');*/
      }
 
 

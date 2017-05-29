@@ -105,6 +105,4 @@
 		transform: rotate(-40deg);
 		}
 	</style>
-</head>
-
 </html>

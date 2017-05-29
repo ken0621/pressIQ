@@ -602,3 +602,11 @@ function mlm_profile($customer)
         // style="height: 200px; width: 100%; object-fit: contain;"
     }
 }
+function mlm_profile_link($customer)
+{
+    if($customer)
+    {
+        $customer->profile != null ? $profile = $customer->profile :  $profile = '/assets/mlm/default-pic.png';
+        return $profile;
+    }
+}

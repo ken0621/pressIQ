@@ -53,10 +53,10 @@
               <!-- Widget: user widget style 1 -->
               <div class="box box-widget widget-user">
                 <!-- Add the bg color to the header using any of the bg-* classes -->
-                <div class="widget-user-header bg-black" style="background-position: center;
+                <div class="widget-user-header" style="background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
-    background: url('{{isset($content['company_logo']) ? $content['company_logo'] : '/assets/mlm/img/pic-shop.jpg'}}');">
+    background-image: url('{{isset($content['company_logo']) ? $content['company_logo'] : '/assets/mlm/img/pic-shop.jpg'}}');">
                 </div>
 
                 <div class="box-footer">

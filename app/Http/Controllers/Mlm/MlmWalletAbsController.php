@@ -222,8 +222,9 @@ class MlmWalletAbsController extends Mlm
                     $insert['tour_wallet_logs_account_id'] =  $tour->tour_Wallet_a_account_id;
                     $insert['tour_wallet_logs_customer_id'] =  Self::$customer_id;
                     $insert['tour_wallet_logs_accepted'] =  1;
+                    $insert['tour_wallet_logs_points'] = 0;
 
-                    DB::table('tbl_tour_wallet_logs')->insert($insert);
+                    
                     // get_balance
                     $host_update = AbsMain::get_balance($base_uri, $host->tour_Wallet_a_account_id, $host->tour_wallet_a_username, $host->tour_wallet_a_base_password);
                     if($host_update['status'] == 1)
@@ -239,7 +240,43 @@ class MlmWalletAbsController extends Mlm
                     ->where('tour_wallet_main', 0)
                     ->update($update);
 
+
+
                     Mlm_slot_log::slot_array($log);
+
+                    $tour_wallet_convertion = $host->tour_wallet_convertion;
+
+                    if($tour_wallet_convertion != 0)
+                    {
+                        $points = ($wallet_amount/100) * $tour_wallet_convertion;
+                        $insert['tour_wallet_logs_points'] = $points;
+                        $l = "You have earned " . $points . " Repurchase Points. From  tours wallet."; 
+                        $log['shop_id'] = Self::$shop_id;
+                        $log['wallet_log_slot'] = Self::$slot_id;
+                        $log['wallet_log_slot_sponsor'] = Self::$slot_id;
+                        $log['wallet_log_details'] = $l ;
+                        $log['wallet_log_amount'] = 0;
+                        $log['wallet_log_plan'] = 'TOURS_WALLET_POINTS';
+                        $log['wallet_log_status'] = 'released';
+                        $log['wallet_log_claimbale_on'] = Carbon::now();
+
+                        Mlm_slot_log::slot_array($log);
+
+                        $array['points_log_complan'] = "REPURCHASE_POINTS";
+                        $array['points_log_level'] = 0;
+                        $array['points_log_slot'] = Self::$slot_id;
+                        $array['points_log_Sponsor'] = Self::$slot_id;
+                        $array['points_log_date_claimed'] = Carbon::now();
+                        $array['points_log_converted'] = 0;
+                        $array['points_log_converted_date'] = Carbon::now();
+                        $array['points_log_type'] = 'PV';
+                        $array['points_log_from'] = 'Wallet Tours';
+                        $array['points_log_points'] = $points;
+
+                        Mlm_slot_log::slot_log_points_array($array);
+                    }
+                    DB::table('tbl_tour_wallet_logs')->insert($insert);
+                    
                 }
                 
                 $status['message'] = 'Wallet Transfer Success';

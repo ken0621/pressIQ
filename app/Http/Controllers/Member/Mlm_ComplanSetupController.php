@@ -250,6 +250,7 @@ class Mlm_ComplanSetupController extends Member
 		$tour_Wallet_a_account_id = Request::input('tour_Wallet_a_account_id');
 		$tour_wallet_a_username = Request::input('tour_wallet_a_username');
 		$tour_wallet_a_base_password = Request::input('tour_wallet_a_base_password');
+		$tour_wallet_convertion = Request::input('tour_wallet_convertion');
 		$base_uri = $this->user_info->shop_wallet_tours_uri;
 
 		$status = AbsMain::get_balance($base_uri, $tour_Wallet_a_account_id, $tour_wallet_a_username, $tour_wallet_a_base_password);
@@ -267,9 +268,9 @@ class Mlm_ComplanSetupController extends Member
 			$insert['tour_wallet_a_username'] = $tour_wallet_a_username;
 			$insert['tour_wallet_a_base_password'] = $tour_wallet_a_base_password;
 			$insert['tour_wallet_a_current_balance'] = $status['result'];
+			$insert['tour_wallet_convertion'] = floatval($tour_wallet_convertion);
 			$insert['tour_wallet_main'] = 1;
 			$insert['tour_wallet_block'] = 0; 
-
 			if($count == 0)
 			{
 				
@@ -278,7 +279,7 @@ class Mlm_ComplanSetupController extends Member
 			else
 			{
 				Tbl_tour_wallet::where('tour_wallet_shop', $this->user_info->shop_id)
-				->where('tour_wallet_main')
+				->where('tour_wallet_main', 1)
 				->update($insert);
 			}
 			

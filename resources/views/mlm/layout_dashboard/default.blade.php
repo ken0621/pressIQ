@@ -14,7 +14,7 @@
 <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
 <div class="row">
     <div class="col-md-6 col-lg-8">
-        <div class="cover-holder panel panel-default panel-block panel-title-block">
+        <div class="cover-holder panel panel-default panel-block panel-title-block hide">
             <div class="panel-headings clearfix">
                 <img class="banner-img" src="/assets/mlm/img/banner-shop.jpg">
                 <div class="shadow">

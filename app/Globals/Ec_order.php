@@ -641,12 +641,12 @@ class Ec_order
         }
 
         /* Email Password */
-        $data["template"]         = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
-        $data['mail_to']          = $order_info["tbl_ec_order"]["customer_email"];
-        $data['mail_subject']     = "Account Verification";
-        $data['account_password'] = $order_info["tbl_customer"]["password"];
+        // $data["template"]         = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
+        // $data['mail_to']          = $order_info["tbl_ec_order"]["customer_email"];
+        // $data['mail_subject']     = "Account Verification";
+        // $data['account_password'] = $order_info["tbl_customer"]["password"];
 
-        $result = Mail_global::password_mail($data, $shop_id);
+        // $result = Mail_global::password_mail($data, $shop_id);
 
         return $order_info["tbl_ec_order"]["ec_order_id"];
     }

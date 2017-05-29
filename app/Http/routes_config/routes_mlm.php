@@ -94,6 +94,7 @@ Route::post('/mlm/slots/item_code_post', 'Mlm\MlmSlotsController@item_code_post'
 /* MLM WALLET ABS */
 Route::get('/mlm/wallet/tours', 'Mlm\MlmWalletAbsController@index');
 Route::post('/mlm/wallet/tours/update', 'Mlm\MlmWalletAbsController@update_info');  
+Route::post('/mlm/wallet/tours/transfer', 'Mlm\MlmWalletAbsController@transfer_wallet'); 
 
 /* Modal Add Slot */
 Route::get('/mlm/slot/add', 'Mlm\MlmSlotsController@add_slot_modal');

@@ -1,6 +1,7 @@
 <?php
 use App\Globals\Ecom_Product;
 use App\Globals\Mlm_report;
+use App\Models\Tbl_post;
 
 function get_post($shop_id, $key)
 {
@@ -110,4 +111,53 @@ function get_product_first_image($data)
     {
         return '/assets/front/img/placeholder.png';
     }   
+}
+
+function loop_content_condition($data, $tab, $content)
+{
+    if ( is_serialized( get_content($data, $tab, $content) ) )
+    {
+        if ( count( unserialize( get_content($data, $tab, $content) ) ) > 0 ) 
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+
+function loop_content_get($data, $tab, $content)
+{
+    return unserialize( get_content($data, $tab, $content) );
+}
+
+function loop_content_divide($data, $divide = 12)
+{
+    $current = [];
+    $current_array = 0;
+    $fix_data = array_values($data);
+    foreach ($fix_data as $key => $value) 
+    {
+        $i = $key + 1;
+
+        if ($i%$divide == 1) 
+        {
+            $current_array++;
+        }
+
+        $current[$current_array][$i] = $value;
+    }
+    
+    return $current;
+}
+
+function get_front_news($shop_id)
+{
+    return Tbl_post::where("shop_id", $shop_id)->where("archived", 0)->get();
 }

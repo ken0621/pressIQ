@@ -5,7 +5,7 @@
         <form class="global-submit" method="post" id="edit_form{{$key}}" action="/member/mlm/plan/stairstep/edit/save" id="edit_stairstep{{$key}}">
             {!! csrf_field() !!}
             <input type="hidden" name="stairstep_id" value="{{$value->stairstep_id}}" />
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <label for="stairstep_name">Rank Name</label>
                 <input type="text" class="form-control" name="stairstep_name" value="{{$value->stairstep_name}}" placeholder="Enter Rank Name">
             </div>
@@ -25,9 +25,22 @@
                 <label for="stairstep_required_gv">Required Group Sales</label>
                 <input type="number" class="form-control" name="stairstep_required_gv" value="{{$value->stairstep_required_gv}}">
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <label for="stairstep_bonus">Bonus</label>
                 <input type="number" class="form-control" name="stairstep_bonus" value="{{$value->stairstep_bonus}}">
+            </div>
+            <div class="col-md-2">
+                <label for="stairstep_leg_id">Leg Rank</label>
+                <select name="stairstep_leg_id" class="form-control">
+                    <option value="0">None</option>
+                    @foreach($rank as $rk)
+                        <option value="{{$rk->stairstep_id}}" {{$rk->stairstep_id == $value->stairstep_leg_id ? "selected" : ""}}>{{$rk->stairstep_name}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-1">
+                <label for="stairstep_leg_count">Leg Count</label>
+                <input type="number" class="form-control" name="stairstep_leg_count" value="{{$value->stairstep_leg_count}}">
             </div>
             <div class="col-md-1">
                 <br>
@@ -43,7 +56,7 @@
     <td colspan="6">
     <form class="global-submit" method="post" action="/member/mlm/plan/stairstep/save" id="save_stairstep">
         {!! csrf_field() !!}
-        <div class="col-md-4">
+        <div class="col-md-2">
             <label for="stairstep_name">Rank Name</label>
             <input type="text" class="form-control" name="stairstep_name" value="" placeholder="Enter Rank Name">
         </div>
@@ -63,9 +76,22 @@
             <label for="stairstep_required_gv">Required Group Sales</label>
             <input type="number" class="form-control" name="stairstep_required_gv" value="0">
         </div>
-        <div class="col-md-2">
+        <div class="col-md-1">
             <label for="stairstep_bonus">Bonus</label>
             <input type="number" class="form-control" name="stairstep_bonus" value="0">
+        </div>
+        <div class="col-md-2">
+            <label for="stairstep_leg_id">Leg Rank</label>
+            <select name="stairstep_leg_id" class="form-control">
+                <option value="0">None</option>
+            @foreach($rank as $rk)
+                <option value="{{$rk->stairstep_id}}">{{$rk->stairstep_name}}</option>
+            @endforeach
+            </select>
+        </div>
+        <div class="col-md-1">
+            <label for="stairstep_leg_count">Leg Count</label>
+            <input type="number" class="form-control" name="stairstep_leg_count" value="0">
         </div>
         <div class="col-md-1">
             <br>

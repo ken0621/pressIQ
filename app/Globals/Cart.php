@@ -13,6 +13,8 @@ use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_ec_order;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_online_pymnt_method;
+use App\Models\Tbl_email_template;
+use App\Models\Tbl_online_pymnt_api;
 use App\Globals\Ecom_Product;
 use DB;
 use Session;
@@ -23,7 +25,10 @@ use App\Globals\Mlm_member;
 use App\Models\Tbl_mlm_item_points;
 use App\Globals\Mlm_plan;
 use Crypt;
+use Config;
+use URL;
 use App\Globals\Mlm_slot_log;
+use App\IPay88\RequestPayment;
 
 class Cart
 {
@@ -786,7 +791,7 @@ class Cart
         /* ITEM ON CART */
         foreach($_cart as $key => $cart)
         {
-            $data["tbl_ec_order_item"][$key]["item_id"] = $cart["cart_product_information"]["item_id"];
+            $data["tbl_ec_order_item"][$key]["item_id"] = $cart["cart_product_information"]["variant_id"];
             $data["tbl_ec_order_item"][$key]["price"] = $cart["cart_product_information"]["product_price"];
             $data["tbl_ec_order_item"][$key]["quantity"] = $cart["quantity"];
             $data["tbl_ec_order_item"][$key]["subtotal"] = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
@@ -895,26 +900,25 @@ class Cart
      *
      * @param
      *    $shop_id (int) - Current Shop ID (for validation)
-     *    $order_id (int) - Current Order ID (for updating)
      *    $payment_status (int) - 0 = not paid, 1 = paid
      *    $order_status (str) - Pending, Failed, Processing, Shipped, Completed, On-Hold, Cancelled
+     *    $customer_id (int) - current logged in
      *
      * @return (array)
-     *    - order data (query)
+     *    - order_id
      *
      * @author (Edward Guevarra)
      *
      */
-    public static function submit_order($shop_id, $payment_status, $order_status)
+    public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null)
     {
-        $insert                   = Self::get_info();
-        $insert["shop_id"]        = $shop_id;
-        $insert["payment_status"] = $payment_status;
-        $insert["order_status"]   = $order_status;
-       
-        return Ec_order::create_ec_order_from_cart($insert);   
+        $order                                   = Cart::get_info($shop_id);
+        $order["tbl_ec_order"]["payment_status"] = $payment_status;
+        $order["tbl_ec_order"]["order_status"]   = $order_status;
+        $order["customer_id"]                    = $customer_id;
+        
+        return Ec_order::create_ec_order_from_cart($order);   
     }
-
     public static function process_payment($shop_id)
     {
         $data = Self::get_info($shop_id);
@@ -925,9 +929,10 @@ class Cart
         {
             switch ($method_information->link_reference_name)
             {
-                case 'ipay88': Redirect::to("/postPaymentWithIPay88")->send(); break;
+                case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
                 case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
                 case 'paypal2': die("UNDER DEVELOPMENT"); break;
+                case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
                 default: die("UNDER DEVELOPMENT"); break;
             }
         }
@@ -935,6 +940,100 @@ class Cart
         {
             die("An error has occurred. Please try again later.");
         }
+    }
+    public static function submit_using_ipay88($data, $shop_id, $method_information)
+    {
+        echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
+        $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "ipay88")->first();
+
+        /* DELIMETER */
+        switch ($method_information->link_delimeter) 
+        {  
+            /* Credit Card */
+            case 1: $data["paymentId"] = 1; break;
+            /* Bancnet */
+            case 5: $data["paymentId"] = 5; break;
+            /* Default (Credit Card) */
+            default: $data["paymentId"] = 1; break;
+        }
+
+        $data["refNo"] = $shop_id . time();
+        $data["amount"] = $data["tbl_ec_order"]["total"];
+
+        /* REASTRUCTURE */
+        $product_summary = array();
+        foreach ($data['tbl_ec_order_item'] as $key => $value) 
+        {
+            if ($key != count($data["cart"])) 
+            {
+                $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . "";
+            }
+            else
+            {
+                $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . ", ";
+            }
+        }
+
+        $data["currency"] = "PHP";
+        $data["prodDesc"] = $product_summary;
+        $data["userName"] = $data["tbl_customer"]["first_name"] . " " . $data["tbl_customer"]["last_name"];
+        $data["userEmail"] = $data["tbl_ec_order"]["customer_email"];
+        $data["userContact"] = $data["tbl_customer"]["customer_contact"];
+        $data["remark"] = "Remarks";
+        $data["lang"] = "UTF-8";
+        $data["responseUrl"] = URL::to('/ipay88_response');
+        $data["backendUrl"] = URL::to('/ipay88_response');
+        $data["merchantKey"] = $api->api_secret_id;
+        $data["merchantCode"] = $api->api_client_id;
+        $requestpayment = new RequestPayment($data["merchantKey"]);
+
+        $ipay88request = array(
+            'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
+            'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
+            'refNo'         => $requestpayment->setRefNo($data["refNo"]),
+            'amount'        => $requestpayment->setAmount($data["amount"]),
+            // 'amount'        => $requestpayment->setAmount(15),
+            'currency'      => $requestpayment->setCurrency($data["currency"]),
+            'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
+            'userName'      => $requestpayment->setUserName($data["userName"]),
+            'userEmail'     => $requestpayment->setUserEmail($data["userEmail"]),
+            'userContact'   => $requestpayment->setUserContact($data["userContact"]),
+            'remark'        => $requestpayment->setRemark($data["remark"]),
+            'lang'          => $requestpayment->setLang($data["lang"]),
+            'signature'     => $requestpayment->getSignature(),
+            'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
+            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
+        );
+
+        RequestPayment::make($data["merchantKey"], $ipay88request);  
+    }
+    public static function submit_using_proof_of_payment($shop_id, $method_information)
+    {
+        $payment_status = 0;
+        $order_status   = "Pending";
+        $customer       = Cart::get_customer();
+
+        $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+        Cart::clear_all($shop_id);
+
+        $tbl_order = DB::table("tbl_ec_order")->where("tbl_ec_order.ec_order_id", $order_id)->leftJoin("tbl_customer", "tbl_customer.customer_id", "=", "tbl_ec_order.customer_id")->first();
+      
+        $data["template"] = Tbl_email_template::where("shop_id", $shop_id)->first();
+        $data['mail_to'] = $tbl_order->customer_email;
+        $data['mail_username'] = Config::get('mail.username');
+        $data['mail_subject'] = "Verify Payment";
+        $data['payment_detail'] = $method_information->other_description;
+        $data['customer_full_name'] = $tbl_order->first_name . " " . $tbl_order->middle_name . " " . $tbl_order->last_name;
+        $data['order_id'] = Crypt::encrypt($tbl_order->ec_order_id);
+
+        $result = Mail_global::payment_mail($data, $shop_id);
+
+        if ($result == 0) 
+        {
+            dd("Some error occurred. Please contact the administrator.");
+        }
+
+        return Redirect::to("/email_payment?email=" . $tbl_order->customer_email)->send();
     }
     public static function submit_using_ewallet($cart, $shop_id)
     {
@@ -981,6 +1080,17 @@ class Cart
         Cart::clear_all($shop_id);
         $result['status'] = 'success';
         return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($result)))->send();
+    }
+    public static function get_customer()
+    {
+        if(Session::get('mlm_member') != null)
+        {
+            return Session::get('mlm_member');
+        }
+        else
+        {
+            return null;
+        }
     }
     public static function get_userip()
     {

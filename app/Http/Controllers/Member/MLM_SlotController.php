@@ -401,6 +401,7 @@ class MLM_SlotController extends Member
         ->leftjoin('tbl_membership_package', 'tbl_membership_package.membership_package_id', '=','tbl_membership_code.membership_package_id')
         ->leftjoin('tbl_membership', 'tbl_membership.membership_id', '=','tbl_membership_package.membership_id')
         ->where('used', 0)->where('blocked', 0)->get();
+
         // dd($data);
         return view('member.mlm_slot.mlm_slot_get_code', $data);
     }

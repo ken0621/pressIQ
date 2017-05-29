@@ -41,6 +41,13 @@
 			"default":"MINING COMPANY",
 			"size":"4"
 		},
+		"home_slogan_subtitle" :
+		{
+			"label":"Home Slogan subtitle",
+			"type":"textbox",
+			"default":"This drives innovative solutions for our clients and improves our understanding of the world in which we work.",
+			"size":"12"
+		},
 		"home_gallery_title" :
 		{
 			"label":"Gallery Title",

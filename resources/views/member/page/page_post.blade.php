@@ -16,7 +16,7 @@
 </div>
 
 <!-- NO PRODUCT YET -->
-@if(count($_post) == 0)
+{{-- @if(count($_post) == 0)
 <div class="load-get">
     <div class="row">
         <div class="col-md-12 text-center">
@@ -27,11 +27,14 @@
         </div>
     </div>
 </div>
-@else
+@else --}}
 <div class="panel panel-default panel-block panel-title-block panel-gray load-get">
     <div class="tab-content">
         <div id="all-orders" class="tab-pane fade in active">
-            <div class="form-group order-tags"></div>
+            <div style="background-color: #fff; border-bottom: 2px solid #eee; padding: 5px 5px; width: 100%;">
+                <a style="display: inline-block; padding: 7.5px 15px; {{ !Request::input("archive") ? "color: #fff; background-color: #1682ba;" : "color: #333;" }}" href="/member/page/post">All</a>
+                <a style="display: inline-block; padding: 7.5px 15px; {{ Request::input("archive") ? "color: #fff; background-color: #1682ba;" : "color: #333;" }}" href="/member/page/post?archive=1">Archived</a>
+            </div>
             <div class="table-responsive">
                 <table class="table table-condensed post-table">
                     <thead style="text-transform: uppercase">
@@ -70,7 +73,7 @@
                                   </button>
                                   <ul class="dropdown-menu">
                                     <li><a class="popup" link="/member/page/post/edit/{{ $post->main_id }}" size="lg">Edit</a></li>
-                                    <li><a class="archive-post" delete="{{ $post->main_id }}" style="cursor: pointer;">Archive</a></li>
+                                    <li><a class="archive-post" href="/member/page/post/{{ Request::input("archive") ? "unarchive" : "archive" }}/{{ $post->main_id }}" style="cursor: pointer;">{{ Request::input("archive") ? "Unarchive" : "Archive" }}</a></li>
                                   </ul>
                                 </div>
                             </td>
@@ -82,7 +85,7 @@
         </div>
     </div>
 </div>
-@endif
+{{-- @endif --}}
 @endsection
 @section('css')
 <link rel="stylesheet" type="text/css" href="/assets/member/css/product.css">

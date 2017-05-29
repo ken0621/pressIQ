@@ -171,7 +171,7 @@
 				<div class="col-md-9">
 					<div class="bottom-container-txt">
 						<div class="bottom-container-title">{{ get_content($shop_theme_info, "home", "home_slogan_first") }} <span class="highlight">{{ get_content($shop_theme_info, "home", "home_slogan_highlight") }}</span> {{ get_content($shop_theme_info, "home", "home_slogan_last") }}</div>
-						<div class="bottom-container-details">This drives innovative solutions for our clients and improves our understanding of the world in which we work</div>
+						<div class="bottom-container-details">{{ get_content($shop_theme_info, "home", "home_slogan_subtitle") }}</div>
 					</div>
 				</div>
 				<div class="col-md-3">

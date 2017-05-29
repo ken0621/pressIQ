@@ -965,6 +965,7 @@ class Cart
                 'description'   => $requestpayment->setDescription($request['description']),
                 'email'         => $requestpayment->setEmail($request['email']),
                 'digest'        => $requestpayment->getdigest(),
+                'edward'        => "edward"
             );
 
             Dragon_RequestPayment::make($merchant_key, $dragon_request); 

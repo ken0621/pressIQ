@@ -930,7 +930,7 @@ class Payroll
 				}
 				if($less_time_in > 0)
 				{
-					$less_time_in = 0;
+					$less_time_in = 0 - $less_time_in;
 				}
 
 				$night_differential = $time_spent + ($less_time_out + $less_time_in);
@@ -958,14 +958,14 @@ class Payroll
 		else
 		{
 			//IF BREAK IS GREATER THAN REGULAR HOURS - SET REGULAR HOURS TO ZERO
-			// if($break > $total_regular_hours)
-			// {
-			// 	$total_regular_hours = 0;
-			// }
-			// else
-			// {
+			if($break > $total_regular_hours)
+			{
+				$total_regular_hours = 0;
+			}
+			else
+			{
 				$total_regular_hours = $total_regular_hours - c_time_to_int($break);
-			// }
+			}
 		}
 
 		/* if regular time */
@@ -1026,14 +1026,21 @@ class Payroll
 
 		
 
-		$total_hours = ($total_regular_hours + $total_early_overtime + $total_early_overtime) - c_time_to_int($break);
+		$total_hours = $total_regular_hours + $total_early_overtime + $total_late_overtime;
 
-		if($total_hours == '00:00')
+		if($total_hours == '00:00' || $total_hours <= 0)
 		{
-			$return->break = '00:00';
+			$break = c_time_to_int('00:00:00');
+			$total_hours = 0;
+			// $return->break = '00:00';
 		}	
 
+		if($total_hours > 0)
+		{
+			$total_hours -= c_time_to_int($break);
+		}
 
+		
 		/* COMPUTE EXTRA DAY AND REST DAY */
 		$total_rest_day_hours = 0;
 		$total_extra_day_hours = 0;
@@ -1070,12 +1077,29 @@ class Payroll
 
 		if($schedule->rest_day == 1)
 		{
+			if($total_hours == '00:00:00' || $total_hours == '00:00')
+			{
+				$total_hours = 0;
+			}
+
 			$total_rest_day_hours = $total_hours;
+			$total_regular_hours = 0;
 			$rest_day_today = true;
 		}
 
 		if($schedule->extra_day == 1)
 		{
+			// $total_hours = $total_regular_hours + $total_early_overtime + $total_late_overtime;
+			// dd($total_early_overtime);
+			if($total_hours == '00:00:00' || $total_hours == '00:00')
+			{
+				$total_hours = 0;
+			}
+			else
+			{
+				$total_hours += c_time_to_int($break);
+			}
+			$total_regular_hours = 0;
 			$total_extra_day_hours = $total_hours;
 			$extra_day_today = true;
 		}
@@ -1119,10 +1143,16 @@ class Payroll
 		$return->night_differential = convert_seconds_to_hours_minutes("H:i", $total_night_differential);
 		$return->special_holiday_hours = convert_seconds_to_hours_minutes("H:i", $special_holiday_hours);
 		$return->regular_holiday_hours = convert_seconds_to_hours_minutes("H:i", $regular_holiday_hours);
-		$return->break 				= $break;
 
 
-		
+
+		if($break == 0)
+		{
+			$break = '00:00';
+		}
+
+		$return->break 				=  $break;
+
 
 		$return->time_record 		= $time_rec;
 		$return->absent 			= $absent;
@@ -1630,11 +1660,11 @@ class Payroll
 			$daily_absent = 0;
 			if($approved->absent)
 			{
-				// if(!$has_leave)
-				// {
+				if(!$has_leave && $group->payroll_group_salary_computation == 'Monthly Rate')
+				{
 					$absent_deduction += $daily_rate;
 					$daily_absent = $daily_rate;
-				// }
+				}
 				$absent_count++;
 			}
 
@@ -2251,8 +2281,11 @@ class Payroll
 
 		$pevious_record = Tbl_payroll_record::getdate($shop_id, $date_period)
 											->where('tbl_payroll_period.payroll_period_category', $payroll_period_category)
+											->where('payroll_employee_id',$employee_id)
 											->get()
 											->toArray();
+
+		// dd($pevious_record);
 
 		
 		$previous_tax 			= collect($pevious_record)->sum('tax_contribution');
@@ -2260,10 +2293,11 @@ class Payroll
 		$previous_pagibig 		= collect($pevious_record)->sum('pagibig_contribution');
 		$previous_philhealth	= collect($pevious_record)->sum('philhealth_contribution_ee');
 
+		// dd($previous_sss);
+
 		$sss_contribution		= Payroll::sss_contribution($shop_id, $data['salary_sss']);
 		$sss_contribution_ee 	= $sss_contribution['ee'];
 
-		// dd($sss_contribution);
 
 		if($group->payroll_group_sss == 'Every Period')
 		{
@@ -2407,7 +2441,7 @@ class Payroll
 				$salary_taxable = $data['salary_taxable'];
 
 
-				if($group->payroll_group_before_tax == 1)
+				if($group->payroll_group_before_tax == 0)
 				{
 					$salary_taxable = $data['salary_taxable'] - ($data['sss_contribution_ee'] + $data['philhealth_contribution_ee'] + $data['pagibig_contribution']);
 				}

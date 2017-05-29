@@ -179,19 +179,16 @@
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                 <div class="form-group">
-                        <div class="col-md-8">
-                            <label>Name *</label>
-                            <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
-                            <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            <img class="img-responsive" style="height:120px;width: 100%; object-fit: contain;" src="/assets/front/img/default.jpg">
-                            <div class="row form-group" style="font-size: 20px">
-                                <div class="col-md-12">
-                                    <a><i class="fa fa-pencil"></i></a> | <a><i class="fa fa-trash"></i></a>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-8">
+                        <label>Name *</label>
+                        <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
+                        <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <input type="hidden" name="item_img" class="image-value" key="2" required value="{{$data['item_img'] ? $data['item_img'] : '/assets/front/img/default.jpg' }}">
+                        <img class="img-responsive img-src" key="2" style="width: 100%; object-fit: contain;" src="{{$data['item_img'] ? $data['item_img'] : '/assets/front/img/default.jpg' }}">
+                        <button type="button" class="btn btn-primary image-gallery image-gallery-single" key="2" style="margin-top: 15px;">Upload Image</button>
+                    </div>
                  </div>
                 <div class="form-group">                        
                     <div class="col-md-4">
@@ -308,19 +305,16 @@
                 <input type="hidden" name="_token" value="{{csrf_token()}}">
                 <input type="hidden" class="item_id" name="item_id" value="{{$item_id}}">
                  <div class="form-group">
-                        <div class="col-md-8">
-                            <label>Name *</label>
-                            <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
-                            <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
-                        </div>
-                        <div class="col-md-4 text-center">
-                            <img class="img-responsive" style="height:120px;width: 100%; object-fit: contain;" src="/assets/front/img/default.jpg">
-                            <div class="row form-group" style="font-size: 20px">
-                                <div class="col-md-12">
-                                    <a><i class="fa fa-pencil"></i></a> | <a><i class="fa fa-trash"></i></a>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-8">
+                        <label>Name *</label>
+                        <!-- <input type="text" class="form-control" id="item_name" value="{{isset($data['item_name']) ? $data['item_name'] : ''}}" name="item_name" required> -->
+                        <textarea required class="form-control item-name" name="item_name" id="item_name">{{isset($data['item_name']) ? $data['item_name'] : ''}}</textarea>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <input type="hidden" name="item_img" class="image-value" key="3" required value="{{$data['item_img'] ? $data['item_img'] : '/assets/front/img/default.jpg' }}">
+                        <img class="img-responsive img-src" key="3" style="width: 100%; object-fit: contain;" src="{{$data['item_img'] ? $data['item_img'] : '/assets/front/img/default.jpg' }}">
+                        <button type="button" class="btn btn-primary image-gallery image-gallery-single" key="3" style="margin-top: 15px;">Upload Image</button>
+                    </div>
                  </div>
                 <div class="form-group">                        
                     <div class="col-md-4">

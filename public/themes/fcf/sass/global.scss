@@ -61,6 +61,31 @@ button:hover{
 /* HEADER */
 .header-container{
 	background-color: #fff;
+	@media screen and (max-width: 900px)
+	{
+		padding-bottom: 12px;
+	}
+	@media screen and (max-width: 768px)
+	{
+		padding-bottom: 12px;
+	}
+	@media screen and (max-width: 600px)
+	{
+		padding-bottom: 12px;
+	}
+	@media screen and (max-width: 375px)
+	{
+		padding-bottom: 12px;
+	}
+	@media screen and (max-width: 360px)
+	{
+		padding-bottom: 12px;
+	}
+	@media screen and (max-width: 320px)
+	{
+		padding-bottom: 12px;
+	}
+
 	nav{
 		a.active{
 			color: #ffc10e;
@@ -650,4 +675,54 @@ top: 8px;
     	bottom: 58px;
     }
 
+}
+.navirino{
+	@media screen and (max-width: 900px)
+	{
+		padding: 0px;
+
+		&:last-child{
+			padding-bottom: 10px;
+		}
+	}
+	@media screen and (max-width: 768px)
+	{
+		padding: 0px;
+
+		&:last-child{
+			padding-bottom: 10px;
+		}
+	}
+	@media screen and (max-width: 600px)
+	{
+		padding: 0px;
+
+		&:last-child{
+			padding-bottom: 10px;
+		}
+	}
+	@media screen and (max-width: 375px)
+	{
+		padding: 0px;
+
+		&:last-child{
+			padding-bottom: 10px;
+		}
+	}
+	@media screen and (max-width: 360px)
+	{
+		padding: 0px;
+
+		&:last-child{
+			padding-bottom: 10px;
+		}
+	}
+	@media screen and (max-width: 320px)
+	{
+		padding: 0px;
+
+		&:last-child{
+			padding-bottom: 10px;
+		}
+	}
 }

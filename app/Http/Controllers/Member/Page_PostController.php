@@ -35,7 +35,7 @@ class Page_PostController extends Member
 
             $data["_post"] = DB::table("tbl_post")->where("tbl_post.archived", $archive)
                                                   ->where("tbl_post.shop_id", $this->user_info->shop_id)
-                                                  ->where("tbl_post.post_author", $this->user_info->user_id)
+                                                  // ->where("tbl_post.post_author", $this->user_info->user_id)
                                                   ->leftJoin("tbl_user", "tbl_post.post_author", "=", "tbl_user.user_id")
                                                   ->leftJoin("rel_post_category", "tbl_post.post_id", "=", "rel_post_category.post_id")
                                                   ->leftJoin("tbl_post_category", "rel_post_category.post_category_id", "=", "tbl_post_category.post_category_id")

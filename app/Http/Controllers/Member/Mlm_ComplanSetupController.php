@@ -30,7 +30,7 @@ class Mlm_ComplanSetupController extends Member
 		$count = Tbl_mlm_plan::where('shop_id', $shop_id)->where('marketing_plan_code', 'BINARY_PROMOTIONS')
 		->where('marketing_plan_enable', 1)
 		->count();
-
+		dd($count);
 		if($count >= 1)
 		{
 			$data['links'][0]['label'] = 'Binary Promotions Setup';

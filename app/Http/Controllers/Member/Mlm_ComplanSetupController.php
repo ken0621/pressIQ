@@ -94,6 +94,10 @@ class Mlm_ComplanSetupController extends Member
 		$data['account_tours'] = Tbl_tour_wallet::where('tour_wallet_shop', $this->user_info->shop_id)
 			->where('tour_wallet_main', 1)
 			->first();
+		$data['logs'] = DB::table('tbl_tour_wallet_logs')
+			->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_tour_wallet_logs.tour_wallet_logs_customer_id')
+			->where('shop_id', $this->user_info->shop_id)
+			->paginate(20);
 		return view('member.mlm_tours_wallet.index', $data);
 	}
 	public function unilevel_distribute()
@@ -281,5 +285,15 @@ class Mlm_ComplanSetupController extends Member
 		}
 		return json_encode($status);
 
+	}
+
+	public function get_log()
+	{
+		$data['logs'] = DB::table('tbl_tour_wallet_logs')
+		->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_tour_wallet_logs.tour_wallet_logs_customer_id')
+		->where('shop_id', $this->user_info->shop_id)
+		->paginate(20);
+
+		return view('member.mlm_tours_wallet.logs', $data);
 	}
 }

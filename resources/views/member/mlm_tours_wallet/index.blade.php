@@ -35,13 +35,51 @@
             </form>    
         </div>
     </div>
-</div>        
+</div>  
+
+<div class="panel panel-default panel-block panel-title-block col-md-12" id="top">
+    <div class="panel-heading">
+        <div class="clearfix">
+            <center>Transacton Logs</center>
+            <div class="load-data" target="value-id-1">
+                <div id="value-id-1">
+                    <table class="table table-bordered table-condensed">
+                        <thead>
+                            <th>Amount</th>
+                            <th>Acount Id</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>User</th>
+                        </thead>
+                        @foreach($logs as $key => $value)
+                            <tr>
+                                <td>{{$value->tour_wallet_logs_wallet_amount}}</td>
+                                <td>{{$value->tour_wallet_logs_account_id}}</td>
+                                <td>
+                                    @if($value->tour_wallet_logs_accepted == 1)
+                                        Transfered
+                                    @else
+                                        Not yet transfered
+                                    @endif
+                                </td>
+                                <td>
+                                    {{$value->tour_wallet_logs_date}}
+                                </td>
+                                <td>{{name_format_from_customer_info($value)}}</td>
+                            </tr>
+                        @endforeach
+                    </table>
+                    <center>{!! $logs->render() !!}</center>
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>       
 @endsection
 
 @section('script')
 <script type="text/javascript">
  function  submit_done (data) {
-     // body...
     if(data.status == 1)
     {
         toastr.success(data.message + ' : ' + data.result);
@@ -52,5 +90,7 @@
         toastr.warning(data.message);
     }
  }
+
 </script>
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 @endsection

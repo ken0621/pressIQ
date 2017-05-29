@@ -20,6 +20,7 @@ use App\Models\Tbl_position;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_item;
+use App\Models\Tbl_email_template;
 use Log;
 use Request;
 use Session;

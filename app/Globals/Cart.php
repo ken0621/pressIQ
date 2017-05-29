@@ -29,6 +29,7 @@ use Config;
 use URL;
 use App\Globals\Mlm_slot_log;
 use App\IPay88\RequestPayment;
+use App\Globals\Dragonpay\Dragon_RequestPayment;
 
 class Cart
 {
@@ -929,17 +930,38 @@ class Cart
         {
             switch ($method_information->link_reference_name)
             {
+                case 'paypal2': dd("UNDER DEVELOPMENT"); break;
+                case 'paymaya': dd("UNDER DEVELOPMENT"); break;
+                case 'paynamics': dd("UNDER DEVELOPMENT"); break;
+                case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information); break;
                 case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
-                case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
-                case 'paypal2': die("UNDER DEVELOPMENT"); break;
                 case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
-                default: die("UNDER DEVELOPMENT"); break;
+                case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                default: dd("UNDER DEVELOPMENT"); break;
             }
         }
         else
         {
-            die("An error has occurred. Please try again later.");
+            return Redirect::back()->with("error", "Please choose payment method.")->send();
         }
+    }
+    public static function submit_using_dragonpay($data, $shop_id, $method_information)
+    {
+        dd("UNDER DEVELOPMENT");
+        $request = Request::all();
+        $requestpayment = new Dragon_RequestPayment($this->_merchantkey);
+
+        $this->_data = array(
+            'merchantid'    => $requestpayment->setMerchantId($this->_merchantid),
+            'txnid'         => $requestpayment->setTxnId($request['txnid']),
+            'amount'        => $requestpayment->setAmount($request['amount']),
+            'ccy'           => $requestpayment->setCcy($request['ccy']),
+            'description'   => $requestpayment->setDescription($request['description']),
+            'email'         => $requestpayment->setEmail($request['email']),
+            'digest'        => $requestpayment->getdigest(),
+        );
+
+        Dragon_RequestPayment::make($this->_merchantkey, $this->_data);   
     }
     public static function submit_using_ipay88($data, $shop_id, $method_information)
     {

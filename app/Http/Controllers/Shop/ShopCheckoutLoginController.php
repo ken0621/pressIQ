@@ -29,6 +29,11 @@ class ShopCheckoutLoginController extends Shop
     {
         if(isset(Self::$customer_info->customer_id))
         {
+            $customer_info["email"] = trim(Self::$customer_info->email);
+            $customer_info["new_account"] = false;
+            $customer_info["password"] = Crypt::decrypt(Self::$customer_info->password);
+            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_account"));
+
             return Redirect::to('/checkout')->send();
         }
     }

@@ -31,7 +31,6 @@ use App\Models\Tbl_locale;
 // use App\Globals\Mlm_slot_log;    
 
 /*4/29/17 this will import the data/class needed by ipay88 payment mode by:brain*/
-use App\IPay88\RequestPayment;
 use App\Models\Tbl_online_pymnt_api;
 
 class ShopCheckoutController extends Shop
@@ -110,6 +109,7 @@ class ShopCheckoutController extends Shop
     {
         return Tbl_locale::where("locale_id", $locale_id)->pluck("locale_name");
     }
+
     public function payment()
     {
         if(Request::isMethod("post"))
@@ -123,7 +123,91 @@ class ShopCheckoutController extends Shop
             $data["get_cart"]        = Cart::get_cart($this->shop_info->shop_id);
             return view("checkout_payment", $data);  
         }
+    }
 
+    public function payment_upload()
+    {
+        $id = Crypt::decrypt(Request::input("id"));
+
+        if (Request::isMethod("post")) 
+        {
+            $input = Input::all();
+            $rules = array('payment_upload' => 'required|mimes:jpeg,png,gif,bmp');
+            $validator = Validator::make($input, $rules);
+
+            if ($validator->fails()) 
+            {
+                $messages = $validator->messages();
+                return Redirect::back()
+                        ->withErrors($validator)
+                        ->withInput();
+            } 
+            else 
+            {
+                $file = Input::file("payment_upload");
+                /* SAVE THE IMAGE IN THE FOLDER */
+                if ($file) 
+                {
+                    $extension          = $file->getClientOriginalExtension();
+                    $filename           = str_random(15).".".$extension;
+                    $destinationPath    = 'uploads/'.$this->shop_info->shop_key."-".$this->shop_info->shop_id.'/ecommerce-upload';
+                    
+                    if(!File::exists($destinationPath)) 
+                    {
+                        $create_result = File::makeDirectory(public_path($destinationPath), 0775, true, true);
+                    }
+
+                    $upload_success    = Input::file('payment_upload')->move($destinationPath, $filename);
+
+                    /* SAVE THE IMAGE PATH IN THE DATABASE */
+                    $image_path = $destinationPath."/".$filename;
+
+                    if( $upload_success ) 
+                    {
+                       $update['ec_order_id'] = $id;
+                       $update['payment_upload'] = "/" . $image_path;
+                       $update['order_status'] = "Pending";
+                       $update['payment_status'] = 0;
+                       $order = Ec_order::update_ec_order($update);
+
+                       if ($order["status"] == "success") 
+                       {
+                           return Redirect::to("/");
+                       }
+                       else
+                       {
+                           return Redirect::back()->with('fail', 'Image upload failed. Please try again.')->send();
+                       }
+                    } 
+                    else 
+                    {
+                       return Redirect::back()->with('fail', 'Image upload failed. Please try again.')->send();
+                    }
+                }
+            }
+        }
+        else
+        {
+            $data["page"] = "Checkout Payment Upload";
+
+            $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $id)
+                                               ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
+                                               ->get();
+
+            $data['summary'] = [];
+            $subtotal = 0;
+            $shipping = 0;
+            $total = 0;
+
+            foreach ($data['_order'] as $key => $value) 
+            {
+                $subtotal += $value->total;
+            }
+            
+            $data['summary']['subtotal'] = $subtotal;
+
+            return view("checkout_payment_upload", $data);
+        }
     }
 
     public function get_payment_method()
@@ -152,66 +236,7 @@ class ShopCheckoutController extends Shop
         $first_name = trim( preg_replace('#'.$last_name.'#', '', $name ) );
         return array($first_name, $last_name);
     }
-
-    public function postPaymentWithIPay88()
-    {
-        echo "Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.";
-        $shop_id = $this->shop_info->shop_id;
-        $data = Cart::get_info($shop_id);
-        $api = Tbl_online_pymnt_api::where('api_shop_id', $shop_id)->join("tbl_online_pymnt_gateway", "tbl_online_pymnt_gateway.gateway_id", "=", "tbl_online_pymnt_api.api_gateway_id")->where("gateway_code_name", "ipay88")->first();
-
-        $data["paymentId"] = 1; //BANCNET, CREDIT CARD, ETC
-        $data["refNo"] = $this->shop_info->shop_id . time();
-        $data["amount"] = $data["tbl_ec_order"]["total"];
-
-        /* REASTRUCTURE */
-        $product_summary = array();
-        foreach ($data['tbl_ec_order_item'] as $key => $value) 
-        {
-            if ($key != count($data["cart"])) 
-            {
-                $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . "";
-            }
-            else
-            {
-                $product_summary = "Product #" . $value["item_id"] . " (x" . $value["quantity"] . ") - " . currency("PHP", $value["price"]) . ", ";
-            }
-        }
-
-        $data["currency"] = "PHP";
-        $data["prodDesc"] = $product_summary;
-        $data["userName"] = $data["tbl_customer"]["first_name"] . " " . $data["tbl_customer"]["last_name"];
-        $data["userEmail"] = $data["tbl_ec_order"]["customer_email"];
-        $data["userContact"] = $data["tbl_customer"]["customer_contact"];
-        $data["remark"] = "Remarks";
-        $data["lang"] = "UTF-8";
-        $data["responseUrl"] = URL::to('/ipay88_response');
-        $data["backendUrl"] = URL::to('/ipay88_response');
-        $data["merchantKey"] = $api->api_secret_id;
-        $data["merchantCode"] = $api->api_client_id;
-        $requestpayment = new RequestPayment($data["merchantKey"]);
-
-        $this->_data = array(
-            'merchantCode'  => $requestpayment->setMerchantCode($data["merchantCode"]),
-            'paymentId'     => $requestpayment->setPaymentId($data["paymentId"]),
-            'refNo'         => $requestpayment->setRefNo($data["refNo"]),
-            'amount'        => $requestpayment->setAmount($data["amount"]),
-            // 'amount'        => $requestpayment->setAmount(15),
-            'currency'      => $requestpayment->setCurrency($data["currency"]),
-            'prodDesc'      => $requestpayment->setProdDesc($data["prodDesc"]),
-            'userName'      => $requestpayment->setUserName($data["userName"]),
-            'userEmail'     => $requestpayment->setUserEmail($data["userEmail"]),
-            'userContact'   => $requestpayment->setUserContact($data["userContact"]),
-            'remark'        => $requestpayment->setRemark($data["remark"]),
-            'lang'          => $requestpayment->setLang($data["lang"]),
-            'signature'     => $requestpayment->getSignature(),
-            'responseUrl'   => $requestpayment->setResponseUrl($data["responseUrl"]),
-            'backendUrl'    => $requestpayment->setBackendUrl($data["backendUrl"])
-        );
-
-        RequestPayment::make($data["merchantKey"], $this->_data);     
-    }
-
+    
     public function ipay88_response()
     {
         $request = Request::all();

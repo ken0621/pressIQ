@@ -11,6 +11,7 @@ use App\Models\Tbl_item;
 use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_user;
+use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_user_warehouse_access ;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
@@ -22,6 +23,79 @@ use Carbon\Carbon;
 use Session;
 class Warehouse
 {   
+    public static function select_item_warehouse_per_bundle($warehouse_id)
+    {
+        $bundle = Tbl_item::where("item_type_id",4)->where("shop_id",Warehouse::getShopId())->get();
+
+        $item = [];
+        $bundle_qty_warehouse = [];
+        $bundle_qty_ = [];
+        $bundle_data = [];
+        foreach($bundle as $key => $value) 
+        {
+            $bundle_data[$key]["bundle_id"] = $value->item_id;
+            $bundle_data[$key]["bundle_item_name"] = $value->item_name;
+            $bundle_data[$key]["bundle_item_bardcode"] = $value->item_barcode;
+            $bundle_data[$key]["bundle_item_um"] = $value->item_measurement_id;
+            $bundle_data[$key]["bundle_current_stocks"] = null;
+
+            $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$value->item_id)->get();
+
+            $warehouse_bundle_qty = [];
+            foreach ($bundle_item as $key_bundle => $value_bundle) 
+            {
+               $warehouse_qty = Tbl_warehouse_inventory::check_inventory_single($warehouse_id, $value_bundle->bundle_item_id)->pluck('inventory_count');      
+
+               $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
+
+               $bundle_qty_warehouse[$value_bundle->bundle_item_id] = $warehouse_qty / $bundle_qty;
+               $bundle_qty_[$value_bundle->bundle_item_id] = $bundle_qty;
+            }
+
+            $bundle_data[$key]["item"] = $bundle_qty_warehouse;
+            $bundle_data[$key]["bundle_qty"] = $bundle_qty_;
+        }
+
+        $um = null;
+        $rem_item = [];
+        foreach($bundle_data as $key_bundle_data => $value_bundle_data) 
+        {
+            $bundle_stocks = 0;
+            if(count($value_bundle_data["item"]) > 0)
+            {
+                $bundle_stocks = floor(min($value_bundle_data["item"]));
+            }
+
+            foreach($value_bundle_data["item"] as $item_id_key => $value_item) 
+            {   
+                $rem_item[$value_bundle_data["bundle_id"].".".$item_id_key]["item_id"] = $item_id_key;
+                $rem_item[$value_bundle_data["bundle_id"].".".$item_id_key]["item_quantity"] = ($value_item - $bundle_stocks) * $value_bundle_data["bundle_qty"][$item_id_key];
+            }            
+
+            $bundle_data[$key_bundle_data]["bundle_current_stocks"] = UnitMeasurement::um_view($bundle_stocks,$value_bundle_data["bundle_item_um"]);
+        }
+
+        foreach($rem_item as $key_rem => $value_rem) 
+        {
+            $item_details = Item::get_item_details($value_rem["item_id"]);
+
+            $bundle_data["b".$key_rem]["bundle_id"] = $value_rem["item_id"];
+            $bundle_data["b".$key_rem]["bundle_item_name"] = $item_details->item_name;
+            $bundle_data["b".$key_rem]["bundle_item_bardcode"] = $item_details->item_barcode;
+            $bundle_data["b".$key_rem]["bundle_item_um"] = $item_details->item_measurement_id;
+            $um_info = UnitMeasurement::um_other($item_details->item_measurement_id);
+            $um = "";
+            if($um_info)
+            {   
+                $um = $um_info->multi_id;
+            }
+            $bundle_data["b".$key_rem]["bundle_current_stocks"] = UnitMeasurement::um_view($value_rem["item_quantity"],$item_details->item_measurement_id,$um);
+        }
+
+
+        dd($bundle_data);
+
+    }
     public static function insert_item_to_all_warehouse($item_id, $reorder_point = 0)
     {
         if($item_id)

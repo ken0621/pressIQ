@@ -43,12 +43,14 @@ class Item
         $return = "";
         $text = "";
         $trail = Tbl_audit_trail::where("source","item")->where("source_id",$item_id)->orderBy("created_at","DESC")->get();
+  
         foreach ($trail as $key => $value) 
         {
             $item_qty = 1;
-            if(Purchasing_inventory_system::check() != 0)
+            $check = Purchasing_inventory_system::check();
+            if($check != 0)
             {
-                $item_qty = UnitMeasurement::getQty($item_data->item_measurement_id);
+                $item_qty = UnitMeasurement::um_qty($item_data->item_measurement_id);
             }
             $old[$key] = unserialize($value->new_data);
             $amount = 0;
@@ -71,8 +73,7 @@ class Item
                     }
                 }
             }
-        }
-           
+        }   
         return $text;
     }
     public static function get_item_details($item_id = 0)

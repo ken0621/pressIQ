@@ -376,7 +376,8 @@ class WarehouseController extends Member
             }
             $data["warehouse"] = Tbl_warehouse::where("warehouse_id",$id)->first();
             $data["warehouse_item"] = Warehouse::select_item_warehouse_single_w_page($id,'array');
-            // dd(collect($data["warehouse_item"])->toArray());
+            $data["warehouse_item_bundle"] = Warehouse::select_item_warehouse_per_bundle($id,'array');
+            // dd(collect($data["warehouse_item_bundle"])->toArray());
             $data["pis"] = Purchasing_inventory_system::check();
             return view("member.warehouse.warehouse_view",$data);
         }

@@ -34,7 +34,27 @@ class OnlinePaymentMethodController extends Member
 		}
 
 		$data["_gateway"] 	= $this->gatewayInfo();
-		// dd($data["_gateway"]);
+		foreach ($data["_gateway"] as $key => $value) 
+		{
+			switch ($value->gateway_code_name) 
+			{
+				case 'ipay88':
+					$data["_gateway"][$key]->gateway_first_label = "Merchant Code";
+					$data["_gateway"][$key]->gateway_second_label = "Merchant Key";
+				break;
+
+				case 'dragonpay':
+					$data["_gateway"][$key]->gateway_first_label = "Merchant ID";
+					$data["_gateway"][$key]->gateway_second_label = "Merchant Key";
+				break;
+				
+				default:
+					$data["_gateway"][$key]->gateway_first_label = "Client ID";
+					$data["_gateway"][$key]->gateway_second_label = "Secret ID";
+				break;
+			}
+		}
+
 		return view('member.online_payment.payment', $data);
 	}
 

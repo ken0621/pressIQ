@@ -647,15 +647,12 @@ class Cart
         return $message;
     }
 
-
     /* return content of SESSION */
     public static function get_info($shop_id)
     {
         $data = Session::get(Cart::get_unique_id($shop_id));
         return $data;
     }
-
-
 
     /*
      * TITLE: CUSTOMER SET INFO
@@ -947,12 +944,18 @@ class Cart
     }
     public static function submit_using_dragonpay($data, $shop_id, $method_information)
     {
-        dd("UNDER DEVELOPMENT");
-        $request = Request::all();
-        $requestpayment = new Dragon_RequestPayment($this->_merchantkey);
+        $merchant_id  = "MYPHONE";
+        $merchant_key = "Ez9MiNqWBS2BHuO";
 
-        $this->_data = array(
-            'merchantid'    => $requestpayment->setMerchantId($this->_merchantid),
+        $requestpayment    = new Dragon_RequestPayment($merchant_key);
+        $request["txnid"]  = $shop_id . time();
+        $request["amount"] = $data["tbl_ec_order"]["total"];
+        $request["ccy"]    = "PHP";
+        $request["description"] = "Item Name (x1) - PHP. 100.00";
+        $request["email"] = $data["tbl_ec_order"]["customer_email"];
+
+        $dragon_request = array(
+            'merchantid'    => $requestpayment->setMerchantId($merchant_id),
             'txnid'         => $requestpayment->setTxnId($request['txnid']),
             'amount'        => $requestpayment->setAmount($request['amount']),
             'ccy'           => $requestpayment->setCcy($request['ccy']),
@@ -961,7 +964,7 @@ class Cart
             'digest'        => $requestpayment->getdigest(),
         );
 
-        Dragon_RequestPayment::make($this->_merchantkey, $this->_data);   
+        Dragon_RequestPayment::make($merchant_key, $dragon_request);   
     }
     public static function submit_using_ipay88($data, $shop_id, $method_information)
     {

@@ -225,6 +225,47 @@
                     <h3>NO DISCOUNT GIVEN</h3>
                 </div>
                 @endif
+
+                @if(count($_cm_others) > 0)
+                <div>
+                    <div class="form-group">
+                        <h2>Credit Memo - Others</h2>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row clearfix draggable-container empties-container">
+                            <div class="col-sm-12">
+                                <table class="digima-table" style="width: 100%">
+                                    <thead >
+                                        <tr>
+                                            <th style="width: 30px;" class="text-center">#</th>
+                                            <th style="width: 200px;">Customer</th>
+                                            <th style="width: 200px;">Description</th>
+                                            <th style="width: 200px;">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                        @foreach($_cm_others as $key => $cm_others)
+                                        <tr>
+                                            <td>{{$key + 1}}</td>
+                                            <td>{{$cm_others->customer_name}}</td>
+                                            <td>{{$cm_others->description}}</td>
+                                            <td class="text-right">{{currency('Php',$cm_others->cm_amount)}}</td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-sm-12 text-right">
+                                <h4><strong>Total CM - OTHERS</strong> {{currency('Php',$total_cm_others)}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @else
+                <div class="form-group">
+                    <h3>NO CREDIT MEMOT - OTHERS GIVEN</h3>
+                </div>
+                @endif
             </div>
             <div style="page-break-after: always;">
                 <div class="form-group">
@@ -353,7 +394,7 @@
                         <tr>
                             <td style="width: 33%">{{currency('PHP', $ar_collection)}}</td>
                             <td style="width: 33%">{{currency('PHP', 0)}}</td>
-                            <td style="width: 33%">{{currency('PHP', $total_cm)}}</td>
+                            <td style="width: 33%">{{currency('PHP', $total_cm + $total_cm_others)}}</td>
                         </tr>
                         <tr>
                             <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>
@@ -373,7 +414,7 @@
                 <div class="form-group text-center">
                     <table class="text-center" style="width: 33%;font-size: 12px;">
                         <tr>
-                            <td style="width: 33%">{{currency('PHP', 0)}}</td>
+                            <td style="width: 33%">{{currency('PHP', $total_cm_others)}}</td>
                         </tr>
                         <tr>
                             <td><div style="border-bottom: 1px solid #000;width: 100%"></div></td>

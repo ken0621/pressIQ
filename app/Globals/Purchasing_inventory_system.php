@@ -432,7 +432,7 @@ class Purchasing_inventory_system
             array_push($data['__transaction'], $_transaction);
         }
 
-        $data["credit_memo"] = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->get();
+        $data["credit_memo"] = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->where("cm_type",0)->get();
         foreach ($data["credit_memo"] as $cm_key => $cm_value) 
         {
             $_transaction = null;
@@ -453,6 +453,14 @@ class Purchasing_inventory_system
 
             array_push($data['__transaction'], $_transaction);
         }
+        $data["total_cm_others"] = 0;
+        $data["_cm_others"] = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->where("cm_type",1)->get();
+        foreach ($data["_cm_others"] as $key_cm_others => $value_cm_others) 
+        {
+            $data["total_cm_others"] += $value_cm_others->cm_amount;   
+            $data["_cm_others"][$key_cm_others]->customer_name = $value_cm_others->company != "" ? $value_cm_others->company : $value_cm_others->title_name." ".$value_cm_others->first_name." ".$value_cm_others->last_name." ".$value_cm_others->suffix_name;        
+        }
+
 
         $sir_data = Tbl_sir::where("sir_id",$sir_id)->first();
         $data["rem_amount"] = $sir_data->agent_collection;

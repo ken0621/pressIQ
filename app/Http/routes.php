@@ -914,13 +914,9 @@ Route::controller('/tester','TesterController');
 // test lang load
 Route::any("/member/load_position","Member\EmployeePositionController@load_position");
 
-
 /* PAYROLL START */
-
-
 // Route::group(array('prefix' => '/member/payroll'), function()
 // {
-
 // 	/* COMPANY START */
 // 	Route::any('/company_list','Member\PayrollController@company_list');
 // 	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');
@@ -967,13 +963,9 @@ Route::any("/member/load_position","Member\EmployeePositionController@load_posit
 // 	Route::any("/jobtitlelist/modal_update_jobtitle","Member\PayrollController@modal_update_jobtitle");
 // 	/* JOB TITLE END */
 // });
-
 include_once('routes_config/routes_payroll.php');
-
 /* PAYROLL END */
 
+/* PAYMENT FACILITIES */
+include_once('routes_config/routes_payment.php');
 
-Route::get('/payment/dragonpay', 'PaymentController@index');
-Route::post('/payment/dragonpay', 'PaymentController@onSubmitPayment');
-Route::get('/payment/dragonpay/postback', 'PaymentController@postback_url'); //confirmation upon payment
-Route::get('/payment/dragonpay/return', 'PaymentController@return_url'); //

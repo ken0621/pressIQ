@@ -7,8 +7,7 @@ namespace App\Http\Controllers;
 use Request;
 use Redirect;
 use App\Http\Controllers\Controller;
-
-use App\Globals\Dragonpay\RequestPayment;
+use App\Globals\Dragonpay\Dragon_RequestPayment;
 use App\Globals\Mlm_member;
 use App\Models\Tbl_mlm_slot;
 use App\Globals\Mlm_plan;
@@ -18,7 +17,6 @@ use Session;
 use Carbon\Carbon;
 class PaymentController extends Controller
 {
-
     protected $_merchantid = 'MYPHONE' ;
     protected $_merchantkey = 'Ez9MiNqWBS2BHuO' ;
     
@@ -31,8 +29,7 @@ class PaymentController extends Controller
     public function onSubmitPayment()
     {
         $request = Request::all();
-        //dd($request['txnid']);
-        $requestpayment = new RequestPayment($this->_merchantkey);
+        $requestpayment = new Dragon_RequestPayment($this->_merchantkey);
 
         $this->_data = array(
             'merchantid'    => $requestpayment->setMerchantId($this->_merchantid),
@@ -44,8 +41,7 @@ class PaymentController extends Controller
             'digest'        => $requestpayment->getdigest(),
         );
 
-        //dd($requestpayment->getdigest());
-        RequestPayment::make($this->_merchantkey, $this->_data);   
+        Dragon_RequestPayment::make($this->_merchantkey, $this->_data);   
     }
 
     public function postback_url()

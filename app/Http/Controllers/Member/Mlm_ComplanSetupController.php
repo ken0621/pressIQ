@@ -17,7 +17,7 @@ use Carbon\Carbon;
 use View;
 use App\Models\Tbl_mlm_plan;
 use DB;
-use App\Globals\Abs\AbsMain;
+use App\Globals\abs\AbsMain;
 use App\Models\Tbl_tour_wallet;
 class Mlm_ComplanSetupController extends Member
 {

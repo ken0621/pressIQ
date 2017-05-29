@@ -30,6 +30,10 @@
                 <input type="text" class="form-control" name="tour_wallet_a_username" value="{{isset($account_tours->tour_wallet_a_username) ? $account_tours->tour_wallet_a_username : '' }}">
                 <label>Password</label>
                 <input type="password" class="form-control" name="tour_wallet_a_base_password" value="{{isset($account_tours->tour_wallet_a_base_password) ? $account_tours->tour_wallet_a_base_password : '' }}">
+
+                <hr>
+                <label>Points (%)</label>
+                <input type="number" class="form-control" name="tour_wallet_convertion" value="{{isset($account_tours->tour_wallet_convertion) ? $account_tours->tour_wallet_convertion : 0 }}">
                 <hr>
                 <button class="btn btn-primary pull-right">Update</button>
             </form>    
@@ -50,6 +54,7 @@
                             <th>Status</th>
                             <th>Date</th>
                             <th>User</th>
+                            <th>Points</th>
                         </thead>
                         @foreach($logs as $key => $value)
                             <tr>
@@ -66,6 +71,7 @@
                                     {{$value->tour_wallet_logs_date}}
                                 </td>
                                 <td>{{name_format_from_customer_info($value)}}</td>
+                                <td>{{$value->tour_wallet_logs_points}}</td>
                             </tr>
                         @endforeach
                     </table>

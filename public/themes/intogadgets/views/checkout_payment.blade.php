@@ -70,7 +70,6 @@ function checkout_form_payment()
 		event_choose_payment_method();
 		action_load_sidecart();
 		action_match_height();
-
 	}
 	function event_choose_payment_method()
 	{

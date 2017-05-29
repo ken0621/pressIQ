@@ -964,8 +964,7 @@ class Cart
                 'ccy'           => $requestpayment->setCcy($request['ccy']),
                 'description'   => $requestpayment->setDescription($request['description']),
                 'email'         => $requestpayment->setEmail($request['email']),
-                'digest'        => $requestpayment->getdigest(),
-                'edward'        => "edward"
+                'digest'        => $requestpayment->getdigest()
             );
 
             Dragon_RequestPayment::make($merchant_key, $dragon_request); 

@@ -63,7 +63,7 @@
             @if(array_has($submenu,'label'))
               <a class="list-group-item single-space second" {{ isset($submenu['user_settings']) ? "data-toggle=collapse data-target=#$key2" : '' }}>
                 <span class="label label-info">{{count($submenu['user_settings'])}}</span>
-                {{$submenu['label']}}
+                {!! $submenu['label'] !!}
               </a>
             @endif
             @if(array_has($submenu,'user_settings'))

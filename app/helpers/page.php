@@ -328,6 +328,7 @@ function page_list()
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "calculator";
 
+
     // /* PAYROLL SUMMARY */
     // $code = "payroll-summary";
     // $nav[$page]['submenu'][$code]['label'] = "Payroll Summary";
@@ -340,11 +341,13 @@ function page_list()
     /* -- EMPLOYEE=> LIST  */
     $code = "company-list";
     $nav[$page]['submenu'][$code]['label'] = "Company List";
+
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/company_list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
 
     /* -- EMPLOYEE POSITION=> LIST  */
     $code = "employee-list";
@@ -441,6 +444,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
     $nav[$page]['submenu'][$code]['status'] = "No progress Yet";
     $nav[$page]['submenu'][$code]['developer'] = "Jimar Zape";
+
 
     /* PAYROLL PROCESS */
     $code = "payroll-process";
@@ -654,7 +658,7 @@ function page_list()
 
     /* -- CUSTOMERS => CUSTOMER INVOICE  */
     $code = "customer-invoice";
-    $nav[$page]['submenu'][$code]['label'] = "Create Invoice";
+    $nav[$page]['submenu'][$code]['label'] = "Create Invoice <span class='blink-ctr ctr-span hidden inv-count pull-right'></span>";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/invoice_list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -714,7 +718,7 @@ function page_list()
     
     /* -- VENDORS => PURCHASE ORDER  */
     $code = "vendor-purchase-order";
-    $nav[$page]['submenu'][$code]['label'] = "Purchase Order";
+    $nav[$page]['submenu'][$code]['label'] = "Purchase Order <span class='blink-ctr ctr-span hidden po-count pull-right'></span>";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/purchase_order/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -741,7 +745,7 @@ function page_list()
 
     /* -- VENDORS => PAY BILLS  */
     $code = "vendor-pay-bills";
-    $nav[$page]['submenu'][$code]['label'] = "Pay Bills";
+    $nav[$page]['submenu'][$code]['label'] = "Pay Bills <span class='blink-ctr ctr-span hidden bill-count pull-right'></span>";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/paybill/list";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
@@ -876,6 +880,16 @@ function page_list()
     $nav[$page]['submenu'][$code]['status'] = "Developing";
     $nav[$page]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
 
+
+    /* -- REPORT => AGENT TRANSACTIONS */
+    $code = "report-agent-transaction";
+    $nav[$page]['submenu'][$code]['label'] = "Agent Profit & Loss";
+    $nav[$page]['submenu'][$code]['code'] = $code;
+    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/agent/profit_loss";
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
+    $nav[$page]['submenu'][$code]['status'] = "Developing";
+    $nav[$page]['submenu'][$code]['developer'] = "ARCY";
+
     /* PURCHASING INVENTORY SYSTEM */
     $page = "pis";
     $nav[$page]['name'] = "Sales & Delivery";
@@ -884,7 +898,7 @@ function page_list()
 
      /* -- PIS => SIR */
     $code = "pis-lof";
-    $nav[$page]['submenu'][$code]['label'] = "Load Out Form ";
+    $nav[$page]['submenu'][$code]['label'] = "Load Out Form <span class='blink-ctr ctr-span hidden lof-count pull-right'></span>";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/lof";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
@@ -893,7 +907,7 @@ function page_list()
 
      /* -- PIS => SIR */
     $code = "pis-sir";
-    $nav[$page]['submenu'][$code]['label'] = "Stock Issuance Report";
+    $nav[$page]['submenu'][$code]['label'] = "Stock Issuance Report <span class='blink-ctr ctr-span hidden sir-count pull-right'></span>";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sir";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','edit','add','archived','open-sir','sync'];
@@ -902,7 +916,7 @@ function page_list()
 
      /* -- PIS => ILR */
     $code = "pis-ilr";
-    $nav[$page]['submenu'][$code]['label'] = "Incoming Load Report";
+    $nav[$page]['submenu'][$code]['label'] = "Incoming Load Report <span class='blink-ctr ctr-span hidden ilr-count pull-right'></span>";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/ilr";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','processed-ilr'];
@@ -941,7 +955,7 @@ function page_list()
 
      /* -- PIS => SIR */
     $code = "agent-collectiong";
-    $nav[$page]['submenu'][$code]['label'] = "Collection";
+    $nav[$page]['submenu'][$code]['label'] = "Collection <span class='blink-ctr ctr-span hidden col-count pull-right'></span>";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/collection";
     $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];

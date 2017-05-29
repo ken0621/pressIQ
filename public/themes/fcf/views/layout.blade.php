@@ -96,7 +96,7 @@
                 <button id="gotoright">&raquo;</button>
             </div>
             <div class="slider3-title">
-                Latest News
+                Our News
             </div>
             <div class="slider3">
                 <div style="position: absolute; top: 18px; left: 0px; width: 2000px;">

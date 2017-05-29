@@ -97,6 +97,7 @@ class Shop extends Controller
         if ($this->shop_theme == "sovereign") 
         {
             $products = Ecom_Product::getAllProduct($this->shop_info->shop_id);
+            View::share("global_product", $products);
         }
         
         View::share("slot_now", Self::$slot_now);
@@ -115,7 +116,7 @@ class Shop extends Controller
         View::share("customer_info", $data['customer_info']);
         View::share("lead_code", $data['lead_code']);
         View::share("_popular_tags", $popular_tags);
-        View::share("global_product", $products);
+        
     }
     public function file($theme, $type, $filename)
     {

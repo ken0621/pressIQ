@@ -38,6 +38,7 @@ class Warehouse
             $bundle_data[$key]["bundle_item_bardcode"] = $value->item_barcode;
             $bundle_data[$key]["bundle_item_um"] = $value->item_measurement_id;
             $bundle_data[$key]["bundle_current_stocks"] = null;
+            $bundle_data[$key]["bundle_current_stocks_um"] = null;
 
             $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$value->item_id)->get();
 
@@ -70,30 +71,36 @@ class Warehouse
             {   
                 $rem_item[$value_bundle_data["bundle_id"].".".$item_id_key]["item_id"] = $item_id_key;
                 $rem_item[$value_bundle_data["bundle_id"].".".$item_id_key]["item_quantity"] = ($value_item - $bundle_stocks) * $value_bundle_data["bundle_qty"][$item_id_key];
-            }            
-
-            $bundle_data[$key_bundle_data]["bundle_current_stocks"] = UnitMeasurement::um_view($bundle_stocks,$value_bundle_data["bundle_item_um"]);
-        }
-
-        foreach($rem_item as $key_rem => $value_rem) 
-        {
-            $item_details = Item::get_item_details($value_rem["item_id"]);
-
-            $bundle_data["b".$key_rem]["bundle_id"] = $value_rem["item_id"];
-            $bundle_data["b".$key_rem]["bundle_item_name"] = $item_details->item_name;
-            $bundle_data["b".$key_rem]["bundle_item_bardcode"] = $item_details->item_barcode;
-            $bundle_data["b".$key_rem]["bundle_item_um"] = $item_details->item_measurement_id;
-            $um_info = UnitMeasurement::um_other($item_details->item_measurement_id);
-            $um = "";
-            if($um_info)
-            {   
-                $um = $um_info->multi_id;
             }
-            $bundle_data["b".$key_rem]["bundle_current_stocks"] = UnitMeasurement::um_view($value_rem["item_quantity"],$item_details->item_measurement_id,$um);
+
+            $bundle_data[$key_bundle_data]["bundle_current_stocks_um"] = UnitMeasurement::um_view($bundle_stocks,$value_bundle_data["bundle_item_um"]);
+            $bundle_data[$key_bundle_data]["bundle_current_stocks"] = $bundle_stocks;
+
+            $qty = Purchasing_inventory_system::get_sir_stocks($warehouse_id, $value_bundle_data["bundle_id"]);
+            $bundle_data[$key_bundle_data]['total_stock_sir'] = UnitMeasurement::um_view($qty,$value_bundle_data["bundle_item_um"]);
         }
 
+        // dd($rem_item);
 
-        dd($bundle_data);
+        // foreach($rem_item as $key_rem => $value_rem)
+        // {
+        //     $item_details = Item::get_item_details($value_rem["item_id"]);
+
+        //     $bundle_data["b".$key_rem]["bundle_id"] = $value_rem["item_id"];
+        //     $bundle_data["b".$key_rem]["bundle_item_name"] = $item_details->item_name;
+        //     $bundle_data["b".$key_rem]["bundle_item_bardcode"] = $item_details->item_barcode;
+        //     $bundle_data["b".$key_rem]["bundle_item_um"] = $item_details->item_measurement_id;
+        //     $um_info = UnitMeasurement::um_other($item_details->item_measurement_id);
+        //     $um = "";
+        //     if($um_info)
+        //     {   
+        //         $um = $um_info->multi_id;
+        //     }
+        //     $bundle_data["b".$key_rem]["bundle_current_stocks"] = UnitMeasurement::um_view($value_rem["item_quantity"],$item_details->item_measurement_id,$um);
+        // }
+        // dd($bundle_data);
+
+        return $bundle_data;
 
     }
     public static function insert_item_to_all_warehouse($item_id, $reorder_point = 0)

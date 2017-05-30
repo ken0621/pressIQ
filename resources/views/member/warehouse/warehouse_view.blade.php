@@ -32,13 +32,23 @@
                 </div>
             </div>
         </div> -->
-        <div class="row clearfix draggable-container">
+        <div class="form-group">
+            <div class="col-md-12 text-left">            
+                <input type="checkbox" onclick="toggle('.show-container', this)" value="update_password" class="up-check" name="update_password"> <label class="label-type"> Per Bundle/Group</label>
+            </div>
+        </div>
+        <div class="row clearfix draggable-container show-container per-item">
             <div class="table-responsive">
                 <div class="load-data" target="warehouse_data">
                     <div id="warehouse_data">                        
                        @include("member.warehouse.load_data_warehouse.load_view_warehouse")
                     </div>
                 </div>
+            </div>
+        </div>  
+        <div class="row clearfix draggable-container show-container per-bundle hidden">
+            <div class="table-responsive">                   
+                @include("member.warehouse.load_data_warehouse.bundle_load_view_warehouse")
             </div>
         </div>    
     </div>
@@ -49,7 +59,25 @@
 </div>
 </form>
 <script type="text/javascript" src="/assets/member/js/textExpand.js"></script>
-<!-- <script type="text/javascript" src="/assets/member/js/draggable_row.js"></script> -->
+<script type="text/javascript" src="/assets/member/js/draggable_row.js"></script>
 <script type="text/javascript" src="/assets/member/js/transfer_warehouse.js"></script>
 <script type="text/javascript" src="/assets/member/js/warehouse.js"></script>
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
+
+<script type="text/javascript">
+    function toggle(className, obj) 
+    {
+        $(".modal-loader").removeClass("hidden");
+        var $input = $(obj);
+        if($input.prop('checked'))
+        {
+            $(".modal-loader").addClass("hidden");
+            $(".show-container").toggleClass("hidden");   
+        }
+        else
+        { 
+            $(".modal-loader").addClass("hidden");
+            $(".show-container").toggleClass("hidden");
+        }
+    }
+</script>

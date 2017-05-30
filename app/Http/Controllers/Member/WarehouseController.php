@@ -15,6 +15,8 @@ use App\Models\Tbl_inventory_slip;
 use App\Models\Tbl_settings;
 use App\Models\Tbl_sir;
 use App\Models\Tbl_sir_inventory;
+use App\Models\Tbl_sir_item;
+use App\Models\Tbl_item_bundle;
 use App\Models\Tbl_unit_measurement_multi;
 use App\Globals\UnitMeasurement;
 use App\Globals\Purchasing_inventory_system;
@@ -394,18 +396,53 @@ class WarehouseController extends Member
 
             $qty = 0;
             $data["item_details"] = Item::get_item_details($item_id);
-            foreach ($data["_sir"] as $key => $value) 
-            {           
-                $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$data["item_details"]->item_measurement_id)->where("is_base",0)->pluck("multi_id");
-                $qty = Tbl_sir_inventory::where("sir_item_id",$item_id)->where("inventory_sir_id",$value->sir_id)->sum("sir_inventory_count");
-                if($qty > 0)
-                {
-                    $data["_sir"][$key]->per_agent_qty = UnitMeasurement::um_view($qty,$data["item_details"]->item_measurement_id,$um_issued);
+            if($data["item_details"])
+            {
+                foreach ($data["_sir"] as $key => $value) 
+                {   
+
+                    $um_issued = Tbl_unit_measurement_multi::where("multi_um_id",$data["item_details"]->item_measurement_id)->where("is_base",0)->pluck("multi_id");
+
+                    if($data["item_details"]->item_type_id != 4)
+                    {        
+                        $qty = Tbl_sir_inventory::where("sir_item_id",$item_id)->where("inventory_sir_id",$value->sir_id)->sum("sir_inventory_count");                       
+                    }
+                    else
+                    {
+                        $sir_bundle_item = Tbl_sir_item::where("sir_id",$value->sir_id)->where("item_id",$item_id)->get();
+                        $rem_bundle_qty_sir = 0;
+
+                        foreach ($sir_bundle_item as $key_sir => $value_sir) 
+                        {
+                            $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+
+                            $total_bundle_qty = 0;
+                            $total_sold_bundle_qty = 0;
+                            $rem_bundle_qty = 0;
+                            foreach ($bundle_item as $key_bundle => $value_bundle)
+                            {
+                               $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
+
+                               $issued_bundle_qty_item = (UnitMeasurement::um_qty($value_sir->related_um_type) * $value_sir->item_qty) * $bundle_qty;
+
+                               $total_sold_bundle_qty = Tbl_sir_inventory::where("sir_item_id",$value_bundle->bundle_item_id)->where("inventory_sir_id",$value->sir_id)->where("sir_inventory_count","<",0)->sum("sir_inventory_count");
+                               $rem_bundle_qty = round(($issued_bundle_qty_item - abs($total_sold_bundle_qty)) / $bundle_qty);
+                            }
+                            $qty += $rem_bundle_qty; 
+                        }     
+                    }
+
+                    if($qty > 0)
+                    {
+                        $data["_sir"][$key]->per_agent_qty = UnitMeasurement::um_view($qty,$data["item_details"]->item_measurement_id,$um_issued);
+                    }
+                    else
+                    {
+                        unset($data["_sir"][$key]);
+                    } 
                 }
-                else
-                {
-                    unset($data["_sir"][$key]);
-                }
+               
+
             }
         }
 

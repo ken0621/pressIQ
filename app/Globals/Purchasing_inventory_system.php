@@ -580,11 +580,44 @@ class Purchasing_inventory_system
     public static function get_sir_stocks($warehouse_id, $item_id)
     {
         $sir = Tbl_sir::where("sir_warehouse_id",$warehouse_id)->where("ilr_status","!=",2)->where("is_sync",1)->get();
-
         $qty = 0;
-        foreach ($sir as $key => $value) 
+        $item_data = Item::get_item_details($item_id);
+        if($item_data)
         {
-            $qty += Tbl_sir_inventory::where("sir_item_id",$item_id)->where("inventory_sir_id",$value->sir_id)->sum("sir_inventory_count");
+            if($item_data->item_type_id != 4)
+            {
+                foreach ($sir as $key => $value) 
+                {
+                    $qty += Tbl_sir_inventory::where("sir_item_id",$item_id)->where("inventory_sir_id",$value->sir_id)->sum("sir_inventory_count");
+                }                
+            }
+            else
+            {
+                $qty = 0;
+                foreach ($sir as $key => $value) 
+                {
+                    $sir_bundle_item = Tbl_sir_item::where("sir_id",$value->sir_id)->where("item_id",$item_id)->get();
+                    $rem_bundle_qty_sir = 0;
+                    foreach ($sir_bundle_item as $key_sir => $value_sir) 
+                    {
+                        $bundle_item = Tbl_item_bundle::where("bundle_bundle_id",$item_id)->get();
+
+                        $total_bundle_qty = 0;
+                        $total_sold_bundle_qty = 0;
+                        $rem_bundle_qty = 0;
+                        foreach ($bundle_item as $key_bundle => $value_bundle)
+                        {
+                           $bundle_qty = UnitMeasurement::um_qty($value_bundle->bundle_um_id) * $value_bundle->bundle_qty;
+
+                           $issued_bundle_qty_item = (UnitMeasurement::um_qty($value_sir->related_um_type) * $value_sir->item_qty) * $bundle_qty;
+
+                           $total_sold_bundle_qty = Tbl_sir_inventory::where("sir_item_id",$value_bundle->bundle_item_id)->where("inventory_sir_id",$value->sir_id)->where("sir_inventory_count","<",0)->sum("sir_inventory_count");
+                           $rem_bundle_qty = round(($issued_bundle_qty_item - abs($total_sold_bundle_qty)) / $bundle_qty);
+                        }
+                        $qty += $rem_bundle_qty; 
+                    }                       
+                }
+            }
         }
 
         return $qty;

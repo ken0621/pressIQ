@@ -52,6 +52,7 @@
     }
     
     </style>
+    <link rel="stylesheet" type="text/css" href="/assets/member/css/global.css">
     @yield('css')
     <script>
     (function () {

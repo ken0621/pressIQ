@@ -551,9 +551,18 @@ class Payroll
 
 		$schedule = Payroll::getshift_emp($employee_information->payroll_employee_id, $date, $employee_information->payroll_group_id);
 
-		$data["default_time_in"] = $schedule->work_start;
-		$data["default_time_out"] = $schedule->work_end;
-		$data["default_working_hours"] = $schedule->target_hours;
+		$data["default_time_in"] = '00:00:00';
+		$data["default_time_out"] = '00:00:00';
+		$data["default_working_hours"] = 0;
+
+		if($schedule != null)
+		{
+			$data["default_time_in"] = $schedule->work_start;
+			$data["default_time_out"] = $schedule->work_end;
+			$data["default_working_hours"] = $schedule->target_hours;
+		}
+
+		
 
 		$payroll_time_sheet_approved = 0;
 		if(isset($time_sheet_info->payroll_time_sheet_approved))

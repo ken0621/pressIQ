@@ -62,6 +62,7 @@ class Warehouse
         foreach($bundle_data as $key_bundle_data => $value_bundle_data) 
         {
             $bundle_stocks = 0;
+            $qty = 0;
             if(count($value_bundle_data["item"]) > 0)
             {
                 $bundle_stocks = floor(min($value_bundle_data["item"]));

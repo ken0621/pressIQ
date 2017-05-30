@@ -104,13 +104,14 @@ class ShopCheckoutController extends Shop
         if (Request::input("status") == "S") 
         {
             $from = Request::input('param1');
-            $wat["log_date"] = Carbon::now();
-            $wat["content"]  = $from;
-            DB::table("tbl_dragonpay_logs")->insert($wat);
 
             if ($from == "checkout") 
             {
                 $order_id = Request::input("param2");
+
+                $wat["log_date"] = Carbon::now();
+                $wat["content"]  = $order_id;
+                DB::table("tbl_dragonpay_logs")->insert($wat);
 
                 $update['ec_order_id'] = $order_id;
                 $update['order_status'] = "Processing";

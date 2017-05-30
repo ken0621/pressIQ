@@ -43,6 +43,14 @@ class ShopCheckoutController extends Shop
         /* DO NOT ALLOW ON THIS PAGE IF THERE IS NOT CART */
         if (isset($data["get_cart"]['cart']) && isset($data["get_cart"]["tbl_customer"]) && isset($data["get_cart"]["tbl_customer_address"]) && isset($data["get_cart"]["tbl_ec_order"]) && isset($data["get_cart"]["tbl_ec_order_item"]) && isset($data["get_cart"]["sale_information"])) 
         {
+            $data['ec_order_load'] = 0;
+            foreach($data['get_cart']['cart'] as $key => $value)
+            {
+                if($value['cart_product_information']['item_category_id'] == 17)
+                {
+                    $data['ec_order_load'] = 1;
+                }      
+            }
             return view("checkout", $data);
         }
         else

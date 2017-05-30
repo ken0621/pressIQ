@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use Request;
 use Redirect;
 use App\Http\Controllers\Controller;
-
 use App\Globals\Dragonpay\Dragon_RequestPayment;
 use App\Globals\Mlm_member;
 use App\Models\Tbl_mlm_slot;
@@ -40,6 +39,7 @@ class PaymentController extends Controller
             'description'   => $requestpayment->setDescription($request['description']),
             'email'         => $requestpayment->setEmail($request['email']),
             'digest'        => $requestpayment->getdigest(),
+            'edward'        => "test"
         );
 
         Dragon_RequestPayment::make($this->_merchantkey, $this->_data);   

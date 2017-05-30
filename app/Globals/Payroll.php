@@ -824,8 +824,6 @@ class Payroll
 				$time_spent += c_time_to_int('24:00:00');
 			}
 			
-
-
 			$regular_hours = $time_spent;
 			// dd($time_out_str);
 			$float_in 		= Payroll::time_float($time_in_str);
@@ -929,58 +927,15 @@ class Payroll
 			{
 				$time_out_str = Payroll::sum_time($time_out_str,'24:00');
 			}
-			
-			// dd($float_in);
-			$float_nd_in 	= Payroll::time_float('15:00');
-			if($float_in <= $float_nd_out && $float_in >= $float_nd_in)
-			{
 
-				$temp_in_float = Payroll::time_float('22:00');
-				if($float_in > $temp_in_float)
-				{
-					$temp_in_float = $float_in;
+			/* for night diff break */
+			$break_start 	= Payroll::hour_24($schedule->break_start);
+			$break_end 		= Payroll::hour_24($schedule->break_end);
 
-				}
-
-				if($float_in <= $float_nd_in)
-				{
-					$float_in = $float_nd_in;
-				}
-				
-				if(($float_nd_out - $temp_in_float) < 0)
-				{
-					$float_nd += 0;
-				}
-				else
-				{
-					$float_nd += $float_nd_out - $temp_in_float;
-				}
-				// dd('early nd');
-			}
-
-			if($float_out <= $float_mx_out && $float_out >= $float_nd_in)
-			{
-				$temp_out_float = $float_out;
-				if($float_out > $float_nd_out)
-				{
-					$temp_out_float = $float_nd_out;
-				}
-				else if($float_out < Payroll::time_float('22:00'))
-				{
-					$temp_out_float = 0;
-				}
-
-				$float_nd += $temp_out_float - $float_nd_in;
-
-				if($float_nd > ($float_nd_out - $float_nd_in))
-				{
-					$float_nd -= ($float_nd_out - $float_nd_in);
-				}
-
-
-			}
-
-			$float_nd -= $break_nd;
+			$float_nd = Payroll::get_night_diff($float_in, $float_out);
+			$break_nd = Payroll::get_night_diff(Payroll::time_float($break_start), Payroll::time_float($break_end));
+			// dd($float_nd);
+			// $float_nd -= $break_nd;
 
 			if($float_nd < 0)
 			{
@@ -1171,6 +1126,83 @@ class Payroll
 		$return->leave 				= $leave;
 
 		return $return;
+	}
+
+
+	public static function get_night_diff($float_in = 0, $float_out = 0)
+	{
+		$float_nd_in 	= Payroll::time_float('15:00');
+		$float_nd_out 	= Payroll::time_float('30:00');
+		$float_mx_out 	= Payroll::time_float('36:00');
+		$float_nd 		= 0;
+
+		$temp_in_float = Payroll::time_float('22:00');
+		if($float_in > $temp_in_float)
+		{
+			$temp_in_float = $float_in;
+		}
+
+		if($float_in <= $float_nd_out && $float_in >= $float_nd_in)
+		{
+			
+			if($float_in <= $float_nd_in)
+			{
+				$float_in = $float_nd_in;
+			}
+			
+			if(($float_nd_out - $temp_in_float) < 0)
+			{
+				$float_nd += 0;
+			}
+			else
+			{
+				$float_nd += $float_nd_out - $temp_in_float;
+			}
+
+		}
+
+		if($float_out <= $float_mx_out && $float_out >= $float_nd_in)
+		{
+			// dd('dito');
+			$temp_out_float = $float_out;
+			if($float_out > $float_nd_out)
+			{
+				$temp_out_float = $float_nd_out;
+			}
+			else if($float_out < Payroll::time_float('22:00'))
+			{
+				$temp_out_float = 0;
+			}
+			$float_nd += $temp_out_float - $temp_in_float;
+			// $float_nd += $temp_out_float - Payroll::time_float('22:00');
+
+			// dd($float_nd);
+
+			// if($float_nd > ($float_nd_out - $float_nd_in))
+			// {
+			// 	$float_nd -= ($float_nd_out - $float_nd_in);
+			// }
+
+		}
+
+		if($float_nd < 0)
+		{
+			$float_nd = 0;
+		}	
+
+		return $float_nd;
+	}
+
+	public static function hour_24($time = '00:00:00')
+	{
+		$time = date('H:i', strtotime($time));
+		$time_float = Payroll::time_float($time);
+		if($time_float <= 12)
+		{
+			$time_float += 24;
+		}
+
+		return Payroll::float_time($time_float);
 	}
 
 	public static function sum_time($time_1 = '00:00', $time_2 = '00:00')

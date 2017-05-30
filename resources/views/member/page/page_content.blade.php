@@ -113,6 +113,7 @@
                                             <div class="row clearfix" style="margin-top: 15px; margin-bottom: 15px;">
                                             <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
                                                 @foreach($_brand as $key_brand => $brand)
+                                                    @if(isset(unserialize($info->default)[$brand['type_name']]))
                                                     <?php $brand_image = is_serialized($info->default) ? unserialize($info->default)[$brand['type_name']]["image"] : ''; ?>
                                                     <?php $brand_link = is_serialized($info->default) ? unserialize($info->default)[$brand['type_name']]["link"] : ''; ?>
                                                     <div class="col-md-3">
@@ -133,6 +134,7 @@
                                                             <input class="form-control" type="hidden" name="info[{{ $keys }}][value][{{ $brand['type_name'] }}][link]" placeholder="Brand Link" value="{{ $brand['type_name'] }}">
                                                         </div>
                                                     </div>
+                                                    @endif
                                                 @endforeach
                                             </div>
                                         </div>

@@ -701,15 +701,21 @@ class Payroll
 		$target_hour = 0;
 		$break_start = '00:00:00';
 		$break_end = '00:00:00';
+		$flexi = 0;
+		$rest_day = 0;
+		$extra_day = 0;
 
 		if($schedule != null)
 		{
 			$target_hour_param 		= $schedule->target_hours;
 			$target_hour 			= $schedule->target_hours;
-			$default_time_in = $schedule->work_start;
-			$default_time_out = $schedule->work_end;
-			$break_start = $schedule->break_start;
-			$break_end = $schedule->break_end;
+			$default_time_in 		= $schedule->work_start;
+			$default_time_out 		= $schedule->work_end;
+			$break_start 			= $schedule->break_start;
+			$break_end 				= $schedule->break_end;
+			$flexi  				= $schedule->flexi;
+			$rest_day				= $schedule->rest_day;
+			$extra_day				= $schedule->extra_day;
 		}
 
 	
@@ -857,7 +863,7 @@ class Payroll
 
 			/* if regular time */
 			
-			if($schedule->flexi == 0)
+			if($flexi == 0)
 			{
 				/* CHECK IF EARLY OVERTIME */
 				// if($time_in < $default_time_in && $time_out != 0)
@@ -927,8 +933,7 @@ class Payroll
 
 			}	
 
-
-			if($schedule->flexi == 1)
+			if($flexi == 1)
 			{
 				$late_overtime = $time_spent - $target_hour;
 
@@ -996,7 +1001,7 @@ class Payroll
 		}
 
 		
-		if($schedule->flexi == 0)
+		if($flexi == 0)
 		{
 			/* COMPUTE LATE BASED ON EARLIEST TIME IN */
 			if($default_time_in < $time_in)
@@ -1025,7 +1030,7 @@ class Payroll
 			}
 		}
 
-		if($schedule->flexi == 1)
+		if($flexi == 1)
 		{
 			/* get under time */
 			$total_under_time = $target_hour - $total_time_spent;
@@ -1069,8 +1074,9 @@ class Payroll
 			$date = $data["time_sheet_info"]->payroll_time_date;
 		}
 
+
 	
-		if($schedule->rest_day == 1)
+		if($rest_day == 1)
 		{
 			if($total_hours == '00:00:00' || $total_hours == '00:00')
 			{
@@ -1082,7 +1088,7 @@ class Payroll
 			$rest_day_today = true;
 		}
 
-		if($schedule->extra_day == 1)
+		if($extra_day == 1)
 		{
 			
 			if($total_hours == '00:00:00' || $total_hours == '00:00')

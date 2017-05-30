@@ -111,14 +111,19 @@ class ShopCheckoutController extends Shop
             {
                 $order_id = $request["param2"];
 
-                $update['ec_order_id'] = $order_id;
-                $update['order_status'] = "Processing";
-                $update['payment_status'] = 1;
-                $order = Ec_order::update_ec_order($update);   
-
-                $last["log_date"] = Carbon::now();
-                $last["content"]  = "nice";
-                DB::table("tbl_dragonpay_logs")->insert($last);        
+                try 
+                {
+                    $update['ec_order_id'] = $order_id;
+                    $update['order_status'] = "Processing";
+                    $update['payment_status'] = 1;
+                    $order = Ec_order::update_ec_order($update);  
+                } 
+                catch (Exception $e) 
+                {
+                    $last["log_date"] = Carbon::now();
+                    $last["content"]  = $e->getMessage();
+                    DB::table("tbl_dragonpay_logs")->insert($last);  
+                }      
             }
         }
     }

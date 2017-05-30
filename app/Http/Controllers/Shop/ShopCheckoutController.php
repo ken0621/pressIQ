@@ -98,13 +98,13 @@ class ShopCheckoutController extends Shop
     public function dragonpay_postback()
     {
         $request = Request::all();
-        dd($request);
+
         $insert["log_date"] = Carbon::now();
         $insert["content"]  = serialize($request);
         DB::table("tbl_dragonpay_logs")->insert($insert);
 
-        if ($request["status"] == "S") 
-        {
+        // if ($request["status"] == "S") 
+        // {
             $from = $request["param1"];
 
             if ($from == "checkout") 
@@ -117,7 +117,7 @@ class ShopCheckoutController extends Shop
                 $order = Ec_order::update_ec_order($update);
                 dd($order);            
             }
-        }
+        // }
     }
     /* End Payment Facilities */
 

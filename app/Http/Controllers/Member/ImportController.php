@@ -255,7 +255,7 @@ class ImportController extends Member
 								}
 								elseif($has_Manufacturer)
 								{
-									$data['manufacturer'] = $has_Asset_Account->account_id;
+									$data['manufacturer'] = $has_Manufacturer->manufacturer_id;
 								}
 
 								$insert["item_type_id"]				      = 1;

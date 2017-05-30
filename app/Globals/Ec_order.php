@@ -28,6 +28,7 @@ use Validator;
 use Redirect;
 use Crypt;
 use Carbon\Carbon;
+use App\Models\Tbl_merchant_school;
 
 class Ec_order
 {
@@ -91,7 +92,7 @@ class Ec_order
         $image_id = Tbl_ec_order::where("ec_order_id", $order_id)->update($update);
         
         $order_info['customer_id'] = $customer_id;
-        Ec_order::create_merchant_school_item($order_info, $order_id);
+        // Ec_order::create_merchant_school_item($order_id);
         
 
 
@@ -100,35 +101,70 @@ class Ec_order
 
         return $return;
     }
-    public static function create_merchant_school_item($order_info, $order_id)
+    public static function create_merchant_school_item($order_id)
     {
-        if($order_info['ec_order_merchant_school'] >= 1)
-        {
-            foreach($order_info['merchant_school_i_id'] as $key => $value)
+        $order_info = Tbl_ec_order::where('ec_order_id', $order_id)
+        ->first()->toArray();
+        $settings = Tbl_merchant_school::get()->keyBy('merchant_item_id');
+
+        $order = Tbl_ec_order_item::where('ec_order_id', $order_id)
+        ->join('tbl_ec_variant', 'tbl_ec_variant.evariant_id', '=', 'tbl_ec_order_item.item_id')
+        ->get();
+
+        foreach ($order as $key => $value) {
+            # code...
+            $item = Tbl_item::where('item_id', $value->evariant_item_id)
+            ->first();
+            if($item)
             {
-                // $insert['merchant_school_s_id'] = $order_info['merchant_school_s_id'][$key];
-                // $insert['merchant_school_s_name'] = $order_info['merchant_school_s_name'][$key];
-                $item = Tbl_item::where('item_id', $value)->first();
-                if($item)
+                if(isset($settings[$item->item_id]))
                 {
-                    $insert['merchant_school_i_amount'] = $item->item_price;
+                    if($item)
+                    {
+                        $insert['merchant_school_i_amount'] = $item->item_price;
+                    }
+                    
+                    $insert['merchant_school_item_shop'] = $order_info['shop_id'];
+                    $insert['merchant_item_item_id'] = $item->item_id;
+                    $insert['merchant_item_ec_order_id'] = $order_id;
+                    $insert['merchant_item_customer_id'] = $order_info['customer_id'];
+
+                    $insert['merchant_item_code'] = Membership_code::random_code_generator(8);;
+                    $insert['merchant_item_pin'] = DB::table('tbl_merchant_school_item')->count() + 1;
+
+                    $insert['merchant_item_date'] = Carbon::now();
+                    $insert['merchant_item_status'] = 0;
+                    DB::table('tbl_merchant_school_item')->insert($insert);
                 }
-                
-                $insert['merchant_school_item_shop'] = $order_info['shop_id'];
-                $insert['merchant_item_item_id'] = $value;
-                $insert['merchant_item_ec_order_id'] = $order_id;
-                $insert['merchant_item_customer_id'] = $order_info['customer_id'];
-
-                // $insert['merchant_item_slot_id'] = ;
-                $insert['merchant_item_code'] = Membership_code::random_code_generator(8);;
-                $insert['merchant_item_pin'] = DB::table('tbl_merchant_school_item')->count() + 1;
-
-                $insert['merchant_item_date'] = Carbon::now();
-                $insert['merchant_item_status'] = 0;
-                // dd($insert);
-                DB::table('tbl_merchant_school_item')->insert($insert);
             }
         }
+        // if($order_info['ec_order_merchant_school'] >= 1)
+        // {
+        //     foreach($order_info['merchant_school_i_id'] as $key => $value)
+        //     {
+        //         // $insert['merchant_school_s_id'] = $order_info['merchant_school_s_id'][$key];
+        //         // $insert['merchant_school_s_name'] = $order_info['merchant_school_s_name'][$key];
+        //         $item = Tbl_item::where('item_id', $value)->first();
+        //         if($item)
+        //         {
+        //             $insert['merchant_school_i_amount'] = $item->item_price;
+        //         }
+                
+        //         $insert['merchant_school_item_shop'] = $order_info['shop_id'];
+        //         $insert['merchant_item_item_id'] = $value;
+        //         $insert['merchant_item_ec_order_id'] = $order_id;
+        //         $insert['merchant_item_customer_id'] = $order_info['customer_id'];
+
+        //         // $insert['merchant_item_slot_id'] = ;
+        //         $insert['merchant_item_code'] = Membership_code::random_code_generator(8);;
+        //         $insert['merchant_item_pin'] = DB::table('tbl_merchant_school_item')->count() + 1;
+
+        //         $insert['merchant_item_date'] = Carbon::now();
+        //         $insert['merchant_item_status'] = 0;
+        //         // dd($insert);
+        //         DB::table('tbl_merchant_school_item')->insert($insert);
+        //     }
+        // }
     }
 	public static function create_ec_order($data)
 	{
@@ -321,7 +357,7 @@ class Ec_order
         $ec_order_id 								= Tbl_ec_order::insertGetId($ec_order);
 
        	Ec_order::create_ec_order_item($ec_order_id,$ec_order_item);
-
+        // Ec_order::create_merchant_school_item($order_id);
        	return $ec_order_id;
 	}
 
@@ -594,6 +630,12 @@ class Ec_order
             unset($order_info["tbl_customer"]["customer_id"]);
             $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
             unset($order_info["tbl_customer"]["customer_contact"]);
+            $middle_name = $order_info["tbl_customer"]['middle_name'];
+            if($middle_name == null)
+            {
+                $middle_name = '';
+                $order_info["tbl_customer"]['middle_name'] = $middle_name;
+            }
             $order_info["tbl_customer"]["middle_name"] = "";
             $order_info["tbl_customer"]["password"] = Crypt::encrypt($order_info["tbl_customer"]["password"]);
             $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);
@@ -631,6 +673,10 @@ class Ec_order
         $order_info["tbl_ec_order"]["customer_id"] = $customer_id;
         $order_info["tbl_ec_order"]["discount_coupon_amount"] = $order_info["tbl_ec_order"]["discount_coupon_amount"] ? $order_info["tbl_ec_order"]["discount_coupon_amount"] : 0;
         $order_info["tbl_ec_order"]["discount_coupon_type"] = $order_info["tbl_ec_order"]["discount_coupon_type"] ? $order_info["tbl_ec_order"]["discount_coupon_type"] : "fixed";
+        
+        $order_info['tbl_ec_order']['ec_order_load'] = isset($data['tbl_ec_order']['ec_order_load']) ?  $data['tbl_ec_order']['ec_order_load'] : 0;
+        $order_info['tbl_ec_order']['ec_order_load_number'] = isset($data['tbl_ec_order']['ec_order_load_number']) ? $data['tbl_ec_order']['ec_order_load_number'] : 0;
+
         $order_info["tbl_ec_order"]["ec_order_id"] = DB::table("tbl_ec_order")->insertGetId($order_info["tbl_ec_order"]);
 
         /* Insert Order Item */
@@ -647,7 +693,7 @@ class Ec_order
         // $data['account_password'] = $order_info["tbl_customer"]["password"];
 
         // $result = Mail_global::password_mail($data, $shop_id);
-
+        // Ec_order::create_merchant_school_item($order_info["tbl_ec_order"]["ec_order_id"]);
         return $order_info["tbl_ec_order"]["ec_order_id"];
     }
 }

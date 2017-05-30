@@ -95,6 +95,14 @@ class ShopCheckoutController extends Shop
         /* DO NOT ALLOW ON THIS PAGE IF THERE IS NOT CART */
         if (isset($data["get_cart"]['cart']) && isset($data["get_cart"]["tbl_customer"]) && isset($data["get_cart"]["tbl_customer_address"]) && isset($data["get_cart"]["tbl_ec_order"]) && isset($data["get_cart"]["tbl_ec_order_item"]) && isset($data["get_cart"]["sale_information"])) 
         {
+            $data['ec_order_load'] = 0;
+            foreach($data['get_cart']['cart'] as $key => $value)
+            {
+                if($value['cart_product_information']['item_category_id'] == 17)
+                {
+                    $data['ec_order_load'] = 1;
+                }      
+            }
             return view("checkout", $data);
         }
         else
@@ -139,6 +147,9 @@ class ShopCheckoutController extends Shop
         $customer_info["shipping_zip"] = Self::locale_id_to_name(Request::input("customer_zip"));
         $customer_info["shipping_street"] = Request::input("customer_street");
 
+        $customer_info['load_wallet']['ec_order_load'] = Request::input('ec_order_load');
+        $customer_info['load_wallet']['ec_order_load_number'] = Request::input('ec_order_load_number');
+
         $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
 
 
@@ -167,7 +178,7 @@ class ShopCheckoutController extends Shop
     {
         if(Request::isMethod("post"))
         {
-            Cart::process_payment($this->shop_info->shop_id);
+            return Cart::process_payment($this->shop_info->shop_id);
         }
         else
         {

@@ -19,7 +19,7 @@ class tbl_online_pymnt_gateway extends Seeder
             (4, 'Dragon Pay', 'dragonpay'),
             (5, 'Other', 'other'),
             (6, 'IPay88', 'ipay88'),
-            (7, 'E-wallet', 'e-wallet')   
+            (7, 'E-wallet', 'e_wallet')   
             ";
 
         DB::statement($statement);

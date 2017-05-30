@@ -23,6 +23,7 @@ class Tbl_payroll_shift_template extends Model
 	// [TINY INTEGER] 	flexi
 	// [TINY INTEGER] 	rest_day
 	// [TINY INTEGER] 	extra_day
+	// [TINY INTEGER]	night_shift
 
 
 	public function scopegetshift($query, $shift_code_id = 0, $day = '')

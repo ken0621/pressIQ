@@ -28,6 +28,7 @@ use App\Models\Tbl_email_template;
 use App\Globals\EmailContent;
 use App\Globals\Mlm_plan;
 use App\Models\Tbl_mlm_item_points;
+use App\Globals\Ec_order;
 use Mail;
 use App\Globals\Accounting;
 class Item_code
@@ -756,6 +757,7 @@ class Item_code
     public static function completed_order_action($order_id)
     {
         Item_code::give_item_code_ec_order($order_id);
+        Ec_order::create_merchant_school_item($order_id);
         Item_code::merchant_school_active_codes($order_id);
     }
     public static function insert_product_merchant_school($order_id)
@@ -774,6 +776,10 @@ class Item_code
             $insert['merchant_school_amount'] = $value->merchant_school_i_amount;
             // $insert['merchant_school_s_id'] = 
             // $insert['merchant_school_s_name'] = 
+            if($all_wallet == null)
+            {
+                $all_wallet = 0;
+            }
             $insert['merchant_school_remarks'] = 'Top up from E-commerce order';
             $insert['merchant_school_date'] = Carbon::now();
             $insert['merchant_school_custmer_id'] = $value->merchant_item_customer_id;

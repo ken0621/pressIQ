@@ -534,6 +534,7 @@ class ShopCheckoutController extends Shop
 
             switch ($use_gateway->gateway_code_name) 
             {
+                case 'e-wallet': return $this->submit_using_ewallet($cart); break;
                 case 'paypal2': return $this->submit_using_paypal(); break;
                 case 'paymaya': return $this->submit_using_paymaya(); break;
                 case 'paynamics': return $this->submit_using_paynamics(); break;

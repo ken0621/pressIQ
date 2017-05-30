@@ -4621,10 +4621,10 @@ class PayrollController extends Member
                     $temp['extra_day']   = Request::input('extra_day_'.$key);
                }
 
-               if(Request::has('night_shift_'.$key))
-               {
-                    $temp['night_shift']   = Request::input('night_shift_'.$key);
-               }
+               // if(Request::has('night_shift_'.$key))
+               // {
+               //      $temp['night_shift']   = Request::input('night_shift_'.$key);
+               // }
 
                array_push($insert_shift, $temp);
           }

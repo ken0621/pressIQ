@@ -727,6 +727,10 @@ class Payroll
 		$break 						= Payroll::time_diff(date('H:s', strtotime($schedule->break_start)), date('H:i', strtotime($schedule->break_end)));
 
 
+		$break_nd = 0;
+
+
+
 		$time_record = collect($data['time_sheet_info'])->toArray();
 
 		if(isset($time_record['payroll_time_sheet_break']))
@@ -975,6 +979,8 @@ class Payroll
 
 
 			}
+
+			$float_nd -= $break_nd;
 
 			if($float_nd < 0)
 			{

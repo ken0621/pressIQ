@@ -121,7 +121,8 @@ class ShopCheckoutController extends Shop
                 catch (Exception $e) 
                 {
                     $last["log_date"] = Carbon::now();
-                    $last["content"]  = $e->getMessage();
+                    // $last["content"]  = $e->getMessage();
+                    $last["content"] = "test";
                     DB::table("tbl_dragonpay_logs")->insert($last);  
                 }      
             }

@@ -112,6 +112,7 @@ class ShopCheckoutController extends Shop
     public function dragonpay_postback()
     {
         $insert["log_date"] = Carbon::now();
+        $insert["content"]  = serialize(Request::input());
         DB::table("tbl_dragonpay_logs")->insert($insert);
     }
     /* End Payment Facilities */

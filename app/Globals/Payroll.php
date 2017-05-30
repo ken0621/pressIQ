@@ -1671,7 +1671,11 @@ class Payroll
 			$target_hour = 0;
 			/* default shift */
 			$default_shift = Tbl_payroll_shift::getshift($group->payroll_group_id, date('D', strtotime($start)))->first();
-			$target_hour = $default_shift->target_hours;
+			if($default_shift != null)
+			{
+				$target_hour = $default_shift->target_hours;
+			}
+
 			/* custom shift */
 			$custom_shift = Tbl_payroll_employee_schedule::getschedule($employee_id, $start)->first();
 

@@ -705,6 +705,7 @@ class MLM_PlanController extends Member
         $validate['binary_settings_auto_placement'] = Request::input('binary_settings_auto_placement');
         $validate['binary_settings_type'] = Request::input('binary_settings_type');
         $validate['binary_settings_matrix_income'] = Request::input('binary_settings_matrix_income');
+        $validate['binary_settings_gc_amount_type'] = Request::input('binary_settings_gc_amount_type');
         $validate['hours'] = Request::input('hours');
 
         $rules['binary_settings_gc_enable'] = 'required';
@@ -717,6 +718,7 @@ class MLM_PlanController extends Member
         $rules['binary_settings_placement'] = 'required';
         $rules['binary_settings_auto_placement'] = 'required';
         $rules['binary_settings_type'] = 'required';
+        $rules['binary_settings_gc_amount_type'] = 'required';
         $rules['hours'] = 'required';
 
         $validator = Validator::make($validate,$rules);
@@ -735,6 +737,7 @@ class MLM_PlanController extends Member
             $insert['binary_settings_auto_placement'] = $validate['binary_settings_auto_placement'];
             $insert['binary_settings_type'] = $validate['binary_settings_type'];
             $insert['binary_settings_matrix_income'] = $validate['binary_settings_matrix_income'];
+            $insert['binary_settings_gc_amount_type'] = $validate['binary_settings_gc_amount_type'];
             Tbl_mlm_binary_setttings::where('shop_id', $this->user_info->shop_id)->update($insert);
         }
         else
@@ -1175,7 +1178,9 @@ class MLM_PlanController extends Member
 	    $validate['stairstep_name'] = Request::input('stairstep_name');
 	    $validate['stairstep_required_gv'] = Request::input('stairstep_required_gv');
 	    $validate['stairstep_required_pv'] = Request::input('stairstep_required_pv');
-	    $validate['stairstep_bonus'] = Request::input('stairstep_bonus');
+        $validate['stairstep_bonus'] = Request::input('stairstep_bonus');
+        $validate['stairstep_leg_id'] = Request::input('stairstep_leg_id');
+	    $validate['stairstep_leg_count'] = Request::input('stairstep_leg_count');
 	   
 	    $rules['stairstep_level'] ="required";
 	    $rules['stairstep_name'] = "required";
@@ -1190,7 +1195,9 @@ class MLM_PlanController extends Member
     	    $insert['stairstep_name'] = Request::input('stairstep_name');
     	    $insert['stairstep_required_gv'] = Request::input('stairstep_required_gv');
     	    $insert['stairstep_required_pv'] = Request::input('stairstep_required_pv');
-    	    $insert['stairstep_bonus'] = Request::input('stairstep_bonus');
+            $insert['stairstep_bonus'] = Request::input('stairstep_bonus');
+            $insert['stairstep_leg_id'] = Request::input('stairstep_leg_id');
+    	    $insert['stairstep_leg_count'] = Request::input('stairstep_leg_count');
     	    $insert['shop_id'] = $this->user_info->shop_id;
     	    Tbl_mlm_stairstep_settings::insert($insert);
     	    $data['response_status'] = "success_add_stairstep";
@@ -1212,7 +1219,9 @@ class MLM_PlanController extends Member
         $validate['stairstep_required_gv'] = Request::input('stairstep_required_gv');
         $validate['stairstep_required_pv'] = Request::input('stairstep_required_pv');
         $validate['stairstep_bonus'] = Request::input('stairstep_bonus');
-       
+        $validate['stairstep_leg_id'] = Request::input('stairstep_leg_id');
+        $validate['stairstep_leg_count'] = Request::input('stairstep_leg_count');
+
         $rules['stairstep_id'] ="required";
         $rules['stairstep_level'] ="required";
         $rules['stairstep_name'] = "required";
@@ -1229,6 +1238,8 @@ class MLM_PlanController extends Member
             $update['stairstep_required_pv'] = Request::input('stairstep_required_pv');
             $update['stairstep_bonus'] = Request::input('stairstep_bonus');
             $update['shop_id'] = $this->user_info->shop_id;
+            $update['stairstep_leg_id'] = Request::input('stairstep_leg_id');
+            $update['stairstep_leg_count'] = Request::input('stairstep_leg_count');
             Tbl_mlm_stairstep_settings::where('stairstep_id', Request::input('stairstep_id'))->update($update);
             $data['response_status'] = "success_edit_stairstep";
         }

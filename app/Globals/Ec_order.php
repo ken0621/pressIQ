@@ -8,6 +8,7 @@ use App\Globals\Customer;
 use App\Globals\Accounting;
 use App\Globals\Item_code;
 use App\Globals\Membership_code;
+use App\Globals\Mail_global;
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
@@ -24,6 +25,7 @@ use Request;
 use Session;
 use Validator;
 use Redirect;
+use Crypt;
 use Carbon\Carbon;
 use App\Models\Tbl_merchant_school;
 
@@ -384,6 +386,7 @@ class Ec_order
         $ec_order_id             = $data["ec_order_id"];
         $update['order_status']  = $data["order_status"];
         $update['payment_status'] = $data["payment_status"];
+        $update["payment_upload"] = isset($data['payment_upload']) ? $data['payment_upload'] : '';
         $order_status            = $data["order_status"];
         $shop_id                 = isset($data["shop_id"]) ? $data["shop_id"] : null ;
         $order                   = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
@@ -587,6 +590,7 @@ class Ec_order
 
     public static function create_ec_order_from_cart($order_info)
     {
+        dd($order_info);
         if($order_info["customer_id"])
         {
             $customer_id = $order_info["customer_id"];
@@ -602,6 +606,15 @@ class Ec_order
 
         if ($customer) 
         {
+            if (!DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 
+            {
+                $customer_mobile = $order_info["tbl_customer"]["customer_contact"];
+                $other_insert["customer_mobile"] = $customer_mobile;
+                $other_insert["customer_id"]     = $customer_id;
+       
+                DB::table("tbl_customer_other_info")->insert($other_insert);
+            }
+
             $customer_other_info = DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first();
 
             $order_info["tbl_customer"]["customer_id"] = $customer->customer_id;
@@ -611,7 +624,6 @@ class Ec_order
             $order_info["tbl_customer"]["email"] = $customer->email;
             $order_info["tbl_customer"]["password"] = $customer->password;
             $order_info["tbl_customer"]["customer_mobile"] = $customer_other_info->customer_mobile;
-
             $order_info["tbl_ec_order"]["customer_id"] = $customer->customer_id;
         }
         else
@@ -625,11 +637,16 @@ class Ec_order
                 $middle_name = '';
                 $order_info["tbl_customer"]['middle_name'] = $middle_name;
             }
+            $order_info["tbl_customer"]["middle_name"] = "";
+            $order_info["tbl_customer"]["password"] = Crypt::encrypt($order_info["tbl_customer"]["password"]);
             $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);
-            $other_insert["customer_mobile"] = $customer_mobile;
-            $other_insert['customer_id'] = $customer_id;
-            // DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->insert($other_insert);
-            DB::table("tbl_customer_other_info")->insert($other_insert);
+            
+            if (!DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 
+            {
+                $other_insert["customer_mobile"] = $customer_mobile;
+                $other_insert["customer_id"]     = $customer_id;
+                DB::table("tbl_customer_other_info")->insert($other_insert);
+            }
         }
 
         /* Check if Customer Address Exist to Update if not Insert */
@@ -665,6 +682,14 @@ class Ec_order
             $order_info["tbl_ec_order_item"][$key]["ec_order_id"] = $order_info["tbl_ec_order"]["ec_order_id"];
             DB::table("tbl_ec_order_item")->insert($value);
         }
+
+        /* Email Password */
+        $data["template"]         = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
+        $data['mail_to']          = $order_info["tbl_ec_order"]["customer_email"];
+        $data['mail_subject']     = "Account Verification";
+        $data['account_password'] = $order_info["tbl_customer"]["password"];
+
+        $result = Mail_global::password_mail($data, $shop_id);
 
         return $order_info["tbl_ec_order"]["ec_order_id"];
     }

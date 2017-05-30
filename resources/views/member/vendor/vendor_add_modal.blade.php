@@ -202,7 +202,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <div class="col-md-6">
                       <label for=""><b>Opening balance</b></label>
                       <input type="number" class="form-control input-sm text-right" name="opening_balance" step="any" value="{{$vendor->ven_info_opeining_balance or ''}}">
@@ -212,7 +212,7 @@
                       <input type="text" class="form-control input-sm indent-13 datepicker" name="date_as_of" value="{{$vendor->ven_info_balance_date or ''}}">
                       <i class="fa fa-calendar pos-absolute top-34 margin-left-6 color-dark-gray" aria-hidden="true"></i>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
             </div>

@@ -83,7 +83,7 @@ Route::any('/member/developer/reset_slot/submit/retro_product_sales', 'Member\De
 Route::any('/member/developer/reset_slot/submit/re_tree', 'Member\Developer_StatusController@re_tree'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Developer_StatusController@re_com_phil_lost'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
-
+Route::any('/member/developer/reset_slot/submit/recompute', 'Member\Developer_StatusController@recompute'); //GUILLERMO TABLIGAN
 
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
@@ -762,15 +762,25 @@ Route::group(array('prefix' => '/member/report'), function()
 	Route::any('/accounting/sale/get/report','Member\ReportsController@accounting_sale_report_view');
 
 	/* Accounting Sales - per item */
-	Route::get('/accounting/sale/item','Member\ReportsController@accounting_sale_items');
-
-	/* Accounting Profit and loss */
-	Route::get('/accounting/profit/loss','Member\ReportsController@profit_loss');
-	Route::any('/accounting/profit/loss/get','Member\ReportsController@profit_loss_get');
+	Route::any('/accounting/sale/item','Member\ReportsController@accounting_sale_items');
 
 	/* Accounting general ledger */
 	Route::get('/accounting/general/ledger','Member\ReportsController@general_ledger');
 	Route::any('/accounting/general/ledger/get','Member\ReportsController@general_ledger_get');
+
+	/* Accounting Balance Sheet */
+	Route::any('/accounting/balance_sheet','Member\ReportsController@balance_sheet');
+
+	/* Accounting Profit and loss */
+	Route::any('/accounting/profit_loss','Member\ReportsController@profit_loss');
+
+	/* Accounting Report List (Customer, Vendor, Item and Account) */
+	Route::any('/accounting/customer_list','Member\ReportsController@customer_list');
+	Route::any('/accounting/vendor_list','Member\ReportsController@vendor_list');
+	Route::any('/accounting/item_list','Member\ReportsController@item_list');
+	Route::any('/accounting/account_list','Member\ReportsController@account_list');
+
+	Route::any('/accounting/date_period','Member\ReportsController@get_date_period_covered');
 });
 //reports end
 
@@ -904,13 +914,9 @@ Route::controller('/tester','TesterController');
 // test lang load
 Route::any("/member/load_position","Member\EmployeePositionController@load_position");
 
-
 /* PAYROLL START */
-
-
 // Route::group(array('prefix' => '/member/payroll'), function()
 // {
-
 // 	/* COMPANY START */
 // 	Route::any('/company_list','Member\PayrollController@company_list');
 // 	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');
@@ -957,13 +963,8 @@ Route::any("/member/load_position","Member\EmployeePositionController@load_posit
 // 	Route::any("/jobtitlelist/modal_update_jobtitle","Member\PayrollController@modal_update_jobtitle");
 // 	/* JOB TITLE END */
 // });
-
 include_once('routes_config/routes_payroll.php');
-
 /* PAYROLL END */
 
-
-Route::get('/payment/dragonpay', 'PaymentController@index');
-Route::post('/payment/dragonpay', 'PaymentController@onSubmitPayment');
-Route::get('/payment/dragonpay/postback', 'PaymentController@postback_url'); //confirmation upon payment
-Route::get('/payment/dragonpay/return', 'PaymentController@return_url'); //
+/* PAYMENT FACILITIES */
+include_once('routes_config/routes_payment.php');

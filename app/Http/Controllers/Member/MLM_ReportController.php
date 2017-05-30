@@ -48,6 +48,7 @@ use App\Models\Tbl_item_code_invoice;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_journal_entry_line;
 use App\Globals\Category;
+use App\Models\Tbl_mlm_slot_wallet_log_transfer;
 use Crypt;
 class MLM_ReportController extends Member
 {
@@ -77,6 +78,16 @@ class MLM_ReportController extends Member
         $data['report_list_d']['e_wallet']['from'] = Carbon::now();
         $data['report_list_d']['e_wallet']['to'] = Carbon::now();
         $data['report_list_d']['e_wallet']['count'] = $slot;
+        // -----------------------------------------------------------------
+        $from = Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)
+        ->first();
+        $to = Tbl_mlm_slot_wallet_log_transfer::where('tbl_mlm_slot_wallet_log_transfer.shop_id', $shop_id)
+        ->orderBy('wallet_log_transfer_id', 'DESC')
+        ->first();
+        $data['report_list']['e_wallet_transfer'] = 'E-Wallet Transfer Report';
+        $data['report_list_d']['e_wallet_transfer']['from'] = $from->wallet_log_transfer_date;
+        $data['report_list_d']['e_wallet_transfer']['to'] = $to->wallet_log_transfer_date;
+        $data['report_list_d']['e_wallet_transfer']['count'] = 999;
         // -----------------------------------------------------------------
         $data['report_list']['slot_count'] = 'Slot Count';
         $data['report_list_d']['slot_count']['from'] = Carbon::now();

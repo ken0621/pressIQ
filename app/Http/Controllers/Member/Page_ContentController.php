@@ -185,7 +185,7 @@ class Page_ContentController extends Member
         {
             $data["field"] = $field;
             $data["key"]   = $key;
-            $content = Tbl_content::where("key", $key)->where("shop_id", $this->user_info->shop_id)->first();
+            $content = Tbl_content::where("key", $key)->where("type", "maintenance")->where("shop_id", $this->user_info->shop_id)->first();
             if (isset($content->value))
             {
                 $content = $content->value;
@@ -232,7 +232,7 @@ class Page_ContentController extends Member
 
         if (isset($key) && isset($id) && isset($field)) 
         {
-            $content = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
+            $content = Tbl_content::where('key', $key)->where("type", "maintenance")->where("shop_id", $this->user_info->shop_id)->first();
 
             $data["edit"]  = unserialize($content->value)[$id];
             $data["field"] = $field;
@@ -250,7 +250,7 @@ class Page_ContentController extends Member
             // Edit
             $all = Request::except("_token");
             $key = Request::input('key');
-            $exist = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
+            $exist = Tbl_content::where('key', $key)->where("type", "maintenance")->where("shop_id", $this->user_info->shop_id)->first();
             if ($exist) 
             {
                 $content_id = $exist->content_id;
@@ -268,7 +268,7 @@ class Page_ContentController extends Member
                 $get_content[$id] = $all;
 
                 $get_content = serialize($get_content);
-                Tbl_content::where('content_id', $content_id)->update(["value" => $get_content]);
+                Tbl_content::where('content_id', $content_id)->where("type", "maintenance")->update(["value" => $get_content]);
             }
             else
             {
@@ -292,7 +292,7 @@ class Page_ContentController extends Member
             // Add
             $all = Request::except("_token");
             $key = Request::input('key');
-            $exist = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
+            $exist = Tbl_content::where('key', $key)->where("type", "maintenance")->where("shop_id", $this->user_info->shop_id)->first();
             if ($exist) 
             {
                 $content_id = $exist->content_id;
@@ -309,7 +309,7 @@ class Page_ContentController extends Member
 
                 array_push($get_content, $all);
                 $get_content = serialize($get_content);
-                Tbl_content::where('content_id', $content_id)->update(["value" => $get_content]);
+                Tbl_content::where('content_id', $content_id)->where("type", "maintenance")->update(["value" => $get_content]);
             }
             else
             {
@@ -321,7 +321,7 @@ class Page_ContentController extends Member
                 $content_id = Tbl_content::insertGetId(["type" => "maintenance", "key" => $key, "value" => $get_content, "shop_id" => $this->user_info->shop_id]);
             }
             
-            $response["result"] = Tbl_content::where('content_id', $content_id)->first();
+            $response["result"] = Tbl_content::where('content_id', $content_id)->where("type", "maintenance")->first();
             $response["response_status"] = "success";
             $response["do"] = "manage";
             $response["key"] = $key;
@@ -339,7 +339,7 @@ class Page_ContentController extends Member
     {
         $id    = Request::input("id");
         $key   = Request::input('key');
-        $exist = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
+        $exist = Tbl_content::where('key', $key)->where("type", "maintenance")->where("shop_id", $this->user_info->shop_id)->first();
         if ($exist) 
         {
             $content_id = $exist->content_id;
@@ -348,10 +348,10 @@ class Page_ContentController extends Member
             unset($get_content[$id]);
 
             $get_content = serialize($get_content);
-            Tbl_content::where('content_id', $content_id)->update(["value" => $get_content]);
+            Tbl_content::where('content_id', $content_id)->where("type", "maintenance")->update(["value" => $get_content]);
         }
         
-        $response["result"] = Tbl_content::where('content_id', $content_id)->first();
+        $response["result"] = Tbl_content::where('content_id', $content_id)->where("type", "maintenance")->first();
         $response["response_status"] = "success";
         $response["do"] = "delete";
         $response["key"] = $key;
@@ -362,7 +362,7 @@ class Page_ContentController extends Member
     public function getMaintenanceCount()
     {
         $key = Request::input('key');
-        $exist = Tbl_content::where('key', $key)->where("shop_id", $this->user_info->shop_id)->first();
+        $exist = Tbl_content::where('key', $key)->where("type", "maintenance")->where("shop_id", $this->user_info->shop_id)->first();
         if ($exist) 
         {
             $content_id = $exist->content_id;

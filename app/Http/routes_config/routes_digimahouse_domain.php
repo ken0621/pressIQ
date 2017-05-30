@@ -36,11 +36,6 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/admin', 'Shop\Shop@admin');
 	Route::get('/file/{theme}/{type}/{filename}', 'Shop\Shop@file');
 
-	/*Payment Integration with iPay88*/
-	Route::any("/postPaymentWithIPay88","Shop\ShopCheckoutController@postPaymentWithIPay88"); //Brain
-	Route::any("/ipay88_response","Shop\ShopCheckoutController@ipay88_response"); //Brain
-	/*End ipay88*/
-
 	/*Product search*/
 	Route::get('/product_search', 'Shop\ShopSearchController@index');
 	/*End Product search*/
@@ -53,6 +48,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/checkout/session', 'Shop\ShopCheckoutController@session');
 	Route::post('/checkout', 'Shop\ShopCheckoutController@submit');
 	Route::any('/checkout/payment', 'Shop\ShopCheckoutController@payment');
+	Route::any('/checkout/payment/upload', 'Shop\ShopCheckoutController@payment_upload');
 	Route::get('/checkout/method', 'Shop\ShopCheckoutController@update_method');
 	/* End Checkout */
 

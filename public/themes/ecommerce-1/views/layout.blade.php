@@ -98,7 +98,7 @@
     		<div class="container">
     			<div class="row clearfix">
 	    			<div class="col-md-3">
-                        <img class="img-responsive" src="/themes/{{ $shop_theme }}/img/philtech-official-logo.png">            
+                        <img class="img-responsive" src="{{ $company_info['company_logo']->value }}">            
                     </div>
 	    			<div class="col-md-6">
 

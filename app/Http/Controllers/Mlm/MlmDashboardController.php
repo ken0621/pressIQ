@@ -196,6 +196,10 @@ class MlmDashboardController extends Mlm
         $data['repurchase_cash'] = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', 'REPURCHASE')
             ->where('wallet_log_slot', $slot_id)
             ->sum('wallet_log_amount');
+
+        $data['single_leg_income'] = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', 'BINARY_SINGLE_LINE')
+            ->where('wallet_log_slot', $slot_id)
+            ->sum('wallet_log_amount');    
         $data['binary'] = $binary;
         $data['left'] = Self::$slot_now->slot_binary_left;
         $data['right'] = Self::$slot_now->slot_binary_right;
@@ -216,14 +220,14 @@ class MlmDashboardController extends Mlm
                 $data["slot_stairstep"] = "None";
             }
             
-            $data["rebates"]        = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Rebates)")->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
-            $data["override"]       = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Over-ride)")->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
+            $data["rebates"]        = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Rebates)")->where("wallet_log_slot",Self::$slot_id)->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
+            $data["override"]       = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Over-ride)")->where("wallet_log_slot",Self::$slot_id)->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
         }
         else
         {
             $data["slot_stairstep"] = null;
-            $data["rebates"]        = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Rebates)")->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
-            $data["override"]       = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Over-ride)")->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
+            $data["rebates"]        = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Rebates)")->where("wallet_log_slot",Self::$slot_id)->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
+            $data["override"]       = Tbl_mlm_slot_wallet_log::where("wallet_log_plan","STAIRSTEP (Over-ride)")->where("wallet_log_slot",Self::$slot_id)->where("shop_id",Self::$shop_id)->sum("wallet_log_amount");
         }
     	return view('mlm.dashboard.income', $data);
     }
@@ -242,8 +246,14 @@ class MlmDashboardController extends Mlm
         $validator = Validator::make($v,$r);
         if ($validator->passes())
         {
-
-            return Mlm_member::add_slot(Self::$shop_id, Self::$customer_id);
+            if(Request::input("type") == "manual")
+            {
+                return Mlm_member::manual_add_slot(Self::$shop_id, Self::$customer_id);
+            }
+            else
+            {
+                return Mlm_member::add_slot(Self::$shop_id, Self::$customer_id);
+            }
         }
         else
         {

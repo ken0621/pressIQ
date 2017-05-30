@@ -14,9 +14,11 @@
                 <td align="center" valign="top">
                     <table border="0" cellpadding="20" cellspacing="0" width="600" id="emailContainer">
                         <tr>
-                            <td align="center" valign="top">
+                            <td align="left" valign="top">
+                                <h2>Dear {{ $customer_full_name }}</h2>
                             	<h3>Payment Details:</h3>
-                                <p style="white-space: pre-wrap;">{{ $payment_detail }}</p>
+                                <p style="padding-left: 20px; white-space: pre-wrap;">{{ $payment_detail }}</p>
+                                <p>Click <a style="cursor: pointer;" href="{{ URL::to('checkout/payment/upload') }}?id={{ $order_id }}">here</a> to complete transaction by uploading your proof of payment.</p>
                             </td>
                         </tr>
                     </table>

@@ -82,9 +82,14 @@ class ShopCheckoutController extends Shop
             return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
         }
     }
-    public function dragonpay_response()
+    public function dragonpay_return()
     {
         dd(Request::all());
+    }
+    public function dragonpay_postback()
+    {
+        $insert["log_date"] = Carbon::now();
+        DB::table("tbl_dragonpay_logs")->insert($insert);
     }
     /* End Payment Facilities */
 

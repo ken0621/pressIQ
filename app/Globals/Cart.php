@@ -944,7 +944,10 @@ class Cart
     }
     public static function submit_using_dragonpay($data, $shop_id, $method_information)
     {
-        $gateway = DB::table("tbl_online_pymnt_gateway")->where("tbl_online_pymnt_gateway.gateway_code_name", $method_information->link_reference_name)->join("tbl_online_pymnt_api", "tbl_online_pymnt_api.api_gateway_id" , "=", "tbl_online_pymnt_gateway.gateway_id")->first();
+        $gateway = DB::table("tbl_online_pymnt_gateway")->where("tbl_online_pymnt_api.api_shop_id", $shop_id)
+                                                        ->where("tbl_online_pymnt_gateway.gateway_code_name", $method_information->link_reference_name)
+                                                        ->join("tbl_online_pymnt_api", "tbl_online_pymnt_api.api_gateway_id" , "=", "tbl_online_pymnt_gateway.gateway_id")
+                                                        ->first();
         if ($gateway) 
         {
             $merchant_id  = $gateway->api_client_id;
@@ -964,7 +967,8 @@ class Cart
                 'ccy'           => $requestpayment->setCcy($request['ccy']),
                 'description'   => $requestpayment->setDescription($request['description']),
                 'email'         => $requestpayment->setEmail($request['email']),
-                'digest'        => $requestpayment->getdigest()
+                'digest'        => $requestpayment->getdigest(),
+                'param1'        => serialize($request)
             );
 
             Dragon_RequestPayment::make($merchant_key, $dragon_request); 

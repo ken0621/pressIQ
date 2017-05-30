@@ -85,6 +85,29 @@ class ShopCheckoutController extends Shop
     public function dragonpay_return()
     {
         dd(Request::all());
+        $gateway = DB::table("tbl_online_pymnt_gateway")->where("tbl_online_pymnt_api.api_shop_id", $this->shop_info->shop_id)
+                                                        ->where("tbl_online_pymnt_gateway.gateway_code_name", "dragonpay")
+                                                        ->join("tbl_online_pymnt_api", "tbl_online_pymnt_api.api_gateway_id" , "=", "tbl_online_pymnt_gateway.gateway_id")
+                                                        ->first();
+        if ($gateway) 
+        {
+            $merchant_id  = $gateway->api_client_id;
+            $merchant_key = $gateway->api_secret_id;
+
+            $param = array(
+                'merchantid'    => $merchant_id, 
+                'txnid'         => $this->getTxnId(),
+                'amount'        => $this->getAmount(), 
+                'ccy'           => $this->getCcy(), 
+                'description'   => $this->getDescription(), 
+                'email'         => $this->getEmail(), 
+                'merchantkey'   => $merchant_key 
+            );
+
+            $digest_string = implode(':', $param);
+            
+            $this->digest = sha1($digest_string);
+        }
     }
     public function dragonpay_postback()
     {

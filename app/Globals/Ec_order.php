@@ -8,6 +8,7 @@ use App\Globals\Customer;
 use App\Globals\Accounting;
 use App\Globals\Item_code;
 use App\Globals\Membership_code;
+use App\Globals\Mail_global;
 use App\Models\Tbl_chart_of_account;
 use App\Models\Tbl_chart_account_type;
 use App\Models\Tbl_journal_entry;
@@ -19,6 +20,7 @@ use App\Models\Tbl_position;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_item;
+use App\Models\Tbl_email_template;
 use Log;
 use Request;
 use Session;
@@ -637,6 +639,14 @@ class Ec_order
             $order_info["tbl_ec_order_item"][$key]["ec_order_id"] = $order_info["tbl_ec_order"]["ec_order_id"];
             DB::table("tbl_ec_order_item")->insert($value);
         }
+
+        /* Email Password */
+        // $data["template"]         = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
+        // $data['mail_to']          = $order_info["tbl_ec_order"]["customer_email"];
+        // $data['mail_subject']     = "Account Verification";
+        // $data['account_password'] = $order_info["tbl_customer"]["password"];
+
+        // $result = Mail_global::password_mail($data, $shop_id);
 
         return $order_info["tbl_ec_order"]["ec_order_id"];
     }

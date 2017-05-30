@@ -29,6 +29,7 @@ use Config;
 use URL;
 use App\Globals\Mlm_slot_log;
 use App\IPay88\RequestPayment;
+use App\Globals\Dragonpay\Dragon_RequestPayment;
 
 class Cart
 {
@@ -646,15 +647,12 @@ class Cart
         return $message;
     }
 
-
     /* return content of SESSION */
     public static function get_info($shop_id)
     {
         $data = Session::get(Cart::get_unique_id($shop_id));
         return $data;
     }
-
-
 
     /*
      * TITLE: CUSTOMER SET INFO
@@ -929,16 +927,51 @@ class Cart
         {
             switch ($method_information->link_reference_name)
             {
+                case 'paypal2': dd("UNDER DEVELOPMENT"); break;
+                case 'paymaya': dd("UNDER DEVELOPMENT"); break;
+                case 'paynamics': dd("UNDER DEVELOPMENT"); break;
+                case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information); break;
                 case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
-                case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
-                case 'paypal2': die("UNDER DEVELOPMENT"); break;
                 case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
-                default: die("UNDER DEVELOPMENT"); break;
+                case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                default: dd("UNDER DEVELOPMENT"); break;
             }
         }
         else
         {
-            die("An error has occurred. Please try again later.");
+            return Redirect::back()->with("error", "Please choose payment method.")->send();
+        }
+    }
+    public static function submit_using_dragonpay($data, $shop_id, $method_information)
+    {
+        $gateway = DB::table("tbl_online_pymnt_gateway")->where("tbl_online_pymnt_gateway.gateway_code_name", $method_information->link_reference_name)->join("tbl_online_pymnt_api", "tbl_online_pymnt_api.api_gateway_id" , "=", "tbl_online_pymnt_gateway.gateway_id")->first();
+        if ($gateway) 
+        {
+            $merchant_id  = $gateway->api_client_id;
+            $merchant_key = $gateway->api_secret_id;
+
+            $requestpayment    = new Dragon_RequestPayment($merchant_key);
+            $request["txnid"]  = $shop_id . time();
+            $request["amount"] = $data["tbl_ec_order"]["total"];
+            $request["ccy"]    = "PHP";
+            $request["description"] = "Item Name (x1) - PHP. 100.00";
+            $request["email"] = $data["tbl_ec_order"]["customer_email"];
+
+            $dragon_request = array(
+                'merchantid'    => $requestpayment->setMerchantId($merchant_id),
+                'txnid'         => $requestpayment->setTxnId($request['txnid']),
+                'amount'        => $requestpayment->setAmount($request['amount']),
+                'ccy'           => $requestpayment->setCcy($request['ccy']),
+                'description'   => $requestpayment->setDescription($request['description']),
+                'email'         => $requestpayment->setEmail($request['email']),
+                'digest'        => $requestpayment->getdigest()
+            );
+
+            Dragon_RequestPayment::make($merchant_key, $dragon_request); 
+        }  
+        else
+        {
+            dd("Some error occurred. Please contact the administrator.");
         }
     }
     public static function submit_using_ipay88($data, $shop_id, $method_information)

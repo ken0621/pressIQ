@@ -250,7 +250,6 @@ class ShopCheckoutController extends Shop
         else
         {
             $data["page"] = "Checkout Payment Upload";
-
             $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $id)
                                                ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
                                                ->get();
@@ -270,7 +269,7 @@ class ShopCheckoutController extends Shop
             return view("checkout_payment_upload", $data);
         }
     }
-
+    
     public function get_payment_method()
     {
         $payment_method = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')

@@ -20,6 +20,7 @@ use App\Models\Tbl_position;
 use App\Models\Tbl_coupon_code;
 use App\Models\Tbl_ec_variant;
 use App\Models\Tbl_item;
+use App\Models\Tbl_email_template;
 use Log;
 use Request;
 use Session;
@@ -590,7 +591,6 @@ class Ec_order
 
     public static function create_ec_order_from_cart($order_info)
     {
-        dd($order_info);
         if($order_info["customer_id"])
         {
             $customer_id = $order_info["customer_id"];
@@ -684,12 +684,12 @@ class Ec_order
         }
 
         /* Email Password */
-        $data["template"]         = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
-        $data['mail_to']          = $order_info["tbl_ec_order"]["customer_email"];
-        $data['mail_subject']     = "Account Verification";
-        $data['account_password'] = $order_info["tbl_customer"]["password"];
+        // $data["template"]         = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
+        // $data['mail_to']          = $order_info["tbl_ec_order"]["customer_email"];
+        // $data['mail_subject']     = "Account Verification";
+        // $data['account_password'] = $order_info["tbl_customer"]["password"];
 
-        $result = Mail_global::password_mail($data, $shop_id);
+        // $result = Mail_global::password_mail($data, $shop_id);
 
         return $order_info["tbl_ec_order"]["ec_order_id"];
     }

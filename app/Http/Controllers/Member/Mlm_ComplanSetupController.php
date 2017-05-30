@@ -30,7 +30,6 @@ class Mlm_ComplanSetupController extends Member
 		$count = Tbl_mlm_plan::where('shop_id', $shop_id)->where('marketing_plan_code', 'BINARY_PROMOTIONS')
 		->where('marketing_plan_enable', 1)
 		->count();
-
 		if($count >= 1)
 		{
 			$data['links'][0]['label'] = 'Binary Promotions Setup';
@@ -61,8 +60,8 @@ class Mlm_ComplanSetupController extends Member
 		{
 			if(!isset($restrict[ $this->user_info->shop_key] ))
 			{
-				$data['links'][0]['label'] = 'Unilevel Distribute';
-				$data['links'][0]['link'] = '/member/mlm/complan_setup/unilevel/distribute';
+				$data['links'][3]['label'] = 'Unilevel Distribute';
+				$data['links'][3]['link'] = '/member/mlm/complan_setup/unilevel/distribute';
 			}
 			
 		}		

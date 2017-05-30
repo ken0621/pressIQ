@@ -46,22 +46,30 @@
 					<div class="content-img-container row clearfix">
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img1") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img1") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img2") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img2") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img3") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img3") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img4") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_company_profile_context_img4") }}">
+								</a>
 							</div>
 						</div>
 					</div>
@@ -79,22 +87,30 @@
 					<div class="content-img-container row clearfix">
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_company_responsibility_context_img1") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_company_responsibility_context_img1") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_company_responsibility_context_img2") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_company_responsibility_context_img2") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_company_responsibility_context_img3") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_company_responsibility_context_img3") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_company_responsibility_context_img4") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_company_responsibility_context_img4") }}">
+								</a>
 							</div>
 						</div>
 					</div>
@@ -112,22 +128,30 @@
 					<div class="content-img-container row clearfix">
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_environmental_management_context_img1") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_environmental_management_context_img1") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_environmental_management_context_img2") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_environmental_management_context_img2") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_environmental_management_context_img3") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_environmental_management_context_img3") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_environmental_management_context_img4") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_environmental_management_context_img4") }}">
+								</a>
 							</div>
 						</div>
 					</div>
@@ -145,22 +169,30 @@
 					<div class="content-img-container row clearfix">
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img1") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img1") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img2") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img2") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img3") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img3") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img4") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img4") }}">
+								</a>
 							</div>
 						</div>
 					</div>
@@ -168,22 +200,30 @@
 					<div class="content-img-container row clearfix">
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img5") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img5") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img6") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img6") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img7") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img7") }}">
+								</a>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<div class="per-img-container">
-								<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img8") }}">
+								<a class="lightbox" href="#goofy">
+									<img src="{{ get_content($shop_theme_info, "about", "about_livelihood_foundation_context_img8") }}">
+								</a>
 							</div>
 						</div>
 					</div>
@@ -248,6 +288,12 @@ $(document).ready(function()
         }, 600);
         return false;
     });
+
+    $(".per-img-container").click(function()
+	{
+		var source = $(this).find("img").attr("src");
+		$(".lightbox-target").find("img").attr("src", source);
+	})
 
 
 });	

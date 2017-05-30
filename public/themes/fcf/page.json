@@ -216,28 +216,28 @@
 		{
 			"label":"Company Profile Context Image 1",
 			"type":"image",
-			"default":"/themes/fcf/img/c1.png",
+			"default":"/themes/fcf/img/full1.jpg",
 			"size":"3"
 		},
 		"about_company_profile_context_img2" :
 		{
 			"label":"Company Profile Context Image 2",
 			"type":"image",
-			"default":"/themes/fcf/img/c2.png",
+			"default":"/themes/fcf/img/full1.jpg",
 			"size":"3"
 		},
 		"about_company_profile_context_img3" :
 		{
 			"label":"Company Profile Context Image 3",
 			"type":"image",
-			"default":"/themes/fcf/img/c3.png",
+			"default":"/themes/fcf/img/full23.jpg",
 			"size":"3"
 		},
 		"about_company_profile_context_img4" :
 		{
 			"label":"Company Profile Context Image 4",
 			"type":"image",
-			"default":"/themes/fcf/img/c4.png",
+			"default":"/themes/fcf/img/full12.jpg",
 			"size":"3"
 		},
 		"about_company_responsibility_title" :
@@ -258,28 +258,28 @@
 		{
 			"label":"Company Responsibility Context Image 1",
 			"type":"image",
-			"default":"/themes/fcf/img/r1.png",
+			"default":"/themes/fcf/img/full5.jpg",
 			"size":"3"
 		},
 		"about_company_responsibility_context_img2" :
 		{
 			"label":"Company Responsibility Context Image 2",
 			"type":"image",
-			"default":"/themes/fcf/img/r2.png",
+			"default":"/themes/fcf/img/full8.jpg",
 			"size":"3"
 		},
 		"about_company_responsibility_context_img3" :
 		{
 			"label":"Company Responsibility Context Image 3",
 			"type":"image",
-			"default":"/themes/fcf/img/r3.png",
+			"default":"/themes/fcf/img/full20.jpg",
 			"size":"3"
 		},
 		"about_company_responsibility_context_img4" :
 		{
 			"label":"Company Responsibility Context Image 4",
 			"type":"image",
-			"default":"/themes/fcf/img/r4.png",
+			"default":"/themes/fcf/img/full4.jpg",
 			"size":"3"
 		},
 		"about_environmental_management_title" :
@@ -300,28 +300,28 @@
 		{
 			"label":"Environmental Management Context Image 1",
 			"type":"image",
-			"default":"/themes/fcf/img/m1.png",
+			"default":"/themes/fcf/img/full13.jpg",
 			"size":"3"
 		},
 		"about_environmental_management_context_img2" :
 		{
 			"label":"Environmental Management Context Image 2",
 			"type":"image",
-			"default":"/themes/fcf/img/m2.png",
+			"default":"/themes/fcf/img/full22.jpg",
 			"size":"3"
 		},
 		"about_environmental_management_context_img3" :
 		{
 			"label":"Environmental Management Context Image 3",
 			"type":"image",
-			"default":"/themes/fcf/img/m3.png",
+			"default":"/themes/fcf/img/full15.jpg",
 			"size":"3"
 		},
 		"about_environmental_management_context_img4" :
 		{
 			"label":"Environmental Management Context Image 4",
 			"type":"image",
-			"default":"/themes/fcf/img/m4.png",
+			"default":"/themes/fcf/img/full14.jpg",
 			"size":"3"
 		},
 		"about_livelihood_foundation_title" :
@@ -342,56 +342,56 @@
 		{
 			"label":"Runruno Livelihood Foundation Context Image 1",
 			"type":"image",
-			"default":"/themes/fcf/img/f1.png",
+			"default":"/themes/fcf/img/full10.jpg",
 			"size":"3"
 		},
 		"about_livelihood_foundation_context_img2" :
 		{
 			"label":"Runruno Livelihood Foundation Context Image 2",
 			"type":"image",
-			"default":"/themes/fcf/img/f2.png",
+			"default":"/themes/fcf/img/full6.jpg",
 			"size":"3"
 		},
 		"about_livelihood_foundation_context_img3" :
 		{
 			"label":"Runruno Livelihood Foundation Context Image 3",
 			"type":"image",
-			"default":"/themes/fcf/img/f3.png",
+			"default":"/themes/fcf/img/full21.jpg",
 			"size":"3"
 		},
 		"about_livelihood_foundation_context_img4" :
 		{
 			"label":"Runruno Livelihood Foundation Context Image 4",
 			"type":"image",
-			"default":"/themes/fcf/img/f4.png",
+			"default":"/themes/fcf/img/full12.jpg",
 			"size":"3"
 		},
 		"about_livelihood_foundation_context_img5" :
 		{
 			"label":"Runruno Livelihood Foundation Context Image 5",
 			"type":"image",
-			"default":"/themes/fcf/img/f5.png",
+			"default":"/themes/fcf/img/full9.jpg",
 			"size":"3"
 		},
 		"about_livelihood_foundation_context_img6" :
 		{
 			"label":"Runruno Livelihood Foundation Context Image 6",
 			"type":"image",
-			"default":"/themes/fcf/img/f6.png",
+			"default":"/themes/fcf/img/full19.jpg",
 			"size":"3"
 		},
 		"about_livelihood_foundation_context_img7" :
 		{
 			"label":"Runruno Livelihood Foundation Context Image 7",
 			"type":"image",
-			"default":"/themes/fcf/img/f7.png",
+			"default":"/themes/fcf/img/full18.jpg",
 			"size":"3"
 		},
 		"about_livelihood_foundation_context_img8" :
 		{
 			"label":"Runruno Livelihood Foundation Context Image 8",
 			"type":"image",
-			"default":"/themes/fcf/img/f8.png",
+			"default":"/themes/fcf/img/full7.jpg",
 			"size":"3"
 		},
 		"about_awards_title" :

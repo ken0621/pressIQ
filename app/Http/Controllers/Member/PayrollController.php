@@ -4375,7 +4375,6 @@ class PayrollController extends Member
                     $shift = Tbl_payroll_shift_template::getshift($shift_template_id, $day)->first();
                }
 
-               // dd($shift);
                $temp['date']                 = $date_start;
                $temp['target_hours']         = $shift->target_hours;
                $temp['work_start']           = $shift->work_start;
@@ -4385,13 +4384,13 @@ class PayrollController extends Member
                $temp['flexi']                = $shift->flexi;
                $temp['rest_day']             = $shift->rest_day;
                $temp['extra_day']            = $shift->extra_day;
+               $temp['night_shift']          = $shift->night_shift;
 
                array_push($data['_day'], $temp);
 
                $date_start = Carbon::parse($date_start)->addDay()->format("Y-m-d");
           }
 
-          // dd($data);
 
           return view('member.payroll.misc.shift_template', $data);
      }
@@ -4605,6 +4604,7 @@ class PayrollController extends Member
                $temp['flexi']           = 0;
                $temp['rest_day']        = 0;
                $temp['extra_day']       = 0;
+               $temp['night_shift']     = 0;
 
                if(Request::has('flexi_'.$key))
                {
@@ -4619,6 +4619,11 @@ class PayrollController extends Member
                if(Request::has('extra_day_'.$key))
                {
                     $temp['extra_day']   = Request::input('extra_day_'.$key);
+               }
+
+               if(Request::has('night_shift_'.$key))
+               {
+                    $temp['night_shift']   = Request::input('night_shift_'.$key);
                }
 
                array_push($insert_shift, $temp);
@@ -5451,7 +5456,7 @@ class PayrollController extends Member
           $temp = array();
 
           $total_allowance = $process['adjustment']['total_allowance'] + $process['total_allowance'];
-
+          
           if($total_allowance > 0)
           {    
                $temp['name']       = '<b>Allowance</b>';
@@ -5735,13 +5740,13 @@ class PayrollController extends Member
 
           $total_net = array();
           $temp = array();
-          if($process['total_net'] > 0)
-          {    
+          // if($process['total_net'] > 0)
+          // {    
                $temp['name']       = '<b>Net Salary</b>';
                $temp['amount']     = '<b>'.number_format($process['total_net'], 2).'</b>';
                $temp['sub']        = array();
                array_push($total_net, $temp);
-          }  
+          // }  
 
           array_push($computation, $salary);
           array_push($computation, $government);

@@ -14,7 +14,7 @@
 <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
 <div class="row">
     <div class="col-md-6 col-lg-8">
-        <div class="cover-holder panel panel-default panel-block panel-title-block">
+        <div class="cover-holder panel panel-default panel-block panel-title-block hide">
             <div class="panel-headings clearfix">
                 <img class="banner-img" src="/assets/mlm/img/banner-shop.jpg">
                 <div class="shadow">
@@ -35,7 +35,7 @@
         </div>
         <center class="hide"><img src="{{isset($content['company_logo']) ? $content['company_logo'] : '/assets/mlm/img/pic-shop.jpg'}}" width="200px" style="margin-top: -11px !important; height: 100%"></center>
         
-        <div class="info-box bg-aqua">
+        <div class="info-box bg-aqua hide">
 	        <span class="info-box-icon" style="width: 40% !important;"><img  src="{{isset($content['company_logo']) ? $content['company_logo'] : '/assets/mlm/img/pic-shop.jpg'}}" alt="User Avatar" style="margin-top: -11px !important; height: 100%; width: 100%"></span>
 
 	        <div class="info-box-content">
@@ -47,13 +47,37 @@
 	          </div>
 	        </div>
 	      </div>
-        <br />
-        <div class="tab-content panel panel-default panel-block">
-            <!-- OVERVIEW -->
-            <div style="" class="tab-pane <?php echo (!isset($_GET["tab"]) && !isset($_GET["tabpw"]) && !Request::input('gc')  && !Request::input('wallet') ? "active" : ""); ?>" id="user-overview">   
-                {!! $income !!}
+
+
+          <div class="col-md-12">
+              <!-- Widget: user widget style 1 -->
+              <div class="box box-widget widget-user">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header" style="background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-image: url('{{isset($content['company_logo']) ? $content['company_logo'] : '/assets/mlm/img/pic-shop.jpg'}}');">
+                </div>
+
+                <div class="box-footer">
+                  <div class="row">
+                    <div class="col-sm-12 border-right">
+                      <div class="description-block">
+                        <h5 class="description-header">CONGRATULATIONS!</h5>
+                        <span class="description-text">YOU CAN NOW SEE ALL YOUR INCOME REPORTS HERE!</span>
+                      </div>
+                      <!-- /.description-block -->
+                    </div>
+                  </div>
+                  <!-- /.row -->
+                </div>
+              </div>
+              <!-- /.widget-user -->
             </div>
-        </div> 
+
+
+        <br />
+        {!! $income !!}
     </div>
   {!! $news !!}
 </div>

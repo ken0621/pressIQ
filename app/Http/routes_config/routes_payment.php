@@ -3,7 +3,7 @@
 Route::get('/payment/dragonpay', 'PaymentController@index');
 Route::post('/payment/dragonpay', 'PaymentController@onSubmitPayment');
 Route::get('/payment/dragonpay/postback', 'PaymentController@postback_url'); //confirmation upon payment
-Route::get('/payment/dragonpay/return', 'ShopCheckoutController@dragonpay_response'); //
+Route::get('/payment/dragonpay/return', 'Shop\ShopCheckoutController@dragonpay_response'); //
 /* End Dragon Pay */
 
 /* Payment Integration with iPay88 */

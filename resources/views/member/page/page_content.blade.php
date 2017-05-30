@@ -114,8 +114,12 @@
                                             <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
                                                 @foreach($_brand as $key_brand => $brand)
                                                     @if(isset(unserialize($info->default)[$brand['type_name']]))
-                                                    <?php $brand_image = is_serialized($info->default) ? unserialize($info->default)[$brand['type_name']]["image"] : ''; ?>
-                                                    <?php $brand_link = is_serialized($info->default) ? unserialize($info->default)[$brand['type_name']]["link"] : ''; ?>
+                                                        <?php $brand_image = is_serialized($info->default) ? unserialize($info->default)[$brand['type_name']]["image"] : '/assets/front/img/default.jpg'; ?>
+                                                        <?php $brand_link = is_serialized($info->default) ? unserialize($info->default)[$brand['type_name']]["link"] : '/assets/front/img/default.jpg'; ?>
+                                                    @else
+                                                        <?php $brand_image = '/assets/front/img/default.jpg'; ?>
+                                                        <?php $brand_link = '/assets/front/img/default.jpg'; ?>
+                                                    @endif
                                                     <div class="col-md-3">
                                                         <div style="margin-bottom: 7.5px; font-weight: 700;">{{ $brand['type_name'] }}</div>
                                                         <input class="image-value" key="{{ $keys }}-{{ $key_brand }}" type="hidden" name="info[{{ $keys }}][value][{{ $brand['type_name'] }}][image]" value="{{ $brand_image }}">
@@ -134,7 +138,6 @@
                                                             <input class="form-control" type="hidden" name="info[{{ $keys }}][value][{{ $brand['type_name'] }}][link]" placeholder="Brand Link" value="{{ $brand['type_name'] }}">
                                                         </div>
                                                     </div>
-                                                    @endif
                                                 @endforeach
                                             </div>
                                         </div>

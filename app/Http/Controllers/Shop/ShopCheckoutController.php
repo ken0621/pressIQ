@@ -84,29 +84,15 @@ class ShopCheckoutController extends Shop
     }
     public function dragonpay_return()
     {
-        dd(Request::all());
-        $gateway = DB::table("tbl_online_pymnt_gateway")->where("tbl_online_pymnt_api.api_shop_id", $this->shop_info->shop_id)
-                                                        ->where("tbl_online_pymnt_gateway.gateway_code_name", "dragonpay")
-                                                        ->join("tbl_online_pymnt_api", "tbl_online_pymnt_api.api_gateway_id" , "=", "tbl_online_pymnt_gateway.gateway_id")
-                                                        ->first();
-        if ($gateway) 
+        if ($status == "S") 
         {
-            $merchant_id  = $gateway->api_client_id;
-            $merchant_key = $gateway->api_secret_id;
+            $from = Request::input('param1');
+            if ($from == "checkout") 
+            {
+                $order_id = Request::input("param2");
 
-            $param = array(
-                'merchantid'    => $merchant_id, 
-                'txnid'         => $this->getTxnId(),
-                'amount'        => $this->getAmount(), 
-                'ccy'           => $this->getCcy(), 
-                'description'   => $this->getDescription(), 
-                'email'         => $this->getEmail(), 
-                'merchantkey'   => $merchant_key 
-            );
-
-            $digest_string = implode(':', $param);
-            
-            $this->digest = sha1($digest_string);
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
+            }
         }
     }
     public function dragonpay_postback()
@@ -114,6 +100,20 @@ class ShopCheckoutController extends Shop
         $insert["log_date"] = Carbon::now();
         $insert["content"]  = serialize(Request::input());
         DB::table("tbl_dragonpay_logs")->insert($insert);
+
+        if ($status == "S") 
+        {
+            $from = Request::input('param1');
+            if ($from == "checkout") 
+            {
+                $order_id = Request::input("param2");
+
+                $update['ec_order_id'] = $order_id;
+                $update['order_status'] = "Processing";
+                $update['payment_status'] = 1;
+                $order = Ec_order::update_ec_order($update);
+            }
+        }
     }
     /* End Payment Facilities */
 

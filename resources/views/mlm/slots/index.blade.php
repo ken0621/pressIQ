@@ -35,8 +35,8 @@ $data['icon'] = 'icon-sitemap';
     <form class="global-submit" method="post" action="/mlm/slot/check_add">
     {!! csrf_field() !!}
     <div class="box-body">
-    	<label>Create Slot</label>
-    	<select name="membership_code_id" class="form-control">
+      <label>Create Slot</label>
+      <select name="membership_code_id" class="form-control">
         @if(count($_code) != 0)
           @foreach($_code as $code)
             <option value="{{$code->membership_code_id}}">{{$code->membership_activation_code}} {{$code->membership_type}}</option>
@@ -52,6 +52,46 @@ $data['icon'] = 'icon-sitemap';
     </div>
     </form>
   </div>
+  <div class="box clearfix" style="overflow: hidden !important;">
+    <div class="box-header with-border">
+      <h3 class="box-title">Slot Transfer</h3>
+    </div>
+    <!-- /.box-header -->
+    <form class="global-submit" method="POST" action="/mlm/slots/before_transfer_slot">
+    {!! csrf_field() !!}
+    <div class="box-body">
+        <label>Slot</label>
+        <select name="slot_id" class="form-control">
+            @foreach($all_slots_show as $slot_show)
+                <option value="{{$slot_show->slot_id}}">{{$slot_show->slot_no}} ({{$slot_show->membership_name}})</option>
+            @endforeach
+        </select>
+      <hr>
+      <button class="btn btn-primary pull-right">Transfer</button>
+    </div>
+    </form>
+  </div>
+  @if(count($_item_code) >= 1)
+    <div class="box clearfix" style="overflow: hidden !important;">
+      <div class="box-header with-border">
+        <h3 class="box-title">Product Codes</h3>
+      </div>
+      <!-- /.box-header -->
+      <form class="global-submit" method="POST" action="/mlm/slots/check_item_code">
+      {!! csrf_field() !!}
+      <div class="box-body">
+          <label>Code</label>
+          <select name="item_code_id" class="form-control">
+              @foreach($_item_code as $item_code)
+                  <option value="{{$item_code->item_code_id}}">{{$item_code->item_activation_code}}</option>
+              @endforeach
+          </select>
+        <hr>
+        <button class="btn btn-primary pull-right">Use code</button>
+      </div>
+      </form>
+    </div>
+  @endif
 </div>  
 <div class="col-md-6">
   <div class="box">
@@ -117,11 +157,6 @@ $data['icon'] = 'icon-sitemap';
 @section('js')
 <script type="text/javascript">
 
-$(".use_code_mem").click(function()
-{
-  $(this).disabled();
-});
-
 function submit_done(data)
 {
   if(data.status == 'success')
@@ -162,6 +197,26 @@ function submit_done(data)
   {
     toastr.success('Congratulations, Your slot is created.');
     window.location = "/mlm";
+  }
+  else if(data.status == 'success_before_transfer_slot')
+  {
+    var link = "/mlm/slots/transfer_slot?slot_id="+data.encrypted;
+    action_load_main_modal(link,"");
+  }
+  else if(data.status == 'success_transfer_slot')
+  {
+    toastr.success('Transfer done.');
+    window.location = "/mlm";
+  }
+  else if(data.status == 'success-check-prod-code')
+  {
+    var link = "/mlm/slots/item_code?item_code_id="+data.item_code_id;
+    action_load_main_modal(link,"");
+  }
+  else if(data.status == 'success-prod-code')
+  {
+    toastr.success('Done.');
+    window.location = "/mlm/slots";
   }
   else
   {

@@ -86,12 +86,14 @@ class Shop extends Controller
         $this->shop_theme_color = $this->shop_info->shop_theme_color;
 
         $this->shop_theme_info  = $shop_theme_info;
-        $company_info           = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->get())->keyBy('key');
+        $company_column         = array('company_name', 'company_acronym', 'company_logo', 'receipt_logo', 'company_address', 'company_email', 'company_mobile', 'company_hour');
+        $company_info           = collect(Tbl_content::where("shop_id", $this->shop_info->shop_id)->whereIn('key', $company_column)->get())->keyBy('key');
         $product_category       = Ecom_Product::getAllCategory($this->shop_info->shop_id);
         $global_cart            = Cart::get_cart($this->shop_info->shop_id);
         $country                = Tbl_country::get();
         $popular_tags           = DB::table("tbl_ec_popular_tags")->where("shop_id", $this->shop_info->shop_id)->orderBy("count", "DESC")->limit(10)->get();
-
+        $products               = Ecom_Product::getAllProduct($this->shop_info->shop_id);
+        
         View::share("slot_now", Self::$slot_now);
         View::share("customer_info_a", Self::$customer_info);
         View::addLocation(base_path() . '/public/themes/' . $this->shop_theme . '/views/');
@@ -108,6 +110,7 @@ class Shop extends Controller
         View::share("customer_info", $data['customer_info']);
         View::share("lead_code", $data['lead_code']);
         View::share("_popular_tags", $popular_tags);
+        View::share("global_product", $products);
     }
     public function file($theme, $type, $filename)
     {

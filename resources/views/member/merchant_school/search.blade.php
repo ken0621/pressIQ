@@ -74,7 +74,7 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-							<label>Anouncement</label>
+							<label>Announcement</label>
 							<textarea class="form-control" name="merchant_school_anouncement"></textarea>
 						</td>
 					</tr>

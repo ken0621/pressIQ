@@ -5,7 +5,7 @@
     <base href="{{ URL::to('/themes/'.$shop_theme.'') }}/">
     <!-- Title -->
     <title>Alpha Global Prestige - {{ $page }}</title>
-    <link rel="icon"  type="image/png" href="assets/front/img/logo.png">
+    <link rel="icon"  type="image/png" href="http://alpha-globalprestige.com/assets/front/img/agp.png">
     <!-- Responsive Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <!-- Pingback URL -->
@@ -82,14 +82,14 @@
     <div class="top_nav">
         <div class="container">
             <div class="row-fluid">
-                <div class="span6" id="ewan">
+                <div class="span9" id="ewan">
                     <div class="pull-left">
                         <div id="widget_topinfo-2" class="widget widget_topinfo">
                             <div class="topinfo">{{ get_content($shop_theme_info, "header", "header_call_label") }}: {{ get_content($shop_theme_info, "header", "header_call_number") }}</span><span class="email">{{ get_content($shop_theme_info, "header", "header_email_label") }}: {{ get_content($shop_theme_info, "header", "header_email_address") }}</span></div>
                         </div>
                     </div>
                 </div>
-                <div class="span6">
+                <div class="span3">
                     <div class="pull-right">
                         <div class="widget social_widget">
                             <div class="row-fluid social_row">

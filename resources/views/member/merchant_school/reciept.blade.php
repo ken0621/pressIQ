@@ -41,7 +41,7 @@ if($reciept->merchant_school_amount <= 0)
                                             <td><img src="@if(Request::input('pdf') == 'true'){{public_path().'/assets/mlm/bongao.png'}} @else {{'/assets/mlm/bongao.png'}}@endif"></td>
                                             <td>
                                                 <center><h3>Merchant</h4></center>
-                                                <center style="color: red;"><h4>Bongoa Discovery School</h4></center>
+                                                <center style="color: red;"><h4>Bongao Discovery School</h4></center>
                                                 <center>Datu Halum St., Poblacion, Bongao Tawi-tawi</center>
                                                 <center>Contact No.: 068-268-1531</center>
                                             </td>
@@ -123,7 +123,7 @@ if($reciept->merchant_school_amount <= 0)
                 <table class="table table-condensed tadble">    
                     <tr>
                         <td style="vertical-align: top !important; padding: 0;" colspan="2">
-                            <center>Anouncement</center>
+                            <center>Announcement</center>
                             <textarea class="form-control" style="height:135px; resize: none;" disabled>{{$reciept->merchant_school_anouncement}}</textarea>
                         </td>
                         <td style="vertical-align: top !important; padding: 0; border: 0 !important;" colspan="2">

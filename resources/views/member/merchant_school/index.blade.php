@@ -60,7 +60,7 @@
 <div class="panel panel-default panel-block panel-title-block col-md-12" id="top">
     <div class="panel-heading">
         <div>
-            <center>Reciept</center>
+            <center>Receipt</center>
              <div class="col-md-4">
                  <div class="load-data" target="value-id-3">     
                     <div id="value-id-3">

@@ -147,6 +147,9 @@ class ShopCheckoutController extends Shop
         $customer_info["shipping_zip"] = Self::locale_id_to_name(Request::input("customer_zip"));
         $customer_info["shipping_street"] = Request::input("customer_street");
 
+        $customer_info['load_wallet']['ec_order_load'] = Request::input('ec_order_load');
+        $customer_info['load_wallet']['ec_order_load_number'] = Request::input('ec_order_load_number');
+
         $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
 
 

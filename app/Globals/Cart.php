@@ -705,6 +705,8 @@ class Cart
         $data["tbl_customer"]['customer_contact'] = (isset($customer_information["customer_contact"]) ? $customer_information["customer_contact"] : (isset($data["tbl_customer"]['customer_contact']) ? $data["tbl_customer"]['customer_contact'] : null));;
         $data["tbl_customer"]['country_id']     = 420;
 
+        $data['load_wallet']['ec_order_load'] = $customer_information['load_wallet']['ec_order_load'];
+        $data['load_wallet']['ec_order_load_number'] = $customer_information['load_wallet']['ec_order_load_number'];
         /* CURRENT LOGGED IN */
         if (isset($customer_information["current_user"])) 
         {
@@ -833,6 +835,8 @@ class Cart
 
 
         /*  OTHER INFO WITH SERVICE FEE */
+        $data['tbl_ec_order']['ec_order_load'] = $customer_information['load_wallet']['ec_order_load'];
+        $data['tbl_ec_order']['ec_order_load_number'] = $customer_information['load_wallet']['ec_order_load_number'];
         $data["tbl_ec_order"]["service_fee"] = $service_fee;
         $data["tbl_ec_order"]["total"] = $total;
         $data["tbl_ec_order"]["coupon_id"] = null;
@@ -922,7 +926,6 @@ class Cart
         $data = Self::get_info($shop_id);
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
         $method_information = Self::get_method_information($shop_id, $method_id);
-        
         if ( isset($method_id) && isset($method_information) )
         {
             switch ($method_information->link_reference_name)
@@ -1078,6 +1081,11 @@ class Cart
         if($slot_session != null)
         {
             $check_wallet = Mlm_slot_log::get_sum_wallet($slot_session->slot_id);
+            $payment_status = 0;
+            $order_status   = "Pending";
+            $customer       = Cart::get_customer();
+
+            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
             if($check_wallet >= $sum )
             {
                 // return $check_wallet;
@@ -1093,7 +1101,10 @@ class Cart
                 $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
                 
                 Mlm_slot_log::slot_array($arry_log);
-                $cart["order_status"] = "Processing";
+                $update['ec_order_id'] = $order_id;
+                $update['order_status'] = "Processing";
+                $update['payment_status'] = 1;
+                $order = Ec_order::update_ec_order($update);
             }
             else
             {

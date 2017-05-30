@@ -92,7 +92,7 @@ class Ec_order
         $image_id = Tbl_ec_order::where("ec_order_id", $order_id)->update($update);
         
         $order_info['customer_id'] = $customer_id;
-        Ec_order::create_merchant_school_item($order_info, $order_id);
+        // Ec_order::create_merchant_school_item($order_id);
         
 
 
@@ -101,15 +101,14 @@ class Ec_order
 
         return $return;
     }
-    public static function create_merchant_school_item($order_info, $order_id)
+    public static function create_merchant_school_item($order_id)
     {
         $order_info = Tbl_ec_order::where('ec_order_id', $order_id)
         ->first()->toArray();
-
         $settings = Tbl_merchant_school::get()->keyBy('merchant_item_id');
 
         $order = Tbl_ec_order_item::where('ec_order_id', $order_id)
-        ->joni('tbl_ec_variant', 'tbl_ec_variant.evariant_id', '=', 'tbl_ec_order_item.item_id')
+        ->join('tbl_ec_variant', 'tbl_ec_variant.evariant_id', '=', 'tbl_ec_order_item.item_id')
         ->get();
 
         foreach ($order as $key => $value) {
@@ -358,7 +357,7 @@ class Ec_order
         $ec_order_id 								= Tbl_ec_order::insertGetId($ec_order);
 
        	Ec_order::create_ec_order_item($ec_order_id,$ec_order_item);
-
+        // Ec_order::create_merchant_school_item($order_id);
        	return $ec_order_id;
 	}
 
@@ -674,6 +673,10 @@ class Ec_order
         $order_info["tbl_ec_order"]["customer_id"] = $customer_id;
         $order_info["tbl_ec_order"]["discount_coupon_amount"] = $order_info["tbl_ec_order"]["discount_coupon_amount"] ? $order_info["tbl_ec_order"]["discount_coupon_amount"] : 0;
         $order_info["tbl_ec_order"]["discount_coupon_type"] = $order_info["tbl_ec_order"]["discount_coupon_type"] ? $order_info["tbl_ec_order"]["discount_coupon_type"] : "fixed";
+        
+        $order_info['tbl_ec_order']['ec_order_load'] = isset($data['tbl_ec_order']['ec_order_load']) ?  $data['tbl_ec_order']['ec_order_load'] : 0;
+        $order_info['tbl_ec_order']['ec_order_load_number'] = isset($data['tbl_ec_order']['ec_order_load_number']) ? $data['tbl_ec_order']['ec_order_load_number'] : 0;
+
         $order_info["tbl_ec_order"]["ec_order_id"] = DB::table("tbl_ec_order")->insertGetId($order_info["tbl_ec_order"]);
 
         /* Insert Order Item */
@@ -690,7 +693,7 @@ class Ec_order
         // $data['account_password'] = $order_info["tbl_customer"]["password"];
 
         // $result = Mail_global::password_mail($data, $shop_id);
-
+        // Ec_order::create_merchant_school_item($order_info["tbl_ec_order"]["ec_order_id"]);
         return $order_info["tbl_ec_order"]["ec_order_id"];
     }
 }

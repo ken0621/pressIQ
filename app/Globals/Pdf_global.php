@@ -4,11 +4,14 @@ use PDF;
 use App;
 class Pdf_global
 {
-	public static function show_pdf($html, $orient = null,$footer = null)
+	public static function show_pdf($html, $orient = null,$footer = '')
 	{
 		$html_b = Pdf_global::bootstrap($html);
         $pdf = App::make('snappy.pdf.wrapper');
-        $pdf->setOption('footer-right', $footer.' Page [page] of [topage]');
+        if($footer != '')
+        {
+	        $pdf->setOption('footer-right', $footer.' Page [page] of [topage]');
+        }
         $pdf->loadHTML($html_b);
         if($orient != null)
         {

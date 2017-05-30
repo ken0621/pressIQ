@@ -22,6 +22,7 @@ class Tbl_payroll_employee_schedule extends Model
 	// [TINY INTEGER] 	flexi
 	// [TINY INTEGER] 	rest_day
 	// [TINY INTEGER] 	extra_day
+	// [TINY INTEGER]	night_shift
 
 
 	public function scopegetschedule($query, $payroll_employee_id = 0, $schedule_date = '0000-00-00')

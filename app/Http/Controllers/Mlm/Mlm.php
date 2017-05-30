@@ -112,6 +112,7 @@ class Mlm extends Controller
             ->orderBy('wallet_log_notified', 'ASC')
             ->orderBy('wallet_log_id', 'DESC')
             ->sponsorslot()
+            ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
             ->where('wallet_log_notified', 0)
             ->take(10)
             ->get();

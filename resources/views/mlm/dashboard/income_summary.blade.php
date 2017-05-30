@@ -75,7 +75,7 @@
                       <td>{{currency('PHP', $earning[$key])}}</td>
                     </tr>
                   @endforeach
-                  @if($single_leg_income >= 0)
+                  @if($single_leg_income != 0)
                     <tr>
                       <td>Single Line Binary Income</td>
                       <td>{{currency('PHP', $single_leg_income)}}</td>

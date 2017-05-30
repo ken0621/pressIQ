@@ -115,7 +115,7 @@ class ShopCheckoutController extends Shop
                 $order = Ec_order::update_ec_order($update);
 
                 $wat["log_date"] = Carbon::now();
-                $wat["content"]  = is_serialized($order) ? serialize($order) : $order;
+                $wat["content"]  = "tumuloy";
                 DB::table("tbl_dragonpay_logs")->insert($wat);
             }
         }

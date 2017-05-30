@@ -957,7 +957,7 @@ class Payroll
 			}
 
 			/* for night diff break */
-			$break_start 	= Payroll::hour_24($break_star);
+			$break_start 	= Payroll::hour_24($break_start);
 			$break_end 		= Payroll::hour_24($break_end);
 
 			$float_nd = Payroll::get_night_diff($float_in, $float_out);

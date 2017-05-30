@@ -97,26 +97,34 @@ class ShopCheckoutController extends Shop
     }
     public function dragonpay_postback()
     {
+        $request = array(
+            "txnid" => "71496202897",
+            "refno" => "PTZBTCU6",
+            "status" => "S",
+            "message" => "[000] BOG Reference No: 20170531115519 #PTZBTCU6",
+            "procid" => "BOG",
+            "digest" => "bc1f21cc919785f34cd0cbf80e46c77dc990d829",
+            "param1" => "checkout",
+            "param2" => "53"
+        );
+        
         $insert["log_date"] = Carbon::now();
-        $insert["content"]  = serialize(Request::input());
+        $insert["content"]  = serialize($request);
         DB::table("tbl_dragonpay_logs")->insert($insert);
 
-        if (Request::input("status") == "S") 
+        if ($request["status"] == "S") 
         {
-            $from = Request::input('param1');
+            $from = $request["param1"];
 
             if ($from == "checkout") 
             {
-                $order_id = Request::input("param2");
+                $order_id = $request["param2"];
 
                 $update['ec_order_id'] = $order_id;
                 $update['order_status'] = "Processing";
                 $update['payment_status'] = 1;
                 $order = Ec_order::update_ec_order($update);
-
-                $wat["log_date"] = Carbon::now();
-                $wat["content"]  = "tumuloy";
-                DB::table("tbl_dragonpay_logs")->insert($wat);
+                dd($order);            
             }
         }
     }

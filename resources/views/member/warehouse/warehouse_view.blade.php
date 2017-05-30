@@ -34,7 +34,7 @@
         </div> -->
         <div class="form-group">
             <div class="col-md-12 text-left">            
-                <input type="checkbox" onclick="toggle('.show-container', this)" value="update_password" class="up-check" name="update_password"> <label class="label-type"> Per Bundle/Group</label>
+                <input type="checkbox" onclick="toggle('.show-container', this)" value="update_password" class="up-check" name="update_password"> <label class="label-type"> View Item Per Bundle/Group</label>
             </div>
         </div>
         <div class="row clearfix draggable-container show-container per-item">

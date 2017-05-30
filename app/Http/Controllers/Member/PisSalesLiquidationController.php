@@ -62,25 +62,24 @@ class PisSalesLiquidationController extends Member
      */
     public function report($sir_id)
     {
-        // $chk = Tbl_sir_sales_report::where("sir_id",$sir_id)->first();
-        // if($chk)
-        // {
-        //     $return = $chk->report_data;
-
+        $chk = Tbl_sir_sales_report::where("sir_id",$sir_id)->first();
+        if($chk)
+        {
+            $return = $chk->report_data;
             // $up["report_data"] = serialize(Purchasing_inventory_system::get_report_data($sir_id));
             // Tbl_sir_sales_report::where("sir_id",$sir_id)->update($up);
+            // $return = serialize(Purchasing_inventory_system::get_report_data($sir_id));
+        }
+        else
+        {
+            $ins["sir_id"] = $sir_id;
+            $ins["report_data"] = serialize(Purchasing_inventory_system::get_report_data($sir_id));
+            $ins["report_created"] = Carbon::now();
+
+            Tbl_sir_sales_report::insert($ins);
+
             $return = serialize(Purchasing_inventory_system::get_report_data($sir_id));
-        // }
-        // else
-        // {
-        //     $ins["sir_id"] = $sir_id;
-        //     $ins["report_data"] = serialize(Purchasing_inventory_system::get_report_data($sir_id));
-        //     $ins["report_created"] = Carbon::now();
-
-        //     Tbl_sir_sales_report::insert($ins);
-
-        //     $return = serialize(Purchasing_inventory_system::get_report_data($sir_id));
-        // }
+        }
         
         $data = unserialize($return);
 

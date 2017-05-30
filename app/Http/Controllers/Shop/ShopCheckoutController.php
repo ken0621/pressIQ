@@ -117,7 +117,7 @@ class ShopCheckoutController extends Shop
                 $order = Ec_order::update_ec_order($update);   
 
                 $last["log_date"] = Carbon::now();
-                $last["content"]  = $order;
+                $last["content"]  = "nice";
                 DB::table("tbl_dragonpay_logs")->insert($last);        
             }
         }

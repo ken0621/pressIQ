@@ -695,9 +695,20 @@ class Payroll
 			$schedule = Tbl_payroll_shift::getshift($data["employee_information"]->payroll_group_id, date('D', strtotime($date)))->first();
 		}
 
-		$default_time_in = $schedule->work_start;
-		$default_time_out = $schedule->work_end;
+		$default_time_in = '00:00:00';
+		$default_time_out = '00:00:00';
+		$target_hour_para = 0;
+		$target_hour = 0;
 
+		if($schedule != null)
+		{
+			$target_hour_param 		= $schedule->target_hours;
+			$target_hour 			= $schedule->target_hours;
+			$default_time_in = $schedule->work_start;
+			$default_time_out = $schedule->work_end;
+		}
+
+	
 		$def_in_float 	= Payroll::time_float($default_time_in);
 		$def_out_float 	= Payroll::time_float($default_time_out);
 
@@ -711,8 +722,7 @@ class Payroll
 
 		/* for flexi time */
 		
-		$target_hour_param 		= $schedule->target_hours;
-		$target_hour 			= $schedule->target_hours;
+		
 
 		$return = new stdClass();
 		$data["default_working_hours"] = $default_working_hours = c_time_to_int($default_working_hours);

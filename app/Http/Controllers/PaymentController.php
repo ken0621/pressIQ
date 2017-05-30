@@ -39,7 +39,7 @@ class PaymentController extends Controller
             'description'   => $requestpayment->setDescription($request['description']),
             'email'         => $requestpayment->setEmail($request['email']),
             'digest'        => $requestpayment->getdigest(),
-            'edward'        => "test"
+            'param1'        => "test"
         );
 
         Dragon_RequestPayment::make($this->_merchantkey, $this->_data);   

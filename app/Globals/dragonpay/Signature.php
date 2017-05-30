@@ -1,6 +1,6 @@
 <?php
 
-namespace App\IPay88;
+namespace App\Globals\Dragonpay;
 
 class Signature
 {

@@ -13,6 +13,7 @@ use DB;
 use App\Globals\Post;
 use App\Models\Tbl_post;
 use App\Globals\Utilities;
+use Redirect;
 
 class Page_PostController extends Member
 {
@@ -23,9 +24,18 @@ class Page_PostController extends Member
         {
             $data["page"] = "Post List";
 
-            $data["_post"] = DB::table("tbl_post")->where("tbl_post.archived", 0)
+            if (Request::input("archive")) 
+            {
+                $archive = 1;
+            }
+            else
+            {
+                $archive = 0;
+            }
+
+            $data["_post"] = DB::table("tbl_post")->where("tbl_post.archived", $archive)
                                                   ->where("tbl_post.shop_id", $this->user_info->shop_id)
-                                                  ->where("tbl_post.post_author", $this->user_info->user_id)
+                                                  // ->where("tbl_post.post_author", $this->user_info->user_id)
                                                   ->leftJoin("tbl_user", "tbl_post.post_author", "=", "tbl_user.user_id")
                                                   ->leftJoin("rel_post_category", "tbl_post.post_id", "=", "rel_post_category.post_id")
                                                   ->leftJoin("tbl_post_category", "rel_post_category.post_category_id", "=", "tbl_post_category.post_category_id")
@@ -158,7 +168,23 @@ class Page_PostController extends Member
 
             $response["id"] = $id;
 
-            return json_encode($response);
+            return Redirect::back();
+        }
+        else
+        {
+            return $this->show_no_access();
+        }
+    }
+    public function getUnarchive($id)
+    {
+        $access = Utilities::checkAccess('page-post', 'archive_post');
+        if($access == 1)
+        {
+            $result = Tbl_post::where("post_id", $id)->update(["archived" => 0]);
+
+            $response["id"] = $id;
+
+            return Redirect::back();
         }
         else
         {

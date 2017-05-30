@@ -1071,7 +1071,6 @@ class Payroll
 		{
 			$total_hours -= c_time_to_int($break);
 		}
-
 		
 		/* COMPUTE EXTRA DAY AND REST DAY */
 		$total_rest_day_hours = 0;

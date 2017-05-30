@@ -238,6 +238,8 @@ Route::any('member/mlm/complan_setup/binary_pro', 'Member\Mlm_ComplanSetupContro
 Route::any('member/mlm/merchant_school', 'Member\BeneficiaryController@index'); 
 
 Route::any('member/mlm/tours_wallet', 'Member\Mlm_ComplanSetupController@tours_wallet'); 
+Route::any('member/mlm/tours_wallet/update/settings', 'Member\Mlm_ComplanSetupController@set_tours_wallet_settings');
+Route::any('member/mlm/tours_wallet/get/log', 'Member\Mlm_ComplanSetupController@get_log'); 
 
 Route::any('member/mlm/merchant_school/create', 'Member\BeneficiaryController@create'); 
 Route::any('member/mlm/merchant_school/get/receipt', 'Member\BeneficiaryController@receipt'); 
@@ -253,3 +255,4 @@ Route::any('member/mlm/merchant_school/consume', 'Member\BeneficiaryController@c
 Route::any('member/mlm/complan_setup/unilevel/distribute', 'Member\Mlm_ComplanSetupController@unilevel_distribute'); 
 Route::any('member/mlm/complan_setup/unilevel/distribute/set/settings', 'Member\Mlm_ComplanSetupController@unilevel_distribute_set_settings'); 
 Route::any('member/mlm/complan_setup/unilevel/distribute/simulate', 'Member\Mlm_ComplanSetupController@unilevel_distribute_simulate'); 
+

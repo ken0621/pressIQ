@@ -596,7 +596,7 @@ class Mlm_complan_manager
                                     $check_date_is_today = Mlm_complan_manager::compare_date($current_pairs_per_date, Carbon::now(), 'day');
 
                                     // check if gc this pair
-                                    $modulus = Binary_pairing::binary_gc($binary_advance_pairing);
+                                    $modulus = Binary_pairing::binary_gc($binary_advance_pairing,$current_pair);
 
                                     // fir pairing cycle of binary
                                     if($setting_cycle_no == 1)
@@ -803,24 +803,41 @@ class Mlm_complan_manager
                                 {
                                     for($i = 0; $i < $gc_count; $i++)
                                     {
-                                        // binary_advance_pairing
-                                        $log = "You have Earned " . $binary_advance_pairing->binary_settings_gc_title . ". With an amount of " .$binary_advance_pairing->binary_settings_gc_amount ;
+                                        if($binary_advance_pairing->binary_settings_gc_amount_type == "membership_based")
+                                        {
+                                            $gc_income = $value2->pairing_bonus;
+                                        }
+                                        else
+                                        {
+                                            $gc_income = $binary_advance_pairing->binary_settings_gc_amount;
+                                        }
+
+                                        $log = "You have Earned " . $binary_advance_pairing->binary_settings_gc_title . ". With an amount of " .$gc_income;
                                         $arry_log['wallet_log_slot']            = $slot->slot_id;
                                         $arry_log['shop_id']                    = $slot->shop_id;
                                         $arry_log['wallet_log_slot_sponsor']    = $slot->slot_id;
                                         $arry_log['wallet_log_details']         = $log;
-                                        $arry_log['wallet_log_amount']          = $binary_advance_pairing->binary_settings_gc_amount;
+                                        $arry_log['wallet_log_amount']          = 0;
                                         $arry_log['wallet_log_plan']            = "BINARY_GC";
                                         $arry_log['wallet_log_status']          = "n_ready";   
                                         $arry_log['wallet_log_claimbale_on']    = Mlm_complan_manager::cutoff_date_claimable('BINARY', $slot->shop_id); 
                                         Mlm_slot_log::slot_array($arry_log);  
 
-                                        $binary_pairing_log['pairing_income'] = $binary_advance_pairing->binary_settings_gc_amount;
+                                        $binary_pairing_log['pairing_income'] = $gc_income;
                                         $binary_pairing_log['pairing_slot'] = $slot->slot_id;
                                         $binary_pairing_log['pairing_slot_entry'] = $slot_info->slot_id;
                                         $binary_pairing_log['pairing_date'] = Carbon::now();
                                         $binary_pairing_log['pairing_type'] = 'GC';
                                         Tbl_mlm_binary_pairing_log::insert($binary_pairing_log);
+
+                                        $insert_gc_vou['mlm_gc_tag']       = "5THPAIR";
+                                        $insert_gc_vou['mlm_gc_code']      = Mlm_gc::random_code_generator(8, $slot->slot_id, $insert_gc_vou['mlm_gc_tag']);
+                                        $insert_gc_vou['mlm_gc_amount']    = $gc_income;
+                                        $insert_gc_vou['mlm_gc_member']    = $slot->slot_owner;
+                                        $insert_gc_vou['mlm_gc_slot']      = $slot->slot_id;
+                                        $insert_gc_vou['mlm_gc_date']      = Carbon::now();
+                                        $insert_gc_vou['mlm_gc_used']      = 0;
+                                        Mlm_gc::insert_gc($insert_gc_vou);
                                     }
                                 }
                                 // update slot

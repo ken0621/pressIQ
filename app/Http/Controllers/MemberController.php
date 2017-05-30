@@ -22,10 +22,15 @@ use App\Globals\Item;
 use App\Globals\Mlm_plan;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_gc;
+use App\Globals\dragonpay\RequestPayment;
 class MemberController extends Controller
 {
     public static $shop_id;
     public static $lead;
+
+    protected $_merchantid = 'MYPHONE' ;
+    protected $_merchantkey = 'Ez9MiNqWBS2BHuO' ;
+
     public function __construct()
     {   
         $domain = Request::url();
@@ -303,8 +308,11 @@ class MemberController extends Controller
                 {
                     $data['status'] = 'warning';
                     $data['message'][0] = 'Invalid Membership Code/Pin.';
-                }
-                
+                } 
+            }
+            elseif($info['payment_type'] == 'dragonpay')
+            {
+                $this->post_dragonpay();
             }
             else
             {
@@ -347,6 +355,31 @@ class MemberController extends Controller
             $data['message'][0] = 'Invalid Payment Type';
         }
         return json_encode($data);
+    }
+
+    public function post_dragonpay()
+    {
+        $info = Session::get('mlm_register_step_1');
+        $package = Session::get('mlm_register_step_2');
+        $package_price = Tbl_membership::where('membership_id', $package['membership'])->first();
+        $package_price_a = $package_price->membership_price;
+        $shop_id = Self::$shop_id;
+        Session::put('shop_id_session', $shop_id);
+        
+        $requestpayment = new RequestPayment($this->_merchantkey);
+
+        $this->_data = array(
+            'merchantid'    => $requestpayment->setMerchantId($this->_merchantid),
+            'txnid'         => $requestpayment->setTxnId(Self::$shop_id . time()),
+            'amount'        => $requestpayment->setAmount($package_price_a),
+            'ccy'           => $requestpayment->setCcy('PHP'),
+            'description'   => $requestpayment->setDescription($package_price->membership_name . " Package"),
+            'email'         => $requestpayment->setEmail($info['email']),
+            'digest'        => $requestpayment->getdigest(),
+        );
+
+        RequestPayment::make($this->_merchantkey, $this->_data);
+        die("Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.");
     }
 
 

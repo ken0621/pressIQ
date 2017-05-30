@@ -149,7 +149,7 @@ class ShopCheckoutController extends Shop
 
         $customer_info['load_wallet']['ec_order_load'] = Request::input('ec_order_load');
         $customer_info['load_wallet']['ec_order_load_number'] = Request::input('ec_order_load_number');
-
+        // dd($customer_info);
         $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
 
 
@@ -165,7 +165,10 @@ class ShopCheckoutController extends Shop
     public function update_method()
     {
         $customer_info["method_id"] = Request::input("method_id");
-        $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info);
+        $old_session = $order = Cart::get_info($this->shop_info->shop_id);
+        $customer_set_info_response = Cart::customer_set_info_ec_order($this->shop_info->shop_id, $old_session, $customer_info);
+        $unique_id = Cart::get_unique_id($this->shop_info->shop_id);
+        Session::put($unique_id, $customer_set_info_response);
         echo json_encode("Success!"); 
     }
 

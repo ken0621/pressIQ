@@ -705,8 +705,8 @@ class Cart
         $data["tbl_customer"]['customer_contact'] = (isset($customer_information["customer_contact"]) ? $customer_information["customer_contact"] : (isset($data["tbl_customer"]['customer_contact']) ? $data["tbl_customer"]['customer_contact'] : null));;
         $data["tbl_customer"]['country_id']     = 420;
 
-        $data['load_wallet']['ec_order_load'] = $customer_information['load_wallet']['ec_order_load'];
-        $data['load_wallet']['ec_order_load_number'] = $customer_information['load_wallet']['ec_order_load_number'];
+        $data['load_wallet']['ec_order_load'] = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
+        $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
         /* CURRENT LOGGED IN */
         if (isset($customer_information["current_user"])) 
         {
@@ -743,9 +743,7 @@ class Cart
             $data["tbl_customer_address"]["billing"]["customer_street"] = $data["tbl_customer_address"]["shipping"]["customer_street"];
             $data["tbl_customer_address"]["billing"]["purpose"] = "billing"; 
         }
-
         $data = Cart::customer_set_info_ec_order($shop_id, $data, $customer_information);
-
         /* VALIDATIONS */
         $check_account = Cart::customer_set_info_check_account($shop_id, $data["new_account"], $data["tbl_customer"]['email'], $data["tbl_customer"]["password"]);
         $check_name = "success";
@@ -772,7 +770,13 @@ class Cart
 
         return $message;
     }
-
+    public static function customer_update_method_a($shop_id, $customer_info)
+    {
+        if(isset($customer_info['method_id']))
+        {
+            $old_session = $order = Cart::get_info($shop_id);
+        }
+    }
     public static function customer_set_info_ec_order($shop_id, $data, $customer_information)
     { 
         $data["tbl_ec_order"]["ec_order_id"] = Tbl_ec_order::max("ec_order_id") + 1;
@@ -835,8 +839,8 @@ class Cart
 
 
         /*  OTHER INFO WITH SERVICE FEE */
-        $data['tbl_ec_order']['ec_order_load'] = $customer_information['load_wallet']['ec_order_load'];
-        $data['tbl_ec_order']['ec_order_load_number'] = $customer_information['load_wallet']['ec_order_load_number'];
+        $data['tbl_ec_order']['ec_order_load'] = intval(isset($data['load_wallet']['ec_order_load']) == true ? $data['load_wallet']['ec_order_load'] : 0);
+        $data['tbl_ec_order']['ec_order_load_number'] = isset($data['load_wallet']['ec_order_load_number']) == true ? $data['load_wallet']['ec_order_load_number'] : 0 ;
         $data["tbl_ec_order"]["service_fee"] = $service_fee;
         $data["tbl_ec_order"]["total"] = $total;
         $data["tbl_ec_order"]["coupon_id"] = null;
@@ -846,8 +850,6 @@ class Cart
         $data["tbl_ec_order"]["shipping_group"] = null;
         $data["tbl_ec_order"]["order_status"] = "Pending";
         $data["tbl_ec_order"]["payment_status"] = 0;
-        
-
         return $data;
     }
     public static function get_method_information($shop_id, $payment_method_id)
@@ -914,16 +916,15 @@ class Cart
      */
     public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null)
     {
-        $order                                   = Cart::get_info($shop_id);
+        $order = Cart::get_info($shop_id);
         $order["tbl_ec_order"]["payment_status"] = $payment_status;
         $order["tbl_ec_order"]["order_status"]   = $order_status;
         $order["customer_id"]                    = $customer_id;
-        
         return Ec_order::create_ec_order_from_cart($order);   
     }
     public static function process_payment($shop_id)
     {
-        $data = Self::get_info($shop_id);
+        $data = Cart::get_info($shop_id);
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
         $method_information = Self::get_method_information($shop_id, $method_id);
         if ( isset($method_id) && isset($method_information) )
@@ -936,7 +937,7 @@ class Cart
                 case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information); break;
                 case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
                 case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
-                case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
                 default: dd("UNDER DEVELOPMENT"); break;
             }
         }

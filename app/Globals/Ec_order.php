@@ -674,9 +674,8 @@ class Ec_order
         $order_info["tbl_ec_order"]["discount_coupon_amount"] = $order_info["tbl_ec_order"]["discount_coupon_amount"] ? $order_info["tbl_ec_order"]["discount_coupon_amount"] : 0;
         $order_info["tbl_ec_order"]["discount_coupon_type"] = $order_info["tbl_ec_order"]["discount_coupon_type"] ? $order_info["tbl_ec_order"]["discount_coupon_type"] : "fixed";
         
-        $order_info['tbl_ec_order']['ec_order_load'] = isset($data['tbl_ec_order']['ec_order_load']) ?  $data['tbl_ec_order']['ec_order_load'] : 0;
-        $order_info['tbl_ec_order']['ec_order_load_number'] = isset($data['tbl_ec_order']['ec_order_load_number']) ? $data['tbl_ec_order']['ec_order_load_number'] : 0;
-
+        $order_info['tbl_ec_order']['ec_order_load'] = isset($order_info['tbl_ec_order']['ec_order_load']) ?  $order_info['tbl_ec_order']['ec_order_load'] : 0;
+        $order_info['tbl_ec_order']['ec_order_load_number'] = isset($order_info['tbl_ec_order']['ec_order_load_number']) ? $order_info['tbl_ec_order']['ec_order_load_number'] : 0;
         $order_info["tbl_ec_order"]["ec_order_id"] = DB::table("tbl_ec_order")->insertGetId($order_info["tbl_ec_order"]);
 
         /* Insert Order Item */

@@ -699,6 +699,8 @@ class Payroll
 		$default_time_out = '00:00:00';
 		$target_hour_para = 0;
 		$target_hour = 0;
+		$break_start = '00:00:00';
+		$break_end = '00:00:00';
 
 		if($schedule != null)
 		{
@@ -706,6 +708,8 @@ class Payroll
 			$target_hour 			= $schedule->target_hours;
 			$default_time_in = $schedule->work_start;
 			$default_time_out = $schedule->work_end;
+			$break_start = $schedule->break_start;
+			$break_end = $schedule->break_end;
 		}
 
 	
@@ -743,7 +747,7 @@ class Payroll
 		$absent						= false;
 		$leave 						= Payroll::check_if_employee_leave($data["employee_information"]->payroll_employee_id, $date);
 
-		$break 						= Payroll::time_diff(date('H:s', strtotime($schedule->break_start)), date('H:i', strtotime($schedule->break_end)));
+		$break 						= Payroll::time_diff(date('H:s', strtotime($break_start)), date('H:i', strtotime($break_end)));
 
 
 		$break_nd = 0;
@@ -948,8 +952,8 @@ class Payroll
 			}
 
 			/* for night diff break */
-			$break_start 	= Payroll::hour_24($schedule->break_start);
-			$break_end 		= Payroll::hour_24($schedule->break_end);
+			$break_start 	= Payroll::hour_24($break_star);
+			$break_end 		= Payroll::hour_24($break_end);
 
 			$float_nd = Payroll::get_night_diff($float_in, $float_out);
 			$break_nd = Payroll::get_night_diff(Payroll::time_float($break_start), Payroll::time_float($break_end));

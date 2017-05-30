@@ -114,7 +114,11 @@ class ShopCheckoutController extends Shop
                 $update['ec_order_id'] = $order_id;
                 $update['order_status'] = "Processing";
                 $update['payment_status'] = 1;
-                $order = Ec_order::update_ec_order($update);           
+                $order = Ec_order::update_ec_order($update);   
+
+                $last["log_date"] = Carbon::now();
+                $last["content"]  = $order;
+                DB::table("tbl_dragonpay_logs")->insert($last);        
             }
         }
     }

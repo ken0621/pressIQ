@@ -84,7 +84,6 @@ class ShopCheckoutController extends Shop
     }
     public function dragonpay_return()
     {
-        dd(Request::input());
         if (Request::input("status") == "S") 
         {
             $from = Request::input('param1');
@@ -98,23 +97,25 @@ class ShopCheckoutController extends Shop
     }
     public function dragonpay_postback()
     {
-        $request = Request::all();
-
         $insert["log_date"] = Carbon::now();
-        $insert["content"]  = serialize($request);
+        $insert["content"]  = serialize(Request::input());
         DB::table("tbl_dragonpay_logs")->insert($insert);
 
-        if ($request["status"] == "S") 
+        if (Request::input("status") == "S") 
         {
-            $from = $request["param1"];
+            $from = Request::input('param1');
             if ($from == "checkout") 
             {
-                $order_id = $request["param2"];
+                $order_id = Request::input("param2");
 
                 $update['ec_order_id'] = $order_id;
                 $update['order_status'] = "Processing";
                 $update['payment_status'] = 1;
                 $order = Ec_order::update_ec_order($update);
+
+                $insert["log_date"] = Carbon::now();
+                $insert["content"]  = serialize(Request::input());
+                DB::table("tbl_dragonpay_logs")->insert("test");
             }
         }
     }

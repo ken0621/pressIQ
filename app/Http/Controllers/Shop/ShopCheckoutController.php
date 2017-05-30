@@ -84,7 +84,7 @@ class ShopCheckoutController extends Shop
     }
     public function dragonpay_return()
     {
-        if ($status == "S") 
+        if (Request::input("status") == "S") 
         {
             $from = Request::input('param1');
             if ($from == "checkout") 
@@ -101,7 +101,7 @@ class ShopCheckoutController extends Shop
         $insert["content"]  = serialize(Request::input());
         DB::table("tbl_dragonpay_logs")->insert($insert);
 
-        if ($status == "S") 
+        if (Request::input("status") == "S") 
         {
             $from = Request::input('param1');
             if ($from == "checkout") 

@@ -7,7 +7,7 @@ namespace App\Http\Controllers;
 use Request;
 use Redirect;
 use App\Http\Controllers\Controller;
-use App\Globals\Dragonpay\Dragon_RequestPayment;
+use App\Globals\Dragonpay2\Dragon_RequestPayment;
 use App\Globals\Mlm_member;
 use App\Models\Tbl_mlm_slot;
 use App\Globals\Mlm_plan;

@@ -1,10 +1,10 @@
 <?php 
 
-namespace App\Globals\Dragonpay;
+namespace App\Globals\DragonPay2;
 
 use App\Globals\Dragonpay\RequestForm;
 
-class Dragon_RequestPayment
+class RequestPayment
 {
     public static $paymentUrl = 'http://test.dragonpay.ph/Pay.aspx';
 
@@ -125,7 +125,7 @@ class Dragon_RequestPayment
 	*/
 	public static function make($merchantid, $fieldValues)
 	{
-		$request = new Dragon_RequestPayment($merchantid);
+		$request = new RequestPayment($merchantid);
 		RequestForm::render($fieldValues, self::$paymentUrl);
 	}
 

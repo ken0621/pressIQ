@@ -29,7 +29,7 @@ use Config;
 use URL;
 use App\Globals\Mlm_slot_log;
 use App\IPay88\RequestPayment;
-use App\Globals\Dragonpay\Dragon_RequestPayment;
+use App\Globals\Dragonpay2\Dragon_RequestPayment;
 
 class Cart
 {

@@ -175,7 +175,7 @@ class ShopCheckoutController extends Shop
     {
         if(Request::isMethod("post"))
         {
-            Cart::process_payment($this->shop_info->shop_id);
+            return Cart::process_payment($this->shop_info->shop_id);
         }
         else
         {

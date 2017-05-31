@@ -5,33 +5,35 @@
   <div class="row">
     <div class="col-md-3">
 
+    @if($customer_info)
       <!-- Profile Image -->
       <div class="box box-primary">
         <div class="box-body box-profile">
-          <img class="profile-user-img img-responsive img-circle" src="../../dist/img/user4-128x128.jpg" alt="User profile picture">
+          <img class="profile-user-img img-responsive img-circle" src="{{mlm_profile_link($customer_info)}}" alt="User profile picture">
 
-          <h3 class="profile-username text-center">Nina Mcintire</h3>
+          <h3 class="profile-username text-center">{{name_format_from_customer_info($customer_info)}}</h3>
 
-          <p class="text-muted text-center">Software Engineer</p>
+        @if($slot_info)
+          <p class="text-muted text-center">{{$slot_info->membership_name}}</p>
 
           <ul class="list-group list-group-unbordered">
             <li class="list-group-item">
-              <b>Followers</b> <a class="pull-right">1,322</a>
+              <b>Direct Referral</b> <a class="pull-right">{{$direct_count}}</a>
             </li>
             <li class="list-group-item">
-              <b>Following</b> <a class="pull-right">543</a>
+              <b>Active Slot</b> <a class="pull-right">{{$slot_info->slot_no}}</a>
             </li>
             <li class="list-group-item">
-              <b>Friends</b> <a class="pull-right">13,287</a>
+              <b>Current Wallet</b> <a class="pull-right">{{currency('PHP', $current_wallet)}}</a>
             </li>
           </ul>
-
-          <a href="#" class="btn btn-primary btn-block"><b>Follow</b></a>
+        @endif
+          <a href="#" target="_blank" class="btn btn-primary btn-block"><b>Leads Link</b></a>
         </div>
         <!-- /.box-body -->
       </div>
       <!-- /.box -->
-
+    @endif
       <!-- About Me Box -->
       <div class="box box-primary">
         <div class="box-header with-border">
@@ -39,313 +41,223 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-          <strong><i class="fa fa-book margin-r-5"></i> Education</strong>
+          <strong><i class="fa fa-book margin-r-5"></i>Date Joined</strong>
 
           <p class="text-muted">
-            B.S. in Computer Science from the University of Tennessee at Knoxville
+            {{$customer_info->created_date}}
           </p>
 
           <hr>
 
           <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
 
-          <p class="text-muted">Malibu, California</p>
+          <p class="text-muted">{{address_customer_info($customer_info)}}</p>
 
-          <hr>
-
-          <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
-
-          <p>
-            <span class="label label-danger">UI Design</span>
-            <span class="label label-success">Coding</span>
-            <span class="label label-info">Javascript</span>
-            <span class="label label-warning">PHP</span>
-            <span class="label label-primary">Node.js</span>
-          </p>
-
-          <hr>
-
-          <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
-
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
         </div>
         <!-- /.box-body -->
       </div>
+      @if($slot_info)
+      <div class="box box-success">
+        <div class="box-header with-border">
+          <h3 class="box-title">Latest Members</h3>
+
+          <div class="box-tools pull-right">
+            <span class="label label-success">{{count($new_member)}} New Members</span>
+          </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body no-padding">
+          <ul class="users-list clearfix">
+            @foreach($new_member as $key => $value)
+                <li style="width: 50% !important">
+                  <img src="{{mlm_profile_link($value)}}" alt="User Image">
+                    {{name_format_from_customer_info($value)}}
+                  <span class="users-list-date">{{$value->slot_created_date}}</span>
+                </li>
+            @endforeach
+          </ul>
+          <!-- /.users-list -->
+        </div>
+        <!-- /.box-body -->
+      </div>
+      @endif
       <!-- /.box -->
     </div>
     <!-- /.col -->
     <div class="col-md-9">
       <div class="nav-tabs-custom">
         <ul class="nav nav-tabs">
-          <li class="active"><a href="#activity" data-toggle="tab">Activity</a></li>
-          <li><a href="#timeline" data-toggle="tab">Timeline</a></li>
-          <li><a href="#settings" data-toggle="tab">Settings</a></li>
+          <li class="active"><a href="#basic" data-toggle="tab">Basic Info</a></li>
+          <li><a href="#contact" data-toggle="tab">Contact Info</a></li>
+          <li><a href="#profilepic" data-toggle="tab">Profile Picture</a></li>
+          <li><a href="#password" data-toggle="tab">Password</a></li>
+          @if(isset($encashment))
+            <li><a href="#encashment" data-toggle="tab">Enchashment</a></li>
+          @endif
+          @if(isset($cards))
+            <li><a href="#card" data-toggle="tab">Card</a></li>
+          @endif
         </ul>
         <div class="tab-content">
-          <div class="active tab-pane" id="activity">
-            <!-- Post -->
-            <div class="post">
-              <div class="user-block">
-                <img class="img-circle img-bordered-sm" src="../../dist/img/user1-128x128.jpg" alt="user image">
-                    <span class="username">
-                      <a href="#">Jonathan Burke Jr.</a>
-                      <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-                    </span>
-                <span class="description">Shared publicly - 7:30 PM today</span>
-              </div>
-              <!-- /.user-block -->
-              <p>
-                Lorem ipsum represents a long-held tradition for designers,
-                typographers and the like. Some people hate it and argue for
-                its demise, but others ignore the hate as they create awesome
-                tools to help create filler text for everyone from bacon lovers
-                to Charlie Sheen fans.
-              </p>
-              <ul class="list-inline">
-                <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
-                <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
-                </li>
-                <li class="pull-right">
-                  <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments
-                    (5)</a></li>
-              </ul>
-
-              <input class="form-control input-sm" type="text" placeholder="Type a comment">
-            </div>
-            <!-- /.post -->
-
-            <!-- Post -->
-            <div class="post clearfix">
-              <div class="user-block">
-                <img class="img-circle img-bordered-sm" src="../../dist/img/user7-128x128.jpg" alt="User Image">
-                    <span class="username">
-                      <a href="#">Sarah Ross</a>
-                      <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-                    </span>
-                <span class="description">Sent you a message - 3 days ago</span>
-              </div>
-              <!-- /.user-block -->
-              <p>
-                Lorem ipsum represents a long-held tradition for designers,
-                typographers and the like. Some people hate it and argue for
-                its demise, but others ignore the hate as they create awesome
-                tools to help create filler text for everyone from bacon lovers
-                to Charlie Sheen fans.
-              </p>
-
-              <form class="form-horizontal">
-                <div class="form-group margin-bottom-none">
-                  <div class="col-sm-9">
-                    <input class="form-control input-sm" placeholder="Response">
-                  </div>
-                  <div class="col-sm-3">
-                    <button type="submit" class="btn btn-danger pull-right btn-block btn-sm">Send</button>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <!-- /.post -->
-
-            <!-- Post -->
-            <div class="post">
-              <div class="user-block">
-                <img class="img-circle img-bordered-sm" src="../../dist/img/user6-128x128.jpg" alt="User Image">
-                    <span class="username">
-                      <a href="#">Adam Jones</a>
-                      <a href="#" class="pull-right btn-box-tool"><i class="fa fa-times"></i></a>
-                    </span>
-                <span class="description">Posted 5 photos - 5 days ago</span>
-              </div>
-              <!-- /.user-block -->
-              <div class="row margin-bottom">
-                <div class="col-sm-6">
-                  <img class="img-responsive" src="../../dist/img/photo1.png" alt="Photo">
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-6">
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <img class="img-responsive" src="../../dist/img/photo2.png" alt="Photo">
-                      <br>
-                      <img class="img-responsive" src="../../dist/img/photo3.jpg" alt="Photo">
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-sm-6">
-                      <img class="img-responsive" src="../../dist/img/photo4.jpg" alt="Photo">
-                      <br>
-                      <img class="img-responsive" src="../../dist/img/photo1.png" alt="Photo">
-                    </div>
-                    <!-- /.col -->
-                  </div>
-                  <!-- /.row -->
-                </div>
-                <!-- /.col -->
-              </div>
-              <!-- /.row -->
-
-              <ul class="list-inline">
-                <li><a href="#" class="link-black text-sm"><i class="fa fa-share margin-r-5"></i> Share</a></li>
-                <li><a href="#" class="link-black text-sm"><i class="fa fa-thumbs-o-up margin-r-5"></i> Like</a>
-                </li>
-                <li class="pull-right">
-                  <a href="#" class="link-black text-sm"><i class="fa fa-comments-o margin-r-5"></i> Comments
-                    (5)</a></li>
-              </ul>
-
-              <input class="form-control input-sm" type="text" placeholder="Type a comment">
-            </div>
-            <!-- /.post -->
-          </div>
           <!-- /.tab-pane -->
-          <div class="tab-pane" id="timeline">
-            <!-- The timeline -->
-            <ul class="timeline timeline-inverse">
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-red">
-                      10 Feb. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-envelope bg-blue"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-
-                  <h3 class="timeline-header"><a href="#">Support Team</a> sent you an email</h3>
-
-                  <div class="timeline-body">
-                    Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles,
-                    weebly ning heekya handango imeem plugg dopplr jibjab, movity
-                    jajah plickers sifteo edmodo ifttt zimbra. Babblely odeo kaboodle
-                    quora plaxo ideeli hulu weebly balihoo...
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-primary btn-xs">Read more</a>
-                    <a class="btn btn-danger btn-xs">Delete</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-user bg-aqua"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 5 mins ago</span>
-
-                  <h3 class="timeline-header no-border"><a href="#">Sarah Young</a> accepted your friend request
-                  </h3>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-comments bg-yellow"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 27 mins ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Jay White</a> commented on your post</h3>
-
-                  <div class="timeline-body">
-                    Take me to your leader!
-                    Switzerland is small and neutral!
-                    We are more like Germany, ambitious and misunderstood!
-                  </div>
-                  <div class="timeline-footer">
-                    <a class="btn btn-warning btn-flat btn-xs">View comment</a>
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <!-- timeline time label -->
-              <li class="time-label">
-                    <span class="bg-green">
-                      3 Jan. 2014
-                    </span>
-              </li>
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
-              <li>
-                <i class="fa fa-camera bg-purple"></i>
-
-                <div class="timeline-item">
-                  <span class="time"><i class="fa fa-clock-o"></i> 2 days ago</span>
-
-                  <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-
-                  <div class="timeline-body">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                    <img src="http://placehold.it/150x100" alt="..." class="margin">
-                  </div>
-                </div>
-              </li>
-              <!-- END timeline item -->
-              <li>
-                <i class="fa fa-clock-o bg-gray"></i>
-              </li>
-            </ul>
-          </div>
-          <!-- /.tab-pane -->
-
-          <div class="tab-pane" id="settings">
-            <form class="form-horizontal">
-              <div class="form-group">
-                <label for="inputName" class="col-sm-2 control-label">Name</label>
-
-                <div class="col-sm-10">
-                  <input type="email" class="form-control" id="inputName" placeholder="Name">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputEmail" class="col-sm-2 control-label">Email</label>
-
-                <div class="col-sm-10">
-                  <input type="email" class="form-control" id="inputEmail" placeholder="Email">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputName" class="col-sm-2 control-label">Name</label>
-
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" id="inputName" placeholder="Name">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputExperience" class="col-sm-2 control-label">Experience</label>
-
-                <div class="col-sm-10">
-                  <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="inputSkills" class="col-sm-2 control-label">Skills</label>
-
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                  <div class="checkbox">
-                    <label>
-                      <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-danger">Submit</button>
-                </div>
-              </div>
+          <div class="active tab-pane" id="basic">
+            <form method="post" action="/mlm/profile/edit/basic" class="global-submit">
+            {!! csrf_field() !!}
+                <table class="table table-condensed table-bordered">
+                    <tr>
+                        <td>
+                            <label>Full Name</label>
+                            <input id="first-name" name="first-name" class="form-control" disabled="disabled" value="{{$customer_info->title_name}} {{$customer_info->first_name}} {{$customer_info->middle_name}} {{$customer_info->last_name}} {{$customer_info->suffix_name}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Birth Date</label>
+                            <input type="date" id="datepicker" name="b_day" class="form-control" style="font-family: 'Titillium Web',sans-serif !important;" value="{{$customer_info->b_day}}" placeholder="mm/dd/yyyy">     
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Country</label>
+                            <select name="country_id" id="account-location" class="form-control" style="font-family: 'Titillium Web',sans-serif !important;">
+                                @foreach($country as $value)
+                                <option value="{{$value->country_id}}" @if($customer_info->country_id == $value->country_id) selected @endif >{{$value->country_name}}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Province</label>
+                            <input id="first-name" name="customer_state" class="form-control"  value="{{isset($customer_address->customer_state) ? $customer_address->customer_state : ''}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>City</label>
+                            <input id="first-name" name="customer_city" class="form-control" value="{{isset($customer_address->customer_city) ? $customer_address->customer_city : ''}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Street</label>
+                            <input id="first-name" name="customer_zipcode" class="form-control"  value="{{isset($customer_address->customer_zipcode) ? $customer_address->customer_zipcode : ''}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Zip Code</label>
+                            <input id="first-name" name="customer_street" class="form-control"  value="{{isset($customer_address->customer_street) ? $customer_address->customer_street : ''}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><button class="btn btn-primary col-md-12">Submit</button></td>
+                    </tr>
+                </table>
             </form>
           </div>
+          <div class="tab-pane" id="contact">
+              <form method="post" action="/mlm/profile/edit/contact" class="global-submit">
+                {!! csrf_field() !!}
+                <table class="table table-condensed table-bordered">
+                    <tr>
+                        <td>
+                            <label>Tin Number</label>
+                            <input type="text" id="first-name" name="tin_number" class="form-control"  readonly value="{{$customer_info->tin_number}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Email</label>
+                            <input type="email" id="first-name" name="email" class="form-control email"  value="{{$customer_info->email}}" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Phone</label>
+                            <input id="first-name" name="customer_phone" class="form-control" value="{{isset($other_info->customer_phone) ? $other_info->customer_phone : ''}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Mobile</label>
+                            <input id="first-name" name="customer_mobile" class="form-control" value="{{isset($other_info->customer_mobile) ? $other_info->customer_mobile : ''}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Fax</label>
+                            <input id="first-name" name="customer_fax" class="form-control" value="{{isset($other_info->customer_fax) ? $other_info->customer_fax : ''}}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary col-md-12">Submit</button>
+                        </td>
+                    </tr>
+                </table>
+              </form>
+          </div>
+          <div class="tab-pane" id="profilepic">
+              <form method="post" action="/mlm/profile/edit/picture" enctype="multipart/form-data">
+                {!! csrf_field() !!}
+                <table class="table table-condensed table-bordered">
+                    <tr>
+                        <td>
+                            <label>Choose New Profile Image</label>
+                            <input type="file" class="form-control" name="profile_picture">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary col-md-12">Submit</button>
+                        </td>
+                    </tr>
+                </table>
+              </form>  
+          </div>
+          <div class="tab-pane" id="password">
+            <form method="post" action="/mlm/profile/edit/password" class="global-submit">
+                {!! csrf_field() !!}
+                <table class="table table-condensed table-bordered">
+                    <tr>
+                        <td>
+                            <label>Old Password</label>
+                            <input type="password" id="first-name" name="password_o" class="form-control" value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>New Password</label>
+                            <input type="password" id="first-name" name="password_n" class="form-control" value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Confirm Password</label>
+                            <input type="password" id="first-name" name="password_n_c" class="form-control" value="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button class="btn btn-primary col-md-12">Submit</button>
+                        </td>
+                    </tr>
+                </table>
+            </form>    
+          </div>
+          @if(isset($encashment))
+          <div class="tab-pane" id="encashment">
+            <div class="clearfix">
+                {!! $encashment !!}
+            </div>
+          </div>
+          @endif
+          @if(isset($cards))
+          <div class="tab-pane" id="card">
+            {!! $cards !!}
+          </div>
+          @endif
           <!-- /.tab-pane -->
         </div>
         <!-- /.tab-content -->

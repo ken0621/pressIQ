@@ -95,43 +95,18 @@ class ShopCheckoutController extends Shop
             }
         }
     }
-    public function dragonpay_postback()
-    {
-        $request = Request::all();
-
-        $insert["log_date"] = Carbon::now();
-        $insert["content"]  = serialize($request);
-        DB::table("tbl_dragonpay_logs")->insert($insert);
-
-        if ($request["status"] == "S") 
-        {
-            $from = $request["param1"];
-
-            if ($from == "checkout") 
-            {
-                $order_id = $request["param2"];
-
-                try 
-                {
-                    $update['ec_order_id'] = $order_id;
-                    $update['order_status'] = "Processing";
-                    $update['payment_status'] = 1;
-                    $order = Ec_order::update_ec_order($update);
-                } 
-                catch (\Exception $e) 
-                {
-                    $last["log_date"] = Carbon::now();
-                    $last["content"]  = $e->getMessage();
-                    DB::table("tbl_dragonpay_logs")->insert($last);  
-                }      
-            }
-        }
-    }
     public function dragonpay_logs()
     {
         $dragonpay = DB::table("tbl_dragonpay_logs")->orderBy("id", "DESC")->first();
 
-        dd(unserialize($dragonpay->content));
+        if (is_serialized($dragonpay->content)) 
+        {
+            dd(unserialize($dragonpay->content));
+        }
+        else
+        {
+            dd($dragonpay->content);
+        }
     }
     /* End Payment Facilities */
 

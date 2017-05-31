@@ -972,8 +972,16 @@ class Cart
                 'description'   => $requestpayment->setDescription($request['description']),
                 'email'         => $requestpayment->setEmail($request['email']),
                 'digest'        => $requestpayment->getdigest(),
-                'param1'        => serialize($request)
+                'param1'        => "checkout",
+                'param2'        => $order_id
             );
+
+            $payment_status = 0;
+            $order_status   = "Pending";
+            $customer       = Cart::get_customer();
+
+            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+            Cart::clear_all($shop_id);
 
             Dragon_RequestPayment::make($merchant_key, $dragon_request); 
         }  

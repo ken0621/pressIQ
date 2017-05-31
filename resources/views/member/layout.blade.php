@@ -109,51 +109,9 @@
 
     <!-- NAVIGATION -->
     <nav class="main-menu" data-step='2' data-intro='This is the extendable Main Navigation Menu.' data-position='right'>
-        <ul>
-            <li>
-                <a href="/member">
-                    <i class="icon-home nav-icon"></i>
-                    <span class="nav-text">
-                        Dashboard
-                    </span>
-                </a>
-            </li>
         
-        <!-- PAGE LIST -->
-        @foreach($_page as $page)
-            <li>
-                <a href="{{ isset($page['url']) ? $page['url'] : 'javascript:' }}">
-                    <i class="fa fa-{{ $page['icon'] }} nav-icon"></i>
-                    <span class="nav-text">
-                        {{ $page["name"] }}
-                    </span>
-                    @if(!isset($page['url']))
-                    <i class="icon-angle-right"></i>
-                    @endif
-                </a>
-                
-                @if(!isset($page['url']))
-                    <ul>
-                    @foreach($page['submenu'] as $key=> $sub_page)
-                        @if(isset($sub_page["popup"]))
-                            <li>
-                                <a class="subnav-text popup" size="flex" href="javascript:" link="{{ $sub_page['url'] }}">
-                                    {{ $sub_page["label"] }}
-                                </a>
-                            </li>
-                        @else
-                            <li>
-                                <a class="subnav-text" href="{{ isset($sub_page['url']) ? $sub_page['url'] : dd($sub_page) }}">
-                                    {!! $sub_page["label"] !!}
-                                </a>
-                            </li>
-                        @endif
-                    @endforeach
-                    </ul>
-                @endif
-            </li>
-        @endforeach
-        </ul>
+        @include('member.page')
+
 
         <ul class="logout">
             <li>

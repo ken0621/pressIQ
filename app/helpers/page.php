@@ -792,37 +792,47 @@ function page_list()
 
 
     /* -- REPORT => ECOMMERCE SUBMENU */
-    $code = "submenu-ecommerce";
-    $nav[$page]['submenu'][$code]['name']  = "Ecommerce";
-    $nav[$page]['submenu'][$code]['code']   = $code;
-    $nav[$page]['submenu'][$code]['type']   = "submenu";
+    $segment = "submenu-ecommerce";
+    $nav[$page]['submenu'][$segment]['name']   = "Ecommerce";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
 
         /* -- REPORT => PRODUCTS  */
-        $code2 = "report-product-sales";
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['label']       = "Product Sales";
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['code']        = $code;
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['url']         = $path . $page . "/sale/product";
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['user_settings'] = ['access_page'];
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['status']      = "Developing";
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['developer']   = "Everyone";
+        $code = "report-product-sales";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Product Sales";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/sale/product";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
 
-        /* -- REPORT => MONTHLY PRODUCT  */
-        $code2 = "report-product-sales-monthly";
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['label']       = "Product Sales Monthly";
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['code']        = $code;
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['url']         = $path . $page . "/sale/month";
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['user_settings'] = ['access_page'];
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['status']      = "Developing";
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['developer']   = "Everyone";
+        $segment2 = "submenu-ecommerce-sdfasfdsd";
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['name']   = "Ecommerce2";
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['segment']= $segment;
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['type']   = "submenu";
 
-        /* -- REPORT => PRODUCTS VARIANT  */
-        $code2 = "report-product-variant-sales";
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['label'] = "Product Variant Sales";
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['code'] = $code;
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['url'] = $path . $page . "/sale/product_variant";
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['user_settings'] = ['access_page'];
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['status'] = "Developing";
-        $nav[$page]['submenu'][$code]['submenu'][$code2]['developer'] = "Everyone";
+            $segment3 = "submenu-ecommerce-sdfsdfasdfasfdsd";
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['name']   = "Ecommerce3";
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['segment']= $segment;
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['type']   = "submenu";
+
+            /* -- REPORT => MONTHLY PRODUCT  */
+            $code = "report-product-sales-monthly";
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['label']       = "Product Sales Monthly";
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['code']        = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['url']         = $path . $page . "/sale/month";
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['user_settings'] = ['access_page'];
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['status']      = "Developing";
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['developer']   = "Everyone";
+
+            /* -- REPORT => PRODUCTS VARIANT  */
+            $code = "report-product-variant-sales";
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['label']        = "Product Variant Sales";
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['code']         = $code;
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['url']          = $path . $page . "/sale/product_variant";
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['user_settings'] = ['access_page'];
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['status']        = "Developing";
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['developer']     = "Everyone";
 
 
     /* -- Accounting => Sales Report  */

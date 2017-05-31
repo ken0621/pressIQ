@@ -5,9 +5,7 @@
             class="{{ isset($page['name']) ? '' : 'subnav-text' }}">
                 @if(!isset($page['url']))
                     <i class="fa fa-{{ $page['icon'] or '' }} nav-icon"></i>
-                        <span class="nav-text">
-                            {{ $page["name"] }}
-                        </span>
+                    <span class="nav-text">{{ $page["name"] }}</span>
                     <i class="icon-angle-right"></i>
                 @else
                     {{ $page["label"] }}

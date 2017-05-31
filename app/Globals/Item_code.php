@@ -35,7 +35,6 @@ class Item_code
 {
 	public static function add_code($data,$shop_id, $user_id, $warehouse_id)
 	{ 
-
         ignore_user_abort(true);
         set_time_limit(0);
         flush();
@@ -190,6 +189,7 @@ class Item_code
         $tendered = 0;
         $tendered_amount = 0;
         $data['response_status']      = "warning";
+
         if(isset($data['payment_type_choose']))
         {
             if($data['payment_type_choose'] == '3')
@@ -309,7 +309,6 @@ class Item_code
         $item_discount            = 0;
         $item_discount_percentage = 0;
 
-        
     	$validator = Validator::make($insert,$rules,$messages);
     	if ($validator->passes())
     	{
@@ -541,7 +540,6 @@ class Item_code
                         
                         }
                         Tbl_item_code_item::insert($insert_item_per);
-                        
                         Mlm_voucher::give_voucher_prod_code($invoice_id);
                         if($gc == 2)
                         {

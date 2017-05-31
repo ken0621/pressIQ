@@ -43,9 +43,11 @@ class Mlm_slot_log
 	{
 		//n_ready if not ready
 		$check_if_fs = Mlm_slot_log::check_if_fs($arry_log['wallet_log_slot']);
+		$check_if_fs = 1;
 		if($check_if_fs == 1)
 		{
 			$check_if_fs_sponsor = Mlm_slot_log::check_if_fs($arry_log['wallet_log_slot_sponsor']);
+			$check_if_fs_sponsor = 1;
 			if($check_if_fs_sponsor == 1)
 			{
 				$insert['shop_id'] = $arry_log['shop_id'];

@@ -964,6 +964,13 @@ class Cart
             $request["description"] = "Item Name (x1) - PHP. 100.00";
             $request["email"] = $data["tbl_ec_order"]["customer_email"];
 
+            $payment_status = 0;
+            $order_status   = "Pending";
+            $customer       = Cart::get_customer();
+
+            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+            Cart::clear_all($shop_id);
+            
             $dragon_request = array(
                 'merchantid'    => $requestpayment->setMerchantId($merchant_id),
                 'txnid'         => $requestpayment->setTxnId($request['txnid']),
@@ -975,13 +982,6 @@ class Cart
                 'param1'        => "checkout",
                 'param2'        => $order_id
             );
-
-            $payment_status = 0;
-            $order_status   = "Pending";
-            $customer       = Cart::get_customer();
-
-            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
-            Cart::clear_all($shop_id);
 
             Dragon_RequestPayment::make($merchant_key, $dragon_request); 
         }  

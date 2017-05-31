@@ -104,6 +104,10 @@ class ShopCheckoutController extends Shop
         if (Request::input("status") == "S") 
         {
             $from = Request::input('param1');
+            $wat["log_date"] = Carbon::now();
+            $wat["content"]  = $from;
+            DB::table("tbl_dragonpay_logs")->insert($wat);
+
             if ($from == "checkout") 
             {
                 $order_id = Request::input("param2");
@@ -112,10 +116,6 @@ class ShopCheckoutController extends Shop
                 $update['order_status'] = "Processing";
                 $update['payment_status'] = 1;
                 $order = Ec_order::update_ec_order($update);
-
-                $insert["log_date"] = Carbon::now();
-                $insert["content"]  = serialize(Request::input());
-                DB::table("tbl_dragonpay_logs")->insert("test");
             }
         }
     }

@@ -455,4 +455,8 @@ class Mlm_EncashmentController extends Member
         $data['country'] = DB::table('currency')->get();
         return view('member.mlm_encashment.currency', $data);
     }
+    public function set_currency_update()
+    {
+        return $_POST;
+    }
 }

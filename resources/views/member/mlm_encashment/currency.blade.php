@@ -16,26 +16,31 @@
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div>
-            <table class="table table-condensed table-bordered">
-                    <tr>
-                        <th>ISO</th>
-                        <th>Country</th>
-                        <th>Enable</th>
-                        <th>Convertion</th>
-                        <th></th>
-                    </tr>
-                @foreach($country as $key => $value)
-                    <tr>
-                        <td>{{$value->iso}}</td>
-                        <td>{{$value->name}}</td>
-                        <th><input type="checkbox"></th>
-                        <th><input type="number" class="form-control"></th>
-                        <th>
-                            <button class="btn btn-primary">Save</button>
-                        </th>
-                    </tr>
-                @endforeach
-            </table>
+            <form class="global_submit" method="post" action="/member/mlm/encashment/currency/update">
+            {!! csrf_field() !!}
+                <table class="table table-condensed table-bordered">
+                        <tr>
+                            <th>ISO</th>
+                            <th>Country</th>
+                            <th>Enable</th>
+                            <th>Convertion</th>
+                            <th></th>
+                        </tr>
+                    @foreach($country as $key => $value)
+                        <tr>
+                            <td>{{$value->iso}}
+
+                            </td>
+                            <td>{{$value->name}}</td>
+                            <th><input type="checkbox"></th>
+                            <th><input type="number" class="form-control"></th>
+                            <th>
+                                <button class="btn btn-primary">Save</button>
+                            </th>
+                        </tr>
+                    @endforeach
+                </table>
+            </form>
         </div>
     </div>
 </div>        

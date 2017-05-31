@@ -127,6 +127,12 @@ class ShopCheckoutController extends Shop
             }
         }
     }
+    public function dragonpay_logs()
+    {
+        $dragonpay = DB::table("tbl_dragonpay_logs")->orderBy("id", "DESC")->first();
+
+        dd(unserialize($dragonpay->content));
+    }
     /* End Payment Facilities */
 
     public function index()

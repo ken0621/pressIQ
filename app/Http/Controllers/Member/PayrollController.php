@@ -3448,6 +3448,7 @@ class PayrollController extends Member
 		$data['_overtime_rate']  = Tbl_payroll_over_time_rate_default::get();
 		$data['_day'] 			= Payroll::restday_checked(); 
           $data['_period']         = Tbl_payroll_tax_period::check(Self::shop_id())->get();
+
 		return view('member.payroll.modal.modal_create_payroll_group', $data);
 	}
 

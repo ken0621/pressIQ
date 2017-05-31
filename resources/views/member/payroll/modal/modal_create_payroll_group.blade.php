@@ -469,6 +469,19 @@
 <script type="text/javascript" src="/assets/external/jquery.timeentry.package-2.0.1/jquery.timeentry.min.js"></script>
 
 <script type="text/javascript">
+
+	var shifting = new shifting();
+
+	function shifting()
+	{
+		init();
+
+		function init()
+		{
+			
+		}
+	}
+
 	$(".restday-check").unbind("change");
 	$(".restday-check").bind("change", function () {
 		var parent = $(this).parents('tr').find('.extraday-check');

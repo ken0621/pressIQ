@@ -1,6 +1,6 @@
 @extends('layout')
 @section('content')
-<div class="container" style="margin: 25px auto; background-color: #fff;">
+<div class="container" style="margin: 25px auto; background-color: #fff; padding: 25px 0;">
 	<form method="post" enctype="multipart/form-data">
 	<input type="hidden" name="_token" value="{{ csrf_token() }}">
 		<div class="row clearfix">

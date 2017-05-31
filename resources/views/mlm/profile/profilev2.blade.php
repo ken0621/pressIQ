@@ -94,7 +94,7 @@
       @if($slot_info)
       <div class="box box-success">
         <div class="box-header with-border">
-          <h3 class="box-title">Latest Members</h3>
+          <h3 class="box-title">New Referral</h3>
 
           <div class="box-tools pull-right">
             <span class="label label-success">{{count($new_member)}} New Members</span>

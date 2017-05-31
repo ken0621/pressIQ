@@ -2,7 +2,7 @@
     @foreach($_page as $page)
         <li>
             <a href="{{ isset($page['url']) ? $page['url'] : 'javascript:' }}" 
-            class="{{ isset($page['type']) ? '' : 'subnav-text' }}">
+            class="{{ isset($page['name']) ? '' : 'subnav-text' }}">
                 @if(!isset($page['url']))
                     <i class="fa fa-{{ $page['icon'] or '' }} nav-icon"></i>
                         <span class="nav-text">

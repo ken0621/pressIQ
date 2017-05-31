@@ -69,8 +69,8 @@
         <div class="box-body no-padding">
           <ul class="users-list clearfix">
             @foreach($new_member as $key => $value)
-                <li style="width: 50% !important">
-                  <img src="{{mlm_profile_link($value)}}" alt="User Image">
+                <li class="clearfix"
+                style="width: 50% !important">
                     {{name_format_from_customer_info($value)}}
                   <span class="users-list-date">{{$value->slot_created_date}}</span>
                 </li>

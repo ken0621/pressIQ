@@ -5,6 +5,7 @@
             <th width="40px" class="text-center"></th>
             <th width="40px" class="text-center"></th>
             <th width="40px" class="text-center"></th>
+            <th width="40px" class="text-center"></th>
             <th width="160px" class="text-center" colspan="2">Actual</th>
             <th width="160px" class="text-center" colspan="2">Approved</th>
             
@@ -17,6 +18,7 @@
             <th width="55px" class="text-center"></th>
         </tr>
         <tr>
+            <th width="40px" class="text-center"></th>
             <th width="40px" class="text-center"></th>
             <th class="text-center" colspan="2">Day</th>
             <th class="text-center">In</th>
@@ -46,11 +48,14 @@
         @foreach($timesheet->time_record as $key => $time_record)
         <tr class="time-record {{ $key == 0 ? 'main' : '' }}" tid="0" date="{{ $timesheet->date }}" total_hours="00:00" total_normal_hours="00:00" total_early_overtime="00:00" total_late_overtime="00:00">
             @if($key == 0) <!--MAIN -->
-            <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $timesheet->date }}">
+            <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->payroll_time_sheet_record_id }}">
             <td class="text-center table-loading">
                 <!-- <i class="table-check fa fa-unlock-alt hidden"></i> -->
                 {!!$timesheet->symbol!!}
                 <i class="table-loader fa fa-spinner fa-pulse fa-fw"></i>
+            </td>
+            <td class="text-center">
+               <i class="fa fa-comment-o"></i>
             </td>
             <td class="text-center edit-data day-number">{!! $timesheet->day_number !!}</td>
             <td class="text-center edit-data day-word">{!! $timesheet->day_word !!}</td>
@@ -110,6 +115,9 @@
         <tr class="time-record new-sub" date="0000-00-00" total_hours="00:00" total_ot_early="00:00" total_ot_late="00:00">
             <input class="date" type="hidden" name="" value="">
             <td class="text-center edit-data"></td>
+            <td class="text-center edit-data">
+                <i class="fa fa-comment-o"></i>
+            </td>
             <td class="text-center edit-data"></td>
             <td class="text-center edit-data"></td>
             <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in is-timeEntry" name="" value="9:00AM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span></td>

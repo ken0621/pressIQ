@@ -359,7 +359,8 @@ function timesheet()
 
 		/* UPDATE DATA FOR NEW SUB */
 		$("tbody").find(".time-record.new-sub").attr("date", date);
-		$("tbody").find(".time-record.new-sub").find(".date").val(date);
+		// $("tbody").find(".time-record.new-sub").find(".date").val(date);
+		$("tbody").find(".time-record.new-sub").find(".date").val(0);
 		$("tbody").find(".time-record.new-sub").find(".time-in").val($time_in);
 		$("tbody").find(".time-record.new-sub").find(".time-out").val($time_out);
 		$arr_count = new_sub_ctr++;

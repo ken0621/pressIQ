@@ -1567,6 +1567,9 @@ class PayrollController extends Member
 		$update_basic['payroll_employee_philhealth'] 	= Request::input('payroll_employee_philhealth');
 		$update_basic['payroll_employee_pagibig'] 		= Request::input('payroll_employee_pagibig');
 		$update_basic['payroll_employee_remarks']		= Request::input('payroll_employee_remarks');
+          $update_basic['payroll_employee_birthdate']       = date('Y-m-d',strtotime(Request::input('payroll_employee_birthdate')));
+          
+
 
 		Tbl_payroll_employee_basic::where('payroll_employee_id',$payroll_employee_id)->update($update_basic);
 

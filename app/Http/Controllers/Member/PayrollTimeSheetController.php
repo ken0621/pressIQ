@@ -59,6 +59,7 @@ class PayrollTimeSheetController extends Member
 		$data['_employee'] = Tbl_payroll_employee_contract::employeefilter($data['company']->payroll_company_id, 0, 0, $data['company']->payroll_period_end, $this->user_info->shop_id)
 							->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 							->where('tbl_payroll_group.payroll_group_period', $data['company']->payroll_period_category)
+							->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
 							->get();
 		// dd($data['company']);
 		$payroll_employee_id = 0;

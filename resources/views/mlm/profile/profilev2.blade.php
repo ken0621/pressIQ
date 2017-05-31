@@ -28,7 +28,42 @@
             </li>
           </ul>
         @endif
-          <a href="#" target="_blank" class="btn btn-primary btn-block"><b>Leads Link</b></a>
+        <?php 
+          $domain = Request::url();
+          $d_e_1 = explode('//', $domain);
+          if(count($d_e_1) >= 2)
+          {
+            $domain_without_http = $d_e_1[1];
+          }
+          else
+          {
+            $domain_without_http = $d_e_1[0];
+          }
+          $d_e_2 = explode('.', $domain_without_http);
+          $username = $customer_info->mlm_username;
+          $domain = 'digimahouse';
+          $com = 'com';
+          if(count($d_e_2) == 3)
+          {
+            $domain = $d_e_2[1];
+            $com = $d_e_2[2];
+          }
+          elseif(count($d_e_2) == 2)
+          {
+            $domain = $d_e_2[0];
+            $com = $d_e_2[1];
+          }
+          else
+          {
+            $domain =$domain;
+            $com = $com;
+          }
+
+          $com_a = explode('/', $com);
+          $com = $com_a[0];
+          $url_a = 'http://' . $username . '.' . $domain . '.' .$com . '/mlm/register';
+        ?>
+          <a href="{{$url_a}}" target="_blank" class="btn btn-primary btn-block"><b>Leads Link</b></a>
         </div>
         <!-- /.box-body -->
       </div>
@@ -59,7 +94,7 @@
       @if($slot_info)
       <div class="box box-success">
         <div class="box-header with-border">
-          <h3 class="box-title">Latest Members</h3>
+          <h3 class="box-title">New Referral</h3>
 
           <div class="box-tools pull-right">
             <span class="label label-success">{{count($new_member)}} New Members</span>

@@ -3,7 +3,7 @@
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div class="col-md-8 col-xs-6">
-            <i class="fa fa-tablet"></i>
+            <i class="fa fa-tablet"></i>  
             <h1>
                 <span class="page-title">Tablet &raquo; Sales Receipt</span>
                 <small>

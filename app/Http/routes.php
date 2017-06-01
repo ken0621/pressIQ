@@ -468,6 +468,8 @@ Route::any('/tablet/credit_memo','Member\TabletPISController@credit_memo');
 Route::any('/tablet/credit_memo/add','Member\TabletPISController@add_cm');
 Route::any('/tablet/credit_memo/add_cm_submit','Member\TabletPISController@add_cm_submit');
 Route::any('/tablet/credit_memo/edit_cm_submit','Member\TabletPISController@edit_cm_submit');
+Route::any('/tablet/credit_memo/choose_type','Member\TabletPISController@cm_choose_type');
+
 
 Route::any('/tablet/sales_receipt','Member\TabletPISController@sales_receipt');
 Route::any('/tablet/sales_receipt/list','Member\TabletPISController@sales_receipt_list');

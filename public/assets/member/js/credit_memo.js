@@ -508,6 +508,11 @@ function submit_done(data)
         toastr.success("Success");
   		action_load_link_to_modal('/member/customer/credit_memo/choose_type?cm_id='+data.id, 'sm');
 	}
+	else if(data.status == "success-credit-memo-tablet")
+	{
+        toastr.success("Success");
+  		action_load_link_to_modal('/tablet/credit_memo/choose_type?cm_id='+data.id, 'sm');
+	}
 	else if(data.status == 'success-sir')
 	{		
         toastr.success("Success");

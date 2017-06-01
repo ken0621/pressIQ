@@ -3,6 +3,15 @@
 function page_list()
 {
     $path = '/member/';
+
+    $page = "dashboard";
+    $nav[$page]['name']        = "Dashboard";
+    $nav[$page]['segment']      = $page;
+    $nav[$page]['icon']         = "home";
+    $nav[$page]['url']          = $path;
+    $nav[$page]['user_settings'] = [];
+    $nav[$page]['status']       = "Working 100% - Not Tested Yet";
+    $nav[$page]['developer']    = ">";
     
     /* TRANSACTION */
     // $page = "transaction_list";  
@@ -852,7 +861,8 @@ function page_list()
 
     /* -- REPORT => ACCOUNTING SUBMENU */
     $segment = "submenu-accounting";
-    $nav[$page]['submenu'][$segment]['name']   = "Accounting";
+    $nav[$page]['submenu'][$segment]['name']   = "Accounting"; 
+    
     $nav[$page]['submenu'][$segment]['segment']= $segment;
     $nav[$page]['submenu'][$segment]['type']   = "submenu";
 

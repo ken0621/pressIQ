@@ -111,8 +111,8 @@
     <!-- NAVIGATION -->
     <nav class="main-menu" data-step='2' data-intro='This is the extendable Main Navigation Menu.' data-position='right'>
         
+        <!-- SIDEBAR MENU  -->
         @include('member.page')
-
 
         <ul class="logout">
             <li>

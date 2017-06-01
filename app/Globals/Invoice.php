@@ -129,6 +129,7 @@ class Invoice
         if($is_sales_receipt != '')
         {
             $insert['inv_payment_applied']        = $overall_price;
+            $insert['inv_is_paid']                = 1;
             $insert['is_sales_receipt']           = 1;
             $transaction_type = "sales-receipt";
             $transaction = "sales_receipt";
@@ -225,10 +226,9 @@ class Invoice
         if($is_sales_receipt != '')
         {
             $update["inv_payment_applied"] = $overall_price;
-
-            Invoice::update_rcv_payment("invoice",$invoice_id,$overall_price);
             $transaction_type = "sales-receipt";
             $transaction = "sales_receipt";
+            Invoice::updateIsPaid($invoice_id);
         }
         else
         {

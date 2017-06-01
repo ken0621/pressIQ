@@ -28,6 +28,7 @@
 </div>
 
 <div id="menu" class="col-md-6">
+
   <div class="table-responsive load-data" target="coa_data">
       <div id="coa_data">
           <table class="table table-hover table-condensed collaptable">

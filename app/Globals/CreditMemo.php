@@ -46,6 +46,7 @@ class CreditMemo
 		$insert_cm["cm_message"] = $customer_info["cm_message"];
 		$insert_cm["cm_memo"] = $customer_info["cm_memo"];
 		$insert_cm["cm_amount"] = $customer_info["cm_amount"];
+		$insert_cm["cm_type"] = isset($customer_info["cm_type"]) ? $customer_info["cm_type"] : 0;
 		$insert_cm["date_created"] = Carbon::now();
 
 		$cm_id = Tbl_credit_memo::insertGetId($insert_cm);

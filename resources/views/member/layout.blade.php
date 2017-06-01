@@ -35,6 +35,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/member/css/notice.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/css/loader.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/css/windows8.css">
+    <link rel="stylesheet" type="text/css" href="/assets/member/css/pis_ctr.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
     <link rel="stylesheet" type="text/css" href="/assets/member/plugin/dropzone/basic.css">
     <link rel="stylesheet" type="text/css" href="/assets/custom_plugin/myDropList/css/myDropList.css">
@@ -50,8 +51,8 @@
     {
         cursor: pointer;
     }
-    
     </style>
+    <link rel="stylesheet" type="text/css" href="/assets/member/css/global.css">
     @yield('css')
     <script>
     (function () {
@@ -109,51 +110,9 @@
 
     <!-- NAVIGATION -->
     <nav class="main-menu" data-step='2' data-intro='This is the extendable Main Navigation Menu.' data-position='right'>
-        <ul>
-            <li>
-                <a href="/member">
-                    <i class="icon-home nav-icon"></i>
-                    <span class="nav-text">
-                        Dashboard
-                    </span>
-                </a>
-            </li>
         
-        <!-- PAGE LIST -->
-        @foreach($_page as $page)
-            <li>
-                <a href="{{ isset($page['url']) ? $page['url'] : 'javascript:' }}">
-                    <i class="fa fa-{{ $page['icon'] }} nav-icon"></i>
-                    <span class="nav-text">
-                        {{ $page["name"] }}
-                    </span>
-                    @if(!isset($page['url']))
-                    <i class="icon-angle-right"></i>
-                    @endif
-                </a>
-                
-                @if(!isset($page['url']))
-                    <ul>
-                    @foreach($page['submenu'] as $key=> $sub_page)
-                        @if(isset($sub_page["popup"]))
-                            <li>
-                                <a class="subnav-text popup" size="flex" href="javascript:" link="{{ $sub_page['url'] }}">
-                                    {{ $sub_page["label"] }}
-                                </a>
-                            </li>
-                        @else
-                            <li>
-                                <a class="subnav-text" href="{{ isset($sub_page['url']) ? $sub_page['url'] : dd($sub_page) }}">
-                                    {!! $sub_page["label"] !!}
-                                </a>
-                            </li>
-                        @endif
-                    @endforeach
-                    </ul>
-                @endif
-            </li>
-        @endforeach
-        </ul>
+        <!-- SIDEBAR MENU  -->
+        @include('member.page')
 
         <ul class="logout">
             <li>
@@ -440,7 +399,17 @@
     </div>
     <div class="settings_checking hide" id="do_not_remove_please"></div>
     
+    <style type="text/css">
+    .blink-ctr
+    {
+        animation: blinker 1s linear infinite;
+    }
+    @keyframes blinker
+    {  
+      50% { opacity: 0; }
+    }
     
+    </style>
     <script type="text/javascript" src="/assets/member/global.js"></script>
 
     <!-- Testing only -->
@@ -455,6 +424,7 @@
     <script type="text/javascript" src="/assets/member/plugin/toaster/toastr.min.js"></script>
     <!--<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.43/js/bootstrap-datetimepicker.min.js'></script>-->
     <script type="text/javascript" src='/assets/member/js/notice.js'></script>
+    <script type="text/javascript" src='/assets/member/js/pis_counter.js'></script>
     <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script>
     <script type="text/javascript" src='/assets/member/plugin/dropzone/dropzone.js'></script>
     <script type="text/javascript" src='/assets/member/js/image_gallery.js'></script>

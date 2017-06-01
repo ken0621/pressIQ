@@ -25,7 +25,7 @@
 			</div>
 		</div>
 		<div class="row clearfix">
-			<div class="col-md-7">
+			{{-- <div class="col-md-7">
 				<div class="hold-container">
 					<div class="hold-header">HOW DO YOU WANT TO PAY?</div>
 					<div class="hold-content match-height">
@@ -33,7 +33,7 @@
 							<div class="pay-holder">
 								<table>
 									<tbody>
-										@if(count($_payment_method) > 0)
+										@if(isset($_payment_method) && count($_payment_method) > 0)
 											@foreach($_payment_method as $payment_method)
 												@if($payment_method->method_name == "Credit Card")
 													<tr>
@@ -107,85 +107,11 @@
 
 					</div>
 				</div>
-			</div>
-			<div class="col-md-5">
-				<div class="hold-container">
-					<div class="hold-header">CART SUMMARY</div>
-					<div class="hold-content match-height">
-						@if (session('fail'))
-						    <div class="alert alert-danger" style="margin-top: -25px; margin-left: -25px; margin-right: -25px;">
-						    	@if(is_array(session('fail')))
-						    		<ul>
-							        @foreach(session('fail') as $fail)
-						        		<li>{{ $fail }}</li>
-							        @endforeach
-							        </ul>
-							    @else
-							    	<ul style="padding: 0; margin: 0;">
-							    		<li>{{ session('fail') }}</li>
-							    	</ul>
-						        @endif
-						    </div>
-						@endif
-						<div class="cart-summary">
-							<table class="table">
-								<thead>
-									<tr>
-										<th>PRODUCT</th>
-										<th>QTY</th>
-										<th>PRICE</th>
-										<th></th>
-									</tr>
-								</thead>
-								<tbody>
-									@if(isset($get_cart['cart']))
-										@foreach($get_cart["cart"] as $cart)
-										<tr>
-											<td>{{ $cart["cart_product_information"]["product_name"] }}</td>
-											<td>{{ $cart["quantity"] }}</td>
-											<td style="padding-left: 0; padding-right: 0;">P {{ number_format($cart['cart_product_information']['product_current_price'] * $cart['quantity'], 2) }}</td>
-											<td style="padding-left: 0px; padding-right: 0px; width: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&variation_id={{ $cart["product_id"] }}"><i class="fa fa-close"></i></a></td>
-										</tr>
-										@endforeach
-									@endif
-								</tbody>
-								<tbody>
-									<tr><td></td></tr>
-									<tr><td></td></tr>
-									<tr>
-										<td></td>
-										<td class="text-right"><b>Subtotal</b></td>
-										<td colspan="2" style="word-break: break-all;">P {{ number_format($get_cart["sale_information"]["total_product_price"], 2) }}</td>
-									</tr>
-									@if($get_cart["sale_information"]["total_overall_price"] > $get_cart["sale_information"]["minimum_purchase"])
-									<!-- <tr>
-										<td></td>
-										<td class="text-right"><b>Shipping Fee</b></td>
-										<td>FREE</td>
-									</tr> -->
-									@else
-									<!-- <tr>
-										<td></td>
-										<td class="text-right"><b>Shipping Fee</b></td>
-										<td>P {{ number_format($get_cart["sale_information"]["total_shipping"], 2) }}</td>
-									</tr> -->
-									@endif
-									<tr>
-										<td></td>
-										<td class="text-right"><b>Total</b></td>
-										<td colspan="2" class="total" style="word-break: break-all;">P {{ number_format($get_cart["sale_information"]["total_overall_price"], 2) }}</td>
-									</tr>
-								</tbody>
-							</table>
-							<!-- <div style="margin-top: 15px; font-size: 16px; font-weight: 700; text-align: center;">Free shipping for orders above ₱ {{ number_format($get_cart['sale_information']['minimum_purchase'], 2) }}</div> -->
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-12">
+			</div> --}}
+			<div class="col-md-7">
 				<div class="hold-container">
 					<div class="hold-header">DELIVERY INFORMATION</div>
-					<div class="hold-content match-height">
+					<div class="hold-content">
 						<div class="info">
 							@if (count($errors) > 0)
 							    <div class="alert alert-danger">
@@ -197,65 +123,36 @@
 							    </div>
 							@endif
 							<div class="row clearfix">
-								<div class="col-md-7">
+								<div class="col-md-12">
+									@if(!$customer_info_a)
 									<div class="form-group">
-										<label>FIRST NAME</label>
-										<input value="{{ $customer_first_name != null ? $customer_first_name : Request::old('customer_first_name') }}" type="text" name="customer_first_name" class="form-control">
+										<label>First and Last Name</label>
+										<input value="{{ old('full_name') }}" type="text" name="full_name" class="form-control">
+									</div>
+									@endif
+									<div class="form-group">
+										<label>Province</label>
+										<select firstload="true" default="{{ old('customer_state') }}" class="form-control load-location" name="customer_state" level="1"></select>
 									</div>
 									<div class="form-group">
-										<label>MIDDLE NAME</label>
-										<input value="{{ $customer_middle_name != null ? $customer_middle_name : Request::old('customer_middle_name') }}" type="text" name="customer_middle_name" class="form-control">
+										<label>City / Municipality</label>		
+										<select firstload="true" default="{{ old('customer_city') }}" class="form-control load-location" name="customer_city" level="2">
+											<option></option>
+										</select>
 									</div>
 									<div class="form-group">
-										<label>LAST NAME</label>
-										<input value="{{ $customer_last_name != null ? $customer_last_name : Request::old('customer_last_name') }}" type="text" name="customer_last_name" class="form-control">
+										<label>Barangay</label>
+										<select firstload="true" default="{{ old('customer_zip') }}" class="form-control load-location" name="customer_zip" level="3">
+											<option></option>
+										</select>
 									</div>
 									<div class="form-group">
-										<label>EMAIL ADDRESS</label>
-										<input value="{{ $customer_email != null ? $customer_email : Request::old('customer_email') }}" type="email" name="customer_email" class="form-control">
+										<label>Street</label>
+										<textarea spellcheck="false" class="form-control" name="customer_street">{{ Request::old('customer_street') }}</textarea>
 									</div>
 									<div class="form-group">
-										<label>BIRTHDAY</label>
-										<div class="row clearfix">
-											<div class="col-md-4">
-												<select name="customer_birthdate[]" class="form-control">
-													<option >January</option>
-													<option >February</option>
-													<option >March</option>
-													<option >April</option>
-													<option >May</option>
-													<option >June</option>
-													<option >July</option>
-													<option >August</option>
-													<option >September</option>
-													<option >October</option>
-													<option >November</option>
-													<option >December</option>
-												</select>
-											</div>
-											<div class="col-md-4">
-												<select name="customer_birthdate[]" class="form-control">
-													@for($ctr=1;$ctr<=31;$ctr++)
-														<option>
-															{{ $ctr }}
-														</option>
-													@endfor		
-												</select>
-											</div>
-											<div class="col-md-4">
-												<select name="customer_birthdate[]" class="form-control">
-													@for($ctr=(date("Y")-120);$ctr<=date("Y");$ctr++)
-														<option {{ (date("Y")-18) == $ctr ? 'selected' : '' }}>
-															{{ $ctr }}
-														</option>
-													@endfor
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="form-group">
-										<label>CONTACT NUMBER</label>
-										<input value="{{ $customer_mobile != null ? $customer_mobile : Request::old('customer_mobile') }}" name="customer_mobile" type="text" class="form-control">
+										<label>Contact Number</label>
+										<input  maxlength="11" class="form-control" type="text" name="contact_number" value="{{ Request::input('customer_mobile') }}">
 									</div>
 									<input type="hidden" name="ec_order_load" value="{{$ec_order_load}}">
 									@if($ec_order_load == 1)
@@ -263,8 +160,12 @@
 										<label>LOAD TO: (Number)</label>
 										<input value="{{ Request::old('ec_order_load_number') }}" name="ec_order_load_number" type="text" class="form-control">
 									</div>
+									@else
+									<div class="form-group">
+										<input value="{{ Request::old('ec_order_load_number') }}" name="ec_order_load_number" type="text" class="form-control hide">
+									</div>
 									@endif
-									<input type="hidden" name="ec_order_merchant_school" value="{{$ec_order_merchant_school}}">
+									{{-- <input type="hidden" name="ec_order_merchant_school" value="{{$ec_order_merchant_school}}">
 									@if($ec_order_merchant_school >= 1)
 										@for($i = 0; $i < $ec_order_merchant_school; $i++ )	
 											@if(isset($ec_order_merchant_school_item[$i]))
@@ -280,28 +181,7 @@
 												<input type="text" class="form-control" name="merchant_school_s_name[]">
 											</div> -->
 										@endfor
-									@endif
-								</div>
-								<div class="col-md-5">
-									<div class="form-group">
-										<label>TAX</label>
-										<select name="taxable" class="form-control">
-											<option value="1" {{ Request::old('taxable') == "1" ? "selected" : "" }}>With Tax</option>
-											<option value="0" {{ Request::old('taxable') == "0" ? "selected" : "" }}>Without Tax</option>
-										</select>
-									</div>
-									<div class="form-group">
-										<label>PROVINCE</label>
-										<input value="{{ $customer_state_province != null ? $customer_state_province : Request::old('customer_state_province') }}" name="customer_state_province" type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label>CITY / MUNICIPALITY</label>
-										<input value="{{ $customer_city != null ? $customer_city : Request::old('customer_city') }}" name="customer_city" type="text" class="form-control">
-									</div>
-									<div class="form-group">
-										<label>COMPLETE SHIPPING ADDRESS</label>
-										<textarea name="customer_address" class="form-control" style="height: 180px;">{{ $customer_address != null ? $customer_address : Request::old('customer_address') }}</textarea>
-									</div>
+									@endif --}}
 								</div>
 							</div>
 						</div>
@@ -311,6 +191,7 @@
 					<button id="placeorder-button" type="submit">BUY NOW</button>
 				</div>
 			</div>
+			<div class="col-md-5 order-summary-container"><img style="height: 50px; margin: auto;" src="/assets/front/img/loader.gif"></div>
 		</div>
 		<div style="margin-bottom: 50px;"></div>
 	</div>
@@ -323,30 +204,87 @@
 
 @section("js")
 <script type="text/javascript">
-$(document).ready(function()
+var checkout_form = new checkout_form();
+var ajax_load_location = null;
+function checkout_form()
 {
-	var payment_method = $('input[name="payment_method_id"]');
-
-	if ( payment_method.val() != 1 && payment_method.val() != 2 ) 
+	init();
+	function init()
 	{
-		$('.upload-container').removeClass("hide");
-	}	
-	else
+		$(document).ready(function()
+		{
+			document_ready();
+		});
+	}
+	function document_ready()
 	{
-		$('.upload-container').addClass("hide");
+		action_load_location(1, 0);
+		action_load_sidecart();
+		action_load_location();
+		event_load_location_change();
 	}
 
-	payment_method.change(function(event) 
+	function action_load_sidecart()
 	{
-		if ( $(event.currentTarget).val() != 1 && $(event.currentTarget).val() != 2 ) 
+		$(".order-summary-container").load("/checkout/side");
+	}
+	function action_load_location(level, parent)
+	{
+		if(level < 4)
 		{
-			$('.upload-container').removeClass("hide");
-		}	
-		else
-		{
-			$('.upload-container').addClass("hide");
+			$(".load-location[level=" + level + "]").html("<option>LOADING LOCATION</option>");
+
+			var deflt;
+			var firstload = false;
+
+			/* GET DEFAULT ON FIRST LOAD */
+			if($(".load-location[level=" + level + "]").attr("firstload") == "true")
+			{
+				$(".load-location[level=" + level + "]").attr("firstload", "false");
+				firstload = true;
+				deflt = $(".load-location[level=" + level + "]").attr("default");
+			}
+
+			if(ajax_load_location)
+			{
+				ajax_load_location.abort();
+			}
+
+			ajax_load_location = 	$.ajax(
+									{
+						            	url: '/checkout/locale?parent=' + parent,
+						            	success: function(data)
+						            	{
+						            		$(".load-location[level=" + level + "]").html(data);
+
+						            		if(deflt != "" && firstload == true)
+						            		{
+						            			$(".load-location[level=" + level + "]").val(deflt);
+						            		}
+
+
+						            		
+						              		action_load_location(level+1, $(".load-location[level=" + (level) + "]").val());
+						            	}
+						          	});
 		}
-	});
-});
+	}
+	function event_load_location_change()
+	{
+		$(".load-location").change(function(e)
+		{
+			parent = $(e.currentTarget).val();
+			level = parseInt($(e.currentTarget).attr("level")) + 1;
+			action_load_location(level, parent);
+
+			if($(e.currentTarget).attr("level") == 3)
+			{
+				$(".checkout-summary .loader-here").removeClass("hidden");
+				action_load_sidecart();
+			}
+
+		});
+	}
+}
 </script>
 @endsection

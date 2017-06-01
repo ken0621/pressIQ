@@ -35,6 +35,113 @@ use App\Models\Tbl_online_pymnt_api;
 
 class ShopCheckoutController extends Shop
 {
+    /* Payment Facilities Response */
+    public function ipay88_response()
+    {
+        $request = Request::all();
+        $shop_id = $this->shop_info->shop_id;
+
+        if ($request) 
+        {
+            // LOGS
+            $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
+            $ipay88_logs["log_payment_id"] = $request['PaymentId'];
+            $ipay88_logs["log_reference_number"] = $request['RefNo'];
+            $ipay88_logs["log_amount"] = $request['Amount'];
+            $ipay88_logs["log_currency"] = $request['Currency'];
+            $ipay88_logs["log_remarks"] = $request['Remark'];
+            $ipay88_logs["log_trans_id"] = $request['TransId'];
+            $ipay88_logs["log_auth_code"] = $request['AuthCode'];
+            $ipay88_logs["log_status"] = $request['Status'];
+            $ipay88_logs["log_error_desc"] = $request['ErrDesc'];
+            $ipay88_logs["log_signature"] = $request['Signature'];
+            $ipay88_logs["shop_id"] = $this->shop_info->shop_id;
+
+            DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
+
+            if($request['Status'] == 0)
+            {
+                dd($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');
+                // return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.')->send();    
+            } 
+            else 
+            {
+                $shop_id        = $this->shop_info->shop_id;
+                $payment_status = 1;
+                $order_status   = "Processing";
+
+                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
+                Cart::clear_all($this->shop_info->shop_id);
+
+                // Redirect
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
+            }
+        }
+        else
+        {
+            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
+        }
+    }
+    public function dragonpay_return()
+    {
+        if (Request::input("status") == "S") 
+        {
+            $from = Request::input('param1');
+            if ($from == "checkout") 
+            {
+                $order_id = Request::input("param2");
+
+                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
+            }
+        }
+    }
+    public function dragonpay_postback()
+    {
+        $request = Request::all();
+
+        $insert["log_date"] = Carbon::now();
+        $insert["content"]  = serialize($request);
+        DB::table("tbl_dragonpay_logs")->insert($insert);
+
+        if ($request["status"] == "S") 
+        {
+            $from = $request["param1"];
+
+            if ($from == "checkout") 
+            {
+                $order_id = $request["param2"];
+
+                try 
+                {
+                    $update['ec_order_id'] = $order_id;
+                    $update['order_status'] = "Processing";
+                    $update['payment_status'] = 1;
+                    $order = Ec_order::update_ec_order($update);
+                } 
+                catch (\Exception $e) 
+                {
+                    $last["log_date"] = Carbon::now();
+                    $last["content"]  = $e->getMessage();
+                    DB::table("tbl_dragonpay_logs")->insert($last);  
+                }      
+            }
+        }
+    }
+    public function dragonpay_logs()
+    {
+        $dragonpay = DB::table("tbl_dragonpay_logs")->orderBy("id", "DESC")->first();
+
+        if (is_serialized($dragonpay->content)) 
+        {
+            dd(unserialize($dragonpay->content));
+        }
+        else
+        {
+            dd($dragonpay->content);
+        }
+    }
+    /* End Payment Facilities */
+
     public function index()
     {
         $data["page"]            = "Checkout";
@@ -42,6 +149,14 @@ class ShopCheckoutController extends Shop
         /* DO NOT ALLOW ON THIS PAGE IF THERE IS NOT CART */
         if (isset($data["get_cart"]['cart']) && isset($data["get_cart"]["tbl_customer"]) && isset($data["get_cart"]["tbl_customer_address"]) && isset($data["get_cart"]["tbl_ec_order"]) && isset($data["get_cart"]["tbl_ec_order_item"]) && isset($data["get_cart"]["sale_information"])) 
         {
+            $data['ec_order_load'] = 0;
+            foreach($data['get_cart']['cart'] as $key => $value)
+            {
+                if($value['cart_product_information']['item_category_id'] == 17)
+                {
+                    $data['ec_order_load'] = 1;
+                }      
+            }
             return view("checkout", $data);
         }
         else
@@ -86,6 +201,9 @@ class ShopCheckoutController extends Shop
         $customer_info["shipping_zip"] = Self::locale_id_to_name(Request::input("customer_zip"));
         $customer_info["shipping_street"] = Request::input("customer_street");
 
+        $customer_info['load_wallet']['ec_order_load'] = Request::input('ec_order_load');
+        $customer_info['load_wallet']['ec_order_load_number'] = Request::input('ec_order_load_number');
+        // dd($customer_info);
         $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_shipping", "check_name"));
 
 
@@ -101,7 +219,10 @@ class ShopCheckoutController extends Shop
     public function update_method()
     {
         $customer_info["method_id"] = Request::input("method_id");
-        $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info);
+        $old_session = $order = Cart::get_info($this->shop_info->shop_id);
+        $customer_set_info_response = Cart::customer_set_info_ec_order($this->shop_info->shop_id, $old_session, $customer_info);
+        $unique_id = Cart::get_unique_id($this->shop_info->shop_id);
+        Session::put($unique_id, $customer_set_info_response);
         echo json_encode("Success!"); 
     }
 
@@ -114,7 +235,7 @@ class ShopCheckoutController extends Shop
     {
         if(Request::isMethod("post"))
         {
-            Cart::process_payment($this->shop_info->shop_id);
+            return Cart::process_payment($this->shop_info->shop_id);
         }
         else
         {
@@ -189,7 +310,6 @@ class ShopCheckoutController extends Shop
         else
         {
             $data["page"] = "Checkout Payment Upload";
-
             $data['_order'] = Tbl_ec_order_item::where("ec_order_id", $id)
                                                ->leftJoin('tbl_ec_variant', 'tbl_ec_order_item.item_id', '=', 'evariant_id')
                                                ->get();
@@ -209,7 +329,7 @@ class ShopCheckoutController extends Shop
             return view("checkout_payment_upload", $data);
         }
     }
-
+    
     public function get_payment_method()
     {
         $payment_method = Tbl_online_pymnt_method::leftJoin('tbl_online_pymnt_link', 'tbl_online_pymnt_link.link_method_id', '=', 'tbl_online_pymnt_method.method_id')
@@ -235,53 +355,6 @@ class ShopCheckoutController extends Shop
         $last_name = (strpos($name, ' ') === false) ? '' : preg_replace('#.*\s([\w-]*)$#', '$1', $name);
         $first_name = trim( preg_replace('#'.$last_name.'#', '', $name ) );
         return array($first_name, $last_name);
-    }
-    
-    public function ipay88_response()
-    {
-        $request = Request::all();
-        $shop_id = $this->shop_info->shop_id;
-
-        if ($request) 
-        {
-            // LOGS
-            $ipay88_logs["log_merchant_code"] = $request['MerchantCode'];
-            $ipay88_logs["log_payment_id"] = $request['PaymentId'];
-            $ipay88_logs["log_reference_number"] = $request['RefNo'];
-            $ipay88_logs["log_amount"] = $request['Amount'];
-            $ipay88_logs["log_currency"] = $request['Currency'];
-            $ipay88_logs["log_remarks"] = $request['Remark'];
-            $ipay88_logs["log_trans_id"] = $request['TransId'];
-            $ipay88_logs["log_auth_code"] = $request['AuthCode'];
-            $ipay88_logs["log_status"] = $request['Status'];
-            $ipay88_logs["log_error_desc"] = $request['ErrDesc'];
-            $ipay88_logs["log_signature"] = $request['Signature'];
-            $ipay88_logs["shop_id"] = $this->shop_info->shop_id;
-
-            DB::table("tbl_ipay88_logs")->insert($ipay88_logs);
-
-            if($request['Status'] == 0)
-            {
-                dd($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.');
-                // return redirect('/checkout')->withErrors($request['ErrDesc'].'. '.'Please refer to ipay88 Appendix I - 3.0 Error Description.')->send();    
-            } 
-            else 
-            {
-                $shop_id        = $this->shop_info->shop_id;
-                $payment_status = 1;
-                $order_status   = "Processing";
-
-                $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, Self::$customer_info ? Self::$customer_info->customer_id : null);
-                Cart::clear_all($this->shop_info->shop_id);
-
-                // Redirect
-                return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
-            }
-        }
-        else
-        {
-            return Redirect::to("/checkout")->with('fail', 'Session has been expired. Please try again.')->send();
-        }
     }
 
     public function order_placed()

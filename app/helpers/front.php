@@ -159,5 +159,5 @@ function loop_content_divide($data, $divide = 12)
 
 function get_front_news($shop_id)
 {
-    return Tbl_post::where("shop_id", $shop_id)->where("archived", 0)->get();
+    return Tbl_post::where("shop_id", $shop_id)->where("archived", 0)->orderBy("post_date", "DESC")->get();
 }

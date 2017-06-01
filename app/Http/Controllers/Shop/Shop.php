@@ -15,6 +15,8 @@ use App\Models\Tbl_customer;
 use App\Globals\Ecom_Product;
 use App\Globals\Cart;
 use App\Globals\Settings;
+use App\Models\Tbl_membership_code;
+use App\Globals\Mlm_member;
 
 class Shop extends Controller
 {
@@ -63,6 +65,7 @@ class Shop extends Controller
                         ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
                         ->whereNotNull('tbl_membership_code.slot_id')
                         ->get();
+
                         $data['customer_info'] = Mlm_member::get_customer_info($data['lead']->customer_id);
                     } 
                 }

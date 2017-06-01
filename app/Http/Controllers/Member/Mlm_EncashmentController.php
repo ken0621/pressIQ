@@ -13,6 +13,7 @@ use Crypt;
 use PDF;
 use App;
 use DB;
+use App\Models\Currency;
 
 use App\Models\Tbl_mlm_slot;
 use App\Models\Tbl_customer;
@@ -27,6 +28,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_mlm_discount_card_log;
 use App\Models\Tbl_mlm_encashment_settings;
 use App\Models\Tbl_mlm_encashment_process;
+use App\Models\Tbl_mlm_encashment_currency;
 
 use App\Globals\Item;
 use App\Globals\Mlm_plan;
@@ -51,8 +53,6 @@ class Mlm_EncashmentController extends Member
 {
     public function index()
     {
-        // return $this->tree_view();
-        
         $access = Utilities::checkAccess('mlm-wallet-encashment', 'access_page');
         if($access == 0)
         {
@@ -453,10 +453,67 @@ class Mlm_EncashmentController extends Member
     {
         $data = [];
         $data['country'] = DB::table('currency')->get();
+        $shop_id = $this->user_info->shop_id;
+        $data['currency_set'] = Tbl_mlm_encashment_currency::where('en_cu_shop_id', $shop_id)->get()->keyBy('iso');
         return view('member.mlm_encashment.currency', $data);
     }
     public function set_currency_update()
     {
-        return $_POST;
+        // return $_POST;
+        $shop_id = $this->user_info->shop_id;
+        $iso = Request::input('iso');
+        $en_cu_active = Request::input('en_cu_active');
+        $en_cu_convertion = Request::input('en_cu_convertion');
+
+        $active_iso = [];
+        $inactive_iso = [];
+        foreach($iso as $key => $value)
+        {
+            if(!isset($en_cu_active[$key])){
+                $en_cu_active[$key] = 0;
+                $inactive_iso[$key] = $key;
+            }
+            else
+            {
+                $en_cu_active[$key] = 1;
+                $active_iso[$key] = $key;
+            }
+        }
+
+        $currency = Tbl_mlm_encashment_currency::where('en_cu_shop_id', $shop_id)
+        ->get()->keyBy('iso');
+
+        $currency_plain = Currency::get()->keyBy('iso');
+        foreach($active_iso as $key => $value)
+        {
+            if(!isset($currency[$key]))
+            {
+                $insert[$key]['en_cu_convertion'] = $en_cu_convertion[$key];
+                $insert[$key]['en_cu_active'] = 1;
+                $insert[$key]['iso'] = $key;
+                $insert[$key]['en_cu_shop_id'] = $shop_id;
+                $insert[$key]['en_cu_name'] = $currency_plain[$key]->name;
+            }
+        }
+        if(isset($insert))
+        {
+            Tbl_mlm_encashment_currency::insert($insert);
+        }
+
+        $update['en_cu_active'] = 1;
+        Tbl_mlm_encashment_currency::where('en_cu_shop_id', $shop_id)
+        ->whereIn('iso', $active_iso)
+        ->update($update);
+
+        $update['en_cu_active'] = 0;
+        Tbl_mlm_encashment_currency::where('en_cu_shop_id', $shop_id)
+        ->whereIn('iso', $inactive_iso)
+        ->update($update);
+
+        $status['status'] = 'success';
+        $status['message'] = 'Currency Set';
+
+        return json_encode($status);
+
     }
 }

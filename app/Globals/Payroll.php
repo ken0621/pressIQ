@@ -961,9 +961,10 @@ class Payroll
 			$break_end 		= Payroll::hour_24($break_end);
 
 			$float_nd = Payroll::get_night_diff($float_in, $float_out);
-			$break_nd = Payroll::get_night_diff(Payroll::time_float($break_start), Payroll::time_float($break_end));
-			// dd($float_nd);
-			// $float_nd -= $break_nd;
+
+			$break_nd = Payroll::get_night_diff(Payroll::time_float($break_start), Payroll::time_float($break_end), true);
+
+			$float_nd -= $break_nd;
 
 			if($float_nd < 0)
 			{
@@ -975,7 +976,6 @@ class Payroll
 			$total_regular_hours += $regular_hours;
 			$total_time_spent += $time_spent;
 		}
-
 		/* CLEARLY EARLIEST TIME IN IF TIME RECORD IS NULL */
 		if($time_rec == null)
 		{
@@ -1048,7 +1048,7 @@ class Payroll
 		}
 
 		
-		$total_hours = $total_regular_hours + $total_early_overtime + $total_late_overtime;
+		$total_hours = $total_regular_hours + $total_early_overtime + $total_late_overtime + c_time_to_int(Payroll::float_time($float_nd));
 
 		if($total_hours == '00:00' || $total_hours <= 0)
 		{
@@ -1126,6 +1126,7 @@ class Payroll
 		{
 			$absent = true;
 		}
+
 		else
 		{
 			$absent = false;
@@ -1144,6 +1145,8 @@ class Payroll
 		$return->special_holiday_hours = convert_seconds_to_hours_minutes("H:i", $special_holiday_hours);
 		$return->regular_holiday_hours = convert_seconds_to_hours_minutes("H:i", $regular_holiday_hours);
 
+		// dd($break);
+
 		if($break == 0)
 		{
 			$break = '00:00';
@@ -1158,7 +1161,7 @@ class Payroll
 	}
 
 
-	public static function get_night_diff($float_in = 0, $float_out = 0)
+	public static function get_night_diff($float_in = 0, $float_out = 0, $is_nd_break = false)
 	{
 		$float_nd_in 	= Payroll::time_float('15:00');
 		$float_nd_out 	= Payroll::time_float('30:00');
@@ -1185,8 +1188,13 @@ class Payroll
 			}
 			else
 			{
+				if($float_out < $float_nd_out && $is_nd_break)
+				{
+					$float_nd_out = $float_out;
+				}
 				$float_nd += $float_nd_out - $temp_in_float;
 			}
+			// dd($float_nd);
 
 		}
 
@@ -1206,11 +1214,14 @@ class Payroll
 			// $float_nd += $temp_out_float - Payroll::time_float('22:00');
 
 			// dd($float_nd);
-
-			// if($float_nd > ($float_nd_out - $float_nd_in))
-			// {
-			// 	$float_nd -= ($float_nd_out - $float_nd_in);
-			// }
+			if($is_nd_break)
+			{
+				if($float_nd > ($temp_out_float - $temp_in_float))
+				{
+					$float_nd -= ($temp_out_float - $temp_in_float);
+				}
+			}
+			
 
 		}
 

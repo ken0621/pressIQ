@@ -833,31 +833,31 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status']        = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']     = "Everyone";
 
-        $segment2 = "submenu-SampleSubMenu2";
-        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['name']   = "SampleSubMenu2";
-        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['segment']= $segment2;
-        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['type']   = "submenu";
+        // $segment2 = "submenu-SampleSubMenu2";
+        // $nav[$page]['submenu'][$segment]['submenu'][$segment2]['name']   = "SampleSubMenu2";
+        // $nav[$page]['submenu'][$segment]['submenu'][$segment2]['segment']= $segment2;
+        // $nav[$page]['submenu'][$segment]['submenu'][$segment2]['type']   = "submenu";
 
-            $segment3 = "submenu-SampleSubMenu3";
-            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['name']   = "SampleSubMenu3";
-            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['segment']= $segment3;
-            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['type']   = "submenu";
+        //     $segment3 = "submenu-SampleSubMenu3";
+        //     $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['name']   = "SampleSubMenu3";
+        //     $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['segment']= $segment3;
+        //     $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['type']   = "submenu";
 
-                $code = "report-sasafsdfsdf";
-                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['label']        = "SamplePage1";
-                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['code']         = $code;
-                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['url']          = '';
-                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['user_settings'] = ['access_page'];
-                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['status']        = "Developing";
-                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['developer']     = "Everyone";
+        //         $code = "report-sasafsdfsdf";
+        //         $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['label']        = "SamplePage1";
+        //         $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['code']         = $code;
+        //         $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['url']          = '';
+        //         $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['user_settings'] = ['access_page'];
+        //         $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['status']        = "Developing";
+        //         $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['developer']     = "Everyone";
 
-                $code = "reportdfgdfgf";
-                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['label']        = "SamplePage2";
-                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['code']         = $code;
-                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['url']          = '';
-                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['user_settings'] = ['access_page'];
-                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['status']        = "Developing";
-                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['developer']     = "Everyone";
+        //         $code = "reportdfgdfgf";
+        //         $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['label']        = "SamplePage2";
+        //         $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['code']         = $code;
+        //         $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['url']          = '';
+        //         $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['user_settings'] = ['access_page'];
+        //         $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['status']        = "Developing";
+        //         $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['developer']     = "Everyone";
 
     /* -- REPORT => ACCOUNTING SUBMENU */
     $segment = "submenu-accounting";

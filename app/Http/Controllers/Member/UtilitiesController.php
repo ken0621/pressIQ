@@ -462,6 +462,7 @@ class UtilitiesController extends Member
         if($this->hasAccess("utilities-admin-positions","add/edit"))
         {
             $data["_page"] = Utilities::filterPageList(Request::input('id'));
+            // dd($data["_page"]);
             return view('member/utilities/admin_access', $data);
         }
         else

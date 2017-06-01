@@ -9,8 +9,10 @@
             <div class="col-md-6 col-xs-12">
                 <a class="btn btn-custom-blue form-control" href="/tablet/credit_memo/add?sir_id={{Session::get('sir_id')}}&type=returns">RETURNS</a>
             </div>
-            <div class="col-md-6 col-xs-12">
-                <a class="btn btn-def-white btn-custom-white form-control" href="/tablet/credit_memo/add?sir_id={{Session::get('sir_id')}}&type=others">OTHERS</a>
+            <div class="form-group">
+                <div class="col-md-12 col-xs-12">
+                    <a class="btn btn-def-white btn-custom-white form-control popup" size="lg" link="/member/customer/credit_memo/update_action?type=invoice&sir_id={{Session::get('sir_id')}}&cm_id={{$cm_id or ''}}">Apply to an Invoice</a>
+                </div>
             </div>
             @else
             <div class="form-group">

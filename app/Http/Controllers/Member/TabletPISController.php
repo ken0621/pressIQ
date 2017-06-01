@@ -358,7 +358,8 @@ class TabletPISController extends Member
 
             Tbl_manual_credit_memo::insert($ins_manual_cm);
 
-            $data["status"] = "success-credit-memo";
+            $data["status"] = "success-credit-memo-action";
+            $data["id"] = $cm_id;
             $data["redirect_to"] = "/tablet/credit_memo/add?id=".$cm_id."&sir_id=".Request::input("sir_id");
         }
 

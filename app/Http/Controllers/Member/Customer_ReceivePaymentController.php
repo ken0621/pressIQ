@@ -7,6 +7,7 @@ use App\Globals\Customer;
 use App\Globals\Accounting;
 use App\Globals\Invoice;
 use App\Globals\CreditMemo;
+use App\Globals\ReceivePayment;
 
 use App\Models\Tbl_payment_method;
 use App\Models\Tbl_receive_payment;
@@ -139,6 +140,7 @@ class Customer_ReceivePaymentController extends Member
         }
         else
         {
+            ReceivePayment::updateCM($cm_id,$rcvpayment_id);
             $json["redirect"]    = "/member/customer/credit_memo/list";
         }
 

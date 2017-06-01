@@ -76,6 +76,37 @@ class CreditMemoController extends Member
 
             return view("member.receive_payment.modal_receive_payment",$data);
         }
+        if($cm_type == "invoice_tablet")
+        {
+            $data["_customer"]      = Tbl_customer::where("customer_id",$data["c_id"])->first();
+            $data['_account']       = Accounting::getAllAccount('all','',['Bank']);
+            $data['_payment_method']= Tbl_payment_method::where("archived",0)->where("shop_id", $this->getShopId())->get();
+            $data['action']         = "/tablet/receive_payment/add_submit";
+            $data["_invoice"]       = Invoice::getAllInvoiceByCustomer($data["c_id"]);
+
+            $cm_amount = $data["cm_data"]->cm_amount;
+            $total_inv = 0;
+
+            if(count($data["_invoice"]) > 0)
+            {  
+            //     foreach ($data["_invoice"] as $key => $value)  
+            //     {
+            //         $total_inv += $value["inv_overall_price"];
+            //         if($cm_amount > $total_inv)
+            //         {
+            //             $data["_invoice"][$key]["amount_applied"] = $value["inv_overall_price"];
+            //             $data["_invoice"][$key]["rpline_amount"] = $value["inv_overall_price"];
+            //         }
+            //     }
+            // if($data["_invoice"][0]["inv_overall_price"] > $cm_amount)
+            // {
+                    $data["_invoice"][0]["amount_applied"] = $cm_amount;
+                    $data["_invoice"][0]["rpline_amount"] = $cm_amount;
+            // }
+            }
+            return view("member.receive_payment.modal_receive_payment",$data);
+
+        }
     }
     public function index()
     {

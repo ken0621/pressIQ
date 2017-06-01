@@ -292,6 +292,48 @@ a
     }
     .product-contentie
     {
+        @media screen and (max-width: 1270px)
+        {
+            > .row-no-padding
+            {
+                > .col-md-8
+                {
+                    width: 70% !important;
+                }
+                > .col-md-4
+                {
+                    width: 30% !important;
+                }
+            }
+        }
+        @media screen and (max-width:  1200px)
+        {
+            > .row-no-padding
+            {
+                > .col-md-8
+                {
+                    width: 80% !important;
+                }
+                > .col-md-4
+                {
+                    width: 20% !important;
+                }
+            }
+        }
+        @media screen and (max-width:  1110px)
+        {
+            > .row-no-padding
+            {
+                > .col-md-8
+                {
+                    width: 100% !important;
+                }
+                > .col-md-4
+                {
+                    width: 100% !important;
+                }
+            }
+        }
         .grid-view
         {
             text-align: left;
@@ -299,13 +341,23 @@ a
             {
                 text-align: center;
             }
+            > .row-no-padding
+            {
+                @media screen and (max-width: 530px)
+                {
+                    > .col-xs-6
+                    {
+                        width: 100% !important;
+                    }
+                }
+            }
             .holder
             {
-                display: inline-block;
+                // display: inline-block;
                 vertical-align: top;
                 overflow: auto;
-                margin: 20px 10px; 
-                width: 220px;
+                // width: 220px;
+                width: 100%;
                 text-align: center;
                 font-family: "Quicksand", sans-serif;
                  &:hover .hover
@@ -390,7 +442,8 @@ a
                     padding: 10px;
                     background-color: white;
                     position: relative;
-                    min-height: 300px;
+                     margin: 20px 10px; 
+                     padding-bottom: 25px;
                 }
                 .img
                 {
@@ -440,6 +493,10 @@ a
                     font-weight: bold;
                     color: #6CAB09;
                 }
+            }
+            .facebook-container
+            {
+                position: relative;
             }
         }
         .list-view

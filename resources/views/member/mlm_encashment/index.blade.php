@@ -10,7 +10,7 @@
                     You can set your encashment settings and process encashment in this tab.
                 </small>
             </h1>
-            <!-- <a href="/member/mlm/membership/add" class="panel-buttons btn btn-primary pull-right btn-custom-primary">Add Membership</a> -->
+            <a href="/member/mlm/encashment/currency" target="_blank" class="panel-buttons btn btn-primary pull-right btn-custom-primary">Set currency</a>
         </div>
     </div>
 </div>  

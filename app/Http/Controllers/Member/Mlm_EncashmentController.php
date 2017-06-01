@@ -58,11 +58,17 @@ class Mlm_EncashmentController extends Member
         {
             return $this->show_no_access(); 
         }
+
         $data = [];
+
         $shop_id = $this->user_info->shop_id;
+
         $count = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->count();
+
         $this->initialize_settings($shop_id);
+
         $data['encashment_settings'] = Tbl_mlm_encashment_settings::where('shop_id', $shop_id)->first();
+
         $data['payout_gateway'] = payout_getway();
 
         $data['not_encashed'] = $all_log = Tbl_mlm_slot_wallet_log::where('wallet_log_status', 'released')
@@ -92,9 +98,13 @@ class Mlm_EncashmentController extends Member
             $history = Tbl_mlm_slot_wallet_log::where('wallet_log_plan', 'ENCASHMENT')
             ->slot()->customer()
             ->where('tbl_mlm_slot.shop_id', $shop_id);
+
             $request = Request::input('request');
+
             $slot = Request::input('slots');
+
             $customer = Request::input('customer');
+
             if($request != null)
             {
                 $history = $history->where('encashment_process_type', $request);
@@ -112,6 +122,7 @@ class Mlm_EncashmentController extends Member
                 $history = $history->leftjoin('tbl_customer_search', 'tbl_customer_search.customer_id', '=', 'tbl_customer.customer_id')
                 ->where('tbl_customer_search.body', 'like', '%' . $customer . '%');
             }
+
             $data['history'] = $history->join('tbl_mlm_encashment_process', 'tbl_mlm_encashment_process.encashment_process', '=', 'tbl_mlm_slot_wallet_log.encashment_process')
             ->paginate(10);
 
@@ -119,6 +130,7 @@ class Mlm_EncashmentController extends Member
         }
         
         $data['from'] = $this->get_last_wallet($shop_id);
+
         return view('member.mlm_encashment.index', $data);
     }
     
@@ -436,5 +448,15 @@ class Mlm_EncashmentController extends Member
         $data['status'] = 'success_new';
         $data['message'] = 'Encashment Denied';
         return json_encode($data);
+    }
+    public function set_currency()
+    {
+        $data = [];
+        $data['country'] = DB::table('currency')->get();
+        return view('member.mlm_encashment.currency', $data);
+    }
+    public function set_currency_update()
+    {
+        return $_POST;
     }
 }

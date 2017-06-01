@@ -610,3 +610,7 @@ function mlm_profile_link($customer)
         return $profile;
     }
 }
+function get_address_customer()
+{
+    
+}

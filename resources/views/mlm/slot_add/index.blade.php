@@ -51,7 +51,7 @@
 					<div class="col-md-12">
 						@if($lead == null)
 						<label for="">Sponsor</label>
-							@if($sponsor_a == null)
+							{{-- @if($sponsor_a == null) --}}
 	                            <select class="form-control chosen-slot_sponsor input-sm pull-left" name="slot_sponsor" data-placeholder="Select Slot Sponsor" >
 	                            	@if(count($_slots) != 0)
 	                            		@foreach($_slots as $slot)
@@ -59,20 +59,20 @@
 	                            		@endforeach
 	                            	@endif
 	                            </select>
-	                        @else 
+	                       {{--  @else  --}}
 
 	                        <input type="hidden" name="slot_sponsor" value="{{$sponsor_a}}">
 		                        @if(count($_slots) != 0) 
 		                        	@foreach($_slots as $slot) 
 		                        		@if($sponsor_a == $slot->slot_id)
 		                        			<?php $name = $slot->first_name . ' ' . $slot->middle_name . ' ' . $slot->last_name . ' ' . $slot->slot_no; ?>
-		                        			<input type="text" class="form-control input-v2" disabled="disabled"
+		                        			<input type="hidden" class="form-control input-v2" disabled="disabled"
 	                       					value="{{$name}}">  
 		                        		@endif 
 		                        	@endforeach 
 		                        @endif 
 
-	                        @endif
+	                        {{-- @endif --}}
 	                        
 						@else
 						<input type="hidden" name="lead_id" value="{{$lead->lead_id}}">

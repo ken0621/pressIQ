@@ -59,6 +59,7 @@ class PayrollTimeSheetController extends Member
 		$data['_employee'] = Tbl_payroll_employee_contract::employeefilter($data['company']->payroll_company_id, 0, 0, $data['company']->payroll_period_end, $this->user_info->shop_id)
 							->join('tbl_payroll_group','tbl_payroll_group.payroll_group_id','=','tbl_payroll_employee_contract.payroll_group_id')
 							->where('tbl_payroll_group.payroll_group_period', $data['company']->payroll_period_category)
+							->orderBy('tbl_payroll_employee_basic.payroll_employee_first_name')
 							->get();
 		// dd($data['company']);
 		$payroll_employee_id = 0;
@@ -495,24 +496,49 @@ class PayrollTimeSheetController extends Member
 	{
 		$data["page"] = "Adjustment Form";
 
-		$data["timesheet_info"] = $timesheet_info = Tbl_payroll_time_sheet::where("payroll_time_sheet_id", Request::input("payroll_time_sheet_id"))->first();
+		$payroll_time_sheet_id = Request::input("payroll_time_sheet_id");
+
+		$data["timesheet_info"] = $timesheet_info = Tbl_payroll_time_sheet::where("payroll_time_sheet_id", $payroll_time_sheet_id)->first();
+
 		$employee_information = Tbl_payroll_employee_contract::selemployee($timesheet_info->payroll_employee_id)->leftJoin("tbl_payroll_group", "tbl_payroll_group.payroll_group_id", "=","tbl_payroll_employee_contract.payroll_group_id")->first();
+
 		$_rest_day = Tbl_payroll_group_rest_day::where("payroll_group_id", $employee_information->payroll_group_id)->get();
+
 		$data["rest_day"] = $rest_day = false;
 
 		/* REST DAY TICK */
-		foreach($_rest_day as $rest_day)
+		// foreach($_rest_day as $rest_day)
+		// {
+		// 	if($rest_day->payroll_group_rest_day == Carbon::parse($timesheet_info->payroll_time_date)->format("l"))
+		// 	{
+		// 		$data["rest_day"] = $rest_day = true;
+		// 	}
+		// }
+
+		// $schedule = Tbl_payroll_employee_schedule::getschedule($employee_information->payroll_employee_id, $timesheet_info->payroll_time_date)->first();
+
+		// if($schedule == null)
+		// {	
+		// 	$schedule = Tbl_payroll_shift::getshift($employee_information->payroll_group_id, date('D', strtotime($timesheet_info->payroll_time_date)))->first();
+		// }
+
+		$schedule = Payroll::getshift_emp($employee_information->payroll_employee_id, $timesheet_info->payroll_time_date, $employee_information->payroll_group_id);
+		
+		if($schedule->rest_day == 1)
 		{
-			if($rest_day->payroll_group_rest_day == Carbon::parse($timesheet_info->payroll_time_date)->format("l"))
-			{
-				$data["rest_day"] = $rest_day = true;
-			}
+			$data["rest_day"] = $rest_day = true;
+		}
+		$work_end_24 = $schedule->work_end;
+		if(Payroll::time_float($schedule->work_end) <= 12)
+		{
+			$work_end_24 = Payroll::sum_time($schedule->work_end, '24:00');
 		}
 
 
 		/* SETTINGS FOR EMPLOYEE PAYROLL GROUP */
-		$data["default_time_in"] = $default_time_in = Carbon::parse($employee_information->payroll_group_start)->format("h:i A");
-		$data["default_time_out"] = $default_time_out = Carbon::parse($employee_information->payroll_group_end)->format("h:i A");
+		$data["default_time_in"] = $default_time_in = Carbon::parse($schedule->work_start)->format("h:i A");
+
+		$data["default_time_out"] = $default_time_out = Carbon::parse($schedule->work_end)->format("h:i A");
 		/* TIMESHEET  */
 		$_time_record = Tbl_payroll_time_sheet_record::where("payroll_time_sheet_id", $timesheet_info->payroll_time_sheet_id)->get();
 	
@@ -525,7 +551,7 @@ class PayrollTimeSheetController extends Member
 			/* CHECK TIME IN */
 			if(c_time_to_int($data["_time_record"][$key]->time_in) < c_time_to_int($default_time_in))
 			{
-				if(c_time_to_int($data["_time_record"][$key]->time_out) < c_time_to_int($default_time_in))
+				if(c_time_to_int($work_end_24) < c_time_to_int($default_time_in))
 				{
 					$max_time_in = $data["_time_record"][$key]->time_out;
 				}

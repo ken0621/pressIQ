@@ -113,8 +113,13 @@
                                             <div class="row clearfix" style="margin-top: 15px; margin-bottom: 15px;">
                                             <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
                                                 @foreach($_brand as $key_brand => $brand)
-                                                    <?php $brand_image = is_serialized($info->default) ? unserialize($info->default)[$brand['type_name']]["image"] : ''; ?>
-                                                    <?php $brand_link = is_serialized($info->default) ? unserialize($info->default)[$brand['type_name']]["link"] : ''; ?>
+                                                    @if(isset(unserialize($info->default)[$brand['type_name']]))
+                                                        <?php $brand_image = is_serialized($info->default) ? unserialize($info->default)[$brand['type_name']]["image"] : '/assets/front/img/default.jpg'; ?>
+                                                        <?php $brand_link = is_serialized($info->default) ? unserialize($info->default)[$brand['type_name']]["link"] : '/assets/front/img/default.jpg'; ?>
+                                                    @else
+                                                        <?php $brand_image = '/assets/front/img/default.jpg'; ?>
+                                                        <?php $brand_link = '/assets/front/img/default.jpg'; ?>
+                                                    @endif
                                                     <div class="col-md-3">
                                                         <div style="margin-bottom: 7.5px; font-weight: 700;">{{ $brand['type_name'] }}</div>
                                                         <input class="image-value" key="{{ $keys }}-{{ $key_brand }}" type="hidden" name="info[{{ $keys }}][value][{{ $brand['type_name'] }}][image]" value="{{ $brand_image }}">
@@ -137,6 +142,11 @@
                                             </div>
                                         </div>
                                         @endif
+                                    @elseif($info->type == "tinymce")
+                                    <div class="match-height">
+                                        <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
+                                        <textarea name="info[{{ $keys }}][value]" class="tinymce">{{ $info->default }}</textarea>
+                                    </div>
                                     @else
                                     <div class="match-height">
                                         <input type="hidden" name="info[{{ $keys }}][type]" value="{{ $info->type }}">
@@ -269,10 +279,22 @@
 .slick-no-slide .slick-list {
     padding: 0;
 }
+
+.mce-notification-warning
+{
+    display: none;
+}
 </style>
 @endsection
 
 @section('script')
 <script type="text/javascript" src="/assets/slick/slick.js"></script>
 <script type="text/javascript" src="/assets/member/js/page_content.js"></script>
+<script src="https://cloud.tinymce.com/stable/tinymce.min.js"></script>
+<script>tinymce.init({ 
+    selector:'.tinymce',
+    plugins: "lists",
+    menubar: false,
+    toolbar: "numlist bullist bold italic underline strikethrough"
+ });</script>
 @endsection

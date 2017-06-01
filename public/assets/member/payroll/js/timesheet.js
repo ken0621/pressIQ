@@ -65,23 +65,6 @@ function timesheet()
 			var ready 	= '<i class="fa fa-check"></i>&nbsp;Ready';
 			var html 	= $('.btn-mark-ready').html();
 
-			// var formdata = new FormData();
-			// var ajax = new XMLHttpRequest();
-			// formdata.append("_token", $("#_token").val());
-			// formdata.append("content", content);
-			// ajax.upload.addEventListener("progress", function(event)
-			// {
-			// 	$('.btn-mark-ready').html(spinner);
-			// }, false);
-			// ajax.addEventListener("load", function(event)
-			// {
-			// 	$('.btn-mark-ready').html(ready);
-			// 	$('.btn-mark-ready').attr("disabled",true);
-			// 	console.log(event.target.responseText);
-			// }, false);
-			// ajax.open("POST","/member/payroll/company_timesheet/mark_ready_company");
-			// ajax.send(formdata);
-			
 			$('.btn-mark-ready').html(spinner);
 			$.ajax({
 				url 	: 	"/member/payroll/timesheet/mark_ready_company",
@@ -145,6 +128,7 @@ function timesheet()
 	function action_compute_overtime_form()
 	{
 		date = $(".over-time-form").find(".field-hidden-date").val();
+		// alert(date);
 		employee_id = $(".over-time-form").find(".field-hidden-employee-id").val();
 
 		if(adjust_form_request !== null)

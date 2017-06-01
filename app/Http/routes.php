@@ -83,7 +83,7 @@ Route::any('/member/developer/reset_slot/submit/retro_product_sales', 'Member\De
 Route::any('/member/developer/reset_slot/submit/re_tree', 'Member\Developer_StatusController@re_tree'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_lost', 'Member\Developer_StatusController@re_com_phil_lost'); //GUILLERMO TABLIGAN
 Route::any('/member/developer/reset_slot/submit/re_com_phil_uni', 'Member\Developer_StatusController@re_com_phil_uni'); //GUILLERMO TABLIGAN
-
+Route::any('/member/developer/reset_slot/submit/recompute', 'Member\Developer_StatusController@recompute'); //GUILLERMO TABLIGAN
 
 /* END MEMBER - VENDOR - GUILLERMO TABLIGAN */
 
@@ -475,6 +475,8 @@ Route::any('/tablet/credit_memo/add','Member\TabletPISController@add_cm');
 Route::any('/tablet/customer/credit_memo/choose_type','Member\TabletPISController@cm_choose_type');
 Route::any('/tablet/credit_memo/add_cm_submit','Member\TabletPISController@add_cm_submit');
 Route::any('/tablet/credit_memo/edit_cm_submit','Member\TabletPISController@edit_cm_submit');
+Route::any('/tablet/credit_memo/choose_type','Member\TabletPISController@cm_choose_type');
+
 
 Route::any('/tablet/sales_receipt','Member\TabletPISController@sales_receipt');
 Route::any('/tablet/sales_receipt/list','Member\TabletPISController@sales_receipt_list');
@@ -595,6 +597,8 @@ Route::any('/member/customer/credit_memo/list',"Member\CreditMemoController@cm_l
 Route::any('/member/customer/credit_memo/create_submit','Member\CreditMemoController@create_submit');
 Route::any('/member/customer/credit_memo/update',"Member\CreditMemoController@update_submit");
 
+Route::any('/member/customer/credit_memo/update_action',"Member\CreditMemoController@update_action");
+Route::any('/member/customer/credit_memo/choose_type','Member\CreditMemoController@choose_type');
 
 /* Vendor Debit MEMO*/
 Route::any('/member/vendor/debit_memo','Member\DebitMemoController@index');
@@ -922,13 +926,9 @@ Route::controller('/tester','TesterController');
 // test lang load
 Route::any("/member/load_position","Member\EmployeePositionController@load_position");
 
-
 /* PAYROLL START */
-
-
 // Route::group(array('prefix' => '/member/payroll'), function()
 // {
-
 // 	/* COMPANY START */
 // 	Route::any('/company_list','Member\PayrollController@company_list');
 // 	Route::any('/company_list/modal_create_company','Member\PayrollController@modal_create_company');
@@ -975,9 +975,9 @@ Route::any("/member/load_position","Member\EmployeePositionController@load_posit
 // 	Route::any("/jobtitlelist/modal_update_jobtitle","Member\PayrollController@modal_update_jobtitle");
 // 	/* JOB TITLE END */
 // });
-
 include_once('routes_config/routes_payroll.php');
-
 /* PAYROLL END */
 
+/* PAYMENT FACILITIES */
+include_once('routes_config/routes_payment.php');
 

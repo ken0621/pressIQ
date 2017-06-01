@@ -28,13 +28,13 @@ use App\Models\Tbl_email_template;
 use App\Globals\EmailContent;
 use App\Globals\Mlm_plan;
 use App\Models\Tbl_mlm_item_points;
+use App\Globals\Ec_order;
 use Mail;
 use App\Globals\Accounting;
 class Item_code
 {
 	public static function add_code($data,$shop_id, $user_id, $warehouse_id)
 	{ 
-
         ignore_user_abort(true);
         set_time_limit(0);
         flush();
@@ -189,6 +189,7 @@ class Item_code
         $tendered = 0;
         $tendered_amount = 0;
         $data['response_status']      = "warning";
+
         if(isset($data['payment_type_choose']))
         {
             if($data['payment_type_choose'] == '3')
@@ -308,7 +309,6 @@ class Item_code
         $item_discount            = 0;
         $item_discount_percentage = 0;
 
-        
     	$validator = Validator::make($insert,$rules,$messages);
     	if ($validator->passes())
     	{
@@ -540,7 +540,6 @@ class Item_code
                         
                         }
                         Tbl_item_code_item::insert($insert_item_per);
-                        
                         Mlm_voucher::give_voucher_prod_code($invoice_id);
                         if($gc == 2)
                         {
@@ -581,6 +580,7 @@ class Item_code
 
                             }
                         }
+                        Item_code::use_item_code_all_invoice($invoice_id);
         	            /* FORGET ALL SESSION FOR PURCHASED ITEM */
         	            Session::forget("sell_item_codes_session");
                         $send["response_status"] = "success_process";    
@@ -755,6 +755,7 @@ class Item_code
     public static function completed_order_action($order_id)
     {
         Item_code::give_item_code_ec_order($order_id);
+        Ec_order::create_merchant_school_item($order_id);
         Item_code::merchant_school_active_codes($order_id);
     }
     public static function insert_product_merchant_school($order_id)
@@ -766,13 +767,17 @@ class Item_code
         $update['merchant_item_status'] = 1;
 
         $merchant_school_item = DB::table('tbl_merchant_school_item')->where('merchant_item_ec_order_id', $order_id)->get();
-        
+
         foreach($merchant_school_item as $key => $value)
         {
             $all_wallet = DB::table('tbl_merchant_school_wallet')->where('merchant_school_custmer_id', $value->merchant_item_customer_id)->sum('merchant_school_amount');
             $insert['merchant_school_amount'] = $value->merchant_school_i_amount;
             // $insert['merchant_school_s_id'] = 
             // $insert['merchant_school_s_name'] = 
+            if($all_wallet == null)
+            {
+                $all_wallet = 0;
+            }
             $insert['merchant_school_remarks'] = 'Top up from E-commerce order';
             $insert['merchant_school_date'] = Carbon::now();
             $insert['merchant_school_custmer_id'] = $value->merchant_item_customer_id;

@@ -174,6 +174,8 @@ Route::any('/member/mlm/encashment/view/type/cheque/edit', 'Member\Mlm_Encashmen
 Route::any('/member/mlm/encashment/view/type/bank/add', 'Member\Mlm_EncashmentController@bank_add');//luke
 Route::any('/member/mlm/encashment/view/type/bank/archive', 'Member\Mlm_EncashmentController@bank_archive');//luke
 Route::any('/member/mlm/encashment/view/type/bank/edit/name', 'Member\Mlm_EncashmentController@bank_edit_name');//luke
+Route::any('/member/mlm/encashment/currency', 'Member\Mlm_EncashmentController@set_currency');
+Route::any('/member/mlm/encashment/currency/update', 'Member\Mlm_EncashmentController@set_currency_update');
 
 Route::any('/member/mlm/encashment/add/to/list', 'Member\Mlm_EncashmentController@add_to_list');//luke
 Route::any('/member/mlm/encashment/add/to/list/date', 'Member\Mlm_EncashmentController@add_to_list_date');//luke
@@ -238,6 +240,8 @@ Route::any('member/mlm/complan_setup/binary_pro', 'Member\Mlm_ComplanSetupContro
 Route::any('member/mlm/merchant_school', 'Member\BeneficiaryController@index'); 
 
 Route::any('member/mlm/tours_wallet', 'Member\Mlm_ComplanSetupController@tours_wallet'); 
+Route::any('member/mlm/tours_wallet/update/settings', 'Member\Mlm_ComplanSetupController@set_tours_wallet_settings');
+Route::any('member/mlm/tours_wallet/get/log', 'Member\Mlm_ComplanSetupController@get_log'); 
 
 Route::any('member/mlm/merchant_school/create', 'Member\BeneficiaryController@create'); 
 Route::any('member/mlm/merchant_school/get/receipt', 'Member\BeneficiaryController@receipt'); 
@@ -253,3 +257,4 @@ Route::any('member/mlm/merchant_school/consume', 'Member\BeneficiaryController@c
 Route::any('member/mlm/complan_setup/unilevel/distribute', 'Member\Mlm_ComplanSetupController@unilevel_distribute'); 
 Route::any('member/mlm/complan_setup/unilevel/distribute/set/settings', 'Member\Mlm_ComplanSetupController@unilevel_distribute_set_settings'); 
 Route::any('member/mlm/complan_setup/unilevel/distribute/simulate', 'Member\Mlm_ComplanSetupController@unilevel_distribute_simulate'); 
+

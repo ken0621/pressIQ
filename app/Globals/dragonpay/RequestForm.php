@@ -1,12 +1,13 @@
 <?php
 
-namespace App\IPay88;
+namespace App\Globals\Dragonpay;
 
 class RequestForm
 {
 	public static function render($fieldValues, $paymentUrl)
 	{
-		echo "<form id='autosubmit' action='".$paymentUrl."' method='post'>";
+		//dd($fieldValues);
+		echo "<form id='autosubmit' action='".$paymentUrl."' method='get'>";
 		if (is_array($fieldValues) || is_object($fieldValues))
 		{
 			foreach ($fieldValues as $key => $val) {

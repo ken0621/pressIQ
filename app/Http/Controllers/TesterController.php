@@ -24,6 +24,7 @@ use App\Globals\Sms;
 use App\Globals\PayrollJournalEntries;
 use App\Globals\Payroll;
 use App\Globals\Report;
+use App\Globals\Utilities;
 
 use Request;
 use Carbon\Carbon;
@@ -56,7 +57,7 @@ class TesterController extends Controller
 
 	public function getIndex()
     {
-        dd(currency("php", 0));
+        dd(Utilities::filterPageList2(2));
     }
 
     public function getJournal()

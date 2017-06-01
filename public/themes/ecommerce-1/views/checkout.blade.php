@@ -162,7 +162,7 @@
 									</div>
 									@else
 									<div class="form-group">
-										<input value="{{ Request::old('ec_order_load_number') }}" name="ec_order_load_number" type="text" class="form-control">
+										<input value="{{ Request::old('ec_order_load_number') }}" name="ec_order_load_number" type="text" class="form-control hide">
 									</div>
 									@endif
 									{{-- <input type="hidden" name="ec_order_merchant_school" value="{{$ec_order_merchant_school}}">

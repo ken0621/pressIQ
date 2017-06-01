@@ -29,7 +29,7 @@ use Config;
 use URL;
 use App\Globals\Mlm_slot_log;
 use App\IPay88\RequestPayment;
-use App\Globals\Dragonpay\Dragon_RequestPayment;
+use App\Globals\Dragonpay2\Dragon_RequestPayment;
 
 class Cart
 {
@@ -948,7 +948,10 @@ class Cart
     }
     public static function submit_using_dragonpay($data, $shop_id, $method_information)
     {
-        $gateway = DB::table("tbl_online_pymnt_gateway")->where("tbl_online_pymnt_gateway.gateway_code_name", $method_information->link_reference_name)->join("tbl_online_pymnt_api", "tbl_online_pymnt_api.api_gateway_id" , "=", "tbl_online_pymnt_gateway.gateway_id")->first();
+        $gateway = DB::table("tbl_online_pymnt_gateway")->where("tbl_online_pymnt_api.api_shop_id", $shop_id)
+                                                        ->where("tbl_online_pymnt_gateway.gateway_code_name", $method_information->link_reference_name)
+                                                        ->join("tbl_online_pymnt_api", "tbl_online_pymnt_api.api_gateway_id" , "=", "tbl_online_pymnt_gateway.gateway_id")
+                                                        ->first();
         if ($gateway) 
         {
             $merchant_id  = $gateway->api_client_id;
@@ -961,6 +964,13 @@ class Cart
             $request["description"] = "Item Name (x1) - PHP. 100.00";
             $request["email"] = $data["tbl_ec_order"]["customer_email"];
 
+            $payment_status = 0;
+            $order_status   = "Pending";
+            $customer       = Cart::get_customer();
+
+            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+            Cart::clear_all($shop_id);
+            
             $dragon_request = array(
                 'merchantid'    => $requestpayment->setMerchantId($merchant_id),
                 'txnid'         => $requestpayment->setTxnId($request['txnid']),
@@ -968,7 +978,9 @@ class Cart
                 'ccy'           => $requestpayment->setCcy($request['ccy']),
                 'description'   => $requestpayment->setDescription($request['description']),
                 'email'         => $requestpayment->setEmail($request['email']),
-                'digest'        => $requestpayment->getdigest()
+                'digest'        => $requestpayment->getdigest(),
+                'param1'        => "checkout",
+                'param2'        => $order_id
             );
 
             Dragon_RequestPayment::make($merchant_key, $dragon_request); 

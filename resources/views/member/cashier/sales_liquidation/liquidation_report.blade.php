@@ -304,7 +304,7 @@
                 </div>
                 @else
                 <div class="form-group">
-                    <h3>NO CREDIT MEMOT - APPLIED</h3>
+                    <h3>NO CREDIT MEMO - APPLIED</h3>
                 </div>
                 @endif
             </div>

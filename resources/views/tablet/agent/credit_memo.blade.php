@@ -29,7 +29,7 @@
             <div class="form-group">
                 <div class="col-md-4 col-xs-6">
                     @if($pis != 0)
-                    <a class="btn btn-primary form-control popup" size="md" link="/tablet/customer/credit_memo/choose_type">Create Credit Memo</a>
+                    <a class="btn btn-primary form-control" href="/tablet/credit_memo/add?sir_id={{Session::get('sir_id')}}">Create Credit Memo</a>
                     @else
                     <a class="btn btn-primary form-control" href="/tablet/credit_memo/add?sir_id={{Session::get('sir_id')}}">Create Credit Memo</a>
                     @endif

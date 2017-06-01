@@ -498,6 +498,18 @@ class Purchasing_inventory_system
             array_push($data['__transaction'], $_transaction);
         }
 
+         $data["_cm_applied"] = Tbl_manual_receive_payment::customer_receive_payment()->selectRaw("*, tbl_manual_receive_payment.rp_date as manual_rp_date")->where("rp_ref_name","credit_memo")->where("sir_id",$sir_id)->get();
+         $data["total_cm_applied"] = 0;
+        foreach ($data["_cm_applied"] as $cm_applied_key => $cm_applied_value) 
+        {
+            $data["_cm_applied"][$cm_applied_key]->customer_name = $cm_applied_value->company != "" ? $cm_applied_value->company : $cm_applied_value->title_name." ".$cm_applied_value->first_name." ".$cm_applied_value->last_name." ".$cm_applied_value->suffix_name;
+            $data["_cm_applied"][$cm_applied_key]->cm_applied_amount = $cm_applied_value->rp_total_amount;
+            $data["_cm_applied"][$cm_applied_key]->cm_id = $cm_applied_value->rp_ref_id;
+
+            $data["total_cm_applied"] += $cm_applied_value->rp_total_amount;
+        }
+
+
         $data["credit_memo"] = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->where("cm_type",0)->get();
         foreach ($data["credit_memo"] as $cm_key => $cm_value) 
         {

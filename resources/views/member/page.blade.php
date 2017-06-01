@@ -8,7 +8,7 @@
                     <span class="nav-text">{{ $page["name"] }}</span>
                     <i class="{{isset($page['url']) ? '' : 'icon-angle-right'}}"></i>
                 @else
-                    {{ $page["label"] }}
+                    {!! $page["label"] !!}
                 @endif
             </a>
             @if(isset($page['submenu']))

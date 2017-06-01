@@ -128,10 +128,6 @@ class CreditMemoController extends Member
 
         return view("member.customer.credit_memo.credit_memo_add",$data);
     }
-    public function choose_type()
-    {
-        return view("member.customer.credit_memo.cm_type");
-    }
     public function create_submit()
     {
         $customer_info[] = null;

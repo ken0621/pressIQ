@@ -79,12 +79,6 @@ class TabletPISController extends Member
 
         return view("tablet.agent.confirm_sync",$data);
     }
-    public function cm_choose_type()
-    {
-        $data["for_tablet"] = "true";
-
-        return view("member.customer.credit_memo.cm_type",$data);
-    }
 	public function index()
 	{
         if($this->get_user())

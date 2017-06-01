@@ -3,6 +3,15 @@
 function page_list()
 {
     $path = '/member/';
+
+    $page = "dashboard";
+    $nav[$page]['name']        = "Dashboard";
+    $nav[$page]['segment']      = $page;
+    $nav[$page]['icon']         = "home";
+    $nav[$page]['url']          = $path;
+    $nav[$page]['user_settings'] = [];
+    $nav[$page]['status']       = "Working 100% - Not Tested Yet";
+    $nav[$page]['developer']    = ">";
     
     /* TRANSACTION */
     // $page = "transaction_list";  
@@ -58,6 +67,7 @@ function page_list()
     $nav[$page]['name'] = "E-Commerce";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "shopping-cart";
+    $nav[$page]['type']     = "menu";
     
     /* -- E-COMMERCE => PRODUCT ORDERS */
     $code = "ecommerce-product-order";
@@ -136,6 +146,7 @@ function page_list()
     $nav[$page]['name'] = "Multilevel Marketing";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "braille";
+    $nav[$page]['type']     = "menu";
     
     /* -- MLM => MEMBERSHIP */
     $code = "mlm-membership";
@@ -267,6 +278,7 @@ function page_list()
     $nav[$page]['name'] = "Accounting";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "money";
+    $nav[$page]['type']     = "menu";
    
     /* -- ACCOUNTING => SALES */
     // $code = "accounting-sales";
@@ -327,6 +339,7 @@ function page_list()
     $nav[$page]['name'] = "Payroll";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "calculator";
+    $nav[$page]['type']     = "menu";
 
     // /* PAYROLL SUMMARY */
     // $code = "payroll-summary";
@@ -360,6 +373,7 @@ function page_list()
     $nav[$page]['name'] = "Payroll";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "calculator";
+    $nav[$page]['type']     = "menu";
 
     // /* PAYROLL SUMMARY */
     // $code = "payroll-summary";
@@ -536,6 +550,7 @@ function page_list()
     $nav[$page]['name'] = "Items";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "cart-plus";
+    $nav[$page]['type']     = "menu";
     
     /* -- ITEM => ITEM LIST  */
     $code = "item-list";
@@ -624,6 +639,7 @@ function page_list()
     $nav[$page]['name'] = "Customers";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "group";
+    $nav[$page]['type']     = "menu";
     
     /* -- CUSTOMERS => CUSTOMER LIST  */
     $code = "customer-list";
@@ -702,6 +718,7 @@ function page_list()
     $nav[$page]['name'] = "Vendors";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "user-secret";
+    $nav[$page]['type']     = "menu";
     
     /* -- VENDORS => LIST  */
     $code = "vendor-list";
@@ -777,110 +794,150 @@ function page_list()
 
     /* REPORTS  */
     $page = "report"; 
-    $nav[$page]['name'] = "Reports";
-    $nav[$page]['segment'] = $page;
-    $nav[$page]['icon'] = "area-chart";
+    $nav[$page]['name']     = "Reports";
+    $nav[$page]['segment']  = $page;
+    $nav[$page]['icon']     = "area-chart";
+    $nav[$page]['type']     = "menu";
 
 
-    /* -- REPORT => PRODUCTS  */
-    $code = "report-product-sales";
-    $nav[$page]['submenu'][$code]['label'] = "Product Sales";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sale/product";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+    /* -- REPORT => ECOMMERCE SUBMENU */
+    $segment = "submenu-ecommerce";
+    $nav[$page]['submenu'][$segment]['name']   = "Ecommerce";
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
 
-    /* -- REPORT => MONTHLY PRODUCT  */
-    $code = "report-product-sales-monthly";
-    $nav[$page]['submenu'][$code]['label'] = "Product Sales Monthly";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sale/month";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+        /* -- REPORT => PRODUCTS  */
+        $code = "report-product-sales";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Product Sales";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/sale/product";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
 
-    /* -- REPORT => PRODUCTS VARIANT  */
-    $code = "report-product-variant-sales";
-    $nav[$page]['submenu'][$code]['label'] = "Product Variant Sales";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/sale/product_variant";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+        /* -- REPORT => MONTHLY PRODUCT  */
+        $code = "report-product-sales-monthly";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']       = "Product Sales Monthly";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']        = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']         = $path . $page . "/sale/month";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']      = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']   = "Everyone";
+
+        /* -- REPORT => PRODUCTS VARIANT  */
+        $code = "report-product-variant-sales";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label']        = "Product Variant Sales";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code']         = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url']          = $path . $page . "/sale/product_variant";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status']        = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer']     = "Everyone";
+
+        $segment2 = "submenu-SampleSubMenu2";
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['name']   = "SampleSubMenu2";
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['segment']= $segment2;
+        $nav[$page]['submenu'][$segment]['submenu'][$segment2]['type']   = "submenu";
+
+            $segment3 = "submenu-SampleSubMenu3";
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['name']   = "SampleSubMenu3";
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['segment']= $segment3;
+            $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['type']   = "submenu";
+
+                $code = "report-sasafsdfsdf";
+                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['label']        = "SamplePage1";
+                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['code']         = $code;
+                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['url']          = '';
+                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['user_settings'] = ['access_page'];
+                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['status']        = "Developing";
+                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['developer']     = "Everyone";
+
+                $code = "reportdfgdfgf";
+                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['label']        = "SamplePage2";
+                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['code']         = $code;
+                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['url']          = '';
+                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['user_settings'] = ['access_page'];
+                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['status']        = "Developing";
+                $nav[$page]['submenu'][$segment]['submenu'][$segment2]['submenu'][$segment3]['submenu'][$code]['developer']     = "Everyone";
+
+    /* -- REPORT => ACCOUNTING SUBMENU */
+    $segment = "submenu-accounting";
+    $nav[$page]['submenu'][$segment]['name']   = "Accounting"; 
+    
+    $nav[$page]['submenu'][$segment]['segment']= $segment;
+    $nav[$page]['submenu'][$segment]['type']   = "submenu";
+
+        /* -- Accounting => Sales Report  */
+        $code = "report-sales-account";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Sales By Customer";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/accounting/sale";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
+        $code = "report-sales-item-account";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Sales By Item";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/accounting/sale/item";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
+
+        $code = "report-profit-and-loss-account";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Profit and Loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/accounting/profit_loss";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
 
-    /* -- Accounting => Sales Report  */
-    $code = "report-sales-account";
-    $nav[$page]['submenu'][$code]['label'] = "Sales By Customer";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/sale";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+        $code = "report-general-ledger-account";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "General Ledger";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/accounting/general/ledger";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
-    $code = "report-sales-item-account";
-    $nav[$page]['submenu'][$code]['label'] = "Sales By Item";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/sale/item";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+        $code = "report-customer-list-account";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Customer List";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/accounting/customer_list";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
 
-    $code = "report-profit-and-loss-account";
-    $nav[$page]['submenu'][$code]['label'] = "Profit and Loss";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/profit_loss";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
+        $code = "report-vendor-list-account";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Vendor List";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/accounting/vendor_list";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
 
+        $code = "report-item-list-account";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Item List";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/accounting/item_list";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
 
-    $code = "report-general-ledger-account";
-    $nav[$page]['submenu'][$code]['label'] = "General Ledger";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/general/ledger";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Everyone";
-
-    $code = "report-customer-list-account";
-    $nav[$page]['submenu'][$code]['label'] = "Customer List";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/customer_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
-
-    $code = "report-vendor-list-account";
-    $nav[$page]['submenu'][$code]['label'] = "Vendor List";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/vendor_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
-
-    $code = "report-item-list-account";
-    $nav[$page]['submenu'][$code]['label'] = "Item List";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/item_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
-
-    $code = "report-account-list-account";
-    $nav[$page]['submenu'][$code]['label'] = "Account List";
-    $nav[$page]['submenu'][$code]['code'] = $code;
-    $nav[$page]['submenu'][$code]['url'] = $path . $page . "/accounting/account_list";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page'];
-    $nav[$page]['submenu'][$code]['status'] = "Developing";
-    $nav[$page]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
+        $code = "report-account-list-account";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Account List";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/accounting/account_list";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
 
     /* PURCHASING INVENTORY SYSTEM */
     $page = "pis";
     $nav[$page]['name'] = "Sales & Delivery";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "truck";
+    $nav[$page]['type']     = "menu";
 
      /* -- PIS => SIR */
     $code = "pis-lof";
@@ -924,6 +981,7 @@ function page_list()
     $nav[$page]['name'] = "Sales Agent Transaction";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "tablet";
+    $nav[$page]['type']     = "menu";
 
      /* -- PIS => SIR */
     $code = "tablet-sir";
@@ -938,6 +996,7 @@ function page_list()
     $nav[$page]['name'] = "Cashier";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "dollar";
+    $nav[$page]['type'] = "menu";
 
      /* -- PIS => SIR */
     $code = "agent-collectiong";
@@ -969,6 +1028,7 @@ function page_list()
     $nav[$page]['name'] = "Manage Pages";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "star";
+    $nav[$page]['type']     = "menu";
     
     /* -- MANAGE CONTENT => PAGE INFORMATION */
     $code = "page-theme";
@@ -1018,7 +1078,8 @@ function page_list()
     $nav[$page]['name'] = "Utilities";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "gear";
-    
+    $nav[$page]['type']     = "menu";
+
     /* -- UTILITIES => AdminN ACCOUNTS */
     $code = "utilities-admin-accounts";
     $nav[$page]['submenu'][$code]['label'] = "Admin Accounts";
@@ -1081,6 +1142,7 @@ function page_list()
     $nav[$page]['name'] = "Maintenance";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "trello";
+    $nav[$page]['type']     = "menu";
 
     /* -- MAINTENACE => Payment Method */
     $code = "maintenance-payment-method";
@@ -1138,6 +1200,7 @@ function page_list()
     $nav[$page]['name'] = "Developers";
     $nav[$page]['segment'] = $page;
     $nav[$page]['icon'] = "diamond";
+    $nav[$page]['type']     = "menu";
 
     /* -- DEVELOPERS => PAGE STATUS */
     $code = "developer-page-status";

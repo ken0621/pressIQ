@@ -45,7 +45,10 @@ class MlmProfileController extends Mlm
 
     	if(Self::$slot_id != null)
     	{
-    		if(Self::$shop_id == 1)
+    		$access['PhilTECH'] = 'PhilTECH';
+    		$access['sovereign'] = 'sovereign';
+    		$access['alphaglobal'] = 'alphaglobal';
+    		if(isset($access[Self::$shop_info->shop_key]))
     		{
     			$shop_id = Self::$shop_id;
     			$data['cus_info'] = Mlm_member::get_customer_info_w_slot(Self::$customer_id, Self::$slot_id);
@@ -61,8 +64,6 @@ class MlmProfileController extends Mlm
 	    		}
     		}
     	}
-
-
     	$data['new_member'] = Tbl_mlm_slot::where('slot_sponsor', Self::$slot_id)
     	->customer()
     	->orderBy('slot_id', 'DESC')

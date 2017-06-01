@@ -56,8 +56,8 @@ class CreditMemoController extends Member
             $cm_amount = $data["cm_data"]->cm_amount;
             $total_inv = 0;
 
-            // if(count($data["_invoice"]) > 0)
-            // {  
+            if(count($data["_invoice"]) > 0)
+            {  
             //     foreach ($data["_invoice"] as $key => $value)  
             //     {
             //         $total_inv += $value["inv_overall_price"];
@@ -67,12 +67,12 @@ class CreditMemoController extends Member
             //             $data["_invoice"][$key]["rpline_amount"] = $value["inv_overall_price"];
             //         }
             //     }
-            //     if($data["_invoice"][0]["inv_overall_price"] > $cm_amount && $total_inv > $cm_amount)
-            //     {
-            //             $data["_invoice"][0]["amount_applied"] = $cm_amount;
-            //             $data["_invoice"][0]["rpline_amount"] = $cm_amount;
-            //     }
+            // if($data["_invoice"][0]["inv_overall_price"] > $cm_amount)
+            // {
+                    $data["_invoice"][0]["amount_applied"] = $cm_amount;
+                    $data["_invoice"][0]["rpline_amount"] = $cm_amount;
             // }
+            }
 
             return view("member.receive_payment.modal_receive_payment",$data);
         }

@@ -1,6 +1,8 @@
 <form class="global-submit form-horizontal" role="form" action="{{$action or ''}}" id="confirm_answer" method="post">
 	{!! csrf_field() !!}
 	<div class="modal-header">
+
+       <input type="hidden" class="form-control input-sm" name="cm_id" value="{{$cm_data->cm_id or ''}}" />
 		<button type="button" class="close" data-dismiss="modal">&times;</button>
 		<h4 class="modal-title">Receive Payment</h4>
 	</div>

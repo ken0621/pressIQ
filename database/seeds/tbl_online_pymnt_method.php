@@ -18,7 +18,6 @@ class tbl_online_pymnt_method extends Seeder
             (3, 'Metro Bank', 'metrobank', '1,2,3,4,5,6'),
             (4, 'BDO', 'bdo', '1,2,3,4,5,6'),
             (5, 'BPI', 'bpi', '1,2,3,4,5,6'),
-            (6, 'E-Wallet', 'e-wallet', '5'),
             (7, 'Palawan Express', 'remittance-1', '5'),
             (9, 'LBC Express', 'remittance-2', '5'),
             (10, 'M. Lhuillier', 'remittance-3', '5'),

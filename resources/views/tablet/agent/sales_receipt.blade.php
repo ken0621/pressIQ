@@ -3,9 +3,9 @@
 <div class="panel panel-default panel-block panel-title-block" id="top">
     <div class="panel-heading">
         <div class="col-md-8 col-xs-6">
-            <i class="fa fa-tablet"></i>
+            <i class="fa fa-tablet"></i>     
             <h1>
-                <span class="page-title">Tablet &raquo; Sales Receipt</span>
+                <span class="page-title">Tablet &raquo; Cash Sales</span>
                 <small>
                 </small>
             </h1>
@@ -24,7 +24,7 @@
         <div id="invoice" class="tab-pane fade in active">
             <div class="form-group">
                 <div class="col-md-4 col-xs-6">
-                    <a class="btn btn-primary form-control" href="/tablet/sales_receipt?sir_id={{Session::get('sir_id')}}">Create Sales Receipt</a>
+                    <a class="btn btn-primary form-control" href="/tablet/sales_receipt?sir_id={{Session::get('sir_id')}}">Create Cash Sales</a>
                 </div>
                 <div class="col-md-8 col-xs-6 text-right">
                     <a href="/tablet/dashboard"><< Back to Dashboard</a>
@@ -36,7 +36,6 @@
                       <thead>
                           <tr>
                               <th>#</th>
-                              <th>Paid</th>
                               <th>Customer</th>
                               <th>Total Price</th>
                               <th></th>
@@ -46,7 +45,6 @@
                           @foreach($_invoices as $inv)
                           <tr style="color: {{$inv->inv_is_paid == 1? '#00b33c' : '#000' }};">
                             <td>{{$inv->inv_id}}</td>
-                            <td><input type="checkbox" name="paid" disabled {{$inv->inv_is_paid == 1? 'checked' : '' }} ></td>
                             <td>
                               @if($inv->company != null)
                               {{$inv->company}}
@@ -66,11 +64,7 @@
                                         @else
                                          <li><a size="lg" link="/tablet/view_invoice_view/{{$inv->inv_id}}" class="popup">View Receipt</a></li>
                                         @endif
-<<<<<<< HEAD
-                                        <li><a href="/tablet/sales_receipt?id={{$inv->inv_id}}&sir_id={{Session::get('selected_sir')}}">Edit Sales Receipt</a></li>                                        
-=======
-                                        <li><a href="/tablet/sales_receipt?id={{$inv->inv_id}}&sir_id={{Session::get('sir_id')}}">Edit Sales Receipt</a></li>                                        
->>>>>>> testing
+                                        <li><a href="/tablet/sales_receipt?id={{$inv->inv_id}}&sir_id={{Session::get('sir_id')}}">Edit Sales Receipt</a></li>
                                     </ul>
                                 </div>
                             </td>

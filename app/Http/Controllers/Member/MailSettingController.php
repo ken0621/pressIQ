@@ -14,7 +14,7 @@ class MailSettingController extends Member
 {
     public function index()
     {
-    	$data["setting"] = collect(DB::table("tbl_settings")->get())->keyBy('settings_key');
+    	$data["setting"] = collect(DB::table("tbl_settings")->where("shop_id", $this->user_info->shop_id)->get())->keyBy('settings_key');
 
         return view("member.settings.mail_setting", $data);
     }

@@ -10,7 +10,7 @@
                     You can set your encashment settings and process encashment in this tab.
                 </small>
             </h1>
-            <!-- <a href="/member/mlm/membership/add" class="panel-buttons btn btn-primary pull-right btn-custom-primary">Add Membership</a> -->
+            <a href="/member/mlm/encashment/currency" target="_blank" class="panel-buttons btn btn-primary pull-right btn-custom-primary">Set currency</a>
         </div>
     </div>
 </div>  
@@ -324,6 +324,17 @@
                         <tbody>
                         @if(count($history) >= 1)
                           @foreach($history as $key => $value)
+                          <?php 
+
+                          $currency = $value->encashment_process_currency;
+                          $convertion = $value->encashment_process_currency_convertion;
+                          $tax_converted = $value->enchasment_process_tax * $convertion;
+                          $process_fee = $value->enchasment_process_p_fee * $convertion;
+                          $taxed = $value->encashment_process_taxed * $convertion;
+                          $total = $value->wallet_log_amount * $convertion;
+                          $denied = $value->wallet_log_denied_amount * $convertion;
+
+                          ?>
                             <tr>
                               <td>
                               @if($value->encashment_process_type == 0)
@@ -341,19 +352,19 @@
                               <td class="hide">{{$value->enchasment_process_to}}</td>
                               <td>{{$value->wallet_log_date_created}}</td>
                               @if($value->enchasment_process_tax_type == 0)
-                              <td>{{$value->enchasment_process_tax}}</td>
+                              <td>{{currency($currency, $tax_converted)}}</td>
                               @else
                               <td>{{$value->enchasment_process_tax}}%</td>
                               @endif
 
                               @if($value->enchasment_process_p_fee_type == 0)
-                              <td>{{$value->enchasment_process_p_fee}}</td>
+                              <td>{{currency($currency, $process_fee)}}</td>
                               @else
                               <td>{{$value->enchasment_process_p_fee}}%</td>
                               @endif
 
-                              <td>{{$value->encashment_process_taxed}}</td>
-                              <td>{{$value->wallet_log_amount * -1}}</td>
+                              <td>{{currency($currency, $taxed)}}</td>
+                              <td>{{currency($currency, $total * -1)}}</td>
 
                               @if($value->encashment_process_type == 0)
                               <td class="alert alert-warning">Pending</td>

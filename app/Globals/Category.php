@@ -213,7 +213,7 @@ class Category
 	public static function select_category_archived($margin_left = 0)
 	{
 		$html = "";
-		$_category = Tbl_category::where("archived",1)->get();
+		$_category = Tbl_category::where("archived",1)->where("type_shop",Category::getShopId())->get();
 
 		$cat_type = array("all","services","inventory","non-inventory","bundles");
 		foreach ($_category as $key => $value) 

@@ -51,7 +51,7 @@
                             <th>Inventory</th>
                             <th class="text-center">Sale Price</th>
                             <th>Item Details</th>
-                            <!-- <th>Item Date Created</th> -->
+                            <th>Item Price History</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -82,7 +82,11 @@
                                 Category : {{$item->type_name}}<br>
                                 Item Type :{{$item->item_type_name}}</small>
                             </td>
-                            <!-- <td>{{date("F d, Y", strtotime($item->item_date_created))}}</td> -->
+                            <td>
+                                <small>
+                                {!! $item->item_price_history !!}
+                                </small>
+                            </td>
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-primary btn-grp-primary popup" link="/member/item/edit/{{$item->item_id}}" size="lg" href="javascript:">Edit</a>

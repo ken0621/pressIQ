@@ -10,7 +10,7 @@ $data['icon'] = 'fa fa-star-half-o';
 @if(isset($report))
     @if(count($report) != 0)
         @foreach($report as $key => $value)
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="box box-widget">
             <div class="box-header with-border">
               <div class="user-block">

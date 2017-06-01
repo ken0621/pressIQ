@@ -154,13 +154,17 @@
 										<label>Contact Number</label>
 										<input  maxlength="11" class="form-control" type="text" name="contact_number" value="{{ Request::input('customer_mobile') }}">
 									</div>
-									{{-- <input type="hidden" name="ec_order_load" value="{{$ec_order_load}}">
+									<input type="hidden" name="ec_order_load" value="{{$ec_order_load}}">
 									@if($ec_order_load == 1)
 									<div class="form-group">
 										<label>LOAD TO: (Number)</label>
 										<input value="{{ Request::old('ec_order_load_number') }}" name="ec_order_load_number" type="text" class="form-control">
 									</div>
-									@endif --}}
+									@else
+									<div class="form-group">
+										<input value="{{ Request::old('ec_order_load_number') }}" name="ec_order_load_number" type="text" class="form-control hide">
+									</div>
+									@endif
 									{{-- <input type="hidden" name="ec_order_merchant_school" value="{{$ec_order_merchant_school}}">
 									@if($ec_order_merchant_school >= 1)
 										@for($i = 0; $i < $ec_order_merchant_school; $i++ )	

@@ -29,7 +29,7 @@ use Config;
 use URL;
 use App\Globals\Mlm_slot_log;
 use App\IPay88\RequestPayment;
-use App\Globals\Dragonpay\Dragon_RequestPayment;
+use App\Globals\Dragonpay2\Dragon_RequestPayment;
 
 class Cart
 {
@@ -705,6 +705,8 @@ class Cart
         $data["tbl_customer"]['customer_contact'] = (isset($customer_information["customer_contact"]) ? $customer_information["customer_contact"] : (isset($data["tbl_customer"]['customer_contact']) ? $data["tbl_customer"]['customer_contact'] : null));;
         $data["tbl_customer"]['country_id']     = 420;
 
+        $data['load_wallet']['ec_order_load'] = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
+        $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
         /* CURRENT LOGGED IN */
         if (isset($customer_information["current_user"])) 
         {
@@ -741,9 +743,7 @@ class Cart
             $data["tbl_customer_address"]["billing"]["customer_street"] = $data["tbl_customer_address"]["shipping"]["customer_street"];
             $data["tbl_customer_address"]["billing"]["purpose"] = "billing"; 
         }
-
         $data = Cart::customer_set_info_ec_order($shop_id, $data, $customer_information);
-
         /* VALIDATIONS */
         $check_account = Cart::customer_set_info_check_account($shop_id, $data["new_account"], $data["tbl_customer"]['email'], $data["tbl_customer"]["password"]);
         $check_name = "success";
@@ -770,7 +770,13 @@ class Cart
 
         return $message;
     }
-
+    public static function customer_update_method_a($shop_id, $customer_info)
+    {
+        if(isset($customer_info['method_id']))
+        {
+            $old_session = $order = Cart::get_info($shop_id);
+        }
+    }
     public static function customer_set_info_ec_order($shop_id, $data, $customer_information)
     { 
         $data["tbl_ec_order"]["ec_order_id"] = Tbl_ec_order::max("ec_order_id") + 1;
@@ -833,6 +839,8 @@ class Cart
 
 
         /*  OTHER INFO WITH SERVICE FEE */
+        $data['tbl_ec_order']['ec_order_load'] = intval(isset($data['load_wallet']['ec_order_load']) == true ? $data['load_wallet']['ec_order_load'] : 0);
+        $data['tbl_ec_order']['ec_order_load_number'] = isset($data['load_wallet']['ec_order_load_number']) == true ? $data['load_wallet']['ec_order_load_number'] : 0 ;
         $data["tbl_ec_order"]["service_fee"] = $service_fee;
         $data["tbl_ec_order"]["total"] = $total;
         $data["tbl_ec_order"]["coupon_id"] = null;
@@ -842,8 +850,6 @@ class Cart
         $data["tbl_ec_order"]["shipping_group"] = null;
         $data["tbl_ec_order"]["order_status"] = "Pending";
         $data["tbl_ec_order"]["payment_status"] = 0;
-        
-
         return $data;
     }
     public static function get_method_information($shop_id, $payment_method_id)
@@ -910,19 +916,17 @@ class Cart
      */
     public static function submit_order($shop_id, $payment_status, $order_status, $customer_id = null)
     {
-        $order                                   = Cart::get_info($shop_id);
+        $order = Cart::get_info($shop_id);
         $order["tbl_ec_order"]["payment_status"] = $payment_status;
         $order["tbl_ec_order"]["order_status"]   = $order_status;
         $order["customer_id"]                    = $customer_id;
-        
         return Ec_order::create_ec_order_from_cart($order);   
     }
     public static function process_payment($shop_id)
     {
-        $data = Self::get_info($shop_id);
+        $data = Cart::get_info($shop_id);
         $method_id = $data["tbl_ec_order"]["payment_method_id"];
         $method_information = Self::get_method_information($shop_id, $method_id);
-        
         if ( isset($method_id) && isset($method_information) )
         {
             switch ($method_information->link_reference_name)
@@ -933,7 +937,7 @@ class Cart
                 case 'dragonpay': return Cart::submit_using_dragonpay($data, $shop_id, $method_information); break;
                 case 'ipay88': return Cart::submit_using_ipay88($data, $shop_id, $method_information); break;
                 case 'other': return Cart::submit_using_proof_of_payment($shop_id, $method_information);  break;
-                case 'e-wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
+                case 'e_wallet': return Cart::submit_using_ewallet($data, $shop_id); break;
                 default: dd("UNDER DEVELOPMENT"); break;
             }
         }
@@ -944,7 +948,10 @@ class Cart
     }
     public static function submit_using_dragonpay($data, $shop_id, $method_information)
     {
-        $gateway = DB::table("tbl_online_pymnt_gateway")->where("tbl_online_pymnt_gateway.gateway_code_name", $method_information->link_reference_name)->join("tbl_online_pymnt_api", "tbl_online_pymnt_api.api_gateway_id" , "=", "tbl_online_pymnt_gateway.gateway_id")->first();
+        $gateway = DB::table("tbl_online_pymnt_gateway")->where("tbl_online_pymnt_api.api_shop_id", $shop_id)
+                                                        ->where("tbl_online_pymnt_gateway.gateway_code_name", $method_information->link_reference_name)
+                                                        ->join("tbl_online_pymnt_api", "tbl_online_pymnt_api.api_gateway_id" , "=", "tbl_online_pymnt_gateway.gateway_id")
+                                                        ->first();
         if ($gateway) 
         {
             $merchant_id  = $gateway->api_client_id;
@@ -957,6 +964,13 @@ class Cart
             $request["description"] = "Item Name (x1) - PHP. 100.00";
             $request["email"] = $data["tbl_ec_order"]["customer_email"];
 
+            $payment_status = 0;
+            $order_status   = "Pending";
+            $customer       = Cart::get_customer();
+
+            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
+            Cart::clear_all($shop_id);
+            
             $dragon_request = array(
                 'merchantid'    => $requestpayment->setMerchantId($merchant_id),
                 'txnid'         => $requestpayment->setTxnId($request['txnid']),
@@ -964,7 +978,9 @@ class Cart
                 'ccy'           => $requestpayment->setCcy($request['ccy']),
                 'description'   => $requestpayment->setDescription($request['description']),
                 'email'         => $requestpayment->setEmail($request['email']),
-                'digest'        => $requestpayment->getdigest()
+                'digest'        => $requestpayment->getdigest(),
+                'param1'        => "checkout",
+                'param2'        => $order_id
             );
 
             Dragon_RequestPayment::make($merchant_key, $dragon_request); 
@@ -1060,12 +1076,7 @@ class Cart
         $data['order_id'] = Crypt::encrypt($tbl_order->ec_order_id);
 
         $result = Mail_global::payment_mail($data, $shop_id);
-
-        if ($result == 0) 
-        {
-            dd("Some error occurred. Please contact the administrator.");
-        }
-
+        
         return Redirect::to("/email_payment?email=" . $tbl_order->customer_email)->send();
     }
     public static function submit_using_ewallet($cart, $shop_id)
@@ -1078,6 +1089,11 @@ class Cart
         if($slot_session != null)
         {
             $check_wallet = Mlm_slot_log::get_sum_wallet($slot_session->slot_id);
+            $payment_status = 0;
+            $order_status   = "Pending";
+            $customer       = Cart::get_customer();
+
+            $order_id = Cart::submit_order($shop_id, $payment_status, $order_status, isset($customer['customer_info']->customer_id) ? $customer['customer_info']->customer_id : null);
             if($check_wallet >= $sum )
             {
                 // return $check_wallet;
@@ -1093,7 +1109,10 @@ class Cart
                 $arry_log['wallet_log_claimbale_on'] = Carbon::now(); 
                 
                 Mlm_slot_log::slot_array($arry_log);
-                $cart["order_status"] = "Processing";
+                $update['ec_order_id'] = $order_id;
+                $update['order_status'] = "Processing";
+                $update['payment_status'] = 1;
+                $order = Ec_order::update_ec_order($update);
             }
             else
             {

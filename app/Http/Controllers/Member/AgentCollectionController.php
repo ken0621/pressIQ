@@ -64,6 +64,7 @@ class AgentCollectionController extends Member
             } 
         }  
 
+
         return view("member.purchasing_inventory_system.agent_transactions.agent_collection_center",$data);
     }
 

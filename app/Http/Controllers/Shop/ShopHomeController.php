@@ -11,11 +11,14 @@ use App\Models\Tbl_category;
 use App\Globals\Category;
 use App\Globals\Ecom_Product;
 use App\Globals\Cards;
+use App\Globals\Ec_brand;
 
 class ShopHomeController extends Shop
 {
     public function index()
     {
+    	$brand = Ec_brand::getBrands(4, $this->shop_info->shop_id);
+    	dd($brand);
         $data["page"]      = "Home";
         $data["_product"] = Ecom_Product::getAllProduct($this->shop_info->shop_id);
      	

@@ -369,17 +369,17 @@ class Item
     }    
     public static function get_item_bundle($item_id = null)
     {
-        $data = Tbl_item::where("item_type_id", 4);
         $items = [];
 
         if($item_id)
         {
-            $items           = $data->where("item_id", $item_id)->first()->toArray();
+            $items           = Tbl_item::where("item_id", $item_id)->first()->toArray();
+
             $items["bundle"] = Tbl_item_bundle::item()->where("bundle_bundle_id", $item_id)->get()->toArray();
         }
         else
         {
-            $_item = $data->get()->toArray();
+            $_item = Tbl_item::get()->toArray();
 
             foreach($_item as $key=>$item)
             {

@@ -607,7 +607,7 @@ function page_list()
     $nav[$page]['submenu'][$code]['label'] = "Warehouse";
     $nav[$page]['submenu'][$code]['code'] = $code;
     $nav[$page]['submenu'][$code]['url'] = $path . $page . "/warehouse";
-    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','transfer','refill','adjust','add-serial','archived','restore'];
+    $nav[$page]['submenu'][$code]['user_settings'] = ['access_page','add','edit','transfer','refill','adjust','add-serial','archived','restore','merchantwarehouse'];
     $nav[$page]['submenu'][$code]['status'] = "Still developing";
     $nav[$page]['submenu'][$code]['developer'] = "No Developer Yet";
 

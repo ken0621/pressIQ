@@ -240,7 +240,6 @@ class PayrollTimeSheetController extends Member
 		return view('member.payroll.employee_timesheet_table', $data);
 	}
 
-
 	public function timesheet_summary($employee_id = 0, $payroll_period_id = 0)
 	{
 
@@ -430,10 +429,27 @@ class PayrollTimeSheetController extends Member
 
 				foreach(Request::input('date')[$key] as $i => $time)
 				{
+					$time_in = '00:00';
+					$time_out = '00:00';
 
-					$time_in = Carbon::parse(Request::input("time_in")[$key][$i])->format("H:i");
-					$time_out = Carbon::parse(Request::input("time_out")[$key][$i])->format("H:i");
+					if(Request::has("time_in")[$key][$i])
+					{
+						$time_in = Carbon::parse(Request::input("time_in")[$key][$i])->format("H:i");
+					}
+					if(Request::has("time_out")[$key][$i])
+					{
+						$time_out = Carbon::parse(Request::input("time_out")[$key][$i])->format("H:i");
+					}
 
+					if(Request::has("time_in2")[$key][$i])
+					{
+						$time_in = Carbon::parse(Request::input("time_in2")[$key][$i])->format("H:i");
+					}
+					if(Request::has("time_out2")[$key][$i])
+					{
+						$time_out = Carbon::parse(Request::input("time_out2")[$key][$i])->format("H:i");
+					}
+					
 					$session_time_sheet_record_id = 0;
 					if(Session::has('session_time_sheet_record_id'))
 					{
@@ -871,4 +887,27 @@ class PayrollTimeSheetController extends Member
 
 		}
 	}
+
+
+	/* time sheet comment start */
+
+	public function modal_timesheet_comment($id)
+	{
+		$data['time_sheet'] = Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $id)->first();
+		$data['date_record'] = Tbl_payroll_time_sheet::where('payroll_time_sheet_id', $data['time_sheet']->payroll_time_sheet_id)->first();
+		return view('member.payroll.modal.modal_timesheet_comment', $data);
+	}
+
+	public function time_sheet_comment_save()
+	{
+		$payroll_time = Request::input('payroll_time');
+		$update['time_sheet_record_remarks'] = Request::input('time_sheet_record_remarks');
+		Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $payroll_time)->update($update);
+
+		$return['status'] = 'success';
+		$return['function_name'] = '';
+		return collect($return)->toJson();
+	}
+
+	/* time sheet comment end */
 }

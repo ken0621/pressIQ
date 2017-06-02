@@ -55,15 +55,17 @@
                 <i class="table-loader fa fa-spinner fa-pulse fa-fw"></i>
             </td>
             <td class="text-center">
-               <i class="fa fa-comment-o"></i>
+               <i class="fa fa-comment-o popup" link="/member/payroll/timesheet/modal_timesheet_comment/{{ $time_record->payroll_time_sheet_record_id }}"></i>
             </td>
             <td class="text-center edit-data day-number">{!! $timesheet->day_number !!}</td>
             <td class="text-center edit-data day-word">{!! $timesheet->day_word !!}</td>
             <td class="text-center editable ">
                 <input placeholder="NO TIME" class="text-table time-entry time-entry-record time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}">
+                <input class="hidden-time-in" type="hidden" name="time_in2[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}">
             </td>
             <td class="text-center editable">
                 <input placeholder="NO TIME" class="text-table time-entry time-entry-record time-out"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}">
+                 <input type="hidden" class="hidden-time-out" name="time_out2[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}">
             </td>
             <td class="text-center editable approved-in">__:__ __</td>
             <td class="text-center editable approved-out">__:__ __</td>
@@ -88,11 +90,21 @@
             @else
             <input class="date" type="hidden" name="date[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->payroll_time_sheet_record_id }}">
             <td class="text-center edit-data day-number"></td>
-            <td class="text-center edit-data day-number"></td>
+            <td class="text-center edit-data day-number">
+                <i class="fa fa-comment-o popup" link="/member/payroll/timesheet/modal_timesheet_comment/{{ $time_record->payroll_time_sheet_record_id }}"></i>
+            </td>
             <td class="text-center edit-data day-number"></td>
             <td class="text-center edit-data day-word"></td>
-            <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}"></td>
-            <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}"></td>
+            <td class="text-center editable">
+                <input placeholder="NO TIME" class="text-table time-entry time-in time-entry-record" type="text" name="time_in[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}">
+
+                <input class="hidden-time-in" type="hidden" name="time_in2[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_in }}">
+            </td>
+            <td class="text-center editable">
+                <input placeholder="NO TIME" class="text-table time-entry time-out time-entry-record"  type="text" name="time_out[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}">
+
+                <input type="hidden" class="hidden-time-out" name="time_out2[{{ $timesheet->date}}][{{ $key }}]" value="{{ $time_record->time_out }}">
+            </td>
             <td class="text-center edit-data approved-in">__:__ __</td>
             <td class="text-center edit-data approved-out">__:__ __</td>
             <td class="text-center edit-data"></td>
@@ -117,12 +129,18 @@
             <input class="date" type="hidden" name="" value="">
             <td class="text-center edit-data"></td>
             <td class="text-center edit-data">
-                <i class="fa fa-comment-o"></i>
+                <i class="fa fa-comment-o popup new-comment" link="/member/payroll/timesheet/modal_timesheet_comment/"></i>
             </td>
             <td class="text-center edit-data"></td>
             <td class="text-center edit-data"></td>
-            <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-in is-timeEntry time-entry-record" name="" value="9:00AM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span></td>
-            <td class="text-center editable"><input placeholder="NO TIME" class="text-table time-entry time-out time-entry-record is-timeEntry" name="" value="6:00PM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span></td>
+            <td class="text-center editable">
+                <input placeholder="NO TIME" class="text-table time-entry time-in is-timeEntry time-entry-record" name="" value="9:00AM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span>
+                <input class="hidden-time-in" type="hidden" name="" value="">
+            </td>
+            <td class="text-center editable">
+                <input placeholder="NO TIME" class="text-table time-entry time-out time-entry-record is-timeEntry" name="" value="6:00PM" type="text"><span class="timeEntry-control" style="display: inline-block; background: url('spinnerDefault.png') 0 0 no-repeat; width: 20px; height: 20px;"></span>
+                <input class="hidden-time-out" type="hidden" name="" value="">
+            </td>
             <td class="text-center edit-data approved-in">__:__ __</td>
             <td class="text-center edit-data approved-out">__:__ __</td>
             <td class="text-center edit-data"></td>

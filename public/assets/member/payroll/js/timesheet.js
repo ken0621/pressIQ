@@ -54,7 +54,6 @@ function timesheet()
 			action_load_link_to_modal("/member/payroll/employee_timesheet/adjustment_form?payroll_time_sheet_id=" + tid, "md");
 		});
 
-		
 	}
 
 	function event_mark_ready()
@@ -113,7 +112,7 @@ function timesheet()
 		// $(".adjust-form-icon").addClass("hidden");
 		// $(".adjust-form-loader").removeClass("hidden");
 
-		var spinner = '<i class="adjust-form-loader fa fa-spinner fa-spin fa-fw hidden"></i>';
+		var spinner 	= '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
 		var html = $(target).html();
 
 		$(target).html(spinner);
@@ -134,6 +133,7 @@ function timesheet()
 				$(".adjust-form-loader").addClass("hidden");
 				$("#global_modal").modal("hide");
 				action_compute_work_hours();
+				action_recompute_loading(date);
 			}
 		});
 	}
@@ -246,7 +246,7 @@ function timesheet()
 			var icon = $(e.currentTarget);
 			var html = icon.html();
 
-			var spinner 	= '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
+			var spinner = '<i class="fa fa-spinner fa-pulse fa-fw"></i><span class="sr-only">Loading...</span>';
 			
 			icon.html(spinner);
 			// action_create_sub_time($date);
@@ -278,6 +278,15 @@ function timesheet()
 					$("tbody").find(".time-record.new-sub").find(".date").attr("name", "date[" + date + "][" + $arr_count + "]");
 					$("tbody").find(".time-record.new-sub").find(".time-in").attr("name", "time_in[" + date + "][" + $arr_count + "]");
 					$("tbody").find(".time-record.new-sub").find(".time-out").attr("name", "time_out[" + date + "][" + $arr_count + "]");
+					
+					$("tbody").find(".time-record.new-sub").find(".hidden-time-in").attr("name", "time_in2[" + date + "][" + $arr_count + "]");
+					$("tbody").find(".time-record.new-sub").find(".hidden-time-out").attr("name", "time_out2[" + date + "][" + $arr_count + "]");
+
+					/* for comment/remarks */
+					var remarks = $("tbody").find(".time-record.new-sub").find(".new-comment");
+					var remark_link = remarks.attr('link');
+					remarks.attr('link', remark_link + result);
+
 					/* ADD EVENT TO NEW SUB */
 					event_time_entry();
 
@@ -315,7 +324,7 @@ function timesheet()
 					success : 	function(result)
 					{
 						$(e.currentTarget).closest("tr").remove();
-						// action_recompute_loading($date);
+						action_recompute_loading($date);
 						action_compute_work_hours();
 
 					},
@@ -407,6 +416,14 @@ function timesheet()
 			var tr 			= $(this).parents("tr");
 			var time_in 	= tr.find('.time-in').val();
 			var time_out 	= tr.find('.time-out').val();
+
+			try
+			{
+				tr.find('.hidden-time-in').val(time_in);
+				tr.find('.hidden-time-out').val(time_out);
+			}
+			catch(err){}
+			
 			var break_	 	= tr.find('.break-time').val();
 			var time_id 			= tr.attr('data-id');
 			var employee_id = $("#employee_id").val();
@@ -440,6 +457,7 @@ function timesheet()
 					check.removeClass('hidden');
 					loader.addClass('hidden');
 					action_compute_work_hours();
+					action_recompute_loading(date);
 				},
 				error 	: 	function(error)
 				{
@@ -764,6 +782,15 @@ function timesheet()
 	    return hours + ":" + minutes + ":00";
 	 }
 
+}	
 
 
+function submit_done(data)
+{
+	try
+	{
+		data = JSON.parse(data);
+	}
+	catch(err){}
+	data.element.modal("toggle");
 }	

@@ -39,7 +39,6 @@ class MlmRegisterController extends MlmLoginController
         } 
         
         $data['country'] = Tbl_country::get();
-        // dd($data);
         return view("mlm.register", $data);
     }
     public function post_register()

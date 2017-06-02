@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Globals\Dragonpay;
+namespace App\Globals\Dragonpay2;
 
 class RequestForm
 {

@@ -69,10 +69,17 @@ class AuditTrail
     	$insert_log["new_data"] = $new_data;
         $insert_log["audit_shop_id"] = AuditTrail::getShopId();
         $insert_log["created_at"] = Carbon::now();
+        
+        if($insert_log["user_id"])
+        {
+    		$id = Tbl_audit_trail::insertGetId($insert_log);
 
-		$id = Tbl_audit_trail::insertGetId($insert_log);
-
-		return $id;
+    		return $id;
+        }
+        else
+        {
+            return null;
+        }
     }
     public static function getSearchAuditData($col, $key, $from=null, $to=null)
     {      

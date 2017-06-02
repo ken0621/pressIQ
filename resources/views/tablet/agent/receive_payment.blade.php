@@ -5,7 +5,7 @@
         <div class="col-md-8 col-xs-6">
             <i class="fa fa-tablet"></i>
             <h1>
-                <span class="page-title">Tablet &raquo; Receive Payment</span>
+                <span class="page-title">Tablet &raquo; Collection</span>
                 <small>
                 </small>
             </h1>
@@ -24,7 +24,7 @@
         <div id="invoice" class="tab-pane fade in active">
             <div class="form-group">
                 <div class="col-md-4 col-xs-6">
-                    <a class="btn btn-primary form-control" href="/tablet/receive_payment/add">Create Receive Payment</a>
+                    <a class="btn btn-primary form-control" href="/tablet/receive_payment/add">Collect Payment</a>
                 </div>
                 <div class="col-md-8 col-xs-6 text-right">
                     <a href="/tablet/dashboard"><< Back to Dashboard</a>

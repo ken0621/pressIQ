@@ -500,7 +500,7 @@ class PayrollTimeSheetController extends Member
 						$update["payroll_time_sheet_out"] 	= $time_out;
 						if(($time_in != '00:00' && $time_out != '00:00'))
 						{
-							Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $time)->update($update);
+							// Tbl_payroll_time_sheet_record::where('payroll_time_sheet_record_id', $time)->update($update);
 						}
 						
 					}

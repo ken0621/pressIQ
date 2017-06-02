@@ -431,7 +431,7 @@ function timesheet()
 
 			var check 		= tr.find('.table-check');
 			var loader 		= tr.find('.table-loader');
-			
+
 			check.addClass('hidden');
 			loader.removeClass('hidden');
 
@@ -457,9 +457,9 @@ function timesheet()
 					{
 						check.removeClass('hidden');
 						loader.addClass('hidden');
-						setTimeout(action_compute_work_hours(),1000);
+						// setTimeout(action_compute_work_hours(),1000);
 						// action_compute_work_hours();
-						action_recompute_loading(date);
+						// action_recompute_loading(date);
 					},
 					error 	: 	function(error)
 					{
@@ -469,8 +469,6 @@ function timesheet()
 					}
 				});
 			}
-
-			
 
 		});
 	}

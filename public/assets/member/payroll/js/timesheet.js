@@ -424,6 +424,7 @@ function timesheet()
 			}
 			catch(err){}
 			
+
 			var break_	 	= tr.find('.break-time').val();
 			var time_id 			= tr.attr('data-id');
 			var employee_id = $("#employee_id").val();
@@ -439,36 +440,33 @@ function timesheet()
 			{
 				break_ = null;
 			}
-			if((time_in != '' || time_in != null) && (time_out != '' || time_out != null))
-			{
-				$.ajax({
-					url 	: 	'/member/payroll/employee_timesheet/save_time_record',
-					type 	: 	'POST',
-					data 	: 	{
-						time_in:time_in,
-						time_out:time_out,
-						break_:break_,
-						time_id:time_id,
-						date:date,
-						employee_id:employee_id,
-						_token:$('#_token').val()
-					},
-					success : 	function(result)
-					{
-						check.removeClass('hidden');
-						loader.addClass('hidden');
-						// setTimeout(action_compute_work_hours(),1000);
-						// action_compute_work_hours();
-						// action_recompute_loading(date);
-					},
-					error 	: 	function(error)
-					{
-						toastr.error('Error, please try again.');
-						check.removeClass('hidden');
-						loader.addClass('hidden');
-					}
-				});
-			}
+
+			$.ajax({
+				url 	: 	'/member/payroll/employee_timesheet/save_time_record',
+				type 	: 	'POST',
+				data 	: 	{
+					time_in:time_in,
+					time_out:time_out,
+					break_:break_,
+					time_id:time_id,
+					date:date,
+					employee_id:employee_id,
+					_token:$('#_token').val()
+				},
+				success : 	function(result)
+				{
+					check.removeClass('hidden');
+					loader.addClass('hidden');
+					action_compute_work_hours();
+					action_recompute_loading(date);
+				},
+				error 	: 	function(error)
+				{
+					toastr.error('Error, please try again.');
+					check.removeClass('hidden');
+					loader.addClass('hidden');
+				}
+			});
 
 		});
 	}
@@ -487,8 +485,8 @@ function timesheet()
 		{
 			$(e.currentTarget).closest("tr").find(".time-in").focus();
 		});
-	}
 
+	}
 	function event_time_entry()
 	{
 		$(".time-entry").timeEntry('destroy');

@@ -24,7 +24,7 @@
                                 <td>{{$encashment_process->enchasment_process_to}}</td>
                                 <td>
                                     @if($encashment_process->enchasment_process_tax_type == 0)
-                                        {{$encashment_process->enchasment_process_tax}}
+                                        {{currency('PHP', $encashment_process->enchasment_process_tax)}}
                                     @else 
                                         {{$encashment_process->enchasment_process_tax}}%
                                     @endif
@@ -32,10 +32,12 @@
                                 <td>
                                     {{$encashment_process->enchasment_process_p_fee}}
                                     @if($encashment_process->enchasment_process_p_fee_type == 1)
-                                    %
+                                    {{$encashment_process->enchasment_process_p_fee}}%
+                                    @else
+                                    {{currency('PHP', $encashment_process->enchasment_process_p_fee)}}
                                     @endif
                                 </td>
-                                <td>{{$encashment_process->encashment_process_sum}}</td>
+                                <td>{{currency('PHP', $encashment_process->encashment_process_sum)}}</td>
                             </tr>
                         @else
                             <tr>
@@ -69,6 +71,15 @@
                     <tbody>
                     @if(count($slots) >=1)
                         @foreach($slots as $key => $value)
+                            <?php 
+                                $currency = $value->encashment_process_currency;
+                                $convertion = $value->encashment_process_currency_convertion;
+                                $tax_converted = $value->enchasment_process_tax * $convertion;
+                                $process_fee = $value->enchasment_process_p_fee * $convertion;
+                                $taxed = $value->encashment_process_taxed * $convertion;
+                                $total = $value->wallet_log_amount * $convertion;
+                                $denied = $value->wallet_log_denied_amount * $convertion;
+                            ?>
                         <tr>
                             <td>{{$value->slot_no}}</td>
                             <td>{{name_format_from_customer_info($value)}}</td>

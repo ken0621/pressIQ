@@ -27,7 +27,7 @@
 			<strong>TERMS</strong><br>
 		</div>
 		<div class="col-md-6 text-left" style="float: left; width: 50%">
-			<span>{{sprintf("%'.04d\n", $invoice->inv_id)}}</span><br>
+			<span>{{sprintf("%'.04d\n", $invoice->new_inv_id)}}</span><br>
 			<span>{{date('m/d/Y',strtotime($invoice->inv_date))}}</span><br>
 			<span>{{date('m/d/Y',strtotime($invoice->inv_due_date))}}</span><br>
 			<span>TERMS</span><br>
@@ -116,7 +116,7 @@
 
 	</tbody>
 </table>
-	<div class="row pull-right">
+	<div class="row pull-right" style="margin-right: 10px">
 		<h3><strong>TOTAL</strong> {{currency('PHP',($invoice->inv_overall_price - $cm_total))}}</h3>
 	</div>
 </body>

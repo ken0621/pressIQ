@@ -5,7 +5,7 @@
         <div class="col-md-8 col-xs-6">
             <i class="fa fa-tablet"></i>
             <h1>
-                <span class="page-title">Tablet &raquo; Invoice</span>
+                <span class="page-title">Tablet &raquo; Credit Sales</span>
                 <small>
                 </small>
             </h1>
@@ -24,7 +24,7 @@
         <div id="invoice" class="tab-pane fade in active">
             <div class="form-group">
                 <div class="col-md-4 col-xs-6">
-                    <a class="btn btn-primary form-control" href="/tablet/create_invoices/add?sir_id={{Session::get('sir_id')}}">Create Invoice</a>
+                    <a class="btn btn-primary form-control" href="/tablet/create_invoices/add?sir_id={{Session::get('sir_id')}}">Create Credit Sales</a>
                 </div>
                 <div class="col-md-8 col-xs-6 text-right">
                     <a href="/tablet/dashboard"><< Back to Dashboard</a>

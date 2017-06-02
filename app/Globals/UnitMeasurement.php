@@ -266,6 +266,12 @@ class UnitMeasurement
         
         return $unit_m;
     }
+    public static function um_other($multi_id)
+    {
+        $unit_m = Tbl_unit_measurement_multi::where("multi_um_id",$multi_id)->where("is_base",0)->first();
+        
+        return $unit_m;
+    }
     public static function select_um_array($multi_id = 0, $return = 'array')
     {
     	if(is_numeric($multi_id))

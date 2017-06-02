@@ -56,7 +56,7 @@ class Accounting
 	}
 	public static function checkAccount($shop, $parent_id, $sublevel, $filter, $type, $search)
 	{
-		$query = Tbl_chart_of_account::accountInfo($shop)->balance()->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel);
+		$query = Tbl_chart_of_account::accountInfo($shop)->balance()->where("account_parent_id", $parent_id)->where("account_sublevel", $sublevel)->orderBy("chart_type_id");
 
 		switch($filter)
 		{
@@ -158,7 +158,6 @@ class Accounting
 			Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Payable")->update(['account_code'=>"accounting-payable"]);
 			$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
 		}
-
 		/* END */
 
 		/* IF THERE IS A SPECIFIED ACCOUNT ID FOR THE MAIN ACCOUNT (ACCOUNT THAT IS SELECTED IN THE TRANSACTION | OVERWRITE THE DEFAULT VALUE OF ACCOUNTS RECEIVABLE OR PAYABLE) */ /* !!!! FOR NOW IT IS FOR CASH ONLY */ 
@@ -486,7 +485,7 @@ class Accounting
 			$line_data["item_id"]				= 0;
 			$line_data["account_id"]			= $line["account_id"];
 			$line_data["entry_type"]			= $line["type"];
-			$line_data["entry_amount"]			= $line["entry_amount"];
+			$line_data["entry_amount"]			= convertToNumber($line["entry_amount"]);
 
 			Accounting::insertJournalLine($line_data);
 		}

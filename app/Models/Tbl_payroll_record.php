@@ -79,6 +79,9 @@ class Tbl_payroll_record extends Model
 	// total_rh
 	// total_sh
 	// total_worked_days
+	// break_deduction
+	// break_time
+	// salary_taxable
 
 	public function scopegetperiod($query, $shop_id = 0, $payroll_period_category = '', $status = 'approved')
 	{

@@ -65,23 +65,6 @@ function timesheet()
 			var ready 	= '<i class="fa fa-check"></i>&nbsp;Ready';
 			var html 	= $('.btn-mark-ready').html();
 
-			// var formdata = new FormData();
-			// var ajax = new XMLHttpRequest();
-			// formdata.append("_token", $("#_token").val());
-			// formdata.append("content", content);
-			// ajax.upload.addEventListener("progress", function(event)
-			// {
-			// 	$('.btn-mark-ready').html(spinner);
-			// }, false);
-			// ajax.addEventListener("load", function(event)
-			// {
-			// 	$('.btn-mark-ready').html(ready);
-			// 	$('.btn-mark-ready').attr("disabled",true);
-			// 	console.log(event.target.responseText);
-			// }, false);
-			// ajax.open("POST","/member/payroll/company_timesheet/mark_ready_company");
-			// ajax.send(formdata);
-			
 			$('.btn-mark-ready').html(spinner);
 			$.ajax({
 				url 	: 	"/member/payroll/timesheet/mark_ready_company",
@@ -145,6 +128,7 @@ function timesheet()
 	function action_compute_overtime_form()
 	{
 		date = $(".over-time-form").find(".field-hidden-date").val();
+		// alert(date);
 		employee_id = $(".over-time-form").find(".field-hidden-employee-id").val();
 
 		if(adjust_form_request !== null)
@@ -361,7 +345,7 @@ function timesheet()
 		$(".time-record.main[date='" + date + "']").find(".night-differential").text("__:__").css("color", "#000");
 		$(".time-record.main[date='" + date + "']").find(".special-holiday-hours").text("__:__").css("color", "#000");
 		$(".time-record.main[date='" + date + "']").find(".regular-holiday-hours").text("__:__").css("color", "#000");
-		$(".time-record.main[date='" + date + "']").find(".break").text("__:__").css("color", "#000");
+		// $(".time-record.main[date='" + date + "']").find(".break").val("__:__").css("color", "#000");
 		$(".time-record.main[date='" + date + "']").find(".under-time").text("__:__").css("color", "#000");
 		$(".time-record[date='" + date + "']").find(".approved-in").text("__:__ __").css("color", "#000");
 		$(".time-record[date='" + date + "']").find(".approved-out").text("__:__ __").css("color", "#000");
@@ -455,7 +439,7 @@ function timesheet()
 		$(".time-record[date='" + val.date + "']").find(".night-differential").text(val.approved_timesheet.night_differential);
 		$(".time-record[date='" + val.date + "']").find(".special-holiday-hours").text(val.approved_timesheet.special_holiday_hours);
 		$(".time-record[date='" + val.date + "']").find(".regular-holiday-hours").text(val.approved_timesheet.regular_holiday_hours);
-		$(".time-record[date='" + val.date + "']").find(".break").text(val.approved_timesheet.break);
+		$(".time-record[date='" + val.date + "']").find(".break").val(val.approved_timesheet.break);
 		$(".time-record[date='" + val.date + "']").find(".under-time").text(val.approved_timesheet.under_time);
 		$(".time-record[date='" + val.date + "']").each(function(key)
 		{

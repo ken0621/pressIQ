@@ -52,7 +52,7 @@
         <script src="/themes/{{ $shop_theme }}/assets/initializr/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
-    <div class="loader">
+    <div class="loader hide">
       <span><img src="/resources/assets/frontend/img/loader.gif"></span>
     </div>
 
@@ -76,8 +76,8 @@
                         <a href="/" class="head-button link-nav {{ Request::segment(1) == '' ? 'active' : '' }}" id="home">HOME</a>
                         <a href="/about" class="head-button link-nav {{ Request::segment(1) == 'about' ? 'active' : '' }}" id="company-profile">COMPANY PROFILE</a>
                         <a href="/runruno" class="head-button link-nav {{ Request::segment(1) == 'runruno' ? 'active' : '' }}" id="runruno">RUNRUNO</a>
-                        <a href="javascript:" class="head-button link-nav" id="news">NEWS</a>
-                        <a href="/contactus" class="head-button link-nav {{ Request::segment(1) == 'contactus' ? 'active' : '' }}" id="contact-us">CONTACT US</a>
+                        <a href="javascript:" class="head-button link-nav {{ Request::segment(1) == 'news' ? 'active' : '' }}" id="news">NEWS</a>
+                        <a href="/contact" class="head-button link-nav {{ Request::segment(1) == 'contact' ? 'active' : '' }}" id="contact-us">CONTACT US</a>
                     </nav>
                 </div>
                 
@@ -96,17 +96,29 @@
                 <button id="gotoright">&raquo;</button>
             </div>
             <div class="slider3-title">
-                Latest News
+                Our News
             </div>
             <div class="slider3">
                 <div style="position: absolute; top: 18px; left: 0px; width: 2000px;">
+                @if(count(get_front_news($shop_id)) > 0)
+                    @foreach(get_front_news($shop_id) as $news)
+                    <div class="slider3-per-container">
+                        <a href="/news?id={{ $news->post_id }}">
+                            <div class="per-container-wrapper">
+                                <img class="4-3-ratio" src="{{ $news->post_image }}">
+                                <div class="slider3-title-container">{{ $news->post_title }}</div>
+                            </div>
+                        </a>                       
+                    </div>
+                    @endforeach 
+                @else
                     <div class="slider3-per-container">
                         <a href="/news">
                             <div class="per-container-wrapper">
                                 <img src="/themes/{{ $shop_theme }}/img/d1.png">
                                 <div class="slider3-title-container">Lorem ipsum dolor sit amet</div>
                             </div>
-                        </a>
+                        </a>                        
                     </div>
                     <div class="slider3-per-container">
                         <a href="/news">
@@ -148,6 +160,7 @@
                             </div>
                         </a>
                     </div>
+                @endif
                 </div>
             </div>
         </div>
@@ -173,11 +186,11 @@
                             NAVIGATION
                         </div>
                         <div class="navigation-btn-container">
-                            <a href="/home"><p><span>HOME</span></p></a>
+                            <a href="/"><p><span>HOME</span></p></a>
                             <a href="/about"><p><span>COMPANY PROFILE</span></p></a>
                             <a href="/runruno"><p><span>RUNRUNO</span></p></a>
-                            <a href="/news"><p><span>NEWS</span></p></a>
-                            <a href="/contactus"><p><span>CONTACT US</span></p></a>
+                            <a href="javascript:" class="head-button link-nav {{ Request::segment(1) == 'news' ? 'active' : '' }}" id="news"><p><span>NEWS</span></p></a>
+                            <a href="/contact"><p><span>CONTACT US</span></p></a>
                         </div>
                     </div>
                 </div>
@@ -236,14 +249,19 @@
 
             function event_toggle_nav()
             {
-                $(".menu-nav").click(function(){
+                $(".menu-nav").bind("click", function()
+                {
                     action_toggle_nav();
                 });
             }
 
             function action_toggle_nav()
             {
-                $(".navirino").slideToggle();
+                $(".menu-nav").unbind("click");
+                $(".navirino").slideToggle(400, function()
+                {
+                    event_toggle_nav();
+                });
             }
 
             function event_news_click()

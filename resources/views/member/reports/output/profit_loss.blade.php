@@ -1,7 +1,7 @@
 <div class="report-container">
     <div class="panel panel-default panel-block panel-title-block panel-report load-data">
         <div class="panel-heading load-content">
-        @include('member.reports.report_header');
+        @include('member.reports.report_header')
         <div class="table-reponsive">
             <table class="table table-condensed  collaptable">
                 <thead>
@@ -20,7 +20,8 @@
                     ?>
                     @foreach($_account as $key=>$account)
                         <tr data-id="type-{{$account->chart_type_id}}" data-parent="">
-                            <td colspan="5" >{{strtoupper($account->chart_type_name)}}</td>
+                            <td colspan="2" >{{strtoupper($account->chart_type_name)}}</td>
+                            <td colspan="3"></td>
                             <td class="text-right"><text class="total-report">{{currency('PHP', collect($account->account_details)->sum('amount'))}}</text></td>
                         </tr>
                         @foreach($account->account_details as $key1=>$acc_details)
@@ -68,7 +69,7 @@
                             </tr>
                             <tr>
                                 <td colspan="5" >NET INCOME</td>
-                                <td class="text-right">{{currency('PHP', (($income - $cog) - $expense) - ($other_income - $other_expense))}}</td>
+                                <td class="text-right"><b>{{currency('PHP', (($income - $cog) - $expense) - ($other_income - $other_expense))}}<b></td>
                             </tr>
                         @endif
 

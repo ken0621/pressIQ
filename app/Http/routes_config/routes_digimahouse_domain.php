@@ -26,7 +26,7 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/testimony', 'Shop\ShopTestimonyController@index'); //EDWARD GUEVARRA
 	Route::get('/runruno', 'Shop\ShopAboutController@runruno'); //EDWARD GUEVARRA
 	Route::get('/news', 'Shop\ShopAboutController@news'); //EDWARD GUEVARRA
-	Route::get('/contactus', 'Shop\ShopAboutController@contactus'); //EDWARD GUEVARRA
+	Route::get('/email_payment', 'Shop\ShopAboutController@email_payment'); //EDWARD GUEVARRA
 
 	Route::get('/blog', 'Shop\ShopBlogController@index');
 	Route::get('/blog/content', 'Shop\ShopBlogContentController@index');
@@ -36,20 +36,20 @@ if(($domain != "digimahouse.com" && $domain != "digimahouse.dev" && $domain != "
 	Route::get('/admin', 'Shop\Shop@admin');
 	Route::get('/file/{theme}/{type}/{filename}', 'Shop\Shop@file');
 
-	/*Payment Integration with iPay88*/
-	Route::any("/postPaymentWithIPay88","Shop\ShopCheckoutController@postPaymentWithIPay88"); //Brain
-	Route::any("/ipay88_response","Shop\ShopCheckoutController@ipay88_response"); //Brain
-	/*End ipay88*/
-
 	/*Product search*/
 	Route::get('/product_search', 'Shop\ShopSearchController@index');
 	/*End Product search*/
 
 	/* Checkout */
-	Route::get('/checkout/login', 'Shop\ShopCheckoutLoginController@index');
+	Route::any('/checkout/login', 'Shop\ShopCheckoutLoginController@index');
 	Route::get('/checkout', 'Shop\ShopCheckoutController@index');
-	Route::get('/checkout/payment', 'Shop\ShopCheckoutController@payment');
+	Route::get('/checkout/side', 'Shop\ShopCheckoutController@checkout_side');
+	Route::get('/checkout/locale', 'Shop\ShopCheckoutController@locale');
+	Route::get('/checkout/session', 'Shop\ShopCheckoutController@session');
 	Route::post('/checkout', 'Shop\ShopCheckoutController@submit');
+	Route::any('/checkout/payment', 'Shop\ShopCheckoutController@payment');
+	Route::any('/checkout/payment/upload', 'Shop\ShopCheckoutController@payment_upload');
+	Route::get('/checkout/method', 'Shop\ShopCheckoutController@update_method');
 	/* End Checkout */
 
 	/* Wishlist */

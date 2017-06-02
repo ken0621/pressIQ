@@ -1,4 +1,17 @@
 <?php
+    
+
+function randomPassword()
+{
+    $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
+    $pass = array(); //remember to declare $pass as an array
+    $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+    for ($i = 0; $i < 8; $i++) {
+        $n = rand(0, $alphaLength);
+        $pass[] = $alphabet[$n];
+    }
+    return implode($pass); //turn the array into a string
+}
 
 function c_time_to_int($time)
 {
@@ -579,4 +592,25 @@ function debit_credit($type, $amount)
     {
         return -1 * $amount;
     }
+}
+function mlm_profile($customer)
+{
+    if($customer)
+    {
+        $customer->profile != null ? $profile = $customer->profile :  $profile = '/assets/mlm/default-pic.png';
+        return '<img src="'.$profile.'" class="img-responsive" >';
+        // style="height: 200px; width: 100%; object-fit: contain;"
+    }
+}
+function mlm_profile_link($customer)
+{
+    if($customer)
+    {
+        $customer->profile != null ? $profile = $customer->profile :  $profile = '/assets/mlm/default-pic.png';
+        return $profile;
+    }
+}
+function get_address_customer()
+{
+    
 }

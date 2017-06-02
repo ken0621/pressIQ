@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Shop;
 use App\Http\Controllers\Controller;
+use App\Models\Tbl_customer;
 use Crypt;
 use Redirect;
 use Request;
@@ -28,17 +29,43 @@ class ShopCheckoutLoginController extends Shop
     {
         if(isset(Self::$customer_info->customer_id))
         {
+            $customer_info["email"] = trim(Self::$customer_info->email);
+            $customer_info["new_account"] = false;
+            $customer_info["password"] = Crypt::decrypt(Self::$customer_info->password);
+            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_account"));
+
             return Redirect::to('/checkout')->send();
         }
     }
     public function index()
     {
-        $data["page"] 	  = "Checkout - Login";
-        $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
+        if(Request::isMethod("post"))
+        {
+            $customer_info["email"] = trim(Request::input("email"));
+            $customer_info["new_account"] = Request::input("continue") == "on" ? true : false;
+            $customer_info["password"]= (Request::input("password") != "" ? Request::input("password") : randomPassword());
+            $customer_set_info_response = Cart::customer_set_info($this->shop_info->shop_id, $customer_info, array("check_account"));
 
-        $this->cart_exist($data);
-        $this->if_loggedin();
+            /* CHECK FOR ERROR RESPONSE */
+            if($customer_set_info_response["status"] == "error")
+            {
+                return Redirect::back()->with('warning', $customer_set_info_response["status_message"])->withInput();
+            }
+            else
+            {
+                return Redirect::to("/checkout");
+            }
+        }
+        else
+        {
+            $data["page"]     = "Checkout - Login";
+            $data["get_cart"] = Cart::get_cart($this->shop_info->shop_id);
+            $this->cart_exist($data);
+            $this->if_loggedin();
+            return view("checkout_login", $data);
+        }
 
-        return view("checkout_login", $data);
+        
     }
+
 }

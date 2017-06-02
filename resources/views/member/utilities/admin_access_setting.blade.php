@@ -2,7 +2,7 @@
 @foreach($_page as $key=>$page)
     <tr data-id="access-{{$page['segment'] or $page['code']}}" data-parent="{{ $page_parent or '' }}" >
         <td>
-            <span >{{$page['name'] or $page['label']}} </span> 
+            <span >{!!$page['name'] or $page['label']!!} </span> 
             <span class="label label-info">{{array_has($page, 'user_settings') ? count($page['user_settings']) : count($page['submenu'])}} </span> 
         </td>
     </tr>

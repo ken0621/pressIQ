@@ -282,6 +282,9 @@ class Payroll_BioImportController extends Member
 		    			{
 		    				array_push($insert_time_record, $temp_array);
 		    			}
+
+		    			/* delete all 0000-00-00 date value */
+		    			Self::delete_blank($payroll_time_sheet_id);
 	    			}
 	    			
 	    		}
@@ -354,8 +357,9 @@ class Payroll_BioImportController extends Member
 		    		{
 		    			$date = date('Y-m-d', strtotime($dk));
 		    			$payroll_time_sheet_id = Self::getTimeSheetId(Self::getemployeeId($key), $date);
-		    			// dd($payroll_time_sheet_id);
-		    			
+
+		    			/* delete all 0000-00-00 date value */
+		    			Self::delete_blank($payroll_time_sheet_id);
 		    			if($date_key[0]['time_in'] != '')
 		    			{
 		    				$insert_record['payroll_time_sheet_in'] 	= date('H:i:s', strtotime($date_key[0]['time_in']));
@@ -376,6 +380,8 @@ class Payroll_BioImportController extends Member
 			    			{
 			    				array_push($insert_time_record, $insert_record);
 			    			}
+
+			    			
 		    			}
 		    			
 		    		}
@@ -441,6 +447,9 @@ class Payroll_BioImportController extends Member
 
 	    				array_push($insert_time_record, $temp_array);
 	    			}
+
+	    			/* delete all 0000-00-00 date value */
+		    		Self::delete_blank($payroll_time_sheet_id);
     			}
 	    	}
 
@@ -507,6 +516,9 @@ class Payroll_BioImportController extends Member
 	    			{
 	    				array_push($insert_time_record, $temp_array);
 	    			}
+
+	    			/* delete all 0000-00-00 date value */
+		    		Self::delete_blank($payroll_time_sheet_id);
     			}
     		}
 
@@ -651,6 +663,14 @@ class Payroll_BioImportController extends Member
             });
 
         })->download('xlsx');
+    }
+
+    public function delete_blank($payroll_time_sheet_id = 0)
+    {
+    	Tbl_payroll_time_sheet_record::where('payroll_time_sheet_id', $payroll_time_sheet_id)
+    								 ->where('payroll_time_sheet_in','0000-00-00')
+    								 ->where('payroll_time_sheet_out','0000-00-00')
+    								 ->delete();
     }
 
     /* BIO METRICS END */

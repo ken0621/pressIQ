@@ -464,7 +464,7 @@ class PayrollTimeSheetController extends Member
 					$time_arr['time_in'] = $time_in;
 					$time_arr['time_out'] = $time_out;
 
-					dd($time_arr);
+					// dd($time_arr);
 
 					if($time == '' || $time == null || $time == 0)
 					{

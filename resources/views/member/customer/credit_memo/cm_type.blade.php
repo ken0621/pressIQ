@@ -15,7 +15,7 @@
             <br>
             <div class="form-group">
                 <div class="col-md-12 col-xs-12">
-                    <a class="btn btn-def-white btn-custom-white form-control" href="/member/customer/credit_memo/update_action?type=others_tablet&sir_id={{Session::get('sir_id')}}&cm_id={{$cm_id or ''}}">Others</a>
+                    <a class="btn btn-def-white btn-custom-white form-control" href="/member/customer/credit_memo/update_action?type=others{{isset($tablet) ? '_tablet' : '' }}&sir_id={{Session::get('sir_id')}}&cm_id={{$cm_id or ''}}">Others</a>
                 </div>
             </div>
             <br>

@@ -82,6 +82,7 @@ class TabletPISController extends Member
     public function cm_choose_type()
     {
         $data["for_tablet"] = "true";
+        $data["tablet"] = "true";
         $data["cm_id"] = Request::input("cm_id");
 
         return view("member.customer.credit_memo.cm_type",$data);

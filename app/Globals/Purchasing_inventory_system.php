@@ -520,7 +520,7 @@ class Purchasing_inventory_system
             array_push($data['__transaction'], $_transaction);
         }
         $data["total_cm_others"] = 0;
-        $data["_cm_others"] = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->where("cm_type",1)->get();
+        $data["_cm_others"] = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->where("cm_type",1)->where("cm_used_ref_name","others")->get();
         foreach ($data["_cm_others"] as $key_cm_others => $value_cm_others) 
         {
             $data["total_cm_others"] += $value_cm_others->cm_amount;   
@@ -1616,7 +1616,7 @@ class Purchasing_inventory_system
             }
         }
         $cm_items = null;
-        $cm = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->where("cm_type",0)->get();
+        $cm = Tbl_manual_credit_memo::customer_cm()->where("sir_id",$sir_id)->where("cm_type",0)->where("cm_used_ref_name","returns")->get();
         foreach ($cm as $cm_key => $cm_value)
         {
             $cm_itemss = Tbl_credit_memo_line::where("cmline_cm_id",$cm_value->cm_id)->get();

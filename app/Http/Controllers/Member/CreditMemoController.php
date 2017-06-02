@@ -38,7 +38,7 @@ class CreditMemoController extends Member
         $data["cm_id"] = Request::input("cm_id");
         if(Purchasing_inventory_system::check() != 0)
         {
-            
+             $data["for_tablet"] = "true";
         }
 
         return view("member.customer.credit_memo.cm_type",$data);
@@ -99,6 +99,15 @@ class CreditMemoController extends Member
                 $data["_invoice"][0]["rpline_amount"] = $cm_amount;
             }
             return view("member.receive_payment.modal_receive_payment",$data);
+        }
+        if($cm_type == "others")
+        {
+            $up["cm_type"] = 1;
+            $up["cm_used_ref_name"] = "others";
+
+            Tbl_credit_memo::where("cm_id",$cm_id)->update($up);
+
+            return Redirect::to("/member/customer/credit_memo/list");
         }
         if($cm_type == "others_tablet")
         {

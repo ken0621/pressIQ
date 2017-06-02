@@ -28,11 +28,7 @@
         <div id="invoice" class="tab-pane fade in active">
             <div class="form-group">
                 <div class="col-md-4 col-xs-6">
-                    @if($pis != 0)
                     <a class="btn btn-primary form-control" href="/tablet/credit_memo/add?sir_id={{Session::get('sir_id')}}">Create Credit Memo</a>
-                    @else
-                    <a class="btn btn-primary form-control" href="/tablet/credit_memo/add?sir_id={{Session::get('sir_id')}}">Create Credit Memo</a>
-                    @endif
                 </div>
                 <div class="col-md-8 col-xs-6 text-right">
                     <a href="/tablet/dashboard"><< Back to Dashboard</a>

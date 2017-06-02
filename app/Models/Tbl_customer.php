@@ -65,7 +65,7 @@ class Tbl_customer extends Model
 
     public function scopeInfo($query)
     {
-        return $query->join("tbl_customer_address", function($on)
+        return $query->leftjoin("tbl_customer_address", function($on)
                             {
                                 $on->on("tbl_customer_address.customer_id","=","tbl_customer.customer_id");
                                 $on->on("purpose","=", DB::raw("'billing'"));

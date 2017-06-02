@@ -19,6 +19,7 @@ use App\Globals\Warehouse;
 use App\Globals\Invoice;
 use App\Http\Controllers\Controller;
 use Request;
+use Redirect;
 
 class CreditMemoController extends Member
 {
@@ -35,6 +36,10 @@ class CreditMemoController extends Member
     public function choose_type()
     {
         $data["cm_id"] = Request::input("cm_id");
+        if(Purchasing_inventory_system::check() != 0)
+        {
+             $data["for_tablet"] = "true";
+        }
 
         return view("member.customer.credit_memo.cm_type",$data);
     }
@@ -70,8 +75,8 @@ class CreditMemoController extends Member
             //     }
             // if($data["_invoice"][0]["inv_overall_price"] > $cm_amount)
             // {
-                    $data["_invoice"][0]["amount_applied"] = $cm_amount;
-                    $data["_invoice"][0]["rpline_amount"] = $cm_amount;
+                $data["_invoice"][0]["amount_applied"] = $cm_amount;
+                $data["_invoice"][0]["rpline_amount"] = $cm_amount;
             // }
             }
 
@@ -90,23 +95,28 @@ class CreditMemoController extends Member
 
             if(count($data["_invoice"]) > 0)
             {  
-            //     foreach ($data["_invoice"] as $key => $value)  
-            //     {
-            //         $total_inv += $value["inv_overall_price"];
-            //         if($cm_amount > $total_inv)
-            //         {
-            //             $data["_invoice"][$key]["amount_applied"] = $value["inv_overall_price"];
-            //             $data["_invoice"][$key]["rpline_amount"] = $value["inv_overall_price"];
-            //         }
-            //     }
-            // if($data["_invoice"][0]["inv_overall_price"] > $cm_amount)
-            // {
-                    $data["_invoice"][0]["amount_applied"] = $cm_amount;
-                    $data["_invoice"][0]["rpline_amount"] = $cm_amount;
-            // }
+                $data["_invoice"][0]["amount_applied"] = $cm_amount;
+                $data["_invoice"][0]["rpline_amount"] = $cm_amount;
             }
             return view("member.receive_payment.modal_receive_payment",$data);
+        }
+        if($cm_type == "others")
+        {
+            $up["cm_type"] = 1;
+            $up["cm_used_ref_name"] = "others";
 
+            Tbl_credit_memo::where("cm_id",$cm_id)->update($up);
+
+            return Redirect::to("/member/customer/credit_memo/list");
+        }
+        if($cm_type == "others_tablet")
+        {
+            $up["cm_type"] = 1;
+            $up["cm_used_ref_name"] = "others";
+
+            Tbl_credit_memo::where("cm_id",$cm_id)->update($up);
+
+            return Redirect::to("/tablet/credit_memo");
         }
     }
     public function index()
@@ -137,13 +147,6 @@ class CreditMemoController extends Member
         $customer_info["cm_message"] = Request::input("cm_message");
         $customer_info["cm_memo"] = Request::input("cm_memo");
         $customer_info["cm_amount"] = Request::input("overall_price");
-
-        $cm_type = Request::input("cm_type") == "" ? "returns" : Request::input("cm_type");
-        $customer_info["cm_type"] = 0;
-        if($cm_type != "returns")
-        {
-            $customer_info["cm_type"] = 1;
-        }
 
         $item_info[] = null;
         $item_returns = [];

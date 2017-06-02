@@ -79,6 +79,14 @@ class TabletPISController extends Member
 
         return view("tablet.agent.confirm_sync",$data);
     }
+    public function cm_choose_type()
+    {
+        $data["for_tablet"] = "true";
+        $data["tablet"] = "true";
+        $data["cm_id"] = Request::input("cm_id");
+
+        return view("member.customer.credit_memo.cm_type",$data);
+    }
 	public function index()
 	{
         if($this->get_user())
@@ -272,15 +280,7 @@ class TabletPISController extends Member
             return redirect("/tablet");
         }
 
-	}  
-    public function cm_choose_type()
-    {
-        $data["for_tablet"] = "true";
-
-        $data["cm_id"] = Request::input("cm_id");
-
-        return view("member.customer.credit_memo.cm_type",$data);
-    }
+	}
 	public function selected_sir()
 	{
 		Session::forget("sir_id");
@@ -337,13 +337,6 @@ class TabletPISController extends Member
         $customer_info["cm_message"] = Request::input("cm_message");
         $customer_info["cm_memo"] = Request::input("cm_memo");
         $customer_info["cm_amount"] = Request::input("overall_price");
-
-        $cm_type = Request::input("cm_type") == "" ? "returns" : Request::input("cm_type");
-        $customer_info["cm_type"] = 0;
-        if($cm_type != "returns")
-        {
-            $customer_info["cm_type"] = 1;
-        }
 
         $item_info[] = null;
         $_items = Request::input("cmline_item_id");

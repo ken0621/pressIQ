@@ -1,4 +1,4 @@
-<form id="bank-form" class="global-submit" method="POST" action="/mlm/slots/transfer_slot_post">
+<form id="bank-form" class="global-submit" method="POST" action="/member/mlm/slot/transfer_post">
     {!! csrf_field() !!}
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -8,15 +8,15 @@
         <div class="form-group">
             <label>Slot</label>
             <input type="text" class="form-control" value="{{$slot->slot_no}}" readonly>
-            <input type="hidden" name="slot_id" class="form-control" value="{{$encrypted}}" readonly>
+            <input type="hidden" class="form-control" name="slot_id" value="{{$slot->slot_id}}" readonly>
         </div>
         <div class="form-group">
-                <label>Password</label>
-                <input type="password" class="form-control" name="password">
-        </div>
-        <div class="form-group">
-                <label>Transfer to(Username)</label>
-                <input type="text" class="form-control" name="mlm_username">
+                <label>Transfer to</label>
+                <select class="form-control chosen-select" name="slot_owner">
+                    @foreach($_customer as $customer)
+                        <option value="{{$customer->customer_id}}">{{$customer->first_name}} {{$customer->middle_name}} {{$customer->last_name}}</option>
+                    @endforeach
+                </select>
         </div>
     </div>
     <div class="modal-footer">

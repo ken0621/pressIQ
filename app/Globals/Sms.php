@@ -353,7 +353,6 @@ class Sms
 
 	public static function apiKey($sms_key)
 	{
-		$curl = curl_init();
 
 		$curl = curl_init();
 		curl_setopt_array($curl, array(

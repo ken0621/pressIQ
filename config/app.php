@@ -209,7 +209,7 @@ return [
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'Honeypot' => Msurguy\Honeypot\HoneypotFacade::class,
-        'Debugbar' => Barryvdh\Debugbar\Facade::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class
     ],
 
 ];

@@ -477,7 +477,6 @@ Route::any('/tablet/credit_memo/add_cm_submit','Member\TabletPISController@add_c
 Route::any('/tablet/credit_memo/edit_cm_submit','Member\TabletPISController@edit_cm_submit');
 Route::any('/tablet/credit_memo/choose_type','Member\TabletPISController@cm_choose_type');
 
-
 Route::any('/tablet/sales_receipt','Member\TabletPISController@sales_receipt');
 Route::any('/tablet/sales_receipt/list','Member\TabletPISController@sales_receipt_list');
 Route::any('/tablet/sales_receipt/create_submit','Member\TabletPISController@create_sales_receipt_submit');

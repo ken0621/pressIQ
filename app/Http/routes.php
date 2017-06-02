@@ -916,6 +916,9 @@ Route::controller('/member/accounting/journal', 'Member\JournalEntryController')
 /* TERMS OF PAYMENT*/
 Route::controller('/member/maintenance/terms', 'Member\TermsOfPaymentController');
 /* End */
+/* TRACKINGS */
+Route::controller('/member/ecommerce/trackings', 'Member\TrackingsController');
+/* END */
 
 Route::controller('/tester','TesterController');
 

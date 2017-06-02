@@ -12,7 +12,7 @@ use App\Models\Tbl_vendor;
 use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_ec_product;
-
+    
 use App\Globals\Accounting;
 use App\Globals\Account;
 use App\Globals\Invoice;

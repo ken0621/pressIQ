@@ -424,6 +424,7 @@ function timesheet()
 			}
 			catch(err){}
 			
+
 			var break_	 	= tr.find('.break-time').val();
 			var time_id 			= tr.attr('data-id');
 			var employee_id = $("#employee_id").val();

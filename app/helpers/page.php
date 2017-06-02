@@ -1001,7 +1001,7 @@ function page_list()
             $code = "agent-collectiong";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Collection <span class='blink-ctr ctr-span hidden col-count pull-right'></span>";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "pis/collection";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "cashier/collection";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
             $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No Progress Yet";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
@@ -1009,15 +1009,15 @@ function page_list()
             $code = "pis-agent";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Agent List";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "pis/agent_list";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . "cashier/agent_list";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page','add','edit','archived'];
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No progress Yet";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No progress Yet";  
             $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";
 
             $code = "pis-sales-liquidation";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Sales Liquidation";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
-            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path ."pis/sales_liquidation";
+            $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path ."cashier/sales_liquidation";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
             $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "No progress Yet";
             $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "No Developer Yet";

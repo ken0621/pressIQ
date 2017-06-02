@@ -69,6 +69,8 @@ class ItemController extends Member
 
 			foreach ($data["_item"] as $key => $value) 
 			{
+				$data["_item"][$key]->item_price_history = Item::get_item_price_history($value->item_id);
+
 				if($value->bundle_group == 1)
 				{
 					$data["_item"][$key]->item_type_name = "Group";
@@ -110,7 +112,13 @@ class ItemController extends Member
             return $this->show_no_access();
         }
 	}
+	public function view_item_history($item_id)
+	{
+		$data["text"] = Item::get_item_price_history($item_id, true);
 
+
+		return view("member.item.pis.item_price_history",$data);
+	}
 	public function load_item()
     {
         $data["_item"]  = Item::get_all_item();

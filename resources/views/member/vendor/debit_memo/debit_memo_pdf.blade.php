@@ -74,8 +74,10 @@
 			</div>
 		</div>
 	</div>
-	
-	<div class="row pull-right" >
+
+                    
+	<div class="row pull-right" style="margin-right: 5px" >
+
 		<h3><strong>TOTAL</strong> {{currency('PHP',($total))}}</h3>
 	</div>
 </body>

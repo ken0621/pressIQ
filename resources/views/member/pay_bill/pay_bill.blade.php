@@ -76,7 +76,7 @@
                             </select>
                         </div>
                         <div class="col-sm-2 pull-right">
-                        	<label>Amount Received</label>
+                        	<label>Total Payment</label>
                         	<input type="text" name="paybill_total_amount" class="input-sm form-control amount-received" value="{{$paybill->paybill_total_amount or ''}}">
                         </div>
                     </div>

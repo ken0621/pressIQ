@@ -15,6 +15,7 @@ use App\Globals\Accounting;
 use App\Globals\Pdf_global;
 use App\Globals\Category;
 use App\Globals\CreditMemo;
+use App\Globals\ReceivePayment;
 
 use App\Models\Tbl_terms;
 use App\Models\Tbl_payment_method;
@@ -81,6 +82,8 @@ class TabletPISController extends Member
     public function cm_choose_type()
     {
         $data["for_tablet"] = "true";
+        $data["tablet"] = "true";
+        $data["cm_id"] = Request::input("cm_id");
 
         return view("member.customer.credit_memo.cm_type",$data);
     }
@@ -277,7 +280,7 @@ class TabletPISController extends Member
             return redirect("/tablet");
         }
 
-	}  
+	}
 	public function selected_sir()
 	{
 		Session::forget("sir_id");
@@ -335,13 +338,6 @@ class TabletPISController extends Member
         $customer_info["cm_memo"] = Request::input("cm_memo");
         $customer_info["cm_amount"] = Request::input("overall_price");
 
-        $cm_type = Request::input("cm_type") == "" ? "returns" : Request::input("cm_type");
-        $customer_info["cm_type"] = 0;
-        if($cm_type != "returns")
-        {
-            $customer_info["cm_type"] = 1;
-        }
-
         $item_info[] = null;
         $_items = Request::input("cmline_item_id");
         foreach ($_items as $key => $value) 
@@ -373,7 +369,8 @@ class TabletPISController extends Member
 
             Tbl_manual_credit_memo::insert($ins_manual_cm);
 
-            $data["status"] = "success-credit-memo";
+            $data["status"] = "success-credit-memo-tablet";
+            $data["id"] = $cm_id;
             $data["redirect_to"] = "/tablet/credit_memo/add?id=".$cm_id."&sir_id=".Request::input("sir_id");
         }
 
@@ -635,6 +632,8 @@ class TabletPISController extends Member
 	}
 	public function add_receive_payment()
 	{
+        //for credit memo
+        $cm_id = Request::input("cm_id");
 
 		$insert["rp_shop_id"]           = $this->getShopId();
         $insert["rp_customer_id"]       = Request::input('rp_customer_id');
@@ -644,6 +643,12 @@ class TabletPISController extends Member
         $insert["rp_payment_method"]    = Request::input('rp_payment_method');
         $insert["rp_memo"]              = Request::input('rp_memo');
         $insert["date_created"]         = Carbon::now();
+
+        if($cm_id != '')
+        {
+            $insert["rp_ref_name"]        = "credit_memo";
+            $insert["rp_ref_id"]          = $cm_id;
+        }
 
         $rcvpayment_id  = Tbl_receive_payment::insertGetId($insert);
 
@@ -685,9 +690,17 @@ class TabletPISController extends Member
 
         Tbl_manual_receive_payment::insert($ins_manual_rcv_pymnt);
 
-        if($button_action == "save-and-edit")
+        if($cm_id == '')
         {
-            $json["redirect"]    = "/tablet/receive_payment/add?id=".$rcvpayment_id;
+            if($button_action == "save-and-edit")
+            {
+                $json["redirect"]    = "/tablet/receive_payment/add?id=".$rcvpayment_id;
+            }            
+        }
+        else
+        {
+            ReceivePayment::updateCM($cm_id,$rcvpayment_id);
+            $json["redirect"]    = "/tablet/credit_memo";
         }
 
         return json_encode($json);

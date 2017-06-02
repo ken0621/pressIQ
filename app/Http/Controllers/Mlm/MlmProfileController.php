@@ -25,7 +25,7 @@ class MlmProfileController extends Mlm
 	public function index()
 	{
 		$data['customer_info'] = Tbl_customer::where('tbl_customer.customer_id', Self::$customer_id)
-		->info()
+		// ->info()
 		->first();
 
 		$data['slot_info'] = Tbl_mlm_slot::where('slot_id', Self::$slot_id)
@@ -69,6 +69,7 @@ class MlmProfileController extends Mlm
     	->orderBy('slot_id', 'DESC')
     	->take(6)
     	->get();
+
 		return view('mlm.profile.profilev2', $data);
 	}
     public function index2()

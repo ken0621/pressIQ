@@ -84,6 +84,16 @@ class MLM_ReportController extends Member
         $data['report_list_d']['e_wallet_transfer']['to'] = Carbon::now();
         $data['report_list_d']['e_wallet_transfer']['count'] = 999;
         // -----------------------------------------------------------------
+        $data['report_list']['e_wallet_refill'] = 'E-Wallet Refill Report';
+        $data['report_list_d']['e_wallet_refill']['from'] = Carbon::now();
+        $data['report_list_d']['e_wallet_refill']['to'] = Carbon::now();
+        $data['report_list_d']['e_wallet_refill']['count'] = 999;
+        // -----------------------------------------------------------------
+        $data['report_list']['e_wallet_tour'] = 'E-Wallet -> Tour Wallet Report';
+        $data['report_list_d']['e_wallet_tour']['from'] = Carbon::now();
+        $data['report_list_d']['e_wallet_tour']['to'] = Carbon::now();
+        $data['report_list_d']['e_wallet_tour']['count'] = 999;
+        // -----------------------------------------------------------------
         $data['report_list']['slot_count'] = 'Slot Count';
         $data['report_list_d']['slot_count']['from'] = Carbon::now();
         $data['report_list_d']['slot_count']['to'] = Carbon::now();

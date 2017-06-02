@@ -158,7 +158,6 @@ class Accounting
 			Tbl_chart_of_account::where("account_shop_id", Accounting::getShopId())->where("account_name", "Accounts Payable")->update(['account_code'=>"accounting-payable"]);
 			$account_payable	= Tbl_chart_of_account::accountInfo(Accounting::getShopId())->where("account_code","accounting-payable")->pluck("account_id");
 		}
-
 		/* END */
 
 		/* IF THERE IS A SPECIFIED ACCOUNT ID FOR THE MAIN ACCOUNT (ACCOUNT THAT IS SELECTED IN THE TRANSACTION | OVERWRITE THE DEFAULT VALUE OF ACCOUNTS RECEIVABLE OR PAYABLE) */ /* !!!! FOR NOW IT IS FOR CASH ONLY */ 

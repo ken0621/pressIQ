@@ -461,6 +461,11 @@ class PayrollTimeSheetController extends Member
 						$time = $session_time_sheet_record_id;
 					}
 
+					$time_arr['time_in'] = $time_in;
+					$time_arr['time_out'] = $time_out;
+
+					dd($time_arr);
+
 					if($time == '' || $time == null || $time == 0)
 					{
 						$temp_insert["payroll_time_sheet_id"] 		= $payroll_time_sheet_id;

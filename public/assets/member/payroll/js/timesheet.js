@@ -225,7 +225,7 @@ function timesheet()
 		{
 			$(".load-timesheet").load('/member/payroll/employee_timesheet/timesheet/' + selected_employee + '/' + payroll_period_id, function()
 			{
-				// action_compute_work_hours();
+				action_compute_work_hours();
 				event_time_entry();
 			});
 		}

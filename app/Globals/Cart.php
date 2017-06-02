@@ -1076,12 +1076,7 @@ class Cart
         $data['order_id'] = Crypt::encrypt($tbl_order->ec_order_id);
 
         $result = Mail_global::payment_mail($data, $shop_id);
-
-        if ($result == 0) 
-        {
-            dd("Some error occurred. Please contact the administrator.");
-        }
-
+        
         return Redirect::to("/email_payment?email=" . $tbl_order->customer_email)->send();
     }
     public static function submit_using_ewallet($cart, $shop_id)

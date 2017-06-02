@@ -34,6 +34,7 @@ use App\Models\Tbl_membership_code_invoice;
 use App\Models\Tbl_voucher_item;
 use App\Models\Tbl_warehouse;
 use App\Models\Tbl_mlm_slot_wallet_log_transfer;
+use App\Models\Tbl_mlm_slot_wallet_log_refill;
 class Mlm_report
 {   
     public static function general($shop_id, $filter)
@@ -249,6 +250,42 @@ class Mlm_report
             return $data;
         }
         return view('member.mlm_report.report.e_wallet_transfer', $data);
+    }
+    public static function e_wallet_refill($shop_id, $filter)
+    {
+        $all_refill = Tbl_mlm_slot_wallet_log_refill::where('tbl_mlm_slot_wallet_log_refill.shop_id', $shop_id)
+        ->where('wallet_log_refill_date', '>=', $filter['from'])
+        ->where('wallet_log_refill_date', '<=', $filter['to'])
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_wallet_log_refill.slot_id')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        ->get();
+
+        $data['all_refill'] = $all_refill;
+
+        $data['page'] = 'e_wallet_refill';
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        return view('member.mlm_report.report.e_wallet_refill', $data);
+    }
+    public static function e_wallet_tour($shop_id, $filter)
+    {
+        $data['logs'] = DB::table('tbl_tour_wallet_logs')
+        ->where('tbl_customer.shop_id', $shop_id)
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_tour_wallet_logs.tour_wallet_logs_customer_id')
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_owner', '=', 'tbl_customer.customer_id')
+        ->groupBy('tour_wallet_logs_id')
+        ->where('tour_wallet_logs_date', '>=', $filter['from'])
+        ->where('tour_wallet_logs_date', '<=', $filter['to'])
+        ->get();
+
+        $data['page'] = 'e_wallet_tour';
+        if(Request::input('pdf') == 'excel')
+        {
+            return $data;
+        }
+        return view('member.mlm_report.report.e_wallet_tour', $data);
     }
     public static function slot_count($shop_id, $filter)
     {

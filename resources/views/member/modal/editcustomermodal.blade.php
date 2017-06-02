@@ -415,6 +415,9 @@
                   <div class="col-md-6">
                     <label>Password</label>
                     <input type="password" class="form-control mlm_password" value="@if($customer_info->password != null){{ Crypt::decrypt($customer_info->password)}}@endif" name="mlm_password" @if($customer_info->ismlm == 0) readonly @endif>
+                    <div>
+                      <input type="checkbox" class="show_password"> Show Password
+                    </div>
                   </div>
                 </div>
               </div>
@@ -466,3 +469,17 @@
   </div>
 </form>
 <script type="text/javascript" src="/assets/member/js/customer.js"></script>
+<script type="text/javascript">
+  $(".show_password").removeAttr("checked");
+  $(".show_password").click(function()
+  {
+    if($(this).is(':checked'))
+    {
+      $(".mlm_password").attr("type","text");
+    }
+    else
+    {
+      $(".mlm_password").attr("type","password");
+    }
+  });
+</script>

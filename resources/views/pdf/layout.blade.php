@@ -11,25 +11,8 @@
     <meta name="description" content="Page Description">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- <link rel="stylesheet" href="/assets/member/styles/92bc1fe4.bootstrap.css"> -->
     <link rel="stylesheet" href="{{ public_path().'/assets/member/styles/92bc1fe4.bootstrap.css' }}">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">  
-    <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js"></script>
-    <script src="/assets/member/scripts/vendor/respond.min.js"></script>
-    <![endif]-->
-    
-    <!-- <link rel="stylesheet" type="text/css" href="/assets/font-awesome/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
-     <link rel="stylesheet" href="/assets/member/styles/40ff7bd7.font-titillium.css" type="text/css"/>
-    <link rel="stylesheet" href="/assets/member/css/member.css" type="text/css"/>
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/windows8.css">
-    <link rel="stylesheet" type="text/css" href="/assets/member/css/image_gallery.css">
-
-    <link rel="stylesheet" href="/assets/external/jquery_css/jquery-ui.css"> -->
-
-    <!-- <script src="/assets/member/scripts/vendor/modernizr.js"></script>
-    <script src="/assets/external/jquery.minv1.js"></script> -->
     <link rel="stylesheet" type="text/css" href="{{public_path()}}/assets/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{public_path()}}/assets/member/styles/6227bbe5.font-awesome.css" type="text/css"/>
     <style type="text/css">
@@ -86,9 +69,5 @@
 </head>
 <body id="body">
     @yield('body')
-     <!-- <script src="/assets/external/jquery_ui/jquery_ui.js"></script>
-     <script src="/assets/member/scripts/e1d08589.bootstrap.min.js"></script>
-    <script type="text/javascript" src="/assets/external/chosen/chosen/chosen.jquery.js"></script>
-     <script type="text/javascript" src='/assets/member/js/image_gallery.js'></script> -->
 </body>
 </html>

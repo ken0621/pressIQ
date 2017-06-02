@@ -35,7 +35,7 @@ $data['icon'] = 'fa fa-plane';
 <div class="panel panel-default panel-block panel-title-block col-md-12" id="top">
     <div class="panel-heading">
         <div class="clearfix">
-            <center>Transacton Logs</center>
+            <center>Transaction Logs</center>
             <table class="table table-bordered table-condensed">
                 <thead>
                     <th>Amount</th>

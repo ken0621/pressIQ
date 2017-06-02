@@ -582,7 +582,7 @@ class MlmTransferController extends Mlm
         }
         if($pdf == 'true'){
             $html_a = view('mlm.wallet.breakdown.breakdown', $data);
-            return $html_a;
+            // return $html_a;
             return Pdf_global::show_pdf($html_a);
         }
         else

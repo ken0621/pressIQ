@@ -59,17 +59,27 @@ class PurchasingInventorySystemController extends Member
     }
     public function pis_counter()
     {
-        $return["lof_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->whereIn("lof_status",[1,3])->count();
-        $return["sir_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->where("reload_sir",1)->count();
-        $return["ilr_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->where("ilr_status",1)->count();
+        $return["lof_ctr"] = 0;
+        $return["sir_ctr"] = 0;
+        $return["ilr_ctr"] = 0;
+        $return["col_ctr"] = 0;
+        $return["inv_ctr"] = 0;
+        $return["po_ctr"] = 0;
+        $return["bill_ctr"] = 0;
+        if(Purchasing_inventory_system::check() != 0)
+        {
+            $return["lof_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->whereIn("lof_status",[1,3])->count();
+            $return["sir_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->where("reload_sir",1)->count();
+            $return["ilr_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->where("ilr_status",1)->count();
 
-        $return["col_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->where("ilr_status",1)->count();
+            $return["col_ctr"] = Tbl_sir::where("shop_id",Purchasing_inventory_system::getShopId())->where("ilr_status",1)->count();
 
-        $return["inv_ctr"] = Tbl_customer_invoice::where("inv_shop_id",Purchasing_inventory_system::getShopId())->where("inv_is_paid",0)->count();
+            $return["inv_ctr"] = Tbl_customer_invoice::where("inv_shop_id",Purchasing_inventory_system::getShopId())->where("inv_is_paid",0)->count();
 
-        $return["po_ctr"] = Tbl_purchase_order::where("po_shop_id",Purchasing_inventory_system::getShopId())->where("po_is_billed",0)->count();
+            $return["po_ctr"] = Tbl_purchase_order::where("po_shop_id",Purchasing_inventory_system::getShopId())->where("po_is_billed",0)->count();
 
-        $return["bill_ctr"] = Tbl_bill::where("bill_shop_id",Purchasing_inventory_system::getShopId())->where("bill_is_paid",0)->count();
+            $return["bill_ctr"] = Tbl_bill::where("bill_shop_id",Purchasing_inventory_system::getShopId())->where("bill_is_paid",0)->count();
+        }
 
         return json_encode($return);
     }

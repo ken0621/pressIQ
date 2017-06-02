@@ -130,7 +130,7 @@ class Accounting
 
 		dd($result);
 	}
-
+	
 	/**
 	 * Create a journal entry for the transaction 
 	 *

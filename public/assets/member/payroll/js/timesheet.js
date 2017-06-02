@@ -456,7 +456,8 @@ function timesheet()
 				{
 					check.removeClass('hidden');
 					loader.addClass('hidden');
-					action_compute_work_hours();
+					setTimeout(action_compute_work_hours(),5);
+					// action_compute_work_hours();
 					action_recompute_loading(date);
 				},
 				error 	: 	function(error)
@@ -484,8 +485,8 @@ function timesheet()
 		{
 			$(e.currentTarget).closest("tr").find(".time-in").focus();
 		});
-
 	}
+
 	function event_time_entry()
 	{
 		$(".time-entry").timeEntry('destroy');

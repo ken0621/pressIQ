@@ -431,7 +431,8 @@ function timesheet()
 
 			var check 		= tr.find('.table-check');
 			var loader 		= tr.find('.table-loader');
-
+			console.log('time_in : '+time_in);
+			console.log('time_out : '+time_out);
 			check.addClass('hidden');
 			loader.removeClass('hidden');
 

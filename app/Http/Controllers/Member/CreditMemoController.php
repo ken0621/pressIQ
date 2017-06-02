@@ -11,6 +11,7 @@ use App\Models\Tbl_user;
 use App\Globals\Item;
 use App\Globals\UnitMeasurement;
 use App\Globals\Customer;
+use App\Globals\Purchasing_inventory_system;
 use App\Globals\CreditMemo;
 use App\Globals\Warehouse;
 use App\Http\Controllers\Controller;
@@ -47,6 +48,10 @@ class CreditMemoController extends Member
 
         return view("member.customer.credit_memo.credit_memo_add",$data);
     }
+    public function choose_type()
+    {
+        return view("member.customer.credit_memo.cm_type");
+    }
     public function create_submit()
     {
         $customer_info[] = null;
@@ -56,6 +61,13 @@ class CreditMemoController extends Member
         $customer_info["cm_message"] = Request::input("cm_message");
         $customer_info["cm_memo"] = Request::input("cm_memo");
         $customer_info["cm_amount"] = Request::input("overall_price");
+
+        $cm_type = Request::input("cm_type") == "" ? "returns" : Request::input("cm_type");
+        $customer_info["cm_type"] = 0;
+        if($cm_type != "returns")
+        {
+            $customer_info["cm_type"] = 1;
+        }
 
         $item_info[] = null;
         $item_returns = [];
@@ -266,6 +278,8 @@ class CreditMemoController extends Member
     }
     public function cm_list()
     {
+        $data["pis"] = Purchasing_inventory_system::check();
+
         $data["_cm"] = Tbl_credit_memo::manual_cm()->customer()->orderBy("tbl_credit_memo.cm_id","DESC")->where("tbl_customer.shop_id", $this->getShopId())->get();
 
         return view("member.customer.credit_memo.cm_list",$data);

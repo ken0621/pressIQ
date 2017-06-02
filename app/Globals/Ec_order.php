@@ -388,8 +388,8 @@ class Ec_order
         $update['payment_status'] = $data["payment_status"];
         $update["payment_upload"] = isset($data['payment_upload']) ? $data['payment_upload'] : '';
         $order_status            = $data["order_status"];
-        $shop_id                 = isset($data["shop_id"]) ? $data["shop_id"] : null ;
         $order                   = Tbl_ec_order::where("ec_order_id",$ec_order_id)->first();
+        $shop_id                 = isset($data["shop_id"]) ? $data["shop_id"] : $order->shop_id ;
         $response                = "nothing";
 
         if($order->order_status == "Pending" || $order->order_status == "Failed" || $order->order_status == "Cancelled")
@@ -686,13 +686,15 @@ class Ec_order
         }
 
         /* Email Password */
-        // $data["template"]         = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
-        // $data['mail_to']          = $order_info["tbl_ec_order"]["customer_email"];
-        // $data['mail_subject']     = "Account Verification";
-        // $data['account_password'] = $order_info["tbl_customer"]["password"];
+        $data["template"]                 = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
+        $data['mail_to']                       = $order_info["tbl_ec_order"]["customer_email"];
+        $data['mail_subject']             = "Account Verification";
+        $data['account_password'] = Crypt::decrypt($order_info["tbl_customer"]["password"]);
 
-        // $result = Mail_global::password_mail($data, $shop_id);
-        // Ec_order::create_merchant_school_item($order_info["tbl_ec_order"]["ec_order_id"]);
+        $result = Mail_global::password_mail($data, $order_info["tbl_ec_order"]["shop_id"]);
+
+        Ec_order::create_merchant_school_item($order_info["tbl_ec_order"]["ec_order_id"]);
+
         return $order_info["tbl_ec_order"]["ec_order_id"];
     }
 }

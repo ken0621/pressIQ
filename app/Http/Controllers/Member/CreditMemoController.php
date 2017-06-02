@@ -36,6 +36,10 @@ class CreditMemoController extends Member
     public function choose_type()
     {
         $data["cm_id"] = Request::input("cm_id");
+        if(Purchasing_inventory_system::check() != 0)
+        {
+            
+        }
 
         return view("member.customer.credit_memo.cm_type",$data);
     }
@@ -134,13 +138,6 @@ class CreditMemoController extends Member
         $customer_info["cm_message"] = Request::input("cm_message");
         $customer_info["cm_memo"] = Request::input("cm_memo");
         $customer_info["cm_amount"] = Request::input("overall_price");
-
-        $cm_type = Request::input("cm_type") == "" ? "returns" : Request::input("cm_type");
-        $customer_info["cm_type"] = 0;
-        if($cm_type != "returns")
-        {
-            $customer_info["cm_type"] = 1;
-        }
 
         $item_info[] = null;
         $item_returns = [];

@@ -456,7 +456,7 @@ function timesheet()
 				{
 					check.removeClass('hidden');
 					loader.addClass('hidden');
-					setTimeout(action_compute_work_hours(),5);
+					setTimeout(action_compute_work_hours(),1000);
 					// action_compute_work_hours();
 					action_recompute_loading(date);
 				},

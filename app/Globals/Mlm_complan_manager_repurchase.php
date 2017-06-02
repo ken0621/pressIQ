@@ -325,7 +325,6 @@ class Mlm_complan_manager_repurchase
             $stairstep_points       = 0;
             $stairstep_group_points = 0;
         }
-
         if($stairstep_points != 0)
         {
             $array['points_log_complan'] = "STAIRSTEP";

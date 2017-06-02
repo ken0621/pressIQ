@@ -53,4 +53,6 @@
     </div>
     </div>
 </div>
+
+@include('mlm.report.global_repurchase');
 @endsection

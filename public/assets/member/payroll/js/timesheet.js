@@ -439,7 +439,7 @@ function timesheet()
 			{
 				break_ = null;
 			}
-			if((time_in != '' || time_in != null) && (time_out != '' || $time_out != null))
+			if((time_in != '' || time_in != null) && (time_out != '' || time_out != null))
 			{
 				$.ajax({
 					url 	: 	'/member/payroll/employee_timesheet/save_time_record',

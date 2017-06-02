@@ -70,7 +70,7 @@
                             <input type="text" class="form-control input-sm" />
                         </div>
                         <div class="col-sm-3">
-                            <label>Deposit to</label>
+                            <label>Payment Account</label>
                             <select class="drop-down-coa" name="paybill_ap_id" required>
                                 @include("member.load_ajax_data.load_chart_account", ['add_search' => "", "account_id" => isset($paybill) ? $paybill->paybill_ap_id : ''])
                             </select>

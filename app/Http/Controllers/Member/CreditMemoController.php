@@ -19,6 +19,7 @@ use App\Globals\Warehouse;
 use App\Globals\Invoice;
 use App\Http\Controllers\Controller;
 use Request;
+use Redirect;
 
 class CreditMemoController extends Member
 {
@@ -70,8 +71,8 @@ class CreditMemoController extends Member
             //     }
             // if($data["_invoice"][0]["inv_overall_price"] > $cm_amount)
             // {
-                    $data["_invoice"][0]["amount_applied"] = $cm_amount;
-                    $data["_invoice"][0]["rpline_amount"] = $cm_amount;
+                $data["_invoice"][0]["amount_applied"] = $cm_amount;
+                $data["_invoice"][0]["rpline_amount"] = $cm_amount;
             // }
             }
 
@@ -90,23 +91,19 @@ class CreditMemoController extends Member
 
             if(count($data["_invoice"]) > 0)
             {  
-            //     foreach ($data["_invoice"] as $key => $value)  
-            //     {
-            //         $total_inv += $value["inv_overall_price"];
-            //         if($cm_amount > $total_inv)
-            //         {
-            //             $data["_invoice"][$key]["amount_applied"] = $value["inv_overall_price"];
-            //             $data["_invoice"][$key]["rpline_amount"] = $value["inv_overall_price"];
-            //         }
-            //     }
-            // if($data["_invoice"][0]["inv_overall_price"] > $cm_amount)
-            // {
-                    $data["_invoice"][0]["amount_applied"] = $cm_amount;
-                    $data["_invoice"][0]["rpline_amount"] = $cm_amount;
-            // }
+                $data["_invoice"][0]["amount_applied"] = $cm_amount;
+                $data["_invoice"][0]["rpline_amount"] = $cm_amount;
             }
             return view("member.receive_payment.modal_receive_payment",$data);
+        }
+        if($cm_type == "others_tablet")
+        {
+            $up["cm_type"] = 1;
+            $up["cm_used_ref_name"] = "others";
 
+            Tbl_credit_memo::where("cm_id",$cm_id)->update($up);
+
+            return Redirect::to("/tablet/credit_memo");
         }
     }
     public function index()
@@ -127,10 +124,6 @@ class CreditMemoController extends Member
         }
 
         return view("member.customer.credit_memo.credit_memo_add",$data);
-    }
-    public function choose_type()
-    {
-        return view("member.customer.credit_memo.cm_type");
     }
     public function create_submit()
     {

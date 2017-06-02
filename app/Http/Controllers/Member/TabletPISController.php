@@ -82,6 +82,7 @@ class TabletPISController extends Member
     public function cm_choose_type()
     {
         $data["for_tablet"] = "true";
+        $data["cm_id"] = Request::input("cm_id");
 
         return view("member.customer.credit_memo.cm_type",$data);
     }
@@ -278,15 +279,7 @@ class TabletPISController extends Member
             return redirect("/tablet");
         }
 
-	}  
-    public function cm_choose_type()
-    {
-        $data["for_tablet"] = "true";
-
-        $data["cm_id"] = Request::input("cm_id");
-
-        return view("member.customer.credit_memo.cm_type",$data);
-    }
+	}
 	public function selected_sir()
 	{
 		Session::forget("sir_id");

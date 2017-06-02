@@ -11,6 +11,15 @@
                     <a class="btn btn-def-white btn-custom-white form-control" href="/tablet/credit_memo">Returns</a>
                 </div>
             </div>
+            <br>
+            <br>
+            <div class="form-group">
+                <div class="col-md-12 col-xs-12">
+                    <a class="btn btn-def-white btn-custom-white form-control" href="/member/customer/credit_memo/update_action?type=others_tablet&sir_id={{Session::get('sir_id')}}&cm_id={{$cm_id or ''}}">Others</a>
+                </div>
+            </div>
+            <br>
+            <br>
             <div class="form-group">
                 <div class="col-md-12 col-xs-12">
                     <a class="btn btn-def-white btn-custom-white form-control popup" size="lg" link="/member/customer/credit_memo/update_action?type=invoice_tablet&sir_id={{Session::get('sir_id')}}&cm_id={{$cm_id or ''}}">Apply to an Invoice</a>

@@ -41,7 +41,7 @@ use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_item;
 use Carbon\Carbon;
 
-class TabletPISController extends Controller
+class TabletPISController extends Member
 {
 	/**
 	 * Display a listing of the resource.
@@ -606,8 +606,17 @@ class TabletPISController extends Controller
             $data['_item'] = Item::get_all_item_sir($sir->sir_id);
         }
 
-		return view('member.customer_invoice.customer_invoice', $data);
+		return view('tablet.agent_transaction.invoice.invoice_transaction', $data);
 	}
+    public function invoice_add_item($id)
+    {
+        $data["item_details"] = Item::get_item_details($id);
+        $data["sir_id"] = Request::input("sir_id");
+        $data['_um']          = UnitMeasurement::load_um_multi();
+        $data['action']       = "/tablet/invoice/add_item_submit";
+
+        return view('tablet.agent_transaction.invoice.add_item_modal',$data);
+    }
 	public function tablet_receive_payment()
 	{
 		$data["c_id"] = Request::input("customer_id");

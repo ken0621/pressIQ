@@ -614,7 +614,7 @@ class WarehouseController extends Member
         $access = Utilities::checkAccess('item-warehouse', 'add');
         if($access == 1)
         { 
-           // $data["merchantwarehouse"]
+           $data["merchantwarehouse"] = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
            $data["_item"] = Tbl_item::where("archived",0)->where("item_type_id",1)->where("shop_id",$this->user_info->shop_id)->get();
            // $data["_cat"] = Tbl_category::where("type_category","inventory")->where("type_parent_id",0)->where("type_shop",$this->user_info->shop_id)->get();
            return view("member.warehouse.warehouse_add",$data);

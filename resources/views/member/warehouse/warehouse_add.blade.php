@@ -25,6 +25,31 @@
                 <textarea required class="form-control input-sm" name="warehouse_address" id="warehouse_address"></textarea>
             </div>
         </div>
+        @if($merchantwarehouse == 1)
+            <div class="col-md-12">
+                <input type="checkbox" name="merchantwarehouse" id="merchantwarehouse"> 
+                <label for="merchantwarehouse">Use warehouse as merchant?</label>
+            </div>
+
+            <div class="col-md-6">
+                <div class="col-md-12">
+                    <label for="default_repurchase">Default Repurchase Points Multiplier*</label>
+                    </br>
+                    <input type="number" class="form-control" name="default_repurhcase_points_mulitplier" id="default_repurchase"> 
+                </div>
+                <div class="col-md-12">
+                    <label for="default_margin">Default Margin per product (%)*</label>
+                    </br>
+                    <input type="number" class="form-control" name="default_margin_per_product" id="default_margin"> 
+                </div>
+            </div>         
+            <div class="col-md-6">
+                <label for="default_margin">Default Margin per product (%)*</label>
+                <input type="number" class="form-control" name="default_margin_per_product" id="default_margin"> 
+                </br>
+            </div>            
+
+        @endif
         <div class="form-group">
         <div class="col-md-12"><h3>Select Item</h3></div>
         </div>

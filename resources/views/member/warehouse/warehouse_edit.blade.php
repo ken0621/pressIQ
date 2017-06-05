@@ -26,6 +26,12 @@
                 <textarea required class="form-control input-sm" name="warehouse_address" id="warehouse_address">{{$warehouse->warehouse_address}}</textarea>
             </div>
         </div>
+        @if($merchantwarehouse == 1)
+            <div class="col-md-12">
+                <input type="checkbox" name="merchantwarehouse" id="merchantwarehouse" {{$warehouse->merchantwarehouse == 1 ? 'checked' : ''}}> 
+                <label for="merchantwarehouse">Use warehouse as merchant?</label>
+            </div>
+        @endif
         <div class="form-group">
         <div class="col-md-12"><h3>Select Item</h3></div>        
             <div class="col-md-3" >

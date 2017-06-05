@@ -167,9 +167,6 @@
     text-align: center; }
     .product .image img {
       max-width: 100%; }
-      @media screen and (max-width: 991px) {
-        .product .image img {
-          margin: auto; } }
   .product .name {
     color: #1e1f1f;
     font-size: 34px;
@@ -367,9 +364,8 @@
       font-size: 18px;
       color: #fff;
       padding: 10px 25px; }
-      @media screen and (max-width: 992px) {
+      @media screen and (max-width: 991px) {
         .join .holder .btn {
-          margin-top: 20px;
-          margin-bottom: -15px; } }
+          margin-top: 20px; } }
 
 /*# sourceMappingURL=home.css.map */

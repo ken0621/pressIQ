@@ -91,9 +91,5 @@
       font-size: 18px;
       color: #fff;
       padding: 10px 25px; }
-      @media screen and (max-width: 992px) {
-        .join .holder .btn {
-          margin-top: 20px;
-          margin-bottom: -15px; } }
 
 /*# sourceMappingURL=contactus.css.map */

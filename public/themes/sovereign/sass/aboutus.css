@@ -30,11 +30,6 @@
   padding: 50px 0; }
   .about .main .holder {
     margin-top: 25px; }
-    @media screen and (max-width: 992px) {
-      .about .main .holder .image {
-        display: block;
-        margin-bottom: 15px;
-        text-align: center; } }
     .about .main .holder h2 {
       color: #0f0f0f;
       font-size: 21.11px;

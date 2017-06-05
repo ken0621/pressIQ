@@ -227,11 +227,9 @@ footer {
     padding: 0 7.5px; }
     .sub-footer .nav:last-child {
       border-right: 0; }
-  .sub-footer .copyright {
-    margin-left: 7px; }
-    @media screen and (min-width: 992px) {
-      .sub-footer .copyright {
-        text-align: right; } }
+  @media screen and (min-width: 991px) {
+    .sub-footer .copyright {
+      text-align: right; } }
 
 @media screen and (max-width: 991px) {
   .header-nav-middle {

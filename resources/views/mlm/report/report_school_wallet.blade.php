@@ -1,6 +1,6 @@
 @extends('mlm.layout')
 @section('content')
-<div class="panel panel-default panel-block panel-title-block col-md-12" id="top">
+<div class="panel panel-default panel-block panel-title-block col-md-12 box box-primary" id="top">
     <div class="panel-heading" style="background-color: white !important">
         <div>
             <span class="pull-right text-success"><h2>Current School Wallet : {{number_format($current_school_wallet)}}</h2></span>
@@ -9,8 +9,9 @@
             <br>
         </div>
     </div>
-</div>        
-<div class="panel panel-default panel-block panel-title-block col-md-12" id="top">
+</div>    
+
+<div class="panel panel-default panel-block panel-title-block col-md-12 box box-primary" id="top">    
     <div class="panel-heading" style="background-color: white !important">
         <div>
             <center>Report</center>

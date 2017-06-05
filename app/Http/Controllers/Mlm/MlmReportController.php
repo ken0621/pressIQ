@@ -30,6 +30,7 @@ use App\Globals\Mlm_voucher;
 use App\Globals\Pdf_global;
 use Carbon\Carbon;
 use Session;
+use App\Http\Controllers\Mlm\MlmReportController;
 class MlmReportController extends Mlm
 {
     public function index($complan)
@@ -42,6 +43,17 @@ class MlmReportController extends Mlm
         {
             return Self::show_no_access();
         }
+    }
+    public static function get_points($complan)
+    {
+        $points_log = Tbl_mlm_slot_points_log::where('points_log_complan', $complan)
+        ->orderby('points_log_id', 'DESC')
+        ->where('points_log_slot', Self::$slot_id)
+        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_points_log.points_log_Sponsor')
+        ->join('tbl_customer', 'tbl_customer.customer_id', '=', 'tbl_mlm_slot.slot_owner')
+        ->paginate(10);
+
+        return $points_log;
     }
     public static function direct()
     {
@@ -166,11 +178,7 @@ class MlmReportController extends Mlm
         $data['report']     = Mlm_member_report::get_wallet('EXECUTIVE_BONUS', Self::$slot_id); 
         $data['plan']       = Mlm_member_report::get_plan('EXECUTIVE_BONUS', Self::$shop_id); 
         $data['header'] = Mlm_member_report::header($data['plan']);
-        $data['points_log'] = Tbl_mlm_slot_points_log::where('points_log_complan', 'EXECUTIVE_BONUS')
-        ->orderby('points_log_id', 'DESC')
-        ->where('points_log_slot', Self::$slot_id)
-        ->join('tbl_mlm_slot', 'tbl_mlm_slot.slot_id', '=', 'tbl_mlm_slot_points_log.points_log_Sponsor')
-        ->get();
+        $data['points_log'] = MlmReportController::get_points('EXECUTIVE_BONUS');
         return view("mlm.report.report_executive_bonus", $data);
     }
     public static function leadership_bonus()
@@ -183,10 +191,7 @@ class MlmReportController extends Mlm
             $data['plan']       = Mlm_member_report::get_plan('LEADERSHIP_BONUS', Self::$shop_id); 
             
             $data['header'] = Mlm_member_report::header($data['plan']);
-            $data['points_log'] = Tbl_mlm_slot_points_log::where('points_log_complan', 'LEADERSHIP_BONUS')
-            ->orderby('points_log_id', 'DESC')
-            ->where('points_log_slot', Self::$slot_id)
-            ->paginate(10);
+            $data['points_log'] = MlmReportController::get_points('LEADERSHIP_BONUS');
 
             return view("mlm.report.report_leadership_bonus", $data);
         }
@@ -216,10 +221,7 @@ class MlmReportController extends Mlm
 
         $data['header'] = Mlm_member_report::header($data['plan']);
 
-        $data['points_log'] = Tbl_mlm_slot_points_log::where('points_log_complan', 'INDIRECT_POINTS')
-        ->orderby('points_log_id', 'DESC')
-        ->where('points_log_slot', Self::$slot_id)
-        ->paginate(10);
+        $data['points_log'] = MlmReportController::get_points('INDIRECT_POINTS');
 
         foreach($data['points_log'] as $key => $value)
         {
@@ -262,10 +264,7 @@ class MlmReportController extends Mlm
         $data['report']     = Mlm_member_report::get_wallet('UNILEVEL_REPURCHASE_POINTS', Self::$slot_id); 
         $data['plan']       = Mlm_member_report::get_plan('UNILEVEL_REPURCHASE_POINTS', Self::$shop_id); 
         $data['header'] = Mlm_member_report::header($data['plan']);
-        $data['points_log'] = Tbl_mlm_slot_points_log::where('points_log_complan', 'UNILEVEL_REPURCHASE_POINTS')
-        ->orderby('points_log_id', 'DESC')
-        ->where('points_log_slot', Self::$slot_id)
-        ->paginate(10);
+        $data['points_log'] = MlmReportController::get_points('UNILEVEL_REPURCHASE_POINTS');
         foreach($data['points_log'] as $key => $value)
         {
             $data['level'][$key] = Tbl_tree_sponsor::where('sponsor_tree_parent_id', Self::$slot_id)

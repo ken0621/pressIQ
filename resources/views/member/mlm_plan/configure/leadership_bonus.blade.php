@@ -24,8 +24,6 @@
         <div id="all-orders" class="tab-pane fade in active">
             <div class="table-responsive">
                 <table class="table table-condensed">
-                    
-
                     <tr>
                         <td>
                             <div class="col-md-6">

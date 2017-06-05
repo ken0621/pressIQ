@@ -51,32 +51,35 @@
 					<div class="col-md-12">
 						@if($lead == null)
 						<label for="">Sponsor</label>
-							@if($sponsor_a == null)
+							{{-- @if($sponsor_a == null) --}}
 	                            <select class="form-control chosen-slot_sponsor input-sm pull-left" name="slot_sponsor" data-placeholder="Select Slot Sponsor" >
 	                            	@if(count($_slots) != 0)
 	                            		@foreach($_slots as $slot)
-	                            			<option value="{{$slot->slot_id}}" @if($sponsor_a == $slot->slot_id) selected @endif >{{$slot->first_name}} {{$slot->middle_name}} {{$slot->last_name}} ({{$slot->slot_no}})</option>
+	                            			<option value="{{$slot->slot_id}}" @if($sponsor_a == $slot->slot_id) selected @endif >
+	                            			{{$slot->first_name}} {{$slot->middle_name}} {{$slot->last_name}} 
+	                            			({{$slot->slot_no}})
+	                            			</option>
 	                            		@endforeach
 	                            	@endif
 	                            </select>
-	                        @else 
+	                       {{--  @else  --}}
 
-	                        <input type="hidden" name="slot_sponsor" value="{{$sponsor_a}}">
+	                        <input type="hidden" name="slot_sponsor" class="new_slot_id" value="{{$sponsor_a}}">
 		                        @if(count($_slots) != 0) 
 		                        	@foreach($_slots as $slot) 
 		                        		@if($sponsor_a == $slot->slot_id)
 		                        			<?php $name = $slot->first_name . ' ' . $slot->middle_name . ' ' . $slot->last_name . ' ' . $slot->slot_no; ?>
-		                        			<input type="text" class="form-control input-v2" disabled="disabled"
+		                        			<input type="hidden" class="form-control input-v2" disabled="disabled"
 	                       					value="{{$name}}">  
 		                        		@endif 
 		                        	@endforeach 
 		                        @endif 
 
-	                        @endif
+	                        {{-- @endif --}}
 	                        
 						@else
 						<input type="hidden" name="lead_id" value="{{$lead->lead_id}}">
-						<input type="hidden" name="slot_sponsor" value="{{$lead->lead_slot_id_sponsor}}">
+						<input type="hidden" name="slot_sponsor" class="new_slot_id" value="{{$lead->lead_slot_id_sponsor}}">
 						<input type="text" class="form-control" name="sponsor" value="{{$lead->mlm_username}} (Slot - {{$lead->slot_no}}) {{$lead->membership_activation_code}}" readonly>
 						@endif
 					</div>
@@ -228,4 +231,15 @@
 
 	$(".chosen-slot_sponsor").chosen({no_results_text: "The slot doesn't exist.", width: '100%'});
 	$(".chosen-slot_position").chosen({no_results_text: "Invalid Position", width: '100%'});
+	
+</script>
+<script>
+$(document).ready(function(){
+	$(".chosen-slot_sponsor").chosen().change(function(){
+		// alert(+$(this).val());
+		$(".new_slot_id").val($(this).val());
+		// alert(+$(".new_slot_id").val());
+	});
+});
+	
 </script>

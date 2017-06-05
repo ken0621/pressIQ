@@ -74,10 +74,13 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-def-white btn-custom-white" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-def-white btn-custom-white">Set to Default</button>
+        <button type="button" class="btn btn-def-white btn-custom-white cancel-approve">
+            <span class="cancel-approve-span"><i class="fa fa-times color-red" aria-hidden="true"></i></span>
+            <span>Cancel Approve</span>
+        </button>
         <button class="btn btn-primary btn-custom-primary submit-overtime-form" type="submit">
-            <i class="adjust-form-loader fa fa-spinner fa-spin fa-fw hidden"></i>
-            <i class="adjust-form-icon fa fa-check"></i>
+            
+            <span class="approve-span"><i class="adjust-form-icon fa fa-check"></i></span>
             &nbsp; Confirm Approve Time
         </button>
     </div>

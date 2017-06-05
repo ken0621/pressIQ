@@ -238,7 +238,7 @@ $(document).ready(function(){
 	$(".chosen-slot_sponsor").chosen().change(function(){
 		// alert(+$(this).val());
 		$(".new_slot_id").val($(this).val());
-		alert(+$(".new_slot_id").val());
+		// alert(+$(".new_slot_id").val());
 	});
 });
 	

@@ -4,7 +4,6 @@
     <input type="hidden" name="_token" value="{{csrf_token()}}">
     <input type="hidden" name="sir_id" value="{{$sir_id or ''}}">
     <input type="hidden" name="credit_memo_id" value="{{Request::input('id')}}" >
-    <input type="hidden" name="cm_type" value="{{Request::input('type')}}" >
     <div class="panel panel-default panel-block panel-title-block" id="top">
         <div class="panel-heading">
             <div>

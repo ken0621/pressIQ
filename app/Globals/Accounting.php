@@ -134,7 +134,7 @@ class Accounting
 	/**
 	 * Create a journal entry for the transaction 
 	 *
-	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["name_id"], $entry["total"] , 
+	 * @param array  	$entry 			$entry["reference_module"] , $entry["reference_id"] , $entry["name_id"], $entry["name_reference"] $entry["total"] , 
 	 *									$entry["vatable"] , $entry["discount"] , $entry["ewt"], $entry["account_id"]
 	 * @param array  	$entry_data     $entry_data[0]['item_id'] or $entry[0]['account_id'], $entry_data[0]['vatable']
 	 *									$entry_data[0]['discount'] , $entry_data[0]['entry_amount'] , $entry_data[0]['entry_desription']
@@ -191,7 +191,8 @@ class Accounting
 		}
 
 		$line_data["item_id"]				= '';
-		$line_data["jline_name_reference"] 	= Accounting::checkTransaction($entry["reference_module"])['name'];
+		if(isset($entry["name_reference"]))	$line_data["jline_name_reference"] = $entry["name_reference"];
+		else   $line_data["jline_name_reference"] 	= Accounting::checkTransaction($entry["reference_module"])['name'];
 		$line_data["jline_name_id"]			= $entry["name_id"];
 
 		/* RECIVABLE OR PAYABLE OR CASH */

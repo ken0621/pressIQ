@@ -9,6 +9,7 @@ use App\Globals\Purchase_Order;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Invoice;
 use App\Globals\Billing;
+
 use App\Models\Tbl_User;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_unit_measurement;
@@ -66,5 +67,19 @@ class DashboardController extends Member
 		{
 			dd("Error 404");
 		}
+	}
+
+	/**
+	 * Dashboard Statistics
+	 *
+	 * @return 	view
+	 */
+	public function statistics()
+	{
+		$data["open_invoice"] 		= Invoice::invoiceStatus()["open"];
+		$data["overdue_invoice"] 	= Invoice::invoiceStatus()["overdue"];
+		$data["paid_invoice"] 		= Invoice::invoiceStatus()["paid"];
+
+		return view('member.dashboard.dashboard', $data);
 	}
 }

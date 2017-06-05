@@ -400,5 +400,45 @@ class Invoice
 
         Tbl_customer_invoice::where("inv_id", $inv_id)->update($data);
     }
+
+
+    /**
+     * Check number of invoices tha is open, overdue and paid
+     *
+     * @param   string      $period     period of the report
+     * @return  array[3]    open | overdue | paid   
+     */
+    public static function invoiceStatus($period = "days_ago", $date = null)
+    {
+        $date["days"] = "365"; 
+        $from   = Report::checkDatePeriod($period, $date)['start_date'];
+        $to     = Report::checkDatePeriod($period, $date)['end_date'];
+        $now    = datepicker_input("today");
+
+        $data["open"]       = Tbl_customer_invoice::where("inv_shop_id", Invoice::getShopId())
+                            ->whereRaw("DATE(inv_date) >= '$from'")
+                            ->whereRaw("DATE(inv_date) <= '$to'")
+                            ->whereRaw("inv_overall_price <> inv_payment_applied")
+                            ->get();
+
+        $data["overdue"]    = Tbl_customer_invoice::where("inv_shop_id", Invoice::getShopId())
+                            ->whereRaw("DATE(inv_date) >= '$from'")
+                            ->whereRaw("DATE(inv_date) <= '$to'")
+                            ->whereRaw("DATE(inv_due_date) <= '$now'")
+                            ->get();
+
+        $date["days"] = "30"; 
+        $from   = Report::checkDatePeriod($period, $date)['start_date'];                
+        $to     = Report::checkDatePeriod($period, $date)['end_date'];
+
+        $data["paid"]       = Tbl_customer_invoice::where("inv_shop_id", Invoice::getShopId())
+                            ->whereRaw("DATE(inv_date) >= '$from'")
+                            ->whereRaw("DATE(inv_date) <= '$to'")
+                            ->whereRaw("inv_overall_price = inv_payment_applied")
+                            ->get();
+
+
+        return $data;
+    }
   
 }

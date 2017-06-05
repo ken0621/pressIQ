@@ -509,6 +509,22 @@ class Accounting
 	}
 
 	/**
+	 * Check if the has warehouse is an inventory type
+	 *
+	 * @param 	integer  	$item_id 		id of item
+	 * @author 	LUKE
+	 */
+	public static function getWarehouse($item_id)
+	{
+		// $warehouse_id = $this->current_warehouse->warehouse_id;
+		$item = Tbl_item::where('item_id', $item_id)->first();
+		if($item)
+		{
+			$session_warehouse = session("warehouse_id_".$item->shop_id);
+		}
+		return 0;
+	}
+	/**
 	 * Check transaction whether it is customer or vendor type; normal balace or contra account; receivable or payable;
 	 *
 	 * @param 	string  	$type 		Type of a transaction

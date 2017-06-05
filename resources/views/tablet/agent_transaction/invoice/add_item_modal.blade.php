@@ -4,9 +4,9 @@
         <h4 class="modal-title">{{$item_details->item_name}}</h4>
     </div>
     <div class="modal-body add_new_package_modal_body clearfix">
-        <input type="hidden" name="item_id" class="tablet-item-id" value="{{$item_details->item_id}}">
-        <div class="form-group">
+        <div class="form-group clearfix row">
             <div class="col-xs-4">
+            <input type="hidden" name="item_id" class="tablet-item-id" value="{{$item_details->item_id}}">
                 <h4> U/M </h4>
             </div>
             <div class="col-xs-8">
@@ -19,7 +19,7 @@
                 </select>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group clearfix row">
             <div class="col-xs-4">
                 <h4> Quantity </h4>
             </div>        
@@ -27,7 +27,7 @@
                 <input type="text" class="form-control input-sm text-right number-input tablet-item-qty tablet-compute" value="1" name="invline_qty">
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group clearfix row">
             <div class="col-xs-4">
                 <h4> Rate </h4>
             </div>        
@@ -35,7 +35,7 @@
                 <input type="text" style="text-align: right; border: 0;border-bottom: 1px solid #000;outline: 0;" class="form-control input-sm tablet-item-rate tablet-compute number-input" name="invline_rate" value="{{number_format($item_details->item_price,2)}}">
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group clearfix row">
             <div class="col-xs-4">
                 <h4> Discount </h4>
             </div>        
@@ -43,7 +43,7 @@
                 <input type="text" class="form-control text-right input-sm tablet-item-disc tablet-compute" name="">
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group clearfix row">
             <div class="col-xs-4">
                 <h4> Remark </h4>
             </div>        
@@ -51,7 +51,7 @@
                 <input type="text" class="form-control input-sm tablet-item-remark">
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group clearfix row">
             <div class="col-xs-4">
                 <h4> Amount </h4>
             </div>        
@@ -60,7 +60,7 @@
                 <h3 class="tablet-item-amount"></h3>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group clearfix row">
             <div class="col-xs-12">
                 <h4> Description </h4>
             </div>        
@@ -68,7 +68,7 @@
                 <textarea class="form-control input-sm tablet-item-desc">{{$item_details->item_description}}</textarea>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group clearfix row">
             <div class="col-xs-12">
                 <input type="checkbox" name="taxable" value="1"> <span>Taxable</span>
             </div>

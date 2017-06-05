@@ -41,7 +41,7 @@ use App\Models\Tbl_manual_invoice;
 use App\Models\Tbl_item;
 use Carbon\Carbon;
 
-class TabletPISController extends Member
+class TabletPISController extends Controller
 {
 	/**
 	 * Display a listing of the resource.

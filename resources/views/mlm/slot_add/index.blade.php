@@ -168,6 +168,14 @@
 							@endforeach
 						</select>
 					</div>
+					<div class="col-md-12 exist_form" style="display:none">
+						<label>Account</label>
+						<select name="customer_id" class="form-control exist_input" disabled>
+							@foreach($_no_slot_customer as $no_slot_customer)
+								<option value="{{$no_slot_customer->customer_id}}">{{$no_slot_customer->first_name}} {{$no_slot_customer->middle_name}} {{$no_slot_customer->last_name}}</option>
+							@endforeach
+						</select>
+					</div>
 				</td>
 			</tr>
 			<tr>
@@ -223,6 +231,12 @@
 	         	$(".new_input").attr('disabled', false);
 	         	$(".append_error").empty();
 	        }
+	        else if (this.value == 'exist') 
+	        {
+	         	$(".exist_form").show();
+	         	$(".exist_input").attr('disabled', false);
+	         	$(".append_error").empty();
+	        }
 	    });
 	});
 
@@ -234,11 +248,11 @@
 	
 </script>
 <script>
-$(document).ready(function(){
-	$(".chosen-slot_sponsor").chosen().change(function(){
-		// alert(+$(this).val());
+$(document).ready(function()
+{
+	$(".chosen-slot_sponsor").chosen().change(function()
+	{
 		$(".new_slot_id").val($(this).val());
-		// alert(+$(".new_slot_id").val());
 	});
 });
 	

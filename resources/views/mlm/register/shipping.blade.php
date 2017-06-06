@@ -5,30 +5,11 @@
 <div class="payment">
   <div class="container-fluid">
     <div class="title">Getting Details</div>
-    <div class="sub">Aenea commodo ligula eget dolor.</div>
     <div class="information-container">
       <div class="information-title">Delivery Information</div>
       <div class="form-holder">
         <div class="row clearfix">
-          <div class="col-md-6">
-            <div class="form-group">
-              <label>First Name</label>
-              <input type="text" class="form-control input-lg" name="first_name">
-            </div>
-            <div class="form-group">
-              <label>Last Name</label>
-              <input type="text" class="form-control input-lg" name="last_name">
-            </div>
-            <div class="form-group">
-              <label>Contact Information</label>
-              <input type="text" class="form-control input-lg" name="contact_info">
-            </div>
-            <div class="form-group">
-              <label>Other Contact Information</label>
-              <input type="text" class="form-control input-lg" name="contact_other">
-            </div>
-          </div>
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="form-group">
               <label>Province</label>
               <select class="form-control input-lg province" name="customer_state">
@@ -50,7 +31,7 @@
             <div class="form-group load-data-barangay">
                <div id="barangay">
                  <label>Barangay</label>
-                 <select class="form-control input-lg barangay" name="customer_street">
+                 <select class="form-control input-lg barangay" name="customer_zip">
                    @foreach($_barangay as $key=>$locale)
                      <option value="{{$locale->locale_id}}">{{$locale->locale_name}}</option>
                    @endforeach
@@ -59,7 +40,7 @@
             </div>
             <div class="form-group">
               <label>Complete Shipping Address</label>
-              <textarea class="form-control input-lg" name="shipping_address"></textarea>
+              <textarea class="form-control input-lg" name="customer_street"></textarea>
             </div>
           </div>
         </div>

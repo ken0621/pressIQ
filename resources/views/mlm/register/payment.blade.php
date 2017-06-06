@@ -73,24 +73,24 @@
                            <tr>
                               <td>PRODUCT NAME - STATIC</td>
                               <td>{{$product['quantity']}}</td>
-                              <td style="padding-left: 0; padding-right: 0;">P{{$product['total']}}</td>
+                              <td style="padding-left: 0; padding-right: 0;">{{currency("P", $product['total'])}}</td>
                               <td style="padding-left: 0px; padding-right: 0px; width: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&amp;variation_id=45"><i class="fa fa-close"></i></a></td>
                            </tr>
                         @endforeach
                          <tr>
                            <td></td>
                            <td class="text-right"><b>Subtotal</b></td>
-                           <td colspan="2" class="total" style="word-break: break-all;">P {{$order["subtotal"]}}</td>
+                           <td colspan="2" class="total text-left" style="word-break: break-all;">{{currency("P", $order["subtotal"])}}</td>
                         </tr>
                         <tr>
                            <td></td>
                            <td class="text-right"><b>Shipping Fee</b></td>
-                           <td colspan="2" class="total" style="word-break: break-all;">P {{$order["shipping_fee"]}}</td>
+                           <td colspan="2" class="total text-left" style="word-break: break-all;">{{currency("P", $order["shipping_fee"])}}</td>
                         </tr>
                          <tr>
                            <td></td>
                            <td class="text-right"><b>Total</b></td>
-                           <td colspan="2" class="total" style="word-break: break-all;">P {{$order["total"]}}</td>
+                           <td colspan="2" class="total text-left" style="word-break: break-all;">{{currency("P", $order["total"])}}</td>
                         </tr>
                      </tbody>
                   </table>

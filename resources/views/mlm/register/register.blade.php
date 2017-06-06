@@ -53,28 +53,10 @@
 			</div>
 			<div class="form-container second">
 				<div class="row clearfix">
-					<div class="col-md-6">
+					<div class="col-md-12">
 						<div class="form-group">
-							<label>Username</label>
-							<input type="text" class="form-control input-lg" name="username" required>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>Sponsor (Optional)</label>
+							<label>Sponsor</label>
 							<input type="text" class="form-control input-lg" name="sponsor" required>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>Password</label>
-							<input type="password" class="form-control input-lg" name="password">
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="form-group">
-							<label>Confirm Password</label>
-							<input type="password" class="form-control input-lg" name="password_confirm">
 						</div>
 					</div>
 				</div>

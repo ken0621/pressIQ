@@ -110,6 +110,11 @@ class MemberController extends Controller
 		echo "hello world";
 	}
 
+    public function generate_username($first_name, $last_name)
+    {
+        
+    }
+
     public function register()
     {
         $data['country'] = Tbl_country::get();

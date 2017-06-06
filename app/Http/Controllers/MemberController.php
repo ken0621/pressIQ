@@ -16,6 +16,7 @@ use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_membership_package_has;
 use App\Models\Tbl_locale;
+use App\Models\Tbl_online_pymnt_method;
 
 use App\Models\Tbl_ec_product;
 use Validator;
@@ -254,8 +255,6 @@ class MemberController extends Controller
         $membership_id = $register_session_2['membership'];
         $package_id = $register_session_2['package'];
 
-
-
         $data['membership_packages'] = Tbl_membership_package::where('membership_id', $membership_id)
         ->where('membership_package_id', $package_id)
         ->where('membership_package_archive', 0)->get();
@@ -268,6 +267,9 @@ class MemberController extends Controller
                 $data['item_bundle'][$key][$key2]->item_list = Item::get_item_bundle($value2->item_id);
             }
         }
+
+        //ONLINE PAYMENT
+        $data["_payment_method"] = Tbl_online_pymnt_method::link(Self::$shop_id)->where("method_shop_id", Self::$shop_id)->get();
 
         return view("mlm.register.payment", $data);
     }

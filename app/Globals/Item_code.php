@@ -765,8 +765,9 @@ class Item_code
         $tbl_ec_order_slot = DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $order_id)->first();
         if($tbl_ec_order_slot)
         {
-            if($table_ec_order_slot->order_slot_customer_id    != 0 &&  $table_ec_order_slot->order_slot_used           != 1 &&  $table_ec_order_slot->order_slot_sponsor        != 0)
+            if($tbl_ec_order_slot->order_slot_customer_id    != 0 &&  $tbl_ec_order_slot->order_slot_used           != 1 &&  $tbl_ec_order_slot->order_slot_sponsor        != 0)
             {
+                $table_ec_order_slot = $tbl_ec_order_slot;
                 $tbl_ec_order_item = DB::table('tbl_ec_order_item')->where('ec_order_id', $order_id)
                 ->get();
                 if($tbl_ec_order_item)
@@ -775,8 +776,8 @@ class Item_code
                     {
                         $tbl_ec_variant = DB::table('tbl_ec_variant')
                                             ->where('evariant_id', $order_item->item_id)
-                                            ->product()
-                                            ->get();
+                                            ->join("tbl_ec_product","eprod_id","=","evariant_prod_id")
+                                            ->get();                                
                         if($tbl_ec_variant)
                         {
                             foreach ($tbl_ec_variant as $v_key => $v_value) 
@@ -790,10 +791,14 @@ class Item_code
                                     $insert['slot_created_date'] = Carbon::now();
                                     $insert['slot_membership'] =    $v_value->ec_product_membership;
                                     $insert['slot_status'] = 'PS';
+                                    $insert['slot_placement'] = $v_value->order_slot_sponsor;
                                     $insert['slot_sponsor'] = $v_value->order_slot_sponsor;
-                                    
+
                                     $id = Tbl_mlm_slot::insertGetId($insert);
                                     $a = Mlm_compute::entry($id);
+
+                                    $update_s['order_slot_used'] = 1;
+                                    DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $order_id)->update($update_s);
                                 }
                             }
                         }                 

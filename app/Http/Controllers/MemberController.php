@@ -336,14 +336,14 @@ class MemberController extends Controller
 
     public function package_post()
     {
-        $info['product_id'] = Request::input('product_id');
-        if(isset($info['product_id']))
+        $info['variant_id'] = Request::input('variant_id');
+        if(isset($info['variant_id']))
         {
             /* Add Package */
-            Cart::add_to_cart($info["product_id"], 1, Self::$shop_id, true);
-
+            Cart::add_to_cart($info["variant_id"], 1, Self::$shop_id, true);
+            
             /* Redirect */
-            $d['product_id'] = $info['product_id'];
+            $d['variant_id'] = $info['variant_id'];
             Session::put('mlm_register_step_2', $d);
             $data['status'] = 'success';
             $data['message'][0] = 'Sucess!';

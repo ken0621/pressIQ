@@ -22,7 +22,7 @@
                 <div class="text-holder">
                   <div class="name">
                     <div class="radio">
-                      <label><input type="radio" name="product_id" value="{{$value->eprod_id}}"> {{$value->eprod_name}}</label>
+                      <label><input type="radio" name="variant_id" value="{{$value->evariant_id}}"> {{$value->eprod_name}}</label>
                     </div>
                   </div>
                   <div class="membership-price">{{currency('PHP', $value->min_price)}}</div>

@@ -5,7 +5,7 @@
 <div class="package">
   <div class="container-fluid text-center">
     <div class="title">Create a Brown Package</div>
-    <div class="sub">Aenea commodo ligula eget dolor.</div>
+    <div class="sub"></div>
     <div class="membership">
       <div class="row clearfix">
         @if(count($_product) > 0)

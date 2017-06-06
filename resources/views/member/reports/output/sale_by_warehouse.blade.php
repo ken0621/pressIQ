@@ -35,7 +35,7 @@
                 @endforeach
               @else
                 <tr>
-                  <td colspan="20"></td>
+                  <td colspan="20"><center>No Record on this warehouse</center></td>
                 </tr>  
               @endif
             @endforeach

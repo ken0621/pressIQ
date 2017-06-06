@@ -719,6 +719,7 @@ class ReportsController extends Member
     {
         $data =[];
         $report_code = 'accounting_sales_report_warehouse';
+        $this->fix_old_data();
         $data['field_checker'] = $this->report_field_checker_seed($report_code);
         $data['head_title'] = 'Sales Report - Item ';
         $data['head_icon'] = 'fa fa-area-chart';
@@ -737,6 +738,54 @@ class ReportsController extends Member
         }
 
         return view('member.reports.accounting.sales_by_warehouse', $data);
+    }
+    public function fix_old_data()
+    {
+        $all_journal_entry_line = Tbl_journal_entry_line::where('jline_item_id', '!=', 0)
+        ->item()
+        ->journal()
+        ->where('jline_warehouse_id', 0)->get();
+
+        $e_commerce_warehouse_select = [];
+        $main_warehouse_select = [];
+        foreach ($all_journal_entry_line as $key => $value) 
+        {
+            if($value->item_type_id == 1)
+            {
+                if($value->je_reference_module == 'product-order')
+                {
+                    $e_commerce_warehouse_select[$value->jline_id] = $value->jline_id;
+                }
+                else
+                {
+                    $main_warehouse_select[$value->jline_id] = $value->jline_id;
+                }
+                
+            }
+        }
+        $shop_id  = $this->user_info->shop_id;
+
+        $warehouse['main']      = Tbl_warehouse::where('main_warehouse', 1)
+        ->where('warehouse_shop_id', $shop_id)
+        ->first();
+
+        $warehouse['ecommerce'] = Tbl_warehouse::where('main_warehouse', 2)
+        ->where('warehouse_shop_id', $shop_id)
+        ->first();
+        if($warehouse['main'])
+        {
+            $update['jline_warehouse_id'] = $warehouse['main']->warehouse_id;
+
+            Tbl_journal_entry_line::whereIn('jline_id', $main_warehouse_select)
+            ->update($update);
+        }
+        if($warehouse['ecommerce'])
+        {
+            $update['jline_warehouse_id'] = $warehouse['ecommerce']->warehouse_id;
+
+            Tbl_journal_entry_line::whereIn('jline_id', $e_commerce_warehouse_select)
+            ->update($update);
+        }
     }
     public function sale_by_warehouse_get($report_type = null)
     {
@@ -784,12 +833,12 @@ class ReportsController extends Member
         {
             switch ($value->jline_warehouse_id) {
                 case 0:
-                    if( $value->je_reference_module == 'product-order'){ $filter_by_warehouse[$warehouse['ecommerce']->warehouse_id] = 1; }
+                    if( $value->je_reference_module == 'product-order'){ $filter_by_warehouse[$warehouse['ecommerce']->warehouse_id][$value->jline_id] = 1; }
                     else{ $filter_by_warehouse[$warehouse['main']->warehouse_id][$value->jline_id] = 1; }
                 break;
                 
                 default:
-                    $filter_by_warehouse[$value->jline_warehouse_id][$value->jline_id];
+                    $filter_by_warehouse[$value->jline_warehouse_id][$value->jline_id] = 1;
                 break;
             }
         }

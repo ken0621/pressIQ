@@ -60,8 +60,8 @@ class Ec_order
         $data['inv_customer_email']= $order_info['customer']['customer_email'];
 
         $data['inv_terms_id']  = '';
-        $data['inv_date']      = '';
-        $data['inv_due_date']  = '';
+        $data['inv_date']      = Carbon::now();
+        $data['inv_due_date']  = Carbon::now();
         $data['inv_customer_billing_address']   = $order_info['customer']['customer_address']." ".$order_info['customer']['customer_city']." ".$order_info['customer']['customer_state_province'];
 
         $data['inv_message']          = '';

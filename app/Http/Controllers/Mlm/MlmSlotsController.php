@@ -33,7 +33,6 @@ class MlmSlotsController extends Mlm
             {
                 $data["enabled_upgrade_slot"] = 0;
             }
-            // $data["_no_slot_customer"] = Tbl_customer::where("tbl_customer.shop_id",Self::$shop_id)->leftJoin("tbl_mlm_slot","slot_owner","=","tbl_customer.customer_id")
             $data['all_slots_p']       = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->membership()->paginate(20);
             $data['active']            = Tbl_mlm_slot::where('slot_owner', Self::$customer_id)->where('slot_defaul', 1)->first();
             $data['_code']             = Tbl_membership_code::where('customer_id', Self::$customer_id)->where('used', 0)->get();

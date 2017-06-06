@@ -898,9 +898,41 @@ class WarehouseController extends Member
     }
     public function add_submit()
     {
-            $for_serial_item = null;
+            $merchantwarehouse  = Utilities::checkAccess('item-warehouse', 'merchantwarehouse');
+            $for_serial_item    = null;
+            $merchant_warehouse = Request::input("merchant_warehouse") ? "1" : "0";
+            /*INSERT TO WAREHOUSE (MERCHANT) */
+            $ins_warehouse["merchant_warehouse"]   = $merchant_warehouse;
+            if($merchant_warehouse == 1)
+            {
+                $ins_warehouse["merchant_logo"]    = Request::input("merchant_logo");
+            }
+            else
+            {
+                $ins_warehouse["merchant_logo"]    = "";
+            }
+            $ins['default_repurhcase_points_mulitplier'] = Request::input("default_repurhcase_points_mulitplier"); 
+            $ins['default_margin_per_product']           = Request::input("default_margin_per_product");
+            
+            if($ins['default_repurhcase_points_mulitplier'] == null)
+            {
+                $data['status']         = 'error';
+                $data['status_message'] = 'Default Repurchase Points Multiplier is required';
+
+                return json_encode($data);
+            }
+
+            if($ins['default_margin_per_product'] == null)
+            {
+                $data['status']         = 'error';
+                $data['status_message'] = 'Default Margin Per Product';
+
+                return json_encode($data);
+            }
+            dd(123);
+
             //INSERT TO tbl_warehouse
-            $ins_warehouse["warehouse_name"] = Request::input("warehouse_name");
+            $ins_warehouse["warehouse_name"]    = Request::input("warehouse_name");
             $ins_warehouse["warehouse_address"] = Request::input("warehouse_address");
             $ins_warehouse["warehouse_shop_id"] = $this->user_info->shop_id;
             $ins_warehouse["warehouse_created"] = Carbon::now();

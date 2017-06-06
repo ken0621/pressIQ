@@ -183,6 +183,7 @@ class MemberController extends Controller
                         $customer_info["username"]         = $info["username"];
                         $customer_info["slot_sponsor"]     = $info["sponsor"];
                         $customer_info["customer_contact"] = $info["customer_mobile"];
+
                         $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
 
                         if($customer_set_info_response["status"] == "error")

@@ -533,6 +533,7 @@ class MemberController extends Controller
         $json["locale"] = Tbl_locale::where("locale_parent", $id)->get();
 
         return json_encode($json);
+    }
 
     public function session()
     {

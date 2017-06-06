@@ -1,10 +1,10 @@
 
-var customer_invoice = new customer_invoice();
-var global_tr_html = $(".div-script tbody").html();
-var global_tr_html_cm = $(".div-script-cm tbody").html();
+var tablet_customer_invoice = new tablet_customer_invoice();
+var global_tr_html = "";
+var global_tablet_html = $(".tablet-div-script").html();
 var item_selected = ''; 
 
-function customer_invoice()
+function tablet_customer_invoice()
 {
 	init();
 
@@ -13,83 +13,36 @@ function customer_invoice()
 		iniatilize_select();
 		draggable_row.dragtable();
 
-		event_remove_tr();
 		event_accept_number_only();
-		event_compute_class_change();
 		event_taxable_check_change();
-		event_item_qty_change();
+		event_compute_class_change();
 		event_button_action_click();
 		
 		action_lastclick_row();
-		action_compute();
 		action_convert_number();
+		action_general_compute();
 		action_date_picker();
-		action_reassign_number();
+		action_click_remove();
 	}
-	function event_remove_tr()
-	{
-		$(document).on("click", ".remove-tr", function(e){
-			var len = $(".tbody-item .remove-tr").length;
-			if($(".tbody-item .remove-tr").length > 1)
-			{
-				if($(this).attr("tr_id") != 0 && $(this).attr("tr_id") != null)
-				{					
-					var id = $(this).attr("tr_id");
-					console.log($(this).attr("linked_in"));
-					if($(this).attr("linked_in") != 'no')
-					{						
-						$(".tr-id-"+id).remove();
-					}
-					else
-					{
-						$(".estimate-tbl").load("/member/customer/estimate_remove/"+id, function()
-						{
-							// console.log("success-removing");
-							iniatilize_select();
-							$(".tbody-item .select-um").globalDropList("enabled");
-							$(".est-"+id).removeClass("hidden");
-							if($(".tbody-item .trcount").length == 0)
-							{
-								$(".so-count").removeClass("hidden");
-								$(".est-count").removeClass("hidden");
-							}
-							$(".drawer-toggle").trigger("click");
-						});
-
-					}
-				}
-				else
-				{
-					$(this).parent().remove();
-				}
-				action_reassign_number();
-				action_compute();
-			}
-			else
-			{
-				console.log("success");
-			}
-		});
-		$(document).on("click", ".remove-tr", function(e){
-			if($(".tbody-item-cm .remove-tr").length > 1){
-				$(this).parent().remove();
-				action_reassign_number();
-				action_compute();
-			}			
-		});
-	}
-
 	this.action_initialized = function()
 	{
 		action_initialize();
 	}
+	function action_click_remove()
+	{
+		$(document).on("click", ".btn-remove", function(e){
+			
+				$(this).parent().parent().remove();
 
+				action_general_compute();
+		});
+	}
 	function action_initialize()
 	{
 		iniatilize_select();
-		action_compute();
 		action_convert_number();
 		action_date_picker();
+		action_general_compute();
 		draggable_row.dragtable();
 	}
 
@@ -105,13 +58,63 @@ function customer_invoice()
 	{
 		action_compute_tablet();
 	}
-	this.action_compute = function()
-	{
-		action_compute();
-	}
 	this.event_tablet_compute_class_change = function()
 	{
 		event_tablet_compute_class_change();
+	}
+	this.action_add_item_submit = function()
+	{
+		action_add_item_submit();
+	}
+
+	this.action_general_compute = function()
+	{
+		action_general_compute();
+	}
+	function action_add_item_submit()
+	{
+		$(".tablet-add-item").unbind("click");
+		$(".tablet-add-item").bind("click",function()
+		{
+			$("#global_modal").modal("toggle");
+			$(".div-item-list").append(global_tablet_html);
+			$item_table = $(".div-item-list .item-table:last");
+
+			//PUT VALUE TO LABEL
+			$item_table.find(".item-name").html($(".tablet-item-name").html());
+			$item_table.find(".item-rate").html($(".tablet-item-rate").val());
+			$item_table.find(".item-um").html($(".tablet-item-um").find("option:selected").attr("abbrev"));
+			$item_table.find(".item-amount").html($(".tablet-item-amount").html());
+			$item_table.find(".item-qty").html($(".tablet-item-qty").val());
+
+			if($(".tablet-item-disc").val())
+			{
+				$item_table.find(".disc-content").removeClass("hidden");	
+				$item_table.find(".item-disc").html($(".tablet-item-disc").val());
+			}
+			var tax = 0;
+			$item_table.find(".item-taxable").html("Non-Taxable");
+			if($(".tablet-item-taxable").is(":checked"))
+			{
+				tax = 1;
+				$item_table.find(".item-taxable").html("Taxable");
+			}
+			$item_table.find(".item-desc").html($(".tablet-item-desc").val());
+
+			//PUT VALUE TO INPUT
+			$item_table.find(".input-item-id").val($(".tablet-item-id").val());
+			$item_table.find(".input-item-amount").val($(".tablet-item-amount").html());
+			$item_table.find(".input-item-rate").val($(".tablet-item-rate").val());
+			$item_table.find(".input-item-disc").val($(".tablet-item-disc").val());
+			$item_table.find(".input-item-remarks").val($(".tablet-item-remark").val());
+			$item_table.find(".input-item-qty").val($(".tablet-item-qty").val());
+			$item_table.find(".input-item-um").val($(".tablet-item-um").val());
+			$item_table.find(".input-item-taxable").val(tax);
+			$item_table.find(".input-item-desc").val($(".tablet-item-desc").val());
+
+			action_general_compute();
+
+		});
 	}
 	function action_lastclick_row()
 	{
@@ -123,6 +126,13 @@ function customer_invoice()
 		});
 	}
 
+	function event_compute_class_change()
+	{
+		$(document).on("change",".compute", function()
+		{
+			action_general_compute();
+		});
+	}
 	function action_lastclick_row_op_cm()
 	{
 		$("tbody.cm-draggable").append(global_tr_html_cm);
@@ -138,28 +148,6 @@ function customer_invoice()
 		action_trigger_select_plugin();
 		action_date_picker();
 	}
-
-
-	this.action_reassign_number = function()
-	{
-		action_reassign_number();
-	}
-
-	function action_reassign_number()
-	{
-		var num = 1;
-		$(".invoice-number-td").each(function(){
-			$(this).html(num);
-			num++;
-		});
-
-		var num2 = 1;
-		$(".cm-number-td").each(function(){
-			$(this).html(num2);
-			num2++;
-		});
-	}
-
 	function action_date_picker()
 	{
 		$(".draggable .for-datepicker").datepicker({ dateFormat: 'mm-dd-yy', });
@@ -216,14 +204,6 @@ function customer_invoice()
 		
 		return parseFloat(number);
 	}
-
-	function event_compute_class_change()
-	{
-		$(document).on("change",".compute", function()
-		{
-			action_compute();
-		});
-	}
 	function event_tablet_compute_class_change()
 	{
 		$(document).on("change",".tablet-compute", function()
@@ -264,91 +244,90 @@ function customer_invoice()
         total = ((qty * rate) - discount).toFixed(2);
 
 
-        $(".tablet-item-amount").html(total);
+        $(".tablet-item-amount").html(action_add_comma(total));
 
 	}
 
-	function action_compute()
+    function action_general_compute()
 	{
 		var subtotal = 0;
 		var total_taxable = 0;
 
-		var subtotal_returns = 0;
-		var total_returns_with_returns = 0;
-
-		$(".tr-draggable").each(function()
+		if($(".div-item-list .item-table").length > 0)
 		{
-			/* GET ALL DATA */
-			var qty 	= $(this).find(".txt-qty").val();
-			var rate 	= $(this).find(".txt-rate").val();
-			var discount= $(this).find(".txt-discount").val().toString();
-			var amount 	= $(this).find(".txt-amount");
-			var taxable = $(this).find(".taxable-check");
+			$(".item-table").each(function() 
+			{			
+				var qty 	= $(this).find(".input-item-qty").val();
+				var rate 	= $(this).find(".input-item-rate").val();
+				var discount= $(this).find(".input-item-disc").val().toString();
+				var amount 	= $(this).find(".input-item-amount");
+				var taxable = $(this).find(".item-taxable");
 
-			/* CHECK IF QUANTITY IS EMPTY */
-			if(qty == "" || qty == null)
-			{
-				qty = 1;
-			}
-
-			/* CHECK THE DISCOUNT */
-			if(discount.indexOf('%') >= 0)
-			{
-				$(this).find(".txt-discount").val(discount.substring(0, discount.indexOf("%") + 1));
-				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
-			}
-			else if(discount == "" || discount == null)
-			{
-				discount = 0;
-			}
-			else
-			{
-				discount = parseFloat(discount);
-			}
-
-			/* RETURN TO NUMBER IF THERE IS COMMA */
-			qty 		= action_return_to_number(qty);
-			rate 		= action_return_to_number(rate);
-			discount 	= action_return_to_number(discount);
-
-			var total_per_tr = ((qty * rate) - discount).toFixed(2);
-
-			/* action_compute SUB TOTAL PER LINE */
-			subtotal += parseFloat(total_per_tr);
-
-			/* AVOID ZEROES */
-			// if(total_per_tr <= 0)
-			// {
-			// 	total_per_tr = '';
-			// }
-
-			/* CONVERT TO INTEGER */
-			var amount_val = amount.val();
-			
-			if(amount_val != '' && amount_val != null && total_per_tr == '') //IF QUANTITY, RATE IS [NOT EMPTY]
-			{
-				var sub = parseFloat(action_return_to_number(amount_val));
-				if(isNaN(sub))
+				if(qty == "" || qty == null)
 				{
-					sub = 0;
+					qty = 1;
 				}
-				subtotal += sub;
-				total_per_tr = sub;
-				amount.val(action_add_comma(sub));
-			}
-			else //IF QUANTITY, RATE IS [EMPTY]
-			{
-				amount.val(action_add_comma(total_per_tr));
-			}
 
-			/*CHECK IF TAXABLE*/	
-			if(taxable.is(':checked'))
-			{
-				total_taxable += parseFloat(total_per_tr);
-			}
+				/* CHECK THE DISCOUNT */
+				if(discount.indexOf('%') >= 0)
+				{
+					$(this).find(".input-item-disc").val(discount.substring(0, discount.indexOf("%") + 1));
+					discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
+				}
+				else if(discount == "" || discount == null)
+				{
+					discount = 0;
+				}
+				else
+				{
+					discount = parseFloat(discount);
+				}
 
-		});
-		
+				/* RETURN TO NUMBER IF THERE IS COMMA */
+				qty 		= action_return_to_number(qty);
+				rate 		= action_return_to_number(rate);
+				discount 	= action_return_to_number(discount);
+
+				var total_per_tr = ((qty * rate) - discount).toFixed(2);
+
+				/* action_compute SUB TOTAL PER LINE */
+				subtotal += parseFloat(total_per_tr);
+
+				/* AVOID ZEROES */
+				// if(total_per_tr <= 0)
+				// {
+				// 	total_per_tr = '';
+				// }
+
+				/* CONVERT TO INTEGER */
+				var amount_val = amount.val();
+				
+				if(amount_val != '' && amount_val != null && total_per_tr == '') //IF QUANTITY, RATE IS [NOT EMPTY]
+				{
+					var sub = parseFloat(action_return_to_number(amount_val));
+					if(isNaN(sub))
+					{
+						sub = 0;
+					}
+					subtotal += sub;
+					total_per_tr = sub;
+					amount.val(action_add_comma(sub));
+				}
+				else //IF QUANTITY, RATE IS [EMPTY]
+				{
+					amount.val(action_add_comma(total_per_tr));
+				}
+
+				/*CHECK IF TAXABLE*/	
+				if(taxable.html() == "Taxable")
+				{
+					total_taxable += parseFloat(total_per_tr);
+				}
+
+			});
+
+		}
+
 		/* action_compute EWT */
 		var ewt_value 			= $(".ewt-value").val();
 
@@ -401,59 +380,7 @@ function customer_invoice()
 		$(".total-amount-input").val(total.toFixed(2));
 
 		$(".balance-due").html(action_add_comma(balance_due.toFixed(2)));
-
-		$(".tr-cm-draggable").each(function()
-		{
-			/* GET ALL DATA */
-			var cm_qty 	= $(this).find(".txt-qty").val();
-			var cm_rate 	= $(this).find(".txt-rate").val();
-			var cm_amount 	= $(this).find(".txt-amount");
-			
-			/* CHECK IF QUANTITY IS EMPTY */
-			if(cm_qty == "" || cm_qty == null)
-			{
-				cm_qty = 1;
-			}
-
-
-			/* RETURN TO NUMBER IF THERE IS COMMA */
-			cm_qty 		= action_return_to_number(cm_qty);
-			cm_rate 	= action_return_to_number(cm_rate);
-
-			var cm_total_per_tr = (cm_qty * cm_rate).toFixed(2);
-
-			/* action_compute SUB TOTAL PER LINE */
-			subtotal_returns += parseFloat(cm_total_per_tr);
-
-			/* CONVERT TO INTEGER */
-			var amount_val = cm_amount.val();
-			
-			if(amount_val != '' && amount_val != null && cm_total_per_tr == '') //IF QUANTITY, RATE IS [NOT EMPTY]
-			{
-				var sub = parseFloat(action_return_to_number(amount_val));
-				if(isNaN(sub))
-				{
-					sub = 0;
-				}
-				subtotal_returns += sub;
-				cm_total_per_tr = sub;
-				cm_amount.val(action_add_comma(sub));
-			}
-			else //IF QUANTITY, RATE IS [EMPTY]
-			{
-				cm_amount.val(action_add_comma(cm_total_per_tr));
-			}
-		});
-
-
-		$(".sub-total-returns").html(action_add_comma(subtotal_returns.toFixed(2)));
-		$(".subtotal-amount-input-returns").val(action_add_comma(subtotal_returns.toFixed(2)));
-
-
-		$(".total-amount-with-returns").html(action_add_comma((total - subtotal_returns).toFixed(2)));
-		$(".total-amount-input-with-returns").val((total - subtotal_returns).toFixed(2));
-	}
-
+	}     
 	function action_convert_number()
 	{
 		$(".payment-applied").html(action_add_comma(parseFloat($(".payment-applied").html()).toFixed(2)));
@@ -489,69 +416,8 @@ function customer_invoice()
 			$this.prev().val(0);
 		}
 	}
+      
 
-	function action_trigger_select_plugin()
-	{
-		$(".draggable .tr-draggable:last td select.select-item").globalDropList(
-        {
-            link : "/member/item/add",
-            width : "100%",
-            maxHeight: "309px",
-            onCreateNew : function()
-            {
-            	item_selected = $(this);
-            },
-            onChangeValue : function()
-            {
-            	action_load_item_info($(this));
-            }
-        });
-        $(".draggable .tr-draggable:last td select.select-um").globalDropList(
-        {
-        	hasPopup: "false",
-    		width : "100%",
-    		placeholder : "um..",
-    		onChangeValue: function()
-    		{  
-    			action_load_unit_measurement($(this));
-    		}
-
-        }).globalDropList('disabled');
-
-        //cm
-        $(".cm-draggable .tr-cm-draggable:last td select.select-item").globalDropList(
-        {
-            link : "/member/item/add",
-            width : "100%",
-            onChangeValue : function()
-            {
-            	action_load_item_info_cm($(this));
-            }
-        });                   
-        $(".cm-draggable .tr-cm-draggable:last td select.select-um").globalDropList(
-        {
-        	hasPopup: "false",
-    		width : "100%",
-    		placeholder : "um..",
-    		onChangeValue: function()
-    		{
-    			action_load_unit_measurement_cm($(this));
-    		}
-
-        }).globalDropList('disabled');
-	}
-                             
-	/* Make select input into a drop down list plugin */
-	function load_all_estimate(customer_id)
-	{
-		$(".estimate-container").load("/member/customer/load_estimate_so/"+customer_id , function()
-		{
-			if($(".est-count").length > 0 || $(".so-count").length > 0)
-			{
-				$(".drawer-toggle").trigger("click");				
-			}
-		});
-	}
 	function iniatilize_select()
 	{
 		$('.droplist-customer').globalDropList(
@@ -562,7 +428,7 @@ function customer_invoice()
 			onChangeValue: function()
 			{
 				$(".customer-email").val($(this).find("option:selected").attr("email"));
-				load_all_estimate($(this).val());
+				// load_all_estimate($(this).val());
 			}
 		});
 	    $('.droplist-item').globalDropList(
@@ -671,93 +537,10 @@ function customer_invoice()
 	    sValue = sValue.toString();
 	    return sValue.length < iPadBy ? LPad("0" + sValue, iPadBy) : sValue;
 	}
-	function action_load_item_info($this)
-	{
-		$parent = $this.closest(".tr-draggable");
-		$parent.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
-		$parent.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
-		$parent.find(".txt-qty").val(1).change();
+	
+	
 
-		$parent.find(".txt-rate").attr("disabled",false);
-		$parent.find(".txt-discount").attr("disabled",false);
-		if($this.find("option:selected").attr("item-type") == 4)
-		{
-			$parent.find(".txt-rate").attr("disabled","disabled");
-			$parent.find(".txt-discount").attr("disabled","disabled");
-		}
-		if($this.find("option:selected").attr("has-um") != '')
-		{			
-			$parent.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
-			{
-				$(this).globalDropList("reload").globalDropList("enabled");
-				$(this).val($(this).find("option:first").val()).change();
-			})
-		}
-		else
-		{
-			$parent.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
-		}
-	}
-	function action_load_item_info_cm($this)
-	{
-		$parent_cm = $this.closest(".tr-cm-draggable");
-		$parent_cm.find(".txt-desc").val($this.find("option:selected").attr("sales-info")).change();
-		$parent_cm.find(".txt-rate").val($this.find("option:selected").attr("price")).change();
-		$parent_cm.find(".txt-qty").val(1).change();
-
-		if($this.find("option:selected").attr("has-um") != '')
-		{		
-			$parent_cm.find(".select-um").load('/member/item/load_one_um/' +$this.find("option:selected").attr("has-um"), function()
-			{
-				$(this).globalDropList("reload").globalDropList("enabled");
-				$(this).val($(this).find("option:first").val()).change();
-			})
-		}
-		else
-		{
-			$parent_cm.find(".select-um").html('<option class="hidden" value=""></option>').globalDropList("reload").globalDropList("disabled").globalDropList("clear");
-		}
-	}
-	function event_item_qty_change()
-	{
-		// $(document).on("change", ".txt-qty", function()
-		// {
-		// 	$parent 	= $(this).closest(".tr-draggable");
-		// 	if($parent.find(".select-item").val() != '')
-		// 	{
-		// 		$item_id 	= $parent.find(".select-item option:selected").val();
-		// 		$item_qty 	= $(this).val();
-		// 		// $.get('/member/item/get_new_price/'+$item_id +"/"+$item_qty, function(data)
-		// 		// {
-		// 		// 	console.log(data);
-		// 		// 	if(data > 0) $parent.find(".txt-rate").val(data).change();
-		// 		// });
-		// 	}
-		// })
-	}
-
-	function action_load_unit_measurement($this)
-	{
-		$parent = $this.closest(".tr-draggable");
-		$item   = $this.closest(".tr-draggable").find(".select-item");
-
-		$um_qty = parseFloat($this.find("option:selected").attr("qty") || 1);
-		$sales  = parseFloat($item.find("option:selected").attr("price"));
-		$qty    = parseFloat($parent.find(".txt-qty").val());
-
-		$parent.find(".txt-rate").val( $um_qty * $sales * $qty ).change();
-	}
-	function action_load_unit_measurement_cm($this)
-	{
-		$parent = $this.closest(".tr-cm-draggable");
-		$item   = $this.closest(".tr-cm-draggable").find(".select-item");
-
-		$cm_um_qty = parseFloat($this.find("option:selected").attr("qty") || 1);
-		$cm_sales  = parseFloat($item.find("option:selected").attr("price"));
-		$cm_qty    = parseFloat($parent.find(".txt-qty").val());
-
-		$parent.find(".txt-rate").val( $cm_um_qty * $cm_sales * $cm_qty ).change();
-	}
+	
 	function event_button_action_click()
 	{
 		$(document).on("click","button[type='submit']", function()
@@ -767,32 +550,6 @@ function customer_invoice()
 	}
 
 }	
-function add_est_to_inv(est_id, type)
-{
-	$(".estimate-tbl").load('/member/customer/load_added_item/'+est_id, function()
-	{
-		console.log("success");
-		customer_invoice.action_compute();
-		customer_invoice.iniatilize_select();
-		$(".tbody-item .select-um").globalDropList("enabled");
-
-		$(".est-"+est_id).addClass("hidden");
-		if(type == 'est')
-		{
-			$(".so-count").addClass("hidden");
-		}
-		else
-		{
-			$(".est-count").addClass("hidden");
-		}
-	});
-}
-
-/* AFTER DRAGGING A TABLE ROW */
-function dragging_done()
-{
-	customer_invoice.action_reassign_number();
-}
 
 /* AFTER ADDING A CUSTOMER */
 function submit_done_customer(result)
@@ -831,7 +588,7 @@ function submit_done(data)
     	{
     		$(".load-data:last").load(data.link+" .load-data .data-container", function()
     		{
-    			customer_invoice.action_initialized();
+    			tablet_customer_invoice.action_initialized();
     			toastr.success("Success");
     		})
     	}

@@ -911,6 +911,7 @@ class WarehouseController extends Member
             {
                 $ins_warehouse["merchant_logo"]    = "";
             }
+
             $ins['default_repurhcase_points_mulitplier'] = Request::input("default_repurhcase_points_mulitplier"); 
             $ins['default_margin_per_product']           = Request::input("default_margin_per_product");
             
@@ -929,7 +930,6 @@ class WarehouseController extends Member
 
                 return json_encode($data);
             }
-            dd(123);
 
             //INSERT TO tbl_warehouse
             $ins_warehouse["warehouse_name"]    = Request::input("warehouse_name");

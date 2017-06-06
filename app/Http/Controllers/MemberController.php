@@ -15,6 +15,8 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_membership_package_has;
+use App\Models\Tbl_locale;
+
 use App\Models\Tbl_ec_product;
 use Validator;
 use Session;
@@ -170,6 +172,7 @@ class MemberController extends Controller
 
                     if($info['password'] == $info['password_confirm'])
                     {
+
                         /* Set Product Temporarily */
                         Cart::clear_all(Self::$shop_id);
                         $product = Tbl_ec_product::where("eprod_shop_id", Self::$shop_id)->where("archived", 0)->first();
@@ -478,7 +481,14 @@ class MemberController extends Controller
             return Redirect::to('/member/register/package');
         }
 
-        return view("mlm.register.shipping");
+
+        $data["_province"]  = Tbl_locale::where("locale_parent", 0)->get();
+        $city_parent        = Request::input("city_parent") ? Request::input("city_parent") : $data["_province"][0]->locale_id; 
+        $data["_city"]      = Tbl_locale::where("locale_parent", $city_parent)->get();
+        $barangay_parent    = Request::input("barangay_parent") ? Request::input("barangay_parent") : $data["_city"][0]->locale_id; 
+        $data["_barangay"]  = Tbl_locale::where("locale_parent", $barangay_parent)->get();
+
+        return view("mlm.register.shipping", $data);
     }
 
     public function shipping_post()
@@ -510,6 +520,14 @@ class MemberController extends Controller
 
             return json_encode($data);
          }
+    }
+
+    public function getLocale($id)
+    {
+        $json["status"] = "success";
+        $json["locale"] = Tbl_locale::where("locale_parent", $id)->get();
+
+        return json_encode($json);
     }
 
     public function session()

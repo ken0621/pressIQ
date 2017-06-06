@@ -264,6 +264,10 @@ class MemberController extends Controller
 
         //ONLINE PAYMENT
         $data["_payment_method"] = Tbl_online_pymnt_method::link(Self::$shop_id)->where("method_shop_id", Self::$shop_id)->get();
+
+        $data["_product"]        =  Cart::get_info(Self::$shop_id)["tbl_ec_order_item"];
+        $data["order"]           =  Cart::get_info(Self::$shop_id)["tbl_ec_order"];
+
         return view("mlm.register.payment", $data);
     }
 

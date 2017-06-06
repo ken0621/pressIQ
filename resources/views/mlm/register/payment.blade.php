@@ -8,8 +8,8 @@
     <div class="title">How do you want to pay?</div>
     <div class="sub">Aenea commodo ligula eget dolor.</div>
     <div class="row clearfix">
-      <div class="col-md-9">
-        <div class="payment-container">
+      <div class="col-md-8">
+        <div class="payment-container" style="margin-top:0px">
           <h2>Choose Payment Method</h2>
           @if (count($errors) > 0)
               <div class="alert alert-danger">
@@ -57,43 +57,50 @@
           </div>
         </div>
       </div>
-      <div class="col-md-3">
-        <table class="table table-bordered table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>QTY</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Product Name</td>
-              <td>1</td>
-              <td>123</td>
-            </tr>
-            <tr>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-              <td>&nbsp;</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Subtotal</td>
-              <td>P 1,000.00</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Shipping Fee</td>
-              <td>P 1,000.00</td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>Total</td>
-              <td>P 1,000.00</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="col-md-4 order-summary-container">
+         <div class="hold-container">
+            <div class="hold-header">SUMMARY</div>
+            <div class="hold-content">
+                     <div class="cart-summary">
+                  <table class="table">
+                     <thead>
+                        <tr>
+                           <th>PRODUCT</th>
+                           <th>QTY</th>
+                           <th>PRICE</th>
+                           <th></th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        @foreach($_product as $product)
+                           <tr>
+                              <td>PRODUCT NAME - STATIC</td>
+                              <td>{{$product['quantity']}}</td>
+                              <td style="padding-left: 0; padding-right: 0;">P{{$product['total']}}</td>
+                              <td style="padding-left: 0px; padding-right: 0px; width: 10px;"><a style="color: red;" href="/cart/remove?redirect=1&amp;variation_id=45"><i class="fa fa-close"></i></a></td>
+                           </tr>
+                        @endforeach
+                         <tr>
+                           <td></td>
+                           <td class="text-right"><b>Subtotal</b></td>
+                           <td colspan="2" class="total" style="word-break: break-all;">P {{$order["subtotal"]}}</td>
+                        </tr>
+                        <tr>
+                           <td></td>
+                           <td class="text-right"><b>Shipping Fee</b></td>
+                           <td colspan="2" class="total" style="word-break: break-all;">P {{$order["shipping_fee"]}}</td>
+                        </tr>
+                         <tr>
+                           <td></td>
+                           <td class="text-right"><b>Total</b></td>
+                           <td colspan="2" class="total" style="word-break: break-all;">P {{$order["total"]}}</td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <!-- <div style="margin-top: 15px; font-size: 16px; font-weight: 700; text-align: center;">Free shipping for orders above ₱ 500.00</div> -->
+               </div>
+            </div>
+         </div>
       </div>
     </div>
     <!-- <div class="information-container">
@@ -215,6 +222,6 @@ event_choose_payment_method();
 </script>
 @endsection
 @section("css")
-<link rel="stylesheet" type="text/css" href="/assets/mlm/css/register-payment.css">
 <link rel="stylesheet" href="/themes/ecommerce-1/css/checkout_payment.css">
+<link rel="stylesheet" type="text/css" href="/assets/mlm/css/register-payment.css">
 @endsection

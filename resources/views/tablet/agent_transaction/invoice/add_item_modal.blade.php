@@ -75,9 +75,8 @@
         </div>
     </div>
     <div class="modal-footer">
-        <div class="col-md-4 col-xs-4"><button data-dismiss="modal" class="btn btn-custom-white form-control">Cancel</button></div>
-        <div class="col-md-4 col-xs-4"><button class="btn btn-custom-white form-control">Remove</button></div>
-        <div class="col-md-4 col-xs-4"><button class="btn btn-custom-blue form-control tablet-add-item">Done</button></div>
+        <div class="col-md-6 col-xs-6"><button data-dismiss="modal" class="btn btn-custom-white form-control">Cancel</button></div>
+        <div class="col-md-6 col-xs-6"><button class="btn btn-custom-blue form-control tablet-add-item">Done</button></div>
     </div>
 <script type="text/javascript">
     tablet_customer_invoice.iniatilize_select();

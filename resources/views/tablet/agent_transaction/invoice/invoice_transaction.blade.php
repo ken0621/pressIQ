@@ -3,6 +3,7 @@
 <form class="global-submit form-to-submit-transfer" id="invoice_form" role="form" action="{{$action}}" method="POST" >
     <input type="hidden" class="token" name="_token" value="{{csrf_token()}}" >
     <input type="hidden" class="token" name="sir_id" value="{{$sir_id}}" >
+    <input type="hidden" name="invoice_id" value="{{Request::input('id')}}" >
     <div class="form-group">
     	<div class="col-md-12">
 			<div class="panel panel-default panel-block panel-title-block" id="top">
@@ -204,6 +205,9 @@
 <div class="tablet-div-script hide">
     <div class="item-table">
         <div style="border: 1px solid #999999; padding: 10px;margin: 5px">
+            <a class="btn-remove col-xs-12 text-right" style="margin-top: -10px;margin-bottom: -10px">
+                Remove
+            </a>
             <div class="form-group row clearfix">
                 <div class="col-xs-6">
                     <input type="hidden" name="invline_item_id[]" class="input-item-id">

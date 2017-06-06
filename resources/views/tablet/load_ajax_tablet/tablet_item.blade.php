@@ -2,6 +2,9 @@
 	@foreach($_invline as $invline)
 	<div class="item-table">
 		<div style="border: 1px solid #999999; padding: 10px;margin: 5px">
+            <a class="btn-remove col-xs-12 text-right" style="margin-top: -10px;margin-bottom: -10px">
+            	Remove
+            </a>
 			<div class="form-group row clearfix">
 				<div class="col-xs-6">
 					<input type="hidden" name="invline_item_id[]" class="input-item-id" value="{{$invline->invline_item_id}}">

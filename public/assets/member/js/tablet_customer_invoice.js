@@ -22,12 +22,21 @@ function tablet_customer_invoice()
 		action_convert_number();
 		action_general_compute();
 		action_date_picker();
+		action_click_remove();
 	}
 	this.action_initialized = function()
 	{
 		action_initialize();
 	}
+	function action_click_remove()
+	{
+		$(document).on("click", ".btn-remove", function(e){
+			
+				$(this).parent().parent().remove();
 
+				action_general_compute();
+		});
+	}
 	function action_initialize()
 	{
 		iniatilize_select();
@@ -244,76 +253,80 @@ function tablet_customer_invoice()
 		var subtotal = 0;
 		var total_taxable = 0;
 
-		$(".item-table").each(function() 
-		{			
-			var qty 	= $(this).find(".input-item-qty").val();
-			var rate 	= $(this).find(".input-item-rate").val();
-			var discount= $(this).find(".input-item-disc").val().toString();
-			var amount 	= $(this).find(".input-item-amount");
-			var taxable = $(this).find(".item-taxable");
+		if($(".div-item-list .item-table").length > 0)
+		{
+			$(".item-table").each(function() 
+			{			
+				var qty 	= $(this).find(".input-item-qty").val();
+				var rate 	= $(this).find(".input-item-rate").val();
+				var discount= $(this).find(".input-item-disc").val().toString();
+				var amount 	= $(this).find(".input-item-amount");
+				var taxable = $(this).find(".item-taxable");
 
-			if(qty == "" || qty == null)
-			{
-				qty = 1;
-			}
-
-			/* CHECK THE DISCOUNT */
-			if(discount.indexOf('%') >= 0)
-			{
-				$(this).find(".input-item-disc").val(discount.substring(0, discount.indexOf("%") + 1));
-				discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
-			}
-			else if(discount == "" || discount == null)
-			{
-				discount = 0;
-			}
-			else
-			{
-				discount = parseFloat(discount);
-			}
-
-			/* RETURN TO NUMBER IF THERE IS COMMA */
-			qty 		= action_return_to_number(qty);
-			rate 		= action_return_to_number(rate);
-			discount 	= action_return_to_number(discount);
-
-			var total_per_tr = ((qty * rate) - discount).toFixed(2);
-
-			/* action_compute SUB TOTAL PER LINE */
-			subtotal += parseFloat(total_per_tr);
-
-			/* AVOID ZEROES */
-			// if(total_per_tr <= 0)
-			// {
-			// 	total_per_tr = '';
-			// }
-
-			/* CONVERT TO INTEGER */
-			var amount_val = amount.val();
-			
-			if(amount_val != '' && amount_val != null && total_per_tr == '') //IF QUANTITY, RATE IS [NOT EMPTY]
-			{
-				var sub = parseFloat(action_return_to_number(amount_val));
-				if(isNaN(sub))
+				if(qty == "" || qty == null)
 				{
-					sub = 0;
+					qty = 1;
 				}
-				subtotal += sub;
-				total_per_tr = sub;
-				amount.val(action_add_comma(sub));
-			}
-			else //IF QUANTITY, RATE IS [EMPTY]
-			{
-				amount.val(action_add_comma(total_per_tr));
-			}
 
-			/*CHECK IF TAXABLE*/	
-			if(taxable.html() == "Taxable")
-			{
-				total_taxable += parseFloat(total_per_tr);
-			}
+				/* CHECK THE DISCOUNT */
+				if(discount.indexOf('%') >= 0)
+				{
+					$(this).find(".input-item-disc").val(discount.substring(0, discount.indexOf("%") + 1));
+					discount = (parseFloat(discount.substring(0, discount.indexOf('%'))) / 100) * (action_return_to_number(rate) * action_return_to_number(qty));
+				}
+				else if(discount == "" || discount == null)
+				{
+					discount = 0;
+				}
+				else
+				{
+					discount = parseFloat(discount);
+				}
 
-		});
+				/* RETURN TO NUMBER IF THERE IS COMMA */
+				qty 		= action_return_to_number(qty);
+				rate 		= action_return_to_number(rate);
+				discount 	= action_return_to_number(discount);
+
+				var total_per_tr = ((qty * rate) - discount).toFixed(2);
+
+				/* action_compute SUB TOTAL PER LINE */
+				subtotal += parseFloat(total_per_tr);
+
+				/* AVOID ZEROES */
+				// if(total_per_tr <= 0)
+				// {
+				// 	total_per_tr = '';
+				// }
+
+				/* CONVERT TO INTEGER */
+				var amount_val = amount.val();
+				
+				if(amount_val != '' && amount_val != null && total_per_tr == '') //IF QUANTITY, RATE IS [NOT EMPTY]
+				{
+					var sub = parseFloat(action_return_to_number(amount_val));
+					if(isNaN(sub))
+					{
+						sub = 0;
+					}
+					subtotal += sub;
+					total_per_tr = sub;
+					amount.val(action_add_comma(sub));
+				}
+				else //IF QUANTITY, RATE IS [EMPTY]
+				{
+					amount.val(action_add_comma(total_per_tr));
+				}
+
+				/*CHECK IF TAXABLE*/	
+				if(taxable.html() == "Taxable")
+				{
+					total_taxable += parseFloat(total_per_tr);
+				}
+
+			});
+
+		}
 
 		/* action_compute EWT */
 		var ewt_value 			= $(".ewt-value").val();

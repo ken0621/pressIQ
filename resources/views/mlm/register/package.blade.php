@@ -7,7 +7,7 @@
     <div class="title">Create a Brown Package</div>
     <div class="sub">Aenea commodo ligula eget dolor.</div>
     <div class="membership">
-      <div class="row clearfix">
+      <div class="row clearfix hidden">
       @if(count($membership) >= 1)
         @if(count($membership) == 1)
         <div class="col-md-4"></div>
@@ -54,8 +54,40 @@
         </div>
         @endforeach
       @else
-        
+        <div class="text-center">
+          No Product
+        </div>
       @endif  
+      </div>
+      <div class="row clearfix">
+        @if(count($_product) > 0)
+          @foreach($_product as $key => $value)
+            <div class="col-md-4">
+              <div class="holder">
+                <div class="img">
+                 @if($value->eprod_detail_image != null)
+                  <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->eprod_id}}" src="{{$value->eprod_detail_image}}">
+                  @else 
+                  <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->eprod_id}}" src="/assets/mlm/img/placeholder.jpg">
+                  @endif
+                </div>
+                <div class="text-holder">
+                  <div class="name">
+                    <div class="radio">
+                      <label><input type="radio" name="product_id" value="{{$value->eprod_id}}"> {{$value->eprod_name}}</label>
+                    </div>
+                  </div>
+                  <div class="membership-price">{{currency('PHP', $value->min_price)}}</div>
+                  <div class="info">{!! $value->inventory_count <= 0 ? "<span style='color: red'>Out of Stock</span>" : "Current Stocks : " . number_format($value->inventory_count) !!}</div>                  
+                </div>
+              </div>              
+            </div>
+          @endforeach
+        @else
+        <div class="text-center">
+          No Product Available
+        </div>        
+        @endif
       </div>
     </div>
     <div class="button-holder">

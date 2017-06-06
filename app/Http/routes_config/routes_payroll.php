@@ -177,6 +177,10 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	Route::any('/holiday/modal_update_holiday',"Member\PayrollController@modal_update_holiday");
 	/* HOLIDAY END */
 
+	/* HOLIDAY DEFAULT START */
+	Route::any('/holiday_default',"Member\PayrollController@default_holiday");
+	/* HOLIDAY DEFAULT END */
+
 	/* ALLOWANCE START */
 	Route::any('/allowance',"Member\PayrollController@allowance");
 	Route::any('/allowance/modal_create_allowance',"Member\PayrollController@modal_create_allowance");

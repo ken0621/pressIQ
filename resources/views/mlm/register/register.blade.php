@@ -64,7 +64,7 @@
 				<div class="row clearfix text-center">
 					<div class="col-md-6">
 						<div class="form-group">
-							<label><input type="radio" name="customer_type" onclick="toggle('.corporate-type','personal', this)" value="0"> Personal</label>
+							<label><input type="radio" name="customer_type" onclick="toggle('.corporate-type','personal', this)" value="0"> Individual</label>
 						</div>
 					</div>
 					<div class="col-md-6">

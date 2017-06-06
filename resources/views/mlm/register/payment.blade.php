@@ -6,7 +6,7 @@
 <div class="payment">
   <div class="container-fluid">
     <div class="title">How do you want to pay?</div>
-    <div class="sub">Aenea commodo ligula eget dolor.</div>
+    <div class="sub hide">Aenea commodo ligula eget dolor.</div>
     <div class="row clearfix">
       <div class="col-md-8">
         <div class="payment-container text-left" style="margin-top:0px">

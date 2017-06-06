@@ -20,6 +20,7 @@ use App\Globals\AuditTrail;
 use App\Globals\Item;
 use App\Globals\Settings;
 use App\Globals\Ecom_Product;
+use DB;
 class MLM_MembershipController extends Member
 {
     public function index()
@@ -119,6 +120,8 @@ class MLM_MembershipController extends Member
                     $data['product_list'] = Ecom_Product::getProductList();
                     $data['membership_product'] = Tbl_membership::where('shop_id', $shop_id)
                     ->where('membership_archive', 0)->get();
+
+                    $data['ec_product'] = DB::table('tbl_ec_product')->where('eprod_shop_id', $shop_id)->where('archived', 0)->get();
                 }
             }
             else
@@ -132,6 +135,22 @@ class MLM_MembershipController extends Member
         {
            return $this->show_no_access(); 
         }
+    }
+    public function edit_add_membership_product()
+    {
+
+        $eprod_id = Request::input('eprod_id');
+        $membership_id = Request::input('membership_id');
+
+        foreach ($eprod_id as $key => $value) {
+            $update['ec_product_membership'] = $membership_id[$key];
+            DB::table('tbl_ec_product')->where('eprod_id', $eprod_id[$key])->update($update);
+        }
+
+        $data['response_status'] = 'success';
+        $data['message'] = 'ok';
+
+        return json_encode($data);
     }
     public function get_packages_with_view($membership_id)
     {

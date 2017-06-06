@@ -162,7 +162,6 @@ class MemberController extends Controller
 
                     if($info['password'] == $info['password_confirm'])
                     {
-                        dd($info);
                         Session::put('mlm_register_step_1', $info);
                         $data['status'] = 'success';
                         $data['message'][0] = 'Sucess!';

@@ -4548,9 +4548,9 @@ class PayrollController extends Member
           $data['_archived'] = Tbl_payroll_holiday_default::getholiday(1)->orderBy('payroll_holiday_date','desc')->select(DB::raw('*, payroll_holiday_default_id as payroll_holiday_id'))->paginate($this->paginate_count);
 
           $data['title']      = 'Holiday Default';
-          $data['create']     = '/holiday_default/modal_create_holiday_default';
-          $data['edit']       = '/holiday_default/modal_edit_holiday_default/';
-          $data['archived']   = '/holiday_default/modal_archive_holiday_default/';
+          $data['create']     = '/member/payroll/holiday_default/modal_create_holiday_default';
+          $data['edit']       = '/member/payroll/holiday_default/modal_edit_holiday_default/';
+          $data['archived']   = '/member/payroll/holiday_default/modal_archive_holiday_default/';
 
           return view('member.payroll.side_container.holiday',$data);
      }    
@@ -4613,7 +4613,7 @@ class PayrollController extends Member
           // dd($_query);
           $data['title']      = 'Do you really want to '.$statement.' holiday '.$query->payroll_holiday_name.'?';
           $data['html']       = '';
-          $data['action']     = '/holiday_default/archive_holiday_default';
+          $data['action']     = '/member/payroll/holiday_default/archive_holiday_default';
           $data['id']         = $id;
           $data['archived']   = $archived;
 
@@ -4629,7 +4629,7 @@ class PayrollController extends Member
           Tbl_payroll_holiday_default::where('payroll_holiday_default_id', $id)->update($update);
 
           $return['status'] = 'success';
-          $return['function_name'] = '';
+          $return['function_name'] = 'reload_holiday_default';
           return collect($return)->toJson();
      }
 	/*HOLIDAY DEFAULT END*/

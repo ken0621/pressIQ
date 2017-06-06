@@ -39,3 +39,16 @@
 		</select>
 	</div>
 <!-- Item Serial Settings -->
+
+	<hr>
+	<center>MLM</center>
+<!-- Item Serial Settings -->
+	<div class="settings" id="use_product_as_membership">
+		Use Product as Membership
+		<input type="hidden" name="settings_key" value="use_product_as_membership">
+		<select name="settings_value" class="form-control">
+			<option value="0">Disable</option>
+			<option value="1">Enable</option>
+		</select>
+	</div>
+<!-- Item Serial Settings -->

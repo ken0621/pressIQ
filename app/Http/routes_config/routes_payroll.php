@@ -408,4 +408,8 @@ Route::group(array('prefix' => '/member/payroll'), function()
 	/* SHIFT START */
 	Route::any('/shift_group','Member\PayrollController@shift_group');
 	/* SHIFT END */
+
+	/* PAYROLL 13TH MONTH PAY REPORT */
+	Route::get('/report_13th_month_pay','Member\PayrollController@report_13th_month_pay');
+	Route::get('/report_13th_month_pay/excel_export','Member\PayrollController@report_13th_month_pay_excel_export');
 });	 

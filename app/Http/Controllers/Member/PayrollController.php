@@ -7477,4 +7477,171 @@ class PayrollController extends Member
      }
      /* SHIFT END */
 
+     /*13th month pay report START*/
+     public function report_13th_month_pay()
+     {
+          //dd(Self::shop_id());
+          $data['start_date'] = NULL;
+          $data['end_date']   = NULL;
+          $data['company_id']      = 0;
+          $data['department_id']   = 0;
+          $data['emp_id']          = 0;
+
+          if(Request::has('start_date') && Request::has('end_date') && Request::has('company_id') && Request::has('department_id') && Request::has('emp_id'))
+          {
+               $data['start_date']      = date('Y-m-d', strtotime(Request::input('start_date')));
+               $data['end_date']        = date('Y-m-d', strtotime(Request::input('end_date')));
+               //dd(Request::all());
+          }  
+
+          $data['company_id']      = Request::input('company_id');
+          $data['department_id']   = Request::input('department_id');
+          $data['emp_id']          = Request::input('emp_id');       
+          
+          //dd(Request::all());
+          $data['_company']        = Payroll::company_heirarchy(Self::shop_id());
+          $data['_department']     = Tbl_payroll_department::sel(Self::shop_id(), 0)->get();
+          $data['_active']         = Self::report_13th_month_pay_table($data['start_date'], $data['end_date'], $data['company_id'], $data['department_id'], $data['emp_id']);
+          //$data['_active'] = Self::report_13th_month_pay_table('2017-04-01', '2017-05-01', 39);
+          //dd($data['department_id']);
+          //dd($data['_active']);
+          return view('member.payroll.report_13th_month_pay', $data);
+     }
+
+      public function report_13th_month_pay_table($start_date = '0000-00-00', $end_date = '0000-00-00', $company_id=0 ,$department_id = 0, $emp_id = 0)
+     {
+          $arr_record    = array();
+          $count         = 0;
+          $tot           = 0;  
+
+          if($start_date==NULL)
+          {
+               $start_date = date('Y-m-d');
+          }  
+
+          $query_emp =  Tbl_payroll_employee_contract::employeefilter($company_id,$department_id,0,$start_date, Self::shop_id())->orderBy('payroll_employee_last_name');
+
+          if($emp_id != 0)
+          {
+               $query_emp->where('tbl_payroll_employee_basic.payroll_employee_id', $emp_id);
+          }
+        
+          $_emp = $query_emp->get();
+          //dd($department_id);
+          
+
+          //dd($_emp);
+          $arr_record = array();
+
+          foreach ($_emp as $key_emp => $emp_value) 
+          {
+               //dd($_emp);
+               $query_pay_rec = $payroll_record = Tbl_payroll_record::get13month($emp_value->payroll_employee_id);                                        
+               if($start_date != NULL && $end_date != NULL)
+               {
+                    //dd($end_date);
+                    $query_pay_rec->where('tbl_payroll_period.payroll_period_start', '>=', $start_date)->where('tbl_payroll_period.payroll_period_end'  , '<=', $end_date);
+                    //$query_pay_rec->whereIn('tbl_payroll_period.payroll_period_start', [$start_date, $end_date]);
+               } 
+               //dd($query_pay_rec);     
+               $_pay_rec = $query_pay_rec->get();                       
+               $sub_tot = 0;
+
+               //dd(count($_pay_rec)); 
+               //dd($_pay_rec);
+
+               if(count($_pay_rec) !=0 )
+               {
+                    foreach ($_pay_rec as $key_pay_rec => $pay_rec_value) 
+                    {
+                         //dd($_pay_rec);                   
+                         $n_13_month = $pay_rec_value->salary_monthly/12;
+                         $tot += $n_13_month;
+                         $sub_tot += $n_13_month;
+
+                         if ($key_pay_rec == 0) 
+                         {
+                              $arr_record[$key_emp][$key_pay_rec]['name']           = $emp_value->payroll_employee_first_name. ' ' .$emp_value->payroll_employee_last_name; 
+                              $arr_record[$key_emp][$key_pay_rec]['department']     = $emp_value->payroll_department_name;
+                              $arr_record[$key_emp][$key_pay_rec]['job_title']      = $emp_value->payroll_jobtitle_name;      
+                         } else {
+                              $arr_record[$key_emp][$key_pay_rec]['name']           = ''; 
+                              $arr_record[$key_emp][$key_pay_rec]['department']     = '';
+                              $arr_record[$key_emp][$key_pay_rec]['job_title']      = '';    
+                         }
+
+                         $arr_record[$key_emp][$key_pay_rec]['period']               = date('M d, Y', strtotime($pay_rec_value->payroll_period_start)). ' - ' 
+                                                                                .date('M d, Y', strtotime($pay_rec_value->payroll_period_end));
+                         $arr_record[$key_emp][$key_pay_rec]['basic_salary']         = number_format($pay_rec_value->salary_monthly, 2);
+                         
+                         $arr_record[$key_emp][$key_pay_rec]['amount_of_13']         = number_format($n_13_month, 2);                           
+                         if($key_pay_rec == count($_pay_rec)-1)
+                         {
+                              $arr_record[$key_emp][$key_pay_rec]['sub_total']       = number_format($sub_tot, 2);
+                         } else {
+                              $arr_record[$key_emp][$key_pay_rec]['sub_total']       = '';   
+
+                         } 
+
+                         $arr_record[$key_emp][$key_pay_rec]['employee_id']         = $emp_value->payroll_employee_id;
+                    }      
+               }                       
+          }
+          //dd($tot);
+          if($arr_record!=NULL)
+          {
+               $arr_record[$key_emp+1][$key_pay_rec]['name']           = ''; 
+               $arr_record[$key_emp+1][$key_pay_rec]['department']     = '';
+               $arr_record[$key_emp+1][$key_pay_rec]['job_title']      = '';    
+               $arr_record[$key_emp+1][$key_pay_rec]['period']         = '';
+               $arr_record[$key_emp+1][$key_pay_rec]['basic_salary']   = '';
+               $arr_record[$key_emp+1][$key_pay_rec]['amount_of_13']   = 'TOTAL';  
+               $arr_record[$key_emp+1][$key_pay_rec]['sub_total']      = number_format($tot, 2); 
+               $arr_record[$key_emp+1][$key_pay_rec]['employee_id']      = '';
+               return $arr_record;                   
+          } else{
+               return FALSE;
+          }
+          //dd($arr);          
+     }   
+
+     public function report_13th_month_pay_excel_export()
+     {
+          //dd('pasok');
+          $start_date         = NULL;
+          $end_date           = NULL;
+          $company_id         = 0;
+          $department_id      = 0;
+          $emp_id             = 0;    
+
+          $_record = Self::report_13th_month_pay_table($start_date, $end_date, $company_id, $department_id, $emp_id);
+          
+          //$data = array;
+
+
+          foreach ($_record as $key => $value) {
+               $data = ($value[$key]);
+               break;
+          }
+          
+          return Excel::create('example', function($excel) use ($data) {
+
+               $date = 'reports';
+               $excel->setTitle('Payroll');
+               $excel->setCreator('Laravel')->setCompany('DIGIMA');
+               $excel->setDescription('payroll file');
+
+               $excel->sheet($date, function($sheet) use ($data) {
+                    $sheet->fromArray($data, null, 'A1', true, true);
+                    $sheet->setColumnFormat(array(
+                         'B:BZ' => '0.00'
+                         ));
+               });
+
+          })->download('xlsx');  
+     }  
+
+     
+     /* end 13th month pay report*/
+
 }

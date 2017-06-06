@@ -61,6 +61,36 @@
 			</div>
 		</div>
 	</div>
+
+	@if($use_product_as_membership == 1)
+		<div class="panel panel-default panel-block">
+			<table class="table table-bordered">
+				@foreach($product_list as $key => $value)
+					@foreach($value['Product'] as $key => $value2)
+					<tr>
+						<td>{{$value2['eprod_name']}}</td>
+						<td>
+							<select class="form-control" name="membership_id">
+								<option value="0">None</option>
+							@foreach($membership_product as $mem_key => $mem_value)
+								<option value="{{$mem_value->membership_id}}">{{$mem_value->membership_name}}</option>
+							@endforeach
+							</select>
+						</td>
+					</tr>
+					@endforeach
+				@endforeach
+				<tr>
+					<td>
+						
+					</td>
+					<td>
+						<button class="btn btn-primary pull-right">Submit</button>
+					</td>	
+				</tr>
+			</table>
+		</div>
+	@endif
 </div>
 <input type="hidden" class="membership_id" value="{{$membership->membership_id}}">
 @else

@@ -16,6 +16,7 @@ use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_membership_package_has;
 use App\Models\Tbl_locale;
+use App\Models\Tbl_online_pymnt_method;
 
 use App\Models\Tbl_ec_product;
 use Validator;
@@ -261,24 +262,8 @@ class MemberController extends Controller
             return Redirect::to('/member/register/shipping');
         }
 
-        // $membership_id = $register_session_2['membership'];
-        // $package_id = $register_session_2['package'];
-
-
-
-        // $data['membership_packages'] = Tbl_membership_package::where('membership_id', $membership_id)
-        // ->where('membership_package_id', $package_id)
-        // ->where('membership_package_archive', 0)->get();
-        // foreach($data['membership_packages'] as $key => $value)
-        // {
-        //     $data['product_count'][$key] = Tbl_membership_package_has::where('membership_package_id', $package_id)->get();
-        //     $data['item_bundle'][$key] = Tbl_membership_package_has::where('membership_package_id', $package_id)->get();
-        //     foreach($data['item_bundle'][$key] as $key2 => $value2)
-        //     {
-        //         $data['item_bundle'][$key][$key2]->item_list = Item::get_item_bundle($value2->item_id);
-        //     }
-        // }
-        $data = [];
+        //ONLINE PAYMENT
+        $data["_payment_method"] = Tbl_online_pymnt_method::link(Self::$shop_id)->where("method_shop_id", Self::$shop_id)->get();
         return view("mlm.register.payment", $data);
     }
 

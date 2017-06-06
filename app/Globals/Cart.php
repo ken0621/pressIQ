@@ -43,7 +43,7 @@ class Cart
         $shop_info = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
         return $shop_info;
     }
-    public static function add_to_cart($product_id,$quantity,$shop_id = null, $clear = false)
+    public static function add_to_cart($product_id,$quantity,$shop_id = null)
     {
         if (!$shop_id) 
         {

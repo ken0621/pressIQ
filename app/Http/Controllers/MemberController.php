@@ -112,35 +112,35 @@ class MemberController extends Controller
 
     public function generate_username($first_name, $last_name)
     {
-        
+        return strtolower( trim( substr($first_name, 0, 6) . "." . substr($last_name, 0, 3) ) );
     }
 
     public function register()
     {
         $data['country'] = Tbl_country::get();
+        $data['current'] = Cart::get_info(Self::$shop_id);
         return view("mlm.register.register", $data);
     }
 
     public function register_post()
     {
-        // return json_encode($_POST);
-        $info['company'] = Request::input('company');
-        $info['country'] = Request::input('country');
-        $info['email'] = Request::input('email');
-        $info['first_name'] = Request::input('first_name');
-        $info['last_name'] = Request::input('last_name');
-        $info['password'] = Request::input('password');
-        $info['password_confirm'] = Request::input('password_confirm');
-        $info['tin_number'] = Request::input('tin_number');
-        $info['username'] = Request::input('username');
-        $info['sponsor'] = Request::input('sponsor');
-        $info['customer_phone'] = Request::input('contact_number');
-        $info['customer_mobile'] = Request::input('contact_number');
-        $rules['first_name'] = 'required';
-        $rules['last_name'] = 'required';
-        $rules['password'] = 'required|min:6';
+        $info['company']           = Request::input('company');
+        $info['country']           = Request::input('country');
+        $info['email']             = Request::input('email');
+        $info['first_name']        = Request::input('first_name');
+        $info['last_name']         = Request::input('last_name');
+        $info['password']          = randomPassword();
+        $info['password_confirm']  = $info['password'];
+        $info['tin_number']        = Request::input('tin_number');
+        $info['username']          = $this->generate_username($info["first_name"], $info["last_name"]);
+        $info['sponsor']           = Request::input('sponsor');
+        $info['customer_phone']    = Request::input('contact_number');
+        $info['customer_mobile']   = Request::input('contact_number');
+        $rules['first_name']       = 'required';
+        $rules['last_name']        = 'required';
+        $rules['password']         = 'required|min:6';
         $rules['password_confirm'] = 'required|min:6';
-        $rules['email'] = 'required';
+        $rules['email']            = 'required';
         if(!isset($_POST['terms']))
         {
             $data['status'] = 'warning';
@@ -170,11 +170,12 @@ class MemberController extends Controller
                     if($info['password'] == $info['password_confirm'])
                     {
                         /* Set Product Temporarily */
+                        Cart::clear_all(Self::$shop_id);
                         $product = Tbl_ec_product::where("eprod_shop_id", Self::$shop_id)->where("archived", 0)->first();
                         Cart::add_to_cart($product->eprod_id, 1, Self::$shop_id, true);
 
                         /* Set Customer Info */
-                        $customer_info["new_account"]      = false;
+                        $customer_info["new_account"]      = true;
                         $customer_info["first_name"]       = $info["first_name"];
                         $customer_info["last_name"]        = $info["last_name"];
                         $customer_info["email"]            = $info["email"];

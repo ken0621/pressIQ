@@ -91,9 +91,10 @@ class ShopCheckoutController extends Shop
             if ($from == "checkout") 
             {
                 $order_id = Request::input("param2");
-                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->get();
+                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->first();
                 if($order)
                 {
+		
                     Mlm_member::add_to_session($order->shop_id, $order->customer_id);
                     return Redirect::to('/mlm');
                 }

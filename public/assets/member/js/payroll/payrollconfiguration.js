@@ -233,6 +233,11 @@ function payrollconfiguration()
 		reload_configuration("/member/payroll/holiday");
 	}
 
+	this.reload_holiday_default = function()
+	{
+		reload_configuration("/member/payroll/holiday_default");
+	}
+
 	this.reload_payroll_group = function()
 	{
 		reload_configuration("/member/payroll/payroll_group");
@@ -294,11 +299,6 @@ function payrollconfiguration()
 		reload_configuration("/member/payroll/shift_template");
 	}
 
-	/*this.reload_holiday_default = function()
-	{
-		reload_configuration("/member/payroll/holiday_default");
-	}*/
-	
 }
 
 /* CALL A FUNCTION BY NAME */

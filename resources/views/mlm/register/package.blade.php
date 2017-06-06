@@ -5,57 +5,40 @@
 <div class="package">
   <div class="container-fluid text-center">
     <div class="title">Create a Brown Package</div>
-    <div class="sub">Aenea commodo ligula eget dolor.</div>
+    <div class="sub"></div>
     <div class="membership">
       <div class="row clearfix">
-      @if(count($membership) >= 1)
-        @if(count($membership) == 1)
-        <div class="col-md-4"></div>
-        @endif
-        @foreach($membership as $key => $value)
-        <div class="col-md-4">
-          <div class="holder">
-            <div class="img">
-              @if($package[$key]->first())
-                 <?php $pack = $package[$key]->first(); ?>
-
-                  @if($pack->membership_package_imgage != null)
-                  <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->membership_id}}" src="{{$pack->membership_package_imgage}}">
+        @if(count($_product) > 0)
+          @foreach($_product as $key => $value)
+            <div class="col-md-4">
+              <div class="holder">
+                <div class="img">
+                 @if($value->eprod_detail_image != null)
+                  <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->eprod_id}}" src="{{$value->eprod_detail_image}}">
                   @else 
-                  <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->membership_id}}" src="/assets/mlm/img/placeholder.jpg">
+                  <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->eprod_id}}" src="/assets/mlm/img/placeholder.jpg">
                   @endif
-              @else
-                <img style="object-fit: contain; height: 250px;" class="img_header_{{$value->membership_id}}" src="/assets/mlm/img/placeholder.jpg">
-              @endif
-              
-            </div>
-            <div class="text-holder">
-              <div class="name">
-                <div class="radio">
-                  <label><input type="radio" name="membership" value="{{$value->membership_id}}"> {{$value->membership_name}}</label>
                 </div>
-              </div>
-              <!-- <div class="membership-name">Silver Membership</div> -->
-              <div class="membership-price">{{currency('PHP', $value->membership_price)}}</div>
-              <div class="info">Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus.</div>
-              <div class="type">
-                <select class="form-control input-lg" name="package[{{$value->membership_id}}]" onChange="change_picture_a(this)">
-                  @if($package[$key]->first())
-                    @foreach($package[$key] as $key2 => $value2)
-                    <option value="{{$value2->membership_package_id}}" membership_id="{{$value->membership_id}}" image="{{$value2->membership_package_imgage}}">{{$value2->membership_package_name}}</option>
-                    @endforeach
-                  @else
-                    <option>NO PACKAGE AVAILABLE</option>
-                  @endif
-                </select>
-              </div>
+                <div class="text-holder">
+                  <div class="name">
+                    <div class="radio">
+                      <label><input type="radio" name="variant_id" value="{{$value->evariant_id}}"> {{$value->eprod_name}}</label>
+                    </div>
+                  </div>
+                  <div class="membership-price">{{currency('PHP', $value->min_price)}}</div>
+                  <div class="info">
+                    {!! $value->inventory_count <= 0 ? "<span style='color: red'>Out of Stock</span>" : "Current Stocks : " . number_format($value->inventory_count) !!}
+                    <input type="hidden" name="product_stocks[{{$value->evariant_id}}]" value="{{$value->inventory_count}}">
+                  </div>                  
+                </div>
+              </div>              
             </div>
-          </div>
-        </div>
-        @endforeach
-      @else
-        
-      @endif  
+          @endforeach
+        @else
+        <div class="text-center">
+          No Product Available
+        </div>        
+        @endif
       </div>
     </div>
     <div class="button-holder">

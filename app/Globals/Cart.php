@@ -15,6 +15,7 @@ use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_email_template;
 use App\Models\Tbl_online_pymnt_api;
+use App\Models\Tbl_mlm_slot;
 use App\Globals\Ecom_Product;
 use DB;
 use Session;
@@ -42,7 +43,7 @@ class Cart
         $shop_info = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
         return $shop_info;
     }
-    public static function add_to_cart($product_id,$quantity,$shop_id = null)
+    public static function add_to_cart($product_id,$quantity,$shop_id = null,$clear = false)
     {
         if (!$shop_id) 
         {
@@ -65,12 +66,18 @@ class Cart
         else
         {
             $_cart                                            = Session::get($unique_id);
+
+            if ($clear == true) 
+            {
+                unset($_cart["cart"]);
+                $insert = $_cart;
+            }
+
             $insert["cart"][$product_id]["product_id"]        = $product_id;
             $insert["cart"][$product_id]["quantity"]          = $quantity;
             $insert["cart"][$product_id]["shop_id"]           = $shop_id;
             $insert["cart"][$product_id]["unique_id_per_pc"]  = $unique_id;
             $insert["cart"][$product_id]["date_added"]        = Carbon::now();
-
 
             if($_cart && isset($_cart["cart"]))
             {
@@ -695,18 +702,23 @@ class Cart
         $data["billing_equals_shipping"] = (isset($customer_information["billing_equals_shipping"]) ? $customer_information["billing_equals_shipping"] : (isset($data["billing_equals_shipping"]) ? $data["billing_equals_shipping"] : true));;
 
         /* SET BASIC INFORMATION */
-        $data["tbl_customer"]['customer_id']    = Tbl_customer::max("customer_id") + 1;
-        $data["tbl_customer"]['first_name']     = (isset($customer_information["first_name"]) ? $customer_information["first_name"] : (isset($data["tbl_customer"]['first_name']) ? $data["tbl_customer"]['first_name'] : null));
-        $data["tbl_customer"]['last_name']      = (isset($customer_information["last_name"]) ? $customer_information["last_name"] : (isset($data["tbl_customer"]['last_name']) ? $data["tbl_customer"]['last_name'] : null));
-        $data["tbl_customer"]['middle_name']    = (isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : (isset($data["tbl_customer"]['middle_name']) ? $data["tbl_customer"]['middle_name'] : null));
-        $data["tbl_customer"]['email']          = (isset($customer_information["email"]) ? $customer_information["email"] : (isset($data["tbl_customer"]['email']) ? $data["tbl_customer"]['email'] : null));
-        $data["tbl_customer"]['password']       = isset($customer_information["password"]) ? $customer_information["password"] : randomPassword();
-        $data["tbl_customer"]['shop_id']        = $shop_id;
+        $data["tbl_customer"]['customer_id']      = Tbl_customer::max("customer_id") + 1;
+        $data["tbl_customer"]['first_name']       = (isset($customer_information["first_name"]) ? $customer_information["first_name"] : (isset($data["tbl_customer"]['first_name']) ? $data["tbl_customer"]['first_name'] : null));
+        $data["tbl_customer"]['last_name']        = (isset($customer_information["last_name"]) ? $customer_information["last_name"] : (isset($data["tbl_customer"]['last_name']) ? $data["tbl_customer"]['last_name'] : null));
+        $data["tbl_customer"]['middle_name']      = (isset($customer_information["middle_name"]) ? $customer_information["middle_name"] : (isset($data["tbl_customer"]['middle_name']) ? $data["tbl_customer"]['middle_name'] : null));
+        $data["tbl_customer"]['email']            = (isset($customer_information["email"]) ? $customer_information["email"] : (isset($data["tbl_customer"]['email']) ? $data["tbl_customer"]['email'] : null));
+        $data["tbl_customer"]['password']         = isset($customer_information["password"]) ? $customer_information["password"] : randomPassword();
+        $data["tbl_customer"]['shop_id']          = $shop_id;
         $data["tbl_customer"]['customer_contact'] = (isset($customer_information["customer_contact"]) ? $customer_information["customer_contact"] : (isset($data["tbl_customer"]['customer_contact']) ? $data["tbl_customer"]['customer_contact'] : null));;
-        $data["tbl_customer"]['country_id']     = 420;
+        $data["tbl_customer"]['country_id']       = 420;
+        $data["tbl_customer"]['tin_number']       = (isset($customer_information["tin_number"]) ? $customer_information["tin_number"] : (isset($data["tbl_customer"]['tin_number']) ? $data["tbl_customer"]['tin_number'] : null));
+        $data["tbl_customer"]['mlm_username']     = (isset($customer_information["mlm_username"]) ? $customer_information["mlm_username"] : (isset($data["tbl_customer"]['mlm_username']) ? $data["tbl_customer"]['mlm_username'] : null));
+        $data["tbl_customer"]['company']          = (isset($customer_information["company"]) ? $customer_information["company"] : (isset($data["tbl_customer"]['company']) ? $data["tbl_customer"]['company'] : null));
+        $data["tbl_customer"]['is_corporate']     = (isset($customer_information["is_corporate"]) ? $customer_information["is_corporate"] : (isset($data["tbl_customer"]['is_corporate']) ? $data["tbl_customer"]['is_corporate'] : 0));
 
-        $data['load_wallet']['ec_order_load'] = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
+        $data['load_wallet']['ec_order_load']        = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
         $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
+        
         /* CURRENT LOGGED IN */
         if (isset($customer_information["current_user"])) 
         {
@@ -723,7 +735,18 @@ class Cart
             $data["tbl_customer"]['shop_id']          = $shop_id;
             $data["tbl_customer"]['customer_contact'] = $other_info->customer_mobile;
             $data["tbl_customer"]['country_id']       = 420;
+            $data["tbl_customer"]['tin_number']       = $current->tin_number;
+            $data["tbl_customer"]['mlm_username']     = $current->mlm_username;
+            $data["tbl_customer"]['company']          = $current->company;
+            $data["tbl_customer"]['is_corporate']     = $current->is_corporate;
         }
+
+        /* SET MLM SLOT */
+        $data["tbl_mlm_slot"]['slot_id'] = Tbl_mlm_slot::max("slot_id") + 1;
+        $data["tbl_mlm_slot"]['shop_id'] = $shop_id;
+        $data["tbl_mlm_slot"]['slot_owner'] = (isset($customer_information["slot_owner"]) ? $customer_information["slot_owner"] : (isset($data["tbl_mlm_slot"]['slot_owner']) ? $data["tbl_mlm_slot"]['slot_owner'] : null));
+        $data["tbl_mlm_slot"]['slot_sponsor'] = (isset($customer_information["slot_sponsor"]) ? $customer_information["slot_sponsor"] : (isset($data["tbl_mlm_slot"]['slot_sponsor']) ? $data["tbl_mlm_slot"]['slot_sponsor'] : null));
+        $data["tbl_mlm_slot"]['slot_membership'] = (isset($customer_information["slot_membership"]) ? $customer_information["slot_membership"] : (isset($data["tbl_mlm_slot"]['slot_membership']) ? $data["tbl_mlm_slot"]['slot_membership'] : null));
 
         /* SET SHIPPINGING INFROMATION */
         $data["tbl_customer_address"]["shipping"]["country_id"] = 420;
@@ -791,21 +814,20 @@ class Cart
         $shipping_fee = 0;
 
         $_cart = Self::get_cart($shop_id)["cart"];
-
+        unset($data["tbl_ec_order_item"]);
         /* ITEM ON CART */
         foreach($_cart as $key => $cart)
         {
-            $data["tbl_ec_order_item"][$key]["item_id"] = $cart["cart_product_information"]["variant_id"];
-            $data["tbl_ec_order_item"][$key]["price"] = $cart["cart_product_information"]["product_price"];
-            $data["tbl_ec_order_item"][$key]["quantity"] = $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["subtotal"] = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["total"] = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
-            $data["tbl_ec_order_item"][$key]["tax"] = 0;
+            $data["tbl_ec_order_item"][$key]["item_id"]     = $cart["cart_product_information"]["variant_id"];
+            $data["tbl_ec_order_item"][$key]["price"]       = $cart["cart_product_information"]["product_price"];
+            $data["tbl_ec_order_item"][$key]["quantity"]    = $cart["quantity"];
+            $data["tbl_ec_order_item"][$key]["subtotal"]    = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
+            $data["tbl_ec_order_item"][$key]["total"]       = $cart["cart_product_information"]["product_price"] * $cart["quantity"];
+            $data["tbl_ec_order_item"][$key]["tax"]         = 0;
             $data["tbl_ec_order_item"][$key]["ec_order_id"] = $data["tbl_ec_order"]["ec_order_id"];
 
             $subtotal += $data["tbl_ec_order_item"][$key]["total"];
         }
-
        
         /* SUMMARY OF DATA FOR ORDER */
         $data["tbl_ec_order"]["customer_id"] = $data["tbl_customer"]["customer_id"];

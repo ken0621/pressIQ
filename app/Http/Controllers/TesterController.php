@@ -103,6 +103,7 @@ class TesterController extends Controller
         // curl_close($curl);
 
         // dd(json_decode($response));"0000-00-00 00:00:00"
+
     }
 
     public function getJournal()

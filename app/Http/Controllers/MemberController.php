@@ -493,6 +493,7 @@ class MemberController extends Controller
 
     public function shipping_post()
     {
+        dd(Request::input());
         $s['first_name'] = Request::input('first_name');
         $s['last_name'] = Request::input('last_name');
         $s['contact_info'] = Request::input('contact_info');

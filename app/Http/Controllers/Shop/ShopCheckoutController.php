@@ -29,7 +29,7 @@ use App\Models\Tbl_item_code_item;
 use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_merchant_school;
 use App\Models\Tbl_locale;
-use App\Globals\Item_code;
+// use App\Globals\Item_code;
 // use App\Globals\Mlm_slot_log;    
 
 /*4/29/17 this will import the data/class needed by ipay88 payment mode by:brain*/

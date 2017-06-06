@@ -128,31 +128,31 @@ class MemberController extends Controller
     public function register_post()
     {
         // return json_encode($_POST);
-        $info['is_coporate'] = Request::input('customer_type');
-        $info['company'] = Request::input('customer_type') == 1 ? Request::input('company') : "";
-        $info['country'] = Request::input('country');
-        $info['email'] = Request::input('email');
-        $info['first_name'] = Request::input('first_name');
-        $info['last_name'] = Request::input('last_name');
-        $info['password'] = Request::input('password');
-        $info['password_confirm'] = Request::input('password_confirm');
-        $info['tin_number'] = Request::input('tin_number');
-        $info['username'] = Request::input('username');
-        $info['sponsor'] = Request::input('sponsor');
-        $info['customer_phone'] = Request::input('contact_number');
-        $info['customer_mobile'] = Request::input('contact_number');
 
+        $info['is_coporate']       = Request::input('customer_type');
+        $info['company']           = Request::input('customer_type') == 1 ? Request::input('company') : "";
+        $info['country']           = Request::input('country');
+        $info['email']             = Request::input('email');
+        $info['first_name']        = Request::input('first_name');
+        $info['last_name']         = Request::input('last_name');
+        $info['password']          = randomPassword();
+        $info['password_confirm']  = $info['password'];
+        $info['tin_number']        = Request::input('tin_number');
+        $info['username']          = $this->generate_username($info["first_name"], $info["last_name"]);
+        $info['sponsor']           = Request::input('sponsor');
+        $info['customer_phone']    = Request::input('contact_number');
+        $info['customer_mobile']   = Request::input('contact_number');
+        $rules['first_name']       = 'required';
+        $rules['last_name']        = 'required';
+        $rules['password']         = 'required|min:6';
+        $rules['password_confirm'] = 'required|min:6';
+        $rules['email']            = 'required';
 
         if($info['is_coporate'] == 1)
         {
             $rules['company'] = 'required';
         }
 
-        $rules['first_name'] = 'required';
-        $rules['last_name'] = 'required';
-        $rules['password'] = 'required|min:6';
-        $rules['password_confirm'] = 'required|min:6';
-        $rules['email']            = 'required';
         if(!isset($_POST['terms']))
         {
             $data['status'] = 'warning';

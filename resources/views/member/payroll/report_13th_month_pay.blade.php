@@ -3,8 +3,6 @@
 @endsection
 @section('content')
 
-
-
 <div class="panel panel-default panel-block panel-title-block" id="top">
 	<div class="form-group">
 	  	<div class="panel-heading">
@@ -32,7 +30,6 @@
 	      	<input type="hidden" name="_token" value="{{csrf_token()}}" id="_token">
 	    </div>
 	</div>
-
 </div>
 
 <div class="tab-content tab-pane-div padding-top-10">
@@ -58,7 +55,7 @@
             <select class="form-control filter-change department_id">
               <option value="0">Select Department</option>             
 				@foreach($_department as $department)			
-					<option value="{{ $department->payroll_department_id }}">{{ $department->payroll_department_name }}</option>													
+					<option value="{{ $department->payroll_department_id }}">{{ $department->payroll_department_name }}</option>					
 				@endforeach				
             </select>
           </div>
@@ -132,82 +129,8 @@
 @endsection
 @section('script')
 <script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
+<script type="text/javascript" src="/assets/member/js/payroll/report_13th_month_pay.js"></script>
 <script>
-
-var payroll_journal_entry = new payroll_journal_entry();
-
-function payroll_journal_entry()
-{
-	init();
-
-	function init()
-	{
-		document_ready();
-	}
-
-	function document_ready()
-	{
-		on_event();
-	}
-
-	function on_event()
-	{
-		$('body').on('change', '.start-date, .end-date, .emp_id', function(event) {
-			action_get_data_table();	
-		});
-		$('body').on('change', '.department_id, .company_id', function(event) {
-			action_get_data_table();
-			action_get_data_table('.search_emp');	
-		});
-		//onclick button export to excel
-		$('body').on('click', '.export_excel', function(event) {
-			/*console.log('button click');*/
-			action_export_excel();
-			 //$("#w3s").attr("href", "https://www.w3schools.com/jquery");
-		});
-	}
-
-		
-
-	function action_get_data_table(target = '.load-data')
-	{
-		//console.log('pasok');
-		event.preventDefault();
-		var start 			= $(".start-date").val();
-		var end 			= $(".end-date").val();
-		var department_id 	= $(".department_id").val();
-		var company_id 		= $(".company_id").val();
-		var emp_id			= $(".emp_id").val();
-
-		var loader 	= '<div class="loader-16-gray"></div>';
-		if(target == '.load-data')
-		{
-			$(target).html(loader);
-		}
-		
-		$(target).load("/member/payroll/report_13th_month_pay?start_date=" +start +"&&end_date=" +end +"&&department_id="+department_id +"&&company_id="+company_id +"&&emp_id="+emp_id+" "+target, function()
-		{
-			if(target == '.load-data')
-			{
-				toastr.success("Generated");	
-			}			
-		})
-		/* Act on the event */	
-	}
-
-	function action_export_excel()
-	{
-		event.preventDefault();
-		var start 			= $(".start-date").val();
-		var end 			= $(".end-date").val();
-		var department_id 	= $(".department_id").val();
-		var company_id 		= $(".company_id").val();
-		var emp_id			= $(".emp_id").val();
-	
-		location.href = "/member/payroll/report_13th_month_pay/excel_export?start_date=" +start +"&&end_date=" +end +"&&department_id="+department_id +"&&company_id="+company_id +"&&emp_id="+emp_id;
-		
-	}
-}
 
 </script>
 @endsection

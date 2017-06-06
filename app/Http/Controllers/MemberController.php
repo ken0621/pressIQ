@@ -261,24 +261,24 @@ class MemberController extends Controller
             return Redirect::to('/member/register/shipping');
         }
 
-        $membership_id = $register_session_2['membership'];
-        $package_id = $register_session_2['package'];
+        // $membership_id = $register_session_2['membership'];
+        // $package_id = $register_session_2['package'];
 
 
 
-        $data['membership_packages'] = Tbl_membership_package::where('membership_id', $membership_id)
-        ->where('membership_package_id', $package_id)
-        ->where('membership_package_archive', 0)->get();
-        foreach($data['membership_packages'] as $key => $value)
-        {
-            $data['product_count'][$key] = Tbl_membership_package_has::where('membership_package_id', $package_id)->get();
-            $data['item_bundle'][$key] = Tbl_membership_package_has::where('membership_package_id', $package_id)->get();
-            foreach($data['item_bundle'][$key] as $key2 => $value2)
-            {
-                $data['item_bundle'][$key][$key2]->item_list = Item::get_item_bundle($value2->item_id);
-            }
-        }
-
+        // $data['membership_packages'] = Tbl_membership_package::where('membership_id', $membership_id)
+        // ->where('membership_package_id', $package_id)
+        // ->where('membership_package_archive', 0)->get();
+        // foreach($data['membership_packages'] as $key => $value)
+        // {
+        //     $data['product_count'][$key] = Tbl_membership_package_has::where('membership_package_id', $package_id)->get();
+        //     $data['item_bundle'][$key] = Tbl_membership_package_has::where('membership_package_id', $package_id)->get();
+        //     foreach($data['item_bundle'][$key] as $key2 => $value2)
+        //     {
+        //         $data['item_bundle'][$key][$key2]->item_list = Item::get_item_bundle($value2->item_id);
+        //     }
+        // }
+        $data = [];
         return view("mlm.register.payment", $data);
     }
 
@@ -441,15 +441,10 @@ class MemberController extends Controller
             return Redirect::to('/member/register');
         }
 
-        $data['membership'] = Tbl_membership::where('shop_id', Self::$shop_id)->where('membership_archive', 0)->get();
-        $data['package'] = [];
-
-        foreach($data['membership'] as $key => $value)
-        {
-            $data['package'][$key] = Tbl_membership_package::where('membership_id', $value->membership_id)->where('membership_package_archive', 0)->get();
-        }
         $warehouse_id = Ecom_Product::getWarehouseId(Self::$shop_id);
-        $data['_product'] = Tbl_ec_product::itemVariant()->inventory($warehouse_id)->price()->where("eprod_shop_id",  Self::$shop_id)->where("tbl_ec_product.archived", 0)->get();
+        $data['_product'] = Tbl_ec_product::itemVariant()->inventory($warehouse_id)
+        ->where('ec_product_membership', '!=', 0)
+        ->price()->where("eprod_shop_id",  Self::$shop_id)->where("tbl_ec_product.archived", 0)->get();
 
         return view("mlm.register.package", $data);
     }

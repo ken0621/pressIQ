@@ -103,58 +103,7 @@
         </div>
       </div>
       <div class="col-md-3">
-      @if($membership_packages->first())
-          <h3 class="text-left" style="margin-top: 100px;">Cart Summary</h3>
-          <table class="table table-bordered table-striped table-hover">
-          <thead>
-            <tr>
-              <th>Product</th>
-              <th>QTY</th>
-              <th>Price</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php $sub = 0; ?>
-          @foreach($membership_packages as $key => $mem_pack)
-              @if($mem_pack->membership_package_is_gc == 0)
-                @foreach($item_bundle[$key] as $key2 => $value2)
-                  @foreach($value2->item_list['bundle'] as $key3 => $value3)
-                    <tr>
-                      <td>{{$value3['item_name']}}</td>
-                      <td>{{$value3['bundle_qty'] * $value2->membership_package_has_quantity}}</td>
-                      <td>P {{number_format($value3['item_price'] * ($value3['bundle_qty'] * $value2->membership_package_has_quantity), 2)}}</td>
-                    </tr>
-                    <?php $sub += $value3['item_price'] * ($value3['bundle_qty'] * $value2->membership_package_has_quantity); ?>
-                  @endforeach
-                @endforeach
-              @else
-              <tr>
-                <td>GC</td>
-                <td>1</td>
-                <td>{{$mem_pack->membership_package_gc_amount}}</td>
-              </tr>
-              @endif
-          @endforeach
-          <tr>
-            <td></td>
-            <td>Subtotal</td>
-            <td>P   {{number_format($sub, 2)}}</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>Shipping Fee</td>
-            <td>P 1,000.00</td>
-          </tr>
-          <tr>
-            <td></td>
-            <td>Total</td>
-            <td>P   {{number_format($sub + 1000, 2)}}</td>
-          </tr>
-          </tbody>
-        @else
-
-        @endif
-        <table class="table table-bordered table-striped table-hover hide">
+        <table class="table table-bordered table-striped table-hover">
           <thead>
             <tr>
               <th>Product</th>

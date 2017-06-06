@@ -691,12 +691,16 @@ class Ec_order
             if($order_info['tbl_mlm_slot']['slot_sponsor'])
             {
 
-                $insert_slot_ref['order_slot_ec_order_id'] = $order_info["tbl_ec_order"]["ec_order_id"];
-                $insert_slot_ref['order_slot_customer_id'] = $customer_id;
-                $insert_slot_ref['order_slot_used'] = 0;
-                $insert_slot_ref['order_slot_sponsor'] = $order_info['tbl_mlm_slot']['slot_sponsor'];
+                $slot_sponsor = Tbl_mlm_slot::where('slot_nick_name', $order_info['tbl_mlm_slot']['slot_sponsor'])->first();
+                if($slot_sponsor)
+                {
+                    $insert_slot_ref['order_slot_ec_order_id']  = $order_info["tbl_ec_order"]["ec_order_id"];
+                    $insert_slot_ref['order_slot_customer_id']  = $customer_id;
+                    $insert_slot_ref['order_slot_used']         = 0;
+                    $insert_slot_ref['order_slot_sponsor']      = $slot_sponsor->slot_id;
 
-                DB::table('tbl_ec_order_slot')->insert($insert_slot_ref);
+                    DB::table('tbl_ec_order_slot')->insert($insert_slot_ref);
+                }
             }
         }
         if ($order_info["new_account"]) 

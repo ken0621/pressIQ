@@ -116,7 +116,7 @@ class MLM_SlotController extends Member
 
     }
     public function index()
-    {        
+    {      
         $access = Utilities::checkAccess('mlm-slots', 'access_page');
         if($access == 0)
         {

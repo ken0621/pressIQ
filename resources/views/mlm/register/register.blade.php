@@ -60,6 +60,30 @@
 					</div>
 				</div>
 			</div>
+			<div class="form-container third">
+				<div class="row clearfix text-center">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label><input type="radio" name="customer_type" onclick="toggle('.corporate-type','personal', this)" value="0"> Personal</label>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label><input type="radio" name="customer_type" onclick="toggle('.corporate-type','corporate', this)" value="1"> Corporate</label>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="form-container fourth corporate-type" style="display: none" >
+				<div class="row clearfix">
+					<div class="col-md-12">
+						<div class="form-group">
+							<label>Company</label>
+							<input type="text" class="form-control input-lg" name="company">
+						</div>
+					</div>
+				</div>
+			</div>
 			<div class="button-holder">
 				<div class="agreement">
 					<div class="checkbox">
@@ -82,6 +106,17 @@
 @endsection
 @section('script')
 <script type="text/javascript">
+	function toggle(className,type, obj) 
+	{
+		if(type == 'personal')
+		{
+			$(className).slideUp()
+		}
+		if(type == 'corporate')
+		{
+			$(className).slideDown()
+		}
+    }
 	$(document).on("submit", ".register-submit", function(e)
         {
             var data = $(e.currentTarget).serialize();

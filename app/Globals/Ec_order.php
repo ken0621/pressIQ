@@ -684,9 +684,22 @@ class Ec_order
             $order_info["tbl_ec_order_item"][$key]["ec_order_id"] = $order_info["tbl_ec_order"]["ec_order_id"];
             DB::table("tbl_ec_order_item")->insert($value);
         }
-
+        /* Insert Reference for slot */
         /* Email Password */
-        if ($order_info["new_account"] == true) 
+        if(isset($order_info['tbl_mlm_slot']))
+        {
+            if($order_info['tbl_mlm_slot']['slot_sponsor'])
+            {
+
+                $insert_slot_ref['order_slot_ec_order_id'] = $order_info["tbl_ec_order"]["ec_order_id"];
+                $insert_slot_ref['order_slot_customer_id'] = $customer_id;
+                $insert_slot_ref['order_slot_used'] = 0;
+                $insert_slot_ref['order_slot_sponsor'] = $order_info['tbl_mlm_slot']['slot_sponsor'];
+
+                DB::table('tbl_ec_order_slot')->insert($insert_slot_ref);
+            }
+        }
+        if ($order_info["new_account"]) 
         {
             $data["template"]                 = Tbl_email_template::where("shop_id", $order_info["tbl_ec_order"]["shop_id"])->first();
             $data['mail_to']                       = $order_info["tbl_ec_order"]["customer_email"];
@@ -696,7 +709,7 @@ class Ec_order
             $result = Mail_global::password_mail($data, $order_info["tbl_ec_order"]["shop_id"]);
         }
         
-        Ec_order::create_merchant_school_item($order_info["tbl_ec_order"]["ec_order_id"]);
+        // Ec_order::create_merchant_school_item($order_info["tbl_ec_order"]["ec_order_id"]);
 
         return $order_info["tbl_ec_order"]["ec_order_id"];
     }

@@ -51,4 +51,13 @@
 			<option value="1">Enable</option>
 		</select>
 	</div>
+
+	<div class="settings" id="enable_consume_on_pending">
+		Enable Consume Inventory on Pending Order
+		<input type="hidden" name="settings_key" value="enable_consume_on_pending">
+		<select name="settings_value" class="form-control">
+			<option value="0">Disable</option>
+			<option value="1">Enable</option>
+		</select>
+	</div>
 <!-- Item Serial Settings -->

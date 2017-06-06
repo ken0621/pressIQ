@@ -128,7 +128,10 @@ class MemberController extends Controller
 
     public function register_post()
     {
-        $info['company']           = Request::input('company');
+        // return json_encode($_POST);
+
+        $info['is_coporate']       = Request::input('customer_type');
+        $info['company']           = Request::input('customer_type') == 1 ? Request::input('company') : "";
         $info['country']           = Request::input('country');
         $info['email']             = Request::input('email');
         $info['first_name']        = Request::input('first_name');
@@ -145,6 +148,12 @@ class MemberController extends Controller
         $rules['password']         = 'required|min:6';
         $rules['password_confirm'] = 'required|min:6';
         $rules['email']            = 'required';
+
+        if($info['is_coporate'] == 1)
+        {
+            $rules['company'] = 'required';
+        }
+
         if(!isset($_POST['terms']))
         {
             $data['status'] = 'warning';
@@ -189,6 +198,7 @@ class MemberController extends Controller
                         $customer_info["username"]         = $info["username"];
                         $customer_info["slot_sponsor"]     = $info["sponsor"];
                         $customer_info["customer_contact"] = $info["customer_mobile"];
+
                         $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
 
                         if($customer_set_info_response["status"] == "error")

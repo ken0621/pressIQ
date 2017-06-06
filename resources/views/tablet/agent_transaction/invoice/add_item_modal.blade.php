@@ -1,7 +1,7 @@
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">{{$item_details->item_name}}</h4>
+        <h4 class="modal-title tablet-item-name">{{$item_details->item_name}}</h4>
     </div>
     <div class="modal-body add_new_package_modal_body clearfix">
         <div class="form-group clearfix row">
@@ -10,7 +10,7 @@
                 <h4> U/M </h4>
             </div>
             <div class="col-xs-8">
-                <select class="1111 tablet-droplist-um form-control">
+                <select class="1111 tablet-droplist-um form-control tablet-item-um">
                     @if($item_details)
                         @include("member.load_ajax_data.load_one_unit_measure", ['item_um_id' => $item_details->multi_um_id, 'selected_um_id' => $item_details->multi_id])
                     @else
@@ -56,7 +56,7 @@
                 <h4> Amount </h4>
             </div>        
             <div class="col-xs-8 text-right">
-                <input type="hidden" class="form-control input-sm tablet-item-amount">
+                <input type="hidden" class="form-control input-sm input-item-amount">
                 <h3 class="tablet-item-amount"></h3>
             </div>
         </div>
@@ -70,7 +70,7 @@
         </div>
         <div class="form-group clearfix row">
             <div class="col-xs-12">
-                <input type="checkbox" name="taxable" value="1"> <span>Taxable</span>
+                <input type="checkbox" name="taxable" class="tablet-item-taxable"> <span>Taxable</span>
             </div>
         </div>
     </div>
@@ -83,4 +83,5 @@
     tablet_customer_invoice.iniatilize_select();
     tablet_customer_invoice.event_tablet_compute_class_change();
     tablet_customer_invoice.action_compute_tablet();
+    tablet_customer_invoice.action_add_item_submit();
 </script>

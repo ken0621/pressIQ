@@ -798,6 +798,8 @@ class Item_code
 
                                     $update_s['order_slot_used'] = 1;
                                     DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $order_id)->update($update_s);
+
+                                    Mlm_member::add_to_session_edit($shop_id, $tbl_ec_order_slot->order_slot_customer_id, $id);
                                 }
                             }
                         }                 

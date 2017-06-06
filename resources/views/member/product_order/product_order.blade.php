@@ -94,6 +94,7 @@
 
 @endsection
 @section('script')
+<script type="text/javascript" src="/assets/member/js/paginate_ajax_multiple.js"></script>
 <script type="text/javascript">
 @if (Session::has('success'))
    toastr.success("{{ Session::get('success') }}");

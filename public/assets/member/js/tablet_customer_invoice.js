@@ -220,7 +220,7 @@ function tablet_customer_invoice()
 
  		var total = 0.00;
 
-        var qty = tablet_item_qty * tablet_unit_qty;
+        var qty = tablet_item_qty;
         /* CHECK THE DISCOUNT */
         if(tablet_item_disc.indexOf('%') >= 0)
         {
@@ -454,6 +454,7 @@ function tablet_customer_invoice()
 	        placeholder : "U/M..",
 	        onChangeValue: function()
 	        {
+	        	$(".tablet-item-rate").val($(this).find("option:selected").attr("qty") * $(".tablet-price-per-item").val());
 	            action_compute_tablet();
 	        }
 

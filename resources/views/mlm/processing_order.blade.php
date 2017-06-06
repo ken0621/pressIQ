@@ -74,6 +74,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </head>
 <body>
    <div class="panel panel-default" style="text-align:center;">
+      @if($first_order)
       <div class="panel-heading">Your order status: {{$first_order->order_status}}</div>
       <div class="panel-body">Order Number:{{$first_order->ec_order_id}}</div>
       <div class="panel-body">Customer Email:{{$first_order->customer_email}}</div>
@@ -81,5 +82,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="panel-body">Payment Status:{{$first_order->payment_status == 1 ? 'Paid' : 'Unpaid'}}</div>
       <div class="panel-body">Billing Adress:{{$first_order->billing_address}}</div>
       <div class="panel-body"><a href="mlm/login">Click here</a> to logout</div>
+      @else
+      <div class="panel-heading">No slot</div>
+      @endif
    </div>
 </body>

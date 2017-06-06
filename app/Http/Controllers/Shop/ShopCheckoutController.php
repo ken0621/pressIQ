@@ -13,6 +13,7 @@ use URL;
 use Session;
 use DB;
 
+use App\Globals\Mlm_member;
 use App\Globals\Mlm_slot_log;
 use App\Globals\Item_code;
 use App\Globals\Cart;
@@ -90,7 +91,12 @@ class ShopCheckoutController extends Shop
             if ($from == "checkout") 
             {
                 $order_id = Request::input("param2");
-
+                $order = DB::table('tbl_ec_order')->where('ec_order_id', $order_id)->get();
+                if($order)
+                {
+                    Mlm_member::add_to_session($order->shop_id, $order->customer_id);
+                    return Redirect::to('/mlm');
+                }
                 return Redirect::to('/order_placed?order=' . Crypt::encrypt(serialize($order_id)))->send();
             }
         }

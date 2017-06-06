@@ -886,6 +886,14 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Everyone";
 
+        $code = "report-sales-item-warehouse";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Sales By Warehouse";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['url'] = $path . $page . "/accounting/sale_by_warehouse";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
+        $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Luke Glenn Jordan";
+
         $code = "report-profit-and-loss-account";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['label'] = "Profit and Loss";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['code'] = $code;
@@ -934,7 +942,6 @@ function page_list()
         $nav[$page]['submenu'][$segment]['submenu'][$code]['user_settings'] = ['access_page'];
         $nav[$page]['submenu'][$segment]['submenu'][$code]['status'] = "Developing";
         $nav[$page]['submenu'][$segment]['submenu'][$code]['developer'] = "Bryan Kier Aradanas";
-
 
     /* -- REPORT => AGENT TRANSACTIONS */
     $code = "report-agent-transaction";

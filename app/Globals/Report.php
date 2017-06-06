@@ -20,70 +20,72 @@ use App\Globals\Report;
 
 class Report
 {
+	/**
+	 * Get the range of report by selected period 
+	 *
+	 * @param  string  	$filter 	 ( tag of account report)
+	 * @author LUKE
+	 */
 	public static function sales_report($filter = 'accounting_sales_report')
 	{
-		// $data['full_name'] = 'Name';
-		// $data['jline_amount'] = 'Amount';
-		if($filter == 'accounting_sales_report')
-		{
-			$data['je_remarks'] = 'Remarks';
-			$data['je_reference_module'] = 'Reference Module';
-			$data['je_entry_date'] = 'Date Created';
-			$data['account_name'] = 'Type';
-			$data['je_entry_date'] = 'Date';
-			$data['account_number'] = 'Num';
-			$data['account_name'] = 'Account Name';
-			$data['full_name'] = 'Name';
-			$data['item_name'] = 'Item';
-			$data['z_um'] = 'U/M';
-			$data['jline_amount'] = 'Amount';
-			// $data[''] = 'Amount Balance';
-			return $data;
+		switch ($filter) {
+			case 'accounting_sales_report':
+					$data['je_remarks'] = 'Remarks';
+					$data['je_reference_module'] = 'Reference Module';
+					$data['je_entry_date'] = 'Date Created';
+					$data['account_name'] = 'Type';
+					$data['je_entry_date'] = 'Date';
+					$data['account_number'] = 'Num';
+					$data['account_name'] = 'Account Name';
+					$data['full_name'] = 'Name';
+					$data['item_name'] = 'Item';
+					$data['z_um'] = 'U/M';
+					$data['jline_amount'] = 'Amount';
+					return $data;
+				break;
+			case 'accounting_sales_report_item':
+					$data['je_remarks'] = 'Remarks';
+					$data['je_reference_module'] = 'Reference Module';
+					$data['je_entry_date'] = 'Date Created';
+					$data['account_name'] = 'Type';
+					$data['je_entry_date'] = 'Date';
+					$data['account_number'] = 'Num';
+					$data['account_name'] = 'Account Name';
+					$data['full_name'] = 'Name';
+					$data['item_name'] = 'Item';
+					$data['z_um'] = 'U/M';
+					$data['jline_amount'] = 'Amount';
+					return $data;
+				break;
+			case 'accounting_general_ledger':
+					$data['date_a'] = 'Date';
+					$data['je_reference_module'] = 'Transaction Type';
+					$data['je_reference_id'] = 'Num';
+					$data['c_full_name'] = 'Name';
+					$data['jline_description'] = 'Memo/Discription';
+					$data['amount2'] = 'Amount';
+					return $data;
+				break;	
+			case 'accounting_sales_report_warehouse':
+					$data['je_remarks'] = 'Remarks';
+					$data['je_reference_module'] = 'Reference Module';
+					$data['je_entry_date'] = 'Date Created';
+					$data['account_name'] = 'Type';
+					$data['je_entry_date'] = 'Date';
+					$data['account_number'] = 'Num';
+					$data['account_name'] = 'Account Name';
+					$data['full_name'] = 'Name';
+					$data['item_name'] = 'Item';
+					$data['z_um'] = 'U/M';
+					$data['jline_amount'] = 'Amount';
+					$data['balance'] = 'Balance';
+					return $data;	
+				break;		
+			default:
+					
+				break;
 		}
-		else if($filter == 'accounting_sales_report_item')
-		{
-			$data['je_remarks'] = 'Remarks';
-			$data['je_reference_module'] = 'Reference Module';
-			$data['je_entry_date'] = 'Date Created';
-			$data['account_name'] = 'Type';
-			$data['je_entry_date'] = 'Date';
-			$data['account_number'] = 'Num';
-			$data['account_name'] = 'Account Name';
-			$data['full_name'] = 'Name';
-			$data['item_name'] = 'Item';
-			$data['z_um'] = 'U/M';
-			$data['jline_amount'] = 'Amount';
-			return $data;
-		}
-		else if($filter == 'accounting_general_ledger')
-		{
-			$data['date_a'] = 'Date';
-			$data['je_reference_module'] = 'Transaction Type';
-			$data['je_reference_id'] = 'Num';
-			$data['c_full_name'] = 'Name';
-			$data['jline_description'] = 'Memo/Discription';
-			$data['amount2'] = 'Amount';
-
-			return $data;
-		}
-	}	
-	public static function sales_report_item()
-	{
-		$data['je_remarks'] = 'Remarks';
-		$data['je_reference_module'] = 'Reference Module';
-		$data['je_entry_date'] = 'Date Created';
-		$data['account_name'] = 'Type';
-		$data['je_entry_date'] = 'Date';
-		$data['account_number'] = 'Num';
-		$data['account_name'] = 'Account Name';
-		$data['full_name'] = 'Name';
-		$data['item_name'] = 'Item';
-		$data['z_um'] = 'U/M';
-		$data['jline_amount'] = 'Amount';
-		return $data;
 	}
-
-
 	/**
 	 * Get the range of report by selected period 
 	 *
@@ -180,6 +182,9 @@ class Report
 
          switch ($report_type) 
          {
+         	case 'return_view':
+         			return $_view->render();
+         		break;
             case 'pdf':
                     $data['view'] = $_view->render();
                     return Pdf_global::show_pdf($data['view'], $pdf_format == "landscape" ? $pdf_format : null);

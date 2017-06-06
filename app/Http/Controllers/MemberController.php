@@ -346,23 +346,34 @@ class MemberController extends Controller
     public function package_post()
     {
         $info['variant_id'] = Request::input('variant_id');
-        if(isset($info['variant_id']))
+        $product_stocks = Request::input('product_stocks');
+        if($product_stocks[$info['variant_id']] > 0)
         {
-            /* Add Package */
-            Cart::add_to_cart($info["variant_id"], 1, Self::$shop_id, true);
+            if(isset($info['variant_id']))
+            {
+                /* Add Package */
+                Cart::add_to_cart($info["variant_id"], 1, Self::$shop_id, true);
 
-            /* Redirect */
-            $d['variant_id'] = $info['variant_id'];
-            Session::put('mlm_register_step_2', $d);
-            $data['status'] = 'success';
-            $data['message'][0] = 'Sucess!';
-            $data['link'] = '/member/register/shipping';
+                /* Redirect */
+                $d['variant_id'] = $info['variant_id'];
+                Session::put('mlm_register_step_2', $d);
+                $data['status'] = 'success';
+                $data['message'][0] = 'Sucess!';
+                $data['link'] = '/member/register/shipping';
+            }
+            else
+            {
+                $data['status'] = 'warning';
+                $data['message'][0] = 'Invalid Package.';
+            }
         }
         else
         {
             $data['status'] = 'warning';
-            $data['message'][0] = 'Invalid Package.';
+            $data['message'][0] = 'Out of Stock';
         }
+
+
         return json_encode($data);
     }
 

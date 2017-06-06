@@ -26,7 +26,10 @@
                     </div>
                   </div>
                   <div class="membership-price">{{currency('PHP', $value->min_price)}}</div>
-                  <div class="info">{!! $value->inventory_count <= 0 ? "<span style='color: red'>Out of Stock</span>" : "Current Stocks : " . number_format($value->inventory_count) !!}</div>                  
+                  <div class="info">
+                    {!! $value->inventory_count <= 0 ? "<span style='color: red'>Out of Stock</span>" : "Current Stocks : " . number_format($value->inventory_count) !!}
+                    <input type="hidden" name="product_stocks[{{$value->evariant_id}}]" value="{{$value->inventory_count}}">
+                  </div>                  
                 </div>
               </div>              
             </div>

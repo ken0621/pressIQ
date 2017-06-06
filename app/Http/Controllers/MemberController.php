@@ -14,6 +14,7 @@ use App\Models\Tbl_membership;
 use App\Models\Tbl_membership_package;
 use App\Models\Tbl_membership_code;
 use App\Models\Tbl_membership_package_has;
+use App\Models\Tbl_locale;
 use Validator;
 use Session;
 use Redirect;
@@ -162,7 +163,7 @@ class MemberController extends Controller
 
                     if($info['password'] == $info['password_confirm'])
                     {
-                        dd($info);
+                        // dd($info);
                         Session::put('mlm_register_step_1', $info);
                         $data['status'] = 'success';
                         $data['message'][0] = 'Sucess!';
@@ -447,7 +448,14 @@ class MemberController extends Controller
             return Redirect::to('/member/register/package');
         }
 
-        return view("mlm.register.shipping");
+
+        $data["_province"]  = Tbl_locale::where("locale_parent", 0)->get();
+        $city_parent        = Request::input("city_parent") ? Request::input("city_parent") : $data["_province"][0]->locale_id; 
+        $data["_city"]      = Tbl_locale::where("locale_parent", $city_parent)->get();
+        $barangay_parent    = Request::input("barangay_parent") ? Request::input("barangay_parent") : $data["_city"][0]->locale_id; 
+        $data["_barangay"]  = Tbl_locale::where("locale_parent", $barangay_parent)->get();
+
+        return view("mlm.register.shipping", $data);
     }
 
     public function shipping_post()
@@ -479,6 +487,14 @@ class MemberController extends Controller
 
             return json_encode($data);
          }
+    }
+
+    public function getLocale($id)
+    {
+        $json["status"] = "success";
+        $json["locale"] = Tbl_locale::where("locale_parent", $id)->get();
+
+        return json_encode($json);
     }
 
     public function barcode( $filepath="", $text="0", $size="20", $orientation="horizontal", $code_type="code128", $print=false, $SizeFactor=1 ) 

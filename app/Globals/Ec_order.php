@@ -30,7 +30,7 @@ use Redirect;
 use Crypt;
 use Carbon\Carbon;
 use App\Models\Tbl_merchant_school;
-
+use App\Models\Tbl_mlm_slot;
 class Ec_order
 {
     public static function getShopId()

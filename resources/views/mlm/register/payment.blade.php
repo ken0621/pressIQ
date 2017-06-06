@@ -1,7 +1,7 @@
 @extends("mlm.register.layout")
 
 @section("content")
-<form method="post" class="register-submit" action="/member/register/payment/submit" >
+<form method="post" action="/member/register/payment/submit" >
     {!! csrf_field() !!}
 <div class="payment">
   <div class="container-fluid">
@@ -20,6 +20,11 @@
                   </ul>
               </div>
           @endif
+          @if (session('error'))
+                <div class="alert alert-danger">
+                    {{ session('error') }}
+                </div>
+            @endif
           <div class="row clearfix">
             <div class="col-md-8">
               <div class="holder-holder">
@@ -43,10 +48,6 @@
               </div>
               <div class="details clearfix">
                 <div class="detail-holder">
-                  {{-- <div class="details-title">Upload Proof of Payment</div>
-                  <button class="btn btn-primary" id="upload-button" type="button" onClick="$('.payment-upload-file').trigger('click');">UPLOAD</button>
-                  <input onChange="$('.upload-name').text($(this).val().split('\\').pop());" class="hide payment-upload-file" type="file" name="payment_upload">
-                  <div class="upload-name"></div> --}}
                   <div class="details-text">Kindly choose a payment method which you are most comfortable with paying.</div>
                 </div>
               </div>
@@ -58,7 +59,7 @@
          <div class="hold-container">
             <div class="hold-header">SUMMARY</div>
             <div class="hold-content">
-                     <div class="cart-summary">
+                <div class="cart-summary">
                   <table class="table">
                      <thead>
                         <tr>

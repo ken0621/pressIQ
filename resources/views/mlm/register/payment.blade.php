@@ -48,9 +48,6 @@
                   <input onChange="$('.upload-name').text($(this).val().split('\\').pop());" class="hide payment-upload-file" type="file" name="payment_upload">
                   <div class="upload-name"></div> --}}
                   <div class="details-text">Kindly choose a payment method which you are most comfortable with paying.</div>
-                  <div class="details-order">
-                    <button class="btn btn-primary">PLACE YOUR ORDER</button>
-                  </div>
                 </div>
               </div>
             </div>

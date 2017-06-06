@@ -765,12 +765,9 @@ class Item_code
         $tbl_ec_order_slot = DB::table('tbl_ec_order_slot')->where('order_slot_ec_order_id', $order_id)->first();
         if($tbl_ec_order_slot)
         {
-            if(     $table_ec_order_slot->order_slot_customer_id    != 0 
-                &&  $table_ec_order_slot->order_slot_used           != 1
-                &&  $table_ec_order_slot->order_slot_sponsor        != 0
-                )
+            if($table_ec_order_slot->order_slot_customer_id    != 0 &&  $table_ec_order_slot->order_slot_used           != 1 &&  $table_ec_order_slot->order_slot_sponsor        != 0)
             {
-                $tbl_ec_order_item = DB::('tbl_ec_order_item')->where('ec_order_id', $order_id)
+                $tbl_ec_order_item = DB::table('tbl_ec_order_item')->where('ec_order_id', $order_id)
                 ->get();
                 if($tbl_ec_order_item)
                 {

@@ -784,6 +784,44 @@ class Ec_order
             $order_info["tbl_ec_order_item"][$key]["ec_order_id"] = $order_info["tbl_ec_order"]["ec_order_id"];
             DB::table("tbl_ec_order_item")->insert($value);
         }
+
+        /* Inventory Consume */
+        $settings = Ec_order::check_settings($order_info["tbl_ec_order"]["shop_id"]);
+
+        if($settings)
+        {
+            $warehouse_id = Ecom_Product::getWarehouseId($order_info["tbl_ec_order"]["shop_id"]);
+            $ctr = 0;
+
+            foreach ($order_info["tbl_ec_order_item"] as $key_ec_item => $value_ec_item) 
+            {
+                $get_prod_id                                   = Tbl_ec_variant::where("evariant_id",$value_ec_item["item_id"])->first();
+                $check_type                                    = Tbl_item::where("item_id",$get_prod_id->evariant_item_id)->first();
+                if($check_type->item_type_id == 1)
+                {
+                    $warehouse_consume_product[$ctr]["product_id"] = $get_prod_id->evariant_item_id;             
+                    $warehouse_consume_product[$ctr]["quantity"]   = $value_ec_item["quantity"];
+                    $ctr++;             
+                }
+
+            }
+
+            if($ctr != 0)
+            {
+                $warehouse_consume_remarks  = "";                                                            
+                $warehouse_consumer_id      = $customer_id;                          
+                $warehouse_consume_reason   = "";                              
+                $return_type                = "array";              
+                $warehouse_response         = Warehouse::inventory_consume($warehouse_id, $warehouse_consume_remarks, $warehouse_consume_product, $warehouse_consumer_id, $warehouse_consume_reason, $return_type);
+
+                if($warehouse_response["status"] == "error")
+                {
+                    return $warehouse_response;
+                }
+            }
+            
+        }
+
         /* Insert Reference for slot */
         /* Email Password */
         if(isset($order_info['tbl_mlm_slot']))

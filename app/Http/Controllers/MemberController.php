@@ -279,128 +279,118 @@ class MemberController extends Controller
 
     public function payment_post()
     {
-        // return $_POST;
-        $info['payment_type'] = Request::input('payment_type');
-        $info['membership_pin'] = Request::input('membership_pin');
-        $info['membership_code'] = Request::input('membership_code');
+        $customer_info['payment_method_id'] = Request::input('payment_method_id');
+        $customer_set_info_response         = Cart::customer_set_info(Self::$shop_id, $customer_info);
 
-        // $s['first_name'] = Request::input('first_name');
-        // $s['last_name'] = Request::input('last_name');
-        // $s['contact_info'] = Request::input('contact_info');
-        // $s['contact_other'] = Request::input('contact_other');
-        // $s['shipping_address'] = Request::input('shipping_address');
-
-        // $rules['first_name'] = 'required';
-        // $rules['last_name'] = 'required';
-        // $rules['contact_info'] = 'required';
-        // $rules['contact_other'] = 'required';
-        // $rules['shipping_address'] = 'required';
-        // $validator = Validator::make($s, $rules);
-        // if (!$validator->passes()) 
-        //  {
-        //     $data['status'] = "warning";
-        //     $data['message'] = $validator->messages();
-        //     return json_encode($data);
-        //  }
-        $s = Session::get('mlm_register_step_3');
-
-        if($info['payment_type'] != null)
-        {
-            if($info['payment_type'] == 'membership_code')
-            {
-                if($info['membership_pin'] != null && $info['membership_code'] != null)
-                {
-                    $count_code = Tbl_membership_code::where('membership_code_id', $info['membership_pin'])
-                    ->where('membership_activation_code', $info['membership_code'])->count();
-                    if($count_code >= 1)
-                    {
-                        $code = Tbl_membership_code::where('membership_code_id', $info['membership_pin'])
-                        ->where('membership_activation_code', $info['membership_code'])->package()->membership()->first();
-                        if($code->used == 0)
-                        {
-                            $shop_id = Self::$shop_id;
-                            if($shop_id == null)
-                            {
-                                $shop_id = 5;
-                            }
-                            $register_session = Session::get('mlm_register_step_1');
-                            $register_session_2 = Session::get('mlm_register_step_2');
-                            $ship = $s;
-                            $code_info = $code;
-                            $code = $info;
-                            Mlm_member::register_slot_membership_code($shop_id, $register_session, $register_session_2, $ship, $code, $code_info);
-                            Session::forget('mlm_register_step_1');
-                            Session::forget('mlm_register_step_2');
-                            Session::forget('mlm_register_step_3');
-
-                            $data['status'] = 'success';
-                            $data['message'][0] = 'Membership Code Already Used.';
-                            $data['link'] = '/mlm';
-                        }
-                        else
-                        {
-                            $data['status'] = 'warning';
-                            $data['message'][0] = 'Membership Code Already Used.';
-                        }
-                        
-                    }
-                    else
-                    {
-                        $data['status'] = 'warning';
-                        $data['message'][0] = 'Invalid Membership Code/Pin.';
-                    }
-                }
-                else
-                {
-                    $data['status'] = 'warning';
-                    $data['message'][0] = 'Invalid Membership Code/Pin.';
-                } 
-            }
-            elseif($info['payment_type'] == 'dragonpay')
-            {
-                $this->post_dragonpay();
-            }
-            else
-            {
-                $shop_id = Self::$shop_id;
-                $register_session = Session::get('mlm_register_step_1');
-                $customer_id = Mlm_member::register_slot_insert_customer($shop_id, $register_session);
-                
-
-                $register_session_2 = Session::get('mlm_register_step_2');
-                // dd();
-                $slot_sponsor = Tbl_mlm_slot::where('slot_nick_name', $register_session['sponsor'])->first();
-                $insert['slot_no'] = Mlm_plan::set_slot_no($shop_id, null);
-                $insert['shop_id'] = $shop_id;
-                $insert['slot_owner'] = $customer_id;
-                $insert['slot_created_date'] = Carbon::now();
-                $insert['slot_membership'] = $register_session_2['membership'];
-                $insert['slot_status'] = 'PS';
-                $insert['slot_sponsor'] = $slot_sponsor->slot_id;
-                
-                $id = Tbl_mlm_slot::insertGetId($insert);
-                $a = Mlm_compute::entry($id);
-
-                $c = Mlm_gc::slot_gc($id);
-                $data['status'] = 'success';
-                $data['message'][0] = 'Membership Code Already Used.';
-                $data['link'] = '/mlm';
-
-                Session::forget('mlm_register_step_1');
-                Session::forget('mlm_register_step_2');
-                Session::forget('mlm_register_step_3');
-
-                Mlm_member::add_to_session_edit($shop_id, $customer_id, $id);
-                // $data['status'] = 'warning';
-                // $data['message'][0] = 'The chosen payment facility is under maintenance.';
-            }
+        if($customer_set_info_response["status"] == "error")
+        { 
+            $data['status'] = 'warning';
+            $data['message'][0] = $customer_set_info_response["status_message"];
         }
         else
         {
-            $data['status'] = 'warning';
-            $data['message'][0] = 'Invalid Payment Type';
+            Cart::process_payment(Self::$shop_id);
         }
-        return json_encode($data);
+
+        // $s = Session::get('mlm_register_step_3');
+
+        // if($info['payment_type'] != null)
+        // {
+        //     if($info['payment_type'] == 'membership_code')
+        //     {
+        //         if($info['membership_pin'] != null && $info['membership_code'] != null)
+        //         {
+        //             $count_code = Tbl_membership_code::where('membership_code_id', $info['membership_pin'])
+        //             ->where('membership_activation_code', $info['membership_code'])->count();
+        //             if($count_code >= 1)
+        //             {
+        //                 $code = Tbl_membership_code::where('membership_code_id', $info['membership_pin'])
+        //                 ->where('membership_activation_code', $info['membership_code'])->package()->membership()->first();
+        //                 if($code->used == 0)
+        //                 {
+        //                     $shop_id = Self::$shop_id;
+        //                     if($shop_id == null)
+        //                     {
+        //                         $shop_id = 5;
+        //                     }
+        //                     $register_session = Session::get('mlm_register_step_1');
+        //                     $register_session_2 = Session::get('mlm_register_step_2');
+        //                     $ship = $s;
+        //                     $code_info = $code;
+        //                     $code = $info;
+        //                     Mlm_member::register_slot_membership_code($shop_id, $register_session, $register_session_2, $ship, $code, $code_info);
+        //                     Session::forget('mlm_register_step_1');
+        //                     Session::forget('mlm_register_step_2');
+        //                     Session::forget('mlm_register_step_3');
+
+        //                     $data['status'] = 'success';
+        //                     $data['message'][0] = 'Membership Code Already Used.';
+        //                     $data['link'] = '/mlm';
+        //                 }
+        //                 else
+        //                 {
+        //                     $data['status'] = 'warning';
+        //                     $data['message'][0] = 'Membership Code Already Used.';
+        //                 }
+                        
+        //             }
+        //             else
+        //             {
+        //                 $data['status'] = 'warning';
+        //                 $data['message'][0] = 'Invalid Membership Code/Pin.';
+        //             }
+        //         }
+        //         else
+        //         {
+        //             $data['status'] = 'warning';
+        //             $data['message'][0] = 'Invalid Membership Code/Pin.';
+        //         } 
+        //     }
+        //     elseif($info['payment_type'] == 'dragonpay')
+        //     {
+        //         $this->post_dragonpay();
+        //     }
+        //     else
+        //     {
+        //         $shop_id = Self::$shop_id;
+        //         $register_session = Session::get('mlm_register_step_1');
+        //         $customer_id = Mlm_member::register_slot_insert_customer($shop_id, $register_session);
+                
+
+        //         $register_session_2 = Session::get('mlm_register_step_2');
+        //         // dd();
+        //         $slot_sponsor = Tbl_mlm_slot::where('slot_nick_name', $register_session['sponsor'])->first();
+        //         $insert['slot_no'] = Mlm_plan::set_slot_no($shop_id, null);
+        //         $insert['shop_id'] = $shop_id;
+        //         $insert['slot_owner'] = $customer_id;
+        //         $insert['slot_created_date'] = Carbon::now();
+        //         $insert['slot_membership'] = $register_session_2['membership'];
+        //         $insert['slot_status'] = 'PS';
+        //         $insert['slot_sponsor'] = $slot_sponsor->slot_id;
+                
+        //         $id = Tbl_mlm_slot::insertGetId($insert);
+        //         $a = Mlm_compute::entry($id);
+
+        //         $c = Mlm_gc::slot_gc($id);
+        //         $data['status'] = 'success';
+        //         $data['message'][0] = 'Membership Code Already Used.';
+        //         $data['link'] = '/mlm';
+
+        //         Session::forget('mlm_register_step_1');
+        //         Session::forget('mlm_register_step_2');
+        //         Session::forget('mlm_register_step_3');
+
+        //         Mlm_member::add_to_session_edit($shop_id, $customer_id, $id);
+        //         // $data['status'] = 'warning';
+        //         // $data['message'][0] = 'The chosen payment facility is under maintenance.';
+        //     }
+        // }
+        // else
+        // {
+        //     $data['status'] = 'warning';
+        //     $data['message'][0] = 'Invalid Payment Type';
+        // }
+        // return json_encode($data);
     }
 
     public function post_dragonpay()

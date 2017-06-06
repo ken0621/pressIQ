@@ -9,7 +9,7 @@
     <div class="sub">Aenea commodo ligula eget dolor.</div>
     <div class="row clearfix">
       <div class="col-md-8">
-        <div class="payment-container" style="margin-top:0px">
+        <div class="payment-container text-left" style="margin-top:0px">
           <h2>Choose Payment Method</h2>
           @if (count($errors) > 0)
               <div class="alert alert-danger">

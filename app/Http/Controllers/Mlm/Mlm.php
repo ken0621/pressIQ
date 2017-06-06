@@ -129,6 +129,12 @@ class Mlm extends Controller
             $customer = Tbl_customer::where('customer_id', Self::$customer_id)->first();
             $customer->profile != null ? $profile = $customer->profile :  $profile = '/assets/mlm/default-pic.png';
 
+            $check_owned_slot = Tbl_mlm_slot::where("slot_owner",Self::$customer_id)->count();
+            if($check_owned_slot == 0 && Request::segment(2) != "login" && Request::segment(2) != "process_order_queue" && Self::$shop_info->member_layout == "myphone")
+            {
+                return Redirect::to("mlm/process_order_queue")->send();
+            }
+
             $this->seed();
             View::share("profile", $profile);
             View::share("content", $content_a);

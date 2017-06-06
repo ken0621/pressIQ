@@ -6743,7 +6743,7 @@ class PayrollController extends Member
                $excel->setDescription('payroll file');
 
                $excel->sheet($date, function($sheet) use ($data) {
-                    $sheet->fromArray($data, null, 'A1', true, true);
+                    $sheet->fromArray($data, null, 'A1', true, false);
                     $sheet->setColumnFormat(array(
                          'B:BZ' => '0.00'
                          ));

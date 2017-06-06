@@ -9,6 +9,7 @@ use App\Models\Tbl_user;
 use App\Models\Tbl_item;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_vendor;
+use App\Models\Tbl_warehouse;
 use Log;
 use Request;
 use Session;
@@ -89,12 +90,13 @@ class Accounting
 			{
 				$result[$key]["is_sub_count"] = 1;
 				$result[$key]["sub_account"] = Accounting::checkAccount($shop, $item->account_id, $sublevel + 1, $filter, $type, $search);
-
+				$result[$key]["account_new_balance"] = $item->balance + collect($result[$key]["sub_account"])->sum('account_new_balance');
 			}
 			else
 			{
 				$result[$key]["is_sub_count"] = 0;
 				$result[$key]["sub_account"] = null;
+				$result[$key]["account_new_balance"] = $item->balance;
 			}
 		}
 
@@ -130,7 +132,7 @@ class Accounting
 
 		dd($result);
 	}
-
+	
 	/**
 	 * Create a journal entry for the transaction 
 	 *
@@ -504,10 +506,63 @@ class Accounting
 		$journal_line['jline_amount'] 			= $line["entry_amount"];
 		$journal_line['jline_description'] 		= isset($line["entry_description"]) ? $line["entry_description"] : '';
 		$journal_line["created_at"]				= Carbon::now();
-
+		$journal_line['jline_warehouse_id'] 	= Accounting::getWarehouse($line["item_id"], $line["je_id"]);
 		$jline_id = Tbl_journal_entry_line::insertGetId($journal_line);
 	}
 
+	/**
+	 * Check if the has warehouse is an inventory type
+	 *
+	 * @param 	integer  	$item_id 		id of item
+	 * @author 	LUKE
+	 */
+	public static function getWarehouse($item_id, $je_id)
+	{
+		$item = Tbl_item::where('item_id', $item_id)->first();
+
+		if($item)
+		{
+			switch ($item->item_type_id) {
+				case 1:
+					$j_e = Tbl_journal_entry::where('je_id', $je_id)->first();
+					if($j_e)
+					{
+						if($j_e->je_reference_module == 'product-order')
+						{
+							$warehouse = Tbl_warehouse::where('warehouse_shop_id', $item->shop_id)
+							->where('main_warehouse', 2)
+							->first();
+							if($warehouse)
+							{
+								return $warehouse->warehouse_id;
+							}
+							else
+							{
+								return 0;
+							}
+						}
+						else
+						{
+							$session_warehouse = session("warehouse_id_".$item->shop_id);
+							if($session_warehouse){ return $session_warehouse; }
+							else{ return 0;}
+						}
+					}
+					else
+					{
+						return 0;
+					}
+					
+				break;
+				
+				default:
+						return 0;
+				break;
+			}
+		}
+		else{ return 0; }
+		
+	}
 	/**
 	 * Check transaction whether it is customer or vendor type; normal balace or contra account; receivable or payable;
 	 *

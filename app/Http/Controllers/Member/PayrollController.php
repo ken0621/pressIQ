@@ -1567,6 +1567,9 @@ class PayrollController extends Member
 		$update_basic['payroll_employee_philhealth'] 	= Request::input('payroll_employee_philhealth');
 		$update_basic['payroll_employee_pagibig'] 		= Request::input('payroll_employee_pagibig');
 		$update_basic['payroll_employee_remarks']		= Request::input('payroll_employee_remarks');
+          $update_basic['payroll_employee_birthdate']       = date('Y-m-d',strtotime(Request::input('payroll_employee_birthdate')));
+          
+
 
 		Tbl_payroll_employee_basic::where('payroll_employee_id',$payroll_employee_id)->update($update_basic);
 
@@ -4621,10 +4624,10 @@ class PayrollController extends Member
                     $temp['extra_day']   = Request::input('extra_day_'.$key);
                }
 
-               if(Request::has('night_shift_'.$key))
-               {
-                    $temp['night_shift']   = Request::input('night_shift_'.$key);
-               }
+               // if(Request::has('night_shift_'.$key))
+               // {
+               //      $temp['night_shift']   = Request::input('night_shift_'.$key);
+               // }
 
                array_push($insert_shift, $temp);
           }
@@ -6717,7 +6720,7 @@ class PayrollController extends Member
                $excel->setDescription('payroll file');
 
                $excel->sheet($date, function($sheet) use ($data) {
-                    $sheet->fromArray($data, null, 'A1', true, true);
+                    $sheet->fromArray($data, null, 'A1', true, false);
                     $sheet->setColumnFormat(array(
                          'B:BZ' => '0.00'
                          ));

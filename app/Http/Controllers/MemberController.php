@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use Request;
 use App\Models\Tbl_mlm_slot;
 use App\Globals\Pdf_global;
+use App\Globals\Ecom_Product;
 use PDF;
 use App;
 use Carbon\Carbon;
@@ -434,6 +435,9 @@ class MemberController extends Controller
         {
             $data['package'][$key] = Tbl_membership_package::where('membership_id', $value->membership_id)->where('membership_package_archive', 0)->get();
         }
+        $warehouse_id = Ecom_Product::getWarehouseId(Self::$shop_id);
+        $data['_product'] = Tbl_ec_product::itemVariant()->inventory($warehouse_id)->price()->where("eprod_shop_id",  Self::$shop_id)->where("tbl_ec_product.archived", 0)->get();
+        // dd($data['_product']);
         return view("mlm.register.package", $data);
     }
 

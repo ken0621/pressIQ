@@ -15,6 +15,7 @@ use App\Models\Tbl_ec_order_item;
 use App\Models\Tbl_online_pymnt_method;
 use App\Models\Tbl_email_template;
 use App\Models\Tbl_online_pymnt_api;
+use App\Models\Tbl_mlm_slot;
 use App\Globals\Ecom_Product;
 use DB;
 use Session;
@@ -42,7 +43,7 @@ class Cart
         $shop_info = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
         return $shop_info;
     }
-    public static function add_to_cart($product_id,$quantity,$shop_id = null)
+    public static function add_to_cart($product_id,$quantity,$shop_id = null, $clear = false)
     {
         if (!$shop_id) 
         {
@@ -704,9 +705,12 @@ class Cart
         $data["tbl_customer"]['shop_id']        = $shop_id;
         $data["tbl_customer"]['customer_contact'] = (isset($customer_information["customer_contact"]) ? $customer_information["customer_contact"] : (isset($data["tbl_customer"]['customer_contact']) ? $data["tbl_customer"]['customer_contact'] : null));;
         $data["tbl_customer"]['country_id']     = 420;
+        $data["tbl_customer"]['tin_number']     = (isset($customer_information["tin_number"]) ? $customer_information["tin_number"] : (isset($data["tbl_customer"]['tin_number']) ? $data["tbl_customer"]['tin_number'] : null));
+        $data["tbl_customer"]['username']     = (isset($customer_information["username"]) ? $customer_information["username"] : (isset($data["tbl_customer"]['username']) ? $data["tbl_customer"]['username'] : null));
 
         $data['load_wallet']['ec_order_load'] = isset($customer_information['load_wallet']['ec_order_load']) == true ? $customer_information['load_wallet']['ec_order_load'] : 0 ;
         $data['load_wallet']['ec_order_load_number'] = isset($customer_information['load_wallet']['ec_order_load_number']) == true ? $customer_information['load_wallet']['ec_order_load_number'] : 0;
+        
         /* CURRENT LOGGED IN */
         if (isset($customer_information["current_user"])) 
         {
@@ -723,7 +727,16 @@ class Cart
             $data["tbl_customer"]['shop_id']          = $shop_id;
             $data["tbl_customer"]['customer_contact'] = $other_info->customer_mobile;
             $data["tbl_customer"]['country_id']       = 420;
+            $data["tbl_customer"]['tin_number']       = $current->tin_number;
+            $data["tbl_customer"]['username']         = $current->username;
         }
+
+        /* SET MLM SLOT */
+        $data["tbl_mlm_slot"]['slot_id'] = Tbl_mlm_slot::max("slot_id") + 1;
+        $data["tbl_mlm_slot"]['shop_id'] = $shop_id;
+        $data["tbl_mlm_slot"]['slot_owner'] = (isset($customer_information["slot_owner"]) ? $customer_information["slot_owner"] : (isset($data["tbl_mlm_slot"]['slot_owner']) ? $data["tbl_mlm_slot"]['slot_owner'] : null));
+        $data["tbl_mlm_slot"]['slot_sponsor'] = (isset($customer_information["slot_sponsor"]) ? $customer_information["slot_sponsor"] : (isset($data["tbl_mlm_slot"]['slot_sponsor']) ? $data["tbl_mlm_slot"]['slot_sponsor'] : null));
+        $data["tbl_mlm_slot"]['slot_membership'] = (isset($customer_information["slot_membership"]) ? $customer_information["slot_membership"] : (isset($data["tbl_mlm_slot"]['slot_membership']) ? $data["tbl_mlm_slot"]['slot_membership'] : null));
 
         /* SET SHIPPINGING INFROMATION */
         $data["tbl_customer_address"]["shipping"]["country_id"] = 420;

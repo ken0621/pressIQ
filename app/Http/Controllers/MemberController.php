@@ -189,7 +189,7 @@ class MemberController extends Controller
                     {
 
                         /* Set Product Temporarily */
-                        $product = Tbl_ec_product::itemVariant()->where("eprod_shop_id", Self::$shop_id)->where("archived", 0)->first();
+                        $product = Tbl_ec_product::variant()->where("eprod_shop_id", Self::$shop_id)->where("tbl_ec_product.archived", 0)->first();
                         Cart::add_to_cart($product->evariant_id, 1, Self::$shop_id, true);
 
                         /* Set Customer Info */
@@ -251,7 +251,7 @@ class MemberController extends Controller
     {
         $customer_information["new_account"] = true;
         $cart_info = Cart::get_info(Self::$shop_id);
-        
+
         Cart::customer_set_info_ec_order(Self::$shop_id, $cart_info, $customer_information);
 
         $register_session = Session::get('mlm_register_step_1');

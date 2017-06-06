@@ -9,10 +9,12 @@ use App\Globals\Purchase_Order;
 use App\Globals\Purchasing_inventory_system;
 use App\Globals\Invoice;
 use App\Globals\Billing;
+use App\Globals\Reportsss;
 
 use App\Models\Tbl_User;
 use App\Models\Tbl_customer;
 use App\Models\Tbl_unit_measurement;
+use App\Models\Tbl_jounal_entry_line;
 use Carbon\Carbon;
 use Request;
 class DashboardController extends Member
@@ -76,11 +78,28 @@ class DashboardController extends Member
 	 */
 	public function statistics()
 	{
-		$data["open_invoice"] 		= Invoice::invoiceStatus()["open"];
-		$data["overdue_invoice"] 	= Invoice::invoiceStatus()["overdue"];
+		$period 		= Request::input("period");
+		$period 		= "days_ago";
+		$date["days"] 	= "365";
+		$from  			= Report::checkDatePeriod($period, $date)['start_date'];
+        $to     		= Report::checkDatePeriod($period, $date)['end_date'];
 
-		$date["days"] 				= "30";
-		$data["paid_invoice"] 		= Invoice::invoiceStatus("days_ago", $date)["paid"];
+		$data["open_invoice"] 		= Invoice::invoiceStatus($from, $to)["open"];
+		$data["overdue_invoice"] 	= Invoice::invoiceStatus($from, $to)["overdue"];
+
+		$date["days"] 	= "30";
+		$from  			= Report::checkDatePeriod($period, $date)['start_date'];
+        $to     		= Report::checkDatePeriod($period, $date)['end_date'];
+        
+		$data["paid_invoice"] 		= Invoice::invoiceStatus($from, $to)["paid"];
+
+
+		$data["_expenses"]          = Tbl_journal_entry_line::account()->journal()->totalAmount()
+                                    ->where("je_shop_id", $this->getShopId())
+                                    ->whereIn("chart_type_name", ['Expense', 'Other Expense', 'Cost of Good Sold'])
+                                    ->whereRaw("DATE(je_entry_date) >= '$from'")
+                                    ->whereRaw("DATE(je_entry_date) <= '$to'")
+                                    ->get();
 
 		return view('member.dashboard.dashboard', $data);
 	}

@@ -81,8 +81,17 @@ class TesterController extends Controller
 
         // $data["open_invoice"]       = Invoice::invoiceStatus()["open"];
         // $data["overdue_invoice"]    = Invoice::invoiceStatus()["overdue"];
-        $date["days"]               = "30";
-        $data["paid_invoice"]       = Invoice::invoiceStatus("days_ago", $date)["paid"];
+        $period = "days_ago";
+        $date["days"]   = "30";
+        $from           = Report::checkDatePeriod($period, $date)['start_date'];
+        $to             = Report::checkDatePeriod($period, $date)['end_date'];
+
+        $data["_expenses"]          = Tbl_journal_entry_line::account()->journal()->totalAmount()
+                                    ->where("je_shop_id", 31)
+                                    ->whereIn("chart_type_name", ['Expense', 'Other Expense', 'Cost of Good Sold'])
+                                    ->whereRaw("DATE(je_entry_date) >= '$from'")
+                                    ->whereRaw("DATE(je_entry_date) <= '$to'")
+                                    ->get();
 
         dd($data);
     }

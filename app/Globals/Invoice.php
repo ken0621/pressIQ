@@ -408,12 +408,8 @@ class Invoice
      * @param   string      $period     period of the report
      * @return  array[3]    open | overdue | paid   
      */
-    public static function invoiceStatus($period = "days_ago", $date = null)
+    public static function invoiceStatus($from, $to)
     {
-        if(!isset($date["days"])) $date["days"] = "365";
-
-        $from   = Report::checkDatePeriod($period, $date)['start_date'];
-        $to     = Report::checkDatePeriod($period, $date)['end_date'];
         $now    = datepicker_input("today");
 
         $data["open"]       = Tbl_customer_invoice::where("inv_shop_id", Invoice::getShopId())

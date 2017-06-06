@@ -723,6 +723,7 @@ class Ec_order
             $order_info["tbl_customer"]["password"] = $customer->password;
             $order_info["tbl_customer"]["customer_mobile"] = $customer_other_info->customer_mobile;
             $order_info["tbl_ec_order"]["customer_id"] = $customer->customer_id;
+
         }
         else
         {
@@ -737,6 +738,7 @@ class Ec_order
             }
             $order_info["tbl_customer"]["middle_name"] = "";
             $order_info["tbl_customer"]["password"] = Crypt::encrypt($order_info["tbl_customer"]["password"]);
+            dd($order_info);
             $customer_id = $customer_query->insertGetId($order_info["tbl_customer"]);
             
             if (!DB::table("tbl_customer_other_info")->where("customer_id", $customer_id)->first()) 

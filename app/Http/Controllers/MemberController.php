@@ -145,7 +145,7 @@ class MemberController extends Controller
         $info['password']          = randomPassword();
         $info['password_confirm']  = $info['password'];
         $info['tin_number']        = Request::input('tin_number');
-        $info['username']          = $this->generate_username($info["first_name"], $info["last_name"]);
+        $info['mlm_username']          = $this->generate_username($info["first_name"], $info["last_name"]);
         $info['sponsor']           = Request::input('sponsor');
         $info['customer_phone']    = Request::input('contact_number');
         $info['customer_mobile']   = Request::input('contact_number');
@@ -172,7 +172,7 @@ class MemberController extends Controller
             $count_email = Tbl_customer::where('email', $info['email'])->count();
             if($count_email == 0)
             {
-                $count_username = Tbl_customer::where('mlm_username', $info['username'])->count();
+                $count_username = Tbl_customer::where('mlm_username', $info['mlm_username'])->count();
                 if($count_username == 0)
                 {
                     if($info['sponsor'] != null)
@@ -200,7 +200,7 @@ class MemberController extends Controller
                         $customer_info["email"]            = $info["email"];
                         $customer_info["password"]         = $info["password"];
                         $customer_info["tin_number"]       = $info["tin_number"];
-                        $customer_info["username"]         = $info["username"];
+                        $customer_info["mlm_username"]         = $info["mlm_username"];
                         $customer_info["slot_sponsor"]     = $info["sponsor"];
                         $customer_info["customer_contact"] = $info["customer_mobile"];
                         $customer_info["is_corporate"]     = $info["is_corporate"];
@@ -416,7 +416,7 @@ class MemberController extends Controller
             $customer_info["shipping_zip"]     = $s["customer_zip"];
             $customer_info["shipping_street"]  = $s["customer_street"];
             $customer_set_info_response        = Cart::customer_set_info(Self::$shop_id, $customer_info);
-
+            
             if($customer_set_info_response["status"] == "error")
             { 
                 $data['status'] = 'warning';

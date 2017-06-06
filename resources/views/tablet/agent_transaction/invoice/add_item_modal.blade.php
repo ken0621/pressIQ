@@ -32,6 +32,7 @@
                 <h4> Rate </h4>
             </div>        
             <div class="col-xs-8">
+                <input type="hidden" name="" class="tablet-price-per-item" value="{{$item_details->item_price}}">
                 <input type="text" style="text-align: right; border: 0;border-bottom: 1px solid #000;outline: 0;" class="form-control input-sm tablet-item-rate tablet-compute number-input" name="invline_rate" value="{{number_format($item_details->item_price,2)}}">
             </div>
         </div>

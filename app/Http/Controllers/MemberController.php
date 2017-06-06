@@ -24,7 +24,7 @@ use App\Globals\Item;
 use App\Globals\Mlm_plan;
 use App\Globals\Mlm_compute;
 use App\Globals\Mlm_gc;
-use App\Globals\dragonpay\RequestPayment;
+use App\Globals\Dragonpay2\Dragon_RequestPayment;
 use App\Globals\Cart;
 class MemberController extends Controller
 {
@@ -404,7 +404,7 @@ class MemberController extends Controller
         $shop_id = Self::$shop_id;
         Session::put('shop_id_session', $shop_id);
         
-        $requestpayment = new RequestPayment($this->_merchantkey);
+        $requestpayment = new Dragon_RequestPayment($this->_merchantkey);
 
         $this->_data = array(
             'merchantid'    => $requestpayment->setMerchantId($this->_merchantid),
@@ -416,7 +416,7 @@ class MemberController extends Controller
             'digest'        => $requestpayment->getdigest(),
         );
 
-        RequestPayment::make($this->_merchantkey, $this->_data);
+        Dragon_RequestPayment::make($this->_merchantkey, $this->_data);
         die("Please do not refresh the page and wait while we are processing your payment. This can take a few minutes.");
     }
 
@@ -437,35 +437,29 @@ class MemberController extends Controller
         }
         $warehouse_id = Ecom_Product::getWarehouseId(Self::$shop_id);
         $data['_product'] = Tbl_ec_product::itemVariant()->inventory($warehouse_id)->price()->where("eprod_shop_id",  Self::$shop_id)->where("tbl_ec_product.archived", 0)->get();
-        // dd($data['_product']);
+
         return view("mlm.register.package", $data);
     }
 
     public function package_post()
     {
-        $info['membership'] = Request::input('membership');
-        $info['package'] = Request::input('package');
-        if($info['membership'] != null)
+        $info['product_id'] = Request::input('product_id');
+        if(isset($info['product_id']))
         {
-            if(isset($info['package'][$info['membership']]))
-            {
-                $d['membership'] = $info['membership'];
-                $d['package'] = $info['package'][$info['membership']];
-                Session::put('mlm_register_step_2', $d);
-                $data['status'] = 'success';
-                $data['message'][0] = 'Sucess!';
-                $data['link'] = '/member/register/shipping';
-            }
-            else
-            {
-                $data['status'] = 'warning';
-                $data['message'][0] = 'Email already used.';
-            }
+            /* Add Package */
+            Cart::add_to_cart($info["product_id"], 1, Self::$shop_id, true);
+
+            /* Redirect */
+            $d['product_id'] = $info['product_id'];
+            Session::put('mlm_register_step_2', $d);
+            $data['status'] = 'success';
+            $data['message'][0] = 'Sucess!';
+            $data['link'] = '/member/register/shipping';
         }
         else
         {
             $data['status'] = 'warning';
-            $data['message'][0] = 'Invalid Membership';
+            $data['message'][0] = 'Invalid Package.';
         }
         return json_encode($data);
     }

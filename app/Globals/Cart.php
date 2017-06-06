@@ -43,7 +43,7 @@ class Cart
         $shop_info = Tbl_user::where("user_email", session('user_email'))->shop()->pluck('user_shop');
         return $shop_info;
     }
-    public static function add_to_cart($product_id,$quantity,$shop_id = null)
+    public static function add_to_cart($product_id,$quantity,$shop_id = null,$clear = false)
     {
         if (!$shop_id) 
         {
@@ -66,12 +66,18 @@ class Cart
         else
         {
             $_cart                                            = Session::get($unique_id);
+
+            if ($clear == true) 
+            {
+                unset($_cart["cart"]);
+                $insert = $_cart;
+            }
+            
             $insert["cart"][$product_id]["product_id"]        = $product_id;
             $insert["cart"][$product_id]["quantity"]          = $quantity;
             $insert["cart"][$product_id]["shop_id"]           = $shop_id;
             $insert["cart"][$product_id]["unique_id_per_pc"]  = $unique_id;
             $insert["cart"][$product_id]["date_added"]        = Carbon::now();
-
 
             if($_cart && isset($_cart["cart"]))
             {
